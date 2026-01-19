@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-18 04:50+0000\n"
+"PO-Revision-Date: 2026-01-19 22:15+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4733,6 +4733,10 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Eine Datei namens \"%s\" ist bereits eingebettet, aber die Datei auf der "
+"Festplatte hat einen anderen Inhalt.\n"
+"\n"
+"Möchten Sie die eingebettete Datei durch die neue Version ersetzen?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
 #, fuzzy
@@ -6095,7 +6099,7 @@ msgstr "Zeilentrenner"
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "Abstandshalter: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:357 pcbnew/pcb_group.cpp:411
@@ -9214,6 +9218,8 @@ msgstr ""
 #: common/local_history.cpp:1728
 msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
+"Kann nicht wiederhergestellt werden – die folgenden Dateien sind von einem "
+"anderen Benutzer geöffnet:"
 
 #: common/local_history.cpp:1730
 #, fuzzy
@@ -11241,7 +11247,7 @@ msgstr "Infomeldungen:"
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "%zu Ladenachricht(en) zeigen"
 
 #: common/widgets/kistatusbar.cpp:438
 #, fuzzy
@@ -13872,7 +13878,7 @@ msgstr "Die Symbolbibliotheksdatei \"%s\" ist leer."
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d Symbole ausgewählt, %d übergeordnete Symbole automatisch einbezogen"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
 #, fuzzy, c-format
@@ -13889,6 +13895,8 @@ msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Die folgenden Symbole sind in der Zielbibliothek bereits vorhanden. Wählen "
+"Sie aus, wie mit den einzelnen Konflikten umgegangen werden soll:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:518
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -16916,7 +16924,7 @@ msgstr "\"%s\" existiert bereits."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Die Standardvariante kann nicht kopiert werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
 #, fuzzy
@@ -17101,6 +17109,9 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"Dies ist nützlich, um Symbole hinzuzufügen, die nicht in exportierte "
+"Positionsdateien,\n"
+"die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2368
@@ -21152,6 +21163,8 @@ msgstr ""
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"Die Bibliothek kann erst gespeichert werden, wenn diese Fehler manuell "
+"behoben wurden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:146
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:360
@@ -21166,6 +21179,10 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"Die Bibliothek kann erst gespeichert werden, wenn diese Fehler manuell "
+"behoben wurden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -21175,6 +21192,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Kann Bibliothek \"%s\" nicht speichern, da während des Ladens ein Fehler "
+"beim Parsen aufgetreten ist.\n"
+"\n"
+"Durch das Speichern würde Symbole, die nicht geladen werden konnten, "
+"vorloren gehen.\n"
+"Bitte reparieren Sie die Bibliotheksdatei von Hand, bevor Sie sie speichern."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:226
 #, c-format
@@ -21193,6 +21216,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Fehler beim Parsen des Symbols in Zeile %d: %s\n"
+"Überspringe Symbol und fahre fort."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:310
 #, c-format
@@ -23724,6 +23749,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens Fehler in "
+"ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -24900,7 +24927,7 @@ msgstr "Kann Symbol \"%s\" nicht importieren: %s"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "%d Symbol(e) importiert, %d übersprungen."
 
 #: eeschema/symbol_library_manager.cpp:179
 #, fuzzy, c-format
@@ -29448,6 +29475,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"Bei der Definition mehrerer Varianten muss der Ausgabepfad ${VARIANT} "
+"enthalten, um für jede Variante einzelne Ausgabedateien zu erzeugen.\n"
 
 #: kicad/cli/command.cpp:145
 msgid "Input directory"
@@ -29491,6 +29520,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"Der/die auszugebende(n) Variantenname(n) kann/können mehrfach verwendet "
+"werden, um mehrere Varianten festzulegen.\n"
+"Wenn Sie mehrere Varianten angeben, verwenden Sie im Ausgabepfad ${VARIANT}, "
+"um für jede Variante eigene Dateien zu erzeugen.\n"
+"Ohne Angabe des Arguments --variant wird die Standardvariante ausgegeben."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -30167,6 +30201,8 @@ msgid ""
 "Board variant for variant-aware filtering (DNP, BOM, position file "
 "exclusions)"
 msgstr ""
+"Platinenvariante für variantenabh. Filterung (DNP, Stückliste, Ausschlüsse "
+"von Positionsdateien)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:138
 #: kicad/cli/command_sch_export_netlist.cpp:97 kicad/cli/command_version.cpp:71
@@ -32256,7 +32292,7 @@ msgstr "Git-Nachverfolgung aktivieren"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Für dieses Projekt Git-Integration reaktivieren"
 
 #: kicad/project_tree_pane.cpp:1077
 #, fuzzy
@@ -32265,7 +32301,7 @@ msgstr "Git-Nachverfolgung aktivieren"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Für dieses Projekt Git-Integration deaktivieren"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -39145,6 +39181,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"Lokaler Lötpastenfreiraum für diesen Footprint.\n"
+"Geben Sie einen absoluten Wert (z.B. -0.1mm), einen prozentualen Wert (z.B. -"
+"5%) oder beides (z.B. -0.1 mm -5%) ein.\n"
+"Ist das Feld leer, wird der globale Wert verwendet."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
 msgid ""
@@ -41177,6 +41217,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"Lokaler Lötpastenfreiraum für dieses Pad.\n"
+"Geben Sie einen absoluten Wert (z.B. -0.1mm), einen prozentualen Wert (z.B. -"
+"5%) oder beides (z.B. -0.1 mm -5%) ein.\n"
+"Ist das Feld leer, wird der globale Wert verwendet."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:679
 #, c-format
@@ -45115,6 +45159,40 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Hinweise\n"
+"\n"
+"Die erste Zeile muss die Versionsdefinition. Sie gibt die Syntaxversion der "
+"Datei an, damit \n"
+"zukünftige Regelparser automatische Aktualisierungen durchführen können. Sie "
+"sollte\n"
+"\"1\" sein.\n"
+"\n"
+"Regeln sollten nach ihrer Spezifität geordnet werden.  Spätere Regeln haben\n"
+"Vorrang vor früheren Regeln; sobald eine passende Regel gefunden wurde,\n"
+"werden keine weiteren Regeln mehr berücksichtigt.\n"
+"\n"
+"Mit Strg+/ können Zeilen aus- und einkommentiert werden.\n"
+"\n"
+"### Graphischer Regeleditor\n"
+"\n"
+"Beim Laden von Regeln in den grafischen Editor werden Bedingungen "
+"automatisch\n"
+"den entsprechenden Bearbeitungsfeldern zugeordnet. Regeln mit mehreren "
+"Bedingungen können\n"
+"auf mehrere Felder aufgeteilt werden, wobei jedes Feld einen Teil der "
+"Bedingungen anzeigt.\n"
+"\n"
+"Felder mit mehreren Bedingungen wie \"Via-Stil\" (via_diameter + hole_size) "
+"und\n"
+"Differenzialpaar-Routing (track_width + diff_pair_gap) werden zuerst "
+"verglichen.\n"
+"Felder mit einer einzigen Bedingung verarbeiten den Rest. Nicht zugewiesene\n"
+"Bedingungen werden im Feld \"Benutzerdefinierte Regeln\" angezeigt.\n"
+"\n"
+"In dem grafischen Editor nicht geänderte Regeln behalten beim\n"
+"Speichern ihre ursprüngliche Formatierung.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -48003,11 +48081,11 @@ msgstr "Prüf' mich!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
-msgstr ""
+msgstr "Falls folg. Bedingungen zutreffen:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
-msgstr ""
+msgstr "Fall das Objekt folg. entspricht:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
 #, fuzzy
@@ -48016,7 +48094,7 @@ msgstr "Eine Mittelpunkt-Bemaßung hinzufügen"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "UND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
 #, fuzzy
@@ -48025,11 +48103,11 @@ msgstr "R"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "UND NICHT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "ODER NICHT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
 #, fuzzy
@@ -48116,13 +48194,12 @@ msgid "Bottom Layer"
 msgstr "Unterste Lage"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "Mindestbreite"
+msgstr "Minimale Leiterbahnbreite"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
-msgstr ""
+msgstr "Bevorzugte Leiterbahnbreite"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
 #, fuzzy
@@ -48180,7 +48257,7 @@ msgstr "Umbenennen"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "FEHLER: Keinerlei Bedingungen für die Prüfung angegeben."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
 #, fuzzy
@@ -52588,6 +52665,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Der Bezeichner der Komponente \"%s\" enthält Nicht-ASCII-Zeichen; für den "
+"ODB++-Export in \"%s\" konvertiert."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:88
 #, c-format
@@ -52595,6 +52674,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Nach der Konvertierung hat Komponente \"%s\" einen keinen eindeutigen "
+"Bezeichner mehr; für den ODB++-Export in \"%s\" umbenannt."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1129
 msgid "Failed to add component data"
@@ -54083,6 +54164,11 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"Der Differenzialpaar-Abstand am Startpunkt stimmt nicht mit dem "
+"konfigurierten Wert überein. Dies kann bei Engstellen auftreten, an denen "
+"die Leiterbahnen schmaler sind und geringere Abstände haben. Passen Sie "
+"entweder die Einstellungen für das Differenzialpaar an oder beginnen Sie an "
+"einer Stelle mit dem richtigen Abstand."
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Place Through Via"
@@ -56835,7 +56921,7 @@ msgstr "DRC-Regeln"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
 msgid "Open drc rule editor window"
-msgstr ""
+msgstr "DRC-Regel-Editorfenster öffnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
