@@ -334,20 +334,21 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
-    auto joinExtensions = []( const std::vector<std::string>& aExts ) -> wxString
-    {
-        wxString result;
+    auto joinExtensions =
+            []( const std::vector<std::string>& aExts ) -> wxString
+            {
+                wxString result;
 
-        for( const std::string& ext : aExts )
-        {
-            if( !result.IsEmpty() )
-                result << wxT( ", " );
+                for( const std::string& ext : aExts )
+                {
+                    if( !result.IsEmpty() )
+                        result << wxT( ", " );
 
-            result << wxT( "." ) << ext;
-        }
+                    result << wxT( "." ) << ext;
+                }
 
-        return result;
-    };
+                return result;
+            };
 
     for( auto& [type, desc] : m_supportedSymFiles )
     {
@@ -383,10 +384,7 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
     for( auto& [type, desc] : m_supportedSymFiles )
-    {
-        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
-                            this, type );
-    }
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this, type );
 
     browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
                         this, ID_PANEL_SYM_LIB_KICAD_FOLDER );
@@ -413,6 +411,9 @@ void PANEL_SYM_LIB_TABLE::populatePluginList()
                 m_supportedSymFiles.emplace( type, desc );
         }
     }
+
+    m_supportedSymFiles.emplace( SCH_IO_MGR::SCH_NESTED_TABLE,
+                                 IO_BASE::IO_FILE_DESC( _( "Table (nested library table)" ), {} ) );
 }
 
 
