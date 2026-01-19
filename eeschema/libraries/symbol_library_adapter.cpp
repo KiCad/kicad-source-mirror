@@ -295,6 +295,11 @@ bool SYMBOL_LIBRARY_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
 
 void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 {
+    std::unique_lock<std::mutex> asyncLock( m_loadMutex, std::try_to_lock );
+
+    if( !asyncLock )
+        return;
+
     // TODO(JE) any reason to clean these up earlier?
     std::erase_if( m_futures,
                    []( const std::future<void>& aFuture )
