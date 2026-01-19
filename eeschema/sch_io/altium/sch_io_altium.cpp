@@ -595,6 +595,37 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     else
         ParseAltiumSch( aFileName );
 
+    // Convert hierarchical labels to global labels on top-level sheets.
+    // Top-level sheets have no parent, so hierarchical labels don't make sense.
+    if( aFileName.empty() )
+    {
+        for( SCH_ITEM* item : rootScreen->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_SCREEN* screen = sheet->GetScreen();
+
+            if( !screen )
+                continue;
+
+            std::vector<SCH_HIERLABEL*> hierLabels;
+
+            for( SCH_ITEM* labelItem : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+                hierLabels.push_back( static_cast<SCH_HIERLABEL*>( labelItem ) );
+
+            for( SCH_HIERLABEL* hierLabel : hierLabels )
+            {
+                SCH_GLOBALLABEL* globalLabel = new SCH_GLOBALLABEL( hierLabel->GetPosition(),
+                                                                     hierLabel->GetText() );
+                globalLabel->SetShape( hierLabel->GetShape() );
+                globalLabel->SetSpinStyle( hierLabel->GetSpinStyle() );
+
+                screen->Remove( hierLabel );
+                screen->Append( globalLabel );
+                delete hierLabel;
+            }
+        }
+    }
+
     if( m_reporter )
     {
         for( auto& [msg, severity] : m_errorMessages )
