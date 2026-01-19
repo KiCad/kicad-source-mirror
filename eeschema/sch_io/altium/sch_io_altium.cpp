@@ -70,14 +70,6 @@
 #include "sch_io_altium.h"
 
 
-/**
- * Flag to enable Altium schematic debugging output.
- *
- * @ingroup trace_env_vars
- */
-static const wxChar traceAltiumSch[] = wxT( "KICAD_ALTIUM_SCH" );
-
-
 // Harness port object itself does not contain color information about itself
 // It seems altium is drawing harness ports using these colors
 #define HARNESS_PORT_COLOR_DEFAULT_BACKGROUND COLOR4D( 0.92941176470588238, \
@@ -478,6 +470,32 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
     {
         if( m_rootSheet->CountSheets( filestring ) > 1 )
             getCurrentScreen()->Remove( sheet );
+    }
+
+    // If there's only one top-level sheet, make it the root instead of having a dummy root
+    SCH_SCREEN* rootScreen = m_rootSheet->GetScreen();
+    std::vector<SCH_SHEET*> topLevelSheets;
+
+    for( SCH_ITEM* item : rootScreen->Items().OfType( SCH_SHEET_T ) )
+        topLevelSheets.push_back( static_cast<SCH_SHEET*>( item ) );
+
+    if( topLevelSheets.size() == 1 )
+    {
+        SCH_SHEET* singleSheet = topLevelSheets[0];
+
+        // Remove the sheet from the dummy root's screen
+        rootScreen->Remove( singleSheet );
+
+        // Transfer the dummy root's properties to the single sheet
+        singleSheet->SetParent( nullptr );
+
+        // Update the schematic to use the single sheet as the new root
+        m_rootSheet = singleSheet;
+        aSchematic->SetRoot( m_rootSheet );
+
+        // Update m_sheetPath to reflect the new root
+        m_sheetPath.clear();
+        m_sheetPath.push_back( m_rootSheet );
     }
 
     return m_rootSheet;
@@ -4895,10 +4913,14 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString& aLibraryPath,
     }
     catch( const CFB::CFBException& exception )
     {
+        m_libCache.erase( aLibraryPath );
+        m_timestamps.erase( aLibraryPath );
         THROW_IO_ERROR( exception.what() );
     }
     catch( const std::exception& exc )
     {
+        m_libCache.erase( aLibraryPath );
+        m_timestamps.erase( aLibraryPath );
         THROW_IO_ERROR( wxString::Format( _( "Error parsing Altium library: %s" ), exc.what() ) );
     }
 }
