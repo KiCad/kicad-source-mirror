@@ -720,7 +720,7 @@ void DIALOG_SHIM::LoadControlState()
                                 for( int page = 0; page < (int) auiNotebook->GetPageCount(); ++page )
                                 {
                                     if( auiNotebook->GetPageText( page ) == pageTitle )
-                                        auiNotebook->SetSelection( page );
+                                        auiNotebook->ChangeSelection( page );
                                 }
                             }
                         }

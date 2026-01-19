@@ -77,7 +77,7 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
    	panel->Layout();
    	sizer->Fit( panel );
 
-   	aNotebook->AddPage( panel, aTitle, true );
+   	aNotebook->AddPage( panel, aTitle, false );
 }
 
 

@@ -45,6 +45,7 @@ public:
     bool TransferDataFromWindow() override;
 
     void AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable );
+    void OpenTable( LIBRARY_TABLE* table, const wxString& aTitle );
 
 private:
     /**

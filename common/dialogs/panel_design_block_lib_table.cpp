@@ -261,6 +261,30 @@ protected:
 };
 
 
+void PANEL_DESIGN_BLOCK_LIB_TABLE::OpenTable( LIBRARY_TABLE* aTable, const wxString& aTitle )
+{
+    for( int ii = 2; ii < (int) m_notebook->GetPageCount(); ++ii )
+    {
+        if( m_notebook->GetPageText( ii ) == aTitle )
+        {
+            // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
+            // results in a re-entrant call where the second call is one page behind.
+            for( int attempts = 0; attempts < 3; ++attempts )
+                m_notebook->ChangeSelection( ii );
+
+            return;
+        }
+    }
+
+    AddTable( aTable, aTitle, true );
+
+    // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
+    // results in a re-entrant call where the second call is one page behind.
+    for( int attempts = 0; attempts < 3; ++attempts )
+        m_notebook->ChangeSelection( m_notebook->GetPageCount() - 1 );
+}
+
+
 void PANEL_DESIGN_BLOCK_LIB_TABLE::AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable )
 {
     DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_project->DesignBlockLibs();

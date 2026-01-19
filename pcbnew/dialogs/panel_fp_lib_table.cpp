@@ -182,7 +182,7 @@ protected:
         wxFileName uri = LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() );
         auto       nestedTable = std::make_unique<LIBRARY_TABLE>( uri, LIBRARY_TABLE_SCOPE::GLOBAL );
 
-        m_panel->AddTable( nestedTable.get(), aRow.Nickname(), true );
+        m_panel->OpenTable( nestedTable.get(), aRow.Nickname() );
     }
 
     wxString getTablePreamble() override
@@ -193,6 +193,30 @@ protected:
 protected:
     PANEL_FP_LIB_TABLE* m_panel;
 };
+
+
+void PANEL_FP_LIB_TABLE::OpenTable( LIBRARY_TABLE* aTable, const wxString& aTitle )
+{
+    for( int ii = 2; ii < (int) m_notebook->GetPageCount(); ++ii )
+    {
+        if( m_notebook->GetPageText( ii ) == aTitle )
+        {
+            // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
+            // results in a re-entrant call where the second call is one page behind.
+            for( int attempts = 0; attempts < 3; ++attempts )
+                m_notebook->ChangeSelection( ii );
+
+            return;
+        }
+    }
+
+    AddTable( aTable, aTitle, true );
+
+    // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
+    // results in a re-entrant call where the second call is one page behind.
+    for( int attempts = 0; attempts < 3; ++attempts )
+        m_notebook->ChangeSelection( m_notebook->GetPageCount() - 1 );
+}
 
 
 void PANEL_FP_LIB_TABLE::AddTable( LIBRARY_TABLE* aTable, const wxString& aTitle, bool aClosable )
