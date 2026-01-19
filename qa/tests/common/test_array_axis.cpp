@@ -105,6 +105,32 @@ BOOST_AUTO_TEST_CASE( ValidOffsets )
             false,
             0,
         },
+        // Lowercase alphabetical input should be accepted and map to same offset as uppercase
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+            "a",
+            true,
+            0,
+        },
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+            "xy",
+            true,
+            648,
+        },
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_NO_IOSQXZ,
+            "a",
+            true,
+            0,
+        },
+        // Hex lowercase should NOT be accepted (hex only allows uppercase A-F)
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_HEX,
+            "a0",
+            false,
+            0,
+        },
     };
     // clang-format on
 
@@ -186,6 +212,39 @@ static const std::vector<ARRAY_AXIS_NAMING_CASE> axis_name_cases = {
         },
         6,
         { "11", "13", "15", "17", "19", "21" },
+    },
+    {
+        // Test lowercase alphabetical input produces lowercase output
+        "Alpha lowercase",
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+            "a",
+            1,
+        },
+        3,
+        { "a", "b", "c" },
+    },
+    {
+        // Test lowercase alphabetical with 2nd col
+        "Alpha lowercase 2nd col",
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+            "y",
+            1,
+        },
+        4,
+        { "y", "z", "aa", "ab" },
+    },
+    {
+        // Test lowercase no-IOSQXZ alphabet
+        "Alpha no IOSQXZ lowercase",
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_NO_IOSQXZ,
+            "a",
+            1,
+        },
+        5,
+        { "a", "b", "c", "d", "e" },
     },
 };
 // clang-format on

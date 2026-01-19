@@ -37,7 +37,11 @@ static bool schemeNonUnitColsStartAt0( ARRAY_AXIS::NUMBERING_TYPE type )
 }
 
 
-ARRAY_AXIS::ARRAY_AXIS() : m_type( NUMBERING_TYPE::NUMBERING_NUMERIC ), m_offset( 0 ), m_step( 1 )
+ARRAY_AXIS::ARRAY_AXIS() :
+        m_type( NUMBERING_TYPE::NUMBERING_NUMERIC ),
+        m_offset( 0 ),
+        m_step( 1 ),
+        m_useLowercase( false )
 {
 }
 
@@ -76,7 +80,14 @@ std::optional<int> ARRAY_AXIS::getNumberingOffset( const wxString& str ) const
 
     for( unsigned i = 0; i < str.length(); i++ )
     {
-        int chIndex = alphabet.Find( str[i], false );
+        wxUniChar ch = str[i];
+
+        // For alphabetic types, convert to uppercase for lookup since our alphabets
+        // are defined with uppercase letters. This allows users to enter lowercase.
+        if( !TypeIsNumeric( m_type ) && ch >= 'a' && ch <= 'z' )
+            ch = ch - 'a' + 'A';
+
+        int chIndex = alphabet.Find( ch, false );
 
         if( chIndex == wxNOT_FOUND )
             return std::optional<int>{};
@@ -109,6 +120,18 @@ bool ARRAY_AXIS::SetOffset( const wxString& aOffsetName )
     if( !offset )
         return false;
 
+    // For alphabetic types, check if the user entered lowercase letters.
+    // If so, we'll output lowercase letters as well.
+    if( !TypeIsNumeric( m_type ) && !aOffsetName.IsEmpty() )
+    {
+        wxUniChar firstChar = aOffsetName[0];
+        m_useLowercase = ( firstChar >= 'a' && firstChar <= 'z' );
+    }
+    else
+    {
+        m_useLowercase = false;
+    }
+
     SetOffset( *offset );
     return true;
 }
@@ -139,5 +162,11 @@ wxString ARRAY_AXIS::GetItemNumber( int n ) const
 
     n = m_offset + m_step * n;
 
-    return AlphabeticFromIndex( n, alphabet, nonUnitColsStartAt0 );
+    wxString result = AlphabeticFromIndex( n, alphabet, nonUnitColsStartAt0 );
+
+    // If the user entered a lowercase starting value, output lowercase letters
+    if( m_useLowercase )
+        result = result.Lower();
+
+    return result;
 }

@@ -125,6 +125,9 @@ private:
 
     /// Skip every 'n' numbers.
     int m_step;
+
+    /// Output lowercase letters when true (for alphabetic types).
+    bool m_useLowercase;
 };
 
 #endif // ARRAY_AXIS__H
