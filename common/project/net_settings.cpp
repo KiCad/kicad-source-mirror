@@ -1069,6 +1069,33 @@ static bool isSuperSubOverbar( wxChar c )
 }
 
 
+/**
+ * Check if a character at the given position is escaped by a backslash.
+ *
+ * @param aStr The string to check
+ * @param aPos Position of the character to check
+ * @return true if the character is preceded by a backslash escape
+ */
+static bool isEscaped( const wxString& aStr, size_t aPos )
+{
+    if( aPos == 0 )
+        return false;
+
+    // Count consecutive backslashes before this position
+    int backslashCount = 0;
+    size_t pos = aPos;
+
+    while( pos > 0 && aStr[pos - 1] == '\\' )
+    {
+        backslashCount++;
+        pos--;
+    }
+
+    // If odd number of backslashes, the character is escaped
+    return ( backslashCount % 2 ) == 1;
+}
+
+
 bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
                                    std::vector<wxString>* aMemberList )
 {
@@ -1086,6 +1113,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     long     begin = 0;
     long     end = 0;
     int      braceNesting = 0;
+    bool     inQuotes = false;
 
     prefix.reserve( busLen );
 
@@ -1093,6 +1121,29 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     //
     for( ; i < busLen; ++i )
     {
+        // Handle quoted strings (allows spaces inside)
+        if( aBus[i] == '"' && !isEscaped( aBus, i ) )
+        {
+            inQuotes = !inQuotes;
+            continue;
+        }
+
+        if( inQuotes )
+        {
+            // Inside quotes, add characters directly (including spaces)
+            if( aBus[i] == '\\' && i + 1 < busLen )
+            {
+                // Handle escaped characters inside quotes
+                prefix += aBus[++i];
+            }
+            else
+            {
+                prefix += aBus[i];
+            }
+
+            continue;
+        }
+
         if( aBus[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aBus[i-1] ) )
@@ -1113,6 +1164,14 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
             continue;
         }
 
+        // Handle backslash-escaped spaces
+        if( aBus[i] == '\\' && i + 1 < busLen && aBus[i + 1] == ' ' )
+        {
+            prefix += aBus[++i];
+            continue;
+        }
+
+        // Unescaped space or ] in bus vector prefix is not allowed
         if( aBus[i] == ' ' || aBus[i] == ']' )
             return false;
 
@@ -1219,13 +1278,57 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     wxString prefix;
     wxString tmp;
     int      braceNesting = 0;
+    bool     inQuotes = false;
 
     prefix.reserve( groupLen );
+
+    // Escape spaces in member names so recursive parsing by ForEachBusMember works correctly.
+    // Both quoted strings and backslash-escaped spaces collapse to bare spaces during parsing,
+    // so we must re-escape them for subsequent ParseBusVector/ParseBusGroup calls.
+    auto escapeSpacesForBus =
+            []( const wxString& aMember ) -> wxString
+            {
+                wxString escaped;
+                escaped.reserve( aMember.length() * 2 );
+
+                for( wxUniChar c : aMember )
+                {
+                    if( c == ' ' )
+                        escaped += wxT( "\\ " );
+                    else
+                        escaped += c;
+                }
+
+                return escaped;
+            };
 
     // Parse prefix
     //
     for( ; i < groupLen; ++i )
     {
+        // Handle quoted strings (allows spaces inside)
+        if( aGroup[i] == '"' && !isEscaped( aGroup, i ) )
+        {
+            inQuotes = !inQuotes;
+            continue;
+        }
+
+        if( inQuotes )
+        {
+            // Inside quotes, add characters directly (including spaces)
+            if( aGroup[i] == '\\' && i + 1 < groupLen )
+            {
+                // Handle escaped characters inside quotes
+                prefix += aGroup[++i];
+            }
+            else
+            {
+                prefix += aGroup[i];
+            }
+
+            continue;
+        }
+
         if( aGroup[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
@@ -1245,6 +1348,14 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             braceNesting--;
         }
 
+        // Handle backslash-escaped spaces
+        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        {
+            prefix += aGroup[++i];
+            continue;
+        }
+
+        // Unescaped space, [, or ] in bus group prefix is not allowed
         if( aGroup[i] == ' ' || aGroup[i] == '[' || aGroup[i] == ']' )
             return false;
 
@@ -1264,8 +1375,33 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
     if( i >= groupLen )
         return false;
 
+    inQuotes = false;
+
     for( ; i < groupLen; ++i )
     {
+        // Handle quoted strings (allows spaces inside member names)
+        if( aGroup[i] == '"' && !isEscaped( aGroup, i ) )
+        {
+            inQuotes = !inQuotes;
+            continue;
+        }
+
+        if( inQuotes )
+        {
+            // Inside quotes, add characters directly (including spaces)
+            if( aGroup[i] == '\\' && i + 1 < groupLen )
+            {
+                // Handle escaped characters inside quotes
+                tmp += aGroup[++i];
+            }
+            else
+            {
+                tmp += aGroup[i];
+            }
+
+            continue;
+        }
+
         if( aGroup[i] == '{' )
         {
             if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
@@ -1290,17 +1426,24 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             else
             {
                 if( aMemberList && !tmp.IsEmpty() )
-                    aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
+                    aMemberList->push_back( EscapeString( escapeSpacesForBus( tmp ), CTX_NETNAME ) );
 
                 return true;
             }
         }
 
-        // Commas aren't strictly legal, but we can be pretty sure what the author had in mind.
+        // Handle backslash-escaped spaces in member names
+        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        {
+            tmp += aGroup[++i];
+            continue;
+        }
+
+        // Unescaped space or comma separates members
         if( aGroup[i] == ' ' || aGroup[i] == ',' )
         {
             if( aMemberList && !tmp.IsEmpty() )
-                aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
+                aMemberList->push_back( EscapeString( escapeSpacesForBus( tmp ), CTX_NETNAME ) );
 
             tmp.Clear();
             continue;
