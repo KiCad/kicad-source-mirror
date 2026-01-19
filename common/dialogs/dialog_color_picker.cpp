@@ -336,7 +336,6 @@ void DIALOG_COLOR_PICKER::createRGBBitmap()
     m_bitmapRGB = new wxBitmap( img, 24 );
 
     m_bitmapRGB->SetScaleFactor( GetDPIScaleFactor() );
-    m_RgbBitmap->SetBitmap( *m_bitmapRGB );
 }
 
 
@@ -402,7 +401,6 @@ void DIALOG_COLOR_PICKER::createHSVBitmap()
     m_bitmapHSV = new wxBitmap( img, 24 );
 
     m_bitmapHSV->SetScaleFactor( GetDPIScaleFactor() );
-    m_HsvBitmap->SetBitmap( *m_bitmapHSV );
 }
 
 
@@ -411,73 +409,70 @@ void DIALOG_COLOR_PICKER::drawRGBPalette()
     if( !m_bitmapRGB || m_bitmapRGB->GetSize() != ToPhys( m_RgbBitmap->GetSize() ) )
         createRGBBitmap();
 
-    wxMemoryDC bitmapDC;
-    wxSize     bmsize = m_bitmapRGB->GetSize();
-    int        half_size = std::min( bmsize.x, bmsize.y ) / 2;
+    wxSize bmsize = m_bitmapRGB->GetSize();
+    int    half_size = std::min( bmsize.x, bmsize.y ) / 2;
 
     wxBitmap newBm( *m_bitmapRGB );
     newBm.SetScaleFactor( 1.0 );
 
-    bitmapDC.SelectObject( newBm );
+    {
+        wxMemoryDC bitmapDC( newBm );
 
-    // Use Y axis from bottom to top and origin to center
-    bitmapDC.SetAxisOrientation( true, true );
+        // Use Y axis from bottom to top and origin to center
+        bitmapDC.SetAxisOrientation( true, true );
 
-#if defined( __WXMSW__ ) && !wxCHECK_VERSION( 3, 3, 0 )
-    // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
-    // It was fixed in wx >= 3.3
-    bitmapDC.SetDeviceOrigin( half_size, -half_size );
-#else
-    bitmapDC.SetDeviceOrigin( half_size, half_size );
-#endif
+    #if defined( __WXMSW__ ) && !wxCHECK_VERSION( 3, 3, 0 )
+        // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+        // It was fixed in wx >= 3.3
+        bitmapDC.SetDeviceOrigin( half_size, -half_size );
+    #else
+        bitmapDC.SetDeviceOrigin( half_size, half_size );
+    #endif
 
-    // Reserve room to draw cursors inside the bitmap
-    half_size -= m_cursorsSize / 2;
+        // Reserve room to draw cursors inside the bitmap
+        half_size -= m_cursorsSize / 2;
 
-    // Draw the 3 RGB cursors, using white color to make them always visible:
-    wxPen pen( wxColor( 255, 255, 255 ), 2 );       // use 2 pixels for pen size
-    wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
-    bitmapDC.SetPen( pen );
-    bitmapDC.SetBrush( brush );
-    int half_csize = m_cursorsSize / 2;
+        // Draw the 3 RGB cursors, using white color to make them always visible:
+        wxPen pen( wxColor( 255, 255, 255 ), 2 );       // use 2 pixels for pen size
+        wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
+        bitmapDC.SetPen( pen );
+        bitmapDC.SetBrush( brush );
+        int half_csize = m_cursorsSize / 2;
 
-    double slope = SLOPE_AXIS / half_size;
+        double slope = SLOPE_AXIS / half_size;
 
-    // Red axis cursor (Z 3Daxis):
-    m_cursorBitmapRed.x = 0;
-    m_cursorBitmapRed.y = m_newColor4D.r * half_size;
-    bitmapDC.DrawRectangle( m_cursorBitmapRed.x - half_csize,
-                            m_cursorBitmapRed.y - half_csize,
-                            m_cursorsSize, m_cursorsSize );
+        // Red axis cursor (Z 3Daxis):
+        m_cursorBitmapRed.x = 0;
+        m_cursorBitmapRed.y = m_newColor4D.r * half_size;
+        bitmapDC.DrawRectangle( m_cursorBitmapRed.x - half_csize,
+                                m_cursorBitmapRed.y - half_csize,
+                                m_cursorsSize, m_cursorsSize );
 
-    // Blue axis cursor (X 3Daxis):
-    m_cursorBitmapBlue.x = m_newColor4D.b * half_size;
-    m_cursorBitmapBlue.y = - slope*m_cursorBitmapBlue.x;
-    bitmapDC.DrawRectangle( m_cursorBitmapBlue.x - half_csize,
-                            m_cursorBitmapBlue.y - half_csize,
-                            m_cursorsSize, m_cursorsSize );
+        // Blue axis cursor (X 3Daxis):
+        m_cursorBitmapBlue.x = m_newColor4D.b * half_size;
+        m_cursorBitmapBlue.y = - slope*m_cursorBitmapBlue.x;
+        bitmapDC.DrawRectangle( m_cursorBitmapBlue.x - half_csize,
+                                m_cursorBitmapBlue.y - half_csize,
+                                m_cursorsSize, m_cursorsSize );
 
-    // Green axis cursor (Y 3Daxis):
-    m_cursorBitmapGreen.x = m_newColor4D.g * half_size;
-    m_cursorBitmapGreen.y = - slope * m_cursorBitmapGreen.x;
-    m_cursorBitmapGreen.x = -m_cursorBitmapGreen.x;
+        // Green axis cursor (Y 3Daxis):
+        m_cursorBitmapGreen.x = m_newColor4D.g * half_size;
+        m_cursorBitmapGreen.y = - slope * m_cursorBitmapGreen.x;
+        m_cursorBitmapGreen.x = -m_cursorBitmapGreen.x;
 
-    bitmapDC.DrawRectangle( m_cursorBitmapGreen.x - half_csize,
-                            m_cursorBitmapGreen.y - half_csize,
-                            m_cursorsSize, m_cursorsSize );
+        bitmapDC.DrawRectangle( m_cursorBitmapGreen.x - half_csize,
+                                m_cursorBitmapGreen.y - half_csize,
+                                m_cursorsSize, m_cursorsSize );
 
-    // Draw the 3 RGB axis:
-    half_size += half_size/5;
-    bitmapDC.DrawLine( 0, 0, 0, half_size );                    // Red axis (Z 3D axis)
-    bitmapDC.DrawLine( 0, 0, half_size, - half_size*slope );    // Blue axis (X 3D axis)
-    bitmapDC.DrawLine( 0, 0, -half_size, - half_size*slope );   // green axis (Y 3D axis)
+        // Draw the 3 RGB axis:
+        half_size += half_size/5;
+        bitmapDC.DrawLine( 0, 0, 0, half_size );                    // Red axis (Z 3D axis)
+        bitmapDC.DrawLine( 0, 0, half_size, - half_size*slope );    // Blue axis (X 3D axis)
+        bitmapDC.DrawLine( 0, 0, -half_size, - half_size*slope );   // green axis (Y 3D axis)
+    }
 
     newBm.SetScaleFactor( GetDPIScaleFactor() );
     m_RgbBitmap->SetBitmap( newBm );
-
-    /* Deselect the Tool Bitmap from DC,
-     *  in order to delete the MemoryDC safely without deleting the bitmap */
-    bitmapDC.SelectObject( wxNullBitmap );
 }
 
 
@@ -486,48 +481,44 @@ void DIALOG_COLOR_PICKER::drawHSVPalette()
     if( !m_bitmapHSV || m_bitmapHSV->GetSize() != ToPhys( m_HsvBitmap->GetSize() ) )
         createHSVBitmap();
 
-    wxMemoryDC bitmapDC;
-    wxSize     bmsize = m_bitmapHSV->GetSize();
-    int        half_size = std::min( bmsize.x, bmsize.y ) / 2;
+    wxSize bmsize = m_bitmapHSV->GetSize();
+    int    half_size = std::min( bmsize.x, bmsize.y ) / 2;
 
     wxBitmap newBm( *m_bitmapHSV );
     newBm.SetScaleFactor( 1.0 );
 
-    bitmapDC.SelectObject( newBm );
+    {
+        wxMemoryDC bitmapDC( newBm );
 
-    // Use Y axis from bottom to top and origin to center
-    bitmapDC.SetAxisOrientation( true, true );
-#if defined( __WXMSW__ ) && !wxCHECK_VERSION(3,3,0)
-    // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
-    // It was fixed in wx >= 3.3
-    bitmapDC.SetDeviceOrigin( half_size, -half_size );
-#else
-    bitmapDC.SetDeviceOrigin( half_size, half_size );
-#endif
+        // Use Y axis from bottom to top and origin to center
+        bitmapDC.SetAxisOrientation( true, true );
+    #if defined( __WXMSW__ ) && !wxCHECK_VERSION(3,3,0)
+        // For some reason, SetDeviceOrigin has changed in wxWidgets 3.1.6 or 3.1.7
+        // It was fixed in wx >= 3.3
+        bitmapDC.SetDeviceOrigin( half_size, -half_size );
+    #else
+        bitmapDC.SetDeviceOrigin( half_size, half_size );
+    #endif
 
-    // Reserve room to draw cursors inside the bitmap
-    half_size -= m_cursorsSize / 2;
+        // Reserve room to draw cursors inside the bitmap
+        half_size -= m_cursorsSize / 2;
 
-    // Draw the HSB cursor:
-    m_cursorBitmapHSV.x = cos( m_hue * M_PI / 180.0 ) * half_size * m_sat;
-    m_cursorBitmapHSV.y = sin( m_hue * M_PI / 180.0 ) * half_size * m_sat;
+        // Draw the HSB cursor:
+        m_cursorBitmapHSV.x = cos( m_hue * M_PI / 180.0 ) * half_size * m_sat;
+        m_cursorBitmapHSV.y = sin( m_hue * M_PI / 180.0 ) * half_size * m_sat;
 
-    wxPen pen( wxColor( 0, 0, 0 ), 2 );     // Use 2 pixels as pensize
-    wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
-    bitmapDC.SetPen( pen );
-    bitmapDC.SetBrush( brush );
+        wxPen pen( wxColor( 0, 0, 0 ), 2 );     // Use 2 pixels as pensize
+        wxBrush brush( wxColor( 0, 0, 0 ), wxBRUSHSTYLE_TRANSPARENT );
+        bitmapDC.SetPen( pen );
+        bitmapDC.SetBrush( brush );
 
-    bitmapDC.DrawRectangle( m_cursorBitmapHSV.x - ( m_cursorsSize / 2 ),
-                            m_cursorBitmapHSV.y - ( m_cursorsSize / 2 ),
-                            m_cursorsSize, m_cursorsSize );
+        bitmapDC.DrawRectangle( m_cursorBitmapHSV.x - ( m_cursorsSize / 2 ),
+                                m_cursorBitmapHSV.y - ( m_cursorsSize / 2 ),
+                                m_cursorsSize, m_cursorsSize );
+    }
 
     newBm.SetScaleFactor( GetDPIScaleFactor() );
     m_HsvBitmap->SetBitmap( newBm );
-
-    /* Deselect the Tool Bitmap from DC,
-     * in order to delete the MemoryDC safely without deleting the bitmap
-     */
-    bitmapDC.SelectObject( wxNullBitmap );
 }
 
 
