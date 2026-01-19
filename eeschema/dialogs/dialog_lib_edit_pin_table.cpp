@@ -273,8 +273,8 @@ public:
 
             for( int i = 1; i <= aSymbol.GetUnitCount(); i++ )
             {
-                if( aValue == aPin.GetBodyStyleDescription( i, true )
-                        || aValue == aPin.GetBodyStyleDescription( i, false ) )
+                if( aValue == aPin.GetUnitDisplayName( i, true )
+                        || aValue == aPin.GetUnitDisplayName( i, false ) )
                 {
                     aPin.SetUnit( i );
                     break;
@@ -1104,7 +1104,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     unitNames.push_back( wxGetTranslation( UNITS_ALL ) );
 
     for( int i = 1; i <= aSymbol->GetUnitCount(); i++ )
-        unitNames.push_back( LIB_SYMBOL::LetterSubReference( i, 'A' ) );
+        unitNames.push_back( m_symbol->GetUnitDisplayName( i, true ) );
 
     attr->SetEditor( new GRID_CELL_COMBOBOX( unitNames ) );
     m_grid->SetColAttr( COL_UNIT, attr );

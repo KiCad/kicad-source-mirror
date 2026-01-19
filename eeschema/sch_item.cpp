@@ -189,6 +189,7 @@ wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const
     return wxEmptyString;
 }
 
+
 void SCH_ITEM::SetUnitString( const wxString& aUnit )
 {
     if( aUnit == _HKI( "All units" ) )
