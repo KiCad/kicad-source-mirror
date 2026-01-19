@@ -2813,9 +2813,11 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         graphic->SetLayer( m_layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        auto angleSnap = GetAngleSnapMode();
+        LEADER_MODE angleSnap = GetAngleSnapMode();
+
         if( evt->Modifier( MD_CTRL ) )
             angleSnap = LEADER_MODE::DIRECT;
+
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         VECTOR2I cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic,
                                                                     GRID_GRAPHICS ),
