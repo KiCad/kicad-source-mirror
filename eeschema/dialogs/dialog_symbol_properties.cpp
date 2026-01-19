@@ -644,6 +644,19 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_embeddedFiles && !m_embeddedFiles->TransferDataToWindow() )
         return false;
 
+    // Recalculate the dialog size now that the grid is populated. On first run, the dialog was
+    // sized before data was available, so the grid had zero height. Recalculating ensures the
+    // minimum size accounts for the actual grid content.
+    m_fieldsGrid->Layout();
+    Layout();
+    GetSizer()->SetSizeHints( this );
+
+    wxSize minSize = GetMinSize();
+    wxSize curSize = GetSize();
+
+    if( curSize.y < minSize.y )
+        SetSize( wxSize( curSize.x, minSize.y ) );
+
     return true;
 }
 
