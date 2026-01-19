@@ -721,7 +721,8 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             SCH_COLLECTOR collector;
 
-            if( m_selection.GetSize() == 1 && dynamic_cast<SCH_TABLE*>( m_selection.GetItem( 0 ) ) )
+            if( m_selection.GetSize() == 1 && dynamic_cast<SCH_TABLE*>( m_selection.GetItem( 0 ) )
+                    && evt->HasPosition() && selectionContains( evt->DragOrigin() ) )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::move );
             }
