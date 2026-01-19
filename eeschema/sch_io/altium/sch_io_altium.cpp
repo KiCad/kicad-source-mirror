@@ -391,17 +391,51 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         if( !key.starts_with( "sch" ) )
             continue;
 
+        wxFileName fn( filestring );
+
+        // Check if this file was already loaded as a subsheet of another sheet.
+        // This can happen when the project file lists sheets in an order where a parent
+        // sheet is processed before its subsheets. We need to handle potential case
+        // differences in filenames (e.g., LVDS.SCHDOC vs LVDS.SchDoc).
+        SCH_SCREEN* existingScreen = nullptr;
+        m_rootSheet->SearchHierarchy( fn.GetFullPath(), &existingScreen );
+
+        // If not found, try case-insensitive search by checking all loaded screens.
+        // Compare base names only (without extension) since Altium uses .SchDoc/.SCHDOC
+        // while KiCad uses .kicad_sch
+        if( !existingScreen )
+        {
+            SCH_SCREENS allScreens( m_rootSheet );
+
+            for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
+            {
+                wxFileName screenFn( screen->GetFileName() );
+                wxFileName checkFn( fn.GetFullPath() );
+
+                if( screenFn.GetName().IsSameAs( checkFn.GetName(), false ) )
+                {
+                    existingScreen = screen;
+                    break;
+                }
+            }
+        }
+
+        if( existingScreen )
+            continue;
+
         VECTOR2I pos    = VECTOR2I( x * schIUScale.MilsToIU( 1000 ),
                                     y * schIUScale.MilsToIU( 1000 ) );
 
-        wxFileName                 fn( filestring );
         wxFileName                 kicad_fn( fn );
         std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         sheet->SetScreen( screen );
 
+        // Convert to KiCad project-relative path with .kicad_sch extension
         kicad_fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
         kicad_fn.SetPath( aSchematic->Prj().GetProjectPath() );
+
+        // Sheet uses relative filename, screen uses full path
         sheet->SetFileName( kicad_fn.GetFullName() );
         screen->SetFileName( kicad_fn.GetFullPath() );
 
@@ -410,6 +444,8 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         wxString pageNo = wxString::Format( wxT( "%d" ), page++ );
 
         m_sheetPath.push_back( sheet.get() );
+
+        // Parse from the original Altium file location
         ParseAltiumSch( fn.GetFullPath() );
 
         m_sheetPath.SetPageNumber( pageNo );
@@ -422,7 +458,9 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         sheet->SetParent( m_sheetPath.Last() );
         SCH_SHEET* sheetPtr = sheet.release();
         currentScreen->Append( sheetPtr );
-        sheets[fn.GetFullPath()] = sheetPtr;
+
+        // Use the KiCad path for the map key since screen filenames use KiCad paths
+        sheets[kicad_fn.GetFullPath()] = sheetPtr;
 
         x += 2;
 
@@ -847,9 +885,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         }
         catch( const std::exception& exc )
         {
-            wxLogTrace( traceAltiumSch, wxS( "Unhandled exception in Altium schematic "
-                                             "parsers: %s." ), exc.what() );
-            throw;
+            THROW_IO_ERROR( wxString::Format( _( "Error parsing Altium schematic: %s" ), exc.what() ) );
         }
     }
     else // ASCII
@@ -921,7 +957,27 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             SCH_SCREEN* screen = sheet->GetScreen();
 
             if( sheet->GetName().Trim().empty() )
-                sheet->SetName( loadAltiumFileName.GetName() );
+            {
+                wxString sheetName = loadAltiumFileName.GetName();
+
+                std::set<wxString> sheetNames;
+
+                for( EDA_ITEM* otherItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
+                {
+                    SCH_SHEET* otherSheet = static_cast<SCH_SHEET*>( otherItem );
+                    sheetNames.insert( otherSheet->GetName() );
+                }
+
+                for( int ii = 1; ; ++ii )
+                {
+                    if( sheetNames.find( sheetName ) == sheetNames.end() )
+                        break;
+
+                    sheetName = loadAltiumFileName.GetName() + wxString::Format( wxT( "_%d" ), ii );
+                }
+
+                sheet->SetName( sheetName );
+            }
 
             wxCHECK2( screen, continue );
 
@@ -4843,9 +4899,7 @@ void SCH_IO_ALTIUM::ensureLoadedLibrary( const wxString& aLibraryPath,
     }
     catch( const std::exception& exc )
     {
-        wxFAIL_MSG( wxString::Format( wxT( "Unhandled exception in Altium schematic parsers: %s." ),
-                                      exc.what() ) );
-        throw;
+        THROW_IO_ERROR( wxString::Format( _( "Error parsing Altium library: %s" ), exc.what() ) );
     }
 }
 
