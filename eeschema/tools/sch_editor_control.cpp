@@ -26,6 +26,7 @@
 
 #include <clipboard.h>
 #include <algorithm>
+#include <chrono>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <design_block.h>
@@ -98,6 +99,10 @@
 #include <wx/mstream.h>
 #include <wx/clipbrd.h>
 
+#ifdef __WXGTK__
+#include <wx/imagpng.h>
+#endif
+
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
 #endif
@@ -126,18 +131,6 @@ void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString
     entry.m_mimeType = aMimeType;
     entry.m_data = aBuffer;
     aMimeData.push_back( entry );
-}
-
-
-void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType, wxBitmap&& aImage )
-{
-    if( !aImage.IsOk() )
-        return;
-
-    CLIPBOARD_MIME_DATA entry;
-    entry.m_mimeType = aMimeType;
-    entry.m_image = std::move( aImage );
-    aMimeData.push_back( std::move( entry ) );
 }
 
 
@@ -1765,16 +1758,65 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             wxMemoryBuffer svgBuffer;
 
             if( plotSelectionToSvg( m_frame, selection, selectionBox, svgBuffer ) )
+            {
                 appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
+            }
             else
+            {
                 wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
+            }
 
-            wxBitmap pngImage = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox, false, false );
+            wxBitmap bitmapWithAlpha = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox, true, false );
 
-            if( pngImage.IsOk() )
-                appendMimeData( mimeData, wxS( "image/png" ), std::move( pngImage ) );
+            if( bitmapWithAlpha.IsOk() )
+            {
+#ifdef __WXGTK__
+                // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
+                // PNG twice internally (once to count size, once to save). We optimize by
+                // encoding PNG once ourselves with fast compression settings.
+                wxImage pngImage = bitmapWithAlpha.ConvertToImage();
+
+                if( pngImage.IsOk() )
+                {
+                    // Fast PNG settings optimized for schematic graphics:
+                    // - Compression level 1 (fast)
+                    // - Z_RLE strategy (good for images with runs of identical pixels)
+                    // - PNG_FILTER_NONE (skip filtering step)
+                    pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );
+                    pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 );  // Z_RLE
+                    pngImage.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );             // PNG_FILTER_NONE
+
+                    wxMemoryOutputStream pngStream;
+
+                    if( pngImage.SaveFile( pngStream, wxBITMAP_TYPE_PNG ) )
+                    {
+                        wxMemoryBuffer pngBuffer( pngStream.GetLength() );
+                        pngBuffer.AppendData( pngStream.GetOutputStreamBuffer()->GetBufferStart(),
+                                              pngStream.GetLength() );
+
+                        CLIPBOARD_MIME_DATA entry;
+                        entry.m_data = pngBuffer;
+                        entry.m_useRawPngData = true;
+                        entry.m_image = bitmapWithAlpha;  // Also store bitmap for image editor compatibility
+                        mimeData.push_back( std::move( entry ) );
+                    }
+                    else
+                    {
+                        wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
+                    }
+                }
+#else
+                // On Windows (CF_DIB) and macOS (TIFF), wxBitmapDataObject uses native formats
+                // that don't require PNG encoding. Pass bitmap directly.
+                CLIPBOARD_MIME_DATA entry;
+                entry.m_image = std::move( bitmapWithAlpha );
+                mimeData.push_back( std::move( entry ) );
+#endif
+            }
             else
-                wxLogTrace( traceSchPaste, wxS( "Failed to generate PNG for clipboard" ) );
+            {
+                wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
+            }
         }
     }
 
@@ -1787,7 +1829,9 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         return true;
     }
 
-    return SaveClipboard( prettyData, mimeData );
+    bool result = SaveClipboard( prettyData, mimeData );
+
+    return result;
 }
 
 

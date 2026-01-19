@@ -36,10 +36,16 @@ struct CLIPBOARD_MIME_DATA
     wxString       m_mimeType;
     wxMemoryBuffer m_data;
 
-    /// Optional pre-decoded image for "image/png" MIME type.
-    /// When set, SaveClipboard() uses this directly instead of decoding m_data,
-    /// avoiding expensive double PNG encode/decode during clipboard operations.
+    /// Optional bitmap image to add to clipboard via wxBitmapDataObject.
+    /// When set, SaveClipboard() adds this using the platform-native format
+    /// (PNG on GTK, CF_DIB on Windows, TIFF on macOS).
     std::optional<wxBitmap> m_image;
+
+    /// When true and m_mimeType is "image/png", m_data contains pre-encoded PNG bytes.
+    /// SaveClipboard() will add this via wxCustomDataObject as the preferred format,
+    /// providing fast clipboard access for apps that support raw PNG data.
+    /// m_image should also be set for compatibility with image editors.
+    bool m_useRawPngData = false;
 };
 
 /**

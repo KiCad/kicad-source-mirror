@@ -31,10 +31,7 @@
 #include <wx/string.h>
 #include <wx/sstream.h>
 
-#include <sstream>
-
 #include <io/csv.h>
-
 
 bool SaveClipboard( const std::string& aTextUTF8 )
 {
@@ -74,35 +71,25 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
             if( entry.m_data.GetDataLen() == 0 && !entry.m_image.has_value() )
                 continue;
 
-            // For PNG data, add as wxBitmapDataObject for compatibility with image
-            // applications like GIMP that expect standard bitmap clipboard format.
-            // We use wxBitmapDataObject instead of custom format because it's more
-            // widely supported and avoids clipboard format query issues.
-            if( entry.m_mimeType == wxS( "image/png" ) )
+            // Handle pre-encoded PNG data (GTK optimization path).
+            // Use wxDF_BITMAP to prevent wx from setting the type to Private
+            if( entry.m_useRawPngData && entry.m_data.GetDataLen() > 0 )
             {
-                wxBitmap bitmap;
+                wxCustomDataObject* custom = new wxCustomDataObject( wxDF_BITMAP );
+                custom->Alloc( entry.m_data.GetDataLen() );
+                custom->SetData( entry.m_data.GetDataLen(), entry.m_data.GetData() );
+                data->Add( custom );
 
-                // Use pre-decoded image if available (avoids expensive PNG decode)
-                if( entry.m_image.has_value() && entry.m_image->IsOk() )
-                {
-                    bitmap = *entry.m_image;
-                }
-                else if( entry.m_data.GetDataLen() > 0 )
-                {
-                    wxMemoryInputStream stream( entry.m_data.GetData(), entry.m_data.GetDataLen() );
-                    wxImage             img( stream, wxBITMAP_TYPE_PNG );
+                continue;
+            }
 
-                    if( img.IsOk() )
-                        bitmap = wxBitmap( img );
-                }
-
-                if( bitmap.IsOk() )
-                {
-                    data->Add( new wxBitmapDataObject( bitmap ) );
-                }
-
-                // Don't also add as custom format - wxBitmapDataObject is sufficient
-                // for image apps, and adding both can cause clipboard query issues
+            // Handle bitmap image data using platform-native clipboard format.
+            // wxBitmapDataObject automatically converts to the appropriate format:
+            // - Windows: CF_DIB
+            // - macOS: kUTTypeTIFF
+            if( entry.m_image.has_value() && entry.m_image->IsOk() )
+            {
+                data->Add( new wxBitmapDataObject( *entry.m_image ) );
                 continue;
             }
 
