@@ -1185,4 +1185,120 @@ BOOST_DATA_TEST_CASE( ArcToPolyline, boost::unit_test::data::make( ArcToPolyline
 }
 
 
+/**
+ * Test that TransformArcToPolygon handles shallow arcs (where the mid-point is nearly
+ * collinear with start and end points) without producing invalid geometry due to
+ * integer overflow from extremely large radii.
+ *
+ * This is a regression test for issue #22475 where shallow-radius arc segments
+ * caused polygon pour rendering artifacts.
+ */
+BOOST_AUTO_TEST_CASE( TransformShallowArcToPolygon )
+{
+    SHAPE_POLY_SET buffer;
+
+    // Create an arc where the mid-point is only slightly off the start-end line.
+    // This creates a very large radius arc that previously caused integer overflow.
+    const VECTOR2I start( 0, 0 );
+    const VECTOR2I end( 10000000, 0 );       // 10mm chord length
+    const VECTOR2I mid( 5000000, 5 );        // Mid-point only 5nm off the line
+
+    const int width = 250000;                // 0.25mm track width
+    const int aError = 5000;                 // Default error tolerance
+
+    // This should not crash or produce invalid geometry
+    TransformArcToPolygon( buffer, start, mid, end, width, aError, ERROR_INSIDE );
+
+    // Should produce at least one outline
+    BOOST_CHECK( buffer.OutlineCount() >= 1 );
+
+    // The outline should be valid (closed, has points)
+    if( buffer.OutlineCount() > 0 )
+    {
+        const SHAPE_LINE_CHAIN& outline = buffer.COutline( 0 );
+        BOOST_CHECK( outline.IsClosed() );
+        BOOST_CHECK( outline.PointCount() >= 3 );
+
+        // The bounding box should be reasonable (roughly the track width around the chord)
+        BOX2I bbox = outline.BBox();
+        BOOST_CHECK( bbox.GetWidth() <= end.x + width * 2 );
+        BOOST_CHECK( bbox.GetHeight() <= width * 2 + 100 ); // Allow some tolerance
+    }
+}
+
+
+/**
+ * Test that arcs with extremely large radii (greater than INT_MAX/2) are
+ * properly converted to line segments.
+ */
+BOOST_AUTO_TEST_CASE( TransformVeryShallowArcToPolygon )
+{
+    SHAPE_POLY_SET buffer;
+
+    // Create an arc that is effectively a straight line - mid-point essentially on the line.
+    // This should be detected by IsEffectiveLine() and handled as a line segment.
+    const VECTOR2I start( 0, 0 );
+    const VECTOR2I end( 50000000, 0 );       // 50mm chord length
+    const VECTOR2I mid( 25000000, 1 );       // Mid-point only 1nm off the line
+
+    const int width = 250000;                // 0.25mm track width
+    const int aError = 5000;
+
+    // This should not crash and should produce valid geometry
+    TransformArcToPolygon( buffer, start, mid, end, width, aError, ERROR_INSIDE );
+
+    BOOST_CHECK( buffer.OutlineCount() >= 1 );
+
+    if( buffer.OutlineCount() > 0 )
+    {
+        const SHAPE_LINE_CHAIN& outline = buffer.COutline( 0 );
+        BOOST_CHECK( outline.IsClosed() );
+        BOOST_CHECK( outline.PointCount() >= 3 );
+    }
+}
+
+
+/**
+ * Test arc with values similar to problematic arcs in issue #22475 board.
+ * These arcs have distToMid around 12-13µm with radius around 24mm.
+ */
+BOOST_AUTO_TEST_CASE( TransformIssue22475ArcToPolygon )
+{
+    SHAPE_POLY_SET buffer;
+
+    // Values approximating one of the problematic arcs from issue #22475:
+    // radius=24.35 mm, distToMid=12960 nm, chord=1.62 mm, angle=-3.8 deg
+    // Compute start, mid, end points for such an arc
+    const VECTOR2I start( 0, 0 );
+    const VECTOR2I end( 1620000, 0 );          // 1.62mm chord length
+    const VECTOR2I mid( 810000, 12960 );       // Mid-point 12960nm (12.96µm) off the line
+
+    const int width = 200000;                   // 0.2mm track width
+    const int aError = 5000;
+
+    // Before the fix, this should create a polygon with very large extent
+    // After the fix, it should create a reasonable oval-shaped polygon
+    TransformArcToPolygon( buffer, start, mid, end, width, aError, ERROR_INSIDE );
+
+    BOOST_REQUIRE( buffer.OutlineCount() >= 1 );
+
+    const SHAPE_LINE_CHAIN& outline = buffer.COutline( 0 );
+    BOOST_CHECK( outline.IsClosed() );
+    BOOST_CHECK( outline.PointCount() >= 3 );
+
+    BOX2I bbox = outline.BBox();
+
+    // The bounding box should be reasonable - roughly chord + 2*width wide, 2*width high
+    // With the fix (treating as oval), width should be ~1620000 + 2*200000 = 2020000
+    // Height should be ~2*200000 = 400000
+    // Without the fix, the height could be enormous due to the large arc radius
+
+    // Check that the polygon isn't ridiculously large
+    BOOST_CHECK_MESSAGE( bbox.GetWidth() <= 3000000,
+                         wxString::Format( "Polygon width %d is too large (expected ~2020000)", bbox.GetWidth() ) );
+    BOOST_CHECK_MESSAGE( bbox.GetHeight() <= 1000000,
+                         wxString::Format( "Polygon height %d is too large (expected ~400000)", bbox.GetHeight() ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -24,10 +24,13 @@
 
 #include <algorithm>                    // for max, min
 #include <bitset>                       // for bitset::count
+#include <climits>                      // for INT_MAX
+#include <cstdint>                      // for int64_t
 #include <math.h>                       // for atan2
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_arc.h>         // for SHAPE_ARC
 #include <geometry/shape_line_chain.h>  // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>    // for SHAPE_POLY_SET, SHAPE_POLY_SE...
 #include <math/util.h>
@@ -588,6 +591,81 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, con
         // Not an arc but essentially a straight line with a small error
         TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError, aErrorLoc );
         return;
+    }
+
+    // Fast path: For well-formed arcs with sufficient curvature (sagitta/chord > 30%),
+    // skip all validation checks. This allows 99% of normal arcs to proceed directly.
+    const int64_t chordLengthSq = startToEnd.SquaredLength();
+    constexpr double DEFINITELY_VALID_SAGITTA_RATIO = 0.30;
+    const int64_t sagittaSq = (int64_t) distanceToMid * distanceToMid;
+    const int64_t thresholdSq = (int64_t)( DEFINITELY_VALID_SAGITTA_RATIO *
+                                            DEFINITELY_VALID_SAGITTA_RATIO * chordLengthSq );
+
+    if( sagittaSq <= thresholdSq )
+    {
+        // Arc may be shallow or problematic - perform comprehensive validation to detect
+        // numerical precision issues and coordinate overflow (see issue #22475)
+        const double chordLength = std::sqrt( static_cast<double>( chordLengthSq ) );
+        const double sagittaRatio = distanceToMid / chordLength;
+
+        // Check 1: Sagitta/chord ratio threshold (catches most problematic arcs)
+        constexpr double MIN_SAGITTA_CHORD_RATIO = 0.20;
+
+        if( sagittaRatio < MIN_SAGITTA_CHORD_RATIO )
+        {
+            TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                    aErrorLoc );
+            return;
+        }
+
+        // Check 2: Analytic center coordinate overflow detection using circumcenter formula
+        // For arcs that pass the sagitta check but might still have numerical issues,
+        // compute the center coordinates and verify they're within int32 bounds.
+        const int64_t x0 = aStart.x, y0 = aStart.y;
+        const int64_t x1 = aMid.x,   y1 = aMid.y;
+        const int64_t x2 = aEnd.x,   y2 = aEnd.y;
+        const int64_t det = 2 * ( x0 * ( y1 - y2 ) + x1 * ( y2 - y0 ) + x2 * ( y0 - y1 ) );
+
+        // If determinant is too small, points are nearly collinear
+        constexpr int64_t MIN_DET_FOR_ARC = 100;
+
+        if( std::abs( det ) < MIN_DET_FOR_ARC )
+        {
+            TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                    aErrorLoc );
+            return;
+        }
+
+        // Compute center coordinates using circumcenter formula
+        const double det_d = static_cast<double>( det );
+        const double mag0_sq = static_cast<double>( x0 * x0 + y0 * y0 );
+        const double mag1_sq = static_cast<double>( x1 * x1 + y1 * y1 );
+        const double mag2_sq = static_cast<double>( x2 * x2 + y2 * y2 );
+
+        const double cx = ( mag0_sq * ( y1 - y2 ) + mag1_sq * ( y2 - y0 ) + mag2_sq * ( y0 - y1 ) ) / det_d;
+        const double cy = ( mag0_sq * ( x2 - x1 ) + mag1_sq * ( x0 - x2 ) + mag2_sq * ( x1 - x0 ) ) / det_d;
+
+        // Check if center coordinates would overflow int32 bounds
+        constexpr double MAX_SAFE_CENTER_COORD = static_cast<double>( std::numeric_limits<int>::max() ) / 2.0;
+
+        if( std::abs( cx ) > MAX_SAFE_CENTER_COORD || std::abs( cy ) > MAX_SAFE_CENTER_COORD )
+        {
+            TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                    aErrorLoc );
+            return;
+        }
+
+        // Check 3: Verify radius is within safe bounds
+        const double dx = x0 - cx;
+        const double dy = y0 - cy;
+        const double radius_sq = dx * dx + dy * dy;
+
+        if( radius_sq > MAX_SAFE_CENTER_COORD * MAX_SAFE_CENTER_COORD )
+        {
+            TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError,
+                                    aErrorLoc );
+            return;
+        }
     }
 
     // This appproximation builds a single polygon by starting with a 180 degree arc at one

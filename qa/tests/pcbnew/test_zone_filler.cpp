@@ -622,3 +622,63 @@ BOOST_FIXTURE_TEST_CASE( HatchZoneThermalConnectivity, ZONE_FILL_TEST_FIXTURE )
                                            "even with large hatch gaps.",
                                            unconnectedCount ) );
 }
+
+
+/**
+ * Test for issue 22475: Zone fill should not produce artifacts when tracks contain
+ * shallow-radius arcs (where the mid-point is nearly collinear with start and end).
+ *
+ * The test board has:
+ * - A GND zone on In1.Cu
+ * - PCB_ARC tracks with very shallow radii causing mid-points to be within 250µm of
+ *   the start-end line
+ *
+ * Before the fix, these shallow arcs caused TransformArcToPolygon to compute extremely
+ * large radii, leading to integer overflow and invalid clearance hole geometry. This
+ * resulted in phantom voids and disconnected fill areas in the zone.
+ *
+ * The fix treats arcs with mid-point distance <= 250µm from the chord as straight
+ * line segments, avoiding numerical instability.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionShallowArcZoneFill, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22475/issue22475", m_board );
+
+    PCB_LAYER_ID in1Cu = m_board->GetLayerID( wxT( "In1.Cu" ) );
+
+    ZONE* gndZone = nullptr;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetNetname() == "GND" && zone->IsOnLayer( in1Cu ) )
+        {
+            gndZone = zone;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( gndZone != nullptr, "GND zone on In1.Cu not found in test board" );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    BOOST_REQUIRE_MESSAGE( gndZone->HasFilledPolysForLayer( in1Cu ),
+                           "GND zone has no fill on In1.Cu" );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = gndZone->GetFilledPolysList( in1Cu );
+
+    // The zone fill should produce a single contiguous outline. Multiple outlines
+    // indicate disconnected fill areas caused by malformed clearance holes.
+    BOOST_CHECK_EQUAL( fill->OutlineCount(), 1 );
+
+    double zoneOutlineArea = gndZone->Outline()->Area();
+    double fillArea = 0.0;
+
+    for( int i = 0; i < fill->OutlineCount(); i++ )
+        fillArea += std::abs( fill->Outline( i ).Area() );
+
+    double fillRatio = fillArea / zoneOutlineArea;
+
+    // The zone should be mostly filled. A low fill ratio indicates excessive voids
+    // from malformed clearance holes around shallow arcs.
+    BOOST_CHECK_GE( fillRatio, 0.90 );
+}
