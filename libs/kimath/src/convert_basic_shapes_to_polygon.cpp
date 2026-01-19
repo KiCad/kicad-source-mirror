@@ -24,15 +24,23 @@
 
 #include <algorithm>                    // for max, min
 #include <bitset>                       // for bitset::count
+#include <climits>                      // for INT_MAX
+#include <cmath>                        // for isfinite
+#include <cstdint>                      // for int64_t
+#include <limits>                       // for numeric_limits
 #include <math.h>                       // for atan2
 
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/arc_chord_params.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_arc.h>         // for SHAPE_ARC
 #include <geometry/shape_line_chain.h>  // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>    // for SHAPE_POLY_SET, SHAPE_POLY_SE...
 #include <math/util.h>
 #include <math/vector2d.h>              // for VECTOR2I
 #include <trigo.h>
+
+#include <wx/log.h>
 
 
 void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer, const VECTOR2I& aCenter, int aRadius,
@@ -516,6 +524,110 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR
 }
 
 
+int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aStart, const VECTOR2I& aMid,
+                          const VECTOR2I& aEnd, double aAccuracy, ERROR_LOC aErrorLoc,
+                          double aRadialOffset )
+{
+    ARC_CHORD_PARAMS params;
+
+    if( !params.Compute( aStart, aMid, aEnd ) )
+    {
+        aPolyline.Append( aStart );
+
+        if( aEnd != aStart )
+            aPolyline.Append( aEnd );
+
+        return 0;
+    }
+
+    double arc_angle = params.GetArcAngle();
+
+    if( arc_angle <= 0.0 )
+    {
+        aPolyline.Append( aStart );
+        aPolyline.Append( aEnd );
+        return 0;
+    }
+
+    constexpr double max_coord = static_cast<double>( std::numeric_limits<int>::max() );
+
+    auto append_point = [&]( double aAlpha, double aEffectiveRadius ) -> bool
+    {
+        const double u_offset = aEffectiveRadius * std::sin( aAlpha );
+        const double n_offset = params.GetCenterOffset() - aEffectiveRadius * std::cos( aAlpha );
+
+        const double x = params.GetMidX() + params.GetUx() * u_offset + params.GetNx() * n_offset;
+        const double y = params.GetMidY() + params.GetUy() * u_offset + params.GetNy() * n_offset;
+
+        if( !std::isfinite( x ) || !std::isfinite( y )
+            || std::abs( x ) > max_coord || std::abs( y ) > max_coord )
+        {
+            wxLogDebug( wxT( "Arc approximation overflow: falling back to straight segment." ) );
+            aPolyline.Clear();
+            aPolyline.Append( aStart );
+            aPolyline.Append( aEnd );
+            return false;
+        }
+
+        aPolyline.Append( KiROUND( x ), KiROUND( y ) );
+        return true;
+    };
+
+    double effective_radius = params.GetRadius() + aRadialOffset;
+
+    EDA_ANGLE arc_angle_eda( arc_angle, RADIANS_T );
+    int       n = 2;
+    int       radius_for_seg = KiROUND( std::min( std::abs( effective_radius ), max_coord ) );
+
+    if( radius_for_seg >= aAccuracy )
+        n = GetArcToSegmentCount( radius_for_seg, aAccuracy, arc_angle_eda ) + 1;
+
+    const double half_angle = arc_angle / 2.0;
+    const double delta = arc_angle / static_cast<double>( n );
+
+    if( aErrorLoc == ERROR_INSIDE )
+    {
+        for( int i = 0; i <= n; ++i )
+        {
+            if( !append_point( -half_angle + delta * i, effective_radius ) )
+                return 0;
+        }
+    }
+    else
+    {
+        int seg360 = std::abs( KiROUND( n * 360.0 / arc_angle_eda.AsDegrees() ) );
+
+        if( seg360 <= 0 )
+        {
+            for( int i = 0; i <= n; ++i )
+            {
+                if( !append_point( -half_angle + delta * i, effective_radius ) )
+                    return 0;
+            }
+
+            return n;
+        }
+
+        int    delta_radius = CircleToEndSegmentDeltaRadius( radius_for_seg, seg360 );
+        double error_radius = effective_radius + static_cast<double>( delta_radius );
+
+        if( !append_point( -half_angle, effective_radius ) )
+            return 0;
+
+        for( int i = 0; i < n; ++i )
+        {
+            if( !append_point( -half_angle + delta * ( i + 0.5 ), error_radius ) )
+                return 0;
+        }
+
+        if( !append_point( half_angle, effective_radius ) )
+            return 0;
+    }
+
+    return n;
+}
+
+
 int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRadius,
                           const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aArcAngle,
                           double aAccuracy, ERROR_LOC aErrorLoc )
@@ -585,29 +697,36 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, con
 
     if( distanceToMid <= 1 )
     {
-        // Not an arc but essentially a straight line with a small error
         TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth + distanceToMid, aError, aErrorLoc );
         return;
     }
 
-    // This appproximation builds a single polygon by starting with a 180 degree arc at one
-    // end, then the outer edge of the arc, then a 180 degree arc at the other end, and finally
-    // the inner edge of the arc.
-    SHAPE_ARC arc( aStart, aMid, aEnd, aWidth );
-    EDA_ANGLE arc_angle_start = arc.GetStartAngle();
-    EDA_ANGLE arc_angle = arc.GetCentralAngle();
-    EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
+    // Determine arc direction using cross product. For consistent polygon winding,
+    // ensure we always process a CCW arc by swapping endpoints if needed.
+    VECTOR2I startToMid = aMid - aStart;
+    VECTOR2I startToEndVec = aEnd - aStart;
+    int64_t  cross = (int64_t) startToMid.x * startToEndVec.y
+                     - (int64_t) startToMid.y * startToEndVec.x;
 
-    if( arc_angle < ANGLE_0 )
+    VECTOR2I p0 = aStart;
+    VECTOR2I p1 = aEnd;
+
+    if( cross < 0 )
+        std::swap( p0, p1 );
+
+    ARC_CHORD_PARAMS params;
+
+    if( !params.Compute( p0, aMid, p1 ) )
     {
-        std::swap( arc_angle_start, arc_angle_end );
-        arc = SHAPE_ARC( aEnd, aMid, aStart, aWidth );
-        arc_angle = -arc_angle;
+        TransformOvalToPolygon( aBuffer, aStart, aEnd, aWidth, aError, aErrorLoc );
+        return;
     }
 
-    int       radial_offset = arc.GetWidth() / 2;
-    int       arc_outer_radius = arc.GetRadius() + radial_offset;
-    int       arc_inner_radius = arc.GetRadius() - radial_offset;
+    EDA_ANGLE startAngle = params.GetStartAngle();
+    EDA_ANGLE endAngle = params.GetEndAngle();
+
+    int       radial_offset = aWidth / 2;
+    double    arc_inner_radius = params.GetRadius() - radial_offset;
     ERROR_LOC errorLocInner = ( aErrorLoc == ERROR_INSIDE ) ? ERROR_OUTSIDE : ERROR_INSIDE;
     ERROR_LOC errorLocOuter = ( aErrorLoc == ERROR_INSIDE ) ? ERROR_INSIDE : ERROR_OUTSIDE;
 
@@ -616,24 +735,19 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, con
 
     SHAPE_LINE_CHAIN& outline = polyshape.Outline( 0 );
 
-    // Starting end
-    ConvertArcToPolyline( outline, arc.GetP0(), radial_offset, arc_angle_start - ANGLE_180,
-                          ANGLE_180, aError, aErrorLoc );
-
-    // Outside edge
-    ConvertArcToPolyline( outline, arc.GetCenter(), arc_outer_radius, arc_angle_start, arc_angle,
-                          aError, errorLocOuter );
-
-    // Other end
-    ConvertArcToPolyline( outline, arc.GetP1(), radial_offset, arc_angle_end, ANGLE_180, aError,
+    // Starting end cap (semicircle at p0)
+    ConvertArcToPolyline( outline, p0, radial_offset, startAngle - ANGLE_180, ANGLE_180, aError,
                           aErrorLoc );
 
-    // Inside edge
+    // Outside edge
+    ConvertArcToPolyline( outline, p0, aMid, p1, aError, errorLocOuter, radial_offset );
+
+    // Ending end cap (semicircle at p1)
+    ConvertArcToPolyline( outline, p1, radial_offset, endAngle, ANGLE_180, aError, aErrorLoc );
+
+    // Inside edge (reversed direction)
     if( arc_inner_radius > 0 )
-    {
-        ConvertArcToPolyline( outline, arc.GetCenter(), arc_inner_radius, arc_angle_end,
-                              -arc_angle, aError, errorLocInner );
-    }
+        ConvertArcToPolyline( outline, p1, aMid, p0, aError, errorLocInner, -radial_offset );
 
     aBuffer.Append( polyshape );
 }

@@ -28,6 +28,7 @@ set( QA_KIMATH_SRCS
     test_kimath.cpp
 
     geometry/geom_test_utils.cpp
+    geometry/test_arc_chord_params.cpp
     geometry/test_chamfer.cpp
     geometry/test_circle.cpp
     geometry/test_distribute.cpp
