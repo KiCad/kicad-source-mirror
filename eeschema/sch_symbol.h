@@ -572,7 +572,8 @@ public:
      *                  reference will be synced.)
      */
     void SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit,
-                         PROPERTY_BASE* aProperty );
+                         PROPERTY_BASE* aProperty,
+                         const wxString& aVariantName = wxEmptyString );
 
     /**
      * Return the next ordinal for a user field for this symbol

@@ -429,7 +429,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                 {
                     changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
                     field->SetText( newValue.GetString(), &symbol->Schematic()->CurrentSheet(), variantName );
-                    symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+                    symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property,
+                                            variantName );
                     continue;
                 }
             }
@@ -443,7 +444,10 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         item->Set( property, newValue );
 
         if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
-            symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property );
+        {
+            symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property,
+                                    symbol->Schematic()->GetCurrentVariant() );
+        }
     }
 
     changes.Push( _( "Edit Properties" ) );

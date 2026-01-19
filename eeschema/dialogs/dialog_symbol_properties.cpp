@@ -908,7 +908,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
     // in sync in multi-unit parts.
-    m_symbol->SyncOtherUnits( currentSheet, commit, nullptr );
+    m_symbol->SyncOtherUnits( currentSheet, commit, nullptr, currentVariant );
 
     if( replaceOnCurrentScreen )
         currentScreen->Append( m_symbol );

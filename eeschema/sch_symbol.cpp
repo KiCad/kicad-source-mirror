@@ -1465,7 +1465,8 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 }
 
 
-void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit, PROPERTY_BASE* aProperty )
+void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT& aCommit,
+                                 PROPERTY_BASE* aProperty, const wxString& aVariantName )
 {
     bool updateValue = true;
     bool updateExclFromBOM = true;
@@ -1559,7 +1560,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                     otherUnit->SetExcludedFromBoard( m_excludedFromBoard );
 
                 if( updateDNP )
-                    otherUnit->SetDNP( GetDNP( &aSourceSheet ), &sheet );
+                    otherUnit->SetDNP( GetDNP( &aSourceSheet, aVariantName ), &sheet, aVariantName );
 
                 if( updatePins )
                 {
