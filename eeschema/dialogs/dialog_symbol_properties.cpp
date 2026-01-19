@@ -879,6 +879,14 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             field.SetOrdinal( ordinal++ );
     }
 
+    if( currentVariant.IsEmpty() )
+    {
+        // Reference has a specific initialization, depending on the current active sheet
+        // because for a given symbol, in a complex hierarchy, there are more than one
+        // reference.
+        m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->GetField( FIELD_T::REFERENCE )->GetText() );
+    }
+
     m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
