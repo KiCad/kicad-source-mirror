@@ -67,7 +67,6 @@
 
 namespace
 {
-constexpr double clipboardPpi = 96.0;
 constexpr int    clipboardMaxBitmapSize = 4096;
 constexpr double clipboardBboxInflation = 0.02;
 
@@ -240,14 +239,27 @@ wxImage renderSymbolToBitmap( SYMBOL_EDIT_FRAME* aFrame, LIB_SYMBOL* aSymbol, co
 
     view->SetLayerVisible( LAYER_DRAWINGSHEET, false );
 
-    double ppi = clipboardPpi;
+    // Calculate effective output DPI for the print context.
+    // On GTK, Cairo uses device scale 72/4800 and SetSheetSize doubles internal resolution.
+    // On Windows/macOS, there's no device scale, so effective DPI = native DPI * 2.
+#ifdef __WXGTK__
+    double ppi = 144.0;
+#else
+    double ppi = printCtx->GetNativeDPI() * 2.0;
+#endif
     double inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
     VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
 
     galPrint->SetSheetSize( pageSizeIn );
     galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
 
-    double zoomFactor = aViewScale * inch2Iu / ppi;
+    // SetSheetSize creates an internal canvas at 2× the nominal page size for quality.
+    // The × 2 multiplier ensures content fills this internal canvas.
+    double zoomFactor = 2.0 * aViewScale * inch2Iu / ppi;
+
+    // Set up both the GAL and VIEW to center on the bbox.
+    view->SetCenter( aBBox.Centre() );
+    view->SetScale( aViewScale * zoomFactor );
 
     gal->SetLookAtPoint( aBBox.Centre() );
     gal->SetZoomFactor( zoomFactor );

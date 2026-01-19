@@ -117,8 +117,7 @@ static const wxChar traceSchPaste[] = wxT( "KICAD_SCH_PASTE" );
 
 namespace
 {
-constexpr double clipboardPpi = 96.0;
-constexpr int    clipboardMaxBitmapSize = 4096;
+constexpr int clipboardMaxBitmapSize = 4096;
 constexpr double clipboardBboxInflation = 0.02;  // Small padding around selection
 
 void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
@@ -335,23 +334,40 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
         }
 
         // Set up page size to match the output bitmap dimensions at our target ppi.
-        // This ensures the content will be centered in the bitmap.
-        double   ppi = clipboardPpi;
-        double   inch2Iu = 1000.0 * schIUScale.IU_PER_MILS;
+        // On GTK, Cairo uses device scale 72/4800 and SetSheetSize doubles internal resolution,
+        // giving effective 144 DPI. On other platforms, use native DPI * 2.
+#ifdef __WXGTK__
+        double ppi = 144.0;
+#else
+        double ppi = printCtx->GetNativeDPI() * 2.0;
+#endif
         VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
 
         galPrint->SetSheetSize( pageSizeIn );
         galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
 
-        // Calculate zoom factor so bbox content fills the page centered.
-        // The zoom maps from IU to page coordinates, scaling by viewScale.
-        double zoomFactor = aViewScale * inch2Iu / ppi;
+        // Get base world scale at zoom=1.0 to calculate required zoom factor
+        gal->SetZoomFactor( 1.0 );
+        gal->ComputeWorldScreenMatrix();
 
-        gal->SetLookAtPoint( aBBox.Centre() );
+        VECTOR2I screenSize = gal->GetScreenPixelSize();
+        double   baseWorldScale = gal->GetWorldScale();
+        double   desiredWorldScale = (double) screenSize.x / (double) aBBox.GetWidth();
+        double   zoomFactor = desiredWorldScale / baseWorldScale;
+
+        // The Cairo print GAL creates a 2x internal buffer but the matrix uses 1x logical size.
+        // This offsets the viewport center by bbox/4 in world units. Compensate by adjusting
+        // lookAtPoint: we want ToWorld(0,0)=bbox.origin, so lookAtPoint = bboxCenter - bbox/4.
+        VECTOR2D lookAtPoint( aBBox.Centre().x - aBBox.GetWidth() / 4.0,
+                              aBBox.Centre().y - aBBox.GetHeight() / 4.0 );
+
+        gal->SetLookAtPoint( lookAtPoint );
         gal->SetZoomFactor( zoomFactor );
+        gal->ComputeWorldScreenMatrix();
         gal->SetClearColor( dstSettings->GetBackgroundColor() );
         gal->ClearScreen();
 
+        view->SetCenter( lookAtPoint );
         view->UseDrawPriority( true );
 
         {
