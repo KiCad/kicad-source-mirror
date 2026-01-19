@@ -110,6 +110,11 @@ protected:
     void onMenu( wxCommandEvent& aEvent );
 
     /**
+     * Handle key events to filter out dead keys that can crash on macOS.
+     */
+    void onCharHook( wxKeyEvent& aEvent );
+
+    /**
      * Check if we can set a hotkey, and prompt the user if there is a conflict between keys.
      * The key code should already have been checked that it's not for the same entry as it's
      * current in, or else this method will prompt for the self-change.

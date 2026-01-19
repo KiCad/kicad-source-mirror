@@ -479,6 +479,24 @@ void WIDGET_HOTKEY_LIST::onMenu( wxCommandEvent& aEvent )
 }
 
 
+void WIDGET_HOTKEY_LIST::onCharHook( wxKeyEvent& aEvent )
+{
+    // On macOS with international keyboards, "dead keys" (like backtick or circumflex on
+    // French keyboards) are used for composing accented characters. When pressed on a
+    // wxTreeListCtrl, these can trigger IME composition handling that the control doesn't
+    // support, causing a crash.
+    //
+    // Per wxWidgets documentation: if both GetUnicodeKey() and GetKeyCode() return WXK_NONE,
+    // the key has no WXK_xxx mapping (e.g., dead keys). We filter these out to prevent crashes.
+    // Navigation keys (arrows, function keys, etc.) have valid GetKeyCode() values even when
+    // GetUnicodeKey() returns WXK_NONE, so they pass through correctly.
+    if( aEvent.GetUnicodeKey() == WXK_NONE && aEvent.GetKeyCode() == WXK_NONE )
+        return;
+
+    aEvent.Skip();
+}
+
+
 bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 {
     HOTKEY* conflictingHotKey = nullptr;
@@ -563,6 +581,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
     Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
     Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
+
+    // Filter out dead keys that can crash on macOS with international keyboards
+    Bind( wxEVT_CHAR_HOOK, &WIDGET_HOTKEY_LIST::onCharHook, this );
 }
 
 
