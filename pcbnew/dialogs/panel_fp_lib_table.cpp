@@ -111,7 +111,7 @@ protected:
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         {
             wxString filter = _( "Footprint Library Tables" );
-#ifdef __WXMSW__
+#ifndef __WXOSX__
             filter << wxString::Format( _( " (%s)|%s" ), FILEEXT::FootprintLibraryTableFileName,
                                         FILEEXT::FootprintLibraryTableFileName );
 #else

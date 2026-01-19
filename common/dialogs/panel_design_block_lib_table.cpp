@@ -176,7 +176,7 @@ protected:
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         {
             wxString filter = _( "Design Block Library Tables" );
-#ifdef __WXMSW__
+#ifndef __WXOSX__
             filter << wxString::Format( _( " (%s)|%s" ), FILEEXT::DesignBlockLibraryTableFileName,
                                         FILEEXT::DesignBlockLibraryTableFileName );
 #else
