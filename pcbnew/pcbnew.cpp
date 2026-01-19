@@ -613,7 +613,12 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
     wxCHECK( aKiway, /* void */ );
 
-    if( m_libraryPreloadInProgress.load() )
+    // Use compare_exchange to atomically check and set the flag to prevent race conditions
+    // when PreloadLibraries is called multiple times concurrently (e.g., from project manager
+    // and pcb editor both scheduling via CallAfter)
+    bool expected = false;
+
+    if( !m_libraryPreloadInProgress.compare_exchange_strong( expected, true ) )
         return;
 
     Pgm().ClearLibraryLoadMessages();
@@ -744,7 +749,6 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
         };
 
     thread_pool& tp = GetKiCadThreadPool();
-    m_libraryPreloadInProgress.store( true );
     m_libraryPreloadReturn = tp.submit_task( preload );
 }
 
