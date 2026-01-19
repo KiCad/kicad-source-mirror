@@ -60,6 +60,9 @@
 #include <widgets/wx_aui_art_providers.h>
 
 
+#define FIRST_MENU_ID 998
+
+
 /**
  * Container that describes file type info for the add a library options
  */
@@ -350,9 +353,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
         if( !desc.m_FileExtensions.empty() )
             entryStr << wxString::Format( wxS( " (%s)" ), joinExtensions( desc.m_FileExtensions ) );
 
-        browseMenu->Append( type, entryStr );
-        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
-                          this, type );
+        browseMenu->Append( type + FIRST_MENU_ID, entryStr );
+        browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this,
+                          type + FIRST_MENU_ID );
 
         // Add folder-based entry right after KiCad file-based entry
         if( type == SCH_IO_MGR::SCH_KICAD )
@@ -360,8 +363,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
             wxString folderEntry = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD );
             folderEntry << wxString::Format( wxS( " (%s)" ), _( "folder with .kicad_sym files" ) );
             browseMenu->Append( ID_PANEL_SYM_LIB_KICAD_FOLDER, folderEntry );
-            browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED,
-                              &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this,
+            browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this,
                               ID_PANEL_SYM_LIB_KICAD_FOLDER );
         }
     }
@@ -479,7 +481,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
-        fileType = static_cast<SCH_IO_MGR::SCH_FILE_T>( event.GetId() );
+        fileType = static_cast<SCH_IO_MGR::SCH_FILE_T>( event.GetId() - FIRST_MENU_ID );
     }
 
     if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
@@ -502,8 +504,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     if( selectingFolder )
     {
-        wxDirDialog dlg( topLevelParent, title, *lastDir,
-                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
+        wxDirDialog dlg( topLevelParent, title, *lastDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

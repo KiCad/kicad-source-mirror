@@ -560,6 +560,13 @@ void DIALOG_SHIM::SaveControlState()
                         if( index >= 0 && index < (int) notebook->GetPageCount() )
                             dlgMap[ key ] = notebook->GetPageText( notebook->GetSelection() );
                     }
+                    else if( wxAuiNotebook* auiNotebook = dynamic_cast<wxAuiNotebook*>( win ) )
+                    {
+                        int index = auiNotebook->GetSelection();
+
+                        if( index >= 0 && index < (int) auiNotebook->GetPageCount() )
+                            dlgMap[ key ] = auiNotebook->GetPageText( auiNotebook->GetSelection() );
+                    }
                     else if( WX_GRID* grid = dynamic_cast<WX_GRID*>( win ) )
                     {
                         dlgMap[ key ] = grid->GetShownColumnsAsString();
@@ -701,6 +708,19 @@ void DIALOG_SHIM::LoadControlState()
                                 {
                                     if( notebook->GetPageText( page ) == pageTitle )
                                         notebook->SetSelection( page );
+                                }
+                            }
+                        }
+                        else if( wxAuiNotebook* auiNotebook = dynamic_cast<wxAuiNotebook*>( win ) )
+                        {
+                            if( j.is_string() )
+                            {
+                                wxString pageTitle = wxString::FromUTF8( j.get<std::string>().c_str() );
+
+                                for( int page = 0; page < (int) auiNotebook->GetPageCount(); ++page )
+                                {
+                                    if( auiNotebook->GetPageText( page ) == pageTitle )
+                                        auiNotebook->SetSelection( page );
                                 }
                             }
                         }
