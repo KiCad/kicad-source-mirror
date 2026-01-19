@@ -60,6 +60,7 @@
 #include <view/view_controls.h>
 #include <widgets/kistatusbar.h>
 #include <wx/choicdlg.h>
+#include <wx/evtloop.h>
 #include <wx/fswatcher.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
@@ -809,6 +810,11 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     wxLog::EnableLogging( false );
     m_watcherLastModified = m_watcherFileName.GetModificationTime();
     wxLog::EnableLogging( true );
+
+    // File system watcher requires an active event loop. If we're being called during
+    // library enumeration before the main event loop is running, skip watcher creation.
+    if( !wxEventLoopBase::GetActive() )
+        return;
 
     Bind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
     m_watcher = std::make_unique<wxFileSystemWatcher>();
