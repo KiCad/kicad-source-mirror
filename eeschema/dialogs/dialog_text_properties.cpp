@@ -479,22 +479,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     text.Replace( "\r", "" );
 #endif
 
-    if( m_currentItem->Type() == SCH_TEXTBOX_T )
-    {
-        // Textboxes have a defined extent and so are allowed to be empty
-        m_currentText->SetText( text );
-    }
-    else if( !text.IsEmpty() )
-    {
-        m_currentText->SetText( text );
-    }
-    else
-    {
-        // Other text items do not have defined extents, and so will disappear if empty
-        DisplayError( this, _( "Text can not be empty." ) );
-        return false;
-    }
-
+    m_currentText->SetText( text );
     m_currentItem->SetExcludedFromSim( m_excludeFromSim->GetValue() );
 
     if( SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
@@ -525,14 +510,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
-        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(),
-                                              m_textSize.GetIntValue() ) );
+        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
     if( m_fontCtrl->HaveFontSelection() )
-    {
-        m_currentText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                              m_italic->IsChecked() ) );
-    }
+        m_currentText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
 
     // Must come after SetTextSize()
     m_currentText->SetBold( m_bold->IsChecked() );
@@ -582,8 +563,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
         textBox->SetStroke( stroke );
 
-        textBox->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR
-                                                       : FILL_T::NO_FILL );
+        textBox->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL );
         textBox->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
     }
 
