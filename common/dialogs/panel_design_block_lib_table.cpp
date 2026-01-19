@@ -174,7 +174,17 @@ protected:
         LIBRARY_TABLE_ROW& tableRow = table->at( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxT( "*.*" );
+        {
+            wxString filter = _( "Design Block Library Tables" );
+#ifdef __WXMSW__
+            filter << wxString::Format( _( " (%s)|%s" ), FILEEXT::DesignBlockLibraryTableFileName,
+                                        FILEEXT::DesignBlockLibraryTableFileName );
+#else
+            filter << wxString::Format( _( " (%s)|%s" ), wxFileSelectorDefaultWildcardStr,
+                                        wxFileSelectorDefaultWildcardStr );
+#endif
+            return filter;
+        }
 
         if( tableRow.Type().IsEmpty() )
             return wxEmptyString;

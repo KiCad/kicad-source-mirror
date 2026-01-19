@@ -121,7 +121,17 @@ protected:
         LIBRARY_TABLE_ROW&         tableRow = table->At( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxT( "*.*" );
+        {
+            wxString filter = _( "Symbol Library Tables" );
+#ifdef __WXMSW__
+            filter << wxString::Format( _( " (%s)|%s" ), FILEEXT::SymbolLibraryTableFileName,
+                                        FILEEXT::SymbolLibraryTableFileName );
+#else
+            filter << wxString::Format( _( " (%s)|%s" ), wxFileSelectorDefaultWildcardStr,
+                                        wxFileSelectorDefaultWildcardStr );
+#endif
+            return filter;
+        }
 
         SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( tableRow.Type() );
         IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( pi_type ) );
@@ -132,13 +142,6 @@ protected:
 
             if( desc.m_IsFile )
                 return desc.FileFilter();
-        }
-        else if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-        {
-            // TODO(JE) library tables - wxWidgets doesn't allow filtering on no-extension filenames
-            return wxString::Format( _( "Symbol Library Tables (%s)|*" ),
-                                     FILEEXT::SymbolLibraryTableFileName,
-                                     FILEEXT::SymbolLibraryTableFileName );
         }
 
         return wxEmptyString;

@@ -109,7 +109,17 @@ protected:
         LIBRARY_TABLE_ROW&            tableRow = table->at( aRow );
 
         if( tableRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-            return wxT( "*.*" );
+        {
+            wxString filter = _( "Footprint Library Tables" );
+#ifdef __WXMSW__
+            filter << wxString::Format( _( " (%s)|%s" ), FILEEXT::FootprintLibraryTableFileName,
+                                        FILEEXT::FootprintLibraryTableFileName );
+#else
+            filter << wxString::Format( _( " (%s)|%s" ), wxFileSelectorDefaultWildcardStr,
+                                        wxFileSelectorDefaultWildcardStr );
+#endif
+            return filter;
+        }
 
         PCB_IO_MGR::PCB_FILE_T        fileType = PCB_IO_MGR::EnumFromStr( tableRow.Type() );
 
