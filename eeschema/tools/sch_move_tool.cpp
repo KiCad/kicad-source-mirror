@@ -1393,6 +1393,31 @@ SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, cons
         }
     }
 
+    // Don't drop into a sheet if any connection point of the selection lands on a sheet pin.
+    // This indicates the user is trying to connect to the pin, not drop into the sheet.
+    if( sheet )
+    {
+        for( EDA_ITEM* it : aSelection )
+        {
+            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( it );
+
+            if( !schItem )
+                continue;
+
+            for( const VECTOR2I& pt : schItem->GetConnectionPoints() )
+            {
+                if( sheet->GetPin( pt ) )
+                {
+                    sheet = nullptr;
+                    break;
+                }
+            }
+
+            if( !sheet )
+                break;
+        }
+    }
+
     bool dropAllowedBySelection = !aHasSheetPins;
     bool dropAllowedByModifiers = !aIsGraphicsOnly || aCtrlDown;
 
