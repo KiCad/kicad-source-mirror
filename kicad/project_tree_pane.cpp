@@ -1575,34 +1575,6 @@ void PROJECT_TREE_PANE::FileWatcherReset()
                         TO_UTF8( fn.GetFullPath() ) );
             return;
         }
-
-        // Explicitly remove .history directory and its descendants from the watch list.
-        // AddTree adds all subdirectories, but we don't want to watch .history (local backup).
-        wxFileName historyDir( prj_dir, wxEmptyString );
-        historyDir.AppendDir( wxS( ".history" ) );
-
-        if( historyDir.DirExists() )
-        {
-            wxDir dir( historyDir.GetPath() );
-
-            if( dir.IsOpened() )
-            {
-                // Remove .history itself
-                m_watcher->Remove( historyDir );
-
-                // Remove all subdirectories of .history
-                wxString subdir;
-                bool     cont = dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS );
-
-                while( cont )
-                {
-                    wxFileName subdirFn( historyDir.GetPath(), wxEmptyString );
-                    subdirFn.AppendDir( subdir );
-                    m_watcher->Remove( subdirFn );
-                    cont = dir.GetNext( &subdir );
-                }
-            }
-        }
     }
 #else
         if( !m_watcher->Add( fn ) )
