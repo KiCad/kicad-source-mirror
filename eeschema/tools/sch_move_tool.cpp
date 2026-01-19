@@ -1264,9 +1264,9 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
         }
 
         schItem->RunOnChildren(
-                [&]( SCH_ITEM* unused )
+                [&]( SCH_ITEM* aChild )
                 {
-                    item->SetFlags( IS_MOVING );
+                    aChild->SetFlags( IS_MOVING );
                 },
                 RECURSE_MODE::RECURSE );
 
