@@ -192,23 +192,50 @@ BOOST_AUTO_TEST_CASE( BasicImage )
 }
 
 /**
- * Check the image is right after rotating
+ * Check the image is right after rotating CCW
  */
-BOOST_AUTO_TEST_CASE( RotateImage )
+BOOST_AUTO_TEST_CASE( RotateImageCCW )
 {
-    // Note the parameter name is wrong here, true is clockwise
-    m_4tile.Rotate( false );
+    m_4tile.Rotate( true );  // true = CCW
 
     const wxImage* img_data = m_4tile.GetImageData();
     BOOST_REQUIRE_NE( img_data, nullptr );
 
-    //   black, blue,
-    //   green, red
+    // Original:        After 90 CCW:
+    //   green, black,     black, blue,
+    //   red,   blue       green, red
     const std::vector<TEST_PIXEL_CASE> exp_pixels = {
         { 1, 1, col_black },
         { 6, 1, col_blue },
         { 1, 6, col_green },
         { 6, 6, col_red },
+    };
+
+    for( const auto& c : exp_pixels )
+    {
+        BOOST_CHECK_PREDICATE(
+                KI_TEST::IsImagePixelOfColor, ( *img_data )( c.m_x )( c.m_y )( c.m_color ) );
+    }
+}
+
+/**
+ * Check the image is right after rotating CW
+ */
+BOOST_AUTO_TEST_CASE( RotateImageCW )
+{
+    m_4tile.Rotate( false );  // false = CW
+
+    const wxImage* img_data = m_4tile.GetImageData();
+    BOOST_REQUIRE_NE( img_data, nullptr );
+
+    // Original:        After 90 CW:
+    //   green, black,     red,   green,
+    //   red,   blue       blue,  black
+    const std::vector<TEST_PIXEL_CASE> exp_pixels = {
+        { 1, 1, col_red },
+        { 6, 1, col_green },
+        { 1, 6, col_blue },
+        { 6, 6, col_black },
     };
 
     for( const auto& c : exp_pixels )

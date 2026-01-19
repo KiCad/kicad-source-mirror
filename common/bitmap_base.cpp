@@ -450,7 +450,8 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
         int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
         int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
 
-        *m_image = m_image->Rotate90( aRotateCCW );
+        // wxImage::Rotate90 parameter is "clockwise", so invert for CCW rotation
+        *m_image = m_image->Rotate90( !aRotateCCW );
 
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT, unit );
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX );
