@@ -4736,10 +4736,18 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
             if( valField.GetText().IsEmpty() )
                 valField.SetText( name );
 
+            // Set the symbol name to match the cache key. The directory name (used as cache
+            // key) may differ from the Altium library reference when the original name
+            // contains characters invalid for directory names (like '/').
+            wxString cacheName;
+
             if( symbols.size() == 1 )
-                ret[name] = symbol;
+                cacheName = name;
             else
-                ret[wxString::Format( "%s (Altium Display %zd)", name, ii + 1 )] = symbol;
+                cacheName = wxString::Format( "%s (Altium Display %zd)", name, ii + 1 );
+
+            symbol->SetName( cacheName );
+            ret[cacheName] = symbol;
         }
     }
 
