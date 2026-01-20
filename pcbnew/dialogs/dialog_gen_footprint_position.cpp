@@ -31,6 +31,7 @@
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
 
+#include <board.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <project/project_file.h>
@@ -57,6 +58,24 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( PCB_EDIT_FRAME* aE
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
+    m_variantChoiceCtrl->Append( m_editFrame->GetBoard()->GetVariantNamesForUI() );
+
+    wxString currentVariant = m_editFrame->GetBoard()->GetCurrentVariant();
+
+    if( !currentVariant.IsEmpty() )
+    {
+        int selection = m_variantChoiceCtrl->FindString( currentVariant );
+
+        if( selection != wxNOT_FOUND )
+            m_variantChoiceCtrl->SetSelection( selection );
+        else
+            m_variantChoiceCtrl->SetSelection( 0 );
+    }
+    else
+    {
+        m_variantChoiceCtrl->SetSelection( 0 );
+    }
+
     SetupStandardButtons( { { wxID_OK, _( "Generate Position File" ) },
                             { wxID_CANCEL, _( "Close" ) } } );
 
@@ -81,6 +100,9 @@ DIALOG_GEN_FOOTPRINT_POSITION::DIALOG_GEN_FOOTPRINT_POSITION( JOB_EXPORT_PCB_POS
     m_browseButton->Hide();
     m_units = m_job->m_units == JOB_EXPORT_PCB_POS::UNITS::INCH ? EDA_UNITS::INCH : EDA_UNITS::MM;
     m_staticTextDir->SetLabel( _( "Output file:" ) );
+
+    if( m_editFrame && m_editFrame->GetBoard() )
+        m_variantChoiceCtrl->Append( m_editFrame->GetBoard()->GetVariantNamesForUI() );
 
     m_messagesPanel->Hide();
 
@@ -111,6 +133,20 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::TransferDataToWindow()
         m_excludeTH->SetValue( m_job->m_excludeFootprintsWithTh );
         m_excludeDNP->SetValue( m_job->m_excludeDNP );
         m_excludeBOM->SetValue( m_job->m_excludeBOM );
+
+        if( !m_job->m_variant.IsEmpty() )
+        {
+            int selection = m_variantChoiceCtrl->FindString( m_job->m_variant );
+
+            if( selection != wxNOT_FOUND )
+                m_variantChoiceCtrl->SetSelection( selection );
+            else
+                m_variantChoiceCtrl->SetSelection( 0 );
+        }
+        else
+        {
+            m_variantChoiceCtrl->SetSelection( 0 );
+        }
     }
 
     return true;
@@ -241,6 +277,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->m_negateBottomX = m_negateXcb->GetValue();
         m_job->m_excludeDNP = m_excludeDNP->GetValue();
         m_job->m_excludeBOM = m_excludeBOM->GetValue();
+        m_job->m_variant = getSelectedVariant();
 
         event.Skip();   // Allow normal close action
     }
@@ -285,8 +322,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     // Not also they include all footprints
     PLACEFILE_GERBER_WRITER exporter( brd );
 
-    // Set the current variant for variant-aware DNP/BOM/position file filtering
-    exporter.SetVariant( brd->GetCurrentVariant() );
+    // Set the selected variant for variant-aware DNP/BOM/position file filtering
+    exporter.SetVariant( getSelectedVariant() );
 
     wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
@@ -358,8 +395,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
                                       ExcludeBOM(), topSide, bottomSide, useCSVfmt, useAuxOrigin,
                                       negateBottomX );
 
-        // Set the current variant for variant-aware DNP/BOM/position file filtering
-        exporter.SetVariant( brd->GetCurrentVariant() );
+        // Set the selected variant for variant-aware DNP/BOM/position file filtering
+        exporter.SetVariant( getSelectedVariant() );
 
         exporter.GenPositionData();
 
@@ -484,6 +521,19 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     reporter->Report( _( "Done." ), RPT_SEVERITY_INFO );
     return true;
+}
+
+
+wxString DIALOG_GEN_FOOTPRINT_POSITION::getSelectedVariant() const
+{
+    wxString variant;
+    int      selection = m_variantChoiceCtrl->GetSelection();
+
+    // Selection 0 is the default variant (empty string)
+    if( ( selection != 0 ) && ( selection != wxNOT_FOUND ) )
+        variant = m_variantChoiceCtrl->GetString( selection );
+
+    return variant;
 }
 
 

@@ -94,6 +94,7 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
     m_params.emplace_back( new JOB_PARAM<SIDE>( "side", &m_side, m_side ) );
     m_params.emplace_back( new JOB_PARAM<UNITS>( "units", &m_units, m_units ) );
     m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &m_format, m_format ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
 }
 
 

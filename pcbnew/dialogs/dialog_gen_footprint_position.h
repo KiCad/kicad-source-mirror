@@ -70,6 +70,8 @@ private:
     bool ExcludeDNP()   { return m_excludeDNP->GetValue(); }
     bool ExcludeBOM()   { return m_excludeBOM->GetValue(); }
 
+    wxString getSelectedVariant() const;
+
 private:
     PCB_EDIT_FRAME*     m_editFrame;
     JOB_EXPORT_PCB_POS* m_job;

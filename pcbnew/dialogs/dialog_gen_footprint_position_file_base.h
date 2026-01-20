@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,8 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxChoice* m_formatCtrl;
 		wxStaticText* m_unitsLabel;
 		wxChoice* m_unitsCtrl;
+		wxStaticText* m_variantLabel;
+		wxChoice* m_variantChoiceCtrl;
 		wxCheckBox* m_onlySMD;
 		wxCheckBox* m_excludeTH;
 		wxCheckBox* m_excludeDNP;

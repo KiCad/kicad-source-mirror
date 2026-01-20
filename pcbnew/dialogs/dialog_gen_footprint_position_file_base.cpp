@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,6 +71,15 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_unitsCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_unitsCtrlNChoices, m_unitsCtrlChoices, 0 );
 	m_unitsCtrl->SetSelection( 1 );
 	fgSizer1->Add( m_unitsCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel->Wrap( -1 );
+	fgSizer1->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxArrayString m_variantChoiceCtrlChoices;
+	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
+	m_variantChoiceCtrl->SetSelection( 0 );
+	fgSizer1->Add( m_variantChoiceCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerMiddle->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
