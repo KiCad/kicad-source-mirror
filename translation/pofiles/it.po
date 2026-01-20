@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-01 13:36+0000\n"
+"PO-Revision-Date: 2026-01-20 23:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -4785,9 +4785,9 @@ msgstr ""
 "Cancellarli anche dai simboli?"
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Fallita aggiunta del file '%s'."
+msgstr "Fallita lettura del file '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4797,11 +4797,14 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Il file di nome '%s' è già stato incorporato, ma il file sul disco ha un "
+"contenuto diverso.\n"
+"\n"
+"Sostituire il file incorporato con la nuova versione?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "File incorporati"
+msgstr "Conflitto file incorporato"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4809,9 +4812,8 @@ msgid "Replace"
 msgstr "Rimpiazza"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "Aggiungi esistente"
+msgstr "Riuso esistente"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -6138,31 +6140,27 @@ msgid "Top auxiliary"
 msgstr "Ausiliario superiore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
 msgstr "Inserisci separatore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
 msgid "Insert Spacer"
 msgstr "Inserisci spaziatore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
 msgstr "Inserisci gruppo"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "Separatori di riga"
+msgstr "Separatore"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "Spaziatore: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:552 common/eda_item.cpp:441
 #: common/eda_item.cpp:466 eeschema/sch_group.cpp:357 pcbnew/pcb_group.cpp:411
@@ -6175,9 +6173,8 @@ msgid "Customize toolbars"
 msgstr "Personalizza barre strumenti"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Barre strumenti"
+msgstr "Barra strumenti:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6191,19 +6188,16 @@ msgid "Save"
 msgstr "Salva"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "Nuovo collegamento"
+msgstr "Nuova regola"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Regole personalizzate"
+msgstr "Copia regola"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Cancella riga"
+msgstr "Elimina regola"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6453,26 +6447,21 @@ msgid "Run: %s"
 msgstr "Esegui: %s"
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "File '%s' non trovato."
+msgstr "File '%s' non trovato.\n"
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Sovrascriverli tutti o rinominare i nuovi simboli?"
+msgstr "Rimuoverlo dall'elenco dei file aperti recentemente?"
 
 #: common/eda_base_frame.cpp:1283
-#, fuzzy
 msgid "Remove"
-msgstr "Rimuovi file"
+msgstr "Rimuovi"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Keep"
-msgstr "Proibiti"
+msgstr "Mantieni"
 
 #: common/eda_base_frame.cpp:1333
 msgid "Preferences"
@@ -8008,9 +7997,10 @@ msgid "Failed to open git repository: %s"
 msgstr "Fallita apertura repository git: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Fallita apertura repository git: %s"
+msgstr ""
+"Impossibile impostare la cartella di lavoro del repository git su %s: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -9193,9 +9183,9 @@ msgid "Library not found in library table"
 msgstr "Libreria non trovata nella tabella librerie"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Libreria: "
+msgstr "Libreria '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -9271,11 +9261,11 @@ msgstr ""
 #: common/local_history.cpp:1728
 msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
+"Impossibile ripristinare: i seguenti file sono aperti da un altro utente:"
 
 #: common/local_history.cpp:1730
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Fusione fallita"
+msgstr "Ripristino fallito"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -9396,7 +9386,7 @@ msgstr "Visualizza dettagli"
 
 #: common/notifications_manager.cpp:99
 msgid "Dismiss"
-msgstr "Rimuovi"
+msgstr "Abbandona"
 
 #: common/notifications_manager.cpp:157
 msgid "Notifications"
@@ -9810,18 +9800,16 @@ msgid "Quit %s"
 msgstr "Esci %s"
 
 #: common/tool/action_toolbar.cpp:1128
-#, fuzzy
 msgid "Grid selector"
-msgstr "Selezione griglia"
+msgstr "Selettore griglia"
 
 #: common/tool/action_toolbar.cpp:1129
 msgid "Grid Selection box"
 msgstr "Riquadro selezione griglia"
 
 #: common/tool/action_toolbar.cpp:1141
-#, fuzzy
 msgid "Zoom selector"
-msgstr "Selezione zoom"
+msgstr "Selettore zoom"
 
 #: common/tool/action_toolbar.cpp:1142
 msgid "Zoom Selection box"
@@ -11013,9 +11001,8 @@ msgstr ""
 "Per donazioni al progetto KiCad, visitare %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Selezione impronte"
+msgstr "Esploratore impronte"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -11285,19 +11272,17 @@ msgid "Select Path"
 msgstr "Seleziona percorso"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Nessun messaggio d'uscita"
+msgstr "Visualizza messaggi di caricamento"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "Visualizza %zu messaggio(i) di caricamento"
 
 #: common/widgets/kistatusbar.cpp:438
-#, fuzzy
 msgid "Load Messages"
-msgstr "Messaggi"
+msgstr "Messaggi di caricamento"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -12003,9 +11988,9 @@ msgid "Footprint '%s' not found."
 msgstr "Impronta \"%s\" non trovata."
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Errore nel caricare un'impronta"
+msgstr "Errore nel caricare un'impronta: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2080
 #, c-format
@@ -12388,9 +12373,8 @@ msgid "Reset existing annotations"
 msgstr "Reimposta le annotazioni esistenti"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Simboli di gruppo"
+msgstr "Raggruppa unità simbolo"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13890,9 +13874,9 @@ msgstr "Proprietà immagine"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Importa simbolo"
+msgstr "Importa simboli da %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13903,39 +13887,40 @@ msgid "Import"
 msgstr "Importa"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Impossibile caricare la libreria\n"
+msgstr "Impossibile trovare un plugin per leggere questa libreria."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Impossibile importare la libreria di simboli '%s'."
+msgstr "Impossibile leggere la libreria dei simboli '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Il file di libreria simboli '%s' è vuoto."
+msgstr "La libreria dei simboli '%s' è vuota."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d simboli selezionati, %d genitori inclusi automaticamente"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Nessun simbolo selezionato"
+msgstr "%d simboli selezionati"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
 msgid "Resolve Import Conflicts"
-msgstr ""
+msgstr "Risolvi i conflitti di importazione"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:511
 msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"I seguenti simboli sono già presenti nella libreria di destinazione. "
+"Scegliere come gestire ogni conflitto:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:518
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -13949,9 +13934,8 @@ msgid "Action"
 msgstr "Azione"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "Salta"
+msgstr "Salta tutto"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13959,9 +13943,8 @@ msgid "Overwrite All"
 msgstr "Sovrascrivi tutto"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "Nessun simbolo selezionato"
+msgstr "0 simboli selezionati"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16904,58 +16887,51 @@ msgstr ""
 "Usare un nome diverso."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2661
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Impossibile eliminare l'ultimo foglio di livello superiore."
+msgstr "Impossibile eliminare la variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Impossibile creare l'immagine schema"
+msgstr "Impossibile rinominare la variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Inserire nome nuova variante"
+msgstr "Inserire il nome della nuova variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Rinomina variante..."
+msgstr "Rinomina variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "Il nome variabile non può essere vuoto."
+msgstr "Il nome variante non può essere vuoto."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "'%s' è un tasto riservato in KiCad, e non può essere assegnato."
+msgstr "'%s' è un nome variante riservato."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "\"%s\" esiste già."
+msgstr "La variante '%s' esiste già."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Impossibile copiare la variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Inserire il nome per il nuovo modello:"
+msgstr "Inserire il nome della variante copiata:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "Varianti"
+msgstr "Copia variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -17053,9 +17029,8 @@ msgid "Alternate Assignment"
 msgstr "Assegnamento alternativo"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "Varianti"
+msgstr " Variante"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17131,6 +17106,8 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"Utile per aggiungere simboli che non dovrebbero essere inclusi nei\n"
+"file di posizionamento esportati utilizzati per le macchine pick and place"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2368
@@ -19658,9 +19635,8 @@ msgid "Exclude from board settings differ."
 msgstr "Le impostazioni escludi dalla scheda differiscono."
 
 #: eeschema/lib_symbol.cpp:2141
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Le impostazioni escludi dalla simulazione differiscono."
+msgstr "Le impostazioni escludi dai file di posizionamento differiscono."
 
 #: eeschema/lib_symbol.cpp:2376 eeschema/symbol_editor/symbol_editor.cpp:1746
 msgid "Datasheet"
@@ -19711,9 +19687,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "Escludi dalla distinta materiali"
 
 #: eeschema/lib_symbol.cpp:2424
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "Escludi dai file di posizione"
+msgstr "Escludi dai file di posizionamento"
 
 #: eeschema/lib_symbol.cpp:2429
 msgid "Units and Body Styles"
@@ -19776,12 +19751,11 @@ msgid "Panels"
 msgstr "Pannelli"
 
 #: eeschema/menubar.cpp:196
-#, fuzzy
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"Installa un server di simboli remoto utilizzando la Gestione Plugin e "
-"Contenuti per abilitare"
+"Installa un server di simboli remoto usando la Gestione Plugin e Contenuti "
+"per abilitare"
 
 #: eeschema/menubar.cpp:333
 msgid "Variants"
@@ -21153,15 +21127,19 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "La cartella della libreria simboli '%s' non può essere cancellata."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "La libreria '%s' esiste già."
+msgstr ""
+"Libreria '%s' caricata con errori:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:96
 msgid "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"La libreria non potrà essere salvata finché questi errori non saranno "
+"corretti manualmente."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:146
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:360
@@ -21176,6 +21154,10 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"La libreria non potrà essere salvata finché questi errori non saranno "
+"corretti manualmente."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -21185,6 +21167,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Impossibile salvare la libreria '%s' perché si è verificato un errore di "
+"analisi durante il caricamento.\n"
+"\n"
+"Il salvataggio causerebbe la perdita permanente dei simboli che non è stato "
+"possibile caricare.\n"
+"Si prega di correggere manualmente il file della libreria prima di salvare."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:226
 #, c-format
@@ -21202,6 +21190,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Errore durante l'analisi del simbolo alla riga %d: %s\n"
+"Simbolo saltato e si continua."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:310
 #, c-format
@@ -23307,6 +23297,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"Simulazione bloccata (%s). Di solito la causa è un bug in ngspice o una "
+"netlist non valida. Il simulatore verrà reimpostato."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -23763,9 +23755,9 @@ msgid "Format"
 msgstr "Formato"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Errore nel caricamento della libreria '%s'"
+msgstr "Errore durante l'analisi della libreria SPICE '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24461,19 +24453,19 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Impossibile trovare un lettore per '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Impossibile importare la libreria di simboli '%s'."
+msgstr "Impossibile importare il simbolo '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "Importati %d simboli, saltati %d."
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "Errore nel caricare il simbolo \"%s\" dalla libreria %s."
+msgstr "Errore nel cancellare il simbolo %s dalla libreria '%s'."
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24578,14 +24570,12 @@ msgstr ""
 "Associazione(i) di pin di interruzione foglio e di etichette gerarchiche"
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Current variant"
 msgstr "Variante corrente"
 
 #: eeschema/toolbars_sch_editor.cpp:54
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "Controllo per selezionare la variante dello schema corrente"
+msgstr "Seleziona la variante dello schema corrente"
 
 #: eeschema/toolbars_sch_editor.cpp:92 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:163
@@ -24602,23 +24592,20 @@ msgid "Select the current variant to display and edit."
 msgstr "Seleziona la variante corrente da visualizzare e modificare."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "Aggiungi variante..."
+msgstr "Aggiungi nuova variante..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
 msgstr "Nuova variante"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "Nome variante"
+msgstr "Nome variante:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "Descrizione:"
+msgstr "Descrizione (opzionale):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -26360,9 +26347,8 @@ msgid "Could not find design block %s."
 msgstr "Impossibile trovare il blocco progetto %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "Il blocco progetto %s non ha un file schema."
+msgstr "Il blocco progetto non ha uno schema da piazzare."
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -27263,14 +27249,12 @@ msgid "No remote data sources are currently installed."
 msgstr "Al momento non sono installate fonti di dati remote."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "Configura percorsi..."
+msgstr "Configura..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "Cancella colore"
+msgstr "Cancella cookie"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -28544,7 +28528,6 @@ msgid "Aperture highlight"
 msgstr "Evidenziamento apertura"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "Selettore DCode"
 
@@ -28980,6 +28963,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"Quando si specificano più varianti, il percorso di uscita deve contenere $"
+"{VARIANT} per generare file di uscita separati per ogni variante.\n"
 
 #: kicad/cli/command.cpp:145
 msgid "Input directory"
@@ -29023,6 +29008,12 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"Il nome/i delle varianti da generare in uscita possono essere utilizzati più "
+"volte per specificare più varianti.\n"
+"Quando si specificano più varianti, utilizzare ${VARIANT} nel percorso di "
+"uscita per generare file separati per ciascuna variante.\n"
+"Se non viene fornito alcun argomento --variant, la variante predefinita è "
+"uscita."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -29699,6 +29690,8 @@ msgid ""
 "Board variant for variant-aware filtering (DNP, BOM, position file "
 "exclusions)"
 msgstr ""
+"Variante della scheda per il filtraggio basato sulle varianti (DNP, DIBA, "
+"esclusioni dei file di posizionamento)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:138
 #: kicad/cli/command_sch_export_netlist.cpp:97 kicad/cli/command_version.cpp:71
@@ -31768,22 +31761,20 @@ msgid "Switch to Branch"
 msgstr "Passa a diramazione"
 
 #: kicad/project_tree_pane.cpp:1072
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Abilita tracciamento Git"
+msgstr "Abilita integrazione Git"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Ri-abilita l'integrazione Git per questo progetto"
 
 #: kicad/project_tree_pane.cpp:1077
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Abilita tracciamento Git"
+msgstr "Disabilita l'integrazione Git"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Disabilita l'integrazione Git per questo progetto"
 
 #: kicad/project_tree_pane.cpp:1135
 #, c-format
@@ -32492,7 +32483,6 @@ msgstr ""
 "che non sono su tutte le pagine sono visualizzati"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
 msgstr "Selettore origine"
 
@@ -32501,7 +32491,6 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "Seleziona origine coordinate della barra di stato"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
 msgstr "Selettore pagina"
 
@@ -38624,9 +38613,8 @@ msgstr "Modelli 3D"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Clearance assoluta pasta salda:"
+msgstr "Clearance pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -38638,6 +38626,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"Clearance locale dalla pasta saldante per questa impronta.\n"
+"Inserire un valore assoluto (ad esempio, -0,1 mm), una percentuale (ad "
+"esempio, -5%) o entrambi (ad esempio, -0,1 mm - 5%).\n"
+"Se vuoto, viene utilizzato il valore globale."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
 msgid ""
@@ -38839,15 +38831,16 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:47
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Solder paste clearance relative to pad size.\n"
 "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Distanza globale tra le piazzole e la maschera di saldatura.\n"
-"Questo valore può essere superato dai valori locali di una impronta o di una "
+"Clearance tra la pastasalda e la dimensione della piazzola.\n"
+"Inserire un valore assoluto (ad esempio, -0,1 mm), una percentuale (ad "
+"esempio, -5%) o entrambi (ad esempio, -0,1 mm - 5%).\n"
+"Questo valore può essere sostituito da valori locali per una impronta o una "
 "piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
