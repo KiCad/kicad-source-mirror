@@ -1,4 +1,4 @@
-# Alex Gellen <alex.n.gellen@gmail.com>, 2021, 2022, 2024.
+# Alex Gellen <alex.n.gellen@gmail.com>, 2021, 2022, 2024, 2026.
 # Adrian Scripcă <benishor@gmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 # Nicoara Alex <alex.nicoara@yahoo.com>, 2024.
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-11-02 02:46+0000\n"
-"Last-Translator: Tatu Bogdan <bogdan.tatu@proton.me>\n"
+"PO-Revision-Date: 2026-01-20 23:02+0000\n"
+"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ro/>\n"
 "Language: ro\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -112,7 +112,7 @@ msgstr "Ultima durată a randării %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:798
 #, c-format
 msgid "OpenGL error during off-screen rendering: 0x%04X\n"
-msgstr "Eroare OpenGL in timpul randării în afara ecranului: 0x%04x\n"
+msgstr "Eroare OpenGL in timpul randării în afara ecranului:0x%04X\n"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:963
 #, c-format
@@ -221,15 +221,13 @@ msgstr "Grilă 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Rotiți"
+msgstr "Rotiți placă"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Mutați placa în sus"
+msgstr "Mutați placă"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -298,16 +296,14 @@ msgstr "Urmărește Editor PCB"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:721
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Urmează Setările de plotare PCB"
+msgstr "Urmați setările PCB Plot"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:566
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:750
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:937
-#, fuzzy
 msgid "legacy colors"
-msgstr "culori tradiționale"
+msgstr "culori clasice"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:749
 msgid "3D Image File Name"
@@ -358,7 +354,7 @@ msgstr "Eroare"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:978
 msgid "Failed to copy image to clipboard"
-msgstr "Nu s-a reușit copierea imaginii în clipboard"
+msgstr "Nu s-a reușit copierea imaginii în mapă"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:992
 msgid "Can't save file"
@@ -369,14 +365,12 @@ msgid "Reload board"
 msgstr "Reîncarcă placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Reîncarcă placa și modelele 3D"
+msgstr "Reîncarcă placa și vizualizarea 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracing"
+msgstr "Utilizați raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -384,32 +378,29 @@ msgstr "Randați vizualizarea folosind Raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr "Copiați imaginea 3D în clipboard"
+msgstr "Copiați imaginea 3D în mapă"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Copiați imaginea 3D în clipboard"
+msgstr "Copiați imaginea 3D curentă în mapă"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Exportați..."
+msgstr "Exportare imagine..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Exportați vizualizarea curentă ca PNG ..."
+msgstr "Exportați vizualizarea curentă ca fișier imagine"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Pin foaie"
+msgstr "Setați punctul de pivotare"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:81
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Rotire a pivotului central (clic din mijloc al mouse-ului)"
+msgstr ""
+"Punctul în jurul căruia va fi rotită placă (clic cu butonul din mijloc al "
+"mouse-ului)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Rotate X Clockwise"
@@ -444,12 +435,10 @@ msgid "Move Board Right"
 msgstr "Mutați placa în dreapta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:157
-#, fuzzy
 msgid "Move Board Up"
 msgstr "Mutați placa în sus"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
-#, fuzzy
 msgid "Move Board Down"
 msgstr "Mutați placa în jos"
 
@@ -471,7 +460,6 @@ msgid "Flip the board view"
 msgstr "Întoarceți vizualizarea plăcii"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
-#, fuzzy
 msgid "Toggle Orthographic Projection"
 msgstr "Comutați proiecția ortografică"
 
@@ -543,9 +531,9 @@ msgid "Render Solid Colors"
 msgstr "Redarea culorilor solide"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:299
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Utilizați numai proprietatea difuză a culorilor din fișierul model 3D"
+msgstr ""
+"Utilizați numai proprietatea difuză a culorilor din fișierul modelului 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:306
 msgid "Render CAD Colors"
@@ -557,7 +545,6 @@ msgstr ""
 "Utilizați un stil de culoare CAD bazat pe culoarea difuză a materialului"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
-#, fuzzy
 msgid "Show Through Hole 3D Models"
 msgstr "Comutați modele 3D prin gaură"
 
@@ -566,7 +553,6 @@ msgid "Show 3D models for 'Through hole' type footprints"
 msgstr "Afișează modele 3D pentru componentele tip 'through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
-#, fuzzy
 msgid "Show SMD 3D Models"
 msgstr "Comutați modele 3D SMD"
 
@@ -575,58 +561,49 @@ msgid "Show 3D models for 'Surface mount' type footprints"
 msgstr "Afișează modele 3D pentru componentele tip 'SMD'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:333
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Comutați alte modele 3D"
+msgstr "Afișează modele 3D nespecificate"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:334
 msgid "Show 3D models for 'unspecified' type footprints"
 msgstr "Afișează modele 3D pentru componentele de alte tipuri"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:342
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Comutați modele 3D pentru componente de alte tipuri"
+msgstr "Afișează modelele 3D care nu se află în fișierul POS"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:343
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Comutați modele 3D pentru componente de alte tipuri"
+msgstr "Afișează modelele 3D chiar dacă nu sunt găsite în fișierul .pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:351
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Comutați modele 3D SMD"
+msgstr "Afișează modelele 3D marcate cu DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Comutați modele 3D cu atributul „Virtual”"
+msgstr "Afișează modelele 3D chiar dacă sunt marcate cu „Nu plasați”"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
 msgstr "Afișați perimetru de delimitare a modelului"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Afișați perimetru de delimitare a modelului"
+msgstr "Afișează cadrul de delimitare ale modelului 3D în randarea timp real"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Afișați toate netclasses"
+msgstr "Afișare navigator 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:374
-#, fuzzy
 msgid "Show Appearance Manager"
-msgstr "%s Proprietăți"
+msgstr "Afișează managerul de aspect"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
 #: pcbnew/tools/pcb_actions.cpp:1619
-#, fuzzy
 msgid "Show/hide the appearance manager"
-msgstr "%s Proprietăți"
+msgstr "Afișează/ascunde managerul de aspect"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
@@ -659,9 +636,8 @@ msgid "Adhesive"
 msgstr "Adeziv"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Arată straturile adezive"
+msgstr "Afișează adezivul"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #: pcbnew/tools/board_inspection_tool.cpp:1416
@@ -669,289 +645,233 @@ msgid "Solder Paste"
 msgstr "Pastă de lipit"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Afișați straturile pastei de sudură"
+msgstr "Afișează pasta de sudură"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Serigrafie frontală"
+msgstr "Afișează serigrafia frontală"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Serigrafie frontală"
+msgstr "Afișează serigrafia din spate"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Mască de sudură frontală"
+msgstr "Afișează masca de sudură frontală"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Mască de sudură frontală"
+msgstr "Afișează masca de sudură din spate"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Afișați straturile de comentarii și desene"
+msgstr "Afișează stratul cu desenele utilizatorului"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Afișați straturile de maști de sudură"
+msgstr "Afișează stratul de comentarii ale utilizatorilor"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Afișați straturile ECO"
+msgstr "Afișează stratul ECO1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Afișați straturile ECO"
+msgstr "Afișează stratul ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Show user defined layer 1"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Show user defined layer 2"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Show user defined layer 3"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show user defined layer 4"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 4"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show user defined layer 5"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 5"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show user defined layer 6"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 6"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show user defined layer 7"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 7"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Show user defined layer 8"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 8"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Show user defined layer 9"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 9"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Show user defined layer 10"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 10"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
-#, fuzzy
 msgid "Show user defined layer 11"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 11"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "Show user defined layer 12"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 12"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Show user defined layer 13"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 13"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Show user defined layer 14"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 14"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:83
-#, fuzzy
 msgid "Show user defined layer 15"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 15"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:84
-#, fuzzy
 msgid "Show user defined layer 16"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 16"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:85
-#, fuzzy
 msgid "Show user defined layer 17"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 17"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:86
-#, fuzzy
 msgid "Show user defined layer 18"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 18"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:87
-#, fuzzy
 msgid "Show user defined layer 19"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 19"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:88
-#, fuzzy
 msgid "Show user defined layer 20"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 20"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:89
-#, fuzzy
 msgid "Show user defined layer 21"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 21"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:90
-#, fuzzy
 msgid "Show user defined layer 22"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 22"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:91
-#, fuzzy
 msgid "Show user defined layer 23"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 23"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:92
-#, fuzzy
 msgid "Show user defined layer 24"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 24"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:93
-#, fuzzy
 msgid "Show user defined layer 25"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 25"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:94
-#, fuzzy
 msgid "Show user defined layer 26"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 26"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:95
-#, fuzzy
 msgid "Show user defined layer 27"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 27"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:96
-#, fuzzy
 msgid "Show user defined layer 28"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 28"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:97
-#, fuzzy
 msgid "Show user defined layer 29"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 29"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:98
-#, fuzzy
 msgid "Show user defined layer 30"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 30"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:99
-#, fuzzy
 msgid "Show user defined layer 31"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 31"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:100
-#, fuzzy
 msgid "Show user defined layer 32"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 32"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:101
-#, fuzzy
 msgid "Show user defined layer 33"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 33"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:102
-#, fuzzy
 msgid "Show user defined layer 34"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 34"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:103
-#, fuzzy
 msgid "Show user defined layer 35"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 35"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:104
-#, fuzzy
 msgid "Show user defined layer 36"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 36"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:105
-#, fuzzy
 msgid "Show user defined layer 37"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 37"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:106
-#, fuzzy
 msgid "Show user defined layer 38"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 38"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:107
-#, fuzzy
 msgid "Show user defined layer 39"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 39"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:108
-#, fuzzy
 msgid "Show user defined layer 40"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 40"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:109
-#, fuzzy
 msgid "Show user defined layer 41"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 41"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy
 msgid "Show user defined layer 42"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 42"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:111
-#, fuzzy
 msgid "Show user defined layer 43"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 43"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:112
-#, fuzzy
 msgid "Show user defined layer 44"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 44"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:113
-#, fuzzy
 msgid "Show user defined layer 45"
-msgstr "Adăugați un strat definit de utilizator"
+msgstr "Afișează stratul definit de utilizator 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, fuzzy
 msgid "Through-hole Models"
-msgstr "Paduri componentă Through-Hole"
+msgstr "Modele cu orificiu traversant"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:116
-#, fuzzy
 msgid "SMD Models"
-msgstr "Modele 3D"
+msgstr "SMD Modele"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:117
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Comutați modele 3D virtuale"
+msgstr "Modele virtuale"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #, fuzzy
@@ -1087,6 +1007,8 @@ msgstr "Dublu click stânga sau click mijloc pentru a schimba culoarea"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:582
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Debifați opțiunea „Utilizați culorile stivei de plăci” pentru a permite "
+"editarea culorilor."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:638
 #: pcbnew/widgets/appearance_controls.cpp:2264
@@ -1132,9 +1054,8 @@ msgstr "Mutați placa în sus"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1882
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2284
 #: pcbnew/widgets/appearance_controls.cpp:2818
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Deschideți documentul existent"
+msgstr "Rescrie presetarea existentă?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1909
@@ -1915,6 +1836,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Afișează sau ascunde corpul plăcii\n"
+"Dacă este ascuns, afișează numai straturile de cupru și serigrafie."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:249
 msgid "Reload board and 3D models"
@@ -2020,9 +1943,8 @@ msgid "Errors"
 msgstr "Erori"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Înlocuiește și găsește următorul"
+msgstr "Înlocuiți fișierul încărcat?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 msgid "There is already a file loaded. Do you want to replace it?"
@@ -2225,6 +2147,8 @@ msgstr "Exportați în mapă"
 #: bitmap2component/bitmap2component.cpp:404
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
+"Nu există nicio formă în imaginea alb-negru care să fie convertită: nu s-a "
+"creat niciun contur."
 
 #: common/api/api_handler.cpp:27
 #, fuzzy
@@ -2450,7 +2374,7 @@ msgstr "Fișierul '%s' nu a putut fi creat."
 
 #: common/design_block_io.cpp:378
 msgid "Design block does not have a valid library ID."
-msgstr ""
+msgstr "Blocul de proiectare nu are un ID de bibliotecă valid."
 
 #: common/design_block_io.cpp:383
 #, fuzzy
@@ -2495,9 +2419,9 @@ msgstr "Fișierul '%s' nu a putut fi creat."
 #: common/design_block_library_adapter.cpp:70
 #: eeschema/libraries/symbol_library_adapter.cpp:113
 #: pcbnew/footprint_library_adapter.cpp:508
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "Adăugați formă"
+msgstr "Tip de bibliotecă necunoscut %s "
 
 #: common/design_block_library_adapter.cpp:75
 #: eeschema/libraries/symbol_library_adapter.cpp:118
@@ -2760,7 +2684,7 @@ msgstr "Raportați"
 
 #: common/dialogs/dialog_assign_netclass.cpp:213
 msgid "<b>Currently matching nets:</b>"
-msgstr ""
+msgstr "<b>Rețele corespunzătoare în prezent:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 #, fuzzy
@@ -2777,6 +2701,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Notă: atribuțiile complete ale clasei de rețea pot fi editate în Configurare "
+"schematică > Proiect."
 
 #: common/dialogs/dialog_assign_netclass_base.h:55
 #, fuzzy
@@ -3263,7 +3189,7 @@ msgstr "încuiat"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
 msgid "Prevents group from being moved on canvas"
-msgstr ""
+msgstr "Împiedică mutarea grupului pe pânză"
 
 #: common/dialogs/dialog_group_properties_base.cpp:52
 #, fuzzy
@@ -3303,6 +3229,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Acest fișier de proiect conține mai multe combinații PCB+Schematic.\n"
+"Selectați care dintre acestea trebuie importate în KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 #, fuzzy
@@ -3544,6 +3472,8 @@ msgstr "Atribuții amprentă..."
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Eliminați informațiile din rețea din toate elementele conectate înainte de a "
+"lipi"
 
 #: common/dialogs/dialog_paste_special_base.h:47
 msgid "Paste Special"
@@ -3554,11 +3484,13 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Selectați din lista de sus <b>Selecție de opțiuni</b> și apoi apăsați "
+"butonul<b>Adăugați opțiunea selectată</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
 msgid "Options for Library '%s'"
-msgstr ""
+msgstr "Opțiuni pentru biblioteca '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 #, fuzzy
@@ -3579,11 +3511,11 @@ msgstr "Opțiuni"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "Opțiuni acceptate de pluginul actual"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<<    Atașează opțiunea selectată"
 
 #: common/dialogs/dialog_print_generic.cpp:96
 #: common/dialogs/dialog_print_generic.cpp:299
@@ -3788,7 +3720,7 @@ msgstr "Raportează eșecul lucrării atunci când există încălcări ale regu
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:58
 msgid "Report all errors for each track"
-msgstr ""
+msgstr "Raportează toate erorile pentru fiecare traseu"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:62
 #: pcbnew/dialogs/dialog_drc_base.cpp:49
@@ -3798,7 +3730,7 @@ msgstr "Testează paritatea dintre PCB și schematic"
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:45
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Reumpleți toate zonele înainte de a efectua DRC"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_unit_entry_base.cpp:21
@@ -3924,7 +3856,7 @@ msgstr "Conexiuni"
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "De bază"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
@@ -4027,7 +3959,7 @@ msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:161
 msgid "C&ommit"
-msgstr ""
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:178
 msgid "Commit message cannot be empty"
@@ -4109,9 +4041,8 @@ msgid "Local"
 msgstr "Fișiere executabile ("
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
-#, fuzzy
 msgid "SSH private key:     "
-msgstr "Creați straturi"
+msgstr "Cheie privată SSH:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 #, fuzzy
@@ -4134,7 +4065,7 @@ msgstr "Raportați"
 
 #: common/dialogs/git/dialog_git_switch.cpp:44
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Comutare Git-Branch"
 
 #: common/dialogs/git/dialog_git_switch.cpp:52
 #, fuzzy
@@ -4185,6 +4116,8 @@ msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Numărul de minute între verificările actualizărilor la distanță.   Zero "
+"dezactivează verificările automate."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 msgid "minutes"
@@ -4192,7 +4125,7 @@ msgstr "minute"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:65
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Date Git Commit"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:78
 #, fuzzy
@@ -4306,19 +4239,22 @@ msgstr ""
 #: common/dialogs/panel_common_settings.cpp:352
 #, c-format
 msgid "Default 'explorer.exe /n,/select,%F' for this OS."
-msgstr ""
+msgstr "Implicit „explorer.exe /n,/select,%F” pentru acest sistem de operare."
 
 #: common/dialogs/panel_common_settings.cpp:356
 msgid ""
 "File explorer command.\n"
 "example:"
 msgstr ""
+"Comanda Explorer.\n"
+"Exemplu:"
 
 #: common/dialogs/panel_common_settings.cpp:360
 #, c-format
 msgid ""
 "Explorer command with mandatory '%s' suffix after last entered character."
 msgstr ""
+"Comanda Explorer cu sufixul obligatoriu „%s” după ultimul caracter introdus."
 
 #: common/dialogs/panel_common_settings.cpp:374
 msgid "Executable files ("
@@ -4408,21 +4344,23 @@ msgstr "Afișați icoanel în meniuri"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "This change takes effect when relaunching the editor."
-msgstr ""
+msgstr "Această modificare intră în vigoare la relansarea editorului."
 
 #: common/dialogs/panel_common_settings_base.cpp:179
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Focusul urmează mouse-ul între editorii schematici și PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Dacă cursorul mouse-ului este mutat peste fereastra unui editor schematic "
+"sau PCB, fereastra respectivă este afișată."
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "Afișează indicatorul pop-up atunci când comuți setările cu scurtături"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid ""
@@ -4699,10 +4637,12 @@ msgid "Library '%s' not found."
 msgstr "Fișierul %s nu a fost găsit."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
-msgstr "Fișierul '%s' există deja în listă."
+msgstr ""
+"Folderul „%s” există deja. Doriți să suprascrieți blocurile de proiectare "
+"existente?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:579
 #: eeschema/dialogs/panel_sym_lib_table.cpp:660
@@ -6124,6 +6064,10 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Tabelele bibliotecii încorporate nu au putut fi găsite în locația așteptată. "
+"Acest lucru înseamnă, de obicei, că ați instalat software-ul KiCad fără a "
+"instala și bibliotecile. Puteți continua configurarea, dar va trebui să "
+"instalați bibliotecile separat pentru ca acestea să fie disponibile."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 #, fuzzy
@@ -6561,9 +6505,8 @@ msgid "File '%s' was not found.\n"
 msgstr "Fișierul '%s' nu a fost găsit."
 
 #: common/eda_base_frame.cpp:1282
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr "Adăugați linii grafice conectate"
+msgstr "Doriți să îl eliminați din lista fișierelor deschise recent?"
 
 #: common/eda_base_frame.cpp:1283
 msgid "Remove"
@@ -7719,14 +7662,14 @@ msgid "Could not create destination directory: %s"
 msgstr "Nu s-a putut crea directorul \"%s"
 
 #: common/gestfich.cpp:472 common/gestfich.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nu s-a putut conecta la \"%s "
+msgstr "Nu s-a putut copia fișierul: %s în %s"
 
 #: common/gestfich.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nu s-a putut conecta la \"%s "
+msgstr "Nu s-a putut copia directorul: %s în %s"
 
 #: common/gestfich.cpp:604
 #, fuzzy, c-format
@@ -8293,9 +8236,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:373
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:740
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:793
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Eroare: "
+msgstr "Eroare: %s"
 
 #: common/http_lib/http_lib_connection.cpp:80
 #: common/http_lib/http_lib_connection.cpp:140
@@ -9356,9 +9299,8 @@ msgid ""
 msgstr "Eroare la încărcarea tabelei bibliotecii de simboluri „%s”."
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Creați un tabel de bibliotecă global %s gol"
+msgstr "Salvați modificările la tabelul bibliotecii imbricate?"
 
 #: common/lib_tree_model_adapter.cpp:155 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:176 common/lib_tree_model_adapter.cpp:178
@@ -9518,10 +9460,10 @@ msgid "The library table path '%s' does not exist"
 msgstr "Calea dată nu există"
 
 #: common/libraries/library_table_parser.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
 msgstr ""
-"S-a produs o eroare la scrierea tabelului bibliotecii de capsule \"%s\"."
+"A apărut o eroare neașteptată în timpul citirii tabelului bibliotecii %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:233
@@ -11639,9 +11581,9 @@ msgid "Design block library '%s' deleted"
 msgstr "Nicio magistrală selectată"
 
 #: common/widgets/design_block_pane.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Eroare la încărcarea amprentei %s din biblioteca \"%s\"."
+msgstr "Ștergeți blocul de proiectare „%s” din biblioteca „%s” de pe disc?"
 
 #: common/widgets/design_block_pane.cpp:365
 #, fuzzy, c-format
@@ -11656,9 +11598,8 @@ msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
 
 #: common/widgets/design_block_pane.cpp:438
 #: eeschema/sch_design_block_utils.cpp:52 pcbnew/pcb_design_block_utils.cpp:58
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Deschideți documentul existent"
+msgstr "Suprascrieți blocul de proiectare existent?"
 
 #: common/widgets/filter_combobox.cpp:72
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1060
@@ -13105,6 +13046,93 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. Rezumat\n"
+"\n"
+"Instrumentul Bill of Materials creează o listă de materiale (BOM) care "
+"enumeră toate componentele din proiect.\n"
+"\n"
+"Instrumentul utilizează un script extern pentru a genera o listă de "
+"materiale în formatul de ieșire dorit. Alegerea unui script diferit modifică "
+"formatul listei de materiale.\n"
+"\n"
+"Generarea unei liste de materiale este descrisă mai detaliat în manualul "
+"Schematic Editor.\n"
+"\n"
+"# 2. Utilizare\n"
+"\n"
+"Selectați un script generator din lista **Scripturi generator BOM**. "
+"Detaliile generatorului selectat sunt afișate în partea dreaptă a "
+"dialogului.\n"
+"\n"
+"Făcând clic pe butonul **Generare** se creează un fișier BOM cu generatorul "
+"selectat.\n"
+"\n"
+"Setările implicite prezintă mai multe opțiuni de scripturi generator, deși "
+"unele scripturi suplimentare sunt instalate cu KiCad și pot fi adăugate la "
+"listă cu butonul **+**.\n"
+"\n"
+"**Notă:** În Windows, există o opțiune suplimentară **Afișare fereastră "
+"consolă**. Când această opțiune este debifată, generatoarele BOM rulează "
+"într-o fereastră consolă ascunsă și orice ieșire este redirecționată și "
+"afișată în fereastra de dialog. Când această opțiune este bifată, "
+"generatoarele BOM rulează într-o fereastră consolă vizibilă.\n"
+"# 3. Generatoare personalizate și linii de comandă\n"
+"\n"
+"Intern, KiCad creează un fișier netlist intermediar în format XML care "
+"conține informații despre toate componentele din proiect. Un script "
+"generator BOM convertește fișierul netlist intermediar în formatul de ieșire "
+"dorit. KiCad rulează scripturile generatorului BOM în conformitate cu linia "
+"de comandă introdusă în partea de jos a dialogului BOM.\n"
+"\n"
+"Formatul liniei de comandă acceptă parametri pentru numele fișierelor. "
+"Fiecare parametru de formatare este înlocuit cu o cale sau un nume de fișier "
+"specific proiectului. Parametrii de formatare acceptați sunt:\n"
+"\n"
+"* `%I`: calea absolută și numele fișierului netlist intermediar, care este "
+"intrarea în generatorul BOM\n"
+"\n"
+"* `%O`: calea absolută și numele fișierului BOM de ieșire (fără extensie de "
+"fișier)\n"
+"\n"
+"* `%B`: numele fișierului de bază al fișierului BOM de ieșire (fără extensie "
+"de fișier)\n"
+"\n"
+"* `%P`: calea absolută a directorului proiectului, fără slash final\n"
+"\n"
+"**Notă:** parametrul fișierului de ieșire `%O` nu include o extensie de "
+"fișier. KiCad va încerca să adauge automat o extensie adecvată la linia de "
+"comandă, dar poate fi necesar să adăugați manual o extensie.\n"
+"\n"
+"Python este instrumentul recomandat pentru scripturile generatorului BOM, "
+"dar pot fi utilizate și alte instrumente.\n"
+"\n"
+"## Exemple de linii de comandă pentru scripturi Python\n"
+"\n"
+"Formatul liniei de comandă pentru un script Python este următorul:\n"
+"\n"
+"```\n"
+"\n"
+"python <numele fișierului script> <numele fișierului de intrare> <numele "
+"fișierului de ieșire>\n"
+"```\n"
+"\n"
+"În Windows, dacă scriptul generator dorit pentru o listă de componente CSV "
+"este `C:\\Users\\username\\kicad\\my_python_script.py`, linia de comandă ar "
+"fi:\n"
+"```\n"
+"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py „%I” „%O.csv”\n"
+"```\n"
+"\n"
+"Pe Linux, dacă scriptul generator dorit pentru o listă de materiale CSV este "
+"`/home/username/kicad/my_python_script.py`, linia de comandă ar fi:\n"
+"```\n"
+"\n"
+"python /home/username/kicad/my_python_script.py „%I” „%O.csv”\n"
+"```\n"
+"\n"
+"Se recomandă utilizarea ghilimelelor duble (`\"`) în jurul argumentelor în "
+"cazul în care numele fișierelor conțin spații sau caractere speciale.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:56
 msgid "Change all symbols in schematic"
@@ -14861,9 +14889,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1009
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1599
-#, fuzzy
 msgid "Save changes?"
-msgstr "Salvați modificările"
+msgstr "Salvați modificările?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:32
 #, fuzzy
@@ -15340,9 +15367,8 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Selectați simbolul următor fără atribuire de amprentă"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:501
-#, fuzzy
 msgid "Delete extra units from symbol?"
-msgstr "Selectați următorul simbol neatribuit"
+msgstr "Suprascrieți blocul de proiectare existent?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:526
 #, fuzzy
@@ -15350,9 +15376,8 @@ msgid "Symbol must have at least 1 body style"
 msgstr "Netclass trebuie să aibă un nume."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:532
-#, fuzzy
 msgid "Delete extra body styles from symbol?"
-msgstr "Selectați următorul simbol neatribuit"
+msgstr "Ștergeți stilurile de corp suplimentare din simbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:556
 #: eeschema/symbol_editor/symbol_editor.cpp:363
@@ -16176,6 +16201,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"Această schemă a fost realizată utilizând biblioteci de simboluri mai vechi, "
+"care pot afecta schema.  Este posibil ca unele simboluri să trebuiască să "
+"fie legate de un nume de simbol diferit.  Este posibil ca unele simboluri să "
+"trebuiască să fie „salvate” (copiate și redenumite) într-o bibliotecă nouă.\n"
+"\n"
+"Pentru actualizarea proiectului, se recomandă următoarele modificări."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid "Accept"
@@ -16597,9 +16628,8 @@ msgid "A sheet must have a valid file name."
 msgstr "Netclass trebuie să aibă un nume."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:310
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Relativ"
+msgstr "Utilizați calea relativă pentru fișierul foaie?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:310
 #, fuzzy
@@ -17765,9 +17795,8 @@ msgid "Alternate Assignment"
 msgstr "Atribuții amprentă..."
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "Bibliotecari"
+msgstr " Varianta"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17950,9 +17979,8 @@ msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "Simbolul %s a fost alocat bibliotecii de simboluri \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:287
-#, fuzzy
 msgid "Symbol library table mapping complete!"
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Maparea tabelului bibliotecii de simboluri finalizată!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #, fuzzy, c-format
@@ -19661,9 +19689,9 @@ msgid "Label connects more than one wire at %d, %d"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Nu s-a putut conecta la \"%s "
+msgstr "Patru elemente conectate la %d, %d"
 
 #: eeschema/erc/erc.cpp:900
 #, fuzzy
@@ -20176,6 +20204,12 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
+"În anumite condiții, acest lucru poate duce la deteriorarea schemei.  Dacă "
+"schema nu prezintă simboluri lipsă la deschidere, salvați-o imediat înainte "
+"de a efectua modificări, pentru a preveni pierderea datelor.  Dacă există "
+"simboluri lipsă, este necesară fie recuperarea manuală a schemei, fie "
+"recuperarea fișierului bibliotecii cache de simboluri și reîncărcarea "
+"schemei."
 
 #: eeschema/files-io.cpp:632
 #, fuzzy
@@ -21585,6 +21619,13 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"Proiectul este prea mare și nu poate fi importat în KiCad.\n"
+"Vă rugăm să reduceți dimensiunea maximă a proiectului în CADSTAR navigând "
+"la:\n"
+"Fila Proiect -> Proprietăți -> Opțiuni de proiectare -> Dimensiune maximă a "
+"proiectului.\n"
+"Dimensiunea actuală a proiectului: %.2f, %.2f milimetri.\n"
+"Dimensiunea maximă permisă a proiectului: %.2f, %.2f milimetri.\n"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:599
 msgid ""
@@ -22776,9 +22817,8 @@ msgid "<Unknown>"
 msgstr "<Necunoscut>"
 
 #: eeschema/sch_symbol.cpp:2713
-#, fuzzy
 msgid "No library defined!"
-msgstr "Identificator nou al bibliotecii:"
+msgstr "Nu este definită nicio bibliotecă!"
 
 #: eeschema/sch_symbol.cpp:2715
 #, c-format
@@ -23537,9 +23577,8 @@ msgid "Missing or invalid C_pkg value."
 msgstr "Șir de valori Spice nevalabil"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:164
-#, fuzzy
 msgid "Checking pin "
-msgstr "Se verifică pinii..."
+msgstr "Se verifică pinul "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:171
 #, fuzzy
@@ -23572,9 +23611,8 @@ msgid "Cpin is not valid."
 msgstr "ID-ul amprentei \"%s\" nu este valid."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:230
-#, fuzzy
 msgid "Checking component "
-msgstr "Se încarcă..."
+msgstr "Verificarea componentelor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:237
 #, fuzzy
@@ -23629,14 +23667,12 @@ msgid "Model name cannot be empty"
 msgstr "Numele variabilei nu poate fi gol."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:467
-#, fuzzy
 msgid "Checking model "
-msgstr "Se verifică etichetele..."
+msgstr "Verificarea modelului "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:474
-#, fuzzy
 msgid "Undefined model type."
-msgstr "Nedefinit!"
+msgstr "Tip de model nedefinit."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:483
 #, fuzzy
@@ -23774,9 +23810,8 @@ msgid "Submodel name cannot be empty."
 msgstr "Numele variabilei nu poate fi gol."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
-#, fuzzy
 msgid "Checking submodel "
-msgstr "Se verifică etichetele..."
+msgstr "Verificarea submodelului "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
 #, fuzzy
@@ -23809,9 +23844,8 @@ msgid "Invalid POWER Pulse table."
 msgstr "Nume de semnal nevalabil"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "Masca de compilare nu este acceptată în prezent."
+msgstr " submodelele nu sunt încă acceptate."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
 #, fuzzy
@@ -23848,9 +23882,8 @@ msgid "Package model name cannot be empty."
 msgstr "Numele variabilei nu poate fi gol."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:877
-#, fuzzy
 msgid "Checking package model "
-msgstr "Alegeți imaginea"
+msgstr "Verificarea modelului pachetului "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:884
 #, fuzzy
@@ -23896,9 +23929,8 @@ msgid "Inductance matrix is nullptr."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:996
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Nu se poate deschide fișierul '%s'"
+msgstr "Nu se poate deschide fișierul "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1020
 #, fuzzy
@@ -23906,23 +23938,20 @@ msgid "Unexpected end of file. Missing [END] ?"
 msgstr "Sfârșit neașteptat al fișierului."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1030
-#, fuzzy
 msgid "Error on line "
-msgstr "Eroare la descărcarea pachetului"
+msgstr "Eroare pe linie "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "%s nu a fost găsit"
+msgstr " submodel nu a fost găsit"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "\"%s\" nu este o amprentă validă."
+msgstr " nu este o valoare dV/dt validă."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
 #, fuzzy
@@ -23967,9 +23996,8 @@ msgid "Submodel name is not unique: "
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1585
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Necunoscut"
+msgstr "Cuvânt cheie necunoscut în "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1585
 msgid " context: "
@@ -24012,9 +24040,8 @@ msgid "The matrix type is missing."
 msgstr "Lipsește.\n"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
-msgstr "Se verifică numele foilor..."
+msgstr " nu este un tip de matrice recunoscut."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
 #, fuzzy
@@ -24056,9 +24083,8 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2323
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Nod necunoscut '%s' în '%s'"
+msgstr "Model_tip necunoscut "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2330
 #, fuzzy
@@ -24066,9 +24092,8 @@ msgid "Internal Error while reading model_type"
 msgstr "Eroare la citirea fișierului."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2345
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Necunoscut"
+msgstr "Necunoscut Activare: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2352
 #: eeschema/sim/kibis/ibis_parser.cpp:2374
@@ -24077,18 +24102,16 @@ msgid "Internal Error while reading Enable"
 msgstr "Eroare la citirea fișierului."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2367
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Adăugați formă"
+msgstr "Polaritate necunoscută "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2413
 msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr "Nedefinit!"
+msgstr " nu este un tip de submodel recunoscut."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
@@ -24709,9 +24732,8 @@ msgstr "Ștergeți toate marcajele"
 
 #: eeschema/sim/simulator_frame_ui.cpp:651
 #: eeschema/sim/simulator_frame_ui.cpp:672
-#, fuzzy
 msgid "Cursor "
-msgstr "Cursorul"
+msgstr "Cursorul "
 
 #: eeschema/sim/simulator_frame_ui.cpp:729
 #: eeschema/sim/simulator_frame_ui.cpp:1149
@@ -24920,6 +24942,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE funcții:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_checker.cpp:130
 #, c-format
@@ -28063,15 +28120,13 @@ msgstr "Schema este numai pentru citire."
 #: eeschema/tools/sch_inspection_tool.cpp:364
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #: pcbnew/tools/board_inspection_tool.cpp:1601
-#, fuzzy
 msgid "Library: "
-msgstr "Bibliotecă"
+msgstr "Bibliotecă: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:365
 #: pcbnew/tools/board_inspection_tool.cpp:1602
-#, fuzzy
 msgid "Library item: "
-msgstr "Bibliotecă"
+msgstr "Element din bibliotecă: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:374
 #: pcbnew/tools/board_inspection_tool.cpp:1611
@@ -28319,9 +28374,8 @@ msgid "Select a single pin with stacked notation to explode"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1407
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Calea selectată nu conține setări KiCad valide!"
+msgstr "Pinul selectat nu are o notație validă stivuită."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1471
 msgid "Symbol is not derived from another symbol."
@@ -28716,14 +28770,12 @@ msgid "Unable to access the symbol library manager."
 msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1678
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Nu s-a reușit crearea directorul de descărcare!"
+msgstr "Imposibil de analizat simbolul descărcat."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1757
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "Nu s-a reușit crearea directorul de descărcare!"
+msgstr "Nu se poate salva simbolul descărcat."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1818
 #, fuzzy
@@ -31964,9 +32016,8 @@ msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:61
-#, fuzzy
 msgid "Welcome to Template Selection!"
-msgstr "Trasați directorul de ieșire"
+msgstr "Bine ați venit la Selecția șabloanelor!"
 
 #: kicad/dialogs/template_default_html.h:62
 msgid ""
@@ -31993,9 +32044,8 @@ msgid "Select a Template"
 msgstr "Selectează un fişier"
 
 #: kicad/dialogs/template_default_html.h:71
-#, fuzzy
 msgid "Click on any template in the list to "
-msgstr "Atribuiți amprenta simbolurilor selectate"
+msgstr "Faceți clic pe orice șablon din listă pentru a "
 
 #: kicad/dialogs/template_default_html.h:71
 #, fuzzy
@@ -32014,9 +32064,8 @@ msgid "Customize Path"
 msgstr "Personalizat (%s)"
 
 #: kicad/dialogs/template_default_html.h:75
-#, fuzzy
 msgid "Use the "
-msgstr "Tema icoanelor:"
+msgstr "Utilizați "
 
 #: kicad/dialogs/template_default_html.h:75
 #, fuzzy
@@ -32210,10 +32259,9 @@ msgid "No Templates Found"
 msgstr "Nu s-a gasit fisierul"
 
 #: kicad/dialogs/template_default_html.h:180
-#, fuzzy
 msgid ""
 "The selected templates directory does not contain any project templates."
-msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
+msgstr "Directorul de șabloane selectat nu conține niciun șablon de proiect."
 
 #: kicad/dialogs/template_default_html.h:183
 msgid "What to do:"
@@ -33115,9 +33163,8 @@ msgid "Rename File"
 msgstr "Redenumiți"
 
 #: kicad/project_tree_item.cpp:147
-#, fuzzy
 msgid "Unable to rename file ... "
-msgstr "Nu se poate citi fișierul \"%s\"."
+msgstr "Imposibil de redenumit fișierul ... "
 
 #: kicad/project_tree_item.cpp:147
 #, fuzzy
@@ -33290,9 +33337,8 @@ msgid "Commit File..."
 msgstr "Adăugați câmp..."
 
 #: kicad/project_tree_pane.cpp:1057
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Treceți la grila următoare"
+msgstr "Comutați la ramură "
 
 #: kicad/project_tree_pane.cpp:1062
 #, fuzzy
@@ -33354,9 +33400,8 @@ msgid "Waiting for Git operations to finish..."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1784
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
+msgstr "Directorul selectat este deja un proiect Git."
 
 #: kicad/project_tree_pane.cpp:1791
 #, fuzzy
@@ -33390,9 +33435,8 @@ msgid "Failed to push project"
 msgstr "Ieșirea datelor a eșuat"
 
 #: kicad/project_tree_pane.cpp:2229
-#, fuzzy
 msgid "The selected directory is not a Git project."
-msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
+msgstr "Directorul selectat nu este un proiect Git."
 
 #: kicad/project_tree_pane.cpp:2316
 msgid "Discarding commit due to empty commit message."
@@ -33718,9 +33762,9 @@ msgid "Unknown error"
 msgstr "Necunoscut"
 
 #: libs/kiplatform/os/windows/environment.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Eroare: "
+msgstr "Cod eroare: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 msgid "Layout"
@@ -37482,39 +37526,32 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:78
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Stratul utilizator Eco1"
+msgstr "Număr straturi de cupru: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:82
-#, fuzzy
 msgid "Board thickness: "
-msgstr "Grosime magistrală"
+msgstr "Grosimea plăcii: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:89
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Adăugați o dimensiune ortogonală"
+msgstr "Dimensiuni totale ale plăcii: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:97
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Distanța minimă a grilei:"
+msgstr "Cale minimă/distanță minimă: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:104
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Diametrul via placate"
+msgstr "Diametru minim al orificiului: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:107
-#, fuzzy
 msgid "Copper finish: "
-msgstr "Cupru / finisaj de suprafață:"
+msgstr "Finisaj cupru: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:110
-#, fuzzy
 msgid "Impedance control: "
-msgstr "Impedanță controlată"
+msgstr "Controlul impedanței: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:113
 msgid "Castellated pads: "
@@ -37525,9 +37562,8 @@ msgid "Press-fit pads: "
 msgstr ""
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:121
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "Reîncarcă placa"
+msgstr "Marginea plăcii placate: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:130
 msgid "Yes, Bevelled"
@@ -37944,15 +37980,12 @@ msgid "PCB has %d empty or invalid reference designations."
 msgstr "Schimbarea simbolurilor care corespund indicativului de referință:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:406
-#, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
 msgstr ""
-"\n"
-"PCB are %d denumiri de referință goale sau nevalabile.\n"
-"Vă recomandăm să rulați DRC cu opțiunea \"Testarea amprentelor împotriva "
-"schemei\" bifată.\n"
+"Este posibil să doriți să rulați DRC cu opțiunea „Testare paritate între PCB "
+"și schemă” bifată."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
 #, c-format
@@ -39852,9 +39885,9 @@ msgid "Export ODB++ File"
 msgstr "Exportați în fișier"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:159
-#, fuzzy
 msgid "The selected output file name is not a supported archive format."
-msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
+msgstr ""
+"Numele fișierului de ieșire selectat nu este un format de arhivă acceptat."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:215
 #, fuzzy
@@ -52920,6 +52953,11 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
+"Proiectul CADSTAR conține rețele cu o „clasă de rețea” atribuită. KiCad nu "
+"are un echivalent pentru clasa de rețea CADSTAR, astfel încât aceste "
+"elemente nu au fost importate. Notă: Versiunea KiCad a „clasei de rețea” "
+"este mai apropiată de „codul de rutare a rețelei” CADSTAR (care a fost "
+"importat pentru toate rețelele)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4016
 msgid ""
@@ -54552,9 +54590,8 @@ msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Lipsește parametrul '%s' în '%s'"
 
 #: pcbnew/pcbnew.cpp:622 pcbnew/pcbnew.cpp:635
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "Încarcă bibliotecile de capsule"
+msgstr "Încărcarea bibliotecilor de amprente"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:438
 msgid "Failed to load board\n"
@@ -60887,6 +60924,12 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad este o suită gratuită și open-source de automatizare a proiectării "
+"electronice (EDA). Oferă captură schematică, simulare de circuite integrate, "
+"dispunere de plăci cu circuite imprimate (PCB), redare 3D și plotare/export "
+"de date în numeroase formate. KiCad include, de asemenea, o bibliotecă de "
+"componente de înaltă calitate, cu mii de simboluri, amprente și modele 3D. "
+"KiCad are cerințe minime de sistem și rulează pe Linux, Windows și macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 #, fuzzy
