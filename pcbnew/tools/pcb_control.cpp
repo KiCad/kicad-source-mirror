@@ -1516,33 +1516,38 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
     bool skipMove = true;
 
-    // If we succeeded in placing the linked design block, we're ready to apply the multichannel tool
-    if( m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit, &skipMove ) )
+    // Lambda to perform the design block layout application with proper cleanup on failure
+    auto applyLayout = [&]() -> int
     {
+        if( !m_toolMgr->RunSynchronousAction( PCB_ACTIONS::placeLinkedDesignBlock, &tempCommit,
+                                              &skipMove ) )
+        {
+            return 1;
+        }
+
         // Lambda for the bounding box of all the components
-        auto generateBoundingBox =
-                [&]( std::unordered_set<EDA_ITEM*> aItems )
-                {
-                    std::vector<VECTOR2I> bbCorners;
-                    bbCorners.reserve( aItems.size() * 4 );
+        auto generateBoundingBox = []( const std::unordered_set<EDA_ITEM*>& aItems )
+        {
+            std::vector<VECTOR2I> bbCorners;
+            bbCorners.reserve( aItems.size() * 4 );
 
-                    for( auto item : aItems )
-                    {
-                        const BOX2I bb = item->GetBoundingBox().GetInflated( 100000 );
-                        KIGEOM::CollectBoxCorners( bb, bbCorners );
-                    }
+            for( EDA_ITEM* item : aItems )
+            {
+                const BOX2I bb = item->GetBoundingBox().GetInflated( 100000 );
+                KIGEOM::CollectBoxCorners( bb, bbCorners );
+            }
 
-                    std::vector<VECTOR2I> hullVertices;
-                    BuildConvexHull( hullVertices, bbCorners );
+            std::vector<VECTOR2I> hullVertices;
+            BuildConvexHull( hullVertices, bbCorners );
 
-                    SHAPE_LINE_CHAIN hull( hullVertices );
+            SHAPE_LINE_CHAIN hull( hullVertices );
 
-                    // Make the newly computed convex hull use only 90 degree segments
-                    return KIGEOM::RectifyPolygon( hull );
-                };
+            // Make the newly computed convex hull use only 90 degree segments
+            return KIGEOM::RectifyPolygon( hull );
+        };
 
         // Build a rule area that contains all the components in the design block,
-        // meaning all items without SKIP_STRUCT set.
+        // meaning all items without MCT_SKIP_STRUCT set.
         RULE_AREA dbRA;
 
         dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
@@ -1559,12 +1564,22 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                         if( item->Type() == PCB_FOOTPRINT_T )
                             dbRA.m_components.insert( static_cast<FOOTPRINT*>( item ) );
                     }
+
                     return INSPECT_RESULT::CONTINUE;
                 },
                 nullptr, GENERAL_COLLECTOR::AllBoardItems );
 
+        // Verify that the design block placement actually added items
+        if( dbRA.m_designBlockItems.empty() || dbRA.m_components.empty() )
+        {
+            tempCommit.Revert();
+            m_frame->GetInfoBar()->ShowMessageFor(
+                    _( "Design block placement failed - no footprints were placed." ), 5000,
+                    wxICON_WARNING );
+            return 1;
+        }
+
         dbRA.m_zone = new ZONE( board() );
-        //dbRA.m_area->SetZoneName( wxString::Format( wxT( "design-block-source-%s" ), group->GetDesignBlockLibId().GetUniStringLibId() ) );
         dbRA.m_zone->SetIsRuleArea( true );
         dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
         dbRA.m_zone->SetPlacementAreaEnabled( true );
@@ -1584,24 +1599,35 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
         destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
 
-        // Add all the design block group footprints to the destination rule area
+        // Check for locked footprints and collect destination components
         for( EDA_ITEM* item : group->GetItems() )
         {
             if( item->Type() == PCB_FOOTPRINT_T )
             {
                 FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
 
-                // If the footprint is locked, we can't place it
                 if( fp->IsLocked() )
                 {
                     wxString msg;
                     msg.Printf( _( "Footprint %s is locked and cannot be placed." ), fp->GetReference() );
                     m_frame->GetInfoBar()->ShowMessageFor( msg, 5000, wxICON_WARNING );
+                    tempCommit.Revert();
+                    delete dbRA.m_zone;
                     return 1;
                 }
 
                 destRA.m_components.insert( fp );
             }
+        }
+
+        // Verify the group has footprints to match
+        if( destRA.m_components.empty() )
+        {
+            tempCommit.Revert();
+            delete dbRA.m_zone;
+            m_frame->GetInfoBar()->ShowMessageFor(
+                    _( "Selected group contains no footprints to place." ), 5000, wxICON_WARNING );
+            return 1;
         }
 
         destRA.m_zone = new ZONE( board() );
@@ -1624,16 +1650,20 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         // Use the multichannel tool to repeat the layout
         MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();
 
-        ret = mct->RepeatLayout( aEvent, dbRA, destRA );
+        int result = mct->RepeatLayout( aEvent, dbRA, destRA );
 
         // Get rid of the temporary design blocks and rule areas
         tempCommit.Revert();
 
         delete dbRA.m_zone;
         delete destRA.m_zone;
-    }
 
-    // We're done, remove SKIP_STRUCT
+        return result;
+    };
+
+    ret = applyLayout();
+
+    // We're done, remove MCT_SKIP_STRUCT
     brd->Visit(
             []( EDA_ITEM* item, void* )
             {
