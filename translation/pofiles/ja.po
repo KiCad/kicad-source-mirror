@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-19 03:28+0000\n"
+"PO-Revision-Date: 2026-01-20 23:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4649,9 +4649,9 @@ msgstr ""
 "シンボルからも削除しますか?"
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "ファイル '%s' の追加に失敗しました。"
+msgstr "ファイル '%s' の読み込みに失敗しました。"
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4667,9 +4667,8 @@ msgstr ""
 "埋め込まれた内容をファイルを新しいバージョンに置き換えますか?"
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "埋め込みファイル"
+msgstr "埋め込みファイルの競合"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4677,9 +4676,8 @@ msgid "Replace"
 msgstr "置換"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "既存を追加"
+msgstr "既存を利用"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -5986,7 +5984,6 @@ msgid "Top auxiliary"
 msgstr "上 サブ"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
 msgstr "セパレーターを挿入"
 
@@ -5995,16 +5992,14 @@ msgid "Insert Spacer"
 msgstr "スペーサーを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
 msgstr "グループを挿入"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "行セパレーター"
+msgstr "セパレーター"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
@@ -6037,19 +6032,16 @@ msgid "Save"
 msgstr "保存"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "新規ネット"
+msgstr "新規ルール"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "カスタム ルール"
+msgstr "ルールをコピー"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "ファイルの削除"
+msgstr "ルールを削除"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -9115,9 +9107,8 @@ msgid "Cannot restore - the following files are open by another user:"
 msgstr "復元できません - 次のファイルは別のユーザーによって開かれています:"
 
 #: common/local_history.cpp:1730
-#, fuzzy
 msgid "Restore Failed"
-msgstr "マージが失敗しました"
+msgstr "復元に失敗しました"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -9645,7 +9636,6 @@ msgid "Quit %s"
 msgstr "%s を終了する"
 
 #: common/tool/action_toolbar.cpp:1128
-#, fuzzy
 msgid "Grid selector"
 msgstr "グリッド選択"
 
@@ -9654,7 +9644,6 @@ msgid "Grid Selection box"
 msgstr "グリッド選択ボックス"
 
 #: common/tool/action_toolbar.cpp:1141
-#, fuzzy
 msgid "Zoom selector"
 msgstr "ズーム選択"
 
@@ -11111,9 +11100,8 @@ msgid "Select Path"
 msgstr "パスを選択"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Info メッセージ:"
+msgstr "メッセージを表示"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
@@ -11121,9 +11109,8 @@ msgid "View %zu load message(s)"
 msgstr "ライブラリ読み込み時のメッセージ( %zu 個)表示"
 
 #: common/widgets/kistatusbar.cpp:438
-#, fuzzy
 msgid "Load Messages"
-msgstr "メッセージ"
+msgstr "メッセージを読み込み"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -12217,9 +12204,8 @@ msgid "Reset existing annotations"
 msgstr "既存のアノテーションをリセット"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "シンボルを再グループ化"
+msgstr "シンボルのユニットを再グループ化"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13711,14 +13697,14 @@ msgid "Unable to find a plugin to read this library."
 msgstr "このライブラリを読み取るプラグインが見つかりません。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "シンボル ライブラリ '%s' をインポートできませんでした。"
+msgstr "シンボル ライブラリ '%s' を読み込むことができませんでした。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "シンボル ライブラリ ファイル '%s' が空です。"
+msgstr "シンボル ライブラリ ファイル '%s' は空です。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
@@ -13731,9 +13717,8 @@ msgid "%d symbols selected"
 msgstr "%d 個のシンボルが選択されました"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "フットプリント衝突の影"
+msgstr "インポートの競合を解決する"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:511
 msgid ""
@@ -13755,9 +13740,8 @@ msgid "Action"
 msgstr "アクション"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "スキップ"
+msgstr "すべてスキップ"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13765,9 +13749,8 @@ msgid "Overwrite All"
 msgstr "全てを上書き"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "保存するシンボルが選択されていません"
+msgstr "シンボルが選択されていません"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16707,36 +16690,33 @@ msgstr "バリアント名の変更"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "変数名は空欄にできません。"
+msgstr "バリアント名は空欄にできません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "'%s' はKiCad予約済みのホットキーなので、指定することはできません。"
+msgstr "'%s' は予約済みのバリアント名です。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "'%s' はすでに存在します。"
+msgstr "バリアント '%s' はすでに存在します。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
 msgstr "デフォルトのバリアントをコピーできません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "新しいテンプレートの名前を入力します:"
+msgstr "コピーしたバリアント名を入力してください:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "バリアント"
+msgstr "バリアントのコピー"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -19523,12 +19503,11 @@ msgid "Panels"
 msgstr "パネル"
 
 #: eeschema/menubar.cpp:196
-#, fuzzy
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"リモート シンボルをプラグイン＆コンテンツ マネージャー(PCM)を利用してインス"
-"トールして有効化"
+"リモート シンボルをプラグイン＆コンテンツ マネージャー(PCM)を利用して"
+"インストールして有効化"
 
 #: eeschema/menubar.cpp:333
 msgid "Variants"
@@ -20628,7 +20607,7 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"ファイル '%s' を読み取れません。\n"
+"ファイル '%s' を読み込めません。\n"
 "'%s' (行 %d、カラム %d、オフセット %d)"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1063
@@ -24639,9 +24618,9 @@ msgid "Imported %d symbol(s), skipped %d."
 msgstr "%d 個のシンボルを取り込み、%d 個はスキップされました。"
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "シンボル '%s' をライブラリ '%s' から読み込み中にエラー。"
+msgstr "シンボル '%s' をライブラリ '%s' から削除中にエラー。"
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24740,14 +24719,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "ブレークシートピンと階層ラベルの関連付け"
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Current variant"
 msgstr "現在のバリアント"
 
 #: eeschema/toolbars_sch_editor.cpp:54
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "現在の回路図バリアントを選択するためのコントロール"
+msgstr "現在の回路図バリアントを選択する"
 
 #: eeschema/toolbars_sch_editor.cpp:92 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:163
@@ -24764,9 +24741,8 @@ msgid "Select the current variant to display and edit."
 msgstr "現在のバリアントを選択して表示および編集。"
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "バリアントを追加..."
+msgstr "新しいバリアントを追加..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
@@ -24777,9 +24753,8 @@ msgid "Variant name:"
 msgstr "バリアント名:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "説明:"
+msgstr "説明(オプション):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -26483,9 +26458,8 @@ msgid "Could not find design block %s."
 msgstr "デザインブロック %s が見つかりませんでした。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "デザイン ブロック %s には回路図ファイルがありません。"
+msgstr "デザイン ブロック には配置する回路図がありません。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -27385,14 +27359,12 @@ msgid "No remote data sources are currently installed."
 msgstr "リモート データ ソースは現在インストールされていません。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "パスを設定..."
+msgstr "設定..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "色をクリア"
+msgstr "Cookieをクリア"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -28669,13 +28641,12 @@ msgid "Aperture highlight"
 msgstr "アパーチャハイライト"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "Dコード選択"
 
 #: gerbview/toolbars_gerber.cpp:318
 msgid "Select all items with the selected DCode"
-msgstr "選択したDコードによりすべてのアイテムを選択"
+msgstr "選択したDCodeを持つすべてのアイテムを選択"
 
 #: gerbview/toolbars_gerber.cpp:322
 msgid "<No selection>"
@@ -51494,7 +51465,7 @@ msgstr "ゾーン アウトライン内の無効なシェイプ タイプ %d が
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
-msgstr "ファイル \"%s\" を作成できません "
+msgstr "ファイル \"%s\" を読み込みできません "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
