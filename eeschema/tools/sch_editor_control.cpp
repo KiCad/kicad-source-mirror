@@ -239,8 +239,7 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
  * @param aIncludeDrawingSheet If true, include the drawing sheet layer in the render
  */
 wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
-                                  int aWidth, int aHeight, double aViewScale, bool aUseAlpha,
-                                  bool aIncludeDrawingSheet )
+                                  int aWidth, int aHeight, bool aUseAlpha, bool aIncludeDrawingSheet )
 {
     wxBitmap bitmap( aWidth, aHeight, 32 );
 
@@ -369,18 +368,19 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
 }
 
 
-wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
-                                          bool aUseAlpha, bool aIncludeDrawingSheet )
+wxBitmap renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
+                                             const BOX2I& aBBox, bool aUseAlpha, bool aIncludeDrawingSheet )
 {
+    const double c_targetPPI = 300;
+    const double c_targetPixelsPerMM = c_targetPPI / 25.4;
+
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
         return wxBitmap();
 
-    // Use the current view scale to match what the user sees on screen
-    double viewScale = aFrame->GetCanvas()->GetView()->GetScale();
-    int    bitmapWidth = KiROUND( size.x * viewScale );
-    int    bitmapHeight = KiROUND( size.y * viewScale );
+    int bitmapWidth = KiROUND( schIUScale.IUTomm( size.x ) * c_targetPixelsPerMM );
+    int bitmapHeight = KiROUND( schIUScale.IUTomm( size.y ) * c_targetPixelsPerMM );
 
     // Clamp to maximum size while preserving aspect ratio
     if( bitmapWidth > clipboardMaxBitmapSize || bitmapHeight > clipboardMaxBitmapSize )
@@ -388,14 +388,13 @@ wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELE
         double scaleDown = (double) clipboardMaxBitmapSize / std::max( bitmapWidth, bitmapHeight );
         bitmapWidth = KiROUND( bitmapWidth * scaleDown );
         bitmapHeight = KiROUND( bitmapHeight * scaleDown );
-        viewScale *= scaleDown;
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
         return wxBitmap();
 
-    wxBitmap result = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
-                                               aUseAlpha, aIncludeDrawingSheet );
+    wxBitmap result = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, aUseAlpha,
+                                               aIncludeDrawingSheet );
 
     return result;
 }
@@ -1702,7 +1701,8 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                 wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
             }
 
-            wxBitmap bitmapWithAlpha = renderSelectionToImageWithAlpha( m_frame, selection, selectionBox, true, false );
+            wxBitmap bitmapWithAlpha =
+                    renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
 
             if( bitmapWithAlpha.IsOk() )
             {
@@ -3043,7 +3043,7 @@ int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
     BOX2I pageBBox( VECTOR2I( 0, 0 ), m_frame->GetPageSizeIU() );
 
     // Render the full sheet selection including the worksheet
-    wxBitmap image = renderSelectionToImageWithAlpha( m_frame, sheetSelection, pageBBox, true, true );
+    wxBitmap image = renderSelectionToImageForClipboard( m_frame, sheetSelection, pageBBox, true, true );
 
     if( image.IsOk() )
     {
