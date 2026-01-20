@@ -1413,7 +1413,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairGap() const
     {
         return m_customDiffPair.m_Gap;
     }
-    else if( m_diffPairIndex == 0 )
+    else if( m_diffPairIndex <= 0 || m_diffPairIndex >= (int) m_DiffPairDimensionsList.size() )
     {
         if( m_NetSettings->GetDefaultNetclass()->HasDiffPairGap() )
             return m_NetSettings->GetDefaultNetclass()->GetDiffPairGap();
@@ -1433,7 +1433,7 @@ int BOARD_DESIGN_SETTINGS::GetCurrentDiffPairViaGap() const
     {
         return m_customDiffPair.m_ViaGap;
     }
-    else if( m_diffPairIndex == 0 )
+    else if( m_diffPairIndex <= 0 || m_diffPairIndex >= (int) m_DiffPairDimensionsList.size() )
     {
         if( m_NetSettings->GetDefaultNetclass()->HasDiffPairViaGap() )
             return m_NetSettings->GetDefaultNetclass()->GetDiffPairViaGap();
