@@ -57,15 +57,15 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
 {
     LIBRARY_TABLE_PARSER parser;
 
-    wxFileName file( aPath );
-    WX_FILENAME::ResolvePossibleSymlinks( file );
-    m_path = file.GetAbsolutePath();
+    wxFileName fn( aPath );
+    WX_FILENAME::ResolvePossibleSymlinks( fn );
+    m_path = fn.GetAbsolutePath();
 
-    if( !file.FileExists() )
+    if( !fn.FileExists() )
     {
         m_ok = false;
         m_errorDescription = wxString::Format( _( "The library table path '%s' does not exist" ),
-                                               file.GetFullPath() );
+                                               fn.GetFullPath() );
         return;
     }
 
@@ -83,14 +83,17 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
 }
 
 
-LIBRARY_TABLE::LIBRARY_TABLE( const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope ) :
+/**
+ * Note: @param aFromClipboard isn't actually used, but might keep people from calling this with a string
+ *                             filepath, which isn't going to do what they expected.
+ */
+LIBRARY_TABLE::LIBRARY_TABLE( bool aFromClipboard, const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope ) :
         m_path( wxEmptyString ),
         m_scope( aScope )
 {
     LIBRARY_TABLE_PARSER parser;
 
-    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir =
-            parser.ParseBuffer( aBuffer.ToStdString() );
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir = parser.ParseBuffer( aBuffer.ToStdString() );
 
     if( ir.has_value() )
     {

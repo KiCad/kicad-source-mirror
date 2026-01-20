@@ -83,8 +83,8 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
 
 bool LIB_TABLE_NOTEBOOK_PANEL::TableModified()
 {
-    wxFileName                     uri = GetModel()->Table().Path();
-    std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( uri, LIBRARY_TABLE_SCOPE::GLOBAL );
+    wxFileName                     file( GetModel()->Table().Path() );
+    std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( file, LIBRARY_TABLE_SCOPE::GLOBAL );
 
     return GetModel()->Table() != *sourceTable;
 }

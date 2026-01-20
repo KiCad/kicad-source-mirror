@@ -43,7 +43,7 @@ public:
     bool TransferDataFromWindow() override;
 
     void AddTable( LIBRARY_TABLE* table, const wxString& aTitle, bool aClosable );
-    void OpenTable( LIBRARY_TABLE* table, const wxString& aTitle );
+    void OpenTable( const std::shared_ptr<LIBRARY_TABLE>& table, const wxString& aTitle );
 
 private:
     /**
@@ -83,6 +83,8 @@ private:
 
     wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
                                                        // project level library.
+
+    std::vector<std::shared_ptr<LIBRARY_TABLE>> m_nestedTables;
 
     std::map<DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T, IO_BASE::IO_FILE_DESC> m_supportedDesignBlockFiles;
 };

@@ -179,10 +179,10 @@ protected:
 
     void openTable( const LIBRARY_TABLE_ROW& aRow ) override
     {
-        wxFileName uri = LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() );
-        auto       nestedTable = std::make_unique<LIBRARY_TABLE>( uri, LIBRARY_TABLE_SCOPE::GLOBAL );
+        wxFileName fn( LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() ) );
+        std::shared_ptr<LIBRARY_TABLE> child = std::make_shared<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
 
-        m_panel->OpenTable( nestedTable.get(), aRow.Nickname() );
+        m_panel->OpenTable( child, aRow.Nickname() );
     }
 
     wxString getTablePreamble() override
@@ -195,7 +195,7 @@ protected:
 };
 
 
-void PANEL_FP_LIB_TABLE::OpenTable( LIBRARY_TABLE* aTable, const wxString& aTitle )
+void PANEL_FP_LIB_TABLE::OpenTable( const std::shared_ptr<LIBRARY_TABLE>& aTable, const wxString& aTitle )
 {
     for( int ii = 2; ii < (int) m_notebook->GetPageCount(); ++ii )
     {
@@ -210,7 +210,8 @@ void PANEL_FP_LIB_TABLE::OpenTable( LIBRARY_TABLE* aTable, const wxString& aTitl
         }
     }
 
-    AddTable( aTable, aTitle, true );
+    m_nestedTables.push_back( aTable );
+    AddTable( aTable.get(), aTitle, true );
 
     // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
     // results in a re-entrant call where the second call is one page behind.

@@ -82,7 +82,7 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
 
         if( fn.IsFileReadable() )
         {
-            auto table = std::make_unique<LIBRARY_TABLE>( fn, aScope );
+            std::unique_ptr<LIBRARY_TABLE> table = std::make_unique<LIBRARY_TABLE>( fn, aScope );
             wxCHECK2( table->Type() == type, continue );
             aTarget[type] = std::move( table );
             loadNestedTables( *aTarget[type] );
@@ -99,7 +99,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
 {
     std::unordered_set<wxString> seenTables;
 
-    std::function<void(LIBRARY_TABLE&)> processOneTable =
+    std::function<void( LIBRARY_TABLE& )> processOneTable =
             [&]( LIBRARY_TABLE& aTable )
             {
                 seenTables.insert( aTable.Path() );

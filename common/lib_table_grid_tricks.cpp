@@ -284,7 +284,7 @@ void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
     {
         // paste the LIB_TABLE_ROWs of s-expr, starting at column 0 regardless of current cursor column.
 
-        if( LIBRARY_TABLE tempTable( cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
+        if( LIBRARY_TABLE tempTable( true, cb_text, tbl->Table().Scope() ); tempTable.IsOk() )
         {
             std::ranges::copy( tempTable.Rows(),
                                std::inserter( tbl->Table().Rows(), tbl->Table().Rows().begin() ) );

@@ -140,10 +140,12 @@ public:
 
     /**
      * Creates a library table from parsed text
+     * @param aFromClipboard isn't actually used, but might keep people from calling this with a string
+     *                       filepath, which isn't going to do what they expected.
      * @param aBuffer is a string containing data to parse
      * @param aScope is the scope of this table (is it global or part of a project)
      */
-    LIBRARY_TABLE( const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope );
+    LIBRARY_TABLE( bool aFromClipboard, const wxString &aBuffer, LIBRARY_TABLE_SCOPE aScope );
 
     ~LIBRARY_TABLE() = default;
 

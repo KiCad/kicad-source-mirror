@@ -380,7 +380,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             }
 
             wxFileName symLibTableFn( fileName.GetPath(), FILEEXT::SymbolLibraryTableFileName );
-            LIBRARY_TABLE table( symLibTableFn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT );
+            LIBRARY_TABLE table( symLibTableFn, LIBRARY_TABLE_SCOPE::PROJECT );
 
             // If there are any new or duplicate libraries, check to see if it's possible that
             // there could be any missing libraries that would cause broken symbol library links.
