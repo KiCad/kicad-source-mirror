@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -199,13 +199,13 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_ShowPinNumButt->SetValue(true);
 	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
 
-	sbSizerPinTextOpts->Add( m_ShowPinNumButt, 0, wxRIGHT|wxLEFT, 5 );
+	sbSizerPinTextOpts->Add( m_ShowPinNumButt, 0, wxRIGHT, 5 );
 
 	m_ShowPinNameButt = new wxCheckBox( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, _("Show pin name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNameButt->SetValue(true);
 	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
 
-	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerPinTextOpts->Add( m_ShowPinNameButt, 0, wxRIGHT|wxTOP, 5 );
 
 
 	sbSizerPinTextOpts->Add( 0, 12, 0, wxEXPAND, 5 );
@@ -214,7 +214,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PinsNameInsideButt->SetValue(true);
 	m_PinsNameInsideButt->SetToolTip( _("Check this option to have pin names inside the body and pin number outside.\nIf not checked pins names and pins numbers are outside.") );
 
-	sbSizerPinTextOpts->Add( m_PinsNameInsideButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerPinTextOpts->Add( m_PinsNameInsideButt, 0, wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizerNameOffset;
 	bSizerNameOffset = new wxBoxSizer( wxHORIZONTAL );
@@ -223,7 +223,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_nameOffsetLabel->Wrap( -1 );
 	m_nameOffsetLabel->SetToolTip( _("Margin between the pin name position and the symbol body.") );
 
-	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 24 );
+	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_nameOffsetCtrl = new wxTextCtrl( sbSizerPinTextOpts->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerNameOffset->Add( m_nameOffsetCtrl, 1, wxLEFT|wxRIGHT, 5 );
@@ -233,7 +233,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bSizerNameOffset->Add( m_nameOffsetUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxEXPAND|wxTOP, 2 );
+	sbSizerPinTextOpts->Add( bSizerNameOffset, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	sbSizerPinTextOpts->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -400,7 +400,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_bpAddBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAddBodyStyle->SetToolTip( _("Add field") );
 
-	bButtonSize1->Add( m_bpAddBodyStyle, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonSize1->Add( m_bpAddBodyStyle, 0, wxRIGHT, 5 );
 
 	m_bpMoveUpBodyStyle = new STD_BITMAP_BUTTON( sbSizerBodyStyles->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveUpBodyStyle->SetToolTip( _("Move up") );
@@ -421,10 +421,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bButtonSize1->Add( m_bpDeleteBodyStyle, 0, wxRIGHT|wxLEFT, 10 );
 
 
-	bSizerIndent->Add( bButtonSize1, 0, wxEXPAND, 5 );
+	bSizerIndent->Add( bButtonSize1, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 
-	sbSizerBodyStyles->Add( bSizerIndent, 1, wxEXPAND|wxLEFT, 24 );
+	sbSizerBodyStyles->Add( bSizerIndent, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerUnitsAndBodyStyles->Add( sbSizerBodyStyles, 1, wxEXPAND|wxALL, 10 );
