@@ -860,6 +860,34 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( !aProjectFileName.Exists() )
         return;
 
+    wxString fullPath = aProjectFileName.GetFullPath();
+
+    // Check project lock BEFORE loading so Cancel can actually abort
+    LOCKFILE lockFile( fullPath );
+    bool     lockOverrideGranted = false;
+
+    if( !lockFile.Valid() && lockFile.IsLockedByMe() )
+    {
+        // If we cannot acquire the lock but we appear to be the one who locked it, check to
+        // see if there is another KiCad instance running. If not, then we can override the
+        // lock. This could happen if KiCad crashed or was interrupted.
+        if( !Pgm().SingleInstance()->IsAnotherRunning() )
+            lockFile.OverrideLock();
+    }
+
+    if( !lockFile.Valid() )
+    {
+        wxString msg;
+        msg.Printf( _( "Project '%s' is already open by '%s' at '%s'." ),
+                    fullPath, lockFile.GetUsername(), lockFile.GetHostname() );
+
+        if( !AskOverrideLock( this, msg ) )
+            return;  // User clicked Cancel - abort project loading entirely
+
+        lockFile.OverrideLock();
+        lockOverrideGranted = true;
+    }
+
     // Any open KIFACE's must be closed if they are not part of the new project.
     // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
     // User is prompted here to close those KIWAY_PLAYERs:
@@ -869,10 +897,15 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     m_active_project = true;
 
     // NB: when loading a legacy project SETTINGS_MANAGER::LoadProject() will convert it to
-    // current extension.  Be very careful with aProjectFileName vs. Prj().GetProjectPath()
+    // current extension. Be very careful with aProjectFileName vs. Prj().GetProjectPath()
     // from here on out.
 
-    Pgm().GetSettingsManager().LoadProject( aProjectFileName.GetFullPath() );
+    Pgm().GetSettingsManager().LoadProject( fullPath );
+
+    // Propagate lock override decision to the loaded project
+    if( lockOverrideGranted )
+        Prj().SetLockOverrideGranted( true );
+
     LoadWindowState( aProjectFileName.GetFullName() );
 
     if( aProjectFileName.IsDirWritable() )

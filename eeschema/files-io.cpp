@@ -118,13 +118,21 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !LockFile( fullFileName ) )
     {
-        msg.Printf( _( "Schematic '%s' is already open by '%s' at '%s'." ), fullFileName,
-                m_file_checker->GetUsername(), m_file_checker->GetHostname() );
+        // If project-level lock override was already granted, silently override this file's lock
+        if( Prj().IsLockOverrideGranted() )
+        {
+            m_file_checker->OverrideLock();
+        }
+        else
+        {
+            msg.Printf( _( "Schematic '%s' is already open by '%s' at '%s'." ), fullFileName,
+                    m_file_checker->GetUsername(), m_file_checker->GetHostname() );
 
-        if( !AskOverrideLock( this, msg ) )
-            return false;
+            if( !AskOverrideLock( this, msg ) )
+                return false;
 
-        m_file_checker->OverrideLock();
+            m_file_checker->OverrideLock();
+        }
     }
 
     if( !AskToSaveChanges() )

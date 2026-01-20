@@ -494,15 +494,23 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     if( !lock->Valid() )
     {
-        msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ),
-                    wx_filename.GetFullName(),
-                    lock->GetUsername(),
-                    lock->GetHostname() );
+        // If project-level lock override was already granted, silently override this file's lock
+        if( Prj().IsLockOverrideGranted() )
+        {
+            lock->OverrideLock();
+        }
+        else
+        {
+            msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ),
+                        wx_filename.GetFullName(),
+                        lock->GetUsername(),
+                        lock->GetHostname() );
 
-        if( !AskOverrideLock( this, msg ) )
-            return false;
+            if( !AskOverrideLock( this, msg ) )
+                return false;
 
-        lock->OverrideLock();
+            lock->OverrideLock();
+        }
     }
 
     if( IsContentModified() )

@@ -162,6 +162,10 @@ public:
 
     virtual void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
 
+    virtual bool IsLockOverrideGranted() const { return m_lockOverrideGranted; }
+
+    virtual void SetLockOverrideGranted( bool aGranted = true ) { m_lockOverrideGranted = aGranted; }
+
     /**
      * Return the name of the sheet identified by the given UUID.
      */
@@ -359,6 +363,7 @@ private:
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
 
     bool            m_readOnly;             ///< No project files will be written to disk
+    bool            m_lockOverrideGranted;  ///< User granted override at project level
     int             m_textVarsTicker;       ///< Update counter on text vars
     int             m_netclassesTicker;     ///< Update counter on netclasses
 
