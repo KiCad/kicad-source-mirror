@@ -62,6 +62,20 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
                           const EDA_ANGLE& aStartAngleDeg, const EDA_ANGLE& aArcAngleDeg,
                           double aAccuracy, ERROR_LOC aErrorLoc );
 
+/**
+ * Generate a polyline to approximate an arc defined by three points.
+ *
+ * @param aPolyline is a buffer to store the polyline.
+ * @param aStart is the start point of the arc.
+ * @param aMid is the mid point of the arc (half-way between start and end).
+ * @param aEnd is the end point of the arc.
+ * @param aAccuracy is the internal units allowed for error approximation.
+ * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
+ */
+int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aStart,
+                          const VECTOR2I& aMid, const VECTOR2I& aEnd, double aAccuracy,
+                          ERROR_LOC aErrorLoc, double aRadialOffset = 0.0 );
+
 
 /**
  * Convert a circle to a polygon, using multiple straight lines.
