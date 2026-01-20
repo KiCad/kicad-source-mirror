@@ -659,6 +659,9 @@ BOOST_FIXTURE_TEST_CASE( RegressionShallowArcZoneFill, ZONE_FILL_TEST_FIXTURE )
 
     BOOST_REQUIRE_MESSAGE( gndZone != nullptr, "GND zone on In1.Cu not found in test board" );
 
+    if( !gndZone )
+        return;
+
     KI_TEST::FillZones( m_board.get() );
 
     BOOST_REQUIRE_MESSAGE( gndZone->HasFilledPolysForLayer( in1Cu ),
@@ -671,6 +674,9 @@ BOOST_FIXTURE_TEST_CASE( RegressionShallowArcZoneFill, ZONE_FILL_TEST_FIXTURE )
     BOOST_CHECK_EQUAL( fill->OutlineCount(), 1 );
 
     double zoneOutlineArea = gndZone->Outline()->Area();
+
+    BOOST_REQUIRE_MESSAGE( zoneOutlineArea > 0.0, "Zone outline area must be positive" );
+
     double fillArea = 0.0;
 
     for( int i = 0; i < fill->OutlineCount(); i++ )
