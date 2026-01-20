@@ -1774,12 +1774,11 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
         addAttribute( specNode, "name", "SURFACE_FINISH" );
 
         wxXmlNode* surfaceFinishNode = appendNode( specNode, "SurfaceFinish" );
-        wxXmlNode* finishNode = appendNode( surfaceFinishNode, "Finish" );
-        addAttribute( finishNode, "type", surfaceFinishTypeToString.at( finishType ) );
+        addAttribute( surfaceFinishNode, "type", surfaceFinishTypeToString.at( finishType ) );
 
         // Add original finish string as comment if it maps to OTHER
         if( finishType == surfaceFinishType::OTHER )
-            addAttribute( finishNode, "comment", stackup.m_FinishType );
+            addAttribute( surfaceFinishNode, "comment", stackup.m_FinishType );
     }
 }
 

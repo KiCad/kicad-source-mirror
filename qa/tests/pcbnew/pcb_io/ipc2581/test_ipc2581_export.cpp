@@ -113,20 +113,21 @@ bool FileContainsPattern( const wxString& aFilePath, const wxString& aPattern )
 }
 
 
+struct VALIDATION_BOARD
+{
+    std::string file;
+    char        minVersion; // 'B' = validate B and C, 'C' = validate C only
+};
+
 /**
  * List of board files from qa/data/pcbnew to test for schema validation.
  * These are relatively simple boards that exercise various features.
  */
-static const std::vector<std::string> VALIDATION_TEST_BOARDS = {
-    "custom_pads.kicad_pcb",
-    "notched_zones.kicad_pcb",
-    "sliver.kicad_pcb",
-    "tracks_arcs_vias.kicad_pcb",
-    "issue7241.kicad_pcb",
-    "issue10906.kicad_pcb",
-    "issue22798.kicad_pcb",
-    "padstacks_complex.kicad_pcb",
-    "issue12609.kicad_pcb",
+static const std::vector<VALIDATION_BOARD> VALIDATION_TEST_BOARDS = {
+    { "custom_pads.kicad_pcb", 'B' },      { "notched_zones.kicad_pcb", 'B' }, { "sliver.kicad_pcb", 'B' },
+    { "tracks_arcs_vias.kicad_pcb", 'B' }, { "issue7241.kicad_pcb", 'B' },     { "issue10906.kicad_pcb", 'B' },
+    { "issue22798.kicad_pcb", 'B' },       { "padstacks_complex.kicad_pcb", 'B' },
+    { "issue12609.kicad_pcb", 'B' },       { "issue22794.kicad_pcb", 'C' }, // Uses SurfaceFinish (IPC-2581C only)
 };
 
 } // anonymous namespace
@@ -259,14 +260,12 @@ BOOST_AUTO_TEST_CASE( SurfaceFinishExport )
 
     BOOST_REQUIRE( wxFileExists( tempPath ) );
 
-    // Verify SurfaceFinish element is present with correct type
-    // Upstream uses nested structure: <SurfaceFinish><Finish type="ENIG-N"/></SurfaceFinish>
+    // Verify SurfaceFinish element is present with correct type attribute
+    // Schema requires: <SurfaceFinish type="ENIG-N"/>
     BOOST_CHECK_MESSAGE( FileContainsPattern( tempPath, wxT( "<SurfaceFinish" ) ),
                          "SurfaceFinish element should be present" );
-    BOOST_CHECK_MESSAGE( FileContainsPattern( tempPath, wxT( "<Finish" ) ),
-                         "Finish element should be present" );
     BOOST_CHECK_MESSAGE( FileContainsPattern( tempPath, wxT( "type=\"ENIG-N\"" ) ),
-                         "Finish type should be ENIG-N" );
+                         "SurfaceFinish type should be ENIG-N" );
 
     // Verify coating layers are present
     BOOST_CHECK_MESSAGE( FileContainsPattern( tempPath, wxT( "COATING_TOP" ) ),
@@ -344,22 +343,25 @@ BOOST_AUTO_TEST_CASE( SchemaValidationVersionB )
         return;
     }
 
-    for( const std::string& boardFile : VALIDATION_TEST_BOARDS )
+    for( const auto& spec : VALIDATION_TEST_BOARDS )
     {
-        BOOST_TEST_CONTEXT( "Board: " << boardFile << " (Version B)" )
+        if( spec.minVersion > 'B' )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Board: " << spec.file << " (Version B)" )
         {
-            std::unique_ptr<BOARD> board = LoadBoard( boardFile );
+            std::unique_ptr<BOARD> board = LoadBoard( spec.file );
 
             if( !board )
             {
-                BOOST_WARN_MESSAGE( false, "Could not load board: " + boardFile );
+                BOOST_WARN_MESSAGE( false, "Could not load board: " + spec.file );
                 continue;
             }
 
             wxString errorMsg;
             bool valid = ExportAndValidate( board.get(), 'B', errorMsg );
 
-            BOOST_CHECK_MESSAGE( valid, "IPC-2581B validation failed for " + boardFile + ": " + errorMsg );
+            BOOST_CHECK_MESSAGE( valid, "IPC-2581B validation failed for " + spec.file + ": " + errorMsg );
         }
     }
 }
@@ -387,22 +389,22 @@ BOOST_AUTO_TEST_CASE( SchemaValidationVersionC )
         return;
     }
 
-    for( const std::string& boardFile : VALIDATION_TEST_BOARDS )
+    for( const auto& spec : VALIDATION_TEST_BOARDS )
     {
-        BOOST_TEST_CONTEXT( "Board: " << boardFile << " (Version C)" )
+        BOOST_TEST_CONTEXT( "Board: " << spec.file << " (Version C)" )
         {
-            std::unique_ptr<BOARD> board = LoadBoard( boardFile );
+            std::unique_ptr<BOARD> board = LoadBoard( spec.file );
 
             if( !board )
             {
-                BOOST_WARN_MESSAGE( false, "Could not load board: " + boardFile );
+                BOOST_WARN_MESSAGE( false, "Could not load board: " + spec.file );
                 continue;
             }
 
             wxString errorMsg;
             bool valid = ExportAndValidate( board.get(), 'C', errorMsg );
 
-            BOOST_CHECK_MESSAGE( valid, "IPC-2581C validation failed for " + boardFile + ": " + errorMsg );
+            BOOST_CHECK_MESSAGE( valid, "IPC-2581C validation failed for " + spec.file + ": " + errorMsg );
         }
     }
 }
