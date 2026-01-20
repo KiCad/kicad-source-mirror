@@ -161,21 +161,33 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
 
                 for( int x = 0; x < stride; x += 4 )
                 {
-                    const unsigned char* src = srcRow + x;
+                    const uint32_t pix = *(uint32_t*) ( srcRow + x );
 
-#if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ )
-                    // ARGB
-                    dstp.Alpha() = src[0];
-                    dstp.Red() = src[1];
-                    dstp.Green() = src[2];
-                    dstp.Blue() = src[3];
+                    const uint8_t b = pix >> 0;
+                    const uint8_t g = pix >> 8;
+                    const uint8_t r = pix >> 16;
+                    const uint8_t alpha = pix >> 24;
+#ifdef __WXGTK__
+                    // Un-premultiply alpha on GTK only
+                    if( alpha == 0 )
+                    {
+                        dstp.Red() = dstp.Green() = dstp.Blue() = dstp.Alpha() = 0;
+                    }
+                    else
+                    {
+                        dstp.Red() = ( (uint32_t) r * 255 ) / alpha;
+                        dstp.Green() = ( (uint32_t) g * 255 ) / alpha;
+                        dstp.Blue() = ( (uint32_t) b * 255 ) / alpha;
+                        dstp.Alpha() = alpha;
+                    }
 #else
-                    // BGRA
-                    dstp.Alpha() = src[3];
-                    dstp.Red() = src[2];
-                    dstp.Green() = src[1];
-                    dstp.Blue() = src[0];
+                    // MSW and OSX already uses pre-multiplied alpha, no need to convert
+                    dstp.Blue() = b;
+                    dstp.Green() = g;
+                    dstp.Red() = r;
+                    dstp.Alpha() = alpha;
 #endif
+
                     dstp++;
                 }
 
