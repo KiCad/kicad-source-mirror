@@ -2544,6 +2544,8 @@ void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection,
 
 void SCH_EDIT_FRAME::unitsChangeRefresh()
 {
+    EDA_DRAW_FRAME::unitsChangeRefresh();
+
     if( m_netNavigator )
     {
         NET_NAVIGATOR_ITEM_DATA itemData;
@@ -2562,8 +2564,6 @@ void SCH_EDIT_FRAME::unitsChangeRefresh()
         m_netNavigator->DeleteAllItems();
         RefreshNetNavigator( refreshSelection ? &itemData : nullptr );
     }
-
-    UpdateProperties();
 }
 
 
