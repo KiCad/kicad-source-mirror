@@ -135,7 +135,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">General</property>
-                  <property name="select">1</property>
+                  <property name="select">0</property>
                   <object class="wxPanel" expanded="false">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -7532,8 +7532,8 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">Connections</property>
-                  <property name="select">0</property>
-                  <object class="wxPanel" expanded="false">
+                  <property name="select">1</property>
+                  <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
                     <property name="RightDockable">1</property>
@@ -7585,25 +7585,25 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style">wxTAB_TRAVERSAL</property>
-                    <object class="wxBoxSizer" expanded="false">
+                    <object class="wxBoxSizer" expanded="true">
                       <property name="minimum_size"></property>
                       <property name="name">bSizerPanelConnections</property>
                       <property name="orient">wxVERTICAL</property>
                       <property name="permission">none</property>
-                      <object class="sizeritem" expanded="false">
+                      <object class="sizeritem" expanded="true">
                         <property name="border">5</property>
                         <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                         <property name="proportion">0</property>
-                        <object class="wxBoxSizer" expanded="false">
+                        <object class="wxBoxSizer" expanded="true">
                           <property name="minimum_size"></property>
                           <property name="name">bSizerConnectionsMargins</property>
                           <property name="orient">wxVERTICAL</property>
                           <property name="permission">none</property>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                             <property name="proportion">1</property>
-                            <object class="wxStaticBoxSizer" expanded="false">
+                            <object class="wxStaticBoxSizer" expanded="true">
                               <property name="id">wxID_ANY</property>
                               <property name="label">Teardrops</property>
                               <property name="minimum_size"></property>
@@ -7611,18 +7611,18 @@
                               <property name="orient">wxVERTICAL</property>
                               <property name="parent">1</property>
                               <property name="permission">none</property>
-                              <object class="sizeritem" expanded="false">
+                              <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND|wxBOTTOM</property>
                                 <property name="proportion">0</property>
-                                <object class="wxBoxSizer" expanded="false">
+                                <object class="wxBoxSizer" expanded="true">
                                   <property name="minimum_size"></property>
                                   <property name="name">m_legacyTeardropsWarning</property>
                                   <property name="orient">wxHORIZONTAL</property>
                                   <property name="permission">protected</property>
                                   <object class="sizeritem" expanded="false">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBitmap" expanded="false">
                                       <property name="BottomDockable">1</property>
@@ -10764,11 +10764,11 @@
                           <property name="name">bSizerClearance</property>
                           <property name="orient">wxVERTICAL</property>
                           <property name="permission">none</property>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
-                            <object class="wxStaticBoxSizer" expanded="false">
+                            <object class="wxStaticBoxSizer" expanded="true">
                               <property name="id">wxID_ANY</property>
                               <property name="label">Clearance Overrides</property>
                               <property name="minimum_size"></property>
@@ -10962,11 +10962,11 @@
                                   <property name="wrap">-1</property>
                                 </object>
                               </object>
-                              <object class="sizeritem" expanded="false">
+                              <object class="sizeritem" expanded="true">
                                 <property name="border">10</property>
                                 <property name="flag">wxTOP|wxBOTTOM</property>
                                 <property name="proportion">0</property>
-                                <object class="wxFlexGridSizer" expanded="false">
+                                <object class="wxFlexGridSizer" expanded="true">
                                   <property name="cols">3</property>
                                   <property name="flexible_direction">wxBOTH</property>
                                   <property name="growablecols">1</property>
@@ -11550,7 +11550,7 @@
                                   </object>
                                   <object class="sizeritem" expanded="false">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="false">
                                       <property name="BottomDockable">1</property>
@@ -12270,7 +12270,7 @@
                                   <property name="permission">none</property>
                                   <object class="sizeritem" expanded="true">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="wxFlexGridSizer" expanded="true">
                                       <property name="cols">3</property>
@@ -13439,7 +13439,7 @@
                                   <property name="permission">none</property>
                                   <object class="sizeritem" expanded="true">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="wxFlexGridSizer" expanded="true">
                                       <property name="cols">3</property>
@@ -15303,7 +15303,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
               <property name="proportion">0</property>
               <object class="wxCheckBox" expanded="false">
                 <property name="BottomDockable">1</property>
