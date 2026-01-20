@@ -185,6 +185,22 @@ std::unique_ptr<wxBitmap> GetImageFromClipboard()
                 bitmap = std::make_unique<wxBitmap>( data.GetBitmap() );
             }
         }
+#ifdef __APPLE__
+        // macOS screenshots use PNG format with UTI "public.png"
+        else if( wxDataFormat pngFormat( wxS( "public.png" ) ); wxTheClipboard->IsSupported( pngFormat ) )
+        {
+            wxCustomDataObject pngData( pngFormat );
+
+            if( wxTheClipboard->GetData( pngData ) && pngData.GetSize() > 0 )
+            {
+                wxMemoryInputStream stream( pngData.GetData(), pngData.GetSize() );
+                wxImage             img( stream, wxBITMAP_TYPE_PNG );
+
+                if( img.IsOk() )
+                    bitmap = std::make_unique<wxBitmap>( img );
+            }
+        }
+#endif
         else if( wxTheClipboard->IsSupported( wxDF_FILENAME ) )
         {
             wxFileDataObject data;
