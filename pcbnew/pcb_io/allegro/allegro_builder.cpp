@@ -1489,7 +1489,14 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
 
-            shape->SetWidth( safeScale( m_scale * arc.m_Width ) );
+            {
+                int arcWidth = safeScale( m_scale * arc.m_Width );
+
+                if( arcWidth <= 0 )
+                    arcWidth = m_board.GetDesignSettings().GetLineThickness( layer );
+
+                shape->SetWidth( arcWidth );
+            }
 
             if( start == end )
             {
@@ -1542,7 +1549,16 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 
             shape->SetStart( start );
             shape->SetEnd( end );
-            shape->SetWidth( safeScale( width * m_scale ) );
+
+            {
+                int scaledWidth = safeScale( width * m_scale );
+
+                if( scaledWidth <= 0 )
+                    scaledWidth = m_board.GetDesignSettings().GetLineThickness( layer );
+
+                shape->SetWidth( scaledWidth );
+            }
+
             break;
         }
         default:
@@ -2103,25 +2119,36 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     fp->SetOrientation( rotation );
 
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_brdDb };
+
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
     {
         const uint8_t type = graphicsBlock->GetBlockType();
+
         if( type == 0x14 )
         {
             const auto& graphics = static_cast<const BLOCK<BLK_0x14>&>( *graphicsBlock ).GetData();
+
+            const uint8_t subclass = graphics.m_Layer.m_Subclass;
+            const bool isAssemblyTop = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP );
+            const bool isAssemblyBot = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM );
 
             std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
             for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
             {
-                // shape->Rotate( fpPos, rotation );
+                if( isAssemblyTop || isAssemblyBot )
+                {
+                    auto courtyard = std::make_unique<PCB_SHAPE>( *shape );
+                    courtyard->SetLayer( isAssemblyTop ? F_CrtYd : B_CrtYd );
+                    courtyard->SetWidth( 0 );
+                    fp->Add( courtyard.release() );
+                }
+
                 fp->Add( shape.release() );
             }
         }
         else
         {
-            // This probably means we're dropping something on the floor
-            // But as so far, only 0x14s occur in this list.
             m_reporter.Report( wxString::Format( "Unexpected type in graphics list: %#04x", type ),
                                RPT_SEVERITY_WARNING );
         }
