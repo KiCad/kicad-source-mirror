@@ -94,7 +94,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );
 
 
-	m_PanelPropertiesBoxSizer->Add( sbSizerTexts, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_PanelPropertiesBoxSizer->Add( sbSizerTexts, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bColumns;
 	bColumns = new wxBoxSizer( wxHORIZONTAL );
@@ -111,25 +111,25 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxStaticText* staticFPNameLabel;
 	staticFPNameLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Footprint name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticFPNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_FootprintNameCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxLEFT, 5 );
+	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticText* staticDescriptionLabel;
 	staticDescriptionLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticDescriptionLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_TOP, 5 );
+	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxLEFT, 5 );
 
 	m_DocCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_DocCtrl, 0, wxEXPAND|wxLEFT, 5 );
+	fgSizerFPID->Add( m_DocCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	staticKeywordsLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticKeywordsLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_KeywordCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxLEFT, 5 );
+	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbMetadataSizer->Add( fgSizerFPID, 1, wxEXPAND, 10 );
@@ -154,7 +154,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	int m_componentTypeNChoices = sizeof( m_componentTypeChoices ) / sizeof( wxString );
 	m_componentType = new wxChoice( sbAttributesSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_componentTypeNChoices, m_componentTypeChoices, 0 );
 	m_componentType->SetSelection( 0 );
-	bPartTypeSizer->Add( m_componentType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bPartTypeSizer->Add( m_componentType, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 
 	sbAttributesSizer->Add( bPartTypeSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
@@ -181,7 +181,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
 	m_LayersPanel = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
@@ -581,7 +581,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelPadConnections->SetSizer( bSizer19 );
 	m_PanelPadConnections->Layout();
 	bSizer19->Fit( m_PanelPadConnections );
-	m_NoteBook->AddPage( m_PanelPadConnections, _("Pad Connections"), false );
+	m_NoteBook->AddPage( m_PanelPadConnections, _("Pad Connections"), true );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
