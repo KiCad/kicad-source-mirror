@@ -121,18 +121,6 @@ namespace
 constexpr int clipboardMaxBitmapSize = 4096;
 constexpr double clipboardBboxInflation = 0.02;  // Small padding around selection
 
-void appendMimeData( std::vector<CLIPBOARD_MIME_DATA>& aMimeData, const wxString& aMimeType,
-                     const wxMemoryBuffer& aBuffer )
-{
-    if( aBuffer.GetDataLen() == 0 )
-        return;
-
-    CLIPBOARD_MIME_DATA entry;
-    entry.m_mimeType = aMimeType;
-    entry.m_data = aBuffer;
-    aMimeData.push_back( entry );
-}
-
 
 bool loadFileToBuffer( const wxString& aFileName, wxMemoryBuffer& aBuffer )
 {
@@ -1645,6 +1633,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         }
     }
 
+    bool               result = true;
     STRING_FORMATTER   formatter;
     SCH_IO_KICAD_SEXPR plugin;
     SCH_SHEET_PATH     selPath = m_frame->GetCurrentSheet();
@@ -1654,82 +1643,112 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     std::string prettyData = formatter.GetString();
     KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES );
 
-    std::vector<CLIPBOARD_MIME_DATA> mimeData;
-
     if( !aUseDuplicateClipboard )
     {
-        CLIPBOARD_MIME_DATA kicadData;
-        kicadData.m_mimeType = wxS( "application/kicad" );
-        kicadData.m_data.AppendData( prettyData.data(), prettyData.size() );
-        mimeData.push_back( kicadData );
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
 
-        BOX2I selectionBox = expandedSelectionBox( selection );
+        result &= wxTheClipboard->Open();
 
-        if( selectionBox.GetWidth() > 0 && selectionBox.GetHeight() > 0 )
+        if( result )
         {
-            wxMemoryBuffer svgBuffer;
+            wxDataObjectComposite* data = new wxDataObjectComposite();
 
-            if( plotSelectionToSvg( m_frame, selection, selectionBox, svgBuffer ) )
+            // Add KiCad data
+            wxCustomDataObject* kicadObj = new wxCustomDataObject( wxDataFormat( "application/kicad" ) );
+            kicadObj->SetData( prettyData.size(), prettyData.data() );
+            data->Add( kicadObj );
+
+            BOX2I selectionBox = expandedSelectionBox( selection );
+
+            if( selectionBox.GetWidth() > 0 && selectionBox.GetHeight() > 0 )
             {
-                appendMimeData( mimeData, wxS( "image/svg+xml" ), svgBuffer );
-            }
-            else
-            {
-                wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
-            }
+                // Add bitmap data
+                wxBitmap bitmapWithAlpha =
+                        renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
 
-            wxBitmap bitmapWithAlpha =
-                    renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
-
-            if( bitmapWithAlpha.IsOk() )
-            {
-#ifdef __WXGTK__
-                // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
-                // PNG twice internally (once to count size, once to save). We optimize by
-                // encoding PNG once ourselves with fast compression settings.
-                wxImage pngImage = bitmapWithAlpha.ConvertToImage();
-
-                if( pngImage.IsOk() )
+                if( bitmapWithAlpha.IsOk() )
                 {
-                    // Fast PNG settings optimized for schematic graphics:
-                    // - Compression level 1 (fast)
-                    // - Z_RLE strategy (good for images with runs of identical pixels)
-                    // - PNG_FILTER_NONE (skip filtering step)
-                    pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );
-                    pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 );  // Z_RLE
-                    pngImage.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );             // PNG_FILTER_NONE
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
+                    // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
+                    // PNG twice internally (once to count size, once to save). We optimize by
+                    // encoding PNG once ourselves with fast compression settings.
+                    // 
+                    // On MSW, most apps don't recognize transparency when using CF_DIB, so provide a PNG.
+                    wxImage pngImage = bitmapWithAlpha.ConvertToImage();
 
-                    wxMemoryOutputStream pngStream;
-
-                    if( pngImage.SaveFile( pngStream, wxBITMAP_TYPE_PNG ) )
+                    if( pngImage.IsOk() )
                     {
-                        wxMemoryBuffer pngBuffer( pngStream.GetLength() );
-                        pngBuffer.AppendData( pngStream.GetOutputStreamBuffer()->GetBufferStart(),
-                                              pngStream.GetLength() );
+                        // Fast PNG settings optimized for schematic graphics:
+                        // - Compression level 1 (fast)
+                        // - Z_RLE strategy (good for images with runs of identical pixels)
+                        // - PNG_FILTER_NONE (skip filtering step)
+                        pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );
+                        pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 ); // Z_RLE
+                        pngImage.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );            // PNG_FILTER_NONE
 
-                        CLIPBOARD_MIME_DATA entry;
-                        entry.m_data = pngBuffer;
-                        entry.m_useRawPngData = true;
-                        entry.m_image = bitmapWithAlpha;  // Also store bitmap for image editor compatibility
-                        mimeData.push_back( std::move( entry ) );
-                    }
-                    else
-                    {
-                        wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
-                    }
-                }
-#else
-                // On Windows (CF_DIB) and macOS (TIFF), wxBitmapDataObject uses native formats
-                // that don't require PNG encoding. Pass bitmap directly.
-                CLIPBOARD_MIME_DATA entry;
-                entry.m_image = std::move( bitmapWithAlpha );
-                mimeData.push_back( std::move( entry ) );
+                        wxMemoryOutputStream pngStream;
+
+                        if( pngImage.SaveFile( pngStream, wxBITMAP_TYPE_PNG ) )
+                        {
+                            wxMemoryBuffer pngBuffer( pngStream.GetLength() );
+                            pngBuffer.AppendData( pngStream.GetOutputStreamBuffer()->GetBufferStart(),
+                                                  pngStream.GetLength() );
+
+#ifdef __WXMSW__
+                            //// Add empty CF_BITMAP so apps recognize the PNG entry
+                            data->Add( new wxCustomDataObject( wxDataFormat( wxDataFormatId::wxDF_BITMAP ) ) );
+
+                            //// Add "PNG" entry
+                            wxCustomDataObject* pngObj = new wxCustomDataObject( wxDataFormat( "PNG" ) );
+                            pngObj->SetData( pngBuffer.GetDataLen(), pngBuffer.GetData() );
+                            data->Add( pngObj );
+#else // __WXGTK__
+
+                            // Handle pre-encoded PNG data (GTK optimization path).
+                            // Use wxDF_BITMAP to prevent wx from setting the type to Private
+                            wxCustomDataObject* pngObj = new wxCustomDataObject( wxDF_BITMAP );
+                            pngObj->SetData( pngBuffer.GetDataLen(), pngBuffer.GetData() );
+                            data->Add( pngObj );
 #endif
+                        }
+                        else
+                        {
+                            wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
+                        }
+                    }
+#else // __WXOSX__
+
+                    // On macOS (TIFF), wxBitmapDataObject uses native formats
+                    // that don't require PNG encoding. Pass bitmap directly.
+                    data->Add( new wxBitmapDataObject(bitmapWithAlpha) );
+#endif
+                }
+                else
+                {
+                    wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
+                }
+
+                // Add SVG data
+                wxMemoryBuffer svgBuffer;
+
+                if( plotSelectionToSvg( m_frame, selection, selectionBox, svgBuffer ) )
+                {
+                    wxCustomDataObject* svgObj = new wxCustomDataObject( wxDataFormat( "image/svg+xml" ) );
+                    svgObj->SetData( svgBuffer.GetDataLen(), svgBuffer.GetData() );
+                    data->Add( svgObj );
+                }
+                else
+                {
+                    wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
+                }
             }
-            else
-            {
-                wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
-            }
+
+            // Finally add text data
+            data->Add( new wxTextDataObject( wxString::FromUTF8( prettyData ) ) );
+
+            result &= wxTheClipboard->SetData( data );
+            result &= wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
         }
     }
 
@@ -1741,8 +1760,6 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         m_duplicateClipboard = prettyData;
         return true;
     }
-
-    bool result = SaveClipboard( prettyData, mimeData );
 
     return result;
 }
