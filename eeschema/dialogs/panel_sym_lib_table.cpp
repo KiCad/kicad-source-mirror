@@ -189,8 +189,8 @@ protected:
 
     void openTable( const LIBRARY_TABLE_ROW& aRow ) override
     {
-        wxString uri = LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() );
-        auto     nestedTable = std::make_unique<LIBRARY_TABLE>( uri, LIBRARY_TABLE_SCOPE::GLOBAL );
+        wxFileName file( LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() ) );
+        auto       nestedTable = std::make_unique<LIBRARY_TABLE>( file, LIBRARY_TABLE_SCOPE::GLOBAL );
 
         m_panel->OpenTable( nestedTable.get(), aRow.Nickname() );
     }
