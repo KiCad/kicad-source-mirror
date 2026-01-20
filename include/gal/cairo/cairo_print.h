@@ -39,7 +39,7 @@ namespace KIGFX
 class GAL_API CAIRO_PRINT_CTX : public PRINT_CONTEXT
 {
 public:
-    CAIRO_PRINT_CTX( wxBitmap* aBitmap );
+    CAIRO_PRINT_CTX( wxBitmap* aBitmap, double aDPI );
     CAIRO_PRINT_CTX( wxDC* aDC );
     ~CAIRO_PRINT_CTX();
 
@@ -88,7 +88,7 @@ public:
     CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
                      std::unique_ptr<CAIRO_PRINT_CTX> aContext );
 
-    static std::unique_ptr<CAIRO_PRINT_GAL> Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap );
+    static std::unique_ptr<CAIRO_PRINT_GAL> Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap, double aDPI );
 
     void ComputeWorldScreenMatrix() override;
 

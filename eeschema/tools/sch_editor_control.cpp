@@ -243,26 +243,34 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
 {
     wxBitmap bitmap( aWidth, aHeight, 32 );
 
+    double actualPPI_x = (double) aWidth / schIUScale.IUTomm( aBBox.GetWidth() ) * 25.4;
+    double actualPPI_y = (double) aHeight / schIUScale.IUTomm( aBBox.GetHeight() ) * 25.4;
+    double actualPPI = std::max( actualPPI_x, actualPPI_y );
+
+    VECTOR2D pageSizeIn( (double) aWidth / actualPPI, (double) aHeight / actualPPI );
+
     {
         KIGFX::GAL_DISPLAY_OPTIONS options;
         options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
 
-        std::unique_ptr<KIGFX::CAIRO_PRINT_GAL> galPrint = KIGFX::CAIRO_PRINT_GAL::Create( options, &bitmap );
+        std::unique_ptr<KIGFX::CAIRO_PRINT_GAL> gal = KIGFX::CAIRO_PRINT_GAL::Create( options, &bitmap, actualPPI );
 
-        if( !galPrint )
+        if( !gal )
             return wxBitmap();
 
-        KIGFX::GAL*                         gal = galPrint->GetGAL();
-        KIGFX::PRINT_CONTEXT*               printCtx = galPrint->GetPrintCtx();
-        std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal );
+        KIGFX::PRINT_CONTEXT*               printCtx = gal->GetPrintCtx();
+        std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal.get() );
         std::unique_ptr<KIGFX::VIEW>        view = std::make_unique<KIGFX::VIEW>();
 
         painter->SetSchematic( &aFrame->Schematic() );
-        view->SetGAL( gal );
+        view->SetGAL( gal.get() );
         view->SetPainter( painter.get() );
         view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
         view->SetScale( 1.0 );
+
         gal->SetWorldUnitLength( SCH_WORLD_UNIT );
+        gal->SetSheetSize( pageSizeIn );
+        gal->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
 
         // Clone items and add to view
         std::vector<std::unique_ptr<SCH_ITEM>> clonedItems;
@@ -321,45 +329,14 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
             view->Add( drawingSheet.get() );
         }
 
-        // Set up page size to match the output bitmap dimensions at our target ppi.
-        // On GTK, Cairo uses device scale 72/4800 and SetSheetSize doubles internal resolution,
-        // giving effective 144 DPI. On other platforms, use native DPI * 2.
-#ifdef __WXGTK__
-        double ppi = 144.0;
-#else
-        double ppi = printCtx->GetNativeDPI() * 2.0;
-#endif
-        VECTOR2D pageSizeIn( (double) aWidth / ppi, (double) aHeight / ppi );
+        view->SetCenter( aBBox.Centre() );
+        view->UseDrawPriority( true );
 
-        galPrint->SetSheetSize( pageSizeIn );
-        galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
-
-        // Get base world scale at zoom=1.0 to calculate required zoom factor
-        gal->SetZoomFactor( 1.0 );
-        gal->ComputeWorldScreenMatrix();
-
-        VECTOR2I screenSize = gal->GetScreenPixelSize();
-        double   baseWorldScale = gal->GetWorldScale();
-        double   desiredWorldScale = (double) screenSize.x / (double) aBBox.GetWidth();
-        double   zoomFactor = desiredWorldScale / baseWorldScale;
-
-        // The Cairo print GAL creates a 2x internal buffer but the matrix uses 1x logical size.
-        // This offsets the viewport center by bbox/4 in world units. Compensate by adjusting
-        // lookAtPoint: we want ToWorld(0,0)=bbox.origin, so lookAtPoint = bboxCenter - bbox/4.
-        VECTOR2D lookAtPoint( aBBox.Centre().x - aBBox.GetWidth() / 4.0,
-                              aBBox.Centre().y - aBBox.GetHeight() / 4.0 );
-
-        gal->SetLookAtPoint( lookAtPoint );
-        gal->SetZoomFactor( zoomFactor );
-        gal->ComputeWorldScreenMatrix();
         gal->SetClearColor( dstSettings->GetBackgroundColor() );
         gal->ClearScreen();
 
-        view->SetCenter( lookAtPoint );
-        view->UseDrawPriority( true );
-
         {
-            KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
+            KIGFX::GAL_DRAWING_CONTEXT ctx( gal.get() );
             view->Redraw();
         }
     }

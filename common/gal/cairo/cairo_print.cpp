@@ -51,8 +51,9 @@ using std::min;
 using namespace KIGFX;
 
 
-CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxBitmap* aBitmap ) :
-        m_targetBitmap( aBitmap )
+CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxBitmap* aBitmap, double aDPI ) :
+        m_targetBitmap( aBitmap ),
+        m_dpi( aDPI )
 {
     wxCHECK( aBitmap, /* void */ );
     wxCHECK( aBitmap->GetDepth() == 32, /* void */ );
@@ -288,8 +289,8 @@ std::unique_ptr<GAL_PRINT> GAL_PRINT::Create( GAL_DISPLAY_OPTIONS& aOptions, wxD
 }
 
 
-std::unique_ptr<CAIRO_PRINT_GAL> CAIRO_PRINT_GAL::Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap )
+std::unique_ptr<CAIRO_PRINT_GAL> CAIRO_PRINT_GAL::Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap, double aDPI )
 {
-    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aBitmap );
+    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aBitmap, aDPI );
     return std::make_unique<CAIRO_PRINT_GAL>( aOptions, std::move( printCtx ) );
 }
