@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-17 22:01+0000\n"
+"PO-Revision-Date: 2026-01-20 23:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -18334,7 +18334,7 @@ msgstr "Pin-Nummern-Anzeigen-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:1831
 msgid "Exclude from simulation settings differ."
-msgstr "Einstellungen \"Von Simulation ausschließen\" weichen ab."
+msgstr "Von-Simulation-ausschließen-Einstellung weichen ab."
 
 #: eeschema/lib_symbol.cpp:1840
 msgid "Exclude from bill of materials settings differ."
@@ -18342,7 +18342,7 @@ msgstr "Von-Stückliste-ausschließen-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:1849
 msgid "Exclude from board settings differ."
-msgstr "Von-Platine-Ausschließen-Einstellung weicht ab."
+msgstr "Von-Platine-Ausschließen-Einstellungen weichen ab."
 
 #: eeschema/libarch.cpp:77
 #, c-format
