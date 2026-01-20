@@ -99,10 +99,7 @@
 #include <wx/filefn.h>
 #include <wx/mstream.h>
 #include <wx/clipbrd.h>
-
-#ifdef __WXGTK__
 #include <wx/imagpng.h>
-#endif
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -222,14 +219,15 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
 
 
 /**
- * Helper to render selection to a bitmap with optional alpha support.
+ * Helper to render selection to an image with optional alpha support.
  *
  * @param aIncludeDrawingSheet If true, include the drawing sheet layer in the render
  */
-wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
+wxImage renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
                                   int aWidth, int aHeight, bool aUseAlpha, bool aIncludeDrawingSheet )
 {
-    wxBitmap bitmap( aWidth, aHeight, 32 );
+    wxImage image( aWidth, aHeight, false );
+    image.SetAlpha();
 
     double actualPPI_x = (double) aWidth / schIUScale.IUTomm( aBBox.GetWidth() ) * 25.4;
     double actualPPI_y = (double) aHeight / schIUScale.IUTomm( aBBox.GetHeight() ) * 25.4;
@@ -241,10 +239,10 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
         KIGFX::GAL_DISPLAY_OPTIONS options;
         options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
 
-        std::unique_ptr<KIGFX::CAIRO_PRINT_GAL> gal = KIGFX::CAIRO_PRINT_GAL::Create( options, &bitmap, actualPPI );
+        std::unique_ptr<KIGFX::CAIRO_PRINT_GAL> gal = KIGFX::CAIRO_PRINT_GAL::Create( options, &image, actualPPI );
 
         if( !gal )
-            return wxBitmap();
+            return wxImage();
 
         KIGFX::PRINT_CONTEXT*               printCtx = gal->GetPrintCtx();
         std::unique_ptr<KIGFX::SCH_PAINTER> painter = std::make_unique<KIGFX::SCH_PAINTER>( gal.get() );
@@ -329,11 +327,11 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
         }
     }
 
-    return bitmap;
+    return image;
 }
 
 
-wxBitmap renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
+wxImage renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
                                              const BOX2I& aBBox, bool aUseAlpha, bool aIncludeDrawingSheet )
 {
     const double c_targetPPI = 300;
@@ -342,7 +340,7 @@ wxBitmap renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_S
     VECTOR2I size = aBBox.GetSize();
 
     if( size.x <= 0 || size.y <= 0 )
-        return wxBitmap();
+        return wxImage();
 
     int bitmapWidth = KiROUND( schIUScale.IUTomm( size.x ) * c_targetPixelsPerMM );
     int bitmapHeight = KiROUND( schIUScale.IUTomm( size.y ) * c_targetPixelsPerMM );
@@ -356,10 +354,10 @@ wxBitmap renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_S
     }
 
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
-        return wxBitmap();
+        return wxImage();
 
-    wxBitmap result = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, aUseAlpha,
-                                               aIncludeDrawingSheet );
+    wxImage result = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, aUseAlpha,
+                                              aIncludeDrawingSheet );
 
     return result;
 }
@@ -1663,10 +1661,9 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             if( selectionBox.GetWidth() > 0 && selectionBox.GetHeight() > 0 )
             {
                 // Add bitmap data
-                wxBitmap bitmapWithAlpha =
-                        renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
+                wxImage image = renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
 
-                if( bitmapWithAlpha.IsOk() )
+                if( image.IsOk() )
                 {
 #if defined( __WXGTK__ ) || defined( __WXMSW__ )
                     // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
@@ -1674,47 +1671,42 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                     // encoding PNG once ourselves with fast compression settings.
                     // 
                     // On MSW, most apps don't recognize transparency when using CF_DIB, so provide a PNG.
-                    wxImage pngImage = bitmapWithAlpha.ConvertToImage();
 
-                    if( pngImage.IsOk() )
+                    // Fast PNG settings optimized for schematic graphics:
+                    // - Compression level Z_BEST_SPEED (fast)
+                    // - Z_RLE strategy (good for images with runs of identical pixels)
+                    // - PNG_FILTER_NONE (skip filtering step)
+
+                    image.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );    // Z_BEST_SPEED
+                    image.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 ); // Z_RLE
+                    image.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );            // PNG_FILTER_NONE
+
+                    wxMemoryOutputStream   memStream;
+                    wxBufferedOutputStream bufferedStream( memStream );
+
+                    if( image.SaveFile( bufferedStream, wxBITMAP_TYPE_PNG ) )
                     {
-                        // Fast PNG settings optimized for schematic graphics:
-                        // - Compression level 1 (fast)
-                        // - Z_RLE strategy (good for images with runs of identical pixels)
-                        // - PNG_FILTER_NONE (skip filtering step)
-                        pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );
-                        pngImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 ); // Z_RLE
-                        pngImage.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );            // PNG_FILTER_NONE
-
-                        wxMemoryOutputStream pngStream;
-
-                        if( pngImage.SaveFile( pngStream, wxBITMAP_TYPE_PNG ) )
-                        {
-                            wxMemoryBuffer pngBuffer( pngStream.GetLength() );
-                            pngBuffer.AppendData( pngStream.GetOutputStreamBuffer()->GetBufferStart(),
-                                                  pngStream.GetLength() );
-
+                        auto stBuf = memStream.GetOutputStreamBuffer();
 #ifdef __WXMSW__
-                            //// Add empty CF_BITMAP so apps recognize the PNG entry
-                            data->Add( new wxCustomDataObject( wxDataFormat( wxDataFormatId::wxDF_BITMAP ) ) );
+                        //// Add empty CF_BITMAP so apps recognize the PNG entry
+                        data->Add( new wxCustomDataObject( wxDataFormat( wxDataFormatId::wxDF_BITMAP ) ) );
 
-                            //// Add "PNG" entry
-                            wxCustomDataObject* pngObj = new wxCustomDataObject( wxDataFormat( "PNG" ) );
-                            pngObj->SetData( pngBuffer.GetDataLen(), pngBuffer.GetData() );
-                            data->Add( pngObj );
+                        //// Add "PNG" entry
+                        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDataFormat( "PNG" ) );
+                        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
+                        data->Add( pngObj );
 #else // __WXGTK__
 
-                            // Handle pre-encoded PNG data (GTK optimization path).
-                            // Use wxDF_BITMAP to prevent wx from setting the type to Private
-                            wxCustomDataObject* pngObj = new wxCustomDataObject( wxDF_BITMAP );
-                            pngObj->SetData( pngBuffer.GetDataLen(), pngBuffer.GetData() );
-                            data->Add( pngObj );
+                        // Handle pre-encoded PNG data (GTK optimization path).
+                        // Use wxDF_BITMAP to prevent wx from setting the type to Private
+                        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDF_BITMAP );
+                        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
+                        data->Add( pngObj );
 #endif
-                        }
-                        else
-                        {
-                            wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
-                        }
+                    }
+                    else
+                    {
+                        wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
                     }
 #else // __WXOSX__
 

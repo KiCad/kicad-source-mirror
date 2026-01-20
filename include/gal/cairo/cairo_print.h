@@ -25,21 +25,21 @@
 #include <gal/cairo/cairo_gal.h>
 #include <gal/gal_print.h>
 
-class wxBitmap;
+class wxImage;
 class wxDC;
 class wxGCDC;
 
 namespace KIGFX
 {
 /**
- * Provide a Cairo context created from wxPrintDC or a wxBitmap.
+ * Provide a Cairo context created from wxPrintDC or an wxImage.
  *
  * It allows one to prepare printouts using the Cairo library and let wxWidgets handle the rest.
  */
 class GAL_API CAIRO_PRINT_CTX : public PRINT_CONTEXT
 {
 public:
-    CAIRO_PRINT_CTX( wxBitmap* aBitmap, double aDPI );
+    CAIRO_PRINT_CTX( wxImage* aImage, double aDPI );
     CAIRO_PRINT_CTX( wxDC* aDC );
     ~CAIRO_PRINT_CTX();
 
@@ -69,7 +69,7 @@ public:
 
 private:
     wxGCDC*          m_gcdc = nullptr;
-    wxBitmap*        m_targetBitmap = nullptr;
+    wxImage*         m_targetImage = nullptr;
     cairo_t*         m_ctx = nullptr;
     cairo_surface_t* m_surface = nullptr;
 
@@ -88,7 +88,7 @@ public:
     CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
                      std::unique_ptr<CAIRO_PRINT_CTX> aContext );
 
-    static std::unique_ptr<CAIRO_PRINT_GAL> Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap, double aDPI );
+    static std::unique_ptr<CAIRO_PRINT_GAL> Create( GAL_DISPLAY_OPTIONS& aOptions, wxImage* aImage, double aDPI );
 
     void ComputeWorldScreenMatrix() override;
 

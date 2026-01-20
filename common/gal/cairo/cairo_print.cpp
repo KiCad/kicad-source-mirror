@@ -51,14 +51,13 @@ using std::min;
 using namespace KIGFX;
 
 
-CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxBitmap* aBitmap, double aDPI ) :
-        m_targetBitmap( aBitmap ),
+CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxImage* aImage, double aDPI ) :
+        m_targetImage( aImage ),
         m_dpi( aDPI )
 {
-    wxCHECK( aBitmap, /* void */ );
-    wxCHECK( aBitmap->GetDepth() == 32, /* void */ );
+    wxCHECK( aImage, /* void */ );
 
-    m_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aBitmap->GetWidth(), aBitmap->GetHeight() );
+    m_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aImage->GetWidth(), aImage->GetHeight() );
 
     if( !m_surface || cairo_surface_status( m_surface ) != CAIRO_STATUS_SUCCESS )
         throw std::runtime_error( "Could not create Cairo surface" );
@@ -145,21 +144,19 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
     {
         cairo_surface_flush( m_surface );
 
-        if( m_targetBitmap )
+        if( m_targetImage )
         {
-            // Convert data from cairo to wxBitmap
-            uint8_t* srcData = cairo_image_surface_get_data( m_surface );
-            int      height = cairo_image_surface_get_height( m_surface );
-            int      stride = cairo_image_surface_get_stride( m_surface );
+            // Convert data from cairo to wxImage
+            unsigned char* srcData = cairo_image_surface_get_data( m_surface );
+            int            height = cairo_image_surface_get_height( m_surface );
+            int            stride = cairo_image_surface_get_stride( m_surface );
 
-            wxAlphaPixelData           pixels( *m_targetBitmap );
-            wxAlphaPixelData::Iterator dstp( pixels );
-            unsigned char*             srcRow = srcData;
+            unsigned char* dstRGB = m_targetImage->GetData();
+            unsigned char* dstAlpha = m_targetImage->GetAlpha();
+            unsigned char* srcRow = srcData;
 
             for( int y = 0; y < height; y++ )
             {
-                wxAlphaPixelData::Iterator rowStart = dstp;
-
                 for( int x = 0; x < stride; x += 4 )
                 {
                     const uint32_t pix = *(uint32_t*) ( srcRow + x );
@@ -168,34 +165,26 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
                     const uint8_t g = pix >> 8;
                     const uint8_t r = pix >> 16;
                     const uint8_t alpha = pix >> 24;
-#ifdef __WXGTK__
-                    // Un-premultiply alpha on GTK only
+
+                    // Un-premultiply alpha
                     if( alpha == 0 )
                     {
-                        dstp.Red() = dstp.Green() = dstp.Blue() = dstp.Alpha() = 0;
+                        dstRGB[0] = dstRGB[1] = dstRGB[2] = 0;
+                        dstAlpha[0] = 0;
                     }
                     else
                     {
-                        dstp.Red() = ( (uint32_t) r * 255 ) / alpha;
-                        dstp.Green() = ( (uint32_t) g * 255 ) / alpha;
-                        dstp.Blue() = ( (uint32_t) b * 255 ) / alpha;
-                        dstp.Alpha() = alpha;
+                        dstRGB[0] = ( (uint32_t) r * 255 ) / alpha;
+                        dstRGB[1] = ( (uint32_t) g * 255 ) / alpha;
+                        dstRGB[2] = ( (uint32_t) b * 255 ) / alpha;
+                        dstAlpha[0] = alpha;
                     }
-#else
-                    // MSW and OSX already uses pre-multiplied alpha, no need to convert
-                    dstp.Blue() = b;
-                    dstp.Green() = g;
-                    dstp.Red() = r;
-                    dstp.Alpha() = alpha;
-#endif
 
-                    dstp++;
+                    dstRGB += 3;
+                    dstAlpha += 1;
                 }
 
                 srcRow += stride;
-
-                dstp = rowStart;
-                dstp.OffsetY( pixels, 1 );
             }
         }
 
@@ -289,8 +278,8 @@ std::unique_ptr<GAL_PRINT> GAL_PRINT::Create( GAL_DISPLAY_OPTIONS& aOptions, wxD
 }
 
 
-std::unique_ptr<CAIRO_PRINT_GAL> CAIRO_PRINT_GAL::Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap, double aDPI )
+std::unique_ptr<CAIRO_PRINT_GAL> CAIRO_PRINT_GAL::Create( GAL_DISPLAY_OPTIONS& aOptions, wxImage* aImage, double aDPI )
 {
-    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aBitmap, aDPI );
+    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aImage, aDPI );
     return std::make_unique<CAIRO_PRINT_GAL>( aOptions, std::move( printCtx ) );
 }
