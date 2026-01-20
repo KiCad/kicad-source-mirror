@@ -107,6 +107,9 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
     cairo_surface_set_device_scale( m_surface, DEFAULT_DPI / KICAD_PRINTER_DPI,
                                     DEFAULT_DPI / KICAD_PRINTER_DPI );
     m_dpi = KICAD_PRINTER_DPI;
+
+    cairo_reference( m_ctx );
+    cairo_surface_reference( m_surface );
 #endif /* __WXGTK__ */
 
 #ifdef __WXMSW__
@@ -132,24 +135,11 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 
     if( !m_surface || cairo_surface_status( m_surface ) != CAIRO_STATUS_SUCCESS )
         throw std::runtime_error( "Could not create Cairo surface" );
-
-    cairo_reference( m_ctx );
-    cairo_surface_reference( m_surface );
 }
 
 
 CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
 {
-#ifdef __WXMSW__
-    if( m_gcdc )
-    {
-        cairo_surface_show_page( m_surface );
-        wxGraphicsContext* gctx = m_gcdc->GetGraphicsContext();
-        Gdiplus::Graphics* g = static_cast<Gdiplus::Graphics*>( gctx->GetNativeContext() );
-        g->ReleaseHDC( static_cast<HDC>( m_hdc ) );
-    }
-#endif /* __WXMSW__ */
-
     if( m_surface )
     {
         cairo_surface_flush( m_surface );
@@ -195,10 +185,13 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
                 dstp.OffsetY( pixels, 1 );
             }
         }
+
+        cairo_surface_destroy( m_surface );
     }
 
-    cairo_surface_destroy( m_surface );
-    cairo_destroy( m_ctx );
+    if( m_ctx )
+        cairo_destroy( m_ctx );
+
     delete m_gcdc;
 }
 
