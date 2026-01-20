@@ -459,7 +459,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 {
                     PAD* pad = static_cast<PAD*>( collector[i] );
 
-                    if( !pad->IsAperturePad() && checkVisibility( pad ) )
+                    if( pad->CanHaveNumber() && checkVisibility( pad ) )
                         selectedPads.push_back( pad );
                 }
             }
