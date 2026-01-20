@@ -599,9 +599,12 @@ void CAIRO_GAL_BASE::Flush()
 
 void CAIRO_GAL_BASE::ClearScreen()
 {
-    cairo_set_source_rgb( m_currentContext, m_clearColor.r, m_clearColor.g, m_clearColor.b );
+    cairo_operator_t oldOp = cairo_get_operator( m_currentContext );
+    cairo_set_source_rgba( m_currentContext, m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a );
+    cairo_set_operator( m_currentContext, CAIRO_OPERATOR_SOURCE );
     cairo_rectangle( m_currentContext, 0.0, 0.0, m_screenSize.x, m_screenSize.y );
     cairo_fill( m_currentContext );
+    cairo_set_operator( m_currentContext, oldOp );
 }
 
 

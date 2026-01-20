@@ -26,6 +26,7 @@
 #include <wx/dcgraph.h>
 #include <wx/dcmemory.h>
 #include <wx/dcprint.h>
+#include <wx/rawbmp.h>
 
 #ifdef NOMINMAX /* workaround for gdiplus.h */
 #include <algorithm>
@@ -49,10 +50,28 @@ using std::min;
 
 using namespace KIGFX;
 
-CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC ) :
-        m_gcdc( nullptr ),
-        m_ctx( nullptr ),
-        m_surface( nullptr )
+
+CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxBitmap* aBitmap ) :
+        m_targetBitmap( aBitmap )
+{
+    wxCHECK( aBitmap, /* void */ );
+    wxCHECK( aBitmap->GetDepth() == 32, /* void */ );
+
+    m_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aBitmap->GetWidth(), aBitmap->GetHeight() );
+
+    if( !m_surface || cairo_surface_status( m_surface ) != CAIRO_STATUS_SUCCESS )
+        throw std::runtime_error( "Could not create Cairo surface" );
+
+    m_ctx = cairo_create( m_surface );
+
+    if( !m_ctx || cairo_status( m_ctx ) != CAIRO_STATUS_SUCCESS )
+        throw std::runtime_error( "Could not create Cairo context" );
+
+    cairo_set_antialias( m_ctx, CAIRO_ANTIALIAS_GOOD );
+}
+
+
+CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 {
     if( wxPrinterDC* printerDC = dynamic_cast<wxPrinterDC*>( aDC ) )
         m_gcdc = new wxGCDC( *printerDC );
@@ -122,11 +141,61 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC ) :
 CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
 {
 #ifdef __WXMSW__
-    cairo_surface_show_page( m_surface );
-    wxGraphicsContext* gctx = m_gcdc->GetGraphicsContext();
-    Gdiplus::Graphics* g = static_cast<Gdiplus::Graphics*>( gctx->GetNativeContext() );
-    g->ReleaseHDC( static_cast<HDC>( m_hdc ) );
+    if( m_gcdc )
+    {
+        cairo_surface_show_page( m_surface );
+        wxGraphicsContext* gctx = m_gcdc->GetGraphicsContext();
+        Gdiplus::Graphics* g = static_cast<Gdiplus::Graphics*>( gctx->GetNativeContext() );
+        g->ReleaseHDC( static_cast<HDC>( m_hdc ) );
+    }
 #endif /* __WXMSW__ */
+
+    if( m_surface )
+    {
+        cairo_surface_flush( m_surface );
+
+        if( m_targetBitmap )
+        {
+            // Convert data from cairo to wxBitmap
+            uint8_t* srcData = cairo_image_surface_get_data( m_surface );
+            int      height = cairo_image_surface_get_height( m_surface );
+            int      stride = cairo_image_surface_get_stride( m_surface );
+
+            wxAlphaPixelData           pixels( *m_targetBitmap );
+            wxAlphaPixelData::Iterator dstp( pixels );
+            unsigned char*             srcRow = srcData;
+
+            for( int y = 0; y < height; y++ )
+            {
+                wxAlphaPixelData::Iterator rowStart = dstp;
+
+                for( int x = 0; x < stride; x += 4 )
+                {
+                    const unsigned char* src = srcRow + x;
+
+#if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ )
+                    // ARGB
+                    dstp.Alpha() = src[0];
+                    dstp.Red() = src[1];
+                    dstp.Green() = src[2];
+                    dstp.Blue() = src[3];
+#else
+                    // BGRA
+                    dstp.Alpha() = src[3];
+                    dstp.Red() = src[2];
+                    dstp.Green() = src[1];
+                    dstp.Blue() = src[0];
+#endif
+                    dstp++;
+                }
+
+                srcRow += stride;
+
+                dstp = rowStart;
+                dstp.OffsetY( pixels, 1 );
+            }
+        }
+    }
 
     cairo_surface_destroy( m_surface );
     cairo_destroy( m_ctx );
@@ -210,5 +279,12 @@ void CAIRO_PRINT_GAL::SetSheetSize( const VECTOR2D& aSize )
 std::unique_ptr<GAL_PRINT> GAL_PRINT::Create( GAL_DISPLAY_OPTIONS& aOptions, wxDC* aDC )
 {
     auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aDC );
+    return std::make_unique<CAIRO_PRINT_GAL>( aOptions, std::move( printCtx ) );
+}
+
+
+std::unique_ptr<CAIRO_PRINT_GAL> CAIRO_PRINT_GAL::Create( GAL_DISPLAY_OPTIONS& aOptions, wxBitmap* aBitmap )
+{
+    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aBitmap );
     return std::make_unique<CAIRO_PRINT_GAL>( aOptions, std::move( printCtx ) );
 }

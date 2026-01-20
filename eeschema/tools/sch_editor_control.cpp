@@ -92,8 +92,9 @@
 #include <plotters/plotters_pslike.h>
 #include <view/view.h>
 #include <zoom_defines.h>
-#include <gal/gal_print.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/gal_print.h>
+#include <gal/cairo/cairo_print.h>
 #include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/mstream.h>
@@ -233,30 +234,21 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
 
 
 /**
- * Helper to render selection to a bitmap with a specific background color.
- * Used for dual-buffer alpha computation.
+ * Helper to render selection to a bitmap with optional alpha support.
  *
  * @param aIncludeDrawingSheet If true, include the drawing sheet layer in the render
  */
 wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
-                                  int aWidth, int aHeight, double aViewScale, const wxColour& aBgColorOverride,
+                                  int aWidth, int aHeight, double aViewScale, bool aUseAlpha,
                                   bool aIncludeDrawingSheet )
 {
-    wxBitmap bitmap( aWidth, aHeight, 24 );
+    wxBitmap bitmap( aWidth, aHeight, 32 );
 
     {
-        wxMemoryDC dc( bitmap );
-
-        if( aBgColorOverride.IsOk() )
-        {
-            dc.SetBackground( wxBrush( aBgColorOverride ) );
-            dc.Clear();
-        }
-
         KIGFX::GAL_DISPLAY_OPTIONS options;
         options.antialiasing_mode = KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY;
 
-        std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, &dc );
+        std::unique_ptr<KIGFX::CAIRO_PRINT_GAL> galPrint = KIGFX::CAIRO_PRINT_GAL::Create( options, &bitmap );
 
         if( !galPrint )
             return wxBitmap();
@@ -297,11 +289,8 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
         dstSettings->SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
         dstSettings->SetIsPrinting( true );
 
-        if( aBgColorOverride.IsOk() )
-        {
-            COLOR4D bgColor4D( aBgColorOverride.Red() / 255.0, aBgColorOverride.Green() / 255.0, aBgColorOverride.Blue() / 255.0, 1.0 );
-            dstSettings->SetBackgroundColor( bgColor4D );
-        }
+        if( aUseAlpha )
+            dstSettings->SetBackgroundColor( COLOR4D::CLEAR );
 
         for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
         {
@@ -380,8 +369,8 @@ wxBitmap renderSelectionToBitmap( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& a
 }
 
 
-wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection,
-                                         const BOX2I& aBBox, bool aUseAlpha, bool aIncludeDrawingSheet )
+wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
+                                          bool aUseAlpha, bool aIncludeDrawingSheet )
 {
     VECTOR2I size = aBBox.GetSize();
 
@@ -405,77 +394,8 @@ wxBitmap renderSelectionToImageWithAlpha( SCH_EDIT_FRAME* aFrame, const SCH_SELE
     if( bitmapWidth <= 0 || bitmapHeight <= 0 )
         return wxBitmap();
 
-    if( !aUseAlpha )
-    {
-        return renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale, wxColour(),
-                                        aIncludeDrawingSheet );
-    }
-
-    // Render twice with different backgrounds for alpha computation.
-    // This dual-buffer technique computes true alpha by comparing renders on white vs black:
-    // - On white: result_w = α*F + (1-α)*255
-    // - On black: result_b = α*F
-    // Therefore: α = 1 - (result_w - result_b)/255
-    wxBitmap bmpOnWhite = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
-                                                   *wxWHITE, aIncludeDrawingSheet );
-    wxBitmap bmpOnBlack = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
-                                                   *wxBLACK, aIncludeDrawingSheet );
-
-    if( !bmpOnWhite.IsOk() || !bmpOnBlack.IsOk() )
-        return wxBitmap();
-
-    wxImage imageOnWhite = bmpOnWhite.ConvertToImage();
-    wxImage imageOnBlack = bmpOnBlack.ConvertToImage();
-
-    if( !imageOnWhite.IsOk() || !imageOnBlack.IsOk() )
-        return wxBitmap();
-
-    // Create output image with alpha channel
-    wxImage result( bitmapWidth, bitmapHeight );
-    result.InitAlpha();
-
-    unsigned char* rgbWhite = imageOnWhite.GetData();
-    unsigned char* rgbBlack = imageOnBlack.GetData();
-    unsigned char* rgbResult = result.GetData();
-    unsigned char* alphaResult = result.GetAlpha();
-
-    int pixelCount = bitmapWidth * bitmapHeight;
-
-    for( int i = 0; i < pixelCount; ++i )
-    {
-        int idx = i * 3;
-
-        // Get RGB values from both renders
-        int rW = rgbWhite[idx], gW = rgbWhite[idx + 1], bW = rgbWhite[idx + 2];
-        int rB = rgbBlack[idx], gB = rgbBlack[idx + 1], bB = rgbBlack[idx + 2];
-
-        // Alpha computation: α = 1 - (white - black) / 255
-        // Use average of channels for stability with anti-aliasing
-        int diffR = rW - rB;
-        int diffG = gW - gB;
-        int diffB = bW - bB;
-        int avgDiff = ( diffR + diffG + diffB ) / 3;
-
-        int alpha = 255 - avgDiff;
-        alpha = std::max( 0, std::min( 255, alpha ) );
-        alphaResult[i] = static_cast<unsigned char>( alpha );
-
-        if( alpha > 0 )
-        {
-            // Recover foreground color: F = black_result / α
-            // Scale by 255/alpha to convert from premultiplied to straight alpha
-            rgbResult[idx] = static_cast<unsigned char>( std::min( 255, rB * 255 / alpha ) );
-            rgbResult[idx + 1] = static_cast<unsigned char>( std::min( 255, gB * 255 / alpha ) );
-            rgbResult[idx + 2] = static_cast<unsigned char>( std::min( 255, bB * 255 / alpha ) );
-        }
-        else
-        {
-            // Fully transparent - color doesn't matter
-            rgbResult[idx] = 0;
-            rgbResult[idx + 1] = 0;
-            rgbResult[idx + 2] = 0;
-        }
-    }
+    wxBitmap result = renderSelectionToBitmap( aFrame, aSelection, aBBox, bitmapWidth, bitmapHeight, viewScale,
+                                               aUseAlpha, aIncludeDrawingSheet );
 
     return result;
 }
