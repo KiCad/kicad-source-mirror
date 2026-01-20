@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -315,9 +315,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_fgSymbolEditor->SetFlexibleDirection( wxBOTH );
 	m_fgSymbolEditor->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to Symbol Editor"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_privateCheckbox->SetValue(true);
-	m_fgSymbolEditor->Add( m_privateCheckbox, 0, wxRIGHT, 5 );
+	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to symbol editor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fgSymbolEditor->Add( m_privateCheckbox, 0, wxRIGHT|wxTOP, 5 );
 
 
 	m_fgSymbolEditor->Add( 60, 0, 1, wxEXPAND, 5 );
