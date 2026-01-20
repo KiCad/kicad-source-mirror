@@ -18,6 +18,7 @@
  */
 
 #include <text_eval/text_eval_parser.h>
+#include <text_eval/text_eval_vcs.h>
 #include <fmt/format.h>
 #include <array>
 #include <cctype>
@@ -673,6 +674,163 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         const auto days = static_cast<int>( dateResult.GetValue() );
         return MakeValue<Value>( DATE_UTILS::GetWeekdayName( days ) );
+    }
+
+    // VCS functions (return strings!)
+    else if( name == "vcsidentifier" && argc <= 1 )
+    {
+        int length = 40; // Full identifier by default
+        if( argc == 1 )
+        {
+            auto lenResult = VALUE_UTILS::ToDouble( argValues[0] );
+            if( lenResult )
+                length = static_cast<int>( lenResult.GetValue() );
+        }
+
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitHash( ".", length ) );
+    }
+    else if( name == "vcsnearestlabel" && argc <= 2 )
+    {
+        std::string match;
+        bool        anyTags = false;
+
+        if( argc >= 1 )
+            match = VALUE_UTILS::ToString( argValues[0] );
+        if( argc >= 2 )
+        {
+            auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+            if( tagsResult )
+                anyTags = tagsResult.GetValue() != 0.0;
+        }
+
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetNearestTag( match, anyTags ) );
+    }
+    else if( name == "vcslabeldistance" && argc <= 2 )
+    {
+        std::string match;
+        bool        anyTags = false;
+
+        if( argc >= 1 )
+            match = VALUE_UTILS::ToString( argValues[0] );
+        if( argc >= 2 )
+        {
+            auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+            if( tagsResult )
+                anyTags = tagsResult.GetValue() != 0.0;
+        }
+
+        return MakeValue<Value>( std::to_string( TEXT_EVAL_VCS::GetDistanceFromTag( match, anyTags ) ) );
+    }
+    else if( name == "vcsdirty" && argc <= 1 )
+    {
+        bool includeUntracked = false;
+        if( argc == 1 )
+        {
+            auto utResult = VALUE_UTILS::ToDouble( argValues[0] );
+            if( utResult )
+                includeUntracked = utResult.GetValue() != 0.0;
+        }
+
+        return MakeValue<Value>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? "1" : "0" );
+    }
+    else if( name == "vcsdirtysuffix" && argc <= 2 )
+    {
+        std::string suffix = "-dirty";
+        bool        includeUntracked = false;
+
+        if( argc >= 1 )
+            suffix = VALUE_UTILS::ToString( argValues[0] );
+        if( argc >= 2 )
+        {
+            auto utResult = VALUE_UTILS::ToDouble( argValues[1] );
+            if( utResult )
+                includeUntracked = utResult.GetValue() != 0.0;
+        }
+
+        return MakeValue<Value>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? suffix : "" );
+    }
+    else if( name == "vcsauthor" && argc == 0 )
+    {
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthor( "." ) );
+    }
+    else if( name == "vcsauthoremail" && argc == 0 )
+    {
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthorEmail( "." ) );
+    }
+    else if( name == "vcscommitter" && argc == 0 )
+    {
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitter( "." ) );
+    }
+    else if( name == "vcscommitteremail" && argc == 0 )
+    {
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitterEmail( "." ) );
+    }
+    else if( name == "vcsbranch" && argc == 0 )
+    {
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetBranch() );
+    }
+    else if( name == "vcscommitdate" && argc <= 1 )
+    {
+        std::string format = "ISO";
+        if( argc == 1 )
+            format = VALUE_UTILS::ToString( argValues[0] );
+
+        int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( "." );
+        if( timestamp == 0 )
+            return MakeValue<Value>( "" );
+
+        int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
+        return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
+    }
+
+    // VCS file functions (file-specific versions)
+    else if( name == "vcsfileidentifier" && argc >= 1 && argc <= 2 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        int         length = 40;
+
+        if( argc == 2 )
+        {
+            auto lenResult = VALUE_UTILS::ToDouble( argValues[1] );
+            if( lenResult )
+                length = static_cast<int>( lenResult.GetValue() );
+        }
+
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitHash( filePath, length ) );
+    }
+    else if( name == "vcsfileauthor" && argc == 1 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthor( filePath ) );
+    }
+    else if( name == "vcsfileauthoremail" && argc == 1 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) );
+    }
+    else if( name == "vcsfilecommitter" && argc == 1 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitter( filePath ) );
+    }
+    else if( name == "vcsfilecommitteremail" && argc == 1 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) );
+    }
+    else if( name == "vcsfilecommitdate" && argc >= 1 && argc <= 2 )
+    {
+        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        std::string format = "ISO";
+        if( argc == 2 )
+            format = VALUE_UTILS::ToString( argValues[1] );
+
+        int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( filePath );
+        if( timestamp == 0 )
+            return MakeValue<Value>( "" );
+
+        int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
+        return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
     }
 
     // String functions (return strings!)

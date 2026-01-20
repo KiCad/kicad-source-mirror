@@ -71,6 +71,7 @@ set( QA_COMMON_SRCS
     text_eval/test_text_eval_parser.cpp
     text_eval/test_text_eval_parser_core.cpp
     text_eval/test_text_eval_parser_datetime.cpp
+    text_eval/test_text_eval_parser_vcs.cpp
     text_eval/test_text_eval_parser_integration.cpp
     text_eval/test_text_eval_numeric_compat.cpp
     text_eval/test_text_eval_render.cpp

@@ -398,6 +398,57 @@ BOOST_AUTO_TEST_CASE( DateTimeFunctions )
 }
 
 /**
+ * Test git functions
+ */
+BOOST_AUTO_TEST_CASE( GitFunctions )
+{
+    EXPRESSION_EVALUATOR evaluator;
+
+    // Note: These tests work whether in a git repo or not.
+    // Git functions return empty strings if not in a repo.
+
+    struct TestCase
+    {
+        std::string expression;
+        bool        shouldError;
+    };
+
+    const std::vector<TestCase> cases = {
+        // Basic VCS functions
+        { "@{vcsidentifier()}", false },
+        { "@{vcsidentifier(7)}", false },
+        { "@{vcsbranch()}", false },
+        { "@{vcsauthor()}", false },
+        { "@{vcsauthoremail()}", false },
+        { "@{vcscommitter()}", false },
+        { "@{vcscommitteremail()}", false },
+        { "@{vcsnearestlabel()}", false },
+        { "@{vcslabeldistance()}", false },
+        { "@{vcsdirty()}", false },
+        { "@{vcsdirtysuffix()}", false },
+        { "@{vcscommitdate()}", false },
+
+        // VCS file functions with current directory
+        { "@{vcsfileidentifier(\".\")}", false },
+    };
+
+    for( const auto& testCase : cases )
+    {
+        auto result = evaluator.Evaluate( testCase.expression );
+
+        if( testCase.shouldError )
+        {
+            BOOST_CHECK( evaluator.HasErrors() );
+        }
+        else
+        {
+            BOOST_CHECK( !evaluator.HasErrors() );
+            // Result can be empty if not in a git repo - that's valid
+        }
+    }
+}
+
+/**
  * Test conditional functions
  */
 BOOST_AUTO_TEST_CASE( ConditionalFunctions )

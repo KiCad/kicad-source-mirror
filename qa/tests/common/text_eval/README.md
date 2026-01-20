@@ -41,6 +41,17 @@ Specialized tests for date and time functionality:
 - **Weekday Calculations**: Day-of-week determination and cycling
 - **Performance**: Date operation timing validation
 
+### `test_text_eval_parser_vcs.cpp`
+Specialized tests for version control system (VCS) functionality:
+
+- **Identifier Formatting**: Commit identifiers with various lengths (4-40 chars), hex validation
+- **Branch and Author Info**: Branch names, author/committer names and emails (repository and file-specific)
+- **Dirty Status**: Repository dirty state detection, untracked file handling
+- **Labels and Distance**: Nearest label/tag finding, commit distance calculations, pattern matching, annotated vs lightweight tags
+- **Commit Dates**: Date formatting (ISO, US, EU, etc.), timestamp validation (repository and file-specific)
+- **Performance**: VCS operation timing validation (100 operations < 2000ms)
+- **Mixed Expressions**: VCS functions combined with variables and text
+
 ### `test_text_eval_parser_integration.cpp`
 Integration tests simulating real-world KiCad usage scenarios:
 
@@ -92,6 +103,27 @@ Integration tests simulating real-world KiCad usage scenarios:
 - `dateformat(days, [format])` - Format date string
   - Formats: "ISO", "US", "EU", "Chinese", "Japanese", "Korean", "long", "short"
 - `weekdayname(days)` - Get weekday name for date
+
+### VCS Functions
+- `vcsidentifier([length])` - Current HEAD commit identifier (default: 40 chars, min: 4)
+- `vcsbranch()` - Current branch name
+- `vcsauthor()` - HEAD commit author name
+- `vcsauthoremail()` - HEAD commit author email
+- `vcscommitter()` - HEAD commit committer name
+- `vcscommitteremail()` - HEAD commit committer email
+- `vcscommitdate([format])` - HEAD commit date (formats: "ISO", "US", "EU", "Chinese", "Japanese", "Korean", "long", "short")
+- `vcsnearestlabel([match], [anyTags])` - Nearest label from HEAD (match pattern, anyTags: 0=annotated only, 1=all tags)
+- `vcslabeldistance([match], [anyTags])` - Number of commits since nearest label
+- `vcsdirty([includeUntracked])` - Repository dirty status: "1" if dirty, "0" if clean
+- `vcsdirtysuffix([suffix], [includeUntracked])` - Custom suffix if dirty (default: "-dirty"), empty if clean
+- `vcsfileidentifier(file, [length])` - Last commit identifier that modified file
+- `vcsfileauthor(file)` - Author of last commit that modified file
+- `vcsfileauthoremail(file)` - Author email of last commit that modified file
+- `vcsfilecommitter(file)` - Committer of last commit that modified file
+- `vcsfilecommitteremail(file)` - Committer email of last commit that modified file
+- `vcsfilecommitdate(file, [format])` - Date of last commit that modified file
+
+Note: All VCS functions return empty strings when not in a VCS repository. File paths are relative to repository root.
 
 ### Conditional Functions
 - `if(condition, true_value, false_value)` - Conditional evaluation
