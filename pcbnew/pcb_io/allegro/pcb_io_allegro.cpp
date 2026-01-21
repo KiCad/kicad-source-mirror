@@ -97,6 +97,9 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
+    if( !aAppendToMe )
+        m_board->SetFileName( aFileName );
+
     std::ifstream fin( aFileName, std::ios::binary );
 
     if( !fin.is_open() )

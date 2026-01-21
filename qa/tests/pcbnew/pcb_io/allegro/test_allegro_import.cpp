@@ -3315,4 +3315,108 @@ BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
 }
 
 
+/**
+ * Test that LoadBoard works when aAppendToMe is nullptr, which is the path used by the
+ * KiCad UI "Import Non-KiCad Board" flow. The plugin must create and return a new BOARD.
+ */
+BOOST_AUTO_TEST_CASE( UIImportPath_NullBoard )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+
+    PCB_IO_ALLEGRO plugin;
+    CAPTURING_REPORTER reporter;
+    plugin.SetReporter( &reporter );
+
+    BOARD* rawBoard = nullptr;
+
+    try
+    {
+        rawBoard = plugin.LoadBoard( dataPath, nullptr, nullptr, nullptr );
+    }
+    catch( const IO_ERROR& e )
+    {
+        BOOST_TEST_MESSAGE( "IO_ERROR: " << e.What() );
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_TEST_MESSAGE( "Exception: " << e.what() );
+    }
+
+    reporter.PrintAllMessages( "UIImportPath_NullBoard" );
+
+    BOOST_REQUIRE_MESSAGE( rawBoard != nullptr, "LoadBoard with nullptr aAppendToMe must return a valid board" );
+
+    std::unique_ptr<BOARD> board( rawBoard );
+
+    BOOST_CHECK_GT( board->GetNetCount(), 0 );
+    BOOST_CHECK_GT( board->Footprints().size(), 0 );
+    BOOST_CHECK_GT( board->Tracks().size(), 0 );
+    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
+
+    PrintBoardStats( board.get(), "ProiectBoard (UI path)" );
+}
+
+
+/**
+ * Verify that SMD pad layer sets are consistent with their parent footprint side.
+ *
+ * In KiCad, footprint definitions always use F.Cu for SMD pads. When a footprint is placed
+ * on the bottom of the board, Flip() moves pads to B.Cu. So after import:
+ *   - Front footprints should have SMD pads on F.Cu
+ *   - Bottom footprints should have SMD pads on B.Cu
+ */
+BOOST_AUTO_TEST_CASE( SmdPadLayerConsistency )
+{
+    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        CAPTURING_REPORTER     reporter;
+        std::string            fullPath = dataPath + boardName;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            int inconsistentCount = 0;
+
+            for( FOOTPRINT* fp : board->Footprints() )
+            {
+                const bool onBottom = fp->IsFlipped();
+
+                for( PAD* pad : fp->Pads() )
+                {
+                    if( pad->GetAttribute() != PAD_ATTRIB::SMD )
+                        continue;
+
+                    LSET layers = pad->GetLayerSet();
+                    bool hasTopCopper = layers.Contains( F_Cu );
+                    bool hasBotCopper = layers.Contains( B_Cu );
+
+                    if( onBottom && hasTopCopper && !hasBotCopper )
+                    {
+                        inconsistentCount++;
+                        BOOST_TEST_MESSAGE( boardName << ": " << fp->GetReference() << " pad "
+                                            << pad->GetNumber() << " is on bottom footprint but SMD "
+                                            << "pad has F.Cu without B.Cu" );
+                    }
+                    else if( !onBottom && hasBotCopper && !hasTopCopper )
+                    {
+                        inconsistentCount++;
+                        BOOST_TEST_MESSAGE( boardName << ": " << fp->GetReference() << " pad "
+                                            << pad->GetNumber() << " is on top footprint but SMD "
+                                            << "pad has B.Cu without F.Cu" );
+                    }
+                }
+            }
+
+            BOOST_CHECK_EQUAL( inconsistentCount, 0 );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
