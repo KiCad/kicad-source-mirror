@@ -2569,14 +2569,10 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 if( pad_angle != ANGLE_0 )
                     xformNode->AddAttribute( "rotation", floatVal( pad_angle.AsDegrees() ) );
             }
-        }
-        else
-        {
-            pinNode = it->second;
-        }
 
-        addLocationNode( pinNode, *pad, true );
-        addShape( pinNode, *pad, pad->GetLayer() );
+            addLocationNode( pinNode, *pad, true );
+            addShape( pinNode, *pad, pad->GetLayer() );
+        }
 
         // We just need the padstack, we don't need the reference here.  The reference will be
         // created in the LayerFeature set
