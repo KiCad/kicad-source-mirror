@@ -158,7 +158,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	gbSizer1->Add( m_cbFilterSelected, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer1->Add( gbSizer1, 1, wxEXPAND, 5 );
+	sbSizer1->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bRightPaneSizer->Add( sbSizer1, 0, wxEXPAND|wxALL, 5 );
@@ -227,7 +227,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	bImportBtnSizer->Add( m_btnImportFromClipboard, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizer2->Add( bImportBtnSizer, 0, wxEXPAND, 5 );
+	sbSizer2->Add( bImportBtnSizer, 0, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bRightPaneSizer->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -253,19 +253,19 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_divider1 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_divider1->Enable( false );
 
-	bSizer5->Add( m_divider1, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 4 );
+	bSizer5->Add( m_divider1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 4 );
 
 	m_cbGroup = new wxCheckBox( this, wxID_ANY, _("Group by name"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_cbGroup, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_groupSelected = new wxButton( this, wxID_ANY, _("Group Selected"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_groupSelected, 0, wxALL|wxALIGN_CENTER_VERTICAL, 7 );
+	bSizer5->Add( m_groupSelected, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 7 );
 
 	m_refreshButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer5->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 
-	bBottomSizer->Add( bSizer5, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bBottomSizer->Add( bSizer5, 0, wxEXPAND|wxRIGHT, 5 );
 
 
 	bBottomSizer->Add( 30, 0, 1, wxEXPAND, 5 );
