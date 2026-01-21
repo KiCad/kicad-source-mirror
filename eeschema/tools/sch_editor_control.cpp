@@ -1686,6 +1686,8 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 
                     if( image.SaveFile( bufferedStream, wxBITMAP_TYPE_PNG ) )
                     {
+                        bufferedStream.Close();
+
                         auto stBuf = memStream.GetOutputStreamBuffer();
 #ifdef __WXMSW__
                         //// Add empty CF_BITMAP so apps recognize the PNG entry
