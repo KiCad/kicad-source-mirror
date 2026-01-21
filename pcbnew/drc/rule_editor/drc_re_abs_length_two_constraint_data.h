@@ -52,6 +52,19 @@ public:
 
     virtual ~DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_absolute_length_2; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_absolute_lenght_2.png (~340x130)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 35, 95, 30, 1 },     // min_length (left arrow)
+            { 165, 225, 85, 2 },   // opt_length (bottom center arrow)
+            { 290, 350, 30, 3 },   // max_length (right arrow)
+        };
+    }
+
     double GetMinimumLength() const { return m_minLength; }
 
     void SetMinimumLength( double aLength ) { m_minLength = aLength; }

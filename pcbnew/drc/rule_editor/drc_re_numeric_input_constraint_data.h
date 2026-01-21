@@ -46,6 +46,17 @@ public:
 
     virtual ~DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_track_width; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_minimum_track_width.png (~280x140)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 220, 300, 50, 1 },   // value (right side, near dimension arrow)
+        };
+    }
+
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
         wxString code = GetConstraintCode();

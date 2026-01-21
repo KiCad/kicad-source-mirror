@@ -1,0 +1,117 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include "drc_re_abs_length_two_overlay_panel.h"
+#include "drc_re_abs_length_two_constraint_data.h"
+#include "drc_rule_editor_utils.h"
+
+#include <base_units.h>
+#include <widgets/unit_binder.h>
+
+#include <wx/textctrl.h>
+
+
+DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
+        wxWindow* aParent, DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA* aData, EDA_UNITS aUnits ) :
+        DRC_RE_BITMAP_OVERLAY_PANEL( aParent ),
+        m_data( aData ),
+        m_unitsProvider( pcbIUScale, aUnits )
+{
+    SetBackgroundBitmap( BITMAPS::constraint_absolute_length_2 );
+
+    std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
+
+    m_minLengthBinder = std::make_unique<UNIT_BINDER>(
+            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+
+    AddFieldWithUnits<wxTextCtrl>( wxS( "min_length" ), positions[0], m_minLengthBinder.get() );
+
+    m_optLengthBinder = std::make_unique<UNIT_BINDER>(
+            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+
+    AddFieldWithUnits<wxTextCtrl>( wxS( "opt_length" ), positions[1], m_optLengthBinder.get() );
+
+    m_maxLengthBinder = std::make_unique<UNIT_BINDER>(
+            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+
+    AddFieldWithUnits<wxTextCtrl>( wxS( "max_length" ), positions[2], m_maxLengthBinder.get() );
+
+    PositionFields();
+    TransferDataToWindow();
+}
+
+
+bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataToWindow()
+{
+    if( !m_data )
+        return false;
+
+    m_minLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinimumLength() ) );
+    m_optLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
+    m_maxLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaximumLength() ) );
+
+    return true;
+}
+
+
+bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataFromWindow()
+{
+    if( !m_data )
+        return false;
+
+    m_data->SetMinimumLength( pcbIUScale.IUTomm( m_minLengthBinder->GetDoubleValue() ) );
+    m_data->SetOptimumLength( pcbIUScale.IUTomm( m_optLengthBinder->GetDoubleValue() ) );
+    m_data->SetMaximumLength( pcbIUScale.IUTomm( m_maxLengthBinder->GetDoubleValue() ) );
+
+    return true;
+}
+
+
+bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
+                                                          std::string* aValidationMessage )
+{
+    TransferDataFromWindow();
+
+    VALIDATION_RESULT result = m_data->Validate();
+
+    if( !result.isValid )
+    {
+        *aErrorCount = result.errors.size();
+
+        for( size_t i = 0; i < result.errors.size(); i++ )
+            *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage( i + 1, result.errors[i] );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+wxString DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::GenerateRule( const RULE_GENERATION_CONTEXT& aContext )
+{
+    if( !m_data )
+        return wxEmptyString;
+
+    return m_data->GenerateRule( aContext );
+}

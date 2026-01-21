@@ -49,6 +49,21 @@ public:
 
     virtual ~DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override
+    {
+        return BITMAPS::constraint_minimum_text_height_and_thickness;
+    }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_minimum_text_height_and_thickness.png (~300x200)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 230, 310, 55, 1 },   // min_text_height (right side, vertical dimension)
+            { 140, 220, 165, 2 },  // min_text_thickness (bottom, horizontal dimension)
+        };
+    }
+
     double GetMinTextHeight() { return m_minTextHeight; }
 
     void SetMinTextHeight( double aMinTextHeight ) { m_minTextHeight = aMinTextHeight; }

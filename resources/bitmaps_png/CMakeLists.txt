@@ -714,6 +714,48 @@ set( BMAPS_256
     tune_diff_pair_skew_legend
     )
 
+# Constraint bitmaps with light/dark theme variants (for DRC rule editor panels)
+# These are in sources/light/constraints/ and sources/dark/constraints/
+set( BMAPS_CONSTRAINTS
+    absolute-length-2
+    allowed-orientation
+    basic-clearance
+    board-outline-clearance
+    clearance
+    copper_to_edge_clearance
+    copper-to-hole-clearance
+    creepage-distance
+    hole-size
+    hole-to-hole-clearance
+    hole-to-hole-distance
+    length
+    matched-length-diff-pair
+    maximum-allowed-deviation
+    maximum-via-count
+    minimum-angular-ring
+    minimum-annular-width
+    minimum-clearance
+    minimum-connection-width
+    minimum-item-clearance
+    minimum-soldermask-silver
+    minimum-text-height-and-thickness
+    minimum_thermal_relief_spoke_count
+    minimum-through-hole
+    minimum-track-width
+    minimum-uvia-diameter
+    minimum-uvia-hole
+    minimum-via-diameter
+    permitted-layers
+    routing-diff-pair
+    routing-width
+    silk_clearance
+    silk-to-soldermask-clearance
+    soldermask-expansion
+    solderpaste-expansion
+    via-style
+    vias-under-smd
+    )
+
 # Images in this section are generated at whatever resolution is set in the source SVG file
 # Use Inkscape Document Properties > Custom Size to set (make sure units are pixels)
 # These are used for images in the UI that are not-square or very large (infographics, etc)
@@ -944,6 +986,64 @@ function( bitmap_dir pngWidth pngHeight bmapList )
 endfunction()
 
 
+# Function bitmap_dir_constraints
+# Like bitmap_dir but looks for SVGs in sources/${theme}/constraints/ subdirectory.
+# Used for DRC rule editor constraint overlay panel images that need light/dark variants.
+# Transforms hyphens to underscores in output names to match BITMAPS enum naming convention.
+function( bitmap_dir_constraints pngWidth pngHeight bmapList )
+
+    set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png" )
+
+    file( MAKE_DIRECTORY ${pngDir} )
+    file( MAKE_DIRECTORY ${TMP_DIR} )
+
+    foreach( theme ${THEMES} )
+
+        if( NOT ${theme} STREQUAL "light" )
+            set( themeTag "_${theme}" )
+        else()
+            set( themeTag "" )
+        endif()
+
+        if( ${pngHeight} EQUAL -1 )
+            set( heightTag "" )
+        else()
+            set( heightTag "_${pngHeight}" )
+        endif()
+
+        foreach( bmn ${bmapList} )
+
+            # Transform hyphens to underscores for the output name to match BITMAPS enum
+            string( REPLACE "-" "_" bmnNormalized "${bmn}" )
+
+            set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/${theme}/constraints/${bmn}.svg" )
+            set( pngFile "constraint_${bmnNormalized}${themeTag}${heightTag}.png" )
+            set( pngPath "${pngDir}/${pngFile}" )
+            set( tmpFile "${TMP_DIR}/${pngFile}" )
+
+            if( NOT EXISTS ${svgFile} )
+                message( "Warning: Source SVG ${svgFile} does not exist!" )
+                continue()
+            endif()
+
+            svg2png( ${svgFile} ${tmpFile} ${pngWidth} ${pngHeight} )
+            png2png( ${tmpFile} ${pngPath} )
+
+            set( bitmapInfo
+            "    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"${theme}\" ) );\n"
+            )
+
+            set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )
+            list( APPEND ALL_PNGS ${pngPath} )
+        endforeach()
+    endforeach()
+
+    set( ALL_PNGS ${ALL_PNGS} PARENT_SCOPE )
+    set( BITMAP_INFO_LIST ${BITMAP_INFO_LIST} PARENT_SCOPE )
+
+endfunction()
+
+
 include( FindUnixCommands )
 
 if( TAR STREQUAL "TAR-NOTFOUND" )
@@ -1069,6 +1169,9 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 500 220 "${BMAPS_TUNING_SKEW}" )
 
     bitmap_dir( -1 -1 "${BMAPS_OTHER}" )
+
+    # Constraint bitmaps with light/dark theme variants (DRC rule editor panels)
+    bitmap_dir_constraints( -1 -1 "${BMAPS_CONSTRAINTS}" )
 
     configure_file( ${BITMAP_INFO_TEMPLATE} ${BITMAP_INFO_FILE}  NEWLINE_STYLE UNIX )
 

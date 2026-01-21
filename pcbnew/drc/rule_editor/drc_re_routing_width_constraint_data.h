@@ -49,6 +49,19 @@ public:
 
     virtual ~DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_routing_width; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_routing_width.png bitmap
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 75, 135, 35, 1 },    // min_width (left arrow)
+            { 145, 205, 85, 2 },   // opt_width (bottom center arrow)
+            { 215, 275, 35, 3 },   // max_width (right arrow)
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

@@ -52,6 +52,23 @@ public:
 
     virtual ~DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_routing_diff_pair; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 95, 155, 30, 1 },    // min_width (left side, top arrow)
+            { 95, 155, 55, 2 },    // opt_width (left side, middle)
+            { 95, 155, 80, 3 },    // max_width (left side, bottom)
+            { 195, 255, 30, 4 },   // min_gap (center-left, top)
+            { 195, 255, 55, 5 },   // opt_gap (center-left, middle)
+            { 195, 255, 80, 6 },   // max_gap (center-left, bottom)
+            { 420, 520, 55, 7 },   // max_uncoupled (right side)
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

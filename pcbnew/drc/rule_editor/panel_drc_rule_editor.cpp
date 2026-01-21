@@ -61,6 +61,19 @@
 #include <drc/rule_editor/drc_re_allowed_orientation_panel.h>
 #include <drc/rule_editor/drc_re_custom_rule_panel.h>
 #include "drc_re_condition_group_panel.h"
+
+// Overlay panels (new bitmap-based implementation)
+#include "drc_re_via_style_overlay_panel.h"
+#include "drc_re_routing_width_overlay_panel.h"
+#include "drc_re_rtg_diff_pair_overlay_panel.h"
+#include "drc_re_min_txt_ht_th_overlay_panel.h"
+#include "drc_re_abs_length_two_overlay_panel.h"
+#include "drc_re_numeric_input_overlay_panel.h"
+#include "drc_re_bool_input_overlay_panel.h"
+#include "drc_re_allowed_orientation_overlay_panel.h"
+#include "drc_re_permitted_layers_overlay_panel.h"
+
+#include <eda_units.h>
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
 #include "drc_re_via_style_constraint_data.h"
@@ -209,13 +222,17 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataToWindow()
         m_conditionGroupPanel->ParseCondition( cond );
     }
 
-    return dynamic_cast<wxPanel*>( m_constraintPanel )->TransferDataToWindow();
+    if( m_constraintPanel )
+        return m_constraintPanel->TransferDataToWindow();
+
+    return true;
 }
 
 
 bool PANEL_DRC_RULE_EDITOR::TransferDataFromWindow()
 {
-    dynamic_cast<wxPanel*>( m_constraintPanel )->TransferDataFromWindow();
+    if( m_constraintPanel )
+        m_constraintPanel->TransferDataFromWindow();
 
     m_constraintData->SetRuleName( m_nameCtrl->GetValue() );
     m_constraintData->SetComment( m_commentCtrl->GetValue() );
@@ -245,65 +262,68 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataFromWindow()
 DRC_RULE_EDITOR_CONTENT_PANEL_BASE*
 PANEL_DRC_RULE_EDITOR::getConstraintPanel( wxWindow* aParent, const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType )
 {
+    // Use millimeters as default unit since constraint data stores values in mm
+    EDA_UNITS units = EDA_UNITS::MM;
+
     switch( aConstraintType )
     {
     case VIA_STYLE:
-        return new DRC_RE_VIA_STYLE_PANEL( aParent, m_constraintTitle,
-                                           dynamic_pointer_cast<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_VIA_STYLE_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( m_constraintData ).get(),
+                units );
+
     case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
-        return new DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA>( m_constraintData ).get(),
+                units );
+
     case ROUTING_DIFF_PAIR:
-        return new DRC_RE_ROUTING_DIFF_PAIR_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA>( m_constraintData ).get(),
+                units );
+
     case ROUTING_WIDTH:
-        return new DRC_RE_ROUTING_WIDTH_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( m_constraintData ).get(),
+                units );
+
     case PERMITTED_LAYERS:
-        return new DRC_RE_PERMITTED_LAYERS_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_PERMITTED_LAYERS_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>( m_constraintData ).get() );
+
     case ALLOWED_ORIENTATION:
-        return new DRC_RE_ALLOWED_ORIENTATION_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( m_constraintData ).get() );
+
     case CUSTOM_RULE:
         return new DRC_RE_CUSTOM_RULE_PANEL(
                 aParent, dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( m_constraintData ) );
+
     case ABSOLUTE_LENGTH:
-        return new DRC_RE_ABSOLUTE_LENGTH_TWO_PANEL(
-                aParent, m_constraintTitle,
-                dynamic_pointer_cast<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( m_constraintData ) );
+        return new DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
+                aParent,
+                dynamic_pointer_cast<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( m_constraintData ).get(),
+                units );
+
     default:
         if( DRC_RULE_EDITOR_UTILS::IsNumericInputType( aConstraintType ) )
         {
-            DRC_RE_NUMERIC_INPUT_CONSTRAINT_PANEL_PARAMS numericInputParams(
-                    *m_constraintTitle, dynamic_pointer_cast<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( m_constraintData ),
-                    aConstraintType, *m_constraintTitle );
-
-            if( aConstraintType == MINIMUM_THERMAL_RELIEF_SPOKE_COUNT || aConstraintType == MAXIMUM_VIA_COUNT )
-                numericInputParams.SetInputIsCount( true );
-
-            return new DRC_RE_NUMERIC_INPUT_PANEL( aParent, numericInputParams );
+            return new DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
+                    aParent,
+                    dynamic_pointer_cast<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( m_constraintData ).get(),
+                    units );
         }
         else if( DRC_RULE_EDITOR_UTILS::IsBoolInputType( aConstraintType ) )
         {
-            wxString customLabel;
-
-            switch( aConstraintType )
-            {
-            case VIAS_UNDER_SMD: customLabel = "Allow Vias under SMD Pads"; break;
-            default: customLabel = *m_constraintTitle;
-            }
-
-            DRC_RE_BOOL_INPUT_CONSTRAINT_PANEL_PARAMS boolInputParams(
-                    *m_constraintTitle, dynamic_pointer_cast<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( m_constraintData ),
-                    aConstraintType, customLabel );
-
-            return new DRC_RE_BOOL_INPUT_PANEL( aParent, boolInputParams );
+            return new DRC_RE_BOOL_INPUT_OVERLAY_PANEL(
+                    aParent,
+                    dynamic_pointer_cast<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( m_constraintData ).get() );
         }
         else
         {

@@ -24,10 +24,14 @@
 #ifndef DRC_RE_BASE_CONSTRAINT_DATA_H_
 #define DRC_RE_BASE_CONSTRAINT_DATA_H_
 
+#include <bitmaps.h>
 #include <dialogs/rule_editor_data_base.h>
+#include "drc_re_overlay_types.h"
 #include "drc_rule_editor_enums.h"
 #include <string_utils.h>
 #include <wx/arrstr.h>
+
+#include <vector>
 
 
 class DRC_RE_BASE_CONSTRAINT_DATA : public RULE_EDITOR_DATA_BASE
@@ -51,6 +55,23 @@ public:
     virtual VALIDATION_RESULT Validate() const { return VALIDATION_RESULT(); }
 
     virtual wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) { return wxEmptyString; }
+
+    /**
+     * Returns the bitmap to use for the overlay panel background.
+     * Override in derived classes to provide constraint-specific artwork.
+     *
+     * @return BITMAPS enum value for the overlay bitmap, or BITMAPS::INVALID_BITMAP if none.
+     */
+    virtual BITMAPS GetOverlayBitmap() const { return BITMAPS::INVALID_BITMAP; }
+
+    /**
+     * Returns the field positions for controls overlaid on the constraint bitmap.
+     * Override in derived classes to specify where input fields should be placed.
+     * Each position includes X range, Y coordinate, and tab order for navigation.
+     *
+     * @return Vector of field position specifications, empty if no overlay fields.
+     */
+    virtual std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const { return {}; }
 
     /**
      * Returns just the constraint clauses without the rule wrapper.

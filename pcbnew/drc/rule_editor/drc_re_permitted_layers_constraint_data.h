@@ -47,6 +47,18 @@ public:
 
     virtual ~DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_permitted_layers; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_permitted_layers.png (~300x170)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 20, 60, 35, 1 },     // top layer checkbox (upper left)
+            { 20, 60, 120, 2 },    // bottom layer checkbox (lower left)
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

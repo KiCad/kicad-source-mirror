@@ -31,7 +31,7 @@
 
 const std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, BITMAPS> NumericConstraintBitMapPairs = {
         { BASIC_CLEARANCE, BITMAPS::constraint_basic_clearance },
-        { BOARD_OUTLINE_CLEARANCE, BITMAPS::constraint_outline_clearance },
+        { BOARD_OUTLINE_CLEARANCE, BITMAPS::constraint_board_outline_clearance },
         { MINIMUM_CLEARANCE, BITMAPS::constraint_minimum_clearance },
         { MINIMUM_ITEM_CLEARANCE, BITMAPS::constraint_minimum_item_clearance },
         { CREEPAGE_DISTANCE, BITMAPS::constraint_creepage_distance},
@@ -47,7 +47,7 @@ const std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, BITMAPS> NumericConstraintBitMap
         { MINIMUM_UVIA_HOLE, BITMAPS::constraint_minimum_uvia_hole },
         { MINIMUM_UVIA_DIAMETER, BITMAPS::constraint_minimum_uvia_diameter },
         { MINIMUM_VIA_DIAMETER, BITMAPS::constraint_minimum_via_diameter },
-        { SILK_TO_SILK_CLEARANCE, BITMAPS::constraint_silk_to_silk_clearance },
+        { SILK_TO_SILK_CLEARANCE, BITMAPS::constraint_silk_clearance },
         { SILK_TO_SOLDERMASK_CLEARANCE, BITMAPS::constraint_silk_to_soldermask_clearance },
         { MINIMUM_SOLDERMASK_SILVER, BITMAPS::constraint_minimum_soldermask_silver },
         { SOLDERMASK_EXPANSION, BITMAPS::constraint_soldermask_expansion },
@@ -56,7 +56,7 @@ const std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, BITMAPS> NumericConstraintBitMap
         { MINIMUM_ANGULAR_RING, BITMAPS::constraint_minimum_angular_ring },
         { MINIMUM_THERMAL_RELIEF_SPOKE_COUNT, BITMAPS::constraint_minimum_thermal_relief_spoke_count },
         { MAXIMUM_VIA_COUNT, BITMAPS::constraint_maximum_via_count },
-        { ABSOLUTE_LENGTH, BITMAPS::constraint_absolute_length },
+        { ABSOLUTE_LENGTH, BITMAPS::constraint_length },
         { MATCHED_LENGTH_DIFF_PAIR, BITMAPS::constraint_matched_length_diff_pair }
     };
 

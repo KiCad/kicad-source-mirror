@@ -52,6 +52,22 @@ public:
 
     virtual ~DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_allowed_orientation; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_allowed_orientation.png (~280x180)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        // Checkboxes stacked vertically on the right side
+        return {
+            { 230, 270, 20, 1 },   // 0 degrees checkbox
+            { 230, 270, 50, 2 },   // 90 degrees checkbox
+            { 230, 270, 80, 3 },   // 180 degrees checkbox
+            { 230, 270, 110, 4 },  // 270 degrees checkbox
+            { 230, 270, 140, 5 },  // all degrees checkbox
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

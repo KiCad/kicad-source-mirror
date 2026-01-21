@@ -46,6 +46,17 @@ public:
 
     virtual ~DRC_RE_BOOL_INPUT_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_vias_under_smd; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_vias_under_SMD.png (~280x160)
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 20, 40, 130, 1 },    // checkbox (bottom left corner)
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         // Boolean inputs are always valid - any true/false value is acceptable

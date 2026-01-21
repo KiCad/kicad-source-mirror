@@ -96,6 +96,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_tuning_profiles.cpp
     drc/test_drc_creepage_issue21482.cpp
     drc/test_drc_rule_editor.cpp
+    drc/test_drc_bitmap_overlay_panel.cpp
 
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp

@@ -51,6 +51,22 @@ public:
 
     virtual ~DRC_RE_VIA_STYLE_CONSTRAINT_DATA() = default;
 
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_via_style; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        // Positions measured from constraint_via_style.png bitmap
+        // Format: { xStart, xEnd, yTop, tabOrder }
+        return {
+            { 260, 340, 25, 1 },   // min_via_diameter (right side, top)
+            { 260, 340, 55, 2 },   // opt_via_diameter (right side, middle)
+            { 260, 340, 85, 3 },   // max_via_diameter (right side, bottom)
+            { 260, 340, 115, 4 },  // min_via_hole (right side, below diameter)
+            { 260, 340, 145, 5 },  // opt_via_hole
+            { 260, 340, 175, 6 },  // max_via_hole
+        };
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;
