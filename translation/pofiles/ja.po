@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-20 23:01+0000\n"
+"PO-Revision-Date: 2026-01-21 17:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -20863,7 +20863,7 @@ msgstr "[File Name] がありません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:694
 msgid "Package model name cannot be empty."
-msgstr "ぱ名は空にできません。"
+msgstr "パッケージモデル名は空にできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:699
 msgid "Checking package model "
@@ -35393,7 +35393,7 @@ msgstr "基板外形レイヤーを含む"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:108
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr "最下層のフットプリントに負のX座標を使用する"
+msgstr "裏面レイヤーのフットプリントに負のX座標を使用する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
@@ -50671,7 +50671,7 @@ msgstr "解決済みのマージンクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:1891
 msgid "Selected Items"
-msgstr "選択アイテム"
+msgstr "選択されたアイテム"
 
 #: pcbnew/tools/pcb_control.cpp:1962
 msgid "Selected 2D Length"
