@@ -202,6 +202,13 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromBoard( const LIB_ID& aLibId )
         return false;
     }
 
+    if( !blk )
+    {
+        DisplayErrorMessage(
+                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
+        return false;
+    }
+
     if( !blk->GetBoardFile().IsEmpty() && !checkOverwriteDbLayout( this, aLibId ) )
         return false;
 
@@ -512,6 +519,13 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
+        return false;
+    }
+
+    if( !blk )
+    {
+        DisplayErrorMessage(
+                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
         return false;
     }
 

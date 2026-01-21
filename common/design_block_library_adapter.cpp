@@ -360,9 +360,24 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::LoadDesignBlock( const wxString& aNi
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
-        DESIGN_BLOCK* db = dbplugin( lib )->DesignBlockLoad( getUri( lib->row ), aDesignBlockName, aKeepUUID, &options );
-        db->GetLibId().SetLibNickname( aNickname );
-        return db;
+        try
+        {
+            if( DESIGN_BLOCK* db =
+                        dbplugin( lib )->DesignBlockLoad( getUri( lib->row ), aDesignBlockName, aKeepUUID, &options ) )
+            {
+                db->GetLibId().SetLibNickname( aNickname );
+                return db;
+            }
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogTrace( traceLibraries, "LoadDesignBlock: error loading %s:%s: %s", aNickname, aDesignBlockName,
+                        ioe.What() );
+        }
+    }
+    else
+    {
+        wxLogTrace( traceLibraries, "LoadDesignBlock: requested library %s not loaded", aNickname );
     }
 
     return nullptr;
@@ -461,4 +476,3 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::DesignBlockLoadWithOptionalNickname(
 
     return nullptr;
 }
-

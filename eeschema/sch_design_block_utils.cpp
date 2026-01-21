@@ -183,6 +183,13 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET
         return false;
     }
 
+    if( !blk )
+    {
+        DisplayErrorMessage(
+                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
+        return false;
+    }
+
     if( !blk->GetSchematicFile().IsEmpty() && !checkOverwriteDbSchematic( this, aLibId ) )
         return false;
 
@@ -513,6 +520,13 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
+        return false;
+    }
+
+    if( !blk )
+    {
+        DisplayErrorMessage(
+                this, wxString::Format( _( "Design block '%s' does not exist." ), aLibId.GetUniStringLibItemName() ) );
         return false;
     }
 
