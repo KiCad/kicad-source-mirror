@@ -159,7 +159,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	sbAction = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Set To") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 6, 5, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->AddGrowableCol( 3 );
 	fgSizer1->AddGrowableCol( 5 );
@@ -183,13 +183,13 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_setTextColor = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Text color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_setTextColor, 0, wxALL, 5 );
+	fgSizer1->Add( m_setTextColor, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textColorSwatch = new COLOR_SWATCH( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_textColorSwatch->SetMinSize( wxSize( 48,24 ) );
 
-	fgSizer1->Add( m_textColorSwatch, 0, wxALL, 5 );
+	fgSizer1->Add( m_textColorSwatch, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_textSizeLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );
@@ -198,7 +198,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_textSizeCtrl = new wxTextCtrl( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeCtrl->SetMinSize( wxSize( 120,-1 ) );
 
-	fgSizer1->Add( m_textSizeCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_textSizeUnits = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeUnits->Wrap( -1 );
@@ -298,17 +298,17 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	vAlignLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("V Align:"), wxDefaultPosition, wxDefaultSize, 0 );
 	vAlignLabel->Wrap( -1 );
-	fgSizer1->Add( vAlignLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( vAlignLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_vAlignChoices[] = { _("Top"), _("Center"), _("Bottom"), _("-- leave unchanged --") };
 	int m_vAlignNChoices = sizeof( m_vAlignChoices ) / sizeof( wxString );
 	m_vAlign = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_vAlignNChoices, m_vAlignChoices, 0 );
 	m_vAlign->SetSelection( 3 );
-	fgSizer1->Add( m_vAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	fgSizer1->Add( m_vAlign, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticText15 = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("(fields only)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
-	fgSizer1->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxBOTTOM, 0 );
@@ -321,7 +321,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_staticText13, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_staticline1 = new wxStaticLine( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
+	fgSizer1->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 7 );
 
 	m_staticline2 = new wxStaticLine( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgSizer1->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
@@ -336,7 +336,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 7 );
 
 	m_staticline5 = new wxStaticLine( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer1->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 7 );
 
 	m_lineWidthLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
@@ -410,10 +410,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_dotColorSwatch, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbAction->Add( fgSizer1, 1, wxEXPAND|wxTOP, 2 );
+	sbAction->Add( fgSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bMainSizer->Add( sbAction, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( sbAction, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
