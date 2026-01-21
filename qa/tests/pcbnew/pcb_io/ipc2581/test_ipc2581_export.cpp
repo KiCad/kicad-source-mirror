@@ -122,6 +122,7 @@ static const std::vector<std::string> VALIDATION_TEST_BOARDS = {
     "tracks_arcs_vias.kicad_pcb",
     "issue7241.kicad_pcb",
     "issue10906.kicad_pcb",
+    "issue22798.kicad_pcb",
 };
 
 } // anonymous namespace
