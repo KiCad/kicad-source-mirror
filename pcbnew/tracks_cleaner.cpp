@@ -525,7 +525,9 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                     continue;
 
                 // for each end of the segment:
-                for( CN_ITEM* citem : connectivity->ItemEntry( segment ).GetItems() )
+                auto& cnItems = connectivity->ItemEntry( segment ).GetItems();
+
+                for( CN_ITEM* citem : cnItems )
                 {
                     // Do not merge an end which has different width tracks attached -- it's a
                     // common use-case for necking-down a track between pads.
@@ -611,6 +613,11 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
         {
             while( !m_brd->BuildConnectivity() )
                 wxSafeYield();
+
+            // BuildConnectivity adds items but doesn't establish connections between them.
+            // RecalculateRatsnest triggers searchConnections which actually finds and links
+            // connected items in the connectivity graph.
+            m_brd->GetConnectivity()->RecalculateRatsnest();
 
             std::lock_guard lock( m_mutex );
             m_connectedItemsCache.clear();
