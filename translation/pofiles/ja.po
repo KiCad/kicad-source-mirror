@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-20 23:04+0000\n"
+"PO-Revision-Date: 2026-01-21 17:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -23035,7 +23035,7 @@ msgstr "[File Name] がありません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "Package model name cannot be empty."
-msgstr "ぱ名は空にできません。"
+msgstr "パッケージモデル名は空にできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:877
 msgid "Checking package model "
@@ -31824,18 +31824,16 @@ msgid "Switch to Branch"
 msgstr "ブランチに切り替え"
 
 #: kicad/project_tree_pane.cpp:1072
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Gitトラッキングを有効化"
+msgstr "Git 統合を有効化"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
 msgstr "このプロジェクトの Git を再度有効にする"
 
 #: kicad/project_tree_pane.cpp:1077
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Gitトラッキングを有効化"
+msgstr "Git 統合を無効化"
 
 #: kicad/project_tree_pane.cpp:1078
 msgid "Disable Git integration for this project"
@@ -32549,7 +32547,6 @@ msgstr ""
 "ここで選択して視覚的に確認できます"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
 msgstr "原点選択"
 
@@ -32558,7 +32555,6 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "ステータスバーの座標の原点を選択する"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
 msgstr "ページ選択"
 
@@ -36010,18 +36006,22 @@ msgid ""
 "Pad %s of %s connects to %lu pads, but candidate pad %s of %s connects to "
 "%lu."
 msgstr ""
+"パッド %s / %s は %lu 接続していますが、しかし候補パッド %s / %s は %lu 接続"
+"しています。"
 
 #: pcbnew/connectivity/topo_match.cpp:124
 #, c-format
 msgid ""
 "Pad %s of %s cannot match candidate pad %s of %s due to differing "
 "connectivity."
-msgstr ""
+msgstr "パッド %s / %s と候補パッド %s / %s の接続が一致しません。"
 
 #: pcbnew/connectivity/topo_match.cpp:171
 #, c-format
 msgid "Component %s expects %lu matching pads but candidate %s provides %lu."
 msgstr ""
+"コンポーネント %s は %lu 個のパッドを期待していますが、候補 %s は %lu 個です"
+"。"
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
@@ -36032,7 +36032,7 @@ msgstr "ネット %d"
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
 msgid "Pad %s of %s is on net %s but its match in candidate %s is on net %s."
-msgstr ""
+msgstr "パッド %s / %s は %s ネット上にありますが、候補 %s は %s ネット上にあります。"
 
 #: pcbnew/connectivity/topo_match.cpp:330
 msgid "No compatible component found in the target area."
@@ -38614,7 +38614,6 @@ msgstr "3D モデル"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
 msgstr "ハンダ ペーストのクリアランス比:"
 
@@ -39320,7 +39319,7 @@ msgstr "基板外形レイヤーを含む"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:112
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr "最下層のフットプリントに負のX座標を使用する"
+msgstr "裏面レイヤーのフットプリントに負のX座標を使用する"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:115
 msgid "Generate single file with both front and back positions"
@@ -41134,9 +41133,8 @@ msgstr ""
 "負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1115
-#, fuzzy
 msgid "Hole Post Machining"
-msgstr "穴の仕上げ加工"
+msgstr "スルーホールの後加工"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
@@ -41160,9 +41158,8 @@ msgid "Backdrill"
 msgstr "バックドリル"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
-#, fuzzy
 msgid "Top & bottom"
-msgstr "上/下"
+msgstr "上 & 下"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -41187,9 +41184,8 @@ msgid "Preview pad in sketch mode"
 msgstr "スケッチ モードでパッドを表示"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "DRC 実行前にゾーンを塗り直す"
+msgstr "プロット前にゾーンを塗り直す"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -43681,7 +43677,6 @@ msgstr ""
 "たレイヤーからすべてのアイテムを削除され、もとに戻すことができません。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
 msgstr "詳細を表示"
 
@@ -47349,54 +47344,44 @@ msgid "Checking thermal reliefs..."
 msgstr "サーマルリリーフをチェック..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:70
-#, fuzzy
 msgid "Design Rule Editor"
 msgstr "デザイン ルール エディター"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "本当にアイテムを削除してもよろしいですか？"
+msgstr "本当に削除してもよろしいですか？"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "最大長:"
+msgstr "最小長さ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "最大長:"
+msgstr "最適な長さ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "最大長:"
+msgstr "最大長さ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "度"
+msgstr "0度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
-msgstr "度"
+msgstr "90度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "度"
+msgstr "180度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "度"
+msgstr "270度"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "向き"
+msgstr "すべての方向"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
 msgid "Check Me!"
@@ -47411,18 +47396,16 @@ msgid "Where object matches:"
 msgstr "オブジェクトが一致する:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "中心マークを追加"
+msgstr "別の条件を追加する"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
 msgstr "AND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "OR"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
@@ -47433,14 +47416,12 @@ msgid "OR NOT"
 msgstr "OR NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "オブジェクト"
+msgstr "オブジェクトA"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "オブジェクト"
+msgstr "オブジェクトB"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -47457,20 +47438,17 @@ msgstr "ネットクラス"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:73
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "アウトライン エリア"
+msgstr "エリア内"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "カスタム ルール"
+msgstr "カスタム クエリ"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
-#, fuzzy
 msgid "Remove this condition"
-msgstr "初期状態を使用"
+msgstr "この条件を削除"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -47491,72 +47469,62 @@ msgstr "初期状態を使用"
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "%.2f mm"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Text Height"
-msgstr "最小テキスト高:"
+msgstr "最小テキスト高さ"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:47
-#, fuzzy
 msgid "Minimum Text Thickness"
-msgstr "最小のテキストの太さ:"
+msgstr "最小テキストの厚さ"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
-msgstr "表面レイヤー:"
+msgstr "表面レイヤー"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
 msgstr "裏面レイヤー"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "最小幅"
+msgstr "最小配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
 msgstr "推奨配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Routing Width"
 msgstr "最大配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
-#, fuzzy
 msgid "Max Uncoupled Length"
-msgstr "非結合長"
+msgstr "最大非結合長"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "最小幅"
+msgstr "最小"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "最大幅:"
+msgstr "最大"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:58
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:105
-#, fuzzy
 msgid "Preferred"
-msgstr "設定"
+msgstr "推奨"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:460
@@ -47565,52 +47533,45 @@ msgid "Via Diameter"
 msgstr "ビアの直径"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:76
-#, fuzzy
 msgid "Via Hole Size"
-msgstr "穴サイズ"
+msgstr "ビア穴サイズ"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
 msgid "Rule type"
 msgstr "ルールタイプ"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "名前を変更"
+msgstr "ルール名"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
 msgstr "エラー:バリデーション用の条件テキストが指定されていません。"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
 msgstr "DRC ルール"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "すべてのエラーを表示"
+msgstr "一致を表示 (エラー)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "カラー テーマ (%d)"
+msgstr "一致を表示 (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "トレースを表示"
+msgstr "一致を表示"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
 msgstr "制約"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "条件："
+msgstr "条件"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -49534,9 +49495,8 @@ msgid "Removed unused net %s."
 msgstr "未使用のネット %s を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "ネットを更新…"
+msgstr "デザインのバリアントを更新…"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
 #, c-format
@@ -50356,9 +50316,9 @@ msgid "Loading board data..."
 msgstr "基板データを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1200
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "ファイル '%s' を作成できませんでした。"
+msgstr "レイヤー '%s' をマッピングできなかったためスキップします。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1264
 msgid "Loading netclasses..."
@@ -51710,9 +51670,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "フットプリント ライブラリ '%s' は読み込み専用です。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "ファイル '%s' を開くことができません"
+msgstr "ファイル '%s' に警告があります"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1635
 #, c-format
@@ -53830,9 +53790,8 @@ msgid "Control to select the via diameter"
 msgstr "ビア直径を選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "ビア直径を選択するためのコントロール"
+msgstr "現在のバリアントを選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:209
 msgid "Track routing tools"
@@ -55450,12 +55409,10 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "ポリゴンのアウトラインを簡素化し、余分なポイントを削除します"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "編集オプション..."
+msgstr "コーナーを編集..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
 msgstr "テーブルを使用してポリゴンの頂点を編集"
 
@@ -56095,14 +56052,12 @@ msgid "Open schematic in schematic editor"
 msgstr "回路図を回路図 エディターで開く"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "デザイン ルール エディター"
+msgstr "DRC ルール エディター"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open drc rule editor window"
-msgstr "デザイン ルール エディター を開く"
+msgstr "DRC ルール エディター を開く"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -57004,9 +56959,8 @@ msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
 #: pcbnew/tools/pcb_control.cpp:1431
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "デザイン ブロック '%s' には既にレイアウトがあります。"
+msgstr "デザイン ブロックには配置するレイアウトがありません。"
 
 #: pcbnew/tools/pcb_control.cpp:1496 pcbnew/tools/pcb_control.cpp:1683
 #, c-format
@@ -57069,13 +57023,12 @@ msgid "Resolved Margin Clearance"
 msgstr "解決済みのマージンクリアランス"
 
 #: pcbnew/tools/pcb_control.cpp:2449
-#, fuzzy
 msgid "Pad Size"
-msgstr "パッドサイズ (&P)"
+msgstr "パッド サイズ"
 
 #: pcbnew/tools/pcb_control.cpp:2481
 msgid "Selected Items"
-msgstr "選択アイテム"
+msgstr "選択されたアイテム"
 
 #: pcbnew/tools/pcb_control.cpp:2567
 msgid "Selected 2D Length"
@@ -57083,17 +57036,15 @@ msgstr "選択された 2D 長"
 
 #: pcbnew/tools/pcb_control.cpp:2656
 msgid "Selected 2D Copper Area"
-msgstr "選択された2D 導体レイヤーエリア"
+msgstr "選択された 2D 銅または導体面積"
 
 #: pcbnew/tools/pcb_control.cpp:2658
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "選択された2D 導体レイヤーエリア"
+msgstr "選択された 2D 面積"
 
 #: pcbnew/tools/pcb_control.cpp:2660
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "選択された2D 導体レイヤーエリア"
+msgstr "選択された 2D 合計面積"
 
 #: pcbnew/tools/pcb_control.cpp:2718
 msgid "Place Board Characteristics"
