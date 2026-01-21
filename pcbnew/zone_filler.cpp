@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <atomic>
 #include <future>
 #include <hash.h>
 #include <set>
@@ -717,7 +718,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     std::vector<std::pair<std::future<int>, int>> returns;
     returns.reserve( toFill.size() );
     size_t finished = 0;
-    bool cancelled = false;
+    std::atomic<bool> cancelled( false );
 
     thread_pool& tp = GetKiCadThreadPool();
 
