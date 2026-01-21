@@ -24,6 +24,7 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 #include <vector>
 #include <unordered_map>
@@ -360,6 +361,7 @@ protected:
     std::vector<DRC_TEST_PROVIDER*>         m_testProviders;
 
     std::vector<int>           m_errorLimits;
+    mutable std::mutex         m_errorLimitsMutex;
     bool                       m_reportAllTrackErrors;
     bool                       m_testFootprints;
 

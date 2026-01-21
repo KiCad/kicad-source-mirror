@@ -2107,6 +2107,7 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
 bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 {
     assert( error_code >= 0 && error_code <= DRCE_LAST );
+    std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
     return m_errorLimits[ error_code ] <= 0;
 }
 
@@ -2114,13 +2115,15 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                                   int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator )
 {
-    static std::mutex globalLock;
-
-    m_errorLimits[ aItem->GetErrorCode() ] -= 1;
+    {
+        std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
+        m_errorLimits[ aItem->GetErrorCode() ] -= 1;
+    }
 
     if( m_violationHandler )
     {
-        std::lock_guard<std::mutex> guard( globalLock );
+        static std::mutex handlerLock;
+        std::lock_guard<std::mutex> guard( handlerLock );
         m_violationHandler( aItem, aPos, aMarkerLayer, aPathGenerator );
     }
 
