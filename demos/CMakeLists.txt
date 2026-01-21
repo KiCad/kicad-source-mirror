@@ -7,6 +7,7 @@ install( DIRECTORY
     kit-dev-coldfire-xilinx_5213
     microwave
     multichannel
+    openair-max
     pic_programmer
     python_scripts_examples
     royalblue54L_feather

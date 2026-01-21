@@ -27,6 +27,7 @@
 
 #include <kicommon.h>
 #include <widgets/progress_reporter_base.h>
+#include <atomic>
 #include <functional>
 #include <memory>
 #include <shared_mutex>
@@ -79,8 +80,8 @@ public:
     wxString m_status;
     std::shared_ptr<BACKGROUND_JOB_REPORTER> m_reporter;
 
-    int m_maxProgress;
-    int m_currentProgress;
+    std::atomic<int> m_maxProgress;
+    std::atomic<int> m_currentProgress;
 };
 
 
