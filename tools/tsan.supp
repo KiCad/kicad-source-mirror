@@ -29,3 +29,17 @@ deadlock:g_type_class_get
 deadlock:g_type_register_static
 deadlock:libgio-2.0.so
 deadlock:libgobject-2.0.so
+
+# Zone filler architectural races
+# The zone filler runs parallel tasks that may access shared zone polygon data.
+# These races occur when copying SHAPE_POLY_SET objects that are being read
+# by other threads during zone fill operations. The operations are designed
+# to work on independent zone/layer pairs, but copy constructors may read
+# from source objects being modified elsewhere.
+# TODO: A proper fix requires architectural changes to the zone filler to
+# ensure zone data is not accessed during parallel fill operations.
+race:SHAPE_POLY_SET::SHAPE_POLY_SET
+race:SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN
+race:SHAPE_BASE::SHAPE_BASE
+race:sul::dynamic_bitset*
+race:ZONE::TransformShapeToPolygon

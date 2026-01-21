@@ -1659,17 +1659,21 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 {
     const BOARD* board = GetBoard();
 
-    if( board )
     {
-        if( aIncludeText )
+        std::lock_guard<std::mutex> lock( m_bboxCacheMutex );
+
+        if( board )
         {
-            if( m_boundingBoxCacheTimeStamp >= board->GetTimeStamp() )
-                return m_cachedBoundingBox;
-        }
-        else
-        {
-            if( m_textExcludedBBoxCacheTimeStamp >= board->GetTimeStamp() )
-                return m_cachedTextExcludedBBox;
+            if( aIncludeText )
+            {
+                if( m_boundingBoxCacheTimeStamp >= board->GetTimeStamp() )
+                    return m_cachedBoundingBox;
+            }
+            else
+            {
+                if( m_textExcludedBBoxCacheTimeStamp >= board->GetTimeStamp() )
+                    return m_cachedTextExcludedBBox;
+            }
         }
     }
 
@@ -1786,6 +1790,8 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 
     if( board )
     {
+        std::lock_guard<std::mutex> lock( m_bboxCacheMutex );
+
         if( aIncludeText || noDrawItems )
         {
             m_boundingBoxCacheTimeStamp = board->GetTimeStamp();

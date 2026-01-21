@@ -924,11 +924,11 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
         bool aSimplify )
 {
     using namespace Clipper2Lib;
-    // A static table to avoid repetitive calculations of the coefficient
+    // A thread-local table to avoid repetitive calculations of the coefficient
     // 1.0 - cos( M_PI / aCircleSegCount )
     // aCircleSegCount is most of time <= 64 and usually 8, 12, 16, 32
     #define SEG_CNT_MAX 64
-    static double arc_tolerance_factor[SEG_CNT_MAX + 1];
+    static thread_local double arc_tolerance_factor[SEG_CNT_MAX + 1];
 
     ClipperOffset c;
 
@@ -1028,11 +1028,11 @@ void SHAPE_POLY_SET::inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, i
                                    CORNER_STRATEGY aCornerStrategy, bool aSimplify )
 {
     using namespace Clipper2Lib;
-    // A static table to avoid repetitive calculations of the coefficient
+    // A thread-local table to avoid repetitive calculations of the coefficient
     // 1.0 - cos( M_PI / aCircleSegCount )
     // aCircleSegCount is most of time <= 64 and usually 8, 12, 16, 32
     #define SEG_CNT_MAX 64
-    static double arc_tolerance_factor[SEG_CNT_MAX + 1];
+    static thread_local double arc_tolerance_factor[SEG_CNT_MAX + 1];
 
     ClipperOffset c;
 

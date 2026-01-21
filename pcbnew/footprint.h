@@ -26,6 +26,7 @@
 #define FOOTPRINT_H
 
 #include <deque>
+#include <mutex>
 
 #include <template_fieldnames.h>
 
@@ -1315,6 +1316,7 @@ private:
     // that any edit that could affect the bounding boxes (including edits to the footprint
     // children) marked the bounding boxes dirty.  It would definitely be faster -- but also more
     // fragile.
+    mutable std::mutex     m_bboxCacheMutex;
     mutable BOX2I          m_cachedBoundingBox;
     mutable int            m_boundingBoxCacheTimeStamp;
     mutable BOX2I          m_cachedTextExcludedBBox;

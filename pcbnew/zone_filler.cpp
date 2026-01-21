@@ -2588,7 +2588,8 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
                                   const SHAPE_POLY_SET& aSmoothedOutline,
                                   const SHAPE_POLY_SET& aMaxExtents, SHAPE_POLY_SET& aFillPolys )
 {
-    m_maxError = m_board->GetDesignSettings().m_MaxError;
+    // m_maxError is initialized in the constructor. Don't reassign here to avoid data races
+    // when multiple threads call this function concurrently.
 
     // Features which are min_width should survive pruning; features that are *less* than
     // min_width should not.  Therefore we subtract epsilon from the min_width when
