@@ -184,6 +184,9 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
 
      addItemtoTree( item );
      m_items.push_back( item );
+
+     // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+     item->SetDirty( true );
      SetDirty();
      return item;
 }
@@ -197,6 +200,9 @@ CN_ITEM* CN_LIST::Add( PCB_TRACK* track )
     item->AddAnchor( track->GetEnd() );
     item->SetLayer( track->GetLayer() );
     addItemtoTree( item );
+
+    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    item->SetDirty( true );
     SetDirty();
     return item;
 }
@@ -210,6 +216,9 @@ CN_ITEM* CN_LIST::Add( PCB_ARC* aArc )
     item->AddAnchor( aArc->GetEnd() );
     item->SetLayer( aArc->GetLayer() );
     addItemtoTree( item );
+
+    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    item->SetDirty( true );
     SetDirty();
     return item;
 }
@@ -224,6 +233,9 @@ CN_ITEM* CN_LIST::Add( PCB_VIA* via )
 
     item->SetLayers( via->TopLayer(), via->BottomLayer() );
     addItemtoTree( item );
+
+    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    item->SetDirty( true );
     SetDirty();
     return item;
 }
@@ -255,6 +267,9 @@ CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
 {
     m_items.push_back( zitem );
     addItemtoTree( zitem );
+
+    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    zitem->SetDirty( true );
     SetDirty();
     return zitem;
 }
@@ -270,6 +285,9 @@ CN_ITEM* CN_LIST::Add( PCB_SHAPE* shape )
 
     item->SetLayer( shape->GetLayer() );
     addItemtoTree( item );
+
+    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    item->SetDirty( true );
     SetDirty();
     return item;
 }

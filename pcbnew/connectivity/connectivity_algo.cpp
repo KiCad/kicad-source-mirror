@@ -271,15 +271,21 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     {
         std::vector<std::future<size_t>> returns( dirtyItems.size() );
 
+        // Collect deferred net code changes to avoid data races in parallel search.
+        // Free vias connected to zones have their net codes updated after all parallel
+        // work completes.
+        std::vector<std::pair<BOARD_CONNECTED_ITEM*, int>> deferredNetCodes;
+        std::mutex deferredNetCodesMutex;
+
         for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
         {
             returns[ii] = tp.submit_task(
-                    [&dirtyItems, ii, this] () ->size_t
+                    [&dirtyItems, ii, this, &deferredNetCodes, &deferredNetCodesMutex] () ->size_t
                     {
                         if( m_progressReporter && m_progressReporter->IsCancelled() )
                             return 0;
 
-                        CN_VISITOR visitor( dirtyItems[ii] );
+                        CN_VISITOR visitor( dirtyItems[ii], &deferredNetCodes, &deferredNetCodesMutex );
                         m_itemList.FindNearby( dirtyItems[ii], visitor );
 
                         if( m_progressReporter )
@@ -302,6 +308,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                 status = ret.wait_for( std::chrono::milliseconds( 250 ) );
             }
         }
+
+        // Apply deferred net code changes now that parallel search is complete
+        for( const auto& [item, netCode] : deferredNetCodes )
+            item->SetNetCode( netCode );
 
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
@@ -741,8 +751,12 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
             [&]()
             {
                 // We don't propagate nets from zones, so any free-via net changes need to happen now.
+                // Defer the SetNetCode call to avoid data races during parallel connectivity search.
                 if( aItem->Parent()->Type() == PCB_VIA_T && aItem->CanChangeNet() )
-                    aItem->Parent()->SetNetCode( aZoneLayer->Net() );
+                {
+                    std::lock_guard<std::mutex> lock( *m_deferredNetCodesMutex );
+                    m_deferredNetCodes->emplace_back( aItem->Parent(), aZoneLayer->Net() );
+                }
 
                 aZoneLayer->Connect( aItem );
                 aItem->Connect( aZoneLayer );
