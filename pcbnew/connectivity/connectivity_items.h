@@ -38,11 +38,12 @@
 
 #include <geometry/shape_poly_set.h>
 
-#include <memory>
 #include <algorithm>
-#include <functional>
-#include <vector>
+#include <atomic>
 #include <deque>
+#include <functional>
+#include <memory>
+#include <vector>
 
 #include <connectivity/connectivity_rtree.h>
 #include <connectivity/connectivity_data.h>
@@ -163,8 +164,8 @@ public:
     void SetValid( bool aValid ) { m_valid = aValid; }
     bool Valid() const { return m_valid; }
 
-    void SetDirty( bool aDirty ) { m_dirty = aDirty; }
-    bool Dirty() const { return m_dirty;  }
+    void SetDirty( bool aDirty ) { m_dirty.store( aDirty, std::memory_order_release ); }
+    bool Dirty() const { return m_dirty.load( std::memory_order_acquire ); }
 
     /**
      * Set the layers spanned by the item to aStartLayer and aEndLayer.
@@ -220,8 +221,16 @@ public:
 
     const BOX2I& BBox()
     {
-        if( m_dirty && m_valid )
-            m_bbox = m_parent->GetBoundingBox();
+        if( m_dirty.load( std::memory_order_acquire ) && m_valid )
+        {
+            std::lock_guard<std::mutex> lock( m_listLock );
+
+            if( m_dirty.load( std::memory_order_relaxed ) && m_valid )
+            {
+                m_bbox = m_parent->GetBoundingBox();
+                m_dirty.store( false, std::memory_order_release );
+            }
+        }
 
         return m_bbox;
     }
@@ -256,7 +265,7 @@ public:
     }
 
 protected:
-    bool            m_dirty;         ///< used to identify recently added item not yet
+    std::atomic<bool> m_dirty;       ///< used to identify recently added item not yet
                                      ///< scanned into the connectivity search
     int             m_start_layer;   ///< start layer of the item N.B. B_Cu is set to INT_MAX
     int             m_end_layer;     ///< end layer of the item N.B. B_Cu is set to INT_MAX
