@@ -483,8 +483,21 @@ VECTOR2I ZONE::GetPosition() const
 
 PCB_LAYER_ID ZONE::GetLayer() const
 {
+    std::lock_guard<std::mutex> lock( m_layerSetMutex );
+
     if( m_layerSet.count() == 1 )
-        return GetFirstLayer();
+    {
+        // GetFirstLayer would try to acquire the mutex again, so inline its logic here
+        if( m_layerSet.count() == 0 )
+            return UNDEFINED_LAYER;
+
+        const LSEQ uiLayers = m_layerSet.UIOrder();
+
+        if( uiLayers.size() )
+            return uiLayers[0];
+
+        return m_layerSet.Seq()[0];
+    }
 
     return UNDEFINED_LAYER;
 }
@@ -492,6 +505,8 @@ PCB_LAYER_ID ZONE::GetLayer() const
 
 PCB_LAYER_ID ZONE::GetFirstLayer() const
 {
+    std::lock_guard<std::mutex> lock( m_layerSetMutex );
+
     if( m_layerSet.count() == 0 )
         return UNDEFINED_LAYER;
 
@@ -510,6 +525,7 @@ PCB_LAYER_ID ZONE::GetFirstLayer() const
 
 bool ZONE::IsOnCopperLayer() const
 {
+    std::lock_guard<std::mutex> lock( m_layerSetMutex );
     return ( m_layerSet & LSET::AllCuMask() ).count() > 0;
 }
 
@@ -524,6 +540,8 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
 {
     if( aLayerSet.count() == 0 )
         return;
+
+    std::scoped_lock lock( m_layerSetMutex, m_filledPolysListMutex );
 
     if( m_layerSet != aLayerSet )
     {
@@ -562,6 +580,8 @@ void ZONE::SetLayerProperties( const std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIE
 
 std::vector<int> ZONE::ViewGetLayers() const
 {
+    std::lock_guard<std::mutex> lock( m_layerSetMutex );
+
     std::vector<int> layers;
     layers.reserve( 2 * m_layerSet.count() + 1 );
 
@@ -606,6 +626,7 @@ double ZONE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
 bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
+    std::lock_guard<std::mutex> lock( m_layerSetMutex );
     return m_layerSet.test( aLayer );
 }
 
@@ -685,6 +706,8 @@ HASH_128 ZONE::GetHashValue( PCB_LAYER_ID aLayer )
 
 void ZONE::BuildHashValue( PCB_LAYER_ID aLayer )
 {
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
     if( !m_FilledPolysList.count( aLayer ) )
         m_filledPolysHash[aLayer] = g_nullPoly.GetHash();
     else
@@ -816,10 +839,18 @@ bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const VECTOR2I& aRefPos, int 
     if( GetIsRuleArea() )
         return m_Poly->Contains( aRefPos, -1, aAccuracy );
 
-    if( !m_FilledPolysList.count( aLayer ) )
-        return false;
+    std::shared_ptr<SHAPE_POLY_SET> fillPolys;
 
-    return m_FilledPolysList.at( aLayer )->Contains( aRefPos, -1, aAccuracy );
+    {
+        std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
+        if( !m_FilledPolysList.count( aLayer ) )
+            return false;
+
+        fillPolys = m_FilledPolysList.at( aLayer );
+    }
+
+    return fillPolys->Contains( aRefPos, -1, aAccuracy );
 }
 
 
@@ -1304,6 +1335,8 @@ void ZONE::swapData( BOARD_ITEM* aImage )
 
 void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer )
 {
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
     if( aLayer == UNDEFINED_LAYER )
     {
         for( auto& [ layer, poly ] : m_FilledPolysList )
@@ -1571,6 +1604,8 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
 
 std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
 {
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
     if( m_FilledPolysList.find( aLayer ) == m_FilledPolysList.end() )
         return std::make_shared<SHAPE_NULL>();
     else
@@ -1583,16 +1618,24 @@ void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer
 {
     wxASSERT_MSG( !aIgnoreLineWidth, wxT( "IgnoreLineWidth has no meaning for zones." ) );
 
-    if( !m_FilledPolysList.count( aLayer ) )
-        return;
+    std::shared_ptr<SHAPE_POLY_SET> fillPolys;
+
+    {
+        std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
+        if( !m_FilledPolysList.count( aLayer ) )
+            return;
+
+        fillPolys = m_FilledPolysList.at( aLayer );
+    }
 
     if( !aClearance )
     {
-        aBuffer.Append( *m_FilledPolysList.at( aLayer ) );
+        aBuffer.Append( *fillPolys );
         return;
     }
 
-    SHAPE_POLY_SET temp_buf = m_FilledPolysList.at( aLayer )->CloneDropTriangulation();
+    SHAPE_POLY_SET temp_buf = fillPolys->CloneDropTriangulation();
 
     // Rebuild filled areas only if clearance is not 0
     if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
@@ -1609,6 +1652,8 @@ void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer
 
 void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aBuffer ) const
 {
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
     if( m_FilledPolysList.count( aLayer ) && !m_FilledPolysList.at( aLayer )->IsEmpty() )
         aBuffer.Append( *m_FilledPolysList.at( aLayer ) );
 }
@@ -1618,6 +1663,8 @@ void ZONE::SetLayerSetAndRemoveUnusedFills( const LSET& aLayerSet )
 {
     if( aLayerSet.count() == 0 )
         return;
+
+    std::scoped_lock lock( m_layerSetMutex, m_filledPolysListMutex );
 
     if( m_layerSet != aLayerSet )
     {
