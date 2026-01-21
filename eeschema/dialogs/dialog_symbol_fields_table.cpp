@@ -528,7 +528,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
         preset.filterString = m_job->m_filterString;
         preset.sortAsc = m_job->m_sortAsc;
         preset.sortField = m_job->m_sortField;
-        preset.groupSymbols = ( m_job->m_fieldsGroupBy.size() > 0 );
+        preset.groupSymbols = m_job->m_groupSymbols;
 
         preset.fieldsOrdered.clear();
 
@@ -1552,6 +1552,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
         m_job->m_excludeDNP = presetFields.excludeDNP;
         m_job->m_filterString = presetFields.filterString;
         m_job->m_sortField = presetFields.sortField;
+        m_job->m_groupSymbols = presetFields.groupSymbols;
 
         m_job->m_fieldsOrdered.clear();
         m_job->m_fieldsLabels.clear();
