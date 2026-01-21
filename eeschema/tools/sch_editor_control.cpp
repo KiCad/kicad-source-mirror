@@ -1714,7 +1714,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 
                     // On macOS (TIFF), wxBitmapDataObject uses native formats
                     // that don't require PNG encoding. Pass bitmap directly.
-                    data->Add( new wxBitmapDataObject(bitmapWithAlpha) );
+                    data->Add( new wxBitmapDataObject( wxBitmap( image ) ) );
 #endif
                 }
                 else
