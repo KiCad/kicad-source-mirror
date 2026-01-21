@@ -67,8 +67,8 @@ BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
 END_EVENT_TABLE()
 
 
-DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-                          const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
+DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title, const wxPoint& pos,
+                          const wxSize& size, long style, const wxString& name ) :
         wxDialog( aParent, id, title, pos, size, style, name ),
         KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
         m_units( EDA_UNITS::MM ),
@@ -82,7 +82,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         m_parentFrame( nullptr ),
         m_userPositioned( false ),
         m_userResized( false ),
-        m_handlingUndoRedo( false )
+        m_handlingUndoRedo( false ),
+        m_childReleased( false )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
     m_initialSize = size;
@@ -425,6 +426,31 @@ void DIALOG_SHIM::OnSize( wxSizeEvent& aEvent )
 void DIALOG_SHIM::OnMove( wxMoveEvent& aEvent )
 {
     m_userPositioned = true;
+
+#ifdef __WXMAC__
+    if( m_parent )
+    {
+        int parentDisplay = wxDisplay::GetFromWindow( m_parent );
+        int myDisplay = wxDisplay::GetFromWindow( this );
+
+        if( parentDisplay != wxNOT_FOUND && myDisplay != wxNOT_FOUND )
+        {
+            if( myDisplay != parentDisplay && !m_childReleased )
+            {
+                // Moving to different monitor - release child relationship
+                KIPLATFORM::UI::ReleaseChildWindow( this );
+                m_childReleased = true;
+            }
+            else if( myDisplay == parentDisplay && m_childReleased )
+            {
+                // Back on same monitor - restore child relationship
+                KIPLATFORM::UI::ReparentModal( this );
+                m_childReleased = false;
+            }
+        }
+    }
+#endif
+
     aEvent.Skip();
 }
 

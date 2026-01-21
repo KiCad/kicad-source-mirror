@@ -198,6 +198,18 @@ namespace KIPLATFORM
          * Intended to set the floating window level in macOS on a window
          */
         void SetFloatLevel( wxWindow* aWindow );
+
+        /**
+         * Release a modal window's parent-child relationship with its parent window.
+         * This only has an effect on macOS, it is a NOP for GTK and MSW.
+         *
+         * On macOS, modal dialogs are attached as child windows using addChildWindow,
+         * which causes them to disappear when dragged to a different monitor. This
+         * function removes that child relationship and sets the window to a floating
+         * level, allowing it to be freely moved across monitors while still staying
+         * above other windows.
+         */
+        void ReleaseChildWindow( wxNonOwnedWindow* aWindow );
     }
 }
 

@@ -237,3 +237,19 @@ void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
     // On OSX we need to forcefully give the focus to the window
     [[aWindow->GetHandle() window] setLevel:NSFloatingWindowLevel];
 }
+
+void KIPLATFORM::UI::ReleaseChildWindow( wxNonOwnedWindow* aWindow )
+{
+    if( wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>(
+            wxGetTopLevelParent( aWindow->GetParent() ) ) )
+    {
+        NSWindow* parentWindow = parent->GetWXWindow();
+        NSWindow* theWindow = aWindow->GetWXWindow();
+
+        if( parentWindow && theWindow )
+        {
+            [parentWindow removeChildWindow:theWindow];
+            [theWindow setLevel:NSFloatingWindowLevel];
+        }
+    }
+}

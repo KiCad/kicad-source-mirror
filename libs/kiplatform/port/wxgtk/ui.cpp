@@ -690,4 +690,10 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 {
     return wxGetMousePosition();
 }
+
+void KIPLATFORM::UI::ReleaseChildWindow( wxNonOwnedWindow* aWindow )
+{
+    // Not needed on this platform
+}
+
 #endif

@@ -296,6 +296,7 @@ protected:
     std::vector<UNDO_STEP>            m_redoStack;
     std::map<wxWindow*, wxVariant>    m_currentValues;
     bool                              m_handlingUndoRedo;
+    bool                              m_childReleased;
 };
 
 #endif  // DIALOG_SHIM_
