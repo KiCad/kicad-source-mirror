@@ -372,19 +372,30 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 
 void BACKGROUND_JOBS_MONITOR::RegisterStatusBar( KISTATUSBAR* aStatusBar )
 {
-    m_statusBars.push_back( aStatusBar );
+    std::shared_ptr<BACKGROUND_JOB> frontJob;
+
+    {
+        std::lock_guard<std::shared_mutex> lock( m_mutex );
+        m_statusBars.push_back( aStatusBar );
+
+        // Capture front job while holding lock
+        if( !m_jobs.empty() )
+            frontJob = m_jobs.front();
+    }
 
     // Make sure the newly-registered bar gets the active job, if any
-    if( !m_jobs.empty() )
-        jobUpdated( m_jobs.front() );
+    if( frontJob )
+        jobUpdated( frontJob );
 }
 
 
 void BACKGROUND_JOBS_MONITOR::UnregisterStatusBar( KISTATUSBAR* aStatusBar )
 {
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
     m_statusBars.erase( std::remove_if( m_statusBars.begin(), m_statusBars.end(),
                                         [&]( KISTATUSBAR* statusBar )
                                         {
                                             return statusBar == aStatusBar;
-                                        } ) );
+                                        } ),
+                        m_statusBars.end() );
 }
