@@ -1,0 +1,31 @@
+# ThreadSanitizer suppression file for KiCad
+#
+# Usage: TSAN_OPTIONS="suppressions=tools/tsan.supp" ./build/tsan/bin/kicad
+#
+# These suppressions address data races and deadlock warnings in external
+# libraries that cannot be fixed in KiCad code.
+
+# GLib/GIO internal races
+# GLib's DBus implementation and memory allocation have known threading issues
+# that are reported by TSan but are considered benign by the GLib maintainers.
+race:libglib-2.0.so
+race:libgio-2.0.so
+race:libgobject-2.0.so
+race:g_*
+
+# Pango/Fontconfig font caching races
+# Pango spawns background threads for font discovery that race with the main
+# thread during font caching operations. These are internal to pango/fontconfig.
+race:libpangoft2-1.0.so
+race:libpango-1.0.so
+race:libfontconfig.so
+
+# GObject type system lock ordering
+# The GObject type system initialization can trigger lock order warnings
+# that are internal to glib's type registration mechanism. These occur during
+# KiCad startup when KICAD_MANAGER_FRAME is created and gio is initialized.
+deadlock:g_type_class_ref
+deadlock:g_type_class_get
+deadlock:g_type_register_static
+deadlock:libgio-2.0.so
+deadlock:libgobject-2.0.so
