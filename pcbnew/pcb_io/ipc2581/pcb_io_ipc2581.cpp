@@ -159,6 +159,31 @@ void PCB_IO_IPC2581::insertNodeAfter( wxXmlNode* aPrev, wxXmlNode* aNode )
 }
 
 
+void PCB_IO_IPC2581::deleteNode( wxXmlNode*& aNode )
+{
+    // When deleting a node, invalidate the appendNode optimization cache if it points
+    // to the node being deleted or any of its descendants
+    if( m_lastAppendedNode )
+    {
+        wxXmlNode* check = m_lastAppendedNode;
+
+        while( check )
+        {
+            if( check == aNode )
+            {
+                m_lastAppendedNode = nullptr;
+                break;
+            }
+
+            check = check->GetParent();
+        }
+    }
+
+    delete aNode;
+    aNode = nullptr;
+}
+
+
 wxXmlNode* PCB_IO_IPC2581::insertNode( wxXmlNode* aParent, const wxString& aName )
 {
     // Opening tag, closing tag, brackets and the closing slash
@@ -175,19 +200,18 @@ void PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, wxXmlNode* aNode )
     // that if possible.  When we share a parent and our next sibling is null,
     // then we are the last child and can just append to the end of the list.
 
-    static wxXmlNode* lastNode = nullptr;
-
-    if( lastNode && lastNode->GetParent() == aParent && lastNode->GetNext() == nullptr )
+    if( m_lastAppendedNode && m_lastAppendedNode->GetParent() == aParent
+        && m_lastAppendedNode->GetNext() == nullptr )
     {
         aNode->SetParent( aParent );
-        lastNode->SetNext( aNode );
+        m_lastAppendedNode->SetNext( aNode );
     }
     else
     {
         aParent->AddChild( aNode );
     }
 
-    lastNode = aNode;
+    m_lastAppendedNode = aNode;
 
     // Opening tag, closing tag, brackets and the closing slash
     m_total_bytes += 2 * aNode->GetName().size() + 5;
@@ -2542,7 +2566,7 @@ void PCB_IO_IPC2581::pruneUnusedBackdrillSpecs()
             if( specNode )
             {
                 m_cad_header_node->RemoveChild( specNode );
-                delete specNode;
+                deleteNode( specNode );
             }
 
             it = m_backdrill_spec_nodes.erase( it );
@@ -2668,7 +2692,7 @@ bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
     if( !outlineNode->GetChildren() )
     {
         aParentNode->RemoveChild( outlineNode );
-        delete outlineNode;
+        deleteNode( outlineNode );
         return false;
     }
 
@@ -2695,7 +2719,7 @@ bool PCB_IO_IPC2581::addContourNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
     else
     {
         aParentNode->RemoveChild( contourNode );
-        delete contourNode;
+        deleteNode( contourNode );
         return false;
     }
 
@@ -2719,7 +2743,7 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
     {
         wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to profile" ) );
         aStepNode->RemoveChild( profileNode );
-        delete profileNode;
+        deleteNode( profileNode );
     }
 }
 
@@ -3293,7 +3317,7 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
         if( layerNode->GetChildren() == nullptr )
         {
             aStepNode->RemoveChild( layerNode );
-            delete layerNode;
+            deleteNode( layerNode );
         }
     }
 }
@@ -3687,19 +3711,19 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     if( specialNode->GetChildren() == nullptr )
     {
         featureSetNode->RemoveChild( specialNode );
-        delete specialNode;
+        deleteNode( specialNode );
     }
 
     if( featureSetNode->GetChildren() == nullptr )
     {
         layerSetNode->RemoveChild( featureSetNode );
-        delete featureSetNode;
+        deleteNode( featureSetNode );
     }
 
     if( layerSetNode->GetChildren() == nullptr )
     {
         aLayerNode->RemoveChild( layerSetNode );
-        delete layerSetNode;
+        deleteNode( layerSetNode );
     }
 }
 
@@ -3881,6 +3905,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     delete m_xml_doc;
     m_xml_doc = nullptr;
     m_xml_root = nullptr;
+    m_lastAppendedNode = nullptr;
 
     m_board = aBoard;
     m_padstack_backdrill_specs.clear();
