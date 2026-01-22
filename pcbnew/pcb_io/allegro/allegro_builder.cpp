@@ -427,7 +427,15 @@ public:
      */
     void FinalizeLayers()
     {
-        const std::vector<CUSTOM_LAYER>& etchLayers = *m_ClassCustomLayerLists[LAYER_INFO::CLASS::ETCH];
+        auto it = m_ClassCustomLayerLists.find( LAYER_INFO::CLASS::ETCH );
+
+        if( it == m_ClassCustomLayerLists.end() || !it->second )
+        {
+            wxLogTrace( traceAllegroBuilder, "No ETCH layer class found; cannot finalize layers" );
+            return;
+        }
+
+        const std::vector<CUSTOM_LAYER>& etchLayers = *it->second;
         const size_t                     numCuLayers = etchLayers.size();
 
         m_board.GetDesignSettings().SetCopperLayerCount( numCuLayers );
@@ -1591,27 +1599,6 @@ const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
 }
 
 
-/**
- * Description of an Allegro pad component - one layer, with: shape, thermal relief, antipad.
- *
- * Drill is a separate part of the padstack.
- */
-struct ALLEGRO_PADSTACK_COMP
-{
-    enum class SHAPE
-    {
-        RECTANGLE,
-        CIRCLE,
-        OBLONG_X,
-        OBLONG_Y,
-    };
-
-    SHAPE m_Shape;
-    VECTOR2I m_Size;
-    VECTOR2I m_Offset;
-};
-
-
 std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK_0x1C_PADSTACK& aPadstack,
                                                                        FOOTPRINT& aFp, const wxString& aPadName, int aNetcode )
 {
@@ -1620,21 +1607,6 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     // would require a separate aperture pad.
     // Also if there are multiple drills, we will need to make a pad for each
     std::vector<std::unique_ptr<BOARD_ITEM>> padItems;
-
-    // This is the main padstack for the copper layers
-    PADSTACK mainPadStack( &aFp );
-
-    const auto getPcbLayerForCompIndex = [&]( size_t i ) -> PCB_LAYER_ID
-    {
-        const size_t indexInLayers = i - aPadstack.m_NumFixedCompEntries;
-        const size_t layerN = indexInLayers / aPadstack.m_NumCompsPerLayer;
-
-        if( layerN == 0 )
-            return F_Cu;
-        if( layerN == aPadstack.m_LayerCount - 1 )
-            return B_Cu;
-        return ToLAYER_ID( 2 * ( layerN + 1 ) );
-    };
 
     std::vector<std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>> copperLayers( aPadstack.m_LayerCount );
 
@@ -1941,14 +1913,15 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
         padStack.SetLayerSet( PAD::PTHMask() );
 
-        if( layersEqual(0, copperLayers.size() ) )
+        if( copperLayers.front() && copperLayers.back() && layersEqual( 0, copperLayers.size() ) )
         {
             wxLogTrace( traceAllegroBuilder, "  Using NORMAL padstack mode (all layers identical)" );
             padStack.SetMode( PADSTACK::MODE::NORMAL );
             PADSTACK::COPPER_LAYER_PROPS& layerProps = padStack.CopperLayer( F_Cu );
             layerProps = *copperLayers.front();
         }
-        else if( layersEqual( 1, copperLayers.size() - 1) )
+        else if( copperLayers.front() && copperLayers.back()
+                 && layersEqual( 1, copperLayers.size() - 1 ) )
         {
             wxLogTrace( traceAllegroBuilder, "  Using FRONT_INNER_BACK padstack mode (inner layers identical)" );
             padStack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
@@ -1956,7 +1929,8 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             padStack.CopperLayer( B_Cu ) = *copperLayers.back();
 
             // May be B_Cu if layers = 2, but that's OK
-            padStack.CopperLayer( In1_Cu ) = *copperLayers[1];
+            if( copperLayers.size() > 2 && copperLayers[1] )
+                padStack.CopperLayer( In1_Cu ) = *copperLayers[1];
         }
         else
         {
@@ -2186,7 +2160,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
             PCB_FIELD* const refDes = fp->GetField( FIELD_T::REFERENCE );
 
             // KiCad netlisting requires non-digit + digit annotation.
-            if( !text->GetText().IsEmpty() && !std::isalpha( text->GetText()[0] ) )
+            if( !text->GetText().IsEmpty() && !wxIsalpha( text->GetText()[0] ) )
                 text->SetText( wxString( "UNK" ) + text->GetText() );
 
             *refDes = PCB_FIELD( *text, FIELD_T::REFERENCE );
@@ -2265,7 +2239,9 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
         if( !padStack )
             continue;
 
-        const int       netCode = m_netCache.at( netAssignment->m_Net )->GetNetCode();
+        auto netIt = m_netCache.find( netAssignment->m_Net );
+        const int       netCode = ( netIt != m_netCache.end() ) ? netIt->second->GetNetCode()
+                                                                 : NETINFO_LIST::UNCONNECTED;
         const wxString  padName = m_brdDb.GetString( padInfo->m_NameStrId );
 
         // 0x0D coordinates and rotation are in the footprint's local (unrotated) space.
@@ -2471,7 +2447,12 @@ void BOARD_BUILDER::createTracks()
 
         const auto& net = static_cast<const BLOCK<BLK_0x1B_NET>&>( *block ).GetData();
 
-        const int netCode = m_netCache.at( net.m_Key )->GetNetCode();
+        auto netIt = m_netCache.find( net.m_Key );
+
+        if( netIt == m_netCache.end() )
+            continue;
+
+        const int netCode = netIt->second->GetNetCode();
 
         LL_WALKER assignmentWalker{ net.m_Assignment, net.m_Key, m_brdDb };
         for( const BLOCK_BASE* assignBlock : assignmentWalker )

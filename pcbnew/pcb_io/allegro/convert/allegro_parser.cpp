@@ -128,12 +128,10 @@ static T ReadField( FILE_STREAM& aStream )
     {
         field = aStream.ReadS16();
     }
-    else if constexpr( std::is_same_v<T, std::array<uint32_t, field.size()>> )
+    else if constexpr( requires { std::tuple_size<T>::value; } )
     {
-        for( size_t i = 0; i < field.size(); ++i )
-        {
+        for( size_t i = 0; i < std::tuple_size_v<T>; ++i )
             field[i] = aStream.ReadU32();
-        }
     }
     else
     {

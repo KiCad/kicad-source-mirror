@@ -100,12 +100,13 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
+    // Only delete m_board on failure if we created it (not caller-owned).
+    std::unique_ptr<BOARD> deleter( aAppendToMe ? nullptr : m_board );
+
     std::ifstream fin( aFileName, std::ios::binary );
 
     if( !fin.is_open() )
-    {
         THROW_IO_ERROR( wxString::Format( "Cannot open file: %s", aFileName ) );
-    }
 
     ALLEGRO::FILE_STREAM allegroStream( fin );
 
@@ -136,10 +137,10 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     {
         wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 2 board construction failed" );
         m_reporter->Report( _( "Failed to build board from Allegro data" ), RPT_SEVERITY_ERROR );
-        delete m_board;
         return nullptr;
     }
 
     wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Board construction completed successfully" );
+    (void) deleter.release();
     return m_board;
 }
