@@ -335,7 +335,9 @@ void SYMBOL_LIBRARY_ADAPTER::AsyncLoad()
 
                 if( aMap.contains( aLib ) )
                 {
-                    if( aMap[aLib].status.load_status == LOAD_STATUS::LOADED )
+                    LOAD_STATUS status = aMap[aLib].status.load_status;
+
+                    if( status == LOAD_STATUS::LOADED || status == LOAD_STATUS::LOADING )
                         return true;
 
                     aMap.erase( aLib );
