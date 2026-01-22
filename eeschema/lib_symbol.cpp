@@ -1043,12 +1043,6 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
 
         // TODO: get rid of const_cast.  (It used to be a C-style cast so was less noticeable.)
         SCH_PIN* pin = const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) );
-        wxLogTrace(
-                traceStackedPins,
-                wxString::Format(
-                        "GetGraphicalPins: lib='%s' unit=%d body=%d -> include pin name='%s' number='%s' shownNum='%s'",
-                        GetLibId().Format().wx_str(), aUnit, aBodyStyle, pin->GetName(), pin->GetNumber(),
-                        pin->GetShownNumber() ) );
         pins.push_back( pin );
     }
 
