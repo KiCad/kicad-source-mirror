@@ -98,8 +98,17 @@ void CACHED_CONTAINER_GPU::Map()
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );
 
-    if( checkGlError( "mapping vertices buffer", __FILE__, __LINE__ ) == GL_NO_ERROR )
+    if( checkGlError( "mapping vertices buffer", __FILE__, __LINE__ ) == GL_NO_ERROR
+        && m_vertices != nullptr )
+    {
         m_isMapped = true;
+    }
+    else
+    {
+        m_vertices = nullptr;
+        glBindBuffer( GL_ARRAY_BUFFER, 0 );
+        throw std::runtime_error( "Could not map vertex buffer: glMapBuffer returned null" );
+    }
 }
 
 
@@ -207,7 +216,18 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 
     // Switch to the new vertex buffer
     m_glBufferHandle = newBuffer;
-    Map();
+
+    try
+    {
+        Map();
+    }
+    catch( const std::runtime_error& )
+    {
+        // Map() failed, likely due to glMapBuffer returning null.
+        // The buffer is valid but we can't map it.
+        return false;
+    }
+
     checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
 #ifdef KICAD_GAL_PROFILE
@@ -265,6 +285,13 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
     checkGlError( "creating buffer during defragmentation", __FILE__, __LINE__ );
 
+    if( newBufferMem == nullptr )
+    {
+        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+        glDeleteBuffers( 1, &newBuffer );
+        return false;
+    }
+
     defragment( newBufferMem );
 
     // Cleanup
@@ -275,7 +302,18 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
 
     // Switch to the new vertex buffer
     m_glBufferHandle = newBuffer;
-    Map();
+
+    try
+    {
+        Map();
+    }
+    catch( const std::runtime_error& )
+    {
+        // Map() failed, likely due to glMapBuffer returning null.
+        // The buffer is valid but we can't map it.
+        return false;
+    }
+
     checkGlError( "switching buffers during defragmentation", __FILE__, __LINE__ );
 
 #ifdef KICAD_GAL_PROFILE
