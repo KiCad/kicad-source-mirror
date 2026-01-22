@@ -1233,10 +1233,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( !override.has_value() && pad )
         {
-            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            if( FOOTPRINT* overrideFootprint = pad->GetParentFootprint() )
             {
-                override = parentFootprint->GetLocalSolderMaskMargin();
-                overrideItem = parentFootprint;
+                override = overrideFootprint->GetLocalSolderMaskMargin();
+                overrideItem = overrideFootprint;
             }
         }
 
@@ -1289,10 +1289,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( !overrideRatio.has_value() && pad )
         {
-            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            if( FOOTPRINT* overrideFootprint = pad->GetParentFootprint() )
             {
-                overrideRatio = parentFootprint->GetLocalSolderPasteMarginRatio();
-                overrideItem = parentFootprint;
+                overrideRatio = overrideFootprint->GetLocalSolderPasteMarginRatio();
+                overrideItem = overrideFootprint;
             }
         }
 
