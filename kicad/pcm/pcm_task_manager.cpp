@@ -434,6 +434,7 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aPar
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
 
     m_reporter->SetFinished();
+    m_pcm->ShowApiEnablePromptIfNeeded();
     m_reporter->KeepRefreshing( false );
     m_reporter->Destroy();
     m_reporter.reset();
@@ -683,6 +684,9 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
 
     download_thread.join();
     install_thread.join();
+
+    // Show deferred API enable prompt when threads are done
+    m_pcm->ShowApiEnablePromptIfNeeded();
 
     // Destroy the reporter only after the threads joined
     // Incase the reporter terminated due to cancellation

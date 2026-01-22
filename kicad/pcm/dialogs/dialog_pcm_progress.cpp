@@ -153,7 +153,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
         m_buttonClose->Enable();
     }
 
-    wxSafeYield();
+    wxSafeYield( this );
 
     return true;
 }

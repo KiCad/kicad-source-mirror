@@ -354,6 +354,8 @@ public:
      */
     static void PreparePackage( PCM_PACKAGE& aPackage );
 
+    void ShowApiEnablePromptIfNeeded();
+
 private:
     ///< Default download limit of 10 Mb to not use too much memory
     static constexpr size_t DEFAULT_DOWNLOAD_MEM_LIMIT = 10 * 1024 * 1024;
@@ -406,6 +408,7 @@ private:
     std::thread                                m_updateThread;
 
     std::shared_ptr<BACKGROUND_JOB>              m_updateBackgroundJob;
+    bool                                         m_apiEnablePromptNeeded;
 };
 
 #endif // PCM_H_

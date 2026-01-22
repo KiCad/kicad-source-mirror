@@ -74,10 +74,10 @@ class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
 };
 
 #include <locale_io.h>
-PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
-                                        std::function<void( int )> aAvailableUpdateCallback ) :
+PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( std::function<void( int )> aAvailableUpdateCallback ) :
         m_dialog( nullptr ),
-        m_availableUpdateCallback( aAvailableUpdateCallback )
+        m_availableUpdateCallback( aAvailableUpdateCallback ),
+        m_apiEnablePromptNeeded( false )
 {
     ReadEnvVar();
 
@@ -772,18 +772,12 @@ void PLUGIN_CONTENT_MANAGER::MarkInstalled( const PCM_PACKAGE& aPackage, const w
     m_installed.emplace( aPackage.identifier, entry );
 
     if( m_dialog
-        && ( aPackage.versions[0].runtime.value_or( PCM_PACKAGE_RUNTIME::PPR_SWIG )
-             == PCM_PACKAGE_RUNTIME::PPR_IPC )
+        && ( aPackage.versions[0].runtime.value_or( PCM_PACKAGE_RUNTIME::PPR_SWIG ) == PCM_PACKAGE_RUNTIME::PPR_IPC )
         && !Pgm().GetCommonSettings()->m_Api.enable_server )
     {
-        if( wxMessageBox( _( "This plugin requires the KiCad API, which is currently "
-                             "disabled in preferences. Would you like to enable it?" ),
-                         _( "Enable KiCad API" ), wxICON_QUESTION | wxYES_NO, m_dialog )
-                   == wxYES )
-        {
-            Pgm().GetCommonSettings()->m_Api.enable_server = true;
-            m_dialog->ParentFrame()->Kiway().CommonSettingsChanged();
-        }
+        // Defer the prompt until after installation completes
+        // to avoid UI operations during wxSafeYield
+        m_apiEnablePromptNeeded = true;
     }
 }
 
@@ -1204,4 +1198,23 @@ PLUGIN_CONTENT_MANAGER::~PLUGIN_CONTENT_MANAGER()
     // By the time object is being destroyed the thread should be
     // stopped already but just in case do it here too.
     StopBackgroundUpdate();
+}
+
+
+void PLUGIN_CONTENT_MANAGER::ShowApiEnablePromptIfNeeded()
+{
+    if( !m_apiEnablePromptNeeded )
+        return;
+
+    m_apiEnablePromptNeeded = false;
+
+    if( m_dialog
+        && wxMessageBox( _( "This plugin requires the KiCad API, which is currently "
+                            "disabled in preferences. Would you like to enable it?" ),
+                         _( "Enable KiCad API" ), wxICON_QUESTION | wxYES_NO, m_dialog )
+                   == wxYES )
+    {
+        Pgm().GetCommonSettings()->m_Api.enable_server = true;
+        m_dialog->ParentFrame()->Kiway().CommonSettingsChanged();
+    }
 }
