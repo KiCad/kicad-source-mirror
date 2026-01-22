@@ -40,7 +40,6 @@ DIALOG_IMPORT_SYMBOL_SELECT::DIALOG_IMPORT_SYMBOL_SELECT( SYMBOL_EDIT_FRAME* aPa
         m_frame( aParent ),
         m_filePath( aFilePath ),
         m_destLibrary( aDestLibrary ),
-        m_pluginType( aPluginType ),
         m_plugin( SCH_IO_MGR::FindPlugin( aPluginType ) ),
         m_preview( nullptr )
 {

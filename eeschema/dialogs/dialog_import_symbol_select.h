@@ -134,7 +134,6 @@ private:
     SYMBOL_EDIT_FRAME*    m_frame;
     wxString              m_filePath;
     wxString              m_destLibrary;
-    SCH_IO_MGR::SCH_FILE_T m_pluginType;
 
     /// Plugin kept alive for symbol access during dialog lifetime
     IO_RELEASER<SCH_IO>   m_plugin;
