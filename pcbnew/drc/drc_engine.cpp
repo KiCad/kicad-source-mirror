@@ -1222,6 +1222,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     else if( aConstraintType == SOLDER_MASK_EXPANSION_CONSTRAINT )
     {
         std::optional<int> override;
+        const BOARD_ITEM* overrideItem = a;
 
         if( pad )
             override = pad->GetLocalSolderMaskMargin();
@@ -1230,11 +1231,20 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         else if( const PCB_TRACK* track = dynamic_cast<const PCB_TRACK*>( a ) )
             override = track->GetLocalSolderMaskMargin();
 
+        if( !override.has_value() && pad )
+        {
+            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            {
+                override = parentFootprint->GetLocalSolderMaskMargin();
+                overrideItem = parentFootprint;
+            }
+        }
+
         if( override )
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; solder mask expansion: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( overrideItem->GetItemDescription( this, true ) ),
                                       MessageTextFromValue( override.value() ) ) )
 
             constraint.m_Value.SetOpt( override.value() );
@@ -1244,15 +1254,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     else if( aConstraintType == SOLDER_PASTE_ABS_MARGIN_CONSTRAINT )
     {
         std::optional<int> override;
+        const BOARD_ITEM* overrideItem = a;
 
         if( pad )
             override = pad->GetLocalSolderPasteMargin();
+
+        if( !override.has_value() && pad )
+        {
+            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            {
+                override = parentFootprint->GetLocalSolderPasteMargin();
+                overrideItem = parentFootprint;
+            }
+        }
 
         if( override )
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; solder paste absolute clearance: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( overrideItem->GetItemDescription( this, true ) ),
                                       MessageTextFromValue( override.value() ) ) )
 
             constraint.m_Value.SetOpt( override.value_or( 0 ) );
@@ -1262,15 +1282,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     else if( aConstraintType == SOLDER_PASTE_REL_MARGIN_CONSTRAINT )
     {
         std::optional<double> overrideRatio;
+        const BOARD_ITEM* overrideItem = a;
 
         if( pad )
             overrideRatio = pad->GetLocalSolderPasteMarginRatio();
+
+        if( !overrideRatio.has_value() && pad )
+        {
+            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            {
+                overrideRatio = parentFootprint->GetLocalSolderPasteMarginRatio();
+                overrideItem = parentFootprint;
+            }
+        }
 
         if( overrideRatio )
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; solder paste relative clearance: %s." ),
-                                      EscapeHTML( pad->GetItemDescription( this, true ) ),
+                                      EscapeHTML( overrideItem->GetItemDescription( this, true ) ),
                                       MessageTextFromValue( overrideRatio.value() * 100.0 ) ) )
 
             constraint.m_Value.SetOpt( KiROUND( overrideRatio.value_or( 0 ) * 1000 ) );
