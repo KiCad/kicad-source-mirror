@@ -122,6 +122,11 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapte
     std::unique_lock<std::mutex> lock( m_loadInProgress );
 
     m_adapter = aAdapter;
+
+    // AsyncLoad() must be called before BlockUntilLoaded() to ensure library loading is started.
+    // This is necessary when the footprint chooser is opened from contexts that don't preload
+    // footprint libraries (e.g., eeschema).
+    m_adapter->AsyncLoad();
     m_adapter->BlockUntilLoaded();
 
     long long int generatedTimestamp = 0;
