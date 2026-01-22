@@ -40,6 +40,8 @@
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <json_common.h>
 #include <project_sch.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <sch_rule_area.h>
 #include <trace_helpers.h>
 
@@ -1320,7 +1322,35 @@ XNODE* NETLIST_EXPORTER_XML::makeSignals()
         xsignal->AddAttribute( wxT( "name" ), signal->GetName() );
 
         if( !signal->GetNetClass().IsEmpty() )
-            xsignal->AddAttribute( wxT( "netclass" ), signal->GetNetClass() );
+            xsignal->AddAttribute( wxT( "net_class" ), signal->GetNetClass() );
+
+        // Carry the chain's class assignment (from project's NET_SETTINGS) so
+        // that downstream consumers of the netlist can see chain hierarchy
+        // without having to also parse the .kicad_pro file.
+        if( m_schematic )
+        {
+            PROJECT_FILE& pf = m_schematic->Project().GetProjectFile();
+            const std::shared_ptr<NET_SETTINGS>& ns = pf.NetSettings();
+
+            if( ns )
+            {
+                wxString className = ns->GetNetChainClass( signal->GetName() );
+
+                if( !className.IsEmpty() )
+                    xsignal->AddAttribute( wxT( "net_chain_class" ), className );
+            }
+        }
+
+        if( signal->GetColor() != COLOR4D::UNSPECIFIED )
+        {
+            const COLOR4D& c = signal->GetColor();
+            xsignal->AddAttribute( wxT( "color" ),
+                                   wxString::Format( wxT( "#%02X%02X%02X%02X" ),
+                                                     (int) std::clamp( KiROUND( c.r * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.g * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.b * 255.0 ), 0, 255 ),
+                                                     (int) std::clamp( KiROUND( c.a * 255.0 ), 0, 255 ) ) );
+        }
 
         XNODE* xmembers;
         xsignal->AddChild( xmembers = node( wxT( "members" ) ) );

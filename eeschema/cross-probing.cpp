@@ -30,6 +30,7 @@
 #include <kiway_mail.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
+#include <sch_signal.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
@@ -236,6 +237,16 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             m_highlightedConn = sg->GetDriverConnection()->Name();
         else
             m_highlightedConn = wxEmptyString;
+
+        // If the incoming net belongs to a net chain, also turn on chain
+        // highlight so the schematic mirrors what the PCB editor is doing.
+        if( CONNECTION_GRAPH* graph = Schematic().ConnectionGraph() )
+        {
+            if( SCH_NETCHAIN* chain = graph->GetSignalForNet( m_highlightedConn ) )
+                SetHighlightedSignal( chain->GetName() );
+            else
+                SetHighlightedSignal( wxEmptyString );
+        }
 
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
         RefreshNetNavigator();

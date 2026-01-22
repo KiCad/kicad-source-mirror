@@ -2105,7 +2105,7 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
                     nets += n;
                 }
 
-                SetStatusText( wxString::Format( _( "Signal nets: %s" ), nets ) );
+                SetStatusText( wxString::Format( _( "Net chain members: %s" ), nets ) );
                 return;
             }
         }

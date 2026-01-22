@@ -48,6 +48,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <gal/painter.h>
+#include <pcb_painter.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <render_settings.h>
@@ -146,6 +147,35 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             std::vector<MSG_PANEL_ITEM> items;
             netinfo->GetMsgPanelInfo( this, items );
             SetMsgPanel( items );
+
+            // If the incoming net belongs to a net chain, promote the single-net
+            // highlight into a multi-net highlight covering every chain member so
+            // the PCB mirrors the chain highlight happening on the schematic side.
+            const wxString& chainName = netinfo->GetSignal();
+
+            if( !chainName.IsEmpty() )
+            {
+                pcb->SetHighLightNet( netcode );
+                renderSettings->SetHighlight( true, netcode );
+                multiHighlight = true;
+
+                for( NETINFO_ITEM* candidate : pcb->GetNetInfo() )
+                {
+                    if( !candidate || candidate == netinfo )
+                        continue;
+
+                    if( candidate->GetSignal() == chainName )
+                    {
+                        pcb->SetHighLightNet( candidate->GetNetCode(), true );
+                        renderSettings->SetHighlight( true, candidate->GetNetCode(), true );
+                    }
+                }
+
+                if( auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings ) )
+                    pcbRender->SetHighlightedSignal( chainName );
+
+                netcode = -1;
+            }
         }
 
         // fall through to highlighting section

@@ -1,5 +1,6 @@
 class
 code
+color
 comp
 components
 component_classes
@@ -32,6 +33,7 @@ names
 net
 nets
 net_chain
+net_chain_class
 net_chains
 net_class
 signal

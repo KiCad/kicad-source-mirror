@@ -1263,6 +1263,20 @@ int SCH_EDITOR_CONTROL::HighlightSignal( const TOOL_EVENT& aEvent )
         wxLogTrace( "KICAD_SCH_HIGHLIGHT", "HighlightSignal: SetHighlightedSignal(%s)", signalName );
         editFrame->SetHighlightedConnection( wxEmptyString );
         editFrame->SetHighlightedSignal( signalName );
+
+        // Cross-probe the chain's member nets to the PCB so the chain highlights there too.
+        // The PCB side interprets the first member as the net to highlight; in a chain-aware
+        // PCB build, all members will be included in a single highlight event.
+        if( CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph() )
+        {
+            if( SCH_NETCHAIN* chain = graph->GetSignalByName( signalName ) )
+            {
+                const auto& nets = chain->GetNets();
+
+                if( !nets.empty() )
+                    editFrame->SendCrossProbeNetName( *nets.begin() );
+            }
+        }
     }
     editFrame->UpdateNetHighlightStatus();
     TOOL_EVENT dummy;

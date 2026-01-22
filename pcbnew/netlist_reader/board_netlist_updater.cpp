@@ -2442,6 +2442,33 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             net->SetSignal( aNetlist.GetNetSignal( net->GetNetname() ) );
 
+        // Net chains may specify a display colour override; lift that into the
+        // board-side lookup so the PCB painter can use it when highlighting.
+        for( const auto& [chain, colorStr] : aNetlist.GetSignalColors() )
+        {
+            if( !colorStr.IsEmpty() )
+            {
+                KIGFX::COLOR4D color;
+
+                if( color.SetFromHexString( colorStr ) )
+                    m_board->SetNetChainColor( chain, color );
+            }
+        }
+
+        // Net chain class assignments stored in the netlist are mirrored into
+        // the project-level NET_SETTINGS map so the inNetChainClass() rule
+        // function can resolve them at DRC time.
+        if( !aNetlist.GetSignalChainClasses().empty() )
+        {
+            std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+            if( netSettings )
+            {
+                for( const auto& [chain, className] : aNetlist.GetSignalChainClasses() )
+                    netSettings->SetNetChainClass( chain, className );
+            }
+        }
+
         // Net chains may specify a netclass that applies to every member net.
         // Push that assignment into the board's netclass map before resyncing.
         const std::map<wxString, wxString>& chainClasses = aNetlist.GetSignalNetClasses();

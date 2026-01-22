@@ -1110,6 +1110,28 @@ public:
 
     void ReplaceSignalTerminalPad( const wxString& aSignal, const KIID& aPrev, const KIID& aNew );
 
+    /// Per-net-chain colour override (empty COLOR4D::UNSPECIFIED = no override).
+    /// Populated from the netlist at update-from-schematic time and consumed by
+    /// the PCB painter when highlighting a chain.
+    void SetNetChainColor( const wxString& aChain, const KIGFX::COLOR4D& aColor )
+    {
+        if( aColor == KIGFX::COLOR4D::UNSPECIFIED )
+            m_netChainColors.erase( aChain );
+        else
+            m_netChainColors[aChain] = aColor;
+    }
+
+    KIGFX::COLOR4D GetNetChainColor( const wxString& aChain ) const
+    {
+        auto it = m_netChainColors.find( aChain );
+        return it != m_netChainColors.end() ? it->second : KIGFX::COLOR4D::UNSPECIFIED;
+    }
+
+    const std::map<wxString, KIGFX::COLOR4D>& GetNetChainColors() const
+    {
+        return m_netChainColors;
+    }
+
     /**
      * Return the set of netname candidates for netclass assignment.
      */
@@ -1601,6 +1623,8 @@ private:
     int                 m_timeStamp;                // actually a modification counter
 
     wxString            m_fileName;
+
+    std::map<wxString, KIGFX::COLOR4D> m_netChainColors;
 
     // These containers only have const accessors and must only be modified by Add()/Remove()
     MARKERS             m_markers;

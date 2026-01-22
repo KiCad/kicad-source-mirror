@@ -395,6 +395,40 @@ public:
         return m_signalNetClasses;
     }
 
+    /// Stored as a #RRGGBB or #RRGGBBAA string; empty means "no override".
+    void SetSignalColor( const wxString& aSignal, const wxString& aColor )
+    {
+        m_signalColors[aSignal] = aColor;
+    }
+
+    wxString GetSignalColor( const wxString& aSignal ) const
+    {
+        auto it = m_signalColors.find( aSignal );
+        return it != m_signalColors.end() ? it->second : wxString();
+    }
+
+    const std::map<wxString, wxString>& GetSignalColors() const
+    {
+        return m_signalColors;
+    }
+
+    /// Net chain class assignment carried through the netlist for downstream tools.
+    void SetSignalChainClass( const wxString& aSignal, const wxString& aClass )
+    {
+        m_signalChainClasses[aSignal] = aClass;
+    }
+
+    wxString GetSignalChainClass( const wxString& aSignal ) const
+    {
+        auto it = m_signalChainClasses.find( aSignal );
+        return it != m_signalChainClasses.end() ? it->second : wxString();
+    }
+
+    const std::map<wxString, wxString>& GetSignalChainClasses() const
+    {
+        return m_signalChainClasses;
+    }
+
     /**
      * @brief Return a #NETLIST_GROUP by \a aUuid.
      *
@@ -532,6 +566,8 @@ private:
     std::map<wxString, wxString> m_netSignals;
     std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_signalTerminals;
     std::map<wxString, wxString> m_signalNetClasses;
+    std::map<wxString, wxString> m_signalColors;
+    std::map<wxString, wxString> m_signalChainClasses;
 
     std::vector<wxString>            m_variantNames;         // Variant names in order.
     std::map<wxString, wxString>     m_variantDescriptions;  // Variant descriptions.
