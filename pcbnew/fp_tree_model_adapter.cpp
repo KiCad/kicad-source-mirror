@@ -75,16 +75,22 @@ std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString
     auto fullListEnd = GFootprintList.GetList().end();
     std::unique_ptr<FOOTPRINT_INFO> dummy = std::make_unique<FOOTPRINT_INFO_IMPL>( aLibName, wxEmptyString );
 
-    // List is sorted, so use a binary search to find the range of footnotes for our library
+    // List is sorted, so use a binary search to find the range of footprints for our library
     auto libBounds = std::equal_range( fullListStart, fullListEnd, dummy,
             []( const std::unique_ptr<FOOTPRINT_INFO>& a,
                 const std::unique_ptr<FOOTPRINT_INFO>& b )
             {
+                if( !a || !b )
+                    return false;
+
                 return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
             } );
 
     for( auto i = libBounds.first; i != libBounds.second; ++i )
-        libList.push_back( i->get() );
+    {
+        if( *i )
+            libList.push_back( i->get() );
+    }
 
     return libList;
 }
