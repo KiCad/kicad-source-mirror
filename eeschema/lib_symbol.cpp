@@ -1121,15 +1121,13 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
             for( const wxString& num : expanded )
             {
                 out.push_back( LOGICAL_PIN{ pin, num } );
-                wxLogTrace( traceStackedPins,
-                            wxString::Format( "GetLogicalPins: base='%s' -> '%s'", pin->GetShownNumber(), num ) );
+                wxLogTrace( traceStackedPins, "GetLogicalPins: base='%s' -> '%s'", pin->GetShownNumber(), num );
             }
         }
         else
         {
             out.push_back( LOGICAL_PIN{ pin, pin->GetShownNumber() } );
-            wxLogTrace( traceStackedPins,
-                        wxString::Format( "GetLogicalPins: base='%s' (no expansion)", pin->GetShownNumber() ) );
+            wxLogTrace( traceStackedPins, "GetLogicalPins: base='%s' (no expansion)", pin->GetShownNumber() );
         }
     }
 
