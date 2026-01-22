@@ -530,54 +530,63 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
 
-                // We need to bypass refreshPreview action here because it is triggered by the move,
-                // so we were getting double-key events that toggled the axis locking if you
-                // pressed them in a certain order.
-                if( controls->GetSettings().m_lastKeyboardCursorPositionValid && ! evt->IsAction( &ACTIONS::refreshPreview ) )
+                if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
                     VECTOR2I keyboardPos( controls->GetSettings().m_lastKeyboardCursorPosition );
-                    long action = controls->GetSettings().m_lastKeyboardCursorCommand;
 
                     grid.SetSnap( false );
-                    m_cursor = grid.Align( keyboardPos, selectionGrid );
 
-                    // Update axis lock based on arrow key press
-                    if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
-                    {
-                        if( axisLock == AXIS_LOCK::HORIZONTAL )
-                        {
-                            // Check if opposite horizontal key pressed to unlock
-                            if( ( lastArrowKeyAction == ACTIONS::CURSOR_LEFT && action == ACTIONS::CURSOR_RIGHT ) ||
-                                ( lastArrowKeyAction == ACTIONS::CURSOR_RIGHT && action == ACTIONS::CURSOR_LEFT ) )
-                            {
-                                axisLock = AXIS_LOCK::NONE;
-                            }
-                            // Same direction axis, keep locked
-                        }
-                        else
-                        {
-                            axisLock = AXIS_LOCK::HORIZONTAL;
-                        }
-                    }
-                    else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
-                    {
-                        if( axisLock == AXIS_LOCK::VERTICAL )
-                        {
-                            // Check if opposite vertical key pressed to unlock
-                            if( ( lastArrowKeyAction == ACTIONS::CURSOR_UP && action == ACTIONS::CURSOR_DOWN ) ||
-                                ( lastArrowKeyAction == ACTIONS::CURSOR_DOWN && action == ACTIONS::CURSOR_UP ) )
-                            {
-                                axisLock = AXIS_LOCK::NONE;
-                            }
-                            // Same direction axis, keep locked
-                        }
-                        else
-                        {
-                            axisLock = AXIS_LOCK::VERTICAL;
-                        }
-                    }
+                    // Use the keyboard position directly without grid alignment. The position
+                    // was already calculated correctly in CursorControl by adding the grid step
+                    // to the current position. Aligning to grid here would snap to the nearest
+                    // grid point, which causes precision errors when the original position is
+                    // not on a grid point (issue #22805).
+                    m_cursor = keyboardPos;
 
-                    lastArrowKeyAction = action;
+                    // Update axis lock based on arrow key press, but skip on refreshPreview
+                    // to avoid double-processing when CursorControl posts refreshPreview after
+                    // handling the arrow key.
+                    if( !evt->IsAction( &ACTIONS::refreshPreview ) )
+                    {
+                        long action = controls->GetSettings().m_lastKeyboardCursorCommand;
+
+                        if( action == ACTIONS::CURSOR_LEFT || action == ACTIONS::CURSOR_RIGHT )
+                        {
+                            if( axisLock == AXIS_LOCK::HORIZONTAL )
+                            {
+                                // Check if opposite horizontal key pressed to unlock
+                                if( ( lastArrowKeyAction == ACTIONS::CURSOR_LEFT && action == ACTIONS::CURSOR_RIGHT ) ||
+                                    ( lastArrowKeyAction == ACTIONS::CURSOR_RIGHT && action == ACTIONS::CURSOR_LEFT ) )
+                                {
+                                    axisLock = AXIS_LOCK::NONE;
+                                }
+                                // Same direction axis, keep locked
+                            }
+                            else
+                            {
+                                axisLock = AXIS_LOCK::HORIZONTAL;
+                            }
+                        }
+                        else if( action == ACTIONS::CURSOR_UP || action == ACTIONS::CURSOR_DOWN )
+                        {
+                            if( axisLock == AXIS_LOCK::VERTICAL )
+                            {
+                                // Check if opposite vertical key pressed to unlock
+                                if( ( lastArrowKeyAction == ACTIONS::CURSOR_UP && action == ACTIONS::CURSOR_DOWN ) ||
+                                    ( lastArrowKeyAction == ACTIONS::CURSOR_DOWN && action == ACTIONS::CURSOR_UP ) )
+                                {
+                                    axisLock = AXIS_LOCK::NONE;
+                                }
+                                // Same direction axis, keep locked
+                            }
+                            else
+                            {
+                                axisLock = AXIS_LOCK::VERTICAL;
+                            }
+                        }
+
+                        lastArrowKeyAction = action;
+                    }
                 }
                 else
                 {
