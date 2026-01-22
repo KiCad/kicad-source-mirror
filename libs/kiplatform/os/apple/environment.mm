@@ -249,7 +249,7 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
 bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg )
 {
     CFURLRef url = CFURLCreateWithString( kCFAllocatorDefault,
-                                          wxCFStringRef( aURL ).AsNSString(),
+                                          wxCFStringRef( aURL ),
                                           nullptr );
     if( !url )
         return false;
