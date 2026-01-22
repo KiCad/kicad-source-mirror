@@ -114,15 +114,15 @@ public:
     void SetVisible( bool aVisible ) { m_hidden = !aVisible; }
 
     const wxString& GetName() const;
-    wxString GetShownName() const;
-    void SetName( const wxString& aName );
+    const wxString& GetShownName() const;
+    void            SetName( const wxString& aName );
     /**
      * Get the name without any alternates
      */
     const wxString& GetBaseName() const;
 
-    const wxString& GetNumber() const { return m_number; }
-    wxString GetShownNumber() const;
+    const wxString&       GetNumber() const { return m_number; }
+    const wxString&       GetShownNumber() const;
     std::vector<wxString> GetStackedPinNumbers( bool* aValid = nullptr ) const;
 
     /**

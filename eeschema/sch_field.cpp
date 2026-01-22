@@ -1642,10 +1642,6 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
     // This is the default variant field text for all fields except the reference field.
     wxString retv = EDA_TEXT::GetShownText( false );
 
-    wxLogTrace( traceSchFieldRendering,
-                "getUnescapedText: field=%s, parent=%p, aPath=%p, path_empty=%d, initial_text='%s'", GetName(),
-                m_parent, aPath, aPath ? ( aPath->empty() ? 1 : 0 ) : -1, retv );
-
     // Special handling for parent object field instance and variant information.
     // Only use the path if it's non-empty; an empty path can't match any instances
     if( m_parent && aPath && !aPath->empty() )

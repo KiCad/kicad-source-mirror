@@ -1675,25 +1675,34 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 
 int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
 {
-    if( aValid )
+    if( !aValid )
+    {
+        // Fastest path when we're not interested in validity
+        size_t len = aPinName.length();
+
+        if( len < 3 )
+            return 1;
+
+        if( aPinName[0] != '[' || aPinName[len - 1] != ']' )
+            return 1;
+    }
+    else
+    {
         *aValid = true;
 
-    // Fast path: if no brackets, it's a single pin
-    const bool hasOpenBracket  = aPinName.Contains( wxT( "[" ) );
-    const bool hasCloseBracket = aPinName.Contains( wxT( "]" ) );
+        // Fast path: if no brackets, it's a single pin
+        const bool hasOpenBracket = aPinName.Contains( wxT( "[" ) );
+        const bool hasCloseBracket = aPinName.Contains( wxT( "]" ) );
 
-    if( hasOpenBracket || hasCloseBracket )
-    {
-        if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
+        if( hasOpenBracket || hasCloseBracket )
         {
-            if( aValid )
+            if( aPinName[0] != '[' || aPinName[aPinName.length() - 1] != ']' )
+            {
                 *aValid = false;
-            return 1;
+                return 1;
+            }
         }
     }
-
-    if( !aPinName.StartsWith( wxT( "[" ) ) || !aPinName.EndsWith( wxT( "]" ) ) )
-        return 1;
 
     const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
 

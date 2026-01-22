@@ -564,7 +564,7 @@ bool SCH_PIN::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) cons
 }
 
 
-wxString SCH_PIN::GetShownName() const
+const wxString& SCH_PIN::GetShownName() const
 {
     if( !m_alt.IsEmpty() )
         return m_alt;
@@ -575,7 +575,7 @@ wxString SCH_PIN::GetShownName() const
 }
 
 
-wxString SCH_PIN::GetShownNumber() const
+const wxString& SCH_PIN::GetShownNumber() const
 {
     return m_number;
 }
@@ -583,15 +583,13 @@ wxString SCH_PIN::GetShownNumber() const
 
 std::vector<wxString> SCH_PIN::GetStackedPinNumbers( bool* aValid ) const
 {
-    wxString shown = GetShownNumber();
-    wxLogTrace( traceStackedPins,
-                wxString::Format( "GetStackedPinNumbers: shown='%s'", shown ) );
+    const wxString& shown = GetShownNumber();
+    wxLogTrace( traceStackedPins, "GetStackedPinNumbers: shown='%s'", shown );
 
     std::vector<wxString> numbers = ExpandStackedPinNotation( shown, aValid );
 
     // Log the expansion for debugging
-    wxLogTrace( traceStackedPins,
-                wxString::Format( "Expanded '%s' to %zu pins", shown, numbers.size() ) );
+    wxLogTrace( traceStackedPins, "Expanded '%s' to %zu pins", shown, numbers.size() );
     for( const wxString& num : numbers )
     {
         wxLogTrace( traceStackedPins, wxString::Format( " -> '%s'", num ) );
@@ -603,7 +601,7 @@ std::vector<wxString> SCH_PIN::GetStackedPinNumbers( bool* aValid ) const
 
 int SCH_PIN::GetStackedPinCount( bool* aValid ) const
 {
-    wxString shown = GetShownNumber();
+    const wxString& shown = GetShownNumber();
     return CountStackedPinNotation( shown, aValid );
 }
 

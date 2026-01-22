@@ -1145,9 +1145,6 @@ int LIB_SYMBOL::GetPinCount()
         count += pinCount;
     }
 
-    wxLogTrace( "CVPCB_PINCOUNT", "LIB_SYMBOL::GetPinCount total for lib='%s' => %d", GetLibId().Format().wx_str(),
-                count );
-
     return count;
 }
 
