@@ -125,6 +125,34 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 }
 
 
+std::string PDF_PLOTTER::encodeDoubleForPlotter( double aValue ) const
+{
+    std::string buf = fmt::format( "{:g}", aValue );
+
+    // PDF syntax does not allow exponent notation (PostScript does). fmt's {:g} can emit it and
+    // can't be configured to force non-exponent output, so fall back to fixed when needed.
+    if( buf.find( 'e' ) != std::string::npos || buf.find( 'E' ) != std::string::npos )
+        buf = fmt::format( "{:.10f}", aValue );
+
+    if( buf.find( '.' ) != std::string::npos )
+    {
+        // Trim trailing zeros from fixed output while keeping at least one digit.
+        while( buf.size() > 1 && buf.back() == '0' )
+            buf.pop_back();
+
+        // Remove a dangling decimal point if we stripped all fractional digits.
+        if( !buf.empty() && buf.back() == '.' )
+            buf.pop_back();
+    }
+
+    // Avoid emitting "-0" for tiny negative values that round to zero.
+    if( buf == "-0" )
+        buf = "0";
+
+    return buf;
+}
+
+
 std::string PDF_PLOTTER::encodeByteString( const std::string& aBytes )
 {
     std::string result;
@@ -200,7 +228,7 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
 
     if( aWidth != m_currentPenWidth )
-        fmt::println( m_workFile, "{:g} w", userToDeviceSize( aWidth ) );
+        fmt::println( m_workFile, "{} w", encodeDoubleForPlotter( userToDeviceSize( aWidth ) ) );
 
     m_currentPenWidth = aWidth;
 }
@@ -219,7 +247,9 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
         b = ( b * a ) + ( 1 - a );
     }
 
-    fmt::println( m_workFile, "{:g} {:g} {:g} rg {:g} {:g} {:g} RG", r, g, b, r, g, b );
+    fmt::println( m_workFile, "{} {} {} rg {} {} {} RG",
+                  encodeDoubleForPlotter( r ), encodeDoubleForPlotter( g ), encodeDoubleForPlotter( b ),
+                  encodeDoubleForPlotter( r ), encodeDoubleForPlotter( g ), encodeDoubleForPlotter( b ) );
 }
 
 
@@ -322,11 +352,11 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     else
         paintOp = width > 0 ? 'B' : 'f';
 
-    fmt::println( m_workFile, "{:g} {:g} {:g} {:g} re {}",
-                  p1_dev.x,
-                  p1_dev.y,
-                  p2_dev.x - p1_dev.x,
-                  p2_dev.y - p1_dev.y,
+    fmt::println( m_workFile, "{} {} {} {} re {}",
+                  encodeDoubleForPlotter( p1_dev.x ),
+                  encodeDoubleForPlotter( p1_dev.y ),
+                  encodeDoubleForPlotter( p2_dev.x - p1_dev.x ),
+                  encodeDoubleForPlotter( p2_dev.y - p1_dev.y ),
                   paintOp );
 }
 
@@ -360,28 +390,28 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 
     // This is the convex hull for the bezier approximated circle
     fmt::println( m_workFile,
-                  "{:g} {:g} m "
-                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
-                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
-                  "{:g} {:g} {:g} {:g} {:g} {:g} c "
-                  "{:g} {:g} {:g} {:g} {:g} {:g} c {}",
-                  pos_dev.x - radius, pos_dev.y,
+                  "{} {} m "
+                  "{} {} {} {} {} {} c "
+                  "{} {} {} {} {} {} c "
+                  "{} {} {} {} {} {} c "
+                  "{} {} {} {} {} {} c {}",
+                  encodeDoubleForPlotter( pos_dev.x - radius ), encodeDoubleForPlotter( pos_dev.y ),
 
-                  pos_dev.x - radius, pos_dev.y + magic,
-                  pos_dev.x - magic, pos_dev.y + radius,
-                  pos_dev.x, pos_dev.y + radius,
+                  encodeDoubleForPlotter( pos_dev.x - radius ), encodeDoubleForPlotter( pos_dev.y + magic ),
+                  encodeDoubleForPlotter( pos_dev.x - magic ), encodeDoubleForPlotter( pos_dev.y + radius ),
+                  encodeDoubleForPlotter( pos_dev.x ), encodeDoubleForPlotter( pos_dev.y + radius ),
 
-                  pos_dev.x + magic, pos_dev.y + radius,
-                  pos_dev.x + radius, pos_dev.y + magic,
-                  pos_dev.x + radius, pos_dev.y,
+                  encodeDoubleForPlotter( pos_dev.x + magic ), encodeDoubleForPlotter( pos_dev.y + radius ),
+                  encodeDoubleForPlotter( pos_dev.x + radius ), encodeDoubleForPlotter( pos_dev.y + magic ),
+                  encodeDoubleForPlotter( pos_dev.x + radius ), encodeDoubleForPlotter( pos_dev.y ),
 
-                  pos_dev.x + radius, pos_dev.y - magic,
-                  pos_dev.x + magic, pos_dev.y - radius,
-                  pos_dev.x, pos_dev.y - radius,
+                  encodeDoubleForPlotter( pos_dev.x + radius ), encodeDoubleForPlotter( pos_dev.y - magic ),
+                  encodeDoubleForPlotter( pos_dev.x + magic ), encodeDoubleForPlotter( pos_dev.y - radius ),
+                  encodeDoubleForPlotter( pos_dev.x ), encodeDoubleForPlotter( pos_dev.y - radius ),
 
-                  pos_dev.x - magic, pos_dev.y - radius,
-                  pos_dev.x - radius, pos_dev.y - magic,
-                  pos_dev.x - radius, pos_dev.y,
+                  encodeDoubleForPlotter( pos_dev.x - magic ), encodeDoubleForPlotter( pos_dev.y - radius ),
+                  encodeDoubleForPlotter( pos_dev.x - radius ), encodeDoubleForPlotter( pos_dev.y - magic ),
+                  encodeDoubleForPlotter( pos_dev.x - radius ), encodeDoubleForPlotter( pos_dev.y ),
 
                   aFill == FILL_T::NO_FILL ? 's' : 'b' );
 }
@@ -442,10 +472,12 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     if( path.size() >= 2 )
     {
-        fmt::print( m_workFile, "{:g} {:g} m ", path[0].x, path[0].y );
+        fmt::print( m_workFile, "{} {} m ",
+                    encodeDoubleForPlotter( path[0].x ), encodeDoubleForPlotter( path[0].y ) );
 
         for( int ii = 1; ii < (int) path.size(); ++ii )
-            fmt::print( m_workFile, "{:g} {:g} l ", path[ii].x, path[ii].y );
+            fmt::print( m_workFile, "{} {} l ",
+                        encodeDoubleForPlotter( path[ii].x ), encodeDoubleForPlotter( path[ii].y ) );
     }
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
@@ -457,7 +489,8 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     else
     {
         VECTOR2D pos_dev = userToDeviceCoordinates( aCenter );
-        fmt::println( m_workFile, "{:g} {:g} l b", pos_dev.x, pos_dev.y );
+        fmt::println( m_workFile, "{} {} l b",
+                      encodeDoubleForPlotter( pos_dev.x ), encodeDoubleForPlotter( pos_dev.y ) );
     }
 }
 
@@ -529,10 +562,12 @@ void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, in
     if( path.size() <= 1 )
         return;
 
-    fmt::print( m_workFile, "{:g} {:g} m ", path[0].x, path[0].y );
+    fmt::print( m_workFile, "{} {} m ",
+                encodeDoubleForPlotter( path[0].x ), encodeDoubleForPlotter( path[0].y ) );
 
     for( int ii = 1; ii < (int) path.size(); ++ii )
-        fmt::print( m_workFile, "{:g} {:g} l ", path[ii].x, path[ii].y );
+        fmt::print( m_workFile, "{} {} l ",
+                    encodeDoubleForPlotter( path[ii].x ), encodeDoubleForPlotter( path[ii].y ) );
 
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
@@ -646,11 +681,11 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
        3) restore the CTM
        4) profit
      */
-    fmt::println( m_workFile, "q {:g} 0 0 {:g} {:g} {:g} cm", // Step 1
-                  userToDeviceSize( drawsize.x ),
-                  userToDeviceSize( drawsize.y ),
-                  dev_start.x,
-                  dev_start.y );
+    fmt::println( m_workFile, "q {} 0 0 {} {} {} cm", // Step 1
+                  encodeDoubleForPlotter( userToDeviceSize( drawsize.x ) ),
+                  encodeDoubleForPlotter( userToDeviceSize( drawsize.y ) ),
+                  encodeDoubleForPlotter( dev_start.x ),
+                  encodeDoubleForPlotter( dev_start.y ) );
 
     fmt::println( m_workFile, "/Im{} Do", imgHandle );
     fmt::println( m_workFile, "Q" );
@@ -821,9 +856,10 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
 
         // Default graphic settings (coordinate system, default color and line style)
         fmt::println( m_workFile,
-                      "{:g} 0 0 {:g} 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG {:g} w",
-                      0.0072 * plotScaleAdjX, 0.0072 * plotScaleAdjY,
-                      userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) );
+                      "{} 0 0 {} 0 0 cm 1 J 1 j 0 0 0 rg 0 0 0 RG {} w",
+                      encodeDoubleForPlotter( 0.0072 * plotScaleAdjX ),
+                      encodeDoubleForPlotter( 0.0072 * plotScaleAdjY ),
+                      encodeDoubleForPlotter( userToDeviceSize( m_renderSettings->GetDefaultPenWidth() ) ) );
     }
 }
 
@@ -1026,12 +1062,12 @@ void PDF_PLOTTER::ClosePage()
                 "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
                 "    /Font {} 0 R\n"
                 "    /XObject {} 0 R >>\n"
-                "/MediaBox [0 0 {:g} {:g}]\n",
+                "/MediaBox [0 0 {} {}]\n",
                 m_pageTreeHandle,
                 m_fontResDictHandle,
                 m_imgResDictHandle,
-                psPaperSize.x,
-                psPaperSize.y );
+                encodeDoubleForPlotter( psPaperSize.x ),
+                encodeDoubleForPlotter( psPaperSize.y ) );
 
     if( m_pageStreamHandle != -1 )
         fmt::print( m_outputFile, "/Contents {} 0 R\n", m_pageStreamHandle );
@@ -1050,7 +1086,7 @@ void PDF_PLOTTER::ClosePage()
                     "<<\n"
                     "/Type /Annot\n"
                     "/Subtype /3D\n"
-                    "/Rect [0 0 {:g} {:g}]\n"
+                    "/Rect [0 0 {} {}]\n"
                     "/NM (3D Annotation)\n"
                     "/3DD {} 0 R\n"
                     "/3DV 0\n"
@@ -1058,7 +1094,8 @@ void PDF_PLOTTER::ClosePage()
                     "/3DI true\n"
                     "/P {} 0 R\n"
                     ">>\n",
-                    psPaperSize.x, psPaperSize.y, m_3dModelHandle, pageHandle );
+                    encodeDoubleForPlotter( psPaperSize.x ), encodeDoubleForPlotter( psPaperSize.y ),
+                    m_3dModelHandle, pageHandle );
 
         closePdfObject();
     }
@@ -1381,16 +1418,16 @@ void PDF_PLOTTER::emitStrokeFonts()
 
         int fontHandle = startPdfObject();
         fmt::print( m_outputFile,
-                    "<<\n/Type /Font\n/Subtype /Type3\n/Name {}\n/FontBBox [ {:g} {:g} {:g} {:g} ]\n",
+                    "<<\n/Type /Font\n/Subtype /Type3\n/Name {}\n/FontBBox [ {} {} {} {} ]\n",
                     subset.ResourceName(),
-                    minX,
-                    minY,
-                    maxX,
-                    maxY );
+                    encodeDoubleForPlotter( minX ),
+                    encodeDoubleForPlotter( minY ),
+                    encodeDoubleForPlotter( maxX ),
+                    encodeDoubleForPlotter( maxY ) );
         fmt::print( m_outputFile,
-                    "/FontMatrix [ {:g} 0 0 {:g} 0 0 ]\n/CharProcs {} 0 R\n",
-                    fontMatrixScale,
-                    fontMatrixScale,
+                    "/FontMatrix [ {} 0 0 {} 0 0 ]\n/CharProcs {} 0 R\n",
+                    encodeDoubleForPlotter( fontMatrixScale ),
+                    encodeDoubleForPlotter( fontMatrixScale ),
                     subset.CharProcsHandle() );
         fmt::print( m_outputFile,
                     "/Encoding << /Type /Encoding /Differences {} >>\n",
@@ -1454,19 +1491,19 @@ void PDF_PLOTTER::emitOutlineFonts()
         subsetPtr->SetFontDescriptorHandle( descriptorHandle );
 
         fmt::print( m_outputFile,
-                    "<<\n/Type /FontDescriptor\n/FontName /{}\n/Flags {}\n/ItalicAngle {:g}\n/Ascent {:g}\n/Descent {:g}\n"
-                    "/CapHeight {:g}\n/StemV {:g}\n/FontBBox [ {:g} {:g} {:g} {:g} ]\n/FontFile2 {} 0 R\n>>\n",
+                    "<<\n/Type /FontDescriptor\n/FontName /{}\n/Flags {}\n/ItalicAngle {}\n/Ascent {}\n/Descent {}\n"
+                    "/CapHeight {}\n/StemV {}\n/FontBBox [ {} {} {} {} ]\n/FontFile2 {} 0 R\n>>\n",
                     subsetPtr->BaseFontName(),
                     subsetPtr->Flags(),
-                    subsetPtr->ItalicAngle(),
-                    subsetPtr->Ascent(),
-                    subsetPtr->Descent(),
-                    subsetPtr->CapHeight(),
-                    subsetPtr->StemV(),
-                    subsetPtr->BBoxMinX(),
-                    subsetPtr->BBoxMinY(),
-                    subsetPtr->BBoxMaxX(),
-                    subsetPtr->BBoxMaxY(),
+                    encodeDoubleForPlotter( subsetPtr->ItalicAngle() ),
+                    encodeDoubleForPlotter( subsetPtr->Ascent() ),
+                    encodeDoubleForPlotter( subsetPtr->Descent() ),
+                    encodeDoubleForPlotter( subsetPtr->CapHeight() ),
+                    encodeDoubleForPlotter( subsetPtr->StemV() ),
+                    encodeDoubleForPlotter( subsetPtr->BBoxMinX() ),
+                    encodeDoubleForPlotter( subsetPtr->BBoxMinY() ),
+                    encodeDoubleForPlotter( subsetPtr->BBoxMaxX() ),
+                    encodeDoubleForPlotter( subsetPtr->BBoxMaxY() ),
                     subsetPtr->FontFileHandle() );
         closePdfObject();
 
@@ -1650,12 +1687,12 @@ void PDF_PLOTTER::endPlotEmitResources()
                     "<<\n"
                     "/Type /Annot\n"
                     "/Subtype /Link\n"
-                    "/Rect [{:g} {:g} {:g} {:g}]\n"
+                    "/Rect [{} {} {} {}]\n"
                     "/Border [16 16 0]\n",
-                    box.GetLeft(),
-                    box.GetBottom(),
-                    box.GetRight(),
-                    box.GetTop() );
+                    encodeDoubleForPlotter( box.GetLeft() ),
+                    encodeDoubleForPlotter( box.GetBottom() ),
+                    encodeDoubleForPlotter( box.GetRight() ),
+                    encodeDoubleForPlotter( box.GetTop() ) );
 
         wxString pageNumber;
         bool     pageFound = false;
@@ -1794,9 +1831,12 @@ void PDF_PLOTTER::endPlotEmitResources()
                     "<<\n"
                     "/Type /Annot\n"
                     "/Subtype /Link\n"
-                    "/Rect [{:g} {:g} {:g} {:g}]\n"
+                    "/Rect [{} {} {} {}]\n"
                     "/Border [16 16 0]\n",
-                    box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
+                    encodeDoubleForPlotter( box.GetLeft() ),
+                    encodeDoubleForPlotter( box.GetBottom() ),
+                    encodeDoubleForPlotter( box.GetRight() ),
+                    encodeDoubleForPlotter( box.GetTop() ) );
 
         fmt::print( m_outputFile,
                  "/A << /Type /Action /S /JavaScript /JS {} >>\n"
@@ -2337,14 +2377,15 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                             appliedTilt, syn_a, syn_b, syn_c, syn_d );
             }
 
-            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {:g} Tz ",
+            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {} Tz ",
                         syn_a, syn_b, syn_c, syn_d, adjusted_ctm_e, adjusted_ctm_f,
                         0, // render_mode
-                        wideningFactor * 100 );
+                        encodeDoubleForPlotter( wideningFactor * 100 ) );
 
             for( const PDF_OUTLINE_FONT_RUN& run : outlineRuns )
             {
-                fmt::print( m_workFile, "{} {:g} Tf <", run.m_subset->ResourceName(), heightFactor );
+                fmt::print( m_workFile, "{} {} Tf <",
+                            run.m_subset->ResourceName(), encodeDoubleForPlotter( heightFactor ) );
 
                 for( const PDF_OUTLINE_FONT_GLYPH& glyph : run.m_glyphs )
                 {
@@ -2391,16 +2432,16 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 adj_d -= ctm_b * tilt;
             }
 
-            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {:g} Tz ",
+            fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {} Tz ",
                         ctm_a, ctm_b, adj_c, adj_d, ctm_e, ctm_f,
                         0, // render_mode
-                        wideningFactor * 100 );
+                        encodeDoubleForPlotter( wideningFactor * 100 ) );
 
             for( const PDF_STROKE_FONT_RUN& run : runs )
             {
-                fmt::print( m_workFile, "{} {:g} Tf {} Tj ",
+                fmt::print( m_workFile, "{} {} Tf {} Tj ",
                             run.m_subset->ResourceName(),
-                            fontSize,
+                            encodeDoubleForPlotter( fontSize ),
                             encodeByteString( run.m_bytes ) );
             }
 
@@ -2637,7 +2678,7 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
                         "/PS /Min\n"
                         "/Subtype /P\n"
                         ">>\n",
-                        view.m_fov );
+                        encodeDoubleForPlotter( view.m_fov ) );
             closePdfObject();
         }
         else

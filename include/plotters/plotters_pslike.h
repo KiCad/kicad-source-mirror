@@ -508,6 +508,9 @@ protected:
     /// string PDF format (convert special chars and non ascii7 chars)
     std::string encodeStringForPlotter( const wxString& aUnicode ) override;
 
+    /// Convert a double to a PDF-compatible numeric token (no exponent notation).
+    std::string encodeDoubleForPlotter( double aValue ) const;
+
     /**
      * PDF supports colors fully. It actually has distinct fill and pen colors,
      * but we set both at the same time.
