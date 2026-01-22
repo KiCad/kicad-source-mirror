@@ -62,6 +62,15 @@ struct KICOMMON_API LIBRARY_ERROR
     wxString message;
 };
 
+
+struct KICOMMON_API LIBRARY_TABLE_OK : public LIBRARY_ERROR
+{
+    LIBRARY_TABLE_OK() :
+            LIBRARY_ERROR( wxT( "Table_OK" ) )
+    {}
+};
+
+
 template<typename ResultType>
 using LIBRARY_RESULT = tl::expected<ResultType, LIBRARY_ERROR>;
 

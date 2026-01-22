@@ -451,6 +451,10 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
 
 void GRID_CELL_TEXT_BUTTON::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 {
+    m_grid = aGrid;
+    m_row = aRow;
+    m_col = aCol;
+
     auto evtHandler = static_cast< wxGridCellEditorEvtHandler* >( m_control->GetEventHandler() );
 
     // Don't immediately end if we get a kill focus event within BeginEdit
@@ -460,11 +464,31 @@ void GRID_CELL_TEXT_BUTTON::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 
     Combo()->SetValue( m_value );
     Combo()->SetFocus();
+
+    // Bind event to handle text changes
+    Combo()->Bind( wxEVT_TEXT, &GRID_CELL_TEXT_BUTTON::OnTextChange, this );
+}
+
+
+void GRID_CELL_TEXT_BUTTON::OnTextChange( wxCommandEvent& event )
+{
+    if( m_grid && m_row >= 0 && m_row < m_grid->GetNumberRows() && m_col >= 0 && m_col < m_grid->GetNumberCols() )
+    {
+        m_value = Combo()->GetValue();
+        ApplyEdit( m_row, m_col, m_grid );
+    }
+
+    event.Skip(); // Ensure that other handlers can process this event too
 }
 
 
 bool GRID_CELL_TEXT_BUTTON::EndEdit( int, int, const wxGrid*, const wxString&, wxString *aNewVal )
 {
+    Combo()->Unbind( wxEVT_TEXT, &GRID_CELL_TEXT_BUTTON::OnTextChange, this );
+    m_grid = nullptr;
+    m_row = -1;
+    m_col = -1;
+
     const wxString value = Combo()->GetValue();
 
     if( value == m_value )

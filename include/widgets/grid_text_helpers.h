@@ -124,7 +124,11 @@ protected:
 class KICOMMON_API GRID_CELL_TEXT_BUTTON : public wxGridCellEditor
 {
 public:
-    GRID_CELL_TEXT_BUTTON() {};
+    GRID_CELL_TEXT_BUTTON() :
+            m_grid( nullptr ),
+            m_row( -1 ),
+            m_col( -1 )
+    {};
 
     wxString GetValue() const override;
 
@@ -136,6 +140,8 @@ public:
     void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;
     void Reset() override;
 
+    void OnTextChange( wxCommandEvent& event );
+
 #if wxUSE_VALIDATORS
     void SetValidator( const wxValidator& validator );
 #endif
@@ -143,11 +149,15 @@ public:
 protected:
     wxComboCtrl* Combo() const { return static_cast<wxComboCtrl*>( m_control ); }
 
+protected:
 #if wxUSE_VALIDATORS
     std::unique_ptr< wxValidator > m_validator;
 #endif
 
-    wxString     m_value;
+    wxGrid*  m_grid;
+    int      m_row;
+    int      m_col;
+    wxString m_value;
 
     wxDECLARE_NO_COPY_CLASS( GRID_CELL_TEXT_BUTTON );
 };

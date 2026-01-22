@@ -69,7 +69,9 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
         wxString   msg;
         wxFileName fileName( row->URI() );
 
-        if( !fileName.FileExists() )
+        if( fileName.FileExists() )
+            return tl::unexpected( LIBRARY_TABLE_OK() );
+        else
             msg = wxString::Format( _( "Nested table '%s' not found." ), row->URI() );
 
         return tl::unexpected( LIBRARY_ERROR( msg ) );

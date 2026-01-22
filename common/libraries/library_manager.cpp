@@ -856,7 +856,12 @@ void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
                 aRow.SetErrorDescription( status.value().error.value().message );
         }
     }
-    else if( !plugin.error().message.IsEmpty() )
+    else if( plugin.error().message == LIBRARY_TABLE_OK().message )
+    {
+        aRow.SetOk( true );
+        aRow.SetErrorDescription( wxEmptyString );
+    }
+    else
     {
         aRow.SetOk( false );
         aRow.SetErrorDescription( plugin.error().message );
