@@ -488,7 +488,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
             theme = pcbSettings->m_ColorTheme;
     }
 
-    COLOR_SETTINGS* colors = ::GetColorSettings( aJob->m_colorTheme );
+    COLOR_SETTINGS* colors = ::GetColorSettings( theme );
 
     if( colors->GetFilename() != theme && !aOpts.GetBlackAndWhite() )
     {
