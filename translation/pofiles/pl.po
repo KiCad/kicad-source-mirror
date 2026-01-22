@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-18 15:22+0000\n"
+"PO-Revision-Date: 2026-01-23 13:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -11863,9 +11863,9 @@ msgid "Footprint '%s' not found."
 msgstr "Footprint '%s' nie został znaleziony."
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Błąd podczas wczytywania footprintu"
+msgstr "Błąd podczas wczytywania footprintu: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2080
 #, c-format
@@ -13754,9 +13754,9 @@ msgstr "Właściwości obrazu"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Importuj symbol"
+msgstr "Importuj symbol z %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13786,9 +13786,9 @@ msgid "%d symbols selected, %d parents auto-included"
 msgstr ""
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Nie wybrano symbolu"
+msgstr "Wybrano %d symboli"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
 #, fuzzy
@@ -14384,14 +14384,14 @@ msgid "Collapse left panel"
 msgstr "Zwiń wszystko"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Nie znaleziono pasujących symboli w bibliotece '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Nie znaleziono symboli w bibliotece '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:578
 #, c-format
@@ -14449,9 +14449,9 @@ msgstr "Nazwa pola '%s' już istnieje."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:816
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "Tabela z polami symbolu"
+msgstr "Tabela z polami symbolu (Biblioteka '%s')"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1033
 #: eeschema/dialogs/dialog_rescue_each.cpp:116
@@ -18301,9 +18301,9 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Zachowaj piny na pozycjach w czasie przeciągania krawędzi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Tables (%s)|*"
-msgstr "Biblioteki symboli"
+msgstr "Tabele bibliotek symboli (%s)|*"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:402 eeschema/files-io.cpp:879
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:162
@@ -19480,39 +19480,39 @@ msgid "Graphic item count differs."
 msgstr "Elementy graficzne różnią się."
 
 #: eeschema/lib_symbol.cpp:1938
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "Elementy graficzne różnią się."
+msgstr "Elementy graficzne różniące się: %s; %s."
 
 #: eeschema/lib_symbol.cpp:1954
-#, fuzzy, c-format
+#, c-format
 msgid "Extra pin in schematic symbol: %s."
-msgstr "Edycja symboli schematowych"
+msgstr "Dodatkowy pin w symbolu schematu: %s."
 
 #: eeschema/lib_symbol.cpp:1962
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs: %s; %s"
-msgstr "Pin %s różni się."
+msgstr "Pin %s różni się: %s; %s"
 
 #: eeschema/lib_symbol.cpp:1977
-#, fuzzy, c-format
+#, c-format
 msgid "Missing pin in schematic symbol: %s."
-msgstr "Edycja symboli schematowych"
+msgstr "Brakujący pin w symbolu schematu: %s."
 
 #: eeschema/lib_symbol.cpp:1996
-#, fuzzy, c-format
+#, c-format
 msgid "Extra field in schematic symbol: %s."
-msgstr "Edycja symboli schematowych"
+msgstr "Dodatkowe pole w symbolu schematu: %s."
 
 #: eeschema/lib_symbol.cpp:2022
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs: %s; %s."
-msgstr "Liczba pól różni się."
+msgstr "Pole '%s' różni się: %s; %s."
 
 #: eeschema/lib_symbol.cpp:2043
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field in schematic symbol: %s."
-msgstr "Edycja symboli schematowych"
+msgstr "Brakujące pole w symbolu schematu: %s."
 
 #: eeschema/lib_symbol.cpp:2053
 #, fuzzy
@@ -20303,9 +20303,9 @@ msgid "Select variant name to remove"
 msgstr "Wybierz nazwę wariantu do usunięcia"
 
 #: eeschema/sch_field.cpp:959
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Pole tekstowe %s (%s)"
+msgstr "Pole %s (puste)"
 
 #: eeschema/sch_field.cpp:963
 #, c-format
@@ -21418,9 +21418,9 @@ msgid "Label '%s'"
 msgstr "Etykieta '%s'"
 
 #: eeschema/sch_label.cpp:1922
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Etykieta z dyrektywą [%s %s]"
+msgstr "Etykieta z dyrektywą [%s (pusta)]"
 
 #: eeschema/sch_label.cpp:1926
 #, c-format
@@ -23418,9 +23418,9 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Run %d"
-msgstr "Uruchom %s"
+msgstr "Uruchom %d"
 
 #: eeschema/sim/sim_plot_tab.cpp:760
 msgid "Amplitude"
@@ -23724,9 +23724,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Wystąpił błąd podczas ładowania biblioteki symboli '%s'."
+msgstr "Wystąpił błąd podczas parsowania biblioteki SPICE '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24422,9 +24422,9 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Nie można odnaleźć przeglądarki dla '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Nie można zaimportować biblioteki symboli '%s'."
+msgstr "Nie można zaimportować symbolu '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
@@ -26511,9 +26511,9 @@ msgid " (already placed)"
 msgstr " (obecnie umieszczone)"
 
 #: eeschema/tools/sch_edit_tool.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "Umieść wszystkie części składowe"
+msgstr "Umieść część składową %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:194
 msgid "Pin Function"
@@ -27027,9 +27027,9 @@ msgid "All pins must be at the same location"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1373
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "Łączenie %s pin %s do %s."
+msgstr "Konwersja %zu stosu pinów do '%s'"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1395
 msgid "Select a single pin with stacked notation to explode"
@@ -27241,9 +27241,9 @@ msgid "Symbol payload did not include the expected symbol."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Nie można połączyć zaznaczonych polygonów."
+msgstr "Nie można zdekodować ładunku symbolu: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:500
 msgid "Select which remote data source to query."
@@ -27303,9 +27303,9 @@ msgid "Failed to allocate a callback port for login."
 msgstr "Nie udało się przydzielić portu zwrotnych wywołań dla logowania."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "Niewspierany kształt przelotki: %s."
+msgstr "Niewspierane RPC wersja %d."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1144
 #, fuzzy
@@ -27446,9 +27446,9 @@ msgid "Unsupported SPICE payload type."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2077
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Wystąpił błąd przy dodawaniu danych komponentu"
+msgstr "Wystąpił błąd przy parsowaniu listy komponentów: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:2083
 msgid "Component list must be an array."
@@ -31010,9 +31010,9 @@ msgid "Moments ago"
 msgstr "Komentarzy"
 
 #: kicad/local_history_pane.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "minut"
+msgstr "%d minut temu"
 
 #: kicad/local_history_pane.cpp:131
 #, c-format
@@ -31133,9 +31133,9 @@ msgid "Libraries (%d)"
 msgstr "Biblioteki (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Data sources (%d)"
-msgstr "Nazwa źródła danych"
+msgstr "Źródła danych (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:55
 #, c-format
@@ -36053,9 +36053,9 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:229
 #: pcbnew/connectivity/topo_match.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "net %d"
-msgstr "węzeł sieci"
+msgstr "węzeł sieci %d"
 
 #: pcbnew/connectivity/topo_match.cpp:235
 #, c-format
@@ -36330,9 +36330,9 @@ msgid ""
 msgstr "Testuj czy występuje zgodność pomiędzy PCB a schematem"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>    RefDes: %s; footprint: %s at %s on PCB."
-msgstr "<br/>Odnośnik: %s Footprint %s:%s na pozycji %s na PCB."
+msgstr "<br/>    Odnośnik: %s; footprint: %s na pozycji %s na PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
@@ -45803,9 +45803,9 @@ msgid "keepout area"
 msgstr "obszar chroniony"
 
 #: pcbnew/drc/drc_engine.cpp:606
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s' of %s"
-msgstr "obszar chroniony '%s'"
+msgstr "obszar chroniony '%s' z %s"
 
 #: pcbnew/drc/drc_engine.cpp:612
 #, c-format
@@ -47082,14 +47082,15 @@ msgid "Footprint layers differ."
 msgstr "Filtry footprintów różnią się."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint has %lu layers not on board: %s"
-msgstr "Na płytce istnieje już taki footprint."
+msgstr "Footprint posiada %lu warstw nie umieszczonych na płytce: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Board has %lu copper layers not in footprint: %s"
-msgstr "Twoja płytka posiada błędny numer warstwy w footprincie %s"
+msgstr ""
+"Płytka posiada %lu warstw sygnałowych nie znajdujących się w footprincie: %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:816
 msgid "Footprint types differ."
@@ -47310,14 +47311,14 @@ msgid "'%s' settings differ"
 msgstr "Ustawienie '%s' różni się."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "Brakujący footprint"
+msgstr "Braku pola symbolu '%s' w footpricie"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "Liczba pól różni się."
+msgstr "Pole %s różni się (PCB: '%s', schemat: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:273
 #, fuzzy
@@ -47924,19 +47925,18 @@ msgid "Failed to create counterbore cylinder shape"
 msgstr "Nie udało się utworzyć podpisu autora: '%s'"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1223
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating counterbore: %s"
-msgstr "Wystąpił wyjątek OCC podczas tworzenia konturu %d: %s"
+msgstr "Wystąpił wyjątek OCC podczas tworzenia pogłębienia: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1363
-#, fuzzy
 msgid "Failed to create countersink cone shape"
-msgstr "Nie udało się utworzyć kształtu pryzmatycznego"
+msgstr "Nie udało się utworzyć stożkowego kształtu pogłębienia stożkowego"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1378
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating countersink: %s"
-msgstr "Wystąpił wyjątek OCC podczas tworzenia konturu %d: %s"
+msgstr "Wystąpił wyjątek OCC podczas tworzenia nawiertu: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1665
 #, c-format
@@ -49496,14 +49496,14 @@ msgid "Invalid footprint ID '%s' for variant '%s' on %s."
 msgstr "Nieznany ID footprintu '%s' dla wariantu '%s' na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "Dodaj dla %s atrybut 'Nie montowane'."
+msgstr "Dodaj %s:%s atrybut wariantu 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "Usuń dla %s atrybut 'Nie montowane'."
+msgstr "Usuń %s:%s atrybut wariantu 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
 #, fuzzy, c-format
