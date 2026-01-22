@@ -176,9 +176,8 @@ BOX2I expandedSelectionBox( const SCH_SELECTION& aSelection )
 bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection, const BOX2I& aBBox,
                          wxMemoryBuffer& aBuffer )
 {
-    SCH_RENDER_SETTINGS renderSettings;
+    SCH_RENDER_SETTINGS renderSettings( *aFrame->GetRenderSettings() );
     renderSettings.LoadColors( aFrame->GetColorSettings() );
-    renderSettings.SetDefaultPenWidth( aFrame->GetRenderSettings()->GetDefaultPenWidth() );
     renderSettings.SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
 
     std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
