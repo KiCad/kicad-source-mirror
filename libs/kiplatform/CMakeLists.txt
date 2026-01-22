@@ -64,6 +64,7 @@ if( APPLE )
         "-framework Foundation"
         "-framework PDFKit"
         "-framework WebKit"
+        "-framework CFNetwork"
         )
 elseif( WIN32 )
     list( APPEND PLATFORM_SRCS
