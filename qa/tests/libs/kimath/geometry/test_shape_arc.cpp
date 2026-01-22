@@ -1295,9 +1295,9 @@ BOOST_AUTO_TEST_CASE( TransformIssue22475ArcToPolygon )
 
     // Check that the polygon isn't ridiculously large
     BOOST_CHECK_MESSAGE( bbox.GetWidth() <= 3000000,
-                         wxString::Format( "Polygon width %d is too large (expected ~2020000)", bbox.GetWidth() ) );
+                         wxString::Format( "Polygon width %lld is too large (expected ~2020000)", (long long)bbox.GetWidth() ) );
     BOOST_CHECK_MESSAGE( bbox.GetHeight() <= 1000000,
-                         wxString::Format( "Polygon height %d is too large (expected ~400000)", bbox.GetHeight() ) );
+                         wxString::Format( "Polygon height %lld is too large (expected ~400000)", (long long)bbox.GetHeight() ) );
 }
 
 
