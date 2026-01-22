@@ -784,7 +784,9 @@ class _ServerState:
 
         assets: List[AssetRecord] = []
         component_entries: List[Dict[str, Any]] = []
-        library_name = Path(symbol_path).stem
+        library_name = self._get_field(entry, "Library")
+        if not library_name:
+            library_name = Path(symbol_path).stem  # Fallback to symbol filename stem
 
         field_plan = [
           ("Footprint", "DL_FOOTPRINT", "SAVE", "footprint"),

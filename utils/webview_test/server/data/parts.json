@@ -2,6 +2,7 @@
   "Parts": [
     {
       "Name": "Resistor 0603 1k",
+      "Library": "Passives",
       "Image": "images/resistor.svg",
       "Symbol": "symbols/r.kicad_sym",
       "Footprint": "footprints/R_0603_1608Metric.kicad_mod",
@@ -10,6 +11,7 @@
     },
     {
       "Name": "Capacitor 0603 100nF",
+      "Library": "Passives",
       "Symbol": "symbols/c.kicad_sym",
       "Footprint": "footprints/R_0603_1608Metric.kicad_mod",
       "SPICE Model": "spice/capacitor.cir"

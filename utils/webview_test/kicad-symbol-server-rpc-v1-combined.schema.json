@@ -258,10 +258,12 @@
                   "enum": ["KICAD_FOOTPRINT_V1"]
                 },
                 "library": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Target library name. Downloads with the same library value are grouped together. Falls back to 'footprints' if not provided."
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Footprint name within the library."
                 }
               },
               "additionalProperties": true
@@ -291,10 +293,12 @@
                   "enum": ["KICAD_SYMBOL_V1"]
                 },
                 "library": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Target library name. Downloads with the same library value are grouped together. Falls back to 'symbols' if not provided."
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Symbol name within the library."
                 }
               },
               "additionalProperties": true
@@ -324,10 +328,12 @@
                   "enum": ["KICAD_SPICE_MODEL_V1"]
                 },
                 "library": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Target library/directory name for SPICE models."
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "SPICE model filename."
                 }
               },
               "additionalProperties": true
@@ -360,10 +366,12 @@
                   ]
                 },
                 "library": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Target library/directory name for 3D models."
                 },
                 "name": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "3D model filename."
                 }
               },
               "additionalProperties": true

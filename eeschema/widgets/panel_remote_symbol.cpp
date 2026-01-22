@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wupdlock.h>
-
-#include "picosha2.h"
-
 #include "panel_remote_symbol.h"
 
 #include <bitmaps.h>
@@ -34,7 +30,6 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project_sch.h>
-#include <remote_login_server.h>
 #include <sch_edit_frame.h>
 #include <sch_symbol.h>
 #include <dialogs/dialog_remote_symbol_config.h>
@@ -44,21 +39,12 @@
 #include <libraries/symbol_library_adapter.h>
 #include <libraries/library_manager.h>
 #include <lib_symbol.h>
-#include <richio.h>
-#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <sch_io/sch_io_mgr.h>
-#include <sch_io/sch_io.h>
-#include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/webview_panel.h>
 #include <nlohmann/json.hpp>
-#include <algorithm>
-#include <cctype>
-#include <fstream>
-#include <map>
-#include <set>
 
 #ifndef wxUSE_BASE64
 #define wxUSE_BASE64 1
@@ -72,136 +58,11 @@
 #include <wx/filefn.h>
 #include <wx/intl.h>
 #include <wx/log.h>
-#include <wx/menu.h>
 #include <wx/mstream.h>
 #include <wx/sizer.h>
 #include <wx/strconv.h>
 #include <wx/webview.h>
-#include <wx/socket.h>
-#include <wx/timer.h>
-#include <wx/tokenzr.h>
-#include <wx/uri.h>
-#include <wx/utils.h>
 #include <zstd.h>
-
-#include <kiplatform/webview.h>
-#include <paths.h>
-
-
-namespace
-{
-
-class STRING_OUTPUTFORMATTER_BUFFER : public OUTPUTFORMATTER
-{
-public:
-    STRING_OUTPUTFORMATTER_BUFFER() : OUTPUTFORMATTER( OUTPUTFMTBUFZ ) {}
-
-    const std::string& GetString() const { return m_output; }
-
-protected:
-    void write( const char* aOutBuf, int aCount ) override
-    {
-        m_output.append( aOutBuf, aCount );
-    }
-
-private:
-    std::string m_output;
-};
-
-std::string HashBuffer( const std::vector<uint8_t>& aBuffer )
-{
-    std::vector<unsigned char> hash( picosha2::k_digest_size );
-    picosha2::hash256( aBuffer.begin(), aBuffer.end(), hash.begin(), hash.end() );
-    return picosha2::bytes_to_hex_string( hash.begin(), hash.end() );
-}
-
-std::string HashString( const std::string& aValue )
-{
-    std::vector<unsigned char> hash( picosha2::k_digest_size );
-    picosha2::hash256( aValue.begin(), aValue.end(), hash.begin(), hash.end() );
-    return picosha2::bytes_to_hex_string( hash.begin(), hash.end() );
-}
-
-bool HashFile( const wxFileName& aPath, std::string& aOutHash )
-{
-    if( !aPath.FileExists() )
-        return false;
-
-    std::ifstream file( aPath.GetFullPath().ToStdString(), std::ios::binary );
-
-    if( !file )
-        return false;
-
-    std::vector<unsigned char> hash( picosha2::k_digest_size );
-    picosha2::hash256( file, hash.begin(), hash.end() );
-    aOutHash = picosha2::bytes_to_hex_string( hash.begin(), hash.end() );
-    return true;
-}
-
-wxString AppendNumericSuffix( const wxString& aBase, int aSuffix )
-{
-    return wxString::Format( wxS( "%s_%d" ), aBase, aSuffix );
-}
-
-wxString AppendNumericSuffixToFilename( const wxString& aFilename, int aSuffix )
-{
-    wxFileName fn;
-    fn.SetFullName( aFilename );
-
-    const wxString base = fn.GetName();
-    const wxString ext = fn.GetExt();
-    wxString candidate = AppendNumericSuffix( base, aSuffix );
-
-    if( ext.IsEmpty() )
-        return candidate;
-
-    return candidate + wxS( "." ) + ext;
-}
-
-std::string SerializeSymbolCanonical( const LIB_SYMBOL& aSymbol )
-{
-    LIB_SYMBOL clone( aSymbol );
-    STRING_OUTPUTFORMATTER_BUFFER formatter;
-    SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( &clone, formatter );
-    return formatter.GetString();
-}
-
-std::unique_ptr<LIB_SYMBOL> TryCloneSymbol( SCH_IO* aPlugin, const wxFileName& aLibraryFile,
-                                            const wxString& aSymbolName )
-{
-    if( !aPlugin || !aLibraryFile.FileExists() )
-        return nullptr;
-
-    try
-    {
-        LIB_SYMBOL* existing = aPlugin->LoadSymbol( aLibraryFile.GetFullPath(), aSymbolName );
-
-        if( !existing )
-            return nullptr;
-
-        return std::make_unique<LIB_SYMBOL>( *existing );
-    }
-    catch( const IO_ERROR& )
-    {
-        return nullptr;
-    }
-}
-
-bool ComputeSymbolChecksum( SCH_IO* aPlugin, const wxFileName& aLibraryFile,
-                           const wxString& aSymbolName, std::string& aOutChecksum )
-{
-    std::unique_ptr<LIB_SYMBOL> symbol = TryCloneSymbol( aPlugin, aLibraryFile, aSymbolName );
-
-    if( !symbol )
-        return false;
-
-    aOutChecksum = HashString( SerializeSymbolCanonical( *symbol ) );
-    return true;
-}
-
-} // namespace
-
-
 
 wxString PANEL_REMOTE_SYMBOL::jsonString( const nlohmann::json& aObject, const char* aKey ) const
 {
@@ -249,7 +110,8 @@ bool PANEL_REMOTE_SYMBOL::decompressIfNeeded( const std::string& aCompression,
 
     if( aCompression != "ZSTD" )
     {
-        aError = wxString::Format( _( "Unsupported compression '%s'." ), wxString::FromUTF8( aCompression ) );
+        aError = wxString::Format( _( "Unsupported compression '%s'." ),
+                                   wxString::FromUTF8( aCompression ) );
         return false;
     }
 
@@ -259,14 +121,16 @@ bool PANEL_REMOTE_SYMBOL::decompressIfNeeded( const std::string& aCompression,
         return false;
     }
 
-    unsigned long long expectedSize = ZSTD_getFrameContentSize( aInput.data(), aInput.size() );
+    unsigned long long expectedSize =
+            ZSTD_getFrameContentSize( aInput.data(), aInput.size() );
 
     if( expectedSize == ZSTD_CONTENTSIZE_ERROR || expectedSize == ZSTD_CONTENTSIZE_UNKNOWN )
         expectedSize = static_cast<unsigned long long>( aInput.size() ) * 4;
 
     aOutput.resize( expectedSize );
 
-    size_t decompressed = ZSTD_decompress( aOutput.data(), expectedSize, aInput.data(), aInput.size() );
+    size_t decompressed = ZSTD_decompress( aOutput.data(), expectedSize,
+                                           aInput.data(), aInput.size() );
 
     if( ZSTD_isError( decompressed ) )
     {
@@ -285,55 +149,6 @@ wxString PANEL_REMOTE_SYMBOL::sanitizeForScript( const std::string& aJson ) cons
     script.Replace( "\\", "\\\\" );
     script.Replace( "'", "\\'" );
     return script;
-}
-
-wxString PANEL_REMOTE_SYMBOL::normalizeDataSourceUrl( const wxString& aUrl ) const
-{
-    wxString normalized = aUrl;
-    normalized.Trim( true ).Trim( false );
-
-    while( normalized.Length() > 1 && normalized.EndsWith( wxS( "/" ) ) )
-        normalized.RemoveLast();
-
-    return normalized;
-}
-
-wxString PANEL_REMOTE_SYMBOL::currentDataSourceKey() const
-{
-    return m_activeDataSourceUrl;
-}
-
-void PANEL_REMOTE_SYMBOL::loadStoredUserIdForActiveSource()
-{
-    m_activeUserId.clear();
-
-    if( m_activeDataSourceUrl.IsEmpty() )
-        return;
-
-    if( EESCHEMA_SETTINGS* settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-    {
-        auto it = settings->m_RemoteSymbol.user_ids.find( m_activeDataSourceUrl );
-
-        if( it != settings->m_RemoteSymbol.user_ids.end() )
-            m_activeUserId = it->second;
-    }
-}
-
-void PANEL_REMOTE_SYMBOL::storeUserIdForActiveSource( const wxString& aUserId )
-{
-    if( aUserId.IsEmpty() )
-        return;
-
-    if( m_activeDataSourceUrl.IsEmpty() )
-        return;
-
-    if( EESCHEMA_SETTINGS* settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-    {
-        settings->m_RemoteSymbol.user_ids[m_activeDataSourceUrl] = aUserId;
-        Pgm().GetSettingsManager().Save( settings );
-    }
-
-    m_activeUserId = aUserId;
 }
 
 wxString PANEL_REMOTE_SYMBOL::sanitizeFileComponent( const wxString& aValue,
@@ -397,9 +212,9 @@ bool PANEL_REMOTE_SYMBOL::writeBinaryFile( const wxFileName& aOutput,
 }
 
 
-std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload( const std::vector<uint8_t>& aPayload,
-                                                                        const wxString&             aLibItemName,
-                                                                        wxString&                   aError ) const
+std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload(
+        const std::vector<uint8_t>& aPayload, const wxString& aLibItemName,
+        wxString& aError ) const
 {
     if( aPayload.empty() )
     {
@@ -453,10 +268,7 @@ std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload( const st
 
         if( loaded )
         {
-            // Clone the symbol before the plugin's cache is destroyed.
-            // LoadSymbol returns a pointer owned by the plugin's internal cache,
-            // and the cache will be destroyed when 'plugin' goes out of scope.
-            symbol = std::make_unique<LIB_SYMBOL>( *loaded );
+            symbol.reset( loaded );
             wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
                         "loadSymbolFromPayload: loaded symbol %s from temporary file %s",
                         aLibItemName.ToUTF8().data(), tempFile.GetFullPath().ToUTF8().data() );
@@ -481,16 +293,11 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
         m_frame( aParent ),
         m_dataSourceChoice( nullptr ),
         m_configButton( nullptr ),
-        m_refreshButton( nullptr ),
         m_webView( nullptr ),
         m_pcm( std::make_shared<PLUGIN_CONTENT_MANAGER>( []( int ) {} ) ),
     m_sessionId( 0 ),
     m_messageIdCounter( 0 ),
-    m_pendingHandshake( false ),
-    m_loginServer(),
-    m_activeDataSourceUrl(),
-    m_activeUserId(),
-    m_webViewLoadedBound( false )
+    m_pendingHandshake( false )
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -500,15 +307,9 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     m_dataSourceChoice->SetToolTip( _( "Select which remote data source to query." ) );
     controlsSizer->Add( m_dataSourceChoice, 1, wxEXPAND | wxRIGHT, FromDIP( 2 ) );
 
-    m_refreshButton = new BITMAP_BUTTON( this, wxID_ANY );
-    m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::reload ) );
-    m_refreshButton->SetPadding( 2 );
-    m_refreshButton->SetToolTip( _( "Refresh" ) );
-    controlsSizer->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, FromDIP( 2 ) );
-
     m_configButton = new BITMAP_BUTTON( this, wxID_ANY );
     m_configButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
-    m_configButton->SetPadding( 2 );
+    m_configButton->SetPadding( FromDIP( 2 ) );
     m_configButton->SetToolTip( _( "Configure remote data sources." ) );
     controlsSizer->Add( m_configButton, 0, wxALIGN_CENTER_VERTICAL );
 
@@ -522,61 +323,29 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
             } );
     m_webView->SetHandleExternalLinks( true );
 
+    if( wxWebView* browser = m_webView->GetWebView() )
+    {
+        browser->Bind( wxEVT_WEBVIEW_LOADED, &PANEL_REMOTE_SYMBOL::onWebViewLoaded, this );
+    }
+
     topSizer->Add( m_webView, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP( 2 ) );
 
     SetSizer( topSizer );
 
     m_dataSourceChoice->Bind( wxEVT_CHOICE, &PANEL_REMOTE_SYMBOL::onDataSourceChanged, this );
     m_configButton->Bind( wxEVT_BUTTON, &PANEL_REMOTE_SYMBOL::onConfigure, this );
-    m_refreshButton->Bind( wxEVT_BUTTON, &PANEL_REMOTE_SYMBOL::onRefresh, this );
-    Bind( EVT_REMOTE_SYMBOL_LOGIN_RESULT, &PANEL_REMOTE_SYMBOL::onRemoteLoginResult, this );
 
     RefreshDataSources();
-
-    // Load saved cookies after data sources are ready
-    LoadCookies();
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "PANEL_REMOTE_SYMBOL constructed (frame=%p)", (void*)aParent );
 }
 
 
-PANEL_REMOTE_SYMBOL::~PANEL_REMOTE_SYMBOL()
-{
-    // Save cookies before destruction
-    SaveCookies();
-}
-
-
-void PANEL_REMOTE_SYMBOL::SaveCookies()
-{
-    if( !m_webView || !m_webView->GetWebView() )
-        return;
-
-    wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
-    KIPLATFORM::WEBVIEW::SaveCookies( m_webView->GetWebView(), cookieFile.GetFullPath() );
-}
-
-
-void PANEL_REMOTE_SYMBOL::LoadCookies()
-{
-    if( !m_webView || !m_webView->GetWebView() )
-        return;
-
-    wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
-    KIPLATFORM::WEBVIEW::LoadCookies( m_webView->GetWebView(), cookieFile.GetFullPath() );
-}
-
-
 void PANEL_REMOTE_SYMBOL::BindWebViewLoaded()
 {
-    if( m_webViewLoadedBound )
-        return;
-
     if( wxWebView* browser = m_webView->GetWebView() )
     {
         browser->Bind( wxEVT_WEBVIEW_LOADED, &PANEL_REMOTE_SYMBOL::onWebViewLoaded, this );
-        m_webView->BindLoadedEvent();
-        m_webViewLoadedBound = true;
     }
 }
 
@@ -631,45 +400,11 @@ void PANEL_REMOTE_SYMBOL::onDataSourceChanged( wxCommandEvent& aEvent )
 
 void PANEL_REMOTE_SYMBOL::onConfigure( wxCommandEvent& aEvent )
 {
-    wxMenu menu;
-    menu.Append( 1, _( "Configure..." ) );
-    menu.Append( 2, _( "Clear Cookies" ) );
+    DIALOG_REMOTE_SYMBOL_CONFIG dlg( this );
 
-    // Position the menu below the button
-    wxPoint pos = m_configButton->GetPosition();
-    pos.y += m_configButton->GetSize().GetHeight();
+    dlg.ShowModal();
 
-    int selection = GetPopupMenuSelectionFromUser( menu, pos );
-
-    if( selection == 1 )
-    {
-        DIALOG_REMOTE_SYMBOL_CONFIG dlg( this );
-
-        dlg.ShowModal();
-
-        RefreshDataSources();
-    }
-    else if( selection == 2 )
-    {
-        if( m_webView && m_webView->GetWebView() )
-        {
-            KIPLATFORM::WEBVIEW::DeleteCookies( m_webView->GetWebView() );
-
-            wxFileName cookieFile( PATHS::GetUserSettingsPath(), wxS( "webview_cookies.json" ) );
-
-            if( cookieFile.FileExists() )
-                wxRemoveFile( cookieFile.GetFullPath() );
-
-            m_webView->GetWebView()->Reload();
-        }
-    }
-}
-
-
-void PANEL_REMOTE_SYMBOL::onRefresh( wxCommandEvent& aEvent )
-{
-    if( m_webView && m_webView->GetWebView() )
-        m_webView->GetWebView()->Reload();
+    RefreshDataSources();
 }
 
 
@@ -682,16 +417,8 @@ bool PANEL_REMOTE_SYMBOL::loadDataSource( size_t aIndex )
 }
 
 
-bool PANEL_REMOTE_SYMBOL::HasDataSources() const
-{
-    return !m_dataSources.empty();
-}
-
-
 bool PANEL_REMOTE_SYMBOL::loadDataSource( const PCM_INSTALLATION_ENTRY& aEntry )
 {
-    stopLoginServer();
-
     std::optional<wxFileName> jsonPath = findDataSourceJson( aEntry );
 
     if( !jsonPath )
@@ -724,16 +451,16 @@ bool PANEL_REMOTE_SYMBOL::loadDataSource( const PCM_INSTALLATION_ENTRY& aEntry )
 
     if( std::optional<wxString> url = extractUrlFromJson( jsonContent ) )
     {
-        m_activeDataSourceUrl = normalizeDataSourceUrl( *url );
-        loadStoredUserIdForActiveSource();
         m_pendingHandshake = true;
         m_webView->LoadURL( *url );
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "loadDataSource: loading URL %s", (*url).ToUTF8().data() );
         return true;
     }
 
-    wxLogWarning( "Remote data source JSON did not produce a valid URL for %s", aEntry.package.identifier );
-    showMessage( wxString::Format( _( "Unable to load remote data for '%s'." ), aEntry.package.name ) );
+    wxLogWarning( "Remote data source JSON did not produce a valid URL for %s",
+                  aEntry.package.identifier );
+    showMessage( wxString::Format( _( "Unable to load remote data for '%s'." ),
+                                   aEntry.package.name ) );
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "loadDataSource: failed to find URL in %s", jsonPath->GetFullPath() );
     return false;
 }
@@ -977,84 +704,6 @@ void PANEL_REMOTE_SYMBOL::beginSessionHandshake()
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "beginSessionHandshake: NEW_SESSION sent, session=%s", m_sessionId.AsString() );
 }
 
-void PANEL_REMOTE_SYMBOL::stopLoginServer()
-{
-    if( m_loginServer )
-        m_loginServer.reset();
-}
-
-void PANEL_REMOTE_SYMBOL::handleRemoteLogin( const nlohmann::json& aParams, int aMessageId )
-{
-    const wxString loginUrl = jsonString( aParams, "url" );
-
-    if( loginUrl.IsEmpty() )
-    {
-        respondWithError( wxS( "REMOTE_LOGIN" ), aMessageId, wxS( "INVALID_PARAMETERS" ),
-                          _( "Missing login URL for remote authentication." ) );
-        return;
-    }
-
-    stopLoginServer();
-
-    std::unique_ptr<REMOTE_LOGIN_SERVER> server = std::make_unique<REMOTE_LOGIN_SERVER>( this, "https://www.google.com/" );
-
-    if( !server->Start() )
-    {
-        respondWithError( wxS( "REMOTE_LOGIN" ), aMessageId, wxS( "INTERNAL_ERROR" ),
-                          _( "Unable to start the local login listener." ) );
-        return;
-    }
-
-    const unsigned short port = server->GetPort();
-
-    if( port == 0 )
-    {
-        respondWithError( wxS( "REMOTE_LOGIN" ), aMessageId, wxS( "INTERNAL_ERROR" ),
-                          _( "Failed to allocate a callback port for login." ) );
-        return;
-    }
-
-    m_loginServer = std::move( server );
-
-    nlohmann::json reply = nlohmann::json::object();
-    reply["port"] = static_cast<int>( port );
-    sendRpcMessage( wxS( "REMOTE_LOGIN" ), std::move( reply ), aMessageId );
-
-    wxString launchUrl = loginUrl;
-
-    if( launchUrl.Find( '?' ) != wxNOT_FOUND )
-        launchUrl << "&port=" << port;
-    else
-        launchUrl << "?port=" << port;
-
-    if( !wxLaunchDefaultBrowser( launchUrl ) )
-    {
-        wxLogWarning( "Remote login requested but default browser could not be opened (%s).",
-                      launchUrl.ToUTF8().data() );
-    }
-}
-
-void PANEL_REMOTE_SYMBOL::onRemoteLoginResult( wxCommandEvent& aEvent )
-{
-    const bool success = aEvent.GetInt() != 0;
-    const wxString userId = aEvent.GetString();
-
-    if( success && !userId.IsEmpty() )
-    {
-        storeUserIdForActiveSource( userId );
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "Remote login succeeded; stored user_id." );
-
-        if( m_webView && !m_activeDataSourceUrl.IsEmpty() )
-            m_webView->LoadURL( m_activeDataSourceUrl );
-    }
-    else
-    {
-        wxLogWarning( "Remote login callback did not provide a user_id." );
-    }
-
-    stopLoginServer();
-}
-
 
 void PANEL_REMOTE_SYMBOL::sendRpcMessage( const wxString& aCommand,
                                           nlohmann::json aParameters,
@@ -1064,7 +713,7 @@ void PANEL_REMOTE_SYMBOL::sendRpcMessage( const wxString& aCommand,
                                           const wxString& aErrorCode,
                                           const wxString& aErrorMessage )
 {
-    if( !m_webView || m_webView->HasLoadError() )
+    if( !m_webView )
         return;
 
     nlohmann::json payload = nlohmann::json::object();
@@ -1072,9 +721,6 @@ void PANEL_REMOTE_SYMBOL::sendRpcMessage( const wxString& aCommand,
     payload["session_id"] = m_sessionId.AsStdString();
     payload["message_id"] = ++m_messageIdCounter;
     payload["command"] = aCommand.ToStdString();
-
-    if( !m_activeUserId.IsEmpty() )
-        payload["user_id"] = m_activeUserId.ToStdString();
 
     if( aResponseTo )
         payload["response_to"] = *aResponseTo;
@@ -1097,7 +743,8 @@ void PANEL_REMOTE_SYMBOL::sendRpcMessage( const wxString& aCommand,
     wxString script = wxString::Format( wxS( "window.kiclient.postMessage('%s');" ),
                                         sanitizeForScript( payload.dump() ) );
     m_webView->RunScriptAsync( script );
-    wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "sendRpcMessage: %s", script );
+    wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "sendRpcMessage: command=%s message_id=%d status=%s",
+                aCommand.ToUTF8().data(), payload["message_id"].get<int>(), aStatus.ToUTF8().data() );
 }
 
 
@@ -1196,7 +843,7 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
     {
         nlohmann::json reply = nlohmann::json::object();
         reply["commands"] = { "NEW_SESSION", "GET_KICAD_VERSION", "LIST_SUPPORTED_VERSIONS",
-                               "CAPABILITIES", "PING", "PONG", "REMOTE_LOGIN", "LOGOUT", "DL_SYMBOL", "DL_COMPONENT", "DL_FOOTPRINT",
+                               "CAPABILITIES", "PING", "PONG", "DL_SYMBOL", "DL_FOOTPRINT",
                                "DL_SPICE", "DL_3DMODEL" };
         reply["compression"] = { "NONE", "ZSTD" };
         reply["max_message_size"] = 0;
@@ -1217,28 +864,6 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
     {
         return;
     }
-    else if( command == wxS( "REMOTE_LOGIN" ) )
-    {
-        handleRemoteLogin( params, messageId );
-        return;
-    }
-    else if( command == wxS( "LOGOUT" ) )
-    {
-        m_activeUserId.Clear();
-
-        if( EESCHEMA_SETTINGS* settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
-        {
-            if( !m_activeDataSourceUrl.IsEmpty() )
-            {
-                settings->m_RemoteSymbol.user_ids.erase( m_activeDataSourceUrl );
-                Pgm().GetSettingsManager().Save( settings );
-            }
-        }
-
-        sendRpcMessage( command, nlohmann::json::object(), messageId );
-        beginSessionHandshake();
-        return;
-    }
 
     const wxString compression = jsonString( params, "compression" );
 
@@ -1246,12 +871,13 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
     {
         if( compression.IsEmpty() )
         {
-            respondWithError( command, messageId, wxS( "INVALID_PARAMETERS" ), _( "Missing compression metadata." ) );
+            respondWithError( command, messageId, wxS( "INVALID_PARAMETERS" ),
+                              _( "Missing compression metadata." ) );
             return;
         }
 
         std::vector<uint8_t> decoded;
-        wxString             error;
+        wxString error;
 
         if( !decodeBase64Payload( data, decoded, error ) )
         {
@@ -1260,10 +886,10 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
         }
 
         std::vector<uint8_t> payload;
-        wxScopedCharBuffer   compUtf8 = compression.ToUTF8();
-        std::string          compressionStr = compUtf8 ? std::string( compUtf8.data() ) : std::string();
+    wxScopedCharBuffer compUtf8 = compression.ToUTF8();
+    std::string        compressionStr = compUtf8 ? std::string( compUtf8.data() ) : std::string();
 
-        if( !decompressIfNeeded( compressionStr, decoded, payload, error ) )
+    if( !decompressIfNeeded( compressionStr, decoded, payload, error ) )
         {
             respondWithError( command, messageId, wxS( "INVALID_PAYLOAD" ), error );
             return;
@@ -1272,13 +898,10 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "handleRpcMessage: decoded size=%zu decompressed size=%zu command=%s",
                     decoded.size(), payload.size(), command.ToUTF8().data() );
 
-        nlohmann::json responseParams = nlohmann::json::object();
         bool ok = false;
 
         if( command == wxS( "DL_SYMBOL" ) )
             ok = receiveSymbol( params, payload, error );
-        else if( command == wxS( "DL_COMPONENT" ) )
-            ok = receiveComponent( params, payload, error, &responseParams );
         else if( command == wxS( "DL_FOOTPRINT" ) )
             ok = receiveFootprint( params, payload, error );
         else if( command == wxS( "DL_3DMODEL" ) )
@@ -1293,7 +916,7 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
         }
 
         if( ok )
-            sendRpcMessage( command, std::move( responseParams ), messageId );
+            sendRpcMessage( command, nlohmann::json::object(), messageId );
         else
             respondWithError( command, messageId, wxS( "INTERNAL_ERROR" ),
                               error.IsEmpty() ? _( "Unable to store payload." ) : error );
@@ -1400,12 +1023,6 @@ bool PANEL_REMOTE_SYMBOL::ensureSymbolLibraryEntry( const wxFileName& aLibraryFi
         return false;
     }
 
-    // Notify adapters about the new library table entry
-    if( aGlobalTable )
-        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
-    else
-        manager.ProjectChanged();
-
     return true;
 }
 
@@ -1462,12 +1079,6 @@ bool PANEL_REMOTE_SYMBOL::ensureFootprintLibraryEntry( const wxFileName& aLibrar
         return false;
     }
 
-    // Notify adapters about the new library table entry
-    if( aGlobalTable )
-        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
-    else
-        manager.ProjectChanged();
-
     return true;
 }
 
@@ -1519,22 +1130,6 @@ bool PANEL_REMOTE_SYMBOL::placeDownloadedSymbol( const wxString& aNickname,
     LIB_ID libId;
     libId.SetLibNickname( aNickname );
     libId.SetLibItemName( aLibItemName );
-
-    wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                "placeDownloadedSymbol: attempting GetLibSymbol for %s:%s",
-                aNickname.ToUTF8().data(), aLibItemName.ToUTF8().data() );
-
-    // Ensure the library adapter has loaded this library
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
-    if( adapter )
-    {
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "placeDownloadedSymbol: got adapter, attempting LoadSymbol" );
-        LIB_SYMBOL* adapterSymbol = adapter->LoadSymbol( aNickname, aLibItemName );
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "placeDownloadedSymbol: adapter LoadSymbol returned %s",
-                    adapterSymbol ? "valid symbol" : "nullptr" );
-    }
 
     LIB_SYMBOL* libSymbol = m_frame->GetLibSymbol( libId );
 
@@ -1628,26 +1223,20 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
         return false;
     }
 
+    // Get symbol's internal name from "name" parameter
     wxString libItemName = jsonString( aParams, "name" );
-    wxString baseName = libItemName;
-
-    if( baseName.IsEmpty() )
-        baseName = jsonString( aParams, "library" );
-
-    if( baseName.IsEmpty() )
-        baseName = wxS( "symbol" );
-
-    baseName.Trim( true ).Trim( false );
-
     if( libItemName.IsEmpty() )
-        libItemName = baseName;
+        libItemName = wxS( "symbol" );
+    libItemName.Trim( true ).Trim( false );
 
-    wxString sanitizedName = sanitizeFileComponent( baseName, wxS( "symbol" ) );
+    // Get library name from "library" parameter, fallback to "symbols"
+    wxString libraryName = jsonString( aParams, "library" );
+    if( libraryName.IsEmpty() )
+        libraryName = wxS( "symbols" );
+    libraryName.Trim( true ).Trim( false );
 
-    if( libItemName.IsEmpty() )
-        libItemName = sanitizedName;
-
-    const wxString nickname = sanitizedPrefix() + wxS( "_sym_" ) + sanitizedName;
+    wxString sanitizedLibName = sanitizeFileComponent( libraryName, wxS( "symbols" ) );
+    const wxString nickname = sanitizedPrefix() + wxS( "_" ) + sanitizedLibName;
 
     wxFileName outFile( symDir );
     outFile.SetFullName( nickname + wxS( ".kicad_sym" ) );
@@ -1662,13 +1251,6 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
         aError = _( "Unable to access the symbol library manager." );
         return false;
     }
-
-    // Ensure the adapter has loaded this library (it was just added to the table)
-    std::optional<LIB_STATUS> libStatus = adapter->LoadOne( nickname );
-    wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                "receiveSymbol: LoadOne(%s) returned %s",
-                nickname.ToUTF8().data(),
-                libStatus.has_value() ? "valid status" : "nullopt" );
 
     std::unique_ptr<LIB_SYMBOL> downloadedSymbol = loadSymbolFromPayload( aPayload, libItemName, aError );
 
@@ -1687,83 +1269,15 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     savedId.SetLibItemName( libItemName );
     downloadedSymbol->SetLibId( savedId );
 
-    // Check if an identical symbol already exists (content-based deduplication)
-    std::string newChecksum = HashBuffer( aPayload );
-    std::string existingChecksum;
-
-    if( ComputeSymbolChecksum( nullptr, outFile, libItemName, existingChecksum )
-        && existingChecksum == newChecksum )
-    {
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "receiveSymbol: symbol %s already exists with same content, skipping save",
-                    libItemName.ToUTF8().data() );
-
-        // Symbol exists with same content - still need to place it if requested
-        if( placeAfterDownload )
-        {
-            wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                        "receiveSymbol: placing existing symbol (nickname=%s libItem=%s)",
-                        nickname.ToUTF8().data(), libItemName.ToUTF8().data() );
-            return placeDownloadedSymbol( nickname, libItemName, aError );
-        }
-
-        return true;
-    }
-
-    // Check if symbol with same name exists but different content - add numeric suffix
-    wxString finalLibItemName = libItemName;
-
-    if( !existingChecksum.empty() && existingChecksum != newChecksum )
-    {
-        int suffix = 1;
-
-        while( true )
-        {
-            finalLibItemName = AppendNumericSuffix( libItemName, suffix++ );
-            std::string candidateChecksum;
-
-            if( !ComputeSymbolChecksum( nullptr, outFile, finalLibItemName, candidateChecksum ) )
-            {
-                // No existing symbol with this name, use it
-                break;
-            }
-
-            if( candidateChecksum == newChecksum )
-            {
-                // Found existing symbol with same content
-                wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                            "receiveSymbol: symbol %s exists with same content as %s, skipping",
-                            finalLibItemName.ToUTF8().data(), libItemName.ToUTF8().data() );
-
-                if( placeAfterDownload )
-                    return placeDownloadedSymbol( nickname, finalLibItemName, aError );
-
-                return true;
-            }
-        }
-
-        downloadedSymbol->SetName( finalLibItemName );
-        savedId.SetLibItemName( finalLibItemName );
-        downloadedSymbol->SetLibId( savedId );
-
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "receiveSymbol: renamed symbol from %s to %s due to content difference",
-                    libItemName.ToUTF8().data(), finalLibItemName.ToUTF8().data() );
-    }
-
     if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true )
             != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
         aError = _( "Unable to save the downloaded symbol." );
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
                     "receiveSymbol: failed to save symbol %s to library %s",
-                    finalLibItemName.ToUTF8().data(), nickname.ToUTF8().data() );
+                    libItemName.ToUTF8().data(), nickname.ToUTF8().data() );
         return false;
     }
-
-    // SaveSymbol transfers ownership to the cache, so release our unique_ptr
-    downloadedSymbol.release();
-    libItemName = finalLibItemName;
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
                 "receiveSymbol: saved symbol %s into library %s", libItemName.ToUTF8().data(),
@@ -1771,23 +1285,14 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
 
     const LIBRARY_TABLE_SCOPE scope = addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL
                                                   : LIBRARY_TABLE_SCOPE::PROJECT;
+    Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
 
-    // Place before forcing a library reload so we can use the existing in-memory cache.
-    // Reloading first invalidates the adapter's cache, causing GetLibSymbol() to fail
-    // because LoadSymbol() does not auto-load libraries (it only fetches if already loaded).
     if( placeAfterDownload )
     {
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "receiveSymbol: placing symbol now (nickname=%s libItem=%s)",
                     nickname.ToUTF8().data(), libItemName.ToUTF8().data() );
-        bool placedOk = placeDownloadedSymbol( nickname, libItemName, aError );
-
-        // Perform the reload afterwards so subsequent operations see the fresh library on disk.
-        Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
-        return placedOk;
+        return placeDownloadedSymbol( nickname, libItemName, aError );
     }
-
-    // No immediate placement requested; safe to reload now.
-    Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "receiveSymbol: saved symbol (nickname=%s libItem=%s)" ,
                 nickname.ToUTF8().data(), libItemName.ToUTF8().data() );
@@ -1833,15 +1338,20 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
         return false;
     }
 
+    // Get footprint's internal name from "name" parameter
     wxString footprintName = jsonString( aParams, "name" );
-
     if( footprintName.IsEmpty() )
-        footprintName = sanitizedPrefix() + wxS( "_footprint" );
+        footprintName = wxS( "footprint" );
+    footprintName = sanitizeFileComponent( footprintName, wxS( "footprint" ) );
 
-    footprintName = sanitizeFileComponent( footprintName, sanitizedPrefix() + wxS( "_footprint" ) );
+    // Get library name from "library" parameter, fallback to "footprints"
+    wxString libraryName = jsonString( aParams, "library" );
+    if( libraryName.IsEmpty() )
+        libraryName = wxS( "footprints" );
+    libraryName.Trim( true ).Trim( false );
 
-    // Use a single shared footprint library instead of per-footprint libraries
-    wxString libNickname = sanitizedPrefix() + wxS( "_footprints" );
+    wxString sanitizedLibName = sanitizeFileComponent( libraryName, wxS( "footprints" ) );
+    wxString libNickname = sanitizedPrefix() + wxS( "_" ) + sanitizedLibName;
 
     wxFileName libDir = fpRoot;
     libDir.AppendDir( libNickname + wxS( ".pretty" ) );
@@ -1852,64 +1362,13 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
         return false;
     }
 
-    // Build file path for the footprint
-    auto footprintPathFor = [&]( const wxString& aName ) -> wxFileName
-    {
-        wxFileName fn( libDir );
-        fn.SetFullName( aName + wxS( ".kicad_mod" ) );
-        return fn;
-    };
+    wxString fileName = footprintName;
 
-    // Compute checksum of the new footprint
-    std::string newChecksum = HashBuffer( aPayload );
+    if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
+        fileName += wxS( ".kicad_mod" );
 
-    // Check if an identical footprint already exists
-    wxFileName existingFile = footprintPathFor( footprintName );
-    std::string existingChecksum;
-
-    if( HashFile( existingFile, existingChecksum ) && existingChecksum == newChecksum )
-    {
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "receiveFootprint: footprint %s already exists with same content, skipping",
-                    footprintName.ToUTF8().data() );
-        return true;
-    }
-
-    // Check if footprint with same name exists but different content - add numeric suffix
-    wxString finalFootprintName = footprintName;
-
-    if( !existingChecksum.empty() && existingChecksum != newChecksum )
-    {
-        int suffix = 1;
-
-        while( true )
-        {
-            finalFootprintName = AppendNumericSuffix( footprintName, suffix++ );
-            std::string candidateChecksum;
-            wxFileName candidateFile = footprintPathFor( finalFootprintName );
-
-            if( !HashFile( candidateFile, candidateChecksum ) )
-            {
-                // No existing footprint with this name, use it
-                break;
-            }
-
-            if( candidateChecksum == newChecksum )
-            {
-                // Found existing footprint with same content
-                wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                            "receiveFootprint: footprint %s exists with same content, skipping",
-                            finalFootprintName.ToUTF8().data() );
-                return true;
-            }
-        }
-
-        wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ),
-                    "receiveFootprint: renamed footprint from %s to %s due to content difference",
-                    footprintName.ToUTF8().data(), finalFootprintName.ToUTF8().data() );
-    }
-
-    wxFileName outFile = footprintPathFor( finalFootprintName );
+    wxFileName outFile( libDir );
+    outFile.SetFullName( fileName );
 
     if( !writeBinaryFile( outFile, aPayload, aError ) )
         return false;
@@ -2059,466 +1518,4 @@ bool PANEL_REMOTE_SYMBOL::receiveSPICEModel( const nlohmann::json& aParams,
         wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "receiveSPICEModel: wrote spice model %s", outFile.GetFullPath() );
 
     return ok;
-}
-
-
-bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
-                                            const std::vector<uint8_t>& aPayload,
-                                            wxString& aError, nlohmann::json* aResponseParams )
-{
-    nlohmann::json components;
-
-    try
-    {
-        components = nlohmann::json::parse( aPayload.begin(), aPayload.end() );
-    }
-    catch( const std::exception& e )
-    {
-        aError = wxString::Format( _( "Failed to parse component list: %s" ), e.what() );
-        return false;
-    }
-
-    if( !components.is_array() )
-    {
-        aError = _( "Component list must be an array." );
-        return false;
-    }
-
-    if( components.empty() )
-    {
-        aError = _( "Component list was empty." );
-        return false;
-    }
-
-    wxString libNickname = sanitizeFileComponent( wxString::FromUTF8( aParams.value( "library", "" ) ),
-                                                  wxS( "Remote" ) );
-
-    if( libNickname.IsEmpty() )
-        libNickname = wxS( "Remote" );
-
-    wxFileName baseDir;
-
-    if( !ensureDestinationRoot( baseDir, aError ) )
-        return false;
-
-    auto ensureDirectory = [&]( wxFileName& aDir ) -> bool
-    {
-        if( aDir.DirExists() )
-            return true;
-
-        if( !aDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            aError = wxString::Format( _( "Unable to create '%s'." ), aDir.GetFullPath() );
-            return false;
-        }
-
-        return true;
-    };
-
-    wxFileName librariesDir( baseDir );
-    librariesDir.AppendDir( wxS( "symbols" ) );
-
-    if( !ensureDirectory( librariesDir ) )
-        return false;
-
-    wxFileName symbolLib( librariesDir );
-    symbolLib.SetFullName( libNickname + wxS( ".kicad_sym" ) );
-
-    wxFileName footprintsDir( baseDir );
-    footprintsDir.AppendDir( wxS( "footprints" ) );
-
-    if( !ensureDirectory( footprintsDir ) )
-        return false;
-
-    wxFileName footprintLibDir( footprintsDir );
-    footprintLibDir.AppendDir( libNickname + wxS( ".pretty" ) );
-
-    if( !ensureDirectory( footprintLibDir ) )
-        return false;
-
-    wxFileName modelDir( baseDir );
-    modelDir.AppendDir( wxS( "3dmodels" ) );
-
-    if( !ensureDirectory( modelDir ) )
-        return false;
-
-    modelDir.AppendDir( libNickname );
-
-    if( !ensureDirectory( modelDir ) )
-        return false;
-
-    EESCHEMA_SETTINGS* settings = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
-
-    if( !settings )
-    {
-        aError = _( "Unable to load schematic settings." );
-        return false;
-    }
-
-    const bool addToGlobal = settings->m_RemoteSymbol.add_to_global_table;
-
-    std::unique_ptr<SCH_IO> symbolPlugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    if( !symbolPlugin )
-    {
-        aError = _( "Unable to access the KiCad symbol plugin." );
-        return false;
-    }
-
-    struct COMPONENT_PAYLOAD
-    {
-        std::string        type;
-        wxString           declaredName;
-        wxString           sanitizedName;
-        wxString           finalName;
-        wxString           payloadSymbolName;
-        std::string        checksum;
-        std::vector<uint8_t> content;
-        bool               skip = false;
-    };
-
-    std::vector<COMPONENT_PAYLOAD> prepared;
-    prepared.reserve( components.size() );
-
-    for( const nlohmann::json& component : components )
-    {
-        if( !component.is_object() )
-        {
-            aError = _( "Component entries must be objects." );
-            return false;
-        }
-
-        COMPONENT_PAYLOAD entry;
-        entry.type = component.value( "type", "" );
-
-        if( entry.type.empty() )
-        {
-            aError = _( "Component entry was missing a type." );
-            return false;
-        }
-
-        std::transform( entry.type.begin(), entry.type.end(), entry.type.begin(),
-                        []( unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
-
-        entry.declaredName = wxString::FromUTF8( component.value( "name", entry.type ).c_str() );
-        entry.declaredName.Trim( true ).Trim( false );
-
-        wxString fallback = sanitizedPrefix() + wxS( "_" ) + wxString::FromUTF8( entry.type );
-        entry.sanitizedName = sanitizeFileComponent( entry.declaredName, fallback );
-
-        if( entry.sanitizedName.IsEmpty() )
-            entry.sanitizedName = fallback;
-
-        entry.finalName = entry.sanitizedName;
-        entry.payloadSymbolName = entry.declaredName.IsEmpty() ? entry.sanitizedName : entry.declaredName;
-
-        const std::string encoded = component.value( "content", std::string() );
-
-        if( !decodeBase64Payload( encoded, entry.content, aError ) )
-            return false;
-
-        const std::string compression = component.value( "compression", std::string() );
-
-        if( !compression.empty() && compression != "NONE" )
-        {
-            std::vector<uint8_t> decompressed;
-
-            if( !decompressIfNeeded( compression, entry.content, decompressed, aError ) )
-                return false;
-
-            entry.content = std::move( decompressed );
-        }
-
-        entry.checksum = component.value( "checksum", std::string() );
-
-        if( entry.checksum.empty() )
-            entry.checksum = HashBuffer( entry.content );
-
-        prepared.emplace_back( std::move( entry ) );
-    }
-
-    nlohmann::json skipped = nlohmann::json::array();
-    nlohmann::json renamedReport = nlohmann::json::array();
-    std::map<std::string, std::map<wxString, wxString>> renames;
-    std::set<wxString> reservedSymbolNames;
-    std::set<wxString> reservedFootprintNames;
-    std::set<wxString> reservedModelNames;
-
-    auto recordRename = [&]( const std::string& aType, const wxString& aFrom, const wxString& aTo )
-    {
-        if( aFrom == aTo )
-            return;
-
-        renames[aType][aFrom] = aTo;
-
-        renamedReport.push_back( { { "type", aType },
-                                   { "from", aFrom.ToStdString() },
-                                   { "to", aTo.ToStdString() } } );
-    };
-
-    auto recordSkip = [&]( const std::string& aType, const wxString& aName )
-    {
-        skipped.push_back( { { "type", aType }, { "name", aName.ToStdString() } } );
-    };
-
-    auto footprintPathFor = [&]( const wxString& aName )
-    {
-        wxFileName fn( footprintLibDir );
-        fn.SetFullName( aName + wxS( ".kicad_mod" ) );
-        return fn;
-    };
-
-    auto modelPathFor = [&]( const wxString& aName )
-    {
-        wxFileName fn( modelDir );
-        fn.SetFullName( aName );
-        return fn;
-    };
-
-    for( COMPONENT_PAYLOAD& entry : prepared )
-    {
-        if( entry.type == "footprint" )
-        {
-            wxFileName existing = footprintPathFor( entry.sanitizedName );
-            std::string localChecksum;
-
-            if( HashFile( existing, localChecksum ) && localChecksum == entry.checksum )
-            {
-                entry.skip = true;
-                recordSkip( entry.type, entry.sanitizedName );
-                continue;
-            }
-
-            wxString candidate = entry.sanitizedName;
-            int suffix = 1;
-
-            auto collides = [&]( const wxString& name )
-            {
-                if( reservedFootprintNames.contains( name ) )
-                    return true;
-
-                return footprintPathFor( name ).FileExists();
-            };
-
-            while( collides( candidate ) )
-                candidate = AppendNumericSuffix( entry.sanitizedName, suffix++ );
-
-            reservedFootprintNames.insert( candidate );
-            recordRename( entry.type, entry.sanitizedName, candidate );
-            entry.finalName = candidate;
-        }
-        else if( entry.type == "3dmodel" )
-        {
-            wxFileName existing = modelPathFor( entry.sanitizedName );
-            std::string localChecksum;
-
-            if( HashFile( existing, localChecksum ) && localChecksum == entry.checksum )
-            {
-                entry.skip = true;
-                recordSkip( entry.type, entry.sanitizedName );
-                continue;
-            }
-
-            wxString candidate = entry.sanitizedName;
-            int suffix = 1;
-
-            auto collides = [&]( const wxString& name )
-            {
-                if( reservedModelNames.contains( name ) )
-                    return true;
-
-                return modelPathFor( name ).FileExists();
-            };
-
-            while( collides( candidate ) )
-                candidate = AppendNumericSuffixToFilename( entry.sanitizedName, suffix++ );
-
-            reservedModelNames.insert( candidate );
-            recordRename( entry.type, entry.sanitizedName, candidate );
-            entry.finalName = candidate;
-        }
-        else if( entry.type == "symbol" )
-        {
-            std::string localChecksum;
-
-            if( ComputeSymbolChecksum( symbolPlugin.get(), symbolLib, entry.sanitizedName, localChecksum )
-                && localChecksum == entry.checksum )
-            {
-                entry.skip = true;
-                recordSkip( entry.type, entry.sanitizedName );
-                continue;
-            }
-
-            wxString candidate = entry.sanitizedName;
-            int suffix = 1;
-
-            auto exists = [&]( const wxString& name )
-            {
-                if( reservedSymbolNames.contains( name ) )
-                    return true;
-
-                std::unique_ptr<LIB_SYMBOL> symbol = TryCloneSymbol( symbolPlugin.get(), symbolLib, name );
-                return static_cast<bool>( symbol );
-            };
-
-            while( exists( candidate ) )
-                candidate = AppendNumericSuffix( entry.sanitizedName, suffix++ );
-
-            reservedSymbolNames.insert( candidate );
-            recordRename( entry.type, entry.sanitizedName, candidate );
-            entry.finalName = candidate;
-        }
-        else
-        {
-            aError = wxString::Format( _( "Unsupported component type '%s'." ),
-                                       wxString::FromUTF8( entry.type ) );
-            return false;
-        }
-    }
-
-    bool footprintLibraryReady = false;
-    bool symbolLibraryReady = false;
-
-    auto ensureFootprintLibrary = [&]() -> bool
-    {
-        if( footprintLibraryReady )
-            return true;
-
-        if( !ensureFootprintLibraryEntry( footprintLibDir, libNickname, addToGlobal, aError ) )
-            return false;
-
-        footprintLibraryReady = true;
-        return true;
-    };
-
-    auto ensureSymbolLibrary = [&]() -> bool
-    {
-        if( symbolLibraryReady )
-            return true;
-
-        if( !ensureSymbolLibraryEntry( symbolLib, libNickname, addToGlobal, aError ) )
-            return false;
-
-        symbolLibraryReady = true;
-        return true;
-    };
-
-    for( COMPONENT_PAYLOAD& entry : prepared )
-    {
-        if( entry.skip )
-            continue;
-
-        if( entry.type == "footprint" )
-        {
-            if( !ensureFootprintLibrary() )
-                return false;
-
-            if( !renames["3dmodel"].empty() )
-            {
-                std::string contentStr( entry.content.begin(), entry.content.end() );
-
-                for( const auto& [oldModel, newModel] : renames["3dmodel"] )
-                {
-                    const std::string from = oldModel.ToStdString();
-                    const std::string to = newModel.ToStdString();
-                    size_t pos = contentStr.find( from );
-
-                    while( pos != std::string::npos )
-                    {
-                        contentStr.replace( pos, from.size(), to );
-                        pos = contentStr.find( from, pos + to.size() );
-                    }
-                }
-
-                entry.content.assign( contentStr.begin(), contentStr.end() );
-            }
-
-            wxFileName target = footprintPathFor( entry.finalName );
-
-            if( !writeBinaryFile( target, entry.content, aError ) )
-                return false;
-        }
-        else if( entry.type == "3dmodel" )
-        {
-            wxFileName target = modelPathFor( entry.finalName );
-
-            if( !target.GetPath().IsEmpty() )
-            {
-                wxFileName parent( target.GetPath(), wxEmptyString );
-
-                if( !parent.DirExists() && !parent.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-                {
-                    aError = wxString::Format( _( "Unable to create '%s'." ), parent.GetFullPath() );
-                    return false;
-                }
-            }
-
-            if( !writeBinaryFile( target, entry.content, aError ) )
-                return false;
-        }
-        else if( entry.type == "symbol" )
-        {
-            if( !ensureSymbolLibrary() )
-                return false;
-
-            if( !renames["footprint"].empty() )
-            {
-                std::string contentStr( entry.content.begin(), entry.content.end() );
-
-                for( const auto& [oldFp, newFp] : renames["footprint"] )
-                {
-                    const std::string from = oldFp.ToStdString();
-                    const std::string to = newFp.ToStdString();
-                    size_t pos = contentStr.find( from );
-
-                    while( pos != std::string::npos )
-                    {
-                        contentStr.replace( pos, from.size(), to );
-                        pos = contentStr.find( from, pos + to.size() );
-                    }
-                }
-
-                entry.content.assign( contentStr.begin(), contentStr.end() );
-            }
-
-            std::unique_ptr<LIB_SYMBOL> symbol = loadSymbolFromPayload( entry.content,
-                                                                        entry.payloadSymbolName,
-                                                                        aError );
-
-            if( !symbol )
-                return false;
-
-            if( entry.finalName != entry.sanitizedName )
-                symbol->SetName( entry.finalName );
-
-            try
-            {
-                if( !symbolLib.FileExists() )
-                    symbolPlugin->SaveLibrary( symbolLib.GetFullPath() );
-
-                symbolPlugin->SaveSymbol( symbolLib.GetFullPath(), symbol.get() );
-                symbol.release();
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                aError = ioe.What();
-                return false;
-            }
-        }
-    }
-
-    if( aResponseParams )
-    {
-        nlohmann::json response = nlohmann::json::object();
-
-        if( !skipped.empty() )
-            response["skipped"] = skipped;
-
-        if( !renamedReport.empty() )
-            response["renamed"] = renamedReport;
-
-        *aResponseParams = std::move( response );
-    }
-
-    return true;
 }

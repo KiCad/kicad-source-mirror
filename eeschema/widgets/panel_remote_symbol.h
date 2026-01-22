@@ -28,13 +28,11 @@
 #include <memory>
 #include <optional>
 #include <vector>
-#include <map>
 
 #include <pcm.h>
 #include <nlohmann/json_fwd.hpp>
 #include <wx/filename.h>
 #include <wx/panel.h>
-#include <kiid.h>
 
 class BITMAP_BUTTON;
 class LIB_SYMBOL;
@@ -43,7 +41,6 @@ class WEBVIEW_PANEL;
 class wxChoice;
 class wxCommandEvent;
 class wxWebViewEvent;
-class REMOTE_LOGIN_SERVER;
 
 #define REMOTE_SYMBOL_SESSION_VERSION 1
 
@@ -51,24 +48,15 @@ class PANEL_REMOTE_SYMBOL : public wxPanel
 {
 public:
     explicit PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent );
-    ~PANEL_REMOTE_SYMBOL();
 
     void RefreshDataSources();
-    bool HasDataSources() const;
+    bool HasDataSources() const { return !m_dataSources.empty(); }
     void BindWebViewLoaded();
-
-    /// Store WebView cookies to settings for persistence across sessions
-    void SaveCookies();
-
-    /// Restore WebView cookies from settings
-    void LoadCookies();
 
 private:
     void onDataSourceChanged( wxCommandEvent& aEvent );
     void onConfigure( wxCommandEvent& aEvent );
-    void onRefresh( wxCommandEvent& aEvent );
     void onWebViewLoaded( wxWebViewEvent& aEvent );
-    void onRemoteLoginResult( wxCommandEvent& aEvent );
 
     bool loadDataSource( size_t aIndex );
     bool loadDataSource( const PCM_INSTALLATION_ENTRY& aEntry );
@@ -78,11 +66,6 @@ private:
     void onKicadMessage( const wxString& aMessage );
     void handleRpcMessage( const nlohmann::json& aMessage );
     void beginSessionHandshake();
-    void handleRemoteLogin( const nlohmann::json& aParams, int aMessageId );
-    void stopLoginServer();
-    void storeUserIdForActiveSource( const wxString& aUserId );
-    void loadStoredUserIdForActiveSource();
-    wxString currentDataSourceKey() const;
 
     void sendRpcMessage( const wxString& aCommand,
                          nlohmann::json aParameters = nlohmann::json::object(),
@@ -110,8 +93,6 @@ private:
                          wxString& aError );
     bool receiveSPICEModel( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
                             wxString& aError );
-    bool receiveComponent( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
-                           wxString& aError, nlohmann::json* aResponseParams = nullptr );
     bool placeDownloadedSymbol( const wxString& aNickname, const wxString& aLibItemName,
                                 wxString& aError );
 
@@ -119,7 +100,6 @@ private:
     wxString sanitizeForScript( const std::string& aJson ) const;
 
     wxString jsonString( const nlohmann::json& aObject, const char* aKey ) const;
-    wxString normalizeDataSourceUrl( const wxString& aUrl ) const;
 
     bool decodeBase64Payload( const std::string& aMessage,
                            std::vector<uint8_t>& aOutPayload,
@@ -142,17 +122,12 @@ private:
     SCH_EDIT_FRAME*                           m_frame;
     wxChoice*                                 m_dataSourceChoice;
     BITMAP_BUTTON*                            m_configButton;
-    BITMAP_BUTTON*                            m_refreshButton;
     WEBVIEW_PANEL*                            m_webView;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>   m_pcm;
     std::vector<PCM_INSTALLATION_ENTRY>       m_dataSources;
     KIID                                      m_sessionId;
     int                                       m_messageIdCounter;
     bool                                      m_pendingHandshake;
-    std::unique_ptr<REMOTE_LOGIN_SERVER>      m_loginServer;
-    wxString                                  m_activeDataSourceUrl;
-    wxString                                  m_activeUserId;
-    bool                                      m_webViewLoadedBound;
 };
 
 #endif // PANEL_REMOTE_SYMBOL_H
