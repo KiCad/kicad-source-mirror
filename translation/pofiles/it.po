@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-20 23:01+0000\n"
+"PO-Revision-Date: 2026-01-22 14:31+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -41188,9 +41188,8 @@ msgid "Backdrill"
 msgstr "Retroforatura"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Sopra/sotto"
+msgstr "Cima & fondo"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -41215,9 +41214,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Anteprima piazzola in modalità schizzo"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Aggiorna riempimenti di tutte le zone prima di eseguire il DRC"
+msgstr "Aggiorna riempimenti zone prima di tracciare"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -43253,6 +43251,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Proposizione\n"
+"\n"
+"    (condizione \"<espressione>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43262,6 +43265,11 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Note\n"
+"\n"
+"Usare Ctrl+/ per commentare o decommentare le righe.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -43719,19 +43727,16 @@ msgid "Pad %s of %s on %s"
 msgstr "Piazzola %s di %s su %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"Sono stati trovati elementi su strati rimossi. Questa operazione cancellerà "
-"tutti gli elementi dagli strati rimossi e non può essere annullata.\n"
-"Continuare?"
+"Trovati elementi su strati rimossi. Questa operazione cancellerà tutti gli "
+"elementi dagli strati rimossi e non può essere annullata."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
-msgstr "Visualizza dettagli"
+msgstr "Mostra dettagli"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1003
 msgid "Layer must have a name."
@@ -47561,106 +47566,90 @@ msgid "Checking thermal reliefs..."
 msgstr "Controllo raccordi termici..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:70
-#, fuzzy
 msgid "Design Rule Editor"
-msgstr "Regole di progettazione"
+msgstr "Modifica regole di progettazione"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "Sicuri di voler rimuovere il campo '%s'?"
+msgstr "Sicuri di voler eliminare?"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "Lunghezza massima:"
+msgstr "Lunghezza minima"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "Lunghezza massima:"
+msgstr "Lunghezza ottimale"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "Lunghezza massima:"
+msgstr "Lunghezza massima"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "gradi"
+msgstr "0 gradi"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
-msgstr "90-gradi"
+msgstr "90 gradi"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "90-gradi"
+msgstr "180 gradi"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "90-gradi"
+msgstr "270 gradi"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "Orientamento"
+msgstr "Tutti gli orientamenti"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "Controlla zone"
+msgstr "Controllami!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
-msgstr ""
+msgstr "Dove le condizioni corrispondono:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
-msgstr ""
+msgstr "Dove l'oggetto corrisponde:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "Aggiunge una dimensione al centro"
+msgstr "Aggiungi un'altra condizione"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "AND"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "OR"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "AND NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "OR NOT"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "Oggetti"
+msgstr "Oggetto A"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "Oggetti"
+msgstr "Oggetto B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:115
-#, fuzzy
 msgid "Any"
-msgstr "Qualsiasi:"
+msgstr "Qualsiasi"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:72
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -47671,20 +47660,17 @@ msgstr "Netclass"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:73
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "Area contorno"
+msgstr "Dentro l'area"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "Regole personalizzate"
+msgstr "Interrogazione personalizzata"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
-#, fuzzy
 msgid "Remove this condition"
-msgstr "Usa condizioni iniziali"
+msgstr "Elimina questa condizione"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -47705,22 +47691,19 @@ msgstr "Usa condizioni iniziali"
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "Zoom %.2f"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Text Height"
-msgstr "Altezza minima testo:"
+msgstr "Altezza minima testo"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:47
-#, fuzzy
 msgid "Minimum Text Thickness"
-msgstr "Spessore minimo testo:"
+msgstr "Spessore minimo testo"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
 msgstr "Strato superiore"
 
