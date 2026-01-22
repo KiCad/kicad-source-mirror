@@ -85,6 +85,39 @@ void FOOTPRINT_LIST_IMPL::Clear()
 }
 
 
+void FOOTPRINT_LIST_IMPL::WithFootprintsForLibrary(
+        const wxString& aLibName,
+        const std::function<void( const std::vector<LIB_TREE_ITEM*>& )>& aCallback )
+{
+    std::unique_lock<std::mutex> lock( m_loadInProgress );
+
+    std::vector<LIB_TREE_ITEM*> libList;
+    const auto& fullList = GetList();
+
+    FOOTPRINT_INFO_IMPL dummy( aLibName, wxEmptyString );
+    std::unique_ptr<FOOTPRINT_INFO> dummyPtr( &dummy );
+
+    auto libBounds = std::equal_range( fullList.begin(), fullList.end(), dummyPtr,
+            []( const std::unique_ptr<FOOTPRINT_INFO>& a, const std::unique_ptr<FOOTPRINT_INFO>& b )
+            {
+                if( !a || !b )
+                    return false;
+
+                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
+            } );
+
+    dummyPtr.release();
+
+    for( auto i = libBounds.first; i != libBounds.second; ++i )
+    {
+        if( *i )
+            libList.push_back( i->get() );
+    }
+
+    aCallback( libList );
+}
+
+
 bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 {
     try

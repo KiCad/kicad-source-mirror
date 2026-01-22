@@ -51,8 +51,9 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
 {
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aParent->Prj().GetProjectFile();
+    std::vector<wxString> libNames = m_libs->GetLibraryNames();
 
-    for( const wxString& libName : m_libs->GetLibraryNames() )
+    for( const wxString& libName : libNames )
     {
         if( !m_libs->HasLibrary( libName, true ) )
             continue;
@@ -60,39 +61,15 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                         || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-        DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), getFootprints( libName ), pinned, true );
+        GFootprintList.WithFootprintsForLibrary( libName,
+                [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
+                {
+                    DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), aFootprints,
+                                  pinned, true );
+                } );
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );
-}
-
-
-std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString& aLibName )
-{
-    std::vector<LIB_TREE_ITEM*> libList;
-
-    auto fullListStart = GFootprintList.GetList().begin();
-    auto fullListEnd = GFootprintList.GetList().end();
-    std::unique_ptr<FOOTPRINT_INFO> dummy = std::make_unique<FOOTPRINT_INFO_IMPL>( aLibName, wxEmptyString );
-
-    // List is sorted, so use a binary search to find the range of footprints for our library
-    auto libBounds = std::equal_range( fullListStart, fullListEnd, dummy,
-            []( const std::unique_ptr<FOOTPRINT_INFO>& a,
-                const std::unique_ptr<FOOTPRINT_INFO>& b )
-            {
-                if( !a || !b )
-                    return false;
-
-                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
-            } );
-
-    for( auto i = libBounds.first; i != libBounds.second; ++i )
-    {
-        if( *i )
-            libList.push_back( i->get() );
-    }
-
-    return libList;
 }
 
 

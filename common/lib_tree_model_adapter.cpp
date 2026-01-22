@@ -261,7 +261,10 @@ LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNo
     LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( aNodeName, aDesc, pinned );
 
     for( LIB_TREE_ITEM* item: aItemList )
-        lib_node.AddItem( item );
+    {
+        if( item )
+            lib_node.AddItem( item );
+    }
 
     lib_node.AssignIntrinsicRanks( m_shownColumns, presorted );
 

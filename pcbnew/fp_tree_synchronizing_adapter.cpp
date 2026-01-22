@@ -118,7 +118,12 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
                 bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                                 || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-                DoAddLibrary( libName, *optDesc, getFootprints( libName ), pinned, true );
+                GFootprintList.WithFootprintsForLibrary( libName,
+                        [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
+                        {
+                            DoAddLibrary( libName, *optDesc, aFootprints, pinned, true );
+                        } );
+
                 m_libMap.insert( libName  );
             }
         }
@@ -137,38 +142,36 @@ int FP_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 
 void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode )
 {
-    std::vector<LIB_TREE_ITEM*> footprints = getFootprints( aLibNode.m_Name );
+    GFootprintList.WithFootprintsForLibrary( aLibNode.m_Name,
+            [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
+            {
+                std::vector<LIB_TREE_ITEM*> footprints = aFootprints;
 
-    // remove the common part from the footprints list
-    for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end();  )
-    {
-        // Since the list is sorted we can use a binary search to speed up searches within
-        // libraries with lots of footprints.
-        FOOTPRINT_INFO_IMPL dummy( wxEmptyString, (*nodeIt)->m_Name );
-        auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
-                []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
+                for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); )
                 {
-                    return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
-                } );
+                    FOOTPRINT_INFO_IMPL dummy( wxEmptyString, (*nodeIt)->m_Name );
 
-        if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
-        {
-            // footprint exists both in the lib tree and the footprint info list; just
-            // update the node data
-            static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update( *footprintIt );
-            footprints.erase( footprintIt );
-            ++nodeIt;
-        }
-        else
-        {
-            // node does not exist in the library manager, remove the corresponding node
-            nodeIt = aLibNode.m_Children.erase( nodeIt );
-        }
-    }
+                    auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
+                            []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
+                            {
+                                return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
+                            } );
 
-    // now the footprint list contains only new aliases that need to be added to the tree
-    for( LIB_TREE_ITEM* footprint : footprints )
-        aLibNode.AddItem( footprint );
+                    if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
+                    {
+                        static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update( *footprintIt );
+                        footprints.erase( footprintIt );
+                        ++nodeIt;
+                    }
+                    else
+                    {
+                        nodeIt = aLibNode.m_Children.erase( nodeIt );
+                    }
+                }
+
+                for( LIB_TREE_ITEM* footprint : footprints )
+                    aLibNode.AddItem( footprint );
+            } );
 
     aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libMap.insert( aLibNode.m_Name );

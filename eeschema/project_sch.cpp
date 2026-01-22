@@ -27,7 +27,6 @@
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
 
-static std::mutex s_symbolTableMutex;
 std::mutex        PROJECT_SCH::s_libAdapterMutex;
 
 // non-member so it can be moved easily, and kept REALLY private.

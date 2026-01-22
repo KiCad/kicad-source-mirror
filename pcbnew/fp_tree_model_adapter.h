@@ -49,8 +49,6 @@ protected:
      */
     FP_TREE_MODEL_ADAPTER( PCB_BASE_FRAME* aParent, FOOTPRINT_LIBRARY_ADAPTER* aLibs );
 
-    std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
-
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::FOOTPRINT_LIB; }
 
 protected:

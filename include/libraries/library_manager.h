@@ -23,6 +23,7 @@
 
 #include <future>
 #include <memory>
+#include <shared_mutex>
 
 #include <kicommon.h>
 #include <libraries/library_table.h>
@@ -55,10 +56,9 @@ struct KICOMMON_API LIB_DATA
 {
     std::unique_ptr<IO_BASE> plugin;
     const LIBRARY_TABLE_ROW* row = nullptr;
-    std::mutex               mutex;
     LIB_STATUS               status;
 
-    int                   modify_hash;
+    int                   modify_hash = -1;
     std::vector<wxString> available_fields_cache;
 };
 
@@ -131,7 +131,7 @@ public:
     void CheckTableRow( LIBRARY_TABLE_ROW& aRow );
 
     /// Loads all available libraries for this adapter type in the background
-    virtual void AsyncLoad() = 0;
+    void AsyncLoad();
 
     virtual std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) = 0;
 
@@ -147,7 +147,7 @@ public:
     bool IsLibraryLoaded( const wxString& aNickname );
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
-    virtual std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const = 0;
+    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const;
 
     /// Returns a list of all library nicknames and their status (even if they failed to load)
     std::vector<std::pair<wxString, LIB_STATUS>> GetLibraryStatuses() const;
@@ -173,7 +173,11 @@ public:
 protected:
     virtual std::map<wxString, LIB_DATA>& globalLibs() = 0;
     virtual std::map<wxString, LIB_DATA>& globalLibs() const = 0;
-    virtual std::mutex&                   globalLibsMutex() = 0;
+    virtual std::shared_mutex&            globalLibsMutex() = 0;
+    virtual std::shared_mutex&            globalLibsMutex() const = 0;
+
+    /// Override in derived class to perform library-specific enumeration
+    virtual void enumerateLibrary( LIB_DATA* aLib ) = 0;
 
     static wxString getUri( const LIBRARY_TABLE_ROW* aRow );
 
@@ -187,7 +191,7 @@ protected:
     LIBRARY_RESULT<LIB_DATA*> loadFromScope( const wxString& aNickname,
                                              LIBRARY_TABLE_SCOPE aScope,
                                              std::map<wxString, LIB_DATA>& aTarget,
-                                             std::mutex& aMutex );
+                                             std::shared_mutex& aMutex );
 
     /// Aborts any async load in progress; blocks until fully done aborting
     void abortLoad();
@@ -200,18 +204,15 @@ protected:
     LIBRARY_MANAGER& m_manager;
 
     // The actual library content is held in an associated IO plugin
-    // TODO(JE) should this be an expected<LIB_ROW> so we can store the
-    // error result if a lib can't be loaded instead of retrying the load every time
-    // content is requested?
     std::map<wxString, LIB_DATA> m_libraries;
 
-    std::mutex m_libraries_mutex;
+    mutable std::shared_mutex m_librariesMutex;
 
     std::atomic_bool               m_abort;
     std::vector<std::future<void>> m_futures;
 
-    std::atomic<size_t> m_loadCount;
-    size_t              m_loadTotal;
+    std::atomic<size_t> m_loadCount{ 0 };
+    std::atomic<size_t> m_loadTotal{ 0 };
     std::mutex          m_loadMutex;
 };
 

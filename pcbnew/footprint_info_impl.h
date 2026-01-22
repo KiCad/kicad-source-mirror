@@ -23,6 +23,7 @@
 #include <atomic>
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <thread>
 #include <vector>
 
@@ -93,6 +94,19 @@ public:
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void Clear() override;
+
+    /**
+     * Execute a callback with thread-safe access to the footprints for a library.
+     *
+     * The callback receives a vector of pointers to footprint info objects. These pointers
+     * are only valid for the duration of the callback. The internal mutex is held while
+     * the callback executes, preventing modification of the underlying list.
+     *
+     * @param aLibName the library nickname to get footprints for
+     * @param aCallback function to call with the footprints vector
+     */
+    void WithFootprintsForLibrary( const wxString& aLibName,
+                                   const std::function<void( const std::vector<LIB_TREE_ITEM*>& )>& aCallback );
 
 protected:
     void loadFootprints();

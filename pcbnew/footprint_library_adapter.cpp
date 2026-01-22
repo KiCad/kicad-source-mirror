@@ -20,6 +20,7 @@
 
 #include <footprint_library_adapter.h>
 
+#include <chrono>
 #include <env_vars.h>
 #include <footprint_info_impl.h>
 #include <thread_pool.h>
@@ -30,10 +31,12 @@
 #include <wx/hash.h>
 #include <wx/log.h>
 
+using namespace std::chrono_literals;
+
 
 std::map<wxString, LIB_DATA> FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraries;
 
-std::mutex FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraryMutex;
+std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
 
 FOOTPRINT_LIBRARY_ADAPTER::FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
@@ -48,151 +51,16 @@ wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 }
 
 
-void FOOTPRINT_LIBRARY_ADAPTER::AsyncLoad()
+void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
 {
-    std::unique_lock<std::mutex> asyncLock( m_loadMutex, std::try_to_lock );
-
-    if( !asyncLock )
-        return;
-
-    // TODO(JE) this shares most code with the symbol adapter
-    // TODO(JE) any reason to clean these up earlier?
-    std::erase_if( m_futures,
-                   []( const std::future<void>& aFuture ) { return aFuture.valid(); } );
-
-    if( !m_futures.empty() )
-    {
-        wxLogTrace( traceLibraries, "FP: Cannot AsyncLoad, futures from a previous call remain!" );
-        return;
-    }
-
-    std::vector<LIBRARY_TABLE_ROW*> rows = m_manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT );
-
-    m_loadTotal = rows.size();
-    m_loadCount.store( 0 );
-
-    if( m_loadTotal == 0 )
-    {
-        wxLogTrace( traceLibraries, "FP: AsyncLoad: no libraries left to load; exiting" );
-        return;
-    }
-
-    thread_pool& tp = GetKiCadThreadPool();
-
-    auto check =
-            []( const wxString& aLib, std::map<wxString, LIB_DATA>& aMap, std::mutex& aMutex )
-            {
-                std::lock_guard lock( aMutex );
-
-                if( aMap.contains( aLib ) )
-                {
-                    LOAD_STATUS status = aMap[aLib].status.load_status;
-
-                    if( status == LOAD_STATUS::LOADED || status == LOAD_STATUS::LOADING )
-                        return true;
-
-                    aMap.erase( aLib );
-                }
-
-                return false;
-            };
-
-    for( const LIBRARY_TABLE_ROW* row : rows )
-    {
-        wxString nickname = row->Nickname();
-        LIBRARY_TABLE_SCOPE scope = row->Scope();
-
-        // TODO(JE) library tables -- check for modified global files
-        if( check( nickname, m_libraries, m_libraries_mutex ) )
-        {
-            --m_loadTotal;
-            continue;
-        }
-
-        if( check( nickname, GlobalLibraries, GlobalLibraryMutex ) )
-        {
-            --m_loadTotal;
-            continue;
-        }
-
-        m_futures.emplace_back( tp.submit_task(
-                [this, nickname, scope]()
-                {
-                    if( m_abort.load() )
-                        return;
-
-                    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( nickname );
-
-                    if( result.has_value() )
-                    {
-                        LIB_DATA* lib = *result;
-                        wxArrayString dummyList;
-                        std::lock_guard lock ( lib->mutex );
-                        lib->status.load_status = LOAD_STATUS::LOADING;
-
-                        std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-
-                        try
-                        {
-                            pcbplugin( lib )->FootprintEnumerate( dummyList, getUri( lib->row ), false, &options );
-                            wxLogTrace( traceLibraries, "FP: %s: library enumerated %zu items", nickname,
-                                        dummyList.size() );
-                            lib->status.load_status = LOAD_STATUS::LOADED;
-                        }
-                        catch( IO_ERROR& e )
-                        {
-                            lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-                            lib->status.error = LIBRARY_ERROR( { e.What() } );
-                            wxLogTrace( traceLibraries, "FP: %s: plugin threw exception: %s", nickname, e.What() );
-                        }
-                    }
-                    else
-                    {
-                        switch( scope )
-                        {
-                        case LIBRARY_TABLE_SCOPE::GLOBAL:
-                        {
-                            std::lock_guard lock( GlobalLibraryMutex );
-
-                            GlobalLibraries[nickname].status = LIB_STATUS( {
-                                .load_status = LOAD_STATUS::LOAD_ERROR,
-                                .error = result.error()
-                            } );
-
-                            break;
-                        }
-
-                        case LIBRARY_TABLE_SCOPE::PROJECT:
-                        {
-                            wxLogTrace( traceLibraries, "FP: project library error: %s: %s", nickname,
-                                        result.error().message );
-                            std::lock_guard lock( m_libraries_mutex );
-
-                            m_libraries[nickname].status = LIB_STATUS( {
-                                .load_status = LOAD_STATUS::LOAD_ERROR,
-                                .error = result.error()
-                            } );
-
-                            break;
-                        }
-
-                        default:
-                            wxFAIL_MSG( "Unexpected library table scope" );
-                        }
-                    }
-
-                    ++m_loadCount;
-                }, BS::pr::lowest ) );
-    }
-
-    wxLogTrace( traceLibraries, "FP: Started async load of %zu libraries", m_loadTotal );
+    wxArrayString dummyList;
+    std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
+    pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
 }
 
 
-/// Loads or reloads the given library, if it exists
 std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 {
-    std::lock_guard lock ( aLib->mutex );
     aLib->status.load_status = LOAD_STATUS::LOADING;
 
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
@@ -201,14 +69,13 @@ std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
     {
         wxArrayString dummyList;
         pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
-        wxLogTrace( traceLibraries, "Sym: %s: library enumerated %zu items", aLib->row->Nickname(), dummyList.size() );
         aLib->status.load_status = LOAD_STATUS::LOADED;
     }
     catch( IO_ERROR& e )
     {
         aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
         aLib->status.error = LIBRARY_ERROR( { e.What() } );
-        wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );
+        wxLogTrace( traceLibraries, "FP: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );
     }
 
     return aLib->status;
@@ -229,19 +96,6 @@ std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( const wxString& ni
 }
 
 
-std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::GetLibraryStatus( const wxString& aNickname ) const
-{
-    // TODO(JE) this could be deduplicated with virtual access to GlobalLibraries
-    if( m_libraries.contains( aNickname ) )
-        return m_libraries.at( aNickname ).status;
-
-    if( GlobalLibraries.contains( aNickname ) )
-        return GlobalLibraries.at( aNickname ).status;
-
-    return std::nullopt;
-}
-
-
 std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString& aNickname, bool aBestEfforts )
 {
     std::vector<FOOTPRINT*> footprints;
@@ -253,7 +107,6 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
 
     const LIB_DATA* lib = *maybeLib;
     std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-
     wxArrayString namesAS;
 
     try
@@ -275,7 +128,7 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
         }
         catch( IO_ERROR& e )
         {
-            wxLogTrace( traceLibraries, "Sym: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
+            wxLogTrace( traceLibraries, "FP: Exception loading footprint from %s: %s", lib->row->Nickname(), e.What() );
             continue;
         }
 
@@ -340,7 +193,6 @@ long long FOOTPRINT_LIBRARY_ADAPTER::GenerateTimestamp( const wxString* aNicknam
     {
         if( std::optional<const LIB_DATA*> r = fetchIfLoaded( nickname ); r.has_value() )
         {
-            // Note: can't use dynamic_cast across compile units on Mac
             wxCHECK2( ( *r )->plugin->IsPCB_IO(), continue );
             PCB_IO* plugin = static_cast<PCB_IO*>( ( *r )->plugin.get() );
             hash += plugin->GetLibraryTimestamp( LIBRARY_MANAGER::GetFullURI( ( *r )->row, true ) )
@@ -358,7 +210,6 @@ bool FOOTPRINT_LIBRARY_ADAPTER::FootprintExists( const wxString& aNickname, cons
     {
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-
         return pcbplugin( lib )->FootprintExists( getUri( lib->row ), aName, &options );
     }
 
@@ -488,11 +339,19 @@ void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, cons
 
 bool FOOTPRINT_LIBRARY_ADAPTER::IsFootprintLibWritable( const wxString& aLib )
 {
-    if( m_libraries.contains( aLib ) )
-        return m_libraries[aLib].plugin->IsLibraryWritable( getUri( m_libraries[aLib].row ) );
+    {
+        std::shared_lock lock( m_librariesMutex );
 
-    if( GlobalLibraries.contains( aLib ) )
-        return GlobalLibraries[aLib].plugin->IsLibraryWritable( getUri( GlobalLibraries[aLib].row ) );
+        if( auto it = m_libraries.find( aLib ); it != m_libraries.end() )
+            return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
+    }
+
+    {
+        std::shared_lock lock( GlobalLibraryMutex );
+
+        if( auto it = GlobalLibraries.find( aLib ); it != GlobalLibraries.end() )
+            return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
+    }
 
     return false;
 }

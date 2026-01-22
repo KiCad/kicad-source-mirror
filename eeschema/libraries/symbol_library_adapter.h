@@ -59,16 +59,11 @@ public:
 
     static wxString GlobalPathEnvVariableName();
 
-    void AsyncLoad() override;
-
     /// Loads or reloads the given library, if it exists
     std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override;
 
     /// Loads or reloads the given library, if it exists
     std::optional<LIB_STATUS> LoadOne( const wxString& aNickname );
-
-    /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
-    std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const override;
 
     /// Returns a list of additional (non-mandatory) symbol fields present in the given library
     std::vector<wxString> GetAvailableExtraFields( const wxString& aNickname );
@@ -161,21 +156,20 @@ public:
 protected:
     std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }
     std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries; }
-    std::mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
+    std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
+    std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex; }
+
+    void enumerateLibrary( LIB_DATA* aLib ) override;
 
     LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override;
 
     IO_BASE* plugin( const LIB_DATA* aRow ) override { return schplugin( aRow ); }
 
 private:
-    /// Helper to cast the ABC plugin in the LIB_DATA* to a concrete plugin
     static SCH_IO* schplugin( const LIB_DATA* aRow );
 
-    // The global libraries, potentially shared between multiple different open
-    // projects, each of which has their own instance of this adapter class
     static std::map<wxString, LIB_DATA> GlobalLibraries;
-
-    static std::mutex GlobalLibraryMutex;
+    static std::shared_mutex GlobalLibraryMutex;
 };
 
 #endif //SYMBOL_LIBRARY_MANAGER_ADAPTER_H
