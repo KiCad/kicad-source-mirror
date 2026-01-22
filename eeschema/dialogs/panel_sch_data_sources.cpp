@@ -47,21 +47,22 @@ PANEL_SCH_DATA_SOURCES::PANEL_SCH_DATA_SOURCES( wxWindow* aParent, EDA_BASE_FRAM
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
     m_description = new wxStaticText( this, wxID_ANY,
-            _( "Install schematic data sources from the Plugin and Content Manager. Data sources extend KiCad by linking schematic items to external data providers." ) );
+            _( "Install schematic data sources from the Plugin and Content Manager. Data sources extend KiCad "
+               "by linking schematic items to external data providers." ) );
     m_description->Wrap( FromDIP( 480 ) );
     m_description->SetFont( KIUI::GetInfoFont( this ) );
-    topSizer->Add( m_description, 0, wxBOTTOM | wxEXPAND, FromDIP( 12 ) );
+    topSizer->Add( m_description, 0, wxALL | wxEXPAND, FromDIP( 12 ) );
 
     m_sourcesList = new wxListBox( this, wxID_ANY );
     m_sourcesList->SetMinSize( FromDIP( wxSize( -1, 160 ) ) );
-    topSizer->Add( m_sourcesList, 1, wxBOTTOM | wxEXPAND, FromDIP( 12 ) );
+    topSizer->Add( m_sourcesList, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, FromDIP( 12 ) );
 
     m_status = new wxStaticText( this, wxID_ANY, wxEmptyString );
     m_status->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
-    topSizer->Add( m_status, 0, wxBOTTOM | wxEXPAND, FromDIP( 12 ) );
+    topSizer->Add( m_status, 0, wxLEFT | wxBOTTOM | wxEXPAND, FromDIP( 12 ) );
 
     m_manageButton = new wxButton( this, wxID_ANY, _( "Manage Data Sources..." ) );
-    topSizer->Add( m_manageButton, 0, wxALIGN_RIGHT );
+    topSizer->Add( m_manageButton, 0, wxRIGHT | wxALIGN_RIGHT, FromDIP( 12 ) );
 
     SetSizer( topSizer );
 

@@ -52,7 +52,7 @@ PANEL_MAINTENANCE_BASE::PANEL_MAINTENANCE_BASE( wxWindow* parent, wxWindowID id,
 	bResetStateSizer->Add( m_clearDialogState, 0, wxALL|wxEXPAND, 5 );
 
 	m_resetAll = new wxButton( this, wxID_ANY, _("Reset All Program Settings to Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
-	bResetStateSizer->Add( m_resetAll, 0, wxALL, 5 );
+	bResetStateSizer->Add( m_resetAll, 0, wxALL|wxEXPAND, 5 );
 
 
 	margins->Add( bResetStateSizer, 1, wxEXPAND|wxTOP, 10 );
