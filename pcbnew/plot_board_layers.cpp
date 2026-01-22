@@ -1214,18 +1214,20 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 
 static void plotPdfBackground( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, PLOTTER* aPlotter )
 {
+    const PAGE_INFO& pageInfo = aPlotter->PageSettings();
+    const VECTOR2I   plotOffset = aPlotter->GetPlotOffsetUserUnits();
+    const VECTOR2I   pageSizeIU( pageInfo.GetWidthIU( pcbIUScale.IU_PER_MILS ),
+                                 pageInfo.GetHeightIU( pcbIUScale.IU_PER_MILS ) );
+
     if( aPlotter->GetColorMode()
         && aPlotOpts->GetPDFBackgroundColor() != COLOR4D::UNSPECIFIED )
     {
         aPlotter->SetColor( aPlotOpts->GetPDFBackgroundColor() );
 
-        // Use page size selected in pcb to know the schematic bg area
-        const PAGE_INFO& actualPage = aBoard->GetPageSettings();
+        // Use plotter page size and offset so background matches the plotted output.
+        VECTOR2I end = plotOffset + pageSizeIU;
 
-        VECTOR2I end( actualPage.GetWidthIU( pcbIUScale.IU_PER_MILS ),
-                      actualPage.GetHeightIU( pcbIUScale.IU_PER_MILS ) );
-
-        aPlotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
+        aPlotter->Rect( plotOffset, end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 }
 
