@@ -66,11 +66,28 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, REPORTER
     for( const EMBEDDED_FILES* embeddedFiles : m_embeddedFilesStack )
         embeddedFilesStack.push_back( embeddedFiles );
 
-    wxString expandedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString, std::move( embeddedFilesStack ) );
+    wxString resolvedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString,
+                                                  std::move( embeddedFilesStack ) );
+
+    // If FILENAME_RESOLVER found the file, use that result
+    if( !resolvedPath.IsEmpty() )
+    {
+        wxFileName fn( resolvedPath );
+
+        if( fn.IsAbsolute() )
+            return fn.GetFullPath();
+    }
+
+    // Fall back to the original behavior for paths not found by FILENAME_RESOLVER.
+    // First expand any environment variables in the path.
+    wxString expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, m_project );
+
+    // Convert to UNIX format
+    expandedPath.Replace( '\\', '/' );
 
     wxFileName fn( expandedPath );
 
-    if( fn.IsAbsolute() )
+    if( fn.IsAbsolute() && fn.Exists() )
         return fn.GetFullPath();
 
     wxFileName projectFn( m_project ? m_project->AbsolutePath( expandedPath ) : expandedPath );
@@ -78,6 +95,7 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, REPORTER
     if( projectFn.Exists() )
         return projectFn.GetFullPath();
 
+    // Check relative to SPICE_LIB_DIR environment variable
     wxFileName spiceLibFn( expandedPath );
     wxString   spiceLibDir;
 
