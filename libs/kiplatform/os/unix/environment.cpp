@@ -151,6 +151,11 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
 
         wxURI proxyUri( proxyUriStr );
 
+        // Clear any stale data from previous lookups
+        aCfg.host.clear();
+        aCfg.username.clear();
+        aCfg.password.clear();
+
         // Build scheme://host:port string for curl.
         // The scheme is required for non-HTTP proxies (socks5, https, etc.)
         wxString scheme = proxyUri.GetScheme();
@@ -158,7 +163,15 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
         if( !scheme.IsEmpty() )
             aCfg.host = scheme + wxT( "://" );
 
-        aCfg.host += proxyUri.GetServer();
+        wxString server = proxyUri.GetServer();
+
+        // Bracket IPv6 addresses when port will be appended
+        bool isIPv6 = server.Contains( wxT( ":" ) );
+
+        if( isIPv6 && proxyUri.HasPort() )
+            aCfg.host += wxT( "[" ) + server + wxT( "]" );
+        else
+            aCfg.host += server;
 
         if( proxyUri.HasPort() )
             aCfg.host += wxT( ":" ) + proxyUri.GetPort();
