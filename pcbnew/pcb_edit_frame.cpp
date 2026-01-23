@@ -3104,6 +3104,7 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
                                                        _( "Compare Footprint with Library" ) );
 
         m_footprintDiffDlg->m_sdbSizerApply->SetLabel( _( "Update Footprint from Library..." ) );
+        m_footprintDiffDlg->m_sdbSizerApply->PostSizeEventToParent();
         m_footprintDiffDlg->m_sdbSizerApply->Show();
     }
 

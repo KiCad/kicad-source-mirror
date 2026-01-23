@@ -213,7 +213,7 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFoo
 
     if( m_currentFootprint )
     {
-        wxASSERT( m_otherFootprint );
+        wxCHECK( m_otherFootprint, /* void */ );
 
         renderFootprint( m_currentFootprint );
         renderFootprint( m_otherFootprint );

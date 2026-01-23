@@ -2367,6 +2367,7 @@ DIALOG_BOOK_REPORTER* SCH_EDIT_FRAME::GetSymbolDiffDialog()
                                                        _( "Compare Symbol with Library" ) );
 
         m_diffSymbolDialog->m_sdbSizerApply->SetLabel( _( "Update Symbol from Library..." ) );
+        m_diffSymbolDialog->m_sdbSizerApply->PostSizeEventToParent();
         m_diffSymbolDialog->m_sdbSizerApply->Show();
     }
 
