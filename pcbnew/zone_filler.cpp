@@ -1331,6 +1331,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             int      netcode = pad->GetNetCode();
             LSET     layers = pad->GetLayerSet() & boardCuMask;
 
+            // For TH pads, use the hole radius as tolerance since the filled zone creates a
+            // thermal relief around the pad hole, similar to vias.
+            int holeRadius = 0;
+
+            if( pad->HasHole() )
+                holeRadius = std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) / 2;
+
             for( PCB_LAYER_ID layer : layers )
             {
                 if( pad->GetZoneLayerOverride( layer ) != ZLO_FORCE_FLASHED )
@@ -1357,7 +1364,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                     if( fill->IsEmpty() )
                         continue;
 
-                    if( fill->Contains( center ) )
+                    if( fill->Contains( center, -1, holeRadius ) )
                     {
                         zoneReachesPad = true;
                         break;

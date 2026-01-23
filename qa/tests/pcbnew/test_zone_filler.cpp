@@ -688,3 +688,84 @@ BOOST_FIXTURE_TEST_CASE( RegressionShallowArcZoneFill, ZONE_FILL_TEST_FIXTURE )
     // from malformed clearance holes around shallow arcs.
     BOOST_CHECK_GE( fillRatio, 0.90 );
 }
+
+
+/**
+ * Test for issue 22826: TH pads with remove_unused_layers should properly flash on inner
+ * layers when inside a zone of the same net.
+ *
+ * The test board has:
+ * - TH pads with remove_unused_layers enabled, on the VBUS_DUT net
+ * - A VBUS_DUT zone on In2.Cu
+ * - Pads that are within the zone boundary
+ *
+ * Before the fix, the zone filler checked if fill->Contains(pad_center) without tolerance,
+ * which would fail because the fill has a thermal relief cutout around the pad. The fix
+ * uses the pad's drill radius as tolerance, similar to how vias are handled.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionTHPadInnerLayerFlashing, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22826/issue22826", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    PCB_LAYER_ID in2Cu = m_board->GetLayerID( wxT( "In2.Cu" ) );
+    int padsWithMissingFlashing = 0;
+    int totalConditionalPads = 0;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( !pad->GetRemoveUnconnected() )
+                continue;
+
+            if( !pad->HasHole() )
+                continue;
+
+            if( pad->GetNetname() != "VBUS_DUT" && pad->GetNetname() != "VBUS_DBG" )
+                continue;
+
+            totalConditionalPads++;
+
+            // Check if the pad should flash on In2.Cu
+            bool shouldFlash = false;
+
+            for( ZONE* zone : m_board->Zones() )
+            {
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( zone->GetNetCode() != pad->GetNetCode() )
+                    continue;
+
+                if( !zone->IsOnLayer( in2Cu ) )
+                    continue;
+
+                if( zone->Outline()->Contains( pad->GetPosition() ) )
+                {
+                    shouldFlash = true;
+                    break;
+                }
+            }
+
+            if( shouldFlash && !pad->FlashLayer( in2Cu ) )
+            {
+                BOOST_TEST_MESSAGE( wxString::Format(
+                        "Pad %s at (%d, %d) on net %s is inside zone but not flashing on In2.Cu",
+                        pad->GetNumber(), pad->GetPosition().x, pad->GetPosition().y,
+                        pad->GetNetname() ) );
+                padsWithMissingFlashing++;
+            }
+        }
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Total conditional pads: %d, Pads with missing "
+                                          "flashing: %d", totalConditionalPads,
+                                          padsWithMissingFlashing ) );
+
+    BOOST_CHECK_MESSAGE( padsWithMissingFlashing == 0,
+                         wxString::Format( "Found %d TH pads that should flash on inner layers "
+                                           "but don't. This indicates issue 22826 is not fixed.",
+                                           padsWithMissingFlashing ) );
+}
