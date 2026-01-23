@@ -794,12 +794,12 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
 {
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_footprints( aBoard->Footprints().begin(),
                                                                   aBoard->Footprints().end() );
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
+    std::set<BOARD_ITEM*, BOARD::cmp_drawings> sorted_drawings( aBoard->Drawings().begin(),
                                                                 aBoard->Drawings().end() );
     std::set<PCB_TRACK*, PCB_TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
                                                                aBoard->Tracks().end() );
     std::set<PCB_POINT*, BOARD_ITEM::ptr_cmp> sorted_points( aBoard->Points().begin(),
-                                                               aBoard->Points().end() );
+                                                             aBoard->Points().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aBoard->Zones().begin(),
                                                              aBoard->Zones().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),

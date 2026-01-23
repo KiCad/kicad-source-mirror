@@ -59,6 +59,7 @@ set( QA_PCBNEW_SRCS
     test_pcb_grid_helper.cpp
     test_save_load.cpp
     test_stacked_pin_netlist.cpp
+    test_teardrop_uuid.cpp
     test_tracks_cleaner.cpp
     test_triangulation.cpp
     test_multichannel.cpp

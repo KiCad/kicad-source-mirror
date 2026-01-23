@@ -55,9 +55,14 @@ TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager ) 
 
 
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const
+                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
+                                        BOARD_ITEM* aCandidate ) const
 {
     ZONE* teardrop = new ZONE( m_board );
+
+    // Create a deterministic UUID from the track and candidate UUIDs so that teardrops
+    // maintain stable ordering in the output file across save/load cycles.
+    const_cast<KIID&>( teardrop->m_Uuid ) = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
 
     // teardrop settings are the last zone settings used by a zone dialog.
     // override them by default.
@@ -94,9 +99,16 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 
 
 ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
-                                            std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const
+                                            std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack,
+                                            BOARD_ITEM* aCandidate ) const
 {
     ZONE* teardrop = new ZONE( m_board );
+
+    // Create a deterministic UUID from the track and candidate UUIDs, then increment it
+    // to differentiate from the copper teardrop zone.
+    KIID maskUuid = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
+    maskUuid.Increment();
+    const_cast<KIID&>( teardrop->m_Uuid ) = maskUuid;
 
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
                                                                       : TEARDROP_TYPE::TD_TRACKEND );
@@ -135,9 +147,9 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
 void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
                                                      TEARDROP_VARIANT aTeardropVariant,
                                                      std::vector<VECTOR2I>& aPoints,
-                                                     PCB_TRACK* aTrack )
+                                                     PCB_TRACK* aTrack, BOARD_ITEM* aCandidate )
 {
-    ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aTrack );
+    ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aTrack, aCandidate );
     m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
     m_createdTdList.push_back( new_teardrop );
 
@@ -145,7 +157,7 @@ void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
 
     if( aTrack->HasSolderMask() && IsExternalCopperLayer( aTrack->GetLayer() ) )
     {
-        ZONE* new_teardrop_mask = createTeardropMask( aTeardropVariant, aPoints, aTrack );
+        ZONE* new_teardrop_mask = createTeardropMask( aTeardropVariant, aPoints, aTrack, aCandidate );
         m_board->Add( new_teardrop_mask, ADD_MODE::BULK_INSERT );
         aCommit.Added( new_teardrop_mask );
     }
@@ -162,7 +174,7 @@ bool TEARDROP_MANAGER::tryCreateTrackTeardrop( BOARD_COMMIT& aCommit,
 
     if( computeTeardropPolygon( aParams, points, aTrack, aCandidate, aPos ) )
     {
-        createAndAddTeardropWithMask( aCommit, aTeardropVariant, points, aTrack );
+        createAndAddTeardropWithMask( aCommit, aTeardropVariant, points, aTrack, aCandidate );
         return true;
     }
 
