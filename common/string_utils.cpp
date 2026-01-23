@@ -1675,15 +1675,12 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 
 int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
 {
+    size_t len = aPinName.length();
+
     if( !aValid )
     {
         // Fastest path when we're not interested in validity
-        size_t len = aPinName.length();
-
         if( len < 3 )
-            return 1;
-
-        if( aPinName[0] != '[' || aPinName[len - 1] != ']' )
             return 1;
     }
     else
@@ -1696,13 +1693,16 @@ int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
 
         if( hasOpenBracket || hasCloseBracket )
         {
-            if( aPinName[0] != '[' || aPinName[aPinName.length() - 1] != ']' )
+            if( aPinName[0] != '[' || aPinName[len - 1] != ']' )
             {
                 *aValid = false;
                 return 1;
             }
         }
     }
+
+    if( aPinName[0] != '[' || aPinName[len - 1] != ']' )
+        return 1;
 
     const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
 
