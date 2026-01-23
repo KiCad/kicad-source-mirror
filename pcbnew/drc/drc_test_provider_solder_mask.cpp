@@ -106,7 +106,13 @@ private:
     // Shapes used to define solder mask apertures don't have nets, so we assign them the
     // first object+net that bridges their aperture (after which any other nets will generate
     // violations).
+    //
+    // When "report all track errors" is enabled, we store all items per net so we can report
+    // violations for each pair of items from different nets.
     std::unordered_map<PTR_LAYER_CACHE_KEY, std::pair<BOARD_ITEM*, int>> m_maskApertureNetMap;
+
+    // Extended storage for "report all track errors" mode: stores all items per net per aperture
+    std::unordered_map<PTR_LAYER_CACHE_KEY, std::vector<std::pair<BOARD_ITEM*, int>>> m_maskApertureNetMapAll;
 };
 
 
@@ -382,6 +388,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
     if( ii == m_maskApertureNetMap.end() )
     {
         m_maskApertureNetMap[ key ] = { aTestItem, aTestNet };
+        m_maskApertureNetMapAll[ key ].push_back( { aTestItem, aTestNet } );
 
         // First net; no bridge yet....
         return false;
@@ -392,7 +399,10 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkMaskAperture( BOARD_ITEM* aMaskItem, BO
 
     if( encounteredItemNet == aTestNet && aTestNet >= 0 )
     {
-        // Same net; still no bridge...
+        // Same net; still no bridge, but add this item to the list so we can report all
+        // pairwise violations later (for non-tracks always, for tracks when option is set).
+        m_maskApertureNetMapAll[ key ].push_back( { aTestItem, aTestNet } );
+
         return false;
     }
 
@@ -608,24 +618,90 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     {
                         if( checkMaskAperture( aItem, other, aRefLayer, otherNet, &colliding ) )
                         {
-                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                            PCB_LAYER_ID maskLayer = IsFrontLayer( aRefLayer ) ? F_Mask : B_Mask;
+                            PTR_LAYER_CACHE_KEY key = { aItem, maskLayer };
+                            auto it = m_maskApertureNetMapAll.find( key );
+                            bool reportedAnyTrack = false;
 
-                            drce->SetErrorMessage( msg );
-                            drce->SetItems( aItem, colliding, other );
-                            drce->SetViolatingRule( &m_bridgeRule );
-                            reportViolation( drce, pos, aTargetLayer );
+                            if( it != m_maskApertureNetMapAll.end() )
+                            {
+                                for( auto& [firstNetItem, firstNet] : it->second )
+                                {
+                                    // Always report all combinations for non-track items.
+                                    // For tracks, report all only when option is set; otherwise
+                                    // report just one track violation.
+                                    bool firstIsTrack = firstNetItem->Type() == PCB_TRACE_T
+                                                        || firstNetItem->Type() == PCB_ARC_T;
+
+                                    if( firstIsTrack )
+                                    {
+                                        if( m_drcEngine->GetReportAllTrackErrors() || !reportedAnyTrack )
+                                        {
+                                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                                            drce->SetErrorMessage( msg );
+                                            drce->SetItems( aItem, firstNetItem, other );
+                                            drce->SetViolatingRule( &m_bridgeRule );
+                                            reportViolation( drce, pos, aTargetLayer );
+                                            reportedAnyTrack = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                                        drce->SetErrorMessage( msg );
+                                        drce->SetItems( aItem, firstNetItem, other );
+                                        drce->SetViolatingRule( &m_bridgeRule );
+                                        reportViolation( drce, pos, aTargetLayer );
+                                    }
+                                }
+                            }
                         }
                     }
                     else if( isMaskAperture( other ) )
                     {
                         if( checkMaskAperture( other, aItem, aRefLayer, itemNet, &colliding ) )
                         {
-                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+                            PCB_LAYER_ID maskLayer = IsFrontLayer( aRefLayer ) ? F_Mask : B_Mask;
+                            PTR_LAYER_CACHE_KEY key = { other, maskLayer };
+                            auto it = m_maskApertureNetMapAll.find( key );
+                            bool reportedAnyTrack = false;
 
-                            drce->SetErrorMessage( msg );
-                            drce->SetItems( other, colliding, aItem );
-                            drce->SetViolatingRule( &m_bridgeRule );
-                            reportViolation( drce, pos, aTargetLayer );
+                            if( it != m_maskApertureNetMapAll.end() )
+                            {
+                                for( auto& [firstNetItem, firstNet] : it->second )
+                                {
+                                    // Always report all combinations for non-track items.
+                                    // For tracks, report all only when option is set; otherwise
+                                    // report just one track violation.
+                                    bool firstIsTrack = firstNetItem->Type() == PCB_TRACE_T
+                                                        || firstNetItem->Type() == PCB_ARC_T;
+
+                                    if( firstIsTrack )
+                                    {
+                                        if( m_drcEngine->GetReportAllTrackErrors() || !reportedAnyTrack )
+                                        {
+                                            auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                                            drce->SetErrorMessage( msg );
+                                            drce->SetItems( other, firstNetItem, aItem );
+                                            drce->SetViolatingRule( &m_bridgeRule );
+                                            reportViolation( drce, pos, aTargetLayer );
+                                            reportedAnyTrack = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
+
+                                        drce->SetErrorMessage( msg );
+                                        drce->SetItems( other, firstNetItem, aItem );
+                                        drce->SetViolatingRule( &m_bridgeRule );
+                                        reportViolation( drce, pos, aTargetLayer );
+                                    }
+                                }
+                            }
                         }
                     }
                     else if( checkItemMask( other, itemNet ) )
@@ -805,9 +881,15 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
             m_largestClearance = std::max( m_largestClearance, pad->GetSolderMaskExpansion( PADSTACK::ALL_LAYERS ) );
     }
 
-    // Order is important here: m_webWidth must be added in before m_largestCourtyardClearance is
-    // maxed with the various SILK_CLEARANCE_CONSTRAINTS.
+    // Order is important here: m_webWidth must be added in before m_largestClearance is
+    // maxed with the various clearance constraints.
     m_largestClearance += m_largestClearance + m_webWidth;
+
+    // Include SolderMaskToCopperClearance so R-tree queries find copper items that are within
+    // the required distance of mask apertures. Without this, tracks passing near pad apertures
+    // from different nets would not be found if SolderMaskToCopperClearance > m_largestClearance.
+    m_largestClearance = std::max( m_largestClearance,
+                                   m_board->GetDesignSettings().m_SolderMaskToCopperClearance );
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
@@ -821,6 +903,7 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::Run()
 
     m_checkedPairs.clear();
     m_maskApertureNetMap.clear();
+    m_maskApertureNetMapAll.clear();
 
     buildRTrees();
 

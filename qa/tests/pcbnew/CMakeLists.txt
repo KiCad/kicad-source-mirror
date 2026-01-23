@@ -62,6 +62,8 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_copper_graphics.cpp
     drc/test_drc_copper_sliver.cpp
     drc/test_solder_mask_bridging.cpp
+    drc/test_solder_mask_bridge_all_tracks.cpp
+    drc/test_solder_mask_track_to_pad.cpp
     drc/test_drc_multi_netclasses.cpp
     drc/test_drc_skew.cpp
     drc/test_drc_component_classes.cpp
