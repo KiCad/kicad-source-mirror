@@ -25,6 +25,7 @@
 #include <confirm.h>
 #include <dialog_footprint_properties_fp_editor.h>
 #include <footprint_edit_frame.h>
+#include <footprint_info.h>
 #include <footprint_tree_pane.h>
 #include <footprint_library_adapter.h>
 #include <functional>

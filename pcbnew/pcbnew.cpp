@@ -30,6 +30,7 @@
 #include <confirm.h>
 #include <kiface_base.h>
 #include <kiface_ids.h>
+#include <kiway_holder.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <macros.h>
@@ -371,10 +372,28 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return (void*) &GFootprintList;
 
         case KIFACE_FOOTPRINT_LIBRARY_ADAPTER:
+        {
             // This is the mechanism by which FOOTPRINT_SELECT_WIDGET can get access to the adapter
             // without directly linking to pcbnew or pcbcommon, going through PROJECT::FootprintLibAdapter
-            // TODO this is kind of cursed and needs thought to support multi-project
-            return PROJECT_PCB::FootprintLibAdapter( &Pgm().GetSettingsManager().Prj() );
+            PROJECT* project = nullptr;
+
+            if( wxTheApp )
+            {
+                wxWindow* focus = wxWindow::FindFocus();
+                wxWindow* top = focus ? wxGetTopLevelParent( focus ) : wxTheApp->GetTopWindow();
+
+                if( top )
+                {
+                    if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( top ) )
+                        project = &holder->Prj();
+                }
+            }
+
+            if( !project )
+                project = &Pgm().GetSettingsManager().Prj();
+
+            return PROJECT_PCB::FootprintLibAdapter( project );
+        }
 
         case KIFACE_SCRIPTING_LEGACY:
             return reinterpret_cast<void*>( PyInit__pcbnew );
@@ -702,30 +721,6 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 else
                 {
                     wxLogTrace( traceLibraries, "  -> no errors from footprint adapter" );
-                }
-
-                // TODO: Remove once fp-info-cache isn't a thing
-                GFootprintList.ReadFootprintFiles( adapter, nullptr, reporter.get() );
-
-                // Also collect errors from GFootprintList
-                wxLogTrace( traceLibraries, "  -> GFootprintList.GetErrorCount()=%u",
-                            GFootprintList.GetErrorCount() );
-
-                if( GFootprintList.GetErrorCount() > 0 )
-                {
-                    std::vector<LOAD_MESSAGE> messages =
-                            ExtractLibraryLoadErrors( GFootprintList.GetErrorMessages(),
-                                                      RPT_SEVERITY_ERROR );
-
-                    wxLogTrace( traceLibraries, "  -> GFootprintList: collected %zu messages",
-                                messages.size() );
-
-                    if( !messages.empty() )
-                        Pgm().AddLibraryLoadMessages( messages );
-                }
-                else
-                {
-                    wxLogTrace( traceLibraries, "  -> no errors from GFootprintList" );
                 }
             }
             else

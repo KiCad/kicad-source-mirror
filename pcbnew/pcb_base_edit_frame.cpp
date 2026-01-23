@@ -39,7 +39,6 @@
 #include <pcb_dimension.h>
 #include <pcb_layer_box_selector.h>
 #include <footprint.h>
-#include <footprint_info_impl.h>
 #include <layer_pairs.h>
 #include <project.h>
 #include <settings/color_settings.h>
@@ -108,13 +107,6 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 void PCB_BASE_EDIT_FRAME::doCloseWindow()
 {
     SETTINGS_MANAGER* mgr = GetSettingsManager();
-    wxFileName projectName( Prj().GetProjectFullName() );
-
-    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( projectName.GetPath() )
-            && projectName.Exists() )
-    {
-        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
-    }
 
     // Close the project if we are standalone, so it gets cleaned up properly
     if( mgr->IsProjectOpen() && Kiface().IsSingle() )

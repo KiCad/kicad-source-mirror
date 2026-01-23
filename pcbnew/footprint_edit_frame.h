@@ -281,7 +281,7 @@ public:
      * Synchronize the footprint library tree to the current state of the footprint library
      * table.
      */
-    void SyncLibraryTree( bool aProgress );
+    void SyncLibraryTree( [[maybe_unused]] bool aProgress );
 
     /**
      * Redisplay the library tree.  Used after changing modified states, descriptions, etc.

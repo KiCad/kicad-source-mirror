@@ -23,7 +23,6 @@
 #define FP_TREE_MODEL_ADAPTER_H
 
 #include <lib_tree_model_adapter.h>
-#include <footprint_info.h>
 
 class FOOTPRINT_LIBRARY_ADAPTER;
 class PCB_BASE_FRAME;

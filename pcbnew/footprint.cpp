@@ -30,6 +30,7 @@
 
 #include <wx/log.h>
 #include <wx/debug.h>
+#include <wx/tokenzr.h>
 
 #include <bitmaps.h>
 #include <board.h>
@@ -1610,6 +1611,26 @@ wxString FOOTPRINT::GetTypeName() const
         return _( "Through hole" );
 
     return _( "Other" );
+}
+
+
+std::vector<SEARCH_TERM> FOOTPRINT::GetSearchTerms()
+{
+    std::vector<SEARCH_TERM> terms;
+
+    terms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
+    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
+    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+
+    wxStringTokenizer keywordTokenizer( GetKeywords(), wxS( " \t\r\n" ), wxTOKEN_STRTOK );
+
+    while( keywordTokenizer.HasMoreTokens() )
+        terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
+
+    terms.emplace_back( SEARCH_TERM( GetKeywords(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetLibDescription(), 1 ) );
+
+    return terms;
 }
 
 

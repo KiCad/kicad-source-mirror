@@ -26,8 +26,7 @@
 #include <wx/tokenzr.h>
 #include <string_utils.h>
 #include <footprint_library_adapter.h>
-#include <footprint_info.h>
-#include <footprint_info_impl.h>
+#include <footprint.h>
 #include <generate_footprint_info.h>
 
 #include "fp_tree_model_adapter.h"
@@ -61,12 +60,16 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                         || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-        GFootprintList.WithFootprintsForLibrary( libName,
-                [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
-                {
-                    DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), aFootprints,
-                                  pinned, true );
-                } );
+        // Use cached footprints (no cloning) for faster tree population. The const_cast is safe
+        // because DoAddLibrary only reads metadata from the footprints, it doesn't modify them.
+        std::vector<const FOOTPRINT*> footprints = m_libs->GetCachedFootprints( libName, true );
+        std::vector<LIB_TREE_ITEM*> treeItems;
+        treeItems.reserve( footprints.size() );
+
+        for( const FOOTPRINT* fp : footprints )
+            treeItems.push_back( const_cast<FOOTPRINT*>( fp ) );
+
+        DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), treeItems, pinned, true );
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );

@@ -42,7 +42,6 @@
 #include <confirm.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
-#include <footprint_info_impl.h>
 #include <footprint_library_adapter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
@@ -70,11 +69,9 @@
 #include <tools/pcb_group_tool.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/appearance_controls.h>
-#include <widgets/kistatusbar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
-#include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_aui_utils.h>
 #include <toolbars_footprint_editor.h>
@@ -997,13 +994,6 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     m_auimgr.GetPane( wxT( "SelectionFilter" ) ).Show( false );
 
     Clear_Pcb( false );
-
-    SETTINGS_MANAGER* mgr = GetSettingsManager();
-
-    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
-    {
-        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
-    }
 }
 
 
@@ -1143,20 +1133,6 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 {
     FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
 
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Load Footprint Libraries" ), 1, PR_CAN_ABORT );
-
-    if( GFootprintList.GetCount() == 0 )
-        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
-
-    GFootprintList.ReadFootprintFiles( footprints, nullptr, &progressReporter );
-    progressReporter.Show( false );
-
-    if( GFootprintList.GetErrorCount() )
-    {
-        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-            statusBar->SetLoadWarningMessages( GFootprintList.GetErrorMessages() );
-    }
-
     m_adapter = FP_TREE_SYNCHRONIZING_ADAPTER::Create( this, footprints );
     auto adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
 
@@ -1164,24 +1140,12 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
+void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
 {
     FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID        target = GetTargetFPID();
     bool          targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
-
-    // Sync FOOTPRINT_INFO list to the libraries on disk
-    if( aProgress )
-    {
-        WX_PROGRESS_REPORTER progressReporter( this, _( "Update Footprint Libraries" ), 1, PR_CAN_ABORT );
-        GFootprintList.ReadFootprintFiles( footprints, nullptr, &progressReporter );
-        progressReporter.Show( false );
-    }
-    else
-    {
-        GFootprintList.ReadFootprintFiles( footprints, nullptr, nullptr );
-    }
 
     // Unselect before syncing to avoid null reference in the adapter
     // if a selected item is removed during the sync

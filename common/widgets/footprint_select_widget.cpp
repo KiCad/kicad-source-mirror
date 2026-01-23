@@ -30,8 +30,6 @@
 #include <wx/wupdlock.h>
 
 
-extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.
-
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
 FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent,

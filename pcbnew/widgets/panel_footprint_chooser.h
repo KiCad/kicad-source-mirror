@@ -26,7 +26,6 @@
 
 #include <widgets/lib_tree.h>
 #include <fp_tree_model_adapter.h>
-#include <footprint_info.h>
 #include <widgets/footprint_preview_widget.h>
 
 class wxTimer;
@@ -34,6 +33,7 @@ class wxSplitterWindow;
 class wxBoxSizer;
 
 class PCB_BASE_FRAME;
+class FOOTPRINT;
 
 // When a new footprint is selected, a custom event is sent, for instance to update
 // 3D viewer. So declare a FP_SELECTION_EVENT event
@@ -131,6 +131,8 @@ protected:
     std::function<bool( LIB_TREE_NODE& )>   m_filter;
     std::function<void()>                   m_acceptHandler;
     std::function<void()>                   m_escapeHandler;
+
+    std::vector<std::unique_ptr<FOOTPRINT>> m_historyFootprints;
 };
 
 #endif /* PANEL_FOOTPRINT_CHOOSER_H */

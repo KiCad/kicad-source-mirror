@@ -39,8 +39,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
-#include <widgets/wx_progress_reporters.h>
-#include <footprint_info_impl.h>
+#include <footprint.h>
 #include <project_pcb.h>
 #include <kiface_base.h>
 #include <tool/actions.h>
@@ -67,24 +66,10 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_CurrFootprint = nullptr;
     FOOTPRINT_LIBRARY_ADAPTER* footprints = PROJECT_PCB::FootprintLibAdapter( &aFrame->Prj() );
 
-    // Load footprint files:
-    auto* progressReporter = new WX_PROGRESS_REPORTER( aParent, _( "Load Footprint Libraries" ), 1,
-                                                       PR_CAN_ABORT );
-    GFootprintList.ReadFootprintFiles( footprints, nullptr, progressReporter );
-
-    // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
-    // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
-    // WX_PROGRESS_REPORTER have some side effects on the event loop manager.  For instance, a
-    // subsequent call to ShowModal() or ShowQuasiModal() for a dialog following the use of a
-    // WX_PROGRESS_REPORTER results in incorrect modal or quasi modal behavior.
-    delete progressReporter;
-
-    if( GFootprintList.GetErrorCount() )
-    {
-        // Show errors in status bar instead of popup dialog
-        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( aFrame->GetStatusBar() ) )
-            statusBar->SetLoadWarningMessages( GFootprintList.GetErrorMessages() );
-    }
+    // Ensure libraries are loaded before building the tree. This is necessary when the footprint
+    // chooser is opened from contexts that don't preload libraries (e.g., from Eeschema).
+    footprints->AsyncLoad();
+    footprints->BlockUntilLoaded();
 
     m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, footprints );
     FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( m_adapter.get() );
@@ -93,11 +78,18 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     for( const wxString& item : aFootprintHistoryList )
     {
-        LIB_TREE_ITEM* fp_info = GFootprintList.GetFootprintInfo( item );
+        LIB_ID fpid;
 
-        // this can be null, for example, if the footprint has been deleted from a library.
-        if( fp_info != nullptr )
-            historyInfos.push_back( fp_info );
+        if( fpid.Parse( item ) >= 0 )
+            continue;
+
+        FOOTPRINT* fp = footprints->LoadFootprint( fpid, false );
+
+        if( fp != nullptr )
+        {
+            historyInfos.push_back( fp );
+            m_historyFootprints.push_back( std::unique_ptr<FOOTPRINT>( fp ) );
+        }
     }
 
     adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,

@@ -29,7 +29,6 @@
 #include <footprint_edit_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_library_adapter.h>
-#include <footprint_info_impl.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <project_pcb.h>
 #include <string_utils.h>
@@ -37,6 +36,9 @@
 #include <footprint.h>
 #include <tool/tool_manager.h>
 #include <tools/footprint_editor_control.h>
+
+#include <map>
+
 #include <wx/settings.h>
 
 
@@ -118,13 +120,17 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
                 bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                                 || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-                GFootprintList.WithFootprintsForLibrary( libName,
-                        [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
-                        {
-                            DoAddLibrary( libName, *optDesc, aFootprints, pinned, true );
-                        } );
+                // Use cached footprints (no cloning) for faster tree population
+                std::vector<const FOOTPRINT*> footprints = m_libs->GetCachedFootprints( libName, true );
+                std::vector<LIB_TREE_ITEM*> treeItems;
+                treeItems.reserve( footprints.size() );
 
-                m_libMap.insert( libName  );
+                for( const FOOTPRINT* fp : footprints )
+                    treeItems.push_back( const_cast<FOOTPRINT*>( fp ) );
+
+                DoAddLibrary( libName, *optDesc, treeItems, pinned, true );
+
+                m_libMap.insert( libName );
             }
         }
     }
@@ -142,36 +148,37 @@ int FP_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 
 void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode )
 {
-    GFootprintList.WithFootprintsForLibrary( aLibNode.m_Name,
-            [&]( const std::vector<LIB_TREE_ITEM*>& aFootprints )
-            {
-                std::vector<LIB_TREE_ITEM*> footprints = aFootprints;
+    // Use cached footprints (no cloning) for faster updates
+    std::vector<const FOOTPRINT*> footprints = m_libs->GetCachedFootprints( aLibNode.m_Name, true );
 
-                for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); )
-                {
-                    FOOTPRINT_INFO_IMPL dummy( wxEmptyString, (*nodeIt)->m_Name );
+    // Build a map of footprint names for quick lookup
+    std::map<wxString, const FOOTPRINT*> fpMap;
 
-                    auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
-                            []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
-                            {
-                                return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
-                            } );
+    for( const FOOTPRINT* fp : footprints )
+        fpMap[fp->GetFPID().GetLibItemName()] = fp;
 
-                    if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
-                    {
-                        static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update( *footprintIt );
-                        footprints.erase( footprintIt );
-                        ++nodeIt;
-                    }
-                    else
-                    {
-                        nodeIt = aLibNode.m_Children.erase( nodeIt );
-                    }
-                }
+    // Remove items that no longer exist
+    for( auto nodeIt = aLibNode.m_Children.begin(); nodeIt != aLibNode.m_Children.end(); )
+    {
+        auto fpIt = fpMap.find( (*nodeIt)->m_Name );
 
-                for( LIB_TREE_ITEM* footprint : footprints )
-                    aLibNode.AddItem( footprint );
-            } );
+        if( fpIt != fpMap.end() )
+        {
+            // const_cast is safe because Update() only reads metadata from the footprint
+            static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update(
+                    const_cast<FOOTPRINT*>( fpIt->second ) );
+            fpMap.erase( fpIt );
+            ++nodeIt;
+        }
+        else
+        {
+            nodeIt = aLibNode.m_Children.erase( nodeIt );
+        }
+    }
+
+    // Add new items (const_cast is safe because AddItem only reads metadata)
+    for( auto& [name, fp] : fpMap )
+        aLibNode.AddItem( const_cast<FOOTPRINT*>( fp ) );
 
     aLibNode.AssignIntrinsicRanks( m_shownColumns );
     m_libMap.insert( aLibNode.m_Name );

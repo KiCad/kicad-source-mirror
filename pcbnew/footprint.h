@@ -38,6 +38,7 @@
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
 #include <lib_id.h>
+#include <lib_tree_item.h>
 #include <list>
 
 #include <zones.h>
@@ -214,7 +215,7 @@ private:
 };
 
 
-class FOOTPRINT : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES
+class FOOTPRINT : public BOARD_ITEM_CONTAINER, public EMBEDDED_FILES, public LIB_TREE_ITEM
 {
 public:
     FOOTPRINT( BOARD* parent );
@@ -355,6 +356,14 @@ public:
 
     wxString GetFPIDAsString() const { return m_fpid.Format(); }
     void SetFPIDAsString( const wxString& aFPID ) { m_fpid.Parse( aFPID ); }
+
+    // LIB_TREE_ITEM interface
+    LIB_ID GetLIB_ID() const override { return m_fpid; }
+    wxString GetName() const override { return m_fpid.GetLibItemName(); }
+    wxString GetLibNickname() const override { return m_fpid.GetLibNickname(); }
+    wxString GetDesc() override { return GetLibDescription(); }
+    int GetPinCount() override { return static_cast<int>( GetUniquePadCount( DO_NOT_INCLUDE_NPTH ) ); }
+    std::vector<SEARCH_TERM> GetSearchTerms() override;
 
     wxString GetLibDescription() const { return m_libDescription; }
     void     SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }

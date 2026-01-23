@@ -31,13 +31,6 @@
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <thread_pool.h>
-#include <wildcards_and_files_ext.h>
-
-#include <kiplatform/io.h>
-
-#include <wx/textfile.h>
-#include <wx/txtstrm.h>
-#include <wx/wfstream.h>
 
 
 void FOOTPRINT_INFO_IMPL::load()
@@ -308,84 +301,11 @@ FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
 
 void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
 {
-    wxFileName          tmpFileName = wxFileName::CreateTempFileName( aFilePath );
-    wxFFileOutputStream outStream( tmpFileName.GetFullPath() );
-    wxTextOutputStream  txtStream( outStream );
-
-    if( !outStream.IsOk() )
-    {
-        return;
-    }
-
-    txtStream << wxString::Format( wxT( "%lld" ), m_list_timestamp ) << endl;
-
-    for( std::unique_ptr<FOOTPRINT_INFO>& fpinfo : m_list )
-    {
-        txtStream << fpinfo->GetLibNickname() << endl;
-        txtStream << fpinfo->GetName() << endl;
-        txtStream << EscapeString( fpinfo->GetDesc(), CTX_LINE ) << endl;
-        txtStream << EscapeString( fpinfo->GetKeywords(), CTX_LINE ) << endl;
-        txtStream << wxString::Format( wxT( "%d" ), fpinfo->GetOrderNum() ) << endl;
-        txtStream << wxString::Format( wxT( "%u" ), fpinfo->GetPadCount() ) << endl;
-        txtStream << wxString::Format( wxT( "%u" ), fpinfo->GetUniquePadCount() ) << endl;
-    }
-
-    txtStream.Flush();
-    outStream.Close();
-
-    // Preserve the permissions of the current file
-    KIPLATFORM::IO::DuplicatePermissions( aFilePath, tmpFileName.GetFullPath() );
-
-    if( !wxRenameFile( tmpFileName.GetFullPath(), aFilePath, true ) )
-    {
-        // cleanup in case rename failed
-        // its also not the end of the world since this is just a cache file
-        wxRemoveFile( tmpFileName.GetFullPath() );
-    }
+    // Cache disabled; no longer needed with async library loading
 }
 
 
 void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( const wxString& aFilePath )
 {
-    wxTextFile cacheFile( aFilePath );
-
-    m_list_timestamp = 0;
-    m_list.clear();
-
-    try
-    {
-        if( cacheFile.Exists() && cacheFile.Open() )
-        {
-            cacheFile.GetFirstLine().ToLongLong( &m_list_timestamp );
-
-            while( cacheFile.GetCurrentLine() + 6 < cacheFile.GetLineCount() )
-            {
-                wxString             libNickname    = cacheFile.GetNextLine();
-                wxString             name           = cacheFile.GetNextLine();
-                wxString             desc           = UnescapeString( cacheFile.GetNextLine() );
-                wxString             keywords       = UnescapeString( cacheFile.GetNextLine() );
-                int                  orderNum       = wxAtoi( cacheFile.GetNextLine() );
-                unsigned int         padCount       = (unsigned) wxAtoi( cacheFile.GetNextLine() );
-                unsigned int         uniquePadCount = (unsigned) wxAtoi( cacheFile.GetNextLine() );
-
-                FOOTPRINT_INFO_IMPL* fpinfo = new FOOTPRINT_INFO_IMPL( libNickname, name, desc,
-                                                                       keywords, orderNum,
-                                                                       padCount,  uniquePadCount );
-
-                m_list.emplace_back( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
-            }
-        }
-    }
-    catch( ... )
-    {
-        // whatever went wrong, invalidate the cache
-        m_list_timestamp = 0;
-    }
-
-    // Sanity check: an empty list is very unlikely to be correct.
-    if( m_list.size() == 0 )
-        m_list_timestamp = 0;
-
-    if( cacheFile.IsOpened() )
-        cacheFile.Close();
+    // Cache disabled; no longer needed with async library loading
 }

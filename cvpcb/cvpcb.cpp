@@ -25,7 +25,6 @@
 
 #include <confirm.h>
 #include <footprint_library_adapter.h>
-#include <footprint_info_impl.h>
 #include <kiface_base.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -102,10 +101,6 @@ static struct IFACE : public KIFACE_BASE
     {
         switch( aDataId )
         {
-        // Return a pointer to the global instance of the footprint list.
-        case KIFACE_FOOTPRINT_LIST:
-            return (void*) &GFootprintList;
-
         case KIFACE_TEST_FOOTPRINT_LINK:
             return (void*) testFootprintLink;
 
@@ -130,12 +125,6 @@ KIFACE_API KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_B
 {
     return &kiface;
 }
-
-
-/// The global footprint info table.  This is performance-intensive to build so we
-/// keep a hash-stamped global version.  Any deviation from the request vs. stored
-/// hash will result in it being rebuilt.
-FOOTPRINT_LIST_IMPL GFootprintList;
 
 
 //!!!!!!!!!!!!!!! This code is obsolete because of the merge into Pcbnew, don't bother with it.

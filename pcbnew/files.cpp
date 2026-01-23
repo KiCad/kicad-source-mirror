@@ -70,7 +70,6 @@
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
 #include <tools/board_editor_control.h>
-#include "footprint_info_impl.h"
 #include <board_commit.h>
 #include <reporter.h>
 #include <zone_filler.h>
@@ -600,9 +599,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetReadOnly( !pro.Exists() && !converted );
     }
 
-    // Clear the cache footprint list which may be project specific
-    GFootprintList.Clear();
-
     if( is_new )
     {
         // Link the existing blank board to the new project
@@ -728,9 +724,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // Skip (possibly expensive) connectivity build here; we build it below after load
         SetBoard( loadedBoard, false, &progressReporter );
-
-        if( GFootprintList.GetCount() == 0 )
-            GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + wxT( "fp-info-cache" ) );
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {

@@ -144,6 +144,54 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
 }
 
 
+std::vector<const FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetCachedFootprints( const wxString& aNickname,
+                                                                               bool aBestEfforts )
+{
+    std::vector<const FOOTPRINT*> footprints;
+
+    std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname );
+
+    if( !maybeLib )
+        return footprints;
+
+    const LIB_DATA* lib = *maybeLib;
+    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+    wxArrayString namesAS;
+
+    try
+    {
+        pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), true, &options );
+    }
+    catch( IO_ERROR& e )
+    {
+        wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s",
+                    lib->row->Nickname(), e.What() );
+    }
+
+    for( const wxString& footprintName : namesAS )
+    {
+        const FOOTPRINT* footprint = nullptr;
+
+        try
+        {
+            footprint = pcbplugin( lib )->GetEnumeratedFootprint( getUri( lib->row ), footprintName,
+                                                                  &options );
+        }
+        catch( IO_ERROR& e )
+        {
+            wxLogTrace( traceLibraries, "FP: Exception getting cached footprint from %s: %s",
+                        lib->row->Nickname(), e.What() );
+            continue;
+        }
+
+        if( footprint )
+            footprints.emplace_back( footprint );
+    }
+
+    return footprints;
+}
+
+
 std::vector<wxString> FOOTPRINT_LIBRARY_ADAPTER::GetFootprintNames( const wxString& aNickname, bool aBestEfforts )
 {
     // TODO(JE) can we kill wxArrayString in internal API?
