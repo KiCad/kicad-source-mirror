@@ -152,6 +152,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
+#if !defined( __WXMAC__ ) && !defined( __WXMSW__ )
 /**
  * Get the CMake build root directory for the current executable
  * (which assumes the executable is in a build directory).
@@ -192,6 +193,48 @@ static wxString getBuildDirectoryRoot()
 
     return fn.GetPath();
 }
+#elif defined( __WXMAC__ )
+/**
+ * Get the main .app bundle root with symlinks resolved.
+ * Handles both main KiCad binaries and aux binaries inside the bundle.
+ * This is the single source of truth for bundle root resolution on macOS.
+ */
+static wxString getOSXBundleRoot()
+{
+    static wxString bundleRoot;
+
+    if( bundleRoot.empty() )
+    {
+        wxFileName fn( wxStandardPaths::Get().GetExecutablePath() );
+        WX_FILENAME::ResolvePossibleSymlinks( fn );
+        fn.SetFullName( wxEmptyString ); // Remove binary name
+
+        // Navigate from .../Contents/MacOS/ up to the .app bundle root
+        // e.g., /Applications/KiCad/KiCad.app/Contents/MacOS -> /Applications/KiCad/KiCad.app
+        if( fn.GetDirCount() >= 2 && fn.GetDirs().Last() == wxT( "MacOS" ) )
+        {
+            fn.RemoveLastDir(); // MacOS
+            fn.RemoveLastDir(); // Contents
+        }
+
+        // Handle aux binaries inside main bundle
+        // From: .../main.app/Contents/Applications/standalone.app
+        // To:   .../main.app
+        const wxArrayString dirs = fn.GetDirs();
+        if( dirs.GetCount() >= 4 && dirs[dirs.GetCount() - 2] == wxT( "Applications" )
+            && dirs[dirs.GetCount() - 4].Lower().EndsWith( wxT( "app" ) ) )
+        {
+            fn.RemoveLastDir(); // standalone.app
+            fn.RemoveLastDir(); // Applications
+            fn.RemoveLastDir(); // Contents
+        }
+
+        bundleRoot = fn.GetPath();
+    }
+
+    return bundleRoot;
+}
+#endif
 
 
 wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
@@ -202,12 +245,10 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
 #if defined( __WXMAC__ )
-        wxFileName fn = wxStandardPaths::Get().GetExecutablePath();
-
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
+        wxFileName fn;
+        fn.AssignDir( getOSXBundleRoot() );
+        fn.RemoveLastDir(); // Above the .app bundle
+        fn.RemoveLastDir(); // Above the target subdirectory to build root
         path = fn.GetPath();
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
@@ -362,25 +403,9 @@ wxString PATHS::GetStockPlugins3DPath()
 
     fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMAC__ )
-    fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
-
-    // This must be mapped to main bundle for everything but kicad.app
-    const wxArrayString dirs = fn.GetDirs();
-
-    // Check if we are the main kicad binary.  in this case, the path will be
-    //     /path/to/bundlename.app/Contents/PlugIns
-    // If we are an aux binary, the path will be something like
-    //     /path/to/bundlename.app/Contents/Applications/<standalone>.app/Contents/PlugIns
-    if( dirs.GetCount() >= 6 &&
-        dirs[dirs.GetCount() - 4] == wxT( "Applications" ) &&
-        dirs[dirs.GetCount() - 6].Lower().EndsWith( wxT( "app" ) ) )
-    {
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.AppendDir( wxT( "PlugIns" ) );
-    }
+    fn.AssignDir( getOSXBundleRoot() );
+    fn.AppendDir( wxT( "Contents" ) );
+    fn.AppendDir( wxT( "PlugIns" ) );
 #else
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
@@ -559,28 +584,10 @@ wxString PATHS::GetOSXKicadMachineDataDir()
 
 wxString PATHS::GetOSXKicadDataDir()
 {
-    // According to wxWidgets documentation for GetDataDir:
-    // Mac: appname.app/Contents/SharedSupport bundle subdirectory
-    wxFileName ddir( wxStandardPaths::Get().GetDataDir(), wxEmptyString );
-
-    // This must be mapped to main bundle for everything but kicad.app
-    const wxArrayString dirs = ddir.GetDirs();
-
-    // Check if we are the main kicad binary.  in this case, the path will be
-    //     /path/to/bundlename.app/Contents/SharedSupport
-    // If we are an aux binary, the path will be something like
-    //     /path/to/bundlename.app/Contents/Applications/<standalone>.app/Contents/SharedSupport
-    if( dirs.GetCount() >= 6 &&
-        dirs[dirs.GetCount() - 4] == wxT( "Applications" ) &&
-        dirs[dirs.GetCount() - 6].Lower().EndsWith( wxT( "app" ) ) )
-    {
-        ddir.RemoveLastDir();
-        ddir.RemoveLastDir();
-        ddir.RemoveLastDir();
-        ddir.RemoveLastDir();
-        ddir.AppendDir( wxT( "SharedSupport" ) );
-    }
-
+    wxFileName ddir;
+    ddir.AssignDir( getOSXBundleRoot() );
+    ddir.AppendDir( wxT( "Contents" ) );
+    ddir.AppendDir( wxT( "SharedSupport" ) );
     return ddir.GetPath();
 }
 #endif
@@ -651,33 +658,12 @@ const wxString& PATHS::GetExecutablePath()
 
     if( exe_path.empty() )
     {
+#ifdef __WXMAC__
+        // Use bundle root helper which handles symlink resolution and aux binaries
+        exe_path = getOSXBundleRoot() + wxT( "/" );
+#else
         wxString bin_dir = wxStandardPaths::Get().GetExecutablePath();
 
-#ifdef __WXMAC__
-        // On OSX GetExecutablePath() will always point to main
-        // bundle directory, e.g., /Applications/kicad.app/
-
-        wxFileName fn( bin_dir );
-        WX_FILENAME::ResolvePossibleSymlinks( fn );
-
-        if( fn.GetName() == wxT( "kicad" ) || fn.GetName() == wxT( "kicad-cli" ) )
-        {
-            // kicad launcher, so just remove the Contents/MacOS part
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-        }
-        else
-        {
-            // standalone binaries live in Contents/Applications/<standalone>.app/Contents/MacOS
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-            fn.RemoveLastDir();
-        }
-
-        bin_dir = fn.GetPath() + wxT( "/" );
-#else
         // Use unix notation for paths. I am not sure this is a good idea,
         // but it simplifies compatibility between Windows and Unices.
         // However it is a potential problem in path handling under Windows.
@@ -686,8 +672,9 @@ const wxString& PATHS::GetExecutablePath()
         // Remove file name form command line:
         while( bin_dir.Last() != '/' && !bin_dir.IsEmpty() )
             bin_dir.RemoveLast();
-#endif
+
         exe_path = bin_dir;
+#endif
     }
 
     return exe_path;
