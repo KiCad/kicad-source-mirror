@@ -778,30 +778,6 @@ bool matchWild( const char* pat, const char* text, bool dot_special )
 }
 
 
-/**
- * A copy of ConvertFileTimeToWx() because wxWidgets left it as a static function
- * private to src/common/filename.cpp.
- */
-#if wxUSE_DATETIME && defined( __WIN32__ ) && !defined( __WXMICROWIN__ )
-
-// Convert between wxDateTime and FILETIME which is a 64-bit value representing
-// the number of 100-nanosecond intervals since January 1, 1601 UTC.
-//
-// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
-static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL( 11644473600000 );
-
-
-static void ConvertFileTimeToWx( wxDateTime* dt, const FILETIME& ft )
-{
-    wxLongLong t( ft.dwHighDateTime, ft.dwLowDateTime );
-    t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
-    t -= EPOCH_OFFSET_IN_MSEC;
-
-    *dt = wxDateTime( t );
-}
-
-#endif // wxUSE_DATETIME && __WIN32__
-
 
 /**
  * This routine offers SIGNIFICANT performance benefits over using wxWidgets to gather
@@ -825,20 +801,27 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
     filespec += aFilespec.t_str();
 
     WIN32_FIND_DATA findData;
-    wxDateTime      lastModDate;
 
-    HANDLE fileHandle = ::FindFirstFile( filespec.data(), &findData );
+    // FindExInfoBasic skips querying 8.3 short filenames (we don't need them)
+    // FIND_FIRST_EX_LARGE_FETCH uses 64KB buffer instead of 4KB, reducing kernel transitions
+    HANDLE fileHandle = ::FindFirstFileEx( filespec.data(), FindExInfoBasic, &findData,
+                                           FindExSearchNameMatch, nullptr,
+                                           FIND_FIRST_EX_LARGE_FETCH );
 
     if( fileHandle != INVALID_HANDLE_VALUE )
     {
         do
         {
-            ConvertFileTimeToWx( &lastModDate, findData.ftLastWriteTime );
-            timestamp += lastModDate.GetValue().GetValue();
+            // FILETIME is 100-nanosecond intervals; shift right by 13 (~0.8ms resolution)
+            // to avoid overflow when summing many files
+            long long ft = ( static_cast<long long>( findData.ftLastWriteTime.dwHighDateTime ) << 32 )
+                         | findData.ftLastWriteTime.dwLowDateTime;
+            timestamp += ft >> 13;
 
             // Get the file size (partial) as well to check for sneaky changes.
             timestamp += findData.nFileSizeLow;
-        } while( FindNextFile( fileHandle, &findData ) != 0 );
+        }
+        while( FindNextFile( fileHandle, &findData ) != 0 );
     }
 
     FindClose( fileHandle );
