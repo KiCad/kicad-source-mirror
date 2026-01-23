@@ -62,6 +62,7 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
+    void OnGridCellChanging( wxGridEvent& event );
     void onMultiLabelCheck( wxCommandEvent& aEvent ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 

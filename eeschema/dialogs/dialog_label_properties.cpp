@@ -211,6 +211,11 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     m_spin2->Bind( wxEVT_BUTTON, &DIALOG_LABEL_PROPERTIES::onSpinButton, this );
     m_spin3->Bind( wxEVT_BUTTON, &DIALOG_LABEL_PROPERTIES::onSpinButton, this );
 
+    // wxFormBuilder doesn't include this event...
+    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
+                     wxGridEventHandler( DIALOG_LABEL_PROPERTIES::OnGridCellChanging ), nullptr,
+                     this );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -220,6 +225,10 @@ DIALOG_LABEL_PROPERTIES::~DIALOG_LABEL_PROPERTIES()
 {
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
+
+    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                        wxGridEventHandler( DIALOG_LABEL_PROPERTIES::OnGridCellChanging ), nullptr,
+                        this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -689,6 +698,42 @@ void DIALOG_LABEL_PROPERTIES::onSpinButton( wxCommandEvent& aEvent )
 void DIALOG_LABEL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
     m_helpWindow = SCH_LABEL_BASE::ShowSyntaxHelp( this );
+}
+
+
+void DIALOG_LABEL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
+{
+    wxGridCellEditor* editor = m_grid->GetCellEditor( event.GetRow(), event.GetCol() );
+    wxControl*        control = editor->GetControl();
+
+    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    {
+        event.Veto();
+        m_delayedFocusRow = event.GetRow();
+        m_delayedFocusColumn = event.GetCol();
+    }
+    else if( event.GetCol() == FDC_NAME )
+    {
+        wxString newName = event.GetString();
+
+        for( int i = 0; i < m_grid->GetNumberRows(); ++i )
+        {
+            if( i == event.GetRow() )
+                continue;
+
+            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            {
+                DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
+                                                      newName ) );
+                event.Veto();
+                m_delayedFocusRow = event.GetRow();
+                m_delayedFocusColumn = event.GetCol();
+                break;
+            }
+        }
+    }
+
+    editor->DecRef();
 }
 
 
