@@ -87,9 +87,6 @@ public:
     FOOTPRINT_LIST_IMPL();
     virtual ~FOOTPRINT_LIST_IMPL() {};
 
-    void WriteCacheToFile( const wxString& aFilePath ) override;
-    void ReadCacheFromFile( const wxString& aFilePath ) override;
-
     bool ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxString* aNickname = nullptr,
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
@@ -126,8 +123,6 @@ private:
     std::mutex               m_join;
     std::mutex               m_loadInProgress;
 };
-
-extern FOOTPRINT_LIST_IMPL GFootprintList;        // KIFACE scope.
 
 
 #endif // FOOTPRINT_INFO_IMPL_H

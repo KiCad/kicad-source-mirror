@@ -485,22 +485,16 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     if( !getCurNickname() )
         setCurFootprintName( wxEmptyString );
 
-    auto fp_info_list = FOOTPRINT_LIST::GetInstance( Kiway() );
-
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     wxString nickname = getCurNickname();
 
-    fp_info_list->ReadFootprintFiles( PROJECT_PCB::FootprintLibAdapter( &Prj() ), !nickname ? nullptr : &nickname );
+    if( !nickname )
+        return;
 
-    if( fp_info_list->GetErrorCount() )
-    {
-        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-            statusBar->SetLoadWarningMessages( fp_info_list->GetErrorMessages() );
+    std::vector<FOOTPRINT*> footprints = adapter->GetFootprints( nickname, true );
 
-        // For footprint libraries that support one footprint per file, there may have been
-        // valid footprints read so show the footprints that loaded properly.
-        if( fp_info_list->GetList().empty() )
-            return;
-    }
+    if( footprints.empty() )
+        return;
 
     std::set<wxString> excludes;
 
@@ -513,24 +507,26 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
             const wxString       filterTerm = tokenizer.GetNextToken().Lower();
             EDA_COMBINED_MATCHER matcher( filterTerm, CTX_LIBITEM );
 
-            for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
+            for( FOOTPRINT* footprint : footprints )
             {
                 std::vector<SEARCH_TERM> searchTerms = footprint->GetSearchTerms();
                 int                      matched = matcher.ScoreTerms( searchTerms );
 
-                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetPadCount() )
+                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) )
                     matched++;
 
                 if( !matched )
-                    excludes.insert( footprint->GetFootprintName() );
+                    excludes.insert( footprint->GetFPID().GetLibItemName() );
             }
         }
     }
 
-    for( const std::unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
+    for( FOOTPRINT* footprint : footprints )
     {
-        if( !excludes.count( footprint->GetFootprintName() ) )
-            m_fpList->Append( footprint->GetFootprintName() );
+        wxString fpName = footprint->GetFPID().GetLibItemName();
+
+        if( !excludes.count( fpName ) )
+            m_fpList->Append( fpName );
     }
 
     int index = wxNOT_FOUND;

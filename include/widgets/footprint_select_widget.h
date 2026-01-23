@@ -20,15 +20,14 @@
 #ifndef FOOTPRINT_SELECT_WIDGET_H
 #define FOOTPRINT_SELECT_WIDGET_H
 
-#include <footprint_filter.h>
-#include <footprint_info.h>
-#include <vector>
+#include <wx/arrstr.h>
 #include <wx/panel.h>
 
 class KIWAY;
 class PROJECT;
 class FOOTPRINT_CHOICE;
 class wxWindow;
+class EDA_DRAW_FRAME;
 
 /**
  * This event is fired when a footprint is selected. The string data of the
@@ -42,36 +41,21 @@ public:
     /**
      * Construct a footprint selector widget.
      *
-     * This requires references to an external footprint loader, and an external
-     * unique_ptr-to-FOOTPRINT_LIST. The latter will be populated with a
-     * FOOTPRINT_LIST instance the first time Load() is called.
-     *
-     * The reason for this is that footprint loading tends to be very expensive,
-     * especially when using online libraries. The caller is expected to keep
-     * these objects around (e.g. they may be statics on the dialog this
-     * FOOTPRINT_SELECT_WIDGET is created in) so footprints do not have to be
-     * loaded more than once.
-     *
+     * @param aFrame - parent frame for context
      * @param aParent - parent window
-     * @param aFpList - FOOTPRINT_LIST container
-     * @param aUpdate - whether to call UpdateList() automatically when finished loading
-     * @param aMaxItems - maximum number of filter items to display, in addition to
-     *  Default and Other
+     * @param aMaxItems - maximum number of filter items to display
      */
-    FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent, FOOTPRINT_LIST* aFpList,
-                             bool aUpdate = true, int aMaxItems = 400 );
+    FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent, int aMaxItems = 400 );
 
     virtual ~FOOTPRINT_SELECT_WIDGET()
     {
     }
 
     /**
-     * Start loading. This function returns immediately; footprints will
-     * continue to load in the background.
+     * Initialize the widget with a KIWAY for cross-module communication.
      *
-     * @param aKiway - active kiway instance. This is cached for use when "Other"
-     *      is selected.
-     * @param aProject - current project
+     * @param aKiway - active kiway instance used to fetch filtered footprints from pcbnew
+     * @param aProject - current project (unused, kept for API compatibility)
      */
     void Load( KIWAY& aKiway, PROJECT& aProject );
 
@@ -104,11 +88,10 @@ public:
     void SetDefaultFootprint( const wxString& aFp );
 
     /**
-     * Update the contents of the list to match the filters. Has no effect if
-     * the footprint list has not been loaded yet. The "default" footprint will be
-     * selected.
+     * Update the contents of the list by fetching filtered footprints from pcbnew.
+     * The "default" footprint will be selected.
      *
-     * @return true if the footprint list has been loaded (and the list was updated)
+     * @return true if the list was updated successfully
      */
     bool UpdateList();
 
@@ -123,17 +106,18 @@ public:
     virtual bool Enable( bool aEnable = true ) override;
 
 private:
-    FOOTPRINT_CHOICE*        m_fp_sel_ctrl;
-    wxSizer*                 m_sizer;
+    FOOTPRINT_CHOICE* m_fp_sel_ctrl;
+    wxSizer*          m_sizer;
 
-    bool                     m_update;
-    int                      m_max_items;
-    wxString                 m_default_footprint;
+    int               m_max_items;
+    wxString          m_default_footprint;
 
-    FOOTPRINT_LIST*          m_fp_list;
-    FOOTPRINT_FILTER         m_fp_filter;
-    bool                     m_zero_filter;
-    EDA_DRAW_FRAME*          m_frame;
+    // Filter parameters
+    int               m_pin_count;
+    wxArrayString     m_filters;
+    bool              m_zero_filter;
+
+    KIWAY*            m_kiway;
 
     void OnComboBox( wxCommandEvent& aEvent );
 };

@@ -38,6 +38,10 @@ std::map<wxString, LIB_DATA> FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraries;
 
 std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
+std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>> FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprints;
+
+std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprintsMutex;
+
 
 FOOTPRINT_LIBRARY_ADAPTER::FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
         LIBRARY_MANAGER_ADAPTER( aManager )
@@ -53,9 +57,45 @@ wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 
 void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
 {
-    wxArrayString dummyList;
+    wxArrayString namesAS;
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
-    pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
+    PCB_IO* plugin = pcbplugin( aLib );
+    wxString uri = getUri( aLib->row );
+    wxString nickname = aLib->row->Nickname();
+
+    plugin->FootprintEnumerate( namesAS, uri, false, &options );
+
+    std::vector<std::unique_ptr<FOOTPRINT>> footprints;
+    footprints.reserve( namesAS.size() );
+
+    for( const wxString& footprintName : namesAS )
+    {
+        FOOTPRINT* footprint = nullptr;
+
+        try
+        {
+            footprint = plugin->FootprintLoad( uri, footprintName, false, &options );
+        }
+        catch( IO_ERROR& e )
+        {
+            wxLogTrace( traceLibraries, "FP: Exception loading footprint %s from %s: %s",
+                        footprintName, nickname, e.What() );
+            continue;
+        }
+
+        if( !footprint )
+            continue;
+
+        LIB_ID id = footprint->GetFPID();
+        id.SetLibNickname( nickname );
+        footprint->SetFPID( id );
+        footprints.emplace_back( footprint );
+    }
+
+    {
+        std::unique_lock lock( PreloadedFootprintsMutex );
+        PreloadedFootprints[nickname] = std::move( footprints );
+    }
 }
 
 
@@ -100,96 +140,20 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
 {
     std::vector<FOOTPRINT*> footprints;
 
-    std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname );
+    std::shared_lock lock( PreloadedFootprintsMutex );
+    auto it = PreloadedFootprints.find( aNickname );
 
-    if( !maybeLib )
+    if( it == PreloadedFootprints.end() )
         return footprints;
 
-    const LIB_DATA* lib = *maybeLib;
-    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-    wxArrayString namesAS;
+    footprints.reserve( it->second.size() );
 
-    try
-    {
-        pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), true, &options );
-    }
-    catch( IO_ERROR& e )
-    {
-        wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
-    }
-
-    for( const wxString& footprintName : namesAS )
-    {
-        FOOTPRINT* footprint = nullptr;
-
-        try
-        {
-            footprint = pcbplugin( lib )->FootprintLoad( getUri( lib->row ),footprintName, false, &options );
-        }
-        catch( IO_ERROR& e )
-        {
-            wxLogTrace( traceLibraries, "FP: Exception loading footprint from %s: %s", lib->row->Nickname(), e.What() );
-            continue;
-        }
-
-        wxCHECK2( footprint, continue );
-
-        LIB_ID id = footprint->GetFPID();
-        id.SetLibNickname( lib->row->Nickname() );
-        footprint->SetFPID( id );
-        footprints.emplace_back( footprint );
-    }
+    for( const auto& fp : it->second )
+        footprints.push_back( fp.get() );
 
     return footprints;
 }
 
-
-std::vector<const FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetCachedFootprints( const wxString& aNickname,
-                                                                               bool aBestEfforts )
-{
-    std::vector<const FOOTPRINT*> footprints;
-
-    std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname );
-
-    if( !maybeLib )
-        return footprints;
-
-    const LIB_DATA* lib = *maybeLib;
-    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
-    wxArrayString namesAS;
-
-    try
-    {
-        pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), true, &options );
-    }
-    catch( IO_ERROR& e )
-    {
-        wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s",
-                    lib->row->Nickname(), e.What() );
-    }
-
-    for( const wxString& footprintName : namesAS )
-    {
-        const FOOTPRINT* footprint = nullptr;
-
-        try
-        {
-            footprint = pcbplugin( lib )->GetEnumeratedFootprint( getUri( lib->row ), footprintName,
-                                                                  &options );
-        }
-        catch( IO_ERROR& e )
-        {
-            wxLogTrace( traceLibraries, "FP: Exception getting cached footprint from %s: %s",
-                        lib->row->Nickname(), e.What() );
-            continue;
-        }
-
-        if( footprint )
-            footprints.emplace_back( footprint );
-    }
-
-    return footprints;
-}
 
 
 std::vector<wxString> FOOTPRINT_LIBRARY_ADAPTER::GetFootprintNames( const wxString& aNickname, bool aBestEfforts )

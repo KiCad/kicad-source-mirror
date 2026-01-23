@@ -384,21 +384,13 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 
     if( m_show_footprints )
     {
-        FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( m_frame->Kiway() );
-
         sizer->Add( m_symbol_preview, 11, wxEXPAND | wxALL, 5 );
 
-        if ( fp_list )
-        {
-            if( m_allow_field_edits )
-                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_frame, panel, fp_list, true );
+        m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_frame, panel );
+        sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
 
-            m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, m_frame->Kiway() );
-            m_fp_preview->SetUserUnits( m_frame->GetUserUnits() );
-        }
-
-        if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+        m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, m_frame->Kiway() );
+        m_fp_preview->SetUserUnits( m_frame->GetUserUnits() );
 
         if( m_fp_preview )
             sizer->Add( m_fp_preview, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );

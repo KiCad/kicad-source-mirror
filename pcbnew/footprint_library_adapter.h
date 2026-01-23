@@ -58,19 +58,6 @@ public:
      */
     std::vector<FOOTPRINT*> GetFootprints( const wxString& aNickname, bool aBestEfforts = false );
 
-    /**
-     * Retrieves const pointers to cached footprints without cloning. This is much faster than
-     * GetFootprints() for read-only access (e.g., populating tree views with metadata).
-     *
-     * The returned pointers are owned by the library plugin cache and remain valid as long as
-     * the library is loaded. Callers must NOT delete or modify the returned footprints.
-     *
-     * @param aNickname is the library to query
-     * @param aBestEfforts if true, don't throw on errors, just return a smaller or empty list.
-     * @return const pointers to cached footprints
-     */
-    std::vector<const FOOTPRINT*> GetCachedFootprints( const wxString& aNickname,
-                                                       bool aBestEfforts = false );
 
     /**
      * Retrieves a list of footprint names contained in a given loaded library
@@ -191,6 +178,11 @@ private:
 
     static std::map<wxString, LIB_DATA> GlobalLibraries;
     static std::shared_mutex GlobalLibraryMutex;
+
+    /// Storage for preloaded footprints, indexed by library nickname.
+    /// These are cloned during library enumeration so GetFootprints() returns instantly.
+    static std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>> PreloadedFootprints;
+    static std::shared_mutex PreloadedFootprintsMutex;
 };
 
 #endif //FOOTPRINT_LIBRARY_ADAPTER_H

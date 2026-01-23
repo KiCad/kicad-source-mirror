@@ -48,6 +48,8 @@
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
+#include <footprint.h>
+#include <nlohmann/json.hpp>
 #include <dialogs/dialog_configure_paths.h>
 #include <dialogs/panel_grid_settings.h>
 #include <panel_display_options.h>
@@ -84,6 +86,133 @@
 /* init functions defined by swig */
 
 extern "C" PyObject* PyInit__pcbnew( void );
+
+
+/**
+ * Filter footprints based on criteria passed as JSON.
+ *
+ * Input JSON format:
+ *   {"pin_count": N, "filters": ["pattern1", ...], "zero_filters": bool, "max_results": N}
+ *
+ * Output JSON format:
+ *   ["lib:footprint1", "lib:footprint2", ...]
+ *
+ * @param aFilterJson JSON string with filter parameters
+ * @return JSON string with array of matching footprint LIB_IDs
+ */
+static wxString filterFootprints( const wxString& aFilterJson )
+{
+    using json = nlohmann::json;
+
+    try
+    {
+        json input = json::parse( aFilterJson.ToStdString() );
+
+        int  pinCount = input.value( "pin_count", 0 );
+        bool zeroFilters = input.value( "zero_filters", true );
+        int  maxResults = input.value( "max_results", 400 );
+
+        wxArrayString filters;
+
+        if( input.contains( "filters" ) && input["filters"].is_array() )
+        {
+            for( const auto& f : input["filters"] )
+            {
+                if( f.is_string() )
+                    filters.Add( wxString::FromUTF8( f.get<std::string>() ) );
+            }
+        }
+
+        bool hasFilters = ( pinCount > 0 || !filters.IsEmpty() );
+
+        if( zeroFilters && !hasFilters )
+            return wxS( "[]" );
+
+        PROJECT* project = nullptr;
+
+        if( wxTheApp )
+        {
+            wxWindow* focus = wxWindow::FindFocus();
+            wxWindow* top = focus ? wxGetTopLevelParent( focus ) : wxTheApp->GetTopWindow();
+
+            if( top )
+            {
+                if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( top ) )
+                    project = &holder->Prj();
+            }
+        }
+
+        if( !project )
+            project = &Pgm().GetSettingsManager().Prj();
+
+        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
+
+        if( !adapter )
+            return wxS( "[]" );
+
+        adapter->AsyncLoad();
+        adapter->BlockUntilLoaded();
+
+        // Iterate through preloaded footprints directly instead of re-reading from disk
+        json output = json::array();
+        int  count = 0;
+
+        for( const wxString& nickname : adapter->GetLibraryNames() )
+        {
+            std::vector<FOOTPRINT*> footprints = adapter->GetFootprints( nickname, true );
+
+            for( FOOTPRINT* fp : footprints )
+            {
+                if( !fp )
+                    continue;
+
+                // Pin count filter
+                if( pinCount > 0 )
+                {
+                    int fpPadCount = fp->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
+
+                    if( fpPadCount != pinCount )
+                        continue;
+                }
+
+                // Footprint filter patterns
+                if( !filters.IsEmpty() )
+                {
+                    wxString fpName = fp->GetFPID().GetLibItemName();
+                    bool     matches = false;
+
+                    for( const wxString& filter : filters )
+                    {
+                        if( fpName.Matches( filter ) )
+                        {
+                            matches = true;
+                            break;
+                        }
+                    }
+
+                    if( !matches )
+                        continue;
+                }
+
+                wxString libId = fp->GetFPID().Format();
+                output.push_back( libId.ToStdString() );
+
+                if( ++count >= maxResults )
+                    break;
+            }
+
+            if( count >= maxResults )
+                break;
+        }
+
+        return wxString::FromUTF8( output.dump() );
+    }
+    catch( const std::exception& e )
+    {
+        return wxS( "[]" );
+    }
+}
+
 
 namespace PCB {
 
@@ -367,10 +496,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     {
         switch( aDataId )
         {
-        // Return a pointer to the global instance of the footprint list.
-        case KIFACE_FOOTPRINT_LIST:
-            return (void*) &GFootprintList;
-
         case KIFACE_FOOTPRINT_LIBRARY_ADAPTER:
         {
             // This is the mechanism by which FOOTPRINT_SELECT_WIDGET can get access to the adapter
@@ -393,6 +518,13 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 project = &Pgm().GetSettingsManager().Prj();
 
             return PROJECT_PCB::FootprintLibAdapter( project );
+        }
+
+        case KIFACE_FILTER_FOOTPRINTS:
+        {
+            // Return function pointer for filtering footprints
+            // Signature: wxString (*)(const wxString& aFilterJson)
+            return reinterpret_cast<void*>( &filterFootprints );
         }
 
         case KIFACE_SCRIPTING_LEGACY:
@@ -444,12 +576,6 @@ KIFACE_API KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BA
 {
     return &kiface;
 }
-
-
-/// The global footprint info table.  This is performance-intensive to build so we
-/// keep a hash-stamped global version.  Any deviation from the request vs. stored
-/// hash will result in it being rebuilt.
-FOOTPRINT_LIST_IMPL   GFootprintList;
 
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )

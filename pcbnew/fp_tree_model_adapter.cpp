@@ -60,14 +60,12 @@ void FP_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
                         || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-        // Use cached footprints (no cloning) for faster tree population. The const_cast is safe
-        // because DoAddLibrary only reads metadata from the footprints, it doesn't modify them.
-        std::vector<const FOOTPRINT*> footprints = m_libs->GetCachedFootprints( libName, true );
+        std::vector<FOOTPRINT*> footprints = m_libs->GetFootprints( libName, true );
         std::vector<LIB_TREE_ITEM*> treeItems;
         treeItems.reserve( footprints.size() );
 
-        for( const FOOTPRINT* fp : footprints )
-            treeItems.push_back( const_cast<FOOTPRINT*>( fp ) );
+        for( FOOTPRINT* fp : footprints )
+            treeItems.push_back( fp );
 
         DoAddLibrary( libName, *m_libs->GetLibraryDescription( libName ), treeItems, pinned, true );
     }

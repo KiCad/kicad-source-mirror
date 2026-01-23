@@ -52,6 +52,7 @@
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>
+#include <footprint_info_impl.h>
 #include <kiplatform/ui.h>
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
@@ -81,7 +82,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_cannotClose         = false;
     m_skipComponentSelect = false;
     m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
-    m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
+    m_FootprintsList      = new FOOTPRINT_LIST_IMPL();
     m_initialized         = false;
     m_aboutTitle          = _( "Assign Footprints" );
 
@@ -241,6 +242,7 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
     delete m_actions;
     delete m_toolManager;
     delete m_toolDispatcher;
+    delete m_FootprintsList;
 
     m_auimgr.UnInit();
 }

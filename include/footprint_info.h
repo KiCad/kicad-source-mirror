@@ -169,9 +169,6 @@ public:
     {
     }
 
-    virtual void WriteCacheToFile( const wxString& aFilePath ) {};
-    virtual void ReadCacheFromFile( const wxString& aFilePath ){};
-
     /**
      * @return the number of items stored in list
      */
@@ -255,15 +252,6 @@ public:
     wxString GetErrorMessages();
 
     FOOTPRINT_LIBRARY_ADAPTER* GetAdapter() const { return m_adapter; }
-
-    /**
-     * Factory function to return a #FOOTPRINT_LIST via Kiway.
-     *
-     * This is not guaranteed to succeed and will return null if the kiface is not available.
-     *
-     * @param aKiway active kiway instance.
-     */
-    static FOOTPRINT_LIST* GetInstance( KIWAY& aKiway );
 
 protected:
     FOOTPRINT_LIBRARY_ADAPTER*                   m_adapter; ///< no ownership

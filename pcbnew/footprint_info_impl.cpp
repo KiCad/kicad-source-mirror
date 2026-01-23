@@ -297,15 +297,3 @@ FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
     m_cancelled( false )
 {
 }
-
-
-void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
-{
-    // Cache disabled; no longer needed with async library loading
-}
-
-
-void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( const wxString& aFilePath )
-{
-    // Cache disabled; no longer needed with async library loading
-}

@@ -31,13 +31,8 @@
 #include <footprint_info.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
-#include <kiface_ids.h>
-#include <kiway.h>
 #include <lib_id.h>
-#include <thread>
-#include <utility>
 #include <wx/tokenzr.h>
-#include <kiface_base.h>
 
 FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aLibNickname,
                                                   const wxString& aFootprintName )
@@ -151,33 +146,4 @@ wxString FOOTPRINT_LIST::GetErrorMessages()
     }
 
     return messages;
-}
-
-
-static FOOTPRINT_LIST* get_instance_from_id( KIWAY& aKiway, int aId )
-{
-    void* ptr = nullptr;
-
-    try
-    {
-        ptr = Kiface().IfaceOrAddress( aId );
-
-        if( !ptr )
-        {
-            KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-            ptr = kiface->IfaceOrAddress( aId );
-        }
-
-        return static_cast<FOOTPRINT_LIST*>( ptr );
-    }
-    catch( ... )
-    {
-        return nullptr;
-    }
-}
-
-
-FOOTPRINT_LIST* FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
-{
-    return get_instance_from_id( aKiway, KIFACE_FOOTPRINT_LIST );
 }
