@@ -97,6 +97,18 @@ public:
     void ConvertTimestampToUuid();
 
     /**
+     * Creates a deterministic KIID from two input KIIDs by XORing their underlying UUIDs.
+     *
+     * This is useful for generating stable IDs for derived objects (like teardrops) that are
+     * created from the combination of two parent objects.
+     *
+     * @param aFirst the first KIID to combine
+     * @param aSecond the second KIID to combine
+     * @return a new KIID that is the XOR combination of the two inputs
+     */
+    static KIID Combine( const KIID& aFirst, const KIID& aSecond );
+
+    /**
      * Generates a deterministic replacement for a given ID.
      *
      * NB: destroys uniform distribution!  But it's the only thing we have when a deterministic

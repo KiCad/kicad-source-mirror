@@ -748,32 +748,11 @@ void PCB_IO_KICAD_SEXPR::formatTeardropParameters( const TEARDROP_PARAMETERS& td
 }
 
 
-struct extended_drawings_cmp
-{
-    /*
-     * This is a fix for tables having no uuid for stable file sorting in 9.0
-     * adding UUIDs would mean a file format bump which can't do now.
-     */
-    bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
-    {
-        if( aFirst->Type() == PCB_TABLE_T && aSecond->Type() == PCB_TABLE_T )
-        {
-            const PCB_TABLE* aTable = static_cast<const PCB_TABLE*>( aFirst );
-            const PCB_TABLE* bTable = static_cast<const PCB_TABLE*>( aSecond );
-
-            return aTable->GetHash() < bTable->GetHash();
-        }
-
-        return BOARD_ITEM::ptr_cmp()( aFirst, aSecond );
-    }
-};
-
-
 void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
 {
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_footprints( aBoard->Footprints().begin(),
                                                                   aBoard->Footprints().end() );
-    std::set<BOARD_ITEM*, extended_drawings_cmp> sorted_drawings( aBoard->Drawings().begin(),
+    std::set<BOARD_ITEM*, BOARD::cmp_drawings> sorted_drawings( aBoard->Drawings().begin(),
                                                                 aBoard->Drawings().end() );
     std::set<PCB_TRACK*, PCB_TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
                                                                aBoard->Tracks().end() );

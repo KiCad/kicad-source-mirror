@@ -3165,27 +3165,32 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aFirst );
         const PCB_SHAPE* other = static_cast<const PCB_SHAPE*>( aSecond );
-        return shape->Compare( other );
+        return shape->Compare( other ) < 0;
     }
     else if( aFirst->Type() == PCB_TEXT_T || aFirst->Type() == PCB_FIELD_T )
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aFirst );
         const PCB_TEXT* other = static_cast<const PCB_TEXT*>( aSecond );
-        return text->Compare( other );
+        return text->Compare( other ) < 0;
     }
     else if( aFirst->Type() == PCB_TEXTBOX_T )
     {
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( aFirst );
         const PCB_TEXTBOX* other = static_cast<const PCB_TEXTBOX*>( aSecond );
 
-        return textbox->PCB_SHAPE::Compare( other ) && textbox->EDA_TEXT::Compare( other );
+        int shapeCmp = textbox->PCB_SHAPE::Compare( other );
+
+        if( shapeCmp != 0 )
+            return shapeCmp < 0;
+
+        return textbox->EDA_TEXT::Compare( other ) < 0;
     }
     else if( aFirst->Type() == PCB_TABLE_T )
     {
         const PCB_TABLE* table = static_cast<const PCB_TABLE*>( aFirst );
         const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aSecond );
 
-        return PCB_TABLE::Compare( table, other );
+        return PCB_TABLE::Compare( table, other ) < 0;
     }
 
     return aFirst->m_Uuid < aSecond->m_Uuid;

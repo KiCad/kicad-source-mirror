@@ -285,6 +285,17 @@ void KIID::Increment()
 }
 
 
+KIID KIID::Combine( const KIID& aFirst, const KIID& aSecond )
+{
+    KIID result( 0 );
+
+    for( int i = 0; i < 16; ++i )
+        result.m_uuid.data[i] = aFirst.m_uuid.data[i] ^ aSecond.m_uuid.data[i];
+
+    return result;
+}
+
+
 void KIID::CreateNilUuids( bool aNil )
 {
     g_createNilUuids = aNil;

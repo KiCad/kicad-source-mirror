@@ -104,4 +104,70 @@ BOOST_AUTO_TEST_CASE( LegacyTimestamp )
 }
 
 
+BOOST_AUTO_TEST_CASE( CombineDeterministic )
+{
+    KIID a, b, c;
+
+    // Combining the same two KIIDs should always produce the same result
+    KIID combined1 = KIID::Combine( a, b );
+    KIID combined2 = KIID::Combine( a, b );
+    BOOST_CHECK_EQUAL( combined1.AsString(), combined2.AsString() );
+
+    // Combined result should be different from inputs
+    BOOST_CHECK( combined1 != a );
+    BOOST_CHECK( combined1 != b );
+
+    // Different inputs should produce different outputs
+    KIID combined3 = KIID::Combine( a, c );
+    BOOST_CHECK( combined1 != combined3 );
+
+    // Order matters for XOR with different values
+    KIID combined4 = KIID::Combine( b, a );
+    BOOST_CHECK_EQUAL( combined1.AsString(), combined4.AsString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( CombineWithKnownValues )
+{
+    // Test with known UUID strings to verify XOR behavior
+    KIID a( "00000000-0000-0000-0000-000000000001" );
+    KIID b( "00000000-0000-0000-0000-000000000002" );
+
+    KIID combined = KIID::Combine( a, b );
+
+    // XOR of 0x01 and 0x02 = 0x03
+    BOOST_CHECK_EQUAL( combined.AsString(), "00000000-0000-0000-0000-000000000003" );
+
+    // Combining with self should give all zeros
+    KIID selfCombined = KIID::Combine( a, a );
+    BOOST_CHECK_EQUAL( selfCombined.AsString(), "00000000-0000-0000-0000-000000000000" );
+}
+
+
+BOOST_AUTO_TEST_CASE( CombineUniqueness )
+{
+    // Generate several random KIIDs and verify all combinations are unique.
+    // XOR is commutative, so Combine(a,b) == Combine(b,a). We only count
+    // unique unordered pairs, which gives n*(n-1)/2 combinations.
+    std::vector<KIID> ids;
+
+    for( int i = 0; i < 10; ++i )
+        ids.push_back( KIID() );
+
+    std::set<wxString> combinations;
+
+    for( size_t i = 0; i < ids.size(); ++i )
+    {
+        for( size_t j = i + 1; j < ids.size(); ++j )
+        {
+            KIID combined = KIID::Combine( ids[i], ids[j] );
+            combinations.insert( combined.AsString() );
+        }
+    }
+
+    // All 45 unique unordered pairs (10*9/2) should produce unique results
+    BOOST_CHECK_EQUAL( combinations.size(), 45 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
