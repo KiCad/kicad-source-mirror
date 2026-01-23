@@ -25,6 +25,7 @@
 
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
+#include <eda_pattern_match.h>
 #include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
 #include <confirm.h>
@@ -112,18 +113,23 @@ static wxString filterFootprints( const wxString& aFilterJson )
         bool zeroFilters = input.value( "zero_filters", true );
         int  maxResults = input.value( "max_results", 400 );
 
-        wxArrayString filters;
+        std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> filterMatchers;
 
         if( input.contains( "filters" ) && input["filters"].is_array() )
         {
             for( const auto& f : input["filters"] )
             {
                 if( f.is_string() )
-                    filters.Add( wxString::FromUTF8( f.get<std::string>() ) );
+                {
+                    wxString pattern = wxString::FromUTF8( f.get<std::string>() );
+                    auto     matcher = std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>();
+                    matcher->SetPattern( pattern.Lower() );
+                    filterMatchers.push_back( std::move( matcher ) );
+                }
             }
         }
 
-        bool hasFilters = ( pinCount > 0 || !filters.IsEmpty() );
+        bool hasFilters = ( pinCount > 0 || !filterMatchers.empty() );
 
         if( zeroFilters && !hasFilters )
             return wxS( "[]" );
@@ -175,15 +181,22 @@ static wxString filterFootprints( const wxString& aFilterJson )
                         continue;
                 }
 
-                // Footprint filter patterns
-                if( !filters.IsEmpty() )
+                // Footprint filter patterns with case-insensitive matching
+                if( !filterMatchers.empty() )
                 {
-                    wxString fpName = fp->GetFPID().GetLibItemName();
-                    bool     matches = false;
+                    bool matches = false;
 
-                    for( const wxString& filter : filters )
+                    for( const auto& matcher : filterMatchers )
                     {
-                        if( fpName.Matches( filter ) )
+                        wxString name;
+
+                        // If filter contains ':', include library nickname in match string
+                        if( matcher->GetPattern().Contains( wxS( ":" ) ) )
+                            name = fp->GetFPID().GetLibNickname().wx_str().Lower() + wxS( ":" );
+
+                        name += fp->GetFPID().GetLibItemName().wx_str().Lower();
+
+                        if( matcher->Find( name ) )
                         {
                             matches = true;
                             break;
