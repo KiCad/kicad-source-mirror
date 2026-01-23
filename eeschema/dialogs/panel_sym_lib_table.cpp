@@ -59,10 +59,6 @@
 #include <lib_table_notebook_panel.h>
 #include <widgets/wx_aui_art_providers.h>
 
-
-#define FIRST_MENU_ID 998
-
-
 /**
  * Container that describes file type info for the add a library options
  */
@@ -82,7 +78,9 @@ struct SUPPORTED_FILE_TYPE
  * Special menu ID for folder-based KiCad symbol library format.
  * This ID is offset from SCH_FILE_T values to distinguish folder mode from file mode.
  */
-static constexpr int ID_PANEL_SYM_LIB_KICAD_FOLDER = 1000;
+static constexpr int FIRST_MENU_ID = 1000;
+// This must not collide with any SCH_FILE_T enum values so we offset it below.
+static constexpr int ID_PANEL_SYM_LIB_KICAD_FOLDER = FIRST_MENU_ID - 1;
 
 
 class SYMBOL_LIB_TABLE_GRID_DATA_MODEL : public LIB_TABLE_GRID_DATA_MODEL
