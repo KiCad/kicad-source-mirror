@@ -2515,13 +2515,14 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             currentHeadId++;
 
-            if( head.PointCount() > 0 )
+            if( !( headLineEntry.policy & SHP_DONT_LOCK_ENDPOINTS ) )
             {
-                m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
-            }
+                if( head.PointCount() > 0 )
+                    m_currentNode->LockJoint( head.CPoint( 0 ), &head, true );
 
-            if( !head.EndsWithVia() )
-                m_currentNode->LockJoint( head.CPoint( -1 ), &head, true );
+                if( !head.EndsWithVia() )
+                    m_currentNode->LockJoint( head.CPoint( -1 ), &head, true );
+            }
 
             SetShovePolicy( head, headLineEntry.policy );
 

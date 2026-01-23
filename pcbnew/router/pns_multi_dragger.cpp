@@ -268,7 +268,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         m_shove.reset( new SHOVE( m_preShoveNode, Router() ) );
         m_shove->SetLogger( Logger() );
         m_shove->SetDebugDecorator( Dbg() );
-        m_shove->SetDefaultShovePolicy( SHOVE::SHP_SHOVE );
+        m_shove->SetDefaultShovePolicy( SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS );
     }
 
     return true;

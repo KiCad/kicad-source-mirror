@@ -619,7 +619,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         }
 
         m_shove->ClearHeads();
-        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE );
+        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS );
         ok = m_shove->Run() == SHOVE::SH_OK;
 
         LINE draggedPostShove( draggedPreShove );
