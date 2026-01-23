@@ -402,14 +402,22 @@ wxString PATHS::GetStockPlugins3DPath()
 #else
     wxString envPath;
 
-    // AppImages have a different path to the plugins, otherwise we end up with host sytem
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
+        fn.AppendDir( wxT( ".." ) );
+        fn.AppendDir( wxT( "plugins" ) );
+    }
+    // AppImages have a different path to the plugins, otherwise we end up with host system
     // plugins being loaded.
-    if( wxGetEnv( wxT( "APPDIR" ), &envPath ) )
+    else if( wxGetEnv( wxT( "APPDIR" ), &envPath ) )
     {
         fn.Assign( envPath, wxEmptyString );
         fn.AppendDir( wxT( "usr" ) );
         fn.AppendDir( wxT( "lib" ) );
         fn.AppendDir( wxT( "x86_64-linux-gnu" ) );
+        fn.AppendDir( wxT( "kicad" ) );
+        fn.AppendDir( wxT( "plugins" ) );
     }
     else
     {
@@ -417,10 +425,9 @@ wxString PATHS::GetStockPlugins3DPath()
         // corresponding to the install path used for constructing KICAD_USER_PLUGIN
         wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
         fn.Assign( tfname, "" );
+        fn.AppendDir( wxT( "kicad" ) );
+        fn.AppendDir( wxT( "plugins" ) );
     }
-
-    fn.AppendDir( wxT( "kicad" ) );
-    fn.AppendDir( wxT( "plugins" ) );
 #endif
 
     fn.AppendDir( wxT( "3d" ) );
