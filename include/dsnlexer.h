@@ -438,7 +438,7 @@ public:
      */
     wxString FromUTF8() const
     {
-        return wxString::FromUTF8( curText.c_str() );
+        return wxString::FromUTF8( curText );
     }
 
     /**
