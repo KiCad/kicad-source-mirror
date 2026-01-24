@@ -275,6 +275,8 @@ public:
     void SetTextX( int aX );
     void SetTextY( int aY );
 
+    inline void SetActiveUrl( const wxString& aUrl ) const { m_activeUrl = aUrl; }
+
     void Offset( const VECTOR2I& aOffset );
 
     void Empty();
@@ -451,6 +453,8 @@ protected:
      * A hyperlink URL.  If empty, this text object is not a hyperlink.
      */
     wxString m_hyperlink;
+
+    mutable wxString m_activeUrl;
 
 private:
     wxString         m_text;
