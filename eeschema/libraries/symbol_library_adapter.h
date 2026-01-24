@@ -24,6 +24,7 @@
 
 #include <future>
 #include <lib_id.h>
+#include <core/leak_at_exit.h>
 #include <libraries/library_manager.h>
 #include <sch_io/sch_io.h>
 
@@ -154,8 +155,8 @@ public:
     int GetModifyHash() const;
 
 protected:
-    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }
-    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries; }
+    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries.Get(); }
+    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries.Get(); }
     std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
     std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex; }
 
@@ -168,7 +169,7 @@ protected:
 private:
     static SCH_IO* schplugin( const LIB_DATA* aRow );
 
-    static std::map<wxString, LIB_DATA> GlobalLibraries;
+    static LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> GlobalLibraries;
     static std::shared_mutex GlobalLibraryMutex;
 };
 

@@ -43,7 +43,7 @@ using namespace std::chrono_literals;
 const char* SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly = "pwr_sym_only";
 const char* SYMBOL_LIBRARY_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
 
-std::map<wxString, LIB_DATA> SYMBOL_LIBRARY_ADAPTER::GlobalLibraries;
+LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> SYMBOL_LIBRARY_ADAPTER::GlobalLibraries;
 
 std::shared_mutex SYMBOL_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
@@ -303,7 +303,7 @@ bool SYMBOL_LIBRARY_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
     {
         std::shared_lock lock( GlobalLibraryMutex );
 
-        if( auto it = GlobalLibraries.find( aLib ); it != GlobalLibraries.end() )
+        if( auto it = GlobalLibraries.Get().find( aLib ); it != GlobalLibraries.Get().end() )
             return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
     }
 

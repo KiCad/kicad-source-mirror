@@ -34,11 +34,11 @@
 using namespace std::chrono_literals;
 
 
-std::map<wxString, LIB_DATA> FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraries;
+LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraries;
 
 std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
-std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>> FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprints;
+LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprints;
 
 std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprintsMutex;
 
@@ -94,7 +94,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
 
     {
         std::unique_lock lock( PreloadedFootprintsMutex );
-        PreloadedFootprints[nickname] = std::move( footprints );
+        PreloadedFootprints.Get()[nickname] = std::move( footprints );
     }
 }
 
@@ -141,9 +141,9 @@ std::vector<FOOTPRINT*> FOOTPRINT_LIBRARY_ADAPTER::GetFootprints( const wxString
     std::vector<FOOTPRINT*> footprints;
 
     std::shared_lock lock( PreloadedFootprintsMutex );
-    auto it = PreloadedFootprints.find( aNickname );
+    auto it = PreloadedFootprints.Get().find( aNickname );
 
-    if( it == PreloadedFootprints.end() )
+    if( it == PreloadedFootprints.Get().end() )
         return footprints;
 
     footprints.reserve( it->second.size() );
@@ -361,7 +361,7 @@ bool FOOTPRINT_LIBRARY_ADAPTER::IsFootprintLibWritable( const wxString& aLib )
     {
         std::shared_lock lock( GlobalLibraryMutex );
 
-        if( auto it = GlobalLibraries.find( aLib ); it != GlobalLibraries.end() )
+        if( auto it = GlobalLibraries.Get().find( aLib ); it != GlobalLibraries.Get().end() )
             return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
     }
 

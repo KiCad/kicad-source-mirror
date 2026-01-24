@@ -23,6 +23,7 @@
 #define FOOTPRINT_LIBRARY_ADAPTER_H
 
 #include <lib_id.h>
+#include <core/leak_at_exit.h>
 #include <libraries/library_manager.h>
 #include <pcb_io/pcb_io.h>
 #include <project.h>
@@ -162,8 +163,8 @@ public:
     bool IsFootprintLibWritable( const wxString& aNickname );
 
 protected:
-    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries; }
-    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries; }
+    std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries.Get(); }
+    std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries.Get(); }
     std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
     std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex; }
 
@@ -176,12 +177,12 @@ protected:
 private:
     static PCB_IO* pcbplugin( const LIB_DATA* aRow );
 
-    static std::map<wxString, LIB_DATA> GlobalLibraries;
+    static LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> GlobalLibraries;
     static std::shared_mutex GlobalLibraryMutex;
 
     /// Storage for preloaded footprints, indexed by library nickname.
     /// These are cloned during library enumeration so GetFootprints() returns instantly.
-    static std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>> PreloadedFootprints;
+    static LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> PreloadedFootprints;
     static std::shared_mutex PreloadedFootprintsMutex;
 };
 

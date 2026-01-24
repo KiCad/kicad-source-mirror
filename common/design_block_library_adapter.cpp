@@ -31,7 +31,7 @@
 #include <wx/log.h>
 
 
-std::map<wxString, LIB_DATA> DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalLibraries;
+LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalLibraries;
 
 std::shared_mutex DESIGN_BLOCK_LIBRARY_ADAPTER::GlobalLibraryMutex;
 

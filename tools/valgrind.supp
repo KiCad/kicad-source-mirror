@@ -1,0 +1,49 @@
+# Valgrind suppression file for KiCad
+#
+# Usage: valgrind --suppressions=tools/valgrind.supp ./build/bin/kicad
+#
+# These suppressions address intentional memory leaks and known issues
+# in external libraries.
+
+# Intentional memory leaks at shutdown for faster exit
+# The GlobalLibraries maps in library adapters are intentionally leaked at
+# exit using LEAK_AT_EXIT<> wrapper. The OS reclaims all process memory
+# anyway, so skipping these destructors speeds up shutdown significantly.
+# See include/core/leak_at_exit.h for details.
+{
+   SYMBOL_LIBRARY_ADAPTER_GlobalLibraries_intentional_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*SYMBOL_LIBRARY_ADAPTER*GlobalLibraries*
+}
+{
+   FOOTPRINT_LIBRARY_ADAPTER_GlobalLibraries_intentional_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*FOOTPRINT_LIBRARY_ADAPTER*GlobalLibraries*
+}
+{
+   FOOTPRINT_LIBRARY_ADAPTER_PreloadedFootprints_intentional_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*FOOTPRINT_LIBRARY_ADAPTER*PreloadedFootprints*
+}
+{
+   DESIGN_BLOCK_LIBRARY_ADAPTER_GlobalLibraries_intentional_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*DESIGN_BLOCK_LIBRARY_ADAPTER*GlobalLibraries*
+}
+
+# Alternative pattern matching for LEAK_AT_EXIT wrapper
+{
+   LEAK_AT_EXIT_intentional_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:*LEAK_AT_EXIT*Get*
+}
