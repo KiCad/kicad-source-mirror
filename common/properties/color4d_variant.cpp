@@ -60,8 +60,8 @@ bool COLOR4D_VARIANT_DATA::Read( wxString& aString )
 
 bool COLOR4D_VARIANT_DATA::Write( wxString& aString ) const
 {
-    if( m_color.m_text.has_value() )
-        aString = m_color.m_text.value();
+    if( m_color.m_text )
+        aString = *m_color.m_text;
     else
         aString = m_color.ToCSSString();
 

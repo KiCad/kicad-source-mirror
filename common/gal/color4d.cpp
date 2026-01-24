@@ -107,14 +107,14 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     g = colorRefs()[candidate].m_Green / 255.0;
     b = colorRefs()[candidate].m_Blue / 255.0;
     a = 1.0;
-    m_text = std::nullopt;
+    m_text = nullptr;
 }
 
 
 COLOR4D::COLOR4D( const wxString& aColorStr )
 {
     if( !SetFromHexString( aColorStr ) && !SetFromWxString( aColorStr ) )
-        m_text = aColorStr;
+        m_text = std::make_shared<wxString>( aColorStr );
 }
 
 
@@ -124,7 +124,7 @@ COLOR4D::COLOR4D( const wxColour& aColor )
     g = aColor.Green() / 255.0;
     b = aColor.Blue() / 255.0;
     a = aColor.Alpha() / 255.0;
-    m_text = std::nullopt;
+    m_text = nullptr;
 }
 
 
@@ -138,7 +138,7 @@ bool COLOR4D::SetFromWxString( const wxString& aColorString )
         g = c.Green() / 255.0;
         b = c.Blue() / 255.0;
         a = c.Alpha() / 255.0;
-        m_text = std::nullopt;
+        m_text = nullptr;
 
         return true;
     }
@@ -206,7 +206,7 @@ bool COLOR4D::SetFromHexString( const wxString& aColorString )
         a = 1.0;
     }
 
-    m_text = std::nullopt;
+    m_text = nullptr;
 
     return true;
 }
@@ -253,8 +253,8 @@ namespace KIGFX {
 
 bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
 {
-    if( lhs.m_text.has_value() || rhs.m_text.has_value() )
-        return lhs.m_text.value_or( wxEmptyString ) == rhs.m_text.value_or( wxEmptyString );
+    if( lhs.m_text || rhs.m_text )
+        return ( lhs.m_text ? *lhs.m_text : wxString() ) == ( rhs.m_text ? *rhs.m_text : wxString() );
 
     return lhs.a == rhs.a && lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }
@@ -268,8 +268,8 @@ bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 
 bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 {
-    if( lhs.m_text.has_value() || rhs.m_text.has_value() )
-        return lhs.m_text.value_or( wxEmptyString ) < rhs.m_text.value_or( wxEmptyString );
+    if( lhs.m_text || rhs.m_text )
+        return ( lhs.m_text ? *lhs.m_text : wxString() ) < ( rhs.m_text ? *rhs.m_text : wxString() );
 
     if( lhs.r < rhs.r )
         return true;
@@ -286,8 +286,8 @@ bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
 
 std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 {
-    if( aColor.m_text.has_value() )
-        return aStream << aColor.m_text.value();
+    if( aColor.m_text )
+        return aStream << *aColor.m_text;
 
     return aStream << aColor.ToCSSString();
 }
@@ -295,8 +295,8 @@ std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 
 void to_json( nlohmann::json& aJson, const COLOR4D& aColor )
 {
-    if( aColor.m_text.has_value() )
-        aJson = nlohmann::json( aColor.m_text.value().ToStdString() );
+    if( aColor.m_text )
+        aJson = nlohmann::json( aColor.m_text->ToStdString() );
     else
         aJson = nlohmann::json( aColor.ToCSSString().ToStdString() );
 }
@@ -380,7 +380,7 @@ void COLOR4D::FromHSL( double aInHue, double aInSaturation, double aInLightness 
         b += Q;
     }
 
-    m_text = std::nullopt;
+    m_text = nullptr;
 }
 
 
@@ -510,7 +510,7 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
         break;
     }
 
-    m_text = std::nullopt;
+    m_text = nullptr;
 }
 
 
@@ -601,7 +601,7 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
     g = std::clamp( aGreen, 0, 255 ) / 255.0;
     b = std::clamp( aBlue, 0, 255 ) / 255.0;
     a = std::clamp( aAlpha, 0.0, 1.0 );
-    m_text = std::nullopt;
+    m_text = nullptr;
 
     return *this;
 }
@@ -609,8 +609,10 @@ COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 
 int COLOR4D::Compare( const COLOR4D& aRhs ) const
 {
-    if( m_text.has_value() || aRhs.m_text.has_value() )
-        return ( m_text.value_or( wxEmptyString ) < aRhs.m_text.value_or( wxEmptyString ) ) ? -1 : 1;
+    if( m_text || aRhs.m_text )
+    {
+        return ( ( m_text ? *m_text : wxString() ) < ( aRhs.m_text ? *aRhs.m_text : wxString() ) ) ? -1 : 1;
+    }
 
     if( r != aRhs.r )
         return ( r < aRhs.r ) ? -1 : 1;

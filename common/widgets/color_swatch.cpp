@@ -63,7 +63,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
                                const wxRect& aRect, const wxSize& aCheckerboardSize,
                                const KIGFX::COLOR4D& aCheckerboardBackground, const std::vector<int>& aMargins )
 {
-    wxColor fg = aColor.m_text.has_value() ? COLOR4D::UNSPECIFIED.ToColour() : aColor.ToColour();
+    wxColor fg = aColor.m_text ? COLOR4D::UNSPECIFIED.ToColour() : aColor.ToColour();
 
     wxBrush brush;
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
@@ -75,7 +75,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor, const KI
     COLOR4D black;
     bool    rowCycle;
 
-    if( aColor.m_text.has_value() || aColor == COLOR4D::UNSPECIFIED )
+    if( aColor.m_text || aColor == COLOR4D::UNSPECIFIED )
     {
         if( aCheckerboardBackground.GetBrightness() > 0.4 )
         {

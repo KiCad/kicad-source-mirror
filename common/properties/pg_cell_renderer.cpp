@@ -42,7 +42,7 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             KIGFX::COLOR4D color = av.IsNull() ? KIGFX::COLOR4D::UNSPECIFIED
                                                : av.As<KIGFX::COLOR4D>();
 
-            if( !color.m_text.has_value() )
+            if( !color.m_text )
             {
                 wxSize swatchSize = aGrid->ConvertDialogToPixels( wxSize( 24, 16 ) );
                 int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;

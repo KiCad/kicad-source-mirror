@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include <optional>
+#include <memory>
 #include <kicommon.h>
 #include <wx/debug.h>
 #include <wx/colour.h>
@@ -396,7 +396,7 @@ public:
     double a; ///< Alpha component
 
     // Optional text for evaluated colors
-    std::optional<wxString> m_text;
+    std::shared_ptr<wxString> m_text;
 
     /// For legacy support; used as a value to indicate color hasn't been set yet
     static const COLOR4D UNSPECIFIED;

@@ -1385,11 +1385,11 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( renderSettings->m_OverrideItemColors || backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
-    if( borderColor.m_text.has_value() && Schematic() )
-        borderColor = COLOR4D( ResolveText( borderColor.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( borderColor.m_text && Schematic() )
+        borderColor = COLOR4D( ResolveText( *borderColor.m_text, &Schematic()->CurrentSheet() ) );
 
-    if( backgroundColor.m_text.has_value() && Schematic() )
-        backgroundColor = COLOR4D( ResolveText( backgroundColor.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( backgroundColor.m_text && Schematic() )
+        backgroundColor = COLOR4D( ResolveText( *backgroundColor.m_text, &Schematic()->CurrentSheet() ) );
 
     if( aBackground && backgroundColor.a > 0.0 )
     {

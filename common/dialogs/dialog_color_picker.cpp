@@ -557,14 +557,14 @@ void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged, bool aCheckTransp
 
     if( aChanged == INIT )
     {
-        if( m_newColor4D.m_text.has_value() )
-            m_colorValue->ChangeValue( m_newColor4D.m_text.value() );
+        if( m_newColor4D.m_text )
+            m_colorValue->ChangeValue( *m_newColor4D.m_text );
         else
             m_colorValue->ChangeValue( m_newColor4D.ToHexString() );
     }
     else if( aChanged != HEX_CHANGED )
     {
-        m_newColor4D.m_text = std::nullopt;
+        m_newColor4D.m_text = nullptr;
         m_colorValue->ChangeValue( m_newColor4D.ToHexString() );
     }
 }

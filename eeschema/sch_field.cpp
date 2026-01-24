@@ -1299,8 +1299,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
 
-    if( color.m_text.has_value() && Schematic() )
-        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( color.m_text && Schematic() )
+        color = COLOR4D( ResolveText( *color.m_text, &Schematic()->CurrentSheet() ) );
 
     if( aDimmed )
     {

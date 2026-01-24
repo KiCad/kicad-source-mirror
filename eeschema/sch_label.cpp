@@ -1449,8 +1449,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     if( aPlotter->GetColorMode() && GetLabelColor() != COLOR4D::UNSPECIFIED )
         color = GetLabelColor();
 
-    if( color.m_text.has_value() && Schematic() )
-        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( color.m_text && Schematic() )
+        color = COLOR4D( ResolveText( *color.m_text, &Schematic()->CurrentSheet() ) );
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );

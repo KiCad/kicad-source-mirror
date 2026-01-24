@@ -191,8 +191,8 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT );
 
-    if( color.m_text.has_value() && Schematic() )
-        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( color.m_text && Schematic() )
+        color = COLOR4D( ResolveText( *color.m_text, &Schematic()->CurrentSheet() ) );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );

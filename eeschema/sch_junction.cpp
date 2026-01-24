@@ -257,8 +257,8 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPT
     if( color == COLOR4D::UNSPECIFIED )
         color = settings->GetLayerColor( GetLayer() );
 
-    if( color.m_text.has_value() && Schematic() )
-        color = COLOR4D( ResolveText( color.m_text.value(), &Schematic()->CurrentSheet() ) );
+    if( color.m_text && Schematic() )
+        color = COLOR4D( ResolveText( *color.m_text, &Schematic()->CurrentSheet() ) );
 
     aPlotter->SetColor( color );
 
