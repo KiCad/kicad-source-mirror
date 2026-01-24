@@ -43,6 +43,7 @@
 
 static const wxString traceTopoMatch = wxT( "TOPO_MATCH" );
 
+
 namespace TMATCH
 {
 
@@ -575,12 +576,49 @@ COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp,
 }
 
 
+bool COMPONENT::isChannelSuffix( const wxString& aSuffix )
+{
+    if( aSuffix.IsEmpty() )
+        return true;
+
+    for( wxUniChar ch : aSuffix )
+    {
+        if( std::isalpha( static_cast<int>( ch ) ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool COMPONENT::prefixesShareCommonBase( const wxString& aPrefixA, const wxString& aPrefixB )
+{
+    if( aPrefixA == aPrefixB )
+        return true;
+
+    size_t commonLen = 0;
+    size_t minLen = std::min( aPrefixA.length(), aPrefixB.length() );
+
+    while( commonLen < minLen && aPrefixA[commonLen] == aPrefixB[commonLen] )
+        commonLen++;
+
+    if( commonLen == 0 )
+        return false;
+
+    wxString suffixA = aPrefixA.Mid( commonLen );
+    wxString suffixB = aPrefixB.Mid( commonLen );
+
+    return isChannelSuffix( suffixA ) && isChannelSuffix( suffixB );
+}
+
+
 bool COMPONENT::IsSameKind( const COMPONENT& b ) const
 {
-    return m_prefix == b.m_prefix
-           && ( ( m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() )
-                || ( m_parentFootprint->GetFPID().empty()
-                     && b.m_parentFootprint->GetFPID().empty() ) );
+    if( !prefixesShareCommonBase( m_prefix, b.m_prefix ) )
+        return false;
+
+    return ( m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() )
+           || ( m_parentFootprint->GetFPID().empty() && b.m_parentFootprint->GetFPID().empty() );
 }
 
 
