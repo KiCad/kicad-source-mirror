@@ -116,7 +116,7 @@ public:
      */
     void ThemeChanged();
 
-    bool IsDarkTheme() const { return m_theme == wxT( "dark" ); }
+    bool IsDarkTheme() const { return m_theme == BITMAP_INFO::THEME::DARK; }
 
 private:
 
@@ -134,7 +134,7 @@ private:
 
     std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>> m_bitmapInfoCache;
 
-    wxString m_theme;
+    BITMAP_INFO::THEME m_theme;
 };
 
 #endif // KICAD_BITMAP_STORE_H

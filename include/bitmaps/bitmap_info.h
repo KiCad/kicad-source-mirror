@@ -30,16 +30,23 @@
 
 struct KICOMMON_API BITMAP_INFO
 {
-    BITMAPS  id;
-    wxString filename;
-    int      height;
-    wxString theme;
+    enum class THEME : uint16_t
+    {
+        LIGHT,
+        DARK,
+        NO_THEME
+    };
 
-    BITMAP_INFO( BITMAPS aId, const wxString& aFilename, int aHeight, const wxString& aTheme ) :
-        id( aId ),
-        filename( aFilename ),
-        height( aHeight ),
-        theme( aTheme )
+    BITMAPS     id;
+    int16_t     height;
+    THEME       theme;
+    std::string filename;
+
+    BITMAP_INFO( BITMAPS aId, const wxString& aFilename, int16_t aHeight, const wxString& aTheme ) :
+            id( aId ),
+            height( aHeight ),
+            theme( aTheme == wxS( "light" ) ? THEME::LIGHT : ( aTheme == wxS( "dark" ) ? THEME::DARK : THEME::NO_THEME ) ),
+            filename( aFilename.utf8_string() )
     {};
 
 };
