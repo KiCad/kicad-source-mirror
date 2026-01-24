@@ -27,6 +27,8 @@
 #include <bitmaps/bitmaps_list.h>
 
 #include <wx/string.h>
+#include <cstdint>
+
 
 struct KICOMMON_API BITMAP_INFO
 {

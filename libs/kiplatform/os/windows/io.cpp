@@ -35,6 +35,9 @@
 // Licensed under GPL v2.
 //
 // FILE_FULL_DIR_INFORMATION is documented in the Windows Driver Kit but not the SDK.
+
+#if !defined( __MINGW32__ )     // already defined in the included mingw header <winternl.h>
+                                // So do not redefine it on mingw
 typedef struct _FILE_FULL_DIR_INFORMATION
 {
     ULONG         NextEntryOffset;
@@ -50,6 +53,7 @@ typedef struct _FILE_FULL_DIR_INFORMATION
     ULONG         EaSize;
     WCHAR         FileName[1];
 } FILE_FULL_DIR_INFORMATION, *PFILE_FULL_DIR_INFORMATION;
+#endif
 
 typedef NTSTATUS( NTAPI* PFN_NtQueryDirectoryFile )( HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID,
                                                      PIO_STATUS_BLOCK, PVOID, ULONG,
