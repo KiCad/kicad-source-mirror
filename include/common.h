@@ -141,9 +141,6 @@ KICOMMON_API wxString DescribeRef( const wxString& aRef );
 KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProject );
 
 
-KICOMMON_API long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
-
-
 /**
  * Checks if the operating system is explicitly unsupported and displays a disclaimer message box
  *

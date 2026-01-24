@@ -38,6 +38,7 @@
 #include <footprint.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <kiface_base.h>
+#include <kiplatform/io.h>
 #include <layer_range.h>
 #include <macros.h>
 #include <pad.h>
@@ -269,7 +270,7 @@ long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
     wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadFootprintFileExtension );
 
-    return TimestampDir( aLibPath, fileSpec );
+    return KIPLATFORM::IO::TimestampDir( aLibPath, fileSpec );
 }
 
 

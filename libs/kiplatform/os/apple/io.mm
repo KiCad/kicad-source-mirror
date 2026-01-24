@@ -25,6 +25,12 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
+#include <climits>
+#include <dirent.h>
+#include <fnmatch.h>
+#include <string>
+#include <sys/stat.h>
+
 FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 {
     return wxFopen( aPath, aMode );
@@ -114,4 +120,63 @@ bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
 {
     // no-op
+}
+
+
+long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
+{
+    long long timestamp = 0;
+
+    std::string pattern( aFilespec.fn_str() );
+    std::string dir_path( aDirPath.fn_str() );
+
+    DIR* dir = opendir( dir_path.c_str() );
+
+    if( dir )
+    {
+        for( dirent* dir_entry = readdir( dir ); dir_entry; dir_entry = readdir( dir ) )
+        {
+            // FNM_PERIOD skips dotfiles (hidden files), FNM_CASEFOLD for case-insensitive match
+            if( fnmatch( pattern.c_str(), dir_entry->d_name, FNM_CASEFOLD | FNM_PERIOD ) != 0 )
+                continue;
+
+            std::string entry_path = dir_path + '/' + dir_entry->d_name;
+            struct stat entry_stat;
+
+            if( lstat( entry_path.c_str(), &entry_stat ) == 0 )
+            {
+                // Follow symlinks to get the actual file's timestamp
+                if( S_ISLNK( entry_stat.st_mode ) )
+                {
+                    char    buffer[PATH_MAX + 1];
+                    ssize_t pathLen = readlink( entry_path.c_str(), buffer, PATH_MAX );
+
+                    if( pathLen > 0 )
+                    {
+                        struct stat linked_stat;
+                        buffer[pathLen] = '\0';
+                        std::string linked_path = dir_path + '/' + buffer;
+
+                        if( lstat( linked_path.c_str(), &linked_stat ) == 0 )
+                            entry_stat = linked_stat;
+                    }
+                }
+
+                if( S_ISREG( entry_stat.st_mode ) )
+                {
+                    timestamp += entry_stat.st_mtime * 1000;
+                    timestamp += entry_stat.st_size;
+                }
+            }
+            else
+            {
+                // If we couldn't stat the file, use the name hash
+                timestamp += (signed) std::hash<std::string>{}( std::string( dir_entry->d_name ) );
+            }
+        }
+
+        closedir( dir );
+    }
+
+    return timestamp;
 }

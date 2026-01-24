@@ -65,6 +65,16 @@ namespace IO
      * This is a no-op on non-Windows platforms.
      */
     void LongPathAdjustment( wxFileName& aFilename );
+
+    /**
+     * Computes a hash of modification times and sizes for files matching a pattern.
+     * Used for cache invalidation by detecting changes to library directories.
+     *
+     * @param aDirPath  Directory to search
+     * @param aFilespec Wildcard pattern to match (e.g. "*.kicad_mod")
+     * @return Hash value that changes when any matching file is modified
+     */
+    long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
 } // namespace IO
 } // namespace KIPLATFORM
 

@@ -28,6 +28,7 @@
  */
 #include "pcb_io/geda/pcb_io_geda.h"
 
+#include <kiplatform/io.h>
 #include <wildcards_and_files_ext.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
@@ -300,7 +301,7 @@ long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 {
     wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::GedaPcbFootprintLibFileExtension );
 
-    return TimestampDir( aLibPath, fileSpec );
+    return KIPLATFORM::IO::TimestampDir( aLibPath, fileSpec );
 }
 
 

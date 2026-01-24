@@ -22,7 +22,41 @@
 #include <wx/string.h>
 #include <wx/wxcrt.h>
 #include <wx/filename.h>
+
+#include <string>
 #include <windows.h>
+#include <shlwapi.h>
+#include <winternl.h>
+
+// NtQueryDirectoryFile-based directory enumeration for fast file listing.
+// This approach is based on git-for-windows fscache implementation:
+// https://github.com/git-for-windows/git/blob/main/compat/win32/fscache.c
+// Copyright (C) Johannes Schindelin and the Git for Windows project
+// Licensed under GPL v2.
+//
+// FILE_FULL_DIR_INFORMATION is documented in the Windows Driver Kit but not the SDK.
+typedef struct _FILE_FULL_DIR_INFORMATION
+{
+    ULONG         NextEntryOffset;
+    ULONG         FileIndex;
+    LARGE_INTEGER CreationTime;
+    LARGE_INTEGER LastAccessTime;
+    LARGE_INTEGER LastWriteTime;
+    LARGE_INTEGER ChangeTime;
+    LARGE_INTEGER EndOfFile;
+    LARGE_INTEGER AllocationSize;
+    ULONG         FileAttributes;
+    ULONG         FileNameLength;
+    ULONG         EaSize;
+    WCHAR         FileName[1];
+} FILE_FULL_DIR_INFORMATION, *PFILE_FULL_DIR_INFORMATION;
+
+typedef NTSTATUS( NTAPI* PFN_NtQueryDirectoryFile )( HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID,
+                                                     PIO_STATUS_BLOCK, PVOID, ULONG,
+                                                     FILE_INFORMATION_CLASS, BOOLEAN,
+                                                     PUNICODE_STRING, BOOLEAN );
+
+#define FileFullDirectoryInformation ( (FILE_INFORMATION_CLASS) 2 )
 
 // Define USE_MSYS2_FALlBACK if the code for _MSC_VER does not compile on msys2
 //#define  USE_MSYS2_FALLBACK
@@ -176,4 +210,109 @@ void KIPLATFORM::IO::LongPathAdjustment( wxFileName& aFilename )
         aFilename.RemoveDir( 0 );
         aFilename.RemoveDir( 0 );
     }
+}
+
+
+long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString& aFilespec )
+{
+    long long timestamp = 0;
+
+    // Use NtQueryDirectoryFile for fast directory enumeration (same approach as git-for-windows).
+    // This retrieves multiple directory entries per syscall into a large buffer, reducing
+    // kernel transitions compared to FindFirstFile/FindNextFile.
+    static PFN_NtQueryDirectoryFile pNtQueryDirectoryFile = nullptr;
+
+    if( !pNtQueryDirectoryFile )
+    {
+        HMODULE ntdll = GetModuleHandleW( L"ntdll.dll" );
+
+        if( ntdll )
+        {
+            pNtQueryDirectoryFile =
+                    (PFN_NtQueryDirectoryFile) GetProcAddress( ntdll, "NtQueryDirectoryFile" );
+        }
+    }
+
+    if( !pNtQueryDirectoryFile )
+        return timestamp;
+
+    std::wstring dirPath( aDirPath.t_str() );
+
+    if( !dirPath.empty() && dirPath.back() != L'\\' )
+        dirPath += L'\\';
+
+    // Prefix with \\?\ for long path support, handling UNC paths specially
+    std::wstring ntPath;
+
+    if( dirPath.size() >= 2 && dirPath[0] == L'\\' && dirPath[1] == L'\\' )
+    {
+        if( dirPath.size() >= 4 && dirPath[2] == L'?' && dirPath[3] == L'\\' )
+        {
+            // Already has \\?\ prefix
+            ntPath = dirPath;
+        }
+        else
+        {
+            // UNC path: \\server\share -> \\?\UNC\server\share
+            ntPath = L"\\\\?\\UNC\\" + dirPath.substr( 2 );
+        }
+    }
+    else
+    {
+        // Local path: C:\foo -> \\?\C:\foo
+        ntPath = L"\\\\?\\" + dirPath;
+    }
+
+    HANDLE hDir = CreateFileW( ntPath.c_str(), FILE_LIST_DIRECTORY,
+                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                               OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr );
+
+    if( hDir == INVALID_HANDLE_VALUE )
+        return timestamp;
+
+    std::wstring pattern( aFilespec.t_str() );
+
+    // 64KB buffer for directory entries (same size as git-for-windows)
+    alignas( sizeof( LONGLONG ) ) char buffer[64 * 1024];
+
+    IO_STATUS_BLOCK iosb;
+    NTSTATUS        status;
+    bool            firstQuery = true;
+
+    for( ;; )
+    {
+        status = pNtQueryDirectoryFile( hDir, nullptr, nullptr, nullptr, &iosb, buffer,
+                                        sizeof( buffer ), FileFullDirectoryInformation, FALSE,
+                                        nullptr, firstQuery ? TRUE : FALSE );
+        firstQuery = false;
+
+        if( status != 0 )
+            break;
+
+        PFILE_FULL_DIR_INFORMATION dirInfo = (PFILE_FULL_DIR_INFORMATION) buffer;
+
+        for( ;; )
+        {
+            // Extract null-terminated filename
+            std::wstring fileName( dirInfo->FileName, dirInfo->FileNameLength / sizeof( WCHAR ) );
+
+            // Skip directories and match against pattern
+            if( !( dirInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+                && PathMatchSpecW( fileName.c_str(), pattern.c_str() ) )
+            {
+                // Shift right by 13 (~0.8ms resolution) to avoid overflow when summing many files
+                timestamp += dirInfo->LastWriteTime.QuadPart >> 13;
+                timestamp += dirInfo->EndOfFile.LowPart;
+            }
+
+            if( dirInfo->NextEntryOffset == 0 )
+                break;
+
+            dirInfo = (PFILE_FULL_DIR_INFORMATION) ( (char*) dirInfo + dirInfo->NextEntryOffset );
+        }
+    }
+
+    CloseHandle( hDir );
+
+    return timestamp;
 }

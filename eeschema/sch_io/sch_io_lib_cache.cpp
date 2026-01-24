@@ -22,6 +22,7 @@
 #include "sch_io_lib_cache.h"
 
 #include <common.h>
+#include <kiplatform/io.h>
 #include <lib_symbol.h>
 #include <wx_filename.h>
 
@@ -94,7 +95,7 @@ long long SCH_IO_LIB_CACHE::GetLibModificationTime()
     {
         m_isWritable = fn.IsDirWritable();
         wildcard = wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension );
-        return TimestampDir( fn.GetPath(), wildcard );
+        return KIPLATFORM::IO::TimestampDir( fn.GetPath(), wildcard );
     }
 }
 
@@ -130,8 +131,11 @@ bool SCH_IO_LIB_CACHE::IsFileChanged() const
         return fn.GetModificationTime().GetValue().GetValue() != m_fileModTime;
 
     if( fn.IsDir() && fn.IsDirReadable() )
-        return TimestampDir( fn.GetPath(),
-                             wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) ) != m_fileModTime;
+    {
+        return KIPLATFORM::IO::TimestampDir( fn.GetPath(),
+                             wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) )
+               != m_fileModTime;
+    }
 
     return false;
 }
