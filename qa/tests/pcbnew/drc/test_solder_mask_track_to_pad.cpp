@@ -112,8 +112,8 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackToPadBridgeTest, DRC_TRACK_TO_PAD_BRIDGE_FIXTUR
         BOARD_ITEM* auxItem = auxId != niluuid ? m_board->GetItem( auxId ) : nullptr;
 
         BOOST_TEST_MESSAGE( wxString::Format( "Violation: main=%s aux=%s",
-                mainItem ? mainItem->GetClass() : "null",
-                auxItem ? auxItem->GetClass() : "null" ) );
+                mainItem ? mainItem->GetClass() : wxS( "null" ),
+                auxItem ? auxItem->GetClass() : wxS( "null" ) ) );
 
         if( ( mainItem && mainItem->Type() == PCB_TRACE_T ) ||
             ( auxItem && auxItem->Type() == PCB_TRACE_T ) )
