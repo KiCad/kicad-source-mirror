@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-17 09:18+0000\n"
+"PO-Revision-Date: 2026-01-24 03:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -54,7 +54,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2142,7 +2142,7 @@ msgstr "不支持的操作系统"
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
-msgstr "无法将这个系统上任何 KiCad 的问题报告至官方 bugtracker。"
+msgstr "无法将此系统上的 KiCad 问题报告至官方 bugtracker。"
 
 #: common/confirm.cpp:48 common/confirm.cpp:54
 msgid "File Open Warning"
@@ -9032,11 +9032,11 @@ msgstr ""
 
 #: common/local_history.cpp:1728
 msgid "Cannot restore - the following files are open by another user:"
-msgstr ""
+msgstr "无法还原 - 以下文件被其他用户打开:"
 
 #: common/local_history.cpp:1730
 msgid "Restore Failed"
-msgstr "恢复失败"
+msgstr "还原失败"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -13563,9 +13563,9 @@ msgid "Unable to find a plugin to read this library."
 msgstr "无法加载库\n"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "无法导入符号库 '%s'。"
+msgstr "无法读取符号库 '%s'。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
 #, c-format
@@ -16513,14 +16513,12 @@ msgstr ""
 "请使用其他名称。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2661
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "无法删最除后一张顶层图纸。"
+msgstr "无法删除默认变体。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "无法创建原理图图像"
+msgstr "无法重命名默认变体。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
 msgid "Enter new variant name:"
@@ -16538,9 +16536,9 @@ msgstr "变体名称不能为空。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "'%s' 是 KiCad 中的一个保留快捷键, 不能进行分配。"
+msgstr "'%s' 是内部保留的变体名称。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
@@ -16551,7 +16549,7 @@ msgstr "变体 '%s' 已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "无法复制默认变体。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
 #, fuzzy
@@ -19286,7 +19284,7 @@ msgstr "面板"
 #: eeschema/menubar.cpp:196
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
-msgstr ""
+msgstr "在扩展内容管理器中安装远程符号服务器后启用"
 
 #: eeschema/menubar.cpp:333
 msgid "Variants"
@@ -20631,6 +20629,9 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"在手动修复这些错误之前, 无法保存库。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:179
 #, c-format
@@ -23851,9 +23852,9 @@ msgid "Unable to find a reader for '%s'."
 msgstr "无法为 '%s' 找到一个可用的读取工具。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "无法导入符号库 '%s'。"
+msgstr "无法导入符号 '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
@@ -26691,9 +26692,8 @@ msgid "Unable to load the downloaded symbol for placement."
 msgstr "无法对选定走线段进行圆角处理。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1565
-#, fuzzy
 msgid "Unable to access the schematic placement tools."
-msgstr "无法访问原理图放置工具。"
+msgstr "无法访问原理图布置工具。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1589
 #: eeschema/widgets/panel_remote_symbol.cpp:1810
@@ -30916,7 +30916,7 @@ msgstr "启用 Git 集成"
 
 #: kicad/project_tree_pane.cpp:1073
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "为此项目重新启用 Git 集成"
 
 #: kicad/project_tree_pane.cpp:1077
 msgid "Disable Git Integration"
@@ -40159,9 +40159,8 @@ msgid "Backdrill"
 msgstr "背钻"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
-#, fuzzy
 msgid "Top & bottom"
-msgstr "上/下"
+msgstr "顶层和底层"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -46153,9 +46152,8 @@ msgid "Design Rule Editor"
 msgstr "设计规则编辑器"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:494
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "确定要删除整板吗？"
+msgstr "确定要删除吗?"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
 msgid "Minimum Length"
@@ -46233,9 +46231,8 @@ msgstr "对象 B"
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:115
-#, fuzzy
 msgid "Any"
-msgstr "任意:"
+msgstr "任意"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:72
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -46256,9 +46253,8 @@ msgid "Custom Query"
 msgstr "自定义查询"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
-#, fuzzy
 msgid "Remove this condition"
-msgstr "使用初始条件"
+msgstr "移除此条件"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -46292,12 +46288,10 @@ msgid "Minimum Text Thickness"
 msgstr "最小文本线宽"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
 msgstr "顶层"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
 msgstr "底层"
 
@@ -46346,9 +46340,8 @@ msgid "Via Diameter"
 msgstr "过孔直径"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:76
-#, fuzzy
 msgid "Via Hole Size"
-msgstr "孔尺寸"
+msgstr "过孔孔径"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
 msgid "Rule type"
@@ -53603,9 +53596,8 @@ msgid "Update Design Block from Board"
 msgstr "从电路板更新设计图块"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "将设计图块布局设为当前电路板"
+msgstr "将设计图块布局设置为当前电路板"
 
 #: pcbnew/tools/pcb_actions.cpp:535
 #, fuzzy
@@ -55357,9 +55349,8 @@ msgid "Resolved Margin Clearance"
 msgstr "已解析 Margin 层间距"
 
 #: pcbnew/tools/pcb_control.cpp:2449
-#, fuzzy
 msgid "Pad Size"
-msgstr "页面大小"
+msgstr "焊盘尺寸"
 
 #: pcbnew/tools/pcb_control.cpp:2481
 msgid "Selected Items"
