@@ -364,6 +364,8 @@ public:
                                              const std::map<std::string,
                                              UTF8>* aProperties = nullptr ) override;
 
+    bool CachesEnumeratedFootprints() const override { return true; }
+
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -379,6 +381,8 @@ public:
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    void ClearCachedFootprints( const wxString& aLibraryPath ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 

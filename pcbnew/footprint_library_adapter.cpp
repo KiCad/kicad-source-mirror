@@ -63,39 +63,53 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
     wxString uri = getUri( aLib->row );
     wxString nickname = aLib->row->Nickname();
 
+    // FootprintEnumerate populates the plugin's internal FP_CACHE with parsed footprints
     plugin->FootprintEnumerate( namesAS, uri, false, &options );
 
     std::vector<std::unique_ptr<FOOTPRINT>> footprints;
     footprints.reserve( namesAS.size() );
 
+    // For plugins with internal caches (like kicad_sexpr), GetEnumeratedFootprint returns
+    // a borrowed pointer and ClearCachedFootprints handles cleanup. For other plugins,
+    // GetEnumeratedFootprint allocates new memory that we must delete after cloning.
+    const bool pluginCaches = plugin->CachesEnumeratedFootprints();
+
     for( const wxString& footprintName : namesAS )
     {
-        FOOTPRINT* footprint = nullptr;
-
         try
         {
-            footprint = plugin->FootprintLoad( uri, footprintName, false, &options );
+            const FOOTPRINT* cached = plugin->GetEnumeratedFootprint( uri, footprintName, &options );
+
+            if( !cached )
+                continue;
+
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( cached->Duplicate( IGNORE_PARENT_GROUP ) );
+            footprint->SetParent( nullptr );
+
+            // For non-caching plugins, delete the allocated footprint now that we've cloned it
+            if( !pluginCaches )
+                delete cached;
+
+            LIB_ID id = footprint->GetFPID();
+            id.SetLibNickname( nickname );
+            footprint->SetFPID( id );
+            footprints.emplace_back( footprint );
         }
         catch( IO_ERROR& e )
         {
-            wxLogTrace( traceLibraries, "FP: Exception loading footprint %s from %s: %s",
-                        footprintName, nickname, e.What() );
-            continue;
+            wxLogTrace( traceLibraries, "FP: %s:%s enumeration error: %s",
+                        nickname, footprintName, e.What() );
         }
-
-        if( !footprint )
-            continue;
-
-        LIB_ID id = footprint->GetFPID();
-        id.SetLibNickname( nickname );
-        footprint->SetFPID( id );
-        footprints.emplace_back( footprint );
     }
 
     {
         std::unique_lock lock( PreloadedFootprintsMutex );
         PreloadedFootprints.Get()[nickname] = std::move( footprints );
     }
+
+    // Clear the plugin's FP_CACHE now that we've copied footprints to PreloadedFootprints.
+    // This eliminates the double-caching that was consuming ~1.2GB of extra RAM.
+    plugin->ClearCachedFootprints( uri );
 }
 
 
@@ -231,11 +245,39 @@ bool FOOTPRINT_LIBRARY_ADAPTER::FootprintExists( const wxString& aNickname, cons
 
 FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, const wxString& aName, bool aKeepUUID )
 {
+    // First check if the footprint is in PreloadedFootprints and clone from there.
+    // This avoids re-parsing the file and keeps FP_CACHE from being repopulated.
+    {
+        std::shared_lock lock( PreloadedFootprintsMutex );
+        auto libIt = PreloadedFootprints.Get().find( aNickname );
+
+        if( libIt != PreloadedFootprints.Get().end() )
+        {
+            for( const auto& fp : libIt->second )
+            {
+                if( fp->GetFPID().GetLibItemName() == UTF8( aName ) )
+                {
+                    FOOTPRINT* copy;
+
+                    if( aKeepUUID )
+                        copy = static_cast<FOOTPRINT*>( fp->Clone() );
+                    else
+                        copy = static_cast<FOOTPRINT*>( fp->Duplicate( IGNORE_PARENT_GROUP ) );
+
+                    copy->SetParent( nullptr );
+                    return copy;
+                }
+            }
+        }
+    }
+
+    // Footprint not found in PreloadedFootprints, fall back to plugin.
+    // This re-parses the file but is needed for footprints not yet enumerated.
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
         try
         {
-            if( FOOTPRINT* footprint = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), aName ) )
+            if( FOOTPRINT* footprint = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), aName, aKeepUUID ) )
             {
                 LIB_ID id = footprint->GetFPID();
                 id.SetLibNickname( ( *lib )->row->Nickname() );

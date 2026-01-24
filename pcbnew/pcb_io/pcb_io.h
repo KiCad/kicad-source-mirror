@@ -242,6 +242,14 @@ public:
                                                      const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
+     * Return true if GetEnumeratedFootprint() returns a borrowed pointer from an internal cache.
+     *
+     * When true, the caller must NOT delete the returned pointer. When false (the default),
+     * GetEnumeratedFootprint() allocates a new FOOTPRINT and the caller owns the memory.
+     */
+    virtual bool CachesEnumeratedFootprints() const { return false; }
+
+    /**
      * Check for the existence of a footprint.
      */
     virtual bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
@@ -282,6 +290,16 @@ public:
      */
     virtual void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                                   const std::map<std::string, UTF8>* aProperties = nullptr );
+
+    /**
+     * Clear any cached footprint data for the given library path.
+     *
+     * This is used to free memory after footprints have been loaded into another cache.
+     * The default implementation does nothing; plugins with caches should override.
+     *
+     * @param aLibraryPath is the path of the library whose cache should be cleared.
+     */
+    virtual void ClearCachedFootprints( const wxString& aLibraryPath ) {}
 
     /**
      * Append supported PLUGIN options to @a aListToAppenTo along with internationalized

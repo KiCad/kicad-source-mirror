@@ -3404,6 +3404,15 @@ void PCB_IO_KICAD_SEXPR::FootprintDelete( const wxString& aLibraryPath,
 }
 
 
+void PCB_IO_KICAD_SEXPR::ClearCachedFootprints( const wxString& aLibraryPath )
+{
+    if( m_cache && m_cache->IsPath( aLibraryPath ) )
+    {
+        delete m_cache;
+        m_cache = nullptr;
+    }
+}
+
 
 long long PCB_IO_KICAD_SEXPR::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
