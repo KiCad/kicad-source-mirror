@@ -1086,6 +1086,87 @@ void ODB_LAYER_ENTITY::GenFeatures( ODB_TREE_WRITER& writer )
 void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 {
     auto fileproxy = writer.CreateFileProxy( "attrlist" );
+
+    std::ostream& ost = fileproxy.GetStream();
+
+    BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
+    BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
+
+    BOARD_STACKUP_ITEM* stackupItem = nullptr;
+
+    if( m_layerID != PCB_LAYER_ID::UNDEFINED_LAYER )
+    {
+        for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+        {
+            if( item->GetBrdLayerId() == m_layerID )
+            {
+                stackupItem = item;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+        {
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+            {
+                wxString dielectricName = wxString::Format( "DIELECTRIC_%d",
+                                                            item->GetDielectricLayerId() );
+
+                if( ODB::GenLegalEntityName( dielectricName ) == m_matrixLayerName )
+                {
+                    stackupItem = item;
+                    break;
+                }
+            }
+        }
+    }
+
+    if( stackupItem )
+    {
+        int thickness = stackupItem->GetThickness();
+
+        if( thickness > 0 )
+        {
+            double thicknessOut = PCB_IO_ODBPP::m_scale * thickness;
+            ost << ".layer_dielectric=" << ODB::Double2String( thicknessOut ) << std::endl;
+        }
+
+        if( stackupItem->GetType() == BS_ITEM_TYPE_COPPER )
+        {
+            double copperThicknessMM = static_cast<double>( thickness ) / pcbIUScale.mmToIU( 1.0 );
+            double thicknessOz = copperThicknessMM / 0.035;
+            ost << ".copper_weight=" << ODB::Double2String( thicknessOz ) << std::endl;
+        }
+
+        if( stackupItem->HasEpsilonRValue() )
+        {
+            double epsilonR = stackupItem->GetEpsilonR();
+
+            if( epsilonR > 0.0 )
+            {
+                ost << ".dielectric_constant=" << ODB::Double2String( epsilonR ) << std::endl;
+            }
+        }
+
+        if( stackupItem->HasLossTangentValue() )
+        {
+            double lossTangent = stackupItem->GetLossTangent();
+
+            if( lossTangent > 0.0 )
+            {
+                ost << ".loss_tangent=" << ODB::Double2String( lossTangent ) << std::endl;
+            }
+        }
+
+        wxString material = stackupItem->GetMaterial();
+
+        if( !material.IsEmpty() )
+        {
+            ost << ".material=" << ODB::GenLegalEntityName( material ).ToStdString() << std::endl;
+        }
+    }
 }
 
 
