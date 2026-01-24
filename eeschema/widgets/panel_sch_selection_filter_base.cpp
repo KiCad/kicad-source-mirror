@@ -71,6 +71,7 @@ PANEL_SCH_SELECTION_FILTER_BASE::PANEL_SCH_SELECTION_FILTER_BASE( wxWindow* pare
 
 	// Connect Events
 	m_cbAllItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbRuleAreas->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbLockedItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbSymbols->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbPins->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
@@ -86,6 +87,7 @@ PANEL_SCH_SELECTION_FILTER_BASE::~PANEL_SCH_SELECTION_FILTER_BASE()
 {
 	// Disconnect Events
 	m_cbAllItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
+	m_cbRuleAreas->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbLockedItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbSymbols->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbPins->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SCH_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
