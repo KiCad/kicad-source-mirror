@@ -1749,7 +1749,7 @@ EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString,
                 }
             }
         }
-        catch( const std::exception& e )
+        catch( const std::exception& )
         {
             // ExpandTextVars failed, continue to error
         }
