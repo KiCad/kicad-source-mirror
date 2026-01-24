@@ -280,6 +280,8 @@ void LIB_TREE_MODEL_ADAPTER::RemoveGroup( bool aRecentGroup, bool aPlacedGroup )
 
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool aState )
 {
+    const LIB_TREE_NODE* firstMatch = nullptr;
+
     {
         wxWindowUpdateLocker updateLock( m_widget );
 
@@ -328,9 +330,13 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         m_tree.SortNodes( m_sort_mode == BEST_MATCH );
         AfterReset();
         Thaw();
-    }
 
-    const LIB_TREE_NODE* firstMatch = showResults();
+        // Move showResults inside the update locker to ensure all tree manipulation
+        // (including ExpandAncestors) happens while the window is frozen. This prevents
+        // GTK from rendering stale cached cell data during partial updates.
+        // https://gitlab.com/kicad/code/kicad/-/issues/18407
+        firstMatch = showResults();
+    }
 
 #ifdef __WXGTK__
     // Ensure the control is repainted with the updated data.  Without an explicit
