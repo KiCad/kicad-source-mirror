@@ -71,6 +71,22 @@ public:
 private:
     void sortPinsByName();
 
+    /**
+     * Check if a suffix looks like a channel identifier.
+     *
+     * Channel identifiers contain no letters, only digits and separator symbols
+     * (dots, underscores, hyphens, etc.).
+     */
+    static bool isChannelSuffix( const wxString& aSuffix );
+
+    /**
+     * Check if two prefixes share a common starting sequence.
+     *
+     * The remaining parts after the common prefix must be valid channel suffixes
+     * (no letters). This handles multi-channel designs where components have
+     * hierarchical reference designators like TRIM_1.1 and TRIM_2.1.
+     */
+    static bool prefixesShareCommonBase( const wxString& aPrefixA, const wxString& aPrefixB );
 
     std::optional<VECTOR2I> m_raOffset;
     wxString          m_reference;

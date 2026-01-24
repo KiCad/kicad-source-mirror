@@ -35,6 +35,7 @@
 #include <settings/settings_manager.h>
 #include <tools/multichannel_tool.h>
 #include <connectivity/topo_match.h>
+#include <lib_id.h>
 
 struct MULTICHANNEL_TEST_FIXTURE
 {
@@ -420,6 +421,99 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutDoesNotRemoveReferenceVias, MULTICHANNEL_TE
     BOOST_TEST_MESSAGE( wxString::Format( "Reference area vias after repeat: %d", refViaCountAfter ) );
 
     BOOST_CHECK_EQUAL( refViaCountAfter, refViaCountBefore );
+}
+
+
+/**
+ * Test that topology matching works correctly with dotted reference designators
+ * used in multi-channel designs (issue 20058).
+ *
+ * Reference designators like TRIM_1.1 and TRIM_2.1 should be considered the same
+ * kind because they share the base prefix "TRIM_".
+ */
+BOOST_FIXTURE_TEST_CASE( TopologyMatchDottedRefDes, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+    using TMATCH::COMPONENT;
+
+    // Create two connection graphs with components that have dotted reference designators
+    auto cgRef = std::make_unique<CONNECTION_GRAPH>();
+    auto cgTarget = std::make_unique<CONNECTION_GRAPH>();
+
+    // Create mock footprints with the same FPID
+    LIB_ID fpid( wxT( "Package_SO" ), wxT( "SOIC-8_3.9x4.9mm_P1.27mm" ) );
+
+    // Create reference footprint TRIM_1.1 and target footprint TRIM_2.1
+    FOOTPRINT fpRef( nullptr );
+    fpRef.SetFPID( fpid );
+    fpRef.SetReference( wxT( "TRIM_1.1" ) );
+
+    FOOTPRINT fpTarget( nullptr );
+    fpTarget.SetFPID( fpid );
+    fpTarget.SetReference( wxT( "TRIM_2.1" ) );
+
+    // Create matching pad structures
+    PAD padRef1( &fpRef );
+    padRef1.SetNumber( wxT( "1" ) );
+    padRef1.SetNetCode( 1 );
+    fpRef.Add( &padRef1 );
+
+    PAD padRef2( &fpRef );
+    padRef2.SetNumber( wxT( "2" ) );
+    padRef2.SetNetCode( 2 );
+    fpRef.Add( &padRef2 );
+
+    PAD padTarget1( &fpTarget );
+    padTarget1.SetNumber( wxT( "1" ) );
+    padTarget1.SetNetCode( 3 );
+    fpTarget.Add( &padTarget1 );
+
+    PAD padTarget2( &fpTarget );
+    padTarget2.SetNumber( wxT( "2" ) );
+    padTarget2.SetNetCode( 4 );
+    fpTarget.Add( &padTarget2 );
+
+    // Build connection graphs
+    cgRef->AddFootprint( &fpRef, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( &fpTarget, VECTOR2I( 0, 0 ) );
+
+    cgRef->BuildConnectivity();
+    cgTarget->BuildConnectivity();
+
+    // Check that the components are considered the same kind
+    BOOST_CHECK_EQUAL( cgRef->Components().size(), 1 );
+    BOOST_CHECK_EQUAL( cgTarget->Components().size(), 1 );
+
+    COMPONENT* cmpRef = cgRef->Components()[0];
+    COMPONENT* cmpTarget = cgTarget->Components()[0];
+
+    bool sameKind = cmpRef->IsSameKind( *cmpTarget );
+
+    BOOST_TEST_MESSAGE( wxString::Format( "TRIM_1.1 and TRIM_2.1 IsSameKind: %d", sameKind ? 1 : 0 ) );
+    BOOST_CHECK( sameKind );
+
+    // Test topology matching
+    TMATCH::COMPONENT_MATCHES result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Topology match result: %d", status ? 1 : 0 ) );
+
+    if( !status && !details.empty() )
+    {
+        for( const auto& reason : details )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s <-> %s: %s",
+                                                  reason.m_reference, reason.m_candidate, reason.m_reason ) );
+        }
+    }
+
+    BOOST_CHECK( status );
+    BOOST_CHECK( details.empty() );
+
+    // Cleanup: remove pads before footprints go out of scope
+    fpRef.Pads().clear();
+    fpTarget.Pads().clear();
 }
 
 
