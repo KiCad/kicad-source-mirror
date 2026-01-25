@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-25 12:26+0000\n"
+"PO-Revision-Date: 2026-01-25 13:28+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -44249,9 +44249,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "სკრიპტინგის კონსოლი"
+msgstr "სკრიპტინგის ინიციალიზაცია"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
@@ -47802,9 +47801,8 @@ msgid "Selected 2D Length"
 msgstr "მონიშნული 2D სიგრძე"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "მოდელის ჩაშენება"
+msgstr "3D მოდელების ჩაშენება"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
@@ -48909,9 +48907,8 @@ msgid "Filled Area"
 msgstr ""
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "წესის ადგილის დახაზვა"
+msgstr "კონტურის არე"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
