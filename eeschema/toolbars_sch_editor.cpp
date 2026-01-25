@@ -318,6 +318,8 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     if( aEvent.GetId() != ID_TOOLBAR_SCH_SELECT_VARAIANT )
         return;
 
+    wxCHECK( m_currentVariantCtrl, /* void */ );
+
     int selection = m_currentVariantCtrl->GetSelection();
     int count = m_currentVariantCtrl->GetCount();
 
@@ -397,6 +399,7 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
     dlg.SetSizer( mainSizer );
     dlg.Fit();
     dlg.Centre();
+    nameLabel->SetFocus();
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
@@ -407,8 +410,7 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
     // Empty strings, reserved names, and duplicate variant names are not allowed.
     if( variantName.IsEmpty() )
     {
-        GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
-                                       10000, wxICON_ERROR );
+        GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
         return false;
     }
 
@@ -417,7 +419,7 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
     {
         GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
                                                          GetDefaultVariantName() ),
-                                       10000, wxICON_ERROR );
+                                      10000, wxICON_ERROR );
         return false;
     }
 
@@ -427,8 +429,8 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
         if( existingName.CmpNoCase( variantName ) == 0 )
         {
             GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                             existingName ),
-                                           10000, wxICON_ERROR );
+                                                            existingName ),
+                                          10000, wxICON_ERROR );
             return false;
         }
     }

@@ -3009,31 +3009,10 @@ void SCH_EDIT_FRAME::AddVariant()
     if( !m_currentVariantCtrl )
         return;
 
-    wxTextEntryDialog dlg( this, _( "Enter new variant name" ), _( "Variant Name" ) );
+    m_currentVariantCtrl->SetSelection( m_currentVariantCtrl->GetCount() - 1 );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxString variantName = dlg.GetValue();
-
-    if( variantName.IsEmpty() || ( m_currentVariantCtrl->FindString( variantName ) != wxNOT_FOUND ) )
-        return;
-
-    Schematic().AddVariant( variantName );
-
-    int selected = m_currentVariantCtrl->GetSelection();
-    wxString tmp;
-
-    if( selected != wxNOT_FOUND )
-        tmp = m_currentVariantCtrl->GetString( selected );
-
-    m_currentVariantCtrl->Set( Schematic().GetVariantNamesForUI() );
-
-    if( selected != wxNOT_FOUND )
-    {
-        selected = m_currentVariantCtrl->FindString( tmp );
-        m_currentVariantCtrl->SetSelection( selected );
-    }
+    wxCommandEvent dummy( wxEVT_CHOICE, ID_TOOLBAR_SCH_SELECT_VARAIANT );
+    onVariantSelected( dummy );
 }
 
 
