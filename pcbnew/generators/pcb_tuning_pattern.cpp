@@ -351,8 +351,9 @@ PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
         m_tuningMode( aMode ),
+        m_tuningLength( 0 ),
         m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED ),
-        m_updateSideFromEnd(false)
+        m_updateSideFromEnd( false )
 {
     m_generatorType = GENERATOR_TYPE;
     m_name = DISPLAY_NAME;
@@ -1226,10 +1227,11 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     m_settings = placer->MeanderSettings();
     m_lastNetName = iface->GetNetName( startItem->Net() );
     m_tuningStatus = placer->TuningStatus();
+    m_tuningLength = placer->TuningLengthResult();
 
     wxString statusMessage;
 
-    switch ( m_tuningStatus )
+    switch( m_tuningStatus )
     {
     case PNS::MEANDER_PLACER_BASE::TOO_LONG:  statusMessage = _( "too long" );  break;
     case PNS::MEANDER_PLACER_BASE::TOO_SHORT: statusMessage = _( "too short" ); break;
@@ -1246,12 +1248,12 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     if( m_settings.m_isTimeDomain )
     {
         result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::PS,
-                                                           (double) placer->TuningLengthResult() );
+                                                           (double) m_tuningLength );
     }
     else
     {
         result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits,
-                                                           (double) placer->TuningLengthResult() );
+                                                           (double) m_tuningLength );
     }
 
     m_tuningInfo.Printf( wxS( "%s (%s)" ), result, statusMessage );
@@ -1689,9 +1691,9 @@ const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
     props.set_iu( "target_skew_max", m_settings.m_targetSkew.Max() );
     props.set_iu( "last_track_width", m_trackWidth );
     props.set_iu( "last_diff_pair_gap", m_diffPairGap );
+    props.set_iu( "last_tuning_length", m_tuningLength );
 
     props.set( "last_netname", m_lastNetName );
-    props.set( "last_tuning", m_tuningInfo );
     props.set( "override_custom_rules", m_settings.m_overrideCustomRules );
 
     if( m_baseLine )
@@ -1767,16 +1769,36 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
     aProps.get_to_iu( "min_spacing", m_settings.m_spacing );
     aProps.get_to_iu( "last_track_width", m_trackWidth );
     aProps.get_to_iu( "last_diff_pair_gap", m_diffPairGap );
+    aProps.get_to_iu( "last_tuning_length", m_tuningLength );
     aProps.get_to( "override_custom_rules", m_settings.m_overrideCustomRules );
 
     aProps.get_to( "last_netname", m_lastNetName );
-    aProps.get_to( "last_tuning", m_tuningInfo );
 
     if( auto baseLine = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line" ) )
         m_baseLine = *baseLine;
 
     if( auto baseLineCoupled = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line_coupled" ) )
         m_baseLineCoupled = *baseLineCoupled;
+
+    // Reconstruct m_tuningInfo from loaded length and status
+    if( m_tuningLength != 0 )
+    {
+        wxString statusMessage;
+
+        switch( m_tuningStatus )
+        {
+        case PNS::MEANDER_PLACER_BASE::TOO_LONG:  statusMessage = _( "too long" );  break;
+        case PNS::MEANDER_PLACER_BASE::TOO_SHORT: statusMessage = _( "too short" ); break;
+        case PNS::MEANDER_PLACER_BASE::TUNED:     statusMessage = _( "tuned" );     break;
+        default:                                  statusMessage = _( "unknown" );   break;
+        }
+
+        EDA_UNITS units = m_settings.m_isTimeDomain ? EDA_UNITS::PS : EDA_UNITS::MM;
+        wxString  lengthStr = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units,
+                                                                        (double) m_tuningLength );
+
+        m_tuningInfo.Printf( wxS( "%s (%s)" ), lengthStr, statusMessage );
+    }
 }
 
 

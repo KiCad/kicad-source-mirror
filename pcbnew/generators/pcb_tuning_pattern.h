@@ -513,6 +513,7 @@ protected:
 
     wxString              m_lastNetName;
     wxString              m_tuningInfo;
+    long long             m_tuningLength;
 
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
 
