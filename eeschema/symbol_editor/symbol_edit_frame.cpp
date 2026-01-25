@@ -1196,8 +1196,8 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
-                                     wxOK | wxICON_ERROR );
+                KICAD_MESSAGE_DIALOG dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                          wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 
@@ -1247,8 +1247,8 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
-                                     wxOK | wxICON_ERROR );
+                KICAD_MESSAGE_DIALOG dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                          wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 
@@ -1987,8 +1987,8 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, LIBRARY_TABL
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
-                                     wxOK | wxICON_ERROR );
+                KICAD_MESSAGE_DIALOG dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                          wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 
@@ -2056,8 +2056,8 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname, cons
     table->Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
-                wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
-                                     wxOK | wxICON_ERROR );
+                KICAD_MESSAGE_DIALOG dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                          wxOK | wxICON_ERROR );
                 dlg.SetExtendedMessage( aError.message );
                 dlg.ShowModal();
 

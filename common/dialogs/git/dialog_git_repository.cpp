@@ -307,8 +307,8 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
     git_remote_disconnect( remote );
 
-    auto dlg = wxMessageDialog( this, wxEmptyString, _( "Test Connection" ),
-                                wxOK | wxICON_INFORMATION );
+    auto dlg = KICAD_MESSAGE_DIALOG( this, wxEmptyString, _( "Test Connection" ),
+                                     wxOK | wxICON_INFORMATION );
 
     if( success )
     {

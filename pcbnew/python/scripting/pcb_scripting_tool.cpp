@@ -40,6 +40,7 @@
 #include <string_utils.h>
 #include <tools/pcb_actions.h>
 #include <launch_ext.h>
+#include <confirm.h>
 
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
@@ -225,7 +226,7 @@ void SCRIPTING_TOOL::ShowPluginFolder()
 
     wxString msg = wxString::Format( _( "The plugin directory '%s' does not exist.  Create it?" ), pluginpath );
 
-    wxMessageDialog dlg( nullptr, msg, _( "Plugin Directory" ), wxYES_NO | wxICON_QUESTION );
+    KICAD_MESSAGE_DIALOG dlg( nullptr, msg, _( "Plugin Directory" ), wxYES_NO | wxICON_QUESTION );
 
     if( dlg.ShowModal() == wxID_YES )
     {

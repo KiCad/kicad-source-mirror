@@ -218,9 +218,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
             msg = _( "The entire schematic could not be loaded.  Errors occurred attempting "
                      "to load hierarchical sheet schematics." );
 
-            wxMessageDialog msgDlg1( this, msg, _( "Schematic Load Error" ),
-                                     wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                     wxCENTER | wxICON_QUESTION );
+            KICAD_MESSAGE_DIALOG msgDlg1( this, msg, _( "Schematic Load Error" ),
+                                          wxOK | wxCANCEL | wxCANCEL_DEFAULT |
+                                          wxCENTER | wxICON_QUESTION );
             msgDlg1.SetOKLabel( wxMessageDialog::ButtonLabel( _( "Use partial schematic" ) ) );
             msgDlg1.SetExtendedMessage( pi->GetError() );
 
@@ -307,8 +307,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
     newScreens.GetLibNicknames( names );
 
-    wxMessageDialog::ButtonLabel okButtonLabel( _( "Continue Load" ) );
-    wxMessageDialog::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
+    KICAD_MESSAGE_DIALOG::ButtonLabel okButtonLabel( _( "Continue Load" ) );
+    KICAD_MESSAGE_DIALOG::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
 
     // Prior to schematic file format 20221002, all symbol instance data was saved in the root
     // sheet so loading a hierarchical sheet that is not the root sheet will have no symbol
@@ -324,8 +324,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                  "Loading the project that uses this schematic file and saving to the "
                  "latest file version will resolve this issue.\n\n"
                  "Do you wish to continue?" );
-        wxMessageDialog msgDlg7( this, msg, _( "Continue Load Schematic" ),
-                                 wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_QUESTION );
+        KICAD_MESSAGE_DIALOG msgDlg7( this, msg, _( "Continue Load Schematic" ),
+                                      wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER | wxICON_QUESTION );
         msgDlg7.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
         if( msgDlg7.ShowModal() == wxID_CANCEL )
@@ -352,9 +352,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                          "from the current project library table.  This may result in broken "
                          "symbol library references for the loaded schematic.\n\n"
                          "Do you wish to continue?" );
-                wxMessageDialog msgDlg3( this, msg, _( "Continue Load Schematic" ),
-                                         wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                         wxCENTER | wxICON_QUESTION );
+                KICAD_MESSAGE_DIALOG msgDlg3( this, msg, _( "Continue Load Schematic" ),
+                                              wxOK | wxCANCEL | wxCANCEL_DEFAULT |
+                                              wxCENTER | wxICON_QUESTION );
                 msgDlg3.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
                 if( msgDlg3.ShowModal() == wxID_CANCEL )
@@ -392,8 +392,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                              "Linking the file to this project may result in missing or "
                              "incorrect symbol library references.\n\n"
                              "Do you wish to continue?" );
-                    wxMessageDialog msgDlg4( this, msg, _( "Continue Load Schematic" ),
-                                             wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER
+                    KICAD_MESSAGE_DIALOG msgDlg4( this, msg, _( "Continue Load Schematic" ),
+                                                  wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER
                                                      | wxICON_QUESTION );
                     msgDlg4.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
@@ -437,9 +437,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                              "are missing from the selected schematic project library table.  "
                              "This may result in broken symbol library references.\n\n"
                              "Do you wish to continue?" );
-                    wxMessageDialog msgDlg5( this, msg, _( "Continue Load Schematic" ),
-                                             wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                             wxCENTER | wxICON_QUESTION );
+                    KICAD_MESSAGE_DIALOG msgDlg5( this, msg, _( "Continue Load Schematic" ),
+                                                  wxOK | wxCANCEL | wxCANCEL_DEFAULT |
+                                                  wxCENTER | wxICON_QUESTION );
                     msgDlg5.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
                     if( msgDlg5.ShowModal() == wxID_CANCEL )
@@ -498,9 +498,9 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                              "in the current library table.  This conflict cannot be resolved and "
                              "may result in broken symbol library references.\n\n"
                              "Do you wish to continue?" );
-                    wxMessageDialog msgDlg6( this, msg, _( "Continue Load Schematic" ),
-                                             wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                             wxCENTER | wxICON_QUESTION );
+                    KICAD_MESSAGE_DIALOG msgDlg6( this, msg, _( "Continue Load Schematic" ),
+                                                  wxOK | wxCANCEL | wxCANCEL_DEFAULT |
+                                                  wxCENTER | wxICON_QUESTION );
                     msgDlg6.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
                     if( msgDlg6.ShowModal() == wxID_CANCEL )
@@ -565,8 +565,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
         projectTable->Save().map_error(
                 [&]( const LIBRARY_ERROR& aError )
                 {
-                    wxMessageDialog dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
-                                         wxOK | wxICON_ERROR );
+                    KICAD_MESSAGE_DIALOG dlg( this, _( "Error saving library table." ), _( "File Save Error" ),
+                                              wxOK | wxICON_ERROR );
                     dlg.SetExtendedMessage( aError.message );
                     dlg.ShowModal();
                 } );

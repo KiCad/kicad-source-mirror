@@ -513,7 +513,7 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
                                      conflictingAction->GetFriendlyName(),
                                      HOTKEY_STORE::GetSectionName( conflictingAction ) );
 
-    wxMessageDialog dlg( GetParent(), msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
+    KICAD_MESSAGE_DIALOG dlg( GetParent(), msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
 
     if( dlg.ShowModal() == wxID_YES )
     {

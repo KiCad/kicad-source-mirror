@@ -30,6 +30,7 @@
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
+#include <confirm.h>
 
 #include <design_block.h>
 
@@ -102,7 +103,7 @@ bool DIALOG_DESIGN_BLOCK_PROPERTIES::TransferDataFromWindow()
                                          illegalCh,
                                          m_textName->GetValue() );
 
-        wxMessageDialog errdlg( this, msg, _( "Error" ) );
+        KICAD_MESSAGE_DIALOG errdlg( this, msg, _( "Error" ) );
         errdlg.ShowModal();
         return false;
     }

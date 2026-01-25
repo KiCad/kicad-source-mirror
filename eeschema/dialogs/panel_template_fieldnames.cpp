@@ -35,6 +35,7 @@
 #include <bitmaps.h>
 #include <richio.h>
 #include <string_utils.h>
+#include <confirm.h>
 
 PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
                                                       TEMPLATES* aProjectTemplateMgr ) :
@@ -213,7 +214,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
                 msg.Printf( _( "The field name '%s' contains trailing and/or leading white space." ),
                             field.m_Name );
 
-                wxMessageDialog dlg( this, msg, _( "Warning" ), wxOK|wxCANCEL|wxCENTER|wxICON_WARNING );
+                KICAD_MESSAGE_DIALOG dlg( this, msg, _( "Warning" ), wxOK | wxCANCEL | wxCENTER | wxICON_WARNING );
 
                 dlg.SetExtendedMessage( _( "This may result in what appears to be duplicate field "
                                            "names but are actually unique names differing only by "
@@ -221,8 +222,8 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
                                            "characters will have no effect on existing symbol "
                                            "field names." ) );
 
-                dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Remove White Space" ) ),
-                                       wxMessageDialog::ButtonLabel( _( "Keep White Space" ) ) );
+                dlg.SetOKCancelLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Remove White Space" ) ),
+                                       KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Keep White Space" ) ) );
 
                 if( dlg.ShowModal() == wxID_OK )
                     field.m_Name = trimmedName;

@@ -31,6 +31,7 @@
 #include <kiface_base.h>
 #include <layer_ids.h>
 #include <lset.h>
+#include <confirm.h>
 
 #include <dialogs/dialog_map_gerber_layers_to_pcb.h>
 
@@ -210,13 +211,12 @@ void DIALOG_MAP_GERBER_LAYERS_TO_PCB::initDialog()
 
     if( numMappedGerbers > 0 )
     {
-        // See if the user wants to map the Altium Gerbers to known KiCad PCB layers
-        int returnVal = wxMessageBox( wxString::Format( _( "Gerbers with known layers: %d" ), numMappedGerbers )
+        KICAD_MESSAGE_DIALOG dlg ( this,
+                                   wxString::Format( _( "Gerbers with known layers: %d" ), numMappedGerbers )
                                               + wxT( "\n\n" ) + _( "Assign to matching PCB layers?" ),
-                                      _( "Automatic Layer Assignment" ),
-                                      wxOK | wxCANCEL | wxOK_DEFAULT );
+                                    _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
 
-        if( returnVal == wxOK )
+        if( dlg.ShowModal() == wxOK )
         {
             int total_copper = 0;
 

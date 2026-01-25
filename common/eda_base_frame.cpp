@@ -1276,12 +1276,12 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type, FI
 
     if( !wxFileName::FileExists( fn ) )
     {
-        wxMessageDialog dlg( this, wxString::Format( _( "File '%s' was not found.\n" ), fn ), _( "Error" ),
-                             wxYES_NO | wxYES_DEFAULT | wxICON_ERROR | wxCENTER );
+        KICAD_MESSAGE_DIALOG dlg( this, wxString::Format( _( "File '%s' was not found.\n" ), fn ), _( "Error" ),
+                                  wxYES_NO | wxYES_DEFAULT | wxICON_ERROR | wxCENTER );
 
         dlg.SetExtendedMessage( _( "Do you want to remove it from list of recently opened files?" ) );
-        dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove" ) ),
-                            wxMessageDialog::ButtonLabel( _( "Keep" ) ) );
+        dlg.SetYesNoLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Remove" ) ),
+                            KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Keep" ) ) );
 
         if( dlg.ShowModal() == wxID_YES )
             aFileHistory->RemoveFileFromHistory( i );

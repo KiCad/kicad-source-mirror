@@ -307,14 +307,15 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
         if( fn.IsAbsolute() && fn.MakeRelativeTo( screenFileName.GetPath() ) )
         {
-            wxMessageDialog makeRelDlg( this, _( "Use relative path for sheet file?" ), _( "Sheet File Path" ),
-                                        wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
+            KICAD_MESSAGE_DIALOG makeRelDlg( this, _( "Use relative path for sheet file?" ),
+                                             _( "Sheet File Path" ),
+                                             wxYES_NO | wxYES_DEFAULT | wxICON_QUESTION | wxCENTER );
 
             makeRelDlg.SetExtendedMessage( _( "Using relative hierarchical sheet file name paths improves "
                                               "schematic portability across systems and platforms.  Using "
                                               "absolute paths can result in portability issues." ) );
-            makeRelDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Use Relative Path" ) ),
-                                       wxMessageDialog::ButtonLabel( _( "Use Absolute Path" ) ) );
+            makeRelDlg.SetYesNoLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Use Relative Path" ) ),
+                                       KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Use Absolute Path" ) ) );
 
             if( makeRelDlg.ShowModal() == wxID_YES )
             {

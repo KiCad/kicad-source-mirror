@@ -45,6 +45,7 @@
 #include <executable_names.h>
 #include <gestfich.h>
 #include <tools/kicad_manager_actions.h>
+#include <confirm.h>
 
 #define URL_GET_INVOLVED wxS( "https://go.kicad.org/contribute/" )
 #define URL_DONATE wxS( "https://go.kicad.org/app-donate" )
@@ -280,7 +281,7 @@ int COMMON_CONTROL::ShowProjectManager( const TOOL_EVENT& aEvent )
     if( top && top->GetFrameType() == KICAD_MAIN_FRAME_T )
         showFrame( top );
     else
-        wxMessageDialog( m_frame, _( "Can not switch to project manager in stand-alone mode." ) );
+        KICAD_MESSAGE_DIALOG( m_frame, _( "Can not switch to project manager in stand-alone mode." ) );
 
     return 0;
 }
@@ -324,8 +325,8 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             msg = wxString::Format( _( "Help file '%s' or\n'%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     names[0], names[1] );
-            wxMessageDialog dlg( nullptr, msg, _( "File Not Found" ),
-                                 wxYES_NO | wxNO_DEFAULT | wxCANCEL );
+            KICAD_MESSAGE_DIALOG dlg( nullptr, msg, _( "File Not Found" ),
+                                      wxYES_NO | wxNO_DEFAULT | wxCANCEL );
 
             if( dlg.ShowModal() != wxID_YES )
                 return -1;
@@ -344,8 +345,8 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
             msg = wxString::Format( _( "Help file '%s' could not be found.\n"
                                        "Do you want to access the KiCad online help?" ),
                                     base_name );
-            wxMessageDialog dlg( nullptr, msg, _( "File Not Found" ),
-                                 wxYES_NO | wxNO_DEFAULT | wxCANCEL );
+            KICAD_MESSAGE_DIALOG dlg( nullptr, msg, _( "File Not Found" ),
+                                      wxYES_NO | wxNO_DEFAULT | wxCANCEL );
 
             if( dlg.ShowModal() != wxID_YES )
                 return -1;

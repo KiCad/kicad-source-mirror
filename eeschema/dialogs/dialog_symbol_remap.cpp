@@ -353,10 +353,10 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
             errorMsg.Printf( _( "Cannot create project remap back up folder '%s'." ),
                              destFileName.GetPath() );
 
-            wxMessageDialog dlg( this, errorMsg, _( "Backup Error" ),
-                                 wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
-            dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Continue with Rescue" ) ),
-                                wxMessageDialog::ButtonLabel( _( "Abort Rescue" ) ) );
+            KICAD_MESSAGE_DIALOG dlg( this, errorMsg, _( "Backup Error" ),
+                                      wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
+            dlg.SetYesNoLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Continue with Rescue" ) ),
+                                KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Abort Rescue" ) ) );
 
             if( dlg.ShowModal() == wxID_NO )
                 return false;
@@ -525,13 +525,13 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 
     if( !errorMsg.IsEmpty() )
     {
-        wxMessageDialog dlg( this, _( "Some of the project files could not be backed up." ),
-                             _( "Backup Error" ),
-                             wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
+        KICAD_MESSAGE_DIALOG dlg( this, _( "Some of the project files could not be backed up." ),
+                                  _( "Backup Error" ),
+                                  wxYES_NO | wxCENTRE | wxRESIZE_BORDER | wxICON_QUESTION );
         errorMsg.Trim();
         dlg.SetExtendedMessage( errorMsg );
-        dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Continue with Rescue" ) ),
-                            wxMessageDialog::ButtonLabel( _( "Abort Rescue" ) ) );
+        dlg.SetYesNoLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Continue with Rescue" ) ),
+                            KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Abort Rescue" ) ) );
 
         if( dlg.ShowModal() == wxID_NO )
             return false;

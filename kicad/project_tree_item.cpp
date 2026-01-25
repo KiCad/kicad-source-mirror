@@ -134,9 +134,9 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 
     if( check && !ext.IsEmpty() && !newFile.Lower().EndsWith( full_ext ) )
     {
-        wxMessageDialog dialog( m_parent, _( "Changing file extension will change file type.\n"
-                                             "Do you want to continue ?" ),
-                                _( "Rename File" ), wxYES_NO | wxICON_QUESTION );
+        KICAD_MESSAGE_DIALOG dialog( m_parent, _( "Changing file extension will change file type.\n"
+                                                  "Do you want to continue ?" ),
+                                     _( "Rename File" ), wxYES_NO | wxICON_QUESTION );
 
         if( wxID_YES != dialog.ShowModal() )
             return false;
@@ -144,8 +144,8 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 
     if( !wxRenameFile( GetFileName(), newFile, false ) )
     {
-        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission denied" ),
-                         wxICON_ERROR | wxOK );
+        KICAD_MESSAGE_DIALOG( m_parent, _( "Unable to rename file ... " ), _( "Permission denied" ),
+                              wxICON_ERROR | wxOK );
         return false;
     }
 

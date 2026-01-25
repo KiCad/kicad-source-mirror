@@ -271,14 +271,9 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
     int icon = wxICON_QUESTION;
 #endif
 
-#if !defined( __WXGTK__ )
-    KICAD_RICH_MESSAGE_DIALOG_BASE dlg( aParent, aMessage, _( "Confirmation" ),
-                                        wxOK | wxCANCEL | wxOK_DEFAULT |
-                                        wxCENTRE | icon | wxSTAY_ON_TOP );
-#else
-    wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
-                         wxOK | wxCANCEL | wxOK_DEFAULT | wxCENTRE | icon | wxSTAY_ON_TOP );
-#endif
+    KICAD_MESSAGE_DIALOG dlg( aParent, aMessage, _( "Confirmation" ),
+                              wxOK | wxCANCEL | wxOK_DEFAULT |
+                              wxCENTRE | icon | wxSTAY_ON_TOP );
 
     dlg.SetOKCancelLabels( _( "&Yes" ), _( "&No" ) );
 

@@ -1268,7 +1268,7 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
             for( const wxString& name : derived )
                 msg += name + wxT( "\n" );
 
-            KICAD_MESSAGE_DIALOG_BASE dlg( this, msg, _( "Warning" ), wxYES_NO | wxICON_WARNING | wxCENTER );
+            KICAD_MESSAGE_DIALOG dlg( this, msg, _( "Warning" ), wxYES_NO | wxICON_WARNING | wxCENTER );
             dlg.SetExtendedMessage( wxT( " " ) );
             dlg.SetYesNoLabels( _( "Delete All Listed Symbols" ), _( "Cancel" ) );
 

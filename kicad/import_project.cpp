@@ -120,8 +120,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
                     msg = _( "Error creating new directory. Please try a different path. The "
                              "project cannot be imported." );
 
-                    wxMessageDialog dirErrorDlg( this, msg, _( "Error" ),
-                                                 wxOK_DEFAULT | wxICON_ERROR );
+                    KICAD_MESSAGE_DIALOG dirErrorDlg( this, msg, _( "Error" ),
+                                                      wxOK_DEFAULT | wxICON_ERROR );
                     dirErrorDlg.ShowModal();
                     return;
                 }

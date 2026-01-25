@@ -483,7 +483,7 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
 
             aErrorHandler( r, COL_NICKNAME );
 
-            wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
+            KICAD_MESSAGE_DIALOG errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
             errdlg.ShowModal();
             return false;
         }
@@ -516,7 +516,7 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
                 // go to the lower of the two rows, it is technically the duplicate:
                 aErrorHandler( r2, 1 );
 
-                wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
+                KICAD_MESSAGE_DIALOG errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                 errdlg.ShowModal();
                 return false;
             }

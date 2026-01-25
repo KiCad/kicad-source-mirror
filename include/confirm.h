@@ -39,12 +39,17 @@
 class wxWindow;
 
 
+// On Windows, to have the best dark mode experience we need to sub in the generic dialogs
+// as wx can't retheme the native dialogs
 #if defined( _WIN32 ) && wxCHECK_VERSION( 3, 3, 0 )
 #define KICAD_MESSAGE_DIALOG_BASE wxGenericMessageDialog
 #define KICAD_RICH_MESSAGE_DIALOG_BASE wxGenericRichMessageDialog
+// incase we in the future declare our own message dialog class
+#define KICAD_MESSAGE_DIALOG KICAD_MESSAGE_DIALOG_BASE
 #else
 #define KICAD_MESSAGE_DIALOG_BASE wxMessageDialog
 #define KICAD_RICH_MESSAGE_DIALOG_BASE wxRichMessageDialog
+#define KICAD_MESSAGE_DIALOG KICAD_MESSAGE_DIALOG_BASE
 #endif
 
 

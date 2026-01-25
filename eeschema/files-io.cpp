@@ -633,12 +633,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             "the schematic or recovery of the symbol cache library file and "
                             "reloading the schematic is required." );
 
-                wxMessageDialog dlgMissingCache( this, msg, _( "Warning" ),
-                                                 wxOK | wxCANCEL | wxICON_EXCLAMATION | wxCENTER );
+                KICAD_MESSAGE_DIALOG dlgMissingCache( this, msg, _( "Warning" ),
+                                                      wxOK | wxCANCEL | wxICON_EXCLAMATION | wxCENTER );
                 dlgMissingCache.SetExtendedMessage( extMsg );
-                dlgMissingCache.SetOKCancelLabels(
-                        wxMessageDialog::ButtonLabel( _( "Load Without Cache File" ) ),
-                        wxMessageDialog::ButtonLabel( _( "Abort" ) ) );
+                dlgMissingCache.SetOKCancelLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Load Without Cache File" ) ),
+                                                   KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Abort" ) ) );
 
                 if( dlgMissingCache.ShowModal() == wxID_CANCEL )
                 {
@@ -1196,8 +1195,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
                            "Make sure you have write permissions and try again." ),
                         newFileName.GetPath() );
 
-            wxMessageDialog dlgBadPath( this, msg, _( "Error" ),
-                                        wxOK | wxICON_EXCLAMATION | wxCENTER );
+            KICAD_MESSAGE_DIALOG dlgBadPath( this, msg, _( "Error" ),
+                                             wxOK | wxICON_EXCLAMATION | wxCENTER );
 
             dlgBadPath.ShowModal();
             return false;
@@ -1224,8 +1223,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( !PrepareSaveAsFiles( Schematic(), screens, fn, newFileName, saveCopy,
                                  copySubsheets, includeExternSheets, filenameMap, msg ) )
         {
-            wxMessageDialog dlgBadFilePath( this, msg, _( "Error" ),
-                                            wxOK | wxICON_EXCLAMATION | wxCENTER );
+            KICAD_MESSAGE_DIALOG dlgBadFilePath( this, msg, _( "Error" ),
+                                                 wxOK | wxICON_EXCLAMATION | wxCENTER );
 
             dlgBadFilePath.ShowModal();
             return false;
@@ -1314,8 +1313,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
                                  wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER |
                                  wxICON_EXCLAMATION );
         dlg.ShowDetailedText( _( "The following files will be overwritten:\n\n" ) + msg );
-        dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Overwrite Files" ) ),
-                               wxMessageDialog::ButtonLabel( _( "Abort Project Save" ) ) );
+        dlg.SetOKCancelLabels( KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Overwrite Files" ) ),
+                               KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Abort Project Save" ) ) );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

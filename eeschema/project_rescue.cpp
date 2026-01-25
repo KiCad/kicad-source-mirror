@@ -549,8 +549,8 @@ bool RESCUER::RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunning
     {
         if( aRunningOnDemand )
         {
-            wxMessageDialog dlg( aParent, _( "This project has nothing to rescue." ),
-                                 _( "Project Rescue Helper" ) );
+            KICAD_MESSAGE_DIALOG dlg( aParent, _( "This project has nothing to rescue." ),
+                                      _( "Project Rescue Helper" ) );
             dlg.ShowModal();
         }
 
@@ -564,8 +564,8 @@ bool RESCUER::RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunning
     // have clicked cancel by mistake, and should have some indication of that.
     if( !aRescuer.GetChosenCandidateCount() )
     {
-        wxMessageDialog dlg( aParent, _( "No symbols were rescued." ),
-                             _( "Project Rescue Helper" ) );
+        KICAD_MESSAGE_DIALOG dlg( aParent, _( "No symbols were rescued." ),
+                                  _( "Project Rescue Helper" ) );
         dlg.ShowModal();
 
         // Set the modified flag even on Cancel. Many users seem to instinctively want to Save at

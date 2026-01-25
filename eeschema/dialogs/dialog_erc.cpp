@@ -46,6 +46,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <string_utils.h>
 #include <kiplatform/ui.h>
+#include <confirm.h>
 
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
@@ -410,8 +411,8 @@ void DIALOG_ERC::OnDeleteAllClick( wxCommandEvent& event )
 
     if( numExcluded > 0 )
     {
-        wxMessageDialog dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
-                             wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
+        KICAD_MESSAGE_DIALOG dlg( this, _( "Delete exclusions too?" ), _( "Delete All Markers" ),
+                                  wxYES_NO | wxCANCEL | wxCENTER | wxICON_QUESTION );
         dlg.SetYesNoLabels( _( "Errors and Warnings Only" ),
                             _( "Errors, Warnings and Exclusions" ) );
 

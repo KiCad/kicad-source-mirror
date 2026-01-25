@@ -28,6 +28,7 @@
 #include <pgm_base.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <confirm.h>
 
 #include <git2.h>
 #include <wx/filename.h>
@@ -468,7 +469,7 @@ static bool commitSnapshotWithLock( git_repository* repo, git_index* index,
         else if( rc != 0 )
         {
             wxLogTrace( traceAutoSave, wxS( "File %s status error %d " ), relPath, rc );
-            filesArrStr.emplace_back( relPathStr ); // Add anyway even if the file is untracked. 
+            filesArrStr.emplace_back( relPathStr ); // Add anyway even if the file is untracked.
         }
     }
 
@@ -1501,8 +1502,8 @@ bool confirmFileDeletion( wxWindow* aParent, const std::vector<wxString>& aFiles
                                      aFilesToDelete.size() - displayCount );
     }
 
-    wxMessageDialog dlg( aParent, message, _( "Delete Files during Restore" ),
-                        wxYES_NO | wxCANCEL | wxICON_QUESTION );
+    KICAD_MESSAGE_DIALOG dlg( aParent, message, _( "Delete Files during Restore" ),
+                              wxYES_NO | wxCANCEL | wxICON_QUESTION );
     dlg.SetYesNoCancelLabels( _( "Proceed" ), _( "Keep All Files" ), _( "Abort" ) );
     dlg.SetExtendedMessage(
         _( "Choosing 'Keep All Files' will restore the selected commit but retain any existing "
