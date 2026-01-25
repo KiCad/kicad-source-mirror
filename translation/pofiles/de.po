@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-20 23:01+0000\n"
+"PO-Revision-Date: 2026-01-25 20:50+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -54501,7 +54501,7 @@ msgstr "Steuerelement zum Wählen des Viadurchmessers"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
 msgid "Control to select the current variant"
-msgstr "Steuerelement zum Wählen aktuellen Variante"
+msgstr "Steuerelement zum Wählen aktueller Variante"
 
 #: pcbnew/toolbars_pcb_editor.cpp:209
 msgid "Track routing tools"
