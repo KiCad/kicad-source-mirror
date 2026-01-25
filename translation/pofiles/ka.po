@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-25 13:28+0000\n"
+"PO-Revision-Date: 2026-01-25 15:27+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -3283,7 +3283,7 @@ msgstr ""
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
-msgstr ""
+msgstr "მიმართვის დამდგენები"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
@@ -29318,7 +29318,7 @@ msgstr "°C/ვტ"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:276
 msgid "Estimated ampacity:"
-msgstr ""
+msgstr "დაახლოებითი დენის დატვირთვა:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:278
 msgid "Based on temperature rise"
@@ -30095,7 +30095,7 @@ msgstr ""
 
 #: pcbnew/board_connected_item.cpp:301
 msgid "Max Length"
-msgstr "მაქსიმალური სიგრძე"
+msgstr "მაქს. სიგრძე"
 
 #: pcbnew/board_connected_item.cpp:307
 msgid "Best Width Ratio"
@@ -30916,7 +30916,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "გეოგრაფიული რეანოტაცია"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:54
 msgid "Board Setup"
@@ -31049,7 +31049,7 @@ msgstr "ბრმა/ჩამარხული:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:158
 msgid "Micro vias:"
-msgstr ""
+msgstr "გამტარი მიკრონახვრეტები:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:410
 #: pcbnew/dialogs/dialog_board_statistics.cpp:424
@@ -31101,7 +31101,7 @@ msgstr "თარიღი"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:678
 msgid "Board name"
-msgstr ""
+msgstr "დაფის სახელი"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:689
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697 pcbnew/pad.cpp:1401
@@ -31115,7 +31115,7 @@ msgstr "კომპონენტები"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:750
 msgid "Drill holes"
-msgstr ""
+msgstr "გასაბურღი ნახვრეტები"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:757
 #, c-format
@@ -31152,15 +31152,15 @@ msgstr "გამტარი ნახვრეტი/საკონტაქ�
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 msgid "Start Layer"
-msgstr ""
+msgstr "საწყისი ფენა"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "Stop Layer"
-msgstr ""
+msgstr "გაჩერების ფენა"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
 msgid "Drill Holes"
-msgstr ""
+msgstr "გასაბურღი ნახვრეტები"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:195
@@ -31169,25 +31169,25 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
-msgstr ""
+msgstr "დაფის სტატისტიკა"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:48
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:323
 #: pcbnew/footprint_libraries_utils.cpp:977
 msgid "Update Footprint"
-msgstr ""
+msgstr "ნაკვალევის განახლება"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:56
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:135
 #: pcbnew/dialogs/dialog_import_netlist.cpp:85
 #: pcbnew/dialogs/dialog_update_pcb.cpp:60
 msgid "Update PCB"
-msgstr ""
+msgstr "ნაბეჭდი დაფის განახლება"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:134
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:61
 msgid "Cleanup Graphics"
-msgstr ""
+msgstr "გრაფიკის მოსუფთავება"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
@@ -44623,7 +44623,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2768
 msgid "90-degree"
-msgstr "90 გრადუსი"
+msgstr "90-გრადუსი"
 
 #: pcbnew/router/router_tool.cpp:2769
 msgid "90-degree rounded"
