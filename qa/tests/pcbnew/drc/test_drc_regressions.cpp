@@ -155,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "reverse_via", 3, {} },       // Via/track ordering
         { "intersectingzones", 1, {} }, // zones are too close to each other
         { "fill_bad",   1, {} },        // zone max BBox was too small
-        { "issue18878", 9, {} },
+        { "issue18878", 12, {} },       // Updated: fix reports all cross-net mask bridge pairs
         { "issue19325/issue19325", 4, issue19325_ignore }, // Overlapping pad annular ring calculation
         { "issue22102", 2, issue22102_ignore },        // arc-to-rect collision; colocated arcs collision
     };
