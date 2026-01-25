@@ -483,15 +483,36 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
     if( !actionMenu ) // Should not occur.
         return;
 
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+
     for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
     {
         wxMenuItem* item;
         ACTION_PLUGIN* ap = ACTION_PLUGINS::GetAction( ii );
-        const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap :
-                                                         KiBitmap( BITMAPS::puzzle_piece );
 
-        item = KIUI::AddMenuItem( actionMenu, wxID_ANY, ap->GetName(), ap->GetDescription(),
-                                  bitmap );
+        wxBitmapBundle bundle;
+
+        if( ap->iconBitmap.IsOk() && ap->iconBitmap.GetHeight() > 0 )
+        {
+            wxBitmap bmp = ap->iconBitmap;
+            wxSize   size = bmp.GetSize();
+            double   defScale = (double) iconSize / size.GetHeight();
+            wxSize   defSize( iconSize, wxRound( size.GetWidth() * defScale ) );
+
+            wxBitmap bmp1 = bmp;
+            wxBitmapHelpers::Rescale( bmp1, defSize );
+
+            wxBitmap bmp2 = bmp;
+            wxBitmapHelpers::Rescale( bmp2, defSize * 2 );
+
+            bundle = wxBitmapBundle::FromBitmaps( bmp1, bmp2 );
+        }
+        else
+        {
+            bundle = KiBitmapBundleDef( BITMAPS::puzzle_piece, iconSize );
+        }
+
+        item = KIUI::AddMenuItem( actionMenu, wxID_ANY, ap->GetName(), ap->GetDescription(), bundle );
 
         Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                  wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginMenu ) );
@@ -503,8 +524,10 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
 
 void PCB_EDIT_FRAME::addActionPluginTools( ACTION_TOOLBAR* aToolbar )
 {
-    bool need_separator = true;
+    bool                                     need_separator = true;
     const std::vector<LEGACY_OR_API_PLUGIN>& orderedPlugins = GetOrderedActionPlugins();
+
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
     for( const auto& entry : orderedPlugins )
     {
@@ -523,15 +546,29 @@ void PCB_EDIT_FRAME::addActionPluginTools( ACTION_TOOLBAR* aToolbar )
             }
 
             // Add button
-            wxBitmap bitmap;
+            wxBitmapBundle bundle;
 
-            if ( ap->iconBitmap.IsOk() )
-                bitmap = KiScaledBitmap( ap->iconBitmap, this );
+            if( ap->iconBitmap.IsOk() && ap->iconBitmap.GetHeight() > 0 )
+            {
+                wxBitmap bmp = ap->iconBitmap;
+                wxSize   size = bmp.GetSize();
+                double   defScale = (double) iconSize / size.GetHeight();
+                wxSize   defSize( iconSize, wxRound( size.GetWidth() * defScale ) );
+
+                wxBitmap bmp1 = bmp;
+                wxBitmapHelpers::Rescale( bmp1, defSize );
+
+                wxBitmap bmp2 = bmp;
+                wxBitmapHelpers::Rescale( bmp2, defSize * 2 );
+
+                bundle = wxBitmapBundle::FromBitmaps( bmp1, bmp2 );
+            }
             else
-                bitmap = KiScaledBitmap( BITMAPS::puzzle_piece, this );
+            {
+                bundle = KiBitmapBundleDef( BITMAPS::puzzle_piece, iconSize );
+            }
 
-            wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString,
-                                                               bitmap, ap->GetName() );
+            wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, bundle, ap->GetName() );
 
             Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                      wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginButton ) );
