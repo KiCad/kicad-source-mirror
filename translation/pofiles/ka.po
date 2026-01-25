@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-25 12:26+0000\n"
+"PO-Revision-Date: 2026-01-25 13:28+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -23385,9 +23385,8 @@ msgid "Current variant"
 msgstr "მიმდინარე ვარიანტი"
 
 #: eeschema/toolbars_sch_editor.cpp:54
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "აირჩიეთ მიმდინარე ვარიანტი საჩვენებლად და ჩასასწორებლად."
+msgstr "აირჩევს სქემის მიმდინარე ვარიანტს"
 
 #: eeschema/toolbars_sch_editor.cpp:92 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:163
@@ -23404,23 +23403,20 @@ msgid "Select the current variant to display and edit."
 msgstr "აირჩიეთ მიმდინარე ვარიანტი საჩვენებლად და ჩასასწორებლად."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Variant..."
-msgstr "ვარიანტის დამატება..."
+msgstr "ახალი ვარიანტის დამატება..."
 
 #: eeschema/toolbars_sch_editor.cpp:370
 msgid "New Variant"
 msgstr "ახალი ვარიანტი"
 
 #: eeschema/toolbars_sch_editor.cpp:376
-#, fuzzy
 msgid "Variant name:"
-msgstr "ვარიანტის სახელი"
+msgstr "ვარიანტის სახელი:"
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "Description (optional):"
-msgstr "აღწერა:"
+msgstr "აღწერა (არასავალდებულო):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -23695,7 +23691,6 @@ msgid "Set design block schematic to current sheet"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:534
-#, fuzzy
 msgid "Update Design Block from Selection"
 msgstr "დიზაინის ბლოკის განახლება მონიშნულიდან"
 
@@ -25090,9 +25085,8 @@ msgid "Could not find design block %s."
 msgstr "ვერ ვიპოვე დიზაინის ბლოკი %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:750
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "დიზაინის ბლოკის სქემის დაყენება მიმდინარე მონიშნულზე"
+msgstr "დიზაინის ბლოკს მოსათავსებელი სქემა არ აქვს."
 
 #: eeschema/tools/sch_drawing_tools.cpp:901
 msgid "Add Design Block"
@@ -25431,7 +25425,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:2142 pcbnew/tools/pcb_control.cpp:1150
-#, fuzzy
 msgid "Paste Cells"
 msgstr "უჯრედების ჩასმა"
 
@@ -25878,17 +25871,15 @@ msgid "(page %s)"
 msgstr "(გვერდი %s)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:222
-#, fuzzy
 msgid "Missing payload data."
 msgstr "აკლია სასარგებლო დატვირთვის მონაცემები."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:230
-#, fuzzy
 msgid "Failed to decode base64 payload."
 msgstr "base64-ით დაშიფრული სასარგებლო დატვირთვის გაშიფვრა ჩავარდა."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported compression '%s'."
 msgstr "მხარდაუჭერელი შეკუმშვის მექანიზმი '%s'."
 
@@ -25913,9 +25904,9 @@ msgstr ""
 #: eeschema/widgets/panel_remote_symbol.cpp:2039
 #: eeschema/widgets/panel_remote_symbol.cpp:2111
 #: eeschema/widgets/panel_remote_symbol.cpp:2451
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "ვერ შევქმენი გამოტანის საქაღალდე '%s'."
+msgstr "'%s'-ის შექმნის შეცდომა."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:385
 #, c-format
@@ -25923,9 +25914,9 @@ msgid "Unable to open '%s' for writing."
 msgstr "'%s'-ის ჩასაწერად გახსნა ჩავარდა."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write '%s'."
-msgstr "ვერ ჩავწერე ფაილი '%s'."
+msgstr "'%s' ვერ ჩავწერე."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:406
 msgid "Symbol payload was empty."
@@ -25950,9 +25941,9 @@ msgid "Symbol payload did not include the expected symbol."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "ფაილის %s ჩატვირთვა ან დამუშავება შეუძლებელია"
+msgstr "სიმბოლოს სასარგებლო დატვირთვის გაშიფვრა შეუძლებელია: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:500
 msgid "Select which remote data source to query."
@@ -25967,14 +25958,12 @@ msgid "No remote data sources are currently installed."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:635
-#, fuzzy
 msgid "Configure..."
-msgstr "ბილიკების მორგება..."
+msgstr "მორგება..."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:636
-#, fuzzy
 msgid "Clear Cookies"
-msgstr "ფერის გასუფთავება"
+msgstr "ქუქიების გასუფთავება"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:700
 #, c-format
@@ -25982,14 +25971,14 @@ msgid "No configuration JSON found for '%s'."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open '%s'."
 msgstr "'%s'-ის გახსნის შეცდომა."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:721
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read '%s'."
-msgstr "'%s'-ის გახსნის შეცდომა."
+msgstr "'%s'-ის წაკითხვის შეცდომა."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:736
 #, c-format
@@ -26019,9 +26008,8 @@ msgid "Missing session identifier."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1249
-#, fuzzy
 msgid "Missing compression metadata."
-msgstr "ნაკლული კომპონენტის კლასის სახელი."
+msgstr "აკლია შეკუმშვის მეტამონაცემები."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1291
 #: eeschema/widgets/panel_remote_symbol.cpp:1305
@@ -26061,9 +26049,8 @@ msgstr "სიმბოლოს %s წაკითხვა ჩავარდ�
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1394
 #: eeschema/widgets/panel_remote_symbol.cpp:1456
-#, fuzzy
 msgid "Remote download"
-msgstr "გადმოწერა"
+msgstr "დაშორებული გადმოწერა"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1399
 #, fuzzy
@@ -27241,7 +27228,6 @@ msgid "Aperture highlight"
 msgstr "დიაფრაგმის გამოკვეთა"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "DCode-ის ამრჩევი"
 
@@ -30981,7 +30967,6 @@ msgid ""
 msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
 msgstr "წყაროს ამრჩევი"
 
@@ -30990,7 +30975,6 @@ msgid "Select the origin of the status bar coordinates"
 msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
 msgstr "გვერდის ამრჩევი"
 
@@ -33941,19 +33925,16 @@ msgid "Board stackup thickness"
 msgstr "დაფის აწყობის სისქე"
 
 #: pcbnew/board_statistics_report.cpp:580
-#, fuzzy
 msgid "Front footprint area"
-msgstr "წინა ნაკვალევები"
+msgstr "წინა ნაკვალევის არე"
 
 #: pcbnew/board_statistics_report.cpp:582
-#, fuzzy
 msgid "Back footprint area"
-msgstr "უკანა ნაკვალევები"
+msgstr "უკანა ნაკვალევის არე"
 
 #: pcbnew/board_statistics_report.cpp:585
-#, fuzzy
 msgid "Front component density"
-msgstr "კომპონენტების გატანა"
+msgstr "წინა კომპონენტების სიმკვრივე"
 
 #: pcbnew/board_statistics_report.cpp:594
 msgid "Back component density"
@@ -34296,9 +34277,8 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:723
 #: pcbnew/connectivity/topo_match.cpp:726
-#, fuzzy
 msgid "(no library ID)"
-msgstr "არასწორი ბიბლიოთეკის ID"
+msgstr "(ბიბლიოთეკის ID-ის გარეშე)"
 
 #: pcbnew/connectivity/topo_match.cpp:729
 #, c-format
@@ -34725,9 +34705,8 @@ msgid "Solder Mask/Paste"
 msgstr "სარჩილავი ნიღაბი/პასტა"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:138
-#, fuzzy
 msgid "Zone Hatch Offsets"
-msgstr "წანაცვლების დაყენება"
+msgstr "ზონის ღიობის წანაცვლებები"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:140
 msgid "Text & Graphics"
@@ -34823,18 +34802,16 @@ msgid "Board stackup thickness:"
 msgstr "დაფის აწყობის სისქე:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "წინა სპილენძის ადგილი:"
+msgstr "წინა ნაკვალევის არე:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 msgid "Front footprint density:"
 msgstr "წინა ნაკვალევის სიმკვრივე:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "უკანა სპილენძის ადგილი:"
+msgstr "უკანა ნაკვალევის არე:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
 msgid "Back footprint density:"
@@ -35081,9 +35058,8 @@ msgid "Layers:"
 msgstr "ფენები:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "ზონების მმართველი..."
+msgstr "ზონის მმართველის გახსნა..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -36779,9 +36755,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "F.Silkscreen"
+msgstr "სარჩილავი პასტის დაშორება:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -37275,19 +37250,16 @@ msgid "Pad Table"
 msgstr "ცხრილის პადინგი"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad numbers:"
-msgstr "საკონტაქტო ღეროს ნიმრები:"
+msgstr "ქვესადების ნომრები:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:82
-#, fuzzy
 msgid "Pad count:"
-msgstr "საკონტაქტო ღეროების რაოდენობა:"
+msgstr "ქვესადებების რაოდენობა:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "გამეორებული საკონტაქტო ღეროები:"
+msgstr "დუბლირებული ქვესადებები:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3347
 msgid "Size X"
@@ -37335,9 +37307,8 @@ msgid "Aperture"
 msgstr "დიაფრაგმა"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:559
-#, fuzzy
 msgid "Edit Pads"
-msgstr "პადის ჩასწორება"
+msgstr "ქვესადებების ჩასწორება"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:199
 msgid "Use a relative path?"
@@ -38437,9 +38408,8 @@ msgid "Target areas:"
 msgstr "სამიზნე ალაგები:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "წესის ადგილის დახაზვა"
+msgstr "სამიზნე წესის არე"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -39177,25 +39147,22 @@ msgstr "მდებარეობა"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3230
-#, fuzzy
 msgid "Countersink"
-msgstr "რაოდენობა"
+msgstr "კონუსური საღრუვი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1177
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:547 pcbnew/pad.cpp:3229
-#, fuzzy
 msgid "Counterbore"
-msgstr "რაოდენობა"
+msgstr "ცილინდრული საღრუვი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1313
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:412
 #: pcbnew/pcb_track.cpp:3165
-#, fuzzy
 msgid "Backdrill"
-msgstr "ფონის შევსება"
+msgstr "უკუბურღი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
 #, fuzzy
@@ -41012,9 +40979,8 @@ msgid "Failed to save footprint library file '%s'."
 msgstr ""
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:576
-#, fuzzy
 msgid "Select Library Table"
-msgstr "ცხრილის არჩევა"
+msgstr "აირჩიეთ ბიბლიოთეკის ცხრილი"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:115
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:443
@@ -41575,9 +41541,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
-msgstr "დეტალები"
+msgstr "დეტალების ჩვენება"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1003
 msgid "Layer must have a name."
@@ -44560,49 +44525,40 @@ msgid "Are you sure you want to delete?"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Length"
-msgstr "მაქსიმალური სიგრძე:"
+msgstr "მინიმალური სიგრძე"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:47
-#, fuzzy
 msgid "Optimum Length"
-msgstr "მაქსიმალური სიგრძე:"
+msgstr "ოპტიმალური სიგრძე"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Length"
-msgstr "მაქსიმალური სიგრძე:"
+msgstr "მაქსიმალური სიგრძე"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
-#, fuzzy
 msgid "0 Degrees"
-msgstr "გრადუსი"
+msgstr "0 გრადუსი"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:39
-#, fuzzy
 msgid "90 Degrees"
 msgstr "90 გრადუსი"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:42
-#, fuzzy
 msgid "180 Degrees"
-msgstr "90 გრადუსი"
+msgstr "180 გრადუსი"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:45
-#, fuzzy
 msgid "270 Degrees"
-msgstr "90 გრადუსი"
+msgstr "270 გრადუსი"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:48
-#, fuzzy
 msgid "All Orientations"
-msgstr "ორიენტაცია"
+msgstr "ყველა ორიენტაცია"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
-#, fuzzy
 msgid "Check Me!"
-msgstr "ზონების შემოწმება"
+msgstr "მნახე!"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
@@ -44622,9 +44578,8 @@ msgid "AND"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "მარჯ"
+msgstr "ან"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
@@ -44635,21 +44590,18 @@ msgid "OR NOT"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:58
-#, fuzzy
 msgid "Object A"
-msgstr "ობიექტები"
+msgstr "ობიექტი A"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object B"
-msgstr "ობიექტები"
+msgstr "ობიექტი B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:70
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:115
-#, fuzzy
 msgid "Any"
-msgstr "ნებისმიერი:"
+msgstr "ნებისმიერი"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:72
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:28
@@ -44660,15 +44612,13 @@ msgstr "ქსელის კლასი"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:73
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "დაფის კონტურის ადგილი"
+msgstr "არეში"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
-#, fuzzy
 msgid "Custom Query"
-msgstr "ხელით მითითებული წესები"
+msgstr "მორგებული მოთხოვნა"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:120
 #, fuzzy
@@ -44694,9 +44644,9 @@ msgstr "ბრუნვის მიმართულების შეცვ�
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:57
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f"
-msgstr "მასშტაბი %.2f"
+msgstr "%.2f"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp:36
 #, fuzzy
@@ -44709,12 +44659,10 @@ msgid "Minimum Text Thickness"
 msgstr "ხაზის სისქე"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
-#, fuzzy
 msgid "Top Layer"
 msgstr "ზედა ფენა"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
 msgstr "ქვედა ფენა"
 
@@ -44741,25 +44689,22 @@ msgstr "მაქსიმალური სიგრძე"
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "მინიმალური სიგანე:"
+msgstr "მინიმუმი"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "მაქსიმალური სიგანე:"
+msgstr "მაქსიმუმი"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:58
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:105
-#, fuzzy
 msgid "Preferred"
-msgstr "მორგება"
+msgstr "პრივილეგიური"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:460
@@ -44773,23 +44718,20 @@ msgid "Via Hole Size"
 msgstr "გამტარი ნახვრეტი"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
-#, fuzzy
 msgid "Rule type"
-msgstr "წესები"
+msgstr "წესის ტიპი"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "სახელის გადარქმევა"
+msgstr "წესის სახელი"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
 msgstr ""
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
-msgstr "DRC წესები"
+msgstr "DRC წესი"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
 #, fuzzy
@@ -44802,19 +44744,16 @@ msgid "Show Matches (%d)"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "დოკუმენტაციის ჩვენება"
+msgstr "დამთხვევების ჩვენება"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
-msgstr "შეზღუდვები"
+msgstr "შეზღუდვა"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "დასტური"
+msgstr "პირობები"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -46996,18 +46935,16 @@ msgid "Undefined"
 msgstr "აღწერილი არაა"
 
 #: pcbnew/pad.cpp:3228
-#, fuzzy
 msgid "Not post-machined"
-msgstr "მითითებული არაა"
+msgstr "პოსტდამუშავებული არაა"
 
 #: pcbnew/pad.cpp:3241
 msgid "No backdrill"
 msgstr ""
 
 #: pcbnew/pad.cpp:3242
-#, fuzzy
 msgid "Backdrill bottom"
-msgstr "ზღვარი ქვემოთ"
+msgstr "უკუბურღი ქვემოთ"
 
 #: pcbnew/pad.cpp:3243
 msgid "Backdrill top"
@@ -47022,14 +46959,12 @@ msgid "Front, back and connected layers"
 msgstr ""
 
 #: pcbnew/pad.cpp:3312
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "საკონტაქტო ღეროს თვისებები"
+msgstr "დამუშავებისშემდგომი თვისებები"
 
 #: pcbnew/pad.cpp:3313
-#, fuzzy
 msgid "Backdrill Properties"
-msgstr "ბარკოდის თვისებები"
+msgstr "უკუბურღის თვისებები"
 
 #: pcbnew/pad.cpp:3315
 msgid "Pad Type"
@@ -47064,9 +46999,8 @@ msgid "Hole Size Y"
 msgstr ""
 
 #: pcbnew/pad.cpp:3418
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "მდებარეობა"
+msgstr "ზედა დამუშავებისშემდეგი"
 
 #: pcbnew/pad.cpp:3431
 msgid "Top Post-machining Size"
@@ -47097,9 +47031,8 @@ msgid "Bottom Countersink Angle"
 msgstr ""
 
 #: pcbnew/pad.cpp:3548 pcbnew/pcb_track.cpp:3215
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "უკანა მხარე"
+msgstr "უკუბურღის რეჟიმი"
 
 #: pcbnew/pad.cpp:3551 pcbnew/pcb_track.cpp:3218
 msgid "Bottom Backdrill Size"
@@ -49423,9 +49356,8 @@ msgstr ""
 #: pcbnew/pcb_track.cpp:2871 pcbnew/pcb_track.cpp:2877
 #: pcbnew/pcb_track.cpp:2883 pcbnew/pcb_track.cpp:2889
 #: pcbnew/pcb_track.cpp:2895
-#, fuzzy
 msgid "From board stackup"
-msgstr "დაფის სტრუქტურა"
+msgstr "დაფის ესკიზიდან"
 
 #: pcbnew/pcb_track.cpp:2872
 msgid "Tented"
@@ -49512,9 +49444,8 @@ msgid "Filling"
 msgstr "შევსება"
 
 #: pcbnew/pcb_track.cpp:3266
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "წინა დაფარვა ნიღბით"
+msgstr "წინა დამუშავებისშემდეგი"
 
 #: pcbnew/pcb_track.cpp:3269
 msgid "Front Post-machining Size"
@@ -49529,9 +49460,8 @@ msgid "Front Post-machining Angle"
 msgstr ""
 
 #: pcbnew/pcb_track.cpp:3302
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "მდებარეობა"
+msgstr "უკანა დამუშავებისშემდეგი"
 
 #: pcbnew/pcb_track.cpp:3305
 msgid "Back Post-machining Size"
@@ -49801,9 +49731,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
-#, fuzzy
 msgid "Scripting init"
-msgstr "სკრიპტინგის კონსოლი"
+msgstr "სკრიპტინგის ინიციალიზაცია"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:117
 #, c-format
@@ -51958,9 +51887,8 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "ბადეების ჩასწორება..."
+msgstr "კუთხეების ჩასწორება..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
 msgid "Edit polygon corners using a table"
@@ -53548,9 +53476,8 @@ msgid "Resolved Margin Clearance"
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:2449
-#, fuzzy
 msgid "Pad Size"
-msgstr "გვერდის ზომა"
+msgstr "ქვესადების ზომა"
 
 #: pcbnew/tools/pcb_control.cpp:2481
 msgid "Selected Items"
@@ -53565,9 +53492,8 @@ msgid "Selected 2D Copper Area"
 msgstr "მონიშნულია 2D სპილენძის ადგილი"
 
 #: pcbnew/tools/pcb_control.cpp:2658
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "მონიშნულია 2D სპილენძის ადგილი"
+msgstr "მონიშნულია 2D არე"
 
 #: pcbnew/tools/pcb_control.cpp:2660
 #, fuzzy
@@ -54790,9 +54716,8 @@ msgid "Filled Area"
 msgstr ""
 
 #: pcbnew/zone.cpp:964
-#, fuzzy
 msgid "Outline Area"
-msgstr "დაფის კონტურის ადგილი"
+msgstr "კონტურის არე"
 
 #: pcbnew/zone.cpp:976
 msgid "Corner Count"
