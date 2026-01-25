@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2025-12-19 22:00+0000\n"
+"PO-Revision-Date: 2026-01-25 12:26+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -4503,9 +4503,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "ვერ დავამატე ფაილი '%s'."
+msgstr "წაკითხვის შეცდომა ფაილისთვის '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -4517,9 +4517,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:352
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "ჩაშენებული ფაილები"
+msgstr "ჩაშენებული ფაილის კონფლიქტი"
 
 #: common/dialogs/panel_embedded_files.cpp:354
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4527,9 +4526,8 @@ msgid "Replace"
 msgstr "ჩანაცვლება"
 
 #: common/dialogs/panel_embedded_files.cpp:354
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "არსებულის დამატება"
+msgstr "არსებულის გამოყენება"
 
 #: common/dialogs/panel_embedded_files.cpp:380
 #, c-format
@@ -5787,25 +5785,22 @@ msgid "Top auxiliary"
 msgstr "ზედა დამატებითი"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
-msgstr "გენერატორი"
+msgstr "გამყოფის ჩასმა"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
 msgid "Insert Spacer"
 msgstr ""
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
-msgstr "ელემენტების ჩამატება ჯგუფში"
+msgstr "ჯგუფის ჩასმა"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "გენერატორი"
+msgstr "გამყოფი"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
@@ -5823,9 +5818,8 @@ msgid "Customize toolbars"
 msgstr "ხელსაწყოს პანელების მორგება"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "ხელსაწყოს პანელები"
+msgstr "ხელსაწყოთა ზოლი:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -5839,19 +5833,16 @@ msgid "Save"
 msgstr "შენახვა"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:448
-#, fuzzy
 msgid "New Rule"
-msgstr "ახალი ელემენტი"
+msgstr "ახალი წესი"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:451
-#, fuzzy
 msgid "Copy Rule"
-msgstr "ხელით მითითებული წესები"
+msgstr "წესის კოპირება"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
-#, fuzzy
 msgid "Delete Rule"
-msgstr "მწკრივის წაშლა"
+msgstr "წესის წაშლა"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6101,23 +6092,21 @@ msgid "Run: %s"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1279
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "ფაილი ნაპოვნი არაა."
+msgstr "ფაილი '%s' აღმოჩენილი არაა.\n"
 
 #: common/eda_base_frame.cpp:1282
 msgid "Do you want to remove it from list of recently opened files?"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1283
-#, fuzzy
 msgid "Remove"
-msgstr "ფაილის წაშლა"
+msgstr "წაშლა"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Keep"
-msgstr "განთავსების აკრძალვა"
+msgstr "შენარჩუნება"
 
 #: common/eda_base_frame.cpp:1333
 msgid "Preferences"
@@ -6189,7 +6178,6 @@ msgid "Field Name Templates"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1424
-#, fuzzy
 msgid "Data Sources"
 msgstr "მონაცემების წყაროები"
 
@@ -7630,9 +7618,9 @@ msgid "Failed to open git repository: %s"
 msgstr "Git-ის რეპოზიტორიის გახსნა ჩავარდა: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Git-ის რეპოზიტორიის გახსნა ჩავარდა: %s"
+msgstr "git რეპოზიტორიის სამუშაო საქაღალდის %s-ზე დაყენება ჩავარდა: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -8807,9 +8795,9 @@ msgid "Library not found in library table"
 msgstr "ბიბლითეკების ცხრილში ბიბლიოთეკა აღმოჩენილი არაა"
 
 #: common/libraries/library_manager.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "ბიბლიოთეკა: "
+msgstr "ბიბლიოთეკა: '%s': %s"
 
 #: common/libraries/library_manager.cpp:1252
 #, c-format
@@ -8877,9 +8865,8 @@ msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
 
 #: common/local_history.cpp:1730
-#, fuzzy
 msgid "Restore Failed"
-msgstr "შერწყმა ჩავარდა"
+msgstr "აღდგენა ჩავარდა"
 
 #: common/local_history.cpp:1927
 msgid "Select snapshot"
@@ -9378,7 +9365,6 @@ msgid "Quit %s"
 msgstr "%s-დან გასვლა"
 
 #: common/tool/action_toolbar.cpp:1128
-#, fuzzy
 msgid "Grid selector"
 msgstr "ბადის ამრჩევი"
 
@@ -9387,7 +9373,6 @@ msgid "Grid Selection box"
 msgstr "ბადის არჩევის ადგილი"
 
 #: common/tool/action_toolbar.cpp:1141
-#, fuzzy
 msgid "Zoom selector"
 msgstr "გადიდების ამრჩევი"
 
@@ -10559,9 +10544,8 @@ msgid ""
 msgstr ""
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "ნაკვალევების მიმდევრობა"
+msgstr "ნაკვალევების დამთვალიერებელი"
 
 #: common/tool/design_block_control.cpp:115
 msgid "New Design Block Library"
@@ -10829,9 +10813,8 @@ msgid "Select Path"
 msgstr "აირჩიეთ ბილიკი"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "გამოტანილი შეტყობინებების გარეშე"
+msgstr "ჩატვირთვის შეტყობინებების ნახვა"
 
 #: common/widgets/kistatusbar.cpp:390
 #, c-format
@@ -10839,9 +10822,8 @@ msgid "View %zu load message(s)"
 msgstr ""
 
 #: common/widgets/kistatusbar.cpp:438
-#, fuzzy
 msgid "Load Messages"
-msgstr "შეტყობინებები"
+msgstr "შეტყობინებების ჩატვირთვა"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11535,9 +11517,9 @@ msgid "Footprint '%s' not found."
 msgstr ""
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "ნაკვალევის ჩატვირთვის შეცდომა"
+msgstr "ნაკვალევის ჩატვირთვის შეცდომა: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2080
 #, c-format
@@ -11891,9 +11873,8 @@ msgid "Reset existing annotations"
 msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "სიმბოლოების დაჯგუფება"
+msgstr "სიმბოლოს ერთეულების თავიდან დაჯგუფება"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -12501,7 +12482,6 @@ msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:234
-#, fuzzy
 msgid "Show all errors"
 msgstr "ყველა შეცდომის ჩვენება"
 
@@ -13261,9 +13241,9 @@ msgstr "გამოსახულების თვისებები"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "სიმბოლოს შემოტანა"
+msgstr "სიმბოლოს შემოტანა %s-დან"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:63
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:540
@@ -13274,19 +13254,18 @@ msgid "Import"
 msgstr "შემოტანა"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:102
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "ვერ გავხსენი დამატებების საქაღალდე '%s'."
+msgstr "ვერ ვიპოვე დამატება ბიბლიოთეკის წასაკითხად."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "შექმნის შეცდომა სიმბოლოების ბიბლიოთეკის ბილიკისთვის '%s'."
+msgstr "წაკითხვის შეცდომა სიმბოლოების ბიბლიოთეკისთვის '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "სიმბოლოების ბიბლიოთეკა '%s' აღმოჩენილი არაა."
+msgstr "სიმბოლოების ბიბლიოთეკა '%s' ცარიელია."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:300
 #, c-format
@@ -13294,9 +13273,9 @@ msgid "%d symbols selected, %d parents auto-included"
 msgstr ""
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "უჯრედები მონიშნული არაა"
+msgstr "მონიშნულია %d სიმბოლო"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:504
 msgid "Resolve Import Conflicts"
@@ -13320,9 +13299,8 @@ msgid "Action"
 msgstr "ქმედება"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
-#, fuzzy
 msgid "Skip All"
-msgstr "გამოტოვება"
+msgstr "ყველას გამოტოვება"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:986
@@ -13330,9 +13308,8 @@ msgid "Overwrite All"
 msgstr "ყველას თავზე გადაწერა"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "უჯრედები მონიშნული არაა"
+msgstr "მონიშნულია 0 სიმბოლო"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -16178,16 +16155,14 @@ msgid "Enter new variant name:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "ვარიანტის წაშლა..."
+msgstr "ვარიანტის სახელის გადარქმევა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
 #: eeschema/toolbars_sch_editor.cpp:410
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "შაბლონის სახელი ცარიელი ვერ იქნება."
+msgstr "ვარიანტის სახელი ცარიელი ვერ იქნება."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2726
 #: eeschema/toolbars_sch_editor.cpp:418
@@ -16198,9 +16173,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2742
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2800
 #: eeschema/toolbars_sch_editor.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "საქაღალდე '%s' უკვე არსებობს."
+msgstr "ვარიანტი '%s' უკვე არსებობს."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2774
 msgid "Cannot copy the default variant."
@@ -16211,9 +16186,8 @@ msgid "Enter name for the copied variant:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2781
-#, fuzzy
 msgid "Copy Variant"
-msgstr "ვარიანტები"
+msgstr "ვარიანტის კოპირება"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16311,9 +16285,8 @@ msgid "Alternate Assignment"
 msgstr "ალტერნატიული მინიჭება"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:478
-#, fuzzy
 msgid " Variant"
-msgstr "ვარიანტები"
+msgstr " ვარიანტი"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:579
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17888,7 +17861,6 @@ msgstr ""
 
 #: eeschema/eeschema_settings.cpp:157 eeschema/menubar.cpp:191
 #: eeschema/sch_edit_frame.cpp:2037 eeschema/tools/sch_actions.cpp:130
-#, fuzzy
 msgid "Remote Symbols"
 msgstr "დაშორებული სიმბოლოები"
 
@@ -18829,9 +18801,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "ზედნადებიდან ამოღება"
 
 #: eeschema/lib_symbol.cpp:2424
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "სიმულაციიდან ამოღება"
+msgstr "ამოღება პოზიციის ფაილებიდან"
 
 #: eeschema/lib_symbol.cpp:2429
 msgid "Units and Body Styles"
@@ -22697,9 +22668,9 @@ msgid "Format"
 msgstr "ფორმატი"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "ბიბლიოთეკის '%s' ჩატვირთვის შეცდომა"
+msgstr "SPICE ბიბლიოთეკის '%s' დამუშავების შეცდომა: %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -23304,9 +23275,9 @@ msgid "Unable to find a reader for '%s'."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "ჩატვირთვის შეცდომა სიმბოლოსთვის '%s': %s"
+msgstr "შემოტანის შეცდომა სიმბოლოსთვის '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
 #, c-format
@@ -23314,9 +23285,9 @@ msgid "Imported %d symbol(s), skipped %d."
 msgstr ""
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "შექმნის შეცდომა სიმბოლოების ბიბლიოთეკისთვის '%s'."
+msgstr "სიმბოლოს %s წაშლის შეცდომა სიმბოლოების ბიბლიოთეკიდან '%s'."
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -23410,7 +23381,6 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr ""
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
-#, fuzzy
 msgid "Current variant"
 msgstr "მიმდინარე ვარიანტი"
 
