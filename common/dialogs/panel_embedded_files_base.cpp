@@ -48,17 +48,17 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 
 	// Cell Defaults
 	m_files_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_filesGridSizer->Add( m_files_grid, 5, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_filesGridSizer->Add( m_files_grid, 5, wxEXPAND|wxALL, 5 );
 
 
-	bMainSizer->Add( m_filesGridSizer, 1, wxEXPAND|wxBOTTOM, 3 );
+	bMainSizer->Add( m_filesGridSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 2 );
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_browse_button = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_browse_button->SetToolTip( _("Add embedded file") );
 
-	m_buttonsSizer->Add( m_browse_button, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_buttonsSizer->Add( m_browse_button, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_buttonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -80,10 +80,10 @@ PANEL_EMBEDDED_FILES_BASE::PANEL_EMBEDDED_FILES_BASE( wxWindow* parent, wxWindow
 	m_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_export = new wxButton( this, wxID_ANY, _("&Export..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_buttonsSizer->Add( m_export, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMainSizer->Add( m_buttonsSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+	bMainSizer->Add( m_buttonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bMainSizer );

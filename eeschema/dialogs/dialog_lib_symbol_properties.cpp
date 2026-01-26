@@ -81,12 +81,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         }
     }
 
-    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0,
-                                                std::move( inheritedEmbeddedFiles ) );
+    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0, std::move( inheritedEmbeddedFiles ) );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
 
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry,
-                                      { m_embeddedFiles->GetLocalFiles() } );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, { m_embeddedFiles->GetLocalFiles() } );
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, { m_embeddedFiles->GetLocalFiles() },
                                                       [&]( wxCommandEvent& aEvent )

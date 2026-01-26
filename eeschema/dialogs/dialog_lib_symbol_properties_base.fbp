@@ -3211,7 +3211,7 @@
                           </object>
                           <object class="sizeritem" expanded="false">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxListBox" expanded="false">
                               <property name="BottomDockable">1</property>
@@ -3275,18 +3275,18 @@
                               <event name="OnListBoxDClick">OnEditFootprintFilter</event>
                             </object>
                           </object>
-                          <object class="sizeritem" expanded="false">
+                          <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag"></property>
                             <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="false">
+                            <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
                               <property name="name">bFpFilterRightBoxSizer</property>
                               <property name="orient">wxHORIZONTAL</property>
                               <property name="permission">none</property>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+                                <property name="flag">wxTOP|wxBOTTOM</property>
                                 <property name="proportion">0</property>
                                 <object class="wxBitmapButton" expanded="false">
                                   <property name="BottomDockable">1</property>
@@ -3588,7 +3588,7 @@
                       <property name="permission">none</property>
                       <object class="sizeritem" expanded="true">
                         <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                        <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                         <property name="proportion">1</property>
                         <object class="wxBoxSizer" expanded="true">
                           <property name="minimum_size"></property>
@@ -3597,7 +3597,7 @@
                           <property name="permission">none</property>
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="true">
                               <property name="BottomDockable">1</property>
@@ -3733,8 +3733,8 @@
                             </object>
                           </object>
                           <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="border">2</property>
+                            <property name="flag">wxEXPAND|wxALL</property>
                             <property name="proportion">1</property>
                             <object class="wxGrid" expanded="true">
                               <property name="BottomDockable">1</property>
@@ -3823,7 +3823,7 @@
                           </object>
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
@@ -3832,7 +3832,7 @@
                               <property name="permission">none</property>
                               <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
-                                <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT</property>
+                                <property name="flag">wxBOTTOM|wxRIGHT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxBitmapButton" expanded="true">
                                   <property name="BottomDockable">1</property>

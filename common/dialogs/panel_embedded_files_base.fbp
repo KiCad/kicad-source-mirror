@@ -61,8 +61,8 @@
         <property name="orient">wxVERTICAL</property>
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
-          <property name="border">3</property>
-          <property name="flag">wxEXPAND|wxBOTTOM</property>
+          <property name="border">2</property>
+          <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
           <property name="proportion">1</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -71,7 +71,7 @@
             <property name="permission">protected</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+              <property name="flag">wxEXPAND|wxALL</property>
               <property name="proportion">5</property>
               <object class="wxGrid" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -163,7 +163,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND|wxBOTTOM</property>
+          <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -172,7 +172,7 @@
             <property name="permission">protected</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -418,7 +418,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL</property>
               <property name="proportion">0</property>
               <object class="wxButton" expanded="false">
                 <property name="BottomDockable">1</property>

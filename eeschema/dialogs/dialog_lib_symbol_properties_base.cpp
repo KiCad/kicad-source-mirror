@@ -448,7 +448,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bFPFiltersMargins->Add( m_staticTextFootprints, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_FootprintFilterListBox = new wxListBox( m_PanelFootprintFilters, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE );
-	bFPFiltersMargins->Add( m_FootprintFilterListBox, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bFPFiltersMargins->Add( m_FootprintFilterListBox, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bFpFilterRightBoxSizer;
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -456,7 +456,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_addFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilters, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_addFilterButton->SetToolTip( _("Add footprint filter") );
 
-	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM, 5 );
 
 	m_editFilterButton = new STD_BITMAP_BUTTON( m_PanelFootprintFilters, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_editFilterButton->SetToolTip( _("Edit footprint filter") );
@@ -492,7 +492,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_cbDuplicatePinsAreJumpers = new wxCheckBox( m_PanelPinConnections, wxID_ANY, _("All pins with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbDuplicatePinsAreJumpers->SetToolTip( _("When enabled, this footprint can have more than one pad with the same number, and pads with the same number will be considered to be jumpered together internally.") );
 
-	bMargins->Add( m_cbDuplicatePinsAreJumpers, 0, wxALL, 5 );
+	bMargins->Add( m_cbDuplicatePinsAreJumpers, 0, wxLEFT, 5 );
 
 
 	bMargins->Add( 0, 5, 0, wxEXPAND, 5 );
@@ -528,13 +528,13 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_jumperGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_jumperGroupsGrid->SetMinSize( wxSize( -1,30 ) );
 
-	bMargins->Add( m_jumperGroupsGrid, 1, wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_jumperGroupsGrid, 1, wxEXPAND|wxALL, 2 );
 
 	wxBoxSizer* bButtonSize21;
 	bButtonSize21 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAddJumperGroup = new STD_BITMAP_BUTTON( m_PanelPinConnections, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize21->Add( m_bpAddJumperGroup, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonSize21->Add( m_bpAddJumperGroup, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bButtonSize21->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -543,10 +543,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bButtonSize21->Add( m_bpRemoveJumperGroup, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bMargins->Add( bButtonSize21, 0, wxEXPAND, 5 );
+	bMargins->Add( bButtonSize21, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bSizerPinConnections->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerPinConnections->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	m_PanelPinConnections->SetSizer( bSizerPinConnections );
