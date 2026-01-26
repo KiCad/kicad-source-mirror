@@ -232,9 +232,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_pasteMarginLabel;
 		wxTextCtrl* m_pasteMarginCtrl;
 		wxStaticText* m_pasteMarginUnits;
-		wxStaticText* m_pasteMarginRatioLabel;
-		wxTextCtrl* m_pasteMarginRatioCtrl;
-		wxStaticText* m_pasteMarginRatioUnits;
 		wxSimplebook* m_nonCopperWarningBook;
 		wxStaticText* m_nonCopperNote;
 		wxStaticText* m_staticTextInfoPaste;

@@ -138,11 +138,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
                                              "(e.g., -5%), or both (e.g., -0.1mm - 5%).\n"
                                              "If blank, the global value is used." ) );
 
-    // Hide the old ratio controls - they're no longer needed
-    m_PasteMarginRatioLabel->Show( false );
-    m_PasteMarginRatioCtrl->Show( false );
-    m_PasteMarginRatioUnits->Show( false );
-
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -167,7 +162,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_SolderMaskMarginCtrl,
       	m_allowSolderMaskBridges,
         m_SolderPasteMarginCtrl,
-      	m_PasteMarginRatioCtrl,
         m_ZoneConnectionChoice
     };
 

@@ -232,14 +232,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     // Update label text and tooltip for combined offset + ratio field
     m_pasteMarginLabel->SetLabel( _( "Solder paste clearance:" ) );
     m_pasteMarginLabel->SetToolTip( _( "Local solder paste clearance for this pad.\n"
-                                       "Enter an absolute value (e.g., -0.1mm), a percentage "
-                                       "(e.g., -5%), or both (e.g., -0.1mm - 5%).\n"
+                                       "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), "
+                                       "or both (e.g., -0.1mm - 5%).\n"
                                        "If blank, the footprint or global value is used." ) );
-
-    // Hide the old ratio controls - they're no longer needed
-    m_pasteMarginRatioLabel->Show( false );
-    m_pasteMarginRatioCtrl->Show( false );
-    m_pasteMarginRatioUnits->Show( false );
 
     m_padToDieDelay.SetUnits( EDA_UNITS::PS );
     m_padToDieDelay.SetDataType( EDA_DATA_TYPE::TIME );
