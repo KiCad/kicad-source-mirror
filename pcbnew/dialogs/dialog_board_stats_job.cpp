@@ -37,7 +37,12 @@ DIALOG_BOARD_STATS_JOB::DIALOG_BOARD_STATS_JOB( wxWindow* parent, JOB_EXPORT_PCB
     for( const auto& [format, name] : outputFormatMap )
         m_choiceFormat->Append( wxGetTranslation( name ) );
 
+    if( aJob )
+        SetTitle( aJob->GetSettingsDialogTitle() );
+
     SetupStandardButtons();
+
+    finishDialogSettings();
 }
 
 
@@ -53,6 +58,7 @@ JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT DIALOG_BOARD_STATS_JOB::getSelectedFormat()
 void DIALOG_BOARD_STATS_JOB::setSelectedFormat( JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT format )
 {
     auto it = outputFormatMap.find( format );
+
     if( it != outputFormatMap.end() )
     {
         int idx = std::distance( outputFormatMap.begin(), it );
@@ -72,7 +78,7 @@ void DIALOG_BOARD_STATS_JOB::OnFormatChoice( wxCommandEvent& event )
         switch( selectedFormat )
         {
         case JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::REPORT: fn.SetExt( FILEEXT::ReportFileExtension ); break;
-        case JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::JSON: fn.SetExt( FILEEXT::JsonFileExtension ); break;
+        case JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::JSON:   fn.SetExt( FILEEXT::JsonFileExtension );   break;
         }
 
         m_textCtrlOutputPath->SetValue( fn.GetFullPath() );
@@ -97,8 +103,8 @@ bool DIALOG_BOARD_STATS_JOB::TransferDataFromWindow()
 {
     m_job->SetConfiguredOutputPath( m_textCtrlOutputPath->GetValue() );
     m_job->m_format = getSelectedFormat();
-    m_job->m_units =
-            m_choiceUnits->GetSelection() == 0 ? JOB_EXPORT_PCB_STATS::UNITS::MM : JOB_EXPORT_PCB_STATS::UNITS::INCH;
+    m_job->m_units = m_choiceUnits->GetSelection() == 0 ? JOB_EXPORT_PCB_STATS::UNITS::MM
+                                                        : JOB_EXPORT_PCB_STATS::UNITS::INCH;
     m_job->m_excludeFootprintsWithoutPads = m_checkBoxExcludeFootprintsWithoutPads->GetValue();
     m_job->m_subtractHolesFromBoardArea = m_checkBoxSubtractHoles->GetValue();
     m_job->m_subtractHolesFromCopperAreas = m_checkBoxSubtractHolesFromCopper->GetValue();
