@@ -300,7 +300,7 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
     // Add all variant names, a separator, and "Add New Variant..." at the end
     wxArrayString contents = aVariantNames;
     contents.Add( wxS( "---" ) );
-    contents.Add( _( "Add New Variant..." ) );
+    contents.Add( _( "Add New Design Variant..." ) );
 
     m_currentVariantCtrl->Set( contents );
 
@@ -369,7 +369,7 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 bool SCH_EDIT_FRAME::ShowAddVariantDialog()
 {
     // Create a dialog with both name and description fields
-    wxDialog dlg( this, wxID_ANY, _( "New Variant" ), wxDefaultPosition, wxDefaultSize,
+    wxDialog dlg( this, wxID_ANY, _( "New Design Variant" ), wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );

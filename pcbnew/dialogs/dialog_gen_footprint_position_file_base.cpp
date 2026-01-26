@@ -23,7 +23,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	fgSizerTop->SetFlexibleDirection( wxBOTH );
 	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Design variant:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_variantLabel->Wrap( -1 );
 	fgSizerTop->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

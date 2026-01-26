@@ -475,7 +475,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
 
     // Remind user that they are editing the current variant.
     if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
-        SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Variant" ) );
+        SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Design Variant" ) );
 
     Layout();
     m_fieldsGrid->Layout();

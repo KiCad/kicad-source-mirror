@@ -2705,7 +2705,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
 
     wxString oldVariantName = m_variantListBox->GetString( selection );
 
-    wxTextEntryDialog dlg( this, _( "Enter new variant name:" ), _( "Rename Variant" ),
+    wxTextEntryDialog dlg( this, _( "Enter new variant name:" ), _( "Rename Design Variant" ),
                            oldVariantName, wxOK | wxCANCEL | wxCENTER );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -2716,8 +2716,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     // Empty name is not allowed.
     if( newVariantName.IsEmpty() )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
-                                                 10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
         return;
     }
 
@@ -2779,7 +2778,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
 
     wxString sourceVariantName = m_variantListBox->GetString( selection );
 
-    wxTextEntryDialog dlg( this, _( "Enter name for the copied variant:" ), _( "Copy Variant" ),
+    wxTextEntryDialog dlg( this, _( "Enter name for the copied variant:" ), _( "Copy Design Variant" ),
                            sourceVariantName + wxS( "_copy" ), wxOK | wxCANCEL | wxCENTER );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -2790,8 +2789,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     // Empty name is not allowed.
     if( newVariantName.IsEmpty() )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ),
-                                                 10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
         return;
     }
 
