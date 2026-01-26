@@ -149,6 +149,17 @@ public:
 
     bool SetOutputStream( const std::ostream* aOutput );
 
+    /**
+     * Set the connection timeout in seconds.
+     *
+     * This controls how long CURL will wait for a connection to be established.
+     * The default is 30 seconds.
+     *
+     * @param aTimeoutSecs timeout in seconds, or 0 to disable
+     * @return true if successful
+     */
+    bool SetConnectTimeout( long aTimeoutSecs );
+
     CURL* GetCurl() { return m_CURL; }
 
     int GetResponseStatusCode();
