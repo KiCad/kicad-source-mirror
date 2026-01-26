@@ -88,7 +88,7 @@ private:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    int doSyncSheetsPins( std::list<SCH_SHEET_PATH> aSheets );
+    int doSyncSheetsPins( std::list<SCH_SHEET_PATH> aSheets, SCH_SHEET* aInitialSheet = nullptr );
 
     ///< Try finding any hierlabel that does not have a sheet pin associated with it
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
