@@ -1092,6 +1092,14 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
         // Remove the reference in the environment to the previous project
         wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
 
+#ifdef _WIN32
+        // On Windows, processes hold a handle to their current working directory, preventing
+        // it from being deleted. Reset to the user settings path to release the project
+        // directory. This mirrors the wxSetWorkingDirectory call in LoadProject.
+        if( wxTheApp && wxTheApp->IsGUI() )
+            wxSetWorkingDirectory( PATHS::GetUserSettingsPath() );
+#endif
+
         if( m_kiway )
             m_kiway->ProjectChanged();
     }
