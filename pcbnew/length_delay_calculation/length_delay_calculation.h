@@ -261,6 +261,12 @@ protected:
      */
     void inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem,
                         LENGTH_DELAY_STATS& aDetails ) const;
+
+    /**
+     * Finds the intersection point between an arc and a pad shape.
+     */
+    static bool findArcPadIntersection( const SHAPE_ARC& aArc, const std::shared_ptr<SHAPE_POLY_SET>& aPadShape,
+                                        const VECTOR2I& aInsidePoint, VECTOR2I& aIntersection );
 };
 
 #endif //PCBNEW_LENGTH_DELAY_CALCULATION_H

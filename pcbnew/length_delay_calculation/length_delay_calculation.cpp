@@ -29,53 +29,118 @@
 #include <wx/log.h>
 
 
-void LENGTH_DELAY_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aLayer,
-                                              bool aForward )
+bool LENGTH_DELAY_CALCULATION::findArcPadIntersection( const SHAPE_ARC&                       aArc,
+                                                       const std::shared_ptr<SHAPE_POLY_SET>& aPadShape,
+                                                       const VECTOR2I& aInsidePoint, VECTOR2I& aIntersection )
 {
-    const int start = aForward ? 0 : aLine.PointCount() - 1;
-    const int delta = aForward ? 1 : -1;
+    bool    found = false;
+    int64_t bestDistSq = std::numeric_limits<int64_t>::max();
 
-    // Note: we don't apply the clip-to-pad optimization if an arc ends in a pad
-    // Room for future improvement.
-    if( aLine.IsPtOnArc( start ) )
-        return;
-
-    const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
-
-    // Skip the "first" (or last) vertex, we already know it's contained in the pad
-    int clip = start;
-
-    for( int vertex = start + delta; aForward ? vertex < aLine.PointCount() : vertex >= 0; vertex += delta )
+    for( int i = 0; i < aPadShape->OutlineCount(); i++ )
     {
-        SEG seg( aLine.GetPoint( vertex ), aLine.GetPoint( vertex - delta ) );
+        const SHAPE_LINE_CHAIN& outline = aPadShape->Outline( i );
 
-        bool containsA = shape->Contains( seg.A );
-        bool containsB = shape->Contains( seg.B );
-
-        if( containsA && containsB )
+        for( int j = 0; j < outline.SegmentCount(); j++ )
         {
-            // Whole segment is inside: clip out this segment
-            clip = vertex;
-        }
-        else if( containsB )
-        {
-            // Only one point inside: Find the intersection
-            VECTOR2I loc;
+            const SEG&            seg = outline.CSegment( j );
+            std::vector<VECTOR2I> intersections;
 
-            if( shape->Collide( seg, 0, nullptr, &loc ) )
+            if( !aArc.IntersectLine( seg, &intersections ) )
+                continue;
+
+            for( const VECTOR2I& pt : intersections )
             {
-                aLine.Replace( vertex - delta, vertex - delta, loc );
+                if( !seg.Contains( pt ) )
+                    continue;
+
+                int64_t distSq = ( pt - aInsidePoint ).SquaredEuclideanNorm();
+
+                if( distSq < bestDistSq )
+                {
+                    bestDistSq = distSq;
+                    aIntersection = pt;
+                    found = true;
+                }
             }
         }
     }
 
-    if( !aForward && clip < start )
-        aLine.Remove( clip + 1, start );
-    else if( clip > start )
-        aLine.Remove( start, clip - 1 );
+    return found;
+}
 
-    // Now connect the dots
-    aLine.Insert( aForward ? 0 : aLine.PointCount(), aPad->GetPosition() );
+
+void LENGTH_DELAY_CALCULATION::clipLineToPad( SHAPE_LINE_CHAIN& aLine, const PAD* aPad, PCB_LAYER_ID aLayer,
+                                              bool aForward )
+{
+    wxASSERT( aLine.PointCount() >= 2 );
+
+    const int start = aForward ? 0 : aLine.PointCount() - 1;
+    const int delta = aForward ? 1 : -1;
+
+    const auto& shape = aPad->GetEffectivePolygon( aLayer, ERROR_INSIDE );
+
+    // Find the first point OUTSIDE the pad
+    int      firstOutside = -1;
+    VECTOR2I intersectionPt;
+    bool     hasIntersection = false;
+
+    for( int vertex = start + delta; aForward ? vertex < aLine.PointCount() : vertex >= 0; vertex += delta )
+    {
+        if( !shape->Contains( aLine.GetPoint( vertex ) ) )
+        {
+            firstOutside = vertex;
+            int prevVertex = vertex - delta;
+
+            // Check if the crossing segment is part of an arc
+            ssize_t arcIdx = aLine.ArcIndex( prevVertex );
+
+            if( arcIdx >= 0 && aLine.ArcIndex( vertex ) == arcIdx )
+            {
+                hasIntersection = findArcPadIntersection( aLine.Arc( arcIdx ), shape, aLine.GetPoint( prevVertex ),
+                                                          intersectionPt );
+            }
+
+            // Fallback to segment intersection if arc intersection didn't work
+            if( !hasIntersection )
+            {
+                SEG      seg( aLine.GetPoint( vertex ), aLine.GetPoint( prevVertex ) );
+                VECTOR2I loc;
+
+                if( shape->Collide( seg, 0, nullptr, &loc ) )
+                {
+                    intersectionPt = loc;
+                    hasIntersection = true;
+                }
+            }
+
+            break;
+        }
+    }
+
+    if( firstOutside < 0 )
+        return; // All points inside pad, nothing to clip
+
+    // Build new chain using Slice (preserves arcs correctly without index corruption)
+    SHAPE_LINE_CHAIN newChain;
+
+    if( aForward )
+    {
+        // Chain: padCenter -> intersection -> [firstOutside to end]
+        newChain.Append( aPad->GetPosition() );
+        if( hasIntersection )
+            newChain.Append( intersectionPt );
+        newChain.Append( aLine.Slice( firstOutside, -1 ) );
+    }
+    else
+    {
+        // Chain: [0 to firstOutside] -> intersection -> padCenter
+        newChain.Append( aLine.Slice( 0, firstOutside ) );
+        if( hasIntersection )
+            newChain.Append( intersectionPt );
+        newChain.Append( aPad->GetPosition() );
+    }
+
+    aLine = newChain;
 }
 
 
