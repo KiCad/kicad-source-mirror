@@ -1146,7 +1146,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 {
                     // Don't double move child items.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
+                    {
                         item->Move( movement );
+
+                        // Images are on non-cached layers and will not be updated automatically in the overlay, so
+                        // explicitly tell the view they've moved.
+                        if( item->Type() == PCB_REFERENCE_IMAGE_T )
+                            view()->Update( item, KIGFX::GEOMETRY );
+                    }
 
                     if( item->Type() == PCB_GENERATOR_T && sel_items.size() == 1 )
                     {
@@ -1231,7 +1238,13 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        static_cast<BOARD_ITEM*>( item )->Move( movement );
+                        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+                        boardItem->Move( movement );
+
+                        // Images are on non-cached layers and will not be updated automatically in the overlay, so
+                        // explicitly tell the view they've moved.
+                        if( boardItem->Type() == PCB_REFERENCE_IMAGE_T )
+                            view()->Update( boardItem, KIGFX::GEOMETRY );
                     }
 
                     selection.SetReferencePoint( m_cursor );
@@ -1399,6 +1412,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     // Pick up new item
                     aCommit->Modify( nextItem, nullptr, RECURSE_MODE::RECURSE );
                     nextItem->Move( controls->GetCursorPosition( true ) - nextItem->GetPosition() );
+
+                    // Images are on non-cached layers and will not be updated automatically in the overlay, so
+                    // explicitly tell the view they've moved.
+                    if( nextItem->Type() == PCB_REFERENCE_IMAGE_T )
+                        view()->Update( nextItem, KIGFX::GEOMETRY );
 
                     continue;
                 }
