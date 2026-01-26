@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-23 13:01+0000\n"
+"PO-Revision-Date: 2026-01-26 23:06+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -9607,14 +9607,12 @@ msgid ""
 msgstr ""
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Biblioteka symboli nie jest aktywna."
+msgstr "Tabela bibliotek symboli"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:113
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Biblioteka footprintów nie jest aktywna."
+msgstr "Tabela bibliotek footprintów"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:117
 #, fuzzy
@@ -10898,9 +10896,8 @@ msgid "Select &All\tA"
 msgstr "Wybierz wszystkie\tA"
 
 #: common/tool/selection_tool.cpp:316
-#, fuzzy
 msgid "Show &More Choices...\tM"
-msgstr "Pokaż źródło..."
+msgstr "Pokaż więcej opcji...\tM"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -14399,9 +14396,8 @@ msgid "Error loading symbol '%s': %s"
 msgstr "Błąd podczas odczytywania symbolu '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:586
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "Uaktualnia symbole by zawierały wszystkie zmiany w bibliotece"
+msgstr "Nie można załadować żadnych odpowiednich symboli z biblioteki."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:588
 msgid "No symbols could be loaded from the library."
@@ -14642,9 +14638,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Usunąć dodatkowe części z symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:526
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Symbol musi posiadać nazwę."
+msgstr "Symbol musi posiadać przynajmniej jeden styl prezentacji"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:532
 #, fuzzy
@@ -15403,24 +15398,20 @@ msgid "Add libraries to:"
 msgstr "Dodano biblioteki do:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "Biblioteka symboli nie jest aktywna."
+msgstr "Tabela bibliotek projektu"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Dodaj nowy wpis w Bibliotece Symboli Projektu"
+msgstr "Dodaje wygenerowane biblioteki do tabel bibliotek projektu."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "Biblioteka symboli nie jest aktywna."
+msgstr "Globalna tabela bibliotek"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Dodaj bibliotekę do globalnej tabeli bibliotek"
+msgstr "Dodaje wygenerowane biblioteki do globalnych tabel bibliotek projektu."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
@@ -16801,9 +16792,8 @@ msgid "Cannot delete the default variant."
 msgstr "Nie można określić obrysu płytki."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2700
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Nie można utworzyć obrazu schematu"
+msgstr "Nie można zmienić nazwy domyślnego wariantu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
 #, fuzzy
@@ -16811,9 +16801,8 @@ msgid "Enter new variant name:"
 msgstr "Wpisz nazwę footprintu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2707
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Usuwanie pól..."
+msgstr "Zmień nazwę wariantu"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2718
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2792
@@ -17913,9 +17902,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Nazwa członka sieci/nazwa aliasu nie może być pusta."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Definicje magistral..."
+msgstr "Definicje magistral"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -18677,25 +18665,25 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "Symbol %s posiada %s nieumieszczonych jednostek"
 
 #: eeschema/erc/erc.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
 msgstr ""
-"Symbol %s posiada piny zasilające w jednostkach %s, które nie zostały "
-"umieszczone."
+"Symbol %s posiada wejściowe piny zasilające w jednostkach %s, które nie "
+"zostały umieszczone"
 
 #: eeschema/erc/erc.cpp:620
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
 msgstr ""
 "Symbol %s posiada piny wejściowe w jednostkach %s, które nie zostały "
-"umieszczone."
+"umieszczone"
 
 #: eeschema/erc/erc.cpp:626
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
 msgstr ""
 "Symbol %s posiada piny dwukierunkowe w jednostkach %s, które nie zostały "
-"umieszczone."
+"umieszczone"
 
 #: eeschema/erc/erc.cpp:649
 #, c-format
@@ -18737,9 +18725,9 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr "Obecna konfiguracja nie zawiera biblioteki symboli '%s'"
 
 #: eeschema/erc/erc.cpp:1547
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Biblioteka symboli '%s' nie została znaleziona w '%s'."
+msgstr "Biblioteka symboli '%s' nie została znaleziona w '%s'"
 
 #: eeschema/erc/erc.cpp:1566
 #, c-format
@@ -18757,32 +18745,32 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Symbol '%s' nie odpowiada jego kopii w bibliotece '%s'"
 
 #: eeschema/erc/erc.cpp:1650
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "'%s' nie jest poprawnym identyfikatorem footprintu."
+msgstr "'%s' nie jest poprawnym identyfikatorem footprintu"
 
 #: eeschema/erc/erc.cpp:1664
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "Obecna konfiguracja nie zawiera biblioteki footprintów '%s'."
+msgstr "Obecna konfiguracja nie zawiera biblioteki footprintów '%s'"
 
 #: eeschema/erc/erc.cpp:1673
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
-msgstr "Biblioteka footprintów '%s' nie jest włączona w bieżącej konfiguracji."
+msgstr "Biblioteka footprintów '%s' nie jest włączona w bieżącej konfiguracji"
 
 #: eeschema/erc/erc.cpp:1682
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1171
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
+msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'"
 
 #: eeschema/erc/erc.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "Przypisany footprint (%s) nie odpowiada ustawionym filtrom (%s)."
+msgstr "Przypisany footprint (%s) nie odpowiada ustawionym filtrom (%s)"
 
 #: eeschema/erc/erc.cpp:1917
 msgid "Checking sheet names..."
@@ -20883,9 +20871,9 @@ msgid "Failed to parse value: '%s'"
 msgstr "Nie można przetworzyć wartości: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "Brak pliku ustawień biblioteki HTTP %s lub jest on nieprawidłowy"
+msgstr "Brak pliku ustawień biblioteki HTTP %s lub jest on nieprawidłowy."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:217
 #, c-format
@@ -20893,13 +20881,13 @@ msgid "HTTP library settings file %s is missing the API version number."
 msgstr "W pliku ustawień biblioteki HTTP %s brakuje numeru wersji API."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
 "Plik ustawień biblioteki HTTP %s używa API w wersji %s, zaś KiCad wymaga "
-"wersji %s"
+"wersji %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:232
 #, c-format
@@ -20907,9 +20895,9 @@ msgid "HTTP library settings file %s is missing the root URL."
 msgstr "W pliku ustawień biblioteki HTTP %s brakuje głównego adresu URL."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "Plik ustawień biblioteki HTTP %s ma nieprawidłowy typ biblioteki"
+msgstr "Plik ustawień biblioteki HTTP %s ma nieprawidłowy typ biblioteki."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:282
 #, c-format
@@ -49506,34 +49494,34 @@ msgid "Remove %s:%s 'Do not place' variant attribute."
 msgstr "Usuń %s:%s atrybut wariantu 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "Dodano dla %s atrybut 'Nie montowane'."
+msgstr "Dodano dla %s:%s atrybut wariantu 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "Usunięto dla %s atrybut 'Nie montowane'."
+msgstr "Usunięto z %s:%s atrybut wariantu 'Nie montowane'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr "Dodaj dla %s atrybut 'wyklucz z BOM'."
+msgstr "Dodaj dla %s:%s atrybut wariantu 'Wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr "Usuń dla %s atrybut 'wyklucz z BOM'."
+msgstr "Usuń dla %s:%s atrybut wariantu 'Wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr "Dodano dla %s atrybut 'wyklucz z BOM'."
+msgstr "Dodano dla %s:%s atrybut wariantu 'Wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "Usunięto dla %s atrybut 'wyklucz z BOM'."
+msgstr "Usunięto z %s:%s atrybut wariantu 'Wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, fuzzy, c-format
