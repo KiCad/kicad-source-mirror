@@ -1161,6 +1161,21 @@ SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 }
 
 
+std::vector<SCH_PIN*> LIB_SYMBOL::GetPinsByNumber( const wxString& aNumber, int aUnit,
+                                                   int aBodyStyle ) const
+{
+    std::vector<SCH_PIN*> pins;
+
+    for( SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
+    {
+        if( aNumber == pin->GetNumber() )
+            pins.push_back( pin );
+    }
+
+    return pins;
+}
+
+
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames, bool aTestType,
                                    bool aTestOrientation, bool aTestLength ) const
 {

@@ -1566,9 +1566,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 {
                     for( const std::unique_ptr<SCH_PIN>& model_pin : m_pins )
                     {
-                        SCH_PIN* src_pin = otherUnit->GetPin( model_pin->GetNumber() );
-
-                        if( src_pin )
+                        for( SCH_PIN* src_pin : otherUnit->GetPinsByNumber( model_pin->GetNumber() ) )
                             src_pin->SetAlt( model_pin->GetAlt() );
                     }
                 }
@@ -1597,6 +1595,20 @@ SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
     }
 
     return nullptr;
+}
+
+
+std::vector<SCH_PIN*> SCH_SYMBOL::GetPinsByNumber( const wxString& aNumber ) const
+{
+    std::vector<SCH_PIN*> pins;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        if( pin->GetNumber() == aNumber )
+            pins.push_back( pin.get() );
+    }
+
+    return pins;
 }
 
 

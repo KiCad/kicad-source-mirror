@@ -1580,9 +1580,15 @@ int ERC_TESTER::TestLibSymbolIssues()
             if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
             {
                 // We have to check for duplicate pins first as they will cause Compare() to fail.
+                // Skip this check if the symbol has duplicate pins marked as jumpers, since that's
+                // an intentional use case where duplicate pin numbers are internally connected.
                 std::vector<wxString> messages;
-                UNITS_PROVIDER        unitsProvider( schIUScale, EDA_UNITS::MILS );
-                CheckDuplicatePins( libSymbolInSchematic, messages, &unitsProvider );
+
+                if( !libSymbolInSchematic->GetDuplicatePinNumbersAreJumpers() )
+                {
+                    UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MILS );
+                    CheckDuplicatePins( libSymbolInSchematic, messages, &unitsProvider );
+                }
 
                 if( !messages.empty() )
                 {

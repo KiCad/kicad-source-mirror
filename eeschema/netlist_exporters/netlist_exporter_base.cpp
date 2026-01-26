@@ -219,14 +219,11 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
         if( aPins[ii].num.empty() ) /* already deleted */
             continue;
 
-        /* Search for duplicated pins
-         * If found, remove duplicates. The priority is to keep connected pins
-         * and remove unconnected
-         * - So this allows (for instance when using multi op amps per package
-         * - to connect only one op amp to power
-         * Because the pin list is sorted by m_PinNum value, duplicated pins
-         * are necessary successive in list
-         */
+        // Search for duplicated pins and remove all but the first. Duplicate pin numbers are
+        // only valid for symbols with the "duplicate pin numbers are jumpers" flag set, in which
+        // case all pins with the same number are internally connected and share the same net.
+        // For such symbols, keeping only one pin per number is correct behavior.
+        // Because the pin list is sorted by pin number, duplicates are consecutive.
         int idxref = ii;
 
         for( unsigned jj = ii + 1; jj < aPins.size(); jj++ )

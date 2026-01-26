@@ -603,6 +603,17 @@ public:
     SCH_PIN* GetPin( const wxString& number ) const;
 
     /**
+     * Find all symbol pins with the given number.
+     *
+     * This is useful for symbols that intentionally have multiple pins with the same number,
+     * such as jumper symbols where duplicate pin numbers are internally connected.
+     *
+     * @param aNumber is the number of the pins to find.
+     * @return Vector of matching pin objects, empty if none found.
+     */
+    std::vector<SCH_PIN*> GetPinsByNumber( const wxString& aNumber ) const;
+
+    /**
      * Populate a vector with all the pins from the library object that match the current unit
      * and bodyStyle.
      *

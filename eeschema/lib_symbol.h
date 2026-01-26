@@ -627,6 +627,20 @@ public:
     SCH_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
+     * Return all pin objects with the requested pin \a aNumber.
+     *
+     * This is useful for symbols that intentionally have multiple pins with the same number,
+     * such as jumper symbols where duplicate pin numbers are internally connected.
+     *
+     * @param aNumber - Number of the pins to find.
+     * @param aUnit - Unit filter.  Set to 0 if a specific unit number is not required.
+     * @param aBodyStyle - Body style filter.  Set to 0 if no specific body style is not required.
+     * @return Vector of matching pin objects, empty if none found.
+     */
+    std::vector<SCH_PIN*> GetPinsByNumber( const wxString& aNumber, int aUnit = 0,
+                                           int aBodyStyle = 0 ) const;
+
+    /**
      * Return true if this symbol's pins do not match another symbol's pins. This is used to
      * detect whether the project cache is out of sync with the system libs.
      *

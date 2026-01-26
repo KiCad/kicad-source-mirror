@@ -1427,7 +1427,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     if( attr.key != wxS( "NO_CONNECT" ) )
                         continue;
 
-                    if( SCH_PIN* schPin = schSym->GetPin( pinInfo.number ) )
+                    for( SCH_PIN* schPin : schSym->GetPinsByNumber( pinInfo.number ) )
                     {
                         VECTOR2I pos = schSym->GetPinPhysicalPosition( schPin->GetLibPin() );
 
