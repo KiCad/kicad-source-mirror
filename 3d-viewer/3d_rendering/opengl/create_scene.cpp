@@ -754,6 +754,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetTH_ODPolys().CloneDropTriangulation();
 
+    // Include NPTH polygons so their barrel walls are also generated
+    if( m_boardAdapter.GetNPTH_ODPolys().OutlineCount() > 0 )
+        outerPolyTHT.BooleanAdd( m_boardAdapter.GetNPTH_ODPolys() );
+
     outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
 
     m_outerThroughHoles = generateHoles( m_boardAdapter.GetTH_ODs().GetList(), outerPolyTHT,
