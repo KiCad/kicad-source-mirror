@@ -19,12 +19,27 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerDir;
-	bSizerDir = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerTop;
+	fgSizerTop = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerTop->AddGrowableCol( 1 );
+	fgSizerTop->SetFlexibleDirection( wxBOTH );
+	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Schematic variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel->Wrap( -1 );
+	fgSizerTop->Add( m_variantLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxArrayString m_variantChoiceCtrlChoices;
+	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
+	m_variantChoiceCtrl->SetSelection( 0 );
+	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_outputPathLabel = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPathLabel->Wrap( -1 );
-	bSizerDir->Add( m_outputPathLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTop->Add( m_outputPathLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerDir;
+	bSizerDir = new wxBoxSizer( wxHORIZONTAL );
 
 	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPath->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the schematic main file location.") );
@@ -35,25 +50,18 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerDir->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bSizerDir, 0, wxALL|wxEXPAND, 7 );
+	fgSizerTop->Add( bSizerDir, 0, wxEXPAND, 7 );
+
+
+	bMainSizer->Add( fgSizerTop, 0, wxALL|wxEXPAND, 5 );
 
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_formatVariantSize = new wxBoxSizer( wxVERTICAL );
 
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 1 );
-	m_formatVariantSize->Add( m_plotFormatOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	wxArrayString m_variantChoiceCtrlChoices;
-	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
-	m_variantChoiceCtrl->SetSelection( 0 );
-	m_formatVariantSize->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT, 5 );
-
-
-	m_optionsSizer->Add( m_formatVariantSize, 0, wxEXPAND, 5 );
+	m_optionsSizer->Add( m_plotFormatOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* sbOptions;
 	sbOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
@@ -183,10 +191,10 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bOptionsRight->Add( m_otherOptions, 1, wxEXPAND|wxTOP, 5 );
 
 
-	m_optionsSizer->Add( bOptionsRight, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	m_optionsSizer->Add( bOptionsRight, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerMsgPanel;
 	bSizerMsgPanel = new wxBoxSizer( wxVERTICAL );
