@@ -67,6 +67,31 @@ BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
 END_EVENT_TABLE()
 
 
+/**
+ * Strip parenthetical suffixes from dialog titles to create stable persistence keys.
+ *
+ * Dialog titles like "Choose Symbol (1234 items loaded)" would otherwise create unique
+ * keys for each item count, flooding the settings file with duplicate entries.
+ */
+static std::string getDialogKeyFromTitle( const wxString& aTitle )
+{
+    std::string title = aTitle.ToStdString();
+    size_t parenPos = title.rfind( '(' );
+
+    if( parenPos != std::string::npos && parenPos > 0 )
+    {
+        size_t end = parenPos;
+
+        while( end > 0 && title[end - 1] == ' ' )
+            end--;
+
+        return title.substr( 0, end );
+    }
+
+    return title;
+}
+
+
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title, const wxPoint& pos,
                           const wxSize& size, long style, const wxString& name ) :
         wxDialog( aParent, id, title, pos, size, style, name ),
@@ -321,7 +346,7 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
 
         wxRect      savedDialogRect;
-        std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+        std::string key = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
 
         if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
         {
@@ -404,7 +429,7 @@ void DIALOG_SHIM::resetSize()
 {
     if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
     {
-        std::string key = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+        std::string key = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
 
         auto dlgIt = settings->m_dialogControlValues.find( key );
 
@@ -511,7 +536,7 @@ void DIALOG_SHIM::SaveControlState()
     if( !settings )
         return;
 
-    std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+    std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
     std::map<std::string, nlohmann::json>& dlgMap = settings->m_dialogControlValues[ dialogKey ];
 
     wxRect rect( GetPosition(), GetSize() );
@@ -621,7 +646,7 @@ void DIALOG_SHIM::LoadControlState()
     if( !settings )
         return;
 
-    std::string dialogKey = m_hash_key.empty() ? GetTitle().ToStdString() : m_hash_key;
+    std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
     auto        dlgIt = settings->m_dialogControlValues.find( dialogKey );
 
     if( dlgIt == settings->m_dialogControlValues.end() )
