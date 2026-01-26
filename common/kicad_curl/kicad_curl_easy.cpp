@@ -139,6 +139,12 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
 #endif
 
+    // Set connection timeout to prevent long freezes when network is unreachable.
+    // Without this, CURL can wait up to 5 minutes for DNS resolution or connection
+    // establishment, which causes the UI to freeze on macOS when behind a proxy with
+    // restricted internet access.
+    curl_easy_setopt( m_CURL, CURLOPT_CONNECTTIMEOUT, 30L );
+
 #ifdef _WIN32
     long sslOpts = CURLSSLOPT_NATIVE_CA;
 
@@ -342,6 +348,12 @@ bool KICAD_CURL_EASY::SetOutputStream( const std::ostream* aOutput )
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, stream_write_callback );
     curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, reinterpret_cast<const void*>( aOutput ) );
     return true;
+}
+
+
+bool KICAD_CURL_EASY::SetConnectTimeout( long aTimeoutSecs )
+{
+    return setOption( CURLOPT_CONNECTTIMEOUT, aTimeoutSecs ) == CURLE_OK;
 }
 
 
