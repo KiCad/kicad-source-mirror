@@ -414,3 +414,37 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
     }
 }
 
+
+/**
+ * Test that PNS_LAYER_RANGE(1, 0) is swapped to (0, 1).
+ *
+ * This is a minimal regression test for https://gitlab.com/kicad/code/kicad/-/issues/20355
+ * The actual fix is in pns_kicad_iface.cpp syncPad() which skips creating an
+ * INNER_LAYERS SOLID on 2-layer boards. This test verifies the layer range behavior
+ * that motivated the fix.
+ */
+BOOST_AUTO_TEST_CASE( PNSLayerRangeSwapBehavior )
+{
+    // On a 2-layer board with FRONT_INNER_BACK mode, BoardCopperLayerCount() returns 2.
+    // The code would calculate PNS_LAYER_RANGE(1, 2 - 2) = PNS_LAYER_RANGE(1, 0)
+    // Since start > end, the constructor swaps them to (0, 1), which would span
+    // both F_Cu and B_Cu incorrectly.
+
+    PNS_LAYER_RANGE innerLayersRange2Layer( 1, 0 );
+
+    // Verify the swap behavior that causes the bug
+    BOOST_CHECK_EQUAL( innerLayersRange2Layer.Start(), 0 );
+    BOOST_CHECK_EQUAL( innerLayersRange2Layer.End(), 1 );
+    BOOST_CHECK( innerLayersRange2Layer.Overlaps( 0 ) );  // F_Cu
+    BOOST_CHECK( innerLayersRange2Layer.Overlaps( 1 ) );  // B_Cu
+
+    // On a 4-layer board, inner layers are 1 and 2, so PNS_LAYER_RANGE(1, 4-2) = (1, 2)
+    PNS_LAYER_RANGE innerLayersRange4Layer( 1, 2 );
+
+    BOOST_CHECK_EQUAL( innerLayersRange4Layer.Start(), 1 );
+    BOOST_CHECK_EQUAL( innerLayersRange4Layer.End(), 2 );
+    BOOST_CHECK( !innerLayersRange4Layer.Overlaps( 0 ) ); // F_Cu - should not overlap
+    BOOST_CHECK( innerLayersRange4Layer.Overlaps( 1 ) );  // In1_Cu
+    BOOST_CHECK( innerLayersRange4Layer.Overlaps( 2 ) );  // In2_Cu
+    BOOST_CHECK( !innerLayersRange4Layer.Overlaps( 3 ) ); // B_Cu - should not overlap
+}
