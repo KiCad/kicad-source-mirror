@@ -1,0 +1,45 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "board_outline_line_width": 0.1
+      },
+      "drc_exclusions": [],
+      "meta": {
+        "version": 2
+      },
+      "rule_severities": {
+        "annular_width": "error",
+        "clearance": "error",
+        "copper_edge_clearance": "error",
+        "hole_clearance": "error",
+        "shorting_items": "error",
+        "track_width": "error",
+        "unconnected_items": "ignore"
+      },
+      "rules": {
+        "min_clearance": 0.1,
+        "min_copper_edge_clearance": 0.254,
+        "min_track_width": 0.1
+      }
+    }
+  },
+  "meta": {
+    "filename": "issue18839.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "clearance": 0.1,
+        "name": "Default",
+        "track_width": 0.254,
+        "via_diameter": 0.6,
+        "via_drill": 0.3
+      }
+    ],
+    "meta": {
+      "version": 3
+    }
+  }
+}

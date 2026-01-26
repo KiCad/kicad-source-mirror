@@ -1,0 +1,49 @@
+(kicad_pcb (version 20240108) (generator "pcbnew")
+  (general
+    (thickness 1.6)
+  )
+
+  (paper "A4")
+  (layers
+    (0 "F.Cu" signal)
+    (31 "B.Cu" signal)
+    (44 "Edge.Cuts" user)
+  )
+
+  (setup
+    (pad_to_mask_clearance 0)
+    (allow_soldermask_bridges_in_footprints no)
+  )
+
+  (net 0 "")
+  (net 1 "Net1")
+
+  (net_class "Default" ""
+    (clearance 0.1)
+    (trace_width 0.254)
+    (via_dia 0.6)
+    (via_drill 0.3)
+    (uvia_dia 0.3)
+    (uvia_drill 0.1)
+  )
+
+  (gr_arc
+    (start 105 100)
+    (mid 103.535534 103.535534)
+    (end 100 105)
+    (layer "Edge.Cuts")
+    (stroke (width 0) (type solid))
+    (uuid "00000000-0000-0000-0000-000000000001")
+  )
+
+  (arc
+    (start 105.381 100)
+    (mid 103.803356 103.803356)
+    (end 100 105.381)
+    (width 0.254)
+    (layer "F.Cu")
+    (net 1)
+    (uuid "00000000-0000-0000-0000-000000000002")
+  )
+
+)
