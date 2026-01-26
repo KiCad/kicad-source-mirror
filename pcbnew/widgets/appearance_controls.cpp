@@ -1362,8 +1362,22 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
         m_frame->GetBoard()->SetVisibleElements( aLayers );
 
         // Update VIEW layer visibility to stay in sync with board settings
-        for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ); i++ )
-            view->SetLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ), aLayers.test( i ) );
+        for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ) && i < aLayers.size(); i++ )
+        {
+            // Warning: all GAL layers are not handled by the apparence panel (i.e. LAYER_SELECT_OVERLAY)
+            // but only some, only set visiblity if the layer is handled by the APPEARANCE_CONTROLS
+            GAL_LAYER_ID gal_ly = GAL_LAYER_ID( i ) + GAL_LAYER_ID_START;
+
+            for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
+            {
+                // See if this gal layer is handled
+                if( s_setting.id == gal_ly )
+                {
+                    view->SetLayerVisible( gal_ly, aLayers.test( i ) );
+                    break;
+                }
+            }
+        }
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
     }
