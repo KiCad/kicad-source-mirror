@@ -249,7 +249,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard(), NO_MARGINS );
+                BOARD* board = m_frame->GetBoard();
+
+                std::vector<const EMBEDDED_FILES*> inheritedFiles;
+
+                for( FOOTPRINT* fp : board->Footprints() )
+                    inheritedFiles.push_back( fp->GetEmbeddedFiles() );
+
+                return new PANEL_EMBEDDED_FILES( aParent, board, NO_MARGINS, inheritedFiles );
             },
             _( "Embedded Files" ) );
 
