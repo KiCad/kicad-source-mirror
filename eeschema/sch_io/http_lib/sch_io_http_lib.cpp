@@ -373,6 +373,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
 
             symbol = originalSymbol->Duplicate();
             symbol->SetSourceLibId( symbolId );
+            symbol->SetName( aSymbolName );
 
             LIB_ID libId = symbol->GetLibId();
             libId.SetSubLibraryName( aCategory.name );
