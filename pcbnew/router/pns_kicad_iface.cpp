@@ -1245,6 +1245,16 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
     auto makeSolidFromPadLayer =
         [&]( PCB_LAYER_ID aLayer )
         {
+            // For FRONT_INNER_BACK mode, skip creating a SOLID for inner layers when there are
+            // no inner layers (2-layer board). Otherwise PNS_LAYER_RANGE(1, 0) would be swapped
+            // to (0, 1) and indexed on both F_Cu and B_Cu, causing incorrect collision checks.
+            if( aPad->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK
+                && aLayer != F_Cu && aLayer != B_Cu
+                && aPad->BoardCopperLayerCount() <= 2 )
+            {
+                return;
+            }
+
             std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
             if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
