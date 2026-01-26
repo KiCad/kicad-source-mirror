@@ -22,7 +22,7 @@
 # "Pferd O." <frank.0228@ich-war-hier.de>, 2024, 2025, 2026.
 # tct123 <tct1234@protonmail.com>, 2024.
 # Lauritz Tieste <lauritz6000000@gmail.com>, 2024.
-# Frank Sonnenberg <frasoberg@web.de>, 2024, 2025.
+# Frank Sonnenberg <frasoberg@web.de>, 2024, 2025, 2026.
 # John Beard <john.j.beard@gmail.com>, 2024, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2025.
 # weblateuser <useross@disroot.org>, 2025.
@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-25 20:50+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-01-26 23:06+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -6130,7 +6130,7 @@ msgstr "Regel kopieren"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:454
 msgid "Delete Rule"
-msgstr "Datei löschen"
+msgstr "Regel löschen"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:460
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -44280,7 +44280,7 @@ msgstr "Lage muss einen Namen haben."
 #: pcbnew/dialogs/panel_setup_layers.cpp:1009
 #, c-format
 msgid "%s are forbidden in layer names."
-msgstr "%s sind nicht zulässig in Lagennamen."
+msgstr "%s sind in Lagennamen unzulässig."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1016
 msgid "Layer name \"signal\" is reserved."
@@ -54170,7 +54170,7 @@ msgstr "Wechselt die Stellung des aktuell gerouteten Leiterzuges."
 
 #: pcbnew/router/router_tool.cpp:201
 msgid "Track Corner Mode Switch"
-msgstr "Leiterbahnecken-Modus Umterschaltung"
+msgstr "Leiterbahnecken-Modus Umschaltung"
 
 #: pcbnew/router/router_tool.cpp:202
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
