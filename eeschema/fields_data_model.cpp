@@ -439,8 +439,20 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
         }
     }
 
+    // Merge with column attributes (renderer, editor, alignment, etc.) set by SetColAttr().
+    // This ensures checkbox renderers and other column-specific attributes are preserved
+    // when we've created a custom attr for highlighting or URL editing.
     if( attr )
+    {
+        wxGridCellAttr* colAttr = m_colAttrs.count( aCol ) ? m_colAttrs[aCol] : nullptr;
+
+        if( colAttr )
+        {
+            attr->MergeWith( colAttr );
+        }
+
         return enhanceAttr( attr, aRow, aCol, aKind );
+    }
 
     return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
 }
