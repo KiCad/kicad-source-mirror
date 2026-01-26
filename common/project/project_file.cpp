@@ -755,7 +755,13 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
     updatePathByPtr( "pcbnew.page_layout_descr_file" );
 
     for( auto& sheetInfo : m_topLevelSheets )
+    {
         updatePath( sheetInfo.filename );
+
+        // Also update the display name if it matches the old project name
+        if( sheetInfo.name == oldProjectName )
+            sheetInfo.name = aFile;
+    }
 
     // If we're actually going ahead and doing the save, the flag that keeps code from doing the save
     // should be cleared at this point

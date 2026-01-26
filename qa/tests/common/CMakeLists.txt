@@ -101,6 +101,9 @@ set( QA_COMMON_SRCS
     # Project template tests (source included directly since it's from kicad executable)
     test_project_template.cpp
     ${CMAKE_SOURCE_DIR}/kicad/project_template.cpp
+
+    # Project file tests
+    test_project_file.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
