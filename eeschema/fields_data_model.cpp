@@ -362,18 +362,19 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
+    bool            needsUrlEditor = false;
+    bool            needsVariantHighlight = false;
+    wxColour        highlightColor;
 
+    // Check if we need URL editor
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
             || IsURL( GetValue( m_rows[aRow], aCol ) ) )
     {
         if( m_urlEditor )
-        {
-            m_urlEditor->IncRef();
-            attr = m_urlEditor;
-        }
+            needsUrlEditor = true;
     }
 
-    // Highlight cells that differ from default when viewing a variant
+    // Check if we need variant highlighting
     if( !m_currentVariant.IsEmpty() && aRow >= 0 && aRow < (int) m_rows.size()
             && aCol >= 0 && aCol < (int) m_cols.size() )
     {
@@ -385,8 +386,6 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
             const DATA_MODEL_ROW& row = m_rows[aRow];
 
             // Check if any symbol in this row has a variant-specific value
-            bool hasVariantDifference = false;
-
             for( const SCH_REFERENCE& ref : row.m_Refs )
             {
                 wxString defaultValue = getDefaultFieldValue( ref, fieldName );
@@ -407,54 +406,60 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
 
                 if( currentValue != defaultValue )
                 {
-                    hasVariantDifference = true;
+                    needsVariantHighlight = true;
+
+                    // Use a subtle highlight color that works in both light and dark themes
+                    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+                    bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
+
+                    if( isDark )
+                        highlightColor = wxColour( 80, 80, 40 );   // Dark gold/brown
+                    else
+                        highlightColor = wxColour( 255, 255, 200 ); // Light yellow
+
                     break;
                 }
-            }
-
-            if( hasVariantDifference )
-            {
-                if( !attr )
-                {
-                    attr = new wxGridCellAttr();
-                }
-                else
-                {
-                    // Clone so we don't modify the shared URL editor attr
-                    wxGridCellAttr* newAttr = attr->Clone();
-                    attr->DecRef();
-                    attr = newAttr;
-                }
-
-                // Use a subtle highlight color that works in both light and dark themes
-                // Light yellow in light mode, darker yellow-ish in dark mode
-                wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-                bool isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
-
-                if( isDark )
-                    attr->SetBackgroundColour( wxColour( 80, 80, 40 ) );  // Dark gold/brown
-                else
-                    attr->SetBackgroundColour( wxColour( 255, 255, 200 ) );  // Light yellow
             }
         }
     }
 
-    // Merge with column attributes (renderer, editor, alignment, etc.) set by SetColAttr().
-    // This ensures checkbox renderers and other column-specific attributes are preserved
-    // when we've created a custom attr for highlighting or URL editing.
-    if( attr )
-    {
-        wxGridCellAttr* colAttr = m_colAttrs.count( aCol ) ? m_colAttrs[aCol] : nullptr;
+    // If we don't need any custom attributes, use the base class behavior
+    if( !needsUrlEditor && !needsVariantHighlight )
+        return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
 
-        if( colAttr )
+    // URL cells: use m_urlEditor as base, potentially with variant highlight overlay
+    if( needsUrlEditor )
+    {
+        if( needsVariantHighlight )
         {
-            attr->MergeWith( colAttr );
+            // Clone the URL editor attribute and add highlight color
+            attr = m_urlEditor->Clone();
+            attr->SetBackgroundColour( highlightColor );
+        }
+        else
+        {
+            // Just use the URL editor attribute directly
+            m_urlEditor->IncRef();
+            attr = m_urlEditor;
         }
 
         return enhanceAttr( attr, aRow, aCol, aKind );
     }
 
-    return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
+    // Non-URL cells with variant highlighting: start with column attributes if they exist.
+    // This preserves checkbox renderers and other column-specific settings.
+    if( m_colAttrs.find( aCol ) != m_colAttrs.end() && m_colAttrs[aCol] )
+    {
+        attr = m_colAttrs[aCol]->Clone();
+    }
+    else
+    {
+        attr = new wxGridCellAttr();
+    }
+
+    attr->SetBackgroundColour( highlightColor );
+
+    return enhanceAttr( attr, aRow, aCol, aKind );
 }
 
 
