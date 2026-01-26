@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,15 +18,26 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bUpperSizer;
-	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerTop;
+	fgSizerTop = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgSizerTop->SetFlexibleDirection( wxBOTH );
+	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxBoxSizer* bSizerdirBrowse;
-	bSizerdirBrowse = new wxBoxSizer( wxHORIZONTAL );
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel->Wrap( -1 );
+	fgSizerTop->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxArrayString m_variantChoiceCtrlChoices;
+	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
+	m_variantChoiceCtrl->SetSelection( 0 );
+	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxEXPAND, 5 );
 
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bSizerdirBrowse->Add( m_staticTextDir, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizerTop->Add( m_staticTextDir, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerdirBrowse;
+	bSizerdirBrowse = new wxBoxSizer( wxHORIZONTAL );
 
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
@@ -38,10 +49,10 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerdirBrowse->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bUpperSizer->Add( bSizerdirBrowse, 1, wxEXPAND|wxALL, 10 );
+	fgSizerTop->Add( bSizerdirBrowse, 1, wxEXPAND, 10 );
 
 
-	m_MainSizer->Add( bUpperSizer, 0, wxEXPAND, 2 );
+	m_MainSizer->Add( fgSizerTop, 0, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
@@ -72,15 +83,6 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_unitsCtrl->SetSelection( 1 );
 	fgSizer1->Add( m_unitsCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_variantLabel->Wrap( -1 );
-	fgSizer1->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	wxArrayString m_variantChoiceCtrlChoices;
-	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
-	m_variantChoiceCtrl->SetSelection( 0 );
-	fgSizer1->Add( m_variantChoiceCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 
 	bSizerMiddle->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
@@ -94,7 +96,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerMiddle->Add( bSizer6, 1, wxEXPAND, 5 );
 
 
-	m_MainSizer->Add( bSizerMiddle, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( bSizerMiddle, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerLower;
 	bSizerLower = new wxBoxSizer( wxVERTICAL );
