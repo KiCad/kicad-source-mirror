@@ -101,7 +101,8 @@ size_t std::hash<std::pair<BITMAPS, int>>::operator()( const std::pair<BITMAPS, 
 }
 
 
-BITMAP_STORE::BITMAP_STORE()
+BITMAP_STORE::BITMAP_STORE() :
+    m_theme( BITMAP_INFO::THEME::LIGHT )
 {
     wxFileName path( PATHS::GetStockDataPath() + wxT( "/resources" ), IMAGE_ARCHIVE );
 
