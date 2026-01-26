@@ -1189,11 +1189,16 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     std::vector< SGPOINT > vertices;
     std::vector< int > indices;
     std::vector< int > indices2;
-    gp_Trsf tx;
+
+    // The triangulation location transform converts local triangulation coordinates to face
+    // coordinates. This must be applied to get correct vertex positions. Skip identity transforms.
+    bool applyTransform = !loc.IsIdentity();
+    gp_Trsf tx = applyTransform ? loc.Transformation() : gp_Trsf();
 
     for( int i = 1; i <= triangulation->NbNodes(); i++ )
     {
-        gp_XYZ v( triangulation->Node(i).Coord() );
+        gp_XYZ v = applyTransform ? triangulation->Node( i ).Transformed( tx ).Coord()
+                                  : triangulation->Node( i ).Coord();
         vertices.emplace_back( v.X(), v.Y(), v.Z() );
     }
 
