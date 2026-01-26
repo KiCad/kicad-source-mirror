@@ -66,6 +66,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue14008",   // Net-tie clearance error
         "issue17967/issue17967",   // Arc dp coupling
         "issue18203",   // DRC error due to colliding arc and circle
+        "issue18839",   // False positive board edge clearance between concentric arcs
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
         "net_tie_drc"   // Net tie bridging soldermask DRC test
     };
