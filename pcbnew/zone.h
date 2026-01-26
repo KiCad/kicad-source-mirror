@@ -811,6 +811,14 @@ public:
 
 #endif
 
+private:
+    /**
+     * Internal implementation of UnFill() that assumes the caller already holds
+     * m_filledPolysListMutex. This is needed because SetLayerSet() already acquires the mutex
+     * via scoped_lock before calling this.
+     */
+    bool unFillLocked();
+
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 

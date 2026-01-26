@@ -820,6 +820,11 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
     const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
 
+    // Zone fill data can be modified (cleared or replaced) while CN_ZONE_LAYERs still reference
+    // it. Check that the outline data is still valid before accessing.
+    if( !aZoneLayerA->HasValidOutline() || !aZoneLayerB->HasValidOutline() )
+        return;
+
     const BOX2I& boxA = aZoneLayerA->BBox();
     const BOX2I& boxB = aZoneLayerB->BBox();
 
@@ -831,7 +836,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     if( !boxA.Intersects( boxB ) )
         return;
 
-    const SHAPE_LINE_CHAIN& outline = zoneA->GetFilledPolysList( layer )->COutline( aZoneLayerA->SubpolyIndex() );
+    const SHAPE_LINE_CHAIN& outline = aZoneLayerA->GetOutline();
 
     for( int i = 0; i < outline.PointCount(); i++ )
     {
@@ -846,7 +851,7 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         }
     }
 
-    const SHAPE_LINE_CHAIN& outline2 = zoneB->GetFilledPolysList( layer )->COutline( aZoneLayerB->SubpolyIndex() );
+    const SHAPE_LINE_CHAIN& outline2 = aZoneLayerB->GetOutline();
 
     for( int i = 0; i < outline2.PointCount(); i++ )
     {

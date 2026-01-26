@@ -96,23 +96,19 @@ void CN_ITEM::Dump()
 
 int CN_ZONE_LAYER::AnchorCount() const
 {
-    if( !Valid() )
+    if( !Valid() || !HasValidOutline() )
         return 0;
 
-    const ZONE* zone = static_cast<const ZONE*>( Parent() );
-
-    return zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex ).PointCount() ? 1 : 0;
+    return GetOutline().PointCount() ? 1 : 0;
 }
 
 
 const VECTOR2I CN_ZONE_LAYER::GetAnchor( int n ) const
 {
-    if( !Valid() )
+    if( !Valid() || !HasValidOutline() )
         return VECTOR2I();
 
-    const ZONE* zone = static_cast<const ZONE*>( Parent() );
-
-    return zone->GetFilledPolysList( m_layer )->COutline( m_subpolyIndex ).CPoint( 0 );
+    return GetOutline().CPoint( 0 );
 }
 
 

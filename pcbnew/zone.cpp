@@ -453,13 +453,25 @@ bool ZONE::SameNet( const ZONE* aOther ) const
 
 bool ZONE::UnFill()
 {
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
+    return unFillLocked();
+}
+
+
+bool ZONE::unFillLocked()
+{
     bool change = false;
 
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
     {
         change |= !pair.second->IsEmpty();
         m_insulatedIslands[pair.first].clear();
-        pair.second->RemoveAllContours();
+
+        // Replace the shared_ptr with a new empty object rather than clearing the existing one.
+        // This ensures that any CN_ZONE_LAYERs holding shared_ptr copies still have valid data
+        // (the old, now orphaned SHAPE_POLY_SET) while we get a fresh container.
+        pair.second = std::make_shared<SHAPE_POLY_SET>();
     }
 
     m_isFilled = false;
@@ -547,7 +559,7 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
     {
         SetNeedRefill( true );
 
-        UnFill();
+        unFillLocked();
 
         m_FilledPolysList.clear();
         m_filledPolysHash.clear();

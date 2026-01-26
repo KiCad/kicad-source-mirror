@@ -333,6 +333,9 @@ public:
 
     bool ContainsPoint( const VECTOR2I& p ) const
     {
+        if( !HasValidOutline() )
+            return false;
+
         if( m_zone->IsTeardropArea() )
             return m_fillPoly->Outline( m_subpolyIndex ).Collide( p ) ;
 
@@ -362,13 +365,29 @@ public:
     virtual int AnchorCount() const override;
     virtual const VECTOR2I GetAnchor( int n ) const override;
 
+    bool HasValidOutline() const
+    {
+        return m_fillPoly && m_subpolyIndex < m_fillPoly->OutlineCount();
+    }
+
     const SHAPE_LINE_CHAIN& GetOutline() const
     {
+        wxASSERT( HasValidOutline() );
+
+        if( !HasValidOutline() )
+        {
+            static SHAPE_LINE_CHAIN empty;
+            return empty;
+        }
+
         return m_fillPoly->Outline( m_subpolyIndex );
     }
 
     bool Collide( SHAPE* aRefShape ) const
     {
+        if( !HasValidOutline() )
+            return false;
+
         if( m_zone->IsTeardropArea() )
             return m_fillPoly->Collide( aRefShape );
 
