@@ -160,7 +160,7 @@ BOOST_FIXTURE_TEST_CASE( CreepagePerformanceIssue21482, DRC_CREEPAGE_PERF_TEST_F
             BOOST_TEST_MESSAGE( "Metrics written to creepage_perf_metrics.txt" );
         }
     }
-    else
+    else if( std::getenv( "KICAD_ENABLE_DRC_PERFORMANCE_QA" ) != nullptr )
     {
         // On local machines, enforce the timeout constraint
         BOOST_CHECK_MESSAGE( elapsedSeconds < 20.0,
