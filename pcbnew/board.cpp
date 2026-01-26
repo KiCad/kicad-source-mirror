@@ -3040,7 +3040,7 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, bool aInferOutli
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError, chainingEpsilon,
                                               aInferOutlineIfNecessary, aErrorHandler, aAllowUseArcsInPolygons );
 
-    // Now add NPTH oval holes as holes in outlines if required
+    // Now subtract NPTH oval holes from outlines if required
     if( aIncludeNPTHAsOutlines )
     {
         for( FOOTPRINT* fp : Footprints() )
@@ -3055,20 +3055,10 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, bool aInferOutli
 
                 if( hole.OutlineCount() > 0 ) // can be not the case for malformed NPTH holes
                 {
-                    // Add this pad hole to the main outline
-                    // But we can have more than one main outline (i.e. more than one board), so
-                    // search the right main outline i.e. the outline that contains the pad hole
-                    SHAPE_LINE_CHAIN& pad_hole = hole.Outline( 0 );
-                    const VECTOR2I    holePt = pad_hole.CPoint( 0 );
-
-                    for( int jj = 0; jj < aOutlines.OutlineCount(); ++jj )
-                    {
-                        if( aOutlines.Outline( jj ).PointInside( holePt ) )
-                        {
-                            aOutlines.AddHole( pad_hole, jj );
-                            break;
-                        }
-                    }
+                    // Issue #20159: BooleanSubtract correctly clips holes extending past board
+                    // edges (common with oval holes near irregular boards). O(n log n) per hole
+                    // vs O(1) for AddHole, but only used for 3D viewer generation, not a hot path.
+                    aOutlines.BooleanSubtract( hole );
                 }
             }
         }
