@@ -31,6 +31,7 @@
 #include <dialog_import_settings.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
+#include <footprint.h>
 #include <panel_embedded_files.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
@@ -206,8 +207,16 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_EMBEDDED_FILES( aParent, m_frame->GetBoard() );
-            }, _( "Embedded Files" ) );
+                BOARD* board = m_frame->GetBoard();
+
+                std::vector<const EMBEDDED_FILES*> inheritedFiles;
+
+                for( FOOTPRINT* fp : board->Footprints() )
+                    inheritedFiles.push_back( fp->GetEmbeddedFiles() );
+
+                return new PANEL_EMBEDDED_FILES( aParent, board, 0, inheritedFiles );
+            },
+            _( "Embedded Files" ) );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
