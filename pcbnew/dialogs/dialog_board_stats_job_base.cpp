@@ -51,10 +51,10 @@ DIALOG_BOARD_STATS_JOB_BASE::DIALOG_BOARD_STATS_JOB_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_choiceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( fgSizer1, 1, wxALL|wxEXPAND, 10 );
+	bSizerMain->Add( fgSizer1, 0, wxEXPAND|wxALL, 10 );
 
 	wxGridSizer* gOptionsSizer;
-	gOptionsSizer = new wxGridSizer( 0, 1, 10, 0 );
+	gOptionsSizer = new wxGridSizer( 0, 1, 5, 0 );
 
 	m_checkBoxSubtractHoles = new wxCheckBox( this, wxID_ANY, _("Subtract holes from board area"), wxDefaultPosition, wxDefaultSize, 0 );
 	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, 0, 5 );
@@ -66,7 +66,7 @@ DIALOG_BOARD_STATS_JOB_BASE::DIALOG_BOARD_STATS_JOB_BASE( wxWindow* parent, wxWi
 	gOptionsSizer->Add( m_checkBoxExcludeFootprintsWithoutPads, 0, 0, 5 );
 
 
-	bSizerMain->Add( gOptionsSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	bSizerMain->Add( gOptionsSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT, 10 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -80,6 +80,7 @@ DIALOG_BOARD_STATS_JOB_BASE::DIALOG_BOARD_STATS_JOB_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 
