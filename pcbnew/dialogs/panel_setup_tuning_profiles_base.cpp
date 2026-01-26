@@ -28,13 +28,13 @@ PANEL_SETUP_TUNING_PROFILES_BASE::PANEL_SETUP_TUNING_PROFILES_BASE( wxWindow* pa
 	bSizer91 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addTuningProfileButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer91->Add( m_addTuningProfileButton, 0, wxBOTTOM|wxLEFT, 5 );
+	bSizer91->Add( m_addTuningProfileButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer91->Add( 20, 0, 1, wxEXPAND, 5 );
 
 	m_removeTuningProfileButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer91->Add( m_removeTuningProfileButton, 0, wxBOTTOM|wxLEFT, 5 );
+	bSizer91->Add( m_removeTuningProfileButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	fgSizer1->Add( bSizer91, 1, wxTOP, 5 );

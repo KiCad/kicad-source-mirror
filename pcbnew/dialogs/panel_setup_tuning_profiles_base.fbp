@@ -138,7 +138,7 @@
             <property name="permission">none</property>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="false">
                 <property name="BottomDockable">1</property>
@@ -223,7 +223,7 @@
             </object>
             <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="false">
                 <property name="BottomDockable">1</property>

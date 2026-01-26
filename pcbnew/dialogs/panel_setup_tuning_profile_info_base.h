@@ -31,7 +31,6 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/splitter.h>
 
@@ -55,11 +54,13 @@ class PANEL_SETUP_TUNING_PROFILE_INFO_BASE : public wxPanel
 		wxCheckBox* m_enableDelayTuning;
 		wxStaticLine* m_staticline1;
 		wxSplitterWindow* m_splitter1;
-		wxPanel* m_panel3;
+		wxPanel* m_panelTrackPropagation;
+		wxStaticText* m_trackPropagationLabel;
 		WX_GRID* m_trackPropagationGrid;
 		STD_BITMAP_BUTTON* m_addTrackPropogationLayer;
 		STD_BITMAP_BUTTON* m_deleteTrackPropogationLayer;
-		wxPanel* m_panel4;
+		wxPanel* m_panelViaPropagation;
+		wxStaticText* m_viaPropagationLabel;
 		wxStaticText* m_viaPropagationSpeedLabel;
 		wxTextCtrl* m_viaPropagationSpeed;
 		wxStaticText* m_viaPropSpeedUnits;
@@ -85,7 +86,7 @@ class PANEL_SETUP_TUNING_PROFILE_INFO_BASE : public wxPanel
 
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
-			m_splitter1->SetSashPosition( 0 );
+			m_splitter1->SetSashPosition( 200 );
 			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_SETUP_TUNING_PROFILE_INFO_BASE::m_splitter1OnIdle ), NULL, this );
 		}
 
