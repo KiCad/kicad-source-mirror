@@ -817,9 +817,6 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
-    const ZONE* zoneA = static_cast<const ZONE*>( aZoneLayerA->Parent() );
-    const ZONE* zoneB = static_cast<const ZONE*>( aZoneLayerB->Parent() );
-
     // Zone fill data can be modified (cleared or replaced) while CN_ZONE_LAYERs still reference
     // it. Check that the outline data is still valid before accessing.
     if( !aZoneLayerA->HasValidOutline() || !aZoneLayerB->HasValidOutline() )

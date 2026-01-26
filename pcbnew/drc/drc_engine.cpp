@@ -1261,10 +1261,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
         if( !override.has_value() && pad )
         {
-            if( FOOTPRINT* parentFootprint = pad->GetParentFootprint() )
+            if( FOOTPRINT* overrideFootprint = pad->GetParentFootprint() )
             {
-                override = parentFootprint->GetLocalSolderPasteMargin();
-                overrideItem = parentFootprint;
+                override = overrideFootprint->GetLocalSolderPasteMargin();
+                overrideItem = overrideFootprint;
             }
         }
 
