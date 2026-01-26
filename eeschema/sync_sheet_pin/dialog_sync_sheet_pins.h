@@ -49,7 +49,8 @@ public:
     };
 
     DIALOG_SYNC_SHEET_PINS( wxWindow* aParent, std::list<SCH_SHEET_PATH> aSheetPath,
-                            std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent );
+                            std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent,
+                            SCH_SHEET* aInitialSheet = nullptr );
 
     ~DIALOG_SYNC_SHEET_PINS() override;
 

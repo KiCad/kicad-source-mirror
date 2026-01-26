@@ -3317,7 +3317,8 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 }
 
 
-int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
+int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths,
+                                         SCH_SHEET* aInitialSheet )
 {
     if( !sheetPaths.size() )
     {
@@ -3385,7 +3386,8 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                         }
                         }
                     },
-                    m_toolMgr, m_frame ) );
+                    m_toolMgr, m_frame ),
+            aInitialSheet );
     m_dialogSyncSheetPin->Show( true );
     return 0;
 }
@@ -3452,8 +3454,10 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    // If a sheet is currently selected, pre-select its tab in the dialog
+    SCH_SHEET* selectedSheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
 
-    return doSyncSheetsPins( std::move( sheetPaths ) );
+    return doSyncSheetsPins( std::move( sheetPaths ), selectedSheet );
 }
 
 SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )

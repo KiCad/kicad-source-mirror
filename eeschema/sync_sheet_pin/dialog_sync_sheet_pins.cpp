@@ -42,7 +42,7 @@
 
 DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
         wxWindow* aParent, std::list<SCH_SHEET_PATH> aSheetPath,
-        std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent ) :
+        std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent, SCH_SHEET* aInitialSheet ) :
         DIALOG_SYNC_SHEET_PINS_BASE( aParent ), m_agent( std::move( aAgent ) ),
         m_lastEditSheet( nullptr ), m_placeItemKind( PlaceItemKind::UNDEFINED ),
         m_currentTemplate( nullptr )
@@ -57,6 +57,8 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
 
     m_notebook->AssignImageList( imageList );
     int                                                             count = -1;
+    int                                                             initialSelection = -1;
+    int                                                             firstUnsyncedPage = -1;
     std::unordered_map<wxString, std::list<PANEL_SYNC_SHEET_PINS*>> sheet_instances;
 
     for( const auto& sheet_path : aSheetPath )
@@ -65,8 +67,15 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
         wxString               fileName = sheet->GetFileName();
         PANEL_SYNC_SHEET_PINS* page = new PANEL_SYNC_SHEET_PINS( m_notebook, sheet, m_notebook,
                                                                  ++count, *m_agent, sheet_path );
-        m_notebook->AddPage( page, sheet->GetShownName( true ), {}, page->HasUndefinedSheetPing() );
+        bool hasUndefined = page->HasUndefinedSheetPing();
+        m_notebook->AddPage( page, sheet->GetShownName( true ), {}, hasUndefined );
         page->UpdateForms();
+
+        if( aInitialSheet && sheet == aInitialSheet )
+            initialSelection = count;
+
+        if( firstUnsyncedPage < 0 && hasUndefined )
+            firstUnsyncedPage = count;
 
         if( sheet_instances.find( fileName ) == sheet_instances.end() )
         {
@@ -108,6 +117,13 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
             }
         }
     }
+
+    // Select initial page: prefer the explicitly requested sheet, fall back to the first page
+    // with unsynced pins, or stay on the first page if all are synced
+    if( initialSelection >= 0 )
+        m_notebook->SetSelection( initialSelection );
+    else if( firstUnsyncedPage >= 0 )
+        m_notebook->SetSelection( firstUnsyncedPage );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SYNC_SHEET_PINS::OnClose, this );
 
