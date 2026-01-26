@@ -1276,7 +1276,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+                  <property name="flag">wxEXPAND|wxBOTTOM</property>
                   <property name="proportion">0</property>
                   <object class="wxStaticBoxSizer" expanded="true">
                     <property name="id">wxID_ANY</property>

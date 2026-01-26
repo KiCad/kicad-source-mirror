@@ -150,6 +150,10 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
         m_plotFormatOpt->Hide();
 
         m_outputPath->SetValue( m_job->GetConfiguredOutputPath() );
+
+        // Must readjust dialog sizing after hiding plot format
+        Layout();
+        GetSizer()->SetSizeHints( this );
     }
 
     wxCommandEvent dummy;

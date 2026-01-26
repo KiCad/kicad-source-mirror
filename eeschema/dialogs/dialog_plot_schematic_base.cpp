@@ -157,7 +157,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_sizerPDFOptions->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptionsRight->Add( m_sizerPDFOptions, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bOptionsRight->Add( m_sizerPDFOptions, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_SizerDxfOption = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
 
