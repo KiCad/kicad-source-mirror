@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,11 +45,18 @@ class PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE : public RESETTABLE_PANEL
 		WX_GRID* m_textItemsGrid;
 		STD_BITMAP_BUTTON* m_bpAdd;
 		STD_BITMAP_BUTTON* m_bpDelete;
+		wxStaticText* m_layerNamesLabel;
+		WX_GRID* m_layerNameitemsGrid;
+		STD_BITMAP_BUTTON* m_bpAddLayer;
+		STD_BITMAP_BUTTON* m_bpDeleteLayer;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddTextItem( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteTextItem( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLayerChange( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnAddLayerItem( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeleteLayerItem( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

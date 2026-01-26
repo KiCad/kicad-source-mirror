@@ -46,7 +46,13 @@ private:
     void OnAddTextItem( wxCommandEvent& event ) override;
     void OnDeleteTextItem( wxCommandEvent& event ) override;
 
+    void OnAddLayerItem( wxCommandEvent& event ) override;
+    void OnDeleteLayerItem( wxCommandEvent& event ) override;
+    void onLayerChange( wxGridEvent& event ) override;
+
     void loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCfg );
+
+    int getNextAvailableLayer() const;
 
 private:
     BOARD_DESIGN_SETTINGS& m_designSettings;

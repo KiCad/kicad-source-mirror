@@ -1,12 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
-
-#include "widgets/std_bitmap_button.h"
-#include "widgets/wx_grid.h"
 
 #include "panel_display_options_base.h"
 
@@ -92,60 +89,6 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	fpEditorPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* fpEditorOptionsSizer;
 	fpEditorOptionsSizer = new wxBoxSizer( wxVERTICAL );
-
-	m_layerNamesLabel = new wxStaticText( fpEditorPage, wxID_ANY, _("Layer Names"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_layerNamesLabel->Wrap( -1 );
-	fpEditorOptionsSizer->Add( m_layerNamesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
-
-
-	fpEditorOptionsSizer->Add( 0, 3, 0, 0, 5 );
-
-	m_layerNameitemsGrid = new WX_GRID( fpEditorPage, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL );
-
-	// Grid
-	m_layerNameitemsGrid->CreateGrid( 0, 2 );
-	m_layerNameitemsGrid->EnableEditing( true );
-	m_layerNameitemsGrid->EnableGridLines( true );
-	m_layerNameitemsGrid->EnableDragGridSize( false );
-	m_layerNameitemsGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_layerNameitemsGrid->SetColSize( 0, 200 );
-	m_layerNameitemsGrid->SetColSize( 1, 220 );
-	m_layerNameitemsGrid->EnableDragColMove( false );
-	m_layerNameitemsGrid->EnableDragColSize( true );
-	m_layerNameitemsGrid->SetColLabelValue( 0, _("Layer") );
-	m_layerNameitemsGrid->SetColLabelValue( 1, _("Name") );
-	m_layerNameitemsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
-	m_layerNameitemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_layerNameitemsGrid->EnableDragRowSize( false );
-	m_layerNameitemsGrid->SetRowLabelSize( 0 );
-	m_layerNameitemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_layerNameitemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_layerNameitemsGrid->SetMinSize( wxSize( -1,140 ) );
-
-	fpEditorOptionsSizer->Add( m_layerNameitemsGrid, 0, wxEXPAND|wxLEFT, 10 );
-
-	wxBoxSizer* bButtonSize1;
-	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_bpAddLayer = new STD_BITMAP_BUTTON( fpEditorPage, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
-
-
-	bButtonSize1->Add( 20, 0, 0, 0, 5 );
-
-	m_bpDeleteLayer = new STD_BITMAP_BUTTON( fpEditorPage, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize1->Add( m_bpDeleteLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-
-	fpEditorOptionsSizer->Add( bButtonSize1, 0, wxLEFT, 5 );
 
 
 	fpEditorPage->SetSizer( fpEditorOptionsSizer );
@@ -245,8 +188,10 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_checkCrossProbeAutoHighlight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkCrossProbeFlash = new wxCheckBox( pcbPage, wxID_ANY, _("Flash cross-probed selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeFlash->SetValue(true);
 	m_checkCrossProbeFlash->SetToolTip( _("Temporarily flash the newly cross-probed selection 3 times") );
-	bSizer8->Add( m_checkCrossProbeFlash, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	bSizer8->Add( m_checkCrossProbeFlash, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_live3Drefresh = new wxCheckBox( pcbPage, wxID_ANY, _("Refresh 3D view automatically"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_live3Drefresh->SetToolTip( _("When enabled, edits to the board will cause the 3D view to refresh (may be slow with larger boards)") );
@@ -277,20 +222,8 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
-
-	// Connect Events
-	m_layerNameitemsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_DISPLAY_OPTIONS_BASE::onLayerChange ), NULL, this );
-	m_layerNameitemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnGridSize ), NULL, this );
-	m_bpAddLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnAddLayerItem ), NULL, this );
-	m_bpDeleteLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnDeleteLayerItem ), NULL, this );
 }
 
 PANEL_DISPLAY_OPTIONS_BASE::~PANEL_DISPLAY_OPTIONS_BASE()
 {
-	// Disconnect Events
-	m_layerNameitemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_DISPLAY_OPTIONS_BASE::onLayerChange ), NULL, this );
-	m_layerNameitemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnGridSize ), NULL, this );
-	m_bpAddLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnAddLayerItem ), NULL, this );
-	m_bpDeleteLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DISPLAY_OPTIONS_BASE::OnDeleteLayerItem ), NULL, this );
-
 }
