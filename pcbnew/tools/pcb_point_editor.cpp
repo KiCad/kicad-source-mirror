@@ -1745,6 +1745,14 @@ public:
         double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
         double scale = ( sx + sy ) / 2.0;
 
+        // Prevent scaling below a minimum threshold to avoid precision loss when shapes
+        // are scaled to near-zero size. Also prevent negative scaling which would flip
+        // shapes when dragging past the center point.
+        const double MIN_SCALE = 0.01;
+
+        if( scale < MIN_SCALE )
+            scale = MIN_SCALE;
+
         for( PCB_SHAPE* shape : m_shapes )
         {
             aCommit.Modify( shape );
