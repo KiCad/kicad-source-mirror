@@ -2042,6 +2042,7 @@ int EDIT_TOOL::SimplifyPolygons( const TOOL_EVENT& aEvent )
             SHAPE_POLY_SET* poly = zone->Outline();
 
             poly->SimplifyOutlines( s_toleranceValue );
+            zone->HatchBorder();
         }
     }
 
