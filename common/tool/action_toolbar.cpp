@@ -138,9 +138,7 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 {
     int            iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
     wxBitmapBundle normalBmp = KiBitmapBundleDef( aAction.GetIcon(), iconSize );
-
-    int bmpWidth = normalBmp.GetPreferredBitmapSizeFor( this ).GetWidth();
-    int padding = ( m_buttonSize.GetWidth() - bmpWidth ) / 2;
+    int            padding = ( m_buttonSize.GetWidth() - FromDIP( iconSize ) ) / 2;
 
     BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
 
