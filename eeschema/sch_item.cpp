@@ -93,6 +93,10 @@ SCH_ITEM::~SCH_ITEM()
     for( const auto& it : m_connection_map )
         delete it.second;
 
+    // Remove this item from any rule areas that contain it
+    for( SCH_RULE_AREA* ruleArea : m_rule_areas_cache )
+        ruleArea->RemoveItem( this );
+
     // Do not try to modify SCHEMATIC::ConnectionGraph()
     // if the schematic does not exist
     if( !SCHEMATIC::m_IsSchematicExists )

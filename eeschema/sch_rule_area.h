@@ -166,6 +166,10 @@ protected:
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
 
+public:
+    /// Remove an item from this rule area's caches (called when the item is deleted).
+    void RemoveItem( SCH_ITEM* aItem );
+
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;
     std::unordered_set<KIID>                 m_itemIDs;

@@ -408,6 +408,13 @@ void SCH_RULE_AREA::addContainedItem( SCH_ITEM* item )
 }
 
 
+void SCH_RULE_AREA::RemoveItem( SCH_ITEM* aItem )
+{
+    m_items.erase( aItem );
+    m_prev_items.erase( aItem->m_Uuid );
+}
+
+
 static struct SCH_RULE_AREA_DESC
 {
     SCH_RULE_AREA_DESC()
