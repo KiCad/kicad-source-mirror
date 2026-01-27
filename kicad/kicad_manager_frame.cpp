@@ -931,8 +931,21 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( Kiway().LocalHistory().HeadNewerThanLastSave( Prj().GetProjectPath() ) )
     {
         wxString head = Kiway().LocalHistory().GetHeadHash( Prj().GetProjectPath() );
-        if( wxMessageBox( _( "A newer local history snapshot is available. Restore it?" ),
-                          _( "Restore" ), wxYES_NO | wxICON_QUESTION, this ) == wxYES )
+
+        KICAD_MESSAGE_DIALOG dlg( this,
+                _( "KiCad found unsaved changes from your last session that are newer than "
+                   "the saved project files." ),
+                _( "Recover Unsaved Changes" ),
+                wxYES_NO | wxICON_QUESTION );
+
+        dlg.SetExtendedMessage(
+                _( "This can happen if your previous session ended unexpectedly.\n\n"
+                   "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
+                   "currently saved files." ) );
+
+        dlg.SetYesNoLabels( _( "Restore" ), _( "Discard" ) );
+
+        if( dlg.ShowModal() == wxID_YES )
         {
             Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), head, this );
         }
