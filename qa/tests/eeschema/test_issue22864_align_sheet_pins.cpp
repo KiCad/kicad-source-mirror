@@ -26,15 +26,11 @@
  *
  * Test for issue #22864: "Align Items to Grid" disconnects wires from hierarchical sheet pins.
  *
- * Bug scenario:
- * - Sheet2 is positioned off-grid at (127.635mm, 95.885mm)
- * - Sheet2 has pins on the left side connected to wires from Sheet1
- * - When aligning Sheet2 to grid, the sheet and pins move but the wire endpoints
- *   should also move to maintain connectivity
- *
- * Root cause: The alignment code incorrectly passed a delta vector to AlignGrid()
- * instead of a position. AlignGrid() snaps positions to grid, so passing a small
- * delta like (0.635mm, -0.635mm) results in snapping to (0, 0), causing no movement.
+ * Tests multiple scenarios:
+ * - Select all items and align
+ * - Select individual sheets
+ * - Different grid spacings
+ * - Verify all wire endpoints connect to pins after alignment
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -54,23 +50,8 @@
 #include <tools/ee_grid_helper.h>
 
 
-struct ISSUE22864_FIXTURE
-{
-    ISSUE22864_FIXTURE() { }
-
-    SETTINGS_MANAGER           m_settingsManager;
-    std::unique_ptr<SCHEMATIC> m_schematic;
-};
-
-
-BOOST_AUTO_TEST_SUITE( Issue22864AlignSheetPins )
-
-
 /**
- * Helper class to test grid alignment.
- *
- * Creates an EE_GRID_HELPER that returns a fixed grid size for all grid types,
- * allowing testing without a full tool manager.
+ * Helper class to test grid alignment with configurable grid size.
  */
 class TEST_GRID_HELPER : public EE_GRID_HELPER
 {
@@ -91,34 +72,481 @@ private:
 };
 
 
+struct ISSUE22864_FIXTURE
+{
+    ISSUE22864_FIXTURE() { }
+
+    void LoadSchematic()
+    {
+        KI_TEST::LoadSchematic( m_settingsManager, "issue22864/Test_Move_Grid", m_schematic );
+    }
+
+    /**
+     * Build a map of positions to connected wires for the callback.
+     */
+    std::map<VECTOR2I, std::vector<SCH_LINE*>> BuildPositionToWiresMap( SCH_SCREEN* aScreen )
+    {
+        std::map<VECTOR2I, std::vector<SCH_LINE*>> positionToWires;
+
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+            if( wire->GetLayer() != LAYER_WIRE )
+                continue;
+
+            positionToWires[wire->GetStartPoint()].push_back( wire );
+            positionToWires[wire->GetEndPoint()].push_back( wire );
+        }
+
+        return positionToWires;
+    }
+
+    /**
+     * Run alignment on selected items and verify wire connectivity.
+     *
+     * @param aScreen The schematic screen
+     * @param aSelection Items to align
+     * @param aGridSize Grid size in IU
+     * @param aTestName Name for error messages
+     * @return true if all wire endpoints connect to pins
+     */
+    bool RunAlignmentAndVerify( SCH_SCREEN* aScreen, std::vector<EDA_ITEM*>& aSelection,
+                                const VECTOR2D& aGridSize, const std::string& aTestName )
+    {
+        TEST_GRID_HELPER grid( aGridSize );
+
+        // Build position-to-wires map BEFORE alignment
+        auto positionToWires = BuildPositionToWiresMap( aScreen );
+
+        // Initialize items the same way AlignToGrid does in sch_move_tool.cpp (lines 2493-2508)
+        // This sets storedPos and flags that the move logic depends on.
+        std::set<EDA_ITEM*> selectionSet( aSelection.begin(), aSelection.end() );
+
+        for( SCH_ITEM* it : aScreen->Items() )
+        {
+            if( selectionSet.find( it ) == selectionSet.end() )
+                it->ClearFlags( STARTPOINT | ENDPOINT );
+            else
+                it->SetFlags( STARTPOINT | ENDPOINT );
+
+            it->SetStoredPos( it->GetPosition() );
+
+            if( it->Type() == SCH_SHEET_T )
+            {
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( it )->GetPins() )
+                    pin->SetStoredPos( pin->GetPosition() );
+            }
+        }
+
+        SCH_ALIGNMENT_CALLBACKS callbacks;
+
+        // Use the shared MoveSchematicItem function - the same logic used by production code
+        callbacks.m_doMoveItem = []( EDA_ITEM* aItem, const VECTOR2I& aDelta )
+        {
+            MoveSchematicItem( aItem, aDelta );
+        };
+
+        callbacks.m_getConnectedDragItems =
+                [&]( SCH_ITEM* aItem, const VECTOR2I& aPoint, EDA_ITEMS& aList )
+                {
+                    auto it = positionToWires.find( aPoint );
+
+                    if( it != positionToWires.end() )
+                    {
+                        for( SCH_LINE* wire : it->second )
+                        {
+                            // Skip selected wires - they will be processed in their own
+                            // SCH_LINE_T block. This matches the real getConnectedDragItems
+                            // behavior in sch_move_tool.cpp.
+                            if( wire->HasFlag( SELECTED ) )
+                                continue;
+
+                            if( std::find( aList.begin(), aList.end(), wire ) == aList.end() )
+                            {
+                                wire->SetFlags( STARTPOINT | ENDPOINT );
+
+                                if( wire->GetStartPoint() == aPoint )
+                                    wire->ClearFlags( ENDPOINT );
+                                else
+                                    wire->ClearFlags( STARTPOINT );
+
+                                aList.push_back( wire );
+                            }
+                        }
+                    }
+                };
+
+        // Run alignment
+        AlignSchematicItemsToGrid( aScreen, aSelection, grid, GRID_CONNECTABLE, callbacks );
+
+        // Collect all pin positions
+        std::set<VECTOR2I> pinPositions;
+
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                pinPositions.insert( pin->GetPosition() );
+        }
+
+        // Verify all wire endpoints connect to pins
+        bool allConnected = true;
+
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+            if( wire->GetLayer() != LAYER_WIRE )
+                continue;
+
+            VECTOR2I start = wire->GetStartPoint();
+            VECTOR2I end = wire->GetEndPoint();
+
+            bool startConnected = pinPositions.count( start ) > 0;
+            bool endConnected = pinPositions.count( end ) > 0;
+
+            if( !startConnected )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire start (" << start.x << ", " << start.y
+                                              << ") not connected to any pin" );
+
+                for( const VECTOR2I& pinPos : pinPositions )
+                {
+                    BOOST_TEST_MESSAGE( "  Available pin at (" << pinPos.x << ", " << pinPos.y
+                                                               << ")" );
+                }
+
+                allConnected = false;
+            }
+
+            if( !endConnected )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire end (" << end.x << ", " << end.y
+                                              << ") not connected to any pin" );
+
+                for( const VECTOR2I& pinPos : pinPositions )
+                {
+                    BOOST_TEST_MESSAGE( "  Available pin at (" << pinPos.x << ", " << pinPos.y
+                                                               << ")" );
+                }
+
+                allConnected = false;
+            }
+        }
+
+        return allConnected;
+    }
+
+    /**
+     * Run alignment and verify that wires are not skewed.
+     * This is used for single-sheet tests where connectivity to unselected items may break,
+     * but wires should remain straight (not skewed).
+     *
+     * @param aScreen the schematic screen
+     * @param aSelection the items to align
+     * @param aGridSize the grid size
+     * @param aTestName name for debug output
+     * @return true if no wires are skewed
+     */
+    bool RunAlignmentAndVerifyNoSkew( SCH_SCREEN* aScreen, const std::vector<EDA_ITEM*>& aSelection,
+                                      const VECTOR2D& aGridSize, const std::string& aTestName )
+    {
+        std::set<EDA_ITEM*> selectionSet( aSelection.begin(), aSelection.end() );
+
+        // Record original wire endpoints to check for skew
+        std::map<SCH_LINE*, std::pair<VECTOR2I, VECTOR2I>> originalWireEndpoints;
+
+        for( SCH_ITEM* it : aScreen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( it );
+
+            if( wire->GetLayer() == LAYER_WIRE )
+                originalWireEndpoints[wire] = { wire->GetStartPoint(), wire->GetEndPoint() };
+        }
+
+        TEST_GRID_HELPER                             grid( aGridSize );
+        std::map<VECTOR2I, std::vector<SCH_LINE*>> positionToWires =
+                BuildPositionToWiresMap( aScreen );
+
+        for( SCH_ITEM* it : aScreen->Items() )
+        {
+            if( selectionSet.find( it ) == selectionSet.end() )
+                it->ClearFlags( STARTPOINT | ENDPOINT );
+            else
+                it->SetFlags( STARTPOINT | ENDPOINT );
+
+            it->SetStoredPos( it->GetPosition() );
+
+            if( it->Type() == SCH_SHEET_T )
+            {
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( it )->GetPins() )
+                    pin->SetStoredPos( pin->GetPosition() );
+            }
+        }
+
+        SCH_ALIGNMENT_CALLBACKS callbacks;
+
+        callbacks.m_doMoveItem = []( EDA_ITEM* aItem, const VECTOR2I& aDelta )
+        {
+            MoveSchematicItem( aItem, aDelta );
+        };
+
+        callbacks.m_getConnectedDragItems =
+                [&]( SCH_ITEM* aItem, const VECTOR2I& aPoint, EDA_ITEMS& aList )
+                {
+                    auto it = positionToWires.find( aPoint );
+
+                    if( it != positionToWires.end() )
+                    {
+                        for( SCH_LINE* wire : it->second )
+                        {
+                            if( wire->HasFlag( SELECTED ) )
+                                continue;
+
+                            if( std::find( aList.begin(), aList.end(), wire ) == aList.end() )
+                            {
+                                wire->SetFlags( STARTPOINT | ENDPOINT );
+
+                                if( wire->GetStartPoint() == aPoint )
+                                    wire->ClearFlags( ENDPOINT );
+                                else
+                                    wire->ClearFlags( STARTPOINT );
+
+                                aList.push_back( wire );
+                            }
+                        }
+                    }
+                };
+
+        // Run alignment
+        AlignSchematicItemsToGrid( aScreen, aSelection, grid, GRID_CONNECTABLE, callbacks );
+
+        // Check for wire skew - wires should maintain their original orientation
+        bool noSkew = true;
+
+        for( const auto& [wire, origEndpoints] : originalWireEndpoints )
+        {
+            VECTOR2I origStart = origEndpoints.first;
+            VECTOR2I origEnd = origEndpoints.second;
+            VECTOR2I newStart = wire->GetStartPoint();
+            VECTOR2I newEnd = wire->GetEndPoint();
+
+            // Check if wire was originally horizontal (same Y)
+            bool wasHorizontal = ( origStart.y == origEnd.y );
+
+            // Check if wire is still horizontal
+            bool isHorizontal = ( newStart.y == newEnd.y );
+
+            if( wasHorizontal && !isHorizontal )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire became skewed! Original: ("
+                                              << origStart.x << ", " << origStart.y << ") to ("
+                                              << origEnd.x << ", " << origEnd.y << "), Now: ("
+                                              << newStart.x << ", " << newStart.y << ") to ("
+                                              << newEnd.x << ", " << newEnd.y << ")" );
+                noSkew = false;
+            }
+
+            // Check if wire was originally vertical (same X)
+            bool wasVertical = ( origStart.x == origEnd.x );
+            bool isVertical = ( newStart.x == newEnd.x );
+
+            if( wasVertical && !isVertical )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire became skewed! Original: ("
+                                              << origStart.x << ", " << origStart.y << ") to ("
+                                              << origEnd.x << ", " << origEnd.y << "), Now: ("
+                                              << newStart.x << ", " << newStart.y << ") to ("
+                                              << newEnd.x << ", " << newEnd.y << ")" );
+                noSkew = false;
+            }
+        }
+
+        // Also check connectivity - collect all pin positions
+        std::set<VECTOR2I> pinPositions;
+
+        for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                pinPositions.insert( pin->GetPosition() );
+        }
+
+        bool allConnected = true;
+
+        for( const auto& [wire, origEndpoints] : originalWireEndpoints )
+        {
+            VECTOR2I start = wire->GetStartPoint();
+            VECTOR2I end = wire->GetEndPoint();
+
+            bool startConnected = pinPositions.count( start ) > 0;
+            bool endConnected = pinPositions.count( end ) > 0;
+
+            if( !startConnected )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire start (" << start.x << ", " << start.y
+                                              << ") not connected to any pin" );
+                allConnected = false;
+            }
+
+            if( !endConnected )
+            {
+                BOOST_TEST_MESSAGE( aTestName << ": Wire end (" << end.x << ", " << end.y
+                                              << ") not connected to any pin" );
+                allConnected = false;
+            }
+        }
+
+        // Return true only if both no skew AND all connected
+        return noSkew && allConnected;
+    }
+
+    SETTINGS_MANAGER           m_settingsManager;
+    std::unique_ptr<SCHEMATIC> m_schematic;
+};
+
+
+BOOST_AUTO_TEST_SUITE( Issue22864AlignSheetPins )
+
+
 /**
- * Test that AlignSchematicItemsToGrid properly aligns sheet pins and connected wires.
- *
- * This test verifies that when a sheet is aligned to grid:
- * 1. The sheet position moves to grid
- * 2. The sheet pins move to grid
- * 3. Wires connected to the pins also move to maintain connectivity
+ * Test aligning all items with standard grid (2.54mm).
  */
-BOOST_FIXTURE_TEST_CASE( Issue22864SheetPinAlignment, ISSUE22864_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( AlignAllItemsStandardGrid, ISSUE22864_FIXTURE )
 {
     LOCALE_IO dummy;
+    LoadSchematic();
 
-    KI_TEST::LoadSchematic( m_settingsManager, "issue22864/Test_Move_Grid", m_schematic );
-
-    // Use RootScreen() to get the actual content screen (not the virtual root)
     SCH_SCREEN* screen = m_schematic->RootScreen();
     BOOST_REQUIRE( screen != nullptr );
 
-    // Find sheet2 (the one at off-grid position 127.635mm, 95.885mm)
-    SCH_SHEET* sheet2 = nullptr;
-    int sheetCount = 0;
+    // Select all sheets
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        selection.push_back( item );
+
+    BOOST_REQUIRE_EQUAL( selection.size(), 2 );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
+
+    bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize,
+                                               "AlignAllItemsStandardGrid" );
+
+    BOOST_CHECK_MESSAGE( allConnected, "All wire endpoints should connect to pins after "
+                                       "aligning all items with 2.54mm grid" );
+}
+
+
+/**
+ * Test aligning all items with fine grid (1.27mm).
+ */
+BOOST_FIXTURE_TEST_CASE( AlignAllItemsFineGrid, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        selection.push_back( item );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 1.27 ), schIUScale.mmToIU( 1.27 ) );
+
+    bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize,
+                                               "AlignAllItemsFineGrid" );
+
+    BOOST_CHECK_MESSAGE( allConnected, "All wire endpoints should connect to pins after "
+                                       "aligning all items with 1.27mm grid" );
+}
+
+
+/**
+ * Test aligning all items with coarse grid (5.08mm).
+ */
+BOOST_FIXTURE_TEST_CASE( AlignAllItemsCoarseGrid, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        selection.push_back( item );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 5.08 ), schIUScale.mmToIU( 5.08 ) );
+
+    bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize,
+                                               "AlignAllItemsCoarseGrid" );
+
+    BOOST_CHECK_MESSAGE( allConnected, "All wire endpoints should connect to pins after "
+                                       "aligning all items with 5.08mm grid" );
+}
+
+
+/**
+ * Test aligning only sheet1 with standard grid.
+ * When only one sheet is selected, wires should stretch/shrink to maintain connectivity
+ * without becoming skewed.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheet1Only, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    SCH_SHEET* sheet1 = nullptr;
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-        sheetCount++;
-        BOOST_TEST_MESSAGE( "Found sheet: \"" << sheet->GetName() << "\" at ("
-                            << sheet->GetPosition().x << ", " << sheet->GetPosition().y << ")" );
+
+        if( sheet->GetName() == "sheet1" )
+        {
+            sheet1 = sheet;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( sheet1 != nullptr );
+
+    std::vector<EDA_ITEM*> selection{ sheet1 };
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
+
+    bool success = RunAlignmentAndVerifyNoSkew( screen, selection, gridSize, "AlignSheet1Only" );
+    BOOST_CHECK_MESSAGE( success, "Wires should remain straight and connected when aligning only sheet1" );
+}
+
+
+/**
+ * Test aligning only sheet2 with standard grid.
+ * When only one sheet is selected, wires should stretch/shrink to maintain connectivity
+ * without becoming skewed.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheet2Only, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    SCH_SHEET* sheet2 = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
         if( sheet->GetName() == "sheet2" )
         {
@@ -127,139 +555,333 @@ BOOST_FIXTURE_TEST_CASE( Issue22864SheetPinAlignment, ISSUE22864_FIXTURE )
         }
     }
 
-    BOOST_TEST_MESSAGE( "Total sheets found: " << sheetCount );
-    BOOST_REQUIRE_MESSAGE( sheet2 != nullptr, "Could not find sheet named 'sheet2'" );
+    BOOST_REQUIRE( sheet2 != nullptr );
 
-    // Verify initial off-grid position
-    // 127.635mm = 1276350 IU, 95.885mm = 958850 IU
-    VECTOR2I initialPos = sheet2->GetPosition();
-    BOOST_TEST_MESSAGE( "Sheet2 initial position: (" << initialPos.x << ", " << initialPos.y << ")" );
+    std::vector<EDA_ITEM*> selection{ sheet2 };
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
 
-    // Verify sheet has pins
-    std::vector<SCH_SHEET_PIN*> pins = sheet2->GetPins();
-    BOOST_REQUIRE( pins.size() >= 2 );
+    bool success = RunAlignmentAndVerifyNoSkew( screen, selection, gridSize, "AlignSheet2Only" );
 
-    // Record initial pin positions
-    std::map<SCH_SHEET_PIN*, VECTOR2I> initialPinPositions;
+    BOOST_CHECK_MESSAGE( success, "Wires should remain straight and connected when aligning only sheet2" );
+}
 
-    for( SCH_SHEET_PIN* pin : pins )
-        initialPinPositions[pin] = pin->GetPosition();
 
-    // Find wires connected to the pins
-    std::map<SCH_SHEET_PIN*, SCH_LINE*> connectedWires;
+/**
+ * Test aligning sheet1 then sheet2 sequentially.
+ * When sheets are aligned one at a time, wires should stretch/shrink to maintain connectivity
+ * without becoming skewed.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheet1ThenSheet2, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    SCH_SHEET* sheet1 = nullptr;
+    SCH_SHEET* sheet2 = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        if( sheet->GetName() == "sheet1" )
+            sheet1 = sheet;
+        else if( sheet->GetName() == "sheet2" )
+            sheet2 = sheet;
+    }
+
+    BOOST_REQUIRE( sheet1 != nullptr );
+    BOOST_REQUIRE( sheet2 != nullptr );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
+
+    // First align sheet1
+    std::vector<EDA_ITEM*> selection1{ sheet1 };
+    bool success1 = RunAlignmentAndVerifyNoSkew( screen, selection1, gridSize,
+                                                 "AlignSheet1ThenSheet2 (step 1)" );
+
+    BOOST_CHECK_MESSAGE( success1, "Wires should remain straight and connected after aligning sheet1" );
+
+    // Then align sheet2
+    std::vector<EDA_ITEM*> selection2{ sheet2 };
+    bool success2 = RunAlignmentAndVerifyNoSkew( screen, selection2, gridSize,
+                                                 "AlignSheet1ThenSheet2 (step 2)" );
+
+    BOOST_CHECK_MESSAGE( success2, "Wires should remain straight and connected after aligning sheet2" );
+}
+
+
+/**
+ * Test aligning sheet2 then sheet1 sequentially.
+ * When sheets are aligned one at a time, wires should stretch/shrink to maintain connectivity
+ * without becoming skewed.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheet2ThenSheet1, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    SCH_SHEET* sheet1 = nullptr;
+    SCH_SHEET* sheet2 = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        if( sheet->GetName() == "sheet1" )
+            sheet1 = sheet;
+        else if( sheet->GetName() == "sheet2" )
+            sheet2 = sheet;
+    }
+
+    BOOST_REQUIRE( sheet1 != nullptr );
+    BOOST_REQUIRE( sheet2 != nullptr );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
+
+    // First align sheet2
+    std::vector<EDA_ITEM*> selection2{ sheet2 };
+    bool success2 = RunAlignmentAndVerifyNoSkew( screen, selection2, gridSize,
+                                                 "AlignSheet2ThenSheet1 (step 1)" );
+
+    BOOST_CHECK_MESSAGE( success2, "Wires should remain straight and connected after aligning sheet2" );
+
+    // Then align sheet1
+    std::vector<EDA_ITEM*> selection1{ sheet1 };
+    bool success1 = RunAlignmentAndVerifyNoSkew( screen, selection1, gridSize,
+                                                 "AlignSheet2ThenSheet1 (step 2)" );
+
+    BOOST_CHECK_MESSAGE( success1, "Wires should remain straight and connected after aligning sheet1" );
+}
+
+
+/**
+ * Test aligning with multiple different grid sizes in sequence.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignMultipleGridSizes, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        selection.push_back( item );
+
+    // Test with progressively finer grids
+    std::vector<double> gridSizesMm = { 5.08, 2.54, 1.27, 0.635 };
+
+    for( double gridMm : gridSizesMm )
+    {
+        // Reload schematic for fresh state
+        LoadSchematic();
+        screen = m_schematic->RootScreen();
+        selection.clear();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+            selection.push_back( item );
+
+        const VECTOR2D gridSize( schIUScale.mmToIU( gridMm ), schIUScale.mmToIU( gridMm ) );
+
+        std::stringstream testName;
+        testName << "AlignMultipleGridSizes (" << gridMm << "mm)";
+
+        bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize, testName.str() );
+
+        BOOST_CHECK_MESSAGE( allConnected, "All wire endpoints should connect to pins with "
+                                                   << gridMm << "mm grid" );
+    }
+}
+
+
+/**
+ * Test that aligning sheets preserves pin-to-wire Y coordinate match.
+ */
+BOOST_FIXTURE_TEST_CASE( VerifyPinWireYCoordinateMatch, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        selection.push_back( item );
+
+    const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
+    TEST_GRID_HELPER grid( gridSize );
+
+    auto positionToWires = BuildPositionToWiresMap( screen );
+
+    SCH_ALIGNMENT_CALLBACKS callbacks;
+
+    callbacks.m_doMoveItem = []( EDA_ITEM* aItem, const VECTOR2I& aDelta )
+    {
+        if( aItem->Type() == SCH_SHEET_T )
+            static_cast<SCH_SHEET*>( aItem )->Move( aDelta );
+        else
+            MoveSchematicItem( aItem, aDelta );
+    };
+
+    callbacks.m_getConnectedDragItems =
+            [&]( SCH_ITEM* aItem, const VECTOR2I& aPoint, EDA_ITEMS& aList )
+            {
+                auto it = positionToWires.find( aPoint );
+
+                if( it != positionToWires.end() )
+                {
+                    for( SCH_LINE* wire : it->second )
+                    {
+                        if( std::find( aList.begin(), aList.end(), wire ) == aList.end() )
+                        {
+                            wire->SetFlags( STARTPOINT | ENDPOINT );
+
+                            if( wire->GetStartPoint() == aPoint )
+                                wire->ClearFlags( ENDPOINT );
+                            else
+                                wire->ClearFlags( STARTPOINT );
+
+                            aList.push_back( wire );
+                        }
+                    }
+                }
+            };
+
+    AlignSchematicItemsToGrid( screen, selection, grid, GRID_CONNECTABLE, callbacks );
+
+    // For each sheet, verify each pin has a wire endpoint at the same position
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+        {
+            VECTOR2I pinPos = pin->GetPosition();
+            bool foundWire = false;
+
+            for( SCH_ITEM* wireItem : screen->Items().OfType( SCH_LINE_T ) )
+            {
+                SCH_LINE* wire = static_cast<SCH_LINE*>( wireItem );
+
+                if( wire->GetLayer() != LAYER_WIRE )
+                    continue;
+
+                if( wire->GetStartPoint() == pinPos || wire->GetEndPoint() == pinPos )
+                {
+                    foundWire = true;
+                    break;
+                }
+            }
+
+            BOOST_CHECK_MESSAGE( foundWire,
+                                 "Pin at (" << pinPos.x << ", " << pinPos.y
+                                            << ") should have a connected wire endpoint" );
+        }
+    }
+}
+
+
+/**
+ * Test aligning when both sheets AND wires are selected together.
+ * This is the critical case from issue #22864 - when "Select All" includes wires,
+ * the wires must still follow their connected sheet pins.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheetsAndWiresTogether, ISSUE22864_FIXTURE )
+{
+    LOCALE_IO dummy;
+    LoadSchematic();
+
+    SCH_SCREEN* screen = m_schematic->RootScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    // Select ALL sheets AND wires (simulates Ctrl+A or Select All)
+    std::vector<EDA_ITEM*> selection;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        item->SetFlags( SELECTED );
+        selection.push_back( item );
+    }
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
     {
         SCH_LINE* wire = static_cast<SCH_LINE*>( item );
 
-        if( wire->GetLayer() != LAYER_WIRE )
-            continue;
-
-        for( SCH_SHEET_PIN* pin : pins )
+        if( wire->GetLayer() == LAYER_WIRE )
         {
-            VECTOR2I pinPos = pin->GetPosition();
-
-            if( wire->GetStartPoint() == pinPos || wire->GetEndPoint() == pinPos )
-                connectedWires[pin] = wire;
+            wire->SetFlags( SELECTED );
+            selection.push_back( wire );
         }
     }
 
-    BOOST_REQUIRE( !connectedWires.empty() );
+    BOOST_REQUIRE_GE( selection.size(), 4 );  // At least 2 sheets + 2 wires
 
-    // Record initial wire endpoints that connect to pins
-    std::map<SCH_SHEET_PIN*, VECTOR2I> initialWireEndpoints;
-
-    for( const auto& [pin, wire] : connectedWires )
-    {
-        VECTOR2I pinPos = pin->GetPosition();
-
-        if( wire->GetStartPoint() == pinPos )
-            initialWireEndpoints[pin] = wire->GetStartPoint();
-        else
-            initialWireEndpoints[pin] = wire->GetEndPoint();
-    }
-
-    // Standard eeschema grid is 2.54mm = 25400 IU (100 mils)
     const VECTOR2D gridSize( schIUScale.mmToIU( 2.54 ), schIUScale.mmToIU( 2.54 ) );
-    TEST_GRID_HELPER grid( gridSize );
 
-    // Track all move operations
-    std::map<EDA_ITEM*, std::vector<VECTOR2I>> moveDeltas;
+    bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize,
+                                               "AlignSheetsAndWiresTogether" );
 
-    SCH_ALIGNMENT_CALLBACKS callbacks;
+    BOOST_CHECK_MESSAGE( allConnected,
+                         "All wire endpoints should connect to pins after aligning "
+                         "both sheets AND wires together (Select All scenario)" );
+}
 
-    callbacks.m_doMoveItem = [&]( EDA_ITEM* aItem, const VECTOR2I& aDelta )
+
+/**
+ * Test aligning sheets and wires together with multiple grid sizes.
+ */
+BOOST_FIXTURE_TEST_CASE( AlignSheetsAndWiresMultipleGrids, ISSUE22864_FIXTURE )
+{
+    std::vector<double> gridSizesMm = { 5.08, 2.54, 1.27, 0.635 };
+
+    for( double gridMm : gridSizesMm )
     {
-        moveDeltas[aItem].push_back( aDelta );
+        LOCALE_IO dummy;
+        LoadSchematic();
 
-        if( aItem->Type() == SCH_SHEET_T )
-            static_cast<SCH_SHEET*>( aItem )->Move( aDelta );
-        else if( aItem->Type() == SCH_SHEET_PIN_T )
-            static_cast<SCH_SHEET_PIN*>( aItem )->Move( aDelta );
-        else if( aItem->Type() == SCH_LINE_T )
-            static_cast<SCH_LINE*>( aItem )->Move( aDelta );
-        else
-            static_cast<SCH_ITEM*>( aItem )->Move( aDelta );
-    };
+        SCH_SCREEN* screen = m_schematic->RootScreen();
+        BOOST_REQUIRE( screen != nullptr );
 
-    // Note: We don't provide m_getConnectedDragItems for this test
-    // The alignment function should still work, but won't drag connected items
-    // The bug we're testing is in the delta calculation, not the drag behavior
+        // Select ALL sheets AND wires
+        std::vector<EDA_ITEM*> selection;
 
-    // Create selection with just sheet2
-    std::vector<EDA_ITEM*> selection{ sheet2 };
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        {
+            item->SetFlags( SELECTED );
+            selection.push_back( item );
+        }
 
-    // Call the alignment function
-    AlignSchematicItemsToGrid( screen, selection, grid, GRID_CONNECTABLE, callbacks );
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* wire = static_cast<SCH_LINE*>( item );
 
-    // Verify sheet2 moved
-    VECTOR2I finalPos = sheet2->GetPosition();
-    BOOST_TEST_MESSAGE( "Sheet2 final position: (" << finalPos.x << ", " << finalPos.y << ")" );
+            if( wire->GetLayer() == LAYER_WIRE )
+            {
+                wire->SetFlags( SELECTED );
+                selection.push_back( wire );
+            }
+        }
 
-    // Sheet should have moved (initial position was off-grid)
-    bool sheetMoved = ( finalPos != initialPos );
-    BOOST_CHECK_MESSAGE( sheetMoved, "Sheet should have moved to align to grid" );
+        const VECTOR2D gridSize( schIUScale.mmToIU( gridMm ), schIUScale.mmToIU( gridMm ) );
 
-    // Verify sheet position is now on grid
-    VECTOR2I expectedSheetPos(
-            KiROUND( initialPos.x / gridSize.x ) * static_cast<int>( gridSize.x ),
-            KiROUND( initialPos.y / gridSize.y ) * static_cast<int>( gridSize.y ) );
+        std::stringstream testName;
+        testName << "AlignSheetsAndWiresMultipleGrids (" << gridMm << "mm)";
 
-    BOOST_CHECK_EQUAL( finalPos.x, expectedSheetPos.x );
-    BOOST_CHECK_EQUAL( finalPos.y, expectedSheetPos.y );
+        bool allConnected = RunAlignmentAndVerify( screen, selection, gridSize, testName.str() );
 
-    // The critical bug test: pins should end up ON GRID after alignment
-    // With the buggy code, the pin delta calculation uses AlignGrid(delta) instead of
-    // AlignGrid(position) - delta, which causes small deltas to snap to (0,0)
-    // This means pins don't get properly aligned to grid
-    for( SCH_SHEET_PIN* pin : pins )
-    {
-        VECTOR2I pinPos = pin->GetPosition();
-        BOOST_TEST_MESSAGE( "Pin final position: (" << pinPos.x << ", " << pinPos.y << ")" );
-
-        // Calculate what the Y position should be if properly aligned to grid
-        int gridInt = static_cast<int>( gridSize.y );
-        int expectedPinY = KiROUND( static_cast<double>( pinPos.y ) / gridInt ) * gridInt;
-
-        // The pin Y position should be exactly on grid
-        // With the buggy code, this check FAILS because the pin doesn't get
-        // the additional alignment delta applied
-        bool pinYOnGrid = ( pinPos.y == expectedPinY );
-
-        BOOST_CHECK_MESSAGE( pinYOnGrid,
-                             "Pin Y position should be on grid after alignment. "
-                             "Actual Y: " << pinPos.y << ", "
-                             "Nearest grid Y: " << expectedPinY << ", "
-                             "Difference: " << ( pinPos.y - expectedPinY ) );
-
-        // Also check X position is on grid (sheet edge which should be on grid)
-        int expectedPinX = KiROUND( static_cast<double>( pinPos.x ) / gridSize.x ) * static_cast<int>( gridSize.x );
-        bool pinXOnGrid = ( pinPos.x == expectedPinX );
-
-        BOOST_CHECK_MESSAGE( pinXOnGrid,
-                             "Pin X position should be on grid after alignment. "
-                             "Actual X: " << pinPos.x << ", "
-                             "Nearest grid X: " << expectedPinX );
+        BOOST_CHECK_MESSAGE( allConnected,
+                             "All wire endpoints should connect to pins with "
+                                     << gridMm << "mm grid when sheets AND wires are selected" );
     }
 }
 

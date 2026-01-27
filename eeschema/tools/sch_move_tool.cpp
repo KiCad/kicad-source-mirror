@@ -2393,17 +2393,18 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     switch( aItem->Type() )
     {
     case SCH_LINE_T:
-    {
-        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
-
-        if( aItem->HasFlag( STARTPOINT ) || ( m_mode == MOVE ) )
-            line->MoveStart( aDelta );
-
-        if( aItem->HasFlag( ENDPOINT ) || ( m_mode == MOVE ) )
-            line->MoveEnd( aDelta );
+        if( m_mode == MOVE )
+        {
+            // In MOVE mode, both endpoints always move
+            static_cast<SCH_LINE*>( aItem )->Move( aDelta );
+        }
+        else
+        {
+            // In DRAG mode, only flagged endpoints move - use shared function
+            MoveSchematicItem( aItem, aDelta );
+        }
 
         break;
-    }
 
     case SCH_PIN_T:
     case SCH_FIELD_T:
@@ -2429,13 +2430,9 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     }
 
     case SCH_SHEET_PIN_T:
-    {
-        SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
-
-        pin->SetStoredPos( pin->GetStoredPos() + aDelta );
-        pin->ConstrainOnEdge( pin->GetStoredPos(), true );
+        // Use shared function for sheet pin movement
+        MoveSchematicItem( aItem, aDelta );
         break;
-    }
 
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:

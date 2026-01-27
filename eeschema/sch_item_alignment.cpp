@@ -34,12 +34,98 @@
 #include <set>
 
 
+void MoveSchematicItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
+{
+    switch( aItem->Type() )
+    {
+    case SCH_LINE_T:
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+
+        if( aItem->HasFlag( STARTPOINT ) )
+            line->MoveStart( aDelta );
+
+        if( aItem->HasFlag( ENDPOINT ) )
+            line->MoveEnd( aDelta );
+
+        break;
+    }
+
+    case SCH_SHEET_PIN_T:
+    {
+        SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( aItem );
+        pin->SetStoredPos( pin->GetStoredPos() + aDelta );
+        pin->ConstrainOnEdge( pin->GetStoredPos(), true );
+        break;
+    }
+
+    default:
+        static_cast<SCH_ITEM*>( aItem )->Move( aDelta );
+        break;
+    }
+}
+
+
 void AlignSchematicItemsToGrid( SCH_SCREEN* aScreen,
                                 const std::vector<EDA_ITEM*>& aItems,
                                 EE_GRID_HELPER& aGrid,
                                 GRID_HELPER_GRIDS aSelectionGrid,
                                 const SCH_ALIGNMENT_CALLBACKS& aCallbacks )
 {
+    // When both sheets are selected, wires drag with pins. When only one sheet is selected,
+    // pins stay at the original Y so wires stretch horizontally without skewing. When wires
+    // are also selected, they align independently and pins follow their endpoints.
+    //
+    // We record original wire endpoints and query the R-tree before moving each sheet, then
+    // update storedPos after the move to prevent double-movement.
+    struct WireEndpoint
+    {
+        SCH_LINE* wire;
+        int       endpointFlag;  // STARTPOINT or ENDPOINT
+    };
+    std::map<VECTOR2I, std::vector<WireEndpoint>> pinPosToWires;
+
+    // Wires may move while processing earlier sheets, so we save their original positions.
+    struct OriginalWireEndpoints
+    {
+        VECTOR2I start;
+        VECTOR2I end;
+    };
+    std::map<SCH_LINE*, OriginalWireEndpoints> originalWireEndpoints;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_LINE_T ) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+        originalWireEndpoints[line] = { line->GetStartPoint(), line->GetEndPoint() };
+    }
+
+    std::set<VECTOR2I> selectedSheetPinPositions;
+
+    for( EDA_ITEM* item : aItems )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                selectedSheetPinPositions.insert( pin->GetPosition() );
+        }
+    }
+
+    for( EDA_ITEM* item : aItems )
+    {
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( selectedSheetPinPositions.count( line->GetStartPoint() ) )
+                pinPosToWires[line->GetStartPoint()].push_back( { line, STARTPOINT } );
+
+            if( selectedSheetPinPositions.count( line->GetEndPoint() ) )
+                pinPosToWires[line->GetEndPoint()].push_back( { line, ENDPOINT } );
+        }
+    }
+
     for( EDA_ITEM* item : aItems )
     {
         if( item->Type() == SCH_LINE_T )
@@ -90,6 +176,18 @@ void AlignSchematicItemsToGrid( SCH_SCREEN* aScreen,
             VECTOR2I   tl_delta = aGrid.AlignGrid( topLeft, aSelectionGrid ) - topLeft;
             VECTOR2I   br_delta = aGrid.AlignGrid( bottomRight, aSelectionGrid ) - bottomRight;
 
+            // Query connected items before moving the sheet since R-tree needs original positions.
+            std::map<SCH_SHEET_PIN*, VECTOR2I> originalPinPositions;
+            std::map<SCH_SHEET_PIN*, EDA_ITEMS> pinDragItems;
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                originalPinPositions[pin] = pin->GetPosition();
+
+                if( aCallbacks.m_getConnectedDragItems )
+                    aCallbacks.m_getConnectedDragItems( pin, pin->GetPosition(), pinDragItems[pin] );
+            }
+
             if( tl_delta != VECTOR2I( 0, 0 ) || br_delta != VECTOR2I( 0, 0 ) )
             {
                 aCallbacks.m_doMoveItem( sheet, tl_delta );
@@ -103,31 +201,78 @@ void AlignSchematicItemsToGrid( SCH_SCREEN* aScreen,
 
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
-                // Pin already moved with the sheet (via SCH_SHEET::Move), so pin->GetPosition()
-                // is the new position. We just need to calculate the additional delta to align
-                // the pin to grid.
+                pin->SetStoredPos( pin->GetPosition() );
+            }
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                VECTOR2I originalPos = originalPinPositions[pin];
                 VECTOR2I pinPos = pin->GetPosition();
-                VECTOR2I delta = aGrid.AlignGrid( pinPos, aSelectionGrid ) - pinPos;
+                VECTOR2I targetPos;
+                bool     canDragWires = true;
 
-                if( delta != VECTOR2I( 0, 0 ) )
+                // If the pin was connected to a selected wire, follow that wire's aligned position.
+                auto it = pinPosToWires.find( originalPos );
+
+                if( it != pinPosToWires.end() && !it->second.empty() )
                 {
-                    EDA_ITEMS drag_items;
+                    WireEndpoint& we = it->second[0];
 
-                    if( aCallbacks.m_getConnectedDragItems )
+                    if( we.endpointFlag == STARTPOINT )
+                        targetPos = we.wire->GetStartPoint();
+                    else
+                        targetPos = we.wire->GetEndPoint();
+                }
+                else
+                {
+                    // Check if any connected wire has its other end at an unselected item.
+                    for( EDA_ITEM* dragItem : pinDragItems[pin] )
                     {
-                        aCallbacks.m_getConnectedDragItems( pin, pin->GetConnectionPoints()[0],
-                                                            drag_items );
-                    }
-
-                    aCallbacks.m_doMoveItem( pin, delta );
-
-                    for( EDA_ITEM* dragItem : drag_items )
-                    {
-                        if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
+                        if( dragItem->Type() != SCH_LINE_T )
                             continue;
 
-                        aCallbacks.m_doMoveItem( dragItem, delta );
+                        SCH_LINE* wire = static_cast<SCH_LINE*>( dragItem );
+                        auto      origIt = originalWireEndpoints.find( wire );
+
+                        if( origIt == originalWireEndpoints.end() )
+                            continue;
+
+                        VECTOR2I otherEnd = ( origIt->second.start == originalPos )
+                                                    ? origIt->second.end
+                                                    : origIt->second.start;
+
+                        if( selectedSheetPinPositions.find( otherEnd )
+                            == selectedSheetPinPositions.end() )
+                        {
+                            canDragWires = false;
+                            break;
+                        }
                     }
+
+                    if( !canDragWires && !pinDragItems[pin].empty() )
+                    {
+                        // Keep pin at original Y so the wire stretches horizontally without skewing.
+                        targetPos = VECTOR2I( pinPos.x, originalPos.y );
+                    }
+                    else
+                    {
+                        targetPos = aGrid.AlignGrid( pinPos, aSelectionGrid );
+                    }
+                }
+
+                VECTOR2I delta = targetPos - pinPos;
+                VECTOR2I totalDelta = targetPos - originalPos;
+
+                if( delta != VECTOR2I( 0, 0 ) )
+                    aCallbacks.m_doMoveItem( pin, delta );
+
+                for( EDA_ITEM* dragItem : pinDragItems[pin] )
+                {
+                    if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
+                        continue;
+
+                    if( totalDelta != VECTOR2I( 0, 0 ) )
+                        aCallbacks.m_doMoveItem( dragItem, totalDelta );
                 }
             }
         }

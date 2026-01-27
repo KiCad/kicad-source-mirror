@@ -66,6 +66,21 @@ struct SCH_ALIGNMENT_CALLBACKS
 
 
 /**
+ * Move a schematic item by a delta.
+ *
+ * This function implements the move logic for different item types, matching
+ * the behavior of SCH_MOVE_TOOL::moveItem in DRAG mode:
+ * - SCH_LINE_T: Moves only flagged endpoints (STARTPOINT/ENDPOINT)
+ * - SCH_SHEET_PIN_T: Uses SetStoredPos + ConstrainOnEdge
+ * - Other items: Calls Move()
+ *
+ * @param aItem The item to move
+ * @param aDelta The movement delta
+ */
+void MoveSchematicItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
+
+
+/**
  * Align a set of schematic items to the grid.
  *
  * This function implements the core alignment logic used by the "Align Items to Grid"
