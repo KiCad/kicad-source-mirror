@@ -368,5 +368,9 @@ protected:
     bool                       m_gridWidthsDirty = true;
     int                        m_gridWidth = 0;
 
+#ifdef __WXMSW__
+    bool                       m_firstSelectionRefreshDone = false;
+#endif
+
     ROW_ICON_PROVIDER*         m_rowIconProvider;
 };

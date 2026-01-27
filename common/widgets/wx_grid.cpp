@@ -345,6 +345,17 @@ void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
         {
             SelectBlock( 0, col, GetNumberRows() - 1, col, false );
         }
+
+#ifdef __WXMSW__
+        // On Windows with wxWidgets 3.3+, the selection highlight can be drawn incorrectly
+        // on the first selection if the grid hasn't been fully laid out yet. Force a single
+        // deferred refresh after the first selection to ensure correct rendering.
+        if( !m_firstSelectionRefreshDone )
+        {
+            m_firstSelectionRefreshDone = true;
+            CallAfter( [this]() { ForceRefresh(); } );
+        }
+#endif
     }
 }
 
