@@ -56,6 +56,7 @@
 #include <eeschema_settings.h>
 #include <advanced_config.h>
 #include <magic_enum.hpp>
+#include <widgets/wx_infobar.h>
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
@@ -794,15 +795,36 @@ void SIMULATOR_FRAME_UI::ApplyPreferences( const SIM_PREFERENCES& aPrefs )
 
 void SIMULATOR_FRAME_UI::InitWorkbook()
 {
-    if( !simulator()->Settings()->GetWorkbookFilename().IsEmpty() )
+    wxString workbookFilename = simulator()->Settings()->GetWorkbookFilename();
+    bool     loadFromSchematic = false;
+
+    if( !workbookFilename.IsEmpty() )
     {
-        wxFileName filename = simulator()->Settings()->GetWorkbookFilename();
+        wxFileName filename = workbookFilename;
         filename.SetPath( m_schematicFrame->Prj().GetProjectPath() );
 
-        if( !LoadWorkbook( filename.GetFullPath() ) )
-            simulator()->Settings()->SetWorkbookFilename( "" );
+        if( !filename.FileExists() )
+        {
+            m_simulatorFrame->GetInfoBar()->ShowMessageFor(
+                    wxString::Format( _( "Workbook file '%s' not found. "
+                                         "Loading simulation settings from schematic." ),
+                                      filename.GetFullPath() ),
+                    8000, wxICON_WARNING );
+
+            simulator()->Settings()->SetWorkbookFilename( wxEmptyString );
+            loadFromSchematic = true;
+        }
+        else if( !LoadWorkbook( filename.GetFullPath() ) )
+        {
+            simulator()->Settings()->SetWorkbookFilename( wxEmptyString );
+        }
     }
-    else if( m_simulatorFrame->LoadSimulator( wxEmptyString, 0 ) )
+    else
+    {
+        loadFromSchematic = true;
+    }
+
+    if( loadFromSchematic && m_simulatorFrame->LoadSimulator( wxEmptyString, 0 ) )
     {
         wxString schTextSimCommand = circuitModel()->GetSchTextSimCommand();
 
