@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <new>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -655,15 +656,36 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
             shapeTools.Append( sh );
     }
 
-    mkFuse.SetRunParallel( true );
-    mkFuse.SetToFillHistory( false );
-    mkFuse.SetArguments( shapeArguments );
-    mkFuse.SetTools( shapeTools );
-    mkFuse.Build();
+    try
+    {
+        mkFuse.SetRunParallel( true );
+        mkFuse.SetToFillHistory( false );
+        mkFuse.SetArguments( shapeArguments );
+        mkFuse.SetTools( shapeTools );
+        mkFuse.Build();
+    }
+    catch( const std::bad_alloc& )
+    {
+        aReporter->Report( _( "Out of memory while fusing shapes. Consider disabling shape fusing, "
+                              "reducing the number of objects (e.g., vias), or freeing system memory." ),
+                          RPT_SEVERITY_ERROR );
+        return false;
+    }
+    catch( const Standard_Failure& e )
+    {
+        aReporter->Report( wxString::Format( _( "OpenCASCADE error while fusing shapes: %s\n"
+                                                "This may indicate insufficient memory. Consider "
+                                                "disabling shape fusing or reducing board complexity." ),
+                                             e.GetMessageString() ),
+                          RPT_SEVERITY_ERROR );
+        return false;
+    }
 
     if( mkFuse.HasErrors() || mkFuse.HasWarnings() )
     {
-        aReporter->Report( _( "** Got problems while fusing shapes **" ), RPT_SEVERITY_ERROR );
+        aReporter->Report( _( "Problems encountered while fusing shapes. This operation is "
+                              "memory-intensive; insufficient memory may cause failures." ),
+                          RPT_SEVERITY_ERROR );
 
         if( mkFuse.HasErrors() )
         {
@@ -690,21 +712,38 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
     {
         TopoDS_Shape fusedShape = mkFuse.Shape();
 
-        ShapeUpgrade_UnifySameDomain unify( fusedShape, true, true, false );
-        unify.History() = nullptr;
-        unify.Build();
-
-        TopoDS_Shape unifiedShapes = unify.Shape();
-
-        if( unifiedShapes.IsNull() )
+        try
         {
-            aReporter->Report( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **" ),
-                               RPT_SEVERITY_ERROR );
+            ShapeUpgrade_UnifySameDomain unify( fusedShape, true, true, false );
+            unify.History() = nullptr;
+            unify.Build();
+
+            TopoDS_Shape unifiedShapes = unify.Shape();
+
+            if( unifiedShapes.IsNull() )
+            {
+                aReporter->Report( _( "ShapeUpgrade_UnifySameDomain produced a null shape." ),
+                                   RPT_SEVERITY_ERROR );
+            }
+            else
+            {
+                aOutShape = unifiedShapes;
+                return true;
+            }
         }
-        else
+        catch( const std::bad_alloc& )
         {
-            aOutShape = unifiedShapes;
-            return true;
+            aReporter->Report( _( "Out of memory while unifying shape domains. Consider disabling "
+                                  "shape fusing or reducing the number of objects." ),
+                              RPT_SEVERITY_ERROR );
+            return false;
+        }
+        catch( const Standard_Failure& e )
+        {
+            aReporter->Report( wxString::Format( _( "OpenCASCADE error while unifying shapes: %s" ),
+                                                 e.GetMessageString() ),
+                              RPT_SEVERITY_ERROR );
+            return false;
         }
     }
 

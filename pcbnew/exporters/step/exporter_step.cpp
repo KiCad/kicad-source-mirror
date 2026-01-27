@@ -49,6 +49,7 @@
 #include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
 
+#include <new>                        // std::bad_alloc
 #include <Message.hxx>                // OpenCascade messenger
 #include <Message_PrinterOStream.hxx> // OpenCascade output messenger
 #include <Standard_Failure.hxx>       // In open cascade
@@ -1333,11 +1334,34 @@ bool EXPORTER_STEP::Export()
                                 RPT_SEVERITY_ACTION );
         }
     }
+    catch( const std::bad_alloc& )
+    {
+        m_reporter->Report( wxString::Format( _( "\n** Out of memory while exporting %s file. **\n"
+                                                 "The board may have too many objects (e.g., vias, tracks, components) "
+                                                 "to process with available system memory.\n"
+                                                 "Try disabling 'Fuse Shapes' option, reducing board complexity, "
+                                                 "or freeing up system memory.\n" ),
+                                              m_params.GetFormatName() ),
+                            RPT_SEVERITY_ERROR );
+        return false;
+    }
     catch( const Standard_Failure& e )
     {
-        m_reporter->Report( e.GetMessageString(), RPT_SEVERITY_ERROR );
-        m_reporter->Report( wxString::Format( _( "\n"
-                                                 "** Error exporting %s file. Export aborted. **\n" ),
+        wxString errorMsg = e.GetMessageString();
+        m_reporter->Report( wxString::Format( _( "\nOpenCASCADE error: %s\n" ), errorMsg ),
+                            RPT_SEVERITY_ERROR );
+
+        // Check if this might be memory-related based on common OCC error patterns
+        if( errorMsg.Contains( "alloc" ) || errorMsg.Contains( "memory" ) ||
+            errorMsg.IsEmpty() )
+        {
+            m_reporter->Report( _( "This error may indicate insufficient memory. Consider disabling "
+                                   "'Fuse Shapes', reducing the number of vias/components, or freeing "
+                                   "system memory.\n" ),
+                                RPT_SEVERITY_INFO );
+        }
+
+        m_reporter->Report( wxString::Format( _( "** Error exporting %s file. Export aborted. **\n" ),
                                               m_params.GetFormatName() ),
                             RPT_SEVERITY_ERROR );
         return false;
@@ -1345,8 +1369,11 @@ bool EXPORTER_STEP::Export()
     #ifndef DEBUG
     catch( ... )
     {
-        m_reporter->Report( wxString::Format( _( "\n"
-                                                 "** Error exporting %s file. Export aborted. **\n" ),
+        m_reporter->Report( wxString::Format( _( "\n** Unexpected error while exporting %s file. **\n"
+                                                 "This may be caused by insufficient system memory, especially "
+                                                 "when exporting boards with many vias or components with 'Fuse Shapes' enabled.\n"
+                                                 "Try disabling 'Fuse Shapes', reducing board complexity, "
+                                                 "or freeing up system memory.\n" ),
                                               m_params.GetFormatName() ),
                             RPT_SEVERITY_ERROR );
         return false;
