@@ -175,6 +175,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_fp_editor_field_defaults_base.cpp
     dialogs/panel_fp_editor_graphics_defaults.cpp
     dialogs/panel_fp_editor_graphics_defaults_base.cpp
+    dialogs/panel_fp_user_layer_names.cpp
+    dialogs/panel_fp_user_layer_names_base.cpp
     dialogs/panel_fp_properties_3d_model.cpp
     dialogs/panel_fp_properties_3d_model_base.cpp
     dialogs/panel_pcbnew_action_plugins.cpp

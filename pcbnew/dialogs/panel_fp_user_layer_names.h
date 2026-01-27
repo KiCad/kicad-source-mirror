@@ -19,19 +19,18 @@
 
 #pragma once
 
-#include <panel_fp_editor_field_defaults_base.h>
+#include <panel_fp_user_layer_names_base.h>
 
 class BOARD_DESIGN_SETTINGS;
 class PAGED_DIALOG;
 class FOOTPRINT_EDITOR_SETTINGS;
-class UNITS_PROVIDER;
 
 
-class PANEL_FP_EDITOR_FIELD_DEFAULTS : public PANEL_FP_EDITOR_FIELD_DEFAULTS_BASE
+class PANEL_FP_USER_LAYER_NAMES : public PANEL_FP_USER_LAYER_NAMES_BASE
 {
 public:
-    PANEL_FP_EDITOR_FIELD_DEFAULTS( wxWindow* aParent );
-    ~PANEL_FP_EDITOR_FIELD_DEFAULTS() override;
+    PANEL_FP_USER_LAYER_NAMES( wxWindow* aParent );
+    ~PANEL_FP_USER_LAYER_NAMES() override;
 
     bool Show( bool aShow ) override;
 
@@ -41,10 +40,14 @@ public:
     void ResetPanel() override;
 
 private:
-    void OnAddTextItem( wxCommandEvent& event ) override;
-    void OnDeleteTextItem( wxCommandEvent& event ) override;
+    void onUserLayerCountChange( wxCommandEvent& event ) override;
+    void OnAddLayerItem( wxCommandEvent& event ) override;
+    void OnDeleteLayerItem( wxCommandEvent& event ) override;
+    void onLayerChange( wxGridEvent& event ) override;
 
     void loadFPSettings( const FOOTPRINT_EDITOR_SETTINGS* aCfg );
+
+    int getNextAvailableLayer() const;
 
 private:
     BOARD_DESIGN_SETTINGS& m_designSettings;

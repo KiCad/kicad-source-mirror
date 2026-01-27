@@ -57,6 +57,7 @@
 #include <panel_edit_options.h>
 #include <panel_fp_editor_field_defaults.h>
 #include <panel_fp_editor_graphics_defaults.h>
+#include <panel_fp_user_layer_names.h>
 #include <panel_fp_editor_color_settings.h>
 #include <panel_pcbnew_color_settings.h>
 #include <panel_pcbnew_action_plugins.h>
@@ -372,6 +373,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             return new PANEL_FP_EDITOR_GRAPHICS_DEFAULTS( aParent, this );
         }
+
+        case PANEL_FP_USER_LAYER_NAMES:
+            return new class PANEL_FP_USER_LAYER_NAMES( aParent );
 
         case PANEL_FP_TOOLBARS:
         {

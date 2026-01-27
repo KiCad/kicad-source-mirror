@@ -1447,6 +1447,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_TOOLBARS ), _( "Toolbars" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_FIELDS ), _( "Footprint Defaults" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_GRAPHICS_VALUES ), _( "Graphics Defaults" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_USER_LAYER_NAMES ), _( "User Layer Names" ) );
 
                 if( GetFrameType() ==  FRAME_PCB_EDITOR )
                     expand.push_back( (int) book->GetPageCount() );

@@ -548,7 +548,6 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
                 case FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS:
                 {
                     enabledLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
-                    enabledLayers |= LSET::UserDefinedLayersMask( 4 );
                     board.SetLayerName( In1_Cu, _( "Inner layers" ) );
                     break;
                 }
@@ -590,9 +589,12 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
             RECURSE_MODE::RECURSE );
     }
 
-    // Enable any layers that the user has gone to the trouble to name
+    // Enable the user-configured number of user layers, plus any specifically named layers
     if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
     {
+        int userLayerCount = cfg->m_DesignSettings.GetUserDefinedLayerCount();
+        enabledLayers |= LSET::UserDefinedLayersMask( userLayerCount );
+
         for( const PCB_LAYER_ID& user : LSET::UserDefinedLayersMask() )
         {
             if( cfg->m_DesignSettings.m_UserLayerNames.contains( LSET::Name( user ).ToStdString() ) )
