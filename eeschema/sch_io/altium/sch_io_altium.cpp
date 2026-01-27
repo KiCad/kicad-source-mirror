@@ -1645,8 +1645,21 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     for( SCH_FIELD& field : symbol->GetFields() )
         field.SetVisible( false );
 
-    // TODO: keep it simple for now, and only set position.
-    // component->SetOrientation( elem.orientation );
+    int orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
+
+    switch( elem.orientation )
+    {
+    case 0: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_90;  break;
+    case 1: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_180; break;
+    case 2: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_270; break;
+    case 3: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;   break;
+    default: break;
+    }
+
+    if( elem.isMirrored )
+        orientation += SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
+
+    symbol->SetOrientation( orientation );
 
     // If Altium has defined a library from which we have the part,
     // use this as the designated source library.
