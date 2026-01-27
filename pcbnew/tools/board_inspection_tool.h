@@ -130,6 +130,14 @@ private:
 
     FOOTPRINT_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
+    void reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB );
+
+    void filterCollectorForInspection( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aPos );
+
+    BOARD_ITEM* pickItemForInspection( const TOOL_EVENT& aEvent, const wxString& aPrompt,
+                                       const std::vector<KICAD_T>& aTypes,
+                                       BOARD_ITEM* aLockedHighlight );
+
 private:
     PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
 
