@@ -1511,6 +1511,16 @@ private:
     void splitCollinearOutlines();
 
     /**
+     * Split outline segments at vertices that lie on them (self-touching polygons).
+     *
+     * This handles the case where a polygon vertex lies on a non-adjacent segment,
+     * creating a "pinch point" where the polygon touches itself. By inserting the
+     * vertex into the segment, the polygon can be properly processed by boolean
+     * operations.
+     */
+    void splitSelfTouchingOutlines();
+
+    /**
      * Check if two line segments are collinear and overlap.
      *
      * @param aSegA First line segment

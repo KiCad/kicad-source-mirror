@@ -2023,8 +2023,159 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
 }
 
 
+void SHAPE_POLY_SET::splitSelfTouchingOutlines()
+{
+    for( size_t polyIdx = 0; polyIdx < m_polys.size(); ++polyIdx )
+    {
+        bool changed = true;
+
+        while( changed )
+        {
+            changed = false;
+
+            SHAPE_LINE_CHAIN& outline = m_polys[polyIdx][0];
+            const int count = outline.PointCount();
+
+            if( count < 4 )
+                break;
+
+            int insertSegIdx = -1;
+            int insertVertIdx = -1;
+
+            // For small polygons, direct O(n²) search is faster than R-tree overhead
+            constexpr int RTREE_THRESHOLD = 32;
+
+            if( count < RTREE_THRESHOLD )
+            {
+                for( int vertIdx = 0; vertIdx < count && insertSegIdx < 0; ++vertIdx )
+                {
+                    const VECTOR2I& pt = outline.CPoint( vertIdx );
+                    const int prevSeg = ( vertIdx + count - 1 ) % count;
+
+                    for( int segIdx = 0; segIdx < count; ++segIdx )
+                    {
+                        // Skip adjacent segments
+                        if( segIdx == prevSeg || segIdx == vertIdx )
+                            continue;
+
+                        const VECTOR2I& a = outline.CPoint( segIdx );
+                        const VECTOR2I& b = outline.CPoint( ( segIdx + 1 ) % count );
+
+                        if( pt != a && pt != b && SEG( a, b ).Contains( pt ) )
+                        {
+                            insertSegIdx = segIdx;
+                            insertVertIdx = vertIdx;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                RTree<int, int, 2, double> rtree;
+
+                for( int i = 0; i < count; ++i )
+                {
+                    const VECTOR2I& a = outline.CPoint( i );
+                    const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
+                    int bmin[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
+                    int bmax[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
+                    rtree.Insert( bmin, bmax, i );
+                }
+
+                for( int vertIdx = 0; vertIdx < count && insertSegIdx < 0; ++vertIdx )
+                {
+                    const VECTOR2I& pt = outline.CPoint( vertIdx );
+                    const int prevSeg = ( vertIdx + count - 1 ) % count;
+                    int bmin[2] = { pt.x, pt.y };
+                    int bmax[2] = { pt.x, pt.y };
+
+                    rtree.Search( bmin, bmax,
+                        [&]( const int& segIdx ) -> bool
+                        {
+                            if( segIdx == prevSeg || segIdx == vertIdx )
+                                return true;
+
+                            const VECTOR2I& a = outline.CPoint( segIdx );
+                            const VECTOR2I& b = outline.CPoint( ( segIdx + 1 ) % count );
+
+                            if( pt != a && pt != b && SEG( a, b ).Contains( pt ) )
+                            {
+                                insertSegIdx = segIdx;
+                                insertVertIdx = vertIdx;
+                                return false;
+                            }
+
+                            return true;
+                        } );
+                }
+            }
+
+            if( insertSegIdx < 0 )
+                break;
+
+            // Split the polygon at the pinch point into two separate polygons.
+            // Polygon 1: vertices from (insertSegIdx+1) to insertVertIdx
+            // Polygon 2: vertices from insertVertIdx to insertSegIdx
+
+            const int splitStart1 = ( insertSegIdx + 1 ) % count;
+
+            // Calculate sizes for each polygon
+            int size1, size2;
+
+            if( insertVertIdx >= splitStart1 )
+                size1 = insertVertIdx - splitStart1 + 1;
+            else
+                size1 = count - splitStart1 + insertVertIdx + 1;
+
+            if( insertSegIdx >= insertVertIdx )
+                size2 = insertSegIdx - insertVertIdx + 1;
+            else
+                size2 = count - insertVertIdx + insertSegIdx + 1;
+
+            if( size1 < 3 || size2 < 3 )
+                break;
+
+            SHAPE_LINE_CHAIN poly1;
+            SHAPE_LINE_CHAIN poly2;
+            poly1.ReservePoints( size1 );
+            poly2.ReservePoints( size2 );
+
+            int idx = splitStart1;
+
+            for( int i = 0; i < size1; ++i )
+            {
+                poly1.Append( outline.CPoint( idx ) );
+                idx = ( idx + 1 ) % count;
+            }
+
+            poly1.SetClosed( true );
+
+            idx = insertVertIdx;
+
+            for( int i = 0; i < size2; ++i )
+            {
+                poly2.Append( outline.CPoint( idx ) );
+                idx = ( idx + 1 ) % count;
+            }
+
+            poly2.SetClosed( true );
+
+            m_polys[polyIdx][0] = std::move( poly1 );
+
+            POLYGON np;
+            np.push_back( std::move( poly2 ) );
+            m_polys.push_back( std::move( np ) );
+
+            changed = true;
+        }
+    }
+}
+
+
 void SHAPE_POLY_SET::Simplify()
 {
+    splitSelfTouchingOutlines();
     splitCollinearOutlines();
 
     SHAPE_POLY_SET empty;

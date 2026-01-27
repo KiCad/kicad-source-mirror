@@ -458,6 +458,78 @@ BOOST_AUTO_TEST_CASE( SelfIntersectingPolygon )
     }
 }
 
+
+/**
+ * Test case for GitLab issue #18083: Self-intersecting filled shape is not completely filled.
+ *
+ * A self-touching polygon where one vertex lies on a non-adjacent edge creates a "pinch point".
+ * The polygon appears to form a figure-8 shape that should be fully filled on both sides.
+ *
+ * The polygon from the issue has points: (165,87), (179,87), (174,94), (169,87), (167,94)
+ * where vertex (169,87) lies on the segment from (165,87) to (179,87).
+ *
+ * This test verifies that the triangulation correctly fills both regions of the self-touching
+ * polygon by checking that the total triangulated area equals the sum of both triangular lobes.
+ */
+BOOST_AUTO_TEST_CASE( Issue18083_SelfIntersectingPolygonArea )
+{
+    SHAPE_POLY_SET polySet;
+    SHAPE_LINE_CHAIN outline;
+
+    // Coordinates from the issue (converted to internal units: 1mm = 1000000)
+    const int SCALE = 1000000;
+    outline.Append( 165 * SCALE, 87 * SCALE );
+    outline.Append( 179 * SCALE, 87 * SCALE );
+    outline.Append( 174 * SCALE, 94 * SCALE );
+    outline.Append( 169 * SCALE, 87 * SCALE );
+    outline.Append( 167 * SCALE, 94 * SCALE );
+    outline.SetClosed( true );
+
+    polySet.AddOutline( outline );
+
+    // Verify the polygon is detected as self-intersecting
+    BOOST_TEST( polySet.IsSelfIntersecting() );
+
+    // Triangulate via SHAPE_POLY_SET
+    polySet.CacheTriangulation( false );
+    BOOST_TEST( polySet.IsTriangulationUpToDate() );
+
+    // Calculate the triangulated area
+    double triangulatedArea = 0.0;
+
+    for( int ii = 0; ii < polySet.TriangulatedPolyCount(); ii++ )
+    {
+        const auto triPoly = polySet.TriangulatedPolygon( ii );
+
+        for( const auto& tri : triPoly->Triangles() )
+            triangulatedArea += std::abs( tri.Area() );
+    }
+
+    // Calculate expected area by simplifying the polygon first.
+    // The simplification should split the self-touching polygon into two separate triangles.
+    SHAPE_POLY_SET simplified;
+    simplified.AddOutline( outline );
+    simplified.Simplify();
+
+    // After simplification, we should have two separate triangular outlines
+    BOOST_TEST( simplified.OutlineCount() == 2 );
+
+    double expectedArea = 0.0;
+
+    for( int ii = 0; ii < simplified.OutlineCount(); ++ii )
+    {
+        expectedArea += std::abs( simplified.Outline( ii ).Area() );
+    }
+
+    // The expected total area is 49 mm² (14 mm² + 35 mm² for the two triangular lobes)
+    double expectedAreaMmSq = 49.0 * SCALE * SCALE;
+    BOOST_TEST( std::abs( expectedArea - expectedAreaMmSq ) < expectedAreaMmSq * 0.01 );
+
+    // The triangulated area should match the expected area
+    BOOST_TEST( std::abs( triangulatedArea - expectedArea ) < expectedArea * 0.01,
+                "Triangulated area should match simplified polygon area" );
+}
+
 BOOST_AUTO_TEST_CASE( NearlyCollinearVertices )
 {
     TRIANGULATION_TEST_FIXTURE fixture;
