@@ -1920,6 +1920,7 @@ void OPENGL_GAL::DrawGrid()
             glDisable( GL_STENCIL_TEST );
     }
 
+    m_nonCachedManager->EnableDepthTest( true );
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_TEXTURE_2D );
 }
