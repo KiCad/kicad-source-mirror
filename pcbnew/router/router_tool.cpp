@@ -240,7 +240,8 @@ ROUTER_TOOL::ROUTER_TOOL() :
         m_lastTargetLayer( UNDEFINED_LAYER ),
         m_originalActiveLayer( UNDEFINED_LAYER ),
         m_inRouterTool( false ),
-        m_inRouteSelected( false )
+        m_inRouteSelected( false ),
+        m_startWithVia( false )
 {
 }
 
@@ -1452,6 +1453,13 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
     // Set initial cursor
     setCursor();
 
+    // If the user pressed 'V' before starting to route, enable via placement now
+    if( m_startWithVia )
+    {
+        m_startWithVia = false;
+        handleLayerSwitch( ACT_PlaceThroughVia.MakeEvent(), true );
+    }
+
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
@@ -1901,6 +1909,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     m_router->SetMode( mode );
     m_cancelled = false;
+    m_startWithVia = false;
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
@@ -1968,6 +1977,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
+            m_startWithVia = true;
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle );
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
