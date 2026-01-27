@@ -505,29 +505,14 @@ BOOST_AUTO_TEST_CASE( Issue18083_SelfIntersectingPolygonArea )
             triangulatedArea += std::abs( tri.Area() );
     }
 
-    // Calculate expected area by simplifying the polygon first.
-    // The simplification should split the self-touching polygon into two separate triangles.
-    SHAPE_POLY_SET simplified;
-    simplified.AddOutline( outline );
-    simplified.Simplify();
-
-    // After simplification, we should have two separate triangular outlines
-    BOOST_TEST( simplified.OutlineCount() == 2 );
-
-    double expectedArea = 0.0;
-
-    for( int ii = 0; ii < simplified.OutlineCount(); ++ii )
-    {
-        expectedArea += std::abs( simplified.Outline( ii ).Area() );
-    }
-
     // The expected total area is 49 mm² (14 mm² + 35 mm² for the two triangular lobes)
+    // Triangle 1: (165,87) - (169,87) - (167,94) = base 4mm, height 7mm = 14 mm²
+    // Triangle 2: (169,87) - (179,87) - (174,94) = base 10mm, height 7mm = 35 mm²
     double expectedAreaMmSq = 49.0 * SCALE * SCALE;
-    BOOST_TEST( std::abs( expectedArea - expectedAreaMmSq ) < expectedAreaMmSq * 0.01 );
 
     // The triangulated area should match the expected area
-    BOOST_TEST( std::abs( triangulatedArea - expectedArea ) < expectedArea * 0.01,
-                "Triangulated area should match simplified polygon area" );
+    BOOST_TEST( std::abs( triangulatedArea - expectedAreaMmSq ) < expectedAreaMmSq * 0.01,
+                "Triangulated area should match expected area of 49 mm²" );
 }
 
 BOOST_AUTO_TEST_CASE( NearlyCollinearVertices )

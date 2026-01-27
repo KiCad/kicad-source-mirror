@@ -2175,7 +2175,6 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
 
 void SHAPE_POLY_SET::Simplify()
 {
-    splitSelfTouchingOutlines();
     splitCollinearOutlines();
 
     SHAPE_POLY_SET empty;
@@ -3234,7 +3233,10 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
             flattened.ClearArcs();
 
             if( flattened.HasHoles() || flattened.IsSelfIntersecting() )
+            {
+                flattened.splitSelfTouchingOutlines();
                 flattened.Fracture();
+            }
             else if( aSimplify )
                 flattened.Simplify();
 
@@ -3260,6 +3262,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
         SHAPE_POLY_SET tmpSet( *this );
 
         tmpSet.ClearArcs();
+        tmpSet.splitSelfTouchingOutlines();
         tmpSet.Fracture();
 
         if( !triangulate( tmpSet, -1, m_triangulatedPolys, aHintData ) )
