@@ -229,20 +229,32 @@ public:
 
 
 /**
- * Reporter forwarding messages to stdout or stderr as appropriate
+ * Reporter forwarding messages to stdout or stderr as appropriate.
+ * By default, debug messages are suppressed unless verbose mode is enabled.
  */
 class KICOMMON_API CLI_REPORTER : public REPORTER
 {
 public:
-    CLI_REPORTER()
+    CLI_REPORTER() :
+            m_verbose( false )
     { }
 
     virtual ~CLI_REPORTER()
     { }
 
-    static REPORTER& GetInstance();
+    static CLI_REPORTER& GetInstance();
+
+    /**
+     * Enable or disable verbose mode. When enabled, debug messages are printed.
+     */
+    void SetVerbose( bool aVerbose ) { m_verbose = aVerbose; }
+
+    bool GetVerbose() const { return m_verbose; }
 
     REPORTER& Report( const wxString& aMsg, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+private:
+    bool m_verbose;
 };
 
 

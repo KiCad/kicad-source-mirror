@@ -19,6 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <reporter.h>
+#include <cli_progress_reporter.h>
 #include <wx/string.h>
 #include <wx/textctrl.h>
 #include <wx/statusbr.h>
@@ -351,10 +352,35 @@ BOOST_AUTO_TEST_CASE( NullReporter_SeverityMask )
 
 BOOST_AUTO_TEST_CASE( CliReporter_Singleton )
 {
-    REPORTER& reporter1 = CLI_REPORTER::GetInstance();
-    REPORTER& reporter2 = CLI_REPORTER::GetInstance();
+    CLI_REPORTER& reporter1 = CLI_REPORTER::GetInstance();
+    CLI_REPORTER& reporter2 = CLI_REPORTER::GetInstance();
 
     BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
+}
+
+BOOST_AUTO_TEST_CASE( CliReporter_VerboseDefault )
+{
+    CLI_REPORTER& reporter = CLI_REPORTER::GetInstance();
+
+    // Default should be non-verbose
+    BOOST_CHECK( !reporter.GetVerbose() );
+}
+
+BOOST_AUTO_TEST_CASE( CliReporter_VerboseToggle )
+{
+    CLI_REPORTER& reporter = CLI_REPORTER::GetInstance();
+    bool originalState = reporter.GetVerbose();
+
+    // Toggle verbose on
+    reporter.SetVerbose( true );
+    BOOST_CHECK( reporter.GetVerbose() );
+
+    // Toggle verbose off
+    reporter.SetVerbose( false );
+    BOOST_CHECK( !reporter.GetVerbose() );
+
+    // Restore original state
+    reporter.SetVerbose( originalState );
 }
 
 BOOST_AUTO_TEST_CASE( StdoutReporter_Singleton )
@@ -424,6 +450,39 @@ BOOST_AUTO_TEST_CASE( ReporterInterface_UnitsDefault )
     TEST_REPORTER reporter;
 
     BOOST_CHECK( reporter.GetUnits() == EDA_UNITS::MM );
+}
+
+BOOST_AUTO_TEST_CASE( CliProgressReporter_Singleton )
+{
+    CLI_PROGRESS_REPORTER& reporter1 = CLI_PROGRESS_REPORTER::GetInstance();
+    CLI_PROGRESS_REPORTER& reporter2 = CLI_PROGRESS_REPORTER::GetInstance();
+
+    BOOST_CHECK_EQUAL( &reporter1, &reporter2 );
+}
+
+BOOST_AUTO_TEST_CASE( CliProgressReporter_VerboseDefault )
+{
+    CLI_PROGRESS_REPORTER& reporter = CLI_PROGRESS_REPORTER::GetInstance();
+
+    // Default should be non-verbose
+    BOOST_CHECK( !reporter.GetVerbose() );
+}
+
+BOOST_AUTO_TEST_CASE( CliProgressReporter_VerboseToggle )
+{
+    CLI_PROGRESS_REPORTER& reporter = CLI_PROGRESS_REPORTER::GetInstance();
+    bool originalState = reporter.GetVerbose();
+
+    // Toggle verbose on
+    reporter.SetVerbose( true );
+    BOOST_CHECK( reporter.GetVerbose() );
+
+    // Toggle verbose off
+    reporter.SetVerbose( false );
+    BOOST_CHECK( !reporter.GetVerbose() );
+
+    // Restore original state
+    reporter.SetVerbose( originalState );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

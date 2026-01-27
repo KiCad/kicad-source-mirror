@@ -109,6 +109,10 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
     REPORTER::Report( aMsg, aSeverity );
 
+    // Skip debug messages unless verbose mode is enabled
+    if( aSeverity == RPT_SEVERITY_DEBUG && !m_verbose )
+        return *this;
+
     FILE* target = stdout;
 
     if( aSeverity == RPT_SEVERITY_ERROR )
@@ -127,7 +131,7 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 }
 
 
-REPORTER& CLI_REPORTER::GetInstance()
+CLI_REPORTER& CLI_REPORTER::GetInstance()
 {
     static CLI_REPORTER s_cliReporter;
 

@@ -29,16 +29,26 @@
 #include <kicommon.h>
 
 /**
- * Reporter forwarding messages to stdout or stderr as appropriate
+ * Reporter forwarding messages to stdout or stderr as appropriate.
+ * By default, informational messages are suppressed unless verbose mode is enabled.
  */
 class KICOMMON_API CLI_PROGRESS_REPORTER : public PROGRESS_REPORTER
 {
 public:
-    CLI_PROGRESS_REPORTER() {}
+    CLI_PROGRESS_REPORTER() :
+            m_verbose( false )
+    { }
 
-    virtual ~CLI_PROGRESS_REPORTER() {}
+    virtual ~CLI_PROGRESS_REPORTER() { }
 
-    static PROGRESS_REPORTER& GetInstance();
+    static CLI_PROGRESS_REPORTER& GetInstance();
+
+    /**
+     * Enable or disable verbose mode. When enabled, progress messages are printed.
+     */
+    void SetVerbose( bool aVerbose ) { m_verbose = aVerbose; }
+
+    bool GetVerbose() const { return m_verbose; }
 
     /**
      * Set the number of phases.
@@ -105,6 +115,8 @@ public:
 
 private:
     void printLine( const wxString& aMessage );
+
+    bool m_verbose;
 };
 
 #endif

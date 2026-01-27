@@ -25,7 +25,7 @@
 #include <wx/crt.h>
 
 
-PROGRESS_REPORTER& CLI_PROGRESS_REPORTER::GetInstance()
+CLI_PROGRESS_REPORTER& CLI_PROGRESS_REPORTER::GetInstance()
 {
     static CLI_PROGRESS_REPORTER s_cliReporter;
 
@@ -35,13 +35,15 @@ PROGRESS_REPORTER& CLI_PROGRESS_REPORTER::GetInstance()
 
 void CLI_PROGRESS_REPORTER::AdvancePhase( const wxString& aMessage )
 {
-    printLine( aMessage );
+    if( m_verbose )
+        printLine( aMessage );
 }
 
 
 void CLI_PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
-    printLine( aMessage );
+    if( m_verbose )
+        printLine( aMessage );
 }
 
 
