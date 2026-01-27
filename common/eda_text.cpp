@@ -99,6 +99,7 @@ EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_text( aText ),
         m_IuScale( aIuScale ),
         m_render_cache_font( nullptr ),
+        m_render_cache_mirrored( false ),
         m_visible( true )
 {
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
@@ -132,6 +133,7 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_render_cache_text = aText.m_render_cache_text;
     m_render_cache_angle = aText.m_render_cache_angle;
     m_render_cache_offset = aText.m_render_cache_offset;
+    m_render_cache_mirrored = aText.m_render_cache_mirrored;
 
     m_render_cache.clear();
 
@@ -174,6 +176,7 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
     m_render_cache_text = aText.m_render_cache_text;
     m_render_cache_angle = aText.m_render_cache_angle;
     m_render_cache_offset = aText.m_render_cache_offset;
+    m_render_cache_mirrored = aText.m_render_cache_mirrored;
 
     m_render_cache.clear();
 
@@ -694,9 +697,11 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
     if( aFont->IsOutline() )
     {
         EDA_ANGLE resolvedAngle = GetDrawRotation();
+        bool      mirrored = IsMirrored();
 
         if( m_render_cache.empty() || m_render_cache_font != aFont || m_render_cache_text != forResolvedText
-            || m_render_cache_angle != resolvedAngle || m_render_cache_offset != aOffset )
+            || m_render_cache_angle != resolvedAngle || m_render_cache_offset != aOffset
+            || m_render_cache_mirrored != mirrored )
         {
             m_render_cache.clear();
 
@@ -710,6 +715,7 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
             m_render_cache_offset = aOffset;
+            m_render_cache_mirrored = mirrored;
         }
 
         return &m_render_cache;
@@ -726,6 +732,7 @@ void EDA_TEXT::SetupRenderCache( const wxString& aResolvedText, const KIFONT::FO
     m_render_cache_font = aFont;
     m_render_cache_angle = aAngle;
     m_render_cache_offset = aOffset;
+    m_render_cache_mirrored = IsMirrored();
     m_render_cache.clear();
 }
 

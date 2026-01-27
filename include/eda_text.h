@@ -467,6 +467,7 @@ private:
     mutable const KIFONT::FONT*                         m_render_cache_font;
     mutable EDA_ANGLE                                   m_render_cache_angle;
     mutable VECTOR2I                                    m_render_cache_offset;
+    mutable bool                                        m_render_cache_mirrored;
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
     struct BBOX_CACHE_ENTRY
