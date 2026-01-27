@@ -446,6 +446,13 @@ void SCH_RULE_AREA::clearContainedItems()
 }
 
 
+void SCH_RULE_AREA::RemoveItem( SCH_ITEM* aItem )
+{
+    m_items.erase( aItem );
+    m_prev_items.erase( aItem );
+}
+
+
 static struct SCH_RULE_AREA_DESC
 {
     SCH_RULE_AREA_DESC()

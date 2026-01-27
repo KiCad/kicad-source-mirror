@@ -116,6 +116,10 @@ protected:
     /// Clear the list of items which this rule area affects.
     void clearContainedItems();
 
+public:
+    /// Remove an item from this rule area's caches (called when the item is deleted).
+    void RemoveItem( SCH_ITEM* aItem );
+
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;
 
