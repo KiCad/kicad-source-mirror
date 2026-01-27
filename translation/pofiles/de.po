@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
 "PO-Revision-Date: 2026-01-28 10:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -42708,7 +42708,7 @@ msgstr "%s Gittermuster-Glättungsaufwand weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:643
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr "%s Gittermuster-Glättungsstärke weicht ab."
+msgstr "%s Gittermuster-Glättungsgrad weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:645
 #, c-format
