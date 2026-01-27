@@ -43,6 +43,7 @@ struct CommitDetails
 // Enum for result codes, error codes are negative, success codes are positive
 enum class PullResult : int
 {
+    DirtyWorkdir = -3,
     MergeFailed = -2,
     Error = -1,
     Success = 0,
@@ -86,6 +87,8 @@ private:
     PullResult  handleFastForward();
     PullResult  handleMerge( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
     PullResult  handleRebase( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount );
+
+    static bool hasUnstagedChanges( git_repository* aRepo );
 };
 
 #endif // _GIT_PULL_HANDLER_H_

@@ -378,6 +378,14 @@ PullResult GIT_PULL_HANDLER::handleFastForward()
 PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHeads,
                                           size_t                       aMergeHeadsCount )
 {
+    if( hasUnstagedChanges( GetRepo() ) )
+    {
+        AddErrorString(
+                _( "Cannot merge: you have unstaged changes. "
+                   "Please commit or stash them before pulling." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
     git_merge_options merge_opts;
     git_merge_options_init( &merge_opts, GIT_MERGE_OPTIONS_VERSION );
 
@@ -481,6 +489,14 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
 
 PullResult GIT_PULL_HANDLER::handleRebase( const git_annotated_commit** aMergeHeads, size_t aMergeHeadsCount )
 {
+    if( hasUnstagedChanges( GetRepo() ) )
+    {
+        AddErrorString(
+                _( "Cannot rebase: you have unstaged changes. "
+                   "Please commit or stash them before pulling." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
     // Get the current branch reference
     git_reference* head_ref = nullptr;
 
@@ -560,6 +576,40 @@ PullResult GIT_PULL_HANDLER::handleRebase( const git_annotated_commit** aMergeHe
     wxLogTrace( traceGit, "GIT_PULL_HANDLER::handleRebase() - Rebase completed successfully" );
     git_repository_state_cleanup( GetRepo() );
     return PullResult::Success;
+}
+
+
+bool GIT_PULL_HANDLER::hasUnstagedChanges( git_repository* aRepo )
+{
+    if( !aRepo )
+        return false;
+
+    git_status_options opts;
+    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
+
+    opts.show = GIT_STATUS_SHOW_WORKDIR_ONLY;
+    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED;
+
+    git_status_list* status_list = nullptr;
+
+    if( git_status_list_new( &status_list, aRepo, &opts ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Failed to get status list: %s", KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    KIGIT::GitStatusListPtr status_list_ptr( status_list );
+    size_t count = git_status_list_entrycount( status_list );
+
+    for( size_t ii = 0; ii < count; ++ii )
+    {
+        const git_status_entry* entry = git_status_byindex( status_list, ii );
+
+        if( entry->status & ( GIT_STATUS_WT_MODIFIED | GIT_STATUS_WT_DELETED | GIT_STATUS_WT_TYPECHANGE ) )
+            return true;
+    }
+
+    return false;
 }
 
 
