@@ -182,4 +182,46 @@ BOOST_AUTO_TEST_CASE( SheetPathPageProperties )
 }
 
 
+/**
+ * Test PathHumanReadable with sheet names containing slashes.
+ * This tests the fix for GitLab issue #21878 where slashes in sheet names
+ * caused incorrect netclass pattern matching.
+ */
+BOOST_AUTO_TEST_CASE( PathHumanReadableWithSlashes )
+{
+    SCH_SHEET_PATH pathWithSlash;
+    SCHEMATIC schematicLocal( nullptr );
+    std::vector<SCH_SHEET> sheets;
+
+    for( unsigned i = 0; i < 3; ++i )
+    {
+        sheets.emplace_back( nullptr, VECTOR2I( i, i ) );
+        sheets[i].SetParent( &schematicLocal );
+    }
+
+    sheets[0].GetField( FIELD_T::SHEET_NAME )->SetText( "Root" );
+    sheets[1].GetField( FIELD_T::SHEET_NAME )->SetText( "Power/Supply" );
+    sheets[2].GetField( FIELD_T::SHEET_NAME )->SetText( "SubSheet" );
+
+    pathWithSlash.push_back( &sheets[0] );
+    pathWithSlash.push_back( &sheets[1] );
+    pathWithSlash.push_back( &sheets[2] );
+
+    // Without escaping, the path contains the literal '/' in the sheet name
+    wxString unescaped = pathWithSlash.PathHumanReadable( true, false, false );
+    BOOST_CHECK_EQUAL( unescaped, "/Power/Supply/SubSheet/" );
+
+    // With escaping, the '/' in the sheet name becomes "{slash}"
+    wxString escaped = pathWithSlash.PathHumanReadable( true, false, true );
+    BOOST_CHECK_EQUAL( escaped, "/Power{slash}Supply/SubSheet/" );
+
+    // The escaped version should be unambiguous since '/' only means path separator
+    // and "{slash}" means a literal slash character in the sheet name.
+
+    // Test with stripping trailing separator
+    wxString escapedNoTrail = pathWithSlash.PathHumanReadable( true, true, true );
+    BOOST_CHECK_EQUAL( escapedNoTrail, "/Power{slash}Supply/SubSheet" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

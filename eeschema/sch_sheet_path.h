@@ -392,9 +392,19 @@ public:
      *
      * The "normal" path instead uses the #KIID objects in the path that do not change
      * even when editing sheet parameters.
+     *
+     * @param aUseShortRootName If true, uses "/" as the root name. If false, uses the root
+     *                          schematic file name.
+     * @param aStripTrailingSeparator If true, removes the trailing "/" from the path.
+     * @param aEscapeSheetNames If true, escapes '/' characters in sheet names to "{slash}"
+     *                          for use in net name construction where '/' is used as a
+     *                          hierarchy separator. This ensures pattern matching for
+     *                          net classes works correctly with sheets that have '/' in
+     *                          their names.
      */
     wxString PathHumanReadable( bool aUseShortRootName = true,
-                                bool aStripTrailingSeparator = false ) const;
+                                bool aStripTrailingSeparator = false,
+                                bool aEscapeSheetNames = false ) const;
 
     /**
      * Update all the symbol references for this sheet path.

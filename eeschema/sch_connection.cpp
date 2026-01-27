@@ -416,8 +416,12 @@ void SCH_CONNECTION::recacheName()
         }
     }
 
-    m_cached_name_with_path = prepend_path ? m_sheet.PathHumanReadable() << m_cached_name
-                                           : m_cached_name;
+    // Use aEscapeSheetNames=true so that sheets with '/' in their names have the slash
+    // escaped to "{slash}". This ensures pattern matching for net classes works correctly
+    // since '/' is used as the hierarchy separator.
+    m_cached_name_with_path = prepend_path
+            ? m_sheet.PathHumanReadable( true, false, true ) << m_cached_name
+            : m_cached_name;
 }
 
 

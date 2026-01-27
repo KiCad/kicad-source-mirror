@@ -33,6 +33,7 @@
 #include <sch_symbol.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <string_utils.h>
 #include <template_fieldnames.h>
 #include <trace_helpers.h>
 
@@ -426,7 +427,8 @@ KIID_PATH SCH_SHEET_PATH::Path() const
 
 
 wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
-                                            bool aStripTrailingSeparator ) const
+                                            bool aStripTrailingSeparator,
+                                            bool aEscapeSheetNames ) const
 {
     wxString s;
 
@@ -454,7 +456,14 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
 
     // Start at startIdx + 1 since we've already processed the root sheet.
     for( unsigned i = startIdx + 1; i < size(); i++ )
-        s << at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false ) << wxS( "/" );
+    {
+        wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
+
+        if( aEscapeSheetNames )
+            sheetName = EscapeString( sheetName, CTX_NETNAME );
+
+        s << sheetName << wxS( "/" );
+    }
 
     if( aStripTrailingSeparator && s.EndsWith( "/" ) )
         s = s.Left( s.length() - 1 );
