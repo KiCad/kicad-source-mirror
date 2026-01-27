@@ -45,6 +45,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/webview_panel.h>
 #include <nlohmann/json.hpp>
+#include <kiplatform/ui.h>
 
 #ifndef wxUSE_BASE64
 #define wxUSE_BASE64 1
@@ -59,6 +60,7 @@
 #include <wx/intl.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
+#include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/strconv.h>
 #include <wx/webview.h>
@@ -518,12 +520,22 @@ void PANEL_REMOTE_SYMBOL::showMessage( const wxString& aMessage )
     if( !m_webView )
         return;
 
-    wxString html;
     wxString escaped = aMessage;
     escaped.Replace( "&", "&amp;" );
     escaped.Replace( "<", "&lt;" );
     escaped.Replace( ">", "&gt;" );
-    html << wxS( "<html><body><p>" ) << escaped << wxS( "</p></body></html>" );
+
+    wxColour bgColour = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+    wxColour fgColour = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+
+    wxString html;
+    html << wxS( "<html><head><style>" )
+         << wxString::Format( wxS( "body { background-color: #%02x%02x%02x; color: #%02x%02x%02x; "
+                                   "font-family: system-ui, sans-serif; padding: 10px; }" ),
+                              bgColour.Red(), bgColour.Green(), bgColour.Blue(),
+                              fgColour.Red(), fgColour.Green(), fgColour.Blue() )
+         << wxS( "</style></head><body><p>" ) << escaped << wxS( "</p></body></html>" );
+
     m_webView->SetPage( html );
 }
 
