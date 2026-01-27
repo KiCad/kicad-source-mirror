@@ -3330,11 +3330,20 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         // inside the shape
         if( !m_schSettings.PrintBlackAndWhiteReq() )
         {
-            m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
+            COLOR4D backgroundColor = aSheet->GetBackgroundColor();
 
-            m_gal->DrawRectangle( pos, pos + size );
+            if( m_schSettings.m_OverrideItemColors || backgroundColor == COLOR4D::UNSPECIFIED )
+                backgroundColor = m_schSettings.GetLayerColor( LAYER_SHEET_BACKGROUND );
+
+            // Only draw the background if it has a visible alpha value
+            if( backgroundColor.a > 0.0 )
+            {
+                m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, false ) );
+                m_gal->SetIsFill( true );
+                m_gal->SetIsStroke( false );
+
+                m_gal->DrawRectangle( pos, pos + size );
+            }
         }
     }
 
