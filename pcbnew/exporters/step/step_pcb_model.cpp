@@ -2504,13 +2504,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                         RPT_SEVERITY_DEBUG );
 
     auto buildBSB =
-            [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles )
+            [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles,
+                          std::vector<Bnd_Box>& holeBoxes )
             {
                 // We need to encompass every location we'll need to test in the global bbox,
                 // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
                 Bnd_Box brdWithHolesBndBox = brdBndBox;
 
                 Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, input.size() - 1 );
+                holeBoxes.resize( input.size() );
 
                 for( size_t i = 0; i < input.size(); i++ )
                 {
@@ -2518,6 +2520,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                     BRepBndLib::Add( input[i], bbox );
                     brdWithHolesBndBox.Add( bbox );
                     ( *holeBoxSet )[i] = bbox;
+                    holeBoxes[i] = bbox;
                 }
 
                 bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
@@ -2525,7 +2528,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
     auto subtractShapesMap =
             [&tp, this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
-                         std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+                         std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles,
+                         const std::vector<Bnd_Box>& aHoleBoxes )
             {
                 m_reporter->Report( wxString::Format( _( "Subtracting holes for %s" ), aWhat ),
                                     RPT_SEVERITY_DEBUG );
@@ -2550,6 +2554,19 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
                             for( const Standard_Integer& index : indices )
                                 holelist.Append( aHolesList[index] );
+
+                            // Workaround for OCCT bug (https://github.com/Open-Cascade-SAS/OCCT/issues/506)
+                            // Bnd_BoundSortBox::Compare can fail to detect intersections in certain edge
+                            // cases (e.g., single item). Fall back to direct bounding box intersection
+                            // checks when Compare returns empty but intersections may exist.
+                            if( holelist.IsEmpty() )
+                            {
+                                for( size_t i = 0; i < aHoleBoxes.size(); i++ )
+                                {
+                                    if( !shapeBbox.IsOut( aHoleBoxes[i] ) )
+                                        holelist.Append( aHolesList[i] );
+                                }
+                            }
                         }
 
                         if( holelist.IsEmpty() )
@@ -2606,30 +2623,33 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
     auto subtractShapes =
             [subtractShapesMap]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
-                                 std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+                                 std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles,
+                                 const std::vector<Bnd_Box>& aHoleBoxes )
             {
                 std::map<wxString, std::vector<TopoDS_Shape>> aShapesMap{ { wxEmptyString, aShapesList } };
 
-                subtractShapesMap( aWhat, aShapesMap, aHolesList, aBSBHoles );
+                subtractShapesMap( aWhat, aShapesMap, aHolesList, aBSBHoles, aHoleBoxes );
                 aShapesList = aShapesMap[wxEmptyString];
             };
 
 
     if( m_boardCutouts.size() )
     {
-        Bnd_BoundSortBox bsbHoles;
-        buildBSB( m_boardCutouts, bsbHoles );
+        Bnd_BoundSortBox     bsbHoles;
+        std::vector<Bnd_Box> holeBoxes;
+        buildBSB( m_boardCutouts, bsbHoles, holeBoxes );
 
-        subtractShapes( _( "shapes" ), m_board_outlines, m_boardCutouts, bsbHoles );
+        subtractShapes( _( "shapes" ), m_board_outlines, m_boardCutouts, bsbHoles, holeBoxes );
     }
 
     if( m_copperCutouts.size() )
     {
-        Bnd_BoundSortBox bsbHoles;
-        buildBSB( m_copperCutouts, bsbHoles );
+        Bnd_BoundSortBox     bsbHoles;
+        std::vector<Bnd_Box> holeBoxes;
+        buildBSB( m_copperCutouts, bsbHoles, holeBoxes );
 
-        subtractShapesMap( _( "pads" ), m_board_copper_pads, m_copperCutouts, bsbHoles );
-        subtractShapesMap( _( "vias" ), m_board_copper_vias, m_copperCutouts, bsbHoles );
+        subtractShapesMap( _( "pads" ), m_board_copper_pads, m_copperCutouts, bsbHoles, holeBoxes );
+        subtractShapesMap( _( "vias" ), m_board_copper_vias, m_copperCutouts, bsbHoles, holeBoxes );
     }
 
     if( m_fuseShapes )
