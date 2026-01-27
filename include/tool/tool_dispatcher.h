@@ -81,6 +81,11 @@ private:
     /// Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
 
+    /// Processes any pending mouse clicks that have been physically completed but not yet
+    /// dispatched. This ensures clicks are processed before cancel events when both happen
+    /// in quick succession.
+    void flushPendingClicks();
+
     /// Returns the instance of VIEW, used by the application.
     KIGFX::VIEW* getView();
 
