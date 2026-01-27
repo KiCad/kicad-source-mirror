@@ -297,6 +297,26 @@ void KISTATUSBAR::SetBackgroundProgressMax( int aAmount )
 void KISTATUSBAR::SetBackgroundStatusText( const wxString& aTxt )
 {
     m_backgroundTxt->SetLabel( aTxt );
+
+    // When there are multiple normal fields, the last normal field (typically used for
+    // file watcher status on Windows) can visually overlap with the background job label
+    // since both have variable width. Save and clear that field when showing background
+    // text, and restore it when the background text is cleared.
+    if( m_normalFieldsCount > 1 )
+    {
+        int adjacentField = m_normalFieldsCount - 1;
+
+        if( !aTxt.empty() )
+        {
+            m_savedStatusText = GetStatusText( adjacentField );
+            SetStatusText( wxEmptyString, adjacentField );
+        }
+        else if( !m_savedStatusText.empty() )
+        {
+            SetStatusText( m_savedStatusText, adjacentField );
+            m_savedStatusText.clear();
+        }
+    }
 }
 
 

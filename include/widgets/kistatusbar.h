@@ -157,6 +157,7 @@ private:
     std::vector<LOAD_MESSAGE> m_loadWarningMessages;
     int            m_normalFieldsCount;
     STYLE_FLAGS    m_styleFlags;
+    wxString       m_savedStatusText;       ///< Saved text from adjacent field during background jobs
 };
 
 #endif
