@@ -437,7 +437,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_LAYER_ID secStart = via->GetSecondaryDrillStartLayer();
                     PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
 
-                    if( LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
+                    bool validLyPair = secStart >= 0 && secEnd >= 0;
+
+                    if( validLyPair && LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
                     {
                         // Add to layer hole map for this layer
                         BVH_CONTAINER_2D* layerHoleContainer = m_layerHoleMap[layer];
@@ -445,7 +447,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius, *track ) );
                     }
 
-                    if( layer == secStart )
+                    if( validLyPair && layer == secStart )
                         m_backdrillCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius, *track ) );
                 }
 
@@ -458,7 +460,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     PCB_LAYER_ID terStart = via->GetTertiaryDrillStartLayer();
                     PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
 
-                    if( LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
+                    bool validLyPair = terStart >= 0 && terEnd >= 0;
+
+                    if( validLyPair && LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
                     {
                         // Add to layer hole map for this layer
                         BVH_CONTAINER_2D* layerHoleContainer = m_layerHoleMap[layer];
@@ -466,7 +470,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, tertiaryDrillRadius, *track ) );
                     }
 
-                    if( layer == terStart )
+                    if( validLyPair && layer == terStart )
                         m_tertiarydrillCutouts.Add( new FILLED_CIRCLE_2D( via_center, tertiaryDrillRadius, *track ) );
                 }
             }
@@ -638,9 +642,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         PCB_LAYER_ID secStart = via->GetSecondaryDrillStartLayer();
                         PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
+                        bool validLyPair = secStart >= 0 && secEnd >= 0;
 
                         // Iterate through layers affected by backdrill
-                        if( LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
+                        if( validLyPair && LAYER_RANGE( secStart, secEnd, m_copperLayersCount ).Contains( layer ) )
                         {
                             TransformCircleToPolygon( *m_layerHoleOdPolys[layer], via->GetStart(),
                                                         backdrillOuterRadiusBIU, via->GetMaxError(),
@@ -671,8 +676,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     {
                         PCB_LAYER_ID terStart = via->GetTertiaryDrillStartLayer();
                         PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
+                        bool validLyPair = terStart >= 0 && terEnd >= 0;
 
-                        if( LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
+                        if( validLyPair && LAYER_RANGE( terStart, terEnd, m_copperLayersCount ).Contains( layer ) )
                         {
                             PCB_LAYER_ID backdrillLayer = layer;
 
@@ -828,26 +834,30 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_LAYER_ID secStart = pad->GetSecondaryDrillStartLayer();
                     PCB_LAYER_ID secEnd = pad->GetSecondaryDrillEndLayer();
+                    bool validLyPair = secStart >= 0 && secEnd >= 0;
 
                     // Iterate through layers affected by backdrill
-                    for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
-                                                                     m_copperLayersCount ) )
+                    if( validLyPair )
                     {
-                        // Add to layer hole map for this layer
-                        BVH_CONTAINER_2D* layerHoleContainer = nullptr;
-
-                        if( !m_layerHoleMap.contains( backdrillLayer ) )
+                        for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
+                                                                         m_copperLayersCount ) )
                         {
-                            layerHoleContainer = new BVH_CONTAINER_2D;
-                            m_layerHoleMap[backdrillLayer] = layerHoleContainer;
-                        }
-                        else
-                        {
-                            layerHoleContainer = m_layerHoleMap[backdrillLayer];
-                        }
+                            // Add to layer hole map for this layer
+                            BVH_CONTAINER_2D* layerHoleContainer = nullptr;
 
-                        layerHoleContainer->Add(
-                                new FILLED_CIRCLE_2D( padCenter, backdrillRadius, *pad ) );
+                            if( !m_layerHoleMap.contains( backdrillLayer ) )
+                            {
+                                layerHoleContainer = new BVH_CONTAINER_2D;
+                                m_layerHoleMap[backdrillLayer] = layerHoleContainer;
+                            }
+                            else
+                            {
+                                layerHoleContainer = m_layerHoleMap[backdrillLayer];
+                            }
+
+                            layerHoleContainer->Add(
+                                    new FILLED_CIRCLE_2D( padCenter, backdrillRadius, *pad ) );
+                        }
                     }
                 }
             }
@@ -952,31 +962,35 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_LAYER_ID secStart = pad->GetSecondaryDrillStartLayer();
                     PCB_LAYER_ID secEnd = pad->GetSecondaryDrillEndLayer();
+                    bool validLyPair = secStart >= 0 && secEnd >= 0;
 
-                    TransformCircleToPolygon( m_BackdrillPolys, pad->GetPosition(),
-                                                backdrillRadiusBIU, pad->GetMaxError(),
-                                                ERROR_INSIDE );
-
-                    // Iterate through layers affected by backdrill
-                    for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
-                                                                        m_copperLayersCount ) )
+                    if( validLyPair )
                     {
-                        // Add polygon to per-layer hole polys
-                        SHAPE_POLY_SET* layerHolePoly = nullptr;
-
-                        if( !m_layerHoleOdPolys.contains( backdrillLayer ) )
-                        {
-                            layerHolePoly = new SHAPE_POLY_SET;
-                            m_layerHoleOdPolys[backdrillLayer] = layerHolePoly;
-                        }
-                        else
-                        {
-                            layerHolePoly = m_layerHoleOdPolys[backdrillLayer];
-                        }
-
-                        TransformCircleToPolygon( *layerHolePoly, pad->GetPosition(),
+                        TransformCircleToPolygon( m_BackdrillPolys, pad->GetPosition(),
                                                     backdrillRadiusBIU, pad->GetMaxError(),
                                                     ERROR_INSIDE );
+
+                        // Iterate through layers affected by backdrill
+                        for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd,
+                                                                            m_copperLayersCount ) )
+                        {
+                            // Add polygon to per-layer hole polys
+                            SHAPE_POLY_SET* layerHolePoly = nullptr;
+
+                            if( !m_layerHoleOdPolys.contains( backdrillLayer ) )
+                            {
+                                layerHolePoly = new SHAPE_POLY_SET;
+                                m_layerHoleOdPolys[backdrillLayer] = layerHolePoly;
+                            }
+                            else
+                            {
+                                layerHolePoly = m_layerHoleOdPolys[backdrillLayer];
+                            }
+
+                            TransformCircleToPolygon( *layerHolePoly, pad->GetPosition(),
+                                                        backdrillRadiusBIU, pad->GetMaxError(),
+                                                        ERROR_INSIDE );
+                        }
                     }
                 }
             }
