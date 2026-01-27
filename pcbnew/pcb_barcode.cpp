@@ -290,7 +290,7 @@ void PCB_BARCODE::ComputeBarcode()
         return;
     }
 
-    wxString text = GetText();
+    wxString text = GetShownText();
     wxScopedCharBuffer utf8Text = text.ToUTF8();
     size_t length = utf8Text.length();
     unsigned char* dataPtr = reinterpret_cast<unsigned char*>( utf8Text.data() );

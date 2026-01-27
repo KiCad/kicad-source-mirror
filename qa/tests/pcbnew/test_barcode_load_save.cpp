@@ -216,3 +216,62 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         board->Add( barcode, ADD_MODE::APPEND, true );
     }
 }
+
+
+BOOST_AUTO_TEST_CASE( BarcodeTextVariableExpansion )
+{
+    SETTINGS_MANAGER settingsManager;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    // Set up board-level text variables that should be expanded
+    std::map<wxString, wxString> properties;
+    properties[wxT( "PART_NUMBER" )] = wxT( "PN12345" );
+    properties[wxT( "VERSION" )] = wxT( "1.0" );
+    board->SetProperties( properties );
+
+    // Create a barcode with text variables in the content
+    PCB_BARCODE* barcode = new PCB_BARCODE( board.get() );
+    barcode->SetText( wxT( "${PART_NUMBER}_${VERSION}" ) );
+    barcode->SetLayer( F_SilkS );
+    barcode->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+    barcode->SetWidth( pcbIUScale.mmToIU( 10.0 ) );
+    barcode->SetHeight( pcbIUScale.mmToIU( 10.0 ) );
+    barcode->SetKind( BARCODE_T::QR_CODE );
+    barcode->SetErrorCorrection( BARCODE_ECC_T::M );
+
+    board->Add( barcode, ADD_MODE::APPEND, true );
+
+    // Verify GetText returns the raw text with variables
+    BOOST_CHECK_EQUAL( barcode->GetText(), wxT( "${PART_NUMBER}_${VERSION}" ) );
+
+    // Verify GetShownText returns the expanded text
+    BOOST_CHECK_EQUAL( barcode->GetShownText(), wxT( "PN12345_1.0" ) );
+
+    // Assemble the barcode and verify the QR code encodes the expanded text
+    barcode->AssembleBarcode();
+
+    // Create a reference barcode with the literal expanded text to compare polygon shapes
+    PCB_BARCODE* refBarcode = new PCB_BARCODE( board.get() );
+    refBarcode->SetText( wxT( "PN12345_1.0" ) );
+    refBarcode->SetLayer( F_SilkS );
+    refBarcode->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 100.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+    refBarcode->SetWidth( pcbIUScale.mmToIU( 10.0 ) );
+    refBarcode->SetHeight( pcbIUScale.mmToIU( 10.0 ) );
+    refBarcode->SetKind( BARCODE_T::QR_CODE );
+    refBarcode->SetErrorCorrection( BARCODE_ECC_T::M );
+    refBarcode->AssembleBarcode();
+
+    board->Add( refBarcode, ADD_MODE::APPEND, true );
+
+    // The symbol polygons should have the same structure since they encode the same content.
+    // Compare the number of outlines as a proxy for encoding the same data.
+    BOOST_CHECK_EQUAL( barcode->GetSymbolPoly().OutlineCount(),
+                       refBarcode->GetSymbolPoly().OutlineCount() );
+
+    // The bounding boxes should be the same size since they encode the same content
+    BOX2I varBbox = barcode->GetSymbolPoly().BBox();
+    BOX2I refBbox = refBarcode->GetSymbolPoly().BBox();
+    BOOST_CHECK_EQUAL( varBbox.GetWidth(), refBbox.GetWidth() );
+    BOOST_CHECK_EQUAL( varBbox.GetHeight(), refBbox.GetHeight() );
+}
