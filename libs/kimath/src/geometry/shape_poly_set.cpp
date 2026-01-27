@@ -2072,7 +2072,7 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
             }
             else
             {
-                RTree<int, int, 2, double> rtree;
+                RTree<intptr_t, int, 2, double> rtree;
 
                 for( int i = 0; i < count; ++i )
                 {
@@ -2091,7 +2091,7 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
                     int bmax[2] = { pt.x, pt.y };
 
                     rtree.Search( bmin, bmax,
-                        [&]( const int& segIdx ) -> bool
+                        [&]( const intptr_t& segIdx ) -> bool
                         {
                             if( segIdx == prevSeg || segIdx == vertIdx )
                                 return true;
