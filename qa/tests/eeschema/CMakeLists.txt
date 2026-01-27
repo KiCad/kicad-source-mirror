@@ -87,6 +87,7 @@ set( QA_EESCHEMA_SRCS
     test_bus_entry_concurrency.cpp
     test_bus_net_name_determinism.cpp
     test_bus_parsing.cpp
+    test_label_bus_connectivity.cpp
     test_label_bounding_box.cpp
     test_lib_part.cpp
     test_ee_grid_helper.cpp

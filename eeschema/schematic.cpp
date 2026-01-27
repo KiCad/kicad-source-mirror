@@ -1887,10 +1887,18 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                 if( !item->IsConnectable() )
                     continue;
 
+                SCH_SCREEN* screen = GetCurrentScreen();
+                std::vector<SCH_SHEET_PATH>& paths = screen->GetClientSheetPaths();
+
                 if( item->Type() == SCH_LINE_T )
                 {
                     if( item->HitTest( pt ) )
+                    {
                         changed_items.insert( item );
+
+                        for( SCH_SHEET_PATH& path : paths )
+                            item_paths.insert( std::make_pair( path, item ) );
+                    }
                 }
                 else if( item->Type() == SCH_SYMBOL_T && item->IsConnected( pt ) )
                 {
@@ -1898,6 +1906,12 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                     std::vector<SCH_PIN*> pins = symbol->GetPins();
 
                     changed_items.insert( pins.begin(), pins.end() );
+
+                    for( SCH_PIN* pin : pins )
+                    {
+                        for( SCH_SHEET_PATH& path : paths )
+                            item_paths.insert( std::make_pair( path, pin ) );
+                    }
                 }
                 else if( item->Type() == SCH_SHEET_T )
                 {
@@ -1907,11 +1921,22 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
                     std::vector<SCH_SHEET_PIN*> sheetPins = sheet->GetPins();
                     changed_items.insert( sheetPins.begin(), sheetPins.end() );
+
+                    for( SCH_SHEET_PIN* pin : sheetPins )
+                    {
+                        for( SCH_SHEET_PATH& path : paths )
+                            item_paths.insert( std::make_pair( path, pin ) );
+                    }
                 }
                 else
                 {
                     if( item->IsConnected( pt ) )
+                    {
                         changed_items.insert( item );
+
+                        for( SCH_SHEET_PATH& path : paths )
+                            item_paths.insert( std::make_pair( path, item ) );
+                    }
                 }
             }
         }
