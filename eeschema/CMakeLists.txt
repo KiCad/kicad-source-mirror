@@ -392,6 +392,7 @@ set( EESCHEMA_SRCS
     sch_field.cpp
     sch_group.cpp
     sch_item.cpp
+    sch_item_alignment.cpp
     sch_junction.cpp
     sch_label.cpp
     sch_line.cpp

@@ -76,6 +76,7 @@ set( QA_EESCHEMA_SRCS
     test_issue22286_pin_alternate.cpp
     test_issue22620_group_annotation.cpp
     test_issue22651_sheet_annotation.cpp
+    test_issue22864_align_sheet_pins.cpp
     test_issue22576_subsheet_standalone.cpp
     test_issue16915_bus_netclass.cpp
     test_nc_pin_connectivity.cpp

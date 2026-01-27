@@ -1,0 +1,166 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "0c75c306-927c-401a-9754-31b7a0ff1a88")
+	(paper "A4")
+	(lib_symbols)
+	(wire
+		(pts
+			(xy 115.57 106.68) (xy 127.635 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15674a81-6897-4411-83ee-04c3fc99c7cd")
+	)
+	(wire
+		(pts
+			(xy 115.57 104.14) (xy 127.635 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d864797-f502-4c0c-808e-aff8299e0a14")
+	)
+	(sheet
+		(at 80.01 96.52)
+		(size 35.56 19.05)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "55d5f2c9-5bd3-4e5f-83c9-32f32b2c9868")
+		(property "Sheetname" "sheet1"
+			(at 80.01 95.8084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sheet1.kicad_sch"
+			(at 80.01 116.1546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "Pin1" output
+			(at 115.57 104.14 0)
+			(uuid "e062f655-b6e4-4db7-96a1-3cfedf861493")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Pin2" output
+			(at 115.57 106.68 0)
+			(uuid "f3b189f5-5fdc-4781-841f-d565333cd3b6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project ""
+				(path "/0c75c306-927c-401a-9754-31b7a0ff1a88"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 127.635 95.885)
+		(size 35.56 19.05)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "c63030d0-0d12-481f-8161-de2cf4c2b48d")
+		(property "Sheetname" "sheet2"
+			(at 127.635 95.1734 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sheet2.kicad_sch"
+			(at 127.635 115.5196 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "Pin1" input
+			(at 127.635 104.14 180)
+			(uuid "5bed9a7f-58fe-4682-80d7-a4489dec6b0f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Pin2" input
+			(at 127.635 106.68 180)
+			(uuid "25c59901-73dc-4e3e-a504-821e3ba9826a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Test_Move_Grid"
+				(path "/0c75c306-927c-401a-9754-31b7a0ff1a88"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

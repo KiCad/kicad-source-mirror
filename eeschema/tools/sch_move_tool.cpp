@@ -55,6 +55,7 @@
 #include <math/box2.h>
 #include <base_units.h>
 #include <sch_screen.h>
+#include <sch_item_alignment.h>
 #include <trace_helpers.h>
 
 
@@ -2506,130 +2507,24 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( EDA_ITEM* item : selection )
-    {
-        if( item->Type() == SCH_LINE_T )
-        {
-            SCH_LINE*             line = static_cast<SCH_LINE*>( item );
-            std::vector<int>      flags{ STARTPOINT, ENDPOINT };
-            std::vector<VECTOR2I> pts{ line->GetStartPoint(), line->GetEndPoint() };
+    SCH_ALIGNMENT_CALLBACKS callbacks;
 
-            for( int ii = 0; ii < 2; ++ii )
+    callbacks.m_doMoveItem = doMoveItem;
+
+    callbacks.m_getConnectedDragItems =
+            [&]( SCH_ITEM* aItem, const VECTOR2I& aPoint, EDA_ITEMS& aList )
             {
-                EDA_ITEMS drag_items{ item };
-                line->ClearFlags();
-                line->SetFlags( SELECTED );
-                line->SetFlags( flags[ii] );
-                getConnectedDragItems( &commit, line, pts[ii], drag_items );
-                std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
+                getConnectedDragItems( &commit, aItem, aPoint, aList );
+            };
 
-                VECTOR2I delta = grid.AlignGrid( pts[ii], selectionGrid ) - pts[ii];
-
-                if( delta != VECTOR2I( 0, 0 ) )
-                {
-                    for( EDA_ITEM* dragItem : unique_items )
-                    {
-                        if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
-                            continue;
-
-                        doMoveItem( dragItem, delta );
-                    }
-                }
-            }
-        }
-        else if( item->Type() == SCH_FIELD_T || item->Type() == SCH_TEXT_T )
-        {
-            VECTOR2I delta = grid.AlignGrid( item->GetPosition(), selectionGrid ) - item->GetPosition();
-
-            if( delta != VECTOR2I( 0, 0 ) )
-                doMoveItem( item, delta );
-        }
-        else if( item->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-            VECTOR2I   topLeft = sheet->GetPosition();
-            VECTOR2I   bottomRight = topLeft + sheet->GetSize();
-            VECTOR2I   tl_delta = grid.AlignGrid( topLeft, selectionGrid ) - topLeft;
-            VECTOR2I   br_delta = grid.AlignGrid( bottomRight, selectionGrid ) - bottomRight;
-
-            if( tl_delta != VECTOR2I( 0, 0 ) || br_delta != VECTOR2I( 0, 0 ) )
+    callbacks.m_updateItem =
+            [&]( EDA_ITEM* aItem )
             {
-                doMoveItem( sheet, tl_delta );
+                updateItem( aItem, true );
+            };
 
-                VECTOR2I newSize = (VECTOR2I) sheet->GetSize() - tl_delta + br_delta;
-                sheet->SetSize( VECTOR2I( newSize.x, newSize.y ) );
-                updateItem( sheet, true );
-            }
-
-            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-            {
-                VECTOR2I newPos;
-
-                if( pin->GetSide() == SHEET_SIDE::TOP || pin->GetSide() == SHEET_SIDE::LEFT )
-                    newPos = pin->GetPosition() + tl_delta;
-                else
-                    newPos = pin->GetPosition() + br_delta;
-
-                VECTOR2I delta = grid.AlignGrid( newPos - pin->GetPosition(), selectionGrid );
-
-                if( delta != VECTOR2I( 0, 0 ) )
-                {
-                    EDA_ITEMS drag_items;
-                    getConnectedDragItems( &commit, pin, pin->GetConnectionPoints()[0],
-                                           drag_items );
-
-                    doMoveItem( pin, delta );
-
-                    for( EDA_ITEM* dragItem : drag_items )
-                    {
-                        if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
-                            continue;
-
-                        doMoveItem( dragItem, delta );
-                    }
-                }
-            }
-        }
-        else
-        {
-            SCH_ITEM*             schItem = static_cast<SCH_ITEM*>( item );
-            std::vector<VECTOR2I> connections = schItem->GetConnectionPoints();
-            EDA_ITEMS             drag_items;
-
-            for( const VECTOR2I& point : connections )
-                getConnectedDragItems( &commit, schItem, point, drag_items );
-
-            std::map<VECTOR2I, int> shifts;
-            VECTOR2I                most_common( 0, 0 );
-            int                     max_count = 0;
-
-            for( const VECTOR2I& conn : connections )
-            {
-                VECTOR2I gridpt = grid.AlignGrid( conn, selectionGrid ) - conn;
-
-                shifts[gridpt]++;
-
-                if( shifts[gridpt] > max_count )
-                {
-                    most_common = gridpt;
-                    max_count = shifts[most_common];
-                }
-            }
-
-            if( most_common != VECTOR2I( 0, 0 ) )
-            {
-                doMoveItem( item, most_common );
-
-                for( EDA_ITEM* dragItem : drag_items )
-                {
-                    if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
-                        continue;
-
-                    doMoveItem( dragItem, most_common );
-                }
-            }
-        }
-    }
+    std::vector<EDA_ITEM*> items( selection.begin(), selection.end() );
+    AlignSchematicItemsToGrid( m_frame->GetScreen(), items, grid, selectionGrid, callbacks );
 
     SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
     lwbTool->TrimOverLappingWires( &commit, &selection );
