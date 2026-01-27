@@ -1320,6 +1320,12 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         return false;
     }
 
+    // Don't allow closing while the modal footprint chooser is open
+    auto* chooser = (FOOTPRINT_CHOOSER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
+
+    if( chooser && chooser->IsModal() ) // Can close footprint chooser?
+        return false;
+
     if( Kiface().IsSingle() )
     {
         auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
@@ -1330,13 +1336,6 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         auto* fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
 
         if( fpViewer && !fpViewer->Close() )   // Can close footprint viewer?
-            return false;
-
-        // FOOTPRINT_CHOOSER_FRAME is always modal so this shouldn't come up, but better safe than
-        // sorry.
-        auto* chooser = (FOOTPRINT_CHOOSER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
-
-        if( chooser && !chooser->Close() )   // Can close footprint chooser?
             return false;
     }
     else
