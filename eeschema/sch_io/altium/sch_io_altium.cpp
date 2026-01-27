@@ -989,6 +989,37 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             projectFileName.SetPath( m_schematic->Project().GetProjectPath() );
             projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
+
+            // Set up symbol instance data for this new sheet path. When the same schematic
+            // is reused in multiple hierarchical instances, each instance needs its own
+            // symbol references with the sheet name as suffix to match Altium's behavior.
+            m_sheetPath.push_back( sheet );
+
+            for( SCH_ITEM* symItem : loadedScreen->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( symItem );
+
+                // Get the base reference from existing instance data
+                wxString baseRef;
+
+                if( !symbol->GetInstances().empty() )
+                    baseRef = symbol->GetInstances().front().m_Reference;
+                else
+                    baseRef = symbol->GetField( FIELD_T::REFERENCE )->GetText();
+
+                // Skip power symbols and graphics
+                if( baseRef.StartsWith( wxT( "#" ) ) )
+                {
+                    symbol->AddSheetPathReferenceEntryIfMissing( m_sheetPath.Path() );
+                    continue;
+                }
+
+                // Create new reference with sheet name suffix (e.g., P1 -> P1_Connector2)
+                wxString newRef = baseRef + wxT( "_" ) + sheet->GetName();
+                symbol->SetRef( &m_sheetPath, newRef );
+            }
+
+            m_sheetPath.pop_back();
             // Do not need to load the sub-sheets - this has already been done.
         }
         else
@@ -1031,6 +1062,21 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
             screen->SetFileName( projectFileName.GetFullPath() );
+
+            // Update symbol references with sheet name suffix to match Altium's multi-channel
+            // naming convention (e.g., P1 -> P1_Connector1)
+            for( SCH_ITEM* schItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
+                wxString    ref = symbol->GetRef( &m_sheetPath );
+
+                // Skip power symbols and graphics
+                if( ref.StartsWith( wxT( "#" ) ) )
+                    continue;
+
+                wxString newRef = ref + wxT( "_" ) + sheet->GetName();
+                symbol->SetRef( &m_sheetPath, newRef );
+            }
 
             m_sheetPath.pop_back();
         }
@@ -3448,7 +3494,12 @@ void SCH_IO_ALTIUM::ParseSheetEntry( const std::map<wxString, wxString>& aProper
     SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sheetIt->second );
     sheetIt->second->AddPin( sheetPin );
 
-    sheetPin->SetText( elem.name );
+    wxString pinName = elem.name;
+
+    if( !elem.harnessType.IsEmpty() )
+        pinName += wxT( "{" ) + elem.harnessType + wxT( "}" );
+
+    sheetPin->SetText( pinName );
     sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
     //sheetPin->SetSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
@@ -3909,13 +3960,18 @@ void SCH_IO_ALTIUM::ParsePortHelper( const ASCH_PORT& aElem )
     VECTOR2I        position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
     SCH_LABEL_BASE* label;
 
+    wxString labelName = aElem.Name;
+
+    if( !aElem.HarnessType.IsEmpty() )
+        labelName += wxT( "{" ) + aElem.HarnessType + wxT( "}" );
+
     // TODO: detect correct label type depending on sheet settings, etc.
 #if 1   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
     {
-        label = new SCH_HIERLABEL( position, aElem.Name );
+        label = new SCH_HIERLABEL( position, labelName );
     }
 #else
-    label = new SCH_GLOBALLABEL( position, aElem.Name );
+    label = new SCH_GLOBALLABEL( position, labelName );
 
     // Default "Sheet References" field should be hidden, at least for now
     label->GetField( INTERSHEET_REFS )->SetVisible( false );

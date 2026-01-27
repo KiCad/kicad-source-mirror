@@ -646,6 +646,7 @@ struct ASCH_SHEET_ENTRY : ASCH_OWNER_INTERFACE
     ASCH_PORT_STYLE       style;
 
     wxString name;
+    wxString harnessType;
 
     explicit ASCH_SHEET_ENTRY( const std::map<wxString, wxString>& aProps );
 };
