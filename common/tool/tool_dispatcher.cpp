@@ -474,6 +474,28 @@ std::optional<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, 
 }
 
 
+void TOOL_DISPATCHER::flushPendingClicks()
+{
+    // When an escape key event arrives, keyboard events can be processed before mouse button
+    // events due to wxWidgets event queue ordering. If a mouse button was pressed and has since
+    // been released (detected via polling), we need to process that click before handling the
+    // escape to maintain proper event ordering.
+    for( BUTTON_STATE* st : m_buttons )
+    {
+        if( st->pressed && !st->GetState() )
+        {
+            st->pressed = false;
+
+            TOOL_EVENT clickEvt( TC_MOUSE, TA_MOUSE_CLICK, st->button );
+            clickEvt.SetMousePosition( st->downPosition );
+            m_toolMgr->ProcessEvent( clickEvt );
+
+            st->dragging = false;
+        }
+    }
+}
+
+
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool            motion = false;
@@ -591,6 +613,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         }
 
         keyIsEscape = ( ke->GetKeyCode() == WXK_ESCAPE );
+
+        // When escape is pressed shortly after a mouse click, the keyboard event can be
+        // processed before the mouse button release event. Flush any pending clicks first
+        // to ensure proper event ordering.
+        if( keyIsEscape )
+            flushPendingClicks();
 
         if( KIUI::IsInputControlFocused( focus ) )
         {
