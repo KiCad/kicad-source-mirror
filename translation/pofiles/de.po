@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-26 23:07+0000\n"
+"PO-Revision-Date: 2026-01-28 10:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -33513,7 +33513,7 @@ msgstr "Füllart:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1898 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 msgid "Solid fill"
-msgstr "Vollständig"
+msgstr "Vollflächig"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
@@ -33559,7 +33559,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:183
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:263
 msgid "Smoothing amount:"
-msgstr "Glättungsaufwand:"
+msgstr "Glättungsgrad:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:340
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:185
