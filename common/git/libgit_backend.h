@@ -96,6 +96,9 @@ private:
                             size_t aMergeHeadsCount );
     PullResult handleRebase( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                              size_t aMergeHeadsCount );
+
+    // Returns true if the working directory has unstaged changes that would block rebase/merge
+    static bool hasUnstagedChanges( git_repository* aRepo );
 };
 
 #endif

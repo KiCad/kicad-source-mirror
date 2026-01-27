@@ -1018,13 +1018,61 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     return PullResult::FastForward;
 }
 
+bool LIBGIT_BACKEND::hasUnstagedChanges( git_repository* aRepo )
+{
+    if( !aRepo )
+        return false;
+
+    git_status_options opts;
+    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
+
+    // Only check workdir changes (unstaged), not index changes (staged)
+    opts.show = GIT_STATUS_SHOW_WORKDIR_ONLY;
+    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED;
+
+    git_status_list* status_list = nullptr;
+
+    if( git_status_list_new( &status_list, aRepo, &opts ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Failed to get status list: %s", KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    KIGIT::GitStatusListPtr status_list_ptr( status_list );
+    size_t count = git_status_list_entrycount( status_list );
+
+    // Check if any of the entries are actual modifications (not just untracked files)
+    for( size_t ii = 0; ii < count; ++ii )
+    {
+        const git_status_entry* entry = git_status_byindex( status_list, ii );
+
+        // Check for actual workdir modifications, not just untracked files
+        if( entry->status & ( GIT_STATUS_WT_MODIFIED | GIT_STATUS_WT_DELETED | GIT_STATUS_WT_TYPECHANGE ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler,
                                         const git_annotated_commit** aMergeHeads,
                                         size_t aMergeHeadsCount )
 {
+    // Check for unstaged changes before attempting merge
+    if( hasUnstagedChanges( aHandler->GetRepo() ) )
+    {
+        aHandler->AddErrorString(
+                _( "Cannot merge: you have unstaged changes. "
+                   "Please commit or stash them before pulling." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
     if( git_merge( aHandler->GetRepo(), aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
     {
-        aHandler->AddErrorString( _( "Merge failed" ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        aHandler->AddErrorString( wxString::Format( _( "Merge failed: %s" ), errorMsg ) );
         return PullResult::MergeFailed;
     }
 
@@ -1035,6 +1083,15 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler,
                                          const git_annotated_commit** aMergeHeads,
                                          size_t aMergeHeadsCount )
 {
+    // Check for unstaged changes before attempting rebase
+    if( hasUnstagedChanges( aHandler->GetRepo() ) )
+    {
+        aHandler->AddErrorString(
+                _( "Cannot pull with rebase: you have unstaged changes. "
+                   "Please commit or stash them before pulling." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
     git_rebase_options rebase_opts;
     git_rebase_init_options( &rebase_opts, GIT_REBASE_OPTIONS_VERSION );
 
@@ -1042,7 +1099,8 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler,
 
     if( git_rebase_init( &rebase, aHandler->GetRepo(), nullptr, aMergeHeads[0], nullptr, &rebase_opts ) )
     {
-        aHandler->AddErrorString( _( "Rebase failed to start" ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        aHandler->AddErrorString( wxString::Format( _( "Rebase failed to start: %s" ), errorMsg ) );
         return PullResult::MergeFailed;
     }
 
@@ -1051,19 +1109,22 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler,
     while( true )
     {
         git_rebase_operation* op = nullptr;
+
         if( git_rebase_next( &op, rebase ) != 0 )
             break;
 
         if( git_rebase_commit( nullptr, rebase, nullptr, nullptr, nullptr, nullptr ) )
         {
-            aHandler->AddErrorString( _( "Rebase commit failed" ) );
+            wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+            aHandler->AddErrorString( wxString::Format( _( "Rebase commit failed: %s" ), errorMsg ) );
             return PullResult::MergeFailed;
         }
     }
 
     if( git_rebase_finish( rebase, nullptr ) )
     {
-        aHandler->AddErrorString( _( "Rebase finish failed" ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ), errorMsg ) );
         return PullResult::MergeFailed;
     }
 

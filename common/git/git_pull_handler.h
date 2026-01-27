@@ -43,6 +43,7 @@ struct CommitDetails
 // Enum for result codes, error codes are negative, success codes are positive
 enum class PullResult : int
 {
+    DirtyWorkdir = -3,
     MergeFailed = -2,
     Error = -1,
     Success = 0,
