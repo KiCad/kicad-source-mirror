@@ -69,18 +69,19 @@ class PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE : public wxPanel
 	private:
 
 	protected:
-		wxStaticText* m_staticText101;
+		wxStaticText* m_componentClassLabel;
 		wxTextCtrl* m_componentClass;
-		STD_BITMAP_BUTTON* m_buttonHighlightItems;
 		STD_BITMAP_BUTTON* m_buttonDeleteAssignment;
 		STD_BITMAP_BUTTON* m_buttonAddCondition;
+		STD_BITMAP_BUTTON* m_buttonHighlightItems;
+		wxStaticLine* m_staticline2;
 		wxRadioButton* m_radioAll;
 		wxRadioButton* m_radioAny;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnHighlightItemsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAssignmentClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddConditionClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnHighlightItemsClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
