@@ -66,7 +66,8 @@ MATERIAL::MATERIAL( const SFVEC3F& aAmbient, const SFVEC3F& aEmissive, const SFV
     wxASSERT( aTransparency <= 1.0f );
 
     wxASSERT( aShinness >= 0.0f );
-    wxASSERT( aShinness <= 180.0f );
+    // No upper bound assertion on shininess since higher values are valid for Blinn-Phong
+    // and needed for realistic dark solder mask rendering
 
     m_ambientColor  = aAmbient * SFVEC3F(AMBIENT_FACTOR);
 
