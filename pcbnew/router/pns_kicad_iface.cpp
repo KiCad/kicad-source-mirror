@@ -461,15 +461,180 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     PCB_LAYER_ID   board_layer = m_routerIface->GetBoardLayerFromPNSLayer( aPNSLayer );
     DRC_CONSTRAINT hostConstraint;
 
-    // A track being routed may not have a BOARD_ITEM associated yet.
-    if( aItemA && !parentA )
-        parentA = getBoardItem( aItemA, board_layer, 0 );
+    // For clearance-type constraints, pick the smaller (more permissive) value.
+    // Returns true if we found a zero/negative clearance (can't get more permissive).
+    auto pickSmallerConstraint = []( DRC_CONSTRAINT& aBest, const DRC_CONSTRAINT& aCandidate ) -> bool
+    {
+        if( aCandidate.IsNull() )
+            return false;
 
-    if( aItemB && !parentB )
-        parentB = getBoardItem( aItemB, board_layer, 1 );
+        if( aBest.IsNull() )
+        {
+            aBest = aCandidate;
+        }
+        else if( aCandidate.m_Value.HasMin() && aBest.m_Value.HasMin()
+                 && aCandidate.m_Value.Min() < aBest.m_Value.Min() )
+        {
+            aBest = aCandidate;
+        }
 
-    if( parentA )
-        hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, board_layer );
+        return aBest.m_Value.HasMin() && aBest.m_Value.Min() <= 0;
+    };
+
+    // Check for multi-segment LINEs without BoardItems. These need segment-by-segment
+    // evaluation because custom DRC rules may have geometry-dependent conditions (like
+    // intersectsCourtyard) that require evaluating actual segment positions.
+    auto isMultiSegmentLine = []( const PNS::ITEM* aItem, BOARD_ITEM* aParent ) -> bool
+    {
+        if( !aItem || aParent || aItem->Kind() != PNS::ITEM::LINE_T )
+            return false;
+
+        const auto* line = static_cast<const PNS::LINE*>( aItem );
+        return line->CLine().SegmentCount() > 1;
+    };
+
+    bool lineANeedsSegmentEval = isMultiSegmentLine( aItemA, parentA );
+    bool lineBNeedsSegmentEval = isMultiSegmentLine( aItemB, parentB );
+
+    // Evaluate segments of a multi-segment LINE against a single opposing item.
+    auto evaluateLineSegments = [&]( const PNS::ITEM* aLineItem, BOARD_ITEM* aOpposingItem,
+                                     bool aLineIsFirst, int aIdx ) -> DRC_CONSTRAINT
+    {
+        DRC_CONSTRAINT bestConstraint;
+        const auto* line = static_cast<const PNS::LINE*>( aLineItem );
+        const SHAPE_LINE_CHAIN& chain = line->CLine();
+
+        PCB_TRACK& dummyTrack = m_dummyTracks[aIdx];
+        dummyTrack.SetLayer( board_layer );
+        dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aLineItem->Net() ) );
+        dummyTrack.SetWidth( line->Width() );
+
+        for( int i = 0; i < chain.SegmentCount(); i++ )
+        {
+            dummyTrack.SetStart( chain.CPoint( i ) );
+            dummyTrack.SetEnd( chain.CPoint( i + 1 ) );
+
+            DRC_CONSTRAINT segConstraint = aLineIsFirst
+                ? drcEngine->EvalRules( hostType, &dummyTrack, aOpposingItem, board_layer )
+                : drcEngine->EvalRules( hostType, aOpposingItem, &dummyTrack, board_layer );
+
+            if( pickSmallerConstraint( bestConstraint, segConstraint ) )
+                break;
+        }
+
+        return bestConstraint;
+    };
+
+    // Check if two multi-segment lines have overlapping bboxes (worth doing segment evaluation)
+    auto linesBBoxOverlap = [&]() -> bool
+    {
+        if( !lineANeedsSegmentEval || !lineBNeedsSegmentEval )
+            return true;
+
+        const auto* lineA = static_cast<const PNS::LINE*>( aItemA );
+        const auto* lineB = static_cast<const PNS::LINE*>( aItemB );
+        const int proximityThreshold = std::max( lineA->Width(), lineB->Width() ) * 2;
+
+        BOX2I bboxA = lineA->CLine().BBox();
+        bboxA.Inflate( proximityThreshold );
+
+        return bboxA.Intersects( lineB->CLine().BBox() );
+    };
+
+    // Handle multi-segment lines with segment-by-segment evaluation.
+    if( ( lineANeedsSegmentEval || lineBNeedsSegmentEval ) && linesBBoxOverlap() )
+    {
+        // Get dummy items for non-multi-segment items that need them
+        if( aItemA && !parentA && !lineANeedsSegmentEval )
+            parentA = getBoardItem( aItemA, board_layer, 0 );
+
+        if( aItemB && !parentB && !lineBNeedsSegmentEval )
+            parentB = getBoardItem( aItemB, board_layer, 1 );
+
+        if( lineANeedsSegmentEval && lineBNeedsSegmentEval )
+        {
+            // Both items are multi-segment lines. Evaluate segment pairs, skipping pairs
+            // that are far apart since geometry-dependent rules won't trigger for them.
+            const auto* lineA = static_cast<const PNS::LINE*>( aItemA );
+            const auto* lineB = static_cast<const PNS::LINE*>( aItemB );
+            const SHAPE_LINE_CHAIN& chainA = lineA->CLine();
+            const SHAPE_LINE_CHAIN& chainB = lineB->CLine();
+
+            const int proximityThreshold = std::max( lineA->Width(), lineB->Width() ) * 2;
+
+            PCB_TRACK& dummyA = m_dummyTracks[0];
+            dummyA.SetLayer( board_layer );
+            dummyA.SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
+            dummyA.SetWidth( lineA->Width() );
+
+            PCB_TRACK& dummyB = m_dummyTracks[1];
+            dummyB.SetLayer( board_layer );
+            dummyB.SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
+            dummyB.SetWidth( lineB->Width() );
+
+            bool  done = false;
+            BOX2I bboxA, bboxB;
+
+            for( int i = 0; i < chainA.SegmentCount() && !done; i++ )
+            {
+                const VECTOR2I& ptA1 = chainA.CPoint( i );
+                const VECTOR2I& ptA2 = chainA.CPoint( i + 1 );
+
+                bboxA.SetOrigin( ptA1 );
+                bboxA.SetEnd( ptA2 );
+                bboxA.Normalize();
+                bboxA.Inflate( proximityThreshold );
+
+                dummyA.SetStart( ptA1 );
+                dummyA.SetEnd( ptA2 );
+
+                for( int j = 0; j < chainB.SegmentCount(); j++ )
+                {
+                    const VECTOR2I& ptB1 = chainB.CPoint( j );
+                    const VECTOR2I& ptB2 = chainB.CPoint( j + 1 );
+
+                    bboxB.SetOrigin( ptB1 );
+                    bboxB.SetEnd( ptB2 );
+                    bboxB.Normalize();
+
+                    if( !bboxA.Intersects( bboxB ) )
+                        continue;
+
+                    dummyB.SetStart( ptB1 );
+                    dummyB.SetEnd( ptB2 );
+
+                    DRC_CONSTRAINT segConstraint =
+                            drcEngine->EvalRules( hostType, &dummyA, &dummyB, board_layer );
+
+                    if( pickSmallerConstraint( hostConstraint, segConstraint ) )
+                    {
+                        done = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else if( lineANeedsSegmentEval )
+        {
+            hostConstraint = evaluateLineSegments( aItemA, parentB, true, 0 );
+        }
+        else
+        {
+            hostConstraint = evaluateLineSegments( aItemB, parentA, false, 1 );
+        }
+    }
+    else
+    {
+        // Standard path: no multi-segment lines (or lines too far apart), use anchor-based dummies
+        if( aItemA && !parentA )
+            parentA = getBoardItem( aItemA, board_layer, 0 );
+
+        if( aItemB && !parentB )
+            parentB = getBoardItem( aItemB, board_layer, 1 );
+
+        if( parentA )
+            hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, board_layer );
+    }
 
     if( hostConstraint.IsNull() )
         return false;

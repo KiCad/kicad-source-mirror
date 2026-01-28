@@ -218,6 +218,19 @@ public:
     virtual void Unmark( int aMarker = -1 ) const override;
     virtual int Marker() const override;
 
+    virtual VECTOR2I Anchor( int n ) const override
+    {
+        if( m_line.PointCount() < 1 )
+            return VECTOR2I();
+
+        return ( n == 0 ) ? m_line.CPoint( 0 ) : m_line.CPoint( -1 );
+    }
+
+    virtual int AnchorCount() const override
+    {
+        return ( m_line.PointCount() >= 2 ) ? 2 : m_line.PointCount();
+    }
+
     void SetBlockingObstacle( ITEM* aObstacle ) { m_blockingObstacle = aObstacle; }
     ITEM* GetBlockingObstacle() const { return m_blockingObstacle; }
 
