@@ -34,7 +34,12 @@ wxDEFINE_EVENT( EVT_LOCAL_HISTORY_REFRESH, wxCommandEvent );
 
 LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel( aParent ),
         m_frame( aParent ), m_list( nullptr ), m_timer( this ), m_refreshTimer( this ),
-        m_hoverItem( -1 ), m_tip( nullptr )
+        m_hoverItem( -1 ),
+#if wxCHECK_VERSION( 3, 3, 2 )
+        m_tip()
+#else
+        m_tip( nullptr )
+#endif
 {
     m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                              wxLC_REPORT | wxLC_SINGLE_SEL );
@@ -213,8 +218,12 @@ void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
 
     wxString msg = m_commits[m_hoverItem].message + wxS( "\n" )
                     + m_commits[m_hoverItem].date.FormatISOCombined();
+#if wxCHECK_VERSION( 3, 3, 2 )
+    m_tip = wxTipWindow::New( this, msg );
+#else
     m_tip = new wxTipWindow( this, msg );
     m_tip->SetTipWindowPtr( &m_tip );
+#endif
     m_tip->Position( ClientToScreen( m_hoverPos ), wxDefaultSize );
     SetFocus();
 }

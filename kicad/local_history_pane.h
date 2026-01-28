@@ -73,7 +73,11 @@ private:
     wxTimer              m_refreshTimer;
     long                 m_hoverItem;
     wxPoint              m_hoverPos;
+#if wxCHECK_VERSION( 3, 3, 2 )
+    wxTipWindow::Ref     m_tip;
+#else
     wxTipWindow*         m_tip;
+#endif
     std::mutex           m_mutex;
 };
 
