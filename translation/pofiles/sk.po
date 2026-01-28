@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-26 23:07+0000\n"
+"PO-Revision-Date: 2026-01-28 10:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -920,15 +920,15 @@ msgid "Use board stackup colors"
 msgstr "Použiť farby zo štruktúry vrstiev"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Použiť farby zo štruktúry vrstiev"
+msgstr "Použiť farby medi z editora DPS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Pre nepokovovanú meď použiť farbu holej medi (pomalé)"
+msgstr ""
+"Pre medené vrstvy použiť farby vrstiev editora dosky (iba pre vykresľovanie "
+"v reálnom čase)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1730,16 +1730,12 @@ msgid "Errors"
 msgstr "Chyby"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Vymeniť a nájsť ďalšiu"
+msgstr "Nahradiť načítaný súbor?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Zmena prípony súboru zmení typ súboru.\n"
-" Chcete pokračovať?"
+msgstr "Súbor je už načítaný. Chcete ho nahradiť?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
