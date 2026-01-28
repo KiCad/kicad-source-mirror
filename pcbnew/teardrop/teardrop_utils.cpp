@@ -115,35 +115,55 @@ void TEARDROP_MANAGER::BuildTrackCaches()
 
 bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTrack ) const
 {
-    for( ZONE* zone: m_board->Zones() )
+    PCB_LAYER_ID layer = aTrack->GetLayer();
+
+    for( ZONE* zone : m_board->Zones() )
     {
         // Skip teardrops
         if( zone->IsTeardropArea() )
             continue;
 
-        // Only consider zones on the same layer
-        if( !zone->IsOnLayer( aTrack->GetLayer() ) )
+        // Only consider zones on the same layer as the track
+        if( !zone->IsOnLayer( layer ) )
             continue;
 
-        if( zone->GetNetCode() == aTrack->GetNetCode() )
+        if( zone->GetNetCode() != aTrack->GetNetCode() )
+            continue;
+
+        // The zone must have filled copper on this layer to provide a connection
+        if( !zone->HasFilledPolysForLayer( layer ) )
+            continue;
+
+        std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+        if( !fill || fill->IsEmpty() )
+            continue;
+
+        // Check if the zone's filled copper actually contains both the pad/via and the track.
+        // The zone outline might contain these items, but the actual fill might not reach them
+        // due to thermal settings, minimum width, island removal, etc.
+        VECTOR2I padPos( aPadOrVia->GetPosition() );
+
+        if( !fill->Contains( padPos ) )
+            continue;
+
+        // Also verify the track is within the filled zone (check both endpoints)
+        if( !fill->Contains( aTrack->GetStart() ) && !fill->Contains( aTrack->GetEnd() ) )
+            continue;
+
+        // If the first item is a pad, ensure it can be connected to the zone
+        if( aPadOrVia->Type() == PCB_PAD_T )
         {
-            if( zone->Outline()->Contains( VECTOR2I( aPadOrVia->GetPosition() ) ) )
+            PAD* pad = static_cast<PAD*>( aPadOrVia );
+
+            if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
+                || pad->GetZoneConnectionOverrides( nullptr ) == ZONE_CONNECTION::NONE )
             {
-                // If the first item is a pad, ensure it can be connected to the zone
-                if( aPadOrVia->Type() == PCB_PAD_T )
-                {
-                    PAD *pad = static_cast<PAD*>( aPadOrVia );
-
-                    if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
-                        || pad->GetZoneConnectionOverrides( nullptr ) == ZONE_CONNECTION::NONE )
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return false;
             }
         }
+
+        return true;
     }
 
     return false;
