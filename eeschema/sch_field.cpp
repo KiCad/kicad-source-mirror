@@ -191,67 +191,13 @@ wxString SCH_FIELD::GetShownName() const
 wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText, int aDepth,
                                   const wxString& aVariantName ) const
 {
-    // Use local depth counter so each text element starts fresh
-    int depth = 0;
-
-    std::function<bool( wxString* )> libSymbolResolver = [&]( wxString* token ) -> bool
-    {
-        LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( token, depth + 1 );
-    };
-
-    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
-    {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-        return symbol->ResolveTextVar( aPath, token, depth + 1 );
-    };
-
-    std::function<bool( wxString* )> schematicResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        if( SCHEMATIC* schematic = Schematic() )
-            return schematic->ResolveTextVar( aPath, token, depth + 1 );
-
-        return false;
-    };
-
-    std::function<bool( wxString* )> sheetResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-
-        SCHEMATIC*     schematic = Schematic();
-        SCH_SHEET_PATH path = *aPath;
-        path.push_back( sheet );
-
-        bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
-
-        if( schematic )
-            retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
-
-        return retval;
-    };
-
-    std::function<bool( wxString* )> labelResolver = [&]( wxString* token ) -> bool
-    {
-        if( !aPath )
-            return false;
-
-        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
-        return label->ResolveTextVar( aPath, token, depth + 1 );
-    };
-
     wxString text = getUnescapedText( aPath, aVariantName );
 
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
     if( HasTextVars() )
-        text = ResolveText( text, aPath, depth );
+        text = ResolveText( text, aPath, aDepth );
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )
         text = _( "File:" ) + wxS( " " ) + text;

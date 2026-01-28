@@ -360,8 +360,8 @@ bool SCH_ITEM::ResolveDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVar
 
 wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPath, int aDepth ) const
 {
-    // Use local depth counter so each text element starts fresh
-    int depth = 0;
+    // Use aDepth to track recursion across nested GetShownText/ResolveText calls
+    int depth = aDepth;
 
     std::function<bool( wxString* )> libSymbolResolver =
             [&]( wxString* token ) -> bool
