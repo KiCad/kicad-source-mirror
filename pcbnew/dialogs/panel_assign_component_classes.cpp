@@ -139,8 +139,7 @@ bool PANEL_ASSIGN_COMPONENT_CLASSES::TransferDataToWindow()
     m_assignSheetClasses->SetValue( m_componentClassSettings->GetEnableSheetComponentClasses() );
 
     // Load dynamic component class assignments
-    for( const COMPONENT_CLASS_ASSIGNMENT_DATA& assignmentData :
-         m_componentClassSettings->GetComponentClassAssignments() )
+    for( const auto& assignmentData : m_componentClassSettings->GetComponentClassAssignments() )
     {
         PANEL_COMPONENT_CLASS_ASSIGNMENT* assignment = addAssignment();
         assignment->SetComponentClass( assignmentData.GetComponentClass() );
@@ -194,9 +193,8 @@ bool PANEL_ASSIGN_COMPONENT_CLASSES::Validate()
 
         if( !rule )
         {
-            const wxString msg = wxString::Format(
-                    _( "Error with conditions for component class assignment %s" ),
-                    assignment->GetComponentClass() );
+            const wxString msg = wxString::Format( _( "Error with conditions for component class assignment %s" ),
+                                                   assignment->GetComponentClass() );
             PAGED_DIALOG::GetDialog( this )->SetError( msg, this, assignment );
             scrollToAssignment( assignment );
             assignment->SetFocus();
@@ -327,8 +325,9 @@ void CONDITION_DATA::SetSecondaryField( const wxString& aVal )
  *
  *************************************************************************************************/
 
-PANEL_COMPONENT_CLASS_ASSIGNMENT::PANEL_COMPONENT_CLASS_ASSIGNMENT(
-        wxWindow* aParent, PANEL_ASSIGN_COMPONENT_CLASSES* aPanelParent, DIALOG_SHIM* aDlg ) :
+PANEL_COMPONENT_CLASS_ASSIGNMENT::PANEL_COMPONENT_CLASS_ASSIGNMENT( wxWindow* aParent,
+                                                                    PANEL_ASSIGN_COMPONENT_CLASSES* aPanelParent,
+                                                                    DIALOG_SHIM* aDlg ) :
         PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( aParent ),
         m_parentPanel( aPanelParent ),
         m_matchesList( static_cast<wxStaticBoxSizer*>( GetSizer() ) ),
@@ -366,10 +365,11 @@ COMPONENT_CLASS_ASSIGNMENT_DATA PANEL_COMPONENT_CLASS_ASSIGNMENT::GenerateAssign
 
 void PANEL_COMPONENT_CLASS_ASSIGNMENT::OnAddConditionClick( wxCommandEvent& event )
 {
-    auto hasCondition = [this]( const COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE aCondition )
-    {
-        return m_conditionTypes.contains( aCondition );
-    };
+    auto hasCondition =
+            [this]( const COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE aCondition )
+            {
+                return m_conditionTypes.contains( aCondition );
+            };
 
     wxMenu menu;
     menu.Append( ID_REFERENCE, _( "Add Reference Condition" ) );
@@ -434,7 +434,8 @@ void PANEL_COMPONENT_CLASS_ASSIGNMENT::onMenu( wxCommandEvent& aEvent )
         AddCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME );
         break;
 
-    default: wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
+    default:
+        wxFAIL_MSG( wxT( "Unknown ID in context menu event" ) );
     }
 }
 
@@ -584,8 +585,7 @@ void PANEL_COMPONENT_CLASS_ASSIGNMENT::OnHighlightItemsClick( wxCommandEvent& ev
  *
  *************************************************************************************************/
 
-PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::PANEL_COMPONENT_CLASS_CONDITION_REFERENCE(
-        wxWindow* aParent ) :
+PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::PANEL_COMPONENT_CLASS_CONDITION_REFERENCE( wxWindow* aParent ) :
         PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE( aParent ),
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::REFERENCE, m_refs ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
@@ -636,8 +636,8 @@ void PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::onMenu( wxCommandEvent& aEvent )
 }
 
 
-PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT::PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT(
-        wxWindow* aParent, DIALOG_SHIM* aDlg ) :
+PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT::PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT( wxWindow* aParent,
+                                                                                      DIALOG_SHIM* aDlg ) :
         PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE( aParent ),
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT, m_footprint ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) ),
@@ -693,8 +693,7 @@ void PANEL_COMPONENT_CLASS_CONDITION_SIDE::OnDeleteConditionClick( wxCommandEven
 }
 
 
-PANEL_COMPONENT_CLASS_CONDITION_ROTATION::PANEL_COMPONENT_CLASS_CONDITION_ROTATION(
-        wxWindow* aParent ) :
+PANEL_COMPONENT_CLASS_CONDITION_ROTATION::PANEL_COMPONENT_CLASS_CONDITION_ROTATION( wxWindow* aParent ) :
         PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE( aParent ),
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::ROTATION, m_rotation ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
@@ -741,8 +740,7 @@ void PANEL_COMPONENT_CLASS_CONDITION_FIELD::SetFieldsList( const std::vector<wxS
 }
 
 
-PANEL_COMPONENT_CLASS_CONDITION_CUSTOM::PANEL_COMPONENT_CLASS_CONDITION_CUSTOM(
-        wxWindow* aParent ) :
+PANEL_COMPONENT_CLASS_CONDITION_CUSTOM::PANEL_COMPONENT_CLASS_CONDITION_CUSTOM( wxWindow* aParent ) :
         PANEL_COMPONENT_CLASS_CONDITION_CUSTOM_BASE( aParent ),
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM, m_customCondition ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
