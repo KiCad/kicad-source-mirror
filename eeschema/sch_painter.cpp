@@ -2909,7 +2909,16 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             return;
     }
 
-    wxString shownText = aField->GetShownText( true );
+    SCH_SHEET_PATH* sheetPath = nullptr;
+    wxString        variant;
+
+    if( m_schematic )
+    {
+        sheetPath = &m_schematic->CurrentSheet();
+        variant = m_schematic->GetCurrentVariant();
+    }
+
+    wxString shownText = aField->GetShownText( sheetPath, true, 0, variant );
 
     if( shownText.IsEmpty() )
         return;
@@ -3282,13 +3291,20 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDim
 
 void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
-    bool DNP = false;
+    SCH_SHEET_PATH* sheetPath = nullptr;
+    wxString        variant;
+    bool            DNP = false;
 
     if( m_schematic )
-        DNP = aSheet->GetDNP( &m_schematic->CurrentSheet(), m_schematic->GetCurrentVariant() );
+    {
+        sheetPath = &m_schematic->CurrentSheet();
+        variant = m_schematic->GetCurrentVariant();
+        DNP = aSheet->GetDNP( sheetPath, variant );
+    }
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions && aSheet->GetExcludedFromSim();
+    bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
+                            && aSheet->GetExcludedFromSim( sheetPath, variant );
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;

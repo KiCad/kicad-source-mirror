@@ -495,7 +495,7 @@ public:
                             const wxString& aVariantName = wxEmptyString );
 
     const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                          bool aAllowExtraText ) const;
+                                          bool aAllowExtraText, const wxString& aVariantName = wxEmptyString ) const;
     void SetFootprintFieldText( const wxString& aFootprint );
 
     /*

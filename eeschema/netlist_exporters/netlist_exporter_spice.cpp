@@ -125,6 +125,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 {
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
+    wxString              variant = m_schematic->GetCurrentVariant();
 
     ReadDirectives( aNetlistOptions );
 
@@ -178,7 +179,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
-            if( !symbol || symbol->ResolveExcludedFromSim() )
+            if( !symbol || symbol->ResolveExcludedFromSim( &sheet, variant ) )
                 continue;
 
             try
@@ -193,11 +194,11 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
                     if( field.GetId() == FIELD_T::REFERENCE )
                         spiceItem.fields.back().SetText( symbol->GetRef( &sheet ) );
                     else
-                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, false ) );
+                        spiceItem.fields.back().SetText( field.GetShownText( &sheet, false, 0, variant ) );
                 }
 
                 readRefName( sheet, *symbol, spiceItem, refNames );
-                readModel( sheet, *symbol, spiceItem, aReporter );
+                readModel( sheet, *symbol, spiceItem, variant, aReporter );
                 readPinNumbers( *symbol, spiceItem, pins );
                 readPinNetNames( *symbol, spiceItem, pins, ncCounter );
                 readNodePattern( spiceItem );
@@ -494,14 +495,14 @@ void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 }
 
 
-void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                        SPICE_ITEM& aItem, REPORTER& aReporter )
+void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
+                                        const wxString& aVariantName, REPORTER& aReporter )
 {
     // For multi-unit symbols, collect merged Sim.Pins from all units
     wxString mergedSimPins = collectMergedSimPins( aSymbol, aSheet );
 
-    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aReporter,
-                                                                mergedSimPins );
+    const SIM_LIBRARY::MODEL& libModel = m_libMgr.CreateModel( &aSheet, aSymbol, true, 0, aVariantName,
+                                                               aReporter, mergedSimPins );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;

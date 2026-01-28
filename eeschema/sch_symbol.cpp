@@ -1294,10 +1294,10 @@ void SCH_SYMBOL::SetValueFieldText( const wxString& aValue, const SCH_SHEET_PATH
 
 
 const wxString SCH_SYMBOL::GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                                  bool aAllowExtraText ) const
+                                                  bool aAllowExtraText, const wxString& aVariantName ) const
 {
     if( aResolve )
-        return GetField( FIELD_T::FOOTPRINT )->GetShownText( aPath, aAllowExtraText );
+        return GetField( FIELD_T::FOOTPRINT )->GetShownText( aPath, aAllowExtraText, 0, aVariantName );
 
     return GetField( FIELD_T::FOOTPRINT )->GetText();
 }
@@ -1826,8 +1826,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         simLibMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
         NULL_REPORTER devnull;
-        SIM_MODEL&    model =
-                simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ), true, aDepth + 1, devnull ).model;
+        SIM_MODEL&    model = simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ), true, aDepth + 1,
+                                                     aVariantName, devnull ).model;
         SPICE_ITEM spiceItem;
         spiceItem.refName = GetRef( aPath );
 

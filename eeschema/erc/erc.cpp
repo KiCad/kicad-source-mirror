@@ -1862,10 +1862,11 @@ int ERC_TESTER::TestSimModelIssues()
     WX_STRING_REPORTER reporter;
     int                err_count = 0;
     SIM_LIB_MGR        libMgr( &m_schematic->Project() );
+    wxString           variant = m_schematic->GetCurrentVariant();
 
     for( SCH_SHEET_PATH& sheet : m_sheetList )
     {
-        if( sheet.GetExcludedFromSim() )
+        if( sheet.GetExcludedFromSim( variant ) )
             continue;
 
         std::vector<SCH_MARKER*> markers;
@@ -1882,7 +1883,7 @@ int ERC_TESTER::TestSimModelIssues()
             // Reset for each symbol
             reporter.Clear();
 
-            SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol, true, 0, reporter );
+            SIM_LIBRARY::MODEL model = libMgr.CreateModel( &sheet, *symbol, true, 0, variant, reporter );
 
             if( reporter.HasMessage() )
             {

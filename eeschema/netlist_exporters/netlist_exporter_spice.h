@@ -162,7 +162,7 @@ private:
     wxString collectMergedSimPins( SCH_SYMBOL& aSymbol, const SCH_SHEET_PATH& aSheet );
 
     void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
-                    REPORTER& aReporter );
+                    const wxString& aVariantName, REPORTER& aReporter );
     void readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                          const std::vector<PIN_INFO>& aPins );
     void readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
@@ -177,6 +177,7 @@ private:
     void writeModels( OUTPUTFORMATTER& aFormatter );
     void writeItems( OUTPUTFORMATTER& aFormatter );
 
+private:
     SIM_LIB_MGR             m_libMgr;             ///< Holds libraries and models
     NAME_GENERATOR          m_modelNameGenerator; ///< Generates unique model names
 

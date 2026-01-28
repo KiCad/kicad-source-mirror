@@ -443,7 +443,8 @@ public:
     void ReadDataFields( const std::vector<SCH_FIELD>* aFields, bool aResolve, int aDepth,
                          const std::vector<SCH_PIN*>& aPins );
 
-    void WriteFields( std::vector<SCH_FIELD>& aFields ) const;
+    void WriteFields( std::vector<SCH_FIELD>& aFields, const SCH_SHEET_PATH* aSheetPath = nullptr,
+                      const wxString& aVariantName = wxEmptyString ) const;
 
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 

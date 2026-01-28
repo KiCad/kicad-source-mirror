@@ -175,7 +175,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
     m_cbExcludeFromSim->SetValue( m_sheet->GetExcludedFromSim( &instance, variantName ) );
     m_cbExcludeFromBom->SetValue( m_sheet->GetExcludedFromBOM( &instance, variantName ) );
-    m_cbExcludeFromBoard->SetValue( m_sheet->GetExcludedFromBoard() );
+    m_cbExcludeFromBoard->SetValue( m_sheet->GetExcludedFromBoard( &instance, variantName ) );
     m_cbDNP->SetValue( m_sheet->GetDNP( &instance, variantName ) );
 
     instance.push_back( m_sheet );

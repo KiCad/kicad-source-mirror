@@ -358,6 +358,21 @@ bool SCH_SHEET_PATH::GetExcludedFromBoard() const
 }
 
 
+bool SCH_SHEET_PATH::GetExcludedFromBoard( const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return GetExcludedFromBoard();
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet->GetExcludedFromBoard( this, aVariantName ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_SHEET_PATH::GetDNP() const
 {
     for( SCH_SHEET* sheet : m_sheets )

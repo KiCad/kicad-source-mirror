@@ -763,6 +763,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                 EDA_ITEM*       item = selTool->GetNode( aPosition );
                 SCH_SHEET_PATH& sheet = m_frame->GetCurrentSheet();
+                wxString        variant = m_frame->Schematic().GetCurrentVariant();
 
                 if( !item )
                     return false;
@@ -789,7 +790,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
-                        SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, reporter ).model;
+                        SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, variant, reporter ).model;
 
                         if( reporter.HasMessage() )
                             THROW_IO_ERROR( reporter.GetMessages() );
@@ -3197,6 +3198,8 @@ int SCH_EDITOR_CONTROL::ToggleERCExclusions( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::MarkSimExclusions( const TOOL_EVENT& aEvent )
 {
+    SCH_SHEET_PATH*    sheetPath = &m_frame->GetCurrentSheet();
+    wxString           variant = m_frame->Schematic().GetCurrentVariant();
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
     cfg->m_Appearance.mark_sim_exclusions = !cfg->m_Appearance.mark_sim_exclusions;
 
@@ -3226,7 +3229,7 @@ int SCH_EDITOR_CONTROL::MarkSimExclusions( const TOOL_EVENT& aEvent )
                             },
                             RECURSE_MODE::NO_RECURSE );
 
-                    if( item->GetExcludedFromSim() )
+                    if( item->GetExcludedFromSim( sheetPath, variant ) )
                         flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
                 }
 

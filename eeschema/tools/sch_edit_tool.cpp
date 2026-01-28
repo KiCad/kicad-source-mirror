@@ -3292,8 +3292,10 @@ void SCH_EDIT_TOOL::collectUnits( const SCH_SELECTION&                          
 
 int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCH_COMMIT     commit( m_toolMgr );
+    SCH_SELECTION&  selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+    SCH_COMMIT      commit( m_toolMgr );
+    SCH_SHEET_PATH* sheet = &m_frame->GetCurrentSheet();
+    wxString        variant = m_frame->Schematic().GetCurrentVariant();
 
     std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>> collectedUnits;
 
@@ -3302,10 +3304,10 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 
     for( const auto& [symbol, _] : collectedUnits )
     {
-        if( ( aEvent.IsAction( &SCH_ACTIONS::setDNP ) && !symbol->GetDNP() )
-            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSimulation ) && !symbol->GetExcludedFromSim() )
-            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) && !symbol->GetExcludedFromBOM() )
-            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) && !symbol->GetExcludedFromBoard() ) )
+        if( ( aEvent.IsAction( &SCH_ACTIONS::setDNP ) && !symbol->GetDNP( sheet, variant ) )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSimulation ) && !symbol->GetExcludedFromSim( sheet, variant ) )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) && !symbol->GetExcludedFromBOM( sheet, variant ) )
+         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) && !symbol->GetExcludedFromBoard( sheet, variant ) ) )
         {
             new_state = true;
             break;

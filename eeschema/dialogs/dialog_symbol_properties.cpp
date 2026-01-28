@@ -628,8 +628,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim( &sheetPath, variantName ) );
     m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM( &sheetPath, variantName ) );
-    m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
-    m_cbExcludeFromPosFiles->SetValue( m_symbol->GetExcludedFromPosFiles() );
+    m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard( &sheetPath, variantName ) );
+    m_cbExcludeFromPosFiles->SetValue( m_symbol->GetExcludedFromPosFiles( &sheetPath, variantName ) );
     m_cbDNP->SetValue( m_symbol->GetDNP( &sheetPath, variantName ) );
 
     if( m_part )
@@ -786,11 +786,11 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_pinGrid->CommitPendingChanges() )
         return false;
 
-    SCH_COMMIT  commit( GetParent() );
-    SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+    SCH_COMMIT     commit( GetParent() );
+    SCH_SCREEN*    currentScreen = GetParent()->GetScreen();
     SCH_SHEET_PATH currentSheet = GetParent()->Schematic().CurrentSheet();
-    wxString currentVariant = GetParent()->Schematic().GetCurrentVariant();
-    bool        replaceOnCurrentScreen;
+    wxString       currentVariant = GetParent()->Schematic().GetCurrentVariant();
+    bool           replaceOnCurrentScreen;
 
     wxCHECK( currentScreen, false );
 

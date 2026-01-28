@@ -1694,6 +1694,8 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
 void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
                                            const wxString& aRef, const wxString& aValue )
 {
+    SCHEMATIC&  schematic = m_schematicFrame->Schematic();
+    wxString    variant = schematic.GetCurrentVariant();
     SCH_ITEM*   item = aSheetPath.ResolveItem( aSymbol );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
@@ -1718,7 +1720,7 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
 
     mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
-    SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, true, 0, devnull ).model;
+    SIM_MODEL& model = mgr.CreateModel( &aSheetPath, *symbol, true, 0, variant, devnull ).model;
 
     const SIM_MODEL::PARAM* tunerParam = model.GetTunerParam();
 
@@ -1730,7 +1732,7 @@ void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, con
     }
 
     model.SetParamValue( tunerParam->info.name, std::string( aValue.ToUTF8() ) );
-    model.WriteFields( symbol->GetFields() );
+    model.WriteFields( symbol->GetFields(), &aSheetPath, variant );
 
     m_schematicFrame->UpdateItem( symbol, false, true );
     m_schematicFrame->OnModify();

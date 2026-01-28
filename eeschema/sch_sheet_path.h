@@ -365,6 +365,7 @@ public:
     bool GetExcludedFromBOM() const;
     bool GetExcludedFromBOM( const wxString& aVariantName ) const;
     bool GetExcludedFromBoard() const;
+    bool GetExcludedFromBoard( const wxString& aVariantName ) const;
     bool GetDNP() const;
     bool GetDNP( const wxString& aVariantName ) const;
 

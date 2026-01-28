@@ -693,10 +693,11 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyl
         return;
     }
 
-    auto textVarRef = [&]( int pt )
-    {
-        return pt >= 2 && scintilla->GetCharAt( pt - 2 ) == '$' && scintilla->GetCharAt( pt - 1 ) == '{';
-    };
+    auto textVarRef =
+            [&]( int pt )
+            {
+                return pt >= 2 && scintilla->GetCharAt( pt - 2 ) == '$' && scintilla->GetCharAt( pt - 1 ) == '{';
+            };
 
     // Check for cross-reference
     if( start > 1 && scintilla->GetCharAt( start - 1 ) == ':' )
@@ -716,6 +717,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyl
                 {
                     NULL_REPORTER   devnull;
                     SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
+                    wxString        variant = schematic->GetCurrentVariant();
                     SIM_LIB_MGR     mgr( &schematic->Project() );
 
                     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
@@ -729,7 +731,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyl
 
                     mgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
-                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, devnull ).model;
+                    SIM_MODEL& model = mgr.CreateModel( &sheet, *symbol, true, 0, variant, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )
                     {

@@ -66,8 +66,8 @@ public:
     // aMergedSimPins is an optional merged Sim.Pins string from all units of a multi-unit symbol.
     // If provided (non-empty), it will be used instead of the symbol's Sim.Pins field.
     SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                    bool aResolve, int aDepth, REPORTER& aReporter,
-                                    const wxString& aMergedSimPins = wxEmptyString );
+                                    bool aResolve, int aDepth, const wxString& aVariantName,
+                                    REPORTER& aReporter, const wxString& aMergedSimPins = wxEmptyString );
 
     SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields, bool aResolve, int aDepth,
                                     const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );

@@ -1579,6 +1579,8 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     SCHEMATIC_SETTINGS& settings = m_schematic->Settings();
     SIM_LIB_MGR         simLibMgr( &Prj() );
     NULL_REPORTER       devnull;
+    SCH_SHEET_PATH&     sheetPath = GetCurrentSheet();
+    wxString            variant = m_schematic->GetCurrentVariant();
 
     // Patch for bug early in V7.99 dev
     if( settings.m_OPO_VRange.EndsWith( 'A' ) )
@@ -1623,7 +1625,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     //
     for( SCH_ITEM* item : GetScreen()->Items() )
     {
-        if( GetCurrentSheet().GetExcludedFromSim() )
+        if( sheetPath.GetExcludedFromSim( variant ) )
             continue;
 
         if( item->Type() == SCH_LINE_T )
@@ -1640,12 +1642,12 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
         else if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
-            wxString              ref = symbol->GetRef( &GetCurrentSheet() );
-            std::vector<SCH_PIN*> pins = symbol->GetPins( &GetCurrentSheet() );
+            wxString              ref = symbol->GetRef( &sheetPath );
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
 
             // Power symbols and other symbols which have the reference starting with "#" are
             // not included in simulation
-            if( ref.StartsWith( '#' ) || symbol->ResolveExcludedFromSim() )
+            if( ref.StartsWith( '#' ) || symbol->ResolveExcludedFromSim( &sheetPath, variant ) )
                 continue;
 
             for( SCH_PIN* pin : pins )
@@ -1680,7 +1682,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
                 simLibMgr.SetFilesStack( std::move( embeddedFilesStack ) );
 
-                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, true, 0, devnull ).model;
+                SIM_MODEL& model = simLibMgr.CreateModel( &sheetPath, *symbol, true, 0, variant, devnull ).model;
 
                 SPICE_ITEM spiceItem;
                 spiceItem.refName = ref;
@@ -1716,7 +1718,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 SCH_LINE* longestWire = nullptr;
                 double    length = 0.0;
 
-                if( subgraph->GetSheet().GetExcludedFromSim() )
+                if( subgraph->GetSheet().GetExcludedFromSim( variant ) )
                     continue;
 
                 for( SCH_ITEM* item : subgraph->GetItems() )

@@ -200,8 +200,8 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel, const std::vec
 }
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
-                                             bool aResolve, int aDepth, REPORTER& aReporter,
-                                             const wxString& aMergedSimPins )
+                                             bool aResolve, int aDepth, const wxString& aVariantName,
+                                             REPORTER& aReporter, const wxString& aMergedSimPins )
 {
     // Note: currently this creates a resolved model (all Kicad variables references are resolved
     // before building the model).
@@ -227,7 +227,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
             if( !aMergedSimPins.IsEmpty() && field.GetName() == SIM_PINS_FIELD )
                 fields.back().SetText( aMergedSimPins );
             else
-                fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth ) );
+                fields.back().SetText( field.GetShownText( aSheetPath, false, aDepth, aVariantName ) );
         }
     }
 
