@@ -2251,21 +2251,13 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
-            if( test->IsConnected( aPoint ) )
+            if( test->IsConnected( aPoint ) && !newWire )
             {
-                if( test->Type() == SCH_JUNCTION_T && test->GetPosition() == aPoint )
-                {
-                    test->SetFlags( SELECTED_BY_DRAG );
-                    aList.push_back( test );
-                }
-                else if( !newWire )
-                {
-                    // Add a new wire between the symbol or junction and the selected item so
-                    // the selected item can be dragged.
-                    newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
-                    newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
-                    aList.push_back( newWire );
-                }
+                // Add a new wire between the symbol or junction and the selected item so
+                // the selected item can be dragged.
+                newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
+                newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
+                aList.push_back( newWire );
             }
 
             break;
