@@ -337,10 +337,10 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
                                           SCH_SHEET_PATH>>( groupCount, ( *it ) ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
 
-                if( std::distance( it, m_orderedSymbolsSheetpath.begin() ) > 0 )
-                    it--;
-                else if( it == m_orderedSymbolsSheetpath.end() )
+                if( m_orderedSymbolsSheetpath.size() == 0 )
                     break;
+                else
+                    it--;   // we want to test the new it element, so compensate the next ++it
             }
         }
         groupCount++;
