@@ -376,14 +376,14 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
 
     // Name field
     wxStaticText* nameLabel = new wxStaticText( &dlg, wxID_ANY, _( "Variant name:" ) );
-    mainSizer->Add( nameLabel, 0, wxALL | wxEXPAND, 5 );
+    mainSizer->Add( nameLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 5 );
 
     wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY );
     mainSizer->Add( nameCtrl, 0, wxALL | wxEXPAND, 5 );
 
     // Description field
     wxStaticText* descLabel = new wxStaticText( &dlg, wxID_ANY, _( "Description (optional):" ) );
-    mainSizer->Add( descLabel, 0, wxALL | wxEXPAND, 5 );
+    mainSizer->Add( descLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 5 );
 
     wxTextCtrl* descCtrl = new wxTextCtrl( &dlg, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                            wxSize( 300, 60 ), wxTE_MULTILINE );
