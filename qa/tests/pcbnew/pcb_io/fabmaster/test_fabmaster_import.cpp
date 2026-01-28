@@ -33,6 +33,7 @@
 #include <pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <zone.h>
 
 
@@ -45,6 +46,43 @@ struct FABMASTER_IMPORT_FIXTURE
 
 
 BOOST_FIXTURE_TEST_SUITE( FabmasterImport, FABMASTER_IMPORT_FIXTURE )
+
+
+/**
+ * Test that footprints with pads are properly imported when the REFDES column
+ * is empty in the PIN section.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/7955
+ *
+ * When a Fabmaster file is exported from a board with only components and no netlist,
+ * the REFDES column in the PIN section is empty. The importer should fall back to
+ * using SYM_NAME to match pins with their footprints.
+ */
+BOOST_AUTO_TEST_CASE( EmptyRefdesInPins )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/fabmaster/cds2f_only_2_comp.txt";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_fabmasterPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    // The board should have footprints
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    // Each footprint should have pads (before the fix, pads were missing because
+    // the lookup by empty REFDES failed)
+    int totalPads = 0;
+
+    for( const FOOTPRINT* fp : board->Footprints() )
+    {
+        totalPads += fp->Pads().size();
+    }
+
+    BOOST_CHECK_MESSAGE( totalPads > 0,
+                         "Footprints should have pads when REFDES is empty in PIN section" );
+}
 
 
 /**

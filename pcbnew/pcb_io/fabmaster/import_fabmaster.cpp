@@ -2009,11 +2009,16 @@ size_t FABMASTER::processPins( size_t aRow )
         pin->refdes = row[refdes_col];
         pin->rotation = readDouble( row[pinrot_col] );
 
-        auto map_it = pins.find( pin->refdes );
+        // Use refdes as the key if available, otherwise fall back to sym_name.
+        // Some fabmaster exports (e.g., boards with only components and no netlist)
+        // have empty refdes fields, but the sym_name still links pins to their symbol.
+        std::string pin_key = pin->refdes.empty() ? pin->name : pin->refdes;
+
+        auto map_it = pins.find( pin_key );
 
         if( map_it == pins.end() )
         {
-            auto retval = pins.insert( std::make_pair( pin->refdes, std::set<std::unique_ptr<PIN>,
+            auto retval = pins.insert( std::make_pair( pin_key, std::set<std::unique_ptr<PIN>,
                                                        PIN::BY_NUM>{} ) );
             map_it = retval.first;
         }
@@ -2618,6 +2623,10 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             }
 
             auto pin_it = pins.find( src->refdes );
+
+            // If no pins found by refdes, try by symbol name (for fabmaster exports without netlists)
+            if( pin_it == pins.end() )
+                pin_it = pins.find( src->name );
 
             if( pin_it != pins.end() )
             {
