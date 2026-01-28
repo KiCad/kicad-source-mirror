@@ -145,11 +145,11 @@ bool PANEL_ASSIGN_COMPONENT_CLASSES::TransferDataToWindow()
         assignment->SetComponentClass( assignmentData.GetComponentClass() );
         assignment->SetConditionsOperator( assignmentData.GetConditionsOperator() );
 
-        for( const auto& [conditionType, conditionData] : assignmentData.GetConditions() )
+        for( const auto& [conditionType, primaryData, secondaryData] : assignmentData.GetConditions() )
         {
             CONDITION_DATA* match = assignment->AddCondition( conditionType );
-            match->SetPrimaryField( conditionData.first );
-            match->SetSecondaryField( conditionData.second );
+            match->SetPrimaryField( primaryData );
+            match->SetSecondaryField( secondaryData );
         }
     }
 
@@ -180,16 +180,13 @@ bool PANEL_ASSIGN_COMPONENT_CLASSES::TransferDataFromWindow()
 
 bool PANEL_ASSIGN_COMPONENT_CLASSES::Validate()
 {
-    PCB_EDIT_FRAME* frame = GetFrame();
-    BOARD*          board = dynamic_cast<BOARD*>( frame->GetModel() );
-
-    frame->GetCanvas()->Refresh();
+    GetFrame()->GetCanvas()->Refresh();
 
     for( PANEL_COMPONENT_CLASS_ASSIGNMENT* assignment : m_assignments )
     {
         const COMPONENT_CLASS_ASSIGNMENT_DATA assignmentData = assignment->GenerateAssignmentData();
         const std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> rule =
-                board->GetComponentClassManager().CompileAssignmentRule( assignmentData );
+                COMPONENT_CLASS_MANAGER::CompileAssignmentRule( assignmentData );
 
         if( !rule )
         {
@@ -355,7 +352,7 @@ COMPONENT_CLASS_ASSIGNMENT_DATA PANEL_COMPONENT_CLASS_ASSIGNMENT::GenerateAssign
 
     for( const auto& condition : GetConditions() )
     {
-        assignmentData.SetCondition( condition->GetConditionType(), condition->GetPrimaryField(),
+        assignmentData.AddCondition( condition->GetConditionType(), condition->GetPrimaryField(),
                                      condition->GetSecondaryField() );
     }
 
@@ -365,12 +362,6 @@ COMPONENT_CLASS_ASSIGNMENT_DATA PANEL_COMPONENT_CLASS_ASSIGNMENT::GenerateAssign
 
 void PANEL_COMPONENT_CLASS_ASSIGNMENT::OnAddConditionClick( wxCommandEvent& event )
 {
-    auto hasCondition =
-            [this]( const COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE aCondition )
-            {
-                return m_conditionTypes.contains( aCondition );
-            };
-
     wxMenu menu;
     menu.Append( ID_REFERENCE, _( "Add Reference Condition" ) );
     menu.Append( ID_FOOTPRINT, _( "Add Footprint Condition" ) );
@@ -379,13 +370,6 @@ void PANEL_COMPONENT_CLASS_ASSIGNMENT::OnAddConditionClick( wxCommandEvent& even
     menu.Append( ID_FOOTPRINT_FIELD, _( "Add Footprint Field Value Condition" ) );
     menu.Append( ID_SHEET_NAME, _( "Add Sheet Condition" ) );
     menu.Append( ID_CUSTOM, _( "Add Custom Expression Condition" ) );
-    menu.Enable( ID_REFERENCE, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::REFERENCE ) );
-    menu.Enable( ID_FOOTPRINT, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT ) );
-    menu.Enable( ID_SIDE, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SIDE ) );
-    menu.Enable( ID_ROTATION, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::ROTATION ) );
-    menu.Enable( ID_FOOTPRINT_FIELD, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT_FIELD ) );
-    menu.Enable( ID_CUSTOM, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM ) );
-    menu.Enable( ID_SHEET_NAME, !hasCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME ) );
     PopupMenu( &menu );
 }
 
@@ -443,8 +427,6 @@ void PANEL_COMPONENT_CLASS_ASSIGNMENT::onMenu( wxCommandEvent& aEvent )
 CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
         const COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE aCondition )
 {
-    wxASSERT_MSG( !m_conditionTypes.contains( aCondition ), "Condition type already exists" );
-
     wxPanel* panelToAdd = nullptr;
 
     switch( aCondition )
@@ -454,25 +436,21 @@ CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
         PANEL_COMPONENT_CLASS_CONDITION_REFERENCE* refsPanel = new PANEL_COMPONENT_CLASS_CONDITION_REFERENCE( this );
         refsPanel->SetSelectionRefs( m_parentPanel->GetSelectionRefs() );
         panelToAdd = refsPanel;
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::REFERENCE );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT:
     {
         panelToAdd = new PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT( this, m_dlg );
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SIDE:
     {
         panelToAdd = new PANEL_COMPONENT_CLASS_CONDITION_SIDE( this );
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SIDE );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::ROTATION:
     {
         panelToAdd = new PANEL_COMPONENT_CLASS_CONDITION_ROTATION( this );
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::ROTATION );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT_FIELD:
@@ -480,13 +458,11 @@ CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
         PANEL_COMPONENT_CLASS_CONDITION_FIELD* fieldPanel = new PANEL_COMPONENT_CLASS_CONDITION_FIELD( this );
         fieldPanel->SetFieldsList( m_parentPanel->GetFieldNames() );
         panelToAdd = fieldPanel;
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT_FIELD );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM:
     {
         panelToAdd = new PANEL_COMPONENT_CLASS_CONDITION_CUSTOM( this );
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM );
         break;
     }
     case COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME:
@@ -494,7 +470,6 @@ CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
         PANEL_COMPONENT_CLASS_CONDITION_SHEET* sheetPanel = new PANEL_COMPONENT_CLASS_CONDITION_SHEET( this );
         sheetPanel->SetSheetsList( m_parentPanel->GetSheetNames() );
         panelToAdd = sheetPanel;
-        m_conditionTypes.insert( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME );
         break;
     }
     }
@@ -515,10 +490,7 @@ CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
 void PANEL_COMPONENT_CLASS_ASSIGNMENT::RemoveCondition( wxPanel* aMatch )
 {
     if( CONDITION_DATA* matchData = dynamic_cast<CONDITION_DATA*>( aMatch ) )
-    {
-        m_conditionTypes.erase( matchData->GetConditionType() );
         m_matches.erase( std::ranges::find( m_matches, matchData ) );
-    }
 
     m_matchesList->Detach( aMatch );
     aMatch->Destroy();

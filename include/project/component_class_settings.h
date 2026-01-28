@@ -49,14 +49,14 @@ public:
     };
 
     /// Sets the given condition type with the assocated match data
-    void SetCondition( const CONDITION_TYPE aCondition, const wxString& aPrimaryData,
+    void AddCondition( const CONDITION_TYPE aCondition, const wxString& aPrimaryData,
                        const wxString& aSecondaryData )
     {
-        m_conditions[aCondition] = { aPrimaryData, aSecondaryData };
+        m_conditions.push_back( { aCondition, aPrimaryData, aSecondaryData } );
     }
 
     /// Gets all conditions
-    const std::unordered_map<CONDITION_TYPE, std::pair<wxString, wxString>>& GetConditions() const
+    const std::vector<std::tuple<CONDITION_TYPE, wxString, wxString>>& GetConditions() const
     {
         return m_conditions;
     }
@@ -92,8 +92,8 @@ protected:
     /// The name of the component class for this assignment rule
     wxString m_componentClass;
 
-    /// Map of condition types to primary and secondary data fields for the condition
-    std::unordered_map<CONDITION_TYPE, std::pair<wxString, wxString>> m_conditions;
+    /// Set of conditions with type, primary and secondary data fields for the condition
+    std::vector<std::tuple<CONDITION_TYPE, wxString, wxString>> m_conditions;
 
     /// Whether conditions are applied with AND or OR logic
     /// Defaults to ALL

@@ -105,18 +105,24 @@ COMPONENT_CLASS_SETTINGS::saveAssignment( const COMPONENT_CLASS_ASSIGNMENT_DATA&
 
     nlohmann::json conditionsJson;
 
-    for( const auto& [conditionType, conditionData] : aAssignment.GetConditions() )
+    for( const auto& [conditionType, primaryData, secondaryData] : aAssignment.GetConditions() )
     {
         nlohmann::json conditionJson;
 
-        if( !conditionData.first.empty() )
-            conditionJson["primary"] = conditionData.first;
+        if( !primaryData.empty() )
+            conditionJson["primary"] = primaryData;
 
-        if( !conditionData.second.empty() )
-            conditionJson["secondary"] = conditionData.second;
+        if( !secondaryData.empty() )
+            conditionJson["secondary"] = secondaryData;
 
-        const wxString conditionName = COMPONENT_CLASS_ASSIGNMENT_DATA::GetConditionName( conditionType );
-        conditionsJson[conditionName] = conditionJson;
+        const    wxString conditionName = COMPONENT_CLASS_ASSIGNMENT_DATA::GetConditionName( conditionType );
+        int      suffix = 1;
+        wxString uniqueName = conditionName;
+
+        while( conditionsJson.contains( uniqueName ) )
+            uniqueName = wxString::Format( wxT( "%s-%d" ), conditionName, suffix++ );
+
+        conditionsJson[uniqueName] = conditionJson;
     }
 
     ret["conditions"] = conditionsJson;
@@ -141,9 +147,13 @@ COMPONENT_CLASS_SETTINGS::loadAssignment( const nlohmann::json& aJson )
 
     for( const auto& [conditionTypeStr, conditionData] : aJson["conditions"].items() )
     {
-        wxString                                        primary, secondary;
+        wxString primary, secondary;
+        wxString typeStr( conditionTypeStr );
+
+        typeStr = typeStr.BeforeFirst( '-' );
+
         COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE conditionType =
-                COMPONENT_CLASS_ASSIGNMENT_DATA::GetConditionType( conditionTypeStr );
+                COMPONENT_CLASS_ASSIGNMENT_DATA::GetConditionType( typeStr );
 
         if( conditionData.contains( "primary" ) )
             primary = wxString( conditionData["primary"].get<std::string>().c_str(), wxConvUTF8 );
@@ -151,7 +161,7 @@ COMPONENT_CLASS_SETTINGS::loadAssignment( const nlohmann::json& aJson )
         if( conditionData.contains( "secondary" ) )
             secondary = wxString( conditionData["secondary"].get<std::string>().c_str(), wxConvUTF8 );
 
-        assignment.SetCondition( conditionType, primary, secondary );
+        assignment.AddCondition( conditionType, primary, secondary );
     }
 
     return assignment;
@@ -331,32 +341,32 @@ wxString COMPONENT_CLASS_ASSIGNMENT_DATA::GetAssignmentInDRCLanguage() const
 
     std::vector<wxString> conditionsExprs;
 
-    for( auto& [conditionType, conditionData] : m_conditions )
+    for( auto& [conditionType, primaryData, secondaryData] : m_conditions )
     {
         wxString conditionExpr;
 
         switch( conditionType )
         {
         case CONDITION_TYPE::REFERENCE:
-            conditionExpr = getRefExpr( conditionData.first );
+            conditionExpr = getRefExpr( primaryData );
             break;
         case CONDITION_TYPE::FOOTPRINT:
-            conditionExpr = getFootprintExpr( conditionData.first );
+            conditionExpr = getFootprintExpr( primaryData );
             break;
         case CONDITION_TYPE::SIDE:
-            conditionExpr = getSideExpr( conditionData.first );
+            conditionExpr = getSideExpr( primaryData );
             break;
         case CONDITION_TYPE::ROTATION:
-            conditionExpr = getRotationExpr( conditionData.first );
+            conditionExpr = getRotationExpr( primaryData );
             break;
         case CONDITION_TYPE::FOOTPRINT_FIELD:
-            conditionExpr = getFootprintFieldExpr( conditionData.first, conditionData.second );
+            conditionExpr = getFootprintFieldExpr( primaryData, secondaryData );
             break;
         case CONDITION_TYPE::CUSTOM:
-            conditionExpr = getCustomFieldExpr( conditionData.first );
+            conditionExpr = getCustomFieldExpr( primaryData );
             break;
         case CONDITION_TYPE::SHEET_NAME:
-            conditionExpr = getSheetNameExpr( conditionData.first );
+            conditionExpr = getSheetNameExpr( primaryData );
             break;
         }
 

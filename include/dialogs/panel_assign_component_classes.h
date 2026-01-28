@@ -245,9 +245,6 @@ protected:
     /// The sizer containing match condition panels
     wxStaticBoxSizer* m_matchesList;
 
-    /// Set containing all currently configured match condition types
-    std::unordered_set<COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE> m_conditionTypes;
-
     /// The parent configuration dialog
     DIALOG_SHIM* m_dlg;
 

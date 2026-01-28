@@ -31,10 +31,9 @@
 
 
 COMPONENT_CLASS_MANAGER::COMPONENT_CLASS_MANAGER( BOARD* board ) :
-        m_board( board ), m_hasCustomAssignmentConditions( false )
+        m_board( board )
 {
-    m_noneClass =
-            std::make_shared<COMPONENT_CLASS>( wxEmptyString, COMPONENT_CLASS::USAGE::STATIC );
+    m_noneClass = std::make_shared<COMPONENT_CLASS>( wxEmptyString, COMPONENT_CLASS::USAGE::STATIC );
 }
 
 
@@ -195,7 +194,6 @@ bool COMPONENT_CLASS_MANAGER::SyncDynamicComponentClassAssignments(
         const std::vector<COMPONENT_CLASS_ASSIGNMENT_DATA>& aAssignments,
         bool aGenerateSheetClasses, const std::unordered_set<wxString>& aNewSheetPaths )
 {
-    m_hasCustomAssignmentConditions = false;
     bool success = true;
 
     // Invalidate component class cache entries
@@ -214,12 +212,6 @@ bool COMPONENT_CLASS_MANAGER::SyncDynamicComponentClassAssignments(
 
     for( const COMPONENT_CLASS_ASSIGNMENT_DATA& assignment : aAssignments )
     {
-        if( assignment.GetConditions().contains(
-                    COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM ) )
-        {
-            m_hasCustomAssignmentConditions = true;
-        }
-
         std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> rule = CompileAssignmentRule( assignment );
 
         if( rule )
@@ -248,7 +240,7 @@ bool COMPONENT_CLASS_MANAGER::SyncDynamicComponentClassAssignments(
 
             COMPONENT_CLASS_ASSIGNMENT_DATA assignment;
             assignment.SetComponentClass( sheetName );
-            assignment.SetCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME,
+            assignment.AddCondition( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME,
                                      sheetName, wxEmptyString );
 
             std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> rule =

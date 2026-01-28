@@ -104,9 +104,6 @@ public:
     /// @param fp the footprint to rebuild. If null, rebuilds all footprint caches
     void RebuildRequiredCaches( FOOTPRINT* aFootprint = nullptr ) const;
 
-    /// Determines whether any custom dynamic rules have a custom assignment condition
-    bool HasCustomAssignmentConditions() const { return m_hasCustomAssignmentConditions; }
-
     static std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>
     CompileAssignmentRule( const COMPONENT_CLASS_ASSIGNMENT_DATA& aAssignment );
 
@@ -142,9 +139,6 @@ protected:
 
     /// Active component class assignment rules
     std::vector<std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>> m_assignmentRules;
-
-    /// Quick lookup of presence of custom dynamic assignment conditions
-    bool m_hasCustomAssignmentConditions;
 
     /// Monotonically increasing ticker to test cached component class validity
     long long int m_ticker{ 0 };
