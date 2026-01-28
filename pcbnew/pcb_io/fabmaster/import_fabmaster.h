@@ -126,6 +126,7 @@ private:
         int x_offset;
         int y_offset;
         int antipad_size;
+        std::set<std::string> copper_layers;  ///< Copper layers with non-zero annular ring
 
         struct HASH
         {

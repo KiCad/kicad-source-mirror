@@ -565,10 +565,13 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             continue;
         }
 
+        auto layer = layers.find( pad_layer );
+
+        if( w > 0.0 && layer != layers.end() && layer->second.conductive )
+            pad->copper_layers.insert( pad_layer );
+
         if( w <= 0.0 )
             continue;
-
-        auto layer = layers.find( pad_layer );
 
         if( layer != layers.end() )
         {
@@ -2873,6 +2876,17 @@ bool FABMASTER::loadVias( BOARD* aBoard )
     const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
     const auto& ds = aBoard->GetDesignSettings();
 
+    // Build a sorted list of conductive layers by their layer id for via span determination
+    std::vector<const FABMASTER_LAYER*> conductiveLayers;
+
+    for( const auto& layer : layers )
+    {
+        if( layer.second.conductive )
+            conductiveLayers.push_back( &layer.second );
+    }
+
+    std::sort( conductiveLayers.begin(), conductiveLayers.end(), FABMASTER_LAYER::BY_ID() );
+
     for( auto& via : vias )
     {
         checkpoint();
@@ -2906,6 +2920,47 @@ bool FABMASTER::loadVias( BOARD* aBoard )
         {
             new_via->SetDrill( padstack->second.drill_size_x );
             new_via->SetWidth( PADSTACK::ALL_LAYERS, padstack->second.width );
+
+            const std::set<std::string>& viaLayers = padstack->second.copper_layers;
+
+            if( viaLayers.size() >= 2 )
+            {
+                // Find the first and last conductive layers that have annular rings
+                const FABMASTER_LAYER* topLayer = nullptr;
+                const FABMASTER_LAYER* botLayer = nullptr;
+
+                for( const FABMASTER_LAYER* layer : conductiveLayers )
+                {
+                    if( viaLayers.count( layer->name ) )
+                    {
+                        if( !topLayer )
+                            topLayer = layer;
+
+                        botLayer = layer;
+                    }
+                }
+
+                if( topLayer && botLayer && topLayer != botLayer )
+                {
+                    PCB_LAYER_ID topLayerId = static_cast<PCB_LAYER_ID>( topLayer->layerid );
+                    PCB_LAYER_ID botLayerId = static_cast<PCB_LAYER_ID>( botLayer->layerid );
+
+                    // Check if this spans all copper layers
+                    bool isThrough = ( topLayerId == F_Cu && botLayerId == B_Cu );
+
+                    if( !isThrough )
+                    {
+                        // Blind via connects to an outer layer (F_Cu or B_Cu)
+                        // Buried via connects only to inner layers
+                        if( topLayerId == F_Cu || botLayerId == B_Cu )
+                            new_via->SetViaType( VIATYPE::BLIND );
+                        else
+                            new_via->SetViaType( VIATYPE::BURIED );
+
+                        new_via->SetLayerPair( topLayerId, botLayerId );
+                    }
+                }
+            }
         }
 
         aBoard->Add( new_via, ADD_MODE::APPEND );
