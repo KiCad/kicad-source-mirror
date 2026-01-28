@@ -31,6 +31,7 @@
 class wxCheckBox;
 class wxTextCtrl;
 class wxListCtrl;
+class wxListEvent;
 class wxButton;
 
 class DIALOG_GIT_COMMIT : public DIALOG_SHIM
@@ -50,6 +51,8 @@ public:
     std::vector<wxString> GetSelectedFiles() const;
 
     void OnTextChanged( wxCommandEvent& event );
+    void OnItemChecked( wxListEvent& event );
+    void OnItemUnchecked( wxListEvent& event );
 
 private:
     wxTextCtrl* m_commitMessageTextCtrl;

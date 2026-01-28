@@ -44,8 +44,7 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
 
 
     // List Control for files to commit
-    m_listCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                 wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_listCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
 
     // Set up columns
     m_listCtrl->EnableCheckBoxes();
@@ -162,6 +161,8 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
 
     // Bind events
     Bind( wxEVT_TEXT, &DIALOG_GIT_COMMIT::OnTextChanged, this, m_commitMessageTextCtrl->GetId() );
+    Bind( wxEVT_LIST_ITEM_CHECKED, &DIALOG_GIT_COMMIT::OnItemChecked, this, m_listCtrl->GetId() );
+    Bind( wxEVT_LIST_ITEM_UNCHECKED, &DIALOG_GIT_COMMIT::OnItemUnchecked, this, m_listCtrl->GetId() );
 
     // Set the repository and defaults
     m_repo = repo;
@@ -221,12 +222,46 @@ std::vector<wxString> DIALOG_GIT_COMMIT::GetSelectedFiles() const
     std::vector<wxString> selectedFiles;
 
     long item = -1;
-    while( ( item = m_listCtrl->GetNextItem( item, wxLIST_NEXT_ALL ) )
-           != -1 )
+
+    while( ( item = m_listCtrl->GetNextItem( item, wxLIST_NEXT_ALL ) ) != -1 )
     {
         if( m_listCtrl->IsItemChecked( item ) )
             selectedFiles.push_back( m_listCtrl->GetItemText( item ) );
     }
 
     return selectedFiles;
+}
+
+
+void DIALOG_GIT_COMMIT::OnItemChecked( wxListEvent& aEvent )
+{
+    long checkedItem = aEvent.GetIndex();
+
+    if( m_listCtrl->GetItemState( checkedItem, wxLIST_STATE_SELECTED ) )
+    {
+        long item = -1;
+
+        while( ( item = m_listCtrl->GetNextItem( item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) ) != -1 )
+        {
+            if( item != checkedItem )
+                m_listCtrl->CheckItem( item, true );
+        }
+    }
+}
+
+
+void DIALOG_GIT_COMMIT::OnItemUnchecked( wxListEvent& aEvent )
+{
+    long uncheckedItem = aEvent.GetIndex();
+
+    if( m_listCtrl->GetItemState( uncheckedItem, wxLIST_STATE_SELECTED ) )
+    {
+        long item = -1;
+
+        while( ( item = m_listCtrl->GetNextItem( item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) ) != -1 )
+        {
+            if( item != uncheckedItem )
+                m_listCtrl->CheckItem( item, false );
+        }
+    }
 }
