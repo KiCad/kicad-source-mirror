@@ -243,8 +243,9 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                 m_infoBar->ShowMessage( wxString::Format( _( "No model named '%s' in library." ),
                                                           modelName ) );
 
-                // Default to first item in library
-                m_modelListBox->SetSelection( 0 );
+                // Default to first item in library if any exist
+                if( m_modelListBox->GetCount() > 0 )
+                    m_modelListBox->SetSelection( 0 );
             }
             else
             {
@@ -1319,15 +1320,23 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
 {
+    int count = m_modelListBox->GetCount();
+
+    if( count == 0 )
+    {
+        aKeyStroke.Skip();
+        return;
+    }
+
     int sel = m_modelListBox->GetSelection();
 
     switch( aKeyStroke.GetKeyCode() )
     {
     case WXK_UP:
         if( sel == wxNOT_FOUND )
-            sel = m_modelListBox->GetCount() - 1;
+            sel = count - 1;
         else
-            sel--;
+            sel = std::max( sel - 1, 0 );
 
         break;
 
@@ -1335,7 +1344,7 @@ void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
         if( sel == wxNOT_FOUND )
             sel = 0;
         else
-            sel++;
+            sel = std::min( sel + 1, count - 1 );
 
         break;
 
@@ -1344,12 +1353,11 @@ void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
         return;
 
     default:
-        aKeyStroke.Skip();      // Any other key: pass on to search box directly.
+        aKeyStroke.Skip();
         return;
     }
 
-    if( sel >= 0 && sel < (int) m_modelListBox->GetCount() )
-        m_modelListBox->SetSelection( sel );
+    m_modelListBox->SetSelection( sel );
 }
 
 
@@ -1376,7 +1384,7 @@ void DIALOG_SIM_MODEL<T>::onModelFilter( wxCommandEvent& aEvent )
     m_modelListBox->Clear();
     m_modelListBox->Append( modelNames );
 
-    if( !m_modelListBox->IsEmpty() )
+    if( m_modelListBox->GetCount() > 0 )
     {
         if( !m_modelListBox->SetStringSelection( current ) )
             m_modelListBox->SetSelection( 0 );
