@@ -499,7 +499,7 @@ CONDITION_DATA* PANEL_COMPONENT_CLASS_ASSIGNMENT::AddCondition(
     }
 
     const size_t numItems = m_matchesList->GetItemCount();
-    m_matchesList->Insert( numItems - 1, panelToAdd, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+    m_matchesList->Insert( numItems - 1, panelToAdd, 0, wxEXPAND | wxALL, 5 );
     Layout();
     GetParent()->Layout();
     m_parentPanel->Layout();

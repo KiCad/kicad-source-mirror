@@ -20,26 +20,23 @@ PANEL_ASSIGN_COMPONENT_CLASSES_BASE::PANEL_ASSIGN_COMPONENT_CLASSES_BASE( wxWind
 	bSizerMain->Add( m_assignSheetClasses, 0, wxALL, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	wxFlexGridSizer* fgSizer8;
-	fgSizer8 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer8->AddGrowableCol( 1 );
-	fgSizer8->SetFlexibleDirection( wxHORIZONTAL );
-	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Custom Assignments:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	fgSizer8->Add( m_staticText3, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer12->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer12->Add( 0, 0, 1, wxBOTTOM|wxEXPAND, 5 );
 
 	m_btnAddAssignment = new wxButton( this, wxID_ANY, _("Add Custom Assignment"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer8->Add( m_btnAddAssignment, 0, wxALL, 5 );
+	bSizer12->Add( m_btnAddAssignment, 0, 0, 5 );
 
 
-	bSizerMain->Add( fgSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bSizer12, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_assignmentsScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_assignmentsScrollWindow->SetScrollRate( 5, 5 );
@@ -50,7 +47,7 @@ PANEL_ASSIGN_COMPONENT_CLASSES_BASE::PANEL_ASSIGN_COMPONENT_CLASSES_BASE( wxWind
 	m_assignmentsScrollWindow->SetSizer( m_assignmentsList );
 	m_assignmentsScrollWindow->Layout();
 	m_assignmentsList->Fit( m_assignmentsScrollWindow );
-	bSizerMain->Add( m_assignmentsScrollWindow, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerMain->Add( m_assignmentsScrollWindow, 1, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
@@ -75,68 +72,56 @@ PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( wx
 	wxStaticBoxSizer* m_assignmentGroup;
 	m_assignmentGroup = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
 
-	wxFlexGridSizer* m_header;
-	m_header = new wxFlexGridSizer( 0, 6, 0, 0 );
-	m_header->AddGrowableCol( 1 );
-	m_header->SetFlexibleDirection( wxHORIZONTAL );
-	m_header->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	wxBoxSizer* bSizer13;
+	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_componentClassLabel = new wxStaticText( m_assignmentGroup->GetStaticBox(), wxID_ANY, _("Component class:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_componentClassLabel = new wxStaticText( this, wxID_ANY, _("Component class:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_componentClassLabel->Wrap( -1 );
-	m_header->Add( m_componentClassLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer13->Add( m_componentClassLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_componentClass = new wxTextCtrl( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_header->Add( m_componentClass, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_componentClass = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer13->Add( m_componentClass, 1, wxEXPAND, 5 );
 
 
-	m_header->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizer13->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	m_buttonDeleteAssignment = new STD_BITMAP_BUTTON( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonDeleteAssignment = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteAssignment->SetToolTip( _("Delete row") );
 
-	m_header->Add( m_buttonDeleteAssignment, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizer13->Add( m_buttonDeleteAssignment, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	m_assignmentGroup->Add( m_header, 0, wxEXPAND, 0 );
-
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizer4->Add( 0, 5, 0, 0, 5 );
+	m_assignmentGroup->Add( bSizer13, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAddCondition = new STD_BITMAP_BUTTON( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3->Add( m_buttonAddCondition, 0, wxALIGN_CENTER_VERTICAL, 0 );
+	m_buttonAddCondition = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer3->Add( m_buttonAddCondition, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3->Add( 30, 0, 1, wxEXPAND, 5 );
 
-	m_buttonHighlightItems = new STD_BITMAP_BUTTON( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonHighlightItems = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonHighlightItems->SetToolTip( _("Highlight matching footprints") );
 
-	bSizer3->Add( m_buttonHighlightItems, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+	bSizer3->Add( m_buttonHighlightItems, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_staticline2 = new wxStaticLine( m_assignmentGroup->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bSizer3->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer3->Add( m_staticline2, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer3->Add( 5, 0, 0, wxEXPAND, 5 );
 
-	m_radioAll = new wxRadioButton( m_assignmentGroup->GetStaticBox(), wxID_ANY, _("Match all"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_radioAll = new wxRadioButton( this, wxID_ANY, _("Match all"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radioAll->SetValue( true );
-	bSizer3->Add( m_radioAll, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer3->Add( m_radioAll, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_radioAny = new wxRadioButton( m_assignmentGroup->GetStaticBox(), wxID_ANY, _("Match any"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_radioAny, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-
-	bSizer4->Add( bSizer3, 0, wxEXPAND, 5 );
+	m_radioAny = new wxRadioButton( this, wxID_ANY, _("Match any"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_radioAny, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	m_assignmentGroup->Add( bSizer4, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_assignmentGroup->Add( bSizer3, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( m_assignmentGroup );
@@ -175,15 +160,15 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_refs = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_conditionSizer->Add( m_refs, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_refs, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_buttonImportRefs = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonImportRefs->SetToolTip( _("Import references") );
 
-	m_conditionSizer->Add( m_buttonImportRefs, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_conditionSizer->Add( m_buttonImportRefs, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -191,10 +176,10 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer5->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer5->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer5 );
@@ -233,10 +218,10 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE_BASE::PANEL_COMPONENT_CLASS_CONDITION_SIDE_
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_side = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
-	m_conditionSizer->Add( m_side, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_side, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -244,10 +229,10 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE_BASE::PANEL_COMPONENT_CLASS_CONDITION_SIDE_
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizer6->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer6->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer6 );
@@ -282,14 +267,14 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_rotation = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_conditionSizer->Add( m_rotation, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_rotation, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_rotUnit = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotUnit->Wrap( -1 );
-	m_conditionSizer->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -297,10 +282,10 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer7->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer7->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer7 );
@@ -335,15 +320,15 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_footprint = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_conditionSizer->Add( m_footprint, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_footprint, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_buttonShowLibrary = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonShowLibrary->SetToolTip( _("Show library") );
 
-	m_conditionSizer->Add( m_buttonShowLibrary, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_conditionSizer->Add( m_buttonShowLibrary, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -351,10 +336,10 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer8->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer8->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer8 );
@@ -392,12 +377,12 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_fieldName->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_fieldName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_fieldName, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 10, 0, 1, wxEXPAND, 5 );
@@ -406,12 +391,12 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 	m_staticText44->Wrap( -1 );
 	m_staticText44->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fieldValue->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_fieldValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_conditionSizer->Add( m_fieldValue, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -419,10 +404,10 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer9->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer9->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer9 );
@@ -457,21 +442,21 @@ PANEL_COMPONENT_CLASS_CONDITION_CUSTOM_BASE::PANEL_COMPONENT_CLASS_CONDITION_CUS
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_customCondition = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_conditionSizer->Add( m_customCondition, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_conditionSizer->Add( m_customCondition, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
+	m_conditionSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer10->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer10->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer10 );
@@ -506,10 +491,10 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 	m_title->Wrap( -1 );
 	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
 
-	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_sheetName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
-	m_conditionSizer->Add( m_sheetName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_conditionSizer->Add( m_sheetName, 0, wxEXPAND, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -517,10 +502,10 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 	m_buttonDeleteMatch = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteMatch->SetToolTip( _("Delete row") );
 
-	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_conditionSizer->Add( m_buttonDeleteMatch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer11->Add( m_conditionSizer, 1, wxEXPAND, 10 );
+	bSizer11->Add( m_conditionSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizer11 );
