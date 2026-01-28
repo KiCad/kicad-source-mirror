@@ -376,18 +376,22 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog()
 
     // Name field
     wxStaticText* nameLabel = new wxStaticText( &dlg, wxID_ANY, _( "Variant name:" ) );
-    mainSizer->Add( nameLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 5 );
+    mainSizer->Add( nameLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 10 );
+
+    mainSizer->AddSpacer( 3 );
 
     wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY );
-    mainSizer->Add( nameCtrl, 0, wxALL | wxEXPAND, 5 );
+    mainSizer->Add( nameCtrl, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 10 );
 
     // Description field
     wxStaticText* descLabel = new wxStaticText( &dlg, wxID_ANY, _( "Description (optional):" ) );
-    mainSizer->Add( descLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 5 );
+    mainSizer->Add( descLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 10 );
+
+    mainSizer->AddSpacer( 3 );
 
     wxTextCtrl* descCtrl = new wxTextCtrl( &dlg, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                            wxSize( 300, 60 ), wxTE_MULTILINE );
-    mainSizer->Add( descCtrl, 1, wxALL | wxEXPAND, 5 );
+    mainSizer->Add( descCtrl, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 10 );
 
     // Buttons
     wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();

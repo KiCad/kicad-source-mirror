@@ -3028,7 +3028,9 @@ void SCH_EDIT_FRAME::RemoveVariant()
     // Default variant cannot be removed.
     choices.RemoveAt( 0 );
 
-    wxSingleChoiceDialog dlg( this, _( "Select variant name to remove" ), _( "Remove Design Variant" ), choices );
+    wxSingleChoiceDialog dlg( this, _( "Select variant name to remove:" ) + wxS( "                " ),
+                              _( "Remove Design Variant" ), choices );
+    dlg.Layout();
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
