@@ -1,0 +1,86 @@
+{
+  "file": "mainBoard.brd",
+  "file_size": 322100,
+  "version": {
+    "magic": "0x131503",
+    "version_string": "V166"
+  },
+  "units": {
+    "type": "metric",
+    "divisor": 10
+  },
+  "counts": {
+    "strings": 264,
+    "objects": 3641
+  },
+  "object_types": {
+    "0x01_ARC": 163,
+    "0x03_FIELD": 199,
+    "0x04_NET_ASSIGNMENT": 48,
+    "0x05_TRACK": 83,
+    "0x06_COMPONENT": 18,
+    "0x07_COMPONENT_INST": 30,
+    "0x08_PIN_NUMBER": 99,
+    "0x09_Unknown_0x09": 63,
+    "0x0C_Unknown_0x0C": 1,
+    "0x0D_PAD": 141,
+    "0x0E_Unknown_0x0E": 33,
+    "0x0F_FUNCTION_SLOT": 18,
+    "0x10_FUNCTION_INST": 30,
+    "0x11_PIN_NAME": 99,
+    "0x12_Unknown_0x12": 121,
+    "0x14_GRAPHICS_LIST": 72,
+    "0x15_SEGMENT_H": 343,
+    "0x16_SEGMENT_DIAG": 239,
+    "0x17_SEGMENT_V": 347,
+    "0x1B_NET": 49,
+    "0x1C_PADSTACK": 18,
+    "0x1D_Unknown_0x1D": 1,
+    "0x1F_Unknown_0x1F": 2,
+    "0x21_HEADERED_BLOCK": 17,
+    "0x23_RATLINE": 73,
+    "0x24_RECT": 58,
+    "0x26_Unknown_0x26": 5,
+    "0x27_BOARD_SETUP": 1,
+    "0x28_SHAPE_POLYGON": 36,
+    "0x2A_LAYER_LIST": 3,
+    "0x2B_FOOTPRINT_DEF": 14,
+    "0x2C_TABLE": 2,
+    "0x2D_FOOTPRINT_INST": 30,
+    "0x2E_Unknown_0x2E": 1,
+    "0x30_STR_WRAPPER": 324,
+    "0x31_STR_GRAPHIC": 324,
+    "0x32_PLACED_PAD": 214,
+    "0x33_VIA": 32,
+    "0x34_KEEPOUT": 18,
+    "0x35_Unknown_0x35": 1,
+    "0x36_FONT_DEF": 6,
+    "0x37_Unknown_0x37": 2,
+    "0x3B_Unknown_0x3B": 3
+  },
+  "linked_lists": {
+    "nets_0x1B": {
+      "head": "0xfe7acf0",
+      "tail": "0xbcf5f44"
+    },
+    "footprints_0x2B": {
+      "head": "0xfe2cf50",
+      "tail": "0xbcf5f64"
+    },
+    "fonts_0x36": {
+      "head": "0xfe6a7f8",
+      "tail": "0xbcf5fb4"
+    }
+  },
+  "kicad_relevant": {
+    "estimated_nets": 49,
+    "estimated_footprints": 30,
+    "estimated_tracks": 83,
+    "estimated_vias": 32,
+    "estimated_pads": 214,
+    "estimated_zones": 36,
+    "estimated_keepouts": 18,
+    "segment_count": 929,
+    "arc_count": 163
+  }
+}

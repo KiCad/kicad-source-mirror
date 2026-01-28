@@ -30,6 +30,7 @@
 #include <convert/allegro_db.h>
 
 #include <board.h>
+#include <geometry/shape_line_chain.h>
 #include <reporter.h>
 #include <progress_reporter.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
@@ -103,7 +104,7 @@ private:
     /**
      * Build the shapes from an 0x14 shape list
      */
-    std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
+    std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14_GRAPHIC& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
 
     /**
@@ -111,10 +112,11 @@ private:
      */
     std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,
                                                             const wxString& aPadName, int aNetcode );
-    std::unique_ptr<FOOTPRINT>               buildFootprint( const BLK_0x2D& aFpInstance );
+    std::unique_ptr<FOOTPRINT>               buildFootprint( const BLK_0x2D_FOOTPRINT_INST& aFpInstance );
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
     std::unique_ptr<ZONE>                    buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode );
+    SHAPE_LINE_CHAIN                         buildOutline( const BLK_0x28_SHAPE& aShape ) const;
 
     /**
      * Resolve the net code for a BOUNDARY shape by following the pointer chain:
@@ -148,21 +150,23 @@ private:
     void createTracks();
     void createBoardOutline();
     void createZones();
+    void applyZoneFills();
     void applyConstraintSets();
     void applyNetConstraints();
     void applyMatchGroups();
+
     /**
      * Get the font definition for a given index in a 0x30, etc.
      *
      * @return the definition if it exists, else nullptr (which is probably an error in the
      * importer logic)
      */
-    const BLK_0x36::FontDef_X08* getFontDef( unsigned aIndex ) const;
+    const BLK_0x36_DEF_TABLE::FontDef_X08* getFontDef( unsigned aIndex ) const;
 
     /**
      * Look up 0x07 FP instance data (0x07) for a given 0x2D FP instance
      */
-    const BLK_0x07* getFpInstRef( const BLK_0x2D& aFpInstance ) const;
+    const BLK_0x07_COMPONENT_INST* getFpInstRef( const BLK_0x2D_FOOTPRINT_INST& aFpInstance ) const;
 
     const BRD_DB&         m_brdDb;
     BOARD&                m_board;
@@ -171,10 +175,19 @@ private:
     LAYER_MAPPING_HANDLER m_layerMappingHandler;
 
     // Cached list of font defs in the 0x36 node
-    std::vector<const BLK_0x36::FontDef_X08*> m_fontDefList;
+    std::vector<const BLK_0x36_DEF_TABLE::FontDef_X08*> m_fontDefList;
 
     // Cached list of KiCad nets corresponding to Allegro 0x1B NET keys
     std::unordered_map<uint32_t, NETINFO_ITEM*> m_netCache;
+
+    struct ZoneFillEntry
+    {
+        const BLK_0x28_SHAPE* shape;
+        int                   netCode;
+        PCB_LAYER_ID          layer;
+    };
+
+    std::vector<ZoneFillEntry> m_zoneFillShapes;
 
     std::unique_ptr<LAYER_MAPPER> m_layerMapper;
 

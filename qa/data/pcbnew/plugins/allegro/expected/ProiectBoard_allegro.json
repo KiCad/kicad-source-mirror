@@ -1,0 +1,88 @@
+{
+  "file": "ProiectBoard.brd",
+  "file_size": 301864,
+  "version": {
+    "magic": "0x131504",
+    "version_string": "V166"
+  },
+  "units": {
+    "type": "metric",
+    "divisor": 1
+  },
+  "counts": {
+    "strings": 151,
+    "objects": 3380
+  },
+  "object_types": {
+    "0x01_ARC": 40,
+    "0x03_FIELD": 369,
+    "0x04_NET_ASSIGNMENT": 21,
+    "0x05_TRACK": 59,
+    "0x06_COMPONENT": 21,
+    "0x07_COMPONENT_INST": 32,
+    "0x08_PIN_NUMBER": 41,
+    "0x0C_Unknown_0x0C": 2,
+    "0x0D_PAD": 15,
+    "0x0E_Unknown_0x0E": 7,
+    "0x0F_FUNCTION_SLOT": 21,
+    "0x10_FUNCTION_INST": 32,
+    "0x11_PIN_NAME": 41,
+    "0x12_Unknown_0x12": 64,
+    "0x14_GRAPHICS_LIST": 352,
+    "0x15_SEGMENT_H": 512,
+    "0x16_SEGMENT_DIAG": 157,
+    "0x17_SEGMENT_V": 502,
+    "0x1B_NET": 21,
+    "0x1C_PADSTACK": 10,
+    "0x1D_Unknown_0x1D": 1,
+    "0x1F_Unknown_0x1F": 2,
+    "0x21_HEADERED_BLOCK": 18,
+    "0x23_RATLINE": 45,
+    "0x24_RECT": 15,
+    "0x26_Unknown_0x26": 34,
+    "0x27_BOARD_SETUP": 1,
+    "0x28_SHAPE_POLYGON": 75,
+    "0x2A_LAYER_LIST": 4,
+    "0x2B_FOOTPRINT_DEF": 10,
+    "0x2C_TABLE": 4,
+    "0x2D_FOOTPRINT_INST": 36,
+    "0x2E_Unknown_0x2E": 4,
+    "0x30_STR_WRAPPER": 255,
+    "0x31_STR_GRAPHIC": 255,
+    "0x32_PLACED_PAD": 81,
+    "0x33_VIA": 10,
+    "0x35_Unknown_0x35": 1,
+    "0x36_FONT_DEF": 6,
+    "0x37_Unknown_0x37": 2,
+    "0x38_FILM": 8,
+    "0x39_FILM_LAYER_LIST": 8,
+    "0x3A_FILM_LIST_NODE": 34,
+    "0x3B_Unknown_0x3B": 4,
+    "0x3C_Unknown_0x3C": 2
+  },
+  "linked_lists": {
+    "nets_0x1B": {
+      "head": "0xf790cd0",
+      "tail": "0x9a272c4"
+    },
+    "footprints_0x2B": {
+      "head": "0xf790100",
+      "tail": "0x9a272e4"
+    },
+    "fonts_0x36": {
+      "head": "0xf7b8308",
+      "tail": "0x9a27334"
+    }
+  },
+  "kicad_relevant": {
+    "estimated_nets": 21,
+    "estimated_footprints": 36,
+    "estimated_tracks": 59,
+    "estimated_vias": 10,
+    "estimated_pads": 81,
+    "estimated_zones": 75,
+    "estimated_keepouts": 0,
+    "segment_count": 1171,
+    "arc_count": 40
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "file": "mainBoard2.brd",
+  "file_size": 355852,
+  "version": {
+    "magic": "0x131503",
+    "version_string": "V166"
+  },
+  "units": {
+    "type": "metric",
+    "divisor": 10
+  },
+  "counts": {
+    "strings": 266,
+    "objects": 4262
+  },
+  "object_types": {
+    "0x01_ARC": 193,
+    "0x03_FIELD": 205,
+    "0x04_NET_ASSIGNMENT": 48,
+    "0x05_TRACK": 69,
+    "0x06_COMPONENT": 18,
+    "0x07_COMPONENT_INST": 30,
+    "0x08_PIN_NUMBER": 99,
+    "0x09_Unknown_0x09": 442,
+    "0x0C_Unknown_0x0C": 1,
+    "0x0D_PAD": 141,
+    "0x0E_Unknown_0x0E": 33,
+    "0x0F_FUNCTION_SLOT": 18,
+    "0x10_FUNCTION_INST": 30,
+    "0x11_PIN_NAME": 99,
+    "0x12_Unknown_0x12": 121,
+    "0x14_GRAPHICS_LIST": 72,
+    "0x15_SEGMENT_H": 336,
+    "0x16_SEGMENT_DIAG": 207,
+    "0x17_SEGMENT_V": 359,
+    "0x1B_NET": 49,
+    "0x1C_PADSTACK": 18,
+    "0x1D_Unknown_0x1D": 1,
+    "0x1F_Unknown_0x1F": 2,
+    "0x21_HEADERED_BLOCK": 17,
+    "0x23_RATLINE": 73,
+    "0x24_RECT": 58,
+    "0x26_Unknown_0x26": 7,
+    "0x27_BOARD_SETUP": 1,
+    "0x28_SHAPE_POLYGON": 38,
+    "0x2A_LAYER_LIST": 3,
+    "0x2B_FOOTPRINT_DEF": 14,
+    "0x2C_TABLE": 2,
+    "0x2D_FOOTPRINT_INST": 30,
+    "0x2E_Unknown_0x2E": 2,
+    "0x30_STR_WRAPPER": 331,
+    "0x31_STR_GRAPHIC": 331,
+    "0x32_PLACED_PAD": 214,
+    "0x33_VIA": 224,
+    "0x34_KEEPOUT": 21,
+    "0x35_Unknown_0x35": 1,
+    "0x36_FONT_DEF": 6,
+    "0x37_Unknown_0x37": 2,
+    "0x38_FILM": 6,
+    "0x39_FILM_LAYER_LIST": 6,
+    "0x3A_FILM_LIST_NODE": 19,
+    "0x3B_Unknown_0x3B": 4
+  },
+  "linked_lists": {
+    "nets_0x1B": {
+      "head": "0xfea6ac0",
+      "tail": "0xac76054"
+    },
+    "footprints_0x2B": {
+      "head": "0xfea5f50",
+      "tail": "0xac76074"
+    },
+    "fonts_0x36": {
+      "head": "0xfee0a90",
+      "tail": "0xac760c4"
+    }
+  },
+  "kicad_relevant": {
+    "estimated_nets": 49,
+    "estimated_footprints": 30,
+    "estimated_tracks": 69,
+    "estimated_vias": 224,
+    "estimated_pads": 214,
+    "estimated_zones": 38,
+    "estimated_keepouts": 21,
+    "segment_count": 902,
+    "arc_count": 193
+  }
+}

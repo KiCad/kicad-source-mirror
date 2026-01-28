@@ -1,11 +1,12 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright Quilter
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -15,8 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
@@ -41,54 +41,54 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     switch( block.GetBlockType() )
     {
     case 0x01: return static_cast<const BLOCK<BLK_0x01_ARC>&>( block ).GetData().m_Key;
-    case 0x03: return static_cast<const BLOCK<BLK_0x03>&>( block ).GetData().m_Key;
+    case 0x03: return static_cast<const BLOCK<BLK_0x03_FIELD>&>( block ).GetData().m_Key;
     case 0x04: return static_cast<const BLOCK<BLK_0x04_NET_ASSIGNMENT>&>( block ).GetData().m_Key;
     case 0x05: return static_cast<const BLOCK<BLK_0x05_TRACK>&>( block ).GetData().m_Key;
-    case 0x06: return static_cast<const BLOCK<BLK_0x06>&>( block ).GetData().m_Key;
-    case 0x07: return static_cast<const BLOCK<BLK_0x07>&>( block ).GetData().m_Key;
-    case 0x08: return static_cast<const BLOCK<BLK_0x08>&>( block ).GetData().m_Key;
-    case 0x09: return static_cast<const BLOCK<BLK_0x09>&>( block ).GetData().m_Key;
+    case 0x06: return static_cast<const BLOCK<BLK_0x06_COMPONENT>&>( block ).GetData().m_Key;
+    case 0x07: return static_cast<const BLOCK<BLK_0x07_COMPONENT_INST>&>( block ).GetData().m_Key;
+    case 0x08: return static_cast<const BLOCK<BLK_0x08_PIN_NUMBER>&>( block ).GetData().m_Key;
+    case 0x09: return static_cast<const BLOCK<BLK_0x09_FILL_LINK>&>( block ).GetData().m_Key;
     case 0x0A: return static_cast<const BLOCK<BLK_0x0A_DRC>&>( block ).GetData().m_Key;
-    case 0x0C: return static_cast<const BLOCK<BLK_0x0C>&>( block ).GetData().m_Key;
+    case 0x0C: return static_cast<const BLOCK<BLK_0x0C_PIN_DEF>&>( block ).GetData().m_Key;
     case 0x0D: return static_cast<const BLOCK<BLK_0x0D_PAD>&>( block ).GetData().m_Key;
-    case 0x0E: return static_cast<const BLOCK<BLK_0x0E>&>( block ).GetData().m_Key;
-    case 0x0F: return static_cast<const BLOCK<BLK_0x0F>&>( block ).GetData().m_Key;
-    case 0x10: return static_cast<const BLOCK<BLK_0x10>&>( block ).GetData().m_Key;
-    case 0x11: return static_cast<const BLOCK<BLK_0x11>&>( block ).GetData().m_Key;
-    case 0x12: return static_cast<const BLOCK<BLK_0x12>&>( block ).GetData().m_Key;
-    case 0x14: return static_cast<const BLOCK<BLK_0x14>&>( block ).GetData().m_Key;
+    case 0x0E: return static_cast<const BLOCK<BLK_0x0E_SHAPE_SEG>&>( block ).GetData().m_Key;
+    case 0x0F: return static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( block ).GetData().m_Key;
+    case 0x10: return static_cast<const BLOCK<BLK_0x10_FUNCTION_INST>&>( block ).GetData().m_Key;
+    case 0x11: return static_cast<const BLOCK<BLK_0x11_PIN_NAME>&>( block ).GetData().m_Key;
+    case 0x12: return static_cast<const BLOCK<BLK_0x12_XREF>&>( block ).GetData().m_Key;
+    case 0x14: return static_cast<const BLOCK<BLK_0x14_GRAPHIC>&>( block ).GetData().m_Key;
     case 0x15:
     case 0x16:
     case 0x17: return static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( block ).GetData().m_Key;
     case 0x1B: return static_cast<const BLOCK<BLK_0x1B_NET>&>( block ).GetData().m_Key;
     case 0x1C: return static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( block ).GetData().m_Key;
-    case 0x1D: return static_cast<const BLOCK<BLK_0x1D>&>( block ).GetData().m_Key;
-    case 0x1E: return static_cast<const BLOCK<BLK_0x1E>&>( block ).GetData().m_Key;
-    case 0x1F: return static_cast<const BLOCK<BLK_0x1F>&>( block ).GetData().m_Key;
-    case 0x21: return static_cast<const BLOCK<BLK_0x21>&>( block ).GetData().m_Key;
-    case 0x22: return static_cast<const BLOCK<BLK_0x22>&>( block ).GetData().m_Key;
+    case 0x1D: return static_cast<const BLOCK<BLK_0x1D_CONSTRAINT_SET>&>( block ).GetData().m_Key;
+    case 0x1E: return static_cast<const BLOCK<BLK_0x1E_SI_MODEL>&>( block ).GetData().m_Key;
+    case 0x1F: return static_cast<const BLOCK<BLK_0x1F_PADSTACK_DIM>&>( block ).GetData().m_Key;
+    case 0x21: return static_cast<const BLOCK<BLK_0x21_BLOB>&>( block ).GetData().m_Key;
+    case 0x22: return static_cast<const BLOCK<BLK_0x22_UNKNOWN>&>( block ).GetData().m_Key;
     case 0x23: return static_cast<const BLOCK<BLK_0x23_RATLINE>&>( block ).GetData().m_Key;
     case 0x24: return static_cast<const BLOCK<BLK_0x24_RECT>&>( block ).GetData().m_Key;
-    case 0x26: return static_cast<const BLOCK<BLK_0x26>&>( block ).GetData().m_Key;
+    case 0x26: return static_cast<const BLOCK<BLK_0x26_MATCH_GROUP>&>( block ).GetData().m_Key;
     case 0x28: return static_cast<const BLOCK<BLK_0x28_SHAPE>&>( block ).GetData().m_Key;
     case 0x29: return static_cast<const BLOCK<BLK_0x29_PIN>&>( block ).GetData().m_Key;
     case 0x2A: return static_cast<const BLOCK<BLK_0x2A_LAYER_LIST>&>( block ).GetData().m_Key;
-    case 0x2B: return static_cast<const BLOCK<BLK_0x2B>&>( block ).GetData().m_Key;
+    case 0x2B: return static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( block ).GetData().m_Key;
     case 0x2C: return static_cast<const BLOCK<BLK_0x2C_TABLE>&>( block ).GetData().m_Key;
-    case 0x2D: return static_cast<const BLOCK<BLK_0x2D>&>( block ).GetData().m_Key;
-    case 0x2E: return static_cast<const BLOCK<BLK_0x2E>&>( block ).GetData().m_Key;
-    case 0x2F: return static_cast<const BLOCK<BLK_0x2F>&>( block ).GetData().m_Key;
+    case 0x2D: return static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( block ).GetData().m_Key;
+    case 0x2E: return static_cast<const BLOCK<BLK_0x2E_CONNECTION>&>( block ).GetData().m_Key;
+    case 0x2F: return static_cast<const BLOCK<BLK_0x2F_UNKNOWN>&>( block ).GetData().m_Key;
     case 0x30: return static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( block ).GetData().m_Key;
     case 0x31: return static_cast<const BLOCK<BLK_0x31_SGRAPHIC>&>( block ).GetData().m_Key;
     case 0x32: return static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( block ).GetData().m_Key;
     case 0x33: return static_cast<const BLOCK<BLK_0x33_VIA>&>( block ).GetData().m_Key;
     case 0x34: return static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( block ).GetData().m_Key;
-    case 0x36: return static_cast<const BLOCK<BLK_0x36>&>( block ).GetData().m_Key;
-    case 0x37: return static_cast<const BLOCK<BLK_0x37>&>( block ).GetData().m_Key;
+    case 0x36: return static_cast<const BLOCK<BLK_0x36_DEF_TABLE>&>( block ).GetData().m_Key;
+    case 0x37: return static_cast<const BLOCK<BLK_0x37_PTR_ARRAY>&>( block ).GetData().m_Key;
     case 0x38: return static_cast<const BLOCK<BLK_0x38_FILM>&>( block ).GetData().m_Key;
     case 0x39: return static_cast<const BLOCK<BLK_0x39_FILM_LAYER_LIST>&>( block ).GetData().m_Key;
-    case 0x3A: return static_cast<const BLOCK<TYPE_3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
-    case 0x3C: return static_cast<const BLOCK<BLK_0x3C>&>( block ).GetData().m_Key;
+    case 0x3A: return static_cast<const BLOCK<BLK_0x3A_FILM_LIST_NODE>&>( block ).GetData().m_Key;
+    case 0x3C: return static_cast<const BLOCK<BLK_0x3C_KEY_LIST>&>( block ).GetData().m_Key;
     default: break;
     }
     // clang-format off
@@ -232,7 +232,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     }
     case 0x03:
     {
-        const BLK_0x03& blk03 = BLK_DATA( aBlock, BLK_0x03 );
+        const BLK_0x03_FIELD& blk03 = BLK_DATA( aBlock, BLK_0x03_FIELD );
         obj = std::make_unique<FIELD>( blk03 );
         break;
     }
@@ -250,55 +250,55 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     }
     case 0x06:
     {
-        const BLK_0x06& compBlk = BLK_DATA( aBlock, BLK_0x06 );
+        const BLK_0x06_COMPONENT& compBlk = BLK_DATA( aBlock, BLK_0x06_COMPONENT );
         obj = std::make_unique<COMPONENT>( *this, compBlk );
         break;
     }
     case 0x07:
     {
-        const BLK_0x07& strBlk = BLK_DATA( aBlock, BLK_0x07 );
+        const BLK_0x07_COMPONENT_INST& strBlk = BLK_DATA( aBlock, BLK_0x07_COMPONENT_INST );
         obj = std::make_unique<COMPONENT_INST>( strBlk );
         break;
     }
     case 0x08:
     {
-        const BLK_0x08& symbolBlk = BLK_DATA( aBlock, BLK_0x08 );
+        const BLK_0x08_PIN_NUMBER& symbolBlk = BLK_DATA( aBlock, BLK_0x08_PIN_NUMBER );
         obj = std::make_unique<PIN_NUMBER>( symbolBlk );
         break;
     }
     case 0x0E:
     {
-        const BLK_0x0E& pinBlk = BLK_DATA( aBlock, BLK_0x0E );
-        obj = std::make_unique<X0E>( *this, pinBlk );
+        const BLK_0x0E_SHAPE_SEG& pinBlk = BLK_DATA( aBlock, BLK_0x0E_SHAPE_SEG );
+        obj = std::make_unique<SHAPE_SEG_OBJ>( *this, pinBlk );
         break;
     }
     case 0x0F:
     {
-        const BLK_0x0F& funcSlotBlk = BLK_DATA( aBlock, BLK_0x0F );
+        const BLK_0x0F_FUNCTION_SLOT& funcSlotBlk = BLK_DATA( aBlock, BLK_0x0F_FUNCTION_SLOT );
         obj = std::make_unique<FUNCTION_SLOT>( funcSlotBlk );
         break;
     }
     case 0x10:
     {
-        const BLK_0x10& funcInstBlk = BLK_DATA( aBlock, BLK_0x10 );
+        const BLK_0x10_FUNCTION_INST& funcInstBlk = BLK_DATA( aBlock, BLK_0x10_FUNCTION_INST );
         obj = std::make_unique<FUNCTION_INSTANCE>( funcInstBlk );
         break;
     }
     case 0x11:
     {
-        const BLK_0x11& pinNameBlk = BLK_DATA( aBlock, BLK_0x11 );
+        const BLK_0x11_PIN_NAME& pinNameBlk = BLK_DATA( aBlock, BLK_0x11_PIN_NAME );
         obj = std::make_unique<PIN_NAME>( pinNameBlk );
         break;
     }
     case 0x12:
     {
-        const BLK_0x12& blk = BLK_DATA( aBlock, BLK_0x12 );
-        obj = std::make_unique<X12>( blk );
+        const BLK_0x12_XREF& blk = BLK_DATA( aBlock, BLK_0x12_XREF );
+        obj = std::make_unique<XREF_OBJ>( blk );
         break;
     }
     case 0x14:
     {
-        const BLK_0x14& lineBlk = BLK_DATA( aBlock, BLK_0x14 );
+        const BLK_0x14_GRAPHIC& lineBlk = BLK_DATA( aBlock, BLK_0x14_GRAPHIC );
         obj = std::make_unique<GRAPHIC_SEG>( *this, lineBlk );
         break;
     }
@@ -325,20 +325,20 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     }
     case 0x2b: // Footprint
     {
-        const BLK_0x2B& fpBlk = BLK_DATA( aBlock, BLK_0x2B );
+        const BLK_0x2B_FOOTPRINT_DEF& fpBlk = BLK_DATA( aBlock, BLK_0x2B_FOOTPRINT_DEF );
         obj = std::make_unique<FOOTPRINT_DEF>( *this, fpBlk );
         break;
     }
     case 0x2d:
     {
-        const BLK_0x2D& fpInstBlk = BLK_DATA( aBlock, BLK_0x2D );
+        const BLK_0x2D_FOOTPRINT_INST& fpInstBlk = BLK_DATA( aBlock, BLK_0x2D_FOOTPRINT_INST );
         obj = std::make_unique<FOOTPRINT_INSTANCE>( fpInstBlk );
         break;
     }
     case 0x2e:
     {
-        const BLK_0x2E& padBlk = BLK_DATA( aBlock, BLK_0x2E );
-        obj = std::make_unique<X2E>( *this, padBlk );
+        const BLK_0x2E_CONNECTION& padBlk = BLK_DATA( aBlock, BLK_0x2E_CONNECTION );
+        obj = std::make_unique<CONNECTION_OBJ>( *this, padBlk );
         break;
     }
     case 0x32:
@@ -561,7 +561,7 @@ bool TRACK::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-FIELD::FIELD( const BLK_0x03& aBlk ):
+FIELD::FIELD( const BLK_0x03_FIELD& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::FIELD, aBlk.m_Key )
 {
     m_SubType = aBlk.m_SubType;
@@ -676,7 +676,7 @@ std::optional<std::variant<wxString, uint32_t>> FIELD_LIST::GetOptField( uint16_
 }
 
 
-COMPONENT::COMPONENT( const BRD_DB& aBrd, const BLK_0x06& aBlk ):
+COMPONENT::COMPONENT( const BRD_DB& aBrd, const BLK_0x06_COMPONENT& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::COMPONENT, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
@@ -733,7 +733,7 @@ const wxString* COMPONENT::GetComponentDeviceType() const
 }
 
 
-COMPONENT_INST::COMPONENT_INST( const BLK_0x07& aBlk ):
+COMPONENT_INST::COMPONENT_INST( const BLK_0x07_COMPONENT_INST& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::COMPONENT_INST, aBlk.m_Key )
 {
     m_TextStr.m_StringKey = aBlk.m_RefDesStrPtr;
@@ -799,7 +799,7 @@ const COMPONENT_INST* COMPONENT_INST::GetNextInstance() const
 }
 
 
-PIN_NUMBER::PIN_NUMBER( const BLK_0x08& aBlk ) :
+PIN_NUMBER::PIN_NUMBER( const BLK_0x08_PIN_NUMBER& aBlk ) :
     DB_OBJ( DB_OBJ::TYPE::PIN_NUMBER, aBlk.m_Key )
 {
     m_PinName.m_TargetKey = aBlk.m_PinNamePtr;
@@ -849,16 +849,16 @@ const PIN_NAME* PIN_NUMBER::GetPinName() const
 }
 
 
-X0E::X0E( const BRD_DB& aBrd, const BLK_0x0E& aBlk ) :
-    DB_OBJ( DB_OBJ::TYPE::x0e, aBlk.m_Key )
+SHAPE_SEG_OBJ::SHAPE_SEG_OBJ( const BRD_DB& aBrd, const BLK_0x0E_SHAPE_SEG& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::SHAPE_SEG, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     m_Next.m_EndKey = aBrd.m_Header->m_LL_Shapes.m_Tail;
-    m_Next.m_DebugName = "X0E::m_Next";
+    m_Next.m_DebugName = "SHAPE_SEG_OBJ::m_Next";
 }
 
 
-bool X0E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool SHAPE_SEG_OBJ::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
@@ -868,7 +868,7 @@ bool X0E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-PIN_NAME::PIN_NAME( const BLK_0x11& aBlk ) :
+PIN_NAME::PIN_NAME( const BLK_0x11_PIN_NAME& aBlk ) :
     DB_OBJ( DB_OBJ::TYPE::PIN_NAME, aBlk.m_Key )
 {
     m_PinNameStr.m_StringKey = aBlk.m_PinNameStrPtr;
@@ -912,21 +912,21 @@ const PIN_NUMBER* PIN_NAME::GetPinNumber() const
 }
 
 
-X12::X12( const BLK_0x12& aBlk ) :
-    DB_OBJ( DB_OBJ::TYPE::x12, aBlk.m_Key )
+XREF_OBJ::XREF_OBJ( const BLK_0x12_XREF& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::XREF, aBlk.m_Key )
 {
     m_Ptr1.m_TargetKey = aBlk.m_Ptr1;
-    m_Ptr1.m_DebugName = "X12::m_Ptr1";
+    m_Ptr1.m_DebugName = "XREF_OBJ::m_Ptr1";
 
     m_Ptr2.m_TargetKey = aBlk.m_Ptr2;
-    m_Ptr2.m_DebugName = "X12::m_Ptr2";
+    m_Ptr2.m_DebugName = "XREF_OBJ::m_Ptr2";
 
     m_Ptr3.m_TargetKey = aBlk.m_Ptr3;
-    m_Ptr3.m_DebugName = "X12::m_Ptr3";
+    m_Ptr3.m_DebugName = "XREF_OBJ::m_Ptr3";
 }
 
 
-bool X12::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool XREF_OBJ::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     // These pointers may point to objects we don't parse, so don't fail if resolution fails
     m_Ptr1.Resolve( aResolver );
@@ -937,7 +937,7 @@ bool X12::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-GRAPHIC_SEG::GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14& aBlk ):
+GRAPHIC_SEG::GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14_GRAPHIC& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::GRAPHIC_SEG, aBlk.m_Key )
 {
     m_Parent.m_TargetKey = aBlk.m_Parent;
@@ -1000,7 +1000,7 @@ bool LINE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk ):
+FOOTPRINT_DEF::FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B_FOOTPRINT_DEF& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::FP_DEF, aBlk.m_Key )
 {
     // 0x2Bs are linked together in a list from the board header
@@ -1061,7 +1061,7 @@ const wxString* FOOTPRINT_DEF::GetLibPath() const
 }
 
 
-FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk ):
+FOOTPRINT_INSTANCE::FOOTPRINT_INSTANCE( const BLK_0x2D_FOOTPRINT_INST& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::FP_INST, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
@@ -1129,7 +1129,7 @@ const wxString* FOOTPRINT_INSTANCE::GetName() const
 }
 
 
-FUNCTION_SLOT::FUNCTION_SLOT( const BLK_0x0F& aBlk ):
+FUNCTION_SLOT::FUNCTION_SLOT( const BLK_0x0F_FUNCTION_SLOT& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::FUNCTION_SLOT, aBlk.m_Key )
 {
     m_SlotName.m_StringKey = aBlk.m_SlotName;
@@ -1166,7 +1166,7 @@ const wxString* FUNCTION_SLOT::GetName() const
 }
 
 
-FUNCTION_INSTANCE::FUNCTION_INSTANCE( const BLK_0x10& aBlk ):
+FUNCTION_INSTANCE::FUNCTION_INSTANCE( const BLK_0x10_FUNCTION_INST& aBlk ):
     DB_OBJ( DB_OBJ::TYPE::FUNCTION_INST, aBlk.m_Key )
 {
     m_Slot.m_TargetKey = aBlk.m_Slots;
@@ -1336,25 +1336,25 @@ bool SHAPE::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
-X2E::X2E( const BRD_DB& aBrd, const BLK_0x2E& aBlk ):
-    DB_OBJ( DB_OBJ::TYPE::x2e, aBlk.m_Key )
+CONNECTION_OBJ::CONNECTION_OBJ( const BRD_DB& aBrd, const BLK_0x2E_CONNECTION& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::CONNECTION, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     // m_Next.m_EndKey = aBrd.m_Header->m_LL_0x2E.m_Tail;
-    m_Next.m_DebugName = "X2E::m_Next";
+    m_Next.m_DebugName = "CONNECTION_OBJ::m_Next";
 
     m_NetAssign.m_TargetKey = aBlk.m_NetAssignment;
-    m_NetAssign.m_DebugName = "X2E::m_NetAssign";
+    m_NetAssign.m_DebugName = "CONNECTION_OBJ::m_NetAssign";
 
     m_Connection.m_TargetKey = aBlk.m_Connection;
-    m_Connection.m_DebugName = "X2E::m_Connection";
+    m_Connection.m_DebugName = "CONNECTION_OBJ::m_Connection";
 
     m_Position.x = aBlk.m_CoordX;
     m_Position.y = aBlk.m_CoordY;
 }
 
 
-bool X2E::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool CONNECTION_OBJ::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 

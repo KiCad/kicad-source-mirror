@@ -1,0 +1,86 @@
+{
+  "file": "led_youtube.brd",
+  "file_size": 326500,
+  "version": {
+    "magic": "0x140902",
+    "version_string": "V174"
+  },
+  "units": {
+    "type": "metric",
+    "divisor": 10000
+  },
+  "counts": {
+    "strings": 54,
+    "objects": 595
+  },
+  "object_types": {
+    "0x01_ARC": 12,
+    "0x03_FIELD": 65,
+    "0x04_NET_ASSIGNMENT": 4,
+    "0x05_TRACK": 9,
+    "0x06_COMPONENT": 3,
+    "0x07_COMPONENT_INST": 5,
+    "0x08_PIN_NUMBER": 6,
+    "0x09_Unknown_0x09": 1,
+    "0x0C_Unknown_0x0C": 1,
+    "0x0D_PAD": 6,
+    "0x0E_Unknown_0x0E": 10,
+    "0x0F_FUNCTION_SLOT": 3,
+    "0x10_FUNCTION_INST": 5,
+    "0x11_PIN_NAME": 6,
+    "0x12_Unknown_0x12": 10,
+    "0x14_GRAPHICS_LIST": 10,
+    "0x15_SEGMENT_H": 77,
+    "0x16_SEGMENT_DIAG": 6,
+    "0x17_SEGMENT_V": 76,
+    "0x1B_NET": 5,
+    "0x1C_PADSTACK": 4,
+    "0x1D_Unknown_0x1D": 1,
+    "0x1F_Unknown_0x1F": 2,
+    "0x21_HEADERED_BLOCK": 15,
+    "0x23_RATLINE": 6,
+    "0x26_Unknown_0x26": 2,
+    "0x27_BOARD_SETUP": 1,
+    "0x28_SHAPE_POLYGON": 25,
+    "0x2A_LAYER_LIST": 3,
+    "0x2B_FOOTPRINT_DEF": 3,
+    "0x2C_TABLE": 3,
+    "0x2D_FOOTPRINT_INST": 5,
+    "0x30_STR_WRAPPER": 37,
+    "0x31_STR_GRAPHIC": 37,
+    "0x32_PLACED_PAD": 16,
+    "0x33_VIA": 1,
+    "0x35_Unknown_0x35": 1,
+    "0x36_FONT_DEF": 6,
+    "0x37_Unknown_0x37": 1,
+    "0x38_FILM": 11,
+    "0x39_FILM_LAYER_LIST": 11,
+    "0x3A_FILM_LIST_NODE": 31,
+    "0x3B_Unknown_0x3B": 17
+  },
+  "linked_lists": {
+    "nets_0x1B": {
+      "head": "0xcf",
+      "tail": "0x6a"
+    },
+    "footprints_0x2B": {
+      "head": "0xc7",
+      "tail": "0x6e"
+    },
+    "fonts_0x36": {
+      "head": "0x19c",
+      "tail": "0x78"
+    }
+  },
+  "kicad_relevant": {
+    "estimated_nets": 5,
+    "estimated_footprints": 5,
+    "estimated_tracks": 9,
+    "estimated_vias": 1,
+    "estimated_pads": 16,
+    "estimated_zones": 25,
+    "estimated_keepouts": 0,
+    "segment_count": 159,
+    "arc_count": 12
+  }
+}

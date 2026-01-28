@@ -161,18 +161,18 @@ struct DB_OBJ
         COMPONENT,      // 0x06
         COMPONENT_INST, // 0x07
         PIN_NUMBER,     // 0x08
-        x0e,            // 0x0E
+        SHAPE_SEG,            // 0x0E
         FUNCTION_SLOT,  // 0x0F
         FUNCTION_INST,  // 0x10
         PIN_NAME,       // 0x11
-        x12,            // 0x12
+        XREF,            // 0x12
         GRAPHIC_SEG,    // 0x14
         LINE,           // 0x15, 0x16, 0x17
         NET,            // 0x1B
         SHAPE,          // 0x28
         FP_DEF,         // 0x2B
         FP_INST,        // 0x2D
-        x2e,            // 0x2E
+        CONNECTION,            // 0x2E
         PLACED_PAD,     // 0x32
         VIA,            // 0x33
         KEEPOUT,        // 0x34
@@ -319,7 +319,7 @@ struct ARC : public DB_OBJ
  */
 struct FIELD : public DB_OBJ
 {
-    FIELD( const BLK_0x03& aBlk );
+    FIELD( const BLK_0x03_FIELD& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override { return true; }
 
@@ -408,7 +408,7 @@ struct TRACK : public DB_OBJ
  */
 struct COMPONENT : public DB_OBJ
 {
-    COMPONENT( const BRD_DB& aBrd, const BLK_0x06& aBlk );
+    COMPONENT( const BRD_DB& aBrd, const BLK_0x06_COMPONENT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -432,7 +432,7 @@ struct COMPONENT : public DB_OBJ
  */
 struct COMPONENT_INST : public DB_OBJ
 {
-    COMPONENT_INST( const BLK_0x07& aBlk );
+    COMPONENT_INST( const BLK_0x07_COMPONENT_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -458,7 +458,7 @@ struct COMPONENT_INST : public DB_OBJ
  */
 struct PIN_NUMBER : public DB_OBJ
 {
-    PIN_NUMBER( const BLK_0x08& aBlk );
+    PIN_NUMBER( const BLK_0x08_PIN_NUMBER& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -474,9 +474,9 @@ struct PIN_NUMBER : public DB_OBJ
 /**
  * 0x0E objects: ??
  */
-struct X0E : public DB_OBJ
+struct SHAPE_SEG_OBJ : public DB_OBJ
 {
-    X0E( const BRD_DB& aBrd, const BLK_0x0E& aBlk );
+    SHAPE_SEG_OBJ( const BRD_DB& aBrd, const BLK_0x0E_SHAPE_SEG& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -489,7 +489,7 @@ struct X0E : public DB_OBJ
  */
 struct FUNCTION_SLOT : public DB_OBJ
 {
-    FUNCTION_SLOT( const BLK_0x0F& aBlk );
+    FUNCTION_SLOT( const BLK_0x0F_FUNCTION_SLOT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -510,7 +510,7 @@ struct FUNCTION_SLOT : public DB_OBJ
  */
 struct FUNCTION_INSTANCE : public DB_OBJ
 {
-    FUNCTION_INSTANCE( const BLK_0x10& aBlk );
+    FUNCTION_INSTANCE( const BLK_0x10_FUNCTION_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -530,7 +530,7 @@ struct FUNCTION_INSTANCE : public DB_OBJ
  */
 struct PIN_NAME: public DB_OBJ
 {
-    PIN_NAME( const BLK_0x11& aBlk );
+    PIN_NAME( const BLK_0x11_PIN_NAME& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -546,9 +546,9 @@ struct PIN_NAME: public DB_OBJ
 /**
  * 0x12 objects.
  */
-struct X12 : public DB_OBJ
+struct XREF_OBJ : public DB_OBJ
 {
-    X12( const BLK_0x12& aBlk );
+    XREF_OBJ( const BLK_0x12_XREF& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -563,7 +563,7 @@ struct X12 : public DB_OBJ
  */
 struct GRAPHIC_SEG: public DB_OBJ
 {
-    GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14& aBlk );
+    GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14_GRAPHIC& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -654,7 +654,7 @@ public:
  */
 struct FOOTPRINT_DEF : public DB_OBJ
 {
-    FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B& aBlk );
+    FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B_FOOTPRINT_DEF& aBlk );
 
     DB_REF     m_Next;
     DB_STR_REF m_FpStr;
@@ -680,7 +680,7 @@ struct FOOTPRINT_DEF : public DB_OBJ
  */
 struct FOOTPRINT_INSTANCE : public DB_OBJ
 {
-    FOOTPRINT_INSTANCE( const BLK_0x2D& aBlk );
+    FOOTPRINT_INSTANCE( const BLK_0x2D_FOOTPRINT_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
@@ -705,9 +705,9 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
 /**
  * 0x2E objects.
  */
-struct X2E : public DB_OBJ
+struct CONNECTION_OBJ : public DB_OBJ
 {
-    X2E( const BRD_DB& aBrd, const BLK_0x2E& aBlk );
+    CONNECTION_OBJ( const BRD_DB& aBrd, const BLK_0x2E_CONNECTION& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 

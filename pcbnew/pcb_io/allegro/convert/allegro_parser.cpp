@@ -5,7 +5,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
@@ -301,7 +301,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x01_ARC( FILE_STREAM& aStream, FM
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x03>>( 0x03, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x03_FIELD>>( 0x03, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -356,7 +356,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
     }
     case 0x6C:
     {
-        BLK_0x03::SUB_0x6C sub;
+        BLK_0x03_FIELD::SUB_0x6C sub;
         sub.m_NumEntries = aStream.ReadU32();
 
         sub.m_Entries.reserve( sub.m_NumEntries );
@@ -371,7 +371,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
     case 0x70:
     case 0x74:
     {
-        BLK_0x03::SUB_0x70_0x74 sub;
+        BLK_0x03_FIELD::SUB_0x70_0x74 sub;
 
         sub.m_X0 = aStream.ReadU16();
         sub.m_X1 = aStream.ReadU16();
@@ -387,7 +387,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
     }
     case 0xF6:
     {
-        BLK_0x03::SUB_0xF6 sub;
+        BLK_0x03_FIELD::SUB_0xF6 sub;
         for( size_t i = 0; i < sub.m_Entries.size(); ++i )
         {
             sub.m_Entries[i] = aStream.ReadU32();
@@ -474,7 +474,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x05_TRACK( FILE_STREAM& aStream, 
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x06>>( 0x06, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x06_COMPONENT>>( 0x06, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -497,7 +497,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x06( FILE_STREAM& stream, FMT_VER
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x07( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x07>>( 0x07, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x07_COMPONENT_INST>>( 0x07, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -526,7 +526,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x07( FILE_STREAM& stream, FMT_VER
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x08( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x08>>( 0x08, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x08_PIN_NUMBER>>( 0x08, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -553,7 +553,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x08( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x09( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x09>>( 0x09, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x09_FILL_LINK>>( 0x09, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -610,7 +610,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0A_DRC( FILE_STREAM& aStream, FM
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0C( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x0C>>( 0x0C, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x0C_PIN_DEF>>( 0x0C, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -687,7 +687,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0D_PAD( FILE_STREAM& aStream, FM
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x0E>>( 0x0E, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x0E_SHAPE_SEG>>( 0x0E, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -720,7 +720,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x0F>>( 0x0F, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x0F_FUNCTION_SLOT>>( 0x0F, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -743,7 +743,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x10>>( 0x10, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x10_FUNCTION_INST>>( 0x10, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -766,7 +766,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x11( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x11>>( 0x11, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x11_PIN_NAME>>( 0x11, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -786,7 +786,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x11( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x12( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x12>>( 0x12, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x12_XREF>>( 0x12, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -807,7 +807,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x12( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x14( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x14>>( 0x14, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x14_GRAPHIC>>( 0x14, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1007,7 +1007,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1D( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x1D>>( 0x1D, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x1D_CONSTRAINT_SET>>( 0x1D, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1049,7 +1049,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1D( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1E( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x1E>>( 0x1E, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x1E_SI_MODEL>>( 0x1E, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1074,7 +1074,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1E( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x1F>>( 0x1F, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x1F_PADSTACK_DIM>>( 0x1F, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1112,7 +1112,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x21>>( 0x21, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x21_BLOB>>( 0x21, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1136,7 +1136,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x22( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x22>>( 0x22, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x22_UNKNOWN>>( 0x22, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1215,7 +1215,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x24_RECT( FILE_STREAM& aStream, F
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x26( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x26>>( 0x26, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x26_MATCH_GROUP>>( 0x26, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1237,7 +1237,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x26( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x27( FILE_STREAM& aStream, FMT_VER aVer, size_t aEndOff )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x27>>( 0x27, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x27_CSTRMGR_XREF>>( 0x27, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1387,7 +1387,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2A( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2B( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x2B>>( 0x2B, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x2B_FOOTPRINT_DEF>>( 0x2B, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -1445,7 +1445,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2C_TABLE( FILE_STREAM& aStream, 
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x2D>>( 0x2D, stream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x2D_FOOTPRINT_INST>>( 0x2D, stream.Position() );
 
     auto& data = block->GetData();
 
@@ -1486,7 +1486,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2E( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x2E>>( 0x2E, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x2E_CONNECTION>>( 0x2E, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1509,7 +1509,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2E( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2F( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x2F>>( 0x2F, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x2F_UNKNOWN>>( 0x2F, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1744,7 +1744,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x34_KEEPOUT( FILE_STREAM& aStream
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x35( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x35>>( 0x35, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x35_FILE_REF>>( 0x35, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1758,7 +1758,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x35( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x36>>( 0x36, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x36_DEF_TABLE>>( 0x36, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1784,7 +1784,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         {
         case 0x02:
         {
-            BLK_0x36::X02 item;
+            BLK_0x36_DEF_TABLE::X02 item;
 
             item.m_String = aStream.ReadStringFixed( 32, true );
             ReadArrayU32( aStream, item.m_Xs );
@@ -1796,7 +1796,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x03:
         {
-            BLK_0x36::X03 item;
+            BLK_0x36_DEF_TABLE::X03 item;
             if( aVer >= FMT_VER::V_172 )
                 item.m_Str = aStream.ReadStringFixed( 64, true );
             else
@@ -1809,7 +1809,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x05:
         {
-            BLK_0x36::X05 item;
+            BLK_0x36_DEF_TABLE::X05 item;
 
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
 
@@ -1818,7 +1818,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x06:
         {
-            BLK_0x36::X06 item;
+            BLK_0x36_DEF_TABLE::X06 item;
 
             item.m_N = aStream.ReadU16();
             item.m_R = aStream.ReadU8();
@@ -1832,7 +1832,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x08:
         {
-            BLK_0x36::FontDef_X08 item;
+            BLK_0x36_DEF_TABLE::FontDef_X08 item;
 
             item.m_A = aStream.ReadU32();
             item.m_B = aStream.ReadU32();
@@ -1848,28 +1848,28 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x0B:
         {
-            BLK_0x36::X0B item;
+            BLK_0x36_DEF_TABLE::X0B item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             data.m_Items.emplace_back( std::move( item ) );
             break;
         }
         case 0x0C:
         {
-            BLK_0x36::X0C item;
+            BLK_0x36_DEF_TABLE::X0C item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             data.m_Items.emplace_back( std::move( item ) );
             break;
         }
         case 0x0D:
         {
-            BLK_0x36::X0D item;
+            BLK_0x36_DEF_TABLE::X0D item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             data.m_Items.emplace_back( std::move( item ) );
             break;
         }
         case 0x0F:
         {
-            BLK_0x36::X0F item;
+            BLK_0x36_DEF_TABLE::X0F item;
             item.m_Key = aStream.ReadU32();
             ReadArrayU32( aStream, item.m_Ptrs );
             item.m_Ptr2 = aStream.ReadU32();
@@ -1878,7 +1878,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         }
         case 0x10:
         {
-            BLK_0x36::X10 item;
+            BLK_0x36_DEF_TABLE::X10 item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             data.m_Items.emplace_back( std::move( item ) );
             break;
@@ -1893,7 +1893,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x37( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x37>>( 0x37, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x37_PTR_ARRAY>>( 0x37, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1968,7 +1968,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x39_FILM_LAYER_LIST( FILE_STREAM&
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3A_FILM_LIST_NODE( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<TYPE_3A_FILM_LIST_NODE>>( 0x3A, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x3A_FILM_LIST_NODE>>( 0x3A, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -1987,7 +1987,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3A_FILM_LIST_NODE( FILE_STREAM& 
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3B( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x3B>>( 0x3B, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x3B_PROPERTY>>( 0x3B, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -2011,7 +2011,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3B( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x3C>>( 0x3C, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x3C_KEY_LIST>>( 0x3C, aStream.Position() );
 
     auto& data = block->GetData();
 

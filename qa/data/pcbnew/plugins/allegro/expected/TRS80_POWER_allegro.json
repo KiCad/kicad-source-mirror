@@ -1,0 +1,84 @@
+{
+  "file": "TRS80_POWER.brd",
+  "file_size": 252352,
+  "version": {
+    "magic": "0x131503",
+    "version_string": "V166"
+  },
+  "units": {
+    "type": "metric",
+    "divisor": 1000
+  },
+  "counts": {
+    "strings": 111,
+    "objects": 1609
+  },
+  "object_types": {
+    "0x01_ARC": 6,
+    "0x03_FIELD": 146,
+    "0x04_NET_ASSIGNMENT": 10,
+    "0x05_TRACK": 41,
+    "0x06_COMPONENT": 9,
+    "0x07_COMPONENT_INST": 21,
+    "0x08_PIN_NUMBER": 28,
+    "0x0A_DRC_ERROR": 8,
+    "0x0C_Unknown_0x0C": 1,
+    "0x0D_PAD": 22,
+    "0x0E_Unknown_0x0E": 29,
+    "0x0F_FUNCTION_SLOT": 9,
+    "0x10_FUNCTION_INST": 21,
+    "0x11_PIN_NAME": 28,
+    "0x12_Unknown_0x12": 45,
+    "0x14_GRAPHICS_LIST": 62,
+    "0x15_SEGMENT_H": 119,
+    "0x16_SEGMENT_DIAG": 52,
+    "0x17_SEGMENT_V": 169,
+    "0x1B_NET": 11,
+    "0x1C_PADSTACK": 11,
+    "0x1D_Unknown_0x1D": 1,
+    "0x1F_Unknown_0x1F": 2,
+    "0x21_HEADERED_BLOCK": 15,
+    "0x23_RATLINE": 35,
+    "0x24_RECT": 3,
+    "0x27_BOARD_SETUP": 1,
+    "0x28_SHAPE_POLYGON": 11,
+    "0x2A_LAYER_LIST": 2,
+    "0x2B_FOOTPRINT_DEF": 8,
+    "0x2D_FOOTPRINT_INST": 25,
+    "0x2E_Unknown_0x2E": 6,
+    "0x30_STR_WRAPPER": 216,
+    "0x31_STR_GRAPHIC": 216,
+    "0x32_PLACED_PAD": 72,
+    "0x35_Unknown_0x35": 1,
+    "0x36_FONT_DEF": 6,
+    "0x38_FILM": 7,
+    "0x39_FILM_LAYER_LIST": 7,
+    "0x3A_FILM_LIST_NODE": 17,
+    "0x3B_Unknown_0x3B": 3
+  },
+  "linked_lists": {
+    "nets_0x1B": {
+      "head": "0xf4211e8",
+      "tail": "0xdf3c49c"
+    },
+    "footprints_0x2B": {
+      "head": "0xf420968",
+      "tail": "0xdf3c4bc"
+    },
+    "fonts_0x36": {
+      "head": "0xf44eb70",
+      "tail": "0xdf3c50c"
+    }
+  },
+  "kicad_relevant": {
+    "estimated_nets": 11,
+    "estimated_footprints": 25,
+    "estimated_tracks": 41,
+    "estimated_vias": 0,
+    "estimated_pads": 72,
+    "estimated_zones": 11,
+    "estimated_keepouts": 0,
+    "segment_count": 340,
+    "arc_count": 6
+  }
+}

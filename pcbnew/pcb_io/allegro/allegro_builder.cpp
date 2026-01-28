@@ -1,11 +1,12 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright Quilter
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -15,8 +16,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
@@ -76,25 +77,25 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x01: return BLK_FIELD( BLK_0x01_ARC, m_Next );
     case 0x04: return BLK_FIELD( BLK_0x04_NET_ASSIGNMENT, m_Next );
     case 0x05: return BLK_FIELD( BLK_0x05_TRACK, m_Next );
-    case 0x0E: return BLK_FIELD( BLK_0x0E, m_Next );
-    case 0x14: return BLK_FIELD( BLK_0x14, m_Next );
+    case 0x0E: return BLK_FIELD( BLK_0x0E_SHAPE_SEG, m_Next );
+    case 0x14: return BLK_FIELD( BLK_0x14_GRAPHIC, m_Next );
     case 0x15:
     case 0x16:
     case 0x17: return BLK_FIELD( BLK_0x15_16_17_SEGMENT, m_Next );
     case 0x1B: return BLK_FIELD( BLK_0x1B_NET, m_Next );
-    case 0x1D: return BLK_FIELD( BLK_0x1D, m_Next );
-    case 0x1E: return BLK_FIELD( BLK_0x1E, m_Next );
-    case 0x1F: return BLK_FIELD( BLK_0x1F, m_Next );
-    case 0x2B: return BLK_FIELD( BLK_0x2B, m_Next );
-    case 0x2D: return BLK_FIELD( BLK_0x2D, m_Next );
-    case 0x2E: return BLK_FIELD( BLK_0x2E, m_Next );
+    case 0x1D: return BLK_FIELD( BLK_0x1D_CONSTRAINT_SET, m_Next );
+    case 0x1E: return BLK_FIELD( BLK_0x1E_SI_MODEL, m_Next );
+    case 0x1F: return BLK_FIELD( BLK_0x1F_PADSTACK_DIM, m_Next );
+    case 0x2B: return BLK_FIELD( BLK_0x2B_FOOTPRINT_DEF, m_Next );
+    case 0x2D: return BLK_FIELD( BLK_0x2D_FOOTPRINT_INST, m_Next );
+    case 0x2E: return BLK_FIELD( BLK_0x2E_CONNECTION, m_Next );
     case 0x30: return BLK_FIELD( BLK_0x30_STR_WRAPPER, m_Next );
     case 0x31: return 0; // Doesn't exist
     case 0x32: return BLK_FIELD( BLK_0x32_PLACED_PAD, m_Next );
     case 0x24: return BLK_FIELD( BLK_0x24_RECT, m_Next );
     case 0x28: return BLK_FIELD( BLK_0x28_SHAPE, m_Next );
     case 0x33: return BLK_FIELD( BLK_0x33_VIA, m_Next );
-    case 0x36: return BLK_FIELD( BLK_0x36, m_Next );
+    case 0x36: return BLK_FIELD( BLK_0x36_DEF_TABLE, m_Next );
     default: return 0;
     }
 }
@@ -841,7 +842,7 @@ void BOARD_BUILDER::cacheFontDefs()
         if( block->GetBlockType() != 0x36 )
             continue;
 
-        const BLK_0x36& blk0x36 = static_cast<const BLOCK<BLK_0x36>&>( *block ).GetData();
+        const BLK_0x36_DEF_TABLE& blk0x36 = static_cast<const BLOCK<BLK_0x36_DEF_TABLE>&>( *block ).GetData();
 
         if( blk0x36.m_Code != 0x08 )
             continue;
@@ -856,7 +857,7 @@ void BOARD_BUILDER::cacheFontDefs()
 
         for( const auto& item : blk0x36.m_Items )
         {
-            const auto& fontDef = std::get<BLK_0x36::FontDef_X08>( item );
+            const auto& fontDef = std::get<BLK_0x36_DEF_TABLE::FontDef_X08>( item );
             m_fontDefList.push_back( &fontDef );
         }
 
@@ -875,9 +876,11 @@ void BOARD_BUILDER::createNets()
     std::vector<BOARD_ITEM*> bulkAdded;
 
     LL_WALKER netWalker{ m_brdDb.m_Header->m_LL_0x1B_Nets, m_brdDb };
+
     for( const BLOCK_BASE* block : netWalker )
     {
         const uint8_t type = block->GetBlockType();
+
         if( type != BLOCK_TYPE::x1B_NET )
         {
             reportUnexpectedBlockType( type, BLOCK_TYPE::x1B_NET, 0, block->GetOffset(), "Net" );
@@ -911,7 +914,7 @@ wxString BOARD_BUILDER::resolveConstraintSetNameFromField( uint32_t aFieldKey ) 
     if( !fieldBlock || fieldBlock->GetBlockType() != 0x03 )
         return wxEmptyString;
 
-    const BLK_0x03& field = static_cast<const BLOCK<BLK_0x03>&>( *fieldBlock ).GetData();
+    const BLK_0x03_FIELD& field = static_cast<const BLOCK<BLK_0x03_FIELD>&>( *fieldBlock ).GetData();
     const std::string* str = std::get_if<std::string>( &field.m_Substruct );
 
     if( !str )
@@ -947,6 +950,7 @@ void BOARD_BUILDER::applyConstraintSets()
         wxString name;
         int      lineWidth = 0;
         int      clearance = 0;
+        int      diffPairGap = 0;
     };
 
     // Map from constraint set name to its definition
@@ -963,7 +967,7 @@ void BOARD_BUILDER::applyConstraintSets()
         if( block->GetBlockType() != 0x1D )
             continue;
 
-        const BLK_0x1D& csBlock = static_cast<const BLOCK<BLK_0x1D>&>( *block ).GetData();
+        const BLK_0x1D_CONSTRAINT_SET& csBlock = static_cast<const BLOCK<BLK_0x1D_CONSTRAINT_SET>&>( *block ).GetData();
 
         wxString setName;
         const wxString* resolved = m_brdDb.ResolveString( csBlock.m_NameStrKey );
@@ -1005,17 +1009,20 @@ void BOARD_BUILDER::applyConstraintSets()
         }
         else
         {
+            // Pre-V172: f[0] is preferred line width, f[1] is line spacing (used as clearance).
+            // f[4] is sometimes also clearance when non-zero, but f[1] is the primary source.
             def.lineWidth = scale( fields[0] );
-            // No dedicated clearance field in pre-V172; use spacing as fallback
             def.clearance = scale( fields[1] );
         }
+
+        def.diffPairGap = scale( fields[7] );
 
         constraintSets[setName] = def;
         keyToSetName[csBlock.m_NameStrKey] = setName;
 
         wxLogTrace( traceAllegroBuilder,
-                    "Constraint set '%s': line_width=%d nm, clearance=%d nm",
-                    setName, def.lineWidth, def.clearance );
+                    "Constraint set '%s': line_width=%d nm, clearance=%d nm, dp_gap=%d nm",
+                    setName, def.lineWidth, def.clearance, def.diffPairGap );
     }
 
     if( constraintSets.empty() )
@@ -1039,6 +1046,15 @@ void BOARD_BUILDER::applyConstraintSets()
 
         if( def.clearance > 0 )
             nc->SetClearance( def.clearance );
+
+        if( def.diffPairGap > 0 )
+        {
+            nc->SetDiffPairGap( def.diffPairGap );
+
+            // Diff pair width is the same as track width for the pair's netclass
+            if( def.lineWidth > 0 )
+                nc->SetDiffPairWidth( def.lineWidth );
+        }
 
         netSettings->SetNetclass( ncName, nc );
 
@@ -1191,7 +1207,7 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
     if( block->GetBlockType() == 0x26 )
     {
         // V172+ path: NET -> 0x26 -> m_GroupPtr -> 0x2C TABLE
-        const auto& x26 = static_cast<const BLOCK<BLK_0x26>&>( *block ).GetData();
+        const auto& x26 = static_cast<const BLOCK<BLK_0x26_MATCH_GROUP>&>( *block ).GetData();
         tableKey = x26.m_GroupPtr;
 
         // Some boards have chained 0x26 blocks (m_GroupPtr -> another 0x26 -> 0x2C)
@@ -1201,7 +1217,7 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
 
             if( next && next->GetBlockType() == 0x26 )
             {
-                const auto& x26b = static_cast<const BLOCK<BLK_0x26>&>( *next ).GetData();
+                const auto& x26b = static_cast<const BLOCK<BLK_0x26_MATCH_GROUP>&>( *next ).GetData();
                 tableKey = x26b.m_GroupPtr;
             }
         }
@@ -1303,6 +1319,12 @@ void BOARD_BUILDER::applyMatchGroups()
                 if( existing->HasTrackWidth() )
                     nc->SetTrackWidth( existing->GetTrackWidth() );
 
+                if( existing->HasDiffPairGap() )
+                    nc->SetDiffPairGap( existing->GetDiffPairGap() );
+
+                if( existing->HasDiffPairWidth() )
+                    nc->SetDiffPairWidth( existing->GetDiffPairWidth() );
+
                 break;
             }
         }
@@ -1365,7 +1387,7 @@ void BOARD_BUILDER::setupLayers()
 }
 
 
-const BLK_0x36::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aIndex ) const
+const BLK_0x36_DEF_TABLE::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aIndex ) const
 {
     if( aIndex == 0 || aIndex > m_fontDefList.size() )
     {
@@ -1421,7 +1443,7 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
         return nullptr;
     }
 
-    const BLK_0x36::FontDef_X08* fontDef = getFontDef( props->m_Key );
+    const BLK_0x36_DEF_TABLE::FontDef_X08* fontDef = getFontDef( props->m_Key );
 
     if( !fontDef )
         return nullptr;
@@ -1452,7 +1474,7 @@ PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
 }
 
 
-std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x14&       aGraphic,
+std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x14_GRAPHIC&       aGraphic,
                                                                     BOARD_ITEM_CONTAINER& aParent )
 {
     std::vector<std::unique_ptr<PCB_SHAPE>> shapes;
@@ -1580,7 +1602,7 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 }
 
 
-const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
+const BLK_0x07_COMPONENT_INST* BOARD_BUILDER::getFpInstRef( const BLK_0x2D_FOOTPRINT_INST& aFpInstance ) const
 {
     uint32_t refKey = 0x00;
 
@@ -1594,7 +1616,7 @@ const BLK_0x07* BOARD_BUILDER::getFpInstRef( const BLK_0x2D& aFpInstance ) const
     if( refKey == 0 )
         return nullptr;
 
-    const BLK_0x07* blk07 = expectBlockByKey<BLK_0x07>( refKey, 0x07 );
+    const BLK_0x07_COMPONENT_INST* blk07 = expectBlockByKey<BLK_0x07_COMPONENT_INST>( refKey, 0x07 );
     return blk07;
 }
 
@@ -1824,6 +1846,45 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
             break;
         }
+        case PADSTACK_COMPONENT::TYPE_PENTAGON:
+        {
+            layerCuProps->shape.shape = PAD_SHAPE::CUSTOM;
+            layerCuProps->shape.anchor_shape = PAD_SHAPE::CIRCLE;
+            layerCuProps->shape.offset = scale( VECTOR2I{ padComp.m_X3, padComp.m_X4 } );
+
+            const int w = std::max( padComp.m_W, 300 );
+            const int h = std::max( padComp.m_H, 220 );
+
+            SHAPE_LINE_CHAIN outline;
+            auto             S = [&]( int x, int y )
+            {
+                return scale( VECTOR2I{ x, y } );
+            };
+
+            // Regular pentagon with flat bottom edge
+            outline.Append( S( 0, -h / 2 ) );
+            outline.Append( S( w / 2, -h / 6 ) );
+            outline.Append( S( w / 3, h / 2 ) );
+            outline.Append( S( -w / 3, h / 2 ) );
+            outline.Append( S( -w / 2, -h / 6 ) );
+            outline.SetClosed( true );
+
+            BOX2I bbox = outline.BBox();
+            int   anchorSize = static_cast<int>(
+                    std::min( bbox.GetWidth(), bbox.GetHeight() ) / 7 );
+
+            if( anchorSize < 1 )
+                anchorSize = 1;
+
+            layerCuProps->shape.size = VECTOR2I( anchorSize, anchorSize );
+
+            auto poly = std::make_shared<PCB_SHAPE>( nullptr, SHAPE_T::POLY );
+            poly->SetPolyShape( SHAPE_POLY_SET( outline ) );
+            poly->SetFilled( true );
+            poly->SetWidth( 0 );
+            layerCuProps->custom_shapes.push_back( poly );
+            break;
+        }
         default:
             m_reporter.Report(
                     wxString::Format( "Padstack %s: unhandled copper pad shape type %d on layer %zu",
@@ -1880,7 +1941,8 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
                                                : wxString( "N/A" ) );
         }
 
-        // TODO keepouts
+        // Padstack-level keepouts (antipad relief geometry) are handled via the
+        // antipad slot in copperLayers above. Board-level keepouts use BLK_0x34.
     }
 
     // We have now constructed a list of copper props. We can determine the PADSTACK mode now and assign the shapes
@@ -1999,6 +2061,22 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     if( drillH == 0 )
         drillH = drillW;
 
+    // Allegro stores slot dimensions as (primary, secondary) regardless of orientation,
+    // not as (X, Y). Compare the first copper layer pad's aspect ratio to determine if
+    // the drill needs to be rotated 90 degrees.
+    if( drillW != drillH && aPadstack.m_LayerCount > 0 )
+    {
+        size_t firstCopperIdx = aPadstack.m_NumFixedCompEntries;
+        const ALLEGRO::PADSTACK_COMPONENT& firstPadComp =
+                aPadstack.m_Components[firstCopperIdx + BLK_0x1C_PADSTACK::LAYER_COMP_SLOT::PAD];
+
+        bool padIsTaller = ( std::abs( firstPadComp.m_H ) > std::abs( firstPadComp.m_W ) );
+        bool drillIsTaller = ( drillH > drillW );
+
+        if( padIsTaller != drillIsTaller )
+            std::swap( drillW, drillH );
+    }
+
     bool isSmd = ( drillW == 0 ) || ( aPadstack.m_LayerCount == 1 );
 
     if( isSmd )
@@ -2058,11 +2136,11 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 }
 
 
-std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpInstance )
+std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRINT_INST& aFpInstance )
 {
     auto fp = std::make_unique<FOOTPRINT>( &m_board );
 
-    const BLK_0x07* fpInstData = getFpInstRef( aFpInstance );
+    const BLK_0x07_COMPONENT_INST* fpInstData = getFpInstRef( aFpInstance );
 
     wxLogTrace( traceAllegroBuilder, "Building footprint from 0x2D block key %#010x", aFpInstance.m_Key );
 
@@ -2092,6 +2170,22 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
     fp->SetPosition( fpPos );
     fp->SetOrientation( rotation );
 
+    // Allegro stores placed instance data in board-absolute form: bottom-side
+    // components already have shapes on bottom layers with bottom-side positions.
+    // Allegro stores placed footprints in board-absolute form with final layers.
+    // KiCad stores footprints in canonical front-side form and uses Flip() to
+    // mirror both positions and layers to the back side.
+    //
+    // Move back-layer items to their front-side counterpart so that fp->Flip()
+    // consistently mirrors positions AND layers for all children. Without this,
+    // bottom-side footprints would have their back-layer graphics double-flipped
+    // to the front.
+    const auto canonicalizeLayer = []( BOARD_ITEM* aItem )
+    {
+        if( IsBackLayer( aItem->GetLayer() ) )
+            aItem->SetLayer( FlipLayer( aItem->GetLayer() ) );
+    };
+
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
@@ -2100,20 +2194,22 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
         if( type == 0x14 )
         {
-            const auto& graphics = static_cast<const BLOCK<BLK_0x14>&>( *graphicsBlock ).GetData();
+            const auto& graphics = static_cast<const BLOCK<BLK_0x14_GRAPHIC>&>( *graphicsBlock ).GetData();
 
             const uint8_t subclass = graphics.m_Layer.m_Subclass;
-            const bool isAssemblyTop = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP );
-            const bool isAssemblyBot = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM );
+            const bool isAssembly = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP
+                                      || subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM );
 
             std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
             for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
             {
-                if( isAssemblyTop || isAssemblyBot )
+                canonicalizeLayer( shape.get() );
+
+                if( isAssembly )
                 {
                     auto courtyard = std::make_unique<PCB_SHAPE>( *shape );
-                    courtyard->SetLayer( isAssemblyTop ? F_CrtYd : B_CrtYd );
+                    courtyard->SetLayer( F_CrtYd );
                     courtyard->SetWidth( 0 );
                     fp->Add( courtyard.release() );
                 }
@@ -2145,6 +2241,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D& aFpIns
 
         if( !text )
             continue;
+
+        canonicalizeLayer( text.get() );
 
         const uint8_t textClass = strWrapper.m_Layer.m_Class;
         const uint8_t textSubclass = strWrapper.m_Layer.m_Subclass;
@@ -2499,9 +2597,16 @@ void BOARD_BUILDER::createTracks()
                 }
                 case 0x28:
                 {
-                    // 0x28 shapes on the net chain are copper fills (computed copper).
-                    // Zone outlines (BOUNDARY class) are imported from m_LL_Shapes in createZones().
-                    // KiCad recomputes fills from zone outlines, so fills are not imported.
+                    // 0x28 shapes on the net chain are computed copper fills.
+                    // Collect them for zone net fallback and fill polygon import.
+                    const BLK_0x28_SHAPE& fillShape =
+                            static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *connItemBlock ).GetData();
+
+                    PCB_LAYER_ID fillLayer = getLayer( fillShape.m_Layer );
+
+                    if( fillLayer != UNDEFINED_LAYER )
+                        m_zoneFillShapes.push_back( { &fillShape, netCode, fillLayer } );
+
                     break;
                 }
                 case 0x2E:
@@ -2675,44 +2780,10 @@ void BOARD_BUILDER::createBoardOutline()
 }
 
 
-std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode )
+SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
 {
-    bool isCopperZone = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ETCH
-                          || aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY );
-    bool isRouteKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
-    bool isViaKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
-
-    PCB_LAYER_ID layer = UNDEFINED_LAYER;
-
-    if( isCopperZone )
-    {
-        // BOUNDARY shares the ETCH layer list, so resolve subclass via ETCH class
-        if( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY )
-        {
-            LAYER_INFO etchLayer{};
-            etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
-            etchLayer.m_Subclass = aShape.m_Layer.m_Subclass;
-            layer = getLayer( etchLayer );
-        }
-        else
-        {
-            layer = getLayer( aShape.m_Layer );
-        }
-    }
-    else
-    {
-        layer = F_Cu;
-    }
-
-    if( isCopperZone && layer == UNDEFINED_LAYER )
-    {
-        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - unmapped copper layer class=%#02x subclass=%#02x",
-                    aShape.m_Key, aShape.m_Layer.m_Class, aShape.m_Layer.m_Subclass );
-        return nullptr;
-    }
-
-    SHAPE_LINE_CHAIN  outline;
-    const LL_WALKER   segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
+    SHAPE_LINE_CHAIN outline;
+    const LL_WALKER  segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* segBlock : segWalker )
     {
@@ -2767,11 +2838,53 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
             break;
         }
         default:
-            wxLogTrace( traceAllegroBuilder, "    Unhandled segment type in zone: %#04x",
+            wxLogTrace( traceAllegroBuilder, "    Unhandled segment type in shape outline: %#04x",
                         segBlock->GetBlockType() );
             break;
         }
     }
+
+    return outline;
+}
+
+
+std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode )
+{
+    bool isCopperZone = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ETCH
+                          || aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY );
+    bool isRouteKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
+    bool isViaKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
+
+    PCB_LAYER_ID layer = UNDEFINED_LAYER;
+
+    if( isCopperZone )
+    {
+        // BOUNDARY shares the ETCH layer list, so resolve subclass via ETCH class
+        if( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY )
+        {
+            LAYER_INFO etchLayer{};
+            etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
+            etchLayer.m_Subclass = aShape.m_Layer.m_Subclass;
+            layer = getLayer( etchLayer );
+        }
+        else
+        {
+            layer = getLayer( aShape.m_Layer );
+        }
+    }
+    else
+    {
+        layer = F_Cu;
+    }
+
+    if( isCopperZone && layer == UNDEFINED_LAYER )
+    {
+        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - unmapped copper layer class=%#02x subclass=%#02x",
+                    aShape.m_Key, aShape.m_Layer.m_Class, aShape.m_Layer.m_Subclass );
+        return nullptr;
+    }
+
+    SHAPE_LINE_CHAIN outline = buildOutline( aShape );
 
     if( outline.PointCount() < 3 )
     {
@@ -2828,7 +2941,7 @@ int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
     if( !tbl )
         return NETINFO_LIST::UNCONNECTED;
 
-    const BLK_0x37* ptrArray = expectBlockByKey<BLK_0x37>( tbl->m_Ptr1, 0x37 );
+    const BLK_0x37_PTR_ARRAY* ptrArray = expectBlockByKey<BLK_0x37_PTR_ARRAY>( tbl->m_Ptr1, 0x37 );
 
     if( !ptrArray || ptrArray->m_Count == 0 )
         return NETINFO_LIST::UNCONNECTED;
@@ -2874,6 +2987,41 @@ void BOARD_BUILDER::createZones()
             continue;
 
         int netCode = resolveShapeNet( shapeData );
+
+        // Fallback: if the pointer chain didn't resolve a net, look for a computed
+        // copper fill on the same layer whose bounding box contains this zone's bbox.
+        if( netCode == NETINFO_LIST::UNCONNECTED && !m_zoneFillShapes.empty() )
+        {
+            LAYER_INFO etchLayer{};
+            etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
+            etchLayer.m_Subclass = shapeData.m_Layer.m_Subclass;
+            PCB_LAYER_ID zoneLayer = getLayer( etchLayer );
+
+            if( zoneLayer != UNDEFINED_LAYER )
+            {
+                SHAPE_LINE_CHAIN zoneOutline = buildOutline( shapeData );
+                BOX2I            zoneBbox = zoneOutline.BBox();
+
+                for( const ZoneFillEntry& fill : m_zoneFillShapes )
+                {
+                    if( fill.layer != zoneLayer || fill.netCode == NETINFO_LIST::UNCONNECTED )
+                        continue;
+
+                    SHAPE_LINE_CHAIN fillOutline = buildOutline( *fill.shape );
+                    BOX2I            fillBbox = fillOutline.BBox();
+
+                    if( zoneBbox.Contains( fillBbox ) || fillBbox.Contains( zoneBbox ) )
+                    {
+                        netCode = fill.netCode;
+
+                        wxLogTrace( traceAllegroBuilder,
+                                    "  BOUNDARY %#010x: resolved net via fill fallback -> code %d",
+                                    shapeData.m_Key, netCode );
+                        break;
+                    }
+                }
+            }
+        }
 
         std::unique_ptr<ZONE> zone = buildZone( shapeData, netCode );
 
@@ -2979,6 +3127,73 @@ void BOARD_BUILDER::createZones()
 }
 
 
+void BOARD_BUILDER::applyZoneFills()
+{
+    if( m_zoneFillShapes.empty() )
+        return;
+
+    wxLogTrace( traceAllegroBuilder, "Applying zone fill polygons from %zu collected fills",
+                m_zoneFillShapes.size() );
+
+    int fillCount = 0;
+
+    for( ZONE* zone : m_board.Zones() )
+    {
+        if( zone->GetIsRuleArea() || zone->GetNetCode() == NETINFO_LIST::UNCONNECTED )
+            continue;
+
+        bool hasFill = false;
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            if( !IsCopperLayer( layer ) )
+                continue;
+
+            SHAPE_POLY_SET combinedFill;
+
+            for( const ZoneFillEntry& fill : m_zoneFillShapes )
+            {
+                if( fill.layer != layer || fill.netCode != zone->GetNetCode() )
+                    continue;
+
+                SHAPE_LINE_CHAIN fillOutline = buildOutline( *fill.shape );
+
+                if( fillOutline.PointCount() < 3 )
+                    continue;
+
+                fillOutline.SetClosed( true );
+                fillOutline.ClearArcs();
+
+                // Only include fills whose bounding box overlaps the zone outline
+                BOX2I fillBbox = fillOutline.BBox();
+                BOX2I zoneBbox = zone->GetBoundingBox();
+
+                if( !fillBbox.Intersects( zoneBbox ) )
+                    continue;
+
+                combinedFill.AddOutline( fillOutline );
+            }
+
+            if( combinedFill.OutlineCount() > 0 )
+            {
+                combinedFill.Fracture();
+                zone->SetFilledPolysList( layer, combinedFill );
+                hasFill = true;
+                fillCount++;
+            }
+        }
+
+        if( hasFill )
+        {
+            zone->SetIsFilled( true );
+            zone->SetNeedRefill( false );
+        }
+    }
+
+    wxLogTrace( traceAllegroBuilder, "Applied fills to %d zone/layer pairs", fillCount );
+}
+
+
 bool BOARD_BUILDER::BuildBoard()
 {
     wxLogTrace( traceAllegroBuilder, "Starting BuildBoard() - Phase 2 of Allegro import" );
@@ -3006,6 +3221,7 @@ bool BOARD_BUILDER::BuildBoard()
     createBoardOutline();
 
     createZones();
+    applyZoneFills();
 
     applyConstraintSets();
     applyNetConstraints();
@@ -3025,7 +3241,7 @@ bool BOARD_BUILDER::BuildBoard()
     {
         if( fpContainer->GetBlockType() == 0x2B )
         {
-            const BLK_0x2B& fpBlock = static_cast<const BLOCK<BLK_0x2B>&>( *fpContainer ).GetData();
+            const BLK_0x2B_FOOTPRINT_DEF& fpBlock = static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( *fpContainer ).GetData();
 
             const LL_WALKER instWalker( fpBlock.m_FirstInstPtr, fpBlock.m_Key, m_brdDb );
 
@@ -3040,7 +3256,7 @@ bool BOARD_BUILDER::BuildBoard()
                 }
                 else
                 {
-                    const auto& inst = static_cast<const BLOCK<BLK_0x2D>&>( *instBlock ).GetData();
+                    const auto& inst = static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( *instBlock ).GetData();
 
                     std::unique_ptr<FOOTPRINT> fp = buildFootprint( inst );
 

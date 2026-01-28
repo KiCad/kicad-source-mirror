@@ -234,8 +234,10 @@ and custom pad shapes.
 0x28 shapes appear in two distinct contexts:
 
 1. On the net assignment chain (reachable from 0x1B NET via 0x04/0x05):
-   these are computed copper fills. KiCad recomputes fills from zone
-   outlines, so these are not imported.
+   these are computed copper fills. Collected during createTracks() and
+   applied as fill polygons on matching ZONE objects via applyZoneFills().
+   Also used as a fallback for zone net resolution when resolveShapeNet()
+   returns UNCONNECTED (matched by layer + bounding box overlap).
 
 2. On the `m_LL_Shapes` header linked list with BOUNDARY class (0x15):
    these are zone outlines and are imported as ZONE objects.
@@ -388,6 +390,19 @@ footprint's rotation:
 
     local_rotation = pad_rotation - footprint_rotation
 
+## Drill Slot Orientation
+
+Allegro stores slot drill dimensions as (primary, secondary) rather
+than (X, Y). The primary dimension is always the larger value
+regardless of pad orientation. For OBLONG_X pads this works naturally
+(slot width > height), but for OBLONG_Y pads the raw dimensions
+produce a horizontal slot instead of the intended vertical slot.
+
+The importer corrects this by comparing the first copper layer's pad
+aspect ratio (m_W vs m_H) with the drill aspect ratio (drillW vs
+drillH). If they disagree on orientation, the drill dimensions are
+swapped. Round drills (equal W and H) skip the check.
+
 ## Font Definitions (0x36)
 
 The 0x36 block contains a heterogeneous list of substruct variants.
@@ -444,9 +459,9 @@ consecutive `int32_t` fields:
 | f[4]  | 16     | **Clearance**                        | 4.0 mil            |
 | f[5]  | 20     | Max value or 0                       | 0                  |
 | f[6]  | 24     | Flag (usually 1; packed in complex)  | 1                  |
-| f[7]  | 28     | Neck width                           | 5.0 mil            |
-| f[8]  | 32     | Dimension or 0                       | 3.0 mil            |
-| f[9]  | 36     | Dimension or 0                       | 3.5 mil            |
+| f[7]  | 28     | **Diff pair gap**                    | 6.5 mil            |
+| f[8]  | 32     | Neck width                           | 3.0 mil            |
+| f[9]  | 36     | Diff pair neck gap                   | 3.5 mil            |
 | f[10] | 40     | Dimension or 0                       | 4.0 mil            |
 | f[11] | 44     | Reserved (usually 0)                 | 0                  |
 | f[12] | 48     | Reserved (always 0)                  | 0                  |
@@ -469,9 +484,9 @@ f[1] to f[0], and there is no dedicated clearance field:
 | f[4]  | 16     | Always 0 (no clearance field)        | 0                  |
 | f[5]  | 20     | Flag (1 or 0x10001)                  | 1                  |
 | f[6]  | 24     | Dimension or 0                       | 15.0 mil           |
-| f[7]  | 28     | Dimension or 0                       | 15.0 mil           |
-| f[8]  | 32     | Usually 0                            | 0                  |
-| f[9]  | 36     | Dimension or 0                       | 7.0 mil            |
+| f[7]  | 28     | **Diff pair gap**                    | 4.8 mil            |
+| f[8]  | 32     | Neck width                           | 0                  |
+| f[9]  | 36     | Diff pair neck gap                   | 7.0 mil            |
 | f[10-13]| 40-52| Reserved (usually 0)                 | 0                  |
 
 Pre-V172 boards have no dedicated clearance field. The importer uses
@@ -514,13 +529,17 @@ Additional NET field codes discovered:
 The constraint import runs in three passes during BuildBoard():
 
 1. **applyConstraintSets()** walks `m_LL_0x1D_0x1E_0x1F`, creates one
-   NETCLASS per 0x1D block with clearance and trace width. Nets are
-   assigned via field 0x1a0 (default set for nets without the field).
+   NETCLASS per 0x1D block with clearance, trace width, and diff pair
+   gap. Nets are assigned via field 0x1a0 (default set for nets without
+   the field). When diff pair gap is non-zero, also sets diff pair width
+   equal to the constraint set's trace width.
 2. **applyNetConstraints()** creates per-net trace width netclasses
    (`Allegro_W<N>mil`) from MIN_LINE_WIDTH field 0x55. These override
    the constraint set trace width for nets that have explicit widths.
 3. **applyMatchGroups()** creates diff pair and match group netclasses
-   from m_MatchGroupPtr pointer chains. Uses direct SetNetClass().
+   from m_MatchGroupPtr pointer chains. Inherits clearance, track width,
+   diff pair gap, and diff pair width from the underlying constraint set
+   netclass. Uses direct SetNetClass().
 
 ### Constraint Set Name Resolution
 

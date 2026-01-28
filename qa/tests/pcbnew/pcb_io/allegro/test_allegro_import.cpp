@@ -2793,9 +2793,11 @@ BOOST_AUTO_TEST_CASE( PadContainedInFabOutline )
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
     BOOST_REQUIRE( board );
 
-    // Footprints known to have pads and F.Fab outlines
-    const std::set<wxString> targetRefs = { wxS( "J1" ), wxS( "P5" ), wxS( "P6" ), wxS( "P10" ),
-                                            wxS( "U5" ), wxS( "U13" ), wxS( "C78" ) };
+    // Footprints known to have pads and fab outlines that enclose them.
+    // P6 and P10 are excluded: they are bottom-side connectors whose assembly outlines
+    // only cover the housing, not the full pin field.
+    const std::set<wxString> targetRefs = { wxS( "J1" ), wxS( "P5" ), wxS( "U5" ),
+                                            wxS( "U13" ), wxS( "C78" ) };
 
     int testedCount = 0;
     int failedCount = 0;
@@ -3316,6 +3318,72 @@ BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
 
 
 /**
+ * Verify diff pair gap is imported from f[7] of constraint set DataB records.
+ * BeagleBone_Black_RevC is V172+ (divisor=100) with two DIFF constraint sets.
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ConstraintSetDiffPairGap" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // 90_OHM_DIFF: f[1]=450, f[4]=400, f[7]=650 (divisor=100, scale=254 nm/unit)
+    auto nc90 = netSettings->GetNetClassByName( wxS( "Allegro_90_OHM_DIFF" ) );
+    BOOST_REQUIRE( nc90 );
+    BOOST_CHECK_EQUAL( nc90->GetTrackWidth(), 114300 );
+    BOOST_CHECK_EQUAL( nc90->GetClearance(), 101600 );
+    BOOST_CHECK_EQUAL( nc90->GetDiffPairGap(), 165100 );
+    BOOST_CHECK_EQUAL( nc90->GetDiffPairWidth(), 114300 );
+
+    // 100OHM_DIFF: f[1]=375, f[4]=400, f[7]=725
+    auto nc100 = netSettings->GetNetClassByName( wxS( "Allegro_100OHM_DIFF" ) );
+    BOOST_REQUIRE( nc100 );
+    BOOST_CHECK_EQUAL( nc100->GetTrackWidth(), 95250 );
+    BOOST_CHECK_EQUAL( nc100->GetClearance(), 101600 );
+    BOOST_CHECK_EQUAL( nc100->GetDiffPairGap(), 184150 );
+    BOOST_CHECK_EQUAL( nc100->GetDiffPairWidth(), 95250 );
+
+    // BGA: f[1]=300, f[7]=300 (divisor=100, 300*254=76200 nm)
+    auto ncBga = netSettings->GetNetClassByName( wxS( "Allegro_BGA" ) );
+    BOOST_REQUIRE( ncBga );
+    BOOST_CHECK_EQUAL( ncBga->GetDiffPairGap(), 76200 );
+    BOOST_CHECK_EQUAL( ncBga->GetDiffPairWidth(), 76200 );
+}
+
+
+/**
+ * Verify diff pair gap is imported on pre-V172 boards. VCU118 (divisor=1000) has multiple
+ * diff pair constraint sets with per-layer variation in f[7].
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGapPreV172 )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/allegro/8851_HW-U1-VCU118_REV2-0_071417.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ConstraintSetDiffPairGapPreV172" );
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    // DP_90_OHM: f[0]=5200 (line_width), f[7]=4800 (dp_gap) on L0 (divisor=1000, scale=25.4)
+    auto nc = netSettings->GetNetClassByName( wxS( "Allegro_DP_90_OHM" ) );
+    BOOST_REQUIRE( nc );
+    BOOST_CHECK_EQUAL( nc->GetTrackWidth(), 132080 );
+    BOOST_CHECK_EQUAL( nc->GetDiffPairGap(), 121920 );
+    BOOST_CHECK_EQUAL( nc->GetDiffPairWidth(), 132080 );
+}
+
+
+/**
  * Test that LoadBoard works when aAppendToMe is nullptr, which is the path used by the
  * KiCad UI "Import Non-KiCad Board" flow. The plugin must create and return a new BOARD.
  */
@@ -3416,6 +3484,206 @@ BOOST_AUTO_TEST_CASE( SmdPadLayerConsistency )
             BOOST_CHECK_EQUAL( inconsistentCount, 0 );
         }
     }
+}
+
+
+/**
+ * Verify that SMD-only footprint tech layers are consistent with the footprint side.
+ *
+ * A front-side SMD footprint should have shapes/text only on front tech layers (F.SilkS,
+ * F.CrtYd, F.Fab, F.Mask, F.Paste). A bottom-side SMD footprint should have them only
+ * on back tech layers. Mixed-side items indicate the importer failed to canonicalize
+ * footprint children before flipping.
+ */
+BOOST_AUTO_TEST_CASE( SmdFootprintTechLayers )
+{
+    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        CAPTURING_REPORTER     reporter;
+        std::string            fullPath = dataPath + boardName;
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            int inconsistentCount = 0;
+
+            for( FOOTPRINT* fp : board->Footprints() )
+            {
+                // Only check SMD-only footprints (no through-hole pads)
+                bool hasSmd = false;
+                bool hasTH = false;
+
+                for( PAD* pad : fp->Pads() )
+                {
+                    if( pad->GetAttribute() == PAD_ATTRIB::SMD )
+                        hasSmd = true;
+                    else if( pad->GetAttribute() == PAD_ATTRIB::PTH )
+                        hasTH = true;
+                }
+
+                if( !hasSmd || hasTH )
+                    continue;
+
+                const bool onBottom = fp->IsFlipped();
+
+                for( BOARD_ITEM* item : fp->GraphicalItems() )
+                {
+                    PCB_LAYER_ID layer = item->GetLayer();
+
+                    if( !IsFrontLayer( layer ) && !IsBackLayer( layer ) )
+                        continue;
+
+                    bool wrongSide = false;
+
+                    if( onBottom && IsFrontLayer( layer ) )
+                        wrongSide = true;
+                    else if( !onBottom && IsBackLayer( layer ) )
+                        wrongSide = true;
+
+                    if( wrongSide )
+                    {
+                        inconsistentCount++;
+                        BOOST_TEST_MESSAGE(
+                                boardName << ": " << fp->GetReference() << " is "
+                                          << ( onBottom ? "bottom" : "top" ) << "-side SMD but has "
+                                          << item->GetClass() << " on "
+                                          << board->GetLayerName( layer ) );
+                    }
+                }
+            }
+
+            BOOST_CHECK_EQUAL( inconsistentCount, 0 );
+        }
+    }
+}
+
+
+/**
+ * Verify that oblong drill slots on BeagleBone connectors align with their copper pad orientation.
+ * P6 pads 20/21, P3 pad 6, and P1 pads 1-3 have vertical oblong pads that require vertical slots.
+ * Previously the slot dimensions were imported as (primary, secondary) instead of matching the
+ * pad aspect ratio, producing horizontal slots on vertical pads.
+ */
+BOOST_AUTO_TEST_CASE( BeagleBone_DrillSlotOrientation )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    struct SLOT_CHECK
+    {
+        wxString fpRef;
+        wxString padNum;
+    };
+
+    // These pads have vertical oblong copper shapes and should have taller-than-wide drill slots
+    std::vector<SLOT_CHECK> checks = {
+        { wxS( "P6" ), wxS( "20" ) },
+        { wxS( "P6" ), wxS( "21" ) },
+        { wxS( "P3" ), wxS( "6" ) },
+        { wxS( "P1" ), wxS( "1" ) },
+        { wxS( "P1" ), wxS( "2" ) },
+        { wxS( "P1" ), wxS( "3" ) },
+    };
+
+    for( const auto& check : checks )
+    {
+        BOOST_TEST_CONTEXT( check.fpRef << " pad " << check.padNum )
+        {
+            FOOTPRINT* fp = nullptr;
+
+            for( FOOTPRINT* candidate : board->Footprints() )
+            {
+                if( candidate->GetReference() == check.fpRef )
+                {
+                    fp = candidate;
+                    break;
+                }
+            }
+
+            BOOST_REQUIRE_MESSAGE( fp != nullptr, "Footprint " << check.fpRef << " should exist" );
+
+            PAD* pad = nullptr;
+
+            for( PAD* candidate : fp->Pads() )
+            {
+                if( candidate->GetNumber() == check.padNum )
+                {
+                    pad = candidate;
+                    break;
+                }
+            }
+
+            BOOST_REQUIRE_MESSAGE( pad != nullptr,
+                                   "Pad " << check.padNum << " should exist on " << check.fpRef );
+
+            VECTOR2I padSize = pad->GetSize( F_Cu );
+            VECTOR2I drillSize = pad->GetDrillSize();
+
+            BOOST_TEST_MESSAGE( check.fpRef << " pad " << check.padNum
+                                << ": pad=" << padSize.x << "x" << padSize.y
+                                << " drill=" << drillSize.x << "x" << drillSize.y );
+
+            // If the pad is oblong, the drill should match the pad's aspect ratio
+            if( drillSize.x != drillSize.y )
+            {
+                bool padIsTaller = ( padSize.y > padSize.x );
+                bool drillIsTaller = ( drillSize.y > drillSize.x );
+
+                BOOST_CHECK_MESSAGE( padIsTaller == drillIsTaller,
+                                     "Drill slot should match pad orientation" );
+            }
+        }
+    }
+}
+
+
+/**
+ * Verify that zones on BeagleBone have fill polygons imported from Allegro's computed copper.
+ * The GND_EARTH zones should have non-empty fill polygon data.
+ */
+BOOST_AUTO_TEST_CASE( BeagleBone_ZoneFills )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    CAPTURING_REPORTER     reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOOST_REQUIRE( board );
+
+    int filledZoneCount = 0;
+    int totalCopperZones = 0;
+
+    for( const ZONE* zone : board->Zones() )
+    {
+        if( zone->GetIsRuleArea() || zone->GetNetCode() == 0 )
+            continue;
+
+        totalCopperZones++;
+
+        if( zone->IsFilled() )
+        {
+            filledZoneCount++;
+
+            BOOST_TEST_MESSAGE( "Filled zone: net=" << zone->GetNetname()
+                                << " layers=" << zone->GetLayerSet().count() );
+        }
+    }
+
+    BOOST_TEST_MESSAGE( "Total copper zones: " << totalCopperZones
+                        << ", filled: " << filledZoneCount );
+
+    BOOST_CHECK_GT( totalCopperZones, 0 );
+    BOOST_CHECK_GT( filledZoneCount, 0 );
 }
 
 

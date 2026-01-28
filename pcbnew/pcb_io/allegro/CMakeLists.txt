@@ -22,7 +22,6 @@ target_link_libraries( allegro_convert
 set( ALLEGRO2PCBNEW_SRCS
     allegro_builder.cpp
     pcb_io_allegro.cpp
-        convert/allegro_padstack.h
 )
 
 add_library( allegro2pcbnew STATIC ${ALLEGRO2PCBNEW_SRCS} )
@@ -40,5 +39,3 @@ target_include_directories( allegro2pcbnew
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_subdirectory(utils/extract)
-add_subdirectory(utils/pycli)

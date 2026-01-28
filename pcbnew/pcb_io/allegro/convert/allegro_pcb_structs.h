@@ -5,7 +5,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -15,8 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
@@ -238,25 +238,24 @@ struct FILE_HEADER
     uint32_t                m_ObjectCount;
     std::array<uint32_t, 9> m_Unknown2;
 
-    // A group of linked lists that refer to certain groups of elements
-    // TODO revisit when we know what all these codes are
-    LINKED_LIST m_LL_0x04;
-    LINKED_LIST m_LL_0x06;
-    LINKED_LIST m_LL_0x0C;
-    LINKED_LIST m_LL_Shapes; // 0xE and 0x28
-    LINKED_LIST m_LL_0x14;
-    LINKED_LIST m_LL_0x1B_Nets;
-    LINKED_LIST m_LL_0x1C;
-    LINKED_LIST m_LL_0x24_0x28;
+    // Linked lists grouping top-level elements by type
+    LINKED_LIST m_LL_0x04;              // Net assignments
+    LINKED_LIST m_LL_0x06;              // Component definitions
+    LINKED_LIST m_LL_0x0C;              // Pin definitions
+    LINKED_LIST m_LL_Shapes;            // Shape segments (0x0E) and shapes (0x28)
+    LINKED_LIST m_LL_0x14;              // Graphics
+    LINKED_LIST m_LL_0x1B_Nets;         // Nets
+    LINKED_LIST m_LL_0x1C;              // Padstacks
+    LINKED_LIST m_LL_0x24_0x28;         // Rects and shapes
     LINKED_LIST m_LL_Unknown1;
-    LINKED_LIST m_LL_0x2B;
-    LINKED_LIST m_LL_0x03_0x30; // string items? 0x30 = string wrapper
-    LINKED_LIST m_LL_0x0A;
-    LINKED_LIST m_LL_0x1D_0x1E_0x1F;
+    LINKED_LIST m_LL_0x2B;              // Footprint definitions
+    LINKED_LIST m_LL_0x03_0x30;         // Fields (0x03) and string wrappers (0x30)
+    LINKED_LIST m_LL_0x0A;              // DRC elements
+    LINKED_LIST m_LL_0x1D_0x1E_0x1F;    // Constraint sets, SI models, padstack dims
     LINKED_LIST m_LL_Unknown2;
-    LINKED_LIST m_LL_0x38;
-    LINKED_LIST m_LL_0x2C;
-    LINKED_LIST m_LL_0x0C_2; // Another 0x0C?
+    LINKED_LIST m_LL_0x38;              // Films
+    LINKED_LIST m_LL_0x2C;              // Tables
+    LINKED_LIST m_LL_0x0C_2;            // Secondary pin definitions
     LINKED_LIST m_LL_Unknown3;
 
     // For some reason the 0x35 extents are recorded here
@@ -312,27 +311,27 @@ struct LAYER_INFO
 {
     enum CLASS
     {
-        BOARD_GEOMETRY = 0x01,
-        COMPONENT_VALUE = 0x02,
-        DEVICE_TYPE = 0x03,
-        DRAWING_FORMAT = 0x04,
-        DRC_ERROR = 0x05,
-        ETCH = 0x06,
-        MANUFACTURING = 0x07,
-        ANALYSIS = 0x08,
-        PACKAGE_GEOMETRY = 0x09,
-        PACKAGE_KEEPIN = 0x0A,
-        PACKAGE_KEEPOUT = 0x0B,
-        PIN = 0x0C,
-        REF_DES = 0x0d,
-        ROUTE_KEEPIN = 0x0e,
-        ROUTE_KEEPOUT = 0x0f,
-        TOLERANCE = 0x10,
-        USER_PART_NUMBER = 0x11,
-        VIA_CLASS = 0x12,
-        VIA_KEEPOUT = 0x13,
-        ANTI_ETCH = 0x14,
-        BOUNDARY = 0x15,
+        BOARD_GEOMETRY       = 0x01,
+        COMPONENT_VALUE      = 0x02,
+        DEVICE_TYPE          = 0x03,
+        DRAWING_FORMAT       = 0x04,
+        DRC_ERROR            = 0x05,
+        ETCH                 = 0x06,
+        MANUFACTURING        = 0x07,
+        ANALYSIS             = 0x08,
+        PACKAGE_GEOMETRY     = 0x09,
+        PACKAGE_KEEPIN       = 0x0A,
+        PACKAGE_KEEPOUT      = 0x0B,
+        PIN                  = 0x0C,
+        REF_DES              = 0x0d,
+        ROUTE_KEEPIN         = 0x0e,
+        ROUTE_KEEPOUT        = 0x0f,
+        TOLERANCE            = 0x10,
+        USER_PART_NUMBER     = 0x11,
+        VIA_CLASS            = 0x12,
+        VIA_KEEPOUT          = 0x13,
+        ANTI_ETCH            = 0x14,
+        BOUNDARY             = 0x15,
     };
 
     /**
@@ -343,38 +342,38 @@ struct LAYER_INFO
     enum SUBCLASS
     {
         // BOARD_GEOMETRY
-        BGEOM_OUTLINE = 0xEA,
-        BGEOM_DIMENSION = 0xF9,
+        BGEOM_OUTLINE                = 0xEA,
+        BGEOM_DIMENSION              = 0xF9,
 
         // COMPONENT_VALUE / DEVICE_TYPE / USER_PART_NUMBER
         // REF_DES / TOLERANCE
-        DISPLAY_BOTTOM = 0xF8,
-        DISPLAY_TOP = 0xF9,
-        SILKSCREEN_BOTTOM = 0xFA,
-        SILKSCREEN_TOP = 0xFB,
-        ASSEMBLY_BOTTOM = 0xFC,
-        ASSEMBLY_TOP = 0xFD,
+        DISPLAY_BOTTOM               = 0xF8,
+        DISPLAY_TOP                  = 0xF9,
+        SILKSCREEN_BOTTOM            = 0xFA,
+        SILKSCREEN_TOP               = 0xFB,
+        ASSEMBLY_BOTTOM              = 0xFC,
+        ASSEMBLY_TOP                 = 0xFD,
 
         // DRAWING_FORMAT
-        DFMT_OUTLINE = 0xFD,
+        DFMT_OUTLINE                 = 0xFD,
         // DFMT_TITLE_BLOCK = 0xF?,
 
         // PACKAGE_GEOMETRY
-        PGEOM_DISPLAY_BOTTOM = 0xF1,
-        PGEOM_DISPLAY_TOP = 0xF2,
-        PGEOM_BODY_CENTER = 0xF5,
-        PGEOM_SILKSCREEN_BOTTOM = 0xF6,
-        PGEOM_SILKSCREEN_TOP = 0xF7,
-        PGEOM_PLACE_BOUND_BOTTOM = 0xFA,
-        PGEOM_PLACE_BOUND_TOP = 0xFB,
-        PGEOM_ASSEMBLY_BOTTOM = 0xFC,
-        PGEOM_ASSEMBLY_TOP = 0xFD,
-        DFA_BOUND_BOTTOM = 0xEE,
-        DFA_BOUND_TOP = 0xEF,
+        PGEOM_DISPLAY_BOTTOM         = 0xF1,
+        PGEOM_DISPLAY_TOP            = 0xF2,
+        PGEOM_BODY_CENTER            = 0xF5,
+        PGEOM_SILKSCREEN_BOTTOM      = 0xF6,
+        PGEOM_SILKSCREEN_TOP         = 0xF7,
+        PGEOM_PLACE_BOUND_BOTTOM     = 0xFA,
+        PGEOM_PLACE_BOUND_TOP        = 0xFB,
+        PGEOM_ASSEMBLY_BOTTOM        = 0xFC,
+        PGEOM_ASSEMBLY_TOP           = 0xFD,
+        DFA_BOUND_BOTTOM             = 0xEE,
+        DFA_BOUND_TOP                = 0xEF,
 
         // MANUFACTURING
-        MFR_AUTOSILK_BOTTOM = 0xF3,
-        MFR_AUTOSILK_TOP = 0xF4,
+        MFR_AUTOSILK_BOTTOM          = 0xF3,
+        MFR_AUTOSILK_TOP             = 0xF4,
     };
 
     uint8_t m_Class;
@@ -385,7 +384,9 @@ struct LAYER_INFO
 
 
 /**
- * 0x01 objects are arcs
+ * Arc segment used in tracks, zone outlines, and shape boundaries. The sweep direction
+ * is encoded in m_SubType bit 6 (0x40 = clockwise). Center and radius are stored as
+ * word-swapped IEEE 754 doubles (ReadAllegroFloat).
  */
 struct BLK_0x01_ARC
 {
@@ -414,9 +415,10 @@ struct BLK_0x01_ARC
 
 
 /**
- * 0x03 objects has some kind of variable substruct
+ * Field/property references with variable-typed substructs. Used for constraint set names,
+ * net properties, trace widths, and schematic cross-references.
  */
-struct BLK_0x03
+struct BLK_0x03_FIELD
 {
     struct SUB_0x6C
     {
@@ -460,15 +462,18 @@ enum FIELD_KEYS
 {
     LOGICAL_PATH = 0x37,
     MIN_LINE_WIDTH = 0x55,
+    NET_SCHEDULE = 0x77,          ///< Net class/schedule assignment
     MAX_LINE_WIDTH = 0x173,
     MIN_NECK_WIDTH = 0x5c,
     MAX_NECK_LENGTH = 0x1fb,
-    PHYS_CONSTRAINT_SET = 0x1a0,
+    PHYS_CONSTRAINT_SET = 0x1a0,  ///< Physical Constraint Set assignment
 };
 
 
 /**
- * 0x04 objects represent net assignments.
+ * Net assignment linking a net (0x1B) to its member objects. Each NET has a chain of
+ * 0x04 blocks, each pointing to a connected item (0x05 track, 0x32 placed pad, 0x33 via,
+ * or 0x28 shape for copper fills).
  */
 struct BLK_0x04_NET_ASSIGNMENT
 {
@@ -484,9 +489,9 @@ struct BLK_0x04_NET_ASSIGNMENT
 
 
 /**
- * 0x05 objects represent tracks
- *
- * They then refer out to, say, 0x17 segments
+ * Track segment container. Each track has a layer, a net assignment (via 0x04), and a
+ * linked list of line/arc segments starting at m_FirstSegPtr (0x15/0x16/0x17 lines or
+ * 0x01 arcs). Also used for zone fill shapes (0x28) on the net assignment chain.
  */
 struct BLK_0x05_TRACK
 {
@@ -514,15 +519,14 @@ struct BLK_0x05_TRACK
 
 
 /**
- * 0x06 objects are usually the first objects in the file.
- *
- * Exact purpose not clear yet.
+ * Component/symbol definitions. Links to instances (0x07), function slots (0x0F),
+ * and pin numbers (0x08).
  */
-struct BLK_0x06
+struct BLK_0x06_COMPONENT
 {
     uint32_t m_Key;
 
-    // Pointer to the next BLK_0x06
+    // Pointer to the next BLK_0x06_COMPONENT
     uint32_t m_Next;
     // Pointer to COMP_DEVICE_TYPE string
     uint32_t m_CompDeviceType;
@@ -543,9 +547,11 @@ struct BLK_0x06
 
 
 /**
- * 0x07 objects.
+ * Component instance reference data. Links a placed footprint (0x2D) to its reference
+ * designator string, function instance (0x10), and placed pad list (0x32). One 0x07
+ * exists per placed component.
  */
-struct BLK_0x07
+struct BLK_0x07_COMPONENT_INST
 {
     uint32_t m_Key;
 
@@ -568,9 +574,11 @@ struct BLK_0x07
 
 
 /**
- * 0x08 objects (PIN_NUMBER)
+ * Pin number within a component. Links to pin name (0x11) and is chained from the
+ * component definition (0x06). The pin number string is version-dependent (m_StrPtr
+ * for V172+, m_StrPtr16x for pre-V172).
  */
-struct BLK_0x08
+struct BLK_0x08_PIN_NUMBER
 {
     uint8_t  m_Type;
     uint16_t m_R;
@@ -593,9 +601,10 @@ struct BLK_0x08
 
 
 /**
- * 0x09 objects.
+ * Intermediate link between copper fills and their parent shapes. Appears in fill-to-shape
+ * resolution chains. Not directly imported.
  */
-struct BLK_0x09
+struct BLK_0x09_FILL_LINK
 {
     uint32_t m_Key;
 
@@ -635,9 +644,10 @@ struct BLK_0x0A_DRC
 
 
 /**
- * 0x0C objects.
+ * Pin definition with shape type, drill character, coordinates, and size. Contains
+ * version-dependent fields for the pad shape and drill character encoding.
  */
-struct BLK_0x0C
+struct BLK_0x0C_PIN_DEF
 {
     uint8_t    m_T;
     LAYER_INFO m_Layer;
@@ -667,7 +677,9 @@ struct BLK_0x0C
 
 
 /**
- * 0x0D objects represent pads.
+ * Pad geometry and placement in board-absolute coordinates. References a padstack (0x1C)
+ * for shape/drill definitions. Coordinates and rotation are board-absolute; for KiCad
+ * footprint-local space, subtract the parent footprint's position and rotation.
  */
 struct BLK_0x0D_PAD
 {
@@ -677,8 +689,8 @@ struct BLK_0x0D_PAD
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
-    int32_t m_CoordsX;
-    int32_t m_CoordsY;
+    int32_t m_CoordsX;  ///< Board coordinates. Use SetFPRelativePosition() for KiCad FP-local space.
+    int32_t m_CoordsY;  ///< Board coordinates. Use SetFPRelativePosition() for KiCad FP-local space.
 
     uint32_t m_PadStack;
     uint32_t m_Unknown2;
@@ -686,14 +698,15 @@ struct BLK_0x0D_PAD
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown3;
 
     uint32_t m_Flags;
-    uint32_t m_Rotation;
+    uint32_t m_Rotation;  ///< Board-absolute millidegrees. Subtract footprint rotation for FP-local orientation.
 };
 
 
 /**
- * 0x0E objects.
+ * Shape/fill segment linking a copper shape to its parent footprint. Contains coordinates
+ * and parent pointer.
  */
-struct BLK_0x0E
+struct BLK_0x0E_SHAPE_SEG
 {
     uint8_t  m_T;
     uint16_t m_T2;
@@ -715,9 +728,11 @@ struct BLK_0x0E
 
 
 /**
- * 0x0F objects: FUNCTION SLOT
+ * Function slot in a multi-slot component (e.g. a quad op-amp has 4 slots). Contains
+ * the slot name string, device type, and links to the parent component (0x06) and
+ * pin name list (0x11).
  */
-struct BLK_0x0F
+struct BLK_0x0F_FUNCTION_SLOT
 {
     uint32_t m_Key;
 
@@ -737,11 +752,11 @@ struct BLK_0x0F
 
 
 /**
- * 0x10 objects: FUNCTION INSTANCE
- *
- * Number of 0x10 objects in a file seems to match 0x07 objects.
+ * Function instance linking a component instance (0x07) to its schematic function,
+ * pin cross-references (0x12), and function slots (0x0F). Count matches 0x07 objects
+ * one-to-one.
  */
-struct BLK_0x10
+struct BLK_0x10_FUNCTION_INST
 {
     uint32_t m_Key;
 
@@ -760,9 +775,10 @@ struct BLK_0x10
 
 
 /**
- * 0x11 objects: PIN_NAME mapping
+ * Pin name within a component, linked from function slots (0x0F). Maps pin names to pin
+ * numbers (0x08) for schematic-to-layout cross-referencing.
  */
-struct BLK_0x11
+struct BLK_0x11_PIN_NAME
 {
     uint8_t  m_Type;
     uint16_t m_R;
@@ -771,7 +787,7 @@ struct BLK_0x11
     uint32_t m_PinNameStrPtr;
     ///< Pointer to next 0x11 PIN_NAME object or 0x0F SLOT
     uint32_t m_Next;
-    ///< Pointer to 0x11 PIN_NUMBER object
+    ///< Pointer to 0x08 PIN_NUMBER object
     uint32_t m_PinNumberPtr;
     uint32_t m_Unknown1;
 
@@ -780,9 +796,10 @@ struct BLK_0x11
 
 
 /**
- * 0x12 objects.
+ * Cross-reference between objects. Exact semantics not fully understood; appears in
+ * component and function instance chains.
  */
-struct BLK_0x12
+struct BLK_0x12_XREF
 {
     uint8_t  m_Type;
     uint16_t m_R;
@@ -798,9 +815,11 @@ struct BLK_0x12
 
 
 /**
- * 0x14 objects.
+ * Graphics container holding a chain of line segments and arcs. Each 0x14 has a layer,
+ * a parent pointer (usually a footprint 0x2D or board-level object), and a head pointer
+ * to the first segment (0x15/0x16/0x17 or 0x01 arc).
  */
-struct BLK_0x14
+struct BLK_0x14_GRAPHIC
 {
     uint8_t    m_Type;
     LAYER_INFO m_Layer;
@@ -886,10 +905,8 @@ enum class PAD_TYPE
 
 
 /**
- * Substruct in a padstack object.
- *
- * It's not quite clear what the fields actually mean, but presumably
- * relate to per layer(?) structures.
+ * Substruct in a padstack object. Each component is one slot in the padstack, representing
+ * either a fixed technical layer or a per-copper-layer pad/antipad/thermal relief.
  */
 struct PADSTACK_COMPONENT
 {
@@ -902,6 +919,7 @@ struct PADSTACK_COMPONENT
         TYPE_SQUARE = 0x05,
         TYPE_RECTANGLE = 0x06,
         TYPE_DIAMOND = 0x07,
+        TYPE_PENTAGON = 0x0a,
         TYPE_OBLONG_X = 0x0b,
         TYPE_OBLONG_Y = 0x0c,
         TYPE_HEXAGON_X = 0x0f,
@@ -913,6 +931,7 @@ struct PADSTACK_COMPONENT
         TYPE_ROUNDED_RECTANGLE = 0x1b,
         TYPE_CHAMFERED_RECTANGLE = 0x1c,
         TYPE_NSIDED_POLYGON = 0x1e,
+        TYPE_APERTURE_EXT = 0xee,
     };
 
     uint8_t m_Type;
@@ -945,6 +964,13 @@ struct PADSTACK_COMPONENT
 };
 
 
+/**
+ * Padstack definition containing drill dimensions and a table of per-layer pad/antipad/thermal
+ * components. The component table has fixed technical layer slots (solder mask, paste mask, etc.)
+ * followed by per-copper-layer groups. Drill location is version-dependent (m_Drill for pre-V172,
+ * m_DrillArr for V172+). Slot dimensions for oblong drills are stored as (primary, secondary)
+ * not (X, Y), requiring orientation correction based on the copper pad aspect ratio.
+ */
 struct BLK_0x1C_PADSTACK
 {
     uint8_t m_UnknownByte1;
@@ -1010,9 +1036,6 @@ struct BLK_0x1C_PADSTACK
 
     COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
 
-    /**
-     * Indexes of fixed slots in the component table
-     */
     /**
      * Fixed slot indices in the component table.
      *
@@ -1090,9 +1113,9 @@ struct BLK_0x1C_PADSTACK
 
 
 /**
- * 0x1D objects.
+ * Physical constraint sets containing trace width, clearance, and routing rules.
  */
-struct BLK_0x1D
+struct BLK_0x1D_CONSTRAINT_SET
 {
     uint32_t m_Key;
     uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
@@ -1102,13 +1125,14 @@ struct BLK_0x1D
     uint16_t m_SizeB;
 
     /**
-     * Size of this is m_SizeB * 56
-     *
-     * Presumably blocks of 56?
+     * Per-copper-layer dimension values, 14 x int32 per record. Count equals board copper
+     * layer count. V172+: f[1]=line_width, f[4]=clearance. Pre-V172: f[0]=line_width,
+     * f[1]=spacing.
      */
     std::vector<std::array<uint8_t, 56>> m_DataB;
     /**
-     * Size of this is m_SizeA * 256
+     * Records contain ASCII padstack/via name strings (null-terminated at offset 4)
+     * and file path references. Size is m_SizeA * 256.
      */
     std::vector<std::array<uint8_t, 256>> m_DataA;
 
@@ -1117,9 +1141,10 @@ struct BLK_0x1D
 
 
 /**
- * 0x1E objects.
+ * Signal integrity and simulation model data (IBIS netlists). m_String contains ASCII
+ * netlist text. Not imported.
  */
-struct BLK_0x1E
+struct BLK_0x1E_SI_MODEL
 {
     uint8_t  m_Type;
     uint16_t m_T2;
@@ -1141,9 +1166,9 @@ struct BLK_0x1E
 
 
 /**
- * 0x1F objects
+ * Per-padstack dimension records with name and value. Not imported.
  */
-struct BLK_0x1F
+struct BLK_0x1F_PADSTACK_DIM
 {
     uint32_t m_Key;
     uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
@@ -1154,21 +1179,18 @@ struct BLK_0x1F
     uint16_t m_Size;
 
     /**
-     * Some kind of quite substantial substruct that varies in version
+     * Version-dependent substruct holding padstack dimension name and value
      */
     std::vector<uint8_t> m_Substruct;
 };
 
 
 /**
- * 0x21 objects.
- *
- * Some kind of headered data structure.
- *
- * The contained data appears to be quite substantial - hundreds or
- * thousands of bytes.
+ * Headered data blob containing structured board data such as layer stackup definitions,
+ * material properties, and design rule tables. The payload (m_Data) is a variable-length
+ * byte array whose interpretation depends on context.
  */
-struct BLK_0x21
+struct BLK_0x21_BLOB
 {
     uint8_t  m_Type;
     uint16_t m_R;
@@ -1185,9 +1207,9 @@ struct BLK_0x21
 
 
 /**
- * 0x22 objects.
+ * Purpose not determined. Contains an 8-element array of uint32 values.
  */
-struct BLK_0x22
+struct BLK_0x22_UNKNOWN
 {
     uint8_t  m_Type;
     uint16_t m_T2;
@@ -1226,7 +1248,8 @@ struct BLK_0x23_RATLINE
 
 
 /**
- * 0x24 objects represent rectangles.
+ * Rectangle defined by four coordinates. Appears on the m_LL_0x24_0x28 header linked
+ * list for keepout areas and other rectangular regions. Has a layer and parent pointer.
  */
 struct BLK_0x24_RECT
 {
@@ -1250,9 +1273,10 @@ struct BLK_0x24_RECT
 
 
 /**
- * 0x26 objects.
+ * Match group indirection for differential pairs and match groups.
+ * NET.m_MatchGroupPtr -> 0x26 -> m_GroupPtr -> 0x2C TABLE -> group name string (V172+).
  */
-struct BLK_0x26
+struct BLK_0x26_MATCH_GROUP
 {
     uint8_t  m_Type;
     uint16_t m_R;
@@ -1262,31 +1286,34 @@ struct BLK_0x26
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
     uint32_t m_GroupPtr;
-    uint32_t m_ConstPtr;
+    uint32_t m_ConstPtr;  ///< Points to timing/delay constraints (field type 0x63), not physical constraints
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
 };
 
 
 /**
- * 0x27 is a constraint manager cross-reference table.
+ * Serialized Constraint Manager database containing secondary name table (V172+),
+ * material stackup, color palette, and constraint manager state. NOT a heap pointer table.
  *
- * It maps constraint manager display list entries to board objects via block keys
- * (V172+) or runtime heap pointers (pre-V172). The blob starts with 3 bytes of
- * padding, then a flat array of uint32 LE values. Zero values separate sections
- * (groups of related object references).
- *
- * The block extends to an offset defined in the header (m_0x27_End). Not imported
- * directly since it's a display/navigation structure, not design data.
+ * Pre-V172 uses runtime heap pointer format. V172+ uses compact indices that match
+ * geometric block keys. The block extends to an offset defined in the header (m_0x27_End).
+ * Not imported directly since it is a display/navigation structure, not design data.
  */
-struct BLK_0x27
+struct BLK_0x27_CSTRMGR_XREF
 {
     std::vector<uint32_t> m_Refs;
 };
 
 
 /**
- * 0x28 objects represent shapes.
+ * Polygon shape defined by a linked list of segments starting at m_FirstSegmentPtr
+ * (0x15/0x16/0x17 lines and 0x01 arcs). Used for zone outlines (BOUNDARY class on
+ * m_LL_Shapes), computed copper fills (on net assignment chains), board outline, keepout
+ * areas, place bounds, and custom pad shapes (shape symbol type 0x16).
+ *
+ * Zone net resolution follows m_Ptr7 (V172+) or m_Ptr7_16x (pre-V172) through a
+ * 0x2C TABLE and 0x37 pointer array to reach the owning 0x1B NET.
  */
 struct BLK_0x28_SHAPE
 {
@@ -1381,9 +1408,11 @@ struct BLK_0x2A_LAYER_LIST
 
 
 /**
- * 0x2B objects.
+ * Footprint definition (template) shared by multiple placed instances. Contains the
+ * library symbol path (m_SymLibPathPtr), bounding box, and a linked list of placed
+ * instances starting at m_FirstInstPtr (0x2D blocks).
  */
-struct BLK_0x2B
+struct BLK_0x2B_FOOTPRINT_DEF
 {
     uint32_t m_Key;
 
@@ -1409,7 +1438,10 @@ struct BLK_0x2B
 
 
 /**
- * 0x2C objects represent a type table.
+ * Lookup table used for named associations. Contains a string pointer (m_StringPtr) and
+ * child pointers (m_Ptr1/m_Ptr2/m_Ptr3). Used in match group name resolution (diff pair
+ * and match group names), zone net resolution (intermediate between 0x28 shape and 0x37
+ * pointer array), and other key-to-name mappings.
  */
 struct BLK_0x2C_TABLE
 {
@@ -1435,9 +1467,13 @@ struct BLK_0x2C_TABLE
 
 
 /**
- * 0x2D objects.
+ * Placed footprint instance on the board. Contains position (m_CoordX/Y), rotation
+ * (m_Rotation in millidegrees), and layer (0=top, 1=bottom). Links to graphics (0x14
+ * via m_GraphicPtr), placed pads (0x32 via m_FirstPadPtr), text (0x30 via m_TextPtr),
+ * and instance reference data (0x07 via m_InstRef). Bottom-layer footprints must be
+ * flipped AFTER adding all children.
  */
-struct BLK_0x2D
+struct BLK_0x2D_FOOTPRINT_INST
 {
     uint8_t  m_UnknownByte1;
     uint8_t  m_Layer;         // 0 = top (F_Cu), 1 = bottom (B_Cu)
@@ -1459,7 +1495,7 @@ struct BLK_0x2D
 
     uint32_t m_Flags;
 
-    uint32_t m_Rotation;
+    uint32_t m_Rotation;  ///< Millidegrees (divide by 1000 for degrees)
     int32_t  m_CoordX;
     int32_t  m_CoordY;
 
@@ -1478,9 +1514,10 @@ struct BLK_0x2D
 
 
 /**
- * 0x2E objects.
+ * Connection point at a track junction or pad-to-track transition. Contains coordinates
+ * and links to the net assignment and connected track.
  */
-struct BLK_0x2E
+struct BLK_0x2E_CONNECTION
 {
     uint8_t  m_Type;
     uint16_t m_T2;
@@ -1498,9 +1535,9 @@ struct BLK_0x2E
 
 
 /**
- * 0x2F objects.
+ * Purpose not determined. Contains a 6-element array of uint32 values.
  */
-struct BLK_0x2F
+struct BLK_0x2F_UNKNOWN
 {
     uint8_t  m_Type;
     uint16_t m_T2;
@@ -1511,7 +1548,10 @@ struct BLK_0x2F
 
 
 /**
- * 0x30 objects represent string wrappers.
+ * Text object with position, rotation, layer, font properties, and alignment. References
+ * a 0x31 string graphic (m_StrGraphicPtr) for the actual text content. Used for reference
+ * designators, component values, and other board text. Font index in TEXT_PROPERTIES.m_Key
+ * is 1-based into the 0x36 FontDef_X08 list.
  */
 struct BLK_0x30_STR_WRAPPER
 {
@@ -1560,14 +1600,15 @@ struct BLK_0x30_STR_WRAPPER
     int32_t m_CoordsY;
 
     uint32_t m_Unknown5;
-    uint32_t m_Rotation;
+    uint32_t m_Rotation;  ///< Millidegrees
 
     COND_LT<FMT_VER::V_172, uint32_t> m_Ptr3_16x;
 };
 
 
 /**
- * 0x31 objects represent string graphics.
+ * String graphic content holding the actual text value and its display layer category.
+ * Referenced by 0x30 text wrapper objects via m_StrGraphicPtr.
  */
 struct BLK_0x31_SGRAPHIC
 {
@@ -1601,7 +1642,9 @@ struct BLK_0x31_SGRAPHIC
 
 
 /**
- * 0x32 objects represent placed pads.
+ * Placed pad instance linking a pad definition (0x0D via m_PadPtr) to its parent
+ * footprint (m_ParentFp) and net (m_NetPtr). Chained within a footprint via m_NextInFp
+ * and within a component instance via m_NextInCompInst.
  */
 struct BLK_0x32_PLACED_PAD
 {
@@ -1633,7 +1676,9 @@ struct BLK_0x32_PLACED_PAD
 
 
 /**
- * 0x33 objects are vias.
+ * Via instance with board position, padstack reference (m_Padstack for drill/annular ring
+ * definitions), and net assignment (m_NetPtr). Drill diameter comes from the referenced
+ * padstack (version-dependent location).
  */
 struct BLK_0x33_VIA
 {
@@ -1685,9 +1730,10 @@ struct BLK_0x34_KEEPOUT
 
 
 /**
- * 0x35 objects.
+ * File path references to Allegro log and report files (terminator.log, eclrpt.txt).
+ * Content is a 120-byte fixed buffer with null-terminated path strings. Not imported.
  */
-struct BLK_0x35
+struct BLK_0x35_FILE_REF
 {
     uint8_t  m_T2;
     uint16_t m_T3;
@@ -1697,9 +1743,11 @@ struct BLK_0x35
 
 
 /**
- * 0x36 objects.
+ * Heterogeneous definition table containing font metrics (FontDef_X08), layer name
+ * definitions (X03), film definitions (X02), and other board-level configuration data.
+ * Items are stored as a variant vector indexed by substruct code.
  */
-struct BLK_0x36
+struct BLK_0x36_DEF_TABLE
 {
     uint16_t m_Code;
     uint32_t m_Key;
@@ -1793,9 +1841,11 @@ struct BLK_0x36
 
 
 /**
- * 0x37 objects.
+ * Fixed-capacity pointer array (100 entries). Used in zone net resolution where
+ * m_Ptrs[0] points to the owning 0x1B NET block. m_Count indicates how many entries
+ * are valid.
  */
-struct BLK_0x37
+struct BLK_0x37_PTR_ARRAY
 {
     uint8_t  m_T;
     uint16_t m_T2;
@@ -1849,7 +1899,7 @@ struct BLK_0x39_FILM_LAYER_LIST
 /**
  * 0x3A objects represent a list of films
  */
-struct TYPE_3A_FILM_LIST_NODE
+struct BLK_0x3A_FILM_LIST_NODE
 {
     LAYER_INFO m_Layer;
     uint32_t   m_Key;
@@ -1861,9 +1911,10 @@ struct TYPE_3A_FILM_LIST_NODE
 
 
 /**
- * 0x3B objects.
+ * Named property with type and value strings. Carries board-level metadata such as
+ * component attributes and design parameters.
  */
-struct BLK_0x3B
+struct BLK_0x3B_PROPERTY
 {
     uint8_t  m_T;
     uint16_t m_SubType;
@@ -1882,9 +1933,10 @@ struct BLK_0x3B
 
 
 /**
- * 0x3C objects.
+ * Ordered list of block keys. Context-dependent usage; appears alongside other
+ * block types for grouping related objects.
  */
-struct BLK_0x3C
+struct BLK_0x3C_KEY_LIST
 {
     uint8_t  m_T;
     uint16_t m_T2;

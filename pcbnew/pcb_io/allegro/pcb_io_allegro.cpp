@@ -1,12 +1,12 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright Quilter
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -16,14 +16,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
+ * http://www.gnu.org/licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 3 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
 /**
- * @brief Pcbnew PLUGIN for Allegro *.brd and *. format.
+ * @brief Pcbnew PLUGIN for Allegro brd format.
  */
 
 #include "pcb_io_allegro.h"
@@ -55,11 +55,8 @@ allegroDefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputL
 {
     std::map<wxString, PCB_LAYER_ID> retval;
 
-    // Just return the auto-mapped layers
     for( const INPUT_LAYER_DESC& layerDesc : aInputLayerDescriptionVector )
-    {
         retval.insert( { layerDesc.Name, layerDesc.AutoMapLayer } );
-    }
 
     return retval;
 }
@@ -100,7 +97,6 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    // Only delete m_board on failure if we created it (not caller-owned).
     std::unique_ptr<BOARD> deleter( aAppendToMe ? nullptr : m_board );
 
     std::ifstream fin( aFileName, std::ios::binary );
