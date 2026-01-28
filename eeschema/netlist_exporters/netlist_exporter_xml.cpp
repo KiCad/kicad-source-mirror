@@ -385,25 +385,25 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
-            if( symbol->ResolveExcludedFromBOM() || sheet.GetExcludedFromBOM() )
+            if( symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( symbol->ResolveExcludedFromBoard() || sheet.GetExcludedFromBoard() )
+            if( symbol->ResolveExcludedFromBoard( &sheet ) || sheet.GetExcludedFromBoard() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
-            if( symbol->ResolveExcludedFromPosFiles() )
+            if( symbol->ResolveExcludedFromPosFiles( &sheet ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
             }
 
-            if( symbol->ResolveDNP() || sheet.GetDNP() )
+            if( symbol->ResolveDNP( &sheet ) || sheet.GetDNP() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
