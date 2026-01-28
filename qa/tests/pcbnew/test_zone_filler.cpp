@@ -691,6 +691,99 @@ BOOST_FIXTURE_TEST_CASE( RegressionShallowArcZoneFill, ZONE_FILL_TEST_FIXTURE )
 
 
 /**
+ * Test for issue 22809: Zone keepouts should be respected by iterative refiller.
+ *
+ * The test board has:
+ * - A net zone that covers most of the board
+ * - Several zone keepouts (rule areas with copperpour not_allowed)
+ *
+ * Before the fix, when iterative refill was enabled (ADVANCED_CFG::m_ZoneFillIterativeRefill),
+ * zone keepouts were being completely ignored because the code path that handled keepouts
+ * (buildCopperItemClearances with aIncludeZoneClearances=true) was skipped when iterative
+ * refill was enabled. Additionally, refillZoneFromCache did not subtract keepouts.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionIterativeRefillRespectsKeepouts, ZONE_FILL_TEST_FIXTURE )
+{
+    // Enable iterative refill
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue22809/issue22809", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    // Find all zone keepouts
+    std::vector<ZONE*> keepouts;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetIsRuleArea() && zone->GetDoNotAllowZoneFills() )
+            keepouts.push_back( zone );
+    }
+
+    BOOST_REQUIRE_MESSAGE( !keepouts.empty(), "No zone keepouts found in test board" );
+
+    // For each keepout, check that no zone fill exists inside it
+    int violationCount = 0;
+
+    for( ZONE* keepout : keepouts )
+    {
+        for( PCB_LAYER_ID layer : keepout->GetLayerSet().Seq() )
+        {
+            SHAPE_POLY_SET keepoutOutline( *keepout->Outline() );
+            keepoutOutline.ClearArcs();
+
+            for( ZONE* zone : m_board->Zones() )
+            {
+                if( zone->GetIsRuleArea() )
+                    continue;
+
+                if( !zone->IsOnLayer( layer ) )
+                    continue;
+
+                if( !zone->HasFilledPolysForLayer( layer ) )
+                    continue;
+
+                const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( layer );
+
+                // Check if any fill intersects the keepout
+                SHAPE_POLY_SET intersection = *fill;
+                intersection.BooleanIntersection( keepoutOutline );
+
+                if( intersection.OutlineCount() > 0 )
+                {
+                    double intersectionArea = 0;
+
+                    for( int i = 0; i < intersection.OutlineCount(); i++ )
+                        intersectionArea += std::abs( intersection.Outline( i ).Area() );
+
+                    // Allow for small numerical errors (less than 1 square mm)
+                    if( intersectionArea > 1e6 )
+                    {
+                        BOOST_TEST_MESSAGE( wxString::Format(
+                                "Zone %s fill on layer %s overlaps keepout by %.2f sq mm",
+                                zone->GetNetname(),
+                                m_board->GetLayerName( layer ),
+                                intersectionArea / 1e6 ) );
+                        violationCount++;
+                    }
+                }
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( violationCount == 0,
+                         wxString::Format( "Found %d zone fills overlapping keepout areas. "
+                                           "This indicates issue 22809 - iterative refiller "
+                                           "ignores zone keepouts.", violationCount ) );
+}
+
+
+/**
  * Test for issue 22826: TH pads with remove_unused_layers should properly flash on inner
  * layers when inside a zone of the same net.
  *

@@ -2423,8 +2423,12 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
         if( evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, otherZone, aLayer ) < 0 )
             continue;
 
-        // Rule areas with do-not-fill are handled by buildCopperItemClearances
-        if( !otherZone->GetIsRuleArea() && otherZone->HigherPriority( aZone ) )
+        if( otherZone->GetIsRuleArea() )
+        {
+            if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
+                knockoutZoneClearance( otherZone );
+        }
+        else if( otherZone->HigherPriority( aZone ) )
         {
             if( !otherZone->SameNet( aZone ) )
                 knockoutZoneClearance( otherZone );
@@ -2438,7 +2442,12 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
             if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
                 continue;
 
-            if( !otherZone->GetIsRuleArea() && otherZone->HigherPriority( aZone ) )
+            if( otherZone->GetIsRuleArea() )
+            {
+                if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
+                    knockoutZoneClearance( otherZone );
+            }
+            else if( otherZone->HigherPriority( aZone ) )
             {
                 if( !otherZone->SameNet( aZone ) )
                     knockoutZoneClearance( otherZone );
@@ -3874,6 +3883,43 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 aFillPolys.BooleanSubtract( inflatedFill );
             }
         }
+    }
+
+    // Subtract keepout zones (rule areas with do-not-fill)
+    auto subtractKeepout =
+            [&]( ZONE* candidate )
+            {
+                if( !candidate->GetIsRuleArea() )
+                    return;
+
+                if( !candidate->HasKeepoutParametersSet() )
+                    return;
+
+                if( candidate->GetDoNotAllowZoneFills() && candidate->IsOnLayer( aLayer ) )
+                {
+                    if( candidate->GetBoundingBox().Intersects( zoneBBox ) )
+                    {
+                        if( candidate->Outline()->ArcCount() == 0 )
+                        {
+                            aFillPolys.BooleanSubtract( *candidate->Outline() );
+                        }
+                        else
+                        {
+                            SHAPE_POLY_SET keepoutOutline( *candidate->Outline() );
+                            keepoutOutline.ClearArcs();
+                            aFillPolys.BooleanSubtract( keepoutOutline );
+                        }
+                    }
+                }
+            };
+
+    for( ZONE* keepout : m_board->Zones() )
+        subtractKeepout( keepout );
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( ZONE* keepout : footprint->Zones() )
+            subtractKeepout( keepout );
     }
 
     aFillPolys.Fracture();
