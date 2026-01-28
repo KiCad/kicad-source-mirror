@@ -131,6 +131,7 @@ set( QA_EESCHEMA_SRCS
     test_symbol_embedded_files.cpp
     test_symbol_clipboard_export.cpp
     test_schematic_clipboard_export.cpp
+    test_autoplace_fields.cpp
 )
 
 if( WIN32 )

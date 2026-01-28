@@ -197,10 +197,12 @@ protected:
                 continue;
             }
 
-            if( m_symbol->GetTransform().y1 )
-                field->SetTextAngle( ANGLE_VERTICAL );
-            else
-                field->SetTextAngle( ANGLE_HORIZONTAL );
+            // Set field angle to HORIZONTAL. GetBoundingBox() applies both the field's text
+            // angle and the symbol transform. For 90/270 degree rotated symbols, this results
+            // in vertical text display. Previously, setting VERTICAL for rotated symbols
+            // caused 180-degree effective rotation (field angle + symbol transform), which
+            // resulted in incorrect bounding box dimensions and field overlap issues.
+            field->SetTextAngle( ANGLE_HORIZONTAL );
 
             BOX2I bbox = field->GetBoundingBox();
             int   field_width = bbox.GetWidth();
