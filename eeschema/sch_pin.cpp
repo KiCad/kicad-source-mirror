@@ -1585,7 +1585,19 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
     if( GetNumber() != pin->GetNumber() )
         return true;
 
-    return GetName() != pin->GetName();
+    if( GetName() != pin->GetName() )
+        return true;
+
+    // For power input pins, visibility changes affect IsGlobalPower() which changes
+    // connectivity semantics. Hidden power pins create implicit global net connections.
+    // Also check if a pin changed type to/from PT_POWER_IN.
+    if( GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN || pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+    {
+        if( IsVisible() != pin->IsVisible() || GetType() != pin->GetType() )
+            return true;
+    }
+
+    return false;
 }
 
 
