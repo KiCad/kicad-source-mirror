@@ -5002,7 +5002,7 @@ msgstr "Sélectionner un fichier à intégrer"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Les fichiers intégrés hérités d'un symbole parent ne peuvent pas être supprimés."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -8554,7 +8554,11 @@ msgid ""
 "1. Disable 'Controlled folder access' in Windows settings or Group Policy\n"
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
-msgstr ""
+msgstr "KiCad n'a pas pu utiliser '%s'.\n"
+"\n"
+"1. Désactivez « Contrôle d'accès aux dossiers » dans les paramètres Windows ou la stratégie de groupe\n"
+"2. Assurez-vous qu'aucun autre logiciel antivirus n'interfère avec KiCad\n"
+"3. Assurez-vous que vous disposez des autorisations appropriées"
 
 #: common/pgm_base.cpp:216
 msgid "No default editor found, you must choose one."
@@ -9433,9 +9437,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Ne plus garder la librairie en haut de la liste"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Erreur dans Table de Librairies"
+msgstr "Table de Librairies"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -13361,34 +13364,28 @@ msgid "Pin Table"
 msgstr "Table des Pins"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Symbole d'alimentation"
+msgstr "Restaurer symbole"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Restaurer '%s' à la dernière version enregistrée?"
+msgstr "Rétablir le symbole à son dernier état enregistré"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Isolation"
+msgstr "Vider cellule"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Effacer Liste Fichiers Perçage Récents"
+msgstr "Effacer la valeur de la cellule"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Symbole en Cache:"
+msgstr "Créer Symbole Dérivé"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Créer un nouveau symbole, dérivé d'un symbole existant"
+msgstr "Créer un nouveau symbole, dérivé du symbole sélectionné"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13424,9 +13421,8 @@ msgid "Group By"
 msgstr "Grouper Par"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
 msgid "No symbols found in library %s."
-msgstr "Symbole %s non trouvée en librairie '%s'."
+msgstr "Pas de symbole trouvé en librairie %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, fuzzy, c-format
@@ -13434,10 +13430,8 @@ msgid "Error loading symbol '%s': %s"
 msgstr "Erreur en chargement des symboles:"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr ""
-"Mise à jour des symboles pour inclure tous les changements des librairies"
+msgstr "Aucun symbole n'a pu être chargé à partir de la librairie."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
@@ -13469,7 +13463,6 @@ msgid "Rename Field"
 msgstr "Renommer Champ"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:738
-#, fuzzy, c-format
 msgid "Field name '%s' already exists."
 msgstr "Le nom de champ '%s' existe déjà."
 
@@ -13480,7 +13473,6 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Etes-vous sûr de vouloir supprimer le champ '%s' ?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:917
-#, fuzzy
 msgid "Exclude From BOM"
 msgstr "Exclure de la Liste du Matériel"
 
@@ -13500,9 +13492,8 @@ msgid "Power Symbol"
 msgstr "Symbole d'Alimentation"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Éditeur de Librairies"
+msgstr "Éditeur de Champs de Librairies"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -21950,9 +21941,8 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:115
-#, fuzzy, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Erreur en énumération de librairie de symboles '%s': %s"
+msgstr "Erreur lors de l'analyse de la librairie SPICE '%s' : %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -24874,9 +24864,8 @@ msgid "SVG File Name"
 msgstr "Nom Fichier SVG"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Librairies"
+msgstr "Champs de Librairies"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -27663,7 +27652,7 @@ msgstr "Sélection type de tâche:"
 
 #: kicad/dialogs/panel_jobset.cpp:772
 msgid "Destination Types"
-msgstr "Types de Destination:"
+msgstr "Types de Destination"
 
 #: kicad/dialogs/panel_jobset.cpp:781
 msgid "Add New Destination"
@@ -35907,9 +35896,8 @@ msgid "Footprint Report"
 msgstr "Rapport sur Empreintes"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Chargement des textes..."
+msgstr "Texte simple"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -41502,7 +41490,7 @@ msgstr "Permet aux \"teardrops\" de s’étaler sur segments de piste"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
 msgid "Properties for Track-to-Track Teardrops"
-msgstr "Propriétés des Teardrops de Piste à Piste :"
+msgstr "Propriétés des Teardrops de Piste à Piste"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:473
 msgid ""
@@ -41518,7 +41506,7 @@ msgstr "Les pistes de taille similaire n'ont pas besoin de teardrops."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:20
 msgid "Default Properties for New Graphics and Text"
-msgstr "Propriétés par Défaut des Nouveaux Graphiques et Textes :"
+msgstr "Propriétés par Défaut des Nouveaux Graphiques et Textes"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:382
 msgid "No via hole size defined."
@@ -41563,7 +41551,7 @@ msgstr "Propriétés par Défaut pour les Paires Différentielles"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
 msgid "Default Properties for Differential Pair Skews"
-msgstr "Propriétés par Défaut pour les Asymétries de Paires Différentielles :"
+msgstr "Propriétés par Défaut pour les Asymétries de Paires Différentielles"
 
 #: pcbnew/drc/drc_cache_generator.cpp:147
 msgid "Gathering copper items..."
@@ -43410,7 +43398,7 @@ msgstr "Soustraction des trous pour %s"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2060
 #, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr " ** Problèmes lors de la découpe de %s net %s **"
+msgstr "** Problèmes lors de la découpe de %s net %s **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2114
 msgid "shapes"
@@ -46658,7 +46646,7 @@ msgstr "Cercle avec rayons x et y inégaux (x=%d, y=%d)"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr "Attendu: x et y sont identiques, obtenu x = %f et y = %f"
+msgstr "Attendu: x et y sont identiques, obtenu x = %f et y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -47750,7 +47738,7 @@ msgstr "Erreur lors du chargement des librairies d'empreintes du projet."
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "Échec de la première phase d'initialisation du module Python '%s' via l'API C de Python."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
@@ -47762,7 +47750,7 @@ msgstr "Console de Script"
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
-msgstr ""
+msgstr "Échec de la deuxième phase d'initialisation du module Python '%s' via l'API C de Python."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -50309,13 +50297,12 @@ msgid "Create bill of materials from board"
 msgstr "Créer la liste de matériel à partir du PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Sélection Modèle 3D"
+msgstr "Collecter et intégrer les modèles 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "Collecter les modèles 3D d'empreintes et les intégrer dans le PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -51487,14 +51474,13 @@ msgid "Selected 2D Length"
 msgstr "Longueur 2D Sélectionnée"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Modèle Intégré"
+msgstr "Modèles 3D Intégrés"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d Modèle(s) 3D intégré(s) avec succès."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
@@ -51779,7 +51765,7 @@ msgstr "Zones d'Occupation en Collision"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show colliding footprint courtyards"
-msgstr "Montrer collisions des zone d'occupation des empreintes..."
+msgstr "Montrer collisions des zone d'occupation des empreintes"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "Show drawing sheet borders and title block"
