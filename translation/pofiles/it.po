@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-22 14:31+0000\n"
+"PO-Revision-Date: 2026-01-28 09:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -40653,6 +40653,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"Clearance locale dalla pastasalda per questa piazzola.\n"
+"Inserire un valore assoluto (ad esempio, -0,1 mm), una percentuale (ad "
+"esempio, -5%) o entrambi (ad esempio, -0,1 mm - 5%).\n"
+"Se vuoto, viene utilizzato il valore dell'impronta o quello globale."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:679
 #, c-format
@@ -41162,7 +41166,6 @@ msgstr ""
 "piazzola."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1115
-#, fuzzy
 msgid "Hole Post Machining"
 msgstr "Postlavorazione foro"
 
@@ -47708,52 +47711,45 @@ msgid "Top Layer"
 msgstr "Strato superiore"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:39
-#, fuzzy
 msgid "Bottom Layer"
 msgstr "Strato inferiore"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
-#, fuzzy
 msgid "Minimum Routing Width"
-msgstr "Larghezza minima"
+msgstr "Larghezza min di sbroglio"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:47
 msgid "Preferred Routing Width"
-msgstr ""
+msgstr "Larghezza preferita di sbroglio"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:58
-#, fuzzy
 msgid "Maximum Routing Width"
-msgstr "Larghezza pista massima"
+msgstr "Larghezza max di sbroglio"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
-#, fuzzy
 msgid "Max Uncoupled Length"
-msgstr "Lunghezza disaccoppiata"
+msgstr "Lunghezza max disaccoppiamento"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:55
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:102
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:36
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:83
-#, fuzzy
 msgid "Minimum"
-msgstr "Larghezza minima"
+msgstr "Minimo"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:66
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:113
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:47
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:94
-#, fuzzy
 msgid "Maximum"
-msgstr "Larghezza massima:"
+msgstr "Massimo"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:124
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:58
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:105
-#, fuzzy
 msgid "Preferred"
-msgstr "Preferenze"
+msgstr "Preferito"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:460
@@ -47762,53 +47758,45 @@ msgid "Via Diameter"
 msgstr "Diametro via"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:76
-#, fuzzy
 msgid "Via Hole Size"
-msgstr "Dimensione foro"
+msgstr "Dimensione foro via"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
-#, fuzzy
 msgid "Rule type"
-msgstr "Area regola"
+msgstr "Tipo regola"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "Rinomina"
+msgstr "Nome regola"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:797
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "ERRORE: testo condizionale non fornito per la convalida."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:808
-#, fuzzy
 msgid "DRC rule"
-msgstr "Regole DRC"
+msgstr "Regola DRC"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:916
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "Mostra tutti gli errori"
+msgstr "Mostra corrispondenze (errore)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "Temi colori (%d)"
+msgstr "Mostra corrispondenze (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:928
-#, fuzzy
 msgid "Show Matches"
-msgstr "Mostra pista"
+msgstr "Mostra corrispondenze"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
-#, fuzzy
 msgid "Constraint"
-msgstr "Vincoli"
+msgstr "Vincolo"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "Conferma"
+msgstr "Condizioni"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -49428,24 +49416,24 @@ msgid "Removed %s 'Do not place' fabrication attribute."
 msgstr "Rimossi %s attributi di fabbricazione 'Non piazzare'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:793
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Aggiungi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiungi %s attributi di fabbricazione 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Rimuovi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimuovi %s attributi di fabbricazione 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Aggiunti %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiunti %s attributi di fabbricazione 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Rimossi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimossi %s attributi di fabbricazione 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
 #, c-format
@@ -49554,82 +49542,79 @@ msgstr "Aggiornati metadati unità %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1328
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"ID impronta non valido in\n"
-"file: '%s'\n"
-"riga: %d"
+msgstr "ID impronta '%s' non valida per la variante '%s' su %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "Aggiungi %s attributi di fabbricazione 'Non piazzare'."
+msgstr "Aggiungi %s:%s attributi di fabbricazione 'Non piazzare'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1380
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "Rimuovi %s attributi di fabbricazione 'Non piazzare'."
+msgstr "Rimuovi l'attributo variante %s:%s 'Non piazzare'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "Aggiunti %s attributi di fabbricazione 'Non piazzare'."
+msgstr "Aggiunto attributo variante %s:%s 'Non piazzare'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1386
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "Rimossi %s attributi di fabbricazione 'Non piazzare'."
+msgstr "Rimosso attributo variante %s:%s 'Non piazzare'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1412
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr "Aggiungi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiungi l'attributo variante %s:%s 'escludi dalla DIBA'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr "Rimuovi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimuovi l'attributo variante %s:%s 'escludi dalla DIBA'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr "Aggiunti %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiunto l'attributo variante %s:%s 'escludi dalla DIBA'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1420
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "Rimossi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimosso l'attributo variante %s:%s 'escludi dalla DIBA'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "Aggiungi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiungi l'attributo variante %s:%s 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "Rimuovi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimuovi l'attributo variante %s:%s 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "Aggiunti %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Aggiunto l'attributo variante %s:%s  'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "Rimossi %s attributi di fabbricazione 'escludi dalla DIBA'."
+msgstr "Rimosso l'attributo variante %s:%s 'escludi dai file posizionali'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s:%s field '%s' to '%s'."
-msgstr "Cambia campo %s '%s' a '%s'."
+msgstr "Cambia campo %s:%s '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "Cambia campo %s '%s' a '%s'."
+msgstr "Cambia campo %s:%s '%s' a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 #, c-format
@@ -49744,24 +49729,23 @@ msgid "Removed unused net %s."
 msgstr "Rimossa connessione non usata %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "Aggiornamento net..."
+msgstr "Aggiornamento varianti di progettazione..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "Aggiunto %s (impronta '%s')."
+msgstr "Aggiunta variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Aggiornati filtri impronta %s a '%s'."
+msgstr "Aggiornata descrizione per la variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "Rinomina variante..."
+msgstr "Rimossa variante '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -50568,9 +50552,9 @@ msgid "Loading board data..."
 msgstr "Caricamento dati scheda..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1200
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Lo strato '%s' non può essere mappato e sarà saltato."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1264
 msgid "Loading netclasses..."
@@ -51925,9 +51909,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "La libreria impronte '%s' è in sola lettura."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "Impossibile aprire il file \"%s\""
+msgstr "Avvertenze nel file '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1635
 #, c-format
@@ -52148,6 +52132,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Il componente '%s' contiene caratteri non ASCII nel suo riferimento; "
+"convertito in '%s' per l'esportazione ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:88
 #, c-format
@@ -52155,6 +52141,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Il componente '%s' ha un riferimento ambiguo dopo la conversione; rinominato "
+"in '%s' per l'esportazione ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1129
 msgid "Failed to add component data"
