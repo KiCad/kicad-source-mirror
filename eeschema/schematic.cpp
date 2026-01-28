@@ -2292,7 +2292,7 @@ void SCHEMATIC::SetVariantDescription( const wxString& aVariantName, const wxStr
 
 void SCHEMATIC::LoadVariants()
 {
-    if( m_rootSheet->GetScreen() )
+    if( m_rootSheet && m_rootSheet->GetScreen() )
     {
         SCH_SCREENS        screens( m_rootSheet );
         std::set<wxString> variantNames = screens.GetVariantNames();

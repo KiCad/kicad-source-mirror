@@ -672,7 +672,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             SCH_SCREEN* first_screen = schematic.GetFirst();
 
             // Skip the first screen as it is a virtual root with no version info.
-            if( first_screen->GetFileFormatVersionAtLoad() == 0 )
+            if( first_screen && first_screen->GetFileFormatVersionAtLoad() == 0 )
                 first_screen = schematic.GetNext();
 
             if( first_screen && first_screen->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
@@ -687,14 +687,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->UpdateLocalLibSymbolLinks();
 
+            SCH_SCREEN* rootScreen = Schematic().RootScreen();
+
             // Restore all of the loaded symbol and sheet instances from the root sheet.
-            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221002 )
-                sheetList.UpdateSymbolInstanceData( Schematic().RootScreen()->GetSymbolInstances() );
+            if( rootScreen && rootScreen->GetFileFormatVersionAtLoad() < 20221002 )
+                sheetList.UpdateSymbolInstanceData( rootScreen->GetSymbolInstances() );
 
-            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20221110 )
-                sheetList.UpdateSheetInstanceData( Schematic().RootScreen()->GetSheetInstances());
+            if( rootScreen && rootScreen->GetFileFormatVersionAtLoad() < 20221110 )
+                sheetList.UpdateSheetInstanceData( rootScreen->GetSheetInstances());
 
-            if( Schematic().RootScreen()->GetFileFormatVersionAtLoad() < 20230221 )
+            if( rootScreen && rootScreen->GetFileFormatVersionAtLoad() < 20230221 )
                 for( SCH_SCREEN* screen = schematic.GetFirst(); screen;
                      screen = schematic.GetNext() )
                     screen->FixLegacyPowerSymbolMismatches();
