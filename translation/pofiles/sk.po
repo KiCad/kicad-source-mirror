@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-26 23:07+0000\n"
+"PO-Revision-Date: 2026-01-28 09:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -232,15 +232,13 @@ msgstr "3D mriežka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Otočiť +"
+msgstr "Otočiť dosku"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Presunúť dosku hore"
+msgstr "Presunúť dosku"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -378,14 +376,12 @@ msgid "Reload board"
 msgstr "Znova načítať dosku"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Znova načítať dosku a 3D modely"
+msgstr "Znova načítať dosku a obnoviť 3D modely"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracing"
+msgstr "Použiť Raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -396,19 +392,16 @@ msgid "Copy 3D image to clipboard"
 msgstr "Kopírovať 3D obrázok do schránky"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
-msgstr "Kopírovať 3D obrázok do schránky"
+msgstr "Kopírovať aktuálny 3D obrázok do schránky"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Upraviť obrázok"
+msgstr "Exportovať obrázok..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Exportovať aktuálne zobrazenie ako PNG..."
+msgstr "Exportovať aktuálne zobrazenie do súboru s obrázkom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -608,9 +601,8 @@ msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "Zobraziť ohraňujúci rámik 3D modelu v relálnom čase rendererovania"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
-#, fuzzy
 msgid "Show 3D Navigator"
-msgstr "Zobraziť Ratsnest"
+msgstr "Zobraziť 3D navigátor"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:374
 msgid "Show Appearance Manager"
@@ -630,14 +622,12 @@ msgid "Show board body"
 msgstr "Zobraziť telo dosky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Pokovované otvory"
+msgstr "Pokovené otvory"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Ukážte podložky do otvorov"
+msgstr "Zobraziť pokovovanie otvorov a prekovov"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show front copper / surface finish color"
@@ -943,9 +933,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Nezachytávať popisovú vrstvu na hrany dosky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Navigátor hierarchie"
+msgstr "3D navigátor"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:128
 msgid "Background Start"
@@ -970,15 +959,15 @@ msgid "Use board stackup colors"
 msgstr "Použiť farby zo štruktúry vrstiev"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:184
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Použiť farby zo štruktúry vrstiev"
+msgstr "Použiť farby medi z editora DPS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Pre nepokovovanú meď použiť farbu holej medi (pomalé)"
+msgstr ""
+"Pre medené vrstvy použiť farby vrstiev editora dosky (iba pre vykresľovanie "
+"v reálnom čase)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 #, c-format
@@ -1136,9 +1125,8 @@ msgid "(unsaved)"
 msgstr "(neuložené)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Exportovať púzdro"
+msgstr "Exportovať 3D zobrazenie"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
 #, fuzzy
@@ -1583,14 +1571,12 @@ msgid "Disable thickness"
 msgstr "Zakázať hrúbku"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Zakázať otvory"
+msgstr "Zakázať otvory mikroprekovov"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Zakázať otvory"
+msgstr "Zakázať všetky pokovované otvory"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
@@ -1910,16 +1896,12 @@ msgid "Errors"
 msgstr "Chyby"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Vymeniť a nájsť ďalšiu"
+msgstr "Nahradiť načítaný súbor?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr ""
-"Zmena prípony súboru zmení typ súboru.\n"
-" Chcete pokračovať?"
+msgstr "Súbor je už načítaný. Chcete ho nahradiť?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
