@@ -1932,7 +1932,11 @@ public:
             0,
             &nullable);
         if (!success(rc))
-            NANODBC_THROW_DATABASE_ERROR(stmt_, SQL_HANDLE_STMT);
+        {
+            // Fallback for ODBC drivers that don't implement SQLDescribeParam
+            return 255;
+        }
+
         NANODBC_ASSERT(
             parameter_size < static_cast<SQLULEN>(std::numeric_limits<unsigned long>::max()));
         return static_cast<unsigned long>(parameter_size);
@@ -1987,7 +1991,14 @@ public:
                 &param.scale_,
                 &nullable);
             if (!success(rc))
-                NANODBC_THROW_DATABASE_ERROR(stmt_, SQL_HANDLE_STMT);
+            {
+                // Fallback to binding as VARCHAR if SQLDescribeParam fails.
+                // This is necessary to support ODBC drivers that don't implement SQLDescribeParam,
+                // such as Microsoft Access, Excel, and CSV drivers.
+                param.type_ = SQL_VARCHAR;
+                param.size_ = 255;
+                param.scale_ = 0;
+            }
         }
         else
         {
