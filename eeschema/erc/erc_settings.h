@@ -88,8 +88,9 @@ enum ERCE_T
     ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
     ERCE_UNCONNECTED_WIRE_ENDPOINT, ///< A label is connected to more than one wire.
     ERCE_STACKED_PIN_SYNTAX,      ///< Pin name resembles stacked pin notation.
+    ERCE_FIELD_NAME_WHITESPACE,   ///< Field name has leading or trailing whitespace.
 
-    ERCE_LAST = ERCE_STACKED_PIN_SYNTAX,
+    ERCE_LAST = ERCE_FIELD_NAME_WHITESPACE,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
@@ -272,4 +273,3 @@ private:
 
     void visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const;
 };
-

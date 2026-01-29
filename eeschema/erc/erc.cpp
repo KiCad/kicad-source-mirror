@@ -438,6 +438,75 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 }
 
 
+int ERC_TESTER::TestFieldNameWhitespace()
+{
+    int warnings = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_FIELD& field : symbol->GetFields() )
+            {
+                wxString trimmedFieldName = field.GetName();
+                trimmedFieldName.Trim();
+                trimmedFieldName.Trim( false );
+
+                if( field.GetName() != trimmedFieldName )
+                {
+                    auto ercItem = ERC_ITEM::Create( ERCE_FIELD_NAME_WHITESPACE );
+                    ercItem->SetItems( symbol, &field );
+                    ercItem->SetItemsSheetPaths( sheet, sheet );
+                    ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetErrorMessage(
+                            wxString::Format(
+                                    _( "Field name has leading or trailing whitespace: '%s'" ),
+                                    field.GetName() ) );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), field.GetPosition() );
+                    screen->Append( marker );
+                    warnings++;
+                }
+            }
+        }
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_FIELD& field : subSheet->GetFields() )
+            {
+                wxString trimmedFieldName = field.GetName();
+                trimmedFieldName.Trim();
+                trimmedFieldName.Trim( false );
+
+                if( field.GetName() != trimmedFieldName )
+                {
+                    auto ercItem = ERC_ITEM::Create( ERCE_FIELD_NAME_WHITESPACE );
+                    ercItem->SetItems( subSheet, &field );
+                    ercItem->SetItemsSheetPaths( sheet, sheet );
+                    ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetErrorMessage(
+                            wxString::Format(
+                                    _( "Field name has leading or trailing whitespace: '%s'" ),
+                                    field.GetName() ) );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), field.GetPosition() );
+                    screen->Append( marker );
+                    warnings++;
+                }
+            }
+        }
+    }
+
+    return warnings;
+}
+
+
 int ERC_TESTER::TestMultiunitFootprints()
 {
     int errors = 0;
@@ -2081,6 +2150,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for unresolved variables..." ) );
 
         TestTextVars( aDrawingSheet );
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_FIELD_NAME_WHITESPACE ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking field names..." ) );
+
+        TestFieldNameWhitespace();
     }
 
     if( m_settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )

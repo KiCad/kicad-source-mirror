@@ -79,6 +79,12 @@ public:
     void TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
     /**
+     * Check for field names with leading or trailing whitespace.
+     * @return warning count
+     */
+    int TestFieldNameWhitespace();
+
+    /**
      * Test if all units of each multiunit symbol have the same footprint assigned.
      * @return The error count.
      */
