@@ -1356,6 +1356,25 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
     m_board->SetProperties( properties );
 
+    // Re-assemble any barcodes now that board properties (text variables) are available.
+    // When barcodes are parsed, AssembleBarcode() is called before board properties are set,
+    // so text variables in human-readable text remain unexpanded. Re-assembling now ensures
+    // variables like ${PART_NUMBER} are properly expanded in the displayed text.
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_BARCODE_T )
+            static_cast<PCB_BARCODE*>( item )->AssembleBarcode();
+    }
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
+        {
+            if( item->Type() == PCB_BARCODE_T )
+                static_cast<PCB_BARCODE*>( item )->AssembleBarcode();
+        }
+    }
+
     if( m_undefinedLayers.size() > 0 )
     {
         PCB_LAYER_ID destLayer = Cmts_User;

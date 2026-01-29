@@ -62,7 +62,9 @@ DIALOG_BARCODE_PROPERTIES::DIALOG_BARCODE_PROPERTIES( PCB_BASE_FRAME* aParent, P
 
     m_board = m_parent->GetBoard();
 
-    m_dummyBarcode = new PCB_BARCODE( nullptr );
+    // Use the board as parent so text variables like ${PART_NUMBER} can be resolved
+    // in the preview. The dummy barcode is not actually added to the board.
+    m_dummyBarcode = new PCB_BARCODE( m_board );
 
     // Initialize canvas to be able to display the dummy barcode:
     prepareCanvas();
