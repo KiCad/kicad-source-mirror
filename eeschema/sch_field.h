@@ -431,7 +431,8 @@ inline std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
 
 
 inline void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
-                           const std::string& aValue, bool aIsVisible = true )
+                           const std::string& aValue, bool aIsVisible = true,
+                           const SCH_SHEET_PATH* aSheetPath = nullptr, const wxString& aVariantName = wxEmptyString )
 {
     if( aValue == "" )
     {
@@ -444,13 +445,19 @@ inline void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFie
 
     if( SCH_FIELD* field = FindField( aFields, aFieldName ) )
     {
-        field->SetText( aValue );
+        field->SetText( aValue, aSheetPath, aVariantName );
         return;
     }
 
     SCH_ITEM* parent = static_cast<SCH_ITEM*>( aFields.at( 0 ).GetParent() );
     aFields.emplace_back( parent, FIELD_T::USER, aFieldName );
-    aFields.back().SetText( aValue );
+    aFields.back().SetText( aValue, aSheetPath, aVariantName );
+
+    // Since the default variant doesn't have this field at all, we initialize its content to be the same
+    // as the variant's content.
+    if( !aVariantName.IsEmpty() )
+        aFields.back().SetText( aValue );
+
     aFields.back().SetVisible( aIsVisible );
 }
 

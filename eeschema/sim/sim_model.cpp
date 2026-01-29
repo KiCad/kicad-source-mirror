@@ -466,19 +466,19 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields, const SCH_SHEET_PA
             aFields.erase( aFields.begin() + ii );
     }
 
-    // TODO: handle writing to given instance & variant
+    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice(), false,
+                   aSheetPath, aVariantName );
+    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype(), false,
+                   aSheetPath, aVariantName );
 
-    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice(), false );
-    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype(),
-                   false );
+    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable(), false,
+                   aSheetPath, aVariantName );
+    SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins(), false, aSheetPath, aVariantName );
 
-    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable(), false );
-    SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins(), false );
-
-    SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams(), false );
+    SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams(), false, aSheetPath, aVariantName );
 
     if( IsStoredInValue() )
-        SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue(), false );
+        SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue(), false, aSheetPath, aVariantName );
 }
 
 
