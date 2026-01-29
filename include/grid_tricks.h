@@ -114,6 +114,7 @@ protected:
     virtual void doPopupSelection( wxCommandEvent& event );
 
     bool isTextEntry( int aRow, int aCol );
+    bool isChoiceEditor( int aRow, int aCol );
     bool isCheckbox( int aRow, int aCol );
     bool isReadOnly( int aRow, int aCol );
 
