@@ -302,7 +302,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     wxString path = m_outputDirectory;
     path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, nullptr );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
@@ -419,7 +419,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     wxString path = m_outputDirectory;
     path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, nullptr );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     wxFileName outputDir = wxFileName::DirName( path );
     wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();

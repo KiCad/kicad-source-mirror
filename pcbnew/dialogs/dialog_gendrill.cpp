@@ -326,7 +326,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
 
     wxString path = m_plotOpts.GetOutputDirectory();
     path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, nullptr );
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_board->GetFileName();

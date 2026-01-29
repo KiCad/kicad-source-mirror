@@ -737,7 +737,7 @@ wxString LIBRARY_MANAGER::GetFullURI( const LIBRARY_TABLE_ROW* aRow,
                                       bool aSubstituted )
 {
     if( aSubstituted )
-        return ExpandEnvVarSubstitutions( aRow->URI(), nullptr );
+        return ExpandEnvVarSubstitutions( aRow->URI(), &Pgm().GetSettingsManager().Prj() );
 
     return aRow->URI();
 }
