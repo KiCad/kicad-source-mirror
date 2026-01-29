@@ -46,6 +46,7 @@
 #include <string_utils.h>
 #include <tools/board_editor_control.h>
 #include <exporters/board_exporter_base.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 
 
 static double iu2hyp( double iu )
@@ -323,10 +324,11 @@ bool HYPERLYNX_EXPORTER::writeStackupInfo()
 {
     /* Format:
      * {STACKUP
-     * (SIGNAL T=thickness [P=plating_thickness] [C=constant] L=layer_name [M=material_name]) [comment]
-     * (DIELECTRIC T=thickness [C=constant] [L=layer_name] [M=material_name]) [comment]
+     * (SIGNAL T=thickness [P=plating_thickness] [C=resistivity] L=layer_name [M=material_name])
+     * (DIELECTRIC T=thickness [C=dielectric_constant] [L=layer_name] [M=material_name])
      * }
-     * name length is <= 20 chars
+     * C parameter: bulk resistivity (ohm-m) for SIGNAL, epsilon_r for DIELECTRIC
+     * Layer name length is <= 20 chars
      */
 
     LSEQ layers = m_board->GetDesignSettings().GetEnabledLayers().CuStack();
@@ -344,7 +346,7 @@ bool HYPERLYNX_EXPORTER::writeStackupInfo()
         {
             layer_name = m_board->GetLayerName( item->GetBrdLayerId() );
             int plating_thickness = 0;
-            double resistivity = 1.724e-8;  // Good for copper
+            double resistivity = 1.724e-8;  // Copper bulk resistivity in ohm-meters
             m_out->Print( 1, "(SIGNAL T=%g P=%g C=%g L=\"%.20s\" M=COPPER)\n",
                           iu2hyp( item->GetThickness( 0 ) ),
                           iu2hyp( plating_thickness ),
@@ -370,6 +372,22 @@ bool HYPERLYNX_EXPORTER::writeStackupInfo()
                               TO_UTF8( layer_name ),
                               TO_UTF8( item->GetMaterial( idx ) ) );
             }
+        }
+        else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK )
+        {
+            // Soldermask uses its KiCad layer name directly (e.g., "F.Mask") rather than
+            // a constructed name like core dielectrics, since these names are already unique.
+            wxString maskLayerName = m_board->GetLayerName( item->GetBrdLayerId() );
+            wxString material = item->GetMaterial( 0 );
+
+            if( !IsPrmSpecified( material ) )
+                material = wxT( "Solder Mask" );
+
+            m_out->Print( 1, "(DIELECTRIC T=%g C=%g L=\"%.20s\" M=\"%.20s\")\n",
+                          iu2hyp( item->GetThickness( 0 ) ),
+                          item->GetEpsilonR( 0 ),
+                          TO_UTF8( maskLayerName ),
+                          TO_UTF8( material ) );
         }
     }
 
