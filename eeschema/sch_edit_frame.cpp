@@ -345,18 +345,16 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( aui_cfg.schematic_hierarchy_float )
         hierarchy_pane.Float();
 
-    if( aui_cfg.search_panel_height > 0
-        && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_TOP
-            || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
+    if( aui_cfg.search_panel_height > 0 && (   aui_cfg.search_panel_dock_direction == wxAUI_DOCK_TOP
+                                            || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_BOTTOM ) )
     {
         wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
         searchPane.Direction( aui_cfg.search_panel_dock_direction );
         SetAuiPaneSize( m_auimgr, searchPane, -1, aui_cfg.search_panel_height );
     }
 
-    else if( aui_cfg.search_panel_width > 0
-            && ( aui_cfg.search_panel_dock_direction == wxAUI_DOCK_LEFT
-                || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
+    else if( aui_cfg.search_panel_width > 0 && (   aui_cfg.search_panel_dock_direction == wxAUI_DOCK_LEFT
+                                                || aui_cfg.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )
     {
         wxAuiPaneInfo& searchPane = m_auimgr.GetPane( SearchPaneName() );
         searchPane.Direction( aui_cfg.search_panel_dock_direction );
@@ -488,6 +486,7 @@ void SCH_EDIT_FRAME::StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems 
         wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: aborted (setting disabled) items=%zu", aItems.size() );
         return;
     }
+
     if( aItems.empty() )
     {
         wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: aborted (no items)" );
@@ -1191,10 +1190,11 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( GetLastUnsavedChangesResponse() == wxID_NO )
         {
             wxString projPath = Prj().GetProjectPath();
+
             if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
             {
-                Kiway().LocalHistory().CommitDuplicateOfLastSave( projPath, wxS("Schematic"),
-                        wxS("Discard unsaved schematic changes") );
+                Kiway().LocalHistory().CommitDuplicateOfLastSave( projPath, wxS( "Schematic" ),
+                                                                  wxS( "Discard unsaved schematic changes" ) );
             }
         }
     }
@@ -1319,9 +1319,9 @@ void SCH_EDIT_FRAME::OnUpdatePCB()
 {
     if( Kiface().IsSingle() )
     {
-        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is opened"
-                                " in stand-alone mode. In order to create/update PCBs from"
-                                " schematics, launch the KiCad shell and create a project." ) );
+        DisplayError( this,  _( "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
+                                "mode. In order to create/update PCBs from schematics, launch the main KiCad "
+                                "application and create a project." ) );
         return;
     }
 
@@ -1404,16 +1404,15 @@ void SCH_EDIT_FRAME::NewProject()
 
     wxString pro_dir = m_mruPath;
 
-    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
-                      FILEEXT::KiCadSchematicFileWildcard(), wxFD_SAVE );
+    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString, FILEEXT::KiCadSchematicFileWildcard(),
+                      wxFD_SAVE );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         // Enforce the extension, wxFileDialog is inept.
-        wxFileName create_me =
-                EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
+        wxFileName create_me = EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
 
         if( create_me.FileExists() )
         {
@@ -1443,8 +1442,8 @@ void SCH_EDIT_FRAME::LoadProject()
                             + wxS( "|" ) + FILEEXT::KiCadSchematicFileWildcard()
                             + wxS( "|" ) + FILEEXT::LegacySchematicFileWildcard();
 
-    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
-                      wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString, wildcards,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
@@ -1455,13 +1454,14 @@ void SCH_EDIT_FRAME::LoadProject()
     }
 
     // Since we know we're single-top here: trigger library reload
-    CallAfter( [&]()
-        {
-            KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-            schface->PreloadLibraries( &Kiway() );
+    CallAfter(
+            [&]()
+            {
+                KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+                schface->PreloadLibraries( &Kiway() );
 
-            Pgm().PreloadDesignBlockLibraries( &Kiway() );
-        } );
+                Pgm().PreloadDesignBlockLibraries( &Kiway() );
+            } );
 }
 
 
@@ -1471,10 +1471,10 @@ void SCH_EDIT_FRAME::ProjectChanged()
 
     // Register schematic saver for autosave history
     Kiway().LocalHistory().RegisterSaver( m_schematic,
-        [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
-        {
-            m_schematic->SaveToHistory( aProjectPath, aFiles );
-        } );
+            [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+            {
+                m_schematic->SaveToHistory( aProjectPath, aFiles );
+            } );
 
     m_designBlocksPane->ProjectChanged();
 }
@@ -1665,8 +1665,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
             if( pins.size() == 2 )
             {
-                wxString op = m_schematic->GetOperatingPoint( ref, settings.m_OPO_IPrecision,
-                                                              settings.m_OPO_IRange );
+                wxString op = m_schematic->GetOperatingPoint( ref, settings.m_OPO_IPrecision, settings.m_OPO_IRange );
 
                 if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
                 {
@@ -1697,8 +1696,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
                 {
                     SCH_PIN* symbolPin = symbol->GetPin( modelPin.get().symbolPinNumber );
                     wxString signalName = ref + wxS( ":" ) + modelPin.get().modelPinName;
-                    wxString op = m_schematic->GetOperatingPoint( signalName,
-                                                                  settings.m_OPO_IPrecision,
+                    wxString op = m_schematic->GetOperatingPoint( signalName, settings.m_OPO_IPrecision,
                                                                   settings.m_OPO_IRange );
 
                     if( symbolPin && !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
@@ -1713,8 +1711,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
     for( const auto& [ key, subgraphList ] : m_schematic->m_connectionGraph->GetNetMap() )
     {
-        wxString op = m_schematic->GetOperatingPoint( key.Name, settings.m_OPO_VPrecision,
-                                                      settings.m_OPO_VRange );
+        wxString op = m_schematic->GetOperatingPoint( key.Name, settings.m_OPO_VPrecision, settings.m_OPO_VRange );
 
         if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
         {
@@ -1759,8 +1756,7 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 
         if( label->AutoRotateOnPlacement() )
         {
-            SPIN_STYLE spin = aScreen->GetLabelOrientationForPoint( label->GetPosition(),
-                                                                    label->GetSpinStyle(),
+            SPIN_STYLE spin = aScreen->GetLabelOrientationForPoint( label->GetPosition(), label->GetSpinStyle(),
                                                                     &GetCurrentSheet() );
 
             if( spin != label->GetSpinStyle() )
@@ -1838,8 +1834,8 @@ void SCH_EDIT_FRAME::initScreenZoom()
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                              PROGRESS_REPORTER* aProgressReporter )
 {
-    wxString            highlightedConn = GetHighlightedConnection();
-    bool                hasHighlightedConn = !highlightedConn.IsEmpty();
+    wxString highlightedConn = GetHighlightedConnection();
+    bool     hasHighlightedConn = !highlightedConn.IsEmpty();
 
     std::function<void( SCH_ITEM* )> changeHandler =
             [&]( SCH_ITEM* aChangedItem ) -> void
@@ -1857,9 +1853,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                     // the list of all nets
                     m_highlightedConnChanged = true;
                 }
-                else if( connection
-                         && ( connection->Name() == highlightedConn
-                              || connection->HasDriverChanged() ) )
+                else if( connection && (   connection->Name() == highlightedConn
+                                        || connection->HasDriverChanged() ) )
                 {
                     m_highlightedConnChanged = true;
                 }
@@ -2502,8 +2497,7 @@ wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 
     panel->SetSizer( sizer );
 
-    m_netNavigatorFilter->Bind( wxEVT_COMMAND_TEXT_UPDATED,
-                                &SCH_EDIT_FRAME::onNetNavigatorFilterChanged, this );
+    m_netNavigatorFilter->Bind( wxEVT_COMMAND_TEXT_UPDATED, &SCH_EDIT_FRAME::onNetNavigatorFilterChanged, this );
     m_netNavigatorFilter->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
     m_netNavigator->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
     m_netNavigator->Bind( wxEVT_TREE_ITEM_MENU, &SCH_EDIT_FRAME::onNetNavigatorItemMenu, this );
@@ -2558,12 +2552,12 @@ void SCH_EDIT_FRAME::unitsChangeRefresh()
     {
         NET_NAVIGATOR_ITEM_DATA itemData;
         wxTreeItemId selection = m_netNavigator->GetSelection();
-        bool refreshSelection = selection.IsOk() && ( selection != m_netNavigator->GetRootItem() );
+        bool refreshSelection = selection.IsOk() && selection != m_netNavigator->GetRootItem();
 
         if( refreshSelection )
         {
             NET_NAVIGATOR_ITEM_DATA* tmp =
-                dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+                    dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
             wxCHECK( tmp, /* void */ );
             itemData = *tmp;
@@ -2645,8 +2639,8 @@ void SCH_EDIT_FRAME::onNetNavigatorContextMenu( wxContextMenuEvent& aEvent )
     if( screenPos == wxDefaultPosition )
         screenPos = wxGetMousePosition();
 
-    wxPoint clientPos = m_netNavigator->ScreenToClient( screenPos );
-    int     flags = 0;
+    wxPoint      clientPos = m_netNavigator->ScreenToClient( screenPos );
+    int          flags = 0;
     wxTreeItemId item = m_netNavigator->HitTest( clientPos, flags );
 
     showNetNavigatorMenu( item );
@@ -2853,8 +2847,7 @@ void SCH_EDIT_FRAME::ToggleProperties()
 
     if( show )
     {
-        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
-                        settings->m_AuiPanels.properties_panel_width, -1 );
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo, settings->m_AuiPanels.properties_panel_width, -1 );
     }
     else
     {
@@ -2887,8 +2880,7 @@ void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
         else if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
         {
             // SetAuiPaneSize also updates m_auimgr
-            SetAuiPaneSize( m_auimgr, hierarchy_pane,
-                            cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+            SetAuiPaneSize( m_auimgr, hierarchy_pane, cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
         }
     }
     else
