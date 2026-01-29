@@ -104,6 +104,14 @@ public:
     int TestMultUnitPinConflicts();
 
     /**
+     * Checks if duplicate pin numbers within a symbol are connected to different nets.
+     * Symbols may have multiple pins with the same number if they are all connected to
+     * the same net. If duplicate pins are on different nets, an error is reported.
+     * @return the error count
+     */
+    int TestDuplicatePinNets();
+
+    /**
      * Checks for ground-labeled pins not on a ground net while another pin is.
      * @return warning count
      */

@@ -62,7 +62,7 @@ ERC_ITEM ERC_ITEM::powerpinNotDriven( ERCE_POWERPIN_NOT_DRIVEN,
         wxT( "power_pin_not_driven" ) );
 
 ERC_ITEM ERC_ITEM::duplicatePinError( ERCE_DUPLICATE_PIN_ERROR,
-        _HKI( "Multiple pins with the same pin number" ),
+        _HKI( "Duplicate pins with different nets" ),
         wxT( "duplicate_pins" ) );
 
 ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,

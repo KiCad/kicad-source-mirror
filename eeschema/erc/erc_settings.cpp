@@ -267,8 +267,8 @@ ERC_SETTINGS::~ERC_SETTINGS()
 
 SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 {
-    // Special-case duplicate pin error.  Unique pin names are required by KiCad, so this
-    // is always an error.
+    // Special-case duplicate pin error. Multiple pins with the same number are allowed
+    // if they share the same net, but having them on different nets is always an error.
     if( aErrorCode == ERCE_DUPLICATE_PIN_ERROR )
     {
         return RPT_SEVERITY_ERROR;

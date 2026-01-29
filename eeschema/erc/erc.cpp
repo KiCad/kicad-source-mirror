@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <set>
 
 #include "connection_graph.h"
 #include "kiface_ids.h"
@@ -1224,6 +1225,85 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 }
 
 
+int ERC_TESTER::TestDuplicatePinNets()
+{
+    int errors = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get();
+
+            if( !libSymbol )
+                continue;
+
+            if( libSymbol->GetDuplicatePinNumbersAreJumpers() )
+                continue;
+
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &sheet );
+
+            std::map<wxString, std::vector<std::pair<SCH_PIN*, wxString>>> pinsByNumber;
+
+            for( SCH_PIN* pin : pins )
+            {
+                SCH_CONNECTION* conn = pin->Connection( &sheet );
+                wxString        netName = conn ? conn->GetNetName() : wxString();
+
+                pinsByNumber[pin->GetNumber()].emplace_back( pin, netName );
+            }
+
+            for( const auto& [pinNumber, pinNetPairs] : pinsByNumber )
+            {
+                if( pinNetPairs.size() < 2 )
+                    continue;
+
+                wxString firstNet = pinNetPairs[0].second;
+                bool     hasDifferentNets = false;
+                SCH_PIN* conflictPin = nullptr;
+
+                for( size_t i = 1; i < pinNetPairs.size(); i++ )
+                {
+                    if( pinNetPairs[i].second != firstNet )
+                    {
+                        hasDifferentNets = true;
+                        conflictPin = pinNetPairs[i].first;
+                        break;
+                    }
+                }
+
+                if( hasDifferentNets )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_PIN_ERROR );
+                    wxString msg;
+
+                    msg.Printf( _( "Pin %s on symbol '%s' is connected to different nets: %s and %s" ),
+                                pinNumber,
+                                symbol->GetRef( &sheet ),
+                                firstNet.IsEmpty() ? _( "<no net>" ) : firstNet,
+                                pinNetPairs[1].second.IsEmpty() ? _( "<no net>" ) : pinNetPairs[1].second );
+
+                    ercItem->SetErrorMessage( msg );
+                    ercItem->SetItems( pinNetPairs[0].first, conflictPin );
+                    ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetItemsSheetPaths( sheet, sheet );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ),
+                                                         pinNetPairs[0].first->GetPosition() );
+                    screen->Append( marker );
+                    errors++;
+                }
+            }
+        }
+    }
+
+    return errors;
+}
+
+
 int ERC_TESTER::TestGroundPins()
 {
     int errors = 0;
@@ -1580,8 +1660,9 @@ int ERC_TESTER::TestLibSymbolIssues()
             if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
             {
                 // We have to check for duplicate pins first as they will cause Compare() to fail.
-                // Skip this check if the symbol has duplicate pins marked as jumpers, since that's
-                // an intentional use case where duplicate pin numbers are internally connected.
+                // Symbols with duplicate pins are valid if those pins share the same net, so we
+                // only skip the comparison here. The actual error checking for duplicate pins on
+                // different nets is done in TestDuplicatePinNets().
                 std::vector<wxString> messages;
 
                 if( !libSymbolInSchematic->GetDuplicatePinNumbersAreJumpers() )
@@ -1590,17 +1671,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                     CheckDuplicatePins( libSymbolInSchematic, messages, &unitsProvider );
                 }
 
-                if( !messages.empty() )
-                {
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_PIN_ERROR );
-                    ercItem->SetItems( symbol );
-                    msg.Printf( _( "Symbol '%s' has multiple pins with the same pin number" ),
-                                UnescapeString( symbolName ) );
-                    ercItem->SetErrorMessage( msg );
-
-                    markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
-                }
-                else if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
+                if( messages.empty() && flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_MISMATCH );
                     ercItem->SetItems( symbol );
@@ -1966,6 +2037,9 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
 
     if( m_settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
         TestMultUnitPinConflicts();
+
+    if( m_settings.IsTestEnabled( ERCE_DUPLICATE_PIN_ERROR ) )
+        TestDuplicatePinNets();
 
     // Test pins on each net against the pin connection table
     if( m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
