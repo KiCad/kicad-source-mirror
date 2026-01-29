@@ -3033,6 +3033,8 @@ void SCH_EDIT_FRAME::RemoveVariant()
     // Default variant cannot be removed.
     choices.RemoveAt( 0 );
 
+    // wxSingleChoiceDialog will ellipsize the title bar if the contents aren't wide enough.  The set
+    // of spaces in the control label are to prevent this.
     wxSingleChoiceDialog dlg( this, _( "Select variant name to remove:" ) + wxS( "                " ),
                               _( "Remove Design Variant" ), choices );
     dlg.Layout();
