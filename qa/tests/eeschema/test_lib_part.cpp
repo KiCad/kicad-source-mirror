@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
     BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), 5 );
-    BOOST_CHECK_EQUAL( m_part_no_data.GetPins().size(), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetGraphicalPins( 0, 0 ).size(), 0 );
 }
 
 

@@ -1185,7 +1185,13 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
     wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve, aDepth );
     wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve, aDepth );
     wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve, aDepth );
-    std::vector<SCH_PIN*> pins = aSymbol.GetPins();
+    std::vector<SCH_PIN*> pins;
+
+    if constexpr (std::is_same_v<T, SCH_SYMBOL>)
+        pins = static_cast<SCH_SYMBOL*>( &aSymbol )->GetPins( nullptr );
+    else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
+        pins = static_cast<LIB_SYMBOL*>( &aSymbol )->GetGraphicalPins( 0, 0 );
+
 
     // ensure the pins are sorted by number (not guaranteed in the symbol)
     // because the inferred spice model pin assignment here and elsewhere depends on
@@ -1521,8 +1527,13 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     wxString              prefix = aSymbol.GetPrefix();
     SCH_FIELD*            valueField = aSymbol.GetField( FIELD_T::VALUE );
-    std::vector<SCH_PIN*> sourcePins = aSymbol.GetPins();
     bool                  sourcePinsSorted = false;
+    std::vector<SCH_PIN*> sourcePins;
+
+    if constexpr (std::is_same_v<T, SCH_SYMBOL>)
+        sourcePins = static_cast<SCH_SYMBOL*>( &aSymbol )->GetPins( nullptr );
+    else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
+        sourcePins = static_cast<LIB_SYMBOL*>( &aSymbol )->GetGraphicalPins( 0, 0 );
 
     auto lazySortSourcePins =
             [&sourcePins, &sourcePinsSorted]()

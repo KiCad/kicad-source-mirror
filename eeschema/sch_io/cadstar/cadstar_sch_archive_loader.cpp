@@ -897,7 +897,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     kiPart->SetShowPinNames( false );
                     kiPart->SetShowPinNumbers( false );
 
-                    std::vector<SCH_PIN*> pins = kiPart->GetPins();
+                    std::vector<SCH_PIN*> pins = kiPart->GetGraphicalPins( 0, 0 );
                     wxCHECK( pins.size() == 1, /*void*/ );
 
                     pins.at( 0 )->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );

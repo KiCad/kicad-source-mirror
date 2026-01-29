@@ -181,7 +181,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
         wxString      netlist;
         wxArrayString pins;
 
-        for( SCH_PIN* pin : symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+        for( const SCH_PIN* pin : symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
         {
             bool valid = false;
             auto expanded = pin->GetStackedPinNumbers( &valid );

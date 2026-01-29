@@ -351,7 +351,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     std::set<wxString> availablePins;
 
-    for( const SCH_PIN* pin : m_libEntry->GetPins() )
+    for( const SCH_PIN* pin : m_libEntry->GetGraphicalPins( 0, 0 ) )
         availablePins.insert( pin->GetNumber() );
 
     for( const std::set<wxString>& group : m_libEntry->JumperPinGroups() )
@@ -395,8 +395,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
         // Don't allow a symbol to be derived from any of its descendants (would create
         // circular inheritance)
         wxArrayString descendants;
-        m_Parent->GetLibManager().GetDerivedSymbolNames( m_libEntry->GetName(), libName,
-                                                         descendants );
+        m_Parent->GetLibManager().GetDerivedSymbolNames( m_libEntry->GetName(), libName, descendants );
 
         for( const wxString& descendant : descendants )
         {

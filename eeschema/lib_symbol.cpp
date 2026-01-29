@@ -1012,7 +1012,43 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 }
 
 
-std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
+std::vector<const SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
+{
+    if( IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
+
+        if( root.get() != this )
+            return const_cast<const LIB_SYMBOL*>( root.get() )->GetGraphicalPins( aUnit, aBodyStyle );
+    }
+
+    std::vector<const SCH_PIN*> pins;
+
+    /* Notes:
+     * when aUnit == 0: no unit filtering
+     * when aBodyStyle == 0: no body style filtering
+     * when m_unit == 0, the item is common to all units
+     * when m_bodyStyle == 0, the item is common to all body styles
+     */
+
+    for( const SCH_ITEM& item : m_drawings[SCH_PIN_T] )
+    {
+        // Unit filtering:
+        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
+            continue;
+
+        // Body style filtering:
+        if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
+            continue;
+
+        pins.push_back( static_cast<const SCH_PIN*>( &item ) );
+    }
+
+    return pins;
+}
+
+
+std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle )
 {
     if( IsDerived() )
     {
@@ -1031,19 +1067,17 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
      * when m_bodyStyle == 0, the item is common to all body styles
      */
 
-    for( const SCH_ITEM& item : m_drawings[SCH_PIN_T] )
+    for( SCH_ITEM& item : m_drawings[SCH_PIN_T] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        // De Morgan variant filtering:
+        // Body style filtering:
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        // TODO: get rid of const_cast.  (It used to be a C-style cast so was less noticeable.)
-        SCH_PIN* pin = const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) );
-        pins.push_back( pin );
+        pins.push_back( static_cast<SCH_PIN*>( &item ) );
     }
 
     return pins;
@@ -1056,29 +1090,30 @@ std::vector<LIB_SYMBOL::UNIT_PIN_INFO> LIB_SYMBOL::GetUnitPinInfo() const
 
     int unitCount = std::max( GetUnitCount(), 1 );
 
-    auto compareByPosition = []( SCH_PIN* a, SCH_PIN* b )
-    {
-        VECTOR2I positionA = a->GetPosition();
-        VECTOR2I positionB = b->GetPosition();
+    auto compareByPosition =
+            []( const SCH_PIN* a, const SCH_PIN* b )
+            {
+                VECTOR2I positionA = a->GetPosition();
+                VECTOR2I positionB = b->GetPosition();
 
-        if( positionA.x != positionB.x )
-            return positionA.x < positionB.x;
+                if( positionA.x != positionB.x )
+                    return positionA.x < positionB.x;
 
-        return positionA.y < positionB.y;
-    };
+                return positionA.y < positionB.y;
+            };
 
     for( int unitIdx = 1; unitIdx <= unitCount; ++unitIdx )
     {
         UNIT_PIN_INFO unitInfo;
         unitInfo.m_unitName = GetUnitDisplayName( unitIdx, false );
 
-        std::vector<SCH_PIN*> pinList = GetGraphicalPins( unitIdx, 0 );
+        std::vector<const SCH_PIN*> pinList = GetGraphicalPins( unitIdx, 0 );
 
         std::sort( pinList.begin(), pinList.end(), compareByPosition );
 
         std::unordered_set<wxString> seenNumbers;
 
-        for( SCH_PIN* basePin : pinList )
+        for( const SCH_PIN* basePin : pinList )
         {
             bool                  stackedValid = false;
             std::vector<wxString> expandedNumbers = basePin->GetStackedPinNumbers( &stackedValid );
@@ -1111,7 +1146,7 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
 {
     std::vector<LOGICAL_PIN> out;
 
-    for( SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
+    for( const SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
     {
         bool                  valid = false;
         std::vector<wxString> expanded = pin->GetStackedPinNumbers( &valid );
@@ -1149,9 +1184,9 @@ int LIB_SYMBOL::GetPinCount()
 }
 
 
-SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
+const SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
 {
-    for( SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
+    for( const SCH_PIN* pin : GetGraphicalPins( aUnit, aBodyStyle ) )
     {
         if( aNumber == pin->GetNumber() )
             return pin;
@@ -1161,8 +1196,7 @@ SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 }
 
 
-std::vector<SCH_PIN*> LIB_SYMBOL::GetPinsByNumber( const wxString& aNumber, int aUnit,
-                                                   int aBodyStyle ) const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetPinsByNumber( const wxString& aNumber, int aUnit, int aBodyStyle )
 {
     std::vector<SCH_PIN*> pins;
 
@@ -1238,8 +1272,8 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 
 std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
 {
-    // Back-compat shim: return graphical pins for all units/body styles
-    return GetGraphicalPins( 0, 0 );
+    // Back-compat shim: return graphical pins for all units/body styles, violating const
+    return const_cast<LIB_SYMBOL*>( this )->GetGraphicalPins( 0, 0 );
 }
 
 
@@ -2210,12 +2244,12 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
         similarity += max_similarity;
     }
 
-    for( const SCH_PIN* pin : GetPins() )
+    for( const SCH_PIN* pin : GetGraphicalPins( 0, 0 ) )
     {
         totalItems += 1;
         double max_similarity = 0.0;
 
-        for( const SCH_PIN* otherPin : other.GetPins() )
+        for( const SCH_PIN* otherPin : other.GetGraphicalPins( 0, 0 ) )
         {
             double temp_similarity = pin->Similarity( *otherPin );
             max_similarity = std::max( max_similarity, temp_similarity );

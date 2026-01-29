@@ -35,19 +35,12 @@ static void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& 
                                     UNITS_PROVIDER* aUnitsProvider );
 
 
-void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                         UNITS_PROVIDER* aUnitsProvider )
+void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages, UNITS_PROVIDER* aUnitsProvider )
 {
     wxString              msg;
-    std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
+    std::vector<SCH_PIN*> pinList = aSymbol->GetGraphicalPins( 0, 0 );
 
-    struct LOGICAL_PIN
-    {
-        SCH_PIN* pin;
-        wxString number;
-    };
-
-    std::vector<LOGICAL_PIN> logicalPins;
+    std::vector<LIB_SYMBOL::LOGICAL_PIN> logicalPins;
     logicalPins.reserve( pinList.size() );
 
     for( SCH_PIN* pin : pinList )
@@ -66,7 +59,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     }
 
     sort( logicalPins.begin(), logicalPins.end(),
-            []( const LOGICAL_PIN& lhs, const LOGICAL_PIN& rhs )
+            []( const LIB_SYMBOL::LOGICAL_PIN& lhs, const LIB_SYMBOL::LOGICAL_PIN& rhs )
             {
                 int result = lhs.number.Cmp( rhs.number );
 
@@ -84,8 +77,8 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 
     for( unsigned ii = 1; ii < logicalPins.size(); ii++ )
     {
-        LOGICAL_PIN& prev = logicalPins[ii - 1];
-        LOGICAL_PIN& next = logicalPins[ii];
+        LIB_SYMBOL::LOGICAL_PIN& prev = logicalPins[ii - 1];
+        LIB_SYMBOL::LOGICAL_PIN& next = logicalPins[ii];
 
         if( prev.number != next.number )
             continue;
@@ -246,7 +239,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 
     CheckDuplicatePins( aSymbol, aMessages, aUnitsProvider );
 
-    std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
+    std::vector<SCH_PIN*> pinList = aSymbol->GetGraphicalPins( 0, 0 );
     sort( pinList.begin(), pinList.end(), sort_by_pin_number );
 
     // The minimal grid size allowed to place a pin is 25 mils

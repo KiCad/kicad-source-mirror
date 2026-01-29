@@ -305,7 +305,13 @@ bool SCH_IO_ALTIUM::CanReadLibrary( const wxString& aFileName ) const
 
 void SCH_IO_ALTIUM::fixupSymbolPinNameNumbers( SYMBOL* aSymbol )
 {
-    std::vector<SCH_PIN*> pins = aSymbol->GetPins();
+    std::vector<SCH_PIN*> pins;
+
+    if( aSymbol->Type() == SCH_SYMBOL_T )
+        pins = static_cast<SCH_SYMBOL*>( aSymbol )->GetPins( nullptr );
+    else if( aSymbol->Type() == LIB_SYMBOL_T )
+        pins = static_cast<LIB_SYMBOL*>( aSymbol )->GetGraphicalPins( 0, 0 );
+
 
     bool names_visible = false;
     bool numbers_visible = false;

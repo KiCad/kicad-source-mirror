@@ -579,7 +579,8 @@ public:
      * @param aUnit Unit number to collect; 0 = all units
      * @param aBodyStyle Alternate body style to collect; 0 = all body styles
      */
-    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 ) const;
+    std::vector<const SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 ) const;
+    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 );
 
     /**
      * Logical pins: Return expanded logical pins based on stacked-pin notation.
@@ -587,8 +588,8 @@ public:
      */
     struct LOGICAL_PIN
     {
-        SCH_PIN*   pin;        ///< pointer to the base graphical pin
-        wxString   number;     ///< expanded logical pin number
+        const SCH_PIN* pin;        ///< pointer to the base graphical pin
+        wxString       number;     ///< expanded logical pin number
     };
 
     /**
@@ -624,7 +625,7 @@ public:
      * @param aBodyStyle - Body style filter.  Set to 0 if no specific body style is not required.
      * @return The pin object if found.  Otherwise NULL.
      */
-    SCH_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
+    const SCH_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return all pin objects with the requested pin \a aNumber.
@@ -637,8 +638,7 @@ public:
      * @param aBodyStyle - Body style filter.  Set to 0 if no specific body style is not required.
      * @return Vector of matching pin objects, empty if none found.
      */
-    std::vector<SCH_PIN*> GetPinsByNumber( const wxString& aNumber, int aUnit = 0,
-                                           int aBodyStyle = 0 ) const;
+    std::vector<SCH_PIN*> GetPinsByNumber( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 );
 
     /**
      * Return true if this symbol's pins do not match another symbol's pins. This is used to

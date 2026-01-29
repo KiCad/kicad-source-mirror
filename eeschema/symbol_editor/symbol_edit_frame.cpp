@@ -1606,7 +1606,7 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 
     if( m_symbol )
     {
-        for( SCH_PIN* pin : m_symbol->GetPins() )
+        for( SCH_PIN* pin : m_symbol->GetGraphicalPins( 0, 0 ) )
         {
             if( pin->m_Uuid == lastBrightenedItemID )
                 lastItem = pin;

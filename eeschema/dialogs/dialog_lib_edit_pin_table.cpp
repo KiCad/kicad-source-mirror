@@ -1239,7 +1239,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 {
     // Make a copy of the pins for editing
-    std::vector<SCH_PIN*> pins = m_symbol->GetPins();
+    std::vector<SCH_PIN*> pins = m_symbol->GetGraphicalPins( 0, 0 );
 
     for( SCH_PIN* pin : pins )
         m_pins.push_back( new SCH_PIN( *pin ) );
@@ -1258,7 +1258,7 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
         return false;
 
     // Delete the part's pins
-    std::vector<SCH_PIN*> pins = m_symbol->GetPins();
+    std::vector<SCH_PIN*> pins = m_symbol->GetGraphicalPins( 0, 0 );
 
     for( SCH_PIN* pin : pins )
         m_symbol->RemoveDrawItem( pin );
@@ -1381,7 +1381,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
 
         if( pins.size() == 1 && m_editFrame->GetCurSymbol() )
         {
-            for( SCH_PIN* candidate : m_editFrame->GetCurSymbol()->GetPins() )
+            for( SCH_PIN* candidate : m_editFrame->GetCurSymbol()->GetGraphicalPins( 0, 0 ) )
             {
                 if( candidate->GetNumber() == pins.at( 0 )->GetNumber() )
                 {

@@ -1457,10 +1457,10 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     bool annotated = true;
 
-    std::vector<SCH_PIN*> pins = symbol->GetPins( &aPath );
+    std::vector<const SCH_PIN*> pins = symbol->GetPins( &aPath );
     bool has_multiple = false;
 
-    for( SCH_PIN* pin : pins )
+    for( const SCH_PIN* pin : pins )
     {
         if( pin->GetShownName() == GetShownName()
                 && pin->GetShownNumber() != GetShownNumber()

@@ -654,7 +654,8 @@ public:
      *
      * @return a vector of pointers (non-owning) to SCH_PINs
      */
-    std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet ) const;
+    std::vector<const SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet ) const;
+    std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet );
 
     std::vector<SCH_PIN*> GetPins() const override;
 

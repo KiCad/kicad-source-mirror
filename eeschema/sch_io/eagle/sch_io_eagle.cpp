@@ -3430,7 +3430,7 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
 
     int                   unit      = aSymbol->GetUnit();
     const wxString        reference = aSymbol->GetField( FIELD_T::REFERENCE )->GetText();
-    std::vector<SCH_PIN*> pins      = aSymbol->GetLibSymbolRef()->GetPins();
+    std::vector<SCH_PIN*> pins      = aSymbol->GetLibSymbolRef()->GetGraphicalPins( 0, 0 );
     std::set<int>         missingUnits;
 
     // Search all units for pins creating implicit connections

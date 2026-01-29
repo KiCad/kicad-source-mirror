@@ -339,7 +339,7 @@ BOOST_AUTO_TEST_CASE( ParserCreatedPinWithAlternate )
 
     // Verify the flattened library symbol has pins with alternates
     BOOST_CHECK( symbol->GetLibSymbolRef() != nullptr );
-    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetPins();
+    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetGraphicalPins( 0, 0 );
     BOOST_CHECK_EQUAL( libPins.size(), 1 );
 
     if( !libPins.empty() )
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE( LibraryPinAlternatesPreservedThroughCopy )
     LIB_SYMBOL* copiedLibSymbol = new LIB_SYMBOL( *origLibSymbol );
 
     // Verify the copied library symbol has pins with alternates
-    std::vector<SCH_PIN*> copiedLibPins = copiedLibSymbol->GetPins();
+    std::vector<SCH_PIN*> copiedLibPins = copiedLibSymbol->GetGraphicalPins( 0, 0 );
     BOOST_CHECK_EQUAL( copiedLibPins.size(), 1 );
 
     if( !copiedLibPins.empty() )
@@ -597,7 +597,7 @@ BOOST_AUTO_TEST_CASE( ChangeSymbolFewerPinsNoCrash )
     BOOST_CHECK_EQUAL( symbol->GetPins( &path ).size(), 1 );
 
     // Verify GetPin returns the correct pin for the new lib pin
-    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetPins();
+    std::vector<SCH_PIN*> libPins = symbol->GetLibSymbolRef()->GetGraphicalPins( 0, 0 );
     BOOST_CHECK_EQUAL( libPins.size(), 1 );
 
     SCH_PIN* schPin = symbol->GetPin( libPins[0] );
