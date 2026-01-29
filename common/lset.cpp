@@ -238,7 +238,7 @@ wxString LSET::Name( PCB_LAYER_ID aLayerId )
 #endif
 
             txt = wxS( "User." );
-            txt << offset;
+            txt << offsetStr;
         }
         else
         {
@@ -251,7 +251,7 @@ wxString LSET::Name( PCB_LAYER_ID aLayerId )
 #endif
 
             txt = wxS( "In" );
-            txt << offset;
+            txt << offsetStr;
             txt << wxS( ".Cu" );
         }
     }
