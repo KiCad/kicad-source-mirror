@@ -145,9 +145,16 @@ BOOST_FIXTURE_TEST_CASE( CreepagePerformanceIssue21482, DRC_CREEPAGE_PERF_TEST_F
     // Check if running on GitLab CI
     bool onGitLabCI = std::getenv( "GITLAB_CI" ) != nullptr;
 
-    if( onGitLabCI )
+    // Check if running on Launchpad/Debian build (DEB_BUILD_OPTIONS contains "nocheck")
+    bool onDebianBuild = false;
+    const char* debBuildOpts = std::getenv( "DEB_BUILD_OPTIONS" );
+
+    if( debBuildOpts && std::string( debBuildOpts ).find( "nocheck" ) != std::string::npos )
+        onDebianBuild = true;
+
+    if( onGitLabCI || onDebianBuild )
     {
-        // On GitLab CI, write metrics to a file for collection as an artifact.
+        // On CI systems, write metrics to a file for collection as an artifact.
         // The timeout varies too much between runners, so we only record the time
         // without asserting on it.
         std::ofstream metricsFile( "creepage_perf_metrics.txt" );
