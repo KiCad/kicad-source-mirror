@@ -2435,6 +2435,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
+    std::set<wxString> savedSelection = SaveGridSelection();
+
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
 
@@ -2475,12 +2477,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
 
     DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
+    std::set<wxString> savedSelection = SaveGridSelection();
+
     for( SCH_ITEM* item : aSchItem )
     {
         if( item->Type() == SCH_SYMBOL_T )
@@ -2491,12 +2496,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC& aSch, std::vector
 
     DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
+    std::set<wxString> savedSelection = SaveGridSelection();
+
     SCH_REFERENCE_LIST allRefs;
     m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
 
@@ -2538,6 +2546,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
 
     DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    RestoreGridSelection( savedSelection );
     EnableSelectionEvents();
 }
 
@@ -2548,8 +2557,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
 
     if( m_dataModel->GetScope() != FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
     {
+        std::set<wxString> savedSelection = SaveGridSelection();
+
         DisableSelectionEvents();
         m_dataModel->RebuildRows();
+        RestoreGridSelection( savedSelection );
         EnableSelectionEvents();
     }
 }
@@ -2568,6 +2580,74 @@ void DIALOG_SYMBOL_FIELDS_TABLE::DisableSelectionEvents()
     m_grid->Disconnect( wxEVT_GRID_RANGE_SELECTED,
                         wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
                         nullptr, this );
+}
+
+
+std::set<wxString> DIALOG_SYMBOL_FIELDS_TABLE::SaveGridSelection()
+{
+    std::set<wxString> selectedFullPaths;
+
+    wxGridCellCoordsArray topLeft = m_grid->GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray bottomRight = m_grid->GetSelectionBlockBottomRight();
+
+    for( size_t i = 0; i < topLeft.size(); ++i )
+    {
+        for( int row = topLeft[i].GetRow(); row <= bottomRight[i].GetRow(); ++row )
+        {
+            for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( row ) )
+                selectedFullPaths.insert( ref.GetFullPath() );
+        }
+    }
+
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+
+    for( int row : selectedRows )
+    {
+        for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( row ) )
+            selectedFullPaths.insert( ref.GetFullPath() );
+    }
+
+    int cursorRow = m_grid->GetGridCursorRow();
+
+    if( cursorRow >= 0 && selectedFullPaths.empty() )
+    {
+        for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( cursorRow ) )
+            selectedFullPaths.insert( ref.GetFullPath() );
+    }
+
+    return selectedFullPaths;
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::RestoreGridSelection( const std::set<wxString>& aFullPaths )
+{
+    if( aFullPaths.empty() )
+        return;
+
+    m_grid->ClearSelection();
+
+    bool firstSelection = true;
+
+    for( int row = 0; row < m_dataModel->GetNumberRows(); ++row )
+    {
+        std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
+
+        for( const SCH_REFERENCE& ref : refs )
+        {
+            if( aFullPaths.count( ref.GetFullPath() ) )
+            {
+                m_grid->SelectRow( row, true );
+
+                if( firstSelection )
+                {
+                    m_grid->SetGridCursor( row, m_grid->GetGridCursorCol() );
+                    firstSelection = false;
+                }
+
+                break;
+            }
+        }
+    }
 }
 
 
