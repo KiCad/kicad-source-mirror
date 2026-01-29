@@ -40,6 +40,9 @@ GRID_CELL_COMBOBOX::GRID_CELL_COMBOBOX( const wxArrayString& names ) :
 }
 
 
+GRID_CELL_COMBOBOX::~GRID_CELL_COMBOBOX() = default;
+
+
 wxGridCellEditor* GRID_CELL_COMBOBOX::Clone() const
 {
     return new GRID_CELL_COMBOBOX( m_names );

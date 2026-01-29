@@ -24,6 +24,7 @@
 #ifndef GRID_COMBOBOX_H
 #define GRID_COMBOBOX_H
 
+#include <kicommon.h>
 #include <wx/combobox.h>
 #include <wx/generic/gridctrl.h>
 #include <wx/generic/grideditors.h>
@@ -32,10 +33,11 @@
 class wxGrid;
 
 
-class GRID_CELL_COMBOBOX : public wxGridCellEditor
+class KICOMMON_API GRID_CELL_COMBOBOX : public wxGridCellEditor
 {
 public:
     GRID_CELL_COMBOBOX( const wxArrayString& names );
+    ~GRID_CELL_COMBOBOX() override;
 
     wxGridCellEditor* Clone() const override;
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
