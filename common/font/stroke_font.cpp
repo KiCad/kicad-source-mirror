@@ -72,7 +72,7 @@ STROKE_FONT* STROKE_FONT::LoadFont( const wxString& aFontName )
     }
     else
     {
-        // FONT TODO: support for other stroke fonts?
+        // If we ever supported other stroke fonts, the code would go here.
         return nullptr;
     }
 }

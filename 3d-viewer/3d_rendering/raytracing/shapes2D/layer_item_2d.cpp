@@ -63,8 +63,6 @@ LAYER_ITEM_2D::~LAYER_ITEM_2D()
 bool LAYER_ITEM_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
-    // !TODO: improve this implementation
-    //return false;
 }
 
 
