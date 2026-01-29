@@ -6339,8 +6339,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         pad->SetSize( PADSTACK::ALL_LAYERS,
                       VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
 
-        wxLogWarning( _( "Invalid zero-sized pad pinned to %s in\nfile: %s\nline: %d\noffset: %d" ),
-                      wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() );
+        m_parseWarnings.push_back(
+                wxString::Format( _( "Invalid zero-sized pad pinned to %s in\nfile: %s\nline: %d\noffset: %d" ),
+                                  wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() ) );
     }
 
     return pad.release();
@@ -8323,8 +8324,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         {
             if( m_showLegacy5ZoneWarning )
             {
-                wxLogWarning( _( "Legacy zone fill strategy is not supported anymore.\n"
-                                 "Zone fills will be converted on best-effort basis." ) );
+                m_parseWarnings.push_back( _( "Legacy zone fill strategy is not supported anymore.\n"
+                                              "Zone fills will be converted on best-effort basis." ) );
 
                 m_showLegacy5ZoneWarning = false;
             }
@@ -8353,8 +8354,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         if( m_showLegacySegmentZoneWarning )
         {
-            wxLogWarning( _( "The legacy segment zone fill mode is no longer supported.\n"
-                             "Zone fills will be converted on a best-effort basis." ) );
+            m_parseWarnings.push_back( _( "The legacy segment zone fill mode is no longer supported.\n"
+                                          "Zone fills will be converted on a best-effort basis." ) );
 
             m_showLegacySegmentZoneWarning = false;
         }

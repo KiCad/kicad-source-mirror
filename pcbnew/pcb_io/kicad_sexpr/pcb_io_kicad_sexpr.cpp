@@ -3119,6 +3119,10 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
                            parser.CurLine(), parser.CurLineNumber(), parser.CurOffset() );
     }
 
+    // Report any non-fatal parse warnings to the load info reporter
+    for( const wxString& warning : parser.GetParseWarnings() )
+        LOAD_INFO_REPORTER::GetInstance().Report( warning, RPT_SEVERITY_WARNING );
+
     return board;
 }
 
