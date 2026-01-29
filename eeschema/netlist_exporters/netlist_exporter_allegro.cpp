@@ -519,6 +519,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         wxString value = iter->second.m_value;
         wxString tolerance = iter->second.m_tolerance;
 
+        // Remove quotes in value (can be added by formatText), if any.
+        // (they are already in print format string)
+        if( value.StartsWith( "'" ) and value.EndsWith( "'" ) )
+        {
+            value.Remove( 0, 1 );
+            value.RemoveLast();
+        }
+
         if( value.IsEmpty() && tolerance.IsEmpty() )
         {
             fmt::print( m_f, "! '{}' ; ", TO_UTF8( deviceType ) );
@@ -555,7 +563,11 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
     if( aString.IsEmpty() )
         return wxEmptyString;
 
-    aString.Replace( "\u03BC", "u" );
+    // Replace 'µ' ("\u00b5") by 'u' to keep ASCII7 constraint
+    wxString mu = "µ";      // also could be "\u03BC" (grec symbol mu);
+    aString.Replace( mu, "u" );
+    mu = "\u03BC";          // grec mu
+    aString.Replace( mu, "u" );
 
     std::regex reg( "[!']|[^ -~]" );
     wxString   processedString = wxString( std::regex_replace( std::string( aString ), reg, "?" ) );
