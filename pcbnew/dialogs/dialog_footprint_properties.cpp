@@ -544,8 +544,15 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     }
 
     // Update fields
+    BOARD* board = m_footprint->GetBoard();
+
     for( PCB_FIELD* existing : m_footprint->GetFields() )
+    {
+        if( board )
+            board->UncacheItemById( existing->m_Uuid );
+
         delete existing;
+    }
 
     m_footprint->GetFields().clear();
 

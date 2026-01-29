@@ -573,6 +573,25 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
             Remove( field );
     }
 
+    // If this footprint is on a board, uncache all items before clearing
+    if( BOARD* board = GetBoard() )
+    {
+        for( PAD* pad : m_pads )
+            board->UncacheItemById( pad->m_Uuid );
+
+        for( BOARD_ITEM* item : m_drawings )
+            board->UncacheItemById( item->m_Uuid );
+
+        for( ZONE* zone : m_zones )
+            board->UncacheItemById( zone->m_Uuid );
+
+        for( PCB_GROUP* group : m_groups )
+            board->UncacheItemById( group->m_Uuid );
+
+        for( PCB_POINT* point : m_points )
+            board->UncacheItemById( point->m_Uuid );
+    }
+
     Pads().clear();
     GraphicalItems().clear();
     Zones().clear();
@@ -825,6 +844,28 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
     m_jumperPadGroups                = aOther.m_jumperPadGroups;
 
+    // If this footprint is on a board, uncache all items before deleting them
+    if( BOARD* board = GetBoard() )
+    {
+        for( PCB_FIELD* field : m_fields )
+            board->UncacheItemById( field->m_Uuid );
+
+        for( PAD* pad : m_pads )
+            board->UncacheItemById( pad->m_Uuid );
+
+        for( ZONE* zone : m_zones )
+            board->UncacheItemById( zone->m_Uuid );
+
+        for( BOARD_ITEM* item : m_drawings )
+            board->UncacheItemById( item->m_Uuid );
+
+        for( PCB_GROUP* group : m_groups )
+            board->UncacheItemById( group->m_Uuid );
+
+        for( PCB_POINT* point : m_points )
+            board->UncacheItemById( point->m_Uuid );
+    }
+
     // Move the fields
     for( PCB_FIELD* field : m_fields )
         delete field;
@@ -952,6 +993,28 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
     m_jumperPadGroups                = aOther.m_jumperPadGroups;
     m_variants                       = aOther.m_variants;
+
+    // If this footprint is on a board, uncache all items before deleting them
+    if( BOARD* board = GetBoard() )
+    {
+        for( PCB_FIELD* field : m_fields )
+            board->UncacheItemById( field->m_Uuid );
+
+        for( PAD* pad : m_pads )
+            board->UncacheItemById( pad->m_Uuid );
+
+        for( ZONE* zone : m_zones )
+            board->UncacheItemById( zone->m_Uuid );
+
+        for( BOARD_ITEM* item : m_drawings )
+            board->UncacheItemById( item->m_Uuid );
+
+        for( PCB_GROUP* group : m_groups )
+            board->UncacheItemById( group->m_Uuid );
+
+        for( PCB_POINT* point : m_points )
+            board->UncacheItemById( point->m_Uuid );
+    }
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -1433,6 +1496,10 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     aBoardItem->ClearEditFlags();
     aBoardItem->SetParent( this );
 
+    // If this footprint is on a board, update the board's item-by-id cache
+    if( BOARD* board = GetBoard() )
+        board->CacheItemById( aBoardItem );
+
     InvalidateGeometryCaches();
 }
 
@@ -1531,6 +1598,10 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         wxFAIL_MSG( msg );
     }
     }
+
+    // If this footprint is on a board, update the board's item-by-id cache
+    if( BOARD* board = GetBoard() )
+        board->UncacheItemById( aBoardItem->m_Uuid );
 
     aBoardItem->SetFlags( STRUCT_DELETED );
 

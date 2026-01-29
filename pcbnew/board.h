@@ -1423,6 +1423,28 @@ public:
         return m_itemByIdCache;
     }
 
+    /**
+     * Add an item to the item-by-id cache.
+     *
+     * This is called by FOOTPRINT::Add() when items are added to footprints that are already
+     * on the board, to keep the cache in sync.
+     */
+    void CacheItemById( BOARD_ITEM* aItem )
+    {
+        m_itemByIdCache.insert( { aItem->m_Uuid, aItem } );
+    }
+
+    /**
+     * Remove an item from the item-by-id cache.
+     *
+     * This is called by FOOTPRINT::Remove() when items are removed from footprints that are
+     * already on the board, to keep the cache in sync.
+     */
+    void UncacheItemById( const KIID& aId )
+    {
+        m_itemByIdCache.erase( aId );
+    }
+
     // --------- Item order comparators ---------
 
     struct cmp_items
