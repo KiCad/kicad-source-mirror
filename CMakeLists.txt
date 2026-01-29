@@ -230,6 +230,18 @@ option( KICAD_STDLIB_DEBUG
     "Build KiCad with libstdc++ debug flags enabled."
     OFF )
 
+# KICAD_STDLIB_DEBUG enables _GLIBCXX_DEBUG which changes the ABI of standard library
+# containers. System Boost libraries are typically built without this flag, causing
+# crashes in QA tests that link to Boost::unit_test_framework due to ABI mismatch.
+if( KICAD_STDLIB_DEBUG AND KICAD_BUILD_QA_TESTS )
+    message( WARNING
+        "KICAD_STDLIB_DEBUG is enabled with KICAD_BUILD_QA_TESTS.\n"
+        "_GLIBCXX_DEBUG changes the ABI of standard library containers, which causes "
+        "crashes when linking against system Boost libraries that were built without "
+        "this flag. QA tests will likely crash at runtime.\n"
+        "Either disable KICAD_STDLIB_DEBUG or set KICAD_BUILD_QA_TESTS=OFF." )
+endif()
+
 option( KICAD_STDLIB_LIGHT_DEBUG
     "Build KiCad with libstdc++ with -Wp,-D_GLIBCXX_ASSERTIONS flag enabled. Not as intrusive as KICAD_STDLIB_DEBUG"
     OFF )
