@@ -221,7 +221,12 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
     Bind( wxEVT_SIZE,
           [&]( wxSizeEvent& aEvent )
           {
-              SetOverflowVisible( !GetToolBarFits() );
+              CallAfter(
+                      [&]()
+                      {
+                          SetOverflowVisible( !GetToolBarFits() );
+                      } );
+
               aEvent.Skip();
           } );
 
