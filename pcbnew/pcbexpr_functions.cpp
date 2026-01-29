@@ -611,24 +611,13 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
     {
         KIID target( aArg );
 
-        for( ZONE* area : aBoard->Zones() )
-        {
-            // Only a single zone can match the UUID; exit once we find a match whether
-            // "inside" or not
-            if( area->m_Uuid == target )
-                return aFunc( area );
-        }
+        // Use the board's item-by-ID cache for O(1) lookup instead of O(n) iteration.
+        // The cache includes both board zones and zones inside footprints.
+        const auto& cache = aBoard->GetItemByIdCache();
+        auto        it = cache.find( target );
 
-        for( FOOTPRINT* footprint : aBoard->Footprints() )
-        {
-            for( ZONE* area : footprint->Zones() )
-            {
-                // Only a single zone can match the UUID; exit once we find a match
-                // whether "inside" or not
-                if( area->m_Uuid == target )
-                    return aFunc( area );
-            }
-        }
+        if( it != cache.end() && it->second->Type() == PCB_ZONE_T )
+            return aFunc( static_cast<ZONE*>( it->second ) );
 
         return false;
     }
