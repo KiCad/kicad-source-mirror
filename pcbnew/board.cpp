@@ -266,7 +266,8 @@ void BOARD::IncrementTimeStamp()
     if( !m_IntersectsAreaCache.empty() || !m_EnclosedByAreaCache.empty() || !m_IntersectsCourtyardCache.empty()
         || !m_IntersectsFCourtyardCache.empty() || !m_IntersectsBCourtyardCache.empty()
         || !m_LayerExpressionCache.empty() || !m_ZoneBBoxCache.empty() || m_CopperItemRTreeCache
-        || m_maxClearanceValue.has_value() || !m_itemByIdCache.empty() || !m_ItemNetclassCache.empty() )
+        || m_maxClearanceValue.has_value() || !m_itemByIdCache.empty() || !m_ItemNetclassCache.empty()
+        || !m_ZonesByNameCache.empty() || !m_DeflatedZoneOutlineCache.empty() )
     {
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();
@@ -275,6 +276,8 @@ void BOARD::IncrementTimeStamp()
         m_IntersectsBCourtyardCache.clear();
         m_LayerExpressionCache.clear();
         m_ItemNetclassCache.clear();
+        m_ZonesByNameCache.clear();
+        m_DeflatedZoneOutlineCache.clear();
 
         m_ZoneBBoxCache.clear();
 

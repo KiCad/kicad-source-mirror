@@ -31,6 +31,7 @@
 #include <embedded_files.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
+#include <geometry/shape_poly_set.h>
 #include <hash.h>
 #include <layer_ids.h>
 #include <lset.h>
@@ -62,7 +63,6 @@ class PCB_MARKER;
 class MSG_PANEL_ITEM;
 class NETLIST;
 class REPORTER;
-class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
@@ -1450,6 +1450,14 @@ public:
     mutable std::optional<int>                            m_maxClearanceValue;
 
     mutable std::unordered_map<const BOARD_ITEM*, wxString> m_ItemNetclassCache;
+
+    // Zone name lookup cache for DRC rule area functions like enclosedByArea/intersectsArea.
+    // Maps zone names to vectors of matching zones to avoid O(n) zone iteration per lookup.
+    mutable std::unordered_map<wxString, std::vector<ZONE*>> m_ZonesByNameCache;
+
+    // Deflated zone outline cache for DRC area checks. Caches the deflated outline for each zone
+    // to avoid repeated expensive deflation operations during collidesWithArea calls.
+    mutable std::unordered_map<const ZONE*, SHAPE_POLY_SET> m_DeflatedZoneOutlineCache;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;

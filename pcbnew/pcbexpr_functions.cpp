@@ -466,18 +466,42 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static SHAPE_POLY_SET getDeflatedZoneOutline( BOARD* aBoard, ZONE* aArea )
+{
+    // Check cache first with read lock
+    {
+        std::shared_lock<std::shared_mutex> readLock( aBoard->m_CachesMutex );
+        auto it = aBoard->m_DeflatedZoneOutlineCache.find( aArea );
+
+        if( it != aBoard->m_DeflatedZoneOutlineCache.end() )
+            return it->second;
+    }
+
+    // Cache miss - compute deflated outline
+    SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
+    areaOutline.ClearArcs();
+    areaOutline.Deflate( aBoard->GetDesignSettings().GetDRCEpsilon(),
+                         CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+
+    // Store in cache
+    {
+        std::unique_lock<std::shared_mutex> writeLock( aBoard->m_CachesMutex );
+        aBoard->m_DeflatedZoneOutlineCache[aArea] = areaOutline;
+    }
+
+    return areaOutline;
+}
+
+
 bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 {
     BOARD* board = aArea->GetBoard();
     BOX2I  areaBBox = aArea->GetBoundingBox();
 
-    // Collisions include touching, so we need to deflate outline by enough to exclude it.
-    // This is particularly important for detecting copper fills as they will be exactly
-    // touching along the entire exclusion border.
-    SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
-    areaOutline.ClearArcs();
-    areaOutline.Deflate( board->GetDesignSettings().GetDRCEpsilon(),
-                         CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+    // Get cached deflated outline. Collisions include touching, so we need to deflate outline
+    // by enough to exclude it. This is particularly important for detecting copper fills as
+    // they will be exactly touching along the entire exclusion border.
+    SHAPE_POLY_SET areaOutline = getDeflatedZoneOutline( board, aArea );
 
     if( aItem->GetFlags() & HOLE_PROXY )
     {
@@ -610,27 +634,50 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
     }
     else  // Match on zone name
     {
-        for( ZONE* area : aBoard->Zones() )
+        // Use cached zone name lookup to avoid O(n) iteration through all zones for each call.
+        // This is a significant performance improvement for boards with many area-based DRC rules.
+        std::vector<ZONE*> matchingZones;
+        bool               cacheHit = false;
+
         {
-            if( area->GetZoneName().Matches( aArg ) )
+            std::shared_lock<std::shared_mutex> readLock( aBoard->m_CachesMutex );
+            auto it = aBoard->m_ZonesByNameCache.find( aArg );
+
+            if( it != aBoard->m_ZonesByNameCache.end() )
             {
-                // Many zones can match the name; exit only when we find an "inside"
-                if( aFunc( area ) )
-                    return true;
+                matchingZones = it->second;
+                cacheHit = true;
             }
         }
 
-        for( FOOTPRINT* footprint : aBoard->Footprints() )
+        if( !cacheHit )
         {
-            for( ZONE* area : footprint->Zones() )
+            for( ZONE* area : aBoard->Zones() )
             {
-                // Many zones can match the name; exit only when we find an "inside"
                 if( area->GetZoneName().Matches( aArg ) )
+                    matchingZones.push_back( area );
+            }
+
+            for( FOOTPRINT* footprint : aBoard->Footprints() )
+            {
+                for( ZONE* area : footprint->Zones() )
                 {
-                    if( aFunc( area ) )
-                        return true;
+                    if( area->GetZoneName().Matches( aArg ) )
+                        matchingZones.push_back( area );
                 }
             }
+
+            // Store in cache for future lookups
+            {
+                std::unique_lock<std::shared_mutex> writeLock( aBoard->m_CachesMutex );
+                aBoard->m_ZonesByNameCache[aArg] = matchingZones;
+            }
+        }
+
+        for( ZONE* area : matchingZones )
+        {
+            if( aFunc( area ) )
+                return true;
         }
 
         return false;
