@@ -61,6 +61,7 @@ set( QA_EESCHEMA_SRCS
 	erc/test_erc_no_connect.cpp
     erc/test_erc_hierarchical_schematics.cpp
     erc/test_erc_label_multiple_wires.cpp
+    erc/test_erc_shared_pin_multiunit.cpp
     erc/test_erc_unconnected_wire_endpoints.cpp
     erc/test_erc_wire_bus_entry.cpp
     erc/test_erc_ground_pins.cpp

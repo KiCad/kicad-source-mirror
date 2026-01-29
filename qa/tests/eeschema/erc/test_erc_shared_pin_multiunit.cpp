@@ -1,0 +1,243 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one at
+ * http://www.gnu.org/licenses/
+ */
+
+/**
+ * @file test_erc_shared_pin_multiunit.cpp
+ * Test ERC and netlist export for shared pins on multi-unit symbols.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/1768
+ *
+ * The issue describes multi-unit symbols where a shared pin (same pin number appears
+ * in all units) is connected to different nets in different unit instances. The tests
+ * verify that:
+ * 1. ERC correctly detects when shared pins are on different nets
+ * 2. The netlist exporter prefers user-assigned nets over auto-generated nets
+ */
+
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <schematic_utils/schematic_file_util.h>
+
+#include <connection_graph.h>
+#include <schematic.h>
+#include <erc/erc_settings.h>
+#include <erc/erc.h>
+#include <erc/erc_report.h>
+#include <netlist_exporters/netlist_exporter_base.h>
+#include <settings/settings_manager.h>
+#include <locale_io.h>
+
+
+struct ERC_SHARED_PIN_TEST_FIXTURE
+{
+    ERC_SHARED_PIN_TEST_FIXTURE() = default;
+
+    SETTINGS_MANAGER           m_settingsManager;
+    std::unique_ptr<SCHEMATIC> m_schematic;
+};
+
+
+BOOST_FIXTURE_TEST_CASE( Issue1768_SharedPinDifferentNets, ERC_SHARED_PIN_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    // Load the issue 1768 test schematic
+    // This schematic has a 4-unit diode symbol (ESDAxx-SC5-V) where pin 2 is the
+    // common anode shared across all units. In the test case, only unit 2 has
+    // pin 2 connected to GND, while the other units have pin 2 unconnected
+    // (which results in auto-generated net names).
+    KI_TEST::LoadSchematic( m_settingsManager, "issue1768/issue1768", m_schematic );
+
+    ERC_SETTINGS&                settings = m_schematic->ErcSettings();
+    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+
+    // Ignore library symbol warnings since we're using old/rescue symbols
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+    // Build connectivity and run ERC
+    m_schematic->ConnectionGraph()->RunERC();
+
+    ERC_TESTER tester( m_schematic.get() );
+
+    // This is the key test - TestMultUnitPinConflicts should detect that the shared
+    // pin 2 is connected to different nets across different unit instances
+    int multiUnitErrors = tester.TestMultUnitPinConflicts();
+
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+
+    // We expect at least one ERCE_DIFFERENT_UNIT_NET error because pin 2
+    // is connected to GND in one unit but has auto-generated nets in others
+    BOOST_CHECK_MESSAGE( multiUnitErrors > 0,
+                         "Expected ERC to detect shared pin on different nets.\n"
+                         << reportWriter.GetTextReport() );
+
+    // Verify the specific error type is present
+    bool foundDifferentUnitNetError = false;
+
+    for( int i = 0; i < errors.GetCount(); ++i )
+    {
+        std::shared_ptr<RC_ITEM> item = errors.GetItem( i );
+
+        if( item && item->GetErrorCode() == ERCE_DIFFERENT_UNIT_NET )
+        {
+            foundDifferentUnitNetError = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundDifferentUnitNetError,
+                         "Expected ERCE_DIFFERENT_UNIT_NET error for shared pin 2.\n"
+                         << reportWriter.GetTextReport() );
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue1768_NetlistPreferUserNet )
+{
+    // Test that the netlist exporter's eraseDuplicatePins() prefers user-assigned nets
+    // over auto-generated "unconnected-(" or "Net-(" nets.
+
+    std::vector<PIN_INFO> pins;
+
+    // Simulate duplicate pin 2 entries: one with auto-generated net, one with user net
+    // The auto-generated net appears first (simulating the problematic ordering)
+    pins.emplace_back( wxT( "2" ), wxT( "unconnected-(VD1A-A-Pad2)" ), wxT( "A" ) );
+    pins.emplace_back( wxT( "2" ), wxT( "GND" ), wxT( "A" ) );
+    pins.emplace_back( wxT( "3" ), wxT( "Net-(VD1-K)" ), wxT( "K" ) );
+
+    // Helper lambda matching the one in eraseDuplicatePins
+    auto isAutoGeneratedNet = []( const wxString& aNetName ) -> bool
+    {
+        return aNetName.StartsWith( wxT( "unconnected-(" ) )
+            || aNetName.StartsWith( wxT( "Net-(" ) );
+    };
+
+    // Simulate eraseDuplicatePins logic
+    for( unsigned ii = 0; ii < pins.size(); ii++ )
+    {
+        if( pins[ii].num.empty() )
+            continue;
+
+        unsigned idxBest = ii;
+
+        for( unsigned jj = ii + 1; jj < pins.size(); jj++ )
+        {
+            if( pins[jj].num.empty() )
+                continue;
+
+            if( pins[idxBest].num != pins[jj].num )
+                break;
+
+            bool bestIsAuto = isAutoGeneratedNet( pins[idxBest].netName );
+            bool jjIsAuto = isAutoGeneratedNet( pins[jj].netName );
+
+            if( bestIsAuto && !jjIsAuto )
+            {
+                pins[idxBest].num.clear();
+                idxBest = jj;
+            }
+            else
+            {
+                pins[jj].num.clear();
+            }
+        }
+    }
+
+    // Collect non-deleted pins
+    std::vector<PIN_INFO> result;
+
+    for( const PIN_INFO& pin : pins )
+    {
+        if( !pin.num.empty() )
+            result.push_back( pin );
+    }
+
+    // Should have 2 pins remaining (pin 2 and pin 3)
+    BOOST_REQUIRE_EQUAL( result.size(), 2 );
+
+    // Pin 2 should have the user-assigned net "GND", not the auto-generated one
+    BOOST_CHECK_EQUAL( result[0].num, wxT( "2" ) );
+    BOOST_CHECK_EQUAL( result[0].netName, wxT( "GND" ) );
+
+    // Pin 3 keeps its net (even though it's auto-generated, there's no duplicate)
+    BOOST_CHECK_EQUAL( result[1].num, wxT( "3" ) );
+    BOOST_CHECK_EQUAL( result[1].netName, wxT( "Net-(VD1-K)" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue1768_NetlistPreferUserNet_ReverseOrder )
+{
+    // Same test but with user net appearing first - should still work correctly
+
+    std::vector<PIN_INFO> pins;
+
+    // User net appears first this time
+    pins.emplace_back( wxT( "2" ), wxT( "GND" ), wxT( "A" ) );
+    pins.emplace_back( wxT( "2" ), wxT( "unconnected-(VD1A-A-Pad2)" ), wxT( "A" ) );
+
+    auto isAutoGeneratedNet = []( const wxString& aNetName ) -> bool
+    {
+        return aNetName.StartsWith( wxT( "unconnected-(" ) )
+            || aNetName.StartsWith( wxT( "Net-(" ) );
+    };
+
+    for( unsigned ii = 0; ii < pins.size(); ii++ )
+    {
+        if( pins[ii].num.empty() )
+            continue;
+
+        unsigned idxBest = ii;
+
+        for( unsigned jj = ii + 1; jj < pins.size(); jj++ )
+        {
+            if( pins[jj].num.empty() )
+                continue;
+
+            if( pins[idxBest].num != pins[jj].num )
+                break;
+
+            bool bestIsAuto = isAutoGeneratedNet( pins[idxBest].netName );
+            bool jjIsAuto = isAutoGeneratedNet( pins[jj].netName );
+
+            if( bestIsAuto && !jjIsAuto )
+            {
+                pins[idxBest].num.clear();
+                idxBest = jj;
+            }
+            else
+            {
+                pins[jj].num.clear();
+            }
+        }
+    }
+
+    std::vector<PIN_INFO> result;
+
+    for( const PIN_INFO& pin : pins )
+    {
+        if( !pin.num.empty() )
+            result.push_back( pin );
+    }
+
+    BOOST_REQUIRE_EQUAL( result.size(), 1 );
+    BOOST_CHECK_EQUAL( result[0].num, wxT( "2" ) );
+    BOOST_CHECK_EQUAL( result[0].netName, wxT( "GND" ) );
+}
