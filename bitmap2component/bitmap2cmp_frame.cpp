@@ -399,8 +399,7 @@ void BITMAP2CMP_FRAME::OnLoadFile()
         path = m_mruPath;
 
     wxFileDialog fileDlg( this, _( "Choose Image" ), path, wxEmptyString,
-                          _( "Image Files" ) + wxS( " " )+ wxImage::GetImageExtWildcard(),
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                          FILEEXT::ImageFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;

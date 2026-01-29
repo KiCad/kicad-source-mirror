@@ -570,6 +570,12 @@ wxString FILEEXT::JpegFileWildcard()
 }
 
 
+wxString FILEEXT::ImageFileWildcard()
+{
+    return _( "Image files" ) + AddFileExtListToFilter( { "png", "jpg", "jpeg", "bmp", "gif" } );
+}
+
+
 wxString FILEEXT::HotkeyFileWildcard()
 {
     return _( "Hotkey file" ) + AddFileExtListToFilter( { HotkeyFileExtension } );

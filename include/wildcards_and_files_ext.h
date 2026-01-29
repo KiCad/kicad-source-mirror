@@ -286,6 +286,7 @@ public:
     static wxString WorkbookFileWildcard();
     static wxString PngFileWildcard();
     static wxString JpegFileWildcard();
+    static wxString ImageFileWildcard();
     static wxString HotkeyFileWildcard();
     static wxString JobsetFileWildcard();
 

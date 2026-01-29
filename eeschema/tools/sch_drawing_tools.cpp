@@ -70,7 +70,7 @@
 #include <import_gfx/dialog_import_gfx_sch.h>
 #include <sync_sheet_pin/sheet_synchronization_agent.h>
 #include <string_utils.h>
-//#include <wildcards_and_files_ext.h>
+#include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
@@ -1184,7 +1184,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
-                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                                  FILEEXT::ImageFileWildcard(), wxFD_OPEN );
 
                 bool cancelled = false;
 

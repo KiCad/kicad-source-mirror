@@ -843,8 +843,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
     case DS_DATA_ITEM::DS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), m_mruImagePath, wxEmptyString,
-                              _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
-                              wxFD_OPEN );
+                              FILEEXT::ImageFileWildcard(), wxFD_OPEN );
 
         if( fileDlg.ShowModal() != wxID_OK )
             return nullptr;

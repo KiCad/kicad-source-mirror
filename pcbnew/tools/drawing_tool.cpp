@@ -56,6 +56,7 @@
 #include <view/view.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_infobar.h>
+#include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
@@ -749,8 +750,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
-                                  wxFD_OPEN );
+                                  FILEEXT::ImageFileWildcard(), wxFD_OPEN );
                 bool         cancelled = false;
 
                 RunMainStack(
