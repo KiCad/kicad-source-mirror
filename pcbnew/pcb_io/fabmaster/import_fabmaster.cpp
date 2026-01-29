@@ -2350,6 +2350,48 @@ void FABMASTER::setupText( const FABMASTER::GRAPHIC_TEXT& aGText, PCB_LAYER_ID a
 }
 
 
+void FABMASTER::createComponentsFromOrphanPins()
+{
+    for( const auto& [pinKey, pinSet] : pins )
+    {
+        if( pinSet.empty() )
+            continue;
+
+        if( components.find( pinKey ) != components.end() )
+            continue;
+
+        const auto& firstPin = *pinSet.begin();
+
+        int minX = firstPin->pin_x;
+        int maxX = firstPin->pin_x;
+        int minY = firstPin->pin_y;
+        int maxY = firstPin->pin_y;
+
+        for( const auto& pin : pinSet )
+        {
+            minX = std::min( minX, pin->pin_x );
+            maxX = std::max( maxX, pin->pin_x );
+            minY = std::min( minY, pin->pin_y );
+            maxY = std::max( maxY, pin->pin_y );
+        }
+
+        auto cmp = std::make_unique<COMPONENT>();
+        cmp->refdes = pinKey;
+        cmp->name = firstPin->name;
+        cmp->mirror = firstPin->mirror;
+        cmp->rotate = 0.0;
+        cmp->x = ( minX + maxX ) / 2;
+        cmp->y = ( minY + maxY ) / 2;
+        cmp->type = SYMTYPE_PACKAGE;
+        cmp->cclass = COMPCLASS_IC;
+
+        std::vector<std::unique_ptr<COMPONENT>> compVec;
+        compVec.push_back( std::move( cmp ) );
+        components.insert( std::make_pair( pinKey, std::move( compVec ) ) );
+    }
+}
+
+
 bool FABMASTER::loadFootprints( BOARD* aBoard )
 {
     const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
@@ -3713,6 +3755,7 @@ bool FABMASTER::LoadBoard( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
     loadNets( aBoard );
     loadLayers( aBoard );
     loadVias( aBoard );
+    createComponentsFromOrphanPins();
     loadFootprints( aBoard );
     loadZones( aBoard );
     loadGraphics( aBoard );

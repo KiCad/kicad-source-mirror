@@ -618,6 +618,12 @@ private:
     bool loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine);
     bool loadFootprints( BOARD* aBoard );
 
+    /**
+     * Creates synthetic COMPONENT entries from pins that have no matching component.
+     * This handles Fabmaster exports where the REFDES section is empty but PIN data exists.
+     */
+    void createComponentsFromOrphanPins();
+
     SHAPE_POLY_SET loadShapePolySet( const graphic_element& aLine);
 
     static bool traceIsOpen( const FABMASTER::TRACE& aLine );
