@@ -71,14 +71,6 @@
 #include "sch_io_altium.h"
 
 
-/**
- * Flag to enable Altium schematic debugging output.
- *
- * @ingroup trace_env_vars
- */
-static const wxChar traceAltiumSch[] = wxT( "KICAD_ALTIUM_SCH" );
-
-
 // Harness port object itself does not contain color information about itself
 // It seems altium is drawing harness ports using these colors
 #define HARNESS_PORT_COLOR_DEFAULT_BACKGROUND COLOR4D( 0.92941176470588238, \
