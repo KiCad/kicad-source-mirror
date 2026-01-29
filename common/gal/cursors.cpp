@@ -48,9 +48,16 @@
 #include <cursors/cursor-xor.xpm>
 #include <cursors/cursor-zoom-in.xpm>
 #include <cursors/cursor-zoom-out.xpm>
+// Under MSW, the standard cursor is white on black.  Elsewhere it is black on white
+#ifdef __WINDOWS__
 #include <cursors/cursor_tune.xpm>
-#include <cursors/voltage_probe.xpm>
-#include <cursors/current_probe.xpm>
+#include <cursors/voltage_probe_win.xpm>
+#include <cursors/current_probe_win.xpm>
+#else
+#include <cursors/cursor_tune_black.xpm>
+#include <cursors/voltage_probe_black.xpm>
+#include <cursors/current_probe_black.xpm>
+#endif
 
 // HiDPI cursor files
 #include <cursors/cursor-add64.xpm>
@@ -71,9 +78,15 @@
 #include <cursors/cursor-xor64.xpm>
 #include <cursors/cursor-zoom-in64.xpm>
 #include <cursors/cursor-zoom-out64.xpm>
+#ifdef __WINDOWS__
 #include <cursors/cursor_tune64.xpm>
-#include <cursors/voltage_probe64.xpm>
-#include <cursors/current_probe64.xpm>
+#include <cursors/voltage_probe_win64.xpm>
+#include <cursors/current_probe_win64.xpm>
+#else
+#include <cursors/cursor_tune_black64.xpm>
+#include <cursors/voltage_probe_black64.xpm>
+#include <cursors/current_probe_black64.xpm>
+#endif
 
 
 // Under MSW, the standard cursor is white on black.  Elsewhere it is black on white

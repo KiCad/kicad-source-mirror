@@ -1452,15 +1452,9 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 break;
             }
             case SCH_SYMBOL_T:
-            {
-                SCH_SYMBOL* aSymbol = static_cast<SCH_SYMBOL*>( a );
-                SCH_SYMBOL* bSymbol = static_cast<SCH_SYMBOL*>( b );
-                int         aOrient = aSymbol->GetOrientation(), bOrient = bSymbol->GetOrientation();
-                std::swap( aOrient, bOrient );
-                aSymbol->SetOrientation( aOrient );
-                bSymbol->SetOrientation( bOrient );
+                // Only swap positions for symbols, not orientation. Users expect swapped symbols
+                // to maintain their visual appearance at the new location.
                 break;
-            }
             default: break;
             }
         }
