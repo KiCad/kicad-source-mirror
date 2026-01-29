@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="file_csv.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2109"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="55.923076"
+     inkscape:cx="3.3259973"
+     inkscape:cy="14.859698"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:snap-global="true"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2"
+       originx="0"
+       originy="0"
+       units="px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>csv</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs116228">
+    <style
+       id="style116226">.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-3{fill:#fff;}</style>
+  </defs>
+  <title
+     id="title116230">csv</title>
+  <!-- File background -->
+  <rect
+     class="cls-1"
+     x="3"
+     y="0"
+     width="21"
+     height="24"
+     rx="3.5"
+     id="rect_bg"
+     style="stroke-width:1" />
+  <!-- Blue banner -->
+  <rect
+     class="cls-2"
+     x="0"
+     y="2"
+     width="19"
+     height="9"
+     id="rect_banner"
+     style="stroke-width:1" />
+  <!-- "csv" text -->
+  <!-- c -->
+  <!-- s -->
+  <!-- v -->
+  <!-- Grid pattern for tabular data -->
+  <!-- Horizontal lines -->
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 6,13 H 21"
+     id="hline1" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 6,17 H 21"
+     id="hline2" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 6,21 H 21"
+     id="hline3" />
+  <!-- Vertical lines for columns -->
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 11,13 V 21"
+     id="vline1" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 16,13 V 21"
+     id="vline2" />
+  <path
+     style="font-weight:500;font-size:10.2096px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto Medium';fill:#ffffff;stroke-width:0.54694"
+     d="m 5.4060762,8.0852411 q 0.4386938,0 0.7427883,-0.254243 Q 6.4529591,7.57177 6.4778849,7.1729575 H 7.6145006 Q 7.5895748,7.9556271 6.9514747,8.5089794 6.3183599,9.0573466 5.4160465,9.0573466 q -1.2462891,0 -1.849493,-0.797625 Q 2.9633496,7.4620966 2.9633496,6.3504067 V 6.170941 q 0,-1.1067047 0.6032039,-1.9043297 0.6081891,-0.8026102 1.849493,-0.8026102 0.9770907,0 1.5753095,0.5683078 0.5982188,0.5683079 0.6231446,1.4606509 H 6.4778849 Q 6.4529591,5.0592512 6.1737903,4.7501714 5.8946216,4.4361066 5.4010911,4.4361066 q -0.7378032,0 -0.987061,0.5483672 Q 4.1697574,5.5278559 4.1697574,6.170941 v 0.1794657 q 0,0.6530555 0.2442727,1.1964375 0.2442727,0.5383969 0.9920461,0.5383969 z M 11.562745,7.4920075 q 0,-0.2592281 -0.214362,-0.4486641 Q 11.139006,6.8489223 10.431114,6.6993676 9.5537265,6.5149168 9.0103444,6.1510004 8.4719475,5.7820988 8.4719475,5.0991324 q 0,-0.6630258 0.5583375,-1.146586 0.5583376,-0.4885453 1.520473,-0.4885453 1.011987,0 1.58528,0.4935305 0.578278,0.4935305 0.578278,1.2213633 h -1.211393 q 0,-0.3140649 -0.239288,-0.5583375 -0.239287,-0.2492578 -0.712877,-0.2492578 -0.458635,0 -0.6779815,0.2043914 -0.2193469,0.2043914 -0.2193469,0.4735898 0,0.2592282 0.2193469,0.4187532 0.2193465,0.159525 0.8873575,0.3040945 0.93721,0.2043914 1.460651,0.5683079 0.528427,0.3589312 0.528427,1.0817789 0,0.7178625 -0.593234,1.1764969 -0.593233,0.4586344 -1.58528,0.4586344 -1.1116895,0 -1.6949528,-0.5683078 Q 8.2924819,7.920731 8.2924819,7.25272 h 1.1764969 q 0.019941,0.4985156 0.3639164,0.6979219 0.3489608,0.1994063 0.7477738,0.1994063 0.478575,0 0.727833,-0.1844508 0.254243,-0.1844508 0.254243,-0.4735899 z m 6.54551,-3.9283033 -1.869434,5.3939393 H 15.186953 L 13.302564,3.5637042 h 1.251274 l 1.166527,3.853526 1.136615,-3.853526 z"
+     id="text1"
+     aria-label="csv" />
+  <g
+     id="g2"
+     transform="translate(-0.03665,-1.036)">
+    <path
+       class="cls-3"
+       d="M 2.0733,10.036 H 1 V 9 h 1.0733 z"
+       id="path26591"
+       style="fill:#ffffff" />
+  </g>
+</svg>

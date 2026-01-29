@@ -296,6 +296,7 @@ set( BMAPS_MID
     fabrication
     file_bom
     file_cir
+    file_csv
     file_drl
     file_dsn
     file_gbr

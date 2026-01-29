@@ -57,6 +57,7 @@ enum class TREE_FILE_TYPE
     DRILL_NC,              // Similar Excellon drill file (.nc)
     DRILL_XNC,             // Similar Excellon drill file (.xnc)
     SVG,                   // SVG file (.svg)
+    CSV,                   // CSV file (.csv)
     DRAWING_SHEET,         // Drawing sheet file (.kicad_wks)
     FOOTPRINT_FILE,        // footprint file (.kicad_mod)
     SCHEMATIC_LIBFILE,     // schematic library file (.lib)

@@ -130,6 +130,7 @@ void PROJECT_TREE::LoadIcons()
     images.push_back( getBundle( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_NC (similar TREE_DRILL)
     images.push_back( getBundle( BITMAPS::file_drl, c_fileDefSize ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
     images.push_back( getBundle( BITMAPS::file_svg, c_fileDefSize ) );               // TREE_SVG
+    images.push_back( getBundle( BITMAPS::file_csv, c_fileDefSize ) );               // TREE_CSV
     images.push_back( getBundle( BITMAPS::icon_pagelayout_editor_24, c_fileDefSize ) ); // TREE_PAGE_LAYOUT_DESCR
     images.push_back( getBundle( BITMAPS::module, c_fileDefSize ) );                 // TREE_FOOTPRINT_FILE
     images.push_back( getBundle( BITMAPS::library, c_fileDefSize ) );                // TREE_SCHEMATIC_LIBFILE
