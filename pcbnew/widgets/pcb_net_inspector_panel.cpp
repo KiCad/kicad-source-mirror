@@ -40,6 +40,7 @@
 
 #include <wx/wupdlock.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include <algorithm>
 #include <thread_pool.h>
@@ -1406,6 +1407,8 @@ void PCB_NET_INSPECTOR_PANEL::generateReport()
     wxFileDialog dlg( this, _( "Save Net Inspector Report File" ), "", "",
                       _( "Report file" ) + AddFileExtListToFilter( { "csv" } ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

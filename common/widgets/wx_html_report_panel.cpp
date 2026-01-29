@@ -315,6 +315,8 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     wxFileDialog dlg( topLevelParent, _( "Save Report File" ), fn.GetPath(), fn.GetFullName(),
                       FILEEXT::TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 

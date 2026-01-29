@@ -28,6 +28,7 @@
 #include <kicad_manager_frame.h>
 #include <kiplatform/policy.h>
 #include <kiplatform/secrets.h>
+#include <kiplatform/ui.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <project/project_file.h>
@@ -86,6 +87,8 @@ wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool
     // Add a "Create a new directory" checkbox
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxFileName();
@@ -281,6 +284,8 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
@@ -435,6 +440,8 @@ int KICAD_MANAGER_CONTROL::NewJobsetFile( const TOOL_EVENT& aEvent )
     wxFileDialog dlg( m_frame, _( "Create New Jobset" ), default_dir, wxEmptyString, FILEEXT::JobsetFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
@@ -470,6 +477,8 @@ int KICAD_MANAGER_CONTROL::openProject( const wxString& aDefaultDir )
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -511,6 +520,8 @@ int KICAD_MANAGER_CONTROL::OpenJobsetFile( const TOOL_EVENT& aEvent )
     wxFileDialog dlg( m_frame, _( "Open Jobset" ), default_dir, wxEmptyString, FILEEXT::JobsetFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
@@ -545,6 +556,8 @@ int KICAD_MANAGER_CONTROL::ArchiveProject( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( m_frame, _( "Archive Project Files" ), fileName.GetPath(), fileName.GetFullName(),
                       FILEEXT::ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;
@@ -628,6 +641,8 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     wxFileDialog dlg( m_frame, _( "Save Project To" ), default_dir, wxEmptyString, wxEmptyString, wxFD_SAVE );
 
     dlg.AddShortcut( PATHS::GetDefaultUserProjectsPath() );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;

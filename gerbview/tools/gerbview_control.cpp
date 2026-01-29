@@ -34,6 +34,7 @@
 #include <view/view.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include "gerbview_actions.h"
 #include "gerbview_control.h"
@@ -125,6 +126,8 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
 
     wxFileDialog filedlg( m_frame, _( "Export as KiCad Board File" ), path, fileDialogName,
                           FILEEXT::PcbFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &filedlg );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return 0;

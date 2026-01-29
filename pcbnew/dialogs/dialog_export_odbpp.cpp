@@ -26,6 +26,7 @@
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include <wx/wfstream.h>
+#include <kiplatform/ui.h>
 #include <wx/zipstrm.h>
 #include <wx/tarstrm.h>
 #include <wx/zstream.h>
@@ -134,6 +135,8 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
     wxString fileDialogName( wxString::Format( wxS( "%s-odb" ), brdFile.GetName() ) );
 
     wxFileDialog dlg( this, _( "Export ODB++ File" ), fn.GetPath(), fileDialogName, filter, wxFD_SAVE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

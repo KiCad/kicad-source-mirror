@@ -32,6 +32,7 @@
 
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
@@ -98,6 +99,8 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
         wxFileDialog dlg( this, _( "Select output path" ), fname.GetPath(), fname.GetFullName(),
                           fileWildcard,
                           wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() != wxID_OK )
             return;

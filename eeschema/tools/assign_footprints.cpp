@@ -40,6 +40,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 
 void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfReferences )
@@ -208,6 +209,8 @@ int SCH_EDITOR_CONTROL::ImportFPAssignments( const TOOL_EVENT& aEvent )
                       path, wxEmptyString,
                       FILEEXT::FootprintAssignmentFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;

@@ -940,6 +940,8 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
             FILEDLG_IMPORT_SHEET_CONTENTS dlgHook( cfg );
             dlg.SetCustomizeHook( dlgHook );
 
+            KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
             if( dlg.ShowModal() == wxID_CANCEL )
                 return 0;
 
@@ -1185,6 +1187,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), m_mruPath, wxEmptyString,
                                   FILEEXT::ImageFileWildcard(), wxFD_OPEN );
+
+                KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
                 bool cancelled = false;
 

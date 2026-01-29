@@ -64,6 +64,7 @@
 #include <wx/treebook.h>
 #include <wx/msgdlg.h>
 #include <wx/log.h>
+#include <kiplatform/ui.h>
 
 #ifndef __linux__
 #include <navlib/nl_pl_editor_plugin.h>
@@ -844,6 +845,8 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::AddDrawingSheetItem( int aType )
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), m_mruImagePath, wxEmptyString,
                               FILEEXT::ImageFileWildcard(), wxFD_OPEN );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
 
         if( fileDlg.ShowModal() != wxID_OK )
             return nullptr;

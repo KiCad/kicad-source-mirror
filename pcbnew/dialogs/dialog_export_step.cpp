@@ -30,6 +30,7 @@
 #include <wx/process.h>
 #include <wx/string.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include <pgm_base.h>
 #include <board.h>
@@ -273,6 +274,8 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
     wxFileName fn( Prj().AbsolutePath( path ) );
 
     wxFileDialog dlg( this, _( "3D Model Output File" ), fn.GetPath(), fn.GetFullName(), filter, wxFD_SAVE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

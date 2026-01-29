@@ -50,6 +50,7 @@
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -1406,6 +1407,8 @@ void SCH_EDIT_FRAME::NewProject()
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
                       FILEEXT::KiCadSchematicFileWildcard(), wxFD_SAVE );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         // Enforce the extension, wxFileDialog is inept.
@@ -1442,6 +1445,8 @@ void SCH_EDIT_FRAME::LoadProject()
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {

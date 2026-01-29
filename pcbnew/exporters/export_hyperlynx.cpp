@@ -27,6 +27,7 @@
 
 #include <wx/log.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include <kiface_base.h>
 #include <macros.h>
@@ -676,6 +677,8 @@ int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( m_frame, _( "Export Hyperlynx Layout" ), fn.GetPath(), fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;

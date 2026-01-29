@@ -36,6 +36,7 @@
 #include <tools/board_editor_control.h>
 #include <wx/filedlg.h>
 #include <vector>
+#include <kiplatform/ui.h>
 
 
 /* creates a BOM list from board
@@ -85,6 +86,8 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( m_frame, _( "Save Bill of Materials" ), pro_dir, fn.GetFullName(),
                       FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;

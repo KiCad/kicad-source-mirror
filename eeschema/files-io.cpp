@@ -35,6 +35,7 @@
 #include <id.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
 #include <local_history.h>
@@ -892,6 +893,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     FILEDLG_IMPORT_NON_KICAD importOptions( eeconfig()->m_System.show_import_issues );
     dlg.SetCustomizeHook( importOptions );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
@@ -1182,6 +1185,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         {
             dlg.SetCustomizeHook( newProjectHook );
         }
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

@@ -1399,6 +1399,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& even
     wxFileDialog saveDlg( this, _( "Bill of Materials Output File" ), path, fn.GetFullName(),
                           FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
+
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
 

@@ -35,6 +35,7 @@
 #include <view/view_overlay.h>
 #include <view/view_controls.h>
 #include <wildcards_and_files_ext.h>
+#include <kiplatform/ui.h>
 
 
 #include "label_manager.h"
@@ -417,6 +418,8 @@ void PNS_LOG_VIEWER_FRAME::onOpen( wxCommandEvent& event )
                       "PNS log files" + AddFileExtListToFilter( { "log" } ),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         wxString logPath = dlg.GetPath();
@@ -437,6 +440,8 @@ void PNS_LOG_VIEWER_FRAME::onSaveAs( wxCommandEvent& event )
     wxFileDialog dlg( this, "New log file", m_mruPath, wxEmptyString,
                       "PNS log files" + AddFileExtListToFilter( { "log" } ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {

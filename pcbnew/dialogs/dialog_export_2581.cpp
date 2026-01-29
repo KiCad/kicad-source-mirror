@@ -25,6 +25,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/filefn.h>
+#include <kiplatform/ui.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -100,6 +101,8 @@ void DIALOG_EXPORT_2581::onBrowseClicked( wxCommandEvent& event )
     wxFileDialog dlg( this, _( "Export IPC-2581 File" ), fn.GetPath(), fn.GetFullName(),
                       m_cbCompress->IsChecked() ? compressed_files : ipc_files,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

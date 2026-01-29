@@ -39,6 +39,7 @@
 #include <wx/menu.h>
 #include <wx/wfstream.h>
 #include <wx/wupdlock.h>
+#include <kiplatform/ui.h>
 
 /* ---------- GRID_TRICKS for embedded files grid ---------- */
 
@@ -394,6 +395,8 @@ void PANEL_EMBEDDED_FILES::onAddEmbeddedFiles( wxCommandEvent& event )
     wxFileDialog fileDialog( this, _( "Select a file to embed" ), wxEmptyString, wxEmptyString,
                              _( "All Files" ) + wxT( " (*.*)|*.*" ),
                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDialog );
 
     if( fileDialog.ShowModal() == wxID_OK )
     {

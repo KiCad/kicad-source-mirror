@@ -48,6 +48,7 @@
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <paths.h>
 #include <jobs/job_export_sch_netlist.h>
+#include <kiplatform/ui.h>
 
 #include <eeschema_id.h>
 #include <wx/checkbox.h>
@@ -562,6 +563,8 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 
         // full name does not and should not include the path, per wx docs.
         wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

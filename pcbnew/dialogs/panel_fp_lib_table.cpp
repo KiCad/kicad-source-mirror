@@ -48,6 +48,7 @@
 #include <lib_table_notebook_panel.h>
 #include <confirm.h>
 #include <lib_table_grid_data_model.h>
+#include <kiplatform/ui.h>
 #include <wildcards_and_files_ext.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
@@ -623,6 +624,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     {
         wxFileDialog dlg( m_parent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

@@ -34,6 +34,7 @@
 
 #include <confirm.h>
 #include <kidialog.h>
+#include <kiplatform/ui.h>
 #include <wildcards_and_files_ext.h>
 
 #include <sch_io/sch_io_mgr.h>
@@ -54,6 +55,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     int      style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 
     wxFileDialog inputdlg( this, aWindowTitle, default_dir, wxEmptyString, aFilesWildcard, style );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &inputdlg );
 
     if( inputdlg.ShowModal() == wxID_CANCEL )
         return;

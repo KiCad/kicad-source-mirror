@@ -1014,6 +1014,8 @@ private:
         wxFileDialog dlg( &m_frame, _( "Select pin data file" ), "", "", FILEEXT::CsvTsvFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
         if( dlg.ShowModal() == wxID_CANCEL )
             return wxEmptyString;
 
@@ -1545,6 +1547,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnExportButtonClick( wxCommandEvent& event )
         fn.SetExt( FILEEXT::CsvFileExtension );
         wxFileDialog dlg( this, _( "Select pin data file" ), "", fn.GetFullName(), FILEEXT::CsvFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

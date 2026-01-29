@@ -42,6 +42,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <kiplatform/ui.h>
 
 
 #define DEFAULT_DPI 300     // the image DPI used in formats that do not define a DPI
@@ -401,6 +402,8 @@ void BITMAP2CMP_FRAME::OnLoadFile()
     wxFileDialog fileDlg( this, _( "Choose Image" ), path, wxEmptyString,
                           FILEEXT::ImageFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
+
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
@@ -442,6 +445,8 @@ void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
     wxFileDialog fileDlg( this, _( "Create Drawing Sheet File" ), path, wxEmptyString,
                           FILEEXT::DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
+
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
@@ -474,6 +479,8 @@ void BITMAP2CMP_FRAME::ExportPostScriptFormat()
 
     wxFileDialog fileDlg( this, _( "Create PostScript File" ), path, wxEmptyString,
                           FILEEXT::PSFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;
@@ -509,6 +516,8 @@ void BITMAP2CMP_FRAME::ExportEeschemaFormat()
                           FILEEXT::KiCadSymbolLibFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
+
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
@@ -541,6 +550,8 @@ void BITMAP2CMP_FRAME::ExportPcbnewFormat()
     wxFileDialog fileDlg( this, _( "Create Footprint Library" ), path, wxEmptyString,
                           FILEEXT::KiCadFootprintLibFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;

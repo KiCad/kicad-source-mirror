@@ -22,6 +22,7 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/clipbrd.h>
+#include <kiplatform/ui.h>
 
 #include <bitmaps.h>
 #include <calculator_panels/panel_regulator.h>
@@ -195,6 +196,8 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     // Must be wxFD_SAVE, otherwise you cannot assign a file name
     wxFileDialog dlg( topLevelParent, _( "Select PCB Calculator Data File" ), wxEmptyString,
                       fullfilename, wildcard, wxFD_SAVE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

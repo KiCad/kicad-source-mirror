@@ -58,6 +58,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
+#include <kiplatform/ui.h>
 #include <project_pcb.h>
 #include <toolbars_3d.h>
 
@@ -750,6 +751,8 @@ bool EDA_3D_VIEWER_FRAME::getExportFileName( EDA_3D_VIEWER_EXPORT_FORMAT& aForma
                       m_defaultSaveScreenshotFileName.GetPath(),
                       m_defaultSaveScreenshotFileName.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     // Set initial filter index based on current format
     dlg.SetFilterIndex( ( aFormat == EDA_3D_VIEWER_EXPORT_FORMAT::JPEG ) ? 0 : 1 );

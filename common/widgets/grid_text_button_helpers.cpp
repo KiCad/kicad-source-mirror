@@ -30,6 +30,7 @@
 
 #include <bitmaps.h>
 #include <embedded_files.h>
+#include <kiplatform/ui.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <kiway_express.h>
@@ -256,6 +257,8 @@ protected:
 
             openFileDialog.SetCustomizeHook( customize );
 
+            KIPLATFORM::UI::AllowNetworkFileSystems( &openFileDialog );
+
             if( openFileDialog.ShowModal() == wxID_OK )
             {
                 filename = openFileDialog.GetPath();
@@ -391,6 +394,8 @@ protected:
 
             if( m_embedCallback )
                 dlg.SetCustomizeHook( customize );
+
+            KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
             if( dlg.ShowModal() == wxID_OK )
             {

@@ -58,6 +58,7 @@
 #include <project.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <settings/settings_manager.h>
+#include <kiplatform/ui.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_event.h>
@@ -469,6 +470,8 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     dlg.SetExtraControlCreator( &LEGACYFILEDLG_NETLIST_OPTIONS::Create );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;

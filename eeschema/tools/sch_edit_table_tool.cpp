@@ -26,6 +26,7 @@
 #include <dialogs/dialog_table_properties.h>
 #include <wx/filedlg.h>
 #include <fstream>
+#include <kiplatform/ui.h>
 #include <sch_sheet_path.h>
 #include <wx/msgdlg.h>
 
@@ -120,6 +121,8 @@ int SCH_EDIT_TABLE_TOOL::ExportTableToCSV( const TOOL_EVENT& aEvent )
                             wxEmptyString, wxEmptyString,
                             _( "CSV files (*.csv)|*.csv" ),
                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &saveDialog );
 
     if( saveDialog.ShowModal() == wxID_CANCEL )
     {

@@ -46,6 +46,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 #include <kiway.h>
 #include <macros.h>
 #include <pcbnew_id.h>
@@ -1538,6 +1539,8 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
                       FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetPath().IsEmpty() )
         return;

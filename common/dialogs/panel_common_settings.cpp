@@ -381,6 +381,8 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
     wxFileDialog dlg( topLevelParent, _( "Select Preferred PDF Viewer" ), fn.GetPath(),
                       fn.GetFullPath(), wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 

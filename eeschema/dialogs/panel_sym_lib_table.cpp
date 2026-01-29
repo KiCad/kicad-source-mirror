@@ -48,6 +48,7 @@
 #include <sch_edit_frame.h>
 #include <kiway.h>
 #include <paths.h>
+#include <kiplatform/ui.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wx/dir.h>
@@ -555,6 +556,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
         wxFileDialog dlg( topLevelParent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

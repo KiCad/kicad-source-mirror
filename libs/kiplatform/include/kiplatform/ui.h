@@ -24,6 +24,7 @@
 #include <wx/cursor.h>
 
 class wxChoice;
+class wxDialog;
 class wxNonOwnedWindow;
 class wxTopLevelWindow;
 class wxWindow;
@@ -210,6 +211,23 @@ namespace KIPLATFORM
          * above other windows.
          */
         void ReleaseChildWindow( wxNonOwnedWindow* aWindow );
+
+        /**
+         * Configure a file dialog to show network and virtual file systems.
+         *
+         * On GTK, file dialogs default to showing only local files, which excludes
+         * GVFS-mounted filesystems like Google Drive, SMB shares, SFTP connections,
+         * and removable media mounted through GVFS. This function configures the
+         * dialog to also show these non-local filesystems.
+         *
+         * This function must be called after creating the dialog but before calling
+         * ShowModal().
+         *
+         * This is a NOP on Windows and macOS where network filesystems are shown by default.
+         *
+         * @param aDialog is the file dialog to configure
+         */
+        void AllowNetworkFileSystems( wxDialog* aDialog );
     }
 }
 

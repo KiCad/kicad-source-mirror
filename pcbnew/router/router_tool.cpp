@@ -23,6 +23,7 @@
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <advanced_config.h>
+#include <kiplatform/ui.h>
 
 #include <functional>
 #include <iomanip>
@@ -674,6 +675,8 @@ void ROUTER_TOOL::saveRouterDebugLog()
     wxFileDialog dlg( frame(), _( "Save router log" ), mruPath, "pns.log",
                       "PNS log files" + AddFileExtListToFilter( { "log" } ),
                       wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_OK )
     {

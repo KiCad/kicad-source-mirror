@@ -46,6 +46,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 
 bool SYMBOL_EDITOR_CONTROL::Init()
@@ -778,6 +779,8 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 
     wxFileDialog dlg( editFrame, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
                       FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )
     {

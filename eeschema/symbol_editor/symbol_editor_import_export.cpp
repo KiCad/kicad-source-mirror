@@ -35,6 +35,7 @@
 #include <wx/filename.h>
 #include <wx/filedlg.h>
 #include <string_utils.h>
+#include <kiplatform/ui.h>
 
 
 void SYMBOL_EDIT_FRAME::ImportSymbol()
@@ -77,6 +78,8 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
 
     wxFileDialog fileDlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, fileFiltersStr,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDlg );
 
     if( fileDlg.ShowModal() == wxID_CANCEL )
         return;

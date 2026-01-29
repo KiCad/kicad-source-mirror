@@ -31,6 +31,7 @@
 #include <wx/filedlg.h>
 #include <wx/intl.h>
 #include <eda_doc.h>
+#include <kiplatform/ui.h>
 
 #include <wx/button.h>
 #include <wx/bmpbuttn.h>
@@ -599,6 +600,8 @@ bool PG_URL_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxW
             wxFileDialog openFileDialog( m_frame, _( "Open file" ), wxS( "" ), wxS( "" ),
                                          _( "All Files" ) + wxS( " (*.*)|*.*" ),
                                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+            KIPLATFORM::UI::AllowNetworkFileSystems( &openFileDialog );
 
             if( openFileDialog.ShowModal() == wxID_OK )
             {

@@ -28,6 +28,7 @@
 #include <confirm.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include <dialog_import_settings.h>
 
@@ -116,6 +117,8 @@ void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
                       FILEEXT::PcbFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_OK )
         m_filePathCtrl->SetValue( dlg.GetPath() );

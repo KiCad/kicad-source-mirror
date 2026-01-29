@@ -31,6 +31,7 @@
 #include <wildcards_and_files_ext.h>
 #include <tools/board_editor_control.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 
 
@@ -75,6 +76,8 @@ int BOARD_EDITOR_CONTROL::ExportCmpFile( const TOOL_EVENT& aEvent )
     wxFileDialog dlg( m_frame, _( "Save Footprint Association File" ), projectDir, fn.GetFullName(),
                       FILEEXT::FootprintAssignmentFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;

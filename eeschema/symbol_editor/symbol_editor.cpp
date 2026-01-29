@@ -46,6 +46,7 @@
 #include <wx/filedlg.h>
 #include <wx/log.h>
 #include <project_sch.h>
+#include <kiplatform/ui.h>
 #include <string_utils.h>
 #include "symbol_saveas_type.h"
 #include <widgets/symbol_library_save_as_filedlg_hook.h>
@@ -1078,6 +1079,8 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
                       FILEEXT::KiCadSymbolLibFileWildcard(), wxFD_SAVE );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
@@ -1545,6 +1548,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK saveAsHook( type );
         dlg.SetCustomizeHook( saveAsHook );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

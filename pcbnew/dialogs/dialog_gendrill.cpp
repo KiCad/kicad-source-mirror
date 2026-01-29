@@ -27,6 +27,7 @@
 #include <wx/msgdlg.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 #include <confirm.h>
 #include <core/arraydim.h>
@@ -397,6 +398,8 @@ void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath, fn.GetFullName(),
                       FILEEXT::ReportFileWildcard(), wxFD_SAVE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

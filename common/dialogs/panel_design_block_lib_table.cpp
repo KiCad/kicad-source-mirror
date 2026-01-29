@@ -48,6 +48,7 @@
 #include <dialogs/dialog_edit_library_tables.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <kiway.h>
+#include <kiplatform/ui.h>
 #include <kiway_express.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
@@ -685,6 +686,8 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event
     {
         wxFileDialog dlg( topLevelParent, title, *lastDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

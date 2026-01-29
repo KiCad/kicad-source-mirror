@@ -48,6 +48,7 @@
 #include <gestfich.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
+#include <kiplatform/ui.h>
 #include <kiplatform/policy.h>
 #include <build_version.h>
 #include <kiway.h>
@@ -1126,6 +1127,8 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Edit File in Text Editor" ), default_dir,  wxEmptyString, wildcard,
                       wxFD_OPEN );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

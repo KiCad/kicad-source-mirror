@@ -47,6 +47,7 @@
 #include <wx/dcmemory.h>
 #include <wx/msgdlg.h>
 #include <confirm.h>
+#include <kiplatform/ui.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 
@@ -709,6 +710,8 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     if( m_embeddedFiles )
         fileDialog.SetCustomizeHook( customize );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &fileDialog );
 
     if( fileDialog.ShowModal() != wxID_OK )
         return;

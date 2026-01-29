@@ -518,6 +518,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
                          wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
                          wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dialog );
+
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
 

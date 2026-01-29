@@ -35,6 +35,7 @@
 #include <wx/filedlg.h>
 #include <wx/filedlgcustomize.h>
 #include <wx/msgdlg.h>
+#include <kiplatform/ui.h>
 
 #include <confirm.h>
 #include <gestfich.h>
@@ -444,6 +445,8 @@ int BOARD_EDITOR_CONTROL::GenD356File( const TOOL_EVENT& aEvent )
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     D365_CUSTOMIZE_HOOK customizeHook( m_frame->GetPcbNewSettings()->m_ExportD356.doNotExportUnconnectedPads );
     dlg.SetCustomizeHook( customizeHook );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return 0;

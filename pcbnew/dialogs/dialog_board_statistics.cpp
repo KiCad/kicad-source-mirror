@@ -453,6 +453,8 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
                       s_savedDialogState.saveReportName, FILEEXT::TextFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 

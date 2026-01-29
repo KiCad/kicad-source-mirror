@@ -22,6 +22,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include <wx/dialog.h>
 #include <wx/nonownedwnd.h>
 #include <wx/toplevel.h>
 #include <wx/button.h>
@@ -252,4 +253,10 @@ void KIPLATFORM::UI::ReleaseChildWindow( wxNonOwnedWindow* aWindow )
             [theWindow setLevel:NSFloatingWindowLevel];
         }
     }
+}
+
+
+void KIPLATFORM::UI::AllowNetworkFileSystems( wxDialog* aDialog )
+{
+    // Not needed on macOS - file dialogs show network filesystems by default
 }

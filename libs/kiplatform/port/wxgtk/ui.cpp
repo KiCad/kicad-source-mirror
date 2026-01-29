@@ -21,6 +21,7 @@
 #include <kiplatform/ui.h>
 
 #include <wx/choice.h>
+#include <wx/dialog.h>
 #include <wx/nonownedwnd.h>
 #include <wx/settings.h>
 #include <wx/window.h>
@@ -710,6 +711,15 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 void KIPLATFORM::UI::ReleaseChildWindow( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform
+}
+
+
+void KIPLATFORM::UI::AllowNetworkFileSystems( wxDialog* aDialog )
+{
+    GtkWidget* widget = static_cast<GtkWidget*>( aDialog->GetHandle() );
+
+    if( widget && GTK_IS_FILE_CHOOSER( widget ) )
+        gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( widget ), FALSE );
 }
 
 #endif

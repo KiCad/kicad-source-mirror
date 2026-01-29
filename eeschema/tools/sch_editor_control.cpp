@@ -45,6 +45,7 @@
 #include <locale_io.h>
 #include <string_utils.h>
 #include <kiway.h>
+#include <kiplatform/ui.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <paths.h>
 #include <pgm_base.h>
@@ -397,6 +398,8 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
     wxFileName   curr_fn = curr_sheet->GetFileName();
     wxFileDialog dlg( m_frame, _( "Schematic Files" ), curr_fn.GetPath(), curr_fn.GetFullName(),
                       FILEEXT::KiCadSchematicFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;

@@ -1121,6 +1121,8 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
                       FILEEXT::ReportFileWildcard() + wxS( "|" ) + FILEEXT::JsonFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 

@@ -43,6 +43,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <kiplatform/ui.h>
 
 #include <dialogs/html_message_box.h>
 #include <widgets/std_bitmap_button.h>
@@ -163,6 +164,8 @@ void DIALOG_IMPORT_GFX_SCH::onBrowseFiles( wxCommandEvent& event )
 
     wxFileDialog dlg( m_parent, _( "Import Graphics" ), path, filename, wildcardsDesc,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )
         m_textCtrlFileName->SetValue( dlg.GetPath() );

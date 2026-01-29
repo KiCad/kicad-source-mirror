@@ -49,6 +49,7 @@
 #include <tool/tool_manager.h>
 #include <board.h>
 #include <kiplatform/app.h>
+#include <kiplatform/ui.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
@@ -188,6 +189,8 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
     if( !kicadFormat )
         dlg.SetCustomizeHook( importOptions );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
     if( dlg.ShowModal() == wxID_OK )
     {
         *aFileName = dlg.GetPath();
@@ -229,6 +232,8 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
 
     if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
         dlg.SetCustomizeHook( newProjectHook );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;

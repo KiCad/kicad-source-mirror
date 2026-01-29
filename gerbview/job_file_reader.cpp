@@ -41,6 +41,7 @@
 #include <dialogs/html_message_box.h>
 #include <view/view.h>
 #include <wx/filedlg.h>
+#include <kiplatform/ui.h>
 
 
 using json = nlohmann::json;
@@ -191,6 +192,8 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
                           filename.GetFullName(),
                           FILEEXT::GerberJobFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

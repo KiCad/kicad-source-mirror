@@ -38,6 +38,7 @@
 #include <project/project_file.h>  // LAST_PATH_TYPE
 #include <dialog_import_netlist.h>
 #include <widgets/wx_html_report_panel.h>
+#include <kiplatform/ui.h>
 #include <view/view_controls.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
@@ -111,6 +112,8 @@ void DIALOG_IMPORT_NETLIST::onBrowseNetlistFiles( wxCommandEvent& event )
 
     wxFileDialog FilesDialog( this, _( "Import Netlist" ), dirPath, filename, FILEEXT::NetlistFileWildcard(),
                               wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &FilesDialog );
 
     if( FilesDialog.ShowModal() != wxID_OK )
         return;

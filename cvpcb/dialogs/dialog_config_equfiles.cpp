@@ -38,6 +38,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <kiplatform/ui.h>
 
 
 DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( wxWindow* aParent ) :
@@ -213,6 +214,8 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Footprint Association File" ), libpath, wxEmptyString,
                       FILEEXT::EquFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

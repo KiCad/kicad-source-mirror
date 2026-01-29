@@ -48,6 +48,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
+#include <kiplatform/ui.h>
 #include <tools/pcb_selection_tool.h>
 #include <pcb_barcode.h>
 #include <tools/tool_event_utils.h>
@@ -751,6 +752,9 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                                   FILEEXT::ImageFileWildcard(), wxFD_OPEN );
+
+                KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
                 bool         cancelled = false;
 
                 RunMainStack(

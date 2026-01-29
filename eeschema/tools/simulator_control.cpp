@@ -29,6 +29,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx_filename.h>
+#include <kiplatform/ui.h>
 #include <wx/stc/stc.h>
 
 #include <kiway.h>
@@ -109,6 +110,8 @@ int SIMULATOR_CONTROL::OpenWorkbook( const TOOL_EVENT& aEvent )
     wxFileDialog openDlg( m_simulatorFrame, _( "Open Simulation Workbook" ), getDefaultPath(), "",
                           FILEEXT::WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
+    KIPLATFORM::UI::AllowNetworkFileSystems( &openDlg );
+
     if( openDlg.ShowModal() == wxID_CANCEL )
         return -1;
 
@@ -163,6 +166,8 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
                                 FILEEXT::WorkbookFileWildcard(),
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+        KIPLATFORM::UI::AllowNetworkFileSystems( &saveAsDlg );
+
         if( saveAsDlg.ShowModal() == wxID_CANCEL )
             return -1;
 
@@ -180,6 +185,8 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
     {
         wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
                               FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
 
         if( saveDlg.ShowModal() == wxID_CANCEL )
             return -1;
@@ -287,6 +294,8 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
         wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "",
                               FILEEXT::CsvFileWildcard(),
                               wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &saveDlg );
 
         if( saveDlg.ShowModal() == wxID_CANCEL )
             return -1;

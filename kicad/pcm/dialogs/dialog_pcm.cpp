@@ -36,6 +36,7 @@
 #include "widgets/wx_grid.h"
 
 #include <fstream>
+#include <kiplatform/ui.h>
 #include <launch_ext.h>
 #include <sstream>
 #include <vector>
@@ -302,6 +303,8 @@ void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
     wxFileDialog open_file_dialog( this, _( "Install Package" ), wxEmptyString, wxEmptyString,
                                    wxT( "Zip files (*.zip)|*.zip" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &open_file_dialog );
 
     if( open_file_dialog.ShowModal() == wxID_CANCEL )
         return;

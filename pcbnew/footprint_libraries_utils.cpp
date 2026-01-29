@@ -48,6 +48,7 @@
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
+#include <kiplatform/ui.h>
 #include <project_pcb.h>
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
@@ -133,6 +134,8 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
         if( lastFilterIndex >= 0 && lastFilterIndex < nWildcards )
             dlg.SetFilterIndex( lastFilterIndex );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return nullptr;
@@ -248,6 +251,8 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
     wxFileDialog dlg( this, _( "Export Footprint" ), fn.GetPath(), fn.GetFullName(),
                       wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

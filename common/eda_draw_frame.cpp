@@ -1245,6 +1245,8 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( const wxString& aTitle, bool doOpen, wx
         if( aFileDlgHook )
             dlg.SetCustomizeHook( *aFileDlgHook );
 
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 

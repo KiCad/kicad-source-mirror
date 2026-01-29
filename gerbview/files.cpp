@@ -39,6 +39,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include "widgets/gerbview_layer_widget.h"
 #include <tool/tool_manager.h>
+#include <kiplatform/ui.h>
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in GerbView to load files" )
@@ -149,6 +150,8 @@ bool GERBVIEW_FRAME::LoadFileOrShowDialog( const wxString& aFileName,
 
         wxFileDialog dlg( this, dialogTitle, currentPath, filename.GetFullName(), dialogFiletypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         wxArrayString dummy1, dummy2;
         const int nWildcards = wxParseCommonDialogsFilter( dialogFiletypes, dummy1, dummy2 );
@@ -658,6 +661,8 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         wxFileDialog dlg( this, _( "Open Zip File" ), currentPath, filename.GetFullName(),
                           FILEEXT::ZipFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
