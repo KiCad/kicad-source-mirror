@@ -334,11 +334,11 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
         dc.DrawBitmap( bmpImg, drawBmpPos, true );
 
     // Draw the badge
-    if( m_showBadge )
+    if( m_showBadge && !m_badgeText.IsEmpty() )
     {
         dc.SetFont( m_badgeFont );
 
-        wxSize text_padding( 3, 1 );
+        wxSize text_padding( 2, 1 );
 
         if( m_padding )
             text_padding *= 2;
