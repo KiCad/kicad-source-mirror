@@ -1452,9 +1452,24 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 break;
             }
             case SCH_SYMBOL_T:
-                // Only swap positions for symbols, not orientation. Users expect swapped symbols
-                // to maintain their visual appearance at the new location.
+            {
+                SCH_SYMBOL* aSymbol = static_cast<SCH_SYMBOL*>( a );
+                SCH_SYMBOL* bSymbol = static_cast<SCH_SYMBOL*>( b );
+
+                // Only swap orientations when both symbols are the same library symbol.
+                // Different symbols (e.g. LED vs resistor) have different default orientations,
+                // so swapping their orientations leads to unexpected visual results.
+                if( aSymbol->GetLibId() == bSymbol->GetLibId() )
+                {
+                    int aOrient = aSymbol->GetOrientation();
+                    int bOrient = bSymbol->GetOrientation();
+                    std::swap( aOrient, bOrient );
+                    aSymbol->SetOrientation( aOrient );
+                    bSymbol->SetOrientation( bOrient );
+                }
+
                 break;
+            }
             default: break;
             }
         }
