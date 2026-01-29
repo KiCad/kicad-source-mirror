@@ -45,6 +45,9 @@ DIALOG_EXPORT_VRML::DIALOG_EXPORT_VRML( PCB_EDIT_FRAME* aEditFrame ) :
 {
     m_filePicker->SetFocus();
 
+    m_xOrigin.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+    m_yOrigin.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
     SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
