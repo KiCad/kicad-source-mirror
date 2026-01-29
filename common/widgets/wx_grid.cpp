@@ -33,6 +33,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
 #include <algorithm>
+#include <vector>
 #include <core/kicad_algo.h>
 #include <gal/color4d.h>
 #include <kiplatform/ui.h>
@@ -239,12 +240,42 @@ WX_GRID::~WX_GRID()
 
 void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 {
-    CallAfter( [&]()
-               {
-                   wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
-               } );
+    // Workaround for wxWidgets bug where hidden column widths (stored as negative values)
+    // are not scaled during DPI changes, corrupting the internal m_colRights array.
+    // https://github.com/wxWidgets/wxWidgets/issues/26079
+    // Fix is to re-hide all hidden columns after the DPI change completes, which forces
+    // wxGrid to recalculate the column geometry correctly.
+
+    std::vector<int> hiddenCols;
+
+    for( int col = 0; col < GetNumberCols(); ++col )
+    {
+        if( !IsColShown( col ) )
+            hiddenCols.push_back( col );
+    }
 
     aEvt.Skip();
+
+    if( !hiddenCols.empty() )
+    {
+        CallAfter(
+                [this, hiddenCols]()
+                {
+                    for( int col : hiddenCols )
+                    {
+                        ShowCol( col );
+                        HideCol( col );
+                    }
+
+                    ForceRefresh();
+                } );
+    }
+
+    CallAfter(
+            [this]()
+            {
+                wxGrid::SetColLabelSize( wxGRID_AUTOSIZE );
+            } );
 }
 
 
