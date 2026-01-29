@@ -55,73 +55,6 @@ wxDEFINE_EVENT( SYMBOL_DELAY_FOCUS, wxCommandEvent );
 wxDEFINE_EVENT( SYMBOL_DELAY_SELECTION, wxCommandEvent );
 
 
-/**
- * Debug helper to trap all SetFocus events on a window and its children.
- * This creates a custom event handler that logs whenever focus is set on any control.
- */
-static void EnableFocusDebugging( wxWindow* aWindow, const wxString& aWindowName = wxEmptyString )
-{
-    // Lambda-based focus event handler
-    auto onFocus = [aWindowName]( wxFocusEvent& aEvent ) -> void
-    {
-        wxWindow* window = static_cast<wxWindow*>( aEvent.GetEventObject() );
-        if( !window )
-            return;
-
-        wxString controlName = window->GetName();
-        wxString controlLabel;
-
-        // Try to get a human-readable label for the control
-        wxControl* ctrl = dynamic_cast<wxControl*>( window );
-        if( ctrl && !ctrl->GetLabel().empty() )
-            controlLabel = ctrl->GetLabel();
-
-        wxString windowInfo = aWindowName.empty() ? wxString( "" ) : aWindowName + wxString( ": " );
-        // fix a conflict that happens with a Windows header on MINGW. so undefine GetClassName
-        #if defined( GetClassName ) && defined( __MINGW32__ )
-        #undef GetClassName
-        #endif
-
-        if( aEvent.GetEventType() == wxEVT_SET_FOCUS )
-        {
-            wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "%sFocus SET on: %s (name=%s, label=%s)" ),
-                        windowInfo,
-                        window->GetClassInfo()->GetClassName(),
-                        controlName,
-                        controlLabel );
-        }
-        else if( aEvent.GetEventType() == wxEVT_KILL_FOCUS )
-        {
-            wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "%sFocus LOST from: %s (name=%s, label=%s)" ),
-                        windowInfo,
-                        window->GetClassInfo()->GetClassName(),
-                        controlName,
-                        controlLabel );
-        }
-
-        aEvent.Skip();  // Allow event to propagate
-    };
-
-    // Recursively attach handler to this window and all children
-    std::function<void( wxWindow* )> attachToTree = [&]( wxWindow* w ) -> void
-    {
-        if( !w )
-            return;
-
-        w->Bind( wxEVT_SET_FOCUS, onFocus );
-        w->Bind( wxEVT_KILL_FOCUS, onFocus );
-
-        // Recursively attach to all child windows
-        for( wxWindow* child : w->GetChildren() )
-            attachToTree( child );
-    };
-
-    attachToTree( aWindow );
-
-    wxLogTrace( wxS( "FOCUS_DEBUG" ), wxS( "Focus debugging enabled for: %s" ), aWindowName );
-}
-
-
 enum PIN_TABLE_COL_ORDER
 {
     COL_NUMBER,
@@ -455,9 +388,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
-
-    // Enable focus debugging to track which element has focus
-    EnableFocusDebugging( this, wxS( "DIALOG_SYMBOL_PROPERTIES" ) );
 
     // wxFormBuilder doesn't include this event...
     m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging, this );

@@ -124,6 +124,22 @@ void KIPLATFORM::UI::GetInfoBarColours( wxColour& aFgColour, wxColour& aBgColour
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     aWindow->SetFocus();
+
+    // On GTK, SetFocus() on a dialog may not be sufficient to receive keyboard events
+    // (like ESC for closing). We need to ensure the window is presented and active.
+    // Find the top-level window and present it to ensure keyboard focus.
+    wxWindow* tlw = aWindow;
+
+    while( tlw && !tlw->IsTopLevel() )
+        tlw = tlw->GetParent();
+
+    if( tlw )
+    {
+        GtkWidget* widget = static_cast<GtkWidget*>( tlw->GetHandle() );
+
+        if( widget && GTK_IS_WINDOW( widget ) )
+            gtk_window_present( GTK_WINDOW( widget ) );
+    }
 }
 
 
