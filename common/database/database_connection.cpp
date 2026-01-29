@@ -233,14 +233,37 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
             nanodbc::catalog::columns columns =
                     catalog.find_columns( NANODBC_TEXT( "" ), tables.table_name() );
 
+            std::set<std::string> columnsInCatalog;
+
             while( columns.next() )
             {
                 std::string columnKey = toUTF8( columns.column_name() );
+                std::string columnKeyLower = boost::to_lower_copy( columnKey );
 
-                if( aColumns.count( boost::to_lower_copy( columnKey ) ) )
+                if( aColumns.count( columnKeyLower ) )
+                {
                     m_columnCache[key][columnKey] = columns.data_type();
+                    columnsInCatalog.insert( columnKeyLower );
+                }
             }
 
+            // Some ODBC drivers (notably SQLite) don't report all columns via SQLColumns.
+            // For example, SQLite's PRAGMA table_info used by its ODBC driver doesn't return
+            // generated columns. Trust the user's configuration and add any requested columns
+            // that weren't found in the catalog. The actual query will fail with a clear error
+            // if the column doesn't exist, which is better than silently ignoring it.
+            for( const std::string& requestedCol : aColumns )
+            {
+                if( !columnsInCatalog.count( requestedCol ) && !requestedCol.empty() )
+                {
+                    wxLogTrace( traceDatabase,
+                                wxT( "CacheTableInfo: column '%s' not found in catalog for table "
+                                     "'%s', adding anyway" ),
+                                requestedCol, key );
+
+                    m_columnCache[key][requestedCol] = SQL_VARCHAR;
+                }
+            }
         }
         catch( nanodbc::database_error& e )
         {
