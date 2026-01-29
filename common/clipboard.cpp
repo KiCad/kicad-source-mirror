@@ -288,3 +288,65 @@ bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData )
 
     return ok;
 }
+
+
+bool AddTransparentImageToClipboardData( wxDataObjectComposite* aData, wxImage aImage )
+{
+    wxCHECK( wxTheClipboard->IsOpened(), false );
+    wxCHECK( aImage.IsOk(), false );
+
+#if defined( __WXGTK__ ) || defined( __WXMSW__ )
+    // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
+    // PNG twice internally (once to count size, once to save). We optimize by
+    // encoding PNG once ourselves with fast compression settings.
+    //
+    // On MSW, most apps don't recognize transparency when using CF_DIB, so provide a PNG.
+
+    // Fast PNG settings optimized for schematic graphics:
+    // - Compression level Z_BEST_SPEED (fast)
+    // - Z_RLE strategy (good for images with runs of identical pixels)
+    // - PNG_FILTER_NONE (skip filtering step)
+
+    aImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );   // Z_BEST_SPEED
+    aImage.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 ); // Z_RLE
+    aImage.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );            // PNG_FILTER_NONE
+
+    wxMemoryOutputStream   memStream;
+    wxBufferedOutputStream bufferedStream( memStream );
+
+    if( aImage.SaveFile( bufferedStream, wxBITMAP_TYPE_PNG ) )
+    {
+        bufferedStream.Close();
+
+        auto stBuf = memStream.GetOutputStreamBuffer();
+#ifdef __WXMSW__
+        // Add empty CF_BITMAP so apps recognize the PNG entry
+        aData->Add( new wxCustomDataObject( wxDataFormat( wxDataFormatId::wxDF_BITMAP ) ) );
+
+        // Add "PNG" entry
+        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDataFormat( "PNG" ) );
+        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
+        aData->Add( pngObj );
+#else // __WXGTK__
+
+        // Handle pre-encoded PNG data (GTK optimization path).
+        // Use wxDF_BITMAP to prevent wx from setting the type to Private
+        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDF_BITMAP );
+        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
+        aData->Add( pngObj );
+#endif
+    }
+    else
+    {
+        wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
+        return false;
+    }
+#else // __WXOSX__
+
+    // On macOS (TIFF), wxBitmapDataObject uses native formats
+    // that don't require PNG encoding. Pass bitmap directly.
+    aData->Add( new wxBitmapDataObject( wxBitmap( aImage ) ) );
+#endif
+
+    return true;
+}

@@ -1695,63 +1695,9 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                 wxImage image = renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
 
                 if( image.IsOk() )
-                {
-#if defined( __WXGTK__ ) || defined( __WXMSW__ )
-                    // On GTK, wxDF_BITMAP maps to "image/png" format. wxBitmapDataObject encodes
-                    // PNG twice internally (once to count size, once to save). We optimize by
-                    // encoding PNG once ourselves with fast compression settings.
-                    // 
-                    // On MSW, most apps don't recognize transparency when using CF_DIB, so provide a PNG.
-
-                    // Fast PNG settings optimized for schematic graphics:
-                    // - Compression level Z_BEST_SPEED (fast)
-                    // - Z_RLE strategy (good for images with runs of identical pixels)
-                    // - PNG_FILTER_NONE (skip filtering step)
-
-                    image.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL, 1 );    // Z_BEST_SPEED
-                    image.SetOption( wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY, 3 ); // Z_RLE
-                    image.SetOption( wxIMAGE_OPTION_PNG_FILTER, 0x08 );            // PNG_FILTER_NONE
-
-                    wxMemoryOutputStream   memStream;
-                    wxBufferedOutputStream bufferedStream( memStream );
-
-                    if( image.SaveFile( bufferedStream, wxBITMAP_TYPE_PNG ) )
-                    {
-                        bufferedStream.Close();
-
-                        auto stBuf = memStream.GetOutputStreamBuffer();
-#ifdef __WXMSW__
-                        //// Add empty CF_BITMAP so apps recognize the PNG entry
-                        data->Add( new wxCustomDataObject( wxDataFormat( wxDataFormatId::wxDF_BITMAP ) ) );
-
-                        //// Add "PNG" entry
-                        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDataFormat( "PNG" ) );
-                        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
-                        data->Add( pngObj );
-#else // __WXGTK__
-
-                        // Handle pre-encoded PNG data (GTK optimization path).
-                        // Use wxDF_BITMAP to prevent wx from setting the type to Private
-                        wxCustomDataObject* pngObj = new wxCustomDataObject( wxDF_BITMAP );
-                        pngObj->SetData( stBuf->GetIntPosition(), stBuf->GetBufferStart() );
-                        data->Add( pngObj );
-#endif
-                    }
-                    else
-                    {
-                        wxLogDebug( wxS( "Failed to encode PNG for clipboard" ) );
-                    }
-#else // __WXOSX__
-
-                    // On macOS (TIFF), wxBitmapDataObject uses native formats
-                    // that don't require PNG encoding. Pass bitmap directly.
-                    data->Add( new wxBitmapDataObject( wxBitmap( image ) ) );
-#endif
-                }
+                    AddTransparentImageToClipboardData( data, image );
                 else
-                {
                     wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
-                }
 
                 // Add SVG data
                 wxMemoryBuffer svgBuffer;
@@ -1764,7 +1710,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                 }
                 else
                 {
-                    wxLogTrace( traceSchPaste, wxS( "Failed to generate SVG for clipboard" ) );
+                    wxLogDebug( wxS( "Failed to generate SVG for clipboard" ) );
                 }
             }
 
@@ -3062,7 +3008,7 @@ int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
     BOX2I pageBBox( VECTOR2I( 0, 0 ), m_frame->GetPageSizeIU() );
 
     // Render the full sheet selection including the worksheet
-    wxBitmap image = renderSelectionToImageForClipboard( m_frame, sheetSelection, pageBBox, true, true );
+    wxImage image = renderSelectionToImageForClipboard( m_frame, sheetSelection, pageBBox, true, true );
 
     if( image.IsOk() )
     {
@@ -3070,9 +3016,11 @@ int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
 
         if( wxTheClipboard->Open() )
         {
-            wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject();
-            clipbrd_data->SetBitmap( wxBitmap( image ) );
-            wxTheClipboard->SetData( clipbrd_data );
+            wxDataObjectComposite* data = new wxDataObjectComposite();
+
+            AddTransparentImageToClipboardData( data, image );
+
+            wxTheClipboard->SetData( data );
             wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
             wxTheClipboard->Close();
         }

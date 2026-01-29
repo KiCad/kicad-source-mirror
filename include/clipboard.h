@@ -29,7 +29,10 @@
 #include <vector>
 #include <wx/buffer.h>
 #include <wx/bitmap.h>
+#include <wx/image.h>
 #include <wx/string.h>
+
+class wxDataObjectComposite;
 
 struct CLIPBOARD_MIME_DATA
 {
@@ -95,3 +98,8 @@ std::string GetClipboardUTF8();
  * If there's a filename there, and it can be loaded as an image, do that.
  */
 std::unique_ptr<wxBitmap> GetImageFromClipboard();
+
+/**
+ * Adds an image to clipboard data in a platform-specific way such that transparency is supported.
+ */
+bool AddTransparentImageToClipboardData( wxDataObjectComposite* data, wxImage aImage );
