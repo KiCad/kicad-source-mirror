@@ -753,6 +753,9 @@ void GERBVIEW_FRAME::SetVisibleLayers( const LSET& aLayerMask )
                                                      gvconfig()->m_Appearance.show_dcodes && v );
         }
     }
+
+    if( gvconfig()->m_Display.m_XORMode )
+        UpdateXORLayers();
 }
 
 
