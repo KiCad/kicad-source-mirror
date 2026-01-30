@@ -93,8 +93,7 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE* aZone, ZONE_SETTINGS
 {
     DIALOG_COPPER_ZONE dlg( aCaller, aZone, aSettings, aConvertSettings );
 
-    // TODO: why does this need QuasiModal?
-    dlg.ShowQuasiModal();
+    dlg.ShowModal();
 
     switch( dlg.GetReturnValue() )
     {
