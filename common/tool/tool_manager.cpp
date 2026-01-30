@@ -33,6 +33,7 @@
 #include <app_monitor.h>
 
 #include <wx/event.h>
+#include <wx/evtloop.h>
 #include <wx/clipbrd.h>
 #include <wx/app.h>
 
@@ -909,6 +910,15 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
 {
+    // Don't open context menus if we're inside a yielding event loop such as a progress dialog.
+    // Opening a popup menu during YieldFor creates a nested modal situation that can leave the
+    // menu stuck and unresponsive, potentially locking up the entire UI on some platforms.
+    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
+    {
+        if( loop->IsYielding() )
+            return;
+    }
+
     for( TOOL_ID toolId : m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
