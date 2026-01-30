@@ -229,7 +229,7 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     default:
-        wxASSERT_MSG( false, "Unhandled shape in PCB_SHAPE::Serialize" );
+        wxASSERT_MSG( false, "Unhandled shape in EDA_SHAPE::Serialize" );
     }
 
     // TODO m_hasSolderMask and m_solderMaskMargin
