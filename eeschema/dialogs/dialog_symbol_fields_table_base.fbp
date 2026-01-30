@@ -1527,7 +1527,7 @@
                           <object class="notebookpage" expanded="false">
                             <property name="bitmap"></property>
                             <property name="label">Edit</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="false">
                               <property name="BottomDockable">1</property>
                               <property name="LeftDockable">1</property>
@@ -2018,7 +2018,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">30,30</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_bRefresh</property>
                                         <property name="pane_border">1</property>
@@ -2093,7 +2093,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">30,30</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_bMenu</property>
                                         <property name="pane_border">1</property>
@@ -2222,7 +2222,7 @@
                           <object class="notebookpage" expanded="false">
                             <property name="bitmap"></property>
                             <property name="label">Export</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="false">
                               <property name="BottomDockable">1</property>
                               <property name="LeftDockable">1</property>
@@ -3361,7 +3361,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">30,30</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_browseButton</property>
                                         <property name="pane_border">1</property>
@@ -3522,7 +3522,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">30,30</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_bRefreshPreview</property>
                                         <property name="pane_border">1</property>
