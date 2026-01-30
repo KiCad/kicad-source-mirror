@@ -400,7 +400,6 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
     try
     {
         statement.prepare( *m_conn, query );
-        statement.bind( 0, aWhere.second.c_str() );
     }
     catch( std::exception& e )
     {
@@ -409,6 +408,24 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
+        Disconnect();
+
+        return false;
+    }
+
+    // Pre-describe parameter as VARCHAR to avoid SQLDescribeParam call. Some ODBC drivers
+    // (Microsoft Access, Excel, CSV) don't implement SQLDescribeParam.
+    try
+    {
+        statement.describe_parameters( { 0 }, { SQL_VARCHAR }, { 255 }, { 0 } );
+        statement.bind( 0, aWhere.second.c_str() );
+    }
+    catch( std::exception& e )
+    {
+        m_lastError = e.what();
+        wxLogTrace( traceDatabase, wxT( "Exception while binding parameter for SelectOne: %s" ),
+                    m_lastError );
+
         Disconnect();
 
         return false;
