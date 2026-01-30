@@ -196,7 +196,7 @@ private:
             }
             else
             {
-                Append( id, name, wxEmptyString );
+                Append( id, SCH_CONNECTION::PrintBusForUI( name ), name );
             }
         }
     }

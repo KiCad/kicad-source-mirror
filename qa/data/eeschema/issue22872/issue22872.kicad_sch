@@ -1,0 +1,54 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "fe3c7ace-9dd2-4b34-9d71-36f84bdbedec")
+	(paper "A4")
+	(lib_symbols)
+	(bus
+		(pts
+			(xy 133.35 100.33) (xy 143.51 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "478543ef-76fc-4162-8b86-6fde989bb1e9")
+	)
+	(bus
+		(pts
+			(xy 100.33 90.17) (xy 133.35 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "712efb6d-5520-4013-bc5f-3296d9488ab9")
+	)
+	(bus
+		(pts
+			(xy 133.35 90.17) (xy 133.35 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "906a0a11-8305-49fd-8c3d-eed6ca3ade17")
+	)
+	(label "\"bus name\"{\"net 1\" \"net 2\"}"
+		(at 115.57 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "64ae7785-9c93-4d71-8d17-c360d96d9dbd")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

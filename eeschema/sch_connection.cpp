@@ -553,6 +553,14 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
             continue;
         }
 
+        // Handle backslash-escaped spaces (display without the backslash)
+        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        {
+            ret += ' ';
+            i++;
+            continue;
+        }
+
         ret += aGroup[i];
 
         if( aGroup[i] == '{' )
@@ -572,6 +580,14 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
         }
         else if( aGroup[i] == '}' )
         {
+            continue;
+        }
+
+        // Handle backslash-escaped spaces (display without the backslash)
+        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        {
+            ret += ' ';
+            i++;
             continue;
         }
 
