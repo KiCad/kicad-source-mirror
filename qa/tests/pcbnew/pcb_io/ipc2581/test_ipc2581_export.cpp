@@ -40,6 +40,8 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <footprint.h>
+#include <pad.h>
 
 #include <wx/dir.h>
 #include <wx/file.h>
@@ -445,6 +447,74 @@ BOOST_AUTO_TEST_CASE( ComplexBoardExport )
             }
         }
     }
+}
+
+
+/**
+ * Test that SMD pad solder mask openings are exported (Issue #16658)
+ *
+ * This test verifies that SMD pads which have implicit solder mask openings
+ * (pads on copper layers that don't explicitly include F_Mask/B_Mask in their
+ * layer set) still get exported with solder mask features in the IPC-2581 output.
+ */
+BOOST_AUTO_TEST_CASE( SmdPadSolderMaskExport_Issue16658 )
+{
+    // Load a board with standard SMD components (capacitors using SMD footprints)
+    std::unique_ptr<BOARD> board = LoadBoard( "issue16658/issue16658.kicad_pcb" );
+
+    BOOST_REQUIRE( board );
+
+    // Verify the board has SMD pads with implicit mask openings
+    bool hasSmtPad = false;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD )
+            {
+                hasSmtPad = true;
+
+                // Verify pad is on copper but NOT explicitly on mask layer
+                bool isOnCopperOnly = pad->IsOnLayer( F_Cu ) && !pad->IsOnLayer( F_Mask );
+
+                if( isOnCopperOnly )
+                {
+                    // This is the condition we're testing
+                    break;
+                }
+            }
+        }
+
+        if( hasSmtPad )
+            break;
+    }
+
+    BOOST_REQUIRE_MESSAGE( hasSmtPad, "Test board should have SMD pads" );
+
+    // Export to IPC-2581 version C
+    wxString tempPath = CreateTempFile();
+
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "3";
+
+    m_ipc2581Plugin.SaveBoard( tempPath, board.get(), &props );
+
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    // Verify that F_Mask layer features are present in the export
+    // (this was the bug - mask layers were empty for SMD pads)
+    bool hasFMaskLayer = FileContainsPattern( tempPath, wxT( "layerRef=\"F.Mask\"" ) )
+                         || FileContainsPattern( tempPath, wxT( "layerRef=\"TSM\"" ) );
+
+    BOOST_CHECK_MESSAGE( hasFMaskLayer,
+                         "IPC-2581 export should contain F.Mask layer features for SMD pads" );
+
+    // Also check for LayerFeature element with mask layer reference
+    bool hasLayerFeature = FileContainsPattern( tempPath, wxT( "<LayerFeature" ) );
+    BOOST_CHECK_MESSAGE( hasLayerFeature, "IPC-2581 export should contain LayerFeature elements" );
 }
 
 

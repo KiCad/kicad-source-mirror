@@ -3267,6 +3267,26 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
                 if( pad->FlashLayer( layer ) )
                     elements[layer][pad->GetNetCode()].push_back( pad );
             }
+
+            // SMD pads have implicit solder mask and paste openings that are not in the layer
+            // set. Add them to the corresponding tech layers if the pad is on a copper layer.
+            if( pad->IsOnLayer( F_Cu ) && pad->FlashLayer( F_Cu ) )
+            {
+                if( !pad->IsOnLayer( F_Mask ) )
+                    elements[F_Mask][pad->GetNetCode()].push_back( pad );
+
+                if( !pad->IsOnLayer( F_Paste ) )
+                    elements[F_Paste][pad->GetNetCode()].push_back( pad );
+            }
+
+            if( pad->IsOnLayer( B_Cu ) && pad->FlashLayer( B_Cu ) )
+            {
+                if( !pad->IsOnLayer( B_Mask ) )
+                    elements[B_Mask][pad->GetNetCode()].push_back( pad );
+
+                if( !pad->IsOnLayer( B_Paste ) )
+                    elements[B_Paste][pad->GetNetCode()].push_back( pad );
+            }
         }
     }
 
