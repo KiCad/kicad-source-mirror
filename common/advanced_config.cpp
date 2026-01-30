@@ -332,9 +332,9 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_ScreenDPI = 91;
 
-    m_EnableUseAuiPerspective = false;
+    m_EnableUseAuiPerspective = true;
     m_HistoryLockStaleTimeout = 300; // 5 minutes default
-    m_ZoneFillIterativeRefill = false;
+    m_ZoneFillIterativeRefill = true;
 
     loadFromConfigFile();
 }

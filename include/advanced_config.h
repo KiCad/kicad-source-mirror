@@ -899,11 +899,10 @@ public:
     /**
      * Enable use Aui Perspective to store/load geometry of main editor frames.
      * the saved prms are position/size of toolbars and some other widgets
-     * Currently (october 12 2025) use only to test this code, nom sutbale for users
      *
      * Setting name: "EnableUseAuiPerspective"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_EnableUseAuiPerspective;
 
@@ -930,7 +929,7 @@ public:
      *
      * Setting name: "ZoneFillIterativeRefill"
      * Valid values: true or false
-     * Default value: false
+     * Default value: true
      */
     bool m_ZoneFillIterativeRefill;
 
