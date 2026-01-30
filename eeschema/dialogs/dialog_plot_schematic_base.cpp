@@ -20,19 +20,19 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerTop;
-	fgSizerTop = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerTop = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgSizerTop->AddGrowableCol( 1 );
 	fgSizerTop->SetFlexibleDirection( wxBOTH );
 	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Schematic variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Design variant:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_variantLabel->Wrap( -1 );
 	fgSizerTop->Add( m_variantLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString m_variantChoiceCtrlChoices;
 	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
 	m_variantChoiceCtrl->SetSelection( 0 );
-	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_outputPathLabel = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPathLabel->Wrap( -1 );
@@ -44,13 +44,13 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_outputPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPath->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the schematic main file location.") );
 
-	bSizerDir->Add( m_outputPath, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
+	bSizerDir->Add( m_outputPath, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizerDir->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerTop->Add( bSizerDir, 0, wxEXPAND, 7 );
+	fgSizerTop->Add( bSizerDir, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( fgSizerTop, 0, wxALL|wxEXPAND, 5 );
