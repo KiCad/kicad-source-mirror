@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-28 09:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-01-30 22:01+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -46873,7 +46873,7 @@ msgstr "Bestückungsdruck durch Platinenkante abgeschnitten"
 
 #: pcbnew/drc/drc_item.cpp:253
 msgid "Silkscreen clearance"
-msgstr "Bestückungsdruck-Freirum"
+msgstr "Bestückungsdruck-Freiraum"
 
 #: pcbnew/drc/drc_item.cpp:257
 msgid "Text height out of range"
