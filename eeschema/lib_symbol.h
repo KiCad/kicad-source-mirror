@@ -82,8 +82,7 @@ struct LIB_SYMBOL_UNIT
 class LIB_SYMBOL : public SYMBOL, public LIB_TREE_ITEM, public EMBEDDED_FILES
 {
 public:
-    LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
-                LEGACY_SYMBOL_LIB* aLibrary = nullptr );
+    LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr, LEGACY_SYMBOL_LIB* aLibrary = nullptr );
 
     LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary = nullptr, bool aCopyEmbeddedFiles = true );
 

@@ -53,8 +53,7 @@
  * @param aCallerName Name of the calling function for logging
  * @return The root symbol, or the input symbol if a cycle is detected or no parent exists
  */
-static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol,
-                                                       const char* aCallerName )
+static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol, const char* aCallerName )
 {
     std::set<const LIB_SYMBOL*> visited;
     visited.insert( aSymbol );
@@ -78,10 +77,11 @@ static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol,
             chain += wxT( " -> " ) + parent->GetName() + wxT( " (CYCLE)" );
 
             wxLogTrace( traceSymbolInheritance,
-                        wxT( "%s: Circular inheritance detected in symbol '%s' (lib: %s). "
-                             "Chain: %s" ),
-                        aCallerName, aSymbol->GetName(),
-                        aSymbol->GetLibId().GetLibNickname().wx_str(), chain );
+                        wxT( "%s: Circular inheritance detected in symbol '%s' (lib: %s). Chain: %s" ),
+                        aCallerName,
+                        aSymbol->GetName(),
+                        aSymbol->GetLibId().GetLibNickname().wx_str(),
+                        chain );
 
             // Return current (last valid symbol before cycle)
             return current;

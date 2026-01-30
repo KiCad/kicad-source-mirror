@@ -62,32 +62,21 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
     case SCH_DIRECTIVE_LABEL_T: return std::make_unique<SCH_DIRECTIVE_LABEL>();
     case SCH_FIELD_T:           return std::make_unique<SCH_FIELD>( parentSchItem );
     case SCH_GROUP_T:           return std::make_unique<SCH_GROUP>();
-
-    case SCH_SYMBOL_T:
-    {
-        // TODO: constructing currently requires more than just a "container" LIB_SYMBOL
-        return nullptr;
-    }
+    case SCH_SYMBOL_T:          return std::make_unique<SCH_SYMBOL>();
+    case LIB_SYMBOL_T:          return std::make_unique<LIB_SYMBOL>( wxEmptyString );
+    case SCH_SHEET_T:           return std::make_unique<SCH_SHEET>();
 
     case SCH_SHEET_PIN_T:
-    {
         if( aContainer && aContainer->Type() == SCH_SHEET_T )
             return std::make_unique<SCH_SHEET_PIN>( static_cast<SCH_SHEET*>( aContainer ) );
 
         return nullptr;
-    }
-
-    case SCH_SHEET_T:           return std::make_unique<SCH_SHEET>();
 
     case SCH_PIN_T:
-    {
         if( aContainer && aContainer->Type() == LIB_SYMBOL_T )
             return std::make_unique<SCH_PIN>( static_cast<LIB_SYMBOL*>( aContainer ) );
 
         return nullptr;
-    }
-
-    case LIB_SYMBOL_T:          return nullptr; // TODO: ctor currently requires non-null name
 
     default:
         return nullptr;
