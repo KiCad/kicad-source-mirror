@@ -711,7 +711,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
         pad->SetSize( PADSTACK::ALL_LAYERS, ScaleSize( size ) );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
     }
-    else if( padSh == wxS( "POLY" ) )
+    else if( padSh == wxS( "POLY" ) || padSh == wxS( "POLYGON" ) )
     {
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
         pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );

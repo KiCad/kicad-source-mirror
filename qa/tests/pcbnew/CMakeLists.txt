@@ -103,6 +103,8 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/kicad_sexpr/test_kicad_sexpr.cpp
 
+    pcb_io/easyedapro/test_easyedapro_import.cpp
+
     pcb_io/fabmaster/test_fabmaster_import.cpp
 
     pcb_io/ipc2581/test_ipc2581_export.cpp
