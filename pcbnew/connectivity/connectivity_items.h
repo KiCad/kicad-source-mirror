@@ -298,7 +298,11 @@ public:
             m_subpolyIndex( aSubpolyIndex ),
             m_layer( aLayer )
     {
-        m_fillPoly = aParent->GetFilledPolysList( aLayer );
+        std::shared_ptr<SHAPE_POLY_SET> fillPoly = aParent->GetFilledPolysList( aLayer );
+
+        if( fillPoly && aSubpolyIndex < fillPoly->OutlineCount() )
+            m_outline = fillPoly->Outline( aSubpolyIndex );
+
         SetLayers( aLayer, aLayer );
     }
 
@@ -307,23 +311,34 @@ public:
         if( m_zone->IsTeardropArea() )
             return;
 
+        m_triangles.clear();
         m_rTree.RemoveAll();
 
-        for( unsigned int ii = 0; ii < m_fillPoly->TriangulatedPolyCount(); ++ii )
+        std::shared_ptr<SHAPE_POLY_SET> fillPoly = m_zone->GetFilledPolysList( m_layer );
+
+        if( !fillPoly )
+            return;
+
+        for( unsigned int ii = 0; ii < fillPoly->TriangulatedPolyCount(); ++ii )
         {
-            const auto* triangleSet = m_fillPoly->TriangulatedPolygon( ii );
+            const auto* triangleSet = fillPoly->TriangulatedPolygon( ii );
 
             if( triangleSet->GetSourceOutlineIndex() != m_subpolyIndex )
                 continue;
 
             for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triangleSet->Triangles() )
             {
-                BOX2I     bbox = tri.BBox();
-                const int mmin[2] = { bbox.GetX(), bbox.GetY() };
-                const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
-
-                m_rTree.Insert( mmin, mmax, &tri );
+                m_triangles.push_back( tri );
             }
+        }
+
+        for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : m_triangles )
+        {
+            BOX2I     bbox = tri.BBox();
+            const int mmin[2] = { bbox.GetX(), bbox.GetY() };
+            const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+
+            m_rTree.Insert( mmin, mmax, &tri );
         }
     }
 
@@ -333,11 +348,11 @@ public:
 
     bool ContainsPoint( const VECTOR2I& p ) const
     {
-        if( !HasValidOutline() )
+        if( m_outline.PointCount() == 0 )
             return false;
 
         if( m_zone->IsTeardropArea() )
-            return m_fillPoly->Outline( m_subpolyIndex ).Collide( p ) ;
+            return m_outline.Collide( p );
 
         int  min[2] = { p.x, p.y };
         int  max[2] = { p.x, p.y };
@@ -367,29 +382,31 @@ public:
 
     bool HasValidOutline() const
     {
-        return m_fillPoly && m_subpolyIndex < m_fillPoly->OutlineCount();
+        return m_outline.PointCount() > 0;
     }
 
     const SHAPE_LINE_CHAIN& GetOutline() const
     {
-        wxASSERT( HasValidOutline() );
+        return m_outline;
+    }
 
-        if( !HasValidOutline() )
-        {
-            static SHAPE_LINE_CHAIN empty;
-            return empty;
-        }
+    int OutlinePointCount() const
+    {
+        return m_outline.PointCount();
+    }
 
-        return m_fillPoly->Outline( m_subpolyIndex );
+    const VECTOR2I& OutlinePoint( int aIndex ) const
+    {
+        return m_outline.CPoint( aIndex );
     }
 
     bool Collide( SHAPE* aRefShape ) const
     {
-        if( !HasValidOutline() )
+        if( m_outline.PointCount() == 0 )
             return false;
 
         if( m_zone->IsTeardropArea() )
-            return m_fillPoly->Collide( aRefShape );
+            return aRefShape->Collide( &m_outline, 0 );
 
         BOX2I bbox = aRefShape->BBox();
         int  min[2] = { bbox.GetX(), bbox.GetY() };
@@ -419,7 +436,8 @@ private:
     ZONE*                               m_zone;
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
-    std::shared_ptr<SHAPE_POLY_SET>     m_fillPoly;
+    SHAPE_LINE_CHAIN                    m_outline;       ///< Cached copy of the zone outline
+    std::vector<SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI> m_triangles;  ///< Owned triangle copies
     RTree<const SHAPE*, int, 2, double> m_rTree;
 };
 

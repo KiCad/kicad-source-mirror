@@ -817,8 +817,7 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
 
 void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB )
 {
-    // Zone fill data can be modified (cleared or replaced) while CN_ZONE_LAYERs still reference
-    // it. Check that the outline data is still valid before accessing.
+    // CN_ZONE_LAYER now caches its own copy of the outline, so we just check if it's non-empty.
     if( !aZoneLayerA->HasValidOutline() || !aZoneLayerB->HasValidOutline() )
         return;
 
@@ -833,14 +832,16 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
     if( !boxA.Intersects( boxB ) )
         return;
 
-    const SHAPE_LINE_CHAIN& outline = aZoneLayerA->GetOutline();
+    const SHAPE_LINE_CHAIN& outlineA = aZoneLayerA->GetOutline();
 
-    for( int i = 0; i < outline.PointCount(); i++ )
+    for( int i = 0; i < outlineA.PointCount(); i++ )
     {
-        if( !boxB.Contains( outline.CPoint( i ) ) )
+        const VECTOR2I& pt = outlineA.CPoint( i );
+
+        if( !boxB.Contains( pt ) )
             continue;
 
-        if( aZoneLayerB->ContainsPoint( outline.CPoint( i ) ) )
+        if( aZoneLayerB->ContainsPoint( pt ) )
         {
             aZoneLayerA->Connect( aZoneLayerB );
             aZoneLayerB->Connect( aZoneLayerA );
@@ -848,14 +849,16 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
         }
     }
 
-    const SHAPE_LINE_CHAIN& outline2 = aZoneLayerB->GetOutline();
+    const SHAPE_LINE_CHAIN& outlineB = aZoneLayerB->GetOutline();
 
-    for( int i = 0; i < outline2.PointCount(); i++ )
+    for( int i = 0; i < outlineB.PointCount(); i++ )
     {
-        if( !boxA.Contains( outline2.CPoint( i ) ) )
+        const VECTOR2I& pt = outlineB.CPoint( i );
+
+        if( !boxA.Contains( pt ) )
             continue;
 
-        if( aZoneLayerA->ContainsPoint( outline2.CPoint( i ) ) )
+        if( aZoneLayerA->ContainsPoint( pt ) )
         {
             aZoneLayerA->Connect( aZoneLayerB );
             aZoneLayerB->Connect( aZoneLayerA );
