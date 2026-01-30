@@ -100,6 +100,31 @@ std::string GetClipboardUTF8();
 std::unique_ptr<wxBitmap> GetImageFromClipboard();
 
 /**
- * Adds an image to clipboard data in a platform-specific way such that transparency is supported.
+ * Encode an image to PNG format with fast compression settings optimized for clipboard use.
+ *
+ * @param aImage Source image to encode
+ * @param aOutput Buffer to receive PNG data
+ * @return true on success
  */
-bool AddTransparentImageToClipboardData( wxDataObjectComposite* data, wxImage aImage );
+bool EncodeImageToPng( const wxImage& aImage, wxMemoryBuffer& aOutput );
+
+/**
+ * Adds pre-encoded PNG data to clipboard in a platform-specific way.
+ *
+ * On Windows: Adds empty CF_BITMAP marker and "PNG" format entry
+ * On GTK: Adds as wxDF_BITMAP (which maps to image/png)
+ * On macOS: Falls back to wxBitmapDataObject with the provided image
+ *
+ * @param aData Clipboard composite to add PNG to
+ * @param aPngData Pre-encoded PNG bytes
+ * @param aFallbackImage Optional image for macOS fallback (required on macOS)
+ * @return true on success
+ */
+bool AddPngToClipboardData( wxDataObjectComposite* aData, const wxMemoryBuffer& aPngData,
+                            const wxImage* aFallbackImage = nullptr );
+
+/**
+ * Adds an image to clipboard data in a platform-specific way such that transparency is supported.
+ * Convenience function that encodes PNG internally.
+ */
+bool AddTransparentImageToClipboardData( wxDataObjectComposite* aData, wxImage aImage );

@@ -25,6 +25,7 @@
 #include "tools/sch_editor_control.h"
 
 #include <clipboard.h>
+#include <core/base64.h>
 #include <algorithm>
 #include <chrono>
 #include <confirm.h>
@@ -171,6 +172,28 @@ BOX2I expandedSelectionBox( const SCH_SELECTION& aSelection )
                       bbox.GetHeight() * clipboardBboxInflation );
 
     return bbox;
+}
+
+
+bool generateHtmlFromPngData( const wxMemoryBuffer& aPngData, wxMemoryBuffer& aHtmlBuffer )
+{
+    if( aPngData.GetDataLen() == 0 )
+        return false;
+
+    std::vector<uint8_t> pngVec( static_cast<const uint8_t*>( aPngData.GetData() ),
+                                 static_cast<const uint8_t*>( aPngData.GetData() ) + aPngData.GetDataLen() );
+
+    std::vector<uint8_t> base64Data;
+    base64::encode( pngVec, base64Data );
+
+    std::string html = "<img src=\"data:image/png;base64,";
+    html.append( reinterpret_cast<const char*>( base64Data.data() ), base64Data.size() );
+    html.append( "\" />" );
+
+    aHtmlBuffer.SetDataLen( 0 );
+    aHtmlBuffer.AppendData( html.data(), html.size() );
+
+    return true;
 }
 
 
@@ -1691,13 +1714,28 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
 
             if( selectionBox.GetWidth() > 0 && selectionBox.GetHeight() > 0 )
             {
-                // Add bitmap data
+                // Add bitmap data (encoded once, used for both PNG clipboard and HTML)
                 wxImage image = renderSelectionToImageForClipboard( m_frame, selection, selectionBox, true, false );
+                wxMemoryBuffer pngBuffer;
 
-                if( image.IsOk() )
-                    AddTransparentImageToClipboardData( data, image );
+                if( image.IsOk() && EncodeImageToPng( image, pngBuffer ) )
+                {
+                    AddPngToClipboardData( data, pngBuffer, &image );
+
+                    // Add HTML with embedded base64 PNG for pasting into documents
+                    wxMemoryBuffer htmlBuffer;
+
+                    if( generateHtmlFromPngData( pngBuffer, htmlBuffer ) )
+                    {
+                        wxCustomDataObject* htmlObj = new wxCustomDataObject( wxDF_HTML );
+                        htmlObj->SetData( htmlBuffer.GetDataLen(), htmlBuffer.GetData() );
+                        data->Add( htmlObj );
+                    }
+                }
                 else
+                {
                     wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
+                }
 
                 // Add SVG data
                 wxMemoryBuffer svgBuffer;
