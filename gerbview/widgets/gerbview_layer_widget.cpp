@@ -242,7 +242,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
                 loc_visible = true;
 
             cb->SetValue( loc_visible );
-            visibleLayers[ row ] = loc_visible;
+            visibleLayers[ layer ] = loc_visible;
         }
 
         m_frame->SetVisibleLayers( visibleLayers );

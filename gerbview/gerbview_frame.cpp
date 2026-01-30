@@ -631,10 +631,19 @@ void GERBVIEW_FRAME::UpdateXORLayers()
         }
     }
 
-    //We don't want to diff the last visible layer onto the background, etc.
+    // We don't want to diff the last visible layer onto the background, etc.
+    // In XOR mode, we must keep TARGET_NONCACHED for all layers including the last one.
+    // This is because OpenGL's cached items are flushed at the end of the frame, which
+    // occurs after XOR compositing. If we used TARGET_CACHED for the last layer, its
+    // items would be drawn on top of the XOR result instead of being included in the
+    // XOR calculation.
     if( lastVisibleLayer != -1 )
     {
-        view->SetLayerTarget( GERBER_DRAW_LAYER( lastVisibleLayer ), target );
+        if( gvconfig()->m_Display.m_XORMode )
+            view->SetLayerTarget( GERBER_DRAW_LAYER( lastVisibleLayer ), KIGFX::TARGET_NONCACHED );
+        else
+            view->SetLayerTarget( GERBER_DRAW_LAYER( lastVisibleLayer ), target );
+
         view->SetLayerDiff( GERBER_DRAW_LAYER( lastVisibleLayer ), false );
     }
 
