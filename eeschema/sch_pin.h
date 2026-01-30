@@ -206,6 +206,11 @@ public:
      */
     bool IsGlobalPower() const;
 
+    /**
+     * @return true if the pin has a valid parent symbol and that symbol is a power symbol
+     */
+    bool IsOnPowerSymbol() const;
+
     int GetPenWidth() const override { return 0; }
 
     void Move( const VECTOR2I& aOffset ) override;

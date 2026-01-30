@@ -337,6 +337,15 @@ bool SCH_PIN::IsGlobalPower() const
 }
 
 
+bool SCH_PIN::IsOnPowerSymbol() const
+{
+    if( !m_libPin || !m_libPin->GetParentSymbol() )
+        return false;
+
+    return GetLibPin()->GetParentSymbol()->IsPower();
+}
+
+
 bool SCH_PIN::IsVisible() const
 {
     if( !m_hidden.has_value() )
@@ -1627,7 +1636,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     // with legacy global power pins on non-power symbols
     if( IsGlobalPower() )
     {
-        if( GetLibPin()->GetParentSymbol()->IsPower() )
+        if( IsOnPowerSymbol() )
         {
             return EscapeString( symbol->GetValue( true, &aPath, false ), CTX_NETNAME );
         }
