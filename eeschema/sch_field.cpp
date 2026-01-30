@@ -1035,7 +1035,7 @@ void SCH_FIELD::SetText( const wxString& aText )
 
 void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, const wxString& aVariantName )
 {
-    wxCHECK( aPath && m_parent, /* void */ );
+    wxCHECK( m_parent, /* void */ );
 
     if( m_isGeneratedField )
         return;
