@@ -95,8 +95,8 @@ void SPNAV_VIEWER_PLUGIN::OnRotate( double rx, double ry, double rz )
 
         if( m_camera )
         {
-            m_camera->RotateX( ry * scale );
-            m_camera->RotateY( rx * scale );
+            m_camera->RotateX( rx * scale );
+            m_camera->RotateY( -ry * scale );
             m_camera->RotateZ( rz * scale );
             m_canvas->Request_refresh();
         }
