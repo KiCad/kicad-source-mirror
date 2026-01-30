@@ -209,6 +209,12 @@ public:
 
     PCB_LAYER_ID GetLayer() const override
     {
+        for( BOARD_ITEM* item : GetBoardItems() )
+        {
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                return track->GetLayer();
+        }
+
         return PCB_GENERATOR::GetLayer();
     }
 

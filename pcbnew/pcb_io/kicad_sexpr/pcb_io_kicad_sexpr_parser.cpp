@@ -1592,6 +1592,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
                 if( item && item->GetParentFootprint() == group->GetParentFootprint() )
                     group->AddItem( item );
             }
+
+            // For generators, set the layer to match the layer of the contained tracks
+            if( PCB_GENERATOR* gen = dynamic_cast<PCB_GENERATOR*>( group ) )
+            {
+                for( BOARD_ITEM* item : gen->GetBoardItems() )
+                {
+                    if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                    {
+                        gen->SetLayer( track->GetLayer() );
+                        break;
+                    }
+                }
+            }
         }
     }
 
