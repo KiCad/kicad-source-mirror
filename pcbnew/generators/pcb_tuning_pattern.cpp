@@ -364,6 +364,17 @@ public:
         RunOnChildren( [aLayer]( BOARD_ITEM* item ) { item->SetLayer( aLayer ); } );
     }
 
+    PCB_LAYER_ID GetLayer() const override
+    {
+        for( BOARD_ITEM* item : m_items )
+        {
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
+                return track->GetLayer();
+        }
+
+        return PCB_GENERATOR::GetLayer();
+    }
+
     const BOX2I GetBoundingBox() const override
     {
         return getOutline().BBox();
