@@ -257,8 +257,9 @@ void DIALOG_CREATE_ARRAY::OnSelectCenterButton( wxCommandEvent& event )
     PCB_PICKER_TOOL* pickerTool = toolMgr->GetTool<PCB_PICKER_TOOL>();
     wxCHECK( pickerTool, /* void */ );
 
-    // Hide, but do not close, the dialog
-    Hide();
+    // Keep the dialog visible, but disable while picking.
+    // Hiding the dialog on GTK causes the controls to not accept their new values
+    Disable();
 
     if( event.GetEventObject() == m_btnSelectCenterItem )
     {
@@ -325,7 +326,7 @@ void DIALOG_CREATE_ARRAY::UpdatePickedItem( const EDA_ITEM* aItem )
         m_vCentre.SetValue( aItem->GetPosition().y );
     }
 
-    Show( true );
+    Enable( true );
 }
 
 
@@ -337,7 +338,7 @@ void DIALOG_CREATE_ARRAY::UpdatePickedPoint( const std::optional<VECTOR2I>& aPoi
         m_vCentre.SetValue( aPoint->y );
     }
 
-    Show( true );
+    Enable( true );
 }
 
 
