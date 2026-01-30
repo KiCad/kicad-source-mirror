@@ -89,20 +89,39 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 
 void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-    menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR,
-                 _( "Edit Options" ),
-                 _( "Edit options for this library entry" ) );
-
-    menu.AppendSeparator();
-
-    bool            showActivate = false;
-    bool            showDeactivate = false;
-    bool            showSetVisible = false;
-    bool            showUnsetVisible = false;
-    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
-
     // Ensure selection parameters are up to date
     getSelectedArea();
+
+    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
+    const LIBRARY_TABLE_ROW&   firstRow = tbl->at( m_sel_row_start );
+
+    bool showSettings = false;
+    bool showOpen = false;
+    if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
+    {
+        wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
+
+        if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
+        {
+            showSettings = true;
+            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS, _( "Edit Settings..." ) );
+        }
+    }
+
+    if( firstRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+    {
+        showOpen = true;
+        menu.Append( LIB_TABLE_GRID_TRICKS_OPEN_TABLE, _( "Open Library Table" ) );
+    }
+
+    if( showSettings || showOpen )
+        menu.AppendSeparator();
+
+    bool showActivate = false;
+    bool showDeactivate = false;
+    bool showSetVisible = false;
+    bool showUnsetVisible = false;
+    bool showOptions = false;
 
     for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
     {
@@ -135,29 +154,14 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
             menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset Visible Flag" ) );
     }
 
-    bool showSettings = false;
-    bool showOpen = false;
-
-    if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
+    if( m_sel_row_count == 1 && firstRow.Type() != LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
     {
-        wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
-
-        if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
-        {
-            showSettings = true;
-            menu.Append( LIB_TABLE_GRID_TRICKS_OPEN_TABLE, _( "Edit Settings" ) );
-        }
-
-        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( nickname );
-
-        if( row.has_value() && row.value()->Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
-        {
-            showOpen = true;
-            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS, _( "Open Library Table" ) );
-        }
+        showOptions = true;
+        menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR, _( "Edit Options..." ),
+                     _( "Edit options for this library entry" ) );
     }
 
-    if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings || showOpen )
+    if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showOptions )
         menu.AppendSeparator();
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
@@ -197,12 +201,10 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     }
     else if( menu_id == LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS )
     {
-        // TODO(JE) library tables
-#if 0
-        LIB_TABLE_ROW* row = tbl->At( m_sel_row_start );
-        row->Refresh();
-        row->ShowSettingsDialog( m_grid->GetParent() );
-#endif
+        LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter();
+        LIBRARY_TABLE_ROW&       row = tbl->At( m_sel_row_start );
+
+        adapter->ShowConfigurationDialog( row.Nickname(), wxGetTopLevelParent( m_grid ) );
     }
     else if( menu_id == LIB_TABLE_GRID_TRICKS_OPEN_TABLE )
     {
