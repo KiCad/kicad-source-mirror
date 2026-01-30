@@ -600,6 +600,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
     static const wxString c_valueFieldName( wxS( "Value" ) );
     static const wxString c_datasheetFieldName( wxS( "Datasheet" ) );
+    static const wxString c_footprintFieldName( wxS( "Footprint" ) );
 
     for( const DATABASE_FIELD_MAPPING& mapping : aTable.fields )
     {
@@ -609,6 +610,11 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                         mapping.column );
             continue;
         }
+
+        // Skip footprint field if it maps to the footprints column, since that column is
+        // already processed above with tokenization for semicolon-separated multiple footprints.
+        if( mapping.name_wx == c_footprintFieldName && mapping.column == aTable.footprints_col )
+            continue;
 
         std::string strValue;
 
