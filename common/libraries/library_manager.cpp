@@ -631,6 +631,10 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
                                 if( !m_childTables.contains( row.URI() ) )
                                     continue;
 
+                                // Don't include libraries from disabled or hidden nested tables
+                                if( row.Disabled() || row.Hidden() )
+                                    continue;
+
                                 processTable( m_childTables.at( row.URI() ) );
                             }
                             else

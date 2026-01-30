@@ -89,6 +89,8 @@ BOOST_AUTO_TEST_CASE( ParseAndConstruct )
         { .filename = "sym-lib-table", .expected_rows = 224 },
         { .filename = "fp-lib-table", .expected_rows = 146 },
         { .filename = "nested-symbols", .expected_rows = 6 },
+        { .filename = "nested-disabled", .expected_rows = 4 },
+        { .filename = "nested-hidden", .expected_rows = 4 },
         { .filename = "cycle", .expected_rows = 2 },
         { .filename = "sym-hand-edited", .expected_rows = 2, .check_formatted = false },
         { .filename = "corrupted", .expected_error = "Syntax error at line 6, column 9" },
@@ -153,5 +155,65 @@ BOOST_AUTO_TEST_CASE( Manager )
     BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ).size() == 3 );
     BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT ).size() == 146 );
 }
+
+
+BOOST_AUTO_TEST_CASE( NestedTablesDisabledHidden )
+{
+    // Test that disabled and hidden nested library table rows are parsed correctly
+    // This is a regression test for https://gitlab.com/kicad/code/kicad/-/issues/22784
+    // Note that full end-to-end testing requires the library manager to process the tables,
+    // but the parse test verifies the flag is correctly read from disk.
+
+    wxFileName fn( KI_TEST::GetTestDataRootDir(), wxEmptyString );
+    fn.AppendDir( "libraries" );
+
+    // Test with the disabled nested table
+    fn.SetName( "nested-disabled" );
+    LIBRARY_TABLE disabledTable( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+    BOOST_REQUIRE( disabledTable.IsOk() );
+    BOOST_REQUIRE_MESSAGE( disabledTable.Rows().size() == 4,
+                           wxString::Format( "Expected 4 rows but got %zu",
+                                             disabledTable.Rows().size() ) );
+
+    // Verify the disabled flag is parsed correctly on the nested table row
+    bool foundDisabledRow = false;
+
+    for( const LIBRARY_TABLE_ROW& row : disabledTable.Rows() )
+    {
+        if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        {
+            BOOST_REQUIRE_MESSAGE( row.Disabled(),
+                                   "Nested table row should have disabled flag set" );
+            foundDisabledRow = true;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( foundDisabledRow,
+                           "Disabled nested table row not found in parsed table" );
+
+    // Test hidden nested table has same behavior
+    fn.SetName( "nested-hidden" );
+    LIBRARY_TABLE hiddenTable( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+    BOOST_REQUIRE( hiddenTable.IsOk() );
+    BOOST_REQUIRE_MESSAGE( hiddenTable.Rows().size() == 4,
+                           wxString::Format( "Expected 4 rows but got %zu",
+                                             hiddenTable.Rows().size() ) );
+
+    bool foundHiddenRow = false;
+
+    for( const LIBRARY_TABLE_ROW& row : hiddenTable.Rows() )
+    {
+        if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+        {
+            BOOST_REQUIRE_MESSAGE( row.Hidden(),
+                                   "Nested table row should have hidden flag set" );
+            foundHiddenRow = true;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( foundHiddenRow,
+                           "Hidden nested table row not found in parsed table" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
