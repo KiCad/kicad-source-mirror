@@ -20,6 +20,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <project/net_settings.h>
+#include <sch_connection.h>
 
 
 BOOST_AUTO_TEST_SUITE( BusParsing )
@@ -349,5 +350,42 @@ BOOST_AUTO_TEST_CASE( ForEachBusMemberExpandsOverbarMembersInGroup )
     BOOST_CHECK_EQUAL_COLLECTIONS( expandedMembers.begin(), expandedMembers.end(),
                                    expected.begin(), expected.end() );
 }
+
+
+BOOST_AUTO_TEST_CASE( PrintBusForUIUnescapesBackslashSpaces )
+{
+    // Test that PrintBusForUI converts backslash-escaped spaces to regular spaces (issue #22872)
+
+    // Simple case with backslash-escaped space
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "net\\ name" ) ),
+                       wxString( wxS( "net name" ) ) );
+
+    // Bus group member with escaped space in prefix
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "bus\\ name.net\\ 1" ) ),
+                       wxString( wxS( "bus name.net 1" ) ) );
+
+    // Multiple escaped spaces
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "my\\ net\\ name" ) ),
+                       wxString( wxS( "my net name" ) ) );
+
+    // No escaped spaces (should pass through unchanged)
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "simple_net" ) ),
+                       wxString( wxS( "simple_net" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrintBusForUIHandlesMixedFormatting )
+{
+    // Test that PrintBusForUI handles both super/sub/overbar formatting and escaped spaces
+
+    // Overbar formatting only
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "~{reset}" ) ),
+                       wxString( wxS( "reset" ) ) );
+
+    // Both overbar and escaped space
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "my\\ ~{signal}" ) ),
+                       wxString( wxS( "my signal" ) ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
