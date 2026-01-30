@@ -2991,10 +2991,10 @@ void PCB_EDIT_FRAME::ProjectChanged()
     if( GetBoard() )
     {
         Kiway().LocalHistory().RegisterSaver( GetBoard(),
-            [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
-            {
-                GetBoard()->SaveToHistory( aProjectPath, aFiles );
-            } );
+                [this]( const wxString& aProjectPath, std::vector<wxString>& aFiles )
+                {
+                    GetBoard()->SaveToHistory( aProjectPath, aFiles );
+                } );
     }
 }
 
