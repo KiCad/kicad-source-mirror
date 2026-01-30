@@ -1346,6 +1346,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
         else if( aGroup[i] == '}' )
         {
             braceNesting--;
+            continue;
         }
 
         // Handle backslash-escaped spaces

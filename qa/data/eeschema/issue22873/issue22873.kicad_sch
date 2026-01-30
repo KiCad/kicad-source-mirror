@@ -1,0 +1,158 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "fe3c7ace-9dd2-4b34-9d71-36f84bdbedec")
+	(paper "A4")
+	(lib_symbols)
+	(text "Unfolded nets from these buses are bus_label}#"
+		(exclude_from_sim no)
+		(at 57.912 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+		)
+		(uuid "18678eac-fa38-4f0a-b833-197d846880ec")
+	)
+	(text "Unfolded nets from these buses are bus_label}.net#"
+		(exclude_from_sim no)
+		(at 137.668 124.714 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+				(bold yes)
+			)
+		)
+		(uuid "ceae9014-f8d3-4196-a968-261a0346ef25")
+	)
+	(bus
+		(pts
+			(xy 31.75 160.02) (xy 85.09 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0431745b-db0f-476f-97dd-9d7117425f70")
+	)
+	(bus
+		(pts
+			(xy 31.75 134.62) (xy 85.09 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "219d934d-ba66-4aab-80de-ec8984f8c036")
+	)
+	(bus
+		(pts
+			(xy 31.75 148.59) (xy 85.09 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "262f47a4-4d9d-4fb5-b0b6-40ad32b7711b")
+	)
+	(bus
+		(pts
+			(xy 111.76 133.35) (xy 165.1 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39f78f11-c3d9-4953-a2ab-4c53b7376394")
+	)
+	(bus
+		(pts
+			(xy 111.76 147.32) (xy 165.1 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e1671ba-0503-4657-ba16-688c931482b3")
+	)
+	(bus
+		(pts
+			(xy 111.76 158.75) (xy 165.1 158.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dfa1abcc-6279-4995-9fce-c608da56dee1")
+	)
+	(label "bus__{label}{net1 net2}"
+		(at 133.35 158.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3b5b5182-e653-439f-a6cd-af1bde300339")
+	)
+	(label "bus_^{label}{net1 net2}"
+		(at 133.35 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "46efdf54-e4d7-400f-9926-4d53798370d1")
+	)
+	(label "bus_^{label}[0..5]"
+		(at 53.34 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "65783447-d701-428b-8ab6-f9badf0d82dc")
+	)
+	(label "bus_~{label}{net1 net2}"
+		(at 133.35 133.35 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d01d5ed1-5c5d-422f-9689-5e16939ada15")
+	)
+	(label "bus__{label}[0..5]"
+		(at 53.34 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d638ae84-46bf-4330-9d7a-407ef4d928e8")
+	)
+	(label "bus_~{label}[0..5]"
+		(at 53.34 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e758cd47-59b7-42a0-83e7-7af8a4df324f")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
