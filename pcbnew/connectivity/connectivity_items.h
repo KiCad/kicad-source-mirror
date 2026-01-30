@@ -311,7 +311,7 @@ public:
         if( m_zone->IsTeardropArea() )
             return;
 
-        m_triangles.clear();
+        m_triangulatedPolys.clear();
         m_rTree.RemoveAll();
 
         std::shared_ptr<SHAPE_POLY_SET> fillPoly = m_zone->GetFilledPolysList( m_layer );
@@ -326,19 +326,23 @@ public:
             if( triangleSet->GetSourceOutlineIndex() != m_subpolyIndex )
                 continue;
 
-            for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triangleSet->Triangles() )
-            {
-                m_triangles.push_back( tri );
-            }
+            // Deep copy the triangulated polygon. The copy constructor copies the vertex storage
+            // and updates all TRI parent pointers to reference our owned copy. This ensures the
+            // triangles remain valid even if the zone is refilled on another thread.
+            m_triangulatedPolys.push_back(
+                    std::make_unique<SHAPE_POLY_SET::TRIANGULATED_POLYGON>( *triangleSet ) );
         }
 
-        for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : m_triangles )
+        for( const auto& triPoly : m_triangulatedPolys )
         {
-            BOX2I     bbox = tri.BBox();
-            const int mmin[2] = { bbox.GetX(), bbox.GetY() };
-            const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+            for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triPoly->Triangles() )
+            {
+                BOX2I     bbox = tri.BBox();
+                const int mmin[2] = { bbox.GetX(), bbox.GetY() };
+                const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
 
-            m_rTree.Insert( mmin, mmax, &tri );
+                m_rTree.Insert( mmin, mmax, &tri );
+            }
         }
     }
 
@@ -437,7 +441,8 @@ private:
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
     SHAPE_LINE_CHAIN                    m_outline;       ///< Cached copy of the zone outline
-    std::vector<SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI> m_triangles;  ///< Owned triangle copies
+    ///< Owned deep copies of triangulated polygons (includes vertex storage that TRI references)
+    std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_triangulatedPolys;
     RTree<const SHAPE*, int, 2, double> m_rTree;
 };
 
