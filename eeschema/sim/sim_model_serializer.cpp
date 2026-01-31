@@ -219,8 +219,6 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
         {
             paramName = node->string();
         }
-        // TODO: Do something with number<SIM_VALUE::TYPE_INT, ...>.
-        // It doesn't seem too useful?
         else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedStringContent>()
             || node->is_type<SIM_MODEL_SERIALIZER_PARSER::unquotedString>() )
         {
