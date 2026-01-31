@@ -161,6 +161,10 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     m_staticTitle->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
     m_staticDescription->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
 
+#if wxCHECK_VERSION( 3, 3, 2 )
+    m_staticDescription->SetWindowStyle( wxST_WRAP );
+#endif
+
     // Bind size event for dynamic text wrapping
     Bind( wxEVT_SIZE, &TEMPLATE_WIDGET::OnSize, this );
 
@@ -241,8 +245,8 @@ void TEMPLATE_WIDGET::SetDescription( const wxString& aDescription )
     // Truncate long descriptions to approximately 3 lines worth
     wxString displayDesc = aDescription;
 
-    if( displayDesc.Length() > 180 )
-        displayDesc = displayDesc.Left( 180 ) + wxS( "..." );
+    if( displayDesc.Length() > 120 )
+        displayDesc = displayDesc.Left( 120 ) + wxS( "..." );
 
     m_staticDescription->SetLabel( displayDesc );
 }
@@ -252,6 +256,8 @@ void TEMPLATE_WIDGET::OnSize( wxSizeEvent& event )
 {
     event.Skip();
 
+    // wx 3.3.2+ can wrap automatically
+#if !wxCHECK_VERSION( 3, 3, 2 )
     // Calculate available width for description text (widget width minus icon and padding)
     int wrapWidth = GetClientSize().GetWidth() - 48 - 20;  // 48px icon + 20px padding
 
@@ -261,13 +267,14 @@ void TEMPLATE_WIDGET::OnSize( wxSizeEvent& event )
         // to avoid cumulative wrapping artifacts
         wxString displayDesc = m_description;
 
-        if( displayDesc.Length() > 180 )
-            displayDesc = displayDesc.Left( 180 ) + wxS( "..." );
+        if( displayDesc.Length() > 120 )
+            displayDesc = displayDesc.Left( 120 ) + wxS( "..." );
 
         m_staticDescription->SetLabel( displayDesc );
         m_staticDescription->Wrap( wrapWidth );
         Layout();
     }
+#endif
 }
 
 
@@ -488,7 +495,7 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
 
     // Override minimum sizes to allow dialog shrinking (base class Fit() sets large sizes)
     m_scrolledTemplates->SetMinSize( FromDIP( wxSize( 300, 300 ) ) );
-    m_panelTemplates->SetMinSize( FromDIP( wxSize( 400, 500 ) ) );
+    m_panelTemplates->SetMinSize( FromDIP( wxSize( 450, 500 ) ) );
 
     // Configure the search control
     m_searchCtrl->ShowSearchButton( true );
