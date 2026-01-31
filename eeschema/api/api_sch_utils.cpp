@@ -20,6 +20,7 @@
 
 #include <sch_pin.h>
 #include <lib_symbol.h>
+#include <sch_symbol.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_field.h>
