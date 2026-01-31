@@ -69,10 +69,15 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	fgSizer2->Add( m_cbUpdateValues, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateNetNames = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateNetNames->SetValue(true);
+	m_cbUpdateNetNames->SetToolTip( _("Update schematic net labels to match net names from the PCB editor.") );
+
 	fgSizer2->Add( m_cbUpdateNetNames, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbUpdateAttributes = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbUpdateAttributes->SetValue(true);
+	m_cbUpdateAttributes->SetToolTip( _("Update symbol attribute flags like Do Not Populate to match the footprint.") );
+
 	fgSizer2->Add( m_cbUpdateAttributes, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_cbPreferUnitSwaps = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Prefer symbol unit swaps over label swaps"), wxDefaultPosition, wxDefaultSize, 0 );
