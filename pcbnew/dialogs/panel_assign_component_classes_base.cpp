@@ -168,7 +168,7 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 	m_buttonImportRefs = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonImportRefs->SetToolTip( _("Import references") );
 
-	m_conditionSizer->Add( m_buttonImportRefs, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_conditionSizer->Add( m_buttonImportRefs, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -494,7 +494,7 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_sheetName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
-	m_conditionSizer->Add( m_sheetName, 0, wxEXPAND, 5 );
+	m_conditionSizer->Add( m_sheetName, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	m_conditionSizer->Add( 20, 0, 1, wxEXPAND, 5 );

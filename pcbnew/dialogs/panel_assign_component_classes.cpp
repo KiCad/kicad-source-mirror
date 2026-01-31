@@ -562,7 +562,7 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE::PANEL_COMPONENT_CLASS_CONDITION_REFER
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::REFERENCE, m_refs ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonImportRefs->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -615,7 +615,7 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT::PANEL_COMPONENT_CLASS_CONDITION_FOOTP
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) ),
         m_dlg( aDlg )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_buttonShowLibrary->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
@@ -649,7 +649,7 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE::PANEL_COMPONENT_CLASS_CONDITION_SIDE( wxWi
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SIDE, m_side ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_side->Append( wxT( "Any" ) );
@@ -670,7 +670,7 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION::PANEL_COMPONENT_CLASS_CONDITION_ROTATI
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::ROTATION, m_rotation ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
     m_rotUnit->SetLabel( wxT( "°" ) );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -694,7 +694,7 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD::PANEL_COMPONENT_CLASS_CONDITION_FIELD( wx
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::FOOTPRINT_FIELD, m_fieldName, m_fieldValue ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 }
@@ -717,7 +717,7 @@ PANEL_COMPONENT_CLASS_CONDITION_CUSTOM::PANEL_COMPONENT_CLASS_CONDITION_CUSTOM( 
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::CUSTOM, m_customCondition ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 }
@@ -734,7 +734,7 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET::PANEL_COMPONENT_CLASS_CONDITION_SHEET( wx
         CONDITION_DATA( COMPONENT_CLASS_ASSIGNMENT_DATA::CONDITION_TYPE::SHEET_NAME, m_sheetName ),
         m_panelParent( static_cast<PANEL_COMPONENT_CLASS_ASSIGNMENT*>( aParent ) )
 {
-    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) ).x, -1 } );
+    m_title->SetMinSize( { GetTextExtent( _( "Footprint Field:" ) + wxS( "M" ) ).x, -1 } );
 
     m_buttonDeleteMatch->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 }
