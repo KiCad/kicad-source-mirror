@@ -99,9 +99,10 @@ PADSTACK& PADSTACK::operator=( const PADSTACK &aOther )
     m_frontPostMachining    = aOther.m_frontPostMachining;
     m_backPostMachining     = aOther.m_backPostMachining;
 
-    // Data consistency enforcement logic that used to live in the pad properties dialog
-    // TODO(JE) Should these move to individual property setters, so that they are always
-    // enforced even through the properties panel and API?
+    // Data consistency enforcement logic that used to live in the pad properties dialog.
+    // While it might be tempting to put these in the individual property setters, there's no
+    // well-defined order in which they're called, and many of the consistency checks are
+    // between multiple properties.
 
     ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
