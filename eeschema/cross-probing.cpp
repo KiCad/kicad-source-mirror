@@ -856,6 +856,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         wxCHECK_RET( optTable.has_value(), "Could not load symbol lib table." );
         LIBRARY_TABLE* table = optTable.value();
 
+        std::vector<wxString> toLoad;
+
         while( std::getline( ss, file, '\n' ) )
         {
             if( file.empty() )
@@ -864,7 +866,6 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxFileName             fn( file );
             IO_RELEASER<SCH_IO>    pi;
             SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
-            bool                   success = true;
 
             if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
             {
@@ -880,19 +881,30 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 row.SetNickname( fn.GetName() );
                 row.SetURI( fn.GetFullPath() );
                 row.SetType( SCH_IO_MGR::ShowType( type ) );
+                toLoad.emplace_back( fn.GetName() );
+            }
+        }
 
-                table->Save().map_error(
+        if( !toLoad.empty() )
+        {
+            bool success = true;
+
+            table->Save().map_error(
                         [&]( const LIBRARY_ERROR& aError )
                         {
                             wxLogError( wxT( "Error saving project library table:\n\n" ) + aError.message );
                             success = false;
                         } );
 
-                if( success )
-                {
-                    manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
-                    adapter->LoadOne( fn.GetName() );
-                }
+            if( success )
+            {
+                manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+                std::ranges::for_each( toLoad,
+                                       [adapter]( const wxString& aNick )
+                                       {
+                                           adapter->LoadOne( aNick );
+                                       } );
             }
         }
 
