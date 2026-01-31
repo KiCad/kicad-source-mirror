@@ -1247,7 +1247,11 @@ std::vector<PCB_LAYER_ID> PADSTACK::UniqueLayers() const
 {
     std::vector<PCB_LAYER_ID> layers;
 
-    ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.push_back( layer ); } );
+    ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                layers.push_back( layer );
+            } );
 
     return layers;
 }
@@ -1285,8 +1289,16 @@ LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
     }
     else
     {
-        ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.set( layer ); } );
-        aOther.ForEachUniqueLayer( [&]( PCB_LAYER_ID layer ) { layers.set( layer ); } );
+        ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    layers.set( layer );
+                } );
+        aOther.ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    layers.set( layer );
+                } );
     }
 
     return layers;
@@ -1296,11 +1308,9 @@ LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
 std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )
-        return FrontOuterLayers().has_solder_mask.has_value() ?
-               std::optional<bool>( !FrontOuterLayers().has_solder_mask.value() ) : std::nullopt;
+        return FrontOuterLayers().has_solder_mask;
     else if( IsBackLayer( aSide ) )
-        return BackOuterLayers().has_solder_mask.has_value() ?
-               std::optional<bool>( !BackOuterLayers().has_solder_mask.value() ) : std::nullopt;
+        return BackOuterLayers().has_solder_mask;
     else
         return std::nullopt;
 }
@@ -1388,14 +1398,14 @@ wxString PADSTACK::Name() const
 
 
 PADSTACK::SHAPE_PROPS::SHAPE_PROPS() :
-    shape( PAD_SHAPE::CIRCLE ),
-    anchor_shape( PAD_SHAPE::RECTANGLE ),
-    size( 0, 0 ),
-    offset( 0, 0 ),
-    round_rect_radius_ratio( 0.0 ),
-    chamfered_rect_ratio( 0.0 ),
-    chamfered_rect_positions( 0 ),
-    trapezoid_delta_size( 0, 0 )
+        shape( PAD_SHAPE::CIRCLE ),
+        anchor_shape( PAD_SHAPE::RECTANGLE ),
+        size( 0, 0 ),
+        offset( 0, 0 ),
+        round_rect_radius_ratio( 0.0 ),
+        chamfered_rect_ratio( 0.0 ),
+        chamfered_rect_positions( 0 ),
+        trapezoid_delta_size( 0, 0 )
 {
 }
 
