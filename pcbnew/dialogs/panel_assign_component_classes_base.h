@@ -30,7 +30,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/radiobut.h>
-#include <wx/statbox.h>
 #include <wx/combobox.h>
 
 ///////////////////////////////////////////////////////////////////////////

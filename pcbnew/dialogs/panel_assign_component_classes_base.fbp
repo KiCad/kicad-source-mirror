@@ -186,7 +186,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+          <property name="flag">wxEXPAND|wxALL</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -434,21 +434,18 @@
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
       <property name="window_style">wxBORDER_SUNKEN|wxTAB_TRAVERSAL</property>
-      <object class="wxStaticBoxSizer" expanded="true">
-        <property name="id">wxID_ANY</property>
-        <property name="label"></property>
+      <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
-        <property name="name">m_assignmentGroup</property>
+        <property name="name">bSizer13</property>
         <property name="orient">wxVERTICAL</property>
-        <property name="parent">0</property>
         <property name="permission">none</property>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxEXPAND</property>
+          <property name="flag">wxEXPAND|wxTOP</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
-            <property name="name">bSizer13</property>
+            <property name="name">bSizer131</property>
             <property name="orient">wxHORIZONTAL</property>
             <property name="permission">none</property>
             <object class="sizeritem" expanded="false">
@@ -578,21 +575,21 @@
                 <property name="window_style"></property>
               </object>
             </object>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxEXPAND</property>
               <property name="proportion">0</property>
-              <object class="spacer" expanded="true">
+              <object class="spacer" expanded="false">
                 <property name="height">0</property>
                 <property name="permission">protected</property>
                 <property name="width">20</property>
               </object>
             </object>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
-              <object class="wxBitmapButton" expanded="true">
+              <object class="wxBitmapButton" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -667,7 +664,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
+          <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
           <property name="proportion">0</property>
           <object class="wxBoxSizer" expanded="true">
             <property name="minimum_size"></property>
@@ -834,11 +831,11 @@
                 <event name="OnButtonClick">OnHighlightItemsClick</event>
               </object>
             </object>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxALL|wxEXPAND</property>
               <property name="proportion">0</property>
-              <object class="wxStaticLine" expanded="true">
+              <object class="wxStaticLine" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -893,11 +890,11 @@
                 <property name="window_style"></property>
               </object>
             </object>
-            <object class="sizeritem" expanded="true">
+            <object class="sizeritem" expanded="false">
               <property name="border">5</property>
               <property name="flag">wxEXPAND</property>
               <property name="proportion">0</property>
-              <object class="spacer" expanded="true">
+              <object class="spacer" expanded="false">
                 <property name="height">0</property>
                 <property name="permission">protected</property>
                 <property name="width">5</property>
@@ -1111,7 +1108,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -1448,7 +1445,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -1710,7 +1707,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2034,7 +2031,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2370,7 +2367,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2433,7 +2430,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2508,7 +2505,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2570,7 +2567,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -2769,7 +2766,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
@@ -3030,7 +3027,7 @@
                 <property name="enabled">1</property>
                 <property name="fg"></property>
                 <property name="floatable">1</property>
-                <property name="font">Helvetica,90,400,12,74,0</property>
+                <property name="font">,90,90,-1,70,0</property>
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>

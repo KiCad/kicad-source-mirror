@@ -36,7 +36,7 @@ PANEL_ASSIGN_COMPONENT_CLASSES_BASE::PANEL_ASSIGN_COMPONENT_CLASSES_BASE( wxWind
 	bSizer12->Add( m_btnAddAssignment, 0, 0, 5 );
 
 
-	bSizerMain->Add( bSizer12, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerMain->Add( bSizer12, 0, wxEXPAND|wxALL, 5 );
 
 	m_assignmentsScrollWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_assignmentsScrollWindow->SetScrollRate( 5, 5 );
@@ -69,29 +69,29 @@ PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( wx
 {
 	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
-	wxStaticBoxSizer* m_assignmentGroup;
-	m_assignmentGroup = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
-
 	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer13 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer131;
+	bSizer131 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_componentClassLabel = new wxStaticText( this, wxID_ANY, _("Component class:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_componentClassLabel->Wrap( -1 );
-	bSizer13->Add( m_componentClassLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer131->Add( m_componentClassLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_componentClass = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_componentClass, 1, wxEXPAND, 5 );
+	bSizer131->Add( m_componentClass, 1, wxEXPAND, 5 );
 
 
-	bSizer13->Add( 20, 0, 0, wxEXPAND, 5 );
+	bSizer131->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_buttonDeleteAssignment = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_buttonDeleteAssignment->SetToolTip( _("Delete row") );
 
-	bSizer13->Add( m_buttonDeleteAssignment, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer131->Add( m_buttonDeleteAssignment, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	m_assignmentGroup->Add( bSizer13, 0, wxEXPAND, 5 );
+	bSizer13->Add( bSizer131, 0, wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
@@ -121,12 +121,12 @@ PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( wx
 	bSizer3->Add( m_radioAny, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	m_assignmentGroup->Add( bSizer3, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizer13->Add( bSizer3, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	this->SetSizer( m_assignmentGroup );
+	this->SetSizer( bSizer13 );
 	this->Layout();
-	m_assignmentGroup->Fit( this );
+	bSizer13->Fit( this );
 
 	// Connect Events
 	m_buttonDeleteAssignment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::OnDeleteAssignmentClick ), NULL, this );
@@ -158,7 +158,7 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Reference:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -216,7 +216,7 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE_BASE::PANEL_COMPONENT_CLASS_CONDITION_SIDE_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Side:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -265,7 +265,7 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -318,7 +318,7 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Footprint:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -375,12 +375,12 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Footprint field:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_fieldName->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_fieldName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_fieldName, 0, wxEXPAND|wxLEFT, 5 );
 
@@ -389,12 +389,12 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 
 	m_staticText44 = new wxStaticText( this, wxID_ANY, _("Field value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText44->Wrap( -1 );
-	m_staticText44->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_staticText44->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldValue->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_fieldValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_fieldValue, 0, wxEXPAND|wxLEFT, 5 );
 
@@ -440,7 +440,7 @@ PANEL_COMPONENT_CLASS_CONDITION_CUSTOM_BASE::PANEL_COMPONENT_CLASS_CONDITION_CUS
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Custom:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -489,7 +489,7 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Sheet name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Helvetica") ) );
+	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
