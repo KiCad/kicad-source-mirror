@@ -240,6 +240,8 @@ public:
 
         bool operator==( const COPPER_LAYER_PROPS& aOther ) const;
         int Compare( const COPPER_LAYER_PROPS& aOther ) const;
+
+        double Similarity( const COPPER_LAYER_PROPS& aOther ) const;
     };
 
     ///! The features of a padstack that can vary on outer layers.
@@ -325,7 +327,7 @@ public:
      * Flips the padstack layers in the case that the pad's parent footprint is flipped to the
      * other side of the board.
      */
-    void FlipLayers( int aCopperLayerCount );
+    void FlipLayers( BOARD* aBoard );
 
     PCB_LAYER_ID StartLayer() const;
     PCB_LAYER_ID EndLayer() const;

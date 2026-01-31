@@ -1415,14 +1415,77 @@ bool PADSTACK::HasExplicitDefinitionForLayer( PCB_LAYER_ID aLayer ) const
 
 double PADSTACK::Similarity( const PADSTACK& aOther ) const
 {
-    // TODO: Implement similarity
-    return 0.0;
+    double similarity = 1.0;
+
+    if( m_mode != aOther.m_mode )
+        similarity *= 0.9;
+
+    if( m_layerSet != aOther.m_layerSet )
+        similarity *= 0.9;
+
+    if( m_customName != aOther.m_customName )
+        similarity *= 0.9;
+
+    if( m_orientation != aOther.m_orientation )
+        similarity *= 0.9;
+
+    if( m_frontMaskProps != aOther.m_frontMaskProps )
+        similarity *= 0.9;
+
+    if( m_backMaskProps != aOther.m_backMaskProps )
+        similarity *= 0.9;
+
+    if( m_unconnectedLayerMode != aOther.m_unconnectedLayerMode )
+        similarity *= 0.9;
+
+    if( m_customShapeInZoneMode != aOther.m_customShapeInZoneMode )
+        similarity *= 0.9;
+
+    if( m_drill != aOther.m_drill )
+        similarity *= 0.9;
+
+    if( m_secondaryDrill != aOther.m_secondaryDrill )
+        similarity *= 0.9;
+
+    if( m_tertiaryDrill != aOther.m_tertiaryDrill )
+        similarity *= 0.9;
+
+    if( m_frontPostMachining != aOther.m_frontPostMachining )
+        similarity *= 0.9;
+
+    if( m_backPostMachining != aOther.m_backPostMachining )
+        similarity *= 0.9;
+
+    ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                similarity *= CopperLayer( aLayer ).Similarity( aOther.CopperLayer( aLayer ) );
+            } );
+
+    return similarity;
 }
 
 
-void PADSTACK::FlipLayers( int aLayerCount )
+void PADSTACK::FlipLayers( BOARD* aBoard )
 {
-    // TODO: Implement FlipLayers
+    std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> oldCopperProps = m_copperProps;
+    m_copperProps.clear();
+
+    for( const auto& [layer, props] : oldCopperProps )
+        m_copperProps[aBoard->FlipLayer( layer )] = props;
+
+    std::swap( m_frontMaskProps, m_backMaskProps );
+
+    m_drill.start = aBoard->FlipLayer( m_drill.start );
+    m_drill.end = aBoard->FlipLayer( m_drill.end );
+
+    m_secondaryDrill.start = aBoard->FlipLayer( m_secondaryDrill.start );
+    m_secondaryDrill.end = aBoard->FlipLayer( m_secondaryDrill.end );
+
+    m_tertiaryDrill.start = aBoard->FlipLayer( m_tertiaryDrill.start );
+    m_tertiaryDrill.end = aBoard->FlipLayer( m_tertiaryDrill.end );
+
+    std::swap( m_frontPostMachining, m_backPostMachining );
 }
 
 
@@ -1508,6 +1571,35 @@ bool PADSTACK::COPPER_LAYER_PROPS::operator==( const COPPER_LAYER_PROPS& aOther 
     // Deep compare of shapes?
     // For now, just check pointers or size
     return true;
+}
+
+
+double PADSTACK::COPPER_LAYER_PROPS::Similarity( const PADSTACK::COPPER_LAYER_PROPS& aOther ) const
+{
+    double similarity = 1.0;
+
+    if( shape != aOther.shape )
+        similarity *= 0.5;
+
+    if( zone_connection != aOther.zone_connection )
+        similarity *= 0.9;
+
+    if( thermal_spoke_width != aOther.thermal_spoke_width )
+        similarity *= 0.9;
+
+    if( thermal_spoke_angle != aOther.thermal_spoke_angle )
+        similarity *= 0.9;
+
+    if( thermal_gap != aOther.thermal_gap )
+        similarity *= 0.9;
+
+    if( clearance != aOther.clearance )
+        similarity *= 0.9;
+
+    if( custom_shapes != aOther.custom_shapes )
+        similarity *= 0.5;
+
+    return similarity;
 }
 
 
