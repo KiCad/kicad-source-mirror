@@ -55,7 +55,13 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
     m_desc->SetLabelText( m_data.package.description );
+
+#if wxCHECK_VERSION( 3, 3, 2 )
+    m_desc->SetWindowStyle( wxST_WRAP );
+#else
     m_desc->Wrap( m_descSizer->GetSize().GetWidth() );
+#endif
+    
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
     int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
@@ -86,8 +92,12 @@ void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
     Layout();
 
     double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
+
+#if !wxCHECK_VERSION( 3, 3, 2 )
     m_desc->SetLabelText( m_data.package.description );
     m_desc->Wrap( m_descSizer->GetSize().GetWidth() );
+#endif
+    
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
     int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
