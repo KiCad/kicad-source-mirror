@@ -106,8 +106,8 @@ void ACTION_GROUP::SetDefaultAction( const TOOL_ACTION& aDefault )
 }
 
 
-#define PALETTE_BORDER 4    // The border around the palette buttons on all sides
-#define BUTTON_BORDER  1    // The border on the sides of the buttons that touch other buttons
+#define PALETTE_BORDER FromDIP( 4 ) // The border around the palette buttons on all sides
+#define BUTTON_BORDER  FromDIP( 1 ) // The border on the sides of the buttons that touch other buttons
 
 
 ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertical ) :
@@ -138,14 +138,14 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 {
     int            iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
     wxBitmapBundle normalBmp = KiBitmapBundleDef( aAction.GetIcon(), iconSize );
-    int            padding = ( m_buttonSize.GetWidth() - FromDIP( iconSize ) ) / 2;
+    int            paddingDip = ( ToDIP( m_buttonSize.GetWidth() ) - iconSize ) / 2;
 
     BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
 
     button->SetIsToolbarButton();
     button->SetBitmap( normalBmp );
     button->SetDisabledBitmap( KiDisabledBitmapBundleDef( aAction.GetIcon(), iconSize ) );
-    button->SetPadding( padding );
+    button->SetPadding( paddingDip );
     button->SetToolTip( aAction.GetButtonTooltip() );
     button->AcceptDragInAsClick();
     button->SetBitmapCentered();
