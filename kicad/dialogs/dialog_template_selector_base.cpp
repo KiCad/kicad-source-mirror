@@ -1,12 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
-
-#include "widgets/std_bitmap_button.h"
-#include "widgets/webview_panel.h"
 
 #include "dialog_template_selector_base.h"
 
@@ -14,45 +11,100 @@
 
 DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 500,400 ), wxDefaultSize );
 
 	wxBoxSizer* bmainSizer;
 	bmainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bsizerTemplateSelector;
-	bsizerTemplateSelector = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* m_mainContent;
+	m_mainContent = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextTpath = new wxStaticText( this, wxID_ANY, _("Folder:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextTpath->Wrap( -1 );
-	bsizerTemplateSelector->Add( m_staticTextTpath, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_panelMRU = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelMRU->SetMinSize( wxSize( 220,-1 ) );
 
-	m_tcTemplatePath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bsizerTemplateSelector->Add( m_tcTemplatePath, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
+	wxBoxSizer* bSizerMRU;
+	bSizerMRU = new wxBoxSizer( wxVERTICAL );
 
-	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bsizerTemplateSelector->Add( m_browseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_labelRecentTemplates = new wxStaticText( m_panelMRU, wxID_ANY, _("Recent project templates"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRecentTemplates->Wrap( -1 );
+	bSizerMRU->Add( m_labelRecentTemplates, 0, wxALL, 5 );
 
-	m_reloadButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bsizerTemplateSelector->Add( m_reloadButton, 0, wxBOTTOM|wxTOP, 5 );
-
-
-	bmainSizer->Add( bsizerTemplateSelector, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	wxBoxSizer* bSizerNotebook;
-	bSizerNotebook = new wxBoxSizer( wxVERTICAL );
-
-	bSizerNotebook->SetMinSize( wxSize( 700,400 ) );
-	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	bSizerNotebook->Add( m_notebook, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	m_webviewPanel = new WEBVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_webviewPanel->SetMinSize( wxSize( 700,300 ) );
-
-	bSizerNotebook->Add( m_webviewPanel, 1, wxEXPAND | wxALL, 5 );
+	m_scrolledMRU = new wxScrolledWindow( m_panelMRU, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledMRU->SetScrollRate( 0, 10 );
+	m_sizerMRU = new wxBoxSizer( wxVERTICAL );
 
 
-	bmainSizer->Add( bSizerNotebook, 1, wxEXPAND, 5 );
+	m_scrolledMRU->SetSizer( m_sizerMRU );
+	m_scrolledMRU->Layout();
+	m_sizerMRU->Fit( m_scrolledMRU );
+	bSizerMRU->Add( m_scrolledMRU, 1, wxEXPAND|wxALL, 5 );
+
+
+	m_panelMRU->SetSizer( bSizerMRU );
+	m_panelMRU->Layout();
+	bSizerMRU->Fit( m_panelMRU );
+	m_mainContent->Add( m_panelMRU, 0, wxEXPAND|wxALL, 5 );
+
+	m_panelTemplates = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerTemplates;
+	bSizerTemplates = new wxBoxSizer( wxVERTICAL );
+
+	m_searchCtrl = new wxSearchCtrl( m_panelTemplates, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	#ifndef __WXMAC__
+	m_searchCtrl->ShowSearchButton( true );
+	#endif
+	m_searchCtrl->ShowCancelButton( true );
+	bSizerTemplates->Add( m_searchCtrl, 0, wxEXPAND|wxALL, 5 );
+
+	wxString m_filterChoiceChoices[] = { _("All Templates"), _("User Templates"), _("System Templates") };
+	int m_filterChoiceNChoices = sizeof( m_filterChoiceChoices ) / sizeof( wxString );
+	m_filterChoice = new wxChoice( m_panelTemplates, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterChoiceNChoices, m_filterChoiceChoices, 0 );
+	m_filterChoice->SetSelection( 0 );
+	bSizerTemplates->Add( m_filterChoice, 0, wxALL, 5 );
+
+	m_scrolledTemplates = new wxScrolledWindow( m_panelTemplates, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledTemplates->SetScrollRate( 0, 10 );
+	m_sizerTemplateList = new wxBoxSizer( wxVERTICAL );
+
+
+	m_scrolledTemplates->SetSizer( m_sizerTemplateList );
+	m_scrolledTemplates->Layout();
+	m_sizerTemplateList->Fit( m_scrolledTemplates );
+	bSizerTemplates->Add( m_scrolledTemplates, 1, wxEXPAND|wxALL, 5 );
+
+
+	m_panelTemplates->SetSizer( bSizerTemplates );
+	m_panelTemplates->Layout();
+	bSizerTemplates->Fit( m_panelTemplates );
+	m_mainContent->Add( m_panelTemplates, 1, wxEXPAND|wxALL, 5 );
+
+	m_panelPreview = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelPreview->Hide();
+
+	wxBoxSizer* bSizerPreview;
+	bSizerPreview = new wxBoxSizer( wxVERTICAL );
+
+	m_webviewPlaceholder = new wxPanel( m_panelPreview, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizerPreview->Add( m_webviewPlaceholder, 1, wxEXPAND|wxALL, 5 );
+
+
+	m_panelPreview->SetSizer( bSizerPreview );
+	m_panelPreview->Layout();
+	bSizerPreview->Fit( m_panelPreview );
+	m_mainContent->Add( m_panelPreview, 2, wxEXPAND|wxALL, 5 );
+
+
+	bmainSizer->Add( m_mainContent, 1, wxEXPAND, 5 );
+
+	m_sizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_btnBack = new wxButton( this, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnBack->Enable( false );
+
+	m_sizerButtons->Add( m_btnBack, 0, wxALL, 5 );
+
+
+	m_sizerButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -61,7 +113,10 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bmainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	m_sizerButtons->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+
+
+	bmainSizer->Add( m_sizerButtons, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bmainSizer );
@@ -70,17 +125,21 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
-	m_reloadButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onReload ), NULL, this );
-	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrlCancel ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
+	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
+	m_filterChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnFilterChanged ), NULL, this );
+	m_btnBack->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnBackClicked ), NULL, this );
 }
 
 DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
 {
 	// Disconnect Events
-	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onDirectoryBrowseClicked ), NULL, this );
-	m_reloadButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onReload ), NULL, this );
-	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnPageChange ), NULL, this );
+	m_searchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrlCancel ), NULL, this );
+	m_searchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
+	m_searchCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
+	m_filterChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnFilterChanged ), NULL, this );
+	m_btnBack->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnBackClicked ), NULL, this );
 
 }
 
@@ -120,15 +179,25 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 64,64 ), 0 );
+	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
 	m_bitmapIcon->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_bitmapIcon->SetMinSize( wxSize( 64,64 ) );
+	m_bitmapIcon->SetMinSize( wxSize( 48,48 ) );
 
-	bSizerMain->Add( m_bitmapIcon, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerMain->Add( m_bitmapIcon, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_staticTitle = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
-	m_staticTitle->Wrap( 100 );
-	bSizerMain->Add( m_staticTitle, 1, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 2 );
+	wxBoxSizer* bSizerText;
+	bSizerText = new wxBoxSizer( wxVERTICAL );
+
+	m_staticTitle = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTitle->Wrap( -1 );
+	bSizerText->Add( m_staticTitle, 0, wxBOTTOM, 0 );
+
+	m_staticDescription = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticDescription->Wrap( -1 );
+	bSizerText->Add( m_staticDescription, 0, wxEXPAND, 0 );
+
+
+	bSizerMain->Add( bSizerText, 1, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bSizerMain );

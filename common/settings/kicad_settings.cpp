@@ -67,6 +67,11 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "template.last_used", &m_LastUsedTemplate, "" ) );
 
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "template.recent_templates", &m_RecentTemplates, {} ) );
+
+    m_params.emplace_back( new PARAM<int>( "template.filter", &m_TemplateFilterChoice, 0 ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",
             [&]() -> nlohmann::json

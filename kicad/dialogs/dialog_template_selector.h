@@ -29,11 +29,41 @@
 #include <widgets/webview_panel.h>
 #include "project_template.h"
 
+#include <memory>
 #include <vector>
 #include <utility>
 #include <wx/filename.h>
+#include <wx/fswatcher.h>
+#include <wx/notebook.h>
+#include <wx/timer.h>
+#include <wx/webview.h>
 
 class DIALOG_TEMPLATE_SELECTOR;
+class TEMPLATE_WIDGET;
+
+
+/**
+ * A widget displaying a recently used template with a small icon and title.
+ */
+class TEMPLATE_MRU_WIDGET : public wxPanel
+{
+public:
+    TEMPLATE_MRU_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog,
+                         const wxString& aPath, const wxString& aTitle, const wxBitmap& aIcon );
+
+    wxString GetTemplatePath() const { return m_templatePath; }
+
+protected:
+    void OnClick( wxMouseEvent& event );
+    void OnDoubleClick( wxMouseEvent& event );
+    void OnEnter( wxMouseEvent& event );
+    void OnLeave( wxMouseEvent& event );
+
+private:
+    DIALOG_TEMPLATE_SELECTOR* m_dialog;
+    wxString                  m_templatePath;
+};
+
 
 class TEMPLATE_WIDGET : public TEMPLATE_WIDGET_BASE
 {
@@ -44,12 +74,16 @@ public:
      * Set the project template for this widget, which will determine the icon and title
      * associated with this project template widget
      */
-    void SetTemplate(PROJECT_TEMPLATE* aTemplate);
+    void SetTemplate( PROJECT_TEMPLATE* aTemplate );
 
     PROJECT_TEMPLATE* GetTemplate() { return m_currTemplate; }
 
     void Select();
+    void SelectWithoutStateChange();
     void Unselect();
+
+    void SetDescription( const wxString& aDescription );
+    wxString GetDescription() const { return m_description; }
 
     /**
      * Set whether this template widget represents a user template
@@ -62,12 +96,13 @@ protected:
     void OnKillFocus( wxFocusEvent& event );
     void OnMouse( wxMouseEvent& event );
     void OnDoubleClick( wxMouseEvent& event );
+    void OnSize( wxSizeEvent& event );
     void onRightClick( wxMouseEvent& event );
     void onEditTemplate( wxCommandEvent& event );
     void onDuplicateTemplate( wxCommandEvent& event );
 
-private:
-    bool IsSelected() { return m_selected; }
+public:
+    bool IsSelected() const { return m_selected; }
 
 protected:
     DIALOG_TEMPLATE_SELECTOR* m_dialog;
@@ -75,37 +110,9 @@ protected:
     wxPanel*                  m_panel;
     bool                      m_selected;
     bool                      m_isUserTemplate;
+    wxString                  m_description;
 
     PROJECT_TEMPLATE*         m_currTemplate;
-};
-
-
-class TEMPLATE_SELECTION_PANEL : public TEMPLATE_SELECTION_PANEL_BASE
-{
-public:
-    /**
-     * @param aParent The window creating the dialog
-     * @param aPath the path
-     */
-    TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent, const wxString& aPath );
-
-    const wxString& GetPath() const { return m_templatesPath; }
-
-    void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
-
-    void SortAlphabetically();
-
-    /**
-     * Set whether templates in this panel are user templates (can be edited/duplicated)
-     */
-    void SetIsUserTemplates( bool aIsUser ) { m_isUserTemplates = aIsUser; }
-    bool IsUserTemplates() const { return m_isUserTemplates; }
-
-protected:
-    wxNotebookPage* m_parent;
-    wxString        m_templatesPath;   ///< the path to access to the folder
-                                       ///<   containing the templates (which are also folders)
-    bool            m_isUserTemplates; ///< true if this panel contains user templates
 };
 
 
@@ -113,61 +120,71 @@ class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
-                              std::vector<std::pair<wxString, wxFileName>> aTitleDirList,
-                              const wxFileName& aDefaultTemplate );
+                              const wxString& aUserTemplatesPath,
+                              const wxString& aSystemTemplatesPath,
+                              const std::vector<wxString>& aRecentTemplates );
 
-    /**
-     * @return the selected template, or NULL
-     */
+    ~DIALOG_TEMPLATE_SELECTOR();
+
     PROJECT_TEMPLATE* GetSelectedTemplate();
-    PROJECT_TEMPLATE* GetDefaultTemplate();
-
-    void SetWidget( TEMPLATE_WIDGET* aWidget );
-
-    /**
-     * @return the project path to edit (if Edit Template was selected), or empty string
-     */
     wxString GetProjectToEdit() const { return m_projectToEdit; }
 
-    /**
-     * Set the project path to edit (used by template widgets)
-     */
+    void SetWidget( TEMPLATE_WIDGET* aWidget );
+    void SelectTemplateByPath( const wxString& aPath );
+    void SelectTemplateByPath( const wxString& aPath, bool aKeepMRUVisible );
+    wxString GetUserTemplatesPath() const { return m_userTemplatesPath; }
+
     void SetProjectToEdit( const wxString& aPath ) { m_projectToEdit = aPath; }
-
-    /**
-     * Refresh the current page to show updated template list
-     */
-    void replaceCurrentPage();
-
-    /**
-     * Get the path to the user templates directory (first panel marked as user templates)
-     */
-    wxString GetUserTemplatesPath() const;
+    void RefreshTemplateList();
 
 protected:
-    void AddTemplate( int aPage, PROJECT_TEMPLATE* aTemplate );
+    void OnSearchCtrl( wxCommandEvent& event ) override;
+    void OnSearchCtrlCancel( wxCommandEvent& event ) override;
+    void OnFilterChanged( wxCommandEvent& event ) override;
+    void OnBackClicked( wxCommandEvent& event ) override;
+
+    void OnSearchTimer( wxTimerEvent& event );
+    void OnRefreshTimer( wxTimerEvent& event );
+    void OnWebViewLoaded( wxWebViewEvent& event );
+    void OnScrolledTemplatesSize( wxSizeEvent& event );
+
+    void OnFileSystemEvent( wxFileSystemWatcherEvent& event );
+    void OnSysColourChanged( wxSysColourChangedEvent& event );
 
 private:
-    void SetHtml( const wxFileName& aFilename )
-    {
-        m_webviewPanel->LoadURL( aFilename.GetFullPath() );
-    }
+    enum class DialogState { Initial, Preview, MRUWithPreview };
 
-private:
-    void buildPageContent( const wxString& aPath, int aPage );
+    void SetState( DialogState aState );
+    void BuildMRUList();
+    void BuildTemplateList();
+    void ApplyFilter();
+    void LoadTemplatePreview( PROJECT_TEMPLATE* aTemplate );
+    void SetupFileWatcher();
+    wxString ExtractDescription( const wxFileName& aHtmlFile );
+    void ShowWelcomeHtml();
+    void EnsureWebViewCreated();
 
-    void OnPageChange( wxNotebookEvent& event ) override;
-    void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
-	void onReload( wxCommandEvent& event ) override;
+    DialogState                                  m_state;
+    TEMPLATE_WIDGET*                             m_selectedWidget;
+    PROJECT_TEMPLATE*                            m_selectedTemplate;
 
-protected:
-    std::vector<TEMPLATE_SELECTION_PANEL*> m_panels;
-    TEMPLATE_WIDGET*                       m_selectedWidget;
-    wxFileName                             m_defaultTemplatePath;
-    TEMPLATE_WIDGET*                       m_defaultWidget;
-    // Keep track of all template widgets so we can pick a sensible default
-    std::vector<TEMPLATE_WIDGET*>          m_allWidgets;
-    wxString                               m_projectToEdit;  ///< Project path to edit instead of creating new
+    wxString                                     m_userTemplatesPath;
+    wxString                                     m_systemTemplatesPath;
+    std::vector<wxString>                        m_recentTemplates;
+
+    std::vector<std::unique_ptr<PROJECT_TEMPLATE>> m_templates;
+    std::vector<TEMPLATE_WIDGET*>                m_templateWidgets;
+    std::vector<TEMPLATE_MRU_WIDGET*>            m_mruWidgets;
+
+    wxTimer                                      m_searchTimer;
+    wxTimer                                      m_refreshTimer;
+
+    wxFileSystemWatcher*                         m_watcher;
+
+    wxString                                     m_projectToEdit;
+
+    WEBVIEW_PANEL*                               m_webviewPanel;
+    bool                                         m_loadingExternalHtml;
 };
 
 #endif

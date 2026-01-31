@@ -205,16 +205,19 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    KICAD_SETTINGS*                settings = GetAppSettings<KICAD_SETTINGS>( "kicad" );
-    std::vector<std::pair<wxString, wxFileName>> titleDirList;
-    wxFileName                     templatePath;
+    KICAD_SETTINGS* settings = GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    wxString userTemplatesPath;
+    wxString systemTemplatesPath;
 
     ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 
     if( itUser != Pgm().GetLocalEnvVariables().end() && itUser->second.GetValue() != wxEmptyString )
     {
+        wxFileName templatePath;
         templatePath.AssignDir( itUser->second.GetValue() );
-        titleDirList.emplace_back( _( "User Templates" ), templatePath );
+        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+        userTemplatesPath = templatePath.GetFullPath();
     }
 
     std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( Pgm().GetLocalEnvVariables(),
@@ -222,35 +225,49 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     if( v && !v->IsEmpty() )
     {
+        wxFileName templatePath;
         templatePath.AssignDir( *v );
-        titleDirList.emplace_back( _( "System Templates" ), templatePath );
+        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+        systemTemplatesPath = templatePath.GetFullPath();
     }
 
-    // Use last used template if available, otherwise fall back to default
-    wxFileName templateToSelect = defaultTemplate;
+    // Use RunMainStack to show the dialog on the main stack instead of the coroutine stack.
+    // This is necessary because the template selector uses a WebView which triggers WebKit's
+    // JavaScript VM initialization. WebKit's stack validation fails on coroutine stacks.
+    int      result = wxID_CANCEL;
+    wxString selectedTemplatePath;
+    wxPoint  templateWindowPos;
+    wxSize   templateWindowSize;
+    wxString projectToEdit;
 
-    if( !settings->m_LastUsedTemplate.IsEmpty() )
-    {
-        wxFileName lastUsed;
-        lastUsed.AssignDir( settings->m_LastUsedTemplate );
+    RunMainStack(
+            [&]()
+            {
+                DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos,
+                                             settings->m_TemplateWindowSize, userTemplatesPath,
+                                             systemTemplatesPath, settings->m_RecentTemplates );
 
-        if( lastUsed.DirExists() )
-            templateToSelect = lastUsed;
-    }
+                result = ps.ShowModal();
+                templateWindowPos = ps.GetPosition();
+                templateWindowSize = ps.GetSize();
+                projectToEdit = ps.GetProjectToEdit();
 
-    DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos, settings->m_TemplateWindowSize,
-                                 titleDirList, templateToSelect );
+                PROJECT_TEMPLATE* templ = ps.GetSelectedTemplate();
 
-    int result = ps.ShowModal();
+                if( templ )
+                {
+                    wxFileName htmlFile = templ->GetHtmlFile();
+                    htmlFile.RemoveLastDir();
+                    selectedTemplatePath = htmlFile.GetPath();
+                }
+            } );
 
-    settings->m_TemplateWindowPos = ps.GetPosition();
-    settings->m_TemplateWindowSize = ps.GetSize();
+    settings->m_TemplateWindowPos = templateWindowPos;
+    settings->m_TemplateWindowSize = templateWindowSize;
 
     // Check if user wants to edit a template instead of creating new project
     if( result == wxID_APPLY )
     {
-        wxString projectToEdit = ps.GetProjectToEdit();
-
         if( !projectToEdit.IsEmpty() && wxFileExists( projectToEdit ) )
         {
             m_frame->LoadProject( wxFileName( projectToEdit ) );
@@ -261,18 +278,16 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     if( result != wxID_OK )
         return -1;
 
-    PROJECT_TEMPLATE* selectedTemplate = ps.GetSelectedTemplate();
-
-    if( !selectedTemplate )
-        selectedTemplate = ps.GetDefaultTemplate();
-
-    if( !selectedTemplate )
+    if( selectedTemplatePath.IsEmpty() )
     {
         wxMessageBox( _( "No project template was selected.  Cannot generate new project." ), _( "Error" ),
                       wxOK | wxICON_ERROR, m_frame );
 
         return -1;
     }
+
+    // Recreate the template object from the saved path
+    PROJECT_TEMPLATE selectedTemplate( selectedTemplatePath );
 
     wxString        default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
     wxString        title = _( "New Project Folder" );
@@ -322,7 +337,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     std::vector< wxFileName > destFiles;
 
-    if( selectedTemplate->GetDestinationFiles( fn, destFiles ) )
+    if( selectedTemplate.GetDestinationFiles( fn, destFiles ) )
     {
         std::vector<wxFileName> overwrittenFiles;
 
@@ -352,16 +367,27 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     wxString errorMsg;
 
-    if( !selectedTemplate->CreateProject( fn, &errorMsg ) )
+    if( !selectedTemplate.CreateProject( fn, &errorMsg ) )
     {
         DisplayErrorMessage( m_frame, _( "A problem occurred creating new project from template." ), errorMsg );
         return -1;
     }
 
-    // Save the last used template path for pre-selection next time
-    wxFileName templateDir = selectedTemplate->GetHtmlFile();
-    templateDir.RemoveLastDir();  // Remove "meta" directory
-    settings->m_LastUsedTemplate = templateDir.GetPath();
+    // Update MRU list with the used template
+    wxFileName templateDir = selectedTemplate.GetHtmlFile();
+    templateDir.RemoveLastDir();
+    wxString templatePath = templateDir.GetPath();
+
+    settings->m_LastUsedTemplate = templatePath;
+
+    // Add to front of recent templates, remove duplicates, trim to 5
+    std::vector<wxString>& recentTemplates = settings->m_RecentTemplates;
+    recentTemplates.erase( std::remove( recentTemplates.begin(), recentTemplates.end(), templatePath ),
+                           recentTemplates.end() );
+    recentTemplates.insert( recentTemplates.begin(), templatePath );
+
+    if( recentTemplates.size() > 5 )
+        recentTemplates.resize( 5 );
 
     m_frame->CreateNewProject( fn.GetFullPath() );
     m_frame->LoadProject( fn );
