@@ -711,6 +711,9 @@ int PCB_BARCODE::Compare( const PCB_BARCODE* aBarcode, const PCB_BARCODE* aOther
     if( ( diff = (int) aBarcode->GetKind() - (int) aOther->GetKind() ) != 0 )
         return diff;
 
+    if( ( diff = aBarcode->m_angle.AsTenthsOfADegree() - aOther->m_angle.AsTenthsOfADegree() ) != 0 )
+        return diff;
+
     if( ( diff = (int) aBarcode->GetErrorCorrection() - (int) aOther->GetErrorCorrection() ) != 0 )
         return diff;
 

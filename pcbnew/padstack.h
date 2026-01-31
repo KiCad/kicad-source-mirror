@@ -208,6 +208,7 @@ public:
 
         SHAPE_PROPS();
         bool operator==( const SHAPE_PROPS& aOther ) const;
+        int Compare( const SHAPE_PROPS& aOther ) const;
     };
 
     /**
@@ -238,6 +239,7 @@ public:
         std::vector<std::shared_ptr<PCB_SHAPE>> custom_shapes;
 
         bool operator==( const COPPER_LAYER_PROPS& aOther ) const;
+        int Compare( const COPPER_LAYER_PROPS& aOther ) const;
     };
 
     ///! The features of a padstack that can vary on outer layers.
@@ -254,6 +256,7 @@ public:
         std::optional<bool> has_plugging; ///< True if the drill hole should be plugged on this side
 
         bool operator==( const MASK_LAYER_PROPS& aOther ) const;
+        int Compare( const MASK_LAYER_PROPS& aOther ) const;
     };
 
     ///! The properties of a padstack drill.  Drill position is always the pad position (origin).
@@ -268,6 +271,7 @@ public:
         std::optional<bool> is_capped; ///< True if the drill hole should be capped
 
         bool operator==( const DRILL_PROPS& aOther ) const;
+        int Compare( const DRILL_PROPS& aOther ) const;
     };
 
     struct POST_MACHINING_PROPS
@@ -278,6 +282,7 @@ public:
         int angle = 0;
 
         bool operator==( const POST_MACHINING_PROPS& aOther ) const;
+        int Compare( const POST_MACHINING_PROPS& aOther ) const;
     };
 
 public:
