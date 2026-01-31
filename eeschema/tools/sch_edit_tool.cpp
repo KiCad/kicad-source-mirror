@@ -1437,10 +1437,14 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
                 const SPIN_STYLE aSpinStyle = aLabelBase.GetSpinStyle();
                 const SPIN_STYLE bSpinStyle = bLabelBase.GetSpinStyle();
+                const GR_TEXT_V_ALIGN_T aVertJustify = aLabelBase.GetVertJustify();
+                const GR_TEXT_V_ALIGN_T bVertJustify = bLabelBase.GetVertJustify();
 
                 // First, swap the label orientations
                 aLabelBase.SetSpinStyle( bSpinStyle );
                 bLabelBase.SetSpinStyle( aSpinStyle );
+                aLabelBase.SetVertJustify( bVertJustify );
+                bLabelBase.SetVertJustify( aVertJustify );
 
                 // And swap the fields as best we can
                 std::vector<SCH_FIELD>& aFields = aLabelBase.GetFields();
@@ -1449,6 +1453,26 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 const unsigned rotationsAtoB = aSpinStyle.CCWRotationsTo( bSpinStyle );
 
                 swapFieldPositionsWithMatching( aFields, bFields, rotationsAtoB );
+                break;
+            }
+            case SCH_TEXT_T:
+            case SCH_TEXTBOX_T:
+            {
+                EDA_TEXT* aText = dynamic_cast<EDA_TEXT*>( a );
+                EDA_TEXT* bText = dynamic_cast<EDA_TEXT*>( b );
+
+                if( !aText || !bText )
+                    break;
+
+                const GR_TEXT_H_ALIGN_T aHorizJustify = aText->GetHorizJustify();
+                const GR_TEXT_V_ALIGN_T aVertJustify = aText->GetVertJustify();
+                const GR_TEXT_H_ALIGN_T bHorizJustify = bText->GetHorizJustify();
+                const GR_TEXT_V_ALIGN_T bVertJustify = bText->GetVertJustify();
+
+                aText->SetHorizJustify( bHorizJustify );
+                aText->SetVertJustify( bVertJustify );
+                bText->SetHorizJustify( aHorizJustify );
+                bText->SetVertJustify( aVertJustify );
                 break;
             }
             case SCH_SYMBOL_T:
