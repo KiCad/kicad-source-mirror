@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-25 15:27+0000\n"
+"PO-Revision-Date: 2026-02-01 07:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -11226,7 +11226,7 @@ msgstr "PostScript ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:439
 msgid "Json files"
-msgstr "JSON ფაილები"
+msgstr "Json ფაილები"
 
 #: common/wildcards_and_files_ext.cpp:445
 msgid "Report files"
@@ -11311,7 +11311,7 @@ msgstr "PNG ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:569
 msgid "Jpeg file"
-msgstr "JPEG ფაილი"
+msgstr "Jpeg ფაილი"
 
 #: common/wildcards_and_files_ext.cpp:575
 msgid "Hotkey file"
@@ -33690,7 +33690,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:104
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
