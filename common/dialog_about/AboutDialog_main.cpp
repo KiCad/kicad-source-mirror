@@ -856,6 +856,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     // Lead librarians
     ADD_LIBRARIAN( wxT( "Carsten Presser") );
+    // Librarian trainining/recruiting
+    ADD_LIBRARIAN( wxT( "Kliment Yanev" ) );
 
     // Active librarians (last 2 years)
     ADD_LIBRARIAN( wxT( "Geries AbuAkel" ) );
@@ -865,15 +867,19 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_LIBRARIAN( wxT( "Greg Cormier" ) );
     ADD_LIBRARIAN( wxT( "Tobias Falk" ) );
     ADD_LIBRARIAN( wxT( "Simon Fivat" ) );
+    ADD_LIBRARIAN( wxT( "Ferrum" ) );
     ADD_LIBRARIAN( wxT( "Jan Sebastian Götte (jaseg)" ) );
     ADD_LIBRARIAN( wxT( "Petr Hodina" ) );
     ADD_LIBRARIAN( wxT( "Mikkel Jeppesen" ) );
+    ADD_LIBRARIAN( wxT( "McDowell Johnson" ) );
+    ADD_LIBRARIAN( wxT( "Graham Keeth" ) );
     ADD_LIBRARIAN( wxT( "Aristeidis Kimirtzis" ) );
     ADD_LIBRARIAN( wxT( "Brandon Kirisaki" ) );
+    ADD_LIBRARIAN( wxT( "Thea Krug" ) );
     ADD_LIBRARIAN( wxT( "Uli Köhler" ) );
-    ADD_LIBRARIAN( wxT( "Graham Keeth" ) );
     ADD_LIBRARIAN( wxT( "Andrew Lutsenko" ) );
     ADD_LIBRARIAN( wxT( "Mojca Miklavec Groenhuis" ) );
+    ADD_LIBRARIAN( wxT( "Peniel Mubita" ) );
     ADD_LIBRARIAN( wxT( "Jorge Neiva" ) );
     ADD_LIBRARIAN( wxT( "Carlos Nieves Ónega" ) );
     ADD_LIBRARIAN( wxT( "Lynn Ochs" ) );
@@ -886,7 +892,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_LIBRARIAN( wxT( "Frank Severinsen" ) );
     ADD_LIBRARIAN( wxT( "Martin Sotirov" ) );
     ADD_LIBRARIAN( wxT( "Philipp Swoboda" ) );
-    ADD_LIBRARIAN( wxT( "Kliment Yanev" ) );
+    ADD_LIBRARIAN( wxT( "Christoph Werner" ) );
 
     // Previously active librarians
     ADD_LIBRARIAN( wxT( "Christian Schlüter" ) );
