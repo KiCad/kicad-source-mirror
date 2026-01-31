@@ -802,15 +802,13 @@ APAD6::APAD6( ALTIUM_BINARY_PARSER& aReader )
 
     if( subrecord5 == 110 )
     {
-        // Don't know exactly what this is, but it's always been 0 in the files with
-        // 110-byte subrecord5.
+        // Don't know exactly what this is, but it's always been 0 in the files with 110-byte subrecord5.
         // e.g. https://gitlab.com/kicad/code/kicad/-/issues/16514
         const uint32_t unknown = aReader.ReadKicadUnit(); // to 110
 
         if( unknown != 0 )
         {
-            THROW_IO_ERROR( wxString::Format( "Pads6 stream subrecord5 + 106 has value %d, "
-                                              "which is unexpected",
+            THROW_IO_ERROR( wxString::Format( "Pads6 stream subrecord5 + 106 has value %d, which is unexpected",
                                               unknown ) );
         }
         holerotation = 0;
@@ -848,7 +846,7 @@ APAD6::APAD6( ALTIUM_BINARY_PARSER& aReader )
     // Known lengths: 596, 628, 651
     // 596 is the number of bytes read in this code-block
     if( subrecord6 >= 596 )
-    { // TODO: detect type from something else than the size?
+    {
         sizeAndShape = std::make_unique<APAD6_SIZE_AND_SHAPE>();
 
         for( wxSize& size : sizeAndShape->inner_size )
