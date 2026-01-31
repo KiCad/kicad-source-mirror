@@ -748,14 +748,14 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
     constexpr int numLocalFields = 8;
 
     wxStatusBar* stsbar = GetStatusBar();
-    int spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+    int spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x;
 
     // Note this is a KISTATUSBAR and there are fields to the right of the ones we know about
     int totalFields = stsbar->GetFieldsCount();
 
     std::vector<int> dims = {
         // remainder of status bar on far left is set to a default or whatever is left over.
-        -1,
+        -3,
 
         // When using GetTextSize() remember the width of character '1' is not the same
         // as the width of '0' unless the font is fixed width, and it usually won't be.
@@ -770,20 +770,23 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
         KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x,
 
         // grid size
-        KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x,
+        KIUI::GetTextSize( wxT( "grid 1234.1234 x 1234.1234" ), stsbar ).x,
 
         // units display, Inches is bigger than mm
         KIUI::GetTextSize( _( "Inches" ), stsbar ).x,
 
-        // Size for the "Current Tool" panel; longest string from SetTool()
-        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x,
+        // Size for the "Current Tool" panel
+        -2,
 
         // constraint mode
-        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x
+        -2
     };
 
     for( int& dim : dims )
-        dim += spacer;
+    {
+        if( dim >= 0 )
+            dim += spacer;
+    }
 
     for( int idx = numLocalFields; idx < totalFields; ++idx )
         dims.emplace_back( stsbar->GetStatusWidth( idx ) );
