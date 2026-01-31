@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-28 09:02+0000\n"
+"PO-Revision-Date: 2026-02-01 07:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -53319,6 +53319,10 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"La distanza della coppia differenziale nel punto iniziale non corrisponde "
+"alla distanza configurata. Ciò può verificarsi nelle aree neckdown dove le "
+"piste hanno larghezza e spaziatura inferiori. Regola le impostazioni della "
+"coppia differenziale o inizia da una posizione con lo spazio corretto."
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Place Through Via"
@@ -53730,9 +53734,8 @@ msgid "Control to select the via diameter"
 msgstr "Controllo per selezionare il diametro del via"
 
 #: pcbnew/toolbars_pcb_editor.cpp:126
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "Controllo per selezionare il diametro del via"
+msgstr "Controllo per selezionare la variante corrente"
 
 #: pcbnew/toolbars_pcb_editor.cpp:209
 msgid "Track routing tools"
@@ -55003,12 +55006,10 @@ msgid "Create outset lines from the selected item"
 msgstr "Crea linee outset dagli elementi selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Add Barcode"
 msgstr "Aggiungi codice a barre"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add a barcode"
 msgstr "Aggiunge un codice a barre"
 
@@ -55029,12 +55030,10 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Aggiungi tabella stack-up scheda su uno strato grafico"
 
 #: pcbnew/tools/pcb_actions.cpp:194
-#, fuzzy
 msgid "Place Point"
 msgstr "Piazza punto"
 
 #: pcbnew/tools/pcb_actions.cpp:195
-#, fuzzy
 msgid "Add reference/snap points"
 msgstr "Aggiunti punti di riferimento/magnetismo"
 
@@ -55189,17 +55188,14 @@ msgid "Add selected design block to current board"
 msgstr "Aggiungi blocco progetto selezionato alla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Apply Design Block Layout"
 msgstr "Applica blocco progetto"
 
 #: pcbnew/tools/pcb_actions.cpp:491
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Applica il blocco progetto collegato al gruppo selezionato"
+msgstr "Applica blocco progetto collegato al gruppo selezionato"
 
 #: pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Save Board as Design Block..."
 msgstr "Salva scheda come blocco progetto..."
 
@@ -55208,19 +55204,16 @@ msgid "Create a new design block from the current board"
 msgstr "Crea un nuovo blocco progetto dalla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Update Design Block from Board"
 msgstr "Aggiorna blocco progetto dalla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Set design block layout to current board"
 msgstr "Imposta il blocco progetto alla scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Imposta il blocco progetto alla selezione corrente"
+msgstr "Imposta blocco progetto alla selezione corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:559
 msgid "Open in Footprint Editor"
@@ -55243,18 +55236,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Sposta gli elementi selezionati uno per uno"
 
 #: pcbnew/tools/pcb_actions.cpp:602
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Sposta con il riferimento..."
+msgstr "Sposta con riferimento..."
 
 #: pcbnew/tools/pcb_actions.cpp:603
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Sposta gli elementi selezionati con un punto di partenza specificato"
 
 #: pcbnew/tools/pcb_actions.cpp:611
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Copia con il riferimento..."
+msgstr "Copia con riferimento..."
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -55379,12 +55370,10 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Semplifica i contorni dei poligoni, rimuovendo i punti superflui"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "Modifica opzioni..."
+msgstr "Modifica vertici..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
 msgstr "Modifica i vertici del poligono utilizzando una tabella"
 
@@ -55492,12 +55481,10 @@ msgid "Footprint Properties..."
 msgstr "Proprietà impronta..."
 
 #: pcbnew/tools/pcb_actions.cpp:938
-#, fuzzy
 msgid "Pad Table..."
 msgstr "Tabella piazzole..."
 
 #: pcbnew/tools/pcb_actions.cpp:939
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
 msgstr "Mostra la tabella piazzole per la modifica in blocco"
 
@@ -55764,12 +55751,10 @@ msgid "Import board file from other applications"
 msgstr "Importa un file scheda da altre applicazioni"
 
 #: pcbnew/tools/pcb_actions.cpp:1215
-#, fuzzy
 msgid "Export Footprints..."
 msgstr "Esporta impronte..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
-#, fuzzy
 msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
@@ -55914,7 +55899,6 @@ msgstr ""
 "schema"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
-#, fuzzy
 msgid "Collect And Embed 3D Models"
 msgstr "Raggruppa e incorpora modelli 3D"
 
@@ -55992,7 +55976,6 @@ msgstr "Blocca o sblocca gli elementi selezionati"
 
 #: pcbnew/tools/pcb_actions.cpp:1461 pcbnew/tools/pcb_actions.cpp:1470
 #: pcbnew/tools/pcb_actions.cpp:1479 pcbnew/tools/pcb_actions.cpp:1489
-#, fuzzy
 msgid "Line Modes"
 msgstr "Modalità linee"
 
@@ -56052,13 +56035,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Apri schema nell'editor schemi elettrici"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "Regole DRC"
+msgstr "Modifica regole DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
 msgid "Open drc rule editor window"
-msgstr ""
+msgstr "Apri la finestra di modifica delle regole DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -56524,12 +56506,10 @@ msgstr ""
 "altro elemento"
 
 #: pcbnew/tools/pcb_actions.cpp:2326
-#, fuzzy
 msgid "Interactive Offset Tool"
 msgstr "Strumento di scostamento interattivo"
 
 #: pcbnew/tools/pcb_actions.cpp:2327
-#, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
 msgstr "Strumento interattivo per lo spostamento di elementi di valori esatti"
 
@@ -56940,7 +56920,6 @@ msgid "Export footprint to editor"
 msgstr "Esporta l'impronta all'editor"
 
 #: pcbnew/tools/pcb_control.cpp:151 pcbnew/tools/pcb_control.cpp:181
-#, fuzzy
 msgid "Add Footprint Library"
 msgstr "Aggiungi libreria di impronte"
 
@@ -56996,9 +56975,8 @@ msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
 #: pcbnew/tools/pcb_control.cpp:1431
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "Il blocco progetto '%s' ha già una disposizione."
+msgstr "Il blocco progetto non ha una disposizione da piazzare."
 
 #: pcbnew/tools/pcb_control.cpp:1496 pcbnew/tools/pcb_control.cpp:1683
 #, c-format
@@ -57006,7 +56984,7 @@ msgid "Design block %s does not have a board file."
 msgstr "Il blocco progetto %s non ha un file scheda."
 
 #: pcbnew/tools/pcb_control.cpp:1598
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
 msgstr "L'impronta %s è bloccata e non può essere piazzata."
 
@@ -57061,9 +57039,8 @@ msgid "Resolved Margin Clearance"
 msgstr "Clearance margine risolte"
 
 #: pcbnew/tools/pcb_control.cpp:2449
-#, fuzzy
 msgid "Pad Size"
-msgstr "Dimensioni pagina"
+msgstr "Dimensioni piazzola"
 
 #: pcbnew/tools/pcb_control.cpp:2481
 msgid "Selected Items"
@@ -57078,14 +57055,12 @@ msgid "Selected 2D Copper Area"
 msgstr "Area rame 2D selezionata"
 
 #: pcbnew/tools/pcb_control.cpp:2658
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "Area rame 2D selezionata"
+msgstr "Area 2D selezionata"
 
 #: pcbnew/tools/pcb_control.cpp:2660
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "Area rame 2D selezionata"
+msgstr "Area totale 2D selezionata"
 
 #: pcbnew/tools/pcb_control.cpp:2718
 msgid "Place Board Characteristics"
@@ -57096,7 +57071,6 @@ msgid "Place Board Stackup Table"
 msgstr "Inserisci tabella stack-up scheda"
 
 #: pcbnew/tools/pcb_control.cpp:2861
-#, fuzzy
 msgid "Embed 3D Models"
 msgstr "Incorpora modelli 3D"
 
@@ -58472,9 +58446,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Rimozione isole di rame isolate..."
 
 #: pcbnew/zone_filler.cpp:985
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Ri-riempi le zone dopo i cambiamenti effettuati sulla scheda"
+msgstr "Ri-riempi le zone dopo la rimozione isole..."
 
 #: pcbnew/zone_filler.cpp:1394
 msgid "Prototype zone fill enabled. Disable setting and refill?"
