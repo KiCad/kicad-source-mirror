@@ -211,33 +211,36 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
     m_staticTitle->SetFont( KIUI::GetInfoFont( this ).Bold() );
     m_staticTitle->SetLabel( *aTemplate->GetTitle() );
 
-    wxBitmap*      icon = aTemplate->GetIcon();
-    int            iconSize = 48;
-    wxBitmapBundle bundle;
+    // Generate bitmap bundle from template icon bitmap (64x64)
+    // so wxStaticBitmap can size itself to the closest match
+    const std::vector<int> c_bitmapSizes = { 48, 64, 96, 128 };
 
-    if( icon && icon->IsOk())
-    {
-        wxSize size = icon->GetSize();
-        double scale = std::min( (double) iconSize / icon->GetWidth(), 
-                                 (double) iconSize / icon->GetHeight() );
+    wxBitmapBundle     bundle;
+    wxVector<wxBitmap> bitmaps;
+    wxBitmap*          icon = aTemplate->GetIcon();
 
-        wxSize defSize( iconSize, wxRound( size.GetWidth() * scale ) );
-
-        wxBitmap bmp1 = *icon;
-        wxBitmapHelpers::Rescale( bmp1, defSize );
-
-        wxBitmap bmp2 = *icon;
-        wxBitmapHelpers::Rescale( bmp2, defSize * 2 );
-
-        bundle = wxBitmapBundle::FromBitmaps( bmp1, bmp2 );
-    }
+    if( icon && icon->IsOk() )
+        bundle = *icon;
     else
+        bundle = KiBitmapBundleDef( BITMAPS::icon_kicad, c_bitmapSizes[0] );
+
+    wxSize defSize = bundle.GetDefaultSize();
+
+    for( const int genSize : c_bitmapSizes )
     {
-        // TODO: Add 96px KiCad icon
-        bundle = KiBitmap( BITMAPS::icon_kicad, iconSize );
+        double scale = std::min( (double) genSize / defSize.GetWidth(), 
+                                 (double) genSize / defSize.GetHeight() );
+
+        wxSize scaledSize( wxRound( defSize.x * scale ),
+                           wxRound( defSize.y * scale ) );
+
+        wxBitmap scaled = bundle.GetBitmap( scaledSize );
+        scaled.SetScaleFactor( 1.0 );
+
+        bitmaps.push_back( scaled );
     }
 
-    m_bitmapIcon->SetBitmap( bundle );
+    m_bitmapIcon->SetBitmap( wxBitmapBundle::FromBitmaps( bitmaps ) );
 }
 
 
