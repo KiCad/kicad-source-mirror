@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -123,8 +123,6 @@ DIALOG_LIB_FIELDS_TABLE_BASE::DIALOG_LIB_FIELDS_TABLE_BASE( wxWindow* parent, wx
 	bControls->Add( m_groupSymbolsBox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bRefresh = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
-
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
