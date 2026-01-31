@@ -62,7 +62,7 @@ TEMPLATE_MRU_WIDGET::TEMPLATE_MRU_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SEL
     wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
 
     wxStaticBitmap* icon = new wxStaticBitmap( this, wxID_ANY, aIcon );
-    icon->SetMinSize( wxSize( 16, 16 ) );
+    icon->SetMinSize( FromDIP( wxSize( 16, 16 ) ) );
     sizer->Add( icon, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxTOP | wxBOTTOM, 6 );
 
     wxStaticText* label = new wxStaticText( this, wxID_ANY, aTitle );
@@ -125,7 +125,7 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
 
     // Set a small minimum size to allow the dialog to shrink
     // The actual size will be determined by the parent sizer
-    SetMinSize( wxSize( 150, -1 ) );
+    SetMinSize( FromDIP( wxSize( 200, -1 ) ) );
 
     m_bitmapIcon->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ),
                            nullptr, this );
@@ -133,6 +133,8 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
                             nullptr, this );
     m_staticDescription->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ),
                                   nullptr, this );
+
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::OnMouse ), nullptr, this );
 
     m_bitmapIcon->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( TEMPLATE_WIDGET::onRightClick ),
                            nullptr, this );
@@ -156,8 +158,8 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     m_staticDescription->SetFont( KIUI::GetInfoFont( this ) );
 
     // Set small minimum sizes on text controls to allow dialog shrinking
-    m_staticTitle->SetMinSize( wxSize( 100, -1 ) );
-    m_staticDescription->SetMinSize( wxSize( 100, -1 ) );
+    m_staticTitle->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
+    m_staticDescription->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
 
     // Bind size event for dynamic text wrapping
     Bind( wxEVT_SIZE, &TEMPLATE_WIDGET::OnSize, this );
@@ -485,8 +487,8 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     m_scrolledTemplates->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
     // Override minimum sizes to allow dialog shrinking (base class Fit() sets large sizes)
-    m_scrolledTemplates->SetMinSize( wxSize( 150, 100 ) );
-    m_panelTemplates->SetMinSize( wxSize( 150, 100 ) );
+    m_scrolledTemplates->SetMinSize( FromDIP( wxSize( 300, 300 ) ) );
+    m_panelTemplates->SetMinSize( FromDIP( wxSize( 400, 500 ) ) );
 
     // Configure the search control
     m_searchCtrl->ShowSearchButton( true );
