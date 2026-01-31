@@ -158,8 +158,6 @@ PANEL_COMPONENT_CLASS_CONDITION_REFERENCE_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Reference:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_refs = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -216,8 +214,6 @@ PANEL_COMPONENT_CLASS_CONDITION_SIDE_BASE::PANEL_COMPONENT_CLASS_CONDITION_SIDE_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Side:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_side = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
@@ -265,8 +261,6 @@ PANEL_COMPONENT_CLASS_CONDITION_ROTATION_BASE::PANEL_COMPONENT_CLASS_CONDITION_R
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_rotation = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
@@ -318,8 +312,6 @@ PANEL_COMPONENT_CLASS_CONDITION_FOOTPRINT_BASE::PANEL_COMPONENT_CLASS_CONDITION_
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Footprint:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_footprint = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -375,13 +367,9 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Footprint field:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_fieldName->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_fieldName, 0, wxEXPAND|wxLEFT, 5 );
 
 
@@ -389,13 +377,9 @@ PANEL_COMPONENT_CLASS_CONDITION_FIELD_BASE::PANEL_COMPONENT_CLASS_CONDITION_FIEL
 
 	m_staticText44 = new wxStaticText( this, wxID_ANY, _("Field value:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_staticText44->Wrap( -1 );
-	m_staticText44->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_fieldValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldValue->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_fieldValue, 0, wxEXPAND|wxLEFT, 5 );
 
 
@@ -440,8 +424,6 @@ PANEL_COMPONENT_CLASS_CONDITION_CUSTOM_BASE::PANEL_COMPONENT_CLASS_CONDITION_CUS
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Custom:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_customCondition = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -489,8 +471,6 @@ PANEL_COMPONENT_CLASS_CONDITION_SHEET_BASE::PANEL_COMPONENT_CLASS_CONDITION_SHEE
 
 	m_title = new wxStaticText( this, wxID_ANY, _("Sheet name:"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE );
 	m_title->Wrap( -1 );
-	m_title->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
 	m_conditionSizer->Add( m_title, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_sheetName = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
