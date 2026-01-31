@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-22 14:31+0000\n"
+"PO-Revision-Date: 2026-02-01 07:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -50350,9 +50350,8 @@ msgid "Create bill of materials from board"
 msgstr "Crea una distinta di base dalla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Seleziona modello 3D"
+msgstr "Raggruppa e incorpora modelli 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
@@ -51535,9 +51534,8 @@ msgid "Selected 2D Length"
 msgstr "lunghezza 2D selezionata"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Incorpora modello"
+msgstr "Incorpora modelli 3D"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
