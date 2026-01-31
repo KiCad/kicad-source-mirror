@@ -211,30 +211,33 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
     m_staticTitle->SetFont( KIUI::GetInfoFont( this ).Bold() );
     m_staticTitle->SetLabel( *aTemplate->GetTitle() );
 
-    wxBitmap* icon = aTemplate->GetIcon();
-    wxSize maxSize( 48, 48 );
+    wxBitmap*      icon = aTemplate->GetIcon();
+    int            iconSize = 48;
+    wxBitmapBundle bundle;
 
-    if( icon && icon->IsOk() )
+    if( icon && icon->IsOk())
     {
-        if( icon->GetWidth() > maxSize.x || icon->GetHeight() > maxSize.y )
-        {
-            double   scale = std::min( (double) maxSize.x / icon->GetWidth(),
-                                       (double) maxSize.y / icon->GetHeight() );
-            wxImage  image = icon->ConvertToImage();
-            int      w = wxRound( icon->GetWidth() * scale );
-            int      h = wxRound( icon->GetHeight() * scale );
-            image.Rescale( w, h, wxIMAGE_QUALITY_HIGH );
-            m_bitmapIcon->SetBitmap( wxBitmap( image ) );
-        }
-        else
-        {
-            m_bitmapIcon->SetBitmap( *icon );
-        }
+        wxSize size = icon->GetSize();
+        double scale = std::min( (double) iconSize / icon->GetWidth(), 
+                                 (double) iconSize / icon->GetHeight() );
+
+        wxSize defSize( iconSize, wxRound( size.GetWidth() * scale ) );
+
+        wxBitmap bmp1 = *icon;
+        wxBitmapHelpers::Rescale( bmp1, defSize );
+
+        wxBitmap bmp2 = *icon;
+        wxBitmapHelpers::Rescale( bmp2, defSize * 2 );
+
+        bundle = wxBitmapBundle::FromBitmaps( bmp1, bmp2 );
     }
     else
     {
-        m_bitmapIcon->SetBitmap( KiBitmap( BITMAPS::icon_kicad ) );
+        // TODO: Add 96px KiCad icon
+        bundle = KiBitmap( BITMAPS::icon_kicad, iconSize );
     }
+
+    m_bitmapIcon->SetBitmap( bundle );
 }
 
 

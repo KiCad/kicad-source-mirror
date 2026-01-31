@@ -390,9 +390,9 @@
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
+                      <event name="OnCancelButton">OnSearchCtrlCancel</event>
                       <event name="OnSearchButton">OnSearchCtrl</event>
                       <event name="OnText">OnSearchCtrl</event>
-                      <event name="OnCancelButton">OnSearchCtrlCancel</event>
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
@@ -935,7 +935,7 @@
             <property name="maximum_size"></property>
             <property name="min_size"></property>
             <property name="minimize_button">0</property>
-            <property name="minimum_size">48,48</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="moveable">1</property>
             <property name="name">m_bitmapIcon</property>
             <property name="pane_border">1</property>
@@ -946,7 +946,7 @@
             <property name="pos"></property>
             <property name="resize">Resizable</property>
             <property name="show">1</property>
-            <property name="size">48,48</property>
+            <property name="size">-1,-1</property>
             <property name="subclass"></property>
             <property name="toolbar_pane">0</property>
             <property name="tooltip"></property>
