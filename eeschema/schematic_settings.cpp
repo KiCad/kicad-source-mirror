@@ -215,7 +215,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<wxString>( "plot_directory",
             &m_PlotDirectoryName, "" ) );
 
-    // TODO(JE) should we keep these LIB_SYMBOL:: things around?
     m_params.emplace_back( new PARAM<int>( "subpart_id_separator",
             &m_SubpartIdSeparator, 0, 0, 126 ) );
 
