@@ -49,6 +49,7 @@
 #include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>
+#include <kiplatform/io.h>
 
 
 
@@ -462,6 +463,12 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
             aProgressReporter->AdvancePhase( _( "Compressing output" ) );
 
         wxFFileOutputStream fnout( outputFn.GetFullPath() );
+
+        // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+        // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
+        if( FILE* fp = fnout.GetFile()->fp() )
+            setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
         wxZipOutputStream   zipStream( fnout );
 
         std::function<void( const wxString&, const wxString& )> addDirToZip =
@@ -505,6 +512,12 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
     else if( aJob.m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ )
     {
         wxFFileOutputStream fnout( outputFn.GetFullPath() );
+
+        // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+        // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
+        if( FILE* fp = fnout.GetFile()->fp() )
+            setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
         wxZlibOutputStream  zlibStream( fnout, -1, wxZLIB_GZIP );
         wxTarOutputStream   tarStream( zlibStream );
 

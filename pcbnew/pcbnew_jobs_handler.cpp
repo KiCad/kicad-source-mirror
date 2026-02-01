@@ -89,6 +89,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 #include <wx/filename.h>
+#include <kiplatform/io.h>
 #include <settings/settings_manager.h>
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
@@ -2509,6 +2510,12 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
         {
             wxFFileOutputStream fnout( zipfn.GetFullPath() );
+
+            // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+            // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
+            if( FILE* fp = fnout.GetFile()->fp() )
+                setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
             wxZipOutputStream   zip( fnout );
             wxFFileInputStream  fnin( tempFile );
 

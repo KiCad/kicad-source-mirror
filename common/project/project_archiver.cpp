@@ -252,6 +252,10 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
         return false;
     }
 
+    // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+    if( FILE* fp = ostream.GetFile()->fp() )
+        setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
     wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
 
     wxDir projectDir( aSrcDir );

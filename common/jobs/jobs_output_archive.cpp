@@ -25,6 +25,7 @@
 #include <gestfich.h>
 #include <common.h>
 #include <wildcards_and_files_ext.h>
+#include <kiplatform/io.h>
 
 JOBS_OUTPUT_ARCHIVE::JOBS_OUTPUT_ARCHIVE() :
     JOBS_OUTPUT_HANDLER(),
@@ -61,13 +62,16 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTemp
 
     wxFFileOutputStream ostream( outputPath );
 
-    if( !ostream.IsOk() ) // issue to create the file. Perhaps not writable dir
+    if( !ostream.IsOk() )
     {
-        //msg.Printf( _( "Failed to create file '%s'." ), aDestFile );
-        //aReporter.Report( msg, RPT_SEVERITY_ERROR );
         aResolvedOutputPath.reset();
         return false;
     }
+
+    // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+    // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
+    if( FILE* fp = ostream.GetFile()->fp() )
+        setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
 
     wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
     wxString          errors;
