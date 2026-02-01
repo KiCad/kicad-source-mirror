@@ -93,8 +93,8 @@ private:
 
     void syncCache( const HTTP_LIB_CATEGORY& category );
 
-    LIB_SYMBOL* loadSymbolFromPart( const wxString& aSymbolName, const HTTP_LIB_CATEGORY& aCategory,
-                                    const HTTP_LIB_PART& aPart );
+    LIB_SYMBOL* loadSymbolFromPart( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                    const HTTP_LIB_CATEGORY& aCategory, const HTTP_LIB_PART& aPart );
 
 private:
     SYMBOL_LIBRARY_ADAPTER*              m_adapter;
