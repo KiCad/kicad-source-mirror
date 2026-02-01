@@ -571,9 +571,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
             polygon->SetLayerId( layerName[ndx] );
 
-            for( unsigned idx = 0; idx < polygonal_shape.size(); idx++ )
+            for( const VECTOR2I& pt : polygonal_shape )
             {
-                POINT corner( scale( polygonal_shape[idx].x ), scale( -polygonal_shape[idx].y ) );
+                POINT corner( scale( pt.x ), scale( -pt.y ) );
                 corner += dsnOffset;
                 polygon->AppendPoint( corner );
             }
@@ -657,8 +657,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             if( !mask_copper_layers.any() )
                 continue;
 
-            PADSTACK*               padstack = makePADSTACK( aBoard, pad );
-            PADSTACKSET::iterator   iter = m_padstackset.find( *padstack );
+            PADSTACK* padstack = makePADSTACK( aBoard, pad );
+            auto      iter = m_padstackset.find( *padstack );
 
             if( iter != m_padstackset.end() )
             {
@@ -1169,7 +1169,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         int       defaultClearance = netSettings->GetDefaultNetclass()->GetClearance();
         double    clearance         = scale( defaultClearance );
 
-        STRINGS&  rules = m_pcb->m_structure->m_rules->m_rules;
+        std::vector<std::string>& rules = m_pcb->m_structure->m_rules->m_rules;
 
         std::snprintf( rule, sizeof( rule ), "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );
@@ -1444,10 +1444,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             // necessarily long.  The exported netlist will have some fabricated pin names in it.
             // If you don't like fabricated pin names, then make sure all pads within your
             // FOOTPRINTs are uniquely named!
-            for( unsigned p = 0; p < image->m_pins.size(); ++p )
+            for( PIN& pin : image->m_pins )
             {
-                PIN* pin = &image->m_pins[p];
-                int  netcode = pin->m_kiNetCode;
+                int  netcode = pin.m_kiNetCode;
 
                 if( netcode > 0 )
                 {
@@ -1458,7 +1457,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     PIN_REF& pin_ref = net->m_pins.back();
 
                     pin_ref.component_id = componentId;
-                    pin_ref.pin_id = pin->m_pin_id;
+                    pin_ref.pin_id = pin.m_pin_id;
                 }
             }
 
@@ -1494,10 +1493,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         // copy the SPECCTRA_DB::padstackset to the LIBRARY.  Since we are
         // removing, do not increment the iterator
-        for( PADSTACKSET::iterator i = m_padstackset.begin(); i != m_padstackset.end();
-             i = m_padstackset.begin() )
+        for( auto i = m_padstackset.begin(); i != m_padstackset.end(); i = m_padstackset.begin() )
         {
-            PADSTACKSET::auto_type ps = m_padstackset.release( i );
+            boost::ptr_set<PADSTACK>::auto_type ps = m_padstackset.release( i );
             PADSTACK* padstack = ps.release();
 
             m_pcb->m_library->AddPadstack( padstack );
@@ -1561,8 +1559,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // output the non-Default netclass vias
         for( const auto& [name, netclass] : netclassesInUse )
         {
-            via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(),
-                           m_top_via_layer, m_bot_via_layer );
+            via = makeVia( netclass->GetViaDiameter(), netclass->GetViaDrill(), m_top_via_layer, m_bot_via_layer );
 
             // maybe add 'via' to the library, but only if unique.
             PADSTACK* registered = m_pcb->m_library->LookupVia( via );

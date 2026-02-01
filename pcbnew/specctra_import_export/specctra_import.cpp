@@ -34,7 +34,6 @@
 #include "specctra.h"
 
 #include <confirm.h>            // DisplayErrorMessage()
-#include <gestfich.h>           // EDA_FileSelector()
 #include <fast_float/fast_float.h>
 #include <pcb_edit_frame.h>
 #include <locale_io.h>
@@ -187,8 +186,7 @@ PCB_ARC* SPECCTRA_DB::makeARC( WIRE* wire, QARC* aQarc, int aNetcode )
 
     arc->SetStart( mapPt( aQarc->vertex[0], m_routeResolution ) );
     arc->SetEnd( mapPt( aQarc->vertex[1], m_routeResolution ) );
-    arc->SetMid( CalcArcMid(arc->GetStart(), arc->GetEnd(),
-                 mapPt( aQarc->vertex[2], m_routeResolution ) ) );
+    arc->SetMid( CalcArcMid(arc->GetStart(), arc->GetEnd(), mapPt( aQarc->vertex[2], m_routeResolution ) ) );
     arc->SetLayer( m_pcbLayer2kicad[layerNdx] );
     arc->SetWidth( scale( aQarc->aperture_width, m_routeResolution ) );
     arc->SetNetCode( aNetcode );
@@ -251,10 +249,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
         DSN_T type = shape->shape->Type();
 
         if( type != T_circle )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s." ),
-                                              GetTokenString( type ) ) );
-        }
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s." ), GetTokenString( type ) ) );
 
         CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
         int viaDiam = scale( circle->diameter, m_routeResolution );
@@ -273,8 +268,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
 
         if( type != T_circle )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ),
-                                              GetTokenString( type ) ) );
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
         }
 
         CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
@@ -300,10 +294,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
             DSN_T type = shape->shape->Type();
 
             if( type != T_circle )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ),
-                                                  GetTokenString( type ) ) );
-            }
+                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
             CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
 
@@ -312,8 +303,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
             if( layerNdx == -1 )
             {
                 wxString layerName = From_UTF8( circle->layer_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'" ),
-                                                  layerName ) );
+                THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'" ), layerName ) );
             }
 
             if( layerNdx > topLayerNdx )
@@ -416,38 +406,31 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
         // each COMPONENT, reposition and re-orient each component and put on
         // correct side of the board.
-        COMPONENTS& components = m_session->placement->m_components;
+        boost::ptr_vector<COMPONENT>& components = m_session->placement->m_components;
 
-        for( COMPONENTS::iterator comp = components.begin(); comp != components.end(); ++comp )
+        for( COMPONENT& component : components)
         {
-            PLACES& places = comp->m_places;
-
-            for( unsigned i = 0; i < places.size(); ++i )
+            for( PLACE& place : component.m_places )
             {
-                PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
-
-                wxString   reference = From_UTF8( place->m_component_id.c_str() );
+                wxString   reference = From_UTF8( place.m_component_id.c_str() );
                 FOOTPRINT* footprint = aBoard->FindFootprintByReference( reference );
 
                 if( !footprint )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "Reference '%s' not found." ),
-                                                      reference ) );
-                }
+                    THROW_IO_ERROR( wxString::Format( _( "Reference '%s' not found." ), reference ) );
 
-                if( !place->m_hasVertex )
+                if( !place.m_hasVertex )
                     continue;
 
-                UNIT_RES* resolution = place->GetUnits();
+                UNIT_RES* resolution = place.GetUnits();
                 wxASSERT( resolution );
 
-                VECTOR2I newPos = mapPt( place->m_vertex, resolution );
+                VECTOR2I newPos = mapPt( place.m_vertex, resolution );
                 footprint->SetPosition( newPos );
 
-                if( place->m_side == T_front )
+                if( place.m_side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
-                    EDA_ANGLE orientation( place->m_rotation, DEGREES_T );
+                    EDA_ANGLE orientation( place.m_rotation, DEGREES_T );
 
                     if( footprint->GetLayer() != F_Cu )
                     {
@@ -457,9 +440,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                     footprint->SetOrientation( orientation );
                 }
-                else if( place->m_side == T_back )
+                else if( place.m_side == T_back )
                 {
-                    EDA_ANGLE orientation( place->m_rotation + 180.0, DEGREES_T );
+                    EDA_ANGLE orientation( place.m_rotation + 180.0, DEGREES_T );
 
                     if( footprint->GetLayer() != B_Cu )
                     {
@@ -481,45 +464,42 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     m_routeResolution = m_session->route->GetUnits();
 
     // Walk the NET_OUTs and create tracks and vias anew.
-    NET_OUTS& net_outs = m_session->route->net_outs;
+    boost::ptr_vector<NET_OUT>& net_outs = m_session->route->net_outs;
 
-    for( NET_OUTS::iterator net = net_outs.begin(); net!=net_outs.end(); ++net )
+    for( NET_OUT& net_out : net_outs )
     {
         int netoutCode = 0;
 
         // page 143 of spec says wire's net_id is optional
-        if( net->net_id.size() )
+        if( net_out.net_id.size() )
         {
-            wxString netName = From_UTF8( net->net_id.c_str() );
+            wxString netName = From_UTF8( net_out.net_id.c_str() );
             NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
             if( netinfo )
                 netoutCode = netinfo->GetNetCode();
         }
 
-        WIRES& wires = net->wires;
-
-        for( unsigned i = 0; i<wires.size(); ++i )
+        for( WIRE& wire : net_out.wires )
         {
-            WIRE*   wire  = &wires[i];
-            DSN_T   shape = wire->m_shape->Type();
+            DSN_T   shape = wire.m_shape->Type();
 
             if( shape == T_path )
             {
-                PATH* path = static_cast<PATH*>( wire->m_shape );
+                PATH* path = static_cast<PATH*>( wire.m_shape );
 
                 for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
                 {
                     PCB_TRACK* track;
-                    track = makeTRACK( wire, path, pt, netoutCode );
+                    track = makeTRACK( &wire, path, pt, netoutCode );
                     aBoard->Add( track );
                 }
             }
             else if ( shape == T_qarc )
             {
-                QARC* qarc = static_cast<QARC*>( wire->m_shape );
+                QARC* qarc = static_cast<QARC*>( wire.m_shape );
 
-                PCB_ARC* arc = makeARC( wire, qarc, netoutCode );
+                PCB_ARC* arc = makeARC( &wire, qarc, netoutCode );
                 aBoard->Add( arc );
             }
             else
@@ -538,28 +518,23 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             }
         }
 
-        WIRE_VIAS& wire_vias = net->wire_vias;
-        LIBRARY& library = *m_session->route->library;
-
-        for( unsigned i = 0; i < wire_vias.size(); ++i )
+        for( WIRE_VIA& wire_via : net_out.wire_vias )
         {
             int netCode = 0;
 
             // page 144 of spec says wire_via's net_id is optional
-            if( net->net_id.size() )
+            if( net_out.net_id.size() )
             {
-                wxString netName = From_UTF8( net->net_id.c_str() );
+                wxString netName = From_UTF8( net_out.net_id.c_str() );
                 NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
                 if( netvia )
                     netCode = netvia->GetNetCode();
             }
 
-            WIRE_VIA* wire_via = &wire_vias[i];
-
             // example: (via Via_15:8_mil 149000 -71000 )
 
-            PADSTACK* padstack = library.FindPADSTACK( wire_via->GetPadstackId() );
+            PADSTACK* padstack = m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
 
             if( !padstack )
             {
@@ -569,20 +544,18 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 // in in the session library, even though they may be actually used in the
                 // pre-routed, protected wire_vias. So until that is fixed, create the padstack
                 // from its name as a work around.
-                wxString psid( From_UTF8( wire_via->GetPadstackId().c_str() ) );
+                wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
 
-                THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ),
-                                                  psid ) );
+                THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ), psid ) );
             }
 
             std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
             int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
 
-            for( unsigned v = 0; v < wire_via->m_vertexes.size(); ++v )
+            for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
             {
-                PCB_VIA* via = makeVIA( wire_via, padstack, wire_via->m_vertexes[v], netCode,
-                                        via_drill_default );
+                PCB_VIA* via = makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode, via_drill_default );
                 aBoard->Add( via );
             }
         }

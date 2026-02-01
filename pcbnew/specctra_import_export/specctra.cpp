@@ -2502,8 +2502,8 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth )
 
 void SPECCTRA_DB::doNET( NET* growth )
 {
-    T           tok = NextTok();
-    PIN_REFS*   pin_refs;
+    T                     tok = NextTok();
+    std::vector<PIN_REF>* pin_refs;
 
     /*  <net_descriptor >::=
         (net <net_id >
@@ -3898,7 +3898,7 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
     out->Print( nestLevel, "(host_cad \"%s\")\n", host_cad.c_str() );
     out->Print( nestLevel, "(host_version \"%s\")\n", host_version.c_str() );
 
-    for( STRINGS::iterator i = constants.begin(); i != constants.end(); )
+    for( auto i = constants.begin(); i != constants.end(); )
     {
         const std::string& s1 = *i++;
         const std::string& s2 = *i++;
