@@ -2009,11 +2009,18 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                     const VECTOR2I& end )
             {
                 SCH_LINE* newWire;
+                bool      isBusLabel = false;
+
+                if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( fixed ) )
+                    isBusLabel |= SCH_CONNECTION::IsBusLabel( label->GetText() );
+
+                if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( selected ) )
+                    isBusLabel |= SCH_CONNECTION::IsBusLabel( label->GetText() );
 
                 // Add a new newWire between the fixed item and the selected item so the selected
                 // item can be dragged.
                 if( fixed->GetLayer() == LAYER_BUS_JUNCTION || fixed->GetLayer() == LAYER_BUS
-                    || selected->GetLayer() == LAYER_BUS )
+                    || selected->GetLayer() == LAYER_BUS || isBusLabel )
                 {
                     newWire = new SCH_LINE( start, LAYER_BUS );
                 }
