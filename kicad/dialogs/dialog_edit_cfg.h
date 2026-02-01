@@ -25,6 +25,9 @@
 
 class WX_GRID;
 
+class wxTextCtrl;
+class wxSearchCtrl;
+
 class DIALOG_EDIT_CFG : public wxDialog
 {
 public:
@@ -37,11 +40,26 @@ private:
     void saveSettings();
     void OnCellChange( wxGridEvent& aEvent );
     void OnCellRightClick( wxGridEvent& aEvent );
+    void OnCellLeftDClick( wxGridEvent& aEvent );
     void OnResetDefault( wxCommandEvent& aEvent );
+    void OnFilterChanged( wxCommandEvent& aEvent );
+    void OnSize( wxSizeEvent& aEvent );
     void updateRowAppearance( int aRow );
+    void applyFilter();
 
 private:
-    WX_GRID*   m_grid;
-    wxFileName m_cfgFile;
-    int        m_contextRow;
+    WX_GRID*      m_grid;
+    wxSearchCtrl* m_filterCtrl;
+    wxFileName    m_cfgFile;
+    int           m_contextRow;
+    wxString      m_filterText;
+
+    struct ConfigEntry
+    {
+        wxString key;
+        wxString value;
+        wxString extant;
+    };
+
+    std::vector<ConfigEntry> m_allEntries;
 };
