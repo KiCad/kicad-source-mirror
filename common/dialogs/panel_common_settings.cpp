@@ -107,9 +107,10 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent ) :
         m_canvasScaleAuto->Show( false );
     }
 
-    m_zoomCorrectionCtrl = new ZOOM_CORRECTION_CTRL( this,
-            Pgm().GetCommonSettings()->m_Appearance.zoom_correction_factor );
-    bLeftSizer->Add( m_zoomCorrectionCtrl, 1, wxEXPAND );
+    m_zoomCorrectionCtrl = new ZOOM_CORRECTION_CTRL(
+            this, Pgm().GetCommonSettings()->m_Appearance.zoom_correction_factor, ADVANCED_CFG::GetCfg().m_ScreenDPI );
+
+    m_scalingSizer->Add( m_zoomCorrectionCtrl, 1, wxEXPAND );
 
     // Hide the option of icons in menus for platforms that do not support them
     m_checkBoxIconsInMenus->Show( KIPLATFORM::UI::AllowIconsInMenus() );

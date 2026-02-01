@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -301,15 +301,20 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
 
-
-	rightSizer->Add( 0, 0, 0, 0, 5 );
-
 	m_staticText251 = new wxStaticText( this, wxID_ANY, _("Scaling"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText251->Wrap( -1 );
-	rightSizer->Add( m_staticText251, 0, wxLEFT|wxRIGHT|wxTOP, 15 );
+	rightSizer->Add( m_staticText251, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 15 );
 
 	m_staticline7 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightSizer->Add( m_staticline7, 0, wxEXPAND | wxALL, 5 );
+	rightSizer->Add( m_staticline7, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_scalingSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	rightSizer->Add( m_scalingSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+
+
+	rightSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Editing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
@@ -421,7 +426,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( bProjectBackupSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( rightSizer, 0, wxRIGHT|wxLEFT, 5 );
+	bPanelSizer->Add( rightSizer, 1, wxLEFT|wxRIGHT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

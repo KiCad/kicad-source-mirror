@@ -28,6 +28,8 @@
 #include <widgets/ui_common.h>
 
 #include <wx/dcclient.h>
+#include <wx/display.h>
+#include <wx/math.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 
@@ -35,7 +37,8 @@ class ZOOM_CORRECTION_RULER : public wxPanel
 {
 public:
     ZOOM_CORRECTION_RULER( wxWindow* aParent ) :
-            wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxSize( 200, 40 ) )
+            wxPanel( aParent, wxID_ANY, wxDefaultPosition, aParent->FromDIP( wxSize( 200, 30 ) ),
+                     wxTAB_TRAVERSAL | wxNO_BORDER | wxFULL_REPAINT_ON_RESIZE )
     {
         Bind( wxEVT_PAINT, &ZOOM_CORRECTION_RULER::OnPaint, this );
     }
@@ -68,117 +71,81 @@ private:
 
         // Minimum spacing between number labels to prevent overlap (in pixels)
         const int MIN_LABEL_SPACING = 30;
-        double lastLabelX = -MIN_LABEL_SPACING;
+        double    lastLabelX = -MIN_LABEL_SPACING;
+        int       majorTickEvery = 10;
+        int       tickLabelDiv = 1;
+        double    pxPerMinorTick;
 
         // Draw major and minor tick marks with numbering
         if( units == ZOOM_CORRECTION_UNITS::INCH )
         {
-            double pxPerMinorTick = pxPerUnit / 4.0; // 1/4 inch intervals
-
-            for( double x = 0; x <= size.x; x += pxPerMinorTick )
-            {
-                int tickCount = (int)round( x / pxPerMinorTick );
-
-                if( tickCount % 4 == 0 )
-                {
-                    // Major tick (inch mark)
-                    dc.DrawLine( x, size.y - 1, x, size.y - 16 );
-
-                    int inchNum = tickCount / 4;
-
-                    if( inchNum > 0 && x < size.x - 10 && ( x - lastLabelX ) >= MIN_LABEL_SPACING )
-                    {
-                        wxString label = wxString::Format( wxT("%d"), inchNum );
-                        wxSize textSize = dc.GetTextExtent( label );
-                        dc.DrawText( label, x - textSize.x / 2, size.y - 40 );
-                        lastLabelX = x;
-                    }
-                }
-                else
-                {
-                    // Minor tick (1/4 inch mark)
-                    dc.DrawLine( x, size.y - 1, x, size.y - 8 );
-                }
-            }
+            majorTickEvery = 4;
+            tickLabelDiv = 4;
+            pxPerMinorTick = pxPerUnit / 4.0; // 1/4 inch intervals
         }
         else if( units == ZOOM_CORRECTION_UNITS::CM )
         {
-            double pxPerMinorTick = pxPerUnit / 10.0; // 1mm intervals
-
-            for( double x = 0; x <= size.x; x += pxPerMinorTick )
-            {
-                int tickCount = (int)round( x / pxPerMinorTick );
-
-                if( tickCount % 10 == 0 )
-                {
-                    // Major tick (cm mark)
-                    dc.DrawLine( x, size.y - 1, x, size.y - 16 );
-
-                    int cmNum = tickCount / 10;
-
-                    if( cmNum > 0 && x < size.x - 10 && ( x - lastLabelX ) >= MIN_LABEL_SPACING )
-                    {
-                        wxString label = wxString::Format( wxT("%d"), cmNum );
-                        wxSize textSize = dc.GetTextExtent( label );
-                        dc.DrawText( label, x - textSize.x / 2, size.y - 40 );
-                        lastLabelX = x;
-                    }
-                }
-                else
-                {
-                    // Minor tick (mm mark)
-                    dc.DrawLine( x, size.y - 1, x, size.y - 8 );
-                }
-            }
+            majorTickEvery = 10;
+            tickLabelDiv = 10;
+            pxPerMinorTick = pxPerUnit / 10.0; // 1mm intervals
         }
         else // MM
         {
             // For mm: Same as cm ruler but numbers count by 10 (so 10mm, 20mm, etc.)
-            double pxPerMinorTick = pxPerUnit;
+            majorTickEvery = 10;
+            tickLabelDiv = 1;
+            pxPerMinorTick = pxPerUnit;
+        }
 
-            for( double x = 0; x <= size.x; x += pxPerMinorTick )
+        for( double x = 0; x <= size.x; x += pxPerMinorTick )
+        {
+            int tickCount = (int) round( x / pxPerMinorTick );
+
+            if( tickCount % majorTickEvery == 0 )
             {
-                int tickCount = (int)round( x / pxPerMinorTick );
+                // Major tick
+                dc.DrawLine( x, size.y - 1, x, size.y - 16 );
 
-                if( tickCount % 10 == 0 )
-                {
-                    // Major tick (10mm mark)
-                    dc.DrawLine( x, size.y - 1, x, size.y - 16 );
+                int labelNum = tickCount / tickLabelDiv;
 
-                    if( tickCount > 0 && x < size.x - 15 && ( x - lastLabelX ) >= MIN_LABEL_SPACING )
-                    {
-                        wxString label = wxString::Format( wxT("%d"), tickCount );
-                        wxSize textSize = dc.GetTextExtent( label );
-                        dc.DrawText( label, x - textSize.x / 2, size.y - 40 );
-                        lastLabelX = x;
-                    }
-                }
-                else
+                if( labelNum > 0 && x < size.x - 10 && ( x - lastLabelX ) >= MIN_LABEL_SPACING )
                 {
-                    dc.DrawLine( x, size.y - 1, x, size.y - 8 );
+                    wxString label = wxString::Format( wxT( "%d" ), labelNum );
+                    wxSize   textSize = dc.GetTextExtent( label );
+                    dc.DrawText( label, x - textSize.x / 2, 0 );
+                    lastLabelX = x;
                 }
+            }
+            else
+            {
+                // Minor tick
+                dc.DrawLine( x, size.y - 1, x, size.y - 8 );
             }
         }
     }
 };
 
-ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue ) :
+ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, double aBaseValue ) :
         wxPanel( aParent, wxID_ANY ),
+        m_baseValue( aBaseValue ),
         m_value( &aValue )
 {
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
-    // Top section: Slider and spinner
+    // Top section: Label, spinner, auto button
     wxBoxSizer* controlsSizer = new wxBoxSizer( wxHORIZONTAL );
-    m_slider = new wxSlider( this, wxID_ANY, (int)( aValue * 100 ), 10, 1000, wxDefaultPosition, wxDefaultSize,
-                             wxSL_HORIZONTAL | wxSL_VALUE_LABEL );
-    controlsSizer->Add( m_slider, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, KIUI::GetStdMargin() );
+
+    m_label = new wxStaticText( this, wxID_ANY, _( "Display PPI: " ), wxDefaultPosition, wxDefaultSize );
+    controlsSizer->Add( m_label, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, KIUI::GetStdMargin() );
 
     m_spinner = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                                wxSP_ARROW_KEYS, 10, 1000, (int)( aValue * 100 ) );
-    controlsSizer->Add( m_spinner, 0, wxALIGN_CENTER_VERTICAL );
+                                wxSP_ARROW_KEYS, 10, 1000, (int)( aValue * m_baseValue ) );
+    controlsSizer->Add( m_spinner, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, KIUI::GetStdMargin() );
 
-    topSizer->Add( controlsSizer, 0, wxEXPAND | wxALL, KIUI::GetStdMargin() );
+    m_autoButton = new wxButton( this, wxID_ANY, _( "Detect" ) );
+    controlsSizer->Add( m_autoButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, KIUI::GetStdMargin() );
+
+    topSizer->Add( controlsSizer, 0, wxEXPAND, KIUI::GetStdMargin() );
 
     // Middle section: Ruler and units choice
     wxBoxSizer* rulerSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -194,11 +161,11 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue ) 
     m_unitsChoice->SetSelection( 0 ); // Default to MM
     rulerSizer->Add( m_unitsChoice, 0, wxALIGN_CENTER_VERTICAL );
 
-    topSizer->Add( rulerSizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, KIUI::GetStdMargin() );
+    topSizer->Add( rulerSizer, 0, wxEXPAND | wxTOP, KIUI::GetStdMargin() );
 
     SetSizer( topSizer );
 
-    m_slider->Bind( wxEVT_SLIDER, &ZOOM_CORRECTION_CTRL::sliderChanged, this );
+    m_autoButton->Bind( wxEVT_BUTTON, &ZOOM_CORRECTION_CTRL::autoPressed, this );
     m_spinner->Bind( wxEVT_SPINCTRL, &ZOOM_CORRECTION_CTRL::spinnerChanged, this );
     m_unitsChoice->Bind( wxEVT_CHOICE, &ZOOM_CORRECTION_CTRL::unitsChanged, this );
 
@@ -208,14 +175,13 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue ) 
 
 void ZOOM_CORRECTION_CTRL::SetDisplayedValue( double aValue )
 {
-    m_slider->SetValue( (int)( aValue * 100 ) );
-    m_spinner->SetValue( (int)( aValue * 100 ) );
+    m_spinner->SetValue( (int)( aValue * m_baseValue ) );
     m_ruler->Refresh();
 }
 
 double ZOOM_CORRECTION_CTRL::GetValue() const
 {
-    return m_slider->GetValue() / 100.0;
+    return (double) m_spinner->GetValue() / m_baseValue;
 }
 
 int ZOOM_CORRECTION_CTRL::GetUnitsSelection() const
@@ -226,8 +192,7 @@ int ZOOM_CORRECTION_CTRL::GetUnitsSelection() const
 
 bool ZOOM_CORRECTION_CTRL::TransferDataToWindow()
 {
-    m_slider->SetValue( (int)( *m_value * 100 ) );
-    m_spinner->SetValue( (int)( *m_value * 100 ) );
+    m_spinner->SetValue( (int)( *m_value * m_baseValue ) );
     m_ruler->Refresh();
     return true;
 }
@@ -238,21 +203,33 @@ bool ZOOM_CORRECTION_CTRL::TransferDataFromWindow()
     return true;
 }
 
-void ZOOM_CORRECTION_CTRL::sliderChanged( wxCommandEvent& )
-{
-    *m_value = GetValue();
-    m_spinner->SetValue( m_slider->GetValue() );
-    m_ruler->Refresh();
-}
-
 void ZOOM_CORRECTION_CTRL::spinnerChanged( wxSpinEvent& )
 {
-    *m_value = m_spinner->GetValue() / 100.0;
-    m_slider->SetValue( m_spinner->GetValue() );
+    *m_value = m_spinner->GetValue() / m_baseValue;
     m_ruler->Refresh();
 }
 
 void ZOOM_CORRECTION_CTRL::unitsChanged( wxCommandEvent& )
 {
+    m_ruler->Refresh();
+}
+
+void ZOOM_CORRECTION_CTRL::autoPressed( wxCommandEvent& aEvent )
+{
+    wxDisplay dpy( this );
+    double    val = 0.0;
+
+#if wxCHECK_VERSION( 3, 3, 2 )
+    wxSize rawPPI = dpy.GetRawPPI();
+    val = wxRound( ( rawPPI.x + rawPPI.y ) / 2.0 );
+#endif
+
+    if( val < 50 )
+    {
+        wxSize ppi = dpy.GetPPI();
+        val = wxRound( ( ppi.x + ppi.y ) / 2.0 );
+    }
+
+    m_spinner->SetValue( val );
     m_ruler->Refresh();
 }

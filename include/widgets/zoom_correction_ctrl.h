@@ -29,7 +29,8 @@
 
 #include <wx/choice.h>
 #include <wx/panel.h>
-#include <wx/slider.h>
+#include <wx/button.h>
+#include <wx/stattext.h>
 #include <wx/spinctrl.h>
 
 class ZOOM_CORRECTION_RULER;
@@ -47,7 +48,7 @@ enum class ZOOM_CORRECTION_UNITS : int
 class ZOOM_CORRECTION_CTRL : public wxPanel
 {
 public:
-    ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue );
+    ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, double aBaseValue );
 
     void   SetDisplayedValue( double aValue );
     double GetValue() const;
@@ -56,13 +57,15 @@ public:
     bool   TransferDataFromWindow() override;
 
 private:
-    void sliderChanged( wxCommandEvent& aEvent );
     void unitsChanged( wxCommandEvent& aEvent );
     void spinnerChanged( wxSpinEvent& aEvent );
+    void autoPressed( wxCommandEvent& aEvent );
 
+    double                 m_baseValue;
     double*                m_value;
     ZOOM_CORRECTION_RULER* m_ruler;
-    wxSlider*              m_slider;
+    wxStaticText*          m_label;
+    wxButton*              m_autoButton;
     wxSpinCtrl*            m_spinner;
     wxChoice*              m_unitsChoice;
 };
