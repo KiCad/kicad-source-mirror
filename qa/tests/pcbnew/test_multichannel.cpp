@@ -517,4 +517,72 @@ BOOST_FIXTURE_TEST_CASE( TopologyMatchDottedRefDes, MULTICHANNEL_TEST_FIXTURE )
 }
 
 
+/**
+ * Test that GeneratePotentialRuleAreas includes components from child sheets
+ * when generating rule areas for a parent sheet (issue 20016).
+ *
+ * The vme-wren board has hierarchical sheets like /io_drivers_fp/bank0/ which
+ * contains child sheets /io_drivers_fp/bank0/io01/ through io78/. The parent
+ * sheet's rule area should include all components from child sheets.
+ */
+BOOST_FIXTURE_TEST_CASE( GenerateRuleAreasIncludesChildSheets, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "vme-wren", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    RULE_AREA* leafArea = nullptr;
+    RULE_AREA* midArea = nullptr;
+    RULE_AREA* topArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_sheetPath == wxT( "/io_drivers_fp/bank0/io01/" ) )
+            leafArea = &ra;
+        else if( ra.m_sheetPath == wxT( "/io_drivers_fp/bank0/" ) )
+            midArea = &ra;
+        else if( ra.m_sheetPath == wxT( "/io_drivers_fp/" ) )
+            topArea = &ra;
+    }
+
+    BOOST_REQUIRE( leafArea != nullptr );
+    BOOST_REQUIRE( midArea != nullptr );
+    BOOST_REQUIRE( topArea != nullptr );
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Leaf /io_drivers_fp/bank0/io01/ components: %d",
+                                          static_cast<int>( leafArea->m_components.size() ) ) );
+    BOOST_TEST_MESSAGE( wxString::Format( "Mid /io_drivers_fp/bank0/ components: %d",
+                                          static_cast<int>( midArea->m_components.size() ) ) );
+    BOOST_TEST_MESSAGE( wxString::Format( "Top /io_drivers_fp/ components: %d",
+                                          static_cast<int>( topArea->m_components.size() ) ) );
+
+    // Leaf sheet has 31 direct components and no children
+    BOOST_CHECK_EQUAL( leafArea->m_components.size(), 31 );
+
+    // Mid-level sheet has 7 direct + 4 child sheets * 31 each = 131
+    BOOST_CHECK_EQUAL( midArea->m_components.size(), 131 );
+
+    // Top-level sheet has 3 direct + 4 banks * 131 each = 527
+    BOOST_CHECK_EQUAL( topArea->m_components.size(), 527 );
+
+    // Mid-level components must be a superset of leaf components
+    for( FOOTPRINT* fp : leafArea->m_components )
+        BOOST_CHECK( midArea->m_components.count( fp ) > 0 );
+
+    // Top-level components must be a superset of mid-level components
+    for( FOOTPRINT* fp : midArea->m_components )
+        BOOST_CHECK( topArea->m_components.count( fp ) > 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

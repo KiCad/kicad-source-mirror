@@ -269,13 +269,16 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInSheet( wxString aSheetN
     if( aSheetName.EndsWith( wxT( "/" ) ) )
         aSheetName.RemoveLast();
 
+    wxString childPrefix = aSheetName + wxT( "/" );
+
     for( FOOTPRINT* fp : board()->Footprints() )
     {
         auto sn = fp->GetSheetname();
+
         if( sn.EndsWith( wxT( "/" ) ) )
             sn.RemoveLast();
 
-        if( sn == aSheetName )
+        if( sn == aSheetName || sn.StartsWith( childPrefix ) )
             rv.insert( fp );
     }
 
