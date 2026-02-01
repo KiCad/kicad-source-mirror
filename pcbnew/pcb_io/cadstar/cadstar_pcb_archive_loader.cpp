@@ -2717,28 +2717,36 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
                                                    const VECTOR2I& aTransformCentre,
                                                    bool aMirrorInvert )
 {
+    auto drawAsOutline =
+            [&]()
+            {
+                drawCadstarVerticesAsShapes( aCadstarShape.Vertices, aKiCadLayer, aLineThickness, aContainer,
+                                             aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                             aTransformCentre, aMirrorInvert );
+                drawCadstarCutoutsAsShapes( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness, aContainer,
+                                            aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                            aTransformCentre, aMirrorInvert );
+            };
+
+    if( aCadstarShape.Type == SHAPE_TYPE::OPENSHAPE || aCadstarShape.Type == SHAPE_TYPE::OUTLINE )
+    {
+        drawAsOutline();
+        return;
+    }
+
     // Special case solid shapes that are effectively a single line
     if( aCadstarShape.Vertices.size() < 3 )
     {
-        drawCadstarVerticesAsShapes( aCadstarShape.Vertices, aKiCadLayer, aLineThickness, aContainer,
-                                     aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
-                                     aTransformCentre, aMirrorInvert );
-        drawCadstarCutoutsAsShapes( aCadstarShape.Cutouts, aKiCadLayer, aLineThickness, aContainer,
-                                    aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
-                                    aTransformCentre, aMirrorInvert );
+        drawAsOutline();
         return;
     }
 
     PCB_SHAPE* shape = new PCB_SHAPE( aContainer, SHAPE_T::POLY );
 
-    if( aCadstarShape.Type == SHAPE_TYPE::OPENSHAPE || aCadstarShape.Type == SHAPE_TYPE::OUTLINE )
-        shape->SetFillMode( FILL_T::NO_FILL );
     if( aCadstarShape.Type == SHAPE_TYPE::SOLID )
         shape->SetFillMode( FILL_T::FILLED_SHAPE );
-    else if( aCadstarShape.HatchCodeID == "reverse" )
+    else if( getHatchCodeAngle( aCadstarShape.HatchCodeID ) > ANGLE_90 )
         shape->SetFillMode( FILL_T::REVERSE_HATCH );
-    else if( aCadstarShape.HatchCodeID == "cross" )
-        shape->SetFillMode( FILL_T::CROSS_HATCH );
     else
         shape->SetFillMode( FILL_T::HATCH );
 
