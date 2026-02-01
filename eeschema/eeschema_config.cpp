@@ -127,8 +127,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
     // No, this does not escape the function context.
     NULLER raii_nuller( (void*&) m_schematicSetupDialog ); m_schematicSetupDialog = &dlg;
 
-    // TODO: is QuasiModal required here?
-    if( dlg.ShowQuasiModal() == wxID_OK )
+    if( dlg.ShowModal() == wxID_OK )
     {
         // Mark document as modified so that project settings can be saved as part of doc save
         OnModify();
