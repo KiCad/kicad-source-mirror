@@ -209,9 +209,6 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     // not pass a bad aFaceId.
     if( (unsigned) aFaceId >= arrayDim( m_kiface ) )
     {
-        // @todo : throw an exception here for python's benefit, at least that
-        // way it gets some explanatory text.
-
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return nullptr;
     }
@@ -406,9 +403,6 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
     // not pass a bad aFrameType.
     if( (unsigned) aFrameType >= KIWAY_PLAYER_COUNT )
     {
-        // @todo : throw an exception here for python's benefit, at least that
-        // way it gets some explanatory text.
-
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFrameType" ) );
         return nullptr;
     }
@@ -462,9 +456,6 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
     // not pass a bad aFrameType.
     if( (unsigned) aFrameType >= KIWAY_PLAYER_COUNT )
     {
-        // @todo : throw an exception here for python's benefit, at least that
-        // way it gets some explanatory text.
-
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFrameType" ) );
         return false;
     }

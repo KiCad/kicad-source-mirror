@@ -87,8 +87,8 @@ bool GRAPHICS_IMPORTER::Import( const VECTOR2D& aScale )
     }
     catch( const std::bad_alloc& )
     {
-        // Memory exhaustion
-        // TODO report back an error message
+        // Memory exhaustion; we'd report an error message but the chances of us being able to display
+        // it are small.
         return false;
     }
 
