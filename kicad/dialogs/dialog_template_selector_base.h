@@ -105,7 +105,7 @@ class TEMPLATE_WIDGET_BASE : public wxPanel
 
 	public:
 
-		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_THEME|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~TEMPLATE_WIDGET_BASE();
 
