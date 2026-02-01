@@ -1756,6 +1756,14 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
     for( EDA_ITEM* item : aSelection )
         m_frame->AutoRotateItem( m_frame->GetScreen(), static_cast<SCH_ITEM*>( item ) );
 
+    // Clear SELECTED_BY_DRAG and other temp flags before CleanUp so that cleanup can properly
+    // process all items, including removing zero-length wires and unwanted stubs
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
+        item->ClearTempFlags();
+
+    for( EDA_ITEM* item : selectionCopy )
+        item->ClearTempFlags();
+
     m_frame->Schematic().CleanUp( aCommit );
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
@@ -1844,9 +1852,10 @@ void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
 
                 // Delete newly dangling lines:
                 // Find split segments (one segment is new, the other is changed) that
-                // we aren't dragging and don't have selected
-                if( aChangedItem->HasFlag( IS_BROKEN) && aChangedItem->IsDangling()
-                  && !aChangedItem->IsSelected() )
+                // we aren't dragging and don't have selected.
+                // Also catch drag wires (created with IS_NEW and SELECTED_BY_DRAG) that are dangling.
+                if( ( aChangedItem->HasFlag( IS_BROKEN ) || aChangedItem->HasFlag( IS_NEW ) )
+                    && aChangedItem->IsDangling() && !aChangedItem->IsSelected() )
                 {
                     danglers.insert( aChangedItem );
                 }
