@@ -1467,11 +1467,23 @@ double PADSTACK::Similarity( const PADSTACK& aOther ) const
 
 void PADSTACK::FlipLayers( BOARD* aBoard )
 {
-    std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> oldCopperProps = m_copperProps;
-    m_copperProps.clear();
+    if( m_mode == MODE::FRONT_INNER_BACK )
+    {
+        std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> oldCopperProps = m_copperProps;
+        m_copperProps.clear();
 
-    for( const auto& [layer, props] : oldCopperProps )
-        m_copperProps[aBoard->FlipLayer( layer )] = props;
+        m_copperProps[aBoard->FlipLayer( F_Cu )] = oldCopperProps[F_Cu];
+        m_copperProps[INNER_LAYERS] = oldCopperProps[INNER_LAYERS];
+        m_copperProps[aBoard->FlipLayer( B_Cu )] = oldCopperProps[B_Cu];
+    }
+    else if( m_mode == MODE::CUSTOM )
+    {
+        std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> oldCopperProps = m_copperProps;
+        m_copperProps.clear();
+
+        for( const auto& [layer, props] : oldCopperProps )
+            m_copperProps[aBoard->FlipLayer( layer )] = props;
+    }
 
     std::swap( m_frontMaskProps, m_backMaskProps );
 
