@@ -303,15 +303,15 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticText251 = new wxStaticText( this, wxID_ANY, _("Scaling"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText251->Wrap( -1 );
-	rightSizer->Add( m_staticText251, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 15 );
+	rightSizer->Add( m_staticText251, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 13 );
 
 	m_staticline7 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	rightSizer->Add( m_staticline7, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	rightSizer->Add( m_staticline7, 0, wxEXPAND|wxTOP, 2 );
 
 	m_scalingSizer = new wxBoxSizer( wxVERTICAL );
 
 
-	rightSizer->Add( m_scalingSizer, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	rightSizer->Add( m_scalingSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	rightSizer->Add( 0, 15, 0, wxEXPAND, 5 );

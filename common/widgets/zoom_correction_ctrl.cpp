@@ -125,6 +125,7 @@ private:
     }
 };
 
+
 ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, double aBaseValue ) :
         wxPanel( aParent, wxID_ANY ),
         m_baseValue( aBaseValue ),
@@ -135,7 +136,7 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, d
     // Top section: Label, spinner, auto button
     wxBoxSizer* controlsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_label = new wxStaticText( this, wxID_ANY, _( "Display PPI: " ), wxDefaultPosition, wxDefaultSize );
+    m_label = new wxStaticText( this, wxID_ANY, _( "Display PPI: " ) );
     controlsSizer->Add( m_label, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, KIUI::GetStdMargin() );
 
     m_spinner = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -143,7 +144,7 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, d
     controlsSizer->Add( m_spinner, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, KIUI::GetStdMargin() );
 
     m_autoButton = new wxButton( this, wxID_ANY, _( "Detect" ) );
-    controlsSizer->Add( m_autoButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, KIUI::GetStdMargin() );
+    controlsSizer->Add( m_autoButton, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, KIUI::GetStdMargin() );
 
     topSizer->Add( controlsSizer, 0, wxEXPAND, KIUI::GetStdMargin() );
 
@@ -151,7 +152,7 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, d
     wxBoxSizer* rulerSizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_ruler = new ZOOM_CORRECTION_RULER( this );
-    rulerSizer->Add( m_ruler, 1, wxEXPAND | wxRIGHT, KIUI::GetStdMargin() );
+    rulerSizer->Add( m_ruler, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, KIUI::GetStdMargin() );
 
     wxArrayString choices;
     choices.Add( wxT( "mm" ) );
@@ -159,7 +160,7 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, d
     choices.Add( wxT( "in" ) );
     m_unitsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices );
     m_unitsChoice->SetSelection( 0 ); // Default to MM
-    rulerSizer->Add( m_unitsChoice, 0, wxALIGN_CENTER_VERTICAL );
+    rulerSizer->Add( m_unitsChoice, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxTOP, KIUI::GetStdMargin() );
 
     topSizer->Add( rulerSizer, 0, wxEXPAND | wxTOP, KIUI::GetStdMargin() );
 
@@ -173,16 +174,19 @@ ZOOM_CORRECTION_CTRL::ZOOM_CORRECTION_CTRL( wxWindow* aParent, double& aValue, d
     m_ruler->Refresh();
 }
 
+
 void ZOOM_CORRECTION_CTRL::SetDisplayedValue( double aValue )
 {
     m_spinner->SetValue( (int)( aValue * m_baseValue ) );
     m_ruler->Refresh();
 }
 
+
 double ZOOM_CORRECTION_CTRL::GetValue() const
 {
     return (double) m_spinner->GetValue() / m_baseValue;
 }
+
 
 int ZOOM_CORRECTION_CTRL::GetUnitsSelection() const
 {
@@ -197,11 +201,13 @@ bool ZOOM_CORRECTION_CTRL::TransferDataToWindow()
     return true;
 }
 
+
 bool ZOOM_CORRECTION_CTRL::TransferDataFromWindow()
 {
     *m_value = GetValue();
     return true;
 }
+
 
 void ZOOM_CORRECTION_CTRL::spinnerChanged( wxSpinEvent& )
 {
@@ -209,10 +215,12 @@ void ZOOM_CORRECTION_CTRL::spinnerChanged( wxSpinEvent& )
     m_ruler->Refresh();
 }
 
+
 void ZOOM_CORRECTION_CTRL::unitsChanged( wxCommandEvent& )
 {
     m_ruler->Refresh();
 }
+
 
 void ZOOM_CORRECTION_CTRL::autoPressed( wxCommandEvent& aEvent )
 {
