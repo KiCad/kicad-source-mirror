@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-16 18:17+0300\n"
-"PO-Revision-Date: 2026-01-23 18:01+0000\n"
+"PO-Revision-Date: 2026-02-02 15:25+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
 "Language: ro\n"
@@ -4679,9 +4679,9 @@ msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:567
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Caracter ilegal găsit în numele bibliotecii logice"
+msgstr "Caracter ilegal „%c” în pseudonimul „%s”."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:578
 #: common/dialogs/panel_design_block_lib_table.cpp:625
@@ -7286,9 +7286,8 @@ msgid "Could not look up target commit"
 msgstr "Nu s-a putut căuta commit-ul"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut obține arborele din commit-ul țintă"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
@@ -7300,14 +7299,12 @@ msgid "Failed to update reference '%s' to point to '%s'"
 msgstr "e nevoie de un număr pentru '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Nu se poate crea fișierul de raport '%s'"
+msgstr "Nu s-a reușit curățarea stării depozitului după avansarea rapidă."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Ieșirea datelor a eșuat"
+msgstr "Inițializarea Revision Walker a eșuat."
 
 #: common/git/git_pull_handler.cpp:343
 msgid "Failed to push reference to revision walker."
@@ -7347,9 +7344,8 @@ msgid "Conflicts detected during rebase"
 msgstr ""
 
 #: common/git/git_push_handler.cpp:56
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut căuta la distanță"
 
 #: common/git/git_push_handler.cpp:76
 #, fuzzy, c-format
@@ -7555,9 +7551,8 @@ msgid "Select all cells"
 msgstr "Selectați toate celulele"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Adnotare completă."
+msgstr "Acceptați completarea automată"
 
 #: common/hotkey_store.cpp:45
 #, fuzzy
@@ -7655,9 +7650,9 @@ msgid "Invalid spline definition encountered"
 msgstr "S-a întâlnit o definiție nevalabilă a splinei"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "Oglindirea pentru axa Y nu este încă acceptată"
+msgstr "%s nu este acceptat."
 
 #: common/import_gfx/dxf_import_plugin.h:460
 #: common/import_gfx/dxf_import_plugin.h:465
@@ -7795,15 +7790,15 @@ msgstr "e nevoie de un număr pentru '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #: common/io/easyedapro/easyedapro_import_utils.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Eroare la citirea imaginii %s."
+msgstr "Eroare JSON la citirea „%s”: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:185
 #: common/io/easyedapro/easyedapro_import_utils.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Eroare la citirea imaginii %s."
+msgstr "Eroare la citirea „%s”: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:204
 #, c-format
@@ -7819,9 +7814,9 @@ msgstr "Nu se poate deschide fișierul '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:272
 #: common/io/easyedapro/easyedapro_import_utils.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Nu se poate deschide fișierul '%s'."
+msgstr "Nu se poate analiza linia JSON %d în „%s”: %s"
 
 #: common/io/io_base.cpp:139
 #, fuzzy
@@ -8085,9 +8080,8 @@ msgid "Schematic PythonBOM export"
 msgstr "Editor de schemă"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Actualizarea PCB din schemă..."
+msgstr "Efectuați DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 #, fuzzy
@@ -8113,9 +8107,8 @@ msgid "PCB: Render"
 msgstr ""
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Actualizarea PCB din schemă..."
+msgstr "Efectuați ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
 #, fuzzy
@@ -8123,9 +8116,8 @@ msgid "Schematic ERC Job Settings"
 msgstr "Exportați netlist-ul plăcii"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Actualizați schema de la PCB..."
+msgstr "Schema: Efectuați ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 #, fuzzy
@@ -8688,9 +8680,9 @@ msgstr "Solid"
 
 #: common/netclass.cpp:310 pcbnew/component_class_manager.cpp:71
 #: pcbnew/zone.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "Numele amprentei nu poate conține \"%s\"."
+msgstr "%s, %s și %d mai mult"
 
 #: common/notifications_manager.cpp:93
 #, fuzzy
@@ -8854,9 +8846,9 @@ msgid "Failed to create file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Nu s-a reușit eliminarea directorului %s"
+msgstr "Eroare la deschiderea directorului: „%s”."
 
 #: common/project/project_archiver.cpp:316
 #, c-format
@@ -8892,9 +8884,9 @@ msgid "Error: "
 msgstr "Eroare: "
 
 #: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:3013
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Directorul '%s' nu există"
+msgstr "Fișierul „%s” nu există."
 
 #: common/richio.cpp:129 eeschema/sch_io/eagle/sch_io_eagle.cpp:599
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:639
@@ -9027,9 +9019,8 @@ msgid "Open existing document"
 msgstr "Deschideți documentul existent"
 
 #: common/tool/actions.cpp:75
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Editor de text"
+msgstr "Editați într-un editor de text..."
 
 #: common/tool/actions.cpp:76
 #, fuzzy
@@ -9037,9 +9028,8 @@ msgid "Open a library file with a text editor"
 msgstr "Editor de schemă"
 
 #: common/tool/actions.cpp:82
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Deschideți directorul proiectului în browserul de fișiere"
+msgstr "Deschideți în browserul de fișiere..."
 
 #: common/tool/actions.cpp:83
 #, fuzzy
@@ -9722,9 +9712,8 @@ msgid "Edit grid definitions"
 msgstr "Setați dimensiunile grilei"
 
 #: common/tool/actions.cpp:939
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Originea grilei"
+msgstr "Originea grilei..."
 
 #: common/tool/actions.cpp:940
 msgid "Set the grid origin point"
@@ -9754,9 +9743,8 @@ msgid "Millimeters"
 msgstr "Milimetri"
 
 #: common/tool/actions.cpp:978
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Selectați niciunul"
+msgstr "Selectați coloanele..."
 
 #: common/tool/actions.cpp:985
 msgid "Switch units"
@@ -10166,14 +10154,14 @@ msgid ", or "
 msgstr ""
 
 #: common/validators.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Indicatorul de referință nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Câmpul de valoare nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:436
 #, c-format
@@ -10181,24 +10169,24 @@ msgid "The footprint field cannot contain %s character(s)."
 msgstr "Textul atributului capsulă nu poate conține caracterul %s."
 
 #: common/validators.cpp:440
-#, fuzzy, c-format
+#, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Câmpul fișei tehnice nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Numele foii nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Numele fișierului nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr "Numele semnalului nu pot conține caractere CR sau LF"
+msgstr "Câmpul nu poate conține caracterul (caracterele) %s."
 
 #: common/validators.cpp:462
 msgid "The reference designator cannot contain text variable references"
@@ -10537,7 +10525,7 @@ msgstr "Amprentă..."
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Undo Changes"
-msgstr "Anulează modificările"
+msgstr "Revertiți modificările"
 
 #: common/widgets/widget_hotkey_list.cpp:454
 msgid "Clear Assigned Hotkey"
@@ -11354,9 +11342,9 @@ msgid "Cleared annotation for %s (unit %s)."
 msgstr "Adnotat %s (unitate %s) ca %s."
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Ștergeți adnotarea"
+msgstr "Adnotare ștersă pentru %s."
 
 #: eeschema/annotate.cpp:174
 #, fuzzy
@@ -11580,9 +11568,8 @@ msgid "Please select some items to save as a design block."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:469
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Selectați fișierul tabelului bibliotecii globale %s:"
+msgstr "Selectați biblioteca pe care doriți să o ștergeți."
 
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
@@ -11611,9 +11598,9 @@ msgid "Delete design block '%s' in library '%s' from disk?"
 msgstr "Ștergeți blocul de proiectare „%s” din biblioteca „%s” de pe disc?"
 
 #: eeschema/design_block_utils.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Amprenta nu a fost găsită."
+msgstr "Blocul de proiectare „%s” șters din biblioteca „%s”"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -11974,9 +11961,8 @@ msgid "Update"
 msgstr "Actualizați"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Simbol..."
+msgstr "Actualizare simboluri"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:563
 #, fuzzy
@@ -12142,14 +12128,13 @@ msgid "Connected to database successfully"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Numele amprentei nu poate conține \"%s\"."
+msgstr "Conectarea la baza de date a eșuat: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Numele amprentei nu poate conține \"%s\"."
+msgstr "Nu există conexiune la baza de date"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, fuzzy, c-format
@@ -12787,7 +12772,7 @@ msgid ""
 "> General > Formatting"
 msgstr ""
 "Vizibilitatea referințelor între foi este controlată global din Configurare "
-"schematică > General > Formatare."
+"schematică > General > Formatare"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
@@ -15123,9 +15108,9 @@ msgid "Failed to copy schematic file '%s' to destination '%s'."
 msgstr "Imposibil de analizat \"%s\" în '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Schimbați simbolul %s din „%s” în „%s”"
+msgstr "Schimbați linkul „%s” din „%s” în „%s”?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:579
 #: eeschema/dialogs/dialog_sheet_properties.cpp:596
@@ -17006,7 +16991,7 @@ msgstr "Afișați meniul Clarificare selecție"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:160
 #: pcbnew/dialogs/panel_edit_options_base.cpp:228
 msgid "Add item(s) to selection"
-msgstr "Adăugați elemente la selecție."
+msgstr "Adăugați articolul (articolele) la selecție"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:165
@@ -17657,9 +17642,9 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:976
 #: pcbnew/dialogs/dialog_export_step.cpp:612
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "Fișierul '%s' există deja în listă."
+msgstr "Fișierul „%s” există deja. Doriți să suprascrieți acest fișier?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1009 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
@@ -19504,9 +19489,9 @@ msgstr "Fișierul %s nu a fost găsit."
 #: kicad/dialogs/panel_jobset.cpp:819 pagelayout_editor/pl_editor_frame.cpp:413
 #: pcbnew/footprint_edit_frame.cpp:876 pcbnew/footprint_edit_frame.cpp:916
 #: pcbnew/pcb_edit_frame.cpp:1186
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "Salvați modificările"
+msgstr "Salvați modificările în „%s” înainte de închidere?"
 
 #: eeschema/sch_edit_frame.cpp:1189
 msgid ""
@@ -21792,9 +21777,8 @@ msgid "Cannot open file "
 msgstr "Nu se poate deschide fișierul "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:853
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Sfârșit neașteptat al fișierului."
+msgstr "Sfârșit neașteptat al fișierului. Lipsește [END] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:863
 msgid "Error on line "
@@ -22410,9 +22394,8 @@ msgid "Unable to load or parse file %s"
 msgstr "Nu se poate citi fișierul '%s'"
 
 #: eeschema/sim/simulator_frame.cpp:621
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Salvați modificările"
+msgstr "Salvați modificările în registrul de lucru?"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
 #, fuzzy
@@ -22993,9 +22976,10 @@ msgid "Create an editable copy"
 msgstr "Creați un dosar nou pentru bibliotecă"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "Salvați o copie a documentului curent într-o altă locație"
+msgstr ""
+"Creați o copie modificabilă a simbolului sau a întregii biblioteci (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:962
 #, fuzzy
@@ -23169,10 +23153,11 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
+msgstr ""
+"Simbolul „%s” există deja în biblioteca „%s”. Doriți să îl suprascrieți?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
 #, c-format
@@ -23719,9 +23704,8 @@ msgid "Create a new design block from the current selection"
 msgstr "Eliminați din selecție"
 
 #: eeschema/tools/sch_actions.cpp:170
-#, fuzzy
 msgid "Delete Design Block"
-msgstr "Ștergeți și excluderile?"
+msgstr "Ștergeți blocul de proiectare"
 
 #: eeschema/tools/sch_actions.cpp:171
 #, fuzzy
@@ -24061,9 +24045,8 @@ msgid "Copy sheet into project and draw on current sheet"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:543
-#, fuzzy
 msgid "Draw Sheet from Design Block"
-msgstr "Ștergeți și excluderile?"
+msgstr "Foaie de desen din blocul de proiectare"
 
 #: eeschema/tools/sch_actions.cpp:544
 #, fuzzy
@@ -24648,7 +24631,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1129
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Generează Listă de materiale (BOM) în format vechi"
+msgstr "Generează Listă de materiale (BoM) în format vechi..."
 
 #: eeschema/tools/sch_actions.cpp:1130
 msgid ""
@@ -25994,9 +25977,9 @@ msgid "Current data will be lost?"
 msgstr ""
 
 #: gerbview/clear_gbr_drawlayers.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Clear layer %d?"
-msgstr "Construiți stratul Tehnic %d"
+msgstr "Ștergeți stratul %d?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
 #, fuzzy
@@ -26071,9 +26054,8 @@ msgid "Gerbers with known layers: %d"
 msgstr ""
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
-#, fuzzy
 msgid "Assign to matching PCB layers?"
-msgstr "Alocați un netclass la rețeaua firului selectat"
+msgstr "Atribuiți straturilor PCB corespunzătoare?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:217
 #, fuzzy
@@ -26652,7 +26634,7 @@ msgstr "Fișierul zip \"%s\" nu poate fi deschis."
 #: gerbview/files.cpp:485
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Fișierul '%s' a fost omis (fișier tip job gerber)"
+msgstr "Fișier omis „%s” (fișier de lucru Gerber)."
 
 #: gerbview/files.cpp:532
 #, c-format
@@ -29789,9 +29771,9 @@ msgid "Failed to push project"
 msgstr "Ieșirea datelor a eșuat"
 
 #: kicad/project_tree_pane.cpp:1892
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Nu s-a putut încărca biblioteca kiface \"%s\"."
+msgstr "Nu s-a putut căuta Branch „%s”: %s"
 
 #: kicad/project_tree_pane.cpp:1905
 #, fuzzy, c-format
@@ -29838,7 +29820,7 @@ msgstr "Nu s-a putut obține indexul depozitului: %s"
 #: kicad/project_tree_pane.cpp:2494
 #, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Failed to add file to index: %s"
+msgstr "Nu s-a putut adăuga fișierul la index: %s"
 
 #: kicad/project_tree_pane.cpp:2502
 #, c-format
@@ -29871,9 +29853,9 @@ msgid "Failed to create author signature: %s"
 msgstr "Nu s-a putut crea semnătura autorului: %s"
 
 #: kicad/project_tree_pane.cpp:2589
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
+msgstr "Nu s-a putut crea commit: %s"
 
 #: kicad/project_tree_pane.cpp:2594
 #, fuzzy, c-format
@@ -30574,8 +30556,7 @@ msgstr "Afișați titlul în modul de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:114
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Spațiile rezervate pentru text vor fi înlocuite cu date de previzualizare."
+msgstr "Spațiile rezervate pentru text sunt înlocuite cu date de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 #, fuzzy
@@ -32231,7 +32212,7 @@ msgstr "pF"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:300
 msgid "pico-Farad"
-msgstr "pico-Farad"
+msgstr "picofarad"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 #, fuzzy
@@ -32843,7 +32824,7 @@ msgstr "Impedanță trasee diferențiale (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:340
 msgid "Zeven"
-msgstr "Zeven"
+msgstr "Z_drept"
 
 #: pcb_calculator/transline_ident.cpp:341
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -32851,7 +32832,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:344
 msgid "Zodd"
-msgstr "Zodd"
+msgstr "Z_ impar"
 
 #: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -33738,9 +33719,8 @@ msgid "<br/>RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:531
-#, fuzzy
 msgid "Reannotate anyway?"
-msgstr "Reanotați:"
+msgstr "Totuși, să adaugă o nouă adnotare?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:551
 #, fuzzy
@@ -35982,9 +35962,9 @@ msgid "The output file name conflicts with the selected compression format."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "Fișierul '%s' există deja în listă."
+msgstr "Fișierele de ieșire „%s” există deja. Doriți să le suprascrieți?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:369
 #, fuzzy, c-format
@@ -36002,11 +35982,13 @@ msgid "Cannot create temporary output directory."
 msgstr "Nu se poate crea directorul de ieșire '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "Simbolul \"%s\" există deja în biblioteca \"%s\"."
+msgstr ""
+"Directorul de ieșire „%s” există deja și nu este gol. Doriți să îl "
+"suprascrieți?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:423
 #, fuzzy, c-format
@@ -37043,9 +37025,8 @@ msgid "Traceback of Python Script Errors"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:244
-#, fuzzy
 msgid "Use a relative path?"
-msgstr "Relativ"
+msgstr "Să folosești o cale relativă?"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:253
 #: pcbnew/dialogs/dialog_gendrill.cpp:347
@@ -40186,9 +40167,8 @@ msgid "Apply Anyway"
 msgstr "Adăugați oricum"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:558
-#, fuzzy
 msgid "Cancel Changes"
-msgstr "Salvați modificările?"
+msgstr "Anulează modificările"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:572
 #, c-format
@@ -40758,7 +40738,7 @@ msgid ""
 "Size must be between %s and %s"
 msgstr ""
 "%s: Dimensiunea textului este incorectă.\n"
-"Dimensiunea trebuie să fie între %s și %s."
+"Dimensiunea trebuie să fie între %s și %s"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:254
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:260
@@ -40793,10 +40773,10 @@ msgid "Hidden footprint libraries are not yet supported."
 msgstr "Amprenta \"%s\" nu a fost găsită."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Fișierul '%s' există deja în listă."
+msgstr "Folderul „%s” există deja. Doriți să suprascrieți amprentele existente?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, fuzzy, c-format
@@ -44797,9 +44777,9 @@ msgid "Footprint exported to file '%s'."
 msgstr "Nu se poate scrie raportul în fișierul \"%s\"."
 
 #: pcbnew/footprint_libraries_utils.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "Eroare la încărcarea amprentei %s din biblioteca \"%s\"."
+msgstr "Ștergeți amprenta „%s” din biblioteca „%s”?"
 
 #: pcbnew/footprint_libraries_utils.cpp:579
 #, fuzzy, c-format
@@ -45873,9 +45853,10 @@ msgid "Cannot parse footprint name in symbol section of netlist."
 msgstr ""
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
-#, fuzzy
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Ștergeți referințele pentru toate simbolurile inserate"
+msgstr ""
+"Nu se poate analiza desemnatorul de referință în secțiunea simbolurilor din "
+"lista de rețele."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
@@ -46051,7 +46032,7 @@ msgstr "Pad %s %s din %s pe %s."
 #: pcbnew/pad.cpp:1700
 #, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s %s din %s pe %s."
+msgstr "Pad %s %s din %s pe %s"
 
 #: pcbnew/pad.cpp:1708
 #, fuzzy, c-format
@@ -51108,10 +51089,8 @@ msgid "Update Footprint..."
 msgstr "Amprentă..."
 
 #: pcbnew/tools/pcb_actions.cpp:785
-#, fuzzy
 msgid "Update footprint to include any changes from the library"
-msgstr ""
-"Actualizați amprentele de peplacă pentru a face referire la noua bibliotecă?"
+msgstr "Actualizați amprenta pentru a include orice modificări din bibliotecă"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 #, fuzzy
@@ -51119,10 +51098,8 @@ msgid "Update Footprints from Library..."
 msgstr "Amprente în bibliotecă..."
 
 #: pcbnew/tools/pcb_actions.cpp:792
-#, fuzzy
 msgid "Update footprints to include any changes from the library"
-msgstr ""
-"Actualizați amprentele de peplacă pentru a face referire la noua bibliotecă?"
+msgstr "Actualizați amprentele pentru a include orice modificări din bibliotecă"
 
 #: pcbnew/tools/pcb_actions.cpp:798
 #, fuzzy
@@ -51360,7 +51337,7 @@ msgstr "Importați sesiunea Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:1016
 msgid "Export Specctra DSN..."
-msgstr "Export Specctra DSN..."
+msgstr "Exportați Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1017
 #, fuzzy
@@ -54448,9 +54425,8 @@ msgid "KiCad Schematic Symbol"
 msgstr "Schematică KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "Editor foi de desen"
+msgstr "Foaie de desen KiCad"
 
 #~ msgid "ASCII"
 #~ msgstr "ASCII"
