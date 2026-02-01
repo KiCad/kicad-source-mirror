@@ -35,4 +35,3 @@ endif()
 if( KICAD_BUILD_PNS_DEBUG_TOOL )
     add_subdirectory( pns )
 endif()
-

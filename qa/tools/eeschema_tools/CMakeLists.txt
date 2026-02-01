@@ -21,6 +21,8 @@ add_executable( qa_eeschema_tools
 
     # The main entry point
     eeschema_tools.cpp
+
+    tools/lib_parser/lib_parser.cpp
 )
 
 include_directories(
