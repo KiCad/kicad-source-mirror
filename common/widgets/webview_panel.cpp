@@ -29,7 +29,8 @@
 #include <wx/utils.h>
 #include <wx/log.h>
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined( __MINGW32__ )
+    // note webview2 is available on Windows, but not on MINGW (only webview available)
     #include <webview2EnvironmentOptions.h>
 #endif
 
@@ -55,7 +56,7 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
 #if wxCHECK_VERSION( 3, 3, 0 )
     wxWebViewConfiguration config = wxWebView::NewConfiguration();
 
-#if defined( __WXMSW__ )
+#if defined( __WXMSW__ ) && !defined( __MINGW32__ )
     ICoreWebView2EnvironmentOptions* webViewOptions =
             (ICoreWebView2EnvironmentOptions*) config.GetNativeConfiguration();
 
