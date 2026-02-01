@@ -156,6 +156,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_footprintsTitleTemplate  = m_Notebook->GetPageText( 2 );
     m_ignoredTitleTemplate     = m_Notebook->GetPageText( 3 );
 
+    // DPI fix
+    bSizerViolationsBox->SetMinSize( FromDIP( bSizerViolationsBox->GetMinSize() ) );
+
     Layout(); // adding the units above expanded Clearance text, now resize.
 
     SetFocus();

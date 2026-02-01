@@ -62,6 +62,7 @@ class DIALOG_DRC_BASE : public DIALOG_SHIM
 		wxPanel* results;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelViolations;
+		wxBoxSizer* bSizerViolationsBox;
 		wxDataViewCtrl* m_markerDataView;
 		wxDataViewCtrl* m_unconnectedDataView;
 		wxPanel* m_panelFootprintWarnings;

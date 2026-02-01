@@ -104,7 +104,6 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_Notebook->SetMinSize( wxSize( 640,-1 ) );
 
 	m_panelViolations = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerViolationsBox;
 	bSizerViolationsBox = new wxBoxSizer( wxVERTICAL );
 
 	bSizerViolationsBox->SetMinSize( wxSize( -1,320 ) );
