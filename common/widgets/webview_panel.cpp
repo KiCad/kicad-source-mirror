@@ -29,6 +29,11 @@
 #include <wx/utils.h>
 #include <wx/log.h>
 
+#if defined(__WXMSW__)
+    #include <webview2EnvironmentOptions.h>
+#endif
+
+
 WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize& aSize,
                               const int aStyle, TOOL_MANAGER* aToolManager, TOOL_BASE* aTool ) :
         wxPanel( aParent, aId, aPos, aSize, aStyle ),
@@ -36,7 +41,7 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_handleExternalLinks( false ),
         m_loadError( false ),
         m_loadedEventBound( false ),
-        m_browser( wxWebView::New() ),
+        m_browser( nullptr ),
         m_toolManager( aToolManager ),
         m_tool( aTool )
 {
@@ -46,6 +51,20 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
     {
         wxSetEnv( wxT( "WEBKIT_DISABLE_COMPOSITING_MODE" ), wxT( "1" ) );
     }
+
+    wxWebViewConfiguration config = wxWebView::NewConfiguration();
+
+#if defined( __WXMSW__ )
+    ICoreWebView2EnvironmentOptions* webViewOptions =
+            (ICoreWebView2EnvironmentOptions*) config.GetNativeConfiguration();
+
+    // Disable gesture navigation features
+    webViewOptions->put_AdditionalBrowserArguments(
+            L"--disable-features=msEdgeMouseGestureSupported,msEdgeMouseGestureDefaultEnabled,OverscrollHistoryNavigation "
+            L"--enable-features=kEdgeMouseGestureDisabledInCN" );
+#endif
+
+    m_browser = wxWebView::New( config );
 
 #ifdef __WXMAC__
     m_browser->RegisterHandler( wxSharedPtr<wxWebViewHandler>( new wxWebViewArchiveHandler( "wxfs" ) ) );
