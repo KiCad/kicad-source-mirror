@@ -81,7 +81,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         {
             wxString libIDString( part.name );
 
-            LIB_SYMBOL* symbol = loadSymbolFromPart( libIDString, category, part );
+            LIB_SYMBOL* symbol = loadSymbolFromPart( aLibraryPath, libIDString, category, part );
 
             if( symbol && ( !powerSymbolsOnly || symbol->IsPower() ) )
                 aSymbolList.emplace_back( symbol );
@@ -156,7 +156,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
 
     wxCHECK( foundCategory, nullptr );
 
-    return loadSymbolFromPart( aAliasName, *foundCategory, result );
+    return loadSymbolFromPart( aLibraryPath, aAliasName, *foundCategory, result );
 }
 
 
@@ -349,7 +349,8 @@ void SCH_IO_HTTP_LIB::syncCache( const HTTP_LIB_CATEGORY& category )
 }
 
 
-LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
+LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
+                                                 const wxString& aSymbolName,
                                                  const HTTP_LIB_CATEGORY& aCategory,
                                                  const HTTP_LIB_PART& aPart )
 {
@@ -358,6 +359,10 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
     LIB_ID      symbolId;
 
     std::string symbolIdStr = aPart.symbolIdStr;
+
+    // Extract library nickname from the library path (e.g., "/path/to/W5.kicad_httplib" -> "W5")
+    wxFileName libFileName( aLibraryPath );
+    wxString   libNickname = libFileName.GetName();
 
     // Get or Create the symbol using the found symbol
     if( !symbolIdStr.empty() )
@@ -376,6 +381,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
             symbol->SetName( aSymbolName );
 
             LIB_ID libId = symbol->GetLibId();
+            libId.SetLibNickname( libNickname );
             libId.SetSubLibraryName( aCategory.name );
             symbol->SetLibId( libId );
         }
@@ -398,6 +404,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aSymbolName,
         symbol = new LIB_SYMBOL( aSymbolName );
 
         LIB_ID libId = symbol->GetLibId();
+        libId.SetLibNickname( libNickname );
         libId.SetSubLibraryName( aCategory.name );
         symbol->SetLibId( libId );
     }
