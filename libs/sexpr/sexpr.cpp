@@ -197,6 +197,10 @@ namespace SEXPR
         else if( IsDouble() )
         {
             std::string out;
+
+            // This code does the same thing as FormatDouble2Str() in string_utils.cpp
+            // Unfortunately on msys2 currently trying to use FormatDouble2Str creates a link
+            // issue. So duplicate a similar code here for now.
             out = fmt::format( "{:.10g}", GetDouble() );
 
             // Scientific notation not allowed. So detect and change it
