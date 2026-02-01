@@ -1339,8 +1339,7 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
         m_libMgr->Sync( aForceRefresh,
                 [&]( int progress, int max, const wxString& libName )
                 {
-                    progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'..." ),
-                                                                    libName ) );
+                    progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'..." ), libName ) );
                 } );
     }
     else if( !aPreloadCancelled )

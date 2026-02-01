@@ -27,10 +27,14 @@
 #include <libraries/symbol_library_adapter.h>
 
 
-// TODO(JE) library tables -- this class doesn't need to exist anymore
+/**
+ * Symbol library management helper that is specific to the symbol library editor frame.
+ *
+ * The base class handles library manipulation; this one also handles synchronizing the LIB_TREE.
+ */
+
 LIB_SYMBOL_LIBRARY_MANAGER::LIB_SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFrame ) :
-        SYMBOL_LIBRARY_MANAGER( aFrame ),
-        m_syncHash( 0 )
+        SYMBOL_LIBRARY_MANAGER( aFrame )
 {
     m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( &aFrame, this );
     m_adapter->ShowUnits( false );
@@ -38,14 +42,11 @@ LIB_SYMBOL_LIBRARY_MANAGER::LIB_SYMBOL_LIBRARY_MANAGER( SYMBOL_EDIT_FRAME& aFram
 
 
 void LIB_SYMBOL_LIBRARY_MANAGER::Sync( const wxString& aForceRefresh,
-                                       std::function<void( int, int,
-                                                           const wxString& )> aProgressCallback )
+                                       std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     m_logger->Activate();
     {
-        getAdapter()->Sync( aForceRefresh, aProgressCallback );
-        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
-        m_syncHash = adapter->GetModifyHash();
+        getAdapter()->Sync( aForceRefresh, std::move( aProgressCallback ) );
     }
     m_logger->Deactivate();
 }
@@ -149,8 +150,7 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_
 }
 
 
-bool LIB_SYMBOL_LIBRARY_MANAGER::CreateNewSymbol( const wxString& aLibrary,
-                                                  const NEW_SYMBOL_PROPERTIES& aProps )
+bool LIB_SYMBOL_LIBRARY_MANAGER::CreateNewSymbol( const wxString& aLibrary, const NEW_SYMBOL_PROPERTIES& aProps )
 {
     LIB_SYMBOL* parent = nullptr;
 

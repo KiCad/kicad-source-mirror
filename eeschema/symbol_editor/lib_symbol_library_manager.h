@@ -17,8 +17,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KICAD_LIB_SYMBOL_LIBRARY_MANAGER_H
-#define KICAD_LIB_SYMBOL_LIBRARY_MANAGER_H
+#pragma once
 
 #include <symbol_library_manager.h>
 #include <symbol_tree_synchronizing_adapter.h>
@@ -46,7 +45,7 @@ struct NEW_SYMBOL_PROPERTIES
 };
 
 /**
- * Symbol library management helper that is specific to the symbol library editor frame
+ * Symbol library management helper that is specific to the symbol library editor frame.
  *
  * The base class handles library manipulation; this one also handles synchronizing the LIB_TREE.
  */
@@ -61,8 +60,7 @@ public:
     void Sync( const wxString& aForceRefresh,
                std::function<void( int, int, const wxString& )> aProgressCallback );
 
-    static std::unique_ptr<LIB_SYMBOL> CreateSymbol( const NEW_SYMBOL_PROPERTIES& aProps,
-                                                     LIB_SYMBOL* aParent );
+    static std::unique_ptr<LIB_SYMBOL> CreateSymbol( const NEW_SYMBOL_PROPERTIES& aProps, LIB_SYMBOL* aParent );
 
     bool CreateNewSymbol( const wxString& aLibrary, const NEW_SYMBOL_PROPERTIES& aProps );
 
@@ -81,9 +79,5 @@ private:
     }
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
-
-    int m_syncHash;     ///< Symbol lib table hash value from last synchronization
 };
 
-
-#endif
