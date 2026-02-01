@@ -50,6 +50,8 @@ struct SPECIAL_CASE_LABEL_INFO
 {
     SCH_LINE* attachedLine;
     VECTOR2I  originalLabelPos;
+    VECTOR2I  originalLineStart;
+    VECTOR2I  originalLineEnd;
 };
 
 

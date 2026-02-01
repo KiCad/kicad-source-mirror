@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <cmath>
 #include <memory>
 #include <optional>
@@ -1508,6 +1509,62 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
                     lineEnd.first->SetEndPoint( pin->GetPosition() );
             }
         }
+
+        // Needed to keep labels attached to a line when dragging a sheet/wire combo with a label
+        // on the line. The label moves by splitDelta for each part of the split move, but the
+        // line endpoints may not follow splitDelta due to orthogonal drag or sheet pin constraints,
+        // which can put the label off the line.
+        for( const auto& [label, info] : m_specialCaseLabels )
+        {
+            if( !label || !info.attachedLine )
+                continue;
+
+            VECTOR2I start = info.attachedLine->GetStartPoint();
+            VECTOR2I end = info.attachedLine->GetEndPoint();
+            VECTOR2I deltaStart = start - info.originalLineStart;
+            VECTOR2I deltaEnd = end - info.originalLineEnd;
+
+            // TODO: this could be improved by positioning the label based on the new line geometry,
+            // including line angle changes, grid snapping, and line length changes when orthogonal
+            // bends are involved.
+            //
+            // For now, special casing the equal delta case and using splitDelta should work in most
+            // cases as the user would expect.
+            if( deltaStart == deltaEnd )
+            {
+                label->SetPosition( info.originalLabelPos + deltaStart );
+            }
+            else
+            {
+                label->Move( splitDelta );
+
+                // If the line shrank while dragging, keep the label on the line,
+                // otherwise the label can drift off the end of the line, and change connectivity
+                if( !info.attachedLine->HitTest( label->GetPosition(), 1 ) && info.attachedLine->IsOrthogonal() )
+                {
+                    VECTOR2I pos = label->GetPosition();
+
+                    if( start.x == end.x )
+                    {
+                        int minY = std::min( start.y, end.y );
+                        int maxY = std::max( start.y, end.y );
+                        pos.x = start.x;
+                        pos.y = std::clamp( pos.y, minY, maxY );
+                    }
+                    else if( start.y == end.y )
+                    {
+                        int minX = std::min( start.x, end.x );
+                        int maxX = std::max( start.x, end.x );
+                        pos.y = start.y;
+                        pos.x = std::clamp( pos.x, minX, maxX );
+                    }
+
+                    label->SetPosition( pos );
+                }
+            }
+
+            updateItem( label, false );
+        }
     }
 
     if( aSelection.HasReferencePoint() )
@@ -2227,8 +2284,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                 break;
             }
 
-            // Since only one end is going to move, the movement vector of any labels attached to
-            // it is scaled by the proportion of the line length the label is from the moving end.
+            // When only one end moves, keep attached labels tracking the moving end so they stay
+            // connected to the line.
             for( SCH_ITEM* item : items.Overlapping( line->GetBoundingBox() ) )
             {
                 SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item );
@@ -2247,6 +2304,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                     SPECIAL_CASE_LABEL_INFO info;
                     info.attachedLine = line;
                     info.originalLabelPos = label->GetPosition();
+                    info.originalLineStart = line->GetStartPoint();
+                    info.originalLineEnd = line->GetEndPoint();
                     m_specialCaseLabels[label] = info;
                 }
             }
@@ -2336,6 +2395,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                             SPECIAL_CASE_LABEL_INFO info;
                             info.attachedLine = line;
                             info.originalLabelPos = label->GetPosition();
+                            info.originalLineStart = line->GetStartPoint();
+                            info.originalLineEnd = line->GetEndPoint();
                             m_specialCaseLabels[label] = info;
                         }
                     }
@@ -2460,17 +2521,8 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     case SCH_HIER_LABEL_T:
     {
         SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
-
-        if( m_specialCaseLabels.count( label ) )
-        {
-            SPECIAL_CASE_LABEL_INFO info = m_specialCaseLabels[ label ];
-            SEG currentLine( info.attachedLine->GetStartPoint(), info.attachedLine->GetEndPoint() );
-            label->SetPosition( currentLine.NearestPoint( info.originalLabelPos ) );
-        }
-        else
-        {
+        if( !m_specialCaseLabels.count( label ) )
             label->Move( aDelta );
-        }
 
         break;
     }
