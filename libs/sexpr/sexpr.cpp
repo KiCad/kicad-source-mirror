@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <sstream>
 #include <wx/debug.h>
+#include <fmt/core.h>
 
 namespace SEXPR
 {
@@ -195,9 +196,24 @@ namespace SEXPR
         }
         else if( IsDouble() )
         {
-            std::stringstream out;
-            out << std::setprecision( 16 ) << GetDouble();
-            result += out.str();
+            std::string out;
+            out = fmt::format( "{:.10g}", GetDouble() );
+
+            // Scientific notation not allowed. So detect and change it
+            if( out.find("e") != std::string::npos )
+            {
+                out = fmt::format( "{:.10f}", GetDouble() );
+
+                // remove trailing zeros
+                while( !out.empty() && out[out.size() - 1] == '0' )
+                    out.pop_back();
+
+                // we may have just stripped all the zeros after the decimal
+                if( out.size() > 1 && out[out.size() - 1] == '.' )
+                    out.pop_back();
+            }
+
+            result += out;
         }
 
         return result;
