@@ -159,6 +159,7 @@ private:
     HIERARCHY_TREE* m_tree;
 
     bool            m_events_bound;
+    bool            m_contextMenuOpen;
     std::set<wxString> m_collapsedPaths;
 };
 

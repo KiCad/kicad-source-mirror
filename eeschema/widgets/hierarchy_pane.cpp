@@ -82,6 +82,7 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE );
 
     m_events_bound = false;
+    m_contextMenuOpen = false;
 
     PROJECT_LOCAL_SETTINGS& localSettings = m_frame->Prj().GetLocalSettings();
 
@@ -475,13 +476,22 @@ std::vector<wxString> HIERARCHY_PANE::GetCollapsedPaths() const
 
 void HIERARCHY_PANE::onTreeItemRightClick( wxTreeEvent& aEvent )
 {
+    // wxEVT_CONTEXT_MENU fires after wxEVT_TREE_ITEM_RIGHT_CLICK for the same right-click,
+    // so set a guard to prevent showing the context menu twice.
+    m_contextMenuOpen = true;
     onRightClick( aEvent.GetItem() );
+    m_contextMenuOpen = false;
 }
 
 
 void HIERARCHY_PANE::onContextMenu( wxContextMenuEvent& aEvent )
 {
-    // Handle right-click in empty space - treat as if clicking on an invalid item
+    // wxEVT_CONTEXT_MENU fires after wxEVT_TREE_ITEM_RIGHT_CLICK for the same right-click.
+    // Skip if the tree item handler already showed the menu.
+    if( m_contextMenuOpen )
+        return;
+
+    // Handle right-click in empty space
     onRightClick( wxTreeItemId() );
 }
 
