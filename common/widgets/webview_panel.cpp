@@ -52,6 +52,7 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         wxSetEnv( wxT( "WEBKIT_DISABLE_COMPOSITING_MODE" ), wxT( "1" ) );
     }
 
+#if wxCHECK_VERSION( 3, 3, 0 )
     wxWebViewConfiguration config = wxWebView::NewConfiguration();
 
 #if defined( __WXMSW__ )
@@ -65,6 +66,9 @@ WEBVIEW_PANEL::WEBVIEW_PANEL( wxWindow* aParent, wxWindowID aId, const wxPoint& 
 #endif
 
     m_browser = wxWebView::New( config );
+#else
+    m_browser = wxWebView::New();
+#endif
 
 #ifdef __WXMAC__
     m_browser->RegisterHandler( wxSharedPtr<wxWebViewHandler>( new wxWebViewArchiveHandler( "wxfs" ) ) );
