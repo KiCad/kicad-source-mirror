@@ -45,8 +45,8 @@ LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel
                              wxLC_REPORT | wxLC_SINGLE_SEL );
     m_list->AppendColumn( _( "Title" ) );
     m_list->AppendColumn( _( "Time" ) );
-    m_list->SetColumnWidth( 0, 200 );
-    m_list->SetColumnWidth( 1, 120 );
+    m_list->SetColumnWidth( 0, FromDIP( 200 ) );
+    m_list->SetColumnWidth( 1, FromDIP( 130 ) );
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( m_list, 1, wxEXPAND );
@@ -143,7 +143,8 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
             timeStr = info.date.FormatISOCombined();
         }
 
-        long row = m_list->InsertItem( m_list->GetItemCount(), info.summary );
+        wxString title = info.message.BeforeFirst( '\n' );
+        long     row = m_list->InsertItem( m_list->GetItemCount(), title );
         m_list->SetItem( row, 1, timeStr );
 
         if( info.summary.StartsWith( wxS( "Autosave" ) ) )
@@ -216,16 +217,20 @@ void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
         m_tip = nullptr;
     }
 
-    wxString msg = m_commits[m_hoverItem].message + wxS( "\n" )
+    SetFocus();
+
+    wxString msg = m_commits[m_hoverItem].message + wxS( "\n\n" )
                     + m_commits[m_hoverItem].date.FormatISOCombined();
+
 #if wxCHECK_VERSION( 3, 3, 2 )
-    m_tip = wxTipWindow::New( this, msg );
+    m_tip = wxTipWindow::New( this, msg, FromDIP( 400 ) );
 #else
-    m_tip = new wxTipWindow( this, msg );
+    m_tip = new wxTipWindow( this, msg, FromDIP( 400 ) );
     m_tip->SetTipWindowPtr( &m_tip );
 #endif
-    m_tip->Position( ClientToScreen( m_hoverPos ), wxDefaultSize );
-    SetFocus();
+
+    if( m_tip )
+        m_tip->Position( ClientToScreen( m_hoverPos ) + wxSize( 10, 10 ), wxDefaultSize );
 }
 
 void LOCAL_HISTORY_PANE::OnRightClick( wxListEvent& aEvent )
