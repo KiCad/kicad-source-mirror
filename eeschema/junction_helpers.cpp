@@ -25,6 +25,8 @@
 #include <sch_item.h>
 #include <trigo.h>
 
+#include <unordered_set>
+
 using namespace JUNCTION_HELPERS;
 
 POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2I& aPosition,
@@ -251,21 +253,26 @@ std::vector<SCH_JUNCTION*> JUNCTION_HELPERS::PreviewJunctions( const SCH_SCREEN*
                                                                const std::vector<SCH_ITEM*>& aItems )
 {
     EE_RTREE combined;
+    std::unordered_set<const SCH_ITEM*> previewSet( aItems.begin(), aItems.end() );
 
-    // Existing items
+    // Existing items, skipping any that are also in aItems to avoid double-counting
     for( const SCH_ITEM* item : aScreen->Items() )
     {
         if( !item->IsConnectable() )
             continue;
 
+        if( previewSet.count( item ) )
+            continue;
+
         combined.insert( const_cast<SCH_ITEM*>( item ) );
     }
 
-    // Temporary items
+    // Temporary/preview items
     for( SCH_ITEM* item : aItems )
     {
         if( !item || !item->IsConnectable() )
             continue;
+
         combined.insert( item );
     }
 
