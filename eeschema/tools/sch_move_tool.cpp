@@ -25,6 +25,7 @@
 #include <cmath>
 #include <memory>
 #include <optional>
+#include <set>
 #include <wx/log.h>
 #include <trigo.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -2000,9 +2001,20 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                                            EDA_ITEMS& aList )
 {
     EE_RTREE&              items = m_frame->GetScreen()->Items();
-    EE_RTREE::EE_TYPE      itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
+    std::set<SCH_ITEM*>    connectableCandidates;
     std::vector<SCH_ITEM*> itemsConnectable;
     bool                   ptHasUnselectedJunction = false;
+
+    for( SCH_ITEM* item : items.Overlapping( aSelectedItem->GetBoundingBox() ) )
+        connectableCandidates.insert( item );
+
+    // Labels can connect at their anchor even if the label bbox doesn't overlap the target, e.g.
+    // sheet pins can do this sometimes with just net labels and no wires.
+    if( dynamic_cast<SCH_LABEL_BASE*>( aSelectedItem ) )
+    {
+        for( SCH_ITEM* item : items.Overlapping( aPoint, 1 ) )
+            connectableCandidates.insert( item );
+    }
 
     auto makeNewWire =
             [this]( SCH_COMMIT* commit, SCH_ITEM* fixed, SCH_ITEM* selected, const VECTOR2I& start,
@@ -2070,7 +2082,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
                 return junction;
             };
 
-    for( SCH_ITEM* item : itemsOverlappingRTree )
+    for( SCH_ITEM* item : connectableCandidates )
     {
         if( item->Type() == SCH_SHEET_T )
         {
