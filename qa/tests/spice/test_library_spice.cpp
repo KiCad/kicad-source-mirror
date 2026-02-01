@@ -1142,8 +1142,6 @@ BOOST_AUTO_TEST_CASE( Fets )
 
         BOOST_TEST_CONTEXT( "FET index: " << i )
 
-        // TODO: Actually test ALL model parameters.
-
         switch( i )
         {
         case 0:

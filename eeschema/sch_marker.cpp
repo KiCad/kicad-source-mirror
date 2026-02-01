@@ -77,13 +77,11 @@ void SCH_MARKER::swapData( SCH_ITEM* aItem )
 
     std::swap( m_markerType, item->m_markerType );
     std::swap( m_excluded, item->m_excluded );
+    std::swap( m_comment, item->m_comment );
     std::swap( m_rcItem, item->m_rcItem );
 
     std::swap( m_scalingFactor, item->m_scalingFactor );
     std::swap( m_shapeBoundingBox, item->m_shapeBoundingBox );
-
-    // TODO: isn't this going to swap all the stuff above a second time?
-    std::swap( *((SCH_MARKER*) this), *((SCH_MARKER*) aItem ) );
 }
 
 
