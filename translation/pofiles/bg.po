@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 18:17+0300\n"
+"POT-Creation-Date: 2026-02-02 18:27+0300\n"
 "PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -175,7 +175,7 @@ msgstr "Време за зареждане %.3f с"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2713
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2692
 #, c-format
 msgid "Loading %s..."
 msgstr "Зареждане на %s…"
@@ -2224,7 +2224,7 @@ msgid "&OK"
 msgstr "Д&обре"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
-#: common/kidialog.cpp:125 common/paths.cpp:522
+#: common/kidialog.cpp:125 common/paths.cpp:531
 #: eeschema/dialogs/dialog_erc.cpp:902
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
@@ -2270,8 +2270,8 @@ msgstr "Потвърждение"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 #: pcbnew/footprint_libraries_utils.cpp:379
-#: pcbnew/footprint_libraries_utils.cpp:1164 pcbnew/router/router_tool.cpp:1868
-#: pcbnew/router/router_tool.cpp:2638
+#: pcbnew/footprint_libraries_utils.cpp:1164 pcbnew/router/router_tool.cpp:1887
+#: pcbnew/router/router_tool.cpp:2659
 #: pcbnew/tools/footprint_editor_control.cpp:471 pcbnew/zone_filler.cpp:890
 msgid "Confirmation"
 msgstr "Потвърждение"
@@ -2309,7 +2309,7 @@ msgid "KiCad Design Block folders"
 msgstr "Kicad проектов файл"
 
 #: common/design_block_io.cpp:174
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3038
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3017
 #, fuzzy, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
@@ -2323,7 +2323,7 @@ msgid ""
 msgstr "Нямате права за запис на файл <%s>."
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:964
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3063
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3042
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Нямате права за запис на файл <%s>."
@@ -6045,7 +6045,7 @@ msgstr "Стил на заливка"
 #: eeschema/sch_textbox.cpp:539 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2620 pcbnew/pcb_dimension.cpp:642
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2631 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480
 msgid "Default"
@@ -6138,7 +6138,7 @@ msgstr ""
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3429
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3293
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3306
 #, fuzzy
 msgid "Failed to read image data."
 msgstr "Неуспешно отваряне"
@@ -6978,7 +6978,7 @@ msgstr "Комп. отпечатъци"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2153 pcbnew/pad.cpp:1436
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2164 pcbnew/pad.cpp:1436
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -7040,14 +7040,14 @@ msgid "Center Y"
 msgstr "Център"
 
 #: common/eda_shape.cpp:2417 eeschema/sch_tablecell.cpp:224
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2632 pcbnew/pcb_tablecell.cpp:229
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2643 pcbnew/pcb_tablecell.cpp:229
 #: pcbnew/pcb_textbox.cpp:806 pcbnew/pcb_track.cpp:2144
 #, fuzzy
 msgid "End X"
 msgstr "Край на инструмент"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_tablecell.cpp:225
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2638 pcbnew/pcb_tablecell.cpp:230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2649 pcbnew/pcb_tablecell.cpp:230
 #: pcbnew/pcb_textbox.cpp:807 pcbnew/pcb_track.cpp:2147
 #, fuzzy
 msgid "End Y"
@@ -7135,7 +7135,7 @@ msgstr "Bold+Italic"
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
 #: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
 msgstr "Ляво"
 
@@ -7163,7 +7163,7 @@ msgstr "Център"
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
 #: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2619
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
 msgstr "Дясно"
 
@@ -7222,7 +7222,7 @@ msgstr "Настройки на текст"
 #: eeschema/fields_grid_table.cpp:502 eeschema/sch_field.cpp:1237
 #: eeschema/sch_label.cpp:1245 eeschema/sch_tablecell.cpp:157
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
-#: eeschema/widgets/sch_properties_panel.cpp:272 pcbnew/pcb_dimension.cpp:642
+#: eeschema/widgets/sch_properties_panel.cpp:271 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480 pcbnew/widgets/pcb_properties_panel.cpp:340
 #, fuzzy
@@ -7408,7 +7408,7 @@ msgstr "%s е дубликат"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/fields_grid_table.cpp:61
-#: eeschema/widgets/sch_properties_panel.cpp:266
+#: eeschema/widgets/sch_properties_panel.cpp:265
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 #, fuzzy
 msgid "Default Font"
@@ -7445,73 +7445,73 @@ msgid ""
 "%d."
 msgstr "Не са намерени компоненти в сиволна библиотека <%s>."
 
-#: common/gestfich.cpp:250
+#: common/gestfich.cpp:251
 #, fuzzy, c-format
 msgid "Command '%s' could not be found."
 msgstr "Команда <%s> не може да бъде намерена"
 
-#: common/gestfich.cpp:267
+#: common/gestfich.cpp:268
 #, fuzzy, c-format
 msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Неуспешно намиране на PDF четец за"
 
-#: common/gestfich.cpp:282
+#: common/gestfich.cpp:283
 #, fuzzy, c-format
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Проблем при работа на PDF четец"
 
-#: common/gestfich.cpp:301 common/gestfich.cpp:374 eeschema/eeschema.cpp:661
+#: common/gestfich.cpp:302 common/gestfich.cpp:375 eeschema/eeschema.cpp:661
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:604
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Неуспешно отв. на файл \"%s\""
 
-#: common/gestfich.cpp:395
+#: common/gestfich.cpp:396
 msgid "Invalid directory name, cannot remove root"
 msgstr ""
 
-#: common/gestfich.cpp:403
+#: common/gestfich.cpp:404
 #, fuzzy, c-format
 msgid "Directory '%s' does not exist"
 msgstr "Неустановено име на файл на компонентна библиотека."
 
-#: common/gestfich.cpp:413
+#: common/gestfich.cpp:414
 #, fuzzy, c-format
 msgid "'%s' is not a directory"
 msgstr "Свържи към конт.пл."
 
-#: common/gestfich.cpp:425
+#: common/gestfich.cpp:426
 #, fuzzy, c-format
 msgid "Error removing directory '%s': %s"
 msgstr "Премахни запойващата маска от прох.отв."
 
-#: common/gestfich.cpp:441 common/gestfich.cpp:515 common/gestfich.cpp:629
+#: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
 #, fuzzy, c-format
 msgid "Could not open source directory: %s"
 msgstr "Невъзможност за създаване на файл %s"
 
-#: common/gestfich.cpp:448 common/gestfich.cpp:586
+#: common/gestfich.cpp:449 common/gestfich.cpp:575
 #, fuzzy, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Невъзможност за създаване на файл %s"
 
-#: common/gestfich.cpp:472 common/gestfich.cpp:503
+#: common/gestfich.cpp:477 common/gestfich.cpp:507
 #, fuzzy, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: common/gestfich.cpp:552
+#: common/gestfich.cpp:542
 #, fuzzy, c-format
 msgid "Could not copy directory: %s to %s"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: common/gestfich.cpp:604
+#: common/gestfich.cpp:593
 #, fuzzy, c-format
 msgid "Source directory does not exist: %s"
 msgstr "Неустановено име на файл на компонентна библиотека."
 
-#: common/gestfich.cpp:659
+#: common/gestfich.cpp:649
 #, fuzzy, c-format
 msgid "Could not read file: %s"
 msgstr "Невъзможност за създаване на файл %s"
@@ -8452,12 +8452,12 @@ msgstr "Инструменти"
 msgid "Special: Execute Command"
 msgstr ""
 
-#: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:45
+#: common/jobs/jobs_output_archive.cpp:98 common/jobs/jobset.cpp:45
 #, fuzzy
 msgid "Archive"
 msgstr "Разархивирай"
 
-#: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:43
+#: common/jobs/jobs_output_folder.cpp:82 common/jobs/jobset.cpp:43
 #, fuzzy
 msgid "Folder"
 msgstr "Solder paste Copper"
@@ -9080,7 +9080,7 @@ msgstr "Подравняване:"
 msgid "There are no notifications available"
 msgstr ""
 
-#: common/paths.cpp:515
+#: common/paths.cpp:524
 #, c-format
 msgid ""
 "KiCad was unable to use '%s'.\n"
@@ -12142,8 +12142,8 @@ msgstr "Моля, изберете компонентна библиотека."
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:945
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2941
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3019
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2920
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2998
 #, fuzzy, c-format
 msgid "Library '%s' is read only."
 msgstr "Библиотека %s не е намерена"
@@ -14199,8 +14199,8 @@ msgstr "Размер на текста V"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:639 eeschema/sch_item.cpp:586
-#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:3014
+#: eeschema/dialogs/dialog_sim_model.cpp:639 eeschema/sch_item.cpp:591
+#: eeschema/sch_item.cpp:639 eeschema/sch_symbol.cpp:3014
 #: eeschema/symbol_editor/symbol_editor.cpp:1753
 msgid "Unit"
 msgstr "Елемент"
@@ -16475,7 +16475,7 @@ msgstr "Параметри"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2108 pcbnew/pcb_marker.cpp:223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2119 pcbnew/pcb_marker.cpp:223
 #: pcbnew/pcb_shape.cpp:615 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1634
 #: pcbnew/pcb_track.cpp:1701 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:775
@@ -19140,7 +19140,7 @@ msgid "Allow Autoplacement"
 msgstr "Автом.поставяне на нови модули"
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
-#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
+#: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 #, fuzzy
 msgid "Private"
 msgstr "Draft layer"
@@ -19835,8 +19835,8 @@ msgstr "Глобален етикетl %s"
 msgid "Unhandled item type %d"
 msgstr "Обратно обозначаване на полета на комп.отп."
 
-#: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2081
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
+#: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2085
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2148
 #: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1036
 #: pcbnew/widgets/appearance_controls.cpp:2472
@@ -20188,7 +20188,7 @@ msgstr "Установи вход на шина /"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:954
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1383
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2158 pcbnew/pad.cpp:1383
 #: pcbnew/pcb_track.cpp:1731 pcbnew/tools/pcb_control.cpp:1916
 #: pcbnew/zone.cpp:811
 #, fuzzy
@@ -20354,115 +20354,125 @@ msgstr "EESchema настройки"
 msgid "Show Field Name"
 msgstr "Име на поле"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:898
+#: eeschema/sch_io/altium/sch_io_altium.cpp:906
+#, fuzzy, c-format
+msgid "Error parsing Altium schematic: %s"
+msgstr "Печат на схема"
+
+#: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:971
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1045
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1053
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1155
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1127
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1229
 #, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Kicad схематични файлове (*.sch)|*.sch"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1270
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1344
 #, fuzzy
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Код \"горещ клавиш\" не е обработен"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1389
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1463
 #, fuzzy
 msgid "Parameter Set not currently supported."
 msgstr "Изчисти текущ слой"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1414
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1488
 #, fuzzy
 msgid "Compile mask not currently supported."
 msgstr "Изчисти текущ слой"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1513
 #, fuzzy
 msgid "Blanket not currently supported."
 msgstr "Изчисти текущ слой"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1444
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1518
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4813
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "Компонент \"%s\" не е намерен в библиотека \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1502
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1576
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1674
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1748
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3818
 #, fuzzy
 msgid "Pin has unexpected orientation."
 msgstr "Ориентация на комп.отп."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1796
 #, fuzzy
 msgid "Pin has unexpected electrical type."
 msgstr "Електр. тип:"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1801
 #, fuzzy
 msgid "Pin has unexpected outer edge type."
 msgstr "Електр. тип:"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1730
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1804
 #, fuzzy
 msgid "Pin has unexpected inner edge type."
 msgstr "Електр. тип:"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2136
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2210
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3621
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3695
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3670
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3838
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3912
 #, fuzzy, c-format
 msgid "Port %s has no connections."
 msgstr "Връзка на конт.пл.:"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4030
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4104
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Помощен файл %s не е намерен."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4047
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4066
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4121
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4140
 #, fuzzy, c-format
 msgid "Error reading image %s."
 msgstr "Изтриване на графики"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4059
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4133
 #, fuzzy, c-format
 msgid "File not found %s."
 msgstr "Файлът не е намерен"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4871
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4924
+#, fuzzy, c-format
+msgid "Error parsing Altium library: %s"
+msgstr "Грешка <%s> при зареждане на символна библиотека <%s>."
+
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -20841,7 +20851,7 @@ msgstr "Kicad библ.файлове на комп.отп. (*.mod)|*.mod"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2716
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2695
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 msgid "Open cancelled by user."
 msgstr ""
@@ -21169,25 +21179,25 @@ msgstr "Помощен файл %s не е намерен."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестна форма на подложка"
 
-#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:641
+#: eeschema/sch_item.cpp:137 eeschema/sch_item.cpp:157
+#: eeschema/sch_item.cpp:646
 #, fuzzy
 msgid "All units"
 msgstr "Drill файлове (за разпробиване)"
 
-#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:663
+#: eeschema/sch_item.cpp:148 eeschema/sch_item.cpp:184
+#: eeschema/sch_item.cpp:668
 #, fuzzy
 msgid "All body styles"
 msgstr "За всички елементи"
 
-#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:594 eeschema/sch_item.cpp:661
 #: eeschema/sch_symbol.cpp:3030 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Тип на контура:"
 
-#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:611 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -21244,8 +21254,8 @@ msgstr "Подравняване:"
 #: eeschema/sch_label.cpp:1385 eeschema/sch_line.cpp:893
 #: pcbnew/board_connected_item.cpp:224
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/generators/pcb_tuning_pattern.cpp:491
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2143 pcbnew/pad.cpp:1381
+#: pcbnew/generators/pcb_tuning_pattern.cpp:502
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2154 pcbnew/pad.cpp:1381
 #: pcbnew/pad.cpp:2815 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1729 pcbnew/tools/pcb_control.cpp:1913
 #: pcbnew/widgets/pcb_properties_panel.cpp:327
@@ -22773,7 +22783,7 @@ msgstr "Печат на схема"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1480
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1491
 #, fuzzy
 msgid "unknown"
 msgstr "Неизвестна форма на подложка"
@@ -26537,7 +26547,7 @@ msgstr "Не са намерени компонентни отпечатъци"
 msgid "Invalid footprint specified"
 msgstr "Съхрани файлове списък на вериги и комп.отп."
 
-#: eeschema/widgets/sch_properties_panel.cpp:219
+#: eeschema/widgets/sch_properties_panel.cpp:218
 #: pcbnew/widgets/pcb_properties_panel.cpp:277
 #, fuzzy
 msgid "Edit Properties"
@@ -26859,7 +26869,7 @@ msgstr "Избор на слой:"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4225 pcbnew/footprint.cpp:4228
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1391
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2161 pcbnew/pad.cpp:1391
 #: pcbnew/pad.cpp:2777 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:498 pcbnew/pcb_marker.cpp:400
@@ -29464,17 +29474,17 @@ msgstr ""
 msgid "Import EasyEDA Pro Project"
 msgstr "Запамети Проектов файл"
 
-#: kicad/jobs_runner.cpp:232
+#: kicad/jobs_runner.cpp:226
 #, fuzzy, c-format
 msgid "Running job %d: %s"
 msgstr "Определени отвори"
 
-#: kicad/jobs_runner.cpp:280
+#: kicad/jobs_runner.cpp:282
 #, fuzzy
 msgid "Job successful"
 msgstr "Операция по запис на файла е неуспешна."
 
-#: kicad/jobs_runner.cpp:287
+#: kicad/jobs_runner.cpp:289
 #, fuzzy
 msgid "Job failed"
 msgstr "Внеси файлове"
@@ -31160,7 +31170,7 @@ msgstr "Плъзни лист"
 msgid "File \"%s\" saved."
 msgstr "Файл %s съхранен"
 
-#: pagelayout_editor/files.cpp:182 pcbnew/router/router_tool.cpp:647
+#: pagelayout_editor/files.cpp:182 pcbnew/router/router_tool.cpp:655
 #, fuzzy, c-format
 msgid "Unable to write '%s'."
 msgstr "Невъзможно създаване на <%s>"
@@ -33794,7 +33804,7 @@ msgstr "Премести компонент"
 msgid "Tessellating copper zones..."
 msgstr "Отстояния на подложки...\n"
 
-#: pcbnew/board.cpp:2078 pcbnew/dialogs/dialog_board_statistics.cpp:701
+#: pcbnew/board.cpp:2082 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1746 pcbnew/netinfo_item.cpp:108
@@ -33804,7 +33814,7 @@ msgstr "Отстояния на подложки...\n"
 msgid "Pads"
 msgstr "Подложки"
 
-#: pcbnew/board.cpp:2079 pcbnew/dialogs/dialog_board_statistics.cpp:707
+#: pcbnew/board.cpp:2083 pcbnew/dialogs/dialog_board_statistics.cpp:707
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:80
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:35
@@ -33819,12 +33829,12 @@ msgstr "Подложки"
 msgid "Vias"
 msgstr "Проходни връзки"
 
-#: pcbnew/board.cpp:2080 pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/board.cpp:2084 pcbnew/pcb_draw_panel_gal.cpp:717
 #, fuzzy
 msgid "Track Segments"
 msgstr "Изтегли сегмент"
 
-#: pcbnew/board.cpp:2082 pcbnew/pcb_draw_panel_gal.cpp:719
+#: pcbnew/board.cpp:2086 pcbnew/pcb_draw_panel_gal.cpp:719
 #, fuzzy
 msgid "Unrouted"
 msgstr "Нулирай неопроводените"
@@ -40385,13 +40395,13 @@ msgid "Differential Pair Dimensions"
 msgstr "Изтр. на размер"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
-#: pcbnew/router/router_tool.cpp:2784
+#: pcbnew/router/router_tool.cpp:2805
 #, fuzzy
 msgid "Mode"
 msgstr "TE-Modes"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
-#: pcbnew/router/router_tool.cpp:2778
+#: pcbnew/router/router_tool.cpp:2799
 #, fuzzy
 msgid "Highlight collisions"
 msgstr "Подчертаване на връзка"
@@ -40413,7 +40423,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
-#: pcbnew/router/router_tool.cpp:2780
+#: pcbnew/router/router_tool.cpp:2801
 #, fuzzy
 msgid "Shove"
 msgstr "Покажи микро проходните връзки"
@@ -40440,7 +40450,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
-#: pcbnew/router/router_tool.cpp:2779
+#: pcbnew/router/router_tool.cpp:2800
 #, fuzzy
 msgid "Walk around"
 msgstr "Маркер намерен"
@@ -41421,13 +41431,13 @@ msgid "Target skew: "
 msgstr "Форма на целта:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2210
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2232 pcbnew/pad.cpp:1483
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2243 pcbnew/pad.cpp:1483
 #: pcbnew/pcb_track.cpp:1676 pcbnew/pcb_track.cpp:1684
 #: pcbnew/pcb_track.cpp:1716 pcbnew/pcb_track.cpp:1722
-#: pcbnew/router/router_tool.cpp:2792 pcbnew/router/router_tool.cpp:2797
-#: pcbnew/router/router_tool.cpp:2802 pcbnew/router/router_tool.cpp:2813
-#: pcbnew/router/router_tool.cpp:2821 pcbnew/router/router_tool.cpp:2826
+#: pcbnew/router/router_tool.cpp:2813 pcbnew/router/router_tool.cpp:2818
+#: pcbnew/router/router_tool.cpp:2823 pcbnew/router/router_tool.cpp:2834
+#: pcbnew/router/router_tool.cpp:2842 pcbnew/router/router_tool.cpp:2847
 #: pcbnew/tools/pcb_control.cpp:1736 pcbnew/tools/pcb_control.cpp:1746
 #: pcbnew/zone.cpp:879
 #, fuzzy, c-format
@@ -41501,7 +41511,7 @@ msgstr "Радиус"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:391
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2721
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2732
 #, fuzzy
 msgid "Single-sided"
 msgstr "Една страница"
@@ -44431,7 +44441,7 @@ msgstr "Елемент %d %c"
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:837
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:884
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:241
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:297
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:303
 #, fuzzy, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "Локална стойност на отст. на маската:"
@@ -45049,27 +45059,27 @@ msgstr ""
 msgid "board setup solder mask min width"
 msgstr "Solder mask Cmp"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:600
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:694
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:610
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:770
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:602
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:696
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:612
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:772
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:819
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:901
 #, fuzzy
 msgid "Building solder mask..."
 msgstr "Старт на запълване..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:827
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:910
 #, fuzzy
 msgid "Checking solder mask to silk clearance..."
 msgstr "Отстояния на подложки...\n"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:832
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:915
 #, fuzzy
 msgid "Checking solder mask web integrity..."
 msgstr "Промяна на ширината на пътечка"
@@ -46051,7 +46061,7 @@ msgstr "Грешка <%s> при зареждане на символна биб
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:262
 #: pcbnew/generators/pcb_tuning_pattern.cpp:267
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2239
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2250
 #, fuzzy
 msgid "Tuning Pattern"
 msgstr "Щриховка"
@@ -46061,172 +46071,172 @@ msgstr "Щриховка"
 msgid "Tuning Patterns"
 msgstr "Щриховка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:492
+#: pcbnew/generators/pcb_tuning_pattern.cpp:503
 #, fuzzy
 msgid "Tuning"
 msgstr "Предупреждение"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1488
 msgid "too long"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1489
 #, fuzzy
 msgid "too short"
 msgstr "Не показвай"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1490
 msgid "tuned"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1559
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1570
 #, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Редактирай в текстов редактор"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2084
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2095
 #, fuzzy
 msgid "current skew"
 msgstr "Текуща верига:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2097
 #, fuzzy
 msgid "current length"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2173
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2184
 #, fuzzy
 msgid "Routed Lengths"
 msgstr "Страна:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2179 pcbnew/pcb_track.cpp:1659
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2190 pcbnew/pcb_track.cpp:1659
 #, fuzzy
 msgid "Routed Length"
 msgstr "Страна:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2185 pcbnew/pad.cpp:2930
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2196 pcbnew/pad.cpp:2930
 #: pcbnew/pcb_track.cpp:1664
 #, fuzzy
 msgid "Pad To Die Length"
 msgstr "Дължина на линия"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2188 pcbnew/pcb_track.cpp:1667
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2199 pcbnew/pcb_track.cpp:1667
 #, fuzzy
 msgid "Full Length"
 msgstr "Пълна Дължина"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2211
 #, fuzzy, c-format
 msgid "Target Skew: %s"
 msgstr "Форма на целта:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2201
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2212
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2234
 #, fuzzy
 msgid "(from tuning pattern properties)"
 msgstr "Текстови настройки на комп.отп."
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2220
 #, fuzzy, c-format
 msgid "Skew Constraints: %s"
 msgstr "Комп.отпечатък:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2233
 #, fuzzy, c-format
 msgid "Target Length: %s"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2231
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 #, fuzzy, c-format
 msgid "Length Constraints: %s"
 msgstr "Комп.отпечатък:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2252
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2263
 #, fuzzy
 msgid "Tune Skew"
 msgstr "Ъгъл"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2465
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2476
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2512
 #, fuzzy
 msgid "Tune"
 msgstr "Ъгъл"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2538
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2556
 #, fuzzy
 msgid "Select a track to tune first."
 msgstr "Изчисти текущото табло и започни ново"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2624
 #, fuzzy
 msgid "Single track"
 msgstr "Една страница"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2625
 #, fuzzy
 msgid "Differential pair"
 msgstr "Изтр. на размер"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2615
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2626
 #, fuzzy
 msgid "Diff pair skew"
 msgstr "Изтр. на размер"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2640
 #, fuzzy
 msgid "Pattern Properties"
 msgstr "Настройки на извод"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2644
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2655
 #, fuzzy
 msgid "Tuning Mode"
 msgstr "Определени отвори"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2650
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2661
 #, fuzzy
 msgid "Min Amplitude"
 msgstr "Времева отметка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2657
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2668
 #, fuzzy
 msgid "Max Amplitude"
 msgstr "Времева отметка"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2664
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2675
 #, fuzzy
 msgid "Initial Side"
 msgstr "Номер на извод:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2670
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2681
 #, fuzzy
 msgid "Min Spacing"
 msgstr "хоризонтал"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2676
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2687
 #, fuzzy
 msgid "Corner Radius %"
 msgstr "Ъгли"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2698
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2709
 #, fuzzy
 msgid "Target Length"
 msgstr "Дължина на верига"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2707
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2718
 #, fuzzy
 msgid "Target Skew"
 msgstr "Форма на целта:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2715
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2726
 #, fuzzy
 msgid "Override Custom Rules"
 msgstr "Скрит текст"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2727
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2738
 #, fuzzy
 msgid "Rounded"
 msgstr " намерен(а)"
@@ -47123,7 +47133,7 @@ msgid "Hole X / Y"
 msgstr "Отвор X / Y"
 
 #: pcbnew/pad.cpp:1481 pcbnew/pcb_track.cpp:1674 pcbnew/pcb_track.cpp:1714
-#: pcbnew/router/router_tool.cpp:2795 pcbnew/router/router_tool.cpp:2824
+#: pcbnew/router/router_tool.cpp:2816 pcbnew/router/router_tool.cpp:2845
 #: pcbnew/zone.cpp:878
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
@@ -48781,7 +48791,7 @@ msgid "Element token contains %d parameters."
 msgstr "Чертай избраните елементи при преместване"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:972
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3071
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3050
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Библиотека %s ненамерена."
@@ -48793,7 +48803,7 @@ msgstr "Компонент \"%s\" не е намерен в библиотека
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1010
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3270
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3108
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3087
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Библиотечни файлове на комп.отп."
@@ -48930,7 +48940,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2534
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7316
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7329
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -48999,49 +49009,49 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "Изтегли прох.отв."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1471
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1450
 #, fuzzy, c-format
 msgid "unknown pad type: %d"
 msgstr "Неизвестна форма на подложка"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2321
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2300
 #, fuzzy, c-format
 msgid "unknown via type %d"
 msgstr "Неизвестна форма на подложка"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2613
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2592
 #, fuzzy, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "Неизвестна форма на подложка"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2762
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2741
 #, fuzzy
 msgid "This file does not contain a PCB."
 msgstr "Неустановено име на файл на компонентна библиотека."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2929
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2908
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2912
 #, fuzzy
 msgid "Library Not Found"
 msgstr "Библиотека %s ненамерена."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2959
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2938
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Името на файла е невалидно!"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2965
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2944
 #, fuzzy, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Нямате права за запис на файл <%s>."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3090
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3069
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Компонент \"%s\" не е намерен в библиотека \"%s\"."
@@ -49075,28 +49085,28 @@ msgstr "**неопределен слой*"
 msgid "Cannot create generated object of type '%s'"
 msgstr "Невъзможност за създаване на файл %s"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1462
 #, fuzzy, c-format
 msgid "Page type '%s' is not valid."
 msgstr "Името на файла е невалидно!"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2011
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2024
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2048
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2061
 #, fuzzy, c-format
 msgid "%d is not a valid layer count"
 msgstr "%s не е Библиотечен файл"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2780
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2793
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3179
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6356
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3192
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6369
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -49105,12 +49115,12 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3357
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3370
 #, fuzzy, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Обратно обозначаване на полета на комп.отп."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4414
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4427
 #, fuzzy, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -49119,7 +49129,7 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5189
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5202
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -49127,7 +49137,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5208
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5221
 #, fuzzy, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -49135,7 +49145,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5539
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5552
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -49144,8 +49154,8 @@ msgid ""
 "offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5662
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6616
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5675
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6629
 #, fuzzy, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -49154,13 +49164,13 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5677
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6631
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5690
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6644
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6255
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6268
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -49169,7 +49179,7 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6467
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6480
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -49178,7 +49188,7 @@ msgid ""
 "offset: %d"
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6722
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6735
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -49187,7 +49197,7 @@ msgid ""
 "offset: %d."
 msgstr "Промяна на библиотечен файл \""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7286
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7299
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -49795,18 +49805,18 @@ msgid ""
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:673 pcbnew/router/pns_kicad_iface.cpp:789
-#: pcbnew/router/router_tool.cpp:755 pcbnew/router/router_tool.cpp:831
+#: pcbnew/router/router_tool.cpp:763 pcbnew/router/router_tool.cpp:839
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Мин. отстояние"
 
 #: pcbnew/router/pns_kicad_iface.cpp:708 pcbnew/router/pns_kicad_iface.cpp:788
-#: pcbnew/router/router_tool.cpp:781 pcbnew/router/router_tool.cpp:812
+#: pcbnew/router/router_tool.cpp:789 pcbnew/router/router_tool.cpp:820
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Мин.ширина"
 
-#: pcbnew/router/pns_kicad_iface.cpp:715 pcbnew/router/router_tool.cpp:783
+#: pcbnew/router/pns_kicad_iface.cpp:715 pcbnew/router/router_tool.cpp:791
 #, fuzzy
 msgid "existing track"
 msgstr "При създаване на пътечки"
@@ -49967,211 +49977,211 @@ msgstr "Пътека близо до подложка"
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:224
+#: pcbnew/router/router_tool.cpp:225
 #, fuzzy
 msgid "Select Track/Via Width"
 msgstr "Избор на ширина на пътечка"
 
-#: pcbnew/router/router_tool.cpp:242
+#: pcbnew/router/router_tool.cpp:243
 #, fuzzy
 msgid "Use Starting Track Width"
 msgstr "Промяна на ширината на пътечка"
 
-#: pcbnew/router/router_tool.cpp:243
+#: pcbnew/router/router_tool.cpp:244
 msgid "Route using the width of the starting track."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:247 pcbnew/router/router_tool.cpp:372
+#: pcbnew/router/router_tool.cpp:248 pcbnew/router/router_tool.cpp:373
 #, fuzzy
 msgid "Use Net Class Values"
 msgstr "Използвай стойности за клас на връзката"
 
-#: pcbnew/router/router_tool.cpp:248
+#: pcbnew/router/router_tool.cpp:249
 #, fuzzy
 msgid "Use track and via sizes from the net class"
 msgstr "Използвай размери за пътечките и прох.отв. от техния клас на връзката"
 
-#: pcbnew/router/router_tool.cpp:252 pcbnew/router/router_tool.cpp:377
+#: pcbnew/router/router_tool.cpp:253 pcbnew/router/router_tool.cpp:378
 #: pcbnew/tools/drawing_tool.cpp:114
 #, fuzzy
 msgid "Use Custom Values..."
 msgstr "Използвай стойности за клас на връзката"
 
-#: pcbnew/router/router_tool.cpp:253 pcbnew/tools/drawing_tool.cpp:115
+#: pcbnew/router/router_tool.cpp:254 pcbnew/tools/drawing_tool.cpp:115
 #, fuzzy
 msgid "Specify custom track and via sizes"
 msgstr "Нова пътечка с област на прох.отв."
 
-#: pcbnew/router/router_tool.cpp:264
+#: pcbnew/router/router_tool.cpp:265
 #, fuzzy
 msgid "Track netclass width"
 msgstr "Ширина на линия"
 
-#: pcbnew/router/router_tool.cpp:266
+#: pcbnew/router/router_tool.cpp:267
 #, c-format
 msgid "Track %s"
 msgstr "Пътечка %s"
 
-#: pcbnew/router/router_tool.cpp:280
+#: pcbnew/router/router_tool.cpp:281
 #, fuzzy
 msgid "Via netclass values"
 msgstr "Използвай стойности от клас на връзките"
 
-#: pcbnew/router/router_tool.cpp:285 pcbnew/tools/drawing_tool.cpp:126
+#: pcbnew/router/router_tool.cpp:286 pcbnew/tools/drawing_tool.cpp:126
 #, fuzzy, c-format
 msgid "Via %s, hole %s"
 msgstr "Стойност"
 
-#: pcbnew/router/router_tool.cpp:291 pcbnew/tools/drawing_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:292 pcbnew/tools/drawing_tool.cpp:132
 #, c-format
 msgid "Via %s"
 msgstr "Прох.отв. %s"
 
-#: pcbnew/router/router_tool.cpp:357
+#: pcbnew/router/router_tool.cpp:358
 #, fuzzy
 msgid "Select Differential Pair Dimensions"
 msgstr "Изтр. на размер"
 
-#: pcbnew/router/router_tool.cpp:373
+#: pcbnew/router/router_tool.cpp:374
 #, fuzzy
 msgid "Use differential pair dimensions from the net class"
 msgstr "Използвай размери за пътечките и прох.отв. от техния клас на връзката"
 
-#: pcbnew/router/router_tool.cpp:378
+#: pcbnew/router/router_tool.cpp:379
 #, fuzzy
 msgid "Specify custom differential pair dimensions"
 msgstr "Изтр. на размер"
 
-#: pcbnew/router/router_tool.cpp:395
+#: pcbnew/router/router_tool.cpp:396
 #, fuzzy, c-format
 msgid "Width %s"
 msgstr "Ширина"
 
-#: pcbnew/router/router_tool.cpp:400
+#: pcbnew/router/router_tool.cpp:401
 #, fuzzy, c-format
 msgid "Width %s, via gap %s"
 msgstr "Форма на прох.отв.:"
 
-#: pcbnew/router/router_tool.cpp:409
+#: pcbnew/router/router_tool.cpp:410
 #, fuzzy, c-format
 msgid "Width %s, gap %s"
 msgstr "Форма на прох.отв.:"
 
-#: pcbnew/router/router_tool.cpp:415
+#: pcbnew/router/router_tool.cpp:416
 #, fuzzy, c-format
 msgid "Width %s, gap %s, via gap %s"
 msgstr "Форма на прох.отв.:"
 
-#: pcbnew/router/router_tool.cpp:477
+#: pcbnew/router/router_tool.cpp:478
 #, fuzzy
 msgid "Interactive Router"
 msgstr "Общи настройки"
 
-#: pcbnew/router/router_tool.cpp:591
+#: pcbnew/router/router_tool.cpp:599
 #, fuzzy
 msgid "Save router log"
 msgstr "Запамети Проектов файл"
 
-#: pcbnew/router/router_tool.cpp:1115
+#: pcbnew/router/router_tool.cpp:1123
 #, fuzzy
 msgid "Via needs 2 different layers."
 msgstr "Не променяй конт.пл. от други слоеве"
 
-#: pcbnew/router/router_tool.cpp:1188
+#: pcbnew/router/router_tool.cpp:1196
 #, fuzzy
 msgid "Tracks on Copper layers only."
 msgstr "Пътечки само на медните слоеве"
 
-#: pcbnew/router/router_tool.cpp:1868 pcbnew/router/router_tool.cpp:2638
+#: pcbnew/router/router_tool.cpp:1887 pcbnew/router/router_tool.cpp:2659
 #, fuzzy
 msgid "The selected item is locked."
 msgstr "Чертай избраните елементи при преместване"
 
-#: pcbnew/router/router_tool.cpp:1870
+#: pcbnew/router/router_tool.cpp:1889
 #, fuzzy
 msgid "Drag Anyway"
 msgstr "Изтегли прох.отв."
 
-#: pcbnew/router/router_tool.cpp:1928 pcbnew/router/router_tool.cpp:2479
+#: pcbnew/router/router_tool.cpp:1947 pcbnew/router/router_tool.cpp:2500
 #, c-format
 msgid "(%s to commit anyway.)"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1932 pcbnew/router/router_tool.cpp:2483
+#: pcbnew/router/router_tool.cpp:1951 pcbnew/router/router_tool.cpp:2504
 #, fuzzy
 msgid "Track violates DRC."
 msgstr "Настройки на конт.пл."
 
-#: pcbnew/router/router_tool.cpp:2640 pcbnew/tools/pcb_actions.cpp:2422
+#: pcbnew/router/router_tool.cpp:2661 pcbnew/tools/pcb_actions.cpp:2428
 msgid "Break Track"
 msgstr "Прекъсни пътека"
 
-#: pcbnew/router/router_tool.cpp:2721
+#: pcbnew/router/router_tool.cpp:2742
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Изтр. на размер"
 
-#: pcbnew/router/router_tool.cpp:2734 pcbnew/router/router_tool.cpp:2745
+#: pcbnew/router/router_tool.cpp:2755 pcbnew/router/router_tool.cpp:2766
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Отстояния на подложки...\n"
 
-#: pcbnew/router/router_tool.cpp:2741
+#: pcbnew/router/router_tool.cpp:2762
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Една страница"
 
-#: pcbnew/router/router_tool.cpp:2750
+#: pcbnew/router/router_tool.cpp:2771
 #, fuzzy
 msgid "Routing Track"
 msgstr "Една страница"
 
-#: pcbnew/router/router_tool.cpp:2751
+#: pcbnew/router/router_tool.cpp:2772
 #, fuzzy
 msgid "(no net)"
 msgstr "Без промяна"
 
-#: pcbnew/router/router_tool.cpp:2760
+#: pcbnew/router/router_tool.cpp:2781
 #, fuzzy
 msgid "Free-angle"
 msgstr "Ъгъл"
 
-#: pcbnew/router/router_tool.cpp:2766
+#: pcbnew/router/router_tool.cpp:2787
 #, fuzzy
 msgid "45-degree"
 msgstr "Градус"
 
-#: pcbnew/router/router_tool.cpp:2767
+#: pcbnew/router/router_tool.cpp:2788
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "Градус"
 
-#: pcbnew/router/router_tool.cpp:2768
+#: pcbnew/router/router_tool.cpp:2789
 #, fuzzy
 msgid "90-degree"
 msgstr "Градус"
 
-#: pcbnew/router/router_tool.cpp:2769
+#: pcbnew/router/router_tool.cpp:2790
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "Градус"
 
-#: pcbnew/router/router_tool.cpp:2774
+#: pcbnew/router/router_tool.cpp:2795
 #, fuzzy
 msgid "Corner Style"
 msgstr "Стил на заливка"
 
-#: pcbnew/router/router_tool.cpp:2790 pcbnew/router/router_tool.cpp:2819
+#: pcbnew/router/router_tool.cpp:2811 pcbnew/router/router_tool.cpp:2840
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Ширина на пътечка"
 
-#: pcbnew/router/router_tool.cpp:2800
+#: pcbnew/router/router_tool.cpp:2821
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Изтр. на размер"
 
-#: pcbnew/router/router_tool.cpp:2811 pcbnew/tools/pcb_control.cpp:1745
+#: pcbnew/router/router_tool.cpp:2832 pcbnew/tools/pcb_control.cpp:1745
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Не са намерени компонентни отпечатъци"
@@ -53722,71 +53732,81 @@ msgstr ""
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
 
+#: pcbnew/tools/pcb_actions.cpp:2422
+#, fuzzy
+msgid "Cancel Current Item"
+msgstr "Отмяни текущ инструент"
+
 #: pcbnew/tools/pcb_actions.cpp:2423
+#, fuzzy
+msgid "Skip current item and route next selected item."
+msgstr "Текст (значение) на избраното поле"
+
+#: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2431
+#: pcbnew/tools/pcb_actions.cpp:2437
 #, fuzzy
 msgid "Drag 45 Degree Mode"
 msgstr "Измени правиъгълник"
 
-#: pcbnew/tools/pcb_actions.cpp:2432
+#: pcbnew/tools/pcb_actions.cpp:2438
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2440
+#: pcbnew/tools/pcb_actions.cpp:2446
 #, fuzzy
 msgid "Drag Free Angle"
 msgstr "Измени правиъгълник"
 
-#: pcbnew/tools/pcb_actions.cpp:2441
+#: pcbnew/tools/pcb_actions.cpp:2447
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2451
+#: pcbnew/tools/pcb_actions.cpp:2457
 msgid "Update All Tuning Patterns"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2452
+#: pcbnew/tools/pcb_actions.cpp:2458
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2459
+#: pcbnew/tools/pcb_actions.cpp:2465
 #, fuzzy
 msgid "Rebuild All Generators"
 msgstr "Регулатори"
 
-#: pcbnew/tools/pcb_actions.cpp:2460
+#: pcbnew/tools/pcb_actions.cpp:2466
 msgid "Rebuilds geometry of all generators"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2467
+#: pcbnew/tools/pcb_actions.cpp:2473
 #, fuzzy
 msgid "Rebuild Selected Generators"
 msgstr "Регулатори"
 
-#: pcbnew/tools/pcb_actions.cpp:2468
+#: pcbnew/tools/pcb_actions.cpp:2474
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2496
+#: pcbnew/tools/pcb_actions.cpp:2502
 #, fuzzy
 msgid "Generators Manager"
 msgstr "Библиотечни файлове:"
 
-#: pcbnew/tools/pcb_actions.cpp:2497
+#: pcbnew/tools/pcb_actions.cpp:2503
 msgid "Show a manager dialog for Generator objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2509
+#: pcbnew/tools/pcb_actions.cpp:2515
 #, fuzzy
 msgid "Length Tuning Settings..."
 msgstr "Параметри на страница"
 
-#: pcbnew/tools/pcb_actions.cpp:2510
+#: pcbnew/tools/pcb_actions.cpp:2516
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
 msgstr "Редактирай настройките на модулите"

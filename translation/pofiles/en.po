@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 18:17+0300\n"
+"POT-Creation-Date: 2026-02-02 18:27+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -12249,6 +12249,10 @@ msgid "Show Field Name"
 msgstr "Show Field Name"
 
 #, c-format
+msgid "Error parsing Altium schematic: %s"
+msgstr "Error parsing Altium schematic: %s"
+
+#, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
@@ -12321,6 +12325,10 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
+
+#, c-format
+msgid "Error parsing Altium library: %s"
+msgstr "Error parsing Altium library: %s"
 
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Expected Altium Schematic Library file version 5.0"
@@ -36066,6 +36074,12 @@ msgstr "Attempt Finish Selected (Autoroute)"
 
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Sequentially attempt to automatically route all selected pads."
+
+msgid "Cancel Current Item"
+msgstr "Cancel Current Item"
+
+msgid "Skip current item and route next selected item."
+msgstr "Skip current item and route next selected item."
 
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 18:17+0300\n"
+"POT-Creation-Date: 2026-02-02 18:27+0300\n"
 "PO-Revision-Date: 2025-09-04 10:01+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v9/vi/"
@@ -168,7 +168,7 @@ msgstr "Thời gian tải lại: %.3f giây"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:116
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2713
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2692
 #, c-format
 msgid "Loading %s..."
 msgstr "Đang mở %s..."
@@ -2075,7 +2075,7 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
-#: common/kidialog.cpp:125 common/paths.cpp:522
+#: common/kidialog.cpp:125 common/paths.cpp:531
 #: eeschema/dialogs/dialog_erc.cpp:902
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
@@ -2120,8 +2120,8 @@ msgstr "Thông tin"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 #: pcbnew/footprint_libraries_utils.cpp:379
-#: pcbnew/footprint_libraries_utils.cpp:1164 pcbnew/router/router_tool.cpp:1868
-#: pcbnew/router/router_tool.cpp:2638
+#: pcbnew/footprint_libraries_utils.cpp:1164 pcbnew/router/router_tool.cpp:1887
+#: pcbnew/router/router_tool.cpp:2659
 #: pcbnew/tools/footprint_editor_control.cpp:471 pcbnew/zone_filler.cpp:890
 msgid "Confirmation"
 msgstr "Xác nhận"
@@ -2155,7 +2155,7 @@ msgid "KiCad Design Block folders"
 msgstr "Thư mục thiết kế theo khối KiCad"
 
 #: common/design_block_io.cpp:174
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3038
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3017
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Không thể ghi đè lên đường dẫn thư viện '%s'."
@@ -2172,7 +2172,7 @@ msgstr ""
 "Hãy đảm bảo bạn có quyền ghi đè và thử lại."
 
 #: common/design_block_io.cpp:203 pcbnew/pcb_io/geda/pcb_io_geda.cpp:964
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3063
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3042
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Không đủ quyền để xóa thư mục '%s'."
@@ -5742,7 +5742,7 @@ msgstr "Kiểu cách Đường thẳng"
 #: eeschema/sch_textbox.cpp:539 include/stroke_params.h:86
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2620 pcbnew/pcb_dimension.cpp:642
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2631 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480
 msgid "Default"
@@ -5829,7 +5829,7 @@ msgstr ""
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3429
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3293
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3306
 msgid "Failed to read image data."
 msgstr "Không tải được dữ liệu của ảnh."
 
@@ -6609,7 +6609,7 @@ msgstr "Điểm"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:40
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2153 pcbnew/pad.cpp:1436
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2164 pcbnew/pad.cpp:1436
 #: pcbnew/pcb_fields_grid_table.cpp:150 pcbnew/pcb_reference_image.cpp:222
 #: pcbnew/pcb_reference_image.cpp:375 pcbnew/pcb_tablecell.cpp:232
 #: pcbnew/pcb_tablecell.cpp:238 pcbnew/pcb_target.cpp:156
@@ -6665,13 +6665,13 @@ msgid "Center Y"
 msgstr "Căn giữa Y"
 
 #: common/eda_shape.cpp:2417 eeschema/sch_tablecell.cpp:224
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2632 pcbnew/pcb_tablecell.cpp:229
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2643 pcbnew/pcb_tablecell.cpp:229
 #: pcbnew/pcb_textbox.cpp:806 pcbnew/pcb_track.cpp:2144
 msgid "End X"
 msgstr "Kết thúc X"
 
 #: common/eda_shape.cpp:2423 eeschema/sch_tablecell.cpp:225
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2638 pcbnew/pcb_tablecell.cpp:230
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2649 pcbnew/pcb_tablecell.cpp:230
 #: pcbnew/pcb_textbox.cpp:807 pcbnew/pcb_track.cpp:2147
 msgid "End Y"
 msgstr "Kết thúc Y"
@@ -6756,7 +6756,7 @@ msgstr "Đậm + Nghiêng"
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
 #: eeschema/sch_pin.cpp:2107 pcbnew/dialogs/dialog_render_job.cpp:40
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2618
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
 msgstr "Trái"
 
@@ -6784,7 +6784,7 @@ msgstr "Giữa"
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
 #: eeschema/sch_pin.cpp:2106 pcbnew/dialogs/dialog_render_job.cpp:41
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2619
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
 msgstr "Phải"
 
@@ -6843,7 +6843,7 @@ msgstr "Thuộc tính Văn bản"
 #: eeschema/fields_grid_table.cpp:502 eeschema/sch_field.cpp:1237
 #: eeschema/sch_label.cpp:1245 eeschema/sch_tablecell.cpp:157
 #: eeschema/sch_text.cpp:644 eeschema/sch_textbox.cpp:539
-#: eeschema/widgets/sch_properties_panel.cpp:272 pcbnew/pcb_dimension.cpp:642
+#: eeschema/widgets/sch_properties_panel.cpp:271 pcbnew/pcb_dimension.cpp:642
 #: pcbnew/pcb_tablecell.cpp:149 pcbnew/pcb_text.cpp:294
 #: pcbnew/pcb_textbox.cpp:480 pcbnew/widgets/pcb_properties_panel.cpp:340
 msgid "Font"
@@ -7041,7 +7041,7 @@ msgstr "Bí danh không hợp lệ (tên trùng lặp)"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/fields_grid_table.cpp:61
-#: eeschema/widgets/sch_properties_panel.cpp:266
+#: eeschema/widgets/sch_properties_panel.cpp:265
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
 msgid "Default Font"
 msgstr "Kiểu chữ mặc định"
@@ -7078,73 +7078,73 @@ msgstr ""
 "Biệt hiệu thư viện trùng lặp '%s' được tìm thấy trong dòng tệp bảng thư viện "
 "footprint %d."
 
-#: common/gestfich.cpp:250
+#: common/gestfich.cpp:251
 #, c-format
 msgid "Command '%s' could not be found."
 msgstr "Không thể tìm thấy lệnh '%s'."
 
-#: common/gestfich.cpp:267
+#: common/gestfich.cpp:268
 #, c-format
 msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Không thể tìm thấy trình xem PDF cho \"%s\"."
 
-#: common/gestfich.cpp:282
+#: common/gestfich.cpp:283
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Có sự cố trong khi chạy trình xem PDF '%s'."
 
-#: common/gestfich.cpp:301 common/gestfich.cpp:374 eeschema/eeschema.cpp:661
+#: common/gestfich.cpp:302 common/gestfich.cpp:375 eeschema/eeschema.cpp:661
 #: gerbview/gerbview.cpp:243 kicad/project_template.cpp:309
 #: pcbnew/pcbnew.cpp:604
 #, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Không thể sao chép tệp tin \"%s\"."
 
-#: common/gestfich.cpp:395
+#: common/gestfich.cpp:396
 msgid "Invalid directory name, cannot remove root"
 msgstr "Tên thư mục vô giá trị, không thể xóa bỏ gốc thư mục"
 
-#: common/gestfich.cpp:403
+#: common/gestfich.cpp:404
 #, c-format
 msgid "Directory '%s' does not exist"
 msgstr "Thư mục '%s' không tồn tại"
 
-#: common/gestfich.cpp:413
+#: common/gestfich.cpp:414
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "'%s' không phải là thư mục"
 
-#: common/gestfich.cpp:425
+#: common/gestfich.cpp:426
 #, c-format
 msgid "Error removing directory '%s': %s"
 msgstr "Lỗi xóa thư mục '%s': %s"
 
-#: common/gestfich.cpp:441 common/gestfich.cpp:515 common/gestfich.cpp:629
+#: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
 #, fuzzy, c-format
 msgid "Could not open source directory: %s"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
-#: common/gestfich.cpp:448 common/gestfich.cpp:586
+#: common/gestfich.cpp:449 common/gestfich.cpp:575
 #, fuzzy, c-format
 msgid "Could not create destination directory: %s"
 msgstr "Không thể tạo thư mục đầu ra '%s'"
 
-#: common/gestfich.cpp:472 common/gestfich.cpp:503
+#: common/gestfich.cpp:477 common/gestfich.cpp:507
 #, c-format
 msgid "Could not copy file: %s to %s"
 msgstr "Không thể sao chép tệp: %s vào %s"
 
-#: common/gestfich.cpp:552
+#: common/gestfich.cpp:542
 #, c-format
 msgid "Could not copy directory: %s to %s"
 msgstr "Không thể sao chép thư mục: %s đến %s"
 
-#: common/gestfich.cpp:604
+#: common/gestfich.cpp:593
 #, fuzzy, c-format
 msgid "Source directory does not exist: %s"
 msgstr "Thư mục '%s' không tồn tại"
 
-#: common/gestfich.cpp:659
+#: common/gestfich.cpp:649
 #, c-format
 msgid "Could not read file: %s"
 msgstr "Không thể đọc tệp: %s"
@@ -8053,11 +8053,11 @@ msgstr "Tệp Specctra DSN"
 msgid "Special: Execute Command"
 msgstr ""
 
-#: common/jobs/jobs_output_archive.cpp:96 common/jobs/jobset.cpp:45
+#: common/jobs/jobs_output_archive.cpp:98 common/jobs/jobset.cpp:45
 msgid "Archive"
 msgstr ""
 
-#: common/jobs/jobs_output_folder.cpp:80 common/jobs/jobset.cpp:43
+#: common/jobs/jobs_output_folder.cpp:82 common/jobs/jobset.cpp:43
 #, fuzzy
 msgid "Folder"
 msgstr "Đổ bột chì kem:"
@@ -8666,7 +8666,7 @@ msgstr "Vertical Justification"
 msgid "There are no notifications available"
 msgstr ""
 
-#: common/paths.cpp:515
+#: common/paths.cpp:524
 #, c-format
 msgid ""
 "KiCad was unable to use '%s'.\n"
@@ -11595,8 +11595,8 @@ msgstr "Vui lòng chọn tệp bảng thư viện ký hiệu."
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:945
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2941
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3019
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2920
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2998
 #, fuzzy, c-format
 msgid "Library '%s' is read only."
 msgstr "Schematic Field"
@@ -13579,8 +13579,8 @@ msgstr "Tên kích thước văn bản"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:639 eeschema/sch_item.cpp:586
-#: eeschema/sch_item.cpp:634 eeschema/sch_symbol.cpp:3014
+#: eeschema/dialogs/dialog_sim_model.cpp:639 eeschema/sch_item.cpp:591
+#: eeschema/sch_item.cpp:639 eeschema/sch_symbol.cpp:3014
 #: eeschema/symbol_editor/symbol_editor.cpp:1753
 msgid "Unit"
 msgstr "Đơn vị"
@@ -15807,7 +15807,7 @@ msgstr "Tham số Đầu ra"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2108 pcbnew/pcb_marker.cpp:223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2119 pcbnew/pcb_marker.cpp:223
 #: pcbnew/pcb_shape.cpp:615 pcbnew/pcb_text.cpp:283 pcbnew/pcb_track.cpp:1634
 #: pcbnew/pcb_track.cpp:1701 pcbnew/tools/drawing_stackup_table_tool.cpp:251
 #: pcbnew/widgets/search_handlers.cpp:253 pcbnew/zone.cpp:775
@@ -18384,7 +18384,7 @@ msgid "Allow Autoplacement"
 msgstr ""
 
 #: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
-#: eeschema/sch_item.cpp:592 eeschema/sch_item.cpp:677
+#: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 #, fuzzy
 msgid "Private"
 msgstr "Tạo các lớp"
@@ -19076,8 +19076,8 @@ msgstr "Nhãn toàn cục '%s' tại %s, %s"
 msgid "Unhandled item type %d"
 msgstr "Loại mục chưa được xử lý %d"
 
-#: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2081
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2137
+#: eeschema/net_navigator.cpp:317 pcbnew/board.cpp:2085
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2148
 #: pcbnew/pcb_draw_panel_gal.cpp:718
 #: pcbnew/widgets/appearance_controls.cpp:1036
 #: pcbnew/widgets/appearance_controls.cpp:2472
@@ -19429,7 +19429,7 @@ msgstr "Nhập bus"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:954
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2147 pcbnew/pad.cpp:1383
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2158 pcbnew/pad.cpp:1383
 #: pcbnew/pcb_track.cpp:1731 pcbnew/tools/pcb_control.cpp:1916
 #: pcbnew/zone.cpp:811
 #, fuzzy
@@ -19593,107 +19593,117 @@ msgstr "Tham chiếu"
 msgid "Show Field Name"
 msgstr "Tên trường mới:"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:898
+#: eeschema/sch_io/altium/sch_io_altium.cpp:906
+#, fuzzy, c-format
+msgid "Error parsing Altium schematic: %s"
+msgstr "Lỗi khi tải sơ đồ mạch '%s'."
+
+#: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:971
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1045
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1053
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1155
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1127
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1229
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Mong đợi tệp sơ đồ Altium phiên bản 5.0"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1270
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1344
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1389
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1463
 msgid "Parameter Set not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1414
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1488
 msgid "Compile mask not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1439
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1513
 msgid "Blanket not currently supported."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1444
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1518
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4813
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr ""
 "Đã tìm thấy id bản ghi không xác định hoặc không mong muốn %d trong %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1502
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1576
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1674
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1748
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3818
 msgid "Pin has unexpected orientation."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1722
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1796
 msgid "Pin has unexpected electrical type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1727
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1801
 msgid "Pin has unexpected outer edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1730
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1804
 msgid "Pin has unexpected inner edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2136
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2210
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3621
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3695
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3670
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3744
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3838
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3912
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Cổng %s không có kết nối."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4030
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4104
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4047
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4066
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4121
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4140
 #, c-format
 msgid "Error reading image %s."
 msgstr "Lỗi khi đọc hình ảnh %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4059
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4133
 #, fuzzy, c-format
 msgid "File not found %s."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4871
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4924
+#, fuzzy, c-format
+msgid "Error parsing Altium library: %s"
+msgstr "Lỗi liệt kê thư viện biểu tượng '%s': %s"
+
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -20069,7 +20079,7 @@ msgstr "Tệp thư viện symbol KiCad"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:220
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:505
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2716
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2695
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:154
 msgid "Open cancelled by user."
 msgstr "Mở bị hủy bởi người dùng."
@@ -20394,25 +20404,25 @@ msgstr "ID footprint \"%s\" không hợp lệ."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Giá trị SCH_FILE_T không xác định: %d"
 
-#: eeschema/sch_item.cpp:132 eeschema/sch_item.cpp:152
-#: eeschema/sch_item.cpp:641
+#: eeschema/sch_item.cpp:137 eeschema/sch_item.cpp:157
+#: eeschema/sch_item.cpp:646
 #, fuzzy
 msgid "All units"
 msgstr "Khoản mục trợ giúp"
 
-#: eeschema/sch_item.cpp:143 eeschema/sch_item.cpp:179
-#: eeschema/sch_item.cpp:663
+#: eeschema/sch_item.cpp:148 eeschema/sch_item.cpp:184
+#: eeschema/sch_item.cpp:668
 #, fuzzy
 msgid "All body styles"
 msgstr "Phổ biến cho tất cả các kiểu thân"
 
-#: eeschema/sch_item.cpp:589 eeschema/sch_item.cpp:656
+#: eeschema/sch_item.cpp:594 eeschema/sch_item.cpp:661
 #: eeschema/sch_symbol.cpp:3030 eeschema/tools/sch_edit_tool.cpp:138
 #, fuzzy
 msgid "Body Style"
 msgstr "Kiểu cách Đường thẳng"
 
-#: eeschema/sch_item.cpp:606 pcbnew/board_item.cpp:420
+#: eeschema/sch_item.cpp:611 pcbnew/board_item.cpp:420
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:163
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:40
@@ -20474,8 +20484,8 @@ msgstr "Vertical Justification"
 #: eeschema/sch_label.cpp:1385 eeschema/sch_line.cpp:893
 #: pcbnew/board_connected_item.cpp:224
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/generators/pcb_tuning_pattern.cpp:491
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2143 pcbnew/pad.cpp:1381
+#: pcbnew/generators/pcb_tuning_pattern.cpp:502
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2154 pcbnew/pad.cpp:1381
 #: pcbnew/pad.cpp:2815 pcbnew/pcb_shape.cpp:906 pcbnew/pcb_tablecell.cpp:221
 #: pcbnew/pcb_track.cpp:1729 pcbnew/tools/pcb_control.cpp:1913
 #: pcbnew/widgets/pcb_properties_panel.cpp:327
@@ -21976,7 +21986,7 @@ msgstr "Lỗi khi tải mô hình mô phỏng: không có trường '%s'"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
 #: pcbnew/dialogs/dialog_board_statistics.cpp:697
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1480
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1491
 #, fuzzy
 msgid "unknown"
 msgstr "Không xác định parent của thuộc tính"
@@ -25695,7 +25705,7 @@ msgstr "Không có footprint nào được chỉ định"
 msgid "Invalid footprint specified"
 msgstr "Footprint được chỉ định không hợp lệ"
 
-#: eeschema/widgets/sch_properties_panel.cpp:219
+#: eeschema/widgets/sch_properties_panel.cpp:218
 #: pcbnew/widgets/pcb_properties_panel.cpp:277
 #, fuzzy
 msgid "Edit Properties"
@@ -26022,7 +26032,7 @@ msgstr "Chọn Lớp: %s"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:98
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:167
 #: pcbnew/footprint.cpp:4225 pcbnew/footprint.cpp:4228
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2150 pcbnew/pad.cpp:1391
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2161 pcbnew/pad.cpp:1391
 #: pcbnew/pad.cpp:2777 pcbnew/pcb_dimension.cpp:675
 #: pcbnew/pcb_dimension.cpp:1491 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:498 pcbnew/pcb_marker.cpp:400
@@ -28575,17 +28585,17 @@ msgstr ""
 msgid "Import EasyEDA Pro Project"
 msgstr "Tệp dự án: \"%s\""
 
-#: kicad/jobs_runner.cpp:232
+#: kicad/jobs_runner.cpp:226
 #, fuzzy, c-format
 msgid "Running job %d: %s"
 msgstr "Màu sắc đường kẻ:"
 
-#: kicad/jobs_runner.cpp:280
+#: kicad/jobs_runner.cpp:282
 #, fuzzy
 msgid "Job successful"
 msgstr "Kết nối thành công"
 
-#: kicad/jobs_runner.cpp:287
+#: kicad/jobs_runner.cpp:289
 #, fuzzy
 msgid "Job failed"
 msgstr "Không có tệp"
@@ -30255,7 +30265,7 @@ msgstr "Bản vẽ"
 msgid "File \"%s\" saved."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pagelayout_editor/files.cpp:182 pcbnew/router/router_tool.cpp:647
+#: pagelayout_editor/files.cpp:182 pcbnew/router/router_tool.cpp:655
 #, c-format
 msgid "Unable to write '%s'."
 msgstr "Không thể ghi '%s'."
@@ -32897,7 +32907,7 @@ msgstr "Linh kiện"
 msgid "Tessellating copper zones..."
 msgstr "Đang tải..."
 
-#: pcbnew/board.cpp:2078 pcbnew/dialogs/dialog_board_statistics.cpp:701
+#: pcbnew/board.cpp:2082 pcbnew/dialogs/dialog_board_statistics.cpp:701
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/footprint.cpp:1746 pcbnew/netinfo_item.cpp:108
@@ -32907,7 +32917,7 @@ msgstr "Đang tải..."
 msgid "Pads"
 msgstr ""
 
-#: pcbnew/board.cpp:2079 pcbnew/dialogs/dialog_board_statistics.cpp:707
+#: pcbnew/board.cpp:2083 pcbnew/dialogs/dialog_board_statistics.cpp:707
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:155
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:80
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:35
@@ -32922,12 +32932,12 @@ msgstr ""
 msgid "Vias"
 msgstr ""
 
-#: pcbnew/board.cpp:2080 pcbnew/pcb_draw_panel_gal.cpp:717
+#: pcbnew/board.cpp:2084 pcbnew/pcb_draw_panel_gal.cpp:717
 #, fuzzy
 msgid "Track Segments"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/board.cpp:2082 pcbnew/pcb_draw_panel_gal.cpp:719
+#: pcbnew/board.cpp:2086 pcbnew/pcb_draw_panel_gal.cpp:719
 #, fuzzy
 msgid "Unrouted"
 msgstr "Nhóm đã chọn"
@@ -39321,13 +39331,13 @@ msgid "Differential Pair Dimensions"
 msgstr "Khoảng cách cặp vi sai"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
-#: pcbnew/router/router_tool.cpp:2784
+#: pcbnew/router/router_tool.cpp:2805
 #, fuzzy
 msgid "Mode"
 msgstr "Mô hình 3D bởi"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
-#: pcbnew/router/router_tool.cpp:2778
+#: pcbnew/router/router_tool.cpp:2799
 #, fuzzy
 msgid "Highlight collisions"
 msgstr "Phần tử được tô sáng"
@@ -39349,7 +39359,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
-#: pcbnew/router/router_tool.cpp:2780
+#: pcbnew/router/router_tool.cpp:2801
 msgid "Shove"
 msgstr ""
 
@@ -39375,7 +39385,7 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
-#: pcbnew/router/router_tool.cpp:2779
+#: pcbnew/router/router_tool.cpp:2800
 #, fuzzy
 msgid "Walk around"
 msgstr "Nền"
@@ -40329,13 +40339,13 @@ msgid "Target skew: "
 msgstr "Độ lệch mục tiêu: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2210
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2232 pcbnew/pad.cpp:1483
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2221
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2243 pcbnew/pad.cpp:1483
 #: pcbnew/pcb_track.cpp:1676 pcbnew/pcb_track.cpp:1684
 #: pcbnew/pcb_track.cpp:1716 pcbnew/pcb_track.cpp:1722
-#: pcbnew/router/router_tool.cpp:2792 pcbnew/router/router_tool.cpp:2797
-#: pcbnew/router/router_tool.cpp:2802 pcbnew/router/router_tool.cpp:2813
-#: pcbnew/router/router_tool.cpp:2821 pcbnew/router/router_tool.cpp:2826
+#: pcbnew/router/router_tool.cpp:2813 pcbnew/router/router_tool.cpp:2818
+#: pcbnew/router/router_tool.cpp:2823 pcbnew/router/router_tool.cpp:2834
+#: pcbnew/router/router_tool.cpp:2842 pcbnew/router/router_tool.cpp:2847
 #: pcbnew/tools/pcb_control.cpp:1736 pcbnew/tools/pcb_control.cpp:1746
 #: pcbnew/zone.cpp:879
 #, c-format
@@ -40409,7 +40419,7 @@ msgstr "Bán kính"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:262
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:391
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2721
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2732
 msgid "Single-sided"
 msgstr ""
 
@@ -43267,7 +43277,7 @@ msgstr "Khối"
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:837
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:884
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:241
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:297
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:303
 #, fuzzy, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "Đang kiểm tra nhãn..."
@@ -43883,26 +43893,26 @@ msgstr ""
 msgid "board setup solder mask min width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:600
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:694
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:610
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:770
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:602
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:696
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:612
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:772
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:819
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:901
 msgid "Building solder mask..."
 msgstr "Đang dựng mặt nạ hàn..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:827
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:910
 #, fuzzy
 msgid "Checking solder mask to silk clearance..."
 msgstr "Đang kiểm tra nhãn..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:832
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:915
 #, fuzzy
 msgid "Checking solder mask web integrity..."
 msgstr "Đang kiểm tra tên trang tính ..."
@@ -44877,7 +44887,7 @@ msgstr "Lỗi khi tải footprint %s từ thư viện '%s'."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:262
 #: pcbnew/generators/pcb_tuning_pattern.cpp:267
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2239
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2250
 #, fuzzy
 msgid "Tuning Pattern"
 msgstr "Mẫu"
@@ -44887,169 +44897,169 @@ msgstr "Mẫu"
 msgid "Tuning Patterns"
 msgstr "Mẫu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:492
+#: pcbnew/generators/pcb_tuning_pattern.cpp:503
 #, fuzzy
 msgid "Tuning"
 msgstr "Cảnh báo"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1477
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1488
 msgid "too long"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1478
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1489
 #, fuzzy
 msgid "too short"
 msgstr "Không hiện lại"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1479
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1490
 msgid "tuned"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:1559
+#: pcbnew/generators/pcb_tuning_pattern.cpp:1570
 #, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Trình soạn thảo Văn bản"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2084
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2095
 #, fuzzy
 msgid "current skew"
 msgstr "Phím hiện tại:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2086
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2097
 #, fuzzy
 msgid "current length"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2173
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2184
 #, fuzzy
 msgid "Routed Lengths"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2179 pcbnew/pcb_track.cpp:1659
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2190 pcbnew/pcb_track.cpp:1659
 #, fuzzy
 msgid "Routed Length"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2185 pcbnew/pad.cpp:2930
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2196 pcbnew/pad.cpp:2930
 #: pcbnew/pcb_track.cpp:1664
 msgid "Pad To Die Length"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2188 pcbnew/pcb_track.cpp:1667
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2199 pcbnew/pcb_track.cpp:1667
 #, fuzzy
 msgid "Full Length"
 msgstr "Độ dài"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2200
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2211
 #, fuzzy, c-format
 msgid "Target Skew: %s"
 msgstr "Mục tiêu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2201
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2223
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2212
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2234
 msgid "(from tuning pattern properties)"
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2209
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2220
 #, fuzzy, c-format
 msgid "Skew Constraints: %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2222
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2233
 #, fuzzy, c-format
 msgid "Target Length: %s"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2231
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 #, fuzzy, c-format
 msgid "Length Constraints: %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2252
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2263
 #, fuzzy
 msgid "Tune Skew"
 msgstr "Đóng %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2465
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2476
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2501
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2512
 msgid "Tune"
 msgstr "Điều chỉnh"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2527
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2545
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2538
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2556
 #, fuzzy
 msgid "Select a track to tune first."
 msgstr "Chọn tất cả các phần tử trên màn hình"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2613
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2624
 #, fuzzy
 msgid "Single track"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2614
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2625
 #, fuzzy
 msgid "Differential pair"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2615
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2626
 #, fuzzy
 msgid "Diff pair skew"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2629
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2640
 #, fuzzy
 msgid "Pattern Properties"
 msgstr "Thuộc tính nhãn"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2644
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2655
 #, fuzzy
 msgid "Tuning Mode"
 msgstr "Màu sắc đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2650
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2661
 #, fuzzy
 msgid "Min Amplitude"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2657
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2668
 #, fuzzy
 msgid "Max Amplitude"
 msgstr "Kiểu dáng đường kẻ:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2664
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2675
 #, fuzzy
 msgid "Initial Side"
 msgstr "Số"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2670
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2681
 #, fuzzy
 msgid "Min Spacing"
 msgstr "Khoảng cách lưới tối thiểu:"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2676
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2687
 #, fuzzy
 msgid "Corner Radius %"
 msgstr "Kiểu cách Đường thẳng"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2698
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2709
 #, fuzzy
 msgid "Target Length"
 msgstr "Đường thẳng, chiều dài %s"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2707
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2718
 #, fuzzy
 msgid "Target Skew"
 msgstr "Mục tiêu"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2715
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2726
 #, fuzzy
 msgid "Override Custom Rules"
 msgstr "Ghi đè ổ khóa"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2727
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2738
 #, fuzzy
 msgid "Rounded"
 msgstr "%s được tìm thấy"
@@ -45927,7 +45937,7 @@ msgid "Hole X / Y"
 msgstr ""
 
 #: pcbnew/pad.cpp:1481 pcbnew/pcb_track.cpp:1674 pcbnew/pcb_track.cpp:1714
-#: pcbnew/router/router_tool.cpp:2795 pcbnew/router/router_tool.cpp:2824
+#: pcbnew/router/router_tool.cpp:2816 pcbnew/router/router_tool.cpp:2845
 #: pcbnew/zone.cpp:878
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
@@ -47562,7 +47572,7 @@ msgid "Element token contains %d parameters."
 msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:972
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3071
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3050
 #, fuzzy, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "không tìm thấy tệp tin \"%s\"."
@@ -47574,7 +47584,7 @@ msgstr "tệp fp-lib-table không chứa thư viện có biệt hiệu \"%s\""
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1010
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3270
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3108
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3087
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Không có symbol nào được chọn"
@@ -47711,7 +47721,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2534
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7316
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7329
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -47783,48 +47793,48 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "Mở bằng mọi cách"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1471
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1450
 #, fuzzy, c-format
 msgid "unknown pad type: %d"
 msgstr "Không xác định parent của thuộc tính"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2321
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2300
 #, fuzzy, c-format
 msgid "unknown via type %d"
 msgstr "Không xác định parent của thuộc tính"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2613
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2592
 #, fuzzy, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "Nút không biết '%s' trong '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2762
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2741
 msgid "This file does not contain a PCB."
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2929
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2908
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2933
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2912
 #, fuzzy
 msgid "Library Not Found"
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2959
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2938
 #, fuzzy, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "ID footprint \"%s\" không hợp lệ."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2965
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2944
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Không đủ quyền để xóa '%s'."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3090
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3069
 #, fuzzy, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "tệp fp-lib-table không chứa thư viện có biệt hiệu \"%s\""
@@ -47857,28 +47867,28 @@ msgstr "Màu sắc đường kẻ:"
 msgid "Cannot create generated object of type '%s'"
 msgstr "Không thể tạo đối tượng được tạo kiểu '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1449
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1462
 #, fuzzy, c-format
 msgid "Page type '%s' is not valid."
 msgstr "ID footprint \"%s\" không hợp lệ."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2011
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2024
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr ""
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2048
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2061
 #, fuzzy, c-format
 msgid "%d is not a valid layer count"
 msgstr "\"%s\" không phải là footprint hợp lệ."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2780
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2793
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "%s trong \"%s\", dòng %d, offset %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3179
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6356
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3192
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6369
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47891,12 +47901,12 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3357
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3370
 #, fuzzy, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Không thể mở tệp '%s'"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4414
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4427
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -47909,7 +47919,7 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5189
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5202
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47920,7 +47930,7 @@ msgstr ""
 "tệp: %s\n"
 "dòng: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5208
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5221
 #, fuzzy, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -47931,7 +47941,7 @@ msgstr ""
 "tệp: %s\n"
 "dòng: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5539
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5552
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -47944,8 +47954,8 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5662
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6616
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5675
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6629
 #, fuzzy, c-format
 msgid ""
 "Invalid padstack layer in\n"
@@ -47958,13 +47968,13 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5677
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6631
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5690
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6644
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "%s trong \"%s\", dòng %d, offset %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6255
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6268
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47977,7 +47987,7 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6467
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6480
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -47990,7 +48000,7 @@ msgstr ""
 "dòng: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6722
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6735
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -48003,7 +48013,7 @@ msgstr ""
 "line: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7286
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7299
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -48608,18 +48618,18 @@ msgid ""
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:673 pcbnew/router/pns_kicad_iface.cpp:789
-#: pcbnew/router/router_tool.cpp:755 pcbnew/router/router_tool.cpp:831
+#: pcbnew/router/router_tool.cpp:763 pcbnew/router/router_tool.cpp:839
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: pcbnew/router/pns_kicad_iface.cpp:708 pcbnew/router/pns_kicad_iface.cpp:788
-#: pcbnew/router/router_tool.cpp:781 pcbnew/router/router_tool.cpp:812
+#: pcbnew/router/router_tool.cpp:789 pcbnew/router/router_tool.cpp:820
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/pns_kicad_iface.cpp:715 pcbnew/router/router_tool.cpp:783
+#: pcbnew/router/pns_kicad_iface.cpp:715 pcbnew/router/router_tool.cpp:791
 #, fuzzy
 msgid "existing track"
 msgstr "Đường dẫn hiện tại:"
@@ -48768,204 +48778,204 @@ msgstr "Kiểu cách Đường thẳng"
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:224
+#: pcbnew/router/router_tool.cpp:225
 #, fuzzy
 msgid "Select Track/Via Width"
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/router/router_tool.cpp:242
+#: pcbnew/router/router_tool.cpp:243
 #, fuzzy
 msgid "Use Starting Track Width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/router_tool.cpp:243
+#: pcbnew/router/router_tool.cpp:244
 msgid "Route using the width of the starting track."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:247 pcbnew/router/router_tool.cpp:372
+#: pcbnew/router/router_tool.cpp:248 pcbnew/router/router_tool.cpp:373
 #, fuzzy
 msgid "Use Net Class Values"
 msgstr "Lớp Net"
 
-#: pcbnew/router/router_tool.cpp:248
+#: pcbnew/router/router_tool.cpp:249
 msgid "Use track and via sizes from the net class"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:252 pcbnew/router/router_tool.cpp:377
+#: pcbnew/router/router_tool.cpp:253 pcbnew/router/router_tool.cpp:378
 #: pcbnew/tools/drawing_tool.cpp:114
 #, fuzzy
 msgid "Use Custom Values..."
 msgstr "Tùy chỉnh:"
 
-#: pcbnew/router/router_tool.cpp:253 pcbnew/tools/drawing_tool.cpp:115
+#: pcbnew/router/router_tool.cpp:254 pcbnew/tools/drawing_tool.cpp:115
 #, fuzzy
 msgid "Specify custom track and via sizes"
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/router/router_tool.cpp:264
+#: pcbnew/router/router_tool.cpp:265
 #, fuzzy
 msgid "Track netclass width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/router_tool.cpp:266
+#: pcbnew/router/router_tool.cpp:267
 #, fuzzy, c-format
 msgid "Track %s"
 msgstr "Tracks"
 
-#: pcbnew/router/router_tool.cpp:280
+#: pcbnew/router/router_tool.cpp:281
 #, fuzzy
 msgid "Via netclass values"
 msgstr "Tệp netlist KiCad"
 
-#: pcbnew/router/router_tool.cpp:285 pcbnew/tools/drawing_tool.cpp:126
+#: pcbnew/router/router_tool.cpp:286 pcbnew/tools/drawing_tool.cpp:126
 #, fuzzy, c-format
 msgid "Via %s, hole %s"
 msgstr "Via Holes"
 
-#: pcbnew/router/router_tool.cpp:291 pcbnew/tools/drawing_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:292 pcbnew/tools/drawing_tool.cpp:132
 #, fuzzy, c-format
 msgid "Via %s"
 msgstr "Via Holes"
 
-#: pcbnew/router/router_tool.cpp:357
+#: pcbnew/router/router_tool.cpp:358
 #, fuzzy
 msgid "Select Differential Pair Dimensions"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/router/router_tool.cpp:373
+#: pcbnew/router/router_tool.cpp:374
 msgid "Use differential pair dimensions from the net class"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:378
+#: pcbnew/router/router_tool.cpp:379
 #, fuzzy
 msgid "Specify custom differential pair dimensions"
 msgstr "Chọn một con đường khác"
 
-#: pcbnew/router/router_tool.cpp:395
+#: pcbnew/router/router_tool.cpp:396
 #, fuzzy, c-format
 msgid "Width %s"
 msgstr "Chiều rộng"
 
-#: pcbnew/router/router_tool.cpp:400
+#: pcbnew/router/router_tool.cpp:401
 #, c-format
 msgid "Width %s, via gap %s"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:409
+#: pcbnew/router/router_tool.cpp:410
 #, fuzzy, c-format
 msgid "Width %s, gap %s"
 msgstr "Đang kiểm tra các pin..."
 
-#: pcbnew/router/router_tool.cpp:415
+#: pcbnew/router/router_tool.cpp:416
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:477
+#: pcbnew/router/router_tool.cpp:478
 #, fuzzy
 msgid "Interactive Router"
 msgstr "Công cụ Xóa Tương tác"
 
-#: pcbnew/router/router_tool.cpp:591
+#: pcbnew/router/router_tool.cpp:599
 msgid "Save router log"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1115
+#: pcbnew/router/router_tool.cpp:1123
 #, fuzzy
 msgid "Via needs 2 different layers."
 msgstr "Vùng Rule %s\t"
 
-#: pcbnew/router/router_tool.cpp:1188
+#: pcbnew/router/router_tool.cpp:1196
 msgid "Tracks on Copper layers only."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1868 pcbnew/router/router_tool.cpp:2638
+#: pcbnew/router/router_tool.cpp:1887 pcbnew/router/router_tool.cpp:2659
 #, fuzzy
 msgid "The selected item is locked."
 msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
-#: pcbnew/router/router_tool.cpp:1870
+#: pcbnew/router/router_tool.cpp:1889
 #, fuzzy
 msgid "Drag Anyway"
 msgstr "Mở bằng mọi cách"
 
-#: pcbnew/router/router_tool.cpp:1928 pcbnew/router/router_tool.cpp:2479
+#: pcbnew/router/router_tool.cpp:1947 pcbnew/router/router_tool.cpp:2500
 #, c-format
 msgid "(%s to commit anyway.)"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1932 pcbnew/router/router_tool.cpp:2483
+#: pcbnew/router/router_tool.cpp:1951 pcbnew/router/router_tool.cpp:2504
 #, fuzzy
 msgid "Track violates DRC."
 msgstr "Tạo các đường mạch và vias"
 
-#: pcbnew/router/router_tool.cpp:2640 pcbnew/tools/pcb_actions.cpp:2422
+#: pcbnew/router/router_tool.cpp:2661 pcbnew/tools/pcb_actions.cpp:2428
 #, fuzzy
 msgid "Break Track"
 msgstr "Track"
 
-#: pcbnew/router/router_tool.cpp:2721
+#: pcbnew/router/router_tool.cpp:2742
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/router/router_tool.cpp:2734 pcbnew/router/router_tool.cpp:2745
+#: pcbnew/router/router_tool.cpp:2755 pcbnew/router/router_tool.cpp:2766
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Net %s NetClass %s"
 
-#: pcbnew/router/router_tool.cpp:2741
+#: pcbnew/router/router_tool.cpp:2762
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/router/router_tool.cpp:2750
+#: pcbnew/router/router_tool.cpp:2771
 #, fuzzy
 msgid "Routing Track"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/router/router_tool.cpp:2751
+#: pcbnew/router/router_tool.cpp:2772
 #, fuzzy
 msgid "(no net)"
 msgstr "<no net>"
 
-#: pcbnew/router/router_tool.cpp:2760
+#: pcbnew/router/router_tool.cpp:2781
 #, fuzzy
 msgid "Free-angle"
 msgstr "Hình chữ nhật"
 
-#: pcbnew/router/router_tool.cpp:2766
+#: pcbnew/router/router_tool.cpp:2787
 msgid "45-degree"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2767
+#: pcbnew/router/router_tool.cpp:2788
 msgid "45-degree rounded"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2768
+#: pcbnew/router/router_tool.cpp:2789
 msgid "90-degree"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2769
+#: pcbnew/router/router_tool.cpp:2790
 msgid "90-degree rounded"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2774
+#: pcbnew/router/router_tool.cpp:2795
 #, fuzzy
 msgid "Corner Style"
 msgstr "Kiểu cách Đường thẳng"
 
-#: pcbnew/router/router_tool.cpp:2790 pcbnew/router/router_tool.cpp:2819
+#: pcbnew/router/router_tool.cpp:2811 pcbnew/router/router_tool.cpp:2840
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/router_tool.cpp:2800
+#: pcbnew/router/router_tool.cpp:2821
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/router/router_tool.cpp:2811 pcbnew/tools/pcb_control.cpp:1745
+#: pcbnew/router/router_tool.cpp:2832 pcbnew/tools/pcb_control.cpp:1745
 #, fuzzy, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Tạo các lớp"
@@ -52408,70 +52418,80 @@ msgstr ""
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
 
+#: pcbnew/tools/pcb_actions.cpp:2422
+#, fuzzy
+msgid "Cancel Current Item"
+msgstr "Hủy công cụ hiện tại"
+
 #: pcbnew/tools/pcb_actions.cpp:2423
+#, fuzzy
+msgid "Skip current item and route next selected item."
+msgstr "Loại bỏ khỏi lựa chọn"
+
+#: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2431
+#: pcbnew/tools/pcb_actions.cpp:2437
 msgid "Drag 45 Degree Mode"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2432
+#: pcbnew/tools/pcb_actions.cpp:2438
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2440
+#: pcbnew/tools/pcb_actions.cpp:2446
 #, fuzzy
 msgid "Drag Free Angle"
 msgstr "Hình chữ nhật"
 
-#: pcbnew/tools/pcb_actions.cpp:2441
+#: pcbnew/tools/pcb_actions.cpp:2447
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2451
+#: pcbnew/tools/pcb_actions.cpp:2457
 msgid "Update All Tuning Patterns"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2452
+#: pcbnew/tools/pcb_actions.cpp:2458
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2459
+#: pcbnew/tools/pcb_actions.cpp:2465
 #, fuzzy
 msgid "Rebuild All Generators"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_actions.cpp:2460
+#: pcbnew/tools/pcb_actions.cpp:2466
 msgid "Rebuilds geometry of all generators"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2467
+#: pcbnew/tools/pcb_actions.cpp:2473
 #, fuzzy
 msgid "Rebuild Selected Generators"
 msgstr "Xóa Trình tạo"
 
-#: pcbnew/tools/pcb_actions.cpp:2468
+#: pcbnew/tools/pcb_actions.cpp:2474
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2496
+#: pcbnew/tools/pcb_actions.cpp:2502
 #, fuzzy
 msgid "Generators Manager"
 msgstr "Tạo Biệt danh:"
 
-#: pcbnew/tools/pcb_actions.cpp:2497
+#: pcbnew/tools/pcb_actions.cpp:2503
 msgid "Show a manager dialog for Generator objects"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:2509
+#: pcbnew/tools/pcb_actions.cpp:2515
 #, fuzzy
 msgid "Length Tuning Settings..."
 msgstr "Cài đặt trang..."
 
-#: pcbnew/tools/pcb_actions.cpp:2510
+#: pcbnew/tools/pcb_actions.cpp:2516
 #, fuzzy
 msgid "Displays tuning pattern properties dialog"
 msgstr "Thuộc tính Ký hiệu Thư viện"
