@@ -835,60 +835,6 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( const s
     paramInfo.description = aUnit == "V" ? "Time-voltage points" : "Time-current points";
     paramInfos.push_back( paramInfo );
 
-    // TODO: Ngspice doesn't support "td" and "r" for current sources, so let's disable that for
-    // now.
-
-    /*paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = aUnit == "V" ? "Time-voltage points" : "Time-current points";
-    paramInfo.isSpiceInstanceParam = true;
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "repeat";
-    paramInfo.type = SIM_VALUE::TYPE_BOOL;
-    paramInfo.unit = "";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = "Repeat forever";
-    paramInfo.isSpiceInstanceParam = true;
-    paramInfo.spiceInstanceName = "r";
-    paramInfos.push_back( paramInfo );*/
-
-    /*paramInfo.name = "t";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT_VECTOR;
-    paramInfo.unit = "s";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Time vector";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = aPrefix;
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT_VECTOR;
-    paramInfo.unit = aUnit;
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = aQuantity + " vector";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "repeat";
-    paramInfo.type = SIM_VALUE::TYPE_BOOL;
-    paramInfo.unit = "";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Repeat forever";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "td";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "s";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = "Delay";
-    paramInfos.push_back( paramInfo );*/
-
     appendAcParamInfos( paramInfos, aUnit );
     appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
