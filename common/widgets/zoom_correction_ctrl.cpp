@@ -70,11 +70,11 @@ private:
         double pxPerUnit = dpi / unitsPerInch * value;
 
         // Minimum spacing between number labels to prevent overlap (in pixels)
-        const int MIN_LABEL_SPACING = 30;
-        double    lastLabelX = -MIN_LABEL_SPACING;
-        int       majorTickEvery = 10;
-        int       tickLabelDiv = 1;
-        double    pxPerMinorTick;
+        int    minLabelSpacing = GetTextExtent( wxT( "000_" ) ).x;
+        double lastLabelX = -minLabelSpacing;
+        int    majorTickEvery = 10;
+        double tickLabelDiv = 1;
+        double pxPerMinorTick;
 
         // Draw major and minor tick marks with numbering
         if( units == ZOOM_CORRECTION_UNITS::INCH )
@@ -97,6 +97,13 @@ private:
             pxPerMinorTick = pxPerUnit;
         }
 
+        if( pxPerMinorTick < 3 )
+        {
+            pxPerMinorTick *= 2;
+            majorTickEvery /= 2;
+            tickLabelDiv /= 2;
+        }
+
         for( double x = 0; x <= size.x; x += pxPerMinorTick )
         {
             int tickCount = (int) round( x / pxPerMinorTick );
@@ -106,9 +113,9 @@ private:
                 // Major tick
                 dc.DrawLine( x, size.y - 1, x, size.y - 16 );
 
-                int labelNum = tickCount / tickLabelDiv;
+                int labelNum = wxRound(tickCount / tickLabelDiv);
 
-                if( labelNum > 0 && x < size.x - 10 && ( x - lastLabelX ) >= MIN_LABEL_SPACING )
+                if( labelNum > 0 && x < size.x - 10 && ( x - lastLabelX ) >= minLabelSpacing )
                 {
                     wxString label = wxString::Format( wxT( "%d" ), labelNum );
                     wxSize   textSize = dc.GetTextExtent( label );
@@ -232,10 +239,14 @@ void ZOOM_CORRECTION_CTRL::autoPressed( wxCommandEvent& aEvent )
     val = wxRound( ( rawPPI.x + rawPPI.y ) / 2.0 );
 #endif
 
-    if( val < 50 )
+    if( val < 10 )
     {
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+        val = dpy.GetStdPPIValue() / dpy.GetScaleFactor();
+#else
         wxSize ppi = dpy.GetPPI();
         val = wxRound( ( ppi.x + ppi.y ) / 2.0 );
+#endif
     }
 
     m_spinner->SetValue( val );
