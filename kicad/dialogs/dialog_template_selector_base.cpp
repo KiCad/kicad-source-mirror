@@ -98,7 +98,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 
 	m_sizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnBack = new wxButton( this, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnBack = new wxButton( this, wxID_ANY, _("Go Back"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnBack->Enable( false );
 
 	m_sizerButtons->Add( m_btnBack, 0, wxALL, 5 );
