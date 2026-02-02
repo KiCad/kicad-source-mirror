@@ -1032,7 +1032,7 @@ void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onChangePadDrawMode( wxCommandEvent& event )
 {
     m_sketchPreview = m_cbShowPadOutline->GetValue();
 

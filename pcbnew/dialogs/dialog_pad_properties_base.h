@@ -313,7 +313,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onTopPostMachining( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBottomPostMachining( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBackDrillChoice( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onChangePadDrawMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 
 
