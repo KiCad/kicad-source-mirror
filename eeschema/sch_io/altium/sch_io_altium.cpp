@@ -447,6 +447,25 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         // Parse from the original Altium file location
         ParseAltiumSch( fn.GetFullPath() );
 
+        // Sheets created here won't have names set by ParseSheetName (which only applies
+        // to sheet symbols within a parent). Derive a name from the Altium filename.
+        if( sheet->GetName().Trim().empty() )
+        {
+            wxString baseName = wxFileName( fn ).GetName();
+            baseName.Replace( wxT( "/" ), wxT( "_" ) );
+
+            wxString           sheetName = baseName;
+            std::set<wxString> existingNames;
+
+            for( auto& [path, existing] : sheets )
+                existingNames.insert( existing->GetName() );
+
+            for( int ii = 1; existingNames.count( sheetName ); ++ii )
+                sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
+
+            sheet->SetName( sheetName );
+        }
+
         m_sheetPath.SetPageNumber( pageNo );
         m_sheetPath.pop_back();
 
@@ -949,7 +968,25 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 
         if( !loadAltiumFileName.IsFileReadable() )
         {
-            // Try case-insensitive search
+            // Altium sheet symbols sometimes store filenames without the .SchDoc extension.
+            // Try appending it before falling through to the directory search.
+            if( !loadAltiumFileName.HasExt() )
+            {
+                wxFileName withExt( loadAltiumFileName );
+                withExt.SetExt( wxT( "SchDoc" ) );
+
+                if( withExt.IsFileReadable() )
+                    loadAltiumFileName = withExt;
+            }
+        }
+
+        if( !loadAltiumFileName.IsFileReadable() )
+        {
+            // Try case-insensitive search, matching by base name so that extensionless
+            // filenames from Altium sheet symbols can resolve to .SchDoc files on disk.
+            wxFileName sheetFn( sheet->GetFileName() );
+            bool       extensionless = !sheetFn.HasExt();
+
             wxArrayString files;
             wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString,
                                 wxDIR_FILES | wxDIR_HIDDEN );
@@ -958,7 +995,11 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             {
                 wxFileName candidateFname( candidate );
 
-                if( candidateFname.GetFullName().IsSameAs( sheet->GetFileName(), false ) )
+                if( candidateFname.GetFullName().IsSameAs( sheet->GetFileName(), false )
+                    || ( extensionless
+                         && !sheetFn.GetName().empty()
+                         && candidateFname.GetName().IsSameAs( sheetFn.GetName(), false )
+                         && candidateFname.GetExt().IsSameAs( wxT( "SchDoc" ), false ) ) )
                 {
                     loadAltiumFileName = candidateFname;
                     break;
