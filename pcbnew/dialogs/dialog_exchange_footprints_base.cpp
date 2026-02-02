@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -125,7 +125,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer5->Add( 0, 10, 1, 0, 5 );
 
 	m_checkAll = new wxButton( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Check All Update Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_checkAll, 0, wxEXPAND, 5 );
+	bSizer5->Add( m_checkAll, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 
 	m_updateOptionsSizer->Add( bSizer5, 1, wxEXPAND|wxRIGHT, 10 );
@@ -146,7 +146,7 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	bSizer6->Add( 0, 10, 1, 0, 5 );
 
 	m_uncheckAll = new wxButton( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Uncheck All Update Options"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_uncheckAll, 0, wxEXPAND, 5 );
+	bSizer6->Add( m_uncheckAll, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 
 	m_updateOptionsSizer->Add( bSizer6, 1, wxEXPAND, 5 );

@@ -1385,7 +1385,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxEXPAND</property>
+                  <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT</property>
                   <property name="proportion">0</property>
                   <object class="wxButton" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -1676,7 +1676,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxEXPAND</property>
+                  <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT</property>
                   <property name="proportion">0</property>
                   <object class="wxButton" expanded="true">
                     <property name="BottomDockable">1</property>
