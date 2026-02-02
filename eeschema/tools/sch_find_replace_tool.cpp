@@ -439,7 +439,6 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     }
 
     SCH_COMMIT commit( m_frame );
-    bool modified = false;      // TODO: move to SCH_COMMIT....
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
@@ -452,10 +451,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
                 commit.Modify( aItem, aSheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
 
                 if( aItem->Replace( aData, aSheet ) )
-                {
                     m_frame->UpdateItem( aItem, false, true );
-                    modified = true;
-                }
             };
 
     if( currentSheetOnly || selectedOnly )
@@ -504,7 +500,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( modified )
+    if( !commit.Empty() )
     {
         commit.Push( wxS( "Find and Replace All" ) );
 
