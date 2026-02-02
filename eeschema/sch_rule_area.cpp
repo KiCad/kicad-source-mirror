@@ -40,6 +40,18 @@
 #include <geometry/shape_rect.h>
 
 
+SCH_RULE_AREA::~SCH_RULE_AREA()
+{
+    // Break bidirectional references so that items destroyed after this rule area
+    // don't try to call RemoveItem() on freed memory.
+    for( SCH_ITEM* item : m_items )
+        item->RemoveRuleAreaFromCache( this );
+
+    for( SCH_DIRECTIVE_LABEL* label : m_directives )
+        label->RemoveConnectedRuleArea( this );
+}
+
+
 wxString SCH_RULE_AREA::GetClass() const
 {
     return wxT( "SCH_RULE_AREA" );

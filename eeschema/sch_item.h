@@ -673,6 +673,11 @@ public:
     void AddRuleAreaToCache( SCH_RULE_AREA* aRuleArea ) { m_rule_areas_cache.insert( aRuleArea ); }
 
     /**
+     * Remove a specific rule area from the item's cache.
+     */
+    void RemoveRuleAreaFromCache( SCH_RULE_AREA* aRuleArea ) { m_rule_areas_cache.erase( aRuleArea ); }
+
+    /**
      * Get the cache of rule areas enclosing this item.
      */
     const std::unordered_set<SCH_RULE_AREA*>& GetRuleAreaCache() const
