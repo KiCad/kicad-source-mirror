@@ -211,10 +211,6 @@ bool LIB_ID::isLegalChar( unsigned aUniChar )
     bool const space_allowed = true;
     bool const illegal_filename_chars_allowed = false;
 
-    // This list of characters is also duplicated in validators.cpp and footprint.cpp
-    // TODO: Unify forbidden character lists - Warning, invalid filename characters are not the same
-    // as invalid LIB_ID characters.  We will need to separate the FP filenames from FP names
-    // before this can be unified
     switch( aUniChar )
     {
     case ':':
