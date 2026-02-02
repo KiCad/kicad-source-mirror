@@ -95,7 +95,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_sizerPreview = new wxBoxSizer( wxVERTICAL );
 
 
-	m_rightColumn->Add( m_sizerPreview, 1, wxEXPAND|wxBOTTOM, 5 );
+	m_rightColumn->Add( m_sizerPreview, 1, wxEXPAND, 5 );
 
 
 	zonePanelSizer->Add( m_rightColumn, 1, wxEXPAND|wxBOTTOM, 5 );

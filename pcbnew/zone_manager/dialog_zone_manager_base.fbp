@@ -702,10 +702,10 @@
                           </object>
                           <object class="sizeritem" expanded="false">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxBOTTOM</property>
+                            <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="false">
-                              <property name="minimum_size"></property>
+                              <property name="minimum_size">-1,-1</property>
                               <property name="name">m_sizerPreview</property>
                               <property name="orient">wxVERTICAL</property>
                               <property name="permission">protected</property>
