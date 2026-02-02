@@ -229,12 +229,17 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         int            holeLayer = aLayer;
         int            annularRingLayer = UNDEFINED_LAYER;
 
-        // TODO(JE) padstacks -- this won't work, we don't know what the annular ring layer is
-        // Inserting F_Cu here for now.
         if( pad && pad->GetAttribute() == PAD_ATTRIB::PTH )
-            annularRingLayer = F_Cu;
+        {
+            LSET copperLayers = pad->GetLayerSet() & LSET::AllCuMask();
+
+            if( !copperLayers.empty() )
+                annularRingLayer = copperLayers.Seq().front();
+        }
         else if( via )
+        {
             annularRingLayer = F_Cu;
+        }
 
         if( annularRingLayer != UNDEFINED_LAYER )
         {
@@ -413,7 +418,6 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
 
         switch( originalLayer )
         {
-        // TODO(JE) not sure if this is needed
         case LAYER_PADS:
         {
             const PAD* pad = static_cast<const PAD*>( aItem );
