@@ -2740,7 +2740,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                 {
                                     // For now, we are only processing the custom pad for the
                                     // top layer
-                                    // TODO: Use full padstacks when implementing in KiCad
                                     PCB_LAYER_ID primary_layer = src->mirror ? B_Cu : F_Cu;
 
                                     if( getLayer( ( *( el.second.begin() ) )->layer ) != primary_layer )
