@@ -157,7 +157,7 @@ protected:
         {
             if( !m_symbolNetlist.empty() )
             {
-                KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST,
+                KIWAY_MAIL_EVENT event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST,
                                      m_symbolNetlist );
                 frame->KiwayMailIn( event );
             }

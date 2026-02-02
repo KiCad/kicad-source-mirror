@@ -114,7 +114,7 @@ public:
 
     SELECTION& GetCurrentSelection() override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+    void KiwayMailIn( KIWAY_MAIL_EVENT& mail ) override;
 
     void ClearToolbarControl( int aId ) override;
 

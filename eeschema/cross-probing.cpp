@@ -837,7 +837,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic, const std::string aSync
 }
 
 
-void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     std::string& payload = mail.GetPayload();
 

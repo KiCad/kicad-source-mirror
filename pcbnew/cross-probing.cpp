@@ -524,7 +524,7 @@ std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string
 }
 
 
-void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     std::string& payload = mail.GetPayload();
 

@@ -57,7 +57,7 @@ public:
      */
     bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+    void KiwayMailIn( KIWAY_MAIL_EVENT& mail ) override;
 
     /**
      * Force the position of the dialog to a new position.  This mimics the DIALOG_SHIM

@@ -1212,7 +1212,7 @@ void CVPCB_MAINFRAME::ShowChangedLanguage()
 }
 
 
-void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
 

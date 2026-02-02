@@ -1643,7 +1643,7 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 }
 
 
-void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
 

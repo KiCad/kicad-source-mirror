@@ -28,12 +28,10 @@
 
 class wxWindow;
 class APP_SETTINGS_BASE;
-class KIWAY_EXPRESS;
+class KIWAY_MAIL_EVENT;
 
 class KIPYTHON_FRAME : public KIWAY_PLAYER
 {
-
-
 public:
     KIPYTHON_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~KIPYTHON_FRAME() override;
@@ -45,7 +43,7 @@ public:
 
     void ExecuteRemoteCommand( const char* cmdline ) override {}
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override {}
+    void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override {}
     void ProjectChanged() override {}
 
     void ShowChangedLanguage() override {};

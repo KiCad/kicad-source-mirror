@@ -497,7 +497,8 @@ void KIWAY::PlayerDidClose( FRAME_T aFrameType )
 void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
                          wxWindow* aSource, bool aFromOtherThread  )
 {
-    std::unique_ptr<KIWAY_EXPRESS> mail = std::make_unique<KIWAY_EXPRESS>( aDestination, aCommand, aPayload, aSource );
+    std::unique_ptr<KIWAY_MAIL_EVENT> mail =
+            std::make_unique<KIWAY_MAIL_EVENT>( aDestination, aCommand, aPayload, aSource );
 
     if( aFromOtherThread )
         QueueEvent( mail.release() );
@@ -689,7 +690,7 @@ void KIWAY::SetBlockingDialog( wxWindow* aWin )
 
 bool KIWAY::ProcessEvent( wxEvent& aEvent )
 {
-    KIWAY_EXPRESS* mail = dynamic_cast<KIWAY_EXPRESS*>( &aEvent );
+    KIWAY_MAIL_EVENT* mail = dynamic_cast<KIWAY_MAIL_EVENT*>( &aEvent );
 
     if( mail )
     {
@@ -715,7 +716,7 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 
 void KIWAY::QueueEvent( wxEvent* aEvent )
 {
-    KIWAY_EXPRESS* mail = dynamic_cast<KIWAY_EXPRESS*>( aEvent );
+    KIWAY_MAIL_EVENT* mail = dynamic_cast<KIWAY_MAIL_EVENT*>( aEvent );
 
     if( mail )
     {

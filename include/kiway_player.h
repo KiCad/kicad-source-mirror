@@ -37,7 +37,7 @@ class PROJECT;
 struct KIFACE;
 class KIFACE_BASE;
 class TOOL_MANAGER;
-class KIWAY_EXPRESS;
+class KIWAY_MAIL_EVENT;
 
 class wxGUIEventLoop;
 class wxSocketServer;
@@ -140,11 +140,11 @@ public:
                             wxWindow* aResultantFocusWindow = nullptr );
 
     /**
-     * Receive #KIWAY_EXPRESS messages from other players.
+     * Receive #KIWAY_ROUTED_EVENT messages from other players.
      *
      * Override it in derived classes.
      */
-    virtual void KiwayMailIn( KIWAY_EXPRESS& aEvent );
+    virtual void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent );
 
     /**
      * Our version of Destroy() which is virtual from wxWidgets.
@@ -179,7 +179,7 @@ public:
 protected:
 
     /// Event handler, routes to derivative specific virtual #KiwayMailIn().
-    void kiway_express( KIWAY_EXPRESS& aEvent );
+    void kiway_express( KIWAY_MAIL_EVENT& aEvent );
 
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless

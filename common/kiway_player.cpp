@@ -85,7 +85,7 @@ KIWAY_PLAYER::~KIWAY_PLAYER() throw()
 }
 
 
-void KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent )
+void KIWAY_PLAYER::KiwayMailIn( KIWAY_MAIL_EVENT& aEvent )
 {
     // override this in derived classes.
 }
@@ -175,7 +175,7 @@ void KIWAY_PLAYER::DismissModal( bool aRetVal, const wxString& aResult )
 }
 
 
-void KIWAY_PLAYER::kiway_express( KIWAY_EXPRESS& aEvent )
+void KIWAY_PLAYER::kiway_express( KIWAY_MAIL_EVENT& aEvent )
 {
     // logging support
     KiwayMailIn( aEvent );     // call the virtual, override in derived.

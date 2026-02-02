@@ -25,18 +25,16 @@
 #ifndef KIWAY_EXPRESS_H_
 #define KIWAY_EXPRESS_H_
 
-// @see http://wiki.wxwidgets.org/Custom_Events_Tutorial
 #include <frame_type.h>
 #include <mail_type.h>
 #include <kicommon.h>
 #include <wx/string.h>
 #include <wx/event.h>
 
-
 /**
  * Carry a payload from one #KIWAY_PLAYER to another within a #PROJECT.
  */
-class KICOMMON_API KIWAY_EXPRESS : public wxEvent
+class KICOMMON_API KIWAY_MAIL_EVENT : public wxEvent
 {
 public:
     /**
@@ -58,37 +56,28 @@ public:
     std::string&  GetPayload() { return m_payload; }
     void SetPayload( const std::string& aPayload ) { m_payload = aPayload; }
 
-    KIWAY_EXPRESS* Clone() const override { return new KIWAY_EXPRESS( *this ); }
+    KIWAY_MAIL_EVENT* Clone() const override { return new KIWAY_MAIL_EVENT( *this ); }
 
-    //KIWAY_EXPRESS() {}
-
-    KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
+    KIWAY_MAIL_EVENT( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
                    wxWindow* aSource = nullptr );
 
-    KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther );
-
-    /// The wxEventType argument to wxEvent() and identifies an event class
-    /// in a hurry.  These wxEventTypes also allow a common class to be used
-    /// multiple ways.  Should be allocated at startup by wxNewEventType();
-    static const wxEventType wxEVENT_ID;
-
-    //DECLARE_DYNAMIC_CLASS( KIWAY_EXPRESS )
+    KIWAY_MAIL_EVENT( const KIWAY_MAIL_EVENT& anOther );
 
 private:
     FRAME_T         m_destination;    ///< could have been a bitmap indicating multiple recipients.
     std::string&    m_payload;        ///< very often s-expression text, but not always.
-
-    // possible new ideas here.
 };
 
 
-typedef void ( wxEvtHandler::*kiwayExpressFunction )( KIWAY_EXPRESS& );
+typedef void ( wxEvtHandler::*kiwayMailFunction )( KIWAY_MAIL_EVENT& );
 
-/// Typecast an event handler for the KIWAY_EXPRESS event class
-#define kiwayExpressHandler( func ) wxEVENT_HANDLER_CAST( kiwayExpressFunction, func )
+/// Typecast an event handler for the KIWAY_ROUTED_EVENT event class
+#define kiwayMailHandler( func ) wxEVENT_HANDLER_CAST( kiwayMailFunction, func )
 
-/// Event table definition for the KIWAY_EXPRESS event class
+/// Event table definition for the KIWAY_ROUTED_EVENT event class
 #define EVT_KIWAY_EXPRESS( func ) \
-    wx__DECLARE_EVT0( KIWAY_EXPRESS::wxEVENT_ID, kiwayExpressHandler( func ) )
+    wx__DECLARE_EVT0( EDA_KIWAY_MAIL_RECEIVED, kiwayMailHandler( func ) )
+
+wxDECLARE_EXPORTED_EVENT( KICOMMON_API, EDA_KIWAY_MAIL_RECEIVED, KIWAY_MAIL_EVENT );
 
 #endif  // KIWAY_EXPRESS_H_

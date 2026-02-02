@@ -470,7 +470,7 @@ COLOR_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetColorSettings( bool aForceRefresh ) 
 static wxRect s_dialogRect( 0, 0, 0, 0 );
 
 
-void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
 

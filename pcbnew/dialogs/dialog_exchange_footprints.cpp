@@ -437,7 +437,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
             netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
 
             std::string payload( netlist.ToStdString() );
-            KIWAY_EXPRESS mail( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
+            KIWAY_MAIL_EVENT mail( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
             frame->KiwayMailIn( mail );
         }
 

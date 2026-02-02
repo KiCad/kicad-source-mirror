@@ -300,7 +300,7 @@ public:
 
     void FocusOnLibID( const LIB_ID& aLibID );
 
-    void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
+    void KiwayMailIn( KIWAY_MAIL_EVENT& mail ) override;
 
     DECLARE_EVENT_TABLE()
 

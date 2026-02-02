@@ -23,28 +23,12 @@
  */
 
 #include <kiway_express.h>
-
 #include <wx/window.h>
 
-//IMPLEMENT_DYNAMIC_CLASS( KIWAY_EXPRESS, wxEvent )
+wxDEFINE_EVENT( EDA_KIWAY_MAIL_RECEIVED, KIWAY_MAIL_EVENT );
 
 
-#if 0   // requires that this code reside in only a single link image, rather than
-        // in each of kicad.exe, _pcbnew.kiface, and _eeschema.kiface as now.
-        // In the current case wxEVENT_ID will get a different value in each link
-        // image.  We need to put this into a shared library for common utilization,
-        // I think that library should be libki.so.  I am reluctant to do that now
-        // because the cost will be finding libki.so at runtime, and we need infrastructure
-        // to set our LIB_ENV_VAR to the proper place so libki.so can be reliably found.
-        // All things in due course.
-const wxEventType KIWAY_EXPRESS::wxEVENT_ID = wxNewEventType();
-#else
-const wxEventType KIWAY_EXPRESS::wxEVENT_ID = 30000;    // common across all link images,
-                                                        // hopefully unique.
-#endif
-
-
-KIWAY_EXPRESS::KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther ) :
+KIWAY_MAIL_EVENT::KIWAY_MAIL_EVENT( const KIWAY_MAIL_EVENT& anOther ) :
     wxEvent( anOther ),
     m_destination( anOther.m_destination ),
     m_payload( anOther.m_payload )
@@ -52,9 +36,9 @@ KIWAY_EXPRESS::KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther ) :
 }
 
 
-KIWAY_EXPRESS::KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
+KIWAY_MAIL_EVENT::KIWAY_MAIL_EVENT( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
                               wxWindow* aSource ) :
-    wxEvent( aCommand, wxEVENT_ID ),
+        wxEvent( aCommand, EDA_KIWAY_MAIL_RECEIVED ),
     m_destination( aDestination ),
     m_payload( aPayload )
 {

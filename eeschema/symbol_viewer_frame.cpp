@@ -1072,7 +1072,7 @@ SELECTION& SYMBOL_VIEWER_FRAME::GetCurrentSelection()
 }
 
 
-void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
+void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
 
     switch( mail.Command() )

@@ -59,7 +59,7 @@ public:
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 ) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
+    void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
 
     /**
      * The action to apply to a footprint filter when it is modified.
