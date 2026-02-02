@@ -1016,7 +1016,6 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( SIM_MODEL* aModel, int aPar
     switch( param.info.type )
     {
     case SIM_VALUE::TYPE_BOOL:
-        // TODO.
         prop = new SIM_BOOL_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex );
         prop->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
         break;
