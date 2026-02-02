@@ -32,7 +32,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxArrayString m_variantChoiceCtrlChoices;
 	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
 	m_variantChoiceCtrl->SetSelection( 0 );
-	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT, 5 );
+	fgSizerTop->Add( m_variantChoiceCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_outputPathLabel = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputPathLabel->Wrap( -1 );
