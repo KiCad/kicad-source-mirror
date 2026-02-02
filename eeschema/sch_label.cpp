@@ -1683,13 +1683,13 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel
 
 void SCH_DIRECTIVE_LABEL::Serialize( google::protobuf::Any& aContainer ) const
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
 }
 
 
 bool SCH_DIRECTIVE_LABEL::Deserialize( const google::protobuf::Any& aContainer )
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
     return false;
 }
 
@@ -1985,13 +1985,13 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
 
 void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
 }
 
 
 bool SCH_GLOBALLABEL::Deserialize( const google::protobuf::Any& aContainer )
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
     return false;
 }
 
@@ -2202,13 +2202,13 @@ SCH_HIERLABEL::SCH_HIERLABEL( const VECTOR2I& pos, const wxString& text, KICAD_T
 
 void SCH_HIERLABEL::Serialize( google::protobuf::Any& aContainer ) const
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
 }
 
 
 bool SCH_HIERLABEL::Deserialize( const google::protobuf::Any& aContainer )
 {
-    // TODO
+    UNIMPLEMENTED_FOR( GetClass() );
     return false;
 }
 
