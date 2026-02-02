@@ -227,8 +227,6 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
     DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = m_frame->Prj().DesignBlockLibs();
     LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
 
-    // TODO(JE) library tables -- figure out where Jeff's added aDialogTitle should be used?
-
     wxFileName fn( aFilename );
     wxString   libPath = fn.GetFullPath();
     wxString   libName = fn.GetName();
@@ -237,7 +235,7 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
         return false;
 
     // Open a dialog to ask for a description
-    wxString description = wxGetTextFromUser( _( "Enter a description for the library:" ), _( "Library Description" ),
+    wxString description = wxGetTextFromUser( _( "Enter a description for the library:" ), aDialogTitle,
                                               wxEmptyString, m_frame );
 
     DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T lib_type = DESIGN_BLOCK_IO_MGR::GuessPluginTypeFromLibPath( libPath );
