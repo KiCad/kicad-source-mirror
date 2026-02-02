@@ -22,13 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * @file footprint_info.h
- */
-
-#ifndef FOOTPRINT_INFO_H_
-#define FOOTPRINT_INFO_H_
-
+#pragma once
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <import_export.h>
@@ -59,9 +53,7 @@ class wxTextFile;
 class APIEXPORT FOOTPRINT_INFO : public LIB_TREE_ITEM
 {
 public:
-    virtual ~FOOTPRINT_INFO()
-    {
-    }
+    virtual ~FOOTPRINT_INFO() = default;
 
     // These two accessors do not have to call ensure_loaded(), because constructor
     // fills in these fields:
@@ -165,23 +157,11 @@ public:
     {
     }
 
-    virtual ~FOOTPRINT_LIST()
-    {
-    }
+    virtual ~FOOTPRINT_LIST() = default;
 
-    /**
-     * @return the number of items stored in list
-     */
-    unsigned GetCount() const
-    {
-        return m_list.size();
-    }
+    unsigned GetCount() const { return m_list.size(); }
 
-    /// Was forced to add this by modview_frame.cpp
-    const std::vector<std::unique_ptr<FOOTPRINT_INFO>>& GetList() const
-    {
-        return m_list;
-    }
+    const std::vector<std::unique_ptr<FOOTPRINT_INFO>>& GetList() const { return m_list; }
 
     /**
      * @return Clears the footprint info cache
@@ -196,8 +176,7 @@ public:
     /**
      * Get info for a footprint by libNickname/footprintName
      */
-    FOOTPRINT_INFO* GetFootprintInfo( const wxString& aLibNickname,
-                                      const wxString& aFootprintName );
+    FOOTPRINT_INFO* GetFootprintInfo( const wxString& aLibNickname, const wxString& aFootprintName );
 
     /**
      * Get info for a footprint by index.
@@ -243,8 +222,6 @@ public:
     virtual bool ReadFootprintFiles( FOOTPRINT_LIBRARY_ADAPTER* aAdapter, const wxString* aNickname = nullptr,
                                      PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
 
-    void DisplayErrors( wxTopLevelWindow* aCaller = nullptr );
-
     /**
      * Returns all accumulated errors as a newline-separated string for display in the
      * status bar. This consumes the errors (pops them from the queue).
@@ -260,6 +237,3 @@ protected:
     SYNC_QUEUE<std::unique_ptr<IO_ERROR>>        m_errors; ///< some can be PARSE_ERRORs also
 };
 
-
-
-#endif // FOOTPRINT_INFO_H_

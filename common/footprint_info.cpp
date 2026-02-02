@@ -106,33 +106,6 @@ bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
 }
 
 
-void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
-{
-    // @todo: go to a more HTML !<table>! ? centric output, possibly with recommendations
-    // for remedy of errors.  Add numeric error codes to PARSE_ERROR, and switch on them for
-    // remedies, etc.  Full access is provided to everything in every exception!
-
-    HTML_MESSAGE_BOX dlg( aWindow, _( "Load Error" ) );
-
-    dlg.MessageSet( _( "Errors were encountered loading footprints:" ) );
-
-    wxString msg;
-
-    while( std::unique_ptr<IO_ERROR> error = PopError() )
-    {
-        wxString tmp = EscapeHTML( error->Problem() );
-
-        // Preserve new lines in error messages so queued errors don't run together.
-        tmp.Replace( wxS( "\n" ), wxS( "<BR>" ) );
-        msg += wxT( "<p>" ) + tmp + wxT( "</p>" );
-    }
-
-    dlg.AddHTML_Text( msg );
-
-    dlg.ShowModal();
-}
-
-
 wxString FOOTPRINT_LIST::GetErrorMessages()
 {
     wxString messages;
