@@ -295,6 +295,36 @@ bool PAD::CanHaveNumber() const
 }
 
 
+bool PAD::IsNPTHWithNoCopper() const
+{
+    if( GetAttribute() != PAD_ATTRIB::NPTH )
+        return false;
+
+    bool hasCopper = false;
+
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( GetShape( layer ) == PAD_SHAPE::CIRCLE )
+                {
+                    if( GetSize( layer ).x > GetDrillSize().x )
+                        hasCopper = true;
+                }
+                else if( GetShape( layer ) == PAD_SHAPE::OVAL )
+                {
+                    if( GetSize( layer ).x > GetDrillSize().x || GetSize( layer ).y > GetDrillSize().y )
+                        hasCopper = true;
+                }
+                else
+                {
+                    hasCopper = true;
+                }
+            } );
+
+    reuturn !hasCopper;
+}
+
+
 bool PAD::IsLocked() const
 {
     if( GetParent() && GetParent()->IsLocked() )

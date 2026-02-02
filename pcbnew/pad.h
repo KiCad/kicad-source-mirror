@@ -572,6 +572,8 @@ public:
         return ( m_padStack.LayerSet() & LSET::AllCuMask() ).none();
     }
 
+    bool IsNPTHWithNoCopper() const;
+
     void SetPadToDieLength( int aLength )       { m_lengthPadToDie = aLength; }
     int GetPadToDieLength() const               { return m_lengthPadToDie; }
 
