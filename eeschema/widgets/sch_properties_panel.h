@@ -27,6 +27,9 @@
 class SELECTION;
 class SCHEMATIC;
 class SCH_BASE_FRAME;
+class SCH_COMMIT;
+class SCH_EDIT_FRAME;
+class SCH_SHEET;
 class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
@@ -54,6 +57,9 @@ protected:
 
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
+
+    bool handleSheetFilenameChange( SCH_EDIT_FRAME* aFrame, SCH_SHEET* aSheet,
+                                    SCH_COMMIT& aChanges, const wxString& aNewFilename );
 
     void OnLanguageChanged( wxCommandEvent& aEvent ) override;
 

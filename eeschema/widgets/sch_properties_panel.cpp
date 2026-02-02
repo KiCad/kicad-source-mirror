@@ -23,12 +23,15 @@
 
 #include <font/fontconfig.h>
 #include <pgm_base.h>
+#include <common.h>
+#include <confirm.h>
 #include <connection_graph.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
 #include <properties/property_mgr.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <sch_sheet.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <schematic.h>
@@ -39,6 +42,8 @@
 #include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
+#include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 #include <set>
 
 static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
@@ -436,6 +441,28 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             }
         }
 
+        // Changing a sheet's filename field requires file operations to match the dialog behavior.
+        if( item->Type() == SCH_FIELD_T
+                && m_frame->IsType( FRAME_SCH )
+                && property->Name() == wxT( "Text" ) )
+        {
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+            SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item->GetParent() );
+
+            if( sheet && field->GetId() == FIELD_T::SHEET_FILENAME )
+            {
+                SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_frame );
+
+                if( !handleSheetFilenameChange( editFrame, sheet, changes, newValue.GetString() ) )
+                {
+                    UpdateData();
+                    return;
+                }
+
+                continue;
+            }
+        }
+
         if( item->Type() == SCH_TABLECELL_T )
             changes.Modify( item->GetParent(), screen, RECURSE_MODE::NO_RECURSE );
         else
@@ -461,6 +488,38 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     AfterCommit();
 
     aEvent.Skip();
+}
+
+
+bool SCH_PROPERTIES_PANEL::handleSheetFilenameChange( SCH_EDIT_FRAME* aFrame, SCH_SHEET* aSheet,
+                                                       SCH_COMMIT& aChanges,
+                                                       const wxString& aNewFilename )
+{
+    wxString newFilename = EnsureFileExtension( aNewFilename, FILEEXT::KiCadSchematicFileExtension );
+
+    if( newFilename.IsEmpty() || !IsFullFileNameValid( newFilename ) )
+    {
+        DisplayError( aFrame, _( "A sheet must have a valid file name." ) );
+        return false;
+    }
+
+    // Normalize separators to unix notation
+    newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    wxString oldFilename = aSheet->GetFileName();
+    oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    if( newFilename == oldFilename )
+        return true;
+
+    if( !aFrame->ChangeSheetFile( aSheet, newFilename ) )
+        return false;
+
+    SCH_SCREEN* currentScreen = aFrame->GetCurrentSheet().LastScreen();
+    aChanges.Modify( aSheet, currentScreen, RECURSE_MODE::NO_RECURSE );
+    aSheet->SetFileName( newFilename );
+
+    return true;
 }
 
 

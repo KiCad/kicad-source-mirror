@@ -23,14 +23,20 @@
  */
 
 #include <sch_draw_panel.h>
+#include <common.h>
 #include <confirm.h>
 #include <kiface_base.h>
 #include <project.h>
 #include <math/vector2wx.h>
+#include <string_utils.h>
+#include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 #include <tool/tool_manager.h>
 #include <project_sch.h>
 #include <sch_edit_frame.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -165,6 +171,239 @@ void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename 
         tb2.SetComment( 8, tb1.GetComment( 8 ) );
 
     newScreen->SetTitleBlock( tb2 );
+}
+
+
+bool SCH_EDIT_FRAME::ChangeSheetFile( SCH_SHEET* aSheet, const wxString& aNewFilename,
+                                      bool* aClearAnnotationNewItems, bool* aIsUndoable,
+                                      const wxString* aSourceSheetFilename )
+{
+    wxString    msg;
+    wxFileName  sheetFileName( aNewFilename );
+    SCHEMATIC&  schematic = Schematic();
+    SCH_SCREEN* currentScreen = GetCurrentSheet().LastScreen();
+
+    wxCHECK( currentScreen, false );
+
+    // SCH_SCREEN file names are always absolute.
+    wxFileName currentScreenFileName = currentScreen->GetFileName();
+    wxFileName screenFileName( sheetFileName );
+
+    if( !screenFileName.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
+                                   currentScreenFileName.GetPath() ) )
+    {
+        msg = wxString::Format( _( "Cannot normalize new sheet schematic file path:\n"
+                                   "'%s'\n"
+                                   "against parent sheet schematic file path:\n"
+                                   "'%s'." ),
+                                sheetFileName.GetPath(),
+                                currentScreenFileName.GetPath() );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    wxString newAbsoluteFilename = screenFileName.GetFullPath();
+    newAbsoluteFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+    if( !AllowCaseSensitiveFileNameClashes( aSheet->GetFileName(), newAbsoluteFilename ) )
+        return false;
+
+    SCH_SHEET_LIST fullHierarchy = schematic.Hierarchy();
+
+    bool        renameFile = false;
+    bool        loadFromFile = false;
+    bool        clearAnnotation = false;
+    bool        isExistingSheet = false;
+    SCH_SCREEN* useScreen = nullptr;
+    SCH_SCREEN* oldScreen = nullptr;
+
+    // Search for a schematic file already in use in the hierarchy or on disk
+    if( !schematic.Root().SearchHierarchy( newAbsoluteFilename, &useScreen ) )
+    {
+        loadFromFile = wxFileExists( newAbsoluteFilename );
+
+        wxLogTrace( tracePathsAndFiles, "\n    Sheet requested file '%s', %s",
+                                        newAbsoluteFilename,
+                                        loadFromFile ? "found" : "not found" );
+    }
+
+    if( aSheet->GetScreen() == nullptr )
+    {
+        // New sheet with no screen yet
+        if( useScreen || loadFromFile )
+        {
+            clearAnnotation = true;
+
+            if( !IsOK( this, wxString::Format( _( "'%s' already exists." ),
+                                               sheetFileName.GetFullName() )
+                             + wxT( "\n\n" )
+                             + wxString::Format( _( "Link '%s' to this file?" ),
+                                                 newAbsoluteFilename ) ) )
+            {
+                return false;
+            }
+        }
+        else if( aSourceSheetFilename && !aSourceSheetFilename->IsEmpty() )
+        {
+            // Design block / sheet import -- copy source file to destination
+            loadFromFile = true;
+
+            if( !wxCopyFile( *aSourceSheetFilename, newAbsoluteFilename, false ) )
+            {
+                msg.Printf( _( "Failed to copy schematic file '%s' to destination '%s'." ),
+                            *aSourceSheetFilename,
+                            newAbsoluteFilename );
+                DisplayError( this, msg );
+                return false;
+            }
+        }
+        else
+        {
+            InitSheet( aSheet, newAbsoluteFilename );
+        }
+    }
+    else
+    {
+        // Existing sheet
+        isExistingSheet = true;
+
+        wxString oldAbsoluteFilename = aSheet->GetScreen()->GetFileName();
+        oldAbsoluteFilename.Replace( wxT( "\\" ), wxT( "/" ) );
+
+        if( newAbsoluteFilename.Cmp( oldAbsoluteFilename ) != 0 )
+        {
+            // Sheet file name changes cannot be undone
+            if( aIsUndoable )
+                *aIsUndoable = false;
+
+            if( useScreen || loadFromFile )
+            {
+                clearAnnotation = true;
+                oldScreen = aSheet->GetScreen();
+
+                if( !IsOK( this, wxString::Format( _( "Change '%s' link from '%s' to '%s'?" ),
+                                                    newAbsoluteFilename,
+                                                    aSheet->GetFileName(),
+                                                    sheetFileName.GetFullName() )
+                                 + wxT( "\n\n" )
+                                 + _( "This action cannot be undone." ) ) )
+                {
+                    return false;
+                }
+
+                if( loadFromFile )
+                    aSheet->SetScreen( nullptr );
+            }
+            else
+            {
+                // Save current content to new file name
+                if( aSheet->GetScreenCount() > 1 )
+                {
+                    if( !IsOK( this, wxString::Format( _( "Create new file '%s' with contents "
+                                                           "of '%s'?" ),
+                                                        sheetFileName.GetFullName(),
+                                                        aSheet->GetFileName() )
+                                     + wxT( "\n\n" )
+                                     + _( "This action cannot be undone." ) ) )
+                    {
+                        return false;
+                    }
+                }
+
+                renameFile = true;
+            }
+        }
+
+        if( renameFile )
+        {
+            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+            // Only update the screen filename when this is the sole user
+            if( aSheet->GetScreenCount() <= 1 )
+                aSheet->GetScreen()->SetFileName( newAbsoluteFilename );
+
+            try
+            {
+                pi->SaveSchematicFile( newAbsoluteFilename, aSheet, &schematic );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                msg = wxString::Format( _( "Error occurred saving schematic file '%s'." ),
+                                        newAbsoluteFilename );
+                DisplayErrorMessage( this, msg, ioe.What() );
+
+                msg = wxString::Format( _( "Failed to save schematic '%s'" ),
+                                        newAbsoluteFilename );
+                SetMsgPanel( wxEmptyString, msg );
+                return false;
+            }
+
+            // Shared screen needs reload to maintain correct reference counting
+            if( aSheet->GetScreenCount() > 1 )
+            {
+                oldScreen = aSheet->GetScreen();
+                aSheet->SetScreen( nullptr );
+                loadFromFile = true;
+            }
+        }
+    }
+
+    SCH_SHEET_PATH& currentSheet = GetCurrentSheet();
+
+    if( useScreen )
+    {
+        // Recursion test with a temporary sheet
+        std::unique_ptr<SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &schematic );
+        tmpSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( sheetFileName.GetFullPath() );
+        tmpSheet->SetScreen( useScreen );
+
+        if( CheckSheetForRecursion( tmpSheet.get(), &currentSheet ) )
+            return false;
+
+        aSheet->SetScreen( useScreen );
+
+        SCH_SHEET_LIST sheetHierarchy( aSheet );
+        sheetHierarchy.AddNewSymbolInstances( currentSheet, Prj().GetProjectName() );
+        sheetHierarchy.AddNewSheetInstances( currentSheet,
+                                             fullHierarchy.GetLastVirtualPageNumber() );
+    }
+    else if( loadFromFile )
+    {
+        bool restoreSheet = false;
+
+        if( isExistingSheet )
+        {
+            restoreSheet = true;
+            currentSheet.LastScreen()->Remove( aSheet );
+        }
+
+        if( !LoadSheetFromFile( aSheet, &currentSheet, newAbsoluteFilename, false, true )
+            || CheckSheetForRecursion( aSheet, &currentSheet ) )
+        {
+            if( restoreSheet )
+            {
+                if( oldScreen )
+                    aSheet->SetScreen( oldScreen );
+
+                currentSheet.LastScreen()->Append( aSheet );
+            }
+
+            return false;
+        }
+
+        if( restoreSheet )
+            currentSheet.LastScreen()->Append( aSheet );
+    }
+
+    if( aClearAnnotationNewItems )
+        *aClearAnnotationNewItems = clearAnnotation;
+
+    RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+
+    SCH_SHEET_LIST repairedList;
+    repairedList.BuildSheetList( &schematic.Root(), true );
+
+    return true;
 }
 
 
