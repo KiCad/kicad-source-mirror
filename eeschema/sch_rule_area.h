@@ -47,7 +47,7 @@ public:
         SetLayer( LAYER_RULE_AREAS );
     }
 
-    virtual ~SCH_RULE_AREA() {}
+    virtual ~SCH_RULE_AREA();
 
     wxString GetClass() const override;
 
