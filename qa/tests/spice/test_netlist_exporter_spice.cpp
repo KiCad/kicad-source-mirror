@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE( NpnCeAmp )
     TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 5.32 } } );
 }
 
-// Incomplete. TODO.
+
 BOOST_AUTO_TEST_CASE( Rlc )
 {
     LOCALE_IO dummy;
