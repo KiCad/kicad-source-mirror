@@ -1104,21 +1104,6 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             sheet->SetFileName( projectFileName.GetFullName() );
             screen->SetFileName( projectFileName.GetFullPath() );
 
-            // Update symbol references with sheet name suffix to match Altium's multi-channel
-            // naming convention (e.g., P1 -> P1_Connector1)
-            for( SCH_ITEM* schItem : screen->Items().OfType( SCH_SYMBOL_T ) )
-            {
-                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
-                wxString    ref = symbol->GetRef( &m_sheetPath );
-
-                // Skip power symbols and graphics
-                if( ref.StartsWith( wxT( "#" ) ) )
-                    continue;
-
-                wxString newRef = ref + wxT( "_" ) + sheet->GetName();
-                symbol->SetRef( &m_sheetPath, newRef );
-            }
-
             m_sheetPath.pop_back();
         }
     }
