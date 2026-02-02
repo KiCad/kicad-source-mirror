@@ -1720,6 +1720,9 @@ void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
 void BOARD::DeleteMARKERs()
 {
     for( PCB_MARKER* marker : m_markers )
+        m_itemByIdCache.erase( marker->m_Uuid );
+
+    for( PCB_MARKER* marker : m_markers )
         delete marker;
 
     m_markers.clear();
@@ -1737,6 +1740,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
         if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
             || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
+            m_itemByIdCache.erase( marker->m_Uuid );
             delete marker;
         }
         else
