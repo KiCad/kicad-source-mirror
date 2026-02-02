@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 18:17+0300\n"
+"POT-Creation-Date: 2026-02-02 18:26+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1030,9 +1030,6 @@ msgstr "Clear Recent Files"
 msgid "Choose Image"
 msgstr "Choose Image"
 
-msgid "Image Files"
-msgstr "Image Files"
-
 msgid "Create Drawing Sheet File"
 msgstr "Create Drawing Sheet File"
 
@@ -1351,6 +1348,10 @@ msgstr "Design block metadata file '%s' could not be saved."
 #, c-format
 msgid "Design block folder '%s' could not be deleted."
 msgstr "Design block folder '%s' could not be deleted."
+
+#, c-format
+msgid "Nested table '%s' not found."
+msgstr "Nested table '%s' not found."
 
 #, c-format
 msgid "Unknown library type %s "
@@ -2599,6 +2600,13 @@ msgstr "I agree to provide anonymous reports"
 msgid "Reset Unique Id"
 msgstr "Reset Unique Id"
 
+msgid "Design Block Library Tables"
+msgstr "Design Block Library Tables"
+
+#, c-format
+msgid " (%s)|%s"
+msgstr " (%s)|%s"
+
 msgid "Global Libraries"
 msgstr "Global Libraries"
 
@@ -3785,6 +3793,9 @@ msgstr "Footprint Defaults"
 msgid "Graphics Defaults"
 msgstr "Graphics Defaults"
 
+msgid "User Layer Names"
+msgstr "User Layer Names"
+
 msgid "PCB Editor"
 msgstr "PCB Editor"
 
@@ -3858,9 +3869,6 @@ msgstr "Units"
 
 msgid "Inches"
 msgstr "Inches"
-
-msgid "Constrain to H, V, 45"
-msgstr "Constrain to H, V, 45"
 
 msgid "Search"
 msgstr "Search"
@@ -4262,12 +4270,6 @@ msgstr "Error loading font '%s'."
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Font '%s' not found; substituting '%s'."
 
-msgid "Load Error"
-msgstr "Load Error"
-
-msgid "Errors were encountered loading footprints:"
-msgstr "Errors were encountered loading footprints:"
-
 #, c-format
 msgid "Command '%s' could not be found."
 msgstr "Command '%s' could not be found."
@@ -4561,17 +4563,35 @@ msgstr "Failed to push reference to revision walker."
 msgid "Could not lookup commit '%s'"
 msgstr "Could not lookup commit '%s'"
 
-msgid "Merge failed"
-msgstr "Merge failed"
+msgid ""
+"Cannot merge: you have unstaged changes. Please commit or stash them before "
+"pulling."
+msgstr ""
+"Cannot merge: you have unstaged changes. Please commit or stash them before "
+"pulling."
 
-msgid "Rebase failed to start"
-msgstr "Rebase failed to start"
+#, c-format
+msgid "Merge failed: %s"
+msgstr "Merge failed: %s"
 
-msgid "Rebase commit failed"
-msgstr "Rebase commit failed"
+msgid ""
+"Cannot pull with rebase: you have unstaged changes. Please commit or stash "
+"them before pulling."
+msgstr ""
+"Cannot pull with rebase: you have unstaged changes. Please commit or stash "
+"them before pulling."
 
-msgid "Rebase finish failed"
-msgstr "Rebase finish failed"
+#, c-format
+msgid "Rebase failed to start: %s"
+msgstr "Rebase failed to start: %s"
+
+#, c-format
+msgid "Rebase commit failed: %s"
+msgstr "Rebase commit failed: %s"
+
+#, c-format
+msgid "Rebase finish failed: %s"
+msgstr "Rebase finish failed: %s"
 
 msgid "Cut"
 msgstr "Cut"
@@ -4936,8 +4956,8 @@ msgstr "Export board statistics"
 msgid "Export Board Statistics Job Settings"
 msgstr "Export Board Statistics Job Settings"
 
-msgid "PCB: Export Statistics"
-msgstr "PCB: Export Statistics"
+msgid "PCB: Export Board Statistics"
+msgstr "PCB: Export Board Statistics"
 
 msgid "Export SVG"
 msgstr "Export SVG"
@@ -5303,11 +5323,11 @@ msgstr "Error loading library table '%s'"
 msgid "Error loading library '%s'"
 msgstr "Error loading library '%s'"
 
-msgid "Edit Options"
-msgstr "Edit Options"
+msgid "Edit Settings..."
+msgstr "Edit Settings..."
 
-msgid "Edit options for this library entry"
-msgstr "Edit options for this library entry"
+msgid "Open Library Table"
+msgstr "Open Library Table"
 
 msgid "Activate Selected"
 msgstr "Activate Selected"
@@ -5321,11 +5341,11 @@ msgstr "Set Visible Flag"
 msgid "Unset Visible Flag"
 msgstr "Unset Visible Flag"
 
-msgid "Edit Settings"
-msgstr "Edit Settings"
+msgid "Edit Options..."
+msgstr "Edit Options..."
 
-msgid "Open Library Table"
-msgstr "Open Library Table"
+msgid "Edit options for this library entry"
+msgstr "Edit options for this library entry"
 
 msgid "Library must have a nickname."
 msgstr "Library must have a nickname."
@@ -6821,9 +6841,6 @@ msgstr "Library %s already exists."
 msgid "Enter a description for the library:"
 msgstr "Enter a description for the library:"
 
-msgid "Library Description"
-msgstr "Library Description"
-
 msgid ""
 "Error saving library table:\n"
 "\n"
@@ -6882,9 +6899,6 @@ msgstr "Toggle between A and B display"
 
 msgid "Footprint not found."
 msgstr "Footprint not found."
-
-msgid "Load Footprint Libraries"
-msgstr "Load Footprint Libraries"
 
 msgid "No default footprint"
 msgstr "No default footprint"
@@ -6950,6 +6964,9 @@ msgstr "Open Preferences Directory"
 #, c-format
 msgid "Reset %s to Defaults"
 msgstr "Reset %s to Defaults"
+
+msgid "Load Error"
+msgstr "Load Error"
 
 msgid "Errors were encountered loading design blocks:"
 msgstr "Errors were encountered loading design blocks:"
@@ -7083,6 +7100,12 @@ msgstr "Infos"
 
 msgid "Save..."
 msgstr "Save…"
+
+msgid "Display PPI: "
+msgstr "Display PPI: "
+
+msgid "Detect"
+msgstr "Detect"
 
 msgid "All files"
 msgstr "All files"
@@ -7332,6 +7355,9 @@ msgstr ""
 
 msgid "Configuration Error"
 msgstr "Configuration Error"
+
+msgid "Load Footprint Libraries"
+msgstr "Load Footprint Libraries"
 
 #, c-format
 msgid ""
@@ -8801,6 +8827,10 @@ msgstr "untitled"
 msgid "Edit Label Properties"
 msgstr "Edit Label Properties"
 
+#, c-format
+msgid "Field name '%s' already in use."
+msgstr "Field name '%s' already in use."
+
 msgid "The first field is mandatory."
 msgstr "The first field is mandatory."
 
@@ -9040,10 +9070,6 @@ msgstr "Add Field"
 
 msgid "Field must have a name."
 msgstr "Field must have a name."
-
-#, c-format
-msgid "Field name '%s' already in use."
-msgstr "Field name '%s' already in use."
 
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
@@ -9551,6 +9577,9 @@ msgstr "Cannot normalize path '%s'."
 
 msgid "No project or path defined for the current schematic."
 msgstr "No project or path defined for the current schematic."
+
+msgid "Design variant:"
+msgstr "Design variant:"
 
 msgid "Output directory:"
 msgstr "Output directory:"
@@ -10626,8 +10655,8 @@ msgstr "Cannot rename the default variant."
 msgid "Enter new variant name:"
 msgstr "Enter new variant name:"
 
-msgid "Rename Variant"
-msgstr "Rename Variant"
+msgid "Rename Design Variant"
+msgstr "Rename Design Variant"
 
 msgid "Variant name cannot be empty."
 msgstr "Variant name cannot be empty."
@@ -10646,8 +10675,8 @@ msgstr "Cannot copy the default variant."
 msgid "Enter name for the copied variant:"
 msgstr "Enter name for the copied variant:"
 
-msgid "Copy Variant"
-msgstr "Copy Variant"
+msgid "Copy Design Variant"
+msgstr "Copy Design Variant"
 
 msgid "Add a new field"
 msgstr "Add a new field"
@@ -10718,8 +10747,8 @@ msgstr "Base Name"
 msgid "Alternate Assignment"
 msgstr "Alternate Assignment"
 
-msgid " Variant"
-msgstr " Variant"
+msgid " Design Variant"
+msgstr " Design Variant"
 
 msgid "Standard"
 msgstr "Standard"
@@ -10931,9 +10960,6 @@ msgstr "<root sheet>"
 msgid "Page %s (%s)"
 msgstr "Page %s (%s)"
 
-msgid "Text can not be empty."
-msgstr "Text can not be empty."
-
 msgid ""
 "Invalid hyperlink destination. Please enter either a valid URL (e.g. file:// "
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
@@ -10954,6 +10980,9 @@ msgstr "Link:"
 
 msgid "Make this text item a clickable hyperlink"
 msgstr "Make this text item a clickable hyperlink"
+
+msgid "Private to symbol editor"
+msgstr "Private to symbol editor"
 
 msgid "Changes to Be Applied"
 msgstr "Changes to Be Applied"
@@ -10993,6 +11022,14 @@ msgstr "Update symbols values that have been replaced in the PCB editor."
 
 msgid "Net names"
 msgstr "Net names"
+
+msgid "Update schematic net labels to match net names from the PCB editor."
+msgstr "Update schematic net labels to match net names from the PCB editor."
+
+msgid ""
+"Update symbol attribute flags like Do Not Populate to match the footprint."
+msgstr ""
+"Update symbol attribute flags like Do Not Populate to match the footprint."
 
 msgid "Prefer symbol unit swaps over label swaps"
 msgstr "Prefer symbol unit swaps over label swaps"
@@ -11654,18 +11691,14 @@ msgstr "General Editing"
 msgid "Keep pins attached when dragging edges"
 msgstr "Keep pins attached when dragging edges"
 
-#, c-format
-msgid "Symbol Library Tables (%s)|*"
-msgstr "Symbol Library Tables (%s)|*"
+msgid "Symbol Library Tables"
+msgstr "Symbol Library Tables"
 
-msgid "All supported formats"
-msgstr "All supported formats"
+msgid "folder with .kicad_sym files"
+msgstr "folder with .kicad_sym files"
 
-msgid "Add Library"
-msgstr "Add Library"
-
-msgid "Warning: Duplicate Nickname"
-msgstr "Warning: Duplicate Nickname"
+msgid "Table (nested library table)"
+msgstr "Table (nested library table)"
 
 msgid ""
 "This action will reset your global library table on disk and cannot be "
@@ -11709,9 +11742,6 @@ msgstr ""
 
 msgid "Symbol Libraries"
 msgstr "Symbol Libraries"
-
-msgid "Add existing library to table"
-msgstr "Add existing library to table"
 
 msgid "Reset Libraries"
 msgstr "Reset Libraries"
@@ -11950,6 +11980,10 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s is connected to both %s and %s"
 
 #, c-format
+msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
+msgstr "Pin %s on symbol '%s' is connected to different nets: %s and %s"
+
+#, c-format
 msgid "Pin %s not connected to ground net"
 msgstr "Pin %s not connected to ground net"
 
@@ -11964,10 +11998,6 @@ msgstr "The symbol library '%s' was not found at '%s'"
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' not found in symbol library '%s'"
-
-#, c-format
-msgid "Symbol '%s' has multiple pins with the same pin number"
-msgstr "Symbol '%s' has multiple pins with the same pin number"
 
 #, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
@@ -12065,8 +12095,8 @@ msgstr "Input pin not driven by any Output pins"
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Input Power pin not driven by any Output Power pins"
 
-msgid "Multiple pins with the same pin number"
-msgstr "Multiple pins with the same pin number"
+msgid "Duplicate pins with different nets"
+msgstr "Duplicate pins with different nets"
 
 msgid "Conflict problem between pins"
 msgstr "Conflict problem between pins"
@@ -12332,6 +12362,9 @@ msgstr ""
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
+
+msgid "All supported formats"
+msgstr "All supported formats"
 
 msgid "Import Schematic"
 msgstr "Import Schematic"
@@ -12970,13 +13003,13 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Save changes to '%s' before closing?"
 
 msgid ""
-"Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, launch the KiCad shell "
-"and create a project."
+"Cannot update the PCB because the Schematic Editor is opened in stand-alone "
+"mode. In order to create/update PCBs from schematics, launch the main KiCad "
+"application and create a project."
 msgstr ""
-"Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, launch the KiCad shell "
-"and create a project."
+"Cannot update the PCB because the Schematic Editor is opened in stand-alone "
+"mode. In order to create/update PCBs from schematics, launch the main KiCad "
+"application and create a project."
 
 msgid "New Schematic"
 msgstr "New Schematic"
@@ -13025,14 +13058,11 @@ msgstr "Regex Search"
 msgid "Find in Net Inspector"
 msgstr "Find in Net Inspector"
 
-msgid "Enter new variant name"
-msgstr "Enter new variant name"
+msgid "Select variant name to remove:"
+msgstr "Select variant name to remove:"
 
-msgid "Variant Name"
-msgstr "Variant Name"
-
-msgid "Select variant name to remove"
-msgstr "Select variant name to remove"
+msgid "Remove Design Variant"
+msgstr "Remove Design Variant"
 
 #, c-format
 msgid "Field %s (empty)"
@@ -13084,6 +13114,10 @@ msgstr "Members"
 #, c-format
 msgid "Importing %s"
 msgstr "Importing %s"
+
+#, c-format
+msgid "Error parsing Altium schematic: %s"
+msgstr "Error parsing Altium schematic: %s"
 
 #, c-format
 msgid ""
@@ -13158,6 +13192,10 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
+
+#, c-format
+msgid "Error parsing Altium library: %s"
+msgstr "Error parsing Altium library: %s"
 
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Expected Altium Schematic Library file version 5.0"
@@ -14145,6 +14183,9 @@ msgstr "Mirror Y"
 
 msgid "Library Link"
 msgstr "Library Link"
+
+msgid "Library Description"
+msgstr "Library Description"
 
 msgid "Exclude From Position Files"
 msgstr "Exclude From Position Files"
@@ -16001,6 +16042,12 @@ msgstr "Cursor 1"
 msgid "Cursor 2"
 msgstr "Cursor 2"
 
+#, c-format
+msgid ""
+"Workbook file '%s' not found. Loading simulation settings from schematic."
+msgstr ""
+"Workbook file '%s' not found. Loading simulation settings from schematic."
+
 msgid "Diff"
 msgstr "Diff"
 
@@ -16692,11 +16739,11 @@ msgstr "Selection modes"
 msgid "Select the current variant to display and edit."
 msgstr "Select the current variant to display and edit."
 
-msgid "Add New Variant..."
-msgstr "Add New Variant..."
+msgid "Add New Design Variant..."
+msgstr "Add New Design Variant..."
 
-msgid "New Variant"
-msgstr "New Variant"
+msgid "New Design Variant"
+msgstr "New Design Variant"
 
 msgid "Variant name:"
 msgstr "Variant name:"
@@ -17935,17 +17982,17 @@ msgstr "Add, edit or delete user-defined simulation signals"
 msgid "Show SPICE Netlist"
 msgstr "Show SPICE Netlist"
 
-msgid "Add Variant..."
-msgstr "Add Variant..."
+msgid "Add Design Variant..."
+msgstr "Add Design Variant..."
 
-msgid "Add new variant to the schematic."
-msgstr "Add new variant to the schematic."
+msgid "Add new design variant to the schematic."
+msgstr "Add new design variant to the schematic."
 
-msgid "Remove Variant..."
-msgstr "Remove Variant..."
+msgid "Remove Design Variant..."
+msgstr "Remove Design Variant..."
 
-msgid "Remove an existing variant from the schematic."
-msgstr "Remove an existing variant from the schematic."
+msgid "Remove an existing design variant from the schematic."
+msgstr "Remove an existing design variant from the schematic."
 
 msgid "Align"
 msgstr "Align"
@@ -18614,12 +18661,6 @@ msgstr "Configure remote data sources."
 msgid "No remote data sources are currently installed."
 msgstr "No remote data sources are currently installed."
 
-msgid "Configure..."
-msgstr "Configure..."
-
-msgid "Clear Cookies"
-msgstr "Clear Cookies"
-
 #, c-format
 msgid "No configuration JSON found for '%s'."
 msgstr "No configuration JSON found for '%s'."
@@ -18635,15 +18676,6 @@ msgstr "Unable to read '%s'."
 #, c-format
 msgid "Unable to load remote data for '%s'."
 msgstr "Unable to load remote data for '%s'."
-
-msgid "Missing login URL for remote authentication."
-msgstr "Missing login URL for remote authentication."
-
-msgid "Unable to start the local login listener."
-msgstr "Unable to start the local login listener."
-
-msgid "Failed to allocate a callback port for login."
-msgstr "Failed to allocate a callback port for login."
 
 #, c-format
 msgid "Unsupported RPC version %d."
@@ -18732,26 +18764,6 @@ msgstr "Unsupported 3D model payload type."
 
 msgid "Unsupported SPICE payload type."
 msgstr "Unsupported SPICE payload type."
-
-#, c-format
-msgid "Failed to parse component list: %s"
-msgstr "Failed to parse component list: %s"
-
-msgid "Component list must be an array."
-msgstr "Component list must be an array."
-
-msgid "Component list was empty."
-msgstr "Component list was empty."
-
-msgid "Component entries must be objects."
-msgstr "Component entries must be objects."
-
-msgid "Component entry was missing a type."
-msgstr "Component entry was missing a type."
-
-#, c-format
-msgid "Unsupported component type '%s'."
-msgstr "Unsupported component type '%s'."
 
 #, c-format
 msgid "Only %s"
@@ -19794,11 +19806,14 @@ msgstr ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 
+msgid "Input file"
+msgstr "Input file"
+
 msgid "Input directory"
 msgstr "Input directory"
 
-msgid "Input file"
-msgstr "Input file"
+msgid "Input file or directory"
+msgstr "Input file or directory"
 
 msgid "Output directory"
 msgstr "Output directory"
@@ -20713,14 +20728,20 @@ msgstr "Template duplicated successfully to '%s'."
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
 
+msgid "Recent project templates"
+msgstr "Recent project templates"
+
+msgid "All Templates"
+msgstr "All Templates"
+
 msgid "User Templates"
 msgstr "User Templates"
 
-msgid "Select Templates Directory"
-msgstr "Select Templates Directory"
+msgid "System Templates"
+msgstr "System Templates"
 
-msgid "Folder:"
-msgstr "Folder:"
+msgid "Go Back"
+msgstr "Go Back"
 
 #, c-format
 msgid ""
@@ -20886,236 +20907,100 @@ msgstr ""
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr "Manage downloadable packages from KiCad and 3rd party repositories"
 
-msgid "Welcome to Template Selection!"
-msgstr "Welcome to Template Selection!"
-
-msgid ""
-"Choose from a variety of pre-configured project templates to jumpstart your "
-"PCB design. Templates provide ready-to-use project structures with common "
-"components, libraries, and design rules."
-msgstr ""
-"Choose from a variety of pre-configured project templates to jumpstart your "
-"PCB design. Templates provide ready-to-use project structures with common "
-"components, libraries, and design rules."
-
-msgid "Browse Templates"
-msgstr "Browse Templates"
-
-msgid ""
-"Navigate through the template tabs above to explore different categories of "
-"project templates. Each tab contains templates organized by type or "
-"complexity."
-msgstr ""
-"Navigate through the template tabs above to explore different categories of "
-"project templates. Each tab contains templates organized by type or "
-"complexity."
-
 msgid "Select a Template"
 msgstr "Select a Template"
 
-msgid "Click on any template in the list to "
-msgstr "Click on any template in the list to "
+msgid ""
+"Templates provide pre-configured project structures to jumpstart your design."
+msgstr ""
+"Templates provide pre-configured project structures to jumpstart your design."
 
-msgid "preview its details"
-msgstr "preview its details"
+msgid "Pre-configured Libraries"
+msgstr "Pre-configured Libraries"
+
+msgid "Common symbols and footprints already linked and ready to use."
+msgstr "Common symbols and footprints already linked and ready to use."
+
+msgid "Design Rules"
+msgstr "Design Rules"
 
 msgid ""
-"The template information will appear in this panel, showing descriptions, "
-"included components, and project structure."
+"Electrical and mechanical constraints configured for the intended "
+"application."
 msgstr ""
-"The template information will appear in this panel, showing descriptions, "
-"included components, and project structure."
+"Electrical and mechanical constraints configured for the intended "
+"application."
 
-msgid "Customize Path"
-msgstr "Customize Path"
+msgid "Board Stackups"
+msgstr "Board Stackups"
 
-msgid "Use the "
-msgstr "Use the "
-
-msgid "folder path field"
-msgstr "folder path field"
+msgid "Layer configurations optimized for common manufacturing processes."
+msgstr "Layer configurations optimized for common manufacturing processes."
 
 msgid ""
-"above to browse custom template directories. Click the folder icon to "
-"browse, or the refresh icon to reload templates."
+"Recently used templates appear at the top. Use the folder icon to browse "
+"custom template directories."
 msgstr ""
-"above to browse custom template directories. Click the folder icon to "
-"browse, or the refresh icon to reload templates."
-
-msgid "Create Project"
-msgstr "Create Project"
-
-msgid "Once you've found the right template, click "
-msgstr "Once you've found the right template, click "
-
-msgid ""
-"to create a new project based on the selected template. Your project will "
-"inherit all template settings and files."
-msgstr ""
-"to create a new project based on the selected template. Your project will "
-"inherit all template settings and files."
-
-msgid "What You Get with Templates"
-msgstr "What You Get with Templates"
-
-msgid "Pre-configured libraries"
-msgstr "Pre-configured libraries"
-
-msgid "- Common components and footprints already linked"
-msgstr "- Common components and footprints already linked"
-
-msgid "Design rules"
-msgstr "Design rules"
-
-msgid "- Appropriate electrical and mechanical constraints"
-msgstr "- Appropriate electrical and mechanical constraints"
-
-msgid "Layer stackups"
-msgstr "Layer stackups"
-
-msgid "- Optimized for the intended application"
-msgstr "- Optimized for the intended application"
-
-msgid "Component placement"
-msgstr "Component placement"
-
-msgid "- Basic layout and routing guidelines"
-msgstr "- Basic layout and routing guidelines"
-
-msgid "Documentation"
-msgstr "Documentation"
-
-msgid "- README files and design notes"
-msgstr "- README files and design notes"
-
-msgid "Manufacturing files"
-msgstr "Manufacturing files"
-
-msgid "- Gerber and drill file configurations"
-msgstr "- Gerber and drill file configurations"
-
-msgid "Pro Tips"
-msgstr "Pro Tips"
-
-msgid "Start Simple:"
-msgstr "Start Simple:"
-
-msgid "Begin with basic templates and add more elements as you go."
-msgstr "Begin with basic templates and add more elements as you go."
-
-msgid "Customize Later:"
-msgstr "Customize Later:"
-
-msgid ""
-"Templates are starting points - you can modify libraries, rules, and layouts "
-"after project creation."
-msgstr ""
-"Templates are starting points - you can modify libraries, rules, and layouts "
-"after project creation."
-
-msgid "Save Your Own:"
-msgstr "Save Your Own:"
-
-msgid ""
-"Once you develop preferred settings, create a custom template for future "
-"projects."
-msgstr ""
-"Once you develop preferred settings, create a custom template for future "
-"projects."
+"Recently used templates appear at the top. Use the folder icon to browse "
+"custom template directories."
 
 msgid "Template"
 msgstr "Template"
 
 msgid ""
-"This project template doesn't include an info page yet. You can still use it "
-"to create a new project."
+"This template does not include a description. You can still use it to create "
+"a new project."
 msgstr ""
-"This project template doesn't include an info page yet. You can still use it "
-"to create a new project."
+"This template does not include a description. You can still use it to create "
+"a new project."
 
-msgid "To use this template:"
-msgstr "To use this template:"
+msgid "To use this template"
+msgstr "To use this template"
 
 msgid "Create the project"
 msgstr "Create the project"
 
-msgid ""
-"Click OK below. KiCad will create a new project folder populated with the "
-"contents of this template."
-msgstr ""
-"Click OK below. KiCad will create a new project folder populated with the "
-"contents of this template."
+msgid "Click OK to create a new project folder with this template's contents."
+msgstr "Click OK to create a new project folder with this template's contents."
 
 msgid "Open schematic and PCB"
 msgstr "Open schematic and PCB"
 
-msgid ""
-"Use the Project Manager tree or launch Schematic and PCB editors to begin "
-"designing."
-msgstr ""
-"Use the Project Manager tree or launch Schematic and PCB editors to begin "
-"designing."
+msgid "Use the Project Manager to launch the Schematic and PCB editors."
+msgstr "Use the Project Manager to launch the Schematic and PCB editors."
 
-msgid "Review libraries & settings"
-msgstr "Review libraries & settings"
+msgid "Review settings"
+msgstr "Review settings"
 
-msgid ""
-"Confirm symbol/footprint libraries, design rules, and board stackup match "
-"your needs."
-msgstr ""
-"Confirm symbol/footprint libraries, design rules, and board stackup match "
-"your needs."
+msgid "Verify libraries, design rules, and board stackup match your needs."
+msgstr "Verify libraries, design rules, and board stackup match your needs."
 
-msgid "Add an info page later:"
-msgstr "Add an info page later:"
+msgid "Add a description by creating"
+msgstr "Add a description by creating"
 
-msgid "Create a file at"
-msgstr "Create a file at"
-
-msgid ""
-"inside this template's directory to provide rich documentation, images, or "
-"guidance."
-msgstr ""
-"inside this template's directory to provide rich documentation, images, or "
-"guidance."
-
-msgid "You can copy styling from the default pages for consistency."
-msgstr "You can copy styling from the default pages for consistency."
+msgid "inside this template's directory."
+msgstr "inside this template's directory."
 
 msgid "No Templates Found"
 msgstr "No Templates Found"
 
-msgid ""
-"The selected templates directory does not contain any project templates."
-msgstr ""
-"The selected templates directory does not contain any project templates."
+msgid "The selected directory does not contain any project templates."
+msgstr "The selected directory does not contain any project templates."
 
-msgid "What to do:"
-msgstr "What to do:"
+msgid "Suggestions"
+msgstr "Suggestions"
 
-msgid "Browse to a different templates directory using the folder icon"
-msgstr "Browse to a different templates directory using the folder icon"
+msgid "Browse to a different directory using the folder icon"
+msgstr "Browse to a different directory using the folder icon"
 
-msgid "Click the refresh icon to reload the current directory"
-msgstr "Click the refresh icon to reload the current directory"
+msgid "Use the refresh icon to reload the current directory"
+msgstr "Use the refresh icon to reload the current directory"
 
-msgid "Check that the directory path contains valid templates"
-msgstr "Check that the directory path contains valid templates"
+msgid "Switch to a system templates tab"
+msgstr "Switch to a system templates tab"
 
-msgid ""
-"Use the default system templates by navigating to a system templates tab"
-msgstr ""
-"Use the default system templates by navigating to a system templates tab"
-
-msgid "Tip:"
-msgstr "Tip:"
-
-msgid ""
-"Templates are organized in subdirectories. Each template needs a 'meta' "
-"folder with configuration files."
-msgstr ""
-"Templates are organized in subdirectories. Each template needs a 'meta' "
-"folder with configuration files."
+msgid "Each template needs a 'meta' folder containing configuration files."
+msgstr "Each template needs a 'meta' folder containing configuration files."
 
 msgid "KiCad project file"
 msgstr "KiCad project file"
@@ -21244,15 +21129,36 @@ msgstr "%d package update(s) available"
 msgid "Error opening jobs file"
 msgstr "Error opening jobs file"
 
-msgid "A newer local history snapshot is available. Restore it?"
-msgstr "A newer local history snapshot is available. Restore it?"
-
-msgid "Edit File in Text Editor"
-msgstr "Edit File in Text Editor"
-
 #, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
 msgstr "Project '%s' is already open by '%s' at '%s'."
+
+msgid ""
+"KiCad found unsaved changes from your last session that are newer than the "
+"saved project files."
+msgstr ""
+"KiCad found unsaved changes from your last session that are newer than the "
+"saved project files."
+
+msgid "Recover Unsaved Changes"
+msgstr "Recover Unsaved Changes"
+
+msgid ""
+"This can happen if your previous session ended unexpectedly.\n"
+"\n"
+"Choose 'Restore' to recover those changes, or 'Discard' to keep the "
+"currently saved files."
+msgstr ""
+"This can happen if your previous session ended unexpectedly.\n"
+"\n"
+"Choose 'Restore' to recover those changes, or 'Discard' to keep the "
+"currently saved files."
+
+msgid "Discard"
+msgstr "Discard"
+
+msgid "Edit File in Text Editor"
+msgstr "Edit File in Text Editor"
 
 msgid "[no project loaded]"
 msgstr "[no project loaded]"
@@ -21610,13 +21516,6 @@ msgstr ""
 msgid "Local file"
 msgstr "Local file"
 
-msgid ""
-"This plugin requires the KiCad API, which is currently disabled in "
-"preferences. Would you like to enable it?"
-msgstr ""
-"This plugin requires the KiCad API, which is currently disabled in "
-"preferences. Would you like to enable it?"
-
 msgid "PCM Update"
 msgstr "PCM Update"
 
@@ -21628,6 +21527,13 @@ msgstr "Fetching repository..."
 
 msgid "Reviewing packages..."
 msgstr "Reviewing packages..."
+
+msgid ""
+"This plugin requires the KiCad API, which is currently disabled in "
+"preferences. Would you like to enable it?"
+msgstr ""
+"This plugin requires the KiCad API, which is currently disabled in "
+"preferences. Would you like to enable it?"
 
 #, c-format
 msgid "Version %s of package %s not found!"
@@ -22033,9 +21939,6 @@ msgstr ""
 "\n"
 "Do you want to continue?"
 
-msgid "System Templates"
-msgstr "System Templates"
-
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "No project template was selected.  Cannot generate new project."
 
@@ -22335,6 +22238,9 @@ msgstr "KiCad Drawing Sheet Editor"
 
 msgid "coord origin: Right Bottom page corner"
 msgstr "coord origin: Right Bottom page corner"
+
+msgid "Constrain to H, V, 45"
+msgstr "Constrain to H, V, 45"
 
 msgid "Error Init Printer info"
 msgstr "Error Init Printer info"
@@ -25271,9 +25177,6 @@ msgstr "Text & Graphics"
 msgid "Defaults"
 msgstr "Defaults"
 
-msgid "Design Rules"
-msgstr "Design Rules"
-
 msgid "Constraints"
 msgstr "Constraints"
 
@@ -26896,29 +26799,6 @@ msgstr ""
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 
-msgid "Solder paste relative clearance:"
-msgstr "Solder paste relative clearance:"
-
-#, c-format
-msgid ""
-"This is the local clearance ratio applied as a percentage of the pad width "
-"and height for this footprint.\n"
-"A value of 10 means the horizontal clearance value is 10% of the pad’s "
-"width, and the vertical clearance value is 10% of the pad’s height.\n"
-"This value can be superseded by a pad local value.\n"
-"The final clearance value is the sum of this value and the absolute "
-"clearance value.\n"
-"A negative value means a smaller stencil aperture size than pad size."
-msgstr ""
-"This is the local clearance ratio applied as a percentage of the pad width "
-"and height for this footprint.\n"
-"A value of 10 means the horizontal clearance value is 10% of the pad’s "
-"width, and the vertical clearance value is 10% of the pad’s height.\n"
-"This value can be superseded by a pad local value.\n"
-"The final clearance value is the sum of this value and the absolute "
-"clearance value.\n"
-"A negative value means a smaller stencil aperture size than pad size."
-
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
@@ -27036,6 +26916,9 @@ msgstr ""
 "If 0, the global value is used.\n"
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
+
+msgid "Solder paste relative clearance:"
+msgstr "Solder paste relative clearance:"
 
 #, c-format
 msgid ""
@@ -28360,11 +28243,11 @@ msgstr "Heatsink pad"
 msgid "Mechanical"
 msgstr "Mechanical"
 
-msgid "Castellated pad (through hole only)"
-msgstr "Castellated pad (through hole only)"
+msgid "Castellated pad (TH only)"
+msgstr "Castellated pad (TH only)"
 
-msgid "Press-fit (round through hole only)"
-msgstr "Press-fit (round through hole only)"
+msgid "Press-fit (round TH only)"
+msgstr "Press-fit (round TH only)"
 
 msgid "Board contains legacy teardrops."
 msgstr "Board contains legacy teardrops."
@@ -28446,21 +28329,6 @@ msgid ""
 msgstr ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
-
-msgid ""
-"This is the local clearance ratio in percent between this pad and the solder "
-"paste.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
-"If 0, the footprint value or the global value is used.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size."
-msgstr ""
-"This is the local clearance ratio in percent between this pad and the solder "
-"paste.\n"
-"A value of 10 means the clearance value is 10 percent of the pad size.\n"
-"If 0, the footprint value or the global value is used.\n"
-"The final clearance value is the sum of this value and the clearance value.\n"
-"A negative value means a smaller mask size than pad size."
 
 msgid "Hole Post Machining"
 msgstr "Hole Post Machining"
@@ -29546,23 +29414,26 @@ msgstr "Update PCB from Schematic"
 msgid "Error with conditions for component class assignment %s"
 msgstr "Error with conditions for component class assignment %s"
 
-msgid "Reference..."
-msgstr "Reference..."
+msgid "Add Reference Condition"
+msgstr "Add Reference Condition"
 
-msgid "Footprint..."
-msgstr "Footprint..."
+msgid "Add Footprint Condition"
+msgstr "Add Footprint Condition"
 
-msgid "Side..."
-msgstr "Side..."
+msgid "Add Side Condition"
+msgstr "Add Side Condition"
 
-msgid "Rotation..."
-msgstr "Rotation..."
+msgid "Add Rotation Condition"
+msgstr "Add Rotation Condition"
 
-msgid "Footprint Field..."
-msgstr "Footprint Field..."
+msgid "Add Footprint Field Value Condition"
+msgstr "Add Footprint Field Value Condition"
 
-msgid "Sheet Name..."
-msgstr "Sheet Name..."
+msgid "Add Sheet Condition"
+msgstr "Add Sheet Condition"
+
+msgid "Add Custom Expression Condition"
+msgstr "Add Custom Expression Condition"
 
 msgid "Footprint Field:"
 msgstr "Footprint Field:"
@@ -29579,20 +29450,20 @@ msgstr "Custom Assignments:"
 msgid "Add Custom Assignment"
 msgstr "Add Custom Assignment"
 
-msgid "Component Class:"
-msgstr "Component Class:"
-
-msgid "Highlight matching footprints"
-msgstr "Highlight matching footprints"
+msgid "Component class:"
+msgstr "Component class:"
 
 msgid "Delete row"
 msgstr "Delete row"
 
-msgid "Match All"
-msgstr "Match All"
+msgid "Highlight matching footprints"
+msgstr "Highlight matching footprints"
 
-msgid "Match Any"
-msgstr "Match Any"
+msgid "Match all"
+msgstr "Match all"
+
+msgid "Match any"
+msgstr "Match any"
 
 msgid "Import references"
 msgstr "Import references"
@@ -29603,15 +29474,14 @@ msgstr "Footprint:"
 msgid "Show library"
 msgstr "Show library"
 
-msgid "Field Value:"
-msgstr "Field Value:"
+msgid "Footprint field:"
+msgstr "Footprint field:"
 
-msgid "Sheet Name:"
-msgstr "Sheet Name:"
+msgid "Field value:"
+msgstr "Field value:"
 
-#, c-format
-msgid "Layer name %s already in use."
-msgstr "Layer name %s already in use."
+msgid "Sheet name:"
+msgstr "Sheet name:"
 
 msgid "Use via color for normal through hole padstacks"
 msgstr "Use via color for normal through hole padstacks"
@@ -29636,9 +29506,6 @@ msgstr "Show always"
 
 msgid "Show pad clearance"
 msgstr "Show pad clearance"
-
-msgid "Layer Names"
-msgstr "Layer Names"
 
 msgid "Net names:"
 msgstr "Net names:"
@@ -29840,8 +29707,8 @@ msgstr "Parameter error"
 msgid "Default Properties for New Graphic Items"
 msgstr "Default Properties for New Graphic Items"
 
-msgid "Table (nested library table)"
-msgstr "Table (nested library table)"
+msgid "Footprint Library Tables"
+msgstr "Footprint Library Tables"
 
 #, c-format
 msgid ""
@@ -29870,6 +29737,19 @@ msgstr "Unable to open file"
 
 msgid "3D Model(s)"
 msgstr "3D Model(s)"
+
+#, c-format
+msgid "Layer name %s already in use."
+msgstr "Layer name %s already in use."
+
+msgid "User layers:"
+msgstr "User layers:"
+
+msgid "7"
+msgstr "7"
+
+msgid "9"
+msgstr "9"
 
 msgid "Recreate Plugin Environment"
 msgstr "Recreate Plugin Environment"
@@ -31946,14 +31826,14 @@ msgstr "Diff pair gap calculation failed"
 msgid "Single"
 msgstr "Single"
 
-msgid "Target Impedance:"
-msgstr "Target Impedance:"
+msgid "Target impedance:"
+msgstr "Target impedance:"
 
 msgid "ohms"
 msgstr "ohms"
 
-msgid "Enable Time Domain Tuning"
-msgstr "Enable Time Domain Tuning"
+msgid "Enable time domain tuning"
+msgstr "Enable time domain tuning"
 
 msgid "Track Propagation"
 msgstr "Track Propagation"
@@ -31976,14 +31856,14 @@ msgstr "Unit Delay"
 msgid "Via Propagation"
 msgstr "Via Propagation"
 
-msgid "Global Unit Delay:"
-msgstr "Global Unit Delay:"
+msgid "Global unit delay:"
+msgstr "Global unit delay:"
 
 msgid "ps/cm"
 msgstr "ps/cm"
 
-msgid "Via Delay Overrides:"
-msgstr "Via Delay Overrides:"
+msgid "Via delay overrides:"
+msgstr "Via delay overrides:"
 
 msgid "Signal Layer From"
 msgstr "Signal Layer From"
@@ -33644,10 +33524,53 @@ msgstr ""
 #, c-format
 msgid ""
 "\n"
-"** Error exporting %s file. Export aborted. **\n"
+"** Out of memory while exporting %s file. **\n"
+"The board may have too many objects (e.g., vias, tracks, components) to "
+"process with available system memory.\n"
+"Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
+"system memory.\n"
 msgstr ""
 "\n"
-"** Error exporting %s file. Export aborted. **\n"
+"** Out of memory while exporting %s file. **\n"
+"The board may have too many objects (e.g., vias, tracks, components) to "
+"process with available system memory.\n"
+"Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
+"system memory.\n"
+
+#, c-format
+msgid ""
+"\n"
+"OpenCASCADE error: %s\n"
+msgstr ""
+"\n"
+"OpenCASCADE error: %s\n"
+
+msgid ""
+"This error may indicate insufficient memory. Consider disabling 'Fuse "
+"Shapes', reducing the number of vias/components, or freeing system memory.\n"
+msgstr ""
+"This error may indicate insufficient memory. Consider disabling 'Fuse "
+"Shapes', reducing the number of vias/components, or freeing system memory.\n"
+
+#, c-format
+msgid "** Error exporting %s file. Export aborted. **\n"
+msgstr "** Error exporting %s file. Export aborted. **\n"
+
+#, c-format
+msgid ""
+"\n"
+"** Unexpected error while exporting %s file. **\n"
+"This may be caused by insufficient system memory, especially when exporting "
+"boards with many vias or components with 'Fuse Shapes' enabled.\n"
+"Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
+"memory.\n"
+msgstr ""
+"\n"
+"** Unexpected error while exporting %s file. **\n"
+"This may be caused by insufficient system memory, especially when exporting "
+"boards with many vias or components with 'Fuse Shapes' enabled.\n"
+"Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
+"memory.\n"
 
 #, c-format
 msgid ""
@@ -33657,8 +33580,29 @@ msgstr ""
 "\n"
 "Export time %.3f s\n"
 
-msgid "** Got problems while fusing shapes **"
-msgstr "** Got problems while fusing shapes **"
+msgid ""
+"Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
+"the number of objects (e.g., vias), or freeing system memory."
+msgstr ""
+"Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
+"the number of objects (e.g., vias), or freeing system memory."
+
+#, c-format
+msgid ""
+"OpenCASCADE error while fusing shapes: %s\n"
+"This may indicate insufficient memory. Consider disabling shape fusing or "
+"reducing board complexity."
+msgstr ""
+"OpenCASCADE error while fusing shapes: %s\n"
+"This may indicate insufficient memory. Consider disabling shape fusing or "
+"reducing board complexity."
+
+msgid ""
+"Problems encountered while fusing shapes. This operation is memory-"
+"intensive; insufficient memory may cause failures."
+msgstr ""
+"Problems encountered while fusing shapes. This operation is memory-"
+"intensive; insufficient memory may cause failures."
 
 msgid "Errors:\n"
 msgstr "Errors:\n"
@@ -33666,8 +33610,19 @@ msgstr "Errors:\n"
 msgid "Warnings:\n"
 msgstr "Warnings:\n"
 
-msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **"
+msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
+msgstr "ShapeUpgrade_UnifySameDomain produced a null shape."
+
+msgid ""
+"Out of memory while unifying shape domains. Consider disabling shape fusing "
+"or reducing the number of objects."
+msgstr ""
+"Out of memory while unifying shape domains. Consider disabling shape fusing "
+"or reducing the number of objects."
+
+#, c-format
+msgid "OpenCASCADE error while unifying shapes: %s"
+msgstr "OpenCASCADE error while unifying shapes: %s"
 
 msgid "OCC error adding pad/via polygon."
 msgstr "OCC error adding pad/via polygon."
@@ -34070,9 +34025,6 @@ msgstr "[from %s]"
 msgid "[no footprint loaded]"
 msgstr "[no footprint loaded]"
 
-msgid "Update Footprint Libraries"
-msgstr "Update Footprint Libraries"
-
 msgid "No footprint selected."
 msgstr "No footprint selected."
 
@@ -34218,6 +34170,9 @@ msgstr "no wizard selected"
 
 msgid "Couldn't reload footprint wizard"
 msgstr "Couldn't reload footprint wizard"
+
+msgid "Documentation"
+msgstr "Documentation"
 
 msgid "too long"
 msgstr "too long"
@@ -34446,6 +34401,9 @@ msgstr "Error saving footprint library"
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Footprint library '%s' saved as '%s'."
+
+msgid "Footprint..."
+msgstr "Footprint..."
 
 msgid "View as &PNG..."
 msgstr "View as &PNG..."
@@ -35980,16 +35938,6 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Footprint definition '%s' has component copper associated to a pad on "
-"multiple layers. Custom padstacks are not supported in KiCad. The copper "
-"items have been imported as graphical elements."
-msgstr ""
-"Footprint definition '%s' has component copper associated to a pad on "
-"multiple layers. Custom padstacks are not supported in KiCad. The copper "
-"items have been imported as graphical elements."
-
-#, c-format
-msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
@@ -36083,8 +36031,8 @@ msgstr ""
 "are not supported."
 
 #, c-format
-msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
-msgstr "Unable to find component '%s' in the library(Symdef ID: '%s')"
+msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
+msgstr "Unable to find component '%s' in the library (Symdef ID: '%s')"
 
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
@@ -36216,14 +36164,6 @@ msgstr ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
-
-#, c-format
-msgid ""
-"The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
-"equivalent. Using solid fill instead."
-msgstr ""
-"The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
-"equivalent. Using solid fill instead."
 
 #, c-format
 msgid ""
@@ -38731,8 +38671,14 @@ msgstr "Assertions"
 msgid "Assertions for:"
 msgstr "Assertions for:"
 
-msgid "Select two items for a clearance resolution report."
-msgstr "Select two items for a clearance resolution report."
+msgid "Select first item for clearance resolution..."
+msgstr "Select first item for clearance resolution..."
+
+msgid "Select second item for clearance resolution..."
+msgstr "Select second item for clearance resolution..."
+
+msgid "Select two different items for clearance resolution."
+msgstr "Select two different items for clearance resolution."
 
 msgid "Cannot generate clearance report on empty group."
 msgstr "Cannot generate clearance report on empty group."
@@ -38825,6 +38771,9 @@ msgid ""
 msgstr ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
+
+msgid "Select item for constraints resolution..."
+msgstr "Select item for constraints resolution..."
 
 msgid "Select a single item for a constraints resolution report."
 msgstr "Select a single item for a constraints resolution report."
@@ -40721,6 +40670,12 @@ msgstr "Attempt Finish Selected (Autoroute)"
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Sequentially attempt to automatically route all selected pads."
 
+msgid "Cancel Current Item"
+msgstr "Cancel Current Item"
+
+msgid "Skip current item and route next selected item."
+msgstr "Skip current item and route next selected item."
+
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
@@ -40848,9 +40803,15 @@ msgstr "Design block has no layout to place."
 msgid "Design block %s does not have a board file."
 msgstr "Design block %s does not have a board file."
 
+msgid "Design block placement failed - no footprints were placed."
+msgstr "Design block placement failed - no footprints were placed."
+
 #, c-format
 msgid "Footprint %s is locked and cannot be placed."
 msgstr "Footprint %s is locked and cannot be placed."
+
+msgid "Selected group contains no footprints to place."
+msgstr "Selected group contains no footprints to place."
 
 msgid "Error loading board."
 msgstr "Error loading board."
@@ -42104,6 +42065,488 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Image Files"
+#~ msgstr "Image Files"
+
+#~ msgid "Errors were encountered loading footprints:"
+#~ msgstr "Errors were encountered loading footprints:"
+
+#~ msgid "Merge failed"
+#~ msgstr "Merge failed"
+
+#~ msgid "Rebase failed to start"
+#~ msgstr "Rebase failed to start"
+
+#~ msgid "Rebase commit failed"
+#~ msgstr "Rebase commit failed"
+
+#~ msgid "Rebase finish failed"
+#~ msgstr "Rebase finish failed"
+
+#~ msgid "PCB: Export Statistics"
+#~ msgstr "PCB: Export Statistics"
+
+#~ msgid "Edit Options"
+#~ msgstr "Edit Options"
+
+#~ msgid "Edit Settings"
+#~ msgstr "Edit Settings"
+
+#~ msgid "Rename Variant"
+#~ msgstr "Rename Variant"
+
+#~ msgid "Copy Variant"
+#~ msgstr "Copy Variant"
+
+#~ msgid " Variant"
+#~ msgstr " Variant"
+
+#~ msgid "Text can not be empty."
+#~ msgstr "Text can not be empty."
+
+#, c-format
+#~ msgid "Symbol Library Tables (%s)|*"
+#~ msgstr "Symbol Library Tables (%s)|*"
+
+#~ msgid "Add Library"
+#~ msgstr "Add Library"
+
+#~ msgid "Warning: Duplicate Nickname"
+#~ msgstr "Warning: Duplicate Nickname"
+
+#~ msgid "Add existing library to table"
+#~ msgstr "Add existing library to table"
+
+#, c-format
+#~ msgid "Symbol '%s' has multiple pins with the same pin number"
+#~ msgstr "Symbol '%s' has multiple pins with the same pin number"
+
+#~ msgid "Multiple pins with the same pin number"
+#~ msgstr "Multiple pins with the same pin number"
+
+#~ msgid ""
+#~ "Cannot update the PCB, because the Schematic Editor is opened in stand-"
+#~ "alone mode. In order to create/update PCBs from schematics, launch the "
+#~ "KiCad shell and create a project."
+#~ msgstr ""
+#~ "Cannot update the PCB, because the Schematic Editor is opened in stand-"
+#~ "alone mode. In order to create/update PCBs from schematics, launch the "
+#~ "KiCad shell and create a project."
+
+#~ msgid "Enter new variant name"
+#~ msgstr "Enter new variant name"
+
+#~ msgid "Variant Name"
+#~ msgstr "Variant Name"
+
+#~ msgid "Select variant name to remove"
+#~ msgstr "Select variant name to remove"
+
+#~ msgid "Add New Variant..."
+#~ msgstr "Add New Variant..."
+
+#~ msgid "New Variant"
+#~ msgstr "New Variant"
+
+#~ msgid "Add Variant..."
+#~ msgstr "Add Variant..."
+
+#~ msgid "Add new variant to the schematic."
+#~ msgstr "Add new variant to the schematic."
+
+#~ msgid "Remove Variant..."
+#~ msgstr "Remove Variant..."
+
+#~ msgid "Remove an existing variant from the schematic."
+#~ msgstr "Remove an existing variant from the schematic."
+
+#~ msgid "Configure..."
+#~ msgstr "Configure..."
+
+#~ msgid "Clear Cookies"
+#~ msgstr "Clear Cookies"
+
+#~ msgid "Missing login URL for remote authentication."
+#~ msgstr "Missing login URL for remote authentication."
+
+#~ msgid "Unable to start the local login listener."
+#~ msgstr "Unable to start the local login listener."
+
+#~ msgid "Failed to allocate a callback port for login."
+#~ msgstr "Failed to allocate a callback port for login."
+
+#, c-format
+#~ msgid "Failed to parse component list: %s"
+#~ msgstr "Failed to parse component list: %s"
+
+#~ msgid "Component list must be an array."
+#~ msgstr "Component list must be an array."
+
+#~ msgid "Component list was empty."
+#~ msgstr "Component list was empty."
+
+#~ msgid "Component entries must be objects."
+#~ msgstr "Component entries must be objects."
+
+#~ msgid "Component entry was missing a type."
+#~ msgstr "Component entry was missing a type."
+
+#, c-format
+#~ msgid "Unsupported component type '%s'."
+#~ msgstr "Unsupported component type '%s'."
+
+#~ msgid "Select Templates Directory"
+#~ msgstr "Select Templates Directory"
+
+#~ msgid "Folder:"
+#~ msgstr "Folder:"
+
+#~ msgid "Welcome to Template Selection!"
+#~ msgstr "Welcome to Template Selection!"
+
+#~ msgid ""
+#~ "Choose from a variety of pre-configured project templates to jumpstart "
+#~ "your PCB design. Templates provide ready-to-use project structures with "
+#~ "common components, libraries, and design rules."
+#~ msgstr ""
+#~ "Choose from a variety of pre-configured project templates to jumpstart "
+#~ "your PCB design. Templates provide ready-to-use project structures with "
+#~ "common components, libraries, and design rules."
+
+#~ msgid "Browse Templates"
+#~ msgstr "Browse Templates"
+
+#~ msgid ""
+#~ "Navigate through the template tabs above to explore different categories "
+#~ "of project templates. Each tab contains templates organized by type or "
+#~ "complexity."
+#~ msgstr ""
+#~ "Navigate through the template tabs above to explore different categories "
+#~ "of project templates. Each tab contains templates organized by type or "
+#~ "complexity."
+
+#~ msgid "Click on any template in the list to "
+#~ msgstr "Click on any template in the list to "
+
+#~ msgid "preview its details"
+#~ msgstr "preview its details"
+
+#~ msgid ""
+#~ "The template information will appear in this panel, showing descriptions, "
+#~ "included components, and project structure."
+#~ msgstr ""
+#~ "The template information will appear in this panel, showing descriptions, "
+#~ "included components, and project structure."
+
+#~ msgid "Customize Path"
+#~ msgstr "Customize Path"
+
+#~ msgid "Use the "
+#~ msgstr "Use the "
+
+#~ msgid "folder path field"
+#~ msgstr "folder path field"
+
+#~ msgid ""
+#~ "above to browse custom template directories. Click the folder icon to "
+#~ "browse, or the refresh icon to reload templates."
+#~ msgstr ""
+#~ "above to browse custom template directories. Click the folder icon to "
+#~ "browse, or the refresh icon to reload templates."
+
+#~ msgid "Create Project"
+#~ msgstr "Create Project"
+
+#~ msgid "Once you've found the right template, click "
+#~ msgstr "Once you've found the right template, click "
+
+#~ msgid ""
+#~ "to create a new project based on the selected template. Your project will "
+#~ "inherit all template settings and files."
+#~ msgstr ""
+#~ "to create a new project based on the selected template. Your project will "
+#~ "inherit all template settings and files."
+
+#~ msgid "What You Get with Templates"
+#~ msgstr "What You Get with Templates"
+
+#~ msgid "Pre-configured libraries"
+#~ msgstr "Pre-configured libraries"
+
+#~ msgid "- Common components and footprints already linked"
+#~ msgstr "- Common components and footprints already linked"
+
+#~ msgid "Design rules"
+#~ msgstr "Design rules"
+
+#~ msgid "- Appropriate electrical and mechanical constraints"
+#~ msgstr "- Appropriate electrical and mechanical constraints"
+
+#~ msgid "Layer stackups"
+#~ msgstr "Layer stackups"
+
+#~ msgid "- Optimized for the intended application"
+#~ msgstr "- Optimized for the intended application"
+
+#~ msgid "Component placement"
+#~ msgstr "Component placement"
+
+#~ msgid "- Basic layout and routing guidelines"
+#~ msgstr "- Basic layout and routing guidelines"
+
+#~ msgid "- README files and design notes"
+#~ msgstr "- README files and design notes"
+
+#~ msgid "Manufacturing files"
+#~ msgstr "Manufacturing files"
+
+#~ msgid "- Gerber and drill file configurations"
+#~ msgstr "- Gerber and drill file configurations"
+
+#~ msgid "Pro Tips"
+#~ msgstr "Pro Tips"
+
+#~ msgid "Start Simple:"
+#~ msgstr "Start Simple:"
+
+#~ msgid "Begin with basic templates and add more elements as you go."
+#~ msgstr "Begin with basic templates and add more elements as you go."
+
+#~ msgid "Customize Later:"
+#~ msgstr "Customize Later:"
+
+#~ msgid ""
+#~ "Templates are starting points - you can modify libraries, rules, and "
+#~ "layouts after project creation."
+#~ msgstr ""
+#~ "Templates are starting points - you can modify libraries, rules, and "
+#~ "layouts after project creation."
+
+#~ msgid "Save Your Own:"
+#~ msgstr "Save Your Own:"
+
+#~ msgid ""
+#~ "Once you develop preferred settings, create a custom template for future "
+#~ "projects."
+#~ msgstr ""
+#~ "Once you develop preferred settings, create a custom template for future "
+#~ "projects."
+
+#~ msgid ""
+#~ "This project template doesn't include an info page yet. You can still use "
+#~ "it to create a new project."
+#~ msgstr ""
+#~ "This project template doesn't include an info page yet. You can still use "
+#~ "it to create a new project."
+
+#~ msgid "To use this template:"
+#~ msgstr "To use this template:"
+
+#~ msgid ""
+#~ "Click OK below. KiCad will create a new project folder populated with the "
+#~ "contents of this template."
+#~ msgstr ""
+#~ "Click OK below. KiCad will create a new project folder populated with the "
+#~ "contents of this template."
+
+#~ msgid ""
+#~ "Use the Project Manager tree or launch Schematic and PCB editors to begin "
+#~ "designing."
+#~ msgstr ""
+#~ "Use the Project Manager tree or launch Schematic and PCB editors to begin "
+#~ "designing."
+
+#~ msgid "Review libraries & settings"
+#~ msgstr "Review libraries & settings"
+
+#~ msgid ""
+#~ "Confirm symbol/footprint libraries, design rules, and board stackup match "
+#~ "your needs."
+#~ msgstr ""
+#~ "Confirm symbol/footprint libraries, design rules, and board stackup match "
+#~ "your needs."
+
+#~ msgid "Add an info page later:"
+#~ msgstr "Add an info page later:"
+
+#~ msgid "Create a file at"
+#~ msgstr "Create a file at"
+
+#~ msgid ""
+#~ "inside this template's directory to provide rich documentation, images, "
+#~ "or guidance."
+#~ msgstr ""
+#~ "inside this template's directory to provide rich documentation, images, "
+#~ "or guidance."
+
+#~ msgid "You can copy styling from the default pages for consistency."
+#~ msgstr "You can copy styling from the default pages for consistency."
+
+#~ msgid ""
+#~ "The selected templates directory does not contain any project templates."
+#~ msgstr ""
+#~ "The selected templates directory does not contain any project templates."
+
+#~ msgid "What to do:"
+#~ msgstr "What to do:"
+
+#~ msgid "Browse to a different templates directory using the folder icon"
+#~ msgstr "Browse to a different templates directory using the folder icon"
+
+#~ msgid "Click the refresh icon to reload the current directory"
+#~ msgstr "Click the refresh icon to reload the current directory"
+
+#~ msgid "Check that the directory path contains valid templates"
+#~ msgstr "Check that the directory path contains valid templates"
+
+#~ msgid ""
+#~ "Use the default system templates by navigating to a system templates tab"
+#~ msgstr ""
+#~ "Use the default system templates by navigating to a system templates tab"
+
+#~ msgid "Tip:"
+#~ msgstr "Tip:"
+
+#~ msgid ""
+#~ "Templates are organized in subdirectories. Each template needs a 'meta' "
+#~ "folder with configuration files."
+#~ msgstr ""
+#~ "Templates are organized in subdirectories. Each template needs a 'meta' "
+#~ "folder with configuration files."
+
+#~ msgid "A newer local history snapshot is available. Restore it?"
+#~ msgstr "A newer local history snapshot is available. Restore it?"
+
+#, c-format
+#~ msgid ""
+#~ "This is the local clearance ratio applied as a percentage of the pad "
+#~ "width and height for this footprint.\n"
+#~ "A value of 10 means the horizontal clearance value is 10% of the pad’s "
+#~ "width, and the vertical clearance value is 10% of the pad’s height.\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "The final clearance value is the sum of this value and the absolute "
+#~ "clearance value.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance ratio applied as a percentage of the pad "
+#~ "width and height for this footprint.\n"
+#~ "A value of 10 means the horizontal clearance value is 10% of the pad’s "
+#~ "width, and the vertical clearance value is 10% of the pad’s height.\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "The final clearance value is the sum of this value and the absolute "
+#~ "clearance value.\n"
+#~ "A negative value means a smaller stencil aperture size than pad size."
+
+#~ msgid "Castellated pad (through hole only)"
+#~ msgstr "Castellated pad (through hole only)"
+
+#~ msgid "Press-fit (round through hole only)"
+#~ msgstr "Press-fit (round through hole only)"
+
+#~ msgid ""
+#~ "This is the local clearance ratio in percent between this pad and the "
+#~ "solder paste.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "If 0, the footprint value or the global value is used.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size."
+#~ msgstr ""
+#~ "This is the local clearance ratio in percent between this pad and the "
+#~ "solder paste.\n"
+#~ "A value of 10 means the clearance value is 10 percent of the pad size.\n"
+#~ "If 0, the footprint value or the global value is used.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value.\n"
+#~ "A negative value means a smaller mask size than pad size."
+
+#~ msgid "Reference..."
+#~ msgstr "Reference..."
+
+#~ msgid "Side..."
+#~ msgstr "Side..."
+
+#~ msgid "Rotation..."
+#~ msgstr "Rotation..."
+
+#~ msgid "Footprint Field..."
+#~ msgstr "Footprint Field..."
+
+#~ msgid "Sheet Name..."
+#~ msgstr "Sheet Name..."
+
+#~ msgid "Component Class:"
+#~ msgstr "Component Class:"
+
+#~ msgid "Match All"
+#~ msgstr "Match All"
+
+#~ msgid "Match Any"
+#~ msgstr "Match Any"
+
+#~ msgid "Field Value:"
+#~ msgstr "Field Value:"
+
+#~ msgid "Sheet Name:"
+#~ msgstr "Sheet Name:"
+
+#~ msgid "Layer Names"
+#~ msgstr "Layer Names"
+
+#~ msgid "Target Impedance:"
+#~ msgstr "Target Impedance:"
+
+#~ msgid "Enable Time Domain Tuning"
+#~ msgstr "Enable Time Domain Tuning"
+
+#~ msgid "Global Unit Delay:"
+#~ msgstr "Global Unit Delay:"
+
+#~ msgid "Via Delay Overrides:"
+#~ msgstr "Via Delay Overrides:"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "** Error exporting %s file. Export aborted. **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** Error exporting %s file. Export aborted. **\n"
+
+#~ msgid "** Got problems while fusing shapes **"
+#~ msgstr "** Got problems while fusing shapes **"
+
+#~ msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
+#~ msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **"
+
+#~ msgid "Update Footprint Libraries"
+#~ msgstr "Update Footprint Libraries"
+
+#, c-format
+#~ msgid ""
+#~ "Footprint definition '%s' has component copper associated to a pad on "
+#~ "multiple layers. Custom padstacks are not supported in KiCad. The copper "
+#~ "items have been imported as graphical elements."
+#~ msgstr ""
+#~ "Footprint definition '%s' has component copper associated to a pad on "
+#~ "multiple layers. Custom padstacks are not supported in KiCad. The copper "
+#~ "items have been imported as graphical elements."
+
+#, c-format
+#~ msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
+#~ msgstr "Unable to find component '%s' in the library(Symdef ID: '%s')"
+
+#, c-format
+#~ msgid ""
+#~ "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
+#~ "equivalent. Using solid fill instead."
+#~ msgstr ""
+#~ "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
+#~ "equivalent. Using solid fill instead."
+
+#~ msgid "Select two items for a clearance resolution report."
+#~ msgstr "Select two items for a clearance resolution report."
 
 #~ msgid "Insert spacer"
 #~ msgstr "Insert spacer"
@@ -45810,9 +46253,6 @@ msgstr "KiCad Drawing Sheet"
 #~ "        (constraint bridged_mask)\n"
 #~ "        (condition \"A.intersectsArea('guard_ring')\")\n"
 #~ "        (severity ignore))"
-
-#~ msgid "7"
-#~ msgstr "7"
 
 #, c-format
 #~ msgid "Ignored barcode on Altium layer %d (not yet supported)."
@@ -60117,9 +60557,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Set border width to 0 to use schematic's default symbol line width."
 #~ msgstr "Set border width to 0 to use schematic's default symbol line width."
-
-#~ msgid "Private to symbol editor"
-#~ msgstr "Private to symbol editor"
 
 #~ msgid "Flags"
 #~ msgstr "Flags"
