@@ -27,6 +27,8 @@
 
 // Code under test
 #include <markup_parser.h>
+#include <font/font.h>
+#include <font/stroke_font.h>
 
 /**
  * Declare the test suite
@@ -121,6 +123,63 @@ BOOST_AUTO_TEST_CASE( Parse )
         // printf( "%s\n", result.c_str() );
     }
 
+}
+
+
+/**
+ * Verify that LinebreakText preserves multiple spaces inside overbar markup and that
+ * the overbar word receives a nonzero width so line-wrapping accounts for it.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/22913
+ */
+BOOST_AUTO_TEST_CASE( OverbarMultipleSpacesWidth )
+{
+    KIFONT::FONT* font = KIFONT::STROKE_FONT::LoadFont( wxEmptyString );
+
+    BOOST_REQUIRE( font );
+
+    VECTOR2I glyphSize( 1000, 1000 );
+
+    // Measure the width of a single space for reference
+    int spaceWidth = font->GetTextAsGlyphs( nullptr, nullptr, wxS( " " ), glyphSize,
+                                            VECTOR2I(), ANGLE_0, false, VECTOR2I(), 0 ).x;
+
+    BOOST_REQUIRE( spaceWidth > 0 );
+
+    // Measure the width of 5 spaces
+    int fiveSpaceWidth = font->GetTextAsGlyphs( nullptr, nullptr, wxS( "     " ), glyphSize,
+                                                VECTOR2I(), ANGLE_0, false, VECTOR2I(), 0 ).x;
+
+    BOOST_CHECK_GT( fiveSpaceWidth, spaceWidth );
+
+    // Verify that LinebreakText preserves overbar with multiple spaces
+    struct LINEBREAK_CASE
+    {
+        wxString Input;
+        wxString Expected;
+    };
+
+    int wideColumn = 100000;
+
+    std::vector<LINEBREAK_CASE> cases =
+    {
+        { wxS( "~{     }" ),         wxS( "~{     }" ) },
+        { wxS( "A ~{     }" ),       wxS( "A ~{     }" ) },
+        { wxS( "A ~{  B  }" ),       wxS( "A ~{  B  }" ) },
+        { wxS( "~{     } end" ),     wxS( "~{     } end" ) },
+        { wxS( "/~{     }" ),        wxS( "/~{     }" ) },
+        { wxS( "_{     }" ),         wxS( "_{     }" ) },
+        { wxS( "^{     }" ),         wxS( "^{     }" ) },
+    };
+
+    for( auto& c : cases )
+    {
+        BOOST_TEST_INFO_SCOPE( c.Input );
+
+        wxString text = c.Input;
+        font->LinebreakText( text, wideColumn, glyphSize, 0, false, false );
+        BOOST_CHECK_EQUAL( text, c.Expected );
+    }
 }
 
 

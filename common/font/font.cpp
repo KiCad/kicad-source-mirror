@@ -502,7 +502,8 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
  */
 void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
                       const std::unique_ptr<MARKUP::NODE>& aNode, const KIFONT::FONT* aFont,
-                      const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle )
+                      const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle,
+                      bool aInsideMarkup = false )
 {
     TEXT_STYLE_FLAGS textStyle = aTextStyle;
 
@@ -544,7 +545,7 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
             std::vector<std::pair<wxString, int>> childWords;
 
             for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
-                wordbreakMarkup( &childWords, child, aFont, aSize, textStyle );
+                wordbreakMarkup( &childWords, child, aFont, aSize, textStyle, true );
 
             for( const std::pair<wxString, int>& childWord : childWords )
             {
@@ -555,6 +556,17 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
             word += wxT( "}" );
             aWords->emplace_back( std::make_pair( word, width ) );
             return;
+        }
+        else if( aInsideMarkup )
+        {
+            // Inside a markup node, preserve the content verbatim (no tokenization).
+            // wxStringTokenizer collapses consecutive spaces, which corrupts content
+            // like ~{     } where spaces are intentional.
+            wxString content = aNode->asWxString();
+            int      w = aFont->GetTextAsGlyphs( nullptr, nullptr, content, aSize, { 0, 0 },
+                                                  ANGLE_0, false, { 0, 0 }, textStyle ).x;
+
+            aWords->emplace_back( std::make_pair( content, w ) );
         }
         else
         {
@@ -570,8 +582,9 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
                 wxString chars = word;
                 chars.Trim();
 
-                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, chars, aSize, { 0, 0 },
-                                                ANGLE_0, false, { 0, 0 }, textStyle ).x;
+                int w = aFont->GetTextAsGlyphs( nullptr, nullptr, chars.IsEmpty() ? word : chars,
+                                                aSize, { 0, 0 }, ANGLE_0, false, { 0, 0 },
+                                                textStyle ).x;
 
                 aWords->emplace_back( std::make_pair( word, w ) );
             }
@@ -579,7 +592,7 @@ void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords,
     }
 
     for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
-        wordbreakMarkup( aWords, child, aFont, aSize, textStyle );
+        wordbreakMarkup( aWords, child, aFont, aSize, textStyle, aInsideMarkup );
 }
 
 
