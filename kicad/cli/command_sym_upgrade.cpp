@@ -54,7 +54,9 @@ int CLI::SYM_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
     symJob->m_outputLibraryPath = m_argOutput;
     symJob->m_force = m_argParser.get<bool>( ARG_FORCE );
 
-    if( !wxFile::Exists( symJob->m_libraryPath ) )
+    const wxFileName inputLibFn( symJob->m_libraryPath );
+
+    if( !inputLibFn.Exists() )
     {
         wxFprintf( stderr, _( "Symbol library does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
