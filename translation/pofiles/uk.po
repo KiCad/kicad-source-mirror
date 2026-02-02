@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-01-17 22:01+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:381
@@ -18792,9 +18792,9 @@ msgid "Show Field Name"
 msgstr "Показати назву поля"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Помилка завантаження схеми '%s."
+msgstr "Помилка аналізу схеми Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -18901,9 +18901,9 @@ msgid "File not found %s."
 msgstr "Файл не знайдено %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Помилка аналізу бібліотеки SPICE '%s': %s"
+msgstr "Помилка аналізу бібліотеки Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
