@@ -887,7 +887,7 @@ public:
      *
      * @param aPlotter is the #PLOTTER object used to plot pins.
      */
-    void PlotPins( PLOTTER* aPlotter ) const;
+    void PlotPins( PLOTTER* aPlotter, bool aDnp ) const;
 
     /**
      * Plot the local power pin indicator icon shape

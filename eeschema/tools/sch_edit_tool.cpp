@@ -302,13 +302,16 @@ bool SCH_EDIT_TOOL::Init()
         return false;
     };
 
-    auto attribDNPCond = []( const SELECTION& aSel )
+    auto attribDNPCond = [this]( const SELECTION& aSel )
     {
+        SCH_SHEET_PATH* sheet = &m_frame->GetCurrentSheet();
+        wxString        variant = m_frame->Schematic().GetCurrentVariant();
+
         return std::all_of( aSel.Items().begin(), aSel.Items().end(),
-                            []( const EDA_ITEM* item )
+                            [sheet, variant]( const EDA_ITEM* item )
                             {
                                 return !item->IsType( { SCH_SYMBOL_T } )
-                                       || static_cast<const SCH_SYMBOL*>( item )->GetDNP();
+                                       || static_cast<const SCH_SYMBOL*>( item )->GetDNP( sheet, variant );
                             } );
     };
 

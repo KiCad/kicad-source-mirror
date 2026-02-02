@@ -1027,16 +1027,20 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
     // and symbols to ensure that they are always visible
     TRANSFORM savedTransform = renderSettings->m_Transform;
 
+    wxString        variant = Schematic()->GetCurrentVariant();
+    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+
     for( const SCH_SYMBOL* sym :symbols )
     {
         renderSettings->m_Transform = sym->GetTransform();
         aPlotter->SetCurrentLineWidth( sym->GetEffectivePenWidth( renderSettings ) );
 
+        bool dnp = sym->GetDNP( sheet, variant );
+
         for( SCH_FIELD field : sym->GetFields() )
         {
             field.ClearRenderCache();
-            field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 },
-                        static_cast<const SYMBOL*>( sym )->GetDNP() );
+            field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 }, dnp );
 
             if( sym->IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
                 && ( field.IsVisible() || field.IsForceVisible() ) )
@@ -1045,9 +1049,9 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
             }
         }
 
-        sym->PlotPins( aPlotter );
+        sym->PlotPins( aPlotter, dnp );
 
-        if( static_cast<const SYMBOL*>( sym )->GetDNP() )
+        if( dnp )
             sym->PlotDNP( aPlotter );
     }
 

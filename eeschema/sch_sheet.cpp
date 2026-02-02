@@ -987,10 +987,16 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( _( "Sheet Name" ), KIUI::EllipsizeStatusText( aFrame, GetName() ) );
 
-    if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
+    SCH_SHEET_PATH* currentSheet = nullptr;
+    wxString        currentVariant;
+
+    if( schframe )
     {
         SCH_SHEET_PATH path = schframe->GetCurrentSheet();
         path.push_back( this );
+        currentSheet = &schframe->GetCurrentSheet();
+        currentVariant = Schematic() ? Schematic()->GetCurrentVariant() : wxString();
 
         aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false, true ) );
     }
@@ -1010,7 +1016,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( GetExcludedFromBoard() )
         msgs.Add( _( "Board" ) );
 
-    if( GetDNP() )
+    if( GetDNP( currentSheet, currentVariant ) )
         msgs.Add( _( "DNP" ) );
 
     msg = wxJoin( msgs, '|' );

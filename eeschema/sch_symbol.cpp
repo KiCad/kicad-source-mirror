@@ -2051,7 +2051,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     {
         *token = wxEmptyString;
 
-        if( aPath->GetDNP() || this->ResolveDNP() )
+        wxString variant = aVariantName.IsEmpty() ? schematic->GetCurrentVariant() : aVariantName;
+
+        if( aPath->GetDNP() || this->ResolveDNP( aPath, variant ) )
             *token = _( "DNP" );
 
         return true;
@@ -2661,6 +2663,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
+    wxString        currentVariant = Schematic() ? Schematic()->GetCurrentVariant() : wxString();
 
     auto addExcludes = [&]()
     {
@@ -2675,7 +2678,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
         if( GetExcludedFromBoard() )
             msgs.Add( _( "Board" ) );
 
-        if( GetDNP( currentSheet ) )
+        if( GetDNP( currentSheet, currentVariant ) )
             msgs.Add( _( "DNP" ) );
 
         msg = wxJoin( msgs, '|' );
@@ -3302,14 +3305,18 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         renderSettings->m_Transform = GetTransform();
         aPlotter->StartBlock( nullptr );
 
+        wxString        variant = Schematic()->GetCurrentVariant();
+        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+        bool            dnp = GetDNP( sheet, variant );
+
         for( bool local_background : { true, false } )
         {
-            tempSymbol.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
+            tempSymbol.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(), m_pos, dnp );
 
             for( SCH_FIELD field : m_fields )
             {
                 field.ClearRenderCache();
-                field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
+                field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(), m_pos, dnp );
 
                 if( IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
                     && ( field.IsVisible() || field.IsForceVisible() ) )
@@ -3319,10 +3326,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             }
         }
 
-        wxString variant = Schematic()->GetCurrentVariant();
-        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
-
-        if( GetDNP( sheet, variant ) )
+        if( dnp )
             PlotDNP( aPlotter );
 
         // Plot attributes to a hypertext menu
@@ -3444,7 +3448,7 @@ void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
 }
 
 
-void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
+void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter, bool aDnp ) const
 {
     if( m_part )
     {
@@ -3471,7 +3475,7 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
             tempPin->SetShape( symbolPin->GetShape() );
-            tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
+            tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, aDnp );
         }
 
         renderSettings->m_Transform = savedTransform;

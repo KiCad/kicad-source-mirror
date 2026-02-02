@@ -363,6 +363,15 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     Schematic().SetCurrentVariant( selectedVariant );
     UpdateProperties();
     HardRedraw();
+
+    // Refresh message panel for current selection
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    if( selTool )
+    {
+        SCH_SELECTION& selection = selTool->GetSelection();
+        if( selection.GetSize() == 1 )
+            SetMsgPanel( static_cast<EDA_ITEM*>( selection.Front() ) );
+    }
 }
 
 
