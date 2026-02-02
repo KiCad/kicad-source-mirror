@@ -56,6 +56,9 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) 
 {
     wxASSERT( aParent != nullptr );
 
+    // dpi fixes
+    m_notebook->SetMinSize( FromDIP( m_notebook->GetMinSize() ) );
+
     SetEvtHandlerEnabled( false );
 
     const int                c_iconSize = 16;
