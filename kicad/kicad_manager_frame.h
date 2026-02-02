@@ -227,8 +227,6 @@ private:
 
     wxString help_name() override;
 
-    void language_change( wxCommandEvent& event );
-
     void updatePcmButtonBadge();
 
 private:

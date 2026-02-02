@@ -740,6 +740,11 @@ protected:
     void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
 
     /**
+     * An event handler called on a language menu selection.
+     */
+    void OnLanguageSelectionEvent( wxCommandEvent& aEvent );
+
+    /**
      * Execute action on accepted dropped file.
      *
      * Called in OnDropFiles() and should be populated with

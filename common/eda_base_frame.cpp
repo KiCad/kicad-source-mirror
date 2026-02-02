@@ -132,7 +132,9 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
 
     EVT_SYS_COLOUR_CHANGED( EDA_BASE_FRAME::onSystemColorChange )
     EVT_ICONIZE( EDA_BASE_FRAME::onIconize )
-END_EVENT_TABLE()
+
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_BASE_FRAME::OnLanguageSelectionEvent )
+    END_EVENT_TABLE()
 
 
 void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
@@ -1861,4 +1863,13 @@ void EDA_BASE_FRAME::AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERAC
 
     // This must be done after the items are added
     aMasterMenu->Add( langsMenu );
+}
+
+
+void EDA_BASE_FRAME::OnLanguageSelectionEvent( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    // tell all the KIWAY_PLAYERs about the language change.
+    Kiway().SetLanguage( id );
 }

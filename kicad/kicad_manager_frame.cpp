@@ -119,9 +119,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_IMPORT_ALTIUM_PROJECT, KICAD_MANAGER_FRAME::OnImportAltiumProjectFiles )
 
     // Range menu events
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                    KICAD_MANAGER_FRAME::language_change )
-
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, KICAD_MANAGER_FRAME::OnFileHistory )
     EVT_MENU( ID_FILE_LIST_CLEAR, KICAD_MANAGER_FRAME::OnClearFileHistory )
 
@@ -1150,13 +1147,6 @@ void KICAD_MANAGER_FRAME::OnEditAdvancedCfg( wxCommandEvent& WXUNUSED( event ) )
 void KICAD_MANAGER_FRAME::RefreshProjectTree()
 {
     m_leftWin->ReCreateTreePrj();
-}
-
-
-void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
-{
-    int id = event.GetId();
-    Kiway().SetLanguage( id );
 }
 
 

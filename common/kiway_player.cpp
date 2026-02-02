@@ -37,7 +37,6 @@
 
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
     EVT_KIWAY_EXPRESS( KIWAY_PLAYER::kiway_express )
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KIWAY_PLAYER::language_change )
 END_EVENT_TABLE()
 
 
@@ -180,15 +179,6 @@ void KIWAY_PLAYER::kiway_express( KIWAY_EXPRESS& aEvent )
 {
     // logging support
     KiwayMailIn( aEvent );     // call the virtual, override in derived.
-}
-
-
-void KIWAY_PLAYER::language_change( wxCommandEvent& event )
-{
-    int id = event.GetId();
-
-    // tell all the KIWAY_PLAYERs about the language change.
-    Kiway().SetLanguage( id );
 }
 
 

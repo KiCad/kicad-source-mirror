@@ -181,11 +181,6 @@ protected:
     /// Event handler, routes to derivative specific virtual #KiwayMailIn().
     void kiway_express( KIWAY_EXPRESS& aEvent );
 
-    /**
-     * An event handler called on a language menu selection.
-     */
-    void language_change( wxCommandEvent& event );
-
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless
 
