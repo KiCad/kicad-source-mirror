@@ -1764,7 +1764,10 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     if( !elem.showPinName )
         pin->SetNameTextSize( 0 );
 
-    VECTOR2I pinLocation = elem.location; // the location given is not the connection point!
+    // Altium gives the pin body end location.  Compute the connection point (electrical end)
+    // from the body end and pin length in the pin's orientation direction.
+    VECTOR2I bodyEnd = elem.location;
+    VECTOR2I pinLocation = bodyEnd;
 
     switch( elem.orientation )
     {
@@ -1796,7 +1799,19 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     // TODO: position can be sometimes off a little bit!
 
     if( schSymbol )
+    {
+        // Both points are in absolute schematic coordinates.  Transform them to library-local
+        // space, then derive the pin orientation from the resulting direction vector.
         pinLocation = GetRelativePosition( pinLocation + m_sheetOffset, schSymbol );
+        bodyEnd = GetRelativePosition( bodyEnd + m_sheetOffset, schSymbol );
+
+        VECTOR2I dir = bodyEnd - pinLocation;
+
+        if( std::abs( dir.x ) >= std::abs( dir.y ) )
+            pin->SetOrientation( dir.x > 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
+        else
+            pin->SetOrientation( dir.y > 0 ? PIN_ORIENTATION::PIN_DOWN : PIN_ORIENTATION::PIN_UP );
+    }
 
     pin->SetPosition( pinLocation );
 
@@ -2752,7 +2767,13 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
             if( schsym )
+            {
                 center = GetRelativePosition( elem.m_Center + m_sheetOffset, schsym );
+                startOffset = GetRelativePosition( elem.m_Center + startOffset + m_sheetOffset, schsym )
+                              - center;
+                endOffset = GetRelativePosition( elem.m_Center + endOffset + m_sheetOffset, schsym )
+                            - center;
+            }
 
             arc->SetCenter( center );
             arc->SetStart( center + startOffset );
