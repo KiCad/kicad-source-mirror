@@ -46,13 +46,13 @@
 CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                                                        const std::string& aDescription,
                                                        SCH_PLOT_FORMAT    aPlotFormat,
-                                                       bool               aOutputIsDir ) :
+                                                       IO_TYPE            aOutputType ) :
         COMMAND( aName ),
         m_plotFormat( aPlotFormat )
 {
     m_argParser.add_description( aDescription );
 
-    addCommonArgs( true, true, INPUT_TYPE::FILE, aOutputIsDir );
+    addCommonArgs( true, true, IO_TYPE::FILE, aOutputType );
     addDrawingSheetArg();
     addDefineArg();
     addVariantsArg();

@@ -27,7 +27,7 @@
 CLI::PCB_UPGRADE_COMMAND::PCB_UPGRADE_COMMAND() :
         COMMAND( "upgrade" )
 {
-    addCommonArgs( true, false, INPUT_TYPE::FILE, false );
+    addCommonArgs( true, false, IO_TYPE::FILE, IO_TYPE::FILE );
     m_argParser.add_description( UTF8STDSTR( _( "Upgrade the board file's format to the latest one" ) ) );
 
     m_argParser.add_argument( ARG_FORCE )

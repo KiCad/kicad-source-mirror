@@ -213,7 +213,7 @@ static bool getColorOrIntensity( const std::string& aInput, VECTOR3D& aOutput )
 
 CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
 {
-    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
+    addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
     addDefineArg();
 
     m_argParser.add_description(

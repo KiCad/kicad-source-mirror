@@ -69,7 +69,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_format( aFormat )
 {
     m_argParser.add_description( aDescription );
-    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
+    addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
     addDefineArg();
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )

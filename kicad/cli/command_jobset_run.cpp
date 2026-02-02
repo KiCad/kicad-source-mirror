@@ -40,7 +40,7 @@
 
 CLI::JOBSET_RUN_COMMAND::JOBSET_RUN_COMMAND() : COMMAND( "run" )
 {
-    addCommonArgs( true, false, INPUT_TYPE::FILE, false );
+    addCommonArgs( true, false, IO_TYPE::FILE, IO_TYPE::FILE );
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs a jobset file" ) ) );
 

@@ -43,7 +43,7 @@
 
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
-    addCommonArgs( true, true, INPUT_TYPE::FILE, false );
+    addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
     addDefineArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB "

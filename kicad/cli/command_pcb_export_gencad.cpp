@@ -27,7 +27,7 @@
 
 
 CLI::PCB_EXPORT_GENCAD_COMMAND::PCB_EXPORT_GENCAD_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "gencad", INPUT_TYPE::FILE, true )
+        PCB_EXPORT_BASE_COMMAND( "gencad", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Export the PCB in Gencad format" ) ) );
 

@@ -31,7 +31,7 @@
 #define ARG_FORCE "--force"
 
 CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "upgrade", INPUT_TYPE::FILE_OR_DIRECTORY, true )
+        PCB_EXPORT_BASE_COMMAND( "upgrade", IO_TYPE::FILE_OR_DIRECTORY, IO_TYPE::DIRECTORY )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Upgrades the footprint library to the current "
                                                 "kicad version format" ) ) );

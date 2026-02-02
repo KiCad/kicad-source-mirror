@@ -28,7 +28,7 @@
 
 
 CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
-        PCB_EXPORT_GERBER_COMMAND( "gerbers", true )
+        PCB_EXPORT_GERBER_COMMAND( "gerbers", IO_TYPE::DIRECTORY )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Plot multiple Gerbers for a PCB, including the "
                                                 "ability to use stored board plot settings" ) ) );

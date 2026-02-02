@@ -32,7 +32,7 @@ public:
     SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                              const std::string& aDescription,
                              SCH_PLOT_FORMAT aPlotFormat,
-                             bool aOutputIsDir = true );
+                             IO_TYPE         aOutputType );
 
     SCH_PLOT_FORMAT m_plotFormat;
 

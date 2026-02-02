@@ -34,7 +34,7 @@
 #define ARG_FORCE_A4 "--force-a4"
 
 CLI::PCB_EXPORT_PS_COMMAND::PCB_EXPORT_PS_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "ps", INPUT_TYPE::FILE, true )
+        PCB_EXPORT_BASE_COMMAND( "ps", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate Postscript from a list of layers" ) ) );
 

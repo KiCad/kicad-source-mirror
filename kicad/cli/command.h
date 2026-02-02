@@ -62,7 +62,7 @@ public:
 
     void PrintHelp();
 
-    enum class INPUT_TYPE
+    enum class IO_TYPE
     {
         FILE,
         DIRECTORY,
@@ -75,12 +75,12 @@ protected:
      *
      * @param aInput Configures the input arg
      * @param aOutput Configures the output arg
-     * @param aInputCanBeDir Configures whether the input arg description will be for either a
-     *                       file or directory
-     * @param aOutputIsDir Configures whether the output arg description will be for a file or
-     *                     directory
+     * @param aInputType Configures whether the input arg description will be for either a
+     *                       file, a directory or either
+     * @param aOutputType Configures whether the output arg description will be for a file, a
+     *                     directory or either
      */
-    void addCommonArgs( bool aInput, bool aOutput, INPUT_TYPE aInputType, bool aOutputIsDir );
+    void addCommonArgs( bool aInput, bool aOutput, IO_TYPE aInputType, IO_TYPE aOutputType );
 
     /**
      * Set up the drawing sheet arg used by many of the export commands

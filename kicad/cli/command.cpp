@@ -34,7 +34,6 @@ CLI::COMMAND::COMMAND( const std::string& aName ) :
         m_hasOutputArg( false ),
         m_hasDrawingSheetArg( false ),
         m_hasDefineArg( false ),
-        m_outputArgExpectsDir( false ),
         m_hasVariantArg( false )
 
 {
@@ -130,31 +129,30 @@ int CLI::COMMAND::doPerform( KIWAY& aKiway )
 }
 
 
-void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, INPUT_TYPE aInputType, bool aOutputIsDir )
+void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, IO_TYPE aInputType, IO_TYPE aOutputType )
 {
     m_hasInputArg = aInput;
     m_hasOutputArg = aOutput;
-    m_outputArgExpectsDir = aOutputIsDir;
 
     if( aInput )
     {
         switch( aInputType )
         {
-            case INPUT_TYPE::FILE:
+            case IO_TYPE::FILE:
             {
                 m_argParser.add_argument( ARG_INPUT )
                         .help( UTF8STDSTR( _( "Input file" ) ) )
                         .metavar( "INPUT_FILE" );
                 break;
             }
-            case INPUT_TYPE::DIRECTORY:
+            case IO_TYPE::DIRECTORY:
             {
                 m_argParser.add_argument( ARG_INPUT )
                         .help( UTF8STDSTR( _( "Input directory" ) ) )
                         .metavar( "INPUT_DIR" );
                 break;
             }
-            case INPUT_TYPE::FILE_OR_DIRECTORY:
+            case IO_TYPE::FILE_OR_DIRECTORY:
             {
                 m_argParser.add_argument( ARG_INPUT )
                         .help( UTF8STDSTR( _( "Input file or directory" ) ) )
@@ -162,24 +160,38 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, INPUT_TYPE aInputTy
                 break;
             }
             // no default
-        }
+            }
     }
 
     if( aOutput )
     {
-        if( aOutputIsDir )
+        switch( aOutputType )
         {
-            m_argParser.add_argument( "-o", ARG_OUTPUT )
-                    .default_value( std::string() )
-                    .help( UTF8STDSTR( _( "Output directory" ) ) )
-                    .metavar( "OUTPUT_DIR" );
-        }
-        else
+        case IO_TYPE::FILE:
         {
             m_argParser.add_argument( "-o", ARG_OUTPUT )
                     .default_value( std::string() )
                     .help( UTF8STDSTR( _( "Output file" ) ) )
                     .metavar( "OUTPUT_FILE" );
+            break;
+        }
+        case IO_TYPE::DIRECTORY:
+        {
+            m_argParser.add_argument( "-o", ARG_OUTPUT )
+                    .default_value( std::string() )
+                    .help( UTF8STDSTR( _( "Output directory" ) ) )
+                    .metavar( "OUTPUT_DIR" );
+            break;
+        }
+        case IO_TYPE::FILE_OR_DIRECTORY:
+        {
+            m_argParser.add_argument( "-o", ARG_OUTPUT )
+                    .default_value( std::string() )
+                    .help( UTF8STDSTR( _( "Output file or directory" ) ) )
+                    .metavar( "OUTPUT_FILE_OR_DIR" );
+            break;
+        }
+            // no default
         }
     }
 }

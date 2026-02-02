@@ -31,7 +31,7 @@
 #define ARG_UNITS "--units"
 
 CLI::PCB_EXPORT_STATS_COMMAND::PCB_EXPORT_STATS_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "stats", INPUT_TYPE::FILE, false )
+        PCB_EXPORT_BASE_COMMAND( "stats", IO_TYPE::FILE, IO_TYPE::FILE )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate a board statistics report" ) ) );
 

@@ -29,8 +29,8 @@
 #include <string_utils.h>
 
 
-CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName, bool aOutputIsDir ) :
-        PCB_EXPORT_BASE_COMMAND( aName, INPUT_TYPE::FILE, aOutputIsDir )
+CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName, IO_TYPE aOutputType ) :
+        PCB_EXPORT_BASE_COMMAND( aName, IO_TYPE::FILE, aOutputType )
 {
     addLayerArg();
     addCommonLayersArg();
@@ -109,7 +109,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
 
 
 CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND() :
-        PCB_EXPORT_GERBER_COMMAND( "gerber" )
+        PCB_EXPORT_GERBER_COMMAND( "gerber", IO_TYPE::FILE )
 {
 }
 

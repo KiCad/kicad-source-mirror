@@ -34,7 +34,7 @@
 #define ARG_MODE_MULTI "--mode-multi"
 
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "dxf", INPUT_TYPE::FILE, true )
+        PCB_EXPORT_BASE_COMMAND( "dxf", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate a DXF from a list of layers" ) ) );
 
