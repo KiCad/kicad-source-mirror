@@ -1232,7 +1232,6 @@ void SYMBOL_EDIT_FRAME::DdAddLibrary( wxString aLibFile )
         return;
     }
 
-    // TODO(JE) after Jeff's commit removing the select dialog; this is always project? is that correct?
     if( !m_libMgr->AddLibrary( fn.GetFullPath(), LIBRARY_TABLE_SCOPE::PROJECT ) )
     {
         DisplayError( this, _( "Could not open the library file." ) );
