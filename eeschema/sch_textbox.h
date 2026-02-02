@@ -55,6 +55,13 @@ public:
 
     int GetLegacyTextMargin() const;
 
+    /**
+     * Return the minimum height needed to contain the textbox's wrapped text content
+     * plus margins. Width is unconstrained (returns 0) so text freely rewraps.
+     * The constrained axis depends on orientation: y-axis for horizontal, x-axis for vertical.
+     */
+    VECTOR2I GetMinSize() const;
+
     void SetMarginLeft( int aLeft )     { m_marginLeft = aLeft; }
     void SetMarginTop( int aTop )       { m_marginTop = aTop; }
     void SetMarginRight( int aRight )   { m_marginRight = aRight; }

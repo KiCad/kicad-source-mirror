@@ -111,6 +111,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_sheet_list.cpp
     test_sch_symbol.cpp
     test_sch_table.cpp
+    test_sch_textbox.cpp
     test_schematic.cpp
     test_flat_hierarchy.cpp
     test_multi_top_level_sheets.cpp

@@ -269,7 +269,7 @@ public:
     }
 
     static void UpdateItem( PCB_SHAPE& aRectangle, const EDIT_POINT& aEditedPoint,
-                            EDIT_POINTS& aPoints )
+                            EDIT_POINTS& aPoints, const VECTOR2I& aMinSize = { 0, 0 } )
     {
         // You can have more points if your item wants to have more points
         // (this class assumes the rect points come first, but that can be changed)
@@ -301,7 +301,8 @@ public:
         VECTOR2I botLeft = aPoints.Point( RECT_BOT_LEFT ).GetPosition();
         VECTOR2I botRight = aPoints.Point( RECT_BOT_RIGHT ).GetPosition();
 
-        PinEditedCorner( aEditedPoint, aPoints, topLeft, topRight, botLeft, botRight );
+        PinEditedCorner( aEditedPoint, aPoints, topLeft, topRight, botLeft, botRight,
+                         { 0, 0 }, { 0, 0 }, aMinSize );
 
         if( isModified( aEditedPoint, aPoints.Point( RECT_TOP_LEFT ) )
             || isModified( aEditedPoint, aPoints.Point( RECT_TOP_RIGHT ) )
@@ -417,10 +418,11 @@ public:
      */
     static void PinEditedCorner( const EDIT_POINT& aEditedPoint, const EDIT_POINTS& aEditPoints,
                                 VECTOR2I& aTopLeft, VECTOR2I& aTopRight, VECTOR2I& aBotLeft, VECTOR2I& aBotRight,
-                                const VECTOR2I& aHole = { 0, 0 }, const VECTOR2I& aHoleSize = { 0, 0 } )
+                                const VECTOR2I& aHole = { 0, 0 }, const VECTOR2I& aHoleSize = { 0, 0 },
+                                const VECTOR2I& aMinSize = { 0, 0 } )
     {
-        int minWidth = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
-        int minHeight = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 );
+        int minWidth = std::max( EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 ), aMinSize.x );
+        int minHeight = std::max( EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 1 ), aMinSize.y );
 
         if( isModified( aEditedPoint, aEditPoints.Point( RECT_TOP_LEFT ) ) )
         {
@@ -1637,7 +1639,11 @@ public:
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
         if( m_textbox.GetShape() == SHAPE_T::RECTANGLE )
-            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints );
+        {
+            m_textbox.ClearBoundingBoxCache();
+            VECTOR2I minSize = m_textbox.GetMinSize();
+            RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints, minSize );
+        }
     }
 
 private:

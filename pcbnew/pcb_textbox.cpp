@@ -193,6 +193,33 @@ int PCB_TEXTBOX::GetLegacyTextMargin() const
 }
 
 
+VECTOR2I PCB_TEXTBOX::GetMinSize() const
+{
+    if( GetText().IsEmpty() )
+        return VECTOR2I( 0, 0 );
+
+    BOX2I textBox = GetTextBox( nullptr );
+
+    int textHeight = std::abs( textBox.GetHeight() );
+
+    if( GetTextAngle().IsHorizontal() )
+        textHeight += GetMarginTop() + GetMarginBottom();
+    else
+        textHeight += GetMarginLeft() + GetMarginRight();
+
+    // Only enforce minimum height. Width returns 0 so the user can freely shrink width
+    // (text rewraps) while height is constrained to fit the wrapped text content.
+    // GetTextBox returns dimensions in text-local coordinates. For 90/270 degree rotations,
+    // the text's natural height maps to screen x-axis.
+    EDA_ANGLE rotation = GetDrawRotation();
+
+    if( rotation == ANGLE_90 || rotation == ANGLE_270 )
+        return VECTOR2I( textHeight, 0 );
+
+    return VECTOR2I( 0, textHeight );
+}
+
+
 VECTOR2I PCB_TEXTBOX::GetTopLeft() const
 {
     EDA_ANGLE rotation = GetDrawRotation();

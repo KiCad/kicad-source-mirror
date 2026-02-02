@@ -565,6 +565,29 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
         textBox->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL );
         textBox->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
+
+        textBox->ClearBoundingBoxCache();
+        textBox->ClearRenderCache();
+
+        VECTOR2I minBoxSize = textBox->GetMinSize();
+        VECTOR2I start = textBox->GetStart();
+        VECTOR2I end = textBox->GetEnd();
+        bool expanded = false;
+
+        if( minBoxSize.x > 0 && std::abs( end.x - start.x ) < minBoxSize.x )
+        {
+            end.x = ( end.x >= start.x ) ? start.x + minBoxSize.x : start.x - minBoxSize.x;
+            expanded = true;
+        }
+
+        if( minBoxSize.y > 0 && std::abs( end.y - start.y ) < minBoxSize.y )
+        {
+            end.y = ( end.y >= start.y ) ? start.y + minBoxSize.y : start.y - minBoxSize.y;
+            expanded = true;
+        }
+
+        if( expanded )
+            textBox->SetEnd( end );
     }
 
     if( !commit.Empty() )

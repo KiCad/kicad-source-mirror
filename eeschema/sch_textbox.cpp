@@ -84,6 +84,26 @@ int SCH_TEXTBOX::GetLegacyTextMargin() const
 }
 
 
+VECTOR2I SCH_TEXTBOX::GetMinSize() const
+{
+    if( GetText().IsEmpty() )
+        return VECTOR2I( 0, 0 );
+
+    BOX2I textBox = GetTextBox( nullptr );
+
+    int textHeight = std::abs( textBox.GetHeight() );
+
+    if( GetTextAngle().IsVertical() )
+    {
+        textHeight += GetMarginLeft() + GetMarginRight();
+        return VECTOR2I( textHeight, 0 );
+    }
+
+    textHeight += GetMarginTop() + GetMarginBottom();
+    return VECTOR2I( 0, textHeight );
+}
+
+
 void SCH_TEXTBOX::MirrorHorizontally( int aCenter )
 {
     SCH_SHAPE::MirrorHorizontally( aCenter );

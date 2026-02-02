@@ -498,14 +498,18 @@ public:
         }
     }
 
-    static void UpdateItem( SCH_SHAPE& aRect, const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints )
+    static void UpdateItem( SCH_SHAPE& aRect, const EDIT_POINT& aEditedPoint,
+                            EDIT_POINTS& aPoints, const VECTOR2I& aMinSize = { 0, 0 } )
     {
         VECTOR2I topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
         VECTOR2I topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
         VECTOR2I botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
         VECTOR2I botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
 
-        PinEditedCorner( aEditedPoint, aPoints, schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ),
+        int minWidth = std::max( schIUScale.MilsToIU( 1 ), aMinSize.x );
+        int minHeight = std::max( schIUScale.MilsToIU( 1 ), aMinSize.y );
+
+        PinEditedCorner( aEditedPoint, aPoints, minWidth, minHeight,
                          topLeft, topRight, botLeft, botRight );
 
         if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) )
@@ -731,7 +735,10 @@ public:
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
-        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints );
+        m_textbox.ClearBoundingBoxCache();
+        VECTOR2I minSize = m_textbox.GetMinSize();
+
+        RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem( m_textbox, aEditedPoint, aPoints, minSize );
         m_textbox.ClearRenderCache();
     }
 

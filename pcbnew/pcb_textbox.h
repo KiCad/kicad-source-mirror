@@ -72,6 +72,13 @@ public:
     VECTOR2I GetTopLeft() const override;
     VECTOR2I GetBotRight() const override;
 
+    /**
+     * Return the minimum height needed to contain the textbox's wrapped text content
+     * plus margins. Width is unconstrained (returns 0) so text freely rewraps.
+     * The constrained axis depends on rotation: y-axis for 0/180, x-axis for 90/270.
+     */
+    VECTOR2I GetMinSize() const;
+
     void SetTop( int aVal ) override;
     void SetLeft( int aVal ) override;
     void SetRight( int aVal ) override;
