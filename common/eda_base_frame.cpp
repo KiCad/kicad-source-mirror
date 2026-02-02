@@ -1760,7 +1760,7 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
 
 wxSize EDA_BASE_FRAME::GetWindowSize()
 {
-#ifdef __WXGTK__
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 2, 9 )
     wxSize winSize = GetSize();
 
     // GTK includes the window decorations in the normal GetSize call,
