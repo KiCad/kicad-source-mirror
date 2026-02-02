@@ -96,13 +96,13 @@ PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE::PANEL_COMPONENT_CLASS_ASSIGNMENT_BASE( wx
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAddCondition = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonAddCondition = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0|wxFULL_REPAINT_ON_RESIZE );
 	bSizer3->Add( m_buttonAddCondition, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3->Add( 30, 0, 1, wxEXPAND, 5 );
 
-	m_buttonHighlightItems = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_buttonHighlightItems = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0|wxFULL_REPAINT_ON_RESIZE );
 	m_buttonHighlightItems->SetToolTip( _("Highlight matching footprints") );
 
 	bSizer3->Add( m_buttonHighlightItems, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );

@@ -742,7 +742,7 @@
                 <property name="validator_variable"></property>
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
-                <property name="window_style"></property>
+                <property name="window_style">wxFULL_REPAINT_ON_RESIZE</property>
                 <event name="OnButtonClick">OnAddConditionClick</event>
               </object>
             </object>
@@ -827,7 +827,7 @@
                 <property name="validator_variable"></property>
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
-                <property name="window_style"></property>
+                <property name="window_style">wxFULL_REPAINT_ON_RESIZE</property>
                 <event name="OnButtonClick">OnHighlightItemsClick</event>
               </object>
             </object>
