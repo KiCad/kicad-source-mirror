@@ -29,6 +29,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eeschema/sch_io/altium/altium_parser_sch.h>
+#include <validators.h>
 
 // Function declarations of private methods to test
 int ReadKiCadUnitFrac( const std::map<wxString, wxString>& aProps,
@@ -103,5 +104,57 @@ BOOST_AUTO_TEST_CASE( PropertiesReadKiCadUnitFracConversation )
     }
 }
 
+
+struct SHEET_NAME_SANITIZE_CASE
+{
+    wxString input;
+    wxString expected;
+};
+
+static const std::vector<SHEET_NAME_SANITIZE_CASE> sheet_name_sanitize_cases = {
+    { wxT( "SimpleSheet" ), wxT( "SimpleSheet" ) },
+    { wxT( "POWER PROTECTION/MONITORING" ), wxT( "POWER PROTECTION_MONITORING" ) },
+    { wxT( "A/B/C" ), wxT( "A_B_C" ) },
+    { wxT( "/" ), wxT( "_" ) },
+    { wxT( "no_slash_here" ), wxT( "no_slash_here" ) },
+    { wxT( "trailing/" ), wxT( "trailing_" ) },
+    { wxT( "/leading" ), wxT( "_leading" ) },
+};
+
+/**
+ * Verify that the slash-to-underscore sanitization used by the Altium importer produces valid
+ * KiCad sheet names.
+ */
+BOOST_AUTO_TEST_CASE( SheetNameSlashSanitization )
+{
+    for( const auto& c : sheet_name_sanitize_cases )
+    {
+        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s' -> '%s'" ), c.input, c.expected ) )
+        {
+            wxString sanitized = c.input;
+            sanitized.Replace( wxT( "/" ), wxT( "_" ) );
+
+            BOOST_CHECK_EQUAL( sanitized, c.expected );
+
+            wxString validationError = GetFieldValidationErrorMessage( FIELD_T::SHEET_NAME,
+                                                                       sanitized );
+            BOOST_CHECK_MESSAGE( validationError.empty(),
+                                 wxString::Format( wxT( "Sanitized name '%s' failed validation: %s" ),
+                                                   sanitized, validationError ) );
+        }
+    }
+}
+
+/**
+ * Verify that unsanitized sheet names with slashes are rejected by KiCad validation.
+ */
+BOOST_AUTO_TEST_CASE( SheetNameSlashRejection )
+{
+    wxString invalidName = wxT( "POWER PROTECTION/MONITORING" );
+    wxString validationError = GetFieldValidationErrorMessage( FIELD_T::SHEET_NAME, invalidName );
+
+    BOOST_CHECK_MESSAGE( !validationError.empty(),
+                         wxT( "Sheet name with '/' should fail validation" ) );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

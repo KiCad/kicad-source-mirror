@@ -1027,8 +1027,10 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 
             if( sheet->GetName().Trim().empty() )
             {
-                wxString sheetName = loadAltiumFileName.GetName();
+                wxString baseName = loadAltiumFileName.GetName();
+                baseName.Replace( wxT( "/" ), wxT( "_" ) );
 
+                wxString           sheetName = baseName;
                 std::set<wxString> sheetNames;
 
                 for( EDA_ITEM* otherItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
@@ -1042,7 +1044,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
                     if( sheetNames.find( sheetName ) == sheetNames.end() )
                         break;
 
-                    sheetName = loadAltiumFileName.GetName() + wxString::Format( wxT( "_%d" ), ii );
+                    sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
                 }
 
                 sheet->SetName( sheetName );
@@ -4277,7 +4279,10 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
         return;
     }
 
-    wxString           sheetName = elem.text;
+    wxString baseName = elem.text;
+    baseName.Replace( wxT( "/" ), wxT( "_" ) );
+
+    wxString           sheetName = baseName;
     std::set<wxString> sheetNames;
 
     for( EDA_ITEM* item : currentScreen->Items().OfType( SCH_SHEET_T ) )
@@ -4291,7 +4296,7 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
         if( sheetNames.find( sheetName ) == sheetNames.end() )
             break;
 
-        sheetName = elem.text + wxString::Format( wxT( "_%d" ), ii );
+        sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
     }
 
     SCH_FIELD* sheetNameField = sheetIt->second->GetField( FIELD_T::SHEET_NAME );
