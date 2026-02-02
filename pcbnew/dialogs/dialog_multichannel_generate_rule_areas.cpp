@@ -71,6 +71,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     // Generate the component class source grid
     m_componentClassGrid = new WX_GRID( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+    m_componentClassGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_componentClassGrid ) ) );
     m_componentClassGrid->CreateGrid( 0, 2 );
     m_componentClassGrid->EnableEditing( false );
     m_componentClassGrid->EnableGridLines( true );
@@ -162,6 +163,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::~DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS()
 {
     m_sheetGrid->PopEventHandler( true );
+    m_componentClassGrid->PopEventHandler( true );
 }
 
 
