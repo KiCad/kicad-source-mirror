@@ -138,6 +138,8 @@ private:
 
     void updateAllowedPadChamferCorners();
 
+    void onPadShapeSelection( bool aUpdateSpokeAngle );
+
 private:
     PCB_BASE_FRAME* m_parent;
     PAD*            m_currentPad;       // pad currently being edited

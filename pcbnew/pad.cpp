@@ -321,7 +321,7 @@ bool PAD::IsNPTHWithNoCopper() const
                 }
             } );
 
-    reuturn !hasCopper;
+    return !hasCopper;
 }
 
 
@@ -359,8 +359,7 @@ bool PAD::IsNoConnectPad() const
 
 bool PAD::IsFreePad() const
 {
-    return GetShortNetname().StartsWith( wxT( "unconnected-(" ) )
-            && m_pinType == wxT( "free" );
+    return GetShortNetname().StartsWith( wxT( "unconnected-(" ) ) && m_pinType == wxT( "free" );
 }
 
 

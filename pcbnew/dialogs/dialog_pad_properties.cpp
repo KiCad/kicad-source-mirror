@@ -194,18 +194,17 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         m_previewPad->GetTeardropParams() = m_masterPad->GetTeardropParams();
     }
 
-    // TODO(JE) padstacks: should this be re-run when pad mode changes?
     // Pads have a hardcoded internal rounding ratio which is 0.25 by default, even if
     // they're not a rounded shape. This makes it hard to detect an intentional 0.25
     // ratio, or one that's only there because it's the PAD default.
     // Zero it out here to mark that we should recompute a better ratio if the user
     // selects a pad shape which would need a default rounding ratio computed for it
     m_previewPad->Padstack().ForEachUniqueLayer(
-        [&]( PCB_LAYER_ID aLayer )
-        {
-            if( !PAD_UTILS::PadHasMeaningfulRoundingRadius( *m_previewPad, aLayer ) )
-                m_previewPad->SetRoundRectRadiusRatio( aLayer, 0.0 );
-        } );
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                if( !PAD_UTILS::PadHasMeaningfulRoundingRadius( *m_previewPad, aLayer ) )
+                    m_previewPad->SetRoundRectRadiusRatio( aLayer, 0.0 );
+            } );
 
     if( m_isFpEditor )
     {
@@ -438,7 +437,7 @@ void DIALOG_PAD_PROPERTIES::OnEditLayerChanged( wxCommandEvent& aEvent )
     initPadstackLayerValues();
 
     wxCommandEvent cmd_event;
-    OnPadShapeSelection( cmd_event );
+    onPadShapeSelection( false );
     OnOffsetCheckbox( cmd_event );
 
     redraw();
@@ -700,11 +699,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_holeX.ChangeValue( m_previewPad->GetDrillSize().x );
     m_holeY.ChangeValue( m_previewPad->GetDrillSize().y );
 
-    // TODO(JE) padstacks -- does this need to be saved/restored every time the layer changes?
-    // Store the initial thermal spoke angle to restore it, because some initializations
-    // can change this value (mainly after m_PadShapeSelector initializations)
-    EDA_ANGLE spokeInitialAngle = m_previewPad->GetThermalSpokeAngle();
-
     initPadstackLayerValues();
 
     m_padToDieOpt->SetValue( m_previewPad->GetPadToDieLength() != 0 );
@@ -884,14 +878,9 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Update some dialog widgets state (Enable/disable options):
     wxCommandEvent cmd_event;
-    OnPadShapeSelection( cmd_event );
+    onPadShapeSelection( false );
     OnOffsetCheckbox( cmd_event );
     updateHoleControls();
-
-    // Restore thermal spoke angle to its initial value, because it can be modified
-    // by the call to OnPadShapeSelection()
-    m_previewPad->SetThermalSpokeAngle( spokeInitialAngle );
-    m_spokeAngle.SetAngleValue( m_previewPad->GetThermalSpokeAngle() );
 }
 
 
@@ -1051,6 +1040,12 @@ void DIALOG_PAD_PROPERTIES::onChangePadDrawMode( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
+    onPadShapeSelection( true );
+}
+
+
+void DIALOG_PAD_PROPERTIES::onPadShapeSelection( bool aUpdateSpokeAngle )
+{
     switch( m_PadShapeSelector->GetSelection() )
     {
     case CHOICE_SHAPE_CIRCLE:
@@ -1124,17 +1119,20 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         break;
     }
 
-    // Note: must do this before enabling/disabling m_sizeY as we're using that as a flag to see
-    // what the last shape was.
-    if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE )
+    if( aUpdateSpokeAngle )
     {
-        if( m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_90 )
-            m_spokeAngle.SetAngleValue( ANGLE_45 );
-    }
-    else
-    {
-        if( !m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_45 )
-            m_spokeAngle.SetAngleValue( ANGLE_90 );
+        // Note: must do this before enabling/disabling m_sizeY as we're using that as a flag to see
+        // what the last shape was.
+        if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE )
+        {
+            if( m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_90 )
+                m_spokeAngle.SetAngleValue( ANGLE_45 );
+        }
+        else
+        {
+            if( !m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_45 )
+                m_spokeAngle.SetAngleValue( ANGLE_90 );
+        }
     }
 
     // Readjust props book size
@@ -1275,8 +1273,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     }
 
     // Update Layers dropdown list and selects the "best" layer set for the new pad type:
-    updatePadLayersList( {}, m_previewPad->GetRemoveUnconnected(),
-                         m_previewPad->GetKeepTopBottom() );
+    updatePadLayersList( {}, m_previewPad->GetRemoveUnconnected(), m_previewPad->GetKeepTopBottom() );
 
     m_gbSizerHole->Show( hasHole );
     m_staticline71->Show( hasHole );
@@ -1877,6 +1874,28 @@ void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
 
 bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 {
+    std::map<PCB_LAYER_ID, PCB_LAYER_ID> newLayerMap;   // Map of new-layerss to init-from-layers
+
+    auto setMode =
+            [&]( PADSTACK::MODE mode )
+            {
+                PADSTACK oldStack = aPad->Padstack();
+
+                aPad->Padstack().SetMode( mode );
+
+                aPad->Padstack().ForEachUniqueLayer(
+                        [&]( PCB_LAYER_ID layer )
+                        {
+                            if( !oldStack.HasExplicitDefinitionForLayer( layer ) )
+                            {
+                                if( IsInnerCopperLayer( layer ) && layer != PADSTACK::INNER_LAYERS )
+                                    newLayerMap[layer] = PADSTACK::INNER_LAYERS;
+                                else
+                                    newLayerMap[layer] = F_Cu;
+                            }
+                        } );
+            };
+
     if( !Validate() )
         return false;
 
@@ -1892,9 +1911,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     switch( m_cbPadstackMode->GetSelection() )
     {
     default:
-    case 0: aPad->Padstack().SetMode( PADSTACK::MODE::NORMAL );           break;
-    case 1: aPad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK ); break;
-    case 2: aPad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );           break;
+    case 0: setMode( PADSTACK::MODE::NORMAL );           break;
+    case 1: setMode( PADSTACK::MODE::FRONT_INNER_BACK ); break;
+    case 2: setMode( PADSTACK::MODE::CUSTOM );           break;
     }
 
     aPad->SetAttribute( code_type[m_padType->GetSelection()] );
@@ -2310,6 +2329,13 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         backPostMachining.depth = m_bottomPostMachineSize2Binder.GetIntValue();
 
     aPad->Padstack().BackPostMachining() = backPostMachining;
+
+    // If we created new layers, initialize them
+    for( const auto& [newLayer, initFromLayer] : newLayerMap )
+    {
+        if( newLayer != m_editLayer && newLayer != initFromLayer )
+            aPad->Padstack().CopperLayer( newLayer ) = aPad->Padstack().CopperLayer( initFromLayer );
+    }
 
     return !error;
 }
