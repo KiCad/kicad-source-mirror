@@ -251,7 +251,7 @@
               </object>
             </object>
             <object class="gbsizeritem" expanded="true">
-              <property name="border">5</property>
+              <property name="border">10</property>
               <property name="colspan">1</property>
               <property name="column">2</property>
               <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
