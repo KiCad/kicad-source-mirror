@@ -32,7 +32,6 @@
 #include <kiway_express.h>
 #include <pgm_base.h>
 #include <config.h>
-#include <core/arraydim.h>
 #include <id.h>
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
@@ -47,8 +46,8 @@
 #include <wx/utils.h>
 #include <confirm.h>
 
-KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
-int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
+std::array<KIFACE*, KIWAY::FACE_T::KIWAY_FACE_COUNT> KIWAY::m_kiface;
+std::array<int, KIWAY::FACE_T::KIWAY_FACE_COUNT>     KIWAY::m_kiface_version;
 
 
 
@@ -207,7 +206,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFaceId.
-    if( (unsigned) aFaceId >= arrayDim( m_kiface ) )
+    if( (unsigned) aFaceId >= m_kiface.size() )
     {
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return nullptr;
