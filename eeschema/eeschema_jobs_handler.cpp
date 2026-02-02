@@ -285,15 +285,17 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
-    // Apply variant if specified
-    if( !aPlotJob->m_variantNames.empty() )
-    {
-        // For plot export, we use the first variant name from the set
-        wxString variantName = *aPlotJob->m_variantNames.begin();
+    // Determine the variant to use. The CLI path populates m_variantNames directly, while
+    // the jobset path serializes into m_variant. Use whichever is available.
+    wxString variantName;
 
-        if( variantName != wxS( "all" ) )
-            sch->SetCurrentVariant( variantName );
-    }
+    if( !aPlotJob->m_variantNames.empty() )
+        variantName = aPlotJob->m_variantNames.front();
+    else if( !aPlotJob->m_variant.IsEmpty() )
+        variantName = aPlotJob->m_variant;
+
+    if( !variantName.IsEmpty() && variantName != wxS( "all" ) )
+        sch->SetCurrentVariant( variantName );
 
     std::unique_ptr<SCH_RENDER_SETTINGS> renderSettings = std::make_unique<SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aPlotJob->m_theme, sch, aPlotJob->m_drawingSheet );
@@ -378,9 +380,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
     plotOpts.m_plotHopOver = aPlotJob->m_show_hop_over;
 
-    // Use variant from m_variantNames if specified, otherwise use the schematic's current variant
-    if( !aPlotJob->m_variantNames.empty() )
-        plotOpts.m_variant = aPlotJob->m_variantNames.front();
+    if( !variantName.IsEmpty() )
+        plotOpts.m_variant = variantName;
 
     // Always export dxf in mm by kicad-cli (similar to Pcbnew)
     plotOpts.m_DXF_File_Unit = DXF_UNITS::MM;

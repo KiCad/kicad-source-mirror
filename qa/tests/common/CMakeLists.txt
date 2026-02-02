@@ -106,6 +106,9 @@ set( QA_COMMON_SRCS
 
     # Project file tests
     test_project_file.cpp
+
+    # Job tests
+    test_job_export_sch_plot.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )

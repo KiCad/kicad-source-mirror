@@ -151,6 +151,14 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
 
         m_outputPath->SetValue( m_job->GetConfiguredOutputPath() );
 
+        if( !m_job->m_variant.IsEmpty() )
+        {
+            int idx = m_variantChoiceCtrl->FindString( m_job->m_variant );
+
+            if( idx != wxNOT_FOUND )
+                m_variantChoiceCtrl->SetSelection( idx );
+        }
+
         // Must readjust dialog sizing after hiding plot format
         Layout();
         GetSizer()->SetSizeHints( this );
