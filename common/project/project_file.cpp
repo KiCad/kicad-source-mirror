@@ -596,7 +596,6 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
                 aCfg->SetPath( "/" );
 
-                // TODO: any reason we want to fail on this?
                 return true;
             };
 
