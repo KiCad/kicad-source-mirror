@@ -35,6 +35,7 @@
 #include <pcb_barcode.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
+#include <pcb_dimension.h>
 #include <board_commit.h>
 #include <eda_group.h>
 #include <layer_ids.h>
@@ -1743,6 +1744,60 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, P
 }
 
 
+bool PNS_KICAD_IFACE_BASE::syncDimension( PNS::NODE* aWorld, PCB_DIMENSION_BASE* aDimension )
+{
+    if( !IsKicadCopperLayer( aDimension->GetLayer() ) )
+        return false;
+
+    auto addPolysToWorld =
+            [&]( const SHAPE_POLY_SET& aPolys )
+            {
+                for( int ii = 0; ii < aPolys.OutlineCount(); ++ii )
+                {
+                    std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+                    SHAPE_SIMPLE*               shape = new SHAPE_SIMPLE;
+
+                    solid->SetLayer( GetPNSLayerFromBoardLayer( aDimension->GetLayer() ) );
+                    solid->SetNet( nullptr );
+                    solid->SetParent( aDimension );
+                    solid->SetShape( shape );   // takes ownership
+                    solid->SetRoutable( false );
+
+                    for( const VECTOR2I& pt : aPolys.Outline( ii ).CPoints() )
+                        shape->Append( pt );
+
+                    aWorld->Add( std::move( solid ) );
+                }
+            };
+
+    SHAPE_POLY_SET cornerBuffer;
+
+    aDimension->TransformShapeToPolygon( cornerBuffer, aDimension->GetLayer(), 0,
+                                         aDimension->GetMaxError(), ERROR_OUTSIDE );
+
+    cornerBuffer.Simplify();
+
+    if( cornerBuffer.OutlineCount() )
+        addPolysToWorld( cornerBuffer );
+
+    // Footprints can have hidden dimensions
+    if( aDimension->IsVisible() && !aDimension->GetText().IsEmpty() )
+    {
+        SHAPE_POLY_SET textBuffer;
+
+        aDimension->PCB_TEXT::TransformShapeToPolygon( textBuffer, aDimension->GetLayer(), 0,
+                                                       aDimension->GetMaxError(), ERROR_OUTSIDE );
+
+        textBuffer.Simplify();
+
+        if( textBuffer.OutlineCount() )
+            addPolysToWorld( textBuffer );
+    }
+
+    return cornerBuffer.OutlineCount() || !aDimension->GetText().IsEmpty();
+}
+
+
 bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem )
 {
     if( aItem->GetLayer() == Edge_Cuts
@@ -2022,13 +2077,12 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             syncBarcode( aWorld, static_cast<PCB_BARCODE*>( gitem ) );
             break;
 
-        case PCB_DIM_ALIGNED_T:         // ignore only if not on a copper layer
+        case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
-            if( gitem->IsOnCopperLayer() )
-                UNIMPLEMENTED_FOR( wxString::Format( wxT( "%s on copper layer" ), gitem->GetClass() ) );
+            syncDimension( aWorld, static_cast<PCB_DIMENSION_BASE*>( gitem ) );
             break;
 
         case PCB_REFERENCE_IMAGE_T:     // ignore
@@ -2104,15 +2158,15 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
                 syncBarcode( aWorld, static_cast<PCB_BARCODE*>( item ) );
                 break;
 
-            case PCB_DIM_ALIGNED_T:         // ignore only if not on a copper layer
+            case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-            case PCB_REFERENCE_IMAGE_T:
-                if( item->IsOnCopperLayer() )
-                    UNIMPLEMENTED_FOR( wxString::Format( wxT( "%s on copper layer" ), item->GetClass() ) );
+                syncDimension( aWorld, static_cast<PCB_DIMENSION_BASE*>( item ) );
+                break;
 
+            case PCB_REFERENCE_IMAGE_T:     // ignore
                 break;
 
             default:

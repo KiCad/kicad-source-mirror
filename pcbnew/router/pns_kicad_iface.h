@@ -38,6 +38,7 @@ class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
 class FOOTPRINT;
 class PCB_BARCODE;
+class PCB_DIMENSION_BASE;
 class PAD;
 class EDA_TEXT;
 class LENGTH_DELAY_CALCULATION_ITEM;
@@ -125,6 +126,7 @@ protected:
     std::unique_ptr<PNS::ARC>     syncArc( PCB_ARC* aArc );
     std::unique_ptr<PNS::VIA>     syncVia( PCB_VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
+    bool syncDimension( PNS::NODE* aWorld, PCB_DIMENSION_BASE* aDimension );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool syncBarcode( PNS::NODE* aWorld, PCB_BARCODE* aBarcode );
