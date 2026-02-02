@@ -344,7 +344,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	viaRightColumn = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizer4;
-	gbSizer4 = new wxGridBagSizer( 0, 0 );
+	gbSizer4 = new wxGridBagSizer( 3, 0 );
 	gbSizer4->SetFlexibleDirection( wxBOTH );
 	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 

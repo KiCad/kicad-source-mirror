@@ -452,16 +452,16 @@
               <property name="border">5</property>
               <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
               <property name="proportion">1</property>
-              <object class="wxBoxSizer" expanded="false">
+              <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerTracksLeftCol</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="false">
+                <object class="sizeritem" expanded="true">
                   <property name="border">8</property>
                   <property name="flag">wxEXPAND|wxBOTTOM</property>
                   <property name="proportion">0</property>
-                  <object class="wxFlexGridSizer" expanded="false">
+                  <object class="wxFlexGridSizer" expanded="true">
                     <property name="cols">5</property>
                     <property name="flexible_direction">wxBOTH</property>
                     <property name="growablecols">1,3</property>
@@ -1107,11 +1107,11 @@
                     </object>
                   </object>
                 </object>
-                <object class="sizeritem" expanded="false">
+                <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxTOP</property>
                   <property name="proportion">1</property>
-                  <object class="wxGridBagSizer" expanded="false">
+                  <object class="wxGridBagSizer" expanded="true">
                     <property name="empty_cell_size">-1,0</property>
                     <property name="flexible_direction">wxBOTH</property>
                     <property name="growablecols">1</property>
@@ -3412,7 +3412,7 @@
                         <property name="name">gbSizer4</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
-                        <property name="vgap">0</property>
+                        <property name="vgap">3</property>
                         <object class="gbsizeritem" expanded="false">
                           <property name="border">5</property>
                           <property name="colspan">1</property>
