@@ -421,11 +421,11 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
 
         if( m_removeTeardrops->GetValue() || m_removeAllTeardrops->GetValue() )
         {
-            targetParams->m_Enabled = false;    // JEY TODO: how does this get undone/redone?
+            targetParams->m_Enabled = false;
         }
         else if( m_addTeardrops->GetValue() )
         {
-            targetParams->m_Enabled = true;     // JEY TODO: how does this get undone/redone?
+            targetParams->m_Enabled = true;
             teardropManager.AddTeardropsOnTracks( commit, nullptr, true );
         }
     }
