@@ -58,6 +58,7 @@ private:
     void onDataSourceChanged( wxCommandEvent& aEvent );
     void onConfigure( wxCommandEvent& aEvent );
     void onWebViewLoaded( wxWebViewEvent& aEvent );
+    void onDarkModeToggle();
 
     bool loadDataSource( size_t aIndex );
     bool loadDataSource( const PCM_INSTALLATION_ENTRY& aEntry );
@@ -129,6 +130,8 @@ private:
     KIID                                      m_sessionId;
     int                                       m_messageIdCounter;
     bool                                      m_pendingHandshake;
+    bool                                      m_darkMode;
+
 };
 
 #endif // PANEL_REMOTE_SYMBOL_H

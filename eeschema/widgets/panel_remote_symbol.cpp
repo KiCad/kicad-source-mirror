@@ -301,6 +301,8 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     m_messageIdCounter( 0 ),
     m_pendingHandshake( false )
 {
+    m_darkMode = KIPLATFORM::UI::IsDarkTheme();
+
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer* controlsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -338,6 +340,16 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     m_configButton->Bind( wxEVT_BUTTON, &PANEL_REMOTE_SYMBOL::onConfigure, this );
 
     RefreshDataSources();
+
+    Bind( wxEVT_IDLE,
+          [this]( wxIdleEvent& aEvent )
+          {
+              if( m_darkMode != KIPLATFORM::UI::IsDarkTheme() )
+              {
+                  onDarkModeToggle();
+                  m_darkMode = KIPLATFORM::UI::IsDarkTheme();
+              }
+          } );
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "PANEL_REMOTE_SYMBOL constructed (frame=%p)", (void*)aParent );
 }
@@ -406,6 +418,12 @@ void PANEL_REMOTE_SYMBOL::onConfigure( wxCommandEvent& aEvent )
 
     dlg.ShowModal();
 
+    RefreshDataSources();
+}
+
+
+void PANEL_REMOTE_SYMBOL::onDarkModeToggle()
+{
     RefreshDataSources();
 }
 
