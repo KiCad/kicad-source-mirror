@@ -78,7 +78,7 @@ void SPNAV_VIEWER_PLUGIN::OnPan( double x, double y, double z )
 
         if( m_camera )
         {
-            m_camera->Pan( SFVEC3F( x * scale, -y * scale, z * scale ) );
+            m_camera->Pan( SFVEC3F( x * scale, z * scale, y * scale ) );
             m_canvas->Request_refresh();
         }
     }
@@ -88,7 +88,7 @@ void SPNAV_VIEWER_PLUGIN::OnRotate( double rx, double ry, double rz )
 {
     if( const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
     {
-        float scale = 0.001f * ( cfg->m_SpaceMouse.rotate_speed / 5.0f );
+        float scale = 0.001f * ( cfg->m_SpaceMouse.rotate_speed / 20.0f );
 
         if( cfg->m_SpaceMouse.reverse_rotate )
             scale = -scale;
@@ -96,8 +96,8 @@ void SPNAV_VIEWER_PLUGIN::OnRotate( double rx, double ry, double rz )
         if( m_camera )
         {
             m_camera->RotateX( rx * scale );
-            m_camera->RotateY( -ry * scale );
-            m_camera->RotateZ( rz * scale );
+            m_camera->RotateY( rz * scale );
+            m_camera->RotateZ( ry * scale );
             m_canvas->Request_refresh();
         }
     }
