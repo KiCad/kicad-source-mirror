@@ -1188,7 +1188,19 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         double thickness =
             m_holePlatingThickness * ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
-        double radius = ( getViaDrillSize( aVia ) / 2.0 ) + thickness;
+        double drillRadius = getViaDrillSize( aVia ) / 2.0;
+        double maxRadius = aVia->GetWidth( layerTop ) / 2.0;
+        double radius = drillRadius + thickness;
+
+        // Clamp the hole wall so it doesn't extend beyond the via's copper
+        if( radius > maxRadius )
+        {
+            radius = maxRadius;
+            thickness = radius - drillRadius;
+        }
+
+        if( thickness <= 0 )
+            return;
 
         if( !outline_mode )
         {
