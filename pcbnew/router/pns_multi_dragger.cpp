@@ -76,6 +76,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             l.originalLine = m_world->AssembleLine( litem );
             l.originalLeaders.push_back( litem );
             l.isDraggable = true;
+            l.mdragIndex = static_cast<int>( m_mdragLines.size() );
             m_mdragLines.push_back( std::move( l ) );
         }
     }
@@ -642,11 +643,30 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
 
     m_lastNode = m_shove->CurrentNode()->Branch();
 
+    // Re-add any m_mdragLines that were removed from m_preShoveNode during Start() but
+    // are not part of aCompletedLines. Without this, lines that fail the drag angle check
+    // would be silently deleted from the board.
+    std::set<int> completedIndices;
+
+    for( const auto& cl : aCompletedLines )
+        completedIndices.insert( cl.mdragIndex );
+
+    for( const auto& ml : m_mdragLines )
+    {
+        if( completedIndices.find( ml.mdragIndex ) == completedIndices.end() )
+        {
+            LINE preserved( ml.originalLine );
+            preserved.ClearLinks();
+            m_lastNode->Add( preserved );
+        }
+    }
+
     if( status == SHOVE::SH_OK )
     {
-        for( int i = 0; i < aCompletedLines.size(); i++ )
+        for( int i = 0; i < (int) aCompletedLines.size(); i++ )
         {
             MDRAG_LINE&l = aCompletedLines[i];
+
             if( m_shove->HeadsModified( i ) )
                 l.draggedLine = m_shove->GetModifiedHead( i );
 
@@ -807,6 +827,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         auto leadAngle = primaryDir.Angle( parallelDir );
 
                         if( leadAngle == DIRECTION_45::ANG_OBTUSE
+                            || leadAngle == DIRECTION_45::ANG_RIGHT
                             || leadAngle == DIRECTION_45::ANG_STRAIGHT )
                         {
                             // compute the distance between the primary line and the last point of
@@ -922,7 +943,8 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 
     for( int variant = 0; variant < 3; variant++ )
     {
-        res = tryPosture( 0 );
+        res = tryPosture( variant );
+
         if( res )
             break;
     }
