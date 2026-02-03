@@ -606,6 +606,51 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
     if( padB )
         processPad( padB, joints.second->Layer() );
 
+    // Find and process any intermediate pads along the path. This is important for inline
+    // footprints such as ESD protection networks where traces pass through pads that are
+    // not at the terminal ends of the tuning path. Without this, the length calculation
+    // would include trace portions inside intermediate pads, causing a mismatch with DRC.
+    std::set<PAD*> processedPads;
+
+    if( padA )
+        processedPads.insert( padA );
+
+    if( padB )
+        processedPads.insert( padB );
+
+    for( int idx = 0; idx < initialPath.Size(); idx++ )
+    {
+        if( initialPath[idx]->Kind() != ITEM::LINE_T )
+            continue;
+
+        LINE* line = static_cast<LINE*>( initialPath[idx] );
+
+        // Check joints at both endpoints of this line segment
+        for( const VECTOR2I& pt : { line->CPoint( 0 ), line->CLastPoint() } )
+        {
+            const JOINT* jt = m_world->FindJoint( pt, line );
+
+            if( !jt )
+                continue;
+
+            // Skip terminal joints - they're already processed
+            if( jt == joints.first || jt == joints.second )
+                continue;
+
+            PAD* intermediatePad = nullptr;
+            getPadFromJoint( jt, &intermediatePad, nullptr );
+
+            if( intermediatePad && processedPads.find( intermediatePad ) == processedPads.end() )
+            {
+                wxLogTrace( wxT( "PNS_TUNE" ),
+                            wxT( "AssembleTuningPath: found intermediate pad at joint (%d,%d)" ),
+                            jt->Pos().x, jt->Pos().y );
+                processPad( intermediatePad, jt->Layer() );
+                processedPads.insert( intermediatePad );
+            }
+        }
+    }
+
     // Calculate total path length
     int totalLength = 0;
     int lineCount = 0;
