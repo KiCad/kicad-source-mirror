@@ -157,10 +157,6 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
     // Set description text to use a smaller font
     m_staticDescription->SetFont( KIUI::GetInfoFont( this ) );
 
-    // Set small minimum sizes on text controls to allow dialog shrinking
-    m_staticTitle->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
-    m_staticDescription->SetMinSize( FromDIP( wxSize( 100, -1 ) ) );
-
 #if wxCHECK_VERSION( 3, 3, 2 )
     m_staticDescription->SetWindowStyle( wxST_WRAP );
 #endif
