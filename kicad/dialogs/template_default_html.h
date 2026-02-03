@@ -15,42 +15,47 @@ namespace
 {
 
 // Common CSS variables and base styles shared across all template HTML pages.
-// Uses CSS custom properties for light/dark theme switching via the kicad-dark class.
 inline wxString GetCommonStyles()
 {
-    return wxString(
-        ":root {"
-            "--bg-primary: #FFFFFF;"
-            "--bg-secondary: #F3F3F3;"
-            "--bg-elevated: #FFFFFF;"
-            "--text-primary: #545454;"
-            "--text-secondary: #848484;"
-            "--accent: #1A81C4;"
-            "--accent-subtle: rgba(26, 129, 196, 0.08);"
-            "--border: #E0E0E0;"
-            "--shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);"
-        "}"
-        "body.kicad-dark {"
-            "--bg-primary: #1E1E1E;"
-            "--bg-secondary: #2D2D2D;"
-            "--bg-elevated: #333333;"
-            "--text-primary: #DED3DD;"
-            "--text-secondary: #848484;"
-            "--accent: #42B8EB;"
-            "--accent-subtle: rgba(66, 184, 235, 0.1);"
-            "--border: #404040;"
-            "--shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.15);"
-        "}"
-        "* { box-sizing: border-box; }"
-        "body {"
-            "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"
-            "margin: 0;"
-            "padding: 24px;"
-            "background: var(--bg-primary);"
-            "color: var(--text-primary);"
-            "line-height: 1.5;"
-        "}"
-    );
+    return wxString( R"(
+:root {
+  color-scheme: light dark;
+
+  --bg-primary: light-dark(#FFFFFF, #1E1E1E);
+  --bg-secondary: light-dark(#F3F3F3, #2D2D2D);
+  --bg-elevated: light-dark(#FFFFFF, #333333);
+  --text-primary: light-dark(#1F2328, #DED3DD);
+  --text-secondary: light-dark(#545454, #848484);
+  --accent: light-dark(#1A81C4, #42B8EB);
+  --accent-subtle: light-dark(rgba(26, 129, 196, 0.08), rgba(66, 184, 235, 0.1));
+  --border: light-dark(#E0E0E0, #404040);
+  --shadow: light-dark(0 1px 3px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.2));
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+a, a:link {
+  color: light-dark(#0D4A8B, #A7D7FC);
+}
+
+a:hover{
+  color: light-dark(#0A2540, #EBF5FE);
+}
+
+a:visited {
+  color: light-dark(#7C3EAE, #E9DDFC);
+}
+
+img { 
+  max-width: 100%;
+  height: auto;
+}
+
+)" );
 }
 
 // SVG icon for template/document

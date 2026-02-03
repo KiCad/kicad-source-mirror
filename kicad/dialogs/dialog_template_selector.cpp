@@ -1098,52 +1098,15 @@ void DIALOG_TEMPLATE_SELECTOR::OnWebViewLoaded( wxWebViewEvent& event )
     // Add style to external documets
     if( m_loadingExternalHtml )
     {
-        wxString script = wxS( R"(
+        wxString script = wxString::Format( wxS( R"(
 (function() {
     var style = document.createElement('style');
     style.textContent = `
-
-:root {
-  color-scheme: light dark;
-
-  --bg-primary: light-dark(#FFFFFF, #1E1E1E);
-  --bg-secondary: light-dark(#F3F3F3, #2D2D2D);
-  --bg-elevated: light-dark(#FFFFFF, #333333);
-  --text-primary: light-dark(#1F2328, #DED3DD);
-  --text-secondary: light-dark(#545454, #848484);
-  --accent: light-dark(#1A81C4, #42B8EB);
-  --accent-subtle: light-dark(rgba(26, 129, 196, 0.08), rgba(66, 184, 235, 0.1));
-  --border: light-dark(#E0E0E0, #404040);
-  --shadow: light-dark(0 1px 3px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.2));
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: sans-serif;
-}
-
-a, a:link {
-  color: light-dark(#0D4A8B, #A7D7FC);
-}
-
-a:hover{
-  color: light-dark(#0A2540, #EBF5FE);
-}
-
-a:visited {
-  color: light-dark(#7C3EAE, #E9DDFC);
-}
-
-img { 
-  max-width: 100%;
-  height: auto;
-}
-
+%s
     `;
     document.head.appendChild(style);
 })();
-        )" );
+        )" ), GetCommonStyles() );
 
         if( m_webviewPanel->GetBackend() != wxWebViewBackendIE )
             m_webviewPanel->RunScriptAsync( script );
