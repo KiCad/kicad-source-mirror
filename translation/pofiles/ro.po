@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-02 15:25+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ro/>\n"
@@ -1386,9 +1386,8 @@ msgid "Resolution"
 msgstr "Soluții"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Soluții"
+msgstr "Rezoluție X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
 #, fuzzy
@@ -1401,9 +1400,8 @@ msgid "pixels/mm"
 msgstr "pixeli"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Soluții"
+msgstr "Rezoluție Y:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
@@ -2659,9 +2657,8 @@ msgid "Pattern:"
 msgstr "Șablon:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Clasele de rețea"
+msgstr "Clasa rețea:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2979,9 +2976,8 @@ msgid "Timeout"
 msgstr "Timp"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Conector:"
+msgstr "Șir de caractere de legătură"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -3000,9 +2996,8 @@ msgid "Unable to connect to database"
 msgstr "Imposibil de conectat la baza de date"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Porecla generatorului:"
+msgstr "Eroare de bază de date"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
@@ -3647,14 +3642,12 @@ msgstr "Fișier de ieșire:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:66
 #: pcbnew/dialogs/dialog_render_job_base.cpp:34
-#, fuzzy
 msgid "Format:"
-msgstr "Format"
+msgstr "Format:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:43
-#, fuzzy
 msgid "Include:"
-msgstr "Include straturi"
+msgstr "Includeți:"
 
 #: common/dialogs/dialog_rc_job_base.cpp:56
 #: common/widgets/wx_html_report_panel_base.cpp:53
@@ -3949,14 +3942,12 @@ msgid "Password:"
 msgstr "Parolă:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
-#, fuzzy
 msgid "Location:"
-msgstr "Rotație"
+msgstr "Locație:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
-#, fuzzy
 msgid "Connection type:"
-msgstr "Conexiuni"
+msgstr "Tipul conexiunii:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 msgid "HTTPS"
@@ -3981,9 +3972,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:99
-#, fuzzy
 msgid "User name:"
-msgstr "Denumiri Net"
+msgstr "Nume utilizator:"
 
 #: common/dialogs/git/dialog_git_repository_base.h:76
 msgid "Git Repository"
@@ -4030,9 +4020,8 @@ msgid "Remote Tracking"
 msgstr "Urmărire la distanță"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:41
-#, fuzzy
 msgid "Update interval:"
-msgstr "Actualizați câmpurile"
+msgstr "Interval de actualizare:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:46
 msgid ""
@@ -4238,9 +4227,8 @@ msgid "Text editor:"
 msgstr "Editor de text:"
 
 #: common/dialogs/panel_common_settings_base.cpp:114
-#, fuzzy
 msgid "File manager:"
-msgstr "Denumiri Net"
+msgstr "Manager de fișiere:"
 
 #: common/dialogs/panel_common_settings_base.cpp:130
 msgid "System default PDF viewer"
@@ -4301,9 +4289,8 @@ msgstr ""
 "tabelului"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Lumina camerei ambientale:"
+msgstr "Dezactivează cursorii personalizați"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -4411,9 +4398,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Factor de reglare a luminozității în modul contrast ridicat:"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
-#, fuzzy
 msgid "Scaling"
-msgstr "Scalare:"
+msgstr "Scalare"
 
 #: common/dialogs/panel_common_settings_base.cpp:319
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4543,7 +4529,7 @@ msgstr "Bibioteci"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
 #, fuzzy, c-format
 msgid " (%s)|%s"
-msgstr "Grilă: %s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -4618,16 +4604,15 @@ msgstr "Nu s-a reușit crearea fișierului temporar \"%s\"."
 #: common/dialogs/panel_design_block_lib_table.cpp:673
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Select %s Library"
-msgstr "Selectați Biblioteca"
+msgstr "Selectați %s Biblioteca"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:722
 #: eeschema/dialogs/panel_sym_lib_table.cpp:571
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:659
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Duplicați:"
+msgstr "Avertisment: porecle duplicate"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:723
 #: eeschema/dialogs/panel_sym_lib_table.cpp:572
@@ -4805,9 +4790,8 @@ msgid "Failed to add file '%s'."
 msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:395
-#, fuzzy
 msgid "Select a file to embed"
-msgstr "Selectați stratul care urmează să fie eliminat:"
+msgstr "Selectați un fișier pentru a-l încorpora"
 
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
@@ -5008,9 +4992,8 @@ msgid "Always show crosshairs"
 msgstr "Afișează întotdeauna crucea"
 
 #: common/dialogs/panel_grid_settings.cpp:53
-#, fuzzy
 msgid "Pads:"
-msgstr "Pad-uri"
+msgstr "Pad-uri:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 #, fuzzy
@@ -5019,14 +5002,13 @@ msgstr "Capsule/terminale:"
 
 #: common/dialogs/panel_grid_settings.cpp:62
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Tracks:"
-msgstr "Trasee"
+msgstr "Trasee:"
 
 #: common/dialogs/panel_grid_settings.cpp:145 common/tool/grid_menu.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Grilă: %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:273
 #: common/dialogs/panel_grid_settings.cpp:317
@@ -5547,9 +5529,9 @@ msgid "Library nickname prefix:"
 msgstr "Porecla generatorului:"
 
 #: common/dialogs/panel_plugin_settings.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Calea existentă:"
+msgstr "Așteaptă conexiune la %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
@@ -6395,9 +6377,9 @@ msgid "Expecting '%s'"
 msgstr "Se așteaptă ' %s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Se așteaptă ' %s'"
+msgstr "Aștept %s. Am primit „%s”"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -6450,14 +6432,14 @@ msgid "Redo"
 msgstr "Refă"
 
 #: common/eda_base_frame.cpp:733
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "Solid"
+msgstr "Executare: %s > %s"
 
 #: common/eda_base_frame.cpp:740
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "Reguli"
+msgstr "Executare: %s"
 
 #: common/eda_base_frame.cpp:1279
 #, c-format
@@ -6682,9 +6664,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Axele grilei"
+msgstr "grilă %s"
 
 #: common/eda_draw_frame.cpp:726 pagelayout_editor/pl_editor_frame.cpp:759
 msgid "inches"
@@ -7481,9 +7463,9 @@ msgstr ""
 "împreună cu KiCad."
 
 #: common/env_vars.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Versiune învechită a KICAD_SYMBOL_DIR."
+msgstr "Versiune învechită a %s."
 
 #: common/exceptions.cpp:83
 #, c-format
@@ -7505,7 +7487,7 @@ msgstr ""
 "sau mai recentă."
 
 #: common/exceptions.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -7514,10 +7496,10 @@ msgid ""
 "format dated %s or later)."
 msgstr ""
 "KiCad nu a putut deschide acest fișier deoarece a fost creat cu o versiune "
-"mai recentă decât cea pe care o rulați.\n"
+"mai recentă decât cea pe care o utilizați.\n"
 "\n"
-"Pentru a-l deschide, va trebui să actualizați KiCad la o versiune datată %s "
-"sau mai recentă."
+"Pentru a-l deschide, va trebui să actualizați KiCad, versiunea %s sau o "
+"versiune ulterioară (format de fișier datat %s sau ulterior)."
 
 #: common/exceptions.cpp:158
 msgid "Full error text:"
@@ -7594,9 +7576,9 @@ msgid "'%s' is not a directory"
 msgstr "'%s' nu este un director"
 
 #: common/gestfich.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Nu s-a reușit eliminarea directorului %s"
+msgstr "Eroare la eliminarea directorului „%s”: %s"
 
 #: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
 #, fuzzy, c-format
@@ -7639,9 +7621,9 @@ msgid "* [updated] %s..%s %s"
 msgstr "* [actualizat] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:934
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Zonele"
+msgstr "* [nou] %s %s"
 
 #: common/git/kicad_git_common.cpp:954
 #, c-format
@@ -7654,9 +7636,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "Grilă: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:974
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Actualizat"
+msgstr "[actualizat] %s"
 
 #: common/git/kicad_git_common.cpp:1038
 #, fuzzy
@@ -7833,14 +7815,14 @@ msgid "Could not get repository head"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nu s-a putut utiliza OpenGL"
+msgstr "Nu s-a putut transfera la distanță: %s"
 
 #: common/git/libgit_backend.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Ieșirea datelor a eșuat"
+msgstr "Inițializarea depozitului Git a eșuat: %s"
 
 #: common/git/libgit_backend.cpp:575
 msgid "No repository available to set up remote"
@@ -7872,9 +7854,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Nu s-a reușit trecerea la Branch„%s”: %s"
 
 #: common/git/libgit_backend.cpp:690
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "e nevoie de un număr pentru '%s'"
+msgstr "Nu s-a reușit actualizarea referinței HEAD pentru ramura „%s”: %s"
 
 #: common/git/libgit_backend.cpp:738
 #, c-format
@@ -7882,14 +7864,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nu s-a putut căuta remote '%s'"
 
 #: common/git/libgit_backend.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Could not connect to remote '%s'"
+msgstr "Nu s-a putut conecta la distanță „%s”: %s"
 
 #: common/git/libgit_backend.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nu s-a putut prelua date de la distanță \"%s"
+msgstr "Nu s-au putut prelua datele de la distanță „%s”: %s"
 
 #: common/git/libgit_backend.cpp:798
 msgid "Could not read 'FETCH_HEAD'"
@@ -7926,9 +7908,9 @@ msgid "Could not get tree from target commit"
 msgstr "Nu s-a putut obține arborele din commit-ul țintă"
 
 #: common/git/libgit_backend.cpp:961
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "e nevoie de un număr pentru '%s'"
+msgstr "Nu s-a reușit actualizarea referinței „%s” pentru a indica „%s”"
 
 #: common/git/libgit_backend.cpp:970
 msgid "Failed to clean up repository state after fast-forward."
@@ -7943,9 +7925,9 @@ msgid "Failed to push reference to revision walker."
 msgstr "Nu s-a reușit trimiterea referinței către revision walker."
 
 #: common/git/libgit_backend.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nu s-a putut consulta commit-ul '{}'"
+msgstr "Nu s-a putut căuta commit-ul „%s”"
 
 #: common/git/libgit_backend.cpp:1067
 msgid ""
@@ -7954,9 +7936,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Nu există fișiere"
+msgstr "Fuziunea a eșuat: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -7965,19 +7947,19 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Rebase nu a reușit să pornească"
+msgstr "Rebase nu a reușit să pornească:%s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Rebase commit a eșuat"
+msgstr "Rebase commit a eșuat:%s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Rebase commit a eșuat"
+msgstr "Rebase finalizare eșuată: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -9154,9 +9136,8 @@ msgid "Error loading library '%s'"
 msgstr "Eroare la încărcarea bibliotecii „%s”"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Alte opțiuni"
+msgstr "Editați setările..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -9183,9 +9164,8 @@ msgid "Unset Visible Flag"
 msgstr "Vizibilitate"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Opțiuni de redare"
+msgstr "Editați opțiunile..."
 
 #: common/lib_table_grid_tricks.cpp:161
 #, fuzzy
@@ -12426,9 +12406,8 @@ msgid "View Selected Footprint"
 msgstr "Vizualizați amprenta selectată"
 
 #: cvpcb/tools/cvpcb_actions.cpp:56
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Gestionați fișierele de asociere a amprentelor"
+msgstr "Gestionarea fișierelor de alocare a amprentei..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:57
 #, fuzzy
@@ -12499,9 +12478,8 @@ msgid "Assign footprints automatically using a footprint association file"
 msgstr "Ștergeți toate asociațiile de amprentă"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Atribuții amprentă..."
+msgstr "Ștergeți alocarea amprentei"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
 #, fuzzy
@@ -13339,9 +13317,8 @@ msgid "Reload the database library configuration file"
 msgstr "Fișiere bibliotecă de simboluri KiCad"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Se caută..."
+msgstr "Buffer"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 #, fuzzy
@@ -13605,9 +13582,8 @@ msgid "Edit violation severities..."
 msgstr "Editați severitatea încălcărilor..."
 
 #: eeschema/dialogs/dialog_erc.cpp:809
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Distanța minimă a grilei:"
+msgstr "Editați spațierea grilei de conexiuni..."
 
 #: eeschema/dialogs/dialog_erc.cpp:821 eeschema/dialogs/dialog_erc.cpp:856
 #: pcbnew/dialogs/dialog_drc.cpp:813 pcbnew/dialogs/dialog_drc.cpp:865
@@ -13698,15 +13674,14 @@ msgstr "Încălcări (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:114
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Editați severitatea încălcărilor..."
+msgstr "Editează testele ignorate"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:124
 #: pcbnew/dialogs/dialog_drc_base.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Editați severitatea încălcărilor..."
+msgstr "Teste ignorate (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:164
 #: pcbnew/dialogs/dialog_drc_base.cpp:210
@@ -14160,25 +14135,21 @@ msgid "Filter Items"
 msgstr "Filtrează rețele"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "Nume fișiere foaie"
+msgstr "După numele câmpului:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Trasați desemnatori de referință"
+msgstr "După indicatorul de referință al părintelui:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "Editați listele bibliotecii de simboluri globale și de proiect"
+msgstr "Prin ID-ul bibliotecii simbolurilor părinte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Adăugați un simbol"
+msgstr "După tipul simbolului părinte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 #, fuzzy
@@ -14258,9 +14229,8 @@ msgstr "Aliniere V:"
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:75
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:235
 #: pcbnew/tools/convert_tool.cpp:110
-#, fuzzy
 msgid "Line width:"
-msgstr "Grosimea liniei"
+msgstr "Lățimea liniei:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:355
 #, fuzzy
@@ -14269,16 +14239,14 @@ msgstr "Folosiți culori:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:364
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:248
-#, fuzzy
 msgid "Line style:"
-msgstr "Stil linie"
+msgstr "Stil linie:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:380
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:155
 #: eeschema/dialogs/dialog_text_properties_base.cpp:272
-#, fuzzy
 msgid "Fill color:"
-msgstr "Lipiți culoarea"
+msgstr "Culoare de umplere:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:389
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:72
@@ -14389,9 +14357,8 @@ msgid "0 symbols selected"
 msgstr "Niciun simbol selectat"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Trasați desemnatori de referință"
+msgstr "Desemnator de referință de start:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
@@ -14405,9 +14372,8 @@ msgstr ""
 "încărcată în schemă."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "Repetați incrementului etichetei"
+msgstr "Creștere cu:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
 #, fuzzy
@@ -14456,9 +14422,8 @@ msgid "Junction Properties"
 msgstr "Proprietățile intersecției"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:94
-#, fuzzy
 msgid "Pin length:"
-msgstr "Linie, lungime %s"
+msgstr "Lungimea pinului:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Global Label Properties"
@@ -14583,18 +14548,16 @@ msgstr "Afișați limitele paginilor"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:63
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:529
-#, fuzzy
 msgid "H Align"
-msgstr "Aliniere H:"
+msgstr "Aliniere H"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:64
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:530
-#, fuzzy
 msgid "V Align"
-msgstr "Aliniere V:"
+msgstr "Aliniere V"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
@@ -14606,9 +14569,8 @@ msgstr "Aliniere V:"
 #: eeschema/sch_text.cpp:717 eeschema/sch_textbox.cpp:449
 #: eeschema/sch_textbox.cpp:605 pcbnew/pcb_barcode.cpp:786
 #: pcbnew/tools/board_inspection_tool.cpp:1723
-#, fuzzy
 msgid "Text Size"
-msgstr "Dimensiunea textului:"
+msgstr "Dimensiune text"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:119
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:78
@@ -14811,9 +14773,8 @@ msgid "Save changes?"
 msgstr "Salvați modificările?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:32
-#, fuzzy
 msgid "Pin numbers:"
-msgstr "Numerele pinilor"
+msgstr "Numerele pinilor:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:36
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
@@ -14853,9 +14814,8 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:43
-#, fuzzy
 msgid "Pin count:"
-msgstr "Numărul pinilor"
+msgstr "Numărul pinilor:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:54
 #, fuzzy
@@ -14868,9 +14828,8 @@ msgid "Filter Pin Table"
 msgstr "Numele pinilor"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Filtrați după numărul de pini"
+msgstr "Filtrați după unitate:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:149
 #, fuzzy
@@ -15018,27 +14977,24 @@ msgid "No symbols found in library '%s'."
 msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Eroare la încărcarea editorului."
+msgstr "Eroare la încărcarea simbolului „%s”: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:586
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "Actualizarea câmpurilor de simboluri din noua bibliotecă"
+msgstr "Nu s-au putut încărca simboluri asociate din bibliotecă."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:588
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Actualizarea câmpurilor de simboluri din noua bibliotecă"
+msgstr "Nu s-au putut încărca simboluri din bibliotecă."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:690
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:757
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:856
-#, fuzzy
 msgid "New field name:"
-msgstr "Nume fișiere foaie"
+msgstr "Noul nume al câmpului:"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:762
@@ -15076,9 +15032,8 @@ msgstr "Câmpuri de simboluri"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1033
 #: eeschema/dialogs/dialog_rescue_each.cpp:117
-#, fuzzy
 msgid "Symbol Name"
-msgstr "Numele simbolului:"
+msgstr "Numele simbolului"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1045
 #, fuzzy
@@ -15150,9 +15105,9 @@ msgid "Group symbols together based on common properties"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Schimbați simbolul %s din „%s” în „%s”"
+msgstr "Derivat din simbolul „%s”."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:130
@@ -15164,18 +15119,16 @@ msgid "Derive from existing symbol:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
-#, fuzzy
 msgid "Default reference designator:"
-msgstr "Trasați desemnatori de referință"
+msgstr "Indicator de referință implicit:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:62
 msgid "U"
 msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:65
-#, fuzzy
 msgid "Number of units per package:"
-msgstr "Număr de probe"
+msgstr "Număr de unități pe pachet:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:78
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:307
@@ -15283,9 +15236,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Suprascrieți blocul de proiectare existent?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Netclass trebuie să aibă un nume."
+msgstr "Simbolul trebuie să aibă cel puțin un stil de corp"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:529
 msgid "Delete extra body styles from symbol?"
@@ -15484,9 +15436,8 @@ msgid "Symbol Units"
 msgstr "Simbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:292
-#, fuzzy
 msgid "Number of units:"
-msgstr "Număr de probe"
+msgstr "Număr de unități:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:294
 msgid "Enter the number of units for a symbol that contains more than one unit"
@@ -15500,9 +15451,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:315
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "e nevoie de un număr pentru '%s'"
+msgstr "Denumiri afișate ale unităților (opțional):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:351
 #: eeschema/lib_symbol.cpp:2485
@@ -15556,14 +15506,12 @@ msgid "Delete footprint filter"
 msgstr "Adăugați un filtru de amprente"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:484
-#, fuzzy
 msgid "Footprint Filters"
-msgstr "Filtre de amprentă:"
+msgstr "Filtre amprentă"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:492
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
+msgstr "Toti pinii cu numere duplicate sunt jumperi"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:522
@@ -15711,9 +15659,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Afișați titlul în modul de editare"
+msgstr "Mod de editare sincronizată a pinilor."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:432
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -15724,33 +15671,28 @@ msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
-#, fuzzy
 msgid "Pin &name:"
-msgstr "Numele pinilor"
+msgstr "Pin &nume:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
-#, fuzzy
 msgid "Pin num&ber:"
-msgstr "Numerele pinilor"
+msgstr "Pin nu&mmer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
-#, fuzzy
 msgid "&X position:"
-msgstr "Poziția X"
+msgstr "&X poziție:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:69
-#, fuzzy
 msgid "&Y position:"
-msgstr "Poziția Y"
+msgstr "Poziția &Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
-#, fuzzy
 msgid "&Pin length:"
-msgstr "Linie, lungime %s"
+msgstr "&Lungimea pinului:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
 #, fuzzy
@@ -15763,18 +15705,16 @@ msgid "Number text si&ze:"
 msgstr "Dimensiune predefinită a textului:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
-#, fuzzy
 msgid "Electrical type:"
-msgstr "Tip electric"
+msgstr "Tip electric:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 msgid "Used by the ERC."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:106
-#, fuzzy
 msgid "Graphic style:"
-msgstr "Stil grafic"
+msgstr "Stil grafic:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:251
@@ -15845,22 +15785,19 @@ msgid "Cannot normalize path '%s'."
 msgstr "Nu se poate normaliza calea \"%s%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:413
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Exportați în alte foii"
+msgstr "Nu există niciun proiect sau cale definită pentru schema actuală."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "Desemnare"
+msgstr "Varianta de design:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:35
-#, fuzzy
 msgid "Output directory:"
-msgstr "Trasați directorul de ieșire"
+msgstr "Director de ieșire:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:45
 msgid ""
@@ -16062,24 +15999,20 @@ msgid "Add libraries to:"
 msgstr "Se încarcă bibliotecile de simboluri"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Tabelul bibliotecii de proiecte"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Adăugați un dosar de bibliotecă existent"
+msgstr "Adăugați bibliotecile create în tabelul bibliotecii proiectului."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Tabelul bibliotecii globale"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Creați un tabel de bibliotecă global %s gol"
+msgstr "Adaugă bibliotecile generate la tabelele globale ale bibliotecilor."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
@@ -16091,9 +16024,8 @@ msgid "Please choose a destination directory."
 msgstr "Vă rugăm să alegeți un fișier netlist valid."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:158
-#, fuzzy
 msgid "Please enter a library prefix."
-msgstr "Selectați fișierul tabelului bibliotecii globale %s:"
+msgstr "Introduceți un prefix de bibliotecă."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
 #, fuzzy
@@ -16136,9 +16068,8 @@ msgstr "Acțiune"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:145
 #: eeschema/dialogs/dialog_rescue_each.cpp:288
-#, fuzzy
 msgid "Rescue Symbols"
-msgstr "Simbol..."
+msgstr "Salvare simboluri"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:146
 #, fuzzy
@@ -16360,9 +16291,8 @@ msgid "Schematic Setup"
 msgstr "Text schematic"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:46
-#, fuzzy
 msgid "Import Settings from Another Project..."
-msgstr "Importați setările dintr-o versiune anterioară la:"
+msgstr "Importați setările dintr-un alt proiect..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:436
@@ -16607,9 +16537,9 @@ msgid "Link '%s' to this file?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "Imposibil de analizat \"%s\" în '%s'"
+msgstr "Nu s-a reușit copierea fișierului schematic „%s” în destinația „%s”."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:580
 #, c-format
@@ -17302,18 +17232,16 @@ msgid "Differential"
 msgstr "Decalajul perechii diferențiale"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:98
-#, fuzzy
 msgid "Pin model:"
-msgstr "Se încarcă modelele 3D..."
+msgstr "Modelul pin-ului:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:105
 msgid "Waveform:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:123
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "Se verifică etichetele..."
+msgstr "Model SPICE încorporat"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:132
 msgid "Device:"
@@ -17367,9 +17295,8 @@ msgid "Model Pin"
 msgstr "Model"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:320
-#, fuzzy
 msgid "Pin Assignments"
-msgstr "Atribuții amprentă..."
+msgstr "Alocarea pinilor"
 
 #: eeschema/dialogs/dialog_sim_model_base.h:131
 #, fuzzy
@@ -17429,9 +17356,8 @@ msgid "Field name %s already exists."
 msgstr "'%s' există deja."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:955
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "Simbol..."
+msgstr "Includeți simbolurile „DNP”"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
 msgid ""
@@ -17519,9 +17445,9 @@ msgid "Could not write BOM output '%s'."
 msgstr "Nu s-au putut scrie fișierele de trasare în folderul „%s”."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1512
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Nu se poate crea directorul de ieșire '%s'."
+msgstr "S-a scris ieșirea BOM în „%s”"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1851
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2253
@@ -17544,24 +17470,20 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2744
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Adnotați schema"
+msgstr "Nu se poate șterge varianta implicită."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2783
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Adnotați schema"
+msgstr "Nu se poate redenumi varianta implicită."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Gestionați bibliotecile de amprente..."
+msgstr "Introduceți numele noii variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Adăugați câmp..."
+msgstr "Redenumire variantă de design"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -17707,9 +17629,8 @@ msgstr "Porecla"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:153
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:288
-#, fuzzy
 msgid "Alternate Assignment"
-msgstr "Atribuții amprentă..."
+msgstr "Atribuire alternativă"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
 #, fuzzy
@@ -17798,15 +17719,13 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2371
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "Actualizați simbolurile din bibliotecă"
+msgstr "Actualizare simbol din bibliotecă..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:239
 #: eeschema/tools/sch_actions.cpp:874
-#, fuzzy
 msgid "Change Symbol..."
-msgstr "Schimbați simbolurile"
+msgstr "Schimbă simbolul..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:242
 #, fuzzy
@@ -17926,9 +17845,9 @@ msgstr "Abandonați restaurare"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:481
 #: eeschema/dialogs/dialog_symbol_remap.cpp:497
 #: eeschema/dialogs/dialog_symbol_remap.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Extragerea fișierului \"%s\"."
+msgstr "Se face o copie de rezervă a fișierului „%s” în „%s”."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:387
 #: eeschema/dialogs/dialog_symbol_remap.cpp:429
@@ -18141,9 +18060,8 @@ msgid "Update references of symbols that have been changed in the PCB editor."
 msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
-#, fuzzy
 msgid "Footprint assignments"
-msgstr "Atribuții amprentă..."
+msgstr "Alocări amprentă"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:61
 msgid ""
@@ -18199,9 +18117,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1015
-#, fuzzy
 msgid "Update Schematic from PCB"
-msgstr "Actualizați schema de la PCB..."
+msgstr "Actualizați schema de la PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:222
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
@@ -18426,9 +18343,8 @@ msgid "Show ERC exclusions"
 msgstr "Excluderi DRC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:131
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
+msgstr "Marcați elementele care sunt excluse din simulare"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:135
 #, fuzzy
@@ -19286,9 +19202,9 @@ msgid "Global Field Name Templates"
 msgstr "Etichete globale"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "The field name '%s' contains trailing and/or leading white space."
-msgstr "Intrarea conține spațiu alb la sfârșit."
+msgstr "Numele câmpului „%s” conține spații albe la început și/sau la sfârșit."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:219
 msgid ""
@@ -49263,11 +49179,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Eroare la exportul fișierului: %s. Export eșuat. **\n"
+msgstr "** Eroare la exportul fișierului: %s. Export eșuat. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1372
 #, c-format
