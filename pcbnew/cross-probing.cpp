@@ -42,7 +42,7 @@
 #include <collectors.h>
 #include <eda_dde.h>
 #include <kiface_base.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <string_utils.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>

@@ -31,7 +31,7 @@
 #include <dialog_exchange_footprints.h>
 #include <string_utils.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <widgets/wx_html_report_panel.h>

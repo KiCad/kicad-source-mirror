@@ -57,7 +57,7 @@
 #include <dialogs/dialog_plugin_options.h>
 #include <footprint_viewer_frame.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <pcbnew_id.h>          // For ID_PCBNEW_END_LIST
 #include <settings/settings_manager.h>
 #include <paths.h>

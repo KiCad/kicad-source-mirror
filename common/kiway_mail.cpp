@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <wx/window.h>
 
 wxDEFINE_EVENT( EDA_KIWAY_MAIL_RECEIVED, KIWAY_MAIL_EVENT );

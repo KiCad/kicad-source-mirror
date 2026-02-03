@@ -49,7 +49,7 @@
 #include <tool/tool_dispatcher.h>
 #include <string_utils.h>
 #include <mail_type.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <fmt/format.h>
 
 #include <widgets/wx_busy_indicator.h>

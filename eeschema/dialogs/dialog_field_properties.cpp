@@ -30,7 +30,7 @@
 #include <settings/color_settings.h>
 #include <bitmaps.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <confirm.h>
 #include <common.h>
 #include <string_utils.h>

@@ -26,7 +26,7 @@
 #include <jobs/job_special_copyfiles.h>
 #include <jobs/job_special_execute.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <reporter.h>
 #include <optional>
 #include <wx/process.h>

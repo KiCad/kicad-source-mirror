@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <functional>
 #include <kiface_base.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <lib_id.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>

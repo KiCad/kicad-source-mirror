@@ -29,7 +29,7 @@
 #include <footprint_tree_pane.h>
 #include <footprint_library_adapter.h>
 #include <functional>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <pcb_group.h>
 #include <pcb_marker.h>
 #include <pcb_textbox.h>

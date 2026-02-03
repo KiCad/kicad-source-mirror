@@ -30,7 +30,7 @@
 #include <footprint_library_adapter.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <string_utils.h>
 #include <project/project_file.h>
 #include <netlist_reader/netlist_reader.h>

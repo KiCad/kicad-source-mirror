@@ -240,7 +240,7 @@ set( KICOMMON_SRCS
     kidialog.cpp
     kiid.cpp
     kiway.cpp
-    kiway_express.cpp
+    kiway_mail.cpp
     kiway_holder.cpp
     launch_ext.cpp
     layer_id.cpp

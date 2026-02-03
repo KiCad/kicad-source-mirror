@@ -49,7 +49,7 @@
 #include <dialogs/dialog_plugin_options.h>
 #include <kiway.h>
 #include <kiplatform/ui.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
 #include <paths.h>

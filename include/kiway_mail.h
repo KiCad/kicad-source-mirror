@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KIWAY_EXPRESS_H_
-#define KIWAY_EXPRESS_H_
+#ifndef KIWAY_MAIL_H
+#define KIWAY_MAIL_H
 
 #include <frame_type.h>
 #include <mail_type.h>

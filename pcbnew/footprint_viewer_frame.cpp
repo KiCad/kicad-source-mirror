@@ -34,7 +34,7 @@
 #include <footprint_viewer_frame.h>
 #include <footprint_library_adapter.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <widgets/kistatusbar.h>
 #include <widgets/msgpanel.h>

@@ -26,7 +26,7 @@
 #include <fmt.h>
 #include <kiface_base.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
 #include <sch_sheet.h>

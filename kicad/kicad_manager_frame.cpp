@@ -52,7 +52,7 @@
 #include <kiplatform/policy.h>
 #include <build_version.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <launch_ext.h>
 #include <lockfile.h>
 #include <notifications_manager.h>

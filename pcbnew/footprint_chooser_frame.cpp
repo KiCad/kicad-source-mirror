@@ -25,7 +25,7 @@
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <board.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>

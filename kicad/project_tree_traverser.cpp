@@ -24,7 +24,7 @@
 #include "project_tree_traverser.h"
 #include "kicad_manager_frame.h"
 #include <kiway.h>
-#include <kiway_express.h>
+#include <kiway_mail.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
