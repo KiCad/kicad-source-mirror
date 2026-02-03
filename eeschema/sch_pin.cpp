@@ -1711,7 +1711,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     if( m_number != tmp->m_number )
     {
         // StrNumCmp: sort the same as the pads in the footprint file
-        return StrNumCmp( m_number, tmp->m_number ) < 0;
+        return StrNumCmp( m_number, tmp->m_number );
     }
 
     if( m_position.x != tmp->m_position.x )
