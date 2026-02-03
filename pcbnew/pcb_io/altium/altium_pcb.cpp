@@ -685,10 +685,12 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
 {
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
-    // TODO: what should we do with those layers?
+    // Map mechanical layers commonly used in Altium footprint libraries to appropriate KiCad layers.
+    // Mechanical 15 and 16 are the standard Altium layers for component courtyards
+    // (as component layer pairs for top/bottom sides respectively).
     m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_14, Eco2_User );
-    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_15, Eco2_User );
-    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_16, Eco2_User );
+    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_15, F_CrtYd );
+    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_16, B_CrtYd );
 
     m_unicodeStrings.clear();
     m_extendedPrimitiveInformationMaps.clear();
@@ -1122,6 +1124,32 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
 }
 
 
+// Helper to detect if a layer name indicates a courtyard layer
+static bool IsLayerNameCourtyard( const wxString& aName )
+{
+    wxString nameLower = aName.Lower();
+    return nameLower.Contains( wxT( "courtyard" ) ) || nameLower.Contains( wxT( "court yard" ) )
+           || nameLower.Contains( wxT( "crtyd" ) );
+}
+
+
+// Helper to detect if a layer name indicates an assembly layer
+static bool IsLayerNameAssembly( const wxString& aName )
+{
+    wxString nameLower = aName.Lower();
+    return nameLower.Contains( wxT( "assembly" ) ) || nameLower.Contains( wxT( "assy" ) );
+}
+
+
+// Helper to detect if a layer name indicates a top-side layer
+static bool IsLayerNameTopSide( const wxString& aName )
+{
+    wxString nameLower = aName.Lower();
+    return nameLower.Contains( wxT( "top" ) ) || nameLower.EndsWith( wxT( "_t" ) )
+           || nameLower.EndsWith( wxT( ".t" ) );
+}
+
+
 void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup )
 {
     LSET enabledLayers        = m_board->GetEnabledLayers();
@@ -1137,6 +1165,10 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     ABOARD6_LAYER_STACKUP& curLayer = aStackup[0];
     ALTIUM_LAYER           layer_num;
     INPUT_LAYER_DESC       iLdesc;
+
+    // Track which courtyard layers we've mapped to avoid duplicates
+    bool frontCourtyardMapped = false;
+    bool backCourtyardMapped = false;
 
     auto next =
             [&]( size_t ii ) -> size_t
@@ -1171,7 +1203,46 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         }
         else
         {
-            iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
+            // Check if the layer name indicates a courtyard layer
+            if( IsLayerNameCourtyard( curLayer.name ) )
+            {
+                bool isTopSide = IsLayerNameTopSide( curLayer.name );
+
+                if( isTopSide && !frontCourtyardMapped )
+                {
+                    iLdesc.AutoMapLayer = F_CrtYd;
+                    frontCourtyardMapped = true;
+                }
+                else if( !isTopSide && !backCourtyardMapped )
+                {
+                    iLdesc.AutoMapLayer = B_CrtYd;
+                    backCourtyardMapped = true;
+                }
+                else if( !frontCourtyardMapped )
+                {
+                    iLdesc.AutoMapLayer = F_CrtYd;
+                    frontCourtyardMapped = true;
+                }
+                else if( !backCourtyardMapped )
+                {
+                    iLdesc.AutoMapLayer = B_CrtYd;
+                    backCourtyardMapped = true;
+                }
+                else
+                {
+                    iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
+                }
+            }
+            // Check if the layer name indicates an assembly layer (map to Fab)
+            else if( IsLayerNameAssembly( curLayer.name ) )
+            {
+                bool isTopSide = IsLayerNameTopSide( curLayer.name );
+                iLdesc.AutoMapLayer = isTopSide ? F_Fab : B_Fab;
+            }
+            else
+            {
+                iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
+            }
         }
 
         iLdesc.Name            = curLayer.name;
