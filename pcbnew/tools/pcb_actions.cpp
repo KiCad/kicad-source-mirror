@@ -1581,7 +1581,7 @@ TOOL_ACTION PCB_ACTIONS::drcRuleEditor( TOOL_ACTION_ARGS()
         .Name( "pcbnew.DRETool.drcRuleEditor" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "DRC Rule Editor" ) )
-        .Tooltip( _( "Open drc rule editor window" ) ) );
+        .Tooltip( _( "Open DRC rule editor window" ) ) );
 
 // PCB_CONTROL
 //

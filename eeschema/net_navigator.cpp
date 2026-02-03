@@ -62,7 +62,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
 
         if( aItem->GetLayer() == LAYER_WIRE )
         {
-            retv.Printf( _( "Wire from %s, %s to %s, %s" ),
+            retv.Printf( _( "Wire from (%s, %s) to (%s, %s)" ),
                          aUnitsProvider->MessageTextFromValue( line->GetStartPoint().x ),
                          aUnitsProvider->MessageTextFromValue( line->GetStartPoint().y ),
                          aUnitsProvider->MessageTextFromValue( line->GetEndPoint().x ),
@@ -70,7 +70,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         }
         else if( aItem->GetLayer() == LAYER_BUS )
         {
-            retv.Printf( _( "Bus from %s, %s to %s, %s" ),
+            retv.Printf( _( "Bus from (%s, %s) to (%s, %s)" ),
                          aUnitsProvider->MessageTextFromValue( line->GetStartPoint().x ),
                          aUnitsProvider->MessageTextFromValue( line->GetStartPoint().y ),
                          aUnitsProvider->MessageTextFromValue( line->GetEndPoint().x ),
@@ -118,7 +118,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_LABEL* label = static_cast<const SCH_LABEL*>( aItem );
 
-        retv.Printf( _( "Label '%s' at %s, %s" ),
+        retv.Printf( _( "Label '%s' at (%s, %s)" ),
                      UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
@@ -128,7 +128,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( aItem );
 
-        retv.Printf( _( "Global label '%s' at %s, %s" ),
+        retv.Printf( _( "Global label '%s' at (%s, %s)" ),
                      UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
@@ -138,7 +138,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_HIERLABEL* label = static_cast<const SCH_HIERLABEL*>( aItem );
 
-        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ),
+        retv.Printf( _( "Hierarchical label '%s' at (%s, %s)" ),
                      UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
@@ -148,7 +148,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_JUNCTION* junction = static_cast<const SCH_JUNCTION*>( aItem );
 
-        retv.Printf( _( "Junction at %s, %s" ),
+        retv.Printf( _( "Junction at (%s, %s)" ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().y ) );
         break;
@@ -157,7 +157,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_NO_CONNECT* nc = static_cast<const SCH_NO_CONNECT*>( aItem );
 
-        retv.Printf( _( "No-Connect at %s, %s" ),
+        retv.Printf( _( "No-Connect at (%s, %s)" ),
                      aUnitsProvider->MessageTextFromValue( nc->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( nc->GetPosition().y ) );
         break;
@@ -166,7 +166,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_BUS_WIRE_ENTRY* entry = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem );
 
-        retv.Printf( _( "Bus to wire entry from %s, %s to %s, %s" ),
+        retv.Printf( _( "Bus to wire entry from (%s, %s) to (%s, %s)" ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ),
                      aUnitsProvider->MessageTextFromValue( entry->GetEnd().x ),
@@ -177,7 +177,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_BUS_BUS_ENTRY* entry = static_cast<const SCH_BUS_BUS_ENTRY*>( aItem );
 
-        retv.Printf( _( "Bus to bus entry from %s, %s to %s, %s" ),
+        retv.Printf( _( "Bus to bus entry from (%s, %s) to (%s, %s)" ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ),
                      aUnitsProvider->MessageTextFromValue( entry->GetEnd().x ),
@@ -188,7 +188,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
     {
         const SCH_DIRECTIVE_LABEL* entry = static_cast<const SCH_DIRECTIVE_LABEL*>( aItem );
 
-        retv.Printf( _( "Netclass label '%s' at %s, %s" ),
+        retv.Printf( _( "Netclass label '%s' at (%s, %s)" ),
                      UnescapeString( entry->GetText() ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ) );

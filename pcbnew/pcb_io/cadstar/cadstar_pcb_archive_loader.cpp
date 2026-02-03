@@ -3914,7 +3914,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
             wxLogWarning( _( "The CADSTAR design contains nets with a 'Spacing Class' assigned. "
                              "KiCad does not have an equivalent to CADSTAR's Spacing Class so "
                              "these elements were not imported. Please review the design rules as "
-                             "copper pours will affected by this." ) );
+                             "copper pours may be affected by this." ) );
             m_doneSpacingClassWarning = true;
         }
 
