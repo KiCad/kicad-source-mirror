@@ -39,6 +39,7 @@ public:
     ~WEBVIEW_PANEL() override;
 
     wxWebView* GetWebView() const { return m_browser; }
+    const wxString& GetBackend() const { return m_backend; }
 
     void LoadURL( const wxString& url );
     void SetPage( const wxString& htmlContent );
@@ -73,6 +74,7 @@ private:
     bool                                m_loadError;
     bool                                m_loadedEventBound;
     wxWebView*                          m_browser;
+    wxString                            m_backend;
     std::map<wxString, MESSAGE_HANDLER> m_msgHandlers;
     TOOL_MANAGER*                       m_toolManager;
     TOOL_BASE*                          m_tool;
