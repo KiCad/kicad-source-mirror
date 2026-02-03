@@ -1700,7 +1700,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
 
 
-    if( realEnd && lastItem )
+    if( lastItem )
         simplifyNewLine( m_lastNode, lastItem );
 
     if( !realEnd )
