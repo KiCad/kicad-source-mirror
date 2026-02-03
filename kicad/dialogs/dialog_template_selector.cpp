@@ -301,14 +301,15 @@ void TEMPLATE_WIDGET::OnDoubleClick( wxMouseEvent& event )
 
 void TEMPLATE_WIDGET::onRightClick( wxMouseEvent& event )
 {
-    if( !m_isUserTemplate || !m_currTemplate )
+    if( !m_currTemplate )
     {
         event.Skip();
         return;
     }
 
     wxMenu menu;
-    menu.Append( wxID_EDIT, _( "Edit Template" ) );
+    menu.Append( wxID_EDIT, m_isUserTemplate ? _( "Edit Template" ) : _( "Open Template (Read-Only)" ) );
+    menu.Append( wxID_OPEN, _( "Open Template Folder" ) );
     menu.Append( wxID_COPY, _( "Duplicate Template" ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
@@ -316,6 +317,8 @@ void TEMPLATE_WIDGET::onRightClick( wxMouseEvent& event )
                {
                    if( evt.GetId() == wxID_EDIT )
                        onEditTemplate( evt );
+                   if( evt.GetId() == wxID_OPEN )
+                       onOpenFolder( evt );
                    else if( evt.GetId() == wxID_COPY )
                        onDuplicateTemplate( evt );
                } );
@@ -354,6 +357,19 @@ void TEMPLATE_WIDGET::onEditTemplate( wxCommandEvent& event )
     m_dialog->SetProjectToEdit( projectFile.GetFullPath() );
 
     m_dialog->EndModal( wxID_APPLY );
+}
+
+
+void TEMPLATE_WIDGET::onOpenFolder( wxCommandEvent& event )
+{
+    if( !m_currTemplate )
+        return;
+
+    wxFileName templatePath = m_currTemplate->GetHtmlFile();
+    templatePath.RemoveLastDir();
+
+    if( !wxLaunchDefaultApplication( templatePath.GetPath() ) )
+        DisplayError( this, wxString::Format( _( "Failed to open '%s'." ), templatePath.GetPath() ) );
 }
 
 
