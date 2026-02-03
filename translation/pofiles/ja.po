@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-01-21 17:07+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -18780,9 +18780,9 @@ msgid "Show Field Name"
 msgstr "フィールド名を表示"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "回路図 '%s' の読み込み中にエラー。"
+msgstr "Altium 回路図の解析中にエラーが発生しました: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -18889,9 +18889,9 @@ msgid "File not found %s."
 msgstr "ファイル '%s' が見つかりません。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Spiceライブラリ '%s' の解析中にエラーが発生しました: %s"
+msgstr "Altium ライブラリの解析中にエラーが発生しました: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -43059,7 +43059,7 @@ msgstr "部品位置情報ファイル から除外"
 
 #: pcbnew/footprint.cpp:4273 pcbnew/pad.cpp:2936
 msgid "Overrides"
-msgstr "オーバーライド"
+msgstr "上書き"
 
 #: pcbnew/footprint.cpp:4280 pcbnew/pad.cpp:2939
 msgid "Clearance Override"
@@ -50518,14 +50518,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "選択したすべてのパッドに対して自動的に配線を試行します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "現在のツールをキャンセル"
+msgstr "現在のアイテムをキャンセル"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "選択アイテムから最初のラインを作成"
+msgstr "現在の項目をスキップし、次に選択した項目を配線します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
