@@ -138,7 +138,15 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     {
         // The 2 *.cpp program launchers: single_top.cpp and kicad.cpp expect
         // the *.kiface's to reside in same directory as their binaries do.
-        path = wxStandardPaths::Get().GetExecutablePath();
+        wxString appDir;
+
+        // When running inside an AppImage, the bundled ld-linux is invoked as a wrapper
+        // which causes /proc/self/exe to resolve to the dynamic linker rather than the
+        // actual binary. Use APPDIR to construct the correct executable path.
+        if( wxGetEnv( wxT( "APPDIR" ), &appDir ) )
+            path = appDir + wxT( "/usr/bin/kicad" );
+        else
+            path = wxStandardPaths::Get().GetExecutablePath();
     }
 
     wxFileName fn = path;

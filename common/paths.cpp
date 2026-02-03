@@ -668,18 +668,35 @@ const wxString& PATHS::GetExecutablePath()
         // Use bundle root helper which handles symlink resolution and aux binaries
         exe_path = getOSXBundleRoot() + wxT( "/" );
 #else
-        wxString bin_dir = wxStandardPaths::Get().GetExecutablePath();
+        wxString envPath;
 
-        // Use unix notation for paths. I am not sure this is a good idea,
-        // but it simplifies compatibility between Windows and Unices.
-        // However it is a potential problem in path handling under Windows.
-        bin_dir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+        // When running inside an AppImage, the bundled ld-linux is invoked as a wrapper
+        // which causes /proc/self/exe to resolve to the dynamic linker rather than the
+        // actual binary. Use APPDIR to construct the correct executable path.
+        if( wxGetEnv( wxT( "APPDIR" ), &envPath ) )
+        {
+            envPath.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-        // Remove file name form command line:
-        while( bin_dir.Last() != '/' && !bin_dir.IsEmpty() )
-            bin_dir.RemoveLast();
+            if( !envPath.EndsWith( wxT( "/" ) ) )
+                envPath += wxT( "/" );
 
-        exe_path = bin_dir;
+            exe_path = envPath + wxT( "usr/bin/" );
+        }
+        else
+        {
+            wxString bin_dir = wxStandardPaths::Get().GetExecutablePath();
+
+            // Use unix notation for paths. I am not sure this is a good idea,
+            // but it simplifies compatibility between Windows and Unices.
+            // However it is a potential problem in path handling under Windows.
+            bin_dir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+            // Remove file name form command line:
+            while( bin_dir.Last() != '/' && !bin_dir.IsEmpty() )
+                bin_dir.RemoveLast();
+
+            exe_path = bin_dir;
+        }
 #endif
     }
 
