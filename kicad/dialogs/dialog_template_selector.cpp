@@ -480,10 +480,20 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
         }
     }
 
-    DisplayInfoMessage( m_dialog, wxString::Format( _( "Template duplicated successfully to '%s'." ),
-                                                    newTemplatePath ) );
+    // The file copy triggers OnFileSystemEvent which starts a refresh timer. If we show a
+    // modal info dialog here, the timer fires during the modal event loop and destroys this
+    // TEMPLATE_WIDGET while we're still on its call stack. Defer both the message and the
+    // refresh to run after the current event handler returns.
+    DIALOG_TEMPLATE_SELECTOR* dlg = m_dialog;
 
-    m_dialog->RefreshTemplateList();
+    dlg->CallAfter(
+            [dlg, newTemplatePath]()
+            {
+                DisplayInfoMessage( dlg, wxString::Format( _( "Template duplicated successfully"
+                                                              " to '%s'." ),
+                                                           newTemplatePath ) );
+                dlg->RefreshTemplateList();
+            } );
 }
 
 
