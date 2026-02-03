@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-02 15:25+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -8454,11 +8454,9 @@ msgid "schema file '%s' not found"
 msgstr "Schematický súbor '%s' sa nenašiel."
 
 #: common/json_schema_validator.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr ""
-"Pri načítaní schémy sa vyskytla chyba.\n"
-"%s"
+msgstr "Pri načítaní schémy sa vyskytla chyba:%s"
 
 #: common/kidialog.cpp:57
 msgid "Do not show again"
@@ -8575,7 +8573,6 @@ msgid "Net class references"
 msgstr "Referencie triedy spojov"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "Rule areas"
 msgstr "Oblasti pravidiel"
 
@@ -8588,9 +8585,8 @@ msgid "Symbol body fills"
 msgstr "Výplne tela symbolu"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "Pilník na list"
+msgstr "Výplň tvarov"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8644,9 +8640,8 @@ msgid "DNP markers"
 msgstr "DNP značky"
 
 #: common/layer_id.cpp:101
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Vyloučeno ze simulace"
+msgstr "Značky \"Vylúčené zo simulácie\""
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
@@ -8702,14 +8697,12 @@ msgid "Hidden items"
 msgstr "Skryté položky"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Zvýraznenie výberu"
+msgstr "Farba zvýrazneného spoju"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Zvýraznite kolízie"
+msgstr "Kolízie ťahania spojov"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8763,15 +8756,13 @@ msgstr "Prechádzajúce prekovy"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "Bl / zakopané priechody"
+msgstr "Slepé prekovy"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Vnorené prekovy:"
+msgstr "Vnorené prekovy"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
@@ -8814,9 +8805,8 @@ msgid "DRC errors"
 msgstr "Chyby DRC"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "Nie je 3D tvar"
+msgstr "DRC obrysy"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -8839,51 +8829,42 @@ msgid "Courtyard collision shadow"
 msgstr ""
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Board outline area"
-msgstr "Obrysy dosky"
+msgstr "Oblasť obrysu dosky"
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Track net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu spoju"
 
 #: common/layer_id.cpp:159
-#, fuzzy
 msgid "Pad net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu plôšky"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Via net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu prekovu"
 
 #: common/lib_id.cpp:146
 msgid "Illegal character found in library nickname"
 msgstr "V prezývke knižnice sa našiel neplatný znak"
 
 #: common/lib_table_grid_tricks.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library table '%s'"
-msgstr "Pri načítaní tabuľky knižnice symbolov '%s' sa vyskytla chyba."
+msgstr "Vyskytla chyba pri načítaní tabuľky knižnice '%s'"
 
 #: common/lib_table_grid_tricks.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s'"
-msgstr ""
-"Chyba pri načítaní knižnice symbolov %s.\n"
-"\n"
-"%s"
+msgstr "Chyba pri načítaní knižnice '%s'"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Upraviť možnosti..."
+msgstr "Upraviť nastavenia..."
 
 #: common/lib_table_grid_tricks.cpp:114
-#, fuzzy
 msgid "Open Library Table"
-msgstr "Vyberte tabuľku knižnice"
+msgstr "Otvoriť tabuľku knižnice"
 
 #: common/lib_table_grid_tricks.cpp:143
 #, fuzzy
@@ -8896,28 +8877,24 @@ msgid "Deactivate Selected"
 msgstr "Deaktivovať vybrané"
 
 #: common/lib_table_grid_tricks.cpp:151
-#, fuzzy
 msgid "Set Visible Flag"
-msgstr "Nastaviť viditeľné vrstvy"
+msgstr "Nastaviť príznak viditeľnosti"
 
 #: common/lib_table_grid_tricks.cpp:154
-#, fuzzy
 msgid "Unset Visible Flag"
-msgstr "Odstrániť viditeľné vrstvy"
+msgstr "Zrušiť príznak viditeľnosti"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Úprava možností"
+msgstr "Upraviť možnosti..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
 msgstr "Upraviť možnosti tejto položky knižnice"
 
 #: common/lib_table_grid_tricks.cpp:482
-#, fuzzy
 msgid "Library must have a nickname."
-msgstr "Vrstva musí mať názov."
+msgstr "Knižnica musí mať prezývku."
 
 #: common/lib_table_grid_tricks.cpp:484
 #, c-format
@@ -8934,19 +8911,16 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Viacero knižníc nemôže zdieľať rovnakú prezývku ('%s')."
 
 #: common/lib_table_notebook_panel.cpp:100
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Chyba pri ukladaní tabuľky globálnej knižnice:\n"
+"Chyba pri ukladaní vnorenej tabuľky knižnice:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:117
-#, fuzzy
 msgid "Save changes to nested library table?"
-msgstr "Uložiť zmeny do knižnice"
+msgstr "Uložiť zmeny do vnorenej tabuľky knižnice?"
 
 #: common/lib_tree_model_adapter.cpp:155 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:176 common/lib_tree_model_adapter.cpp:178
@@ -8966,14 +8940,12 @@ msgstr "Nedávno použité"
 
 #: common/lib_tree_model_adapter.cpp:451
 #: eeschema/widgets/panel_symbol_chooser.cpp:184
-#, fuzzy
 msgid "Already Placed"
-msgstr "Pohyb a umiestnenie"
+msgstr "Už umiestnené"
 
 #: common/libeval_compiler/libeval_compiler.cpp:599
-#, fuzzy
 msgid "Unresolved text variable reference"
-msgstr "Nevyriešená textová premenná"
+msgstr "Nevyriešený odkaz textovej premennej"
 
 #: common/libeval_compiler/libeval_compiler.cpp:601
 #, c-format
@@ -9028,14 +9000,12 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Nezhoda typu pre %lf a '%s'"
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
-#, fuzzy
 msgid "Edit settings"
-msgstr "Nastavenia strany"
+msgstr "Upraviť nastavenia"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Open library table"
-msgstr "Knižnica stopy nie je povolená."
+msgstr "Otvoriť tabuľku knižnice"
 
 #: common/libraries/lib_table_grid_data_model.cpp:335
 msgid "Nickname"
@@ -9046,14 +9016,12 @@ msgid "Library Path"
 msgstr "Cesta knmižnice"
 
 #: common/libraries/lib_table_grid_data_model.cpp:339
-#, fuzzy
 msgid "Library Format"
-msgstr "Cesta knmižnice"
+msgstr "Formát knižnice"
 
 #: common/libraries/lib_table_grid_data_model.cpp:342 pcbnew/zone.cpp:2008
-#, fuzzy
 msgid "Enable"
-msgstr "Povolené:"
+msgstr "Povoliť"
 
 #: common/libraries/lib_table_grid_data_model.cpp:343
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
@@ -9072,43 +9040,40 @@ msgid "Show"
 msgstr "Zobraziť"
 
 #: common/libraries/library_manager.cpp:130
-#, fuzzy
 msgid "A reference to this library table already exists"
-msgstr "Knižnica s prezývkou '%s' už existuje."
+msgstr "Odkaz na túto tabuľku knižnice už existuje"
 
 #: common/libraries/library_manager.cpp:299
 msgid "Added by Plugin and Content Manager"
 msgstr "Pridané správcom zásuvných modulov a obsahu"
 
 #: common/libraries/library_manager.cpp:388
-#, fuzzy
 msgid "KiCad Default Libraries"
-msgstr "KiCad Predvolené"
+msgstr "Predvolené knižnice KiCad"
 
 #: common/libraries/library_manager.cpp:1096
-#, fuzzy
 msgid "Library not found in library table"
-msgstr "Knižnica sa nenašla v tabuľke knižnice symbolov."
+msgstr "Knižnica sa nenašla v tabuľke knižníc"
 
 #: common/libraries/library_manager.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Knižnica: "
+msgstr "Knižnica '%s': %s"
 
 #: common/libraries/library_manager.cpp:1335
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Knižnica '%s' sa nenašla."
+msgstr "Knižnica %s sa nenašla"
 
 #: common/libraries/library_table.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "cesta knižnice stopy \"%s\" neexistuje"
+msgstr "Cesta tabuľky knižnice '%s' neexistuje"
 
 #: common/libraries/library_table_parser.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "nastala chyba pri ukladaní súboru dokumentácie knižnice \""
+msgstr "Vyskytla sa neočakávaná chyba pri čítaní tabuľky knižnice %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:233
@@ -9117,19 +9082,15 @@ msgid "Syntax error at line %zu, column %zu"
 msgstr ""
 
 #: common/libraries/library_table_parser.cpp:219
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "nastala chyba pri ukladaní súboru dokumentácie knižnice \""
+msgstr "Pri čítaní tabuľky knižnice sa vyskytla neočakávaná chyba"
 
 #: common/local_history.cpp:1490
-#, fuzzy
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"Nasledujúce súbory budú prepísané:\n"
-"\n"
-"%s\n"
+"Pri obnove tohto commitu budú vymazané nasledujúce súbory:\n"
 "\n"
 
 #: common/local_history.cpp:1501
@@ -9140,23 +9101,20 @@ msgid ""
 msgstr ""
 
 #: common/local_history.cpp:1505
-#, fuzzy
 msgid "Delete Files during Restore"
-msgstr "Odstrániť adresár"
+msgstr "Odstrániť súbory počas obnovenia"
 
 #: common/local_history.cpp:1507
 msgid "Proceed"
 msgstr ""
 
 #: common/local_history.cpp:1507
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Všetky súbory"
+msgstr "Ponechať všetky súbory"
 
 #: common/local_history.cpp:1507 eeschema/files-io.cpp:641
-#, fuzzy
 msgid "Abort"
-msgstr "Ukončovanie"
+msgstr "Prerušiť"
 
 #: common/local_history.cpp:1509
 msgid ""
@@ -9170,19 +9128,16 @@ msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
 
 #: common/local_history.cpp:1746
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Súbory úloh"
+msgstr "Obnovenie zlyhalo"
 
 #: common/local_history.cpp:1943
-#, fuzzy
 msgid "Select snapshot"
-msgstr "Zvoľte cestu"
+msgstr "Vybrať snapshot"
 
 #: common/local_history.cpp:1943 kicad/kicad_manager_frame.cpp:947
-#, fuzzy
 msgid "Restore"
-msgstr "Rezistor"
+msgstr "Obnoviť"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1227 pcbnew/zone.cpp:954
@@ -9192,41 +9147,41 @@ msgstr "%s a %s"
 
 #: common/netclass.cpp:311 pcbnew/component_classes/component_class.cpp:72
 #: pcbnew/zone.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s a %s"
+msgstr "%s, %s a %s"
 
 #: common/netclass.cpp:318 pcbnew/component_classes/component_class.cpp:77
 #: pcbnew/zone.cpp:967
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s a %d ďalších"
+msgstr "%s, %s a %d viac"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Neplatné ID stopy v\n"
-"súbor: \"%s\"\n"
+"Neplatné ID puzdra v\n"
+"súbore: '%s'\n"
 "riadok: %d\n"
 "offset: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Neplatné ID stopy v\n"
-"súbor: \"%s\"\n"
+"Neplatné ID lib_id v\n"
+"súbore: '%s'\n"
 "riadok: %d\n"
 "offset: %d"
 
@@ -9264,20 +9219,20 @@ msgstr "Nie je možné analyzovať názov siete v netto sekcii so symbolmi."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:243
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Nie je možné nájsť symbol '%s' v sekcii filtra stopa netlistu."
+msgstr "Nedá sa nájsť symbol %s v sekcii filtra puzdra netlistu."
 
 #: common/netlist_reader/netlist_reader.cpp:189
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"Neplatné ID stopy v\n"
-"súbor: \"%s\"\n"
+"Neplatné ID puzdra v\n"
+"súbore: '%s'\n"
 "riadok: %d"
 
 #: common/notifications_manager.cpp:95
@@ -9297,78 +9252,64 @@ msgid "There are no notifications available"
 msgstr "Žiadne oznamy"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210 mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297 mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420 mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594 mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841 mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189 mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "8,5 x 11 palcov"
+msgstr "A 8,5 x 11palcov"
 
 #: common/page_info.cpp:55
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17 palcov"
+msgstr "B 11 x 17palcov"
 
 #: common/page_info.cpp:56
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22 palcov"
+msgstr "C 17 x 22palcov"
 
 #: common/page_info.cpp:57
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34 palcov"
+msgstr "D 22 x 34palcov"
 
 #: common/page_info.cpp:58
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44 palcov"
+msgstr "E 34 x 44palcov"
 
 #: common/page_info.cpp:62
 msgid "User (Custom)"
 msgstr "Používateľské (vlastné)"
 
 #: common/page_info.cpp:64
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8,5x11 palcov"
+msgstr "US Letter 8,5 x 11palcov"
 
 #: common/page_info.cpp:65
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8,5x14 palcov"
+msgstr "US Legal 8,5 x 14palcov"
 
 #: common/page_info.cpp:66
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11x17 palcov"
+msgstr "US Ledger 11 x 17palcov"
 
 #: common/paths.cpp:555
 #, c-format
@@ -9393,9 +9334,8 @@ msgid "Select Preferred Editor"
 msgstr "Vyberte predvolený editor"
 
 #: common/pgm_base.cpp:357
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Názov premennej prostredia nemôže byť prázdne."
+msgstr "Premenná prostredia HOME je prázdna. Nie je možné pokračovať."
 
 #: common/pgm_base.cpp:583
 msgid "This language is not supported by the operating system."
@@ -9406,9 +9346,8 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Jazykový súbor KiCad pre tento jazyk nie je nainštalovaný."
 
 #: common/pgm_base.cpp:891 common/pgm_base.cpp:903
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Načítavajú sa knižnice symbolov"
+msgstr "Načítavajú sa knižnice návrhových blokov"
 
 #: common/pin_numbers.cpp:129
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:345
@@ -9439,9 +9378,9 @@ msgid "Open %s"
 msgstr "Otvoriť %s"
 
 #: common/plotters/PDF_plotter.cpp:2764
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open 3D model file: %s"
-msgstr "Zlyhalo otvorenie súboru „%s”"
+msgstr "Zlyhalo otvorenie súboru 3D modelu: %s"
 
 #: common/project/net_settings.cpp:67 pcbnew/board.cpp:144
 msgid "This is the default net class."
@@ -9457,9 +9396,9 @@ msgid "Invalid archive file format."
 msgstr "Neplatný formát archívneho súboru."
 
 #: common/project/project_archiver.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Rozbaliť súbor \"%s\""
+msgstr "Rozbaľovanie súboru '%s'."
 
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
@@ -9498,9 +9437,9 @@ msgid "Failed to create file '%s'."
 msgstr "Nepodarilo sa vytvoriť súbor '%s'."
 
 #: common/project/project_archiver.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Chyba pri odstraňovaní adresára '%s': %s"
+msgstr "Chyba pri otváraní adresára '%s'."
 
 #: common/project/project_archiver.cpp:319
 #, c-format
@@ -9519,7 +9458,6 @@ msgstr "Zip archív \"%s\" vytvorený (%s nekomprimované, %s komprimované)."
 
 #: common/properties/pg_editors.cpp:600
 #: common/widgets/grid_text_button_helpers.cpp:255
-#, fuzzy
 msgid "Open file"
 msgstr "Otvoriť súbor"
 
@@ -9542,17 +9480,17 @@ msgid "Error: "
 msgstr "Chyba: "
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3184
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Adresár '%s' neexistuje"
+msgstr "Súbor '%s' neexistuje."
 
 #: common/richio.cpp:88 eeschema/sch_io/eagle/sch_io_eagle.cpp:603
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:674
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3231
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "Súbor '%s' sa nedá prečítať"
+msgstr "Súbor '%s' sa nedá prečítať."
 
 #: common/richio.cpp:164
 #, c-format
@@ -9568,9 +9506,8 @@ msgid "Line length exceeded"
 msgstr "Prekročená dĺžka riadka"
 
 #: common/settings/bom_settings.cpp:126
-#, fuzzy
 msgid "Default Editing"
-msgstr "Predvolené jednotky:"
+msgstr "Predvolené úpravy"
 
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
@@ -9589,9 +9526,8 @@ msgid "Grouped By Value"
 msgstr "Zoskupené podľa hodnoty"
 
 #: common/settings/bom_settings.cpp:166
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Vybrať a presunúť puzdro"
+msgstr "Zoskupené podľa hodnoty a puzdra"
 
 #: common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:251
@@ -9610,14 +9546,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:266
-#, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:273
-#, fuzzy
 msgid "Semicolons"
-msgstr "Výber farieb"
+msgstr "bodkočiarky"
 
 #: common/settings/color_settings.cpp:392
 msgid "(Footprints)"
@@ -9633,9 +9567,9 @@ msgid "KiCad Classic"
 msgstr "KiCad Classic"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Vitajte v KiCad-e %s!"
+msgstr "Vitajte v KiCad-e %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -9651,9 +9585,8 @@ msgid "For help, please visit "
 msgstr ""
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Nastavenie Dosky"
+msgstr "Nastavenie KiCad"
 
 #: common/startwizard/startwizard.cpp:202
 msgid ""
@@ -9662,19 +9595,16 @@ msgid ""
 msgstr ""
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
-#, fuzzy
 msgid "Symbol library table"
-msgstr "Knižnica symbolov nie je povolená."
+msgstr "Tabuľka knižnice symbolov"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:113
-#, fuzzy
 msgid "Footprint library table"
-msgstr "Knižnica stopy nie je povolená."
+msgstr "Tabuľka knižnice puzdier"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:117
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Globálne knižnice"
+msgstr "Tabuľka knižnice návrhových blokov"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:136
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
@@ -9697,9 +9627,8 @@ msgid "Select Settings Path"
 msgstr "Vybrať cestu k nastaveniu"
 
 #: common/startwizard/startwizard_provider_settings.cpp:183
-#, fuzzy
 msgid "Configuration"
-msgstr "Potvrdenie"
+msgstr "Nastavenie"
 
 #: common/tool/action_menu.cpp:224 common/tool/action_menu.cpp:229
 #, c-format
@@ -9712,38 +9641,32 @@ msgid "Quit %s"
 msgstr "Ukončiť %s"
 
 #: common/tool/action_toolbar.cpp:1131
-#, fuzzy
 msgid "Grid selector"
-msgstr "Štýl mriežky"
+msgstr "Výber mriežky"
 
 #: common/tool/action_toolbar.cpp:1132
-#, fuzzy
 msgid "Grid Selection box"
-msgstr "Konkretizovať výber"
+msgstr "Pole výberu mriežky"
 
 #: common/tool/action_toolbar.cpp:1144
-#, fuzzy
 msgid "Zoom selector"
-msgstr "Priblížiť na výber"
+msgstr "Výber priblíženia"
 
 #: common/tool/action_toolbar.cpp:1145
-#, fuzzy
 msgid "Zoom Selection box"
-msgstr "Priblížiť na výber"
+msgstr "Pole výberu priblíženia"
 
 #: common/tool/action_toolbar.cpp:1157
-#, fuzzy
 msgid "IPC/Scripting plugins"
-msgstr "Skriptovacia konzola"
+msgstr "Pluginy pre IPC/skriptovanie"
 
 #: common/tool/action_toolbar.cpp:1158
 msgid "Region to hold the IPC/Scripting action buttons"
 msgstr ""
 
 #: common/tool/action_toolbar.cpp:1163
-#, fuzzy
 msgid "Layer selector"
-msgstr "Výber vrstvy:"
+msgstr "Výber vrstvy"
 
 #: common/tool/action_toolbar.cpp:1164
 #, fuzzy
