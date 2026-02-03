@@ -698,7 +698,7 @@ static void boxText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aP
     BOX2I box = GetTextExtents( aText, aPosition, *font, aAttrs, aFontMetrics );
 
     // Give the highlight a bit of margin.
-    box.Inflate( 0, aAttrs.m_StrokeWidth * 2 );
+    box.Inflate( aAttrs.m_StrokeWidth / 2, aAttrs.m_StrokeWidth * 2 );
 
     aGal.SetIsFill( true );
     aGal.SetIsStroke( false );
@@ -1455,7 +1455,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 strokeText( aGal, aText, aPosition, aAttrs, aFontMetrics );
             };
 
-    const auto drawMultiLineTextBox =
+    const auto boxMultiLineText =
             [&]( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D& aPosition,
                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
             {
@@ -1635,8 +1635,8 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                     }
                     else
                     {
-                        drawMultiLineTextBox( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
-                                            aPin->GetFontMetrics() );
+                        boxMultiLineText( *m_gal, aTextInfo.m_Text, aTextInfo.m_TextPosition, attrs,
+                                          aPin->GetFontMetrics() );
                     }
                 }
                 else if( nonCached( aPin ) && renderTextAsBitmap )
@@ -2244,27 +2244,17 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
-    // Adjust text drawn in an outline font to more closely mimic the positioning of
-    // SCH_FIELD text.
-    if( font->IsOutline() && aText->Type() == SCH_TEXT_T )
-    {
-        BOX2I    firstLineBBox = aText->GetTextBox( nullptr, 0 );
-        int      sizeDiff = firstLineBBox.GetHeight() - aText->GetTextSize().y;
-        int      adjust = KiROUND( sizeDiff * 0.35 );
-        VECTOR2I adjust_offset( 0, adjust );
-
-        RotatePoint( adjust_offset, aText->GetDrawRotation() );
-        text_offset += adjust_offset;
-    }
-
     if( drawingShadows && font->IsOutline() )
     {
-        BOX2I bBox = aText->GetBoundingBox();
-        bBox.Inflate( KiROUND( getTextThickness( aText ) * 2 ) );
+        VECTOR2I pos( aText->GetDrawPos() );
 
-        m_gal->SetIsStroke( false );
-        m_gal->SetIsFill( true );
-        m_gal->DrawRectangle( bBox.GetPosition(), bBox.GetEnd() );
+        pos += text_offset;
+
+        if( aText->Type() == SCH_TEXT_T )
+            pos += aText->GetOffsetToMatchSCH_FIELD( nullptr );
+
+        // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
+        boxText( *m_gal, shownText, pos, attrs, aText->GetFontMetrics() );
     }
     else if( aText->GetLayer() == LAYER_DEVICE )
     {
@@ -2273,8 +2263,6 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
         // Due to the fact a shadow text can be drawn left or right aligned, it needs to be
         // offset by shadowWidth/2 to be drawn at the same place as normal text.
-        // For some reason we need to slightly modify this offset for a better look (better
-        // alignment of shadow shape), for KiCad font only.
         double shadowOffset = 0.0;
 
         if( drawingShadows )
@@ -2350,8 +2338,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         else if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_90 )
             text_offset.y += fudge;
 
-        strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs,
-                    aText->GetFontMetrics() );
+        strokeText( *m_gal, shownText, aText->GetDrawPos() + text_offset, attrs, aText->GetFontMetrics() );
     }
     else
     {
@@ -2370,6 +2357,9 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
                 activeUrl = aText->GetHyperlink();
             }
         }
+
+        if( aText->Type() == SCH_TEXT_T )
+            text_offset += aText->GetOffsetToMatchSCH_FIELD( nullptr );
 
         if( nonCached( aText ) && aText->RenderAsBitmap( m_gal->GetWorldScale() )
                                && !shownText.Contains( wxT( "\n" ) ) )
@@ -2959,27 +2949,24 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( m_schSettings.GetDrawBoundingBoxes() )
         drawItemBoundingBox( aField );
 
+    TEXT_ATTRIBUTES attributes = aField->GetAttributes();
+    attributes.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
+
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->SetHoverColor( color );
 
     if( drawingShadows && getFont( aField )->IsOutline() )
     {
-        BOX2I shadow_box = bbox;
-        shadow_box.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
-
-        m_gal->SetIsStroke( false );
-        m_gal->SetIsFill( true );
-        m_gal->DrawRectangle( shadow_box.GetPosition(), shadow_box.GetEnd() );
+        // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
+        boxText( *m_gal, shownText, aField->GetDrawPos(), attributes, aField->GetFontMetrics() );
     }
     else
     {
-        VECTOR2I        textpos = bbox.Centre();
-        TEXT_ATTRIBUTES attributes = aField->GetAttributes();
+        VECTOR2I textpos = bbox.Centre();
 
         attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attributes.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
         attributes.m_Angle = orient;
 
         if( drawingShadows )
