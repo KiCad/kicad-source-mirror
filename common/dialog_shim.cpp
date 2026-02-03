@@ -377,6 +377,14 @@ bool DIALOG_SHIM::Show( bool show )
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
                          std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
                          std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ), 0 );
+
+                // Reset minimum size so the user can resize the dialog smaller than
+                // the saved size. We must clear the current minimum and invalidate
+                // the cached best size so GetBestSize() returns the true sizer
+                // minimum rather than being constrained by the restored size.
+                SetMinSize( wxDefaultSize );
+                InvalidateBestSize();
+                SetMinSize( GetBestSize() );
             }
 
 #ifdef __WXMAC__
