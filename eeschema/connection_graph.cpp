@@ -1784,6 +1784,32 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
     // These are NOT limited to power symbols, we support legacy invisible + power-in pins
     // on non-power symbols.
 
+    // Sort power pins for deterministic processing order. This ensures that when multiple
+    // power pins share the same net name, the same pin consistently creates the subgraph
+    // across different ERC runs.
+    std::sort( m_global_power_pins.begin(), m_global_power_pins.end(),
+               []( const std::pair<SCH_SHEET_PATH, SCH_PIN*>& a,
+                   const std::pair<SCH_SHEET_PATH, SCH_PIN*>& b )
+               {
+                   int pathCmp = a.first.Cmp( b.first );
+
+                   if( pathCmp != 0 )
+                       return pathCmp < 0;
+
+                   const SCH_SYMBOL* symA = static_cast<const SCH_SYMBOL*>( a.second->GetParentSymbol() );
+                   const SCH_SYMBOL* symB = static_cast<const SCH_SYMBOL*>( b.second->GetParentSymbol() );
+
+                   wxString refA = symA ? symA->GetRef( &a.first, false ) : wxString();
+                   wxString refB = symB ? symB->GetRef( &b.first, false ) : wxString();
+
+                   int refCmp = refA.Cmp( refB );
+
+                   if( refCmp != 0 )
+                       return refCmp < 0;
+
+                   return a.second->GetNumber().Cmp( b.second->GetNumber() ) < 0;
+               } );
+
     std::unordered_map<int, CONNECTION_SUBGRAPH*> global_power_pin_subgraphs;
 
     for( const auto& [sheet, pin] : m_global_power_pins )
