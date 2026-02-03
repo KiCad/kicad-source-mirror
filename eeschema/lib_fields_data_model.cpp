@@ -117,6 +117,33 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
     }
 
     m_cols.erase( m_cols.begin() + aCol );
+
+    if( m_sortColumn == aCol )
+        m_sortColumn = 0;
+    else if( m_sortColumn > aCol )
+        m_sortColumn--;
+
+    wxSafeDecRef( m_colAttrs[aCol] );
+    m_colAttrs.erase( aCol );
+
+    std::map<int, wxGridCellAttr*> newColAttrs;
+
+    for( auto& [col, attr] : m_colAttrs )
+    {
+        if( col > aCol )
+            newColAttrs[col - 1] = attr;
+        else
+            newColAttrs[col] = attr;
+    }
+
+    m_colAttrs = std::move( newColAttrs );
+
+    if( wxGrid* grid = GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_COLS_DELETED, aCol, 1 );
+        grid->ProcessTableMessage( msg );
+    }
+
     m_edited = true;
 }
 
@@ -1026,7 +1053,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             {
                 symbolChangeHandler( symbol );
                 symbol->RemoveField( field );
-                delete field;
             }
         }
     }
