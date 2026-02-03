@@ -16,8 +16,8 @@ When loading rules into the graphical editor, constraints are automatically
 mapped to appropriate editing panels. Rules with multiple constraints may be
 split across panels, each showing a subset of the rule's constraints.
 
-Multi-constraint panels like Via Style (via_diameter + hole_size) and
-Differential Pair Routing (track_width + diff_pair_gap) are matched first.
+Multi-constraint panels like Via Style (`via_diameter` + `hole_size`) and
+Differential Pair Routing (`track_width` + `diff_pair_gap`) are matched first.
 Single-constraint panels handle the remainder. Unmapped constraints appear
 in the Custom Rule panel.
 
