@@ -1987,6 +1987,65 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
 }
 
 
+// Altium text orientation and justification are in absolute (page) coordinates. KiCad stores
+// field text properties relative to the parent symbol and applies the symbol's transform at
+// render time. This function adjusts the field's stored text angle and justification to
+// compensate for the symbol's orientation so that the final rendered appearance matches the
+// original Altium layout.
+//
+// The compensation follows the same logic as SCH_FIELD::Rotate() but applied in the
+// inverse direction to undo the symbol's rotation effect on text properties.
+void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSymbol )
+{
+    bool isHorizontal = aField->GetTextAngle().IsHorizontal();
+
+    // Altium orientation 0 (RIGHTWARDS) maps to KiCad SYM_ORIENT_90 (CCW). To compensate,
+    // apply CW 90-degree rotation to text properties. Per SCH_FIELD::Rotate(), CW rotation
+    // of horizontal text flips justification; CW rotation of vertical text does not.
+    if( aSymbol.orientation == 0 )
+    {
+        if( isHorizontal )
+        {
+            aField->SetHorizJustify(
+                    static_cast<GR_TEXT_H_ALIGN_T>( -aField->GetHorizJustify() ) );
+        }
+
+        aField->SetTextAngle( isHorizontal ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
+    }
+    // Altium orientation 1 (UPWARDS) maps to KiCad SYM_ORIENT_180 (two CCW rotations). The
+    // transform [-1,0,0,-1] negates both X and Y, flipping horizontal justification. Apply
+    // one correction for the full 180 degrees regardless of text angle.
+    else if( aSymbol.orientation == 1 )
+    {
+        aField->SetHorizJustify(
+                static_cast<GR_TEXT_H_ALIGN_T>( -aField->GetHorizJustify() ) );
+    }
+    // Altium orientation 2 (LEFTWARDS) maps to KiCad SYM_ORIENT_270 (CW). To compensate,
+    // apply CCW 90-degree rotation to text properties. Per SCH_FIELD::Rotate(), CCW rotation
+    // of vertical text flips justification; CCW rotation of horizontal text does not.
+    else if( aSymbol.orientation == 2 )
+    {
+        if( !isHorizontal )
+        {
+            aField->SetHorizJustify(
+                    static_cast<GR_TEXT_H_ALIGN_T>( -aField->GetHorizJustify() ) );
+        }
+
+        aField->SetTextAngle( isHorizontal ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
+    }
+    // Altium orientation 3 (DOWNWARDS) maps to KiCad SYM_ORIENT_0 (identity). No rotation
+    // compensation needed.
+
+    // Mirror-Y in KiCad negates the X component of the bounding box, which effectively
+    // flips horizontal justification. Compensate so the rendered text matches Altium.
+    if( aSymbol.isMirrored )
+    {
+        aField->SetHorizJustify(
+                static_cast<GR_TEXT_H_ALIGN_T>( -aField->GetHorizJustify() ) );
+    }
+}
+
+
 bool SCH_IO_ALTIUM::ShouldPutItemOnSheet( int aOwnerindex )
 {
     // No component assigned -> Put on sheet
@@ -4373,6 +4432,11 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
     SCH_FIELD* field = symbol->GetField( REFERENCE_FIELD );
     field->SetPosition( elem.location + m_sheetOffset );
     SetTextPositioning( field, elem.justification, elem.orientation );
+
+    const auto& altiumSymIt = m_altiumComponents.find( elem.ownerindex );
+
+    if( altiumSymIt != m_altiumComponents.end() )
+        AdjustFieldForSymbolOrientation( field, altiumSymIt->second );
 }
 
 
@@ -4394,6 +4458,7 @@ void SCH_IO_ALTIUM::ParseLibDesignator( const std::map<wxString, wxString>& aPro
             refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
 
         refField.SetPosition( elem.location );
+        SetTextPositioning( &refField, elem.justification, elem.orientation );
 
         if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
         {
@@ -4514,6 +4579,11 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         field->SetVisible( !elem.isHidden );
         field->SetNameShown( elem.isShowName );
         SetTextPositioning( field, elem.justification, elem.orientation );
+
+        const auto& altiumSymIt = m_altiumComponents.find( elem.ownerindex );
+
+        if( altiumSymIt != m_altiumComponents.end() )
+            AdjustFieldForSymbolOrientation( field, altiumSymIt->second );
     }
 }
 
