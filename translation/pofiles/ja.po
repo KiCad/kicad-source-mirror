@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-01-21 17:07+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -2331,9 +2331,9 @@ msgstr "デザイン ブロック フォルダー ' %s ' を削除できませ�
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "ファイル '%s' が見つかりません。"
+msgstr "入れ子になったテーブル '%s' が見つかりません。"
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4434,7 +4434,6 @@ msgid "Reset Unique Id"
 msgstr "固有IDのリセット"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
 msgstr "デザインブロック ライブラリ テーブル"
 
@@ -4444,9 +4443,9 @@ msgstr "デザインブロック ライブラリ テーブル"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -6426,9 +6425,8 @@ msgstr "グラフィックスのデフォルト"
 
 #: common/eda_base_frame.cpp:1450
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "レイヤー名"
+msgstr "ユーザー レイヤー名"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7744,32 +7742,38 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"マージできません: コミットされていない(ステージングされていない)変更がありま"
+"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてください"
+"。"
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "マージが失敗しました"
+msgstr "マージが失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"リベースでプルできません: コミットされていない(ステージングされていない)変更"
+"があります。コミットまたは変更を一時退避 (Stash)してコミットしてからpullして"
+"ください。"
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "リベースの開始に失敗しました"
+msgstr "リベースの開始に失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "リベースのコミットに失敗しました"
+msgstr "リベースのコミットに失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "リベースの完了に失敗しました"
+msgstr "リベースの完了に失敗しました: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8331,7 +8335,6 @@ msgid "Export Board Statistics Job Settings"
 msgstr "基板統計のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
 msgstr "PCB: 基板統計をエクスポート"
 
@@ -8861,9 +8864,8 @@ msgid "Error loading library '%s'"
 msgstr "シンボル ライブラリ %s の読み込み中にエラー"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "設定を編集"
+msgstr "設定を編集..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8886,9 +8888,8 @@ msgid "Unset Visible Flag"
 msgstr "表示フラグを解除"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "編集オプション"
+msgstr "編集オプション..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -11404,13 +11405,12 @@ msgid "Save..."
 msgstr "保存..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "表示:"
+msgstr "表示PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "見付ける"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -15138,9 +15138,8 @@ msgstr "現在の回路図にはプロジェクトまたはパスが定義され
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "名称"
+msgstr "デザイン バリアント:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -16726,9 +16725,8 @@ msgid "Enter new variant name:"
 msgstr "新しいバリアント名を入力:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "バリアント名の変更"
+msgstr "デザイン バリアント名の変更"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16758,9 +16756,8 @@ msgid "Enter name for the copied variant:"
 msgstr "コピーしたバリアント名を入力してください:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "バリアントのコピー"
+msgstr "デザイン バリアントのコピー"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16858,9 +16855,8 @@ msgid "Alternate Assignment"
 msgstr "代替割り当て"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " バリアント"
+msgstr " デザイン バリアント"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17275,15 +17271,15 @@ msgid "Net names"
 msgstr "ネット名"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
-msgstr "PCB エディターで置き換えられたシンボルの値を更新します。"
+msgstr "PCB エディターのネット名と一致するように回路図のネット ラベルを更新します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "シンボル内の他のすべてのフィールドをフットプリントから更新"
+msgstr ""
+"フットプリントと一致するように、未実装(DNP) などのシンボル属性フラグを更新し"
+"ます。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18216,14 +18212,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "エッジのドラッグ中にピンを追従させます"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
 msgstr "シンボル ライブラリ テーブル"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:392
-#, fuzzy
 msgid "folder with .kicad_sym files"
-msgstr "%s ファイルを含むフォルダー"
+msgstr ".kicad_sym ファイルを含むフォルダー"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
@@ -18623,9 +18617,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc/erc.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "ピン %s (%s) が %s と %s の両方に接続されています"
+msgstr "ピン %s (シンボル %s) は異なるネット %s と %s の両方に接続しています"
 
 #: eeschema/erc/erc.cpp:1354
 #, c-format
@@ -18781,9 +18775,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "電源入力ピンが電源出力ピンによって駆動されていない"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "異なったレイヤー上にゾーンの外枠を複製"
+msgstr "異なるネットの重複ピン"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -20080,15 +20073,14 @@ msgid "Save changes to '%s' before closing?"
 msgstr "閉じる前に '%s' へ変更を保存しますか?"
 
 #: eeschema/sch_edit_frame.cpp:1322
-#, fuzzy
 msgid ""
 "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the main KiCad "
 "application and create a project."
 msgstr ""
-"回路図 エディターがスタンドアローン モードで開かれているため、基板 (PCB) を更"
-"新できません。回路図から基板を作成または更新するには、KiCad シェルから起動し"
-"て、プロジェクトを作成して下さい。"
+"回路図 エディターがスタンドアローン モードで開かれているため、プリント基板 "
+"(PCB) を更新できません。回路図から基板を作成または更新するには、メインの"
+"KiCad プロジェクトマネージャーから起動して、プロジェクトを作成して下さい。"
 
 #: eeschema/sch_edit_frame.cpp:1407
 msgid "New Schematic"
@@ -20156,14 +20148,12 @@ msgid "Find in Net Inspector"
 msgstr "ネット インスペクター検索"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "削除するバリアント名を選択"
+msgstr "削除するバリアント名を選択:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "バリアントを削除..."
+msgstr "デザイン バリアントを削除"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -20249,9 +20239,9 @@ msgid "Importing %s"
 msgstr "%sをインポート中"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:927
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "回路図 '%s' の読み込み中にエラー。"
+msgstr "Altium 回路図の解析中にエラーが発生しました: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
@@ -20358,9 +20348,9 @@ msgid "File not found %s."
 msgstr "ファイル '%s' が見つかりません。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4980
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Spiceライブラリ '%s' の解析中にエラーが発生しました: %s"
+msgstr "Altium ライブラリの解析中にエラーが発生しました: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5003
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -23936,6 +23926,8 @@ msgstr "カーソル 2"
 msgid ""
 "Workbook file '%s' not found. Loading simulation settings from schematic."
 msgstr ""
+"ワークブック ファイル '%s' が見つかりません。回路図からシミュレーション設定を"
+"読み込んでいます。"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1436
 #: eeschema/sim/simulator_frame_ui.cpp:3210
@@ -24818,14 +24810,12 @@ msgid "Select the current variant to display and edit."
 msgstr "現在のバリアントを選択して表示および編集。"
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "新しいバリアントを追加..."
+msgstr "新しいデザイン バリアントを追加..."
 
 #: eeschema/toolbars_sch_editor.cpp:372
-#, fuzzy
 msgid "New Design Variant"
-msgstr "新しいバリアント"
+msgstr "新しいデザイン バリアント"
 
 #: eeschema/toolbars_sch_editor.cpp:378
 msgid "Variant name:"
@@ -26474,24 +26464,20 @@ msgid "Show SPICE Netlist"
 msgstr "SPICE ネットリストを表示"
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "新しいバリアントを追加..."
+msgstr "新しいデザイン バリアントを追加..."
 
 #: eeschema/tools/sch_actions.cpp:1764
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "回路図に新しいバリアントを追加。"
+msgstr "回路図に新しいデザイン バリアントを追加。"
 
 #: eeschema/tools/sch_actions.cpp:1769
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "バリアントを削除..."
+msgstr "デザイン バリアントを削除..."
 
 #: eeschema/tools/sch_actions.cpp:1770
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "回路図から既存のバリアントを削除。"
+msgstr "回路図から既存のデザイン バリアントを削除。"
 
 #: eeschema/tools/sch_align_tool.cpp:63
 msgid "Align"
@@ -29126,9 +29112,8 @@ msgid "Input directory"
 msgstr "入力ディレクトリ"
 
 #: kicad/cli/command.cpp:160
-#, fuzzy
 msgid "Input file or directory"
-msgstr "入力ディレクトリ"
+msgstr "入力ファイルまたはディレクトリ"
 
 #: kicad/cli/command.cpp:174
 msgid "Output directory"
@@ -30363,14 +30348,12 @@ msgid "Project Template Selector"
 msgstr "プロジェクト テンプレートの選択"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "テンプレートから新規プロジェクトを作成"
+msgstr "最近のプロジェクト テンプレート"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "テンプレート"
+msgstr "すべてのテンプレート"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -30381,9 +30364,8 @@ msgid "System Templates"
 msgstr "システム テンプレート"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "裏面"
+msgstr "戻る"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -30611,16 +30593,16 @@ msgstr "テンプレートを選択"
 msgid ""
 "Templates provide pre-configured project structures to jumpstart your design."
 msgstr ""
+"テンプレートは、あなたが設計をすぐに開始できるように、事前に構成された"
+"プロジェクトを提供しています。"
 
 #: kicad/dialogs/template_default_html.h:238
-#, fuzzy
 msgid "Pre-configured Libraries"
 msgstr "事前設定されたライブラリ"
 
 #: kicad/dialogs/template_default_html.h:239
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "- 共通コンポーネントとフットプリントはすでにリンクされています"
+msgstr "共通シンボルとフットプリントはすでにリンクされており、すぐに使用できます。"
 
 #: kicad/dialogs/template_default_html.h:245
 #: pcbnew/dialogs/dialog_board_setup.cpp:162
@@ -30631,121 +30613,107 @@ msgstr "デザインルール"
 msgid ""
 "Electrical and mechanical constraints configured for the intended "
 "application."
-msgstr ""
+msgstr "目的のアプリケーションに合わせて構成された電気的および機械的な制約。"
 
 #: kicad/dialogs/template_default_html.h:252
-#, fuzzy
 msgid "Board Stackups"
 msgstr "基板スタックアップ"
 
 #: kicad/dialogs/template_default_html.h:253
 msgid "Layer configurations optimized for common manufacturing processes."
-msgstr ""
+msgstr "一般的な製造プロセスに最適化されたレイヤー構成。"
 
 #: kicad/dialogs/template_default_html.h:260
 msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
+"最近使用したテンプレートは上部に表示されます。フォルダ アイコンからカスタム "
+"テンプレートのディレクトリを参照できます。"
 
 #: kicad/dialogs/template_default_html.h:394
 msgid "Template"
 msgstr "テンプレート"
 
 #: kicad/dialogs/template_default_html.h:398
-#, fuzzy
 msgid ""
 "This template does not include a description. You can still use it to create "
 "a new project."
 msgstr ""
-"このプロジェクト テンプレートにはページ情報が含まれていませんが、新しいプロ"
-"ジェクトを作成する時に使えます。"
+"このテンプレートには説明が含まれていませんが、新しいプロジェクトを作成する時"
+"に使えます。"
 
 #: kicad/dialogs/template_default_html.h:401
-#, fuzzy
 msgid "To use this template"
-msgstr "このテンプレートを使用する:"
+msgstr "このテンプレートを使用するには"
 
 #: kicad/dialogs/template_default_html.h:405
 msgid "Create the project"
 msgstr "プロジェクトを作成"
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
 msgstr ""
-"OKをクリックすることで。KiCadはこのテンプレートを含む新しいプロジェクト フォ"
-"ルダを作成します。"
+"OKをクリックすることで。このテンプレートを含む新しいプロジェクト フォルダを作"
+"成します。"
 
 #: kicad/dialogs/template_default_html.h:412
 msgid "Open schematic and PCB"
 msgstr "回路図と基板を開く"
 
 #: kicad/dialogs/template_default_html.h:413
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr ""
-"プロジェクト マネージャーのツリーを使うか、回路図 エディターとPCB エディター"
-"を起動して設計を開始します。"
+"プロジェクト マネージャーから、回路図 エディターやPCB エディターを起動します"
+"。"
 
 #: kicad/dialogs/template_default_html.h:419
-#, fuzzy
 msgid "Review settings"
-msgstr "ページ プレビューの設定"
+msgstr "設定を確認する"
 
 #: kicad/dialogs/template_default_html.h:420
-#, fuzzy
 msgid "Verify libraries, design rules, and board stackup match your needs."
 msgstr ""
-"シンボル／フットプリント ライブラリ、デザイン ルール そして基板スタックアップ"
-"がニーズに合っているか確認します。"
+"シンボル／フットプリント ライブラリ、デザイン ルール、基板スタックアップが"
+"ニーズに合っているか確認します。"
 
 #: kicad/dialogs/template_default_html.h:427
 msgid "Add a description by creating"
-msgstr ""
+msgstr "説明を追加する"
 
 #: kicad/dialogs/template_default_html.h:428
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "ユーザー テンプレート ディレクトリが見つかりませんでした。"
+msgstr "このテンプレートのディレクトリ内。"
 
 #: kicad/dialogs/template_default_html.h:536
 msgid "No Templates Found"
 msgstr "テンプレートが見つかりませんでした"
 
 #: kicad/dialogs/template_default_html.h:538
-#, fuzzy
 msgid "The selected directory does not contain any project templates."
-msgstr ""
-"選択したテンプレート ディレクトリにはプロジェクト テンプレートが含まれていま"
-"せん。"
+msgstr "選択したディレクトリにはプロジェクト テンプレートが含まれていません。"
 
 #: kicad/dialogs/template_default_html.h:541
-#, fuzzy
 msgid "Suggestions"
-msgstr "質問"
+msgstr "提案"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
 msgstr "フォルダ アイコンを使用して別のテンプレート ディレクトリを参照します"
 
 #: kicad/dialogs/template_default_html.h:544
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
 msgstr "更新アイコンをクリックして現在のディレクトリを再読み込みします"
 
 #: kicad/dialogs/template_default_html.h:545
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "システム テンプレート"
+msgstr "システム テンプレート タブに切り替える"
 
 #: kicad/dialogs/template_default_html.h:551
-#, fuzzy
 msgid "Each template needs a 'meta' folder containing configuration files."
 msgstr ""
-"テンプレートはサブ ディレクトリに整理されています。各テンプレートには設定ファ"
-"イルを含む 'meta' フォルダが必要です。"
+"テンプレートはサブ ディレクトリ毎に整理されています。各テンプレートには設定"
+"ファイルを含む 'meta' フォルダが必要です。"
 
 #: kicad/files-io.cpp:42
 msgid "KiCad project file"
@@ -30918,11 +30886,12 @@ msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
 msgstr ""
+"KiCad は、前回のセッションで保存されたプロジェクト ファイルよりも新しい未保存"
+"の変更を検出しました。"
 
 #: kicad/kicad_manager_frame.cpp:939
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "変更を元に戻す"
+msgstr "保存されていない変更を回復する"
 
 #: kicad/kicad_manager_frame.cpp:943
 msgid ""
@@ -30931,11 +30900,14 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"これは、前回のセッションが予期せず終了した場合に発生する可能性があります。\n"
+"\n"
+"これらの変更を復元するには '復元'を、現在保存されているファイルを保持するに"
+"は '破棄' を選択してください。"
 
 #: kicad/kicad_manager_frame.cpp:947
-#, fuzzy
 msgid "Discard"
-msgstr "操作を破棄"
+msgstr "破棄"
 
 #: kicad/kicad_manager_frame.cpp:1128
 msgid "Edit File in Text Editor"
@@ -40900,12 +40872,10 @@ msgid "Mechanical"
 msgstr "機構"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Castellated pad (TH only)"
 msgstr "端面スルーホール パッド (スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round TH only)"
 msgstr "プレスフィット (ラウンド スルーホールのみ)"
 
@@ -42513,39 +42483,32 @@ msgid "Error with conditions for component class assignment %s"
 msgstr "コンポーネント クラス割り当て %s の条件でエラーが発生しました"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:366
-#, fuzzy
 msgid "Add Reference Condition"
-msgstr "リファレンス位置"
+msgstr "リファレンス条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
-#, fuzzy
 msgid "Add Footprint Condition"
-msgstr "フットプリント フィルターの追加"
+msgstr "フットプリント条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
-#, fuzzy
 msgid "Add Side Condition"
-msgstr "別の条件を追加する"
+msgstr "表裏面条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:369
-#, fuzzy
 msgid "Add Rotation Condition"
-msgstr "別の条件を追加する"
+msgstr "回転条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:370
-#, fuzzy
 msgid "Add Footprint Field Value Condition"
-msgstr "フットプリント フィルターの追加"
+msgstr "フットプリント フィールド 値 条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Add Sheet Condition"
-msgstr "シートピンを追加"
+msgstr "用紙条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
-#, fuzzy
 msgid "Add Custom Expression Condition"
-msgstr "カスタム割り当てを追加"
+msgstr "カスタム条件の追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:565
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
@@ -42574,9 +42537,8 @@ msgid "Add Custom Assignment"
 msgstr "カスタム割り当てを追加"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
-#, fuzzy
 msgid "Component class:"
-msgstr "コンポーネントクラス:"
+msgstr "コンポーネント クラス名:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:89
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:175
@@ -42587,21 +42549,19 @@ msgstr "コンポーネントクラス:"
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:436
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:483
 msgid "Delete row"
-msgstr "行を削除"
+msgstr "この条件を削除"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:106
 msgid "Highlight matching footprints"
 msgstr "ハイライトに該当するフットプリント"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
-#, fuzzy
 msgid "Match all"
-msgstr "すべて一致"
+msgstr "すべての条件に一致"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
-#, fuzzy
 msgid "Match any"
-msgstr "いずれか一致"
+msgstr "いずれかの条件に一致"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:167
 msgid "Import references"
@@ -42616,19 +42576,16 @@ msgid "Show library"
 msgstr "ライブラリーを表示"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "フットプリント フィールド"
+msgstr "フットプリント フィールド:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
 msgstr "フィールド値:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "シート名 (&S):"
+msgstr "用紙名:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -42941,9 +42898,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "新規グラフィック アイテムのデフォルトのプロパティ"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:114
-#, fuzzy
 msgid "Footprint Library Tables"
-msgstr "フットプリント ライブラリー テーブル (&b)..."
+msgstr "フットプリント ライブラリ テーブル"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 #, c-format
@@ -42988,18 +42944,16 @@ msgid "Layer name %s already in use."
 msgstr "レイヤー名 '%s' はすでに使われています。"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "ユーザーレイヤー"
+msgstr "ユーザー レイヤー:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
-#, fuzzy
 msgid "9"
-msgstr "90"
+msgstr "9"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 msgid "Recreate Plugin Environment"
@@ -44384,7 +44338,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
-#, fuzzy
 msgid ""
 "### Notes\n"
 "\n"
@@ -44423,16 +44376,16 @@ msgstr ""
 "将来のルールパーサーが自動更新を実行できるようにします。\n"
 "この句は \"1\" に設定する必要があります。\n"
 "\n"
-"Rules should be ordered by specificity.  Later rules take\n"
-"precedence over earlier rules; once a matching rule is found\n"
-"no further rules will be checked.\n"
+"ルールは詳細度の高い順に並べる必要があります。\n"
+"後のルールが前のルールよりも優先されます。\n"
+"一致するルールが見つかったら、それ以上のルールはチェックされません。\n"
 "\n"
 "Ctrl+/ を使って行をコメント化またはコメント解除できます。\n"
 "\n"
 "### グラフィカルルールエディター\n"
 "\n"
-"ルールをグラフィカルエディタに読み込むと、自動的に適切な編集パネルにマッピン"
-"グされます。\n"
+"ルールをグラフィカルエディタに読み込むと、自動的に適切な編集パネルに"
+"マッピングされます。\n"
 "複数の制約を持つルールは複数のパネルに分割され、\n"
 "それぞれルールの制約の一部を表示する場合があります。\n"
 "\n"
@@ -45284,7 +45237,7 @@ msgstr "誘電体の高さは0より大きくなければなりません"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1171
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1273
 msgid "Target impedance must be greater than 0"
-msgstr "ターゲット インピーダンスは0より大きくなければなりません"
+msgstr "目標 インピーダンスは0より大きくなければなりません"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1073
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1148
@@ -45326,16 +45279,14 @@ msgid "Single"
 msgstr "単線"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
-msgstr "ターゲット インピーダンス:"
+msgstr "ターゲットインピーダンス:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
 msgstr "Ω"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Enable time domain tuning"
 msgstr "時間領域チューニングを有効"
 
@@ -45368,16 +45319,14 @@ msgid "Via Propagation"
 msgstr "ビア伝搬"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:170
-#, fuzzy
 msgid "Global unit delay:"
-msgstr "グローバル ユニット遅延:"
+msgstr "1単位長さあたりの伝搬遅延:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:177
 msgid "ps/cm"
 msgstr "pS/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:187
-#, fuzzy
 msgid "Via delay overrides:"
 msgstr "ビア 遅延の上書き:"
 
@@ -47646,27 +47595,35 @@ msgid ""
 "Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
 "system memory.\n"
 msgstr ""
+"\n"
+"** %s ファイルのエクスポート中にメモリ不足が発生しました。** \n"
+"基板上のオブジェクト（ビア、トラック、コンポーネントなど）が多すぎて、"
+"システムメモリの空き容量が不足している可能性があります。\n"
+"'形状を融合' オプションを無効にするか、ボードの複雑さを軽減するか、システム "
+"メモリを解放してみてください。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"%s 用の3Dモデルが追加できませんでした。\n"
-"CASCADE のオープンエラー: %s\n"
+"\n"
+"OpenCASCADE エラー: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
 msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
 msgstr ""
+"このエラーはメモリ不足を示している可能性があります。'形状を融合' を無効にする"
+"か、ビア/コンポーネントの数を減らすか、システムメモリを解放することを検討して"
+"ください。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
-"\n"
 "** %s ファイルのエクスポート中にエラーが発生しました。エクスポートの処理は中"
 "止されました。**\n"
 
@@ -47680,6 +47637,13 @@ msgid ""
 "Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
 "memory.\n"
 msgstr ""
+"\n"
+"** %s ファイルのエクスポート中に予期しないエラーが発生しました。**\n"
+"これは、特に '形状を融合' が有効になっている多数のビアやコンポーネントを含む"
+"ボードをエクスポートする場合に、システム メモリの不足によって発生する可能性が"
+"あります。\n"
+" '形状を融合' を無効にするか、ボードの複雑さを軽減するか、システム メモリを解"
+"放してみてください。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1385
 #, c-format
@@ -47695,6 +47659,9 @@ msgid ""
 "Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
 "the number of objects (e.g., vias), or freeing system memory."
 msgstr ""
+"形状を融合中にメモリ不足が発生しました。形状を融合を無効にするか、"
+"オブジェクト数（ビアなど）を減らすか、システムメモリを解放することを検討して"
+"ください。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:676
 #, c-format
@@ -47703,12 +47670,17 @@ msgid ""
 "This may indicate insufficient memory. Consider disabling shape fusing or "
 "reducing board complexity."
 msgstr ""
+"形状を融合中にOpenCASCADEエラーが発生しました: %s\n"
+"メモリ不足の可能性があります。形状を融合を無効にするか、基板の複雑さを軽減す"
+"ることを検討してください。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:686
 msgid ""
 "Problems encountered while fusing shapes. This operation is memory-"
 "intensive; insufficient memory may cause failures."
 msgstr ""
+"図形の形状を融合中に問題が発生しました。この操作はメモリを大量に消費するため"
+"、メモリ不足により失敗する可能性があります。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:692
 #: pcbnew/exporters/step/step_pcb_model.cpp:2581
@@ -47721,20 +47693,21 @@ msgid "Warnings:\n"
 msgstr "警告:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:725
-#, fuzzy
 msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
-msgstr "** ShapeUpgrade_UnifySameDomain は空の形状を生成しました **"
+msgstr "ShapeUpgrade_UnifySameDomainによって空の形状を生成しました。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:736
 msgid ""
 "Out of memory while unifying shape domains. Consider disabling shape fusing "
 "or reducing the number of objects."
 msgstr ""
+"ドメインの形状を融合でメモリ不足が発生しました。形状を融合を無効にするか、"
+"オブジェクトの数を減らすことを検討してください。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:743
 #, c-format
 msgid "OpenCASCADE error while unifying shapes: %s"
-msgstr ""
+msgstr "形状を融合中に OpenCASCADE エラーが発生しました: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:999
 msgid "OCC error adding pad/via polygon."
@@ -48169,7 +48142,7 @@ msgstr "回路図にない"
 
 #: pcbnew/footprint.cpp:4842 pcbnew/pad.cpp:3664
 msgid "Overrides"
-msgstr "オーバーライド"
+msgstr "上書き"
 
 #: pcbnew/footprint.cpp:4844
 msgid "Exempt From Courtyard Requirement"
@@ -49490,7 +49463,7 @@ msgstr "未使用のネット %s を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
 msgid "Updating design variants..."
-msgstr "デザインのバリアントを更新…"
+msgstr "デザイン バリアントを更新…"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
 #, c-format
@@ -50872,7 +50845,7 @@ msgstr ""
 "はサポートされていません。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1732
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
 msgstr "ライブラリ内にコンポーネント '%s' が見つかりません(Symdef ID: '%s')"
 
@@ -54152,19 +54125,16 @@ msgid "Assertions for:"
 msgstr "アサーション:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:915
-#, fuzzy
 msgid "Select first item for clearance resolution..."
-msgstr "クリアランス解決レポートの項目を2つ選択します。"
+msgstr "クリアランス解決レポートの最初の項目を選択してください。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Select second item for clearance resolution..."
-msgstr "クリアランス解決レポートの項目を2つ選択します。"
+msgstr "クリアランス解決レポートの2つ目の項目を選択してください。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
-#, fuzzy
 msgid "Select two different items for clearance resolution."
-msgstr "クリアランス解決レポートの項目を2つ選択します。"
+msgstr "クリアランス解決のために 2 つの異なる項目を選択します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:959
 #: pcbnew/tools/board_inspection_tool.cpp:972
@@ -54288,9 +54258,8 @@ msgstr ""
 "ません。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1573
-#, fuzzy
 msgid "Select item for constraints resolution..."
-msgstr "制約解決レポートの項目を選択します。"
+msgstr "制約解決の項目を選択..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1581
 msgid "Select a single item for a constraints resolution report."
@@ -56796,14 +56765,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "選択したすべてのパッドに対して自動的に配線を試行します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2676
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "現在のツールをキャンセル"
+msgstr "現在のアイテムをキャンセル"
 
 #: pcbnew/tools/pcb_actions.cpp:2677
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "選択アイテムから最初のラインを作成"
+msgstr "現在の項目をスキップし、次に選択した項目を配線します。"
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid ""
@@ -56968,11 +56935,10 @@ msgid "Design block %s does not have a board file."
 msgstr "デザイン ブロック %s にはボード ファイルがありません。"
 
 #: pcbnew/tools/pcb_control.cpp:1577
-#, fuzzy
 msgid "Design block placement failed - no footprints were placed."
 msgstr ""
-"デザイン ブロック メタデータ ファイル ' %s ' を読み取ることができませんでし"
-"た。"
+"デザイン ブロックの配置に失敗しました - フットプリントが配置されませんでした"
+"。"
 
 #: pcbnew/tools/pcb_control.cpp:1612
 #, c-format
@@ -56980,9 +56946,8 @@ msgid "Footprint %s is locked and cannot be placed."
 msgstr "フットプリント %s はロックされており、配置できません。"
 
 #: pcbnew/tools/pcb_control.cpp:1629
-#, fuzzy
 msgid "Selected group contains no footprints to place."
-msgstr "選択範囲にはラベルが付けられたネットが含まれていません。"
+msgstr "選択したグループには配置するフットプリントが含まれていません。"
 
 #: pcbnew/tools/pcb_control.cpp:2030
 msgid "Error loading board."
