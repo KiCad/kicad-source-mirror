@@ -838,7 +838,8 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 }
 
 
-bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth )
+bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth,
+                                              const VECTOR2I& aStartPosition )
 {
     VECTOR2I p;
 
@@ -874,10 +875,56 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     assert( jt != nullptr );
 
-    int mval = INT_MAX;
-
     PNS::ITEM_SET linkedSegs( jt->CLinks() );
     linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T );
+
+    if( linkedSegs.Empty() )
+        return false;
+
+    // When a start position is provided, find the connected track whose far end is closest to
+    // the cursor. Since all tracks share the pad/via endpoint, the far-end direction is a proxy
+    // for which track the user is pointing at.
+    if( aStartPosition != VECTOR2I() )
+    {
+        PNS::ITEM*  closestItem = nullptr;
+        SEG::ecoord minDist = VECTOR2I::ECOORD_MAX;
+
+        for( PNS::ITEM* item : linkedSegs.Items() )
+        {
+            PNS::LINKED_ITEM* li = static_cast<PNS::LINKED_ITEM*>( item );
+
+            VECTOR2I anchor0 = li->Anchor( 0 );
+            VECTOR2I anchor1 = li->Anchor( 1 );
+
+            // The "other end" is the anchor farther from the pad/via center
+            VECTOR2I otherEnd = ( anchor0 - p ).SquaredEuclideanNorm()
+                                        > ( anchor1 - p ).SquaredEuclideanNorm()
+                                ? anchor0
+                                : anchor1;
+
+            SEG::ecoord dist = ( otherEnd - aStartPosition ).SquaredEuclideanNorm();
+
+            if( dist < minDist )
+            {
+                minDist = dist;
+                closestItem = item;
+            }
+        }
+
+        if( closestItem )
+        {
+            int w = tryGetTrackWidth( closestItem );
+
+            if( w > 0 )
+            {
+                *aInheritedWidth = w;
+                return true;
+            }
+        }
+    }
+
+    // Fallback to minimum width when no start position provided or no valid track found
+    int mval = INT_MAX;
 
     for( PNS::ITEM* item : linkedSegs.Items() )
     {
@@ -945,7 +992,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     if( bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth && aStartItem != nullptr )
     {
-        found = inheritTrackWidth( aStartItem, &trackWidth );
+        found = inheritTrackWidth( aStartItem, &trackWidth, startPosInt );
 
         if( found )
             aSizes.SetWidthSource( _( "existing track" ) );
@@ -1028,7 +1075,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     // First try to pick up diff pair width from starting track, if enabled
     if( bds.m_UseConnectedTrackWidth && aStartItem )
-        found = inheritTrackWidth( aStartItem, &diffPairWidth );
+        found = inheritTrackWidth( aStartItem, &diffPairWidth, startPosInt );
 
     // Next, pick up gap from netclass, and width also if we didn't get a starting width above
     if( bds.UseNetClassDiffPair() && aStartItem )

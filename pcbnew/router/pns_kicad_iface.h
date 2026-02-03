@@ -130,7 +130,8 @@ protected:
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
     bool syncBarcode( PNS::NODE* aWorld, PCB_BARCODE* aBarcode );
-    bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth );
+    bool inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth,
+                            const VECTOR2I& aStartPosition );
     std::vector<LENGTH_DELAY_CALCULATION_ITEM> getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
                                                                                const NETCLASS*      aNetClass ) const;
 

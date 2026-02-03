@@ -29,10 +29,13 @@
 #include <pcbnew/pad.h>
 #include <pcbnew/pcb_track.h>
 
+#include <geometry/shape_circle.h>
 #include <router/pns_item.h>
 #include <router/pns_kicad_iface.h>
 #include <router/pns_node.h>
 #include <router/pns_router.h>
+#include <router/pns_segment.h>
+#include <router/pns_solid.h>
 #include <router/pns_via.h>
 
 static bool isCopper( const PNS::ITEM* aItem )
@@ -283,6 +286,12 @@ public:
                       int aFlags = 0 ) override {};
     PNS::RULE_RESOLVER* GetRuleResolver() override;
 
+    bool TestInheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth,
+                                const VECTOR2I& aStartPosition = VECTOR2I() )
+    {
+        return inheritTrackWidth( aItem, aInheritedWidth, aStartPosition );
+    }
+
 private:
     PNS_TEST_FIXTURE* m_testFixture;
 };
@@ -523,5 +532,77 @@ BOOST_AUTO_TEST_CASE( PNSLayerRangeSwapBehavior )
     BOOST_CHECK( innerLayersRange4Layer.Overlaps( 1 ) );  // In1_Cu
     BOOST_CHECK( innerLayersRange4Layer.Overlaps( 2 ) );  // In2_Cu
     BOOST_CHECK( !innerLayersRange4Layer.Overlaps( 3 ) ); // B_Cu - should not overlap
+}
+
+
+/**
+ * Test that inheritTrackWidth selects the correct track based on cursor proximity.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/19123
+ * When a pad has multiple tracks of different widths, the router should inherit
+ * the width of the track closest to the cursor, not just the minimum width.
+ */
+BOOST_FIXTURE_TEST_CASE( PNSInheritTrackWidthCursorProximity, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    VECTOR2I padPos( 0, 0 );
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+
+    // Pad at origin with a small circular shape
+    PNS::SOLID* pad = new PNS::SOLID;
+    pad->SetShape( new SHAPE_CIRCLE( padPos, 500000 ) );
+    pad->SetPos( padPos );
+    pad->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    pad->SetNet( net );
+    world->AddRaw( pad );
+
+    // Narrow track going right (250um width)
+    int narrowWidth = 250000;
+    PNS::SEGMENT* narrowSeg = new PNS::SEGMENT(
+            SEG( padPos, VECTOR2I( 5000000, 0 ) ), net );
+    narrowSeg->SetWidth( narrowWidth );
+    narrowSeg->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world->AddRaw( narrowSeg );
+
+    // Wide track going up (500um width)
+    int wideWidth = 500000;
+    PNS::SEGMENT* wideSeg = new PNS::SEGMENT(
+            SEG( padPos, VECTOR2I( 0, -5000000 ) ), net );
+    wideSeg->SetWidth( wideWidth );
+    wideSeg->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world->AddRaw( wideSeg );
+
+    int inherited = 0;
+
+    // Without cursor position, should fall back to minimum width
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited ) );
+    BOOST_CHECK_EQUAL( inherited, narrowWidth );
+
+    // Cursor near the narrow track (to the right) should select narrow width
+    inherited = 0;
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
+                                                 VECTOR2I( 2000000, 0 ) ) );
+    BOOST_CHECK_EQUAL( inherited, narrowWidth );
+
+    // Cursor near the wide track (upward) should select wide width
+    inherited = 0;
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
+                                                 VECTOR2I( 0, -2000000 ) ) );
+    BOOST_CHECK_EQUAL( inherited, wideWidth );
+
+    // Cursor slightly offset toward narrow track should still select narrow
+    inherited = 0;
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
+                                                 VECTOR2I( 100000, 50000 ) ) );
+    BOOST_CHECK_EQUAL( inherited, narrowWidth );
+
+    // Cursor slightly offset toward wide track should select wide
+    inherited = 0;
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
+                                                 VECTOR2I( 50000, -100000 ) ) );
+    BOOST_CHECK_EQUAL( inherited, wideWidth );
 }
 
