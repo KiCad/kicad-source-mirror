@@ -84,6 +84,9 @@ PROJECT::~PROJECT()
 
 bool PROJECT::TextVarResolver( wxString* aToken ) const
 {
+    if( !m_projectFile )
+        return false;
+
     if( aToken->IsSameAs( wxT( "PROJECTNAME" ) )  )
     {
         *aToken = GetProjectName();
