@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-01-26 23:06+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -4472,9 +4472,9 @@ msgstr "Biblioteki bloków projektowych"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -7787,9 +7787,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Scalenie nie powiodło się"
+msgstr "Scalenie nie powiodło się: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -7798,19 +7798,19 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Nie udało się uruchomić rebase"
+msgstr "Nie udało się uruchomić rebase: %s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Nie udało się zatwierdzić rebase"
+msgstr "Nie udało się zatwierdzić rebase: %s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Nie udało się ukończyć rebase"
+msgstr "Nie udało się ukończyć rebase: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -11446,9 +11446,8 @@ msgid "Save..."
 msgstr "Zapisz..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Widok"
+msgstr "PPI wyświetlacza: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
@@ -15238,9 +15237,8 @@ msgstr "Nie zdefiniowano projektu ani ścieżki dla bieżącego schematu."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "Oznaczenie"
+msgstr "Wariant projektu:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -18761,9 +18759,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s jest połączony zarówno do %s jak i %s"
+msgstr "Pin %s w symbolu '%s' jest połączony zarówno z: %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1354
 #, c-format
@@ -20333,9 +20331,8 @@ msgid "Find in Net Inspector"
 msgstr "Inspekcja sieci"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "Wybierz nazwę wariantu do usunięcia"
+msgstr "Wybierz nazwę wariantu do usunięcia:"
 
 #: eeschema/sch_edit_frame.cpp:3031
 #, fuzzy
@@ -20536,9 +20533,9 @@ msgid "File not found %s."
 msgstr "Nie znaleziono pliku %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4980
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Wystąpił błąd podczas parsowania biblioteki SPICE '%s': %s"
+msgstr "Wystąpił błąd podczas parsowania biblioteki Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5003
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -30674,9 +30671,8 @@ msgid "Suggestions"
 msgstr "Pytanie"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
-msgstr "Użyj innego motywu kolorystycznego przy drukowaniu:"
+msgstr "Przeglądaj w poszukiwaniu innego folderu używając ikony folderu"
 
 #: kicad/dialogs/template_default_html.h:544
 #, fuzzy
@@ -42728,9 +42724,8 @@ msgid "Show library"
 msgstr "Pokaż bibliotekę"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "Pola footprintów"
+msgstr "Pole footprintu:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
 #, fuzzy
@@ -43101,9 +43096,8 @@ msgid "Layer name %s already in use."
 msgstr "Nazwa warstwy %s jest już używana."
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "Pozostałe warstwy"
+msgstr "Warstwy użytkownika:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
@@ -47780,12 +47774,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Nie można dodać modelu 3D dla %s. \n"
+"\n"
 "Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
@@ -47795,11 +47789,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Błąd podczas eksportu pliku %s. Eksport przerwany. **\n"
+msgstr "** Błąd podczas eksportu pliku %s. Eksport przerwany. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1372
 #, c-format
@@ -49496,34 +49488,34 @@ msgid "Removed %s:%s 'exclude from BOM' variant attribute."
 msgstr "Usunięto z %s:%s atrybut wariantu 'Wyklucz z BOM'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "Dodaj dla %s atrybut 'wyklucz z pliku położeń'."
+msgstr "Dodaj dla %s:%s atrybut wariantu 'Wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "Usuń dla %s atrybut 'wyklucz z pliku położeń'."
+msgstr "Usuń dla %s:%s atrybut wariantu 'Wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "Dodano dla %s atrybut 'wyklucz z pliku położeń'."
+msgstr "Dodano dla %s:%s atrybut wariantu 'Wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "Usunięto dla %s atrybut 'wyklucz z pliku położeń'."
+msgstr "Usunięto dla %s:%s atrybut wariantu 'Wyklucz z pliku położeń'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s:%s field '%s' to '%s'."
-msgstr "Zmieniam pole %s o wartości '%s' na '%s'."
+msgstr "Zmień pole %s:%s '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "Zmieniam pole %s o wartości '%s' na '%s'."
+msgstr "Zmieniam pole %s:%s '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 #, c-format
@@ -49566,11 +49558,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Strefa miedzi '%s' nie ma połączenia z żadnym polem."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1723
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
 "Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma połączenia z żadnym "
-"polem."
+"polem sieci \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1759
 #, c-format
@@ -49645,19 +49637,19 @@ msgid "Updating design variants..."
 msgstr "Uaktualnianie sieci..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2225
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "Dodano %s (footprint '%s')."
+msgstr "Dodano wariant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2240
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Uaktualniono %s filtrów footrpintu na '%s'."
+msgstr "Uaktualniono opis wariantu '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2269
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "Usuwanie pól..."
+msgstr "Usunięto wariant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 msgid "Update Netlist"
@@ -54485,9 +54477,9 @@ msgid "Swap Gate Nets..."
 msgstr "Zamień warstwy..."
 
 #: pcbnew/tools/edit_tool.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Swap with %s"
-msgstr "Zamień jednostki"
+msgstr "Zamień z %s"
 
 #: pcbnew/tools/edit_tool.cpp:987
 #, c-format
