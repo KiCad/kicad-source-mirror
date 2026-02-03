@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-02 15:25+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -46504,7 +46504,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:1695 pcbnew/drc/drc_engine.cpp:2108
 #, c-format
 msgid "Checking rule condition '%s'."
-msgstr "Regelbedingung ‚%s‘ wird überprüft."
+msgstr "Regelbedingung \"%s\" wird überprüft."
 
 #: pcbnew/drc/drc_engine.cpp:1705
 msgid "Constraint applied."
