@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-02-02 15:25+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -4814,9 +4814,8 @@ msgstr "Cesta knmižnice"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:214 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
-#, fuzzy
 msgid "Library Format"
-msgstr "Cesta knmižnice"
+msgstr "Formát knižnice"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:69
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
@@ -7963,11 +7962,9 @@ msgid "schema file '%s' not found"
 msgstr "Schematický súbor '%s' sa nenašiel."
 
 #: common/json_schema_validator.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr ""
-"Pri načítaní schémy sa vyskytla chyba.\n"
-"%s"
+msgstr "Pri načítaní schémy sa vyskytla chyba:%s"
 
 #: common/kidialog.cpp:53
 msgid "Do not show again"
@@ -8082,7 +8079,6 @@ msgid "Net class references"
 msgstr "Referencie triedy spojov"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "Rule areas"
 msgstr "Oblasti pravidiel"
 
@@ -8095,9 +8091,8 @@ msgid "Symbol body fills"
 msgstr "Výplne tela symbolu"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "Pilník na list"
+msgstr "Výplň tvarov"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8151,9 +8146,8 @@ msgid "DNP markers"
 msgstr "DNP značky"
 
 #: common/layer_id.cpp:101
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Vyloučeno ze simulace"
+msgstr "Značky \"Vylúčené zo simulácie\""
 
 #: common/layer_id.cpp:102
 msgid "ERC warnings"
@@ -8220,9 +8214,8 @@ msgid "Selection highlight"
 msgstr "Zvýraznenie výberu"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Zvýraznenie výberu"
+msgstr "Farba zvýrazneného spoju"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:145
 msgid "Drawing sheet"
@@ -8348,19 +8341,16 @@ msgid "Courtyard collision shadow"
 msgstr ""
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Track net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu spoju"
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Pad net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu plôšky"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via net names"
-msgstr "Meno listu"
+msgstr "Názvy signálu prekovu"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in library nickname"
@@ -8415,9 +8405,8 @@ msgstr "Nedávno použité"
 
 #: common/lib_tree_model_adapter.cpp:427
 #: eeschema/widgets/panel_symbol_chooser.cpp:188
-#, fuzzy
 msgid "Already Placed"
-msgstr "Pohyb a umiestnenie"
+msgstr "Už umiestnené"
 
 #: common/libeval_compiler/libeval_compiler.cpp:598
 #, c-format
@@ -8479,15 +8468,15 @@ msgstr "%s a %s"
 
 #: common/netclass.cpp:303 pcbnew/component_class_manager.cpp:66
 #: pcbnew/zone.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s a %s"
+msgstr "%s, %s a %s"
 
 #: common/netclass.cpp:310 pcbnew/component_class_manager.cpp:71
 #: pcbnew/zone.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s a %d ďalších"
+msgstr "%s, %s a %d viac"
 
 #: common/notifications_manager.cpp:93
 msgid "View Details"
@@ -8560,9 +8549,8 @@ msgid "Decline"
 msgstr "Náčrt čiary"
 
 #: common/pgm_base.cpp:498
-#, fuzzy
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Názov premennej prostredia nemôže byť prázdne."
+msgstr "Premenná prostredia HOME je prázdna. Nie je možné pokračovať."
 
 #: common/pgm_base.cpp:735
 msgid "This language is not supported by the operating system."
@@ -8618,9 +8606,9 @@ msgid "Invalid archive file format."
 msgstr "Neplatný formát archívneho súboru."
 
 #: common/project/project_archiver.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Rozbaliť súbor \"%s\""
+msgstr "Rozbaľovanie súboru '%s'."
 
 #: common/project/project_archiver.cpp:163 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
@@ -8658,9 +8646,9 @@ msgid "Failed to create file '%s'."
 msgstr "Nepodarilo sa vytvoriť súbor '%s'."
 
 #: common/project/project_archiver.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening directory: '%s'."
-msgstr "Chyba pri odstraňovaní adresára '%s': %s"
+msgstr "Chyba pri otváraní adresára '%s'."
 
 #: common/project/project_archiver.cpp:316
 #, c-format
@@ -8696,17 +8684,17 @@ msgid "Error: "
 msgstr "Chyba: "
 
 #: common/richio.cpp:102 eeschema/tools/sch_drawing_tools.cpp:3013
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' does not exist."
-msgstr "Adresár '%s' neexistuje"
+msgstr "Súbor '%s' neexistuje."
 
 #: common/richio.cpp:129 eeschema/sch_io/eagle/sch_io_eagle.cpp:599
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:639
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:670
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3222
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "Súbor '%s' sa nedá prečítať"
+msgstr "Súbor '%s' sa nedá prečítať."
 
 #: common/richio.cpp:205
 #, c-format
@@ -8722,9 +8710,8 @@ msgid "Line length exceeded"
 msgstr "Prekročená dĺžka riadka"
 
 #: common/settings/bom_settings.cpp:126
-#, fuzzy
 msgid "Default Editing"
-msgstr "Predvolené jednotky:"
+msgstr "Predvolené úpravy"
 
 #: common/settings/bom_settings.cpp:126 common/settings/bom_settings.cpp:147
 #: common/settings/bom_settings.cpp:166 common/settings/bom_settings.cpp:186
@@ -8742,9 +8729,8 @@ msgid "Grouped By Value"
 msgstr "Zoskupené podľa hodnoty"
 
 #: common/settings/bom_settings.cpp:166
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Vybrať a presunúť puzdro"
+msgstr "Zoskupené podľa hodnoty a puzdra"
 
 #: common/settings/bom_settings.cpp:186
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -8765,14 +8751,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:266
-#, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:273
-#, fuzzy
 msgid "Semicolons"
-msgstr "Výber farieb"
+msgstr "bodkočiarky"
 
 #: common/settings/color_settings.cpp:389
 msgid "(Footprints)"
@@ -10163,7 +10147,6 @@ msgid "Always show crosshairs"
 msgstr "Vždy ukazujte nitkový kríž"
 
 #: common/widgets/grid_text_button_helpers.cpp:375
-#, fuzzy
 msgid "Open file"
 msgstr "Otvoriť súbor"
 
@@ -18297,9 +18280,8 @@ msgid "Load Without Cache File"
 msgstr "Skončiť bez uloženia"
 
 #: eeschema/files-io.cpp:456
-#, fuzzy
 msgid "Abort"
-msgstr "Ukončovanie"
+msgstr "Prerušiť"
 
 #: eeschema/files-io.cpp:471 eeschema/files-io.cpp:491
 #: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:827
@@ -25689,9 +25671,8 @@ msgid "(page %s)"
 msgstr "(strana %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Načítavajú sa knižnice symbolov"
+msgstr "Načítavajú sa knižnice návrhových blokov"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:275
 #, fuzzy
@@ -45636,15 +45617,15 @@ msgid "Total warnings: %d, errors: %d."
 msgstr "Celkové varovania: %d, chyby: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Neplatné ID stopy v\n"
-"súbor: \"%s\"\n"
+"Neplatné ID puzdra v\n"
+"súbore: '%s'\n"
 "riadok: %d\n"
 "offset: %d"
 
@@ -45675,9 +45656,9 @@ msgid "Cannot parse net name in symbol net section of netlist."
 msgstr "Nie je možné analyzovať názov siete v netto sekcii so symbolmi."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Nie je možné nájsť symbol '%s' v sekcii filtra stopa netlistu."
+msgstr "Nedá sa nájsť symbol %s v sekcii filtra puzdra netlistu."
 
 #: pcbnew/netlist_reader/netlist.cpp:65
 #, fuzzy, c-format
@@ -45715,14 +45696,14 @@ msgid ""
 msgstr "%s puzdro \"%s\" nenájdené v žiadnej knižnici v knižnici puzdier."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"Neplatné ID stopy v\n"
-"súbor: \"%s\"\n"
+"Neplatné ID puzdra v\n"
+"súbore: '%s'\n"
 "riadok: %d"
 
 #: pcbnew/pad.cpp:1177 pcbnew/pad.cpp:1329 pcbnew/pad.cpp:1345
@@ -53906,9 +53887,8 @@ msgid "Keep Out Footprints"
 msgstr "Udržujte stopy"
 
 #: pcbnew/zone.cpp:2033
-#, fuzzy
 msgid "Enable"
-msgstr "Povolené:"
+msgstr "Povoliť"
 
 #: pcbnew/zone.cpp:2040
 msgid "Source Type"
