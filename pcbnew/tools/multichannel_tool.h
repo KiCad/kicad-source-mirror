@@ -140,7 +140,8 @@ private:
 
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
-                                          RULE_AREA_COMPAT_DATA& aMatches );
+                                          RULE_AREA_COMPAT_DATA& aMatches,
+                                          const TMATCH::ISOMORPHISM_PARAMS& aParams = {} );
     void       fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
                          TMATCH::COMPONENT_MATCHES& aComponentMatches );
     bool       pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToCheck );

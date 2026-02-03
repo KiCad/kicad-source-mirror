@@ -48,7 +48,12 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_picker_tool.h>
 #include <random>
+#include <chrono>
+#include <atomic>
+#include <thread>
 #include <core/profile.h>
+#include <thread_pool.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wx/log.h>
 #include <wx/richmsgdlg.h>
 #include <pgm_base.h>
@@ -557,14 +562,112 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
     m_areas.m_compatMap.clear();
 
+    std::vector<RULE_AREA*> targets;
+
     for( RULE_AREA& ra : m_areas.m_areas )
     {
         if( ra.m_zone == m_areas.m_refRA->m_zone )
             continue;
 
+        targets.push_back( &ra );
         m_areas.m_compatMap[&ra] = RULE_AREA_COMPAT_DATA();
+    }
 
-        resolveConnectionTopology( m_areas.m_refRA, &ra, m_areas.m_compatMap[&ra] );
+    if( targets.empty() )
+        return 0;
+
+    int              total = static_cast<int>( targets.size() );
+    std::atomic<int> completed( 0 );
+    std::atomic<bool> cancelled( false );
+    std::atomic<int>  matchedComponents( 0 );
+    std::atomic<int>  totalComponents( 0 );
+    RULE_AREA*        refRA = m_areas.m_refRA;
+
+    TMATCH::ISOMORPHISM_PARAMS isoParams;
+    isoParams.m_cancelled = &cancelled;
+    isoParams.m_matchedComponents = &matchedComponents;
+    isoParams.m_totalComponents = &totalComponents;
+
+    // Process RA resolutions sequentially on a single background thread.
+    // Each resolveConnectionTopology call internally parallelizes its MRV scan
+    // across the thread pool, creating many short-lived tasks that fully utilize
+    // all available cores.  Running the outer loop sequentially avoids thread
+    // pool starvation from nested parallelism.
+    thread_pool& tp = GetKiCadThreadPool();
+
+    auto future = tp.submit_task(
+            [this, refRA, &targets, &completed, &cancelled, &matchedComponents, &isoParams]()
+            {
+                for( RULE_AREA* target : targets )
+                {
+                    if( cancelled.load( std::memory_order_relaxed ) )
+                        break;
+
+                    matchedComponents.store( 0, std::memory_order_relaxed );
+
+                    RULE_AREA_COMPAT_DATA& compatData = m_areas.m_compatMap[target];
+                    resolveConnectionTopology( refRA, target, compatData, isoParams );
+                    completed.fetch_add( 1, std::memory_order_relaxed );
+                }
+            } );
+
+    if( Pgm().IsGUI() )
+    {
+        std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
+        auto startTime = std::chrono::steady_clock::now();
+        double highWaterMark = 0.0;
+
+        while( future.wait_for( std::chrono::milliseconds( 100 ) ) != std::future_status::ready )
+        {
+            if( !reporter )
+            {
+                auto elapsed = std::chrono::steady_clock::now() - startTime;
+
+                if( elapsed > std::chrono::seconds( 1 ) )
+                {
+                    reporter = std::make_unique<WX_PROGRESS_REPORTER>(
+                            frame(), _( "Checking Rule Area compatibility..." ), 1, PR_CAN_ABORT );
+                }
+                else
+                {
+                    // Flush background-thread log messages so timing traces appear promptly
+                    wxLog::FlushActive();
+                }
+            }
+
+            if( reporter )
+            {
+                int done = completed.load( std::memory_order_relaxed );
+                int matched = matchedComponents.load( std::memory_order_relaxed );
+                int compTotal = totalComponents.load( std::memory_order_relaxed );
+
+                double fraction = ( compTotal > 0 )
+                                          ? static_cast<double>( matched ) / compTotal
+                                          : 0.0;
+                double progress = static_cast<double>( done + fraction ) / total;
+
+                if( progress > highWaterMark )
+                    highWaterMark = progress;
+
+                reporter->SetCurrentProgress( highWaterMark );
+                reporter->Report( wxString::Format(
+                        _( "Resolving topology %d of %d (%d/%d components)" ),
+                        done + 1, total, matched, compTotal ) );
+
+                if( !reporter->KeepRefreshing() )
+                    cancelled.store( true, std::memory_order_relaxed );
+            }
+        }
+    }
+    else
+    {
+        future.wait();
+    }
+
+    if( cancelled.load( std::memory_order_relaxed ) )
+    {
+        m_areas.m_compatMap.clear();
+        return -1;
     }
 
     return 0;
@@ -1206,15 +1309,30 @@ void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_IT
 
 
 bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
-                                                   RULE_AREA_COMPAT_DATA& aMatches )
+                                                   RULE_AREA_COMPAT_DATA& aMatches,
+                                                   const TMATCH::ISOMORPHISM_PARAMS& aParams )
 {
     using namespace TMATCH;
 
-    std::unique_ptr<CONNECTION_GRAPH> cgRef ( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components ) );
-    std::unique_ptr<CONNECTION_GRAPH> cgTarget ( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components ) );
+    PROF_TIMER timerBuild;
+    std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components ) );
+    timerBuild.Stop();
+
+    wxLogTrace( traceMultichannelTool, wxT( "Graph construction: %s (%d + %d components)" ),
+                timerBuild.to_string(),
+                (int) aRefArea->m_components.size(),
+                (int) aTargetArea->m_components.size() );
 
     std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> mismatchReasons;
-    bool status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents, mismatchReasons );
+
+    PROF_TIMER timerIso;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), aMatches.m_matchingComponents,
+                                          mismatchReasons, aParams );
+    timerIso.Stop();
+
+    wxLogTrace( traceMultichannelTool, wxT( "FindIsomorphism: %s, result=%d" ),
+                timerIso.to_string(), status ? 1 : 0 );
 
     aMatches.m_isOk = status;
 

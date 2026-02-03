@@ -36,6 +36,7 @@
 #include <tools/multichannel_tool.h>
 #include <connectivity/topo_match.h>
 #include <lib_id.h>
+#include <atomic>
 
 struct MULTICHANNEL_TEST_FIXTURE
 {
@@ -582,6 +583,113 @@ BOOST_FIXTURE_TEST_CASE( GenerateRuleAreasIncludesChildSheets, MULTICHANNEL_TEST
     // Top-level components must be a superset of mid-level components
     for( FOOTPRINT* fp : midArea->m_components )
         BOOST_CHECK( topArea->m_components.count( fp ) > 0 );
+}
+
+
+/**
+ * Test that FindIsomorphism respects cancellation and reports progress
+ * through the ISOMORPHISM_PARAMS interface.
+ */
+BOOST_FIXTURE_TEST_CASE( FindIsomorphismCancellation, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    KI_TEST::LoadBoard( m_settingsManager, "vme-wren", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    ruleData->m_replaceExisting = true;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_sheetName == wxT( "io_driver.kicad_sch" ) )
+            ra.m_generateEnabled = true;
+    }
+
+    TOOL_EVENT dummyEvent;
+    mtTool->AutogenerateRuleAreas( dummyEvent );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* refArea = findRuleAreaByPartialName( mtTool, wxT( "io_drivers_fp/bank3/io78/" ) );
+    RULE_AREA* targetArea = findRuleAreaByPartialName( mtTool, wxT( "io_drivers_fp/bank2/io78/" ) );
+
+    BOOST_REQUIRE( refArea != nullptr );
+    BOOST_REQUIRE( targetArea != nullptr );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea->m_components );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( targetArea->m_components );
+
+    // Pre-cancelled: should return false immediately with empty result
+    {
+        std::atomic<bool> cancelled( true );
+        std::atomic<int>  matched( 0 );
+        std::atomic<int>  total( 0 );
+
+        TMATCH::ISOMORPHISM_PARAMS params;
+        params.m_cancelled = &cancelled;
+        params.m_matchedComponents = &matched;
+        params.m_totalComponents = &total;
+
+        TMATCH::COMPONENT_MATCHES result;
+        std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+
+        bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details, params );
+
+        BOOST_CHECK( !status );
+        BOOST_CHECK( result.empty() );
+
+        BOOST_TEST_MESSAGE( "Pre-cancelled FindIsomorphism correctly returned false" );
+    }
+
+    // Normal run with progress reporting
+    {
+        std::atomic<bool> cancelled( false );
+        std::atomic<int>  matched( 0 );
+        std::atomic<int>  total( 0 );
+
+        TMATCH::ISOMORPHISM_PARAMS params;
+        params.m_cancelled = &cancelled;
+        params.m_matchedComponents = &matched;
+        params.m_totalComponents = &total;
+
+        TMATCH::COMPONENT_MATCHES result;
+        std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+
+        bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details, params );
+
+        BOOST_CHECK( status );
+
+        int finalMatched = matched.load();
+        int finalTotal = total.load();
+
+        BOOST_TEST_MESSAGE( wxString::Format( "Progress: matched=%d, total=%d", finalMatched, finalTotal ) );
+
+        BOOST_CHECK( finalTotal > 0 );
+        BOOST_CHECK_EQUAL( finalMatched, finalTotal );
+    }
+
+    // Sanity check: same graphs without params still succeed
+    {
+        TMATCH::COMPONENT_MATCHES result;
+        std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+
+        bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+        BOOST_CHECK( status );
+        BOOST_CHECK( !result.empty() );
+
+        BOOST_TEST_MESSAGE( "Default params FindIsomorphism still succeeds" );
+    }
 }
 
 

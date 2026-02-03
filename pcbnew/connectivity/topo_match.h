@@ -24,8 +24,10 @@
 #ifndef __TOPO_MATCH_H
 #define __TOPO_MATCH_H
 
+#include <atomic>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <optional>
 
 #include <wx/string.h>
@@ -41,6 +43,13 @@ namespace TMATCH
 
 class PIN;
 class CONNECTION_GRAPH;
+
+struct ISOMORPHISM_PARAMS
+{
+    std::atomic<bool>* m_cancelled = nullptr;
+    std::atomic<int>*  m_matchedComponents = nullptr;
+    std::atomic<int>*  m_totalComponents = nullptr;
+};
 
 struct TOPOLOGY_MISMATCH_REASON
 {
@@ -158,14 +167,17 @@ public:
         m_refIndex = other.m_refIndex;
     }
 
-    const std::map<COMPONENT*, COMPONENT*>& GetMatchingComponentPairs() const { return m_locked; }
+    const std::unordered_map<COMPONENT*, COMPONENT*>& GetMatchingComponentPairs() const
+    {
+        return m_locked;
+    }
 
 private:
     COMPONENT*                       m_ref;
     int                              m_currentMatch = -1;
     int                              m_nloops;
     std::vector<COMPONENT*>          m_matches;
-    std::map<COMPONENT*, COMPONENT*> m_locked;
+    std::unordered_map<COMPONENT*, COMPONENT*> m_locked;
     int m_refIndex;
 };
 
@@ -182,7 +194,8 @@ public:
     void   BuildConnectivity();
     void   AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset );
     bool   FindIsomorphism( CONNECTION_GRAPH* target, COMPONENT_MATCHES& result,
-                            std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails );
+                            std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
+                            const ISOMORPHISM_PARAMS& aParams = {} );
     static std::unique_ptr<CONNECTION_GRAPH> BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps );
     std::vector<COMPONENT*> &Components() { return m_components; }
 
@@ -190,10 +203,11 @@ private:
     void sortByPinCount();
 
 
-    std::vector<COMPONENT*> findMatchingComponents( CONNECTION_GRAPH* aRefGraph,
-                                                    COMPONENT*             ref,
-                                                    const BACKTRACK_STAGE& partialMatches,
-                                                    std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails );
+    std::vector<COMPONENT*> findMatchingComponents( COMPONENT*                     ref,
+                                                    const std::vector<COMPONENT*>& aStructuralMatches,
+                                                    const BACKTRACK_STAGE&         partialMatches,
+                                                    std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
+                                                    const std::atomic<bool>* aCancelled = nullptr );
 
     std::vector<COMPONENT*> m_components;
 
