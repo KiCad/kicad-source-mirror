@@ -773,7 +773,7 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
         {
             wxLogTrace( traceTopoMatchDetail,
                         wxT( "iter %d: MRV dead end, alt='%s'" ),
-                        nloops, altNextRef ? altNextRef->m_reference : wxT( "(none)" ) );
+                        nloops, altNextRef ? altNextRef->m_reference : wxString( "(none)" ) );
 
             next.m_ref = altNextRef;
             next.m_refIndex = altRefIndex;
