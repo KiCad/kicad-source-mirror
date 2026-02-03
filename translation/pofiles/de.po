@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
 "PO-Revision-Date: 2026-02-03 23:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -4511,9 +4511,9 @@ msgstr "Designblockbibliothek-Tabelle"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -7844,9 +7844,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Merge fehlgeschlagen"
+msgstr "Merge fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -7855,19 +7855,19 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Start des Rebase fehlgeschlagen"
+msgstr "Start des Rebase fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Rebase-Commit fehlgeschlagen"
+msgstr "Rebase-Commit fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Rebase-Abschluss fehlgeschlagen"
+msgstr "Rebase-Abschluss fehlgeschlagen: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8962,9 +8962,8 @@ msgid "Error loading library '%s'"
 msgstr "Fehler beim Laden der Bibliothek \"%s\""
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Einstellungen bearbeiten"
+msgstr "Einstellungen bearbeiten..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8987,9 +8986,8 @@ msgid "Unset Visible Flag"
 msgstr "Sichtbar-Kennzeichnung entfernen"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Optionen bearbeiten"
+msgstr "Optionen bearbeiten..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -11538,9 +11536,8 @@ msgstr "Speichern..."
 # For dialog with options about polar coordinates...
 # 2) einblenden
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Darstellung"
+msgstr "Anzeige-PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
@@ -15315,9 +15312,8 @@ msgstr "Für diesen Schaltplan ist kein Projekt oder Pfad definiert."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "Bezeichnung"
+msgstr "Designvariante:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -17486,10 +17482,11 @@ msgid "Update schematic net labels to match net names from the PCB editor."
 msgstr "Im Leiterplatteneditor bearbeitete Werte von Symbolen aktualisieren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "Alle weiteren Felder des Symbols aus dem Footprint aktualisieren"
+msgstr ""
+"Alle Symbolattribute wie \"Nicht bestücken\" passend zum Footprint "
+"aktualisieren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18836,9 +18833,11 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
 
 #: eeschema/erc/erc.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
+msgstr ""
+"Pin %s von Symbol \"%s\" ist mit unterschiedlichen Netzen verbunden: %s und "
+"%s"
 
 #: eeschema/erc/erc.cpp:1354
 #, c-format
@@ -20399,14 +20398,12 @@ msgid "Find in Net Inspector"
 msgstr "Im Netzinspektor finden"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "Zu löschenden Variantennamen wählen"
+msgstr "Zu löschenden Variantennamen wählen:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "Variante entfernen ..."
+msgstr "Designvariante entfernen"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -20492,9 +20489,9 @@ msgid "Importing %s"
 msgstr "Importiere %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:927
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Fehler beim Laden des Schaltplans \"%s\"."
+msgstr "Fehler beim Parsen des Altiumschaltplans: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
@@ -20599,9 +20596,9 @@ msgid "File not found %s."
 msgstr "Datei %s nicht gefunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4980
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Fehler beim Parsen der SPICE-Bibliothek \"%s\": %s"
+msgstr "Fehler beim Parsen der Altium-Bibliothek: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5003
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -31035,9 +31032,10 @@ msgid "Pre-configured Libraries"
 msgstr "Vorkonfigurierte Bibliotheken"
 
 #: kicad/dialogs/template_default_html.h:239
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "- Gemeinsame Bauteile und Footprints sind bereits verknüpft"
+msgstr ""
+"Gemeinsame Symbole und Footprints sind bereits verknüpft und können sofort "
+"verwendet werden."
 
 #: kicad/dialogs/template_default_html.h:245
 #: pcbnew/dialogs/dialog_board_setup.cpp:162
@@ -31079,9 +31077,8 @@ msgstr ""
 "dennoch für ein neues Projekt verwenden."
 
 #: kicad/dialogs/template_default_html.h:401
-#, fuzzy
 msgid "To use this template"
-msgstr "Verwendung dieser Vorlage:"
+msgstr "Verwendung dieser Vorlage"
 
 #: kicad/dialogs/template_default_html.h:405
 msgid "Create the project"
@@ -31141,16 +31138,13 @@ msgid "Suggestions"
 msgstr "Frage"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
-msgstr "Mithilfe des Ordnersymbols ein anderes Vorlagenverzeichnis wählen."
+msgstr "Mithilfe des Ordnersymbols ein anderes Vorlagenverzeichnis wählen"
 
 #: kicad/dialogs/template_default_html.h:544
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
 msgstr ""
-"Auf \"Aktualisieren\"-Symbol klicken, um das aktuelle Verzeichnis neu zu "
-"laden."
+"Auf \"Aktualisieren\"-Symbol klicken, um aktuelles Verzeichnis neu zu laden"
 
 #: kicad/dialogs/template_default_html.h:545
 #, fuzzy
@@ -43179,9 +43173,8 @@ msgid "Show library"
 msgstr "Bibliothek anzeigen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "Footprintfelder"
+msgstr "Footprintfeld:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
 #, fuzzy
@@ -43189,9 +43182,8 @@ msgid "Field value:"
 msgstr "Feldwert:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "Schaltplanname"
+msgstr "Schaltplanblattname:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -43554,9 +43546,8 @@ msgid "Layer name %s already in use."
 msgstr "Lagenname %s wird bereits verwendet."
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "Benutzerlagen"
+msgstr "Benutzerlagen:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
@@ -48275,12 +48266,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Konnte 3D-Modell für %s nicht hinzufügen.\n"
+"\n"
 "OpenCASCADE-Fehler: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
@@ -48290,11 +48281,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Fehler beim Exportieren der %s-Datei. Export abgebrochen. **\n"
+msgstr "** Fehler beim Exportieren der Datei %s. Export abgebrochen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1372
 #, c-format
@@ -48347,9 +48336,8 @@ msgid "Warnings:\n"
 msgstr "Warnungen:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:725
-#, fuzzy
 msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
-msgstr "** ShapeUpgrade_UnifySameDomain erzeugte eine null shape **"
+msgstr "ShapeUpgrade_UnifySameDomain erzeugte eine leere Form (null shape)."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:736
 msgid ""
@@ -57598,9 +57586,8 @@ msgid "Cancel Current Item"
 msgstr "Vorgang mit aktuellem Werkzeug abbrechen"
 
 #: pcbnew/tools/pcb_actions.cpp:2677
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Außenlinien um gewähltes Element erzeugen"
+msgstr "Aktuelles Element überspringen und nächstes Element routen."
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid ""
