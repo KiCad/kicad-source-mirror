@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-01-28 10:01+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -19010,9 +19010,9 @@ msgid "Show Field Name"
 msgstr "Feldname anzeigen"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Fehler beim Laden des Schaltplans \"%s\"."
+msgstr "Fehler beim Parsen des Altiumschaltplans: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -19117,9 +19117,9 @@ msgid "File not found %s."
 msgstr "Datei %s nicht gefunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Fehler beim Parsen der SPICE-Bibliothek \"%s\": %s"
+msgstr "Fehler beim Parsen der Altium-Bibliothek: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -51273,9 +51273,8 @@ msgid "Cancel Current Item"
 msgstr "Vorgang mit aktuellem Werkzeug abbrechen"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Außenlinien um gewähltes Element erzeugen"
+msgstr "Aktuelles Element überspringen und nächstes Element routen."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
