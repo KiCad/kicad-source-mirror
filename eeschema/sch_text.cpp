@@ -521,6 +521,23 @@ std::vector<int> SCH_TEXT::ViewGetLayers() const
 }
 
 
+VECTOR2I SCH_TEXT::GetOffsetToMatchSCH_FIELD( SCH_RENDER_SETTINGS* aRenderSettings ) const
+{
+    if( GetDrawFont( aRenderSettings )->IsOutline() )
+    {
+        BOX2I    firstLineBBox = GetTextBox( aRenderSettings, 0 );
+        int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
+        int      adjust = KiROUND( sizeDiff * 0.4 );
+        VECTOR2I adjust_offset( 0, -adjust );
+
+        RotatePoint( adjust_offset, GetDrawRotation() );
+        return adjust_offset;
+    }
+
+    return { 0, 0 };
+}
+
+
 void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
@@ -594,18 +611,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
         VECTOR2I        text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
 
-        // Adjust text drawn in an outline font to more closely mimic the positioning of
-        // SCH_FIELD text.
-        if( font->IsOutline() )
-        {
-            BOX2I    firstLineBBox = GetTextBox( renderSettings, 0 );
-            int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
-            int      adjust = KiROUND( sizeDiff * 0.4 );
-            VECTOR2I adjust_offset( 0, - adjust );
-
-            RotatePoint( adjust_offset, GetDrawRotation() );
-            text_offset += adjust_offset;
-        }
+        text_offset += GetOffsetToMatchSCH_FIELD( renderSettings );
 
         std::vector<VECTOR2I> positions;
         wxArrayString strings_list;

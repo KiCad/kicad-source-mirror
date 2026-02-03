@@ -155,6 +155,8 @@ public:
     void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                           const VECTOR2I& aOffset, bool aDimmed ) override {}
 
+    VECTOR2I GetOffsetToMatchSCH_FIELD( SCH_RENDER_SETTINGS* aRenderSettings ) const;
+
     void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
