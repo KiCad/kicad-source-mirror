@@ -49,6 +49,7 @@ class PANEL_REMOTE_SYMBOL : public wxPanel
 {
 public:
     explicit PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent );
+    virtual ~PANEL_REMOTE_SYMBOL();
 
     void RefreshDataSources();
     bool HasDataSources() const { return !m_dataSources.empty(); }
@@ -58,7 +59,7 @@ private:
     void onDataSourceChanged( wxCommandEvent& aEvent );
     void onConfigure( wxCommandEvent& aEvent );
     void onWebViewLoaded( wxWebViewEvent& aEvent );
-    void onDarkModeToggle();
+    void onDarkModeToggle( wxSysColourChangedEvent& aEvent );
 
     bool loadDataSource( size_t aIndex );
     bool loadDataSource( const PCM_INSTALLATION_ENTRY& aEntry );
@@ -130,7 +131,6 @@ private:
     KIID                                      m_sessionId;
     int                                       m_messageIdCounter;
     bool                                      m_pendingHandshake;
-    bool                                      m_darkMode;
 
 };
 

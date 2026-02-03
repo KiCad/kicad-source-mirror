@@ -66,7 +66,6 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_tabbedPanel( nullptr )
 {
     m_SelLayerBox = nullptr;
-    m_darkMode = KIPLATFORM::UI::IsDarkTheme();
 
     // Do not register the idle event handler if we are running in headless mode.
     if( !wxApp::GetGUIInstance() )
@@ -84,13 +83,9 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                   if( selTool )
                       selTool->OnIdle( aEvent );
               }
-
-              if( m_darkMode != KIPLATFORM::UI::IsDarkTheme() )
-              {
-                  onDarkModeToggle();
-                  m_darkMode = KIPLATFORM::UI::IsDarkTheme();
-              }
           } );
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PCB_BASE_EDIT_FRAME::onDarkModeToggle ), this );
 
     Pgm().GetBackgroundJobMonitor().RegisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
 }
@@ -98,6 +93,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
+    Unbind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PCB_BASE_EDIT_FRAME::onDarkModeToggle ), this );
+
     Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( static_cast<KISTATUSBAR*>( GetStatusBar() ) );
     CloseVertexEditor();
     GetCanvas()->GetView()->Clear();
@@ -304,7 +301,7 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 }
 
 
-void PCB_BASE_EDIT_FRAME::onDarkModeToggle()
+void PCB_BASE_EDIT_FRAME::onDarkModeToggle( wxSysColourChangedEvent& aEvent )
 {
     m_appearancePanel->OnDarkModeToggle();
 

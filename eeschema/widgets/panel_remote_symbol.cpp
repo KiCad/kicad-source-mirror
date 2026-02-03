@@ -214,9 +214,9 @@ bool PANEL_REMOTE_SYMBOL::writeBinaryFile( const wxFileName& aOutput,
 }
 
 
-std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload(
-        const std::vector<uint8_t>& aPayload, const wxString& aLibItemName,
-        wxString& aError ) const
+std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload( const std::vector<uint8_t>& aPayload,
+                                                                        const wxString& aLibItemName,
+                                                                        wxString& aError ) const
 {
     if( aPayload.empty() )
     {
@@ -301,8 +301,6 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
     m_messageIdCounter( 0 ),
     m_pendingHandshake( false )
 {
-    m_darkMode = KIPLATFORM::UI::IsDarkTheme();
-
     wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer* controlsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -341,17 +339,15 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
 
     RefreshDataSources();
 
-    Bind( wxEVT_IDLE,
-          [this]( wxIdleEvent& aEvent )
-          {
-              if( m_darkMode != KIPLATFORM::UI::IsDarkTheme() )
-              {
-                  onDarkModeToggle();
-                  m_darkMode = KIPLATFORM::UI::IsDarkTheme();
-              }
-          } );
+    Bind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_REMOTE_SYMBOL::onDarkModeToggle ), this );
 
     wxLogTrace( wxS( "KI_TRACE_REMOTE_SYMBOL" ), "PANEL_REMOTE_SYMBOL constructed (frame=%p)", (void*)aParent );
+}
+
+
+PANEL_REMOTE_SYMBOL::~PANEL_REMOTE_SYMBOL()
+{
+    Unbind( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler( PANEL_REMOTE_SYMBOL::onDarkModeToggle ), this );
 }
 
 
@@ -422,7 +418,7 @@ void PANEL_REMOTE_SYMBOL::onConfigure( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_REMOTE_SYMBOL::onDarkModeToggle()
+void PANEL_REMOTE_SYMBOL::onDarkModeToggle( wxSysColourChangedEvent& aEvent )
 {
     RefreshDataSources();
 }
