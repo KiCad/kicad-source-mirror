@@ -974,4 +974,76 @@ BOOST_AUTO_TEST_CASE( FootprintFieldVariantNoOpWhenSame )
 }
 
 
+/**
+ * Test that switching variants invalidates field bounding box caches so that field geometry
+ * reflects the new variant's text. This is the regression test for GitLab issue #22917.
+ */
+BOOST_AUTO_TEST_CASE( VariantSwitchInvalidatesBoundingBoxCache )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    // GetShownText(bool) resolves variants via CurrentSheet(), so we must set it
+    m_schematic->SetCurrentSheet( m_schematic->Hierarchy()[0] );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    SCH_FIELD* fpField = symbol->GetField( FIELD_T::FOOTPRINT );
+    BOOST_REQUIRE( fpField );
+
+    wxString variantName = wxS( "BboxVariant" );
+    wxString shortFp = wxS( "R_0402" );
+    wxString longFp = wxS( "Resistor_SMD:R_2512_6332Metric_Pad1.52x3.35mm_HandSolder" );
+
+    symbol->SetFootprintFieldText( shortFp );
+    fpField->SetVisible( true );
+    fpField->ClearBoundingBoxCache();
+
+    m_schematic->AddVariant( variantName );
+    symbol->SetFieldText( fpField->GetName(), longFp, &m_schematic->Hierarchy()[0], variantName );
+
+    // Confirm variant text resolution works
+    wxString resolvedDefault = fpField->GetShownText( &m_schematic->Hierarchy()[0], false, 0, wxEmptyString );
+    wxString resolvedVariant = fpField->GetShownText( &m_schematic->Hierarchy()[0], false, 0, variantName );
+    BOOST_CHECK_EQUAL( resolvedDefault, shortFp );
+    BOOST_CHECK_EQUAL( resolvedVariant, longFp );
+
+    // Verify the implicit text resolution via GetShownText(bool) works for each variant
+    m_schematic->SetCurrentVariant( wxEmptyString );
+    wxString implicitDefault = fpField->GetShownText( false );
+
+    m_schematic->SetCurrentVariant( variantName );
+    wxString implicitVariant = fpField->GetShownText( false );
+
+    BOOST_CHECK_EQUAL( implicitDefault, shortFp );
+    BOOST_CHECK_EQUAL( implicitVariant, longFp );
+
+    // Prime the bounding box cache with the default variant (short footprint text)
+    m_schematic->SetCurrentVariant( wxEmptyString );
+    fpField->ClearBoundingBoxCache();
+    BOX2I defaultTextBox = fpField->GetTextBox( nullptr );
+
+    // Switch to the variant with a much longer footprint string.
+    // SetCurrentVariant must invalidate caches so the new text is reflected.
+    m_schematic->SetCurrentVariant( variantName );
+    BOX2I variantTextBox = fpField->GetTextBox( nullptr );
+
+    // The longer text must produce a wider text box.  If the bounding box cache was not
+    // invalidated on variant switch, both boxes would be identical.
+    BOOST_CHECK_GT( variantTextBox.GetWidth(), defaultTextBox.GetWidth() );
+
+    // Switch back and verify it returns to the original width
+    m_schematic->SetCurrentVariant( wxEmptyString );
+    BOX2I restoredTextBox = fpField->GetTextBox( nullptr );
+    BOOST_CHECK_EQUAL( restoredTextBox.GetWidth(), defaultTextBox.GetWidth() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

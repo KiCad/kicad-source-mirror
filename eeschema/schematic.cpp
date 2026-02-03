@@ -2188,11 +2188,29 @@ wxString SCHEMATIC::GetCurrentVariant() const
 
 void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
 {
+    wxString newVariant;
+
     // Internally an empty string is the default variant.  Set to default if the variant name doesn't exist.
-    if( ( aVariantName == GetDefaultVariantName() ) || !m_variantNames.contains( aVariantName ) )
-        m_currentVariant = wxEmptyString;
-    else
-        m_currentVariant = aVariantName;
+    if( ( aVariantName != GetDefaultVariantName() ) && m_variantNames.contains( aVariantName ) )
+        newVariant = aVariantName;
+
+    if( m_currentVariant == newVariant )
+        return;
+
+    m_currentVariant = newVariant;
+
+    // Variant-specific field values affect text geometry, so bounding box caches computed
+    // with the previous variant's text are now stale.
+    if( m_rootSheet )
+    {
+        SCH_SCREENS allScreens( m_rootSheet );
+
+        for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
+        {
+            for( SCH_ITEM* item : screen->Items() )
+                item->ClearCaches();
+        }
+    }
 }
 
 
