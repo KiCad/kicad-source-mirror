@@ -153,39 +153,47 @@ static wxFileName ensureDefaultProjectTemplate()
     templatePath.AssignDir( it->second.GetValue() );
     templatePath.AppendDir( "default" );
 
-    if( templatePath.DirExists() )
-        return templatePath;
-
-    if( !templatePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    if( !templatePath.DirExists() && !templatePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         return wxFileName();
 
     wxFileName metaDir = templatePath;
     metaDir.AppendDir( METADIR );
 
-    if( !metaDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    if( !metaDir.DirExists() && !metaDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         return wxFileName();
 
     wxFileName infoFile = metaDir;
     infoFile.SetFullName( METAFILE_INFO_HTML );
-    wxFFile info( infoFile.GetFullPath(), wxT( "w" ) );
 
-    if( !info.IsOpened() )
-        return wxFileName();
+    if( !infoFile.FileExists() )
+    {
+        wxFFile info( infoFile.GetFullPath(), wxT( "w" ) );
 
-    info.Write( wxT( "<html><head><title>Default</title></head><body></body></html>" ) );
-    info.Close();
+        if( !info.IsOpened() )
+            return wxFileName();
+
+        info.Write( wxT( "<html><head><title>Default</title></head><body><h3>Default KiCad project template.</h3></body></html>" ) );
+        info.Close();
+    }
 
     wxFileName proFile = templatePath;
     proFile.SetFullName( wxT( "default.kicad_pro" ) );
-    wxFFile proj( proFile.GetFullPath(), wxT( "w" ) );
 
-    if( !proj.IsOpened() )
+    if( !proFile.FileExists() )
+    {
+        wxFFile proj( proFile.GetFullPath(), wxT( "w" ) );
+
+        if( !proj.IsOpened() )
+            return wxFileName();
+
+        proj.Write( wxT( "{}" ) );
+        proj.Close();
+    }
+
+    if( infoFile.FileExists() && proFile.FileExists() )
+        return templatePath;
+    else
         return wxFileName();
-
-    proj.Write( wxT( "{}" ) );
-    proj.Close();
-
-    return templatePath;
 }
 
 int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
