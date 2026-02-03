@@ -33,7 +33,14 @@
 #include <wx/evtloop.h>
 #include <wx/socket.h>
 #include <core/raii.h>
+#include <wx/log.h>
 
+
+static const wxString HOSTNAME( wxT( "localhost" ) );
+
+// buffer for read and write data in socket connections
+#define IPC_BUF_SIZE 4096
+static char client_ipc_buffer[IPC_BUF_SIZE];
 
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
     EVT_KIWAY_EXPRESS( KIWAY_PLAYER::kiway_express )
@@ -182,6 +189,76 @@ void KIWAY_PLAYER::kiway_express( KIWAY_MAIL_EVENT& aEvent )
 }
 
 
+void KIWAY_PLAYER::CreateServer( int service, bool local )
+{
+    wxIPV4address addr;
 
-//  LocalWords:  ShowModal DismissModal vtable wxWindowDisabler aui
-//  LocalWords:  miniframe reenables KIWAY PLAYERs
+    // Set the port number
+    addr.Service( service );
+
+    // Listen on localhost only if requested
+    if( local )
+        addr.Hostname( HOSTNAME );
+
+    if( m_socketServer )
+    {
+        // this helps prevent any events that could come in during deletion
+        m_socketServer->Notify( false );
+        delete m_socketServer;
+    }
+
+    m_socketServer = new wxSocketServer( addr );
+
+    m_socketServer->SetNotify( wxSOCKET_CONNECTION_FLAG );
+    m_socketServer->SetEventHandler( *this, ID_EDA_SOCKET_EVENT_SERV );
+    m_socketServer->Notify( true );
+}
+
+
+void KIWAY_PLAYER::OnSockRequest( wxSocketEvent& evt )
+{
+    size_t        len;
+    wxSocketBase* sock = evt.GetSocket();
+
+    switch( evt.GetSocketEvent() )
+    {
+    case wxSOCKET_INPUT:
+        sock->Read( client_ipc_buffer, 1 );
+
+        if( sock->LastCount() == 0 )
+            break;                    // No data, occurs on opening connection
+
+        sock->Read( client_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
+        len = 1 + sock->LastCount();
+        client_ipc_buffer[len] = 0;
+        ExecuteRemoteCommand( client_ipc_buffer );
+        break;
+
+    case wxSOCKET_LOST:
+        return;
+        break;
+
+    default:
+        wxLogError( wxT( "EDA_DRAW_FRAME::OnSockRequest() error: Invalid event !" ) );
+        break;
+    }
+}
+
+
+void KIWAY_PLAYER::OnSockRequestServer( wxSocketEvent& evt )
+{
+    wxSocketBase*   socket;
+    wxSocketServer* server = (wxSocketServer*) evt.GetSocket();
+
+    socket = server->Accept();
+
+    if( socket == nullptr )
+        return;
+
+    m_sockets.push_back( socket );
+
+    socket->Notify( true );
+    socket->SetEventHandler( *this, ID_EDA_SOCKET_EVENT );
+    socket->SetNotify( wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG );
+}
+
