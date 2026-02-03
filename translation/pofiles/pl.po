@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-01-23 18:01+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -19016,9 +19016,9 @@ msgid "File not found %s."
 msgstr "Nie znaleziono pliku %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Wystąpił błąd podczas parsowania biblioteki SPICE '%s': %s"
+msgstr "Wystąpił błąd podczas parsowania biblioteki Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
