@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-01-17 09:19+0000\n"
+"PO-Revision-Date: 2026-02-03 23:02+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -2331,9 +2331,9 @@ msgstr "Тека блоку дизайну '%s' не вдалося видали
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Файл '%s' не знайдено."
+msgstr "Вкладену таблицю '%s' не знайдено."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4435,9 +4435,8 @@ msgid "Reset Unique Id"
 msgstr "Скинути унікальний Id"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "Таблиця бібліотеки Design Block"
+msgstr "Таблиці бібліотек блоків проєктування"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -4445,9 +4444,9 @@ msgstr "Таблиця бібліотеки Design Block"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -6429,9 +6428,8 @@ msgstr "Типові для графіків"
 
 #: common/eda_base_frame.cpp:1450
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Назви шарів"
+msgstr "Назви користувацьких шарів"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7745,32 +7743,37 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Неможливо виконати злиття: у вас є непідготовлені зміни. Будь ласка, "
+"зафіксуйте (commit) або сховайте (stash) їх перед отриманням даних (pull)."
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Не вдалося об'єднати"
+msgstr "Не вдалося об'єднати: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"Неможливо виконати отримання (pull) з перебазуванням (rebase): у вас є "
+"непідготовлені зміни. Будь ласка, зафіксуйте (commit) або сховайте (stash) "
+"їх перед отриманням даних."
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Не вдалося запустити перебазування"
+msgstr "Не вдалося запустити перебазування (rebase): %s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Не вдалося виконати перебазування (commit)"
+msgstr "Не вдалося виконати перебазування (commit): %s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Не вдалося завершити перебазування"
+msgstr "Не вдалося завершити перебазування: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8332,9 +8335,8 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Налаштування завдання експорту статистики дошки"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "ПХБ: Статистика експорту"
+msgstr "PCB: Статистика експорту плати"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:149 kicad/kicad_cli.cpp:167
@@ -8861,9 +8863,8 @@ msgid "Error loading library '%s'"
 msgstr "Помилка завантаження бібліотеки '%s'"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Редагувати налаштування"
+msgstr "Редагувати налаштування..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8886,9 +8887,8 @@ msgid "Unset Visible Flag"
 msgstr "Зняти прапор видимості"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Редагування параметрів"
+msgstr "Редагування параметрів..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -11418,13 +11418,12 @@ msgid "Save..."
 msgstr "Зберегти..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Відображати"
+msgstr "PPI дисплея: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "Виявити"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -15160,9 +15159,8 @@ msgstr "Для поточної схеми не визначено ні проє
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "Позначити"
+msgstr "Варіант дизайну:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -16754,9 +16752,8 @@ msgid "Enter new variant name:"
 msgstr "Введіть назву нового варіанта:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Перейменувати варіант"
+msgstr "Перейменувати варіанту дизайну"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16786,9 +16783,8 @@ msgid "Enter name for the copied variant:"
 msgstr "Введіть назву для скопійованого варіанту:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "Скопіювати варіант"
+msgstr "Скопіювати варіант дизайну"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16886,9 +16882,8 @@ msgid "Alternate Assignment"
 msgstr "Альтернативне призначення"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " Варіант"
+msgstr " Варіант дизайну"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17305,16 +17300,15 @@ msgid "Net names"
 msgstr "Імена звʼязків"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
 msgstr ""
-"Оновити значення символів, що були замінені в редакторі друкованої плати."
+"Оновити мітки мереж на схемі відповідно до назв мереж із редактора плати."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "Оновити всі інші поля у символі з даних посадкового місця"
+msgstr ""
+"Оновити прапорці атрибутів символів, щоб вони відповідали посадковим місцям."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18256,14 +18250,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Тримайте шпильки прикріпленими під час перетягування країв"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
-msgstr "Таблиця бібліотеки символів"
+msgstr "Таблиця бібліотек символів"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:392
-#, fuzzy
 msgid "folder with .kicad_sym files"
-msgstr "тека з %s файлами"
+msgstr "тека з .kicad_sym файлами"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
@@ -18666,9 +18658,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Вивід %s з'єднано з %s та %s"
 
 #: eeschema/erc/erc.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Вивід %s з'єднано з %s та %s"
+msgstr "Вивід %s на символі '%s' підключений до різних мереж: %s та %s"
 
 #: eeschema/erc/erc.cpp:1354
 #, c-format
@@ -18822,9 +18814,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Вхід живлення не підключений до жодного виходу живлення"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Дублювати контур зони на інший шар"
+msgstr "Дубльовані виводи з різними мережами"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -20119,15 +20110,14 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Зберегти зміни в '%s' до закриття?"
 
 #: eeschema/sch_edit_frame.cpp:1322
-#, fuzzy
 msgid ""
 "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the main KiCad "
 "application and create a project."
 msgstr ""
-"Не вдається оновити друковану плату, оскільки редактор схем відкрито в "
-"автономному режимі. Щоб створити/оновити друковані плати зі схем, запустіть "
-"оболонку KiCad і створіть проект."
+"Неможливо оновити плату (PCB), оскільки редактор схем відкритий в "
+"автономному (stand-alone) режимі. Щоб створювати або оновлювати плати зі "
+"схем, запустіть основну програму KiCad і створіть проєкт."
 
 #: eeschema/sch_edit_frame.cpp:1407
 msgid "New Schematic"
@@ -20196,14 +20186,12 @@ msgid "Find in Net Inspector"
 msgstr "Знайти в Net Inspector"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "Виберіть назву варіанта для видалення"
+msgstr "Виберіть назву варіанта для видалення:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "Вилучити варіант..."
+msgstr "Видалити варіант проєкту"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -20289,9 +20277,9 @@ msgid "Importing %s"
 msgstr "Імпортується %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:927
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Помилка завантаження схеми '%s."
+msgstr "Помилка аналізу схеми Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
@@ -20397,9 +20385,9 @@ msgid "File not found %s."
 msgstr "Файл не знайдено %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4980
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Помилка аналізу бібліотеки SPICE '%s': %s"
+msgstr "Помилка аналізу бібліотеки Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5003
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -23957,6 +23945,8 @@ msgstr "Курсор 2"
 msgid ""
 "Workbook file '%s' not found. Loading simulation settings from schematic."
 msgstr ""
+"Файл робочої книги (workbook) '%s' не знайдено. Завантаження налаштувань "
+"симуляції зі схеми."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1436
 #: eeschema/sim/simulator_frame_ui.cpp:3210
@@ -24852,14 +24842,12 @@ msgid "Select the current variant to display and edit."
 msgstr "Виберіть поточний варіант для відображення та редагування."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "Додати новий варіант..."
+msgstr "Додати новий варіант проєкту..."
 
 #: eeschema/toolbars_sch_editor.cpp:372
-#, fuzzy
 msgid "New Design Variant"
-msgstr "Новий варіант"
+msgstr "Новий варіант проєкту"
 
 #: eeschema/toolbars_sch_editor.cpp:378
 msgid "Variant name:"
@@ -26530,24 +26518,20 @@ msgid "Show SPICE Netlist"
 msgstr "Показати SPICE список зв'язків"
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "Додати новий варіант..."
+msgstr "Додати варіант проєкту..."
 
 #: eeschema/tools/sch_actions.cpp:1764
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "Додати новий варіант до схеми."
+msgstr "Додати новий варіант проєкту до схеми."
 
 #: eeschema/tools/sch_actions.cpp:1769
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "Вилучити варіант..."
+msgstr "Видалити варіант проєкту..."
 
 #: eeschema/tools/sch_actions.cpp:1770
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "Вилучити існуючий варіант зі схеми."
+msgstr "Видалити існуючий варіант проєкту зі схеми."
 
 #: eeschema/tools/sch_align_tool.cpp:63
 msgid "Align"
@@ -29179,9 +29163,8 @@ msgid "Input directory"
 msgstr "Вхідна тека"
 
 #: kicad/cli/command.cpp:160
-#, fuzzy
 msgid "Input file or directory"
-msgstr "Вхідна тека"
+msgstr "Вхідний файл або тека"
 
 #: kicad/cli/command.cpp:174
 msgid "Output directory"
@@ -30455,14 +30438,12 @@ msgid "Project Template Selector"
 msgstr "Вибір шаблону проекту"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "Створити новий проект із шаблону"
+msgstr "Нещодавні шаблони проєктів"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "Шаблон"
+msgstr "Всі шаблони"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -30473,9 +30454,8 @@ msgid "System Templates"
 msgstr "Системні шаблони"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "Низ"
+msgstr "Повернутися"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -30698,16 +30678,18 @@ msgstr "Виберіть шаблон"
 msgid ""
 "Templates provide pre-configured project structures to jumpstart your design."
 msgstr ""
+"Шаблони надають попередньо налаштовані структури проєктів для швидкого "
+"старту вашої розробки."
 
 #: kicad/dialogs/template_default_html.h:238
-#, fuzzy
 msgid "Pre-configured Libraries"
 msgstr "Попередньо налаштовані бібліотеки"
 
 #: kicad/dialogs/template_default_html.h:239
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "- Загальні компоненти та посадкові місця вже пов'язані"
+msgstr ""
+"Загальні символи та посадкові місця вже пов’язані між собою та готові до "
+"використання."
 
 #: kicad/dialogs/template_default_html.h:245
 #: pcbnew/dialogs/dialog_board_setup.cpp:162
@@ -30719,106 +30701,96 @@ msgid ""
 "Electrical and mechanical constraints configured for the intended "
 "application."
 msgstr ""
+"Електричні та механічні обмеження налаштовані для цільового застосування."
 
 #: kicad/dialogs/template_default_html.h:252
-#, fuzzy
 msgid "Board Stackups"
-msgstr "Структура плати"
+msgstr "Стек шарів плати"
 
 #: kicad/dialogs/template_default_html.h:253
 msgid "Layer configurations optimized for common manufacturing processes."
 msgstr ""
+"Конфігурації шарів, оптимізовані для розповсюджених процесів виробництва."
 
 #: kicad/dialogs/template_default_html.h:260
 msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
+"Нещодавно використані шаблони відображаються зверху. Використовуйте іконку "
+"теки, щоб переглянути власні каталоги шаблонів."
 
 #: kicad/dialogs/template_default_html.h:394
 msgid "Template"
 msgstr "Шаблон"
 
 #: kicad/dialogs/template_default_html.h:398
-#, fuzzy
 msgid ""
 "This template does not include a description. You can still use it to create "
 "a new project."
 msgstr ""
-"Цей шаблон проєкту ще не містить інформаційної сторінки. Ви все ще можете "
-"використовувати її для створення нового проєкту."
+"Цей шаблон не має опису. Ви все одно можете використовувати його для "
+"створення нового проєкту."
 
 #: kicad/dialogs/template_default_html.h:401
-#, fuzzy
 msgid "To use this template"
-msgstr "Щоб скористатися цим шаблоном:"
+msgstr "Щоб використати цей шаблон"
 
 #: kicad/dialogs/template_default_html.h:405
 msgid "Create the project"
 msgstr "Створити проєкт"
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
 msgstr ""
-"Натисніть кнопку «ОК» нижче. KiCad створить нову папку проекту, заповнену "
-"вмістом цього шаблону."
+"Натисніть «ОК», щоб створити нову папку проєкту з вмістом цього шаблону."
 
 #: kicad/dialogs/template_default_html.h:412
 msgid "Open schematic and PCB"
 msgstr "Відкрийте схему та PCB"
 
 #: kicad/dialogs/template_default_html.h:413
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
-msgstr ""
-"Скористайтеся деревом менеджера проектів або запустіть редактори схем та "
-"друкованих плат, щоб розпочати проектування."
+msgstr "Використовуйте Менеджер проєктів, щоб запустити редактори схем та плат."
 
 #: kicad/dialogs/template_default_html.h:419
-#, fuzzy
 msgid "Review settings"
-msgstr "Налаштування попереднього перегляду"
+msgstr "Переглянути налаштування"
 
 #: kicad/dialogs/template_default_html.h:420
-#, fuzzy
 msgid "Verify libraries, design rules, and board stackup match your needs."
 msgstr ""
-"Переконайтеся, що бібліотеки символів/посадових відбитків, правила "
-"проектування та розташування плати відповідають вашим потребам."
+"Перевірте, чи бібліотеки, правила проектування та стек шарів плати "
+"відповідають вашим потребам."
 
 #: kicad/dialogs/template_default_html.h:427
 msgid "Add a description by creating"
-msgstr ""
+msgstr "Додайте опис, створивши"
 
 #: kicad/dialogs/template_default_html.h:428
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "Не вдалося знайти каталог шаблонів користувачів."
+msgstr "всередині теки цього шаблону."
 
 #: kicad/dialogs/template_default_html.h:536
 msgid "No Templates Found"
 msgstr "Шаблонів не знайдено"
 
 #: kicad/dialogs/template_default_html.h:538
-#, fuzzy
 msgid "The selected directory does not contain any project templates."
-msgstr "Вибраний каталог шаблонів не містить жодних шаблонів проєктів."
+msgstr "Вибрана тека не містить жодних шаблонів проєктів."
 
 #: kicad/dialogs/template_default_html.h:541
-#, fuzzy
 msgid "Suggestions"
-msgstr "Питання"
+msgstr "Рекомендації"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
-msgstr "Перейдіть до іншого каталогу шаблонів за допомогою значка папки"
+msgstr "Перейдіть до іншої теки за допомогою іконки папки"
 
 #: kicad/dialogs/template_default_html.h:544
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
-msgstr "Натисніть значок оновлення, щоб перезавантажити поточний каталог"
+msgstr ""
+"Використовуйте іконку оновлення, щоб перезавантажити вміст поточної теки"
 
 #: kicad/dialogs/template_default_html.h:545
 #, fuzzy
