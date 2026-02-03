@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-01-24 03:02+0000\n"
+"PO-Revision-Date: 2026-02-03 23:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -4407,7 +4407,6 @@ msgid "Reset Unique Id"
 msgstr "重置唯一标识"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
 msgstr "设计图块库表"
 
@@ -4417,9 +4416,9 @@ msgstr "设计图块库表"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -7679,9 +7678,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "合并失败"
+msgstr "合并失败: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -8812,9 +8811,8 @@ msgid "Unset Visible Flag"
 msgstr "取消可见标记"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "编辑选项"
+msgstr "编辑选项..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
