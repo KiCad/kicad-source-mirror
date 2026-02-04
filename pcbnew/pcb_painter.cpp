@@ -2402,6 +2402,8 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
+    const double imgAlpha = m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a;
+
     if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
     {
         COLOR4D color = m_pcbSettings.GetColor( aBitmap, LAYER_ANCHOR );
@@ -2422,14 +2424,13 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
 
         m_gal->DrawRectangle( origin, end );
 
-        // Hard code reference images as opaque when selected. Otherwise cached layers will
-        // not be rendered under the selected image because cached layers are rendered after
-        // non-cached layers (e.g. bitmaps), which will have a closer Z order.
-        m_gal->DrawBitmap( refImg.GetImage(), 1.0 );
+        // Keep reference images opaque when selected (and not moving). Otherwise cached layers
+        // will not be rendered under the selected image because cached layers are rendered
+        // after non-cached layers (e.g. bitmaps), which will have a closer Z order.
+        m_gal->DrawBitmap( refImg.GetImage(), aBitmap->IsMoving() ? imgAlpha : 1.0 );
     }
     else
-        m_gal->DrawBitmap( refImg.GetImage(),
-                           m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a );
+        m_gal->DrawBitmap( refImg.GetImage(), imgAlpha );
 
     m_gal->Restore();
 }

@@ -1552,6 +1552,12 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     if( !glIsTexture( texture_id ) ) // ensure the bitmap texture is still valid
         return;
 
+    GLboolean depthMask = GL_TRUE;
+    glGetBooleanv( GL_DEPTH_WRITEMASK, &depthMask );
+
+    if( alpha < 1.0f )
+        glDepthMask( GL_FALSE );
+
     glDepthFunc( GL_ALWAYS );
 
     glAlphaFunc( GL_GREATER, 0.01f );
@@ -1604,6 +1610,8 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glMatrixMode( GL_MODELVIEW );
 
     glDisable( GL_ALPHA_TEST );
+
+    glDepthMask( depthMask );
 
     glDepthFunc( GL_LESS );
 }
