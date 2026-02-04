@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-02-03 23:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-05 08:01+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -22536,7 +22536,7 @@ msgstr ""
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Symbol '%s' existiert bereits in Bibliothek '%s'. Soll es überschrieben "
+"Symbol \"%s\" existiert bereits in Bibliothek \"%s\". Soll es überschrieben "
 "werden?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
@@ -34172,7 +34172,7 @@ msgstr "Textausrichtung"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:247
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:201
 msgid "90.0"
-msgstr "90.0"
+msgstr "90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:248
