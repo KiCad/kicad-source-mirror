@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-04 13:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-04 13:12+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -2385,9 +2385,9 @@ msgstr "Designblock-Verzeichnis \"%s\" konnte nicht gelöscht werden."
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Datei \"%s\" nicht gefunden."
+msgstr "Verschachtelte Tabelle \"%s\" nicht gefunden."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4501,9 +4501,8 @@ msgid "Reset Unique Id"
 msgstr "Eindeutige ID zurücksetzen"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "Designblockbibliothek-Tabelle"
+msgstr "Designblockbibliothek-Tabellen"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -6517,9 +6516,8 @@ msgstr "Standardeinstellungen für Grafik"
 
 #: common/eda_base_frame.cpp:1450
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Lagennamen"
+msgstr "Benutzerlagen-Namen"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7842,6 +7840,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Kann nicht mergen: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
+"committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1075
 #, c-format
