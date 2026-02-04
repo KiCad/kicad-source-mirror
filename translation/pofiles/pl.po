@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-04 13:12+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -4713,6 +4713,10 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Plik o nazwie '%s' jest obecnie osadzony, lecz jego wersja na dysku różni "
+"się zawartością.\n"
+"\n"
+"Czy chcesz zastąpić osadzony plik tym z nową zawartością?"
 
 #: common/dialogs/panel_embedded_files.cpp:353
 msgid "Embedded File Conflict"
@@ -4739,6 +4743,7 @@ msgstr "Wybierz plik by go osadzić"
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"Osadzonych plików dziedziczących z nadrzędnego symbolu nie można usuwać."
 
 #: common/dialogs/panel_embedded_files.cpp:463
 msgid "Select a directory to export files"
@@ -7785,6 +7790,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Nie można scalić: istnieją nieudostępnione zmiany. Proszę je zatwierdzić lub "
+"schować przed pobraniem nowej zawartości."
 
 #: common/git/libgit_backend.cpp:1075
 #, c-format
@@ -7796,6 +7803,8 @@ msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"Nie można pobrać i wykonać rebase: istnieją nieudostępnione zmiany. Proszę "
+"je zatwierdzić lub schować przed pobraniem nowej zawartości."
 
 #: common/git/libgit_backend.cpp:1103
 #, c-format
@@ -9120,7 +9129,7 @@ msgstr "Wystąpił nieoczekiwany błąd podczas odczytywania tabeli bibliotek %s
 #: common/libraries/library_table_parser.cpp:233
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Błąd składni w linii %zu, kolumna %zu"
 
 #: common/libraries/library_table_parser.cpp:219
 msgid "An unexpected error occurred while reading library table"
@@ -9140,14 +9149,16 @@ msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... oraz następne %zu plików\n"
 
 #: common/local_history.cpp:1505
 msgid "Delete Files during Restore"
-msgstr ""
+msgstr "Usuń pliki podczas odzyskiwania"
 
 #: common/local_history.cpp:1507
 msgid "Proceed"
-msgstr ""
+msgstr "Kontynuuj"
 
 #: common/local_history.cpp:1507
 msgid "Keep All Files"
@@ -9163,10 +9174,15 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"Wybranie opcji 'Zachowaj wszystkie pliki' spowoduje przywrócenie wybranego "
+"zatwierdzenia, lecz zachowa wszystkie istniejące pliki w katalogu projektu. "
+"Wybranie opcji 'Kontynuuj' spowoduje usunięcie plików, których nie ma w "
+"przywróconym zatwierdzeniu."
 
 #: common/local_history.cpp:1744
 msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
+"Nie można przywrócić - następujące pliki są otwarte przez innego użytkownika:"
 
 #: common/local_history.cpp:1746
 msgid "Restore Failed"
@@ -9359,6 +9375,13 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad nie mógł użyć '%s'.\n"
+"\n"
+"1. Wyłącz 'Kontrolowany dostęp do folderów' w ustawieniach systemu Windows "
+"lub w zasadach grupy\n"
+"2. Upewnij się, że żaden inny program antywirusowy nie koliduje z programem "
+"KiCad\n"
+"3. Upewnij się, że masz skonfigurowane prawidłowe uprawnienia"
 
 #: common/pgm_base.cpp:234
 msgid "No default editor found, you must choose one."
@@ -9619,10 +9642,15 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
+"KiCad został uruchomiony po raz pierwszy, lub niektóre z plików "
+"konfiguracyjnych zostały utracone.\n"
+"\n"
+"Poświęć chwilę czasu by skonfigurować podstawowe ustawienia.  Możesz je "
+"zawsze zmodyfikować później otwierając okno dialogowe z ustawieniami."
 
 #: common/startwizard/startwizard.cpp:90
 msgid "For help, please visit "
-msgstr ""
+msgstr "By uzyskać pomoc, proszę odwiedzić "
 
 #: common/startwizard/startwizard.cpp:160
 #, fuzzy
@@ -9634,6 +9662,8 @@ msgid ""
 "Are you sure?  If you cancel KiCad setup, default settings will be chosen "
 "for you."
 msgstr ""
+"Jesteś pewien?  Jeśli anulujesz konfigurację KiCad, wybrane zostaną domyślne "
+"ustawienia."
 
 #: common/startwizard/startwizard_provider_libraries.cpp:109
 msgid "Symbol library table"
@@ -9658,7 +9688,7 @@ msgstr "Biblioteki"
 
 #: common/startwizard/startwizard_provider_privacy.cpp:76
 msgid "Updates && Privacy"
-msgstr ""
+msgstr "Aktualizacje i prywatność"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
@@ -9945,11 +9975,11 @@ msgstr "Rysuj prostokąt zaznaczenia"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
-msgstr ""
+msgstr "Lasso"
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Ustawia tryb zaznaczenia na użycie lassa"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10170,7 +10200,7 @@ msgstr "Eksportuj jako CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
-msgstr ""
+msgstr "Exportuje zawartość tabeli do pliku CSV z wartościami zmiennych"
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
