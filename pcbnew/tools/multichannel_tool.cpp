@@ -691,7 +691,18 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
     BOARD_COMMIT commit( GetManager(), true, false );
 
-    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, m_areas.m_options, compat ) )
+    REPEAT_LAYOUT_OPTIONS options = m_areas.m_options;
+
+    // If no anchor is provided, pick the first matched pair to avoid center-alignment shifting
+    // the whole group. This keeps Apply Design Block Layout from moving the group to wherever
+    // the source design block happened to be placed.
+    if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !options.m_anchorFp )
+    {
+        if( !compat.m_matchingComponents.empty() )
+            options.m_anchorFp = compat.m_matchingComponents.begin()->first;
+    }
+
+    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, options, compat ) )
     {
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
                                         m_areas.m_refRA->m_zone->GetZoneName(),
@@ -925,6 +936,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( refFP->GetReference() == aOpts.m_anchorFp->GetReference() )
                 targetAnchorFp = targetFP;
         }
+
+        // If the dialog-selected anchor reference doesn't exist in the target area (e.g. refs don't match),
+        // fall back to the first matched pair to avoid center-alignment shifting the whole group.
+        if( !targetAnchorFp && !aCompatData.m_matchingComponents.empty() )
+            targetAnchorFp = aCompatData.m_matchingComponents.begin()->second;
 
         if( targetAnchorFp )
         {
