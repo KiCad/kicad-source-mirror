@@ -47,9 +47,8 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Shape.hxx>
 #include <Quantity_Color.hxx>
+#include <Quantity_ColorRGBA.hxx>
 #include <XCAFApp_Application.hxx>
-
-#include <AIS_Shape.hxx>
 
 #include <IGESControl_Reader.hxx>
 #include <IGESCAFControl_Reader.hxx>

@@ -28,18 +28,12 @@
 
 # Set the needed libraries
 set( OCC_LIBS_COMMON
-    TKBinL
-    TKBin
-    TKBinTObj
-    TKBinXCAF
     TKBool
     TKBO
     TKBRep
     TKCAF
     TKCDF
     TKernel
-    TKFeat
-    TKFillet
     TKG2d
     TKG3d
     TKGeomAlgo
@@ -48,22 +42,13 @@ set( OCC_LIBS_COMMON
     TKLCAF
     TKMath
     TKMesh
-    TKMeshVS
-    TKOffset
-    TKOpenGl
     TKPrim
     TKRWMesh
     TKService
     TKShHealing
-    TKTObj
     TKTopAlgo
     TKV3d
     TKXCAF
-    TKXMesh
-    TKXmlL
-    TKXml
-    TKXmlTObj
-    TKXmlXCAF
     TKXSBase
 )
 
@@ -140,6 +125,7 @@ else(WIN32)
     /usr
     /usr/local
     /usr/local/opencascade
+    /usr/opencascade
     /opt/opencascade
     /opt/opencascade/lin64/gcc
     PATH_SUFFIXES lib
