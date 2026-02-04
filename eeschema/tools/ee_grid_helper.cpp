@@ -226,15 +226,17 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
         m_viewSnapPoint.SetPosition( pt );
 
         snapLineManager.SetSnapLineOrigin( pt );
+        snapLineManager.SetSnapLineEnd( std::nullopt );
 
         if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
-            m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
+            m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY );
         else
             m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, true );
+
+        return pt;
     }
 
-    if( !snappedToAnchor )
-        m_snapItem = std::nullopt;
+    m_snapItem = std::nullopt;
 
     if( canUseGrid() && !gridChecked )
         pt = nearestGrid;
