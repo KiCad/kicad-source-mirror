@@ -719,7 +719,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
         EDA_GROUP* group = ( *aTargetArea.m_components.begin() )->GetParentGroup();
 
-        commit.Add( group->AsEdaItem() );
+        commit.Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
 
         for( BOARD_ITEM* item : compat.m_groupableItems )
         {
@@ -953,19 +953,28 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
     std::map<EDA_GROUP*, EDA_GROUP*>   groupMap;
 
+    // For Apply Design Block Layout, grouping is handled later by RepeatLayout() using the
+    // existing target group. Do not clone groups here or we end up with duplicates.
+    const bool preserveGroups = aTargetArea->m_sourceType != PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+
     auto fixupParentGroup =
             [&]( BOARD_ITEM* sourceItem, BOARD_ITEM* destItem )
             {
+                if( !preserveGroups )
+                    return;
+
                 if( EDA_GROUP* parentGroup = sourceItem->GetParentGroup() )
                 {
                     if( !groupMap.contains( parentGroup ) )
                     {
-                        BOARD_ITEM* newGroup = static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false );
-                        groupMap[parentGroup] = static_cast<PCB_GROUP*>( newGroup );
+                        PCB_GROUP* newGroup = static_cast<PCB_GROUP*>(
+                                static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false ) );
+                        newGroup->GetItems().clear();
+                        groupMap[parentGroup] = newGroup;
                         aCommit->Add( newGroup );
                     }
 
-                    destItem->SetParentGroup( groupMap[parentGroup] );
+                    groupMap[parentGroup]->AddItem( destItem );
                 }
             };
 
