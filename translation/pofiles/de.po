@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-03 23:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-04 13:11+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -9160,7 +9160,7 @@ msgstr "Bibliothek nicht in Bibliothekstabelle gefunden"
 #: common/libraries/library_manager.cpp:1116
 #, c-format
 msgid "Library '%s': %s"
-msgstr "Bibliothek '%s': %s"
+msgstr "Bibliothek \"%s\": %s"
 
 #: common/libraries/library_manager.cpp:1335
 #, c-format
@@ -24817,7 +24817,7 @@ msgstr ""
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
 msgstr ""
-"Symbol '%s' existiert bereits in Bibliothek '%s'. Soll es überschrieben "
+"Symbol \"%s\" existiert bereits in Bibliothek \"%s\". Soll es überschrieben "
 "werden?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:976
@@ -31133,9 +31133,8 @@ msgid "The selected directory does not contain any project templates."
 msgstr "Das ausgewählte Vorlagenverzeichnis enthält keine Projektvorlagen."
 
 #: kicad/dialogs/template_default_html.h:541
-#, fuzzy
 msgid "Suggestions"
-msgstr "Frage"
+msgstr "Vorschläge"
 
 #: kicad/dialogs/template_default_html.h:543
 msgid "Browse to a different directory using the folder icon"
@@ -37861,7 +37860,7 @@ msgstr "Textausrichtung"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:249
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:212
 msgid "90.0"
-msgstr "90.0"
+msgstr "90,0"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:250
@@ -39050,8 +39049,8 @@ msgid ""
 "If blank, the global value is used."
 msgstr ""
 "Lokaler Lötpastenfreiraum für diesen Footprint.\n"
-"Geben Sie einen absoluten Wert (z.B. -0.1mm), einen prozentualen Wert (z.B. "
-"-5%) oder beides (z.B. -0.1mm -5%) ein.\n"
+"Geben Sie einen absoluten Wert (z.B. -0,1mm), einen prozentualen Wert (z.B. -"
+"5%) oder beides (z.B. -0,1mm -5%) ein.\n"
 "Ist das Feld leer, wird der globale Wert verwendet."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:279
@@ -39258,8 +39257,8 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Lötpastenfreiraum relativ zur Padgröße.\n"
-"Geben Sie einen absoluten Wert (z.B. -0.1mm), einen prozentualen Wert (z.B. "
-"-5%) oder beides (z.B. -0.1mm -5%) ein.\n"
+"Geben Sie einen absoluten Wert (z.B. -0,1mm), einen prozentualen Wert (z.B. -"
+"5%) oder beides (z.B. -0,1mm -5%) ein.\n"
 "Dieser Wert kann durch lokale Werte für ein Footprint oder ein Pad "
 "überschrieben werden."
 
@@ -41063,8 +41062,8 @@ msgid ""
 "If blank, the footprint or global value is used."
 msgstr ""
 "Lokaler Lötpastenfreiraum für dieses Pad.\n"
-"Geben Sie einen absoluten Wert (z.B. -0.1mm), einen prozentualen Wert (z.B. "
-"-5%) oder beides (z.B. -0.1mm -5%) ein.\n"
+"Geben Sie einen absoluten Wert (z.B. -0,1mm), einen prozentualen Wert (z.B. -"
+"5%) oder beides (z.B. -0,1mm -5%) ein.\n"
 "Ist das Feld leer, wird der Footprint- oder globale Wert verwendet."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:673
@@ -43554,9 +43553,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
-#, fuzzy
 msgid "9"
-msgstr "90"
+msgstr "9"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 msgid "Recreate Plugin Environment"
