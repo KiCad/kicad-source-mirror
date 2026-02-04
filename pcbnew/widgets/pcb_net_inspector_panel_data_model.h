@@ -555,6 +555,13 @@ public:
 
     const LIST_ITEM& itemAt( unsigned int aRow ) const { return *m_items.at( aRow ); }
 
+    wxVariant valueForItem( const LIST_ITEM* aItem, unsigned int aCol ) const
+    {
+        wxVariant r;
+        GetValue( r, wxDataViewItem( const_cast<LIST_ITEM*>( aItem ) ), aCol );
+        return r;
+    }
+
     std::vector<std::pair<wxString, wxDataViewItem>> getGroupDataViewItems()
     {
         std::vector<std::pair<wxString, wxDataViewItem>> ret;

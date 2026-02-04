@@ -88,7 +88,7 @@ protected:
     void OnSearchTextChanged( wxCommandEvent& event ) override;
     void OnConfigButton( wxCommandEvent& event ) override;
     void OnExpandCollapseRow( wxCommandEvent& event );
-    void OnHeaderContextMenu( wxCommandEvent& event );
+    void OnHeaderContextMenu( wxDataViewEvent& event );
     void OnNetsListContextMenu( wxDataViewEvent& event );
     void OnNetsListItemActivated( wxDataViewEvent& event );
     void OnColumnSorted( wxDataViewEvent& event );
@@ -130,6 +130,21 @@ private:
      * @param cfg the PANEL_NET_INSPECTOR_SETTINGS from which to read column widths
     */
     void adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTINGS* cfg ) const;
+
+    /**
+     * Computes the minimum display width for a column based on its header text
+     *
+     * @param aModelColumn The model column index
+     * @returns The minimum width in pixels
+    */
+    int getMinColumnWidth( int aModelColumn ) const;
+
+    /**
+     * Auto-sizes a column to fit both its header text and content
+     *
+     * @param aCol The column to auto-size
+    */
+    void autosizeColumn( wxDataViewColumn* aCol );
 
     /**
      * Sets the sort column in the grid to that showing the given model ID column
@@ -322,6 +337,11 @@ private:
         ID_CLEAR_HIGHLIGHTING,
         ID_SHOW_TIME_DOMAIN_DETAILS,
         ID_LAST_STATIC_MENU = ID_CLEAR_HIGHLIGHTING,
+        ID_AUTOFIT_COLUMN = ID_SHOW_TIME_DOMAIN_DETAILS + 1,
+        ID_AUTOFIT_ALL_COLUMNS,
         ID_HIDE_COLUMN,
     };
+
+    /// Tracks which column the header context menu was opened for
+    wxDataViewColumn* m_contextMenuColumn = nullptr;
 };
