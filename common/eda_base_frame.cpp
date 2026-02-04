@@ -1367,11 +1367,13 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                     return new PANEL_MOUSE_SETTINGS( aParent );
                 }, _( "Mouse and Touchpad" ) );
 
+#ifdef __linux__
         book->AddLazyPage(
                 [] ( wxWindow* aParent ) -> wxWindow*
                 {
                     return new PANEL_SPACEMOUSE( aParent );
                 }, _( "SpaceMouse" ) );
+#endif
 
         book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
