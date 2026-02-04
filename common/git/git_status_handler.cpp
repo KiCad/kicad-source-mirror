@@ -28,23 +28,28 @@
 GIT_STATUS_HANDLER::GIT_STATUS_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
 {}
 
+
 GIT_STATUS_HANDLER::~GIT_STATUS_HANDLER()
 {}
+
 
 bool GIT_STATUS_HANDLER::HasChangedFiles()
 {
     return GetGitBackend()->HasChangedFiles( this );
 }
 
+
 std::map<wxString, FileStatus> GIT_STATUS_HANDLER::GetFileStatus( const wxString& aPathspec )
 {
     return GetGitBackend()->GetFileStatus( this, aPathspec );
 }
 
+
 wxString GIT_STATUS_HANDLER::GetCurrentBranchName()
 {
     return GetGitBackend()->GetCurrentBranchName( this );
 }
+
 
 void GIT_STATUS_HANDLER::UpdateRemoteStatus( const std::set<wxString>& aLocalChanges,
                                              const std::set<wxString>& aRemoteChanges,
@@ -53,10 +58,12 @@ void GIT_STATUS_HANDLER::UpdateRemoteStatus( const std::set<wxString>& aLocalCha
     GetGitBackend()->UpdateRemoteStatus( this, aLocalChanges, aRemoteChanges, aFileStatus );
 }
 
+
 wxString GIT_STATUS_HANDLER::GetWorkingDirectory()
 {
     return GetGitBackend()->GetWorkingDirectory( this );
 }
+
 
 KIGIT_COMMON::GIT_STATUS GIT_STATUS_HANDLER::ConvertStatus( unsigned int aGitStatus )
 {
@@ -85,6 +92,7 @@ KIGIT_COMMON::GIT_STATUS GIT_STATUS_HANDLER::ConvertStatus( unsigned int aGitSta
         return KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT;
     }
 }
+
 
 void GIT_STATUS_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
 {

@@ -31,23 +31,28 @@
 GIT_INIT_HANDLER::GIT_INIT_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
 {}
 
+
 GIT_INIT_HANDLER::~GIT_INIT_HANDLER()
 {}
+
 
 bool GIT_INIT_HANDLER::IsRepository( const wxString& aPath )
 {
     return GetGitBackend()->IsRepository( this, aPath );
 }
 
+
 InitResult GIT_INIT_HANDLER::InitializeRepository( const wxString& aPath )
 {
     return GetGitBackend()->InitializeRepository( this, aPath );
 }
 
+
 bool GIT_INIT_HANDLER::SetupRemote( const RemoteConfig& aConfig )
 {
     return GetGitBackend()->SetupRemote( this, aConfig );
 }
+
 
 void GIT_INIT_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
 {

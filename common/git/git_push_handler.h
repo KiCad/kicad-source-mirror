@@ -47,12 +47,12 @@ public:
     PushResult PerformPush();
 
     // Virtual method for progress reporting
-    virtual void ReportProgress(int aCurrent, int aTotal, const wxString& aMessage) {}
+    virtual void ReportProgress( int aCurrent, int aTotal, const wxString& aMessage ) {}
 
 private:
 
     // Implementation of GIT_PROGRESS's virtual method
-    void UpdateProgress(int aCurrent, int aTotal, const wxString& aMessage) override;
+    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 };
 
 #endif // _GIT_PUSH_HANDLER_H_

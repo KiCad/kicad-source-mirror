@@ -43,6 +43,7 @@ KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
         m_nextPublicKey( 0 ), m_secretFetched( false )
 {}
 
+
 KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // Initialize base class and member variables
         m_repo( aOther.m_repo ),
@@ -53,6 +54,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_username( aOther.m_username ),
         m_password( aOther.m_password ),
         m_testedTypes( aOther.m_testedTypes ),
+
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
         m_publicKeys( aOther.m_publicKeys ),
@@ -60,6 +62,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_secretFetched( aOther.m_secretFetched )
 {
 }
+
 
 KIGIT_COMMON::~KIGIT_COMMON()
 {}
@@ -587,6 +590,7 @@ wxString KIGIT_COMMON::GetRemotename() const
     return retval;
 }
 
+
 void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
 {
     auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );
@@ -706,6 +710,7 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
     updatePublicKeys();
 }
 
+
 KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 {
     wxString remote = m_remote;
@@ -725,6 +730,7 @@ KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 
     return GIT_CONN_TYPE::GIT_CONN_LOCAL;
 }
+
 
 void KIGIT_COMMON::updateConnectionType()
 {
@@ -769,6 +775,7 @@ void KIGIT_COMMON::updateConnectionType()
         {
             // SSH format: git@hostname:path
             size_t colonPos = m_remote.find( ':' );
+
             if( colonPos != wxString::npos )
                 m_hostname = m_remote.Mid( 4, colonPos - 4 );
         }
@@ -818,7 +825,7 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
     wxLogTrace( traceGit, "Testing %s\n", sshKey );
 
     if( git_credential_ssh_key_new( aOut, aUsername.mbc_str(), sshPubKey.mbc_str(), sshKey.mbc_str(),
-                                password.mbc_str() ) != GIT_OK )
+                                    password.mbc_str() ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s",
                     aUsername, KIGIT_COMMON::GetLastGitError() );
@@ -838,6 +845,7 @@ int KIGIT_COMMON::HandlePlaintextAuthentication( git_cred** aOut, const wxString
 
     return GIT_OK;
 }
+
 
 int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername )
 {
@@ -999,6 +1007,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         wxString username = parent->GetUsername().Trim().Trim( false );
         wxLogTrace( traceGit, "Username credential for %s at %s with allowed type %d",
                     username, aUrl, aAllowedTypes );
+
         if( git_credential_username_new( aOut, username.ToStdString().c_str() ) != GIT_OK )
         {
             wxLogTrace( traceGit, "Failed to create username credential for %s: %s",
@@ -1036,6 +1045,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
 
         git_error_clear();
         git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
+
         // Otherwise, we did try something but we failed, so return an authentication error
         return GIT_EAUTH;
     }

@@ -30,6 +30,7 @@ GIT_BACKEND* GetGitBackend()
     return s_backend;
 }
 
+
 void SetGitBackend( GIT_BACKEND* aBackend )
 {
     s_backend = aBackend;

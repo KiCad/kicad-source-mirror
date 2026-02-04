@@ -45,7 +45,6 @@ public:
 
     void ReportProgress( int aCurrent, int aTotal, const wxString& aMessage )
     {
-
         if( m_progressReporter )
         {
             if( aCurrent == m_previousProgress || aTotal == 0 )

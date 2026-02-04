@@ -27,24 +27,28 @@
 GIT_PULL_HANDLER::GIT_PULL_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
 {}
 
+
 GIT_PULL_HANDLER::~GIT_PULL_HANDLER()
 {}
+
 
 bool GIT_PULL_HANDLER::PerformFetch( bool aSkipLock )
 {
     return GetGitBackend()->PerformFetch( this, aSkipLock );
 }
 
+
 PullResult GIT_PULL_HANDLER::PerformPull()
 {
     return GetGitBackend()->PerformPull( this );
 }
 
-const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&
-GIT_PULL_HANDLER::GetFetchResults() const
+
+const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&GIT_PULL_HANDLER::GetFetchResults() const
 {
     return m_fetchResults;
 }
+
 
 void GIT_PULL_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
 {

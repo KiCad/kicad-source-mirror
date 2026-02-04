@@ -35,9 +35,9 @@ GIT_COMMIT_HANDLER::~GIT_COMMIT_HANDLER()
 
 CommitResult
 GIT_COMMIT_HANDLER::PerformCommit( const std::vector<wxString>& aFiles,
-                                   const wxString&               aMessage,
-                                   const wxString&               aAuthorName,
-                                   const wxString&               aAuthorEmail )
+                                   const wxString&              aMessage,
+                                   const wxString&              aAuthorName,
+                                   const wxString&              aAuthorEmail )
 {
     return GetGitBackend()->Commit( this, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
@@ -53,4 +53,3 @@ void GIT_COMMIT_HANDLER::AddErrorString( const wxString& aErrorString )
 {
     m_errorString += aErrorString;
 }
-

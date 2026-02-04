@@ -72,8 +72,8 @@ public:
      * @param aErrors Output parameter for any error messages
      * @return True on success, false on failure
      */
-static bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath = wxEmptyString,
-                      bool aRemoveGitDir = false, wxString* aErrors = nullptr );
+    static bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath = wxEmptyString,
+                           bool aRemoveGitDir = false, wxString* aErrors = nullptr );
 
     /**
      * Compute a working directory path that preserves symlinks from the user's project path.

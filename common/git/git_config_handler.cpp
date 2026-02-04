@@ -33,8 +33,10 @@
 GIT_CONFIG_HANDLER::GIT_CONFIG_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
 {}
 
+
 GIT_CONFIG_HANDLER::~GIT_CONFIG_HANDLER()
 {}
+
 
 GitUserConfig GIT_CONFIG_HANDLER::GetUserConfig()
 {
@@ -58,15 +60,18 @@ GitUserConfig GIT_CONFIG_HANDLER::GetUserConfig()
     return userConfig;
 }
 
+
 wxString GIT_CONFIG_HANDLER::GetWorkingDirectory()
 {
     return GetGitBackend()->GetWorkingDirectory( this );
 }
 
+
 bool GIT_CONFIG_HANDLER::GetConfigString( const wxString& aKey, wxString& aValue )
 {
     return GetGitBackend()->GetConfigString( this, aKey, aValue );
 }
+
 
 void GIT_CONFIG_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
 {

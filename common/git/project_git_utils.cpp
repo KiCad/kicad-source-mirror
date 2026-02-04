@@ -41,16 +41,19 @@ git_repository* PROJECT_GIT_UTILS::GetRepositoryForFile( const char* aFilename )
     return GetGitBackend()->GetRepositoryForFile( aFilename );
 }
 
+
 int PROJECT_GIT_UTILS::CreateBranch( git_repository* aRepo, const wxString& aBranchName )
 {
     return GetGitBackend()->CreateBranch( aRepo, aBranchName );
 }
 
+
 bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
-                                  bool aRemoveGitDir, wxString* aErrors )
+                                   bool aRemoveGitDir, wxString* aErrors )
 {
     return GetGitBackend()->RemoveVCS( aRepo, aProjectPath, aRemoveGitDir, aErrors );
 }
+
 
 wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool aShort )
 {
@@ -61,7 +64,7 @@ wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool a
     {
         git_reference* head = nullptr;
 
-    if( git_repository_head( &head, repo ) == 0 )
+        if( git_repository_head( &head, repo ) == 0 )
         {
             const git_oid* oid = git_reference_target( head );
 
