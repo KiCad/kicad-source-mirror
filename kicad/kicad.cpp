@@ -365,6 +365,8 @@ bool PGM_KICAD::OnPgmInit()
             }
         }
 
+        bool loaded = false;
+
         // Do not attempt to load a non-existent project file.
         if( !projToLoad.empty() )
         {
@@ -376,9 +378,12 @@ bool PGM_KICAD::OnPgmInit()
                 fn.MakeAbsolute();
 
                 if( appType == KICAD_MAIN_FRAME_T )
-                    managerFrame->LoadProject( fn );
+                    loaded = managerFrame->LoadProject( fn );
             }
         }
+
+        if( !loaded && appType == KICAD_MAIN_FRAME_T )
+            managerFrame->PreloadAllLibraries();
     }
 
     frame->Show( true );

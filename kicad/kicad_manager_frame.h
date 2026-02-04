@@ -149,7 +149,13 @@ public:
      * Closes the project, and saves it if aSave is true;
      */
     bool CloseProject( bool aSave );
-    void LoadProject( const wxFileName& aProjectFileName );
+
+    /**
+     *
+     * @param aProjectFileName is the path to the project to load
+     * @return true if the project was successfully loaded
+     */
+bool LoadProject( const wxFileName& aProjectFileName );
 
     void OpenJobsFile( const wxFileName& aFileName, bool aCreate = false,
                        bool aResaveProjectPreferences = true );
@@ -162,6 +168,8 @@ public:
     void ShowChangedLanguage() override;
     void CommonSettingsChanged( int aFlags ) override;
     void ProjectChanged() override;
+
+    void PreloadAllLibraries();
 
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS

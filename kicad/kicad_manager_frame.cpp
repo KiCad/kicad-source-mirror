@@ -503,6 +503,21 @@ KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
 }
 
 
+void KICAD_MANAGER_FRAME::PreloadAllLibraries()
+{
+    CallAfter( [&]()
+        {
+            KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
+            schface->PreloadLibraries( &Kiway() );
+
+            KIFACE *pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
+            pcbface->PreloadLibraries( &Kiway() );
+
+            Pgm().PreloadDesignBlockLibraries( &Kiway() );
+        } );
+}
+
+
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
     return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName()
@@ -852,11 +867,11 @@ void KICAD_MANAGER_FRAME::OpenJobsFile( const wxFileName& aFileName, bool aCreat
 }
 
 
-void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
+bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 {
     // The project file should be valid by the time we get here or something has gone wrong.
     if( !aProjectFileName.Exists() )
-        return;
+        return false;
 
     wxString fullPath = aProjectFileName.GetFullPath();
 
@@ -891,7 +906,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
                         fullPath, lockFile.GetUsername(), lockFile.GetHostname() );
 
             if( !AskOverrideLock( this, msg ) )
-                return;  // User clicked Cancel - abort project loading entirely
+                return false;  // User clicked Cancel - abort project loading entirely
 
             lockFile.OverrideLock();
             lockOverrideGranted = true;
@@ -905,7 +920,7 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
     // User is prompted here to close those KIWAY_PLAYERs:
     if( !CloseProject( true ) )
-        return;
+        return false;
 
     m_active_project = true;
 
@@ -995,16 +1010,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
     // Now that we have a new project, trigger a library preload, which will load in any
     // project-specific symbol and footprint libraries into the manager
-    CallAfter( [&]()
-            {
-                KIFACE *schface = Kiway().KiFACE( KIWAY::FACE_SCH );
-                schface->PreloadLibraries( &Kiway() );
-
-                KIFACE *pcbface = Kiway().KiFACE( KIWAY::FACE_PCB );
-                pcbface->PreloadLibraries( &Kiway() );
-
-                Pgm().PreloadDesignBlockLibraries( &Kiway() );
-            } );
+    PreloadAllLibraries();
+    return true;
 }
 
 
