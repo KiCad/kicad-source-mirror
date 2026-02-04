@@ -223,7 +223,7 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::DRILL_GUIDE:       return Dwgs_User;
     case ALTIUM_LAYER::KEEP_OUT_LAYER:    return Margin;
 
-    case ALTIUM_LAYER::MECHANICAL_1:      return User_1; //Edge_Cuts;
+    case ALTIUM_LAYER::MECHANICAL_1:      return User_1;
     case ALTIUM_LAYER::MECHANICAL_2:      return User_2;
     case ALTIUM_LAYER::MECHANICAL_3:      return User_3;
     case ALTIUM_LAYER::MECHANICAL_4:      return User_4;
@@ -233,12 +233,12 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::MECHANICAL_8:      return User_8;
     case ALTIUM_LAYER::MECHANICAL_9:      return User_9;
     case ALTIUM_LAYER::MECHANICAL_10:     return User_10;
-    case ALTIUM_LAYER::MECHANICAL_11:     return User_11; //Eco1 is used for unknown elements
-    case ALTIUM_LAYER::MECHANICAL_12:     return F_Fab;
-    case ALTIUM_LAYER::MECHANICAL_13:     return B_Fab; // Don't use courtyard layers for other purposes
-    case ALTIUM_LAYER::MECHANICAL_14:     return User_12;
-    case ALTIUM_LAYER::MECHANICAL_15:     return User_13;
-    case ALTIUM_LAYER::MECHANICAL_16:     return User_14;
+    case ALTIUM_LAYER::MECHANICAL_11:     return User_11;
+    case ALTIUM_LAYER::MECHANICAL_12:     return User_12;
+    case ALTIUM_LAYER::MECHANICAL_13:     return User_13;
+    case ALTIUM_LAYER::MECHANICAL_14:     return User_14;
+    case ALTIUM_LAYER::MECHANICAL_15:     return User_15;
+    case ALTIUM_LAYER::MECHANICAL_16:     return User_16;
 
     case ALTIUM_LAYER::DRILL_DRAWING:     return Dwgs_User;
     case ALTIUM_LAYER::MULTI_LAYER:       return UNDEFINED_LAYER;
@@ -685,15 +685,21 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
 {
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
-    // Map mechanical layers commonly used in Altium footprint libraries to appropriate KiCad layers.
-    // Mechanical 15 and 16 are the standard Altium layers for component courtyards
-    // (as component layer pairs for top/bottom sides respectively).
-    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_14, Eco2_User );
-    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_15, F_CrtYd );
-    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_16, B_CrtYd );
-
     m_unicodeStrings.clear();
     m_extendedPrimitiveInformationMaps.clear();
+
+    const std::vector<std::string>  libStreamName{ "Library", "Data" };
+    const CFB::COMPOUND_FILE_ENTRY* libStream = altiumLibFile.FindStream( libStreamName );
+
+    if( libStream == nullptr )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), FormatPath( libStreamName ) ) );
+    }
+
+    ALTIUM_BINARY_PARSER libParser( altiumLibFile, libStream );
+    ALIBRARY      libData( libParser );
+
+    HelperFillMechanicalLayerAssignments( libData.stackup );
 
     // TODO: WideStrings are stored as parameterMap in the case of footprints, not as binary
     //    std::string                     unicodeStringsStreamName = aFootprintName.ToStdString() + "\\WideStrings";
@@ -1092,6 +1098,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         ++it;
     }
 
+    HelperFillMechanicalLayerAssignments( elem.stackup );
     remapUnsureLayers( elem.stackup );
 
     // Set name of all non-cu layers
@@ -1144,9 +1151,35 @@ static bool IsLayerNameAssembly( const wxString& aName )
 // Helper to detect if a layer name indicates a top-side layer
 static bool IsLayerNameTopSide( const wxString& aName )
 {
-    wxString nameLower = aName.Lower();
-    return nameLower.Contains( wxT( "top" ) ) || nameLower.EndsWith( wxT( "_t" ) )
-           || nameLower.EndsWith( wxT( ".t" ) );
+    bool isTop = false;
+
+    auto check = [&isTop]( bool aTopCond, bool aBotCond )
+    {
+        if( aTopCond && aBotCond )
+            return false;
+
+        if( !aTopCond && !aBotCond )
+            return false;
+
+        isTop = aTopCond;
+        return true;
+    };
+
+    wxString lower = aName.Lower();
+
+    if( check( lower.StartsWith( "top" ), lower.StartsWith( "bot" ) ) )
+        return isTop;
+
+    if( check( lower.EndsWith( "_t" ), lower.EndsWith( "_b" ) ) )
+        return isTop;
+
+    if( check( lower.EndsWith( ".t" ), lower.EndsWith( ".b" ) ) )
+        return isTop;
+
+    if( check( lower.Contains( "top" ), lower.Contains( "bot" ) ) )
+        return isTop;
+
+    return true; // Unknown
 }
 
 
@@ -1284,6 +1317,72 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
     m_board->SetEnabledLayers( enabledLayers );
     m_board->SetVisibleLayers( enabledLayers );
+}
+
+
+void ALTIUM_PCB::HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6_LAYER_STACKUP>& aStackup )
+{
+    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_1 );
+         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_16 ); altiumLayerId++ )
+    {
+        // array starts with 0, but stackup with 1
+        if( altiumLayerId > aStackup.size() )
+            break;
+
+        const ABOARD6_LAYER_STACKUP& layer = aStackup.at( altiumLayerId - 1 );
+
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
+
+        if( layer.mechenabled )
+        {
+            PCB_LAYER_ID target = UNDEFINED_LAYER;
+
+            switch( layer.mechkind )
+            {
+            case ALTIUM_MECHKIND::ASSEMBLY_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::ASSEMBLY_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::COURTYARD_TOP: target = F_CrtYd; break;
+            case ALTIUM_MECHKIND::COURTYARD_BOT: target = B_CrtYd; break;
+
+            case ALTIUM_MECHKIND::GLUE_POINTS_TOP: target = F_Adhes; break;
+            case ALTIUM_MECHKIND::GLUE_POINTS_BOT: target = B_Adhes; break;
+
+            case ALTIUM_MECHKIND::ASSEMBLY_NOTES: target = Cmts_User; break;
+            case ALTIUM_MECHKIND::FAB_NOTES: target = Cmts_User; break;
+
+            case ALTIUM_MECHKIND::DIMENSIONS: target = Dwgs_User; break;
+
+            case ALTIUM_MECHKIND::DIMENSIONS_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::DIMENSIONS_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::VALUE_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::VALUE_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::DESIGNATOR_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::DESIGNATOR_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::COMPONENT_OUTLINE_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::COMPONENT_OUTLINE_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::COMPONENT_CENTER_TOP: target = F_Fab; break;
+            case ALTIUM_MECHKIND::COMPONENT_CENTER_BOT: target = B_Fab; break;
+
+            case ALTIUM_MECHKIND::BOARD: target = Edge_Cuts; break;
+            case ALTIUM_MECHKIND::BOARD_SHAPE: target = Edge_Cuts; break;
+            case ALTIUM_MECHKIND::V_CUT: target = Edge_Cuts; break;
+
+            default: break;
+            }
+
+            if( target != UNDEFINED_LAYER )
+                m_layermap.emplace( alayer, target );
+        }
+        else
+        {
+            m_layermap.emplace( alayer, UNDEFINED_LAYER ); // Disabled layer, do not import
+        }
+    }
 }
 
 

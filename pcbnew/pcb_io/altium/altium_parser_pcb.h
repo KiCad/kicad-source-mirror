@@ -342,6 +342,57 @@ enum class ALTIUM_LAYER
     VIA_HOLES         = 82,
 };
 
+// Specifies values from LayerKindMapping
+enum class ALTIUM_MECHKIND
+{
+    UNKNOWN = 0,
+
+    ASSEMBLY_TOP = 0x01,
+    ASSEMBLY_BOT = 0x02,
+
+    ASSEMBLY_NOTES = 0x03,
+    BOARD = 0x04,
+
+    COATING_TOP = 0x05,
+    COATING_BOT = 0x06,
+
+    COMPONENT_CENTER_TOP = 0x07,
+    COMPONENT_CENTER_BOT = 0x08,
+
+    COMPONENT_OUTLINE_TOP = 0x09,
+    COMPONENT_OUTLINE_BOT = 0x0A,
+
+    COURTYARD_TOP = 0x0B,
+    COURTYARD_BOT = 0x0C,
+
+    DESIGNATOR_TOP = 0x0D,
+    DESIGNATOR_BOT = 0x0E,
+
+    DIMENSIONS = 0x0F,
+    DIMENSIONS_TOP = 0x10,
+    DIMENSIONS_BOT = 0x11,
+
+    FAB_NOTES = 0x12,
+
+    GLUE_POINTS_TOP = 0x13,
+    GLUE_POINTS_BOT = 0x14,
+
+    GOLD_PLATING_TOP = 0x15,
+    GOLD_PLATING_BOT = 0x16,
+
+    VALUE_TOP = 0x17,
+    VALUE_BOT = 0x18,
+
+    V_CUT = 0x19,
+
+    BODY_3D_TOP = 0x1A,
+    BODY_3D_BOT = 0x1B,
+
+    ROUTE_TOOL_PATH = 0x1C,
+    SHEET = 0x1D,
+    BOARD_SHAPE = 0x1E
+};
+
 class ALTIUM_BINARY_PARSER;
 
 enum class AEXTENDED_PRIMITIVE_INFORMATION_TYPE
@@ -379,6 +430,20 @@ struct ABOARD6_LAYER_STACKUP
     double   dielectricconst;
     int32_t  dielectricthick;
     wxString dielectricmaterial;
+
+    bool            mechenabled;
+    ALTIUM_MECHKIND mechkind;
+
+    explicit ABOARD6_LAYER_STACKUP( const std::map<wxString, wxString>& aProps, const wxString& aPrefix );
+};
+
+struct ALIBRARY
+{
+    int                                layercount;
+    std::vector<ABOARD6_LAYER_STACKUP> stackup;
+    std::set<wxString>                 layerNames;
+
+    explicit ALIBRARY( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ABOARD6

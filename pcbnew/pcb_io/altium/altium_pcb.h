@@ -245,6 +245,8 @@ private:
 
     void HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLayer, PCB_SHAPE* aShape );
 
+    void HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6_LAYER_STACKUP>& aStackup );
+
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
     void HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer );

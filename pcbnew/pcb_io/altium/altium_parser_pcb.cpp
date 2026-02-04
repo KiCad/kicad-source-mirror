@@ -152,6 +152,70 @@ ALTIUM_LAYER altium_layer_from_name( const wxString& aName )
     }
 }
 
+
+ALTIUM_MECHKIND altium_mechkind_from_name( const wxString& aName )
+{
+    static const std::unordered_map<std::string, ALTIUM_MECHKIND> hash_map = {
+        { "AssemblyTop", ALTIUM_MECHKIND::ASSEMBLY_TOP },
+        { "AssemblyBottom", ALTIUM_MECHKIND::ASSEMBLY_BOT },
+
+        { "AssemblyNotes", ALTIUM_MECHKIND::ASSEMBLY_NOTES },
+        { "Board", ALTIUM_MECHKIND::BOARD },
+
+        { "CoatingTop", ALTIUM_MECHKIND::COATING_TOP },
+        { "CoatingBottom", ALTIUM_MECHKIND::COATING_BOT },
+
+        { "ComponentCenterTop", ALTIUM_MECHKIND::COMPONENT_CENTER_TOP },
+        { "ComponentCenterBottom", ALTIUM_MECHKIND::COMPONENT_CENTER_BOT },
+
+        { "ComponentOutlineTop", ALTIUM_MECHKIND::COMPONENT_OUTLINE_TOP },
+        { "ComponentOutlineBottom", ALTIUM_MECHKIND::COMPONENT_OUTLINE_BOT },
+
+        { "CourtyardTop", ALTIUM_MECHKIND::COURTYARD_TOP },
+        { "CourtyardBottom", ALTIUM_MECHKIND::COURTYARD_BOT },
+
+        { "DesignatorTop", ALTIUM_MECHKIND::DESIGNATOR_TOP },
+        { "DesignatorBottom", ALTIUM_MECHKIND::DESIGNATOR_BOT },
+
+        { "Dimensions", ALTIUM_MECHKIND::DIMENSIONS },
+        { "DimensionsTop", ALTIUM_MECHKIND::DIMENSIONS_TOP },
+        { "DimensionsBottom", ALTIUM_MECHKIND::DIMENSIONS_BOT },
+
+        { "FabNotes", ALTIUM_MECHKIND::FAB_NOTES },
+
+        { "GluePointsTop", ALTIUM_MECHKIND::GLUE_POINTS_TOP },
+        { "GluePointsBottom", ALTIUM_MECHKIND::GLUE_POINTS_BOT },
+
+        { "GoldPlatingTop", ALTIUM_MECHKIND::GOLD_PLATING_TOP },
+        { "GoldPlatingBottom", ALTIUM_MECHKIND::GOLD_PLATING_BOT },
+
+        { "ValueTop", ALTIUM_MECHKIND::VALUE_TOP },
+        { "ValueBottom", ALTIUM_MECHKIND::VALUE_BOT },
+
+        { "VCut", ALTIUM_MECHKIND::V_CUT },
+
+        { "3DBodyTop", ALTIUM_MECHKIND::BODY_3D_TOP },
+        { "3DBodyBottom", ALTIUM_MECHKIND::BODY_3D_BOT },
+
+        { "RouteToolPath", ALTIUM_MECHKIND::ROUTE_TOOL_PATH },
+        { "Sheet", ALTIUM_MECHKIND::SHEET },
+        { "BoardShape", ALTIUM_MECHKIND::BOARD_SHAPE },
+    };
+
+    auto it = hash_map.find( std::string( aName.c_str() ) );
+
+    if( it != hash_map.end() )
+    {
+        return it->second;
+    }
+    else
+    {
+        wxLogError( _( "Unknown mapping of the Altium layer kind '%s'." ), aName );
+        return ALTIUM_MECHKIND::UNKNOWN;
+    }
+}
+
+
 void altium_parse_polygons( std::map<wxString, wxString>& aProps,
                             std::vector<ALTIUM_VERTICE>& aVertices )
 {
@@ -280,6 +344,81 @@ AEXTENDED_PRIMITIVE_INFORMATION::AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_BINARY_
 }
 
 
+ABOARD6_LAYER_STACKUP::ABOARD6_LAYER_STACKUP( const std::map<wxString, wxString>& aProps, const wxString& aPrefix )
+{
+    name = ALTIUM_PROPS_UTILS::ReadString( aProps, aPrefix + wxT( "NAME" ), wxT( "" ) );
+    nextId = ALTIUM_PROPS_UTILS::ReadInt( aProps, aPrefix + wxT( "NEXT" ), 0 );
+    prevId = ALTIUM_PROPS_UTILS::ReadInt( aProps, aPrefix + wxT( "PREV" ), 0 );
+    copperthick = ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, aPrefix + wxT( "COPTHICK" ), wxT( "1.4mil" ) );
+
+    dielectricconst = ALTIUM_PROPS_UTILS::ReadDouble( aProps, aPrefix + wxT( "DIELCONST" ), 0. );
+    dielectricthick = ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, aPrefix + wxT( "DIELHEIGHT" ), wxT( "60mil" ) );
+    dielectricmaterial = ALTIUM_PROPS_UTILS::ReadString( aProps, aPrefix + wxT( "DIELMATERIAL" ), wxT( "FR-4" ) );
+
+    // TODO: In some component libraries MECHENABLED may be FALSE but the layers show up as used.
+    // (we should check if any objects exists on these layers?)
+    wxString mechEnabled = ALTIUM_PROPS_UTILS::ReadString( aProps, aPrefix + wxT( "MECHENABLED" ), wxT( "" ) );
+
+    mechenabled = !mechEnabled.Contains( wxS( "FALSE" ) );
+    mechkind = ALTIUM_MECHKIND::UNKNOWN;
+
+    if( mechenabled )
+    {
+        wxString mechKind = ALTIUM_PROPS_UTILS::ReadString( aProps, aPrefix + wxT( "MECHKIND" ), wxT( "" ) );
+
+        if( !mechKind.IsEmpty() )
+            mechkind = altium_mechkind_from_name( mechKind );
+    }
+}
+
+
+static std::vector<ABOARD6_LAYER_STACKUP> ReadAltiumStackupFromProperties( const std::map<wxString, wxString>& aProps )
+{
+    std::vector<ABOARD6_LAYER_STACKUP> stackup;
+
+    for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )
+    {
+        const wxString layeri = wxString( wxT( "LAYER" ) ) << std::to_string( i );
+        const wxString layername = layeri + wxT( "NAME" );
+
+        auto layernameit = aProps.find( layername );
+
+        if( layernameit == aProps.end() )
+            break;
+
+        ABOARD6_LAYER_STACKUP l( aProps, layeri );
+        stackup.push_back( l );
+    }
+
+    return stackup;
+}
+
+
+ALIBRARY::ALIBRARY( ALTIUM_BINARY_PARSER& aReader )
+{
+    std::map<wxString, wxString> props = aReader.ReadProperties();
+
+    if( props.empty() )
+        THROW_IO_ERROR( wxT( "Library stream has no properties!" ) );
+
+    layercount = ALTIUM_PROPS_UTILS::ReadInt( props, wxT( "LAYERSETSCOUNT" ), 1 ) + 1;
+
+    stackup = ReadAltiumStackupFromProperties( props );
+
+    for( ABOARD6_LAYER_STACKUP& l : stackup )
+    {
+        wxString originalName = l.name;
+
+        // Ensure that layer names are unique in KiCad
+        for( int ii = 2; !layerNames.insert( l.name ).second; ii++ )
+            l.name = wxString::Format( wxT( "%s %d" ), originalName, ii );
+    }
+
+    if( aReader.HasParsingError() )
+        THROW_IO_ERROR( wxT( "Library stream was not parsed correctly!" ) );
+}
+
+
 ABOARD6::ABOARD6( ALTIUM_BINARY_PARSER& aReader )
 {
     std::map<wxString, wxString> props = aReader.ReadProperties();
@@ -294,35 +433,15 @@ ABOARD6::ABOARD6( ALTIUM_BINARY_PARSER& aReader )
 
     layercount = ALTIUM_PROPS_UTILS::ReadInt( props, wxT( "LAYERSETSCOUNT" ), 1 ) + 1;
 
-    for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )
+    stackup = ReadAltiumStackupFromProperties( props );
+
+    for( ABOARD6_LAYER_STACKUP& l : stackup )
     {
-        const wxString layeri    = wxT( "LAYER" ) + wxString( std::to_string( i ) );
-        const wxString layername = layeri + wxT( "NAME" );
-
-        auto layernameit = props.find( layername );
-
-        if( layernameit == props.end() )
-            break; // it doesn't seem like we know beforehand how many vertices are inside a polygon
-
-        ABOARD6_LAYER_STACKUP l;
-
-        l.name = ALTIUM_PROPS_UTILS::ReadString( props, layername, wxT( "" ) );
         wxString originalName = l.name;
-        int ii = 2;
 
         // Ensure that layer names are unique in KiCad
-        while( !layerNames.insert( l.name ).second )
-            l.name = wxString::Format( wxT( "%s %d" ), originalName, ii++ );
-
-        l.nextId = ALTIUM_PROPS_UTILS::ReadInt( props, layeri + wxT( "NEXT" ), 0 );
-        l.prevId = ALTIUM_PROPS_UTILS::ReadInt( props, layeri + wxT( "PREV" ), 0 );
-        l.copperthick = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, layeri + wxT( "COPTHICK" ), wxT( "1.4mil" ) );
-
-        l.dielectricconst = ALTIUM_PROPS_UTILS::ReadDouble( props, layeri + wxT( "DIELCONST" ), 0. );
-        l.dielectricthick = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, layeri + wxT( "DIELHEIGHT" ),  wxT( "60mil" ) );
-        l.dielectricmaterial = ALTIUM_PROPS_UTILS::ReadString( props, layeri + wxT( "DIELMATERIAL" ), wxT( "FR-4" ) );
-
-        stackup.push_back( l );
+        for( int ii = 2; !layerNames.insert( l.name ).second; ii++ )
+            l.name = wxString::Format( wxT( "%s %d" ), originalName, ii );
     }
 
     altium_parse_polygons( props, board_vertices );
