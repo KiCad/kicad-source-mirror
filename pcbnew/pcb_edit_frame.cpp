@@ -2653,9 +2653,22 @@ void PCB_EDIT_FRAME::ProjectChanged()
 
 bool PCB_EDIT_FRAME::CanAcceptApiCommands()
 {
-    // For now, be conservative: Don't allow any API use while the user is changing things
-    if( GetToolManager()->GetCurrentTool() != GetToolManager()->GetTool<PCB_SELECTION_TOOL>() )
+    TOOL_BASE* currentTool = GetToolManager()->GetCurrentTool();
+
+    // When a single item that can be point-edited is selected, the point editor
+    // tool will be active instead of the selection tool.  It blocks undo/redo
+    // while the user is actually dragging points around, though, so we can use
+    // this as an initial check to prevent API actions when points are being edited.
+    if( UndoRedoBlocked() )
         return false;
+
+    // Don't allow any API use while the user is using a tool that could
+    // modify the model in the middle of the message stream
+    if( currentTool != GetToolManager()->GetTool<PCB_SELECTION_TOOL>() &&
+        currentTool != GetToolManager()->GetTool<PCB_POINT_EDITOR>() )
+    {
+        return false;
+    }
 
     ZONE_FILLER_TOOL* zoneFillerTool = m_toolManager->GetTool<ZONE_FILLER_TOOL>();
 
