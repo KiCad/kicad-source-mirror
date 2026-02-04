@@ -568,11 +568,8 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
             continue;
         }
 
-        if( item != m_driver )
-        {
-            item_conn->Clone( *m_driver_connection );
-            item_conn->ClearDirty();
-        }
+        item_conn->Clone( *m_driver_connection );
+        item_conn->ClearDirty();
     }
 }
 

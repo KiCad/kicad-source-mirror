@@ -1,0 +1,160 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "f6c0ef12-181c-4566-b020-d29020e47b3e")
+	(paper "A4")
+	(lib_symbols)
+	(wire
+		(pts
+			(xy 80.01 73.66) (xy 87.63 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "078cdc46-88dd-463b-b95c-154221e11019")
+	)
+	(wire
+		(pts
+			(xy 80.01 71.12) (xy 87.63 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08d1c03b-575f-4ce8-9a3f-ccdb5fb09b04")
+	)
+	(global_label "Glob_Lab_Main"
+		(shape input)
+		(at 111.76 95.25 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bcd38e9e-e732-44dc-bb46-98c911f0c5e3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 128.5939 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(sheet
+		(at 120.65 59.69)
+		(size 17.78 19.05)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "1df962ec-4622-4193-b2fd-a15e7eb70a3b")
+		(property "Sheetname" "Untitled Sheet"
+			(at 120.65 58.9784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 120.65 79.3246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "issue22694"
+				(path "/f6c0ef12-181c-4566-b020-d29020e47b3e"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 49.53 63.5)
+		(size 30.48 34.29)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "5f507089-e358-470c-9943-96a68327be1c")
+		(property "Sheetname" "Subsheet 1"
+			(at 49.53 62.7884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "S1.kicad_sch"
+			(at 49.53 98.3746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "HL1" input
+			(at 80.01 71.12 0)
+			(uuid "57368993-a02c-4d77-985f-0fcf19b90304")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "HL2" input
+			(at 80.01 73.66 0)
+			(uuid "07eede9e-80b7-461d-ae0b-676f91bf388b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "issue22694"
+				(path "/f6c0ef12-181c-4566-b020-d29020e47b3e"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
