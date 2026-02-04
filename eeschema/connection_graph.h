@@ -22,6 +22,7 @@
 #ifndef _CONNECTION_GRAPH_H
 #define _CONNECTION_GRAPH_H
 
+#include <memory>
 #include <mutex>
 #include <utility>
 #include <vector>
@@ -93,11 +94,6 @@ public:
               m_driver_connection( nullptr )
     {}
 
-    ~CONNECTION_SUBGRAPH()
-    {
-        for( SCH_CONNECTION* connection : m_bus_element_connections )
-            delete connection;
-    }
 
     friend class CONNECTION_GRAPH;
 
@@ -219,9 +215,13 @@ public:
 
     // Use this to keep a connection pointer that is not owned by any item
     // This will be destroyed with the subgraph
-    void StoreImplicitConnection( SCH_CONNECTION* aConnection )
+    SCH_CONNECTION* StoreImplicitConnection( std::unique_ptr<SCH_CONNECTION> aConnection )
     {
-        m_bus_element_connections.insert( aConnection );
+        SCH_CONNECTION* raw = aConnection.get();
+
+        m_bus_element_connections.insert( std::move( aConnection ) );
+
+        return raw;
     }
 
 private:
@@ -317,9 +317,19 @@ private:
     /// Cache for driver connection.
     SCH_CONNECTION* m_driver_connection;
 
+    // A comparator for unique_ptr<SCH_CONNECTION> to allow storage in a set
+    struct CompareConnectionPtr
+    {
+        bool operator()( const std::unique_ptr<SCH_CONNECTION>& aLeft,
+                         const std::unique_ptr<SCH_CONNECTION>& aRight ) const
+        {
+            return aLeft.get() < aRight.get();
+        }
+    };
+
     /// A cache of connections that are part of this subgraph but that don't have
     /// an owning element (i.e. bus members)
-    std::set<SCH_CONNECTION*> m_bus_element_connections;
+    std::set<std::unique_ptr<SCH_CONNECTION>, CompareConnectionPtr> m_bus_element_connections;
 
     std::mutex m_driver_mutex;
 };

@@ -1746,17 +1746,18 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
                 // This connection cannot form a part of the item because the item is not, itself
                 // connected to this subgraph.  It exists as part of a virtual item that may be
                 // connected to other items but is not in the schematic.
-                SCH_CONNECTION* new_conn = new SCH_CONNECTION( item, subgraph->m_sheet );
+                auto new_conn = std::make_unique<SCH_CONNECTION>( item, subgraph->m_sheet );
                 new_conn->SetGraph( this );
                 new_conn->SetName( name );
                 new_conn->SetType( CONNECTION_TYPE::NET );
-                subgraph->StoreImplicitConnection( new_conn );
-                int code = assignNewNetCode( *new_conn );
+
+                SCH_CONNECTION* new_conn_ptr = subgraph->StoreImplicitConnection( std::move( new_conn ) );
+                int             code = assignNewNetCode( *new_conn_ptr );
 
                 wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d) on subsheet %s" ),
                             subgraph->m_code, name, code, subgraph->m_sheet.PathHumanReadable() );
 
-                new_sg->m_driver_connection = new_conn;
+                new_sg->m_driver_connection = new_conn_ptr;
                 new_sg->m_code = m_last_subgraph_code++;
                 new_sg->m_sheet = subgraph->GetSheet();
                 new_sg->m_is_bus_member = true;
