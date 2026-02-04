@@ -656,6 +656,95 @@ BOOST_AUTO_TEST_CASE( PadsInsideOutline )
 }
 
 
+/**
+ * Standalone copper shapes (ETCH 0x28 shapes on net chains without a BOUNDARY zone) should
+ * be imported as filled PCB_SHAPE polygons with the correct net assignment.
+ */
+BOOST_AUTO_TEST_CASE( StandaloneCopperShapes )
+{
+    std::string dataPath =
+            "/home/seth/Documents/circuits/Allegro/8MMINILPD4-EVK-DESIGNFILES/"
+            "SOM Board/LAY-31399_C/LAY-31399_C.brd";
+
+    if( !std::filesystem::exists( dataPath ) )
+    {
+        BOOST_TEST_MESSAGE( "Skipping: LAY-31399_C.brd not found" );
+        return;
+    }
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_allegroPlugin.LoadBoard( dataPath, board.get(), nullptr, nullptr );
+    BOOST_REQUIRE( board != nullptr );
+
+    // Find filled PCB_SHAPE polygons on copper layers with net assignments.
+    // These are the standalone copper shapes from Allegro.
+    std::map<wxString, std::vector<const PCB_SHAPE*>> netShapes;
+
+    for( const PCB_SHAPE* shape : board->Drawings() | std::views::transform(
+                 []( BOARD_ITEM* item ) { return dynamic_cast<PCB_SHAPE*>( item ); } ) )
+    {
+        if( !shape )
+            continue;
+
+        if( shape->GetShape() != SHAPE_T::POLY || shape->GetFillMode() != FILL_T::FILLED_SHAPE )
+            continue;
+
+        if( !IsCopperLayer( shape->GetLayer() ) )
+            continue;
+
+        if( shape->GetNetCode() <= 0 )
+            continue;
+
+        netShapes[shape->GetNetname()].push_back( shape );
+    }
+
+    // VSYS_5V should have copper shapes on TOP
+    BOOST_CHECK_MESSAGE( netShapes.count( wxS( "VSYS_5V" ) ) > 0,
+                         "Expected VSYS_5V copper shapes" );
+
+    if( netShapes.count( wxS( "VSYS_5V" ) ) > 0 )
+    {
+        bool hasTop = false;
+
+        for( const PCB_SHAPE* s : netShapes[wxS( "VSYS_5V" )] )
+        {
+            if( s->GetLayer() == F_Cu )
+                hasTop = true;
+        }
+
+        BOOST_CHECK_MESSAGE( hasTop, "Expected VSYS_5V copper shape on TOP layer" );
+    }
+
+    // NVCC_1V8 should have copper shapes on BOTTOM
+    BOOST_CHECK_MESSAGE( netShapes.count( wxS( "NVCC_1V8" ) ) > 0,
+                         "Expected NVCC_1V8 copper shapes" );
+
+    if( netShapes.count( wxS( "NVCC_1V8" ) ) > 0 )
+    {
+        bool hasBottom = false;
+
+        for( const PCB_SHAPE* s : netShapes[wxS( "NVCC_1V8" )] )
+        {
+            if( s->GetLayer() == B_Cu )
+                hasBottom = true;
+        }
+
+        BOOST_CHECK_MESSAGE( hasBottom, "Expected NVCC_1V8 copper shape on BOTTOM layer" );
+    }
+
+    // Verify total count of standalone copper shapes (27 expected based on investigation)
+    int totalShapes = 0;
+
+    for( const auto& [net, shapes] : netShapes )
+        totalShapes += shapes.size();
+
+    BOOST_CHECK_GE( totalShapes, 20 );
+
+    BOOST_TEST_MESSAGE( "Found " << totalShapes << " standalone copper shapes across "
+                        << netShapes.size() << " nets" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

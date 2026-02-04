@@ -119,6 +119,12 @@ private:
     SHAPE_LINE_CHAIN                         buildOutline( const BLK_0x28_SHAPE& aShape ) const;
 
     /**
+     * Walk a geometry chain (0x01 arcs and 0x15-17 segments) starting from the given key,
+     * following m_Next links. Used for building hole outlines from 0x34 KEEPOUT blocks.
+     */
+    SHAPE_LINE_CHAIN buildSegmentChain( uint32_t aStartKey ) const;
+
+    /**
      * Resolve the net code for a BOUNDARY shape by following the pointer chain:
      * BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 array -> first entry -> 0x1B NET
      */

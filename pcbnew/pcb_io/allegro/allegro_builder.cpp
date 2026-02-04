@@ -2364,9 +2364,16 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
     }
 
     // Flip AFTER adding all children so that graphics, text, and pads all get
-    // their layers and positions mirrored correctly for bottom-layer footprints
+    // their layers and positions mirrored correctly for bottom-layer footprints.
+    //
+    // Allegro mirrors bottom-side components via X-mirror (flip around Y axis),
+    // then rotates by R. KiCad's Flip(TOP_BOTTOM) is a Y-mirror which negates
+    // the orientation. Since X-mirror = Y-mirror + Rotate(180), we need the
+    // final orientation to be R+180. Flip negates what we set before it, so
+    // set -(R+180) to get R+180 after negation.
     if( aFpInstance.m_Layer != 0 )
     {
+        fp->SetOrientation( -rotation - ANGLE_180 );
         fp->Flip( fpPos, FLIP_DIRECTION::TOP_BOTTOM );
     }
 
@@ -2780,6 +2787,87 @@ void BOARD_BUILDER::createBoardOutline()
 }
 
 
+SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) const
+{
+    SHAPE_LINE_CHAIN outline;
+    uint32_t         currentKey = aStartKey;
+
+    // Safety limit to prevent infinite loops on corrupt data
+    static constexpr int MAX_CHAIN_LENGTH = 50000;
+    int visited = 0;
+
+    while( currentKey != 0 && visited < MAX_CHAIN_LENGTH )
+    {
+        const BLOCK_BASE* block = m_brdDb.GetObjectByKey( currentKey );
+
+        if( !block )
+            break;
+
+        visited++;
+
+        switch( block->GetBlockType() )
+        {
+        case 0x01:
+        {
+            const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *block ).GetData();
+            VECTOR2I    start = scale( { arc.m_StartX, arc.m_StartY } );
+            VECTOR2I    end = scale( { arc.m_EndX, arc.m_EndY } );
+            VECTOR2I    center = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
+
+            if( start == end )
+            {
+                SHAPE_ARC shapeArc( center, start, ANGLE_360 );
+                outline.Append( shapeArc );
+            }
+            else
+            {
+                bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
+
+                EDA_ANGLE startAngle( start - center );
+                EDA_ANGLE endAngle( end - center );
+                startAngle.Normalize();
+                endAngle.Normalize();
+                EDA_ANGLE arcAngle = endAngle - startAngle;
+
+                if( clockwise && arcAngle < ANGLE_0 )
+                    arcAngle += ANGLE_360;
+
+                if( !clockwise && arcAngle > ANGLE_0 )
+                    arcAngle -= ANGLE_360;
+
+                SHAPE_ARC shapeArc( center, start, arcAngle );
+                outline.Append( shapeArc );
+            }
+
+            currentKey = arc.m_Next;
+            break;
+        }
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        {
+            const auto& seg =
+                    static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *block ).GetData();
+            VECTOR2I start = scale( { seg.m_StartX, seg.m_StartY } );
+
+            if( outline.PointCount() == 0 || outline.CLastPoint() != start )
+                outline.Append( start );
+
+            VECTOR2I end = scale( { seg.m_EndX, seg.m_EndY } );
+            outline.Append( end );
+            currentKey = seg.m_Next;
+            break;
+        }
+        default:
+            currentKey = 0;
+            break;
+        }
+    }
+
+    return outline;
+}
+
+
 SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
 {
     SHAPE_LINE_CHAIN outline;
@@ -3136,6 +3224,8 @@ void BOARD_BUILDER::applyZoneFills()
                 m_zoneFillShapes.size() );
 
     int fillCount = 0;
+    int totalHoles = 0;
+    std::vector<bool> matched( m_zoneFillShapes.size(), false );
 
     for( ZONE* zone : m_board.Zones() )
     {
@@ -3151,8 +3241,10 @@ void BOARD_BUILDER::applyZoneFills()
 
             SHAPE_POLY_SET combinedFill;
 
-            for( const ZoneFillEntry& fill : m_zoneFillShapes )
+            for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
             {
+                const ZoneFillEntry& fill = m_zoneFillShapes[i];
+
                 if( fill.layer != layer || fill.netCode != zone->GetNetCode() )
                     continue;
 
@@ -3172,6 +3264,34 @@ void BOARD_BUILDER::applyZoneFills()
                     continue;
 
                 combinedFill.AddOutline( fillOutline );
+                int outlineIdx = combinedFill.OutlineCount() - 1;
+                matched[i] = true;
+
+                // Walk 0x34 KEEPOUT chain from m_Ptr4 for clearance holes
+                uint32_t holeKey = fill.shape->m_Ptr4;
+
+                while( holeKey != 0 )
+                {
+                    const BLOCK_BASE* holeBlock = m_brdDb.GetObjectByKey( holeKey );
+
+                    if( !holeBlock || holeBlock->GetBlockType() != 0x34 )
+                        break;
+
+                    const auto& keepout =
+                            static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
+
+                    SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_Ptr2 );
+
+                    if( holeOutline.PointCount() >= 3 )
+                    {
+                        holeOutline.SetClosed( true );
+                        holeOutline.ClearArcs();
+                        combinedFill.AddHole( holeOutline, outlineIdx );
+                        totalHoles++;
+                    }
+
+                    holeKey = keepout.m_Next;
+                }
             }
 
             if( combinedFill.OutlineCount() > 0 )
@@ -3190,13 +3310,86 @@ void BOARD_BUILDER::applyZoneFills()
         }
     }
 
-    wxLogTrace( traceAllegroBuilder, "Applied fills to %d zone/layer pairs", fillCount );
+    // Unmatched ETCH shapes on the net chain are standalone copper polygons (Allegro
+    // "shapes" drawn on ETCH layers without a BOUNDARY zone definition). Import each
+    // as a filled PCB_SHAPE with the appropriate net.
+    int copperShapeCount = 0;
+
+    for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
+    {
+        if( matched[i] )
+            continue;
+
+        const ZoneFillEntry& fill = m_zoneFillShapes[i];
+
+        SHAPE_LINE_CHAIN outline = buildOutline( *fill.shape );
+
+        if( outline.PointCount() < 3 )
+            continue;
+
+        outline.SetClosed( true );
+        outline.ClearArcs();
+
+        SHAPE_POLY_SET polySet;
+        polySet.AddOutline( outline );
+
+        // Walk 0x34 KEEPOUT chain for clearance holes
+        uint32_t holeKey = fill.shape->m_Ptr4;
+
+        while( holeKey != 0 )
+        {
+            const BLOCK_BASE* holeBlock = m_brdDb.GetObjectByKey( holeKey );
+
+            if( !holeBlock || holeBlock->GetBlockType() != 0x34 )
+                break;
+
+            const auto& keepout =
+                    static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
+
+            SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_Ptr2 );
+
+            if( holeOutline.PointCount() >= 3 )
+            {
+                holeOutline.SetClosed( true );
+                holeOutline.ClearArcs();
+                polySet.AddHole( holeOutline );
+            }
+
+            holeKey = keepout.m_Next;
+        }
+
+        polySet.Fracture();
+
+        auto shape = std::make_unique<PCB_SHAPE>( &m_board, SHAPE_T::POLY );
+        shape->SetPolyShape( polySet );
+        shape->SetFilled( true );
+        shape->SetLayer( fill.layer );
+        shape->SetNetCode( fill.netCode );
+        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+
+        wxLogTrace( traceAllegroBuilder, "  Copper shape %#010x net=%d layer=%s",
+                    fill.shape->m_Key, fill.netCode,
+                    m_board.GetLayerName( fill.layer ) );
+
+        m_board.Add( shape.release(), ADD_MODE::APPEND );
+        copperShapeCount++;
+    }
+
+    wxLogTrace( traceAllegroBuilder,
+                "Applied fills to %d zone/layer pairs (%d clearance holes), "
+                "created %d standalone copper shapes",
+                fillCount, totalHoles, copperShapeCount );
 }
 
 
 bool BOARD_BUILDER::BuildBoard()
 {
     wxLogTrace( traceAllegroBuilder, "Starting BuildBoard() - Phase 2 of Allegro import" );
+    wxLogTrace( traceAllegroBuilder, "  Format version: %d (V172+ = %s)",
+                static_cast<int>( m_brdDb.m_FmtVer ),
+                ( m_brdDb.m_FmtVer >= FMT_VER::V_172 ) ? "yes" : "no" );
+    wxLogTrace( traceAllegroBuilder, "  Allegro version string: %.60s",
+                m_brdDb.m_Header->m_AllegroVersion.data() );
 
     if( m_progressReporter )
     {

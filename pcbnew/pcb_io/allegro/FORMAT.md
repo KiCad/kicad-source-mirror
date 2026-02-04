@@ -233,14 +233,22 @@ and custom pad shapes.
 
 0x28 shapes appear in two distinct contexts:
 
-1. On the net assignment chain (reachable from 0x1B NET via 0x04/0x05):
-   these are computed copper fills. Collected during createTracks() and
-   applied as fill polygons on matching ZONE objects via applyZoneFills().
-   Also used as a fallback for zone net resolution when resolveShapeNet()
-   returns UNCONNECTED (matched by layer + bounding box overlap).
-
-2. On the `m_LL_Shapes` header linked list with BOUNDARY class (0x15):
+1. On the `m_LL_Shapes` header linked list with BOUNDARY class (0x15):
    these are zone outlines and are imported as ZONE objects.
+
+2. On the net assignment chain (reachable from 0x1B NET via 0x04/0x05):
+   these have ETCH class and include both zone outlines repeated as
+   copper shapes and actual computed fills. applyZoneFills() matches
+   fills to zones by net code, layer, and bounding box overlap, then
+   applies the genuine fills via SetFilledPolysList(). Unmatched fills
+   also serve as a fallback for zone net resolution when
+   resolveShapeNet() returns UNCONNECTED.
+
+3. Also on the net assignment chain but with NO corresponding BOUNDARY
+   zone: these are standalone copper polygons (Allegro "shapes" drawn
+   directly on ETCH layers). They are imported as filled PCB_SHAPE
+   objects with the appropriate net assignment. LAY-31399_C has 27 such
+   shapes across 13 nets (VSYS_5V, NVCC_1V8, VDD_SOC_0V8, etc.).
 
 ### Zone Net Resolution
 
