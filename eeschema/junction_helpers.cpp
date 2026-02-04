@@ -41,6 +41,7 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
     info.hasExplicitJunctionDot = false;
     info.isJunction = false;
     info.hasBusEntryToMultipleWires = false;
+    info.hasBusAtPoint = false;
 
     bool                         breakLines[2] = { false };
     std::unordered_set<int>      exitAngles[2];
@@ -168,6 +169,9 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
                 // Defer any line midpoints until we know whether or not we're breaking them
                 midPointLines[layer].push_back( line );
             }
+
+            if( layer == BUSES && line->HitTest( aPosition, -1 ) )
+                info.hasBusAtPoint = true;
         }
         break;
 
@@ -304,7 +308,12 @@ std::vector<SCH_JUNCTION*> JUNCTION_HELPERS::PreviewJunctions( const SCH_SCREEN*
 
         if( info.isJunction && ( !info.hasBusEntry || info.hasBusEntryToMultipleWires ) )
         {
-            jcts.push_back( new SCH_JUNCTION( pt ) );
+            SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
+
+            if( info.hasBusAtPoint )
+                junction->SetLayer( LAYER_BUS_JUNCTION );
+
+            jcts.push_back( junction );
         }
     }
 

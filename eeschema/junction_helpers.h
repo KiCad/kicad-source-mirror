@@ -45,6 +45,9 @@ struct POINT_INFO
 
     /// True if there is a bus entry at the point and it connects to more than one wire
     bool hasBusEntryToMultipleWires;
+
+    /// True if there is a bus segment at the point
+    bool hasBusAtPoint;
 };
 
 /**

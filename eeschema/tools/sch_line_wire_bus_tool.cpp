@@ -1486,6 +1486,9 @@ SCH_JUNCTION* SCH_LINE_WIRE_BUS_TOOL::AddJunction( SCH_COMMIT* aCommit, SCH_SCRE
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );
 
+    if( aScreen->GetBus( aPos ) )
+        junction->SetLayer( LAYER_BUS_JUNCTION );
+
     m_frame->AddToScreen( junction, aScreen );
     aCommit->Added( junction, aScreen );
 
