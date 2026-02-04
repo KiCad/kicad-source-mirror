@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-02-03 23:01+0000\n"
+"PO-Revision-Date: 2026-02-05 08:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -7048,34 +7048,34 @@ msgid "Error removing directory '%s': %s"
 msgstr "Chyba pri odstraňovaní adresára '%s': %s"
 
 #: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Nepodarilo sa vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa otvoriť zdrojový adresár: %s"
 
 #: common/gestfich.cpp:449 common/gestfich.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Nepodarilo sa vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa vytvoriť cieľový adresár: %s"
 
 #: common/gestfich.cpp:477 common/gestfich.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nie je možné pripojiť sa k '%s' "
+msgstr "Nepodarilo sa skopírovať súbor: %s do %s"
 
 #: common/gestfich.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nie je možné pripojiť sa k '%s' "
+msgstr "Nepodarilo sa skopírovať adresár: %s do %s"
 
 #: common/gestfich.cpp:593
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Adresár '%s' neexistuje"
+msgstr "Zdrojový adresár neexistuje: %s"
 
 #: common/gestfich.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Nebolo možné prečítať súbor "
+msgstr "Nepodarilo sa prečítať súbor: %s"
 
 #: common/git/git_clone_handler.cpp:58
 #, c-format
@@ -7093,14 +7093,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nepodarilo sa vyhľadať vzdialené '%s'"
 
 #: common/git/git_pull_handler.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s'"
+msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s': %s"
 
 #: common/git/git_pull_handler.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nepodarilo sa získať dáta zo vzdialeného %s"
+msgstr "Nepodarilo sa získať dáta zo vzdialeného úložiska '%s': %s"
 
 #: common/git/git_pull_handler.cpp:127
 msgid "Could not read 'FETCH_HEAD'"
@@ -7128,28 +7128,25 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Nepodarilo sa získať referenčné OID pre referenciu '%s'"
 
 #: common/git/git_pull_handler.cpp:252
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Nepodarilo sa načítať commit"
+msgstr "Nepodarilo sa vyhľadať cieľový commit"
 
 #: common/git/git_pull_handler.cpp:264
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Nepodarilo sa zlúčiť commit-y"
+msgstr "Nepodarilo sa získať strom z cieľového commitu"
 
 #: common/git/git_pull_handler.cpp:306 common/git/kicad_git_errors.cpp:55
 msgid "Failed to perform checkout operation."
 msgstr "Nepodarilo sa vykonať checkout operáciu."
 
 #: common/git/git_pull_handler.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "potrebujete číslo pre '%s'"
+msgstr "Nepodarilo sa aktualizovať referenciu '%s' tak, aby ukazovala na '%s'"
 
 #: common/git/git_pull_handler.cpp:325
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Nepodarilo sa naklonovať repozitár."
+msgstr "Po rýchlom pretáčaní vpred sa nepodarilo vyčistiť stav úložiska."
 
 #: common/git/git_pull_handler.cpp:334
 #, fuzzy
@@ -7195,14 +7192,14 @@ msgid "Could not lookup remote"
 msgstr "Nepodarilo sa načítať vzdialené"
 
 #: common/git/git_push_handler.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s'"
+msgstr "Nepodarilo sa pripojiť ku vzdialenému: %s"
 
 #: common/git/git_push_handler.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nepodarilo sa uložiť zmeny na vzdialené"
+msgstr "Nepodarilo sa odoslať na vzdialený: %s"
 
 #: common/git/kicad_git_common.cpp:867
 #, c-format
@@ -7235,9 +7232,8 @@ msgid "[updated] %s"
 msgstr "[aktualizované] %s"
 
 #: common/git/kicad_git_common.cpp:1004
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nemožno vytvoriť"
+msgstr "Nie je možné overiť"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -10103,12 +10099,10 @@ msgid "Grid thickness:"
 msgstr "Hrúbka mriežky:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "Minimálny rozstup mriežky:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Prichytiť k mriežke:"
 
@@ -29602,9 +29596,9 @@ msgid "Failed to push project"
 msgstr "Nepodarilo sa načítať '%s'"
 
 #: kicad/project_tree_pane.cpp:1892
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr "Nepodarilo sa vyhľadať vetvu '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1905
 #, fuzzy, c-format
@@ -29645,14 +29639,14 @@ msgid "Discarding commit due to empty file selection."
 msgstr "Zahodenie commit-u kvôli nevybratému súboru."
 
 #: kicad/project_tree_pane.cpp:2483
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Nemožno otvoriť %s"
+msgstr "Nepodarilo sa získať index repozitára: %s"
 
 #: kicad/project_tree_pane.cpp:2494
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa pridať súbor do indexu: %s"
 
 #: kicad/project_tree_pane.cpp:2502
 #, c-format
@@ -29660,19 +29654,19 @@ msgid "Failed to write index: %s"
 msgstr "Nepodarilo sa zapísať index: %s"
 
 #: kicad/project_tree_pane.cpp:2509
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa zapísať: %s"
 
 #: kicad/project_tree_pane.cpp:2516
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa vyhľadať: %s"
 
 #: kicad/project_tree_pane.cpp:2528
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Nie je možné vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa získať referenciu na HEAD: %s"
 
 #: kicad/project_tree_pane.cpp:2537
 #, c-format
@@ -29680,9 +29674,9 @@ msgid "Failed to get commit: %s"
 msgstr "Nepodarilo sa získať commit: %s"
 
 #: kicad/project_tree_pane.cpp:2552
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Nepodarilo sa vytvoriť dočasný súbor '%s'"
+msgstr "Nepodarilo sa vytvoriť podpis autora: %s"
 
 #: kicad/project_tree_pane.cpp:2589
 #, c-format
