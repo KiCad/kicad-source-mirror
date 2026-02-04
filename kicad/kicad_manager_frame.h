@@ -151,11 +151,11 @@ public:
     bool CloseProject( bool aSave );
 
     /**
-     *
+     * Loads a new project
      * @param aProjectFileName is the path to the project to load
      * @return true if the project was successfully loaded
      */
-bool LoadProject( const wxFileName& aProjectFileName );
+    bool LoadProject( const wxFileName& aProjectFileName );
 
     void OpenJobsFile( const wxFileName& aFileName, bool aCreate = false,
                        bool aResaveProjectPreferences = true );
