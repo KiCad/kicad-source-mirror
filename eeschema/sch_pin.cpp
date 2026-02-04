@@ -356,8 +356,20 @@ wxString SCH_PIN::GetElectricalTypeName() const
 
 bool SCH_PIN::IsGlobalPower() const
 {
-    return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-           && ( !IsVisible() || GetParentSymbol()->IsGlobalPower() );
+    if( GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN )
+        return false;
+
+    const SYMBOL* parent = GetParentSymbol();
+
+    if( parent->IsGlobalPower() )
+        return true;
+
+    // Local power symbols are never global, even with invisible pins
+    if( parent->IsLocalPower() )
+        return false;
+
+    // Legacy support: invisible power-in pins on non-power symbols act as global power
+    return !IsVisible();
 }
 
 

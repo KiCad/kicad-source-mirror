@@ -1,0 +1,23 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "fa69e683-819b-4b00-9e50-45c52564fadd")
+	(paper "A3")
+	(title_block
+		(title "Pumpenmodul v06")
+		(date "2021-08-13")
+	)
+	(lib_symbols)
+	(text "Schrittmotoransteuerung mit TMC261"
+		(exclude_from_sim no)
+		(at 172.72 25.4 0)
+		(effects
+			(font
+				(size 5.08 5.08)
+			)
+			(justify left bottom)
+		)
+		(uuid "f5068fe1-6fe4-420f-bc23-e659d9c3ea82")
+	)
+)

@@ -1,0 +1,14 @@
+(kicad_sch 
+  (version 20260101) 
+  (generator "eeschema") 
+  (generator_version "9.99") 
+  (uuid "f911e8e0-a7f3-499f-b63e-6d2c93b2fa9c") 
+  (paper "A") 
+  (lib_symbols) 
+  (text "https://pcbartists.com/design/embedded/how-to-replace-microusb-with-usb-c-connector/\nAmphenol 12402012E212A Molex 2169900003 (board cut out type" 
+    (exclude_from_sim no) 
+    (at 81.28 226.06 0) 
+    (effects 
+      (font 
+        (size 1.27 1.27))) 
+    (uuid "4e4812a8-4ab5-4105-8559-4678b7139d3b")))

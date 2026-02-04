@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "project_lib_STKRO") (type "KiCad") (uri "${KIPRJMOD}/project_lib_STKRO.pretty") (options "") (descr ""))
+)
