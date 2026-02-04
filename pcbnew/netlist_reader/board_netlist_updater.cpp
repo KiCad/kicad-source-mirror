@@ -1363,11 +1363,22 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             // During dry run, just read current state. During actual run, create variant if needed.
             const FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
 
-            // Apply explicit overrides from schematic, or reset to base footprint value
-            // if there's no explicit override. This applies to both active and non-active
-            // footprints to match the schematic's inheritance model where unset attributes
-            // inherit from the base.
-            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : footprint->IsDNP();
+            // Check if this footprint is the active one for this variant
+            bool isActiveFootprint = ( footprint->GetFPID() == info.activeFpid );
+
+            // If this footprint is not active for this variant, it should be DNP.
+            // Otherwise, apply explicit overrides from schematic, or reset to base footprint value.
+            bool targetDnp;
+
+            if( !isActiveFootprint )
+            {
+                targetDnp = true;
+            }
+            else
+            {
+                targetDnp = variant.m_hasDnp ? variant.m_dnp : footprint->IsDNP();
+            }
+
             bool currentDnp = currentVariant ? currentVariant->GetDNP() : footprint->IsDNP();
 
             if( currentDnp != targetDnp )
@@ -1498,6 +1509,25 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                     changed = true;
                 }
             }
+        }
+
+        // For the default variant: if this footprint is not the base footprint
+        // it should be DNP by default
+        bool isBaseFootprint = ( footprint->GetFPID() == aBaseFpid );
+
+        if( !isBaseFootprint && !footprint->IsDNP() )
+        {
+            wxString msg;
+            msg.Printf( m_isDryRun ? _( "Add %s 'Do not place' fabrication attribute." )
+                                   : _( "Added %s 'Do not place' fabrication attribute." ),
+                        footprint->GetReference() );
+
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+            if( !m_isDryRun )
+                footprint->SetDNP( true );
+
+            changed = true;
         }
 
         if( !m_isDryRun && changed && copy )

@@ -536,6 +536,7 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     // Refresh the view and properties panel to show the new variant state
     UpdateProperties();
     GetCanvas()->Refresh();
+    Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 }
 
 
