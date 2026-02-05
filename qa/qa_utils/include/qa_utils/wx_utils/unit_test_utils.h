@@ -38,6 +38,18 @@
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
+// C++20 deleted operator<<(ostream&, const wchar_t*) (P1423R3), which breaks wxString streaming
+// via implicit wchar_t* conversion in Boost.Test's lazy_ostream (used by BOOST_TEST_CONTEXT,
+// BOOST_TEST_MESSAGE, BOOST_CHECK_MESSAGE, and BOOST_FAIL).
+inline std::ostream& operator<<( std::ostream& os, const wxString& aStr )
+{
+#if wxUSE_UNICODE
+    os << aStr.ToUTF8().data();
+#else
+    os << aStr.c_str();
+#endif
+    return os;
+}
 
 
 template<class T>
