@@ -93,7 +93,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticText891->Wrap( -1 );
 	m_padstackControls->Add( m_staticText891, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	wxString m_cbPadstackModeChoices[] = { _("Normal"), _("Front/Inner/Bottom"), _("Custom") };
+	wxString m_cbPadstackModeChoices[] = { _("Normal"), _("Front/Inner/Back"), _("Custom") };
 	int m_cbPadstackModeNChoices = sizeof( m_cbPadstackModeChoices ) / sizeof( wxString );
 	m_cbPadstackMode = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbPadstackModeNChoices, m_cbPadstackModeChoices, 0 );
 	m_cbPadstackMode->SetSelection( 2 );

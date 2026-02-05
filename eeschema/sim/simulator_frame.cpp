@@ -419,7 +419,7 @@ void SIMULATOR_FRAME::StartSimulation()
 
         if( tranSpicePlot.IsEmpty() )
         {
-            DisplayErrorMessage( this, _( "You must run a TRAN simulation first; its results"
+            DisplayErrorMessage( this, _( "You must run a TRAN simulation first; its results "
                                           "will be used for the fast Fourier transform." ) );
         }
         else

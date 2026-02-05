@@ -48,18 +48,17 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() :
 
     m_argParser.add_argument( ARG_SIDE )
             .default_value( std::string( "both" ) )
-            .help( UTF8STDSTR( _( "Valid options: front,back,both. Gerber format only supports "
+            .help( UTF8STDSTR( _( "Valid options: front, back, both. Gerber format only supports "
                                   "\"front\" or \"back\"." ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "ascii" ) )
-            .help( UTF8STDSTR( _( "Valid options: ascii,csv,gerber" ) ) )
+            .help( UTF8STDSTR( _( "Valid options: ascii, csv, gerber" ) ) )
             .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "in" ) )
-            .help( UTF8STDSTR( _( "Output units; ascii or csv format only; valid options: "
-                                  "in,mm" ) ) )
+            .help( UTF8STDSTR( _( "Output units; ascii or csv format only; valid options: in, mm" ) ) )
             .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_NEGATE_BOTTOM_X )

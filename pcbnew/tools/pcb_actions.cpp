@@ -2253,7 +2253,7 @@ TOOL_ACTION PCB_ACTIONS::distributeHorizontallyCenters( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.distributeHorizontallyCenters" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Distribute Horizontally by Centers" ) )
-        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item"
+        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item "
                      "so that the item centers are equally distributed" ) )
         .Icon( BITMAPS::distribute_horizontal_centers ) );
 
