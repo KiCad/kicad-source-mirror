@@ -475,6 +475,7 @@ void GRID_CELL_TEXT_BUTTON::OnTextChange( wxCommandEvent& event )
     if( m_grid && m_row >= 0 && m_row < m_grid->GetNumberRows() && m_col >= 0 && m_col < m_grid->GetNumberCols() )
     {
         wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGING, m_grid, m_row, m_col );
+        evt.SetString( Combo()->GetValue() );
         m_grid->GetEventHandler()->ProcessEvent( evt );
     }
 

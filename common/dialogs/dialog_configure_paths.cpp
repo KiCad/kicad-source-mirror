@@ -293,6 +293,12 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
 {
     wxGrid*  grid = dynamic_cast<wxGrid*>( event.GetEventObject() );
+
+    // Mid-edit notifications from text-button editors fire while the user is still typing.
+    // Only validate when the edit is being committed (cell edit control already disabled).
+    if( grid && grid->IsCellEditControlEnabled() )
+        return;
+
     int      row = event.GetRow();
     int      col = event.GetCol();
     wxString text = event.GetString();
