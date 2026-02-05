@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-02-01 07:01+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -18106,9 +18106,9 @@ msgid "Show Field Name"
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "SPICE ბიბლიოთეკის '%s' დამუშავების შეცდომა: %s"
+msgstr "Altium-ის სქემის დამუშავების შეცდომა: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -18210,9 +18210,9 @@ msgid "File not found %s."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "SPICE ბიბლიოთეკის '%s' დამუშავების შეცდომა: %s"
+msgstr "Altium-ის ბიბლიოთეკის დამუშავების შეცდომა: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
