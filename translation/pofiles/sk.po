@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
-"PO-Revision-Date: 2026-02-05 08:01+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -2086,9 +2086,8 @@ msgid "&No"
 msgstr "&Nie"
 
 #: common/design_block_info_impl.cpp:132
-#, fuzzy
 msgid "Loading design_blocks..."
-msgstr "Načítavajú sa súbory Gerber..."
+msgstr "Načítavajú sa návrhové bloky..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
@@ -7149,19 +7148,17 @@ msgid "Failed to clean up repository state after fast-forward."
 msgstr "Po rýchlom pretáčaní vpred sa nepodarilo vyčistiť stav úložiska."
 
 #: common/git/git_pull_handler.cpp:334
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr ""
 
 #: common/git/git_pull_handler.cpp:343
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Nepodarilo sa push-núť zmeny do vzdialeného repozitára."
+msgstr ""
 
 #: common/git/git_pull_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nepodarilo sa načítať commit '{}'"
+msgstr "Nepodarilo sa vyhľadať commit '%s'"
 
 #: common/git/git_pull_handler.cpp:391
 msgid "Could not merge commits"
@@ -7281,7 +7278,7 @@ msgstr "Nepodarilo sa zlúčiť."
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Rebase conflict encountered."
-msgstr "Pri \"rebase\" nastal konflikt."
+msgstr ""
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Failed to pull changes from remote repository."
@@ -7384,19 +7381,16 @@ msgid "Select all cells"
 msgstr "Vybrať všetky bunky"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Aktualizovať hodnoty"
+msgstr "Prijať automatické dopĺňanie"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Aktualizovať hodnoty"
+msgstr "Zrušiť automatické dopĺňanie"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Prepnúť zámok"
+msgstr "Prepnúť začiarkavacie políčko"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7465,9 +7459,9 @@ msgstr "API odpoveď:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API odpoveď:  %s"
+msgstr "Odpoveď API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:360
 #, c-format
@@ -7491,12 +7485,11 @@ msgstr "%s nie je podporované."
 #: common/import_gfx/dxf_import_plugin.h:460
 #: common/import_gfx/dxf_import_plugin.h:465
 msgid "DXF construction lines not currently supported."
-msgstr "Konštrukčné čiary v DXF nie sú zatiaľ podporované."
+msgstr "Konštrukčné čiary DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:470
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Oblúkovo zarovnaný text DXF momentálne nie je podporovaný."
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
@@ -7507,32 +7500,27 @@ msgstr "Momentálne nie je otvorená žiadna schéma."
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
 msgid "DXF dimensions not currently supported."
-msgstr "Kóty z DXF zatiaľ nie sú podporované."
+msgstr "Kóty DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:516
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Šrafovanie DXF momentálne nie je podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:524
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Trasy DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:529
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "3D plochy DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:534
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Vyplnené plochy (SOLID) DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:539
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Obrázky DXF momentálne nie sú podporované."
 
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
@@ -7669,29 +7657,25 @@ msgid "Export 3D Model Job Settings"
 msgstr "Nastavenia úlohy exportu 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:170
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Exportovať púzdro"
+msgstr "DPS: Export 3D modelu"
 
 #: common/jobs/job_export_pcb_drill.cpp:123
-#, fuzzy
 msgid "Export drill data"
-msgstr "Predná spájkovacia pasta"
+msgstr "Export vŕtacích dát"
 
 #: common/jobs/job_export_pcb_drill.cpp:129
 msgid "Export Drill Data Job Settings"
 msgstr "Nastavenia úlohy exportu dát vŕtania"
 
 #: common/jobs/job_export_pcb_drill.cpp:132
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "Predná spájkovacia pasta"
+msgstr "DPS: Export vŕtacích dát"
 
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:143
-#, fuzzy
 msgid "Export DXF"
-msgstr "Exportovať IDFv3"
+msgstr "Exportovať DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:166
@@ -7699,27 +7683,24 @@ msgid "Export DXF Job Settings"
 msgstr "Nastavenia úlohy exportu DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:67
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:38
 msgid "Export GenCAD Job Settings"
 msgstr "Nastavenia úlohy exportu GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "Predná hodvábna obrazovka"
+msgstr "Export jednoho Gerber súboru"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export Single Gerber Job Settings"
 msgstr "Nastavenia úlohy exportu Gerber súboru"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "Exportné jednotky:"
+msgstr "Export Gerber súborov"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers Job Settings"
@@ -7727,7 +7708,7 @@ msgstr "Nastavenia úlohy exportu Gerber súborov"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "DPS: Export Gerber súborov"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:88
@@ -7739,44 +7720,38 @@ msgid "Export IPC-2581 Job Settings"
 msgstr "Nastavenia úlohy exportu IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Export STEP"
+msgstr "DPS: Export IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Export STEP"
+msgstr "Export IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
 msgid "Export IPC-D-356 Job Settings"
 msgstr "Nastavenia úlohy exportu IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:52
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Export STEP"
+msgstr "DPS: Export IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Exportovať IDFv3"
+msgstr "Export ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
 msgstr "Nastavenia úlohy exportu ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:141 kicad/kicad_cli.cpp:145
-#, fuzzy
 msgid "Export PDF"
-msgstr "Exportovať IDFv3"
+msgstr "Export PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:147
@@ -7784,14 +7759,12 @@ msgid "Export PDF Job Settings"
 msgstr "Nastavenia úlohy exportu PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:68
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:97
-#, fuzzy
 msgid "Export position data"
-msgstr "Exportná stopa"
+msgstr "Export polohových dát"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 msgid "Export Position Data Job Settings"
@@ -7799,13 +7772,12 @@ msgstr "Nastavenia úlohy exportu dát pozícií"
 
 #: common/jobs/job_export_pcb_pos.cpp:121
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "DPS: Export polohových dát"
 
 #: common/jobs/job_export_pcb_svg.cpp:49
 #: common/jobs/job_export_sch_plot.cpp:179 kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export SVG"
-msgstr "Exportujte súbor SVG"
+msgstr "Export SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:55
 #: common/jobs/job_export_sch_plot.cpp:185
@@ -7813,90 +7785,77 @@ msgid "Export SVG Job Settings"
 msgstr "Nastavenia úlohy exportu SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Exportujte súbor SVG"
+msgstr "DPS: Export SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať zoznam materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:98
 msgid "Generate Bill of Materials Job Settings"
 msgstr "Nastavenia úlohy exportu zoznamu materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:102
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Generovať rozpis &materiálu"
+msgstr "Schéma: Generovať zoznam materiálu"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Exportovať %s netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 msgid "Export Netlist Job Settings"
 msgstr "Nastavenia úlohy exportu netlistu"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Schéma: Export netlistu"
 
 #: common/jobs/job_export_sch_plot.cpp:198
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Kresliť PostScript"
+msgstr "Export Poscscript"
 
 #: common/jobs/job_export_sch_plot.cpp:204
 msgid "Export Postscript Job Settings"
 msgstr "Nastavenia úlohy exportu Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:217 kicad/kicad_cli.cpp:144
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Export STEP"
+msgstr "Export HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:223
 msgid "Export HPGL Job Settings"
 msgstr "Nastavenia úlohy exportu HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Editor schém"
+msgstr "Schéma: Export SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "EESchema Kresliť HPGL"
+msgstr "Schéma: Export HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:231
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Schéma: Export Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:233
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Editor schém"
+msgstr "Schéma: Export DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:235
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Editor schém"
+msgstr "Schéma: Export PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Schematický text"
+msgstr "Export PythonBOM schémy"
 
 #: common/jobs/job_pcb_drc.cpp:37
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Aktualizujte PCB zo schémy"
+msgstr "Vykonať DRC"
 
 #: common/jobs/job_pcb_drc.cpp:43 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 msgid "DRC Job Settings"
@@ -7904,12 +7863,12 @@ msgstr "Nastavenia úlohy DRC"
 
 #: common/jobs/job_pcb_drc.cpp:47
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "DPS: Vykonať DRC"
 
 #: common/jobs/job_pcb_render.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Prečíslovať DPS"
+msgstr "Vykresliť %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 msgid "Render PCB Job Settings"
@@ -7917,45 +7876,40 @@ msgstr "Nastavenia úlohy vykreslenia DPS"
 
 #: common/jobs/job_pcb_render.cpp:142
 msgid "PCB: Render"
-msgstr ""
+msgstr "DPS: Vykresliť"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Aktualizujte PCB zo schémy"
+msgstr "Vykonať ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
 msgid "Schematic ERC Job Settings"
 msgstr "Nastavenia úlohy ERC schémy"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Aktualizovať schému z DPS"
+msgstr "Schéma: Vykonať ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Špeciálne náradie ..."
+msgstr "Špeciálne: Kopírovať súbory"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Špeciálne: Vykonať príkaz"
 
 #: common/jobs/jobs_output_archive.cpp:98 common/jobs/jobset.cpp:45
-#, fuzzy
 msgid "Archive"
-msgstr "&Archivovať"
+msgstr "Archivovať"
 
 #: common/jobs/jobs_output_folder.cpp:82 common/jobs/jobset.cpp:43
-#, fuzzy
 msgid "Folder"
-msgstr "Spájkovacia pasta:"
+msgstr "Priečinok"
 
 #: common/json_schema_validator.cpp:48
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Schematický súbor '%s' sa nenašiel."
+msgstr "Schematický súbor '%s' sa nenašiel"
 
 #: common/json_schema_validator.cpp:53
 #, c-format
@@ -29803,7 +29757,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:156
 msgid "Clone Project from Git Repository"
-msgstr "Vytvoriť projekt z Git repozitára"
+msgstr "Klonovať projekt z Git repozitára"
 
 #: kicad/tools/kicad_manager_control.cpp:180
 msgid "Cloning Repository"
