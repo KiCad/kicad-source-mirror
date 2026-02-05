@@ -1638,7 +1638,7 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
             lastBrightenedItemID = aItem->m_Uuid;
         }
 
-        FocusOnLocation( VECTOR2I( aItem->GetFocusPosition().x, -aItem->GetFocusPosition().y ), aAllowScroll );
+        FocusOnLocation( VECTOR2I( aItem->GetFocusPosition().x, aItem->GetFocusPosition().y ), aAllowScroll );
     }
 }
 
