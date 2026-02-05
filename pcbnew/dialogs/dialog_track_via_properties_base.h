@@ -113,8 +113,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_annularRingsCtrl;
 		wxStaticText* m_protectionPresetsLabel;
 		wxChoice* m_protectionFeatures;
-		wxStaticText* m_backDrillLabel;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_backdrillLabel;
 		wxChoice* m_backDrillChoice;
 		wxStaticText* m_backDrillFrontLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_backDrillFrontLayer;
