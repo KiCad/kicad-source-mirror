@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-02 18:26+0300\n"
+"POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10049,49 +10049,6 @@ msgstr ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 
-#, c-format
-msgid ""
-"Cannot normalize new sheet schematic file path:\n"
-"'%s'\n"
-"against parent sheet schematic file path:\n"
-"'%s'."
-msgstr ""
-"Cannot normalize new sheet schematic file path:\n"
-"'%s'\n"
-"against parent sheet schematic file path:\n"
-"'%s'."
-
-#, c-format
-msgid "'%s' already exists."
-msgstr "'%s' already exists."
-
-#, c-format
-msgid "Link '%s' to this file?"
-msgstr "Link '%s' to this file?"
-
-#, c-format
-msgid "Failed to copy schematic file '%s' to destination '%s'."
-msgstr "Failed to copy schematic file '%s' to destination '%s'."
-
-#, c-format
-msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Change '%s' link from '%s' to '%s'?"
-
-msgid "This action cannot be undone."
-msgstr "This action cannot be undone."
-
-#, c-format
-msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Create new file '%s' with contents of '%s'?"
-
-#, c-format
-msgid "Error occurred saving schematic file '%s'."
-msgstr "Error occurred saving schematic file '%s'."
-
-#, c-format
-msgid "Failed to save schematic '%s'"
-msgstr "Failed to save schematic '%s'"
-
 msgid "Page number:"
 msgstr "Page number:"
 
@@ -11937,6 +11894,10 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Unresolved text variable in drawing sheet"
 
 #, c-format
+msgid "Field name has leading or trailing whitespace: '%s'"
+msgstr "Field name has leading or trailing whitespace: '%s'"
+
+#, c-format
 msgid "Different footprints assigned to %s and %s"
 msgstr "Different footprints assigned to %s and %s"
 
@@ -12046,6 +12007,9 @@ msgstr "Checking local and global labels..."
 
 msgid "Checking for unresolved variables..."
 msgstr "Checking for unresolved variables..."
+
+msgid "Checking field names..."
+msgstr "Checking field names..."
 
 msgid "Checking SPICE models..."
 msgstr "Checking SPICE models..."
@@ -12163,6 +12127,9 @@ msgstr "Ground pin not connected to ground net"
 
 msgid "Pin name resembles stacked pin"
 msgstr "Pin name resembles stacked pin"
+
+msgid "Field name has leading or trailing whitespace"
+msgstr "Field name has leading or trailing whitespace"
 
 msgid "Unresolved text variable"
 msgstr "Unresolved text variable"
@@ -12678,12 +12645,12 @@ msgid "P&references"
 msgstr "P&references"
 
 #, c-format
-msgid "Wire from %s, %s to %s, %s"
-msgstr "Wire from %s, %s to %s, %s"
+msgid "Wire from (%s, %s) to (%s, %s)"
+msgstr "Wire from (%s, %s) to (%s, %s)"
 
 #, c-format
-msgid "Bus from %s, %s to %s, %s"
-msgstr "Bus from %s, %s to %s, %s"
+msgid "Bus from (%s, %s) to (%s, %s)"
+msgstr "Bus from (%s, %s) to (%s, %s)"
 
 msgid "Graphic line not connectable"
 msgstr "Graphic line not connectable"
@@ -12697,36 +12664,36 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Sheet '%s' pin '%s'"
 
 #, c-format
-msgid "Label '%s' at %s, %s"
-msgstr "Label '%s' at %s, %s"
+msgid "Label '%s' at (%s, %s)"
+msgstr "Label '%s' at (%s, %s)"
 
 #, c-format
-msgid "Global label '%s' at %s, %s"
-msgstr "Global label '%s' at %s, %s"
+msgid "Global label '%s' at (%s, %s)"
+msgstr "Global label '%s' at (%s, %s)"
 
 #, c-format
-msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Hierarchical label '%s' at %s, %s"
+msgid "Hierarchical label '%s' at (%s, %s)"
+msgstr "Hierarchical label '%s' at (%s, %s)"
 
 #, c-format
-msgid "Junction at %s, %s"
-msgstr "Junction at %s, %s"
+msgid "Junction at (%s, %s)"
+msgstr "Junction at (%s, %s)"
 
 #, c-format
-msgid "No-Connect at %s, %s"
-msgstr "No-Connect at %s, %s"
+msgid "No-Connect at (%s, %s)"
+msgstr "No-Connect at (%s, %s)"
 
 #, c-format
-msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "Bus to wire entry from %s, %s to %s, %s"
+msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
+msgstr "Bus to wire entry from (%s, %s) to (%s, %s)"
 
 #, c-format
-msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "Bus to bus entry from %s, %s to %s, %s"
+msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
+msgstr "Bus to bus entry from (%s, %s) to (%s, %s)"
 
 #, c-format
-msgid "Netclass label '%s' at %s, %s"
-msgstr "Netclass label '%s' at %s, %s"
+msgid "Netclass label '%s' at (%s, %s)"
+msgstr "Netclass label '%s' at (%s, %s)"
 
 #, c-format
 msgid "Unhandled item type %d"
@@ -15115,6 +15082,49 @@ msgstr ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 
+#, c-format
+msgid ""
+"Cannot normalize new sheet schematic file path:\n"
+"'%s'\n"
+"against parent sheet schematic file path:\n"
+"'%s'."
+msgstr ""
+"Cannot normalize new sheet schematic file path:\n"
+"'%s'\n"
+"against parent sheet schematic file path:\n"
+"'%s'."
+
+#, c-format
+msgid "'%s' already exists."
+msgstr "'%s' already exists."
+
+#, c-format
+msgid "Link '%s' to this file?"
+msgstr "Link '%s' to this file?"
+
+#, c-format
+msgid "Failed to copy schematic file '%s' to destination '%s'."
+msgstr "Failed to copy schematic file '%s' to destination '%s'."
+
+#, c-format
+msgid "Change '%s' link from '%s' to '%s'?"
+msgstr "Change '%s' link from '%s' to '%s'?"
+
+msgid "This action cannot be undone."
+msgstr "This action cannot be undone."
+
+#, c-format
+msgid "Create new file '%s' with contents of '%s'?"
+msgstr "Create new file '%s' with contents of '%s'?"
+
+#, c-format
+msgid "Error occurred saving schematic file '%s'."
+msgstr "Error occurred saving schematic file '%s'."
+
+#, c-format
+msgid "Failed to save schematic '%s'"
+msgstr "Failed to save schematic '%s'"
+
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
@@ -15934,10 +15944,10 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator requires a fully annotated schematic."
 
 msgid ""
-"You must run a TRAN simulation first; its resultswill be used for the fast "
+"You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
 msgstr ""
-"You must run a TRAN simulation first; its resultswill be used for the fast "
+"You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
 
 msgid ""
@@ -17251,11 +17261,11 @@ msgstr "Sync Selected Sheet Pins..."
 msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "Synchronize selected sheet pins and hierarchical labels"
 
-msgid "Sync All Sheets Pins..."
-msgstr "Sync All Sheets Pins..."
+msgid "Sync All Sheet Pins..."
+msgstr "Sync All Sheet Pins..."
 
-msgid "Synchronize all sheets pins and hierarchical labels"
-msgstr "Synchronize all sheets pins and hierarchical labels"
+msgid "Synchronize all sheet pins and hierarchical labels"
+msgstr "Synchronize all sheet pins and hierarchical labels"
 
 msgid "Import Sheet..."
 msgstr "Import Sheet..."
@@ -19815,11 +19825,14 @@ msgstr "Input directory"
 msgid "Input file or directory"
 msgstr "Input file or directory"
 
+msgid "Output file"
+msgstr "Output file"
+
 msgid "Output directory"
 msgstr "Output directory"
 
-msgid "Output file"
-msgstr "Output file"
+msgid "Output file or directory"
+msgstr "Output file or directory"
 
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
@@ -20078,17 +20091,17 @@ msgstr "Generate Drill Files"
 msgid "Valid options excellon, gerber."
 msgstr "Valid options excellon, gerber."
 
-msgid "Valid options are: absolute,plot"
-msgstr "Valid options are: absolute,plot"
+msgid "Valid options are: absolute, plot"
+msgstr "Valid options are: absolute, plot"
 
-msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
+msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
+msgstr "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 
-msgid "Valid options are: route,alternate."
-msgstr "Valid options are: route,alternate."
+msgid "Valid options are: route, alternate."
+msgstr "Valid options are: route, alternate."
 
-msgid "Output units, valid options:in,mm"
-msgstr "Output units, valid options:in,mm"
+msgid "Output units, valid options:in, mm"
+msgstr "Output units, valid options:in, mm"
 
 msgid "Mirror Y axis"
 msgstr "Mirror Y axis"
@@ -20277,17 +20290,17 @@ msgid "Generate Position File"
 msgstr "Generate Position File"
 
 msgid ""
-"Valid options: front,back,both. Gerber format only supports \"front\" or "
+"Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Valid options: front,back,both. Gerber format only supports \"front\" or "
+"Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 
-msgid "Valid options: ascii,csv,gerber"
-msgstr "Valid options: ascii,csv,gerber"
+msgid "Valid options: ascii, csv, gerber"
+msgstr "Valid options: ascii, csv, gerber"
 
-msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr "Output units; ascii or csv format only; valid options: in,mm"
+msgid "Output units; ascii or csv format only; valid options: in, mm"
+msgstr "Output units; ascii or csv format only; valid options: in, mm"
 
 msgid ""
 "Use negative X coordinates for footprints on bottom layer (ascii or csv "
@@ -20689,6 +20702,12 @@ msgstr "Execute Command Job Settings"
 msgid "Edit Template"
 msgstr "Edit Template"
 
+msgid "Open Template (Read-Only)"
+msgstr "Open Template (Read-Only)"
+
+msgid "Open Template Folder"
+msgstr "Open Template Folder"
+
 msgid "Duplicate Template"
 msgstr "Duplicate Template"
 
@@ -20697,6 +20716,10 @@ msgstr "Could not open template directory."
 
 msgid "No project file found in template directory."
 msgstr "No project file found in template directory."
+
+#, c-format
+msgid "Failed to open '%s'."
+msgstr "Failed to open '%s'."
 
 msgid "Enter name for the new template:"
 msgstr "Enter name for the new template:"
@@ -20811,10 +20834,6 @@ msgstr "Last run failed"
 
 msgid "Running Jobs"
 msgstr "Running Jobs"
-
-#, c-format
-msgid "Failed to open '%s'."
-msgstr "Failed to open '%s'."
 
 msgid "Edit Destination Options..."
 msgstr "Edit Destination Options..."
@@ -24819,6 +24838,10 @@ msgstr "net %d"
 msgid "Pad %s of %s is on net %s but its match in candidate %s is on net %s."
 msgstr "Pad %s of %s is on net %s but its match in candidate %s is on net %s."
 
+#, c-format
+msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
+msgstr "Pad %s of %s has inconsistent net mapping in candidate %s."
+
 msgid "No compatible component found in the target area."
 msgstr "No compatible component found in the target area."
 
@@ -28052,8 +28075,8 @@ msgstr "Net name:"
 msgid "Padstack mode:"
 msgstr "Padstack mode:"
 
-msgid "Front/Inner/Bottom"
-msgstr "Front/Inner/Bottom"
+msgid "Front/Inner/Back"
+msgstr "Front/Inner/Back"
 
 msgid "Edit layer:"
 msgstr "Edit layer:"
@@ -29248,9 +29271,6 @@ msgstr ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 
-msgid "Front/Inner/Back"
-msgstr "Front/Inner/Back"
-
 msgid "Via diameter:"
 msgstr "Via diameter:"
 
@@ -29284,11 +29304,14 @@ msgstr "Annular rings:"
 msgid "Protection features:"
 msgstr "Protection features:"
 
+msgid "Backdrill:"
+msgstr "Backdrill:"
+
 msgid "Both"
 msgstr "Both"
 
-msgid "Hole post-machining"
-msgstr "Hole post-machining"
+msgid "Hole Post-machining"
+msgstr "Hole Post-machining"
 
 msgid "Add teardrops on via's track connections"
 msgstr "Add teardrops on via's track connections"
@@ -30983,8 +31006,9 @@ msgid ""
 "be\n"
 "split across panels, each showing a subset of the rule's constraints.\n"
 "\n"
-"Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
-"Differential Pair Routing (track_width + diff_pair_gap) are matched first.\n"
+"Multi-constraint panels like Via Style (`via_diameter` + `hole_size`) and\n"
+"Differential Pair Routing (`track_width` + `diff_pair_gap`) are matched "
+"first.\n"
 "Single-constraint panels handle the remainder. Unmapped constraints appear\n"
 "in the Custom Rule panel.\n"
 "\n"
@@ -31013,8 +31037,9 @@ msgstr ""
 "be\n"
 "split across panels, each showing a subset of the rule's constraints.\n"
 "\n"
-"Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
-"Differential Pair Routing (track_width + diff_pair_gap) are matched first.\n"
+"Multi-constraint panels like Via Style (`via_diameter` + `hole_size`) and\n"
+"Differential Pair Routing (`track_width` + `diff_pair_gap`) are matched "
+"first.\n"
 "Single-constraint panels handle the remainder. Unmapped constraints appear\n"
 "in the Custom Rule panel.\n"
 "\n"
@@ -32000,8 +32025,8 @@ msgstr "board setup constraints edge"
 msgid "board setup constraints courtyard"
 msgstr "board setup constraints courtyard"
 
-msgid "board setup micro-via constraints"
-msgstr "board setup micro-via constraints"
+msgid "board setup constraints micro-via"
+msgstr "board setup constraints micro-via"
 
 msgid "barcode visual separation default"
 msgstr "barcode visual separation default"
@@ -34759,8 +34784,8 @@ msgid "Add %s to group '%s'."
 msgstr "Add %s to group '%s'."
 
 #, c-format
-msgid "Added %s group '%s'."
-msgstr "Added %s group '%s'."
+msgid "Added %s to group '%s'."
+msgstr "Added %s to group '%s'."
 
 #, c-format
 msgid "Disconnect %s pin %s."
@@ -34899,20 +34924,20 @@ msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 
 #, c-format
-msgid "Change group name to '%s' to '%s'."
-msgstr "Change group name to '%s' to '%s'."
+msgid "Change group name from '%s' to '%s'."
+msgstr "Change group name from '%s' to '%s'."
 
 #, c-format
-msgid "Changed group name to '%s' to '%s'."
-msgstr "Changed group name to '%s' to '%s'."
+msgid "Changed group name from '%s' to '%s'."
+msgstr "Changed group name from '%s' to '%s'."
 
 #, c-format
-msgid "Change group library link to '%s'."
-msgstr "Change group library link to '%s'."
+msgid "Change group library link from '%s' to '%s'."
+msgstr "Change group library link from '%s' to '%s'."
 
 #, c-format
-msgid "Changed group library link to '%s'."
-msgstr "Changed group library link to '%s'."
+msgid "Changed group library link from '%s' to '%s'."
+msgstr "Changed group library link from '%s' to '%s'."
 
 #, c-format
 msgid ""
@@ -35512,6 +35537,10 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
 
 #, c-format
+msgid "Unknown mapping of the Altium layer kind '%s'."
+msgstr "Unknown mapping of the Altium layer kind '%s'."
+
+#, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Unknown Mode string: '%s'."
 
@@ -35555,12 +35584,12 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "File not found: '%s' for directory '%s'."
 
 #, c-format
-msgid "Footprint directory not found: '%s'."
-msgstr "Footprint directory not found: '%s'."
-
-#, c-format
 msgid "File not found: '%s'."
 msgstr "File not found: '%s'."
+
+#, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Footprint directory not found: '%s'."
 
 #, c-format
 msgid "Record of unknown type: '%d'."
@@ -36229,12 +36258,12 @@ msgstr ""
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
-"imported. Please review the design rules as copper pours will affected by "
+"imported. Please review the design rules as copper pours may be affected by "
 "this."
 msgstr ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
-"imported. Please review the design rules as copper pours will affected by "
+"imported. Please review the design rules as copper pours may be affected by "
 "this."
 
 msgid "CADSTAR PCB Archive files"
@@ -39233,6 +39262,13 @@ msgstr "Select a reference Rule Area to copy from..."
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "No Rule Areas to repeat layout to have been found."
 
+msgid "Checking Rule Area compatibility..."
+msgstr "Checking Rule Area compatibility..."
+
+#, c-format
+msgid "Resolving topology %d of %d (%d/%d components)"
+msgstr "Resolving topology %d of %d (%d/%d components)"
+
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "Rule Area topologies do not match: %s"
@@ -40095,8 +40131,8 @@ msgstr "Open schematic in schematic editor"
 msgid "DRC Rule Editor"
 msgstr "DRC Rule Editor"
 
-msgid "Open drc rule editor window"
-msgstr "Open drc rule editor window"
+msgid "Open DRC rule editor window"
+msgstr "Open DRC rule editor window"
 
 msgid "Local Ratsnest"
 msgstr "Local Ratsnest"
@@ -40393,10 +40429,10 @@ msgstr "Distribute Horizontally by Centers"
 
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
-"itemso that the item centers are equally distributed"
+"item so that the item centers are equally distributed"
 msgstr ""
 "Distributes selected items between the left-most item and the right-most "
-"itemso that the item centers are equally distributed"
+"item so that the item centers are equally distributed"
 
 msgid "Distribute Horizontally with Even Gaps"
 msgstr "Distribute Horizontally with Even Gaps"
@@ -41664,6 +41700,12 @@ msgstr "New Group"
 msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Use /.../ to indicate a regular expression.)"
 
+msgid "Auto-fit Column"
+msgstr "Auto-fit Column"
+
+msgid "Auto-fit All Columns"
+msgstr "Auto-fit All Columns"
+
 msgid "Filter by Net Name"
 msgstr "Filter by Net Name"
 
@@ -42065,6 +42107,203 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Wire from %s, %s to %s, %s"
+#~ msgstr "Wire from %s, %s to %s, %s"
+
+#, c-format
+#~ msgid "Bus from %s, %s to %s, %s"
+#~ msgstr "Bus from %s, %s to %s, %s"
+
+#, c-format
+#~ msgid "Label '%s' at %s, %s"
+#~ msgstr "Label '%s' at %s, %s"
+
+#, c-format
+#~ msgid "Global label '%s' at %s, %s"
+#~ msgstr "Global label '%s' at %s, %s"
+
+#, c-format
+#~ msgid "Hierarchical label '%s' at %s, %s"
+#~ msgstr "Hierarchical label '%s' at %s, %s"
+
+#, c-format
+#~ msgid "Junction at %s, %s"
+#~ msgstr "Junction at %s, %s"
+
+#, c-format
+#~ msgid "No-Connect at %s, %s"
+#~ msgstr "No-Connect at %s, %s"
+
+#, c-format
+#~ msgid "Bus to wire entry from %s, %s to %s, %s"
+#~ msgstr "Bus to wire entry from %s, %s to %s, %s"
+
+#, c-format
+#~ msgid "Bus to bus entry from %s, %s to %s, %s"
+#~ msgstr "Bus to bus entry from %s, %s to %s, %s"
+
+#, c-format
+#~ msgid "Netclass label '%s' at %s, %s"
+#~ msgstr "Netclass label '%s' at %s, %s"
+
+#~ msgid ""
+#~ "You must run a TRAN simulation first; its resultswill be used for the "
+#~ "fast Fourier transform."
+#~ msgstr ""
+#~ "You must run a TRAN simulation first; its resultswill be used for the "
+#~ "fast Fourier transform."
+
+#~ msgid "Sync All Sheets Pins..."
+#~ msgstr "Sync All Sheets Pins..."
+
+#~ msgid "Synchronize all sheets pins and hierarchical labels"
+#~ msgstr "Synchronize all sheets pins and hierarchical labels"
+
+#~ msgid "Valid options are: absolute,plot"
+#~ msgstr "Valid options are: absolute,plot"
+
+#~ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
+#~ msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
+
+#~ msgid "Valid options are: route,alternate."
+#~ msgstr "Valid options are: route,alternate."
+
+#~ msgid "Output units, valid options:in,mm"
+#~ msgstr "Output units, valid options:in,mm"
+
+#~ msgid ""
+#~ "Valid options: front,back,both. Gerber format only supports \"front\" or "
+#~ "\"back\"."
+#~ msgstr ""
+#~ "Valid options: front,back,both. Gerber format only supports \"front\" or "
+#~ "\"back\"."
+
+#~ msgid "Valid options: ascii,csv,gerber"
+#~ msgstr "Valid options: ascii,csv,gerber"
+
+#~ msgid "Output units; ascii or csv format only; valid options: in,mm"
+#~ msgstr "Output units; ascii or csv format only; valid options: in,mm"
+
+#~ msgid "Front/Inner/Bottom"
+#~ msgstr "Front/Inner/Bottom"
+
+#~ msgid "Hole post-machining"
+#~ msgstr "Hole post-machining"
+
+#~ msgid ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that\n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "\n"
+#~ "### Graphical Rule Editor\n"
+#~ "\n"
+#~ "When loading rules into the graphical editor, constraints are "
+#~ "automatically\n"
+#~ "mapped to appropriate editing panels. Rules with multiple constraints may "
+#~ "be\n"
+#~ "split across panels, each showing a subset of the rule's constraints.\n"
+#~ "\n"
+#~ "Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
+#~ "Differential Pair Routing (track_width + diff_pair_gap) are matched "
+#~ "first.\n"
+#~ "Single-constraint panels handle the remainder. Unmapped constraints "
+#~ "appear\n"
+#~ "in the Custom Rule panel.\n"
+#~ "\n"
+#~ "Rules that are not modified in the graphical editor preserve their "
+#~ "original\n"
+#~ "text formatting when saved.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Notes\n"
+#~ "\n"
+#~ "Version clause must be the first clause.  It indicates the syntax version "
+#~ "of the file so that\n"
+#~ "future rules parsers can perform automatic updates.  It should be\n"
+#~ "set to \"1\".\n"
+#~ "\n"
+#~ "Rules should be ordered by specificity.  Later rules take\n"
+#~ "precedence over earlier rules; once a matching rule is found\n"
+#~ "no further rules will be checked.\n"
+#~ "\n"
+#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
+#~ "\n"
+#~ "### Graphical Rule Editor\n"
+#~ "\n"
+#~ "When loading rules into the graphical editor, constraints are "
+#~ "automatically\n"
+#~ "mapped to appropriate editing panels. Rules with multiple constraints may "
+#~ "be\n"
+#~ "split across panels, each showing a subset of the rule's constraints.\n"
+#~ "\n"
+#~ "Multi-constraint panels like Via Style (via_diameter + hole_size) and\n"
+#~ "Differential Pair Routing (track_width + diff_pair_gap) are matched "
+#~ "first.\n"
+#~ "Single-constraint panels handle the remainder. Unmapped constraints "
+#~ "appear\n"
+#~ "in the Custom Rule panel.\n"
+#~ "\n"
+#~ "Rules that are not modified in the graphical editor preserve their "
+#~ "original\n"
+#~ "text formatting when saved.\n"
+#~ "<br><br><br>\n"
+#~ "\n"
+
+#~ msgid "board setup micro-via constraints"
+#~ msgstr "board setup micro-via constraints"
+
+#, c-format
+#~ msgid "Added %s group '%s'."
+#~ msgstr "Added %s group '%s'."
+
+#, c-format
+#~ msgid "Change group name to '%s' to '%s'."
+#~ msgstr "Change group name to '%s' to '%s'."
+
+#, c-format
+#~ msgid "Changed group name to '%s' to '%s'."
+#~ msgstr "Changed group name to '%s' to '%s'."
+
+#, c-format
+#~ msgid "Change group library link to '%s'."
+#~ msgstr "Change group library link to '%s'."
+
+#, c-format
+#~ msgid "Changed group library link to '%s'."
+#~ msgstr "Changed group library link to '%s'."
+
+#~ msgid ""
+#~ "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad "
+#~ "does not have an equivalent to CADSTAR's Spacing Class so these elements "
+#~ "were not imported. Please review the design rules as copper pours will "
+#~ "affected by this."
+#~ msgstr ""
+#~ "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad "
+#~ "does not have an equivalent to CADSTAR's Spacing Class so these elements "
+#~ "were not imported. Please review the design rules as copper pours will "
+#~ "affected by this."
+
+#~ msgid "Open drc rule editor window"
+#~ msgstr "Open drc rule editor window"
+
+#~ msgid ""
+#~ "Distributes selected items between the left-most item and the right-most "
+#~ "itemso that the item centers are equally distributed"
+#~ msgstr ""
+#~ "Distributes selected items between the left-most item and the right-most "
+#~ "itemso that the item centers are equally distributed"
 
 #~ msgid "Image Files"
 #~ msgstr "Image Files"
