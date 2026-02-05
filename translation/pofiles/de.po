@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-04 21:14+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -30403,7 +30403,7 @@ msgstr "Ungültige Voreinstellung\n"
 
 #: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
-msgstr "Weißer Hintergrund\n"
+msgstr "Unzulässiger Hintergrund\n"
 
 #: kicad/cli/command_pcb_render.cpp:363
 msgid "Invalid rotation format\n"
