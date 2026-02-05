@@ -361,6 +361,36 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
             return SAVE_SKIPPED;
         }
 
+        {
+            std::unique_lock lock( PreloadedFootprintsMutex );
+            auto             it = PreloadedFootprints.Get().find( aNickname );
+
+            if( it != PreloadedFootprints.Get().end() )
+            {
+                wxString fpName = aFootprint->GetFPID().GetLibItemName();
+
+                if( aOverwrite )
+                {
+                    auto& footprints = it->second;
+                    footprints.erase( std::remove_if( footprints.begin(), footprints.end(),
+                                                      [&fpName]( const std::unique_ptr<FOOTPRINT>& fp )
+                                                      {
+                                                          return fp->GetFPID().GetLibItemName().wx_str() == fpName;
+                                                      } ),
+                                      footprints.end() );
+                }
+
+                FOOTPRINT* clone = static_cast<FOOTPRINT*>( aFootprint->Duplicate( IGNORE_PARENT_GROUP ) );
+                clone->SetParent( nullptr );
+
+                LIB_ID id = clone->GetFPID();
+                id.SetLibNickname( aNickname );
+                clone->SetFPID( id );
+
+                it->second.emplace_back( clone );
+            }
+        }
+
         return SAVE_OK;
     }
     else
@@ -369,6 +399,7 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
         return SAVE_SKIPPED;
     }
 }
+
 
 void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, const wxString& aFootprintName )
 {
@@ -382,6 +413,23 @@ void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, cons
         {
             wxLogTrace( traceLibraries, "DeleteFootprint: error deleting %s:%s: %s", aNickname,
                         aFootprintName, e.What() );
+            return;
+        }
+
+        {
+            std::unique_lock lock( PreloadedFootprintsMutex );
+            auto             it = PreloadedFootprints.Get().find( aNickname );
+
+            if( it != PreloadedFootprints.Get().end() )
+            {
+                auto& footprints = it->second;
+                footprints.erase( std::remove_if( footprints.begin(), footprints.end(),
+                                                  [&aFootprintName]( const std::unique_ptr<FOOTPRINT>& fp )
+                                                  {
+                                                      return fp->GetFPID().GetLibItemName().wx_str() == aFootprintName;
+                                                  } ),
+                                  footprints.end() );
+            }
         }
     }
     else
