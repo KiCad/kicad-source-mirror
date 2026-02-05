@@ -2052,12 +2052,16 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     if( !isDefaultTeardropParameters( aPad->GetTeardropParams() ) )
         formatTeardropParameters( aPad->GetTeardropParams() );
 
-    m_out->Print( 0, " (tenting " );
-    KICAD_FORMAT::FormatOptBool( m_out, "front",
-                                 aPad->Padstack().FrontOuterLayers().has_solder_mask );
-    KICAD_FORMAT::FormatOptBool( m_out, "back",
-                                 aPad->Padstack().BackOuterLayers().has_solder_mask );
-    m_out->Print( 0, ")" );
+    if( aPad->Padstack().FrontOuterLayers().has_solder_mask.has_value()
+        || aPad->Padstack().BackOuterLayers().has_solder_mask.has_value() )
+    {
+        m_out->Print( 0, " (tenting " );
+        KICAD_FORMAT::FormatOptBool( m_out, "front",
+                                     aPad->Padstack().FrontOuterLayers().has_solder_mask );
+        KICAD_FORMAT::FormatOptBool( m_out, "back",
+                                     aPad->Padstack().BackOuterLayers().has_solder_mask );
+        m_out->Print( 0, ")" );
+    }
 
     KICAD_FORMAT::FormatUuid( m_out, aPad->m_Uuid );
 
@@ -2688,24 +2692,44 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
 
         const PADSTACK& padstack = via->Padstack();
 
-        m_out->Print( 0, " (tenting " );
-        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_solder_mask );
-        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_solder_mask );
-        m_out->Print( 0, ")" );
+        if( padstack.FrontOuterLayers().has_solder_mask.has_value()
+            || padstack.BackOuterLayers().has_solder_mask.has_value() )
+        {
+            m_out->Print( 0, " (tenting " );
+            KICAD_FORMAT::FormatOptBool( m_out, "front",
+                                         padstack.FrontOuterLayers().has_solder_mask );
+            KICAD_FORMAT::FormatOptBool( m_out, "back",
+                                         padstack.BackOuterLayers().has_solder_mask );
+            m_out->Print( 0, ")" );
+        }
 
-        KICAD_FORMAT::FormatOptBool( m_out, "capping", padstack.Drill().is_capped );
+        if( padstack.Drill().is_capped.has_value() )
+            KICAD_FORMAT::FormatOptBool( m_out, "capping", padstack.Drill().is_capped );
 
-        m_out->Print( 0, " (covering " );
-        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_covering );
-        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_covering );
-        m_out->Print( 0, ")" );
+        if( padstack.FrontOuterLayers().has_covering.has_value()
+            || padstack.BackOuterLayers().has_covering.has_value() )
+        {
+            m_out->Print( 0, " (covering " );
+            KICAD_FORMAT::FormatOptBool( m_out, "front",
+                                         padstack.FrontOuterLayers().has_covering );
+            KICAD_FORMAT::FormatOptBool( m_out, "back",
+                                         padstack.BackOuterLayers().has_covering );
+            m_out->Print( 0, ")" );
+        }
 
-        m_out->Print( 0, " (plugging " );
-        KICAD_FORMAT::FormatOptBool( m_out, "front", padstack.FrontOuterLayers().has_plugging );
-        KICAD_FORMAT::FormatOptBool( m_out, "back", padstack.BackOuterLayers().has_plugging );
-        m_out->Print( 0, ")" );
+        if( padstack.FrontOuterLayers().has_plugging.has_value()
+            || padstack.BackOuterLayers().has_plugging.has_value() )
+        {
+            m_out->Print( 0, " (plugging " );
+            KICAD_FORMAT::FormatOptBool( m_out, "front",
+                                         padstack.FrontOuterLayers().has_plugging );
+            KICAD_FORMAT::FormatOptBool( m_out, "back",
+                                         padstack.BackOuterLayers().has_plugging );
+            m_out->Print( 0, ")" );
+        }
 
-        KICAD_FORMAT::FormatOptBool( m_out, "filling", padstack.Drill().is_filled );
+        if( padstack.Drill().is_filled.has_value() )
+            KICAD_FORMAT::FormatOptBool( m_out, "filling", padstack.Drill().is_filled );
 
         if( padstack.Mode() != PADSTACK::MODE::NORMAL )
         {
