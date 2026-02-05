@@ -61,7 +61,22 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
 
         for( const SCH_SHEET_PATH& sheet : m_schematic->Hierarchy() )
         {
-            for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            // The rtree returns items in a non-deterministic order (platform-dependent)
+            // Therefore we need to sort them before outputting to ensure file stability for version
+            // control and QA comparisons
+            std::vector<EDA_ITEM*> sheetItems;
+
+            for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                sheetItems.push_back( item );
+
+            auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+            {
+                return item1->m_Uuid < item2->m_Uuid;
+            };
+
+            std::sort( sheetItems.begin(), sheetItems.end(), pred );
+
+            for( EDA_ITEM* item : sheetItems )
             {
                 symbol = findNextSymbol( item, sheet );
 
