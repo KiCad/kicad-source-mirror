@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
 "PO-Revision-Date: 2026-02-05 20:38+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -3095,7 +3095,7 @@ msgstr "Raster-Einstellungen"
 #: common/dialogs/dialog_group_properties.cpp:115
 #, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Ungültig Bibliotheksverknüpfung: \"%s\""
+msgstr "Ungültige Bibliotheksverknüpfung: \"%s\""
 
 #: common/dialogs/dialog_group_properties.cpp:138
 msgid "Edit Group Properties"
@@ -8432,9 +8432,8 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Platinenstatistik-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "PCB: Statistiken exportieren"
+msgstr "PCB: Platinenstatistiken exportieren"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:149 kicad/kicad_cli.cpp:167
@@ -9277,7 +9276,7 @@ msgid ""
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -9291,7 +9290,7 @@ msgid ""
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Unzulässige lib_id ID in\n"
+"Ungültige lib_id ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -9347,7 +9346,7 @@ msgid ""
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d"
 
@@ -11541,7 +11540,7 @@ msgstr "Anzeige-PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "Ermitteln"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -16919,9 +16918,8 @@ msgid "Enter new variant name:"
 msgstr "Neuer Variantenname:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Variante umbenennen"
+msgstr "Designvariante umbenennen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16951,9 +16949,8 @@ msgid "Enter name for the copied variant:"
 msgstr "Name für die kopierte Variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "Variante kopieren"
+msgstr "Designvariante kopieren"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -17051,9 +17048,8 @@ msgid "Alternate Assignment"
 msgstr "Alternative Zuordnung"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " Variante"
+msgstr " Designvariante"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -18427,14 +18423,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Beim Ziehen von Kanten Pins verbunden halten"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
-msgstr "Symbolbibliothek-Tabelle"
+msgstr "Symbolbibliothek-Tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:392
-#, fuzzy
 msgid "folder with .kicad_sym files"
-msgstr "Ordner mit %s Dateien"
+msgstr "Ordner mit .kicad_sym-Dateien"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
@@ -18994,9 +18988,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Input-Power-Pin wird von keinem Output-Power-Pin angesteuert"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Dupliziert die Zone auf eine andere Lage"
+msgstr "Pins mit unterschiedlichen Netzen doppeln"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -19270,7 +19263,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:510
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Ungültiger Eintrag in der Symbol-Bibliotheksliste der Projektdatei."
+msgstr "Unzulässiger Eintrag in der Symbol-Bibliotheksliste der Projektdatei."
 
 #: eeschema/files-io.cpp:511
 msgid "Project Load Warning"
@@ -30403,39 +30396,39 @@ msgstr "Ungültige Voreinstellung\n"
 
 #: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
-msgstr "Unzulässiger Hintergrund\n"
+msgstr "Ungültiger Hintergrund\n"
 
 #: kicad/cli/command_pcb_render.cpp:363
 msgid "Invalid rotation format\n"
-msgstr "Unzulässiges Rotationsformat\n"
+msgstr "Ungültiges Rotationsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:369
 msgid "Invalid pan format\n"
-msgstr "Unzulässiges Schwenkformat\n"
+msgstr "Ungültiges Schwenkformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:375
 msgid "Invalid pivot format\n"
-msgstr "Unzulässiges Drehpunktformat\n"
+msgstr "Ungültiges Drehpunktformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:382
 msgid "Invalid light top intensity format\n"
-msgstr "Unzulässiges Oberlichtintensitäts-Format\n"
+msgstr "Ungültiges Oberlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:389
 msgid "Invalid light bottom intensity format\n"
-msgstr "Unzulässiges Unterlichtintensitäts-Format\n"
+msgstr "Ungültiges Unterlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:396
 msgid "Invalid light side intensity format\n"
-msgstr "Unzulässiges Seitenlichtintensitäts-Format\n"
+msgstr "Ungültiges Seitenlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid light camera intensity format\n"
-msgstr "Unzulässiges Kameralichtintensitäts-Format\n"
+msgstr "Ungültiges Kameralichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:418
 msgid "Invalid image format\n"
-msgstr "Unzulässiges Grafikformat\n"
+msgstr "Ungültiges Grafikformat\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
 msgid "Upgrade the board file's format to the latest one"
@@ -31025,9 +31018,10 @@ msgstr "Vorlage auswählen"
 msgid ""
 "Templates provide pre-configured project structures to jumpstart your design."
 msgstr ""
+"Vorlagen bieten voreingestellte Projektstruktur, um Ihr Design schneller "
+"voranzubringen."
 
 #: kicad/dialogs/template_default_html.h:238
-#, fuzzy
 msgid "Pre-configured Libraries"
 msgstr "Vorkonfigurierte Bibliotheken"
 
@@ -31047,11 +31041,12 @@ msgid ""
 "Electrical and mechanical constraints configured for the intended "
 "application."
 msgstr ""
+"Elektrische und mechanische Einschränkungen, die für die vorgesehene "
+"Anwendung festgelegt wurden."
 
 #: kicad/dialogs/template_default_html.h:252
-#, fuzzy
 msgid "Board Stackups"
-msgstr "Lagenaufbau der Platine"
+msgstr "Lagenaufbauten"
 
 #: kicad/dialogs/template_default_html.h:253
 msgid "Layer configurations optimized for common manufacturing processes."
@@ -31068,13 +31063,12 @@ msgid "Template"
 msgstr "Vorlage"
 
 #: kicad/dialogs/template_default_html.h:398
-#, fuzzy
 msgid ""
 "This template does not include a description. You can still use it to create "
 "a new project."
 msgstr ""
-"Diese Projektvorlage beinhaltet bisher keine Infoseite. Sie können sie "
-"dennoch für ein neues Projekt verwenden."
+"Diese Projektvorlage beinhaltet keine Beschreibung. Sie können sie dennoch "
+"für ein neues Projekt verwenden."
 
 #: kicad/dialogs/template_default_html.h:401
 msgid "To use this template"
@@ -31085,22 +31079,20 @@ msgid "Create the project"
 msgstr "Ein Projekt erstellen"
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
 msgstr ""
-"Klicken Sie unten auf OK. KiCad erstellt einen neuen Projektordner, der mit "
-"dem Inhalt dieser Vorlage gefüllt ist."
+"Klicken Sie auf OK um einen neuen Projektordner mit dem Inhalt dieser "
+"Vorlage zu erstellen."
 
 #: kicad/dialogs/template_default_html.h:412
 msgid "Open schematic and PCB"
 msgstr "Schaltplan und Leiterplatte öffnen"
 
 #: kicad/dialogs/template_default_html.h:413
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr ""
-"Verwenden Sie die Projektmanager-Verzeichnisstruktur oder starten Sie die "
-"Schaltplan- und Leiterplatteneditoren, um mit dem Design zu beginnen."
+"Verwenden Sie den Projektmanager um den Schaltplan- und Leiterplatteneditor "
+"zu starten."
 
 #: kicad/dialogs/template_default_html.h:419
 #, fuzzy
@@ -37303,7 +37295,7 @@ msgstr "Mittelpunkt auswählen..."
 #: pcbnew/dialogs/dialog_create_array.cpp:362
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "Unzulässiger Integerwert für %s: %s"
+msgstr "Ungültiger numerischer Wert für %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:398
 #, c-format
@@ -49939,7 +49931,7 @@ msgstr "Metadaten der Einheit %s aktualisiert."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1958
 #, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr "Unzulässige Footprint-ID \"%s\" für Variante \"%s\" auf %s."
+msgstr "Ungültige Footprint-ID \"%s\" für Variante \"%s\" auf %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1379
 #, c-format
@@ -52272,7 +52264,7 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Unzulässige Gleitkommazahl in Datei: \"%s\"\n"
+"Ungültige Gleitkommazahl in Datei: \"%s\"\n"
 "Zeile: %d, Spalte: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2923
@@ -52373,7 +52365,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässige Netz-ID in\n"
+"Ungültige Netz-ID in\n"
 "Datei: %s;\n"
 "Zeile: %d\n"
 "Spalte: %d."
@@ -52440,7 +52432,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: %s\n"
 "Zeile: %d\n"
 "Spalte: %d."
@@ -52471,7 +52463,7 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Unzulässige Netz-ID in\n"
+"Ungültige Netz-ID in\n"
 "Datei: %s\n"
 "Zeile: %d Spalte: %d"
 
@@ -52508,7 +52500,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässiger Padstack in\n"
+"Ungültiger Padstack in\n"
 "Datei: %s\n"
 "Zeile: %d\n"
 "Spalte: %d."
@@ -52517,7 +52509,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7689
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "Unzulässige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr "Ungültige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8340
 msgid ""
