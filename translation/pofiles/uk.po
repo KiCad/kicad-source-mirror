@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -30793,16 +30793,13 @@ msgstr ""
 "Використовуйте іконку оновлення, щоб перезавантажити вміст поточної теки"
 
 #: kicad/dialogs/template_default_html.h:545
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "Системні шаблони"
+msgstr "Перейдіть на вкладку системних шаблонів"
 
 #: kicad/dialogs/template_default_html.h:551
-#, fuzzy
 msgid "Each template needs a 'meta' folder containing configuration files."
 msgstr ""
-"Шаблони організовані в підкаталоги. Для кожного шаблону потрібна папка "
-"«meta» з файлами конфігурації."
+"Для кожного шаблону потрібна тека «meta», що містить конфігураційні файли."
 
 #: kicad/files-io.cpp:42
 msgid "KiCad project file"
@@ -30975,11 +30972,12 @@ msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
 msgstr ""
+"KiCad знайшов незбережені зміни з вашого останнього сеансу, які є новішими "
+"за збережені файли проєкту."
 
 #: kicad/kicad_manager_frame.cpp:939
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "Скасувати Зміни"
+msgstr "Відновити незбережені зміни"
 
 #: kicad/kicad_manager_frame.cpp:943
 msgid ""
@@ -30988,11 +30986,14 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"Це могло статися, якщо ваш попередній сеанс завершився раптово.\n"
+"\n"
+"Виберіть 'Відновити', щоб повернути ці зміни, або 'Відхилити', щоб залишити "
+"поточні збережені файли."
 
 #: kicad/kicad_manager_frame.cpp:947
-#, fuzzy
 msgid "Discard"
-msgstr "Відмінити дію"
+msgstr "Відхилити"
 
 #: kicad/kicad_manager_frame.cpp:1128
 msgid "Edit File in Text Editor"
@@ -41034,14 +41035,12 @@ msgid "Mechanical"
 msgstr "Механічний"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Castellated pad (TH only)"
-msgstr "Зубчаста контактна площадка (тільки наскрізний отвір)"
+msgstr "Напіввідкрита контактна площадка (тільки для наскрізних отворів / TH)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round TH only)"
-msgstr "Пресове прилягання (лише круглий наскрізний отвір)"
+msgstr "Пресовий монтаж (тільки для круглих наскрізних отворів)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:595
@@ -42665,39 +42664,32 @@ msgid "Error with conditions for component class assignment %s"
 msgstr "Помилка з умовами для призначення класу компонента %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:366
-#, fuzzy
 msgid "Add Reference Condition"
-msgstr "Позначення"
+msgstr "Додати контрольну умову"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
-#, fuzzy
 msgid "Add Footprint Condition"
-msgstr "Додати фільтр посадкових місць"
+msgstr "Додати умову для посадкового місця"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
-#, fuzzy
 msgid "Add Side Condition"
-msgstr "Додати ще одну умову"
+msgstr "Додати умову сторони"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:369
-#, fuzzy
 msgid "Add Rotation Condition"
-msgstr "Додати ще одну умову"
+msgstr "Додати умову повороту"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:370
-#, fuzzy
 msgid "Add Footprint Field Value Condition"
-msgstr "Додати фільтр посадкових місць"
+msgstr "Додати умову за значенням поля посадкового місця"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Add Sheet Condition"
-msgstr "Додати штифт аркуша"
+msgstr "Додати умову аркуша"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
-#, fuzzy
 msgid "Add Custom Expression Condition"
-msgstr "Додати власне завдання"
+msgstr "Додати умову за користувацьким виразом"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:565
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
@@ -42726,7 +42718,6 @@ msgid "Add Custom Assignment"
 msgstr "Додати власне завдання"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
-#, fuzzy
 msgid "Component class:"
 msgstr "Клас компонента:"
 
@@ -42746,14 +42737,12 @@ msgid "Highlight matching footprints"
 msgstr "Виділіть відповідні сліди"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
-#, fuzzy
 msgid "Match all"
-msgstr "Збіг усіх"
+msgstr "Збіг за всіма параметрами"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
-#, fuzzy
 msgid "Match any"
-msgstr "Збіг будь-який"
+msgstr "Збіг за будь-яким із параметрів"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:167
 msgid "Import references"
@@ -42768,19 +42757,16 @@ msgid "Show library"
 msgstr "Показати бібліотеку"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "Фільтри посадкових місць:"
+msgstr "Поле посадкового місця:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
 msgstr "Значення поля:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "Назва аркуша"
+msgstr "Назва аркуша:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -43096,9 +43082,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Властивості за замовчуванням для нових графічних елементів"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:114
-#, fuzzy
 msgid "Footprint Library Tables"
-msgstr "Бібліотечний стіл Footprint"
+msgstr "Таблиці бібліотек посадкових місць"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 #, c-format
@@ -43142,18 +43127,16 @@ msgid "Layer name %s already in use."
 msgstr "Назва шару %s вже використовується."
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "Шари користувача"
+msgstr "Шари користувача:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
-#, fuzzy
 msgid "9"
-msgstr "90"
+msgstr "9"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 msgid "Recreate Plugin Environment"
@@ -45494,7 +45477,6 @@ msgid "Single"
 msgstr "Одинарний"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
 msgstr "Цільовий імпеданс:"
 
@@ -45503,9 +45485,8 @@ msgid "ohms"
 msgstr "Оми"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Enable time domain tuning"
-msgstr "Увімкнути налаштування часової області"
+msgstr "Увімкнути налаштування у часовій області"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:101
 msgid "Track Propagation"
@@ -45536,18 +45517,16 @@ msgid "Via Propagation"
 msgstr "Через поширення"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:170
-#, fuzzy
 msgid "Global unit delay:"
-msgstr "Глобальна затримка одиниці:"
+msgstr "Глобальна одинична затримка:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:177
 msgid "ps/cm"
 msgstr "пс/см"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:187
-#, fuzzy
 msgid "Via delay overrides:"
-msgstr "Через перевизначення затримки:"
+msgstr "Перевизначення затримки в перехідних отворах:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:204
 msgid "Signal Layer From"
@@ -47819,28 +47798,35 @@ msgid ""
 "Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
 "system memory.\n"
 msgstr ""
+"\n"
+"** Недостатньо пам'яті під час експорту файлу %s. **\n"
+"На платі може бути занадто багато об'єктів (наприклад, перехідних отворів, "
+"доріжок, компонентів) для обробки наявною системною пам'яттю.\n"
+"Спробуйте вимкнути параметр 'Об'єднати фігури' (Fuse Shapes), зменшити "
+"складність плати або звільнити системну пам'ять.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Не вдалося додати 3D-модель для %s.\n"
-"Помилка OpenCASCADE: %s\n"
+"\n"
+"OpenCASCADE помилка: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
 msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
 msgstr ""
+"Ця помилка може свідчити про недостатню кількість пам'яті. Спробуйте "
+"вимкнути параметр 'Об'єднати фігури' (Fuse Shapes), зменшити кількість "
+"перехідних отворів/компонентів або звільнити системну пам'ять.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Помилка експорту файлу %s. Експорт перервано. **\n"
+msgstr "** Помилка експорту файлу %s. Експорт перервано. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1372
 #, c-format
@@ -47852,6 +47838,13 @@ msgid ""
 "Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
 "memory.\n"
 msgstr ""
+"\n"
+"** Непередбачена помилка під час експорту файлу %s. **\n"
+"Це може бути спричинено недостатньою кількістю системної пам'яті, особливо "
+"під час експорту плат із великою кількістю перехідних отворів або "
+"компонентів з увімкненим параметром 'Об'єднати фігури' (Fuse Shapes).\n"
+"Спробуйте вимкнути 'Об'єднати фігури', зменшити складність плати або "
+"звільнити системну пам'ять.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1385
 #, c-format
@@ -47867,6 +47860,9 @@ msgid ""
 "Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
 "the number of objects (e.g., vias), or freeing system memory."
 msgstr ""
+"Недостатньо пам'яті під час об'єднання фігур. Спробуйте вимкнути об'єднання "
+"фігур (shape fusing), зменшити кількість об'єктів (наприклад, перехідних "
+"отворів) або звільнити системну пам'ять."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:676
 #, c-format
@@ -47875,12 +47871,17 @@ msgid ""
 "This may indicate insufficient memory. Consider disabling shape fusing or "
 "reducing board complexity."
 msgstr ""
+"Помилка OpenCASCADE під час об'єднання фігур: %s\n"
+"Це може свідчити про недостатню кількість пам'яті. Спробуйте вимкнути "
+"об'єднання фігур (shape fusing) або зменшити складність плати."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:686
 msgid ""
 "Problems encountered while fusing shapes. This operation is memory-"
 "intensive; insufficient memory may cause failures."
 msgstr ""
+"Виникли проблеми під час об'єднання фігур. Ця операція потребує багато "
+"пам'яті; її нестача може призвести до збоїв."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:692
 #: pcbnew/exporters/step/step_pcb_model.cpp:2581
@@ -47893,20 +47894,22 @@ msgid "Warnings:\n"
 msgstr "Попередження:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:725
-#, fuzzy
 msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
-msgstr "** ShapeUpgrade_UnifySameDomain створив нульову фігуру **"
+msgstr ""
+"Функція ShapeUpgrade_UnifySameDomain створила порожню фігуру (null shape)."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:736
 msgid ""
 "Out of memory while unifying shape domains. Consider disabling shape fusing "
 "or reducing the number of objects."
 msgstr ""
+"Недостатньо пам'яті під час уніфікації доменів фігур. Спробуйте вимкнути "
+"об'єднання фігур (shape fusing) або зменшити кількість об'єктів."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:743
 #, c-format
 msgid "OpenCASCADE error while unifying shapes: %s"
-msgstr ""
+msgstr "Помилка OpenCASCADE під час уніфікації фігур: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:999
 msgid "OCC error adding pad/via polygon."
@@ -51053,9 +51056,10 @@ msgstr ""
 "підтримуються."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1732
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
-msgstr "Не вдалося знайти компонент '%s' в бібліотеці (Symdef ID: '%s')"
+msgstr ""
+"Не вдалося знайти компонент '%s' у бібліотеці (ID визначення символу: '%s')"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1854
 #, c-format
@@ -54331,19 +54335,16 @@ msgid "Assertions for:"
 msgstr "Дозволи для:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:915
-#, fuzzy
 msgid "Select first item for clearance resolution..."
-msgstr "Виберіть два елементи для звіту про зазори."
+msgstr "Виберіть перший елемент для аналізу зазору..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Select second item for clearance resolution..."
-msgstr "Виберіть два елементи для звіту про зазори."
+msgstr "Виберіть другий елемент для аналізу зазору..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
-#, fuzzy
 msgid "Select two different items for clearance resolution."
-msgstr "Виберіть два елементи для звіту про зазори."
+msgstr "Виберіть два різні елементи для аналізу зазору."
 
 #: pcbnew/tools/board_inspection_tool.cpp:959
 #: pcbnew/tools/board_inspection_tool.cpp:972
@@ -54469,9 +54470,8 @@ msgstr ""
 "не застосовуватимуться."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1573
-#, fuzzy
 msgid "Select item for constraints resolution..."
-msgstr "Виберіть один елемент для звіту про вирішення обмежень."
+msgstr "Виберіть елемент для аналізу обмежень..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1581
 msgid "Select a single item for a constraints resolution report."
@@ -57033,14 +57033,12 @@ msgstr ""
 "площадок."
 
 #: pcbnew/tools/pcb_actions.cpp:2676
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Скасувати поточний інструмент"
+msgstr "Скасувати поточний елемент"
 
 #: pcbnew/tools/pcb_actions.cpp:2677
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Створення ліній обводу з вибраного елемента"
+msgstr "Пропустити поточний елемент і трасувати наступний вибраний елемент."
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid ""
@@ -57207,9 +57205,10 @@ msgid "Design block %s does not have a board file."
 msgstr "Блок проєкту %s не має файлу плати."
 
 #: pcbnew/tools/pcb_control.cpp:1577
-#, fuzzy
 msgid "Design block placement failed - no footprints were placed."
-msgstr "Файл з метаданими блоків проектування '%s' не може бути прочитаним."
+msgstr ""
+"Помилка розміщення блоку проектування - жодного посадкового місця не було "
+"розміщено."
 
 #: pcbnew/tools/pcb_control.cpp:1612
 #, c-format
@@ -57217,9 +57216,8 @@ msgid "Footprint %s is locked and cannot be placed."
 msgstr "Слід %s заблоковано та не може бути розміщено."
 
 #: pcbnew/tools/pcb_control.cpp:1629
-#, fuzzy
 msgid "Selected group contains no footprints to place."
-msgstr "Вибір не містить елементів із позначеними зв'язками."
+msgstr "Вибрана група не містить посадкових місць для розміщення."
 
 #: pcbnew/tools/pcb_control.cpp:2030
 msgid "Error loading board."
