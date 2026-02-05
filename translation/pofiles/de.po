@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:27+0300\n"
 "PO-Revision-Date: 2026-02-05 20:38+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -17889,7 +17889,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:405
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Ungültiger Eintrag in der Symbol-Bibliotheksliste der Projektdatei."
+msgstr "Unzulässiger Eintrag in der Symbol-Bibliotheksliste der Projektdatei."
 
 #: eeschema/files-io.cpp:406
 msgid "Project Load Warning"
@@ -27174,39 +27174,39 @@ msgstr "Ungültige Voreinstellung\n"
 
 #: kicad/cli/command_pcb_render.cpp:357
 msgid "Invalid background\n"
-msgstr "Unzulässiger Hintergrund\n"
+msgstr "Ungültiger Hintergrund\n"
 
 #: kicad/cli/command_pcb_render.cpp:363
 msgid "Invalid rotation format\n"
-msgstr "Unzulässiges Rotationsformat\n"
+msgstr "Ungültiges Rotationsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:369
 msgid "Invalid pan format\n"
-msgstr "Unzulässiges Schwenkformat\n"
+msgstr "Ungültiges Schwenkformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:375
 msgid "Invalid pivot format\n"
-msgstr "Unzulässiges Drehpunktformat\n"
+msgstr "Ungültiges Drehpunktformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:382
 msgid "Invalid light top intensity format\n"
-msgstr "Unzulässiges Oberlichtintensitäts-Format\n"
+msgstr "Ungültiges Oberlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:389
 msgid "Invalid light bottom intensity format\n"
-msgstr "Unzulässiges Unterlichtintensitäts-Format\n"
+msgstr "Ungültiges Unterlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:396
 msgid "Invalid light side intensity format\n"
-msgstr "Unzulässiges Seitenlichtintensitäts-Format\n"
+msgstr "Ungültiges Seitenlichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:403
 msgid "Invalid light camera intensity format\n"
-msgstr "Unzulässiges Kameralichtintensitäts-Format\n"
+msgstr "Ungültiges Kameralichtintensitäts-Format\n"
 
 #: kicad/cli/command_pcb_render.cpp:418
 msgid "Invalid image format\n"
-msgstr "Unzulässiges Grafikformat\n"
+msgstr "Ungültiges Grafikformat\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -33640,7 +33640,7 @@ msgstr "Mittelpunkt auswählen..."
 #: pcbnew/dialogs/dialog_create_array.cpp:348
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "Unzulässiger Integerwert für %s: %s"
+msgstr "Ungültiger numerischer Wert für %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:384
 #, c-format
@@ -44816,7 +44816,7 @@ msgid ""
 "line: %d\n"
 "offf: %d"
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d\n"
 "Spalte: %d"
@@ -44903,7 +44903,7 @@ msgid ""
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: \"%s\"\n"
 "Zeile: %d"
 
@@ -46905,7 +46905,7 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Unzulässige Gleitkommazahl in Datei: \"%s\"\n"
+"Ungültige Gleitkommazahl in Datei: \"%s\"\n"
 "Zeile: %d, Spalte: %d"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2866
@@ -47089,7 +47089,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässige Footprint-ID in\n"
+"Ungültige Footprint-ID in\n"
 "Datei: %s\n"
 "Zeile: %d\n"
 "Spalte: %d."
@@ -47101,7 +47101,7 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Unzulässige Netz-ID in\n"
+"Ungültige Netz-ID in\n"
 "Datei: %s\n"
 "Zeile: %d Spalte: %d"
 
@@ -47138,7 +47138,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässiger Padstack in\n"
+"Ungültiger Padstack in\n"
 "Datei: %s\n"
 "Zeile: %d\n"
 "Spalte: %d."
@@ -47147,7 +47147,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6644
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "Unzulässige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
+msgstr "Ungültige Padstacklage \"%s\" in Datei \"%s\", Zeile %d, Spalte %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6268
 #, c-format
@@ -47183,7 +47183,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Unzulässige Netz-ID in\n"
+"Ungültige Netz-ID in\n"
 "Datei: %s;\n"
 "Zeile: %d\n"
 "Spalte: %d."
