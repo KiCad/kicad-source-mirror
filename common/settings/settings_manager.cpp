@@ -1048,9 +1048,6 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     if( !aProject || !m_projects.count( aProject->GetProjectFullName() ) )
         return false;
 
-    if( !unloadProjectFile( aProject, aSave ) )
-        return false;
-
     wxString projectPath = aProject->GetProjectFullName();
     wxLogTrace( traceSettings, wxT( "Unload project %s" ), projectPath );
 
@@ -1070,6 +1067,9 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     // conditions where background threads try to access Prj() while the list is empty.
     if( wasActiveProject && PgmOrNull() )
         Pgm().GetLibraryManager().AbortAsyncLoads();
+
+    if( !unloadProjectFile( aProject, aSave ) )
+        return false;
 
     auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
                             [&]( const std::unique_ptr<PROJECT>& ptr )
