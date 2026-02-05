@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-01 07:01+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -2281,9 +2281,9 @@ msgstr ""
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "BOM-ის პრესეტი '%s' აღმოჩენილი არაა"
+msgstr "ჩალაგებული ცხრილი '%s' აღმოჩენილი არაა."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4299,9 +4299,8 @@ msgid "Reset Unique Id"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "დიზაინის ბლოკის ბიბლიოთეკის ცხრილი"
+msgstr "დიზაინის ბლოკის ბიბლიოთეკის ცხრილები"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -6227,9 +6226,8 @@ msgstr "გრაფიკის ნაგულისხმევები"
 
 #: common/eda_base_frame.cpp:1450
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "ფენის სახელები"
+msgstr "მომხმარებლის განლაგების სახელები"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7523,9 +7521,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "შერწყმა ჩავარდა"
+msgstr "შერწყმა ჩავარდა: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -7534,19 +7532,19 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "ბაზის შეცვლის დაწყება ჩავარდა"
+msgstr "ბაზის შეცვლის დაწყება ჩავარდა: %s"
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "ინდექსის ჩაწერა ჩავარდა: %s"
+msgstr "ბაზის შეცვლის გადაცემა ჩავარდა: %s"
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "ბაზის შეცვლის დაწყება ჩავარდა"
+msgstr "ბაზის შეცვლის დასრულება ჩავარდა: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8099,9 +8097,8 @@ msgid "Export Board Statistics Job Settings"
 msgstr "დაფის სტატისტიკის გატანის დავალების მორგება"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "PCB: სტატისტიკის გატანა"
+msgstr "PCB: დაფის სტატისტიკის გატანა"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:149 kicad/kicad_cli.cpp:167
@@ -8627,9 +8624,8 @@ msgid "Error loading library '%s'"
 msgstr "ბიბლიოთეკის '%s' ჩატვირთვის შეცდომა"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "პარამეტრების ჩასწორება"
+msgstr "მორგების ჩასწორება..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8652,9 +8648,8 @@ msgid "Unset Visible Flag"
 msgstr "ხილულობის ალმის მოხსნა"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "ჩასწორების მორგება"
+msgstr "პარამეტრების ჩასწორება..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -14657,9 +14652,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:28
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
-#, fuzzy
 msgid "Design variant:"
-msgstr "დადგენა"
+msgstr "დიზაინის ვარიანტი:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:37
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -16196,9 +16190,8 @@ msgid "Enter new variant name:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "ვარიანტის სახელის გადარქმევა"
+msgstr "დიზაინის ვარიანტის სახელის გადარქმევა"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16228,9 +16221,8 @@ msgid "Enter name for the copied variant:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "ვარიანტის კოპირება"
+msgstr "დიზაინის ვარიანტის კოპირება"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16328,9 +16320,8 @@ msgid "Alternate Assignment"
 msgstr "ალტერნატიული მინიჭება"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " ვარიანტი"
+msgstr " დიზაინის ვარიანტი"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -16673,9 +16664,8 @@ msgid "Make this text item a clickable hyperlink"
 msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:318
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "შემდეგი სიმბოლოს ერთეულის მოთავსება"
+msgstr "კონფიდენციალური სიმბოლოების რედაქტორში"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:36
 #: pcbnew/dialogs/dialog_import_netlist.cpp:69
@@ -17635,9 +17625,8 @@ msgid "Keep pins attached when dragging edges"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
-msgstr "სიმბოლოს ბიბლიოთეკის ცხრილი"
+msgstr "სიმბოლოს ბიბლიოთეკის ცხრილები"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:392
 msgid "folder with .kicad_sym files"
@@ -19499,14 +19488,12 @@ msgid "Find in Net Inspector"
 msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "აირჩიეთ წასაშლელი ვარიანტის სახელი"
+msgstr "აირჩიეთ წასაშლელი ვარიანტის სახელი:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "ვარიანტის წაშლა..."
+msgstr "დიზაინის ვარიანტის წაშლა"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -19592,9 +19579,9 @@ msgid "Importing %s"
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:927
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "SPICE ბიბლიოთეკის '%s' დამუშავების შეცდომა: %s"
+msgstr "Altium-ის სქემის დამუშავების შეცდომა: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:971
 #, c-format
@@ -19696,9 +19683,9 @@ msgid "File not found %s."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4980
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "SPICE ბიბლიოთეკის '%s' დამუშავების შეცდომა: %s"
+msgstr "Altium-ის ბიბლიოთეკის დამუშავების შეცდომა: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5003
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -23474,14 +23461,12 @@ msgid "Select the current variant to display and edit."
 msgstr "აირჩიეთ მიმდინარე ვარიანტი საჩვენებლად და ჩასასწორებლად."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "ახალი ვარიანტის დამატება..."
+msgstr "ახალი დიზაინის ვარიანტის დამატება..."
 
 #: eeschema/toolbars_sch_editor.cpp:372
-#, fuzzy
 msgid "New Design Variant"
-msgstr "ახალი ვარიანტი"
+msgstr "ახალი დიზაინის ვარიანტი"
 
 #: eeschema/toolbars_sch_editor.cpp:378
 msgid "Variant name:"
@@ -25095,18 +25080,16 @@ msgid "Show SPICE Netlist"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "ახალი ვარიანტის დამატება..."
+msgstr "დიზაინის ვარიანტის დამატება..."
 
 #: eeschema/tools/sch_actions.cpp:1764
 msgid "Add new design variant to the schematic."
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1769
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "ვარიანტის წაშლა..."
+msgstr "დიზაინის ვარიანტის წაშლა..."
 
 #: eeschema/tools/sch_actions.cpp:1770
 msgid "Remove an existing design variant from the schematic."
@@ -27693,9 +27676,8 @@ msgid "Input directory"
 msgstr "შეყვანის საქაღალდე"
 
 #: kicad/cli/command.cpp:160
-#, fuzzy
 msgid "Input file or directory"
-msgstr "შეყვანის საქაღალდე"
+msgstr "შეყვანის ფაილი ან საქაღალდე"
 
 #: kicad/cli/command.cpp:174
 msgid "Output directory"
@@ -28859,14 +28841,12 @@ msgid "Project Template Selector"
 msgstr ""
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "შაბლონების დათვალიერება"
+msgstr "უახლესი პროექტის ნიმუშები"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "შაბლონი"
+msgstr "ყველა შაბლონი"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -28877,9 +28857,8 @@ msgid "System Templates"
 msgstr "სისტემური შაბლონები"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "უკან"
+msgstr "გადასვლა უკან"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -29097,9 +29076,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:238
-#, fuzzy
 msgid "Pre-configured Libraries"
-msgstr "ბიბლიოთეკების მიგრაცია"
+msgstr "წინასწარ მორგებული ბიბლიოთეკები"
 
 #: kicad/dialogs/template_default_html.h:239
 msgid "Common symbols and footprints already linked and ready to use."
@@ -29117,9 +29095,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:252
-#, fuzzy
 msgid "Board Stackups"
-msgstr "დაფის სტრუქტურა"
+msgstr "დაფის მარქაფები"
 
 #: kicad/dialogs/template_default_html.h:253
 msgid "Layer configurations optimized for common manufacturing processes."
@@ -29142,9 +29119,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:401
-#, fuzzy
 msgid "To use this template"
-msgstr "შაბლონების დათვალიერება"
+msgstr "ამ შაბლონის გამოსაყენებლად"
 
 #: kicad/dialogs/template_default_html.h:405
 msgid "Create the project"
@@ -29163,9 +29139,8 @@ msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:419
-#, fuzzy
 msgid "Review settings"
-msgstr "მინიატურის მორგება"
+msgstr "პარამეტრების მიმოხილვა"
 
 #: kicad/dialogs/template_default_html.h:420
 msgid "Verify libraries, design rules, and board stackup match your needs."
@@ -29176,9 +29151,8 @@ msgid "Add a description by creating"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:428
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "მომხმარებლის შაბლონების საქაღალდის აღმოჩენა შეუძლებელია."
+msgstr "ამ შაბლონების საქაღალდეში."
 
 #: kicad/dialogs/template_default_html.h:536
 msgid "No Templates Found"
@@ -29189,9 +29163,8 @@ msgid "The selected directory does not contain any project templates."
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:541
-#, fuzzy
 msgid "Suggestions"
-msgstr "კითხვა"
+msgstr "რჩევები"
 
 #: kicad/dialogs/template_default_html.h:543
 msgid "Browse to a different directory using the folder icon"
@@ -29202,9 +29175,8 @@ msgid "Use the refresh icon to reload the current directory"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:545
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "სისტემური შაბლონები"
+msgstr "გადართვა სისტემური შაბლონების ჩანართზე"
 
 #: kicad/dialogs/template_default_html.h:551
 msgid "Each template needs a 'meta' folder containing configuration files."
@@ -29375,9 +29347,8 @@ msgid ""
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:939
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "ცვლილებების გაუქმება"
+msgstr "შეუნახავი ცვლილებების აღდგენა"
 
 #: kicad/kicad_manager_frame.cpp:943
 msgid ""
@@ -29388,9 +29359,8 @@ msgid ""
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:947
-#, fuzzy
 msgid "Discard"
-msgstr "ქმედების მოცილება"
+msgstr "მოცილება"
 
 #: kicad/kicad_manager_frame.cpp:1128
 msgid "Edit File in Text Editor"
@@ -40556,9 +40526,8 @@ msgid "Field value:"
 msgstr "ველის მნიშვნელობა:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "ფურცლის სახელი"
+msgstr "ფურცლის სახელი:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -40901,9 +40870,8 @@ msgid "Layer name %s already in use."
 msgstr ""
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "მომხმარებლის ფენები"
+msgstr "მომხმარებლის ფენები:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
