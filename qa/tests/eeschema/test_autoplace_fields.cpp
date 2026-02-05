@@ -149,4 +149,110 @@ BOOST_AUTO_TEST_CASE( FieldDrawRotationForRotatedSymbol )
 }
 
 
+/**
+ * Regression test for issue #22927.
+ *
+ * The autoplacer must set field angles so that GetDrawRotation() returns HORIZONTAL
+ * for all symbol orientations. For 90/270-degree rotated symbols, the stored angle
+ * should be VERTICAL (counteracting the symbol's transform).
+ */
+BOOST_AUTO_TEST_CASE( RotatedSymbolFieldAngleForHorizontalDisplay )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "issue16538" ) );
+    fn.SetName( wxS( "issue16538" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    // C1 is a 90-degree rotated capacitor (y1 != 0)
+    SCH_SYMBOL* rotatedSymbol = GetSymbolByRef( wxS( "C1" ) );
+    BOOST_REQUIRE( rotatedSymbol );
+    BOOST_REQUIRE( rotatedSymbol->GetTransform().y1 != 0 );
+
+    SCH_FIELD* refField = rotatedSymbol->GetField( FIELD_T::REFERENCE );
+    BOOST_REQUIRE( refField );
+
+    // Simulate what the autoplacer should do for rotated symbols
+    refField->SetTextAngle( ANGLE_VERTICAL );
+
+    EDA_ANGLE drawRotation = refField->GetDrawRotation();
+    BOOST_CHECK_MESSAGE( drawRotation.IsHorizontal(),
+                         wxString::Format( wxS( "Rotated symbol with VERTICAL field angle "
+                                                "should display horizontally. Got %f degrees" ),
+                                           drawRotation.AsDegrees() ) );
+
+    // R1 is a non-rotated resistor (y1 == 0)
+    SCH_SYMBOL* normalSymbol = GetSymbolByRef( wxS( "R1" ) );
+    BOOST_REQUIRE( normalSymbol );
+    BOOST_REQUIRE( normalSymbol->GetTransform().y1 == 0 );
+
+    refField = normalSymbol->GetField( FIELD_T::REFERENCE );
+    BOOST_REQUIRE( refField );
+
+    // For non-rotated symbols, HORIZONTAL field angle should stay horizontal
+    refField->SetTextAngle( ANGLE_HORIZONTAL );
+
+    drawRotation = refField->GetDrawRotation();
+    BOOST_CHECK_MESSAGE( drawRotation.IsHorizontal(),
+                         wxString::Format( wxS( "Non-rotated symbol with HORIZONTAL field angle "
+                                                "should display horizontally. Got %f degrees" ),
+                                           drawRotation.AsDegrees() ) );
+}
+
+
+/**
+ * Verify that using HORIZONTAL field angle for bounding box computation on a rotated
+ * symbol produces correct dimensions (not swapped).
+ * This ensures the fix for #16538 is preserved while fixing #22927.
+ */
+BOOST_AUTO_TEST_CASE( RotatedSymbolBBoxWithHorizontalAngle )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "issue16538" ) );
+    fn.SetName( wxS( "issue16538" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    // C1 is a 90-degree rotated capacitor
+    SCH_SYMBOL* symbol = GetSymbolByRef( wxS( "C1" ) );
+    BOOST_REQUIRE( symbol );
+
+    SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
+    BOOST_REQUIRE( refField );
+
+    // With HORIZONTAL angle, the bounding box for a rotated symbol
+    // should be tall and narrow (symbol transform makes text vertical)
+    refField->SetTextAngle( ANGLE_HORIZONTAL );
+    BOX2I hBox = refField->GetBoundingBox();
+
+    // With VERTICAL angle, the bounding box gets double-rotated (180°)
+    // which produces incorrect (wider than tall) dimensions
+    refField->SetTextAngle( ANGLE_VERTICAL );
+    BOX2I vBox = refField->GetBoundingBox();
+
+    // The HORIZONTAL version should have the correct vertical orientation
+    BOOST_CHECK_MESSAGE( hBox.GetHeight() > hBox.GetWidth(),
+                         wxString::Format( wxS( "HORIZONTAL angle bbox should be taller than "
+                                                "wide. Got width=%lld, height=%lld" ),
+                                           static_cast<long long>( hBox.GetWidth() ),
+                                           static_cast<long long>( hBox.GetHeight() ) ) );
+
+    // The VERTICAL version has incorrect dimensions (wider than tall)
+    // due to the 180-degree effective rotation
+    BOOST_CHECK_MESSAGE( vBox.GetWidth() > vBox.GetHeight(),
+                         wxString::Format( wxS( "VERTICAL angle bbox should be wider than "
+                                                "tall (known incorrect). Got width=%lld, "
+                                                "height=%lld" ),
+                                           static_cast<long long>( vBox.GetWidth() ),
+                                           static_cast<long long>( vBox.GetHeight() ) ) );
+
+    // Restore correct angle
+    refField->SetTextAngle( ANGLE_VERTICAL );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

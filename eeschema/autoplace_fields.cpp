@@ -149,6 +149,10 @@ public:
             if( !field->IsVisible() || !field->CanAutoplace() )
                 continue;
 
+            // Use HORIZONTAL for justification and position computation since
+            // GetBoundingBox() combines the field angle with the symbol transform.
+            field->SetTextAngle( ANGLE_HORIZONTAL );
+
             if( m_allow_rejustify )
             {
                 if( sideandpins.pins > 0 )
@@ -176,6 +180,14 @@ public:
                     pos.y = round_n( pos.y, schIUScale.MilsToIU( 50 ), field_side.y >= 0 );
             }
 
+            // Set the final field angle so text displays horizontally on screen.
+            // For 90/270 rotated symbols, the symbol transform flips H↔V, so
+            // we store VERTICAL to counteract the transform.
+            if( m_symbol->GetTransform().y1 )
+                field->SetTextAngle( ANGLE_VERTICAL );
+            else
+                field->SetTextAngle( ANGLE_HORIZONTAL );
+
             field->SetPosition( pos );
         }
     }
@@ -197,14 +209,13 @@ protected:
                 continue;
             }
 
-            // Set field angle to HORIZONTAL. GetBoundingBox() applies both the field's text
-            // angle and the symbol transform. For 90/270 degree rotated symbols, this results
-            // in vertical text display. Previously, setting VERTICAL for rotated symbols
-            // caused 180-degree effective rotation (field angle + symbol transform), which
-            // resulted in incorrect bounding box dimensions and field overlap issues.
+            // GetBoundingBox() applies both the field's text angle and the symbol
+            // transform.  Use HORIZONTAL here so the combined transform produces correct
+            // bounding box dimensions, then restore the original angle.
+            EDA_ANGLE savedAngle = field->GetTextAngle();
             field->SetTextAngle( ANGLE_HORIZONTAL );
-
             BOX2I bbox = field->GetBoundingBox();
+            field->SetTextAngle( savedAngle );
             int   field_width = bbox.GetWidth();
             int   field_height = bbox.GetHeight();
 
