@@ -690,6 +690,8 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
             if( zone->GetFilledPolysList( layer )->IsEmpty() )
                 continue;
 
+            bool notInConnectivity = true;
+
             for( const std::shared_ptr<CN_CLUSTER>& cluster : m_connClusters )
             {
                 for( CN_ITEM* item : *cluster )
@@ -697,6 +699,7 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
                     if( item->Parent() == zone && item->GetBoardLayer() == layer )
                     {
                         CN_ZONE_LAYER* z = static_cast<CN_ZONE_LAYER*>( item );
+                        notInConnectivity = false;
 
                         if( cluster->IsOrphaned() )
                             layerIslands.m_IsolatedOutlines.push_back( z->SubpolyIndex() );
@@ -705,6 +708,9 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
                     }
                 }
             }
+
+            if( notInConnectivity )
+                layerIslands.m_IsolatedOutlines.push_back( 0 );
         }
     }
 }
