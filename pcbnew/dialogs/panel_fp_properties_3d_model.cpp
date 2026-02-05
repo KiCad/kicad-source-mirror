@@ -144,6 +144,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_button3DShapeBrowse->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_button3DShapeRemove->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
+    m_modelsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     Bind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
     m_parentDialog->Bind( wxEVT_ACTIVATE, &PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent, this );
 }
@@ -154,6 +155,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
     // Delete the GRID_TRICKS.
     m_modelsGrid->PopEventHandler( true );
 
+    m_modelsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     // Unbind OnShowEvent to prevent unnecessary event handling.
     Unbind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
 
@@ -245,31 +247,47 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelSelected( wxGridEvent& aEvent )
 }
 
 
+void PANEL_FP_PROPERTIES_3D_MODEL::cleanupFilename( wxString* aFilename )
+{
+    if( !aFilename->empty() )
+    {
+        bool               hasAlias = false;
+        FILENAME_RESOLVER* res = PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
+
+        aFilename->Replace( wxT( "\n" ), wxT( "" ) );
+        aFilename->Replace( wxT( "\r" ), wxT( "" ) );
+        aFilename->Replace( wxT( "\t" ), wxT( "" ) );
+
+        res->ValidateFileName( *aFilename, hasAlias );
+
+        // If the user has specified an alias in the name then prepend ':'
+        if( hasAlias )
+            aFilename->insert( 0, wxT( ":" ) );
+
+#ifdef __WINDOWS__
+        // In KiCad files, filenames and paths are stored using Unix notation
+        aFilename->Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+    }
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging( wxGridEvent& aEvent )
+{
+    if( aEvent.GetCol() == COL_FILENAME )
+        updateValidateStatus( aEvent.GetRow() );
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
 {
     if( aEvent.GetCol() == COL_FILENAME )
     {
-        bool               hasAlias = false;
-        FILENAME_RESOLVER* res = PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
-        wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_FILENAME );
+        wxString filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_FILENAME );
 
-        // Perform cleanup and validation on the filename if it isn't empty
         if( !filename.empty() )
         {
-            filename.Replace( wxT( "\n" ), wxT( "" ) );
-            filename.Replace( wxT( "\r" ), wxT( "" ) );
-            filename.Replace( wxT( "\t" ), wxT( "" ) );
-
-            res->ValidateFileName( filename, hasAlias );
-
-            // If the user has specified an alias in the name then prepend ':'
-            if( hasAlias )
-                filename.insert( 0, wxT( ":" ) );
-
-#ifdef __WINDOWS__
-            // In KiCad files, filenames and paths are stored using Unix notation
-            filename.Replace( wxT( "\\" ), wxT( "/" ) );
-#endif
+            cleanupFilename( &filename );
 
             // Update the grid with the modified filename
             m_modelsGrid->SetCellValue( aEvent.GetRow(), COL_FILENAME, filename );
@@ -508,8 +526,17 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateValidateStatus( int aRow )
 {
     int icon = 0;
     wxString errStr;
+    wxString filename = m_modelsGrid->GetCellValue( aRow, COL_FILENAME );
 
-    switch( validateModelExists( m_modelsGrid->GetCellValue( aRow, COL_FILENAME) ) )
+    if( wxGridCellEditor* cellEditor = m_modelsGrid->GetCellEditor( aRow, COL_FILENAME ) )
+    {
+        if( cellEditor->IsCreated() && cellEditor->GetWindow()->IsShown() )
+            filename = cellEditor->GetValue();
+
+        cellEditor->DecRef();
+    }
+
+    switch( validateModelExists( filename ) )
     {
         case MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR:
             icon   = 0;

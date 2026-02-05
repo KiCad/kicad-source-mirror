@@ -23,12 +23,15 @@
 #include <confirm.h>
 #include <lib_table_grid_data_model.h>
 #include <lib_table_notebook_panel.h>
+#include <libraries/library_manager.h>
 
 
 LIB_TABLE_NOTEBOOK_PANEL::~LIB_TABLE_NOTEBOOK_PANEL()
 {
     // Delete the GRID_TRICKS.
     GetGrid()->PopEventHandler( true );
+
+    GetGrid()->Unbind( wxEVT_GRID_CELL_CHANGING, &LIB_TABLE_NOTEBOOK_PANEL::onGridCellChanging, this );
 }
 
 
@@ -77,6 +80,8 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
    	panel->Layout();
    	sizer->Fit( panel );
 
+    grid->Bind( wxEVT_GRID_CELL_CHANGING, &LIB_TABLE_NOTEBOOK_PANEL::onGridCellChanging, panel );
+
    	aNotebook->AddPage( panel, aTitle, false );
 }
 
@@ -87,6 +92,37 @@ bool LIB_TABLE_NOTEBOOK_PANEL::TableModified()
     std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( file, LIBRARY_TABLE_SCOPE::GLOBAL );
 
     return GetModel()->Table() != *sourceTable;
+}
+
+
+void LIB_TABLE_NOTEBOOK_PANEL::onGridCellChanging( wxGridEvent& aEvent )
+{
+    int      row = aEvent.GetRow();
+    int      col = aEvent.GetCol();
+
+    if( col == COL_URI || col == COL_TYPE || col == COL_OPTIONS )
+    {
+        WX_GRID* grid = GetGrid();
+        wxString editValue = grid->GetCellValue( row, col );
+
+        if( wxGridCellEditor* cellEditor = grid->GetCellEditor( row, col ) )
+        {
+            if( cellEditor->IsCreated() && cellEditor->GetWindow()->IsShown() )
+                editValue = cellEditor->GetValue();
+
+            cellEditor->DecRef();
+        }
+
+        grid->GetTable()->SetValue( row, col, editValue );
+
+        if( GetModel()->Adapter() )
+        {
+            LIBRARY_TABLE_ROW& tableRow = GetModel()->At( row );
+            GetModel()->Adapter()->CheckTableRow( tableRow );
+        }
+
+        grid->RefreshBlock( row, COL_STATUS, row, COL_STATUS );
+    }
 }
 
 

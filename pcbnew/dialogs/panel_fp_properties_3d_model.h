@@ -62,6 +62,7 @@ public:
 private:
     // virtual event functions
     void On3DModelSelected( wxGridEvent&  ) override;
+    void on3DModelCellChanging( wxGridEvent& aEvent );
     void On3DModelCellChanged( wxGridEvent& aEvent ) override;
     void OnRemove3DModel( wxCommandEvent& event ) override;
     void OnAdd3DModel( wxCommandEvent& event ) override;
@@ -71,6 +72,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void updateValidateStatus( int aRow );
+    void cleanupFilename( wxString* aFilename );
 
     MODEL_VALIDATE_ERRORS validateModelExists( const wxString& aFilename );
 

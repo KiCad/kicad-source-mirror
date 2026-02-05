@@ -64,4 +64,7 @@ public:
     bool SaveTable();
 
     static void AddTable( wxAuiNotebook* aNotebook, const wxString& aTitle, bool aClosable );
+
+private:
+    void onGridCellChanging( wxGridEvent& aEvent );
 };
