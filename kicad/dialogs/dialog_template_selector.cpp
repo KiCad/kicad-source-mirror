@@ -224,7 +224,7 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 
     for( const int genSize : c_bitmapSizes )
     {
-        double scale = std::min( (double) genSize / defSize.GetWidth(), 
+        double scale = std::min( (double) genSize / defSize.GetWidth(),
                                  (double) genSize / defSize.GetHeight() );
 
         wxSize scaledSize( wxRound( defSize.x * scale ),
@@ -1130,8 +1130,10 @@ void DIALOG_TEMPLATE_SELECTOR::OnWebViewLoaded( wxWebViewEvent& event )
 })();
         )" ), GetCommonStyles() );
 
+    #if !defined( __MINGW32__ )     // RunScriptAsync() is not supported on MINGW build
         if( m_webviewPanel->GetBackend() != wxWebViewBackendIE )
             m_webviewPanel->RunScriptAsync( script );
+    #endif
     }
 }
 
