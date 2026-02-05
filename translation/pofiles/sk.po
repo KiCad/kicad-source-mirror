@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -2327,9 +2327,9 @@ msgstr "Priečinok návrhových blokov '%s' sa nepodarilo odstrániť."
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Súbor '%s' sa nenašiel."
+msgstr "Vnorená tabuľka '%s' nebola nájdená."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4419,9 +4419,8 @@ msgid "Reset Unique Id"
 msgstr "Obnoviť jedinečné ID"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "Globálne knižnice"
+msgstr "Knižničné tabuľky návrhových blokov"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -4429,9 +4428,9 @@ msgstr "Globálne knižnice"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "Prejsť na stránku %s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -4812,13 +4811,11 @@ msgstr "Hrúbka mriežky:"
 
 #: common/dialogs/panel_gal_options_base.cpp:61
 #: common/widgets/gal_options_panel_base.cpp:61
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "Minimálny rozstup mriežky:"
 
 #: common/dialogs/panel_gal_options_base.cpp:72
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Prichytiť k mriežke:"
 
@@ -6372,9 +6369,8 @@ msgstr "Predvolená grafika"
 
 #: common/eda_base_frame.cpp:1450
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Základný názov"
+msgstr "Názvy používateľských vrstiev"
 
 #: common/eda_base_frame.cpp:1455 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7349,34 +7345,34 @@ msgid "Error removing directory '%s': %s"
 msgstr "Chyba pri odstraňovaní adresára '%s': %s"
 
 #: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Nepodarilo sa vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa otvoriť zdrojový adresár: %s"
 
 #: common/gestfich.cpp:449 common/gestfich.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Nepodarilo sa vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa vytvoriť cieľový adresár: %s"
 
 #: common/gestfich.cpp:477 common/gestfich.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Nie je možné pripojiť sa k '%s' "
+msgstr "Nepodarilo sa skopírovať súbor: %s do %s"
 
 #: common/gestfich.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Nie je možné pripojiť sa k '%s' "
+msgstr "Nepodarilo sa skopírovať adresár: %s do %s"
 
 #: common/gestfich.cpp:593
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "Adresár '%s' neexistuje"
+msgstr "Zdrojový adresár neexistuje: %s"
 
 #: common/gestfich.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Nebolo možné prečítať súbor "
+msgstr "Nepodarilo sa prečítať súbor: %s"
 
 #: common/git/kicad_git_common.cpp:896
 #, c-format
@@ -7409,9 +7405,8 @@ msgid "[updated] %s"
 msgstr "[aktualizované] %s"
 
 #: common/git/kicad_git_common.cpp:1038
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nemožno vytvoriť"
+msgstr "Nie je možné overiť"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
@@ -7463,7 +7458,7 @@ msgstr "Nepodarilo sa zlúčiť."
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Rebase conflict encountered."
-msgstr "Pri \"rebase\" nastal konflikt."
+msgstr ""
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Failed to pull changes from remote repository."
@@ -7516,14 +7511,14 @@ msgid "Could not clone repository '%s'"
 msgstr "Nepodarilo sa naklonovať repozitár '%s'"
 
 #: common/git/libgit_backend.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Nemožno otvoriť %s"
+msgstr "Nepodarilo sa získať index repozitára: %s"
 
 #: common/git/libgit_backend.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa pridať súbor do indexu: %s"
 
 #: common/git/libgit_backend.cpp:182
 #, c-format
@@ -7531,19 +7526,19 @@ msgid "Failed to write index: %s"
 msgstr "Nepodarilo sa zapísať index: %s"
 
 #: common/git/libgit_backend.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa zapísať: %s"
 
 #: common/git/libgit_backend.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Nepodarilo sa vymazať '%s'"
+msgstr "Nepodarilo sa vyhľadať: %s"
 
 #: common/git/libgit_backend.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Nie je možné vytvoriť adresár '%s'"
+msgstr "Nepodarilo sa získať referenciu na HEAD: %s"
 
 #: common/git/libgit_backend.cpp:223
 #, c-format
@@ -7551,9 +7546,9 @@ msgid "Failed to get commit: %s"
 msgstr "Nepodarilo sa získať commit: %s"
 
 #: common/git/libgit_backend.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Nepodarilo sa vytvoriť dočasný súbor '%s'"
+msgstr "Nepodarilo sa vytvoriť podpis autora: %s"
 
 #: common/git/libgit_backend.cpp:257 kicad/project_tree_pane.cpp:2305
 #, c-format
@@ -7565,57 +7560,56 @@ msgid "Could not lookup remote"
 msgstr "Nepodarilo sa načítať vzdialené"
 
 #: common/git/libgit_backend.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s'"
+msgstr "Nepodarilo sa pripojiť ku vzdialenému: %s"
 
 #: common/git/libgit_backend.cpp:317 common/git/libgit_backend.cpp:878
 msgid "Could not get repository head"
 msgstr "Nepodarilo sa získať 'head' repozitára"
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nepodarilo sa uložiť zmeny na vzdialené"
+msgstr "Nepodarilo sa odoslať na vzdialený: %s"
 
 #: common/git/libgit_backend.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr "Nepodarilo sa inicializovať Git repozitár: %s"
 
 #: common/git/libgit_backend.cpp:575
 msgid "No repository available to set up remote"
 msgstr ""
 
 #: common/git/libgit_backend.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create remote: %s"
-msgstr "Nepodarilo sa vytvoriť commit: %s"
+msgstr "Nepodarilo sa vytvoriť vzdialený: %s"
 
 #: common/git/libgit_backend.cpp:655
-#, fuzzy
 msgid "No repository available"
-msgstr "Nespojené"
+msgstr "Nie je k dispozícii žiadny repozitár"
 
 #: common/git/libgit_backend.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr "Nepodarilo sa vyhľadať vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť hlavičku vetvy pre '%s': %s"
 
 #: common/git/libgit_backend.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr "Nepodarilo sa prepnúť na vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:690
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "potrebujete číslo pre '%s'"
+msgstr "Nepodarilo sa aktualizovať referenciu na HEAD pre vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:738
 #, c-format
@@ -7623,14 +7617,14 @@ msgid "Could not lookup remote '%s'"
 msgstr "Nepodarilo sa vyhľadať vzdialené '%s'"
 
 #: common/git/libgit_backend.cpp:759
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s'"
+msgstr "Nepodarilo sa pripojiť ku vzdialenému '%s': %s"
 
 #: common/git/libgit_backend.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Nepodarilo sa získať dáta zo vzdialeného %s"
+msgstr "Nepodarilo sa získať dáta zo vzdialeného úložiska '%s': %s"
 
 #: common/git/libgit_backend.cpp:798
 msgid "Could not read 'FETCH_HEAD'"
@@ -7649,9 +7643,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Neplatný HEAD.  Nebolo možné zlúčiť."
 
 #: common/git/libgit_backend.cpp:849
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Nepodarilo sa získať index repozitára"
+msgstr "Nepodarilo sa získať prístup ku konfigurácii úložiska"
 
 #: common/git/libgit_backend.cpp:892
 #, c-format
@@ -7659,39 +7652,34 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "Nepodarilo sa získať referenčné OID pre referenciu '%s'"
 
 #: common/git/libgit_backend.cpp:901
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Nepodarilo sa načítať commit"
+msgstr "Nepodarilo sa vyhľadať cieľový commit"
 
 #: common/git/libgit_backend.cpp:912
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Nepodarilo sa zlúčiť commit-y"
+msgstr "Nepodarilo sa získať strom z cieľového commitu"
 
 #: common/git/libgit_backend.cpp:961
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "potrebujete číslo pre '%s'"
+msgstr "Nepodarilo sa aktualizovať referenciu '%s' tak, aby ukazovala na '%s'"
 
 #: common/git/libgit_backend.cpp:970
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Nepodarilo sa naklonovať repozitár."
+msgstr "Po rýchlom pretáčaní vpred sa nepodarilo vyčistiť stav úložiska."
 
 #: common/git/libgit_backend.cpp:978
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr ""
 
 #: common/git/libgit_backend.cpp:987
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Nepodarilo sa push-núť zmeny do vzdialeného repozitára."
+msgstr ""
 
 #: common/git/libgit_backend.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Nepodarilo sa načítať commit '{}'"
+msgstr "Nepodarilo sa vyhľadať commit '%s'"
 
 #: common/git/libgit_backend.cpp:1067
 msgid ""
@@ -7700,9 +7688,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1075
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Súbory úloh"
+msgstr "Nepodarilo sa zlúčiť: %s"
 
 #: common/git/libgit_backend.cpp:1090
 msgid ""
@@ -7711,19 +7699,19 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1103
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Eeschema sa nepodarilo načítať:"
+msgstr ""
 
 #: common/git/libgit_backend.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Prebieha kontrola sieťových pripojení..."
+msgstr ""
 
 #: common/git/libgit_backend.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Vymazanie dokončené"
+msgstr ""
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -7801,9 +7789,9 @@ msgid "Select all cells"
 msgstr "Vybrať všetky bunky"
 
 #: common/history_lock.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Nie je možné vytvoriť výstupný adresár '%s'."
+msgstr "Nepodarilo sa vytvoriť adresár histórie: %s"
 
 #: common/history_lock.cpp:156
 #, c-format
@@ -7811,19 +7799,19 @@ msgid "History repository is locked by %s@%s"
 msgstr ""
 
 #: common/history_lock.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "Adresár '%s' neexistuje"
+msgstr "Adresár histórie neexistuje: %s"
 
 #: common/history_lock.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Nemožno otvoriť %s"
+msgstr "Nepodarilo sa otvoriť Git repozitár: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Nemožno otvoriť %s"
+msgstr "Nepodarilo sa nastaviť pracovný adresár Git repozitára na %s: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -7835,19 +7823,16 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr ""
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Aktualizovať hodnoty"
+msgstr "Prijať automatické dopĺňanie"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Aktualizovať hodnoty"
+msgstr "Zrušiť automatické dopĺňanie"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Prepnúť zámok"
+msgstr "Prepnúť začiarkavacie políčko"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7918,9 +7903,9 @@ msgstr "API odpoveď:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API odpoveď:  %s"
+msgstr "Odpoveď API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:391
 #, c-format
@@ -7944,12 +7929,11 @@ msgstr "%s nie je podporované."
 #: common/import_gfx/dxf_import_plugin.h:460
 #: common/import_gfx/dxf_import_plugin.h:465
 msgid "DXF construction lines not currently supported."
-msgstr "Konštrukčné čiary v DXF nie sú zatiaľ podporované."
+msgstr "Konštrukčné čiary DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:470
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Oblúkovo zarovnaný text DXF momentálne nie je podporovaný."
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
@@ -7960,32 +7944,27 @@ msgstr "Momentálne nie je otvorená žiadna schéma."
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
 msgid "DXF dimensions not currently supported."
-msgstr "Kóty z DXF zatiaľ nie sú podporované."
+msgstr "Kóty DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:516
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Šrafovanie DXF momentálne nie je podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:524
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Trasy DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:529
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "3D plochy DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:534
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Vyplnené plochy (SOLID) DXF momentálne nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:539
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Obrázky DXF momentálne nie sú podporované."
 
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
@@ -8025,7 +8004,6 @@ msgstr "Nie je možné otvoriť súbor '%s'"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:120
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:62
-#, fuzzy
 msgid "File import canceled by user."
 msgstr "Import súboru bol zrušený používateľom."
 
@@ -8073,9 +8051,9 @@ msgid "Invalid size %lld: too large"
 msgstr "Neplatná veľkosť %lld: príliš veľká"
 
 #: common/io/eagle/eagle_parser.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "Neplatný oblúk s polomerom %f a uhlom %f"
+msgstr "Neplatný oblúk s polomerom %0.2f a uhlom %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -8131,29 +8109,25 @@ msgid "Export 3D Model Job Settings"
 msgstr "Nastavenia úlohy exportu 3D modelu"
 
 #: common/jobs/job_export_pcb_3d.cpp:182
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Exportovať púzdro"
+msgstr "DPS: Export 3D modelu"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
-#, fuzzy
 msgid "Export drill data"
-msgstr "Predná spájkovacia pasta"
+msgstr "Export vŕtacích dát"
 
 #: common/jobs/job_export_pcb_drill.cpp:143
 msgid "Export Drill Data Job Settings"
 msgstr "Nastavenia úlohy exportu dát vŕtania"
 
 #: common/jobs/job_export_pcb_drill.cpp:146
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "Predná spájkovacia pasta"
+msgstr "DPS: Export vŕtacích dát"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:130 kicad/kicad_cli.cpp:163
-#, fuzzy
 msgid "Export DXF"
-msgstr "Exportovať IDFv3"
+msgstr "Exportovať DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:136
@@ -8161,38 +8135,33 @@ msgid "Export DXF Job Settings"
 msgstr "Nastavenia úlohy exportu DXF"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export DXF"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "Exportujte súbor SVG"
+msgstr "Export GenCAD súboru"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
 msgstr "Nastavenia úlohy exportu GenCAD"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export GenCAD"
 
 #: common/jobs/job_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "Predná hodvábna obrazovka"
+msgstr "Export jednoho Gerber súboru"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export Single Gerber Job Settings"
 msgstr "Nastavenia úlohy exportu Gerber súboru"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "Exportné jednotky:"
+msgstr "Export Gerber súborov"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers Job Settings"
@@ -8200,18 +8169,16 @@ msgstr "Nastavenia úlohy exportu Gerber súborov"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr ""
+msgstr "DPS: Export Gerber súborov"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:187 kicad/kicad_cli.cpp:164
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Export STEP"
+msgstr "Export HPGL"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export HPGL"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:88
@@ -8223,45 +8190,39 @@ msgid "Export IPC-2581 Job Settings"
 msgstr "Nastavenia úlohy exportu IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:91
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Export STEP"
+msgstr "DPS: Export IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:35
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Export STEP"
+msgstr "Export IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:41
 msgid "Export IPC-D-356 Job Settings"
 msgstr "Nastavenia úlohy exportu IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:55
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Export STEP"
+msgstr "DPS: Export IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "Exportovať IDFv3"
+msgstr "Export ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
 msgstr "Nastavenia úlohy exportu ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:76
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:111 kicad/kicad_cli.cpp:141
 #: kicad/kicad_cli.cpp:165
-#, fuzzy
 msgid "Export PDF"
-msgstr "Exportovať IDFv3"
+msgstr "Export PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:69
 #: common/jobs/job_export_sch_plot.cpp:117
@@ -8269,14 +8230,12 @@ msgid "Export PDF Job Settings"
 msgstr "Nastavenia úlohy exportu PDF"
 
 #: common/jobs/job_export_pcb_pdf.cpp:73
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "Exportovať IDFv3"
+msgstr "DPS: Export PDF"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export position data"
-msgstr "Exportná stopa"
+msgstr "Export polohových dát"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
 msgid "Export Position Data Job Settings"
@@ -8284,42 +8243,36 @@ msgstr "Nastavenia úlohy exportu dát pozícií"
 
 #: common/jobs/job_export_pcb_pos.cpp:127
 msgid "PCB: Export Position Data"
-msgstr ""
+msgstr "DPS: Export polohových dát"
 
 #: common/jobs/job_export_pcb_ps.cpp:57 common/jobs/job_export_sch_plot.cpp:168
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Kresliť PostScript"
+msgstr "Export Poscscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:63 common/jobs/job_export_sch_plot.cpp:174
 msgid "Export Postscript Job Settings"
 msgstr "Nastavenia úlohy exportu Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Kresliť PostScript"
+msgstr "DPS: Export Postscript"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Zobrazuje štatistiku nástenky"
+msgstr "Export štatistiky dosky"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Nastavenie úlohy exportu štatistík dosky"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "Štatistika predstavenstva"
+msgstr "DPS: Export štatistík dosky"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:149 kicad/kicad_cli.cpp:167
-#, fuzzy
 msgid "Export SVG"
-msgstr "Exportujte súbor SVG"
+msgstr "Export SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:56
 #: common/jobs/job_export_sch_plot.cpp:155
@@ -8327,72 +8280,61 @@ msgid "Export SVG Job Settings"
 msgstr "Nastavenia úlohy exportu SVG"
 
 #: common/jobs/job_export_pcb_svg.cpp:60
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "Exportujte súbor SVG"
+msgstr "DPS: Export SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:93
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať zoznam materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:99
 msgid "Generate Bill of Materials Job Settings"
 msgstr "Nastavenia úlohy exportu zoznamu materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:103
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Generovať rozpis &materiálu"
+msgstr "Schéma: Generovať zoznam materiálu"
 
 #: common/jobs/job_export_sch_netlist.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Exportovať %s netlist"
 
 #: common/jobs/job_export_sch_netlist.cpp:87
 msgid "Export Netlist Job Settings"
 msgstr "Nastavenia úlohy exportu netlistu"
 
 #: common/jobs/job_export_sch_netlist.cpp:91
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Schéma: Export netlistu"
 
 #: common/jobs/job_export_sch_plot.cpp:191
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Editor schém"
+msgstr "Schéma: Export SVG"
 
 #: common/jobs/job_export_sch_plot.cpp:193
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "EESchema Kresliť HPGL"
+msgstr "Schéma: Export HPGL"
 
 #: common/jobs/job_export_sch_plot.cpp:195
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Schéma: Export Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:197
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Editor schém"
+msgstr "Schéma: Export DXF"
 
 #: common/jobs/job_export_sch_plot.cpp:199
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Editor schém"
+msgstr "Schéma: Export PDF"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Schematický text"
+msgstr "Export PythonBOM schémy"
 
 #: common/jobs/job_pcb_drc.cpp:42
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Aktualizujte PCB zo schémy"
+msgstr "Vykonať DRC"
 
 #: common/jobs/job_pcb_drc.cpp:48 pcbnew/dialogs/dialog_drc_job_config.cpp:24
 msgid "DRC Job Settings"
@@ -8400,12 +8342,12 @@ msgstr "Nastavenia úlohy DRC"
 
 #: common/jobs/job_pcb_drc.cpp:52
 msgid "PCB: Perform DRC"
-msgstr ""
+msgstr "DPS: Vykonať DRC"
 
 #: common/jobs/job_pcb_render.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Prečíslovať DPS"
+msgstr "Vykresliť %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 msgid "Render PCB Job Settings"
@@ -8413,45 +8355,40 @@ msgstr "Nastavenia úlohy vykreslenia DPS"
 
 #: common/jobs/job_pcb_render.cpp:142
 msgid "PCB: Render"
-msgstr ""
+msgstr "DPS: Vykresliť"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Aktualizujte PCB zo schémy"
+msgstr "Vykonať ERC"
 
 #: common/jobs/job_sch_erc.cpp:39
 msgid "Schematic ERC Job Settings"
 msgstr "Nastavenia úlohy ERC schémy"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Aktualizovať schému z DPS"
+msgstr "Schéma: Vykonať ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Špeciálne náradie ..."
+msgstr "Špeciálne: Kopírovať súbory"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
-msgstr ""
+msgstr "Špeciálne: Vykonať príkaz"
 
 #: common/jobs/jobs_output_archive.cpp:110 common/jobs/jobset.cpp:46
-#, fuzzy
 msgid "Archive"
-msgstr "&Archivovať"
+msgstr "Archivovať"
 
 #: common/jobs/jobs_output_folder.cpp:93 common/jobs/jobset.cpp:44
-#, fuzzy
 msgid "Folder"
-msgstr "Spájkovacia pasta:"
+msgstr "Priečinok"
 
 #: common/json_schema_validator.cpp:48
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Schematický súbor '%s' sa nenašiel."
+msgstr "Schematický súbor '%s' sa nenašiel"
 
 #: common/json_schema_validator.cpp:53
 #, c-format
@@ -33006,7 +32943,7 @@ msgstr "Problém počas vytvárania nového projektu zo šablóny."
 
 #: kicad/tools/kicad_manager_control.cpp:402
 msgid "Clone Project from Git Repository"
-msgstr "Vytvoriť projekt z Git repozitára"
+msgstr "Klonovať projekt z Git repozitára"
 
 #: kicad/tools/kicad_manager_control.cpp:426
 #, fuzzy
