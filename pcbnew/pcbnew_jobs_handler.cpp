@@ -781,6 +781,25 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     cfg.m_UseStackupColors = aRenderJob->m_useBoardStackupColors;
     boardAdapter.m_Cfg = &cfg;
 
+    // Apply the preset's layer visibility and colors to the render settings
+    if( !aRenderJob->m_appearancePreset.empty() )
+    {
+        wxString presetName = wxString::FromUTF8( aRenderJob->m_appearancePreset );
+
+        if( presetName == FOLLOW_PCB || presetName == FOLLOW_PLOT_SETTINGS )
+        {
+            boardAdapter.SetVisibleLayers( boardAdapter.GetVisibleLayers() );
+        }
+        else if( LAYER_PRESET_3D* preset = cfg.FindPreset( presetName ) )
+        {
+            boardAdapter.SetVisibleLayers( preset->layers );
+            boardAdapter.SetLayerColors( preset->colors );
+
+            if( preset->name.Lower() == _( "legacy colors" ) )
+                cfg.m_UseStackupColors = false;
+        }
+    }
+
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
         || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
              && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
