@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-02 18:26+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-05 20:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/master-"
 "source/et/>\n"
@@ -41265,9 +41265,8 @@ msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
-#, fuzzy
 msgid "9"
-msgstr "90"
+msgstr "9"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 msgid "Recreate Plugin Environment"
