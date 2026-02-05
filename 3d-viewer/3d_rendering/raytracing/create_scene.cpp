@@ -1574,6 +1574,9 @@ void RENDER_3D_RAYTRACE_BASE::backfillPostMachine()
 
 void RENDER_3D_RAYTRACE_BASE::insertHole( const PCB_VIA* aVia )
 {
+    if( !m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+        return;
+
     PCB_LAYER_ID top_layer, bottom_layer;
     int          radiusBUI = ( aVia->GetDrillValue() / 2 );
 
@@ -1651,6 +1654,9 @@ void RENDER_3D_RAYTRACE_BASE::insertHole( const PCB_VIA* aVia )
 
 void RENDER_3D_RAYTRACE_BASE::insertHole( const PAD* aPad )
 {
+    if( !m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
+        return;
+
     const OBJECT_2D* object2d_A = nullptr;
 
     SFVEC3F        objColor = m_boardAdapter.m_CopperColor;
