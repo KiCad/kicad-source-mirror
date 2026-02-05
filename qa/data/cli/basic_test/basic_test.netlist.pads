@@ -1,14 +1,14 @@
 *PADS-PCB*
 *PART*
-R1               Resistor_SMD:R_1206_3216Metric
+J1               TestPoint:TestPoint_Pad_3.0x3.0mm
+J2               TestPoint:TestPoint_Pad_3.0x3.0mm
+J4               TestPoint:TestPoint_Pad_3.0x3.0mm
 C1               Capacitor_SMD:C_1206_3216Metric
 R2               Resistor_SMD:R_1206_3216Metric
-J3               TestPoint:TestPoint_Pad_3.0x3.0mm
-J2               TestPoint:TestPoint_Pad_3.0x3.0mm
-J1               TestPoint:TestPoint_Pad_3.0x3.0mm
-J4               TestPoint:TestPoint_Pad_3.0x3.0mm
 R3               Resistor_SMD:R_1206_3216Metric
+J3               TestPoint:TestPoint_Pad_3.0x3.0mm
 U1               Package_TO_SOT_SMD:SOT-23-5
+R1               Resistor_SMD:R_1206_3216Metric
 
 *NET*
 *SIGNAL* /IN
