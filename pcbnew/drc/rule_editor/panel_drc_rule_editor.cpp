@@ -429,7 +429,6 @@ void PANEL_DRC_RULE_EDITOR::onScintillaCharAdded( wxStyledTextEvent& aEvent )
     std::stack<wxString> sexprs;
     wxString             partial;
     wxString             last;
-    wxString             constraintType;
     EXPR_CONTEXT_T       context = EXPR_CONTEXT_T::NONE;
     EXPR_CONTEXT_T       expr_context = EXPR_CONTEXT_T::NONE;
 

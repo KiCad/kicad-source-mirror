@@ -202,7 +202,6 @@ void DIALOG_PLOT_SCHEMATIC::onOutputDirectoryBrowseClicked( wxCommandEvent& even
 
     wxFileName fn( Prj().AbsolutePath( m_editFrame->Schematic().Root().GetFileName() ) );
     wxString defaultPath = fn.GetPathWithSep();
-    wxString msg;
     wxFileName relPathTest; // Used to test if we can make the path relative
 
     relPathTest.Assign( dirDialog.GetPath() );

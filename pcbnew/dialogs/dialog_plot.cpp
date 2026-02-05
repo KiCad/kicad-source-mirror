@@ -779,7 +779,6 @@ void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     wxFileName fn( Prj().AbsolutePath( m_editFrame->GetBoard()->GetFileName() ) );
     wxString   defaultPath = fn.GetPathWithSep();
-    wxString   msg;
     wxFileName relPathTest; // Used to test if we can make the path relative
 
     relPathTest.Assign( dirDialog.GetPath() );
