@@ -203,6 +203,8 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
     SCH_RENDER_SETTINGS renderSettings( *aFrame->GetRenderSettings() );
     renderSettings.LoadColors( aFrame->GetColorSettings() );
     renderSettings.SetDefaultFont( aFrame->eeconfig()->m_Appearance.default_font );
+    renderSettings.m_ShowHiddenPins = false;
+    renderSettings.m_ShowHiddenFields = false;
 
     std::unique_ptr<SVG_PLOTTER> plotter = std::make_unique<SVG_PLOTTER>();
     plotter->SetRenderSettings( &renderSettings );
