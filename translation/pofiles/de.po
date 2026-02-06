@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-05 20:38+0000\n"
+"PO-Revision-Date: 2026-02-06 13:07+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -18719,9 +18719,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Nicht-aufgelöste Textvariable in Zeichnungsblatt"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "Der Feldname \"%s\" enthält Leerzeichen am Anfang oder Ende."
+msgstr "Der Feldname beginnt oder endet mit Leerzeichen: \"%s\""
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18874,9 +18874,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Prüfe auf nicht-aufgelöste Variablen ..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "Prüfe Blattnamen..."
+msgstr "Prüfe Feldnamen..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -19047,9 +19046,8 @@ msgid "Pin name resembles stacked pin"
 msgstr "Pinname gleicht einem gestapelten Pin"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr "Der Feldname \"%s\" enthält Leerzeichen am Anfang oder Ende."
+msgstr "Der Feldname beginnt oder endet mit Leerzeichen"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -19781,12 +19779,12 @@ msgid "P&references"
 msgstr "&Einstellungen"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Linie von (%s,%s) nach (%s,%s)"
+msgstr "Verbindung von (%s,%s) nach (%s,%s)"
 
 #: eeschema/net_navigator.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
 msgstr "Bus von (%s,%s) nach (%s,%s)"
 
@@ -19805,22 +19803,22 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Schaltplanblatt \"%s\" Pin \"%s\""
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "Bezeichner \"%s\" bei %s, %s"
+msgstr "Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
 msgstr "Globaler Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
 msgstr "Hierarchischer Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
 msgstr "Knotenpunkt bei (%s, %s)"
 
@@ -36460,11 +36458,11 @@ msgstr ""
 "ist im Netz %s."
 
 #: pcbnew/connectivity/topo_match.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
 msgstr ""
-"Pad %s von %s ist im Netz %s, aber das in Frage kommende Gegenstück von %s "
-"ist im Netz %s."
+"Pad %s von %s hat im in Frage kommenden Kanditat %s eine widersprüchliche "
+"Netzzuordnung."
 
 #: pcbnew/connectivity/topo_match.cpp:350
 msgid "No compatible component found in the target area."
@@ -42901,9 +42899,8 @@ msgid "Protection features:"
 msgstr "Schutzmaßnahmen:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
-#, fuzzy
 msgid "Backdrill:"
-msgstr "Backdrill"
+msgstr "Backdrill:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
@@ -50119,14 +50116,14 @@ msgid "Changed group name from '%s' to '%s'."
 msgstr "Gruppe von \"%s\" in \"%s\" umbenannt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1810
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "Gruppenbibliotheksverknüpfung in \"%s\" ändern."
+msgstr "Gruppenbibliothek-Verknüpfung von \"%s\" in \"%s\" ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1816
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "Gruppenbibliotheksverknüpfung in \"%s\" geändert."
+msgstr "Gruppenbibliothek-Verknüpfung von \"%s\" in \"%s\" geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1856
 #, c-format
@@ -57266,13 +57263,12 @@ msgid "Distribute Horizontally by Centers"
 msgstr "Horizontal verteilen (nach Mittelpunkten)"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
 msgstr ""
 "Verteilt ausgewählte Elemente zwischen dem ganz linken und ganz rechten "
-"Element so, dass die Elementmittelpunkte gleichmäßig verteilt sind."
+"Element so, dass die Elementmittelpunkte gleichmäßig verteilt sind"
 
 #: pcbnew/tools/pcb_actions.cpp:2263
 msgid "Distribute Horizontally with Even Gaps"
