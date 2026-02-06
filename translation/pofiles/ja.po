@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-06 21:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -12084,7 +12084,7 @@ msgstr "すべての '%s' 違反をテストしない"
 
 #: eeschema/dialogs/dialog_erc.cpp:717 pcbnew/dialogs/dialog_drc.cpp:773
 msgid "Violations will not be checked or reported"
-msgstr "違反はチェック、レポートされません"
+msgstr "違反は確認もレポートもされません"
 
 #: eeschema/dialogs/dialog_erc.cpp:725
 msgid "Edit pin-to-pin conflict map..."
@@ -14708,7 +14708,7 @@ msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr "TRAN"
+msgstr "過渡解析"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
@@ -17309,7 +17309,7 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:1844
 msgid "Checking sheet names..."
-msgstr "シート名をチェック中..."
+msgstr "シート名を確認中..."
 
 #: eeschema/erc/erc.cpp:1852
 msgid "Checking bus conflicts..."
@@ -17317,68 +17317,68 @@ msgstr "バスの競合をチェック中..."
 
 #: eeschema/erc/erc.cpp:1859
 msgid "Checking conflicts..."
-msgstr "競合をチェック中..."
+msgstr "競合を確認中..."
 
 #: eeschema/erc/erc.cpp:1873
 msgid "Checking units..."
-msgstr "単位をチェック中..."
+msgstr "ユニットを確認中..."
 
 #: eeschema/erc/erc.cpp:1879
 #: pcbnew/drc/drc_test_provider_footprint_checks.cpp:70
 msgid "Checking footprints..."
-msgstr "フットプリントをチェック中..."
+msgstr "フットプリントを確認中..."
 
 #: eeschema/erc/erc.cpp:1893
 msgid "Checking pins..."
-msgstr "ピンをチェック中..."
+msgstr "ピンを確認中..."
 
 #: eeschema/erc/erc.cpp:1913
 msgid "Checking similar labels..."
-msgstr "同様のラベルをチェック中..."
+msgstr "類似のラベルを確認中..."
 
 #: eeschema/erc/erc.cpp:1921
 msgid "Checking local and global labels..."
-msgstr "ローカルラベルとグローバルラベルをチェック中..."
+msgstr "ローカルラベルとグローバルラベルを確認中..."
 
 #: eeschema/erc/erc.cpp:1929
 msgid "Checking for unresolved variables..."
-msgstr "未解決の変数をチェック中..."
+msgstr "未解決の変数を確認中..."
 
 #: eeschema/erc/erc.cpp:1937
 msgid "Checking SPICE models..."
-msgstr "SPICEモデルをチェック中..."
+msgstr "SPICEモデルを確認中..."
 
 #: eeschema/erc/erc.cpp:1945
 msgid "Checking no connect pins for connections..."
-msgstr "未接続ピンへの接続をチェック中..."
+msgstr "未接続ピンへの接続を確認中..."
 
 #: eeschema/erc/erc.cpp:1954
 msgid "Checking for library symbol issues..."
-msgstr "ライブラリ シンボルの問題をチェック中..."
+msgstr "ライブラリ シンボルの問題を確認中..."
 
 #: eeschema/erc/erc.cpp:1962
 msgid "Checking for footprint link issues..."
-msgstr "フットプリントの接続の問題をチェック中..."
+msgstr "フットプリントの接続の問題を確認中..."
 
 #: eeschema/erc/erc.cpp:1970
 msgid "Checking footprint assignments against footprint filters..."
-msgstr "フットプリントフィルターに対応するフットプリントをチェック中..."
+msgstr "フットプリントフィルターに対応するフットプリントを確認中..."
 
 #: eeschema/erc/erc.cpp:1978
 msgid "Checking for off grid pins and wires..."
-msgstr "グリッドから外れているピンと配線をチェック中..."
+msgstr "グリッドから外れているピンと配線を確認中..."
 
 #: eeschema/erc/erc.cpp:1986
 msgid "Checking for four way junctions..."
-msgstr "4方向のジャンクション(接続点)をチェック中..."
+msgstr "四つ角のジャンクション(接続点)を確認中..."
 
 #: eeschema/erc/erc.cpp:1994
 msgid "Checking for labels on more than one wire..."
-msgstr "1つ以上の配線にあるラベルをチェック中..."
+msgstr "配線上にある複数のラベルを確認中..."
 
 #: eeschema/erc/erc.cpp:2002
 msgid "Checking for undefined netclasses..."
-msgstr "未定義のネットクラスをチェック中..."
+msgstr "未定義のネットクラスを確認中..."
 
 #: eeschema/erc/erc_item.cpp:40
 msgid "Conflicts"
@@ -20713,7 +20713,7 @@ msgstr "不正な C_pkg 値."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:194
 msgid "Checking pin "
-msgstr "ピンをチェック中 "
+msgstr "ピンを確認中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:201
 msgid "Pin name cannot be empty."
@@ -20741,7 +20741,7 @@ msgstr "Cpinが不正です。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:260
 msgid "Checking component "
-msgstr "コンポーネントをチェック中 "
+msgstr "コンポーネントを確認中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:267
 msgid "Component: name cannot be empty."
@@ -20789,7 +20789,7 @@ msgstr "モデル名は空欄にできません"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Checking model "
-msgstr "モデルをチェック中 "
+msgstr "モデルを確認中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:498
 msgid "Undefined model type."
@@ -20853,7 +20853,7 @@ msgstr "不正な Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:635
 msgid "Checking Header..."
-msgstr "ヘッダーをチェック中..."
+msgstr "ヘッダーを確認中..."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:642
 msgid "Missing [IBIS Ver]"
@@ -20877,7 +20877,7 @@ msgstr "パッケージモデル名は空にできません。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:699
 msgid "Checking package model "
-msgstr "パッケージ モデルをチェック中 "
+msgstr "パッケージ モデルを確認中 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
 msgid "Manufacturer cannot be empty."
@@ -32727,7 +32727,7 @@ msgstr "変更を反映"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:266
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:196
 msgid "Checking zones..."
-msgstr "ゾーンをチェック中..."
+msgstr "ゾーンを確認中..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:276
 msgid "Rebuilding connectivity..."
@@ -41721,7 +41721,7 @@ msgstr "深刻度の名前がありません。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
 msgid "Checking pad & via annular rings..."
-msgstr "パッドとビアのアニュラーリングをチェック..."
+msgstr "パッドとビアのアニュラーリングを確認中..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:340
 #, c-format
@@ -41735,7 +41735,7 @@ msgstr "(%s 最大アニュラー幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:318
 msgid "Checking nets for minimum connection width..."
-msgstr "ネットの最小接続幅をチェックしています..."
+msgstr "ネットの最小接続幅を確認中..."
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:470
 #, c-format
@@ -41744,39 +41744,39 @@ msgstr "(%s 最小接続幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:71
 msgid "Checking pad, via and zone connections..."
-msgstr "パッド、ビア、ゾーンの接続をチェック..."
+msgstr "パッド、ビア、ゾーンの接続を確認中..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:139
 msgid "Checking net connections..."
-msgstr "ネットの接続をチェック..."
+msgstr "ネットの接続を確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:143
 msgid "Checking track & via clearances..."
-msgstr "配線とビアのクリアランスをチェック..."
+msgstr "配線とビアのクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:150
 msgid "Checking hole clearances..."
-msgstr "穴のクリアランスをチェック中..."
+msgstr "スルーホールのクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:158
 msgid "Checking pad clearances..."
-msgstr "パッドのクリアランスをチェック..."
+msgstr "パッドのクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:166
 msgid "Checking pads..."
-msgstr "パッドをチェック中..."
+msgstr "パッドを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:174
 msgid "Checking copper graphic clearances..."
-msgstr "導体の図形のクリアランスをチェック..."
+msgstr "導体の図形のクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
 msgid "Checking copper graphic hole clearances..."
-msgstr "導体のスルホールのクリアランスをチェック..."
+msgstr "導体スルホール図形のクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
-msgstr "導体ゾーンのクリアランスをチェック..."
+msgstr "導体ゾーンのクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:310
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:618
@@ -41820,7 +41820,7 @@ msgstr "(交差するゾーンには明確な優先順位が必要）"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr "フットプリントのコートヤードの定義をチェック..."
+msgstr "フットプリントのコートヤードの定義を確認中..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
@@ -41828,11 +41828,11 @@ msgstr "フットプリントのコートヤードを収集..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:150
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "オーバーラップしたコートヤードをチェック..."
+msgstr "重なり合うコートヤードのフットプリントを確認中..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:83
 msgid "Checking creepage..."
-msgstr "沿面距離をチェック中..."
+msgstr "沿面距離を確認中..."
 
 #: pcbnew/drc/drc_test_provider_creepage.cpp:193
 #, c-format
@@ -41856,27 +41856,27 @@ msgstr "(%s 最大ギャップ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:73
 msgid "Checking keepouts & disallow constraints..."
-msgstr "禁止と不許可の制約をチェック..."
+msgstr "禁止と不許可の制約を確認中..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:150
 msgid "Checking copper to board edge clearances..."
-msgstr "導体から基板端のクリアランスをチェック..."
+msgstr "導体から基板端のクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "シルク印刷から基板端クリアランスをチェック..."
+msgstr "シルク印刷から基板端クリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "パッドの穴をチェック..."
+msgstr "パッドの穴を確認中..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
-msgstr "ビアの穴をチェック..."
+msgstr "ビア穴を確認中..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking micro-via holes..."
-msgstr "マイクロビアの穴をチェック..."
+msgstr "マイクロ ビア穴を確認中..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:162
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
@@ -41892,7 +41892,7 @@ msgstr "(%s 最大のホール %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "穴間のクリアランスをチェックしています..."
+msgstr "スルーホール間のクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:323
 #, c-format
@@ -42227,7 +42227,7 @@ msgstr "フットプリント ライブラリ テーブルを読み込み中…"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:931
 msgid "Checking board footprints against library..."
-msgstr "ライブラリに対するフットプリントをチェック..."
+msgstr "基板上とライブラリ上のフットプリントを比較確認中..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:997
 #, c-format
@@ -42289,7 +42289,7 @@ msgstr "<制約なし>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:431
 msgid "Checking length constraints..."
-msgstr "配線長をチェック..."
+msgstr "配線の長さ制約を確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:121
 msgid "(Suspicious items found on Edge.Cuts layer)"
@@ -42306,19 +42306,19 @@ msgstr "(レイヤー %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:433
 msgid "Checking board outline..."
-msgstr "基板外形をチェック..."
+msgstr "基板外形を確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:441
 msgid "Checking disabled layers..."
-msgstr "無効化されたレイヤーをチェック..."
+msgstr "無効化されたレイヤーを確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:449
 msgid "Checking text variables..."
-msgstr "テキストの値をチェック..."
+msgstr "テキストの変数を確認中..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:459
 msgid "Checking assertions..."
-msgstr "アサーションをチェック..."
+msgstr "アサーションを確認中..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:110
 msgid "Gathering physical items..."
@@ -42326,7 +42326,7 @@ msgstr "物理的なアイテムを収集しています..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:192
 msgid "Checking physical clearances..."
-msgstr "物理的なクリアランスをチェック..."
+msgstr "物理的なクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:541
 #, c-format
@@ -42374,11 +42374,11 @@ msgstr "回路図のピン %s のパッドが見つかりません。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:320
 msgid "Checking PCB to schematic parity..."
-msgstr "基板と回路図の等価性をチェック..."
+msgstr "基板と回路図の等価性を確認中..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:91
 msgid "Checking silkscreen for overlapping items..."
-msgstr "シルクスクリーンのオーバーラップしたアイテムをチェック..."
+msgstr "シルクスクリーンのオーバーラップしたアイテムを確認中..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:84
 msgid "Running sliver detection on copper layers..."
@@ -42404,15 +42404,15 @@ msgstr "ハンダマスクを構築中..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:910
 msgid "Checking solder mask to silk clearance..."
-msgstr "ハンダマスクとシルク間のクリアランスをチェックしています..."
+msgstr "ハンダマスクとシルク間のクリアランスを確認中..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:915
 msgid "Checking solder mask web integrity..."
-msgstr "ハンダマスクのウェブの整合性をチェックしています..."
+msgstr "ハンダマスクのウェブの整合性を確認中..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:88
 msgid "Checking text dimensions..."
-msgstr "テキストの寸法をチェック..."
+msgstr "テキストの寸法を確認中..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:108
 #, c-format
@@ -42440,11 +42440,11 @@ msgstr "(%s 最大幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:78
 msgid "Checking text mirroring..."
-msgstr "テキストのミラーリングをチェック中..."
+msgstr "テキストの鏡面反転を確認中..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:78
 msgid "Checking track angles..."
-msgstr "配線の角度をチェック..."
+msgstr "配線の角度を確認中..."
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:180
 #, c-format
@@ -42458,11 +42458,11 @@ msgstr "(%s 最大の角度 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:75
 msgid "Checking track segment lengths..."
-msgstr "配線のセグメント長をチェック中..."
+msgstr "配線のセグメント長を確認中..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
-msgstr "フットプリントをチェック..."
+msgstr "配線幅を確認中..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:137
 #, c-format
@@ -42476,7 +42476,7 @@ msgstr "(%s 最大幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:74
 msgid "Checking via diameters..."
-msgstr "ビアの直径をチェック..."
+msgstr "ビアの直径を確認中..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:123
 #, c-format
@@ -42500,7 +42500,7 @@ msgstr "(レイヤー %s; %s 最小スポーク数: %d; 現状 %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:254
 msgid "Checking thermal reliefs..."
-msgstr "サーマルリリーフをチェック..."
+msgstr "サーマルリリーフを確認中..."
 
 #: pcbnew/edit_zone_helpers.cpp:83
 msgid "Edit Zone Properties"
@@ -50840,23 +50840,23 @@ msgstr "ゾーンの塗りつぶしを削除"
 
 #: pcbnew/tracks_cleaner.cpp:74
 msgid "Checking null tracks and vias..."
-msgstr "配線とビアが空かどうかをチェック..."
+msgstr "長さがゼロの場所(配線やビア)を確認中..."
 
 #: pcbnew/tracks_cleaner.cpp:76
 msgid "Removing null tracks and vias..."
-msgstr "空の配線とビアを削除..."
+msgstr "長さがゼロの場所(配線やビア)を削除..."
 
 #: pcbnew/tracks_cleaner.cpp:87
 msgid "Checking redundant tracks..."
-msgstr "余分な配線をチェック…"
+msgstr "冗長な配線を確認中…"
 
 #: pcbnew/tracks_cleaner.cpp:89
 msgid "Removing redundant tracks..."
-msgstr "余分な配線を削除…"
+msgstr "冗長な配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:103
 msgid "Checking shorting tracks..."
-msgstr "短絡している配線をチェック..."
+msgstr "短絡している配線を確認中..."
 
 #: pcbnew/tracks_cleaner.cpp:105
 msgid "Removing shorting tracks..."
@@ -50864,7 +50864,7 @@ msgstr "短絡している配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:118
 msgid "Checking tracks in pads..."
-msgstr "パッド内の配線をチェック..."
+msgstr "パッド内の配線を確認中..."
 
 #: pcbnew/tracks_cleaner.cpp:120
 msgid "Removing tracks in pads..."
@@ -50872,7 +50872,7 @@ msgstr "パッド内の配線を削除…"
 
 #: pcbnew/tracks_cleaner.cpp:134
 msgid "Checking dangling tracks and vias..."
-msgstr "未接続の配線とビアをチェック..."
+msgstr "未接続の配線とビアを確認中..."
 
 #: pcbnew/tracks_cleaner.cpp:139
 msgid "Removing dangling tracks..."
@@ -50884,7 +50884,7 @@ msgstr "未接続のビアを削除…"
 
 #: pcbnew/tracks_cleaner.cpp:156
 msgid "Checking collinear tracks..."
-msgstr "共線の配線をチェック中..."
+msgstr "同一の配線を確認中..."
 
 #: pcbnew/tracks_cleaner.cpp:158
 msgid "Merging collinear tracks..."
@@ -51973,7 +51973,7 @@ msgstr "パッド接続"
 
 #: pcbnew/zone_filler.cpp:254
 msgid "Checking zone fills..."
-msgstr "ゾーンの塗りつぶしをチェック中..."
+msgstr "ゾーンの塗りつぶしを確認中..."
 
 #: pcbnew/zone_filler.cpp:255
 msgid "Building zone fills..."
