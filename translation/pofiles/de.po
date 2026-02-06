@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-06 13:07+0000\n"
+"PO-Revision-Date: 2026-02-06 20:21+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -19823,24 +19823,24 @@ msgid "Junction at (%s, %s)"
 msgstr "Knotenpunkt bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "Keine Verbindung bei %s, %s"
+msgstr "Keine Verbindung bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Bus-an-Verbindung-Zugang von %s, %s nach %s, %s"
+msgstr "Bus-an-Verbindung-Zugang von (%s, %s) nach (%s, %s)"
 
 #: eeschema/net_navigator.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Bus-an-Bus-Zugang von %s, %s nach %s, %s"
+msgstr "Bus-an-Bus-Zugang von (%s, %s) nach (%s, %s)"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "Netzklassen-Bezeichner \"%s\" bei %s, %s"
+msgstr "Netzklassen-Bezeichner \"%s\" bei (%s, %s)"
 
 #: eeschema/net_navigator.cpp:198
 #, c-format
