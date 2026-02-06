@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-06 21:02+0000\n"
+"PO-Revision-Date: 2026-02-07 17:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -48135,7 +48135,7 @@ msgstr "DP max. ungekoppelte Länge: %s"
 
 #: pcbnew/sel_layer.cpp:770
 msgid "Warning: top and bottom layers are same."
-msgstr "Achtung: Lage für Ober- und Unterseite ist die selbe."
+msgstr "Achtung: Lage für Ober- und Unterseite ist dieselbe."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:98
 msgid "BOARD exported OK."
