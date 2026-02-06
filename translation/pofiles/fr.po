@@ -9868,9 +9868,8 @@ msgstr ""
 "Pour faire un don au projet KiCad, visitez %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Sélecteur d'Empreintes"
+msgstr "Examinateur d'Empreintes"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -13410,9 +13409,9 @@ msgid "Show datasheet in browser"
 msgstr "Afficher dans un Visualisateur"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Librairies de Symboles"
+msgstr "Champs de Librairie de Symbole"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1230
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13430,9 +13429,9 @@ msgid "No symbols found in library %s."
 msgstr "Pas de symbole trouvé en librairie %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Erreur en chargement des symboles:"
+msgstr "Erreur en chargement du symbole '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
@@ -19026,9 +19025,9 @@ msgid "Show Field Name"
 msgstr "Montrer Nom de Champ"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Erreur lors du chargement du fichier schématique '%s'."
+msgstr "Erreur d'analyse de la schématique Altium '%s'."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -19135,9 +19134,9 @@ msgid "File not found %s."
 msgstr "Fichier non trouvé %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4924
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Erreur lors de l'analyse de la librairie SPICE '%s' : %s"
+msgstr "Erreur lors de l'analyse de la librairie Altium : %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4947
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -19452,13 +19451,13 @@ msgstr ""
 "format XML peuvent être importés."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Invalide couche de pile de pad '%s'  dans le fichier '%s' ligne %d, offset "
-"%d."
+"Impossible de lire le ficier '%s'.\n"
+"'%s' ligne %d, offset %d."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -42396,9 +42395,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Vérification de l'isolation des graphiques sur cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Vérification de l'isolation des graphiques sur cuivre..."
+msgstr "Vérification de l'isolation des trous sur cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -47761,9 +47759,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Console de Script"
+msgstr "Init Script"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
@@ -51320,14 +51317,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Essayer de router séquentiellement les pads sélectionnés."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Désélection outil courant"
+msgstr "Annuler Element Courant"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Créer des lignes d'enveloppe à partir de la sélection"
+msgstr "Ignorer l'élément actuel et passer à l'élément suivant sélectionné."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -52635,9 +52630,8 @@ msgid "Filled Area"
 msgstr "Surface Remplie"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Surface à Règles"
+msgstr "Surface du Contour"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
@@ -53015,18 +53009,16 @@ msgstr "Feuille de Dessin KiCad"
 #~ msgstr "ASCII"
 
 #, fuzzy, c-format
-#~ msgid ""
 #~ "Error accessing library %s.\n"
 #~ "\n"
 #~ "%s"
 #~ msgstr ""
-#~ "Erreur lors du chargement de la librairie de symboles %s.\n"
+#~ "Erreur lors de l'accès à la librairie %s.\n"
 #~ "\n"
 #~ "%s\n"
 
-#, fuzzy
 #~ msgid "Local Power Symbol"
-#~ msgstr "Symbole d'Alimentation"
+#~ msgstr "Symbole d'Alimentation Local"
 
 #~ msgid "Roundrect radius is larger than the rectangle's major dimension"
 #~ msgstr ""
