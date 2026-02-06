@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-04 13:12+0000\n"
+"PO-Revision-Date: 2026-02-06 20:21+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -10617,7 +10617,7 @@ msgstr "Zawsze wyświetla kursor krzyżowy nawet bez wybranego narzędzia"
 
 #: common/tool/actions.cpp:1183
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Używa małego krzyżyka skrzyżowanego pod kątem 0 i 90 stopni"
 
 #: common/tool/actions.cpp:1190
 msgid "Full-Window Crosshairs"
@@ -10625,15 +10625,15 @@ msgstr "Kursor pełnoekranowy"
 
 #: common/tool/actions.cpp:1191
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Wyświetla pełnoekranowy krzyż z liniami pod kątem 0 i 90 stopni"
 
 #: common/tool/actions.cpp:1198
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "Kursor pochylony"
 
 #: common/tool/actions.cpp:1199
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Wyświetla pełnoekranowy krzyż z liniami pod kątem 45 i 135 stopni"
 
 #: common/tool/actions.cpp:1207
 msgid "Inactive Layer View Mode"
@@ -11192,7 +11192,7 @@ msgstr "Pokazuj wiadomości podczas wczytywania"
 #: common/widgets/kistatusbar.cpp:410
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "Podgląd %zu załadowanych wiadomości"
 
 #: common/widgets/kistatusbar.cpp:458
 #, fuzzy
@@ -11482,7 +11482,7 @@ msgstr "PPI wyświetlacza: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "Wykryj"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -13034,7 +13034,7 @@ msgstr "Wycentruj w miejscu kursora"
 
 #: eeschema/dialogs/dialog_erc.cpp:235 pcbnew/dialogs/dialog_drc.cpp:290
 msgid "When cross-probing, scroll the canvas so that the item is visible"
-msgstr ""
+msgstr "Podczas sondowania, przesuń kanwę by element sondowany był widoczny"
 
 #: eeschema/dialogs/dialog_erc.cpp:239
 #, fuzzy
@@ -13043,7 +13043,7 @@ msgstr "Pokaż wszystkie wersje"
 
 #: eeschema/dialogs/dialog_erc.cpp:240
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "Pokaż zdublowane znaczniki ERC na wszystkich odpowiednich pinach"
 
 #: eeschema/dialogs/dialog_erc.cpp:414 pcbnew/dialogs/dialog_drc.cpp:1297
 msgid "Delete exclusions too?"
@@ -13844,7 +13844,7 @@ msgstr "Plik biblioteki symboli '%s' jest pusty."
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:299
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d wybranych symboli, %d symboli nadrzędnych wybranych automatycznie"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:304
 #, c-format
@@ -13861,6 +13861,8 @@ msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Następujące symbole istnieją w docelowej bibliotece. Wybierz jak traktować "
+"każdy taki konflikt:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:517
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -14946,7 +14948,7 @@ msgstr "Wspólny dla wszystkich stylów"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:359
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "'Standardowe' oraz 'Alternatywne' style prezentacji De Morgan"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:365
 msgid "Custom body styles:"
@@ -15439,7 +15441,7 @@ msgstr "Importuj ustawienia"
 msgid ""
 "Configure where downloaded remote libraries are stored and how they are "
 "named."
-msgstr ""
+msgstr "Ustala gdzie pobrać zdalne biblioteki i jak zostaną one nazwane."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:65
 #, fuzzy
