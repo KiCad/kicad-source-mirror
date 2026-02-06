@@ -73,7 +73,7 @@ class HIERARCHY_PANE : public WX_PANEL
 public:
     enum ContextMenuAction
     {
-        EDIT_PAGE_NUMBER,
+        EDIT_PAGE_NUMBER = wxID_HIGHEST + 1,
         EXPAND_ALL,
         COLLAPSE_ALL,
         RENAME,
