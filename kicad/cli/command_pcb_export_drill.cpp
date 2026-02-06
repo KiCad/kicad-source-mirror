@@ -73,7 +73,7 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() :
 
     m_argParser.add_argument( "-u", ARG_EXCELLON_UNITS )
             .default_value( std::string( "mm" ) )
-            .help( UTF8STDSTR( _( "Output units, valid options:in, mm" ) ) )
+            .help( UTF8STDSTR( _( "Output units, valid options: in, mm" ) ) )
             .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_EXCELLON_MIRRORY )
@@ -107,7 +107,7 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() :
 
     m_argParser.add_argument( ARG_MAP_FORMAT )
             .default_value( std::string( "pdf" ) )
-            .help( UTF8STDSTR( _( "Valid options: pdf,gerberx2,ps,dxf,svg" ) ) )
+            .help( UTF8STDSTR( _( "Valid options: pdf, gerberx2, ps, dxf, svg" ) ) )
             .metavar( "MAP_FORMAT" );
 
     m_argParser.add_argument( ARG_GERBER_PRECISION )
