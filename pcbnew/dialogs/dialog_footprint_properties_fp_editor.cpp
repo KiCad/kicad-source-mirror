@@ -975,7 +975,7 @@ std::pair<int, int> DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onLayerGridRowAddUser
     aGrid.ProcessTableMessage( msg );
     OnModify();
 
-    return { aGridTable.size() - 1, 0 };
+    return { aGridTable.size() - 1, -1 };
 }
 
 
