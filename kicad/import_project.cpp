@@ -227,3 +227,11 @@ void KICAD_MANAGER_FRAME::OnImportGedaFiles( wxCommandEvent& event )
                            FILEEXT::GedaProjectFilesWildcard(), { "prj", "sch" }, { "pcb" },
                            SCH_IO_MGR::SCH_GEDA, PCB_IO_MGR::GEDA_PCB );
 }
+
+
+void KICAD_MANAGER_FRAME::OnImportDipTraceFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import DipTrace Project Files" ),
+                           FILEEXT::DipTraceFilesWildcard(), { "dch" }, { "dip" },
+                           SCH_IO_MGR::SCH_DIPTRACE, PCB_IO_MGR::DIPTRACE );
+}

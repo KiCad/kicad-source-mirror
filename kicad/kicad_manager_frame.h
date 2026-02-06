@@ -133,6 +133,11 @@ public:
     void OnImportGedaFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import DipTrace schematic and board files.
+     */
+    void OnImportDipTraceFiles( wxCommandEvent& event );
+
+    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();

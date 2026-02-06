@@ -353,6 +353,12 @@ wxString FILEEXT::EasyEdaProFileWildcard()
 }
 
 
+wxString FILEEXT::DipTraceFilesWildcard()
+{
+    return _( "DipTrace files" ) + AddFileExtListToFilter( { "dch", "dip" } );
+}
+
+
 wxString FILEEXT::PcbFileWildcard()
 {
     return _( "KiCad printed circuit board files" )

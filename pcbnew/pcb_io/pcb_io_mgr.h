@@ -73,6 +73,7 @@ public:
         ODBPP,
         PADS,
         SPRINT_LAYOUT,
+        DIPTRACE,
         // add your type here.
 
         // etc.

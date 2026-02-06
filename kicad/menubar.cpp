@@ -155,6 +155,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      ID_IMPORT_GEDA_PROJECT,
                      BITMAPS::import_project );
 
+    importMenu->Add( _( "DipTrace Project..." ),
+                     _( "Import DipTrace schematic and PCB (*.dch, *.dip)" ),
+                     ID_IMPORT_DIPTRACE_PROJECT,
+                     BITMAPS::import_project );
+
     fileMenu->Add( importMenu );
 
     fileMenu->AppendSeparator();

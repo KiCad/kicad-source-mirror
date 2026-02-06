@@ -97,6 +97,10 @@ set( EESCHEMA_SCH_IO
     sch_io/pads/pads_sch_parser.cpp
     sch_io/pads/pads_sch_symbol_builder.cpp
     sch_io/pads/pads_sch_schematic_builder.cpp
+
+    # DipTrace IO plugin
+    sch_io/diptrace/sch_io_diptrace.cpp
+    sch_io/diptrace/diptrace_sch_parser.cpp
     )
 
 set( EESCHEMA_DLGS

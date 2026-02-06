@@ -180,6 +180,10 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/easyedapro/test_easyedapro_import.cpp
 
+    pcb_io/diptrace/test_diptrace_import.cpp
+    pcb_io/diptrace/test_diptrace_cross_link.cpp
+    pcb_io/diptrace/test_diptrace_benchmarks.cpp
+
     pcb_io/fabmaster/test_fabmaster_import.cpp
 
     pcb_io/allegro/allegro_test_utils.cpp

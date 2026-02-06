@@ -706,6 +706,9 @@ set( COMMON_IO_SRCS
     io/easyedapro/easyedapro_parser.cpp
     io/easyedapro/easyedapro_import_utils.cpp
 
+    # DipTrace
+    io/diptrace/diptrace_binary_reader.cpp
+
     io/csv.cpp
     )
 
