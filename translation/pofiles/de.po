@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-05 20:38+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-06 21:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -27572,7 +27572,7 @@ msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobset.cpp:286
 msgid "Edit Destination Options..."
-msgstr "Ausgabeoptionen bearbeiten..."
+msgstr "Ausgabeoptionen bearbeiten ..."
 
 #: kicad/dialogs/panel_jobset.cpp:287
 msgid "Delete Destination"
@@ -27588,7 +27588,7 @@ msgstr "Auftragsbeschreibung bearbeiten"
 
 #: kicad/dialogs/panel_jobset.cpp:381
 msgid "Edit Job Settings..."
-msgstr "Auftragseinstellungen bearbeiten..."
+msgstr "Auftragseinstellungen bearbeiten ..."
 
 #: kicad/dialogs/panel_jobset.cpp:386
 msgid "Delete selected jobs"
