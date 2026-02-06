@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-06 20:21+0000\n"
+"PO-Revision-Date: 2026-02-07 17:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -31169,11 +31169,8 @@ msgid "Switch to a system templates tab"
 msgstr "Systemspezifische Vorlagen"
 
 #: kicad/dialogs/template_default_html.h:556
-#, fuzzy
 msgid "Each template needs a 'meta' folder containing configuration files."
-msgstr ""
-"Vorlagen sind in Unterverzeichnissen organisiert. Jede Vorlage benötigt "
-"einen \"meta\"-Ordner mit Konfigurationsdateien."
+msgstr "Jede Vorlage benötigt einen \"meta\"-Ordner mit Konfigurationsdateien."
 
 #: kicad/files-io.cpp:42
 msgid "KiCad project file"
@@ -31339,7 +31336,7 @@ msgstr "Fehler beim Öffnen der Auftragsdatei"
 #: kicad/kicad_manager_frame.cpp:905 kicad/kicad_manager_frame.cpp:1229
 #, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Projekt \"%s\" ist bereits durch \"%s\" auf \"%s\" geöffnet ."
+msgstr "Projekt \"%s\" ist bereits durch \"%s\" auf \"%s\" geöffnet."
 
 #: kicad/kicad_manager_frame.cpp:949
 msgid ""
@@ -43095,9 +43092,8 @@ msgid "Error with conditions for component class assignment %s"
 msgstr "Fehlerhafte Bedingungen für Bauteilklassenzuweisung %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:366
-#, fuzzy
 msgid "Add Reference Condition"
-msgstr "Referenzposition"
+msgstr "Referenzbedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
 #, fuzzy
@@ -46205,7 +46201,7 @@ msgstr "Einschränkungen aus Platinenkonfiguration zur Abstandsfläche"
 #: pcbnew/drc/drc_engine.cpp:238
 #, fuzzy
 msgid "board setup constraints micro-via"
-msgstr "Einschränkungen aus Platinenkonfiguration"
+msgstr "Einschränkungen aus Platinenkonfiguration zum Mikro-Via"
 
 #: pcbnew/drc/drc_engine.cpp:253
 msgid "barcode visual separation default"
@@ -49912,9 +49908,9 @@ msgid "Add %s to group '%s'."
 msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
-msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
+msgstr "%s zur Gruppe \"%s\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1081
 #, c-format
@@ -54387,7 +54383,7 @@ msgstr "DP max. ungekoppelte Länge: %s"
 
 #: pcbnew/sel_layer.cpp:745
 msgid "Warning: top and bottom layers are same."
-msgstr "Achtung: Lage für Ober- und Unterseite ist die selbe."
+msgstr "Achtung: Lage für Ober- und Unterseite ist dieselbe."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:101
 msgid "BOARD exported OK."
@@ -55665,9 +55661,9 @@ msgid "Checking Rule Area compatibility..."
 msgstr "Prüfe Regelbereiche ..."
 
 #: pcbnew/tools/multichannel_tool.cpp:654
-#, c-format
+#, c-format, fuzzy
 msgid "Resolving topology %d of %d (%d/%d components)"
-msgstr ""
+msgstr "Löse Topologie %d von %d auf (%d/%d Bauteile)"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 #, c-format
