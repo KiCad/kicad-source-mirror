@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-05 20:38+0000\n"
+"PO-Revision-Date: 2026-02-06 13:08+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -6487,7 +6487,7 @@ msgstr "palce"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:123
 #: pagelayout_editor/pl_editor_frame.cpp:760
 msgid "mils"
-msgstr "milov"
+msgstr "mils"
 
 #: common/eda_draw_frame.cpp:729 cvpcb/toolbars_display_footprints.cpp:46
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
@@ -8622,9 +8622,8 @@ msgid "Background"
 msgstr "Pozadie"
 
 #: common/layer_id.cpp:111
-#, fuzzy
 msgid "Hovered items"
-msgstr "Podsvietené položky"
+msgstr "Zvýraznené položky"
 
 #: common/layer_id.cpp:112
 msgid "Highlighted items"
@@ -8805,12 +8804,10 @@ msgid "Open Library Table"
 msgstr "Otvoriť tabuľku knižnice"
 
 #: common/lib_table_grid_tricks.cpp:143
-#, fuzzy
 msgid "Activate Selected"
 msgstr "Aktivovať vybrané"
 
 #: common/lib_table_grid_tricks.cpp:146
-#, fuzzy
 msgid "Deactivate Selected"
 msgstr "Deaktivovať vybrané"
 
@@ -9607,34 +9604,28 @@ msgid "Layer selector"
 msgstr "Výber vrstvy"
 
 #: common/tool/action_toolbar.cpp:1164
-#, fuzzy
 msgid "Control to select the layer"
-msgstr "Vymažte vybranú grafickú vrstvu"
+msgstr "Ovládací prvok na výber vrstvy"
 
 #: common/tool/action_toolbar.cpp:1171
-#, fuzzy
 msgid "Symbol unit selector"
-msgstr "Označenie symbolickej jednotky:"
+msgstr "Výber symbolickej jednotky"
 
 #: common/tool/action_toolbar.cpp:1172
-#, fuzzy
 msgid "Displays the current unit"
-msgstr "Zatvorte aktuálneho editora"
+msgstr "Zobrazenie aktuálnych jednotiek"
 
 #: common/tool/action_toolbar.cpp:1177
-#, fuzzy
 msgid "Symbol body style selector"
-msgstr "Označenie symbolickej jednotky:"
+msgstr "Výber štýlu tela symbolu"
 
 #: common/tool/action_toolbar.cpp:1178
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "Zatvorte aktuálneho editora"
+msgstr "Zobrazenie aktuálneho štýlu tela"
 
 #: common/tool/action_toolbar.cpp:1184
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "Povoliť výber uzamknutých položiek"
+msgstr "Povoliť presúvanie uzamknutých položiek myšou"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
@@ -9672,24 +9663,20 @@ msgid "Open existing document"
 msgstr "Otvoriť existujúci dokument"
 
 #: common/tool/actions.cpp:77
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Úpravy v textovom editore"
+msgstr "Upraviť v textovom editore..."
 
 #: common/tool/actions.cpp:78
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Zobrazí súbor na prečítanie alebo úpravu v textovom editore"
+msgstr "Otvoriť súbor knižnice pomocou textového editora"
 
 #: common/tool/actions.cpp:84
-#, fuzzy
 msgid "Open in file explorer..."
-msgstr "Otvorte adresár v Prieskumníkovi súborov"
+msgstr "Otvoriť v prieskumníkovi súborov..."
 
 #: common/tool/actions.cpp:85
-#, fuzzy
 msgid "Open a library file with system file explorer"
-msgstr "Zobrazí súbor na prečítanie alebo úpravu v textovom editore"
+msgstr "Otvoriť súbor knižnice pomocou systémového prieskumníka súborov"
 
 #: common/tool/actions.cpp:94
 msgid "Save changes"
@@ -9704,9 +9691,8 @@ msgid "Save current document to another location"
 msgstr "Uložiť aktuálny dokument na iné miesto"
 
 #: common/tool/actions.cpp:109
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Uložiť &ako..."
+msgstr "Uložiť kópiu..."
 
 #: common/tool/actions.cpp:110
 msgid "Save a copy of the current document to another location"
@@ -9752,34 +9738,30 @@ msgstr "Zatvorte aktuálneho editora"
 #: eeschema/sch_design_block_utils.cpp:648
 #: eeschema/tools/sch_group_tool.cpp:174 pcbnew/pcb_design_block_utils.cpp:452
 #: pcbnew/pcb_design_block_utils.cpp:589 pcbnew/tools/pcb_group_tool.cpp:212
-#, fuzzy
 msgid "Group Items"
-msgstr "Členovia skupiny:"
+msgstr "Položky skupiny"
 
 #: common/tool/actions.cpp:203
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Presunie vybrané položky so zadaným začiatočným bodom"
+msgstr ""
+"Zoskupiť vybrané položky tak, aby sa s nimi zaobchádzalo ako s jednou "
+"položkou"
 
 #: common/tool/actions.cpp:209 common/tool/group_tool.cpp:183
-#, fuzzy
 msgid "Ungroup Items"
-msgstr "Zrušiť zoskupenie"
+msgstr "Zrušiť zoskupenie položiek"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "nie je vybratá knižnica"
+msgstr "Zrušiť zoskupenie všetkých vybraných skupín"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add Items"
-msgstr "Položky"
+msgstr "Pridať položky"
 
 #: common/tool/actions.cpp:217
-#, fuzzy
 msgid "Add items to group"
-msgstr "Odstrániť položky zo skupiny"
+msgstr "Pridať položky do skupiny"
 
 #: common/tool/actions.cpp:223
 msgid "Remove Items"
@@ -9810,14 +9792,12 @@ msgid "Cancel current tool"
 msgstr "Zrušiť aktuálny nástroj"
 
 #: common/tool/actions.cpp:264
-#, fuzzy
 msgid "Finish"
-msgstr "Dokončiť autobus"
+msgstr "Ukončiť"
 
 #: common/tool/actions.cpp:265
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Zrušiť aktuálny nástroj"
+msgstr "Ukončiť aktuálny nástroj"
 
 #: common/tool/actions.cpp:273
 msgid "Show Context Menu"
@@ -9836,24 +9816,20 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Skopírujte vybrané položky do schránky"
 
 #: common/tool/actions.cpp:334
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Text dosky"
+msgstr "Kopírovať ako text"
 
 #: common/tool/actions.cpp:335
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Skopírujte vybrané položky do schránky"
+msgstr "Kopírovať vybranú položku(y) do schránky ako text"
 
 #: common/tool/actions.cpp:345
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Prilepujte položky zo schránky"
+msgstr "Vložiť položku(y) zo schránky"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Nakresliť obdĺžnik výberu"
+msgstr "Nastaviť režim výberu na použitie obdĺžnika"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
@@ -9868,23 +9844,20 @@ msgid "Select all items on screen"
 msgstr "Vyberte všetky položky na obrazovke"
 
 #: common/tool/actions.cpp:375
-#, fuzzy
 msgid "Unselect All"
-msgstr "Odstrániť všetko"
+msgstr "Zrušiť výber všetkého"
 
 #: common/tool/actions.cpp:376
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Vyberte všetky položky na obrazovke"
+msgstr "Zrušiť výber všetkých položiek na obrazovke"
 
 #: common/tool/actions.cpp:382
 msgid "Paste Special..."
 msgstr "Prilepiť špeciálne..."
 
 #: common/tool/actions.cpp:383
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Prilepte položky do schránky s možnosťami"
+msgstr "Vložiť položky zo schránky s možnosťami"
 
 #: common/tool/actions.cpp:391 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1815
@@ -9897,9 +9870,8 @@ msgid "Duplicates the selected item(s)"
 msgstr "Duplikuje vybraté položky"
 
 #: common/tool/actions.cpp:405
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Vymazať zvolené položky"
+msgstr "Odstrániť vybrané položky"
 
 #: common/tool/actions.cpp:412
 msgid "Interactive Delete Tool"
@@ -9911,9 +9883,8 @@ msgstr "Odstrániť kliknuté položky"
 
 #: common/tool/actions.cpp:421 eeschema/tools/sch_edit_tool.cpp:3155
 #: pcbnew/tools/edit_tool.cpp:2746
-#, fuzzy
 msgid "Left Justify"
-msgstr "Zvislo rozmiestniť"
+msgstr "Zarovnať vľavo"
 
 #: common/tool/actions.cpp:422
 msgid "Left-justify fields and text items"
@@ -9921,9 +9892,8 @@ msgstr ""
 
 #: common/tool/actions.cpp:428 eeschema/tools/sch_edit_tool.cpp:3157
 #: pcbnew/tools/edit_tool.cpp:2748
-#, fuzzy
 msgid "Center Justify"
-msgstr "Zvislo rozmiestniť"
+msgstr "Zarovnať na stred"
 
 #: common/tool/actions.cpp:429
 msgid "Center-justify fields and text items"
@@ -9931,164 +9901,137 @@ msgstr ""
 
 #: common/tool/actions.cpp:435 eeschema/tools/sch_edit_tool.cpp:3159
 #: pcbnew/tools/edit_tool.cpp:2750
-#, fuzzy
 msgid "Right Justify"
-msgstr "X Zdôvodniť"
+msgstr "Zarovnať vpravo"
 
 #: common/tool/actions.cpp:436
 msgid "Right-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:442 eeschema/sch_edit_frame.cpp:2657
-#, fuzzy
 msgid "Expand All"
-msgstr "Aktualizovať"
+msgstr "Rozbaliť všetko"
 
 #: common/tool/actions.cpp:448 eeschema/sch_edit_frame.cpp:2658
-#, fuzzy
 msgid "Collapse All"
-msgstr "&Vymazať všetko"
+msgstr "Zbaliť všetko"
 
 #: common/tool/actions.cpp:456 eeschema/tools/sch_tool_base.h:239
 #: pcbnew/tools/edit_tool.cpp:3450
-#, fuzzy
 msgid "Increment"
-msgstr "Krok prírastku:"
+msgstr "Prírastok"
 
 #: common/tool/actions.cpp:457
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "Vymazať zvolené položky"
+msgstr "Zvýšiť zvolenú položku(y)"
 
 #: common/tool/actions.cpp:462
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Krok prírastku:"
+msgstr "Primárny prírastok"
 
 #: common/tool/actions.cpp:463
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "Z výberu vytvorí grafické čiary"
+msgstr "Zvýšiť primárne pole vybranej položky (položiek)"
 
 #: common/tool/actions.cpp:469
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Krok prírastku:"
+msgstr "Primárny úbytok"
 
 #: common/tool/actions.cpp:470
-#, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "Duplikuje vybraté položky"
+msgstr "Znížiť primárne pole vybranej položky (položiek)"
 
 #: common/tool/actions.cpp:476
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Krok prírastku:"
+msgstr "Prírastok sekundárny"
 
 #: common/tool/actions.cpp:477
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "Z výberu vytvorí grafické čiary"
+msgstr "Zvýšiť sekundárne pole vybranej položky (položiek)"
 
 #: common/tool/actions.cpp:483
 msgid "Decrement Secondary"
 msgstr ""
 
 #: common/tool/actions.cpp:484
-#, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr "Z výberu vytvorí grafické čiary"
+msgstr "Znížiť sekundárne pole vybranej položky (položiek)"
 
 #: common/tool/actions.cpp:490
-#, fuzzy
 msgid "Select Column(s)"
-msgstr "Vyberte súčiastku"
+msgstr "Vybrať stĺpec(stĺpce)"
 
 #: common/tool/actions.cpp:491
 msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr ""
 
 #: common/tool/actions.cpp:497
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "Vyberte položky"
+msgstr "Vybrať riadok(riadky)"
 
 #: common/tool/actions.cpp:498
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
 
 #: common/tool/actions.cpp:504
-#, fuzzy
 msgid "Select Table"
-msgstr "Vybrať všetko"
+msgstr "Vybrať tabuľku"
 
 #: common/tool/actions.cpp:505
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Vymazať zvolené položky"
+msgstr "Vybrať nadradenú tabuľku vybranej bunky(buniek)"
 
 #: common/tool/actions.cpp:511 include/tool/edit_table_tool_base.h:161
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Pridajte silu"
+msgstr "Pridať riadok nad"
 
 #: common/tool/actions.cpp:512
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Vložiť nový riadok tabuľky nad vybranú bunku(bunky)"
 
 #: common/tool/actions.cpp:518 include/tool/edit_table_tool_base.h:213
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Pridajte silu"
+msgstr "Pridať riadok pod"
 
 #: common/tool/actions.cpp:519
 msgid "Insert a new table row below the selected cell(s)"
 msgstr ""
 
 #: common/tool/actions.cpp:525 include/tool/edit_table_tool_base.h:264
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Pridajte silu"
+msgstr "Pridať stĺpec pred"
 
 #: common/tool/actions.cpp:526
 msgid "Insert a new table column before the selected cell(s)"
 msgstr ""
 
 #: common/tool/actions.cpp:532 include/tool/edit_table_tool_base.h:315
-#, fuzzy
 msgid "Add Column After"
-msgstr "Pridajte silu"
+msgstr "Pridať stĺpec za"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Vložiť nový stĺpec tabuľky za vybranú bunku(bunky)"
 
 #: common/tool/actions.cpp:539
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Odstrániť riadok"
+msgstr "Odstrániť riadok(riadky)"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Vymazať zvolené položky"
+msgstr "Odstrániť riadok obsahujúci práve vybranú bunku(bunky)"
 
 #: common/tool/actions.cpp:546
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "Vyberte súčiastku"
+msgstr "Odstrániť stĺpec(stĺpce)"
 
 #: common/tool/actions.cpp:547
-#, fuzzy
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr "Vymažte siete obsahujúce iba jednu podložku"
+msgstr "Odstrániť stĺpce obsahujúce práve vybranú bunku(bunky)"
 
 #: common/tool/actions.cpp:553 include/tool/edit_table_tool_base.h:544
-#, fuzzy
 msgid "Merge Cells"
-msgstr "Zlúčiť zóny"
+msgstr "Zlúčiť bunky"
 
 #: common/tool/actions.cpp:554
 msgid "Turn selected table cells into a single cell"
@@ -10109,9 +10052,8 @@ msgid "Edit Table..."
 msgstr "Upraviť tabuľku..."
 
 #: common/tool/actions.cpp:574
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "Exportovať symbol ako SVG ..."
+msgstr "Exportovať tabuľku do CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
@@ -10136,27 +10078,24 @@ msgid ""
 msgstr ""
 
 #: common/tool/actions.cpp:600
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Ponechať stred oblúka, upraviť polomer"
+msgstr "Zachovať polomer a stred oblúka, prispôsobiť uhol"
 
 #: common/tool/actions.cpp:601
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
 
 #: common/tool/actions.cpp:608
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Prepnúť na realistický režim"
+msgstr "Prepnúť režim úprav oblúka"
 
 #: common/tool/actions.cpp:609
 msgid "Switch to a different method of editing arcs"
 msgstr ""
 
 #: common/tool/actions.cpp:617
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Zobraziť / skryť správcu vzhľadu"
+msgstr "Zobraziť/skryť vyhľadávací panel"
 
 #: common/tool/actions.cpp:625 eeschema/dialogs/dialog_sch_find.cpp:33
 #: eeschema/dialogs/dialog_sch_find_base.cpp:122
@@ -10760,7 +10699,8 @@ msgstr "Zoznam klávesových skratiek..."
 
 #: common/tool/actions.cpp:1414
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr "Zobrazí tabuľku aktuálnych klávesových skratiek a príslušné príkazy"
+msgstr ""
+"Zobrazenie tabuľku aktuálnych klávesových skratiek a príslušných príkazov"
 
 #: common/tool/actions.cpp:1420
 msgid "Get Involved"
@@ -11276,14 +11216,12 @@ msgid "Toggle panning to selections in the search pane"
 msgstr ""
 
 #: common/widgets/search_pane.cpp:54
-#, fuzzy
 msgid "Search Hidden Fields"
-msgstr "Vyhľadajte skryté polia"
+msgstr "Hľadať skryté polia"
 
 #: common/widgets/search_pane.cpp:56
-#, fuzzy
 msgid "Search Metadata"
-msgstr "Metadata"
+msgstr "Hľadať Metadáta"
 
 #: common/widgets/search_pane.cpp:56
 msgid "Search library links, descriptions and keywords"
@@ -11772,7 +11710,7 @@ msgstr "Počet vývodov"
 
 #: cvpcb/cvpcb_mainframe.cpp:839
 msgid "Search Text"
-msgstr "Vyhľadanie textu"
+msgstr "Hľadať text"
 
 #: cvpcb/cvpcb_mainframe.cpp:843
 msgid "No Filtering"
@@ -15238,15 +15176,15 @@ msgid "Alternate pin definitions must have a name."
 msgstr "Alternatívne definície špendlíkov musia mať názov."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This pin is not on a %d mils grid which will make it difficult to connect to "
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Tento pin nie je na mriežke %d mil, čo ho umožní\n"
-"na schéme je ťažké sa pripojiť.\n"
-"Chceš pokračovať?"
+"Tento vývod nie je na mriežke %d mils, preto ho nebude jednoduché v schéme "
+"pripojiť.\n"
+"Chcete pokračovať?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:430
 #, fuzzy
@@ -15718,7 +15656,7 @@ msgstr "Pomocník na záchranu projektu"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
-msgstr "Hľadať:"
+msgstr "&Hľadať pre:"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
@@ -15759,7 +15697,7 @@ msgstr "Znetvorený výraz"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:93
 msgid "Search pin &names and numbers"
-msgstr "Vyhľadajte pin, mená a čísla"
+msgstr "Hľadať názvy a čísla vývodov"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
@@ -15769,12 +15707,11 @@ msgstr "Vyhľadajte skryté polia"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:99
 msgid "Search the current &sheet only"
-msgstr "Hľadať iba v aktuálnom a hárku"
+msgstr "Hľadať iba v aktuálnom &liste"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:102
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Hľadať iba v aktuálnom a hárku"
+msgstr "Hľadať iba v aktuálnom &výbere"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:105
 msgid "Replace matches in reference designators"
@@ -15782,15 +15719,13 @@ msgstr "Nahraďte zhody v referenčných označeniach"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:110
 #: pcbnew/dialogs/dialog_find_base.cpp:88
-#, fuzzy
 msgid "Search &net names"
-msgstr "Meno listu"
+msgstr "Hľadať &názvy spojov"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:152
 #: pcbnew/dialogs/dialog_find_base.cpp:145
-#, fuzzy
 msgid "Show search panel"
-msgstr "Vlastnosti listu"
+msgstr "Zobraziť vyhľadávací panel"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:42
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:68
@@ -26301,7 +26236,7 @@ msgstr "Pripnúť tabuľku..."
 
 #: eeschema/tools/sch_actions.cpp:984
 msgid "Displays pin table for bulk editing of pins"
-msgstr "Zobrazí tabuľku pinov na hromadnú úpravu pinov"
+msgstr "Zobrazenie tabuľky vývodov pre ich hromadnú úpravu"
 
 #: eeschema/tools/sch_actions.cpp:990
 #, fuzzy
@@ -30041,9 +29976,8 @@ msgid "Output file format, options: json, report"
 msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:67 kicad/cli/command_sch_erc.cpp:55
-#, fuzzy
 msgid "Report units; valid options: in, mm, mils"
-msgstr "Výstupní jednotky, platné možnosti: mm, in"
+msgstr "Jednotky hlásenia; platné možnosti: in, mm, mils"
 
 #: kicad/cli/command_pcb_drc.cpp:71
 msgid ""
@@ -38547,9 +38481,8 @@ msgstr "0,00000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1835
-#, fuzzy
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr "0,00000"
+msgstr "0.00 in / 0 mils / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1836
@@ -52613,9 +52546,8 @@ msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
-#, fuzzy
 msgid "Could not find units value, defaulting to mils."
-msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
+msgstr "Nepodarilo sa nájsť hodnotu jednotiek, predvolene sú nastavené mils."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:334
 #, fuzzy, c-format
@@ -55930,14 +55862,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:80
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "Pokovené podložky:"
+msgstr "Nevybrané plôšky:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:91
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "Odstrániť nepoužívané podložky ..."
+msgstr "Ignorovať nevybrané plôšky"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:91
 #, fuzzy
@@ -56854,9 +56784,8 @@ msgid "Pad Table..."
 msgstr "Pripnúť tabuľku..."
 
 #: pcbnew/tools/pcb_actions.cpp:939
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
-msgstr "Zobrazí tabuľku pinov na hromadnú úpravu pinov"
+msgstr "Zobrazenie tabuľku vývodov pre ich hromadnú úpravu"
 
 #: pcbnew/tools/pcb_actions.cpp:946
 msgid "Show the footprint checker window"
@@ -58363,9 +58292,8 @@ msgid "Length Tuning Settings..."
 msgstr "Nastavenia vyladenia dĺžky ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2770
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Zobraziť vlastnosti položky"
+msgstr "Zobrazenie dialógového okna vlastností ladiaceho vzoru"
 
 #: pcbnew/tools/pcb_actions.cpp:2790
 #, fuzzy
@@ -59208,9 +59136,9 @@ msgstr "Vyberte skladby a priechody v priečinku %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:947
 #: pcbnew/widgets/appearance_controls.cpp:2477
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Zrušiť výber stôp a prejazdov v priečinku %s"
+msgstr "Zrušiť výber spojov a prekovov v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:952
 msgid "Show All Nets"
