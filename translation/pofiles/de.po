@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2026-02-06 20:21+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -8963,7 +8963,7 @@ msgstr "Fehler beim Laden der Bibliothek \"%s\""
 
 #: common/lib_table_grid_tricks.cpp:107
 msgid "Edit Settings..."
-msgstr "Einstellungen bearbeiten..."
+msgstr "Einstellungen bearbeiten ..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8987,7 +8987,7 @@ msgstr "Sichtbar-Kennzeichnung entfernen"
 
 #: common/lib_table_grid_tricks.cpp:160
 msgid "Edit Options..."
-msgstr "Optionen bearbeiten..."
+msgstr "Optionen bearbeiten ..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -18875,7 +18875,7 @@ msgstr "Prüfe auf nicht-aufgelöste Variablen ..."
 
 #: eeschema/erc/erc.cpp:2158
 msgid "Checking field names..."
-msgstr "Prüfe Feldnamen..."
+msgstr "Prüfe Feldnamen ..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -25113,14 +25113,12 @@ msgid "Select the current variant to display and edit."
 msgstr "Aktuelle Variante wählen, um diese anzuzeigen und zu bearbeiten."
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "Neue Variante hinzufügen ..."
+msgstr "Neue Designvariante hinzufügen ..."
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "New Design Variant"
-msgstr "Neue Variante"
+msgstr "Neue Designvariante"
 
 #: eeschema/toolbars_sch_editor.cpp:389
 msgid "Variant name:"
@@ -26823,14 +26821,12 @@ msgid "Show SPICE Netlist"
 msgstr "SPICE-Netzliste anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "Neue Variante hinzufügen ..."
+msgstr "Designvariante hinzufügen ..."
 
 #: eeschema/tools/sch_actions.cpp:1764
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "Neue Variante zum Schaltplan hinzufügen."
+msgstr "Neue Designvariante zum Schaltplan hinzufügen."
 
 #: eeschema/tools/sch_actions.cpp:1769
 #, fuzzy
@@ -29496,9 +29492,8 @@ msgid "Input directory"
 msgstr "Eingabeverzeichnis"
 
 #: kicad/cli/command.cpp:158
-#, fuzzy
 msgid "Input file or directory"
-msgstr "Eingabeverzeichnis"
+msgstr "Eingabedatei oder -verzeichnis"
 
 #: kicad/cli/command.cpp:174
 msgid "Output file"
@@ -29509,9 +29504,8 @@ msgid "Output directory"
 msgstr "Ausgabeverzeichnis"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "Eingabeverzeichnis"
+msgstr "Ausgabedatei oder -verzeichnis"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -30743,12 +30737,11 @@ msgstr "Vorlage bearbeiten"
 
 #: kicad/dialogs/dialog_template_selector.cpp:307
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "Vorlage öffnen (schreibgeschützt)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:308
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "Ordner mit Themen öffnen"
+msgstr "Vorlagenordner öffnen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:309
 #: kicad/dialogs/dialog_template_selector.cpp:384
@@ -30811,14 +30804,12 @@ msgid "Project Template Selector"
 msgstr "Projektvorlagenauswahl"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "Ein neues Projekt aus einer Vorlage erstellen"
+msgstr "Zuletzt verwendete Projektvorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "Vorlage"
+msgstr "Alle Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -30829,9 +30820,8 @@ msgid "System Templates"
 msgstr "Systemspezifische Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "Rückseite"
+msgstr "Zurückgehen"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -30924,7 +30914,7 @@ msgstr "Führe Aufträge aus"
 
 #: kicad/dialogs/panel_jobset.cpp:331
 msgid "Edit Destination Options..."
-msgstr "Ausgabeoptionen bearbeiten..."
+msgstr "Ausgabeoptionen bearbeiten ..."
 
 #: kicad/dialogs/panel_jobset.cpp:332
 msgid "Delete Destination"
@@ -30944,7 +30934,7 @@ msgstr "Auftragsbeschreibung bearbeiten"
 
 #: kicad/dialogs/panel_jobset.cpp:437
 msgid "Edit Job Settings..."
-msgstr "Auftragseinstellungen bearbeiten..."
+msgstr "Auftragseinstellungen bearbeiten ..."
 
 #: kicad/dialogs/panel_jobset.cpp:440
 msgid "Delete selected jobs"
@@ -31088,7 +31078,7 @@ msgstr "Lagenaufbauten"
 
 #: kicad/dialogs/template_default_html.h:258
 msgid "Layer configurations optimized for common manufacturing processes."
-msgstr ""
+msgstr "Lagenkonfigurationen optimiert für übliche Fertigungsprozesse."
 
 #: kicad/dialogs/template_default_html.h:265
 msgid ""
@@ -31133,9 +31123,8 @@ msgstr ""
 "zu starten."
 
 #: kicad/dialogs/template_default_html.h:424
-#, fuzzy
 msgid "Review settings"
-msgstr "Vorschau-Einstellungen"
+msgstr "Überprüfungs-Einstellungen"
 
 #: kicad/dialogs/template_default_html.h:425
 #, fuzzy
@@ -31146,12 +31135,11 @@ msgstr ""
 
 #: kicad/dialogs/template_default_html.h:432
 msgid "Add a description by creating"
-msgstr ""
+msgstr "Fügen Sie eine Beschreibung bei der Erstellung von"
 
 #: kicad/dialogs/template_default_html.h:433
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "Konnte Benutzer-Vorlagenverzeichnis nicht finden."
+msgstr "in diesem Verzeichnis der Vorlage hinzu."
 
 #: kicad/dialogs/template_default_html.h:541
 msgid "No Templates Found"
