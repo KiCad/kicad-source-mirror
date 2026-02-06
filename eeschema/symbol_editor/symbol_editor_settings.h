@@ -60,6 +60,11 @@ public:
         bool                       sidebar_collapsed;
     };
 
+    struct PIN_TABLE
+    {
+        bool crossprobe_on_selection;
+    };
+
     SYMBOL_EDITOR_SETTINGS();
 
     virtual ~SYMBOL_EDITOR_SETTINGS() {}
@@ -89,6 +94,8 @@ public:
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
     PANEL_LIB_FIELDS_TABLE m_LibFieldEditor;
+
+    PIN_TABLE m_PinTable;
 
 protected:
 

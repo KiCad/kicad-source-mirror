@@ -110,6 +110,9 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "lib_field_editor.sidebar_collapsed",
             &m_LibFieldEditor.sidebar_collapsed, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "pin_table.crossprobe_on_selection",
+            &m_PinTable.crossprobe_on_selection, true ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "selection_filter",
             [&]() -> nlohmann::json
             {

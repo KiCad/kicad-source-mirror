@@ -1630,6 +1630,17 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 
     if( aItem )
     {
+        if( aItem->IsSCH_ITEM() )
+        {
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( aItem );
+
+            if( int unit = item->GetUnit() )
+                SetUnit( unit );
+
+            if( int bodyStyle = item->GetBodyStyle() )
+                SetBodyStyle( bodyStyle );
+        }
+
         if( !aItem->IsBrightened() )
         {
             aItem->SetBrightened();

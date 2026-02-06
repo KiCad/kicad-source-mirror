@@ -68,6 +68,7 @@ public:
     void OnCellEdited( wxGridEvent& event ) override;
     void OnCellSelected( wxGridEvent& event ) override;
     void OnRebuildRows( wxCommandEvent& event ) override;
+    void OnMenu( wxCommandEvent& event ) override;
     void OnGroupSelected( wxCommandEvent& event ) override;
     void OnFilterCheckBox( wxCommandEvent& event ) override;
     void OnFilterChoice( wxCommandEvent& event ) override;

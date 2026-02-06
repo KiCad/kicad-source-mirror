@@ -1150,8 +1150,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_addButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
-
-    m_divider1->SetIsSeparator();
+    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
 
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -1392,10 +1391,15 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
         }
     }
 
-    WINDOW_THAWER thawer( m_editFrame );
+    SYMBOL_EDITOR_SETTINGS* cfg = static_cast<SYMBOL_EDITOR_SETTINGS*>( m_editFrame->config() );
 
-    m_editFrame->FocusOnItem( pin );
-    m_editFrame->GetCanvas()->Refresh();
+    if( cfg->m_PinTable.crossprobe_on_selection )
+    {
+        WINDOW_THAWER thawer( m_editFrame );
+
+        m_editFrame->FocusOnItem( pin );
+        m_editFrame->GetCanvas()->Refresh();
+    }
 }
 
 
@@ -1432,6 +1436,26 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
     }
 
     adjustGridColumns();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnMenu( wxCommandEvent& event )
+{
+    SYMBOL_EDITOR_SETTINGS* cfg = static_cast<SYMBOL_EDITOR_SETTINGS*>( m_editFrame->config() );
+
+    // Build a pop menu:
+    wxMenu menu;
+
+    menu.Append( 4206, _( "Highlight on Cross-probe" ),
+                 _( "Highlight corresponding pin on canvas when it is selected in the table" ),
+                 wxITEM_CHECK );
+    menu.Check( 4206, cfg->m_PinTable.crossprobe_on_selection );
+
+    // menu_id is the selected submenu id from the popup menu or wxID_NONE
+    int menu_id = m_bMenu->GetPopupMenuSelectionFromUser( menu );
+
+    if( menu_id == 0 || menu_id == 4206 )
+        cfg->m_PinTable.crossprobe_on_selection = !cfg->m_PinTable.crossprobe_on_selection;
 }
 
 
