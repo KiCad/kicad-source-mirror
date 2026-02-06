@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-05 20:38+0000\n"
+"PO-Revision-Date: 2026-02-06 13:08+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -18552,9 +18552,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Невизначена текстова змінна на аркуші креслення"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "Ім'я поля '%s' містить пробіли на початку та/або на початку."
+msgstr "Назва поля містить пробіли на початку або в кінці: '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18702,9 +18702,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Перевірка для невирішених змінних..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "Перевірка імен листів..."
+msgstr "Перевірка назв полів..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -18866,9 +18865,8 @@ msgid "Pin name resembles stacked pin"
 msgstr "Назва штифта нагадує штабельований штифт"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr "Ім'я поля '%s' містить пробіли на початку та/або на початку."
+msgstr "Назва поля містить пробіли на початку або в кінці"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -19587,14 +19585,14 @@ msgid "P&references"
 msgstr "&Налаштування"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Дріт від %s, %s до %s, %s"
+msgstr "Дріт від (%s, %s) до (%s, %s)"
 
 #: eeschema/net_navigator.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
-msgstr "Автобус з %s, %s до %s, %s"
+msgstr "Шина з (%s, %s) до (%s, %s)"
 
 #: eeschema/net_navigator.cpp:81
 msgid "Graphic line not connectable"
@@ -19611,44 +19609,44 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Аркуш '%s' закріплений '%s'"
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "Мітка '%s' за адресою %s, %s"
+msgstr "Мітка '%s' у (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "Глобальна мітка '%s' за адресою %s, %s"
+msgstr "Глобальна мітка '%s' у (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "Ієрархічна мітка '%s' за адресою %s, %s"
+msgstr "Ієрархічна мітка '%s' у (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "Точка з'єднання %s, %s"
+msgstr "Точка з'єднання (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "Немає з’єднання о %s, %s"
+msgstr "Немає з’єднання у (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Ввід провідника в шину з %s, %s в %s, %s"
+msgstr "Ввід провідника в шину з (%s, %s) в (%s, %s)"
 
 #: eeschema/net_navigator.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Ввід шини в шину з %s, %s в %s, %s"
+msgstr "Ввід шини в шину з (%s, %s) в (%s, %s)"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "Мітка мережевого класу '%s' за адресою %s, %s"
+msgstr "Мітка мережевого класу '%s' у (%s, %s)"
 
 #: eeschema/net_navigator.cpp:198
 #, c-format
@@ -23801,13 +23799,12 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Симулятор потребує повністю анотовану схему."
 
 #: eeschema/sim/simulator_frame.cpp:422
-#, fuzzy
 msgid ""
 "You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
 msgstr ""
-"Ви повинні спочатку запустити симуляцію TRAN; її результати будуть "
-"використанні для швидкого перетвореннє Фур'є."
+"Спершу необхідно запустити симуляцію перехідних процесів (TRAN); її "
+"результати будуть використані для швидкого перетворення Фур'є."
 
 #: eeschema/sim/simulator_frame.cpp:454
 msgid ""
@@ -25545,14 +25542,12 @@ msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "Синхронізувати вибрані закріплення аркушів та ієрархічні підписи"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheet Pins..."
-msgstr "Синхронізувати всі піни Таблиць..."
+msgstr "Синхронізувати всі виводи аркуша..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
-msgstr "Синхронізувати всі закріплені елементи аркушів та ієрархічні мітки"
+msgstr "Синхронізувати всі виводи аркуша та ієрархічні мітки"
 
 #: eeschema/tools/sch_actions.cpp:627
 msgid "Import Sheet..."
@@ -29193,9 +29188,8 @@ msgid "Output directory"
 msgstr "Вихідна тека"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "Вхідний файл або тека"
+msgstr "Вихідний файл або каталог"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -29543,24 +29537,23 @@ msgid "Valid options excellon, gerber."
 msgstr "Допустимі варіанти excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
-msgstr "Допустимі варіанти: absolute,plot"
+msgstr "Допустимі варіанти: абсолютний (absolute), відносно проєкту (plot)"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr "Допустимі варіанти є: decimal,suppressleading,suppresstrailing,keep."
+msgstr ""
+"Допустимі варіанти: десятковий (decimal), приховати початкові нулі "
+"(suppressleading), приховати кінцеві нулі (suppresstrailing), залишити як є."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
-msgstr "Дійсні варіанти: маршрут, альтернативний."
+msgstr "Допустимі варіанти: основний маршрут, альтернативний."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options:in, mm"
-msgstr "Вихідні величини, допустимі значення:in,mm"
+msgstr ""
+"Вихідні одиниці вимірювання, допустимі варіанти: дюйми (in), міліметри (mm)"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -29856,24 +29849,21 @@ msgid "Generate Position File"
 msgstr "Генерувати файл позицій"
 
 #: kicad/cli/command_pcb_export_pos.cpp:51
-#, fuzzy
 msgid ""
 "Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Допустимі варіанти: передня частина, ззаду, обидва. Формат Gerber підтримує "
-"лише «передня частина» або «ззаду»."
+"Допустимі варіанти: передня (front), задня (back), обидві (both). Формат "
+"Gerber підтримує лише \"front\" або \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:56
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "Допустимі варіанти: ascii,csv,gerber"
+msgstr "Допустимі варіанти: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:61
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
 msgstr ""
-"Вихідні одиниці; ascii або csv формат тільки; допустимі варіанти: in,mm"
+"Вихідні одиниці; ascii або csv формат тільки; допустимі варіанти: in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:65
 msgid ""
@@ -30415,12 +30405,11 @@ msgstr "Редагувати шаблон"
 
 #: kicad/dialogs/dialog_template_selector.cpp:307
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "Відкрити шаблон (Тільки для читання)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:308
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "Відкрити теку з темою"
+msgstr "Відкрити теку шаблону"
 
 #: kicad/dialogs/dialog_template_selector.cpp:309
 #: kicad/dialogs/dialog_template_selector.cpp:384
@@ -36081,11 +36070,10 @@ msgstr ""
 "знаходиться в мережі %s."
 
 #: pcbnew/connectivity/topo_match.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
 msgstr ""
-"Колодка %s з %s знаходиться в мережі %s, але її збіг у кандидаті %s "
-"знаходиться в мережі %s."
+"Контакт %s компонента %s має суперечливе призначення кола у кандидаті %s."
 
 #: pcbnew/connectivity/topo_match.cpp:350
 msgid "No compatible component found in the target area."
@@ -42507,18 +42495,16 @@ msgid "Protection features:"
 msgstr "Функції захисту:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
-#, fuzzy
 msgid "Backdrill:"
-msgstr "Зворотне буріння"
+msgstr "Зворотне буріння:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
 msgstr "Обидва"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
-#, fuzzy
 msgid "Hole Post-machining"
-msgstr "Післяобробка отворів"
+msgstr "Пост-механічна обробка отвору"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:621
 msgid "Add teardrops on via's track connections"
@@ -44601,7 +44587,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
-#, fuzzy
 msgid ""
 "### Notes\n"
 "\n"
@@ -44654,14 +44639,15 @@ msgstr ""
 "обмеженнями можуть бути розділені між панелями, кожна з яких показуватиме "
 "підмножину обмежень цього правила.\n"
 "\n"
-"Панелі з декількома обмеженнями, такі як «Стиль перехідного "
-"отвору» (via_diameter + hole_size) та «Трасування диференціальних "
-"пар» (track_width + diff_pair_gap), перевіряються першими. Панелі з одним "
-"обмеженням обробляють решту. Нерозподілені обмеження відображаються на "
-"панелі «Спеціальні правила» (Custom Rule).\n"
+"Панелі з декількома обмеженнями, такі як «Стиль перехідного отвору» "
+"(via_diameter + hole_size) та «Трасування диференціальних пар» (track_width "
+"+ diff_pair_gap), перевіряються першими. Панелі з одним обмеженням "
+"обробляють решту. Нерозподілені обмеження відображаються на панелі «"
+"Спеціальні правила» (Custom Rule).\n"
 "\n"
 "Правила, які не були змінені у графічному редакторі, зберігають своє "
-"оригінальне текстове форматування при збереженні.\n"
+"оригінальне\n"
+"текстове форматування при збереженні.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -45764,9 +45750,8 @@ msgid "board setup constraints courtyard"
 msgstr "налаштування області встановлення для плати"
 
 #: pcbnew/drc/drc_engine.cpp:238
-#, fuzzy
 msgid "board setup constraints micro-via"
-msgstr "встановити обмеження плати"
+msgstr "Налаштування плати обмеження мікро перехідних отворів"
 
 #: pcbnew/drc/drc_engine.cpp:253
 msgid "barcode visual separation default"
@@ -49484,9 +49469,9 @@ msgid "Add %s to group '%s'."
 msgstr "Додати %s до групи '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
-msgstr "Додати %s до групи '%s'."
+msgstr "Додано %s до групи '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1081
 #, c-format
@@ -49664,24 +49649,24 @@ msgstr ""
 "підключених до мережі \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name from '%s' to '%s'."
 msgstr "Змінити назву групи з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1796
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name from '%s' to '%s'."
 msgstr "Назву групи змінено з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1810
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "Змінити посилання на бібліотеку групи на '%s'."
+msgstr "Змінити посилання на бібліотеку групи з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1816
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "Посилання на бібліотеку групи змінено на '%s'."
+msgstr "Посилання на бібліотеку групи змінено з '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1856
 #, c-format
@@ -50470,9 +50455,9 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Невідоме відображення шару Altium '%s'."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:213
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown mapping of the Altium layer kind '%s'."
-msgstr "Невідоме відображення шару Altium '%s'."
+msgstr "Невідоме відображення типу шару Altium '%s'."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:258
 #, c-format
@@ -51335,16 +51320,16 @@ msgstr ""
 "(який було імпортовано для всіх ланцюгів зв'язків)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3914
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
 "imported. Please review the design rules as copper pours may be affected by "
 "this."
 msgstr ""
-"Дизайн CADSTAR містить зв'язки з призначеним «класом інтервалу». KiCad не "
-"має еквівалента Spacing Class CADSTAR, тому ці елементи не були імпортовані. "
-"Перегляньте правила проектування, оскільки це вплине на заливку міді."
+"Проєкт CADSTAR містить зв'язки з призначеним 'Spacing Class'. KiCad не має "
+"еквівалента для Spacing Class у CADSTAR, тому ці елементи не були "
+"імпортовані. Будь ласка, перегляньте правила проєктування, оскільки це може "
+"вплинути на полігони."
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -55160,14 +55145,13 @@ msgid "No Rule Areas to repeat layout to have been found."
 msgstr "Не знайдено жодних областей правил для повторення макета."
 
 #: pcbnew/tools/multichannel_tool.cpp:629
-#, fuzzy
 msgid "Checking Rule Area compatibility..."
-msgstr "Перевірка міток..."
+msgstr "Перевірка сумісності зони правил..."
 
 #: pcbnew/tools/multichannel_tool.cpp:654
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
-msgstr ""
+msgstr "Вирішення топології: %d з %d (%d/%d компонентів)"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 #, c-format
@@ -56339,7 +56323,6 @@ msgid "DRC Rule Editor"
 msgstr "Редактор правил DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
 msgstr "Відкрити вікно редактора правил DRC"
 
@@ -56735,13 +56718,12 @@ msgid "Distribute Horizontally by Centers"
 msgstr "Розподілити горизонтально по центрах"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
 msgstr ""
 "Розподіляє вибрані елементи між крайнім лівим та крайнім правим елементами "
-"таким чином, щоб центри елементів були розподілені рівномірно"
+"так, щоб центри елементів були розподілені рівномірно"
 
 #: pcbnew/tools/pcb_actions.cpp:2263
 msgid "Distribute Horizontally with Even Gaps"
@@ -58450,14 +58432,12 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Використовуйте /.../ для позначення регулярного виразу.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
-#, fuzzy
 msgid "Auto-fit Column"
-msgstr "Автоматична заливка зон(и)"
+msgstr "Автоматичне підбору ширини стовпця"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
-#, fuzzy
 msgid "Auto-fit All Columns"
-msgstr "Автоматична заливка зон(и)"
+msgstr "Автоматичне підбору ширини всіх стовпців"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1245
 msgid "Filter by Net Name"
