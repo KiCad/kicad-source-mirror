@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-03 23:01+0000\n"
+"PO-Revision-Date: 2026-02-06 20:21+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -1935,7 +1935,7 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
-msgstr "图像分辨率:"
+msgstr "图像 PPI:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:193
 #: pcbnew/pcb_reference_image.cpp:224
@@ -11318,9 +11318,8 @@ msgid "Save..."
 msgstr "保存..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "显示"
+msgstr "显示器 PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
