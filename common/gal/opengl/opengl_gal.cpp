@@ -423,48 +423,52 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 
 OPENGL_GAL::~OPENGL_GAL()
 {
-
     GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
-    gl_mgr->LockCtx( m_glPrivContext, this );
+    wxASSERT( gl_mgr );
 
-    --m_instanceCounter;
-    glFlush();
-    gluDeleteTess( m_tesselator );
-    ClearCache();
-
-    delete m_compositor;
-
-    if( m_isInitialized )
+    if( gl_mgr )
     {
-        delete m_cachedManager;
-        delete m_nonCachedManager;
-        delete m_overlayManager;
-        delete m_tempManager;
-    }
+        gl_mgr->LockCtx( m_glPrivContext, this );
 
-    gl_mgr->UnlockCtx( m_glPrivContext );
+        --m_instanceCounter;
+        glFlush();
+        gluDeleteTess( m_tesselator );
+        ClearCache();
 
-    // If it was the main context, then it will be deleted
-    // when the last OpenGL GAL instance is destroyed (a few lines below)
-    if( m_glPrivContext != m_glMainContext )
-        gl_mgr->DestroyCtx( m_glPrivContext );
+        delete m_compositor;
 
-    delete m_shader;
-
-    // Are we destroying the last GAL instance?
-    if( m_instanceCounter == 0 )
-    {
-        gl_mgr->LockCtx( m_glMainContext, this );
-
-        if( m_isBitmapFontLoaded )
+        if( m_isInitialized )
         {
-            glDeleteTextures( 1, &g_fontTexture );
-            m_isBitmapFontLoaded = false;
+            delete m_cachedManager;
+            delete m_nonCachedManager;
+            delete m_overlayManager;
+            delete m_tempManager;
         }
 
-        gl_mgr->UnlockCtx( m_glMainContext );
-        gl_mgr->DestroyCtx( m_glMainContext );
-        m_glMainContext = nullptr;
+        gl_mgr->UnlockCtx( m_glPrivContext );
+
+        // If it was the main context, then it will be deleted
+        // when the last OpenGL GAL instance is destroyed (a few lines below)
+        if( m_glPrivContext != m_glMainContext )
+            gl_mgr->DestroyCtx( m_glPrivContext );
+
+        delete m_shader;
+
+        // Are we destroying the last GAL instance?
+        if( m_instanceCounter == 0 )
+        {
+            gl_mgr->LockCtx( m_glMainContext, this );
+
+            if( m_isBitmapFontLoaded )
+            {
+                glDeleteTextures( 1, &g_fontTexture );
+                m_isBitmapFontLoaded = false;
+            }
+
+            gl_mgr->UnlockCtx( m_glMainContext );
+            gl_mgr->DestroyCtx( m_glMainContext );
+            m_glMainContext = nullptr;
+        }
     }
 }
 
