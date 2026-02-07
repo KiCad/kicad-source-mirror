@@ -60,6 +60,7 @@
 #include <wx/zstream.h>
 #include <progress_reporter.h>
 #include <magic_enum.hpp>
+#include <thread_pool.h>
 
 
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
@@ -1689,6 +1690,9 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading component 3D models..." ) );
 
+    thread_pool&           tp = GetKiCadThreadPool();
+    BS::multi_future<void> embeddedFutures;
+
     ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1744,8 +1748,13 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
         file->decompressedData.resize( decompressedStream.GetSize() );
         decompressedStream.CopyTo( file->decompressedData.data(), file->decompressedData.size() );
 
-        EMBEDDED_FILES::CompressAndEncode( *file );
         footprint->GetEmbeddedFiles()->AddFile( file );
+
+        embeddedFutures.push_back( tp.submit_task(
+                [file]()
+                {
+                    EMBEDDED_FILES::CompressAndEncode( *file );
+                } ) );
 
         FP_3DMODEL modelSettings;
 
@@ -1788,6 +1797,8 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_PCB_COMPOUND_FILE&    
 
         footprint->Models().push_back( modelSettings );
     }
+
+    embeddedFutures.wait();
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "ComponentsBodies6 stream is not fully parsed" ) );
