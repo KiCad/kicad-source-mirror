@@ -2918,33 +2918,29 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 
     if( currentVariant != selectedVariant )
     {
-        if( m_grid->CommitPendingChanges( true ) )
+        m_grid->CommitPendingChanges( true );
+
+        SCH_COMMIT     commit( m_parent );
+
+        m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, currentVariant );
+
+        if( !commit.Empty() )
         {
-            SCH_COMMIT     commit( m_parent );
-
-            m_dataModel->ApplyData( commit, m_schSettings.m_TemplateFieldNames, currentVariant );
-
-            if( !commit.Empty() )
-            {
-                commit.Push( wxS( "Symbol Fields Table Edit" ) );  // Push clears the commit buffer.
-                m_parent->OnModify();
-            }
-
-            // Update the data model's current variant for field highlighting
-            m_dataModel->SetCurrentVariant( selectedVariant );
-            m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
-            m_dataModel->RebuildRows();
-
-            if( m_nbPages->GetSelection() == 1 )
-                PreviewRefresh();
-            else
-                m_grid->ForceRefresh();
-
-            syncBomFmtPresetSelection();
+            commit.Push( wxS( "Symbol Fields Table Edit" ) );  // Push clears the commit buffer.
+            m_parent->OnModify();
         }
+
+        // Update the data model's current variant for field highlighting
+        m_dataModel->SetCurrentVariant( selectedVariant );
+        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
+        m_dataModel->RebuildRows();
+
+        if( m_nbPages->GetSelection() == 1 )
+            PreviewRefresh();
         else
-        {
-        }
+            m_grid->ForceRefresh();
+
+        syncBomFmtPresetSelection();
     }
 }
 
