@@ -2230,6 +2230,15 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_BARCODE* aBarcode ) const
         m_out->Print( "(ecc_level %s)", eccStr );
     }
 
+    KICAD_FORMAT::FormatBool( m_out, "hide", !aBarcode->GetShowText() );
+    KICAD_FORMAT::FormatBool( m_out, "knockout", aBarcode->IsKnockout() );
+
+    if( aBarcode->GetMargin().x != 0 || aBarcode->GetMargin().y != 0 )
+    {
+        m_out->Print( "(margins %s %s)", formatInternalUnits( aBarcode->GetMargin().x ).c_str(),
+                      formatInternalUnits( aBarcode->GetMargin().y ).c_str() );
+    }
+
     KICAD_FORMAT::FormatUuid( m_out, aBarcode->m_Uuid );
 
     m_out->Print( ")" );

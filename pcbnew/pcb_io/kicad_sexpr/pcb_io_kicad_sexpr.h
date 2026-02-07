@@ -198,7 +198,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20251027  // Store pad-to-die delays with correct scaling
 //#define SEXPR_BOARD_FILE_VERSION    20251028  // Stop writing netcodes; they're an internal implementation detail
 //#define SEXPR_BOARD_FILE_VERSION    20251101  // Backdrill and tertiary drill support
-#define SEXPR_BOARD_FILE_VERSION      20260101  // PCB variants with per-footprint overrides
+//#define SEXPR_BOARD_FILE_VERSION    20260101  // PCB variants with per-footprint overrides
+#define SEXPR_BOARD_FILE_VERSION      20260206  // Fix barcode and variant attribute serialization 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

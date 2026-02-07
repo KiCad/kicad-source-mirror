@@ -3990,8 +3990,27 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_hide:
+            barcode->SetShowText( !parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_knockout:
+            barcode->SetIsKnockout( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_margins:
+        {
+            int marginX = parseBoardUnits( "margin X" );
+            int marginY = parseBoardUnits( "margin Y" );
+            barcode->SetMargin( VECTOR2I( marginX, marginY ) );
+            NeedRIGHT();
+            break;
+        }
+
         default:
-            Expecting( "at, layer, size, text, text_height, type, ecc_level, locked or uuid" );
+            Expecting( "at, layer, size, text, text_height, type, ecc_level, locked, hide, knockout, margins or uuid" );
         }
     }
 
@@ -5366,7 +5385,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                                "exclude_from_bom or allow_solder_mask_bridges" );
                 }
             }
-
+            footprint->SetAttributes( attributes );
             break;
 
         case T_fp_text:
