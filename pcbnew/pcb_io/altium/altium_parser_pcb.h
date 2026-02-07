@@ -249,7 +249,7 @@ struct ALTIUM_VERTICE
     }
 };
 
-enum class ALTIUM_LAYER
+enum class ALTIUM_LAYER : uint32_t
 {
     UNKNOWN = 0,
 
@@ -340,6 +340,38 @@ enum class ALTIUM_LAYER
     VISIBLE_GRID_2    = 80,
     PAD_HOLES         = 81,
     VIA_HOLES         = 82,
+
+    // V7 format layers
+    V7_START = 0x01000000,
+
+    V7_COPPER_BASE  = 0x01000000,
+    V7_TOP_LAYER    = V7_COPPER_BASE + 1,
+    V7_BOTTOM_LAYER = V7_COPPER_BASE + 65535,
+
+    V7_MECHANICAL_BASE = 0x01020000,
+    V7_MECHANICAL_1    = V7_MECHANICAL_BASE + 1,
+    V7_MECHANICAL_17   = V7_MECHANICAL_BASE + 17,
+    V7_MECHANICAL_LAST = V7_MECHANICAL_BASE + 65535,
+
+    V7_OTHER_BASE        = 0x01030000,
+    V7_TOP_OVERLAY       = V7_OTHER_BASE + 6,
+    V7_BOTTOM_OVERLAY    = V7_OTHER_BASE + 7,
+    V7_TOP_PASTE         = V7_OTHER_BASE + 8,
+    V7_BOTTOM_PASTE      = V7_OTHER_BASE + 9,
+    V7_TOP_SOLDER        = V7_OTHER_BASE + 10,
+    V7_BOTTOM_SOLDER     = V7_OTHER_BASE + 11,
+    V7_DRILL_GUIDE       = V7_OTHER_BASE + 12,
+    V7_KEEP_OUT_LAYER    = V7_OTHER_BASE + 13,
+    V7_DRILL_DRAWING     = V7_OTHER_BASE + 14,
+    V7_MULTI_LAYER       = V7_OTHER_BASE + 15,
+    V7_CONNECTIONS       = V7_OTHER_BASE + 16,
+    V7_BACKGROUND        = V7_OTHER_BASE + 17,
+    V7_DRC_ERROR_MARKERS = V7_OTHER_BASE + 18,
+    V7_SELECTIONS        = V7_OTHER_BASE + 19,
+    V7_VISIBLE_GRID_1    = V7_OTHER_BASE + 20,
+    V7_VISIBLE_GRID_2    = V7_OTHER_BASE + 21,
+    V7_PAD_HOLES         = V7_OTHER_BASE + 22,
+    V7_VIA_HOLES         = V7_OTHER_BASE + 23,
 };
 
 // Specifies values from LayerKindMapping
@@ -420,6 +452,7 @@ struct AEXTENDED_PRIMITIVE_INFORMATION
 
 struct ABOARD6_LAYER_STACKUP
 {
+    uint32_t layerId = 0;
     wxString name;
 
     size_t nextId;
@@ -431,10 +464,11 @@ struct ABOARD6_LAYER_STACKUP
     int32_t  dielectricthick;
     wxString dielectricmaterial;
 
-    bool            mechenabled;
-    ALTIUM_MECHKIND mechkind;
+    bool            mechenabled = false;
+    ALTIUM_MECHKIND mechkind = ALTIUM_MECHKIND::UNKNOWN;
 
-    explicit ABOARD6_LAYER_STACKUP( const std::map<wxString, wxString>& aProps, const wxString& aPrefix );
+    explicit ABOARD6_LAYER_STACKUP( const std::map<wxString, wxString>& aProps, const wxString& aPrefix,
+                                    uint32_t aLayerIdFallback );
 };
 
 struct ALIBRARY
@@ -496,7 +530,9 @@ struct ACOMPONENT6
 
 struct ADIMENSION6
 {
-    ALTIUM_LAYER          layer;
+    ALTIUM_LAYER          layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER          layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER          layer = ALTIUM_LAYER::UNKNOWN;
     ALTIUM_DIMENSION_KIND kind;
 
     wxString textformat;
@@ -548,7 +584,9 @@ struct ANET6
 
 struct APOLYGON6
 {
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     net;
     bool         locked;
 
@@ -626,7 +664,9 @@ struct AREGION6
 
     bool is_shapebased;
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     net;
     uint16_t     component;
     uint16_t     polygon;
@@ -648,7 +688,9 @@ struct AARC6
     bool is_keepout;
     bool is_polygonoutline;
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     net;
     uint16_t     component;
     uint16_t     polygon;
@@ -726,7 +768,9 @@ struct APAD6
 
     wxString name;
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     net;
     uint16_t     component;
 
@@ -793,7 +837,7 @@ struct AVIA6
     // In PAD_MODE::SIMPLE, this is the same as the diameter
     // In PAD_MODE::TOP_MIDDLE_BOTTOM, layer 0 is top, layer 1 is middle, layer 31 is bottom
     // In PAD_MODE::FULL_STACK, layers correspond to the layer number
-    uint32_t diameter_by_layer[32];
+    uint32_t diameter_by_layer[32]{ 0 };
 
     explicit AVIA6( ALTIUM_BINARY_PARSER& aReader );
 };
@@ -804,7 +848,9 @@ struct ATRACK6
     bool is_keepout;
     bool is_polygonoutline;
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     net;
     uint16_t     component;
     uint16_t     polygon;
@@ -828,7 +874,9 @@ struct ATEXT6
     };
 
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     component = 0;
 
     VECTOR2I             position;
@@ -881,7 +929,9 @@ struct AFILL6
     bool is_locked;
     bool is_keepout;
 
-    ALTIUM_LAYER layer;
+    ALTIUM_LAYER layer_v6 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer_v7 = ALTIUM_LAYER::UNKNOWN;
+    ALTIUM_LAYER layer = ALTIUM_LAYER::UNKNOWN;
     uint16_t     component;
     uint16_t     net;
     uint8_t      keepoutrestrictions;

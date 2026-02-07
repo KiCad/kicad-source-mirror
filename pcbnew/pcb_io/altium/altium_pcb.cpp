@@ -160,6 +160,18 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
         return override->second;
     }
 
+    if( aAltiumLayer >= ALTIUM_LAYER::V7_MECHANICAL_17 && aAltiumLayer <= ALTIUM_LAYER::V7_MECHANICAL_LAST )
+    {
+        // Layer "Mechanical 17" would correspond to altiumOrd 16
+        int altiumOrd = static_cast<int>( aAltiumLayer ) - static_cast<int>( ALTIUM_LAYER::V7_MECHANICAL_1 );
+
+        if( ( altiumOrd + 1 ) > MAX_USER_DEFINED_LAYERS )
+            return UNDEFINED_LAYER;
+
+        // Convert to KiCad User_* layers
+        return static_cast<PCB_LAYER_ID>( static_cast<int>( User_1 ) + altiumOrd * 2 );
+    }
+
     switch( aAltiumLayer )
     {
     case ALTIUM_LAYER::UNKNOWN:           return UNDEFINED_LAYER;
@@ -1103,28 +1115,17 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     remapUnsureLayers( elem.stackup );
 
     // Set name of all non-cu layers
-    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::TOP_OVERLAY );
-         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::BOTTOM_SOLDER ); altiumLayerId++ )
+    for( const ABOARD6_LAYER_STACKUP& layer : elem.stackup )
     {
-        // array starts with 0, but stackup with 1
-        ABOARD6_LAYER_STACKUP& layer = elem.stackup.at( altiumLayerId - 1 );
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( layer.layerId );
 
-        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
-        PCB_LAYER_ID klayer = GetKicadLayer( alayer );
-
-        m_board->SetLayerName( klayer, layer.name );
-    }
-
-    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_1 );
-         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_16 ); altiumLayerId++ )
-    {
-        // array starts with 0, but stackup with 1
-        ABOARD6_LAYER_STACKUP& layer = elem.stackup.at( altiumLayerId - 1 );
-
-        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
-        PCB_LAYER_ID klayer = GetKicadLayer( alayer );
-
-        m_board->SetLayerName( klayer, layer.name );
+        if( ( alayer >= ALTIUM_LAYER::TOP_OVERLAY && alayer <= ALTIUM_LAYER::BOTTOM_SOLDER )
+            || ( alayer >= ALTIUM_LAYER::MECHANICAL_1 && alayer <= ALTIUM_LAYER::MECHANICAL_16 )
+            || ( alayer >= ALTIUM_LAYER::V7_MECHANICAL_17 && alayer <= ALTIUM_LAYER::V7_MECHANICAL_LAST ) )
+        {
+            PCB_LAYER_ID klayer = GetKicadLayer( alayer );
+            m_board->SetLayerName( klayer, layer.name );
+        }
     }
 
     HelperCreateBoardOutline( elem.board_vertices );
@@ -1219,16 +1220,15 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     for( size_t ii = 0; ii < aStackup.size(); ii = next( ii ) )
     {
         curLayer = aStackup[ii];
-        layer_num = static_cast<ALTIUM_LAYER>( ii + 1 );
+        layer_num = static_cast<ALTIUM_LAYER>( curLayer.layerId );
 
         if( m_layermap.find( layer_num ) != m_layermap.end() )
             continue;
 
         if( ii >= m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
-            && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY
-                   && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
-            && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1
-                   && layer_num <= ALTIUM_LAYER::MECHANICAL_16 ) )
+            && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
+            && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1 && layer_num <= ALTIUM_LAYER::MECHANICAL_16 )
+            && !( layer_num >= ALTIUM_LAYER::V7_MECHANICAL_17 && layer_num <= ALTIUM_LAYER::V7_MECHANICAL_LAST ) )
         {
             if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
                 continue;
@@ -1323,19 +1323,19 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
 void ALTIUM_PCB::HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6_LAYER_STACKUP>& aStackup )
 {
-    for( size_t altiumLayerId = static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_1 );
-         altiumLayerId <= static_cast<size_t>( ALTIUM_LAYER::MECHANICAL_16 ); altiumLayerId++ )
+    for( const ABOARD6_LAYER_STACKUP& layer : aStackup )
     {
-        // array starts with 0, but stackup with 1
-        if( altiumLayerId > aStackup.size() )
-            break;
+        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( layer.layerId );
 
-        const ABOARD6_LAYER_STACKUP& layer = aStackup.at( altiumLayerId - 1 );
-
-        ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
-
-        if( layer.mechenabled )
+        if( ( alayer >= ALTIUM_LAYER::MECHANICAL_1 && alayer <= ALTIUM_LAYER::MECHANICAL_16 )
+            || ( alayer >= ALTIUM_LAYER::V7_MECHANICAL_17 && alayer <= ALTIUM_LAYER::V7_MECHANICAL_LAST ) )
         {
+            if( !layer.mechenabled )
+            {
+                m_layermap.emplace( alayer, UNDEFINED_LAYER ); // Disabled layer, do not import
+                continue;
+            }
+
             PCB_LAYER_ID target = UNDEFINED_LAYER;
 
             switch( layer.mechkind )
@@ -1378,10 +1378,6 @@ void ALTIUM_PCB::HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6
 
             if( target != UNDEFINED_LAYER )
                 m_layermap.emplace( alayer, target );
-        }
-        else
-        {
-            m_layermap.emplace( alayer, UNDEFINED_LAYER ); // Disabled layer, do not import
         }
     }
 }
