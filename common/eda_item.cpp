@@ -88,6 +88,14 @@ EDA_ITEM* EDA_ITEM::findParent( KICAD_T aType ) const
 }
 
 
+void EDA_ITEM::SetParent( EDA_ITEM* aParent )
+{
+    wxCHECK( aParent != this, /* void */ );
+
+    m_parent = aParent;
+}
+
+
 KIID EDA_ITEM::GetParentGroupId() const
 {
     if( EDA_GROUP* group = GetParentGroup() )

@@ -110,7 +110,7 @@ public:
     inline KICAD_T Type() const { return m_structType; }
 
     EDA_ITEM* GetParent() const { return m_parent; }
-    virtual void SetParent( EDA_ITEM* aParent )   { m_parent = aParent; }
+    virtual void SetParent( EDA_ITEM* aParent );
 
     virtual void SetParentGroup( EDA_GROUP* aGroup ) { m_group = aGroup; }
     virtual EDA_GROUP* GetParentGroup() const { return m_group; }
