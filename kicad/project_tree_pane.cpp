@@ -1732,7 +1732,7 @@ void PROJECT_TREE_PANE::onPaint( wxPaintEvent& event )
 
 void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 {
-    m_leftWin->FileWatcherReset();
+    m_projectTreePane->FileWatcherReset();
 }
 
 

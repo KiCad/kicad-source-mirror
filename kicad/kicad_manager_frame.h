@@ -244,7 +244,7 @@ private:
     bool                  m_active_project;
     bool                  m_showHistoryPanel;
 
-    PROJECT_TREE_PANE*    m_leftWin;
+    PROJECT_TREE_PANE*    m_projectTreePane;
     LOCAL_HISTORY_PANE*   m_historyPane;
     wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
