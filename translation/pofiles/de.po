@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2026-02-08 14:39+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -5972,7 +5972,7 @@ msgid ""
 "install the libraries separately in order for them to be available."
 msgstr ""
 "Die integrierten Bibliothekstabellen wurden nicht am erwarteten Speicherort "
-"gefunden. Das bedeutet für gewöhnlich, dass Sie die KiCad ohne Bibliotheken "
+"gefunden. Das bedeutet für gewöhnlich, dass Sie KiCad ohne Bibliotheken "
 "installiert haben. Sie können mit der Einrichtung fortfahren, müssen jedoch "
 "die Bibliotheken gesondert installieren um sie verfügbar zu machen."
 
@@ -7854,6 +7854,8 @@ msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"Pull mit Rebase nicht möglich: Sie haben unverarbeitete Änderungen. Bitte "
+"vor dem Pull committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1135
 #, c-format
@@ -17419,9 +17421,10 @@ msgid "Net names"
 msgstr "Netznamen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
-msgstr "Im Leiterplatteneditor bearbeitete Werte von Symbolen aktualisieren."
+msgstr ""
+"Netzbezeichner im Schaltplan auf Netznamen aus Leiterplatteneditor "
+"aktualisieren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
 msgid ""
@@ -20271,7 +20274,6 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Die Änderungen in \"%s\" vor dem Schließen speichern?"
 
 #: eeschema/sch_edit_frame.cpp:1322
-#, fuzzy
 msgid ""
 "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the main KiCad "
@@ -20280,7 +20282,7 @@ msgstr ""
 "Die Platine kann nicht aktualisiert werden, da der Schaltplaneditor im "
 "eigenständigen Modus gestartet ist. Um aus dem Schaltplan eine Platine zu "
 "erstellen oder zu aktualisieren, starten Sie die KiCad-Oberfläche und "
-"erstellen ein neues KiCad-Projekt."
+"erstellen Sie ein Projekt."
 
 #: eeschema/sch_edit_frame.cpp:1407
 msgid "New Schematic"
@@ -24041,7 +24043,6 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator benötigt einen vollständig annotierten Schaltplan."
 
 #: eeschema/sim/simulator_frame.cpp:422
-#, fuzzy
 msgid ""
 "You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
@@ -24201,6 +24202,8 @@ msgstr "Zeiger 2"
 msgid ""
 "Workbook file '%s' not found. Loading simulation settings from schematic."
 msgstr ""
+"Arbeitsmappendatei \"%s\" nicht gefunden. Lade Simulationseinstellungen aus "
+"Schaltplan."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1436
 #: eeschema/sim/simulator_frame_ui.cpp:3210
@@ -24635,8 +24638,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1010
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
-"Bibliothek nur lesbar.  Änderungen in dieser Bibliothek können nicht "
-"gespeichert werden."
+"Bibliothek ist schreibgeschützt.  Änderungen in dieser Bibliothek können "
+"nicht gespeichert werden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
 msgid "Create an editable copy"
@@ -24802,8 +24805,8 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Bibliothek \"%s\" ist nur lesbar. Andere Bibliothek zum Speicher des Symbols "
-"\"%s\" wählen."
+"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speicher des "
+"Symbols \"%s\" wählen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:936
 #, c-format
@@ -25803,12 +25806,10 @@ msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "Gewählte Schaltplanpins und hierarchische Bezeichner synchronisieren"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheet Pins..."
 msgstr "Alle Schaltplanpins synchronisieren..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
 msgstr "Alle Schaltplanpins und hierarchische Bezeichner synchronisieren"
 
@@ -26829,14 +26830,12 @@ msgid "Add new design variant to the schematic."
 msgstr "Neue Designvariante zum Schaltplan hinzufügen."
 
 #: eeschema/tools/sch_actions.cpp:1769
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "Variante entfernen ..."
+msgstr "Designvariante entfernen ..."
 
 #: eeschema/tools/sch_actions.cpp:1770
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "Eine bestehende Variante aus dem Schaltplan entfernen."
+msgstr "Eine bestehende Designvariante aus dem Schaltplan entfernen."
 
 #: eeschema/tools/sch_align_tool.cpp:63
 msgid "Align"
@@ -29856,22 +29855,18 @@ msgid "Valid options excellon, gerber."
 msgstr "Gültige Optionen: excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
 msgstr "Gültige Optionen: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 msgstr "Gültige Optionen: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
 msgstr "Gültige Optionen: route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options:in, mm"
 msgstr "Ausgabeeinheiten, gültige Optionen: in, mm"
 
@@ -30168,23 +30163,20 @@ msgid "Generate Position File"
 msgstr "Positionsdatei generieren"
 
 #: kicad/cli/command_pcb_export_pos.cpp:51
-#, fuzzy
 msgid ""
 "Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Gültige Optionen: front,back,both. Gerber-Format unterstützt nur \"front\" "
+"Gültige Optionen: front, back, both. Gerber-Format unterstützt nur \"front\" "
 "oder \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:56
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "Gültige Optionen: ascii,csv,gerber"
+msgstr "Gültige Optionen: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:61
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
-msgstr "Ausgabe-Einheiten; nur ascii oder csv Format; gültige Optionen: in,mm"
+msgstr "Ausgabe-Einheiten; nur ascii- oder csv-Format; gültige Optionen: in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:65
 msgid ""
@@ -31085,6 +31077,8 @@ msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
+"Kürzlich verwende Vorlagen werden oben angezeigt. Verwenden Sie das "
+"Ordnersymbol, um benutzerdefinierte Vorlagenverzeichnisse zu durchsuchen."
 
 #: kicad/dialogs/template_default_html.h:399
 msgid "Template"
@@ -31127,28 +31121,26 @@ msgid "Review settings"
 msgstr "Überprüfungs-Einstellungen"
 
 #: kicad/dialogs/template_default_html.h:425
-#, fuzzy
 msgid "Verify libraries, design rules, and board stackup match your needs."
 msgstr ""
-"Überprüfen Sie, ob Symbol-/Footprint-Bibliotheken, Designregeln und "
-"Leiterplattenaufbau Ihren Anforderungen entsprechen."
+"Überprüfen Sie, ob Bibliotheken, Designregeln und Leiterplattenaufbau Ihren "
+"Anforderungen entsprechen."
 
 #: kicad/dialogs/template_default_html.h:432
 msgid "Add a description by creating"
-msgstr "Fügen Sie eine Beschreibung bei der Erstellung von"
+msgstr "Eine Beschreibung kann durch die Erstellung der Datei"
 
 #: kicad/dialogs/template_default_html.h:433
 msgid "inside this template's directory."
-msgstr "in diesem Verzeichnis der Vorlage hinzu."
+msgstr "in Verzeichnis der Vorlage hinzugefügt werden."
 
 #: kicad/dialogs/template_default_html.h:541
 msgid "No Templates Found"
 msgstr "Keine Vorlagen gefunden"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "The selected directory does not contain any project templates."
-msgstr "Das ausgewählte Vorlagenverzeichnis enthält keine Projektvorlagen."
+msgstr "Das ausgewählte Verzeichnis enthält keine Projektvorlagen."
 
 #: kicad/dialogs/template_default_html.h:546
 msgid "Suggestions"
@@ -31164,9 +31156,8 @@ msgstr ""
 "Auf \"Aktualisieren\"-Symbol klicken, um aktuelles Verzeichnis neu zu laden"
 
 #: kicad/dialogs/template_default_html.h:550
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "Systemspezifische Vorlagen"
+msgstr "Zur Registerkarte \"Systemvorlagen\" wechseln"
 
 #: kicad/dialogs/template_default_html.h:556
 msgid "Each template needs a 'meta' folder containing configuration files."
@@ -31343,11 +31334,12 @@ msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
 msgstr ""
+"KiCad hat ungespeicherte Änderungen aus der letzten Sitzen gefunden, die "
+"neuer als die gespeicherten Projektdateien sind."
 
 #: kicad/kicad_manager_frame.cpp:951
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "Änderungen rückgängig machen"
+msgstr "Ungespeicherte Änderungen wiederherstellen"
 
 #: kicad/kicad_manager_frame.cpp:955
 msgid ""
@@ -31356,6 +31348,10 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"Dies kann auftreten, wenn die vorherige Sitzung unerwartet beendet wurde.\n"
+"\n"
+"\"Wiederherstellen\" wählen, um diese Änderungen wiederherzustellen, oder „"
+"Verwerfen“ wählen, um die aktuell gespeicherten Dateien beizubehalten."
 
 #: kicad/kicad_manager_frame.cpp:959
 #, fuzzy
@@ -48899,7 +48895,7 @@ msgstr "In Bibliothek %s öffnen"
 #: pcbnew/footprint_edit_frame.cpp:666
 #, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Footprint aus nur-lesbarer Bibliothek \"%s\" bearbeiten."
+msgstr "Footprint aus schreibgeschützter Bibliothek \"%s\" bearbeiten."
 
 #: pcbnew/footprint_edit_frame.cpp:670
 msgid "Save as editable copy"
@@ -55505,7 +55501,7 @@ msgid ""
 "library is read-only."
 msgstr ""
 "Der Footprint konnte nicht zur gewählten Bibliothek (\"%s\") hinzugefügt "
-"werden. Diese Bibliothek ist nur-lesbar."
+"werden. Diese Bibliothek ist schreibgeschützt."
 
 #: pcbnew/tools/footprint_editor_control.cpp:463
 msgid "Change Footprint Name"
