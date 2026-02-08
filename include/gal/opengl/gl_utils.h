@@ -59,32 +59,21 @@ public:
             if( glXSwapIntervalEXT && glXQueryDrawable && drawable
                 && exts.find( "GLX_EXT_swap_control" ) != std::string::npos )
             {
-                if( aVal == -1 )
-                {
-                    if( exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
-                    {
-                        aVal = 1;
-                    }
-                    else
-                    {
-                        // Even though the extensions might be available,
-                        // we need to be sure that late/adaptive swaps are
-                        // enabled on the drawable.
-
-                        unsigned lateSwapsEnabled = 0;
-                        glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT,
-                                          &lateSwapsEnabled );
-
-                        if( !lateSwapsEnabled )
-                        {
-                            aVal = 0;
-                        }
-                    }
-                }
+                if( aVal == -1 && exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
+                    aVal = 1; // Late swaps not available
 
                 unsigned clampedInterval;
                 glXSwapIntervalEXT( dpy, drawable, aVal );
                 glXQueryDrawable( dpy, drawable, GLX_SWAP_INTERVAL_EXT, &clampedInterval );
+
+                if( aVal == -1 )
+                {
+                    unsigned lateSwapsEnabled = 0;
+                    glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &lateSwapsEnabled );
+
+                    if( lateSwapsEnabled )
+                        clampedInterval = -1;
+                }
 
                 return clampedInterval;
             }
