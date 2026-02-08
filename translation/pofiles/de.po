@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2026-02-08 18:38+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -6026,7 +6026,7 @@ msgstr "Wie möchten Sie KiCad konfigurieren?"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:25
 msgid "Import settings from a previous version at:"
-msgstr "Einstellungen aus vorherigen Version importieren:"
+msgstr "Einstellungen aus vorheriger Version importieren:"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:38
 msgid "Choose a different path"
@@ -24805,7 +24805,7 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speicher des "
+"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speichern des "
 "Symbols \"%s\" wählen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:936
@@ -54890,14 +54890,12 @@ msgstr "Zusicherungen für:"
 #: pcbnew/tools/board_inspection_tool.cpp:915
 #, fuzzy
 msgid "Select first item for clearance resolution..."
-msgstr ""
-"Wählen Sie zwei Elemente für einen Bericht zur Ermittlung des Freiraums aus."
+msgstr "Wählen Sie das erste Element für die Freiraumermittlung ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
 #, fuzzy
 msgid "Select second item for clearance resolution..."
-msgstr ""
-"Wählen Sie zwei Elemente für einen Bericht zur Ermittlung des Freiraums aus."
+msgstr "Wählen Sie das zweite Element für die Freiraumermittlung ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
 #, fuzzy
@@ -57812,7 +57810,8 @@ msgstr "Designblock %s hat keine Platinendatei."
 #: pcbnew/tools/pcb_control.cpp:1577
 #, fuzzy
 msgid "Design block placement failed - no footprints were placed."
-msgstr "Designblock Metadatendatei \"%s\" konnte nicht gelesen werden."
+msgstr ""
+"Designblock-Platzierung gescheitert - es wurden keine Footprints platziert."
 
 #: pcbnew/tools/pcb_control.cpp:1612
 #, c-format
@@ -57822,7 +57821,7 @@ msgstr "Footprint %s ist gesperrt und kann nicht platziert werden."
 #: pcbnew/tools/pcb_control.cpp:1629
 #, fuzzy
 msgid "Selected group contains no footprints to place."
-msgstr "Auswahl enthält keine Elemente mit bezeichneten Netzen."
+msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
 
 #: pcbnew/tools/pcb_control.cpp:2030
 msgid "Error loading board."
@@ -58984,12 +58983,12 @@ msgstr "(/.../ nutzen, um regulären Ausdruck anzuzeigen.)"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
 #, fuzzy
 msgid "Auto-fit Column"
-msgstr "Zone(n) automatisch füllen"
+msgstr "Spalte automatisch anpassen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
 #, fuzzy
 msgid "Auto-fit All Columns"
-msgstr "Zone(n) automatisch füllen"
+msgstr "Alle Spalten automatisch anpassen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1245
 msgid "Filter by Net Name"
