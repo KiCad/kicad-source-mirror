@@ -1431,6 +1431,9 @@ public:
      */
     void CacheItemById( BOARD_ITEM* aItem )
     {
+        if( IsFootprintHolder() )
+            return;
+
         m_itemByIdCache.insert( { aItem->m_Uuid, aItem } );
     }
 
