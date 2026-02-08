@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-08 14:39+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-08 18:38+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -31354,9 +31354,8 @@ msgstr ""
 "Verwerfen“ wählen, um die aktuell gespeicherten Dateien beizubehalten."
 
 #: kicad/kicad_manager_frame.cpp:959
-#, fuzzy
 msgid "Discard"
-msgstr "Aktion verwerfen"
+msgstr "Verwerfen"
 
 #: kicad/kicad_manager_frame.cpp:1132
 msgid "Edit File in Text Editor"
@@ -41454,12 +41453,10 @@ msgid "Mechanical"
 msgstr "Mechanisch"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Castellated pad (TH only)"
 msgstr "Halbloch-Pad (castellated; nur durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round TH only)"
 msgstr "Einpresspad (nur runde, durchgehende Bohrung)"
 
@@ -42888,7 +42885,6 @@ msgid "Both"
 msgstr "Beide"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
-#, fuzzy
 msgid "Hole Post-machining"
 msgstr "Loch-Nachbearbeitung"
 
@@ -43092,34 +43088,28 @@ msgid "Add Reference Condition"
 msgstr "Referenzbedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
-#, fuzzy
 msgid "Add Footprint Condition"
-msgstr "Footprintfilter hinzufügen"
+msgstr "Footprint-Bedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
-#, fuzzy
 msgid "Add Side Condition"
-msgstr "Weitere Bedingung hinzufügen"
+msgstr "Nebenbedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:369
-#, fuzzy
 msgid "Add Rotation Condition"
-msgstr "Weitere Bedingung hinzufügen"
+msgstr "Rotationsbedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:370
-#, fuzzy
 msgid "Add Footprint Field Value Condition"
-msgstr "Footprintfilter hinzufügen"
+msgstr "Footprint-Feldwert-Bedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Add Sheet Condition"
-msgstr "Schaltplanpin hinzufügen"
+msgstr "Schaltplanseiten-Bedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
-#, fuzzy
 msgid "Add Custom Expression Condition"
-msgstr "Benutzerdefinierte Zuweisung hinzufügen"
+msgstr "Benutzerdefinierte-Bedingung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:565
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
@@ -43148,7 +43138,6 @@ msgid "Add Custom Assignment"
 msgstr "Benutzerdefinierte Zuweisung hinzufügen"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
-#, fuzzy
 msgid "Component class:"
 msgstr "Bauteilklasse:"
 
@@ -43168,12 +43157,10 @@ msgid "Highlight matching footprints"
 msgstr "Passende Footprints hervorheben"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
-#, fuzzy
 msgid "Match all"
 msgstr "Übereinstimmung mit allen/-m"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
-#, fuzzy
 msgid "Match any"
 msgstr "Übereinstimmung mit mind. einem"
 
@@ -43194,7 +43181,6 @@ msgid "Footprint field:"
 msgstr "Footprintfeld:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
 msgstr "Feldwert:"
 
@@ -43515,9 +43501,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Standardeigenschaften neuer Grafikelemente"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:114
-#, fuzzy
 msgid "Footprint Library Tables"
-msgstr "Footprintbibliothek-Tabelle"
+msgstr "Footprintbibliothek-Tabellen"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
 #, c-format
@@ -44994,7 +44979,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
-#, fuzzy
 msgid ""
 "### Notes\n"
 "\n"
@@ -45035,8 +45019,9 @@ msgstr ""
 "können. Sie sollte\n"
 "\"1\" sein.\n"
 "\n"
-"Regeln sollten nach ihrer Spezifität geordnet werden.  Spätere Regeln haben\n"
-"Vorrang vor früheren Regeln; sobald eine passende Regel gefunden wurde,\n"
+"Regeln sollten nach ihrer Bedeutung geordnet sein.  Weiter unten definierte "
+"Regeln haben\n"
+"Vorrang vor früheren Regeln. Sobald eine passende Regel gefunden wurde\n"
 "werden keine weiteren Regeln mehr berücksichtigt.\n"
 "\n"
 "Mit Strg+/ können Zeilen aus- und einkommentiert werden.\n"
@@ -45045,20 +45030,22 @@ msgstr ""
 "\n"
 "Beim Laden von Regeln in den grafischen Editor werden Bedingungen "
 "automatisch\n"
-"den entsprechenden Bearbeitungsfeldern zugeordnet. Regeln mit mehreren "
+"den passenden Bearbeitungsfeldern zugeordnet. Regeln mit mehreren "
 "Bedingungen können\n"
 "auf mehrere Felder aufgeteilt werden, wobei jedes Feld einen Teil der "
-"Bedingungen anzeigt.\n"
+"Regelbedingungen enthält.\n"
 "\n"
-"Felder mit mehreren Bedingungen wie \"Via-Stil\" (via_diameter + hole_size) "
+"Felder mit mehreren Bedingungen wie Via-Stil (`via_diameter` + `hole_size`) "
 "und\n"
-"Differenzialpaar-Routing (track_width + diff_pair_gap) werden zuerst "
-"verglichen.\n"
-"Felder mit einer einzigen Bedingung verarbeiten den Rest. Nicht zugewiesene\n"
-"Bedingungen werden im Feld \"Benutzerdefinierte Regeln\" angezeigt.\n"
+"Differential Pair Routing (`track_width` + `diff_pair_gap`) werden zuerst "
+"abgeglichen.\n"
+"Felder mit einer einzigen Beschränkung übernehmen den Rest. Nicht "
+"zugeordnete Beschränkungen werden\n"
+"im Feld \"Benutzerdefinierte Regel\" angezeigt.\n"
 "\n"
-"In dem grafischen Editor nicht geänderte Regeln behalten beim\n"
-"Speichern ihre ursprüngliche Formatierung.\n"
+"Regeln, die im grafischen Editor nicht vergeändert wurden, behalten beim "
+"Speichern ihre\n"
+"ursprüngliche Textformatierung bei.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -45954,7 +45941,6 @@ msgid "Single"
 msgstr "Einzeln"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
 msgstr "Zielimpedanz:"
 
@@ -45963,7 +45949,6 @@ msgid "ohms"
 msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Enable time domain tuning"
 msgstr "Zeitbereichsabstimmung aktivieren"
 
@@ -45996,7 +45981,6 @@ msgid "Via Propagation"
 msgstr "Ausbreitung im Via"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:170
-#, fuzzy
 msgid "Global unit delay:"
 msgstr "Globale Verzögerungseinheit:"
 
@@ -46005,7 +45989,6 @@ msgid "ps/cm"
 msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:187
-#, fuzzy
 msgid "Via delay overrides:"
 msgstr "Viaverzögerung-Überschreibungen:"
 
@@ -48283,6 +48266,13 @@ msgid ""
 "Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
 "system memory.\n"
 msgstr ""
+"\n"
+"** Nicht genügend Speicher für den Export der Datei %s. **\n"
+"Die Leiterplatte enthält möglicherweise zu viele Objekte (z.B. Vias, "
+"Leiterbahnen, Bauteile), um mit dem verfügbaren Systemspeicher verarbeitet "
+"zu werden.\n"
+"Deaktivieren Sie die Option \"Formen vereinen\", reduzieren Sie die "
+"Platinenkomplexität oder geben Sie Systemspeicher frei.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
 #, c-format
@@ -48298,6 +48288,9 @@ msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
 msgstr ""
+"Dieser Fehler kann auf zu wenig Speicher hinweisen. Erwägen Sie \"Formen "
+"vereinen\" zu deaktivieren, die Anzahl der Vias/Bauteile zu reduzieren oder "
+"Arbeitsspeicher freizugeben.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
 #, c-format
@@ -48314,6 +48307,13 @@ msgid ""
 "Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
 "memory.\n"
 msgstr ""
+"\n"
+"** Unerwarteter Fehler beim Export der Datei %s. **\n"
+"Dies kann möglicherweise durch zu wenig Arbeitsspeicher, besonders bei "
+"Platinen mit vielen Vias oder Bauteilen, oder durch die Option \"Formen "
+"vereinen\" verursacht werden.\n"
+"Versuchen Sie die Option \"Formen vereinen\" zu deaktivieren, reduzieren Sie "
+"die Platinenkomplexität oder geben Sie Systemspeicher frei.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1385
 #, c-format
@@ -48329,6 +48329,9 @@ msgid ""
 "Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
 "the number of objects (e.g., vias), or freeing system memory."
 msgstr ""
+"Speichermangel beim Vereinen von Formen. Versuchen Sie, das Vereinen von "
+"Formen zu deaktivieren, die Anzahl der Objekte (z.B. Vias) zu reduzieren "
+"oder Arbeitsspeicher freizugeben."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:676
 #, c-format
@@ -48337,12 +48340,18 @@ msgid ""
 "This may indicate insufficient memory. Consider disabling shape fusing or "
 "reducing board complexity."
 msgstr ""
+"OpenCASCADE-Fehler beim Vereinen von Formen: %s\n"
+"Dies kann auf zu wenig Arbeitsspeicher hinweisen. Deaktivieren Sie "
+"gegebenenfalls das Vereinen von Formen oder reduzieren Sie die "
+"Platinenkomplexität."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:686
 msgid ""
 "Problems encountered while fusing shapes. This operation is memory-"
 "intensive; insufficient memory may cause failures."
 msgstr ""
+"Probleme beim Vereinen von Formen. Dieser Vorgang ist speicherintensiv; "
+"unzureichender Arbeitsspeicher kann Fehler verursachen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:692
 #: pcbnew/exporters/step/step_pcb_model.cpp:2598
@@ -48363,11 +48372,13 @@ msgid ""
 "Out of memory while unifying shape domains. Consider disabling shape fusing "
 "or reducing the number of objects."
 msgstr ""
+"Speichermangel beim Vereinheitlichen von Formdomänen. Deaktivieren Sie die "
+"Vereinigung von Formen oder reduzieren Sie die Anzahl der Objekte."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:743
 #, c-format
 msgid "OpenCASCADE error while unifying shapes: %s"
-msgstr ""
+msgstr "OpenCASCADE-Fehler beim Vereinheitlichen von Formen: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:999
 msgid "OCC error adding pad/via polygon."
