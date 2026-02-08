@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-07 17:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -22355,8 +22355,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:950
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
-"Bibliothek nur lesbar.  Änderungen in dieser Bibliothek können nicht "
-"gespeichert werden."
+"Bibliothek ist schreibgeschützt.  Änderungen in dieser Bibliothek können "
+"nicht gespeichert werden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:952
 msgid "Create an editable copy"
@@ -22514,8 +22514,8 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Bibliothek \"%s\" ist nur lesbar. Andere Bibliothek zum Speicher des Symbols "
-"\"%s\" wählen."
+"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speicher des "
+"Symbols \"%s\" wählen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
@@ -43712,7 +43712,7 @@ msgstr "In Bibliothek %s öffnen"
 #: pcbnew/footprint_edit_frame.cpp:629
 #, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Footprint aus nur-lesbarer Bibliothek \"%s\" bearbeiten."
+msgstr "Footprint aus schreibgeschützter Bibliothek \"%s\" bearbeiten."
 
 #: pcbnew/footprint_edit_frame.cpp:634
 msgid "Save as editable copy"
@@ -49204,7 +49204,7 @@ msgid ""
 "library is read-only."
 msgstr ""
 "Der Footprint konnte nicht zur gewählten Bibliothek (\"%s\") hinzugefügt "
-"werden. Diese Bibliothek ist nur-lesbar."
+"werden. Diese Bibliothek ist schreibgeschützt."
 
 #: pcbnew/tools/footprint_editor_control.cpp:406
 msgid "_copy"
