@@ -225,14 +225,12 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "TopMainToolbar" ).Left().Layer( 2 ) );
 
-    // BestSize() does not always set the actual pane size of m_projectTreePane to the required value.
-    // It happens when m_projectTreePane is too large (roughly > 1/3 of the kicad manager frame width.
-    // (Well, BestSize() sets the best size... not the window size)
-    // A trick is to use MinSize() to set the required pane width, and after give a reasonable MinSize value
+    // There is no wxAUIPaneInfo::SetSize(), but a trick is to use MinSize() to set the required pane width,
+    // and after give a reasonable MinSize value.
     m_auimgr.AddPane( m_projectTreePane,
                       EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer( 1 )
                                 .Caption( PROJECT_FILES_CAPTION ).PaneBorder( false )
-                                .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
+                                .MinSize( m_leftWinWidth, -1 ).Floatable( false ).Movable( false ) );
 
     m_historyPane = new LOCAL_HISTORY_PANE( this );
     m_auimgr.AddPane( m_historyPane,
@@ -267,7 +265,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.Update();
 
     // Now the actual m_projectTreePane size is set, give it a reasonable min width
-    m_auimgr.GetPane( m_projectTreePane ).MinSize( defaultLeftWinWidth, -1 );
+    m_auimgr.GetPane( m_projectTreePane ).MinSize( defaultLeftWinWidth, FromDIP( 80 ) );
 
 
     wxSizer* mainSizer = GetSizer();
