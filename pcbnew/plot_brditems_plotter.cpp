@@ -312,7 +312,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
         {
             SHAPE_POLY_SET outline;
             aPad->TransformShapeToPolygon( outline, aLayer, 0, m_plotter->GetPlotterArcHighDef(),
-                                           ERROR_INSIDE, true );
+                                           ERROR_INSIDE, false );
 
             m_plotter->ThickPoly( outline, GetSketchPadLineWidth(), nullptr );
             break;
