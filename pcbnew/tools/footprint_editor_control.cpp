@@ -213,12 +213,13 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 {
     const LIB_ID   selected = m_frame->GetTargetFPID();
     const wxString libraryName = selected.GetUniStringLibNickname();
-    FOOTPRINT*     newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
-
-    if( !newFootprint )
-        return 0;
 
     if( !m_frame->Clear_Pcb( true ) )
+        return 0;
+
+    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
+
+    if( !newFootprint )
         return 0;
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
