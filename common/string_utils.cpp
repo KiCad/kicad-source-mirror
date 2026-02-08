@@ -155,7 +155,7 @@ bool ConvertSmartQuotesAndDashes( wxString* aString )
 
     for( wxString::iterator ii = aString->begin(); ii != aString->end(); ++ii )
     {
-        if( *ii == L'\u00B4' || *ii == L'\u2018' || *ii == L'\u2019' )
+        if( *ii == L'\u2018' || *ii == L'\u2019' )
         {
             *ii = '\'';
             retVal = true;
