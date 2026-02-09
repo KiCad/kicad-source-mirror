@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-05 08:01+0000\n"
+"PO-Revision-Date: 2026-02-09 08:13+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -539,8 +539,7 @@ msgstr "Pokaż modele komponentów SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr ""
-"Pokazuje modele 3D posiadające atrybut 'Do montażu powierzchniowego (SMT)'"
+msgstr "Pokazuje modele 3D posiadające atrybut 'Do montażu powierzchniowego'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
@@ -4675,7 +4674,7 @@ msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 "Wybierz jeden lub więcej wierszy zawierających biblioteki by zapisać je "
-"bieżącym formacie programu KiCAD."
+"bieżącym formacie programu KiCad."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:819
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:843
@@ -9815,9 +9814,8 @@ msgstr ""
 "Informacje jak wspomóc proces tworzenia programu KiCad, przejdź do %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Wybór footprintu"
+msgstr "Przeglądarka footprintów"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -18914,9 +18912,9 @@ msgid "Show Field Name"
 msgstr "Pokaż nazwę pola"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Błąd podczas ładowania schematu '%s'."
+msgstr "Błąd podczas parsowania schematu Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:952
 #, c-format
@@ -19339,12 +19337,13 @@ msgstr ""
 "pliki w formacie Eagle XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Nieprawidłowa warstwa stosu '%s' w pliku '%s' w linii %d, przesunięcie %d."
+"Nie można odczyta pliku '%s'.\n"
+"'%s' w linii %d, kolumna %d, przesunięcie %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -47474,18 +47473,21 @@ msgstr "Błąd podczas wczytywania bibliotek footprintów projektu."
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Nie powiodła się pierwsza faza inicjalizacji modułu Python '%s', poprzez "
+"Python C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Konsola Skryptów"
+msgstr "Inicjalizacja skryptów"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Nie powiodła się druga faza inicjalizacji modułu Python '%s', poprzez Python "
+"C API."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -50021,13 +50023,12 @@ msgid "Create bill of materials from board"
 msgstr "Tworzy listę materiałową z płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Wybierz model 3D"
+msgstr "Zbierz i osadź modele 3D"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "Zbiera modele 3D footprintów oraz osadza je na płytce"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -51021,14 +51022,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Kolejno próbuje trasować ścieżki z wybranego pola lutowniczego."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Anuluj bieżące narzędzie"
+msgstr "Anuluj bieżący element"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Tworzy linie zaokrąglenia z zaznaczonych elementów"
+msgstr "Pomija obecny element i przechodzi do następnego wybranego elementu."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -51208,14 +51207,13 @@ msgid "Selected 2D Length"
 msgstr "Długość zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2089
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Osadzony model"
+msgstr "Osadzone modele 3D"
 
 #: pcbnew/tools/pcb_control.cpp:2090
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d modeli 3D zostało poprawnie osadzonych."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
@@ -52335,9 +52333,8 @@ msgid "Filled Area"
 msgstr "Wypełniony obszar"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Strefa z regułami"
+msgstr "Obszar obrysu"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
