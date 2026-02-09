@@ -348,6 +348,19 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
+#if 0
+                // While this keeps us from marking documents modified when someone OK's a dialog with
+                // no changes, it depends on our various SCH_ITEM::operator=='s being bullet-proof. They
+                // currently aren't.
+                if( *itemCopy == *schItem )
+                {
+                    // No actual changes made; short-circuit undo
+                    delete entry.m_copy;
+                    entry.m_copy = nullptr;
+                    break;
+                }
+#endif
+
                 ITEM_PICKER itemWrapper( screen, schItem, UNDO_REDO::CHANGED );
                 itemWrapper.SetLink( entry.m_copy );
                 entry.m_copy = nullptr;   // We've transferred ownership to the undo list
@@ -420,7 +433,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     {
         if( frame )
         {
-            frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false );
+            if( undoList.GetCount() > 0 )
+                frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false );
 
             if( dirtyConnectivity )
             {

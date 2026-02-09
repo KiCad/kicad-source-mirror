@@ -3751,11 +3751,33 @@ bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
     if( m_pins.size() != symbol.m_pins.size() )
         return false;
 
+    if( m_excludedFromSim != symbol.m_excludedFromSim )
+        return false;
+
+    if( m_excludedFromBOM != symbol.m_excludedFromBOM )
+        return false;
+
+    if( m_DNP != symbol.m_DNP )
+        return false;
+
+    if( m_excludedFromBoard != symbol.m_excludedFromBoard )
+        return false;
+
+    if( m_schLibSymbolName != symbol.m_schLibSymbolName )
+        return false;
+
     for( unsigned i = 0; i < m_pins.size(); ++i )
     {
         if( *m_pins[i] != *symbol.m_pins[i] )
             return false;
     }
+
+#if 0
+    // This has historically been a compare of the current instance, rather than a compare
+    // of all instances.  Probably better to keep it that way for now.
+    if( m_instanceReferences != symbol.m_instanceReferences )
+        return false;
+#endif
 
     return true;
 }
