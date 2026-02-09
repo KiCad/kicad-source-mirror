@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
 "PO-Revision-Date: 2026-02-09 08:13+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -3109,7 +3109,7 @@ msgstr "Wie möchten Sie KiCad konfigurieren?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
-msgstr "Einstellungen aus vorherigen Version importieren:"
+msgstr "Einstellungen aus vorheriger Version importieren:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -22514,7 +22514,7 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speicher des "
+"Bibliothek \"%s\" ist schreibgeschützt. Andere Bibliothek zum Speichern des "
 "Symbols \"%s\" wählen."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:974
@@ -24266,7 +24266,7 @@ msgstr "Simulation stoppen"
 
 #: eeschema/tools/sch_actions.cpp:1565
 msgid "Probe Schematic..."
-msgstr "Messpunkt hinzufügen..."
+msgstr "Messpunkt hinzufügen ..."
 
 #: eeschema/tools/sch_actions.cpp:1566
 msgid "Add a simulator probe"
@@ -28990,7 +28990,7 @@ msgstr "Ordner \"%s\" kann nicht kopiert werden."
 
 #: kicad/tools/kicad_manager_control.cpp:701
 msgid "Save Project To"
-msgstr "Projekt speichern zu"
+msgstr "Projekt speichern in"
 
 #: kicad/tools/kicad_manager_control.cpp:720
 #, c-format
