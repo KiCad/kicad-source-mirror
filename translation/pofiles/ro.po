@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-03 23:02+0000\n"
+"PO-Revision-Date: 2026-02-10 00:02+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
 "Language: ro\n"
@@ -4681,9 +4681,8 @@ msgstr "Caracter ilegal „%c” în pseudonimul „%s”."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:546
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:602
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:650
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Porecla generatorului:"
+msgstr "Eroare la pseudonimul bibliotecii"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:612
 #: eeschema/dialogs/panel_sym_lib_table.cpp:532
@@ -5114,14 +5113,12 @@ msgid "Grid Overrides"
 msgstr "Suprascrieți"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
-#, fuzzy
 msgid "Connected items:"
-msgstr "Elemente neconectate (%s)"
+msgstr "Elemente conectate:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
-#, fuzzy
 msgid "Wires:"
-msgstr "Fire"
+msgstr "Conexiuni:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
 #, fuzzy
@@ -5140,9 +5137,8 @@ msgid "Text:"
 msgstr "Text:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:154
-#, fuzzy
 msgid "Graphics:"
-msgstr "Grafică"
+msgstr "Grafică:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -5197,9 +5193,8 @@ msgstr ""
 "Esti sigur?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Scală"
+msgstr "Scala:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -6110,9 +6105,8 @@ msgid "Hotkeys"
 msgstr "Comenzi rapide"
 
 #: common/eda_base_frame.cpp:1100 kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Version Control"
-msgstr "Culoare selectie:"
+msgstr "Controlul versiunilor"
 
 #: common/eda_base_frame.cpp:1107
 #, fuzzy
@@ -6747,9 +6741,8 @@ msgstr "Grosimea liniei"
 
 #: common/eda_shape.cpp:2449 eeschema/sch_tablecell.cpp:234
 #: pcbnew/pcb_shape.cpp:893 pcbnew/pcb_tablecell.cpp:236
-#, fuzzy
 msgid "Line Color"
-msgstr "Folosiți culori:"
+msgstr "Culoarea liniei"
 
 #: common/eda_shape.cpp:2496 eeschema/sch_shape.cpp:759
 #: pcbnew/dialogs/dialog_plot_base.cpp:138 pcbnew/pcb_textbox.cpp:812
@@ -8082,9 +8075,9 @@ msgid "PCB: Perform DRC"
 msgstr ""
 
 #: common/jobs/job_pcb_render.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Reanotați:"
+msgstr "Renderizare %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 #, fuzzy
@@ -8122,9 +8115,8 @@ msgid "Archive"
 msgstr ""
 
 #: common/jobs/jobs_output_folder.cpp:82 common/jobs/jobset.cpp:43
-#, fuzzy
 msgid "Folder"
-msgstr "Pastă de sudură:"
+msgstr "Dosar"
 
 #: common/json_schema_validator.cpp:48
 #, c-format
@@ -8246,9 +8238,8 @@ msgid "Sheet references"
 msgstr "Preferințe"
 
 #: common/layer_id.cpp:84
-#, fuzzy
 msgid "Net class references"
-msgstr "Filtru Netclass:"
+msgstr "Referințe privind clasele de rețea"
 
 #: common/layer_id.cpp:85
 #, fuzzy
@@ -9989,9 +9980,8 @@ msgid "Embedded Files"
 msgstr "Fișiere imagine"
 
 #: common/tool/actions.cpp:1256
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Filtrează rețeaua după nume:"
+msgstr "Gestionați fișierele încorporate"
 
 #: common/tool/actions.cpp:1261
 #, fuzzy
@@ -10069,9 +10059,8 @@ msgid "Footprint Browser"
 msgstr "Verificator de amprentă"
 
 #: common/tool/library_editor_control.cpp:177
-#, fuzzy
 msgid "New name:"
-msgstr "Denumiri Net"
+msgstr "Nume nou:"
 
 #: common/tool/selection_tool.cpp:307
 msgid "Select &All\tA"
@@ -11525,9 +11514,8 @@ msgid "Library %s already exists."
 msgstr "Biblioteca '%s' există deja."
 
 #: eeschema/design_block_utils.cpp:239
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Adăugați un dosar de bibliotecă existent"
+msgstr "Introduceți o descriere pentru bibliotecă:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2989
 #: pcbnew/footprint.cpp:4246 pcbnew/plot_board_layers.cpp:189
@@ -11732,9 +11720,8 @@ msgstr "Porecla \"%s\" este deja utilizată."
 
 #: eeschema/dialogs/dialog_bom.cpp:375
 #: eeschema/dialogs/dialog_export_netlist.cpp:984
-#, fuzzy
 msgid "Generator File"
-msgstr "Fișiere generator:"
+msgstr "Fișier generator"
 
 #: eeschema/dialogs/dialog_bom.cpp:394
 msgid "Generator file name not found."
@@ -12133,9 +12120,8 @@ msgid "DSN:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Denumiri Net"
+msgstr "Nume utilizator:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -12164,9 +12150,8 @@ msgid "Caching"
 msgstr "Buffer"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Fișiere imagine"
+msgstr "Dimensiune cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
@@ -12174,9 +12159,8 @@ msgid "How many database queries to cache"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Schimbați simbolurile"
+msgstr "Timp de expirare cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -12647,9 +12631,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:395
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Simulare"
+msgstr "Executați comanda simulatorului extern:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:397
 msgid ""
@@ -12717,9 +12700,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
-#, fuzzy
 msgid "Output path:"
-msgstr "Ieșire"
+msgstr "Calea de ieșire:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
 #, fuzzy
@@ -13519,16 +13501,14 @@ msgstr "Stil grafic"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
 #: eeschema/sch_pin.cpp:2175
-#, fuzzy
 msgid "Number Text Size"
-msgstr "Dimensiunea textului:"
+msgstr "Dimensiunea textului numeric"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
 #: eeschema/sch_pin.cpp:2170
-#, fuzzy
 msgid "Name Text Size"
-msgstr "Dimensiunea textului:"
+msgstr "Dimensiunea textului Nume"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
