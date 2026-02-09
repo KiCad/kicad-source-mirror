@@ -215,7 +215,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Left().Layer( 3 )
                       .TopDockable( false ).BottomDockable( false )
                       .Caption( _( "Libraries" ) )
-                      .MinSize( FromDIP( 250 ), -1 ).BestSize( FromDIP( 250 ), -1 ) );
+                      // Don't use -1 for don't-change-height on a growable panel; it has side-effects.
+                      .MinSize( FromDIP( 250 ), FromDIP( 80 ) )
+                      .BestSize( FromDIP( 250 ), -1 ) );
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );

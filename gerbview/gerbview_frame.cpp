@@ -164,9 +164,11 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_tbTopAux, EDA_PANE().HToolbar().Name( "TopAuxToolbar" ).Top().Layer(4) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer( 6 ) );
     m_auimgr.AddPane( m_tbLeft, EDA_PANE().VToolbar().Name( "LeftToolbar" ).Left().Layer( 3 ) );
-    m_auimgr.AddPane( m_LayersManager, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer( 3 )
-                                                 .Caption( _( "Layers Manager" ) ).PaneBorder( false )
-                                                 .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
+    m_auimgr.AddPane( m_LayersManager,
+                      EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer( 3 )
+                                .Caption( _( "Layers Manager" ) ).PaneBorder( false )
+                                .MinSize( FromDIP( 80 ), FromDIP( 80 ) )
+                                .BestSize( m_LayersManager->GetBestSize() ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
