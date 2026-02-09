@@ -18,13 +18,14 @@
 # Petr Pazourek <petr.pazourek.brno@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Michal Kundrát <DreitTheDragon@gmail.com>, 2025.
+# Tomas0015 <tom.bezanyi@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2025-12-28 23:00+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2026-02-09 18:36+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
 "Language: cs\n"
@@ -32,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -233,15 +234,13 @@ msgstr "3D mřížka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:42
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Otočit blok"
+msgstr "Otočit desku"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:56
-#, fuzzy
 msgid "Move Board"
-msgstr "Přesunout desku nahoru"
+msgstr "Přesunout desku"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -403,14 +402,12 @@ msgid "Copy the current 3D image to the clipboard"
 msgstr "Kopírovat 3D obrázek do schránky"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Upravit obrázek..."
+msgstr "Exportovat obrázek..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Exportovat aktuální pohled jako PNG..."
+msgstr "Exportovat aktuální pohled jako obrázek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -1142,14 +1139,12 @@ msgid "(unsaved)"
 msgstr "(neuloženo)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Exportovat modul:"
+msgstr "Exportovat 3D pohled"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Velikost obrázku:"
+msgstr "Velikost obrázku"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1396,9 +1391,8 @@ msgid "Height:"
 msgstr "Výška:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Nízké rozlišení"
+msgstr "Rozlišení"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
 #, fuzzy
@@ -1406,14 +1400,12 @@ msgid "X resolution:"
 msgstr "3R řešení:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "pixelů"
+msgstr "pixelů/palec"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "pixelů"
+msgstr "pixelů/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
 #, fuzzy
@@ -1423,7 +1415,7 @@ msgstr "3R řešení:"
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d pixelů"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2111,9 +2103,8 @@ msgid "Background Jobs"
 msgstr "Úlohy na pozadí"
 
 #: common/common.cpp:345 pcbnew/dialogs/dialog_board_reannotate.cpp:286
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "načíst pouzdro"
+msgstr "neočíslované pouzdro"
 
 #: common/common.cpp:511
 #, c-format
@@ -2326,9 +2317,9 @@ msgid "Schematic source file '%s' does not exist."
 msgstr "Zdrojový soubor schématu '%s' neexistuje."
 
 #: common/design_block_io.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Zdrojový soubor schématu '%s' neexistuje."
+msgstr "Zdrojový soubor desky '%s' neexistuje."
 
 #: common/design_block_io.cpp:411
 #, c-format
@@ -2341,9 +2332,9 @@ msgid "Schematic file '%s' could not be saved as design block at '%s'."
 msgstr "Soubor schématu '%s' nelze uložit jako blok návrhu na '%s'."
 
 #: common/design_block_io.cpp:449
-#, fuzzy, c-format
+#, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
-msgstr "Soubor schématu '%s' nelze uložit jako blok návrhu na '%s'."
+msgstr "Soubor desky '%s' nelze uložit jako blok návrhu na '%s'."
 
 #: common/design_block_io.cpp:483
 #, c-format
@@ -2365,16 +2356,15 @@ msgstr "Soubor '%s' nenalezen."
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
 #: pcbnew/footprint_library_adapter.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "neznámý prokov typu %d"
+msgstr "Neznámý typ knihovny %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:139
 #: pcbnew/footprint_library_adapter.cpp:486
-#, fuzzy
 msgid "Internal error"
-msgstr "Vnitřní vrstvy"
+msgstr "Interní chyba"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:792
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
@@ -2909,14 +2899,12 @@ msgid "Description:"
 msgstr "Popis:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:69
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Knihovny bloků návrhu"
+msgstr "Vlastnosti bloku návrhu"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Propojení označení"
+msgstr "Vygenerovat připojení k databázi"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -4483,9 +4471,9 @@ msgstr "Knihovny bloků návrhu"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -40762,6 +40750,11 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"Stupeň vyhlazování\n"
+"0 = bez vyhlazování\n"
+"1 = zkosené hrany\n"
+"2 = zaoblené hrany\n"
+"3 = zaoblené hrany (jemnější oblouk)"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:186
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:242
@@ -40775,6 +40768,9 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"Poměr velikostí vyhlazených hran a mezerou mezi čárami\n"
+"0 = bez vyhlazování\n"
+"1,0 = maximální velikost (polovina mezery)"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
 msgid "Non Copper Zone Properties"
@@ -58617,38 +58613,32 @@ msgid "Cannot be less than zone minimum width"
 msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
 
 #: pcbnew/zone.cpp:2051
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Šířka šrafování:"
+msgstr "Šířka šrafování"
 
 #: pcbnew/zone.cpp:2058
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Mezera šrafování:"
+msgstr "Mezera šrafování"
 
 #: pcbnew/zone.cpp:2065
 msgid "Hatch Minimum Hole Ratio"
 msgstr ""
 
 #: pcbnew/zone.cpp:2073
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Vyhlazování:"
+msgstr "Vyhlazování"
 
 #: pcbnew/zone.cpp:2079
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Vyhlazovací množství:"
+msgstr "Vyhlazovací množství"
 
 #: pcbnew/zone.cpp:2085
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Odstranit ostrovy:"
+msgstr "Odstranit ostrovy"
 
 #: pcbnew/zone.cpp:2090
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Minimální velikost prokovu:"
+msgstr "Minimální velikost ostrova"
 
 #: pcbnew/zone.cpp:2104
 msgid "Minimum Width"
