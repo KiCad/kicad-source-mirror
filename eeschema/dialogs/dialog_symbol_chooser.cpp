@@ -79,6 +79,7 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     m_keepSymbol->SetToolTip( _( "Keep the symbol selected for subsequent clicks." ) );
 
     m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ) );
+    m_useUnits->SetValue( true );
     m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
 
     buttonsSizer->Add( m_keepSymbol, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
