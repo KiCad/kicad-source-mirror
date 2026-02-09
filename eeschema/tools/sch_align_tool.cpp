@@ -37,7 +37,8 @@
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_align_tool.h>
 #include <view/view_controls.h>
-
+#include <tools/sch_line_wire_bus_tool.h>
+#include <schematic.h>
 
 SCH_ALIGN_TOOL::SCH_ALIGN_TOOL() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.Align" ),
@@ -215,6 +216,8 @@ int SCH_ALIGN_TOOL::AlignTop( const TOOL_EVENT& aEvent )
         moveItem( item.first, VECTOR2I( 0, difference ), commit );
     }
 
+    doAlignCleanup( commit, itemsToAlign );
+
     commit.Push( _( "Align to Top" ) );
     return 0;
 }
@@ -247,6 +250,8 @@ int SCH_ALIGN_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
         int difference = targetBottom - item.second.GetBottom();
         moveItem( item.first, VECTOR2I( 0, difference ), commit );
     }
+
+    doAlignCleanup( commit, itemsToAlign );
 
     commit.Push( _( "Align to Bottom" ) );
     return 0;
@@ -281,6 +286,8 @@ int SCH_ALIGN_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
         moveItem( item.first, VECTOR2I( difference, 0 ), commit );
     }
 
+    doAlignCleanup( commit, itemsToAlign );
+
     commit.Push( _( "Align to Left" ) );
     return 0;
 }
@@ -313,6 +320,8 @@ int SCH_ALIGN_TOOL::AlignRight( const TOOL_EVENT& aEvent )
         int difference = targetRight - item.second.GetRight();
         moveItem( item.first, VECTOR2I( difference, 0 ), commit );
     }
+
+    doAlignCleanup( commit, itemsToAlign );
 
     commit.Push( _( "Align to Right" ) );
     return 0;
@@ -347,6 +356,8 @@ int SCH_ALIGN_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
         moveItem( item.first, VECTOR2I( difference, 0 ), commit );
     }
 
+    doAlignCleanup( commit, itemsToAlign );
+
     commit.Push( _( "Align to Middle" ) );
     return 0;
 }
@@ -380,7 +391,30 @@ int SCH_ALIGN_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
         moveItem( item.first, VECTOR2I( 0, difference ), commit );
     }
 
+    doAlignCleanup( commit, itemsToAlign );
+
     commit.Push( _( "Align to Center" ) );
     return 0;
 }
 
+
+void SCH_ALIGN_TOOL::doAlignCleanup( SCH_COMMIT& aCommit, std::vector<ITEM_BOX>& aItems )
+{
+    SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+
+    SCH_SELECTION alignedItems;
+
+    for( const ITEM_BOX& item : aItems )
+        alignedItems.Add( item.first );
+
+    lwbTool->TrimOverLappingWires( &aCommit, &alignedItems );
+    lwbTool->AddJunctionsIfNeeded( &aCommit, &alignedItems );
+
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
+        item->ClearTempFlags();
+
+    m_frame->Schematic().CleanUp( &aCommit );
+
+    for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
+        item->ClearEditFlags();
+}

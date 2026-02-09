@@ -61,6 +61,7 @@ private:
 
     void moveItem( SCH_ITEM* aItem, const VECTOR2I& aDelta, SCH_COMMIT& aCommit );
     VECTOR2I adjustDeltaForGrid( SCH_ITEM* aItem, const VECTOR2I& aDelta );
+    void     doAlignCleanup( SCH_COMMIT& aCommit, std::vector<ITEM_BOX>& aItems );
     void setTransitions() override;
 
 private:
