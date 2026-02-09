@@ -558,12 +558,21 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
                 newScreen->SetFileName( filename );
 
-                // Calculate the next page number
-                int nextPage = m_frame->Schematic().GetTopLevelSheets().size() + 1;
-                newScreen->SetPageNumber( wxString::Format( "%d", nextPage ) );
+                // Find the lowest unused page number
+                SCH_SHEET_LIST hierarchy = m_frame->Schematic().Hierarchy();
+                int            nextPage = 1;
+                wxString       pageStr;
 
-                // Add to schematic
+                do
+                {
+                    pageStr = wxString::Format( "%d", nextPage++ );
+                } while( hierarchy.PageNumberExists( pageStr ) );
+
                 m_frame->Schematic().AddTopLevelSheet( newSheet );
+
+                SCH_SHEET_PATH newSheetPath;
+                newSheetPath.push_back( newSheet );
+                newSheetPath.SetPageNumber( pageStr );
 
                 commit.Push( _( "Add new top-level sheet" ) );
 
@@ -626,10 +635,20 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
         if( dlg.ShowModal() == wxID_OK && dlg.GetValue() != itemData->m_SheetPath.GetPageNumber() )
         {
             SCH_COMMIT commit( m_frame );
-            SCH_SHEET_PATH parentPath = itemData->m_SheetPath;
-            parentPath.pop_back();
+            SCH_SCREEN* modifyScreen = nullptr;
 
-            commit.Modify( itemData->m_SheetPath.Last(), parentPath.LastScreen() );
+            if( itemData->m_SheetPath.size() == 1 )
+            {
+                modifyScreen = m_frame->Schematic().Root().GetScreen();
+            }
+            else
+            {
+                SCH_SHEET_PATH parentPath = itemData->m_SheetPath;
+                parentPath.pop_back();
+                modifyScreen = parentPath.LastScreen();
+            }
+
+            commit.Modify( itemData->m_SheetPath.Last(), modifyScreen );
 
             itemData->m_SheetPath.SetPageNumber( dlg.GetValue() );
 
