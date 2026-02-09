@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-06 21:01+0000\n"
+"PO-Revision-Date: 2026-02-09 08:13+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -9165,9 +9165,8 @@ msgid "Zoom to Objects"
 msgstr "Priblížiť na objekty"
 
 #: common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom to Selected Objects"
-msgstr "Priblížiť na objekty"
+msgstr "Priblížiť na vybrané objekty"
 
 #: common/tool/actions.cpp:600
 msgid "Zoom In at Cursor"
@@ -9188,9 +9187,8 @@ msgid "Zoom Out"
 msgstr "Oddialiť"
 
 #: common/tool/actions.cpp:630
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Distribuovať horizontálne"
+msgstr "Vodorovne priblížiť"
 
 #: common/tool/actions.cpp:631
 #, fuzzy
@@ -9208,9 +9206,8 @@ msgid "Zoom out horizontally the plot area"
 msgstr "Distribuovať horizontálne"
 
 #: common/tool/actions.cpp:644
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Distribuovať zvisle"
+msgstr "Zvislo priblížiť"
 
 #: common/tool/actions.cpp:645
 #, fuzzy
