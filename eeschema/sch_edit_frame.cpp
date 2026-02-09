@@ -1802,7 +1802,7 @@ void SCH_EDIT_FRAME::updateTitle()
 
         wxString sheetPath = GetCurrentSheet().PathHumanReadable( false, true );
 
-        if( sheetPath != title )
+        if( sheetPath != fn.GetName() )
             title += wxString::Format( wxT( " [%s]" ), sheetPath );
 
         if( readOnly )
