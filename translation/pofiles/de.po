@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2026-02-09 08:13+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -26794,7 +26794,7 @@ msgstr "Simulation stoppen"
 
 #: eeschema/tools/sch_actions.cpp:1735
 msgid "Probe Schematic..."
-msgstr "Messpunkt hinzufügen..."
+msgstr "Messpunkt hinzufügen ..."
 
 #: eeschema/tools/sch_actions.cpp:1736
 msgid "Add a simulator probe"
