@@ -20,6 +20,16 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ *
+ * This file contains file format knowledge derived from the gEDA/pcb project:
+ *
+ *   gEDA/gaf  - Copyright (C) 1998-2010 Ales Hvezda
+ *               Copyright (C) 1998-2016 gEDA Contributors
+ *   Lepton EDA - Copyright (C) 2017-2024 Lepton EDA Contributors
+ *
+ * Both projects are licensed under the GNU General Public License v2 or later.
+ * See https://github.com/lepton-eda/lepton-eda and
+ *     https://github.com/rlutz/geda-gaf
  */
 
 /**
@@ -35,18 +45,23 @@
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <board_design_settings.h>
 #include <font/fontconfig.h>
 #include <footprint.h>
+#include <netinfo.h>
 #include <pad.h>
 #include <macros.h>
 #include <pcb_text.h>
+#include <pcb_track.h>
 #include <pcb_shape.h>
 #include <reporter.h>
+#include <zone.h>
 #include <wx_filename.h>
 
 #include <wx/dir.h>
 #include <wx/log.h>
 #include <wx/filename.h>
+#include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <filter_reader.h>
@@ -98,6 +113,11 @@ static inline long parseInt( const wxString& aValue, double aScalar )
 
     return KiROUND( value * aScalar );
 }
+
+
+#define TEXT_DEFAULT_SIZE  ( 40 * pcbIUScale.IU_PER_MILS )
+#define OLD_GPCB_UNIT_CONV pcbIUScale.IU_PER_MILS
+#define NEW_GPCB_UNIT_CONV ( 0.01 * pcbIUScale.IU_PER_MILS )
 
 
 /**
@@ -307,12 +327,6 @@ long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 
 FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 {
-    #define TEXT_DEFAULT_SIZE  ( 40*pcbIUScale.IU_PER_MILS )
-    #define OLD_GPCB_UNIT_CONV pcbIUScale.IU_PER_MILS
-
-    // Old version unit = 1 mil, so conv_unit is 10 or 0.1
-    #define NEW_GPCB_UNIT_CONV ( 0.01*pcbIUScale.IU_PER_MILS )
-
     int                        paramCnt;
 
     // GPCB unit = 0.01 mils and Pcbnew 0.1.
@@ -417,11 +431,11 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             PCB_SHAPE* shape = new PCB_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
             shape->SetLayer( F_SilkS );
-            shape->SetStart( VECTOR2I( parseInt( parameters[2], conv_unit ),
-                                       parseInt( parameters[3], conv_unit ) ) );
-            shape->SetEnd( VECTOR2I( parseInt( parameters[4], conv_unit ),
-                                     parseInt( parameters[5], conv_unit ) ) );
-            shape->SetStroke( STROKE_PARAMS( parseInt( parameters[6], conv_unit ),
+            shape->SetStart( VECTOR2I( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                                       static_cast<int>( parseInt( parameters[3], conv_unit ) ) ) );
+            shape->SetEnd( VECTOR2I( static_cast<int>( parseInt( parameters[4], conv_unit ) ),
+                                     static_cast<int>( parseInt( parameters[5], conv_unit ) ) ) );
+            shape->SetStroke( STROKE_PARAMS( static_cast<int>( parseInt( parameters[6], conv_unit ) ),
                                              LINE_STYLE::SOLID ) );
 
             shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
@@ -447,18 +461,20 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             footprint->Add( shape );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
-            int      radius = ( parseInt( parameters[4], conv_unit ) +
-                                parseInt( parameters[5], conv_unit ) ) / 2;
+            int      radius = static_cast<int>( ( parseInt( parameters[4], conv_unit ) +
+                                                   parseInt( parameters[5], conv_unit ) ) / 2 );
 
-            VECTOR2I centre( parseInt( parameters[2], conv_unit ),
-                             parseInt( parameters[3], conv_unit ) );
+            VECTOR2I centre( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                             static_cast<int>( parseInt( parameters[3], conv_unit ) ) );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
-            EDA_ANGLE start_angle( (int) parseInt( parameters[6], -10.0 ), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE start_angle( static_cast<int>( parseInt( parameters[6], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
             start_angle += ANGLE_180;
 
             // Pcbnew delta angle direction is the opposite of Geda PCB delta angles.
-            EDA_ANGLE sweep_angle( (int) parseInt( parameters[7], -10.0 ), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE sweep_angle( static_cast<int>( parseInt( parameters[7], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
 
             // Geda PCB does not support circles.
             if( sweep_angle == -ANGLE_360 )
@@ -479,7 +495,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 shape->SetArcAngleAndEnd( sweep_angle, true );
             }
 
-            shape->SetStroke( STROKE_PARAMS( parseInt( parameters[8], conv_unit ),
+            shape->SetStroke( STROKE_PARAMS( static_cast<int>( parseInt( parameters[8], conv_unit ) ),
                                              LINE_STYLE::SOLID ) );
 
             shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
@@ -523,18 +539,18 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // can be a bit confusing.
             pad->SetNumber( parameters[paramCnt-3] );
 
-            int x1 = parseInt( parameters[2], conv_unit );
-            int x2 = parseInt( parameters[4], conv_unit );
-            int y1 = parseInt( parameters[3], conv_unit );
-            int y2 = parseInt( parameters[5], conv_unit );
-            int width = parseInt( parameters[6], conv_unit );
+            int x1 = static_cast<int>( parseInt( parameters[2], conv_unit ) );
+            int x2 = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+            int y1 = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+            int y2 = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+            int width = static_cast<int>( parseInt( parameters[6], conv_unit ) );
             VECTOR2I delta( x2 - x1, y2 - y1 );
             double angle = atan2( (double)delta.y, (double)delta.x );
 
             // Get the pad clearance and the solder mask clearance.
             if( paramCnt == 13 )
             {
-                int clearance = parseInt( parameters[7], conv_unit );
+                int clearance = static_cast<int>( parseInt( parameters[7], conv_unit ) );
                 // One of gEDA's oddities is that clearance between pad and polygon
                 // is given as the gap on both sides of the pad together, so for
                 // KiCad it has to halfed.
@@ -543,7 +559,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 // In GEDA, the mask value is the size of the hole in this
                 // solder mask. In Pcbnew, it is a margin, therefore the distance
                 // between the copper and the mask
-                int maskMargin = parseInt( parameters[8], conv_unit );
+                int maskMargin = static_cast<int>( parseInt( parameters[8], conv_unit ) );
                 maskMargin = ( maskMargin - width ) / 2;
                 pad->SetLocalSolderMaskMargin( maskMargin );
             }
@@ -612,10 +628,10 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // which is used for the same purpose.
             pad->SetNumber( parameters[paramCnt-3] );
 
-            VECTOR2I padPos( parseInt( parameters[2], conv_unit ),
-                             parseInt( parameters[3], conv_unit ) );
+            VECTOR2I padPos( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                             static_cast<int>( parseInt( parameters[3], conv_unit ) ) );
 
-            int padSize = parseInt( parameters[4], conv_unit );
+            int padSize = static_cast<int>( parseInt( parameters[4], conv_unit ) );
 
             pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padSize, padSize ) );
 
@@ -624,7 +640,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // Get the pad clearance, solder mask clearance, and drill size.
             if( paramCnt == 12 )
             {
-                int clearance = parseInt( parameters[5], conv_unit );
+                int clearance = static_cast<int>( parseInt( parameters[5], conv_unit ) );
                 // One of gEDA's oddities is that clearance between pad and polygon
                 // is given as the gap on both sides of the pad together, so for
                 // KiCad it has to halfed.
@@ -633,15 +649,15 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 // In GEDA, the mask value is the size of the hole in this
                 // solder mask. In Pcbnew, it is a margin, therefore the distance
                 // between the copper and the mask
-                int maskMargin = parseInt( parameters[6], conv_unit );
+                int maskMargin = static_cast<int>( parseInt( parameters[6], conv_unit ) );
                 maskMargin = ( maskMargin - padSize ) / 2;
                 pad->SetLocalSolderMaskMargin( maskMargin );
 
-                drillSize = parseInt( parameters[7], conv_unit );
+                drillSize = static_cast<int>( parseInt( parameters[7], conv_unit ) );
             }
             else
             {
-                drillSize = parseInt( parameters[5], conv_unit );
+                drillSize = static_cast<int>( parseInt( parameters[5], conv_unit ) );
             }
 
             pad->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
@@ -762,6 +778,10 @@ void GPCB_FPL_CACHE::parseParameters( wxArrayString& aParameterList, LINE_READER
 
         case '#':
             line = aLineReader->ReadLine();
+
+            if( !line )
+                return;
+
             break;
 
         default:
@@ -794,7 +814,8 @@ bool GPCB_FPL_CACHE::testFlags( const wxString& aFlag, long aMask, const wxChar*
 
 PCB_IO_GEDA::PCB_IO_GEDA() : PCB_IO( wxS( "gEDA PCB" ) ),
     m_cache( nullptr ),
-    m_ctl( 0 )
+    m_ctl( 0 ),
+    m_numCopperLayers( 2 )
 {
     m_reader = nullptr;
     init( nullptr );
@@ -803,7 +824,8 @@ PCB_IO_GEDA::PCB_IO_GEDA() : PCB_IO( wxS( "gEDA PCB" ) ),
 
 PCB_IO_GEDA::PCB_IO_GEDA( int aControlFlags ) : PCB_IO( wxS( "gEDA PCB" ) ),
     m_cache( nullptr ),
-    m_ctl( aControlFlags )
+    m_ctl( aControlFlags ),
+    m_numCopperLayers( 2 )
 {
     m_reader = nullptr;
     init( nullptr );
@@ -812,6 +834,9 @@ PCB_IO_GEDA::PCB_IO_GEDA( int aControlFlags ) : PCB_IO( wxS( "gEDA PCB" ) ),
 
 PCB_IO_GEDA::~PCB_IO_GEDA()
 {
+    for( FOOTPRINT* fp : m_cachedFootprints )
+        delete fp;
+
     delete m_cache;
 }
 
@@ -1041,4 +1066,1055 @@ bool PCB_IO_GEDA::IsLibraryWritable( const wxString& aLibraryPath )
     validateCache( aLibraryPath );
 
     return m_cache->IsWritable();
+}
+
+
+// =====================================================================
+// Board-level import
+// =====================================================================
+
+
+void PCB_IO_GEDA::parseParameters( wxArrayString& aParameterList, LINE_READER* aLineReader )
+{
+    char     key;
+    wxString tmp;
+    char*    line = aLineReader->Line();
+
+    while( *line != 0 )
+    {
+        key = *line;
+        line++;
+
+        switch( key )
+        {
+        case '[':
+        case '(':
+            if( !tmp.IsEmpty() )
+            {
+                aParameterList.Add( tmp );
+                tmp.Clear();
+            }
+
+            tmp.Append( key );
+            aParameterList.Add( tmp );
+            tmp.Clear();
+
+            if( aParameterList.GetCount() == 1 )
+            {
+                wxLogTrace( traceGedaPcbPlugin, dump( aParameterList ) );
+                return;
+            }
+
+            break;
+
+        case ']':
+        case ')':
+            if( !tmp.IsEmpty() )
+            {
+                aParameterList.Add( tmp );
+                tmp.Clear();
+            }
+
+            tmp.Append( key );
+            aParameterList.Add( tmp );
+            wxLogTrace( traceGedaPcbPlugin, dump( aParameterList ) );
+            return;
+
+        case '\n':
+        case '\r':
+            line = aLineReader->ReadLine();
+
+            if( !line )
+                return;
+
+            KI_FALLTHROUGH;
+
+        case '\t':
+        case ' ':
+            if( !tmp.IsEmpty() )
+            {
+                aParameterList.Add( tmp );
+                tmp.Clear();
+            }
+
+            break;
+
+        case '"':
+            if( *line == '"' )
+            {
+                line++;
+                tmp.Clear();
+                aParameterList.Add( wxEmptyString );
+                break;
+            }
+
+            while( *line != 0 )
+            {
+                key = *line;
+                line++;
+
+                if( key == '"' )
+                {
+                    aParameterList.Add( tmp );
+                    tmp.Clear();
+                    break;
+                }
+                else
+                {
+                    tmp.Append( key );
+                }
+            }
+
+            break;
+
+        case '#':
+            line = aLineReader->ReadLine();
+
+            if( !line )
+                return;
+
+            break;
+
+        default:
+            tmp.Append( key );
+            break;
+        }
+    }
+}
+
+
+bool PCB_IO_GEDA::testFlags( const wxString& aFlag, long aMask, const wxChar* aName )
+{
+    wxString number;
+
+    if( aFlag.StartsWith( wxT( "0x" ), &number ) || aFlag.StartsWith( wxT( "0X" ), &number ) )
+    {
+        long lflags;
+
+        if( number.ToLong( &lflags, 16 ) && ( lflags & aMask ) )
+            return true;
+    }
+    else if( aFlag.Contains( aName ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+bool PCB_IO_GEDA::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PCB_IO::CanReadBoard( aFileName ) )
+        return false;
+
+    wxFileInputStream input( aFileName );
+
+    if( !input.IsOk() )
+        return false;
+
+    wxTextInputStream text( input );
+
+    for( int i = 0; i < 20; i++ )
+    {
+        if( input.Eof() )
+            return false;
+
+        wxString line = text.ReadLine();
+
+        if( line.Contains( wxS( "PCB[" ) ) || line.Contains( wxS( "PCB(" ) ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+PCB_LAYER_ID PCB_IO_GEDA::mapLayer( int aGedaLayer, const wxString& aLayerName ) const
+{
+    wxString name = aLayerName.Lower();
+
+    if( name.Contains( wxT( "outline" ) ) || name.Contains( wxT( "route" ) ) )
+        return Edge_Cuts;
+
+    if( name.Contains( wxT( "silk" ) ) )
+    {
+        if( name.Contains( wxT( "solder" ) ) || name.Contains( wxT( "bottom" ) ) )
+            return B_SilkS;
+
+        return F_SilkS;
+    }
+
+    if( name.Contains( wxT( "mask" ) ) )
+    {
+        if( name.Contains( wxT( "solder" ) ) || name.Contains( wxT( "bottom" ) ) )
+            return B_Mask;
+
+        return F_Mask;
+    }
+
+    if( name.Contains( wxT( "paste" ) ) )
+    {
+        if( name.Contains( wxT( "solder" ) ) || name.Contains( wxT( "bottom" ) ) )
+            return B_Paste;
+
+        return F_Paste;
+    }
+
+    if( name.Contains( wxT( "fab" ) ) )
+        return F_Fab;
+
+    // Copper layers: gEDA uses 1-based numbering. 1 = component/top, 2 = solder/bottom.
+    if( name.Contains( wxT( "component" ) ) || name.Contains( wxT( "top" ) )
+        || ( aGedaLayer == 1 && !name.Contains( wxT( "solder" ) ) ) )
+    {
+        return F_Cu;
+    }
+
+    if( name.Contains( wxT( "solder" ) ) || name.Contains( wxT( "bottom" ) )
+        || aGedaLayer == 2 )
+    {
+        return B_Cu;
+    }
+
+    // Inner copper layers (gEDA layer numbers 3+)
+    if( aGedaLayer >= 3 && aGedaLayer <= 16 )
+    {
+        int innerIdx = aGedaLayer - 3;
+        PCB_LAYER_ID innerLayers[] = { In1_Cu, In2_Cu, In3_Cu, In4_Cu, In5_Cu, In6_Cu,
+                                       In7_Cu, In8_Cu, In9_Cu, In10_Cu, In11_Cu, In12_Cu,
+                                       In13_Cu, In14_Cu };
+
+        if( innerIdx < 14 )
+            return innerLayers[innerIdx];
+    }
+
+    return F_Cu;
+}
+
+
+void PCB_IO_GEDA::parseVia( wxArrayString& aParameters, double aConvUnit )
+{
+    // Via[X Y Thickness Clearance Mask Drill "Name" SFlags]
+    int paramCnt = aParameters.GetCount();
+
+    if( paramCnt < 10 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "Via token contains %d parameters, expected at least 10." ), paramCnt ) );
+    }
+
+    PCB_VIA* via = new PCB_VIA( m_board );
+
+    int x         = static_cast<int>( parseInt( aParameters[2], aConvUnit ) );
+    int y         = static_cast<int>( parseInt( aParameters[3], aConvUnit ) );
+    int thickness = static_cast<int>( parseInt( aParameters[4], aConvUnit ) );
+    int drill     = static_cast<int>( parseInt( aParameters[7], aConvUnit ) );
+
+    via->SetPosition( VECTOR2I( x, y ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, thickness );
+    via->SetDrill( drill );
+    via->SetViaType( VIATYPE::THROUGH );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetNet( NETINFO_LIST::OrphanedItem() );
+
+    m_board->Add( via, ADD_MODE::APPEND );
+}
+
+
+FOOTPRINT* PCB_IO_GEDA::parseElement( wxArrayString& aParameters, LINE_READER* aLineReader,
+                                      double aConvUnit )
+{
+    int       paramCnt = aParameters.GetCount();
+    double    conv_unit = aConvUnit;
+    wxString  msg;
+
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
+
+    if( paramCnt < 10 || paramCnt > 14 )
+    {
+        msg.Printf( _( "Element token contains %d parameters." ), paramCnt );
+        THROW_IO_ERROR( msg );
+    }
+
+    // The long form has SFlags, Desc, Name, Value, MX, MY, TX, TY, TDir, TScale, TSFlags
+    // paramCnt == 14: Element [ SFlags "Desc" "Name" "Value" MX MY TX TY TDir TScale TSFlags ]
+    // paramCnt == 12: Element ( NFlags "Desc" "Name" "Value" TX TY TDir TScale TNFlags )
+    int descIdx, nameIdx, valueIdx, mxIdx;
+
+    if( paramCnt > 10 )
+    {
+        descIdx  = 3;
+        nameIdx  = 4;
+        valueIdx = 5;
+        mxIdx    = 6;
+    }
+    else
+    {
+        descIdx  = 2;
+        nameIdx  = 3;
+        valueIdx = -1;
+        mxIdx    = -1;
+    }
+
+    footprint->SetLibDescription( aParameters[descIdx] );
+    footprint->SetReference( aParameters[nameIdx] );
+
+    if( valueIdx > 0 )
+        footprint->SetValue( aParameters[valueIdx] );
+
+    if( footprint->Value().GetText().IsEmpty() )
+        footprint->Value().SetText( wxT( "VAL**" ) );
+
+    if( footprint->Reference().GetText().IsEmpty() )
+        footprint->Reference().SetText( wxT( "REF**" ) );
+
+    // Set footprint position from MX, MY (absolute board coordinates)
+    if( mxIdx > 0 && paramCnt > 12 )
+    {
+        int mx = static_cast<int>( parseInt( aParameters[mxIdx], conv_unit ) );
+        int my = static_cast<int>( parseInt( aParameters[mxIdx + 1], conv_unit ) );
+        footprint->SetPosition( VECTOR2I( mx, my ) );
+    }
+
+    wxArrayString parameters;
+
+    while( aLineReader->ReadLine() )
+    {
+        parameters.Clear();
+        parseParameters( parameters, aLineReader );
+
+        if( parameters.IsEmpty() || parameters[0] == wxT( "(" ) )
+            continue;
+
+        if( parameters[0] == wxT( ")" ) )
+            break;
+
+        paramCnt = parameters.GetCount();
+
+        if( paramCnt > 3 )
+        {
+            if( parameters[1] == wxT( "(" ) )
+                conv_unit = OLD_GPCB_UNIT_CONV;
+            else
+                conv_unit = NEW_GPCB_UNIT_CONV;
+        }
+
+        // ElementLine [X1 Y1 X2 Y2 Thickness]
+        if( parameters[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )
+        {
+            if( paramCnt != 8 )
+                continue;
+
+            PCB_SHAPE* shape = new PCB_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
+            shape->SetLayer( F_SilkS );
+            shape->SetStart( VECTOR2I( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                                       static_cast<int>( parseInt( parameters[3], conv_unit ) ) ) );
+            shape->SetEnd( VECTOR2I( static_cast<int>( parseInt( parameters[4], conv_unit ) ),
+                                     static_cast<int>( parseInt( parameters[5], conv_unit ) ) ) );
+            shape->SetStroke( STROKE_PARAMS( static_cast<int>( parseInt( parameters[6], conv_unit ) ),
+                                             LINE_STYLE::SOLID ) );
+
+            shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
+            shape->Move( footprint->GetPosition() );
+
+            footprint->Add( shape );
+            continue;
+        }
+
+        // ElementArc [X Y Width Height StartAngle DeltaAngle Thickness]
+        if( parameters[0].CmpNoCase( wxT( "ElementArc" ) ) == 0 )
+        {
+            if( paramCnt != 10 )
+                continue;
+
+            PCB_SHAPE* shape = new PCB_SHAPE( footprint.get(), SHAPE_T::ARC );
+            shape->SetLayer( F_SilkS );
+            footprint->Add( shape );
+
+            int radius = static_cast<int>( ( parseInt( parameters[4], conv_unit )
+                                             + parseInt( parameters[5], conv_unit ) ) / 2 );
+
+            VECTOR2I centre( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                             static_cast<int>( parseInt( parameters[3], conv_unit ) ) );
+
+            EDA_ANGLE start_angle( static_cast<int>( parseInt( parameters[6], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
+            start_angle += ANGLE_180;
+
+            EDA_ANGLE sweep_angle( static_cast<int>( parseInt( parameters[7], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
+
+            if( sweep_angle == -ANGLE_360 )
+            {
+                shape->SetShape( SHAPE_T::CIRCLE );
+                shape->SetCenter( centre );
+                shape->SetEnd( centre + VECTOR2I( radius, 0 ) );
+            }
+            else
+            {
+                VECTOR2I arcStart( radius, 0 );
+                RotatePoint( arcStart, -start_angle );
+                shape->SetCenter( centre );
+                shape->SetStart( arcStart + centre );
+                shape->SetArcAngleAndEnd( sweep_angle, true );
+            }
+
+            shape->SetStroke( STROKE_PARAMS( static_cast<int>( parseInt( parameters[8], conv_unit ) ),
+                                             LINE_STYLE::SOLID ) );
+
+            shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
+            shape->Move( footprint->GetPosition() );
+            continue;
+        }
+
+        // Pad [rX1 rY1 rX2 rY2 Thickness Clearance Mask "Name" "Number" SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Pad" ) ) == 0 )
+        {
+            if( paramCnt < 10 || paramCnt > 13 )
+                continue;
+
+            std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
+
+            static const LSET pad_front( { F_Cu, F_Mask, F_Paste } );
+            static const LSET pad_back( { B_Cu, B_Mask, B_Paste } );
+
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+            pad->SetAttribute( PAD_ATTRIB::SMD );
+            pad->SetLayerSet( pad_front );
+
+            if( testFlags( parameters[paramCnt - 2], 0x0080, wxT( "onsolder" ) ) )
+                pad->SetLayerSet( pad_back );
+
+            pad->SetNumber( parameters[paramCnt - 3] );
+
+            int x1 = static_cast<int>( parseInt( parameters[2], conv_unit ) );
+            int x2 = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+            int y1 = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+            int y2 = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+            int width = static_cast<int>( parseInt( parameters[6], conv_unit ) );
+            VECTOR2I delta( x2 - x1, y2 - y1 );
+            double angle = atan2( (double) delta.y, (double) delta.x );
+
+            if( paramCnt == 13 )
+            {
+                int clearance = static_cast<int>( parseInt( parameters[7], conv_unit ) );
+                pad->SetLocalClearance( clearance / 2 );
+
+                int maskMargin = static_cast<int>( parseInt( parameters[8], conv_unit ) );
+                maskMargin = ( maskMargin - width ) / 2;
+                pad->SetLocalSolderMaskMargin( maskMargin );
+            }
+
+            EDA_ANGLE orient( -angle, RADIANS_T );
+            pad->SetOrientation( orient );
+
+            VECTOR2I padPos( ( x1 + x2 ) / 2, ( y1 + y2 ) / 2 );
+
+            pad->SetSize( PADSTACK::ALL_LAYERS,
+                          VECTOR2I( delta.EuclideanNorm() + width, width ) );
+
+            padPos += footprint->GetPosition();
+            pad->SetPosition( padPos );
+
+            if( !testFlags( parameters[paramCnt - 2], 0x0100, wxT( "square" ) ) )
+            {
+                if( pad->GetSize( PADSTACK::ALL_LAYERS ).x
+                    == pad->GetSize( PADSTACK::ALL_LAYERS ).y )
+                {
+                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                }
+                else
+                {
+                    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+                }
+            }
+
+            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+                footprint->Add( pad.release() );
+
+            continue;
+        }
+
+        // Pin [rX rY Thickness Clearance Mask Drill "Name" "Number" SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Pin" ) ) == 0 )
+        {
+            if( paramCnt < 8 || paramCnt > 12 )
+                continue;
+
+            PAD* pad = new PAD( footprint.get() );
+
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+
+            static const LSET pad_set = LSET::AllCuMask()
+                                        | LSET( { F_SilkS, F_Mask, B_Mask } );
+
+            pad->SetLayerSet( pad_set );
+
+            if( testFlags( parameters[paramCnt - 2], 0x0100, wxT( "square" ) ) )
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+
+            pad->SetNumber( parameters[paramCnt - 3] );
+
+            VECTOR2I padPos( static_cast<int>( parseInt( parameters[2], conv_unit ) ),
+                             static_cast<int>( parseInt( parameters[3], conv_unit ) ) );
+
+            int padSize = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padSize, padSize ) );
+
+            int drillSize = 0;
+
+            if( paramCnt == 12 )
+            {
+                int clearance = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+                pad->SetLocalClearance( clearance / 2 );
+
+                int maskMargin = static_cast<int>( parseInt( parameters[6], conv_unit ) );
+                maskMargin = ( maskMargin - padSize ) / 2;
+                pad->SetLocalSolderMaskMargin( maskMargin );
+
+                drillSize = static_cast<int>( parseInt( parameters[7], conv_unit ) );
+            }
+            else
+            {
+                drillSize = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+            }
+
+            pad->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
+
+            padPos += footprint->GetPosition();
+            pad->SetPosition( padPos );
+
+            if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE
+                && pad->GetSize( PADSTACK::ALL_LAYERS ).x
+                       != pad->GetSize( PADSTACK::ALL_LAYERS ).y )
+            {
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+            }
+
+            footprint->Add( pad );
+            continue;
+        }
+    }
+
+    // Handle the onsolder element flag to flip bottom-side components.
+    // In the long form, SFlags is at index 2; in the short form, NFlags is at index 2.
+    wxString elementFlags = aParameters[2];
+
+    if( elementFlags.Contains( wxT( "onsolder" ) ) )
+        footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+    footprint->AutoPositionFields();
+
+    return footprint.release();
+}
+
+
+void PCB_IO_GEDA::parseLayer( wxArrayString& aParameters, LINE_READER* aLineReader,
+                              double aConvUnit )
+{
+    // Layer(N "name") (  ... objects ... )
+    // In new format: Layer[N "name"]
+    int paramCnt = aParameters.GetCount();
+
+    if( paramCnt < 4 )
+        return;
+
+    long layerNum = 0;
+    aParameters[2].ToLong( &layerNum );
+
+    wxString layerName;
+
+    if( paramCnt > 4 )
+        layerName = aParameters[3];
+
+    PCB_LAYER_ID kicadLayer = mapLayer( (int) layerNum, layerName );
+
+    bool isCopperLayer = IsCopperLayer( kicadLayer );
+
+    if( isCopperLayer )
+    {
+        // gEDA layer numbers are 1-based (1=component, 2=solder, 3+=inner)
+        int layerCount = static_cast<int>( layerNum );
+
+        if( layerCount > m_numCopperLayers )
+            m_numCopperLayers = layerCount;
+    }
+
+    wxArrayString parameters;
+    double        conv_unit = aConvUnit;
+
+    while( aLineReader->ReadLine() )
+    {
+        parameters.Clear();
+        parseParameters( parameters, aLineReader );
+
+        if( parameters.IsEmpty() || parameters[0] == wxT( "(" ) )
+            continue;
+
+        if( parameters[0] == wxT( ")" ) )
+            break;
+
+        paramCnt = parameters.GetCount();
+
+        if( paramCnt > 3 )
+        {
+            if( parameters[1] == wxT( "(" ) )
+                conv_unit = OLD_GPCB_UNIT_CONV;
+            else
+                conv_unit = NEW_GPCB_UNIT_CONV;
+        }
+
+        // Line[X1 Y1 X2 Y2 Thickness Clearance SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Line" ) ) == 0 )
+        {
+            if( paramCnt < 9 )
+                continue;
+
+            int x1        = static_cast<int>( parseInt( parameters[2], conv_unit ) );
+            int y1        = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+            int x2        = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+            int y2        = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+            int thickness = static_cast<int>( parseInt( parameters[6], conv_unit ) );
+
+            if( isCopperLayer )
+            {
+                PCB_TRACK* track = new PCB_TRACK( m_board );
+                track->SetStart( VECTOR2I( x1, y1 ) );
+                track->SetEnd( VECTOR2I( x2, y2 ) );
+                track->SetWidth( thickness );
+                track->SetLayer( kicadLayer );
+                track->SetNet( NETINFO_LIST::OrphanedItem() );
+                m_board->Add( track, ADD_MODE::APPEND );
+            }
+            else
+            {
+                PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+                shape->SetStart( VECTOR2I( x1, y1 ) );
+                shape->SetEnd( VECTOR2I( x2, y2 ) );
+                shape->SetStroke( STROKE_PARAMS( thickness, LINE_STYLE::SOLID ) );
+                shape->SetLayer( kicadLayer );
+                m_board->Add( shape, ADD_MODE::APPEND );
+            }
+
+            continue;
+        }
+
+        // Arc[X Y Width Height Thickness Clearance StartAngle DeltaAngle SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Arc" ) ) == 0 )
+        {
+            if( paramCnt < 11 )
+                continue;
+
+            int cx        = static_cast<int>( parseInt( parameters[2], conv_unit ) );
+            int cy        = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+            int arcWidth  = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+            int arcHeight = static_cast<int>( parseInt( parameters[5], conv_unit ) );
+            int thickness = static_cast<int>( parseInt( parameters[6], conv_unit ) );
+            int radius    = ( arcWidth + arcHeight ) / 2;
+
+            VECTOR2I centre( cx, cy );
+
+            EDA_ANGLE start_angle( static_cast<int>( parseInt( parameters[8], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
+            start_angle += ANGLE_180;
+
+            EDA_ANGLE sweep_angle( static_cast<int>( parseInt( parameters[9], -10.0 ) ),
+                                   TENTHS_OF_A_DEGREE_T );
+
+            if( isCopperLayer )
+            {
+                PCB_ARC* arc = new PCB_ARC( m_board );
+                arc->SetLayer( kicadLayer );
+                arc->SetWidth( thickness );
+                arc->SetNet( NETINFO_LIST::OrphanedItem() );
+
+                VECTOR2I arcStart( radius, 0 );
+                RotatePoint( arcStart, -start_angle );
+                arc->SetStart( arcStart + centre );
+
+                VECTOR2I arcMid( radius, 0 );
+                RotatePoint( arcMid, -start_angle - sweep_angle / 2 );
+                arc->SetMid( arcMid + centre );
+
+                VECTOR2I arcEnd( radius, 0 );
+                RotatePoint( arcEnd, -start_angle - sweep_angle );
+                arc->SetEnd( arcEnd + centre );
+
+                m_board->Add( arc, ADD_MODE::APPEND );
+            }
+            else
+            {
+                PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::ARC );
+                shape->SetLayer( kicadLayer );
+
+                if( sweep_angle == -ANGLE_360 )
+                {
+                    shape->SetShape( SHAPE_T::CIRCLE );
+                    shape->SetCenter( centre );
+                    shape->SetEnd( centre + VECTOR2I( radius, 0 ) );
+                }
+                else
+                {
+                    VECTOR2I arcStart( radius, 0 );
+                    RotatePoint( arcStart, -start_angle );
+                    shape->SetCenter( centre );
+                    shape->SetStart( arcStart + centre );
+                    shape->SetArcAngleAndEnd( sweep_angle, true );
+                }
+
+                shape->SetStroke( STROKE_PARAMS( thickness, LINE_STYLE::SOLID ) );
+                m_board->Add( shape, ADD_MODE::APPEND );
+            }
+
+            continue;
+        }
+
+        // Polygon(SFlags) ( [X Y] [X Y] ... )
+        if( parameters[0].CmpNoCase( wxT( "Polygon" ) ) == 0 )
+        {
+            ZONE* zone = new ZONE( m_board );
+            zone->SetLayer( kicadLayer );
+            zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            zone->SetLocalClearance( 0 );
+            zone->SetAssignedPriority( 0 );
+
+            const int outlineIdx = -1;
+            bool      parsingPoints = false;
+
+            while( aLineReader->ReadLine() )
+            {
+                wxArrayString polyParams;
+                parseParameters( polyParams, aLineReader );
+
+                if( polyParams.IsEmpty() )
+                    continue;
+
+                if( polyParams[0] == wxT( ")" ) )
+                    break;
+
+                if( polyParams[0] == wxT( "(" ) )
+                {
+                    parsingPoints = true;
+                    continue;
+                }
+
+                if( !parsingPoints )
+                    continue;
+
+                // Parse coordinate pairs [X Y]
+                for( size_t i = 0; i < polyParams.GetCount(); i++ )
+                {
+                    if( polyParams[i] == wxT( "[" ) && i + 2 < polyParams.GetCount() )
+                    {
+                        int px = static_cast<int>( parseInt( polyParams[i + 1], conv_unit ) );
+                        int py = static_cast<int>( parseInt( polyParams[i + 2], conv_unit ) );
+                        zone->AppendCorner( VECTOR2I( px, py ), outlineIdx );
+                        i += 3;  // skip past X, Y, ]
+                    }
+                }
+            }
+
+            if( zone->GetNumCorners() >= 3 )
+            {
+                zone->SetIsFilled( false );
+                m_board->Add( zone, ADD_MODE::APPEND );
+            }
+            else
+            {
+                delete zone;
+            }
+
+            continue;
+        }
+
+        // Text[X Y Direction Scale "String" SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Text" ) ) == 0 )
+        {
+            if( paramCnt < 8 )
+                continue;
+
+            PCB_TEXT* text = new PCB_TEXT( m_board );
+            text->SetLayer( kicadLayer );
+
+            int tx = static_cast<int>( parseInt( parameters[2], conv_unit ) );
+            int ty = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+            text->SetPosition( VECTOR2I( tx, ty ) );
+
+            long direction = 0;
+            parameters[4].ToLong( &direction );
+
+            EDA_ANGLE textAngle( static_cast<double>( direction ) * 90.0, DEGREES_T );
+            text->SetTextAngle( textAngle );
+
+            long scale = 100;
+            parameters[5].ToLong( &scale );
+
+            int textSize = KiROUND( TEXT_DEFAULT_SIZE * static_cast<double>( scale ) / 100.0 );
+            text->SetTextSize( VECTOR2I( textSize, textSize ) );
+
+            text->SetText( parameters[6] );
+            m_board->Add( text, ADD_MODE::APPEND );
+            continue;
+        }
+    }
+}
+
+
+void PCB_IO_GEDA::parseNetList( LINE_READER* aLineReader )
+{
+    // NetList() (
+    //   Net("netname" "style") (
+    //     Connect("refdes-pinnumber")
+    //   )
+    // )
+
+    // Build a lookup map for fast refdes -> footprint resolution
+    std::map<wxString, FOOTPRINT*> fpByRef;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+        fpByRef[fp->GetReference()] = fp;
+
+    wxArrayString parameters;
+
+    while( aLineReader->ReadLine() )
+    {
+        parameters.Clear();
+        parseParameters( parameters, aLineReader );
+
+        if( parameters.IsEmpty() )
+            continue;
+
+        if( parameters[0] == wxT( ")" ) )
+            break;
+
+        if( parameters[0] == wxT( "(" ) )
+            continue;
+
+        // Net("netname" "style") (
+        if( parameters[0].CmpNoCase( wxT( "Net" ) ) == 0 )
+        {
+            wxString netName;
+
+            if( parameters.GetCount() > 3 )
+                netName = parameters[2];
+
+            // Create or find the net
+            NETINFO_ITEM* netInfo = nullptr;
+            auto          it = m_netMap.find( netName );
+
+            if( it != m_netMap.end() )
+            {
+                netInfo = it->second;
+            }
+            else
+            {
+                netInfo = new NETINFO_ITEM( m_board, netName );
+                m_board->Add( netInfo );
+                m_netMap[netName] = netInfo;
+            }
+
+            // Parse Connect entries within this Net
+            while( aLineReader->ReadLine() )
+            {
+                wxArrayString netParams;
+                parseParameters( netParams, aLineReader );
+
+                if( netParams.IsEmpty() )
+                    continue;
+
+                if( netParams[0] == wxT( ")" ) )
+                    break;
+
+                if( netParams[0] == wxT( "(" ) )
+                    continue;
+
+                // Connect("refdes-pinnumber")
+                if( netParams[0].CmpNoCase( wxT( "Connect" ) ) == 0 && netParams.GetCount() > 3 )
+                {
+                    wxString connectStr = netParams[2];
+
+                    // Find the last hyphen to split refdes from pinnumber
+                    int lastDash = connectStr.Find( '-', true );
+
+                    if( lastDash == wxNOT_FOUND )
+                        continue;
+
+                    wxString refdes    = connectStr.Left( lastDash );
+                    wxString pinNumber = connectStr.Mid( lastDash + 1 );
+
+                    auto fpIt = fpByRef.find( refdes );
+
+                    if( fpIt == fpByRef.end() )
+                        continue;
+
+                    for( PAD* pad : fpIt->second->Pads() )
+                    {
+                        if( pad->GetNumber() == pinNumber )
+                        {
+                            pad->SetNet( netInfo );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+BOARD* PCB_IO_GEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                               const std::map<std::string, UTF8>* aProperties,
+                               PROJECT* aProject )
+{
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
+
+    init( aProperties );
+
+    m_board = aAppendToMe ? aAppendToMe : new BOARD();
+
+    if( !aAppendToMe )
+        m_board->SetFileName( aFileName );
+
+    std::unique_ptr<BOARD> deleter( aAppendToMe ? nullptr : m_board );
+
+    for( FOOTPRINT* fp : m_cachedFootprints )
+        delete fp;
+
+    m_cachedFootprints.clear();
+    m_netMap.clear();
+    m_numCopperLayers = 2;
+
+    FILE_LINE_READER reader( aFileName );
+
+    double conv_unit = NEW_GPCB_UNIT_CONV;
+
+    while( reader.ReadLine() )
+    {
+        wxArrayString parameters;
+        parseParameters( parameters, &reader );
+
+        if( parameters.IsEmpty() )
+            continue;
+
+        int paramCnt = parameters.GetCount();
+
+        if( paramCnt > 3 )
+        {
+            if( parameters[1] == wxT( "(" ) )
+                conv_unit = OLD_GPCB_UNIT_CONV;
+            else
+                conv_unit = NEW_GPCB_UNIT_CONV;
+        }
+
+        // PCB["name" width height]
+        if( parameters[0].CmpNoCase( wxT( "PCB" ) ) == 0 )
+        {
+            if( paramCnt > 4 )
+            {
+                int boardWidth  = static_cast<int>( parseInt( parameters[3], conv_unit ) );
+                int boardHeight = static_cast<int>( parseInt( parameters[4], conv_unit ) );
+
+                // Set page size from board dimensions
+                VECTOR2I pageSize( boardWidth, boardHeight );
+                PAGE_INFO page;
+                page.SetWidthMils( boardWidth / pcbIUScale.IU_PER_MILS );
+                page.SetHeightMils( boardHeight / pcbIUScale.IU_PER_MILS );
+                m_board->SetPageSettings( page );
+            }
+
+            continue;
+        }
+
+        // FileVersion[YYYYMMDD]
+        if( parameters[0].CmpNoCase( wxT( "FileVersion" ) ) == 0 )
+            continue;
+
+        // Grid, Cursor, Thermal, DRC, Flags, Groups, Styles -- skip
+        if( parameters[0].CmpNoCase( wxT( "Grid" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Cursor" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Thermal" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "DRC" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Flags" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Groups" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Styles" ) ) == 0
+            || parameters[0].CmpNoCase( wxT( "Attribute" ) ) == 0 )
+        {
+            continue;
+        }
+
+        // Via[X Y Thickness Clearance Mask Drill "Name" SFlags]
+        if( parameters[0].CmpNoCase( wxT( "Via" ) ) == 0 )
+        {
+            parseVia( parameters, conv_unit );
+            continue;
+        }
+
+        // Element[SFlags "Desc" "Name" "Value" MX MY TX TY TDir TScale TSFlags] (...)
+        if( parameters[0].CmpNoCase( wxT( "Element" ) ) == 0 )
+        {
+            FOOTPRINT* fp = parseElement( parameters, &reader, conv_unit );
+
+            if( fp )
+            {
+                m_board->Add( fp, ADD_MODE::APPEND );
+
+                // Cache a copy for GetImportedCachedLibraryFootprints
+                FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( fp->Clone() );
+                fpCopy->SetParent( nullptr );
+                m_cachedFootprints.push_back( fpCopy );
+            }
+
+            continue;
+        }
+
+        // Layer(N "name") ( ... )
+        if( parameters[0].CmpNoCase( wxT( "Layer" ) ) == 0 )
+        {
+            parseLayer( parameters, &reader, conv_unit );
+            continue;
+        }
+
+        // Rat[X1 Y1 Group1 X2 Y2 Group2 SFlags] -- skip rats nest
+        if( parameters[0].CmpNoCase( wxT( "Rat" ) ) == 0 )
+            continue;
+
+        // NetList() ( ... )
+        if( parameters[0].CmpNoCase( wxT( "NetList" ) ) == 0 )
+        {
+            parseNetList( &reader );
+            continue;
+        }
+    }
+
+    // Set copper layer count
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    m_board->SetCopperLayerCount( std::max( 2, m_numCopperLayers ) );
+
+    LSET enabledLayers = bds.GetEnabledLayers();
+    enabledLayers.set( F_Cu );
+    enabledLayers.set( B_Cu );
+    enabledLayers.set( F_SilkS );
+    enabledLayers.set( B_SilkS );
+    enabledLayers.set( F_Mask );
+    enabledLayers.set( B_Mask );
+    enabledLayers.set( Edge_Cuts );
+    bds.SetEnabledLayers( enabledLayers );
+
+    m_board->m_LegacyDesignSettingsLoaded = true;
+    m_board->m_LegacyNetclassesLoaded = true;
+
+    deleter.release();
+    return m_board;
+}
+
+
+std::vector<FOOTPRINT*> PCB_IO_GEDA::GetImportedCachedLibraryFootprints()
+{
+    std::vector<FOOTPRINT*> retval;
+
+    for( FOOTPRINT* fp : m_cachedFootprints )
+        retval.push_back( static_cast<FOOTPRINT*>( fp->Clone() ) );
+
+    return retval;
 }

@@ -1,0 +1,44 @@
+v 20061020 1
+P 300 1000 300 800 1 0 0
+{
+T 300 900 5 8 0 1 0 7 1
+pinnumber=1
+T 300 900 5 8 0 1 0 7 1
+pinseq=1
+T 300 650 9 18 1 1 270 4 1
+pinlabel=+
+T 350 900 5 8 0 1 0 1 1
+pintype=pas
+}
+P 300 0 300 200 1 0 0
+{
+T 300 100 5 8 0 1 0 7 1
+pinnumber=2
+T 300 100 5 8 0 1 0 7 1
+pinseq=2
+T 350 300 9 18 1 1 180 4 1
+pinlabel=-
+T 350 100 5 8 0 1 0 1 1
+pintype=pas
+}
+T 100 2100 5 8 0 0 0 0 1
+device=beeper
+T 700 700 8 10 1 1 0 0 1
+refdes=U?
+V 300 500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 100 1900 5 8 0 0 0 0 1
+description=digisound coil beeper
+T 100 1100 5 8 0 0 0 0 1
+numslots=0
+T 700 500 8 10 1 1 0 0 1
+value=F/UCW-12
+T 700 300 8 8 1 1 0 0 1
+footprint=BEEPER
+T 325 500 9 10 1 0 0 4 1
+BEEP
+T 100 1300 5 8 0 0 0 0 1
+license=GPL2
+T 100 1700 5 8 0 0 0 0 1
+documentation=http://www.digisound.de/pdf/06%20MBuzzerWOscil/F.UCW.01.pdf
+T 100 1500 5 8 0 0 0 0 1
+author=K-M. Knaak, kmk@lilalaser.de

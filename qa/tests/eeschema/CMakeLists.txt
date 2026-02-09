@@ -52,6 +52,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/altium/test_altium_parser_sch.cpp
     sch_io/pads/test_pads_sch_parser.cpp
     sch_io/pads/test_pads_sch_import.cpp
+    sch_io/geda/test_geda_sch_import.cpp
 
     erc/test_erc_four_way.cpp
 	erc/test_erc_label_not_connected.cpp

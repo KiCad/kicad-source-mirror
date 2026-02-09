@@ -1187,6 +1187,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case PCB_IO_MGR::EAGLE:
     case PCB_IO_MGR::EASYEDA:
     case PCB_IO_MGR::EASYEDAPRO:
+    case PCB_IO_MGR::GEDA_PCB:
         return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
 
     case PCB_IO_MGR::ALTIUM_DESIGNER:

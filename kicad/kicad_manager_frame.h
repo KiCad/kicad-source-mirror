@@ -131,6 +131,11 @@ public:
     void OnImportPadsProjectFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import gEDA/gaf schematic and PCB files.
+     */
+    void OnImportGedaFiles( wxCommandEvent& event );
+
+    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();

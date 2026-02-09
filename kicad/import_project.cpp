@@ -203,3 +203,11 @@ void KICAD_MANAGER_FRAME::OnImportPadsProjectFiles( wxCommandEvent& event )
                            { "asc", "txt" }, { "asc", "txt" }, SCH_IO_MGR::SCH_PADS,
                            PCB_IO_MGR::PADS );
 }
+
+
+void KICAD_MANAGER_FRAME::OnImportGedaFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import gEDA / Lepton EDA Project Files" ),
+                           FILEEXT::GedaProjectFilesWildcard(), { "prj", "sch" }, { "pcb" },
+                           SCH_IO_MGR::SCH_GEDA, PCB_IO_MGR::GEDA_PCB );
+}

@@ -1,0 +1,18 @@
+v 20091004 2
+P 0 100 200 100 1 0 0
+{
+T 600 100 5 10 0 0 180 8 1
+pinseq=1
+T 600 300 5 10 0 0 180 8 1
+pinnumber=1
+}
+L 100 0 300 200 3 0 0 0 -1 -1
+T 100 500 8 10 0 0 0 0 1
+value=NoConnection
+T 0 600 8 10 0 0 0 0 1
+documentation=nc.pdf
+T 100 700 8 10 0 0 0 0 1
+device=DRC_Directive
+T 100 900 8 10 0 0 0 0 1
+graphical=1
+L 300 0 100 200 3 0 0 0 -1 -1

@@ -82,6 +82,8 @@ private:
     void EasyEDAProProjectHandler();
 
     void AltiumProjectHandler();
+
+    void GedaProjectHandler();
 };
 
 #endif

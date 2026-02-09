@@ -1,0 +1,38 @@
+# release: pcb 20140316
+FileVersion[20091103]
+
+PCB["onsolder_test" 200.00mil 200.00mil]
+
+Grid[1000.000000 0.0000 0.0000 0]
+PolyArea[3100.006200]
+Thermal[0.500000]
+DRC[10.00mil 10.00mil 10.00mil 10.00mil 15.00mil 10.00mil]
+Flags("nameonpcb,uniquename,clearnew,snappin")
+Groups("1,c:2,s")
+Styles["Signal,10.00mil,36.00mil,20.00mil,10.00mil:Power,25.00mil,60.00mil,35.00mil,10.00mil:Fat,40.00mil,60.00mil,35.00mil,10.00mil:Skinny,6.00mil,24.02mil,11.81mil,6.00mil"]
+
+Symbol[' ' 18.00mil]
+(
+)
+
+# Top-side resistor (no onsolder flag)
+Element["" "0805" "R1" "10k" 5000 5000 -2000 -3000 0 100 ""]
+(
+	Pad[-393 -2755 393 -2755 2952 2000 3552 "1" "1" "square"]
+	Pad[-393 2755 393 2755 2952 2000 3552 "2" "2" "square"]
+	ElementLine [-1969 -3937 -1969 3937 800]
+	ElementLine [-1969 3937 1969 3937 800]
+	ElementLine [1969 3937 1969 -3937 800]
+	ElementLine [1969 -3937 -1969 -3937 800]
+	)
+
+# Bottom-side capacitor (onsolder flag)
+Element["onsolder" "0603" "C1" "100nF" 15000 5000 -2000 -3000 0 100 ""]
+(
+	Pad[-295 -2067 295 -2067 2362 2000 2962 "1" "1" "square,onsolder"]
+	Pad[-295 2067 295 2067 2362 2000 2962 "2" "2" "square,onsolder"]
+	ElementLine [-1476 -2953 -1476 2953 800]
+	ElementLine [-1476 2953 1476 2953 800]
+	ElementLine [1476 2953 1476 -2953 800]
+	ElementLine [1476 -2953 -1476 -2953 800]
+	)

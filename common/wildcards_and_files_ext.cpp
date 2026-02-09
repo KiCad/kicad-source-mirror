@@ -309,6 +309,12 @@ wxString FILEEXT::PADSProjectFilesWildcard()
 }
 
 
+wxString FILEEXT::GedaProjectFilesWildcard()
+{
+    return _( "gEDA / Lepton EDA project files" ) + AddFileExtListToFilter( { "prj", "sch", "pcb" } );
+}
+
+
 wxString FILEEXT::OrCadPcb2NetlistFileWildcard()
 {
     return _( "OrcadPCB2 netlist files" )

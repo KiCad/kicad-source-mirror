@@ -64,6 +64,9 @@ set( EESCHEMA_SCH_IO
     # Database IO plugin
     sch_io/database/sch_io_database.cpp
 
+    # gEDA IO plugin
+    sch_io/geda/sch_io_geda.cpp
+
     # Eagle IO plugin
     sch_io/eagle/sch_io_eagle.cpp
 

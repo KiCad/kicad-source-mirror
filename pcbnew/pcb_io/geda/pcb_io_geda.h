@@ -20,41 +20,71 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ *
+ * This file contains file format knowledge derived from the gEDA/pcb project:
+ *
+ *   gEDA/gaf  - Copyright (C) 1998-2010 Ales Hvezda
+ *               Copyright (C) 1998-2016 gEDA Contributors
+ *   Lepton EDA - Copyright (C) 2017-2024 Lepton EDA Contributors
+ *
+ * Both projects are licensed under the GNU General Public License v2 or later.
+ * See https://github.com/lepton-eda/lepton-eda and
+ *     https://github.com/rlutz/geda-gaf
  */
 
 /**
- * @file pcb_io_geda.cpp
+ * @file pcb_io_geda.h
  * @brief Geda PCB file plugin definition file.
  */
 
 #ifndef PCB_IO_GEDA_H_
 #define PCB_IO_GEDA_H_
 
+#include <map>
 #include <string>
+#include <vector>
 
+#include <layer_ids.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
 
+class BOARD;
+class FOOTPRINT;
 class GPCB_FPL_CACHE;
 class LINE_READER;
+class NETINFO_ITEM;
 
 /**
  * A #PLUGIN derivation for saving and loading Geda PCB files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
- * @note Currently only reading GPCB footprint files is implemented.
  */
 class PCB_IO_GEDA : public PCB_IO
 {
 public:
+    // Board-level file support
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
+    {
+        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA / Lepton EDA PCB board file" ), { "pcb" } );
+    }
+
+    bool CanReadBoard( const wxString& aFileName ) const override;
+
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const std::map<std::string, UTF8>* aProperties = nullptr,
+                      PROJECT* aProject = nullptr ) override;
+
+    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+
+    // Footprint library support
     const IO_BASE::IO_FILE_DESC GetLibraryFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA PCB footprint file" ), { "fp" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA / Lepton EDA PCB footprint file" ), { "fp" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA PCB footprint library directory" ), {}, { "fp" },
+        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA / Lepton EDA PCB footprint library directory" ), {}, { "fp" },
                                       false );
     }
 
@@ -85,7 +115,7 @@ public:
 
     PCB_IO_GEDA( int aControlFlags );
 
-    ~PCB_IO_GEDA();
+    ~PCB_IO_GEDA() override;
 
 private:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
@@ -97,12 +127,28 @@ private:
 
     friend class GPCB_FPL_CACHE;
 
+    // Board parsing helpers
+    PCB_LAYER_ID mapLayer( int aGedaLayer, const wxString& aLayerName ) const;
+
+    void parseVia( wxArrayString& aParameters, double aConvUnit );
+    FOOTPRINT* parseElement( wxArrayString& aParameters, LINE_READER* aLineReader,
+                             double aConvUnit );
+    void parseLayer( wxArrayString& aParameters, LINE_READER* aLineReader, double aConvUnit );
+    void parseNetList( LINE_READER* aLineReader );
+    void parseParameters( wxArrayString& aParameterList, LINE_READER* aLineReader );
+    bool testFlags( const wxString& aFlag, long aMask, const wxChar* aName );
+
 protected:
     wxString               m_error;    ///< for throwing exceptions
     GPCB_FPL_CACHE*        m_cache;    ///< Footprint library cache.
     int                    m_ctl;
     LINE_READER*           m_reader;   ///< no ownership here.
     wxString               m_filename; ///< for saves only, name is in m_reader for loads
+
+    // Board import state
+    std::vector<FOOTPRINT*>                     m_cachedFootprints;
+    std::map<wxString, NETINFO_ITEM*>           m_netMap;
+    int                                         m_numCopperLayers;
 };
 
 #endif  // PCB_IO_GEDA_H_

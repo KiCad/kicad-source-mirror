@@ -1,0 +1,3 @@
+; gschemrc - project-level gschem configuration
+; This file configures local symbol libraries
+(component-library "gschemrc-symbols")

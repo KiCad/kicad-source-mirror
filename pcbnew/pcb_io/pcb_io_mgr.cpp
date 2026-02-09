@@ -329,7 +329,7 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerGPCBPlugin(
         PCB_IO_MGR::GEDA_PCB,
-        wxT( "GEDA/Pcb" ),
+        wxT( "gEDA / Lepton EDA" ),
         []() -> PCB_IO* { return new PCB_IO_GEDA; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerPcadPlugin(

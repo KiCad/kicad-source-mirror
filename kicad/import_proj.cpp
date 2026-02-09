@@ -25,7 +25,11 @@
 #include <richio.h>
 
 #include <wx/fileconf.h>
+#include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/tokenzr.h>
+#include <wx/dir.h>
+#include <wx/textfile.h>
 #include <wx/wfstream.h>
 
 #include <kiway.h>
@@ -330,6 +334,252 @@ void IMPORT_PROJ_HELPER::ImportPadsFiles()
 }
 
 
+void IMPORT_PROJ_HELPER::GedaProjectHandler()
+{
+    wxFileName prjFile = m_InputFile;
+
+    if( prjFile.GetExt().CmpNoCase( "prj" ) != 0 )
+        return;
+
+    wxTextFile file;
+
+    if( !file.Open( prjFile.GetFullPath() ) )
+    {
+        wxLogWarning( _( "Could not open gEDA / Lepton EDA project file '%s'." ), prjFile.GetFullPath() );
+        return;
+    }
+
+    std::vector<wxFileName> schFiles;
+    wxString                outputName;
+    wxString                elementsDir;
+
+    for( size_t i = 0; i < file.GetLineCount(); ++i )
+    {
+        wxString line = file.GetLine( i );
+
+        line.Trim( true );
+        line.Trim( false );
+
+        if( line.IsEmpty() )
+            continue;
+
+        if( line.StartsWith( wxT( "#" ) ) || line.StartsWith( wxT( ";" ) ) )
+            continue;
+
+        int commentPos = line.Find( wxT( "#" ) );
+
+        if( commentPos != wxNOT_FOUND )
+        {
+            line = line.Left( commentPos );
+            line.Trim( true );
+            line.Trim( false );
+        }
+
+        if( line.IsEmpty() )
+            continue;
+
+        wxStringTokenizer tok( line );
+
+        if( !tok.HasMoreTokens() )
+            continue;
+
+        wxString keyword = tok.GetNextToken();
+
+        if( keyword.CmpNoCase( "schematics" ) == 0 )
+        {
+            while( tok.HasMoreTokens() )
+            {
+                wxString  schToken = tok.GetNextToken();
+                wxFileName schFile( schToken );
+
+                if( !schFile.IsAbsolute() )
+                    schFile.MakeAbsolute( prjFile.GetPath() );
+
+                schFiles.push_back( schFile );
+            }
+        }
+        else if( keyword.CmpNoCase( "output-name" ) == 0 )
+        {
+            wxString rest = line.Mid( keyword.length() );
+            rest.Trim( true );
+            rest.Trim( false );
+            outputName = rest;
+        }
+        else if( keyword.CmpNoCase( "elements-dir" ) == 0 )
+        {
+            wxString rest = line.Mid( keyword.length() );
+            rest.Trim( true );
+            rest.Trim( false );
+            elementsDir = rest;
+        }
+    }
+
+    if( !elementsDir.IsEmpty() )
+    {
+        wxFileName elementsPath( elementsDir );
+
+        if( !elementsPath.IsAbsolute() )
+            elementsPath.MakeAbsolute( prjFile.GetPath() );
+
+        m_properties["elements_dir"] = elementsPath.GetFullPath().ToStdString();
+    }
+
+    if( schFiles.empty() )
+    {
+        wxFileName candidate = prjFile;
+        candidate.SetExt( wxS( "sch" ) );
+
+        if( candidate.FileExists() )
+            schFiles.push_back( candidate );
+    }
+
+    auto promptForMissingFile =
+            [&]( const wxString& aTitle, const wxString& aWildcard, wxFileName& aFile ) -> bool
+            {
+                wxString defaultDir = aFile.GetPath();
+
+                if( defaultDir.IsEmpty() )
+                    defaultDir = prjFile.GetPath();
+
+                wxFileDialog dlg( m_frame, aTitle, defaultDir, wxEmptyString, aWildcard,
+                                  wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+                if( dlg.ShowModal() == wxID_OK )
+                {
+                    aFile.Assign( dlg.GetPath() );
+                    return true;
+                }
+
+                aFile.Clear();
+                return false;
+            };
+
+    std::vector<wxFileName> resolvedSchFiles;
+    const wxString          schWildcard = _( "gEDA / Lepton EDA schematic files" ) + wxS( " (*.sch)|*.sch" );
+
+    for( wxFileName schFile : schFiles )
+    {
+        if( !schFile.FileExists() )
+        {
+            if( !promptForMissingFile( _( "Locate gEDA / Lepton EDA Schematic" ), schWildcard, schFile ) )
+                continue;
+        }
+
+        resolvedSchFiles.push_back( schFile );
+    }
+
+    if( schFiles.empty() && resolvedSchFiles.empty() )
+    {
+        wxFileName schFile;
+
+        if( promptForMissingFile( _( "Locate gEDA / Lepton EDA Schematic" ), schWildcard, schFile ) )
+            resolvedSchFiles.push_back( schFile );
+    }
+
+    if( resolvedSchFiles.size() > 1 )
+    {
+        // Pass additional schematic files as a semicolon-delimited property so the
+        // importer can create sub-sheets for each additional page within a single
+        // KiCad project hierarchy.
+        wxString additionalFiles;
+
+        for( size_t i = 1; i < resolvedSchFiles.size(); i++ )
+        {
+            if( !additionalFiles.IsEmpty() )
+                additionalFiles += wxT( ";" );
+
+            additionalFiles += resolvedSchFiles[i].GetFullPath();
+        }
+
+        m_properties["additional_schematics"] = additionalFiles.ToStdString();
+    }
+
+    // Auto-discover subdirectories containing .sym files and pass them as
+    // additional search paths for the importer's symbol resolution.
+    auto discoverSymDirs = [&]( const wxString& aBaseDir, wxString& aSymPaths )
+    {
+        wxDir dir( aBaseDir );
+
+        if( !dir.IsOpened() )
+            return;
+
+        wxString subdir;
+        bool     cont = dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS );
+
+        while( cont )
+        {
+            wxString subdirPath = aBaseDir + wxFileName::GetPathSeparator() + subdir;
+            wxDir    childDir( subdirPath );
+
+            if( childDir.IsOpened() && childDir.HasFiles( wxT( "*.sym" ) ) )
+            {
+                if( !aSymPaths.IsEmpty() )
+                    aSymPaths += wxT( "\n" );
+
+                aSymPaths += subdirPath;
+            }
+
+            cont = dir.GetNext( &subdir );
+        }
+    };
+
+    wxString symPaths;
+    discoverSymDirs( prjFile.GetPath(), symPaths );
+
+    if( !resolvedSchFiles.empty() )
+    {
+        wxString schDir = resolvedSchFiles[0].GetPath();
+
+        if( schDir != prjFile.GetPath() )
+            discoverSymDirs( schDir, symPaths );
+    }
+
+    if( !symPaths.IsEmpty() )
+        m_properties["sym_search_paths"] = symPaths.ToStdString();
+
+    if( !resolvedSchFiles.empty() )
+        doImport( resolvedSchFiles[0].GetFullPath(), FRAME_SCH, SCH_IO_MGR::SCH_GEDA );
+
+    wxFileName layoutDir( prjFile.GetPath(), wxEmptyString );
+    layoutDir.RemoveLastDir();
+    layoutDir.AppendDir( wxS( "layout" ) );
+
+    wxFileName pcbFile;
+
+    if( !outputName.IsEmpty() )
+    {
+        wxFileName candidate( layoutDir.GetPath(), outputName, wxS( "pcb" ) );
+
+        if( candidate.FileExists() )
+            pcbFile = candidate;
+    }
+
+    if( !pcbFile.FileExists() )
+    {
+        wxFileName candidate( prjFile.GetPath(), prjFile.GetName(), wxS( "pcb" ) );
+
+        if( candidate.FileExists() )
+            pcbFile = candidate;
+    }
+
+    if( !pcbFile.FileExists() )
+    {
+        wxFileName candidate( layoutDir.GetPath(), prjFile.GetName(), wxS( "pcb" ) );
+
+        if( candidate.FileExists() )
+            pcbFile = candidate;
+    }
+
+    const wxString pcbWildcard = _( "gEDA / Lepton EDA PCB files" ) + wxS( " (*.pcb)|*.pcb" );
+
+    if( !pcbFile.FileExists() )
+        promptForMissingFile( _( "Locate gEDA / Lepton EDA PCB" ), pcbWildcard, pcbFile );
+
+    if( pcbFile.FileExists() )
+        doImport( pcbFile.GetFullPath(), FRAME_PCB_EDITOR, PCB_IO_MGR::GEDA_PCB );
+}
+
+
 void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
     m_properties.clear();
@@ -343,6 +593,57 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
              || aImportedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
     {
         AltiumProjectHandler();
+        return;
+    }
+    else if( aImportedSchFileType == SCH_IO_MGR::SCH_GEDA )
+    {
+        if( m_InputFile.GetExt().CmpNoCase( "prj" ) == 0 )
+        {
+            GedaProjectHandler();
+        }
+        else if( m_InputFile.GetExt().CmpNoCase( "pcb" ) == 0 )
+        {
+            ImportIndividualFile( PCB_T, aImportedPcbFileType );
+        }
+        else
+        {
+            // When importing a bare .sch file, pass the original source directory
+            // so the importer can find symbols in subdirectories relative to the
+            // gEDA / Lepton EDA schematic, even though the file may be copied to a new location
+            // for the KiCad project.
+            wxString sourceDir = m_InputFile.GetPath();
+            wxString symPaths = sourceDir;
+
+            auto discoverSymDirs = [&]( const wxString& aBaseDir )
+            {
+                wxDir dir( aBaseDir );
+
+                if( !dir.IsOpened() )
+                    return;
+
+                wxString subdir;
+                bool     cont = dir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS );
+
+                while( cont )
+                {
+                    wxString subdirPath =
+                            aBaseDir + wxFileName::GetPathSeparator() + subdir;
+                    wxDir childDir( subdirPath );
+
+                    if( childDir.IsOpened() && childDir.HasFiles( wxT( "*.sym" ) ) )
+                        symPaths += wxT( "\n" ) + subdirPath;
+
+                    cont = dir.GetNext( &subdir );
+                }
+            };
+
+            discoverSymDirs( sourceDir );
+            m_properties["sym_search_paths"] = symPaths.ToStdString();
+
+            doImport( m_InputFile.GetFullPath(), FRAME_SCH, SCH_IO_MGR::SCH_GEDA );
+            ImportIndividualFile( PCB_T, aImportedPcbFileType );
+        }
+
         return;
     }
 

@@ -1,0 +1,82 @@
+# release: pcb 20140316
+FileVersion[20091103]
+
+PCB["multilayer_test" 500.00mil 500.00mil]
+
+Grid[1000.000000 0.0000 0.0000 0]
+PolyArea[3100.006200]
+Thermal[0.500000]
+DRC[10.00mil 10.00mil 10.00mil 10.00mil 15.00mil 10.00mil]
+Flags("nameonpcb,uniquename,clearnew,snappin")
+Groups("1,c:2,s:3:4")
+Styles["Signal,10.00mil,36.00mil,20.00mil,10.00mil:Power,25.00mil,60.00mil,35.00mil,10.00mil:Fat,40.00mil,60.00mil,35.00mil,10.00mil:Skinny,6.00mil,24.02mil,11.81mil,6.00mil"]
+
+Symbol[' ' 18.00mil]
+(
+)
+
+# Through-hole component
+Element["" "DIP8" "U1" "OPAMP" 25000 25000 -5000 -5000 0 100 ""]
+(
+	Pin[0 0 6000 3000 6600 2800 "1" "1" "square"]
+	Pin[10000 0 6000 3000 6600 2800 "2" "2" ""]
+	Pin[20000 0 6000 3000 6600 2800 "3" "3" ""]
+	Pin[30000 0 6000 3000 6600 2800 "4" "4" ""]
+	Pin[30000 30000 6000 3000 6600 2800 "5" "5" ""]
+	Pin[20000 30000 6000 3000 6600 2800 "6" "6" ""]
+	Pin[10000 30000 6000 3000 6600 2800 "7" "7" ""]
+	Pin[0 30000 6000 3000 6600 2800 "8" "8" ""]
+	ElementLine [-5000 -5000 35000 -5000 1000]
+	ElementLine [35000 -5000 35000 35000 1000]
+	ElementLine [35000 35000 -5000 35000 1000]
+	ElementLine [-5000 35000 -5000 -5000 1000]
+	)
+
+# Through-hole resistor
+Element["" "AXIAL300" "R1" "1k" 75000 25000 0 0 0 100 ""]
+(
+	Pin[0 0 6000 3000 6600 2800 "1" "1" "square"]
+	Pin[30000 0 6000 3000 6600 2800 "2" "2" ""]
+	ElementLine [5000 -2000 25000 -2000 1000]
+	ElementLine [25000 -2000 25000 2000 1000]
+	ElementLine [25000 2000 5000 2000 1000]
+	ElementLine [5000 2000 5000 -2000 1000]
+	ElementLine [0 0 5000 0 1000]
+	ElementLine [25000 0 30000 0 1000]
+	)
+
+Layer(1 "component")
+(
+	Line[25000 25000 75000 25000 1000 2000 "clearline"]
+)
+
+Layer(2 "solder")
+(
+	Line[55000 25000 75000 55000 1000 2000 "clearline"]
+)
+
+Layer(3 "inner1")
+(
+	Line[25000 55000 75000 55000 1000 2000 "clearline"]
+)
+
+Layer(4 "inner2")
+(
+	Line[55000 55000 25000 25000 1000 2000 "clearline"]
+)
+
+Via[55000 25000 6000 2000 0 2800 "" ""]
+
+NetList()
+(
+	Net("GND" "(unknown)")
+	(
+		Connect("U1-4")
+		Connect("R1-2")
+	)
+	Net("VCC" "(unknown)")
+	(
+		Connect("U1-8")
+		Connect("R1-1")
+	)
+)
