@@ -177,10 +177,6 @@ void PGM_BASE::Destroy()
 
     m_pgm_checker.reset();
 
-#ifdef _MSC_VER
-    winrt::uninit_apartment();
-#endif
-
     m_singleton.Shutdown();
 }
 
