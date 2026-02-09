@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-08 18:38+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -622,8 +622,8 @@ msgstr "3D-Modelle von nicht zu bestückenden Bauteilen anzeigen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
 msgstr ""
-"3D-Modelle von Footprints anzeigen, auch wenn diese als nicht zu bestücken "
-"(DNP) markiert sind"
+"3D-Modelle anzeigen, auch wenn diese als \"nicht bestücken\" (DNP) markiert "
+"sind"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
@@ -50097,12 +50097,12 @@ msgstr ""
 "verbunden sind."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name from '%s' to '%s'."
 msgstr "Gruppe von \"%s\" in \"%s\" umbenennen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1796
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name from '%s' to '%s'."
 msgstr "Gruppe von \"%s\" in \"%s\" umbenannt."
 
@@ -50913,9 +50913,9 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unbekannte Zuordnung der Altium-Lage \"%s\"."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:213
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown mapping of the Altium layer kind '%s'."
-msgstr "Unbekannte Zuordnung der Altium-Lage \"%s\"."
+msgstr "Unbekannte Zuordnung der Altiumlage \"%s\"."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:258
 #, c-format
@@ -51559,11 +51559,9 @@ msgstr ""
 "Platzierungsbereiche werden nicht unterstützt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1732
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
-msgstr ""
-"Bauteil \"%s\" kann in der Bibliothek nicht gefunden werden (Symdef ID: "
-"\"%s\")"
+msgstr "Bauteil \"%s\" nicht in Bibliothek gefunden (Symdef ID: \"%s\")"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1854
 #, c-format
@@ -51788,17 +51786,16 @@ msgstr ""
 "näher an CADSTARs \"Net Route Code\" (der für alle Netze importiert wurde)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3914
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
 "imported. Please review the design rules as copper pours may be affected by "
 "this."
 msgstr ""
-"Das CADSTAR-Design enthält Netze mit einer zugewiesenen Abstandsklasse. "
-"KiCad hat kein Äquivalent zur CADSTAR-Abstandsklasse, daher wurden diese "
-"Elemente nicht importiert. Bitte überprüfen Sie die Designregeln, da "
-"Kupfergüsse davon betroffen sind."
+"Das CADSTAR-Design enthält Netze denen eine \"Abstandsklasse\" zugewiesen "
+"ist. KiCad hat kein Äquivalent zur CADSTARs Abstandsklassen, daher wurden "
+"diese Elemente nicht importiert. Bitte überprüfen Sie die Designregeln, da "
+"Kupferzonen davon betroffen sind."
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -54888,17 +54885,14 @@ msgid "Assertions for:"
 msgstr "Zusicherungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:915
-#, fuzzy
 msgid "Select first item for clearance resolution..."
 msgstr "Wählen Sie das erste Element für die Freiraumermittlung ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Select second item for clearance resolution..."
 msgstr "Wählen Sie das zweite Element für die Freiraumermittlung ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
-#, fuzzy
 msgid "Select two different items for clearance resolution."
 msgstr ""
 "Wählen Sie zwei Elemente für einen Bericht zur Ermittlung des Freiraums aus."
@@ -55027,7 +55021,6 @@ msgstr ""
 "\"physical_clearance\"-Beschränkungen angewendet."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1573
-#, fuzzy
 msgid "Select item for constraints resolution..."
 msgstr ""
 "Einzelnes Element für einen Bericht zur Ermittlung von Einschränkungen "
@@ -55661,14 +55654,13 @@ msgstr ""
 "Keinen Regelbereich gefunden, zu dem das Layout übertragen werden kann."
 
 #: pcbnew/tools/multichannel_tool.cpp:629
-#, fuzzy
 msgid "Checking Rule Area compatibility..."
-msgstr "Prüfe Regelbereiche ..."
+msgstr "Prüfe Regelbereich-Kompatibilität ..."
 
 #: pcbnew/tools/multichannel_tool.cpp:654
-#, c-format, fuzzy
+#, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
-msgstr "Löse Topologie %d von %d auf (%d/%d Bauteile)"
+msgstr "Löse Topologie %d von %d auf (%d/%d Bauteilen)"
 
 #: pcbnew/tools/multichannel_tool.cpp:685
 #, c-format
@@ -56853,7 +56845,6 @@ msgid "DRC Rule Editor"
 msgstr "DRC-Regeleditor"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
 msgstr "DRC-Regel-Editorfenster öffnen"
 
@@ -57808,7 +57799,6 @@ msgid "Design block %s does not have a board file."
 msgstr "Designblock %s hat keine Platinendatei."
 
 #: pcbnew/tools/pcb_control.cpp:1577
-#, fuzzy
 msgid "Design block placement failed - no footprints were placed."
 msgstr ""
 "Designblock-Platzierung gescheitert - es wurden keine Footprints platziert."
@@ -57819,7 +57809,6 @@ msgid "Footprint %s is locked and cannot be placed."
 msgstr "Footprint %s ist gesperrt und kann nicht platziert werden."
 
 #: pcbnew/tools/pcb_control.cpp:1629
-#, fuzzy
 msgid "Selected group contains no footprints to place."
 msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
 
@@ -58981,12 +58970,10 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(/.../ nutzen, um regulären Ausdruck anzuzeigen.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
-#, fuzzy
 msgid "Auto-fit Column"
 msgstr "Spalte automatisch anpassen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
-#, fuzzy
 msgid "Auto-fit All Columns"
 msgstr "Alle Spalten automatisch anpassen"
 
