@@ -22,15 +22,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2025-11-23 15:54+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2026-02-10 00:02+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -11881,9 +11881,8 @@ msgid "Description:"
 msgstr "Popis:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Knihovny bloků návrhu"
+msgstr "Vlastnosti bloku návrhu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, c-format
@@ -33208,6 +33207,11 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"Stupeň vyhlazování\n"
+"0 = bez vyhlazování\n"
+"1 = zkosené hrany\n"
+"2 = zaoblené hrany\n"
+"3 = zaoblené hrany (jemnější oblouk)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:338
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:183
@@ -33223,6 +33227,9 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"Poměr velikostí vyhlazených hran a mezerou mezi čárami\n"
+"0 = bez vyhlazování\n"
+"1,0 = maximální velikost (polovina mezery)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:276
@@ -52118,38 +52125,32 @@ msgid "Cannot be less than zone minimum width"
 msgstr "Šířka tepelného paprsku nesmí být menší než minimální šířka."
 
 #: pcbnew/zone.cpp:2083
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Šířka šrafování:"
+msgstr "Šířka šrafování"
 
 #: pcbnew/zone.cpp:2090
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Mezera šrafování:"
+msgstr "Mezera šrafování"
 
 #: pcbnew/zone.cpp:2097
 msgid "Hatch Minimum Hole Ratio"
 msgstr ""
 
 #: pcbnew/zone.cpp:2105
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Vyhlazování:"
+msgstr "Vyhlazování"
 
 #: pcbnew/zone.cpp:2111
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Vyhlazovací množství:"
+msgstr "Vyhlazovací množství"
 
 #: pcbnew/zone.cpp:2117
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Odstranit ostrovy:"
+msgstr "Odstranit ostrovy"
 
 #: pcbnew/zone.cpp:2122
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Minimální velikost prokovu:"
+msgstr "Minimální velikost ostrova"
 
 #: pcbnew/zone.cpp:2137
 msgid "Minimum Width"
