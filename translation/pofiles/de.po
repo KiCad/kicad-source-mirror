@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
 "PO-Revision-Date: 2026-02-09 08:13+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -591,8 +591,8 @@ msgstr "3D-Modelle von nicht zu bestückenden Bauteilen anzeigen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 msgid "Show 3D models even if marked 'Do Not Place'"
 msgstr ""
-"3D-Modelle von Footprints anzeigen, auch wenn diese als nicht zu bestücken "
-"(DNP) markiert sind"
+"3D-Modelle anzeigen, auch wenn diese als \"nicht bestücken\" (DNP) markiert "
+"sind"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
