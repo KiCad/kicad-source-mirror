@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"PO-Revision-Date: 2026-02-09 18:36+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -24153,7 +24153,7 @@ msgstr "Grundfrequenz:"
 #: eeschema/sim/simulator_frame_ui.cpp:379
 #, c-format
 msgid "Format %s..."
-msgstr "Format %s…"
+msgstr "Format %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:454
 msgid "Format Value..."
@@ -33283,7 +33283,7 @@ msgstr "Spezifischer Widerstand in Ohm*m bei 20 °C"
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:879
 msgid "..."
-msgstr "…"
+msgstr "..."
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:75
@@ -52631,8 +52631,8 @@ msgid ""
 msgstr ""
 "Die ausgewählte Datei enthält mehrere Footprints. Nur der erste wird "
 "importiert.\n"
-"Um alle Footprints zu laden, die Datei als Bibliothek unter Einstellungen -> "
-"Footprintbibliotheken verwalten hinzufügen..."
+"Um alle Footprints zu laden, die Datei als Bibliothek unter "
+"\"Einstellungen -> Footprintbibliotheken verwalten ...\" hinzufügen."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -55672,8 +55672,8 @@ msgstr "Regelbereichstopologien nicht übereinstimmend: %s"
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
-"Kopieren von Regelbereichsinhalten zwischen den Regelbereichen ‚%s‘ und ‚%s‘ "
-"fehlgeschlagen."
+"Kopieren von Regelbereichsinhalten zwischen den Regelbereichen \"%s\" und "
+"\"%s\" fehlgeschlagen."
 
 #: pcbnew/tools/multichannel_tool.cpp:726
 msgid "Target group does not have a group."
