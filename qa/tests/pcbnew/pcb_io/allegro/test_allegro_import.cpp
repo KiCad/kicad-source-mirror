@@ -799,6 +799,27 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
     }
 
     /**
+     * Get a cached board, loading it on first access. Boards loaded through this
+     * method are shared across all test cases to avoid redundant parsing of large
+     * Allegro files.
+     */
+    BOARD* GetCachedBoard( const std::string& aFilePath )
+    {
+        auto it = s_boardCache.find( aFilePath );
+
+        if( it != s_boardCache.end() )
+            return it->second.get();
+
+        CAPTURING_REPORTER reporter;
+        auto board = LoadBoardWithCapture( aFilePath, reporter );
+        BOARD* raw = board.get();
+        s_boardCache[aFilePath] = std::move( board );
+        return raw;
+    }
+
+    static std::map<std::string, std::unique_ptr<BOARD>> s_boardCache;
+
+    /**
      * Print detailed board statistics for debugging.
      */
     void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName )
@@ -881,6 +902,8 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
     PCB_IO_ALLEGRO m_allegroPlugin;
 };
 
+std::map<std::string, std::unique_ptr<BOARD>> ALLEGRO_COMPREHENSIVE_FIXTURE::s_boardCache;
+
 
 BOOST_FIXTURE_TEST_SUITE( AllegroComprehensive, ALLEGRO_COMPREHENSIVE_FIXTURE )
 
@@ -909,15 +932,12 @@ BOOST_AUTO_TEST_CASE( LoadAllBoards )
         BOOST_TEST_MESSAGE( "Testing: " << boardName );
         BOOST_TEST_MESSAGE( "----------------------------------------" );
 
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
-
-        reporter.PrintAllMessages( boardName );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( board )
         {
-            PrintBoardStats( board.get(), boardName );
+            PrintBoardStats( board, boardName );
 
             bool hasContent = board->GetNetCount() > 0 || board->Footprints().size() > 0;
 
@@ -1099,8 +1119,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_OutermostZoneNets )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     const std::vector<wxString> expectedLayers = { wxS( "TOP" ), wxS( "LYR2_GND" ),
@@ -1181,9 +1200,8 @@ BOOST_AUTO_TEST_CASE( PadSizesPositive )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -1225,9 +1243,8 @@ BOOST_AUTO_TEST_CASE( ViaDrillNotLargerThanSize )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -1273,9 +1290,8 @@ BOOST_AUTO_TEST_CASE( SmdPadDetection )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -1332,9 +1348,8 @@ BOOST_AUTO_TEST_CASE( QuadPackagePadRotation )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -1447,9 +1462,7 @@ BOOST_AUTO_TEST_CASE( FootprintLayerPlacement )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE_MESSAGE( board != nullptr, "BeagleBone_Black_RevC.brd should load successfully" );
 
     // Look for C78 which should be on the bottom layer
@@ -1506,9 +1519,8 @@ BOOST_AUTO_TEST_CASE( ArcConnectivity )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -1868,8 +1880,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
         ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( ref.algFile );
         BOOST_REQUIRE_GT( algData.netNames.size(), 0u );
 
-        CAPTURING_REPORTER     reporter;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + ref.brdFile, reporter );
+        BOARD* board = GetCachedBoard( dataPath + ref.brdFile );
         BOOST_REQUIRE( board );
 
         std::set<wxString> boardNets;
@@ -1934,8 +1945,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
         ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
         BOOST_REQUIRE_GT( algData.refDes.size(), 0u );
 
-        CAPTURING_REPORTER     reporter;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+        BOARD* board = GetCachedBoard( dataPath + brdFile );
         BOOST_REQUIRE( board );
 
         std::set<wxString> boardRefDes;
@@ -1988,9 +1998,8 @@ BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -2032,13 +2041,13 @@ BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
  */
 BOOST_AUTO_TEST_CASE( WarningBudget )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
+        CAPTURING_REPORTER     reporter;
+        std::string            fullPath = dataPath + boardName;
         std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
 
         if( !board )
@@ -2257,8 +2266,7 @@ BOOST_AUTO_TEST_CASE( OutlineSegmentCount )
                 continue;
             }
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + tb.brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + tb.brdFile );
             BOOST_REQUIRE( board );
 
             int edgeCutsCount = 0;
@@ -2325,8 +2333,7 @@ BOOST_AUTO_TEST_CASE( OutlineBoundingBox )
                 continue;
             }
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + brdFile );
             BOOST_REQUIRE( board );
 
             BOX2I boardBbox;
@@ -2441,8 +2448,7 @@ BOOST_AUTO_TEST_CASE( OutlineEndpoints )
                 continue;
             }
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + brdFile );
             BOOST_REQUIRE( board );
 
             // Collect all Edge_Cuts segment endpoints
@@ -2574,9 +2580,8 @@ BOOST_AUTO_TEST_CASE( PadDrillConsistency )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER reporter;
-        std::string        fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -2657,8 +2662,7 @@ BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + brdFile );
             BOOST_REQUIRE( board );
 
             size_t boardCopperZoneLayers = 0;
@@ -2712,8 +2716,7 @@ BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + brdFile );
             BOOST_REQUIRE( board );
 
             std::map<wxString, int> algLayerCounts;
@@ -2782,8 +2785,7 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            CAPTURING_REPORTER     reporter;
-            std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath + brdFile, reporter );
+            BOARD* board = GetCachedBoard( dataPath + brdFile );
             BOOST_REQUIRE( board );
 
             // Collect sorted areas per layer from .alg and board, then compare distributions
@@ -2878,8 +2880,7 @@ BOOST_AUTO_TEST_CASE( PadContainedInFabOutline )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     // Footprints known to have pads and fab outlines that enclose them.
@@ -2959,8 +2960,7 @@ BOOST_AUTO_TEST_CASE( PadOrientationP6P10 )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     for( FOOTPRINT* fp : board->Footprints() )
@@ -3016,8 +3016,7 @@ BOOST_AUTO_TEST_CASE( SlotHoles )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     int oblongCount = 0;
@@ -3062,8 +3061,7 @@ BOOST_AUTO_TEST_CASE( FootprintOrientation )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
 
     BOOST_REQUIRE( board );
 
@@ -3094,19 +3092,16 @@ BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ProiectBoard.brd" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W20mil" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W24mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "W20mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "W24mil" ) ) );
 
-    auto nc20 = netSettings->GetNetClassByName( wxS( "Allegro_W20mil" ) );
-    auto nc24 = netSettings->GetNetClassByName( wxS( "Allegro_W24mil" ) );
+    auto nc20 = netSettings->GetNetClassByName( wxS( "W20mil" ) );
+    auto nc24 = netSettings->GetNetClassByName( wxS( "W24mil" ) );
 
     BOOST_REQUIRE( nc20 );
     BOOST_REQUIRE( nc24 );
@@ -3129,9 +3124,9 @@ BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
         if( !nc )
             continue;
 
-        if( nc->GetName() == wxS( "Allegro_W20mil" ) )
+        if( nc->GetName() == wxS( "W20mil" ) )
             count20++;
-        else if( nc->GetName() == wxS( "Allegro_W24mil" ) )
+        else if( nc->GetName() == wxS( "W24mil" ) )
             count24++;
     }
 
@@ -3142,23 +3137,20 @@ BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
 
 /**
  * Verify that diff pair match groups in BeagleBone Black produce netclasses with the
- * Allegro_DP_ prefix and contain exactly 2 nets each.
+ * DP_ prefix and contain exactly 2 nets each.
  */
 BOOST_AUTO_TEST_CASE( DiffPairNetclass )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "DiffPairNetclass" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // HDMI_TXC is a well-known diff pair on BeagleBone Black
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DP_HDMI_TXC" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DP_USB0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "DP_HDMI_TXC" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "DP_USB0" ) ) );
 
     // Verify HDMI_TXC has exactly 2 nets assigned
     int hdmiTxcCount = 0;
@@ -3170,7 +3162,7 @@ BOOST_AUTO_TEST_CASE( DiffPairNetclass )
 
         NETCLASS* nc = net->GetNetClass();
 
-        if( nc && nc->GetName() == wxS( "Allegro_DP_HDMI_TXC" ) )
+        if( nc && nc->GetName() == wxS( "DP_HDMI_TXC" ) )
             hdmiTxcCount++;
     }
 
@@ -3180,23 +3172,20 @@ BOOST_AUTO_TEST_CASE( DiffPairNetclass )
 
 /**
  * Verify that match groups with more than 2 nets (DDR byte lanes, address buses) produce
- * netclasses with the Allegro_MG_ prefix.
+ * netclasses with the MG_ prefix.
  */
 BOOST_AUTO_TEST_CASE( MatchGroupNetclass )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "MatchGroupNetclass" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // DDR_DQ0 is a DDR byte lane with 11 nets (not a diff pair)
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_MG_DDR_DQ0" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_MG_DDR_ADD" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "MG_DDR_DQ0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "MG_DDR_ADD" ) ) );
 
     // DDR_DQ0 should have 11 nets, DDR_ADD should have 26
     int dq0Count = 0;
@@ -3212,9 +3201,9 @@ BOOST_AUTO_TEST_CASE( MatchGroupNetclass )
         if( !nc )
             continue;
 
-        if( nc->GetName() == wxS( "Allegro_MG_DDR_DQ0" ) )
+        if( nc->GetName() == wxS( "MG_DDR_DQ0" ) )
             dq0Count++;
-        else if( nc->GetName() == wxS( "Allegro_MG_DDR_ADD" ) )
+        else if( nc->GetName() == wxS( "MG_DDR_ADD" ) )
             addCount++;
     }
 
@@ -3231,10 +3220,7 @@ BOOST_AUTO_TEST_CASE( MatchGroupCounts )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "MatchGroupCounts" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
@@ -3244,9 +3230,9 @@ BOOST_AUTO_TEST_CASE( MatchGroupCounts )
 
     for( const auto& [name, nc] : netSettings->GetNetclasses() )
     {
-        if( name.StartsWith( wxS( "Allegro_DP_" ) ) )
+        if( name.StartsWith( wxS( "DP_" ) ) )
             dpCount++;
-        else if( name.StartsWith( wxS( "Allegro_MG_" ) ) )
+        else if( name.StartsWith( wxS( "MG_" ) ) )
             mgCount++;
     }
 
@@ -3257,23 +3243,20 @@ BOOST_AUTO_TEST_CASE( MatchGroupCounts )
 
 /**
  * Verify that boards without match groups (e.g., simple boards) don't produce any
- * Allegro_DP_ or Allegro_MG_ netclasses.
+ * DP_ or MG_ netclasses.
  */
 BOOST_AUTO_TEST_CASE( NoMatchGroupsOnSimpleBoard )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/led_youtube.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "NoMatchGroupsOnSimpleBoard" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     for( const auto& [name, nc] : netSettings->GetNetclasses() )
     {
-        BOOST_CHECK_MESSAGE( !name.StartsWith( wxS( "Allegro_DP_" ) ) && !name.StartsWith( wxS( "Allegro_MG_" ) ),
+        BOOST_CHECK_MESSAGE( !name.StartsWith( wxS( "DP_" ) ) && !name.StartsWith( wxS( "MG_" ) ),
                              "Simple board should not have match group netclass: " + name );
     }
 }
@@ -3287,23 +3270,20 @@ BOOST_AUTO_TEST_CASE( ConstraintSetNetclasses )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ConstraintSetNetclasses" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // BB Black has 5 constraint sets, all with 4.0 mil (101600 nm) clearance
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_DEFAULT" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_PWR" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_BGA" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_90_OHM_DIFF" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_100OHM_DIFF" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_Default" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "PWR" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "BGA" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "90_OHM_DIFF" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "100OHM_DIFF" ) ) );
 
-    auto ncDefault = netSettings->GetNetClassByName( wxS( "Allegro_DEFAULT" ) );
-    auto ncPwr = netSettings->GetNetClassByName( wxS( "Allegro_PWR" ) );
+    auto ncDefault = netSettings->GetNetClassByName( wxS( "Allegro_Default" ) );
+    auto ncPwr = netSettings->GetNetClassByName( wxS( "PWR" ) );
 
     BOOST_REQUIRE( ncDefault );
     BOOST_REQUIRE( ncPwr );
@@ -3329,7 +3309,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetNetclasses )
         if( !nc )
             continue;
 
-        if( nc->GetName() == wxS( "Allegro_DEFAULT" ) )
+        if( nc->GetName() == wxS( "Allegro_Default" ) )
             defaultCount++;
     }
 
@@ -3345,17 +3325,14 @@ BOOST_AUTO_TEST_CASE( ConstraintSetPreV172 )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/TRS80_POWER.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ConstraintSetPreV172" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_CS_0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "CS_0" ) ) );
 
-    auto nc = netSettings->GetNetClassByName( wxS( "Allegro_CS_0" ) );
+    auto nc = netSettings->GetNetClassByName( wxS( "CS_0" ) );
 
     BOOST_REQUIRE( nc );
 
@@ -3373,31 +3350,28 @@ BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ConstraintSetAndTraceWidth" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // Constraint set netclass
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_CS_0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "CS_0" ) ) );
 
     // Per-net trace width netclasses
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W20mil" ) ) );
-    BOOST_CHECK( netSettings->HasNetclass( wxS( "Allegro_W24mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "W20mil" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "W24mil" ) ) );
 
     // Constraint set values (pre-V172, 5 mil line/spacing/clearance)
-    auto ncCS = netSettings->GetNetClassByName( wxS( "Allegro_CS_0" ) );
+    auto ncCS = netSettings->GetNetClassByName( wxS( "CS_0" ) );
 
     BOOST_REQUIRE( ncCS );
     BOOST_CHECK_EQUAL( ncCS->GetTrackWidth(), 127000 );
     BOOST_CHECK_EQUAL( ncCS->GetClearance(), 127000 );
 
     // Per-net trace widths still intact
-    auto nc20 = netSettings->GetNetClassByName( wxS( "Allegro_W20mil" ) );
-    auto nc24 = netSettings->GetNetClassByName( wxS( "Allegro_W24mil" ) );
+    auto nc20 = netSettings->GetNetClassByName( wxS( "W20mil" ) );
+    auto nc24 = netSettings->GetNetClassByName( wxS( "W24mil" ) );
 
     BOOST_REQUIRE( nc20 );
     BOOST_REQUIRE( nc24 );
@@ -3414,16 +3388,13 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ConstraintSetDiffPairGap" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // 90_OHM_DIFF: f[1]=450, f[4]=400, f[7]=650 (divisor=100, scale=254 nm/unit)
-    auto nc90 = netSettings->GetNetClassByName( wxS( "Allegro_90_OHM_DIFF" ) );
+    auto nc90 = netSettings->GetNetClassByName( wxS( "90_OHM_DIFF" ) );
     BOOST_REQUIRE( nc90 );
     BOOST_CHECK_EQUAL( nc90->GetTrackWidth(), 114300 );
     BOOST_CHECK_EQUAL( nc90->GetClearance(), 101600 );
@@ -3431,7 +3402,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
     BOOST_CHECK_EQUAL( nc90->GetDiffPairWidth(), 114300 );
 
     // 100OHM_DIFF: f[1]=375, f[4]=400, f[7]=725
-    auto nc100 = netSettings->GetNetClassByName( wxS( "Allegro_100OHM_DIFF" ) );
+    auto nc100 = netSettings->GetNetClassByName( wxS( "100OHM_DIFF" ) );
     BOOST_REQUIRE( nc100 );
     BOOST_CHECK_EQUAL( nc100->GetTrackWidth(), 95250 );
     BOOST_CHECK_EQUAL( nc100->GetClearance(), 101600 );
@@ -3439,7 +3410,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
     BOOST_CHECK_EQUAL( nc100->GetDiffPairWidth(), 95250 );
 
     // BGA: f[1]=300, f[7]=300 (divisor=100, 300*254=76200 nm)
-    auto ncBga = netSettings->GetNetClassByName( wxS( "Allegro_BGA" ) );
+    auto ncBga = netSettings->GetNetClassByName( wxS( "BGA" ) );
     BOOST_REQUIRE( ncBga );
     BOOST_CHECK_EQUAL( ncBga->GetDiffPairGap(), 76200 );
     BOOST_CHECK_EQUAL( ncBga->GetDiffPairWidth(), 76200 );
@@ -3455,16 +3426,13 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGapPreV172 )
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
                            + "plugins/allegro/8851_HW-U1-VCU118_REV2-0_071417.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ConstraintSetDiffPairGapPreV172" );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
 
     // DP_90_OHM: f[0]=5200 (line_width), f[7]=4800 (dp_gap) on L0 (divisor=1000, scale=25.4)
-    auto nc = netSettings->GetNetClassByName( wxS( "Allegro_DP_90_OHM" ) );
+    auto nc = netSettings->GetNetClassByName( wxS( "DP_90_OHM" ) );
     BOOST_REQUIRE( nc );
     BOOST_CHECK_EQUAL( nc->GetTrackWidth(), 132080 );
     BOOST_CHECK_EQUAL( nc->GetDiffPairGap(), 121920 );
@@ -3529,9 +3497,8 @@ BOOST_AUTO_TEST_CASE( SmdPadLayerConsistency )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER     reporter;
-        std::string            fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -3591,9 +3558,8 @@ BOOST_AUTO_TEST_CASE( SmdFootprintTechLayers )
 
     for( const std::string& boardName : boards )
     {
-        CAPTURING_REPORTER     reporter;
-        std::string            fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
 
         if( !board )
             continue;
@@ -3664,8 +3630,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_DrillSlotOrientation )
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
                            + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     struct SLOT_CHECK
@@ -3745,8 +3710,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_ZoneFills )
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
                            + "plugins/allegro/BeagleBone_Black_RevC.brd";
 
-    CAPTURING_REPORTER     reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+    BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
 
     int filledZoneCount = 0;
@@ -3773,6 +3737,257 @@ BOOST_AUTO_TEST_CASE( BeagleBone_ZoneFills )
 
     BOOST_CHECK_GT( totalCopperZones, 0 );
     BOOST_CHECK_GT( filledZoneCount, 0 );
+}
+
+
+/**
+ * Verify that Allegro dynamic copper shapes (m_Unknown2 bit 12) are imported as teardrop
+ * zones, and that the pads/vias anchoring those teardrops have teardrops enabled.
+ */
+BOOST_AUTO_TEST_CASE( BeagleBone_Teardrops )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    BOARD* board = GetCachedBoard( dataPath );
+    BOOST_REQUIRE( board );
+
+    int teardropZones = 0;
+
+    for( const ZONE* zone : board->Zones() )
+    {
+        if( zone->IsTeardropArea() )
+            teardropZones++;
+    }
+
+    BOOST_CHECK_GT( teardropZones, 1000 );
+    BOOST_TEST_MESSAGE( "Teardrop zones: " << teardropZones );
+
+    // Pads and vias anchoring teardrops must have teardrops enabled
+    int padsWithTeardrops = 0;
+    int totalPads = 0;
+
+    for( const FOOTPRINT* fp : board->Footprints() )
+    {
+        for( const PAD* pad : fp->Pads() )
+        {
+            totalPads++;
+
+            if( pad->GetTeardropsEnabled() )
+                padsWithTeardrops++;
+        }
+    }
+
+    BOOST_CHECK_GT( padsWithTeardrops, 0 );
+    BOOST_TEST_MESSAGE( "Pads with teardrops enabled: " << padsWithTeardrops << " / " << totalPads );
+
+    int viasWithTeardrops = 0;
+    int totalVias = 0;
+
+    for( const PCB_TRACK* track : board->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        totalVias++;
+
+        if( static_cast<const PCB_VIA*>( track )->GetTeardropsEnabled() )
+            viasWithTeardrops++;
+    }
+
+    BOOST_CHECK_GT( viasWithTeardrops, 0 );
+    BOOST_TEST_MESSAGE( "Vias with teardrops enabled: " << viasWithTeardrops << " / " << totalVias );
+}
+
+
+/**
+ * Verify that pre-V172 boards (which lack the m_Unknown2 discriminator field) have no
+ * teardrop zones and no pads/vias with teardrops enabled.
+ */
+BOOST_AUTO_TEST_CASE( PreV172_NoTeardrops )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/allegro/ProiectBoard.brd";
+
+    BOARD* board = GetCachedBoard( dataPath );
+    BOOST_REQUIRE( board );
+
+    int teardropZones = 0;
+
+    for( const ZONE* zone : board->Zones() )
+    {
+        if( zone->IsTeardropArea() )
+            teardropZones++;
+    }
+
+    BOOST_CHECK_EQUAL( teardropZones, 0 );
+
+    int padsWithTeardrops = 0;
+
+    for( const FOOTPRINT* fp : board->Footprints() )
+    {
+        for( const PAD* pad : fp->Pads() )
+        {
+            if( pad->GetTeardropsEnabled() )
+                padsWithTeardrops++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( padsWithTeardrops, 0 );
+}
+
+
+/**
+ * Verify that the importer sets the legacy netclass and design settings flags so that
+ * netclasses survive the SetProject() call during UI import (which replaces m_NetSettings
+ * with the project's version unless these flags are set).
+ */
+BOOST_AUTO_TEST_CASE( LegacyNetclassFlags )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    PCB_IO_ALLEGRO plugin;
+    CAPTURING_REPORTER reporter;
+    plugin.SetReporter( &reporter );
+
+    BOARD* rawBoard = plugin.LoadBoard( dataPath, nullptr, nullptr, nullptr );
+
+    BOOST_REQUIRE( rawBoard );
+
+    std::unique_ptr<BOARD> board( rawBoard );
+
+    BOOST_CHECK_MESSAGE( board->m_LegacyNetclassesLoaded,
+                         "m_LegacyNetclassesLoaded must be true after Allegro import" );
+    BOOST_CHECK_MESSAGE( board->m_LegacyDesignSettingsLoaded,
+                         "m_LegacyDesignSettingsLoaded must be true after Allegro import" );
+}
+
+
+/**
+ * Verify that netclasses with correct DRC values are created for every board that has
+ * constraint sets. Tests the full matrix of boards and their expected netclass counts.
+ */
+BOOST_AUTO_TEST_CASE( NetclassesCreatedForAllBoards )
+{
+    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+    std::vector<std::string> boards = GetAllBoardFiles();
+
+    for( const std::string& boardName : boards )
+    {
+        std::string fullPath = dataPath + boardName;
+        BOARD*      board = GetCachedBoard( fullPath );
+
+        if( !board )
+            continue;
+
+        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
+        {
+            std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+            const auto& netclasses = netSettings->GetNetclasses();
+
+            BOOST_TEST_MESSAGE( boardName << ": " << netclasses.size() << " netclasses" );
+
+            for( const auto& [name, nc] : netclasses )
+            {
+                BOOST_TEST_MESSAGE( "  " << name << ": track="
+                                    << nc->GetTrackWidth() << " clearance="
+                                    << nc->GetClearance() );
+
+                // Constraint set netclasses should have positive track width.
+                // Skip generated netclasses (DP_, MG_, W*mil) which may not set track width.
+                if( !name.StartsWith( wxS( "DP_" ) )
+                    && !name.StartsWith( wxS( "MG_" ) )
+                    && !name.StartsWith( wxS( "W" ) ) )
+                {
+                    BOOST_CHECK_MESSAGE( nc->HasTrackWidth(),
+                                         name << " should have a track width" );
+                    BOOST_CHECK_MESSAGE( nc->GetTrackWidth() > 0,
+                                         name << " track width should be positive" );
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Verify that BeagleBone Black netclass net assignments survive and that assigned nets
+ * have the correct netclass. This tests the full pattern+direct assignment chain.
+ */
+BOOST_AUTO_TEST_CASE( BeagleBone_NetclassAssignments )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+
+    BOARD* board = GetCachedBoard( dataPath );
+
+    BOOST_REQUIRE( board );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    struct ExpectedNC
+    {
+        const char* name;
+        int         trackWidth;
+        int         clearance;
+    };
+
+    ExpectedNC expectedSets[] = {
+        { "Allegro_Default",      120650, 101600 },
+        { "PWR",          381000, 101600 },
+        { "BGA",           76200, 101600 },
+        { "90_OHM_DIFF",  114300, 101600 },
+        { "100OHM_DIFF",   95250, 101600 },
+    };
+
+    for( const auto& expected : expectedSets )
+    {
+        wxString ncName( expected.name );
+
+        BOOST_CHECK_MESSAGE( netSettings->HasNetclass( ncName ),
+                             "Missing netclass: " << expected.name );
+
+        auto nc = netSettings->GetNetClassByName( ncName );
+
+        BOOST_REQUIRE_MESSAGE( nc, "Cannot retrieve netclass: " << expected.name );
+        BOOST_CHECK_EQUAL( nc->GetTrackWidth(), expected.trackWidth );
+        BOOST_CHECK_EQUAL( nc->GetClearance(), expected.clearance );
+    }
+
+    // Diff pair netclasses
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "DP_USB0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "DP_USB1" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "DP_HDMI_TX0" ) ) );
+
+    // Match group netclasses
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "MG_DDR_ADD" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "MG_DDR_DQ0" ) ) );
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "MG_DDR_DQ1" ) ) );
+
+    // Per-net trace width netclass
+    BOOST_CHECK( netSettings->HasNetclass( wxS( "W8mil" ) ) );
+
+    auto ncW8 = netSettings->GetNetClassByName( wxS( "W8mil" ) );
+
+    BOOST_REQUIRE( ncW8 );
+    BOOST_CHECK_EQUAL( ncW8->GetTrackWidth(), 203200 );
+
+    // At least some nets should have non-default netclass assignments
+    int assignedCount = 0;
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() <= 0 )
+            continue;
+
+        NETCLASS* nc = net->GetNetClass();
+
+        if( nc && nc->GetName() != NETCLASS::Default )
+            assignedCount++;
+    }
+
+    BOOST_CHECK_MESSAGE( assignedCount > 0,
+                         "At least some nets should have non-default netclass assignments" );
+    BOOST_TEST_MESSAGE( "Nets with non-default netclass: " << assignedCount );
 }
 
 

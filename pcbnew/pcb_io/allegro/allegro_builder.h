@@ -157,6 +157,7 @@ private:
     void createBoardOutline();
     void createZones();
     void applyZoneFills();
+    void enablePadTeardrops();
     void applyConstraintSets();
     void applyNetConstraints();
     void applyMatchGroups();

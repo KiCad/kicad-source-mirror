@@ -1034,7 +1034,10 @@ void BOARD_BUILDER::applyConstraintSets()
     // Create a netclass for each constraint set that has nonzero values
     for( const auto& [name, def] : constraintSets )
     {
-        wxString ncName = wxString::Format( wxS( "Allegro_%s" ), name );
+        wxString ncName = name;
+
+        if( ncName.CmpNoCase( NETCLASS::Default ) == 0 )
+            ncName = wxS( "Allegro_Default" );
 
         if( netSettings->HasNetclass( ncName ) )
             continue;
@@ -1109,7 +1112,10 @@ void BOARD_BUILDER::applyConstraintSets()
         if( assignedSetName.IsEmpty() )
             return;
 
-        wxString ncName = wxString::Format( wxS( "Allegro_%s" ), assignedSetName );
+        wxString ncName = assignedSetName;
+
+        if( ncName.CmpNoCase( NETCLASS::Default ) == 0 )
+            ncName = wxS( "Allegro_Default" );
 
         if( !netSettings->HasNetclass( ncName ) )
             return;
@@ -1162,7 +1168,7 @@ void BOARD_BUILDER::applyNetConstraints()
     for( const auto& [widthNm, netKeys] : widthToNetKeys )
     {
         int widthMils = ( widthNm + 12700 ) / 25400;
-        wxString ncName = wxString::Format( wxS( "Allegro_W%dmil" ), widthMils );
+        wxString ncName = wxString::Format( wxS( "W%dmil" ), widthMils );
 
         if( netSettings->HasNetclass( ncName ) )
             continue;
@@ -1292,7 +1298,7 @@ void BOARD_BUILDER::applyMatchGroups()
         // A diff pair has exactly 2 nets. We don't check P/N naming because Allegro doesn't
         // require any naming convention for paired nets.
         bool isDiffPair = ( netKeys.size() == 2 );
-        wxString ncPrefix = isDiffPair ? wxS( "Allegro_DP_" ) : wxS( "Allegro_MG_" );
+        wxString ncPrefix = isDiffPair ? wxS( "DP_" ) : wxS( "MG_" );
         wxString ncName = ncPrefix + groupName;
 
         if( netSettings->HasNetclass( ncName ) )
@@ -3310,10 +3316,12 @@ void BOARD_BUILDER::applyZoneFills()
         }
     }
 
-    // Unmatched ETCH shapes on the net chain are standalone copper polygons (Allegro
-    // "shapes" drawn on ETCH layers without a BOUNDARY zone definition). Import each
-    // as a filled PCB_SHAPE with the appropriate net.
+    // Unmatched ETCH shapes are either standalone copper polygons or dynamic copper
+    // (teardrops/fillets). On V172+ boards, m_Unknown2 bit 12 (0x1000) marks auto-generated
+    // dynamic copper that maps to KiCad teardrop zones. Shapes without this flag are genuine
+    // standalone copper imported as filled PCB_SHAPE.
     int copperShapeCount = 0;
+    int teardropCount = 0;
 
     for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
     {
@@ -3360,25 +3368,116 @@ void BOARD_BUILDER::applyZoneFills()
 
         polySet.Fracture();
 
-        auto shape = std::make_unique<PCB_SHAPE>( &m_board, SHAPE_T::POLY );
-        shape->SetPolyShape( polySet );
-        shape->SetFilled( true );
-        shape->SetLayer( fill.layer );
-        shape->SetNetCode( fill.netCode );
-        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+        const bool isDynCopperShape = ( fill.shape->m_Unknown2.value_or( 0 ) & 0x1000 ) != 0;
 
-        wxLogTrace( traceAllegroBuilder, "  Copper shape %#010x net=%d layer=%s",
-                    fill.shape->m_Key, fill.netCode,
-                    m_board.GetLayerName( fill.layer ) );
+        if( isDynCopperShape )
+        {
+            auto zone = std::make_unique<ZONE>( &m_board );
 
-        m_board.Add( shape.release(), ADD_MODE::APPEND );
-        copperShapeCount++;
+            zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
+            zone->SetLayer( fill.layer );
+            zone->SetNetCode( fill.netCode );
+            zone->SetLocalClearance( 0 );
+            zone->SetPadConnection( ZONE_CONNECTION::FULL );
+            zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+            zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER );
+
+            zone->AddPolygon( outline );
+            zone->SetFilledPolysList( fill.layer, polySet );
+            zone->SetIsFilled( true );
+            zone->SetNeedRefill( false );
+            zone->CalculateFilledArea();
+
+            m_board.Add( zone.release(), ADD_MODE::APPEND );
+            teardropCount++;
+        }
+        else
+        {
+            auto shape = std::make_unique<PCB_SHAPE>( &m_board, SHAPE_T::POLY );
+            shape->SetPolyShape( polySet );
+            shape->SetFilled( true );
+            shape->SetLayer( fill.layer );
+            shape->SetNetCode( fill.netCode );
+            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+
+            m_board.Add( shape.release(), ADD_MODE::APPEND );
+            copperShapeCount++;
+        }
     }
 
     wxLogTrace( traceAllegroBuilder,
                 "Applied fills to %d zone/layer pairs (%d clearance holes), "
-                "created %d standalone copper shapes",
-                fillCount, totalHoles, copperShapeCount );
+                "created %d standalone copper shapes, %d teardrop zones",
+                fillCount, totalHoles, copperShapeCount, teardropCount );
+}
+
+
+void BOARD_BUILDER::enablePadTeardrops()
+{
+    std::unordered_map<int, std::vector<ZONE*>> teardropsByNet;
+
+    for( ZONE* zone : m_board.Zones() )
+    {
+        if( zone->IsTeardropArea() )
+            teardropsByNet[zone->GetNetCode()].push_back( zone );
+    }
+
+    if( teardropsByNet.empty() )
+        return;
+
+    int padCount = 0;
+    int viaCount = 0;
+
+    for( FOOTPRINT* fp : m_board.Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            auto it = teardropsByNet.find( pad->GetNetCode() );
+
+            if( it == teardropsByNet.end() )
+                continue;
+
+            for( ZONE* tdZone : it->second )
+            {
+                if( !pad->IsOnLayer( tdZone->GetLayer() ) )
+                    continue;
+
+                if( tdZone->Outline()->Contains( pad->GetPosition() ) )
+                {
+                    pad->SetTeardropsEnabled( true );
+                    padCount++;
+                    break;
+                }
+            }
+        }
+    }
+
+    for( PCB_TRACK* track : m_board.Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( track );
+        auto it = teardropsByNet.find( via->GetNetCode() );
+
+        if( it == teardropsByNet.end() )
+            continue;
+
+        for( ZONE* tdZone : it->second )
+        {
+            if( !via->IsOnLayer( tdZone->GetLayer() ) )
+                continue;
+
+            if( tdZone->Outline()->Contains( via->GetPosition() ) )
+            {
+                via->SetTeardropsEnabled( true );
+                viaCount++;
+                break;
+            }
+        }
+    }
+
+    wxLogTrace( traceAllegroBuilder, "Enabled teardrops on %d pads and %d vias", padCount, viaCount );
 }
 
 
@@ -3474,6 +3573,9 @@ bool BOARD_BUILDER::BuildBoard()
         m_board.FinalizeBulkAdd( bulkAddedItems );
 
     wxLogTrace( traceAllegroBuilder, "Converted %zu footprints", bulkAddedItems.size() );
+
+    enablePadTeardrops();
+
     wxLogTrace( traceAllegroBuilder, "Board construction completed successfully" );
     return true;
 }

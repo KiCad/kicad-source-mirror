@@ -247,8 +247,29 @@ and custom pad shapes.
 3. Also on the net assignment chain but with NO corresponding BOUNDARY
    zone: these are standalone copper polygons (Allegro "shapes" drawn
    directly on ETCH layers). They are imported as filled PCB_SHAPE
-   objects with the appropriate net assignment. LAY-31399_C has 27 such
-   shapes across 13 nets (VSYS_5V, NVCC_1V8, VDD_SOC_0V8, etc.).
+   objects with the appropriate net assignment.
+
+   On V172+ boards, the m_Unknown2 field in 0x28 SHAPE blocks is a
+   discriminator for dynamic copper. Bit 12 (0x1000) marks shapes that
+   Allegro auto-generated (teardrops, via fillets, pad connection
+   polygons). Observed values:
+
+   - 0x3001: classic teardrop shapes (5 vertices, asymmetric bbox)
+   - 0x1001: dynamic copper fillets at via/pad junctions
+   - 0x0001: genuine standalone copper pours
+   - 0x0000: pre-V172 boards (field absent, value_or(0) returns 0)
+
+   Shapes with bit 12 set are imported as KiCad teardrop ZONE objects
+   (TEARDROP_TYPE::TD_VIAPAD). Shapes without this flag are imported
+   as filled PCB_SHAPE objects (standalone copper).
+
+   After teardrop zones are created, enablePadTeardrops() finds the
+   anchoring pad/via for each teardrop by checking which pad/via
+   position on the same net and layer is contained within the teardrop
+   outline, and calls SetTeardropsEnabled(true) on matching items.
+
+   BeagleBone Black: 1063 teardrops (20 pads + 499 vias enabled),
+   1 genuine copper pour. Pre-V172 boards: 0 teardrops.
 
 ### Zone Net Resolution
 

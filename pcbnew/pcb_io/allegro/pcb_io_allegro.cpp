@@ -137,6 +137,10 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
 
     wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Board construction completed successfully" );
+
+    m_board->m_LegacyNetclassesLoaded = true;
+    m_board->m_LegacyDesignSettingsLoaded = true;
+
     (void) deleter.release();
     return m_board;
 }
