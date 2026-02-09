@@ -321,6 +321,19 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 wxCHECK2( itemCopy, continue );
 
+#if 0
+                // While this keeps us from marking documents modified when someone OK's a dialog with
+                // no changes, it depends on our various SCH_ITEM::operator=='s being bullet-proof. They
+                // currently aren't.
+                if( *itemCopy == *schItem )
+                {
+                    // No actual changes made; short-circuit undo
+                    delete ent.m_copy;
+                    ent.m_copy = nullptr;
+                    break;
+                }
+#endif
+
                 SCH_SHEET_PATH currentSheet;
 
                 if( frame )
@@ -331,7 +344,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 {
                     updateConnectivityFlag();
                 }
-
 
                 if( schItem->Type() == SCH_SHEET_T )
                 {
@@ -406,14 +418,19 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     {
         if( frame )
         {
-            frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
+            if( undoList.GetCount() > 0 )
+            {
+                frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
+
+                if( !( aCommitFlags & SKIP_SET_DIRTY ) )
+                    frame->OnModify();
+            }
 
             if( dirtyConnectivity )
             {
                 wxLogTrace( wxS( "CONN_PROFILE" ),
                             wxS( "SCH_COMMIT::pushSchEdit() %s clean up connectivity rebuild." ),
-                            ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" )
-                                                                     : wxS( "global" ) );
+                            ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" ) : wxS( "global" ) );
                 frame->RecalculateConnections( this, connectivityCleanUp );
             }
         }
@@ -429,12 +446,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( frame && frame->GetCanvas() )
         frame->GetCanvas()->Refresh();
-
-    if( !( aCommitFlags & SKIP_SET_DIRTY ) )
-    {
-        if( frame )
-            frame->OnModify();
-    }
 
     clear();
 }
