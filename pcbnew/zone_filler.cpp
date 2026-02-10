@@ -594,7 +594,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             // Add the zone to the list of zones to test or refill
             toFill.emplace_back( std::make_pair( zone, layer ) );
 
-            isolatedIslandsMap[ zone ][ layer ] = ISOLATED_ISLANDS();
+            isolatedIslandsMap[zone][layer] = ISOLATED_ISLANDS();
         }
 
         // Remove existing fill first to prevent drawing invalid polygons on some platforms
@@ -1098,7 +1098,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 refillZones.insert( zone );
 
             for( ZONE* zone : refillZones )
+            {
                 refillIslandsMap[zone] = std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>();
+
+                for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+                    refillIslandsMap[zone][layer] = ISOLATED_ISLANDS();
+            }
 
             connectivity->FillIsolatedIslandsMap( refillIslandsMap );
 
