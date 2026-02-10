@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
 "PO-Revision-Date: 2026-02-11 00:10+0000\n"
-"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
 "Language: cs\n"
@@ -6539,7 +6539,6 @@ msgstr "Neznámý MIME typ pro soubor dokumentace '%s'"
 
 #: common/eda_draw_frame.cpp:230 common/tool/action_toolbar.cpp:1183
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
 msgstr "Přepsat zámky"
 
@@ -42899,9 +42898,8 @@ msgid "Update Footprints"
 msgstr "Aktualizovat pouzdro"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:44
-#, fuzzy
 msgid "Replace footprints with those specified by symbols"
-msgstr "Nahrazení pouzder s těmi uvedenými v netlistu"
+msgstr "Nahrazení pouzder s těmi uvedenými v symbolu"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:46
 msgid ""
