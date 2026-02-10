@@ -305,6 +305,7 @@ PANEL_DRC_RULE_EDITOR::getConstraintPanel( wxWindow* aParent, const DRC_RULE_EDI
         return new DRC_RE_CUSTOM_RULE_PANEL(
                 aParent, dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( m_constraintData ) );
 
+    case MATCHED_LENGTH_DIFF_PAIR:
     case ABSOLUTE_LENGTH:
         return new DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
                 aParent,
