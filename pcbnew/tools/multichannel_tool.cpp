@@ -1253,9 +1253,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 continue;
             }
 
-            // Ignore footprints outside of the rule area
-            if( !refFP->GetEffectiveShape( refFP->GetLayer() )->Collide( &refPoly, 0 ) )
+            // For regular Rule Area repeat, ignore source footprints outside the reference area.
+            // For Design Block apply, use the exact source item set collected from the block.
+            if( aRefArea->m_sourceType != PLACEMENT_SOURCE_T::DESIGN_BLOCK
+                && !refFP->GetEffectiveShape( refFP->GetLayer() )->Collide( &refPoly, 0 ) )
+            {
                 continue;
+            }
 
             if( targetFP->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
