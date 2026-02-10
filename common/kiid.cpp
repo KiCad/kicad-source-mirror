@@ -42,15 +42,13 @@
 
 #include <wx/log.h>
 
-// boost:mt19937 is not thread-safe
-static std::mutex                                           rng_mutex;
-
+// Use thread_local because boost:mt19937 is not thread-safe
 // Static rng and generators are used because the overhead of constant seeding is expensive
 // We rely on the default non-arg constructor of basic_random_generator to provide a random seed.
 // We use a separate rng object for cases where we want to control the basic_random_generator
 // initial seed by calling SeedGenerator from unit tests and other special cases.
-static boost::mt19937                                       rng;
-static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator;
+static thread_local boost::mt19937                                       rng;
+static thread_local boost::uuids::basic_random_generator<boost::mt19937> randomGenerator;
 
 // These don't have the same performance penalty, but we might as well be consistent
 static boost::uuids::string_generator                       stringGenerator;
@@ -87,7 +85,6 @@ KIID::KIID()
         }
         else
         {
-            std::lock_guard<std::mutex> lock( rng_mutex );
             m_uuid = randomGenerator();
         }
 
