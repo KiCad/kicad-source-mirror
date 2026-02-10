@@ -20,13 +20,13 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
@@ -45,11 +45,11 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_variantLabel;
-		wxChoice* m_variantChoiceCtrl;
 		wxStaticText* m_outputPathLabel;
 		wxTextCtrl* m_outputPath;
 		STD_BITMAP_BUTTON* m_browseButton;
+		wxStaticText* m_variantLabel;
+		wxChoice* m_variantChoiceCtrl;
 		wxBoxSizer* m_optionsSizer;
 		wxRadioBox* m_plotFormatOpt;
 		wxStaticText* m_staticText4;

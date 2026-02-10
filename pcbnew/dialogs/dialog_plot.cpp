@@ -149,6 +149,9 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXP
     // non-job versions.
     m_hash_key = TO_UTF8( GetTitle() );
 
+    m_variantChoiceCtrl->Append( board->GetVariantNamesForUI() );
+    m_variantChoiceCtrl->SetSelection( 0 );
+
     int                       order = 0;
     wxArrayInt                plotAllLayersOrder;
     wxArrayString             plotAllLayersChoicesStrings;
@@ -280,6 +283,30 @@ bool DIALOG_PLOT::TransferDataToWindow()
 
     // Could devote a PlotOrder() function in place of UIOrder().
     m_layerList = board->GetEnabledLayers().UIOrder();
+
+    // Select the current board variant in the variant choice
+    if( m_job )
+    {
+        if( !m_job->m_variant.IsEmpty() )
+        {
+            int idx = m_variantChoiceCtrl->FindString( m_job->m_variant );
+
+            if( idx != wxNOT_FOUND )
+                m_variantChoiceCtrl->SetSelection( idx );
+        }
+    }
+    else
+    {
+        wxString currentVariant = board->GetCurrentVariant();
+
+        if( !currentVariant.IsEmpty() )
+        {
+            int idx = m_variantChoiceCtrl->FindString( currentVariant );
+
+            if( idx != wxNOT_FOUND )
+                m_variantChoiceCtrl->SetSelection( idx );
+        }
+    }
 
     if( !m_job && !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
         m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
@@ -520,6 +547,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
 
     // this exists outside plot opts because its usually globally saved
     m_job->m_checkZonesBeforePlot = m_zoneFillCheck->GetValue();
+
+    m_job->m_variant = getSelectedVariant();
 }
 
 
@@ -567,6 +596,18 @@ void DIALOG_PLOT::reInitDialog()
     {
         m_PlotOptionsSizer->Hide( m_SizerSolderMaskAlert );
     }
+}
+
+
+wxString DIALOG_PLOT::getSelectedVariant() const
+{
+    wxString variant;
+    int      selection = m_variantChoiceCtrl->GetSelection();
+
+    if( ( selection != 0 ) && ( selection != wxNOT_FOUND ) )
+        variant = m_variantChoiceCtrl->GetString( selection );
+
+    return variant;
 }
 
 
@@ -1246,6 +1287,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         // Save the current plot options in the board
         m_editFrame->SetPlotSettings( m_plotOpts );
 
+        wxString oldVariant = board->GetCurrentVariant();
+        board->SetCurrentVariant( getSelectedVariant() );
+
         PCB_PLOTTER pcbPlotter( m_editFrame->GetBoard(), &reporter, m_plotOpts );
 
         LSEQ layersToPlot = m_plotOpts.GetLayerSelection().UIOrder();
@@ -1267,6 +1311,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
 
         pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers, m_useGerberExtensions->GetValue() );
+
+        board->SetCurrentVariant( oldVariant );
     }
 }
 

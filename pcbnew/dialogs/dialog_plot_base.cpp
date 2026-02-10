@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,22 +19,52 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bupperSizer;
-	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizerTop;
+	fgSizerTop = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizerTop->AddGrowableCol( 1 );
+	fgSizerTop->SetFlexibleDirection( wxBOTH );
+	fgSizerTop->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxBoxSizer* bVariantSizer;
+	bVariantSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPlotFmt->Wrap( -1 );
-	bupperSizer->Add( m_staticTextPlotFmt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bVariantSizer->Add( m_staticTextPlotFmt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	fgSizerTop->Add( bVariantSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bFormatSizer;
+	bFormatSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("PDF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
-	bupperSizer->Add( m_plotFormatOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 28 );
+	bFormatSizer->Add( m_plotFormatOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 28 );
+
+
+	bFormatSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Design variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel->Wrap( -1 );
+	bFormatSizer->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxArrayString m_variantChoiceCtrlChoices;
+	m_variantChoiceCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceCtrlChoices, 0 );
+	m_variantChoiceCtrl->SetSelection( 0 );
+	bFormatSizer->Add( m_variantChoiceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizerTop->Add( bFormatSizer, 0, wxEXPAND, 5 );
 
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bupperSizer->Add( m_staticTextDir, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTop->Add( m_staticTextDir, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bupperSizer;
+	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
@@ -53,7 +83,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bupperSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT, 5 );
 
 
-	m_MainSizer->Add( bupperSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerTop->Add( bupperSizer, 0, wxEXPAND, 5 );
+
+
+	m_MainSizer->Add( fgSizerTop, 0, wxALL|wxEXPAND, 5 );
 
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
 

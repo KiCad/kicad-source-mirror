@@ -50,6 +50,7 @@ public:
     wxString m_filename;
     wxString m_colorTheme;
     wxString m_drawingSheet;
+    wxString m_variant;
 
     /**
      * Common Options

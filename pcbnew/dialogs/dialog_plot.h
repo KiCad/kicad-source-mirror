@@ -72,6 +72,7 @@ private:
     void reInitDialog();     // initialization after calling drill dialog
     void applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
+    wxString    getSelectedVariant() const;
 
     void arrangeAllLayersList( const LSEQ& aSeq );
     void transferPlotParamsToJob();
