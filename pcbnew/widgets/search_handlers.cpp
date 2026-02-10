@@ -251,9 +251,16 @@ wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
     {
         wxArrayString layers;
         BOARD*        board = m_frame->GetBoard();
+        // Make sure we don't show layers from Rule Areas that aren't actually on the board,
+        // since they have all copper areas by default.
+        LSET          dialogLayers = LSET::AllNonCuMask()
+                                     | LSET::AllCuMask( board->GetCopperLayerCount() );
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-            layers.Add( board->GetLayerName( layer ) );
+        for( PCB_LAYER_ID layer : dialogLayers.UIOrder() )
+        {
+            if( zone->IsOnLayer( layer ) )
+                layers.Add( board->GetLayerName( layer ) );
+        }
 
         return wxJoin( layers, ',' );
     }
