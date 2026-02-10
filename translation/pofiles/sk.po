@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:39+0300\n"
-"PO-Revision-Date: 2026-02-10 00:02+0000\n"
+"PO-Revision-Date: 2026-02-11 00:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -11226,22 +11226,20 @@ msgid "Clear Assigned Hotkey"
 msgstr "Vymazať priradenú klávesovú skratku"
 
 #: common/widgets/widget_hotkey_list.cpp:451
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Vymazať priradenú klávesovú skratku"
+msgstr "Vymazať priradenú alternatívu"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Obnov štandardné hodnoty"
+msgstr "Obnoviť predvolené"
 
 #: common/widgets/widget_hotkey_list.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
-"'%s' je už priradený k '%s' v sekcii '%s'. Naozaj chcete zmeniť jeho "
+"Premenná '%s' je už priradená k '%s' v sekcii '%s'. Naozaj chcete zmeniť jej "
 "priradenie?"
 
 #: common/widgets/widget_hotkey_list.cpp:516
