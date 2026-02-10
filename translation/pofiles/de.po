@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-10 00:02+0000\n"
+"PO-Revision-Date: 2026-02-11 00:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -11801,7 +11801,7 @@ msgstr "*** Keine Symbole mit passenden Kriterien gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
 msgid "*** symbol lib id not valid ***"
-msgstr "*** Symbolbibliotheks-ID nicht gültig ***"
+msgstr "*** Symbolbibliotheks-ID ungültig ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -11849,7 +11849,7 @@ msgstr "Symbole aktualisieren, die mit Wert übereinstimmen:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
-msgstr "Symbole aktualisieren mit Bibliotheks-ID:"
+msgstr "Symbole mit Bibliotheks-ID aktualisieren :"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:79
 msgid "New library identifier:"
@@ -18446,7 +18446,7 @@ msgstr "elektr. Verbindung von (%s,%s) nach (%s,%s)"
 #: eeschema/net_navigator.cpp:65
 #, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "Bus von (%s,%s) nach (%s,%s)"
+msgstr "Bus von %s,%s nach %s,%s"
 
 #: eeschema/net_navigator.cpp:73
 msgid "Graphic line not connectable"
@@ -18470,17 +18470,17 @@ msgstr "Bezeichner \"%s\" bei %s, %s"
 #: eeschema/net_navigator.cpp:123
 #, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Globaler Bezeichner \"%s\" bei (%s, %s)"
+msgstr "Globaler Bezeichner \"%s\" bei %s, %s"
 
 #: eeschema/net_navigator.cpp:133
 #, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Hierarchischer Bezeichner \"%s\" bei (%s, %s)"
+msgstr "Hierarchischer Bezeichner \"%s\" bei %s, %s"
 
 #: eeschema/net_navigator.cpp:143
 #, c-format
 msgid "Junction at %s, %s"
-msgstr "Knotenpunkt bei (%s, %s)"
+msgstr "Knotenpunkt bei %s, %s"
 
 #: eeschema/net_navigator.cpp:152
 #, c-format
@@ -19738,7 +19738,7 @@ msgstr "Ungültige Darstellungsformnummer %s"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:818
 #, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Ungültiger Hyperlink-URL \"%s\""
+msgstr "Ungültige Hyperlink-URL \"%s\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:980
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2213
@@ -22991,7 +22991,7 @@ msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
-msgstr "Fenster für die Elektrischen Regeln (DRC)"
+msgstr "Design-Rule-Check (DRC)-Fenster anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
@@ -25350,7 +25350,7 @@ msgstr "Grafiklage %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:37
 msgid "Show D codes"
-msgstr "DCodes anzeigen"
+msgstr "D-Codes anzeigen"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 #: pcbnew/dialogs/panel_edit_options_base.cpp:418
@@ -26170,7 +26170,7 @@ msgstr "Als KiCad-Platinendatei exportieren"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
-msgstr "DCodes"
+msgstr "D-Codes"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, c-format
@@ -27006,8 +27006,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:69
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr ""
-"Ursprung der Drill/Place-Datei als Ursprung verwenden (nur ASCII oder CSV)"
+msgstr "Ursprung der Drill/Place-Datei verwenden (nur ASCII oder CSV)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:73
 msgid "Include only SMD footprints (ascii or csv only)"
@@ -51268,9 +51267,8 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Ausgewählte Pads nacheinander versuchen, automatisch zu verbinden."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Vorgang mit aktuellem Werkzeug abbrechen"
+msgstr "Nächstes Element routen"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
 msgid "Skip current item and route next selected item."
