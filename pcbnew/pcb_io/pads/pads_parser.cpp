@@ -1191,7 +1191,7 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
             }
             else if( poly_type == "VOIDOUT" )
             {
-                pour.style = POUR_STYLE::VOID;
+                pour.style = POUR_STYLE::VOIDOUT;
             }
             else if( poly_type == "PADTHERM" )
             {

@@ -342,7 +342,7 @@ enum class POUR_STYLE
 {
     SOLID,      ///< Solid filled pour (POUROUT, POLY)
     HATCHED,    ///< Hatched pour (HATOUT)
-    VOID        ///< Void/empty region (VOIDOUT)
+    VOIDOUT     ///< Void/empty region (VOIDOUT)
 };
 
 /**
