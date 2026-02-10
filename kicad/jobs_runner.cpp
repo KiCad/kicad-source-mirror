@@ -68,8 +68,23 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
     wxProcess process;
     process.Redirect();
 
+    // wxExecute with a string argument calls execvp() directly on Unix, bypassing the shell.
+    // This means glob expansion, pipes, and other shell features don't work for direct binaries.
+    // Use the array form of wxExecute to invoke a shell, passing the command as a single argument
+    // to avoid any quoting issues with shell metacharacters in the command string.
+#ifdef __WXMSW__
+    const wxString shell = wxS( "cmd.exe" );
+    const wxString shellFlag = wxS( "/c" );
+#else
+    const wxString shell = wxS( "/bin/sh" );
+    const wxString shellFlag = wxS( "-c" );
+#endif
+
+    const wchar_t* argv[] = { shell.wc_str(), shellFlag.wc_str(), cmd.wc_str(), nullptr };
+
     // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
-    int result = static_cast<int>( wxExecute( cmd, wxEXEC_SYNC, &process ) );
+    int result = static_cast<int>(
+            wxExecute( const_cast<wchar_t**>( argv ), wxEXEC_SYNC, &process ) );
 
     wxInputStream* inputStream = process.GetInputStream();
     wxInputStream* errorStream = process.GetErrorStream();

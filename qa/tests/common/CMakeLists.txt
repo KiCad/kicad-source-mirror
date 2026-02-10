@@ -114,6 +114,7 @@ set( QA_COMMON_SRCS
 
     # Job tests
     test_job_export_sch_plot.cpp
+    test_jobs_runner.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
