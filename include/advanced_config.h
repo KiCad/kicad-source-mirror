@@ -920,6 +920,54 @@ public:
     int m_HistoryLockStaleTimeout;
 
     /**
+     * PADS text height scale factor for PCB imports.
+     * PADS text height includes leading/descender; multiply by this to get
+     * character cell height.
+     *
+     * Setting name: "PadsPcbTextHeightScale"
+     * Valid values: 0.1 to 1.0
+     * Default value: 0.69
+     */
+    double m_PadsPcbTextHeightScale;
+
+    /**
+     * PADS text width scale factor for PCB imports.
+     *
+     * Setting name: "PadsPcbTextWidthScale"
+     * Valid values: 0.1 to 1.0
+     * Default value: 0.64
+     */
+    double m_PadsPcbTextWidthScale;
+
+    /**
+     * PADS text height scale factor for schematic imports.
+     *
+     * Setting name: "PadsSchTextHeightScale"
+     * Valid values: 0.1 to 1.0
+     * Default value: 0.50
+     */
+    double m_PadsSchTextHeightScale;
+
+    /**
+     * PADS text width scale factor for schematic imports.
+     *
+     * Setting name: "PadsSchTextWidthScale"
+     * Valid values: 0.1 to 1.0
+     * Default value: 0.46
+     */
+    double m_PadsSchTextWidthScale;
+
+    /**
+     * PADS text anchor offset in nanometers for PCB imports.
+     * Compensates for the difference between PADS and KiCad text anchor positions.
+     *
+     * Setting name: "PadsTextAnchorOffsetNm"
+     * Valid values: 0 to 1000000
+     * Default value: 350000
+     */
+    int m_PadsTextAnchorOffsetNm;
+
+    /**
      * Enable iterative zone filling to handle isolated islands in higher priority zones.
      *
      * When enabled, zones are filled in priority batches. After each batch, isolated islands

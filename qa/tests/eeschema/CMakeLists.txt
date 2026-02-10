@@ -50,6 +50,8 @@ set( QA_EESCHEMA_SRCS
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_array_options.cpp
 
     sch_io/altium/test_altium_parser_sch.cpp
+    sch_io/pads/test_pads_sch_parser.cpp
+    sch_io/pads/test_pads_sch_import.cpp
 
     erc/test_erc_four_way.cpp
 	erc/test_erc_label_not_connected.cpp
@@ -160,6 +162,7 @@ PRIVATE
     eeschema_kiface_objects
     common
     kicommon
+    pads_common
     scripting
     kimath
     qa_utils

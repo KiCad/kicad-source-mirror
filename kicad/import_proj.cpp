@@ -42,6 +42,7 @@
 #include <io/easyedapro/easyedapro_import_utils.h>
 #include <io/easyedapro/easyedapro_parser.h>
 #include <io/common/plugin_common_choose_project.h>
+#include <io/pads/pads_common.h>
 #include <dialogs/dialog_import_choose_project.h>
 
 #include <wx/log.h>
@@ -290,6 +291,42 @@ void IMPORT_PROJ_HELPER::AltiumProjectHandler()
 
     if( !pcb_file.empty() )
         doImport( *pcb_file.begin(), FRAME_PCB_EDITOR, PCB_IO_MGR::ALTIUM_DESIGNER );
+}
+
+
+void IMPORT_PROJ_HELPER::ImportPadsFiles()
+{
+    m_properties.clear();
+
+    PADS_COMMON::RELATED_FILES related = PADS_COMMON::FindRelatedPadsFiles( m_InputFile.GetFullPath() );
+
+    if( !related.HasPcb() && !related.HasSchematic() )
+        return;
+
+    std::vector<SCOPED_FILE_REMOVER> copiedFiles;
+
+    auto copyAndImport = [&]( const wxString& sourceFile, FRAME_T frameType, int fileType )
+    {
+        if( sourceFile.IsEmpty() )
+            return;
+
+        wxFileName srcFn( sourceFile );
+        wxFileName targetFile( m_TargetProj.GetPath(), srcFn.GetName(), srcFn.GetExt() );
+
+        if( !targetFile.FileExists() )
+        {
+            bool copied = wxCopyFile( srcFn.GetFullPath(), targetFile.GetFullPath(), false );
+
+            if( copied )
+                copiedFiles.emplace_back( targetFile.GetFullPath() );
+        }
+
+        if( targetFile.FileExists() )
+            doImport( targetFile.GetFullPath(), frameType, fileType );
+    };
+
+    copyAndImport( related.schematicFile, FRAME_SCH, SCH_IO_MGR::SCH_PADS );
+    copyAndImport( related.pcbFile, FRAME_PCB_EDITOR, PCB_IO_MGR::PADS );
 }
 
 

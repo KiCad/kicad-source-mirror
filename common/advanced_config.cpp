@@ -144,6 +144,11 @@ static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
 static const wxChar HistoryLockStaleTimeout[] = wxT( "HistoryLockStaleTimeout" );
 static const wxChar ZoneFillIterativeRefill[] = wxT( "ZoneFillIterativeRefill" );
+static const wxChar PadsPcbTextHeightScale[] = wxT( "PadsPcbTextHeightScale" );
+static const wxChar PadsPcbTextWidthScale[] = wxT( "PadsPcbTextWidthScale" );
+static const wxChar PadsSchTextHeightScale[] = wxT( "PadsSchTextHeightScale" );
+static const wxChar PadsSchTextWidthScale[] = wxT( "PadsSchTextWidthScale" );
+static const wxChar PadsTextAnchorOffsetNm[] = wxT( "PadsTextAnchorOffsetNm" );
 
 } // namespace AC_KEYS
 
@@ -335,6 +340,12 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableUseAuiPerspective = true;
     m_HistoryLockStaleTimeout = 300; // 5 minutes default
     m_ZoneFillIterativeRefill = true;
+
+    m_PadsPcbTextHeightScale = 0.69;
+    m_PadsPcbTextWidthScale  = 0.64;
+    m_PadsSchTextHeightScale = 0.50;
+    m_PadsSchTextWidthScale  = 0.46;
+    m_PadsTextAnchorOffsetNm = 350000;
 
     loadFromConfigFile();
 }
@@ -651,6 +662,26 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ZoneFillIterativeRefill,
                                                            &m_ZoneFillIterativeRefill, m_ZoneFillIterativeRefill ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PadsPcbTextHeightScale,
+                                                             &m_PadsPcbTextHeightScale,
+                                                             m_PadsPcbTextHeightScale, 0.1, 1.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PadsPcbTextWidthScale,
+                                                             &m_PadsPcbTextWidthScale,
+                                                             m_PadsPcbTextWidthScale, 0.1, 1.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PadsSchTextHeightScale,
+                                                             &m_PadsSchTextHeightScale,
+                                                             m_PadsSchTextHeightScale, 0.1, 1.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::PadsSchTextWidthScale,
+                                                             &m_PadsSchTextWidthScale,
+                                                             m_PadsSchTextWidthScale, 0.1, 1.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PadsTextAnchorOffsetNm,
+                                                          &m_PadsTextAnchorOffsetNm,
+                                                          m_PadsTextAnchorOffsetNm, 0, 1000000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

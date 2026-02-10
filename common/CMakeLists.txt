@@ -25,6 +25,9 @@ add_subdirectory( gal )
 # Get the netlist reader library
 add_subdirectory( netlist_reader )
 
+# Get the shared PADS format support library
+add_subdirectory( io/pads )
+
 # Only for win32 cross compilation using MXE
 add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
 
@@ -126,6 +129,7 @@ set( KICOMMON_SRCS
     jobs/jobset.cpp
     jobs/job_fp_export_svg.cpp
     jobs/job_fp_upgrade.cpp
+    jobs/job_pcb_import.cpp
     jobs/job_pcb_render.cpp
     jobs/job_pcb_drc.cpp
     jobs/job_rc.cpp

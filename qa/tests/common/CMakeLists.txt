@@ -90,6 +90,10 @@ set( QA_COMMON_SRCS
 
     io/cadstar/test_cadstar_archive_parser.cpp
 
+    io/pads/test_pads_attribute_mapper.cpp
+    io/pads/test_pads_common.cpp
+    io/pads/test_pads_unit_converter.cpp
+
     view/test_zoom_controller.cpp
 
     test_netname_validator.cpp
@@ -137,6 +141,7 @@ target_link_libraries( qa_common
     common
     libcontext
     gal
+    pads_common
     qa_utils
     Boost::headers
     Boost::unit_test_framework
@@ -149,6 +154,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kicad
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/common/io/pads
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}
 )

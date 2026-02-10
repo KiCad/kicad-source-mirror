@@ -58,6 +58,7 @@ public:
     int JobExportIpcD356( JOB* aJob );
     int JobExportStats( JOB* aJob );
     int JobUpgrade( JOB* aJob );
+    int JobImport( JOB* aJob );
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );

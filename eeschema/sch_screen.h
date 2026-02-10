@@ -62,6 +62,7 @@ class SCH_LABEL_BASE;
 class PLOTTER;
 class REPORTER;
 class SCH_IO_ALTIUM;
+class SCH_IO_PADS;
 class SCH_EDIT_FRAME;
 class SCH_SHEET_LIST;
 class SCH_IO_KICAD_SEXPR_PARSER;
@@ -642,6 +643,7 @@ private:
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
     friend SCH_IO_KICAD_SEXPR;   // Only to save the loaded instance information to schematic file.
     friend SCH_IO_ALTIUM;
+    friend SCH_IO_PADS;
     friend TEST_SCH_SCREEN_FIXTURE;
 
     bool doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,

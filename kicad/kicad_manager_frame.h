@@ -126,6 +126,11 @@ public:
     void OnImportEasyEdaProFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import PADS Logic schematic and PCB files.
+     */
+    void OnImportPadsProjectFiles( wxCommandEvent& event );
+
+    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();

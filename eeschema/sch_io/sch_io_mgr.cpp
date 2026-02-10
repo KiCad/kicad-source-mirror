@@ -35,6 +35,7 @@
 #include <sch_io/database/sch_io_database.h>
 #include <sch_io/ltspice/sch_io_ltspice.h>
 #include <sch_io/http_lib/sch_io_http_lib.h>
+#include <sch_io/pads/sch_io_pads.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 
 #include <wildcards_and_files_ext.h>
@@ -76,6 +77,7 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_EASYEDAPRO:      return new SCH_IO_EASYEDAPRO();
     case SCH_LTSPICE:         return new SCH_IO_LTSPICE();
     case SCH_HTTP:            return new SCH_IO_HTTP_LIB();
+    case SCH_PADS:            return new SCH_IO_PADS();
     default:                  return nullptr;
     }
 }
@@ -99,6 +101,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_EASYEDAPRO:      return wxString( wxT( "EasyEDA (JLCEDA) Pro" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     case SCH_HTTP:            return wxString( wxT( "HTTP" ) );
+    case SCH_PADS:            return wxString( wxT( "PADS Logic" ) );
     case SCH_NESTED_TABLE:    return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aType );
     }
@@ -131,6 +134,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_LTSPICE;
     else if( aType == wxT( "HTTP" ) )
         return SCH_HTTP;
+    else if( aType == wxT( "PADS Logic" ) )
+        return SCH_PADS;
     else if( aType == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         return SCH_NESTED_TABLE;
 

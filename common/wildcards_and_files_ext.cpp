@@ -303,6 +303,12 @@ wxString FILEEXT::EagleFilesWildcard()
 }
 
 
+wxString FILEEXT::PADSProjectFilesWildcard()
+{
+    return _( "PADS ASCII files" ) + AddFileExtListToFilter( { "asc", "txt" } );
+}
+
+
 wxString FILEEXT::OrCadPcb2NetlistFileWildcard()
 {
     return _( "OrcadPCB2 netlist files" )

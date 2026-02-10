@@ -108,6 +108,6 @@
     "pdf_viewer_name": "",
     "text_editor": "/usr/bin/open -e",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/seth/code/kicad/kicad-source-mirror/qa/tests"
+    "working_dir": "/home/seth/Developer/kicad/worktrees/pads/qa/tests"
   }
 }

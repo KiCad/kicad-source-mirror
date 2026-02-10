@@ -1,0 +1,5 @@
+(version 1)
+
+(rule "DiffPair_D1_gap"
+  (condition "A.NetName == 'N01271' && B.NetName == 'N01267'")
+  (constraint clearance (min 0.3048mm)))

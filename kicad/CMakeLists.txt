@@ -72,6 +72,7 @@ set( KICAD_CLI_SRCS
     cli/command_pcb_export_stats.cpp
     cli/command_pcb_export_svg.cpp
     cli/command_pcb_upgrade.cpp
+    cli/command_pcb_import.cpp
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
     cli/command_sch_upgrade.cpp
@@ -155,6 +156,7 @@ if( APPLE )
     target_link_libraries( kicad
         nlohmann_json
         common
+        pads_common
         kicommon
         core
         ${wxWidgets_LIBRARIES}
@@ -167,6 +169,7 @@ if( APPLE )
     target_link_libraries( kicad-cli
         nlohmann_json
         common
+        pads_common
         ${wxWidgets_LIBRARIES}
         core
         )
@@ -176,6 +179,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        pads_common
         kicommon
         core
         ${wxWidgets_LIBRARIES}
@@ -186,6 +190,7 @@ else()
         common
         gal
         common      #repeated due to a circular dependency between gal and common
+        pads_common
         kicommon
         core
         ${wxWidgets_LIBRARIES}

@@ -145,6 +145,10 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      _( "Import EasyEDA (JLCEDA) Professional schematic and board" ),
                      ID_IMPORT_EASYEDAPRO_PROJECT, BITMAPS::import_project );
 
+    importMenu->Add( _( "PADS Project..." ),
+                     _( "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)" ),
+                     ID_IMPORT_PADS_PROJECT, BITMAPS::import_project );
+
     fileMenu->Add( importMenu );
 
     fileMenu->AppendSeparator();

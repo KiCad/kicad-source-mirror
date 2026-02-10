@@ -70,6 +70,7 @@ public:
         SOLIDWORKS_PCB,
         IPC2581,
         ODBPP,
+        PADS,
         // add your type here.
 
         // etc.

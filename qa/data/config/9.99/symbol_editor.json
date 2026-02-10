@@ -81,15 +81,23 @@
   "meta": {
     "version": 1
   },
+  "pin_table": {
+    "crossprobe_on_selection": true
+  },
   "pin_table_visible_columns": "0 1 2 3 4 5 9 10",
   "plugins": {
     "actions": []
   },
   "printing": {
+    "as_item_checkboxes": false,
     "background": false,
     "color_theme": "",
+    "drill_marks": 1,
+    "edge_cuts_on_all_pages": true,
     "layers": [],
+    "mirror": false,
     "monochrome": true,
+    "pagination": 1,
     "scale": 1.0,
     "title_block": false,
     "use_theme": false

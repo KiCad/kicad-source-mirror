@@ -46,6 +46,7 @@
 #include <pcb_io/easyedapro/pcb_io_easyedapro.h>
 #include <pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcb_io/odbpp/pcb_io_odbpp.h>
+#include <pcb_io/pads/pcb_io_pads.h>
 #include <reporter.h>
 #include <libraries/library_table_parser.h>
 
@@ -344,4 +345,9 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerODBPPPlugin(
         PCB_IO_MGR::ODBPP,
         wxT( "ODB++" ),
         []() -> PCB_IO* { return new PCB_IO_ODBPP; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerPadsPlugin(
+        PCB_IO_MGR::PADS,
+        wxT( "PADS" ),
+        []() -> PCB_IO* { return new PCB_IO_PADS(); } );
 // clang-format on

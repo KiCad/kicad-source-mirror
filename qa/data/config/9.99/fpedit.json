@@ -85,7 +85,8 @@
     "silk_text_italic": false,
     "silk_text_size_h": 1.0,
     "silk_text_size_v": 1.0,
-    "silk_text_thickness": 0.1
+    "silk_text_thickness": 0.1,
+    "user_layer_count": 4
   },
   "editing": {
     "fp_angle_snap_mode": 1,
@@ -149,10 +150,15 @@
     "actions": []
   },
   "printing": {
+    "as_item_checkboxes": false,
     "background": false,
     "color_theme": "",
+    "drill_marks": 1,
+    "edge_cuts_on_all_pages": true,
     "layers": [],
+    "mirror": false,
     "monochrome": true,
+    "pagination": 1,
     "scale": 1.0,
     "title_block": false,
     "use_theme": false
