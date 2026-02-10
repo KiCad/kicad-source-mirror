@@ -674,8 +674,12 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 }
 
 
-int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea )
+int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea,
+                                     REPEAT_LAYOUT_OPTIONS& aOptions )
 {
+    wxCHECK_MSG( aRefArea.m_zone, -1, wxT( "Reference Rule Area has no zone." ) );
+    wxCHECK_MSG( aTargetArea.m_zone, -1, wxT( "Target Rule Area has no zone." ) );
+
     RULE_AREA_COMPAT_DATA compat;
 
     if( !resolveConnectionTopology( &aRefArea, &aTargetArea, compat ) )
@@ -691,22 +695,19 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
     BOARD_COMMIT commit( GetManager(), true, false );
 
-    REPEAT_LAYOUT_OPTIONS options = m_areas.m_options;
-
     // If no anchor is provided, pick the first matched pair to avoid center-alignment shifting
     // the whole group. This keeps Apply Design Block Layout from moving the group to wherever
     // the source design block happened to be placed.
-    if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !options.m_anchorFp )
+    if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aOptions.m_anchorFp )
     {
         if( !compat.m_matchingComponents.empty() )
-            options.m_anchorFp = compat.m_matchingComponents.begin()->first;
+            aOptions.m_anchorFp = compat.m_matchingComponents.begin()->first;
     }
 
-    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, options, compat ) )
+    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, aOptions, compat ) )
     {
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
-                                        m_areas.m_refRA->m_zone->GetZoneName(),
-                                        aTargetArea.m_zone->GetZoneName() );
+                                        aRefArea.m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
 
         commit.Revert();
 

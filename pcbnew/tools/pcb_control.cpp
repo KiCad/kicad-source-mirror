@@ -1650,7 +1650,15 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         // Use the multichannel tool to repeat the layout
         MULTICHANNEL_TOOL* mct = m_toolMgr->GetTool<MULTICHANNEL_TOOL>();
 
-        int result = mct->RepeatLayout( aEvent, dbRA, destRA );
+        REPEAT_LAYOUT_OPTIONS options = { .m_copyRouting = true,
+                                          .m_connectedRoutingOnly = false,
+                                          .m_copyPlacement = true,
+                                          .m_copyOtherItems = true,
+                                          .m_groupItems = false,
+                                          .m_includeLockedItems = true,
+                                          .m_anchorFp = nullptr };
+
+        int result = mct->RepeatLayout( aEvent, dbRA, destRA, options );
 
         // Get rid of the temporary design blocks and rule areas
         tempCommit.Revert();
