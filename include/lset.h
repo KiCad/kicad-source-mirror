@@ -77,6 +77,17 @@ public:
     }
 
     /**
+     * See if this layer set contains all layers in another set.
+     *
+     * @param aLayers is the set to check.
+     * @return true if every layer in @a aLayers is included in this set.
+     */
+    bool ContainsAll( const LSET& aLayers ) const
+    {
+        return aLayers.is_subset_of( *this );
+    }
+
+    /**
      * Return the fixed name association with @a aLayerId.
      *
      * @note These names must not be translated or changed.  They are used as tokens in the board

@@ -200,8 +200,8 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
     // rather than querying the board for items that are inside the area.
     if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
     {
-        // Get all board items that aren't footprints or connected items,
-        // since they'll be handled in the the other findXInRuleArea routines
+        // Get all board items that aren't footprints.  Connected items are usually handled by the
+        // routing path, except zones which are copied via "other items".
         for( EDA_ITEM* item : aRuleArea->m_designBlockItems )
         {
             if( item->Type() == PCB_FOOTPRINT_T )
@@ -209,7 +209,7 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
             {
-                if( !boardItem->IsConnected() )
+                if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
                     aItems.insert( boardItem );
             }
         }
@@ -859,6 +859,12 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
 
             if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
             {
+                // Zones are handled by the "copy other items" path, we need this check here
+                // because design blocks explicitly include them as part of the block contents,
+                // but other RA types grab them by querying the board for items enclosed by the RA polygon
+                if( bci->Type() == PCB_ZONE_T )
+                    continue;
+
                 if( bci->IsConnected() )
                     aOutput.insert( bci );
             }
@@ -1058,11 +1064,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( aCommit->GetStatus( item ) != 0 )
                 continue;
 
-            if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+            if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
             {
-                aCompatData.m_affectedItems.insert( item );
-                aCommit->Remove( item );
+                continue;
             }
+
+            aCompatData.m_affectedItems.insert( item );
+            aCommit->Remove( item );
         }
 
         for( BOARD_CONNECTED_ITEM* item : refRouting )
@@ -1119,17 +1127,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             {
                 ZONE* zone = static_cast<ZONE*>( item );
 
-                // Check all zone layers are included in the rule area
-                bool layerMismatch = false;
-                LSET zoneLayers = zone->GetLayerSet();
-
-                for( const PCB_LAYER_ID& layer : zoneLayers )
-                {
-                    if( !aTargetArea->m_zone->GetLayerSet().Contains( layer ) )
-                        layerMismatch = true;
-                }
-
-                if( !layerMismatch )
+                // Check all zone layers are included in the target rule area.
+                if( aTargetArea->m_zone->GetLayerSet().ContainsAll( zone->GetLayerSet() ) )
                 {
                     aCompatData.m_affectedItems.insert( zone );
                     aCommit->Remove( zone );
@@ -1158,21 +1157,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( item->Type() == PCB_ZONE_T )
             {
                 ZONE* zone = static_cast<ZONE*>( item );
+                LSET  allowedLayers = aRefArea->m_zone->GetLayerSet() & aTargetArea->m_zone->GetLayerSet();
 
-                // Check all zone layers are included in the rule area
-                bool layerMismatch = false;
-                LSET zoneLayers = zone->GetLayerSet();
-
-                for( const PCB_LAYER_ID& layer : zoneLayers )
-                {
-                    if( !aRefArea->m_zone->GetLayerSet().Contains( layer )
-                        || !aTargetArea->m_zone->GetLayerSet().Contains( layer ) )
-                    {
-                        layerMismatch = true;
-                    }
-                }
-
-                if( layerMismatch )
+                // Check all zone layers are included in both source and target rule areas.
+                if( !allowedLayers.ContainsAll( zone->GetLayerSet() ) )
                     continue;
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Duplicate( false ) );

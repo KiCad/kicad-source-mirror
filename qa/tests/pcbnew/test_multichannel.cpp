@@ -68,6 +68,36 @@ RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& 
     return nullptr;
 }
 
+RULE_AREA* findRuleAreaByPlacementGroup( MULTICHANNEL_TOOL* aTool, const wxString& aGroupName )
+{
+    for( RULE_AREA& ra : aTool->GetData()->m_areas )
+    {
+        if( ra.m_zone && ra.m_zone->GetPlacementAreaSource() == aGroupName )
+            return &ra;
+    }
+
+    return nullptr;
+}
+
+int countZonesByNameInRuleArea( BOARD* aBoard, const wxString& aZoneName, const RULE_AREA& aRuleArea )
+{
+    int count = 0;
+
+    for( const ZONE* zone : aBoard->Zones() )
+    {
+        if( zone == aRuleArea.m_zone )
+            continue;
+
+        if( zone->GetZoneName() != aZoneName )
+            continue;
+
+        if( aRuleArea.m_zone->Outline()->Contains( zone->Outline()->COutline( 0 ).Centre() ) )
+            count++;
+    }
+
+    return count;
+}
+
 
 BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE )
 {
@@ -422,6 +452,67 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutDoesNotRemoveReferenceVias, MULTICHANNEL_TE
     BOOST_TEST_MESSAGE( wxString::Format( "Reference area vias after repeat: %d", refViaCountAfter ) );
 
     BOOST_CHECK_EQUAL( refViaCountAfter, refViaCountBefore );
+}
+
+
+/**
+ * Test that "copy other items" only copies zones whose full layer sets are inside both
+ * source and target rule area layer sets (issue 22983).
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutRespectsZoneLayerSetsForOtherItems, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22983/issue22983", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* sourceA = findRuleAreaByPlacementGroup( mtTool, wxT( "SourceA" ) );
+    RULE_AREA* destA = findRuleAreaByPlacementGroup( mtTool, wxT( "DestA" ) );
+    RULE_AREA* sourceB = findRuleAreaByPlacementGroup( mtTool, wxT( "SourceB" ) );
+    RULE_AREA* destB = findRuleAreaByPlacementGroup( mtTool, wxT( "DestB" ) );
+
+    BOOST_REQUIRE( sourceA != nullptr );
+    BOOST_REQUIRE( destA != nullptr );
+    BOOST_REQUIRE( sourceB != nullptr );
+    BOOST_REQUIRE( destB != nullptr );
+
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneFrontAndOne" ), *sourceA ), 1 );
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneFrontAndOne" ), *destA ), 0 );
+    BOOST_CHECK_EQUAL(
+            countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneSourceBLayerMismatch" ), *sourceB ), 1 );
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneSourceBLayerMismatch" ), *destB ),
+                       0 );
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "BottomZoneDontCopyMe" ), *sourceB ), 1 );
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "BottomZoneDontCopyMe" ), *destB ), 0 );
+
+    REPEAT_LAYOUT_OPTIONS options;
+    options.m_copyPlacement = false;
+    options.m_copyRouting = false;
+    options.m_copyOtherItems = true;
+    options.m_includeLockedItems = true;
+
+    int copyAStatus = mtTool->RepeatLayout( TOOL_EVENT(), *sourceA, *destA, options );
+    BOOST_REQUIRE( copyAStatus >= 0 );
+
+    int copyBStatus = mtTool->RepeatLayout( TOOL_EVENT(), *sourceB, *destB, options );
+    BOOST_REQUIRE( copyBStatus >= 0 );
+
+    // SourceA and DestA both include F.Cu+B.Cu, so this multilayer zone should copy.
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneFrontAndOne" ), *destA ), 1 );
+
+    // SourceB only includes F.Cu, so this F.Cu+B.Cu zone should not copy to DestB.
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneSourceBLayerMismatch" ), *destB ),
+                       0 );
+
+    // SourceB excludes B.Cu, so this B.Cu-only zone should not copy either.
+    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "BottomZoneDontCopyMe" ), *destB ), 0 );
 }
 
 
