@@ -755,7 +755,7 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
     LSET                   enabledLayers = board->GetEnabledLayers();
 
     std::unordered_map<wxString, wxString> seenConditions;
-    std::regex                             netclassPattern( "NetClass\\s*[!=]=\\s*\"?([^\"\\s]+)\"?" );
+    std::regex netclassPattern( "NetClass\\s*[!=]=\\s*'\"?([^\"\\s]+)'\"?" );
 
     for( const auto& rule : aRules )
     {
