@@ -42,12 +42,14 @@ BOOST_AUTO_TEST_SUITE( PadTenting )
 static std::string SaveBoardToString( BOARD& aBoard )
 {
     std::filesystem::path tempPath = std::filesystem::temp_directory_path() / "pad_tenting_test.kicad_pcb";
+    std::stringstream     buf;
 
-    KI_TEST::DumpBoardToFile( aBoard, tempPath.string() );
+    {
+        KI_TEST::DumpBoardToFile( aBoard, tempPath.string() );
 
-    std::ifstream ifs( tempPath );
-    std::stringstream buf;
-    buf << ifs.rdbuf();
+        std::ifstream ifs( tempPath );
+        buf << ifs.rdbuf();
+    }
 
     std::filesystem::remove( tempPath );
 
