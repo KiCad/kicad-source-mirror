@@ -326,6 +326,26 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& 
 }
 
 
+std::set<BOARD_ITEM*> MULTICHANNEL_TOOL::queryBoardItemsInGroup( const wxString& aGroupName ) const
+{
+    std::set<BOARD_ITEM*> rv;
+
+    for( PCB_GROUP* group : board()->Groups() )
+    {
+        if( group->GetName() != aGroupName )
+            continue;
+
+        for( EDA_ITEM* item : group->GetItems() )
+        {
+            if( item->IsBOARD_ITEM() )
+                rv.insert( static_cast<BOARD_ITEM*>( item ) );
+        }
+    }
+
+    return rv;
+}
+
+
 const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin )
 {
     std::vector<VECTOR2I> bbCorners;
@@ -335,6 +355,30 @@ const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( std::set<FOOTPRINT*>& 
     {
         const BOX2I bb = fp->GetBoundingBox( false ).GetInflated( aMargin );
         KIGEOM::CollectBoxCorners( bb, bbCorners );
+    }
+
+    std::vector<VECTOR2I> hullVertices;
+    BuildConvexHull( hullVertices, bbCorners );
+
+    SHAPE_LINE_CHAIN hull( hullVertices );
+
+    // Make the newly computed convex hull use only 90 degree segments
+    return KIGEOM::RectifyPolygon( hull );
+}
+
+const SHAPE_LINE_CHAIN MULTICHANNEL_TOOL::buildRAOutline( const std::set<BOARD_ITEM*>& aItems, int aMargin )
+{
+    std::vector<VECTOR2I> bbCorners;
+    bbCorners.reserve( aItems.size() * 4 );
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        BOX2I bb = item->GetBoundingBox();
+
+        if( item->Type() == PCB_FOOTPRINT_T )
+            bb = static_cast<FOOTPRINT*>( item )->GetBoundingBox( false );
+
+        KIGEOM::CollectBoxCorners( bb.GetInflated( aMargin ), bbCorners );
     }
 
     std::vector<VECTOR2I> hullVertices;
@@ -1507,7 +1551,29 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         if( ra.m_components.empty() )
             continue;
 
-        SHAPE_LINE_CHAIN raOutline = buildRAOutline( ra.m_components, 100000 );
+        SHAPE_LINE_CHAIN raOutline;
+
+        // Groups are a way for the user to more explicitly provide a list of items to include in
+        // the multichannel tool, as opposed to inferring them based on sheet structure or component classes.
+        // So for group-based RAs, we build the RA outline based everything in the group, not just components.
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
+        {
+            std::set<BOARD_ITEM*> groupItems = queryBoardItemsInGroup( ra.m_groupName );
+
+            if( groupItems.empty() )
+            {
+                wxLogTrace( traceMultichannelTool,
+                            wxT( "Skipping placement rule area generation for source group '%s': group has no board items." ),
+                            ra.m_groupName );
+                continue;
+            }
+
+            raOutline = buildRAOutline( groupItems, 100000 );
+        }
+        else
+        {
+            raOutline = buildRAOutline( ra.m_components, 100000 );
+        }
 
         std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
 

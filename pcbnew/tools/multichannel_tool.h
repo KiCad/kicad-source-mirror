@@ -134,10 +134,12 @@ private:
                                RULE_AREA_COMPAT_DATA& aCompatData );
 
     const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
+    const SHAPE_LINE_CHAIN buildRAOutline( const std::set<BOARD_ITEM*>& aItems, int aMargin );
 
     std::set<FOOTPRINT*> queryComponentsInSheet( wxString aSheetName ) const;
     std::set<FOOTPRINT*> queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
     std::set<FOOTPRINT*> queryComponentsInGroup( const wxString& aGroupName ) const;
+    std::set<BOARD_ITEM*> queryBoardItemsInGroup( const wxString& aGroupName ) const;
 
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
