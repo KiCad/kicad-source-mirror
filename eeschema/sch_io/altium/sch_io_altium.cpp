@@ -2046,6 +2046,32 @@ void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSym
 }
 
 
+// Altium text in symbols uses absolute orientation, but KiCad applies the symbol's transform
+// to library body items via OrientAndMirrorSymbolItems at render time. This function pre-
+// compensates the stored text angle and justification so that after the render-time transform,
+// the final appearance matches the original Altium layout. Position is not adjusted here
+// since GetRelativePosition already handles the positional component.
+void AdjustTextForSymbolOrientation( SCH_TEXT* aText, const ASCH_SYMBOL& aSymbol )
+{
+    int nRenderRotations = ( aSymbol.orientation + 1 ) % 4;
+
+    // Undo mirror first (reverse of render-time application order).
+    // MirrorHorizontally on LAYER_DEVICE text flips H-justify when horizontal
+    // and V-justify when vertical.
+    if( aSymbol.isMirrored )
+    {
+        if( aText->GetTextAngle().IsHorizontal() )
+            aText->FlipHJustify();
+        else
+            aText->SetVertJustify( static_cast<GR_TEXT_V_ALIGN_T>( -aText->GetVertJustify() ) );
+    }
+
+    // The render pipeline applies Rotate90(false) N times; undo with N inverse rotations.
+    for( int i = 0; i < nRenderRotations; i++ )
+        aText->Rotate90( true );
+}
+
+
 bool SCH_IO_ALTIUM::ShouldPutItemOnSheet( int aOwnerindex )
 {
     // No component assigned -> Put on sheet
@@ -2138,6 +2164,14 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
         textItem->SetPosition( pos );
         textItem->SetUnit( std::max( 0, elem.ownerpartid ) );
         SetTextPositioning( textItem, elem.justification, elem.orientation );
+
+        if( schsym )
+        {
+            const auto& altiumSymIt = m_altiumComponents.find( elem.ownerindex );
+
+            if( altiumSymIt != m_altiumComponents.end() )
+                AdjustTextForSymbolOrientation( textItem, altiumSymIt->second );
+        }
 
         size_t fontId = elem.fontId;
 
