@@ -42,7 +42,7 @@ def kicad_cli() -> str:
 
     return "kicad-cli"
 
-def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
+def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
     env = {}
