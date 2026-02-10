@@ -99,7 +99,7 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
     std::unique_ptr<BOARD> deleter( aAppendToMe ? nullptr : m_board );
 
-    std::ifstream fin( aFileName, std::ios::binary );
+    std::ifstream fin( aFileName.fn_str(), std::ios::binary );
 
     if( !fin.is_open() )
         THROW_IO_ERROR( wxString::Format( "Cannot open file: %s", aFileName ) );
