@@ -123,14 +123,17 @@ private:
 
     void SaveRulesToFile();
 
-    /**
+    /**                                                                                                               
      * Creates a new rule tree node with a unique name and assigns the appropriate constraint data.
      *
      * @param aRuleTreeItemData The rule tree item data for the node.
+     * @param aBaseName Optional base name for unique name generation. If empty, the parent
+     *                  constraint node name is used.
      *
      * @return The newly created rule tree node.
      */
-    RULE_TREE_NODE buildRuleTreeNode( RULE_TREE_ITEM_DATA* aRuleTreeItemData );
+    RULE_TREE_NODE buildRuleTreeNode( RULE_TREE_ITEM_DATA* aRuleTreeItemData,
+                                    const wxString& aBaseName = wxEmptyString );
 
     /**
      * Creates a new rule tree node with the specified parameters, generating a new ID if not provided.

@@ -332,16 +332,29 @@ void DIALOG_DRC_RULE_EDITOR::AddNewRule( RULE_TREE_ITEM_DATA* aRuleTreeItemData 
 
 
 void DIALOG_DRC_RULE_EDITOR::DuplicateRule( RULE_TREE_ITEM_DATA* aRuleTreeItemData )
-{
-    RULE_TREE_NODE* sourceTreeNode = getRuleTreeNodeInfo( aRuleTreeItemData->GetNodeId() );
-    RULE_TREE_NODE  targetTreeNode = buildRuleTreeNode( aRuleTreeItemData );
+{                                                                                                                     
+    RULE_TREE_NODE* sourceTreeNode = getRuleTreeNodeInfo( aRuleTreeItemData->GetNodeId() );                           
 
     auto sourceDataPtr = dynamic_pointer_cast<RULE_EDITOR_DATA_BASE>( sourceTreeNode->m_nodeData );
 
-    if( sourceDataPtr )
+    if( !sourceDataPtr )
+        return;
+
+    // Strip any trailing " <number>" suffix so the number increments
+    wxString baseName = sourceDataPtr->GetRuleName();
+    int      lastSpace = baseName.Find( ' ', true );
+
+    if( lastSpace != wxNOT_FOUND )
     {
-        targetTreeNode.m_nodeData->CopyFrom( *sourceDataPtr );
+        wxString suffix = baseName.Mid( lastSpace + 1 );
+        long     num;
+
+        if( suffix.ToLong( &num ) )
+            baseName = baseName.Left( lastSpace );
     }
+
+    RULE_TREE_NODE targetTreeNode = buildRuleTreeNode( aRuleTreeItemData, baseName );
+    targetTreeNode.m_nodeData->CopyFrom( *sourceDataPtr );
 
     wxTreeItemId treeItemId = aRuleTreeItemData->GetParentTreeItemId();
     AppendNewRuleTreeItem( targetTreeNode, treeItemId );
@@ -790,7 +803,8 @@ bool nodeExists( const std::vector<RULE_TREE_NODE>& aRuleTreeNodes, const wxStri
 }
 
 
-RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* aRuleTreeItemData )
+RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* aRuleTreeItemData,
+                                                           const wxString& aBaseName )
 {
     // Factory function type for creating constraint data objects
     using ConstraintDataFactory =
@@ -861,7 +875,8 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
 
     m_nodeId++;
 
-    wxString nodeName = nodeDetail->m_nodeName + " 1";
+    wxString base = aBaseName.IsEmpty() ? nodeDetail->m_nodeName : aBaseName;
+    wxString nodeName = base + " 1";
 
     int  loop = 2;
     bool check = false;
@@ -872,7 +887,7 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
 
         if( nodeExists( m_ruleTreeNodeDatas, nodeName ) )
         {
-            nodeName = nodeDetail->m_nodeName + wxString::Format( " %d", loop );
+            nodeName = base + wxString::Format( " %d", loop );
             loop++;
             check = true;
         }
