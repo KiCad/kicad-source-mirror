@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <memory>
+#include <wx/event.h>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
@@ -50,8 +51,11 @@ protected:
     void     OnColClicked( wxListEvent& aEvent );
     void     OnUpdateUI( wxUpdateUIEvent& aEvent );
     void     OnChar( wxKeyEvent& aEvent );
+    void     OnContextMenu( wxContextMenuEvent& aEvent );
+    void     OnCopyMenu( wxCommandEvent& aEvent );
 
     void GetSelectRowsList( std::vector<long>& aSelectedList );
+    void CopySelectionToClipboard();
 
 private:
     std::shared_ptr<SEARCH_HANDLER> m_handler;

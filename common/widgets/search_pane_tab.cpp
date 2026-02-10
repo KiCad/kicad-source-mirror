@@ -22,6 +22,7 @@
 #include <vector>
 #include <string_utils.h>
 #include <wx/clipbrd.h>
+#include <wx/menu.h>
 #include <wx/wupdlock.h>
 #include <core/kicad_algo.h>
 
@@ -44,6 +45,8 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( const std::shared_ptr<SEARCH_HANDLER
     Bind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
     Bind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
     Bind( wxEVT_CHAR, &SEARCH_PANE_LISTVIEW::OnChar, this );
+    Bind( wxEVT_CONTEXT_MENU, &SEARCH_PANE_LISTVIEW::OnContextMenu, this );
+    Bind( wxEVT_MENU, &SEARCH_PANE_LISTVIEW::OnCopyMenu, this, wxID_COPY );
 }
 
 
@@ -56,6 +59,8 @@ SEARCH_PANE_LISTVIEW::~SEARCH_PANE_LISTVIEW()
     Unbind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
     Unbind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
     Unbind( wxEVT_CHAR, &SEARCH_PANE_LISTVIEW::OnChar, this );
+    Unbind( wxEVT_CONTEXT_MENU, &SEARCH_PANE_LISTVIEW::OnContextMenu, this );
+    Unbind( wxEVT_MENU, &SEARCH_PANE_LISTVIEW::OnCopyMenu, this, wxID_COPY );
 }
 
 
@@ -166,33 +171,7 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
 
         case WXK_CONTROL_C:
         {
-            // Copy to clipboard the selected rows
-            if( wxTheClipboard->Open() )
-            {
-                wxString txt;
-
-                for( int row = 0; row < GetItemCount(); row++ )
-                {
-                    if( GetItemState( row, wxLIST_STATE_SELECTED ) == wxLIST_STATE_SELECTED )
-                    {
-                        for( int col = 0; col < GetColumnCount(); col++ )
-                        {
-                            if( GetColumnWidth( col ) > 0 )
-                            {
-                                txt += GetItemText( row, col );
-
-                                if( row <= GetItemCount() - 1 )
-                                    txt += wxT( "\t" );
-                            }
-                        }
-
-                        txt += wxT( "\n" );
-                    }
-                }
-
-                wxTheClipboard->SetData( new wxTextDataObject( txt ) );
-                wxTheClipboard->Close();
-            }
+            CopySelectionToClipboard();
 
             handled = true;
             break;
@@ -255,6 +234,54 @@ void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
 
     if( !handled )
         aEvent.Skip();
+}
+
+
+void SEARCH_PANE_LISTVIEW::OnContextMenu( wxContextMenuEvent& aEvent )
+{
+    wxMenu menu;
+    menu.Append( wxID_COPY, _( "Copy" ) );
+    PopupMenu( &menu );
+}
+
+
+void SEARCH_PANE_LISTVIEW::OnCopyMenu( wxCommandEvent& aEvent )
+{
+    CopySelectionToClipboard();
+}
+
+
+void SEARCH_PANE_LISTVIEW::CopySelectionToClipboard()
+{
+    if( !wxTheClipboard->Open() )
+        return;
+
+    wxString txt;
+
+    for( int row = 0; row < GetItemCount(); row++ )
+    {
+        if( GetItemState( row, wxLIST_STATE_SELECTED ) != wxLIST_STATE_SELECTED )
+            continue;
+
+        bool firstCol = true;
+
+        for( int col = 0; col < GetColumnCount(); col++ )
+        {
+            if( GetColumnWidth( col ) <= 0 )
+                continue;
+
+            if( !firstCol )
+                txt += wxT( "\t" );
+
+            txt += GetItemText( row, col );
+            firstCol = false;
+        }
+
+        txt += wxT( "\n" );
+    }
+
+    wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+    wxTheClipboard->Close();
 }
 
 
