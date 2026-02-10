@@ -46,6 +46,7 @@
 #include <libraries/symbol_library_adapter.h>
 #include <widgets/sch_design_block_pane.h>
 #include <widgets/kistatusbar.h>
+#include <wx/filefn.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
 
@@ -856,6 +857,12 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         wxCHECK_RET( optTable.has_value(), "Could not load symbol lib table." );
         LIBRARY_TABLE* table = optTable.value();
 
+        wxString projectPath = Prj().GetProjectPath();
+
+        // First line of payload is the source project directory.
+        std::string srcProjDir;
+        std::getline( ss, srcProjDir, '\n' );
+
         std::vector<wxString> toLoad;
 
         while( std::getline( ss, file, '\n' ) )
@@ -875,11 +882,34 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
             pi.reset( SCH_IO_MGR::FindPlugin( type ) );
 
+            wxString libTableUri;
+            bool     isProjectLocal = fn.GetFullPath().StartsWith( wxString( srcProjDir ) );
+
+            if( isProjectLocal )
+            {
+                // Project-local library: copy into the KiCad project directory and use a
+                // project-relative path so the sym-lib-table stays portable.
+                if( !fn.FileExists() )
+                    continue;
+
+                wxFileName projectFn( projectPath, fn.GetFullName() );
+
+                if( fn.GetFullPath() != projectFn.GetFullPath() && !projectFn.FileExists() )
+                    wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath() );
+
+                libTableUri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
+            }
+            else
+            {
+                // External library referenced by absolute path. Preserve the original path.
+                libTableUri = fn.GetFullPath();
+            }
+
             if( !table->HasRow( fn.GetName() ) )
             {
                 LIBRARY_TABLE_ROW& row = table->InsertRow();
                 row.SetNickname( fn.GetName() );
-                row.SetURI( fn.GetFullPath() );
+                row.SetURI( libTableUri );
                 row.SetType( SCH_IO_MGR::ShowType( type ) );
                 toLoad.emplace_back( fn.GetName() );
             }

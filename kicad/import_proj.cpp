@@ -208,6 +208,10 @@ void IMPORT_PROJ_HELPER::addLocalLibraries( const std::set<wxString>& aNames, FR
 
     std::stringstream ss;
 
+    // First line is the source project directory so the handler can distinguish
+    // project-local libraries from external fixed-path references.
+    ss << TO_UTF8( m_InputFile.GetPath() ) << '\n';
+
     for( const wxString& name : aNames )
     {
         wxFileName fname( name );
