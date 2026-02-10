@@ -32,6 +32,7 @@
 #include <wx/intl.h>
 #include <eda_doc.h>
 #include <kiplatform/ui.h>
+#include <kiway_mail.h>
 
 #include <wx/button.h>
 #include <wx/bmpbuttn.h>
@@ -489,7 +490,9 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
 }
 
 
-PG_FPID_EDITOR::PG_FPID_EDITOR( EDA_DRAW_FRAME* aFrame ) : m_frame( aFrame )
+PG_FPID_EDITOR::PG_FPID_EDITOR( EDA_DRAW_FRAME* aFrame, const std::function<std::string()>& aNetlistCallback ) :
+        m_frame( aFrame ),
+        m_netlistCallback( aNetlistCallback )
 {
     m_editorName = BuildEditorName( aFrame );
 }
@@ -535,6 +538,15 @@ bool PG_FPID_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wx
 
         if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_frame ) )
         {
+            // Create symbol netlist for footprint picker
+            std::string symbolNetlist = m_netlistCallback();
+
+            if( !symbolNetlist.empty() )
+            {
+                KIWAY_MAIL_EVENT event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, symbolNetlist );
+                frame->KiwayMailIn( event );
+            }
+
             if( frame->ShowModal( &fpid, m_frame ) )
                 aGrid->ChangePropertyValue( aProperty, fpid );
 

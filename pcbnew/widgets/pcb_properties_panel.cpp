@@ -289,7 +289,11 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     }
     else
     {
-        PG_FPID_EDITOR* fpEditor = new PG_FPID_EDITOR( m_frame );
+        PG_FPID_EDITOR* fpEditor = new PG_FPID_EDITOR( m_frame,
+                                                       []()
+                                                       {
+                                                           return "";
+                                                       });
         m_fpEditorInstance = static_cast<PG_FPID_EDITOR*>( wxPropertyGrid::RegisterEditorClass( fpEditor ) );
     }
 
