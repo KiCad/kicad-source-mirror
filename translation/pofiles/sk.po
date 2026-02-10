@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"PO-Revision-Date: 2026-02-10 00:02+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -4043,7 +4043,7 @@ msgstr "E-mail autora:"
 
 #: common/dialogs/panel_color_settings.cpp:52
 msgid "Reveal Themes in Finder"
-msgstr "Odhaliť motívy vo vyhľadávači"
+msgstr "Ukázať motívy v prehliadači"
 
 #: common/dialogs/panel_color_settings.cpp:140
 msgid "New theme name:"
@@ -9196,65 +9196,56 @@ msgid "Zoom in horizontally the plot area"
 msgstr "Distribuovať horizontálne"
 
 #: common/tool/actions.cpp:637
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Distribuovať horizontálne"
+msgstr "Vodorovne oddialiť"
 
 #: common/tool/actions.cpp:638
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "Distribuovať horizontálne"
+msgstr "Vodorovne oddialiť oblasť tlače"
 
 #: common/tool/actions.cpp:644
 msgid "Zoom In Vertically"
 msgstr "Zvislo priblížiť"
 
 #: common/tool/actions.cpp:645
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "Distribuovať zvisle"
+msgstr "Zvislo priblížiť oblasť tlače"
 
 #: common/tool/actions.cpp:651
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Distribuovať zvisle"
+msgstr "Zvislo oddialiť"
 
 #: common/tool/actions.cpp:652
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "Distribuovať zvisle"
+msgstr "Zvislo oddialiť oblasť tlače"
 
 #: common/tool/actions.cpp:660 common/widgets/mathplot.cpp:1404
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Stred na strane"
+msgstr "Vycentrovať na kurzor"
 
 #: common/tool/actions.cpp:668 common/widgets/search_pane.cpp:47
 msgid "Zoom to Selection"
 msgstr "Priblížiť na výber"
 
 #: common/tool/actions.cpp:675 common/widgets/mathplot.cpp:1397
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Vráti posledné"
+msgstr "Vrátiť poslednú zmenu priblíženia"
 
 #: common/tool/actions.cpp:676 common/widgets/mathplot.cpp:1398
 msgid "Return zoom to level prior to last zoom action"
 msgstr ""
 
 #: common/tool/actions.cpp:682 common/widgets/mathplot.cpp:1399
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Obnoví naposledy vrátenú akciu"
+msgstr "Obnoviť posledné priblíženie"
 
 #: common/tool/actions.cpp:683 common/widgets/mathplot.cpp:1400
 msgid "Return zoom to level prior to last zoom undo"
 msgstr ""
 
 #: common/tool/actions.cpp:698
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "Vymazať zvolené položky"
+msgstr "Posunúť pohľad na stred vybraných objektov"
 
 #: common/tool/actions.cpp:705
 msgid "Cursor Up"
@@ -9327,19 +9318,16 @@ msgid "Library Table"
 msgstr "Tabuľky knižníc PCB"
 
 #: common/tool/actions.cpp:811
-#, fuzzy
 msgid "Library Tree"
-msgstr "Nový odkaz na knižnicu"
+msgstr "Strom knižníc"
 
 #: common/tool/actions.cpp:817
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Nový odkaz na knižnicu"
+msgstr "Skryť strom knižníc"
 
 #: common/tool/actions.cpp:823
-#, fuzzy
 msgid "Focus Library Tree Search Field"
-msgstr "Pole púzdra"
+msgstr "Prejsť na vyhľadávanie v strome knižníc"
 
 #: common/tool/actions.cpp:830
 msgid "Pan Up"
@@ -9366,9 +9354,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Prepnite na Fast Grid 2"
 
 #: common/tool/actions.cpp:878
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Prepnúť na rýchlu mriežku 1"
+msgstr "Rýchlo prepnúť mriežku"
 
 #: common/tool/actions.cpp:885
 msgid "Switch to Next Grid"
@@ -9380,16 +9367,15 @@ msgstr "Prepnúť na predchádzajúcu mriežku"
 
 #: common/tool/actions.cpp:898 common/tool/common_tools.cpp:628
 msgid "Grid Origin"
-msgstr "Mriežkový pôvod"
+msgstr "Počiatok mriežky"
 
 #: common/tool/actions.cpp:899
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Nastavte začiatočný bod mriežky"
+msgstr "Umiestniť počiatočný bod mriežky"
 
 #: common/tool/actions.cpp:907
 msgid "Reset Grid Origin"
-msgstr "Obnoviť začiatok mriežky"
+msgstr "Obnoviť počiatok mriežky"
 
 #: common/tool/actions.cpp:917
 msgid "Show Grid"
@@ -9409,13 +9395,12 @@ msgid "Edit grid definitions"
 msgstr "Upraviť rozmery mriežky"
 
 #: common/tool/actions.cpp:939
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Mriežkový pôvod"
+msgstr "Počiatok mriežky..."
 
 #: common/tool/actions.cpp:940
 msgid "Set the grid origin point"
-msgstr "Nastavte začiatočný bod mriežky"
+msgstr "Nastaviť počiatočný bod mriežky"
 
 #: common/tool/actions.cpp:954 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -9589,11 +9574,11 @@ msgstr "Aktualizujte schému so zmenami vykonanými na DPS"
 
 #: common/tool/actions.cpp:1154
 msgid "Preferences..."
-msgstr "Predvoľba..."
+msgstr "Nastavenia..."
 
 #: common/tool/actions.cpp:1155
 msgid "Show preferences for all open tools"
-msgstr "Zobraziť predvoľby pre všetky otvorené nástroje"
+msgstr "Zobraziť nastavenia pre všetky otvorené nástroje"
 
 #: common/tool/actions.cpp:1162
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:78
@@ -9626,9 +9611,8 @@ msgid "Manage Design Block Libraries..."
 msgstr "Spravovať knižnice symbolov..."
 
 #: common/tool/actions.cpp:1184
-#, fuzzy
 msgid "Edit the global and project design block library lists"
-msgstr "Upraviť globálne a projektové zoznamy knižníc symbolov"
+msgstr "Upraviť zoznamy globálnych a projektových knižníc"
 
 #: common/tool/actions.cpp:1190
 msgid "Getting Started with KiCad"
@@ -9651,9 +9635,8 @@ msgid "Open product documentation in a web browser"
 msgstr "Otvorte dokumentáciu k produktu vo webovom prehliadači"
 
 #: common/tool/actions.cpp:1204
-#, fuzzy
 msgid "About KiCad"
-msgstr "&O KiCad"
+msgstr "O KiCad-e"
 
 #: common/tool/actions.cpp:1213
 msgid "List Hotkeys..."
@@ -9694,34 +9677,28 @@ msgstr "Znova načítajte všetky doplnky pythonu a obnovte ponuky doplnkov"
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:79
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:151
-#, fuzzy
 msgid "Embedded Files"
-msgstr "Súbory Obrázkov"
+msgstr "Vložené súbory"
 
 #: common/tool/actions.cpp:1256
-#, fuzzy
 msgid "Manage embedded files"
-msgstr "Premenovať súbor"
+msgstr "Spravovať vložené súbory"
 
 #: common/tool/actions.cpp:1261
-#, fuzzy
 msgid "Remove File"
-msgstr "Premenovať súbor"
+msgstr "Odstrániť súbor"
 
 #: common/tool/actions.cpp:1262
-#, fuzzy
 msgid "Remove an embedded file"
-msgstr "Odstráňte všetky zhodné vrstvy."
+msgstr "Odstrániť vložený súbor"
 
 #: common/tool/actions.cpp:1267
-#, fuzzy
 msgid "Extract File"
-msgstr "Exportovať do Súboru"
+msgstr "Extrahovať súbor"
 
 #: common/tool/actions.cpp:1268
-#, fuzzy
 msgid "Extract an embedded file"
-msgstr "Spustitelný súbor"
+msgstr "Extrahovať vložený súbor"
 
 #: common/tool/common_control.cpp:203
 msgid "Can not switch to project manager in stand-alone mode."
@@ -9765,7 +9742,7 @@ msgid "Get involved with KiCad"
 msgstr "Zapojte sa do KiCadu"
 
 #: common/tool/common_control.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
@@ -9774,14 +9751,12 @@ msgstr ""
 "Informácie o tom, ako pomôcť projektu KiCad, nájdete na %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Kontrola stopy"
+msgstr "Prehliadač puzdier"
 
 #: common/tool/library_editor_control.cpp:177
-#, fuzzy
 msgid "New name:"
-msgstr "Meno siete:"
+msgstr "Nový názov:"
 
 #: common/tool/selection_tool.cpp:307
 msgid "Select &All\tA"
@@ -9908,9 +9883,8 @@ msgid "Filter:"
 msgstr "Filter:"
 
 #: common/widgets/font_choice.cpp:64
-#, fuzzy
 msgid "<not found>"
-msgstr "> nenájdený"
+msgstr "<nenájdený>"
 
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
 #: eeschema/sch_symbol.cpp:2007 pcbnew/dialogs/dialog_board_statistics.cpp:681
@@ -9926,9 +9900,8 @@ msgstr "Knižnica"
 
 #: common/widgets/footprint_diff_widget.cpp:50
 #: eeschema/widgets/symbol_diff_widget.cpp:53
-#, fuzzy
 msgid "Toggle between A and B display"
-msgstr "Prepnúť zobrazenie tela dosky"
+msgstr "Prepnúť medzi zobrazením A a B"
 
 #: common/widgets/footprint_preview_widget.cpp:127
 msgid "Footprint not found."
@@ -10061,19 +10034,16 @@ msgid "Sort by Best Match"
 msgstr ""
 
 #: common/widgets/lib_tree.cpp:95
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Abecedne"
+msgstr "Zoradiť abecedne"
 
 #: common/widgets/lib_tree.cpp:445
-#, fuzzy
 msgid "recent searches"
-msgstr "Jednotky &rozmerov:"
+msgstr "nedávne vyhľadávania"
 
 #: common/widgets/lib_tree.cpp:1008
-#, fuzzy
 msgid "Select Columns"
-msgstr "Vyberte súčiastku"
+msgstr "Vybrať stĺpce"
 
 #: common/widgets/mathplot.cpp:1402
 msgid "Zoom in plot view."
@@ -10117,44 +10087,39 @@ msgid "Reset to Defaults"
 msgstr "Obnoviť na predvolené"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Odhaľte motívy vo vyhľadávači"
+msgstr "Ukázať nastavenia v prehliadači"
 
 #: common/widgets/paged_dialog.cpp:94
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Otvoriť Nastavenia"
+msgstr "Otvoriť adresár s nastaveniami"
 
 #: common/widgets/paged_dialog.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Obnoviť na predvolené"
+msgstr "Obnoviť %s na predvolené"
 
 #: common/widgets/properties_panel.cpp:77
 #: common/widgets/properties_panel.cpp:204
-#, fuzzy
 msgid "No objects selected"
-msgstr "Nie je vybraný žiadny autobus"
+msgstr "Žiadne vybrané objekty"
 
 #: common/widgets/properties_panel.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Nie je vybraný žiadny autobus"
+msgstr "%d vybraných objektov"
 
 #: common/widgets/properties_panel.cpp:346
-#, fuzzy
 msgid "Basic Properties"
-msgstr "Vlastnosti"
+msgstr "Základné vlastnosti"
 
 #: common/widgets/search_pane.cpp:47
 msgid "Toggle zooming to selections in the search pane"
 msgstr ""
 
 #: common/widgets/search_pane.cpp:49
-#, fuzzy
 msgid "Pan to Selection"
-msgstr "Pridať do výberu"
+msgstr "Posunúť pohľad na vybrané"
 
 #: common/widgets/search_pane.cpp:49
 msgid "Toggle panning to selections in the search pane"
@@ -10188,7 +10153,6 @@ msgid "Current key:"
 msgstr "Aktuálny kľúč:"
 
 #: common/widgets/widget_hotkey_list.cpp:136
-#, fuzzy
 msgid "Clear assigned hotkey"
 msgstr "Vymazať priradenú klávesovú skratku"
 
@@ -10197,9 +10161,9 @@ msgid "Set Hotkey"
 msgstr "Nastaviť klávesovú skratku"
 
 #: common/widgets/widget_hotkey_list.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Názov %s je vyhradený a nemožno ho tu použiť"
+msgstr "'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Edit..."
@@ -11153,14 +11117,13 @@ msgid "Error loading design block %s from library '%s'."
 msgstr "Chyba pri načítavaní návrhového bloku %s z knižnice '%s'."
 
 #: eeschema/design_block_utils.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already exists in library '%s'."
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Návrhový blok '%s' už existuje v knižnici '%s'."
 
 #: eeschema/design_block_utils.cpp:50
-#, fuzzy
 msgid "Overwrite existing design block?"
-msgstr "Prepísať existujúce prednastavenie?"
+msgstr "Prepísať existujúci blok návrhu?"
 
 #: eeschema/design_block_utils.cpp:70 eeschema/sch_base_frame.cpp:287
 #: pcbnew/footprint_libraries_utils.cpp:414
@@ -11197,9 +11160,9 @@ msgid "Add To Library Table"
 msgstr "Pridať do tabuľky knižnice"
 
 #: eeschema/design_block_utils.cpp:176 pcbnew/footprint_libraries_utils.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "Knižnica '%s' je iba na čítanie."
+msgstr "Knižnica %s je iba na čítanie."
 
 #: eeschema/design_block_utils.cpp:182 pcbnew/footprint_libraries_utils.cpp:378
 #, c-format
@@ -11207,9 +11170,8 @@ msgid "Library %s already exists."
 msgstr "Knižnica %s už existuje."
 
 #: eeschema/design_block_utils.cpp:239
-#, fuzzy
 msgid "Enter a description for the library:"
-msgstr "Upraviť možnosti tejto položky knižnice"
+msgstr "Zadať popis tejto knižnice:"
 
 #: eeschema/design_block_utils.cpp:240 eeschema/sch_symbol.cpp:2989
 #: pcbnew/footprint.cpp:4246 pcbnew/plot_board_layers.cpp:189
@@ -11238,9 +11200,8 @@ msgid "Please select some items to save as a design block."
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:469
-#, fuzzy
 msgid "Please select a library to delete."
-msgstr "Vyberte súbor tabuľky knižnice symbolov."
+msgstr "Zvoľte knižnicu, ktorú chcete odstrániť."
 
 #: eeschema/design_block_utils.cpp:475 eeschema/design_block_utils.cpp:517
 #: eeschema/design_block_utils.cpp:560 pcbnew/footprint_libraries_utils.cpp:556
@@ -11259,19 +11220,19 @@ msgid ""
 msgstr ""
 
 #: eeschema/design_block_utils.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' deleted"
-msgstr "nie je vybratá knižnica"
+msgstr "Knižnica návrhových blokov '%s' bola odstránená"
 
 #: eeschema/design_block_utils.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Delete design block '%s' in library '%s' from disk?"
-msgstr "Zmazať puzdra '%s' z knižnice '%s'?"
+msgstr "Odstrániť návrhový blok '%s' v knižnici '%s' z disku?"
 
 #: eeschema/design_block_utils.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' deleted from library '%s'"
-msgstr "Stopa '%s' bola odstránená z knižnice '%s'"
+msgstr "Návrhový blok '%s' bol odstránený z knižnice '%s'"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
@@ -14380,7 +14341,6 @@ msgid "Instances of this symbol (%d items):"
 msgstr "Príklady tohto symbolu (%d položiek):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -14391,7 +14351,7 @@ msgstr ""
 "Prestať zobrazovať tento nástroj?\n"
 "Nebudú sa robiť žiadne zmeny.\n"
 "\n"
-"Toto nastavenie je možné zmeniť v dialógovom okne \"Knižnice symbolov\",\n"
+"Toto nastavenie je možné zmeniť v dialógovom okne \"Nastavenia\",\n"
 "a nástroj je možné aktivovať manuálne z ponuky \"Nástroje\"."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -14454,7 +14414,7 @@ msgstr "Import:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
-msgstr "Predvoľby formátovania"
+msgstr "Nastavenia formátovania"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -14642,9 +14602,8 @@ msgstr "Pri načítaní schematického súboru '%s' sa vyskytla chyba."
 #: eeschema/dialogs/dialog_table_properties.cpp:110
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:54
 #: eeschema/dialogs/dialog_text_properties.cpp:72
-#, fuzzy
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Poznámka: Farby položiek sú v aktuálnej farebnej téme prepísané."
+msgstr "Poznámka: Farby jednotlivých položiek sú prepísané v nastaveniach."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:374
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
@@ -14760,14 +14719,14 @@ msgid "Note: item colors are overridden in the current color theme."
 msgstr "Poznámka: Farby položiek sú v aktuálnej farebnej téme prepísané."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "Ak chcete zobraziť farby jednotlivých položiek, zrušte začiarknutie políčka "
 "'%s'\n"
-"v časti Predvoľby> Eeschema> Farby."
+"v časti Nastavenia > Editor schémy > Farby."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:470
 #, c-format
@@ -16730,7 +16689,7 @@ msgstr "Prírastok štítku:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:316
 msgid "Dialog Preferences"
-msgstr "Predvoľby dialógového okna"
+msgstr "Nastavenia dialógového okna"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:326
 msgid "Show footprint previews in Symbol Chooser"
@@ -18447,7 +18406,7 @@ msgstr "O"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "Pôvod DXF na mriežke PCB, súradnica X"
+msgstr "Počiatok DXF na mriežke PCB, súradnica X"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
@@ -27233,9 +27192,8 @@ msgid "Exclude 3D models for components with 'Do not populate' attribute"
 msgstr "Vylúčte komponenty bez kolíkov"
 
 #: kicad/cli/command_pcb_export_3d.cpp:100
-#, fuzzy
 msgid "Use Grid Origin for output origin"
-msgstr "Použite Grid Origin"
+msgstr "Použiť počiatok mriežky aj pre počiatok výstupu"
 
 #: kicad/cli/command_pcb_export_3d.cpp:104
 #, fuzzy
@@ -29098,6 +29056,8 @@ msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
 msgstr ""
+"Tento plugin vyžaduje rozhranie KiCad API, ktoré je momentálne v "
+"nastaveniach vypnuté. Chcete ho povoliť?"
 
 #: kicad/pcm/pcm.cpp:1121
 #, fuzzy
@@ -29305,11 +29265,11 @@ msgstr "Vytvorí nový adresár"
 
 #: kicad/project_tree_pane.cpp:918 kicad/project_tree_pane.cpp:928
 msgid "Reveal in Finder"
-msgstr "Odhaliť vo vyhľadávači"
+msgstr "Ukázať v prehliadači"
 
 #: kicad/project_tree_pane.cpp:919
 msgid "Reveals the directory in a Finder window"
-msgstr "Odhalí adresár v okne vyhľadávača"
+msgstr "Ukázať adresár v prehliadači"
 
 #: kicad/project_tree_pane.cpp:921
 msgid "Open Directory in File Explorer"
@@ -29321,7 +29281,7 @@ msgstr "Otvára adresár v predvolenom správcovi súborov systému"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Reveals the directories in a Finder window"
-msgstr "Odhalí adresáre v okne Finder"
+msgstr "Ukázať adresáre v okne prehliadača"
 
 #: kicad/project_tree_pane.cpp:931
 msgid "Open Directories in File Explorer"
@@ -35959,7 +35919,7 @@ msgstr "Pôvod súboru vrtáka / umiestnenia"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:171
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr "Mriežkový pôvod"
+msgstr "Počiatok mriežky"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:174
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -39241,7 +39201,7 @@ msgstr "Vyberte referenčný bod pre presun..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:246
 msgid "Reference location: grid origin"
-msgstr "Referenčné umiestnenie: pôvod mriežky"
+msgstr "Referenčné umiestnenie: počiatok mriežky"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:250
 msgid "Reference location: local coordinates origin"
@@ -39271,7 +39231,7 @@ msgstr "Použite miestny pôvod"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:37
 msgid "Use Grid Origin"
-msgstr "Použite Grid Origin"
+msgstr "Použiť počiatok mriežky"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid ""
@@ -47981,6 +47941,9 @@ msgid ""
 "To load all footprints, add it as a library using Preferences -> Manage "
 "Footprint Libraries..."
 msgstr ""
+"Vybraný súbor obsahuje viacero puzdier. Importovaný bude iba prvý.\n"
+"Ak chcete načítať všetky puzdra, pridajte ho ako knižnicu pomocou ponuky "
+"Nastavenia -> Spravovať knižnice puzdier..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 #, fuzzy
@@ -50117,9 +50080,8 @@ msgid "Ungroup Items"
 msgstr "Zrušiť zoskupenie položiek"
 
 #: pcbnew/tools/group_tool.cpp:348
-#, fuzzy
 msgid "Remove Group Items"
-msgstr "Vymazať Predmet"
+msgstr "Odstrániť skupinu položiek"
 
 #: pcbnew/tools/item_modification_routine.cpp:111
 #, fuzzy
@@ -51067,11 +51029,11 @@ msgstr "Upraviť vlastnosti plôšky použitej pri vytváraní nových plôšok"
 
 #: pcbnew/tools/pcb_actions.cpp:982
 msgid "Reveal Plugin Folder in Finder"
-msgstr "Odhaliť priečinok doplnkov vo vyhľadávači"
+msgstr "Ukázať priečinok doplnkov v prehliadači"
 
 #: pcbnew/tools/pcb_actions.cpp:983
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "Odhalí priečinok doplnkov v okne vyhľadávača"
+msgstr "Ukázať priečinok doplnkov v okne prehliadača"
 
 #: pcbnew/tools/pcb_actions.cpp:995
 msgid "Board Setup..."
@@ -51284,11 +51246,11 @@ msgstr "Odstrániť položky zo skupiny"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Enter Group"
-msgstr "Zadajte skupinu"
+msgstr "Vstúpiť do skupiny"
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 msgid "Enter the group to edit items"
-msgstr "Vstupte do skupiny a upravujte položky"
+msgstr "Vstúpiť do skupiny pre úpravu položiek"
 
 #: pcbnew/tools/pcb_actions.cpp:1230
 msgid "Leave Group"
@@ -52584,6 +52546,8 @@ msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
 msgstr ""
+"Automatické znovu vyplnenie zón je možné vypnúť v nastaveniach, ak sa stane "
+"príliš pomalým."
 
 #: pcbnew/tools/zone_filler_tool.cpp:347
 msgid "Fill Zone"
@@ -53384,8 +53348,8 @@ msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 msgstr ""
-"Aktuálna farebná téma je iba na čítanie. Ak chcete povoliť úpravy farieb, v "
-"Predvoľbách vytvorte nový motív."
+"Aktuálna farebná téma je iba na čítanie.  Pre úpravy farieb, vytvorte novú "
+"tému v nastaveniach."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
