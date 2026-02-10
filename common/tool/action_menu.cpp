@@ -471,6 +471,26 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 if( keyEvent.GetSkipped() )
                 {
                     keyEvent.SetEventType( wxEVT_CHAR );
+
+                    // CHAR_HOOK always uses uppercase key codes for letters, but
+                    // wxEVT_CHAR should use the translated (case-correct) character.
+                    // Since the original key event was lost to the menu system, check
+                    // the actual keyboard state to determine proper case.
+                    int keyCode = keyEvent.GetKeyCode();
+
+                    if( keyCode >= 'A' && keyCode <= 'Z' )
+                    {
+                        bool shiftActive = wxGetKeyState( WXK_SHIFT );
+                        bool capsActive  = wxGetKeyState( WXK_CAPITAL );
+
+                        if( !( shiftActive ^ capsActive ) )
+                            keyEvent.m_keyCode = keyCode + 32;  // Convert to lowercase
+                    }
+
+                #if wxUSE_UNICODE
+                    keyEvent.m_uniChar = keyEvent.m_keyCode;
+                #endif
+
                     focus->HandleWindowEvent( keyEvent );
                 }
 
