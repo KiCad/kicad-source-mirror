@@ -27,12 +27,14 @@ from pathlib import Path
 import pytest
 from typing import List
 
+from conftest import KiTestFixture
+
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.svg", []),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test_nobg_bnw_nods", "cli/basic_test/basic_test_nobg_bnw_nods.svg", ["--no-background-color", "--exclude-drawing-sheet", "--black-and-white"])
                              ])
-def test_sch_export_svg( kitest,
+def test_sch_export_svg( kitest: KiTestFixture,
                          test_file: str,
                          output_dir: str,
                          compare_fn: str,
@@ -45,7 +47,7 @@ def test_sch_export_svg( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_path ) )
-    command.append( input_file )
+    command.append( str(input_file) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -99,7 +101,7 @@ def test_sch_export_netlist( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str(input_file) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -108,9 +110,9 @@ def test_sch_export_netlist( kitest,
 
     # some of our netlist formats are not cross platform so skip for now
     if not skip_compare:
-        assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+        assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )
 
 
 @pytest.mark.parametrize("test_file,output_fn,cli_args",
@@ -130,14 +132,14 @@ def test_sch_export_pdf( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
     assert exitcode == 0
     assert stderr == ''
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )
 
 
 @pytest.mark.parametrize("test_file,output_fn,compare_fn,line_skip_count,cli_args",
@@ -148,7 +150,7 @@ def test_sch_export_pdf( kitest,
                              ("cli/variants/variants.kicad_sch", "variants_v2.bom.csv", "cli/variants/variants_v2.bom.csv", 0,
                               ["--variant", "Variant2", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
                              ])
-def test_sch_export_bom_variants( kitest,
+def test_sch_export_bom_variants( kitest: KiTestFixture,
                          test_file: str,
                          output_fn: str,
                          compare_fn: str,
@@ -164,19 +166,19 @@ def test_sch_export_bom_variants( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
     assert exitcode == 0
     assert stderr == ''
 
-    assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+    assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )
 
 
-def test_sch_export_bom_multi_variant_requires_placeholder( kitest ):
+def test_sch_export_bom_multi_variant_requires_placeholder( kitest: KiTestFixture ):
     """Test that multiple variants require ${VARIANT} in output path"""
     input_file = kitest.get_data_file_path( "cli/variants/variants.kicad_sch" )
 
@@ -187,7 +189,7 @@ def test_sch_export_bom_multi_variant_requires_placeholder( kitest ):
     command.extend( ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"] )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -195,7 +197,7 @@ def test_sch_export_bom_multi_variant_requires_placeholder( kitest ):
     assert "VARIANT" in stderr
 
 
-def test_sch_export_bom_multi_variant_with_placeholder( kitest ):
+def test_sch_export_bom_multi_variant_with_placeholder( kitest: KiTestFixture ):
     """Test BOM export with multiple variants using ${VARIANT} placeholder"""
     input_file = kitest.get_data_file_path( "cli/variants/variants.kicad_sch" )
 
@@ -207,7 +209,7 @@ def test_sch_export_bom_multi_variant_with_placeholder( kitest ):
     command.extend( ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"] )
     command.append( "-o" )
     command.append( output_pattern )
-    command.append( input_file )
+    command.append( str(input_file) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -223,17 +225,17 @@ def test_sch_export_bom_multi_variant_with_placeholder( kitest ):
     v1_compare = kitest.get_data_file_path( "cli/variants/variants_v1.bom.csv" )
     v2_compare = kitest.get_data_file_path( "cli/variants/variants_v2.bom.csv" )
 
-    assert utils.textdiff_files( v1_compare, str( v1_path ), 0 )
-    assert utils.textdiff_files( v2_compare, str( v2_path ), 0 )
+    assert utils.textdiff_files( v1_compare, v1_path, 0 )
+    assert utils.textdiff_files( v2_compare, v2_path, 0 )
 
-    kitest.add_attachment( str( v1_path ) )
-    kitest.add_attachment( str( v2_path ) )
+    kitest.add_attachment( v1_path )
+    kitest.add_attachment( v2_path )
 
 
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.pythonbom", 6, [])
                              ])
-def test_sch_export_pythonbom( kitest,
+def test_sch_export_pythonbom( kitest: KiTestFixture,
                          test_file: str,
                          output_fn: str,
                          line_skip_count: int,
@@ -247,7 +249,7 @@ def test_sch_export_pythonbom( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -256,7 +258,7 @@ def test_sch_export_pythonbom( kitest,
 
     # pythonbom is not currently crossplatform (platform specific paths) to enable diffs
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )
 
 
 
@@ -266,7 +268,7 @@ def test_sch_export_pythonbom( kitest,
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.json", 5, False,0, ["--format=json"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.unitsin.rpt", 1, False, 0, ["--format=report", "--units=in"]),
                              ])
-def test_sch_export_erc( kitest,
+def test_sch_export_erc( kitest: KiTestFixture,
                              test_file: str,
                              output_fn: str,
                              line_skip_count: int,
@@ -282,7 +284,7 @@ def test_sch_export_erc( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -290,9 +292,9 @@ def test_sch_export_erc( kitest,
 
     # some of our netlist formats are not cross platform so skip for now
     if not skip_compare:
-        assert utils.textdiff_files( compare_filepath, str( output_filepath ), line_skip_count )
+        assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )
 
 
 @pytest.mark.parametrize("test_file,output_fn,expected_headers,cli_args",
@@ -323,7 +325,7 @@ def test_sch_export_bom( kitest,
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_filepath ) )
-    command.append( input_file )
+    command.append( str( input_file ) )
 
     stdout, stderr, exitcode = utils.run_and_capture( command )
 
@@ -340,4 +342,4 @@ def test_sch_export_bom( kitest,
     for expected in expected_headers:
         assert expected in actual_headers, f"Expected header '{expected}' not found in BOM output. Got: {actual_headers}"
 
-    kitest.add_attachment( str( output_filepath ) )
+    kitest.add_attachment( output_filepath )

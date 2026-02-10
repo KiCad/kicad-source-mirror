@@ -78,17 +78,17 @@ def test_pcb_export_svg( kitest: KiTestFixture,
 
     for layer_name in layers_to_test:
         generated_svg_path, layer_name_fixed = get_generated_path( kitest,
-                                                                   Path( input_file ).with_suffix( ".svg" ),
+                                                                   input_file.with_suffix( ".svg" ),
                                                                    "export_svg",
                                                                    layer_name )
 
         command = [utils.kicad_cli(), "pcb", "export", "svg", "--page-size-mode", "1",  # 1=Current page size
                    "--exclude-drawing-sheet", "--black-and-white", "--layers", layer_name,
-                   "-o", str(generated_svg_path), input_file]
+                   "-o", str(generated_svg_path), str(input_file)]
 
         run_and_check_export_command( kitest, command, generated_svg_path )
 
-        svg_source_path = str( Path( input_file ).with_suffix( "" ) )
+        svg_source_path = str( input_file.with_suffix( "" ) )
         svg_source_path += layer_name_fixed + ".svg"
 
         # This test works only with Python >= 3.9 because it uses a pathlib function only existing
@@ -124,17 +124,17 @@ def test_pcb_export_gerber( kitest: KiTestFixture,
 
     for layer_name in layers_to_test:
         generated_gerber_path, layer_name_fixed = get_generated_path( kitest,
-                                                                      Path( input_file ).with_suffix( ".gbr" ),
+                                                                      input_file.with_suffix( ".gbr" ),
                                                                       "export_gerber",
                                                                       layer_name )
 
         command = [utils.kicad_cli(), "pcb", "export", "gerber", "--no-x2", "--use-drill-file-origin",
                    "--layers", layer_name,
-                   "-o", str(generated_gerber_path), input_file]
+                   "-o", str(generated_gerber_path), str(input_file)]
 
         run_and_check_export_command( kitest, command, generated_gerber_path )
 
-        gbr_source_path = str( Path( input_file ).with_suffix( "" ) )
+        gbr_source_path = str( input_file.with_suffix( "" ) )
         gbr_source_path += layer_name_fixed + ".gbr"
 
         # Comparison DPI = 5080 => 1px == 5um. I.e. allowable error of 15 um after eroding
@@ -182,29 +182,29 @@ def test_pcb_export_drill( kitest: KiTestFixture,
                          cli_args: List[str]  ):
 
     input_file = kitest.get_data_file_path( test_file )
-    
+
     output_path =  kitest.get_output_path( "cli/{}/".format( output_dir ) )
-                   
+
     command = [utils.kicad_cli(), "pcb", "export", "drill"]
     command.extend( cli_args )
     command.append( "-o" )
     command.append( str( output_path ) )
-    command.append( input_file )
-    
+    command.append( str( input_file ) )
+
     stdout, stderr, exitcode = utils.run_and_capture( command )
-    
+
     print(stdout)
 
     assert exitcode == 0
     assert stdout is not None
-    
+
     stdout_regex = re.search("Created file '(.+)'", stdout)
     assert stdout_regex
-    
+
     output_drill_path = Path( stdout_regex.group(1) )
     assert output_drill_path.exists()
 
     kitest.add_attachment( output_drill_path )
-    
+
     compare_filepath = kitest.get_data_file_path( "cli/basic_test/{}".format( golden_name ) )
-    assert utils.textdiff_files( compare_filepath, str( output_drill_path ), skip_line_count )
+    assert utils.textdiff_files( compare_filepath, output_drill_path, skip_line_count )

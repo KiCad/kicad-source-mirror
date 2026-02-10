@@ -103,7 +103,7 @@ def test_sym_upgrade_lib_pack_roundtrip(
     output_path = kitest.get_output_path(f"cli/{output_dir}/")
 
     unpacked_lib_path = Path(output_path) / (
-        Path(input_file).stem + ".unpacked.kicad_symdir"
+        input_file.stem + ".unpacked.kicad_symdir"
     )
 
     # Create output directory if it doesn't exist
@@ -127,7 +127,7 @@ def test_sym_upgrade_lib_pack_roundtrip(
     assert len(sym_files) == num_syms
 
     repacked_lib_path = Path(output_path) / (
-        Path(input_file).stem + ".repacked.kicad_sym"
+        input_file.stem + ".repacked.kicad_sym"
     )
 
     if repacked_lib_path.exists():
@@ -151,7 +151,7 @@ def test_sym_upgrade_lib_pack_roundtrip(
 
     # Now, check that the packed file can be upgraded directly to another packed file
     packed_to_packed_output_path = Path(output_path) / (
-        Path(input_file).stem + ".packed_to_packed.kicad_sym"
+        input_file.stem + ".packed_to_packed.kicad_sym"
     )
 
     if packed_to_packed_output_path.exists():
@@ -175,7 +175,7 @@ def test_sym_upgrade_lib_pack_roundtrip(
     # Finally, check unpacking to unpacked lib again
 
     unpacked_to_unpacked_output_path = Path(output_path) / (
-        Path(input_file).stem + ".unpacked_to_unpacked.kicad_symdir"
+        input_file.stem + ".unpacked_to_unpacked.kicad_symdir"
     )
 
     unpacked_to_unpacked_cmd = get_sym_upgrade_cmd(

@@ -52,7 +52,7 @@ class KiTestFixture:
             self._ci_project_dir = Path( env_project_dir )
 
         junitxml = config.getoption("xmlpath")
-        
+
         if junitxml is not None:
             p = Path( junitxml )
             p = Path( p.parent ) # get the directory as junitxml points to a file
@@ -61,44 +61,44 @@ class KiTestFixture:
             self._junit = True
         else:
             p = Path.cwd()
-            
+
         p = p.joinpath('output/')
-        
+
         self._output_path = p
-        
+
     def get_output_path( self, sub: str ) -> Path:
         """Return the calculated output path for test artifacts"""
-        
+
         output_path =  self._output_path.joinpath( sub )
-        
+
         os.makedirs( str( output_path ), exist_ok=True )
-        
+
         return output_path
-    
-    def get_data_file_path( self, file: str ) -> str:
+
+    def get_data_file_path( self, file: str ) -> Path:
         current_dir = os.path.dirname(__file__)
         base_data_path = os.path.abspath(os.path.join(current_dir, '../../data'))
 
-        return os.path.join(base_data_path, file)
-        
-    def add_attachment( self, path: str ) -> None:
+        return Path(base_data_path).joinpath(file)
+
+    def add_attachment( self, path: Path ) -> None:
         """Prints the attachment message line for junit reports"""
 
         if not self._junit:
             return
-        
+
         # Make the attachment path relative, gitlab in particular wants it
         # relative tot he CI_PROJECT_DIR variable
-        attach_src_path = Path( path )
+        attach_src_path = path
         attach_path: Path = None
         if self._ci_project_dir is not None:
             attach_path = attach_src_path.relative_to( self._ci_project_dir )
         else:
             attach_path = attach_src_path.relative_to( self._junit_folder )
-        
+
         print( "[[ATTACHMENT|{}]]".format( str( attach_path ) ) )
-    
-    
+
+
 @pytest.fixture
 def kitest( pytestconfig ):
     kitesthelper = KiTestFixture( pytestconfig )
