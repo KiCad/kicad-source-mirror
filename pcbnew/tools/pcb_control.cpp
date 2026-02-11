@@ -2019,6 +2019,25 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     brd->SynchronizeNetsAndNetClasses( true );
     brd->BuildConnectivity();
 
+    // New appended items need to inherit the current global ratsnest state.
+    // Existing items are marked SKIP_STRUCT and are handled elsewhere.
+    const bool showGlobalRatsnest = displayOptions().m_ShowGlobalRatsnest;
+
+    for( BOARD_ITEM* item : brd->GetItemSet() )
+    {
+        if( item->GetFlags() & SKIP_STRUCT )
+            continue;
+
+        if( BOARD_CONNECTED_ITEM* connectedItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            connectedItem->SetLocalRatsnestVisible( showGlobalRatsnest );
+
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+                pad->SetLocalRatsnestVisible( showGlobalRatsnest );
+        }
+    }
+
     // Synchronize layers
     // we should not ask PLUGINs to do these items:
     int copperLayerCount = brd->GetCopperLayerCount();
