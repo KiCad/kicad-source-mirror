@@ -34,6 +34,44 @@
 namespace ALLEGRO
 {
 
+
+/**
+ * The block parser is responsible for parsing individual blocks of data from the file stream.
+ *
+ * Most blocks don't need much context to parse in a binary sense, but most need to know the
+ * version, and one (0x27) needs to know where the end of the block is.
+ */
+class BLOCK_PARSER
+{
+public:
+    BLOCK_PARSER( FILE_STREAM& aStream, FMT_VER aVer, size_t aX27End = 0 ) :
+            m_stream( aStream ),
+            m_ver( aVer ),
+            m_x27_end( aX27End )
+    {
+    }
+
+    /**
+     * Parse one block from the stream, returning a BLOCK_BASE representing the raw data of the block.
+     *
+     * @param aStream The stream to read from, positioned at the start of the block
+     *                (i.e. the next byte to read is the block type).
+     * @param aEndOfObjectsMarker This is set to true if we encounter the end of objects marker.
+     */
+    std::unique_ptr<BLOCK_BASE> ParseBlock( bool& aEndOfObjectsMarker );
+
+private:
+    FILE_STREAM&  m_stream;
+    const FMT_VER m_ver;
+
+    /**
+     * To parse an 0x27 block, we need to know where the end of the block is in the stream.
+     * In a .brd file, this is in the header.
+     */
+    const size_t m_x27_end;
+};
+
+
 /**
  * Class that parses a single FILE_STREAM into a RAW_BOARD,
  * and handles any state involved in that parsing

@@ -2050,6 +2050,300 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
 }
 
 
+std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjectsMarker )
+{
+    const size_t offset = m_stream.Position();
+
+    // Read the type of the object
+    // The file can end here without error.
+    uint8_t type = 0x00;
+    if( !m_stream.GetU8( type ) )
+    {
+        aEndOfObjectsMarker = true;
+        return nullptr;
+    }
+
+    std::unique_ptr<BLOCK_BASE> block;
+
+    switch( type )
+    {
+    case 0x01:
+    {
+        block = ParseBlock_0x01_ARC( m_stream, m_ver );
+        break;
+    }
+    case 0x03:
+    {
+        block = ParseBlock_0x03( m_stream, m_ver );
+        break;
+    }
+    case 0x04:
+    {
+        block = ParseBlock_0x04_NET_ASSIGNMENT( m_stream, m_ver );
+        break;
+    }
+    case 0x05:
+    {
+        block = ParseBlock_0x05_TRACK( m_stream, m_ver );
+        break;
+    }
+    case 0x06:
+    {
+        block = ParseBlock_0x06( m_stream, m_ver );
+        break;
+    }
+    case 0x07:
+    {
+        block = ParseBlock_0x07( m_stream, m_ver );
+        break;
+    }
+    case 0x08:
+    {
+        block = ParseBlock_0x08( m_stream, m_ver );
+        break;
+    }
+    case 0x09:
+    {
+        block = ParseBlock_0x09( m_stream, m_ver );
+        break;
+    }
+    case 0x0A:
+    {
+        block = ParseBlock_0x0A_DRC( m_stream, m_ver );
+        break;
+    }
+    case 0x0C:
+    {
+        block = ParseBlock_0x0C( m_stream, m_ver );
+        break;
+    }
+    case 0x0D:
+    {
+        block = ParseBlock_0x0D_PAD( m_stream, m_ver );
+        break;
+    }
+    case 0x0E:
+    {
+        block = ParseBlock_0x0E( m_stream, m_ver );
+        break;
+    }
+    case 0x0F:
+    {
+        block = ParseBlock_0x0F( m_stream, m_ver );
+        break;
+    }
+    case 0x10:
+    {
+        block = ParseBlock_0x10( m_stream, m_ver );
+        break;
+    }
+    case 0x11:
+    {
+        block = ParseBlock_0x11( m_stream, m_ver );
+        break;
+    }
+    case 0x12:
+    {
+        block = ParseBlock_0x12( m_stream, m_ver );
+        break;
+    }
+    case 0x14:
+    {
+        block = ParseBlock_0x14( m_stream, m_ver );
+        break;
+    }
+    case 0x15:
+    case 0x16:
+    case 0x17:
+    {
+        block = ParseBlock_0x15_16_17_SEGMENT( m_stream, m_ver, type );
+        break;
+    }
+    case 0x1B:
+    {
+        block = ParseBlock_0x1B_NET( m_stream, m_ver );
+        break;
+    }
+    case 0x1C:
+    {
+        block = ParseBlock_0x1C_PADSTACK( m_stream, m_ver );
+        break;
+    }
+    case 0x1D:
+    {
+        block = ParseBlock_0x1D( m_stream, m_ver );
+        break;
+    }
+    case 0x1E:
+    {
+        block = ParseBlock_0x1E( m_stream, m_ver );
+        break;
+    }
+    case 0x1F:
+    {
+        block = ParseBlock_0x1F( m_stream, m_ver );
+        break;
+    }
+    case 0x20:
+    {
+        block = ParseBlock_0x20( m_stream, m_ver );
+        break;
+    }
+    case 0x21:
+    {
+        block = ParseBlock_0x21( m_stream, m_ver );
+        break;
+    }
+    case 0x22:
+    {
+        block = ParseBlock_0x22( m_stream, m_ver );
+        break;
+    }
+    case 0x23:
+    {
+        block = ParseBlock_0x23_RATLINE( m_stream, m_ver );
+        break;
+    }
+    case 0x24:
+    {
+        block = ParseBlock_0x24_RECT( m_stream, m_ver );
+        break;
+    }
+    case 0x26:
+    {
+        block = ParseBlock_0x26( m_stream, m_ver );
+        break;
+    }
+    case 0x27:
+    {
+        if( m_x27_end <= m_stream.Position() )
+        {
+            THROW_IO_ERROR(
+                    wxString::Format( "Current offset %#010zx is at or past the expected end of block 0x27 at %#010zx",
+                                      m_stream.Position(), m_x27_end ) );
+        }
+        block = ParseBlock_0x27( m_stream, m_ver, m_x27_end );
+        break;
+    }
+    case 0x28:
+    {
+        block = ParseBlock_0x28_SHAPE( m_stream, m_ver );
+        break;
+    }
+    case 0x29:
+    {
+        block = ParseBlock_0x29_PIN( m_stream, m_ver );
+        break;
+    }
+    case 0x2A:
+    {
+        block = ParseBlock_0x2A( m_stream, m_ver );
+        break;
+    }
+    case 0x2B:
+    {
+        block = ParseBlock_0x2B( m_stream, m_ver );
+        break;
+    }
+    case 0x2C:
+    {
+        block = ParseBlock_0x2C_TABLE( m_stream, m_ver );
+        break;
+    }
+    case 0x2D:
+    {
+        block = ParseBlock_0x2D( m_stream, m_ver );
+        break;
+    }
+    case 0x2E:
+    {
+        block = ParseBlock_0x2E( m_stream, m_ver );
+        break;
+    }
+    case 0x2F:
+    {
+        block = ParseBlock_0x2F( m_stream, m_ver );
+        break;
+    }
+    case 0x30:
+    {
+        block = ParseBlock_0x30_STR_WRAPPER( m_stream, m_ver );
+        break;
+    }
+    case 0x31:
+    {
+        block = ParseBlock_0x31_SGRAPHIC( m_stream, m_ver );
+        break;
+    }
+    case 0x32:
+    {
+        block = ParseBlock_0x32_PLACED_PAD( m_stream, m_ver );
+        break;
+    }
+    case 0x33:
+    {
+        block = ParseBlock_0x33_VIA( m_stream, m_ver );
+        break;
+    }
+    case 0x34:
+    {
+        block = ParseBlock_0x34_KEEPOUT( m_stream, m_ver );
+        break;
+    }
+    case 0x35:
+    {
+        block = ParseBlock_0x35( m_stream, m_ver );
+        break;
+    }
+    case 0x36:
+    {
+        block = ParseBlock_0x36( m_stream, m_ver );
+        break;
+    }
+    case 0x37:
+    {
+        block = ParseBlock_0x37( m_stream, m_ver );
+        break;
+    }
+    case 0x38:
+    {
+        block = ParseBlock_0x38_FILM( m_stream, m_ver );
+        break;
+    }
+    case 0x39:
+    {
+        block = ParseBlock_0x39_FILM_LAYER_LIST( m_stream, m_ver );
+        break;
+    }
+    case 0x3A:
+    {
+        block = ParseBlock_0x3A_FILM_LIST_NODE( m_stream, m_ver );
+        break;
+    }
+    case 0x3B:
+    {
+        block = ParseBlock_0x3B( m_stream, m_ver );
+        break;
+    }
+    case 0x3C:
+    {
+        block = ParseBlock_0x3C( m_stream, m_ver );
+        break;
+    }
+    case 0x00:
+    {
+        // Block type 0x00 marks the end of the objects section
+        aEndOfObjectsMarker = true;
+        break;
+    }
+    default:
+        break;
+    }
+
+    return block;
+}
+
+
 void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 {
     const uint32_t magic = aBoard.m_Header->m_Magic;
@@ -2062,6 +2356,8 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         m_progressReporter->SetMaxProgress( static_cast<int>( aBoard.m_Header->m_ObjectCount ) );
     }
 
+    BLOCK_PARSER blockParser( m_stream, ver, aBoard.m_Header->m_0x27_End );
+
     while( true )
     {
         const size_t offset = m_stream.Position();
@@ -2070,305 +2366,41 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         wxASSERT_MSG( offset % 4 == 0,
                       wxString::Format( "Allegro object at %#010zx, offset not aligned to 4 bytes", offset ) );
 
-        // Read the type of the object
-        // The file can end here without error.
-        uint8_t type = 0x00;
-        if( !m_stream.GetU8( type ) )
-        {
-            break;
-        }
+        bool                        endOfObjectsMarker = false;
+        std::unique_ptr<BLOCK_BASE> block = blockParser.ParseBlock( endOfObjectsMarker );
 
-        std::unique_ptr<BLOCK_BASE> block;
-
-        switch( type )
-        {
-        case 0x01:
-        {
-            block = ParseBlock_0x01_ARC( m_stream, ver );
-            break;
-        }
-        case 0x03:
-        {
-            block = ParseBlock_0x03( m_stream, ver );
-            break;
-        }
-        case 0x04:
-        {
-            block = ParseBlock_0x04_NET_ASSIGNMENT( m_stream, ver );
-            break;
-        }
-        case 0x05:
-        {
-            block = ParseBlock_0x05_TRACK( m_stream, ver );
-            break;
-        }
-        case 0x06:
-        {
-            block = ParseBlock_0x06( m_stream, ver );
-            break;
-        }
-        case 0x07:
-        {
-            block = ParseBlock_0x07( m_stream, ver );
-            break;
-        }
-        case 0x08:
-        {
-            block = ParseBlock_0x08( m_stream, ver );
-            break;
-        }
-        case 0x09:
-        {
-            block = ParseBlock_0x09( m_stream, ver );
-            break;
-        }
-        case 0x0A:
-        {
-            block = ParseBlock_0x0A_DRC( m_stream, ver );
-            break;
-        }
-        case 0x0C:
-        {
-            block = ParseBlock_0x0C( m_stream, ver );
-            break;
-        }
-        case 0x0D:
-        {
-            block = ParseBlock_0x0D_PAD( m_stream, ver );
-            break;
-        }
-        case 0x0E:
-        {
-            block = ParseBlock_0x0E( m_stream, ver );
-            break;
-        }
-        case 0x0F:
-        {
-            block = ParseBlock_0x0F( m_stream, ver );
-            break;
-        }
-        case 0x10:
-        {
-            block = ParseBlock_0x10( m_stream, ver );
-            break;
-        }
-        case 0x11:
-        {
-            block = ParseBlock_0x11( m_stream, ver );
-            break;
-        }
-        case 0x12:
-        {
-            block = ParseBlock_0x12( m_stream, ver );
-            break;
-        }
-        case 0x14:
-        {
-            block = ParseBlock_0x14( m_stream, ver );
-            break;
-        }
-        case 0x15:
-        case 0x16:
-        case 0x17:
-        {
-            block = ParseBlock_0x15_16_17_SEGMENT( m_stream, ver, type );
-            break;
-        }
-        case 0x1B:
-        {
-            block = ParseBlock_0x1B_NET( m_stream, ver );
-            break;
-        }
-        case 0x1C:
-        {
-            block = ParseBlock_0x1C_PADSTACK( m_stream, ver );
-            break;
-        }
-        case 0x1D:
-        {
-            block = ParseBlock_0x1D( m_stream, ver );
-            break;
-        }
-        case 0x1E:
-        {
-            block = ParseBlock_0x1E( m_stream, ver );
-            break;
-        }
-        case 0x1F:
-        {
-            block = ParseBlock_0x1F( m_stream, ver );
-            break;
-        }
-        case 0x20:
-        {
-            block = ParseBlock_0x20( m_stream, ver );
-            break;
-        }
-        case 0x21:
-        {
-            block = ParseBlock_0x21( m_stream, ver );
-            break;
-        }
-        case 0x22:
-        {
-            block = ParseBlock_0x22( m_stream, ver );
-            break;
-        }
-        case 0x23:
-        {
-            block = ParseBlock_0x23_RATLINE( m_stream, ver );
-            break;
-        }
-        case 0x24:
-        {
-            block = ParseBlock_0x24_RECT( m_stream, ver );
-            break;
-        }
-        case 0x26:
-        {
-            block = ParseBlock_0x26( m_stream, ver );
-            break;
-        }
-        case 0x27:
-        {
-            size_t endOffset = aBoard.m_Header->m_0x27_End;
-            block = ParseBlock_0x27( m_stream, ver, endOffset );
-            break;
-        }
-        case 0x28:
-        {
-            block = ParseBlock_0x28_SHAPE( m_stream, ver );
-            break;
-        }
-        case 0x29:
-        {
-            block = ParseBlock_0x29_PIN( m_stream, ver );
-            break;
-        }
-        case 0x2A:
-        {
-            block = ParseBlock_0x2A( m_stream, ver );
-            break;
-        }
-        case 0x2B:
-        {
-            block = ParseBlock_0x2B( m_stream, ver );
-            break;
-        }
-        case 0x2C:
-        {
-            block = ParseBlock_0x2C_TABLE( m_stream, ver );
-            break;
-        }
-        case 0x2D:
-        {
-            block = ParseBlock_0x2D( m_stream, ver );
-            break;
-        }
-        case 0x2E:
-        {
-            block = ParseBlock_0x2E( m_stream, ver );
-            break;
-        }
-        case 0x2F:
-        {
-            block = ParseBlock_0x2F( m_stream, ver );
-            break;
-        }
-        case 0x30:
-        {
-            block = ParseBlock_0x30_STR_WRAPPER( m_stream, ver );
-            break;
-        }
-        case 0x31:
-        {
-            block = ParseBlock_0x31_SGRAPHIC( m_stream, ver );
-            break;
-        }
-        case 0x32:
-        {
-            block = ParseBlock_0x32_PLACED_PAD( m_stream, ver );
-            break;
-        }
-        case 0x33:
-        {
-            block = ParseBlock_0x33_VIA( m_stream, ver );
-            break;
-        }
-        case 0x34:
-        {
-            block = ParseBlock_0x34_KEEPOUT( m_stream, ver );
-            break;
-        }
-        case 0x35:
-        {
-            block = ParseBlock_0x35( m_stream, ver );
-            break;
-        }
-        case 0x36:
-        {
-            block = ParseBlock_0x36( m_stream, ver );
-            break;
-        }
-        case 0x37:
-        {
-            block = ParseBlock_0x37( m_stream, ver );
-            break;
-        }
-        case 0x38:
-        {
-            block = ParseBlock_0x38_FILM( m_stream, ver );
-            break;
-        }
-        case 0x39:
-        {
-            block = ParseBlock_0x39_FILM_LAYER_LIST( m_stream, ver );
-            break;
-        }
-        case 0x3A:
-        {
-            block = ParseBlock_0x3A_FILM_LIST_NODE( m_stream, ver );
-            break;
-        }
-        case 0x3B:
-        {
-            block = ParseBlock_0x3B( m_stream, ver );
-            break;
-        }
-        case 0x3C:
-        {
-            block = ParseBlock_0x3C( m_stream, ver );
-            break;
-        }
-        case 0x00:
+        if( endOfObjectsMarker )
         {
             // Block type 0x00 marks the end of the objects section
             wxLogTrace( traceAllegroParser,
                         wxString::Format( "End of objects marker (0x00) at index %zu, offset %#010zx",
                                           aBoard.GetObjectCount(), offset ) );
-            return;
+            break;
         }
-        default:
+
+        if( !block )
         {
             if( !m_endAtUnknownBlock )
             {
                 THROW_IO_ERROR( wxString::Format(
                         "Do not have parser for block index %zu type %#02x available at offset %#010zx",
-                        aBoard.GetObjectCount(), type, offset ) );
+                        aBoard.GetObjectCount(), block->GetBlockType(), offset ) );
             }
+            else
+            {
+                wxLogTrace( traceAllegroParser,
+                            wxString::Format( "Ending at unknown block, index %zu type %#04x at offset %#010zx",
+                                              aBoard.GetObjectCount(), block->GetBlockType(), offset ) );
 
-            wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Ending at unknown block, index %zu type %#04x at offset %#010zx",
-                                          aBoard.GetObjectCount(), type, offset ) );
-            return;
+                wxFAIL_MSG( "Failed to create block" );
+                return;
+            }
         }
-        }
-
-        if( block )
+        else
         {
-            wxLogTrace( traceAllegroParser,
-                        wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
-                                          aBoard.GetObjectCount(), type, offset, m_stream.Position() ) );
+            wxLogTrace( traceAllegroParser, wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
+                                                              aBoard.GetObjectCount(), block->GetBlockType(), offset,
+                                                              m_stream.Position() ) );
 
             // Turn the binary-ish data into database objects
             aBoard.InsertBlock( std::move( block ) );
@@ -2377,11 +2409,6 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
             // {
             //     m_progressReporter->AdvanceProgress();
             // }
-        }
-        else
-        {
-            wxFAIL_MSG( "Failed to create block" );
-            return;
         }
     }
 }
