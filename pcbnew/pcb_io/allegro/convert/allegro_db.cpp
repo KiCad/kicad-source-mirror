@@ -65,6 +65,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x1D: return static_cast<const BLOCK<BLK_0x1D_CONSTRAINT_SET>&>( block ).GetData().m_Key;
     case 0x1E: return static_cast<const BLOCK<BLK_0x1E_SI_MODEL>&>( block ).GetData().m_Key;
     case 0x1F: return static_cast<const BLOCK<BLK_0x1F_PADSTACK_DIM>&>( block ).GetData().m_Key;
+    case 0x20: return static_cast<const BLOCK<BLK_0x20_UNKNOWN>&>( block ).GetData().m_Key;
     case 0x21: return static_cast<const BLOCK<BLK_0x21_BLOB>&>( block ).GetData().m_Key;
     case 0x22: return static_cast<const BLOCK<BLK_0x22_UNKNOWN>&>( block ).GetData().m_Key;
     case 0x23: return static_cast<const BLOCK<BLK_0x23_RATLINE>&>( block ).GetData().m_Key;
@@ -315,6 +316,12 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     {
         const BLK_0x1B_NET& netBlk = BLK_DATA( aBlock, BLK_0x1B_NET );
         obj = std::make_unique<NET>( *this, netBlk );
+        break;
+    }
+    case 0x20:
+    {
+        const BLK_0x20_UNKNOWN& blk = BLK_DATA( aBlock, BLK_0x20_UNKNOWN );
+        obj = std::make_unique<UNKNOWN_0x20>( *this, blk );
         break;
     }
     case 0x28:
@@ -1307,6 +1314,23 @@ std::optional<int> NET::GetNetMinNeckWidth() const
 std::optional<int> NET::GetNetMaxNeckLength() const
 {
     return m_Fields.GetOptFieldExpectInt( FIELD_KEYS::MAX_NECK_LENGTH );
+}
+
+
+UNKNOWN_0x20::UNKNOWN_0x20( const BRD_DB& aBrd, const BLK_0x20_UNKNOWN& aBlk ):
+    DB_OBJ( DB_OBJ::TYPE::x20, aBlk.m_Key )
+{
+    m_Next.m_TargetKey = aBlk.m_Next;
+    m_Next.m_DebugName = "UNKNOWN_0x20::m_Next";
+}
+
+
+bool UNKNOWN_0x20::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    // m_Next may point to objects we don't parse, so don't fail if it can't be resolved.
+    m_Next.Resolve( aResolver );
+
+    return true;
 }
 
 

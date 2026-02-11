@@ -1110,6 +1110,24 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VE
 }
 
 
+static std::unique_ptr<BLOCK_BASE> ParseBlock_0x20( FILE_STREAM& aStream, FMT_VER aVer )
+{
+    auto block = std::make_unique<BLOCK<BLK_0x20_UNKNOWN>>( 0x20, aStream.Position() );
+
+    auto& data = block->GetData();
+
+    data.m_Type = aStream.ReadU8();
+    data.m_R = aStream.ReadU16();
+    data.m_Key = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+
+    ReadArrayU32( aStream, data.m_UnknownArray1 );
+    ReadCond( aStream, aVer, data.m_UnknownArray2 );
+
+    return block;
+}
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x21_BLOB>>( 0x21, aStream.Position() );
@@ -2179,6 +2197,11 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         case 0x1F:
         {
             block = ParseBlock_0x1F( m_stream, ver );
+            break;
+        }
+        case 0x20:
+        {
+            block = ParseBlock_0x20( m_stream, ver );
             break;
         }
         case 0x21:

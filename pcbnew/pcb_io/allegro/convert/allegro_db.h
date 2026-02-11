@@ -161,18 +161,19 @@ struct DB_OBJ
         COMPONENT,      // 0x06
         COMPONENT_INST, // 0x07
         PIN_NUMBER,     // 0x08
-        SHAPE_SEG,            // 0x0E
+        SHAPE_SEG,      // 0x0E
         FUNCTION_SLOT,  // 0x0F
         FUNCTION_INST,  // 0x10
         PIN_NAME,       // 0x11
-        XREF,            // 0x12
+        XREF,           // 0x12
         GRAPHIC_SEG,    // 0x14
         LINE,           // 0x15, 0x16, 0x17
         NET,            // 0x1B
+        x20,            // 0x20
         SHAPE,          // 0x28
         FP_DEF,         // 0x2B
         FP_INST,        // 0x2D
-        CONNECTION,            // 0x2E
+        CONNECTION,     // 0x2E
         PLACED_PAD,     // 0x32
         VIA,            // 0x33
         KEEPOUT,        // 0x34
@@ -630,6 +631,20 @@ struct NET : public DB_OBJ
     std::optional<int> GetNetMaxLineWidth() const;
     std::optional<int> GetNetMinNeckWidth() const;
     std::optional<int> GetNetMaxNeckLength() const;
+};
+
+
+/**
+ * 0x20 objects. Purpose unknown.
+ */
+class UNKNOWN_0x20 : public DB_OBJ
+{
+public:
+    UNKNOWN_0x20( const BRD_DB& aBrd, const BLK_0x20_UNKNOWN& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    DB_REF m_Next;
 };
 
 

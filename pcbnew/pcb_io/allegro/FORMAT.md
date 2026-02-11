@@ -106,6 +106,7 @@ indexed by key in a flat hash map (`m_ObjectKeyMap`).
 | 0x1D | BLK_0x1D                | Physical constraint set (see below)  |
 | 0x1E | BLK_0x1E                | Signal integrity model (IBIS data)   |
 | 0x1F | BLK_0x1F                | Linked list connector (empty)        |
+| 0x20 | BLK_0x20_UNKNOWN        | Unknown                              |
 | 0x21 | BLK_0x21                | Headered block (rules, stackup)      |
 | 0x22 | BLK_0x22                | Unknown                              |
 | 0x23 | BLK_0x23_RATLINE        | Ratsnest line                        |
@@ -133,13 +134,28 @@ indexed by key in a flat hash map (`m_ObjectKeyMap`).
 | 0x3B | BLK_0x3B                | Unknown                              |
 | 0x3C | BLK_0x3C                | Unknown                              |
 
-## Arc Direction (0x01)
+## Arcs (0x01)
+
+## Direction Encoding
 
 The `m_SubType` field encodes arc sweep direction:
 - Bit 6 clear (value 0): counter-clockwise sweep
 - Bit 6 set (value 0x40): clockwise sweep
 
 Only values 0 and 64 (0x40) have been observed.
+
+## Segments (0x15/0x16/0x17)
+
+The 0x15/0x16/0x17 block types all share the same layout and represent
+line segments. The only difference is the 0x15/0x16/0x17 are
+horizontally/diagonally/vertically oriented segments respectively.
+
+The parent field can be:
+* 0x05: Track
+* 0x14: Graphics container
+* 0x20: Unknown
+* 0x28: Polygon shape
+* 0x34: Keepout area
 
 ## Padstack Layout (0x1C)
 

@@ -1187,6 +1187,27 @@ struct BLK_0x1F_PADSTACK_DIM
 
 
 /**
+ * Unknown purpose.
+ *
+ * Seems to contain one or two fixed-size arrays of uint32 values
+ * (but they could be some set of fields).
+ *
+ * This block is sometimes used at the parent of, e.g. line segments.
+ *
+ * Only seen so far in Project Olympus 15061-1b.brd
+ */
+struct BLK_0x20_UNKNOWN
+{
+    uint8_t                 m_Type;
+    uint16_t                m_R;
+    uint32_t                m_Key;
+    uint32_t                m_Next;
+    std::array<uint32_t, 7> m_UnknownArray1;
+
+    COND_GE<FMT_VER::V_174, std::array<uint32_t, 10>> m_UnknownArray2;
+};
+
+/**
  * Headered data blob containing structured board data such as layer stackup definitions,
  * material properties, and design rule tables. The payload (m_Data) is a variable-length
  * byte array whose interpretation depends on context.
