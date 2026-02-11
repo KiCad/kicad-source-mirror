@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 00:09+0000\n"
+"PO-Revision-Date: 2026-02-11 23:16+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -8348,19 +8348,16 @@ msgid "PCB: Perform DRC"
 msgstr "DPS: Vykonať DRC"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Import"
+msgstr "Importovať DPS"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Importovať nastavenia"
+msgstr "Nastavenia úlohy importu DPS"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Import"
+msgstr "DPS: Import"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -10213,9 +10210,8 @@ msgid "Zoom In Horizontally"
 msgstr "Vodorovne priblížiť"
 
 #: common/tool/actions.cpp:779
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Distribuovať horizontálne"
+msgstr "Vodorovne priblížiť oblasť tlače"
 
 #: common/tool/actions.cpp:785
 msgid "Zoom Out Horizontally"
@@ -10402,9 +10398,8 @@ msgid "Show Grid"
 msgstr "Zobraziť m&riežku"
 
 #: common/tool/actions.cpp:1076
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Zobrazenie bodiek alebo čiar mriežky v okne úprav"
+msgstr "Zobraziť mriežku pozadia v okne editora"
 
 #: common/tool/actions.cpp:1085
 msgid "Enables item-specific grids that override the current grid"
@@ -10450,9 +10445,8 @@ msgid "Millimeters"
 msgstr "Milimetre"
 
 #: common/tool/actions.cpp:1144
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Vyberte súčiastku"
+msgstr "Vybrať stĺpce..."
 
 #: common/tool/actions.cpp:1151
 msgid "Switch units"
