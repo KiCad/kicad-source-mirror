@@ -1331,7 +1331,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 wxCHECK2( refField, continue );
 
                 PCB_FIELD* targetField = targetFP->GetField( refField->GetName() );
-                wxCHECK2( targetField, continue );
+
+                if( !targetField )
+                    continue;
 
                 targetField->SetLayerSet( refField->GetLayerSet() );
                 targetField->SetVisible( refField->IsVisible() );
