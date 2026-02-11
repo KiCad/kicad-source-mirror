@@ -54,6 +54,7 @@
 #include <core/profile.h>
 #include <thread_pool.h>
 #include <widgets/wx_progress_reporters.h>
+#include <string_utils.h>
 #include <wx/log.h>
 #include <wx/richmsgdlg.h>
 #include <pgm_base.h>
@@ -62,6 +63,59 @@
 #define MULTICHANNEL_EXTRA_DEBUG
 
 static const wxString traceMultichannelTool = wxT( "MULTICHANNEL_TOOL" );
+
+
+static wxString FormatComponentList( const std::set<FOOTPRINT*>& aComponents )
+{
+    std::vector<wxString> refs;
+
+    for( FOOTPRINT* fp : aComponents )
+    {
+        if( !fp )
+            continue;
+
+        refs.push_back( fp->GetReferenceAsString() );
+    }
+
+    std::sort( refs.begin(), refs.end(),
+               []( const wxString& aLhs, const wxString& aRhs )
+               {
+                   return aLhs.CmpNoCase( aRhs ) < 0;
+               } );
+
+    if( refs.empty() )
+        return _( "(none)" );
+
+    wxString result;
+    wxString line;
+    size_t   componentsOnLine = 0;
+
+    for( const wxString& ref : refs )
+    {
+        if( componentsOnLine == 10 )
+        {
+            if( !result.IsEmpty() )
+                result += wxT( "\n" );
+
+            result += line;
+            line.clear();
+            componentsOnLine = 0;
+        }
+
+        AccumulateDescription( line, ref );
+        componentsOnLine++;
+    }
+
+    if( !line.IsEmpty() )
+    {
+        if( !result.IsEmpty() )
+            result += wxT( "\n" );
+
+        result += line;
+    }
+
+    return result;
+}
 
 
 static void ShowTopologyMismatchReasons( wxWindow* aParent, const wxString& aSummary,
@@ -1431,6 +1485,19 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
     if( aMatches.m_mismatchReasons.empty() )
         aMatches.m_mismatchReasons.push_back( _( "Topology mismatch" ) );
+
+    // Component count mismatch
+    if( aRefArea->m_components.size() != aTargetArea->m_components.size() )
+    {
+        aMatches.m_mismatchReasons.push_back(
+                wxString::Format( _( "Reference area total components: %d" ), (int) aRefArea->m_components.size() ) );
+        aMatches.m_mismatchReasons.push_back( wxString::Format( _( "Reference area components:\n%s" ),
+                                                                FormatComponentList( aRefArea->m_components ) ) );
+        aMatches.m_mismatchReasons.push_back(
+                wxString::Format( _( "Target area total components: %d" ), (int) aTargetArea->m_components.size() ) );
+        aMatches.m_mismatchReasons.push_back( wxString::Format( _( "Target area components:\n%s" ),
+                                                                FormatComponentList( aTargetArea->m_components ) ) );
+    }
 
     aMatches.m_errorMsg = aMatches.m_mismatchReasons.front();
 
