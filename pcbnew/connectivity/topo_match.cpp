@@ -367,6 +367,138 @@ CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                            
 }
 
 
+void CONNECTION_GRAPH::breakTie( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const
+{
+    if( aMatches.size() <= 1 )
+        return;
+
+    wxString candidateRefs;
+
+    for( size_t i = 0; i < aMatches.size(); i++ )
+    {
+        if( i > 0 )
+            candidateRefs += wxT( ", " );
+
+        candidateRefs += aMatches[i]->GetParent()->GetReferenceAsString();
+    }
+
+    wxLogTrace( traceTopoMatch, wxT( "Topology tie for %s: %s" ),
+                aRef->GetParent()->GetReferenceAsString(), candidateRefs );
+
+    if( breakTieBySymbolUuid( aRef, aMatches ) )
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "Broke tie with symbol UUID match for %s" ),
+                    aRef->GetParent()->GetReferenceAsString() );
+    }
+    // TODO: other tie breakers can be added, e.g. based on position or reference designators,
+    // just waiting for actual user test cases
+    else
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "No tie breakers worked for %s, leaving match order alone." ),
+                    aRef->GetParent()->GetReferenceAsString() );
+    }
+}
+
+
+bool CONNECTION_GRAPH::breakTieBySymbolUuid( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const
+{
+    auto getSymbolInstanceUuid =
+            []( const FOOTPRINT* aFootprint ) -> KIID
+            {
+                if( !aFootprint )
+                    return niluuid;
+
+                const KIID_PATH& path = aFootprint->GetPath();
+
+                if( path.empty() )
+                    return niluuid;
+
+                const KIID& symbolUuid = path.back();
+
+                return symbolUuid;
+            };
+
+    FOOTPRINT* refFp = aRef ? aRef->GetParent() : nullptr;
+    const KIID refSymbolUuid = getSymbolInstanceUuid( refFp );
+    wxString   candidateSymbolUuids;
+    wxString   matchingSymbolCandidates;
+    int        symbolUuidHitCount = 0;
+    int        uniqueMatchIdx = -1;
+
+    if( refSymbolUuid == niluuid )
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "Tie symbol UUID unavailable for %s" ),
+                    refFp ? refFp->GetReferenceAsString() : wxT( "<null>" ) );
+        return false;
+    }
+
+    // Inspect every tied candidate and collect:
+    // 1) a detailed ref->symbol UUID mapping string for traces, and
+    // 2) the subset of candidates whose symbol-path tail UUID matches the reference.
+    for( size_t i = 0; i < aMatches.size(); i++ )
+    {
+        FOOTPRINT*     candidateFp = aMatches[i]->GetParent();
+        const wxString candidateRef = candidateFp->GetReferenceAsString();
+        const KIID     candidateSymbolUuid = getSymbolInstanceUuid( candidateFp );
+
+        if( i > 0 )
+            candidateSymbolUuids += wxT( ", " );
+
+        if( candidateSymbolUuid == niluuid )
+            candidateSymbolUuids += candidateRef + wxT( "=<none>" );
+        else
+            candidateSymbolUuids += candidateRef + wxT( "=" ) + candidateSymbolUuid.AsString();
+
+        if( candidateSymbolUuid == refSymbolUuid )
+        {
+            if( uniqueMatchIdx < 0 )
+                uniqueMatchIdx = static_cast<int>( i );
+
+            symbolUuidHitCount++;
+
+            if( !matchingSymbolCandidates.IsEmpty() )
+                matchingSymbolCandidates += wxT( ", " );
+
+            matchingSymbolCandidates += candidateRef;
+        }
+    }
+
+    wxLogTrace( traceTopoMatchDetail, wxT( "Tie reference symbol UUID for %s: %s (hits=%d)" ),
+                refFp->GetReferenceAsString(), refSymbolUuid.AsString(), symbolUuidHitCount );
+
+    wxLogTrace( traceTopoMatchDetail, wxT( "Tie candidate symbol UUIDs: %s" ), candidateSymbolUuids );
+
+    // One match is what we want, we should have one match between the source symbol instance
+    // and the destination only since in theory we are repeating across two instances of the same sheet
+    if( symbolUuidHitCount == 1 )
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "Symbol UUID unique match (usable) for %s: %s" ),
+                    refFp->GetReferenceAsString(), matchingSymbolCandidates );
+
+        std::rotate( aMatches.begin(), aMatches.begin() + uniqueMatchIdx, aMatches.begin() + uniqueMatchIdx + 1 );
+
+        wxLogTrace( traceTopoMatchDetail, wxT( "Applied symbol UUID tie-break for %s: selected %s" ),
+                    refFp->GetReferenceAsString(), aMatches.front()->GetParent()->GetReferenceAsString() );
+
+        return true;
+    }
+    // Copy and pasting footprints can result in multiple matches
+    else if( symbolUuidHitCount > 1 )
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "Symbol UUID multiple matches (not usable) for %s: %s" ),
+                    refFp->GetReferenceAsString(), matchingSymbolCandidates );
+        return false;
+    }
+    // Probably not sheet instances, break the tie some other way
+    else
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "No symbol UUID candidate match (not usable) for %s" ),
+                    refFp->GetReferenceAsString() );
+        return false;
+    }
+}
+
+
 void COMPONENT::sortPinsByName()
 {
     std::sort( m_pins.begin(), m_pins.end(),
@@ -585,6 +717,9 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
                     current.m_ref->m_reference, (int) stack.size(), current.m_currentMatch,
                     (int) current.m_matches.size(), (int) current.m_locked.size(),
                     (int) m_components.size() );
+
+        if( current.m_currentMatch == 0 && current.m_matches.size() > 1 )
+            breakTie( current.m_ref, current.m_matches );
 
         if ( current.m_matches.empty() )
         {

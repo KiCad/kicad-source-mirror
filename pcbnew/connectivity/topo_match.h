@@ -200,6 +200,18 @@ public:
     std::vector<COMPONENT*> &Components() { return m_components; }
 
 private:
+    /**
+     * Many times components are electrically/topologically identical, e.g. a bunch of decoupling capacitors
+     * connected to the same power supply and ground. However, the user doesn't want them to be picked randomly,
+     * so we implement a number of strategies to break ties between components.
+     */
+    void breakTie( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
+    /**
+     * The most useful tie breaker is based on symbol/sheet instances, since multiple channels in a design
+     * are very often multiple instances of the same sheet.
+     */
+    bool breakTieBySymbolUuid( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
+
     void sortByPinCount();
 
 
