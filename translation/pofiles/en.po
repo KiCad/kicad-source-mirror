@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-05 23:39+0300\n"
+"POT-Creation-Date: 2026-02-12 00:15+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5014,6 +5014,15 @@ msgstr "DRC Job Settings"
 msgid "PCB: Perform DRC"
 msgstr "PCB: Perform DRC"
 
+msgid "Import PCB"
+msgstr "Import PCB"
+
+msgid "PCB Import Job Settings"
+msgstr "PCB Import Job Settings"
+
+msgid "PCB: Import"
+msgstr "PCB: Import"
+
 #, c-format
 msgid "Render %s"
 msgstr "Render %s"
@@ -7140,6 +7149,12 @@ msgstr "CADSTAR Archive files"
 msgid "Eagle XML files"
 msgstr "Eagle XML files"
 
+msgid "PADS ASCII files"
+msgstr "PADS ASCII files"
+
+msgid "gEDA / Lepton EDA project files"
+msgstr "gEDA / Lepton EDA project files"
+
 msgid "OrcadPCB2 netlist files"
 msgstr "OrcadPCB2 netlist files"
 
@@ -8948,6 +8963,12 @@ msgstr "Unknown columns in data: %s. These columns will be ignored."
 msgid "Read Only"
 msgstr "Read Only"
 
+msgid "Highlight on Cross-probe"
+msgstr "Highlight on Cross-probe"
+
+msgid "Highlight corresponding pin on canvas when it is selected in the table"
+msgstr "Highlight corresponding pin on canvas when it is selected in the table"
+
 msgid "Save changes?"
 msgstr "Save changes?"
 
@@ -8963,8 +8984,11 @@ msgstr "Pin count:"
 msgid "Duplicate pins:"
 msgstr "Duplicate pins:"
 
-msgid "Filter Pin Table"
-msgstr "Filter Pin Table"
+msgid "Group by name"
+msgstr "Group by name"
+
+msgid "Group Selected Pins"
+msgstr "Group Selected Pins"
 
 msgid "Filter by unit:"
 msgstr "Filter by unit:"
@@ -9001,12 +9025,6 @@ msgstr "From File..."
 
 msgid "From Clipboard"
 msgstr "From Clipboard"
-
-msgid "Group by name"
-msgstr "Group by name"
-
-msgid "Group Selected"
-msgstr "Group Selected"
 
 msgid "Pin Table"
 msgstr "Pin Table"
@@ -9578,9 +9596,6 @@ msgstr "Cannot normalize path '%s'."
 msgid "No project or path defined for the current schematic."
 msgstr "No project or path defined for the current schematic."
 
-msgid "Design variant:"
-msgstr "Design variant:"
-
 msgid "Output directory:"
 msgstr "Output directory:"
 
@@ -9590,6 +9605,9 @@ msgid ""
 msgstr ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
+
+msgid "Design variant:"
+msgstr "Design variant:"
 
 msgid "Postscript"
 msgstr "Postscript"
@@ -10535,9 +10553,6 @@ msgid ""
 msgstr ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
-
-msgid "Highlight on Cross-probe"
-msgstr "Highlight on Cross-probe"
 
 msgid "Highlight corresponding item on canvas when it is selected in the table"
 msgstr ""
@@ -13476,6 +13491,49 @@ msgid "Failed to parse value: '%s'"
 msgstr "Failed to parse value: '%s'"
 
 #, c-format
+msgid "Symbol '%s' not found in gEDA libraries."
+msgstr "Symbol '%s' not found in gEDA libraries."
+
+#, c-format
+msgid " Did you mean '%s'?"
+msgstr " Did you mean '%s'?"
+
+#, c-format
+msgid ""
+"Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
+"symbol has symversion %s."
+msgstr ""
+"Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
+"symbol has symversion %s."
+
+#, c-format
+msgid "Hierarchical source '%s' not found, creating empty sheet."
+msgstr "Hierarchical source '%s' not found, creating empty sheet."
+
+#, c-format
+msgid "Circular hierarchy detected for '%s', skipping."
+msgstr "Circular hierarchy detected for '%s', skipping."
+
+#, c-format
+msgid "Failed to load sub-schematic '%s': %s"
+msgstr "Failed to load sub-schematic '%s': %s"
+
+#, c-format
+msgid "File '%s' is empty."
+msgstr "File '%s' is empty."
+
+#, c-format
+msgid "File '%s' is not a valid gEDA schematic."
+msgstr "File '%s' is not a valid gEDA schematic."
+
+#, c-format
+msgid "Failed to load page '%s': %s"
+msgstr "Failed to load page '%s': %s"
+
+msgid "gEDA / Lepton EDA schematic files"
+msgstr "gEDA / Lepton EDA schematic files"
+
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
 msgstr "HTTP library settings file %s missing or invalid."
 
@@ -13807,6 +13865,12 @@ msgstr ""
 
 msgid "LTspice schematic files"
 msgstr "LTspice schematic files"
+
+msgid "PADS Logic schematic files"
+msgstr "PADS Logic schematic files"
+
+msgid "PADS Logic library files"
+msgstr "PADS Logic library files"
 
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
@@ -20100,8 +20164,8 @@ msgstr "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 msgid "Valid options are: route, alternate."
 msgstr "Valid options are: route, alternate."
 
-msgid "Output units, valid options:in, mm"
-msgstr "Output units, valid options:in, mm"
+msgid "Output units, valid options: in, mm"
+msgstr "Output units, valid options: in, mm"
 
 msgid "Mirror Y axis"
 msgstr "Mirror Y axis"
@@ -20124,8 +20188,8 @@ msgstr "Report output file path"
 msgid "Generate a file specifically for tenting"
 msgstr "Generate a file specifically for tenting"
 
-msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
-msgstr "Valid options: pdf,gerberx2,ps,dxf,svg"
+msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
+msgstr "Valid options: pdf, gerberx2, ps, dxf, svg"
 
 msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr "Precision of Gerber coordinates (5 or 6)"
@@ -20392,6 +20456,36 @@ msgstr "Fit the page to the board"
 
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
+
+msgid "Import a non-KiCad PCB file to KiCad format"
+msgstr "Import a non-KiCad PCB file to KiCad format"
+
+msgid ""
+"Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
+"solidworks (default: auto)"
+msgstr ""
+"Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
+"solidworks (default: auto)"
+
+msgid "JSON file with layer name mappings"
+msgstr "JSON file with layer name mappings"
+
+msgid "Use automatic layer mapping (default behavior)"
+msgstr "Use automatic layer mapping (default behavior)"
+
+msgid "Import report format: none, json, text (default: none)"
+msgstr "Import report format: none, json, text (default: none)"
+
+msgid "File path for import report (default: stdout)"
+msgstr "File path for import report (default: stdout)"
+
+#, c-format
+msgid "Invalid format: %s\n"
+msgstr "Invalid format: %s\n"
+
+#, c-format
+msgid "Invalid report format: %s\n"
+msgstr "Invalid report format: %s\n"
 
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr "Renders the PCB in 3D view to PNG or JPEG image"
@@ -21042,6 +21136,22 @@ msgstr "Target Directory"
 msgid "Unzipping project in '%s'.\n"
 msgstr "Unzipping project in '%s'.\n"
 
+#, c-format
+msgid "Could not open gEDA / Lepton EDA project file '%s'."
+msgstr "Could not open gEDA / Lepton EDA project file '%s'."
+
+msgid "Locate gEDA / Lepton EDA Schematic"
+msgstr "Locate gEDA / Lepton EDA Schematic"
+
+msgid "gEDA / Lepton EDA PCB files"
+msgstr "gEDA / Lepton EDA PCB files"
+
+msgid "Locate gEDA / Lepton EDA PCB"
+msgstr "Locate gEDA / Lepton EDA PCB"
+
+msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
+msgstr "The selected file does not appear to be a PADS ASCII schematic or PCB."
+
 msgid "KiCad Project Destination"
 msgstr "KiCad Project Destination"
 
@@ -21077,6 +21187,12 @@ msgstr "Import EasyEDA Std Backup"
 
 msgid "Import EasyEDA Pro Project"
 msgstr "Import EasyEDA Pro Project"
+
+msgid "Import PADS Project Files"
+msgstr "Import PADS Project Files"
+
+msgid "Import gEDA / Lepton EDA Project Files"
+msgstr "Import gEDA / Lepton EDA Project Files"
 
 #, c-format
 msgid "Running job %d: %s"
@@ -21242,6 +21358,18 @@ msgstr "EasyEDA (JLCEDA) Pro Project..."
 
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "Import EasyEDA (JLCEDA) Professional schematic and board"
+
+msgid "PADS Project..."
+msgstr "PADS Project..."
+
+msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
+msgstr "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
+
+msgid "gEDA / Lepton EDA Project..."
+msgstr "gEDA / Lepton EDA Project..."
+
+msgid "Import gEDA or Lepton EDA schematic and PCB layout"
+msgstr "Import gEDA or Lepton EDA schematic and PCB layout"
 
 msgid "Edit Advanced Config..."
 msgstr "Edit Advanced Config..."
@@ -35532,6 +35660,27 @@ msgstr "Update Order"
 msgid "Generator Properties"
 msgstr "Generator Properties"
 
+msgid "Constructing caches"
+msgstr "Constructing caches"
+
+msgid "Creating nets"
+msgstr "Creating nets"
+
+msgid "Creating tracks"
+msgstr "Creating tracks"
+
+msgid "Converting footprints"
+msgstr "Converting footprints"
+
+msgid "Parsing Allegro objects"
+msgstr "Parsing Allegro objects"
+
+msgid "Failed to build board from Allegro data"
+msgstr "Failed to build board from Allegro data"
+
+msgid "Allegro PCB files"
+msgstr "Allegro PCB files"
+
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
@@ -36511,11 +36660,18 @@ msgstr "Unexpected file '%s' found in library '%s'."
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Footprint library '%s' cannot be deleted."
 
-msgid "gEDA PCB footprint file"
-msgstr "gEDA PCB footprint file"
+#, c-format
+msgid "Via token contains %d parameters, expected at least 10."
+msgstr "Via token contains %d parameters, expected at least 10."
 
-msgid "gEDA PCB footprint library directory"
-msgstr "gEDA PCB footprint library directory"
+msgid "gEDA / Lepton EDA PCB board file"
+msgstr "gEDA / Lepton EDA PCB board file"
+
+msgid "gEDA / Lepton EDA PCB footprint file"
+msgstr "gEDA / Lepton EDA PCB footprint file"
+
+msgid "gEDA / Lepton EDA PCB footprint library directory"
+msgstr "gEDA / Lepton EDA PCB footprint library directory"
 
 msgid "Generating content section"
 msgstr "Generating content section"
@@ -36632,10 +36788,6 @@ msgid ""
 msgstr ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
-
-#, c-format
-msgid "File '%s' is empty."
-msgstr "File '%s' is empty."
 
 #, c-format
 msgid "File '%s' is not a legacy library."
@@ -36860,6 +37012,43 @@ msgstr "Exporting board to ODB++"
 
 msgid "ODB++ Production File"
 msgstr "ODB++ Production File"
+
+msgid "Starting PADS PCB import"
+msgstr "Starting PADS PCB import"
+
+#, c-format
+msgid "Footprint '%s' not found in decal list, part skipped"
+msgstr "Footprint '%s' not found in decal list, part skipped"
+
+#, c-format
+msgid "Skipping decal item on unmapped layer %d"
+msgstr "Skipping decal item on unmapped layer %d"
+
+#, c-format
+msgid "Text on unmapped layer %d assigned to Comments layer"
+msgstr "Text on unmapped layer %d assigned to Comments layer"
+
+#, c-format
+msgid "Skipping track on non-copper layer %d"
+msgstr "Skipping track on non-copper layer %d"
+
+#, c-format
+msgid "Skipping pour on unmapped layer %d"
+msgstr "Skipping pour on unmapped layer %d"
+
+#, c-format
+msgid "Skipping keepout on unmapped layer %d"
+msgstr "Skipping keepout on unmapped layer %d"
+
+msgid "Skipping keepout with no valid layers"
+msgstr "Skipping keepout with no valid layers"
+
+#, c-format
+msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
+msgstr "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
+
+msgid "Starting PADS binary PCB import"
+msgstr "Starting PADS binary PCB import"
 
 #, c-format
 msgid "Unknown PCad layer %u"
@@ -37961,6 +38150,30 @@ msgstr "Successfully saved board file using the latest format\n"
 
 msgid "Board file was not updated\n"
 msgstr "Board file was not updated\n"
+
+#, c-format
+msgid "Unable to determine file format for '%s'\n"
+msgstr "Unable to determine file format for '%s'\n"
+
+#, c-format
+msgid "Input file not found: '%s'\n"
+msgstr "Input file not found: '%s'\n"
+
+#, c-format
+msgid "No plugin found for file type '%s'\n"
+msgstr "No plugin found for file type '%s'\n"
+
+#, c-format
+msgid "Importing '%s' using %s format...\n"
+msgstr "Importing '%s' using %s format...\n"
+
+#, c-format
+msgid "Successfully saved imported board to '%s'\n"
+msgstr "Successfully saved imported board to '%s'\n"
+
+#, c-format
+msgid "Error during import: %s\n"
+msgstr "Error during import: %s\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -39253,6 +39466,9 @@ msgstr "Unable to outset the selected items."
 msgid "Some of the items could not be outset."
 msgstr "Some of the items could not be outset."
 
+msgid "(none)"
+msgstr "(none)"
+
 msgid "Topology mismatch"
 msgstr "Topology mismatch"
 
@@ -39286,6 +39502,30 @@ msgstr "Repeat layout"
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Copied to %d Rule Areas."
+
+#, c-format
+msgid "Reference area total components: %d"
+msgstr "Reference area total components: %d"
+
+#, c-format
+msgid ""
+"Reference area components:\n"
+"%s"
+msgstr ""
+"Reference area components:\n"
+"%s"
+
+#, c-format
+msgid "Target area total components: %d"
+msgstr "Target area total components: %d"
+
+#, c-format
+msgid ""
+"Target area components:\n"
+"%s"
+msgstr ""
+"Target area components:\n"
+"%s"
 
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
@@ -42107,6 +42347,24 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Filter Pin Table"
+#~ msgstr "Filter Pin Table"
+
+#~ msgid "Group Selected"
+#~ msgstr "Group Selected"
+
+#~ msgid "Output units, valid options:in, mm"
+#~ msgstr "Output units, valid options:in, mm"
+
+#~ msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
+#~ msgstr "Valid options: pdf,gerberx2,ps,dxf,svg"
+
+#~ msgid "gEDA PCB footprint file"
+#~ msgstr "gEDA PCB footprint file"
+
+#~ msgid "gEDA PCB footprint library directory"
+#~ msgstr "gEDA PCB footprint library directory"
 
 #, c-format
 #~ msgid "Wire from %s, %s to %s, %s"
