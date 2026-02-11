@@ -809,6 +809,28 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             field.SetOrdinal( ordinal++ );
     }
 
+    for( int ii = (int) m_symbol->GetFields().size() - 1; ii >= 0; ii-- )
+    {
+        SCH_FIELD& symbolField = m_symbol->GetFields()[ii];
+
+        if( symbolField.IsMandatory() )
+            continue;
+
+        bool found = false;
+
+        for( const SCH_FIELD& editedField : *m_fields )
+        {
+            if( editedField.GetName() == symbolField.GetName() )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if( !found )
+            m_symbol->GetFields().erase( m_symbol->GetFields().begin() + ii );
+    }
+
     if( currentVariant.IsEmpty() )
     {
         // Reference has a specific initialization, depending on the current active sheet
