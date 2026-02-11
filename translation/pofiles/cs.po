@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-05 23:40+0300\n"
-"PO-Revision-Date: 2026-02-11 00:09+0000\n"
-"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"PO-Revision-Date: 2026-02-11 21:12+0000\n"
+"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -23427,7 +23427,7 @@ msgstr "Nastavit atribut vyloučení z desky"
 
 #: eeschema/tools/sch_actions.cpp:994
 msgid "Set the do not populate attribute"
-msgstr "Nastavit atribut „neosazovat“"
+msgstr "Nastavit atribut 'neosazovat'"
 
 #: eeschema/tools/sch_actions.cpp:1001
 msgid "Open the library symbol in the Symbol Editor"
