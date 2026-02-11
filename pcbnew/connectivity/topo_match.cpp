@@ -428,7 +428,7 @@ bool CONNECTION_GRAPH::breakTieBySymbolUuid( COMPONENT* aRef, std::vector<COMPON
     if( refSymbolUuid == niluuid )
     {
         wxLogTrace( traceTopoMatchDetail, wxT( "Tie symbol UUID unavailable for %s" ),
-                    refFp ? refFp->GetReferenceAsString() : wxT( "<null>" ) );
+                    refFp ? refFp->GetReferenceAsString() : wxString( wxT( "<null>" ) ) );
         return false;
     }
 
