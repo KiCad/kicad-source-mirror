@@ -615,17 +615,23 @@ int BOARD_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
             processItem( group );
     }
 
-    for( BOARD_ITEM* drawing : board()->Drawings() )
-        processItem( drawing );
+    // Everything owned by the board not handled above
+    for( BOARD_ITEM* item : board()->GetItemSet() )
+    {
+        // Top-level footprints and tracks were handled above.
+        switch( item->Type() )
+        {
+        case PCB_FOOTPRINT_T:
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+            break;
 
-    for( ZONE* zone : board()->Zones() )
-        processItem( zone );
-
-    for( PCB_MARKER* marker : board()->Markers() )
-        processItem( marker );
-
-    for( PCB_GROUP* group : board()->Groups() )
-        processItem( group );
+        default:
+            processItem( item );
+            break;
+        }
+    }
 
     if( duplicates )
     {

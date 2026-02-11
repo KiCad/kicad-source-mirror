@@ -452,32 +452,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
     if( m_drawingSheet )
         m_drawingSheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
 
-    // Load drawings
-    for( BOARD_ITEM* drawing : aBoard->Drawings() )
-        m_view->Add( drawing );
-
-    // Load tracks
-    for( PCB_TRACK* track : aBoard->Tracks() )
-        m_view->Add( track );
-
-    // Load footprints and its additional elements
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-        m_view->Add( footprint );
-
-    // DRC markers
-    for( PCB_MARKER* marker : aBoard->Markers() )
-        m_view->Add( marker );
-
-    // Load points
-    for( PCB_POINT* point : aBoard->Points() )
-        m_view->Add( point );
-
-    // Load zones
-    for( ZONE* zone : aBoard->Zones() )
-        m_view->Add( zone );
-
-    for( PCB_GENERATOR* generator : aBoard->Generators() )
-        m_view->Add( generator );
+    for( BOARD_ITEM* item : aBoard->GetItemSet() )
+        m_view->Add( item );
 
     aBoard->UpdateBoardOutline();
     m_view->Add( aBoard->BoardOutline() );

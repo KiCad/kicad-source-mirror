@@ -172,10 +172,6 @@ BOARD::~BOARD()
     m_groups.clear();
     m_points.clear();
 
-    // Generators not currently returned by GetItemSet
-    for( PCB_GENERATOR* g : m_generators )
-        ownedItems.insert( g );
-
     delete m_boardOutline;
     m_generators.clear();
 
@@ -3546,6 +3542,7 @@ const BOARD_ITEM_SET BOARD::GetItemSet()
 
     std::copy( m_tracks.begin(), m_tracks.end(), std::inserter( items, items.end() ) );
     std::copy( m_zones.begin(), m_zones.end(), std::inserter( items, items.end() ) );
+    std::copy( m_generators.begin(), m_generators.end(), std::inserter( items, items.end() ) );
     std::copy( m_footprints.begin(), m_footprints.end(), std::inserter( items, items.end() ) );
     std::copy( m_drawings.begin(), m_drawings.end(), std::inserter( items, items.end() ) );
     std::copy( m_markers.begin(), m_markers.end(), std::inserter( items, items.end() ) );

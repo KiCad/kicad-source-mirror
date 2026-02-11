@@ -1777,38 +1777,6 @@ int PCB_CONTROL::SaveToLinkedDesignBlock( const TOOL_EVENT& aEvent )
 }
 
 
-template<typename T>
-static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
-{
-    std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-            [aIsNew]( T aItem )
-            {
-                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
-
-                aItem->ClearFlags( SKIP_STRUCT );
-                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
-
-                return doCopy;
-            } );
-}
-
-
-template<typename T>
-static void moveUnflaggedItems( const std::vector<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
-{
-    std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-            [aIsNew]( T aItem )
-            {
-                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
-
-                aItem->ClearFlags( SKIP_STRUCT );
-                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
-
-                return doCopy;
-            } );
-}
-
-
 bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
                                    bool aReannotateDuplicates, bool aSkipMove )
 {
@@ -1816,19 +1784,20 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aA
     bool                     isNew = board() != aBoard;
     std::vector<BOARD_ITEM*> items;
 
-    moveUnflaggedItems( aBoard->Tracks(), items, isNew );
-    moveUnflaggedItems( aBoard->Footprints(), items, isNew );
-    moveUnflaggedItems( aBoard->Drawings(), items, isNew );
-    moveUnflaggedItems( aBoard->Zones(), items, isNew );
+    for( BOARD_ITEM* item : aBoard->GetItemSet() )
+    {
+        // Marker transfer is intentionally not part of append/paste item placement.
+        if( item->Type() == PCB_MARKER_T )
+            continue;
 
-    // Subtlety: When selecting a group via the mouse,
-    // PCB_SELECTION_TOOL::highlightInternal runs, which does a SetSelected() on all
-    // descendants. In PCB_CONTROL::placeBoardItems, below, we skip that and
-    // mark items non-recursively.  That works because the saving of the
-    // selection created aBoard that has the group and all descendants in it.
-    moveUnflaggedItems( aBoard->Groups(), items, isNew );
+        bool doCopy = ( item->GetFlags() & SKIP_STRUCT ) == 0;
 
-    moveUnflaggedItems( aBoard->Generators(), items, isNew );
+        item->ClearFlags( SKIP_STRUCT );
+        item->SetFlags( isNew ? IS_NEW : 0 );
+
+        if( doCopy )
+            items.push_back( item );
+    }
 
     if( isNew )
         aBoard->RemoveAll();
@@ -1977,23 +1946,17 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading
-    for( PCB_TRACK* track : brd->Tracks() )
-        track->SetFlags( SKIP_STRUCT );
+    BOARD_ITEM_SET existingItems = brd->GetItemSet();
 
-    for( FOOTPRINT* footprint : brd->Footprints() )
-        footprint->SetFlags( SKIP_STRUCT );
+    for( BOARD_ITEM* item : existingItems )
+        item->SetFlags( SKIP_STRUCT );
 
-    for( PCB_GROUP* group : brd->Groups() )
-        group->SetFlags( SKIP_STRUCT );
-
-    for( BOARD_ITEM* drawing : brd->Drawings() )
-        drawing->SetFlags( SKIP_STRUCT );
-
-    for( ZONE* zone : brd->Zones() )
-        zone->SetFlags( SKIP_STRUCT );
-
-    for( PCB_GENERATOR* generator : brd->Generators() )
-        generator->SetFlags( SKIP_STRUCT );
+    auto clearSkipStructOnExistingItems =
+            [&existingItems]()
+            {
+                for( BOARD_ITEM* item : existingItems )
+                    item->ClearFlags( SKIP_STRUCT );
+            };
 
     std::map<wxString, wxString> oldProperties = brd->GetProperties();
     std::map<wxString, wxString> newProperties;
@@ -2036,6 +1999,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     catch( const IO_ERROR& ioe )
     {
         DisplayErrorMessage( editFrame, _( "Error loading board." ), ioe.What() );
+        clearSkipStructOnExistingItems();
 
         return 0;
     }
@@ -2141,6 +2105,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
     // Refresh the UI for the updated board properties
     editFrame->GetAppearancePanel()->OnBoardChanged();
+    clearSkipStructOnExistingItems();
 
     return ret;
 }

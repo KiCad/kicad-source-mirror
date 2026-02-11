@@ -283,31 +283,9 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     BOARD*  currentPcb  = GetBoard();
     bool    fromEmpty   = false;
 
-    // Append tracks:
-    for( PCB_TRACK* item : currentPcb->Tracks() )
+    for( BOARD_ITEM* item : currentPcb->GetItemSet() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
-        itemsList.PushItem( picker );
-    }
-
-    // Append footprints:
-    for( FOOTPRINT* item : currentPcb->Footprints() )
-    {
-        ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
-        itemsList.PushItem( picker );
-    }
-
-    // Append drawings
-    for( BOARD_ITEM* item : currentPcb->Drawings() )
-    {
-        ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
-        itemsList.PushItem( picker );
-    }
-
-    // Append zones outlines
-    for( ZONE* zone : currentPcb->Zones() )
-    {
-        ITEM_PICKER picker( nullptr, zone, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
 
@@ -366,44 +344,14 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
     }
 
-    // Find new footprints
-    for( FOOTPRINT* item : currentPcb->Footprints() )
+    // Find new items
+    for( BOARD_ITEM* item : currentPcb->GetItemSet() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {
             ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
             oldBuffer->PushItem( picker );
             commit.Added( item );
-        }
-    }
-
-    for( PCB_TRACK* item : currentPcb->Tracks() )
-    {
-        if( !oldBuffer->ContainsItem( item ) )
-        {
-            ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
-            oldBuffer->PushItem( picker );
-            commit.Added( item );
-        }
-    }
-
-    for( BOARD_ITEM* item : currentPcb->Drawings() )
-    {
-        if( !oldBuffer->ContainsItem( item ) )
-        {
-            ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );
-            oldBuffer->PushItem( picker );
-            commit.Added( item );
-        }
-    }
-
-    for( ZONE* zone : currentPcb->Zones() )
-    {
-        if( !oldBuffer->ContainsItem( zone ) )
-        {
-            ITEM_PICKER picker( nullptr, zone, UNDO_REDO::NEWITEM );
-            oldBuffer->PushItem( picker );
-            commit.Added( zone );
         }
     }
 
