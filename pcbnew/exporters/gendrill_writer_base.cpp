@@ -1087,10 +1087,16 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, REPORTER* aReporter )
 {
     wxFFile out( aFullFileName, "wb" );
+
     if( !out.IsOpened() )
     {
-        wxString msg = wxString::Format( _( "Error creating drill report file '%s'" ), aFullFileName );
-        aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        if( aReporter )
+        {
+            wxString msg = wxString::Format( _( "Error creating drill report file '%s'" ),
+                                             aFullFileName );
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+
         return false;
     }
 
@@ -1214,10 +1220,10 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
         writeError = true;
     }
 
-    if( writeError )
+    if( writeError && aReporter )
     {
-        wxString msg = wxString::Format( _( "Created drill report file '%s'" ), aFullFileName );
-        aReporter->Report( msg, RPT_SEVERITY_ACTION );
+        wxString msg = wxString::Format( _( "Error writing drill report file '%s'" ), aFullFileName );
+        aReporter->Report( msg, RPT_SEVERITY_ERROR );
     }
 
     return !writeError;

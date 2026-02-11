@@ -179,3 +179,35 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23005
+// GenDrillReportFile crashed when aReporter was null (the default)
+BOOST_AUTO_TEST_CASE( DrillReportNullReporter )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "test_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    wxFileName reportFile( tempDir.GetFullPath(), wxT( "test_board-drl.rpt" ) );
+
+    // Valid path with null reporter should succeed without crashing
+    EXCELLON_WRITER excellon( &board );
+    BOOST_CHECK( excellon.GenDrillReportFile( reportFile.GetFullPath() ) );
+    BOOST_CHECK( reportFile.FileExists() );
+
+    GERBER_WRITER gerber( &board );
+    BOOST_CHECK( gerber.GenDrillReportFile( reportFile.GetFullPath() ) );
+
+    // Invalid path with null reporter should return false without crashing
+    EXCELLON_WRITER excellon2( &board );
+    BOOST_CHECK( !excellon2.GenDrillReportFile( wxT( "/nonexistent/path/report.rpt" ) ) );
+
+    GERBER_WRITER gerber2( &board );
+    BOOST_CHECK( !gerber2.GenDrillReportFile( wxT( "/nonexistent/path/report.rpt" ) ) );
+
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
