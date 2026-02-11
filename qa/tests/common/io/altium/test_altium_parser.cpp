@@ -286,4 +286,42 @@ BOOST_DATA_TEST_CASE( ReadProperties,
 }
 
 
+/**
+ * Verify that ReadProperties does not strip a trailing 0x00 byte from binary records.
+ * Binary records use the MSB of the length field as a flag; their payload is raw compressed
+ * data where 0x00 is a legitimate final byte. Stripping it corrupts the zlib stream.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23013
+ */
+BOOST_AUTO_TEST_CASE( ReadPropertiesBinaryNullBytePreserved )
+{
+    // Build a binary record whose payload ends with 0x00.
+    // The MSB of the 4-byte length field signals "binary" to ReadProperties.
+    const std::string payload = { '\x01', '\x02', '\x03', '\x00' };
+    uint32_t          rawLength = static_cast<uint32_t>( payload.size() ) | 0x01000000;
+
+    size_t                  totalSize = 4 + payload.size();
+    std::unique_ptr<char[]> content = std::make_unique<char[]>( totalSize );
+
+    std::memcpy( content.get(), &rawLength, 4 );
+    std::memcpy( content.get() + 4, payload.data(), payload.size() );
+
+    // Capture the raw string that handleBinaryData receives so we can check its length.
+    std::string captured;
+
+    auto captureBinaryData = [&]( const std::string& aData ) -> std::map<wxString, wxString>
+    {
+        captured = aData;
+        return {};
+    };
+
+    ALTIUM_BINARY_PARSER parser( content, totalSize );
+
+    parser.ReadProperties( captureBinaryData );
+
+    BOOST_CHECK_EQUAL( parser.HasParsingError(), false );
+    BOOST_CHECK_EQUAL( captured.size(), payload.size() );
+    BOOST_CHECK_EQUAL( captured, payload );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

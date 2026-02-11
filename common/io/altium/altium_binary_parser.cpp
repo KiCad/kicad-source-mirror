@@ -382,7 +382,7 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
 
     // we use std::string because std::string can handle NULL-bytes
     // wxString would end the string at the first NULL-byte
-    std::string str = std::string( m_pos, length - ( hasNullByte ? 1 : 0 ) );
+    std::string str = std::string( m_pos, length - ( ( hasNullByte && !isBinary ) ? 1 : 0 ) );
     m_pos += length;
 
     if( isBinary )
