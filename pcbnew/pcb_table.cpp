@@ -131,40 +131,75 @@ VECTOR2I PCB_TABLE::GetEnd() const
 
 void PCB_TABLE::Normalize()
 {
-    int y = GetPosition().y;
+    if( m_cells.empty() )
+        return;
+
+    EDA_ANGLE cellAngle = m_cells[0]->GetTextAngle();
+
+    BOX2I    cell0BBox = m_cells[0]->GetBoundingBox();
+    VECTOR2I stableCenter = cell0BBox.GetCenter();
+
+    int cell0Width = m_colWidths[0];
+    int cell0Height = m_rowHeights[0];
+
+    if( m_cells[0]->GetColSpan() > 1 )
+    {
+        for( int ii = 1; ii < m_cells[0]->GetColSpan(); ++ii )
+            cell0Width += m_colWidths[ii];
+    }
+
+    if( m_cells[0]->GetRowSpan() > 1 )
+    {
+        for( int ii = 1; ii < m_cells[0]->GetRowSpan(); ++ii )
+            cell0Height += m_rowHeights[ii];
+    }
+
+    VECTOR2I localCell0Center( cell0Width / 2, cell0Height / 2 );
+    RotatePoint( localCell0Center, cellAngle );
+
+    if( cellAngle != ANGLE_0 )
+    {
+        for( PCB_TABLECELL* cell : m_cells )
+            cell->Rotate( stableCenter, -cellAngle );
+    }
+
+    VECTOR2I unrotatedOrigin = stableCenter - VECTOR2I( cell0Width / 2, cell0Height / 2 );
+
+    int y = unrotatedOrigin.y;
 
     for( int row = 0; row < GetRowCount(); ++row )
     {
-        int x = GetPosition().x;
-        int rowHeight = m_rowHeights[ row ];
+        int x = unrotatedOrigin.x;
+        int rowHeight = m_rowHeights[row];
 
         for( int col = 0; col < GetColCount(); ++col )
         {
-            int colWidth = m_colWidths[ col ];
-
+            int            colWidth = m_colWidths[col];
             PCB_TABLECELL* cell = GetCell( row, col );
-            VECTOR2I       pos( x, y );
 
-            RotatePoint( pos, GetPosition(), cell->GetTextAngle() );
+            if( !cell )
+                continue;
+
+            int cellWidth = colWidth;
+            int cellHeight = rowHeight;
+
+            if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
+            {
+                for( int ii = col + 1; ii < col + cell->GetColSpan(); ++ii )
+                    cellWidth += m_colWidths[ii];
+
+                for( int ii = row + 1; ii < row + cell->GetRowSpan(); ++ii )
+                    cellHeight += m_rowHeights[ii];
+            }
+
+            VECTOR2I pos( x, y );
+            VECTOR2I end( x + cellWidth, y + cellHeight );
 
             if( cell->GetPosition() != pos )
             {
                 cell->SetPosition( pos );
                 cell->ClearRenderCache();
             }
-
-            VECTOR2I end = VECTOR2I( x + colWidth, y + rowHeight );
-
-            if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
-            {
-                for( int ii = col + 1; ii < col + cell->GetColSpan(); ++ii )
-                    end.x += m_colWidths[ii];
-
-                for( int ii = row + 1; ii < row + cell->GetRowSpan(); ++ii )
-                    end.y += m_rowHeights[ii];
-            }
-
-            RotatePoint( end, GetPosition(), cell->GetTextAngle() );
 
             if( cell->GetEnd() != end )
             {
@@ -176,6 +211,23 @@ void PCB_TABLE::Normalize()
         }
 
         y += rowHeight;
+    }
+
+    if( cellAngle != ANGLE_0 )
+    {
+        for( PCB_TABLECELL* cell : m_cells )
+            cell->Rotate( stableCenter, cellAngle );
+    }
+
+    BOX2I    newCell0BBox = m_cells[0]->GetBoundingBox();
+    VECTOR2I newCenter = newCell0BBox.GetCenter();
+
+    if( newCenter != stableCenter )
+    {
+        VECTOR2I correction = stableCenter - newCenter;
+
+        for( PCB_TABLECELL* cell : m_cells )
+            cell->Move( correction );
     }
 }
 
@@ -201,46 +253,110 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    BOX2I originalBBox = GetBoundingBox();
+
+    VECTOR2I targetPos;
+
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+    {
+        targetPos.x = 2 * aCentre.x - originalBBox.GetRight();
+        targetPos.y = originalBBox.GetTop();
+    }
+    else
+    {
+        targetPos.x = originalBBox.GetLeft();
+        targetPos.y = 2 * aCentre.y - originalBBox.GetBottom();
+    }
+
     EDA_ANGLE originalAngle = m_cells[0]->GetTextAngle();
 
-    Rotate( aCentre, -originalAngle );
-    Normalize();
+    if( originalAngle != ANGLE_0 )
+        Rotate( GetPosition(), -originalAngle );
+
+    VECTOR2I tableOrigin = GetPosition();
 
     for( PCB_TABLECELL* cell : m_cells )
-        cell->Flip( aCentre, aFlipDirection );
+        cell->Flip( tableOrigin, aFlipDirection );
 
     std::vector<PCB_TABLECELL*> oldCells = m_cells;
-    int                         rowOffset = 0;
 
-    for( int row = 0; row < GetRowCount(); ++row )
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
     {
+        int rowOffset = 0;
+
+        for( int row = 0; row < GetRowCount(); ++row )
+        {
+            for( int col = 0; col < GetColCount(); ++col )
+                m_cells[rowOffset + col] = oldCells[rowOffset + GetColCount() - 1 - col];
+
+            rowOffset += GetColCount();
+        }
+
+        std::map<int, int> newColWidths;
+
         for( int col = 0; col < GetColCount(); ++col )
-            m_cells[ rowOffset + col ] = oldCells[ rowOffset + GetColCount() - 1 - col ];
+            newColWidths[col] = m_colWidths[GetColCount() - 1 - col];
 
-        rowOffset += GetColCount();
+        m_colWidths = std::move( newColWidths );
     }
-
-    VECTOR2I currentPos = GetPosition();
-
-    int      firstWidth = m_colWidths.begin()->second;
-    VECTOR2I translationVector = VECTOR2I( firstWidth, 0 );
-
-    VECTOR2I position = currentPos - translationVector;
-    SetPosition( position );
-
-    std::map<int, int> newColWidths;
-    for( int col = 0; col < GetColCount(); ++col )
+    else // TOP_BOTTOM
     {
-        newColWidths[col] = m_colWidths[GetColCount() - 1 - col];
-    }
+        for( int row = 0; row < GetRowCount(); ++row )
+        {
+            for( int col = 0; col < GetColCount(); ++col )
+            {
+                int oldRow = GetRowCount() - 1 - row;
+                m_cells[row * GetColCount() + col] = oldCells[oldRow * GetColCount() + col];
+            }
+        }
 
-    m_colWidths = std::move( newColWidths );
+        std::map<int, int> newRowHeights;
+
+        for( int row = 0; row < GetRowCount(); ++row )
+            newRowHeights[row] = m_rowHeights[GetRowCount() - 1 - row];
+
+        m_rowHeights = std::move( newRowHeights );
+    }
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
     Normalize();
 
-    Rotate( aCentre, originalAngle );
-    Normalize();
+    if( originalAngle != ANGLE_0 )
+        Rotate( GetPosition(), originalAngle );
+
+    BOX2I newBBox = GetBoundingBox();
+    Move( targetPos - newBBox.GetPosition() );
+
+    int localWidth = 0;
+    for( int col = 0; col < GetColCount(); ++col )
+        localWidth += m_colWidths[col];
+
+    int localHeight = 0;
+    for( int row = 0; row < GetRowCount(); ++row )
+        localHeight += m_rowHeights[row];
+
+    bool isNowOnFrontSide = IsFrontLayer( GetLayer() );
+
+    VECTOR2I translation( 0, 0 );
+
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+    {
+        if( isNowOnFrontSide )
+            translation.y = localHeight;
+        else
+            translation.y = -localHeight;
+    }
+    else // LEFT_RIGHT
+    {
+        if( isNowOnFrontSide )
+            translation.x = localWidth;
+        else
+            translation.x = -localWidth;
+    }
+
+    RotatePoint( translation, originalAngle );
+
+    Move( translation );
 }
 
 
