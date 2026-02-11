@@ -2069,7 +2069,7 @@ BOOST_AUTO_TEST_CASE( PinOrientationCorrect )
     std::unique_ptr<LIB_SYMBOL> sym;
 
     // Use a known .sym file from test data instead
-    wxString symPath = KI_TEST::GetEeschemaTestDataDir() + wxT( "/io/geda/7400-1.sym" );
+    wxString symPath = KI_TEST::GetEeschemaTestDataDir() + wxString( wxT( "/io/geda/7400-1.sym" ) );
     wxTextFile file;
 
     BOOST_REQUIRE( file.Open( symPath ) );
