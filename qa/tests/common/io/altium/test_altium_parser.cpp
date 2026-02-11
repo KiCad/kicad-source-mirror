@@ -286,4 +286,40 @@ BOOST_DATA_TEST_CASE( ReadProperties,
 }
 
 
+/**
+ * Verify that binary records ending with 0x00 are not truncated.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23013
+ */
+BOOST_AUTO_TEST_CASE( ReadPropertiesBinaryNullBytePreserved )
+{
+    // Simulate a binary record whose payload ends with 0x00.
+    // The MSB of the 4-byte length field flags the record as binary.
+    const char binaryPayload[] = { 0x01, 0x02, 0x03, 0x00 };
+    const uint32_t payloadLen = sizeof( binaryPayload );
+    const uint32_t lengthField = payloadLen | 0x01000000;
+
+    size_t                  totalSize = 4 + payloadLen;
+    std::unique_ptr<char[]> content = std::make_unique<char[]>( totalSize );
+
+    std::memcpy( content.get(), &lengthField, 4 );
+    std::memcpy( content.get() + 4, binaryPayload, payloadLen );
+
+    ALTIUM_BINARY_PARSER parser( content, totalSize );
+
+    std::string receivedData;
+    auto binaryHandler = [&]( const std::string& aData ) -> std::map<wxString, wxString>
+    {
+        receivedData = aData;
+        return {};
+    };
+
+    parser.ReadProperties( binaryHandler );
+
+    BOOST_CHECK_EQUAL( parser.HasParsingError(), false );
+    BOOST_CHECK_EQUAL( parser.GetRemainingBytes(), 0 );
+    BOOST_CHECK_EQUAL( receivedData.size(), payloadLen );
+    BOOST_CHECK_EQUAL( receivedData.back(), '\0' );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
