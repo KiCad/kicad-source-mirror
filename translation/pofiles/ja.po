@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-06 13:08+0000\n"
+"PO-Revision-Date: 2026-02-11 23:16+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -20730,14 +20730,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "値のパースに失敗しました: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "シンボル '%s' がライブラリ '%s' に見つかりません。"
+msgstr "シンボル '%s' がライブラリ gEDA に見つかりません。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "'%s' を開くことができませんでした。"
+msgstr " '%s'でしょうか？"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -20757,9 +20757,9 @@ msgid "Circular hierarchy detected for '%s', skipping."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "回路図 '%s' の保存に失敗しました"
+msgstr "サブ回路図 '%s' の読み込みに失敗しました: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3106
@@ -20773,9 +20773,9 @@ msgid "File '%s' is not a valid gEDA schematic."
 msgstr "'%s' は有効な SPICE の値ではありません。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "'%s' の読み込みに失敗しました。"
+msgstr "ページ '%s' の読み込みに失敗しました: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
 #, fuzzy
@@ -30034,14 +30034,14 @@ msgid "File path for import report (default: stdout)"
 msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "不正な フォーマットです\n"
+msgstr "不正な フォーマット:%s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "不正なレポート フォーマットです\n"
+msgstr "不正なレポート フォーマット: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
