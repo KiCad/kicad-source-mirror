@@ -518,6 +518,12 @@ void KICAD_MANAGER_FRAME::PreloadAllLibraries()
 }
 
 
+wxString KICAD_MANAGER_FRAME::GetCurrentFileName() const
+{
+    return GetProjectFileName();
+}
+
+
 const wxString KICAD_MANAGER_FRAME::GetProjectFileName() const
 {
     return Pgm().GetSettingsManager().IsProjectOpen() ? Prj().GetProjectFullName()

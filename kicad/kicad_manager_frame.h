@@ -80,10 +80,7 @@ public:
      */
     void HideTabsIfNeeded();
 
-    wxString GetCurrentFileName() const override
-    {
-        return GetProjectFileName();
-    }
+    wxString GetCurrentFileName() const override;
 
     /**
      * @brief Creates a project and imports a non-KiCad Schematic and PCB
