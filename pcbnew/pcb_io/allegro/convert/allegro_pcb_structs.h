@@ -303,7 +303,7 @@ struct FILE_HEADER
 
     uint32_t m_Unknown8;
 
-    COND_LT<FMT_VER::V_180, uint32_t> m_StringsCount;
+    uint32_t m_StringsCount;
 
     std::array<uint32_t, 53> m_Unknown9;
 

@@ -231,8 +231,9 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
         header->m_0x35_Start = stream.ReadU32();
         header->m_0x35_End = stream.ReadU32();
 
-        // 0x27_End relocated to Unknown2[4] in v18
+        // 0x27_End and StringsCount relocated to Unknown2 in v18
         header->m_0x27_End = header->m_Unknown2[4];
+        header->m_StringsCount = header->m_Unknown2[7];
     }
     else
     {
@@ -318,59 +319,22 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
         header->m_LayerMap[i].m_LayerList0x2A = stream.ReadU32();
     }
 
-    uint32_t strCount = header->m_StringsCount.has_value() ? header->m_StringsCount.value() : 0;
     wxLogTrace( traceAllegroParser, wxT( "Parsed header: %d objects, %d strings" ),
-                header->m_ObjectCount, strCount );
+                header->m_ObjectCount, header->m_StringsCount );
 
     return header;
 }
 
 
-/**
- * Read the string table from the file. For pre-v18 files, the count is known from the
- * header. For v18+, count is 0 and we scan until strings end by checking id validity
- * and the first byte of the string payload.
- */
-static void ReadStringMap( FILE_STREAM& stream, DB& aDb, uint32_t count, uint32_t maxKey )
+static void ReadStringMap( FILE_STREAM& stream, DB& aDb, uint32_t count )
 {
     stream.Seek( RAW_BOARD::STRING_TABLE_OFFSET );
 
-    for( uint32_t i = 0; i < count || count == 0; ++i )
+    for( uint32_t i = 0; i < count; ++i )
     {
         uint32_t id = stream.ReadU32();
-
-        if( count == 0 )
-        {
-            if( id > maxKey || id == 0 )
-            {
-                stream.Seek( stream.Position() - 4 );
-                break;
-            }
-
-            // Peek at first byte to validate this is a real string entry
-            size_t  savedPos = stream.Position();
-            uint8_t firstByte;
-
-            if( !stream.GetU8( firstByte ) )
-            {
-                stream.Seek( savedPos - 4 );
-                break;
-            }
-
-            stream.Seek( savedPos );
-
-            bool validStringStart = ( firstByte >= 0x20 && firstByte <= 0x7E )
-                                    || firstByte == '\t' || firstByte == '\n'
-                                    || firstByte == '\r' || firstByte == '\0';
-
-            if( !validStringStart )
-            {
-                stream.Seek( savedPos - 4 );
-                break;
-            }
-        }
-
         wxString str = stream.ReadString( true );
+
         aDb.AddString( id, std::move( str ) );
     }
 }
@@ -2649,12 +2613,7 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
 
     try
     {
-        uint32_t strCount = board->m_Header->m_StringsCount.has_value()
-                                     ? board->m_Header->m_StringsCount.value()
-                                     : 0;
-        uint32_t maxKey = ( strCount == 0 ) ? board->m_Header->m_MaxKey : UINT32_MAX;
-
-        ReadStringMap( m_stream, *board, strCount, maxKey );
+        ReadStringMap( m_stream, *board, board->m_Header->m_StringsCount );
 
         readObjects( *board );
     }
