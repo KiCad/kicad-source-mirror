@@ -39,6 +39,7 @@ to determine the format version:
 | `0x0014_0400` | V_172   | 17.2            |
 | `0x0014_0900` | V_174   | 17.4            |
 | `0x0014_1500` | V_175   | 17.5            |
+| `0x0015_0000` | V_180   | 18.0            |
 
 Version 17.2 is the most significant layout change. Many struct fields
 are conditionally present using `COND_GE<FMT_VER::V_172, T>` (present

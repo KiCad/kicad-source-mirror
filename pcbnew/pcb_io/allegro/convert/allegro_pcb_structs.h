@@ -114,6 +114,7 @@ enum class FMT_VER
     V_172, // Allegro 17.2, 0x00140400
     V_174, // Allegro 17.4, 0x00140900
     V_175, // Allegro 17.5, 0x00141500
+    V_180, // Allegro 18.0, 0x00150000
 };
 
 constexpr bool operator>=( FMT_VER lhs, FMT_VER rhs )
@@ -238,7 +239,14 @@ struct FILE_HEADER
     uint32_t                m_Magic;
     std::array<uint32_t, 4> m_Unknown1;
     uint32_t                m_ObjectCount;
-    std::array<uint32_t, 9> m_Unknown2;
+
+    uint32_t m_Unknown2_1;
+    uint32_t m_Unknown2_2;
+    uint32_t m_Unknown2_3;
+    uint32_t m_Unknown2_4;
+    uint32_t m_Unknown2_5;
+    uint32_t m_Unknown2_6;
+    uint32_t m_Unknown2_7;
 
     // Linked lists grouping top-level elements by type
     LINKED_LIST m_LL_0x04;              // Net assignments
@@ -269,6 +277,7 @@ struct FILE_HEADER
     LINKED_LIST m_LL_Unknown5;
     LINKED_LIST m_LL_Unknown6;
     LINKED_LIST m_LL_0x0A_2;
+    LINKED_LIST m_LL_Unknown7;
 
     uint32_t m_Unknown3;
 
@@ -279,7 +288,10 @@ struct FILE_HEADER
 
     uint32_t m_MaxKey;
 
-    std::array<uint32_t, 17> m_Unknown5;
+    std::array<uint32_t, 12> m_Unknown5_r17;
+    std::array<uint32_t, 4>  m_Unknown5_r18;
+
+    std::array<uint32_t, 5> m_Unknown_after5;
 
     BOARD_UNITS m_BoardUnits;
     // 3 empty bytes here?

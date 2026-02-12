@@ -63,6 +63,7 @@ static FMT_VER GetFormatVer( uint32_t aMagic )
     case 0x00140900:
     case 0x00140E00: return FMT_VER::V_174;
     case 0x00141500: return FMT_VER::V_175;
+    case 0x00150000: return FMT_VER::V_180;
     default: break;
     }
 
@@ -78,7 +79,7 @@ static FMT_VER GetFormatVer( uint32_t aMagic )
     // Because the struct sizes depend on the version, we can't
     // really do anything with the file other than throw an error
     // and hope the user sends the file in for analysis.
-    THROW_IO_ERROR( wxString::Format( "Unknown Allegro file version %#010x", aMagic ) );
+    THROW_IO_ERROR( wxString::Format( "Unknown Allegro file version %#010x (rev %d)", aMagic, majorVer - 3 ) );
 }
 
 
@@ -173,7 +174,36 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     header->m_Magic = fileMagic;
     ReadArrayU32( stream, header->m_Unknown1 );
     header->m_ObjectCount = stream.ReadU32();
-    ReadArrayU32( stream, header->m_Unknown2 );
+    stream.SkipU32(); // 0A 0D 0A 00
+    stream.SkipU32(); // 6 or 1
+
+    if( fileMagic >= 0x00150000 )
+    {
+        header->m_Unknown2_1 = stream.ReadU32();
+        header->m_Unknown2_2 = stream.ReadU32();
+        header->m_0x27_End = stream.ReadU32();
+        header->m_Unknown2_4 = stream.ReadU32();
+        header->m_Unknown2_5 = stream.ReadU32();
+        header->m_StringsCount = stream.ReadU32();
+        header->m_Unknown2_7 = stream.ReadU32();
+
+        for( int i = 0; i < 5; i++ )
+            uint32_t a = stream.ReadU32(); // zeros
+
+        for( int i = 0; i < 4; i++ )
+            uint32_t b = stream.ReadU32(); // linked lists?
+    }
+    else
+    {
+        header->m_Unknown2_1 = stream.ReadU32();
+        header->m_Unknown2_2 = stream.ReadU32();
+        header->m_Unknown2_3 = stream.ReadU32();
+        header->m_Unknown2_4 = stream.ReadU32();
+        header->m_Unknown2_5 = stream.ReadU32();
+        header->m_Unknown2_6 = stream.ReadU32();
+        header->m_Unknown2_7 = stream.ReadU32();
+    }
+
     header->m_LL_0x04 = ReadLL( stream );
     header->m_LL_0x06 = ReadLL( stream );
     header->m_LL_0x0C = ReadLL( stream );
@@ -198,11 +228,21 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     header->m_LL_Unknown5 = ReadLL( stream );
     header->m_LL_Unknown6 = ReadLL( stream );
     header->m_LL_0x0A_2 = ReadLL( stream );
+
+    if( fileMagic >= 0x00150000 )
+        header->m_LL_Unknown7 = ReadLL( stream );
+
     header->m_Unknown3 = stream.ReadU32();
     stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
     header->m_Unknown4 = stream.ReadU32();
     header->m_MaxKey = stream.ReadU32();
-    ReadArrayU32( stream, header->m_Unknown5 );
+
+    if( fileMagic >= 0x00150000 )
+        ReadArrayU32( stream, header->m_Unknown5_r18 );
+    else
+        ReadArrayU32( stream, header->m_Unknown5_r17 );
+
+    ReadArrayU32( stream, header->m_Unknown_after5 );
 
     {
         uint8_t units = stream.ReadU8();
@@ -217,11 +257,19 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
         stream.Skip( 3 );
     }
 
-    header->m_Unknown6 = stream.ReadU32();
-    header->m_Unknown7 = stream.ReadU32();
-    header->m_0x27_End = stream.ReadU32();
-    header->m_Unknown8 = stream.ReadU32();
-    header->m_StringsCount = stream.ReadU32();
+    if( fileMagic >= 0x00150000 )
+    {
+        header->m_Unknown6 = stream.ReadU32();
+        header->m_Unknown7 = stream.ReadU32();
+    }
+    else
+    {
+        header->m_Unknown6 = stream.ReadU32();
+        header->m_Unknown7 = stream.ReadU32();
+        header->m_0x27_End = stream.ReadU32();
+        header->m_Unknown8 = stream.ReadU32();
+        header->m_StringsCount = stream.ReadU32();
+    }
 
     ReadArrayU32( stream, header->m_Unknown9 );
 
