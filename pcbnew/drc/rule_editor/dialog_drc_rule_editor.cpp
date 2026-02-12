@@ -84,6 +84,8 @@ DIALOG_DRC_RULE_EDITOR::DIALOG_DRC_RULE_EDITOR( PCB_EDIT_FRAME* aEditorFrame, wx
 
     m_ruleTreeNodeDatas = GetDefaultRuleTreeItems();
 
+    SetName( DIALOG_DRC_RULE_EDITOR_WINDOW_NAME );
+
     InitRuleTreeItems( m_ruleTreeNodeDatas );
 
     LoadExistingRules();
