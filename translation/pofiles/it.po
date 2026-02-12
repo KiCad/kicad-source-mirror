@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-01 07:01+0000\n"
+"PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -2454,9 +2454,9 @@ msgstr "La cartella blocco progetto '%s' non può essere eliminata."
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "File '%s' non trovato."
+msgstr "Tabella nidificata '%s' non trovata."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4569,9 +4569,8 @@ msgid "Reset Unique Id"
 msgstr "Reimposta id univoco"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "Tabella librerie blocchi progetto"
+msgstr "Tabelle librerie blocchi progetto"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -4579,9 +4578,9 @@ msgstr "Tabella librerie blocchi progetto"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:367
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326
@@ -6583,9 +6582,8 @@ msgstr "Predefiniti grafica"
 
 #: common/eda_base_frame.cpp:1454
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Nomi strati"
+msgstr "Nomi strati utente"
 
 #: common/eda_base_frame.cpp:1459 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7900,32 +7898,37 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Impossibile fare il merge: sono presenti modifiche non ancora salvate. Si "
+"prega di eseguirne il commit o di archiviarle prima di estrarle."
 
 #: common/git/libgit_backend.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Fusione fallita"
+msgstr "Merge fallito: %s"
 
 #: common/git/libgit_backend.cpp:1122
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"Impossibile eseguire il pull con rebase: sono presenti modifiche non ancora "
+"in fase di staging. Si prega di committarle o di archiviarle prima di "
+"eseguirne il pull."
 
 #: common/git/libgit_backend.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Rebase non partito"
+msgstr "Rebase non partito: %s"
 
 #: common/git/libgit_backend.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Rebase commit fallito"
+msgstr "Commit rebase fallito: %s"
 
 #: common/git/libgit_backend.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Chiusura rebase fallita"
+msgstr "Chiusura rebase fallita: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8489,9 +8492,8 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Impostazioni del lavoro di esportazione statistiche scheda"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "C.S.: Statistiche esportazione"
+msgstr "C.S.: Esporta statistiche scheda"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:149 kicad/kicad_cli.cpp:169
@@ -8569,19 +8571,16 @@ msgid "PCB: Perform DRC"
 msgstr "C.S.: Esegui CRP"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Importa"
+msgstr "Importa C.S."
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Importa impostazioni"
+msgstr "Impostazioni lavoro di importazione C.S."
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Importa"
+msgstr "C.S.: Importa"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -9033,9 +9032,8 @@ msgid "Error loading library '%s'"
 msgstr "Errore nel caricamento della libreria '%s'"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Modifica impostazioni"
+msgstr "Modifica impostazioni..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -9058,9 +9056,8 @@ msgid "Unset Visible Flag"
 msgstr "Togli flag visibile"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Modifica opzioni"
+msgstr "Modifica opzioni..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -11594,13 +11591,12 @@ msgid "Save..."
 msgstr "Salva..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:146
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Mostra"
+msgstr "PPI Schermo: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "Rileva"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -11650,14 +11646,12 @@ msgid "Eagle XML files"
 msgstr "File Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "File netlist PADS"
+msgstr "File ASCII PADS"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Archivia tutti i file del progetto"
+msgstr "File progetto gEDA / Lepton"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -14400,10 +14394,9 @@ msgid "Highlight on Cross-probe"
 msgstr "Evidenzia sulle analisi-incrociate"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1450
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
 msgstr ""
-"Evidenzia gli elementi corrispondenti sulla scheda se selezionati nella "
+"Evidenzia i pin corrispondenti sullo spazio di lavoro se selezionati nella "
 "tabella"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1688
@@ -14467,9 +14460,8 @@ msgid "Group by name"
 msgstr "Raggruppa per nome"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "Gruppo selezionato"
+msgstr "Raggruppa pin selezionati"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
@@ -15392,9 +15384,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:40
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Design variant:"
-msgstr "Valore"
+msgstr "Variante progetto:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
@@ -16922,9 +16913,8 @@ msgid "Enter new variant name:"
 msgstr "Inserire il nome della nuova variante:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Rinomina variante"
+msgstr "Rinomina variante progetto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16954,9 +16944,8 @@ msgid "Enter name for the copied variant:"
 msgstr "Inserire il nome della variante copiata:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "Copia variante"
+msgstr "Copia variante progetto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -17054,9 +17043,8 @@ msgid "Alternate Assignment"
 msgstr "Assegnamento alternativo"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " Variante"
+msgstr " Variante Progetto"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -17477,10 +17465,10 @@ msgid "Net names"
 msgstr "Nomi connessioni"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
 msgstr ""
-"Aggiorna i valori dei simboli che sono stati modificati nell'editor del C.S."
+"Aggiorna le etichette collegamenti per farle corrispondere a quelle "
+"dall'editor del C.S. ."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
 #, fuzzy
