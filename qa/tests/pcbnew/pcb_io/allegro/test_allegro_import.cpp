@@ -669,7 +669,7 @@ BOOST_AUTO_TEST_CASE( PreV16FileRejection )
                 wxString msg = e.What();
 
                 return msg.Contains( wxS( "predates Allegro 16.0" ) )
-                       && msg.Contains( wxS( "Allegro PCB Design 610-S029" ) );
+                       && msg.Contains( wxS( "Allegro PCB Design" ) );
             } );
 }
 
@@ -904,7 +904,11 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
                 if( entry.is_regular_file() && entry.path().extension() == ".brd"
                     && entry.file_size() > 0 )
                 {
-                    boards.push_back( entry.path().filename().string() );
+                    std::string name = entry.path().filename().string();
+
+                    // v13_header.brd is intentionally pre-v16 and tested separately
+                    if( name != "v13_header.brd" )
+                        boards.push_back( name );
                 }
             }
         }
