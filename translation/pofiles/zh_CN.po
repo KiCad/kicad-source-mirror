@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-06 20:21+0000\n"
+"PO-Revision-Date: 2026-02-12 10:06+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -6255,11 +6255,8 @@ msgid "File '%s' was not found.\n"
 msgstr "未找到文件 '%s'。\n"
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"要覆盖所有这些符号, 还是重命名新符号?"
+msgstr "是否将其从「最近打开的文件」列表中移除？"
 
 #: common/eda_base_frame.cpp:1285
 msgid "Remove"
@@ -6370,9 +6367,8 @@ msgstr "图形默认值"
 
 #: common/eda_base_frame.cpp:1454
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "层名称"
+msgstr "用户层名称"
 
 #: common/eda_base_frame.cpp:1459 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -6864,21 +6860,18 @@ msgstr "贝塞尔曲线"
 #: common/eda_shape.cpp:2683
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Hatch"
 msgstr "影线"
 
 #: common/eda_shape.cpp:2684
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Reverse Hatch"
 msgstr "反向影线"
 
 #: common/eda_shape.cpp:2685
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#, fuzzy
 msgid "Cross-hatch"
 msgstr "交叉影线"
 
@@ -7801,9 +7794,9 @@ msgid "Failed to open git repository: %s"
 msgstr "无法打开 git 仓库: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "无法打开 git 仓库: %s"
+msgstr "将 git 仓库工作目录设置为 %s 失败: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -8071,8 +8064,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"文件 '%s' 似乎不是有效的 EasyEDA (立创 EDA) 专业版工程文件或者库文件。无法在"
-"其中找到 project.json 或者 device.json。"
+"文件 '%s' 似乎不是有效的 EasyEDA (JLCEDA) 专业版工程文件或者库文件。无法在其"
+"中找到 project.json 或者 device.json。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
@@ -8339,9 +8332,8 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: 执行 DRC"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "导入"
+msgstr "导入 PCB"
 
 #: common/jobs/job_pcb_import.cpp:65
 #, fuzzy
@@ -8349,9 +8341,8 @@ msgid "PCB Import Job Settings"
 msgstr "导入设置"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "导入"
+msgstr "PCB: 导入"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -8644,9 +8635,8 @@ msgid "Net color highlight"
 msgstr "网络颜色高亮"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "高亮碰撞"
+msgstr "拖动时高亮碰撞网络"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
 msgid "Selection highlight"
@@ -8804,9 +8794,8 @@ msgid "Error loading library '%s'"
 msgstr "加载库 '%s' 时出错"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "编辑设置"
+msgstr "编辑设置..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8837,9 +8826,8 @@ msgid "Edit options for this library entry"
 msgstr "库条目的编辑选项"
 
 #: common/lib_table_grid_tricks.cpp:482
-#, fuzzy
 msgid "Library must have a nickname."
-msgstr "层必须要有一个名称。"
+msgstr "库必须要有一个名称。"
 
 #: common/lib_table_grid_tricks.cpp:484
 #, c-format
@@ -11340,7 +11328,7 @@ msgstr "显示器 PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:153
 msgid "Detect"
-msgstr ""
+msgstr "检测"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -11390,14 +11378,12 @@ msgid "Eagle XML files"
 msgstr "Eagle XML 文件"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "PADS 网表文件"
+msgstr "PADS ASCII 文件"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "打包全部工程文件"
+msgstr "gEDA / Lepton EDA 工程文件"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -11417,14 +11403,14 @@ msgstr "PADS 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr "EasyEDA (嘉立创 EDA) 标准版备份打包"
+msgstr "EasyEDA (JLCEDA) 标准版备份打包"
 
 #: common/wildcards_and_files_ext.cpp:352
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr "EasyEDA (嘉立创 EDA) 专业版文件"
+msgstr "EasyEDA (JLCEDA) 专业版文件"
 
 #: common/wildcards_and_files_ext.cpp:358
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:328
@@ -11786,9 +11772,9 @@ msgid "Footprint '%s' not found."
 msgstr "找不到封装 '%s'。"
 
 #: cvpcb/display_footprints_frame.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "加载封装时出错"
+msgstr "加载封装时出错: %s"
 
 #: cvpcb/display_footprints_frame.cpp:377 pcbnew/footprint.cpp:2178
 #, c-format
@@ -12151,9 +12137,8 @@ msgid "Reset existing annotations"
 msgstr "重置现有的批注"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "分组符号"
+msgstr "重组符号单元"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13617,9 +13602,8 @@ msgid "Import"
 msgstr "导入"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:101
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "无法加载库\n"
+msgstr "找不到可以读取此库的插件。"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:114
 #, c-format
@@ -14479,7 +14463,7 @@ msgstr "新建符号"
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:404
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:615
 msgid "Fields must have a name."
-msgstr "字段必须要有名称。"
+msgstr "字段必须要有一个名称。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:487
 msgid "Derived symbol must have a parent selected"
@@ -15039,9 +15023,8 @@ msgstr "绘制文件的输出目录。可以是原理图主文件位置的绝对
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:40
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Design variant:"
-msgstr "名称"
+msgstr "设计变体:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
@@ -16543,9 +16526,8 @@ msgid "Enter new variant name:"
 msgstr "输入新变体名称："
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2790
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "重命名变体"
+msgstr "重命名设计变体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2801
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2874
@@ -16571,14 +16553,12 @@ msgid "Cannot copy the default variant."
 msgstr "无法复制默认变体。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "输入新的模板名称:"
+msgstr "输入新的变体名称:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "复制变体"
+msgstr "复制设计变体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16676,9 +16656,8 @@ msgid "Alternate Assignment"
 msgstr "备选分配"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr " 变体"
+msgstr " 设计变体"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -18002,7 +17981,6 @@ msgid "Keep pins attached when dragging edges"
 msgstr "拖动边缘时保持引脚附着"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
 msgstr "符号库表"
 
@@ -18490,9 +18468,8 @@ msgid "Checking for unresolved variables..."
 msgstr "正在检查未解析的变量..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "正在检查图纸名称..."
+msgstr "正在检查字段名称..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -19927,9 +19904,8 @@ msgid "Select variant name to remove:"
 msgstr "选择要移除的变体名称:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "移除变体..."
+msgstr "移除设计变体"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -20015,9 +19991,9 @@ msgid "Importing %s"
 msgstr "导入 %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "加载原理图 '%s' 时出错。"
+msgstr "解析 Altium 原理图时出错: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1012
 #, c-format
@@ -20119,9 +20095,9 @@ msgid "File not found %s."
 msgstr "找不到文件 %s。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5136
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "加载库 '%s' 时出错"
+msgstr "解析 Altium 库时出错: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5159
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -20465,7 +20441,7 @@ msgstr "加载原理图 '%s' 时出错, 错误: %s"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr "EasyEDA (嘉立创 EDA) 标准版文件"
+msgstr "EasyEDA (JLCEDA) 标准版文件"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:84
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:75
@@ -20474,9 +20450,9 @@ msgid "Failed to parse value: '%s'"
 msgstr "无法解析数值: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "符号 '%s' 在库中 '%s' 找不到。"
+msgstr "在 gEDA 库中找不到符号 '%s'。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
 #, fuzzy, c-format
@@ -20501,9 +20477,9 @@ msgid "Circular hierarchy detected for '%s', skipping."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "无法保存原理图 '%s'"
+msgstr "子原理图 '%s' 加载失败: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3106
@@ -20512,19 +20488,18 @@ msgid "File '%s' is empty."
 msgstr "文件 '%s' 为空。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4711
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' 不是有效的 SPICE 值。"
+msgstr "文件 '%s' 不是有效的 gEDA 原理图。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "'%s' 加载失败。"
+msgstr "页面 '%s' 加载失败: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Eagle XML 原理图文件"
+msgstr "gEDA / Lepton EDA 原理图文件"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
 #, c-format
@@ -20966,14 +20941,12 @@ msgid "LTspice schematic files"
 msgstr "LTspice 原理图文件"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "LTspice 原理图文件"
+msgstr "PADS Logic 原理图文件"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Eagle XML 库文件"
+msgstr "PADS Logic 库文件"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -23370,9 +23343,9 @@ msgid "Format"
 msgstr "格式"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "加载库 '%s' 时出错"
+msgstr "解析 SPICE 库 '%s' 出错: %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -24045,9 +24018,9 @@ msgid "Imported %d symbol(s), skipped %d."
 msgstr "%d 个符号已导入, %d 个符号被跳过。"
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "从库 %2$s 加载符号 '%1$s' 出错。"
+msgstr "从库 '%2$s' 中删除符号 %1$s 时出错。"
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24167,14 +24140,12 @@ msgid "Select the current variant to display and edit."
 msgstr "选中当前变体以显示并编辑。"
 
 #: eeschema/toolbars_sch_editor.cpp:303
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "添加新变体..."
+msgstr "添加新的设计变体..."
 
 #: eeschema/toolbars_sch_editor.cpp:383
-#, fuzzy
 msgid "New Design Variant"
-msgstr "新建变体"
+msgstr "新建设计变体"
 
 #: eeschema/toolbars_sch_editor.cpp:389
 msgid "Variant name:"
@@ -24831,12 +24802,10 @@ msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "同步所选图纸引脚和层次标签"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheet Pins..."
 msgstr "同步所有图纸引脚..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
 msgstr "同步所有图纸引脚和层次标签"
 
@@ -25804,24 +25773,20 @@ msgid "Show SPICE Netlist"
 msgstr "显示 SPICE 网表"
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "添加新变体..."
+msgstr "添加新的设计变体..."
 
 #: eeschema/tools/sch_actions.cpp:1764
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "添加新的变体到原理图中。"
+msgstr "添加新的设计变体到原理图中。"
 
 #: eeschema/tools/sch_actions.cpp:1769
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "移除变体..."
+msgstr "移除设计变体..."
 
 #: eeschema/tools/sch_actions.cpp:1770
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "从原理图中移除现有变体。"
+msgstr "从原理图中移除现有设计变体。"
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -25858,9 +25823,8 @@ msgid "All units of this symbol are already placed."
 msgstr "该符号的所有单元均已放置。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:665
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "单元已放置"
+msgstr "要求单元已被放置"
 
 #: eeschema/tools/sch_drawing_tools.cpp:740
 #: eeschema/tools/sch_editor_control.cpp:3490
@@ -28434,9 +28398,8 @@ msgid "Input directory"
 msgstr "输入目录"
 
 #: kicad/cli/command.cpp:158
-#, fuzzy
 msgid "Input file or directory"
-msgstr "输入目录"
+msgstr "输入文件或目录"
 
 #: kicad/cli/command.cpp:174
 msgid "Output file"
@@ -28447,9 +28410,8 @@ msgid "Output directory"
 msgstr "输出目录"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "输入目录"
+msgstr "输出文件或目录"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -28648,7 +28610,7 @@ msgstr "排除电路板主体"
 
 #: kicad/cli/command_pcb_export_3d.cpp:127
 msgid "Exclude 3D models for components"
-msgstr "排除部件的 3D 模型"
+msgstr "排除元件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:131
 msgid ""
@@ -28761,19 +28723,16 @@ msgid "Valid options are: absolute, plot"
 msgstr "有效选项: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr "可用选项有: decimal, suppressleading, suppresstrailing, keep。"
+msgstr "有效选项: decimal, suppressleading, suppresstrailing, keep。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
-msgstr "可用选项有: route, alternate。"
+msgstr "有效选项: route, alternate。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
-msgstr "输出单位, 有效选项: in、mm"
+msgstr "输出单位, 有效选项: in, mm"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -28807,9 +28766,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "生成盖油专用文件"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "可用选项: pdf,gerberx2,ps,dxf,svg"
+msgstr "有效选项: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -29066,14 +29024,12 @@ msgid ""
 msgstr "有效选项: front、back、both。Gerber 格式仅支持 \"front\" 或 \"back\"。"
 
 #: kicad/cli/command_pcb_export_pos.cpp:56
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "有效选项: ascii、csv、gerber"
+msgstr "有效选项: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:61
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
-msgstr "输出格式: 仅 ascii 或 csv 格式; 有效选项: in、mm"
+msgstr "输出单位: 仅 ascii 或 csv 格式; 有效选项: in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:65
 msgid ""
@@ -29218,14 +29174,14 @@ msgid "File path for import report (default: stdout)"
 msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "无效的格式\n"
+msgstr "无效的格式: %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "无效的报告格式\n"
+msgstr "无效的报告格式: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -29615,12 +29571,11 @@ msgstr "编辑模板"
 
 #: kicad/dialogs/dialog_template_selector.cpp:307
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "打开模板 (只读)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:308
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "打开主题文件夹"
+msgstr "打开模板文件夹"
 
 #: kicad/dialogs/dialog_template_selector.cpp:309
 #: kicad/dialogs/dialog_template_selector.cpp:384
@@ -29688,9 +29643,8 @@ msgid "Recent project templates"
 msgstr "从模板新建工程"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "模板"
+msgstr "所有模板"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -29701,9 +29655,8 @@ msgid "System Templates"
 msgstr "系统模板"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "底层"
+msgstr "返回"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -29916,7 +29869,6 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:243
-#, fuzzy
 msgid "Pre-configured Libraries"
 msgstr "预配置库"
 
@@ -29963,31 +29915,26 @@ msgid ""
 msgstr "此项目模板尚未包含信息页面。但你仍然可以用它创建新项目。"
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "To use this template"
-msgstr "要使用该模板:"
+msgstr "要使用该模板"
 
 #: kicad/dialogs/template_default_html.h:410
 msgid "Create the project"
 msgstr "创建工程"
 
 #: kicad/dialogs/template_default_html.h:411
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
-msgstr ""
-"点击下方的「确定」。KiCad 将创建一个新的项目文件夹, 并填充此模板的全部内容。"
+msgstr "点击下方「确定」以创建一个新的项目文件夹, 并填充此模板的全部内容。"
 
 #: kicad/dialogs/template_default_html.h:417
 msgid "Open schematic and PCB"
 msgstr "打开原理图和 PCB"
 
 #: kicad/dialogs/template_default_html.h:418
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr "使用项目管理器或启动原理图编辑器和 PCB 编辑器开始设计。"
 
 #: kicad/dialogs/template_default_html.h:424
-#, fuzzy
 msgid "Review settings"
 msgstr "预览设置"
 
@@ -30015,9 +29962,8 @@ msgid "The selected directory does not contain any project templates."
 msgstr "选定的模板目录不包含任何项目模板。"
 
 #: kicad/dialogs/template_default_html.h:546
-#, fuzzy
 msgid "Suggestions"
-msgstr "问题"
+msgstr "建议"
 
 #: kicad/dialogs/template_default_html.h:548
 #, fuzzy
@@ -30072,16 +30018,15 @@ msgstr "无法 打开/创建 路径 '%s'。"
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr ""
+msgstr "定位 gEDA / Lepton EDA 原理图"
 
 #: kicad/import_proj.cpp:573
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "EasyEDA (嘉立创 EDA) 专业版文件"
+msgstr "gEDA / Lepton EDA PCB 文件"
 
 #: kicad/import_proj.cpp:576
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr ""
+msgstr "定位 gEDA / Lepton EDA PCB"
 
 #: kicad/import_project.cpp:73
 #, fuzzy
@@ -30333,19 +30278,19 @@ msgstr "导入 EAGLE CAD XML 原理图和电路板"
 
 #: kicad/menubar.cpp:139
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr "EasyEDA (嘉立创 EDA) 标准版备份..."
+msgstr "EasyEDA (JLCEDA) 标准版备份..."
 
 #: kicad/menubar.cpp:140
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "导入 EasyEDA (嘉立创 EDA) 标准版原理图和电路板"
+msgstr "导入 EasyEDA (JLCEDA) 标准版原理图和电路板"
 
 #: kicad/menubar.cpp:144
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EasyEDA (嘉立创 EDA) 专业版工程..."
+msgstr "EasyEDA (JLCEDA) 专业版工程..."
 
 #: kicad/menubar.cpp:145
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "导入 (嘉立创 EDA) 专业版原理图和电路板"
+msgstr "导入 (JLCEDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:148
 #, fuzzy
@@ -40311,9 +40256,8 @@ msgid "Preview pad in sketch mode"
 msgstr "在草图模式下预览焊盘"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "运行 DRC 前重新填充填充区"
+msgstr "绘制前重新填充填充区"
 
 #: pcbnew/dialogs/dialog_plot.cpp:192
 msgid "Plot on All Layers"
@@ -45889,7 +45833,7 @@ msgstr "%s 个 '栅格定向角度' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:670
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 个 '栅格平滑等级' 差异。"
+msgstr "%s 个 '栅格平滑等级' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:672
 #, c-format
@@ -50224,7 +50168,7 @@ msgstr "在工程 '%2$s 中未发现封装 '%1$s'"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr "EasyEDA (嘉立创 EDA) 专业版工程"
+msgstr "EasyEDA (JLCEDA) 专业版工程"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:268
 #, c-format
@@ -50630,9 +50574,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "封装库 '%s' 是只读的。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "无法打开文件 '%s'"
+msgstr "文件 '%s' 中的警告"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1636
 #, c-format
@@ -54155,14 +54099,12 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "简化多边形外框, 去除多余的形状节点"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "编辑选项..."
+msgstr "编辑角点..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
-msgstr "通过表格编辑多边形顶点"
+msgstr "使用表格编辑多边形角点"
 
 #: pcbnew/tools/pcb_actions.cpp:794
 msgid ""
@@ -55226,7 +55168,7 @@ msgstr "在最顶部项目和最底部项目之间分布选定项目, 以使项�
 
 #: pcbnew/tools/pcb_actions.cpp:2295
 msgid "Create a corner"
-msgstr "建立拐角"
+msgstr "创建拐角"
 
 #: pcbnew/tools/pcb_actions.cpp:2302
 msgid "Remove corner"
@@ -57179,9 +57121,8 @@ msgid "Removing isolated copper islands..."
 msgstr "正在移除死铜..."
 
 #: pcbnew/zone_filler.cpp:986
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "在板上发生修改后重新填充填充区"
+msgstr "移除孤铜后重新填充填充区..."
 
 #: pcbnew/zone_filler.cpp:1407
 msgid "Prototype zone fill enabled. Disable setting and refill?"
