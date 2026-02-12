@@ -657,6 +657,24 @@ BOOST_AUTO_TEST_CASE( PadsInsideOutline )
 
 
 /**
+ * Verify that pre-v16 Allegro files are rejected with an informative error message
+ * rather than an opaque "Unknown Allegro file version" error.
+ */
+BOOST_AUTO_TEST_CASE( PreV16FileRejection )
+{
+    BOOST_CHECK_EXCEPTION(
+            LoadAllegroBoard( "v13_header.brd" ), IO_ERROR,
+            []( const IO_ERROR& e )
+            {
+                wxString msg = e.What();
+
+                return msg.Contains( wxS( "predates Allegro 16.0" ) )
+                       && msg.Contains( wxS( "Allegro PCB Design 610-S029" ) );
+            } );
+}
+
+
+/**
  * Standalone copper shapes (ETCH 0x28 shapes on net chains without a BOUNDARY zone) should
  * be imported as filled PCB_SHAPE polygons with the correct net assignment.
  */

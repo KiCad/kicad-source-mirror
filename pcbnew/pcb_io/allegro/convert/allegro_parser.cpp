@@ -66,7 +66,15 @@ static FMT_VER GetFormatVer( uint32_t aMagic )
     default: break;
     }
 
-    // This is an unknown version, so we can't parse it
+    // Pre-v16 Allegro files use a fundamentally different binary format
+    // that cannot be parsed by this importer. The header is still compatible enough to read
+    // the Allegro version string for a helpful error message.
+    uint32_t majorVer = ( aMagic >> 16 ) & 0xFFFF;
+
+    if( majorVer <= 0x0012 )
+        return FMT_VER::V_PRE_V16;
+
+    // This is an unknown version, so we can't parse it.
     // Because the struct sizes depend on the version, we can't
     // really do anything with the file other than throw an error
     // and hope the user sends the file in for analysis.
@@ -2428,7 +2436,36 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
     {
         board->m_Header = ReadHeader( m_stream );
         board->m_FmtVer = GetFormatVer( board->m_Header->m_Magic );
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxString s;
+        s += wxString::Format( "Error parsing Allegro file: %s\n", e.What() );
+        s += wxString::Format( "Stream position: %#010lx\n", m_stream.Position() );
 
+        if( board->m_Header )
+            s += wxString::Format( "File magic: %#010x\n", board->m_Header->m_Magic );
+        else
+            s += wxString::Format( "File magic: Unknown\n" );
+
+        THROW_IO_ERROR( s );
+    }
+
+    if( board->m_FmtVer == FMT_VER::V_PRE_V16 )
+    {
+        wxString verStr( board->m_Header->m_AllegroVersion.data(), 60 );
+        verStr.Trim();
+
+        THROW_IO_ERROR( wxString::Format(
+                _( "This file was created with %s, which uses a binary format that "
+                   "predates Allegro 16.0 and is not supported by this importer.\n\n"
+                   "To import this design, open it in Cadence Allegro PCB Editor "
+                   "version 16.0 or later and re-save, then import the resulting file." ),
+                verStr ) );
+    }
+
+    try
+    {
         ReadStringMap( m_stream, *board, board->m_Header->m_StringsCount );
 
         readObjects( *board );

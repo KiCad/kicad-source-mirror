@@ -105,6 +105,7 @@ enum BLOCK_TYPE
 enum class FMT_VER
 {
     V_UNKNOWN,
+    V_PRE_V16, // Allegro versions before 16.0 (unsupported binary format)
     V_160, // Allegro 16.0, 0x00130000
     V_162, // Allegro 16.2  0x00130400
     V_164, // Allegro 16.4, 0x00130C00
