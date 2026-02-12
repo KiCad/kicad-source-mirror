@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 23:16+0000\n"
+"PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -7744,8 +7744,8 @@ msgid ""
 "pulling."
 msgstr ""
 "マージできません: コミットされていない(ステージングされていない)変更がありま"
-"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてくださ"
-"い。"
+"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてください"
+"。"
 
 #: common/git/libgit_backend.cpp:1106
 #, c-format
@@ -8417,19 +8417,16 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: DRC を実行"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "インポート"
+msgstr "インポート プリント基板"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "設定をインポート"
+msgstr "プリント基板インポートJob設定"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "インポート"
+msgstr "PCB: インポート"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -11478,14 +11475,12 @@ msgid "Eagle XML files"
 msgstr "Eagle XML ファイル"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "PADS ネットリスト ファイル"
+msgstr "PADS ASCII ファイル"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "プロジェクトのすべてのファイルをアーカイブ"
+msgstr "gEDA / Lepton EDAプロジェクトのファイル"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -14204,9 +14199,8 @@ msgid "Highlight on Cross-probe"
 msgstr "クロスプローブをハイライト"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1450
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "テーブルで選択されたときにキャンバス上の対応する項目をハイライト表示"
+msgstr "テーブルでの選択に対応するキャンバス上についてハイライト表示"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1688
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
@@ -14269,9 +14263,8 @@ msgid "Group by name"
 msgstr "名前によるグループ"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "選択したグループ"
+msgstr "選択したピンをグループ化"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
@@ -20745,16 +20738,18 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
+"'%s' (%s) のシンボル版数の不一致: 回路図は symversion %s 、ライブラリ "
+"シンボルは symversion %s 。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4086
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr ""
+msgstr "階層シート '%s' が見つからないため、空のシートが作成されます。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4098
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr ""
+msgstr "'%s' に循環階層が検出されたため、スキップします。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
 #, c-format
@@ -20768,9 +20763,9 @@ msgid "File '%s' is empty."
 msgstr "ファイル '%s' は空です。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4711
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' は有効な SPICE の値ではありません。"
+msgstr "ファイル '%s' は有効な gEDA 回路図ではありません。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
 #, c-format
@@ -20778,9 +20773,8 @@ msgid "Failed to load page '%s': %s"
 msgstr "ページ '%s' の読み込みに失敗しました: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Eagle XML 回路図ファイル"
+msgstr "gEDA / Lepton EDA 回路図ファイル"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
 #, c-format
@@ -21236,14 +21230,12 @@ msgid "LTspice schematic files"
 msgstr "LTspice 回路図ファイル"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "LTspice 回路図ファイル"
+msgstr "PADS Logic 回路図ファイル"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Eagle XML ライブラリ ファイル"
+msgstr "PADS Logic ライブラリ ファイル"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -29580,9 +29572,8 @@ msgid "Valid options are: route, alternate."
 msgstr "有効なオプション: route,alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
-msgstr "有効なオプション: in,mm"
+msgstr "出力単位、有効なオプション: in, mm"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -29615,9 +29606,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "テンティング処理専用のファイルを生成"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "有効なオプション: pdf,gerberx2,ps,dxf,svg"
+msgstr "有効なオプション: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -30007,31 +29997,32 @@ msgid "No drawing sheet"
 msgstr "図面用紙を含めない"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "KiCad形式でネットリストをエクスポート"
+msgstr "KiCad以外のプリント基板ファイルをKiCad形式にインポートする"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
 "Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
 "solidworks (default: auto)"
 msgstr ""
+"入力形式のヒント: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
+"solidworks (デフォルト: auto)"
 
 #: kicad/cli/command_pcb_import.cpp:52
 msgid "JSON file with layer name mappings"
-msgstr ""
+msgstr "レイヤー名のマッピングを含む JSON ファイル"
 
 #: kicad/cli/command_pcb_import.cpp:56
 msgid "Use automatic layer mapping (default behavior)"
-msgstr ""
+msgstr "自動レイヤーマッピングを使用する(デフォルトの動作)"
 
 #: kicad/cli/command_pcb_import.cpp:61
 msgid "Import report format: none, json, text (default: none)"
-msgstr ""
+msgstr "インポートレポートの形式: none, json, text (デフォルト: none)"
 
 #: kicad/cli/command_pcb_import.cpp:66
 msgid "File path for import report (default: stdout)"
-msgstr ""
+msgstr "インポート レポートのファイル パス(デフォルト:標準出力)"
 
 #: kicad/cli/command_pcb_import.cpp:114
 #, c-format
@@ -30903,27 +30894,27 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "プロジェクトを '%s' に展開します。\n"
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "パス '%s' を作成もしくは開くことができません。"
+msgstr "gEDA / Lepton EDA プロジェクト ファイル '%s' を開く事ができません。"
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr ""
+msgstr "gEDA / Lepton EDA回路図の場所"
 
 #: kicad/import_proj.cpp:573
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "EasyEDA (JLCEDA) Pro ファイル"
+msgstr "gEDA / Lepton EDA プリント基板 ファイル"
 
 #: kicad/import_proj.cpp:576
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr ""
+msgstr "gEDA / Lepton EDAプリント基板図の場所"
 
 #: kicad/import_project.cpp:73
-#, fuzzy
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
-msgstr "CADSTARの部品ライブラリファイルではないようです"
+msgstr ""
+"選択されたファイルは PADS PowerPCB ASCII 形式(.asc)の回路図またはプリント基板"
+"図ではないようです。"
 
 #: kicad/import_project.cpp:91
 msgid "KiCad Project Destination"
@@ -30970,14 +30961,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro プロジェクトをインポート"
 
 #: kicad/import_project.cpp:202
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "Altium プロジェクトファイルをインポート"
+msgstr "PADS プロジェクトファイルをインポート"
 
 #: kicad/import_project.cpp:210
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Eagle プロジェクト ファイルをインポート"
+msgstr "gEDA / Lepton EDA プロジェクト ファイルをインポート"
 
 #: kicad/jobs_runner.cpp:228
 #, c-format
@@ -31193,25 +31182,20 @@ msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "EasyEDA (JLCEDA) Professional 回路図と基板図をインポート"
 
 #: kicad/menubar.cpp:148
-#, fuzzy
 msgid "PADS Project..."
-msgstr "CADSTAR プロジェクト..."
+msgstr "PADS プロジェクト..."
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr ""
-"CADSTAR 回路図アーカイブと基板アーカイブ(*.csa, *.cpa)をインポートします"
+msgstr "PADS Logic 回路図とPADS ASCII プリント基板(*.asc, *.txt)をインポートします"
 
 #: kicad/menubar.cpp:152
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "Eagle プロジェクト..."
+msgstr "gEDA / Lepton EDA プロジェクト..."
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "EAGLE CAD XML 回路図と基板図をインポートします"
+msgstr "gEDA または Lepton EDAの回路図とプリント基板レイアウトをインポート"
 
 #: kicad/menubar.cpp:182
 msgid "Edit Advanced Config..."
@@ -50422,38 +50406,32 @@ msgid "Generator Properties"
 msgstr "ジェネレーター設定"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3496
-#, fuzzy
 msgid "Constructing caches"
-msgstr "重複しているラベル"
+msgstr "キャッシュの構築"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3504
-#, fuzzy
 msgid "Creating nets"
-msgstr "実体を生成する"
+msgstr "ネットを生成"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3509
-#, fuzzy
 msgid "Creating tracks"
-msgstr "既存の配線"
+msgstr "配線を生成"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3524
-#, fuzzy
 msgid "Converting footprints"
-msgstr "フットプリントの中心"
+msgstr "フットプリントの変換"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2354
 msgid "Parsing Allegro objects"
-msgstr ""
+msgstr "Allegro の解析"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:135
-#, fuzzy
 msgid "Failed to build board from Allegro data"
-msgstr "コンポーネントデータの追加に失敗しました"
+msgstr "Allegroのデータから基板の構築に失敗しました"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:38
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Allegroネットリストファイル"
+msgstr "Allegroプリント基板ファイル"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:176
 #, c-format
@@ -50547,7 +50525,7 @@ msgstr "基板データを読み込み中..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1305
 #, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "レイヤー '%s' をマッピングできなかったためスキップします。"
+msgstr "レイヤー '%s' をマップできなかったため、スキップした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1431
 msgid "Loading netclasses..."
@@ -51690,23 +51668,21 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "フットプリント ライブラリ '%s' は削除できません。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Via token contains %d parameters, expected at least 10."
-msgstr "要素トークンは %d パラメーターを含んでいます。"
+msgstr "Via トークンには %d 個のパラメータが含まれており、少なくとも 10 個必要です。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "gEDA / Lepton EDAプリント基板ファイル"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "gEDA PCB フットプリント ファイル"
+msgstr "gEDA / Lepton EDA プリント基板 フットプリント ファイル"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "gEDA PCB フットプリント ライブラリ ディレクトリ"
+msgstr "gEDA / Lepton EDA プリント基板 フットプリント ライブラリ ディレクトリ"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:425
 msgid "Generating content section"
@@ -52140,54 +52116,58 @@ msgstr "ODB++ 製造ファイル"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:125
 msgid "Starting PADS PCB import"
-msgstr ""
+msgstr "PADS プリント基板のインポートを開始"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "フットプリント '%s' がライブラリ'%s'に見つかりません"
+msgstr ""
+"フットプリント '%s' がdecal リストに見つからないため、パーツはスキップされま"
+"した"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:843
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr ""
+msgstr "マッピングされていないレイヤー %d 上のdecal をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1102
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
-msgstr ""
+msgstr "マップされていないレイヤー %d のテキストをコメント レイヤーに割り当てました"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1179
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping track on non-copper layer %d"
-msgstr "配線を次の有効な導体レイヤーに切り替える"
+msgstr "非導体レイヤー %d にある配線をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1375
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
-msgstr ""
+msgstr "マッピングされていないレイヤー %d への注入をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1620
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr ""
+msgstr "マッピングされていないレイヤー %d へのキープアウトをスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1644
 msgid "Skipping keepout with no valid layers"
-msgstr ""
+msgstr "有効なレイヤーがないキープアウトをスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1867
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:646
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
 msgstr ""
+"%zu フットプリント, %d ネット, %zu 配線, %zu ビア, %zu ゾーンがインポートされ"
+"た"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:109
 msgid "Starting PADS binary PCB import"
-msgstr ""
+msgstr "PADSバイナリープリント基板のインポート開始"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -53450,34 +53430,34 @@ msgid "Board file was not updated\n"
 msgstr "基板ファイルは更新されませんでした\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2828
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "ファイル '%s' を読み込めません。"
+msgstr "'%s' のファイル形式を判別できません\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2837
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "ファイルが見つかりません: '%s'."
+msgstr "入力ファイルが見つかりません: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2863
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "ファイル名 '%s' に位置情報がありません。"
+msgstr "ファイルタイプ '%s' 用のプラグインが見つかりません\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2869
 #, c-format
 msgid "Importing '%s' using %s format...\n"
-msgstr ""
+msgstr "'%s' を %s 形式でインポートしています...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2885
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "%s へのVRMLのエクスポートが成功しました"
+msgstr "インポートした基板を正常に '%s' に保存しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "フットプリントの読み込み中にエラー: %s"
+msgstr "インポート中にエラー: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -55218,9 +55198,8 @@ msgid "Some of the items could not be outset."
 msgstr "いくつかのアイテムを最初にすることができません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:87
-#, fuzzy
 msgid "(none)"
-msgstr "なし"
+msgstr "(なし)"
 
 #: pcbnew/tools/multichannel_tool.cpp:137
 #: pcbnew/tools/multichannel_tool.cpp:1489
@@ -55272,26 +55251,30 @@ msgstr "%dルール領域にコピーしました。"
 #: pcbnew/tools/multichannel_tool.cpp:1495
 #, c-format
 msgid "Reference area total components: %d"
-msgstr ""
+msgstr "参照領域の合計コンポーネント数: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1496
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "参照画像のプロパティ"
+msgstr ""
+"参照領域のコンポーネント:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "コンポーネント リストの解析に失敗しました: %s"
+msgstr "目標領域の合計コンポーネント数: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "コンポーネント リストの解析に失敗しました: %s"
+msgstr ""
+"目標領域のコンポーネント:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1552
 msgid ""
