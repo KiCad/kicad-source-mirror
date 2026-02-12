@@ -1001,6 +1001,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                                         BOARD_ITEM* a = pad;
                                         BOARD_ITEM* b = other;
 
+                                        // store canonical order so we don't collide in both
+                                        // directions (a:b and b:a)
+                                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                            std::swap( a, b );
+
                                         std::lock_guard<std::mutex> lock( checkedPairsMutex );
                                         auto it = checkedPairs.find( { a, b } );
 
