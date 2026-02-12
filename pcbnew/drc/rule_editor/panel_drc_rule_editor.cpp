@@ -385,6 +385,12 @@ void PANEL_DRC_RULE_EDITOR::onSaveButtonClicked( wxCommandEvent& aEvent )
 }
 
 
+void PANEL_DRC_RULE_EDITOR::OnEnterKey( wxCommandEvent& aEvent )                                                      
+{
+    onSaveButtonClicked( aEvent );
+}
+
+
 void PANEL_DRC_RULE_EDITOR::Save( wxCommandEvent& aEvent )
 {
     onSaveButtonClicked( aEvent );

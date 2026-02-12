@@ -91,6 +91,8 @@ public:
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
 
+    void OnEnterKey( wxCommandEvent& aEvent ) override;
+
     void Save( wxCommandEvent& aEvent );
 
     void Cancel( wxCommandEvent& aEvent );

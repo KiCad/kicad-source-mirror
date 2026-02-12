@@ -207,7 +207,7 @@
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
                         <property name="size">-1,-1</property>
-                        <property name="style"></property>
+                        <property name="style">wxTE_PROCESS_ENTER</property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
@@ -219,6 +219,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnTextEnter">OnEnterKey</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -717,9 +718,9 @@
                   <property name="proportion">1</property>
                   <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
-                    <property name="name">bSizer15</property>
+                    <property name="name">m_conditionControlsSizer</property>
                     <property name="orient">wxVERTICAL</property>
-                    <property name="permission">none</property>
+                    <property name="permission">protected</property>
                     <object class="sizeritem" expanded="false">
                       <property name="border">5</property>
                       <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT</property>

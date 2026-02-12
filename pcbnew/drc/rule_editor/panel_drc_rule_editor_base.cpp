@@ -31,7 +31,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	m_nameLabel->Wrap( -1 );
 	fgSizer2->Add( m_nameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_nameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_nameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_PROCESS_ENTER );
 	fgSizer2->Add( m_nameCtrl, 0, wxALL|wxEXPAND, 5 );
 
 	m_commentLabel = new wxStaticText( this, wxID_ANY, _("Comment"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -86,7 +86,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bConditionSizer->Add( m_staticline8, 0, wxEXPAND | wxALL, 5 );
 
-        m_conditionControlsSizer = new wxBoxSizer( wxVERTICAL );
+	m_conditionControlsSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_textConditionCtrl = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0, wxEmptyString );
 	m_textConditionCtrl->SetUseTabs( true );
@@ -121,7 +121,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	m_textConditionCtrl->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_textConditionCtrl->SetMaxSize( wxSize( -1,60 ) );
 
-        m_conditionControlsSizer->Add( m_textConditionCtrl, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
+	m_conditionControlsSizer->Add( m_textConditionCtrl, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
@@ -137,10 +137,10 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	bSizer16->Add( m_syntaxErrorReport, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
-        m_conditionControlsSizer->Add( bSizer16, 1, wxEXPAND, 5 );
+	m_conditionControlsSizer->Add( bSizer16, 1, wxEXPAND, 5 );
 
 
-        bConditionSizer->Add( m_conditionControlsSizer, 1, wxEXPAND|wxTOP, 5 );
+	bConditionSizer->Add( m_conditionControlsSizer, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bContentSizer->Add( bConditionSizer, 0, wxEXPAND, 15 );
@@ -172,6 +172,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	mainSizer->Fit( this );
 
 	// Connect Events
+	m_nameCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onSyntaxHelp ), NULL, this );
 	m_textConditionCtrl->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onContextMenu ), NULL, this );
 	m_checkSyntaxBtnCtrl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onCheckSyntax ), NULL, this );
@@ -181,6 +182,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 PANEL_DRC_RULE_EDITOR_BASE::~PANEL_DRC_RULE_EDITOR_BASE()
 {
 	// Disconnect Events
+	m_nameCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onSyntaxHelp ), NULL, this );
 	m_textConditionCtrl->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onContextMenu ), NULL, this );
 	m_checkSyntaxBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onCheckSyntax ), NULL, this );
