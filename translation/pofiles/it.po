@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 08:25+0000\n"
+"PO-Revision-Date: 2026-02-12 22:22+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17471,10 +17471,11 @@ msgstr ""
 "dall'editor del C.S. ."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "Aggiorna tutti gli altri campi nel simbolo dall'impronta"
+msgstr ""
+"Aggiorna i flag degli attributi dei simboli come Non popolare in modo che "
+"corrispondano all'impronta."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18424,14 +18425,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Pin attaccati quando si trascinano i bordi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
-msgstr "Tabella librerie di simboli"
+msgstr "Tabelle librerie di simboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:392
-#, fuzzy
 msgid "folder with .kicad_sym files"
-msgstr "cartella con %s file"
+msgstr "cartella con file .kicad_sym"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
@@ -18779,9 +18778,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Variabile testo non risolta nel foglio di disegno"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "Il nome del campo '%s' contiene spazi bianchi iniziali e/o finali."
+msgstr "Il nome del campo '%s' contiene spazi bianchi iniziali e/o finali"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18839,9 +18838,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Il pin %s è connesso sia a %s che a %s"
 
 #: eeschema/erc/erc.cpp:1352
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Il pin %s è connesso sia a %s che a %s"
+msgstr "Il pin %s sul simbolo '%s' è connesso a net diverse: %s e %s"
 
 #: eeschema/erc/erc.cpp:1423
 #, c-format
@@ -18931,9 +18930,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Controllo variabili non risolte..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "Controllo nomi fogli..."
+msgstr "Controllo nomi campi..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
