@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-06 13:08+0000\n"
+"PO-Revision-Date: 2026-02-12 22:22+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -7745,7 +7745,7 @@ msgid ""
 "pulling."
 msgstr ""
 "Неможливо виконати злиття: у вас є непідготовлені зміни. Будь ласка, "
-"зафіксуйте (commit) або сховайте (stash) їх перед отриманням даних (pull)."
+"зафіксуйте (commit) або сховайте (stash) їх перед отриманням (pull) даних."
 
 #: common/git/libgit_backend.cpp:1106
 #, c-format
@@ -8417,19 +8417,16 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: Виконати DRC"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Імпорт"
+msgstr "Імпорт PCB"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Імпортувати налаштування"
+msgstr "Налаштування завдання імпорту плати"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Імпорт"
+msgstr "PCB: Імпорт"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -11491,14 +11488,12 @@ msgid "Eagle XML files"
 msgstr "Файли Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "Файли нетлісту PADS"
+msgstr "PADS ASCII файли"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Архівувати всі файли проекту"
+msgstr "Файли проєкту gEDA / Lepton EDA"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -14219,9 +14214,8 @@ msgid "Highlight on Cross-probe"
 msgstr "Виділіть на перехресному зонді"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1450
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "Виділяти відповідний елемент на полотні, коли його вибрано в таблиці"
+msgstr "Підсвічувати відповідний вивід на полотні, коли його вибрано в таблиці"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1688
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
@@ -14284,9 +14278,8 @@ msgid "Group by name"
 msgstr "Групувати за ім'ям"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "Групувати виділене"
+msgstr "Згрупувати вибрані виводи"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
@@ -18644,7 +18637,7 @@ msgstr "Вивід %s з'єднано з %s та %s"
 #: eeschema/erc/erc.cpp:1352
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Вивід %s на символі '%s' підключений до різних мереж: %s та %s"
+msgstr "Вивід %s на символі '%s' підключений до різних зв'язків: %s та %s"
 
 #: eeschema/erc/erc.cpp:1423
 #, c-format
@@ -18803,7 +18796,7 @@ msgstr "Вхід живлення не підключений до жодног�
 
 #: eeschema/erc/erc_item.cpp:65
 msgid "Duplicate pins with different nets"
-msgstr "Дубльовані виводи з різними мережами"
+msgstr "Дублювати виводи з різними зв'язками"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -20769,14 +20762,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "Не вдалося проаналізувати значення: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "Символ %s не знайдено в бібліотеці '%s'."
+msgstr "Символ '%s' не знайдено в бібліотеках gEDA."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Не вдалося відкрити '%s'."
+msgstr " Ви мали на увазі '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
