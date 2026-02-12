@@ -240,13 +240,7 @@ struct FILE_HEADER
     std::array<uint32_t, 4> m_Unknown1;
     uint32_t                m_ObjectCount;
 
-    uint32_t m_Unknown2_1;
-    uint32_t m_Unknown2_2;
-    uint32_t m_Unknown2_3;
-    uint32_t m_Unknown2_4;
-    uint32_t m_Unknown2_5;
-    uint32_t m_Unknown2_6;
-    uint32_t m_Unknown2_7;
+    std::array<uint32_t, 9> m_Unknown2;
 
     // Linked lists grouping top-level elements by type
     LINKED_LIST m_LL_0x04;              // Net assignments
@@ -277,9 +271,16 @@ struct FILE_HEADER
     LINKED_LIST m_LL_Unknown5;
     LINKED_LIST m_LL_Unknown6;
     LINKED_LIST m_LL_0x0A_2;
-    LINKED_LIST m_LL_Unknown7;
 
-    uint32_t m_Unknown3;
+    COND_LT<FMT_VER::V_180, uint32_t> m_Unknown3;
+
+    // V180 has 6 additional linked lists in the header
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_3;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_4;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_5;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_6;
 
     // Fixed length string field
     std::array<char, 60> m_AllegroVersion;
@@ -288,23 +289,21 @@ struct FILE_HEADER
 
     uint32_t m_MaxKey;
 
-    std::array<uint32_t, 12> m_Unknown5_r17;
-    std::array<uint32_t, 4>  m_Unknown5_r18;
-
-    std::array<uint32_t, 5> m_Unknown_after5;
+    COND_LT<FMT_VER::V_180, std::array<uint32_t, 17>> m_Unknown5;
+    COND_GE<FMT_VER::V_180, std::array<uint32_t, 9>>  m_Unknown5_V18;
 
     BOARD_UNITS m_BoardUnits;
     // 3 empty bytes here?
 
     uint32_t m_Unknown6;
-    uint32_t m_Unknown7;
+    COND_LT<FMT_VER::V_180, uint32_t> m_Unknown7;
 
     // The end of the 0x27 object(?)
     uint32_t m_0x27_End;
 
     uint32_t m_Unknown8;
 
-    uint32_t m_StringsCount;
+    COND_LT<FMT_VER::V_180, uint32_t> m_StringsCount;
 
     std::array<uint32_t, 53> m_Unknown9;
 
@@ -1123,6 +1122,8 @@ struct BLK_0x1C_PADSTACK
      * * >= 17.2: 10
      */
     std::vector<uint32_t> m_UnknownArrN;
+
+    COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_V180Trailer;
 };
 
 

@@ -109,17 +109,21 @@ bool DB_REF::Resolve( const DB_OBJ_RESOLVER& aResolver )
 {
     if( m_TargetKey == m_EndKey )
     {
-        // Null reference
         m_Target = nullptr;
         return true;
     }
 
-    // No conditions
     m_Target = aResolver.Resolve( m_TargetKey );
 
-
-    if(!m_Target)
+    if( !m_Target )
     {
+        // V18+ linked list sentinel keys are not in the DB but are valid
+        // null-reference targets (end-of-chain markers)
+        if( aResolver.IsSentinel( m_TargetKey ) )
+        {
+            return true;
+        }
+
         wxLogTrace( "ALLEGRO_EXTRACT", "Failed to resolve DB_REF target key %#010x for %s",
                     m_TargetKey, m_DebugName ? m_DebugName : "<unknown>" );
     }
@@ -419,8 +423,6 @@ const wxString* DB::ResolveString( uint32_t aKey ) const
 
 void DB::ResolveObjectLinks()
 {
-    wxLogTrace( "ALLEGRO_EXTRACT", "Resolving %zu object references", m_Objects.size() );
-
     for( auto& [key, obj] : m_Objects )
     {
         obj->m_Valid = obj->ResolveRefs( *this );
@@ -447,7 +449,8 @@ void DB::visitLinkedList( const FILE_HEADER::LINKED_LIST            aLList,
     {
         const DB_REF& nextRef = aVisitor( *node );
 
-        if( !nextRef.m_Target && nextRef.m_TargetKey != aLList.m_Tail )
+        if( !nextRef.m_Target && nextRef.m_TargetKey != aLList.m_Tail
+            && !IsSentinel( nextRef.m_TargetKey ) )
         {
             THROW_IO_ERROR( wxString::Format( "Unexpected end of linked list: could not find %#010x", nextRef.m_TargetKey ) );
         }
@@ -1496,9 +1499,54 @@ bool VIA::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 }
 
 
+static void collectSentinelKeys( const FILE_HEADER& aHeader, DB& aDb )
+{
+    auto addTail = [&]( const FILE_HEADER::LINKED_LIST& aLL )
+    {
+        aDb.AddSentinelKey( aLL.m_Tail );
+    };
+
+    addTail( aHeader.m_LL_0x04 );
+    addTail( aHeader.m_LL_0x06 );
+    addTail( aHeader.m_LL_0x0C );
+    addTail( aHeader.m_LL_Shapes );
+    addTail( aHeader.m_LL_0x14 );
+    addTail( aHeader.m_LL_0x1B_Nets );
+    addTail( aHeader.m_LL_0x1C );
+    addTail( aHeader.m_LL_0x24_0x28 );
+    addTail( aHeader.m_LL_Unknown1 );
+    addTail( aHeader.m_LL_0x2B );
+    addTail( aHeader.m_LL_0x03_0x30 );
+    addTail( aHeader.m_LL_0x0A );
+    addTail( aHeader.m_LL_0x1D_0x1E_0x1F );
+    addTail( aHeader.m_LL_Unknown2 );
+    addTail( aHeader.m_LL_0x38 );
+    addTail( aHeader.m_LL_0x2C );
+    addTail( aHeader.m_LL_0x0C_2 );
+    addTail( aHeader.m_LL_Unknown3 );
+    addTail( aHeader.m_LL_0x36 );
+    addTail( aHeader.m_LL_Unknown5 );
+    addTail( aHeader.m_LL_Unknown6 );
+    addTail( aHeader.m_LL_0x0A_2 );
+
+    if( aHeader.m_LL_V18_1.has_value() )
+    {
+        addTail( aHeader.m_LL_V18_1.value() );
+        addTail( aHeader.m_LL_V18_2.value() );
+        addTail( aHeader.m_LL_V18_3.value() );
+        addTail( aHeader.m_LL_V18_4.value() );
+        addTail( aHeader.m_LL_V18_5.value() );
+        addTail( aHeader.m_LL_V18_6.value() );
+    }
+}
+
+
 bool BRD_DB::ResolveAndValidate()
 {
-    // First, iterate the whole table and resolve all the links
+    if( m_FmtVer >= FMT_VER::V_180 )
+        collectSentinelKeys( *m_Header, *this );
+
+    // Iterate the whole table and resolve all the links
     ResolveObjectLinks();
 
     // Now, we can apply "board-y" knowledge and validate that various structures look

@@ -86,7 +86,7 @@ public:
 
     EDA_UNITS GetUnits() const override { return EDA_UNITS::MM; }
 
-    void Clear()
+    void Clear() override
     {
         m_messages.clear();
         m_errorCount = 0;
@@ -4010,6 +4010,193 @@ BOOST_AUTO_TEST_CASE( BeagleBone_NetclassAssignments )
     BOOST_CHECK_MESSAGE( assignedCount > 0,
                          "At least some nets should have non-default netclass assignments" );
     BOOST_TEST_MESSAGE( "Nets with non-default netclass: " << assignedCount );
+}
+
+
+/**
+ * Load a v18.0 board from external path. Auto-skips if file not found.
+ */
+BOOST_AUTO_TEST_CASE( V18BasicLoad )
+{
+    std::string dataPath =
+            "/home/seth/Documents/circuits/Allegro/ElectronicDevices-Circuits/"
+            "Layout/ProiectBoard_uprev.brd";
+
+    if( !std::filesystem::exists( dataPath ) )
+    {
+        BOOST_TEST_MESSAGE( "Skipping: ProiectBoard_uprev.brd not found" );
+        return;
+    }
+
+    CAPTURING_REPORTER reporter;
+    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
+
+    reporter.PrintAllMessages( "ProiectBoard_uprev.brd" );
+
+    BOOST_REQUIRE_MESSAGE( board != nullptr, "V18 board should load successfully" );
+    PrintBoardStats( board.get(), "ProiectBoard_uprev.brd" );
+
+    BOOST_CHECK_GT( board->GetNetCount(), 0 );
+    BOOST_CHECK_GT( board->Footprints().size(), 0 );
+    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
+}
+
+
+/**
+ * Compare a v18.0 board against its original v16/v17 counterpart to confirm identical
+ * import results. Both files represent the same design, just saved in different Allegro
+ * versions.
+ */
+BOOST_AUTO_TEST_CASE( V18MatchesOriginal )
+{
+    struct V18_COMPARISON
+    {
+        std::string originalPath;
+        std::string uprevPath;
+        std::string name;
+    };
+
+    std::vector<V18_COMPARISON> boards = {
+        { "/home/seth/Documents/circuits/Allegro/ElectronicDevices-Circuits/"
+          "Layout/ProiectBoard.brd",
+          "/home/seth/Documents/circuits/Allegro/ElectronicDevices-Circuits/"
+          "Layout/ProiectBoard_uprev.brd",
+          "ProiectBoard" },
+        { "/home/seth/Documents/circuits/Allegro/cutiepi-board/"
+          "CutiePi_V2_3_TapeOut/CutiePi_V2_3_PCB/CutiePi_V2_3.brd",
+          "/home/seth/Documents/circuits/Allegro/cutiepi-board/"
+          "CutiePi_V2_3_TapeOut/CutiePi_V2_3_PCB/CutiePi_V2_3_uprev.brd",
+          "CutiePi" },
+        { "/home/seth/Documents/circuits/Allegro/board-openrex-in-cadence/"
+          "OpenRex_V1I1_PCB_V172.brd",
+          "/home/seth/Documents/circuits/Allegro/board-openrex-in-cadence/"
+          "OpenRex_V1I1_PCB_V172_uprev.brd",
+          "OpenRex" },
+    };
+
+    for( const V18_COMPARISON& comp : boards )
+    {
+        if( !std::filesystem::exists( comp.originalPath )
+            || !std::filesystem::exists( comp.uprevPath ) )
+        {
+            BOOST_TEST_MESSAGE( "Skipping " << comp.name << ": boards not found" );
+            continue;
+        }
+
+        BOOST_TEST_CONTEXT( "Comparing " << comp.name )
+        {
+            BOARD* original = GetCachedBoard( comp.originalPath );
+            BOARD* uprev = GetCachedBoard( comp.uprevPath );
+
+            if( !original || !uprev )
+            {
+                if( !original )
+                    BOOST_TEST_MESSAGE( comp.name << " original failed to load, skipping" );
+
+                if( !uprev )
+                    BOOST_TEST_MESSAGE( comp.name << " uprev failed to load, skipping" );
+
+                continue;
+            }
+
+            PrintBoardStats( original, comp.name + " (original)" );
+            PrintBoardStats( uprev, comp.name + " (uprev)" );
+
+            // Net count should match
+            BOOST_CHECK_EQUAL( original->GetNetCount(), uprev->GetNetCount() );
+
+            // Net names should match
+            std::set<wxString> origNets, uprevNets;
+
+            for( NETINFO_ITEM* net : original->GetNetInfo() )
+            {
+                if( net->GetNetCode() > 0 )
+                    origNets.insert( net->GetNetname() );
+            }
+
+            for( NETINFO_ITEM* net : uprev->GetNetInfo() )
+            {
+                if( net->GetNetCode() > 0 )
+                    uprevNets.insert( net->GetNetname() );
+            }
+
+            BOOST_CHECK_EQUAL( origNets.size(), uprevNets.size() );
+
+            for( const wxString& net : origNets )
+            {
+                BOOST_CHECK_MESSAGE( uprevNets.count( net ) > 0,
+                                     "Net " << net << " missing from uprev" );
+            }
+
+            // Footprint count
+            BOOST_CHECK_EQUAL( original->Footprints().size(), uprev->Footprints().size() );
+
+            // Reference designators should match
+            std::set<wxString> origRefs, uprevRefs;
+
+            for( FOOTPRINT* fp : original->Footprints() )
+                origRefs.insert( fp->GetReference() );
+
+            for( FOOTPRINT* fp : uprev->Footprints() )
+                uprevRefs.insert( fp->GetReference() );
+
+            BOOST_CHECK_EQUAL( origRefs.size(), uprevRefs.size() );
+
+            for( const wxString& ref : origRefs )
+            {
+                BOOST_CHECK_MESSAGE( uprevRefs.count( ref ) > 0,
+                                     "RefDes " << ref << " missing from uprev" );
+            }
+
+            // Copper layer count
+            BOOST_CHECK_EQUAL( original->GetCopperLayerCount(),
+                               uprev->GetCopperLayerCount() );
+
+            // Track, via, and arc counts
+            auto countTrackTypes = []( const BOARD* aBoard )
+            {
+                int tracks = 0, vias = 0, arcs = 0;
+
+                for( PCB_TRACK* t : aBoard->Tracks() )
+                {
+                    switch( t->Type() )
+                    {
+                    case PCB_TRACE_T: tracks++; break;
+                    case PCB_VIA_T: vias++; break;
+                    case PCB_ARC_T: arcs++; break;
+                    default: break;
+                    }
+                }
+
+                return std::tuple{ tracks, vias, arcs };
+            };
+
+            auto [origTracks, origVias, origArcs] = countTrackTypes( original );
+            auto [uprevTracks, uprevVias, uprevArcs] = countTrackTypes( uprev );
+
+            BOOST_CHECK_EQUAL( origTracks, uprevTracks );
+            BOOST_CHECK_EQUAL( origVias, uprevVias );
+            BOOST_CHECK_EQUAL( origArcs, uprevArcs );
+
+            // Zone count (uprev may add/remove zones, so allow small differences)
+            size_t origZones = original->Zones().size();
+            size_t uprevZones = uprev->Zones().size();
+
+            if( origZones != uprevZones )
+            {
+                BOOST_TEST_MESSAGE( comp.name << " zone count differs: original="
+                                    << origZones << " uprev=" << uprevZones );
+            }
+
+            // Allow up to 5% difference or 4 zones, whichever is larger
+            size_t zoneTolerance = std::max( static_cast<size_t>( 4 ),
+                                             origZones / 20 );
+
+            BOOST_CHECK_LE( std::abs( static_cast<int>( origZones )
+                                      - static_cast<int>( uprevZones ) ),
+                            static_cast<int>( zoneTolerance ) );
+        }
+    }
 }
 
 

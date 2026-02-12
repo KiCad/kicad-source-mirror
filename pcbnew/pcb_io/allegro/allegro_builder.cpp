@@ -133,6 +133,9 @@ public:
                 m_current( aCurrent ), m_tail( aTail ), m_board( aBoard ), m_NextFunc( aNextFunc )
         {
             m_currBlock = m_board.GetObjectByKey( m_current );
+
+            if( !m_currBlock )
+                m_current = 0;
         }
 
         const BLOCK_BASE* operator*() const { return m_currBlock; }
@@ -147,16 +150,12 @@ public:
             {
                 m_current = m_NextFunc( *m_currBlock );
 
-                // Reached the tail - this isn't actually a node we should return
-                if( m_current == m_tail )
+                if( m_current == m_tail || m_board.IsSentinel( m_current ) )
                 {
                     m_current = 0;
                 }
                 else
                 {
-                    // Look up the next block. If it exists, advance.
-                    // REVIEW: This may be a place we want to throw in some cases as it implies a corrupt list
-                    // but I'm not 100% sure there aren't lists that end in 0x0.
                     m_currBlock = m_board.GetObjectByKey( m_current );
 
                     if( m_currBlock == nullptr )
@@ -3523,8 +3522,6 @@ bool BOARD_BUILDER::BuildBoard()
     {
         m_progressReporter->AdvancePhase( _( "Converting footprints" ) );
     }
-
-    wxLogTrace( traceAllegroBuilder, "Converting footprints from Allegro to KiCad" );
 
     const LL_WALKER          fpWalker( m_brdDb.m_Header->m_LL_0x2B, m_brdDb );
     std::vector<BOARD_ITEM*> bulkAddedItems;

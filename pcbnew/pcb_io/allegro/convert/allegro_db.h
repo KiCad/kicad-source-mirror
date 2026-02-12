@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <math/vector2d.h>
 #include <math/box2.h>
@@ -144,6 +145,12 @@ public:
     virtual DB_OBJ* Resolve( uint32_t aKey ) const = 0;
 
     virtual const wxString* ResolveString( uint32_t aKey ) const = 0;
+
+    /**
+     * In v18+ files, linked list sentinel nodes are real blocks with small keys.
+     * References pointing to these sentinels are logically null (end-of-chain).
+     */
+    virtual bool IsSentinel( uint32_t aKey ) const { return false; }
 };
 
 
@@ -273,6 +280,17 @@ public:
 
     const wxString* ResolveString( uint32_t aRef ) const override;
 
+    bool IsSentinel( uint32_t aKey ) const override
+    {
+        return m_SentinelKeys.count( aKey ) > 0;
+    }
+
+    void AddSentinelKey( uint32_t aKey )
+    {
+        if( aKey != 0 )
+            m_SentinelKeys.insert( aKey );
+    }
+
     virtual void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock ) = 0;
 
 protected:
@@ -282,6 +300,9 @@ protected:
 private:
     // Main store of DB objects.
     std::unordered_map<uint32_t, std::unique_ptr<DB_OBJ>> m_Objects;
+
+    // V18+ linked list sentinel keys. References to these are null (end-of-chain).
+    std::unordered_set<uint32_t> m_SentinelKeys;
 
 public:
     std::unordered_map<uint32_t, wxString> m_StringTable;
