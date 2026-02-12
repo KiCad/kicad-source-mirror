@@ -1123,6 +1123,10 @@ struct BLK_0x1C_PADSTACK
      */
     std::vector<uint32_t> m_UnknownArrN;
 
+    /**
+     * V180 inserts 8 extra uint32s between the fixed arrays and the component table.
+     * Despite the name, this is read before the components, not after.
+     */
     COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_V180Trailer;
 };
 

@@ -40,13 +40,18 @@
 
 static bool checkFileHeader( const wxString& aFileName )
 {
-    // The files start with a version string that can vary (a bit),
-    // But the header seems always to contain the string "all" at the
-    // start of the version string at 0xF8.
+    // Pre-v18 files contain the string "all" at offset 0xF8 (start of version string)
     static const std::vector<uint8_t> allegroVString = { 'a', 'l', 'l' };
     static const size_t               allegroVStringOffset = 0xf8;
 
-    return IO_UTILS::fileHasBinaryHeader( aFileName, allegroVString, allegroVStringOffset );
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, allegroVString, allegroVStringOffset ) )
+        return true;
+
+    // v18+ files have a different header layout without the version string at 0xF8.
+    // Detect them by the magic number 0x00150000 (little-endian) at offset 0.
+    static const std::vector<uint8_t> v18Magic = { 0x00, 0x00, 0x15, 0x00 };
+
+    return IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic );
 }
 
 

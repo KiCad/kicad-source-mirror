@@ -274,6 +274,13 @@ public:
     void ResolveObjectLinks();
 
     /**
+     * Like ResolveObjectLinks(), but logs warnings for unresolvable references instead of
+     * throwing. This allows partial imports of boards that contain object types not yet
+     * fully supported by the parser.
+     */
+    void ResolveObjectLinksBestEffort();
+
+    /**
      * Implement the object resolver interface
      */
     DB_OBJ* Resolve( uint32_t aRef ) const override;

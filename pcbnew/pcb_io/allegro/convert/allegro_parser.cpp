@@ -1045,6 +1045,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     ReadCond( aStream, aVer, data.m_SlotAndUnknownArr );
     ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
 
+    // V180 has 8 extra uint32s between the fixed arrays and the component table
+    ReadCond( aStream, aVer, data.m_V180Trailer );
+
     // Work out how many fixed slots we have, and how many per-layer slots
     data.m_NumFixedCompEntries = aVer < FMT_VER::V_172 ? 10 : 21;
     data.m_NumCompsPerLayer = aVer < FMT_VER::V_172 ? 3 : 4;
@@ -1092,8 +1095,6 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
             data.m_UnknownArrN.push_back( aStream.ReadU32() );
         }
     }
-
-    ReadCond( aStream, aVer, data.m_V180Trailer );
 
     return block;
 }

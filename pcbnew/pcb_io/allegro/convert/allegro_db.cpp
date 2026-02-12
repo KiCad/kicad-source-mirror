@@ -437,6 +437,32 @@ void DB::ResolveObjectLinks()
 }
 
 
+void DB::ResolveObjectLinksBestEffort()
+{
+    int failCount = 0;
+
+    for( auto& [key, obj] : m_Objects )
+    {
+        obj->m_Valid = obj->ResolveRefs( *this );
+
+        if( !obj->m_Valid )
+        {
+            failCount++;
+            wxLogTrace( "ALLEGRO_EXTRACT",
+                        "Best-effort: skipping unresolvable object key %#010x (type %d)",
+                        key, static_cast<int>( obj->GetType() ) );
+        }
+    }
+
+    if( failCount > 0 )
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT",
+                    "Best-effort resolution complete: %d of %zu objects could not be resolved",
+                    failCount, m_Objects.size() );
+    }
+}
+
+
 void DB::visitLinkedList( const FILE_HEADER::LINKED_LIST            aLList,
                           std::function<const DB_REF&( const DB_OBJ& aObj )> aVisitor ) const
 {
@@ -1546,15 +1572,20 @@ bool BRD_DB::ResolveAndValidate()
     if( m_FmtVer >= FMT_VER::V_180 )
         collectSentinelKeys( *m_Header, *this );
 
-    // Iterate the whole table and resolve all the links
-    ResolveObjectLinks();
+    // Try strict resolution first. If it fails (some boards have object types the parser
+    // doesn't fully support), fall back to best-effort which allows partial imports.
+    try
+    {
+        ResolveObjectLinks();
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT",
+                    "Strict reference resolution failed (%s), retrying with best-effort",
+                    e.Problem() );
 
-    // Now, we can apply "board-y" knowledge and validate that various structures look
-    // sensible
-
-    // Or we can do the checks as we go... not sure which is best.
-
-    bool ok = true;
+        ResolveObjectLinksBestEffort();
+    }
 
     return true;
 }

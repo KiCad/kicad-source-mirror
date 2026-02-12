@@ -26,6 +26,8 @@
 
 #include <cmath>
 #include <limits>
+#include <set>
+#include <tuple>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -2650,6 +2652,21 @@ void BOARD_BUILDER::createBoardOutline()
 
     std::vector<BOARD_ITEM*> outlineItems;
 
+    // Track unique line segments to avoid duplicates. Some Allegro files store the board
+    // outline on both BOARD_GEOMETRY:OUTLINE and DRAWING_FORMAT:OUTLINE layers, which
+    // produces duplicate (sometimes direction-reversed) edges.
+    std::set<std::tuple<int, int, int, int>> uniqueSegments;
+
+    auto isNewSegment = [&]( const VECTOR2I& a, const VECTOR2I& b ) -> bool
+    {
+        VECTOR2I p1 = a, p2 = b;
+
+        if( p1.x > p2.x || ( p1.x == p2.x && p1.y > p2.y ) )
+            std::swap( p1, p2 );
+
+        return uniqueSegments.emplace( p1.x, p1.y, p2.x, p2.y ).second;
+    };
+
     // Walk through LL_0x24_0x28 which contains rectangles (0x24) and shapes (0x28)
     const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
     int             shapeCount = 0;
@@ -2675,6 +2692,9 @@ void BOARD_BUILDER::createBoardOutline()
 
             auto makeSegment = [&]( const VECTOR2I& start, const VECTOR2I& end )
             {
+                if( !isNewSegment( start, end ) )
+                    return;
+
                 auto shape = std::make_unique<PCB_SHAPE>( &m_board );
                 shape->SetLayer( Edge_Cuts );
                 shape->SetShape( SHAPE_T::SEGMENT );
@@ -2761,12 +2781,14 @@ void BOARD_BUILDER::createBoardOutline()
             case 0x16:
             case 0x17:
             {
-                shape->SetShape( SHAPE_T::SEGMENT );
-
                 const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
                 VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
                 VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
 
+                if( !isNewSegment( start, end ) )
+                    continue;
+
+                shape->SetShape( SHAPE_T::SEGMENT );
                 shape->SetStart( start );
                 shape->SetEnd( end );
                 shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( Edge_Cuts ) );
