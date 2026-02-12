@@ -1166,6 +1166,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             if( dynamic_cast<PCB_TRACK*>( other) )
                                 return false;
 
+                            BOARD_CONNECTED_ITEM* graphic_bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aShape );
+                            BOARD_CONNECTED_ITEM* other_bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+                            int                   graphicNet = graphic_bci ? graphic_bci->GetNetCode() : 0;
+                            int                   otherNet = other_bci ? other_bci->GetNetCode() : 0;
+
+                            if( graphicNet && graphicNet == otherNet )
+                                return false;
+
                             BOARD_ITEM* a = aShape;
                             BOARD_ITEM* b = other;
 
