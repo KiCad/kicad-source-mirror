@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 00:09+0000\n"
+"PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -9205,9 +9205,8 @@ msgid "Zoom In Horizontally"
 msgstr "Vodorovne priblížiť"
 
 #: common/tool/actions.cpp:631
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Distribuovať horizontálne"
+msgstr "Vodorovne priblížiť oblasť tlače"
 
 #: common/tool/actions.cpp:637
 msgid "Zoom Out Horizontally"
@@ -9396,9 +9395,8 @@ msgid "Show Grid"
 msgstr "Zobraziť m&riežku"
 
 #: common/tool/actions.cpp:918
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Zobrazenie bodiek alebo čiar mriežky v okne úprav"
+msgstr "Zobraziť mriežku pozadia v okne editora"
 
 #: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
@@ -9440,9 +9438,8 @@ msgid "Millimeters"
 msgstr "Milimetre"
 
 #: common/tool/actions.cpp:978
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Vyberte súčiastku"
+msgstr "Vybrať stĺpce..."
 
 #: common/tool/actions.cpp:985
 msgid "Switch units"
@@ -9465,18 +9462,16 @@ msgid "Reset Local Coordinates"
 msgstr "Obnoviť lokálne súradnice"
 
 #: common/tool/actions.cpp:1008
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "Vždy ukazujte nitkový kríž"
+msgstr "Vždy zobraziť zameriavací kríž"
 
 #: common/tool/actions.cpp:1009
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Zobraziť nitkový kríž aj v nástroji na výber"
+msgstr "Zobraziť zameriavací kríž, aj keď sa práve nekreslia objekty"
 
 #: common/tool/actions.cpp:1015
 msgid "Full-Window Crosshairs"
-msgstr "Zameriavací kríž s plným oknom"
+msgstr "Zameriavací kríž cez celé oknom"
 
 #: common/tool/actions.cpp:1016
 msgid "Switch display of full-window crosshairs"
@@ -10021,15 +10016,15 @@ msgstr "Nikdy"
 
 #: common/widgets/gal_options_panel_base.cpp:132
 msgid "Small crosshairs"
-msgstr "Malý kríž"
+msgstr "Malý zameriavací kríž"
 
 #: common/widgets/gal_options_panel_base.cpp:135
 msgid "Full window crosshairs"
-msgstr "Kríž cez celé okno"
+msgstr "Zameriavací kríž cez celé okno"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
-msgstr "Vždy ukazujte nitkový kríž"
+msgstr "Vždy zobraziť zameriavací kríž"
 
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "Open file"
