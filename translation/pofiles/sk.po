@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 08:25+0000\n"
+"PO-Revision-Date: 2026-02-12 22:22+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -87,7 +87,7 @@ msgstr "Vytvoriť technickú vrstvu %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1672
 msgid "Simplifying copper layer polygons"
-msgstr "Zjednodušenie polygónov medených vrstiev"
+msgstr "Zjednodušenie mnohouholníkov medených vrstiev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1677
 msgid "Calculating plated copper"
@@ -9851,7 +9851,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:361
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Nastaviť režim výberu na použitie mnohouholníkového lasa"
 
 #: common/tool/actions.cpp:369
 msgid "Select all items on screen"
@@ -10311,11 +10311,11 @@ msgstr "Vykonáva kliknutie ľavým tlačidlom myši"
 
 #: common/tool/actions.cpp:940
 msgid "Double-click"
-msgstr "Dvojklik"
+msgstr "Dvakrát kliknúť"
 
 #: common/tool/actions.cpp:941
 msgid "Performs left mouse button double-click"
-msgstr "Dvojitým kliknutím vykoná ľavé tlačidlo myši"
+msgstr "Vykoná kliknutie dvakrát ľavým tlačidlom myši"
 
 #: common/tool/actions.cpp:954
 msgid "Pin Library"
@@ -10554,9 +10554,8 @@ msgid "Symbol Library Browser"
 msgstr "Prehliadač knižnice symbolov"
 
 #: common/tool/actions.cpp:1286 kicad/tools/kicad_manager_actions.cpp:117
-#, fuzzy
 msgid "Create, delete and edit schematic symbols"
-msgstr "Vytváranie, mazanie a úprava symbolov"
+msgstr "Vytvárať, odstraňovať a upravovať schematické symbolov"
 
 #: common/tool/actions.cpp:1294 pcbnew/footprint_viewer_frame.cpp:102
 #: pcbnew/footprint_viewer_frame.cpp:994
@@ -10566,7 +10565,7 @@ msgstr "Prezerač knižníc pudzier"
 #: common/tool/actions.cpp:1303
 #, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Vytvárať, mazať a upravovať stopy"
+msgstr "Vytvárať, odstraňovať a upravovať puzdrá"
 
 #: common/tool/actions.cpp:1311 kicad/tools/kicad_manager_actions.cpp:168
 #: pcb_calculator/pcb_calculator_frame.cpp:62
@@ -10581,21 +10580,19 @@ msgid "Run component calculations, track width calculations, etc."
 msgstr "Spustiť výpočty komponentov, výpočty šírky spoja atď."
 
 #: common/tool/actions.cpp:1321
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "Zobraziť / skryť správcu vzhľadu"
+msgstr "Zobraziť/skryť správcu vlastností"
 
 #: common/tool/actions.cpp:1330
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:134
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:120
 #: eeschema/fields_grid_table.cpp:1203
 msgid "Show Datasheet"
-msgstr "Zobraziť údajový list"
+msgstr "Zobraziť technický list"
 
 #: common/tool/actions.cpp:1331
-#, fuzzy
 msgid "Open the datasheet in a browser"
-msgstr "Otvorí údajový list v prehliadači"
+msgstr "Otvoriť technický list v prehliadači"
 
 #: common/tool/actions.cpp:1339
 msgid "Update PCB from Schematic..."
@@ -10647,9 +10644,8 @@ msgid "Edit the global and project footprint library lists"
 msgstr "Upraviť globálne a projektové zoznamy knižníc puzdier"
 
 #: common/tool/actions.cpp:1383
-#, fuzzy
 msgid "Manage Design Block Libraries..."
-msgstr "Spravovať knižnice symbolov..."
+msgstr "Spravovať knižnice návrhových blokov..."
 
 #: common/tool/actions.cpp:1384
 msgid "Edit the global and project design block library lists"
@@ -10894,7 +10890,7 @@ msgstr "Pole stopy nemôže obsahovať %s znakov."
 #: common/validators.cpp:367
 #, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Pole údajového hárka nemôže obsahovať %s znakov."
+msgstr "Pole technického listu nesmie obsahovať %s znak(y)."
 
 #: common/validators.cpp:371
 #, c-format
@@ -11257,9 +11253,8 @@ msgid "Confirm change"
 msgstr "Potvrďte zmenu"
 
 #: common/widgets/widget_hotkey_list.cpp:534
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(upravte dvojitým kliknutím)"
+msgstr "Príkaz (dvakrát kliknúť pre úpravu)"
 
 #: common/widgets/widget_hotkey_list.cpp:537
 msgid "Hotkey"
@@ -14437,7 +14432,7 @@ msgstr "Vyhľadajte stopu"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:120
 #: eeschema/fields_grid_table.cpp:1203
 msgid "Show datasheet in browser"
-msgstr "Zobraziť údajový list v prehliadači"
+msgstr "Zobraziť technický list v prehliadači"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:382
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:388
@@ -14665,9 +14660,8 @@ msgid "Exclude from board"
 msgstr "Vylúčiť z hracieho plánu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
-#, fuzzy
 msgid "Keep linked datasheet"
-msgstr "Udržujte stopy"
+msgstr "Ponechať prepojený technický list"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
 #, fuzzy
@@ -17058,9 +17052,8 @@ msgid "Keep tabs"
 msgstr "Držte sa mimo priechodov"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:318
-#, fuzzy
 msgid "Keep line breaks"
-msgstr "Udržujte stopy"
+msgstr "Zachovať zalomenie riadkov"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:324
 #, fuzzy
@@ -25183,7 +25176,7 @@ msgstr "Zmeňte existujúcu položku na hierarchický štítok"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "Prerušiť priradenie/priradenia vývodu listu a hierarchického označenia"
 
 #: eeschema/toolbars_sch_editor.cpp:53 pcbnew/toolbars_pcb_editor.cpp:125
 #, fuzzy
@@ -25783,9 +25776,8 @@ msgid "Draw connected graphic lines"
 msgstr "Pridajte spojené grafické čiary"
 
 #: eeschema/tools/sch_actions.cpp:405 pcbnew/tools/pcb_actions.cpp:120
-#, fuzzy
 msgid "Draw Polygons"
-msgstr "Nakreslite grafický polygón"
+msgstr "Kresliť mnohouholníky"
 
 #: eeschema/tools/sch_actions.cpp:414
 msgid "Move Symbol Anchor"
@@ -26286,9 +26278,8 @@ msgid "Convert a pin with stacked notation to multiple individual pins"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1004
-#, fuzzy
 msgid "Break"
-msgstr "Prerušiť zbernicu"
+msgstr "Nalomiť"
 
 #: eeschema/tools/sch_actions.cpp:1005
 #, fuzzy
@@ -26297,7 +26288,7 @@ msgstr "Via nie je pripojená"
 
 #: eeschema/tools/sch_actions.cpp:1011
 msgid "Slice"
-msgstr "Střih"
+msgstr "Strihnúť"
 
 #: eeschema/tools/sch_actions.cpp:1012
 #, fuzzy
@@ -26802,7 +26793,7 @@ msgstr "Rozbaliť z autobusu"
 
 #: eeschema/tools/sch_actions.cpp:1491
 msgid "Break a wire out of a bus"
-msgstr "Vylomte drôt z autobusu"
+msgstr "Vytiahnuť spoj zo zbernice"
 
 #: eeschema/tools/sch_actions.cpp:1512 pcbnew/tools/pcb_actions.cpp:2628
 #, fuzzy
@@ -27088,7 +27079,7 @@ msgstr "Zarovnajte na stred"
 
 #: eeschema/tools/sch_drawing_tools.cpp:322
 msgid "Press <ESC> to cancel symbol creation."
-msgstr "Stisknout <ESC> pro zrušení vytvoření symbolu."
+msgstr "Stlačiť <ESC> pre zrušenie tvorby symbolu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:466
 #, fuzzy
@@ -27145,7 +27136,7 @@ msgstr "Nová schéma"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1164 pcbnew/tools/drawing_tool.cpp:731
 msgid "Press <ESC> to cancel image creation."
-msgstr "Stisknout <ESC> pro zrušení vytvoření obrázku."
+msgstr "Stlačiť <ESC> pre zrušenie tvorby obrázku."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1226
 #: eeschema/tools/sch_edit_tool.cpp:3285
@@ -27194,7 +27185,7 @@ msgstr "V mieste umiestnenia pripojení nie sú žiadne spoje a/alebo vývody."
 #: eeschema/tools/sch_drawing_tools.cpp:2129
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:184
 msgid "Press <ESC> to cancel item creation."
-msgstr "Stisknout <ESC> pro zrušení vytvoření položky."
+msgstr "Stlačiť <ESC> pre zrušenie tvorby položky."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2162
 msgid "Add Text"
@@ -27249,7 +27240,7 @@ msgstr "Nakresli čiaru"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3269
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "Stisknout <ESC> pro zrušení vytvoření listu."
+msgstr "Stlačiť <ESC> pre zrušenie tvorby listu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3560
 #, fuzzy
@@ -27647,9 +27638,8 @@ msgid "Visual"
 msgstr ""
 
 #: eeschema/tools/sch_inspection_tool.cpp:522
-#, fuzzy
 msgid "No datasheet defined."
-msgstr "Nie cez vŕtanie definované."
+msgstr "Technický list nie je definovaný."
 
 #: eeschema/tools/sch_inspection_tool.cpp:551
 #: pagelayout_editor/tools/pl_editor_control.cpp:161
@@ -27667,35 +27657,32 @@ msgstr "Autobus nemá žiadnych členov"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:812
 msgid "Press <ESC> to cancel drawing."
-msgstr "Stisknout <ESC> pro zrušení výkresu."
+msgstr "Stlačiť <ESC> pre zrušenie kreslenia."
 
 #: eeschema/tools/sch_move_tool.cpp:495
 msgid "Break Wire"
-msgstr "Prerušiť spoj"
+msgstr "Nalomiť spoj"
 
 #: eeschema/tools/sch_move_tool.cpp:496
-#, fuzzy
 msgid "Slice Wire"
-msgstr "Zmazať spoj"
+msgstr "Strihnúť spoj"
 
 #: eeschema/tools/sch_move_tool.cpp:848
 #: pagelayout_editor/tools/pl_edit_tool.cpp:235
 msgid "Press <ESC> to cancel move."
-msgstr "Stisknout <ESC> pro zrušení přesunutí."
+msgstr "Stlačiť <ESC> pre zrušenie presúvania."
 
 #: eeschema/tools/sch_move_tool.cpp:849
 msgid "Press <ESC> to cancel drag."
-msgstr "Stisknout <ESC> pro zrušení tažení."
+msgstr "Stlačiť <ESC> pre zrušenie ťahania."
 
 #: eeschema/tools/sch_move_tool.cpp:850
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "Stisknout <ESC> pro zrušení tažení."
+msgstr "Stlačiť <ESC> pre zrušenie nalomenia."
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "Stisknout <ESC> pro zrušení přesunutí."
+msgstr "Stlačiť <ESC> pre zrušenie strihania."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, fuzzy, c-format
@@ -28776,12 +28763,11 @@ msgstr "Náčrt čiary"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:68
 msgid "Sketch polygons"
-msgstr "Načrtnite mnohouholníky"
+msgstr "Náčrt mnohouholníkov"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
-#, fuzzy
 msgid "Display polygon items in outline mode"
-msgstr "Zobraziť polygóny v režime osnovy"
+msgstr "Zobraziť mnohouholníky v režime obrysov"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
 #, fuzzy
@@ -29555,11 +29541,11 @@ msgstr "Zobraziť blikajúce položky v režime osnovy"
 
 #: gerbview/tools/gerbview_actions.cpp:207
 msgid "Sketch Polygons"
-msgstr "Načrtnite mnohouholníky"
+msgstr "Náčrt mnohouholníkov"
 
 #: gerbview/tools/gerbview_actions.cpp:208
 msgid "Show polygons in outline mode"
-msgstr "Zobraziť polygóny v režime osnovy"
+msgstr "Zobraziť polygóny v režime obrysov"
 
 #: gerbview/tools/gerbview_actions.cpp:216
 msgid "Ghost Negative Objects"
@@ -34155,6 +34141,9 @@ msgid ""
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
+"Vzhľadom na menovité napätie a kategóriu prepätia, by zariadenie malo tejto "
+"hodnote odolať bez prerušenia izolácie. Toto impulzné napätie je štandardná "
+"vlna 1,2/50 µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -43128,13 +43117,12 @@ msgid "Optimize pad connections"
 msgstr "Optimalizujte pripojenia podložiek"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
-#, fuzzy
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Ak je táto možnosť povolená, smerovač sa snaží čistým spôsobom vylomiť "
-"podložky / priechody, vyhnúť sa ostrým uhlom a zubatým stopám úniku."
+"Ak je táto možnosť povolená, smerovač sa snaží čistým spôsobom obchádzať "
+"plôšky/prekovy, vyhnutím sa ostrým uhlom a zubatým spojom."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
@@ -43632,9 +43620,8 @@ msgid "Corner radius must be less than or equal to half the smaller side."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr "Šírka čiary nemusí byť 0 pre nevyplnené tvary."
+msgstr "Šírka čiary musí byť väčšia ako nula pre nevyplnené mnohouholníky."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1284
 #, fuzzy
@@ -51601,9 +51588,9 @@ msgid "Footprint field of %s (%s)"
 msgstr "Text stopy '%s' z %s"
 
 #: pcbnew/pcb_field.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "Hodnota '%s' z %s"
+msgstr "Pole technického listu %s (%s)"
 
 #: pcbnew/pcb_field.cpp:236
 #, fuzzy, c-format
@@ -54918,7 +54905,7 @@ msgstr "Počiatočný bod smerovania porušuje KDR."
 
 #: pcbnew/router/router_tool.cpp:2804 pcbnew/tools/pcb_actions.cpp:2682
 msgid "Break Track"
-msgstr "Prerušiť spoj"
+msgstr "Nalomiť spoj"
 
 #: pcbnew/router/router_tool.cpp:2885
 #, fuzzy, c-format
@@ -56157,13 +56144,13 @@ msgid "Angle snap lines: 90°"
 msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Kliknite na podložku %s %d\n"
-"Stlačením <esc> akciu zrušíte alebo dvojitým kliknutím potvrdíte"
+"Kliknúť pre umiestnenie %s (položka %zu z %zu)\n"
+"Stlačiť <esc> pre zrušenie všetkého; kliknúť dvakrát pre ukončenie"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:876
 #, fuzzy, c-format
@@ -56192,9 +56179,8 @@ msgid "Error renaming footprint"
 msgstr "Z rodičovského puzdra"
 
 #: pcbnew/tools/footprint_editor_control.cpp:712
-#, fuzzy
 msgid "No datasheet found in the footprint."
-msgstr "Nie cez vŕtanie definované."
+msgstr "Technický list puzdra nenájdený."
 
 #: pcbnew/tools/footprint_editor_control.cpp:970
 #, fuzzy
@@ -56438,13 +56424,13 @@ msgid "Push Pad Settings"
 msgstr "Nastavenia podložky"
 
 #: pcbnew/tools/pad_tool.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Kliknite na podložku %s %d\n"
-"Stlačením <esc> akciu zrušíte alebo dvojitým kliknutím potvrdíte"
+"Kliknúť na plôšku %s\n"
+"Stlačiť <esc> pre zrušenie všetkého; kliknúť dvakrát pre ukončenie"
 
 #: pcbnew/tools/pad_tool.cpp:427 pcbnew/tools/pad_tool.cpp:530
 #, fuzzy
@@ -58847,14 +58833,12 @@ msgid "Remove Polygon Corner"
 msgstr "Odstráňte roh zóny / mnohouholníka"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3439
-#, fuzzy
 msgid "Break Zone Corner"
-msgstr "Pridajte roh zóny"
+msgstr "Nalomiť roh zóny"
 
 #: pcbnew/tools/pcb_point_editor.cpp:3441
-#, fuzzy
 msgid "Break Polygon Corner"
-msgstr "Odstráňte roh zóny / mnohouholníka"
+msgstr "Nalomiť roh zóny/mnohouholníka"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:81
 msgid "Select"
