@@ -26,6 +26,7 @@
 
 #include <functional>
 #include <memory>
+#include <unordered_map>
 
 #include <convert/allegro_pcb_structs.h>
 #include <convert/allegro_db.h>
@@ -117,13 +118,13 @@ private:
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
     std::unique_ptr<ZONE>                    buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode );
-    SHAPE_LINE_CHAIN                         buildOutline( const BLK_0x28_SHAPE& aShape ) const;
+    const SHAPE_LINE_CHAIN&                  buildOutline( const BLK_0x28_SHAPE& aShape ) const;
 
     /**
      * Walk a geometry chain (0x01 arcs and 0x15-17 segments) starting from the given key,
      * following m_Next links. Used for building hole outlines from 0x34 KEEPOUT blocks.
      */
-    SHAPE_LINE_CHAIN buildSegmentChain( uint32_t aStartKey ) const;
+    const SHAPE_LINE_CHAIN& buildSegmentChain( uint32_t aStartKey ) const;
 
     /**
      * Resolve the net code for a BOUNDARY shape by following the pointer chain:
@@ -198,6 +199,12 @@ private:
     std::vector<ZoneFillEntry> m_zoneFillShapes;
 
     std::unique_ptr<LAYER_MAPPER> m_layerMapper;
+
+    // Cache of computed outlines keyed by shape block key, avoiding redundant geometry rebuilds
+    mutable std::unordered_map<uint32_t, SHAPE_LINE_CHAIN> m_outlineCache;
+
+    // Cache of segment chains keyed by start key, avoiding redundant hole geometry rebuilds
+    mutable std::unordered_map<uint32_t, SHAPE_LINE_CHAIN> m_segChainCache;
 
     // Conversion factor from internal units to nanometers.
     // Internal coordinates are in mils / divisor, so scale = 25400 / divisor.

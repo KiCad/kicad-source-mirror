@@ -275,13 +275,6 @@ public:
     void ResolveObjectLinks();
 
     /**
-     * Like ResolveObjectLinks(), but logs warnings for unresolvable references instead of
-     * throwing. This allows partial imports of boards that contain object types not yet
-     * fully supported by the parser.
-     */
-    void ResolveObjectLinksBestEffort();
-
-    /**
      * Implement the object resolver interface
      */
     DB_OBJ* Resolve( uint32_t aRef ) const override;
@@ -304,6 +297,14 @@ public:
 protected:
     void visitLinkedList( const FILE_HEADER::LINKED_LIST                     aLList,
                           std::function<const DB_REF&( const DB_OBJ& aObj )> aVisitor ) const;
+
+    void reserveObjects( size_t aCount ) { m_Objects.reserve( aCount ); }
+
+    /**
+     * Resolve all DB_OBJ references without throwing on failure.
+     * Objects that can't fully resolve are marked invalid but processing continues.
+     */
+    void ResolveObjectLinksBestEffort();
 
 private:
     // Main store of DB objects.
@@ -848,11 +849,26 @@ class BRD_DB : public DB
 {
 public:
     BRD_DB() :
-            m_FmtVer( FMT_VER::V_UNKNOWN )
+            m_FmtVer( FMT_VER::V_UNKNOWN ),
+            m_leanMode( false )
     {
     }
 
     void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock ) override;
+
+    /**
+     * Pre-allocate storage for the expected number of objects and strings.
+     * Avoids incremental rehashing as elements are inserted.
+     */
+    void ReserveCapacity( size_t aObjectCount, size_t aStringCount );
+
+    /**
+     * When true, InsertBlock skips DB_OBJ creation for high-volume block types
+     * (segments, graphics, arcs) that the BOARD_BUILDER accesses only through
+     * raw BLOCK_BASE. Types needed by VisitNets (NET, FIELD, etc.) still get
+     * full DB_OBJ resolution.
+     */
+    void SetLeanMode( bool aLean ) { m_leanMode = aLean; }
 
     /**
      * Iterate all the links we know about and fill in the object links
@@ -929,6 +945,8 @@ public:
     // Raw block storage for backward compatibility with BOARD_BUILDER
     std::vector<std::unique_ptr<BLOCK_BASE>> m_Blocks;
     std::unordered_map<uint32_t, BLOCK_BASE*> m_ObjectKeyMap;
+
+    bool m_leanMode;
 
 private:
     /**

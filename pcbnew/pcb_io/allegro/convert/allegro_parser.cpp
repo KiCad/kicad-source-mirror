@@ -24,12 +24,15 @@
 
 #include "convert/allegro_parser.h"
 
+#include <array>
+#include <chrono>
 #include <cstring>
 
 #include <wx/sstream.h>
 #include <wx/log.h>
 #include <wx/translation.h>
 
+#include <core/profile.h>
 #include <core/type_helpers.h>
 #include <ki_exception.h>
 
@@ -44,6 +47,7 @@ using namespace ALLEGRO;
  * @ingroup trace_env_vars
  */
 static const wxChar* const traceAllegroParser = wxT( "KICAD_ALLEGRO_PARSER" );
+static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
 static FMT_VER GetFormatVer( uint32_t aMagic )
@@ -1117,25 +1121,15 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1D( FILE_STREAM& aStream, FMT_VE
     data.m_SizeA = aStream.ReadU16();
     data.m_SizeB = aStream.ReadU16();
 
-    data.m_DataB.reserve( data.m_SizeB );
-    for( size_t i = 0; i < data.m_SizeB; ++i )
-    {
-        auto& item = data.m_DataB.emplace_back();
-        for( size_t j = 0; j < item.size(); ++j )
-        {
-            item[j] = aStream.ReadU8();
-        }
-    }
+    data.m_DataB.resize( data.m_SizeB );
 
-    data.m_DataA.reserve( data.m_SizeA );
-    for( size_t i = 0; i < data.m_SizeA; ++i )
-    {
-        auto& item = data.m_DataA.emplace_back();
-        for( size_t j = 0; j < item.size(); ++j )
-        {
-            item[j] = aStream.ReadU8();
-        }
-    }
+    for( auto& item : data.m_DataB )
+        aStream.ReadBytes( item.data(), item.size() );
+
+    data.m_DataA.resize( data.m_SizeA );
+
+    for( auto& item : data.m_DataA )
+        aStream.ReadBytes( item.data(), item.size() );
 
     ReadCond( aStream, aVer, data.m_Unknown4 );
 
@@ -1196,11 +1190,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1F( FILE_STREAM& aStream, FMT_VE
     else
         substructSize = data.m_Size * 240 + 4;
 
-    data.m_Substruct.reserve( substructSize );
-    for( size_t i = 0; i < substructSize; i++ )
-    {
-        data.m_Substruct.push_back( aStream.ReadU8() );
-    }
+    data.m_Substruct.resize( substructSize );
+    aStream.ReadBytes( data.m_Substruct.data(), substructSize );
 
     return block;
 }
@@ -1238,11 +1229,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
     data.m_Key = aStream.ReadU32();
 
     const size_t nBytes = data.m_Size - 12;
-    data.m_Data.reserve( nBytes );
-    for( size_t i = 0; i < nBytes; ++i )
-    {
-        data.m_Data.push_back( aStream.ReadU8() );
-    }
+    data.m_Data.resize( nBytes );
+    aStream.ReadBytes( data.m_Data.data(), nBytes );
 
     return block;
 }
@@ -2454,6 +2442,8 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
     BLOCK_PARSER blockParser( m_stream, ver, aBoard.m_Header->m_0x27_End );
 
+    auto lastRefresh = std::chrono::steady_clock::now();
+
     while( true )
     {
         const size_t offset = m_stream.Position();
@@ -2479,8 +2469,6 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
                 if( nextByte > 0x00 && nextByte <= 0x3C )
                 {
-                    // Found a valid block type after the gap. Rewind to the start
-                    // of that block (the 4-byte-aligned position before nextByte).
                     size_t blockStart = scanPos;
 
                     if( blockStart % 4 != 0 )
@@ -2496,9 +2484,13 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
                 }
             }
 
-            wxLogTrace( traceAllegroParser,
-                        wxString::Format( "End of objects marker (0x00) at index %zu, offset %#010zx",
-                                          aBoard.GetObjectCount(), offset ) );
+            if( wxLog::IsAllowedTraceMask( traceAllegroParser ) )
+            {
+                wxLogTrace( traceAllegroParser,
+                            wxString::Format( "End of objects marker (0x00) at index %zu, offset %#010zx",
+                                              aBoard.GetObjectCount(), offset ) );
+            }
+
             break;
         }
 
@@ -2522,17 +2514,31 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         }
         else
         {
-            wxLogTrace( traceAllegroParser, wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
-                                                              aBoard.GetObjectCount(), block->GetBlockType(), offset,
-                                                              m_stream.Position() ) );
+            if( wxLog::IsAllowedTraceMask( traceAllegroParser ) )
+            {
+                wxLogTrace( traceAllegroParser,
+                            wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
+                                              aBoard.GetObjectCount(), block->GetBlockType(), offset,
+                                              m_stream.Position() ) );
+            }
 
-            // Turn the binary-ish data into database objects
             aBoard.InsertBlock( std::move( block ) );
 
-            // if( m_progressReporter )
-            // {
-            //     m_progressReporter->AdvanceProgress();
-            // }
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvanceProgress();
+
+                if( ( aBoard.GetObjectCount() & 0x3F ) == 0 )
+                {
+                    auto now = std::chrono::steady_clock::now();
+
+                    if( now - lastRefresh >= std::chrono::milliseconds( 100 ) )
+                    {
+                        m_progressReporter->KeepRefreshing();
+                        lastRefresh = now;
+                    }
+                }
+            }
         }
     }
 }
@@ -2547,6 +2553,8 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
         m_progressReporter->AddPhases( 2 );
         m_progressReporter->AdvancePhase( "Reading file header" );
     }
+
+    PROF_TIMER parseTimer;
 
     try
     {
@@ -2600,6 +2608,8 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
         THROW_IO_ERROR( s );
     }
 
+    wxLogTrace( traceAllegroPerf, wxT( "  ReadHeader: %.3f ms" ), parseTimer.msecs( true ) ); //format:allow
+
     if( board->m_FmtVer == FMT_VER::V_PRE_V16 )
     {
         wxString verStr( board->m_Header->m_AllegroVersion.data(), 60 );
@@ -2613,11 +2623,23 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
                 verStr ) );
     }
 
+    board->ReserveCapacity( board->m_Header->m_ObjectCount, board->m_Header->m_StringsCount );
+
+    // Skip DB_OBJ creation for high-volume types (segments, graphics, arcs) that the
+    // BOARD_BUILDER accesses only through raw BLOCK_BASE. Saves millions of allocations.
+    board->SetLeanMode( true );
+
     try
     {
         ReadStringMap( m_stream, *board, board->m_Header->m_StringsCount );
 
+        wxLogTrace( traceAllegroPerf, wxT( "  ReadStringMap (%u strings): %.3f ms" ), //format:allow
+                    board->m_Header->m_StringsCount, parseTimer.msecs( true ) );
+
         readObjects( *board );
+
+        wxLogTrace( traceAllegroPerf, wxT( "  readObjects (%zu objects): %.3f ms" ), //format:allow
+                    board->GetObjectCount(), parseTimer.msecs( true ) );
     }
     catch( const IO_ERROR& e )
     {
@@ -2635,6 +2657,9 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
 
     // Now the object are read, resolve the DB links
     board->ResolveAndValidate();
+
+    wxLogTrace( traceAllegroPerf, wxT( "  ResolveAndValidate: %.3f ms" ), parseTimer.msecs( true ) ); //format:allow
+    wxLogTrace( traceAllegroPerf, wxT( "  Phase 1 total: %.3f ms" ), parseTimer.msecs() ); //format:allow
 
     return board;
 }

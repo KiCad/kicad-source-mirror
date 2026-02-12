@@ -31,11 +31,17 @@
 #include <board.h>
 #include <reporter.h>
 #include <io/io_utils.h>
+#include <kiplatform/io.h>
 
 #include <convert/allegro_parser.h>
 #include <allegro_builder.h>
 
 #include <core/profile.h>
+
+#include <stdexcept>
+
+
+static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
 static bool checkFileHeader( const wxString& aFileName )
@@ -116,12 +122,21 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
     std::unique_ptr<BOARD> deleter( aAppendToMe ? nullptr : m_board );
 
-    std::ifstream fin( aFileName.fn_str(), std::ios::binary );
+    std::unique_ptr<KIPLATFORM::IO::MAPPED_FILE> mappedFile;
 
-    if( !fin.is_open() )
-        THROW_IO_ERROR( wxString::Format( "Cannot open file: %s", aFileName ) );
+    try
+    {
+        mappedFile = std::make_unique<KIPLATFORM::IO::MAPPED_FILE>( aFileName );
+    }
+    catch( const std::runtime_error& e )
+    {
+        THROW_IO_ERROR( wxString::Format( wxS( "%s" ), e.what() ) );
+    }
 
-    ALLEGRO::FILE_STREAM allegroStream( fin );
+    if( !mappedFile->Data() || mappedFile->Size() == 0 )
+        THROW_IO_ERROR( wxString::Format( wxS( "File is empty: %s" ), aFileName ) );
+
+    ALLEGRO::FILE_STREAM allegroStream( mappedFile->Data(), mappedFile->Size() );
 
     ALLEGRO::PARSER parser( allegroStream, m_progressReporter );
 
@@ -129,22 +144,26 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     // cannot know how long that block is, and thus can't proceed to find any later blocks.
     parser.EndAtUnknownBlock( false );
 
-    PROF_TIMER timer( "allegro_file_parse" );
+    PROF_TIMER totalTimer;
+
+    wxLogTrace( traceAllegroPerf, wxT( "=== Allegro Import Performance ===" ) );
 
     // Import phase 1: turn the file into the C++ structs
+    PROF_TIMER phaseTimer;
     std::unique_ptr<ALLEGRO::BRD_DB> brdDb = parser.Parse();
+    phaseTimer.Stop();
 
-    m_reporter->Report( wxString::Format( "Phase 1 parse took %fms", timer.msecs() ), RPT_SEVERITY_DEBUG ); // format:allow
-
-    wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 1 parse complete, starting Phase 2 board construction" );
+    wxLogTrace( traceAllegroPerf, wxT( "Phase 1 (binary parse): %.3f ms" ), phaseTimer.msecs() ); //format:allow
 
     // Import Phase 2: turn the C++ structs into the KiCad BOARD
     ALLEGRO::BOARD_BUILDER builder( *brdDb, *m_board, *m_reporter, m_progressReporter,
                                     m_layer_mapping_handler );
 
+    phaseTimer.Start();
     const bool phase2Ok = builder.BuildBoard();
+    phaseTimer.Stop();
 
-    m_reporter->Report( wxString::Format( "Phase 2 parse took %fms", timer.msecs( true ) ), RPT_SEVERITY_DEBUG ); // format:allow
+    wxLogTrace( traceAllegroPerf, wxT( "Phase 2 (board construction): %.3f ms" ), phaseTimer.msecs() ); //format:allow
 
     if( !phase2Ok )
     {
@@ -154,6 +173,7 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
 
     wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Board construction completed successfully" );
+    wxLogTrace( traceAllegroPerf, wxT( "LoadBoard total (Phase 1 + Phase 2): %.3f ms" ), totalTimer.msecs() ); //format:allow
 
     m_board->m_LegacyNetclassesLoaded = true;
     m_board->m_LegacyDesignSettingsLoaded = true;

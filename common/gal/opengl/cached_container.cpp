@@ -41,7 +41,7 @@
 #include <cassert>
 
 #ifdef __WIN32__
-#include <excpt.h>
+#include <windows.h>
 #endif
 
 #ifdef KICAD_GAL_PROFILE
@@ -320,8 +320,8 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
         // currently, because SEH (Structured Exception Handling) is not documented on msys
         // (for instance __except1 exists without doc) or is not supported, do nothing
     #else
-        __except( GetExceptionCode() == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
-                                                                : EXCEPTION_CONTINUE_SEARCH )
+        __except( GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER
+                                                                  : EXCEPTION_CONTINUE_SEARCH )
         {
             throw std::runtime_error(
                     "Access violation in defragment. This is usually an indicator of "

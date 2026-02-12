@@ -205,20 +205,38 @@ void DB_REF_CHAIN::Visit( std::function<void ( DB_OBJ& aObj )> aVisitor )
 }
 
 
+void BRD_DB::ReserveCapacity( size_t aObjectCount, size_t aStringCount )
+{
+    m_Blocks.reserve( aObjectCount );
+    m_ObjectKeyMap.reserve( aObjectCount );
+    reserveObjects( aObjectCount );
+    m_StringTable.reserve( aStringCount );
+}
+
+
 void BRD_DB::InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock )
 {
-    std::unique_ptr<DB_OBJ> dbObj = createObject( *aBlock );
+    bool skipDbObj = false;
 
-    if( dbObj )
+    if( m_leanMode )
     {
-        AddObject( std::move( dbObj ) );
+        // Skip DB_OBJ creation for high-volume types that the BOARD_BUILDER accesses
+        // exclusively through raw BLOCK_BASE via m_ObjectKeyMap and LL_WALKER.
+        // Types like NET (0x1B) and FIELD (0x03) must still create DB_OBJ for VisitNets.
+        uint8_t t = aBlock->GetBlockType();
+        skipDbObj = ( t == 0x01 || t == 0x14 || t == 0x15 || t == 0x16 || t == 0x17 );
     }
 
-    // Store raw block for BOARD_BUILDER compatibility
+    if( !skipDbObj )
+    {
+        std::unique_ptr<DB_OBJ> dbObj = createObject( *aBlock );
+
+        if( dbObj )
+            AddObject( std::move( dbObj ) );
+    }
+
     if( aBlock->GetKey() != 0 )
-    {
         m_ObjectKeyMap[aBlock->GetKey()] = aBlock.get();
-    }
 
     m_Blocks.push_back( std::move( aBlock ) );
 }
@@ -439,27 +457,8 @@ void DB::ResolveObjectLinks()
 
 void DB::ResolveObjectLinksBestEffort()
 {
-    int failCount = 0;
-
     for( auto& [key, obj] : m_Objects )
-    {
         obj->m_Valid = obj->ResolveRefs( *this );
-
-        if( !obj->m_Valid )
-        {
-            failCount++;
-            wxLogTrace( "ALLEGRO_EXTRACT",
-                        "Best-effort: skipping unresolvable object key %#010x (type %d)",
-                        key, static_cast<int>( obj->GetType() ) );
-        }
-    }
-
-    if( failCount > 0 )
-    {
-        wxLogTrace( "ALLEGRO_EXTRACT",
-                    "Best-effort resolution complete: %d of %zu objects could not be resolved",
-                    failCount, m_Objects.size() );
-    }
 }
 
 
@@ -1571,6 +1570,16 @@ bool BRD_DB::ResolveAndValidate()
 {
     if( m_FmtVer >= FMT_VER::V_180 )
         collectSentinelKeys( *m_Header, *this );
+
+    if( m_leanMode )
+    {
+        // In lean mode, DB_OBJ was not created for high-volume types (segments, graphics,
+        // arcs). Other DB_OBJ types that reference those keys will fail to resolve, so we
+        // attempt best-effort resolution. The NET and FIELD objects the builder needs only
+        // reference each other and will resolve correctly.
+        ResolveObjectLinksBestEffort();
+        return true;
+    }
 
     // Try strict resolution first. If it fails (some boards have object types the parser
     // doesn't fully support), fall back to best-effort which allows partial imports.

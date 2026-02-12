@@ -22,6 +22,8 @@
 
 #include <stdio.h>
 #include <cstddef>
+#include <cstdint>
+#include <vector>
 
 class wxString;
 class wxFileName;
@@ -30,6 +32,40 @@ namespace KIPLATFORM
 {
 namespace IO
 {
+    /**
+     * RAII wrapper for memory-mapped file I/O.
+     *
+     * Uses mmap on POSIX and MapViewOfFile on Windows. Falls back to reading
+     * the entire file into a heap buffer if memory mapping is unavailable.
+     */
+    class MAPPED_FILE
+    {
+    public:
+        explicit MAPPED_FILE( const wxString& aFileName );
+        ~MAPPED_FILE();
+
+        MAPPED_FILE( const MAPPED_FILE& ) = delete;
+        MAPPED_FILE& operator=( const MAPPED_FILE& ) = delete;
+
+        const uint8_t* Data() const { return m_data; }
+        size_t         Size() const { return m_size; }
+
+    private:
+        void readIntoBuffer( const wxString& aFileName );
+
+        const uint8_t* m_data = nullptr;
+        size_t         m_size = 0;
+
+#ifdef _WIN32
+        void*          m_fileHandle = nullptr;
+        void*          m_mapHandle = nullptr;
+#else
+        bool           m_isMapped = false;
+#endif
+
+        std::vector<uint8_t> m_fallbackBuffer;
+    };
+
     /**
      * Buffer size for file I/O operations on cloud-synced folders.
      *

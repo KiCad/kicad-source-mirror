@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <string>
+#include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -156,4 +157,53 @@ long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString
     }
 
     return timestamp;
+}
+
+
+KIPLATFORM::IO::MAPPED_FILE::MAPPED_FILE( const wxString& aFileName )
+{
+    int fd = open( aFileName.fn_str(), O_RDONLY );
+
+    if( fd < 0 )
+    {
+        throw std::runtime_error( std::string( "Cannot open file: " )
+                                  + aFileName.ToStdString() );
+    }
+
+    struct stat st;
+
+    if( fstat( fd, &st ) != 0 )
+    {
+        close( fd );
+        throw std::runtime_error( std::string( "Cannot stat file: " )
+                                  + aFileName.ToStdString() );
+    }
+
+    m_size = static_cast<size_t>( st.st_size );
+
+    if( m_size == 0 )
+    {
+        close( fd );
+        return;
+    }
+
+    void* ptr = mmap( nullptr, m_size, PROT_READ, MAP_PRIVATE, fd, 0 );
+    close( fd );
+
+    if( ptr == MAP_FAILED )
+    {
+        readIntoBuffer( aFileName );
+        return;
+    }
+
+    madvise( ptr, m_size, MADV_SEQUENTIAL );
+    m_data = static_cast<const uint8_t*>( ptr );
+    m_isMapped = true;
+}
+
+
+KIPLATFORM::IO::MAPPED_FILE::~MAPPED_FILE()
+{
+    if( m_isMapped && m_data )
+        munmap( const_cast<uint8_t*>( m_data ), m_size );
 }

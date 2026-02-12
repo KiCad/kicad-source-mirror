@@ -30,6 +30,7 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <core/arraydim.h>
+#include <core/profile.h>
 #include <thread_pool.h>
 #include <gestfich.h>
 #include <local_history.h>
@@ -92,6 +93,8 @@
 
 //#define     USE_INSTRUMENTATION     1
 #define     USE_INSTRUMENTATION     0
+
+static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
 /**
@@ -728,7 +731,14 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Raise();
 
         // Skip (possibly expensive) connectivity build here; we build it below after load
+        progressReporter.AddPhases( 1 );
+        progressReporter.AdvancePhase( _( "Finalizing board" ) );
+        progressReporter.KeepRefreshing();
+
+        PROF_TIMER postLoadTimer;
         SetBoard( loadedBoard, false, &progressReporter );
+        wxLogTrace( traceAllegroPerf, wxT( "Post-load SetBoard: %.3f ms" ),
+                    postLoadTimer.msecs( true ) );
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {
@@ -773,8 +783,22 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // we should not ask PCB_IOs to do these items:
         loadedBoard->BuildListOfNets();
+        wxLogTrace( traceAllegroPerf, wxT( "Post-load BuildListOfNets: %.3f ms" ),
+                    postLoadTimer.msecs( true ) );
+
+        progressReporter.KeepRefreshing();
+
         m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true);
+        wxLogTrace( traceAllegroPerf, wxT( "Post-load repairBoard: %.3f ms" ),
+                    postLoadTimer.msecs( true ) );
+
+        progressReporter.KeepRefreshing();
+
         m_toolManager->RunAction( PCB_ACTIONS::rehatchShapes );
+        wxLogTrace( traceAllegroPerf, wxT( "Post-load rehatchShapes: %.3f ms" ),
+                    postLoadTimer.msecs( true ) );
+
+        progressReporter.KeepRefreshing();
 
         if( loadedBoard->IsModified() )
             OnModify();
@@ -916,11 +940,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     std::vector<ZONE*> toFill;
 
     // Rebuild list of nets (full ratsnest rebuild)
+    PROF_TIMER connectivityTimer;
     GetBoard()->BuildConnectivity( &progressReporter );
+    wxLogTrace( traceAllegroPerf, wxT( "Post-load BuildConnectivity: %.3f ms" ),
+                connectivityTimer.msecs( true ) );
 
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
     LoadDrawingSheet();
+    wxLogTrace( traceAllegroPerf, wxT( "Post-load LoadProjectSettings+DrawingSheet: %.3f ms" ),
+                connectivityTimer.msecs( true ) );
 
     // Resolve DRC exclusions after project settings are loaded
     ResolveDRCExclusions( true );
@@ -930,9 +959,15 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     // Initialise time domain tuning caches
     GetBoard()->GetLengthCalculation()->SynchronizeTuningProfileProperties();
+    wxLogTrace( traceAllegroPerf, wxT( "Post-load DRC+ComponentClass+Tuning caches: %.3f ms" ),
+                connectivityTimer.msecs( true ) );
 
     // Syncs the UI (appearance panel, etc) with the loaded board and project
     OnBoardLoaded();
+    wxLogTrace( traceAllegroPerf, wxT( "Post-load OnBoardLoaded: %.3f ms" ),
+                connectivityTimer.msecs( true ) );
+    wxLogTrace( traceAllegroPerf, wxT( "=== Post-load pipeline total: %.3f ms ===" ),
+                connectivityTimer.msecs() );
 
     // Refresh the 3D view, if any
     EDA_3D_VIEWER_FRAME* draw3DFrame = Get3DViewerFrame();

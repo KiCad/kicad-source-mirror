@@ -24,6 +24,7 @@
 
 #include "allegro_builder.h"
 
+#include <chrono>
 #include <cmath>
 #include <limits>
 #include <set>
@@ -32,6 +33,8 @@
 #include <convert/allegro_pcb_structs.h>
 
 #include <wx/log.h>
+
+#include <core/profile.h>
 
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -55,6 +58,7 @@ using namespace ALLEGRO;
  * @ingroup trace_env_vars
  */
 static const wxChar* const traceAllegroBuilder = wxT( "KICAD_ALLEGRO_BUILDER" );
+static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
 #define BLK_FIELD( BLK_T, FIELD ) static_cast<const BLOCK<BLK_T>&>( aBlock ).GetData().FIELD
@@ -2814,10 +2818,15 @@ void BOARD_BUILDER::createBoardOutline()
 }
 
 
-SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) const
+const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) const
 {
-    SHAPE_LINE_CHAIN outline;
-    uint32_t         currentKey = aStartKey;
+    auto cacheIt = m_segChainCache.find( aStartKey );
+
+    if( cacheIt != m_segChainCache.end() )
+        return cacheIt->second;
+
+    SHAPE_LINE_CHAIN& outline = m_segChainCache[aStartKey];
+    uint32_t          currentKey = aStartKey;
 
     // Safety limit to prevent infinite loops on corrupt data
     static constexpr int MAX_CHAIN_LENGTH = 50000;
@@ -2895,10 +2904,15 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) const
 }
 
 
-SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
+const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
 {
-    SHAPE_LINE_CHAIN outline;
-    const LL_WALKER  segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
+    auto it = m_outlineCache.find( aShape.m_Key );
+
+    if( it != m_outlineCache.end() )
+        return it->second;
+
+    SHAPE_LINE_CHAIN& outline = m_outlineCache[aShape.m_Key];
+    const LL_WALKER   segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* segBlock : segWalker )
     {
@@ -3114,16 +3128,16 @@ void BOARD_BUILDER::createZones()
 
             if( zoneLayer != UNDEFINED_LAYER )
             {
-                SHAPE_LINE_CHAIN zoneOutline = buildOutline( shapeData );
-                BOX2I            zoneBbox = zoneOutline.BBox();
+                const SHAPE_LINE_CHAIN& zoneOutline = buildOutline( shapeData );
+                BOX2I                  zoneBbox = zoneOutline.BBox();
 
                 for( const ZoneFillEntry& fill : m_zoneFillShapes )
                 {
                     if( fill.layer != zoneLayer || fill.netCode == NETINFO_LIST::UNCONNECTED )
                         continue;
 
-                    SHAPE_LINE_CHAIN fillOutline = buildOutline( *fill.shape );
-                    BOX2I            fillBbox = fillOutline.BBox();
+                    const SHAPE_LINE_CHAIN& fillOutline = buildOutline( *fill.shape );
+                    BOX2I                   fillBbox = fillOutline.BBox();
 
                     if( zoneBbox.Contains( fillBbox ) || fillBbox.Contains( zoneBbox ) )
                     {
@@ -3179,6 +3193,12 @@ void BOARD_BUILDER::createZones()
                 continue;
 
             const SHAPE_LINE_CHAIN& candidateOutline = candidate->Outline()->COutline( 0 );
+
+            if( primaryOutline.PointCount() != candidateOutline.PointCount() )
+                continue;
+
+            if( primaryOutline.BBox() != candidateOutline.BBox() )
+                continue;
 
             if( primaryOutline.CompareGeometry( candidateOutline ) )
             {
@@ -3247,12 +3267,25 @@ void BOARD_BUILDER::applyZoneFills()
     if( m_zoneFillShapes.empty() )
         return;
 
+    PROF_TIMER fillTimer;
+
     wxLogTrace( traceAllegroBuilder, "Applying zone fill polygons from %zu collected fills",
                 m_zoneFillShapes.size() );
 
     int fillCount = 0;
     int totalHoles = 0;
     std::vector<bool> matched( m_zoneFillShapes.size(), false );
+
+    // Index fills by (layer, netCode) to avoid scanning all fills for each zone
+    std::unordered_map<uint64_t, std::vector<size_t>> fillIndex;
+
+    for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
+    {
+        const ZoneFillEntry& fill = m_zoneFillShapes[i];
+        uint64_t key = ( static_cast<uint64_t>( fill.layer ) << 32 )
+                       | static_cast<uint32_t>( fill.netCode );
+        fillIndex[key].push_back( i );
+    }
 
     for( ZONE* zone : m_board.Zones() )
     {
@@ -3266,24 +3299,27 @@ void BOARD_BUILDER::applyZoneFills()
             if( !IsCopperLayer( layer ) )
                 continue;
 
+            uint64_t key = ( static_cast<uint64_t>( layer ) << 32 )
+                           | static_cast<uint32_t>( zone->GetNetCode() );
+            auto indexIt = fillIndex.find( key );
+
+            if( indexIt == fillIndex.end() )
+                continue;
+
             SHAPE_POLY_SET combinedFill;
 
-            for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
+            for( size_t i : indexIt->second )
             {
                 const ZoneFillEntry& fill = m_zoneFillShapes[i];
+                const SHAPE_LINE_CHAIN& cachedOutline = buildOutline( *fill.shape );
 
-                if( fill.layer != layer || fill.netCode != zone->GetNetCode() )
+                if( cachedOutline.PointCount() < 3 )
                     continue;
 
-                SHAPE_LINE_CHAIN fillOutline = buildOutline( *fill.shape );
-
-                if( fillOutline.PointCount() < 3 )
-                    continue;
-
+                SHAPE_LINE_CHAIN fillOutline = cachedOutline;
                 fillOutline.SetClosed( true );
                 fillOutline.ClearArcs();
 
-                // Only include fills whose bounding box overlaps the zone outline
                 BOX2I fillBbox = fillOutline.BBox();
                 BOX2I zoneBbox = zone->GetBoundingBox();
 
@@ -3323,7 +3359,10 @@ void BOARD_BUILDER::applyZoneFills()
 
             if( combinedFill.OutlineCount() > 0 )
             {
-                combinedFill.Fracture();
+                // Allegro fill data is well-formed, skip Clipper2 Simplify
+                if( combinedFill.HasHoles() )
+                    combinedFill.Fracture( /* aSimplify */ false );
+
                 zone->SetFilledPolysList( layer, combinedFill );
                 hasFill = true;
                 fillCount++;
@@ -3336,6 +3375,9 @@ void BOARD_BUILDER::applyZoneFills()
             zone->SetNeedRefill( false );
         }
     }
+
+    wxLogTrace( traceAllegroPerf, wxT( "    applyZoneFills matched loop: %.3f ms (%d fills, %d holes)" ), //format:allow
+                fillTimer.msecs( true ), fillCount, totalHoles );
 
     // Unmatched ETCH shapes are either standalone copper polygons or dynamic copper
     // (teardrops/fillets). On V172+ boards, m_Unknown2 bit 12 (0x1000) marks auto-generated
@@ -3387,7 +3429,8 @@ void BOARD_BUILDER::applyZoneFills()
             holeKey = keepout.m_Next;
         }
 
-        polySet.Fracture();
+        if( polySet.HasHoles() )
+            polySet.Fracture( /* aSimplify */ false );
 
         const bool isDynCopperShape = ( fill.shape->m_Unknown2.value_or( 0 ) & 0x1000 ) != 0;
 
@@ -3425,6 +3468,9 @@ void BOARD_BUILDER::applyZoneFills()
             copperShapeCount++;
         }
     }
+
+    wxLogTrace( traceAllegroPerf, wxT( "    applyZoneFills unmatched loop: %.3f ms (%d shapes, %d teardrops)" ), //format:allow
+                fillTimer.msecs( true ), copperShapeCount, teardropCount );
 
     wxLogTrace( traceAllegroBuilder,
                 "Applied fills to %d zone/layer pairs (%d clearance holes), "
@@ -3515,59 +3561,93 @@ bool BOARD_BUILDER::BuildBoard()
     {
         m_progressReporter->AddPhases( 4 );
         m_progressReporter->AdvancePhase( _( "Constructing caches" ) );
+        m_progressReporter->KeepRefreshing();
     }
+
+    PROF_TIMER buildTimer;
 
     wxLogTrace( traceAllegroBuilder, "Caching font definitions and setting up layers" );
     cacheFontDefs();
+    wxLogTrace( traceAllegroPerf, wxT( "  cacheFontDefs: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
     setupLayers();
+    wxLogTrace( traceAllegroPerf, wxT( "  setupLayers: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     if( m_progressReporter )
+    {
         m_progressReporter->AdvancePhase( _( "Creating nets" ) );
+        m_progressReporter->KeepRefreshing();
+    }
 
     createNets();
+    wxLogTrace( traceAllegroPerf, wxT( "  createNets: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     if( m_progressReporter )
+    {
         m_progressReporter->AdvancePhase( _( "Creating tracks" ) );
+        m_progressReporter->KeepRefreshing();
+    }
 
     createTracks();
+    wxLogTrace( traceAllegroPerf, wxT( "  createTracks: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
+    if( m_progressReporter )
+        m_progressReporter->KeepRefreshing();
 
     createBoardOutline();
+    wxLogTrace( traceAllegroPerf, wxT( "  createBoardOutline: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     createZones();
+    wxLogTrace( traceAllegroPerf, wxT( "  createZones: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
+    if( m_progressReporter )
+        m_progressReporter->KeepRefreshing();
+
     applyZoneFills();
+    wxLogTrace( traceAllegroPerf, wxT( "  applyZoneFills: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     applyConstraintSets();
+    wxLogTrace( traceAllegroPerf, wxT( "  applyConstraintSets: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
     applyNetConstraints();
+    wxLogTrace( traceAllegroPerf, wxT( "  applyNetConstraints: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
     applyMatchGroups();
+    wxLogTrace( traceAllegroPerf, wxT( "  applyMatchGroups: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase( _( "Converting footprints" ) );
+        m_progressReporter->KeepRefreshing();
     }
 
     const LL_WALKER          fpWalker( m_brdDb.m_Header->m_LL_0x2B, m_brdDb );
     std::vector<BOARD_ITEM*> bulkAddedItems;
 
+    auto lastRefresh = std::chrono::steady_clock::now();
+
     for( const BLOCK_BASE* fpContainer : fpWalker )
     {
         if( fpContainer->GetBlockType() == 0x2B )
         {
-            const BLK_0x2B_FOOTPRINT_DEF& fpBlock = static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( *fpContainer ).GetData();
+            const BLK_0x2B_FOOTPRINT_DEF& fpBlock =
+                    static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( *fpContainer ).GetData();
 
             const LL_WALKER instWalker( fpBlock.m_FirstInstPtr, fpBlock.m_Key, m_brdDb );
 
-            unsigned numInsts = 0;
             for( const BLOCK_BASE* instBlock : instWalker )
             {
                 if( instBlock->GetBlockType() != 0x2D )
                 {
-                    m_reporter.Report( wxString::Format( "Unexpected object of type %#04x found in footprint %#010x",
-                                                         instBlock->GetBlockType(), fpBlock.m_Key ),
-                                       RPT_SEVERITY_ERROR );
+                    m_reporter.Report(
+                            wxString::Format( "Unexpected object of type %#04x found in footprint %#010x",
+                                              instBlock->GetBlockType(), fpBlock.m_Key ),
+                            RPT_SEVERITY_ERROR );
                 }
                 else
                 {
-                    const auto& inst = static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( *instBlock ).GetData();
+                    const auto& inst =
+                            static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( *instBlock ).GetData();
 
                     std::unique_ptr<FOOTPRINT> fp = buildFootprint( inst );
 
@@ -3579,21 +3659,38 @@ bool BOARD_BUILDER::BuildBoard()
                     else
                     {
                         m_reporter.Report(
-                                wxString::Format( "Failed to construct footprint for 0x2D key %#010x", inst.m_Key ),
+                                wxString::Format( "Failed to construct footprint for 0x2D key %#010x",
+                                                  inst.m_Key ),
                                 RPT_SEVERITY_ERROR );
                     }
                 }
-                numInsts++;
+
+                if( m_progressReporter )
+                {
+                    auto now = std::chrono::steady_clock::now();
+
+                    if( now - lastRefresh >= std::chrono::milliseconds( 100 ) )
+                    {
+                        m_progressReporter->KeepRefreshing();
+                        lastRefresh = now;
+                    }
+                }
             }
         }
     }
 
+    wxLogTrace( traceAllegroPerf, wxT( "  convertFootprints (%zu footprints): %.3f ms" ), //format:allow
+                bulkAddedItems.size(), buildTimer.msecs( true ) );
+
     if( !bulkAddedItems.empty() )
         m_board.FinalizeBulkAdd( bulkAddedItems );
 
+    wxLogTrace( traceAllegroPerf, wxT( "  FinalizeBulkAdd: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
     wxLogTrace( traceAllegroBuilder, "Converted %zu footprints", bulkAddedItems.size() );
 
     enablePadTeardrops();
+    wxLogTrace( traceAllegroPerf, wxT( "  enablePadTeardrops: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+    wxLogTrace( traceAllegroPerf, wxT( "  Phase 2 total: %.3f ms" ), buildTimer.msecs() ); //format:allow
 
     wxLogTrace( traceAllegroBuilder, "Board construction completed successfully" );
     return true;

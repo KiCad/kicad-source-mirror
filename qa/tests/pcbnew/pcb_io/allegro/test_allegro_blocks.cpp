@@ -98,9 +98,7 @@ struct ALLEGRO_BLK_PARSE_FIXTURE
         BOOST_TEST_CONTEXT( wxString::Format( "Parsing block type %#02x at offset %#010zx from board %s", blockType,
                                               aTestBlock.m_BlockOffset, aTestBlock.m_BrdInfo.m_BrdFileName ) );
 
-        // Create the FILE_STREAM from the vector
-        std::istringstream stream( std::string( aTestBlock.m_BlockData.begin(), aTestBlock.m_BlockData.end() ) );
-        FILE_STREAM        fileStream( stream );
+        FILE_STREAM fileStream( aTestBlock.m_BlockData.data(), aTestBlock.m_BlockData.size() );
 
         BLOCK_PARSER parser( fileStream, aTestBlock.m_BrdInfo.m_FormatVersion );
 

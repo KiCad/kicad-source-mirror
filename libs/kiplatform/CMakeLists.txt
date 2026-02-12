@@ -121,6 +121,7 @@ include_directories(
     )
 
 add_library( kiplatform STATIC
+    os/common/io.cpp
     ${PLATFORM_SRCS}
     )
 

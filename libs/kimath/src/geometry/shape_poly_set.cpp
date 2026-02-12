@@ -1662,9 +1662,10 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 }
 
 
-void SHAPE_POLY_SET::Fracture()
+void SHAPE_POLY_SET::Fracture( bool aSimplify )
 {
-    Simplify();    // remove overlapping holes/degeneracy
+    if( aSimplify )
+        Simplify();    // remove overlapping holes/degeneracy
 
     for( POLYGON& paths : m_polys )
         fractureSingle( paths );

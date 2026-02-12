@@ -23,6 +23,7 @@
 #include <wx/wxcrt.h>
 #include <wx/filename.h>
 
+#include <stdexcept>
 #include <string>
 #include <windows.h>
 #include <shlwapi.h>
@@ -319,4 +320,74 @@ long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString
     CloseHandle( hDir );
 
     return timestamp;
+}
+
+
+KIPLATFORM::IO::MAPPED_FILE::MAPPED_FILE( const wxString& aFileName )
+{
+    m_fileHandle = CreateFileW( aFileName.wc_str(), GENERIC_READ, FILE_SHARE_READ,
+                                nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr );
+
+    if( m_fileHandle == INVALID_HANDLE_VALUE )
+    {
+        m_fileHandle = nullptr;
+        throw std::runtime_error( std::string( "Cannot open file: " )
+                                  + aFileName.ToStdString() );
+    }
+
+    LARGE_INTEGER fileSize;
+
+    if( !GetFileSizeEx( m_fileHandle, &fileSize ) )
+    {
+        CloseHandle( m_fileHandle );
+        m_fileHandle = nullptr;
+        throw std::runtime_error( std::string( "Cannot determine file size: " )
+                                  + aFileName.ToStdString() );
+    }
+
+    m_size = static_cast<size_t>( fileSize.QuadPart );
+
+    if( m_size == 0 )
+    {
+        CloseHandle( m_fileHandle );
+        m_fileHandle = nullptr;
+        return;
+    }
+
+    m_mapHandle = CreateFileMappingW( m_fileHandle, nullptr, PAGE_READONLY, 0, 0, nullptr );
+
+    if( !m_mapHandle )
+    {
+        CloseHandle( m_fileHandle );
+        m_fileHandle = nullptr;
+        readIntoBuffer( aFileName );
+        return;
+    }
+
+    void* ptr = MapViewOfFile( m_mapHandle, FILE_MAP_READ, 0, 0, 0 );
+
+    if( !ptr )
+    {
+        CloseHandle( m_mapHandle );
+        m_mapHandle = nullptr;
+        CloseHandle( m_fileHandle );
+        m_fileHandle = nullptr;
+        readIntoBuffer( aFileName );
+        return;
+    }
+
+    m_data = static_cast<const uint8_t*>( ptr );
+}
+
+
+KIPLATFORM::IO::MAPPED_FILE::~MAPPED_FILE()
+{
+    if( m_data && m_mapHandle )
+        UnmapViewOfFile( m_data );
+
+    if( m_mapHandle )
+        CloseHandle( m_mapHandle );
+
+    if( m_fileHandle )
+        CloseHandle( m_fileHandle );
 }

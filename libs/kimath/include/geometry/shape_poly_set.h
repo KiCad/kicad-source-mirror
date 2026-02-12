@@ -1095,8 +1095,13 @@ public:
     void InflateWithLinkedHoles( int aFactor, CORNER_STRATEGY aCornerStrategy, int aMaxError );
 
     /// Convert a set of polygons with holes to a single outline with "slits"/"fractures"
-    /// connecting the outer ring to the inner holes
-    void Fracture();
+    /// connecting the outer ring to the inner holes.
+    ///
+    /// @param aSimplify when true (default), run Simplify() first to remove overlapping
+    ///                  holes and degenerate geometry via Clipper2 Union. Set to false when
+    ///                  the input is known to be well-formed (e.g. imported fill data) to
+    ///                  avoid the expensive boolean operation.
+    void Fracture( bool aSimplify = true );
 
     /// Convert a single outline slitted ("fractured") polygon into a set ouf outlines
     /// with holes.
