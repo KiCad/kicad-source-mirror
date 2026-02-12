@@ -31,9 +31,11 @@
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
+#include <cstdint>
 #include <functional>
 #include <optional>
 #include <set>
+#include <vector>
 
 #include <wx/gdicmn.h>
 #include <wx/string.h>
@@ -347,6 +349,16 @@ struct NAMED_CASE
 std::string GetEeschemaTestDataDir();
 
 std::string GetTestDataRootDir();
+
+/**
+ * Load the contents of a file into a vector of bytes.
+ *
+ * If this fails, it throws a std::runtime_error with a descriptive message.
+ *
+ * @param aFilePath the path to the file to load
+ * @param aLoadBytes the number of bytes to load, or all bytes if not specified
+ */
+std::vector<uint8_t> LoadBinaryData( const std::string& aFilePath, std::optional<size_t> aLoadBytes = std::nullopt );
 
 void SetMockConfigDir();
 

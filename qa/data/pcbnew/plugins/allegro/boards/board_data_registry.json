@@ -1,0 +1,52 @@
+{
+    "boards": {
+        "CutiePi_V2_3_v166": {
+            "url": "https://github.com/cutiepi-io/cutiepi-board",
+            "license": "BSD-3-Clause",
+            "description": "CutiePi 2.3 v166 board file, saved in Allegro",
+            "formatVersion": "16.6",
+            "header": {
+                "skip": false
+            },
+            "blocks": [
+                {
+                    "type": "0x08",
+                    "offset": "0x00136a5c",
+                    "skip": false
+                }
+            ],
+            "boardExpections": {
+                "footprintCount": {
+                    "minimum": 1
+                }
+            }
+        },
+        "CutiePi_V2_3_dbd18": {
+            "url": "https://github.com/cutiepi-io/cutiepi-board",
+            "license": "BSD-3-Clause",
+            "description": "CutiePi 2.3, up-revved with DB Doctor 18",
+            "formatVersion": "18.0",
+            "header": {
+                // This one appears to be reading only 1264 bytes
+                "skip": true
+            }
+        },
+        "Olympus_15061-1b_v165": {
+            "url": "https://www.opencompute.org/wiki/Server/ProjectOlympus",
+            "license": "OWFa-1.0",
+            "description": "Olympus 15061 1b board file, saved in Allegro",
+            "formatVersion": "16.5",
+            "header": {
+                "skip": false
+            },
+            "blocks": [
+                {
+                    "comment": "This is the only known 0x20 in the boards seen so far",
+                    "type": "0x20",
+                    "offset": "0x0131553c",
+                    "skip": false
+                }
+            ]
+        }
+    }
+}

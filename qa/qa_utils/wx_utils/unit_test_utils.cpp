@@ -21,8 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "qa_utils/wx_utils/unit_test_utils.h"
+
+#include <exception>
+#include <filesystem>
+#include <fstream>
+
 #include <wx/utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
 
 std::ostream& boost_test_print_type( std::ostream& os, wxPoint const& aPt )
 {
@@ -81,6 +86,33 @@ std::string KI_TEST::GetTestDataRootDir()
     fn += "/";
 
     return fn;
+}
+
+
+std::vector<uint8_t> KI_TEST::LoadBinaryData( const std::string& aFilePath, std::optional<size_t> aLoadBytes )
+{
+    std::ifstream fileStream( aFilePath, std::ios::binary );
+
+    if( !fileStream )
+        throw std::runtime_error( "Failed to open file: " + aFilePath );
+
+    fileStream.seekg( 0, std::ios::end );
+    const size_t fileSize = static_cast<size_t>( fileStream.tellg() );
+    fileStream.seekg( 0, std::ios::beg );
+
+    const size_t bytesToRead = aLoadBytes.value_or( fileSize );
+
+    if( bytesToRead > fileSize )
+        throw std::runtime_error( "Requested " + std::to_string( bytesToRead ) + " bytes but file is "
+                                  + std::to_string( fileSize ) + " bytes: " + aFilePath );
+
+    std::vector<uint8_t> data( bytesToRead );
+    fileStream.read( reinterpret_cast<char*>( data.data() ), bytesToRead );
+
+    if( static_cast<size_t>( fileStream.gcount() ) != bytesToRead )
+        throw std::runtime_error( "Short read from file: " + aFilePath );
+
+    return data;
 }
 
 

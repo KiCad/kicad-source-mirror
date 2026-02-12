@@ -22,14 +22,26 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include "allegro_block_tests.h"
+#include "allegro_test_utils.h"
+
+#include <filesystem>
+#include <fstream>
+
 #include <boost/test/data/test_case.hpp>
+
+#include <json_common.h>
+
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <convert/allegro_parser.h>
 
 /**
  * @file test_allegro_blocks.cpp
  *
- * This file contains unit tests for parsing individual Allegro blocks, using the BLOCK_PARSER class.
+ * This file contains unit tests for parsing individual Allegro blocks and headers, loading from
+ * declarative test definitions in JSON files and binary data files.
  *
  * This allows to put regression/validation tests in place for block parsing, without having to
  * load an entire .brd file and parse all of its blocks. Allows to "lock in" known parsable blocks
@@ -37,137 +49,500 @@
  */
 
 using namespace ALLEGRO;
+using namespace KI_TEST;
 
 
-/**
- * Description of a test board, used to provide context for parser tests, in particular
- * where the test data came from and which version of the Allegro format it uses.
- */
-struct TEST_BRD_INFO
+static std::vector<uint8_t> loadDataByUri( const std::string& aDataSource )
 {
-    wxString m_Name;
-    wxString m_Url;
-    wxString m_License;
-    wxString m_BrdFileName;
-    FMT_VER  m_FormatVersion;
-};
+    // For now, we only support loading from files, but in the future we could also support
+    // loading from other sources (e.g. from compiled-in data, base64, etc.)
 
+    // Split off the protocol (e.g. "file://") if present, to get the actual path
+    std::string       path, protocol;
+    const std::string sep = "://";
 
-enum class EXPECT_PARSE_RESULT
-{
-    SUCCESS,
-    FAILURE,
-};
-
-
-/**
- * A single block of test data, along with the expected result of parsing it.
- */
-struct BLK_TEST_INFO
-{
-    ///< The board that this block is from
-    const TEST_BRD_INFO& m_BrdInfo;
-    ///< The offset within the board file where this block is located (used for error messages)
-    size_t m_BlockOffset;
-    ///< The raw bytes of the block, as copied from the file
-    std::vector<uint8_t> m_BlockData;
-    ///< The expected result of parsing this block
-    EXPECT_PARSE_RESULT m_ExpectParseResult;
-    ///< An optional function to validate the contents of the parsed block if parsing is expected to succeed
-    std::function<void( const BLOCK_BASE& )> m_ValidateFunc;
-
-    friend std::ostream& operator<<( std::ostream& os, const BLK_TEST_INFO& aTestInfo )
+    size_t sepPos = aDataSource.find( sep );
+    if( sepPos != std::string::npos )
     {
-        const uint8_t blockType = aTestInfo.m_BlockData.empty() ? 0x00 : aTestInfo.m_BlockData[0];
-        wxString      descr = wxString::Format( "Block type 0x%02x at offset 0x%010zx from board %s", blockType,
-                                                aTestInfo.m_BlockOffset, aTestInfo.m_BrdInfo.m_BrdFileName );
-        os << descr.ToStdString();
-        return os;
+        protocol = aDataSource.substr( 0, sepPos );
+        path = aDataSource.substr( sepPos + sep.size() );
     }
-};
-
-
-struct ALLEGRO_BLK_PARSE_FIXTURE
-{
-    ALLEGRO_BLK_PARSE_FIXTURE() {}
-
-    void RunBlockTest( const BLK_TEST_INFO& aTestBlock )
+    else
     {
-        const uint8_t blockType = aTestBlock.m_BlockData[0];
-
-        BOOST_TEST_CONTEXT( wxString::Format( "Parsing block type %#02x at offset %#010zx from board %s", blockType,
-                                              aTestBlock.m_BlockOffset, aTestBlock.m_BrdInfo.m_BrdFileName ) );
-
-        FILE_STREAM fileStream( aTestBlock.m_BlockData.data(), aTestBlock.m_BlockData.size() );
-
-        BLOCK_PARSER parser( fileStream, aTestBlock.m_BrdInfo.m_FormatVersion );
-
-        bool                        endOfObjectsMarker = false;
-        std::unique_ptr<BLOCK_BASE> block = parser.ParseBlock( endOfObjectsMarker );
-
-        // Compare the result to the expected results
-        if( aTestBlock.m_ExpectParseResult == EXPECT_PARSE_RESULT::SUCCESS )
-        {
-            BOOST_REQUIRE( block != nullptr );
-
-            if( aTestBlock.m_ValidateFunc )
-            {
-                aTestBlock.m_ValidateFunc( *block );
-            }
-        }
-        else
-        {
-            BOOST_TEST( block == nullptr );
-        }
+        // No protocol
+        throw std::runtime_error( "Unsupported data source URI (missing protocol): " + aDataSource );
     }
-};
 
-
-static const TEST_BRD_INFO brd_olympus_15061_1b_info{
-    "Project Olympus Motherboard",
-    "https://www.opencompute.org/wiki/Server/ProjectOlympus",
-    "OWFa 1.0",
-    "15061-1b.brd",
-    FMT_VER::V_165,
-};
-
-
-/**
- * This is an 0x20 block from the Olympus board
- *
- * It's the only one seen so far.
- */
-const BLK_TEST_INFO blk_x20_olympus_0x0131553c{
-    brd_olympus_15061_1b_info,
-    0x0131553c,
+    if( protocol == "file" )
     {
-            0x20, 0x00, 0x07, 0x05, 0x98, 0xB4, 0x2A, 0x81, 0xF0, 0xF8, 0x4D, 0x82, 0x20, 0x8C, 0x92, 0x81,
-            0xF4, 0x01, 0x00, 0x00, 0xF4, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x01, 0x00, 0x00, 0x00, 0xC8, 0xAF, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00, 0xC0, 0xB4, 0x2A, 0x81,
-            0x80, 0xCF, 0xDE, 0x81, 0x58, 0xB0, 0xF7, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x36, 0x39, 0x00, 0x00, 0x79, 0x2D, 0x0F, 0x00, 0xAE, 0x25, 0x00, 0x00, 0x9D, 0x27, 0x0F, 0x00,
-    },
-    EXPECT_PARSE_RESULT::SUCCESS,
-    []( const BLOCK_BASE& block )
-    {
-        const auto& blk = static_cast<const BLOCK<BLK_0x20_UNKNOWN>&>( block ).GetData();
-        BOOST_TEST( blk.m_R == 0x0507 );
-        BOOST_TEST( blk.m_Key == 0x812AB498 );
-        BOOST_TEST( blk.m_Next == 0x824DF8F0 );
+        // This means get it from a file in the QD data
+        return KI_TEST::LoadBinaryData( path, std::nullopt );
     }
-};
 
-
-BOOST_FIXTURE_TEST_SUITE( AllegroBlkParse, ALLEGRO_BLK_PARSE_FIXTURE )
-
-
-BOOST_DATA_TEST_CASE( Blk_0x20,
-                      boost::unit_test::data::make( {
-                              blk_x20_olympus_0x0131553c,
-                      } ),
-                      aTestCase )
-{
-    RunBlockTest( aTestCase );
+    throw std::runtime_error( "Unsupported data source protocol: " + protocol );
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+
+static std::string getBoardsDataDir()
+{
+    return KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/boards/";
+}
+
+
+static std::string getBoardTestDir( const std::string& aBoardName )
+{
+    return getBoardsDataDir() + aBoardName + "/";
+}
+
+
+ALLEGRO::FMT_VER getFormatVersionFromStr( const std::string& aFmtVerStr )
+{
+    // clang-format off
+    static const std::map<std::string, ALLEGRO::FMT_VER> fmtVerStrMap{
+        { "16.0", FMT_VER::V_160 },
+        { "16.2", FMT_VER::V_162 },
+        { "16.4", FMT_VER::V_164 },
+        { "16.5", FMT_VER::V_165 },
+        { "16.6", FMT_VER::V_166 },
+        { "17.2", FMT_VER::V_172 },
+        { "17.4", FMT_VER::V_174 },
+        { "17.5", FMT_VER::V_175 },
+        { "18.0", FMT_VER::V_180 },
+    };
+    // clang-format on
+
+    auto it = fmtVerStrMap.find( aFmtVerStr );
+    if( it != fmtVerStrMap.end() )
+    {
+        return it->second;
+    }
+
+    return FMT_VER::V_UNKNOWN;
+}
+
+
+static std::unique_ptr<HEADER_TEST_INFO> createHeaderTestEntry( const std::string&    boardDir,
+                                                                const nlohmann::json& headerTestEntry )
+{
+    std::unique_ptr<HEADER_TEST_INFO> headerTest = nullptr;
+
+    if( !headerTestEntry.is_object() )
+    {
+        throw std::runtime_error( "Header test entry is not a valid JSON object" );
+    }
+
+    // Default header location
+    const std::string headerDataUri = std::string( "file://" ) + boardDir + "header.bin";
+
+    return std::make_unique<HEADER_TEST_INFO>( headerDataUri, headerTestEntry.value( "skip", false ) );
+}
+
+
+static BLK_TEST_INFO createBlockTestEntry( const std::string& boardDir, const nlohmann::json& blockTestEntry )
+{
+    if( !blockTestEntry.contains( "type" ) || !blockTestEntry["type"].is_string() )
+    {
+        throw std::runtime_error( "Block test entry is missing a valid 'type' field" );
+    }
+
+    const std::string blockTypeStr = blockTestEntry["type"];
+    const uint8_t     blockType = std::stoul( blockTypeStr, nullptr, 0 );
+
+    const std::string block_offset = blockTestEntry["offset"];
+    const size_t      blockOffset = std::stoul( block_offset, nullptr, 0 );
+
+    const bool skipBlock = blockTestEntry.value( "skip", false );
+
+    // Default block data location is a file with a name based on the block type and offset
+    wxString blockDataLoc = wxString::Format( "0x%02x_0x%08zx.bin", blockType, blockOffset );
+
+    const std::string blockDataUri = std::string( "file://" ) + boardDir + blockDataLoc.ToStdString();
+
+    const auto blockTestCallback = [&]( const ALLEGRO::BLOCK_BASE& aBlock )
+    {
+        // For now, we don't have any specific expectations for the contents of the block, but we could add some if needed.
+        // For example, commonly used fields.
+        // Often just parsing successfully is enough.
+    };
+
+    return BLK_TEST_INFO{
+            blockType,
+            blockOffset,
+            skipBlock,
+            blockDataUri,
+            blockTestCallback,
+    };
+}
+
+
+struct BOARD_TEST_INFO
+{
+    std::string      m_BrdName;
+    std::string      m_BrdPath;
+    ALLEGRO::FMT_VER m_FormatVersion;
+};
+
+
+static BOARD_TEST_INFO createBoardTestInfo( const std::string& aBrdName, const nlohmann::json& boardTestEntry )
+{
+    const std::string boardDir = getBoardTestDir( aBrdName );
+
+    const ALLEGRO::FMT_VER formatVersion =
+            getFormatVersionFromStr( boardTestEntry.value( "formatVersion", "unknown" ) );
+
+    return BOARD_TEST_INFO{ aBrdName, boardDir, formatVersion };
+}
+
+
+class ALLEGRO_BLOCK_TEST_FIXTURE
+{
+public:
+    void RunHeaderTest( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
+    {
+        BOOST_TEST_CONTEXT( wxString::Format( "Testing header from board %s", aBrdName ) )
+        {
+            BOARD_TEST_INFO brdDef = createBoardTestInfo( aBrdName, aBoardTestJson );
+
+            const std::string boardDir = getBoardTestDir( aBrdName );
+
+            std::unique_ptr<HEADER_TEST_INFO> headerTest = nullptr;
+
+            if( aBoardTestJson.contains( "header" ) && aBoardTestJson["header"].is_object() )
+            {
+                headerTest = createHeaderTestEntry( boardDir, aBoardTestJson["header"] );
+            }
+
+            BOOST_REQUIRE( headerTest != nullptr );
+
+            if( headerTest->m_Skip )
+            {
+                BOOST_TEST_MESSAGE( "Skipping test for this header" );
+                return;
+            }
+
+            // Read in the header data
+            std::vector<uint8_t> headerData = loadDataByUri( headerTest->m_HeaderDataSource );
+            FILE_STREAM          fileStream( headerData.data(), headerData.size() );
+            HEADER_PARSER        parser( fileStream );
+
+            std::unique_ptr<FILE_HEADER> header = parser.ParseHeader();
+
+            BOOST_REQUIRE( header != nullptr );
+
+            // We don't expect any known header to be in an unknown format
+            BOOST_TEST( parser.GetFormatVersion() != FMT_VER::V_UNKNOWN );
+
+            // Make sure the format version matches what the board is expected to be
+            if( brdDef.m_FormatVersion != FMT_VER::V_UNKNOWN )
+            {
+                BOOST_TEST( parser.GetFormatVersion() == brdDef.m_FormatVersion );
+            }
+
+            // Other header tests - validate some commonly used fields?
+
+            // The parser should have consumed all the data in the header
+            BOOST_TEST( fileStream.Position() == headerData.size() );
+        }
+    }
+
+
+    void RunBlockTest( const std::string& aBrdName, const nlohmann::json& aBoardTestJson,
+                       const nlohmann::json& aBlockTestJson )
+    {
+        const BOARD_TEST_INFO brdDef = createBoardTestInfo( aBrdName, aBoardTestJson );
+        const BLK_TEST_INFO   blockTest = createBlockTestEntry( getBoardTestDir( aBrdName ), aBlockTestJson );
+
+        BOOST_TEST_CONTEXT( wxString::Format( "Testing block type %#02x at offset %#010zx from board %s",
+                                              blockTest.m_BlockType, blockTest.m_BlockOffset, aBrdName ) )
+        {
+            if( blockTest.m_Skip )
+            {
+                BOOST_TEST_MESSAGE( "Skipping test for this block" );
+                return;
+            }
+
+            // Read in the block data, and create a FILE_STREAM for it
+            std::vector<uint8_t> data = loadDataByUri( blockTest.m_DataSource );
+            FILE_STREAM          fileStream( data.data(), data.size() );
+
+            BLOCK_PARSER parser( fileStream, brdDef.m_FormatVersion );
+
+            bool                        endOfObjectsMarker = false;
+            std::unique_ptr<BLOCK_BASE> block = parser.ParseBlock( endOfObjectsMarker );
+
+            // Compare the result to the expected results
+            BOOST_REQUIRE( block != nullptr );
+
+            if( blockTest.m_ValidateFunc )
+            {
+                BOOST_TEST_CONTEXT( "Validating block contents" )
+                {
+                    blockTest.m_ValidateFunc( *block );
+                }
+            }
+
+            // The parser should have consumed all the data in the block
+            BOOST_TEST( fileStream.Position() == data.size() );
+
+            // Look up and run additional ad-hoc block-level tests
+            KI_TEST::RunAdditionalBlockTest( aBrdName, blockTest.m_BlockOffset, *block );
+
+            // Now try to convert the block into a DB_OBJ
+            ALLEGRO::BRD_DB                  brd;
+            ALLEGRO::BRD_DB::OBJ_FACTORY     objFactory( brd );
+            std::unique_ptr<ALLEGRO::DB_OBJ> dbObj = objFactory.CreateObject( *block );
+
+            // Not all blocks convert to DB_OBJ yet, but at least it mustn't crash.
+            // Eventually, this should always succeed.
+            if( dbObj )
+            {
+                KI_TEST::RunAdditionalObjectTest( aBrdName, blockTest.m_BlockOffset, *dbObj );
+            }
+        }
+    }
+};
+
+
+/**
+ * Just enough information about the board and block tests to be able to name and
+ * register the test cases and look up the definitions at runtime.
+ */
+struct ALLEGRO_BLOCK_TEST
+{
+    uint8_t m_BlockType;
+    size_t  m_BlockOffset;
+    /// Handy ref to the JSON entry for this block test
+    const nlohmann::json& m_BlockTestJson;
+};
+
+/**
+ * Just enough information about the board test to be able to name and register any
+ * tests for this board.
+ */
+struct ALLEGRO_BOARD_TEST_REF
+{
+    // The board name in the JSON registry
+    std::string m_BrdName;
+
+    // Handy ref to the JSON entry for this board test
+    const nlohmann::json& m_BrdTestJson;
+
+    bool                            m_HasHeaderTest;
+    std::vector<ALLEGRO_BLOCK_TEST> m_BlockTests;
+};
+
+
+/**
+ * The registry of known Allegro board and block tests,
+ * populated at static init time by reading the JSON registry file.
+ *
+ * (We need to do this at static init time to be able to register
+ * named Boost test cases).
+ */
+struct ALLEGRO_BLOCK_TEST_REGISTRY
+{
+    nlohmann::json                      m_Json;
+    std::vector<ALLEGRO_BOARD_TEST_REF> m_BoardTests;
+
+    const nlohmann::json& GetBoardJson( const std::string& aBoardName ) const
+    {
+        return m_Json["boards"][aBoardName];
+    }
+};
+
+
+/**
+ * Construct a list of test definitions for the boards we have test data for,
+ * by reading the registry JSON file.
+ *
+ * These definitions will then be bound to the test cases. This all happens at static init
+ * time, but the data loads and tests will run at runtime.
+ */
+static std::vector<ALLEGRO_BOARD_TEST_REF> getBoardTestDefinitions( const nlohmann::json& aJson )
+{
+    // For now, we just return a hardcoded list of the boards we have test data for, but in the future
+    // we could make this dynamic by e.g. scanning the data dir or having a registry file.
+
+    if( !aJson.contains( "boards" ) || !aJson["boards"].is_object() )
+    {
+        throw std::runtime_error( "Test register JSON file does not contain a valid 'boards' object." );
+    }
+
+    // Iterate the "boards" dict
+    std::vector<ALLEGRO_BOARD_TEST_REF> boardTests;
+
+    // Build only the very basic test definitions here, just enough to construct the test cases metadata
+    for( auto& [boardName, boardEntry] : aJson["boards"].items() )
+    {
+        ALLEGRO_BOARD_TEST_REF boardTestRef{
+            .m_BrdName = boardName,
+            .m_BrdTestJson = boardEntry,
+            .m_HasHeaderTest = boardEntry.contains( "header" ),
+            .m_BlockTests = {},
+        };
+
+        if( boardEntry.contains( "blocks" ) && boardEntry["blocks"].is_array() )
+        {
+            for( const auto& blockTestEntry : boardEntry["blocks"] )
+            {
+                if( !blockTestEntry.contains( "type" ) || !blockTestEntry["type"].is_string() )
+                {
+                    throw std::runtime_error( "Block test entry is missing a valid 'type' field" );
+                }
+
+                if( !blockTestEntry.contains( "offset" ) || !blockTestEntry["offset"].is_string() )
+                {
+                    throw std::runtime_error( "Block test entry is missing a valid 'offset' field" );
+                }
+
+                const std::string blockTypeStr = blockTestEntry["type"];
+                const uint8_t     blockType = std::stoul( blockTypeStr, nullptr, 0 );
+
+                const std::string block_offset = blockTestEntry["offset"];
+                const size_t      blockOffset = std::stoul( block_offset, nullptr, 0 );
+
+                boardTestRef.m_BlockTests.push_back( ALLEGRO_BLOCK_TEST{
+                        blockType,
+                        blockOffset,
+                        blockTestEntry,
+                } );
+            }
+        }
+
+        boardTests.push_back( std::move( boardTestRef ) );
+    }
+
+    return boardTests;
+}
+
+
+static const ALLEGRO_BLOCK_TEST_REGISTRY& buildTestRegistry()
+{
+    static ALLEGRO_BLOCK_TEST_REGISTRY registry = []()
+    {
+        ALLEGRO_BLOCK_TEST_REGISTRY reg;
+
+        // There is currently one registry file, but we could have more
+        const std::filesystem::path testRegisterJsonPath( getBoardsDataDir() + "board_data_registry.json" );
+        std::ifstream               jsonFileStream( testRegisterJsonPath );
+
+        reg.m_Json = nlohmann::json::parse( jsonFileStream, nullptr, false, true );
+        reg.m_BoardTests = getBoardTestDefinitions( reg.m_Json );
+
+        return reg;
+    }();
+
+    return registry;
+}
+
+
+/**
+ * This function initializes the test suite for Allegro block parsing
+ *
+ * It reads about the minium information it needs to to construct the test cases
+ * (i.e. it needs to know the name and which tests are present).
+ *
+ * Each test case will call the appropriate test function (e.g. RunHeaderTest or RunBlockTest)
+ * at runtime, which will construct a more complete test implementions and then run them.
+ */
+static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
+{
+    using BTS = boost::unit_test::test_suite;
+    std::vector<BTS*>                  suites;
+    BTS*                               blockSuite = suites.emplace_back( BOOST_TEST_SUITE( "AllegroBlocks" ) );
+    const ALLEGRO_BLOCK_TEST_REGISTRY* registry = nullptr;
+
+    try
+    {
+        registry = &buildTestRegistry();
+    }
+    catch( const std::exception& ex )
+    {
+        std::string msg = "Failed to load Allegro block test definitions: " + std::string( ex.what() );
+
+        // Register one failing test to report the error, so that we don't just silently skip all the tests
+        const auto failingTestFunction = [=]()
+        {
+            BOOST_FAIL( msg );
+        };
+
+        blockSuite->add(
+            boost::unit_test::make_test_case(
+                failingTestFunction,
+                "FailureToLoadTestDefinitions",
+                __FILE__,
+                __LINE__
+            )
+        );
+
+        return { blockSuite };
+    }
+
+    for( const ALLEGRO_BOARD_TEST_REF& boardTest : registry->m_BoardTests )
+    {
+        boost::unit_test::test_suite* boardSuite = BOOST_TEST_SUITE( boardTest.m_BrdName );
+        blockSuite->add( boardSuite );
+
+        const nlohmann::json& boardTestJson = registry->GetBoardJson( boardTest.m_BrdName );
+
+        if( boardTest.m_HasHeaderTest )
+        {
+            // Note: captures ref-to-static
+            const auto testRunFunction = [&]()
+            {
+                ALLEGRO_BLOCK_TEST_FIXTURE fixture;
+                fixture.RunHeaderTest( boardTest.m_BrdName, boardTestJson );
+            };
+
+            boardSuite->add(
+                boost::unit_test::make_test_case(
+                    testRunFunction,
+                    "Header",
+                    __FILE__,
+                    __LINE__
+                )
+            );
+        }
+
+        for( const auto& blockTest : boardTest.m_BlockTests )
+        {
+            const auto testRunFunction = [&]()
+            {
+                ALLEGRO_BLOCK_TEST_FIXTURE fixture;
+                fixture.RunBlockTest( boardTest.m_BrdName, boardTestJson, blockTest.m_BlockTestJson );
+            };
+
+            wxString testName =
+                    wxString::Format( "Block_0x%02x_offset_0x%010zx", blockTest.m_BlockType, blockTest.m_BlockOffset );
+
+            boardSuite->add(
+                boost::unit_test::make_test_case(
+                    testRunFunction,
+                    testName.ToStdString(),
+                    __FILE__,
+                    __LINE__
+                )
+            );
+        }
+    }
+
+    return { blockSuite };
+}
+
+
+/**
+ * At static initialization, register the test suite.
+ * This is needed to be able to run the tests by name.
+ */
+static struct RegisterBlockSuites
+{
+    RegisterBlockSuites()
+    {
+        std::vector<boost::unit_test::test_suite*> suites = buildAllegroBoardSuites();
+
+        for( boost::unit_test::test_suite* suite : suites )
+        {
+            boost::unit_test::framework::master_test_suite().add( suite );
+        }
+    }
+} s_registerHeaderBlockSuites;
