@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 23:16+0000\n"
+"PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -4853,22 +4853,22 @@ msgstr "Kurzor"
 #: common/dialogs/panel_gal_options_base.cpp:102 common/tool/actions.cpp:1182
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Small crosshairs"
-msgstr "Malý kríž"
+msgstr "Malý zameriavací kríž"
 
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
 msgid "Full window crosshairs"
-msgstr "Kríž cez celé okno"
+msgstr "Zameriavací kríž cez celé okno"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
 msgid "45 degree crosshairs"
-msgstr "45 stupňový kríž"
+msgstr "45 stupňový zameriavací kríž"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
 msgid "Always show crosshairs"
-msgstr "Vždy ukazujte nitkový kríž"
+msgstr "Vždy zobraziť zameriavací kríž"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
@@ -10469,34 +10469,32 @@ msgid "Reset Local Coordinates"
 msgstr "Obnoviť lokálne súradnice"
 
 #: common/tool/actions.cpp:1175
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "Vždy ukazujte nitkový kríž"
+msgstr "Vždy zobraziť zameriavací kríž"
 
 #: common/tool/actions.cpp:1176
-#, fuzzy
 msgid "Display crosshairs even when not drawing objects"
-msgstr "Zobraziť nitkový kríž aj v nástroji na výber"
+msgstr "Zobraziť zameriavací kríž, aj keď sa práve nekreslia objekty"
 
 #: common/tool/actions.cpp:1183
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Použiť malý 0/90° zameriavací kríž"
 
 #: common/tool/actions.cpp:1190
 msgid "Full-Window Crosshairs"
-msgstr "Zameriavací kríž s plným oknom"
+msgstr "Zameriavací kríž cez celé oknom"
 
 #: common/tool/actions.cpp:1191
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Zobraziť 0/90° zameriavací kríž cez celé okno"
 
 #: common/tool/actions.cpp:1198
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "45° zameriavací kríž"
 
 #: common/tool/actions.cpp:1199
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
-msgstr ""
+msgstr "Zobraziť 45/135° zameriavací kríž cez celé okno"
 
 #: common/tool/actions.cpp:1207
 #, fuzzy
@@ -11904,9 +11902,8 @@ msgstr "Filter puzdier:"
 #: eeschema/toolbars_sch_editor.cpp:83 gerbview/toolbars_gerber.cpp:62
 #: pcbnew/toolbars_footprint_editor.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:85 pcbnew/toolbars_pcb_editor.cpp:157
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Kurzor vpravo"
+msgstr "Režimy zameriavacieho kríža"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 #, fuzzy
