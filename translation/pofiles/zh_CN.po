@@ -45,7 +45,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 10:06+0000\n"
+"PO-Revision-Date: 2026-02-12 22:22+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -18630,9 +18630,8 @@ msgid "Pin name resembles stacked pin"
 msgstr "引脚名称看起来像是堆叠引脚"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr "字段名称 '%s' 包含尾随空格/前导空格。"
+msgstr "字段名称包含尾随空格/前导空格。"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -19899,7 +19898,6 @@ msgid "Find in Net Inspector"
 msgstr "在网络检查器中查找"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
 msgstr "选择要移除的变体名称:"
 
@@ -28718,7 +28716,6 @@ msgid "Valid options excellon, gerber."
 msgstr "有效的选项 excellon, gerber。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
 msgstr "有效选项: absolute, plot"
 
@@ -29147,9 +29144,8 @@ msgid "No drawing sheet"
 msgstr "无图框"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "将网表导出为 KiCad 格式"
+msgstr "导入非 KiCad PCB 文件并转换为 KiCad 格式"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
@@ -30012,9 +30008,9 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "在 '%s' 中解压工程。\n"
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "无法 打开/创建 路径 '%s'。"
+msgstr "无法打开 gEDA / Lepton EDA 工程文件 '%s'。"
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
@@ -30075,14 +30071,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "导入 EasyEDA Pro 工程"
 
 #: kicad/import_project.cpp:202
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "导入 Altium 工程文件"
+msgstr "导入 PADS 工程文件"
 
 #: kicad/import_project.cpp:210
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "导入 Eagle 工程文件"
+msgstr "导入 gEDA / Lepton EDA 工程文件"
 
 #: kicad/jobs_runner.cpp:228
 #, c-format
@@ -30200,7 +30194,6 @@ msgid ""
 msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:964
-#, fuzzy
 msgid "Discard"
 msgstr "放弃操作"
 
@@ -30293,24 +30286,20 @@ msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "导入 (JLCEDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:148
-#, fuzzy
 msgid "PADS Project..."
-msgstr "CADSTAR 工程..."
+msgstr "PADS 工程..."
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "导入 CADSTAR 归档原理图和 PCB (*.csa, *.cpa)"
+msgstr "导入 PADS Logic 原理图和 PADS ASCII PCB (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:152
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "Eagle 工程..."
+msgstr "gEDA / Lepton EDA 工程..."
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "导入 EAGLE CAD XML 原理图和电路板"
+msgstr "导入 gEDA 或 Lepton EDA 原理图和 PCB 布局"
 
 #: kicad/menubar.cpp:182
 msgid "Edit Advanced Config..."
@@ -31186,14 +31175,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "选择一个 Zip 归档文件, 并解压缩至工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "在“访达”中显示工程文件夹"
+msgstr "在「访达」中显示工程文件夹"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "在“访达”中显示工程文件夹"
+msgstr "在「访达」中打开工程文件夹"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -35238,9 +35225,8 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:1083
 #: pcbnew/connectivity/topo_match.cpp:1086
-#, fuzzy
 msgid "(no library ID)"
-msgstr "无效的库标识"
+msgstr "(缺少库标识)"
 
 #: pcbnew/connectivity/topo_match.cpp:1089
 #, c-format
@@ -36361,9 +36347,8 @@ msgid "Item Source"
 msgstr "项目源"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:499
-#, fuzzy
 msgid "Duplicate selection"
-msgstr "图框名称重复"
+msgstr "选区重复"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:503
 #: pcbnew/tools/array_tool.cpp:196
@@ -39442,9 +39427,8 @@ msgid "Target areas:"
 msgstr "目标域:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
-#, fuzzy
 msgid "Target Rule Area"
-msgstr "绘制规则域"
+msgstr "目标规则域"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:100
 msgid "Copy footprint placement"
@@ -41670,14 +41654,12 @@ msgid "Error with conditions for component class assignment %s"
 msgstr "元件类分配条件错误 %s"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:366
-#, fuzzy
 msgid "Add Reference Condition"
-msgstr "参考位置"
+msgstr "添加位号条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
-#, fuzzy
 msgid "Add Footprint Condition"
-msgstr "添加封装筛选规则"
+msgstr "添加封装条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
 #, fuzzy
@@ -41690,19 +41672,16 @@ msgid "Add Rotation Condition"
 msgstr "添加另一个条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:370
-#, fuzzy
 msgid "Add Footprint Field Value Condition"
-msgstr "添加封装筛选规则"
+msgstr "添加封装字段值条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Add Sheet Condition"
-msgstr "添加图纸引脚"
+msgstr "添加图纸条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
-#, fuzzy
 msgid "Add Custom Expression Condition"
-msgstr "添加自定义分配"
+msgstr "添加自定义表达式条件"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:565
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:618
@@ -41731,7 +41710,6 @@ msgid "Add Custom Assignment"
 msgstr "添加自定义分配"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
-#, fuzzy
 msgid "Component class:"
 msgstr "元件类:"
 
@@ -41751,12 +41729,10 @@ msgid "Highlight matching footprints"
 msgstr "高亮匹配的封装"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
-#, fuzzy
 msgid "Match all"
 msgstr "匹配全部"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
-#, fuzzy
 msgid "Match any"
 msgstr "匹配任意"
 
@@ -41773,19 +41749,16 @@ msgid "Show library"
 msgstr "显示库"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "封装字段"
+msgstr "封装字段:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
-msgstr "字段数值:"
+msgstr "字段值:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "图纸名称"
+msgstr "图纸名称:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -42091,7 +42064,6 @@ msgid "Default Properties for New Graphic Items"
 msgstr "新建图形项目的默认属性"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:114
-#, fuzzy
 msgid "Footprint Library Tables"
 msgstr "封装库表"
 
@@ -42137,18 +42109,16 @@ msgid "Layer name %s already in use."
 msgstr "层名称 %s 已在使用中。"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "用户层"
+msgstr "用户层:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
 msgstr "7"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
-#, fuzzy
 msgid "9"
-msgstr "90"
+msgstr "9"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 msgid "Recreate Plugin Environment"
@@ -44309,13 +44279,12 @@ msgid "Single"
 msgstr "单个文档"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
 msgstr "目标阻抗:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:69
 msgid "ohms"
-msgstr ""
+msgstr "ohms"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
 msgid "Enable time domain tuning"
@@ -44331,14 +44300,12 @@ msgid "Signal Layer"
 msgstr "信号层"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:119
-#, fuzzy
 msgid "Top Reference"
-msgstr "位号"
+msgstr "顶层位号"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:120
-#, fuzzy
 msgid "Bottom Reference"
-msgstr "位号"
+msgstr "底层位号"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:122
 msgid "Diff Pair Gap"
@@ -46090,14 +46057,14 @@ msgid "'%s' settings differ"
 msgstr "'%s' 设置不一致"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Missing symbol field '%s' in footprint"
-msgstr "缺少封装"
+msgstr "原理图中缺少符号字段 '%s'"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "'字段 '%s'' 不一致: %s; %s。"
+msgstr "字段 '%s' 不一致: (PCB: '%s', 原理图: '%s')。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:273
 msgid "No corresponding pin found in schematic"
@@ -46574,14 +46541,14 @@ msgid "Created file '%s'."
 msgstr "创建文件 '%s'。"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1092
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "写入文件 '%s' 时出错。"
+msgstr "创建钻孔报告文件 '%s' 时出错。"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1219
-#, fuzzy, c-format
+#, c-format
 msgid "Created drill report file '%s'"
-msgstr "创建报告文件："
+msgstr "已创建钻孔报告文件: '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
@@ -46643,12 +46610,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"无法为 %s 添加 3D 模型。\n"
+"\n"
 "OpenCASCADE 错误: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
@@ -48223,7 +48190,7 @@ msgid "Add %s to group '%s'."
 msgstr "将 %s 添加到分组 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
 msgstr "将 %s 添加到分组 '%s'。"
 
@@ -48894,14 +48861,12 @@ msgid "Bottom Countersink Angle"
 msgstr ""
 
 #: pcbnew/pad.cpp:3574 pcbnew/pcb_track.cpp:3215
-#, fuzzy
 msgid "Backdrill Mode"
-msgstr "填充模式"
+msgstr "背钻模式"
 
 #: pcbnew/pad.cpp:3577 pcbnew/pcb_track.cpp:3218
-#, fuzzy
 msgid "Bottom Backdrill Size"
-msgstr "自定义布线/过孔尺寸"
+msgstr "底层背钻尺寸"
 
 #: pcbnew/pad.cpp:3594 pcbnew/pcb_track.cpp:3230
 #: pcbnew/widgets/pcb_properties_panel.cpp:643
@@ -48912,7 +48877,7 @@ msgstr "底部主焊盘"
 
 #: pcbnew/pad.cpp:3611 pcbnew/pcb_track.cpp:3242
 msgid "Top Backdrill Size"
-msgstr ""
+msgstr "顶层背钻尺寸"
 
 #: pcbnew/pad.cpp:3628 pcbnew/pcb_track.cpp:3254
 #: pcbnew/widgets/pcb_properties_panel.cpp:644
@@ -49202,14 +49167,12 @@ msgid "Constructing caches"
 msgstr "相互冲突的标签"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3504
-#, fuzzy
 msgid "Creating nets"
-msgstr "创建实体"
+msgstr "正在创建网络"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3509
-#, fuzzy
 msgid "Creating tracks"
-msgstr "现存线路"
+msgstr "正在创建走线"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3524
 #, fuzzy
@@ -49226,9 +49189,8 @@ msgid "Failed to build board from Allegro data"
 msgstr "元件数据添加失败"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:38
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Allegro 网表文件"
+msgstr "Allegro PCB 文件"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:176
 #, c-format
@@ -50394,17 +50356,15 @@ msgstr "元素标记包含 %d 个参数。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "gEDA / Lepton EDA PCB 板文件"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "gEDA PCB 封装文件"
+msgstr "gEDA / Lepton EDA PCB 封装文件"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "gEDA PCB 封装库文件目录"
+msgstr "gEDA / Lepton EDA PCB 封装库目录"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:425
 msgid "Generating content section"
@@ -51818,14 +51778,14 @@ msgid "Board file was not updated\n"
 msgstr "电路板文件未更新\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2828
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "无法写入文件 '%s'。"
+msgstr "无法确定 '%s' 的文件格式\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2837
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "找不到文件: '%s'。"
+msgstr "找不到输入文件: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2863
 #, fuzzy, c-format
@@ -51835,17 +51795,17 @@ msgstr "文件 '%s' 中没有定位数据。"
 #: pcbnew/pcbnew_jobs_handler.cpp:2869
 #, c-format
 msgid "Importing '%s' using %s format...\n"
-msgstr ""
+msgstr "使用 %$2s 格式导入 '%$1s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2885
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "成功导出 VRML 到 %s"
+msgstr "成功将导出的电路板保存到 '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "加载封装时出错"
+msgstr "导入时出错: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -53560,9 +53520,8 @@ msgid "Some of the items could not be outset."
 msgstr "部分项目无法进行外扩。"
 
 #: pcbnew/tools/multichannel_tool.cpp:87
-#, fuzzy
 msgid "(none)"
-msgstr "无"
+msgstr "(无)"
 
 #: pcbnew/tools/multichannel_tool.cpp:137
 #: pcbnew/tools/multichannel_tool.cpp:1489
@@ -54740,7 +54699,6 @@ msgid "DRC Rule Editor"
 msgstr "DRC 规则编辑器"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
 msgstr "打开 DRC 规则编辑器窗口"
 
