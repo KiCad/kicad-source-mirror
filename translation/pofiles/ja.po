@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-06 21:01+0000\n"
+"PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -7183,6 +7183,9 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"マージできません: コミットされていない(ステージングされていない)変更がありま"
+"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてください"
+"。"
 
 #: common/git/git_pull_handler.cpp:399
 msgid "Could not merge commits"
@@ -7209,6 +7212,9 @@ msgid ""
 "Cannot rebase: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"リベースできません: コミットされていない(ステージングされていない)変更があり"
+"ます。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてくださ"
+"い。"
 
 #: common/git/git_pull_handler.cpp:543
 msgid "Conflicts detected during rebase"
@@ -17260,9 +17266,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "ピン %s (%s) が %s と %s の両方に接続されています"
+msgstr "ピン %s (シンボル %s) は異なるネット %s と %s の両方に接続しています"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17424,9 +17430,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "電源入力ピンが電源出力ピンによって駆動されていない"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "シート名の重複"
+msgstr "異なるネットの重複ピン"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -28312,22 +28317,20 @@ msgid "Switch to Branch"
 msgstr "ブランチに切り替え"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Gitトラッキングを有効化"
+msgstr "Git 統合を有効化"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "このプロジェクトの Git を再度有効にする"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Gitトラッキングを有効化"
+msgstr "Git 統合を無効化"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "このプロジェクトの Git を無効にする"
 
 #: kicad/project_tree_pane.cpp:1121
 #, c-format
@@ -44945,9 +44948,9 @@ msgid "Loading board data..."
 msgstr "基板データを読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "ファイル '%s' を作成できませんでした。"
+msgstr "レイヤー '%s' をマップできなかったため、スキップした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1262
 msgid "Loading netclasses..."
@@ -46591,6 +46594,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"コンポーネント '%s' の指定子に非 ASCII 文字が含まれています。ODB++ "
+"エクスポートでは '%s' に変換されます。"
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -46598,6 +46603,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"コンポーネント '%s' は変換後、紛らわしい指定子になってしまうため、ODB++ "
+"エクスポート用に '%s' に名前が変更されました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"
