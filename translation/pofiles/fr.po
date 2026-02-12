@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-02 16:12+0100\n"
+"POT-Creation-Date: 2026-02-12 09:57+0100\n"
+"PO-Revision-Date: 2026-02-12 09:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -8491,19 +8491,16 @@ msgid "PCB: Perform DRC"
 msgstr "PCB : Exécuter la DRC"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Importer"
+msgstr "Importer PCB"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Importer Réglages"
+msgstr "Réglages du Job d'importation de PCB"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Importer"
+msgstr "PCB : Importation"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -9086,12 +9083,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -11599,14 +11594,12 @@ msgid "Eagle XML files"
 msgstr "Fichiers Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "Fichiers netliste PADS"
+msgstr "Fichiers ASCII PADS"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Archiver les fichiers du projet"
+msgstr "Fichiers de projet gEDA / Lepton EDA"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -14365,11 +14358,10 @@ msgid "Highlight on Cross-probe"
 msgstr "Surbrillance en Sélection Croisée"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1450
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
 msgstr ""
-"Mettre en surbrillance les éléments correspondant à ceux sélectionnées dans "
-"la table"
+"Mettre en surbrillance la pin correspondante lorsqu'elle est sélectionnée "
+"dans la table."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1688
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
@@ -14432,9 +14424,8 @@ msgid "Group by name"
 msgstr "Grouper par nom"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "Groupe Sélectionné"
+msgstr "Grouper Pins Sélectionnées"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
@@ -16704,6 +16695,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -18777,10 +18769,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Variable texte non résolue dans la feuille de dessin"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr ""
-"Le nom du champ '%s' contient des espaces blancs à la fin et/ou au début."
+msgstr "Le nom du champ comporte des espaces avant ou après : '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18937,9 +18928,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Vérification des variables texte non résolues..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "Vérification des noms de feuilles..."
+msgstr "Vérification des noms de champs..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -19106,10 +19096,8 @@ msgid "Pin name resembles stacked pin"
 msgstr "Le nom de pin ressemble à celui d'une pin empilée"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr ""
-"Le nom du champ '%s' contient des espaces blancs à la fin et/ou au début."
+msgstr "Le nom du champ comporte des espaces avant ou après"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -19838,14 +19826,14 @@ msgid "P&references"
 msgstr "P&références"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Fil de %s, %s à %s, %s"
+msgstr "Fil de (%s, %s) à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
-msgstr "Bus de %s, %s à %s, %s"
+msgstr "Bus de (%s, %s) à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:81
 msgid "Graphic line not connectable"
@@ -19862,44 +19850,44 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Feuille '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "Label  '%s' à %s, %s"
+msgstr "Label  '%s' à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "Label global '%s' à %s, %s"
+msgstr "Label global '%s' à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "Label hiérarchique '%s' à %s, %s"
+msgstr "Label hiérarchique '%s' à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "Jonction à %s, %s"
+msgstr "Jonction à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "Non-Connexion à %s, %s"
+msgstr "Non-Connexion à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Entrée de fil vers bus de %s, %s à %s, %s"
+msgstr "Entrée de fil vers bus de (%s, %s) à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Entrée de bus vers bus de %s, %s à %s, %s"
+msgstr "Entrée de bus vers bus de (%s, %s) à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "Label de Netclasse '%s' à %s, %s"
+msgstr "Label de Netclasse '%s' à (%s, %s)"
 
 #: eeschema/net_navigator.cpp:198
 #, c-format
@@ -21004,14 +20992,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "Échec de l'analyse de la valeur : '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "Symbole %s non trouvée en librairie '%s'."
+msgstr "Symbole '%s' non trouvé en librairies gEDA."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Impossible d'ouvrir '%s'."
+msgstr " Vouliez-vous dire '%s' ?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -21019,21 +21007,23 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
+"Incompatibilité de version de symbole pour '%s' (%s) : le schéma a "
+"symversion %s, le symbole de librairie a symversion %s."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4086
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr ""
+msgstr "Source hiérarchique '%s' introuvable, création d'une feuille vide."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4098
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr ""
+msgstr "Hiérarchie circulaire détectée pour '%s', ignorée."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "Impossible de sauver le schéma '%s'"
+msgstr "Échec du chargement du sous-schéma '%s' : %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3106
@@ -21042,19 +21032,18 @@ msgid "File '%s' is empty."
 msgstr "Le fichier '%s' est vide."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4711
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' n’est pas une valeur valide pour SPICE."
+msgstr "Le fichier '%s' n'est pas un schéma gEDA valide."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "Impossible de charger '%s'."
+msgstr "Échec du chargement de la page '%s' : %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Fichier schématique Eagle XML"
+msgstr "Fichiers schématiques gEDA / Lepton EDA"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
 #, c-format
@@ -21523,14 +21512,12 @@ msgid "LTspice schematic files"
 msgstr "Fichiers schématiques Ltspice"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "Fichiers schématiques Ltspice"
+msgstr "Fichiers schématiques PADS Logic"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Eagle fichiers librairie  XML"
+msgstr "Fichiers de librairie PADS Logic"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -24158,12 +24145,11 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
 #: eeschema/sim/simulator_frame.cpp:422
-#, fuzzy
 msgid ""
 "You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
 msgstr ""
-"Vous devez d'abord effectuer une simulation TRAN, dont les résultats seront "
+"Vous devez d'abord effectuer une simulation TRAN,; ses résultats seront "
 "utilisés pour la transformée de Fourier rapide."
 
 #: eeschema/sim/simulator_frame.cpp:454
@@ -25923,14 +25909,12 @@ msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "Synchroniser les pins et les labels hiérarchiques de feuille sélectée"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheet Pins..."
-msgstr "Synchroniser Pins de Toutes Feuilles..."
+msgstr "Synchroniser Toutes Pins de Feuille..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
-msgstr "Synchroniser les pins et les labels hiérarchiques de toutes feuilles"
+msgstr "Synchroniser toutes les pins de feuille et les labels hiérarchiques"
 
 #: eeschema/tools/sch_actions.cpp:627
 msgid "Import Sheet..."
@@ -29625,9 +29609,8 @@ msgid "Output directory"
 msgstr "Répertoire de sortie"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "Fichier ou répertoire d'entrée"
+msgstr "Fichier ou répertoire de sortie"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -29989,22 +29972,18 @@ msgid "Valid options excellon, gerber."
 msgstr "Options valides excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
-msgstr "Options valides : absolute,plot"
+msgstr "Options valides : absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 msgstr "Options valides : decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
 msgstr "Les options valides sont : route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
 msgstr "Unités de sortie, options valides: in, mm"
 
@@ -30039,9 +30018,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "Générer un fichier spécifique pour les vias couvertes"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "Options valides : pdf,gerberx2,ps,dxf,svg"
+msgstr "Options valides : pdf,gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -30306,7 +30284,6 @@ msgid "Generate Position File"
 msgstr "Générer Fichier Position des Empreintes"
 
 #: kicad/cli/command_pcb_export_pos.cpp:51
-#, fuzzy
 msgid ""
 "Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
@@ -30315,15 +30292,13 @@ msgstr ""
 "\"front\" ou \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:56
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "Options valides : ascii,csv,gerber"
+msgstr "Options valides : ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:61
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
 msgstr ""
-"Unités de sortie; format ascii ou csv uniquement; options valides : in,mm"
+"Unités de sortie; format ascii ou csv uniquement; options valides : in ,mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:65
 msgid ""
@@ -30449,41 +30424,43 @@ msgid "No drawing sheet"
 msgstr "Pas de feuille de dessin"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Exporter la netliste au format KiCad"
+msgstr "Importer un fichier PCB non KiCad au format KiCad"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
 "Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
 "solidworks (default: auto)"
 msgstr ""
+"Option du format d'entrée: auto, pads, altium, eagle, cadstar, fabmaster, "
+"pcad, solidworks (defaut: auto)"
 
 #: kicad/cli/command_pcb_import.cpp:52
 msgid "JSON file with layer name mappings"
-msgstr ""
+msgstr "Fichier JSON avec mappages des noms de couches"
 
 #: kicad/cli/command_pcb_import.cpp:56
 msgid "Use automatic layer mapping (default behavior)"
-msgstr ""
+msgstr "Utiliser le mappage automatique des couches (comportement par défaut)"
 
 #: kicad/cli/command_pcb_import.cpp:61
 msgid "Import report format: none, json, text (default: none)"
 msgstr ""
+"Format du rapport d'importation : aucun, json, texte (par défaut : aucun)"
 
 #: kicad/cli/command_pcb_import.cpp:66
 msgid "File path for import report (default: stdout)"
-msgstr ""
+msgstr "Chemin du fichier pour le rapport d'importation (par défaut : stdout)"
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "Format non valide\n"
+msgstr "Format non valide : %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "Format de rapport non valide\n"
+msgstr "Format de rapport non valide : %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -30918,12 +30895,11 @@ msgstr "Editer Modèle"
 
 #: kicad/dialogs/dialog_template_selector.cpp:307
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "Ouvrir Modèle (lecture seule)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:308
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "Ouvrir Répertoire des Thèmes"
+msgstr "Ouvrir le Dossier des Modèles"
 
 #: kicad/dialogs/dialog_template_selector.cpp:309
 #: kicad/dialogs/dialog_template_selector.cpp:384
@@ -31339,7 +31315,7 @@ msgstr "Examiner un autre répertoire à l'aide de l'icône de dossier"
 
 #: kicad/dialogs/template_default_html.h:549
 msgid "Use the refresh icon to reload the current directory"
-msgstr "Utilisez l'icône d'actualisation pour recharger le répertoire actuel."
+msgstr "Utilisez l'icône d'actualisation pour recharger le répertoire actuel"
 
 #: kicad/dialogs/template_default_html.h:550
 msgid "Switch to a system templates tab"
@@ -31378,28 +31354,27 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "Décompression projet en '%s'.\n"
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "Impossible d'ouvrir/créer le chemin '%s'."
+msgstr "Impossible d'ouvrir le fichier de projet gEDA / Lepton EDA '%s'."
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr ""
+msgstr "Localiser Schématique gEDA / EDA Lepton"
 
 #: kicad/import_proj.cpp:573
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "Fichiers EasyEDA (JLCEDA) Pro"
+msgstr "Fichiers PCB gEDA / Lepton EDA"
 
 #: kicad/import_proj.cpp:576
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr ""
+msgstr "Localiser gEDA / Lepton EDA PCB"
 
 #: kicad/import_project.cpp:73
-#, fuzzy
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
 msgstr ""
-"Le fichier sélectionné ne semble pas être une librairie de composants CADSTAR"
+"Le fichier sélectionné ne semble pas être un PCB ou une schématique PADS "
+"ASCII"
 
 #: kicad/import_project.cpp:91
 msgid "KiCad Project Destination"
@@ -31446,14 +31421,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Importer un projet EasyEDA Pro"
 
 #: kicad/import_project.cpp:202
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "Importer Fichiers de Projet Altium"
+msgstr "Importation Fichiers de Projet PADS"
 
 #: kicad/import_project.cpp:210
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Importer Fichiers de Projet Eagle"
+msgstr "Importation des fichiers de projet gEDA / Lepton EDA"
 
 #: kicad/jobs_runner.cpp:228
 #, c-format
@@ -31669,24 +31642,22 @@ msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "Importer EasyEDA (JLCEDA) Schématique et PCB professionnel"
 
 #: kicad/menubar.cpp:148
-#, fuzzy
 msgid "PADS Project..."
-msgstr "Projet CADSTAR..."
+msgstr "Projet PADS..."
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "Importer archive schématique et PCB  CADSTAR (*.csa, *.cpa)"
+msgstr ""
+"Importer la schématique PADS Logic et le fichier PADS ASCII PCB (*.asc, *."
+"txt)"
 
 #: kicad/menubar.cpp:152
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "Projet EAGLE..."
+msgstr "Projet gEDA / Lepton EDA..."
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "Importer  schematique et  C.I. Eagle CAD XML"
+msgstr "Importer schéma et PCB  gEDA ou Lepton EDA "
 
 #: kicad/menubar.cpp:182
 msgid "Edit Advanced Config..."
@@ -36689,11 +36660,9 @@ msgstr ""
 "est sur le net %s."
 
 #: pcbnew/connectivity/topo_match.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
-msgstr ""
-"Le pad %s de %s est sur le net %s, mais son équivalent dans le candidat %s "
-"est sur le net %s."
+msgstr "Le pad %s de %s a un inconsistant mappage de net dans le candidat %s."
 
 #: pcbnew/connectivity/topo_match.cpp:350
 msgid "No compatible component found in the target area."
@@ -36733,8 +36702,8 @@ msgstr "(pas d'ID de librairie)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
-"Différence des liens de librairie : %s attend '%s' mais le candidat %s est « "
-"%s »."
+"Différence des liens de librairie : %s attend '%s' mais le candidat %s est "
+"« %s »."
 
 #: pcbnew/connectivity/topo_match.cpp:1104
 #, c-format
@@ -41813,7 +41782,7 @@ msgid ""
 "clearance)."
 msgstr ""
 "Une marge négative signifie une surface plus petite que le pad (usuel pour "
-"le masque de soudure)"
+"le masque de pate à souder)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:999
 msgid ""
@@ -43143,16 +43112,14 @@ msgid "Protection features:"
 msgstr "Caractéristiques de protection:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
-#, fuzzy
 msgid "Backdrill:"
-msgstr "Backdrill"
+msgstr "Backdrill:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
 msgstr "Les deux"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
-#, fuzzy
 msgid "Hole Post-machining"
 msgstr "Trou Post-usinage"
 
@@ -46436,9 +46403,8 @@ msgid "board setup constraints courtyard"
 msgstr "configuration des contraintes des zones d'occupation"
 
 #: pcbnew/drc/drc_engine.cpp:238
-#, fuzzy
 msgid "board setup constraints micro-via"
-msgstr "configuration des contraintes du PCB"
+msgstr "configuration des contraintes PCB des micro-vias"
 
 #: pcbnew/drc/drc_engine.cpp:253
 msgid "barcode visual separation default"
@@ -48458,15 +48424,15 @@ msgstr "Création fichier '%s'"
 msgid "Created file '%s'."
 msgstr "Création fichier '%s'."
 
-#: pcbnew/exporters/gendrill_writer_base.cpp:1092
+#: pcbnew/exporters/gendrill_writer_base.cpp:1095
 #, c-format
 msgid "Error creating drill report file '%s'"
 msgstr "Erreur lors de la création du fichier de rapport de perçage '%s'"
 
-#: pcbnew/exporters/gendrill_writer_base.cpp:1219
+#: pcbnew/exporters/gendrill_writer_base.cpp:1225
 #, c-format
-msgid "Created drill report file '%s'"
-msgstr "Fichier de rapport de perçage '%s' créé"
+msgid "Error writing drill report file '%s'"
+msgstr "Erreur lors de l'écriture du fichier de rapport de perçage '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:138
 #, c-format
@@ -50166,7 +50132,7 @@ msgid "Add %s to group '%s'."
 msgstr "Ajout %s au groupe '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
 msgstr "Ajout %s au groupe '%s'."
 
@@ -50347,24 +50313,24 @@ msgstr ""
 "La zone cuivre sur couche %s à (%s %s) n'a pas de pad connecté au net \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name from '%s' to '%s'."
-msgstr "Modifie le nom du groupe de '%s' à '%s'."
+msgstr "Modifie le nom du groupe de '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1796
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name from '%s' to '%s'."
-msgstr "Modifié le nom du groupe de '%s' à '%s'."
+msgstr "Modifié le nom du groupe de '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1810
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "Modifie le lien de librairie du groupe en '%s'."
+msgstr "Modifie le lien de librairie du groupe de '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1816
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "Modification du lien de librairie du groupe en '%s'."
+msgstr "Modification du lien de librairie du groupe de '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1856
 #, c-format
@@ -51155,38 +51121,48 @@ msgid "Generator Properties"
 msgstr "Propriétés du Générateur"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3496
-#, fuzzy
 msgid "Constructing caches"
-msgstr "Labels en conflit"
+msgstr "Construction des caches"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3504
-#, fuzzy
 msgid "Creating nets"
-msgstr "Couche notes & dessins"
+msgstr "Création des nets"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3509
-#, fuzzy
 msgid "Creating tracks"
-msgstr "piste existante"
+msgstr "Création des pistes"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3524
-#, fuzzy
 msgid "Converting footprints"
-msgstr "Centre sur l'empreinte"
+msgstr "Conversion des empreintes"
 
-#: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2354
+#: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2362
 msgid "Parsing Allegro objects"
+msgstr "Analyse des objets Allegro"
+
+#: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2460
+#, c-format
+msgid ""
+"This file was created with %s, which uses a binary format that predates "
+"Allegro 16.0 and is not supported by this importer.\n"
+"\n"
+"To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
+"later and re-save, then import the resulting file."
 msgstr ""
+"Ce fichier a été créé avec %s, qui utilise un format binaire antérieur à "
+"Allegro 16.0 et qui n'est pas pris en charge par cet importateur.\n"
+"\n"
+"Pour importer ce fichier, ouvrez-le dans Cadence Allegro PCB Editor version "
+"16.0 ou ultérieure et enregistrez-le à nouveau, puis importez le fichier "
+"obtenu."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:135
-#, fuzzy
 msgid "Failed to build board from Allegro data"
-msgstr "Échec de l'ajout des données du composant"
+msgstr "Échec de la création de la carte à partir des données Allegro"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:38
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Fichiers de netliste Allegro"
+msgstr "Fichiers PCB Allegro"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:176
 #, c-format
@@ -51194,9 +51170,9 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Correspondance inconnue de la couche Altium '%s'."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown mapping of the Altium layer kind '%s'."
-msgstr "Correspondance inconnue de la couche Altium '%s'."
+msgstr "Mappage inconnu du type de couche Altium '%s'."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:283
 #, c-format
@@ -52066,7 +52042,6 @@ msgstr ""
 "les nets)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3914
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -52075,8 +52050,8 @@ msgid ""
 msgstr ""
 "Le projet CADSTAR contient des nets avec une \"classe d’espacement\" "
 "assignée. KiCad n’a pas d’équivalent à la classe d’espacement de CADSTAR, de "
-"sorte que ces éléments n’ont pas été importés. S’il vous plaît examiner les "
-"règles de conception car les zones de cuivre seront affectées par cela."
+"sorte que ces éléments n’ont pas été importés. SVP examiner les règles de "
+"conception car les zones de cuivre seront affectées par cela."
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -52435,23 +52410,21 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "La librairie d'empreintes  '%s' ne peut pas être supprimée."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Via token contains %d parameters, expected at least 10."
-msgstr "Element token contains %d parameters."
+msgstr "La via contient %d paramètres, au moins 10 sont attendus."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "Fichier PCB gEDA / Lepton EDA"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "Fichier empreinte gEDA PCB"
+msgstr "Fichier empreinte gEDA / Lepton EDA PCB"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "Répertoire librairies d'empreintes gEDA PCB"
+msgstr "Répertoire librairies d'empreintes gEDA / Lepton EDA PCB"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:425
 msgid "Generating content section"
@@ -52890,54 +52863,56 @@ msgstr "Fichier de Production ODB++"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:125
 msgid "Starting PADS PCB import"
-msgstr ""
+msgstr "Démarrer importation PADS PCB"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "Empreinte '%s' introuvable dans la librairie '%s'"
+msgstr ""
+"Empreinte « %s » introuvable dans la liste des \"décalcomanies\", élément "
+"ignoré"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:843
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr ""
+msgstr "Ignore élément \"décalcomanie\" sur la couche non mappée %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1102
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
-msgstr ""
+msgstr "Texte sur la couche non mappé %d attribué à la couche Commentaires"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1179
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping track on non-copper layer %d"
-msgstr "Commuter piste à couche cuivre suivante"
+msgstr "Ignore piste sur une couche non cuivrée %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1375
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
-msgstr ""
+msgstr "Ignorer le remplissage sur la couche non mappée %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1620
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr ""
+msgstr "Ignore la zone interdite sur la couche non mappée %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1644
 msgid "Skipping keepout with no valid layers"
-msgstr ""
+msgstr "Ignore la zone interdite sans couches valides"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1867
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:646
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
-msgstr ""
+msgstr "Importé %zu empreintes, %d nets, %zu pistes, %zu vias, %zu zones"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:109
 msgid "Starting PADS binary PCB import"
-msgstr ""
+msgstr "Démarrage de l'importation binaire PADS PCB"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -54203,34 +54178,34 @@ msgid "Board file was not updated\n"
 msgstr "Le fichier PCB n'a pas été mis à jour\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2828
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "Impossible de lire le fichier '%s'"
+msgstr "Impossible de déterminer le format du fichier pour '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2837
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Fichier non trouvé: '%s'."
+msgstr "Fichier d'entrée non trouvé: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2863
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "Pas de données de localisation pour le nom de fichier '%s'."
+msgstr "Aucun plugin trouvé pour le type de fichier '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2869
 #, c-format
 msgid "Importing '%s' using %s format...\n"
-msgstr ""
+msgstr "Importation de '%s' format %s...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2885
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "Exportation réussie de VRML vers %s"
+msgstr "La carte importée a été enregistrée avec succès dans '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Erreur lors du chargement de l'empreinte : %s"
+msgstr "Erreur lors de l'impotation: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -54241,6 +54216,7 @@ msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr "Le traçage HPGL n'est plus supporté depuis KiCad 10.0"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:105
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:105
 #, c-format
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
@@ -54250,10 +54226,13 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:107
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:120
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:107
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:120
 msgid "Scripting init"
 msgstr "Init des scripts"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:118
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:119
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
@@ -54263,6 +54242,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:220
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:237
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:220
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:237
 #, c-format
 msgid "Unable to open plugin directory '%s'."
 msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
@@ -54271,15 +54252,21 @@ msgstr "Impossible d'ouvrir le répertoire de plugins '%s'."
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:229
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:238
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:244
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:221
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:229
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:238
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:244
 msgid "Plugin Directory"
 msgstr "Répertoire Plugin"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:227
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:227
 #, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Le répertoire de plugins '%s' n'existe pas.  Le créer ?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:243
+#: pcbnew/python/scripting/pcb_scripting_tool_swig44.cpp:243
 #, c-format
 msgid "Unable to create plugin directory '%s'."
 msgstr "Impossible de créer le répertoire de plugins '%s'."
@@ -55995,9 +55982,8 @@ msgid "Some of the items could not be outset."
 msgstr "Certains éléments n'ont pas pu être mis en enveloppe."
 
 #: pcbnew/tools/multichannel_tool.cpp:87
-#, fuzzy
 msgid "(none)"
-msgstr "aucun"
+msgstr "(aucun)"
 
 #: pcbnew/tools/multichannel_tool.cpp:137
 #: pcbnew/tools/multichannel_tool.cpp:1489
@@ -56016,14 +56002,13 @@ msgstr ""
 "Aucune zone de règles pour répéter le placement/routage n'a été trouvée."
 
 #: pcbnew/tools/multichannel_tool.cpp:727
-#, fuzzy
 msgid "Checking Rule Area compatibility..."
-msgstr "Vérification de l’intégrité du masque de soudure..."
+msgstr "Vérification de la compatibilité de la zone à règles..."
 
 #: pcbnew/tools/multichannel_tool.cpp:752
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
-msgstr ""
+msgstr "Résolution de la topologie %d de %d (composants %d/%d)"
 
 #: pcbnew/tools/multichannel_tool.cpp:787
 #, c-format
@@ -56055,26 +56040,28 @@ msgstr "Copié sur %d Zones à Règles."
 #: pcbnew/tools/multichannel_tool.cpp:1495
 #, c-format
 msgid "Reference area total components: %d"
-msgstr ""
+msgstr "Nombre total de composants dans la zone de référence : %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1496
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "Propriétés de l'Image"
+msgstr ""
+"Composants de la zone de référence :\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "Échec de l'analyse de la liste des composants : %s"
+msgstr "Nombre total de composants dans la zone cible : %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "Échec de l'analyse de la liste des composants : %s"
+msgstr "Composants de la zone cible : %s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1552
 msgid ""
@@ -57229,9 +57216,8 @@ msgid "DRC Rule Editor"
 msgstr "Editeur de Règles DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
-msgstr "Ouvrir la fenêtre de l'éditeur de règles drc"
+msgstr "Ouvrir la fenêtre de l'éditeur de règles DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -57625,13 +57611,12 @@ msgid "Distribute Horizontally by Centers"
 msgstr "Distribuer Horizontalement par Centres"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
 msgstr ""
 "Répartit les éléments sélectionnés entre l'élément le plus à gauche et "
-"l'élément le plus à droite pour que les centres des éléments soient répartis "
+"l'élément le plus à droite afin que les centres des éléments soient répartis "
 "de manière égale"
 
 #: pcbnew/tools/pcb_actions.cpp:2263
@@ -59357,14 +59342,12 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Utilisez /.../ pour indiquer une expression régulière)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1220
-#, fuzzy
 msgid "Auto-fit Column"
-msgstr "Remplissage automatique Zone(s)"
+msgstr "Ajustement auto. colonne"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
-#, fuzzy
 msgid "Auto-fit All Columns"
-msgstr "Remplissage automatique Zone(s)"
+msgstr "Ajuster auto. toutes colonnes"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1245
 msgid "Filter by Net Name"
@@ -59901,6 +59884,10 @@ msgstr "Symbole Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
+
+#, c-format
+#~ msgid "Created drill report file '%s'"
+#~ msgstr "Fichier de rapport de perçage '%s' créé"
 
 #~ msgid "Filter Pin Table"
 #~ msgstr "Filtre Table des Pins"
