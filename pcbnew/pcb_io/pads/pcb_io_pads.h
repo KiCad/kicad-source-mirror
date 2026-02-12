@@ -78,6 +78,7 @@ private:
     void        loadTestPoints();
     void        loadTexts();
     void        loadTracksAndVias();
+    void        loadCopperShapes();
     void        loadClusterGroups();
     void        loadZones();
     void        loadBoardOutline();

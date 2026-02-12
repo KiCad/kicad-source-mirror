@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <climits>
 #include <cstdlib>
+#include <limits>
 #include <wx/log.h>
 
 namespace PADS_IO
@@ -2439,6 +2440,19 @@ void PARSER::parseSectionTEXT( std::ifstream& aStream )
         // Read Content line
         if( readLine( aStream, line ) )
         {
+            // Standard PADS format uses literal backslash-n for line breaks
+            size_t pos = 0;
+
+            while( ( pos = line.find( "\\n", pos ) ) != std::string::npos )
+            {
+                line.replace( pos, 2, "\n" );
+                pos += 1;
+            }
+
+            // EasyEDA exports (mode "250L") encode newlines as underscores
+            if( m_file_header.mode == "250L" )
+                std::replace( line.begin(), line.end(), '_', '\n' );
+
             text.content = line;
             m_texts.push_back( text );
         }
@@ -2629,9 +2643,16 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
 
         iss >> name >> type >> xloc >> yloc >> pieces >> flags;
 
-        // Try to read optional text count and signal name (for COPPER type)
+        // Try to read optional text count and signal name (for COPPER type).
+        // Standard format: pieces flags textcount signame
+        // EasyEDA format:  pieces flags signame (no text count)
         if( iss >> textCount )
         {
+            iss >> signame;
+        }
+        else
+        {
+            iss.clear();
             iss >> signame;
         }
 
@@ -3209,6 +3230,7 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 COPPER_SHAPE copper;
                 copper.name = name;
                 copper.layer = level;
+                copper.width = width;
                 copper.net_name = signame;
 
                 copper.filled = ( shape_type == "COPCLS" || shape_type == "COPCIR" );
@@ -4363,6 +4385,18 @@ void PARSER::parseSectionLAYERDEFS( std::ifstream& aStream )
             iss >> typeStr;
             currentLayer.layer_type = parseLayerType( typeStr );
         }
+        else if( token == "LAYER_THICKNESS" && inLayerBlock )
+        {
+            iss >> currentLayer.layer_thickness;
+        }
+        else if( token == "COPPER_THICKNESS" && inLayerBlock )
+        {
+            iss >> currentLayer.copper_thickness;
+        }
+        else if( token == "DIELECTRIC" && inLayerBlock )
+        {
+            iss >> currentLayer.dielectric_constant;
+        }
     }
 }
 
@@ -4442,7 +4476,23 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                 if( inClearanceRule && braceDepth < clearanceRuleDepth )
                 {
                     inClearanceRule = false;
+
+                    // Fall back to struct defaults if no values were parsed
+                    if( m_design_rules.default_clearance
+                        == std::numeric_limits<double>::max() )
+                    {
+                        m_design_rules.default_clearance = DESIGN_RULES().default_clearance;
+                    }
+
                     m_design_rules.min_clearance = m_design_rules.default_clearance;
+
+                    if( m_design_rules.copper_edge_clearance
+                        == std::numeric_limits<double>::max() )
+                    {
+                        m_design_rules.copper_edge_clearance =
+                                m_design_rules.default_clearance;
+                    }
+
                     foundDefaultRules = true;
                 }
 
@@ -4454,6 +4504,20 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
         std::istringstream iss( line );
         std::string token;
         iss >> token;
+
+        // LAYER DATA block contains per-layer definitions (name, type, etc.)
+        // which may appear inside *MISC* instead of as a standalone section.
+        if( token == "LAYER" )
+        {
+            std::string secondToken;
+            iss >> secondToken;
+
+            if( secondToken == "DATA" )
+            {
+                parseSectionLAYERDEFS( aStream );
+                continue;
+            }
+        }
 
         // Check for NET_CLASS DATA section header
         if( token == "NET_CLASS" )
@@ -4504,6 +4568,8 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
         {
             inClearanceRule = true;
             clearanceRuleDepth = braceDepth;
+            m_design_rules.default_clearance = std::numeric_limits<double>::max();
+            m_design_rules.copper_edge_clearance = std::numeric_limits<double>::max();
         }
         else if( inClearanceRule )
         {
@@ -4512,16 +4578,32 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
 
             if( !iss.fail() && val > 0.0 )
             {
-                if( token == "TRACK_TO_TRACK" )
-                    m_design_rules.default_clearance = val;
-                else if( token == "VIA_TO_TRACK" || token == "VIA_TO_VIA" )
-                    m_design_rules.default_clearance = std::min( m_design_rules.default_clearance, val );
-                else if( token == "MIN_TRACK_WIDTH" )
+                if( token == "MIN_TRACK_WIDTH" )
+                {
                     m_design_rules.min_track_width = val;
+                }
                 else if( token == "REC_TRACK_WIDTH" )
+                {
                     m_design_rules.default_track_width = val;
+                }
                 else if( token == "DRILL_TO_DRILL" )
+                {
                     m_design_rules.hole_to_hole = val;
+                }
+                else if( token == "OUTLINE_TO_TRACK" || token == "OUTLINE_TO_VIA"
+                         || token == "OUTLINE_TO_PAD" || token == "OUTLINE_TO_COPPER" )
+                {
+                    m_design_rules.copper_edge_clearance =
+                            std::min( m_design_rules.copper_edge_clearance, val );
+                }
+                else
+                {
+                    // All clearance values (TRACK_TO_TRACK, VIA_TO_*, PAD_TO_*,
+                    // SMD_TO_*, COPPER_TO_*, TEXT_TO_*, DRILL_TO_*) contribute to
+                    // the global minimum copper clearance
+                    m_design_rules.default_clearance =
+                            std::min( m_design_rules.default_clearance, val );
+                }
             }
         }
         else if( token == "DIF_PAIR" )

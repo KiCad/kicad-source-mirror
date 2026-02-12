@@ -47,6 +47,7 @@
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <netclass.h>
 #include <geometry/eda_angle.h>
 #include <geometry/shape_arc.h>
@@ -162,6 +163,7 @@ BOARD* PCB_IO_PADS::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
             m_progressReporter->BeginPhase( 3 );
 
         loadTracksAndVias();
+        loadCopperShapes();
         loadClusterGroups();
         loadZones();
         loadBoardOutline();
@@ -216,6 +218,12 @@ void PCB_IO_PADS::loadNets()
 
     for( const auto& pour_def : m_parser->GetPours() )
         ensureNet( pour_def.net_name );
+
+    for( const auto& copper : m_parser->GetCopperShapes() )
+    {
+        if( !copper.net_name.empty() && IsCopperLayer( getMappedLayer( copper.layer ) ) )
+            ensureNet( copper.net_name );
+    }
 
     const auto& reuse_blocks = m_parser->GetReuseBlocks();
 
@@ -1299,6 +1307,261 @@ void PCB_IO_PADS::loadTracksAndVias()
 }
 
 
+void PCB_IO_PADS::loadCopperShapes()
+{
+    const auto& copperShapes = m_parser->GetCopperShapes();
+
+    // Check if a COPPER_SHAPE is a non-copper straight-line segment suitable for
+    // rectangle grouping (2 outline points, no arcs, not filled, not cutout).
+    auto isRectCandidate = []( const PADS_IO::COPPER_SHAPE& cs )
+    {
+        return cs.outline.size() == 2 && !cs.outline[1].is_arc
+               && !cs.filled && !cs.is_cutout;
+    };
+
+    // Check if 4 consecutive entries at idx form a closed axis-aligned rectangle.
+    // Each entry must have the same net_name and layer, and consecutive segment
+    // endpoints must connect to form a closed cycle with only horizontal/vertical edges.
+    auto tryFormRectangle = [&]( size_t idx, VECTOR2I& minCorner, VECTOR2I& maxCorner ) -> bool
+    {
+        if( idx + 3 >= copperShapes.size() )
+            return false;
+
+        const auto& c0 = copperShapes[idx];
+        const auto& c1 = copperShapes[idx + 1];
+        const auto& c2 = copperShapes[idx + 2];
+        const auto& c3 = copperShapes[idx + 3];
+
+        if( !isRectCandidate( c0 ) || !isRectCandidate( c1 )
+            || !isRectCandidate( c2 ) || !isRectCandidate( c3 ) )
+        {
+            return false;
+        }
+
+        if( c1.net_name != c0.net_name || c2.net_name != c0.net_name
+            || c3.net_name != c0.net_name )
+        {
+            return false;
+        }
+
+        if( c1.layer != c0.layer || c2.layer != c0.layer || c3.layer != c0.layer )
+            return false;
+
+        // Get the 4 segment start/end pairs in scaled coordinates
+        VECTOR2I pts[8];
+        const PADS_IO::COPPER_SHAPE* segs[4] = { &c0, &c1, &c2, &c3 };
+
+        for( int i = 0; i < 4; ++i )
+        {
+            pts[i * 2] = VECTOR2I( scaleCoord( segs[i]->outline[0].x, true ),
+                                    scaleCoord( segs[i]->outline[0].y, false ) );
+            pts[i * 2 + 1] = VECTOR2I( scaleCoord( segs[i]->outline[1].x, true ),
+                                        scaleCoord( segs[i]->outline[1].y, false ) );
+        }
+
+        // Each segment must be axis-aligned
+        for( int i = 0; i < 4; ++i )
+        {
+            VECTOR2I s = pts[i * 2];
+            VECTOR2I e = pts[i * 2 + 1];
+
+            if( s.x != e.x && s.y != e.y )
+                return false;
+        }
+
+        // Consecutive segments must connect (end of N == start of N+1)
+        for( int i = 0; i < 3; ++i )
+        {
+            if( pts[i * 2 + 1] != pts[( i + 1 ) * 2] )
+                return false;
+        }
+
+        // Cycle must close (end of last == start of first)
+        if( pts[7] != pts[0] )
+            return false;
+
+        // Compute bounding box from the 4 corner points
+        int minX = pts[0].x, maxX = pts[0].x;
+        int minY = pts[0].y, maxY = pts[0].y;
+
+        for( int i = 0; i < 8; ++i )
+        {
+            minX = std::min( minX, pts[i].x );
+            maxX = std::max( maxX, pts[i].x );
+            minY = std::min( minY, pts[i].y );
+            maxY = std::max( maxY, pts[i].y );
+        }
+
+        minCorner = VECTOR2I( minX, minY );
+        maxCorner = VECTOR2I( maxX, maxY );
+        return true;
+    };
+
+    for( size_t idx = 0; idx < copperShapes.size(); ++idx )
+    {
+        const auto& copper = copperShapes[idx];
+
+        if( copper.outline.size() < 2 )
+            continue;
+
+        if( copper.is_cutout )
+            continue;
+
+        PCB_LAYER_ID layer = getMappedLayer( copper.layer );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format(
+                        _( "COPPER item on unmapped layer %d defaulting to F.Cu" ),
+                        copper.layer ),
+                        RPT_SEVERITY_WARNING );
+            }
+
+            layer = F_Cu;
+        }
+
+        int width = scaleSize( copper.width );
+
+        if( !IsCopperLayer( layer ) )
+        {
+            // Check for 4 consecutive entries forming an axis-aligned rectangle
+            VECTOR2I minCorner, maxCorner;
+
+            if( tryFormRectangle( idx, minCorner, maxCorner ) )
+            {
+                PCB_SHAPE* rect = new PCB_SHAPE( m_loadBoard );
+                rect->SetShape( SHAPE_T::RECTANGLE );
+                rect->SetStart( minCorner );
+                rect->SetEnd( maxCorner );
+                rect->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+                rect->SetLayer( layer );
+                m_loadBoard->Add( rect );
+
+                idx += 3;
+                continue;
+            }
+
+            // EasyEDA PADS exports place footprint silkscreen outlines in the *LINES*
+            // section as COPPER type on the silkscreen layer. Import these as board
+            // graphics on their actual layer rather than forcing them onto copper.
+            for( size_t i = 0; i < copper.outline.size() - 1; ++i )
+            {
+                const auto& p1 = copper.outline[i];
+                const auto& p2 = copper.outline[i + 1];
+
+                VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
+                VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
+
+                if( ( start - end ).EuclideanNorm() < 1000 )
+                    continue;
+
+                PCB_SHAPE* shape = new PCB_SHAPE( m_loadBoard );
+
+                if( p2.is_arc )
+                {
+                    shape->SetShape( SHAPE_T::ARC );
+                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
+                                     scaleCoord( p2.arc.cy, false ) );
+
+                    if( p2.arc.delta_angle > 0 )
+                        std::swap( start, end );
+
+                    shape->SetCenter( center );
+                    shape->SetStart( start );
+                    shape->SetEnd( end );
+                }
+                else
+                {
+                    shape->SetShape( SHAPE_T::SEGMENT );
+                    shape->SetStart( start );
+                    shape->SetEnd( end );
+                }
+
+                shape->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+                shape->SetLayer( layer );
+                m_loadBoard->Add( shape );
+            }
+
+            continue;
+        }
+
+        NETINFO_ITEM* net = nullptr;
+
+        if( !copper.net_name.empty() )
+            net = m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( copper.net_name ) );
+
+        if( copper.filled )
+        {
+            ZONE* zone = new ZONE( m_loadBoard );
+            zone->SetLayer( layer );
+            zone->SetIsRuleArea( false );
+
+            if( net )
+                zone->SetNet( net );
+
+            SHAPE_LINE_CHAIN outline;
+
+            for( const auto& pt : copper.outline )
+                outline.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+
+            outline.SetClosed( true );
+            zone->Outline()->NewOutline();
+            zone->Outline()->Append( outline );
+            m_loadBoard->Add( zone );
+        }
+        else
+        {
+            for( size_t i = 0; i < copper.outline.size() - 1; ++i )
+            {
+                const auto& p1 = copper.outline[i];
+                const auto& p2 = copper.outline[i + 1];
+
+                VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
+                VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
+
+                if( ( start - end ).EuclideanNorm() < 1000 )
+                    continue;
+
+                if( p2.is_arc )
+                {
+                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
+                                     scaleCoord( p2.arc.cy, false ) );
+
+                    bool clockwise = ( p2.arc.delta_angle < 0 );
+
+                    SHAPE_ARC shapeArc;
+                    shapeArc.ConstructFromStartEndCenter( start, end, center, clockwise, width );
+
+                    PCB_ARC* arc = new PCB_ARC( m_loadBoard, &shapeArc );
+
+                    if( net )
+                        arc->SetNet( net );
+
+                    arc->SetWidth( width );
+                    arc->SetLayer( layer );
+                    m_loadBoard->Add( arc );
+                }
+                else
+                {
+                    PCB_TRACK* track = new PCB_TRACK( m_loadBoard );
+
+                    if( net )
+                        track->SetNet( net );
+
+                    track->SetWidth( width );
+                    track->SetLayer( layer );
+                    track->SetStart( start );
+                    track->SetEnd( end );
+                    m_loadBoard->Add( track );
+                }
+            }
+        }
+    }
+}
+
+
 void PCB_IO_PADS::loadClusterGroups()
 {
     const auto& clusters = m_parser->GetClusters();
@@ -2085,6 +2348,7 @@ void PCB_IO_PADS::loadBoardSetup()
     bds.m_HoleToHoleMin = scaleSize( designRules.hole_to_hole );
     bds.m_SilkClearance = scaleSize( designRules.silk_clearance );
     bds.m_SolderMaskExpansion = scaleSize( designRules.mask_clearance );
+    bds.m_CopperEdgeClearance = scaleSize( designRules.copper_edge_clearance );
 
     bds.GetDefaultZoneSettings().m_ZoneClearance = scaleSize( designRules.default_clearance );
 
@@ -2100,6 +2364,34 @@ void PCB_IO_PADS::loadBoardSetup()
         defaultNetclass->SetTrackWidth( scaleSize( designRules.default_track_width ) );
         defaultNetclass->SetViaDiameter( scaleSize( designRules.default_via_size ) );
         defaultNetclass->SetViaDrill( scaleSize( designRules.default_via_drill ) );
+    }
+
+    const auto& viaDefs = m_parser->GetViaDefs();
+
+    if( !viaDefs.empty() )
+    {
+        // Use the file's designated default signal via, falling back to the first
+        // definition if no explicit default was specified
+        const std::string& defaultViaName = m_parser->GetParameters().default_signal_via;
+        auto defaultIt = viaDefs.find( defaultViaName );
+
+        if( defaultIt == viaDefs.end() )
+            defaultIt = viaDefs.begin();
+
+        int viaDia = scaleSize( defaultIt->second.size );
+        int viaDrill = scaleSize( defaultIt->second.drill );
+
+        bds.SetCustomViaSize( viaDia );
+        bds.SetCustomViaDrill( viaDrill );
+
+        if( defaultNetclass )
+        {
+            defaultNetclass->SetViaDiameter( viaDia );
+            defaultNetclass->SetViaDrill( viaDrill );
+        }
+
+        for( const auto& [name, def] : viaDefs )
+            bds.m_ViasDimensionsList.emplace_back( scaleSize( def.size ), scaleSize( def.drill ) );
     }
 
     const auto& netClasses = m_parser->GetNetClasses();
@@ -2202,5 +2494,86 @@ void PCB_IO_PADS::loadBoardSetup()
             m_originX = ( min_x + max_x ) / 2.0;
             m_originY = ( min_y + max_y ) / 2.0;
         }
+    }
+
+    // Build board stackup from LAYER DATA if meaningful data exists.
+    // Collect copper layer infos ordered by PADS layer number.
+    std::vector<const PADS_IO::LAYER_INFO*> copperLayerInfos;
+
+    for( const auto& li : padsLayerInfos )
+    {
+        if( li.is_copper )
+            copperLayerInfos.push_back( &li );
+    }
+
+    bool hasStackupData = false;
+
+    for( const auto* li : copperLayerInfos )
+    {
+        if( li->layer_thickness > 0.0 || li->dielectric_constant > 0.0 )
+        {
+            hasStackupData = true;
+            break;
+        }
+    }
+
+    if( hasStackupData )
+    {
+        BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
+        stackup.RemoveAll();
+        stackup.BuildDefaultStackupList( &bds, copperLayerCount );
+
+        // Build a map from KiCad PCB_LAYER_ID to PADS LAYER_INFO for copper layers
+        std::map<PCB_LAYER_ID, const PADS_IO::LAYER_INFO*> copperInfoMap;
+
+        for( const auto* li : copperLayerInfos )
+        {
+            PCB_LAYER_ID kicadLayer = getMappedLayer( li->number );
+
+            if( kicadLayer != UNDEFINED_LAYER )
+                copperInfoMap[kicadLayer] = li;
+        }
+
+        // Track the previous copper layer's info for dielectric assignment
+        const PADS_IO::LAYER_INFO* prevCopperInfo = nullptr;
+
+        for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+        {
+            if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER )
+            {
+                auto it = copperInfoMap.find( item->GetBrdLayerId() );
+
+                if( it != copperInfoMap.end() )
+                {
+                    prevCopperInfo = it->second;
+
+                    if( it->second->copper_thickness > 0.0 )
+                        item->SetThickness( scaleSize( it->second->copper_thickness ) );
+                }
+            }
+            else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC )
+            {
+                if( prevCopperInfo )
+                {
+                    if( prevCopperInfo->layer_thickness > 0.0 )
+                        item->SetThickness( scaleSize( prevCopperInfo->layer_thickness ) );
+
+                    if( prevCopperInfo->dielectric_constant > 0.0 )
+                        item->SetEpsilonR( prevCopperInfo->dielectric_constant );
+                }
+            }
+            else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN )
+            {
+                item->SetColor( wxT( "White" ) );
+            }
+            else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK )
+            {
+                item->SetColor( wxT( "Green" ) );
+            }
+        }
+
+        int thickness = stackup.BuildBoardThicknessFromStackup();
+        bds.SetBoardThickness( thickness );
+        bds.m_HasStackup = true;
     }
 }

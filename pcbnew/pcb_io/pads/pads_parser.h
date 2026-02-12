@@ -142,6 +142,7 @@ struct DESIGN_RULES
     double hole_to_hole = 10.0;           ///< Minimum hole-to-hole spacing (HOLEHOLE)
     double silk_clearance = 5.0;          ///< Minimum silkscreen clearance (SILKCLEAR)
     double mask_clearance = 3.0;          ///< Solder mask clearance (MASKCLEAR)
+    double copper_edge_clearance = 10.0;  ///< Board outline clearance (OUTLINE_TO_*)
 };
 
 struct ATTRIBUTE
@@ -566,6 +567,7 @@ struct COPPER_SHAPE
     std::string name;                   ///< Shape name
     std::string net_name;               ///< Associated net (empty if unconnected)
     int layer = 0;                      ///< Layer number
+    double width = 0.0;                 ///< Line width (for open polylines)
     bool filled = false;                ///< True for filled shapes (COPCLS, COPCIR)
     bool is_cutout = false;             ///< True for cutouts (COPCUT, COPCCO)
     std::vector<ARC_POINT> outline;     ///< Shape outline vertices
@@ -596,6 +598,9 @@ struct LAYER_INFO
     PADS_LAYER_FUNCTION  layer_type;  ///< Parsed layer type from file
     bool                 is_copper;   ///< True if copper layer
     bool                 required;    ///< True if layer must be mapped
+    double               layer_thickness = 0.0;     ///< Dielectric thickness (BASIC units)
+    double               copper_thickness = 0.0;    ///< Copper foil thickness (BASIC units)
+    double               dielectric_constant = 0.0; ///< Relative permittivity (Er)
 };
 
 /**

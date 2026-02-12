@@ -37,6 +37,7 @@
 #include <footprint.h>
 #include <zone.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <set>
 
 
@@ -57,6 +58,7 @@ static const PADS_BOARD_INFO PADS_BOARDS[] = {
     { "LCORE_2",           "LCORE_2.asc" },            // V2005.0 METRIC
     { "Dexter_MotorCtrl",  "Dexter_MotorCtrl.asc" },   // V2007.0 MILS
     { "MAIS_FC",           "MAIS_FC.asc" },             // V5.0 METRIC
+    { "ClaySight_MK2",    "ClaySight_MK2.asc" },      // V10.0 BASIC (copper lines)
 };
 
 
@@ -191,6 +193,101 @@ BOOST_AUTO_TEST_CASE( ImportClaySight_MK1 )
 }
 
 
+/**
+ * Verify element counts for ClaySight_MK1 (V10.0 BASIC units).
+ *
+ * This board is a 2-layer design with 36 components, routed traces on F.Cu
+ * and B.Cu, no vias, no copper pours, and a rectangular board outline.
+ * Counts are derived from the ASC source file sections.
+ */
+BOOST_AUTO_TEST_CASE( ClaySight_MK1_ElementCounts )
+{
+    std::unique_ptr<BOARD> board = LoadAndVerify( PADS_BOARDS[0] );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // Footprints: 36 parts in the *PART* section
+    BOOST_CHECK_EQUAL( board->Footprints().size(), 36 );
+
+    // Total pads across all footprints
+    int totalPads = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+        totalPads += fp->Pads().size();
+
+    BOOST_CHECK_EQUAL( totalPads, 140 );
+
+    // Tracks: routed signal segments from 32 *SIGNAL* sections
+    int traceCount = 0;
+    int viaCount = 0;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() == PCB_TRACE_T || trk->Type() == PCB_ARC_T )
+            traceCount++;
+        else if( trk->Type() == PCB_VIA_T )
+            viaCount++;
+    }
+
+    BOOST_CHECK_EQUAL( traceCount, 247 );
+
+    // No vias on this 2-layer board (empty *VIA* section)
+    BOOST_CHECK_EQUAL( viaCount, 0 );
+
+    // No zones (empty *POUR* section)
+    BOOST_CHECK_EQUAL( board->Zones().size(), 0 );
+
+    // Board outline on Edge.Cuts
+    int edgeCutsCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
+            if( shape->GetLayer() == Edge_Cuts )
+                edgeCutsCount++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( edgeCutsCount, 6 );
+
+    // Free text items from the *TEXT* section
+    int textCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( dynamic_cast<PCB_TEXT*>( item ) )
+            textCount++;
+    }
+
+    BOOST_CHECK_EQUAL( textCount, 17 );
+
+    // Net assignments: tracks and pads should reference named nets
+    std::set<wxString> trackNets;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        NETINFO_ITEM* net = trk->GetNet();
+
+        if( net && !net->GetNetname().IsEmpty() )
+            trackNets.insert( net->GetNetname() );
+    }
+
+    BOOST_CHECK_EQUAL( trackNets.size(), 32 );
+
+    // All traces on copper layers (F.Cu or B.Cu for this 2-layer board)
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() == PCB_TRACE_T )
+        {
+            PCB_LAYER_ID layer = trk->GetLayer();
+            BOOST_CHECK_MESSAGE( layer == F_Cu || layer == B_Cu,
+                    "trace on unexpected layer " << layer );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( ImportTMS1mmX19 )
 {
     RunStructuralChecks( PADS_BOARDS[1] );
@@ -300,6 +397,187 @@ BOOST_AUTO_TEST_CASE( ImportTextOnUnmappedLayer )
     BOOST_CHECK_EQUAL( silkscreen_count, 1 );
     BOOST_CHECK_EQUAL( comments_count, 1 );
     BOOST_CHECK_EQUAL( copper_count, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ImportClaySight_MK2 )
+{
+    RunStructuralChecks( PADS_BOARDS[9] );
+}
+
+
+/**
+ * Verify element counts for ClaySight_MK2 (V10.0 BASIC units, EasyEDA export).
+ *
+ * EasyEDA exports footprint silkscreen outlines as COPPER type entries on the
+ * silkscreen layer in the *LINES* section. These are imported as silkscreen
+ * graphics rather than copper tracks. Route tracks come from *SIGNAL* sections.
+ */
+BOOST_AUTO_TEST_CASE( ClaySight_MK2_ElementCounts )
+{
+    std::unique_ptr<BOARD> board = LoadAndVerify( PADS_BOARDS[9] );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // 10 parts: U1 (RPi Pico), SU1-SU8 (TO-92), U2 (ULN2003A)
+    BOOST_CHECK_EQUAL( board->Footprints().size(), 10 );
+
+    // U1=40 pads, SU1-SU8=3 each (24), U2=16 pads = 80 total
+    int totalPads = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+        totalPads += fp->Pads().size();
+
+    BOOST_CHECK_EQUAL( totalPads, 80 );
+
+    int traceCount = 0;
+    int viaCount = 0;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() == PCB_TRACE_T || trk->Type() == PCB_ARC_T )
+            traceCount++;
+        else if( trk->Type() == PCB_VIA_T )
+            viaCount++;
+    }
+
+    // 138 track segments from 2 *SIGNAL* route sections only
+    BOOST_CHECK_EQUAL( traceCount, 138 );
+    BOOST_CHECK_EQUAL( viaCount, 0 );
+
+    // 2 nets from *SIGNAL* routes: N$12982 and N$12975
+    std::set<wxString> trackNets;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        NETINFO_ITEM* net = trk->GetNet();
+
+        if( net && !net->GetNetname().IsEmpty() )
+            trackNets.insert( net->GetNetname() );
+    }
+
+    BOOST_CHECK_EQUAL( trackNets.size(), 2 );
+
+    // All traces on copper layers
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() == PCB_TRACE_T )
+        {
+            BOOST_CHECK_MESSAGE( IsCopperLayer( trk->GetLayer() ),
+                    "trace on non-copper layer " << trk->GetLayer() );
+        }
+    }
+
+    // 72 COPPER items on layer 126 become silkscreen graphics. 64 of these
+    // (16 groups of 4 axis-aligned segments) are detected as rectangles. The
+    // remaining 8 are individual segments. Plus 44 segments from LINES items.
+    int silkCount = 0;
+    int rectCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
+            if( shape->GetLayer() == F_SilkS )
+            {
+                silkCount++;
+
+                if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                    rectCount++;
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( silkCount, 68 );
+    BOOST_CHECK_EQUAL( rectCount, 16 );
+
+    // Default via size from JMPVIA_1 definition (drill=457505, size=915010 BASIC)
+    const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    std::shared_ptr<NETCLASS> defaultNc = bds.m_NetSettings->GetDefaultNetclass();
+    BOOST_CHECK( defaultNc->GetViaDiameter() > 0 );
+    BOOST_CHECK( defaultNc->GetViaDrill() > 0 );
+    BOOST_CHECK( defaultNc->GetViaDiameter() > defaultNc->GetViaDrill() );
+    BOOST_CHECK_EQUAL( bds.m_ViasDimensionsList.size(), 1 );
+
+    // Copper-to-edge clearance from OUTLINE_TO_* rules (227990 BASIC)
+    BOOST_CHECK( bds.m_CopperEdgeClearance > 0 );
+
+    // Board outline on Edge.Cuts (rectangular outline = 4 segments)
+    int edgeCutsCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
+            if( shape->GetLayer() == Edge_Cuts )
+                edgeCutsCount++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( edgeCutsCount, 4 );
+
+    // 1 board-level text item on silkscreen with multi-line content
+    int textCount = 0;
+    wxString textContent;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_TEXT_T )
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+            textContent = text->GetText();
+            textCount++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( textCount, 1 );
+
+    // EasyEDA exports encode newlines as underscores in text content.
+    // The parser converts them back to newlines for proper multi-line display.
+    BOOST_CHECK( textContent.Contains( wxT( "\n" ) ) );
+    BOOST_CHECK( !textContent.Contains( wxT( "_" ) ) );
+    BOOST_CHECK( textContent.Contains( wxT( "CLAYSIGHT MCU V.2" ) ) );
+    BOOST_CHECK( textContent.Contains( wxT( "The Ohio State University" ) ) );
+}
+
+
+/**
+ * Verify stackup is built from LAYER DATA for MAIS_FC (V5.0 BASIC, 2-layer).
+ *
+ * MAIS_FC has meaningful stackup data for its 2 copper layers:
+ * LAYER_THICKNESS 304800, COPPER_THICKNESS 38100, DIELECTRIC 3.8.
+ */
+BOOST_AUTO_TEST_CASE( MAIS_FC_Stackup )
+{
+    std::unique_ptr<BOARD> board = LoadAndVerify( PADS_BOARDS[8] );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    BOOST_CHECK( bds.m_HasStackup );
+
+    const BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
+
+    bool foundCopperThickness = false;
+    bool foundDielectric = false;
+
+    for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+    {
+        if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER )
+        {
+            if( item->GetThickness() > 0 )
+                foundCopperThickness = true;
+        }
+        else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC )
+        {
+            if( item->GetEpsilonR() > 3.0 )
+                foundDielectric = true;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundCopperThickness, "stackup should have non-zero copper thickness" );
+    BOOST_CHECK_MESSAGE( foundDielectric, "stackup should have dielectric constant > 3.0" );
+    BOOST_CHECK( bds.GetBoardThickness() > 0 );
 }
 
 
