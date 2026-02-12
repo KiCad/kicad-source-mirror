@@ -347,6 +347,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
                                           &actual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
                     drcItem->SetErrorDetail( formatMsg( clearance ? _( "(%s clearance %s; actual %s)" )
                                                                   : _( "(%s clearance %s; actual < 0)" ),
                                                         constraint.GetName(),
@@ -1108,6 +1109,14 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 
                             // Track clearances are tested in testTrackClearances()
                             if( dynamic_cast<PCB_TRACK*>( other) )
+                                return false;
+
+                            BOARD_CONNECTED_ITEM* graphic_bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( graphic );
+                            BOARD_CONNECTED_ITEM* other_bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+                            int                   graphicNet = graphic_bci ? graphic_bci->GetNetCode() : 0;
+                            int                   otherNet = other_bci ? other_bci->GetNetCode() : 0;
+
+                            if( graphicNet && graphicNet == otherNet )
                                 return false;
 
                             BOARD_ITEM* a = graphic;
