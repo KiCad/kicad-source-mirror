@@ -48,7 +48,7 @@ struct PADS_BOARD_INFO
 
 
 static const PADS_BOARD_INFO PADS_BOARDS[] = {
-    { "ClaySight_MK1",    "ClaySight_MK1.asc" },    // V10.0 MILS
+    { "ClaySight_MK1",    "ClaySight_MK1.asc" },    // V10.0 BASIC
     { "TMS1mmX19",         "TMS1mmX19.asc" },         // V9.5 BASIC MILS
     { "MC4_PLUS_CSHAPE",   "MC4_PLUS_CSHAPE.asc" },   // V9.5 MILS
     { "MC2_PLUS_REV1",     "MC2_PLUS_REV1.asc" },     // V9.4 METRIC

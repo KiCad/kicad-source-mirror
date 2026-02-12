@@ -424,7 +424,9 @@ void PCB_IO_PADS::loadFootprints()
                         // labels. Redirect to the corresponding silkscreen layer.
                         PCB_LAYER_ID fieldLayer = getMappedLayer( attr.level );
 
-                        if( IsCopperLayer( fieldLayer ) )
+                        if( fieldLayer == UNDEFINED_LAYER )
+                            fieldLayer = Cmts_User;
+                        else if( IsCopperLayer( fieldLayer ) )
                             fieldLayer = IsBackLayer( fieldLayer ) ? B_SilkS : F_SilkS;
 
                         field->SetLayer( fieldLayer );
@@ -492,11 +494,11 @@ void PCB_IO_PADS::loadFootprints()
 
                 const std::string& units = decal_it->second.units;
 
-                if( units == "I" || units == "MILS" || units == "MIL" )
+                if( units == "M" || units == "D" || units == "MILS" || units == "MIL" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::MILS_TO_NM );
-                else if( units == "M" || units == "METRIC" || units == "MM" )
+                else if( units == "MM" || units == "METRIC" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::MM_TO_NM );
-                else if( units == "INCHES" || units == "INCH" )
+                else if( units == "I" || units == "INCHES" || units == "INCH" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::INCHES_TO_NM );
                 else
                     return scaleSize( val );
@@ -559,11 +561,12 @@ void PCB_IO_PADS::loadFootprints()
                 if( m_parser->IsBasicUnits() )
                     return scaleSize( val );
 
-                if( decal.units == "I" || decal.units == "MILS" || decal.units == "MIL" )
+                if( decal.units == "M" || decal.units == "D" || decal.units == "MILS"
+                    || decal.units == "MIL" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::MILS_TO_NM );
-                else if( decal.units == "M" || decal.units == "METRIC" || decal.units == "MM" )
+                else if( decal.units == "MM" || decal.units == "METRIC" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::MM_TO_NM );
-                else if( decal.units == "INCHES" || decal.units == "INCH" )
+                else if( decal.units == "I" || decal.units == "INCHES" || decal.units == "INCH" )
                     return KiROUND( val * PADS_UNIT_CONVERTER::INCHES_TO_NM );
                 else
                     return scaleSize( val );

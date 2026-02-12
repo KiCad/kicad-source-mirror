@@ -165,10 +165,16 @@ void PARSER::Parse( const wxString& aFileName )
         // Library files default to mils
         m_parameters.units = UNIT_TYPE::MILS;
     }
-    else if( line.size() > 2 && line[0] == '!' && line.back() == '!' )
+    else if( line.size() > 2 && line[0] == '!' )
     {
-        // PCB file format
-        std::string header = line.substr( 1, line.size() - 2 );
+        // PCB file format: !PADS-product-version-units[-mode][-encoding]! [description...]
+        // Find the closing '!' to extract just the header marker, ignoring any trailing text
+        size_t close_pos = line.find( '!', 1 );
+
+        if( close_pos == std::string::npos )
+            close_pos = line.size();
+
+        std::string header = line.substr( 1, close_pos - 1 );
 
         // Split by '-'
         std::vector<std::string> parts;
@@ -227,7 +233,7 @@ void PARSER::Parse( const wxString& aFileName )
             m_parameters.units = UNIT_TYPE::INCHES;
         }
     }
-    else if( line.find( "BASIC!" ) != std::string::npos )
+    else if( line.find( "BASIC" ) != std::string::npos )
     {
         m_is_basic_units = true;
     }

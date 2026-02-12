@@ -14,7 +14,6 @@
     <summary>An EDA suite for schematic and circuit board design</summary>
 
     <provides>
-        <id>@KICAD_PROVIDES_APP_ID@</id>
         <binary>kicad</binary>
         <binary>eeschema</binary>
         <binary>pcbnew</binary>
