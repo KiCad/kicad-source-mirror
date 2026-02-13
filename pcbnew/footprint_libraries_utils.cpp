@@ -272,7 +272,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         }
 
         std::string prettyData = pcb_io.GetStringOutput( false );
-        KICAD_FORMAT::Prettify( prettyData, true );
+        KICAD_FORMAT::Prettify( prettyData, false );
 
         fprintf( fp, "%s", prettyData.c_str() );
         fclose( fp );
