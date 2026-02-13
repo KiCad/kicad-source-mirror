@@ -29,7 +29,7 @@
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
-
+#include <dialogs/rule_editor_dialog_base.h> 
 
 DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
         wxWindow* aParent, DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA* aData, EDA_UNITS aUnits ) :
@@ -41,21 +41,50 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
+    // Create min length field
+    auto* minLengthField = AddField<wxTextCtrl>( wxS( "min_length" ), positions[0] );
+    static_cast<wxTextCtrl*>( minLengthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_minLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+            &m_unitsProvider, this, nullptr, minLengthField->GetControl(), nullptr, false, false );
+    minLengthField->SetUnitBinder( m_minLengthBinder.get() );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "min_length" ), positions[0], m_minLengthBinder.get() );
-
+    // Create opt length field
+    auto* optLengthField = AddField<wxTextCtrl>( wxS( "opt_length" ), positions[1] );
+    static_cast<wxTextCtrl*>( optLengthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_optLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+            &m_unitsProvider, this, nullptr, optLengthField->GetControl(), nullptr, false, false );
+    optLengthField->SetUnitBinder( m_optLengthBinder.get() );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "opt_length" ), positions[1], m_optLengthBinder.get() );
-
+    // Create max length field
+    auto* maxLengthField = AddField<wxTextCtrl>( wxS( "max_length" ), positions[2] );
+    static_cast<wxTextCtrl*>( maxLengthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+            &m_unitsProvider, this, nullptr, maxLengthField->GetControl(), nullptr, false, false );
+    maxLengthField->SetUnitBinder( m_maxLengthBinder.get() );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "max_length" ), positions[2], m_maxLengthBinder.get() );
+    auto notifyModified = [this]( wxCommandEvent& )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
+    };
 
+    minLengthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    optLengthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    maxLengthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+
+    auto notifySave = [this]( wxCommandEvent& aEvent )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->OnSave( aEvent );
+    };
+
+    minLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    optLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    maxLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+
+    // Position all fields and update the panel layout
     PositionFields();
     TransferDataToWindow();
 }

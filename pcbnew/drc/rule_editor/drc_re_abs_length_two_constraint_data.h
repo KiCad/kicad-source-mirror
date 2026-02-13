@@ -59,9 +59,9 @@ public:
         // Positions measured from constraint_absolute_lenght_2.png (~340x130)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 35, 95, 30, 1 },     // min_length (left arrow)
-            { 165, 225, 85, 2 },   // opt_length (bottom center arrow)
-            { 290, 350, 30, 3 },   // max_length (right arrow)
+            { 5, 25, 18, 1 },     // min_length (left arrow)
+            { 116, 136, 65, 2 },   // opt_length (bottom center arrow)
+            { 135, 155, 31, 3 },   // max_length (right arrow)
         };
     }
 
