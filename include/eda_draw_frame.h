@@ -26,7 +26,7 @@
 #ifndef DRAW_FRAME_H_
 #define DRAW_FRAME_H_
 
-#include <api/api_plugin.h>
+#include <api/plugin_action_scope.h>
 #include <eda_base_frame.h>
 #include <kiway_player.h>
 #include <gal/gal_display_options.h>
@@ -38,6 +38,7 @@
 #include <lib_id.h>
 
 struct EDA_SEARCH_DATA;
+struct PLUGIN_ACTION;
 class LIB_TREE;
 class EDA_ITEM;
 class wxSingleInstanceChecker;

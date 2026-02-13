@@ -37,6 +37,7 @@
 #include <vector>
 
 #include <wx/datetime.h>
+#include <wx/filename.h>
 #include <wx/timer.h>
 
 /* Forward declarations of classes. */

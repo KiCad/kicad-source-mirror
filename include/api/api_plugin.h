@@ -29,6 +29,7 @@
 #include <wx/filename.h>
 #include <wx/string.h>
 
+#include <api/plugin_action_scope.h>
 #include <kicommon.h>
 
 
@@ -49,17 +50,6 @@ enum class PLUGIN_RUNTIME_TYPE
     INVALID,
     PYTHON,
     EXEC
-};
-
-
-enum class PLUGIN_ACTION_SCOPE
-{
-    INVALID,
-    PCB,
-    SCHEMATIC,
-    FOOTPRINT,
-    SYMBOL,
-    PROJECT_MANAGER
 };
 
 
