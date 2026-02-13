@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-13 12:09+0000\n"
+"PO-Revision-Date: 2026-02-14 21:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -33725,7 +33725,7 @@ msgstr "Preddefinované veľkosti"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:176
 msgid "Length-tuning Patterns"
-msgstr "Ladenie dĺžky"
+msgstr "Ladiace tvary dĺžky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:205
 #, fuzzy
@@ -37737,7 +37737,7 @@ msgstr "Nastavenia mriežky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
 msgid "Length-tuning pattern defaults"
-msgstr "Predvolené nastavenie ladenia dĺžky"
+msgstr "Predvolené nastavenie ladiaceho tvary dĺžky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 #, fuzzy
@@ -39037,7 +39037,7 @@ msgstr "Cez medzeru rovnakú ako stopová medzera"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:56
 msgid "Differential Pair Dimensions"
-msgstr "Rozmery diferenciálných párov"
+msgstr "Rozmery diferenciálneho páru"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
 #: pcbnew/router/router_tool.cpp:2815
@@ -40124,7 +40124,7 @@ msgstr "Jedna strana"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
 msgid "Tuning Pattern Properties"
-msgstr "Vlastnosti vzoru ladenia"
+msgstr "Vlastnosti ladiaceho tvaru"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 #, fuzzy
@@ -42065,9 +42065,8 @@ msgid "Hole"
 msgstr "Diera"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential Pairs"
-msgstr "Diferenciálne páry:"
+msgstr "Diferenciálne páry"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -42083,14 +42082,12 @@ msgid "Default Properties for Single Track Tuning"
 msgstr "Prednastavené vlastnosti pre ladenie jedného spoja"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default Properties for Differential Pairs"
-msgstr "Predvolené vlastnosti pre nové grafické prvky:"
+msgstr "Predvolené vlastnosti pre diferenciálne páry"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default Properties for Differential Pair Skews"
-msgstr "Predvolené vlastnosti pre nové grafické prvky:"
+msgstr "Predvolené vlastnosti pre rozdiely dĺžok diferenciálneho páru"
 
 #: pcbnew/drc/drc_cache_generator.cpp:147
 msgid "Gathering copper items..."
@@ -42706,7 +42703,7 @@ msgstr "Príliš veľa prekovov na spojení"
 
 #: pcbnew/drc/drc_item.cpp:274
 msgid "Differential pair gap out of range"
-msgstr "Mezera diferenciálneho páru je mimo rozsahu"
+msgstr "Medzera diferenciálneho páru je mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:278
 msgid "Differential uncoupled length too long"
@@ -44591,11 +44588,11 @@ msgstr ""
 #: pcbnew/generators/pcb_tuning_pattern.cpp:267
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2250
 msgid "Tuning Pattern"
-msgstr "Ladiaci Vzor"
+msgstr "Ladiaci tvar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:272
 msgid "Tuning Patterns"
-msgstr "Ladiace Vzory"
+msgstr "Ladiace tvary"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:503
 msgid "Tuning"
@@ -44615,7 +44612,7 @@ msgstr "vyladené"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1570
 msgid "Edit Tuning Pattern"
-msgstr "Upraviť ladiaci vzor"
+msgstr "Upraviť ladiaci tvar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2095
 #, fuzzy
@@ -44654,7 +44651,7 @@ msgstr "Cieľová odchýlka:"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2212
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2234
 msgid "(from tuning pattern properties)"
-msgstr "(z vlastností ladiaceho vzoru)"
+msgstr "(z vlastností ladiaceho tvaru)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2220
 #, fuzzy, c-format
@@ -44678,12 +44675,11 @@ msgstr "Vyladené: zošikmenie "
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2476
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Nie je možné ladiť segmenty vo vnútri iných ladiacich tvarov."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2512
-#, fuzzy
 msgid "Tune"
-msgstr "Naladiť"
+msgstr "Ladiť"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2538
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2556
@@ -44697,9 +44693,8 @@ msgid "Single track"
 msgstr "Jedna strana"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2625
-#, fuzzy
 msgid "Differential pair"
-msgstr "Diferenčné páry"
+msgstr "Diferenciálny pár"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2626
 #, fuzzy
@@ -48488,13 +48483,12 @@ msgid "Error loading drawing sheet '%s': %s"
 msgstr "Chyba pri načítaní editora"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:526
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Nie je možné nájsť doplnkové párové diferenciálne siete. Skontrolujte, či sa "
-"názvy sietí patriacich k diferenciálnemu páru končia znakom _N / _P alebo "
+"Nepodarilo sa nájsť komplementárne signály diferenciálneho páru. Uistite sa, "
+"že názvy signálov patriacich do diferenciálneho páru končia buď N/P, alebo "
 "+/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:543
@@ -48502,8 +48496,8 @@ msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
 msgstr ""
-"Nemôžem nájsť vhodný východiskový bod. Ak vychádzate z existujúceho "
-"diferenciálneho páru, uistite sa, že ste na konci."
+"Nedá sa nájsť vhodný východiskový bod. Ak vychádzate z existujúceho "
+"diferenciálneho páru, uistite sa, že ste na jeho konci."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:598
 #, c-format
@@ -48521,9 +48515,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Nepodarilo sa nájsť doplnkovú dvojicu diferenciálnych párov pre ladenie "
-"dĺžky. Skontrolujte, či sa názvy sietí patriacich k diferenciálnemu páru "
-"končia znakom _N / _P alebo +/-."
+"Nepodarilo sa nájsť komplementárne signály páru pre ladenie dĺžky. Uistite "
+"sa, že názvy signálov patriacich do diferenciálneho páru končia buď _N/_P, "
+"alebo +/-."
 
 #: pcbnew/router/pns_kicad_iface.cpp:673 pcbnew/router/pns_kicad_iface.cpp:789
 #: pcbnew/router/router_tool.cpp:764 pcbnew/router/router_tool.cpp:840
@@ -48566,9 +48560,8 @@ msgid "Routing"
 msgstr "Trasa jednej trate"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
-#, fuzzy
 msgid "Please select a differential pair track you want to tune."
-msgstr "Vyberte sledovanie rozdielového páru, ktoré chcete naladiť."
+msgstr "Vybrať spoje diferenciálneho páru, pre ladenie."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:68
 msgid ""
@@ -48576,9 +48569,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Nepodarilo sa nájsť doplnkovú dvojicu diferenciálnych sietí pre ladenie "
-"zošikmenia. Skontrolujte, či sa názvy sietí patriacich k diferenciálnemu "
-"páru končia znakom _N / _P alebo +/-."
+"Nepodarilo sa nájsť komplementárne signály diferenciálneho páru pre ladenie "
+"rozdielu dĺžky. Uistite sa, že názvy signálov patriacich do diferenciálneho "
+"páru končia buď _N/_P, alebo +/-."
 
 #: pcbnew/router/pns_router.cpp:228
 #, fuzzy
@@ -48609,9 +48602,8 @@ msgid "The routing start point violates DRC."
 msgstr "Počiatočný bod smerovania porušuje KDR."
 
 #: pcbnew/router/pns_router.cpp:342
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "Nemôžem spustiť diferenciálny pár uprostred ničoho."
+msgstr "Nie je možné spustiť diferenciálny pár uprostred ničoho."
 
 #: pcbnew/router/router_tool.cpp:118
 msgid "Place Through Via"
@@ -48753,15 +48745,15 @@ msgstr "Prechod %s"
 
 #: pcbnew/router/router_tool.cpp:359
 msgid "Select Differential Pair Dimensions"
-msgstr "Vyberte možnosť Diferenčné páry"
+msgstr "Vybrať rozmery diferenciálneho páru"
 
 #: pcbnew/router/router_tool.cpp:375
 msgid "Use differential pair dimensions from the net class"
-msgstr "Použite rozmery diferenciálneho páru z triedy siete"
+msgstr "Použiť rozmery diferenciálneho páru z triedy spojov"
 
 #: pcbnew/router/router_tool.cpp:380
 msgid "Specify custom differential pair dimensions"
-msgstr "Zadajte vlastné rozmery rozdielového páru"
+msgstr "Zadať vlastné rozmery diferenciálneho páru"
 
 #: pcbnew/router/router_tool.cpp:397
 #, c-format
@@ -50426,36 +50418,32 @@ msgid "Increase Spacing"
 msgstr "Zväčšiť medzery"
 
 #: pcbnew/tools/pcb_actions.cpp:209
-#, fuzzy
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Zvýšte rozstup meandrov o jeden krok."
+msgstr "Zvýšiť rozstup ladiaceho tvaru o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:217
 msgid "Decrease Spacing"
 msgstr "Zmenšiť medzery"
 
 #: pcbnew/tools/pcb_actions.cpp:218
-#, fuzzy
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Znížte rozstup meandrov o jeden krok."
+msgstr "Znížiť rozstup ladiaceho tvaru o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:226
 msgid "Increase Amplitude"
 msgstr "Zvýšte amplitúdu"
 
 #: pcbnew/tools/pcb_actions.cpp:227
-#, fuzzy
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Zvýšte amplitúdu meandra o jeden krok."
+msgstr "Zvýšiť amplitúdu ladiaceho tvaru o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:235
 msgid "Decrease Amplitude"
 msgstr "Znížte amplitúdu"
 
 #: pcbnew/tools/pcb_actions.cpp:236
-#, fuzzy
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Znížte amplitúdu meandra o jeden krok."
+msgstr "Znížiť amplitúdu ladiaceho tvaru o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:244
 #, fuzzy
@@ -52146,9 +52134,8 @@ msgid "Tune Length of a Single Track"
 msgstr "Nalaďte dĺžku jednej stopy"
 
 #: pcbnew/tools/pcb_actions.cpp:2349
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Nalaďte skosenie diferenciálneho páru"
+msgstr "Doladiť dĺžku diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2360
 #, fuzzy
@@ -52242,11 +52229,11 @@ msgstr "Potiahne najbližší spoj v stope bez obmedzenia uhla stopy."
 
 #: pcbnew/tools/pcb_actions.cpp:2457
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "Aktualizovať všetky ladiace tvary"
 
 #: pcbnew/tools/pcb_actions.cpp:2458
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr ""
+msgstr "Pokúsiť sa preladiť existujúce ladiace tvary v rámci ich hraníc"
 
 #: pcbnew/tools/pcb_actions.cpp:2465
 #, fuzzy
@@ -52281,7 +52268,7 @@ msgstr "Nastavenia vyladenia dĺžky ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2516
 msgid "Displays tuning pattern properties dialog"
-msgstr "Zobrazenie dialógového okna vlastností ladiaceho vzoru"
+msgstr "Zobraziť dialógové okno vlastností ladiaceho tvaru"
 
 #: pcbnew/tools/pcb_control.cpp:247
 msgid "Don't show again"
