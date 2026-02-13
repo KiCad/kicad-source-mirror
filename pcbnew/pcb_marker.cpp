@@ -38,6 +38,8 @@
 #include <pgm_base.h>
 #include <drc/drc_item.h>
 #include <trigo.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 /// Factor to convert the maker unit shape to internal units:

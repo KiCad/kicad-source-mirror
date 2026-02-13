@@ -27,6 +27,7 @@
 #pragma once
 
 #include <gal/gal.h>
+#include <map>
 #include <vector>
 #include <set>
 #include <unordered_map>

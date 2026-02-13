@@ -48,6 +48,8 @@
 #include <tools/sch_navigate_tool.h>
 #include <trigo.h>
 #include <markup_parser.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_TEXT::SCH_TEXT( const VECTOR2I& aPos, const wxString& aText, SCH_LAYER_ID aLayer, KICAD_T aType ) :

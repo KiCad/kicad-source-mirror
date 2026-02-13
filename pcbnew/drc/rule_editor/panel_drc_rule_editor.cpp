@@ -71,6 +71,8 @@
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 static constexpr const wxChar* KI_TRACE_DRC_RULE_EDITOR = wxT( "KI_TRACE_DRC_RULE_EDITOR" );
 

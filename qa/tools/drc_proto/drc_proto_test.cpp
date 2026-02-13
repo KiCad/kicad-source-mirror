@@ -30,6 +30,7 @@
 #include <wx/init.h>
 
 #include <properties/property_mgr.h>
+#include <properties/property.h>
 
 #include <pgm_base.h>
 

@@ -29,6 +29,7 @@
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
 #include <properties/property_mgr.h>
+#include <properties/property.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>

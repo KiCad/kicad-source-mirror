@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <properties/property.h>
 #include <widgets/pcb_net_inspector_panel.h>
 #include <widgets/pcb_net_inspector_panel_data_model.h>
 
@@ -44,6 +45,7 @@
 
 #include <algorithm>
 #include <thread_pool.h>
+#include <properties/property_mgr.h>
 
 PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRAME* aFrame ) :
         NET_INSPECTOR_PANEL( parent, aFrame ),

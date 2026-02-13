@@ -49,6 +49,8 @@
 #include <trace_helpers.h>
 #include <validators.h>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <pgm_base.h>
 #include <wx/log.h>
 

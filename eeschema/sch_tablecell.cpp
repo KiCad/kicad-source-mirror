@@ -28,6 +28,8 @@
 #include <string_utils.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :

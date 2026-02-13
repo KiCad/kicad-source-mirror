@@ -54,6 +54,8 @@
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 /* Coding polygons for global symbol graphic shapes.

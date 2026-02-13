@@ -34,6 +34,8 @@
 #include <view/view.h>
 
 #include <wx/debug.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 SCH_GROUP::SCH_GROUP() : SCH_ITEM( nullptr, SCH_GROUP_T )
 {

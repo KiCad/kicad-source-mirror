@@ -41,6 +41,8 @@
 #include <connection_graph.h>
 #include "sch_painter.h"
 #include "plotters/plotter.h"
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool aFlipY ) :

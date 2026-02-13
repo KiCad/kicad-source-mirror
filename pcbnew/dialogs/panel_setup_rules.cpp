@@ -47,6 +47,8 @@
 #include <wildcards_and_files_ext.h>
 #include <regex>
 #include <unordered_map>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParentWindow ),

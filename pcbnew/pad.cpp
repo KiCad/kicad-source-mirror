@@ -52,6 +52,8 @@
 #include <widgets/msgpanel.h>
 #include <pcb_painter.h>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <wx/log.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>

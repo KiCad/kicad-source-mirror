@@ -27,6 +27,7 @@
 #include <optional>
 
 #include <eda_item.h>
+#include <eda_units.h>
 #include <gal/color4d.h>
 #include <preview_items/two_point_geom_manager.h>
 

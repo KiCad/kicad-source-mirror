@@ -29,6 +29,8 @@
 #include <pad.h>
 #include <zone.h>
 #include <pcb_text.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 // A list of all basic (ie: non-compound) board geometry items

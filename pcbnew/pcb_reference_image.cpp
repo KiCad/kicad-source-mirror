@@ -40,6 +40,8 @@
 #include <trigo.h>
 
 #include <wx/mstream.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;

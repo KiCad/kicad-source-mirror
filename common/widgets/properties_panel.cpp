@@ -26,6 +26,8 @@
 #include <import_export.h>
 #include <pgm_base.h>
 #include <properties/pg_cell_renderer.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 #include <algorithm>
 #include <iterator>

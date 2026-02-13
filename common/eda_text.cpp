@@ -50,6 +50,8 @@
 #include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <ctl_flags.h>
 #include <markup_parser.h>
 #include <api/api_enums.h>

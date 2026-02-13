@@ -716,6 +716,7 @@ set( COMMON_SRCS
     gr_basic.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
+    inspectable.cpp
     kiface_base.cpp
     kiway_player.cpp
     lib_table_grid_tricks.cpp

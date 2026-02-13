@@ -61,6 +61,8 @@
 #include <wx/app.h>
 #include <wx/crt.h>
 #include <wx/image.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = nullptr;
 static SETTINGS_MANAGER* s_SettingsManager = nullptr;

@@ -31,6 +31,7 @@
 #include <tool/edit_points.h>
 #include <view/view_controls.h>
 
+class COMMIT;
 class SHAPE_POLY_SET;
 
 /**

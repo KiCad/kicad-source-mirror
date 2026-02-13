@@ -26,6 +26,8 @@
 #include <common_data.h>
 #include <widgets/unit_selector.h>
 #include <pcb_calculator_utils.h>
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 
 extern double DoubleFromString( const wxString& TextValue );

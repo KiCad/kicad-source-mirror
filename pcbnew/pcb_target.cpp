@@ -36,6 +36,8 @@
 #include <geometry/shape_circle.h>
 #include <eda_draw_frame.h>
 #include <pcb_shape.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :

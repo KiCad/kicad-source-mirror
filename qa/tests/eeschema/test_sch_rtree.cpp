@@ -26,6 +26,7 @@
  * Test suite for SCH_SHEET
  */
 
+#include <properties/property.h>
 #include <base_units.h>
 #include <core/ignore.h>
 #include <sch_junction.h>
@@ -37,6 +38,7 @@
 #include <sch_rtree.h>
 
 #include <qa_utils/wx_utils/wx_assert.h>
+#include <properties/property_mgr.h>
 
 class TEST_SCH_RTREE_FIXTURE
 {

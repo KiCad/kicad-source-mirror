@@ -25,6 +25,8 @@
 
 // Code under test
 #include <core/typeinfo.h>
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 
 /**

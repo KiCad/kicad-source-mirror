@@ -30,6 +30,8 @@
 #include <board.h>
 #include <pcb_table.h>
 #include <footprint.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :

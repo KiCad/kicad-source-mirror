@@ -30,6 +30,8 @@
 #include <pcbexpr_evaluator.h>
 #include <reporter.h>
 #include <component_classes/component_class_assignment_rule.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 using namespace DRCRULE_T;
 

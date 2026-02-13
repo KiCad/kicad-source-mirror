@@ -23,6 +23,7 @@
 #include <utility>
 #include <wx/datetime.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 #include <boost/algorithm/string.hpp>
 

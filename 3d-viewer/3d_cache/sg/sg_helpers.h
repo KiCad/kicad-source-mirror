@@ -39,7 +39,7 @@
 #include <vector>
 #include "plugins/3dapi/sg_base.h"
 #include "plugins/3dapi/sg_types.h"
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 class SGNORMALS;
 class SGCOORDS;

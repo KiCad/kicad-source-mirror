@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <wx/debug.h>
+#include <wx/tokenzr.h>
 
 #include <project/project_file.h>
 #include <confirm.h>

@@ -36,6 +36,8 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <font/kicad_font_name.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 // Rendering fonts is expensive (particularly when using outline fonts).  At small effective

@@ -39,6 +39,8 @@
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <string_utils.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength, int aTextSize, KIFONT::FONT* aFont,
                                      const KIFONT::METRICS& aFontMetrics )

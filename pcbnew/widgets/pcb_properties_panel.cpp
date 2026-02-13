@@ -35,6 +35,7 @@
 #include <board_connected_item.h>
 #include <board.h>
 #include <properties/pg_properties.h>
+#include <properties/property.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>

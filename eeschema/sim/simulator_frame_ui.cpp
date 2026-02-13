@@ -35,6 +35,7 @@
 #include <wx/debug.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 #include <project/project_file.h>
 #include <sch_edit_frame.h>

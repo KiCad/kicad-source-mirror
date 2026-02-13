@@ -45,6 +45,8 @@
 
 #include <utility>
 #include <validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;

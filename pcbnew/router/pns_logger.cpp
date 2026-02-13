@@ -24,6 +24,7 @@
 #include "pns_via.h"
 
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 namespace PNS {
 

@@ -24,6 +24,7 @@
 #pragma once
 
 #include <eda_item.h>
+#include <eda_units.h>
 #include <preview_items/bezier_geom_manager.h>
 #include <layer_ids.h>
 

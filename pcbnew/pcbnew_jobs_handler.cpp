@@ -19,6 +19,7 @@
  */
 
 #include <wx/dir.h>
+#include <wx/tokenzr.h>
 #include "pcbnew_jobs_handler.h"
 #include <board_commit.h>
 #include <board_design_settings.h>

@@ -21,7 +21,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <wx/gdicmn.h>      // wxPoint
 
-#include <inspectable.h>
+#include <inspectable_impl.h>
 #include <properties/property_mgr.h>
 
 using namespace std;

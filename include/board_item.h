@@ -29,6 +29,7 @@
 #include <eda_item.h>
 #include <geometry/approximation.h>
 #include <layer_ids.h>
+#include <properties/property.h>
 #include <lseq.h>
 #include <lset.h>
 #include <stroke_params.h>
@@ -464,7 +465,6 @@ protected:
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( PCB_LAYER_ID );
 #endif
-
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.

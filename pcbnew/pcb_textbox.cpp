@@ -43,6 +43,8 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :

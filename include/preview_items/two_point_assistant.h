@@ -25,6 +25,7 @@
 #define PREVIEW_ITEMS_TWO_POINT_ASSISTANT_H
 
 #include <eda_item.h>
+#include <eda_units.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <layer_ids.h>
 

@@ -32,6 +32,8 @@
 #include <sim/sim_model.h>
 #include <sim/spice_generator.h>
 
+#include <list>
+
 
 class wxWindow;
 

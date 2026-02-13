@@ -39,6 +39,8 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 bool fromToFunc( LIBEVAL::CONTEXT* aCtx, void* self )

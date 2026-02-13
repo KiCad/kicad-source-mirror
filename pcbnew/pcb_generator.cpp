@@ -25,6 +25,8 @@
 #include "pcb_generator.h"
 
 #include <board.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 PCB_GENERATOR::PCB_GENERATOR( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer ) :

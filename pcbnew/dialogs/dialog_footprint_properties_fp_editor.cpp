@@ -27,6 +27,7 @@
 #include "dialog_footprint_properties_fp_editor.h"
 
 #include <wx/debug.h>
+#include <wx/tokenzr.h>
 
 #include <3d_rendering/opengl/3d_model.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>

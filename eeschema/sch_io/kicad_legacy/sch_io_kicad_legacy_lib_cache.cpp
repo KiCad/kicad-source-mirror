@@ -19,6 +19,7 @@
 
 #include <magic_enum.hpp>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 #include <common.h>
 #include <kiplatform/io.h>

@@ -40,6 +40,8 @@
 #include <macros.h>
 #include <algorithm>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_item.h>
 #include <plotters/plotter.h>

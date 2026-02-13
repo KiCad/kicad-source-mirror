@@ -44,6 +44,8 @@
 #include <memory>
 #include <unordered_set>
 #include <advanced_config.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 /**

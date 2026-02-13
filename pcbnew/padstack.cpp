@@ -30,6 +30,8 @@
 #include <pad.h>
 #include <board.h>
 #include <pcb_shape.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 IMPLEMENT_ENUM_TO_WXANY( PAD_DRILL_POST_MACHINING_MODE );

@@ -31,6 +31,8 @@
 #include <connectivity/connectivity_data.h>
 #include <lset.h>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <netinfo.h>

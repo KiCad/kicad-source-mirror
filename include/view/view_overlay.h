@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <gal/color4d.h>
 #include <gal/gal.h>
 #include <view/view_item.h>
 #include <vector>

@@ -38,6 +38,8 @@
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
 #include <geometry/shape_rect.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_RULE_AREA::~SCH_RULE_AREA()

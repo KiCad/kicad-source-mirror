@@ -31,6 +31,8 @@
 #include <drc/drc_rule.h>
 #include <pcbnew/board.h>
 #include <pcbnew/pcb_track.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 

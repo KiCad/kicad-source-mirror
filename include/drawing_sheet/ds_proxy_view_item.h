@@ -27,6 +27,7 @@
 #define DS_PROXY_VIEW_ITEM_H
 
 #include <eda_item.h>
+#include <eda_units.h>
 
 class BOARD;
 class PAGE_INFO;

@@ -33,6 +33,7 @@
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
+#include <properties/property.h>
 #include <connectivity/from_to_cache.h>
 #include <board_item.h>
 #include <project/net_settings.h>
@@ -44,6 +45,7 @@
 #include <thread_pool.h>
 #include <trigo.h>
 #include <drc/drc_rtree.h>
+#include <properties/property_mgr.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA() :
         m_skipRatsnestUpdate( false )

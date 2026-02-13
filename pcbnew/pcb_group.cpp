@@ -41,6 +41,8 @@
 #include <google/protobuf/any.pb.h>
 
 #include <wx/debug.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_GROUP_T )

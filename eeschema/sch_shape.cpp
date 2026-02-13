@@ -33,6 +33,8 @@
 #include <geometry/geometry_utils.h>
 #include <schematic.h>
 #include <sch_shape.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, SCH_LAYER_ID aLayer, int aLineWidth, FILL_T aFillType,

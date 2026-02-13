@@ -25,6 +25,7 @@
 #define PREVIEW_ITEMS_ARC_ASSISTANT_H
 
 #include <eda_item.h>
+#include <eda_units.h>
 #include <preview_items/arc_geom_manager.h>
 #include <layer_ids.h>
 

@@ -268,6 +268,8 @@ private:
     {
     }
 
+    ~PROPERTY_MANAGER();
+
     friend class PROPERTY_COMMIT_HANDLER;
 
     ///< Structure holding type meta-data
@@ -279,6 +281,10 @@ private:
             m_groupDisplayOrder.emplace_back( wxEmptyString );
             m_groups.insert( wxEmptyString );
         }
+
+        ~CLASS_DESC();
+
+        CLASS_DESC( CLASS_DESC&& ) = default;
 
         ///< Unique type identifier (obtained using TYPE_HASH)
         const TYPE_ID m_id;

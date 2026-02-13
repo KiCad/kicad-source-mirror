@@ -39,6 +39,7 @@
 #include <richio.h>
 #include <tool/grid_menu.h>
 #include <widgets/wx_html_report_panel.h>
+#include <wx/tokenzr.h>
 #include <wx/valtext.h>
 
 

@@ -20,6 +20,7 @@
 
 
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 #include <fmt.h>
 #include <lib_symbol.h>

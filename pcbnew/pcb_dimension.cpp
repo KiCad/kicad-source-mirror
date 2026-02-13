@@ -45,6 +45,8 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 static const int INWARD_ARROW_LENGTH_TO_HEAD_RATIO = 2;

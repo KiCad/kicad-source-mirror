@@ -23,12 +23,13 @@
 #ifndef INSPECTABLE_H
 #define INSPECTABLE_H
 
-#include <core/wx_stl_compat.h>
-
-#include <properties/property_mgr.h>
-#include <properties/property.h>
+#include <wx/any.h>
+#include <wx/string.h>
+#include <wx/variant.h>
 
 #include <optional>
+
+class PROPERTY_BASE;
 
 /**
  * Class that other classes need to inherit from, in order to be inspectable.
@@ -40,128 +41,23 @@ public:
     {
     }
 
-    bool Set( PROPERTY_BASE* aProperty, wxAny& aValue, bool aNotify = true )
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
+    bool Set( PROPERTY_BASE* aProperty, wxAny& aValue, bool aNotify = true );
 
-        if( object )
-        {
-            aProperty->setter( object, aValue );
+    template <typename T>
+    bool Set( PROPERTY_BASE* aProperty, T aValue, bool aNotify = true );
 
-            if( aNotify )
-                propMgr.PropertyChanged( this, aProperty );
-        }
+    bool Set( PROPERTY_BASE* aProperty, wxVariant aValue, bool aNotify = true );
 
-        return object != nullptr;
-    }
+    template <typename T>
+    bool Set( const wxString& aProperty, T aValue, bool aNotify = true );
 
-    template<typename T>
-    bool Set( PROPERTY_BASE* aProperty, T aValue, bool aNotify = true )
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        void*             object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
+    wxAny Get( PROPERTY_BASE* aProperty ) const;
 
-        if( object )
-        {
-            aProperty->set<T>( object, aValue );
+    template <typename T>
+    T Get( PROPERTY_BASE* aProperty ) const;
 
-            if( aNotify )
-                propMgr.PropertyChanged( this, aProperty );
-        }
-
-        return object != nullptr;
-    }
-
-    bool Set( PROPERTY_BASE* aProperty, wxVariant aValue, bool aNotify = true )
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        void*             object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
-
-        if( object )
-        {
-            wxPGChoices choices = aProperty->GetChoices( this );
-
-            if( choices.GetCount()  )
-            {
-                // If the property type is int, use the choice value directly
-                // Otherwise, convert to the choice label string
-                if( aProperty->TypeHash() == TYPE_HASH( int ) )
-                    aProperty->set<int>( object, aValue.GetInteger() );
-                else
-                    aProperty->set<wxString>( object, choices.GetLabel( aValue.GetInteger() ) );
-            }
-            else
-                aProperty->set<wxVariant>( object, aValue );
-
-            if( aNotify )
-                propMgr.PropertyChanged( this, aProperty );
-        }
-
-        return object != nullptr;
-    }
-
-    template<typename T>
-    bool Set( const wxString& aProperty, T aValue, bool aNotify = true )
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        PROPERTY_BASE* prop = propMgr.GetProperty( thisType, aProperty );
-        void* object = nullptr;
-
-        if( prop )
-        {
-            object = propMgr.TypeCast( this, thisType, prop->OwnerHash() );
-
-            if( object )
-            {
-                prop->set<T>( object, aValue );
-
-                if( aNotify )
-                    propMgr.PropertyChanged( this, prop );
-            }
-        }
-
-        return object != nullptr;
-    }
-
-    wxAny Get( PROPERTY_BASE* aProperty ) const
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        const void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
-        return object ? aProperty->getter( object ) : wxAny();
-    }
-
-    template<typename T>
-    T Get( PROPERTY_BASE* aProperty ) const
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        const void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
-
-        if( !object )
-            throw std::runtime_error( "Could not cast INSPECTABLE to the requested type" );
-
-        return aProperty->get<T>( object );
-    }
-
-    template<typename T>
-    std::optional<T> Get( const wxString& aProperty ) const
-    {
-        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        TYPE_ID thisType = TYPE_HASH( *this );
-        PROPERTY_BASE* prop = propMgr.GetProperty( thisType, aProperty );
-        std::optional<T> ret;
-
-        if( prop )
-        {
-            const void* object = propMgr.TypeCast( this, thisType, prop->OwnerHash() );
-
-            if( object )
-                ret = prop->get<T>( object );
-        }
-
-        return ret;
-    }
+    template <typename T>
+    std::optional<T> Get( const wxString& aProperty ) const;
 };
 
 #endif /* INSPECTABLE_H */

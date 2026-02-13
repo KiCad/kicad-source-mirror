@@ -20,6 +20,7 @@
 #include <advanced_config.h>
 #include <algorithm>
 #include <common.h>
+#include <inspectable_impl.h>
 #include <set>
 #include <bus_alias.h>
 #include <commit.h>

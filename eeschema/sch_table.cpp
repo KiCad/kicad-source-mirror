@@ -34,6 +34,8 @@
 #include <wx/log.h>
 #include <sch_table.h>
 #include <geometry/geometry_utils.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_TABLE::SCH_TABLE( int aLineWidth ) :

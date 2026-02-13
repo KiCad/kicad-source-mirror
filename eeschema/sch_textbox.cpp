@@ -40,6 +40,8 @@
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
 #include <markup_parser.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_TEXTBOX::SCH_TEXTBOX( SCH_LAYER_ID aLayer, int aLineWidth, FILL_T aFillType, const wxString& aText,

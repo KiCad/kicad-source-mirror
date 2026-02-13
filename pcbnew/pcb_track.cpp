@@ -50,6 +50,8 @@
 #include <pcb_painter.h>
 #include <trigo.h>
 #include <properties/property_validators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 #include <google/protobuf/any.pb.h>
 #include <api/api_enums.h>

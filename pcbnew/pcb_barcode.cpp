@@ -49,6 +49,8 @@
 
 #include <backend/zint.h>
 #include <board_design_settings.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_BARCODE_T ),
@@ -843,6 +845,5 @@ static struct PCB_BARCODE_DESC
     }
 } _PCB_BARCODE_DESC;
 
-// wxAny conversion implementations for enum properties (declarations in header)
 IMPLEMENT_ENUM_TO_WXANY( BARCODE_T );
 IMPLEMENT_ENUM_TO_WXANY( BARCODE_ECC_T );

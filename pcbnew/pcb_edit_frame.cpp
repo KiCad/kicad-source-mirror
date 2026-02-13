@@ -99,6 +99,8 @@
 #include <tools/align_distribute_tool.h>
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 #include <tools/position_relative_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/multichannel_tool.h>

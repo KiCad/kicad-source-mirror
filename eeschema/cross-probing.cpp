@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/tokenzr.h>
 #include <fmt.h>
 #include <kiface_base.h>
 #include <kiway.h>

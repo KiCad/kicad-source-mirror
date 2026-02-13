@@ -31,6 +31,8 @@
 #include <router/router_tool.h>
 
 #include <dialog_generators.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 GENERATOR_TOOL::GENERATOR_TOOL() :

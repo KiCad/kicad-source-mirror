@@ -30,6 +30,7 @@
 #include <set>
 
 #include <eda_item.h>
+#include <properties/property.h>
 #include <sch_sheet_path.h>
 #include <netclass.h>
 #include <stroke_params.h>
@@ -800,3 +801,4 @@ private:
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );
 #endif
+

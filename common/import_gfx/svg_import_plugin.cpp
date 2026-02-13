@@ -28,6 +28,7 @@
 #include <nanosvg.h>
 #include <algorithm>
 #include <cmath>
+#include <wx/math.h>
 #include <locale_io.h>
 
 #include <eda_item.h>

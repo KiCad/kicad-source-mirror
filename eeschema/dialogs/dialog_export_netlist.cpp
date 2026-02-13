@@ -36,6 +36,7 @@
  * referred to as plugins, but they are really just external binaries.
  */
 
+#include <properties/property.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <string_utils.h>
@@ -61,6 +62,7 @@
 
 #include <thread>
 #include <vector>
+#include <properties/property_mgr.h>
 
 
 namespace

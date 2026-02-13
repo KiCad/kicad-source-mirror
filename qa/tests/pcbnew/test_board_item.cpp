@@ -46,6 +46,8 @@
 #include <pcb_target.h>
 #include <pcb_group.h>
 #include <pcb_board_outline.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 class TEST_BOARD_ITEM_FIXTURE
 {

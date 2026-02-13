@@ -18,6 +18,7 @@
  */
 
 #include <eda_draw_frame.h>
+#include <properties/color4d_variant.h>
 #include <properties/std_optional_variants.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_editors.h>

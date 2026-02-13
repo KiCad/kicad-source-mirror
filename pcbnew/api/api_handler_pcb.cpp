@@ -19,6 +19,7 @@
  */
 
 #include <magic_enum.hpp>
+#include <properties/property.h>
 
 #include <common.h>
 #include <api/api_handler_pcb.h>

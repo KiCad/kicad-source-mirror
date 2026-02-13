@@ -31,6 +31,7 @@
  * Note: these ports must be enabled for firewall protection
  */
 
+#include <wx/tokenzr.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <fmt.h>

@@ -47,6 +47,8 @@
 #include <wx/log.h>
 #include <wx/numformatter.h>
 #include <wx/xml/xml.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 /**

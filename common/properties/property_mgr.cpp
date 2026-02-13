@@ -36,6 +36,11 @@ static const std::map<PROPERTY_BASE*, int> EMPTY_PROP_DISPLAY_ORDER;
 std::vector<wxString>                      EMPTY_GROUP_DISPLAY_ORDER;
 
 
+PROPERTY_MANAGER::~PROPERTY_MANAGER()
+{
+}
+
+
 void PROPERTY_MANAGER::RegisterType( TYPE_ID aType, const wxString& aName )
 {
     wxASSERT( m_classNames.count( aType ) == 0 );
@@ -281,6 +286,11 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
         tie( it, std::ignore ) = m_classes.emplace( aTypeId, CLASS_DESC( aTypeId ) );
 
     return it->second;
+}
+
+
+PROPERTY_MANAGER::CLASS_DESC::~CLASS_DESC()
+{
 }
 
 

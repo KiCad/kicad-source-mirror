@@ -35,6 +35,8 @@
 #include <wx/fdrepdlg.h>
 #include <wx/regex.h>
 #include <eda_pattern_match.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType, bool isSCH_ITEM, bool isBOARD_ITEM ) :
         KIGFX::VIEW_ITEM( isSCH_ITEM, isBOARD_ITEM ),

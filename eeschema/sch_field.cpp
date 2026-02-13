@@ -40,6 +40,8 @@
 #include <tools/sch_navigate_tool.h>
 #include <font/outline_font.h>
 #include "sim/sim_lib_mgr.h"
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
 

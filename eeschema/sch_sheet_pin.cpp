@@ -36,6 +36,8 @@
 #include <sch_painter.h>
 #include <schematic.h>
 #include <trigo.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const VECTOR2I& pos, const wxString& text ) :

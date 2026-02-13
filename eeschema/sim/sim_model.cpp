@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/tokenzr.h>
 #include <ki_exception.h>
 #include <lib_symbol.h>
 #include <sch_symbol.h>

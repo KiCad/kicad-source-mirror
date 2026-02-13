@@ -41,6 +41,8 @@
 #include "pcb_calculator_settings.h"
 #include "widgets/unit_selector.h"
 #include "transline_ident.h"
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 
 TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordCfg, const wxString& aDlgLabel,

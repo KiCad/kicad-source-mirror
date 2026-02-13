@@ -24,6 +24,8 @@
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
 #include <widgets/std_bitmap_button.h>
+#include <properties/property_mgr.h>
+#include <properties/property.h>
 
 
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint& pos,

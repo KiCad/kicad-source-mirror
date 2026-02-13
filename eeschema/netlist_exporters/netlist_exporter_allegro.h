@@ -27,6 +27,7 @@
 #define NETLIST_EXPORTER_ALLEGRO_H
 
 #include "netlist_exporter_base.h"
+#include <list>
 
 /**
  * Generate a netlist compatible with Allegro.

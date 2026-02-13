@@ -73,6 +73,8 @@
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/api_pcb_utils.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :

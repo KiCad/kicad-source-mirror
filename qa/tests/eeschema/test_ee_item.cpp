@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <properties/property.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eda_item_test_utils.h>
 #include <core/typeinfo.h>
@@ -48,6 +49,7 @@
 #include <sch_pin.h>
 
 #include <erc/erc_settings.h>
+#include <properties/property_mgr.h>
 
 class TEST_EE_ITEM_FIXTURE
 {

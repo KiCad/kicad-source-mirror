@@ -29,6 +29,7 @@
 #include <sch_screen.h>
 #include <wx/log.h>
 #include <wx/dir.h>
+#include <wx/tokenzr.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
 #include <schematic.h>

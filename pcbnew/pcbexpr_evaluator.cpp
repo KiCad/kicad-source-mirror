@@ -23,6 +23,8 @@
 
 #include "pcbexpr_evaluator.h"
 
+#include <inspectable_impl.h>
+
 #include <cstdio>
 #include <memory>
 #include <mutex>

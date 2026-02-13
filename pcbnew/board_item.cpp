@@ -36,6 +36,8 @@
 #include <pcb_generator.h>
 #include <footprint.h>
 #include <font/font.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 bool BOARD_ITEM::IsGroupableType() const

@@ -75,6 +75,8 @@
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
 #include <generators/pcb_tuning_pattern.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 TUNING_STATUS_VIEW_ITEM::TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
         EDA_ITEM( NOT_USED ), // Never added to anything - just a preview

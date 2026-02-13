@@ -40,6 +40,8 @@
 #include <trigo.h>
 
 #include <wx/mstream.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 SCH_BITMAP::SCH_BITMAP( const VECTOR2I& pos ) :

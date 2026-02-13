@@ -31,6 +31,8 @@
 #include <geometry/geometry_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_painter.h>    // for PCB_RENDER_SETTINGS
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :

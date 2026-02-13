@@ -36,6 +36,8 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <view/view.h>
+#include <properties/property.h>
+#include <properties/property_mgr.h>
 
 
 static const double DEFAULT_PT_SIZE_MM = 1.0;
