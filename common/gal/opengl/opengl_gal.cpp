@@ -2896,7 +2896,12 @@ void OPENGL_GAL::init()
         throw std::runtime_error( "Requested texture size is not supported" );
     }
 
+#if wxCHECK_VERSION( 3, 3, 2 )
+    wxGLCanvas::SetSwapInterval( -1 );
+    m_swapInterval = wxGLCanvas::GetSwapInterval();
+#else
     m_swapInterval = GL_UTILS::SetSwapInterval( -1 );
+#endif
 
     m_cachedManager = new VERTEX_MANAGER( true );
     m_nonCachedManager = new VERTEX_MANAGER( false );

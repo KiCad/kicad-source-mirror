@@ -288,7 +288,12 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
         }
     }
 
+#if wxCHECK_VERSION( 3, 3, 2 )
+    wxGLCanvas::SetSwapInterval( -1 );
+#else
     GL_UTILS::SetSwapInterval( -1 );
+#endif
+
     m_is_opengl_initialized = true;
 
     return true;

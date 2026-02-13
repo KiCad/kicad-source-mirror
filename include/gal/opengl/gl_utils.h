@@ -28,18 +28,11 @@
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 
-#ifdef _WIN32
-    #ifdef __MINGW32__
-    #pragma GCC push_options
-    #pragma GCC optimize( "O0" )
-    #else
-    #pragma optimize( "", off )
-    #endif
-#endif
-
 class GL_UTILS
 {
 public:
+
+#if !wxCHECK_VERSION( 3, 3, 2 )
     /**
      * Attempt to set the OpenGL swap interval.
      *
@@ -148,14 +141,8 @@ public:
 #endif
         return 0;
     }
-};
+#endif /* !wxCHECK_VERSION( 3, 3, 2 ) */
 
-#ifdef _WIN32
-    #ifdef __MINGW32__
-    #pragma GCC pop_options
-    #else
-    #pragma optimize( "", on )
-    #endif
-#endif
+};
 
 #endif /* GL_CONTEXT_MANAGER_H */

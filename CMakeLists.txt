@@ -1122,8 +1122,6 @@ else()
     message( FATAL_ERROR "Unable to detect wxWidgets port")
 endif()
 
-message(STATUS "wxUSE_GLCANVAS_EGL=${wxWidgets_GLCANVAS_EGL}")
-
 if( NOT MSVC )
     if( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.2 )
         message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
@@ -1140,10 +1138,14 @@ if( MINGW )
     endif()
 endif()
 
+message(STATUS "wxUSE_GLCANVAS_EGL=${wxWidgets_GLCANVAS_EGL}")
+message(STATUS "wxHAS_GLX=${wxWidgets_HAS_GLX}")
+message(STATUS "wxHAS_EGL=${wxWidgets_HAS_EGL}")
+
 #
 # Find OpenGL library, required
 #
-if( wxWidgets_GLCANVAS_EGL EQUAL 1 )
+if( wxWidgets_GLCANVAS_EGL EQUAL 1 OR wxWidgets_HAS_EGL EQUAL 1 )
     set( KICAD_USE_EGL ON )
     find_package( OpenGL REQUIRED COMPONENTS OpenGL EGL )
 else()

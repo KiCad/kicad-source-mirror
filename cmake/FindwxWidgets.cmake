@@ -799,6 +799,7 @@ else()
 
         DBG_MSG_V("wxWidgets_CXX_FLAGS=${wxWidgets_CXX_FLAGS}")
 
+        # wx 3.2 switches GLX/EGL at compile time.
         execute_process(
           COMMAND sh -c "echo '#include <wx/platform.h>' ; echo CMAKE_WXTEST_RESULT wxUSE_GLCANVAS_EGL"
           COMMAND ${CMAKE_CXX_COMPILER} ${wxWidgets_CXX_FLAGS} -E -
@@ -806,6 +807,23 @@ else()
           COMMAND cut "-d " -f2
           OUTPUT_STRIP_TRAILING_WHITESPACE
           OUTPUT_VARIABLE   wxWidgets_GLCANVAS_EGL )
+
+        # wx 3.3+ can switch GLX/EGL at runtime.
+        execute_process(
+          COMMAND sh -c "echo '#include <wx/platform.h>' ; echo CMAKE_WXTEST_RESULT wxHAS_EGL"
+          COMMAND ${CMAKE_CXX_COMPILER} ${wxWidgets_CXX_FLAGS} -E -
+          COMMAND grep CMAKE_WXTEST_RESULT
+          COMMAND cut "-d " -f2
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          OUTPUT_VARIABLE   wxWidgets_HAS_EGL )
+
+        execute_process(
+          COMMAND sh -c "echo '#include <wx/platform.h>' ; echo CMAKE_WXTEST_RESULT wxHAS_GLX"
+          COMMAND ${CMAKE_CXX_COMPILER} ${wxWidgets_CXX_FLAGS} -E -
+          COMMAND grep CMAKE_WXTEST_RESULT
+          COMMAND cut "-d " -f2
+          OUTPUT_STRIP_TRAILING_WHITESPACE
+          OUTPUT_VARIABLE   wxWidgets_HAS_GLX )
 
         # parse definitions from cxxflags;
         #   drop -D* from CXXFLAGS and the -D prefix
