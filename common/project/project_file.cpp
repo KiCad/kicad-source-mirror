@@ -30,6 +30,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include <wx/config.h>
+#include <wx/filename.h>
 #include <wx/log.h>
 
 
@@ -691,6 +692,42 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
             m_wasMigrated = true;
 
             wxLogTrace( traceSettings, wxT( "PROJECT_FILE: Migrated old single-root format to top_level_sheets" ) );
+        }
+
+        // When a project is created from a template, the top_level_sheets entries may
+        // still reference the template's schematic filenames rather than the new project's.
+        // The template copy renames files on disk but doesn't update the .kicad_pro content.
+        // Detect this and fix the references so the schematic can be found.
+        if( !m_topLevelSheets.empty() && m_project )
+        {
+            wxString projectPath = m_project->GetProjectPath();
+            wxString projectName = m_project->GetProjectName();
+
+            for( TOP_LEVEL_SHEET_INFO& sheetInfo : m_topLevelSheets )
+            {
+                wxFileName referencedFile( projectPath, sheetInfo.filename );
+
+                if( referencedFile.FileExists() )
+                    continue;
+
+                // Try the project-name-based filename
+                wxString expectedFile =
+                        projectName + wxS( "." ) + FILEEXT::KiCadSchematicFileExtension;
+
+                wxFileName candidateFile( projectPath, expectedFile );
+
+                if( candidateFile.FileExists() )
+                {
+                    wxLogTrace( traceSettings,
+                                wxT( "PROJECT_FILE: Fixing stale top_level_sheets reference "
+                                     "'%s' -> '%s'" ),
+                                sheetInfo.filename, expectedFile );
+
+                    sheetInfo.filename = expectedFile;
+                    sheetInfo.name = projectName;
+                    m_wasMigrated = true;
+                }
+            }
         }
     }
 

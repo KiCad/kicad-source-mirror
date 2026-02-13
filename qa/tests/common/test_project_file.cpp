@@ -28,9 +28,11 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <project/project_file.h>
+#include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
 #include <filesystem>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -109,6 +111,123 @@ BOOST_AUTO_TEST_CASE( SaveAsUpdatesTopLevelSheetNames )
 
     // Second sheet's filename should remain unchanged
     BOOST_CHECK_EQUAL( sheets[1].filename, wxS( "custom_sheet.kicad_sch" ) );
+}
+
+
+/**
+ * Test that LoadFromFile fixes stale top_level_sheets references after template copy.
+ *
+ * When a project is created from a template, files are renamed to match the new project name,
+ * but the .kicad_pro content still references the template's filenames. LoadFromFile should
+ * detect and correct these stale references.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/22951
+ */
+BOOST_AUTO_TEST_CASE( LoadFixesStaleTopLevelSheetReferences )
+{
+    fs::path projectDir = m_tempDir / "my_project";
+    fs::create_directories( projectDir );
+
+    // Write a .kicad_pro that references "default.kicad_sch" (as if copied from a template)
+    std::string proContent = R"({
+        "meta": {
+            "filename": "my_project.kicad_pro",
+            "version": 3
+        },
+        "schematic": {
+            "top_level_sheets": [
+                {
+                    "uuid": "00000000-0000-0000-0000-000000000000",
+                    "name": "default",
+                    "filename": "default.kicad_sch"
+                }
+            ]
+        }
+    })";
+
+    fs::path proPath = projectDir / "my_project.kicad_pro";
+    std::ofstream proFile( proPath );
+    proFile << proContent;
+    proFile.close();
+
+    // Create the renamed schematic file (as if the template copy renamed it)
+    fs::path schPath = projectDir / "my_project.kicad_sch";
+    std::ofstream schFile( schPath );
+    schFile << "(kicad_sch (version 20231120) (generator \"eeschema\") (generator_version \"9.99\")";
+    schFile << " (uuid \"12345678-1234-1234-1234-123456789abc\")";
+    schFile << " (paper \"A4\"))";
+    schFile.close();
+
+    // Load the project using SETTINGS_MANAGER
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( wxString( proPath.string() ) );
+
+    PROJECT& project = settingsManager.Prj();
+    PROJECT_FILE& projectFile = project.GetProjectFile();
+
+    const std::vector<TOP_LEVEL_SHEET_INFO>& sheets = projectFile.GetTopLevelSheets();
+
+    BOOST_REQUIRE_EQUAL( sheets.size(), 1 );
+
+    // The filename should have been corrected from "default.kicad_sch" to "my_project.kicad_sch"
+    BOOST_CHECK_EQUAL( sheets[0].filename, wxS( "my_project.kicad_sch" ) );
+
+    // The name should also be updated
+    BOOST_CHECK_EQUAL( sheets[0].name, wxS( "my_project" ) );
+}
+
+
+/**
+ * Test that LoadFromFile does NOT modify top_level_sheets when references are already valid.
+ */
+BOOST_AUTO_TEST_CASE( LoadPreservesValidTopLevelSheetReferences )
+{
+    fs::path projectDir = m_tempDir / "valid_project";
+    fs::create_directories( projectDir );
+
+    // Write a .kicad_pro with valid references
+    std::string proContent = R"({
+        "meta": {
+            "filename": "valid_project.kicad_pro",
+            "version": 3
+        },
+        "schematic": {
+            "top_level_sheets": [
+                {
+                    "uuid": "00000000-0000-0000-0000-000000000000",
+                    "name": "valid_project",
+                    "filename": "valid_project.kicad_sch"
+                }
+            ]
+        }
+    })";
+
+    fs::path proPath = projectDir / "valid_project.kicad_pro";
+    std::ofstream proFile( proPath );
+    proFile << proContent;
+    proFile.close();
+
+    // Create the schematic file that matches the reference
+    fs::path schPath = projectDir / "valid_project.kicad_sch";
+    std::ofstream schFile( schPath );
+    schFile << "(kicad_sch (version 20231120) (generator \"eeschema\") (generator_version \"9.99\")";
+    schFile << " (uuid \"12345678-1234-1234-1234-123456789abc\")";
+    schFile << " (paper \"A4\"))";
+    schFile.close();
+
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( wxString( proPath.string() ) );
+
+    PROJECT& project = settingsManager.Prj();
+    PROJECT_FILE& projectFile = project.GetProjectFile();
+
+    const std::vector<TOP_LEVEL_SHEET_INFO>& sheets = projectFile.GetTopLevelSheets();
+
+    BOOST_REQUIRE_EQUAL( sheets.size(), 1 );
+
+    // References should be unchanged
+    BOOST_CHECK_EQUAL( sheets[0].filename, wxS( "valid_project.kicad_sch" ) );
+    BOOST_CHECK_EQUAL( sheets[0].name, wxS( "valid_project" ) );
 }
 
 
