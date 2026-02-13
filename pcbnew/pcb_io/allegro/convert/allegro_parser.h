@@ -37,6 +37,40 @@ namespace ALLEGRO
 
 
 /**
+ * Parses a .brd header, taking care of any version-specific differences.
+ *
+ * Encapsulates any state and context needed to parse the header.
+ */
+class HEADER_PARSER
+{
+public:
+    HEADER_PARSER( FILE_STREAM& aStream ) :
+            m_stream( aStream ),
+            m_fmtVer( FMT_VER::V_UNKNOWN )
+    {
+    }
+
+    std::unique_ptr<FILE_HEADER> ParseHeader();
+
+    /**
+     * Get the parsed format version.
+     *
+     * This is only valid after ParseHeader() has been called successfully.
+     */
+    FMT_VER GetFormatVersion() const { return m_fmtVer; }
+
+    /**
+     * Determine the format version from the magic number.
+     */
+    static FMT_VER FormatFromMagic( uint32_t aMagic );
+
+private:
+    FILE_STREAM& m_stream;
+    FMT_VER      m_fmtVer;
+};
+
+
+/**
  * The block parser is responsible for parsing individual blocks of data from the file stream.
  *
  * Most blocks don't need much context to parse in a binary sense, but most need to know the

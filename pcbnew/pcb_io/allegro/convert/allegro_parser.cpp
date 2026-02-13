@@ -50,42 +50,6 @@ static const wxChar* const traceAllegroParser = wxT( "KICAD_ALLEGRO_PARSER" );
 static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
-static FMT_VER GetFormatVer( uint32_t aMagic )
-{
-    uint32_t masked = aMagic & 0xFFFFFF00;
-
-    switch( masked )
-    {
-    case 0x00130000: return FMT_VER::V_160;
-    case 0x00130400: return FMT_VER::V_162;
-    case 0x00130C00: return FMT_VER::V_164;
-    case 0x00131000: return FMT_VER::V_165;
-    case 0x00131500: return FMT_VER::V_166;
-    case 0x00140400:
-    case 0x00140500:
-    case 0x00140600:
-    case 0x00140700: return FMT_VER::V_172;
-    case 0x00140900:
-    case 0x00140E00: return FMT_VER::V_174;
-    case 0x00141500: return FMT_VER::V_175;
-    case 0x00150000: return FMT_VER::V_180;
-    default: break;
-    }
-
-    // Pre-v16 Allegro files use a fundamentally different binary format
-    // that cannot be parsed by this importer. The header is still compatible enough to read
-    // the Allegro version string for a helpful error message.
-    uint32_t majorVer = ( aMagic >> 16 ) & 0xFFFF;
-
-    if( majorVer <= 0x0012 )
-        return FMT_VER::V_PRE_V16;
-
-    // Struct sizes depend on version, so we can't do anything useful with
-    // unrecognized formats. Report the magic and ask the user to report it.
-    THROW_IO_ERROR( wxString::Format( "Unknown Allegro file version %#010x (rev %d)", aMagic, majorVer - 3 ) );
-}
-
-
 static FILE_HEADER::LINKED_LIST ReadLL( FILE_STREAM& aStream, FMT_VER aVer = FMT_VER::V_160 )
 {
     uint32_t w1 = aStream.ReadU32();
@@ -181,60 +145,96 @@ static void ReadCond( FILE_STREAM& aStream, FMT_VER aVer, COND_T& aField )
 }
 
 
-static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
+FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
+{
+    uint32_t masked = aMagic & 0xFFFFFF00;
+
+    switch( masked )
+    {
+    case 0x00130000: return FMT_VER::V_160;
+    case 0x00130400: return FMT_VER::V_162;
+    case 0x00130C00: return FMT_VER::V_164;
+    case 0x00131000: return FMT_VER::V_165;
+    case 0x00131500: return FMT_VER::V_166;
+    case 0x00140400:
+    case 0x00140500:
+    case 0x00140600:
+    case 0x00140700: return FMT_VER::V_172;
+    case 0x00140900:
+    case 0x00140E00: return FMT_VER::V_174;
+    case 0x00141500: return FMT_VER::V_175;
+    case 0x00150000: return FMT_VER::V_180;
+    default: break;
+    }
+
+    // Pre-v16 Allegro files use a fundamentally different binary format
+    // that cannot be parsed by this importer. The header is still compatible enough to read
+    // the Allegro version string for a helpful error message.
+    uint32_t majorVer = ( aMagic >> 16 ) & 0xFFFF;
+
+    if( majorVer <= 0x0012 )
+        return FMT_VER::V_PRE_V16;
+
+    // Struct sizes depend on version, so we can't do anything useful with
+    // unrecognized formats. Report the magic and ask the user to report it.
+    THROW_IO_ERROR( wxString::Format( "Unknown Allegro file version %#010x (rev %d)", aMagic, majorVer - 3 ) );
+}
+
+
+std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 {
     auto header = std::make_unique<ALLEGRO::FILE_HEADER>();
 
-    uint32_t fileMagic = stream.ReadU32();
-    FMT_VER  fmtVer = GetFormatVer( fileMagic );
+    uint32_t fileMagic = m_stream.ReadU32();
+    m_fmtVer = FormatFromMagic( fileMagic );
 
     header->m_Magic = fileMagic;
-    ReadArrayU32( stream, header->m_Unknown1 );
-    header->m_ObjectCount = stream.ReadU32();
-    ReadArrayU32( stream, header->m_Unknown2 );
+    ReadArrayU32( m_stream, header->m_Unknown1 );
+    header->m_ObjectCount = m_stream.ReadU32();
+    ReadArrayU32( m_stream, header->m_Unknown2 );
 
-    if( fmtVer >= FMT_VER::V_180 )
+    if( m_fmtVer >= FMT_VER::V_180 )
     {
         // V18 has 28 linked lists: 5 new at the front, then the same 22 as v16, then 1 new.
         // Positions 0-4 are new v18-only LLs
-        header->m_LL_V18_1 = ReadLL( stream, fmtVer );
-        header->m_LL_V18_2 = ReadLL( stream, fmtVer );
-        header->m_LL_V18_3 = ReadLL( stream, fmtVer );
-        header->m_LL_V18_4 = ReadLL( stream, fmtVer );
-        header->m_LL_V18_5 = ReadLL( stream, fmtVer );
+        header->m_LL_V18_1 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_V18_2 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_V18_3 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_V18_4 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_V18_5 = ReadLL( m_stream, m_fmtVer );
 
         // Positions 5-22 match v16 positions 0-17
-        header->m_LL_0x04 = ReadLL( stream, fmtVer );
-        header->m_LL_0x06 = ReadLL( stream, fmtVer );
-        header->m_LL_0x0C = ReadLL( stream, fmtVer );
-        header->m_LL_Shapes = ReadLL( stream, fmtVer );
-        header->m_LL_0x14 = ReadLL( stream, fmtVer );
-        header->m_LL_0x1B_Nets = ReadLL( stream, fmtVer );
-        header->m_LL_0x1C = ReadLL( stream, fmtVer );
-        header->m_LL_0x24_0x28 = ReadLL( stream, fmtVer );
-        header->m_LL_Unknown1 = ReadLL( stream, fmtVer );
-        header->m_LL_0x2B = ReadLL( stream, fmtVer );
-        header->m_LL_0x03_0x30 = ReadLL( stream, fmtVer );
-        header->m_LL_0x0A = ReadLL( stream, fmtVer );
-        header->m_LL_0x1D_0x1E_0x1F = ReadLL( stream, fmtVer );
-        header->m_LL_Unknown2 = ReadLL( stream, fmtVer );
-        header->m_LL_0x38 = ReadLL( stream, fmtVer );
-        header->m_LL_0x2C = ReadLL( stream, fmtVer );
-        header->m_LL_0x0C_2 = ReadLL( stream, fmtVer );
-        header->m_LL_Unknown3 = ReadLL( stream, fmtVer );
+        header->m_LL_0x04 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x06 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x0C = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_Shapes = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x14 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x1B_Nets = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x1C = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x24_0x28 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_Unknown1 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x2B = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x03_0x30 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x0A = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x1D_0x1E_0x1F = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_Unknown2 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x38 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x2C = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x0C_2 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_Unknown3 = ReadLL( m_stream, m_fmtVer );
 
         // Positions 23-26 match v16 positions 18-21, but 0x36 and Unknown5 are swapped
-        header->m_LL_Unknown5 = ReadLL( stream, fmtVer );
-        header->m_LL_0x36 = ReadLL( stream, fmtVer );
-        header->m_LL_Unknown6 = ReadLL( stream, fmtVer );
-        header->m_LL_0x0A_2 = ReadLL( stream, fmtVer );
+        header->m_LL_Unknown5 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x36 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_Unknown6 = ReadLL( m_stream, m_fmtVer );
+        header->m_LL_0x0A_2 = ReadLL( m_stream, m_fmtVer );
 
         // Position 27: new v18 LL
-        header->m_LL_V18_6 = ReadLL( stream, fmtVer );
+        header->m_LL_V18_6 = ReadLL( m_stream, m_fmtVer );
 
         // V18 stores 0x35 extents as two scalars after the linked lists
-        header->m_0x35_Start = stream.ReadU32();
-        header->m_0x35_End = stream.ReadU32();
+        header->m_0x35_Start = m_stream.ReadU32();
+        header->m_0x35_End = m_stream.ReadU32();
 
         // 0x27_End and StringsCount relocated to Unknown2 in v18
         header->m_0x27_End = header->m_Unknown2[4];
@@ -243,49 +243,49 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
     else
     {
         // 18 linked lists in the shared header region
-        header->m_LL_0x04 = ReadLL( stream );
-        header->m_LL_0x06 = ReadLL( stream );
-        header->m_LL_0x0C = ReadLL( stream );
-        header->m_LL_Shapes = ReadLL( stream );
-        header->m_LL_0x14 = ReadLL( stream );
-        header->m_LL_0x1B_Nets = ReadLL( stream );
-        header->m_LL_0x1C = ReadLL( stream );
-        header->m_LL_0x24_0x28 = ReadLL( stream );
-        header->m_LL_Unknown1 = ReadLL( stream );
-        header->m_LL_0x2B = ReadLL( stream );
-        header->m_LL_0x03_0x30 = ReadLL( stream );
-        header->m_LL_0x0A = ReadLL( stream );
-        header->m_LL_0x1D_0x1E_0x1F = ReadLL( stream );
-        header->m_LL_Unknown2 = ReadLL( stream );
-        header->m_LL_0x38 = ReadLL( stream );
-        header->m_LL_0x2C = ReadLL( stream );
-        header->m_LL_0x0C_2 = ReadLL( stream );
-        header->m_LL_Unknown3 = ReadLL( stream );
+        header->m_LL_0x04 = ReadLL( m_stream );
+        header->m_LL_0x06 = ReadLL( m_stream );
+        header->m_LL_0x0C = ReadLL( m_stream );
+        header->m_LL_Shapes = ReadLL( m_stream );
+        header->m_LL_0x14 = ReadLL( m_stream );
+        header->m_LL_0x1B_Nets = ReadLL( m_stream );
+        header->m_LL_0x1C = ReadLL( m_stream );
+        header->m_LL_0x24_0x28 = ReadLL( m_stream );
+        header->m_LL_Unknown1 = ReadLL( m_stream );
+        header->m_LL_0x2B = ReadLL( m_stream );
+        header->m_LL_0x03_0x30 = ReadLL( m_stream );
+        header->m_LL_0x0A = ReadLL( m_stream );
+        header->m_LL_0x1D_0x1E_0x1F = ReadLL( m_stream );
+        header->m_LL_Unknown2 = ReadLL( m_stream );
+        header->m_LL_0x38 = ReadLL( m_stream );
+        header->m_LL_0x2C = ReadLL( m_stream );
+        header->m_LL_0x0C_2 = ReadLL( m_stream );
+        header->m_LL_Unknown3 = ReadLL( m_stream );
 
-        header->m_0x35_Start = stream.ReadU32();
-        header->m_0x35_End = stream.ReadU32();
-        header->m_LL_0x36 = ReadLL( stream );
-        header->m_LL_Unknown5 = ReadLL( stream );
-        header->m_LL_Unknown6 = ReadLL( stream );
-        header->m_LL_0x0A_2 = ReadLL( stream );
-        header->m_Unknown3 = stream.ReadU32();
+        header->m_0x35_Start = m_stream.ReadU32();
+        header->m_0x35_End = m_stream.ReadU32();
+        header->m_LL_0x36 = ReadLL( m_stream );
+        header->m_LL_Unknown5 = ReadLL( m_stream );
+        header->m_LL_Unknown6 = ReadLL( m_stream );
+        header->m_LL_0x0A_2 = ReadLL( m_stream );
+        header->m_Unknown3 = m_stream.ReadU32();
     }
 
-    stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
-    header->m_Unknown4 = stream.ReadU32();
-    header->m_MaxKey = stream.ReadU32();
+    m_stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
+    header->m_Unknown4 = m_stream.ReadU32();
+    header->m_MaxKey = m_stream.ReadU32();
 
-    if( fmtVer >= FMT_VER::V_180 )
+    if( m_fmtVer >= FMT_VER::V_180 )
     {
-        header->m_Unknown5_V18 = ReadField<std::array<uint32_t, 9>>( stream );
+        header->m_Unknown5_V18 = ReadField<std::array<uint32_t, 9>>( m_stream );
     }
     else
     {
-        header->m_Unknown5 = ReadField<std::array<uint32_t, 17>>( stream );
+        header->m_Unknown5 = ReadField<std::array<uint32_t, 17>>( m_stream );
     }
 
     {
-        uint8_t units = stream.ReadU8();
+        uint8_t units = m_stream.ReadU8();
 
         switch( units )
         {
@@ -294,34 +294,34 @@ static std::unique_ptr<ALLEGRO::FILE_HEADER> ReadHeader( FILE_STREAM& stream )
         default: THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
         }
 
-        stream.Skip( 3 );
+        m_stream.Skip( 3 );
     }
 
-    header->m_Unknown6 = stream.ReadU32();
+    header->m_Unknown6 = m_stream.ReadU32();
 
-    if( fmtVer < FMT_VER::V_180 )
+    if( m_fmtVer < FMT_VER::V_180 )
     {
-        header->m_Unknown7 = stream.ReadU32();
-        header->m_0x27_End = stream.ReadU32();
+        header->m_Unknown7 = m_stream.ReadU32();
+        header->m_0x27_End = m_stream.ReadU32();
     }
 
-    header->m_Unknown8 = stream.ReadU32();
+    header->m_Unknown8 = m_stream.ReadU32();
 
-    if( fmtVer < FMT_VER::V_180 )
+    if( m_fmtVer < FMT_VER::V_180 )
     {
-        header->m_StringsCount = stream.ReadU32();
+        header->m_StringsCount = m_stream.ReadU32();
     }
 
-    ReadArrayU32( stream, header->m_Unknown9 );
+    ReadArrayU32( m_stream, header->m_Unknown9 );
 
-    header->m_UnitsDivisor = stream.ReadU32();
+    header->m_UnitsDivisor = m_stream.ReadU32();
 
-    stream.SkipU32( 110 );
+    m_stream.SkipU32( 110 );
 
     for( size_t i = 0; i < header->m_LayerMap.size(); ++i )
     {
-        header->m_LayerMap[i].m_A = stream.ReadU32();
-        header->m_LayerMap[i].m_LayerList0x2A = stream.ReadU32();
+        header->m_LayerMap[i].m_A = m_stream.ReadU32();
+        header->m_LayerMap[i].m_LayerList0x2A = m_stream.ReadU32();
     }
 
     wxLogTrace( traceAllegroParser, wxT( "Parsed header: %d objects, %d strings" ),
@@ -2555,11 +2555,18 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
     }
 
     PROF_TIMER parseTimer;
+    HEADER_PARSER headerParser( m_stream );
 
     try
     {
-        board->m_Header = ReadHeader( m_stream );
-        board->m_FmtVer = GetFormatVer( board->m_Header->m_Magic );
+        board->m_Header = headerParser.ParseHeader();
+
+        if( !board->m_Header )
+        {
+            THROW_IO_ERROR( "Failed to parse file header" );
+        }
+
+        board->m_FmtVer = headerParser.GetFormatVersion();
 
         {
             auto dumpLL = [&]( const char* name, const FILE_HEADER::LINKED_LIST& ll )
