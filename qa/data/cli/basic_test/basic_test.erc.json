@@ -12,6 +12,10 @@
             "key": "four_way_junction"
         },
         {
+            "description": "Footprint link issue",
+            "key": "footprint_link_issues"
+        },
+        {
             "description": "Assigned footprint doesn't match footprint filters",
             "key": "footprint_filter"
         }

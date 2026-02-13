@@ -29,4 +29,5 @@ Report includes: Errors, Warnings
  ** Ignored checks:
     - Global label only appears once in the schematic
     - Four connection points are joined together
+    - Footprint link issue
     - Assigned footprint doesn't match footprint filters

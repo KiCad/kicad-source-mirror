@@ -42,6 +42,34 @@ def kicad_cli() -> str:
 
     return "kicad-cli"
 
+
+def _get_kicad_major_version() -> int:
+    """Get the major version from kicad-cli so library env vars match the running binary."""
+    try:
+        proc = subprocess.run( [kicad_cli(), 'version', '--format', 'plain'],
+                               capture_output=True, text=True, timeout=10 )
+
+        if proc.returncode == 0 and proc.stdout.strip():
+            major = proc.stdout.strip().split( '.' )[0]
+            return int( major )
+    except Exception:
+        pass
+
+    logger.warning( "Could not determine kicad-cli version, defaulting to 10" )
+    return 10
+
+
+_kicad_major_version = None
+
+def _get_cached_kicad_major_version() -> int:
+    global _kicad_major_version
+
+    if _kicad_major_version is None:
+        _kicad_major_version = _get_kicad_major_version()
+
+    return _kicad_major_version
+
+
 def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
 
@@ -50,7 +78,7 @@ def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
 
     if 'KICAD_CONFIG_HOME' not in env:
         if 'QA_DATA_ROOT' in env:
-            base_path = env.get('QA_DATA_ROOT')
+            base_path = Path( env.get('QA_DATA_ROOT') )
         else:
             cwd = Path.cwd()
             base_path = None
@@ -64,9 +92,10 @@ def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
 
         if base_path is not None:
             logger.info("Using QA data base path '%s'", str(base_path))
+            ver = _get_cached_kicad_major_version()
             env['KICAD_CONFIG_HOME'] = str(base_path / 'config')
-            env['KICAD9_SYMBOL_DIR'] = str(base_path / 'libraries')
-            env['KICAD9_FOOTPRINT_DIR'] = str(base_path / 'libraries')
+            env[f'KICAD{ver}_SYMBOL_DIR'] = str(base_path / 'libraries')
+            env[f'KICAD{ver}_FOOTPRINT_DIR'] = str(base_path / 'libraries')
         else:
             logger.warning("Unexpected cwd '%s', tests will likely fail", cwd)
 
