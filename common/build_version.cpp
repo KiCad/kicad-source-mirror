@@ -59,12 +59,19 @@ static std::recursive_mutex s_platformInfoMutex;
 static wxString s_glVendor;
 static wxString s_glRenderer;
 static wxString s_glVersion;
+static wxString s_glBackend;
 
 void SetOpenGLInfo( const char* aVendor, const char* aRenderer, const char* aVersion )
 {
     s_glVendor = wxString::FromUTF8( aVendor );
     s_glRenderer = wxString::FromUTF8( aRenderer );
     s_glVersion = wxString::FromUTF8( aVersion );
+}
+
+
+void SetOpenGLBackendInfo( wxString aBackend )
+{
+    s_glBackend = aBackend;
 }
 
 
@@ -224,11 +231,21 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
          << ", " << wxGetenv( "XDG_SESSION_TYPE" );
 #endif
 
-    if( !s_glVendor.empty() || !s_glRenderer.empty() || !s_glVersion.empty() )
+    wxString glMsg;
+
+    for( const wxString& str : { s_glVendor, s_glRenderer, s_glVersion, s_glBackend } )
     {
-        aMsg << eol;
-        aMsg << "OpenGL: " << s_glVendor << ", " << s_glRenderer << ", " << s_glVersion;
+        if( str.empty() )
+            continue;
+
+        if( !glMsg.empty() )
+            glMsg << ", ";
+
+        glMsg << str;
     }
+
+    if( !glMsg.empty() )
+        aMsg << eol << "OpenGL: " << glMsg;
 
     aMsg << eol << eol;
 

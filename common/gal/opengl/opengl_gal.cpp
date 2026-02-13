@@ -2824,6 +2824,9 @@ void OPENGL_GAL::init()
     // Check correct initialization from the constructor
     if( m_tesselator == nullptr )
         throw std::runtime_error( "Could not create the tesselator" );
+
+    SetOpenGLBackendInfo( GL_UTILS::DetectGLBackend( this ) );
+
     GLenum err = glewInit();
 
 #ifdef KICAD_USE_EGL
@@ -2839,11 +2842,11 @@ void OPENGL_GAL::init()
 
 #endif // KICAD_USE_EGL
 
-    SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
-                   (const char*) glGetString( GL_VERSION ) );
-
     if( GLEW_OK != err )
         throw std::runtime_error( (const char*) glewGetErrorString( err ) );
+
+    SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
+                   (const char*) glGetString( GL_VERSION ) );
 
     // Check the OpenGL version (minimum 2.1 is required)
     if( !GLEW_VERSION_2_1 )

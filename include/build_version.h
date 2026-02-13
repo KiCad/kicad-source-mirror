@@ -110,6 +110,11 @@ KICOMMON_API bool IsNightlyVersion();
 KICOMMON_API void SetOpenGLInfo( const char* aRenderer, const char* aVendor, const char* aVersion );
 
 /**
+ * A setter for OpenGL backend info after the canvas is created.
+ */
+KICOMMON_API void SetOpenGLBackendInfo( wxString aBackend );
+
+/**
  * Create a version info string for bug reports and the about dialog
  * @param aTitle is the application title to include at the top of the report
  * @param aBrief = true to condense information for the bug report URL

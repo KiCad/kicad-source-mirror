@@ -220,6 +220,8 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL" ) );
 
+    SetOpenGLBackendInfo( GL_UTILS::DetectGLBackend( this ) );
+
     const GLenum err = glewInit();
 
     if( GLEW_OK != err )

@@ -25,12 +25,30 @@
 #define GL_UTILS_H
 
 #include <gal/opengl/kiglew.h> // Must be included first
+#include <wx/version.h>
 #include <wx/glcanvas.h>
 #include <wx/utils.h>
 
 class GL_UTILS
 {
 public:
+
+    static wxString DetectGLBackend( wxGLCanvas* aCanvas )
+    {
+        wxString backend;
+
+#if wxCHECK_VERSION( 3, 3, 2 ) && defined( __WXGTK__ )
+        int eglMajor = 0, eglMinor = 0;
+
+        if( aCanvas->GetEGLVersion( &eglMajor, &eglMinor ) )
+            backend = wxString::Format( "EGL %d.%d", eglMajor, eglMinor );
+
+        if( int glxVersion = aCanvas->GetGLXVersion() )
+            backend = wxString::Format( "GLX %d.%d", glxVersion / 10, glxVersion % 10 );
+#endif
+
+        return backend;
+    }
 
 #if !wxCHECK_VERSION( 3, 3, 2 )
     /**
