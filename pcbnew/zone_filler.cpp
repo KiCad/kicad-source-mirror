@@ -2292,20 +2292,31 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 {
                     if( aKnockout->GetIsRuleArea() )
                     {
-                        // Keepouts use outline with no clearance
-                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE, nullptr );
+                        if( aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
+                        {
+                            // Keepouts use outline with no clearance
+                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE,
+                                                                          nullptr );
+                        }
                     }
                     else
                     {
-                        int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
-                                                                  aLayer ) );
+                        if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
+                        {
+                            int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
+                                                                      aLayer ) );
 
-                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
+                            gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
 
-                        SHAPE_POLY_SET poly;
-                        aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
-                                                            ERROR_OUTSIDE );
-                        aHoles.Append( poly );
+                            // Negative clearance permits zones to short
+                            if( gap < 0 )
+                                return;
+
+                            SHAPE_POLY_SET poly;
+                            aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
+                                                                ERROR_OUTSIDE );
+                            aHoles.Append( poly );
+                        }
                     }
                 }
             };
@@ -2317,24 +2328,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             if( checkForCancel( m_progressReporter ) )
                 return;
 
-            // Only check zones whose bounding box overlaps the max clearance
-            if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
-                continue;
-
-            // Negative clearance permits zones to short
-            if( evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, otherZone, aLayer ) < 0 )
-                continue;
-
-            if( otherZone->GetIsRuleArea() )
-            {
-                if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                    knockoutZoneClearance( otherZone );
-            }
-            else if( otherZone->HigherPriority( aZone ) )
-            {
-                if( !otherZone->SameNet( aZone ) )
-                    knockoutZoneClearance( otherZone );
-            }
+            knockoutZoneClearance( otherZone );
         }
 
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -2344,20 +2338,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 if( checkForCancel( m_progressReporter ) )
                     return;
 
-                // Only check zones whose bounding box overlaps
-                if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
-                    continue;
-
-                if( otherZone->GetIsRuleArea() )
-                {
-                    if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                        knockoutZoneClearance( otherZone );
-                }
-                else if( otherZone->HigherPriority( aZone ) )
-                {
-                    if( !otherZone->SameNet( aZone ) )
-                        knockoutZoneClearance( otherZone );
-                }
+                knockoutZoneClearance( otherZone );
             }
         }
     }
@@ -2370,8 +2351,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
  * Builds clearance knockout holes for higher-priority zones on different nets.
  * This is separated from buildCopperItemClearances to allow caching before zone knockouts.
  */
-void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                                   SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aHoles )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int extra_margin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
@@ -2401,63 +2381,41 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
                 {
                     if( aKnockout->GetIsRuleArea() )
                     {
-                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError,
-                                                                      ERROR_OUTSIDE, nullptr );
+                        if( aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
+                        {
+                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE,
+                                                                          nullptr );
+                        }
                     }
                     else
                     {
-                        int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
-                                                                  aZone, aKnockout, aLayer ) );
+                        if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
+                        {
+                            int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
+                                                                      aLayer ) );
 
-                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
-                                                                aKnockout, aLayer ) );
+                            gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
 
-                        SHAPE_POLY_SET poly;
-                        aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
-                                                            m_maxError, ERROR_OUTSIDE );
-                        aHoles.Append( poly );
+                            // Negative clearance permits zones to short
+                            if( gap < 0 )
+                                return;
+
+                            SHAPE_POLY_SET poly;
+                            aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
+                                                                ERROR_OUTSIDE );
+                            aHoles.Append( poly );
+                        }
                     }
                 }
             };
 
     for( ZONE* otherZone : m_board->Zones() )
-    {
-        if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
-            continue;
-
-        if( evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, otherZone, aLayer ) < 0 )
-            continue;
-
-        if( otherZone->GetIsRuleArea() )
-        {
-            if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                knockoutZoneClearance( otherZone );
-        }
-        else if( otherZone->HigherPriority( aZone ) )
-        {
-            if( !otherZone->SameNet( aZone ) )
-                knockoutZoneClearance( otherZone );
-        }
-    }
+        knockoutZoneClearance( otherZone );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( ZONE* otherZone : footprint->Zones() )
-        {
-            if( !otherZone->GetBoundingBox().Intersects( zone_boundingbox ) )
-                continue;
-
-            if( otherZone->GetIsRuleArea() )
-            {
-                if( otherZone->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                    knockoutZoneClearance( otherZone );
-            }
-            else if( otherZone->HigherPriority( aZone ) )
-            {
-                if( !otherZone->SameNet( aZone ) )
-                    knockoutZoneClearance( otherZone );
-            }
-        }
+            knockoutZoneClearance( otherZone );
     }
 
     aHoles.Simplify();
@@ -2468,8 +2426,7 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
  * Removes the outlines of higher-proirity zones with the same net.  These zones should be
  * in charge of the fill parameters within their own outlines.
  */
-void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                               SHAPE_POLY_SET& aRawFill )
+void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aRawFill )
 {
     BOX2I zoneBBox = aZone->GetBoundingBox();
 
