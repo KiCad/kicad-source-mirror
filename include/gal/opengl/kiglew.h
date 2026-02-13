@@ -35,6 +35,10 @@
 
 #if wxCHECK_VERSION( 3, 3, 2 )
     #include <GL/glew.h>
+
+    #ifdef _WIN32
+        #include <GL/wglew.h>
+    #endif
 #else
     #if defined( __unix__ ) and not defined( __APPLE__ )
 
