@@ -1452,14 +1452,19 @@ int SYMBOL_EDITOR_EDIT_TOOL::ExplodeStackedPin( const TOOL_EVENT& aEvent )
         newPin->SetOrientation( pin->GetOrientation() );
         newPin->SetShape( pin->GetShape() );
         newPin->SetLength( pin->GetLength() );
-        newPin->SetType( pin->GetType() );
+        // Hidden power input pins act as global labels, so demote them to passive
+        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            newPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+        else
+            newPin->SetType( pin->GetType() );
+
         newPin->SetName( pin->GetName() );
         newPin->SetNumber( stackedNumbers[i] );
         newPin->SetNameTextSize( pin->GetNameTextSize() );
         newPin->SetNumberTextSize( pin->GetNumberTextSize() );
         newPin->SetUnit( pin->GetUnit() );
         newPin->SetBodyStyle( pin->GetBodyStyle() );
-        newPin->SetVisible( false );  // Make all other pins invisible
+        newPin->SetVisible( false );
 
         // Add the new pin to the symbol
         symbol->AddDrawItem( newPin );

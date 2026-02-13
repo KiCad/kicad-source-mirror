@@ -824,4 +824,160 @@ BOOST_AUTO_TEST_CASE( TestStackedPinCountEfficiency )
     }
 }
 
+/**
+ * Test that exploding a stacked power input pin demotes hidden pins to passive.
+ * Regression test for GitLab issue #23021.
+ *
+ * Hidden power input pins act as global labels, so the explode operation must
+ * change hidden copies to PT_PASSIVE to avoid creating unintended power nets.
+ */
+BOOST_AUTO_TEST_CASE( TestExplodePowerInputDemotesToPassive )
+{
+    VECTOR2I position( 0, 0 );
+
+    SCH_PIN* stackedPin = new SCH_PIN( m_symbol.get() );
+    stackedPin->SetNumber( wxT( "[1,2,3]" ) );
+    stackedPin->SetPosition( position );
+    stackedPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+    stackedPin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    stackedPin->SetName( wxT( "GND" ) );
+    stackedPin->SetVisible( true );
+
+    bool isValid;
+    std::vector<wxString> expanded = stackedPin->GetStackedPinNumbers( &isValid );
+    BOOST_REQUIRE( isValid );
+    BOOST_REQUIRE_EQUAL( expanded.size(), 3 );
+
+    std::sort( expanded.begin(), expanded.end(),
+        []( const wxString& a, const wxString& b )
+        {
+            long numA, numB;
+
+            if( a.ToLong( &numA ) && b.ToLong( &numB ) )
+                return numA < numB;
+
+            return a < b;
+        } );
+
+    // Simulate ExplodeStackedPin: first pin keeps original type
+    stackedPin->SetNumber( expanded[0] );
+    stackedPin->SetVisible( true );
+
+    std::vector<SCH_PIN*> explodedPins;
+    explodedPins.push_back( stackedPin );
+
+    for( size_t i = 1; i < expanded.size(); ++i )
+    {
+        SCH_PIN* newPin = new SCH_PIN( m_symbol.get() );
+        newPin->SetPosition( stackedPin->GetPosition() );
+        newPin->SetOrientation( stackedPin->GetOrientation() );
+        newPin->SetShape( stackedPin->GetShape() );
+        newPin->SetLength( stackedPin->GetLength() );
+
+        // The fix: hidden power input pins become passive
+        if( stackedPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            newPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+        else
+            newPin->SetType( stackedPin->GetType() );
+
+        newPin->SetName( stackedPin->GetName() );
+        newPin->SetNumber( expanded[i] );
+        newPin->SetVisible( false );
+
+        explodedPins.push_back( newPin );
+    }
+
+    BOOST_REQUIRE_EQUAL( explodedPins.size(), 3 );
+
+    // First pin stays visible and keeps PT_POWER_IN
+    BOOST_CHECK( explodedPins[0]->IsVisible() );
+    BOOST_CHECK( explodedPins[0]->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+
+    // Hidden pins must be PT_PASSIVE, not PT_POWER_IN
+    for( size_t i = 1; i < explodedPins.size(); ++i )
+    {
+        BOOST_CHECK( !explodedPins[i]->IsVisible() );
+        BOOST_CHECK_MESSAGE( explodedPins[i]->GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE,
+                             "Hidden pin " << explodedPins[i]->GetNumber()
+                                           << " should be PT_PASSIVE, not PT_POWER_IN" );
+    }
+
+    for( size_t i = 1; i < explodedPins.size(); ++i )
+        delete explodedPins[i];
+}
+
+
+/**
+ * Test that exploding a stacked non-power pin preserves the original type on hidden pins.
+ * Ensures the PT_POWER_IN demotion only applies to power input pins.
+ */
+BOOST_AUTO_TEST_CASE( TestExplodeNonPowerPinPreservesType )
+{
+    VECTOR2I position( 0, 0 );
+
+    SCH_PIN* stackedPin = new SCH_PIN( m_symbol.get() );
+    stackedPin->SetNumber( wxT( "[4,5,6]" ) );
+    stackedPin->SetPosition( position );
+    stackedPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+    stackedPin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
+    stackedPin->SetName( wxT( "DATA" ) );
+    stackedPin->SetVisible( true );
+
+    bool isValid;
+    std::vector<wxString> expanded = stackedPin->GetStackedPinNumbers( &isValid );
+    BOOST_REQUIRE( isValid );
+    BOOST_REQUIRE_EQUAL( expanded.size(), 3 );
+
+    std::sort( expanded.begin(), expanded.end(),
+        []( const wxString& a, const wxString& b )
+        {
+            long numA, numB;
+
+            if( a.ToLong( &numA ) && b.ToLong( &numB ) )
+                return numA < numB;
+
+            return a < b;
+        } );
+
+    stackedPin->SetNumber( expanded[0] );
+    stackedPin->SetVisible( true );
+
+    std::vector<SCH_PIN*> explodedPins;
+    explodedPins.push_back( stackedPin );
+
+    for( size_t i = 1; i < expanded.size(); ++i )
+    {
+        SCH_PIN* newPin = new SCH_PIN( m_symbol.get() );
+        newPin->SetPosition( stackedPin->GetPosition() );
+        newPin->SetOrientation( stackedPin->GetOrientation() );
+        newPin->SetShape( stackedPin->GetShape() );
+        newPin->SetLength( stackedPin->GetLength() );
+
+        if( stackedPin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            newPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+        else
+            newPin->SetType( stackedPin->GetType() );
+
+        newPin->SetName( stackedPin->GetName() );
+        newPin->SetNumber( expanded[i] );
+        newPin->SetVisible( false );
+
+        explodedPins.push_back( newPin );
+    }
+
+    BOOST_REQUIRE_EQUAL( explodedPins.size(), 3 );
+
+    // All pins should keep PT_INPUT since it's not a power input pin
+    for( size_t i = 0; i < explodedPins.size(); ++i )
+    {
+        BOOST_CHECK_MESSAGE( explodedPins[i]->GetType() == ELECTRICAL_PINTYPE::PT_INPUT,
+                             "Pin " << explodedPins[i]->GetNumber()
+                                    << " should keep PT_INPUT type" );
+    }
+
+    for( size_t i = 1; i < explodedPins.size(); ++i )
+        delete explodedPins[i];
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
