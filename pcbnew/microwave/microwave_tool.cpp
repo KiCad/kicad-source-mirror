@@ -33,6 +33,7 @@
 #include <preview_items/centreline_rect_item.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 

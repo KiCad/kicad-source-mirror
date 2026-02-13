@@ -38,6 +38,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <component_classes/component_class_manager.h>
 #include <project/net_settings.h>
 #include <embedded_files_parser.h>
 #include <font/fontconfig.h>

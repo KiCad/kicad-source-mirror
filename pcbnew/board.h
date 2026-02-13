@@ -27,7 +27,6 @@
 
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
-#include <component_classes/component_class_manager.h>
 #include <embedded_files.h>
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <geometry/shape_poly_set.h>
@@ -38,15 +37,16 @@
 #include <pcb_item_containers.h>
 #include <pcb_plot_params.h>
 #include <title_block.h>
-#include <tools/pcb_selection.h>
 #include <zone_settings.h>
 #include <shared_mutex>
+#include <unordered_set>
 #include <project.h>
 #include <list>
 
 class BOARD_DESIGN_SETTINGS;
 class BOARD_CONNECTED_ITEM;
 class BOARD_COMMIT;
+class COMPONENT_CLASS_MANAGER;
 class DRC_RTREE;
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;

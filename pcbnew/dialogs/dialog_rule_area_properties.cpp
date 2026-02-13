@@ -27,6 +27,7 @@
 #include <kiface_base.h>
 #include <confirm.h>
 #include <board.h>
+#include <component_classes/component_class_manager.h>
 #include <eda_group.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>

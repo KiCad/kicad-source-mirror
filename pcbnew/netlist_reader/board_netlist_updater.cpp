@@ -33,6 +33,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <component_classes/component_class.h>
+#include <component_classes/component_class_manager.h>
 #include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>

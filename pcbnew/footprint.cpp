@@ -35,6 +35,8 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <collectors.h>
+#include <component_classes/component_class_manager.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <convert_shape_list_to_polygon.h>

@@ -28,6 +28,7 @@
 #define PCB_POINT_EDITOR_H
 
 #include <tool/tool_interactive.h>
+#include <tools/pcb_selection.h>
 #include "tool/edit_points.h"
 #include <pcbnew_settings.h>
 #include <status_popup.h>

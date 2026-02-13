@@ -23,6 +23,7 @@
  */
 
 #include <common.h>
+#include <view/view.h>
 #include <pcb_field.h>
 #include <footprint.h>
 #include <board_design_settings.h>

@@ -30,6 +30,7 @@
 #include <kiplatform/ui.h>
 #include <board.h>
 #include <board_commit.h>
+#include <collectors.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <pad.h>

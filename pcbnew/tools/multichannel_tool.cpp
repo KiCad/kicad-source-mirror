@@ -24,6 +24,7 @@
 
 #include <board_commit.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection.h>
 
 #include <dialogs/dialog_multichannel_generate_rule_areas.h>
 #include <dialogs/dialog_multichannel_repeat_layout.h>

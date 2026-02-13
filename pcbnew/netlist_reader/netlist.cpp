@@ -37,6 +37,7 @@ using namespace std::placeholders;
 #include <lib_id.h>
 #include <footprint_library_adapter.h>
 #include <board.h>
+#include <component_classes/component_class_manager.h>
 #include <footprint.h>
 #include <spread_footprints.h>
 #include <ratsnest/ratsnest_data.h>

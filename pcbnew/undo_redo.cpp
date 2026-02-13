@@ -27,6 +27,7 @@
 
 #include <functional>
 using namespace std::placeholders;
+#include <component_classes/component_class_manager.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_track.h>

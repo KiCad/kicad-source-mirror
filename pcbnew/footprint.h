@@ -27,13 +27,12 @@
 
 #include <deque>
 #include <mutex>
+#include <unordered_set>
 
 #include <template_fieldnames.h>
 
 #include <board_item_container.h>
 #include <board_item.h>
-#include <collectors.h>
-#include <component_classes/component_class_manager.h>
 #include <embedded_files.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
@@ -53,6 +52,8 @@ class LINE_READER;
 class EDA_3D_CANVAS;
 class PAD;
 class BOARD;
+class COMPONENT_CLASS;
+class GENERAL_COLLECTOR;
 class MSG_PANEL_ITEM;
 class SHAPE;
 class REPORTER;

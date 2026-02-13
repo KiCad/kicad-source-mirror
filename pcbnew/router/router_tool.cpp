@@ -35,6 +35,7 @@ using namespace std::placeholders;
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>
+#include <collectors.h>
 #include <footprint.h>
 #include <geometry/geometry_utils.h>
 #include <pad.h>

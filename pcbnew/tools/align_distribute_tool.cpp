@@ -32,6 +32,7 @@
 
 #include <board.h>
 #include <board_commit.h>
+#include <collectors.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <geometry/distribute.h>

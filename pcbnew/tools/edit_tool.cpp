@@ -32,6 +32,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <collectors.h>
 #include <footprint.h>
 #include <increment.h>
 #include <pcb_shape.h>

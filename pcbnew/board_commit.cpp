@@ -27,6 +27,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <board.h>
+#include <component_classes/component_class_manager.h>
 #include <footprint.h>
 #include <lset.h>
 #include <pcb_group.h>

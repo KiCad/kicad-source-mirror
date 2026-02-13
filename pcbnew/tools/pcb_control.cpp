@@ -27,6 +27,7 @@
 #include "convert_basic_shapes_to_polygon.h"
 
 #include <advanced_config.h>
+#include <collectors.h>
 #include <kiplatform/ui.h>
 #include <kiway.h>
 #include <tools/edit_tool.h>

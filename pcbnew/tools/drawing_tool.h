@@ -30,6 +30,7 @@
 #include <stack>
 #include <optional>
 #include <tool/tool_menu.h>
+#include <tools/pcb_selection.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 
