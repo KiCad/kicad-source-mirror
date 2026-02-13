@@ -349,14 +349,14 @@ PANEL_DRC_RULE_EDITOR::getConstraintPanel( wxWindow* aParent, const DRC_RULE_EDI
 }
 
 
-bool PANEL_DRC_RULE_EDITOR::ValidateInputs( int* aErrorCount, std::string* aValidationMessage )
+bool PANEL_DRC_RULE_EDITOR::ValidateInputs( int* aErrorCount, wxString* aValidationMessage )
 {
     if( !m_callBackRuleNameValidation( m_constraintData->GetId(), m_nameCtrl->GetValue() ) )
     {
         m_validationSucceeded = false;
         ( *aErrorCount )++;
         m_validationMessage +=
-                DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, "Rule Name should be unique !!" );
+                DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, _( "Rule name must be unique." ) );
     }
 
     if( m_layerListChoiceCtrl->GetSelection() == wxNOT_FOUND )
@@ -364,7 +364,7 @@ bool PANEL_DRC_RULE_EDITOR::ValidateInputs( int* aErrorCount, std::string* aVali
         m_validationSucceeded = false;
         ( *aErrorCount )++;
         m_validationMessage +=
-                DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, "Layers selection should not be empty !!" );
+                DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, _( "Layer selection is required." ) );
     }
 
     return m_validationSucceeded;
@@ -381,7 +381,7 @@ void PANEL_DRC_RULE_EDITOR::onSaveButtonClicked( wxCommandEvent& aEvent )
 {
     m_validationSucceeded = true;
     int errorCount = 0;
-    m_validationMessage = "";
+    m_validationMessage.Clear();
 
     ValidateInputs( &errorCount, &m_validationMessage );
 

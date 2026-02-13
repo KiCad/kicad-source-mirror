@@ -75,7 +75,7 @@ bool DRC_RE_PERMITTED_LAYERS_OVERLAY_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_PERMITTED_LAYERS_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
-                                                            std::string* aValidationMessage )
+                                                            wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

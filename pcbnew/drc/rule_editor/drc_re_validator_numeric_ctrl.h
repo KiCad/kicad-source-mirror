@@ -27,8 +27,6 @@
 #include <wx/wx.h>
 #include <wx/object.h>
 
-#include <string>
-
 #include "drc_rule_editor_enums.h"
 
 

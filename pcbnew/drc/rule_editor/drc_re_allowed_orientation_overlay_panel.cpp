@@ -99,7 +99,7 @@ bool DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
-                                                               std::string* aValidationMessage )
+                                                               wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

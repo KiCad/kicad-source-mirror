@@ -25,7 +25,6 @@
 #define DRC_RULE_EDITOR_ENUMS_H_
 
 #include <wx/string.h>
-#include <string>
 #include <vector>
 
 
@@ -36,9 +35,9 @@
 struct VALIDATION_RESULT
 {
     bool                     isValid = true;
-    std::vector<std::string> errors;
+    std::vector<wxString>    errors;
 
-    void AddError( const std::string& aError )
+    void AddError( const wxString& aError )
     {
         isValid = false;
         errors.push_back( aError );

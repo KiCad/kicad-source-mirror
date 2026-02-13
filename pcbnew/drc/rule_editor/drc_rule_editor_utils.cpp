@@ -311,8 +311,8 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateNumericCtrl( wxTextCtrl* aTextCtrl, std::string aLabel, bool aCanBeZero,
-                                                 int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RULE_EDITOR_UTILS::ValidateNumericCtrl( wxTextCtrl* aTextCtrl, const wxString& aLabel, bool aCanBeZero,
+                                                 int* aErrorCount, wxString* aValidationMessage )
 {
     VALIDATOR_NUMERIC_CTRL validator( aCanBeZero );
     aTextCtrl->SetValidator( validator );
@@ -327,21 +327,22 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericCtrl( wxTextCtrl* aTextCtrl, std::str
         {
             ( *aErrorCount )++;
             *aValidationMessage +=
-                    DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, aLabel + " should not be empty !!" );
+                    DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount,
+                            wxString::Format( _( "%s should not be empty." ), aLabel ) );
             return false;
         }
         case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotNumeric:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, "The value of " + aLabel + " should be valid numeric value !!" );
+                    *aErrorCount, wxString::Format( _( "The value of %s must be a valid number." ), aLabel ) );
             return false;
         }
         case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotGreaterThanZero:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, "The value of " + aLabel + " must be greater than 0 !!" );
+                    *aErrorCount, wxString::Format( _( "The value of %s must be greater than 0." ), aLabel ) );
             return false;
         }
         default: break;
@@ -352,8 +353,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericCtrl( wxTextCtrl* aTextCtrl, std::str
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateIntegerCtrl( wxTextCtrl* aTextCtrl, std::string aLabel, bool aCanBeZero,
-                                                 int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RULE_EDITOR_UTILS::ValidateIntegerCtrl( wxTextCtrl* aTextCtrl, const wxString& aLabel, bool aCanBeZero,
+                                                 int* aErrorCount, wxString* aValidationMessage )
 {
     VALIDATOR_NUMERIC_CTRL validator( aCanBeZero, true );
     aTextCtrl->SetValidator( validator );
@@ -368,21 +369,22 @@ bool DRC_RULE_EDITOR_UTILS::ValidateIntegerCtrl( wxTextCtrl* aTextCtrl, std::str
         {
             ( *aErrorCount )++;
             *aValidationMessage +=
-                    DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, aLabel + " should not be empty !!" );
+                    DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount,
+                            wxString::Format( _( "%s should not be empty." ), aLabel ) );
             return false;
         }
         case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotInteger:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, "The value of " + aLabel + " should be valid integer value !!" );
+                    *aErrorCount, wxString::Format( _( "The value of %s must be a valid integer." ), aLabel ) );
             return false;
         }
         case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotGreaterThanZero:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, "The value of " + aLabel + " must be greater than 0 !!" );
+                    *aErrorCount, wxString::Format( _( "The value of %s must be greater than 0." ), aLabel ) );
             return false;
         }
         default: break;
@@ -393,8 +395,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateIntegerCtrl( wxTextCtrl* aTextCtrl, std::str
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateComboCtrl( wxComboBox* aComboBox, std::string aLabel, int* aErrorCount,
-                                               std::string* aValidationMessage )
+bool DRC_RULE_EDITOR_UTILS::ValidateComboCtrl( wxComboBox* aComboBox, const wxString& aLabel, int* aErrorCount,
+                                               wxString* aValidationMessage )
 {
     VALIDATOR_COMBO_CTRL cmbCtrlValidator;
     aComboBox->SetValidator( cmbCtrlValidator );
@@ -408,7 +410,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateComboCtrl( wxComboBox* aComboBox, std::strin
         case VALIDATOR_COMBO_CTRL::VALIDATION_STATE::NothingSelected:
         {
             ( *aErrorCount )++;
-            *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, "Please choose " + aLabel );
+            *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount,
+                    wxString::Format( _( "Please choose %s." ), aLabel ) );
             return false;
         }
         default: break;
@@ -420,8 +423,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateComboCtrl( wxComboBox* aComboBox, std::strin
 
 
 bool DRC_RULE_EDITOR_UTILS::ValidateMinMaxCtrl( wxTextCtrl* aMinTextCtrl, wxTextCtrl* aMaxTextCtrl,
-                                                std::string aMinLabel, std::string aMaxLabel, int* aErrorCount,
-                                                std::string* aValidationMessage )
+                                                const wxString& aMinLabel, const wxString& aMaxLabel,
+                                                int* aErrorCount, wxString* aValidationMessage )
 {
     aMinTextCtrl->SetName( "min" );
     aMaxTextCtrl->SetName( "max" );
@@ -438,7 +441,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinMaxCtrl( wxTextCtrl* aMinTextCtrl, wxText
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, aMinLabel + " value cannot be greater than " + aMaxLabel + " value" );
+                    *aErrorCount, wxString::Format( _( "%s value cannot be greater than %s value." ),
+                                                    aMinLabel, aMaxLabel ) );
             return false;
         }
         default: break;
@@ -453,9 +457,9 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinMaxCtrl( wxTextCtrl* aMinTextCtrl, wxText
 
 
 bool DRC_RULE_EDITOR_UTILS::ValidateMinPreferredMaxCtrl( wxTextCtrl* aMinTextCtrl, wxTextCtrl* aPreferredTextCtrl,
-                                                         wxTextCtrl* aMaxTextCtrl, std::string aMinLabel,
-                                                         std::string aPreferredLabel, std::string aMaxLabel,
-                                                         int* aErrorCount, std::string* aValidationMessage )
+                                                         wxTextCtrl* aMaxTextCtrl, const wxString& aMinLabel,
+                                                         const wxString& aPreferredLabel, const wxString& aMaxLabel,
+                                                         int* aErrorCount, wxString* aValidationMessage )
 {
     aMinTextCtrl->SetName( "min" );
     aPreferredTextCtrl->SetName( "preferred" );
@@ -474,21 +478,24 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinPreferredMaxCtrl( wxTextCtrl* aMinTextCtr
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, aMinLabel + " value cannot be greater than " + aPreferredLabel + " value" );
+                    *aErrorCount, wxString::Format( _( "%s value cannot be greater than %s value." ),
+                                                    aMinLabel, aPreferredLabel ) );
             return false;
         }
         case VALIDATE_MIN_PREFERRED_MAX_CTRL::VALIDATION_STATE::PreferredGreaterThanMax:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, aPreferredLabel + " value cannot be greater than " + aMaxLabel + " value" );
+                    *aErrorCount, wxString::Format( _( "%s value cannot be greater than %s value." ),
+                                                    aPreferredLabel, aMaxLabel ) );
             return false;
         }
         case VALIDATE_MIN_PREFERRED_MAX_CTRL::VALIDATION_STATE::MinGreaterThanMax:
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, aMinLabel + " value cannot be greater than " + aMaxLabel + " value" );
+                     *aErrorCount, wxString::Format( _( "%s value cannot be greater than %s value." ),
+                                                    aMinLabel, aMaxLabel ) );
             return false;
         }
         default: break;
@@ -503,8 +510,8 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinPreferredMaxCtrl( wxTextCtrl* aMinTextCtr
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateCheckBoxCtrls( const std::vector<wxCheckBox*>& aCheckboxes, std::string aLabel,
-                                                   int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RULE_EDITOR_UTILS::ValidateCheckBoxCtrls( const std::vector<wxCheckBox*>& aCheckboxes, const wxString& aLabel,
+                                                   int* aErrorCount, wxString* aValidationMessage )
 {
     VALIDATE_CHECKBOX_LIST validator( aCheckboxes );
 
@@ -520,7 +527,7 @@ bool DRC_RULE_EDITOR_UTILS::ValidateCheckBoxCtrls( const std::vector<wxCheckBox*
         {
             ( *aErrorCount )++;
             *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage(
-                    *aErrorCount, "Please select at least one option from " + aLabel + " list" );
+                    *aErrorCount, wxString::Format( _( "Please select at least one option from %s list." ), aLabel ));
             return false;
         }
         default: break;
@@ -531,20 +538,20 @@ bool DRC_RULE_EDITOR_UTILS::ValidateCheckBoxCtrls( const std::vector<wxCheckBox*
 }
 
 
-std::string DRC_RULE_EDITOR_UTILS::FormatErrorMessage( const int& aErrorCount, const std::string aErrorMessage )
+wxString DRC_RULE_EDITOR_UTILS::FormatErrorMessage( int aErrorCount, const wxString& aErrorMessage )
 {
-    return std::to_string( aErrorCount ) + ". " + aErrorMessage + "\n";
+    return wxString::Format( wxS( "%d. %s\n" ), aErrorCount, aErrorMessage );
 }
 
 
 // ==================== Pure Validators (No GUI Dependencies) ====================
 
-bool DRC_RULE_EDITOR_UTILS::ValidateNumericValue( double aValue, bool aCanBeZero, const std::string& aLabel,
+bool DRC_RULE_EDITOR_UTILS::ValidateNumericValue( double aValue, bool aCanBeZero, const wxString& aLabel,
                                                    VALIDATION_RESULT* aResult )
 {
     if( !aCanBeZero && aValue <= 0.0 )
     {
-        aResult->AddError( "The value of " + aLabel + " must be greater than 0" );
+        aResult->AddError( wxString::Format( _( "The value of %s must be greater than 0." ), aLabel ) );
         return false;
     }
 
@@ -552,13 +559,13 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericValue( double aValue, bool aCanBeZero
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateNumericString( const std::string& aValueStr, bool aCanBeZero,
-                                                    bool aIntegerOnly, const std::string& aLabel,
+bool DRC_RULE_EDITOR_UTILS::ValidateNumericString( const wxString& aValueStr, bool aCanBeZero,
+                                                    bool aIntegerOnly, const wxString& aLabel,
                                                     VALIDATION_RESULT* aResult )
 {
-    if( aValueStr.empty() )
+    if( aValueStr.IsEmpty() )
     {
-        aResult->AddError( aLabel + " should not be empty" );
+        aResult->AddError( wxString::Format( _( "%s should not be empty." ), aLabel ) );
         return false;
     }
 
@@ -566,35 +573,37 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericString( const std::string& aValueStr,
     {
         if( aIntegerOnly )
         {
+            std::string stdStr = aValueStr.ToStdString();
             size_t pos;
-            long   intVal = std::stol( aValueStr, &pos );
+            long   intVal = std::stol( stdStr, &pos );
 
-            if( pos != aValueStr.length() )
+            if( pos != stdStr.length() )
             {
-                aResult->AddError( "The value of " + aLabel + " should be a valid integer value" );
+                aResult->AddError( wxString::Format( _( "The value of %s must be a valid integer." ), aLabel ) );
                 return false;
             }
 
             if( !aCanBeZero && intVal <= 0 )
             {
-                aResult->AddError( "The value of " + aLabel + " must be greater than 0" );
+                aResult->AddError( wxString::Format( _( "The value of %s must be greater than 0." ), aLabel ) );
                 return false;
             }
         }
         else
         {
+            std::string stdStr = aValueStr.ToStdString();
             size_t pos;
-            double floatVal = std::stod( aValueStr, &pos );
+            double floatVal = std::stod( stdStr, &pos );
 
-            if( pos != aValueStr.length() )
+            if( pos != stdStr.length() )
             {
-                aResult->AddError( "The value of " + aLabel + " should be a valid numeric value" );
+                aResult->AddError( wxString::Format( _( "The value of %s must be a valid number." ), aLabel ) );
                 return false;
             }
 
             if( !aCanBeZero && floatVal <= 0.0 )
             {
-                aResult->AddError( "The value of " + aLabel + " must be greater than 0" );
+                aResult->AddError( wxString::Format( _( "The value of %s must be greater than 0." ), aLabel ) );
                 return false;
             }
         }
@@ -602,9 +611,9 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericString( const std::string& aValueStr,
     catch( const std::exception& )
     {
         if( aIntegerOnly )
-            aResult->AddError( "The value of " + aLabel + " should be a valid integer value" );
+            aResult->AddError( wxString::Format( _( "The value of %s must be a valid integer." ), aLabel ) );
         else
-            aResult->AddError( "The value of " + aLabel + " should be a valid numeric value" );
+            aResult->AddError( wxString::Format( _( "The value of %s must be a valid number." ), aLabel ) );
 
         return false;
     }
@@ -613,12 +622,12 @@ bool DRC_RULE_EDITOR_UTILS::ValidateNumericString( const std::string& aValueStr,
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateMinMax( double aMin, double aMax, const std::string& aMinLabel,
-                                             const std::string& aMaxLabel, VALIDATION_RESULT* aResult )
+bool DRC_RULE_EDITOR_UTILS::ValidateMinMax( double aMin, double aMax, const wxString& aMinLabel,
+                                             const wxString& aMaxLabel, VALIDATION_RESULT* aResult )
 {
     if( aMin > aMax )
     {
-        aResult->AddError( aMinLabel + " value cannot be greater than " + aMaxLabel + " value" );
+        aResult->AddError( wxString::Format( _( "%s value cannot be greater than %s value." ), aMinLabel, aMaxLabel ));
         return false;
     }
 
@@ -627,28 +636,28 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinMax( double aMin, double aMax, const std:
 
 
 bool DRC_RULE_EDITOR_UTILS::ValidateMinPreferredMax( double aMin, double aPreferred, double aMax,
-                                                      const std::string& aMinLabel,
-                                                      const std::string& aPrefLabel,
-                                                      const std::string& aMaxLabel,
+                                                      const wxString& aMinLabel,
+                                                      const wxString& aPrefLabel,
+                                                      const wxString& aMaxLabel,
                                                       VALIDATION_RESULT* aResult )
 {
     bool valid = true;
 
     if( aMin > aPreferred )
     {
-        aResult->AddError( aMinLabel + " value cannot be greater than " + aPrefLabel + " value" );
+        aResult->AddError( wxString::Format( _( "%s value cannot be greater than %s value." ), aMinLabel, aPrefLabel ));
         valid = false;
     }
 
     if( aPreferred > aMax )
     {
-        aResult->AddError( aPrefLabel + " value cannot be greater than " + aMaxLabel + " value" );
+        aResult->AddError( wxString::Format( _( "%s value cannot be greater than %s value." ), aPrefLabel, aMaxLabel ));
         valid = false;
     }
 
     if( aMin > aMax )
     {
-        aResult->AddError( aMinLabel + " value cannot be greater than " + aMaxLabel + " value" );
+        aResult->AddError( wxString::Format( _( "%s value cannot be greater than %s value." ), aMinLabel, aMaxLabel ));
         valid = false;
     }
 
@@ -657,7 +666,7 @@ bool DRC_RULE_EDITOR_UTILS::ValidateMinPreferredMax( double aMin, double aPrefer
 
 
 bool DRC_RULE_EDITOR_UTILS::ValidateAtLeastOneSelected( const std::vector<bool>& aSelected,
-                                                         const std::string&       aLabel,
+                                                         const wxString&          aLabel,
                                                          VALIDATION_RESULT*       aResult )
 {
     for( bool selected : aSelected )
@@ -666,17 +675,17 @@ bool DRC_RULE_EDITOR_UTILS::ValidateAtLeastOneSelected( const std::vector<bool>&
             return true;
     }
 
-    aResult->AddError( "Please select at least one option from " + aLabel + " list" );
+    aResult->AddError( wxString::Format( _( "Please select at least one option from %s list." ), aLabel ) );
     return false;
 }
 
 
-bool DRC_RULE_EDITOR_UTILS::ValidateSelection( int aSelectionIndex, const std::string& aLabel,
+bool DRC_RULE_EDITOR_UTILS::ValidateSelection( int aSelectionIndex, const wxString& aLabel,
                                                 VALIDATION_RESULT* aResult )
 {
     if( aSelectionIndex < 0 )
     {
-        aResult->AddError( "Please choose " + aLabel );
+        aResult->AddError( wxString::Format( _( "Please choose %s." ), aLabel ) );
         return false;
     }
 

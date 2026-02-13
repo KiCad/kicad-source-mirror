@@ -83,23 +83,23 @@ public:
 
         // Validate length values are positive
         if( m_minLength <= 0 )
-            result.AddError( "Minimum Length must be greater than 0" );
+            result.AddError( _( "Minimum Length must be greater than 0" ) );
 
         if( m_optLength <= 0 )
-            result.AddError( "Optimum Length must be greater than 0" );
+            result.AddError( _( "Optimum Length must be greater than 0" ) );
 
         if( m_maxLength <= 0 )
-            result.AddError( "Maximum Length must be greater than 0" );
+            result.AddError( _( "Maximum Length must be greater than 0" ) );
 
         // Validate min <= opt <= max
         if( m_minLength > m_optLength )
-            result.AddError( "Minimum Length cannot be greater than Optimum Length" );
+            result.AddError( _( "Minimum Length cannot be greater than Optimum Length" ) );
 
         if( m_optLength > m_maxLength )
-            result.AddError( "Optimum Length cannot be greater than Maximum Length" );
+            result.AddError( _( "Optimum Length cannot be greater than Maximum Length" ) );
 
         if( m_minLength > m_maxLength )
-            result.AddError( "Minimum Length cannot be greater than Maximum Length" );
+            result.AddError( _( "Minimum Length cannot be greater than Maximum Length" ) );
 
         return result;
     }

@@ -69,7 +69,7 @@ bool DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_PANEL::ValidateInputs( int* aErrorCount,
-                                                                 std::string* aValidationMessage )
+                                                                 wxString* aValidationMessage )
 {
     TransferDataFromWindow();
     VALIDATION_RESULT result = m_constraintData->Validate();

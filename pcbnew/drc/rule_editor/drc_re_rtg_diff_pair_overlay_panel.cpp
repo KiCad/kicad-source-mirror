@@ -166,7 +166,7 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
-                                                             std::string* aValidationMessage )
+                                                             wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

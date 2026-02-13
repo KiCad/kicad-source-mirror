@@ -72,7 +72,7 @@ bool DRC_RE_BOOL_INPUT_PANEL::TransferDataFromWindow()
 }
 
 
-bool DRC_RE_BOOL_INPUT_PANEL::ValidateInputs( int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RE_BOOL_INPUT_PANEL::ValidateInputs( int* aErrorCount, wxString* aValidationMessage )
 {
     TransferDataFromWindow();
     VALIDATION_RESULT result = m_constraintData->Validate();

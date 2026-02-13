@@ -54,7 +54,7 @@ public:
         VALIDATION_RESULT result;
 
         if( m_ruleText.IsEmpty() )
-            result.AddError( "Rule text cannot be empty" );
+            result.AddError( _( "Rule text cannot be empty" ) );
 
         return result;
     }

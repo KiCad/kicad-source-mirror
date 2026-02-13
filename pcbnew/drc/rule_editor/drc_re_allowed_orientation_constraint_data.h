@@ -76,7 +76,7 @@ public:
         if( !m_allowZeroDegreess && !m_allowNinetyDegrees && !m_allowOneEightyDegrees
             && !m_allowTwoSeventyDegrees && !m_allowAllDegrees )
         {
-            result.AddError( "At least one orientation must be selected" );
+            result.AddError( _( "At least one orientation must be selected" ) );
         }
 
         return result;

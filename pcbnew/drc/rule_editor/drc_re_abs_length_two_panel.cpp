@@ -76,7 +76,7 @@ bool DRC_RE_ABSOLUTE_LENGTH_TWO_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_ABSOLUTE_LENGTH_TWO_PANEL::ValidateInputs( int* aErrorCount,
-                                                       std::string* aValidationMessage )
+                                                       wxString* aValidationMessage )
 {
     TransferDataFromWindow();
     VALIDATION_RESULT result = m_constraintData->Validate();

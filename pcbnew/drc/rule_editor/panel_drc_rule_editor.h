@@ -85,9 +85,9 @@ public:
 
     bool GetIsValidationSucceeded() { return m_validationSucceeded; }
 
-    std::string GetValidationMessage() { return m_validationMessage; }
+    wxString GetValidationMessage() { return m_validationMessage; }
 
-    bool ValidateInputs( int* aErrorCount, std::string* aValidationMessage ) override;
+    bool ValidateInputs( int* aErrorCount, wxString* aValidationMessage ) override;
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
 
@@ -173,7 +173,7 @@ private:
     BOARD*            m_board;
     wxString*         m_constraintTitle;
     bool              m_validationSucceeded;
-    std::string       m_validationMessage;
+    wxString          m_validationMessage;
 
     std::unique_ptr<SCINTILLA_TRICKS>            m_scintillaTricks;
     wxChoice*                                    m_layerListChoiceCtrl;

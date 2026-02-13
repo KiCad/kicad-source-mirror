@@ -94,7 +94,7 @@ public:
         VALIDATION_RESULT result;
 
         if( m_numericInputValue <= 0 )
-            result.AddError( "Numeric input value must be greater than 0" );
+            result.AddError( _( "Numeric input value must be greater than 0" ));
 
         return result;
     }

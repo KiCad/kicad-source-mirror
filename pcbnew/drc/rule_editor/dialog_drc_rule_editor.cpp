@@ -289,7 +289,7 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
                     wxS( "[LoadExistingRules] Found parent node: parentId=%d" ), parentId );
 
         RULE_TREE_NODE node =
-                buildRuleTreeNodeData( entry.ruleName.ToStdString(), RULE, parentId, type );
+                buildRuleTreeNodeData( entry.ruleName, RULE, parentId, type );
 
         // Transfer loaded entry data to the constraint data
         auto ruleData = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( entry.constraintData );
@@ -896,7 +896,7 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
     } while( check );
 
     RULE_TREE_NODE newRuleNode = buildRuleTreeNodeData(
-            nodeName.ToStdString(), RULE, nodeDetail->m_nodeId,
+            nodeName, RULE, nodeDetail->m_nodeId,
             static_cast<DRC_RULE_EDITOR_CONSTRAINT_NAME>( nodeDetail->m_nodeTypeMap.value_or( 0 ) ), {}, m_nodeId );
 
     auto nodeType = static_cast<DRC_RULE_EDITOR_CONSTRAINT_NAME>( newRuleNode.m_nodeTypeMap.value_or( -1 ) );
@@ -952,7 +952,7 @@ void DIALOG_DRC_RULE_EDITOR::saveRule( int aNodeId )
 {
     if( !m_ruleEditorPanel->GetIsValidationSucceeded() )
     {
-        std::string validationMessage = m_ruleEditorPanel->GetValidationMessage();
+        wxString validationMessage = m_ruleEditorPanel->GetValidationMessage();
 
         DisplayErrorMessage( this, validationMessage );
     }
@@ -1158,12 +1158,12 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
             {
                 wxString errorMsg;
 
-                for( const std::string& err : result.errors )
+                for( const wxString& err : result.errors )
                 {
                     if( !errorMsg.IsEmpty() )
                         errorMsg += wxS( "\n" );
 
-                    errorMsg += wxString::FromUTF8( err );
+                    errorMsg += err;
                 }
 
                 aErrors[node.m_nodeName] = errorMsg;
@@ -1257,7 +1257,7 @@ void DIALOG_DRC_RULE_EDITOR::selectRuleNode( int aNodeId )
 
 
 RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNodeData(
-        const std::string& aName, const DRC_RULE_EDITOR_ITEM_TYPE& aNodeType, const std::optional<int>& aParentId,
+        const wxString& aName, const DRC_RULE_EDITOR_ITEM_TYPE& aNodeType, const std::optional<int>& aParentId,
         const std::optional<DRC_RULE_EDITOR_CONSTRAINT_NAME>& aConstraintType,
         const std::vector<RULE_TREE_NODE>& aChildNodes, const std::optional<int>& id )
 {
@@ -1300,7 +1300,7 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleNodeFromKicadDrc( const wxString
 {
     auto           typeOpt = DRC_RULE_EDITOR_UTILS::GetConstraintTypeFromCode( aCode );
     RULE_TREE_NODE node =
-            buildRuleTreeNodeData( aName.ToStdString(), DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, aParentId, typeOpt );
+            buildRuleTreeNodeData( aName, DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, aParentId, typeOpt );
 
     auto baseData = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( node.m_nodeData );
     DRC_RULE_EDITOR_UTILS::ConstraintFromKicadDrc( aCode, baseData.get() );

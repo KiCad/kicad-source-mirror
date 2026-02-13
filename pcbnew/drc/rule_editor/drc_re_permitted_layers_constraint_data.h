@@ -64,7 +64,7 @@ public:
         VALIDATION_RESULT result;
 
         if( !m_topLayer && !m_bottomLayer )
-            result.AddError( "At least one layer must be selected" );
+            result.AddError( _( "At least one layer must be selected" ) );
 
         return result;
     }

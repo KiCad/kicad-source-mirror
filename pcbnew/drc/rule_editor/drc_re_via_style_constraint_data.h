@@ -73,43 +73,43 @@ public:
 
         // Validate via diameter values are positive
         if( m_minViaDiameter <= 0 )
-            result.AddError( "Minimum Via Diameter must be greater than 0" );
+            result.AddError( _( "Minimum Via Diameter must be greater than 0" ) );
 
         if( m_preferredViaDiameter <= 0 )
-            result.AddError( "Preferred Via Diameter must be greater than 0" );
+            result.AddError( _( "Preferred Via Diameter must be greater than 0" ) );
 
         if( m_maxViaDiameter <= 0 )
-            result.AddError( "Maximum Via Diameter must be greater than 0" );
+            result.AddError( _( "Maximum Via Diameter must be greater than 0" ) );
 
         // Validate via hole size values are positive
         if( m_minViaHoleSize <= 0 )
-            result.AddError( "Minimum Via Hole Size must be greater than 0" );
+            result.AddError( _( "Minimum Via Hole Size must be greater than 0" ) );
 
         if( m_preferredViaHoleSize <= 0 )
-            result.AddError( "Preferred Via Hole Size must be greater than 0" );
+            result.AddError( _( "Preferred Via Hole Size must be greater than 0" ) );
 
         if( m_maxViaHoleSize <= 0 )
-            result.AddError( "Maximum Via Hole Size must be greater than 0" );
+            result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
 
         // Validate min <= preferred <= max for diameter
         if( m_minViaDiameter > m_preferredViaDiameter )
-            result.AddError( "Minimum Via Diameter cannot be greater than Preferred Via Diameter" );
+            result.AddError( _( "Minimum Via Diameter cannot be greater than Preferred Via Diameter" ) );
 
         if( m_preferredViaDiameter > m_maxViaDiameter )
-            result.AddError( "Preferred Via Diameter cannot be greater than Maximum Via Diameter" );
+            result.AddError( _( "Preferred Via Diameter cannot be greater than Maximum Via Diameter" ) );
 
         if( m_minViaDiameter > m_maxViaDiameter )
-            result.AddError( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" );
+            result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
 
         // Validate min <= preferred <= max for hole size
         if( m_minViaHoleSize > m_preferredViaHoleSize )
-            result.AddError( "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size" );
+            result.AddError( _( "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size" ) );
 
         if( m_preferredViaHoleSize > m_maxViaHoleSize )
-            result.AddError( "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size" );
+            result.AddError( _( "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
 
         if( m_minViaHoleSize > m_maxViaHoleSize )
-            result.AddError( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" );
+            result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
 
         return result;
     }

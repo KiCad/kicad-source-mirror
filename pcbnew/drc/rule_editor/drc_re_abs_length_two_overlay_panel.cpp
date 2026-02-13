@@ -88,7 +88,7 @@ bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
-                                                          std::string* aValidationMessage )
+                                                          wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

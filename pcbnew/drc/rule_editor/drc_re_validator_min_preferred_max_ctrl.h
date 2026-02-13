@@ -27,8 +27,6 @@
 #include <wx/wx.h>
 #include <wx/object.h>
 
-#include <string>
-
 #include "drc_rule_editor_enums.h"
 
 
@@ -56,9 +54,9 @@ private:
     wxTextCtrl*      m_minCtrl;
     wxTextCtrl*      m_preferredCtrl;
     wxTextCtrl*      m_maxCtrl;
-    std::string      m_minCtrlName;
-    std::string      m_preferredCtrlName;
-    std::string      m_maxCtrlName;
+    wxString         m_minCtrlName;
+    wxString         m_preferredCtrlName;
+    wxString         m_maxCtrlName;
     VALIDATION_STATE m_validationState;
 };
 

@@ -77,10 +77,10 @@ public:
         VALIDATION_RESULT result;
 
         if( m_minTextHeight <= 0 )
-            result.AddError( "Minimum Text Height must be greater than 0" );
+            result.AddError( _( "Minimum Text Height must be greater than 0" ) );
 
         if( m_minTextThickness <= 0 )
-            result.AddError( "Minimum Text Thickness must be greater than 0" );
+            result.AddError( _( "Minimum Text Thickness must be greater than 0" ) );
 
         return result;
     }

@@ -69,7 +69,7 @@ bool DRC_RE_BOOL_INPUT_OVERLAY_PANEL::TransferDataFromWindow()
 
 
 bool DRC_RE_BOOL_INPUT_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
-                                                      std::string* aValidationMessage )
+                                                      wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

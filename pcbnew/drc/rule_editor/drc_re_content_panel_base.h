@@ -57,7 +57,7 @@ public:
     virtual bool TransferDataToWindow() = 0;
     virtual bool TransferDataFromWindow() = 0;
 
-    virtual bool ValidateInputs( int* aErrorCount, std::string* aValidationMessage ) = 0;
+    virtual bool ValidateInputs( int* aErrorCount, wxString* aValidationMessage ) = 0;
 
     virtual wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) = 0;
 

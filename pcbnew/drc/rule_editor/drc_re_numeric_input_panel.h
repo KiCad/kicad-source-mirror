@@ -41,7 +41,7 @@ public:
 
     bool TransferDataFromWindow() override;
 
-    bool ValidateInputs( int* aErrorCount, std::string* aValidationMessage ) override;
+    bool ValidateInputs( int* aErrorCount, wxString* aValidationMessage ) override;
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
 

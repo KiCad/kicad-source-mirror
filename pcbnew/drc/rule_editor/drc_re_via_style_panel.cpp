@@ -83,7 +83,7 @@ bool DRC_RE_VIA_STYLE_PANEL::TransferDataFromWindow()
 }
 
 
-bool DRC_RE_VIA_STYLE_PANEL::ValidateInputs( int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RE_VIA_STYLE_PANEL::ValidateInputs( int* aErrorCount, wxString* aValidationMessage )
 {
     TransferDataFromWindow();
 

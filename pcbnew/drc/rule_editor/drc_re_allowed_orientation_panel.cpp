@@ -121,7 +121,7 @@ void DRC_RE_ALLOWED_ORIENTATION_PANEL::onAllOrientationCheckboxClicked( wxComman
 
 
 bool DRC_RE_ALLOWED_ORIENTATION_PANEL::ValidateInputs( int* aErrorCount,
-                                                       std::string* aValidationMessage )
+                                                       wxString* aValidationMessage )
 {
     VALIDATION_RESULT result = m_constraintData->Validate();
 
@@ -132,7 +132,7 @@ bool DRC_RE_ALLOWED_ORIENTATION_PANEL::ValidateInputs( int* aErrorCount,
 
         if( aValidationMessage )
         {
-            for( const std::string& error : result.errors )
+            for( const wxString& error : result.errors )
             {
                 if( !aValidationMessage->empty() )
                     *aValidationMessage += "\n";

@@ -67,7 +67,7 @@ bool DRC_RE_ROUTING_WIDTH_PANEL::TransferDataFromWindow()
 }
 
 
-bool DRC_RE_ROUTING_WIDTH_PANEL::ValidateInputs( int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RE_ROUTING_WIDTH_PANEL::ValidateInputs( int* aErrorCount, wxString* aValidationMessage )
 {
     TransferDataFromWindow();
     VALIDATION_RESULT result = m_constraintData->Validate();

@@ -149,7 +149,7 @@ private:
      * @return The newly created RULE_TREE_NODE.
      */
     RULE_TREE_NODE
-    buildRuleTreeNodeData( const std::string& aName, const DRC_RULE_EDITOR_ITEM_TYPE& aNodeType,
+    buildRuleTreeNodeData( const wxString& aName, const DRC_RULE_EDITOR_ITEM_TYPE& aNodeType,
                            const std::optional<int>&                             aParentId = std::nullopt,
                            const std::optional<DRC_RULE_EDITOR_CONSTRAINT_NAME>& aConstraintType = std::nullopt,
                            const std::vector<RULE_TREE_NODE>&                    aChildNodes = {},

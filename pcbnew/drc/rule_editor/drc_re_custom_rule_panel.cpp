@@ -95,7 +95,7 @@ bool DRC_RE_CUSTOM_RULE_PANEL::TransferDataFromWindow()
 }
 
 
-bool DRC_RE_CUSTOM_RULE_PANEL::ValidateInputs( int* aErrorCount, std::string* aValidationMessage )
+bool DRC_RE_CUSTOM_RULE_PANEL::ValidateInputs( int* aErrorCount, wxString* aValidationMessage )
 {
     (void) aErrorCount;
     (void) aValidationMessage;
