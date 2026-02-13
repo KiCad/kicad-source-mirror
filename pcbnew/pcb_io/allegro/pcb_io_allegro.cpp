@@ -47,11 +47,23 @@ static bool checkFileHeader( const wxString& aFileName )
     if( IO_UTILS::fileHasBinaryHeader( aFileName, allegroVString, allegroVStringOffset ) )
         return true;
 
-    // v18+ files have a different header layout without the version string at 0xF8.
-    // Detect them by the magic number 0x00150000 (little-endian) at offset 0.
-    static const std::vector<uint8_t> v18Magic = { 0x00, 0x00, 0x15, 0x00 };
+    // Files processed by Cadence dbdoctor replace the version string at 0xF8 with a
+    // database version string (e.g. "dbd..."), so the "all" check above fails.
+    // Detect these by checking the magic number at offset 0. The upper two bytes
+    // of the little-endian magic identify the major Allegro format family:
+    //   0x0013 = v16.x, 0x0014 = v17.x, 0x0015 = v18+
+    static const std::vector<uint8_t> v16Magic = { 0x13, 0x00 };
+    static const std::vector<uint8_t> v17Magic = { 0x14, 0x00 };
+    static const std::vector<uint8_t> v18Magic = { 0x15, 0x00 };
+    static const size_t               magicMajorOffset = 2;
 
-    return IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic );
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, v16Magic, magicMajorOffset ) )
+        return true;
+
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, v17Magic, magicMajorOffset ) )
+        return true;
+
+    return IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic, magicMajorOffset );
 }
 
 
