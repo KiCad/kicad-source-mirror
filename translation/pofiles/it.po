@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-13 12:09+0000\n"
+"PO-Revision-Date: 2026-02-14 21:09+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -51395,14 +51395,12 @@ msgstr ""
 "selezionate."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Annulla strumento corrente"
+msgstr "Elimina elemento corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Crea linee outset dagli elementi selezionati"
+msgstr "Salta l'elemento corrente e passa all'elemento successivo selezionato."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
