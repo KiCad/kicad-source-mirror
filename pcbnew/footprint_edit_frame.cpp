@@ -780,7 +780,12 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_DesignSettings  = GetDesignSettings();
         cfg->m_Display         = m_displayOptions;
         cfg->m_LibWidth        = m_treePane->GetSize().x;
-        cfg->m_SelectionFilter = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
+
+        if( TOOL_MANAGER* toolMgr = GetToolManager() )
+        {
+            if( PCB_SELECTION_TOOL* selTool = toolMgr->GetTool<PCB_SELECTION_TOOL>() )
+                cfg->m_SelectionFilter = selTool->GetFilter();
+        }
 
         cfg->m_AuiPanels.show_layer_manager = m_show_layer_manager_tools;
 

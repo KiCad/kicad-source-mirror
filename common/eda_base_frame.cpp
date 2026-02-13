@@ -220,6 +220,12 @@ wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
+    // Guard against re-entrant close events. GTK can deliver a second wxEVT_CLOSE_WINDOW
+    // while we are still processing the first one (e.g. during Destroy() calls), which leads
+    // to use-after-free crashes when child objects have already been torn down.
+    if( m_isClosing )
+        return;
+
     // Don't allow closing when a quasi-modal is open.
     wxWindow* quasiModal = findQuasiModalDialog();
 
