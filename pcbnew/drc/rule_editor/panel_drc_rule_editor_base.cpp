@@ -38,7 +38,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	m_commentLabel->Wrap( -1 );
 	fgSizer2->Add( m_commentLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_commentCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_commentCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_PROCESS_ENTER );
 	fgSizer2->Add( m_commentCtrl, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -173,6 +173,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 
 	// Connect Events
 	m_nameCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_commentCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onSyntaxHelp ), NULL, this );
 	m_textConditionCtrl->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onContextMenu ), NULL, this );
 	m_checkSyntaxBtnCtrl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onCheckSyntax ), NULL, this );
@@ -183,6 +184,7 @@ PANEL_DRC_RULE_EDITOR_BASE::~PANEL_DRC_RULE_EDITOR_BASE()
 {
 	// Disconnect Events
 	m_nameCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
+	m_commentCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::OnEnterKey ), NULL, this );
 	m_syntaxHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onSyntaxHelp ), NULL, this );
 	m_textConditionCtrl->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onContextMenu ), NULL, this );
 	m_checkSyntaxBtnCtrl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_DRC_RULE_EDITOR_BASE::onCheckSyntax ), NULL, this );
