@@ -59,13 +59,13 @@ public:
         // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 95, 155, 30, 1 },    // min_width (left side, top arrow)
-            { 95, 155, 55, 2 },    // opt_width (left side, middle)
-            { 95, 155, 80, 3 },    // max_width (left side, bottom)
-            { 195, 255, 30, 4 },   // min_gap (center-left, top)
-            { 195, 255, 55, 5 },   // opt_gap (center-left, middle)
-            { 195, 255, 80, 6 },   // max_gap (center-left, bottom)
-            { 420, 520, 55, 7 },   // max_uncoupled (right side)
+            { 82, 102, 37, 1 },    // min_width (left side, top arrow)
+            { 152, 172, 34, 2 },    // opt_width (left side, middle)
+            { 240, 260, 25, 3 },    // max_width (left side, bottom)
+            { 107, 127, 44, 4 },   // min_gap (center-left, top)
+            { 193, 213, 40, 5 },   // opt_gap (center-left, middle)
+            { 300, 320, 32, 6 },   // max_gap (center-left, bottom)
+            { 60, 80, 102, 7 },   // max_uncoupled (right side)
         };
     }
 
@@ -73,49 +73,47 @@ public:
     {
         VALIDATION_RESULT result;
 
-        // Validate max uncoupled length is positive
-        if( m_maxUncoupledLength <= 0 )
-            result.AddError( "Maximum Uncoupled Length must be greater than 0" );
-
-        // Validate width values are positive
         if( m_minWidth <= 0 )
-            result.AddError( "Minimum Width must be greater than 0" );
+            result.AddError( "Minimum Width is required" );
 
         if( m_preferredWidth <= 0 )
-            result.AddError( "Preferred Width must be greater than 0" );
+            result.AddError( "Preferred Width is required" );
 
         if( m_maxWidth <= 0 )
-            result.AddError( "Maximum Width must be greater than 0" );
+            result.AddError( "Maximum Width is required" );
 
-        // Validate gap values are positive
         if( m_minGap <= 0 )
-            result.AddError( "Minimum Gap must be greater than 0" );
+            result.AddError( "Minimum Gap is required" );
 
         if( m_preferredGap <= 0 )
-            result.AddError( "Preferred Gap must be greater than 0" );
+            result.AddError( "Preferred Gap is required" );
 
         if( m_maxGap <= 0 )
-            result.AddError( "Maximum Gap must be greater than 0" );
+            result.AddError( "Maximum Gap is required" );
 
-        // Validate min <= preferred <= max for width
-        if( m_minWidth > m_preferredWidth )
-            result.AddError( "Minimum Width cannot be greater than Preferred Width" );
+        if( m_maxUncoupledLength <= 0 )
+            result.AddError( "Maximum Uncoupled Length is required" );
 
-        if( m_preferredWidth > m_maxWidth )
-            result.AddError( "Preferred Width cannot be greater than Maximum Width" );
+        if( result.isValid )
+        {
+            if( m_minWidth > m_preferredWidth )
+                result.AddError( "Minimum Width cannot be greater than Preferred Width" );
 
-        if( m_minWidth > m_maxWidth )
-            result.AddError( "Minimum Width cannot be greater than Maximum Width" );
+            if( m_preferredWidth > m_maxWidth )
+                result.AddError( "Preferred Width cannot be greater than Maximum Width" );
 
-        // Validate min <= preferred <= max for gap
-        if( m_minGap > m_preferredGap )
-            result.AddError( "Minimum Gap cannot be greater than Preferred Gap" );
+            if( m_minWidth > m_maxWidth )
+                result.AddError( "Minimum Width cannot be greater than Maximum Width" );
 
-        if( m_preferredGap > m_maxGap )
-            result.AddError( "Preferred Gap cannot be greater than Maximum Gap" );
+            if( m_minGap > m_preferredGap )
+                result.AddError( "Minimum Gap cannot be greater than Preferred Gap" );
 
-        if( m_minGap > m_maxGap )
-            result.AddError( "Minimum Gap cannot be greater than Maximum Gap" );
+            if( m_preferredGap > m_maxGap )
+                result.AddError( "Preferred Gap cannot be greater than Maximum Gap" );
+
+            if( m_minGap > m_maxGap )
+                result.AddError( "Minimum Gap cannot be greater than Maximum Gap" );
+        }
 
         return result;
     }

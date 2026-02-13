@@ -172,7 +172,7 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         // Calculate scaled position and size
         wxPoint scaledPos = ScalePosition( pos.xStart, pos.yTop );
         int width = pos.xEnd - pos.xStart;
-        wxSize scaledSize = ScaleSize( width, ctrl->GetBestSize().GetHeight() );
+        wxSize scaledSize( ScaleSize( width, 0 ).GetWidth(), ctrl->GetBestSize().GetHeight() );
 
         // Check bounds
         if( m_bitmap.IsOk() )
