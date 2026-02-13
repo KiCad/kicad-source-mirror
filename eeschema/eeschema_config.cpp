@@ -264,9 +264,13 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 {
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
-    SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
-    localSettings.m_SchSelectionFilter = selTool->GetFilter();
+    if( TOOL_MANAGER* toolMgr = GetToolManager() )
+    {
+        if( SCH_SELECTION_TOOL* selTool = toolMgr->GetTool<SCH_SELECTION_TOOL>() )
+            localSettings.m_SchSelectionFilter = selTool->GetFilter();
+    }
+
     localSettings.m_SchHierarchyCollapsed = m_hierarchy->GetCollapsedPaths();
 }
 

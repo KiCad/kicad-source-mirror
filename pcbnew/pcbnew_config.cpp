@@ -241,8 +241,9 @@ void PCB_EDIT_FRAME::saveProjectSettings()
             localSettings.m_HiddenNets.emplace_back( net->GetNetname() );
     }
 
-    PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-    PCB_SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
-
-    localSettings.m_PcbSelectionFilter = filterOpts;
+    if( TOOL_MANAGER* toolMgr = GetToolManager() )
+    {
+        if( PCB_SELECTION_TOOL* selTool = toolMgr->GetTool<PCB_SELECTION_TOOL>() )
+            localSettings.m_PcbSelectionFilter = selTool->GetFilter();
+    }
 }
