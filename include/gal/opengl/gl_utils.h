@@ -37,7 +37,7 @@ public:
     {
         wxString backend;
 
-#if wxCHECK_VERSION( 3, 3, 2 ) && defined( __WXGTK__ )
+#if wxCHECK_VERSION( 3, 3, 3 ) && defined( __WXGTK__ )
         int eglMajor = 0, eglMinor = 0;
 
         if( aCanvas->GetEGLVersion( &eglMajor, &eglMinor ) )
@@ -50,7 +50,7 @@ public:
         return backend;
     }
 
-#if !wxCHECK_VERSION( 3, 3, 2 )
+#if !wxCHECK_VERSION( 3, 3, 3 )
     /**
      * Attempt to set the OpenGL swap interval.
      *
@@ -159,7 +159,7 @@ public:
 #endif
         return 0;
     }
-#endif /* !wxCHECK_VERSION( 3, 3, 2 ) */
+#endif /* !wxCHECK_VERSION( 3, 3, 3 ) */
 
 };
 
