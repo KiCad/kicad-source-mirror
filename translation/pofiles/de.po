@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 22:22+0000\n"
+"PO-Revision-Date: 2026-02-13 23:10+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -21029,9 +21029,8 @@ msgid "Failed to load page '%s': %s"
 msgstr "Fehler beim Laden der Seite \"%s\": %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Eagle XML-Schaltplandateien"
+msgstr "gEDA / Lepton EDA-Schaltplandateien"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
 #, c-format
@@ -21495,14 +21494,12 @@ msgid "LTspice schematic files"
 msgstr "LTspice Schaltplandateien"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "LTspice Schaltplandateien"
+msgstr "PADS Logic-Schaltplandateien"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Eagle XML-Bibliotheksdateien"
+msgstr "PADS Logic-Bibliotheksdateien"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -29959,7 +29956,6 @@ msgid "Valid options are: route, alternate."
 msgstr "Gültige Optionen: route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
 msgstr "Ausgabeeinheiten, gültige Optionen: in, mm"
 
@@ -29994,9 +29990,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "Spez. Datei für Abdeckungen erzeugen"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "Gültige Optionen: pdf,gerberx2,ps,dxf,svg"
+msgstr "Gültige Optionen: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -30396,31 +30391,32 @@ msgid "No drawing sheet"
 msgstr "Kein Zeichnungsblatt"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Netzliste in KiCad-Format exportieren"
+msgstr "Nicht-KiCad-PCB-Datei in KiCad-Format importieren"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
 "Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
 "solidworks (default: auto)"
 msgstr ""
+"Hinweis zum Eingabeformat: auto, pads, altium, eagle, cadstar, fabmaster, "
+"pcad, solidworks (Standard: auto)"
 
 #: kicad/cli/command_pcb_import.cpp:52
 msgid "JSON file with layer name mappings"
-msgstr ""
+msgstr "JSON-Datei mit Zuordnungen von Layernamen"
 
 #: kicad/cli/command_pcb_import.cpp:56
 msgid "Use automatic layer mapping (default behavior)"
-msgstr ""
+msgstr "Automatische Lagenzuordnung nutzen (Standardverhalten)"
 
 #: kicad/cli/command_pcb_import.cpp:61
 msgid "Import report format: none, json, text (default: none)"
-msgstr ""
+msgstr "Import Berichtsformat: none, json, text (Standard: none)"
 
 #: kicad/cli/command_pcb_import.cpp:66
 msgid "File path for import report (default: stdout)"
-msgstr ""
+msgstr "Dateipfad für Importbericht (Standard: stdout)"
 
 #: kicad/cli/command_pcb_import.cpp:114
 #, c-format
@@ -30944,7 +30940,7 @@ msgstr "Systemspezifische Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
 msgid "Go Back"
-msgstr "Zurückgehen"
+msgstr "Zurück"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -31321,22 +31317,21 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "Entpacke Projekt in \"%s\".\n"
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "Konnte Pfad \"%s\" nicht öffnen/erstellen."
+msgstr "Konnte gEDA / Lepton EDA-Projektdatei \"%s\" nicht öffnen."
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr ""
+msgstr "gEDA / Lepton EDA-Schaltplan suchen"
 
 #: kicad/import_proj.cpp:573
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "EasyEDA (JLCEDA) Pro Dateien"
+msgstr "gEDA / Lepton EDA-PCB-Dateien"
 
 #: kicad/import_proj.cpp:576
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr ""
+msgstr "gEDA / Lepton EDA-PCB suchen"
 
 #: kicad/import_project.cpp:73
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
@@ -31389,14 +31384,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro-Projekt importieren"
 
 #: kicad/import_project.cpp:202
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "Altium-Projektdateien importieren"
+msgstr "PADS-Projektdateien importieren"
 
 #: kicad/import_project.cpp:210
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Eagle-Projektdateien importieren"
+msgstr "gEDA / Lepton EDA-Projektdateien importieren"
 
 #: kicad/jobs_runner.cpp:228
 #, c-format
@@ -31611,24 +31604,20 @@ msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "EasyEDA (JLCEDA) Professional Schaltplan und Platine importieren"
 
 #: kicad/menubar.cpp:148
-#, fuzzy
 msgid "PADS Project..."
-msgstr "CADSTAR-Projekt..."
+msgstr "PADS-Projekt..."
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "CADSTAR-Archivschema und PCB importieren (*.csa, *.cpa)"
+msgstr "PADS Logic-Schaltplan und PADS ASCII-PCB importieren (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:152
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "EAGLE-Projekt..."
+msgstr "gEDA / Lepton EDA-Projekt..."
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "EAGLE-CAD-XML-Schaltplan und -Leiterplattendesign importieren"
+msgstr "gEDA or Lepton EDA-Schaltplan und -platinenlayout importieren"
 
 #: kicad/menubar.cpp:182
 msgid "Edit Advanced Config..."
@@ -46363,7 +46352,6 @@ msgid "board setup constraints courtyard"
 msgstr "Einschränkungen aus Platinenkonfiguration zur Abstandsfläche"
 
 #: pcbnew/drc/drc_engine.cpp:238
-#, fuzzy
 msgid "board setup constraints micro-via"
 msgstr "Einschränkungen aus Platinenkonfiguration zum Mikro-Via"
 
@@ -46397,7 +46385,7 @@ msgstr "Abstimmungsprofil \"%s\""
 #: pcbnew/drc/drc_engine.cpp:593
 #, c-format
 msgid "keepout area of %s"
-msgstr "Sperrbereich von %s"
+msgstr "Sperrfläche von %s"
 
 #: pcbnew/drc/drc_engine.cpp:598
 msgid "keepout area"
@@ -46406,12 +46394,12 @@ msgstr "Sperrfläche"
 #: pcbnew/drc/drc_engine.cpp:606
 #, c-format
 msgid "keepout area '%s' of %s"
-msgstr "Sperrbereich \"%s\" von %s"
+msgstr "Sperrfläche \"%s\" von %s"
 
 #: pcbnew/drc/drc_engine.cpp:612
 #, c-format
 msgid "keepout area '%s'"
-msgstr "Sperrbereich \"%s\""
+msgstr "Sperrfläche \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:931
 #, c-format
@@ -51093,38 +51081,32 @@ msgid "Generator Properties"
 msgstr "Generator-Eigenschaften"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3496
-#, fuzzy
 msgid "Constructing caches"
-msgstr "In Konflikt stehende Bezeichner"
+msgstr "Erstelle Caches"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3504
-#, fuzzy
 msgid "Creating nets"
-msgstr "Erstelle Objekte"
+msgstr "Erstelle Netze"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3509
-#, fuzzy
 msgid "Creating tracks"
-msgstr "vorhandene Leiterbahn"
+msgstr "Erstelle Leiterbahnen"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3524
-#, fuzzy
 msgid "Converting footprints"
-msgstr "Auf Footprint zentrieren"
+msgstr "Footprint konvertieren"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2354
 msgid "Parsing Allegro objects"
-msgstr ""
+msgstr "Allegroobjekte parsen"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:135
-#, fuzzy
 msgid "Failed to build board from Allegro data"
-msgstr "Konnte Bauteildaten nicht hinzufügen"
+msgstr "Platinenerstellung aus Allegrodaten fehlgeschlagen"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:38
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Allegro-Netzlistendateien"
+msgstr "Allegro-PCB-Dateien"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:176
 #, c-format
@@ -51676,9 +51658,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Der CADSTAR-Bereich \"%s\" in der Bibliothekskomponente \"%s\" hat kein "
-"KiCad-Äquivalent. Er ist weder ein Sperrbereich für Leiterbahnen noch für "
-"Vias. Der Bereich wurde nicht importiert."
+"Die CADSTAR-Fläche \"%s\" in der Bibliothekskomponente \"%s\" hat kein KiCad-"
+"Äquivalent. Sie ist weder eine Sperrfläche für Leiterbahnen noch für Vias. "
+"Die Fläche wurde nicht importiert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1076
 #, c-format
@@ -52377,23 +52359,21 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Footprintbibliothek \"%s\" kann nicht gelöscht werden."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Via token contains %d parameters, expected at least 10."
-msgstr "Elementvorkommnis enthält %d Parameter."
+msgstr "Der Via-Token enthält %d Parameter, mindestens 10 werden erwartet."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "gEDA / Lepton EDA PCB-Platinendatei"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "gEDA PCB Footprint-Datei"
+msgstr "EDA / Lepton EDA PCB-Footprintdatei"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "gEDA PCB Footprint-Bibliotheksverzeichnis"
+msgstr "gEDA / Lepton EDA PCB Footprint-Bibliotheksverzeichnis"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:425
 msgid "Generating content section"
@@ -52827,7 +52807,7 @@ msgstr "ODB++ Produktionsdatei"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:125
 msgid "Starting PADS PCB import"
-msgstr ""
+msgstr "Starte PADS PCB-Import"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:512
 #, c-format
@@ -52837,13 +52817,13 @@ msgstr "Footprint \"%s\" nicht in decal-Liste gefunden, Teil wird übersprungen"
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:843
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr ""
+msgstr "Überspringe decal-Element auf nicht zugeordneter Ebene %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1102
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
-msgstr ""
+msgstr "Text auf nicht zugeordneter Ebene %d der Lage \"Kommentare\" zugewiesen"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1179
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
@@ -52855,26 +52835,27 @@ msgstr "Überspringe Leiterbahn auf Nicht-Kupferlage %d"
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
-msgstr ""
+msgstr "Überspringe Füllung auf nicht zugeordneter Ebene %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1620
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr ""
+msgstr "Überspringe Sperrfläche auf nicht zugeordneter Ebene %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1644
 msgid "Skipping keepout with no valid layers"
-msgstr ""
+msgstr "Überspringe Sperrfläche ohne gültige Ebene"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1867
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:646
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
 msgstr ""
+"%zu Footprints, %d Netze, %zu Leiterbahnen, %zu Vias, %zu Zonen importiert"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:109
 msgid "Starting PADS binary PCB import"
-msgstr ""
+msgstr "Starte PADS Binär-PCB-Import"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -54158,7 +54139,7 @@ msgstr "Kein Plugin für Dateityp \"%s\" gefunden.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2869
 #, c-format
 msgid "Importing '%s' using %s format...\n"
-msgstr ""
+msgstr "Importiere \"%s\" mittels %s Format ...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2885
 #, c-format
@@ -55947,9 +55928,8 @@ msgid "Some of the items could not be outset."
 msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 
 #: pcbnew/tools/multichannel_tool.cpp:87
-#, fuzzy
 msgid "(none)"
-msgstr "keine"
+msgstr "(keine/-r/-s)"
 
 #: pcbnew/tools/multichannel_tool.cpp:137
 #: pcbnew/tools/multichannel_tool.cpp:1489
@@ -56004,7 +55984,7 @@ msgstr "In %d Regelbereiche kopiert."
 #: pcbnew/tools/multichannel_tool.cpp:1495
 #, c-format
 msgid "Reference area total components: %d"
-msgstr ""
+msgstr "Referenzbereich-Gesamtkomponenten: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1496
 #, c-format
