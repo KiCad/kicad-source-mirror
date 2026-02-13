@@ -714,8 +714,8 @@ foreach(file ${markdownFiles})
     get_filename_component(filename "${file}" NAME_WE)
     set(outputHeader "${CMAKE_CURRENT_SOURCE_DIR}/dialogs/${filename}.h")
 
-    message(STATUS "Processing markdown file: ${file}")
-    message(STATUS "Output header will be: ${outputHeader}")
+    message(VERBOSE "Processing markdown file: ${file}")
+    message(VERBOSE "Output header will be: ${outputHeader}")
 
 #Call the custom function to process the file
     callMrkdn2C("${file}" "${outputHeader}")
@@ -726,7 +726,7 @@ foreach(file ${markdownFiles})
 
 #Mark the output header as a dependency of the source file
     get_source_file_property(existing_depends dialogs/panel_setup_rules.cpp OBJECT_DEPENDS)
-    message(STATUS "Existing OBJECT_DEPENDS for dialogs/panel_setup_rules.cpp: ${existing_depends}")
+    message(VERBOSE "Existing OBJECT_DEPENDS for dialogs/panel_setup_rules.cpp: ${existing_depends}")
     if(NOT existing_depends OR existing_depends STREQUAL "NOTFOUND")
         set(existing_depends "")
     else()
@@ -736,7 +736,7 @@ foreach(file ${markdownFiles})
         PROPERTIES OBJECT_DEPENDS "${existing_depends}${outputHeader}")
 #Print out the new OBJECT_DEPENDS property for verification
     get_source_file_property(new_depends dialogs/panel_setup_rules.cpp OBJECT_DEPENDS)
-    message(STATUS "New OBJECT_DEPENDS for dialogs/panel_setup_rules.cpp: ${new_depends}")
+    message(VERBOSE "New OBJECT_DEPENDS for dialogs/panel_setup_rules.cpp: ${new_depends}")
 endforeach()
 
 # Generate pcb_text_help_md.h from pcb_text_help.md for text variable syntax help
