@@ -314,6 +314,11 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     if( m_pcm )
         m_pcm->StopBackgroundUpdate();
 
+    // Stop update manager before tearing down the AUI framework. The update
+    // task runs on the thread pool and may call CallAfter on this frame, so it
+    // must complete before we uninitialize AUI or destroy child windows.
+    m_updateManager.reset();
+
     delete m_actions;
     delete m_toolManager;
     delete m_toolDispatcher;
@@ -378,6 +383,9 @@ void KICAD_MANAGER_FRAME::CreatePCM()
     m_pcm = std::make_shared<PLUGIN_CONTENT_MANAGER>(
             [this]( int aUpdateCount )
             {
+                if( Pgm().m_Quitting )
+                    return;
+
                 m_pcmUpdateCount = aUpdateCount;
 
                 if( aUpdateCount > 0 )
