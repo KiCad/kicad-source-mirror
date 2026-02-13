@@ -5,6 +5,7 @@
             "license": "BSD-3-Clause",
             "description": "CutiePi 2.3 v166 board file, saved in Allegro",
             "formatVersion": "16.6",
+            "boardFile": "CutiePi_V2_3.brd",
             "header": {
                 "skip": false
             },
@@ -15,11 +16,25 @@
                     "skip": false
                 }
             ],
-            "boardExpections": {
-                "footprintCount": {
-                    "minimum": 1
+            "boardExpectations": [
+                {
+                    "type": "footprint",
+                    "count": {
+                        "min": 300,
+                        "max": 400
+                    }
+                },
+                {
+                    "type": "net",
+                    "count": {
+                        "min": 300
+                    }
+                },
+                {
+                    "type": "net",
+                    "name": ["3V3", "5V_IN", "GND"]
                 }
-            }
+            ]
         },
         "CutiePi_V2_3_dbd18": {
             "url": "https://github.com/cutiepi-io/cutiepi-board",

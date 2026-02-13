@@ -22,8 +22,7 @@
  */
 
 
-#ifndef QA_PCBNEW_BOARD_TEST_UTILS__H
-#define QA_PCBNEW_BOARD_TEST_UTILS__H
+#pragma once
 
 #include <map>
 #include <memory>
@@ -37,6 +36,7 @@
 #include <reporter.h>
 #include <core/typeinfo.h>
 #include <tool/tool_manager.h>
+#include <pcb_io/pcb_io.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -250,6 +250,87 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone );
 
 void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset );
 
-} // namespace KI_TEST
 
-#endif // QA_PCBNEW_BOARD_TEST_UTILS__H
+/**
+ * Custom REPORTER that captures all messages for later analysis in the unit test framework.
+ */
+class CAPTURING_REPORTER : public REPORTER
+{
+public:
+    struct MESSAGE
+    {
+        wxString text;
+        SEVERITY severity = RPT_SEVERITY_UNDEFINED;
+    };
+
+    CAPTURING_REPORTER() :
+            m_errorCount( 0 ),
+            m_warningCount( 0 ),
+            m_infoCount( 0 )
+    {
+    }
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override { return !m_messages.empty(); }
+
+    EDA_UNITS GetUnits() const override { return EDA_UNITS::MM; }
+
+    void Clear() override
+    {
+        m_messages.clear();
+        m_errorCount = 0;
+        m_warningCount = 0;
+        m_infoCount = 0;
+    }
+
+    void PrintAllMessages( const std::string& aContext ) const;
+
+    int                         GetErrorCount() const { return m_errorCount; }
+    int                         GetWarningCount() const { return m_warningCount; }
+    const std::vector<MESSAGE>& GetMessages() const { return m_messages; }
+
+private:
+    std::vector<MESSAGE> m_messages;
+    int                  m_errorCount;
+    int                  m_warningCount;
+    int                  m_infoCount;
+};
+
+
+/**
+ * Attempt to load an board with a given IO plugin, capturing all reporter messages.
+ * Returns the board (or nullptr on failure) and populates the reporter.
+ */
+extern std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath,
+                                                    REPORTER& aReporter );
+
+
+/**
+ * Manager for caching loaded boards in memory, to avoid repeatedly loading and parsing the same board.
+ *
+ * Generally, you might want to use a singleton instance of this class for each PCB_IO plugin.
+ *
+ * This class can learn additional features such as load profiling, or cache eviction policies.
+ */
+class CACHED_BOARD_LOADER
+{
+public:
+    /**
+     * Get a cached board for the given file path, or load it if not already cached.
+     *
+     * Probably will be implemented in terms of a PCB_IO inheritor.
+     *
+     * @param aFilePath the file path to load
+     * @return a pointer to the cached board, or nullptr if loading failed
+     */
+    virtual BOARD* GetCachedBoard( const std::string& aFilePath ) = 0;
+
+protected:
+    BOARD* getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath );
+
+private:
+    std::map<std::string, std::unique_ptr<BOARD>> m_boardCache;
+};
+
+} // namespace KI_TEST

@@ -33,7 +33,12 @@
 
 #include <json_common.h>
 
+#include <board.h>
+#include <reporter.h>
+#include <pcbnew/pcb_io/allegro/pcb_io_allegro.h>
+
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_expectations.h>
 
 #include <convert/allegro_parser.h>
 
@@ -303,6 +308,41 @@ public:
 };
 
 
+void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
+{
+    BOARD* board = nullptr;
+
+    BOOST_TEST_CONTEXT( wxString::Format( "Testing load from board %s", aBrdName ) )
+    {
+        if( aBoardTestJson.contains( "boardFile" ) )
+        {
+            const std::string boardFilePath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/"
+                                              + aBoardTestJson["boardFile"].get<std::string>();
+
+            board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
+
+            BOOST_REQUIRE( board != nullptr );
+        }
+    }
+
+    BOOST_TEST_CONTEXT( "Running board expectations" )
+    {
+        std::unique_ptr<BOARD_EXPECTATION_TEST> boardExpectationTest = nullptr;
+
+        // Load board expectations from the JSON file and create expectation objects
+        if( aBoardTestJson.contains( "boardExpectations" ) )
+        {
+            boardExpectationTest = BOARD_EXPECTATION_TEST::CreateFromJson( aBrdName, aBoardTestJson["boardExpectations"] );
+        }
+
+        if( boardExpectationTest )
+        {
+            boardExpectationTest->RunTest( *board );
+        }
+    }
+}
+
+
 /**
  * Just enough information about the board and block tests to be able to name and
  * register the test cases and look up the definitions at runtime.
@@ -329,6 +369,8 @@ struct ALLEGRO_BOARD_TEST_REF
 
     bool                            m_HasHeaderTest;
     std::vector<ALLEGRO_BLOCK_TEST> m_BlockTests;
+    bool                            m_HasBoardFile;
+    bool                            m_HasExpectations;
 };
 
 
@@ -379,6 +421,8 @@ static std::vector<ALLEGRO_BOARD_TEST_REF> getBoardTestDefinitions( const nlohma
             .m_BrdTestJson = boardEntry,
             .m_HasHeaderTest = boardEntry.contains( "header" ),
             .m_BlockTests = {},
+            .m_HasBoardFile = boardEntry.contains( "boardFile" ),
+            .m_HasExpectations = boardEntry.contains( "boardExpectations" ),
         };
 
         if( boardEntry.contains( "blocks" ) && boardEntry["blocks"].is_array() )
@@ -437,13 +481,13 @@ static const ALLEGRO_BLOCK_TEST_REGISTRY& buildTestRegistry()
 
 
 /**
- * This function initializes the test suite for Allegro block parsing
+ * This function initializes the test suites for Allegro block and board parsing
  *
  * It reads about the minium information it needs to to construct the test cases
  * (i.e. it needs to know the name and which tests are present).
  *
  * Each test case will call the appropriate test function (e.g. RunHeaderTest or RunBlockTest)
- * at runtime, which will construct a more complete test implementions and then run them.
+ * at runtime, which will construct more complete test implementions and then run them.
  */
 static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 {
@@ -475,12 +519,12 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
             )
         );
 
-        return { blockSuite };
+        return suites;
     }
 
     for( const ALLEGRO_BOARD_TEST_REF& boardTest : registry->m_BoardTests )
     {
-        boost::unit_test::test_suite* boardSuite = BOOST_TEST_SUITE( boardTest.m_BrdName );
+        BTS* boardSuite = BOOST_TEST_SUITE( boardTest.m_BrdName );
         blockSuite->add( boardSuite );
 
         const nlohmann::json& boardTestJson = registry->GetBoardJson( boardTest.m_BrdName );
@@ -526,7 +570,42 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
         }
     }
 
-    return { blockSuite };
+    // Separate test suite for board expectations, which will run after the header and block parsing tests,
+    // and will have access to the fully parsed board (and obviously be much slower)
+    BTS* boardSuites = suites.emplace_back( BOOST_TEST_SUITE( "AllegroBoards" ) );
+
+    for( const ALLEGRO_BOARD_TEST_REF& boardTest : registry->m_BoardTests )
+    {
+        if( !boardTest.m_HasBoardFile )
+        {
+            continue;
+        }
+
+        // Board-level suite
+        BTS* boardSuite = BOOST_TEST_SUITE( boardTest.m_BrdName );
+        boardSuites->add( boardSuite );
+
+        const nlohmann::json& boardTestData = registry->GetBoardJson( boardTest.m_BrdName );
+
+        if( boardTest.m_HasExpectations )
+        {
+            const auto testRunFunction = [&]()
+            {
+                RunBoardExpectations( boardTest.m_BrdName, boardTestData );
+            };
+
+            boardSuite->add(
+                boost::unit_test::make_test_case(
+                    testRunFunction,
+                    boardTest.m_BrdName + "_Expectations",
+                    __FILE__,
+                    __LINE__
+                )
+            );
+        }
+    }
+
+    return suites;
 }
 
 

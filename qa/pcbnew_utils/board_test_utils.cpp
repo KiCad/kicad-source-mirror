@@ -737,4 +737,99 @@ void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* po
     }
 }
 
+
+REPORTER& CAPTURING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    MESSAGE msg;
+    msg.text = aText;
+    msg.severity = aSeverity;
+    m_messages.push_back( msg );
+
+    switch( aSeverity )
+    {
+    case RPT_SEVERITY_ERROR:   m_errorCount++; break;
+    case RPT_SEVERITY_WARNING: m_warningCount++; break;
+    case RPT_SEVERITY_INFO:
+    case RPT_SEVERITY_ACTION:  m_infoCount++; break;
+    default: break;
+    }
+
+    return *this;
+}
+
+
+void CAPTURING_REPORTER::PrintAllMessages( const std::string& aContext ) const
+{
+    if( m_messages.empty() )
+    {
+        BOOST_TEST_MESSAGE( aContext << ": No messages" );
+        return;
+    }
+
+    BOOST_TEST_MESSAGE( aContext << ": " << m_messages.size() << " messages (" << m_errorCount << " errors, "
+                                 << m_warningCount << " warnings)" );
+
+    for( const MESSAGE& msg : m_messages )
+    {
+        const char* severityStr = "???";
+
+        switch( msg.severity )
+        {
+        case RPT_SEVERITY_ERROR:   severityStr = "ERROR"; break;
+        case RPT_SEVERITY_WARNING: severityStr = "WARN "; break;
+        case RPT_SEVERITY_INFO:    severityStr = "INFO "; break;
+        case RPT_SEVERITY_ACTION:  severityStr = "ACT  "; break;
+        case RPT_SEVERITY_DEBUG:   severityStr = "DEBUG"; break;
+        default:                   severityStr = "     "; break;
+        }
+
+        BOOST_TEST_MESSAGE( "  [" << severityStr << "] " << msg.text );
+    }
+}
+
+
+std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath, REPORTER& aReporter )
+{
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    aIoPlugin.SetReporter( &aReporter );
+
+    try
+    {
+        aIoPlugin.LoadBoard( aFilePath, board.get(), nullptr, nullptr );
+        return board;
+    }
+    catch( const IO_ERROR& e )
+    {
+        aReporter.Report( wxString::Format( "IO_ERROR: %s", e.What() ), RPT_SEVERITY_ERROR );
+        return nullptr;
+    }
+    catch( const std::exception& e )
+    {
+        aReporter.Report( wxString::Format( "Exception: %s", e.what() ), RPT_SEVERITY_ERROR );
+        return nullptr;
+    }
+    catch( ... )
+    {
+        aReporter.Report( "Unknown exception during load", RPT_SEVERITY_ERROR );
+        return nullptr;
+    }
+}
+
+
+BOARD* CACHED_BOARD_LOADER::getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath )
+{
+    auto it = m_boardCache.find( aFilePath );
+
+    if( it != m_boardCache.end() )
+        return it->second.get();
+
+    CAPTURING_REPORTER reporter;
+    auto               board = KI_TEST::LoadBoardWithCapture( aIoPlugin, aFilePath, reporter );
+    BOARD*             raw = board.get();
+    m_boardCache[aFilePath] = std::move( board );
+    return raw;
+}
+
+
 } // namespace KI_TEST

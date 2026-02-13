@@ -33,6 +33,8 @@
 
 namespace KI_TEST
 {
+class BOARD_EXPECTATION_TEST;
+
 /**
  * A header block, along with the expected result of parsing it.
  */
@@ -81,12 +83,16 @@ struct BOARD_TEST_DEF
 {
     /// The name of the board being tested, used for error messages and test context
     std::string m_BrdName;
+    /// The filename of the board being tested
+    std::string m_FilePath;
     /// The version of the Allegro format that this board is in
     ALLEGRO::FMT_VER m_FormatVersion;
     // If there is a header test for this board, it will be stored here, else nullptr
     std::unique_ptr<HEADER_TEST_INFO> m_HeaderTest;
     // List of block tests for this board
     std::vector<BLK_TEST_INFO> m_BlockTests;
+    // A KiCad board expectation test to run against the parsed board, or nullptr
+    std::unique_ptr<BOARD_EXPECTATION_TEST> m_BrdExpectations;
 };
 
 

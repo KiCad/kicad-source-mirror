@@ -118,6 +118,7 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/fabmaster/test_fabmaster_import.cpp
 
+    pcb_io/allegro/allegro_test_utils.cpp
     pcb_io/allegro/test_allegro_blocks.cpp
     pcb_io/allegro/test_allegro_import.cpp
     pcb_io/allegro/test_block_additional.cpp

@@ -30,6 +30,7 @@
 set( QA_PCBNEW_UTILS_SRCS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/board_construction_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/board_expectations.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/board_file_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/board_test_utils.cpp
 )
@@ -89,4 +90,3 @@ target_compile_definitions( qa_pcbnew_utils
 set_source_files_properties( board_file_utils.cpp PROPERTIES
     COMPILE_DEFINITIONS "QA_PCBNEW_DATA_LOCATION=(\"${CMAKE_SOURCE_DIR}/qa/data/pcbnew\")"
 )
-

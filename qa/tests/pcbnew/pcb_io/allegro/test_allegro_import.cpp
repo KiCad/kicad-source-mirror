@@ -26,6 +26,7 @@
  * Test suite for import of Cadence Allegro PCB .brd files
  */
 
+#include "allegro_test_utils.h"
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -50,91 +51,7 @@
 #include <map>
 #include <set>
 
-
-/**
- * Custom REPORTER that captures all messages for later analysis.
- */
-class CAPTURING_REPORTER : public REPORTER
-{
-public:
-    struct MESSAGE
-    {
-        wxString text;
-        SEVERITY severity = RPT_SEVERITY_UNDEFINED;
-    };
-
-    CAPTURING_REPORTER() : m_errorCount( 0 ), m_warningCount( 0 ), m_infoCount( 0 ) {}
-
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
-    {
-        MESSAGE msg;
-        msg.text = aText;
-        msg.severity = aSeverity;
-        m_messages.push_back( msg );
-
-        switch( aSeverity )
-        {
-        case RPT_SEVERITY_ERROR:   m_errorCount++; break;
-        case RPT_SEVERITY_WARNING: m_warningCount++; break;
-        case RPT_SEVERITY_INFO:
-        case RPT_SEVERITY_ACTION:  m_infoCount++; break;
-        default: break;
-        }
-
-        return *this;
-    }
-
-    bool HasMessage() const override { return !m_messages.empty(); }
-
-    EDA_UNITS GetUnits() const override { return EDA_UNITS::MM; }
-
-    void Clear() override
-    {
-        m_messages.clear();
-        m_errorCount = 0;
-        m_warningCount = 0;
-        m_infoCount = 0;
-    }
-
-    void PrintAllMessages( const std::string& aContext ) const
-    {
-        if( m_messages.empty() )
-        {
-            BOOST_TEST_MESSAGE( aContext << ": No messages" );
-            return;
-        }
-
-        BOOST_TEST_MESSAGE( aContext << ": " << m_messages.size() << " messages ("
-                            << m_errorCount << " errors, " << m_warningCount << " warnings)" );
-
-        for( const MESSAGE& msg : m_messages )
-        {
-            const char* severityStr = "???";
-
-            switch( msg.severity )
-            {
-            case RPT_SEVERITY_ERROR:   severityStr = "ERROR"; break;
-            case RPT_SEVERITY_WARNING: severityStr = "WARN "; break;
-            case RPT_SEVERITY_INFO:    severityStr = "INFO "; break;
-            case RPT_SEVERITY_ACTION:  severityStr = "ACT  "; break;
-            case RPT_SEVERITY_DEBUG:   severityStr = "DEBUG"; break;
-            default:                   severityStr = "     "; break;
-            }
-
-            BOOST_TEST_MESSAGE( "  [" << severityStr << "] " << msg.text );
-        }
-    }
-
-    int GetErrorCount() const { return m_errorCount; }
-    int GetWarningCount() const { return m_warningCount; }
-    const std::vector<MESSAGE>& GetMessages() const { return m_messages; }
-
-private:
-    std::vector<MESSAGE> m_messages;
-    int                  m_errorCount;
-    int                  m_warningCount;
-    int                  m_infoCount;
-};
+using namespace KI_TEST;
 
 
 struct ALLEGRO_IMPORT_FIXTURE
@@ -778,33 +695,9 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
      * Attempt to load an Allegro board, capturing all reporter messages.
      * Returns the board (or nullptr on failure) and populates the reporter.
      */
-    std::unique_ptr<BOARD> LoadBoardWithCapture( const std::string& aFilePath,
-                                                  CAPTURING_REPORTER& aReporter )
+    std::unique_ptr<BOARD> LoadBoardWithCapture( const std::string& aFilePath, CAPTURING_REPORTER& aReporter )
     {
-        std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-
-        m_allegroPlugin.SetReporter( &aReporter );
-
-        try
-        {
-            m_allegroPlugin.LoadBoard( aFilePath, board.get(), nullptr, nullptr );
-            return board;
-        }
-        catch( const IO_ERROR& e )
-        {
-            aReporter.Report( wxString::Format( "IO_ERROR: %s", e.What() ), RPT_SEVERITY_ERROR );
-            return nullptr;
-        }
-        catch( const std::exception& e )
-        {
-            aReporter.Report( wxString::Format( "Exception: %s", e.what() ), RPT_SEVERITY_ERROR );
-            return nullptr;
-        }
-        catch( ... )
-        {
-            aReporter.Report( "Unknown exception during load", RPT_SEVERITY_ERROR );
-            return nullptr;
-        }
+        return KI_TEST::LoadBoardWithCapture( m_allegroPlugin, aFilePath, aReporter );
     }
 
     /**
@@ -814,19 +707,8 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
      */
     BOARD* GetCachedBoard( const std::string& aFilePath )
     {
-        auto it = s_boardCache.find( aFilePath );
-
-        if( it != s_boardCache.end() )
-            return it->second.get();
-
-        CAPTURING_REPORTER reporter;
-        auto board = LoadBoardWithCapture( aFilePath, reporter );
-        BOARD* raw = board.get();
-        s_boardCache[aFilePath] = std::move( board );
-        return raw;
+        return KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( aFilePath );
     }
-
-    static std::map<std::string, std::unique_ptr<BOARD>> s_boardCache;
 
     /**
      * Print detailed board statistics for debugging.
@@ -914,9 +796,6 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
 
     PCB_IO_ALLEGRO m_allegroPlugin;
 };
-
-std::map<std::string, std::unique_ptr<BOARD>> ALLEGRO_COMPREHENSIVE_FIXTURE::s_boardCache;
-
 
 BOOST_FIXTURE_TEST_SUITE( AllegroComprehensive, ALLEGRO_COMPREHENSIVE_FIXTURE )
 
