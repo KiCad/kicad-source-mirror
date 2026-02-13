@@ -992,15 +992,14 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             auto cached_refill_lambda =
                     [&]( const std::pair<ZONE*, PCB_LAYER_ID>& aFillItem ) -> int
                     {
-                        ZONE*       zone = aFillItem.first;
-                        PCB_LAYER_ID layer = aFillItem.second;
+                        ZONE*          zone = aFillItem.first;
+                        PCB_LAYER_ID   layer = aFillItem.second;
                         SHAPE_POLY_SET fillPolys;
 
                         if( !refillZoneFromCache( zone, layer, fillPolys ) )
                             return 0;
 
-                        wxLogTrace( traceZoneFiller,
-                                    wxT( "Cached refill for zone %s: %d outlines, area %.0f" ),
+                        wxLogTrace( traceZoneFiller, wxT( "Cached refill for zone %s: %d outlines, area %.0f" ),
                                     zone->GetNetname(), fillPolys.OutlineCount(), fillPolys.Area() );
 
                         zone->SetFilledPolysList( layer, fillPolys );
@@ -1157,8 +1156,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 }
             }
 
-            wxLogTrace( traceZoneFiller, wxT( "Iterative refill completed in %0.3f ms" ),
-                        timer.msecs() );
+            wxLogTrace( traceZoneFiller, wxT( "Iterative refill completed in %0.3f ms" ), timer.msecs() );
         }
     }
 
@@ -2826,10 +2824,6 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     aFillPolys.BooleanSubtract( clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
-    /* -------------------------------------------------------------------------------------
-     * Lastly give any same-net but higher-priority zones control over their own area.
-     */
-
     // Cache the pre-knockout fill for iterative refill optimization (issue 21746)
     // At this point, the fill has NOT been knocked out by higher-priority zones on different nets
     if( iterativeRefill )
@@ -2855,6 +2849,10 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         if( zoneClearances.OutlineCount() > 0 )
             aFillPolys.BooleanSubtract( zoneClearances );
     }
+
+    /* -------------------------------------------------------------------------------------
+     * Lastly give any same-net but higher-priority zones control over their own area.
+     */
 
     subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
