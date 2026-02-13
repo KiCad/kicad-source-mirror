@@ -27,6 +27,8 @@
 
 #include "../render_3d_base.h"
 
+class GLUquadric;
+
 /**
  * @class SPHERES_GIZMO
  * @brief Renders a set of colored spheres in 3D space that act as a directional orientation gizmo.

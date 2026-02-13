@@ -27,7 +27,8 @@
  * @brief Implementation of a 3d cursor
  */
 
-#include "../common_ogl/openGL_includes.h"
+#include <kicad_gl/kiglu.h> // Must be included first
+
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
 

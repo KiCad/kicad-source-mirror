@@ -24,11 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <3d_rendering/opengl/render_3d_opengl.h> // Must be included before any GL header
+
 #include "panel_preview_3d_model.h"
 #include <dialogs/dialog_unit_entry.h>
 #include <libeval/numeric_evaluator.h>
 #include <3d_canvas/eda_3d_canvas.h>
-#include <3d_rendering/opengl/render_3d_opengl.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/eda_3d_actions.h>

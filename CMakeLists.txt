@@ -136,14 +136,9 @@ option( KICAD_UPDATE_CHECK
     "Build in update check"
     ON )
 
-cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
-    "Use the bundled version of GLEW - only available when KICAD_USE_EGL is set"
-    ON "KICAD_USE_EGL"
-    OFF )
-
 cmake_dependent_option( KICAD_WAYLAND
     "Support Wayland features"
-    ON "KICAD_USE_EGL"
+    ON "UNIX_NOT_APPLE"
     OFF )
 
 # Options to build with flatpak platform defaults (only on Linux)
@@ -1142,53 +1137,12 @@ message(STATUS "wxUSE_GLCANVAS_EGL=${wxWidgets_GLCANVAS_EGL}")
 message(STATUS "wxHAS_GLX=${wxWidgets_HAS_GLX}")
 message(STATUS "wxHAS_EGL=${wxWidgets_HAS_EGL}")
 
-#
-# Find OpenGL library, required
-#
-if( wxWidgets_GLCANVAS_EGL EQUAL 1 OR wxWidgets_HAS_EGL EQUAL 1 )
-    set( KICAD_USE_EGL ON )
-    find_package( OpenGL REQUIRED COMPONENTS OpenGL EGL )
-else()
-    set( KICAD_USE_EGL OFF )
-    set( OpenGL_GL_PREFERENCE "LEGACY" )     # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
-    find_package( OpenGL REQUIRED )
-endif()
-
-if( KICAD_USE_EGL )
-    message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
-    add_compile_definitions( KICAD_USE_EGL )
-endif()
+# Find OpenGL with GLU
+find_package( OpenGL REQUIRED )
 
 if( KICAD_WAYLAND )
     message( STATUS "Configuring KiCad to support Wayland features" )
     add_compile_definitions( KICAD_WAYLAND )
-endif()
-
-#
-# Find GLEW library, required
-#
-# The EGL canvas on GTK requires the use of a GLEW version compiled with an EGL flag.
-# The one built in the thirdparty directory has the flag for EGL set, so we use it unless told
-# otherwise. Then we search for the system GLEW version and use that instead.
-#
-if( KICAD_USE_EGL AND KICAD_USE_BUNDLED_GLEW )
-    if( OpenGL_EGL_FOUND )
-        message( STATUS "Found OpenGL EGL library: ${OPENGL_egl_LIBRARY}" )
-    else()
-        message( FATAL_ERROR "OpenGL EGL library not found" )
-    endif()
-
-    # Add the custom GLEW target
-    add_subdirectory( thirdparty/glew )
-
-    # Set the standard package variables to point to our custom target to mimic the system version.
-    set( GLEW_LIBRARIES glew )
-    set( GLEW_FOUND TRUE )
-    include_directories( SYSTEM $<TARGET_PROPERTY:glew,INCLUDE_DIRECTORIES> )
-else()
-    find_package( GLEW REQUIRED )
-    check_find_package_result( GLEW_FOUND "GLEW" )
-    include_directories( SYSTEM ${GLEW_INCLUDE_DIR} )
 endif()
 
 if( APPLE )

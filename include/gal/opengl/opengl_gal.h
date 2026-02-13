@@ -52,6 +52,8 @@
 ///< The default number of points for circle approximation
 #define SEG_PER_CIRCLE_COUNT  64
 
+class GLUtesselator;
+
 struct bitmap_glyph;
 
 namespace KIGFX

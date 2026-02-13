@@ -24,7 +24,7 @@
  */
 
 #include <cstdint>
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <kicad_gl/kiglad.h>    // Must be included first
 
 #include "plugins/3dapi/xv3d_types.h"
 #include "render_3d_opengl.h"
@@ -32,7 +32,7 @@
 #include "common_ogl/ogl_utils.h"
 #include <board.h>
 #include <footprint.h>
-#include <gal/opengl/gl_context_mgr.h>
+#include <kicad_gl/gl_context_mgr.h>
 #include <3d_math.h>
 #include <glm/geometric.hpp>
 #include <lset.h>

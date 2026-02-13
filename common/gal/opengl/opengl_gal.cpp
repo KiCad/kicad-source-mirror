@@ -26,12 +26,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kicad_gl/kiglu.h> // Must be included first
+#include <kicad_gl/gl_utils.h>
+
 #include <advanced_config.h>
 #include <build_version.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
-#include <gal/opengl/gl_context_mgr.h>
+#include <kicad_gl/gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
 #include <math/vector2wx.h>
 #include <bitmap_base.h>
@@ -48,8 +51,6 @@
 
 #include <core/profile.h>
 #include <trace_helpers.h>
-
-#include <gal/opengl/gl_utils.h>
 
 #include <functional>
 #include <limits>
@@ -2815,10 +2816,6 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 void OPENGL_GAL::init()
 {
-#ifndef KICAD_USE_EGL
-    wxASSERT( IsShownOnScreen() );
-#endif // KICAD_USE_EGL
-
     wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
 
     // Check correct initialization from the constructor
@@ -2827,44 +2824,31 @@ void OPENGL_GAL::init()
 
     SetOpenGLBackendInfo( GL_UTILS::DetectGLBackend( this ) );
 
-    GLenum err = glewInit();
+    int glVersion = gladLoaderLoadGL();
 
-#ifdef KICAD_USE_EGL
-    // TODO: better way to check when EGL is ready (init fails at "getString(GL_VERSION)")
-    for( int i = 0; i < 10; i++ )
-    {
-        if( GLEW_OK == err )
-            break;
-
-        std::this_thread::sleep_for( std::chrono::milliseconds( 250 ) );
-        err = glewInit();
-    }
-
-#endif // KICAD_USE_EGL
-
-    if( GLEW_OK != err )
-        throw std::runtime_error( (const char*) glewGetErrorString( err ) );
+    if( glVersion == 0 )
+        throw std::runtime_error( "Failed to load OpenGL via loader" );
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
                    (const char*) glGetString( GL_VERSION ) );
 
     // Check the OpenGL version (minimum 2.1 is required)
-    if( !GLEW_VERSION_2_1 )
+    if( !GLAD_GL_VERSION_2_1 )
         throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
 
 #if defined( __LINUX__ ) // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
 #ifdef DEBUG
-    if( GLEW_ARB_debug_output )
+    if( glDebugMessageCallback || glDebugMessageCallbackARB )
         enableGlDebug( true );
 #endif
 #endif
 
     // Framebuffers have to be supported
-    if( !GLEW_EXT_framebuffer_object )
+    if( !GLAD_GL_EXT_framebuffer_object && !GLAD_GL_VERSION_3_0 )
         throw std::runtime_error( "Framebuffer objects are not supported!" );
 
     // Vertex buffer has to be supported
-    if( !GLEW_ARB_vertex_buffer_object )
+    if( !GLAD_GL_ARB_vertex_buffer_object && !GLAD_GL_VERSION_1_5 )
         throw std::runtime_error( "Vertex buffer objects are not supported!" );
 
     // Prepare shaders
@@ -2903,7 +2887,7 @@ void OPENGL_GAL::init()
     wxGLCanvas::SetSwapInterval( -1 );
     m_swapInterval = wxGLCanvas::GetSwapInterval();
 #else
-    m_swapInterval = GL_UTILS::SetSwapInterval( -1 );
+    m_swapInterval = GL_UTILS::SetSwapInterval( this, -1 );
 #endif
 
     m_cachedManager = new VERTEX_MANAGER( true );

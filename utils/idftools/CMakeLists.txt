@@ -19,6 +19,7 @@ endif( MINGW )
 add_library( idf3 STATIC ${IDF3_FILES} )
 target_link_libraries( idf3
     kimath
+    glad
     Boost::headers
     )
 

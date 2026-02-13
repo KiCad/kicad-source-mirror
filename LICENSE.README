@@ -24,6 +24,7 @@ Licensed under MIT:
 - compoundfilereader in thirdparty/compoundfilereader
 - delaunator in thirdparty/delaunator
 - fmt in thirdparty/fmt
+- glad in thirdparty/glad
 - json_schema_validator in thirdparty/json_schema_validator
 - magic_enum in thirdparty/magic_enum
 - nanodbc in thirdparty/nanodbc
@@ -35,8 +36,6 @@ Licensed under MIT:
 - sentry-native in thirdparty/sentry-native
 - thread-pool in thirdparty/thread-pool
 - tinyspline_lib in thirdparty/tinyspline_lib
-Licensed under MIT and BSD:
-- glew in thirdparty/glew
 Licensed under BSD:
 - pybind11 in thirdparty/pybind11
 Licensed under BSD2:

@@ -28,7 +28,7 @@
  */
 #include <algorithm>
 #include <stdexcept>
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <kicad_gl/kiglad.h>    // Must be included first
 
 #include "3d_model.h"
 #include "../common_ogl/ogl_utils.h"

@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libwxgtk3.2-dev \
     libwxgtk-webview3.2-dev \
     libboost-all-dev \
-    libglew-dev \
     libcairo2-dev \
     libcurl4-openssl-dev \
     libgit2-dev \

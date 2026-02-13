@@ -25,7 +25,8 @@
 #ifndef TRIANGLE_DISPLAY_LIST_H
 #define TRIANGLE_DISPLAY_LIST_H
 
-#include "../../common_ogl/openGL_includes.h"
+#include <kicad_gl/kiglad.h> // Must be included first
+
 #include <plugins/3dapi/xv3d_types.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>

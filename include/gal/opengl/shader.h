@@ -29,7 +29,7 @@
 #ifndef SHADER_H_
 #define SHADER_H_
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <kicad_gl/kiglad.h>    // Must be included first
 
 #include <math/vector2d.h>
 
@@ -70,7 +70,7 @@ inline const char* translateStringArg( const char* str )
  * shader for drawing exact circles or for anti-aliasing. This class supports vertex, geometry
  * and fragment shaders.
  *
- * Make sure that the hardware supports these features. This can be identified with the "GLEW"
+ * Make sure that the hardware supports these features. This can be identified with the "GLAD"
  * library.
  */
 class SHADER

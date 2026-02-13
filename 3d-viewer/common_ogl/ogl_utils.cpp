@@ -28,9 +28,8 @@
  */
 
 #include <stdexcept>
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <kicad_gl/kiglad.h>    // Must be included first
 
-#include "openGL_includes.h"
 #include "ogl_utils.h"
 
 

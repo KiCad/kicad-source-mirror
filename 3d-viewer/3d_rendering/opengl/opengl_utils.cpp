@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "../../common_ogl/openGL_includes.h"
+#include <kicad_gl/kiglu.h> // Must be included first
+
 #include "opengl_utils.h"
 #include <trigo.h>
 #include <wx/debug.h>   // For the wxASSERT

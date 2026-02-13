@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,26 +22,45 @@
  */
 
 /**
- * @file  openGL_includes.h
- * @brief includes in a proper way the openGL related includes
+ * This file is used for including the proper OpenGL loader header for the platform.
  */
 
-#ifndef OPENGL_INCLUDES_H
-#define OPENGL_INCLUDES_H
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
+#ifndef KIGLAD_H_
+#define KIGLAD_H_
 
 #ifdef _WIN32
-// required for the windows gl.h to work
-#include <windows.h>
+
+// GL/GLU needs APIENTRY, CALLBACK and WINGDIAPI defined on Windows.
+// Don't include <windows.h> to avoid name space pollution.
+// This is based on GLEW code.
+
+/* <windef.h> and <gl.h>*/
+#ifndef APIENTRY
+#  if defined(__MINGW32__) || defined(__CYGWIN__) || (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) || defined(__BORLANDC__)
+#    define APIENTRY __stdcall
+#  else
+#    define APIENTRY
+#  endif
 #endif
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+/* <winnt.h> */
+#ifndef CALLBACK
+#  if defined(__MINGW32__) || defined(__CYGWIN__)
+#    define CALLBACK __attribute__ ((__stdcall__))
+#  elif (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC)) && !defined(MIDL_PASS)
+#    define CALLBACK __stdcall
+#  else
+#    define CALLBACK
+#  endif
 #endif
 
+/* <wingdi.h> and <winnt.h> */
+#ifndef WINGDIAPI
+#define WINGDIAPI __declspec(dllimport)
+#endif
 
-#endif // OPENGL_INCLUDES_H
+#endif
+
+#include <glad/gl.h>
+
+#endif  // KIGLAD_H_

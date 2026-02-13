@@ -65,7 +65,6 @@ target_link_libraries( gal
     kimath
     kiplatform
     nlohmann_json
-    ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
     ${PIXMAN_LIBRARIES}
     ${OPENGL_LIBRARIES}

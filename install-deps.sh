@@ -14,7 +14,6 @@ sudo apt-get update && sudo apt-get install -y \
   libcairo2-dev \
   libglu1-mesa-dev \
   libgl1-mesa-dev \
-  libglew-dev \
   libx11-dev \
   mesa-common-dev \
   libgtk-3-dev \

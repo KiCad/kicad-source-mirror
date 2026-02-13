@@ -31,6 +31,7 @@
 //    a closed loop as assumed for all other outlines.
 // 3. a scheme is needed to tell a castellated edge from a plain board edge
 
+#include <kicad_gl/kiglu.h>
 
 #include <sstream>
 #include <string>

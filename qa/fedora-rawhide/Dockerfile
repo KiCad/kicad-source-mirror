@@ -6,7 +6,6 @@ RUN dnf install -y --setopt=install_weak_deps=False \
     gcc-c++ \
     swig \
     boost-devel \
-    glew-devel \
     glm-devel \
     gtk3-devel \
     libcurl-devel \

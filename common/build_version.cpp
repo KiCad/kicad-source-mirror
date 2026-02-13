@@ -340,13 +340,9 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 #endif
 
     // Add build settings config (build options):
-#if defined( KICAD_USE_EGL ) || ! defined( NDEBUG )
+#if !defined( NDEBUG )
     aMsg << eol;
     aMsg << "Build settings:" << eol;
-#endif
-
-#ifdef KICAD_USE_EGL
-    aMsg << indent4 << "KICAD_USE_EGL=" << ON;
 #endif
 
 #ifdef KICAD_IPC_API

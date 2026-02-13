@@ -23,7 +23,6 @@
       "name": "wxwidgets-33",
       "features": [ "webview" ]
     },
-    "glew",
     "curl",
     {
       "name": "gettext",

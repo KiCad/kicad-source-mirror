@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/gl_context_mgr.h>
+#include <kicad_gl/gl_context_mgr.h>
 #include <wx/debug.h>
 
 
@@ -82,15 +82,9 @@ void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
     m_glCtxMutex.lock();
     wxGLCanvas* canvas = aCanvas ? aCanvas : m_glContexts.at( aContext );
 
-    // Prevent assertion failure in wxGLContext::SetCurrent during GAL teardown
 #ifdef __WXGTK__
-
-#ifdef KICAD_USE_EGL
+    // Prevent assertion failure in wxGLContext::SetCurrent during GAL teardown
     if( canvas->GTKGetDrawingWindow() )
-#else
-    if( canvas->GetXWindow() )
-#endif // KICAD_USE_EGL
-
 #endif // __WXGTK__
     {
         canvas->SetCurrent( *aContext );

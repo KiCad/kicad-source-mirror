@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/kiglew.h> // Must be included first
+#include <kicad_gl/kiglu.h> // Must be included first
 #include <glm/geometric.hpp>
 
 #include "3d_spheres_gizmo.h"

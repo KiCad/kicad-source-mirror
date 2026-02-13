@@ -27,9 +27,11 @@
 #ifndef GL_CONTEXT_MANAGER_H
 #define GL_CONTEXT_MANAGER_H
 
-#include <kicommon.h>
-#include <gal/gal.h>
+#include <kicad_gl/kiglad.h> // Must be included first
 #include <wx/glcanvas.h>
+
+#include <kicommon.h>
+
 #include <mutex>
 #include <map>
 

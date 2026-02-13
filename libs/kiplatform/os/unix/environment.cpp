@@ -24,6 +24,7 @@
 #include <wx/filename.h>
 #include <wx/uri.h>
 #include <wx/utils.h>
+#include <wx/sysopt.h>
 
 
 void KIPLATFORM::ENV::Init()
@@ -36,13 +37,26 @@ void KIPLATFORM::ENV::Init()
     if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
         wxSetEnv( wxT( "UBUNTU_MENUPROXY" ), wxT( "0" ) );
 
-#if !KICAD_USE_EGL \
-        || ( wxCHECK_VERSION( 3, 3, 2 ) && !wxHAS_EGL ) \
-        || ( !wxCHECK_VERSION( 3, 3, 2 ) && !wxUSE_GLCANVAS_EGL )
-    // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
-    // required until wxWidgets supports the Wayland compositors
-    wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+    bool forceX11 = false;
+
+#if wxCHECK_VERSION( 3, 3, 2 )
+    #if wxHAS_EGL
+        // Prefer GLX backend on X11 and EGL backend on Wayland.
+        if( !wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+            wxSystemOptions::SetOption( "opengl.egl", 0 );
+    #else
+        // Forces GLX on X11 and XWayland
+        forceX11 = true;
+    #endif
+#else
+    #if !wxUSE_GLCANVAS_EGL
+        // Forces GLX on X11 and XWayland
+        forceX11 = true;
+    #endif
 #endif
+
+    if( forceX11 )
+        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 
     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
     // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll

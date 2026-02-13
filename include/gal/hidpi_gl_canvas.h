@@ -27,8 +27,9 @@
 #ifndef HIDPI_GL_CANVAS_H
 #define HIDPI_GL_CANVAS_H
 
-#include <view/view_controls.h>
 #include <wx/glcanvas.h>
+
+#include <view/view_controls.h>
 #include <gal/gal.h>
 
 

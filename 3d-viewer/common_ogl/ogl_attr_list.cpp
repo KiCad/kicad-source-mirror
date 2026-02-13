@@ -28,7 +28,6 @@
  */
 
 #include "ogl_attr_list.h"
-#include <wx/glcanvas.h>
 #include <wx/debug.h>
 #include <core/arraydim.h>
 

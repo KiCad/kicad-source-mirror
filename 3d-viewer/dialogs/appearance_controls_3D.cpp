@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <../3d_rendering/opengl/render_3d_opengl.h> // Must be included before any GL header
+
 #include <dialogs/appearance_controls_3D.h>
 
 #include <bitmaps.h>
@@ -44,7 +46,6 @@
 #include <wx/textdlg.h>
 #include <wx/checkbox.h>
 
-#include <../3d_rendering/opengl/render_3d_opengl.h>
 #include <algorithm>
 
 /// Render Row abbreviation to reduce source width.

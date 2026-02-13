@@ -26,9 +26,10 @@
 #ifndef _MODEL_3D_H_
 #define _MODEL_3D_H_
 
+#include <kicad_gl/kiglad.h> // Must be included first
+
 #include <vector>
 #include <plugins/3dapi/c3dmodel.h>
-#include "../../common_ogl/openGL_includes.h"
 #include "../raytracing/shapes3D/bbox_3d.h"
 #include <3d_enums.h>
 

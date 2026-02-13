@@ -35,23 +35,16 @@
 #ifndef VRML_LAYER_H
 #define VRML_LAYER_H
 
-#include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
-                            // also needed on OSX to define __DARWIN__
-
-#ifdef __WXMAC__
-#  ifdef __DARWIN__
-#    include <OpenGL/glu.h>
-#  else
-#    include <glu.h>
-#  endif
-#else
-#  include <GL/glu.h>
-#endif
-
 #include <iostream>
 #include <vector>
 #include <list>
 #include <utility>
+
+#include <wx/gdicmn.h>
+
+class GLUtesselator;
+
+typedef unsigned int GLenum;
 
 #ifndef M_PI2
 #define M_PI2 ( M_PI / 2.0 )

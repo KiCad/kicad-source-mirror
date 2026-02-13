@@ -54,7 +54,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
         m_isMapped( false ),
         m_glBufferHandle( -1 )
 {
-    m_useCopyBuffer = GLEW_ARB_copy_buffer;
+    m_useCopyBuffer = ( GLAD_GL_ARB_copy_buffer != 0 ) || ( GLAD_GL_VERSION_3_1 != 0 );
 
     wxString vendor( glGetString( GL_VENDOR ) );
 

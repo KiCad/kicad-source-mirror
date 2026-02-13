@@ -27,9 +27,9 @@
  * 3d models that come in the original data from the files without any transformations.
  */
 
-#include <gal/opengl/kiglew.h>    // Must be included first
-#include <gal/opengl/gl_utils.h>
-#include <gal/opengl/gl_context_mgr.h>
+#include <kicad_gl/kiglu.h> // Must be included first
+#include <kicad_gl/gl_utils.h>
+#include <kicad_gl/gl_context_mgr.h>
 
 #include <iostream>
 #include <wx/dcclient.h>
@@ -189,18 +189,16 @@ void EDA_3D_MODEL_VIEWER::ogl_initialize()
 {
     SetOpenGLBackendInfo( GL_UTILS::DetectGLBackend( this ) );
 
-    const GLenum err = glewInit();
+    const int glVersion = gladLoaderLoadGL();
 
-    if( GLEW_OK != err )
+    if( glVersion == 0 )
     {
-        const wxString msgError = (const char*) glewGetErrorString( err );
-
-        wxLogMessage( msgError );
+        wxLogMessage( wxT( "Failed to load OpenGL via loader" ) );
     }
     else
     {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using GLEW version %s" ),
-                    From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
+        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using OpenGL version %s" ),
+                    From_UTF8( (char*) glGetString( GL_VERSION ) ) );
     }
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),

@@ -25,6 +25,8 @@
 #ifndef RENDER_3D_OPENGL_H
 #define RENDER_3D_OPENGL_H
 
+#include <kicad_gl/kiglad.h> // Must be included first
+
 #include "../render_3d_base.h"
 #include "layer_triangles.h"
 #include "3d_spheres_gizmo.h"

@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/kiglew.h>    // Must be included first
+#include <kicad_gl/kiglad.h> // Must be included first
 
 #include <algorithm>
 #include <atomic>

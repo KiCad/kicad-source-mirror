@@ -28,8 +28,7 @@ add_subdirectory( netlist_reader )
 # Get the shared PADS format support library
 add_subdirectory( io/pads )
 
-# Only for win32 cross compilation using MXE
-add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
+
 
 
 # The build version string defaults to the value in the KiCadVersion.cmake file.
@@ -73,7 +72,10 @@ set( KICOMMON_SRCS
 
     # Gal
     gal/color4d.cpp
-    gal/opengl/gl_context_mgr.cpp
+
+    # KiCad GL
+    kicad_gl/gl_utils.cpp
+    kicad_gl/gl_context_mgr.cpp
 
     # Git
     git/git_add_to_index_handler.cpp
@@ -343,6 +345,7 @@ target_link_libraries( kicommon
     picosha2
     rapidcsv
     sexpr
+    glad
     ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}

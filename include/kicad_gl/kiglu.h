@@ -1,8 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2024 Alex Shvartzkop <dudesuchamazing@gmail.com>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,33 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef RENDER_3D_RAYTRACE_GL_H
-#define RENDER_3D_RAYTRACE_GL_H
+/**
+ * This file is used to include proper OpenGL loader and GLU headers.
+ */
 
-#include "render_3d_raytrace_base.h"
+#ifndef KIGLU_H_
+#define KIGLU_H_
 
 #include <kicad_gl/kiglad.h>
 
-class RENDER_3D_RAYTRACE_GL : public RENDER_3D_RAYTRACE_BASE
-{
-public:
-    explicit RENDER_3D_RAYTRACE_GL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
-                                    CAMERA& aCamera );
+// System GL headers (assumed to be loaded via wxGLCanvas or other dependencies)
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
-    ~RENDER_3D_RAYTRACE_GL();
-
-    void SetCurWindowSize( const wxSize& aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
-
-protected:
-    void initPbo() override;
-    void deletePbo() override;
-
-    bool   m_openglSupportsVertexBufferObjects;
-    bool   m_useArbPbo;
-    GLuint m_pboId;
-    GLuint m_pboDataSize;
-};
-
-
-#endif // RENDER_3D_RAYTRACE_GL_H
+#endif  // KIGLU_H_

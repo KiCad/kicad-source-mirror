@@ -26,7 +26,7 @@
 
 #include <confirm.h> // DisplayError
 
-#include <gal/opengl/kiglew.h> // Must be included first
+#include <kicad_gl/kiglad.h> // Must be included first
 
 #include <stdexcept>
 #include <wx/log.h> // wxLogTrace
@@ -190,7 +190,10 @@ void enableGlDebug( bool aEnable )
     if( aEnable )
     {
         glEnable( GL_DEBUG_OUTPUT );
-        glDebugMessageCallback( (GLDEBUGPROC) debugMsgCallback, nullptr );
+        if( glDebugMessageCallback )
+            glDebugMessageCallback( (GLDEBUGPROC) debugMsgCallback, nullptr );
+        else if( glDebugMessageCallbackARB )
+            glDebugMessageCallbackARB( (GLDEBUGPROCARB) debugMsgCallback, nullptr );
     }
     else
     {
