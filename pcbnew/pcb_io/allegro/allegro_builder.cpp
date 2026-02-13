@@ -29,6 +29,7 @@
 #include <limits>
 #include <set>
 #include <tuple>
+#include <unordered_set>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -894,9 +895,13 @@ void BOARD_BUILDER::createNets()
 
         const auto& netBlk = static_cast<const BLOCK<BLK_0x1B_NET>&>( *block ).GetData();
 
-        // All Allegro nets seem to have names even if just 'N1234', but even if they didn't,
-        // we can handle that in KiCad, as we're assigning new netcodes.
-        const wxString& netName = m_brdDb.GetString( netBlk.m_NetName );
+        wxString netName = m_brdDb.GetString( netBlk.m_NetName );
+
+        // Allegro allows unnamed nets. KiCad's NETINFO_LIST matches nets by name, and all
+        // empty-named nets would collapse to the unconnected net (code 0). Generate a unique
+        // name so each Allegro net gets its own KiCad net code.
+        if( netName.IsEmpty() )
+            netName = wxString::Format( wxS( "Net_%d" ), netCode );
 
         auto kiNetInfo = std::make_unique<NETINFO_ITEM>( &m_board, netName, netCode );
         netCode++;
@@ -3090,6 +3095,73 @@ int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
 }
 
 
+void BOARD_BUILDER::createBoardText()
+{
+    // Collect all 0x30 keys that appear in footprint text chains so we can skip them.
+    // Board-level text is identified by exclusion: any 0x30 block NOT referenced from a
+    // footprint is a board-level text object.
+    std::unordered_set<uint32_t> footprintTextKeys;
+
+    const LL_WALKER fpDefWalker( m_brdDb.m_Header->m_LL_0x2B, m_brdDb );
+
+    for( const BLOCK_BASE* fpContainer : fpDefWalker )
+    {
+        if( fpContainer->GetBlockType() != 0x2B )
+            continue;
+
+        const auto& fpBlock =
+                static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( *fpContainer ).GetData();
+
+        const LL_WALKER instWalker( fpBlock.m_FirstInstPtr, fpBlock.m_Key, m_brdDb );
+
+        for( const BLOCK_BASE* instBlock : instWalker )
+        {
+            if( instBlock->GetBlockType() != 0x2D )
+                continue;
+
+            const auto& fpInst =
+                    static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( *instBlock ).GetData();
+
+            const LL_WALKER textWalker( fpInst.m_TextPtr, fpInst.m_Key, m_brdDb );
+
+            for( const BLOCK_BASE* textBlock : textWalker )
+            {
+                if( textBlock->GetBlockType() == 0x30 )
+                    footprintTextKeys.insert( textBlock->GetKey() );
+            }
+        }
+    }
+
+    int textCount = 0;
+
+    for( const auto& block : m_brdDb.m_Blocks )
+    {
+        if( block->GetBlockType() != 0x30 )
+            continue;
+
+        if( footprintTextKeys.count( block->GetKey() ) )
+            continue;
+
+        const auto& strWrapper =
+                static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( *block ).GetData();
+
+        std::unique_ptr<PCB_TEXT> text = buildPcbText( strWrapper, m_board );
+
+        if( !text )
+            continue;
+
+        wxLogTrace( traceAllegroBuilder, "  Board text '%s' on layer %s at (%d, %d)",
+                    text->GetText(), m_board.GetLayerName( text->GetLayer() ),
+                    text->GetPosition().x, text->GetPosition().y );
+
+        m_board.Add( text.release(), ADD_MODE::APPEND );
+        textCount++;
+    }
+
+    wxLogTrace( traceAllegroBuilder, "Created %d board-level text objects", textCount );
+}
+
+
 void BOARD_BUILDER::createZones()
 {
     wxLogTrace( traceAllegroBuilder, "Creating zones from m_LL_Shapes and m_LL_0x24_0x28" );
@@ -3596,6 +3668,9 @@ bool BOARD_BUILDER::BuildBoard()
 
     createBoardOutline();
     wxLogTrace( traceAllegroPerf, wxT( "  createBoardOutline: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
+    createBoardText();
+    wxLogTrace( traceAllegroPerf, wxT( "  createBoardText: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     createZones();
     wxLogTrace( traceAllegroPerf, wxT( "  createZones: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow

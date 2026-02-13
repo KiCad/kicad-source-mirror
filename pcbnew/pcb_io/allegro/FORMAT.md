@@ -9,11 +9,11 @@ as implemented in this importer. This is not an official specification.
 Offset 0x0000: File Header (~4KB)
   - Magic number (4 bytes)
   - Object count
-  - 22 linked list heads (block type indices)
+  - Linked lists: 22 for pre-V180, 28 for V180+
   - Allegro version string (60 bytes)
   - Board units (1 byte: 0x01=Imperial, 0x02=Metric)
   - Units divisor (4 bytes)
-  - String count
+  - String count (explicit field pre-V180, embedded in Unknown2 for V180)
   - Layer map (256 entries)
 
 Offset 0x1200: String Table
@@ -22,6 +22,7 @@ Offset 0x1200: String Table
 After strings: Object Blocks
   - Repeated: [1-byte type tag] [type-specific data]
   - Each block type has a fixed layout with version-conditional fields
+  - V180 files may have zero-padded gaps between block groups
 ```
 
 ## Version Detection
@@ -39,11 +40,15 @@ to determine the format version:
 | `0x0014_0400` | V_172   | 17.2            |
 | `0x0014_0900` | V_174   | 17.4            |
 | `0x0014_1500` | V_175   | 17.5            |
-| `0x0015_0000` | V_180   | 18.0            |
+| `0x0015_0000` | V_180   | 18.0+           |
 
-Version 17.2 is the most significant layout change. Many struct fields
-are conditionally present using `COND_GE<FMT_VER::V_172, T>` (present
-in >= 17.2) or `COND_LT<FMT_VER::V_172, T>` (present in < 17.2).
+Version 17.2 is the most significant layout change for structs. Many
+fields are conditionally present using `COND_GE<FMT_VER::V_172, T>`
+(present in >= 17.2) or `COND_LT<FMT_VER::V_172, T>` (present in
+< 17.2).
+
+Version 18.0 is the most significant layout change for the file header.
+See the V18 Header Changes section for details.
 
 ## Coordinate System
 
@@ -718,3 +723,86 @@ Keepout shapes appear on the `m_LL_0x24_0x28` header linked list
 with ROUTE_KEEPOUT (0x0F) or VIA_KEEPOUT (0x13) class. They share
 the 0x28 shape structure and are converted to KiCad ZONE objects
 with appropriate keepout flags.
+
+## Board-Level Text (0x30)
+
+0x30 STR_WRAPPER blocks contain text objects. Each wraps a 0x31
+SGRAPHIC block (via `m_StrGraphicPtr`) that holds the actual string
+content, position, and font reference.
+
+Board-level text blocks are NOT on the `m_LL_0x03_0x30` linked list.
+That list only contains 0x03 FIELD blocks. Board-level 0x30 blocks
+exist in the flat block database (`m_Blocks`) and must be found by
+scanning all blocks for type 0x30.
+
+To distinguish board-level text from footprint text, collect the keys
+of all 0x30 blocks reachable through footprint instance text chains
+(BLK_0x2D_FOOTPRINT_INST `m_TextPtr`), then exclude those keys when
+scanning for board-level text.
+
+Board-level text with ETCH class (0x06) is placed on copper layers.
+The subclass byte indexes the copper layer in stackup order.
+
+## Empty Net Names
+
+Allegro zones (BOUNDARY shapes) can have unnamed nets. When the
+resolveShapeNet() pointer chain yields a 0x1B NET block whose string
+table name is empty, the importer assigns a synthetic net name of
+the form `Net_<code>` to prevent the net from collapsing into
+KiCad's UNCONNECTED net (code 0). Without this, zone fill matching
+in applyZoneFills() fails because the zone and its fills end up on
+different nets.
+
+## V18 Header Changes (0x00150000)
+
+V18 restructures the file header with significant differences from
+V16/V17.
+
+### Linked Lists
+
+V18 has 28 linked lists compared to 22 in pre-V18 files.
+
+| V18 Position | Pre-V18 Position | Field            |
+|-------------|-----------------|------------------|
+| 0-4         | (new)           | m_LL_V18_1..5    |
+| 5-22        | 0-17            | Same 18 shared   |
+| 23          | 19              | m_LL_Unknown5    |
+| 24          | 18              | m_LL_0x36        |
+| 25-26       | 20-21           | Same 2 shared    |
+| 27          | (new)           | m_LL_V18_6       |
+
+Note positions 23-24: m_LL_0x36 and m_LL_Unknown5 are swapped
+relative to their pre-V18 order.
+
+### Head/Tail Word Order
+
+Each linked list descriptor is two 32-bit words. Pre-V18 reads
+word1=tail, word2=head. V18 reverses this to word1=head, word2=tail.
+
+### String Count
+
+Pre-V18 stores the string count as an explicit field in the header
+after the layer map. V18 stores it in `m_Unknown2[7]` (read during
+early header parsing) and has no separate field. Similarly,
+`m_0x27_End` is relocated to `m_Unknown2[4]`.
+
+### 0x35 File References
+
+Pre-V18 stores 0x35 extents (start/end) between the first 18 LLs
+and the last 4 LLs. V18 stores them after all 28 linked lists as
+two scalar uint32 values.
+
+### Object Stream Gaps
+
+V18 files can have zero-padded gaps between groups of object blocks.
+After encountering the end-of-objects marker (0x00 type byte), the
+parser skips consecutive zero bytes, then checks if a valid block
+type tag (0x01-0x3C) follows. If so, parsing continues from the
+4-byte-aligned position before that tag.
+
+### Padstack Trailer
+
+0x1C PADSTACK blocks in V18 have 8 additional uint32 values
+(`m_V180Trailer`) between the fixed arrays and the component table.
+These are read via `COND_GE<FMT_VER::V_180>` and their purpose is
+not yet determined.

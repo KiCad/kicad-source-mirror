@@ -157,6 +157,7 @@ private:
     void createNets();
     void createTracks();
     void createBoardOutline();
+    void createBoardText();
     void createZones();
     void applyZoneFills();
     void enablePadTeardrops();

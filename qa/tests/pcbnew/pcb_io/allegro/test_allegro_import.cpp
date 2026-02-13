@@ -36,6 +36,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_text.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <netinfo.h>
@@ -671,6 +672,84 @@ BOOST_AUTO_TEST_CASE( PreV16FileRejection )
                 return msg.Contains( wxS( "predates Allegro 16.0" ) )
                        && msg.Contains( wxS( "Allegro PCB Design" ) );
             } );
+}
+
+
+/**
+ * Test that rects.brd imports one zone fill (left rectangle) and one standalone copper
+ * polygon with a net (right rectangle). Verifies that BOUNDARY shapes with unnamed nets
+ * correctly resolve their net from overlapping fills.
+ */
+BOOST_AUTO_TEST_CASE( RectsZoneVsCopperPolygon )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "rects.brd" );
+    BOOST_REQUIRE( board );
+
+    // Should have exactly one zone (the left rectangle as a zone fill)
+    BOOST_CHECK_EQUAL( board->Zones().size(), 1 );
+
+    ZONE* zone = board->Zones().front();
+    BOOST_CHECK( zone->GetNetCode() > 0 );
+    BOOST_CHECK( IsCopperLayer( zone->GetFirstLayer() ) );
+    BOOST_CHECK( zone->IsFilled() );
+
+    // Should have exactly one standalone copper polygon (the right rectangle)
+    int copperPolyCount = 0;
+    int copperPolyWithNet = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( IsCopperLayer( shape->GetLayer() ) && shape->GetShape() == SHAPE_T::POLY )
+            {
+                copperPolyCount++;
+
+                if( shape->GetNetCode() > 0 )
+                    copperPolyWithNet++;
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( copperPolyCount, 1 );
+    BOOST_CHECK_EQUAL( copperPolyWithNet, 1 );
+}
+
+
+/**
+ * Test that copper_text.brd imports the "TESTING" text on F.Cu.
+ */
+BOOST_AUTO_TEST_CASE( CopperText )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "copper_text.brd" );
+    BOOST_REQUIRE( board );
+
+    int copperTextCount = 0;
+    bool foundTestingText = false;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_TEXT_T )
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+            if( IsCopperLayer( text->GetLayer() ) )
+            {
+                copperTextCount++;
+
+                if( text->GetText() == wxS( "TESTING" ) )
+                {
+                    foundTestingText = true;
+                    BOOST_CHECK_EQUAL( text->GetLayer(), F_Cu );
+                }
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundTestingText, "Board should contain 'TESTING' text on F.Cu" );
+    BOOST_CHECK_EQUAL( copperTextCount, 1 );
 }
 
 
