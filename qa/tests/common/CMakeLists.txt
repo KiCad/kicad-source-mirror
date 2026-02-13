@@ -56,6 +56,7 @@ set( QA_COMMON_SRCS
     test_pdf_unicode_plot.cpp
     test_kiid.cpp
     test_layer_ids.cpp
+    test_lib_id.cpp
     test_layer_range.cpp
     test_lset.cpp
     test_markup_parser.cpp

@@ -1924,6 +1924,18 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         const LIB_ID& baseFpid = component->GetFPID();
         const bool    hasBaseFpid = !baseFpid.empty();
+
+        if( baseFpid.IsLegacy() )
+        {
+            msg.Printf( _( "Warning: %s footprint '%s' is missing a library name. "
+                           "Use the full 'Library:Footprint' format to avoid repeated update "
+                           "notifications." ),
+                        component->GetReference(),
+                        EscapeHTML( baseFpid.Format().wx_str() ) );
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            ++m_warningCount;
+        }
+
         std::vector<FOOTPRINT*> matchingFootprints;
 
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -2001,13 +2013,35 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             addExpectedFpid( parsedId );
         }
 
+        // When the schematic-side FPID has no library nickname (legacy format like
+        // "DGG56" instead of "Package_SO:DGG56"), matching should compare only the
+        // footprint item name. Otherwise the board footprint (which always has a library
+        // nickname) will never match, causing perpetual "change footprint" notifications.
+        auto fpidMatches =
+                [&]( const LIB_ID& aBoardFpid, const LIB_ID& aExpectedFpid ) -> bool
+                {
+                    if( aExpectedFpid.IsLegacy() )
+                        return aBoardFpid.GetLibItemName() == aExpectedFpid.GetLibItemName();
+
+                    return aBoardFpid == aExpectedFpid;
+                };
+
         auto isExpectedFpid =
                 [&]( const LIB_ID& aFpid ) -> bool
                 {
                     if( aFpid.empty() )
                         return false;
 
-                    return expectedFpidKeys.count( aFpid.Format() ) > 0;
+                    if( expectedFpidKeys.count( aFpid.Format() ) > 0 )
+                        return true;
+
+                    for( const LIB_ID& expected : expectedFpids )
+                    {
+                        if( fpidMatches( aFpid, expected ) )
+                            return true;
+                    }
+
+                    return false;
                 };
 
         auto takeMatchingFootprint =
@@ -2018,7 +2052,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                         if( usedFootprints.count( footprint ) )
                             continue;
 
-                        if( footprint->GetFPID() == aFpid )
+                        if( fpidMatches( footprint->GetFPID(), aFpid ) )
                             return footprint;
                     }
 
