@@ -25,6 +25,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <zone.h>
 
 
@@ -78,6 +79,49 @@ BOOST_AUTO_TEST_CASE( RescuedLayers )
     BOOST_TEST( zone.GetLayer() == zone.GetFirstLayer() );
 
     BOOST_TEST( zone.IsOnCopperLayer() == false );
+}
+
+/**
+ * Verify that a rule area on all inner copper layers does not produce a
+ * spurious layer validation error when the footprint uses the default
+ * EXPAND_INNER_LAYERS stackup mode.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23042
+ */
+BOOST_AUTO_TEST_CASE( RuleAreaInnerLayersExpandMode )
+{
+    FOOTPRINT footprint( &m_board );
+    footprint.SetStackupMode( FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS );
+
+    ZONE* ruleArea = new ZONE( &footprint );
+    ruleArea->SetIsRuleArea( true );
+    ruleArea->SetLayerSet( LSET::InternalCuMask() );
+    footprint.Add( ruleArea );
+
+    // Collect all layers used by the footprint (mirrors GetAllUsedFootprintLayers
+    // from dialog_footprint_properties_fp_editor.cpp)
+    LSET usedLayers;
+
+    footprint.RunOnChildren(
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( aItem->Type() == PCB_ZONE_T )
+                    usedLayers |= static_cast<ZONE*>( aItem )->GetLayerSet();
+                else
+                    usedLayers.set( aItem->GetLayer() );
+            },
+            RECURSE_MODE::RECURSE );
+
+    // In EXPAND_INNER_LAYERS mode, F_Cu, B_Cu and all inner copper layers
+    // are valid, along with tech, user, and user-defined layers.
+    LSET allowedLayers = LSET{ F_Cu, B_Cu } | LSET::InternalCuMask();
+    allowedLayers |= LSET::UserDefinedLayersMask( 4 );
+
+    usedLayers &= ~allowedLayers;
+    usedLayers &= ~LSET::AllTechMask();
+    usedLayers &= ~LSET::UserMask();
+
+    BOOST_TEST( usedLayers.none() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

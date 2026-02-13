@@ -544,7 +544,8 @@ LSET DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::getCustomLayersFromControls() const
     }
     else
     {
-        userLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
+        userLayers |= LSET{ F_Cu, B_Cu };
+        userLayers |= LSET::InternalCuMask();
         userLayers |= LSET::UserDefinedLayersMask( 4 );
     }
 
