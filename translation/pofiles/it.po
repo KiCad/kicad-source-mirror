@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 08:25+0000\n"
+"PO-Revision-Date: 2026-02-13 12:09+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
@@ -17468,9 +17468,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Il pin %s è connesso sia a %s che a %s"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Il pin %s è connesso sia a %s che a %s"
+msgstr "Il pin %s sul simbolo '%s' è connesso a net diverse: %s e %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17633,9 +17633,8 @@ msgstr ""
 "Pin di potenza d'ingresso non pilotato da nessun pin di potenza d'uscita"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Duplica la delimitazione zona su uno strato diverso"
+msgstr "Duplica pin con net diverse"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -19015,9 +19014,9 @@ msgid "Show Field Name"
 msgstr "Mostra nome campo"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:937
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Errore nel caricamento dello schema \"%s\"."
+msgstr "Errore analizzando lo schema Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:983
 #, c-format
@@ -19122,9 +19121,9 @@ msgid "File not found %s."
 msgstr "File non trovato %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4976
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Errore durante l'analisi della libreria SPICE '%s': %s"
+msgstr "Errore analizzando la libreria Altium: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4999
 msgid "Expected Altium Schematic Library file version 5.0"
