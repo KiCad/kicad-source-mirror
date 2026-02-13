@@ -29,6 +29,8 @@
 #include <mutex>
 #include <unordered_set>
 
+#include <template_fieldnames.h>
+
 #include <board_item_container.h>
 #include <board_item.h>
 #include <embedded_files.h>
