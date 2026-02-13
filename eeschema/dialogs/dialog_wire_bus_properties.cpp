@@ -27,6 +27,7 @@
 #include <sch_junction.h>
 #include <dialog_wire_bus_properties.h>
 #include <dialogs/dialog_color_picker.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <stroke_params.h>

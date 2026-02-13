@@ -22,6 +22,7 @@
  */
 
 #include <bitmaps.h>
+#include <common.h>
 #include <confirm.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
@@ -29,6 +30,9 @@
 #include <pcbexpr_evaluator.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
+#include <project/net_settings.h>
+#include <settings/common_settings.h>
 #include <project.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>

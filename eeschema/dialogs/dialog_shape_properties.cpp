@@ -29,6 +29,7 @@
 #include <sch_rule_area.h>
 #include <dialog_shape_properties.h>
 #include <settings/color_settings.h>
+#include <widgets/wx_infobar.h>
 #include <symbol_editor_settings.h>
 #include <sch_commit.h>
 #include <string_utils.h>

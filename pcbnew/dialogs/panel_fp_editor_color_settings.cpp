@@ -19,6 +19,7 @@
  */
 
 #include <pgm_base.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <layer_ids.h>

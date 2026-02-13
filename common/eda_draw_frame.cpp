@@ -32,6 +32,7 @@
 #include <dialog_shim.h>
 #include <dialogs/hotkey_cycle_popup.h>
 #include <eda_draw_frame.h>
+#include <eda_search_data.h>
 #include <file_history.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
@@ -189,6 +190,12 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_auimgr.UnInit();
 
     ReleaseFile();
+}
+
+
+EDA_SEARCH_DATA& EDA_DRAW_FRAME::GetFindReplaceData()
+{
+    return *m_findReplaceData;
 }
 
 

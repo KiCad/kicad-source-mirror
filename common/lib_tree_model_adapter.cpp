@@ -165,6 +165,12 @@ LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
 {}
 
 
+TOOL_DISPATCHER* LIB_TREE_MODEL_ADAPTER::GetToolDispatcher() const
+{
+    return m_parent->GetToolDispatcher();
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::loadColumnConfig()
 {
     for( const std::pair<const wxString, int>& pair : m_cfg.column_widths )

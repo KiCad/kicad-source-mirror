@@ -26,10 +26,7 @@
 
 #include <memory>
 
-#include <netclass.h>
-#include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
-#include <drc/drc_engine.h>
 #include <lset.h>
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>
@@ -99,6 +96,10 @@
 
 #define MINIMUM_ERROR_SIZE_MM         0.001   // For arc approximation
 #define MAXIMUM_ERROR_SIZE_MM         0.1     // For arc approximation
+
+class DRC_ENGINE;
+class NET_SETTINGS;
+class NETCLASS;
 
 #define MAXIMUM_CLEARANCE             pcbIUScale.mmToIU( 500 )  // to prevent int-overflows
 

@@ -38,6 +38,8 @@
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
 #include <board.h>
+#include <project/net_settings.h>
+#include <widgets/wx_infobar.h>
 #include <footprint.h>
 #include <confirm.h>
 #include <footprint_edit_frame.h>

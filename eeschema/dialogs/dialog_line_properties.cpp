@@ -25,6 +25,7 @@
 #include <sch_line.h>
 #include <dialog_line_properties.h>
 #include <dialogs/dialog_color_picker.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <stroke_params.h>

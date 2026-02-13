@@ -31,6 +31,7 @@
 #include <pcb_scripting_tool.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <api/api_plugin_manager.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/paged_dialog.h>

@@ -25,6 +25,7 @@
 
 #include "pcb_draw_panel_gal.h"
 
+#include <settings/color_settings.h>
 #include <pcb_view.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>

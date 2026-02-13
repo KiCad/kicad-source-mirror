@@ -69,6 +69,7 @@ Load() TODO's
 #include <project.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>

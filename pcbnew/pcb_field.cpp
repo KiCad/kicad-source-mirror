@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <common.h>
 #include <pcb_field.h>
 #include <footprint.h>
 #include <board_design_settings.h>

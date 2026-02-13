@@ -28,7 +28,6 @@
 #define BOARD_ITEM_CONTAINER_H
 
 #include <board_item.h>
-#include <zone_settings.h>
 
 enum class ADD_MODE
 {

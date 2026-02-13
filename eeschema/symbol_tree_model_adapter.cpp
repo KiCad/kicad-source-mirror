@@ -26,6 +26,7 @@
 #include <wx/window.h>
 #include <core/kicad_algo.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <project/project_file.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialogs/html_message_box.h>

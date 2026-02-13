@@ -50,6 +50,7 @@
 #include <sch_junction.h>
 #include <junction_helpers.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <eeschema_id.h>
 #include <pgm_base.h>
 #include <view/view_controls.h>

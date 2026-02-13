@@ -143,6 +143,12 @@ LANGUAGE_DESCR LanguagesList[] =
 #define _(s) wxGetTranslation((s))
 
 
+BS::priority_thread_pool& PGM_BASE::GetThreadPool()
+{
+    return *m_singleton.m_ThreadPool;
+}
+
+
 PGM_BASE::PGM_BASE()
 {
     m_locale = nullptr;

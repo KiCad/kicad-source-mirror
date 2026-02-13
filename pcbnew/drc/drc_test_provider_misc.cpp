@@ -22,6 +22,7 @@
  */
 
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>

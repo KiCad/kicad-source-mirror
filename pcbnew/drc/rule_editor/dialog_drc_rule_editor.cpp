@@ -18,6 +18,8 @@
  */
 
 
+#include <drc/drc_engine.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/appearance_controls.h>
 

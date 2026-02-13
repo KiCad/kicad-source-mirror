@@ -36,11 +36,10 @@
 #include <wx/string.h>
 
 #include <math/vector2d.h>
-#include <geometry/shape_poly_set.h>
-#include <project/net_settings.h>
 #include <zone.h>
 
 class FROM_TO_CACHE;
+class NET_SETTINGS;
 class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
 class CN_EDGE;

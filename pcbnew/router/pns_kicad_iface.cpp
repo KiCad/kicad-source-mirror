@@ -22,6 +22,7 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <netinfo.h>
 #include <footprint.h>
 #include <layer_range.h>

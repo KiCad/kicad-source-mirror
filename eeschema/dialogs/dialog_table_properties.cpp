@@ -29,6 +29,7 @@
 #include <widgets/grid_text_helpers.h>
 #include <grid_tricks.h>
 #include <settings/color_settings.h>
+#include <widgets/wx_infobar.h>
 #include <sch_table.h>
 #include <sch_commit.h>
 #include <tool/tool_manager.h>

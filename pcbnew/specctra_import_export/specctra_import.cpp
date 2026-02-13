@@ -36,6 +36,7 @@
 #include <confirm.h>            // DisplayErrorMessage()
 #include <fast_float/fast_float.h>
 #include <pcb_edit_frame.h>
+#include <project/net_settings.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <board.h>

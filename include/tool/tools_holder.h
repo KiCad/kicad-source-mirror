@@ -26,7 +26,7 @@
 
 #include <vector>
 #include <tool/selection.h>
-#include <settings/common_settings.h>
+#include <mouse_drag_action.h>
 
 struct ACTION_CONDITIONS;
 

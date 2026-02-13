@@ -37,6 +37,7 @@
 #include <geometry/geometry_utils.h>
 #include <lset.h>
 #include <pgm_base.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
 #include <pcbnew_settings.h>

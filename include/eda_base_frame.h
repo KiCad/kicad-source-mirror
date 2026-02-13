@@ -33,10 +33,13 @@
 #define  EDA_BASE_FRAME_H_
 
 
+#include <functional>
 #include <map>
 #include <optional>
+#include <string>
 #include <vector>
 
+#include <memory>
 #include <nlohmann/json_fwd.hpp>
 
 #include <wx/aui/aui.h>
@@ -44,10 +47,9 @@
 #include <frame_type.h>
 #include <hotkeys_basic.h>
 #include <kiway_holder.h>
-#include <tool/action_toolbar.h>
 #include <tool/tools_holder.h>
 #include <widgets/ui_common.h>
-#include <widgets/wx_infobar.h>
+#include <widgets/wx_infobar_message_type.h>
 #include <undo_redo_container.h>
 #include <units_provider.h>
 #include <origin_transforms.h>
@@ -89,8 +91,13 @@ class APPEARANCE_CONTROLS_3D;
 struct WINDOW_SETTINGS;
 struct WINDOW_STATE;
 class ACTION_MENU;
+class ACTION_TOOLBAR;
+class ACTION_TOOLBAR_CONTROL;
 class TOOL_INTERACTIVE;
 class TOOLBAR_SETTINGS;
+class WX_INFOBAR;
+
+using ACTION_TOOLBAR_CONTROL_FACTORY = std::function<void( ACTION_TOOLBAR* )>;
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
@@ -204,20 +211,7 @@ public:
      * Select the given action in the toolbar group which contains it, if any.
      * This updates the displayed icon/tooltip and UI conditions for that group.
      */
-    void SelectToolbarAction( const TOOL_ACTION& aAction )
-    {
-        if( m_tbLeft )
-            m_tbLeft->SelectAction( aAction );
-
-        if( m_tbTopMain )
-            m_tbTopMain->SelectAction( aAction );
-
-        if( m_tbTopAux )
-            m_tbTopAux->SelectAction( aAction );
-
-        if( m_tbRight )
-            m_tbRight->SelectAction( aAction );
-    }
+    void SelectToolbarAction( const TOOL_ACTION& aAction );
 
     void OnMaximize( wxMaximizeEvent& aEvent );
 
@@ -268,7 +262,7 @@ public:
      * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false,
-                           WX_INFOBAR::MESSAGE_TYPE aType = WX_INFOBAR::MESSAGE_TYPE::GENERIC );
+                           INFOBAR_MESSAGE_TYPE aType = INFOBAR_MESSAGE_TYPE::GENERIC );
 
     /**
      * Show the #WX_INFOBAR displayed on the top of the canvas with a message and an error
@@ -806,7 +800,7 @@ private:
 
     wxAuiManager            m_auimgr;
     wxString                m_perspective;       // wxAuiManager perspective.
-    nlohmann::json          m_auiLayoutState;
+    std::unique_ptr<nlohmann::json> m_auiLayoutState;
     WX_INFOBAR*             m_infoBar;           // Infobar for the frame
     APPEARANCE_CONTROLS_3D* m_appearancePanel;
     wxString                m_configName;        // Prefix used to identify some params (frame

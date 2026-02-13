@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <future>
 #include <mutex>
+#include <ranges>
 
 #include <connectivity/connectivity_algo.h>
 #include <progress_reporter.h>

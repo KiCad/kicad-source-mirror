@@ -25,6 +25,7 @@
 
 #include <plotters/plotter.h>
 #include <pcbplot.h>
+#include <common.h>
 #include <base_units.h>
 #include <lset.h>
 #include <locale_io.h>

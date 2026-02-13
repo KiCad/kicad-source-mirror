@@ -44,6 +44,7 @@
 #include <project_sch.h>
 #include <sch_painter.h>
 #include <sch_view.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <toolbars_symbol_editor.h>
 #include <tool/action_manager.h>
@@ -76,6 +77,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/sch_properties_panel.h>
+#include <widgets/lib_tree.h>
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <widgets/filedlg_hook_new_library.h>

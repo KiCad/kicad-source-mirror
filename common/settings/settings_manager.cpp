@@ -286,6 +286,20 @@ COLOR_SETTINGS* SETTINGS_MANAGER::GetColorSettings( const wxString& aName )
 }
 
 
+std::vector<COLOR_SETTINGS*> SETTINGS_MANAGER::GetColorSettingsList()
+{
+    std::vector<COLOR_SETTINGS*> ret;
+
+    for( const std::pair<const wxString, COLOR_SETTINGS*>& entry : m_color_settings )
+        ret.push_back( entry.second );
+
+    std::sort( ret.begin(), ret.end(), []( COLOR_SETTINGS* a, COLOR_SETTINGS* b )
+                                       { return a->GetName() < b->GetName(); } );
+
+    return ret;
+}
+
+
 COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName )
 {
     wxLogTrace( traceSettings, wxT( "Attempting to load color theme %s" ), aName );

@@ -25,6 +25,8 @@
 
 #include "panel_zone_properties.h"
 
+#include <widgets/wx_infobar.h>
+#include <zone_layer_properties_grid.h>
 #include <grid_tricks.h>
 #include <wx/radiobut.h>
 #include <kiface_base.h>

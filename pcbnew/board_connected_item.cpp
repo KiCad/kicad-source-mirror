@@ -26,6 +26,7 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <drc/drc_engine.h>
 #include <connectivity/connectivity_data.h>
 #include <lset.h>

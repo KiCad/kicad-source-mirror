@@ -26,6 +26,7 @@
 #include <google/protobuf/any.pb.h>
 
 #include <advanced_config.h>
+#include <common.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <bitmaps.h>

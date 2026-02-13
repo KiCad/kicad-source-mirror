@@ -27,6 +27,7 @@
 #include <widgets/color_swatch.h>
 #include <widgets/font_choice.h>
 #include <settings/color_settings.h>
+#include <widgets/wx_infobar.h>
 #include <sch_table.h>
 #include <sch_text.h>
 #include <sch_commit.h>

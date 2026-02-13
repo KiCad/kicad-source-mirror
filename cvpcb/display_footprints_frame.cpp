@@ -42,6 +42,7 @@
 #include <pgm_base.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
+#include <widgets/wx_infobar.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>

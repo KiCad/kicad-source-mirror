@@ -29,6 +29,7 @@
 #include <tool/tool_interactive.h>
 
 class DESIGN_BLOCK_PANE;
+class LIB_TREE_NODE;
 
 /**
  * Handle schematic design block actions in the schematic editor.

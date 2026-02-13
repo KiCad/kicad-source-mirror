@@ -35,6 +35,8 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
+#include <tool/action_toolbar.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_dimension.h>
 #include <pcb_layer_box_selector.h>

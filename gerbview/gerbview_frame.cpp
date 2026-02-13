@@ -19,6 +19,7 @@
  */
 
 #include <kiface_base.h>
+#include <settings/color_settings.h>
 #include <base_units.h>
 #include <pgm_base.h>
 #include <bitmaps.h>

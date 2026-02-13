@@ -29,6 +29,7 @@
 #include <dialogs/html_message_box.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
+#include <settings/color_settings.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiway.h>

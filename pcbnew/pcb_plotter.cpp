@@ -22,6 +22,7 @@
  */
 
 #include <pcb_plotter.h>
+#include <common.h>
 #include <plotters/plotter.h>
 #include <plotters/plotters_pslike.h>
 #include <board.h>

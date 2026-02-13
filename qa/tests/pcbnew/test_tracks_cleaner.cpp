@@ -28,9 +28,11 @@
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <connectivity/connectivity_data.h>
 #include <tracks_cleaner.h>
 #include <cleanup_item.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>

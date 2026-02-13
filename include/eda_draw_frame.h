@@ -28,7 +28,6 @@
 
 #include <api/api_plugin.h>
 #include <eda_base_frame.h>
-#include <eda_search_data.h>
 #include <kiway_player.h>
 #include <gal/gal_display_options.h>
 #include <gal_display_options_common.h>
@@ -36,8 +35,10 @@
 #include <class_draw_panel_gal.h>
 #include <kiid.h>
 #include <hotkeys_basic.h>
-#include <widgets/lib_tree.h>
+#include <lib_id.h>
 
+struct EDA_SEARCH_DATA;
+class LIB_TREE;
 class EDA_ITEM;
 class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
@@ -115,7 +116,7 @@ public:
      */
     bool IsScriptingConsoleVisible();
 
-    EDA_SEARCH_DATA& GetFindReplaceData() { return *m_findReplaceData; }
+    EDA_SEARCH_DATA& GetFindReplaceData();
     wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;

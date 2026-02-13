@@ -27,6 +27,7 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <footprint.h>

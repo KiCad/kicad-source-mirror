@@ -44,6 +44,7 @@
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
+#include <widgets/wx_infobar.h>
 #include <trace_helpers.h>
 #include "panel_eeschema_color_settings.h"
 #include "wx/dcclient.h"

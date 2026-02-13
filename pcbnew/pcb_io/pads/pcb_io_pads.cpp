@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <functional>
 
 #include <board.h>
@@ -47,6 +48,7 @@
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <netclass.h>
 #include <geometry/eda_angle.h>

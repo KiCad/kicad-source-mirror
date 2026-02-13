@@ -30,6 +30,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <layer_range.h>
 #include <pcb_dimension.h>
 #include <pad.h>

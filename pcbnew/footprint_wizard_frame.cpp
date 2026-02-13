@@ -33,6 +33,7 @@
 #include <bitmaps.h>
 #include <grid_tricks.h>
 #include <board.h>
+#include <project/net_settings.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <pcbnew_id.h>
@@ -514,7 +515,7 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::LoadSettings( cfg );
 
     m_auiPerspective = cfg->m_FootprintViewer.perspective;
-    m_viewerAuiState = cfg->m_FootprintViewer.aui_state;
+    m_viewerAuiState = std::make_unique<nlohmann::json>( cfg->m_FootprintViewer.aui_state );
 }
 
 

@@ -22,6 +22,7 @@
 #include <lset.h>
 #include <lseq.h>
 #include <project/board_project_settings.h>
+#include <project/board_project_settings_params.h>
 #include <settings/layer_settings_utils.h>
 
 using namespace std::placeholders;

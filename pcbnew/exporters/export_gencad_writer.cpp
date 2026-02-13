@@ -19,6 +19,7 @@
 #include "export_gencad_writer.h"
 
 #include <build_version.h>
+#include <common.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>

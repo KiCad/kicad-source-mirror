@@ -22,6 +22,7 @@
 #include "pcbnew_jobs_handler.h"
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <board_statistics_report.h>
 #include <drc/drc_item.h>
 #include <drc/drc_report.h>

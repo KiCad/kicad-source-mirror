@@ -42,6 +42,7 @@
 #include <wx/filedlg.h>
 #include <fmt/format.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <sim/sim_model_l_mutual.h>
 #include <sim/spice_circuit_model.h>
 #include <widgets/filedlg_hook_embed_file.h>

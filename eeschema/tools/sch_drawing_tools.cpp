@@ -38,6 +38,7 @@
 #include <sch_actions.h>
 #include <sch_tool_utils.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <pgm_base.h>
 #include <design_block.h>
 #include <widgets/sch_design_block_pane.h>

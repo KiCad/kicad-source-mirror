@@ -24,6 +24,7 @@
 #ifndef PANEL_FOOTPRINT_CHOOSER_H
 #define PANEL_FOOTPRINT_CHOOSER_H
 
+#include <wx/toplevel.h>
 #include <widgets/lib_tree.h>
 #include <fp_tree_model_adapter.h>
 #include <widgets/footprint_preview_widget.h>

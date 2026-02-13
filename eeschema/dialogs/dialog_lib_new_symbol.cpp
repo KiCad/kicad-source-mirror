@@ -23,6 +23,7 @@
  */
 
 #include "dialog_lib_new_symbol.h"
+#include <widgets/wx_infobar.h>
 
 #include <default_values.h>
 #include <eda_draw_frame.h>

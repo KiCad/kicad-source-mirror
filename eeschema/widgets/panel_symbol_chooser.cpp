@@ -25,6 +25,7 @@
 #include "panel_symbol_chooser.h"
 
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
 #include <project_sch.h>

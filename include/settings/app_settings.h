@@ -22,7 +22,7 @@
 #define _APP_SETTINGS_H
 
 #include <gal/color4d.h>
-#include <nlohmann/json_fwd.hpp>
+#include <json_common.h>
 #include <settings/json_settings.h>
 #include <settings/grid_settings.h>
 

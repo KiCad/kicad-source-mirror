@@ -25,7 +25,7 @@
 #include <mutex>
 #include <typeinfo>
 #include <core/wx_stl_compat.h> // for wxString hash
-#include <settings/color_settings.h>
+#include <settings/json_settings.h>
 #include <pgm_base.h>
 
 class COLOR_SETTINGS;
@@ -219,20 +219,7 @@ public:
      */
     COLOR_SETTINGS* GetColorSettings( const wxString& aName );
 
-    std::vector<COLOR_SETTINGS*> GetColorSettingsList()
-    {
-        std::vector<COLOR_SETTINGS*> ret;
-
-        for( const std::pair<const wxString, COLOR_SETTINGS*>& entry : m_color_settings )
-            ret.push_back( entry.second );
-
-        std::sort( ret.begin(), ret.end(), []( COLOR_SETTINGS* a, COLOR_SETTINGS* b )
-                                           {
-                                               return a->GetName() < b->GetName();
-                                           } );
-
-        return ret;
-    }
+    std::vector<COLOR_SETTINGS*> GetColorSettingsList();
 
     /**
      * Safely save a #COLOR_SETTINGS to disk, preserving any changes outside the given namespace.

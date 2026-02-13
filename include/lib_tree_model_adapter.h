@@ -23,7 +23,6 @@
 #ifndef LIB_TREE_MODEL_ADAPTER_H
 #define LIB_TREE_MODEL_ADAPTER_H
 
-#include <eda_base_frame.h>
 #include <lib_id.h>
 #include <lib_tree_model.h>
 #include <settings/app_settings.h>
@@ -96,6 +95,7 @@
 #include <project.h>
 
 ;
+class TOOL_DISPATCHER;
 class TOOL_INTERACTIVE;
 class EDA_BASE_FRAME;
 
@@ -279,7 +279,7 @@ public:
     virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) {}
     virtual void ShutdownPreview( wxWindow* aParent ) {}
 
-    TOOL_DISPATCHER* GetToolDispatcher() const { return m_parent->GetToolDispatcher(); }
+    TOOL_DISPATCHER* GetToolDispatcher() const;
 
     /**
      * Return the number of symbols loaded in the tree.

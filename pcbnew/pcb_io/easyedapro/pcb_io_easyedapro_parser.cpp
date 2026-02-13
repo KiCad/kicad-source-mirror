@@ -34,6 +34,7 @@
 
 #include <wx/wfstream.h>
 #include <wx/stdstream.h>
+#include <wx/base64.h>
 #include <wx/log.h>
 #include <glm/glm.hpp>
 

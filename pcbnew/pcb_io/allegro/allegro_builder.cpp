@@ -38,6 +38,7 @@
 #include <core/profile.h>
 
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <footprint.h>
 #include <netclass.h>
 #include <pad.h>

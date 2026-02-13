@@ -23,6 +23,7 @@
  */
 
 #include <bitmaps.h>
+#include <widgets/wx_infobar.h>
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
 #include <sch_pin.h>

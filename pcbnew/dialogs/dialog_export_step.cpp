@@ -33,6 +33,7 @@
 #include <kiplatform/ui.h>
 
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <board.h>
 #include <confirm.h>
 #include <kidialog.h>

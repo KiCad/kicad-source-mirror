@@ -37,6 +37,7 @@
 #include <footprint.h>
 #include <zone.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <set>
 

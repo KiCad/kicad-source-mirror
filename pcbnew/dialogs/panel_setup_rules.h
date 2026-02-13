@@ -29,6 +29,7 @@
 #include <panel_setup_rules_base.h>
 
 class DRC;
+class DRC_RULE;
 class PAGED_DIALOG;
 class PCB_EDIT_FRAME;
 class SCINTILLA_TRICKS;

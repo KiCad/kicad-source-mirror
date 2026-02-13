@@ -29,6 +29,7 @@
 #include <board_stackup_manager/stackup_predefined_prms.h> // KEY_COPPER, KEY_CORE, KEY_PREPREG
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>

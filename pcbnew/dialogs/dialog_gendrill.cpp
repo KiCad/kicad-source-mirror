@@ -24,6 +24,7 @@
 
 #include "dialog_gendrill.h"
 
+#include <common.h>
 #include <wx/msgdlg.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>

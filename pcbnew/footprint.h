@@ -44,7 +44,6 @@
 #include <zones.h>
 #include <convert_shape_list_to_polygon.h>
 #include <pcb_item_containers.h>
-#include <pcb_text.h>
 #include <pcb_field.h>
 #include <functional>
 #include <math/vector3.h>

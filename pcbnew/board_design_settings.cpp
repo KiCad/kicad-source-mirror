@@ -28,6 +28,7 @@
 #include <kiface_base.h>
 #include <pad.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <drc/drc_item.h>
 #include <drc/drc_engine.h>
 #include <settings/json_settings_internals.h>

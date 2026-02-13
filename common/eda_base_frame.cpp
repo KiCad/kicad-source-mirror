@@ -27,6 +27,7 @@
 #include "dialogs/panel_maintenance.h"
 #include "kicad_manager_frame.h"
 #include <eda_base_frame.h>
+#include <nlohmann/json.hpp>
 
 #include <advanced_config.h>
 #include <bitmaps.h>
@@ -577,6 +578,22 @@ void EDA_BASE_FRAME::configureToolbars()
 }
 
 
+void EDA_BASE_FRAME::SelectToolbarAction( const TOOL_ACTION& aAction )
+{
+    if( m_tbLeft )
+        m_tbLeft->SelectAction( aAction );
+
+    if( m_tbTopMain )
+        m_tbTopMain->SelectAction( aAction );
+
+    if( m_tbTopAux )
+        m_tbTopAux->SelectAction( aAction );
+
+    if( m_tbRight )
+        m_tbRight->SelectAction( aAction );
+}
+
+
 void EDA_BASE_FRAME::RecreateToolbars()
 {
     wxWindowUpdateLocker dummy( this );
@@ -1001,7 +1018,7 @@ void EDA_BASE_FRAME::LoadWindowSettings( const WINDOW_SETTINGS* aCfg )
     LoadWindowState( aCfg->state );
 
     m_perspective = aCfg->perspective;
-    m_auiLayoutState = aCfg->aui_state;
+    m_auiLayoutState = std::make_unique<nlohmann::json>( aCfg->aui_state );
     m_mruPath = aCfg->mru_path;
 
     TOOLS_HOLDER::CommonSettingsChanged();
@@ -1171,11 +1188,11 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
 #if wxCHECK_VERSION( 3, 3, 0 )
     bool restored = false;
 
-    if( !m_auiLayoutState.is_null() && !m_auiLayoutState.empty() )
+    if( m_auiLayoutState && !m_auiLayoutState->is_null() && !m_auiLayoutState->empty() )
     {
         WX_AUI_JSON_SERIALIZER serializer( m_auimgr );
 
-        if( serializer.Deserialize( m_auiLayoutState ) )
+        if( serializer.Deserialize( *m_auiLayoutState ) )
             restored = true;
     }
 
@@ -1202,7 +1219,7 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
 
 
 void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
-                                       WX_INFOBAR::MESSAGE_TYPE aType )
+                                       INFOBAR_MESSAGE_TYPE aType )
 {
     m_infoBar->RemoveAllButtons();
 

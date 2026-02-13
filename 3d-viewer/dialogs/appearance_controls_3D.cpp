@@ -21,6 +21,7 @@
 #include <dialogs/appearance_controls_3D.h>
 
 #include <bitmaps.h>
+#include <settings/color_settings.h>
 #include <confirm.h>
 #include <pgm_base.h>
 #include <dpi_scaling_common.h>
@@ -35,6 +36,7 @@
 #include <tools/eda_3d_actions.h>
 #include <widgets/bitmap_toggle.h>
 #include <widgets/color_swatch.h>
+#include <widgets/wx_infobar.h>
 #include <widgets/grid_bitmap_toggle.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wx/bmpbuttn.h>

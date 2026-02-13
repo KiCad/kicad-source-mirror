@@ -24,7 +24,7 @@
 #include <settings/nested_settings.h>
 #include <settings/bom_settings.h>
 #include <template_fieldnames.h>
-#include <font/font.h>
+#include <font/font_metrics.h>
 
 class NGSPICE_SETTINGS;
 class REFDES_TRACKER;

@@ -24,6 +24,7 @@
 
 
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <bitmaps.h>
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>

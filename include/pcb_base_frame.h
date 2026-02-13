@@ -233,7 +233,7 @@ public:
     virtual void ShowChangedLanguage() override;
     virtual void UpdateStatusBar() override;
 
-    PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
+    PCB_SCREEN* GetScreen() const override;
 
     /**
      * Show the 3D view frame.
@@ -347,8 +347,8 @@ public:
      */
     virtual void SwitchLayer( PCB_LAYER_ID aLayer );
 
-    virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) { GetScreen()->m_Active_Layer = aLayer; }
-    virtual PCB_LAYER_ID GetActiveLayer() const { return GetScreen()->m_Active_Layer; }
+    virtual void SetActiveLayer( PCB_LAYER_ID aLayer );
+    virtual PCB_LAYER_ID GetActiveLayer() const;
 
     SEVERITY GetSeverity( int aErrorCode ) const override;
 

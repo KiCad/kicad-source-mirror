@@ -26,11 +26,13 @@
 #include <string>
 
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <board.h>
 #include <boost/test/unit_test.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/uuid.hpp>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <footprint.h>
 #include <pad.h>

@@ -22,14 +22,13 @@
 #define _JSON_SETTINGS_H
 
 #include <core/wx_stl_compat.h>
-#include <gal/gal_display_options.h>
 
 #include <utility>
 #include <wx/string.h>
 
 #include <functional>
 #include <optional>
-#include <settings/json_settings_internals.h>
+#include <nlohmann/json_fwd.hpp>
 #include <json_conversions.h>
 
 #include <kicommon.h>
@@ -48,6 +47,7 @@ struct GRID;
 namespace KIGFX
 {
 class COLOR4D;
+enum class CROSS_HAIR_MODE : int;
 };
 
 #define traceSettings wxT( "KICAD_SETTINGS" )

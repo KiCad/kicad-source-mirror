@@ -28,6 +28,7 @@
  */
 
 #include "netinfo.h"
+#include <project/net_settings.h>
 
 #include <fmt/format.h>
 

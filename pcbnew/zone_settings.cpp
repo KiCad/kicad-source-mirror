@@ -24,6 +24,7 @@
  */
 
 #include <zone_settings.h>
+#include <zone_layer_properties_grid.h>
 
 #include <pcb_base_frame.h>
 #include <board.h>

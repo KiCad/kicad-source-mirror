@@ -22,6 +22,7 @@
  */
 
 #include "panel_setup_zone_hatch_offsets.h"
+#include <zone_layer_properties_grid.h>
 #include <grid_layer_box_helpers.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>

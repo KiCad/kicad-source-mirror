@@ -18,6 +18,7 @@
  */
 
 #include <pgm_base.h>
+#include <settings/color_settings.h>
 #include <layer_ids.h>
 #include <panel_gerbview_color_settings.h>
 #include <settings/settings_manager.h>

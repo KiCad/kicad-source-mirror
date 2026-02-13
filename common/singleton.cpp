@@ -18,6 +18,7 @@
  */
 
 #include <singleton.h>
+#include <advanced_config.h>
 #include <bs_thread_pool.hpp>
 #include <gal/opengl/gl_context_mgr.h>
 #include <thread_pool.h>

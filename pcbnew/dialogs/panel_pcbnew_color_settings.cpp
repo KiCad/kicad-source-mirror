@@ -21,6 +21,7 @@
 #include <regex>
 
 #include <pgm_base.h>
+#include <settings/color_settings.h>
 #include <board.h>
 #include <layer_ids.h>
 #include <layer_range.h>

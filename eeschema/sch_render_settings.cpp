@@ -24,6 +24,7 @@
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <advanced_config.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
 #include <default_values.h>

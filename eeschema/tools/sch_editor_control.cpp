@@ -82,6 +82,7 @@
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <view/view_controls.h>
+#include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <wx/filedlg.h>

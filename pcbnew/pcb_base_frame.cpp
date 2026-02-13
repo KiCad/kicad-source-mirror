@@ -624,6 +624,24 @@ void PCB_BASE_FRAME::doReCreateMenuBar()
 }
 
 
+PCB_SCREEN* PCB_BASE_FRAME::GetScreen() const
+{
+    return static_cast<PCB_SCREEN*>( EDA_DRAW_FRAME::GetScreen() );
+}
+
+
+void PCB_BASE_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
+{
+    GetScreen()->m_Active_Layer = aLayer;
+}
+
+
+PCB_LAYER_ID PCB_BASE_FRAME::GetActiveLayer() const
+{
+    return GetScreen()->m_Active_Layer;
+}
+
+
 void PCB_BASE_FRAME::ShowChangedLanguage()
 {
     // call my base class

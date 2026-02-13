@@ -34,10 +34,12 @@
 #include <3d_viewer_id.h>
 #include <advanced_config.h>
 #include <build_version.h>
+#include <settings/color_settings.h>
 #include <board.h>
 #include <pad.h>
 #include <pcb_field.h>
 #include <reporter.h>
+#include <widgets/wx_infobar.h>
 #include <gal/opengl/gl_context_mgr.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>

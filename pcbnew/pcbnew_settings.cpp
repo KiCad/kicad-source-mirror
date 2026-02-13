@@ -24,6 +24,7 @@
 #include <pybind11/pybind11.h>
 
 #include <common.h>
+#include <settings/color_settings.h>
 #include <footprint_editor_settings.h>
 #include <layer_ids.h>
 #include <lset.h>

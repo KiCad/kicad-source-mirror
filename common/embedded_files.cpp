@@ -36,7 +36,34 @@
 #include <kiid.h>
 #include <mmh3_hash.h>
 #include <paths.h>
+#include <picosha2.h>
+#include <wildcards_and_files_ext.h>
 
+
+bool EMBEDDED_FILES::EMBEDDED_FILE::Validate()
+{
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( decompressedData );
+
+    is_valid = ( hash.digest().ToString() == data_hash );
+    return is_valid;
+}
+
+
+bool EMBEDDED_FILES::EMBEDDED_FILE::Validate_SHA256()
+{
+    std::string new_sha;
+    picosha2::hash256_hex_string( decompressedData, new_sha );
+
+    is_valid = ( new_sha == data_hash );
+    return is_valid;
+}
+
+
+wxString EMBEDDED_FILES::EMBEDDED_FILE::GetLink() const
+{
+    return wxString::Format( "%s://%s", FILEEXT::KiCadUriPrefix, name );
+}
 
 
 EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName, bool aOverwrite )

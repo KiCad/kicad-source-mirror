@@ -24,6 +24,7 @@
 
 #include <bitmap2cmp_frame.h>
 #include <bitmap2component.h>
+#include <reporter.h>
 #include <bitmap2cmp_panel.h>
 #include <bitmap2cmp_settings.h>
 #include <bitmap_io.h>

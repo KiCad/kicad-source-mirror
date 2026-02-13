@@ -59,6 +59,7 @@
 #include <reporter.h>
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>

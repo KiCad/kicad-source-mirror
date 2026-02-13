@@ -42,6 +42,7 @@
 #include <netinfo.h>
 #include <netclass.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <reporter.h>
 
 #include <filesystem>

@@ -23,6 +23,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <eda_list_dialog.h>

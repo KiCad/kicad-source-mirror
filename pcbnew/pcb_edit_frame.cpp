@@ -25,6 +25,7 @@
 #include <kiface_base.h>
 #include <kiway.h>
 #include <board_design_settings.h>
+#include <settings/color_settings.h>
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>

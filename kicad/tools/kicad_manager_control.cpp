@@ -33,6 +33,7 @@
 #include <kidialog.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
 #include <tool/selection.h>

@@ -29,13 +29,14 @@
 
 #include <deque>
 
-#include <geometry/shape_line_chain.h>
 #include <api/serializable.h>
 #include <core/typeinfo.h>
 #include <eda_item_flags.h>
 #include <eda_search_data.h>
 #include <view/view_item.h>
 #include <kiid.h>
+
+class SHAPE_LINE_CHAIN;
 
 enum class BITMAPS : unsigned int;
 

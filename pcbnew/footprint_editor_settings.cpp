@@ -20,6 +20,8 @@
 
 #include "footprint_editor_settings.h"
 
+#include <project/board_project_settings_params.h>
+#include <settings/color_settings.h>
 #include <common.h>
 #include <layer_ids.h>
 #include <lset.h>

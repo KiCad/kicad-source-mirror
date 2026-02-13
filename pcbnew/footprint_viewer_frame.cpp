@@ -27,6 +27,8 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
+#include <project/net_settings.h>
+#include <settings/color_settings.h>
 #include <footprint.h>
 #include <confirm.h>
 #include <eda_pattern_match.h>

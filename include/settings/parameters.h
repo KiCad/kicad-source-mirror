@@ -27,6 +27,7 @@
 #include <math/util.h>
 
 #include <optional>
+#include <json_common.h>
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
 #include <settings/grid_settings.h>

@@ -31,6 +31,7 @@
 #include <sstream>
 
 using namespace std::placeholders;
+#include <tool/action_manager.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_item.h>

@@ -30,6 +30,7 @@
 #ifndef FOOTPRINT_WIZARD_FRAME_H_
 #define FOOTPRINT_WIZARD_FRAME_H_
 
+#include <memory>
 #include <wx/gdicmn.h>
 #include <footprint_wizard.h>
 #include <pcb_base_edit_frame.h>
@@ -192,7 +193,7 @@ private:
     wxTextCtrl*     m_buildMessageBox;
 
     wxString        m_auiPerspective;       ///< Encoded string describing the AUI layout
-    nlohmann::json  m_viewerAuiState;
+    std::unique_ptr<nlohmann::json> m_viewerAuiState;
 
     bool            m_wizardListShown;      ///< A show-once flag for the wizard list
 };

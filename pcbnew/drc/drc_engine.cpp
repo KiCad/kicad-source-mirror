@@ -30,6 +30,7 @@
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_rule_parser.h>

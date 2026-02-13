@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <advanced_config.h>
 #include <class_draw_panel_gal.h>
 #include <common.h>
 #include <eda_units.h>

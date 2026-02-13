@@ -29,7 +29,6 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <component_classes/component_class_manager.h>
 #include <embedded_files.h>
-#include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <geometry/shape_poly_set.h>
 #include <hash.h>
@@ -40,6 +39,7 @@
 #include <pcb_plot_params.h>
 #include <title_block.h>
 #include <tools/pcb_selection.h>
+#include <zone_settings.h>
 #include <shared_mutex>
 #include <project.h>
 #include <list>

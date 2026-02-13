@@ -41,7 +41,9 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <sch_shape.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <widgets/wx_infobar.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
 #include <project_sch.h>

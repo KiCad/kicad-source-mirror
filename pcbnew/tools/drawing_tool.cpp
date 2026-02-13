@@ -65,6 +65,8 @@
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_rule.h>
 #include <confirm.h>
 #include <footprint.h>
 #include <macros.h>

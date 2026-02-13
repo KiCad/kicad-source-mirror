@@ -40,6 +40,7 @@
  */
 static const wxChar traceZoneFiller[] = wxT( "KICAD_ZONE_FILLER" );
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <zone.h>
 #include <footprint.h>
 #include <pad.h>

@@ -30,6 +30,7 @@
 
 #include <board.h>
 #include <reporter.h>
+#include <fstream>
 #include <io/io_utils.h>
 #include <kiplatform/io.h>
 

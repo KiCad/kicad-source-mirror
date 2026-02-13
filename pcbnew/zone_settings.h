@@ -36,8 +36,6 @@
 #include <zones.h>
 #include <geometry/eda_angle.h>
 #include <teardrop/teardrop_types.h>
-#include <widgets/wx_grid.h>
-
 
 class PCB_BASE_FRAME;
 class wxDataViewListCtrl;
@@ -261,62 +259,4 @@ public:
     void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 };
 
-
-class LAYER_PROPERTIES_GRID_TABLE : public WX_GRID_TABLE_BASE
-{
-public:
-    LAYER_PROPERTIES_GRID_TABLE( PCB_BASE_FRAME* aFrame, std::function<LSET()> getLayers );
-    ~LAYER_PROPERTIES_GRID_TABLE() override;
-
-    int GetNumberRows() override { return (int) m_items.size(); }
-    int GetNumberCols() override { return 3; }
-
-    wxString GetColLabelValue( int aCol ) override
-    {
-        switch( aCol )
-        {
-        case 0: return _( "Layer" );
-        case 1: return _( "Offset X" );
-        case 2: return _( "Offset Y" );
-        default: return wxEmptyString;
-        }
-    }
-
-    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
-    {
-        switch( aCol )
-        {
-        case 0: return aTypeName == wxGRID_VALUE_NUMBER;
-        case 1: return aTypeName == wxGRID_VALUE_STRING;
-        case 2: return aTypeName == wxGRID_VALUE_STRING;
-        default: wxFAIL; return false;
-        }
-    }
-
-    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
-    {
-        return CanGetValueAs( aRow, aCol, aTypeName );
-    }
-
-    wxString GetValue( int aRow, int aCol ) override;
-    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
-
-    long GetValueAsLong( int aRow, int aCol ) override;
-    void SetValueAsLong( int aRow, int aCol, long aValue ) override;
-
-    void AddItem( PCB_LAYER_ID aLayer, const ZONE_LAYER_PROPERTIES& aProps );
-    bool AppendRows( size_t aNumRows = 1 ) override;
-    bool DeleteRows( size_t aPos, size_t aNumRows ) override;
-
-    const std::vector<std::pair<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>>& GetItems() { return m_items; }
-
-protected:
-    void onUnitsChanged( wxCommandEvent& aEvent );
-
-private:
-    PCB_BASE_FRAME*                                             m_frame;
-    std::function<LSET()>                                       m_getLayersFunc;
-    std::vector<std::pair<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>> m_items;
-};
-
-
+class LAYER_PROPERTIES_GRID_TABLE;

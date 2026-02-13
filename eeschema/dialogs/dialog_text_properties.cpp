@@ -30,6 +30,7 @@
 #include <widgets/color_swatch.h>
 #include <widgets/wx_combobox.h>
 #include <settings/color_settings.h>
+#include <widgets/wx_infobar.h>
 #include <sch_textbox.h>
 #include <confirm.h>
 #include <schematic.h>

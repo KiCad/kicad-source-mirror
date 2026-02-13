@@ -37,6 +37,7 @@
 #include <plotters/plotters_pslike.h>
 #include <reporter.h>
 #include <trace_helpers.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <wx_filename.h>
 #include <pgm_base.h>

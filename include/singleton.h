@@ -21,7 +21,6 @@
 #define KICAD_SINGLETON_H
 
 #include <cstdint>
-#include <advanced_config.h>
 
 class GL_CONTEXT_MANAGER;
 namespace BS

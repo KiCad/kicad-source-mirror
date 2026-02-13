@@ -36,6 +36,7 @@
 #include <kiway.h>
 #include <macros.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <python_scripting.h>
 #include <string_utils.h>
 #include <tools/pcb_actions.h>

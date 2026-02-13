@@ -32,6 +32,7 @@
 #include <map>
 #include <algorithm>
 #include <wx/string.h>
+#include <font/font_metrics.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 
@@ -90,40 +91,6 @@ inline bool IsSubscript( TEXT_STYLE_FLAGS aFlags )
 
 namespace KIFONT
 {
-class GAL_API METRICS
-{
-public:
-    /**
-     * Compute the vertical position of an overbar.  This is the distance between the text
-     * baseline and the overbar.
-     */
-    double GetOverbarVerticalPosition( double aGlyphHeight ) const
-    {
-        return aGlyphHeight * m_OverbarHeight;
-    }
-
-    /**
-     * Compute the vertical position of an underline.  This is the distance between the text
-     * baseline and the underline.
-     */
-    double GetUnderlineVerticalPosition( double aGlyphHeight ) const
-    {
-        return aGlyphHeight * m_UnderlineOffset;
-    }
-
-    double GetInterline( double aFontHeight ) const
-    {
-        return aFontHeight * m_InterlinePitch;
-    }
-
-    static const METRICS& Default();
-
-public:
-    double m_InterlinePitch  =  1.68;
-    double m_OverbarHeight   =  1.23;
-    double m_UnderlineOffset = -0.16;
-};
-
 /**
  * FONT is an abstract base class for both outline and stroke fonts
  */

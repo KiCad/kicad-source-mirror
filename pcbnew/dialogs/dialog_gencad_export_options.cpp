@@ -26,6 +26,7 @@
 
 #include "dialog_gencad_export_options.h"
 
+#include <common.h>
 #include <wx/anybutton.h>
 #include <wx/filedlg.h>
 #include <wx/checkbox.h>

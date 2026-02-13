@@ -35,6 +35,7 @@
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <sch_reference_list.h>
 #include <tools/sch_editor_control.h>
 #include <kiplatform/ui.h>

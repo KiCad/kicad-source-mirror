@@ -33,6 +33,7 @@
 
 #include "specctra.h"
 
+#include <project/net_settings.h>
 #include <set>
 #include <map>
 

@@ -24,6 +24,7 @@
 #include <list>
 #include <magic_enum.hpp>
 #include <thread_pool.h>
+#include <ranges>
 #include <unordered_set>
 
 #include <paths.h>

@@ -22,6 +22,7 @@
 */
 
 #include <pgm_base.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include "panel_sym_color_settings.h"

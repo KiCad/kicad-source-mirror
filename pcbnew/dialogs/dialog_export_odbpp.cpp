@@ -32,6 +32,7 @@
 #include <wx/zstream.h>
 
 #include <board.h>
+#include <reporter.h>
 #include <confirm.h>
 #include <footprint.h>
 #include <kidialog.h>

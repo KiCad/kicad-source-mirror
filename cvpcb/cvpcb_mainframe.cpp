@@ -49,6 +49,7 @@
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>

@@ -25,6 +25,8 @@
 
 #include <app_monitor.h>
 #include <dialog_shim.h>
+#include <settings/common_settings.h>
+#include <settings/common_settings_internals.h>
 #include <core/ignore.h>
 #include <kiway_player.h>
 #include <kiway.h>
@@ -350,9 +352,9 @@ bool DIALOG_SHIM::Show( bool show )
 
         if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
         {
-            auto dlgIt = settings->m_dialogControlValues.find( key );
+            auto dlgIt = settings->CsInternals().m_dialogControlValues.find( key );
 
-            if( dlgIt != settings->m_dialogControlValues.end() )
+            if( dlgIt != settings->CsInternals().m_dialogControlValues.end() )
             {
                 auto geoIt = dlgIt->second.find( "__geometry" );
 
@@ -439,9 +441,9 @@ void DIALOG_SHIM::resetSize()
     {
         std::string key = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
 
-        auto dlgIt = settings->m_dialogControlValues.find( key );
+        auto dlgIt = settings->CsInternals().m_dialogControlValues.find( key );
 
-        if( dlgIt == settings->m_dialogControlValues.end() )
+        if( dlgIt == settings->CsInternals().m_dialogControlValues.end() )
             return;
 
         dlgIt->second.erase( "__geometry" );
@@ -545,7 +547,7 @@ void DIALOG_SHIM::SaveControlState()
         return;
 
     std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
-    std::map<std::string, nlohmann::json>& dlgMap = settings->m_dialogControlValues[ dialogKey ];
+    std::map<std::string, nlohmann::json>& dlgMap = settings->CsInternals().m_dialogControlValues[ dialogKey ];
 
     wxRect rect( GetPosition(), GetSize() );
     nlohmann::json geom;
@@ -655,9 +657,9 @@ void DIALOG_SHIM::LoadControlState()
         return;
 
     std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
-    auto        dlgIt = settings->m_dialogControlValues.find( dialogKey );
+    auto        dlgIt = settings->CsInternals().m_dialogControlValues.find( dialogKey );
 
-    if( dlgIt == settings->m_dialogControlValues.end() )
+    if( dlgIt == settings->CsInternals().m_dialogControlValues.end() )
         return;
 
     const std::map<std::string, nlohmann::json>& dlgMap = dlgIt->second;

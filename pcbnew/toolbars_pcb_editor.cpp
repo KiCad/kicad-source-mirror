@@ -40,6 +40,7 @@
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <router/pns_routing_settings.h>
 #include <router/router_tool.h>
 #include <settings/color_settings.h>

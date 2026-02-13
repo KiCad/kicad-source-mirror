@@ -26,6 +26,7 @@
 #include <wx/msgdlg.h>
 #include <fmt/format.h>
 
+#include <widgets/wx_infobar.h>
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
 #include <drawing_sheet/ds_data_item.h>

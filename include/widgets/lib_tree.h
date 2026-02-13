@@ -26,6 +26,7 @@
 #define LIB_TREE_H
 
 #include <wx/panel.h>
+#include <wx/sizer.h>
 #include <wx/timer.h>
 #include <lib_tree_model_adapter.h>
 #include <widgets/html_window.h>
@@ -37,6 +38,7 @@ class wxSearchCtrl;
 class wxTimer;
 class wxTimerEvent;
 class wxPopupWindow;
+class BITMAP_BUTTON;
 class STD_BITMAP_BUTTON;
 class ACTION_MENU;
 class LIB_ID;

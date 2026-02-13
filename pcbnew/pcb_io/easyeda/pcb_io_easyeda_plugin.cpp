@@ -34,6 +34,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <reporter.h>
 
 #include <wx/log.h>

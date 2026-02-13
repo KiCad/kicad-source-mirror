@@ -20,6 +20,7 @@
 
 #include <sch_junction.h>
 #include <dialog_junction_props.h>
+#include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>

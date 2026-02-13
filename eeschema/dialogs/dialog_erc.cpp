@@ -28,6 +28,7 @@
 #include <gestfich.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <project.h>
 #include <kiface_base.h>
 #include <reporter.h>

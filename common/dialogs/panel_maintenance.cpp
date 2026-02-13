@@ -24,12 +24,14 @@
 #include <dialogs/panel_maintenance.h>
 
 #include <kidialog.h>
+#include <settings/common_settings_internals.h>
 #include <pgm_base.h>
 #include <kiway.h>
 #include <eda_base_frame.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/wx_infobar.h>
 
 
 PANEL_MAINTENANCE::PANEL_MAINTENANCE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
@@ -118,7 +120,7 @@ void PANEL_MAINTENANCE::doClearDialogState()
 
     if( COMMON_SETTINGS* settings = Pgm().GetSettingsManager().GetCommonSettings() )
     {
-        settings->m_dialogControlValues = {};
+        settings->CsInternals().m_dialogControlValues = {};
         settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
     }
 }

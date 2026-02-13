@@ -35,6 +35,7 @@
 #include <action_plugin.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <settings/common_settings.h>
 #include <pcb_marker.h>
 #include <cstdlib>
 #include <drawing_sheet/ds_data_model.h>
@@ -48,6 +49,7 @@
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <project.h>
 #include <project_pcb.h>
 #include <project/net_settings.h>

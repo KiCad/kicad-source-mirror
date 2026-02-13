@@ -50,6 +50,7 @@
 #include <sch_bus_entry.h>
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_screen.h>

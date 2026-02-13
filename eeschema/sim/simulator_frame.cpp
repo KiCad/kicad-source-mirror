@@ -33,6 +33,7 @@
 
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
+#include <widgets/wx_infobar.h>
 #include <kiway.h>
 #include <confirm.h>
 #include <bitmaps.h>

@@ -31,6 +31,7 @@
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
+#include <settings/color_settings.h>
 #include <sch_painter.h>
 #include <schematic.h>
 #include <widgets/hierarchy_pane.h>

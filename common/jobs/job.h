@@ -22,6 +22,7 @@
 
 #include <wx/string.h>
 
+#include <json_common.h>
 #include <kicommon.h>
 #include <map>
 #include <settings/json_settings.h>

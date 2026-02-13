@@ -35,8 +35,10 @@
 #include <python_scripting.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
+#include <settings/common_settings.h>
 #include <tool/action_toolbar.h>
 #include <tool/ui/toolbar_context_menu_registry.h>
+#include <widgets/wx_infobar.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <widgets/hierarchy_pane.h>

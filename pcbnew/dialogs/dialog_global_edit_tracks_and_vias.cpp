@@ -28,6 +28,7 @@
 #include <widgets/unit_binder.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <connectivity/connectivity_data.h>

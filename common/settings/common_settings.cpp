@@ -28,7 +28,9 @@
 #include <search_stack.h>
 #include <settings/settings_manager.h>
 #include <settings/common_settings.h>
+#include <settings/common_settings_internals.h>
 #include <settings/json_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
@@ -44,6 +46,8 @@ const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 ///! Update the schema version whenever a migration is required
 const int commonSchemaVersion = 4;
 
+COMMON_SETTINGS::~COMMON_SETTINGS() = default;
+
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
         m_Appearance(),
@@ -56,7 +60,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_System(),
         m_DoNotShowAgain(),
         m_PackageManager(),
-        m_Api()
+        m_Api(),
+        m_csInternals( std::make_unique<COMMON_SETTINGS_INTERNALS>() )
 {
     /*
      * Automatic dark mode detection works fine on Mac.
@@ -449,14 +454,14 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             {
                 nlohmann::json ret = nlohmann::json::object();
 
-                for( const auto& dlg : m_dialogControlValues )
+                for( const auto& dlg : m_csInternals->m_dialogControlValues )
                     ret[ dlg.first ] = dlg.second;
 
                 return ret;
             },
             [&]( const nlohmann::json& aVal )
             {
-                m_dialogControlValues.clear();
+                m_csInternals->m_dialogControlValues.clear();
 
                 if( !aVal.is_object() )
                     return;
@@ -467,7 +472,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         continue;
 
                     for( auto& [ctrlKey, ctrlVal] : dlgVal.items() )
-                        m_dialogControlValues[ dlgKey ][ ctrlKey ] = ctrlVal;
+                        m_csInternals->m_dialogControlValues[ dlgKey ][ ctrlKey ] = ctrlVal;
                 }
             },
             nlohmann::json::object() ) );
