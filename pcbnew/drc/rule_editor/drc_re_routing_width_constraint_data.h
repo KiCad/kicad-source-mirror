@@ -56,38 +56,41 @@ public:
         // Positions measured from constraint_routing_width.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 75, 135, 35, 1 },    // min_width (left arrow)
-            { 145, 205, 85, 2 },   // opt_width (bottom center arrow)
-            { 215, 275, 35, 3 },   // max_width (right arrow)
+            { 32, 52, 48, 1 },    // min_width (left arrow)
+            { 63, 83, 20, 2 },   // opt_width (bottom center arrow)
+            { 124, 144, 37, 3 },   // max_width (right arrow)
         };
     }
+
 
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;
 
-        // Validate routing width values are positive
         if( m_minRoutingWidth <= 0 )
-            result.AddError( "Minimum Routing Width must be greater than 0" );
+            result.AddError( "Minimum Routing Width is required" );
 
         if( m_preferredRoutingWidth <= 0 )
-            result.AddError( "Preferred Routing Width must be greater than 0" );
+            result.AddError( "Preferred Routing Width is required" );
 
         if( m_maxRoutingWidth <= 0 )
-            result.AddError( "Maximum Routing Width must be greater than 0" );
+            result.AddError( "Maximum Routing Width is required" );
 
-        // Validate min <= preferred <= max
-        if( m_minRoutingWidth > m_preferredRoutingWidth )
-            result.AddError( "Minimum Routing Width cannot be greater than Preferred Routing Width" );
+        if( result.isValid )
+        {
+            if( m_minRoutingWidth > m_preferredRoutingWidth )
+                result.AddError( "Minimum Routing Width cannot be greater than Preferred Routing Width" );
 
-        if( m_preferredRoutingWidth > m_maxRoutingWidth )
-            result.AddError( "Preferred Routing Width cannot be greater than Maximum Routing Width" );
+            if( m_preferredRoutingWidth > m_maxRoutingWidth )
+                result.AddError( "Preferred Routing Width cannot be greater than Maximum Routing Width" );
 
-        if( m_minRoutingWidth > m_maxRoutingWidth )
-            result.AddError( "Minimum Routing Width cannot be greater than Maximum Routing Width" );
+            if( m_minRoutingWidth > m_maxRoutingWidth )
+                result.AddError( "Minimum Routing Width cannot be greater than Maximum Routing Width" );
+        }
 
         return result;
     }
+
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
