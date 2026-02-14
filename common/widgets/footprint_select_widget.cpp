@@ -22,7 +22,7 @@
 #include <kiface_ids.h>
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/wupdlock.h>
 
 
