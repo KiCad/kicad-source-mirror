@@ -32,6 +32,7 @@
 #include <wx/math.h>
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
+#include <wx/settings.h>
 
 class ZOOM_CORRECTION_RULER : public wxPanel
 {
@@ -48,6 +49,8 @@ private:
     {
         wxPaintDC dc( this );
         wxSize    size = GetClientSize();
+
+        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) ) );
 
         // Draw baseline
         dc.DrawLine( 0, size.y - 1, size.x, size.y - 1 );
