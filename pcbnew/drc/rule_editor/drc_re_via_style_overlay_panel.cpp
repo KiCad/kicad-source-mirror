@@ -25,6 +25,7 @@
 #include "drc_re_via_style_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
+#include <dialogs/rule_editor_dialog_base.h>
 #include <base_units.h>
 #include <widgets/unit_binder.h>
 
@@ -45,39 +46,67 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
     m_minViaDiameterBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "min_via_diameter" ), positions[0],
-                                   m_minViaDiameterBinder.get() );
+    auto* minViaDiameterField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_via_diameter" ), positions[0],
+                                                                m_minViaDiameterBinder.get() );
 
     m_maxViaDiameterBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "max_via_diameter" ), positions[1],
-                                   m_maxViaDiameterBinder.get() );
+    auto* maxViaDiameterField = AddFieldWithUnits<wxTextCtrl>( wxS( "max_via_diameter" ), positions[1],
+                                                                m_maxViaDiameterBinder.get() );
 
     m_prefViaDiameterBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "pref_via_diameter" ), positions[2],
-                                   m_prefViaDiameterBinder.get() );
+    auto* prefViaDiameterField = AddFieldWithUnits<wxTextCtrl>( wxS( "pref_via_diameter" ), positions[2],
+                                                                m_prefViaDiameterBinder.get() );
 
     // Create via hole size fields (min/pref/max)
     m_minViaHoleSizeBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "min_via_hole" ), positions[3],
-                                   m_minViaHoleSizeBinder.get() );
+    auto* minViaHoleField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_via_hole" ), positions[3],
+                                                                m_minViaHoleSizeBinder.get() );
 
     m_maxViaHoleSizeBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "max_via_hole" ), positions[4],
-                                   m_maxViaHoleSizeBinder.get() );
+    auto* maxViaHoleField = AddFieldWithUnits<wxTextCtrl>( wxS( "max_via_hole" ), positions[4],
+                                                                m_maxViaHoleSizeBinder.get() );
 
     m_prefViaHoleSizeBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "pref_via_hole" ), positions[5],
-                                   m_prefViaHoleSizeBinder.get() );
+    auto* prefViaHoleField = AddFieldWithUnits<wxTextCtrl>( wxS( "pref_via_hole" ), positions[5],
+                                                                m_prefViaHoleSizeBinder.get() );
+
+    auto notifyModified = [this]( wxCommandEvent& )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
+    };
+
+    auto notifySave = [this]( wxCommandEvent& aEvent )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->OnSave( aEvent );
+    };
+
+    minViaDiameterField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    maxViaDiameterField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    prefViaDiameterField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    minViaHoleField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    maxViaHoleField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    prefViaHoleField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+
+    minViaDiameterField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    maxViaDiameterField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    prefViaDiameterField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    minViaHoleField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    maxViaHoleField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    prefViaHoleField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
     // Position all fields and update the panel layout
     PositionFields();

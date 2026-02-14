@@ -33,6 +33,7 @@ class AREA_SELECTOR;
 class wxChoice;
 class wxBitmapButton;
 class wxStyledTextCtrl;
+class wxStyledTextEvent;
 class wxBoxSizer;
 
 /**
@@ -98,6 +99,8 @@ private:
     void onObjectChoice( wxCommandEvent& aEvent );
     void onConditionChoice( wxCommandEvent& aEvent );
     void onDeleteClicked( wxCommandEvent& aEvent );
+    void onValueChanged( wxCommandEvent& aEvent );
+    void onCustomQueryChanged( wxStyledTextEvent& aEvent );
     void updateVisibility();
 
     bool               m_showObjectSelector;

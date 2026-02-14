@@ -131,6 +131,12 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     m_layerCategory = DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint( aConstraintType );
     populateLayerSelector( m_layerCategory );
     m_LayersComboBoxSizer->Add( m_layerListChoiceCtrl, 0, wxALL | wxEXPAND, 5 );
+    m_layerListChoiceCtrl->Bind( wxEVT_CHOICE, [this]( wxCommandEvent& )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
+    } );
 
     // Hide layer selector for constraints where it doesn't apply
     if( m_layerCategory == DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR )
@@ -175,6 +181,10 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     m_conditionGroupPanel = new DRC_RE_CONDITION_GROUP_PANEL( this, m_board, twoObjects );
     m_conditionGroupPanel->SetChangeCallback( [this]() {
         ResetShowMatchesButton();
+
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
     } );
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "[PANEL_DRC_RULE_EDITOR] inserting conditionGroupPanel" ) );
     m_conditionControlsSizer->Insert( 0, m_conditionGroupPanel, 0, wxEXPAND | wxBOTTOM, 5 );

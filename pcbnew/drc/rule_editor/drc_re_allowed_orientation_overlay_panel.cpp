@@ -25,6 +25,7 @@
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
+#include <dialogs/rule_editor_dialog_base.h>
 #include <wx/checkbox.h>
 
 
@@ -56,6 +57,19 @@ DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL::DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PAN
 
     field = AddCheckbox( wxS( "all_degrees" ), positions[4] );
     m_allDegreesCheckbox = static_cast<wxCheckBox*>( field->GetControl() );
+
+    auto notifyModified = [this]( wxCommandEvent& )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
+    };
+
+    m_zeroDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
+    m_ninetyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
+    m_oneEightyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
+    m_twoSeventyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
+    m_allDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
 
     PositionFields();
     TransferDataToWindow();

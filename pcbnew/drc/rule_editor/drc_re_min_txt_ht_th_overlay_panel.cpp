@@ -25,6 +25,7 @@
 #include "drc_re_min_txt_ht_th_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
+#include <dialogs/rule_editor_dialog_base.h>
 #include <base_units.h>
 #include <widgets/unit_binder.h>
 
@@ -45,14 +46,34 @@ DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
     m_minTextHeightBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_height" ), positions[0],
-                                   m_minTextHeightBinder.get() );
+    auto* minTextHeightField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_height" ), positions[0],
+                                                                m_minTextHeightBinder.get() );
 
     m_minTextThicknessBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1],
-                                   m_minTextThicknessBinder.get() );
+    auto* minTextThicknessField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1],
+                                                                m_minTextThicknessBinder.get() );
+
+    auto notifyModified = [this]( wxCommandEvent& )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->SetModified();
+    };
+
+    auto notifySave = [this]( wxCommandEvent& aEvent )
+    {
+        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+        if( dlg )
+            dlg->OnSave( aEvent );
+    };
+
+    minTextHeightField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    minTextThicknessField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+
+    minTextHeightField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    minTextThicknessField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
     PositionFields();
     TransferDataToWindow();

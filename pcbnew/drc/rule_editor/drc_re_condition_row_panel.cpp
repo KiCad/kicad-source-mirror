@@ -127,6 +127,11 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
     m_objectChoice->Bind( wxEVT_CHOICE, &DRC_RE_CONDITION_ROW_PANEL::onObjectChoice, this );
     m_conditionChoice->Bind( wxEVT_CHOICE, &DRC_RE_CONDITION_ROW_PANEL::onConditionChoice, this );
     m_deleteBtn->Bind( wxEVT_BUTTON, &DRC_RE_CONDITION_ROW_PANEL::onDeleteClicked, this );
+    m_netSelector->Bind( FILTERED_ITEM_SELECTED, &DRC_RE_CONDITION_ROW_PANEL::onValueChanged, this );
+    m_netclassSelector->Bind( FILTERED_ITEM_SELECTED, &DRC_RE_CONDITION_ROW_PANEL::onValueChanged, this );
+    m_areaSelector->Bind( FILTERED_ITEM_SELECTED, &DRC_RE_CONDITION_ROW_PANEL::onValueChanged, this );
+    m_customQueryCtrl->Bind( wxEVT_STC_CHANGE, &DRC_RE_CONDITION_ROW_PANEL::onCustomQueryChanged, this );
+
     wxLogTrace( TRACE_COND, wxS( "[DRC_RE_CONDITION_ROW_PANEL] ctor END" ) );
 }
 
@@ -353,6 +358,20 @@ void DRC_RE_CONDITION_ROW_PANEL::onDeleteClicked( wxCommandEvent& aEvent )
 {
     if( m_deleteCallback )
         m_deleteCallback();
+}
+
+
+void DRC_RE_CONDITION_ROW_PANEL::onValueChanged( wxCommandEvent& aEvent )
+{
+    if( m_changeCallback )
+        m_changeCallback();
+}
+
+
+void DRC_RE_CONDITION_ROW_PANEL::onCustomQueryChanged( wxStyledTextEvent& aEvent )
+{
+    if( m_changeCallback )
+        m_changeCallback();
 }
 
 
