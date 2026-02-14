@@ -115,6 +115,11 @@ public:
             m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
         }
 
+        // Fields always display horizontally after autoplace. For 90/270 rotated
+        // symbols, GetDrawRotation() flips the stored angle, so we store VERTICAL
+        // to counteract the transform and produce horizontal display.
+        m_field_angle = m_symbol->GetTransform().y1 ? ANGLE_VERTICAL : ANGLE_HORIZONTAL;
+
         m_symbol_bbox = m_symbol->GetBodyBoundingBox();
         m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
@@ -149,9 +154,7 @@ public:
             if( !field->IsVisible() || !field->CanAutoplace() )
                 continue;
 
-            // Use HORIZONTAL for justification and position computation since
-            // GetBoundingBox() combines the field angle with the symbol transform.
-            field->SetTextAngle( ANGLE_HORIZONTAL );
+            field->SetTextAngle( m_field_angle );
 
             if( m_allow_rejustify )
             {
@@ -180,14 +183,6 @@ public:
                     pos.y = round_n( pos.y, schIUScale.MilsToIU( 50 ), field_side.y >= 0 );
             }
 
-            // Set the final field angle so text displays horizontally on screen.
-            // For 90/270 rotated symbols, the symbol transform flips H↔V, so
-            // we store VERTICAL to counteract the transform.
-            if( m_symbol->GetTransform().y1 )
-                field->SetTextAngle( ANGLE_VERTICAL );
-            else
-                field->SetTextAngle( ANGLE_HORIZONTAL );
-
             field->SetPosition( pos );
         }
     }
@@ -210,10 +205,11 @@ protected:
             }
 
             // GetBoundingBox() applies both the field's text angle and the symbol
-            // transform.  Use HORIZONTAL here so the combined transform produces correct
-            // bounding box dimensions, then restore the original angle.
+            // transform.  Set the display angle so the combined rotation produces
+            // bounding box dimensions matching the final horizontal display, then
+            // restore the original angle.
             EDA_ANGLE savedAngle = field->GetTextAngle();
-            field->SetTextAngle( ANGLE_HORIZONTAL );
+            field->SetTextAngle( m_field_angle );
             BOX2I bbox = field->GetBoundingBox();
             field->SetTextAngle( savedAngle );
             int   field_width = bbox.GetWidth();
@@ -756,6 +752,7 @@ private:
     std::vector<SCH_ITEM*>  m_colliders;
     BOX2I                   m_symbol_bbox;
     VECTOR2I                m_fbox_size;
+    EDA_ANGLE               m_field_angle;
     bool                    m_allow_rejustify;
     bool                    m_align_to_grid;
     bool                    m_is_power_symbol;
