@@ -27,6 +27,7 @@
 #include <string>
 
 #include <confirm.h>
+#include <common.h>
 #include <wx/clipbrd.h>
 #include <pgm_base.h>
 #include <core/profile.h>
