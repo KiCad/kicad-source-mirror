@@ -92,12 +92,15 @@ bool WX_PROGRESS_REPORTER::updateUI()
         m_messageChanged = false;
     }
 
+    // Allowing interaction with other windows has unintended consequences
+    wxWindowDisabler ed( this );
+
     // Returns false when cancelled (if it's a cancellable dialog)
     bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
     // Prevent wx from queuing timer events and slowing down
     // See https://github.com/wxWidgets/wxWidgets/issues/26192
-    wxYield();
+    wxEventLoopBase::GetActive()->YieldFor( wxEVT_CATEGORY_TIMER );
 
     return diag;
 }
