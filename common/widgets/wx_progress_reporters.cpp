@@ -87,8 +87,6 @@ bool WX_PROGRESS_REPORTER::updateUI()
             Fit();
         }
 
-        Raise();
-
         m_messageChanged = false;
     }
 
