@@ -94,6 +94,7 @@ protected:
      * @tparam T The wxWindow-derived control type to create.
      * @param aId String identifier for this field (used for error display and lookup).
      * @param aPosition Position specification in 1x bitmap coordinates.
+     * @param aStyle Window style flags passed to the control constructor
      * @return Pointer to the created field wrapper.
      */
     template <typename T>
@@ -107,12 +108,14 @@ protected:
      * @param aId String identifier for this field.
      * @param aPosition Position specification in 1x bitmap coordinates.
      * @param aUnitBinder UNIT_BINDER to associate with this field for unit conversion.
+     * @param aStyle Window style flags passed to the control constructor
      * @return Pointer to the created field wrapper.
      */
     template <typename T>
     DRC_RE_OVERLAY_FIELD* AddFieldWithUnits( const wxString& aId,
                                               const DRC_RE_FIELD_POSITION& aPosition,
-                                              UNIT_BINDER* aUnitBinder );
+                                              UNIT_BINDER* aUnitBinder,
+                                              long aStyle = 0 );
 
     /**
      * Create and position a checkbox control on the bitmap overlay.
@@ -226,10 +229,11 @@ DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddField( const wxString& aId
 template <typename T>
 DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddFieldWithUnits( const wxString& aId,
                                                                        const DRC_RE_FIELD_POSITION& aPosition,
-                                                                       UNIT_BINDER* aUnitBinder )
+                                                                       UNIT_BINDER* aUnitBinder,
+                                                                       long aStyle )
 {
     // Create the field using the base AddField method
-    DRC_RE_OVERLAY_FIELD* field = AddField<T>( aId, aPosition );
+    DRC_RE_OVERLAY_FIELD* field = AddField<T>( aId, aPosition, aStyle );
 
     // Associate the unit binder for value conversion
     field->SetUnitBinder( aUnitBinder );

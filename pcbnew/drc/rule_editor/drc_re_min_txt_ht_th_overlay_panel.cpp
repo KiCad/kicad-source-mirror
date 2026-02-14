@@ -47,13 +47,13 @@ DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
     auto* minTextHeightField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_height" ), positions[0],
-                                                                m_minTextHeightBinder.get() );
+                                                                m_minTextHeightBinder.get(), wxTE_PROCESS_ENTER );
 
     m_minTextThicknessBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
     auto* minTextThicknessField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1],
-                                                                m_minTextThicknessBinder.get() );
+                                                                m_minTextThicknessBinder.get(), wxTE_PROCESS_ENTER );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

@@ -45,7 +45,7 @@ DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
     m_valueBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
 
-    auto* valueField = AddFieldWithUnits<wxTextCtrl>( wxS( "value" ), positions[0], m_valueBinder.get() );
+    auto* valueField = AddFieldWithUnits<wxTextCtrl>( wxS( "value" ), positions[0], m_valueBinder.get(), wxTE_PROCESS_ENTER );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
