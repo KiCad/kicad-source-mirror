@@ -32,7 +32,6 @@
 #include <kiid.h>
 #include <layer_ids.h>
 #include <units_provider.h>
-#include <pcb_shape.h>
 #include <lset.h>
 #include <drc/drc_rule.h>
 

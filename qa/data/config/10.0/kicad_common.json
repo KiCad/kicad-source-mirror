@@ -95,6 +95,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/seth/code/kicad/kicad-master/qa/tests"
+    "working_dir": "/home/seth/Develop/kicad/worktrees/header-optimization/qa/tests"
   }
 }
