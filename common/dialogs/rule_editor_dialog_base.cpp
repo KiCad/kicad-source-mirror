@@ -301,6 +301,19 @@ bool RULE_EDITOR_DIALOG_BASE::TransferDataFromWindow()
 }
 
 
+void RULE_EDITOR_DIALOG_BASE::OnCharHook( wxKeyEvent& aEvt )
+{
+    if( aEvt.GetKeyCode() == 'S' && aEvt.ControlDown() && !aEvt.ShiftDown() && !aEvt.AltDown() )
+    {
+        wxCommandEvent evt;
+        OnSave( evt );
+        return;
+    }
+
+    DIALOG_SHIM::OnCharHook( aEvt );
+}
+
+
 RULE_EDITOR_DIALOG_BASE* RULE_EDITOR_DIALOG_BASE::GetDialog( wxWindow* aParent )
 {
     while( aParent )

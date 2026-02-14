@@ -291,6 +291,8 @@ protected:
 
     bool TransferDataFromWindow() override;
 
+    void OnCharHook( wxKeyEvent& aEvt ) override;
+
 private:
     /**
      * Populates the rule tree with nodes and their children.

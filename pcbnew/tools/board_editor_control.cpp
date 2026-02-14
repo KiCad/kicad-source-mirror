@@ -51,6 +51,7 @@
 #include <dialogs/dialog_update_pcb.h>
 #include <dialogs/dialog_assign_netclass.h>
 #include <dialog_plot.h>
+#include <dialogs/rule_editor_dialog_base.h>
 #include <kiface_base.h>
 #include <kiway.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -295,6 +296,25 @@ bool BOARD_EDITOR_CONTROL::Init()
 
 int BOARD_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
+    wxWindow* focus = wxWindow::FindFocus();
+
+    if( focus )
+    {
+        wxWindow* topLevel = focus;
+
+        while( topLevel && !topLevel->IsTopLevel() )
+            topLevel = topLevel->GetParent();
+
+        RULE_EDITOR_DIALOG_BASE* reDlg = dynamic_cast<RULE_EDITOR_DIALOG_BASE*>( topLevel );
+
+        if( reDlg )
+        {
+            wxCommandEvent evt;
+            reDlg->OnSave( evt );
+            return 0;
+        }
+    }
+
     m_frame->SaveBoard();
     return 0;
 }
