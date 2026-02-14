@@ -680,9 +680,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     else if( name == "vcsidentifier" && argc <= 1 )
     {
         int length = 40; // Full identifier by default
+
         if( argc == 1 )
         {
             auto lenResult = VALUE_UTILS::ToDouble( argValues[0] );
+
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
         }
@@ -696,9 +698,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 1 )
             match = VALUE_UTILS::ToString( argValues[0] );
+
         if( argc >= 2 )
         {
             auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( tagsResult )
                 anyTags = tagsResult.GetValue() != 0.0;
         }
@@ -712,9 +716,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 1 )
             match = VALUE_UTILS::ToString( argValues[0] );
+
         if( argc >= 2 )
         {
             auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( tagsResult )
                 anyTags = tagsResult.GetValue() != 0.0;
         }
@@ -724,9 +730,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     else if( name == "vcsdirty" && argc <= 1 )
     {
         bool includeUntracked = false;
+
         if( argc == 1 )
         {
             auto utResult = VALUE_UTILS::ToDouble( argValues[0] );
+
             if( utResult )
                 includeUntracked = utResult.GetValue() != 0.0;
         }
@@ -740,9 +748,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 1 )
             suffix = VALUE_UTILS::ToString( argValues[0] );
+
         if( argc >= 2 )
         {
             auto utResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( utResult )
                 includeUntracked = utResult.GetValue() != 0.0;
         }
@@ -772,10 +782,12 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     else if( name == "vcscommitdate" && argc <= 1 )
     {
         std::string format = "ISO";
+
         if( argc == 1 )
             format = VALUE_UTILS::ToString( argValues[0] );
 
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( "." );
+
         if( timestamp == 0 )
             return MakeValue<Value>( "" );
 
@@ -792,6 +804,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         if( argc == 2 )
         {
             auto lenResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
         }
@@ -822,10 +835,12 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     {
         std::string filePath = VALUE_UTILS::ToString( argValues[0] );
         std::string format = "ISO";
+
         if( argc == 2 )
             format = VALUE_UTILS::ToString( argValues[1] );
 
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( filePath );
+
         if( timestamp == 0 )
             return MakeValue<Value>( "" );
 
@@ -849,6 +864,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     else if( name == "concat" && argc >= 2 )
     {
         std::string result;
+
         for( const auto& val : argValues )
             result += VALUE_UTILS::ToString( val );
 
