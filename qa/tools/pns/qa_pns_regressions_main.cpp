@@ -26,6 +26,7 @@
 #include <wx/cmdline.h>
 #include <wx/stdstream.h>
 #include <wx/wfstream.h>
+#include <wx/textfile.h>
 
 #include <qa_utils/utility_registry.h>
 #include <pcbnew_utils/board_test_utils.h>
