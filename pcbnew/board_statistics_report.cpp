@@ -30,7 +30,7 @@
 #include <geometry/shape_segment.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <i18n_utility.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <string_utils.h>
 
 #include <algorithm>
