@@ -94,13 +94,12 @@ SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader,
 
 void SCH_IO_KICAD_SEXPR_PARSER::checkpoint()
 {
-    const unsigned PROGRESS_DELTA = 500;
-
     if( m_progressReporter )
     {
+        unsigned progressDelta = std::max( 50u, m_lineCount / 10 );
         unsigned curLine = m_lineReader->LineNumber();
 
-        if( curLine > m_lastProgressLine + PROGRESS_DELTA )
+        if( m_lastProgressLine == 0 || curLine > m_lastProgressLine + progressDelta )
         {
             m_progressReporter->SetCurrentProgress( ( (double) curLine )
                                                             / std::max( 1U, m_lineCount ) );
