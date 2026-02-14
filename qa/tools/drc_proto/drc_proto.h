@@ -31,6 +31,7 @@
 #include <optional>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/netlist_reader.h>
+#include <view/view_overlay.h>
 
 class BOARD;
 
