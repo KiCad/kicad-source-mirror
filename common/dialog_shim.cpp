@@ -768,7 +768,7 @@ void DIALOG_SHIM::LoadControlState()
                                 for( int page = 0; page < (int) notebook->GetPageCount(); ++page )
                                 {
                                     if( notebook->GetPageText( page ) == pageTitle )
-                                        notebook->SetSelection( page );
+                                        notebook->ChangeSelection( page );
                                 }
                             }
                         }
