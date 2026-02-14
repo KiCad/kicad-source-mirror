@@ -45,46 +45,46 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
     // Create width fields (min/pref/max) — positions[0..2]                                                               
-    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0] );                                     
-    static_cast<wxTextCtrl*>( minWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );                           
+    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0],
+                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );                         
     m_minWidthBinder = std::make_unique<UNIT_BINDER>(                                                                     
             &m_unitsProvider, this, nullptr, minWidthField->GetControl(), nullptr, false, false );
     minWidthField->SetUnitBinder( m_minWidthBinder.get() );
 
-    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1] );
-    static_cast<wxTextCtrl*>( prefWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
+                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_preferredWidthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, prefWidthField->GetControl(), nullptr, false, false );
     prefWidthField->SetUnitBinder( m_preferredWidthBinder.get() );
 
-    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2] );
-    static_cast<wxTextCtrl*>( maxWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
+                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxWidthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, maxWidthField->GetControl(), nullptr, false, false );
     maxWidthField->SetUnitBinder( m_maxWidthBinder.get() );
 
     // Create gap fields (min/pref/max) — positions[3..5]
-    auto* minGapField = AddField<wxTextCtrl>( wxS( "min_gap" ), positions[3] );
-    static_cast<wxTextCtrl*>( minGapField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* minGapField = AddField<wxTextCtrl>( wxS( "min_gap" ), positions[3],
+                                              wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_minGapBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, minGapField->GetControl(), nullptr, false, false );
     minGapField->SetUnitBinder( m_minGapBinder.get() );
 
-    auto* prefGapField = AddField<wxTextCtrl>( wxS( "pref_gap" ), positions[4] );
-    static_cast<wxTextCtrl*>( prefGapField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* prefGapField = AddField<wxTextCtrl>( wxS( "pref_gap" ), positions[4],
+                                               wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_preferredGapBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, prefGapField->GetControl(), nullptr, false, false );
     prefGapField->SetUnitBinder( m_preferredGapBinder.get() );
 
-    auto* maxGapField = AddField<wxTextCtrl>( wxS( "max_gap" ), positions[5] );
-    static_cast<wxTextCtrl*>( maxGapField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* maxGapField = AddField<wxTextCtrl>( wxS( "max_gap" ), positions[5],
+                                              wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxGapBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, maxGapField->GetControl(), nullptr, false, false );
     maxGapField->SetUnitBinder( m_maxGapBinder.get() );
 
     // Create max uncoupled length field — positions[6]
-    auto* maxUncoupledField = AddField<wxTextCtrl>( wxS( "max_uncoupled" ), positions[6] );
-    static_cast<wxTextCtrl*>( maxUncoupledField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* maxUncoupledField = AddField<wxTextCtrl>( wxS( "max_uncoupled" ), positions[6],
+                                                    wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxUncoupledLengthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, maxUncoupledField->GetControl(), nullptr, false, false );
     maxUncoupledField->SetUnitBinder( m_maxUncoupledLengthBinder.get() );

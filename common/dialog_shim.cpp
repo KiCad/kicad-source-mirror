@@ -1424,6 +1424,15 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 }
 
 
+void DIALOG_SHIM::resetUndoRedoForNewContent( wxWindowList& aChildren )
+{
+    m_undoStack.clear();
+    m_redoStack.clear();
+    m_currentValues.clear();
+    registerUndoRedoHandlers( aChildren );
+}
+
+
 void DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
 {
     wxString msg = wxString::Format( "Closing dialog %s", GetTitle() );

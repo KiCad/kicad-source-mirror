@@ -97,7 +97,8 @@ protected:
      * @return Pointer to the created field wrapper.
      */
     template <typename T>
-    DRC_RE_OVERLAY_FIELD* AddField( const wxString& aId, const DRC_RE_FIELD_POSITION& aPosition );
+    DRC_RE_OVERLAY_FIELD* AddField( const wxString& aId, const DRC_RE_FIELD_POSITION& aPosition,
+                                    long aStyle = 0 );
 
     /**
      * Create and position a field control with unit binding.
@@ -188,10 +189,11 @@ private:
 
 template <typename T>
 DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddField( const wxString& aId,
-                                                              const DRC_RE_FIELD_POSITION& aPosition )
+                                                             const DRC_RE_FIELD_POSITION& aPosition,
+                                                             long aStyle )
 {
     // Create the control
-    T* control = new T( this, wxID_ANY );
+    T* control = new T( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, aStyle );
 
     // Create the overlay field wrapper
     auto field = std::make_unique<DRC_RE_OVERLAY_FIELD>( this, aId, control, aPosition );

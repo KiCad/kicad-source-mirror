@@ -360,6 +360,8 @@ void RULE_EDITOR_DIALOG_BASE::SetContentPanel( wxPanel* aContentPanel )
     auto treeCtrlPanel = m_splitter->GetWindow1();
     m_splitter->SplitVertically( treeCtrlPanel, m_contentPanel, sash_position );
 
+    resetUndoRedoForNewContent( m_contentPanel->GetChildren() );
+
     Layout();
     Refresh();
 }

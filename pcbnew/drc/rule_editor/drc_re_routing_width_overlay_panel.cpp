@@ -45,22 +45,22 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
     // Create min width field
-    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0] );
-    static_cast<wxTextCtrl*>( minWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0],
+                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_minRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, minWidthField->GetControl(), nullptr, false, false );
     minWidthField->SetUnitBinder( m_minRoutingWidthBinder.get() );
 
     // Create preferred width field
-    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1] );
-    static_cast<wxTextCtrl*>( prefWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
+                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_preferredRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, prefWidthField->GetControl(), nullptr, false, false );
     prefWidthField->SetUnitBinder( m_preferredRoutingWidthBinder.get() );
 
     // Create max width field
-    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2] );
-    static_cast<wxTextCtrl*>( maxWidthField->GetControl() )->SetWindowStyleFlag( wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
+                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
             &m_unitsProvider, this, nullptr, maxWidthField->GetControl(), nullptr, false, false );
     maxWidthField->SetUnitBinder( m_maxRoutingWidthBinder.get() );
