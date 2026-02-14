@@ -38,6 +38,7 @@
 #include <lset.h>
 #include <pad.h>
 #include <base_units.h>
+#include <drc/drc_engine.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
 #include <geometry/point_types.h>

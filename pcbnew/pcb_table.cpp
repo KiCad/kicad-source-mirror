@@ -162,8 +162,6 @@ void PCB_TABLE::Normalize()
     VECTOR2I localCell0Center( cell0Width / 2, cell0Height / 2 );
     RotatePoint( localCell0Center, cellAngle );
 
-    VECTOR2I tableOrigin = stableCenter - localCell0Center;
-
     if( cellAngle != ANGLE_0 )
     {
         for( PCB_TABLECELL* cell : m_cells )

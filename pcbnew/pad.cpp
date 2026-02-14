@@ -47,6 +47,7 @@
 #include <pad_utils.h>
 #include <pcb_shape.h>
 #include <connectivity/connectivity_data.h>
+#include <drc/drc_engine.h>
 #include <eda_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <widgets/msgpanel.h>

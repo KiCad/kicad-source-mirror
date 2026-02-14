@@ -37,6 +37,7 @@
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 #include <trigo.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
