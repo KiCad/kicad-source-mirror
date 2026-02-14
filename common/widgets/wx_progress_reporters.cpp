@@ -95,6 +95,10 @@ bool WX_PROGRESS_REPORTER::updateUI()
     // Returns false when cancelled (if it's a cancellable dialog)
     bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
+    // Prevent wx from queuing timer events and slowing down
+    // See https://github.com/wxWidgets/wxWidgets/issues/26192
+    wxYield();
+
     return diag;
 }
 
