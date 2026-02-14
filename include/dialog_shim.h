@@ -224,6 +224,15 @@ protected:
      */
     void resetUndoRedoForNewContent( wxWindowList& aChildren ); 
 
+    /**                                                                                                                   
+     * Remove UNIT_BINDER registrations for a window and all its descendants.
+     *
+     * Call before destroying a panel whose children have registered unit binders.
+     *
+     * @param aWindow The root window whose subtree should be unregistered.
+     */
+    void unregisterUnitBinders( wxWindow* aWindow );
+
 private:
     /**
      * Properly handle the wxCloseEvent when in the quasimodal mode when not calling

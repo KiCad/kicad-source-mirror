@@ -366,6 +366,7 @@ void RULE_EDITOR_DIALOG_BASE::SetContentPanel( wxPanel* aContentPanel )
     {
         sash_position = m_splitter->GetSashPosition();
         m_splitter->Unsplit( m_contentPanel );
+        unregisterUnitBinders( m_contentPanel );
         m_contentPanel->Destroy();
     }
 

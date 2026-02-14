@@ -1433,6 +1433,15 @@ void DIALOG_SHIM::resetUndoRedoForNewContent( wxWindowList& aChildren )
 }
 
 
+void DIALOG_SHIM::unregisterUnitBinders( wxWindow* aWindow )
+{
+    m_unitBinders.erase( aWindow );
+
+    for( wxWindow* child : aWindow->GetChildren() )
+        unregisterUnitBinders( child );
+}
+
+
 void DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
 {
     wxString msg = wxString::Format( "Closing dialog %s", GetTitle() );
