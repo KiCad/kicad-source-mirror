@@ -260,7 +260,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
 
 void PAD::ClearZoneLayerOverrides()
 {
-    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+    std::unique_lock<std::mutex> cacheLock( m_dataMutex );
 
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
         m_zoneLayerOverrides[layer] = ZLO_NONE;
@@ -269,7 +269,7 @@ void PAD::ClearZoneLayerOverrides()
 
 const ZONE_LAYER_OVERRIDE& PAD::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) const
 {
-    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+    std::unique_lock<std::mutex> cacheLock( m_dataMutex );
 
     static const ZONE_LAYER_OVERRIDE defaultOverride = ZLO_NONE;
     auto it = m_zoneLayerOverrides.find( aLayer );
@@ -279,7 +279,7 @@ const ZONE_LAYER_OVERRIDE& PAD::GetZoneLayerOverride( PCB_LAYER_ID aLayer ) cons
 
 void PAD::SetZoneLayerOverride( PCB_LAYER_ID aLayer, ZONE_LAYER_OVERRIDE aOverride )
 {
-    std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
+    std::unique_lock<std::mutex> cacheLock( m_dataMutex );
     m_zoneLayerOverrides[aLayer] = aOverride;
 }
 
@@ -1080,7 +1080,7 @@ int PAD::GetBoundingRadius() const
 
 void PAD::BuildEffectiveShapes() const
 {
-    std::lock_guard<std::mutex> RAII_lock( m_shapesBuildingLock );
+    std::lock_guard<std::mutex> RAII_lock( m_dataMutex );
 
     // If we had to wait for the lock then we were probably waiting for someone else to
     // finish rebuilding the shapes.  So check to see if they're clean now.
@@ -1279,7 +1279,7 @@ const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
 
 void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 {
-    std::lock_guard<std::mutex> RAII_lock( m_polyBuildingLock );
+    std::lock_guard<std::mutex> RAII_lock( m_dataMutex );
 
     // Only calculate this once, not for both ERROR_INSIDE and ERROR_OUTSIDE
     bool doBoundingRadius = aErrorLoc == ERROR_OUTSIDE;

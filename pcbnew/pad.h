@@ -1082,22 +1082,22 @@ private:
 
     PADSTACK          m_padStack;
 
+    // Mutex for shape building, poly building and zone layer overrides
+    mutable std::mutex m_dataMutex;
+
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     typedef std::map<PCB_LAYER_ID, std::shared_ptr<SHAPE_COMPOUND>> LAYER_SHAPE_MAP;
-    mutable bool                              m_shapesDirty;
-    mutable std::mutex                        m_shapesBuildingLock;
     mutable BOX2I                             m_effectiveBoundingBox;
     mutable LAYER_SHAPE_MAP                   m_effectiveShapes;
     mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
 
     typedef std::map<PCB_LAYER_ID, std::array<std::shared_ptr<SHAPE_POLY_SET>, 2>> LAYER_POLYGON_MAP;
-    mutable bool                              m_polyDirty[2];
-    mutable std::mutex                        m_polyBuildingLock;
     mutable LAYER_POLYGON_MAP                 m_effectivePolygons;
-    mutable int                               m_effectiveBoundingRadius;
     // Last zoom level used to draw the pad: the LAYER_PAD_HOLEWALLS layer shape
     // depend on the zoom level. So keep trace on the last used zoom level
     mutable double                            m_lastGalZoomLevel;
+
+    mutable int       m_effectiveBoundingRadius;
 
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations
@@ -1109,6 +1109,9 @@ private:
     int               m_lengthPadToDie;     // Length net from pad to die, inside the package
     int               m_delayPadToDie;      // Propagation delay from pad to die
 
-    mutable std::mutex                          m_zoneLayerOverridesMutex;
+    // Bools at the end for better memory layout
+    mutable bool m_polyDirty[2];
+    mutable bool m_shapesDirty;
+
     std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> m_zoneLayerOverrides;
 };
