@@ -1242,7 +1242,10 @@ void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet, S
             std::vector<SCH_PIN*> pins;
 
             for( const wxString& pinNumber : group )
-                pins.emplace_back( aSymbol->GetPin( pinNumber ) );
+            {
+                if( SCH_PIN* pin = aSymbol->GetPin( pinNumber ) )
+                    pins.emplace_back( pin );
+            }
 
             linkPinsInVec( pins );
         }

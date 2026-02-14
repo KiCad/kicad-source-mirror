@@ -704,6 +704,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->SetDuplicatePinNumbersAreJumpers( m_cbDuplicatePinsAreJumpers->GetValue() );
 
+    std::set<wxString> availablePins;
+
+    for( const SCH_PIN* pin : m_libEntry->GetGraphicalPins( 0, 0 ) )
+        availablePins.insert( pin->GetNumber() );
+
     std::vector<std::set<wxString>>& jumpers = m_libEntry->JumperPinGroups();
     jumpers.clear();
 
@@ -714,8 +719,21 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
         while( tokenizer.HasMoreTokens() )
         {
-            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
-                group.insert( token );
+            wxString token = tokenizer.GetNextToken();
+
+            if( token.IsEmpty() )
+                continue;
+
+            if( !availablePins.count( token ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Pin '%s' in jumper pin group %d does not exist in this symbol." ),
+                             token, ii + 1 );
+                DisplayErrorMessage( this, msg );
+                return false;
+            }
+
+            group.insert( token );
         }
     }
 
