@@ -29,7 +29,6 @@
 #include <mutex>
 #include <vector>
 #include <map>
-#include <gr_basic.h>
 #include <board_item.h>
 #include <board_connected_item.h>
 #include <layer_ids.h>
