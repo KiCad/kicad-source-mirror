@@ -1359,4 +1359,14 @@ void DIALOG_DRC_RULE_EDITOR::SaveRulesToFile()
 
     DRC_RULE_SAVER saver;
     saver.SaveFile( m_frame->GetDesignRulesPath(), entries, m_currentBoard );
+
+    try
+    {
+        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine(
+                m_frame->GetDesignRulesPath() );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        wxLogError( _( "Failed to reload DRC rules: %s" ), pe.What() );
+    }
 }
