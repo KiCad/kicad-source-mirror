@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"PO-Revision-Date: 2026-02-14 21:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -7874,15 +7874,15 @@ msgstr "PCB: Eksport SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:92
 msgid "Generate bill of materials"
-msgstr "Generuj listę materiałową (BOM)"
+msgstr "Generuj listę materiałową"
 
 #: common/jobs/job_export_sch_bom.cpp:98
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Ustawienia zadania eksportu danych listy materiałowej (BOM)"
+msgstr "Ustawienia zadania eksportu danych listy materiałowej"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Schemat: Generowanie listy materiałowej (BOM)"
+msgstr "Schemat: Generowanie listy materiałowej"
 
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
@@ -8015,18 +8015,18 @@ msgstr "Pytanie"
 #: common/kiway.cpp:242
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Nie można zweryfikować podpisu biblioteki KIFACE '%s'."
+msgstr "Nie można zweryfikować podpisu biblioteki kiface '%s'."
 
 #: common/kiway.cpp:282
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Nie można załadować biblioteki KIFACE '%s'."
+msgstr "Nie można załadować biblioteki kiface '%s'."
 
 #: common/kiway.cpp:290
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"Nie można odczytać nazwy instancji oraz wersji symbolu z biblioteki KIFACE "
+"Nie można odczytać nazwy instancji oraz wersji symbolu z biblioteki kiface "
 "'%s'."
 
 #: common/kiway.cpp:463
@@ -10609,7 +10609,7 @@ msgstr ""
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
-msgstr "Błąd odczytu pliku .EQU"
+msgstr "Błąd odczytu pliku dopasowania"
 
 #: cvpcb/auto_associate.cpp:187
 #, c-format
@@ -12304,7 +12304,7 @@ msgstr "Usuń znacznik"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
-msgstr "Sprawdzanie poprawności elektrycznej (ERC)"
+msgstr "Sprawdzanie poprawności elektrycznej"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -17178,7 +17178,7 @@ msgstr "Wstępny format BOM '%s' nie został znaleziony"
 #: eeschema/eeschema_jobs_handler.cpp:856
 #, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Zapisano listę materiałową (BOM) do '%s'."
+msgstr "Zapisano listę materiałową do '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:908
 #, c-format
@@ -17376,9 +17376,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s jest połączony zarówno do %s jak i %s"
+msgstr "Pin %s w symbolu '%s' jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -23743,7 +23743,7 @@ msgstr "Eksportuje plik zawierający listę sieci w jednym z kilku formatów"
 
 #: eeschema/tools/sch_actions.cpp:1122
 msgid "Generate Bill of Materials..."
-msgstr "Generuj listę materiałową (BOM)..."
+msgstr "Generuj listę materiałową..."
 
 #: eeschema/tools/sch_actions.cpp:1123
 msgid "Generate a bill of materials for the current schematic"
@@ -23751,7 +23751,7 @@ msgstr "Tworzy listę materiałową dla bieżącego schematu"
 
 #: eeschema/tools/sch_actions.cpp:1129
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Generuj listę materiałową (BOM) starszego typu..."
+msgstr "Generuj listę materiałową starszego typu..."
 
 #: eeschema/tools/sch_actions.cpp:1130
 msgid ""
@@ -24441,7 +24441,7 @@ msgstr "Uaktualnić symbole na schemacie by odnosiły się do nowej biblioteki?"
 #: eeschema/tools/sch_editor_control.cpp:846
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
-"BŁĄD: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
+"Błąd: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
 
 #: eeschema/tools/sch_editor_control.cpp:953
 msgid "No net selected."
@@ -30579,7 +30579,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Tylko dla regulatorów trójkońcówkowych. Prąd wejścia ADJ."
+msgstr "Tylko dla regulatorów trójkońcówkowych.  Prąd wejścia Adjust."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
@@ -32807,7 +32807,7 @@ msgstr "Nieokreślony:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
-msgstr "Do montażu przewlekanego (THT):"
+msgstr "Do montażu przewlekanego:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
 msgid "Connector:"
@@ -34208,7 +34208,7 @@ msgstr "Zgodność ze schematem (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:107 pcbnew/tools/pcb_actions.cpp:420
 msgid "Design Rules Checker"
-msgstr "Sprawdzenie reguł projektowych (DRC)"
+msgstr "Sprawdzenie reguł projektowych"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -35246,7 +35246,7 @@ msgstr "Typ footprintu:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/footprint.cpp:1402
 msgid "Through hole"
-msgstr "Do montażu przewlekanego (THT)"
+msgstr "Do montażu przewlekanego"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
@@ -46808,7 +46808,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:307
 msgid "KiCad footprint file"
-msgstr "Plik footprintów programu KiCAD"
+msgstr "Plik footprintów programu KiCad"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:287
 #, c-format
