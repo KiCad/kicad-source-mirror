@@ -25,6 +25,7 @@
 #include "pads_layer_mapper.h"
 
 #include <algorithm>
+#include <climits>
 #include <cmath>
 #include <fstream>
 #include <functional>
@@ -357,9 +358,10 @@ void PCB_IO_PADS::loadFootprints()
 
             long long res_nm = val_nm - origin_nm;
 
-            if( !is_x ) res_nm = -res_nm;
+            if( !is_x )
+                res_nm = -res_nm;
 
-            return static_cast<int>( res_nm );
+            return static_cast<int>( std::clamp<long long>( res_nm, INT_MIN, INT_MAX ) );
         };
 
         footprint->SetPosition( VECTOR2I( partCoordScaler( pads_part.location.x, true ),
@@ -2158,7 +2160,8 @@ std::map<wxString, PCB_LAYER_ID> PCB_IO_PADS::DefaultLayerMappingCallback(
 
 int PCB_IO_PADS::scaleSize( double aVal ) const
 {
-    return static_cast<int>( m_unitConverter.ToNanometersSize( aVal ) );
+    int64_t nm = m_unitConverter.ToNanometersSize( aVal );
+    return static_cast<int>( std::clamp<int64_t>( nm, INT_MIN, INT_MAX ) );
 }
 
 
@@ -2169,10 +2172,8 @@ int PCB_IO_PADS::scaleCoord( double aVal, bool aIsX ) const
     long long origin_nm = static_cast<long long>( std::round( origin * m_scaleFactor ) );
     long long val_nm = static_cast<long long>( std::round( aVal * m_scaleFactor ) );
 
-    if( aIsX )
-        return static_cast<int>( val_nm - origin_nm );
-    else
-        return static_cast<int>( origin_nm - val_nm );
+    long long result = aIsX ? ( val_nm - origin_nm ) : ( origin_nm - val_nm );
+    return static_cast<int>( std::clamp<long long>( result, INT_MIN, INT_MAX ) );
 }
 
 

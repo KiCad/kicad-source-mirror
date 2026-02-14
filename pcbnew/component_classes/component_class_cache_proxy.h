@@ -22,6 +22,7 @@
 #define PCBNEW_COMPONENT_CLASS_CACHE_PROXY_H
 
 #include <component_classes/component_class.h>
+#include <component_classes/component_class_manager.h>
 #include <footprint.h>
 
 /*
