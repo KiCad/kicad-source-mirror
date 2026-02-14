@@ -278,7 +278,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
+	m_NoteBook->AddPage( m_PanelBasic, _("General"), false );
 	m_PanelUnitsAndBodyStyles = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnitsAndBodyStyles;
 	bSizerUnitsAndBodyStyles = new wxBoxSizer( wxHORIZONTAL );
@@ -490,7 +490,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_cbDuplicatePinsAreJumpers = new wxCheckBox( m_PanelPinConnections, wxID_ANY, _("All pins with duplicate numbers are jumpers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbDuplicatePinsAreJumpers->SetToolTip( _("When enabled, this footprint can have more than one pad with the same number, and pads with the same number will be considered to be jumpered together internally.") );
+	m_cbDuplicatePinsAreJumpers->SetToolTip( _("When enabled, this symbol can have more than one pin with the same number.  Pins with the same number will be considered to be jumpered together internally.") );
 
 	bMargins->Add( m_cbDuplicatePinsAreJumpers, 0, wxLEFT, 5 );
 
@@ -552,7 +552,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelPinConnections->SetSizer( bSizerPinConnections );
 	m_PanelPinConnections->Layout();
 	bSizerPinConnections->Fit( m_PanelPinConnections );
-	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), false );
+	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), true );
 
 	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 

@@ -136,7 +136,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">General</property>
-                  <property name="select">1</property>
+                  <property name="select">0</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -3528,7 +3528,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">Pin Connections</property>
-                  <property name="select">0</property>
+                  <property name="select">1</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -3650,7 +3650,7 @@
                               <property name="style"></property>
                               <property name="subclass">; ; forward_declare</property>
                               <property name="toolbar_pane">0</property>
-                              <property name="tooltip">When enabled, this footprint can have more than one pad with the same number, and pads with the same number will be considered to be jumpered together internally.</property>
+                              <property name="tooltip">When enabled, this symbol can have more than one pin with the same number.  Pins with the same number will be considered to be jumpered together internally.</property>
                               <property name="validator_data_type"></property>
                               <property name="validator_style">wxFILTER_NONE</property>
                               <property name="validator_type">wxDefaultValidator</property>
