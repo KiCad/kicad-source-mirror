@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-09 08:13+0000\n"
+"PO-Revision-Date: 2026-02-15 09:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -8401,15 +8401,15 @@ msgstr "PCB: Eksport SVG"
 
 #: common/jobs/job_export_sch_bom.cpp:93
 msgid "Generate bill of materials"
-msgstr "Generuj listę materiałową (BOM)"
+msgstr "Generuj listę materiałową"
 
 #: common/jobs/job_export_sch_bom.cpp:99
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Ustawienia zadania eksportu danych listy materiałowej (BOM)"
+msgstr "Ustawienia zadania eksportu danych listy materiałowej"
 
 #: common/jobs/job_export_sch_bom.cpp:103
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Schemat: Generowanie listy materiałowej (BOM)"
+msgstr "Schemat: Generowanie listy materiałowej"
 
 #: common/jobs/job_export_sch_netlist.cpp:81
 #, c-format
@@ -8541,18 +8541,18 @@ msgstr "Pytanie"
 #: common/kiway.cpp:251
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Nie można zweryfikować podpisu biblioteki KIFACE '%s'."
+msgstr "Nie można zweryfikować podpisu biblioteki kiface '%s'."
 
 #: common/kiway.cpp:283
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "Nie można załadować biblioteki KIFACE '%s'."
+msgstr "Nie można załadować biblioteki kiface '%s'."
 
 #: common/kiway.cpp:291
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"Nie można odczytać nazwy instancji oraz wersji symbolu z biblioteki KIFACE "
+"Nie można odczytać nazwy instancji oraz wersji symbolu z biblioteki kiface "
 "'%s'."
 
 #: common/kiway.cpp:452
@@ -8926,9 +8926,8 @@ msgid "Error loading library '%s'"
 msgstr "Wystąpił błąd podczas ładowania biblioteki '%s'"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Edycja ustawień"
+msgstr "Edycja ustawień..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8951,9 +8950,8 @@ msgid "Unset Visible Flag"
 msgstr "Skasuj flagę widoczności"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Edycja opcji"
+msgstr "Edycja opcji..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -11751,7 +11749,7 @@ msgstr ""
 
 #: cvpcb/auto_associate.cpp:180
 msgid "Equivalence File Load Error"
-msgstr "Błąd odczytu pliku .EQU"
+msgstr "Błąd odczytu pliku dopasowania"
 
 #: cvpcb/auto_associate.cpp:187
 #, c-format
@@ -13294,7 +13292,7 @@ msgstr "Usuń znacznik"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:50
 msgid "Electrical Rules Checker"
-msgstr "Sprawdzanie poprawności elektrycznej (ERC)"
+msgstr "Sprawdzanie poprawności elektrycznej"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -17408,10 +17406,11 @@ msgid "Update schematic net labels to match net names from the PCB editor."
 msgstr "Uaktualnia wartości symboli, które zostały zamienione w edytorze PCB."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "Zaktualizuj wszystkie pozostałe pola w symbolu z footprintu"
+msgstr ""
+"Zaktualizuj flagi atrybutów symbolu, takie jak 'Nie montowany', aby "
+"dopasować je do footprintu."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18362,9 +18361,8 @@ msgstr "folder z %s plikami"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "Biblioteka symboli nie jest aktywna."
+msgstr "Tabela (pochodząca z tabeli bibliotek)"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:653
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:761
@@ -18545,7 +18543,7 @@ msgstr "Nie można otworzyć docelowego '%s'"
 #: eeschema/eeschema_jobs_handler.cpp:929
 #, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Zapisano listę materiałową (BOM) do '%s'."
+msgstr "Zapisano listę materiałową do '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:986
 #, c-format
@@ -18708,9 +18706,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Nierozwiązywalna zmienna tekstowa na arkuszu"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "Nazwa pola '%s' zawiera spacje końcowe lub spacje wiodące."
+msgstr "Nazwa pola zawierająca spacje końcowe lub spacje wiodące: '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18775,7 +18773,7 @@ msgstr "Pin %s jest połączony zarówno do %s jak i %s"
 #: eeschema/erc/erc.cpp:1352
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s w symbolu '%s' jest połączony zarówno z: %s jak i %s"
+msgstr "Pin %s w symbolu '%s' jest połączony zarówno do %s jak i %s"
 
 #: eeschema/erc/erc.cpp:1423
 #, c-format
@@ -19041,9 +19039,8 @@ msgid "Pin name resembles stacked pin"
 msgstr ""
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr "Nazwa pola '%s' zawiera spacje końcowe lub spacje wiodące."
+msgstr "Nazwa pola zawiera spacje końcowe lub spacje wiodące"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:91
@@ -20359,9 +20356,8 @@ msgid "Select variant name to remove:"
 msgstr "Wybierz nazwę wariantu do usunięcia:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "Usuwanie pól..."
+msgstr "Usuwanie wariantu projektu"
 
 #: eeschema/sch_field.cpp:907
 #, c-format
@@ -20954,14 +20950,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "Nie można przetworzyć wartości: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Symbol '%s' nie został odnaleziony w bibliotekach gEDA."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Nie udało się otworzyć pliku '%s'."
+msgstr " Chodziło o '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -20981,9 +20977,9 @@ msgid "Circular hierarchy detected for '%s', skipping."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "Nie powiódł się zapis schematu '%s'"
+msgstr "Nie powiodło się wczytywanie sub-schematu '%s':%s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3106
@@ -20997,9 +20993,9 @@ msgid "File '%s' is not a valid gEDA schematic."
 msgstr "'%s' to nie jest poprawna wartość programu SPICE."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można załadować strony '%s':%s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
 #, fuzzy
@@ -21237,9 +21233,9 @@ msgid "Cannot create symbol library path '%s'."
 msgstr "Nie można utworzyć globalnej tabeli bibliotek w ścieżce '%s'."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'."
+msgstr "Nie znaleziono rodzica dla rozszerzonego symbolu '%s' w bibliotece '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:261
 #, c-format
@@ -22875,9 +22871,8 @@ msgid "Missing or invalid C_comp_pulldown value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
-#, fuzzy
 msgid "No C_comp values are available."
-msgstr "Dostępne są aktualizacje pakietów"
+msgstr "Brak dostępnych wartości C_comp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
 #, fuzzy
@@ -22885,9 +22880,8 @@ msgid "Missing or invalid Temperature Range value."
 msgstr "Zakres temperatury jest niepoprawny."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Missing or invalid Voltage Range value."
-msgstr "W tabeli IV występuje nieprawidłowe napięcie"
+msgstr "Brak lub nieprawidłowa wartość Zakres Napięcia."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
@@ -22933,9 +22927,8 @@ msgid "Invalid ISSO_PU table."
 msgstr "Niepoprawna wartość R_pkg."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:677
-#, fuzzy
 msgid "Invalid Composite Current table."
-msgstr "Niepoprawna wartość właściwości"
+msgstr "Niepoprawna tabela Prąd Skompensowany."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:683
 #: eeschema/sim/kibis/ibis_parser.cpp:768
@@ -22951,9 +22944,8 @@ msgstr "Nieprawidłowy GND clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:698
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Invalid Ramp specification."
-msgstr "Napotkano nieprawidłową definicję"
+msgstr "Nieprawidłowa specyfikacja rampy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:711
 #, fuzzy
@@ -22981,9 +22973,8 @@ msgid "Missing or invalid V_trigger_f value."
 msgstr "Niepoprawna wartość V_ref."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
-#, fuzzy
 msgid "Missing or invalid Off_delay value."
-msgstr "Niepoprawna wartość opóźnienia"
+msgstr "Brak lub niepoprawna wartość Off_delay."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
 #, fuzzy
@@ -23163,14 +23154,12 @@ msgid " is not a recognised Submodel Spec subparameter."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
-#, fuzzy
 msgid "Missing pin name/number for matrix row."
-msgstr "Brakujące informacje"
+msgstr "Brak nazwy/numeru pinu dla wiersza macierzy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1921
-#, fuzzy
 msgid "Invalid pin name/number in matrix row."
-msgstr "Nieprawidłowy rząd w matrycy"
+msgstr "Nieprawidłowa nazwa/numer pinu dla wiersza macierzy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1942
 msgid "The matrix type is missing."
@@ -23181,9 +23170,8 @@ msgid " is not a recognised matrix type."
 msgstr " nie zostało rozpoznane jako typ matrycowy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
-#, fuzzy
 msgid "Unexpected [Bandwidth] keyword."
-msgstr "Niespodziewane jednostki dla '%s'"
+msgstr "Niespodziewane wystąpienie klucza [Bandwidth]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1992
 #, fuzzy
@@ -23206,9 +23194,8 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2048
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
-#, fuzzy
 msgid "Failed to read a matrix element."
-msgstr "Nie można odczytać elementu matrycy"
+msgstr "Nie można odczytać elementu matrycy."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2061
 #, fuzzy
@@ -24758,9 +24745,8 @@ msgid "Selection modes"
 msgstr "Skopiowano zaznaczenie"
 
 #: eeschema/toolbars_sch_editor.cpp:241 pcbnew/toolbars_pcb_editor.cpp:433
-#, fuzzy
 msgid "Select the current variant to display and edit."
-msgstr "Wybiera stronę, aby zasymulować wyświetlanie elementów"
+msgstr "Wybiera aktualną wersję, którą chcemy wyświetlić i edytować."
 
 #: eeschema/toolbars_sch_editor.cpp:303
 #, fuzzy
@@ -25975,7 +25961,7 @@ msgstr "Eksportuje plik zawierający listę sieci w jednym z kilku formatów"
 
 #: eeschema/tools/sch_actions.cpp:1214
 msgid "Generate Bill of Materials..."
-msgstr "Generuj listę materiałową (BOM)..."
+msgstr "Generuj listę materiałową..."
 
 #: eeschema/tools/sch_actions.cpp:1215
 msgid "Generate a bill of materials for the current schematic"
@@ -25983,7 +25969,7 @@ msgstr "Tworzy listę materiałową dla bieżącego schematu"
 
 #: eeschema/tools/sch_actions.cpp:1221
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Generuj listę materiałową (BOM) starszego typu..."
+msgstr "Generuj listę materiałową starszego typu..."
 
 #: eeschema/tools/sch_actions.cpp:1222
 msgid ""
@@ -26480,9 +26466,8 @@ msgid "Add Design Variant..."
 msgstr "Dodaj sieć..."
 
 #: eeschema/tools/sch_actions.cpp:1764
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "Dodaje bieżący symbol na schemat"
+msgstr "Dodaje nowy wariant projektu do schematu."
 
 #: eeschema/tools/sch_actions.cpp:1769
 #, fuzzy
@@ -26529,9 +26514,8 @@ msgid "All units of this symbol are already placed."
 msgstr "Wszystkie części składowe tego symbolu są już umieszczone."
 
 #: eeschema/tools/sch_drawing_tools.cpp:665
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Element składowy obecnie już umieszczony"
+msgstr "Żądany element składowy jest już umieszczony."
 
 #: eeschema/tools/sch_drawing_tools.cpp:740
 #: eeschema/tools/sch_editor_control.cpp:3490
@@ -26676,9 +26660,8 @@ msgstr "Nie odnaleziono schematu podrzędnego w bieżącym projekcie"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:120
 #: pcbnew/tools/pcb_edit_table_tool.cpp:161
-#, fuzzy
 msgid "Export Table to CSV"
-msgstr "Eksportuj jako CSV..."
+msgstr "Eksportuj tabelę jako CSV"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:122
 #: pcbnew/tools/pcb_edit_table_tool.cpp:163
@@ -26837,9 +26820,8 @@ msgid "Toggle Attribute"
 msgstr "Przełącz stan atrybutu"
 
 #: eeschema/tools/sch_edit_tool.cpp:3385
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "Edycja właściwości symbolu"
+msgstr "Edycja właściwości symbolu..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3401
 #, fuzzy
@@ -26873,7 +26855,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:1063
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr ""
-"BŁĄD: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
+"Błąd: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
 
 #: eeschema/tools/sch_editor_control.cpp:1170
 #, fuzzy
@@ -26902,9 +26884,8 @@ msgid "Paste Cells"
 msgstr "Wklej specjalnie"
 
 #: eeschema/tools/sch_editor_control.cpp:2149 pcbnew/tools/pcb_control.cpp:1155
-#, fuzzy
 msgid "Failed to paste cells"
-msgstr "Nie można zapisać %s."
+msgstr "Nie udało się wkleić komórek"
 
 #: eeschema/tools/sch_editor_control.cpp:2265
 #, c-format
@@ -27188,9 +27169,8 @@ msgid "No symbol to flatten"
 msgstr "Nie ma nic do wyeksportowania"
 
 #: eeschema/tools/symbol_editor_control.cpp:875
-#, fuzzy
 msgid "Failed to flatten symbol"
-msgstr "Nie można zapisać %s."
+msgstr "Nie udało się spłaszczyć symbolu"
 
 #: eeschema/tools/symbol_editor_control.cpp:879
 msgid "Failed to update library with flattened symbol"
@@ -27447,9 +27427,8 @@ msgid "Select which remote data source to query."
 msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:315
-#, fuzzy
 msgid "Configure remote data sources."
-msgstr "Konfiguracja klas sieci"
+msgstr "Konfiguracja zdalnych źródeł danych."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:390
 msgid "No remote data sources are currently installed."
@@ -27508,9 +27487,8 @@ msgid "Unable to load schematic settings."
 msgstr "Nie można załadować ustawień schematu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:979
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "Folder konfiguracji 3D nie jest znany"
+msgstr "Folder docelowy nie jest skonfigurowany."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:990
 #, fuzzy, c-format
@@ -30013,14 +29991,14 @@ msgid "File path for import report (default: stdout)"
 msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "Nieprawidłowy format\n"
+msgstr "Nieprawidłowy format: %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "Nieprawidłowy format raportu\n"
+msgstr "Nieprawidłowy format raportu: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -34082,7 +34060,7 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Tylko dla regulatorów trójkońcówkowych. Prąd wejścia ADJ."
+msgstr "Tylko dla regulatorów trójkońcówkowych.  Prąd wejścia Adjust."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
@@ -35797,7 +35775,7 @@ msgstr "Nieokreślony:"
 
 #: pcbnew/board_statistics_report.cpp:111
 msgid "Through hole:"
-msgstr "Do montażu przewlekanego (THT):"
+msgstr "Do montażu przewlekanego:"
 
 #: pcbnew/board_statistics_report.cpp:113
 msgid "Connector:"
@@ -37860,7 +37838,7 @@ msgstr "Zgodność ze schematem (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:110 pcbnew/tools/pcb_actions.cpp:463
 msgid "Design Rules Checker"
-msgstr "Sprawdzenie reguł projektowych (DRC)"
+msgstr "Sprawdzenie reguł projektowych"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -38972,7 +38950,7 @@ msgstr "Typ footprintu:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:153
 #: pcbnew/footprint.cpp:1682
 msgid "Through hole"
-msgstr "Do montażu przewlekanego (THT)"
+msgstr "Do montażu przewlekanego"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:153
@@ -52197,7 +52175,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:333
 msgid "KiCad footprint file"
-msgstr "Plik footprintów programu KiCAD"
+msgstr "Plik footprintów programu KiCad"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:305
 #, c-format
@@ -52393,9 +52371,10 @@ msgid "Starting PADS PCB import"
 msgstr ""
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'"
+msgstr ""
+"Footprint '%s' nie został znaleziony na liście decali, element pominięto"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:843
 #, c-format
@@ -52410,9 +52389,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1179
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping track on non-copper layer %d"
-msgstr "Przełącz ścieżkę na następną aktywną warstwę sygnałową"
+msgstr "Pomijam ścieżkę na warstwie nie sygnałowej %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1375
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
@@ -53414,19 +53393,19 @@ msgid "Board file was not updated\n"
 msgstr "Biblioteka symboli nie została zaktualizowana\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2828
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "Nie można zapisać do pliku '%s'."
+msgstr "Nie można określić formatu pliku '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2837
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Nie znaleziono pliku: '%s'."
+msgstr "Nie znaleziono pliku wejściowego: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2863
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "Brak danych o lokalizacji w pliku '%s'."
+msgstr "Nie odnaleziono wtyczki do obsługi plików typu '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2869
 #, c-format
@@ -53434,14 +53413,14 @@ msgid "Importing '%s' using %s format...\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2885
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "Plik VRML poprawnie wyeksportowany do %s"
+msgstr "Zapis importowanej płytki '%s' zakończył się sukcesem\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Błąd podczas wczytywania footprintu: %s"
+msgstr "Błąd podczas importu: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -55293,16 +55272,18 @@ msgid "Reference area total components: %d"
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:1496
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "Właściwości obrazu referencyjnego"
+msgstr ""
+"Właściwości obszaru referencyjnego: \n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1499
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "Wystąpił błąd przy parsowaniu listy komponentów: %s"
+msgstr "Komponentów w sumie na obszarze docelowym: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1500
 #, fuzzy, c-format
