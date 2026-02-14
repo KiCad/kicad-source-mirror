@@ -37,7 +37,7 @@ public:
     {
         wxString backend;
 
-#if wxCHECK_VERSION( 3, 3, 3 ) && defined( __WXGTK__ )
+#if wxCHECK_VERSION( 3, 3, 2 ) && defined( __WXGTK__ )
         int eglMajor = 0, eglMinor = 0;
 
         if( aCanvas->GetEGLVersion( &eglMajor, &eglMinor ) )
