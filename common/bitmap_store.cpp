@@ -22,6 +22,7 @@
 #include <wx/log.h>
 #include <wx/mstream.h>
 #include <wx/stdpaths.h>
+#include <wx/utils.h>
 
 #include <advanced_config.h>
 #include <asset_archive.h>
