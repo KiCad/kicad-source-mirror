@@ -40,7 +40,7 @@ namespace KIFONT
 class KICOMMON_API EMBEDDED_FILES
 {
 public:
-    struct EMBEDDED_FILE
+    struct KICOMMON_API EMBEDDED_FILE
     {
         enum class FILE_TYPE
         {
