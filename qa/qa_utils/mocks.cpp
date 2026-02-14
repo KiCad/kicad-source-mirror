@@ -29,6 +29,7 @@
 #include <wx/snglinst.h>
 #include <wx/app.h>
 #include <board.h>
+#include <collectors.h>
 #include <footprint_viewer_frame.h>
 #include <footprint.h>
 #include <tools/pcb_actions.h>
