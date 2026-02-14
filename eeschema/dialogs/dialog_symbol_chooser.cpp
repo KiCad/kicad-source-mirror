@@ -31,6 +31,7 @@
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
 #include <widgets/symbol_preview_widget.h>
+
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>

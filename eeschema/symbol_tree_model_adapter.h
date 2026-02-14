@@ -27,6 +27,8 @@
 class SYMBOL_LIBRARY_ADAPTER;
 class SCH_BASE_FRAME;
 
+class wxTimer;
+
 class SYMBOL_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
