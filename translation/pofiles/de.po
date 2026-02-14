@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-13 12:09+0000\n"
+"PO-Revision-Date: 2026-02-14 21:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -7287,6 +7287,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Kann nicht mergen: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
+"committen oder stashen."
 
 #: common/git/git_pull_handler.cpp:399
 msgid "Could not merge commits"
@@ -7313,6 +7315,8 @@ msgid ""
 "Cannot rebase: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Rebase nicht möglich: Sie haben unverarbeitete Änderungen. Bitte vor dem "
+"Pull committen oder stashen."
 
 #: common/git/git_pull_handler.cpp:543
 msgid "Conflicts detected during rebase"
@@ -17456,9 +17460,11 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
+msgstr ""
+"Pin %s von Symbol \"%s\" ist mit unterschiedlichen Netzen verbunden: %s und "
+"%s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17623,9 +17629,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Input-Power-Pin wird von keinem Output-Power-Pin angesteuert"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Doppelter Schaltplanname"
+msgstr "Pins mit unterschiedlichen Netzen doppeln"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -28686,18 +28691,16 @@ msgid "Switch to Branch"
 msgstr "Zum Branch wechseln"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Git-Nachverfolgung aktivieren"
+msgstr "Git-Integration aktivieren"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Für dieses Projekt Git-Integration reaktivieren"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Git-Nachverfolgung aktivieren"
+msgstr "Git-Integration deaktivieren"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
@@ -41601,7 +41604,7 @@ msgstr "Sperrfläche"
 #: pcbnew/drc/drc_engine.cpp:461
 #, c-format
 msgid "keepout area '%s'"
-msgstr "Sperrbereich \"%s\""
+msgstr "Sperrfläche \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:683
 #, c-format
@@ -45554,9 +45557,9 @@ msgid "Loading board data..."
 msgstr "Lade Platinendaten ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Lage \"%s\" konnte nicht zugeordnet werden und wird übersprungen."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1262
 msgid "Loading netclasses..."
@@ -46047,9 +46050,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Der CADSTAR-Bereich \"%s\" in der Bibliothekskomponente \"%s\" hat kein "
-"KiCad-Äquivalent. Er ist weder ein Sperrbereich für Leiterbahnen noch für "
-"Vias. Der Bereich wurde nicht importiert."
+"Die CADSTAR-Fläche \"%s\" in der Bibliothekskomponente \"%s\" hat kein KiCad-"
+"Äquivalent. Sie ist weder eine Sperrfläche für Leiterbahnen noch für Vias. "
+"Die Fläche wurde nicht importiert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1088
 #, c-format
