@@ -7,7 +7,7 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
-# Jan Straka <bach@email.cz>, 2020, 2021, 2022, 2023, 2024, 2025.
+# Jan Straka <bach@email.cz>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021, 2022, 2023.
 # Ondřej Čertík <ondrej@certik.us>, 2022.
@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 21:12+0000\n"
-"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
+"PO-Revision-Date: 2026-02-15 09:09+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
 "Language: cs\n"
@@ -8235,7 +8235,7 @@ msgstr "DPS: Export dat vrtání"
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:130 kicad/kicad_cli.cpp:165
 msgid "Export DXF"
-msgstr "Export DXF"
+msgstr "DXF export"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:136
@@ -8284,7 +8284,7 @@ msgstr "DPS: Export souborů Gerber"
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:187 kicad/kicad_cli.cpp:166
 msgid "Export HPGL"
-msgstr "Export HPGL"
+msgstr "HPGL export"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
 #, fuzzy
@@ -8294,7 +8294,7 @@ msgstr "DPS: Export PDF"
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:88
 msgid "Export IPC-2581"
-msgstr "Export IPC-2581"
+msgstr "IPC-2581 export"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 msgid "Export IPC-2581 Job Settings"
@@ -8319,7 +8319,7 @@ msgstr "DPS: Export IPC2581"
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
 msgid "Export ODB++"
-msgstr "Export ODB++"
+msgstr "ODB++ export"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
@@ -17060,9 +17060,8 @@ msgid "Alternate Assignment"
 msgstr "Alternativní přiřazení"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr "Knihovny"
+msgstr " Varianta návrhu"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:416 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -20999,9 +20998,9 @@ msgid "Symbol '%s' not found in gEDA libraries."
 msgstr "Symbol %s nenalezen v knihovně '%s'."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Selhalo otevření souboru \"%s\"."
+msgstr " Měli jste na mysli '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -23042,9 +23041,8 @@ msgid "Invalid POWER Pulse table."
 msgstr "Neplatná svorka POWER."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:795
-#, fuzzy
 msgid " submodels are not yet supported."
-msgstr "DXF SOLID v současné době není podporován."
+msgstr " submodely zatím nejsou podporovány."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:801
 #, fuzzy
@@ -23132,18 +23130,16 @@ msgid "Error on line "
 msgstr "Chyba na řádku "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1048
-#, fuzzy
 msgid " submodel not found."
-msgstr "Symbol nenalezen."
+msgstr " submodel nenalezen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1075
 msgid "A line did not end properly."
 msgstr "Řádek neskončil správně."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1137
-#, fuzzy
 msgid " is not a valid dV/dt value."
-msgstr "'%s' není platná hodnota Spice."
+msgstr " není platná hodnota dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
 #, fuzzy
@@ -23228,9 +23224,8 @@ msgid "The matrix type is missing."
 msgstr "Chybí.\n"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1960
-#, fuzzy
 msgid " is not a recognised matrix type."
-msgstr "Chybí typ matice"
+msgstr " není rozpoznaný typ matice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1982
 #, fuzzy
@@ -23297,9 +23292,8 @@ msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr "Pokračování čtení modelu, který nezačal. ( interní chyba )"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
-#, fuzzy
 msgid " is not a recognised submodel type."
-msgstr "Nedefinovaný typ modelu."
+msgstr " není rozpoznaný typ submodelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
@@ -31139,7 +31133,7 @@ msgstr "Exportovat IDFv3"
 
 #: kicad/kicad_cli.cpp:138
 msgid "Export VRML"
-msgstr "Export VRML"
+msgstr "VRML export"
 
 #: kicad/kicad_cli.cpp:139
 #, fuzzy
@@ -38502,7 +38496,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:401
 msgid "STEP/GLTF Export"
-msgstr "STEP/GLTF Export"
+msgstr "Export STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STEP"
@@ -44245,14 +44239,12 @@ msgid "Pad %s of %s on %s"
 msgstr "Ploška %s na %s z %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
-"Byly nalezeny položky na odstraněných vrstvách. Tato operace smaže všechny "
-"položky z odstraněných vrstev a nelze ji vrátit zpět. \n"
-"Chcete pokračovat?"
+"Byly nalezeny položky na odstraněných vrstvách. Tato operace odstraní "
+"všechny položky z odebraných vrstev a nelze je vrátit zpět."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
 #, fuzzy
