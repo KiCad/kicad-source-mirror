@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-14 21:09+0000\n"
+"PO-Revision-Date: 2026-02-15 23:07+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -9478,7 +9478,6 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Prepnúť zobrazenie kríža na celú obrazovku"
 
 #: common/tool/actions.cpp:1023
-#, fuzzy
 msgid "Inactive Layer View Mode"
 msgstr "Režim zobrazenia jednej vrstvy"
 
@@ -9487,20 +9486,18 @@ msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Neaktívne vrstvy môžete prepínať medzi normálnymi a stlmenými"
 
 #: common/tool/actions.cpp:1031
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
 msgstr "Režim zobrazenia jednej vrstvy (3-stavový)"
 
 #: common/tool/actions.cpp:1032
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr ""
-"Neaktívne vrstvy môžete prepínať medzi normálnymi, stlmenými a skrytými"
+"Prepínať zobrazenie neaktívnych vrstiev medzi normálnym, tlmeným a skrytým "
+"zobrazením"
 
 #: common/tool/actions.cpp:1038
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Ohraničujúca skrinka"
+msgstr "Kresliť ohraničujúce rámčeky"
 
 #: common/tool/actions.cpp:1044 pcbnew/dialogs/panel_edit_options_base.cpp:140
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
@@ -9516,14 +9513,12 @@ msgid "Interactively measure distance between points"
 msgstr "Interaktívne merajte vzdialenosť medzi bodmi"
 
 #: common/tool/actions.cpp:1071
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Manažér projektu"
+msgstr "Prepnúť na správcu projektov"
 
 #: common/tool/actions.cpp:1072
-#, fuzzy
 msgid "Show project window"
-msgstr "Zobraziť okno konzoly"
+msgstr "Zobraziť okno projektu"
 
 #: common/tool/actions.cpp:1081
 msgid "Show 3D viewer window"
@@ -10226,9 +10221,8 @@ msgstr "Kláv. skratka"
 #: eeschema/lib_symbol.cpp:320 eeschema/sch_symbol.cpp:545
 #: eeschema/symbol_editor/symbol_editor.cpp:1756
 #: eeschema/tools/sch_edit_tool.cpp:162
-#, fuzzy
 msgid "Alternate"
-msgstr "Alternatívny názov PIN"
+msgstr "Alternatíva"
 
 #: common/widgets/wx_html_report_panel.cpp:192
 #: common/widgets/wx_html_report_panel.cpp:214
@@ -10254,9 +10248,9 @@ msgid "Save Report File"
 msgstr "Uložiť súbor správy"
 
 #: common/widgets/wx_html_report_panel.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nemožno zapísať hlásenie do súboru \"%s\"."
+msgstr "Nie je možné zapísať správy do súboru '%s'."
 
 #: common/widgets/wx_html_report_panel.cpp:391
 msgid "File save error"
@@ -10323,9 +10317,8 @@ msgid "All KiCad project files"
 msgstr "Všetky súbory projektu KiCad"
 
 #: common/wildcards_and_files_ext.cpp:268
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Altiové schematické súbory"
+msgstr "Všetky schematické súbory KiCad-u"
 
 #: common/wildcards_and_files_ext.cpp:275
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:74
@@ -10338,36 +10331,32 @@ msgid "KiCad s-expression schematic files"
 msgstr "Schematické súbory KiCad s-výraz"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Všetky súbory projektu KiCad"
+msgstr "Altium projektové súbory"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
-msgstr "Archívne súbory CADSTAR"
+msgstr "CADSTAR archívne súbory"
 
 #: common/wildcards_and_files_ext.cpp:301
 msgid "Eagle XML files"
 msgstr "Eagle XML súbory"
 
 #: common/wildcards_and_files_ext.cpp:307
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "KiCad netlist súbory"
+msgstr "OrcadPCB2 netlist súbory"
 
 #: common/wildcards_and_files_ext.cpp:314
 msgid "KiCad netlist files"
 msgstr "KiCad netlist súbory"
 
 #: common/wildcards_and_files_ext.cpp:320
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "Generovať netlist"
+msgstr "Allegro netlist súbory"
 
 #: common/wildcards_and_files_ext.cpp:327
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "SPICE súbor netlistu"
+msgstr "PADS netlist súbory"
 
 #: common/wildcards_and_files_ext.cpp:333
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -10378,17 +10367,17 @@ msgstr ""
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr "EasyEDA (JLCEDA) Pro soubory"
+msgstr "EasyEDA (JLCEDA) Pro súbory"
 
 #: common/wildcards_and_files_ext.cpp:345
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:302
 msgid "KiCad printed circuit board files"
-msgstr "Súbory plošných spojov KiCad"
+msgstr "KiCad súbory plošných spojov"
 
 #: common/wildcards_and_files_ext.cpp:352
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:312
 msgid "KiCad footprint files"
-msgstr "Súbory stopy KiCad"
+msgstr "KiCad súbory púzdier"
 
 #: common/wildcards_and_files_ext.cpp:358
 msgid "KiCad footprint library paths"
@@ -10404,13 +10393,12 @@ msgid "KiCad design block library paths"
 msgstr "Cesty knižnice stopy KiCad"
 
 #: common/wildcards_and_files_ext.cpp:379
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Uchopiť list"
+msgstr "Súbory listu výkresu"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "KiCad symbol footprint link files"
-msgstr "Súbory odkazov na stopu so symbolom KiCad"
+msgstr "KiCad súbory s odkazmi symbolov na puzdrá"
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
@@ -10418,7 +10406,7 @@ msgstr "Súbory vŕtania"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "SVG files"
-msgstr "Súbory SVG"
+msgstr "SVG súbory"
 
 #: common/wildcards_and_files_ext.cpp:408
 msgid "HTML files"
@@ -10426,37 +10414,35 @@ msgstr "HTML súbory"
 
 #: common/wildcards_and_files_ext.cpp:414
 msgid "CSV Files"
-msgstr "Súbory CSV"
+msgstr "CSV súbory"
 
 #: common/wildcards_and_files_ext.cpp:420
 msgid "Portable document format files"
-msgstr "Súbory vo formáte prenosného dokumentu"
+msgstr "Súbory Portable document format"
 
 #: common/wildcards_and_files_ext.cpp:426
 msgid "PostScript files"
-msgstr "Súbory PostScript"
+msgstr "PostScript súbory"
 
 #: common/wildcards_and_files_ext.cpp:432
-#, fuzzy
 msgid "Json files"
-msgstr "Súbory úloh"
+msgstr "Json súbory"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Report files"
-msgstr "Nahlásiť súbory"
+msgstr "Súbory správ"
 
 #: common/wildcards_and_files_ext.cpp:444
-#, fuzzy
 msgid "Component placement files"
-msgstr "Súbory knižníc súčiastok"
+msgstr "Súbory umiestnenia súčiastok"
 
 #: common/wildcards_and_files_ext.cpp:450
 msgid "VRML and X3D files"
-msgstr "Súbory VRML a X3D"
+msgstr "VRML a X3D súbory"
 
 #: common/wildcards_and_files_ext.cpp:456
 msgid "IDFv3 footprint files"
-msgstr "Súbory stopy IDFv3"
+msgstr "IDFv3 súbory puzdier"
 
 #: common/wildcards_and_files_ext.cpp:462
 msgid "Text files"
@@ -10464,7 +10450,7 @@ msgstr "Textové súbory"
 
 #: common/wildcards_and_files_ext.cpp:468
 msgid "Legacy footprint export files"
-msgstr "Staré exportné súbory stopy"
+msgstr "Staršie verzie súborov exportovaných puzdier"
 
 #: common/wildcards_and_files_ext.cpp:474
 #, fuzzy
@@ -10486,7 +10472,7 @@ msgstr "Súbor netlistov CadStar"
 
 #: common/wildcards_and_files_ext.cpp:498
 msgid "Symbol footprint association files"
-msgstr "Uložiť súbor priradenia puzdra"
+msgstr "Súbory priradenia symbolov a puzdier"
 
 #: common/wildcards_and_files_ext.cpp:504
 msgid "Zip file"
@@ -10494,11 +10480,11 @@ msgstr "Súbor ZIP"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "GenCAD 1.4 board files"
-msgstr "Súbory GenCAD 1.4"
+msgstr "GenCAD 1.4 súbory dosky"
 
 #: common/wildcards_and_files_ext.cpp:516
 msgid "DXF Files"
-msgstr "Súbory DXF"
+msgstr "DXF súbory"
 
 #: common/wildcards_and_files_ext.cpp:522
 #: resources/linux/mime/kicad-gerbers.xml.in:22
@@ -10515,7 +10501,7 @@ msgstr "Súbor relácie Specctra"
 
 #: common/wildcards_and_files_ext.cpp:542
 msgid "IPC-D-356 Test Files"
-msgstr "Súbory IPC-D-356 Test"
+msgstr "IPC-D-356 Test súbory"
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "Workbook file"
@@ -10535,9 +10521,8 @@ msgid "Hotkey file"
 msgstr "Zoznam klávesových skratiek"
 
 #: common/wildcards_and_files_ext.cpp:574
-#, fuzzy
 msgid "KiCad jobset files"
-msgstr "Súbor projektu Kicad"
+msgstr "Kicad súbory so sadami úloh"
 
 #: cvpcb/auto_associate.cpp:108
 #, fuzzy, c-format
@@ -10874,18 +10859,16 @@ msgid "View Selected Footprint"
 msgstr "Zobraziť zvolené puzdro"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Spravujte súbory asociácie stopy"
+msgstr "Spravovať súbory asociácie puzdier..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
-"Nakonfigurujte zoznam súborov priradenia stopy (.equ). Tieto súbory sa "
-"používajú na automatické priradenie názvov stôp k hodnotám symbolov."
+"Upraviť zoznam súborov asociácie puzdier.  Tieto súbory sa používajú na "
+"automatické priraďovanie puzdier na základe hodnôt symbolov."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
@@ -10902,11 +10885,12 @@ msgid "Save to Schematic and File"
 msgstr "Uložiť do schémy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
-msgstr "Uložiť asociácie puzdier do polí schematických puzdier a súborov"
+msgstr ""
+"Uložiť priradenia puzdier do polí 'puzdro' schematických symbolov a potom "
+"uložiť súbory so schémami"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 #, fuzzy
@@ -36366,7 +36350,7 @@ msgstr "Nie je to schematické"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:735
 msgid "Exclude from position files"
-msgstr "Vylúčiť z pozičných súborov"
+msgstr "Vylúčiť z polohových súborov"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
@@ -44838,9 +44822,9 @@ msgid "Footprints [%u items]"
 msgstr "Stopy [%u položiek]"
 
 #: pcbnew/load_select_footprint.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť generátor '%s'."
 
 #: pcbnew/load_select_footprint.cpp:372
 #, fuzzy, c-format
@@ -46663,6 +46647,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"Nepodarilo sa určiť priority vyplnenia zóny pre vrstvu '%s'. Bol urobený "
+"najlepší pokus, ale je možné, že existujú chyby DRC a že je potrebná "
+"manuálna úprava priorít zón."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -46783,24 +46770,22 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1360
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nedá sa nájsť index plôšky '%d' v puzdre '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1393
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
-"Zdá sa, že súbor je poškodený. V definíciách skupiny sa nepodarilo nájsť ID "
-"skupiny %s."
+msgstr "Nepodarilo sa nájsť ID skupiny %s v definíciách skupiny."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1399
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
-"Zdá sa, že súbor je poškodený. Na skupinovej mape nebolo možné nájsť "
-"podskupinu %s (ID nadradenej skupiny = %s, názov = %s)."
+"Nepodarilo sa nájsť podskupinu %s v mape skupiny (ID nadradenej skupiny = "
+"%s, názov = %s)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1481
 #, fuzzy, c-format
@@ -46862,7 +46847,7 @@ msgstr "V knižnici sa nepodarilo nájsť komponent '%s' (Symdef ID: '%s')"
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1884
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr "V knižnici sa nepodarilo nájsť symbol dokumentácie (Symdef ID: '%s')"
+msgstr "Nepodarilo sa nájsť dokumentáciu symbolu (Symdef ID: '%s') v knižnici"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1953
 #, c-format
@@ -47173,9 +47158,9 @@ msgid "Unknown SVGNODE nodeType %d"
 msgstr "Neznámy Model_type"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť platnú dosku v '%s'"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:268
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
@@ -47187,9 +47172,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:298
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť platné puzdrá v '%s'"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:369
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:374
@@ -47348,9 +47333,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2654
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "Nemožno vytvoriť súbor archívu \"%s\"\n"
+msgstr "Nepodarilo sa nájsť padstack %s v súbore %s\n"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2730
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2762
@@ -47939,14 +47924,13 @@ msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad podporuje iba 32 signálnych vrstiev"
 
 #: pcbnew/pcb_io/pcad/pcad_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
+msgstr "Nepodarilo sa nájsť sekciu knižnice."
 
 #: pcbnew/pcb_io/pcad/pcad_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť viaStyleDef %s."
 
 #: pcbnew/pcb_io/pcad/pcb_io_pcad.h:44
 msgid "P-Cad 200x ASCII PCB files"
@@ -48348,9 +48332,8 @@ msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Cesta knižnice stopy '%s' neexistuje (alebo nejde o adresár).\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1747
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "(žiadna aktívna knižnica)\n"
+msgstr "Nepodarilo sa uložiť knižnicu\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1753
 #, fuzzy
@@ -48398,9 +48381,9 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2080
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Nemožno otvoriť %s\n"
+msgstr "Nepodarilo sa uložiť DRC správy do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2085
 #, fuzzy, c-format
@@ -48896,7 +48879,7 @@ msgstr "DOSKA úspešne exportovaná."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:100
 msgid "Unable to export, please fix and try again"
-msgstr "Nie je možné exportovať, opravte to a skúste to znova"
+msgstr "Nepodarilo sa exportovať, opravte to a skúste to znova"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, fuzzy, c-format
@@ -49858,6 +49841,7 @@ msgstr "Voľby tvaru"
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
+"Nepodarilo sa zmeniť veľkosť oblúkových spojov s hodnotou %s alebo väčšou."
 
 #: pcbnew/tools/edit_tool.cpp:1004
 #, fuzzy
@@ -49884,7 +49868,7 @@ msgstr "Polomer"
 
 #: pcbnew/tools/edit_tool.cpp:1272
 msgid "Unable to fillet the selected track segments."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa zaobliť vybrané segmenty spoja."
 
 #: pcbnew/tools/edit_tool.cpp:1274
 msgid "Some of the track segments could not be filleted."
@@ -50095,9 +50079,8 @@ msgid "Remove Group Items"
 msgstr "Odstrániť skupinu položiek"
 
 #: pcbnew/tools/item_modification_routine.cpp:111
-#, fuzzy
 msgid "Unable to fillet the selected lines."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa zaobliť čiary."
 
 #: pcbnew/tools/item_modification_routine.cpp:115
 #, fuzzy
@@ -50105,9 +50088,8 @@ msgid "Some of the lines could not be filleted."
 msgstr "Niektoré segmenty trate nebolo možné zaobliť."
 
 #: pcbnew/tools/item_modification_routine.cpp:206
-#, fuzzy
 msgid "Unable to chamfer the selected lines."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa skosiť vybrané čiary."
 
 #: pcbnew/tools/item_modification_routine.cpp:210
 #, fuzzy
@@ -50120,9 +50102,8 @@ msgid "Dogbone Corners"
 msgstr "Presunúť roh"
 
 #: pcbnew/tools/item_modification_routine.cpp:275
-#, fuzzy
 msgid "Unable to add dogbone corners to the selected lines."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa pridať rohy typu dogbone k vybraným čiaram."
 
 #: pcbnew/tools/item_modification_routine.cpp:279
 #, fuzzy
@@ -50150,9 +50131,8 @@ msgid "Extend Lines to Meet"
 msgstr "Posunutie predlžovacej čiary:"
 
 #: pcbnew/tools/item_modification_routine.cpp:392
-#, fuzzy
 msgid "Unable to extend the selected lines to meet."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa predĺžiť vybrané čiary tak, aby sa spojili."
 
 #: pcbnew/tools/item_modification_routine.cpp:396
 #, fuzzy
@@ -50204,9 +50184,8 @@ msgid "Outset items."
 msgstr "Ostatné veci"
 
 #: pcbnew/tools/item_modification_routine.cpp:684
-#, fuzzy
 msgid "Unable to outset the selected items."
-msgstr "Vybrané segmenty stopy sa nepodarilo zaobliť."
+msgstr "Nepodarilo sa vytvoriť vonkajší odsadený obrys vybraných prvkov."
 
 #: pcbnew/tools/item_modification_routine.cpp:688
 #, fuzzy
@@ -52062,6 +52041,7 @@ msgid "Route tracks"
 msgstr "Zamknuté spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:2272
+#, fuzzy
 msgid "Route Differential Pair"
 msgstr "Diferenciálny pár trasy"
 
@@ -52084,7 +52064,7 @@ msgstr "Rozmery diferenciálných párov..."
 
 #: pcbnew/tools/pcb_actions.cpp:2291
 msgid "Open Differential Pair Dimension settings"
-msgstr "Otvorte nastavenia Diferenciálny párový rozmer"
+msgstr "Otvorte nastavenia rozmerov diferenciálnych párov"
 
 #: pcbnew/tools/pcb_actions.cpp:2297
 msgid "Router Highlight Mode"
@@ -52135,12 +52115,11 @@ msgstr "Nalaďte dĺžku jednej stopy"
 
 #: pcbnew/tools/pcb_actions.cpp:2349
 msgid "Tune Length of a Differential Pair"
-msgstr "Doladiť dĺžku diferenciálneho páru"
+msgstr "Naladiť dĺžku diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2360
-#, fuzzy
 msgid "Tune Skew of a Differential Pair"
-msgstr "Nalaďte skosenie diferenciálneho páru"
+msgstr "Naladiť rozdiel dĺžok diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2375
 #, fuzzy
