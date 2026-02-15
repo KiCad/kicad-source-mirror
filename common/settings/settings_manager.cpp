@@ -587,7 +587,8 @@ public:
             path.Replace( m_src, m_dest, false );
             dir.SetPath( path );
 
-            wxMkdir( dir.GetFullPath() );
+            if( !wxDirExists( dir.GetPath() ) )
+                wxMkdir( dir.GetPath() );
 
             return wxDIR_CONTINUE;
         }
