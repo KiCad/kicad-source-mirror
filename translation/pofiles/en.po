@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3568,6 +3568,9 @@ msgstr "Insert separator"
 msgid "Save"
 msgstr "Save"
 
+msgid "Discard"
+msgstr "Discard"
+
 msgid "New Rule"
 msgstr "New Rule"
 
@@ -5872,6 +5875,9 @@ msgstr "Select Settings Path"
 
 msgid "Configuration"
 msgstr "Configuration"
+
+msgid "<unknown>"
+msgstr "<unknown>"
 
 #, c-format
 msgid "Close %s"
@@ -9402,13 +9408,13 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "All pins with duplicate numbers are jumpers"
 
 msgid ""
-"When enabled, this footprint can have more than one pad with the same "
-"number, and pads with the same number will be considered to be jumpered "
-"together internally."
+"When enabled, this symbol can have more than one pin with the same number.  "
+"Pins with the same number will be considered to be jumpered together "
+"internally."
 msgstr ""
-"When enabled, this footprint can have more than one pad with the same "
-"number, and pads with the same number will be considered to be jumpered "
-"together internally."
+"When enabled, this symbol can have more than one pin with the same number.  "
+"Pins with the same number will be considered to be jumpered together "
+"internally."
 
 msgid "Explicit jumper pin groups:"
 msgstr "Explicit jumper pin groups:"
@@ -10395,9 +10401,6 @@ msgstr "P"
 #, c-format
 msgid "Format %s"
 msgstr "Format %s"
-
-msgid "<unknown>"
-msgstr "<unknown>"
 
 #, c-format
 msgid "No model named '%s' in library."
@@ -13756,6 +13759,10 @@ msgstr "Invalid symbol body style number %s"
 #, c-format
 msgid "Invalid hyperlink url '%s'"
 msgstr "Invalid hyperlink url '%s'"
+
+#, c-format
+msgid "Cannot parse '%s' as a header."
+msgstr "Cannot parse '%s' as a header."
 
 msgid "Invalid property value"
 msgstr "Invalid property value"
@@ -21289,9 +21296,6 @@ msgstr ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 
-msgid "Discard"
-msgstr "Discard"
-
 msgid "Edit File in Text Editor"
 msgstr "Edit File in Text Editor"
 
@@ -27120,6 +27124,15 @@ msgstr "Jumpers"
 msgid "All pads with duplicate numbers are jumpers"
 msgstr "All pads with duplicate numbers are jumpers"
 
+msgid ""
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
+msgstr ""
+"When enabled, this footprint can have more than one pad with the same "
+"number, and pads with the same number will be considered to be jumpered "
+"together internally."
+
 msgid "Explicit jumper pad groups:"
 msgstr "Explicit jumper pad groups:"
 
@@ -29991,13 +30004,13 @@ msgid ""
 "\n"
 "    (condition \"<expression>\")\n"
 "\n"
-"<br>"
+"<br>\n"
 msgstr ""
 "### Clause\n"
 "\n"
 "    (condition \"<expression>\")\n"
 "\n"
-"<br>"
+"<br>\n"
 
 msgid ""
 "### Notes\n"
@@ -33423,8 +33436,61 @@ msgstr "Checking thermal reliefs..."
 msgid "Design Rule Editor"
 msgstr "Design Rule Editor"
 
+#, c-format
+msgid ""
+"Cannot save due to validation errors in rule '%s':\n"
+"\n"
+"%s"
+msgstr ""
+"Cannot save due to validation errors in rule '%s':\n"
+"\n"
+"%s"
+
 msgid "Are you sure you want to delete?"
 msgstr "Are you sure you want to delete?"
+
+msgid ""
+"Multiple rules with the same name have different conditions. Rules with the "
+"same name must have identical conditions to be merged."
+msgstr ""
+"Multiple rules with the same name have different conditions. Rules with the "
+"same name must have identical conditions to be merged."
+
+msgid ""
+"The following rules have unsaved changes:\n"
+"\n"
+msgstr ""
+"The following rules have unsaved changes:\n"
+"\n"
+
+msgid ""
+"\n"
+"Do you want to save your changes?"
+msgstr ""
+"\n"
+"Do you want to save your changes?"
+
+#, c-format
+msgid "Failed to reload DRC rules: %s"
+msgstr "Failed to reload DRC rules: %s"
+
+msgid "Minimum Length must be greater than 0"
+msgstr "Minimum Length must be greater than 0"
+
+msgid "Optimum Length must be greater than 0"
+msgstr "Optimum Length must be greater than 0"
+
+msgid "Maximum Length must be greater than 0"
+msgstr "Maximum Length must be greater than 0"
+
+msgid "Minimum Length cannot be greater than Optimum Length"
+msgstr "Minimum Length cannot be greater than Optimum Length"
+
+msgid "Optimum Length cannot be greater than Maximum Length"
+msgstr "Optimum Length cannot be greater than Maximum Length"
+
+msgid "Minimum Length cannot be greater than Maximum Length"
+msgstr "Minimum Length cannot be greater than Maximum Length"
 
 msgid "Minimum Length"
 msgstr "Minimum Length"
@@ -33434,6 +33500,24 @@ msgstr "Optimum Length"
 
 msgid "Maximum Length"
 msgstr "Maximum Length"
+
+msgid "Allow 0°"
+msgstr "Allow 0°"
+
+msgid "Allow 90°"
+msgstr "Allow 90°"
+
+msgid "Allow 180°"
+msgstr "Allow 180°"
+
+msgid "Allow 270°"
+msgstr "Allow 270°"
+
+msgid "Allow All"
+msgstr "Allow All"
+
+msgid "At least one orientation must be selected"
+msgstr "At least one orientation must be selected"
 
 msgid "0 Degrees"
 msgstr "0 Degrees"
@@ -33449,6 +33533,9 @@ msgstr "270 Degrees"
 
 msgid "All Orientations"
 msgstr "All Orientations"
+
+msgid "Allow"
+msgstr "Allow"
 
 msgid "Check Me!"
 msgstr "Check Me!"
@@ -33495,6 +33582,34 @@ msgstr "Custom Query"
 msgid "Remove this condition"
 msgstr "Remove this condition"
 
+msgid "Rule text cannot be empty"
+msgstr "Rule text cannot be empty"
+
+msgid "Check Syntax"
+msgstr "Check Syntax"
+
+msgid "No rule text to check."
+msgstr "No rule text to check."
+
+msgid "Custom rule"
+msgstr "Custom rule"
+
+#, c-format
+msgid "ERROR at line %d, column %d: %s"
+msgstr "ERROR at line %d, column %d: %s"
+
+msgid "Syntax check passed with warnings:\n"
+msgstr "Syntax check passed with warnings:\n"
+
+msgid "Syntax OK"
+msgstr "Syntax OK"
+
+msgid "Minimum Text Height must be greater than 0"
+msgstr "Minimum Text Height must be greater than 0"
+
+msgid "Minimum Text Thickness must be greater than 0"
+msgstr "Minimum Text Thickness must be greater than 0"
+
 #, c-format
 msgid "%.2f"
 msgstr "%.2f"
@@ -33505,11 +33620,41 @@ msgstr "Minimum Text Height"
 msgid "Minimum Text Thickness"
 msgstr "Minimum Text Thickness"
 
+msgid "Numeric input value must be greater than 0"
+msgstr "Numeric input value must be greater than 0"
+
+msgid "Allow top Layer"
+msgstr "Allow top Layer"
+
+msgid "Allow bottom Layer"
+msgstr "Allow bottom Layer"
+
+msgid "At least one layer must be selected"
+msgstr "At least one layer must be selected"
+
 msgid "Top Layer"
 msgstr "Top Layer"
 
 msgid "Bottom Layer"
 msgstr "Bottom Layer"
+
+msgid "Minimum Routing Width is required"
+msgstr "Minimum Routing Width is required"
+
+msgid "Preferred Routing Width is required"
+msgstr "Preferred Routing Width is required"
+
+msgid "Maximum Routing Width is required"
+msgstr "Maximum Routing Width is required"
+
+msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
+msgstr "Minimum Routing Width cannot be greater than Preferred Routing Width"
+
+msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
+msgstr "Preferred Routing Width cannot be greater than Maximum Routing Width"
+
+msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
+msgstr "Minimum Routing Width cannot be greater than Maximum Routing Width"
 
 msgid "Minimum Routing Width"
 msgstr "Minimum Routing Width"
@@ -33519,6 +33664,45 @@ msgstr "Preferred Routing Width"
 
 msgid "Maximum Routing Width"
 msgstr "Maximum Routing Width"
+
+msgid "Minimum Width is required"
+msgstr "Minimum Width is required"
+
+msgid "Preferred Width is required"
+msgstr "Preferred Width is required"
+
+msgid "Maximum Width is required"
+msgstr "Maximum Width is required"
+
+msgid "Minimum Gap is required"
+msgstr "Minimum Gap is required"
+
+msgid "Preferred Gap is required"
+msgstr "Preferred Gap is required"
+
+msgid "Maximum Gap is required"
+msgstr "Maximum Gap is required"
+
+msgid "Maximum Uncoupled Length is required"
+msgstr "Maximum Uncoupled Length is required"
+
+msgid "Minimum Width cannot be greater than Preferred Width"
+msgstr "Minimum Width cannot be greater than Preferred Width"
+
+msgid "Preferred Width cannot be greater than Maximum Width"
+msgstr "Preferred Width cannot be greater than Maximum Width"
+
+msgid "Minimum Width cannot be greater than Maximum Width"
+msgstr "Minimum Width cannot be greater than Maximum Width"
+
+msgid "Minimum Gap cannot be greater than Preferred Gap"
+msgstr "Minimum Gap cannot be greater than Preferred Gap"
+
+msgid "Preferred Gap cannot be greater than Maximum Gap"
+msgstr "Preferred Gap cannot be greater than Maximum Gap"
+
+msgid "Minimum Gap cannot be greater than Maximum Gap"
+msgstr "Minimum Gap cannot be greater than Maximum Gap"
 
 msgid "Max Uncoupled Length"
 msgstr "Max Uncoupled Length"
@@ -33532,17 +33716,87 @@ msgstr "Maximum"
 msgid "Preferred"
 msgstr "Preferred"
 
+msgid "Minimum Via Diameter must be greater than 0"
+msgstr "Minimum Via Diameter must be greater than 0"
+
+msgid "Preferred Via Diameter must be greater than 0"
+msgstr "Preferred Via Diameter must be greater than 0"
+
+msgid "Maximum Via Diameter must be greater than 0"
+msgstr "Maximum Via Diameter must be greater than 0"
+
+msgid "Minimum Via Hole Size must be greater than 0"
+msgstr "Minimum Via Hole Size must be greater than 0"
+
+msgid "Preferred Via Hole Size must be greater than 0"
+msgstr "Preferred Via Hole Size must be greater than 0"
+
+msgid "Maximum Via Hole Size must be greater than 0"
+msgstr "Maximum Via Hole Size must be greater than 0"
+
+msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
+msgstr "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
+
+msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
+msgstr "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
+
+msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
+msgstr "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
+
+msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
+msgstr "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
+
+msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
+msgstr "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
+
+msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
+msgstr "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
+
 msgid "Via Diameter"
 msgstr "Via Diameter"
 
 msgid "Via Hole Size"
 msgstr "Via Hole Size"
 
+#, c-format
+msgid "%s should not be empty."
+msgstr "%s should not be empty."
+
+#, c-format
+msgid "The value of %s must be a valid number."
+msgstr "The value of %s must be a valid number."
+
+#, c-format
+msgid "The value of %s must be greater than 0."
+msgstr "The value of %s must be greater than 0."
+
+#, c-format
+msgid "The value of %s must be a valid integer."
+msgstr "The value of %s must be a valid integer."
+
+#, c-format
+msgid "Please choose %s."
+msgstr "Please choose %s."
+
+#, c-format
+msgid "%s value cannot be greater than %s value."
+msgstr "%s value cannot be greater than %s value."
+
+#, c-format
+msgid "Please select at least one option from %s list."
+msgstr "Please select at least one option from %s list."
+
 msgid "Rule type"
 msgstr "Rule type"
 
 msgid "Rule name"
 msgstr "Rule name"
+
+msgid "Rule name must be unique."
+msgstr "Rule name must be unique."
+
+msgid "Layer selection is required."
+msgstr "Layer selection is required."
 
 msgid "ERROR: No condition text provided for validation."
 msgstr "ERROR: No condition text provided for validation."
@@ -33559,6 +33813,12 @@ msgstr "Show Matches (%d)"
 
 msgid "Show Matches"
 msgstr "Show Matches"
+
+msgid "outer"
+msgstr "outer"
+
+msgid "inner"
+msgstr "inner"
 
 msgid "Constraint"
 msgstr "Constraint"
@@ -33630,8 +33890,8 @@ msgid "Error creating drill report file '%s'"
 msgstr "Error creating drill report file '%s'"
 
 #, c-format
-msgid "Created drill report file '%s'"
-msgstr "Created drill report file '%s'"
+msgid "Error writing drill report file '%s'"
+msgstr "Error writing drill report file '%s'"
 
 #, c-format
 msgid "Created Gerber job file '%s'."
@@ -33996,6 +34256,9 @@ msgstr "Error loading PCB '%s'."
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memory exhausted loading PCB '%s'"
+
+msgid "Finalizing board"
+msgstr "Finalizing board"
 
 msgid "Could not load component class assignment rules"
 msgstr "Could not load component class assignment rules"
@@ -35084,6 +35347,14 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Processing symbol '%s:%s'."
 
 #, c-format
+msgid ""
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
+msgstr ""
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
+
+#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "Cannot remove unused footprint %s (footprint is locked)."
 
@@ -35674,6 +35945,20 @@ msgstr "Converting footprints"
 
 msgid "Parsing Allegro objects"
 msgstr "Parsing Allegro objects"
+
+#, c-format
+msgid ""
+"This file was created with %s, which uses a binary format that predates "
+"Allegro 16.0 and is not supported by this importer.\n"
+"\n"
+"To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
+"later and re-save, then import the resulting file."
+msgstr ""
+"This file was created with %s, which uses a binary format that predates "
+"Allegro 16.0 and is not supported by this importer.\n"
+"\n"
+"To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
+"later and re-save, then import the resulting file."
 
 msgid "Failed to build board from Allegro data"
 msgstr "Failed to build board from Allegro data"
@@ -37031,6 +37316,10 @@ msgstr "Text on unmapped layer %d assigned to Comments layer"
 #, c-format
 msgid "Skipping track on non-copper layer %d"
 msgstr "Skipping track on non-copper layer %d"
+
+#, c-format
+msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
+msgstr "COPPER item on unmapped layer %d defaulting to F.Cu"
 
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
@@ -42191,6 +42480,12 @@ msgstr "Zone fills are out-of-date. Refill?"
 msgid "Refill"
 msgstr "Refill"
 
+msgid "Offset X"
+msgstr "Offset X"
+
+msgid "Offset Y"
+msgstr "Offset Y"
+
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
@@ -42214,12 +42509,6 @@ msgstr ""
 
 msgid "Zone Manager"
 msgstr "Zone Manager"
-
-msgid "Offset X"
-msgstr "Offset X"
-
-msgid "Offset Y"
-msgstr "Offset Y"
 
 msgid "inherited"
 msgstr "inherited"
@@ -42347,6 +42636,23 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid ""
+#~ "### Clause\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "<br>"
+#~ msgstr ""
+#~ "### Clause\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "<br>"
+
+#, c-format
+#~ msgid "Created drill report file '%s'"
+#~ msgstr "Created drill report file '%s'"
 
 #~ msgid "Filter Pin Table"
 #~ msgstr "Filter Pin Table"
