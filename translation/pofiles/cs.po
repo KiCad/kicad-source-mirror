@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-15 09:09+0000\n"
+"PO-Revision-Date: 2026-02-15 23:07+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -6346,11 +6346,8 @@ msgid "File '%s' was not found.\n"
 msgstr "Soubor '%s' nenalezen."
 
 #: common/eda_base_frame.cpp:1284
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Chcete je všechny přepsat nebo přejmenovat nové symboly?"
+msgstr "Chcete jej odstranit ze seznamu naposledy otevřených souborů?"
 
 #: common/eda_base_frame.cpp:1285
 msgid "Remove"
@@ -8009,9 +8006,9 @@ msgstr "Odpověď API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Odpověď API:  %s"
+msgstr "Odpověď API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:391
 #, c-format
@@ -14887,15 +14884,12 @@ msgid "Define as power symbol"
 msgstr "Vytvoří součástku jako symbol napájení"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Nastavením této možnosti se dotyčný symbol objeví v\n"
-"dialogu \"přidat symbol napájení\".  Zamkne text hodnoty, aby byl chráněn\n"
-"před úpravami ve schématu.  Symbol nebude zahrnut do\n"
-"BOM a nelze mu přiřadit pouzdro."
+"Symboly napájení definují globální síť s hodnotou jako netname. \n"
+"Nebudou zahrnuty do BOM a nelze jim přidělit pouzdro."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 #, fuzzy
@@ -16899,11 +16893,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2744
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr ""
-"\n"
-"Nelze aktualizovat pouzdro"
+msgstr "Výchozí variantu nelze odstranit."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2783
 #, fuzzy
@@ -16941,11 +16932,8 @@ msgid "Variant '%s' already exists."
 msgstr "'%s' již existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2856
-#, fuzzy
 msgid "Cannot copy the default variant."
-msgstr ""
-"\n"
-"Nelze aktualizovat pouzdro"
+msgstr "Výchozí variantu nelze zkopírovat."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2863
 #, fuzzy
@@ -41758,7 +41746,7 @@ msgstr "Vrtací značky:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:153
 msgid "Actual size"
-msgstr "Aktuální velikost"
+msgstr "Skutečná velikost"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:159
 msgid "Scaling:"
@@ -47815,12 +47803,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1351
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Nelze přidat 3D model pro %s.\n"
+"\n"
 "Chyba OpenCascade: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1358
@@ -47830,11 +47818,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Chyba exportu souboru STEP. Export přerušen. **\n"
+msgstr "** Chyba exportu souboru %s. Export přerušen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1372
 #, c-format
@@ -48555,9 +48541,8 @@ msgid "Export footprints to library:"
 msgstr "Export pouzdra do editoru"
 
 #: pcbnew/footprint_libraries_utils.cpp:656
-#, fuzzy
 msgid "Update board footprints to link to exported footprints"
-msgstr "Aktualizovat pouzdro na desce aby se odkazoval na %s?"
+msgstr "Aktualizovat pouzdra desky, aby se propojily s exportovanými pouzdry"
 
 #: pcbnew/footprint_libraries_utils.cpp:848
 #: pcbnew/footprint_viewer_frame.cpp:740
@@ -51983,7 +51968,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Nelze interpretovat kód data %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -51991,7 +51976,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Položky nalezené na nedefinovaných vrstvách (%s).\n"
-"Přejete si je obnovit do vrstvy %s?"
+"Přejete si je zachránit do vrstvy %s?\n"
+"\n"
+"Zóny bude třeba znovu vyplnit."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1401
 #, fuzzy
@@ -53286,9 +53273,9 @@ msgid "Plugin Directory"
 msgstr "Otevřít adresář pluginu"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "The plugin directory '%s' does not exist.  Create it?"
-msgstr "Adresář '%s' neexistuje"
+msgstr "Adresář zásuvných modulů '%s' neexistuje. Vytvořit ho?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:243
 #, fuzzy, c-format
