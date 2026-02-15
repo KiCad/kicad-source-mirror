@@ -535,7 +535,10 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
     try
     {
         std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT, aScope.value() );
-        wxCHECK( optTable, false );
+
+        if( !optTable )
+            return false;
+
         LIBRARY_TABLE* table = optTable.value();
 
         LIBRARY_TABLE_ROW& row = table->InsertRow();
