@@ -1525,8 +1525,7 @@ void PCB_IO_PADS::loadCopperShapes()
                 outline.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
 
             outline.SetClosed( true );
-            zone->Outline()->NewOutline();
-            zone->Outline()->Append( outline );
+            zone->Outline()->AddOutline( outline );
             m_loadBoard->Add( zone );
         }
         else

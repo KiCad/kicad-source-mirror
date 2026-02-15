@@ -182,6 +182,21 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
                     aBoard.dir << " " << fp->GetReference() << " pad has zero size" );
         }
     }
+
+    // Every zone outline must have non-empty contours
+    for( ZONE* zone : board->Zones() )
+    {
+        const SHAPE_POLY_SET* outline = zone->Outline();
+        BOOST_REQUIRE_MESSAGE( outline != nullptr,
+                aBoard.dir << " zone has null outline" );
+
+        for( int ii = 0; ii < outline->OutlineCount(); ++ii )
+        {
+            BOOST_CHECK_MESSAGE( outline->COutline( ii ).PointCount() >= 3,
+                    aBoard.dir << " zone outline " << ii << " has "
+                               << outline->COutline( ii ).PointCount() << " points" );
+        }
+    }
 }
 
 
@@ -613,6 +628,32 @@ BOOST_AUTO_TEST_CASE( ImportDegeneratePourSkipped )
         BOOST_CHECK( zone->Outline()->OutlineCount() == 1 );
         BOOST_CHECK( zone->Outline()->COutline( 0 ).PointCount() >= 3 );
     }
+}
+
+
+/**
+ * Verify that filled copper shapes produce zones with exactly one valid outline.
+ *
+ * Before the fix, loadCopperShapes() called NewOutline() then Append(SHAPE_LINE_CHAIN),
+ * which created two outlines per zone: an empty polygon from NewOutline() and the real
+ * one from the implicit SHAPE_LINE_CHAIN->SHAPE_POLY_SET conversion. The empty outline
+ * (0 points, but closed) crashed the renderer via CPoint(0) on an empty vector.
+ */
+BOOST_AUTO_TEST_CASE( ImportFilledCopperSingleOutline )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir()
+                        + "plugins/pads/synthetic_filled_copper.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+    BOOST_REQUIRE_EQUAL( board->Zones().size(), 1 );
+
+    ZONE* zone = board->Zones()[0];
+    BOOST_CHECK_EQUAL( zone->Outline()->OutlineCount(), 1 );
+    BOOST_CHECK( zone->Outline()->COutline( 0 ).PointCount() >= 3 );
 }
 
 
