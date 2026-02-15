@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-15 23:07+0000\n"
+"PO-Revision-Date: 2026-02-15 23:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -19884,9 +19884,8 @@ msgid "Exclude from Bill of Materials"
 msgstr "Vylúčiť z kusovníka"
 
 #: eeschema/lib_symbol.cpp:2462
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "Vylúčiť z pozičných súborov"
+msgstr "Vylúčiť z polohových súborov"
 
 #: eeschema/lib_symbol.cpp:2467
 #, fuzzy
@@ -20809,7 +20808,7 @@ msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.h:83
 msgid "Altium schematic files"
-msgstr "Altiové schematické súbory"
+msgstr "Altium schematické súbory"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:88
 #, fuzzy
@@ -21057,9 +21056,8 @@ msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR Schematické archívne súbory"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "Nie je súbor knižnice"
+msgstr "CADSTAR súbory knižnice súčiastok"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:243
 #, fuzzy, c-format
@@ -21079,9 +21077,8 @@ msgstr ""
 "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:52
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "Súbory knižnice symbolov KiCad"
+msgstr "KiCad súbory databázovej knižnice"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:613
 #, fuzzy, c-format
