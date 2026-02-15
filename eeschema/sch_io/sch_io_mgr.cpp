@@ -228,6 +228,10 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
     IO_RELEASER<SCH_IO>                oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
     IO_RELEASER<SCH_IO>                kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+    if( !oldFilePI || !kicadPI )
+        return false;
+
     std::vector<LIB_SYMBOL*>           symbols;
     std::vector<LIB_SYMBOL*>           newSymbols;
     std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
