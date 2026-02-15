@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2025-11-07 07:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -41527,7 +41527,7 @@ msgstr "(네트 %s 와 %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1281
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:116
@@ -41548,7 +41548,7 @@ msgstr "(%s 공간거리 %s; 실제값 %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s 공간거리 %s; 실제값 < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "아크는 3개의 별개의 점이 있음"

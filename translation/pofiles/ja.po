@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2026-02-12 08:25+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
@@ -7184,8 +7184,8 @@ msgid ""
 "pulling."
 msgstr ""
 "マージできません: コミットされていない(ステージングされていない)変更がありま"
-"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてください"
-"。"
+"す。コミットまたは変更を一時退避 (Stash)してコミットしてからpullしてくださ"
+"い。"
 
 #: common/git/git_pull_handler.cpp:399
 msgid "Could not merge commits"
@@ -41812,7 +41812,7 @@ msgstr "(ネット %s と %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1281
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:116
@@ -41833,7 +41833,7 @@ msgstr "(%s クリアランス %s; 現状 %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s クリアランス %s; 現状 < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "(交差するゾーンには明確な優先順位が必要）"
 
@@ -46594,8 +46594,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
-"コンポーネント '%s' の指定子に非 ASCII 文字が含まれています。ODB++ "
-"エクスポートでは '%s' に変換されます。"
+"コンポーネント '%s' の指定子に非 ASCII 文字が含まれています。ODB++ エクスポー"
+"トでは '%s' に変換されます。"
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -46603,8 +46603,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
-"コンポーネント '%s' は変換後、紛らわしい指定子になってしまうため、ODB++ "
-"エクスポート用に '%s' に名前が変更されました。"
+"コンポーネント '%s' は変換後、紛らわしい指定子になってしまうため、ODB++ エク"
+"スポート用に '%s' に名前が変更されました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"

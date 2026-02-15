@@ -115,7 +115,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2026-02-14 21:09+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
@@ -42536,7 +42536,7 @@ msgstr "(coll %s e %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1281
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:116
@@ -42557,7 +42557,7 @@ msgstr "(%s clearance %s; reale %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s clearance %s; reale < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 #, fuzzy
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "L'arco deve avere 3 punti distinti"

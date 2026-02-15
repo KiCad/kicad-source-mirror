@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2026-02-12 10:06+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -41152,7 +41152,7 @@ msgstr "(网络 %s 和 %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1281
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:116
@@ -41173,7 +41173,7 @@ msgstr "(%s 间距 %s; 实际 %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s 间距 %s; 实际 < 0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 msgid "(intersecting zones must have distinct priorities)"
 msgstr "(相交的填充区必须具有不同的优先级)"
 

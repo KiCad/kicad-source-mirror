@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-12 00:15+0300\n"
+"POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2025-01-23 15:38+0000\n"
 "Last-Translator: John Beard <john.j.beard@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -42424,7 +42424,7 @@ msgstr "(เน็ต %s และ %s)"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:625
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:932
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:954
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1281
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:245
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:277
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:116
@@ -42445,7 +42445,7 @@ msgstr "(%s ระยะห่าง %s ค่าจริง %s)"
 msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s ระยะห่าง %s ;ค่าจริง<0)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1265
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1273
 msgid "(intersecting zones must have distinct priorities)"
 msgstr ""
 
