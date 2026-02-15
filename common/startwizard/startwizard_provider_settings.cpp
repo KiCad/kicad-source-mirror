@@ -29,7 +29,6 @@
 #include <settings/settings_manager.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/dirdlg.h>
-#include <wx/msgdlg.h>
 
 
 class PANEL_STARTWIZARD_SETTINGS : public PANEL_STARTWIZARD_SETTINGS_BASE
@@ -213,27 +212,6 @@ void STARTWIZARD_PROVIDER_SETTINGS::Finish()
     // Else, perform migration.  First copy the old files in, then reload the in-memory copies.
     mgr.MigrateFromPreviousVersion( m_model->import_path );
     mgr.Load();
-
-    // Copy the user custom key mappings.
-    if( m_model )
-    {
-        wxFileName keyMapFileSrc( m_model->import_path, wxS( "user.hotkeys" ) );
-
-        if( keyMapFileSrc.FileExists() )
-        {
-            wxFileName keyMapFileDest = keyMapFileSrc;
-
-            keyMapFileDest.SetPath( mgr.GetPathForSettingsFile( settings ) );
-
-            if( !wxCopyFile( keyMapFileSrc.GetFullPath(), keyMapFileDest.GetFullPath() ) )
-            {
-                wxMessageDialog dlg( nullptr, _( "An error occurred attempting to copy the custom keyboard "
-                                                 "map file." ), _( "Warning" ), wxOK | wxICON_WARNING | wxCENTER );
-
-                dlg.ShowModal();
-            }
-        }
-    }
 }
 
 
