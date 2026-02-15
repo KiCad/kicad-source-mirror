@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-13 12:09+0000\n"
+"PO-Revision-Date: 2026-02-15 23:07+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v9/uk/>\n"
 "Language: uk\n"
@@ -28367,22 +28367,20 @@ msgid "Switch to Branch"
 msgstr "Перейти до відділення"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Увімкнути відстеження Git"
+msgstr "Увімкнути інтеграцію з Git"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Повторно увімкнути інтеграцію з Git для цього проєкту"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Увімкнути відстеження Git"
+msgstr "Вимкнути інтеграцію з Git"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Вимкнути інтеграцію з Git для цього проєкту"
 
 #: kicad/project_tree_pane.cpp:1121
 #, c-format
