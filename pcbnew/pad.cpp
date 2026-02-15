@@ -2504,7 +2504,6 @@ bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int a
 void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                    int aMaxError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
-    wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for pads." ) );
     wxASSERT_MSG( aLayer != UNDEFINED_LAYER,
                   wxT( "UNDEFINED_LAYER is no longer allowed for PAD::TransformShapeToPolygon" ) );
 
