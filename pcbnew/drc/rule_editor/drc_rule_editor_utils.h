@@ -30,13 +30,14 @@
 #include <optional>
 #include <memory>
 #include <vector>
+#include <bitmaps.h>
 
 #include "drc_rule_editor_enums.h"
 #include "drc_re_base_constraint_data.h"
 
 class BOARD;
 class DRC_RULE;
-
+class DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
 
 class DRC_RULE_EDITOR_UTILS
 {
@@ -48,6 +49,12 @@ public:
     static bool IsBoolInputType( const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType );
 
     static bool IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType );
+
+    static std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA> CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType );
+
+    static std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>
+                            CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType,
+                            const DRC_RE_BASE_CONSTRAINT_DATA& aBase );
 
     static wxString FormatErrorMessage( int aErrorCount, const wxString& aErrorMessage );
 

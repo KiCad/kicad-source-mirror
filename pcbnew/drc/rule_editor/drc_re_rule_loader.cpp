@@ -193,7 +193,7 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         // For numeric input types, create a generic numeric constraint data
         if( DRC_RULE_EDITOR_UTILS::IsNumericInputType( aPanel ) )
         {
-            auto data = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>();
+            auto data = DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( aPanel );
             data->SetRuleName( aRule.m_Name );
 
             wxString code = DRC_RULE_EDITOR_UTILS::GetConstraintCode( aPanel );

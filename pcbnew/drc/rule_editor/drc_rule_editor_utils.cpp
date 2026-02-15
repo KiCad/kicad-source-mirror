@@ -22,6 +22,7 @@
  */
 
 #include "drc_rule_editor_utils.h"
+#include "drc_re_numeric_constraint_types.h"
 #include <reporter.h>
 #include <component_classes/component_class_assignment_rule.h>
 #include <drc/drc_rule_parser.h>
@@ -168,7 +169,8 @@ static void RegisterDefaultConverters()
                 if( DRC_RULE_EDITOR_UTILS::IsNumericInputType( type ) )
                 {
                     double val = constraint.GetValue().Min() / 1000000.0;
-                    auto data = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 0, val, aRule->m_Name );
+                    auto data = DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( type );
+                    data->SetNumericInputValue( val );
                     data->SetConstraintCode( code );
                     return data;
                 }
@@ -281,6 +283,7 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case COPPER_TO_EDGE_CLEARANCE:
     case COPPER_TO_HOLE_CLEARANCE:
     case COURTYARD_CLEARANCE:
+    case PHYSICAL_CLEARANCE:
     case CREEPAGE_DISTANCE:
     case HOLE_SIZE:
     case HOLE_TO_HOLE_CLEARANCE:
@@ -883,5 +886,82 @@ wxString DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRA
 
     default:
         return wxEmptyString;
+    }
+}
+
+
+std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>
+DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType )
+{
+    switch( aType )
+    {
+    case BASIC_CLEARANCE:                    return std::make_shared<DRC_RE_BASIC_CLEARANCE_CONSTRAINT_DATA>();
+    case BOARD_OUTLINE_CLEARANCE:            return std::make_shared<DRC_RE_BOARD_OUTLINE_CLEARANCE_CONSTRAINT_DATA>();
+    case COPPER_TO_EDGE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_EDGE_CLEARANCE_CONSTRAINT_DATA>();
+    case COPPER_TO_HOLE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>();
+    case COURTYARD_CLEARANCE:                return std::make_shared<DRC_RE_COURTYARD_CLEARANCE_CONSTRAINT_DATA>();
+    case PHYSICAL_CLEARANCE:                 return std::make_shared<DRC_RE_PHYSICAL_CLEARANCE_CONSTRAINT_DATA>();
+    case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>();
+    case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>();
+    case HOLE_TO_HOLE_CLEARANCE:             return std::make_shared<DRC_RE_HOLE_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>();
+    case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>();
+    case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>();
+    case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>();
+    case MINIMUM_ANGULAR_RING:               return std::make_shared<DRC_RE_MINIMUM_ANGULAR_RING_CONSTRAINT_DATA>();
+    case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>();
+    case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>();
+    case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>();
+    case MINIMUM_ITEM_CLEARANCE:             return std::make_shared<DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA>();
+    case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>();
+    case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
+    case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>();
+    case MINIMUM_TRACK_WIDTH:                return std::make_shared<DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA>();
+    case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>();
+    case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>();
+    case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
+    case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>();
+    case SILK_TO_SOLDERMASK_CLEARANCE:       return std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>();
+    case SOLDERMASK_EXPANSION:               return std::make_shared<DRC_RE_SOLDERMASK_EXPANSION_CONSTRAINT_DATA>();
+    case SOLDERPASTE_EXPANSION:              return std::make_shared<DRC_RE_SOLDERPASTE_EXPANSION_CONSTRAINT_DATA>();
+    default:                                 return std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>();
+    }
+}
+
+
+std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>
+DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType,
+                                                    const DRC_RE_BASE_CONSTRAINT_DATA& aBase )
+{
+    switch( aType )
+    {
+    case BASIC_CLEARANCE:                    return std::make_shared<DRC_RE_BASIC_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case BOARD_OUTLINE_CLEARANCE:            return std::make_shared<DRC_RE_BOARD_OUTLINE_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case COPPER_TO_EDGE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_EDGE_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case COPPER_TO_HOLE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case COURTYARD_CLEARANCE:                return std::make_shared<DRC_RE_COURTYARD_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case PHYSICAL_CLEARANCE:                 return std::make_shared<DRC_RE_PHYSICAL_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>( aBase );
+    case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>( aBase );
+    case HOLE_TO_HOLE_CLEARANCE:             return std::make_shared<DRC_RE_HOLE_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>( aBase );
+    case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>( aBase );
+    case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_ANGULAR_RING:               return std::make_shared<DRC_RE_MINIMUM_ANGULAR_RING_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_ITEM_CLEARANCE:             return std::make_shared<DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_TRACK_WIDTH:                return std::make_shared<DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );
+    case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case SILK_TO_SOLDERMASK_CLEARANCE:       return std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>( aBase );
+    case SOLDERMASK_EXPANSION:               return std::make_shared<DRC_RE_SOLDERMASK_EXPANSION_CONSTRAINT_DATA>( aBase );
+    case SOLDERPASTE_EXPANSION:              return std::make_shared<DRC_RE_SOLDERPASTE_EXPANSION_CONSTRAINT_DATA>( aBase );
+    default:                                 return std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( aBase );
     }
 }

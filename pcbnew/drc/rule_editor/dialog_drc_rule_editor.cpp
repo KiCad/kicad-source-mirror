@@ -909,7 +909,7 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
     }
     else if( DRC_RULE_EDITOR_UTILS::IsNumericInputType( nodeType ) )
     {
-        newRuleNode.m_nodeData = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( clearanceData );
+        newRuleNode.m_nodeData = DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( nodeType, clearanceData );
     }
     else if( DRC_RULE_EDITOR_UTILS::IsBoolInputType( nodeType ) )
     {

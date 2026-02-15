@@ -42,10 +42,10 @@ DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
+    auto* valueField = AddField<wxTextCtrl>( wxS( "value" ), positions[0], wxTE_PROCESS_ENTER | wxTE_CENTRE );
     m_valueBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
-
-    auto* valueField = AddFieldWithUnits<wxTextCtrl>( wxS( "value" ), positions[0], m_valueBinder.get(), wxTE_PROCESS_ENTER );
+            &m_unitsProvider, this, nullptr, valueField->GetControl(), nullptr, false, false );
+    valueField->SetUnitBinder( m_valueBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

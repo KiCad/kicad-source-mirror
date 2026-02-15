@@ -53,7 +53,7 @@ public:
         // Positions measured from constraint_vias_under_SMD.png (~280x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 20, 40, 130, 1 },    // checkbox (bottom left corner)
+            { 45, 55, 75, 1, _("Allow"), LABEL_POSITION::RIGHT },    // checkbox (bottom left corner)
         };
     }
 
