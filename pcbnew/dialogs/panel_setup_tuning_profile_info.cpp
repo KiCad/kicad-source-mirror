@@ -37,7 +37,7 @@
 
 PANEL_SETUP_TUNING_PROFILE_INFO::PANEL_SETUP_TUNING_PROFILE_INFO( wxWindow*                    aParentWindow,
                                                                   PANEL_SETUP_TUNING_PROFILES* parentPanel ) :
-        PANEL_SETUP_TUNING_PROFILE_INFO_BASE( aParentWindow ),
+        PANEL_SETUP_TUNING_PROFILE_INFO_BASE( aParentWindow, wxID_ANY, wxPoint( -1000, -1000 ) ),
         m_parentPanel( parentPanel ),
         m_viaPropagationUnits( parentPanel->m_frame, m_viaPropagationSpeedLabel, m_viaPropagationSpeed,
                                m_viaPropSpeedUnits )
