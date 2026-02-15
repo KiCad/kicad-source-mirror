@@ -580,7 +580,11 @@ wxString SCH_SHEET_PATH::GetPageNumber() const
     wxCHECK( sheet, wxEmptyString );
 
     KIID_PATH tmpPath = Path();
-    tmpPath.pop_back();
+
+    if( !tmpPath.empty() )
+        tmpPath.pop_back();
+    else
+        return wxEmptyString;
 
     return sheet->getPageNumber( tmpPath );
 }

@@ -688,8 +688,24 @@ void SCHEMATIC::SetSheetNumberAndCount()
     SCH_SCREENS s_list( Root() );
 
     // Set the sheet count, and the sheet number (1 for root sheet)
-    int              sheet_count = Root().CountSheets();
-    int              sheet_number = 1;
+    int sheet_count = Root().CountSheets();
+    int sheet_number = 1;
+
+    if( m_hierarchy.empty() )
+    {
+        for( screen = s_list.GetFirst(); screen != nullptr; screen = s_list.GetNext() )
+            screen->SetPageCount( sheet_count );
+
+        CurrentSheet().SetVirtualPageNumber( sheet_number );
+        screen = CurrentSheet().LastScreen();
+
+        if( screen )
+            screen->SetVirtualPageNumber( sheet_number );
+
+        return;
+    }
+
+
     const KIID_PATH& current_sheetpath = CurrentSheet().Path();
 
     // @todo Remove all pseudo page number system is left over from prior to real page number
