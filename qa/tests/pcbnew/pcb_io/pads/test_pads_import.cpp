@@ -582,4 +582,38 @@ BOOST_AUTO_TEST_CASE( MAIS_FC_Stackup )
 }
 
 
+/**
+ * Verify that degenerate pour definitions (PADTHERM/VIATHERM with < 3 points)
+ * are skipped without crashing.
+ *
+ * Before the fix, these created zones with empty SHAPE_LINE_CHAIN outlines
+ * which caused a SIGABRT in the renderer's DrawPolyline() when accessing
+ * CPoint(0) on a zero-length vector.
+ */
+BOOST_AUTO_TEST_CASE( ImportDegeneratePourSkipped )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir()
+                        + "plugins/pads/synthetic_degenerate_pour.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // Only the valid 4-point pour should produce a zone.
+    // The PADTHERM (2 SEG pieces with 2 points each) and
+    // VIATHERM (1 SEG piece with 2 points) must be skipped.
+    BOOST_CHECK_EQUAL( board->Zones().size(), 1 );
+
+    // The single valid zone must have a non-degenerate outline
+    if( board->Zones().size() == 1 )
+    {
+        ZONE* zone = board->Zones()[0];
+        BOOST_CHECK( zone->Outline()->OutlineCount() == 1 );
+        BOOST_CHECK( zone->Outline()->COutline( 0 ).PointCount() >= 3 );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

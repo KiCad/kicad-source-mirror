@@ -1285,10 +1285,16 @@ void PCB_IO_PADS::loadTracksAndVias()
                 via->SetWidth( scaleSize( def.size ) );
                 via->SetDrill( scaleSize( def.drill ) );
 
-                if( def.start_layer > 0 && def.end_layer > 0 )
+                PCB_LAYER_ID startLayer = ( def.start_layer > 0 )
+                                                 ? getMappedLayer( def.start_layer )
+                                                 : UNDEFINED_LAYER;
+                PCB_LAYER_ID endLayer = ( def.end_layer > 0 )
+                                                ? getMappedLayer( def.end_layer )
+                                                : UNDEFINED_LAYER;
+
+                if( startLayer != UNDEFINED_LAYER && endLayer != UNDEFINED_LAYER )
                 {
-                    via->SetLayerPair( getMappedLayer( def.start_layer ),
-                                       getMappedLayer( def.end_layer ) );
+                    via->SetLayerPair( startLayer, endLayer );
                     via->SetViaType( viaType );
                 }
                 else
@@ -1498,6 +1504,9 @@ void PCB_IO_PADS::loadCopperShapes()
 
         if( copper.filled )
         {
+            if( copper.outline.size() < 3 )
+                continue;
+
             ZONE* zone = new ZONE( m_loadBoard );
             zone->SetLayer( layer );
             zone->SetIsRuleArea( false );
@@ -1635,6 +1644,9 @@ void PCB_IO_PADS::loadZones()
 
     for( const auto& pour_def : pours )
     {
+        if( pour_def.points.size() < 3 )
+            continue;
+
         PCB_LAYER_ID pourLayer = getMappedLayer( pour_def.layer );
 
         if( pourLayer == UNDEFINED_LAYER )
@@ -1868,7 +1880,7 @@ void PCB_IO_PADS::loadKeepouts()
 
     for( const auto& ko : keepouts )
     {
-        if( ko.outline.empty() )
+        if( ko.outline.size() < 3 )
             continue;
 
         ZONE* zone = new ZONE( m_loadBoard );
