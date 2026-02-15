@@ -293,7 +293,9 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
 
         if( !close_enough( aPrevPt, pstart, aChainingEpsilon ) )
         {
-            wxASSERT( close_enough( aPrevPt, aShape->GetEnd(), aChainingEpsilon ) );
+            if( !close_enough( aPrevPt, aShape->GetEnd(), aChainingEpsilon ) )
+                return;
+
             std::swap( pstart, pend );
         }
 
