@@ -706,7 +706,7 @@ wxString SCH_SHEET_PATH::GetPageNumber() const
     if( !tmpPath.empty() )
         tmpPath.pop_back();
     else
-        wxFAIL_MSG( wxS( "Sheet paths must have a least one valid sheet." ) );
+        return wxEmptyString;
 
     return sheet->getPageNumber( tmpPath );
 }
