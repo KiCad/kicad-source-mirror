@@ -3,4 +3,5 @@ _HKI( "### Clause\n"
 "\n"
 "    (condition \"<expression>\")\n"
 "\n"
-"<br>" );
+"<br>\n"
+"" );

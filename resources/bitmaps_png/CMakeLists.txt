@@ -889,7 +889,10 @@ function( svg2png inputFile outFile pngWidth pngHeight )
         # COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile} -w ${pngWidth} -h ${pngHeight} > ${logfile}
 
         # this Inkscape command line is for Inkscape >= 1.0
-        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type=png ${inputFile}
+        # Clear DBUS_SESSION_BUS_ADDRESS to prevent Gio::DBus::Error crashes
+        # when multiple inkscape instances run in parallel during the build.
+        COMMAND ${CMAKE_COMMAND} -E env DBUS_SESSION_BUS_ADDRESS=
+                ${Inkscape_EXECUTABLE} --export-area-snap --export-type=png ${inputFile}
                 --export-filename ${outFile} ${sizeArgs} > ${logfile}
 
         DEPENDS ${inputFile}

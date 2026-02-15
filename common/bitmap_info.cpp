@@ -5025,17 +5025,13 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::viacalc].emplace_back( BITMAPS::viacalc, wxT( "viacalc_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_absolute_length_2].emplace_back( BITMAPS::constraint_absolute_length_2, wxT( "constraint_absolute_length_2.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_allowed_orientation].emplace_back( BITMAPS::constraint_allowed_orientation, wxT( "constraint_allowed_orientation.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_basic_clearance].emplace_back( BITMAPS::constraint_basic_clearance, wxT( "constraint_basic_clearance.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_board_outline_clearance].emplace_back( BITMAPS::constraint_board_outline_clearance, wxT( "constraint_board_outline_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_clearance].emplace_back( BITMAPS::constraint_clearance, wxT( "constraint_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_copper_to_edge_clearance].emplace_back( BITMAPS::constraint_copper_to_edge_clearance, wxT( "constraint_copper_to_edge_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_copper_to_hole_clearance].emplace_back( BITMAPS::constraint_copper_to_hole_clearance, wxT( "constraint_copper_to_hole_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_creepage_distance].emplace_back( BITMAPS::constraint_creepage_distance, wxT( "constraint_creepage_distance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_hole_size].emplace_back( BITMAPS::constraint_hole_size, wxT( "constraint_hole_size.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_hole_to_hole_clearance].emplace_back( BITMAPS::constraint_hole_to_hole_clearance, wxT( "constraint_hole_to_hole_clearance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_hole_to_hole_distance].emplace_back( BITMAPS::constraint_hole_to_hole_distance, wxT( "constraint_hole_to_hole_distance.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_length].emplace_back( BITMAPS::constraint_length, wxT( "constraint_length.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_matched_length_diff_pair].emplace_back( BITMAPS::constraint_matched_length_diff_pair, wxT( "constraint_matched_length_diff_pair.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_maximum_allowed_deviation].emplace_back( BITMAPS::constraint_maximum_allowed_deviation, wxT( "constraint_maximum_allowed_deviation.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_maximum_via_count].emplace_back( BITMAPS::constraint_maximum_via_count, wxT( "constraint_maximum_via_count.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_angular_ring].emplace_back( BITMAPS::constraint_minimum_angular_ring, wxT( "constraint_minimum_angular_ring.png" ), -1, wxT( "light" ) );
