@@ -327,7 +327,6 @@ ZONE_FILLER::~ZONE_FILLER()
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
-    wxASSERT_MSG( m_commit, wxT( "ZONE_FILLER must have a valid commit to call SetProgressReporter" ) );
 }
 
 
