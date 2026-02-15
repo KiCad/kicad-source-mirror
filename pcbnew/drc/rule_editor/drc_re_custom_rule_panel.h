@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include <wx/tipwin.h>
 #include <wx/panel.h>
 #include <wx/stc/stc.h>
 
@@ -34,7 +35,6 @@
 
 class SCINTILLA_TRICKS;
 class wxButton;
-class wxTipWindow;
 
 /**
  * Simple panel used for editing custom rule text.  The panel consists of a
@@ -59,7 +59,13 @@ private:
     std::shared_ptr<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA> m_constraintData;
     wxStyledTextCtrl*                                   m_textCtrl;
     wxButton*                                           m_checkSyntaxBtn;
-    wxTipWindow*                                        m_tipWindow;
+
+#if wxCHECK_VERSION( 3, 3, 2 )
+    wxTipWindow::Ref m_tipWindow;
+#else
+    wxTipWindow* m_tipWindow = nullptr;
+#endif
+
     std::unique_ptr<SCINTILLA_TRICKS>                   m_scintillaTricks;
 };
 

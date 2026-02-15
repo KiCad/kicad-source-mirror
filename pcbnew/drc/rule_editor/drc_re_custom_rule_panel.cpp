@@ -40,8 +40,7 @@ DRC_RE_CUSTOM_RULE_PANEL::DRC_RE_CUSTOM_RULE_PANEL(
         wxPanel( aParent ),
         m_constraintData( aConstraintData ),
         m_textCtrl( nullptr ),
-        m_checkSyntaxBtn( nullptr ),
-        m_tipWindow( nullptr )
+        m_checkSyntaxBtn( nullptr )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -283,8 +282,12 @@ void DRC_RE_CUSTOM_RULE_PANEL::onCheckSyntax( wxCommandEvent& aEvent )
 
     if( rulesText.Trim().IsEmpty() )
     {
+#if wxCHECK_VERSION( 3, 3, 2 )
+        m_tipWindow = wxTipWindow::New( this, _( "No rule text to check." ) );
+#else
         m_tipWindow = new wxTipWindow( this, _( "No rule text to check." ) );
         m_tipWindow->SetTipWindowPtr( &m_tipWindow );
+#endif
         return;
     }
 
@@ -321,6 +324,10 @@ void DRC_RE_CUSTOM_RULE_PANEL::onCheckSyntax( wxCommandEvent& aEvent )
         message = _( "Syntax OK" );
     }
 
+#if wxCHECK_VERSION( 3, 3, 2 )
+    m_tipWindow = wxTipWindow::New( this, message );
+#else
     m_tipWindow = new wxTipWindow( this, message );
     m_tipWindow->SetTipWindowPtr( &m_tipWindow );
+#endif
 }
