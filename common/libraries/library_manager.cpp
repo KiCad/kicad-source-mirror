@@ -1424,8 +1424,12 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
             continue;
         }
 
+        // Resolve the URI on the main thread. URI expansion accesses PROJECT data
+        // (text variables, env vars) that is not thread-safe.
+        wxString uri = getUri( row );
+
         m_futures.emplace_back( tp.submit_task(
-                [this, nickname, scope]()
+                [this, nickname, scope, uri]()
                 {
                     if( m_abort.load() )
                         return;
@@ -1445,7 +1449,7 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                                 lib->status.load_status = LOAD_STATUS::LOADING;
                             }
 
-                            enumerateLibrary( lib );
+                            enumerateLibrary( lib, uri );
 
                             {
                                 std::unique_lock lock( scope == LIBRARY_TABLE_SCOPE::GLOBAL

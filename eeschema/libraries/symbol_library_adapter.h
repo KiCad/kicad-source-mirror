@@ -160,7 +160,7 @@ protected:
     std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
     std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex; }
 
-    void enumerateLibrary( LIB_DATA* aLib ) override;
+    void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) override;
 
     LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override;
 

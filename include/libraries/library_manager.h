@@ -176,8 +176,10 @@ protected:
     virtual std::shared_mutex&            globalLibsMutex() = 0;
     virtual std::shared_mutex&            globalLibsMutex() const = 0;
 
-    /// Override in derived class to perform library-specific enumeration
-    virtual void enumerateLibrary( LIB_DATA* aLib ) = 0;
+    /// Override in derived class to perform library-specific enumeration.
+    /// @param aUri is the pre-resolved library URI (must be resolved on the main thread
+    ///             since URI expansion accesses PROJECT data that is not thread-safe).
+    virtual void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) = 0;
 
     static wxString getUri( const LIBRARY_TABLE_ROW* aRow );
 

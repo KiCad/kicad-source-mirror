@@ -93,11 +93,11 @@ IO_BASE* DESIGN_BLOCK_LIBRARY_ADAPTER::plugin( const LIB_DATA* aRow )
 }
 
 
-void DESIGN_BLOCK_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
+void DESIGN_BLOCK_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& aUri )
 {
     wxArrayString dummyList;
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
-    dbplugin( aLib )->DesignBlockEnumerate( dummyList, getUri( aLib->row ), false, &options );
+    dbplugin( aLib )->DesignBlockEnumerate( dummyList, aUri, false, &options );
 }
 
 

@@ -68,11 +68,11 @@ SCH_IO* SYMBOL_LIBRARY_ADAPTER::schplugin( const LIB_DATA* aRow )
 }
 
 
-void SYMBOL_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
+void SYMBOL_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& aUri )
 {
     wxArrayString dummyList;
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
-    schplugin( aLib )->EnumerateSymbolLib( dummyList, getUri( aLib->row ), &options );
+    schplugin( aLib )->EnumerateSymbolLib( dummyList, aUri, &options );
 }
 
 

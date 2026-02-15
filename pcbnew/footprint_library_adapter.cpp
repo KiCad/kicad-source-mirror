@@ -55,16 +55,15 @@ wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 }
 
 
-void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
+void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString& aUri )
 {
     wxArrayString namesAS;
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
     PCB_IO* plugin = pcbplugin( aLib );
-    wxString uri = getUri( aLib->row );
     wxString nickname = aLib->row->Nickname();
 
     // FootprintEnumerate populates the plugin's internal FP_CACHE with parsed footprints
-    plugin->FootprintEnumerate( namesAS, uri, false, &options );
+    plugin->FootprintEnumerate( namesAS, aUri, false, &options );
 
     std::vector<std::unique_ptr<FOOTPRINT>> footprints;
     footprints.reserve( namesAS.size() );
@@ -78,7 +77,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
     {
         try
         {
-            const FOOTPRINT* cached = plugin->GetEnumeratedFootprint( uri, footprintName, &options );
+            const FOOTPRINT* cached = plugin->GetEnumeratedFootprint( aUri, footprintName, &options );
 
             if( !cached )
                 continue;
@@ -109,7 +108,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib )
 
     // Clear the plugin's FP_CACHE now that we've copied footprints to PreloadedFootprints.
     // This eliminates the double-caching that was consuming ~1.2GB of extra RAM.
-    plugin->ClearCachedFootprints( uri );
+    plugin->ClearCachedFootprints( aUri );
 }
 
 
