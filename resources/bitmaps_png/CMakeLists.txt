@@ -846,7 +846,7 @@ set( BMAPS_OTHER
     constraint_solderpaste_expansion
     constraint_unrouted
     constraint_via_style
-    constraint_vias_under_SMD
+    constraint_vias_under_smd
     )
 
 
