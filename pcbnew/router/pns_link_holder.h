@@ -41,8 +41,12 @@ public:
     ///< Add a reference to an item registered in a #NODE that is a part of this line.
     void Link( LINKED_ITEM* aLink )
     {
-        wxCHECK_MSG( !alg::contains( m_links, aLink ), /* void */,
-                     "Trying to link an item that is already linked" );
+        if( alg::contains( m_links, aLink ) )
+        {
+            wxLogDebug( wxT( "PNS LINK_HOLDER::Link: item %p already linked to %p" ), aLink, this );
+            return;
+        }
+
         m_links.push_back( aLink );
     }
 
