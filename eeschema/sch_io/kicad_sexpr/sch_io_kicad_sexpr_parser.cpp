@@ -900,8 +900,12 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
 
 void SCH_IO_KICAD_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersion )
 {
-    wxCHECK_RET( CurTok() == aHeaderType,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a header." ) );
+    if( CurTok() != aHeaderType )
+    {
+        THROW_PARSE_ERROR( wxString::Format( _( "Cannot parse '%s' as a header." ),
+                                             GetTokenString( CurTok() ) ),
+                           CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
 
     NeedLEFT();
 
