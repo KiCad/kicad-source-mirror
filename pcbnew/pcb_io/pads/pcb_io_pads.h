@@ -104,4 +104,5 @@ private:
     std::map<std::string, std::string>          m_pinToNetMap;
     std::map<std::string, std::string>          m_partToBlockMap;
     int                                         m_testPointIndex = 1;
+    int                                         m_minObjectSize = 1000;
 };

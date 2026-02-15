@@ -968,6 +968,18 @@ public:
     int m_PadsTextAnchorOffsetNm;
 
     /**
+     * Minimum object size in nanometers for PCB imports.
+     * Any dimension (pad size, track width, via size, circle radius) that would be
+     * smaller than this value is clamped to it, preventing zero-size objects that
+     * can crash the renderer or cause division-by-zero in DRC.
+     *
+     * Setting name: "PcbImportMinObjectSizeNm"
+     * Valid values: 100 to 1000000
+     * Default value: 1000
+     */
+    int m_PcbImportMinObjectSizeNm;
+
+    /**
      * Enable iterative zone filling to handle isolated islands in higher priority zones.
      *
      * When enabled, zones are filled in priority batches. After each batch, isolated islands

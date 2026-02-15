@@ -149,6 +149,7 @@ static const wxChar PadsPcbTextWidthScale[] = wxT( "PadsPcbTextWidthScale" );
 static const wxChar PadsSchTextHeightScale[] = wxT( "PadsSchTextHeightScale" );
 static const wxChar PadsSchTextWidthScale[] = wxT( "PadsSchTextWidthScale" );
 static const wxChar PadsTextAnchorOffsetNm[] = wxT( "PadsTextAnchorOffsetNm" );
+static const wxChar PcbImportMinObjectSizeNm[] = wxT( "PcbImportMinObjectSizeNm" );
 
 } // namespace AC_KEYS
 
@@ -346,6 +347,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_PadsSchTextHeightScale = 0.50;
     m_PadsSchTextWidthScale  = 0.46;
     m_PadsTextAnchorOffsetNm = 350000;
+    m_PcbImportMinObjectSizeNm = 1000;
 
     loadFromConfigFile();
 }
@@ -682,6 +684,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PadsTextAnchorOffsetNm,
                                                           &m_PadsTextAnchorOffsetNm,
                                                           m_PadsTextAnchorOffsetNm, 0, 1000000 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::PcbImportMinObjectSizeNm,
+                                                          &m_PcbImportMinObjectSizeNm,
+                                                          m_PcbImportMinObjectSizeNm, 100,
+                                                          1000000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

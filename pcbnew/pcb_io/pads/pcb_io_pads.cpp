@@ -145,6 +145,7 @@ BOARD* PCB_IO_PADS::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     m_loadBoard = board.get();
     m_parser = &parser;
     m_testPointIndex = 1;
+    m_minObjectSize = ADVANCED_CFG::GetCfg().m_PcbImportMinObjectSizeNm;
 
     try
     {
@@ -589,7 +590,8 @@ void PCB_IO_PADS::loadFootprints()
                                         const EDA_ANGLE& part_orient ) {
                 const std::string& shape = layer_def.shape;
                 // In PADS, sizeA is height (Y) and sizeB is width (X), opposite of KiCad convention
-                VECTOR2I size( decalScaler( layer_def.sizeB ), decalScaler( layer_def.sizeA ) );
+                VECTOR2I size( std::max( decalScaler( layer_def.sizeB ), m_minObjectSize ),
+                               std::max( decalScaler( layer_def.sizeA ), m_minObjectSize ) );
 
                 if( shape == "R" || shape == "C" || shape == "A" || shape == "RT" )
                 {
@@ -801,7 +803,8 @@ void PCB_IO_PADS::loadFootprints()
                 }
                 else
                 {
-                    pad->SetSize( F_Cu, VECTOR2I( decalScaler( 1.5 ), decalScaler( 1.5 ) ) );
+                    int fallbackSize = std::max( decalScaler( 1.5 ), m_minObjectSize );
+                    pad->SetSize( F_Cu, VECTOR2I( fallbackSize, fallbackSize ) );
                     pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
                     pad->SetAttribute( PAD_ATTRIB::PTH );
                     pad->SetLayerSet( LSET::AllCuMask() );
@@ -883,8 +886,9 @@ void PCB_IO_PADS::loadFootprints()
                                                + ( y2 - y1 ) * ( y2 - y1 ) )
                                     / 2.0;
 
+                    int scaledRadius = std::max( decalScaler( radius ), m_minObjectSize );
                     VECTOR2I center( decalScaler( cx ), -decalScaler( cy ) );
-                    VECTOR2I pt_on_circle( decalScaler( cx + radius ), -decalScaler( cy ) );
+                    VECTOR2I pt_on_circle( center.x + scaledRadius, center.y );
 
                     RotatePoint( center, part_orient );
                     RotatePoint( pt_on_circle, part_orient );
@@ -1074,7 +1078,8 @@ void PCB_IO_PADS::loadTestPoints()
         pad->SetNumber( wxT( "1" ) );
         pad->SetPosition( pos );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( scaleSize( 50.0 ), scaleSize( 50.0 ) ) );
+        int tpSize = std::max( scaleSize( 50.0 ), m_minObjectSize );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( tpSize, tpSize ) );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( layer == B_Cu ? LSET( { B_Cu } ) : LSET( { F_Cu } ) );
 
@@ -1197,7 +1202,7 @@ void PCB_IO_PADS::loadTracksAndVias()
                 continue;
             }
 
-            int track_width = scaleSize( track_def.width );
+            int track_width = std::max( scaleSize( track_def.width ), m_minObjectSize );
 
             for( size_t i = 0; i < track_def.points.size() - 1; ++i )
             {
@@ -1282,8 +1287,8 @@ void PCB_IO_PADS::loadTracksAndVias()
             {
                 const PADS_IO::VIA_DEF& def = it->second;
 
-                via->SetWidth( scaleSize( def.size ) );
-                via->SetDrill( scaleSize( def.drill ) );
+                via->SetWidth( std::max( scaleSize( def.size ), m_minObjectSize ) );
+                via->SetDrill( std::max( scaleSize( def.drill ), m_minObjectSize ) );
 
                 PCB_LAYER_ID startLayer = ( def.start_layer > 0 )
                                                  ? getMappedLayer( def.start_layer )
@@ -1305,8 +1310,8 @@ void PCB_IO_PADS::loadTracksAndVias()
             }
             else
             {
-                via->SetWidth( scaleSize( 20.0 ) );
-                via->SetDrill( scaleSize( 10.0 ) );
+                via->SetWidth( std::max( scaleSize( 20.0 ), m_minObjectSize ) );
+                via->SetDrill( std::max( scaleSize( 10.0 ), m_minObjectSize ) );
                 via->SetLayerPair( F_Cu, B_Cu );
                 via->SetViaType( VIATYPE::THROUGH );
             }
@@ -1432,7 +1437,7 @@ void PCB_IO_PADS::loadCopperShapes()
             layer = F_Cu;
         }
 
-        int width = scaleSize( copper.width );
+        int width = std::max( scaleSize( copper.width ), m_minObjectSize );
 
         if( !IsCopperLayer( layer ) )
         {
@@ -1992,7 +1997,7 @@ void PCB_IO_PADS::loadGraphicLines()
             shape->SetShape( SHAPE_T::CIRCLE );
             VECTOR2I center( scaleCoord( pts[0].arc.cx, true ),
                              scaleCoord( pts[0].arc.cy, false ) );
-            int radius = scaleSize( pts[0].arc.radius );
+            int radius = std::max( scaleSize( pts[0].arc.radius ), m_minObjectSize );
             shape->SetCenter( center );
             shape->SetEnd( VECTOR2I( center.x + radius, center.y ) );
             shape->SetWidth( scaleSize( graphic.width ) );
