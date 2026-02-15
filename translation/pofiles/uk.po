@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-12 22:22+0000\n"
+"PO-Revision-Date: 2026-02-15 23:07+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -20777,21 +20777,23 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
+"«Невідповідність версії символу для '%s' (%s): схема має версію %s, а символ "
+"у бібліотеці — %s."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4086
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr ""
+msgstr "Джерело ієрархії '%s' не знайдено, створюється порожній аркуш."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4098
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr ""
+msgstr "Виявлено циклічну ієрархію для '%s', пропускається."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "Не вдалося зберегти схему '%s'"
+msgstr "Не вдалося завантажити підсхему '%s': %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3106
@@ -20800,19 +20802,18 @@ msgid "File '%s' is empty."
 msgstr "Файл '%s' незаповнений."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4711
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' не є дійсним значенням SPICE."
+msgstr "Файл '%s' не є коректною схемою gEDA."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "Не вдалося завантажити '%s."
+msgstr "Не вдалося завантажити сторінку '%s': %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Файли схем Eagle XML"
+msgstr "Файли схем gEDA / Lepton EDA"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:211
 #, c-format
@@ -21273,14 +21274,12 @@ msgid "LTspice schematic files"
 msgstr "Файли схем LTspice"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "Файли схем LTspice"
+msgstr "Файли схем PADS Logic"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Файли бібліотеки Eagle XML"
+msgstr "Файли бібліотек PADS Logic"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
