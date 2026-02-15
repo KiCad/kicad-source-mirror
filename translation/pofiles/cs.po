@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-12 00:15+0300\n"
-"PO-Revision-Date: 2026-02-11 21:12+0000\n"
-"Last-Translator: René Široký <siroky.rene@wideservis.cz>\n"
+"PO-Revision-Date: 2026-02-15 23:06+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -7481,9 +7481,9 @@ msgstr "Odpověď API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "Odpověď API:  %s"
+msgstr "Odpověď API: %s"
 
 #: common/http_lib/http_lib_connection.cpp:360
 #, c-format
@@ -7697,7 +7697,7 @@ msgstr "DPS: Export dat vrtání"
 #: common/jobs/job_export_pcb_dxf.cpp:57
 #: common/jobs/job_export_sch_plot.cpp:160 kicad/kicad_cli.cpp:145
 msgid "Export DXF"
-msgstr "Export DXF"
+msgstr "DXF export"
 
 #: common/jobs/job_export_pcb_dxf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:166
@@ -7735,7 +7735,7 @@ msgstr "DPS: Export souborů Gerber"
 #: common/jobs/job_export_pcb_ipc2581.cpp:72
 #: pcbnew/dialogs/dialog_export_2581_base.h:88
 msgid "Export IPC-2581"
-msgstr "Export IPC-2581"
+msgstr "IPC-2581 export"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:78
 msgid "Export IPC-2581 Job Settings"
@@ -7760,7 +7760,7 @@ msgstr "DPS: Export IPC2581"
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
 msgid "Export ODB++"
-msgstr "Export ODB++"
+msgstr "ODB++ export"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
@@ -7845,7 +7845,7 @@ msgstr "Nastavení úlohy exportu Postscript"
 
 #: common/jobs/job_export_sch_plot.cpp:217 kicad/kicad_cli.cpp:146
 msgid "Export HPGL"
-msgstr "Export HPGL"
+msgstr "HPGL export"
 
 #: common/jobs/job_export_sch_plot.cpp:223
 msgid "Export HPGL Job Settings"
@@ -27570,7 +27570,7 @@ msgstr "Exportovat IDFv3"
 
 #: kicad/kicad_cli.cpp:126
 msgid "Export VRML"
-msgstr "Export VRML"
+msgstr "VRML export"
 
 #: kicad/kicad_cli.cpp:127
 #, fuzzy
@@ -34546,7 +34546,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:615
 msgid "STEP/GLTF Export"
-msgstr "STEP/GLTF Export"
+msgstr "Export STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:27
 msgid "STEP"
@@ -37441,7 +37441,7 @@ msgstr "Vrtací značky:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Actual size"
-msgstr "Aktuální velikost"
+msgstr "Skutečná velikost"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
 msgid "Scaling:"
@@ -46223,7 +46223,7 @@ msgid "Cannot interpret date code %d"
 msgstr "Nelze interpretovat kód data %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?\n"
@@ -46231,7 +46231,9 @@ msgid ""
 "Zones will need to be refilled."
 msgstr ""
 "Položky nalezené na nedefinovaných vrstvách (%s).\n"
-"Přejete si je obnovit do vrstvy %s?"
+"Přejete si je zachránit do vrstvy %s?\n"
+"\n"
+"Zóny bude třeba znovu vyplnit."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1161
 #, fuzzy
