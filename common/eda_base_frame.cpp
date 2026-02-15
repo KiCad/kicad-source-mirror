@@ -1185,9 +1185,9 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
     if( !ADVANCED_CFG::GetCfg().m_EnableUseAuiPerspective )
         return;
 
-#if wxCHECK_VERSION( 3, 3, 0 )
     bool restored = false;
 
+#if wxCHECK_VERSION( 3, 3, 0 )
     if( m_auiLayoutState && !m_auiLayoutState->is_null() && !m_auiLayoutState->empty() )
     {
         WX_AUI_JSON_SERIALIZER serializer( m_auimgr );
@@ -1195,11 +1195,13 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
         if( serializer.Deserialize( *m_auiLayoutState ) )
             restored = true;
     }
+#endif
 
+    /*
+     * Legacy loading of the string AUI perspective (if it exists). This is needed for
+     * wx 3.2 or the first settings upgrade when wx 3.3 is used in KiCad (e.g., 9.0->10.0 for Windows and macOS).
+     */
     if( !restored && !m_perspective.IsEmpty() )
-        m_auimgr.LoadPerspective( m_perspective );
-#else
-    if( !m_perspective.IsEmpty() )
     {
         m_auimgr.LoadPerspective( m_perspective );
 
@@ -1214,7 +1216,6 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
                 panes.Item( i ).Show( true );
         }
     }
-#endif
 }
 
 
