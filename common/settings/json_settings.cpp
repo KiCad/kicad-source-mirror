@@ -382,8 +382,15 @@ bool JSON_SETTINGS::Store()
 {
     for( PARAM_BASE* param : m_params )
     {
-        m_modified |= !param->MatchesFile( *this );
-        param->Store( this );
+        try
+        {
+            m_modified |= !param->MatchesFile( *this );
+            param->Store( this );
+        }
+        catch( ... )
+        {
+            wxLogTrace( traceSettings, wxT( "param '%s' store err" ), param->GetJsonPath().c_str() );
+        }
     }
 
     return m_modified;
