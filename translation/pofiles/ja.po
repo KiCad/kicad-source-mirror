@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-12 08:25+0000\n"
+"PO-Revision-Date: 2026-02-17 01:10+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -14575,7 +14575,7 @@ msgstr "電源シンボルとしてシンボルを作成"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:835
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:196
 msgid "Exclude from bill of materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:262
@@ -14915,14 +14915,13 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "重複する番号のピンはすべてジャンパー接続"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
-#, fuzzy
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number.  "
 "Pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
-"有効化すると、このシンボルは同じ番号のピンを複数持つことができ、同じ番号のピ"
-"ンは内部でジャンパー接続されているものと見なさる。"
+"有効化すると、このシンボルは同じ番号のピンを複数持つことができ、同じ番号の"
+"ピンは内部でジャンパー接続されているものと見なさる。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
@@ -17361,11 +17360,11 @@ msgstr "配線、バスのプロパティ"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
 msgid "Bill of Materials Presets"
-msgstr "BOM(部品表)プリセット"
+msgstr "部品表(BOM)プリセット"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 msgid "Bill of Materials Formatting Presets"
-msgstr "BOM(部品表)のフォーマット プリセット"
+msgstr "部品表(BOM)のフォーマット プリセット"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -19481,7 +19480,7 @@ msgstr "基板から除外"
 
 #: eeschema/lib_symbol.cpp:2460 eeschema/tools/sch_actions.cpp:1067
 msgid "Exclude from Bill of Materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/lib_symbol.cpp:2464
 msgid "Exclude from Position Files"
@@ -21091,9 +21090,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "不正なハイパーリンク URL '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "%s をシンボルとして読み込めません"
+msgstr "%s をヘッダーとして解析できません。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -21674,7 +21673,7 @@ msgstr "背景色"
 #: pcbnew/widgets/pcb_properties_panel.cpp:596
 #: pcbnew/widgets/pcb_properties_panel.cpp:697
 msgid "Exclude From Bill of Materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/sch_sheet.cpp:2168 eeschema/sch_symbol.cpp:1485
 #: eeschema/sch_symbol.cpp:4012 eeschema/tools/sch_actions.cpp:1085
@@ -29768,7 +29767,7 @@ msgstr "新しい動作は --mode-multi と同じ動きです"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:32
 msgid "Export the PCB in Gencad format"
-msgstr "Gencad 形式で基板(PCB)をエクスポート"
+msgstr "Gencad 形式でプリント基板図をエクスポート"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:37
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:218
@@ -32225,7 +32224,7 @@ msgstr "プロジェクトを作成して(または開いて)、回路図を編�
 
 #: kicad/tools/kicad_manager_control.cpp:768
 msgid "Create (or open) a project to edit a pcb."
-msgstr "プロジェクトを作成して(または開いて)、基板(PCB) を編集します。"
+msgstr "プロジェクトを作成して(または開いて)、プリント基板図を編集します。"
 
 #: kicad/tools/kicad_manager_control.cpp:783
 msgid "Application failed to load:\n"
@@ -43298,7 +43297,6 @@ msgid "Place items in group:"
 msgstr "アイテムをグループに配置:"
 
 #: pcbnew/dialogs/panel_setup_condition_help_1clauses.h:2
-#, fuzzy
 msgid ""
 "### Clause\n"
 "\n"
@@ -43310,7 +43308,7 @@ msgstr ""
 "\n"
 "    (condition \"<expression>\")\n"
 "\n"
-"<br>"
+"<br>\n"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -47452,6 +47450,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"ルール '%s' の検証エラーのため保存できません:\n"
+"\n"
+"%s"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:564
 msgid "Are you sure you want to delete?"
@@ -47462,54 +47463,53 @@ msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
 msgstr ""
+"同じ名前の複数のルールには異なる条件が設定されています。同じ名前のルールをま"
+"とめるには、同じ条件が設定されている必要があります。"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1204
-#, fuzzy
 msgid ""
 "The following rules have unsaved changes:\n"
 "\n"
 msgstr ""
-"次のファイルが上書きされます:\n"
+"次のルールには保存されていない変更があります:\n"
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1209
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
-msgstr "エクスポート処理をキャンセルしますか?"
+msgstr ""
+"\n"
+"変更を保存しますか?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1370
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "ファイル '%s' の読み込みに失敗しました。"
+msgstr "DRC ルールの再読み込みに失敗しました: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Length must be greater than 0"
-msgstr "半径は０より大きくする必要があります"
+msgstr "最小長さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:89
-#, fuzzy
 msgid "Optimum Length must be greater than 0"
-msgstr "半径は０より大きくする必要があります"
+msgstr "最適な長さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Length must be greater than 0"
-msgstr "半径は０より大きくする必要があります"
+msgstr "最大長さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
 msgid "Minimum Length cannot be greater than Optimum Length"
-msgstr ""
+msgstr "最小長さは最適な長さより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:99
 msgid "Optimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "最適な長さは最大長さより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:102
 msgid "Minimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "最小長さは最大長さより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
 msgid "Minimum Length"
@@ -47525,29 +47525,27 @@ msgstr "最大長さ"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
 msgid "Allow 0°"
-msgstr ""
+msgstr "0° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 90°"
-msgstr ""
+msgstr "90° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
 msgid "Allow 180°"
-msgstr ""
+msgstr "180° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
-msgstr ""
+msgstr "270° 許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
-#, fuzzy
 msgid "Allow All"
-msgstr "全て塗り潰し"
+msgstr "すべて許可"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:79
-#, fuzzy
 msgid "At least one orientation must be selected"
-msgstr "一つ以上のレイヤーを指定する必要があります\n"
+msgstr "少なくとも1つの向きを選択する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
 msgid "0 Degrees"
@@ -47570,9 +47568,8 @@ msgid "All Orientations"
 msgstr "すべての方向"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
-#, fuzzy
 msgid "Allow"
-msgstr "黄"
+msgstr "許可"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
 msgid "Check Me!"
@@ -47642,48 +47639,41 @@ msgid "Remove this condition"
 msgstr "この条件を削除"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_constraint_data.h:57
-#, fuzzy
 msgid "Rule text cannot be empty"
-msgstr "テキストは空にできません。"
+msgstr "ルールテキストは空欄にできません"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:51
-#, fuzzy
 msgid "Check Syntax"
-msgstr "ルールの文法をチェック"
+msgstr "ルールの構文を確認"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:286
-#, fuzzy
 msgid "No rule text to check."
-msgstr "これ以上表示するアイテムがありません"
+msgstr "チェックするルールテキストがありません。"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:296
-#, fuzzy
 msgid "Custom rule"
 msgstr "カスタム ルール"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:302
 #, c-format
 msgid "ERROR at line %d, column %d: %s"
-msgstr ""
+msgstr "行 %d、列%d でエラー: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:317
 msgid "Syntax check passed with warnings:\n"
-msgstr ""
+msgstr "構文確認は警告付きで通過した:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:321
-#, fuzzy
 msgid "Syntax OK"
-msgstr "構文ヘルプ"
+msgstr "構文確認成功"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:80
-#, fuzzy
 msgid "Minimum Text Height must be greater than 0"
-msgstr "誘電体の高さは0より大きくなければなりません"
+msgstr "最小テキスト高さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:83
-#, fuzzy
 msgid "Minimum Text Thickness must be greater than 0"
-msgstr "信号レイヤーの厚さは0より大きくなければなりません"
+msgstr "最小テキスト厚さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -47717,24 +47707,20 @@ msgid "Minimum Text Thickness"
 msgstr "最小テキストの厚さ"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:90
-#, fuzzy
 msgid "Numeric input value must be greater than 0"
-msgstr "円弧の角度は０より大きくなければなりません"
+msgstr "数値入力値は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:57
-#, fuzzy
 msgid "Allow top Layer"
-msgstr "すべての導体レイヤー"
+msgstr "表面レイヤーを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:58
-#, fuzzy
 msgid "Allow bottom Layer"
-msgstr "裏面レイヤー"
+msgstr "裏面レイヤーを許可"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:67
-#, fuzzy
 msgid "At least one layer must be selected"
-msgstr "一つ以上のレイヤーを指定する必要があります\n"
+msgstr "一つ以上のレイヤーを選択する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
 msgid "Top Layer"
@@ -47745,31 +47731,28 @@ msgid "Bottom Layer"
 msgstr "裏面レイヤー"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
-#, fuzzy
 msgid "Minimum Routing Width is required"
-msgstr "最小配線幅"
+msgstr "最小配線幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
-#, fuzzy
 msgid "Preferred Routing Width is required"
-msgstr "推奨配線幅"
+msgstr "推奨配線幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
-#, fuzzy
 msgid "Maximum Routing Width is required"
-msgstr "最大配線幅"
+msgstr "最大配線幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:82
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
-msgstr ""
+msgstr "最小配線幅は推奨配線幅より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:85
 msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
-msgstr ""
+msgstr "推奨配線幅は最大配線幅より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:88
 msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
-msgstr ""
+msgstr "最小配線幅は最大配線幅より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
 msgid "Minimum Routing Width"
@@ -47784,65 +47767,56 @@ msgid "Maximum Routing Width"
 msgstr "最大配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Minimum Width is required"
-msgstr "最小幅"
+msgstr "最小幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Preferred Width is required"
-msgstr "推奨配線幅"
+msgstr "推奨幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:83
-#, fuzzy
 msgid "Maximum Width is required"
-msgstr "最大幅:"
+msgstr "最大幅が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Gap is required"
-msgstr "最小ビア サイズ:"
+msgstr "最小ギャップが必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:89
 msgid "Preferred Gap is required"
-msgstr ""
+msgstr "推奨ギャップが必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Gap is required"
-msgstr "一日あたりの最大バックアップ数:"
+msgstr "最大ギャップが必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:95
-#, fuzzy
 msgid "Maximum Uncoupled Length is required"
-msgstr "最大非結合長"
+msgstr "最大非結合長が必要です"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:100
-#, fuzzy
 msgid "Minimum Width cannot be greater than Preferred Width"
-msgstr "線幅は０より大きくする必要があります。"
+msgstr "最小幅は推奨幅より大きくすることは出来ません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:103
-#, fuzzy
 msgid "Preferred Width cannot be greater than Maximum Width"
-msgstr "サーマルリリーフのスポーク幅は最小幅より狭くできません。"
+msgstr "推奨幅は最大幅より大きくすることは出来ません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:106
-#, fuzzy
 msgid "Minimum Width cannot be greater than Maximum Width"
-msgstr "サーマルリリーフのスポーク幅は最小幅より狭くできません。"
+msgstr "最小幅は最大幅より大きくすることは出来ません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:109
 msgid "Minimum Gap cannot be greater than Preferred Gap"
-msgstr ""
+msgstr "最小ギャップは推奨ギャップより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:112
 msgid "Preferred Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "推奨ギャップは最大ギャップより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:115
 msgid "Minimum Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "最小ギャップは最大ギャップより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
 msgid "Max Uncoupled Length"
@@ -47870,59 +47844,52 @@ msgid "Preferred"
 msgstr "推奨"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:76
-#, fuzzy
 msgid "Minimum Via Diameter must be greater than 0"
-msgstr "目標 インピーダンスは0より大きくなければなりません"
+msgstr "最小ビア直径は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:79
-#, fuzzy
 msgid "Preferred Via Diameter must be greater than 0"
-msgstr "目標 インピーダンスは0より大きくなければなりません"
+msgstr "推奨ビア直径は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:82
-#, fuzzy
 msgid "Maximum Via Diameter must be greater than 0"
-msgstr "半径は０より大きくする必要があります"
+msgstr "最大ビア直径は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Via Hole Size must be greater than 0"
-msgstr "信号レイヤーの厚さは0より大きくなければなりません"
+msgstr "最小ビア穴サイズは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:89
-#, fuzzy
 msgid "Preferred Via Hole Size must be greater than 0"
-msgstr "円弧の角度は０より大きくなければなりません"
+msgstr "推奨ビア穴サイズは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Via Hole Size must be greater than 0"
-msgstr "半径は０より大きくする必要があります"
+msgstr "最大ビア穴サイズは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:96
 msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
-msgstr ""
+msgstr "最小ビア直径は推奨ビア直径より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:99
 msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr ""
+msgstr "推奨ビア直径は最大ビア直径より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:102
-#, fuzzy
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "最小ビア径 (%s) 未満のビア径。"
+msgstr "最小ビア径は最大ビア径より大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:106
 msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
-msgstr ""
+msgstr "最小ビア穴サイズは推奨ビア穴サイズより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:109
 msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
-msgstr ""
+msgstr "推奨ビア穴サイズは最大ビア穴サイズより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:112
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
-msgstr ""
+msgstr "最小ビア穴サイズは最大ビア穴サイズより大きくできません"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:657
@@ -47937,38 +47904,38 @@ msgstr "ビア穴サイズ"
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:334
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:376
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "%s should not be empty."
-msgstr "%s フィールドは空にできません。"
+msgstr "%s は空にできません。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:341
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:603
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid number."
-msgstr "スケールは正の番号でなければなりません。"
+msgstr "%s の値は有効な数値である必要があります。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:348
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:390
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:557
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:591
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be greater than 0."
-msgstr "半径は０より大きくなければなりません。"
+msgstr "%s の値は0より大きくなければなりません。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:383
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:585
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid integer."
-msgstr "フィールドの値は空にできません。"
+msgstr "%s の値は有効な整数である必要があります。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:417
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose %s."
-msgstr "有効なネットリスト ファイルを選択して下さい。"
+msgstr "%s を選択して下さい。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:447
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:484
@@ -47978,15 +47945,15 @@ msgstr "有効なネットリスト ファイルを選択して下さい。"
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:651
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:657
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "%s value cannot be greater than %s value."
-msgstr "%s は %s より大きいか等しくなければなりません。"
+msgstr "%s は %s より大きくできません。"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:533
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Please select at least one option from %s list."
-msgstr "インポートするファイルを選択してください。"
+msgstr "%s リストから少なくとも 1 つを選択してください。"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
 msgid "Rule type"
@@ -47997,14 +47964,12 @@ msgid "Rule name"
 msgstr "ルール名"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:369
-#, fuzzy
 msgid "Rule name must be unique."
-msgstr "サブモデル名がユニークではない: "
+msgstr "ルール名は重複せず一意である必要があります。"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:377
-#, fuzzy
 msgid "Layer selection is required."
-msgstr "レイヤー選択:"
+msgstr "レイヤーの選択が必須です。"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:850
 msgid "ERROR: No condition text provided for validation."
@@ -48029,14 +47994,13 @@ msgstr "一致を表示"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:995
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1037
-#, fuzzy
 msgid "outer"
-msgstr "未配線"
+msgstr "外側"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1039
 msgid "inner"
-msgstr ""
+msgstr "内側"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
 msgid "Constraint"
@@ -48136,7 +48100,7 @@ msgid "Error creating drill report file '%s'"
 msgstr "ドリル レポート ファイル '%s' の作成に失敗"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing drill report file '%s'"
 msgstr "ドリル レポート ファイル '%s' の作成に失敗"
 
@@ -48603,9 +48567,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "基板 '%s' の読み込み中メモリー不足が発生しました"
 
 #: pcbnew/files.cpp:737
-#, fuzzy
 msgid "Finalizing board"
-msgstr "基板をロード中\n"
+msgstr "基板をロード中"
 
 #: pcbnew/files.cpp:782 pcbnew/pcb_edit_frame.cpp:1548
 msgid "Could not load component class assignment rules"
@@ -49289,8 +49252,8 @@ msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
-"チェックすると、選択したレイヤーをこのダイアログで使用します\n"
-"チェックしない場合、PCB エディターのアクティブレイヤーを使用します"
+"チェックされている場合、このダイアログで選択したレイヤーを使用します\n"
+"チェックされていない場合、PCB エディターのアクティブレイヤーを使用します"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 msgid "Group imported items"
@@ -50048,6 +50011,9 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"警告: %s フットプリント '%s' にライブラリ名がありません。完全な "
+"'Library:Footprint' 形式を使用するようにしてください。(繰り返しの更新通知を回"
+"避のため)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
 #, c-format
@@ -50845,6 +50811,11 @@ msgid ""
 "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
 "later and re-save, then import the resulting file."
 msgstr ""
+"このファイルは %s で作成されていますが、Allegro 16.0より前のバイナリ形式を使"
+"用しているため、サポートされていません。\n"
+"\n"
+"この設計をインポートするには、Cadence Allegro PCB Editor 16.0以降で開いて再保"
+"存し、そのファイルを再度インポートしてください。"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:172
 msgid "Failed to build board from Allegro data"
@@ -52566,10 +52537,9 @@ msgid "Skipping track on non-copper layer %d"
 msgstr "非導体レイヤー %d にある配線をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
-msgstr ""
-"マップされていないレイヤー %d のテキストをコメント レイヤーに割り当てました"
+msgstr "マッピングされていないレイヤー %d の導体を F.Cu レイヤー配置しました"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1661
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
