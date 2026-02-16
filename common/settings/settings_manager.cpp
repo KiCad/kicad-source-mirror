@@ -957,7 +957,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     // or the OS may hand us a .kicad_sch/.kicad_pcb via file association or drag-and-drop.
     wxFileName path( aFullPath );
 
-    if( path.GetExt() != FILEEXT::ProjectFileExtension )
+    if( path.HasName() && path.GetExt() != FILEEXT::ProjectFileExtension )
         path.SetExt( FILEEXT::ProjectFileExtension );
 
     wxString fullPath = path.GetFullPath();
