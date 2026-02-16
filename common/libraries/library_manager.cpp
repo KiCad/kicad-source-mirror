@@ -761,6 +761,8 @@ wxString LIBRARY_MANAGER::GetFullURI( const LIBRARY_TABLE_ROW* aRow,
 
 wxString LIBRARY_MANAGER::ExpandURI( const wxString& aShortURI, const PROJECT& aProject )
 {
+    wxLogNull doNotLog; // We do our own error reporting; we don't want to hear about missing envvars
+
     wxFileName path( ExpandEnvVarSubstitutions( aShortURI, &aProject ) );
     path.MakeAbsolute();
     return path.GetFullPath();
