@@ -33,8 +33,15 @@
 #include <vector>
 
 class BOARD;
+class PCB_SHAPE;
+class SHAPE_ARC;
+class SHAPE_LINE_CHAIN;
 
-namespace PADS_IO { class PARSER; }
+namespace PADS_IO
+{
+class PARSER;
+struct ARC_POINT;
+}
 
 class PCB_IO_PADS : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
@@ -70,6 +77,24 @@ private:
     int         scaleCoord( double aVal, bool aIsX ) const;
     PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const;
     void        ensureNet( const std::string& aNetName );
+
+    /// Interpolate arc segments from an ARC_POINT vector into polyline
+    /// vertices on a SHAPE_LINE_CHAIN. Full-circle entries become
+    /// 36-segment polygons.
+    void appendArcPoints( SHAPE_LINE_CHAIN& aChain,
+                          const std::vector<PADS_IO::ARC_POINT>& aPts );
+
+    /// Configure a PCB_SHAPE as an arc from two consecutive PADS points
+    /// using board-level scaleCoord. Handles the Y-axis winding fix.
+    void setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
+                         const PADS_IO::ARC_POINT& aCurr );
+
+    /// Build a SHAPE_ARC from two consecutive PADS points using the
+    /// midpoint approach. Computes the arc midpoint in PADS coordinate
+    /// space before the Y-axis flip so the 3-point constructor gets
+    /// the correct winding.
+    SHAPE_ARC makeMidpointArc( const PADS_IO::ARC_POINT& aPrev,
+                               const PADS_IO::ARC_POINT& aCurr, int aWidth );
 
     void        loadBoardSetup();
     void        loadNets();

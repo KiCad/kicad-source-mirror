@@ -1267,17 +1267,7 @@ void PCB_IO_PADS::loadTracksAndVias()
 
                 if( p2.is_arc )
                 {
-                    double startAngleRad =
-                            atan2( p1.y - p2.arc.cy, p1.x - p2.arc.cx );
-                    double midAngleRad =
-                            startAngleRad + ( p2.arc.delta_angle * M_PI / 180.0 ) / 2.0;
-
-                    double midX = p2.arc.cx + p2.arc.radius * cos( midAngleRad );
-                    double midY = p2.arc.cy + p2.arc.radius * sin( midAngleRad );
-
-                    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
-
-                    SHAPE_ARC shapeArc( start, mid, end, track_width );
+                    SHAPE_ARC shapeArc = makeMidpointArc( p1, p2, track_width );
 
                     PCB_ARC* arc = new PCB_ARC( m_loadBoard, &shapeArc );
                     arc->SetNet( net );
@@ -1533,16 +1523,7 @@ void PCB_IO_PADS::loadCopperShapes()
 
                 if( p2.is_arc )
                 {
-                    shape->SetShape( SHAPE_T::ARC );
-                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
-                                     scaleCoord( p2.arc.cy, false ) );
-
-                    if( p2.arc.delta_angle > 0 )
-                        std::swap( start, end );
-
-                    shape->SetCenter( center );
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
+                    setPcbShapeArc( shape, p1, p2 );
                 }
                 else
                 {
@@ -1577,10 +1558,7 @@ void PCB_IO_PADS::loadCopperShapes()
                 zone->SetNet( net );
 
             SHAPE_LINE_CHAIN outline;
-
-            for( const auto& pt : copper.outline )
-                outline.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-
+            appendArcPoints( outline, copper.outline );
             outline.SetClosed( true );
             zone->Outline()->AddOutline( outline );
             m_loadBoard->Add( zone );
@@ -1600,17 +1578,7 @@ void PCB_IO_PADS::loadCopperShapes()
 
                 if( p2.is_arc )
                 {
-                    double startAngleRad =
-                            atan2( p1.y - p2.arc.cy, p1.x - p2.arc.cx );
-                    double midAngleRad =
-                            startAngleRad + ( p2.arc.delta_angle * M_PI / 180.0 ) / 2.0;
-
-                    double midX = p2.arc.cx + p2.arc.radius * cos( midAngleRad );
-                    double midY = p2.arc.cy + p2.arc.radius * sin( midAngleRad );
-
-                    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
-
-                    SHAPE_ARC shapeArc( start, mid, end, width );
+                    SHAPE_ARC shapeArc = makeMidpointArc( p1, p2, width );
 
                     PCB_ARC* arc = new PCB_ARC( m_loadBoard, &shapeArc );
 
@@ -1696,72 +1664,6 @@ void PCB_IO_PADS::loadZones()
 {
     const auto& pours = m_parser->GetPours();
     const auto& params = m_parser->GetParameters();
-
-    // Append arc-aware points from an ARC_POINT vector to a contour chain.
-    // Arc segments are interpolated into polyline approximations. Full-circle
-    // entries (from CIRCLE piece types) are generated as 36-segment polygons.
-    auto appendArcPoints = [this]( SHAPE_LINE_CHAIN& chain,
-                                   const std::vector<PADS_IO::ARC_POINT>& pts )
-    {
-        if( pts.empty() )
-            return;
-
-        if( pts.size() == 1 && pts[0].is_arc
-            && std::abs( pts[0].arc.delta_angle ) >= 359.0 )
-        {
-            VECTOR2I center( scaleCoord( pts[0].arc.cx, true ),
-                             scaleCoord( pts[0].arc.cy, false ) );
-            int radius = scaleSize( pts[0].arc.radius );
-
-            constexpr int NUM_SEGS = 36;
-
-            for( int i = 0; i < NUM_SEGS; i++ )
-            {
-                double angle = 2.0 * M_PI * i / NUM_SEGS;
-                chain.Append( center.x + KiROUND( radius * cos( angle ) ),
-                              center.y + KiROUND( radius * sin( angle ) ) );
-            }
-
-            return;
-        }
-
-        chain.Append( scaleCoord( pts[0].x, true ), scaleCoord( pts[0].y, false ) );
-
-        for( size_t i = 1; i < pts.size(); i++ )
-        {
-            const auto& pt = pts[i];
-
-            if( pt.is_arc )
-            {
-                VECTOR2I start( scaleCoord( pts[i - 1].x, true ),
-                                scaleCoord( pts[i - 1].y, false ) );
-                VECTOR2I end( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-
-                // Compute the arc midpoint in PADS coordinate space (before the
-                // Y-axis flip in scaleCoord) so the 3-point SHAPE_ARC constructor
-                // gets the correct winding direction.
-                double startAngleRad =
-                        atan2( pts[i - 1].y - pt.arc.cy, pts[i - 1].x - pt.arc.cx );
-                double midAngleRad =
-                        startAngleRad + ( pt.arc.delta_angle * M_PI / 180.0 ) / 2.0;
-
-                double midX = pt.arc.cx + pt.arc.radius * cos( midAngleRad );
-                double midY = pt.arc.cy + pt.arc.radius * sin( midAngleRad );
-
-                VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
-
-                SHAPE_ARC shapeArc( start, mid, end, 0 );
-                const SHAPE_LINE_CHAIN arcPoly = shapeArc.ConvertToPolyline();
-
-                for( int j = 1; j < arcPoly.PointCount(); j++ )
-                    chain.Append( arcPoly.CPoint( j ).x, arcPoly.CPoint( j ).y );
-            }
-            else
-            {
-                chain.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-            }
-        }
-    };
 
     // Returns true if the points can produce a valid polygon (at least 3 vertices
     // for a regular polygon, or a single full-circle point).
@@ -1952,17 +1854,7 @@ void PCB_IO_PADS::loadBoardOutline()
 
             if( p2.is_arc )
             {
-                shape->SetShape( SHAPE_T::ARC );
-                VECTOR2I center( scaleCoord( p2.arc.cx, true ), scaleCoord( p2.arc.cy, false ) );
-                VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
-                VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
-
-                if( p2.arc.delta_angle > 0 )
-                    std::swap( start, end );
-
-                shape->SetCenter( center );
-                shape->SetStart( start );
-                shape->SetEnd( end );
+                setPcbShapeArc( shape, p1, p2 );
             }
             else
             {
@@ -1994,20 +1886,7 @@ void PCB_IO_PADS::loadBoardOutline()
 
                 if( pFirst.is_arc )
                 {
-                    shape->SetShape( SHAPE_T::ARC );
-                    VECTOR2I center( scaleCoord( pFirst.arc.cx, true ),
-                                     scaleCoord( pFirst.arc.cy, false ) );
-                    VECTOR2I start( scaleCoord( pLast.x, true ),
-                                    scaleCoord( pLast.y, false ) );
-                    VECTOR2I end( scaleCoord( pFirst.x, true ),
-                                  scaleCoord( pFirst.y, false ) );
-
-                    if( pFirst.arc.delta_angle > 0 )
-                        std::swap( start, end );
-
-                    shape->SetCenter( center );
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
+                    setPcbShapeArc( shape, pLast, pFirst );
                 }
                 else
                 {
@@ -2186,24 +2065,21 @@ void PCB_IO_PADS::loadKeepouts()
 
         zone->SetZoneName( wxString::Format( wxT( "%s_%d" ), typeName, ++keepoutIndex ) );
 
-        zone->Outline()->NewOutline();
+        SHAPE_LINE_CHAIN koChain;
+        appendArcPoints( koChain, ko.outline );
 
-        for( const auto& pt : ko.outline )
-        {
-            zone->Outline()->Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-        }
-
-        if( !ko.outline.empty() && ko.outline.size() > 2 )
+        // Close the outline if first and last points don't match
+        if( ko.outline.size() > 2 )
         {
             const auto& first = ko.outline.front();
             const auto& last = ko.outline.back();
 
             if( std::abs( first.x - last.x ) > 0.001 || std::abs( first.y - last.y ) > 0.001 )
-            {
-                zone->Outline()->Append( scaleCoord( first.x, true ),
-                                         scaleCoord( first.y, false ) );
-            }
+                koChain.Append( scaleCoord( first.x, true ), scaleCoord( first.y, false ) );
         }
+
+        koChain.SetClosed( true );
+        zone->Outline()->AddOutline( koChain );
 
         m_loadBoard->Add( zone );
     }
@@ -2252,17 +2128,7 @@ void PCB_IO_PADS::loadGraphicLines()
 
             if( p2.is_arc )
             {
-                shape->SetShape( SHAPE_T::ARC );
-                VECTOR2I center( scaleCoord( p2.arc.cx, true ), scaleCoord( p2.arc.cy, false ) );
-                VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
-                VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
-
-                if( p2.arc.delta_angle > 0 )
-                    std::swap( start, end );
-
-                shape->SetCenter( center );
-                shape->SetStart( start );
-                shape->SetEnd( end );
+                setPcbShapeArc( shape, p1, p2 );
             }
             else
             {
@@ -2292,20 +2158,7 @@ void PCB_IO_PADS::loadGraphicLines()
 
                 if( pFirst.is_arc )
                 {
-                    shape->SetShape( SHAPE_T::ARC );
-                    VECTOR2I center( scaleCoord( pFirst.arc.cx, true ),
-                                     scaleCoord( pFirst.arc.cy, false ) );
-                    VECTOR2I start( scaleCoord( pLast.x, true ),
-                                    scaleCoord( pLast.y, false ) );
-                    VECTOR2I end( scaleCoord( pFirst.x, true ),
-                                  scaleCoord( pFirst.y, false ) );
-
-                    if( pFirst.arc.delta_angle > 0 )
-                        std::swap( start, end );
-
-                    shape->SetCenter( center );
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
+                    setPcbShapeArc( shape, pLast, pFirst );
                 }
                 else
                 {
@@ -2473,6 +2326,93 @@ void PCB_IO_PADS::clearLoadingState()
     m_pinToNetMap.clear();
     m_partToBlockMap.clear();
     m_testPointIndex = 1;
+}
+
+
+void PCB_IO_PADS::appendArcPoints( SHAPE_LINE_CHAIN& aChain,
+                                    const std::vector<PADS_IO::ARC_POINT>& aPts )
+{
+    if( aPts.empty() )
+        return;
+
+    // Single full-circle entry becomes a 36-segment polygon
+    if( aPts.size() == 1 && aPts[0].is_arc
+        && std::abs( aPts[0].arc.delta_angle ) >= 359.0 )
+    {
+        VECTOR2I center( scaleCoord( aPts[0].arc.cx, true ),
+                         scaleCoord( aPts[0].arc.cy, false ) );
+        int radius = scaleSize( aPts[0].arc.radius );
+
+        constexpr int NUM_SEGS = 36;
+
+        for( int i = 0; i < NUM_SEGS; i++ )
+        {
+            double angle = 2.0 * M_PI * i / NUM_SEGS;
+            aChain.Append( center.x + KiROUND( radius * cos( angle ) ),
+                           center.y + KiROUND( radius * sin( angle ) ) );
+        }
+
+        return;
+    }
+
+    aChain.Append( scaleCoord( aPts[0].x, true ), scaleCoord( aPts[0].y, false ) );
+
+    for( size_t i = 1; i < aPts.size(); i++ )
+    {
+        const auto& pt = aPts[i];
+
+        if( pt.is_arc )
+        {
+            SHAPE_ARC arc = makeMidpointArc( aPts[i - 1], pt, 0 );
+            const SHAPE_LINE_CHAIN arcPoly = arc.ConvertToPolyline();
+
+            for( int j = 1; j < arcPoly.PointCount(); j++ )
+                aChain.Append( arcPoly.CPoint( j ).x, arcPoly.CPoint( j ).y );
+        }
+        else
+        {
+            aChain.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+        }
+    }
+}
+
+
+void PCB_IO_PADS::setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
+                                   const PADS_IO::ARC_POINT& aCurr )
+{
+    aShape->SetShape( SHAPE_T::ARC );
+
+    VECTOR2I center( scaleCoord( aCurr.arc.cx, true ), scaleCoord( aCurr.arc.cy, false ) );
+    VECTOR2I start( scaleCoord( aPrev.x, true ), scaleCoord( aPrev.y, false ) );
+    VECTOR2I end( scaleCoord( aCurr.x, true ), scaleCoord( aCurr.y, false ) );
+
+    // Y-axis flip reverses arc winding; swap endpoints for CCW arcs
+    if( aCurr.arc.delta_angle > 0 )
+        std::swap( start, end );
+
+    aShape->SetCenter( center );
+    aShape->SetStart( start );
+    aShape->SetEnd( end );
+}
+
+
+SHAPE_ARC PCB_IO_PADS::makeMidpointArc( const PADS_IO::ARC_POINT& aPrev,
+                                          const PADS_IO::ARC_POINT& aCurr, int aWidth )
+{
+    VECTOR2I start( scaleCoord( aPrev.x, true ), scaleCoord( aPrev.y, false ) );
+    VECTOR2I end( scaleCoord( aCurr.x, true ), scaleCoord( aCurr.y, false ) );
+
+    // Compute the arc midpoint in PADS coordinate space (before the Y-axis
+    // flip in scaleCoord) so the 3-point constructor gets the correct winding.
+    double startAngleRad = atan2( aPrev.y - aCurr.arc.cy, aPrev.x - aCurr.arc.cx );
+    double midAngleRad = startAngleRad + ( aCurr.arc.delta_angle * M_PI / 180.0 ) / 2.0;
+
+    double midX = aCurr.arc.cx + aCurr.arc.radius * cos( midAngleRad );
+    double midY = aCurr.arc.cy + aCurr.arc.radius * sin( midAngleRad );
+
+    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
+
+    return SHAPE_ARC( start, mid, end, aWidth );
 }
 
 
