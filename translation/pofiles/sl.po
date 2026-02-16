@@ -9,17 +9,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sl/>\n"
+"PO-Revision-Date: 2026-02-17 01:09+0000\n"
+"Last-Translator: Mitja Nemec <mitja.nemec@fe.uni-lj.si>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v9/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -36,14 +35,12 @@ msgid "All Files"
 msgstr "Vse datoteke"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:334
-#, fuzzy
 msgid "Build board outline"
-msgstr "Grajenje obrisa plošče"
+msgstr "Grajenje obrisa vezja"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:557
-#, fuzzy
 msgid "Create layers"
-msgstr "Ustvarjanje plasti"
+msgstr "Ustvari sloje"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:982
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
@@ -52,35 +49,28 @@ msgid "No footprint loaded."
 msgstr "Nobeno podnožje ni naloženo."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:997
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Obris podnožja manjka ali je neustrezen. Za popolno analizo zaženite "
-"Footprint Checker."
+"Obris podnožja manjka ali je deformiran. Za analizo zaženite Kontrolo "
+"podnožja."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1006
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
-"Oblika plošče manjka ali je napačno oblikovana. Zaženite DRC za popolno "
-"analizo."
+msgstr "Obris vezja manjka ali je deformiran. Za analizo zaženite DRC."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:317
-#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Ustvari povezave in skoznike"
+msgstr "Ustvari povezave in skoznje luknje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:790
-#, fuzzy
 msgid "Create zones"
-msgstr "Ustvari poligone"
+msgstr "Ustvari območja"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
-#, fuzzy
 msgid "Build Tech layers"
-msgstr "Zgradite tehnične sloje"
+msgstr "Zgradi tehnične sloje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:947
 #, fuzzy, c-format
@@ -39603,9 +39593,8 @@ msgstr "Zaženi preverjanja"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:69
 #: pcbnew/tools/pcb_actions.cpp:775
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "Footprint Checker"
+msgstr "Kontrola podnožja"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:78
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:150
