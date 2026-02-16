@@ -64,6 +64,7 @@ private:
     void adjustPathSubsGridColumns( int aWidth );
     void onConvertLegacyLibraries( wxCommandEvent& event ) override;
 
+    void onNotebookPageChangeRequest( wxAuiNotebookEvent& aEvent );
     void onNotebookPageCloseRequest( wxAuiNotebookEvent& aEvent );
 
     void onPageChange( wxAuiNotebookEvent& event ) override;
@@ -84,6 +85,7 @@ private:
 private:
     PROJECT*                    m_project;
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
+    bool                        m_suppressNotebookPageEvents;
     wxArrayString               m_pluginChoices;
 
     wxString                    m_lastProjectLibDir;   //< Transient (unsaved) last browsed folder when adding a
