@@ -156,12 +156,12 @@ void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
         m_project_name = aFullPathAndName;
 
         wxASSERT( m_project_name.IsAbsolute() );
+        wxString ext = m_project_name.GetExt();
 
-        if( m_project_name.GetExt() != FILEEXT::ProjectFileExtension )
+        if( !ext.IsEmpty() && ext != FILEEXT::ProjectFileExtension )
         {
-            wxLogWarning( wxT( "Project file has unexpected extension '%s', expected '%s'" ),
-                          m_project_name.GetExt(),
-                          wxString::FromUTF8( FILEEXT::ProjectFileExtension ) );
+            wxLogDebug( wxT( "Project file has unexpected extension '%s', expected '%s'" ), ext,
+                        FILEEXT::ProjectFileExtension );
             m_project_name.SetExt( FILEEXT::ProjectFileExtension );
         }
     }
