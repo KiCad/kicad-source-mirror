@@ -37,6 +37,7 @@
 #include <footprint.h>
 #include <zone.h>
 #include <board_design_settings.h>
+#include <pcb_dimension.h>
 #include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <set>
@@ -654,6 +655,120 @@ BOOST_AUTO_TEST_CASE( ImportFilledCopperSingleOutline )
     ZONE* zone = board->Zones()[0];
     BOOST_CHECK_EQUAL( zone->Outline()->OutlineCount(), 1 );
     BOOST_CHECK( zone->Outline()->COutline( 0 ).PointCount() >= 3 );
+}
+
+
+/**
+ * Verify Importer.asc (V10.0 BASIC, 6-layer) imports correctly.
+ *
+ * This board exercises four specific import scenarios:
+ * 1. Graphics on PADS layers 18/19/20 (UNASSIGNED type) must be imported
+ * 2. Copper pours with HATOUT fills and VOIDOUT holes
+ * 3. Oval finger (OF) pads on U1 must not be overwritten by thermal (RT) entries
+ * 4. Dimension line with non-aligned base points must not be skewed
+ */
+BOOST_AUTO_TEST_CASE( Importer_SpecificFixes )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/Importer.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // Bug 1: Graphics on layers 18/19/20 must be imported.
+    // The LAYERSTACK_6L_35U block has 556 pieces mostly on layer 18, plus layer 20.
+    // The DRW59706864 block has a BOARD outline on layer 0 (Edge.Cuts).
+    // Count graphics on Dwgs_User and Cmts_User to verify documentation layers imported.
+    int dwgsUserCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
+            if( shape->GetLayer() == Dwgs_User )
+                dwgsUserCount++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( dwgsUserCount > 0,
+            "graphics on PADS layer 18 (drill drawing) should map to Dwgs_User" );
+
+    // Bug 3: U1 pads should be oval (OF shape), not circular (RT thermal).
+    // U1 has part type DIO_RECT_3PH_1600V_100A with DIOB_D100JHT160V decal.
+    // PAD 0 stack has OF 0.000 11550000 on layer -2 (4.8mm height, 11.55mm width).
+    FOOTPRINT* u1 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() == wxT( "U1" ) )
+        {
+            u1 = fp;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( u1 != nullptr, "U1 footprint should exist" );
+
+    bool foundOvalPad = false;
+
+    for( PAD* pad : u1->Pads() )
+    {
+        VECTOR2I padSize = pad->GetSize( PADSTACK::ALL_LAYERS );
+
+        if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::OVAL && padSize.x != padSize.y )
+        {
+            foundOvalPad = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundOvalPad, "U1 should have oval pads (OF shape, not RT thermal)" );
+
+    // Bug 2: Copper pours should not have duplicates from HATOUT records.
+    // The file has 13 POUROUT records. HATOUT records should become fills, not zones.
+    // Count zones that are NOT rule areas (actual copper pours).
+    int pourZoneCount = 0;
+    int filledZoneCount = 0;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+        {
+            pourZoneCount++;
+
+            if( zone->IsFilled() )
+                filledZoneCount++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( pourZoneCount <= 13,
+            "should not have duplicate zones from HATOUT; got " << pourZoneCount );
+
+    BOOST_CHECK_MESSAGE( filledZoneCount > 0, "HATOUT records should produce filled zones" );
+
+    // Bug 4: Dimension line should not be skewed.
+    // DIM92271615 measures 110.00mm horizontal. Start=(0,9000000) end=(165000000,1500000).
+    // After fix, both endpoints should have the same Y for horizontal measurement.
+    int dimCount = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_DIM_ALIGNED* dim = dynamic_cast<PCB_DIM_ALIGNED*>( item ) )
+        {
+            dimCount++;
+
+            VECTOR2I start = dim->GetStart();
+            VECTOR2I end = dim->GetEnd();
+
+            BOOST_CHECK_MESSAGE( start.y == end.y,
+                    "horizontal dimension endpoints should have equal Y coordinates; "
+                    "start.y=" << start.y << " end.y=" << end.y );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( dimCount > 0, "should have at least one dimension" );
 }
 
 

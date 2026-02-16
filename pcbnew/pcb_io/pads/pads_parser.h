@@ -358,13 +358,14 @@ enum class THERMAL_TYPE
 
 struct POUR
 {
+    std::string name;                   ///< This pour record's name
     std::string net_name;
     int layer = 0;
     int priority = 0;
     double width = 0.0;
     std::vector<ARC_POINT> points;      ///< Pour outline, may include arc segments
     bool is_cutout = false;             ///< True if this is a cutout (POCUT) piece
-    std::string owner_pour;             ///< Name of parent pour for cutouts
+    std::string owner_pour;             ///< Name of parent pour (7th field in header)
     POUR_STYLE style = POUR_STYLE::SOLID;   ///< Pour fill style
     double hatch_grid = 0.0;            ///< Hatch grid spacing for hatched pours
     double hatch_width = 0.0;           ///< Hatch line width

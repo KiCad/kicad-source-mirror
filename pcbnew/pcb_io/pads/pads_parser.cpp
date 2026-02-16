@@ -1181,30 +1181,34 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
                 continue;
 
             POUR pour;
+            pour.name = name;
             pour.net_name = signame;
             pour.layer = level;
             pour.priority = priority;
             pour.width = width;
-            pour.is_cutout = ( poly_type == "POCUT" || poly_type == "CUTOUT" || poly_type == "CIRCUT"
-                               || poly_type == "VOIDOUT" );
-            pour.owner_pour = name;
+            pour.is_cutout = ( poly_type == "POCUT" || poly_type == "CUTOUT"
+                               || poly_type == "CIRCUT" );
+            pour.owner_pour = owner;
             pour.hatch_grid = hatchgrid;
             pour.hatch_width = hatchrad;
 
-            // Set pour style based on piece type
-            if( poly_type == "HATOUT" )
+            // The header TYPE field (POUROUT, HATOUT, VOIDOUT, PADTHERM, VIATHERM)
+            // determines the record's role. The piece-level poly_type (POLY, SEG, etc.)
+            // only describes the geometry shape.
+            if( type == "HATOUT" )
             {
                 pour.style = POUR_STYLE::HATCHED;
             }
-            else if( poly_type == "VOIDOUT" )
+            else if( type == "VOIDOUT" )
             {
                 pour.style = POUR_STYLE::VOIDOUT;
+                pour.is_cutout = true;
             }
-            else if( poly_type == "PADTHERM" )
+            else if( type == "PADTHERM" )
             {
                 pour.thermal_type = THERMAL_TYPE::PAD;
             }
-            else if( poly_type == "VIATHERM" )
+            else if( type == "VIATHERM" )
             {
                 pour.thermal_type = THERMAL_TYPE::VIA;
             }

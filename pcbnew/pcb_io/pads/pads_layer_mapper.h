@@ -162,14 +162,17 @@ public:
     static constexpr int LAYER_PAD_STACK_INNER = 0;    ///< Pad stack: Inner copper
 
     // Common PADS layer number ranges
+    static constexpr int LAYER_DRILL_DRAWING = 18;
+    static constexpr int LAYER_DIMENSIONS = 19;
+    static constexpr int LAYER_PLACEMENT_OUTLINE = 20;
+    static constexpr int LAYER_ASSEMBLY_TOP = 21;
+    static constexpr int LAYER_ASSEMBLY_BOTTOM = 22;
+    static constexpr int LAYER_SOLDERMASK_TOP = 25;
     static constexpr int LAYER_SILKSCREEN_TOP = 26;
     static constexpr int LAYER_SILKSCREEN_BOTTOM = 27;
-    static constexpr int LAYER_SOLDERMASK_TOP = 25;
     static constexpr int LAYER_SOLDERMASK_BOTTOM = 28;
     static constexpr int LAYER_PASTE_TOP = 29;
     static constexpr int LAYER_PASTE_BOTTOM = 30;
-    static constexpr int LAYER_ASSEMBLY_TOP = 21;
-    static constexpr int LAYER_ASSEMBLY_BOTTOM = 22;
     static constexpr int LAYER_BOARD_OUTLINE = 1;
 
 private:

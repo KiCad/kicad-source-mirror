@@ -129,14 +129,26 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::GetLayerType( int aPadsLayer ) const
         return PADS_LAYER_TYPE::COPPER_INNER;
 
     // Non-copper layers by number
+    if( aPadsLayer == LAYER_DRILL_DRAWING )
+        return PADS_LAYER_TYPE::DRILL_DRAWING;
+
+    if( aPadsLayer == LAYER_DIMENSIONS || aPadsLayer == LAYER_PLACEMENT_OUTLINE )
+        return PADS_LAYER_TYPE::DOCUMENTATION;
+
+    if( aPadsLayer == LAYER_ASSEMBLY_TOP )
+        return PADS_LAYER_TYPE::ASSEMBLY_TOP;
+
+    if( aPadsLayer == LAYER_ASSEMBLY_BOTTOM )
+        return PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
+
+    if( aPadsLayer == LAYER_SOLDERMASK_TOP )
+        return PADS_LAYER_TYPE::SOLDERMASK_TOP;
+
     if( aPadsLayer == LAYER_SILKSCREEN_TOP )
         return PADS_LAYER_TYPE::SILKSCREEN_TOP;
 
     if( aPadsLayer == LAYER_SILKSCREEN_BOTTOM )
         return PADS_LAYER_TYPE::SILKSCREEN_BOTTOM;
-
-    if( aPadsLayer == LAYER_SOLDERMASK_TOP )
-        return PADS_LAYER_TYPE::SOLDERMASK_TOP;
 
     if( aPadsLayer == LAYER_SOLDERMASK_BOTTOM )
         return PADS_LAYER_TYPE::SOLDERMASK_BOTTOM;
@@ -146,12 +158,6 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::GetLayerType( int aPadsLayer ) const
 
     if( aPadsLayer == LAYER_PASTE_BOTTOM )
         return PADS_LAYER_TYPE::PASTE_BOTTOM;
-
-    if( aPadsLayer == LAYER_ASSEMBLY_TOP )
-        return PADS_LAYER_TYPE::ASSEMBLY_TOP;
-
-    if( aPadsLayer == LAYER_ASSEMBLY_BOTTOM )
-        return PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
 
     return PADS_LAYER_TYPE::UNKNOWN;
 }

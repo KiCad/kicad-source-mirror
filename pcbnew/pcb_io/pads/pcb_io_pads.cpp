@@ -768,6 +768,15 @@ void PCB_IO_PADS::loadFootprints()
                         if( layer_def.sizeA <= 0 )
                             continue;
 
+                        // RT/ST are thermal relief spoke patterns for plane layers.
+                        // KiCad computes thermal reliefs from zone settings, so skip
+                        // these to avoid overwriting the actual pad shape.
+                        if( layer_def.shape == "RT" || layer_def.shape == "ST"
+                            || layer_def.shape == "RA" || layer_def.shape == "SA" )
+                        {
+                            continue;
+                        }
+
                         PCB_LAYER_ID kicad_layer = mapPadsLayer( layer_def.layer );
 
                         if( kicad_layer != UNDEFINED_LAYER )
@@ -1646,8 +1655,27 @@ void PCB_IO_PADS::loadZones()
             maxPriority = pour_def.priority;
     }
 
+    // Map from pour name to created zone for linking HATOUT/VOIDOUT later
+    std::map<std::string, ZONE*> pourZoneMap;
+
+    // Map from HATOUT name to parent POUROUT name for VOIDOUT chain resolution
+    std::map<std::string, std::string> hatoutToParent;
+
+    // First pass: create zones from POUROUT records and build lookup maps
     for( const auto& pour_def : pours )
     {
+        if( pour_def.style == PADS_IO::POUR_STYLE::HATCHED )
+        {
+            hatoutToParent[pour_def.name] = pour_def.owner_pour;
+            continue;
+        }
+
+        if( pour_def.style == PADS_IO::POUR_STYLE::VOIDOUT
+            || pour_def.thermal_type != PADS_IO::THERMAL_TYPE::NONE )
+        {
+            continue;
+        }
+
         if( pour_def.points.size() < 3 )
             continue;
 
@@ -1661,6 +1689,7 @@ void PCB_IO_PADS::loadZones()
                         _( "Skipping pour on unmapped layer %d" ), pour_def.layer ),
                         RPT_SEVERITY_WARNING );
             }
+
             continue;
         }
 
@@ -1686,12 +1715,11 @@ void PCB_IO_PADS::loadZones()
         }
         else
         {
-            NETINFO_ITEM* net = m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( pour_def.net_name ) );
+            NETINFO_ITEM* net = m_loadBoard->FindNet(
+                    PADS_COMMON::ConvertInvertedNetName( pour_def.net_name ) );
 
             if( net )
-            {
                 zone->SetNet( net );
-            }
 
             int kicadPriority = maxPriority - pour_def.priority + 1;
             zone->SetAssignedPriority( kicadPriority );
@@ -1703,7 +1731,64 @@ void PCB_IO_PADS::loadZones()
             zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
         }
 
+        pourZoneMap[pour_def.name] = zone;
         m_loadBoard->Add( zone );
+    }
+
+    // Second pass: build fill polygons from HATOUT records with VOIDOUT holes
+    for( const auto& pour_def : pours )
+    {
+        if( pour_def.style != PADS_IO::POUR_STYLE::HATCHED )
+            continue;
+
+        if( pour_def.points.size() < 3 )
+            continue;
+
+        auto zoneIt = pourZoneMap.find( pour_def.owner_pour );
+
+        if( zoneIt == pourZoneMap.end() )
+            continue;
+
+        ZONE* zone = zoneIt->second;
+        PCB_LAYER_ID pourLayer = zone->GetLayer();
+
+        SHAPE_POLY_SET fillPoly;
+        fillPoly.NewOutline();
+
+        for( const auto& pt : pour_def.points )
+        {
+            fillPoly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+        }
+
+        // Add VOIDOUT records as holes in the fill polygon
+        for( const auto& void_def : pours )
+        {
+            if( void_def.style != PADS_IO::POUR_STYLE::VOIDOUT )
+                continue;
+
+            if( void_def.points.size() < 3 )
+                continue;
+
+            // VOIDOUT's owner_pour points to a HATOUT name. Check if that HATOUT
+            // is owned by our POUROUT.
+            auto parentIt = hatoutToParent.find( void_def.owner_pour );
+
+            if( parentIt == hatoutToParent.end() )
+                continue;
+
+            if( parentIt->second != pour_def.owner_pour )
+                continue;
+
+            fillPoly.NewHole();
+
+            for( const auto& pt : void_def.points )
+            {
+                fillPoly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+            }
+        }
+
+        zone->SetFilledPolysList( pourLayer, fillPoly );
+        zone->SetIsFilled( true );
     }
 }
 
@@ -1819,6 +1904,15 @@ void PCB_IO_PADS::loadDimensions()
                         scaleCoord( dim.points[0].y, false ) );
         VECTOR2I end( scaleCoord( dim.points[1].x, true ),
                       scaleCoord( dim.points[1].y, false ) );
+
+        // PADS horizontal/vertical dimensions measure only the X or Y projection.
+        // PCB_DIM_ALIGNED measures along the start→end direction, so if the base
+        // points differ on the non-measured axis the line becomes skewed.
+        // Project the end point onto the measurement axis.
+        if( dim.is_horizontal )
+            end.y = start.y;
+        else
+            end.x = start.x;
 
         dimension->SetStart( start );
         dimension->SetEnd( end );
@@ -2280,7 +2374,8 @@ void PCB_IO_PADS::loadBoardSetup()
         info.padsLayerNum = padsInfo.number;
         info.name = padsInfo.name;
 
-        if( padsInfo.layer_type != PADS_IO::PADS_LAYER_FUNCTION::UNKNOWN )
+        if( padsInfo.layer_type != PADS_IO::PADS_LAYER_FUNCTION::UNKNOWN
+            && padsInfo.layer_type != PADS_IO::PADS_LAYER_FUNCTION::UNASSIGNED )
         {
             info.type = convertLayerType( padsInfo.layer_type );
 
