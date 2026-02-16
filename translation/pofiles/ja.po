@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-12 08:25+0000\n"
+"PO-Revision-Date: 2026-02-17 01:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -13419,7 +13419,7 @@ msgstr "電源シンボルとしてシンボルを作成"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:739
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:206
 msgid "Exclude from bill of materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:279
@@ -17333,7 +17333,7 @@ msgstr "シート名を確認中..."
 
 #: eeschema/erc/erc.cpp:1923
 msgid "Checking bus conflicts..."
-msgstr "バスの競合をチェック中..."
+msgstr "バスの競合を確認中..."
 
 #: eeschema/erc/erc.cpp:1930
 msgid "Checking conflicts..."
@@ -20077,7 +20077,7 @@ msgstr "背景色"
 #: eeschema/sch_sheet.cpp:1769 eeschema/sch_symbol.cpp:1134
 #: eeschema/sch_symbol.cpp:3146 pcbnew/footprint.cpp:4266
 msgid "Exclude From Bill of Materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/sch_sheet.cpp:1773 eeschema/sch_symbol.cpp:1135
 #: eeschema/sch_symbol.cpp:3149 eeschema/tools/sch_actions.cpp:993
@@ -23407,7 +23407,7 @@ msgstr "選択したシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/sch_actions.cpp:975
 msgid "Exclude from Bill of Materials"
-msgstr "BOM(部品表)から除外"
+msgstr "部品表(BOM)から除外"
 
 #: eeschema/tools/sch_actions.cpp:976
 msgid "Set the exclude from bill of materials attribute"
@@ -26550,7 +26550,7 @@ msgstr "新しい動作は --mode-multi と同じ動きです"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:33
 msgid "Export the PCB in Gencad format"
-msgstr "Gencad 形式で基板(PCB)をエクスポート"
+msgstr "Gencad 形式でプリント基板図をエクスポート"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:38
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
@@ -28654,7 +28654,7 @@ msgstr "プロジェクトを作成して(または開いて)、回路図を編�
 
 #: kicad/tools/kicad_manager_control.cpp:792
 msgid "Create (or open) a project to edit a pcb."
-msgstr "プロジェクトを作成して(または開いて)、基板(PCB) を編集します。"
+msgstr "プロジェクトを作成して(または開いて)、プリント基板図を編集します。"
 
 #: kicad/tools/kicad_manager_control.cpp:807
 msgid "Application failed to load:\n"
@@ -41103,7 +41103,7 @@ msgstr "%s の最小幅: %s."
 #: pcbnew/drc/drc_engine.cpp:957
 #, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "アサーション \"%s\" をチェックしています。"
+msgstr "アサーション \"%s\" を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:963 pcbnew/drc/drc_engine.cpp:1677
 msgid "Assertion passed."
@@ -41274,7 +41274,7 @@ msgstr "条件なしのルールを適用します; 以前の制約を上書き�
 #: pcbnew/drc/drc_engine.cpp:1336 pcbnew/drc/drc_engine.cpp:1705
 #, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "ルールの条件 \"%s\" をチェックしています。"
+msgstr "ルールの条件 \"%s\" を確認中。"
 
 #: pcbnew/drc/drc_engine.cpp:1346
 msgid "Constraint applied."
@@ -41334,7 +41334,7 @@ msgstr "%s のサーマルスポーク幅: %s."
 #: pcbnew/drc/drc_engine.cpp:1671
 #, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "ルールのアサーション \"%s\" をチェックしています。"
+msgstr "ルールのアサーション \"%s\" を確認中。"
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2128
 msgid "Electrical"
@@ -43554,8 +43554,8 @@ msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
-"チェックすると、選択したレイヤーをこのダイアログで使用します\n"
-"チェックしない場合、PCB エディターのアクティブレイヤーを使用します"
+"チェックされている場合、このダイアログで選択したレイヤーを使用します\n"
+"チェックされていない場合、PCB エディターのアクティブレイヤーを使用します"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 msgid "Group imported items"
@@ -50829,7 +50829,7 @@ msgstr "ポリゴンを描画"
 
 #: pcbnew/tools/zone_filler_tool.cpp:89
 msgid "Checking Zones"
-msgstr "ゾーンをチェック中"
+msgstr "ゾーンを確認中"
 
 #: pcbnew/tools/zone_filler_tool.cpp:95 pcbnew/tools/zone_filler_tool.cpp:173
 #: pcbnew/tools/zone_filler_tool.cpp:353
