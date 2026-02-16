@@ -59,7 +59,7 @@ public:
      */
     static int SetSwapInterval( int aVal )
     {
-#if defined( __linux__ ) && !defined( KICAD_USE_EGL )
+#if ( defined( __linux__ ) || defined( __FreeBSD__ ) ) && !defined( KICAD_USE_EGL )
 
         if( Display* dpy = glXGetCurrentDisplay() )
         {
