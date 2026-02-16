@@ -1343,7 +1343,24 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     zone_layer_poly_segs.push_back( seg );
                 }
 
-                std::sort( zone_layer_poly_segs.begin(), zone_layer_poly_segs.end() );
+                // Sort by x-coordinates for the sweep-line optimization in the inner
+                // loop. SEG::operator< must not be used here because it delegates to
+                // VECTOR2I::operator< which compares by magnitude, violating strict
+                // weak ordering when mixed with VECTOR2I::operator== for tie-breaking.
+                std::sort( zone_layer_poly_segs.begin(), zone_layer_poly_segs.end(),
+                           []( const SEG& a, const SEG& b ) -> bool
+                           {
+                               if( a.A.x != b.A.x )
+                                   return a.A.x < b.A.x;
+
+                               if( a.A.y != b.A.y )
+                                   return a.A.y < b.A.y;
+
+                               if( a.B.x != b.B.x )
+                                   return a.B.x < b.B.x;
+
+                               return a.B.y < b.B.y;
+                           } );
             }
         }
 
@@ -1381,7 +1398,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     polyB = zoneB->GetFill( layer );
                 }
 
-                if( !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
+                if( !polyA || !polyB
+                        || !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
                     continue;
 
                 count++;
