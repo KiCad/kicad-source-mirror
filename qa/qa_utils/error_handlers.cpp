@@ -25,7 +25,7 @@
 #include <string>
 #include <iostream>
 #include <qa_utils/error_handlers.h>
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__FreeBSD__)
 #define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
 #endif
 #ifdef __linux__
