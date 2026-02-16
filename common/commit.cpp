@@ -50,11 +50,15 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
     EDA_ITEM* undoItem = undoLevelItem( aItem );
 
     if( undoItem != aItem )
+    {
         changeType = CHT_MODIFY;
 
-    // CHT_MODIFY and CHT_DONE are not compatible
-    if( changeType == CHT_MODIFY )
-        wxASSERT( ( flags & CHT_DONE ) == 0 );
+        // CHT_DONE means the original add/remove was already applied to the child, but that
+        // semantic doesn't carry over when we remap to a modify of the parent
+        flags &= ~CHT_DONE;
+    }
+
+    wxASSERT( changeType != CHT_MODIFY || ( flags & CHT_DONE ) == 0 );
 
     switch( changeType )
     {
