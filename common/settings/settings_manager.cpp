@@ -1127,7 +1127,14 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 PROJECT& SETTINGS_MANAGER::Prj() const
 {
     // No MDI yet:  First project in the list is the active project
-    wxASSERT_MSG( m_projects_list.size(), wxT( "no project in list" ) );
+    if( m_projects_list.empty() )
+    {
+        wxLogTrace( traceSettings, wxT( "Prj() called with no project loaded" ) );
+
+        static PROJECT s_emptyProject;
+        return s_emptyProject;
+    }
+
     return *m_projects_list.begin()->get();
 }
 
