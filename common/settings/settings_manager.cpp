@@ -953,10 +953,11 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
 
 bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 {
-    // Normalize path to new format even if migrating from a legacy file
+    // Normalize path to current project extension. Users may open legacy .pro files,
+    // or the OS may hand us a .kicad_sch/.kicad_pcb via file association or drag-and-drop.
     wxFileName path( aFullPath );
 
-    if( path.GetExt() == FILEEXT::LegacyProjectFileExtension )
+    if( path.GetExt() != FILEEXT::ProjectFileExtension )
         path.SetExt( FILEEXT::ProjectFileExtension );
 
     wxString fullPath = path.GetFullPath();
