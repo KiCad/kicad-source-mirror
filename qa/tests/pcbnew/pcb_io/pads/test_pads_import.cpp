@@ -772,4 +772,86 @@ BOOST_AUTO_TEST_CASE( Importer_SpecificFixes )
 }
 
 
+/**
+ * Verify peka.asc (V9.0 BASIC, 4-layer) via import.
+ *
+ * STANDARDVIA spans all 4 copper layers (-2=top, -1=bottom) plus non-copper
+ * entries (layer 0=inner pad, layer 25=soldermask). Three specific issues:
+ * 1. Via classified as blind instead of through-hole because the soldermask
+ *    layer (25) inflates the span beyond the copper layer count
+ * 2. Via size uses the soldermask opening (~63 mil) instead of the copper
+ *    pad size (~36 mil) because def.size takes the max across all layers
+ * 3. Multiple copies of the same through-hole via because deduplication
+ *    only applies to VIATYPE::THROUGH
+ */
+BOOST_AUTO_TEST_CASE( Peka_ViaImport )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/peka.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // Collect all vias and check for duplicates
+    std::map<std::pair<int, int>, int> viaPositionCount;
+    int blindCount = 0;
+    int throughCount = 0;
+
+    // Copper pad size from the STANDARDVIA definition is 1371600 BASIC units.
+    // At BASIC_TO_NM = 25400/38100, that converts to ~914,400 nm (36 mil).
+    // The soldermask opening is 2400300 BASIC = ~1,600,200 nm (63 mil).
+    // Via size must use the copper value, not the mask opening.
+    const int maxExpectedViaWidth = 1200000;  // 1.2mm, well above 36 mil copper pad
+
+    int oversizedViaCount = 0;
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        PCB_VIA* via = dynamic_cast<PCB_VIA*>( track );
+
+        if( !via )
+            continue;
+
+        VECTOR2I pos = via->GetPosition();
+        auto key = std::make_pair( pos.x, pos.y );
+        viaPositionCount[key]++;
+
+        if( via->GetViaType() == VIATYPE::BLIND )
+            blindCount++;
+        else if( via->GetViaType() == VIATYPE::THROUGH )
+            throughCount++;
+
+        if( via->GetWidth( F_Cu ) > maxExpectedViaWidth )
+            oversizedViaCount++;
+    }
+
+    // All vias in this 4-layer board span top-to-bottom, so none should be blind
+    BOOST_CHECK_MESSAGE( blindCount == 0,
+            "no vias should be blind; STANDARDVIA spans all copper layers; got "
+            << blindCount << " blind vias" );
+
+    BOOST_CHECK_MESSAGE( throughCount > 0, "should have through-hole vias" );
+
+    // No via should use the soldermask opening as its pad size
+    BOOST_CHECK_MESSAGE( oversizedViaCount == 0,
+            "via size should use copper pad, not soldermask opening; got "
+            << oversizedViaCount << " oversized vias" );
+
+    // No duplicate vias at the same position
+    int duplicateCount = 0;
+
+    for( const auto& [pos, count] : viaPositionCount )
+    {
+        if( count > 1 )
+            duplicateCount++;
+    }
+
+    BOOST_CHECK_MESSAGE( duplicateCount == 0,
+            "should not have duplicate vias at the same position; got "
+            << duplicateCount << " positions with duplicates" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

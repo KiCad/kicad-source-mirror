@@ -1074,10 +1074,9 @@ void PARSER::parseSectionVIA( std::ifstream& aStream )
 
             def.stack.push_back( layer_data );
 
-            if( size > def.size )
-                def.size = size;
-
-            // Track layer span for via type classification
+            // Map special layer numbers to copper layer indices.
+            // Non-copper layers (soldermask, silkscreen, etc.) must not
+            // affect via type classification or pad size.
             int effective_layer = level;
 
             if( level == -2 )
@@ -1085,8 +1084,14 @@ void PARSER::parseSectionVIA( std::ifstream& aStream )
             else if( level == -1 )
                 effective_layer = m_parameters.layer_count;
 
-            if( effective_layer > 0 )
+            bool is_copper = ( effective_layer >= 1
+                               && effective_layer <= m_parameters.layer_count );
+
+            if( is_copper )
             {
+                if( size > def.size )
+                    def.size = size;
+
                 if( effective_layer < min_layer )
                     min_layer = effective_layer;
 
