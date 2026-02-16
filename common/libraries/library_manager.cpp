@@ -88,7 +88,18 @@ void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOP
         if( fn.IsFileReadable() )
         {
             std::unique_ptr<LIBRARY_TABLE> table = std::make_unique<LIBRARY_TABLE>( fn, aScope );
-            wxCHECK2( table->Type() == type, continue );
+
+            if( table->Type() != type )
+            {
+                auto actualName = magic_enum::enum_name( table->Type() );
+                auto expectedName = magic_enum::enum_name( type );
+                wxLogWarning( wxS( "Library table '%s' has type %s but expected %s; skipping" ),
+                              fn.GetFullPath(),
+                              wxString( actualName.data(), actualName.size() ),
+                              wxString( expectedName.data(), expectedName.size() ) );
+                continue;
+            }
+
             aTarget[type] = std::move( table );
             loadNestedTables( *aTarget[type] );
         }
