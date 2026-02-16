@@ -877,4 +877,137 @@ BOOST_AUTO_TEST_CASE( Peka_ViaImport )
 }
 
 
+/**
+ * Verify that U1 pads 1-5 in Importer.asc have oval drill hits.
+ *
+ * The DIOB_D100JHT160V decal's PAD 0 definition includes slotted drill
+ * parameters (2250000 x 9000000 BASIC units at 0 degrees). The converter
+ * must set PAD_DRILL_SHAPE::OBLONG with the correct major/minor dimensions
+ * rather than treating the drill as round.
+ */
+BOOST_AUTO_TEST_CASE( Importer_OvalDrillHits )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/Importer.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* u1 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() == "U1" )
+        {
+            u1 = fp;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( u1, "U1 not found on board" );
+
+    // BASIC-to-nm: value * 25400 / 38100 = value * 2/3
+    // drill = 2250000 BASIC -> 1500000 nm (1.5mm)
+    // slot_length = 9000000 BASIC -> 6000000 nm (6.0mm)
+    const int expectedMajor = 6000000;
+    const int expectedMinor = 1500000;
+    const int tolerance = 10000;  // 10um
+
+    int oblongCount = 0;
+
+    for( PAD* pad : u1->Pads() )
+    {
+        wxString padNum = pad->GetNumber();
+
+        if( padNum == "1" || padNum == "2" || padNum == "3"
+            || padNum == "4" || padNum == "5" )
+        {
+            BOOST_CHECK_MESSAGE( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG,
+                    "pad " << padNum << " should have oblong drill" );
+
+            VECTOR2I drillSize = pad->GetDrillSize();
+            int major = std::max( drillSize.x, drillSize.y );
+            int minor = std::min( drillSize.x, drillSize.y );
+
+            BOOST_CHECK_MESSAGE( std::abs( major - expectedMajor ) < tolerance,
+                    "pad " << padNum << " drill major axis " << major
+                    << " should be ~" << expectedMajor );
+
+            BOOST_CHECK_MESSAGE( std::abs( minor - expectedMinor ) < tolerance,
+                    "pad " << padNum << " drill minor axis " << minor
+                    << " should be ~" << expectedMinor );
+
+            if( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
+                oblongCount++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( oblongCount == 5,
+            "expected 5 pads with oblong drill, got " << oblongCount );
+}
+
+
+/**
+ * Verify M4 pad 1 in peka.asc uses the alternate MTHOLEAAAB decal.
+ *
+ * The MTHOLE part type has alternate decals separated by colons. M4 has
+ * ALT=1 which selects MTHOLEAAAB (250 mil pad, 125 mil circular drill).
+ * The converter must resolve through the PARTTYPE section to pick the
+ * correct alternate rather than defaulting to the base MTHOLE decal.
+ */
+BOOST_AUTO_TEST_CASE( Peka_AlternateDecalDrill )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/peka.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* m4 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() == "M4" )
+        {
+            m4 = fp;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( m4, "M4 not found on board" );
+
+    // MTHOLEAAAB: pad = 9525000 BASIC * 2/3 = 6350000 nm (250 mil)
+    //             drill = 4762500 BASIC * 2/3 = 3175000 nm (125 mil)
+    const int expectedPadSize = 6350000;
+    const int expectedDrill = 3175000;
+    const int tolerance = 10000;
+
+    BOOST_REQUIRE_MESSAGE( m4->Pads().size() == 1,
+            "MTHOLEAAAB has 1 terminal; got " << m4->Pads().size() );
+
+    PAD* pad = m4->Pads().front();
+
+    BOOST_CHECK_MESSAGE( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE,
+            "M4 pad 1 drill should be circular" );
+
+    VECTOR2I padSize = pad->GetSize( F_Cu );
+    int padDim = std::max( padSize.x, padSize.y );
+
+    BOOST_CHECK_MESSAGE( std::abs( padDim - expectedPadSize ) < tolerance,
+            "M4 pad size " << padDim << " should be ~" << expectedPadSize
+            << " (250 mil)" );
+
+    VECTOR2I drillSize = pad->GetDrillSize();
+    int drillDim = std::max( drillSize.x, drillSize.y );
+
+    BOOST_CHECK_MESSAGE( std::abs( drillDim - expectedDrill ) < tolerance,
+            "M4 drill size " << drillDim << " should be ~" << expectedDrill
+            << " (125 mil)" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

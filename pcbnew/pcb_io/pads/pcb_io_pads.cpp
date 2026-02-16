@@ -263,8 +263,11 @@ void PCB_IO_PADS::loadFootprints()
         // Resolve Decal Name
         std::string decal_name = pads_part.decal;
 
-        // When explicit_decal is true, pads_part.decal already contains the direct decal name
-        if( !pads_part.explicit_decal && decals.find( decal_name ) == decals.end() )
+        // Always resolve through part types to get the full alternate decal
+        // list. A name like "MTHOLE" can be both a decal and a part type, and
+        // the part type entry carries the colon-separated alternate list that
+        // alt_decal_index indexes into.
+        if( !pads_part.explicit_decal )
         {
             auto part_type_it = part_types.find( decal_name );
 
@@ -698,6 +701,9 @@ void PCB_IO_PADS::loadFootprints()
 
                     double drill = 0.0;
                     bool plated = true;
+                    double slot_length = 0.0;
+                    double slot_orientation = 0.0;
+                    double pad_rotation = 0.0;
 
                     for( const auto& layer_def : stack )
                     {
@@ -705,6 +711,9 @@ void PCB_IO_PADS::loadFootprints()
                         {
                             drill = layer_def.drill;
                             plated = layer_def.plated;
+                            slot_length = layer_def.slot_length;
+                            slot_orientation = layer_def.slot_orientation;
+                            pad_rotation = layer_def.rotation;
                             break;
                         }
                     }
@@ -792,7 +801,36 @@ void PCB_IO_PADS::loadFootprints()
                         convertPadShape( stack[0], pad, F_Cu, part_orient );
                     }
 
-                    pad->SetDrillSize( VECTOR2I( decalScaler( drill ), decalScaler( drill ) ) );
+                    if( slot_length > 0 && slot_length != drill )
+                    {
+                        pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
+
+                        int drillMinor = decalScaler( drill );
+                        int drillMajor = decalScaler( slot_length );
+
+                        // Slot orientation is in the decal's local frame.
+                        // Subtract the pad shape rotation to get the slot
+                        // angle in the pad's own local frame.
+                        double relAngle = slot_orientation - pad_rotation;
+
+                        relAngle = fmod( relAngle, 360.0 );
+
+                        if( relAngle < 0 )
+                            relAngle += 360.0;
+
+                        bool vertical = ( relAngle > 45.0 && relAngle < 135.0 )
+                                        || ( relAngle > 225.0 && relAngle < 315.0 );
+
+                        if( vertical )
+                            pad->SetDrillSize( VECTOR2I( drillMinor, drillMajor ) );
+                        else
+                            pad->SetDrillSize( VECTOR2I( drillMajor, drillMinor ) );
+                    }
+                    else
+                    {
+                        pad->SetDrillSize( VECTOR2I( decalScaler( drill ),
+                                                     decalScaler( drill ) ) );
+                    }
 
                     if( drill == 0 )
                     {
