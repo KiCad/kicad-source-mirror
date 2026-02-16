@@ -152,6 +152,8 @@ public:
     {
     }
 
+    void UpdateFrame( PCB_BASE_EDIT_FRAME* aFrame ) { m_frame = aFrame; }
+
     wxString GetName() const override { return EDITOR_NAME; }
 
     wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
@@ -279,6 +281,7 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     else
     {
         m_netSelectorEditorInstance = static_cast<PG_NET_SELECTOR_EDITOR*>( it->second );
+        m_netSelectorEditorInstance->UpdateFrame( m_frame );
     }
 
     it = wxPGGlobalVars->m_mapEditorClasses.find( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
