@@ -1316,6 +1316,13 @@ void PCB_IO_PADS::loadTracksAndVias()
                     via->SetLayerPair( F_Cu, B_Cu );
                     via->SetViaType( VIATYPE::THROUGH );
                 }
+
+                if( !def.has_mask_front )
+                    via->SetFrontTentingMode( TENTING_MODE::TENTED );
+
+                if( !def.has_mask_back )
+                    via->SetBackTentingMode( TENTING_MODE::TENTED );
+
             }
             else
             {

@@ -328,6 +328,8 @@ struct VIA_DEF
     VIA_TYPE via_type = VIA_TYPE::THROUGH;   ///< Classified via type
     int drill_start = 0;     ///< Drill start layer from file (for blind/buried vias)
     int drill_end = 0;       ///< Drill end layer from file (for blind/buried vias)
+    bool has_mask_front = false;  ///< Stack includes top soldermask opening (layer 25)
+    bool has_mask_back = false;   ///< Stack includes bottom soldermask opening (layer 28)
 };
 
 struct VIA

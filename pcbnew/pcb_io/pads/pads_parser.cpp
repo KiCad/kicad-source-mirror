@@ -1098,6 +1098,12 @@ void PARSER::parseSectionVIA( std::ifstream& aStream )
                 if( effective_layer > max_layer )
                     max_layer = effective_layer;
             }
+
+            // PADS layer 25 = top soldermask, 28 = bottom soldermask
+            if( level == 25 )
+                def.has_mask_front = true;
+            else if( level == 28 )
+                def.has_mask_back = true;
         }
 
         // Determine layer span and via type

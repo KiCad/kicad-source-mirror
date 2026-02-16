@@ -851,6 +851,29 @@ BOOST_AUTO_TEST_CASE( Peka_ViaImport )
     BOOST_CHECK_MESSAGE( duplicateCount == 0,
             "should not have duplicate vias at the same position; got "
             << duplicateCount << " positions with duplicates" );
+
+    // STANDARDVIA has a layer 25 (front mask) entry but no layer 28 (back mask),
+    // so the back should be tented. JMPVIA has no mask layers at all.
+    // At minimum, every via should have the back tented.
+    int backTentedCount = 0;
+    int totalVias = 0;
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        PCB_VIA* via = dynamic_cast<PCB_VIA*>( track );
+
+        if( !via )
+            continue;
+
+        totalVias++;
+
+        if( via->GetBackTentingMode() == TENTING_MODE::TENTED )
+            backTentedCount++;
+    }
+
+    BOOST_CHECK_MESSAGE( backTentedCount == totalVias,
+            "vias without soldermask opening should be tented; "
+            << backTentedCount << " of " << totalVias << " back-tented" );
 }
 
 
