@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-09 18:36+0000\n"
+"PO-Revision-Date: 2026-02-17 01:10+0000\n"
 "Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ro/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -896,9 +896,8 @@ msgstr "Valori"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:124
 #: pcbnew/widgets/appearance_controls.cpp:342
-#, fuzzy
 msgid "Show footprint values"
-msgstr "Afișare valori capsulă"
+msgstr "Afișează valorile amprentei"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #: pcbnew/widgets/appearance_controls.cpp:343
@@ -907,9 +906,8 @@ msgstr "Referințe"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125
 #: pcbnew/widgets/appearance_controls.cpp:343
-#, fuzzy
 msgid "Show footprint references"
-msgstr "Afișează referințele capsulei"
+msgstr "Afișează referințele amprentei"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:344
@@ -930,14 +928,12 @@ msgid "Do not clip silk layers to board outline"
 msgstr "Nu tăia straturile de inscripționare pe conturul circuitului"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:129
-#, fuzzy
 msgid "3D Navigator"
-msgstr "Navigare"
+msgstr "Navigator 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:130
-#, fuzzy
 msgid "Background Start"
-msgstr "Fundal"
+msgstr "Fundal Start"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:130
 msgid "Background gradient start color"
@@ -958,15 +954,15 @@ msgid "Use board stackup colors"
 msgstr "Folosește culorile definite pentru structura circuitului"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:186
-#, fuzzy
 msgid "Use PCB editor copper colors"
-msgstr "Folosește culorile definite pentru structura circuitului"
+msgstr "Utilizați culorile cuprului din editorul PCB"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:188
-#, fuzzy
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
-msgstr "Utilizați culoarea cuprului gol pentru cupru neplacat"
+msgstr ""
+"Utilizați culorile stratului editorului de plăci pentru straturile de cupru "
+"(numai pentru randare în timp real)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:205
 #, c-format
@@ -1080,9 +1076,8 @@ msgstr "Salvați vizualizare ca..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:964
 #: pcbnew/widgets/appearance_controls.cpp:2997
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Șterge mod de vizualizare..."
+msgstr "Ștergeți fereastra de vizualizare..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:997
 #: pcbnew/widgets/appearance_controls.cpp:3047
@@ -1128,14 +1123,12 @@ msgid "(unsaved)"
 msgstr "(nesalvat)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Selectați Modelul 3D"
+msgstr "Export vizualizare 3D"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Fișiere imagine"
+msgstr "Dimensiunea imaginii"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1369,9 +1362,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Pin"
+msgstr "in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1382,23 +1374,20 @@ msgid "Height:"
 msgstr "Înălțime:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Soluții"
+msgstr "Rezoluție"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
 msgid "X resolution:"
 msgstr "Rezoluție X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "pixeli"
+msgstr "pixeli/in"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "pixeli"
+msgstr "pixeli/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
 msgid "Y resolution:"
@@ -1424,9 +1413,8 @@ msgid "Configure Paths"
 msgstr "Configurați căi"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:82
-#, fuzzy
 msgid "Embed model"
-msgstr "Model"
+msgstr "Model încorporat"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
@@ -1437,14 +1425,12 @@ msgid "Render Options"
 msgstr "Opțiuni de randare"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Decupați desenul serigrafic la inelul via"
+msgstr "Clip serigrafie la inelul via"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Decupați desenul serigrafic la marginile măștii serigrafice"
+msgstr "Clip serigrafie la marginile măștii de lipit"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
@@ -1463,25 +1449,22 @@ msgid "Material properties:"
 msgstr "Proprietățile materialului:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Realistic"
-msgstr "Mod realist"
+msgstr "Realist"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
 msgstr "Culori solide"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "CAD colors"
-msgstr "Culori"
+msgstr "Culori CAD"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
 msgstr "Opțiuni cameră"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Increment de rotație:"
 
@@ -1517,7 +1500,6 @@ msgstr "Viteză redesenare:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
-#, fuzzy
 msgid "Rendering Options"
 msgstr "Opțiuni de redare"
 
@@ -1526,9 +1508,8 @@ msgid "Show model bounding boxes"
 msgstr "Afișați perimetru de delimitare a modelului"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "Arată grosimea straturilor"
+msgstr "Afișează grosimea straturilor de cupru și tehnologie (lent)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1586,26 +1567,21 @@ msgid "Disable all plated holes"
 msgstr "Dezactivați găurile"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Texturi procedurale"
+msgstr "Texturi procedurale (lente)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:34
 msgid "Add floor (slow)"
 msgstr "Adăugați podea (lent)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:38
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Anti-aliasing"
+msgstr "Anti-aliasing (lent)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:42
-#, fuzzy
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
-"Aplicați Screen Space Ambient Occlusion și reflexii de iluminare globală la "
-"redarea finală (lent)"
+msgstr "Screen Space Ambient Occlusion și reflexiile iluminării globale (lent)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
@@ -1680,13 +1656,11 @@ msgstr "Lumina de jos:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
-#, fuzzy
 msgid "Elevation (deg)"
 msgstr "Elevație (grade)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
-#, fuzzy
 msgid "Azimuth (deg)"
 msgstr "Azimut (grade)"
 
@@ -1829,29 +1803,25 @@ msgstr "Convertor de imagini"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Convertor Bitmap în Componentă"
+msgstr "Convertor de imagini KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:238
 #: common/wildcards_and_files_ext.cpp:587
-#, fuzzy
 msgid "Image files"
 msgstr "Fișiere imagine"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:288 eeschema/menubar.cpp:73
 #: kicad/menubar.cpp:80 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
-#, fuzzy
 msgid "Open Recent"
-msgstr "Deschideți fișierul de foraj recent"
+msgstr "Deschide recent"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:289 eeschema/menubar.cpp:74
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Ștergeți fișierele de forare recente"
+msgstr "Ștergeți fișierele recente"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
 #: eeschema/tools/sch_drawing_tools.cpp:1189
@@ -1860,9 +1830,8 @@ msgid "Choose Image"
 msgstr "Alegeți imaginea"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:445
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Selectează un fişier"
+msgstr "Creați fișierul foii de desen"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:496
@@ -1881,9 +1850,8 @@ msgid "Create Symbol Library"
 msgstr "Creați o bibliotecă de simboluri"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:550
-#, fuzzy
 msgid "Create Footprint Library"
-msgstr "Creați biblioteca de capsule"
+msgstr "Creați biblioteca de amprente"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:54
 msgid "Inch"
@@ -2093,9 +2061,8 @@ msgid "Postscript (.ps file)"
 msgstr "Postscript (fișier .ps)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:191
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Foaie de lucru (fișier .kicad_wks)"
+msgstr "Foaie de desen (fișier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
@@ -2113,18 +2080,16 @@ msgstr ""
 "creat niciun contur."
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Justificare"
+msgstr "Modificare din API"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
 msgstr "Sarcini în fundal"
 
 #: common/common.cpp:345 pcbnew/dialogs/dialog_board_reannotate.cpp:287
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "amprentă"
+msgstr "amprentă neadnotată"
 
 #: common/common.cpp:511
 #, c-format
@@ -2176,14 +2141,12 @@ msgstr "Salvările încrucișate pot produce rezultate nedorite."
 
 #: common/confirm.cpp:52 common/confirm.cpp:57 common/confirm.cpp:123
 #: common/confirm.cpp:158 common/dialog_shim.cpp:1698
-#, fuzzy
 msgid "&Cancel"
-msgstr "Anulați"
+msgstr "&Anulează"
 
 #: common/confirm.cpp:52 common/confirm.cpp:57
-#, fuzzy
 msgid "&Open Anyway"
-msgstr "Deschideți oricum"
+msgstr "&Deschide oricum"
 
 #: common/confirm.cpp:68 common/confirm.cpp:107
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1211
@@ -2199,23 +2162,20 @@ msgid "&Save"
 msgstr "&Salvează"
 
 #: common/confirm.cpp:73 common/confirm.cpp:110
-#, fuzzy
 msgid "&Discard Changes"
-msgstr "Anulează schimbările"
+msgstr "&Anulează schimbările"
 
 #: common/confirm.cpp:76 common/confirm.cpp:164
-#, fuzzy
 msgid "&Apply to all"
-msgstr "Aplica la toate"
+msgstr "&Aplica la toate"
 
 #: common/confirm.cpp:122
 msgid "Your current changes will be permanently lost."
 msgstr "Modificările dvs. actuale se vor pierde definitiv."
 
 #: common/confirm.cpp:123
-#, fuzzy
 msgid "&Revert"
-msgstr "Resetați"
+msgstr "&Reveniți"
 
 #: common/confirm.cpp:157 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:1697
@@ -2223,9 +2183,8 @@ msgid "&OK"
 msgstr "&BINE"
 
 #: common/confirm.cpp:247
-#, fuzzy
 msgid "Information"
-msgstr "Configurație"
+msgstr "Informații"
 
 #: common/confirm.cpp:274 common/dialogs/panel_embedded_files.cpp:478
 #: common/widgets/design_block_pane.cpp:199
@@ -2262,9 +2221,8 @@ msgid "&Yes"
 msgstr "Da"
 
 #: common/confirm.cpp:278 common/dialog_shim.cpp:1700
-#, fuzzy
 msgid "&No"
-msgstr "Nu"
+msgstr "&Nu"
 
 #: common/design_block_io.cpp:51 common/design_block_io.cpp:61
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
@@ -2278,9 +2236,8 @@ msgid "UNKNOWN (%d)"
 msgstr "NECUNOSCUT (%d)"
 
 #: common/design_block_io.cpp:148
-#, fuzzy
 msgid "KiCad Design Block folders"
-msgstr "Fișiere de proiect tradițional KiCad"
+msgstr "Dosare blocuri de proiectare KiCad"
 
 #: common/design_block_io.cpp:185
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3466
@@ -2289,16 +2246,15 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Nu se poate suprascrie calea bibliotecii \"%s\"."
 
 #: common/design_block_io.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library path '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Dosarul '%s' nu a putut fi creat.\n"
+"Calea către bibliotecă „%s” nu a putut fi creată.\n"
 "\n"
-"Vă rugăm să vă asigurați că aveți permisiuni de scriere și să încercați din "
-"nou."
+"Asigurați-vă că aveți permisiuni de scriere și încercați din nou."
 
 #: common/design_block_io.cpp:214 pcbnew/pcb_io/geda/pcb_io_geda.cpp:989
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3490
@@ -2307,19 +2263,19 @@ msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Permisiuni insuficiente pentru a șterge dosarul '%s'."
 
 #: common/design_block_io.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected files."
-msgstr "Fișierul %s nu a fost găsit."
+msgstr "Dosarul bibliotecii „%s” conține fișiere neașteptate."
 
 #: common/design_block_io.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected folder '%s' found in library path '%s'."
-msgstr "S-a găsit un fișier neașteptat '%s' în calea de bibliotecă '%s'."
+msgstr "Folderul neașteptat „%s” găsit în calea bibliotecii „%s”."
 
 #: common/design_block_io.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' cannot be deleted."
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Biblioteca de blocuri de proiectare „%s” nu poate fi ștersă."
 
 #: common/design_block_io.cpp:281 common/design_block_io.cpp:308
 #: common/design_block_io.cpp:498 eeschema/sch_design_block_utils.cpp:189
@@ -2330,9 +2286,10 @@ msgid "Design block '%s' does not exist."
 msgstr "Blocul de proiectare „%s” nu există."
 
 #: common/design_block_io.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "Fișierul '%s' nu a putut fi creat."
+msgstr ""
+"Fișierul de metadate al blocului de proiectare „%s” nu a putut fi citit."
 
 #: common/design_block_io.cpp:380
 msgid "Design block does not have a valid library ID."
@@ -2343,19 +2300,19 @@ msgid "Design block does not have a schematic or board file."
 msgstr "Blocul de proiectare nu are un fișier schematic sau de placă."
 
 #: common/design_block_io.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic source file '%s' does not exist."
-msgstr "Calea de acces `%s` este numai pentru citire."
+msgstr "Fișierul sursă schematic „%s” nu există."
 
 #: common/design_block_io.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Board source file '%s' does not exist."
-msgstr "Calea de acces `%s` este numai pentru citire."
+msgstr "Fișierul sursă al plăcii „%s” nu există."
 
 #: common/design_block_io.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be created."
-msgstr "Fișierul '%s' nu a putut fi creat."
+msgstr "Nu s-a putut crea folderul de blocuri de proiectare „%s”."
 
 #: common/design_block_io.cpp:431
 #, c-format
@@ -2368,21 +2325,22 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Fișierul circuitului '%s' nu a putut fi salvat în '%s'."
 
 #: common/design_block_io.cpp:484
-#, fuzzy, c-format
+#, c-format
 msgid "Design block metadata file '%s' could not be saved."
-msgstr "Fișierul '%s' nu a putut fi creat."
+msgstr ""
+"Fișierul de metadate al blocului de proiectare „%s” nu a putut fi salvat."
 
 #: common/design_block_io.cpp:504
-#, fuzzy, c-format
+#, c-format
 msgid "Design block folder '%s' could not be deleted."
-msgstr "Fișierul '%s' nu a putut fi creat."
+msgstr "Nu s-a putut șterge folderul de blocuri de proiectare „%s”."
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Fișierul ' %s' nu a fost găsit."
+msgstr "Tabelul imbricat „%s” nu a fost găsit."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -2394,9 +2352,8 @@ msgstr "Tip de bibliotecă necunoscut %s "
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:139
 #: pcbnew/footprint_library_adapter.cpp:485
-#, fuzzy
 msgid "Internal error"
-msgstr "Include straturi"
+msgstr "Eroare internă"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:793
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
@@ -2412,9 +2369,9 @@ msgstr "Cuvinte cheie"
 #: common/design_block_tree_model_adapter.cpp:138
 #: common/design_block_tree_model_adapter.cpp:189
 #: common/widgets/design_block_pane.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading design block %s from library '%s'."
-msgstr "Eroare la încărcarea simbolului %s din biblioteca „%s”."
+msgstr "Eroare la încărcarea blocului de proiectare %s din biblioteca „%s”."
 
 #: common/dialog_about/AboutDialog_main.cpp:112
 #: common/lib_tree_model_adapter.cpp:156 common/lib_tree_model_adapter.cpp:158
@@ -2493,17 +2450,14 @@ msgid "Additional Contributions By"
 msgstr "Contribuții suplimentare de către"
 
 #: common/dialog_about/AboutDialog_main.cpp:628
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Documentație"
+msgstr "Echipa de documentare"
 
 #: common/dialog_about/AboutDialog_main.cpp:854
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Echipa Bibliotecară KiCad"
+msgstr "Echipa bibliotecarilor"
 
 #: common/dialog_about/AboutDialog_main.cpp:913
-#, fuzzy
 msgid "3D models"
 msgstr "Modele 3D"
 
@@ -2527,14 +2481,12 @@ msgid "Footprints"
 msgstr "Capsule"
 
 #: common/dialog_about/AboutDialog_main.cpp:941
-#, fuzzy
 msgid "Icons"
-msgstr "Icoană"
+msgstr "Pictograme"
 
 #: common/dialog_about/AboutDialog_main.cpp:948
-#, fuzzy
 msgid "Package Developers"
-msgstr "Dezvoltatori"
+msgstr "Dezvoltatori de pachete"
 
 #: common/dialog_about/dialog_about.cpp:108
 #, c-format
@@ -2671,9 +2623,8 @@ msgstr ""
 "schematică > Proiect."
 
 #: common/dialogs/dialog_assign_netclass_base.h:55
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Atribuire schematică"
+msgstr "Adăugați atribuirea Netclass"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -2872,9 +2823,8 @@ msgid "Duplicate fields are not allowed."
 msgstr "Nu sunt permise atribute duplicate."
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:26
-#, fuzzy
 msgid "Default Fields"
-msgstr "Valoarea predefinită este 1"
+msgstr "Câmpuri implicite"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
@@ -2939,14 +2889,12 @@ msgid "Description:"
 msgstr "Descriere:"
 
 #: common/dialogs/dialog_design_block_properties_base.h:69
-#, fuzzy
 msgid "Design Block Properties"
-msgstr "Bibioteci"
+msgstr "Proprietățile blocului de design"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Conexiuni"
+msgstr "Generați conexiunea la baza de date"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2958,14 +2906,12 @@ msgid "Custom"
 msgstr "Personalizat"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Sursă"
+msgstr "Numele sursei de date"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
-#, fuzzy
 msgid "Username"
-msgstr "Denumiri Net"
+msgstr "Nume de utilizator"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:58
 #: common/dialogs/git/dialog_git_auth.cpp:64
@@ -2973,9 +2919,8 @@ msgid "Password"
 msgstr "Parola"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Timp"
+msgstr "Timp expirat"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 msgid "Connection String"
@@ -2984,14 +2929,12 @@ msgstr "Șir de caractere de legătură"
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
 #: common/dialogs/git/dialog_git_repository.cpp:310
-#, fuzzy
 msgid "Test Connection"
-msgstr "Conexiuni"
+msgstr "Testați conexiunea"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Numele pinilor"
+msgstr "Tabele"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Unable to connect to database"
@@ -3010,9 +2953,8 @@ msgid "Grid size Y out of range."
 msgstr "Dimensiunea grilă Y este în afara intervalului."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opțional; predefinite 0)"
+msgstr "(opțional)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -3109,9 +3051,8 @@ msgid "Invalid library link: '%s'"
 msgstr "Legătură incorectă la biblioteca: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:138
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Proprietăți text"
+msgstr "Editați proprietățile grupului"
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -8591,19 +8532,16 @@ msgid "PCB: Export SVG"
 msgstr "Exportați în fișier"
 
 #: common/jobs/job_export_sch_bom.cpp:93
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Listă de materiale(BOM)"
+msgstr "Generați listă de materiale"
 
 #: common/jobs/job_export_sch_bom.cpp:99
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Listă de materiale(BOM)"
+msgstr "Generați setările pentru lista de materiale"
 
 #: common/jobs/job_export_sch_bom.cpp:103
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Listă de materiale(BOM)"
+msgstr "Schematică: Generarea listei de materiale"
 
 #: common/jobs/job_export_sch_netlist.cpp:81
 #, fuzzy, c-format
@@ -8706,9 +8644,8 @@ msgid "Schematic: Perform ERC"
 msgstr "Schema: Efectuați ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Fișier Specctra DSN"
+msgstr "Special: Copiere fișiere"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -11858,9 +11795,8 @@ msgid "Save..."
 msgstr "Salvați..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:149
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Afişare"
+msgstr "Ecran PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:156
 msgid "Detect"
@@ -12089,9 +12025,8 @@ msgid "Specctra DSN file"
 msgstr "Fișier Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Fișier Specctra DSN"
+msgstr "Fișier Specctra Session"
 
 #: common/wildcards_and_files_ext.cpp:561
 msgid "IPC-D-356 Test Files"
@@ -12107,7 +12042,7 @@ msgstr "Fișier PNG"
 
 #: common/wildcards_and_files_ext.cpp:581
 msgid "Jpeg file"
-msgstr "Fișier JPEG"
+msgstr "Fișier Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:593
 #, fuzzy
@@ -12879,9 +12814,8 @@ msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr "Resetați lista scripturilor generatorului BOM la setările implicite"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Listă de materiale(BOM)"
+msgstr "Listă de materiale"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -14166,7 +14100,7 @@ msgstr "După indicatorul de referință al părintelui:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "By parent symbol library id:"
-msgstr "Prin ID-ul bibliotecii simbolurilor părinte:"
+msgstr "După ID-ul bibliotecii de simboluri părinte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "By parent symbol type:"
@@ -15073,9 +15007,8 @@ msgstr "Excludeți din fișierele de poziție"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1047
 #: eeschema/sch_sheet.cpp:2157 eeschema/sch_symbol.cpp:1483
 #: eeschema/sch_symbol.cpp:4004
-#, fuzzy
 msgid "Exclude From Board"
-msgstr "Excludeți din BOM"
+msgstr "Excludeți de pe placă"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/symbol_editor/symbol_editor.cpp:1742
@@ -15192,9 +15125,8 @@ msgstr "Excludeți lista de materiale din schematică"
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:54
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:214
-#, fuzzy
 msgid "Exclude from board"
-msgstr "Excludeți din BOM"
+msgstr "Excludeți de pe placă"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
 #, fuzzy
@@ -17088,9 +17020,8 @@ msgid "K"
 msgstr "Bine"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
@@ -17241,9 +17172,8 @@ msgstr "Parametri"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:222
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:177
-#, fuzzy
 msgid "Code"
-msgstr "DCod:"
+msgstr "Cod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
 msgid "Save {} in Value field as \"{}\""
@@ -17370,9 +17300,8 @@ msgid "The Item Number column cannot be grouped by."
 msgstr "Fișierul zip \"%s\" nu poate fi deschis."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Listă de materiale(BOM)"
+msgstr "Fișier de ieșire pentru lista de materiale"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1416
 msgid ""
@@ -18154,9 +18083,8 @@ msgid "Wire & Bus Properties"
 msgstr "Proprietățile etichetei"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Listă de materiale(BOM)"
+msgstr "Presetări pentru lista de materiale"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 #, fuzzy
@@ -18605,14 +18533,12 @@ msgid "Dialog Preferences"
 msgstr "Preferințe"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:372
-#, fuzzy
 msgid "Show footprint previews in Symbol Chooser"
-msgstr "Nicio amprentă definită pentru simbol %s."
+msgstr "Afișează previzualizări ale amprentei în Selectorul de simboluri"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:375
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "Simbol..."
+msgstr "Nu afișa niciodată instrumentul Simboluri de salvare"
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:50
 msgid ""
@@ -18645,9 +18571,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Numele variabilei nu poate fi gol."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus Definitions"
-msgstr "Definiții magistrală..."
+msgstr "Definiții magistrală"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -19097,9 +19022,8 @@ msgstr "director cu %s fișiere"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:425
-#, fuzzy
 msgid "Table (nested library table)"
-msgstr "Identificatorul bibliotecii de simboluri %s nu este valid."
+msgstr "Tabel (tabel bibliotecă imbricat)"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:653
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:761
@@ -19178,9 +19102,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:225
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Se încarcă..."
+msgstr "Elimină spațiile albe"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:226
 msgid "Keep White Space"
@@ -19257,9 +19180,9 @@ msgid "BOM preset '%s' not found"
 msgstr "Fișierul %s nu a fost găsit"
 
 #: eeschema/eeschema_jobs_handler.cpp:771
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Format BOM prestabilit „%s” nu a fost găsit"
 
 #: eeschema/eeschema_jobs_handler.cpp:846
 #: eeschema/eeschema_jobs_handler.cpp:1014
@@ -19269,9 +19192,9 @@ msgstr "Imposibil de analizat \"%s\" în '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:857
 #: eeschema/eeschema_jobs_handler.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Listă de materiale(BOM)"
+msgstr "A scris lista de materiale în „%s”."
 
 #: eeschema/eeschema_jobs_handler.cpp:986
 #, c-format
@@ -19286,9 +19209,8 @@ msgstr "Biblioteca nu poate fi încărcată\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1083
 #: eeschema/symbol_editor/symbol_editor.cpp:1070
-#, fuzzy
 msgid "There is no symbol selected to save."
-msgstr "Niciun simbol selectat"
+msgstr "Nu este selectat niciun simbol pentru salvare."
 
 #: eeschema/eeschema_jobs_handler.cpp:1093
 #, fuzzy, c-format
@@ -19446,9 +19368,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Trasarea foii de desen"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "Numele câmpului „%s” conține spații albe la început și/sau la sfârșit."
+msgstr "Numele câmpului are spații libere la început sau la sfârșit: '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, fuzzy, c-format
@@ -19456,9 +19378,9 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Ștergeți toate asociațiile de amprentă"
 
 #: eeschema/erc/erc.cpp:640
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
+msgstr "Simbolul %s are unități neplasate %s"
 
 #: eeschema/erc/erc.cpp:684
 #, fuzzy, c-format
@@ -19476,9 +19398,9 @@ msgid "Symbol %s has bidirectional pins in units %s that are not placed"
 msgstr "Modificările simbolului la amprentă sunt nesalvate"
 
 #: eeschema/erc/erc.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Nu este definită nicio fișă tehnică."
+msgstr "Netclass %s nu este definit"
 
 #: eeschema/erc/erc.cpp:796
 #, c-format
@@ -19521,47 +19443,47 @@ msgid "The current configuration does not include the symbol library '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:1696
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Amprenta \"%s\" nu a fost găsită."
+msgstr "Biblioteca de simboluri „%s” nu a fost găsită la „%s”"
 
 #: eeschema/erc/erc.cpp:1715
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
+msgstr "Simbolul „%s” nu a fost găsit în biblioteca de simboluri „%s”"
 
 #: eeschema/erc/erc.cpp:1747
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Amprente în bibliotecă..."
+msgstr "Simbolul „%s” nu corespunde cu copia din biblioteca „%s”"
 
 #: eeschema/erc/erc.cpp:1796
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier"
-msgstr "\"%s\" nu este o amprentă validă."
+msgstr "„%s” nu este un identificator valid pentru amprenta digitală."
 
 #: eeschema/erc/erc.cpp:1810
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "Nu se poate crea biblioteca de amprente '%s'."
+msgstr "Configurația actuală nu include biblioteca de amprente „%s”."
 
 #: eeschema/erc/erc.cpp:1819
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration"
-msgstr "Biblioteca \"%s\" nu se află în tabelul de biblioteci de amprentă."
+msgstr "Biblioteca de amprente „%s” nu este activată în configurația curentă."
 
 #: eeschema/erc/erc.cpp:1828
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1171
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Amprenta nu a fost găsită."
+msgstr "Amprenta „%s” nu a fost găsită în biblioteca „%s”"
 
 #: eeschema/erc/erc.cpp:1898
-#, fuzzy, c-format
+#, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
-msgstr "Amprente în bibliotecă..."
+msgstr "Amprenta atribuită (%s) nu corespunde filtrelor de amprentă (%s)"
 
 #: eeschema/erc/erc.cpp:2064
 msgid "Checking sheet names..."
@@ -19774,18 +19696,16 @@ msgid "Invalid connection between bus and net items"
 msgstr "Conexiune nevalabilă între magistrală și elementele rețelei"
 
 #: eeschema/erc/erc_item.cpp:161
-#, fuzzy
 msgid "Ground pin not connected to ground net"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Pinul de împământare nu este conectat la rețeaua de împământare"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
 msgstr ""
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr "Numele câmpului „%s” conține spații albe la început și/sau la sfârșit."
+msgstr "Numele câmpului are spații libere la început sau la sfârșit"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:93
@@ -20272,9 +20192,8 @@ msgstr "Excludeți din BOM"
 
 #: eeschema/lib_symbol.cpp:834 eeschema/sch_label.cpp:882
 #: eeschema/sch_sheet.cpp:299 eeschema/sch_symbol.cpp:2039
-#, fuzzy
 msgid "Excluded from board"
-msgstr "Excludeți din BOM"
+msgstr "Exclus din placă"
 
 #: eeschema/lib_symbol.cpp:839 eeschema/sch_label.cpp:895
 #: eeschema/sch_sheet.cpp:308 eeschema/sch_symbol.cpp:2048
@@ -20370,9 +20289,8 @@ msgid "Show pin numbers settings differ."
 msgstr "Numerele pinilor"
 
 #: eeschema/lib_symbol.cpp:2154
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "Excludeți din BOM"
+msgstr "Setările de excludere din simulare diferă."
 
 #: eeschema/lib_symbol.cpp:2163
 #, fuzzy
@@ -20380,14 +20298,12 @@ msgid "Exclude from bill of materials settings differ."
 msgstr "Excludeți lista de materiale din schematică"
 
 #: eeschema/lib_symbol.cpp:2172
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "Excludeți din BOM"
+msgstr "Excluderea din setările plăcii diferă."
 
 #: eeschema/lib_symbol.cpp:2181
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Excludeți din BOM"
+msgstr "Setările de excludere din fișierele de poziție diferă."
 
 #: eeschema/lib_symbol.cpp:2416 eeschema/symbol_editor/symbol_editor.cpp:1751
 msgid "Datasheet"
@@ -20439,9 +20355,8 @@ msgid "Exclude from Simulation"
 msgstr "Excludeți din fișierele de poziție"
 
 #: eeschema/lib_symbol.cpp:2456 eeschema/tools/sch_actions.cpp:1079
-#, fuzzy
 msgid "Exclude from Board"
-msgstr "Excludeți din BOM"
+msgstr "Excludeți de pe placă"
 
 #: eeschema/lib_symbol.cpp:2460 eeschema/tools/sch_actions.cpp:1067
 #, fuzzy
@@ -21700,9 +21615,9 @@ msgid "Symbol '%s' not found in gEDA libraries."
 msgstr "Simbolul %s nu se găsește în biblioteca '%s'."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Nu s-a reușit crearea fișierului temporar '%s'."
+msgstr " Ați vrut să spuneți „%s”?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -22224,9 +22139,9 @@ msgid "Plugin '%s' does not implement the '%s' function."
 msgstr "Unitatea \"%s\" nu se termină cu \"mil\"."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin type '%s' is not found."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Tipul de plugin „%s” nu a fost găsit."
 
 #: eeschema/sch_io/sch_io_mgr.cpp:109
 #, fuzzy, c-format
@@ -22626,9 +22541,8 @@ msgstr "Listă de materiale (BOM)"
 
 #: eeschema/sch_sheet.cpp:1028 eeschema/sch_symbol.cpp:2690
 #: eeschema/sch_text.cpp:634 eeschema/sch_textbox.cpp:463
-#, fuzzy
 msgid "Exclude from"
-msgstr "Excludeți din BOM"
+msgstr "Exclude din"
 
 #: eeschema/sch_sheet.cpp:1339
 #, fuzzy, c-format
@@ -23539,19 +23453,16 @@ msgid "Model name cannot be empty."
 msgstr "Numele variabilei nu poate fi gol."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:198
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Rpin nu este valid."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:207
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Lpin nu este valid."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:216
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Cpin nu este valid."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:230
 msgid "Checking component "
@@ -23698,9 +23609,8 @@ msgid "Missing or invalid POWER Clamp Reference value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:647
-#, fuzzy
 msgid "Voltage Range or Reference is missing."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Intervalul de tensiune sau referința lipsesc."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:653
 #: eeschema/sim/kibis/ibis_parser.cpp:758
@@ -24236,9 +24146,8 @@ msgid "expecting simulation tab count"
 msgstr "Simulare"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "Proiect CADSTAR..."
+msgstr "tipul de filă pentru simulare așteptată"
 
 #: eeschema/sim/legacy_workbook.cpp:210
 #, fuzzy
@@ -25464,9 +25373,9 @@ msgstr "Amprente în bibliotecă nouă..."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:95
 #: pcbnew/load_select_footprint.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Nu se poate găsi un program de vizualizare PDF pentru \"%s\"."
+msgstr "Nu se poate găsi un cititor pentru „%s”."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:146
 #, fuzzy, c-format
@@ -25685,9 +25594,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "ID-ul amprentei \"%s\" nu este valid."
+msgstr "Amprenta „%s” nu are niciun simbol alocat."
 
 #: eeschema/tools/backannotate.cpp:244
 #, c-format
@@ -25707,9 +25616,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:348
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "Generarea BOM necesită o schemă complet adnotată."
+msgstr "Reconectarea amprentelor necesită o schemă complet adnotată."
 
 #: eeschema/tools/backannotate.cpp:351
 #, fuzzy
@@ -26066,9 +25974,10 @@ msgid "Update Symbol Fields..."
 msgstr "Actualizați câmpurile"
 
 #: eeschema/tools/sch_actions.cpp:277
-#, fuzzy
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "Actualizați schema cu modificările aduse PCB-ului"
+msgstr ""
+"Actualizați simbolul pentru a corespunde modificărilor efectuate în simbolul "
+"părinte"
 
 #: eeschema/tools/sch_actions.cpp:283
 #, fuzzy
@@ -26789,14 +26698,12 @@ msgid "Set the exclude from bill of materials attribute"
 msgstr "Excludeți lista de materiale din schematică"
 
 #: eeschema/tools/sch_actions.cpp:1074
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
+msgstr "Setați atributul de excludere din simulare"
 
 #: eeschema/tools/sch_actions.cpp:1080
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "S-a adăugat %s atributul de fabricație „exclude din BOM”."
+msgstr "Setați atributul de excludere din placă"
 
 #: eeschema/tools/sch_actions.cpp:1086
 msgid "Set the do not populate attribute"
@@ -26960,9 +26867,8 @@ msgid "Export file containing netlist in one of several formats"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1214
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Listă de materiale(BOM)"
+msgstr "Generați lista de materiale..."
 
 #: eeschema/tools/sch_actions.cpp:1215
 msgid "Generate a bill of materials for the current schematic"
@@ -26978,9 +26884,8 @@ msgid ""
 msgstr "Genereaza o listă de materiale pentru schema curentă (Generator vechi)"
 
 #: eeschema/tools/sch_actions.cpp:1229
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Listă de materiale(BOM)"
+msgstr "Generați lista de materiale (externă)..."
 
 #: eeschema/tools/sch_actions.cpp:1230
 msgid ""
@@ -27372,9 +27277,8 @@ msgid "Create a new tab containing a simulation analysis"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1637
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Proiect CADSTAR..."
+msgstr "Deschideți registrul de lucru..."
 
 #: eeschema/tools/sch_actions.cpp:1638
 msgid "Open a saved set of analysis tabs and settings"
@@ -27415,9 +27319,8 @@ msgid "Export Current Plot to Clipboard"
 msgstr "Exportați desen în mapă"
 
 #: eeschema/tools/sch_actions.cpp:1680
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Exportați vizualizarea curentă ca PNG ..."
+msgstr "Exportă graficul curent în schemă"
 
 #: eeschema/tools/sch_actions.cpp:1686
 #, fuzzy
@@ -49055,9 +48958,8 @@ msgid "Allow All"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:79
-#, fuzzy
 msgid "At least one orientation must be selected"
-msgstr "Trebuie specificat cel puțin un strat\n"
+msgstr "Trebuie selectată cel puțin o orientare"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
 #, fuzzy
@@ -49258,9 +49160,8 @@ msgid "Allow bottom Layer"
 msgstr "Partea de jos"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:67
-#, fuzzy
 msgid "At least one layer must be selected"
-msgstr "Trebuie specificat cel puțin un strat\n"
+msgstr "Trebuie selectat cel puțin un strat"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
 #, fuzzy
@@ -55146,19 +55047,19 @@ msgid "Board file was not updated\n"
 msgstr "Biblioteca de simboluri nu a fost actualizată\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2830
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "Nu se poate citi fișierul \"%s\"."
+msgstr "Imposibil de determinat formatul fișierului pentru „%s”\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2839
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Fișierul nu a fost găsit: \"%s\"."
+msgstr "Fișierul nu a fost găsit: \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2865
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "Nu există date de localizare pentru numele fișierului „%s”."
+msgstr "Nu s-a găsit niciun plugin pentru tipul de fișier „%s”\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2871
 #, c-format
@@ -55171,9 +55072,9 @@ msgid "Successfully saved imported board to '%s'\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3009
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Eroare la încărcarea amprentei: %s"
+msgstr "Eroare în timpul importului: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 #, fuzzy
