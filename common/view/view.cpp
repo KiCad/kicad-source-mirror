@@ -28,6 +28,7 @@
 
 #include <layer_ids.h>
 #include <trace_helpers.h>
+#include <wx/log.h>
 
 #include <view/view.h>
 #include <view/view_group.h>
@@ -344,8 +345,11 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 
     if( aItem && aItem->m_viewPrivData )
     {
-        wxCHECK_MSG( aItem->m_viewPrivData->m_view == nullptr || aItem->m_viewPrivData->m_view == this, /*void*/,
-                     aItem->GetClass() );
+        if( aItem->m_viewPrivData->m_view != nullptr && aItem->m_viewPrivData->m_view != this )
+        {
+            wxLogDebug( wxT( "VIEW::Remove: item %s belongs to a different view" ), aItem->GetClass() );
+            return;
+        }
 
         std::vector<VIEW_ITEM*>::iterator item = m_allItems->end();
         int                               cachedIndex = aItem->m_viewPrivData->m_cachedIndex;
