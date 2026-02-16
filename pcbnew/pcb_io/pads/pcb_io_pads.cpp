@@ -1652,6 +1652,81 @@ void PCB_IO_PADS::loadZones()
     const auto& pours = m_parser->GetPours();
     const auto& params = m_parser->GetParameters();
 
+    // Append arc-aware points from an ARC_POINT vector to a SHAPE_POLY_SET.
+    // Arc segments are interpolated into polyline approximations. Full-circle
+    // entries (from CIRCLE piece types) are generated as 36-segment polygons.
+    auto appendArcPoints = [this]( SHAPE_POLY_SET& poly,
+                                   const std::vector<PADS_IO::ARC_POINT>& pts )
+    {
+        if( pts.empty() )
+            return;
+
+        if( pts.size() == 1 && pts[0].is_arc
+            && std::abs( pts[0].arc.delta_angle ) >= 359.0 )
+        {
+            VECTOR2I center( scaleCoord( pts[0].arc.cx, true ),
+                             scaleCoord( pts[0].arc.cy, false ) );
+            int radius = scaleSize( pts[0].arc.radius );
+
+            constexpr int NUM_SEGS = 36;
+
+            for( int i = 0; i < NUM_SEGS; i++ )
+            {
+                double angle = 2.0 * M_PI * i / NUM_SEGS;
+                poly.Append( center.x + KiROUND( radius * cos( angle ) ),
+                             center.y + KiROUND( radius * sin( angle ) ) );
+            }
+
+            return;
+        }
+
+        poly.Append( scaleCoord( pts[0].x, true ), scaleCoord( pts[0].y, false ) );
+
+        for( size_t i = 1; i < pts.size(); i++ )
+        {
+            const auto& pt = pts[i];
+
+            if( pt.is_arc )
+            {
+                VECTOR2I start( scaleCoord( pts[i - 1].x, true ),
+                                scaleCoord( pts[i - 1].y, false ) );
+                VECTOR2I end( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+                VECTOR2I center( scaleCoord( pt.arc.cx, true ),
+                                 scaleCoord( pt.arc.cy, false ) );
+
+                bool clockwise = ( pt.arc.delta_angle < 0 );
+
+                SHAPE_ARC shapeArc;
+                shapeArc.ConstructFromStartEndCenter( start, end, center, clockwise, 0 );
+
+                const SHAPE_LINE_CHAIN arcPoly = shapeArc.ConvertToPolyline();
+
+                for( int j = 1; j < arcPoly.PointCount(); j++ )
+                    poly.Append( arcPoly.CPoint( j ).x, arcPoly.CPoint( j ).y );
+            }
+            else
+            {
+                poly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+            }
+        }
+    };
+
+    // Returns true if the points can produce a valid polygon (at least 3 vertices
+    // for a regular polygon, or a single full-circle point).
+    auto isValidPoly = []( const std::vector<PADS_IO::ARC_POINT>& pts )
+    {
+        if( pts.size() >= 3 )
+            return true;
+
+        if( pts.size() == 1 && pts[0].is_arc
+            && std::abs( pts[0].arc.delta_angle ) >= 359.0 )
+        {
+            return true;
+        }
+
+        return false;
+    };
+
     // PADS uses lower numbers = higher priority (priority 1 fills on top),
     // while KiCad uses higher numbers = higher priority.
     int maxPriority = 0;
@@ -1704,11 +1779,7 @@ void PCB_IO_PADS::loadZones()
         zone->SetLayer( pourLayer );
 
         zone->Outline()->NewOutline();
-
-        for( const auto& pt : pour_def.points )
-        {
-            zone->Outline()->Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-        }
+        appendArcPoints( *zone->Outline(), pour_def.points );
 
         if( pour_def.is_cutout )
         {
@@ -1748,7 +1819,7 @@ void PCB_IO_PADS::loadZones()
         if( pour_def.style != PADS_IO::POUR_STYLE::HATCHED )
             continue;
 
-        if( pour_def.points.size() < 3 )
+        if( !isValidPoly( pour_def.points ) )
             continue;
 
         auto zoneIt = pourZoneMap.find( pour_def.owner_pour );
@@ -1761,11 +1832,7 @@ void PCB_IO_PADS::loadZones()
 
         SHAPE_POLY_SET fillPoly;
         fillPoly.NewOutline();
-
-        for( const auto& pt : pour_def.points )
-        {
-            fillPoly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-        }
+        appendArcPoints( fillPoly, pour_def.points );
 
         // Add VOIDOUT records as holes in the fill polygon
         for( const auto& void_def : pours )
@@ -1773,7 +1840,7 @@ void PCB_IO_PADS::loadZones()
             if( void_def.style != PADS_IO::POUR_STYLE::VOIDOUT )
                 continue;
 
-            if( void_def.points.size() < 3 )
+            if( !isValidPoly( void_def.points ) )
                 continue;
 
             // VOIDOUT's owner_pour points to a HATOUT name. Check if that HATOUT
@@ -1787,11 +1854,7 @@ void PCB_IO_PADS::loadZones()
                 continue;
 
             fillPoly.NewHole();
-
-            for( const auto& pt : void_def.points )
-            {
-                fillPoly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-            }
+            appendArcPoints( fillPoly, void_def.points );
         }
 
         zone->SetFilledPolysList( pourLayer, fillPoly );

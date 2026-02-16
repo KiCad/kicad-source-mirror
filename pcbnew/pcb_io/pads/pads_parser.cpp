@@ -1266,9 +1266,17 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
             }
             else
             {
-                // Polygon piece types: POLY, POCUT, HATOUT, POUROUT, VOIDOUT, PADTHERM, VIATHERM
-                // All use same format: corners optionally followed by arc parameters
-                for( int j = 0; j < corners; ++j )
+                // Polygon piece types: POLY, POCUT, HATOUT, POUROUT, VOIDOUT,
+                // PADTHERM, VIATHERM.
+                //
+                // Total data lines = corners + arcs. Lines with 4 values
+                // (cx cy beginAngle sweepAngle) define an arc center and
+                // angles. The following line gives the arc endpoint.
+                int totalLines = corners + arcs;
+                bool nextIsArcEndpoint = false;
+                ARC pendingArc{};
+
+                for( int j = 0; j < totalLines; ++j )
                 {
                     if( !readLine( aStream, line ) )
                         break;
@@ -1276,32 +1284,39 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
                     std::stringstream iss3( line );
                     double px = 0.0, py = 0.0;
 
-                    if( iss3 >> px >> py )
+                    if( !( iss3 >> px >> py ) )
+                        continue;
+
+                    int angle1 = 0, angle2 = 0;
+
+                    if( iss3 >> angle1 >> angle2 )
                     {
-                        // Check if this is an arc point (has angle params)
-                        // POUR arc format: xloc yloc beginangle endangle
-                        int beginAngle = 0, endAngle = 0;
+                        // Arc center line. The two angles are begin angle
+                        // (direction from center to the previous vertex) and
+                        // sweep angle, both in tenths of degrees.
+                        pendingArc = ARC{};
+                        pendingArc.cx = x + px;
+                        pendingArc.cy = y + py;
+                        pendingArc.start_angle = angle1 / 10.0;
+                        pendingArc.delta_angle = angle2 / 10.0;
 
-                        if( iss3 >> beginAngle >> endAngle )
+                        if( !pour.points.empty() )
                         {
-                            // This is an arc point
-                            double startAngle = beginAngle / 10.0;
-                            double deltaAngle = ( endAngle - beginAngle ) / 10.0;
+                            double dx = pour.points.back().x - pendingArc.cx;
+                            double dy = pour.points.back().y - pendingArc.cy;
+                            pendingArc.radius = std::sqrt( dx * dx + dy * dy );
+                        }
 
-                            // For pour arcs, we need to compute the arc center
-                            // The format is: endpoint x/y plus angles
-                            ARC arc{};
-                            arc.start_angle = startAngle;
-                            arc.delta_angle = deltaAngle;
-                            arc.cx = 0;
-                            arc.cy = 0;
-                            arc.radius = 0;
-                            pour.points.emplace_back( x + px, y + py, arc );
-                        }
-                        else
-                        {
-                            pour.points.emplace_back( x + px, y + py );
-                        }
+                        nextIsArcEndpoint = true;
+                    }
+                    else if( nextIsArcEndpoint )
+                    {
+                        pour.points.emplace_back( x + px, y + py, pendingArc );
+                        nextIsArcEndpoint = false;
+                    }
+                    else
+                    {
+                        pour.points.emplace_back( x + px, y + py );
                     }
                 }
             }
