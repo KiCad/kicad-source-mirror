@@ -483,10 +483,11 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 {
     D_CODE* code = aItem->GetDcodeDescr();
 
-    wxASSERT_MSG( code, wxT( "drawFlashedShape: Item has no D_CODE!" ) );
-
     if( !code )
+    {
+        wxLogDebug( wxT( "drawFlashedShape: Item has no D_CODE" ) );
         return;
+    }
 
     m_gal->SetIsFill( aFilled );
     m_gal->SetIsStroke( !aFilled );
