@@ -2959,7 +2959,12 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( drawingShadows && getFont( aField )->IsOutline() )
     {
         // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
-        boxText( *m_gal, shownText, aField->GetDrawPos(), attributes, aField->GetFontMetrics() );
+        VECTOR2I textpos = bbox.Centre();
+
+        attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+        attributes.m_Angle = orient;
+        boxText( *m_gal, shownText, textpos, attributes, aField->GetFontMetrics() );
     }
     else
     {
