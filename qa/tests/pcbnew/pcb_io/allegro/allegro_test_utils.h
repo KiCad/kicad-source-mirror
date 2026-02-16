@@ -24,6 +24,9 @@ std::ostream& boost_test_print_type( std::ostream& os, FMT_VER const& aFmtVer );
 namespace KI_TEST
 {
 
+std::string AllegroBoardDataDir( const std::string& aBoardName );
+std::string AllegroBoardFile( const std::string& aFileName );
+
 /**
  * Singleton class to load Allegro boards and cache them in memory, to avoid
  * repeatedly loading and parsing the same board files for multiple tests.

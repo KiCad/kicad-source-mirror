@@ -738,6 +738,56 @@ void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* po
 }
 
 
+void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName )
+{
+    if( !aBoard )
+    {
+        BOOST_TEST_MESSAGE( aBoardName << ": FAILED TO LOAD" );
+        return;
+    }
+
+    int trackCount = 0;
+    int viaCount = 0;
+    int arcCount = 0;
+
+    for( PCB_TRACK* track : aBoard->Tracks() )
+    {
+        switch( track->Type() )
+        {
+        case PCB_TRACE_T: trackCount++; break;
+        case PCB_VIA_T: viaCount++; break;
+        case PCB_ARC_T: arcCount++; break;
+        default: break;
+        }
+    }
+
+    int smdPadCount = 0;
+    int thPadCount = 0;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD )
+                smdPadCount++;
+            else
+                thPadCount++;
+        }
+    }
+
+    BOOST_TEST_MESSAGE( "\n=== Board Statistics: " << aBoardName << " ===" );
+    BOOST_TEST_MESSAGE( "  Layers: " << aBoard->GetCopperLayerCount() );
+    BOOST_TEST_MESSAGE( "  Nets: " << aBoard->GetNetCount() );
+    BOOST_TEST_MESSAGE( "  Footprints: " << aBoard->Footprints().size() );
+    BOOST_TEST_MESSAGE( "  Tracks: " << trackCount );
+    BOOST_TEST_MESSAGE( "  Vias: " << viaCount );
+    BOOST_TEST_MESSAGE( "  Arcs: " << arcCount );
+    BOOST_TEST_MESSAGE( "  SMD Pads: " << smdPadCount );
+    BOOST_TEST_MESSAGE( "  TH Pads: " << thPadCount );
+    BOOST_TEST_MESSAGE( "  Zones: " << aBoard->Zones().size() );
+}
+
+
 REPORTER& CAPTURING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
 {
     MESSAGE msg;

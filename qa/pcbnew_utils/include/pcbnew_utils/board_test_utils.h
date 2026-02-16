@@ -250,6 +250,11 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone );
 
 void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* polyset );
 
+/**
+ * Print detailed board statistics for debugging using test-framework logging.
+ */
+void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName );
+
 
 /**
  * Custom REPORTER that captures all messages for later analysis in the unit test framework.

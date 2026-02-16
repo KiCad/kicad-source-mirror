@@ -26,12 +26,37 @@
 #include <board.h>
 #include <pcb_io/allegro/pcb_io_allegro.h>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 
 std::ostream& ALLEGRO::boost_test_print_type( std::ostream& os, FMT_VER const& aFmtVer )
 {
     os << static_cast<int>( aFmtVer );
     return os;
 };
+
+
+static std::string getBoardsDataDir()
+{
+    return KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/boards/";
+}
+
+
+std::string KI_TEST::AllegroBoardDataDir( const std::string& aBoardName )
+{
+    if( aBoardName.empty() )
+    {
+        return getBoardsDataDir();
+    }
+
+    return getBoardsDataDir() + aBoardName + "/";
+}
+
+
+std::string KI_TEST::AllegroBoardFile( const std::string& aFileName )
+{
+    return getBoardsDataDir() + aFileName;
+}
 
 
 KI_TEST::ALLEGRO_CACHED_LOADER::ALLEGRO_CACHED_LOADER() :

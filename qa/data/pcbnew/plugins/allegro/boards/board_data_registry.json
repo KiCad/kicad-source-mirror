@@ -1,5 +1,17 @@
 {
     "boards": {
+        "BeagleBone_Black_RevC": {
+            "formatVersion": "17.2",
+            "boardFile": "BeagleBone_Black_RevC.brd"
+        },
+        "BeagleBone-AI": {
+            "formatVersion": "17.2",
+            "boardFile": "BeagleBone-AI.brd"
+        },
+        "copper_text": {
+            "formatVersion": "17.4",
+            "boardFile": "copper_text.brd"
+        },
         "CutiePi_V2_3_v166": {
             "url": "https://github.com/cutiepi-io/cutiepi-board",
             "license": "BSD-3-Clause",
@@ -46,6 +58,26 @@
                 "skip": true
             }
         },
+        "EVK_BaseBoard": {
+            "formatVersion": "17.2",
+            "boardFile": "EVK_BaseBoard.brd"
+        },
+        "EVK_SOM": {
+            "formatVersion": "17.2",
+            "boardFile": "EVK_SOM.brd"
+        },
+        "led_youtube": {
+            "formatVersion": "17.4",
+            "boardFile": "led_youtube.brd"
+        },
+        "mainBoard": {
+            "formatVersion": "16.6",
+            "boardFile": "mainBoard.brd"
+        },
+        "mainBoard2": {
+            "formatVersion": "16.6",
+            "boardFile": "mainBoard2.brd"
+        },
         "Olympus_15061-1b_v165": {
             "url": "https://www.opencompute.org/wiki/Server/ProjectOlympus",
             "license": "OWFa-1.0",
@@ -62,6 +94,27 @@
                     "skip": false
                 }
             ]
+        },
+        "ProiectBoard": {
+            "formatVersion": "16.6",
+            "boardFile": "ProiectBoard.brd"
+        },
+        "rects": {
+            "formatVersion": "17.4",
+            "boardFile": "rects.brd"
+        },
+        "TRS80_POWER": {
+            "formatVersion": "16.6",
+            "boardFile": "TRS80_POWER.brd"
+        },
+        "v13_header": {
+            "formatVersion": "13.0",
+            "boardFile": "v13_header.brd",
+            "expectLoadFailure": true
+        },
+        "VCU118_REV2-0": {
+            "formatVersion": "16.6",
+            "boardFile": "8851_HW-U1-VCU118_REV2-0_071417.brd"
         }
     }
 }

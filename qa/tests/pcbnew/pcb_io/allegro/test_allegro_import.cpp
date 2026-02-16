@@ -60,64 +60,12 @@ struct ALLEGRO_IMPORT_FIXTURE
 
     std::unique_ptr<BOARD> LoadAllegroBoard( const std::string& aFileName )
     {
-        std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/" + aFileName;
+        std::string dataPath = KI_TEST::AllegroBoardFile( aFileName );
 
         std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
         m_allegroPlugin.LoadBoard( dataPath, board.get(), nullptr, nullptr );
 
         return board;
-    }
-
-    /**
-     * Print detailed board statistics for debugging
-     */
-    void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName )
-    {
-        if( !aBoard )
-        {
-            BOOST_TEST_MESSAGE( aBoardName << ": FAILED TO LOAD" );
-            return;
-        }
-
-        int trackCount = 0;
-        int viaCount = 0;
-        int arcCount = 0;
-
-        for( PCB_TRACK* track : aBoard->Tracks() )
-        {
-            switch( track->Type() )
-            {
-            case PCB_TRACE_T: trackCount++; break;
-            case PCB_VIA_T: viaCount++; break;
-            case PCB_ARC_T: arcCount++; break;
-            default: break;
-            }
-        }
-
-        int smdPadCount = 0;
-        int thPadCount = 0;
-
-        for( FOOTPRINT* fp : aBoard->Footprints() )
-        {
-            for( PAD* pad : fp->Pads() )
-            {
-                if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-                    smdPadCount++;
-                else
-                    thPadCount++;
-            }
-        }
-
-        BOOST_TEST_MESSAGE( "\n=== Board Statistics: " << aBoardName << " ===" );
-        BOOST_TEST_MESSAGE( "  Layers: " << aBoard->GetCopperLayerCount() );
-        BOOST_TEST_MESSAGE( "  Nets: " << aBoard->GetNetCount() );
-        BOOST_TEST_MESSAGE( "  Footprints: " << aBoard->Footprints().size() );
-        BOOST_TEST_MESSAGE( "  Tracks: " << trackCount );
-        BOOST_TEST_MESSAGE( "  Vias: " << viaCount );
-        BOOST_TEST_MESSAGE( "  Arcs: " << arcCount );
-        BOOST_TEST_MESSAGE( "  SMD Pads: " << smdPadCount );
-        BOOST_TEST_MESSAGE( "  TH Pads: " << thPadCount );
-        BOOST_TEST_MESSAGE( "  Zones: " << aBoard->Zones().size() );
     }
 
     PCB_IO_ALLEGRO m_allegroPlugin;
@@ -133,7 +81,7 @@ BOOST_FIXTURE_TEST_SUITE( AllegroImport, ALLEGRO_IMPORT_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( BasicLoad )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE_MESSAGE( board != nullptr, "Board should load successfully" );
 
@@ -150,7 +98,7 @@ BOOST_AUTO_TEST_CASE( BasicLoad )
  */
 BOOST_AUTO_TEST_CASE( NetImport )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -188,7 +136,7 @@ BOOST_AUTO_TEST_CASE( NetImport )
  */
 BOOST_AUTO_TEST_CASE( FootprintRefDes )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -217,7 +165,7 @@ BOOST_AUTO_TEST_CASE( FootprintRefDes )
  */
 BOOST_AUTO_TEST_CASE( PadSizes )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -264,7 +212,7 @@ BOOST_AUTO_TEST_CASE( PadSizes )
  */
 BOOST_AUTO_TEST_CASE( ViaSizes )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -307,7 +255,7 @@ BOOST_AUTO_TEST_CASE( ViaSizes )
  */
 BOOST_AUTO_TEST_CASE( TrackWidths )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -345,9 +293,9 @@ BOOST_AUTO_TEST_CASE( MultiVersionImport )
     // - V175: 8851_HW-U1-VCU118_REV2-0_071417.brd (large board)
 
     std::vector<std::string> testBoards = {
-        "TRS80_POWER.brd",      // V166
-        // "led_youtube.brd",      // V174 - requires additional block types for reference resolution
-        // "8851_HW-U1-VCU118_REV2-0_071417.brd" // V175 - large, skip for quick tests
+        "TRS80_POWER/TRS80_POWER.brd",      // V166
+        // "led_youtube/led_youtube.brd",      // V174 - requires additional block types for reference resolution
+        // "VCU118_REV2-0/8851_HW-U1-VCU118_REV2-0_071417.brd" // V175 - large, skip for quick tests
     };
 
     for( const std::string& boardName : testBoards )
@@ -375,7 +323,7 @@ BOOST_AUTO_TEST_CASE( MultiVersionImport )
  */
 BOOST_AUTO_TEST_CASE( PadNumbers )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -409,7 +357,7 @@ BOOST_AUTO_TEST_CASE( PadNumbers )
  */
 BOOST_AUTO_TEST_CASE( CopperLayers )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -434,7 +382,7 @@ BOOST_AUTO_TEST_CASE( CopperLayers )
  */
 BOOST_AUTO_TEST_CASE( BoardOutline )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -507,7 +455,7 @@ BOOST_AUTO_TEST_CASE( BoardOutline )
  */
 BOOST_AUTO_TEST_CASE( PadsInsideOutline )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOOST_REQUIRE( board != nullptr );
 
@@ -582,7 +530,7 @@ BOOST_AUTO_TEST_CASE( PadsInsideOutline )
 BOOST_AUTO_TEST_CASE( PreV16FileRejection )
 {
     BOOST_CHECK_EXCEPTION(
-            LoadAllegroBoard( "v13_header.brd" ), IO_ERROR,
+            LoadAllegroBoard( "v13_header/v13_header.brd" ), IO_ERROR,
             []( const IO_ERROR& e )
             {
                 wxString msg = e.What();
@@ -600,7 +548,7 @@ BOOST_AUTO_TEST_CASE( PreV16FileRejection )
  */
 BOOST_AUTO_TEST_CASE( RectsZoneVsCopperPolygon )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "rects.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "rects/rects.brd" );
     BOOST_REQUIRE( board );
 
     // Should have exactly one zone (the left rectangle as a zone fill)
@@ -641,7 +589,7 @@ BOOST_AUTO_TEST_CASE( RectsZoneVsCopperPolygon )
  */
 BOOST_AUTO_TEST_CASE( CopperText )
 {
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "copper_text.brd" );
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "copper_text/copper_text.brd" );
     BOOST_REQUIRE( board );
 
     int copperTextCount = 0;
@@ -711,77 +659,33 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
     }
 
     /**
-     * Print detailed board statistics for debugging.
-     */
-    void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName )
-    {
-        if( !aBoard )
-        {
-            BOOST_TEST_MESSAGE( aBoardName << ": FAILED TO LOAD" );
-            return;
-        }
-
-        int trackCount = 0;
-        int viaCount = 0;
-        int arcCount = 0;
-
-        for( PCB_TRACK* track : aBoard->Tracks() )
-        {
-            switch( track->Type() )
-            {
-            case PCB_TRACE_T: trackCount++; break;
-            case PCB_VIA_T: viaCount++; break;
-            case PCB_ARC_T: arcCount++; break;
-            default: break;
-            }
-        }
-
-        int smdPadCount = 0;
-        int thPadCount = 0;
-
-        for( FOOTPRINT* fp : aBoard->Footprints() )
-        {
-            for( PAD* pad : fp->Pads() )
-            {
-                if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-                    smdPadCount++;
-                else
-                    thPadCount++;
-            }
-        }
-
-        BOOST_TEST_MESSAGE( "\n=== Board Statistics: " << aBoardName << " ===" );
-        BOOST_TEST_MESSAGE( "  Layers: " << aBoard->GetCopperLayerCount() );
-        BOOST_TEST_MESSAGE( "  Nets: " << aBoard->GetNetCount() );
-        BOOST_TEST_MESSAGE( "  Footprints: " << aBoard->Footprints().size() );
-        BOOST_TEST_MESSAGE( "  Tracks: " << trackCount );
-        BOOST_TEST_MESSAGE( "  Vias: " << viaCount );
-        BOOST_TEST_MESSAGE( "  Arcs: " << arcCount );
-        BOOST_TEST_MESSAGE( "  SMD Pads: " << smdPadCount );
-        BOOST_TEST_MESSAGE( "  TH Pads: " << thPadCount );
-        BOOST_TEST_MESSAGE( "  Zones: " << aBoard->Zones().size() );
-    }
-
-    /**
      * Get list of all .brd files in the Allegro test data directory.
      */
     static std::vector<std::string> GetAllBoardFiles()
     {
         std::vector<std::string> boards;
-        std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
+        std::string              dataPath = KI_TEST::AllegroBoardDataDir( "" );
 
+        // For each board dir, look for .brd files and add them to the list of test cases
         try
         {
-            for( const auto& entry : std::filesystem::directory_iterator( dataPath ) )
+            for( const auto& boardDir : std::filesystem::directory_iterator( dataPath ) )
             {
-                if( entry.is_regular_file() && entry.path().extension() == ".brd"
-                    && entry.file_size() > 0 )
-                {
-                    std::string name = entry.path().filename().string();
+                if( !boardDir.is_directory() )
+                    continue;
 
-                    // v13_header.brd is intentionally pre-v16 and tested separately
-                    if( name != "v13_header.brd" )
-                        boards.push_back( name );
+                for( const auto& entry : std::filesystem::directory_iterator( boardDir ) )
+                {
+                    if( entry.is_regular_file() && entry.path().extension() == ".brd" && entry.file_size() > 0 )
+                    {
+                        std::string name = entry.path().filename().string();
+
+                        // v13_header.brd is intentionally pre-v16 and tested separately
+                        if( name != "v13_header.brd" )
+                        {
+                            boards.push_back( boardDir.path().string() + "/" + name );
+                        }
+                    }
                 }
             }
         }
@@ -799,88 +703,12 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
 
 BOOST_FIXTURE_TEST_SUITE( AllegroComprehensive, ALLEGRO_COMPREHENSIVE_FIXTURE )
 
-
-/**
- * Comprehensive test that attempts to load ALL Allegro boards in the test data directory.
- * Reports detailed error messages and statistics for each board.
- */
-BOOST_AUTO_TEST_CASE( LoadAllBoards )
-{
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-    std::vector<std::string> boards = GetAllBoardFiles();
-
-    BOOST_TEST_MESSAGE( "\n========================================" );
-    BOOST_TEST_MESSAGE( "ALLEGRO COMPREHENSIVE BOARD LOAD TEST" );
-    BOOST_TEST_MESSAGE( "========================================" );
-    BOOST_TEST_MESSAGE( "Found " << boards.size() << " board files to test\n" );
-
-    int successCount = 0;
-    int failureCount = 0;
-    std::vector<std::string> failedBoards;
-
-    for( const std::string& boardName : boards )
-    {
-        BOOST_TEST_MESSAGE( "\n----------------------------------------" );
-        BOOST_TEST_MESSAGE( "Testing: " << boardName );
-        BOOST_TEST_MESSAGE( "----------------------------------------" );
-
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
-
-        if( board )
-        {
-            PrintBoardStats( board, boardName );
-
-            bool hasContent = board->GetNetCount() > 0 || board->Footprints().size() > 0;
-
-            if( hasContent )
-            {
-                successCount++;
-                BOOST_TEST_MESSAGE( "RESULT: SUCCESS" );
-            }
-            else
-            {
-                failureCount++;
-                failedBoards.push_back( boardName + " (loaded but empty)" );
-                BOOST_TEST_MESSAGE( "RESULT: FAILED (board is empty)" );
-            }
-        }
-        else
-        {
-            failureCount++;
-            failedBoards.push_back( boardName );
-            BOOST_TEST_MESSAGE( "RESULT: FAILED (could not load)" );
-        }
-    }
-
-    BOOST_TEST_MESSAGE( "\n========================================" );
-    BOOST_TEST_MESSAGE( "SUMMARY" );
-    BOOST_TEST_MESSAGE( "========================================" );
-    BOOST_TEST_MESSAGE( "Total boards: " << boards.size() );
-    BOOST_TEST_MESSAGE( "Successful: " << successCount );
-    BOOST_TEST_MESSAGE( "Failed: " << failureCount );
-
-    if( !failedBoards.empty() )
-    {
-        BOOST_TEST_MESSAGE( "\nFailed boards:" );
-
-        for( const std::string& name : failedBoards )
-        {
-            BOOST_TEST_MESSAGE( "  - " << name );
-        }
-    }
-
-    // Mark the test as failed if any boards failed to load
-    BOOST_CHECK_EQUAL( failureCount, 0 );
-}
-
-
 /**
  * Test TRS80_POWER.brd individually.
  */
 BOOST_AUTO_TEST_CASE( Individual_TRS80_POWER )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/TRS80_POWER.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "TRS80_POWER/TRS80_POWER.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -901,7 +729,7 @@ BOOST_AUTO_TEST_CASE( Individual_TRS80_POWER )
  */
 BOOST_AUTO_TEST_CASE( Individual_led_youtube )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/led_youtube.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "led_youtube/led_youtube.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -922,7 +750,7 @@ BOOST_AUTO_TEST_CASE( Individual_led_youtube )
  */
 BOOST_AUTO_TEST_CASE( Individual_mainBoard )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/mainBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "mainBoard/mainBoard.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -943,7 +771,7 @@ BOOST_AUTO_TEST_CASE( Individual_mainBoard )
  */
 BOOST_AUTO_TEST_CASE( Individual_mainBoard2 )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/mainBoard2.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "mainBoard2/mainBoard2.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -964,7 +792,7 @@ BOOST_AUTO_TEST_CASE( Individual_mainBoard2 )
  */
 BOOST_AUTO_TEST_CASE( Individual_ProiectBoard )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -986,7 +814,7 @@ BOOST_AUTO_TEST_CASE( Individual_ProiectBoard )
  */
 BOOST_AUTO_TEST_CASE( Individual_BeagleBone )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -1009,7 +837,7 @@ BOOST_AUTO_TEST_CASE( Individual_BeagleBone )
  */
 BOOST_AUTO_TEST_CASE( BeagleBone_OutermostZoneNets )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -1065,8 +893,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_OutermostZoneNets )
  */
 BOOST_AUTO_TEST_CASE( Individual_VCU118 )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/8851_HW-U1-VCU118_REV2-0_071417.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "VCU118_REV2-0/8851_HW-U1-VCU118_REV2-0_071417.brd" );
 
     CAPTURING_REPORTER reporter;
     std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
@@ -1087,13 +914,12 @@ BOOST_AUTO_TEST_CASE( Individual_VCU118 )
  */
 BOOST_AUTO_TEST_CASE( PadSizesPositive )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1130,13 +956,12 @@ BOOST_AUTO_TEST_CASE( PadSizesPositive )
  */
 BOOST_AUTO_TEST_CASE( ViaDrillNotLargerThanSize )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1177,13 +1002,12 @@ BOOST_AUTO_TEST_CASE( ViaDrillNotLargerThanSize )
  */
 BOOST_AUTO_TEST_CASE( SmdPadDetection )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1235,13 +1059,12 @@ BOOST_AUTO_TEST_CASE( SmdPadDetection )
  */
 BOOST_AUTO_TEST_CASE( QuadPackagePadRotation )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1352,7 +1175,7 @@ BOOST_AUTO_TEST_CASE( QuadPackagePadRotation )
  */
 BOOST_AUTO_TEST_CASE( FootprintLayerPlacement )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE_MESSAGE( board != nullptr, "BeagleBone_Black_RevC.brd should load successfully" );
@@ -1406,13 +1229,12 @@ BOOST_AUTO_TEST_CASE( FootprintLayerPlacement )
  */
 BOOST_AUTO_TEST_CASE( ArcConnectivity )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1734,45 +1556,69 @@ struct ALG_REFERENCE_DATA
 };
 
 
+struct BRD_ALG_PAIR
+{
+    std::string brdFile;
+    std::string algFile;
+};
+
+
+/**
+ * Get a list of all board files in the test data that have a corresponding .alg reference file.
+ * This allows us to automatically run cross-validation tests on all boards with reference data.
+ */
+static std::vector<BRD_ALG_PAIR> getBoardsWithAlg()
+{
+    std::string               dataPath = KI_TEST::AllegroBoardDataDir( "" );
+    std::vector<BRD_ALG_PAIR> boardsWithAlg;
+
+    for( const auto& boardDir : std::filesystem::directory_iterator( dataPath ) )
+    {
+        if( !boardDir.is_directory() )
+            continue;
+
+        std::filesystem::path boardPath;
+        std::filesystem::path algPath;
+
+        for( const auto& entry : std::filesystem::directory_iterator( boardDir ) )
+        {
+            if( !entry.is_regular_file() )
+                continue;
+
+            if( entry.path().extension() == ".brd" )
+                boardPath = entry.path();
+            else if( entry.path().extension() == ".alg" )
+                algPath = entry.path();
+
+            if( !boardPath.empty() && !algPath.empty() )
+            {
+                boardsWithAlg.push_back( { boardPath.string(), algPath.string() } );
+                break;
+            }
+        }
+    }
+
+    return boardsWithAlg;
+}
+
+
 /**
  * Cross-validate imported board net names against .alg ASCII reference export.
  */
 BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    struct BOARD_REF
-    {
-        std::string brdFile;
-        std::string algFile;
-    };
-
-    std::vector<BOARD_REF> boardsWithAlg;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
-        {
-            std::string algName = entry.path().filename().string();
-            std::string brdName = algName.substr( 0, algName.size() - 4 );
-
-            std::filesystem::path brdPath( dataPath + brdName );
-
-            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-                boardsWithAlg.push_back( { brdName, entry.path().string() } );
-        }
-    }
+    std::vector<BRD_ALG_PAIR> boardsWithAlg = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
 
-    for( const auto& ref : boardsWithAlg )
+    for( const auto& [brdFile, algFile] : boardsWithAlg )
     {
-        BOOST_TEST_MESSAGE( "Validating net names: " << ref.brdFile );
+        BOOST_TEST_MESSAGE( "Validating net names: " << brdFile );
 
-        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( ref.algFile );
+        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
         BOOST_REQUIRE_GT( algData.netNames.size(), 0u );
 
-        BOARD* board = GetCachedBoard( dataPath + ref.brdFile );
+        BOARD* board = GetCachedBoard( brdFile );
         BOOST_REQUIRE( board );
 
         std::set<wxString> boardNets;
@@ -1796,9 +1642,8 @@ BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
             }
         }
 
-        BOOST_TEST_MESSAGE( ref.brdFile << ": .alg has " << algData.netNames.size()
-                            << " nets, board has " << boardNets.size()
-                            << ", missing " << missingNets );
+        BOOST_TEST_MESSAGE( brdFile << ": .alg has " << algData.netNames.size() << " nets, board has "
+                                    << boardNets.size() << ", missing " << missingNets );
 
         BOOST_CHECK_EQUAL( missingNets, 0 );
     }
@@ -1810,23 +1655,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
  */
 BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> boardsWithAlg;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
-        {
-            std::string algName = entry.path().filename().string();
-            std::string brdName = algName.substr( 0, algName.size() - 4 );
-
-            std::filesystem::path brdPath( dataPath + brdName );
-
-            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-                boardsWithAlg.push_back( { brdName, entry.path().string() } );
-        }
-    }
+    std::vector<BRD_ALG_PAIR> boardsWithAlg = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
 
@@ -1837,7 +1666,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
         ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
         BOOST_REQUIRE_GT( algData.refDes.size(), 0u );
 
-        BOARD* board = GetCachedBoard( dataPath + brdFile );
+        BOARD* board = GetCachedBoard( brdFile );
         BOOST_REQUIRE( board );
 
         std::set<wxString> boardRefDes;
@@ -1885,13 +1714,12 @@ BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
  */
 BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -1933,14 +1761,13 @@ BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
  */
 BOOST_AUTO_TEST_CASE( WarningBudget )
 {
-    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
         CAPTURING_REPORTER     reporter;
-        std::string            fullPath = dataPath + boardName;
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( fullPath, reporter );
+        std::string            boardName = std::filesystem::path( boardPath ).filename().string();
+        std::unique_ptr<BOARD> board = LoadBoardWithCapture( boardPath, reporter );
 
         if( !board )
             continue;
@@ -2121,36 +1948,15 @@ struct ALG_OUTLINE_DATA
  */
 BOOST_AUTO_TEST_CASE( OutlineSegmentCount )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    struct OUTLINE_TEST_BOARD
-    {
-        std::string brdFile;
-        std::string algFile;
-    };
-
-    std::vector<OUTLINE_TEST_BOARD> testBoards;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( !entry.is_regular_file() || entry.path().extension() != ".alg" )
-            continue;
-
-        std::string algName = entry.path().filename().string();
-        std::string brdName = algName.substr( 0, algName.size() - 4 );
-        std::filesystem::path brdPath( dataPath + brdName );
-
-        if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-            testBoards.push_back( { brdName, entry.path().string() } );
-    }
+    std::vector<BRD_ALG_PAIR> testBoards = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( testBoards.size(), 0u );
 
-    for( const auto& tb : testBoards )
+    for( const auto& [brdFile, algFile] : testBoards )
     {
-        BOOST_TEST_CONTEXT( "Board: " << tb.brdFile )
+        BOOST_TEST_CONTEXT( "Board: " << brdFile )
         {
-            ALG_OUTLINE_DATA algOutlines = ALG_OUTLINE_DATA::ParseAlgOutlines( tb.algFile );
+            ALG_OUTLINE_DATA algOutlines = ALG_OUTLINE_DATA::ParseAlgOutlines( algFile );
 
             if( algOutlines.designOutlineCount == 0 && algOutlines.outlineCount == 0 )
             {
@@ -2158,7 +1964,7 @@ BOOST_AUTO_TEST_CASE( OutlineSegmentCount )
                 continue;
             }
 
-            BOARD* board = GetCachedBoard( dataPath + tb.brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             int edgeCutsCount = 0;
@@ -2188,22 +1994,7 @@ BOOST_AUTO_TEST_CASE( OutlineSegmentCount )
  */
 BOOST_AUTO_TEST_CASE( OutlineBoundingBox )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> testBoards;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( !entry.is_regular_file() || entry.path().extension() != ".alg" )
-            continue;
-
-        std::string algName = entry.path().filename().string();
-        std::string brdName = algName.substr( 0, algName.size() - 4 );
-        std::filesystem::path brdPath( dataPath + brdName );
-
-        if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-            testBoards.push_back( { brdName, entry.path().string() } );
-    }
+    std::vector<BRD_ALG_PAIR> testBoards = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( testBoards.size(), 0u );
 
@@ -2225,7 +2016,7 @@ BOOST_AUTO_TEST_CASE( OutlineBoundingBox )
                 continue;
             }
 
-            BOARD* board = GetCachedBoard( dataPath + brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             BOX2I boardBbox;
@@ -2290,22 +2081,7 @@ BOOST_AUTO_TEST_CASE( OutlineBoundingBox )
  */
 BOOST_AUTO_TEST_CASE( OutlineEndpoints )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> testBoards;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( !entry.is_regular_file() || entry.path().extension() != ".alg" )
-            continue;
-
-        std::string algName = entry.path().filename().string();
-        std::string brdName = algName.substr( 0, algName.size() - 4 );
-        std::filesystem::path brdPath( dataPath + brdName );
-
-        if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-            testBoards.push_back( { brdName, entry.path().string() } );
-    }
+    std::vector<BRD_ALG_PAIR> testBoards = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( testBoards.size(), 0u );
 
@@ -2340,7 +2116,7 @@ BOOST_AUTO_TEST_CASE( OutlineEndpoints )
                 continue;
             }
 
-            BOARD* board = GetCachedBoard( dataPath + brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             // Collect all Edge_Cuts segment endpoints
@@ -2467,13 +2243,12 @@ BOOST_AUTO_TEST_CASE( OutlineEndpoints )
  */
 BOOST_AUTO_TEST_CASE( PadDrillConsistency )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -2528,23 +2303,7 @@ BOOST_AUTO_TEST_CASE( PadDrillConsistency )
  */
 BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> boardsWithAlg;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
-        {
-            std::string algName = entry.path().filename().string();
-            std::string brdName = algName.substr( 0, algName.size() - 4 );
-
-            std::filesystem::path brdPath( dataPath + brdName );
-
-            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-                boardsWithAlg.push_back( { brdName, entry.path().string() } );
-        }
-    }
+    std::vector<BRD_ALG_PAIR> boardsWithAlg = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
 
@@ -2554,7 +2313,7 @@ BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            BOARD* board = GetCachedBoard( dataPath + brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             size_t boardCopperZoneLayers = 0;
@@ -2582,23 +2341,7 @@ BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
  */
 BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> boardsWithAlg;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
-        {
-            std::string algName = entry.path().filename().string();
-            std::string brdName = algName.substr( 0, algName.size() - 4 );
-
-            std::filesystem::path brdPath( dataPath + brdName );
-
-            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-                boardsWithAlg.push_back( { brdName, entry.path().string() } );
-        }
-    }
+    std::vector<BRD_ALG_PAIR> boardsWithAlg = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
 
@@ -2608,7 +2351,7 @@ BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            BOARD* board = GetCachedBoard( dataPath + brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             std::map<wxString, int> algLayerCounts;
@@ -2651,23 +2394,7 @@ BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
  */
 BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
-
-    std::vector<std::pair<std::string, std::string>> boardsWithAlg;
-
-    for( const auto& entry : std::filesystem::directory_iterator( dataPath + "expected/" ) )
-    {
-        if( entry.is_regular_file() && entry.path().extension() == ".alg" )
-        {
-            std::string algName = entry.path().filename().string();
-            std::string brdName = algName.substr( 0, algName.size() - 4 );
-
-            std::filesystem::path brdPath( dataPath + brdName );
-
-            if( std::filesystem::exists( brdPath ) && std::filesystem::file_size( brdPath ) > 0 )
-                boardsWithAlg.push_back( { brdName, entry.path().string() } );
-        }
-    }
+    std::vector<BRD_ALG_PAIR> boardsWithAlg = getBoardsWithAlg();
 
     BOOST_REQUIRE_GT( boardsWithAlg.size(), 0u );
 
@@ -2677,7 +2404,7 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
         {
             ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
 
-            BOARD* board = GetCachedBoard( dataPath + brdFile );
+            BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
 
             // Collect sorted areas per layer from .alg and board, then compare distributions
@@ -2770,7 +2497,7 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
  */
 BOOST_AUTO_TEST_CASE( PadContainedInFabOutline )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -2850,7 +2577,7 @@ BOOST_AUTO_TEST_CASE( PadContainedInFabOutline )
  */
 BOOST_AUTO_TEST_CASE( PadOrientationP6P10 )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -2906,7 +2633,7 @@ BOOST_AUTO_TEST_CASE( PadOrientationP6P10 )
  */
 BOOST_AUTO_TEST_CASE( SlotHoles )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -2951,7 +2678,7 @@ BOOST_AUTO_TEST_CASE( SlotHoles )
  */
 BOOST_AUTO_TEST_CASE( FootprintOrientation )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
 
@@ -2982,7 +2709,7 @@ BOOST_AUTO_TEST_CASE( FootprintOrientation )
  */
 BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3033,7 +2760,7 @@ BOOST_AUTO_TEST_CASE( NetclassTraceWidths )
  */
 BOOST_AUTO_TEST_CASE( DiffPairNetclass )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3068,7 +2795,7 @@ BOOST_AUTO_TEST_CASE( DiffPairNetclass )
  */
 BOOST_AUTO_TEST_CASE( MatchGroupNetclass )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3110,7 +2837,7 @@ BOOST_AUTO_TEST_CASE( MatchGroupNetclass )
  */
 BOOST_AUTO_TEST_CASE( MatchGroupCounts )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3139,7 +2866,7 @@ BOOST_AUTO_TEST_CASE( MatchGroupCounts )
  */
 BOOST_AUTO_TEST_CASE( NoMatchGroupsOnSimpleBoard )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/led_youtube.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "led_youtube/led_youtube.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3160,7 +2887,7 @@ BOOST_AUTO_TEST_CASE( NoMatchGroupsOnSimpleBoard )
  */
 BOOST_AUTO_TEST_CASE( ConstraintSetNetclasses )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3215,7 +2942,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetNetclasses )
  */
 BOOST_AUTO_TEST_CASE( ConstraintSetPreV172 )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/TRS80_POWER.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "TRS80_POWER/TRS80_POWER.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3240,7 +2967,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetPreV172 )
  */
 BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3278,7 +3005,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetAndTraceWidth )
  */
 BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3315,8 +3042,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGap )
  */
 BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGapPreV172 )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/8851_HW-U1-VCU118_REV2-0_071417.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "VCU118_REV2-0/8851_HW-U1-VCU118_REV2-0_071417.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3338,7 +3064,7 @@ BOOST_AUTO_TEST_CASE( ConstraintSetDiffPairGapPreV172 )
  */
 BOOST_AUTO_TEST_CASE( UIImportPath_NullBoard )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/ProiectBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
 
     PCB_IO_ALLEGRO plugin;
     CAPTURING_REPORTER reporter;
@@ -3384,13 +3110,12 @@ BOOST_AUTO_TEST_CASE( UIImportPath_NullBoard )
  */
 BOOST_AUTO_TEST_CASE( SmdPadLayerConsistency )
 {
-    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -3445,13 +3170,12 @@ BOOST_AUTO_TEST_CASE( SmdPadLayerConsistency )
  */
 BOOST_AUTO_TEST_CASE( SmdFootprintTechLayers )
 {
-    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -3519,8 +3243,7 @@ BOOST_AUTO_TEST_CASE( SmdFootprintTechLayers )
  */
 BOOST_AUTO_TEST_CASE( BeagleBone_DrillSlotOrientation )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3599,8 +3322,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_DrillSlotOrientation )
  */
 BOOST_AUTO_TEST_CASE( BeagleBone_ZoneFills )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3638,8 +3360,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_ZoneFills )
  */
 BOOST_AUTO_TEST_CASE( BeagleBone_Teardrops )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3698,8 +3419,7 @@ BOOST_AUTO_TEST_CASE( BeagleBone_Teardrops )
  */
 BOOST_AUTO_TEST_CASE( PreV172_NoTeardrops )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
-                           + "plugins/allegro/ProiectBoard.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
     BOOST_REQUIRE( board );
@@ -3736,7 +3456,7 @@ BOOST_AUTO_TEST_CASE( PreV172_NoTeardrops )
  */
 BOOST_AUTO_TEST_CASE( LegacyNetclassFlags )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     PCB_IO_ALLEGRO plugin;
     CAPTURING_REPORTER reporter;
@@ -3761,13 +3481,12 @@ BOOST_AUTO_TEST_CASE( LegacyNetclassFlags )
  */
 BOOST_AUTO_TEST_CASE( NetclassesCreatedForAllBoards )
 {
-    std::string              dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/";
     std::vector<std::string> boards = GetAllBoardFiles();
 
-    for( const std::string& boardName : boards )
+    for( const std::string& boardPath : boards )
     {
-        std::string fullPath = dataPath + boardName;
-        BOARD*      board = GetCachedBoard( fullPath );
+        std::string boardName = std::filesystem::path( boardPath ).filename().string();
+        BOARD*      board = GetCachedBoard( boardPath );
 
         if( !board )
             continue;
@@ -3808,10 +3527,9 @@ BOOST_AUTO_TEST_CASE( NetclassesCreatedForAllBoards )
  */
 BOOST_AUTO_TEST_CASE( BeagleBone_NetclassAssignments )
 {
-    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/BeagleBone_Black_RevC.brd";
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
 
     BOARD* board = GetCachedBoard( dataPath );
-
     BOOST_REQUIRE( board );
 
     std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;

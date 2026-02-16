@@ -88,18 +88,6 @@ static std::vector<uint8_t> loadDataByUri( const std::string& aDataSource )
 }
 
 
-static std::string getBoardsDataDir()
-{
-    return KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/boards/";
-}
-
-
-static std::string getBoardTestDir( const std::string& aBoardName )
-{
-    return getBoardsDataDir() + aBoardName + "/";
-}
-
-
 ALLEGRO::FMT_VER getFormatVersionFromStr( const std::string& aFmtVerStr )
 {
     // clang-format off
@@ -190,7 +178,7 @@ struct BOARD_TEST_INFO
 
 static BOARD_TEST_INFO createBoardTestInfo( const std::string& aBrdName, const nlohmann::json& boardTestEntry )
 {
-    const std::string boardDir = getBoardTestDir( aBrdName );
+    const std::string boardDir = AllegroBoardDataDir( aBrdName );
 
     const ALLEGRO::FMT_VER formatVersion =
             getFormatVersionFromStr( boardTestEntry.value( "formatVersion", "unknown" ) );
@@ -208,7 +196,7 @@ public:
         {
             BOARD_TEST_INFO brdDef = createBoardTestInfo( aBrdName, aBoardTestJson );
 
-            const std::string boardDir = getBoardTestDir( aBrdName );
+            const std::string boardDir = AllegroBoardDataDir( aBrdName );
 
             std::unique_ptr<HEADER_TEST_INFO> headerTest = nullptr;
 
@@ -255,7 +243,7 @@ public:
                        const nlohmann::json& aBlockTestJson )
     {
         const BOARD_TEST_INFO brdDef = createBoardTestInfo( aBrdName, aBoardTestJson );
-        const BLK_TEST_INFO   blockTest = createBlockTestEntry( getBoardTestDir( aBrdName ), aBlockTestJson );
+        const BLK_TEST_INFO   blockTest = createBlockTestEntry( AllegroBoardDataDir( aBrdName ), aBlockTestJson );
 
         BOOST_TEST_CONTEXT( wxString::Format( "Testing block type %#02x at offset %#010zx from board %s",
                                               blockTest.m_BlockType, blockTest.m_BlockOffset, aBrdName ) )
@@ -316,18 +304,42 @@ void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aB
     {
         if( aBoardTestJson.contains( "boardFile" ) )
         {
-            const std::string boardFilePath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/"
-                                              + aBoardTestJson["boardFile"].get<std::string>();
+            const std::string boardFilePath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/boards/" + aBrdName
+                                              + "/" + aBoardTestJson["boardFile"].get<std::string>();
+
+            if( !std::filesystem::exists( boardFilePath ) )
+            {
+                BOOST_FAIL( "Board file does not exist: " + boardFilePath );
+                return;
+            }
 
             board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
 
-            BOOST_REQUIRE( board != nullptr );
+            const bool expectLoadFailure = aBoardTestJson.value( "expectLoadFailure", false );
+
+            if( expectLoadFailure )
+            {
+                BOOST_CHECK( board == nullptr );
+                BOOST_TEST_MESSAGE( "Board load was expected to fail, and it did." );
+                return;
+            }
+            else
+            {
+                BOOST_CHECK( board != nullptr );
+                BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
+            }
         }
     }
 
     BOOST_TEST_CONTEXT( "Running board expectations" )
     {
         std::unique_ptr<BOARD_EXPECTATION_TEST> boardExpectationTest = nullptr;
+
+        // There are default expectations that apply unless otherwise specified
+        {
+            bool hasContent = board->GetNetCount() > 0 || board->Footprints().size() > 0;
+            BOOST_CHECK( hasContent ); // The board should have some content (e.g. nets or footprints)
+        }
 
         // Load board expectations from the JSON file and create expectation objects
         if( aBoardTestJson.contains( "boardExpectations" ) )
@@ -467,7 +479,7 @@ static const ALLEGRO_BLOCK_TEST_REGISTRY& buildTestRegistry()
         ALLEGRO_BLOCK_TEST_REGISTRY reg;
 
         // There is currently one registry file, but we could have more
-        const std::filesystem::path testRegisterJsonPath( getBoardsDataDir() + "board_data_registry.json" );
+        const std::filesystem::path testRegisterJsonPath( AllegroBoardDataDir( "" ) + "board_data_registry.json" );
         std::ifstream               jsonFileStream( testRegisterJsonPath );
 
         reg.m_Json = nlohmann::json::parse( jsonFileStream, nullptr, false, true );
@@ -587,7 +599,7 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 
         const nlohmann::json& boardTestData = registry->GetBoardJson( boardTest.m_BrdName );
 
-        if( boardTest.m_HasExpectations )
+        if( boardTest.m_HasBoardFile )
         {
             const auto testRunFunction = [&]()
             {
