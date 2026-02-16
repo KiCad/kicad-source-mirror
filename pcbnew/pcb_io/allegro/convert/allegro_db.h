@@ -848,11 +848,30 @@ using VIEW_OBJS_VISITOR = std::function<void( const VIEW_OBJS& aViewObjs )>;
 class BRD_DB : public DB
 {
 public:
-    BRD_DB() :
-            m_FmtVer( FMT_VER::V_UNKNOWN ),
-            m_leanMode( false )
+    /**
+     * Converts blocks of "raw" binary-ish data into a DB_OBJ of the appropriate type to be
+     * stored in the DB.
+     *
+     * As constructed, the objects may have dangling references to other object that will
+     * need to be resolved only after all objects are inserted into the DB.
+     *
+     * This class encapsulates context/state for that process.
+     */
+    class OBJ_FACTORY
     {
-    }
+    public:
+        OBJ_FACTORY( const BRD_DB& aBrdDb ) :
+                m_brdDb( aBrdDb )
+        {
+        }
+
+        std::unique_ptr<DB_OBJ> CreateObject( const BLOCK_BASE& aBlock ) const;
+
+    private:
+        const BRD_DB& m_brdDb;
+    };
+
+    BRD_DB();
 
     void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock ) override;
 
@@ -946,17 +965,11 @@ public:
     std::vector<std::unique_ptr<BLOCK_BASE>> m_Blocks;
     std::unordered_map<uint32_t, BLOCK_BASE*> m_ObjectKeyMap;
 
-    bool m_leanMode;
-
 private:
-    /**
-     * Convert a block of "raw" binary-ish data into a DB_OBJ of the appropriate type to be
-     * stored in the DB.
-     *
-     * As constructed, the objects may have dangling references to other object that will
-     * need to be resolved only after all objects are inserted into the DB.
-     */
-    std::unique_ptr<DB_OBJ> createObject( const BLOCK_BASE& aBlock );
+    // The factory that will turn BLOCKs into DB_OBJs
+    OBJ_FACTORY m_ObjFactory;
+
+    bool m_leanMode;
 };
 
 } // namespace ALLEGRO

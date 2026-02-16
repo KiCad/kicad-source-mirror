@@ -229,7 +229,7 @@ void BRD_DB::InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock )
 
     if( !skipDbObj )
     {
-        std::unique_ptr<DB_OBJ> dbObj = createObject( *aBlock );
+        std::unique_ptr<DB_OBJ> dbObj = m_ObjFactory.CreateObject( *aBlock );
 
         if( dbObj )
             AddObject( std::move( dbObj ) );
@@ -241,7 +241,7 @@ void BRD_DB::InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock )
     m_Blocks.push_back( std::move( aBlock ) );
 }
 
-std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
+std::unique_ptr<DB_OBJ> BRD_DB::OBJ_FACTORY::CreateObject( const BLOCK_BASE& aBlock ) const
 {
     std::unique_ptr<DB_OBJ> obj;
 
@@ -262,19 +262,19 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x04:
     {
         const BLK_0x04_NET_ASSIGNMENT& netBlk = BLK_DATA( aBlock, BLK_0x04_NET_ASSIGNMENT );
-        obj = std::make_unique<NET_ASSIGN>( *this, netBlk );
+        obj = std::make_unique<NET_ASSIGN>( m_brdDb, netBlk );
         break;
     }
     case 0x05:
     {
         const BLK_0x05_TRACK& trackBlk = BLK_DATA( aBlock, BLK_0x05_TRACK );
-        obj = std::make_unique<TRACK>( *this, trackBlk );
+        obj = std::make_unique<TRACK>( m_brdDb, trackBlk );
         break;
     }
     case 0x06:
     {
         const BLK_0x06_COMPONENT& compBlk = BLK_DATA( aBlock, BLK_0x06_COMPONENT );
-        obj = std::make_unique<COMPONENT>( *this, compBlk );
+        obj = std::make_unique<COMPONENT>( m_brdDb, compBlk );
         break;
     }
     case 0x07:
@@ -292,7 +292,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x0E:
     {
         const BLK_0x0E_SHAPE_SEG& pinBlk = BLK_DATA( aBlock, BLK_0x0E_SHAPE_SEG );
-        obj = std::make_unique<SHAPE_SEG_OBJ>( *this, pinBlk );
+        obj = std::make_unique<SHAPE_SEG_OBJ>( m_brdDb, pinBlk );
         break;
     }
     case 0x0F:
@@ -322,7 +322,7 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x14:
     {
         const BLK_0x14_GRAPHIC& lineBlk = BLK_DATA( aBlock, BLK_0x14_GRAPHIC );
-        obj = std::make_unique<GRAPHIC_SEG>( *this, lineBlk );
+        obj = std::make_unique<GRAPHIC_SEG>( m_brdDb, lineBlk );
         break;
     }
     case 0x15:
@@ -331,31 +331,30 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     {
         const BLK_0x15_16_17_SEGMENT& seg = BLK_DATA( aBlock, BLK_0x15_16_17_SEGMENT );
         obj = std::make_unique<LINE>( seg );
-        // std::cout << "Seg" << std::endl;
         break;
     }
     case 0x1b:
     {
         const BLK_0x1B_NET& netBlk = BLK_DATA( aBlock, BLK_0x1B_NET );
-        obj = std::make_unique<NET>( *this, netBlk );
+        obj = std::make_unique<NET>( m_brdDb, netBlk );
         break;
     }
     case 0x20:
     {
         const BLK_0x20_UNKNOWN& blk = BLK_DATA( aBlock, BLK_0x20_UNKNOWN );
-        obj = std::make_unique<UNKNOWN_0x20>( *this, blk );
+        obj = std::make_unique<UNKNOWN_0x20>( m_brdDb, blk );
         break;
     }
     case 0x28:
     {
         const BLK_0x28_SHAPE& shapeBlk = BLK_DATA( aBlock, BLK_0x28_SHAPE );
-        obj = std::make_unique<SHAPE>( *this, shapeBlk );
+        obj = std::make_unique<SHAPE>( m_brdDb, shapeBlk );
         break;
     }
     case 0x2b: // Footprint
     {
         const BLK_0x2B_FOOTPRINT_DEF& fpBlk = BLK_DATA( aBlock, BLK_0x2B_FOOTPRINT_DEF );
-        obj = std::make_unique<FOOTPRINT_DEF>( *this, fpBlk );
+        obj = std::make_unique<FOOTPRINT_DEF>( m_brdDb, fpBlk );
         break;
     }
     case 0x2d:
@@ -367,19 +366,19 @@ std::unique_ptr<DB_OBJ> BRD_DB::createObject( const BLOCK_BASE& aBlock )
     case 0x2e:
     {
         const BLK_0x2E_CONNECTION& padBlk = BLK_DATA( aBlock, BLK_0x2E_CONNECTION );
-        obj = std::make_unique<CONNECTION_OBJ>( *this, padBlk );
+        obj = std::make_unique<CONNECTION_OBJ>( m_brdDb, padBlk );
         break;
     }
     case 0x32:
     {
         const BLK_0x32_PLACED_PAD& placedPadBlk = BLK_DATA( aBlock, BLK_0x32_PLACED_PAD );
-        obj =  std::make_unique<PLACED_PAD>( *this, placedPadBlk );
+        obj =  std::make_unique<PLACED_PAD>( m_brdDb, placedPadBlk );
         break;
     }
     case 0x33:
     {
         const BLK_0x33_VIA& viaBlk = BLK_DATA( aBlock, BLK_0x33_VIA );
-        obj =  std::make_unique<VIA>( *this, viaBlk );
+        obj =  std::make_unique<VIA>( m_brdDb, viaBlk );
         break;
     }
     default:
@@ -410,7 +409,6 @@ void DB::AddObject( std::unique_ptr<DB_OBJ> aObject )
     m_Objects[aObject->GetKey()] = std::move( aObject );
 }
 
-#include <fmt/format.h>
 
 DB_OBJ* DB::Resolve( uint32_t aKey ) const
 {
@@ -418,10 +416,6 @@ DB_OBJ* DB::Resolve( uint32_t aKey ) const
     if( it != m_Objects.end() )
     {
         return it->second.get();
-    }
-
-    {
-        // std::cout << fmt::format( "Failed to resolve key: {:010x}", aRef.m_TargetKey ) << std::endl;
     }
     return nullptr;
 }
@@ -1573,6 +1567,14 @@ static void collectSentinelKeys( const FILE_HEADER& aHeader, DB& aDb )
         addTail( aHeader.m_LL_V18_5.value() );
         addTail( aHeader.m_LL_V18_6.value() );
     }
+}
+
+
+BRD_DB::BRD_DB() :
+        m_FmtVer( FMT_VER::V_UNKNOWN ),
+        m_ObjFactory( *this ),
+        m_leanMode( false )
+{
 }
 
 
