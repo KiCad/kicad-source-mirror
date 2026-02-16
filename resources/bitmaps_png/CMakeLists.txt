@@ -809,7 +809,6 @@ set( BMAPS_OTHER
     constraint_creepage_distance
     constraint_daisy_chain_stub
     constraint_daisy_chain_stub_2
-    constraint_hole_to_hole_clearance
     constraint_hole_size
     constraint_hole_to_hole_clearance
     constraint_hole_to_hole_distance
