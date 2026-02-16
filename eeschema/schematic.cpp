@@ -2351,6 +2351,9 @@ void SCHEMATIC::LoadVariants()
 
 void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<wxString>& aFiles )
 {
+    if( !IsValid() )
+        return;
+
     wxString projPath = m_project->GetProjectPath();
 
     if( projPath.IsEmpty() )
