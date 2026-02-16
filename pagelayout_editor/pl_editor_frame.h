@@ -39,10 +39,10 @@ class PROPERTIES_FRAME;
 class DS_DATA_ITEM;
 class wxChoice;
 
-#ifndef __linux__
-class NL_PL_EDITOR_PLUGIN;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
 class SPNAV_2D_PLUGIN;
+#else
+class NL_PL_EDITOR_PLUGIN;
 #endif
 
 /**
@@ -276,10 +276,10 @@ private:
                                               // only on page 1, not on page 1
     VECTOR2I          m_grid_origin;
 
-#ifndef __linux__
-    std::unique_ptr<NL_PL_EDITOR_PLUGIN> m_spaceMouse;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
     std::unique_ptr<SPNAV_2D_PLUGIN> m_spaceMouse;
+#else
+    std::unique_ptr<NL_PL_EDITOR_PLUGIN> m_spaceMouse;
 #endif
 
     wxString m_originChoiceList[5] =

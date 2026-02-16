@@ -68,11 +68,11 @@
 #include <wx/msgdlg.h>
 #include <trace_helpers.h>
 
-#ifndef __linux__
+#if defined(__linux__) || defined(__FreeBSD__)
+#include <spacenav/spnav_2d_plugin.h>
+#else
 #include <navlib/nl_schematic_plugin.h>
 #include <wx/fdrepdlg.h>
-#else
-#include <spacenav/spnav_2d_plugin.h>
 #endif
 
 
@@ -341,11 +341,11 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
     {
         if( !m_spaceMouse )
         {
-#ifndef __linux__
-            m_spaceMouse = std::make_unique<NL_SCHEMATIC_PLUGIN>();
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
             m_spaceMouse = std::make_unique<SPNAV_2D_PLUGIN>( GetCanvas() );
             m_spaceMouse->SetScale( schIUScale.IU_PER_MILS / pcbIUScale.IU_PER_MILS );
+#else
+            m_spaceMouse = std::make_unique<NL_SCHEMATIC_PLUGIN>();
 #endif
         }
 

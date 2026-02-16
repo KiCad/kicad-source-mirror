@@ -63,10 +63,10 @@ struct MAGNETIC_SETTINGS;
 class PROGRESS_REPORTER;
 class PCB_LAYER_BOX_SELECTOR;
 
-#ifndef __linux__
-class NL_PCBNEW_PLUGIN;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
 class SPNAV_2D_PLUGIN;
+#else
+class NL_PCBNEW_PLUGIN;
 #endif
 
 #ifdef wxHAS_INOTIFY
@@ -438,10 +438,10 @@ protected:
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
 
 private:
-#ifndef __linux__
-    std::unique_ptr<NL_PCBNEW_PLUGIN>    m_spaceMouse;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
     std::unique_ptr<SPNAV_2D_PLUGIN>    m_spaceMouse;
+#else
+    std::unique_ptr<NL_PCBNEW_PLUGIN>    m_spaceMouse;
 #endif
 
     std::unique_ptr<wxFileSystemWatcher> m_watcher;

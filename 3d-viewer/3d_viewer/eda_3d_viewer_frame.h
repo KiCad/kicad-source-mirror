@@ -44,7 +44,7 @@
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
 // Forward declarations
-#ifdef __linux__
+#if defined(__linux__) || defined(__FreeBSD__)
 class SPNAV_VIEWER_PLUGIN;
 #else
 class NL_3D_VIEWER_PLUGIN;
@@ -280,7 +280,7 @@ private:
 
     bool                           m_disable_ray_tracing;
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__FreeBSD__)
     std::unique_ptr<SPNAV_VIEWER_PLUGIN> m_spaceMouse;
 #else
     std::unique_ptr<NL_3D_VIEWER_PLUGIN> m_spaceMouse;

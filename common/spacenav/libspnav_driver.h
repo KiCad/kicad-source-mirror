@@ -24,7 +24,7 @@
 #ifndef KICAD_LIBSPNAV_DRIVER_H
 #define KICAD_LIBSPNAV_DRIVER_H
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__FreeBSD__)
 #include <spnav.h>
 #endif
 

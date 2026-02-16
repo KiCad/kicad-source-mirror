@@ -66,10 +66,10 @@
 #include <wx/log.h>
 #include <kiplatform/ui.h>
 
-#ifndef __linux__
-#include <navlib/nl_pl_editor_plugin.h>
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
 #include <spacenav/spnav_2d_plugin.h>
+#else
+#include <navlib/nl_pl_editor_plugin.h>
 #endif
 
 
@@ -241,11 +241,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         if( !m_spaceMouse )
         {
-#ifndef __linux__
-            m_spaceMouse = std::make_unique<NL_PL_EDITOR_PLUGIN>();
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
             m_spaceMouse = std::make_unique<SPNAV_2D_PLUGIN>( GetCanvas() );
             m_spaceMouse->SetScale( drawSheetIUScale.IU_PER_MILS / pcbIUScale.IU_PER_MILS );
+#else
+            m_spaceMouse = std::make_unique<NL_PL_EDITOR_PLUGIN>();
 #endif
         }
 

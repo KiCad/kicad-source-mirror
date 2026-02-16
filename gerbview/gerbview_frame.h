@@ -46,10 +46,10 @@ class REPORTER;
 class SELECTION;
 class wxStaticText;
 
-#ifndef __linux__
-class NL_GERBVIEW_PLUGIN;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
 class SPNAV_2D_PLUGIN;
+#else
+class NL_GERBVIEW_PLUGIN;
 #endif
 
 
@@ -528,10 +528,10 @@ private:
     wxStaticText*       m_dcodeText;        // a message on the auxiliary toolbar,
                                             // relative to the m_DCodeSelector
 
-#ifndef __linux__
-    std::unique_ptr<NL_GERBVIEW_PLUGIN> m_spaceMouse;
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
     std::unique_ptr<SPNAV_2D_PLUGIN> m_spaceMouse;
+#else
+    std::unique_ptr<NL_GERBVIEW_PLUGIN> m_spaceMouse;
 #endif
 };
 

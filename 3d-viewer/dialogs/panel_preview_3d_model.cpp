@@ -48,10 +48,10 @@
 #include <eda_3d_viewer_settings.h>
 #include <board_design_settings.h>
 
-#ifndef __linux__
-#include <3d_navlib/nl_footprint_properties_plugin.h>
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
 #include <3d_spacenav/spnav_viewer_plugin.h>
+#else
+#include <3d_navlib/nl_footprint_properties_plugin.h>
 #endif
 
 PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
@@ -137,10 +137,10 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     try
     {
-#ifndef __linux__
-        m_spaceMouse = std::make_unique<NL_FOOTPRINT_PROPERTIES_PLUGIN>( m_previewPane );
-#else
+#if defined(__linux__) || defined(__FreeBSD__)
         m_spaceMouse = std::make_unique<SPNAV_VIEWER_PLUGIN>( m_previewPane );
+#else
+        m_spaceMouse = std::make_unique<NL_FOOTPRINT_PROPERTIES_PLUGIN>( m_previewPane );
 #endif
         m_spaceMouse->SetFocus( true );
     }
