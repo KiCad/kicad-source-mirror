@@ -459,7 +459,8 @@ void LIB_TABLE_GRID_TRICKS::MoveDownHandler( WX_GRID* aGrid )
 }
 
 
-bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int aRow, int aCol )> aErrorHandler )
+bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, bool aSupportsVisibilityColumn,
+                                         std::function<void( int aRow, int aCol )> aErrorHandler )
 {
     wxWindow*                  topLevelParent = wxGetTopLevelParent( aGrid );
     LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
@@ -495,8 +496,11 @@ bool LIB_TABLE_GRID_TRICKS::VerifyTable( WX_GRID* aGrid, std::function<void( int
             model->SetValue( r, COL_NICKNAME, nick );
             model->SetValue( r, COL_URI, uri );
 
-            // Make sure to not save a hidden flag
-            model->SetValue( r, COL_VISIBLE, wxS( "1" ) );
+            if( !aSupportsVisibilityColumn )
+            {
+            // Make sure to not save an inappropriate hidden flag
+                model->SetValue( r, COL_VISIBLE, wxS( "1" ) );
+            }
 
             ++r;        // this row was OK.
         }

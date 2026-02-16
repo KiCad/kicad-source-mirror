@@ -52,7 +52,8 @@ public:
     static void MoveUpHandler( WX_GRID* aGrid );
     static void MoveDownHandler( WX_GRID* aGrid );
 
-    static bool VerifyTable( WX_GRID* aGrid, std::function<void( int aRow, int aCol )> aErrorHandler );
+    static bool VerifyTable( WX_GRID* aGrid, bool aSupportsVisibilityColumn,
+                             std::function<void( int aRow, int aCol )> aErrorHandler );
 
 protected:
     virtual void optionsEditor( int aRow ) = 0;
@@ -69,6 +70,6 @@ protected:
      */
     void paste_text( const wxString& cb_text ) override;
 
-    virtual bool supportsVisibilityColumn() { return false; }
+    virtual bool supportsVisibilityColumn() = 0;
     virtual wxString getTablePreamble() = 0;
 };

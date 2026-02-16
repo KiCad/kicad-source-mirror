@@ -159,6 +159,11 @@ public:
         SetTooltipEnable( COL_STATUS );
     }
 
+    static bool SupportsVisibilityColumn()
+    {
+        return true;
+    }
+
 protected:
     void optionsEditor( int aRow ) override
     {
@@ -201,7 +206,7 @@ protected:
 
     bool supportsVisibilityColumn() override
     {
-        return true;
+        return SYMBOL_GRID_TRICKS::SupportsVisibilityColumn();
     }
 
 protected:
@@ -470,7 +475,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
     {
         WX_GRID* grid = get_grid( page );
 
-        if( !LIB_TABLE_GRID_TRICKS::VerifyTable( grid,
+        if( !SYMBOL_GRID_TRICKS::VerifyTable( grid, SYMBOL_GRID_TRICKS::SupportsVisibilityColumn(),
                 [&]( int aRow, int aCol )
                 {
                     // show the tabbed panel holding the grid we have flunked:
