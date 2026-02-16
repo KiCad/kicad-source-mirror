@@ -1028,6 +1028,37 @@ BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
 
     BOOST_REQUIRE( board != nullptr );
 
+    // Check whether any two non-adjacent segments in the polygon truly
+    // cross. Clipper2 BooleanSubtract can produce bridge edges where
+    // non-adjacent segments share endpoints at T-junctions. These are
+    // valid geometry, not real crossings.
+    auto hasTrueCrossing = []( const SHAPE_POLY_SET& aPoly, int aIdx ) -> bool
+    {
+        std::vector<SEG> segs;
+
+        for( auto it = aPoly.CIterateSegmentsWithHoles( aIdx ); it; it++ )
+            segs.emplace_back( *it );
+
+        for( size_t i = 0; i < segs.size(); i++ )
+        {
+            for( size_t j = i + 1; j < segs.size(); j++ )
+            {
+                // Segments sharing any endpoint are either adjacent in the
+                // contour or bridge junctions from Clipper2.
+                if( segs[i].A == segs[j].A || segs[i].A == segs[j].B
+                    || segs[i].B == segs[j].A || segs[i].B == segs[j].B )
+                {
+                    continue;
+                }
+
+                if( segs[i].Collide( segs[j], 0 ) )
+                    return true;
+            }
+        }
+
+        return false;
+    };
+
     int zonesChecked = 0;
 
     for( ZONE* zone : board->Zones() )
@@ -1045,39 +1076,20 @@ BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
             if( !fill || fill->OutlineCount() == 0 )
                 continue;
 
-            // Skip polygon sets containing degenerate contours (outline or
-            // holes with fewer than 3 points) that would assert in the
-            // segment-based self-intersection check.
-            bool hasDegenerate = false;
-
-            for( int i = 0; !hasDegenerate && i < fill->OutlineCount(); i++ )
-            {
-                if( fill->Outline( i ).PointCount() < 3 )
-                {
-                    hasDegenerate = true;
-                    break;
-                }
-
-                for( int h = 0; h < fill->HoleCount( i ); h++ )
-                {
-                    if( fill->Hole( i, h ).PointCount() < 3 )
-                    {
-                        hasDegenerate = true;
-                        break;
-                    }
-                }
-            }
-
-            if( hasDegenerate )
-                continue;
-
             zonesChecked++;
 
-            BOOST_CHECK_MESSAGE(
-                    !fill->IsSelfIntersecting(),
-                    "zone \"" << zone->GetNetname() << "\" on "
-                    << board->GetLayerName( layer )
-                    << " has self-intersecting fill polygon" );
+            for( int pi = 0; pi < fill->OutlineCount(); pi++ )
+            {
+                if( fill->Outline( pi ).PointCount() < 3 )
+                    continue;
+
+                BOOST_CHECK_MESSAGE(
+                        !hasTrueCrossing( *fill, pi ),
+                        "zone \"" << zone->GetNetname() << "\" on "
+                        << board->GetLayerName( layer )
+                        << " outline " << pi
+                        << " has self-intersecting fill polygon" );
+            }
         }
     }
 

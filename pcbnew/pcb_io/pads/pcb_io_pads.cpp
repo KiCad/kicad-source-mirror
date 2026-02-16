@@ -1697,10 +1697,10 @@ void PCB_IO_PADS::loadZones()
     const auto& pours = m_parser->GetPours();
     const auto& params = m_parser->GetParameters();
 
-    // Append arc-aware points from an ARC_POINT vector to a SHAPE_POLY_SET.
+    // Append arc-aware points from an ARC_POINT vector to a contour chain.
     // Arc segments are interpolated into polyline approximations. Full-circle
     // entries (from CIRCLE piece types) are generated as 36-segment polygons.
-    auto appendArcPoints = [this]( SHAPE_POLY_SET& poly,
+    auto appendArcPoints = [this]( SHAPE_LINE_CHAIN& chain,
                                    const std::vector<PADS_IO::ARC_POINT>& pts )
     {
         if( pts.empty() )
@@ -1718,14 +1718,14 @@ void PCB_IO_PADS::loadZones()
             for( int i = 0; i < NUM_SEGS; i++ )
             {
                 double angle = 2.0 * M_PI * i / NUM_SEGS;
-                poly.Append( center.x + KiROUND( radius * cos( angle ) ),
-                             center.y + KiROUND( radius * sin( angle ) ) );
+                chain.Append( center.x + KiROUND( radius * cos( angle ) ),
+                              center.y + KiROUND( radius * sin( angle ) ) );
             }
 
             return;
         }
 
-        poly.Append( scaleCoord( pts[0].x, true ), scaleCoord( pts[0].y, false ) );
+        chain.Append( scaleCoord( pts[0].x, true ), scaleCoord( pts[0].y, false ) );
 
         for( size_t i = 1; i < pts.size(); i++ )
         {
@@ -1754,11 +1754,11 @@ void PCB_IO_PADS::loadZones()
                 const SHAPE_LINE_CHAIN arcPoly = shapeArc.ConvertToPolyline();
 
                 for( int j = 1; j < arcPoly.PointCount(); j++ )
-                    poly.Append( arcPoly.CPoint( j ).x, arcPoly.CPoint( j ).y );
+                    chain.Append( arcPoly.CPoint( j ).x, arcPoly.CPoint( j ).y );
             }
             else
             {
-                poly.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+                chain.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
             }
         }
     };
@@ -1831,7 +1831,7 @@ void PCB_IO_PADS::loadZones()
         zone->SetLayer( pourLayer );
 
         zone->Outline()->NewOutline();
-        appendArcPoints( *zone->Outline(), pour_def.points );
+        appendArcPoints( zone->Outline()->Outline( 0 ), pour_def.points );
 
         if( pour_def.is_cutout )
         {
@@ -1884,19 +1884,22 @@ void PCB_IO_PADS::loadZones()
 
         SHAPE_POLY_SET fillPoly;
         fillPoly.NewOutline();
-        appendArcPoints( fillPoly, pour_def.points );
+        appendArcPoints( fillPoly.Outline( 0 ), pour_def.points );
 
         // PADS HATOUT fill data can contain self-intersecting vertices where
         // narrow corridors route between pads. Run Clipper2 union on the
-        // outline before adding holes, since Simplify can introduce
-        // micro-artifacts in clean complex polygons with holes.
+        // outline before subtracting holes, since Simplify can introduce
+        // micro-artifacts in clean complex polygons.
         if( fillPoly.Outline( 0 ).PointCount() >= 3
             && fillPoly.IsPolygonSelfIntersecting( 0 ) )
         {
             fillPoly.Simplify();
         }
 
-        // Add VOIDOUT records as holes in the fill polygon
+        // Subtract each VOIDOUT region individually. PADS VOIDOUT shapes
+        // can extend beyond the HATOUT outline boundary (PADS clips at
+        // render time), so boolean subtraction is needed rather than
+        // treating them as contained holes.
         for( const auto& void_def : pours )
         {
             if( void_def.style != PADS_IO::POUR_STYLE::VOIDOUT )
@@ -1905,8 +1908,8 @@ void PCB_IO_PADS::loadZones()
             if( !isValidPoly( void_def.points ) )
                 continue;
 
-            // VOIDOUT's owner_pour points to a HATOUT name. Check if that HATOUT
-            // is owned by our POUROUT.
+            // VOIDOUT's owner_pour points to a HATOUT name. Check if that
+            // HATOUT is owned by our POUROUT.
             auto parentIt = hatoutToParent.find( void_def.owner_pour );
 
             if( parentIt == hatoutToParent.end() )
@@ -1915,8 +1918,11 @@ void PCB_IO_PADS::loadZones()
             if( parentIt->second != pour_def.owner_pour )
                 continue;
 
-            fillPoly.NewHole();
-            appendArcPoints( fillPoly, void_def.points );
+            SHAPE_POLY_SET voidPoly;
+            voidPoly.NewOutline();
+            appendArcPoints( voidPoly.Outline( 0 ), void_def.points );
+
+            fillPoly.BooleanSubtract( voidPoly );
         }
 
         zone->SetFilledPolysList( pourLayer, fillPoly );
