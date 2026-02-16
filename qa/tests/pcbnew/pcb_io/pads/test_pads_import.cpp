@@ -1010,4 +1010,79 @@ BOOST_AUTO_TEST_CASE( Peka_AlternateDecalDrill )
 }
 
 
+/**
+ * Verify zone fills imported from peka.asc are not self-intersecting.
+ *
+ * The HATOUT records define complex outlines with arcs that get converted
+ * to polyline approximations. Errors in arc conversion (wrong winding,
+ * bad radius, or incorrect center) can produce outlines that cross
+ * themselves. Every filled polygon on every layer must be clean.
+ */
+BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/peka.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int zonesChecked = 0;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->IsFilled() )
+            continue;
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            if( !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+            if( !fill || fill->OutlineCount() == 0 )
+                continue;
+
+            // Skip polygon sets containing degenerate contours (outline or
+            // holes with fewer than 3 points) that would assert in the
+            // segment-based self-intersection check.
+            bool hasDegenerate = false;
+
+            for( int i = 0; !hasDegenerate && i < fill->OutlineCount(); i++ )
+            {
+                if( fill->Outline( i ).PointCount() < 3 )
+                {
+                    hasDegenerate = true;
+                    break;
+                }
+
+                for( int h = 0; h < fill->HoleCount( i ); h++ )
+                {
+                    if( fill->Hole( i, h ).PointCount() < 3 )
+                    {
+                        hasDegenerate = true;
+                        break;
+                    }
+                }
+            }
+
+            if( hasDegenerate )
+                continue;
+
+            zonesChecked++;
+
+            BOOST_CHECK_MESSAGE(
+                    !fill->IsSelfIntersecting(),
+                    "zone \"" << zone->GetNetname() << "\" on "
+                    << board->GetLayerName( layer )
+                    << " has self-intersecting fill polygon" );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( zonesChecked > 0, "no filled zones found to check" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

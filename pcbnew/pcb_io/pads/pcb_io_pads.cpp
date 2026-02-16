@@ -1267,14 +1267,17 @@ void PCB_IO_PADS::loadTracksAndVias()
 
                 if( p2.is_arc )
                 {
-                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
-                                     scaleCoord( p2.arc.cy, false ) );
+                    double startAngleRad =
+                            atan2( p1.y - p2.arc.cy, p1.x - p2.arc.cx );
+                    double midAngleRad =
+                            startAngleRad + ( p2.arc.delta_angle * M_PI / 180.0 ) / 2.0;
 
-                    bool clockwise = ( p2.arc.delta_angle < 0 );
+                    double midX = p2.arc.cx + p2.arc.radius * cos( midAngleRad );
+                    double midY = p2.arc.cy + p2.arc.radius * sin( midAngleRad );
 
-                    SHAPE_ARC shapeArc;
-                    shapeArc.ConstructFromStartEndCenter( start, end, center, clockwise,
-                                                         track_width );
+                    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
+
+                    SHAPE_ARC shapeArc( start, mid, end, track_width );
 
                     PCB_ARC* arc = new PCB_ARC( m_loadBoard, &shapeArc );
                     arc->SetNet( net );
@@ -1597,13 +1600,17 @@ void PCB_IO_PADS::loadCopperShapes()
 
                 if( p2.is_arc )
                 {
-                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
-                                     scaleCoord( p2.arc.cy, false ) );
+                    double startAngleRad =
+                            atan2( p1.y - p2.arc.cy, p1.x - p2.arc.cx );
+                    double midAngleRad =
+                            startAngleRad + ( p2.arc.delta_angle * M_PI / 180.0 ) / 2.0;
 
-                    bool clockwise = ( p2.arc.delta_angle < 0 );
+                    double midX = p2.arc.cx + p2.arc.radius * cos( midAngleRad );
+                    double midY = p2.arc.cy + p2.arc.radius * sin( midAngleRad );
 
-                    SHAPE_ARC shapeArc;
-                    shapeArc.ConstructFromStartEndCenter( start, end, center, clockwise, width );
+                    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
+
+                    SHAPE_ARC shapeArc( start, mid, end, width );
 
                     PCB_ARC* arc = new PCB_ARC( m_loadBoard, &shapeArc );
 
@@ -1729,14 +1736,21 @@ void PCB_IO_PADS::loadZones()
                 VECTOR2I start( scaleCoord( pts[i - 1].x, true ),
                                 scaleCoord( pts[i - 1].y, false ) );
                 VECTOR2I end( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
-                VECTOR2I center( scaleCoord( pt.arc.cx, true ),
-                                 scaleCoord( pt.arc.cy, false ) );
 
-                bool clockwise = ( pt.arc.delta_angle < 0 );
+                // Compute the arc midpoint in PADS coordinate space (before the
+                // Y-axis flip in scaleCoord) so the 3-point SHAPE_ARC constructor
+                // gets the correct winding direction.
+                double startAngleRad =
+                        atan2( pts[i - 1].y - pt.arc.cy, pts[i - 1].x - pt.arc.cx );
+                double midAngleRad =
+                        startAngleRad + ( pt.arc.delta_angle * M_PI / 180.0 ) / 2.0;
 
-                SHAPE_ARC shapeArc;
-                shapeArc.ConstructFromStartEndCenter( start, end, center, clockwise, 0 );
+                double midX = pt.arc.cx + pt.arc.radius * cos( midAngleRad );
+                double midY = pt.arc.cy + pt.arc.radius * sin( midAngleRad );
 
+                VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
+
+                SHAPE_ARC shapeArc( start, mid, end, 0 );
                 const SHAPE_LINE_CHAIN arcPoly = shapeArc.ConvertToPolyline();
 
                 for( int j = 1; j < arcPoly.PointCount(); j++ )
@@ -1871,6 +1885,16 @@ void PCB_IO_PADS::loadZones()
         SHAPE_POLY_SET fillPoly;
         fillPoly.NewOutline();
         appendArcPoints( fillPoly, pour_def.points );
+
+        // PADS HATOUT fill data can contain self-intersecting vertices where
+        // narrow corridors route between pads. Run Clipper2 union on the
+        // outline before adding holes, since Simplify can introduce
+        // micro-artifacts in clean complex polygons with holes.
+        if( fillPoly.Outline( 0 ).PointCount() >= 3
+            && fillPoly.IsPolygonSelfIntersecting( 0 ) )
+        {
+            fillPoly.Simplify();
+        }
 
         // Add VOIDOUT records as holes in the fill polygon
         for( const auto& void_def : pours )
