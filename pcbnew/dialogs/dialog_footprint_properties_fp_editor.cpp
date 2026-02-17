@@ -42,6 +42,7 @@
 #include <filename_resolver.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
+#include <pad.h>
 #include <footprint_editor_settings.h>
 #include <grid_layer_box_helpers.h>
 #include <layer_utils.h>
@@ -864,6 +865,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     m_footprint->SetDuplicatePadNumbersAreJumpers( m_cbDuplicatePadsAreJumpers->GetValue() );
 
+    std::set<wxString> availablePads;
+
+    for( const PAD* pad : m_footprint->Pads() )
+        availablePads.insert( pad->GetNumber() );
+
     std::vector<std::set<wxString>>& jumpers = m_footprint->JumperPadGroups();
     jumpers.clear();
 
@@ -874,8 +880,21 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
         while( tokenizer.HasMoreTokens() )
         {
-            if( wxString token = tokenizer.GetNextToken(); !token.IsEmpty() )
-                group.insert( token );
+            wxString token = tokenizer.GetNextToken();
+
+            if( token.IsEmpty() )
+                continue;
+
+            if( !availablePads.count( token ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Pad '%s' in jumper pad group %d does not exist in this footprint." ),
+                             token, ii + 1 );
+                DisplayErrorMessage( this, msg );
+                return false;
+            }
+
+            group.insert( token );
         }
     }
 
