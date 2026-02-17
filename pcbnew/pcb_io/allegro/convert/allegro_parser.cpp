@@ -1226,6 +1226,12 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
 
     data.m_Size = aStream.ReadU32();
 
+    if( data.m_Size < 12 )
+    {
+        THROW_IO_ERROR( wxString::Format( "Block 0x21 size %u too small (minimum 12) at offset %#010zx",
+                                          data.m_Size, aStream.Position() ) );
+    }
+
     data.m_Key = aStream.ReadU32();
 
     const size_t nBytes = data.m_Size - 12;
