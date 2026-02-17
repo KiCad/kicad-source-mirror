@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-17 07:49+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-18 09:09+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15082,7 +15082,6 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "Alle Pins mit mehrfach vergebenen Nummern sind Jumper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
-#, fuzzy
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number.  "
 "Pins with the same number will be considered to be jumpered together "
@@ -48084,6 +48083,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Speichern aufgrund von Validierungsfehlern in der Regel \"%s\" nicht "
+"möglich: \n"
+"\n"
+"%s"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:564
 msgid "Are you sure you want to delete?"
@@ -48094,6 +48097,9 @@ msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
 msgstr ""
+"Mehrere Regeln mit gleichem Namen haben unterschiedliche Bedingungen. Regeln "
+"mit gleichem Namen müssen identische Bedingungen haben, um zusammengefasst "
+"werden zu können."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1204
 msgid ""
@@ -48360,31 +48366,34 @@ msgid "Bottom Layer"
 msgstr "Unterste Lage"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
-#, fuzzy
 msgid "Minimum Routing Width is required"
-msgstr "Minimale Leiterbahnbreite"
+msgstr "Minimale Leiterbahnbreite ist erforderlich"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
-#, fuzzy
 msgid "Preferred Routing Width is required"
-msgstr "Bevorzugte Leiterbahnbreite"
+msgstr "Bevorzugte Leiterbahnbreite ist erforderlich"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
-#, fuzzy
 msgid "Maximum Routing Width is required"
-msgstr "Maximale Leiterbahnbreite"
+msgstr "Maximale Leiterbahnbreite ist erforderlich"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:82
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
 msgstr ""
+"Die minimale Leiterbahnbreite darf nicht größer als die bervorzugte "
+"Leiterbahnbreite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:85
 msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
 msgstr ""
+"Die bervorzugte Leiterbahnbreite darf nicht größer als die maximale "
+"Leiterbahnbreite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:88
 msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
 msgstr ""
+"Die minimale Leiterbahnbreite darf nicht größer als die maximale "
+"Leiterbahnbreite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
 msgid "Minimum Routing Width"
@@ -48476,60 +48485,64 @@ msgid "Preferred"
 msgstr "Bevorzugt"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:76
-#, fuzzy
 msgid "Minimum Via Diameter must be greater than 0"
-msgstr "Die Zielimpedanz muss größer als 0 sein"
+msgstr "Der minimale Via-Durchmesser muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:79
-#, fuzzy
 msgid "Preferred Via Diameter must be greater than 0"
-msgstr "Die Zielimpedanz muss größer als 0 sein"
+msgstr "Der bevorzugte Via-Durchmesser muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:82
-#, fuzzy
 msgid "Maximum Via Diameter must be greater than 0"
-msgstr "Radius muss größer als Null sein"
+msgstr "Der maximale Via-Durchmesser muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Via Hole Size must be greater than 0"
-msgstr "Die Dicke der Signallage muss größer als 0 sein"
+msgstr "Der minimale Via-Lochgröße muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:89
-#, fuzzy
 msgid "Preferred Via Hole Size must be greater than 0"
-msgstr "Bogenwinkel muss größer als 0 sein"
+msgstr "Die bevorzugte Via-Lochgröße muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Via Hole Size must be greater than 0"
-msgstr "Radius muss größer als Null sein"
+msgstr "Maximale Via-Lochgröße muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:96
 msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
 msgstr ""
+"Der minimale Via-Durchmesser darf nicht größer als der bevorzugte Via-"
+"Durchmesser sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:99
 msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
 msgstr ""
+"Der bevorzugte Via-Durchmesser darf nicht größer als der maximale Via-"
+"Durchmesser sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:102
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
 msgstr ""
-"Minimaler Via-Durchmesser darf nicht größer als der maximale Via-Durchmesser "
-"sein"
+"Der minimale Via-Durchmesser darf nicht größer als der maximale Via-"
+"Durchmesser sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:106
 msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
 msgstr ""
+"Die minimale Via-Lochgröße darf nicht größer als die bervorzugte Via-"
+"Lochgröße sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:109
 msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr ""
+"Die bervorzugte Via-Lochgröße darf nicht größer als die maximale Via-"
+"Lochgröße sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:112
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr ""
+"Die minimale Via-Lochgröße darf nicht größer als die maximale Via-Lochgröße "
+"sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:657
@@ -48634,14 +48647,13 @@ msgstr "Übereinstimmungen anzeigen"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:995
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1037
-#, fuzzy
 msgid "outer"
-msgstr "Ungeroutet"
+msgstr "äußere(-r/-s)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1039
 msgid "inner"
-msgstr ""
+msgstr "innere(-r/-s)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
 msgid "Constraint"
@@ -48744,9 +48756,9 @@ msgid "Error creating drill report file '%s'"
 msgstr "Fehler beim Erstellen der Bohrprotokoll-Datei \"%s\""
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing drill report file '%s'"
-msgstr "Fehler beim Erstellen der Bohrprotokoll-Datei \"%s\""
+msgstr "Fehler beim Schreiben der Bohrprotokoll-Datei \"%s\""
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:140
 #, c-format
@@ -50685,6 +50697,9 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Warnung: %s Footprint \"%s\" fehlt ein Bibliotheksname. Die vollständige "
+"Form \"Bibliothek:Footprint\" verwenden, um wiederholte "
+"Aktualisierungsbenachrichtigungen zu vermeiden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
 #, c-format
@@ -51487,6 +51502,12 @@ msgid ""
 "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
 "later and re-save, then import the resulting file."
 msgstr ""
+"Diese Datei wurde mit %s erstellt, das ein Binärformat älter als Allegro "
+"16.0 verwendet und von diesem Import nicht unterstützt wird.\n"
+"\n"
+"Um dieses Design zu importieren, öffnen Sie es im Cadence Allegro PCB Editor "
+"Version 16.0 oder höher, speichern Sie es und importieren Sie dann die "
+"resultierende Datei."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:172
 msgid "Failed to build board from Allegro data"
@@ -53221,10 +53242,9 @@ msgid "Skipping track on non-copper layer %d"
 msgstr "Überspringe Leiterbahn auf Nicht-Kupferlage %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
-msgstr ""
-"Text auf nicht zugeordneter Ebene %d der Lage \"Kommentare\" zugewiesen"
+msgstr "KUPFER-Element auf nicht zugeordneter Ebene %d, nutze Standardwert F.Cu"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1661
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
