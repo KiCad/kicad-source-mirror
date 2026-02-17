@@ -4723,6 +4723,7 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                     if( line[0] == '*' )
                     {
                         pushBackLine( line );
+                        clampDesignRuleSentinels();
                         return;
                     }
 
@@ -4761,6 +4762,20 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
 
         // Skip other MISC subsections (ATTRIBUTES DICTIONARY, DESIGN_RULES, etc.)
     }
+
+    clampDesignRuleSentinels();
+}
+
+
+void PARSER::clampDesignRuleSentinels()
+{
+    DESIGN_RULES defaults;
+
+    if( m_design_rules.default_clearance == std::numeric_limits<double>::max() )
+        m_design_rules.default_clearance = defaults.default_clearance;
+
+    if( m_design_rules.copper_edge_clearance == std::numeric_limits<double>::max() )
+        m_design_rules.copper_edge_clearance = defaults.copper_edge_clearance;
 }
 
 

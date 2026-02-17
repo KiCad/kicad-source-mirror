@@ -777,6 +777,7 @@ private:
     void parseSectionDIFFPAIR( std::ifstream& aStream );
     void parseSectionLAYERDEFS( std::ifstream& aStream );
     void parseSectionMISC( std::ifstream& aStream );
+    void clampDesignRuleSentinels();
 
     // Helper to read next line skipping comments and empty lines
     bool readLine( std::ifstream& aStream, std::string& aLine );
