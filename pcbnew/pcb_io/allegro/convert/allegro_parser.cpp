@@ -1050,6 +1050,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
     ReadCond( aStream, aVer, data.m_Unknown10 );
     data.m_LayerCount = aStream.ReadU16();
+
+    if( data.m_LayerCount > 256 )
+    {
+        THROW_IO_ERROR( wxString::Format( "Padstack layer count %u exceeds maximum at offset %#010zx",
+                                          data.m_LayerCount, aStream.Position() ) );
+    }
+
     ReadCond( aStream, aVer, data.m_Unknown11 );
 
     ReadArrayU32( aStream, data.m_DrillArr );
