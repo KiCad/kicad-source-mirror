@@ -76,62 +76,6 @@ BOOST_FIXTURE_TEST_SUITE( AllegroImport, ALLEGRO_IMPORT_FIXTURE )
 
 
 /**
- * Test that an Allegro .brd file can be loaded without crashing.
- * Uses TRS80_POWER.brd as a simple test board.
- */
-BOOST_AUTO_TEST_CASE( BasicLoad )
-{
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "Board should load successfully" );
-
-    PrintBoardStats( board.get(), "TRS80_POWER.brd" );
-
-    // Basic sanity checks
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-}
-
-
-/**
- * Test that nets are imported correctly with proper names.
- */
-BOOST_AUTO_TEST_CASE( NetImport )
-{
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
-
-    BOOST_REQUIRE( board != nullptr );
-
-    // Check that nets exist
-    BOOST_CHECK_GT( board->GetNetCount(), 1 );
-
-    // Check for expected net names (will need to be adjusted based on actual board content)
-    bool foundGnd = false;
-    bool foundVcc = false;
-
-    for( int i = 0; i < board->GetNetCount(); i++ )
-    {
-        NETINFO_ITEM* net = board->GetNetInfo().GetNetItem( i );
-
-        if( net )
-        {
-            wxString name = net->GetNetname().Upper();
-
-            if( name.Contains( "GND" ) || name.Contains( "VSS" ) )
-                foundGnd = true;
-
-            if( name.Contains( "VCC" ) || name.Contains( "VDD" ) || name.Contains( "+5" ) ||
-                name.Contains( "+3" ) || name.Contains( "PWR" ) )
-                foundVcc = true;
-        }
-    }
-
-    BOOST_TEST_MESSAGE( "Found GND-like net: " << ( foundGnd ? "yes" : "no" ) );
-    BOOST_TEST_MESSAGE( "Found VCC-like net: " << ( foundVcc ? "yes" : "no" ) );
-}
-
-
-/**
  * Test that footprints have valid reference designators.
  */
 BOOST_AUTO_TEST_CASE( FootprintRefDes )

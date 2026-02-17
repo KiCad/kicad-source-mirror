@@ -106,11 +106,26 @@
         },
         "TRS80_POWER": {
             "formatVersion": "16.6",
-            "boardFile": "TRS80_POWER.brd"
+            "boardFile": "TRS80_POWER.brd",
+            "boardExpectations": [
+                {
+                    "type": "footprint",
+                    "count": {
+                        "min": 1
+                    }
+                },
+                {
+                    "type": "net",
+                    "count": {
+                        "min": 1
+                    }
+                }
+            ]
         },
         "v13_header": {
             "formatVersion": "13.0",
             "boardFile": "v13_header.brd",
+            // This version cannot (yet) be read successfully, so expect it to fail
             "expectLoadFailure": true
         },
         "VCU118_REV2-0": {
