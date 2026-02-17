@@ -822,7 +822,11 @@ const FUNCTION_INSTANCE& COMPONENT_INST::GetFunctionInstance() const
 
 const COMPONENT_INST* COMPONENT_INST::GetNextInstance() const
 {
-    wxCHECK2_MSG( m_Next.m_Target, nullptr, "COMPONENT_INST::GetNextInstance: Null m_Next reference" );
+    if( m_Next.m_Target == nullptr )
+    {
+        wxLogTrace( "ALLEGRO_EXTRACT", "COMPONENT_INST::GetNextInstance: Null m_Next reference for key %#010x", m_Key );
+        return nullptr;
+    }
 
     // If the next is not a COMPONENT_INST, it's the end of the list
     if( m_Next.m_Target->GetType() != DB_OBJ::TYPE::COMPONENT_INST )
@@ -1746,7 +1750,11 @@ void BRD_DB::VisitComponentPins( VIEW_OBJS_VISITOR aVisitor ) const
         // For each footprint instance, visit all the pins of the component
         const COMPONENT_INST* compInst = aViewObjs.m_ComponentInstance;
 
-        wxCHECK2_MSG( compInst != nullptr, , "BRD_DB::VisitComponentPins: Null component instance in view objs" );
+        if( compInst == nullptr )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "  No component instance in view objs, skipping" );
+            return;
+        }
 
         const auto padVisitor = [&]( const DB_OBJ& aObj )
         {
