@@ -642,6 +642,7 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentEnd = p;
     m_placingVia = false;
     m_chainedPlacement = false;
+    m_hasFixedAnything = false;
     m_currentTraceOk = false;
     m_currentTrace = DIFF_PAIR();
     m_currentTrace.SetNets( m_netP, m_netN );
@@ -781,10 +782,18 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
 
 void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 {
+    int prevDiffPairWidth = m_sizes.DiffPairWidth();
+
     m_sizes = aSizes;
 
     if( !m_idle )
     {
+        // When continuing from an existing track in connected-track-width mode, preserve the
+        // inherited diff pair width rather than reverting to the netclass default. This matches
+        // the guard in LINE_PLACER::UpdateSizes() for single tracks.
+        if( !m_sizes.TrackWidthIsExplicit() && m_hasFixedAnything )
+            m_sizes.SetDiffPairWidth( prevDiffPairWidth );
+
         m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
         m_currentTrace.SetGap( m_sizes.DiffPairGap() );
 
@@ -863,6 +872,7 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
     }
     else
     {
+        m_hasFixedAnything = true;
         initPlacement();
         return false;
     }
