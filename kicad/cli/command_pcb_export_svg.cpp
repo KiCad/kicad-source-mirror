@@ -116,10 +116,6 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() :
                                   "which files may be output." ) ) )
             .flag();
 
-    m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
-            .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
-            .flag();
-
     m_argParser.add_argument( ARG_SCALE )
             .help( UTF8STDSTR( _( ARG_SCALE_DESC ) ) )
             .scan<'g', double>()
@@ -151,9 +147,6 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_subtractSolderMaskFromSilk = m_argParser.get<bool>( ARG_SUBTRACT_SOLDERMASK );
     svgJob->m_scale = m_argParser.get<double>( ARG_SCALE );
     svgJob->m_checkZonesBeforePlot = m_argParser.get<bool>( ARG_CHECK_ZONES );
-
-    if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
-        wxFprintf( stdout, DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_WARNING );
 
     svgJob->m_fitPageToBoard = m_argParser.get<bool>( ARG_FIT_PAGE_TO_BOARD );
 

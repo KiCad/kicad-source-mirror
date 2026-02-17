@@ -249,7 +249,6 @@ _kicad_cli_pcb_export_commands() {
         'drill:Generate Drill Files'
         'dxf:Generate a DXF from a list of layers'
         'gencad:Export the PCB in Gencad format'
-        'gerber:Plot given layers to a single Gerber file'
         'gerbers:Plot multiple Gerbers for a PCB, including the ability to use stored board plot settings'
         'glb:Export GLB (binary GLTF)'
         'hpgl:No longer supported as of KiCad 10.0.'
@@ -298,9 +297,6 @@ _kicad_cli_pcb_export() {
                     ;;
                 (gencad)
                     _kicad_cli_pcb_export_gencad
-                    ;;
-                (gerber)
-                    _kicad_cli_pcb_export_gerber
                     ;;
                 (gerbers)
                     _kicad_cli_pcb_export_gerbers
@@ -470,7 +466,6 @@ _kicad_cli_pcb_export_dxf() {
         '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
         '(--ou --output-units)'{--ou,--output-units}'[Output units, valid options: mm, in \[nargs=0..1\] \[default: "in"\]]' \
         '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
-        '--plot-invisible-text[Deprecated.  Has no effect.]' \
         '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
         '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
         '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
@@ -496,36 +491,6 @@ _kicad_cli_pcb_export_gencad() {
         && return 0
 }
 
-_kicad_cli_pcb_export_gerber() {
-    local context state state_descr line
-    typeset -A opt_args
-
-    _arguments -C \
-        '(--cdnp --crossout-DNP-footprints-on-fab-layers)'{--cdnp,--crossout-DNP-footprints-on-fab-layers}'[Plot an '\''X'\'' over the courtyard of DNP footprints on fab layers, and strikeout their reference designators]' \
-        '--check-zones[Check and refill zones if required]' \
-        '(--cl --common-layers)'{--cl,--common-layers}'[Layers to include on each plot, comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
-        '(--define-var -D)'{--define-var,-D}'[]' \
-        '--disable-aperture-macros[Disable aperture macros]' \
-        '--drawing-sheet[Path to drawing sheet, this overrides any existing project defined sheet when used \[nargs=0..1\] \[default: ""\]]' \
-        '(--erd --exclude-refdes)'{--erd,--exclude-refdes}'[Exclude the reference designator text]' \
-        '(--ev --exclude-value)'{--ev,--exclude-value}'[Exclude the value text]' \
-        '(--hdnp --hide-DNP-footprints-on-fab-layers)'{--hdnp,--hide-DNP-footprints-on-fab-layers}'[Don'\''t plot text & graphics of DNP footprints on fab layers]' \
-        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
-        '(--ibt --include-border-title)'{--ibt,--include-border-title}'[Include the border and title block]' \
-        '(--layers -l)'{--layers,-l}'[Comma separated list of untranslated layer names to include such as F.Cu,B.Cu \[nargs=0..1\] \[default: ""\]]' \
-        '--no-netlist[Do not generate netlist attributes]' \
-        '--no-protel-ext[Use KiCad Gerber file extension]' \
-        '--no-x2[Do not use the extended X2 format]' \
-        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
-        '--plot-invisible-text[Deprecated.  Has no effect.]' \
-        '--precision[Precision of Gerber coordinates, valid options: 5 or 6 \[nargs=0..1\] \[default: 6\]]' \
-        '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
-        '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
-        '--subtract-soldermask[Subtract soldermask from silkscreen]' \
-        '--use-drill-file-origin[Use drill/place file origin]' \
-        && return 0
-}
-
 _kicad_cli_pcb_export_gerbers() {
     local context state state_descr line
     typeset -A opt_args
@@ -548,7 +513,6 @@ _kicad_cli_pcb_export_gerbers() {
         '--no-protel-ext[Use KiCad Gerber file extension]' \
         '--no-x2[Do not use the extended X2 format]' \
         '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
-        '--plot-invisible-text[Deprecated.  Has no effect.]' \
         '--precision[Precision of Gerber coordinates, valid options: 5 or 6 \[nargs=0..1\] \[default: 6\]]' \
         '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
         '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
@@ -671,7 +635,6 @@ _kicad_cli_pcb_export_pdf() {
         '--mode-single[Generates a single file with the output arg path acting as the complete directory and filename path. COMMON_LAYER_LIST does not function in this mode. Instead LAYER_LIST controls all layers plotted.]' \
         '(--negative -n)'{--negative,-n}'[Plot as negative (useful for directly etching from the export)]' \
         '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
-        '--plot-invisible-text[Deprecated.  Has no effect.]' \
         '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
         '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
         '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \
@@ -906,7 +869,6 @@ _kicad_cli_pcb_export_svg() {
         '(--negative -n)'{--negative,-n}'[Plot as negative (useful for directly etching from the export)]' \
         '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
         '--page-size-mode[Set page sizing mode (0 = page with frame and title block, 1 = current page size, 2 = board area only) \[nargs=0..1\] \[default: 0\]]' \
-        '--plot-invisible-text[Deprecated.  Has no effect.]' \
         '--scale[Scale for the PCB, not for the border and title. Use 0 for autoscale \[nargs=0..1\] \[default: 1\]]' \
         '(--sdnp --sketch-DNP-footprints-on-fab-layers)'{--sdnp,--sketch-DNP-footprints-on-fab-layers}'[Plot graphics of DNP footprints in sketch mode on fab layers]' \
         '(--sketch-pads-on-fab-layers --sp)'{--sketch-pads-on-fab-layers,--sp}'[Draw pad outlines and their numbers on front and back fab layers]' \

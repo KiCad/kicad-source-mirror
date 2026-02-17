@@ -123,18 +123,32 @@ def test_pcb_export_gerber( kitest: KiTestFixture,
     input_file = kitest.get_data_file_path( test_file )
 
     for layer_name in layers_to_test:
-        generated_gerber_path, layer_name_fixed = get_generated_path( kitest,
-                                                                      input_file.with_suffix( ".gbr" ),
-                                                                      "export_gerber",
-                                                                      layer_name )
+        output_dir = kitest.get_output_path( "cli/export_gerber/{}/{}/".format(
+                input_file.stem, layer_name.replace( ".", "_" ) ) )
 
-        command = [utils.kicad_cli(), "pcb", "export", "gerber", "--no-x2", "--use-drill-file-origin",
+        if output_dir.exists():
+            import shutil
+            shutil.rmtree( output_dir )
+
+        output_dir.mkdir( parents=True, exist_ok=True )
+
+        command = [utils.kicad_cli(), "pcb", "export", "gerbers", "--no-x2", "--use-drill-file-origin",
                    "--layers", layer_name,
-                   "-o", str(generated_gerber_path), str(input_file)]
+                   "-o", str(output_dir), str(input_file)]
 
-        run_and_check_export_command( kitest, command, generated_gerber_path )
+        stdout, stderr, exitcode = utils.run_and_capture( command )
+        assert exitcode == 0
+        assert stdout is not None
+
+        gerber_files = [f for f in output_dir.iterdir() if not f.name.endswith( ".gbrjob" )]
+        assert len( gerber_files ) == 1, \
+            "Expected 1 gerber file in output dir, found {}".format( len( gerber_files ) )
+
+        generated_gerber_path = gerber_files[0]
+        kitest.add_attachment( generated_gerber_path )
 
         gbr_source_path = str( input_file.with_suffix( "" ) )
+        layer_name_fixed = "-" + layer_name.replace( ".", "_" )
         gbr_source_path += layer_name_fixed + ".gbr"
 
         # Comparison DPI = 5080 => 1px == 5um. I.e. allowable error of 15 um after eroding

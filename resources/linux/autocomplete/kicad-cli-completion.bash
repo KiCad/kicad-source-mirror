@@ -63,7 +63,7 @@ _kicad_cli()
             return 0
             ;;
         "pcb export")
-            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerber gerbers glb hpgl ipc2581 ipcd356 odb pdf ply pos ps stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
+            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerbers glb hpgl ipc2581 ipcd356 odb pdf ply pos ps stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
             return 0
             ;;
         "pcb export 3dpdf")
@@ -79,19 +79,15 @@ _kicad_cli()
             return 0
             ;;
         "pcb export dxf")
-            COMPREPLY=( $(compgen -W "--cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --mode-multi --mode-single --ou --output --output-units --plot-invisible-text --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --uc --udo --use-contours --use-drill-origin -D -h -l -o" -- "$cur") )
+            COMPREPLY=( $(compgen -W "--cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --mode-multi --mode-single --ou --output --output-units --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --uc --udo --use-contours --use-drill-origin -D -h -l -o" -- "$cur") )
             return 0
             ;;
         "pcb export gencad")
             COMPREPLY=( $(compgen -W "--define-var --flip-bottom-pads --help --output --store-origin-coord --unique-footprints --unique-pins --use-drill-origin -D -f -h -o" -- "$cur") )
             return 0
             ;;
-        "pcb export gerber")
-            COMPREPLY=( $(compgen -W "--cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --disable-aperture-macros --drawing-sheet --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --no-netlist --no-protel-ext --no-x2 --output --plot-invisible-text --precision --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --use-drill-file-origin -D -h -l -o" -- "$cur") )
-            return 0
-            ;;
         "pcb export gerbers")
-            COMPREPLY=( $(compgen -W "--board-plot-params --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --disable-aperture-macros --drawing-sheet --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --no-netlist --no-protel-ext --no-x2 --output --plot-invisible-text --precision --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --use-drill-file-origin -D -h -l -o" -- "$cur") )
+            COMPREPLY=( $(compgen -W "--board-plot-params --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --disable-aperture-macros --drawing-sheet --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --no-netlist --no-protel-ext --no-x2 --output --precision --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --use-drill-file-origin -D -h -l -o" -- "$cur") )
             return 0
             ;;
         "pcb export glb")
@@ -115,7 +111,7 @@ _kicad_cli()
             return 0
             ;;
         "pcb export pdf")
-            COMPREPLY=( $(compgen -W "--bg-color --black-and-white --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --mirror --mode-multipage --mode-separate --mode-single --negative --output --plot-invisible-text --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --theme -D -h -l -m -n -o -t" -- "$cur") )
+            COMPREPLY=( $(compgen -W "--bg-color --black-and-white --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --erd --ev --exclude-refdes --exclude-value --hdnp --help --hide-DNP-footprints-on-fab-layers --ibt --include-border-title --layers --mirror --mode-multipage --mode-separate --mode-single --negative --output --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --theme -D -h -l -m -n -o -t" -- "$cur") )
             return 0
             ;;
         "pcb export ply")
@@ -147,7 +143,7 @@ _kicad_cli()
             return 0
             ;;
         "pcb export svg")
-            COMPREPLY=( $(compgen -W "--black-and-white --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --exclude-drawing-sheet --fit-page-to-board --hdnp --help --hide-DNP-footprints-on-fab-layers --layers --mirror --mode-multi --mode-single --negative --output --page-size-mode --plot-invisible-text --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --theme -D -h -l -m -n -o -t" -- "$cur") )
+            COMPREPLY=( $(compgen -W "--black-and-white --cdnp --check-zones --cl --common-layers --crossout-DNP-footprints-on-fab-layers --define-var --drawing-sheet --drill-shape-opt --exclude-drawing-sheet --fit-page-to-board --hdnp --help --hide-DNP-footprints-on-fab-layers --layers --mirror --mode-multi --mode-single --negative --output --page-size-mode --scale --sdnp --sketch-DNP-footprints-on-fab-layers --sketch-pads-on-fab-layers --sp --subtract-soldermask --theme -D -h -l -m -n -o -t" -- "$cur") )
             return 0
             ;;
         "pcb export u3d")

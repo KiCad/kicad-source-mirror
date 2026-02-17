@@ -21,11 +21,9 @@
 #include "command_pcb_export_gerber.h"
 #include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_gerber.h"
-#include <kiface_base.h>
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <locale_io.h>
 #include <string_utils.h>
 
 
@@ -98,19 +96,9 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
             .help( UTF8STDSTR( _( "Use KiCad Gerber file extension" ) ) )
             .flag();
 
-    m_argParser.add_argument( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT )
-            .help( UTF8STDSTR( _( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_DESC ) ) )
-            .flag();
-
     m_argParser.add_argument( ARG_CHECK_ZONES )
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
-}
-
-
-CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND() :
-        PCB_EXPORT_GERBER_COMMAND( "gerber", IO_TYPE::FILE )
-{
 }
 
 
@@ -142,9 +130,6 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
     aJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
 
-    if( m_argParser.get<bool>( DEPRECATED_ARG_PLOT_INVISIBLE_TEXT ) )
-        wxFprintf( stdout, DEPRECATED_ARG_PLOT_INVISIBLE_TEXT_WARNING );
-
     if( !wxFile::Exists( aJob->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
@@ -158,21 +143,4 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     }
 
     return EXIT_CODES::OK;
-}
-
-
-int CLI::PCB_EXPORT_GERBER_COMMAND::doPerform( KIWAY& aKiway )
-{
-    wxFprintf( stdout, wxT( "\033[33;1m%s\033[0m\n" ),
-               _( "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n" ) );
-
-    std::unique_ptr<JOB_EXPORT_PCB_GERBER> gerberJob( new JOB_EXPORT_PCB_GERBER() );
-
-    int exitCode = populateJob( gerberJob.get() );
-
-    if( exitCode != EXIT_CODES::OK )
-        return exitCode;
-
-    LOCALE_IO dummy;
-    return aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob.get() );
 }
