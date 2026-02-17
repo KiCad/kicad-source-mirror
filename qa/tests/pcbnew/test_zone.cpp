@@ -124,4 +124,20 @@ BOOST_AUTO_TEST_CASE( RuleAreaInnerLayersExpandMode )
     BOOST_TEST( usedLayers.none() );
 }
 
+/**
+ * Verify that GetPosition() on a zone with no outline vertices does not
+ * throw or crash. Empty zones can be created by importers.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23125
+ */
+BOOST_AUTO_TEST_CASE( EmptyZoneGetPosition )
+{
+    ZONE zone( &m_board );
+    zone.SetLayer( F_Cu );
+
+    BOOST_TEST( zone.GetNumCorners() == 0 );
+    BOOST_CHECK_NO_THROW( zone.GetPosition() );
+    BOOST_TEST( zone.GetPosition() == VECTOR2I( 0, 0 ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -1304,10 +1304,22 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_zone:
-            item = parseZONE( m_board );
+        {
+            ZONE* zone = parseZONE( m_board );
+
+            if( zone->GetNumCorners() == 0 )
+            {
+                // Zones with no outline vertices are degenerate and can cause crashes
+                // elsewhere. Silently discard them.
+                delete zone;
+                break;
+            }
+
+            item = zone;
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
+        }
 
         case T_target:
             item = parsePCB_TARGET();
@@ -5491,6 +5503,13 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         case T_zone:
         {
             ZONE* zone = parseZONE( footprint.get() );
+
+            if( zone->GetNumCorners() == 0 )
+            {
+                delete zone;
+                break;
+            }
+
             footprint->Add( zone, ADD_MODE::APPEND, true );
             break;
         }

@@ -594,6 +594,12 @@ void PCB_IO_PADS_BINARY::loadZones()
             zone->Outline()->Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
         }
 
+        if( zone->GetNumCorners() == 0 )
+        {
+            delete zone;
+            continue;
+        }
+
         if( pour_def.is_cutout )
         {
             zone->SetIsRuleArea( true );

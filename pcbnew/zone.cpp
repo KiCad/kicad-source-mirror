@@ -491,6 +491,9 @@ bool ZONE::IsConflicting() const
 
 VECTOR2I ZONE::GetPosition() const
 {
+    if( m_Poly->OutlineCount() == 0 || m_Poly->TotalVertices() == 0 )
+        return VECTOR2I( 0, 0 );
+
     return GetCornerPosition( 0 );
 }
 

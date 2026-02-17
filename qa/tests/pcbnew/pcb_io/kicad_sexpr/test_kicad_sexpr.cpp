@@ -101,4 +101,31 @@ BOOST_AUTO_TEST_CASE( Issue19775_ZoneLayerWildcards )
 }
 
 
+/**
+ * Verify that zones with no polygon outline are silently discarded during
+ * loading rather than being added to the board where they would cause
+ * crashes in GetPosition().
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23125
+ */
+BOOST_AUTO_TEST_CASE( Issue23125_EmptyZoneDiscarded )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/kicad_sexpr/Issue23125_EmptyZone/";
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    kicadPlugin.LoadBoard( dataPath + "EmptyZone.kicad_pcb", testBoard.get() );
+
+    // The file contains 3 zones: 1 valid (with polygon) and 2 empty (no polygon).
+    // The 2 empty zones should have been discarded during loading.
+    BOOST_CHECK_EQUAL( testBoard->Zones().size(), 1 );
+
+    // The surviving zone should have a valid position
+    ZONE* z = testBoard->Zones()[0];
+    BOOST_CHECK_NO_THROW( z->GetPosition() );
+    BOOST_CHECK( z->GetNumCorners() > 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
