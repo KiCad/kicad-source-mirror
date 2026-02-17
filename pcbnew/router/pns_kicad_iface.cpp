@@ -2687,6 +2687,9 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 
     if( newBoardItem )
     {
+        if( aItem->IsLocked() )
+            newBoardItem->SetLocked( true );
+
         if( BOARD_ITEM* src = aItem->GetSourceItem() )
         {
             if( m_itemGroups.contains( src ) )
