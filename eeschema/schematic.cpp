@@ -441,6 +441,8 @@ std::shared_ptr<BUS_ALIAS> SCHEMATIC::GetBusAlias( const wxString& aLabel ) cons
 }
 
 
+
+
 std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 {
     std::set<wxString> names;

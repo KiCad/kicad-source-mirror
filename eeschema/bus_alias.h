@@ -45,11 +45,34 @@ public:
         return std::make_shared<BUS_ALIAS>( *this );
     }
 
-    wxString GetName() { return m_name; }
-    void SetName( const wxString& aName ) { m_name = aName; }
+    wxString GetName() const { return m_name; }
+
+    void SetName( const wxString& aName ) { m_name = aName.Strip( wxString::both ); }
 
     const std::vector<wxString>& Members() const { return m_members; }
-    std::vector<wxString>& Members() { return m_members; }
+
+    void SetMembers( const std::vector<wxString>& aMembers )
+    {
+        m_members.clear();
+
+        for( const wxString& member : aMembers )
+        {
+            wxString trimmed = member.Strip( wxString::both );
+
+            if( !trimmed.IsEmpty() )
+                m_members.push_back( trimmed );
+        }
+    }
+
+    void AddMember( const wxString& aMember )
+    {
+        wxString trimmed = aMember.Strip( wxString::both );
+
+        if( !trimmed.IsEmpty() )
+            m_members.push_back( trimmed );
+    }
+
+    void ClearMembers() { m_members.clear(); }
 
     SCH_SCREEN* GetParent() { return m_parent; }
     void SetParent( SCH_SCREEN* aParent ) { m_parent = aParent; }

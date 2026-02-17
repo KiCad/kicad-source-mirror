@@ -1205,7 +1205,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             BUS               bus     = Schematic.Buses.at( busTerm.BusID );
 
             if( !alg::contains( m_busesMap.at( bus.ID )->Members(), netName ) )
-                m_busesMap.at( bus.ID )->Members().emplace_back( netName );
+                m_busesMap.at( bus.ID )->AddMember( netName );
 
             SCH_BUS_WIRE_ENTRY* busEntry =
                     new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );

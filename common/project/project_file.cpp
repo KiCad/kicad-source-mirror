@@ -117,6 +117,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                     m_LegacyLibNames.push_back( entry.get<wxString>() );
             }, {} ) );
 
+
+
     m_NetSettings = std::make_shared<NET_SETTINGS>( this, "net_settings" );
 
     m_params.emplace_back( new PARAM_LAYER_PRESET( "board.layer_presets", &m_LayerPresets ) );

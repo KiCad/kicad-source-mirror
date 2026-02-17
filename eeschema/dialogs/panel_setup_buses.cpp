@@ -284,10 +284,10 @@ void PANEL_SETUP_BUSES::OnRemoveMember( wxCommandEvent& aEvent )
 
     // Update the member list of the current bus alias from the members grid
     const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
-    alias->Members().clear();
+    alias->ClearMembers();
 
     for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
-        alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
+        alias->AddMember( m_membersGrid->GetCellValue( ii, 0 ) );
 
     if( m_membersGrid->GetNumberRows() > 0 )
     {
@@ -347,7 +347,7 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
 
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
 
-        alias->Members().clear();
+        alias->ClearMembers();
 
         for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
         {
@@ -363,11 +363,11 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
                 }
 
                 while( tok.HasMoreTokens() )
-                    alias->Members().push_back( tok.GetNextToken() );
+                    alias->AddMember( tok.GetNextToken() );
             }
             else
             {
-                alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
+                alias->AddMember( m_membersGrid->GetCellValue( ii, 0 ) );
             }
         }
     }
@@ -525,16 +525,9 @@ void PANEL_SETUP_BUSES::updateAliasMembers( int aAliasIndex )
     {
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[aAliasIndex];
 
-        alias->Members().clear();
+        alias->ClearMembers();
 
         for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
-        {
-            wxString memberValue = m_membersGrid->GetCellValue( ii, 0 );
-
-            if( !memberValue.empty() )
-            {
-                alias->Members().push_back( memberValue );
-            }
-        }
+            alias->AddMember( m_membersGrid->GetCellValue( ii, 0 ) );
     }
 }

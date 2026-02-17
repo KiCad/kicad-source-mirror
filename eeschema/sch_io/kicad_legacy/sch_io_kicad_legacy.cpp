@@ -1497,7 +1497,7 @@ std::shared_ptr<BUS_ALIAS> SCH_IO_KICAD_LEGACY::loadBusAlias( LINE_READER& aRead
         parseUnquotedString( buf, aReader, line, &line, true );
 
         if( !buf.IsEmpty() )
-            busAlias->Members().emplace_back( buf );
+            busAlias->AddMember( buf );
     }
 
     return busAlias;

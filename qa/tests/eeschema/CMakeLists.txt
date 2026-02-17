@@ -74,6 +74,7 @@ set( QA_EESCHEMA_SRCS
     test_crossing_label.cpp
     test_eagle_plugin.cpp
     test_junction_helpers.cpp
+    test_bus_alias_whitespace.cpp
     test_bus_net_name_determinism.cpp
     test_bus_parsing.cpp
     test_lib_part.cpp

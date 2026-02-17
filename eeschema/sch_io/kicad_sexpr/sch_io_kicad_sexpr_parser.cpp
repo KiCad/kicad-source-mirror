@@ -4766,7 +4766,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
         if( m_requiredVersion < 20210621 )
             member = ConvertToNewOverbarNotation( member );
 
-        busAlias->Members().emplace_back( member );
+        busAlias->AddMember( member );
 
         token = NextTok();
     }

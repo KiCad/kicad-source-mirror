@@ -747,8 +747,8 @@ void SCH_IO_ALTIUM::CreateAliases()
         std::shared_ptr<BUS_ALIAS> alias = std::make_shared<BUS_ALIAS>( screen);
         alias->SetName( harness.m_name );
 
-        for( auto& port : harness.m_ports )
-            alias->Members().push_back( port.m_name );
+        for( HARNESS::HARNESS_PORT& port : harness.m_ports )
+            alias->AddMember( port.m_name );
 
         screen->AddBusAlias( alias );
 
