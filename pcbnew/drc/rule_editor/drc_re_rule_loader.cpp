@@ -320,14 +320,37 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wx
 
 wxString DRC_RULE_LOADER::extractRuleText( const wxString& aContent, const wxString& aRuleName )
 {
-    // Search for the rule by name, handling both quoted and unquoted names
+    // Search for the rule by name, handling both quoted and unquoted names.
+    // The quoted form includes the closing quote as a boundary so partial
+    // matches like "Clearance" vs "Clearance for BGA" are not possible.
+    // The unquoted form needs an explicit boundary check.
     wxString quotedSearch = wxString::Format( wxS( "(rule \"%s\"" ), aRuleName );
     wxString unquotedSearch = wxString::Format( wxS( "(rule %s" ), aRuleName );
 
     size_t startPos = aContent.find( quotedSearch );
 
     if( startPos == wxString::npos )
-        startPos = aContent.find( unquotedSearch );
+    {
+        size_t pos = 0;
+
+        while( ( pos = aContent.find( unquotedSearch, pos ) ) != wxString::npos )
+        {
+            size_t afterMatch = pos + unquotedSearch.length();
+
+            if( afterMatch >= aContent.length()
+                || aContent[afterMatch] == ')'
+                || aContent[afterMatch] == ' '
+                || aContent[afterMatch] == '\n'
+                || aContent[afterMatch] == '\r'
+                || aContent[afterMatch] == '\t' )
+            {
+                startPos = pos;
+                break;
+            }
+
+            pos = afterMatch;
+        }
+    }
 
     if( startPos == wxString::npos )
         return wxEmptyString;
