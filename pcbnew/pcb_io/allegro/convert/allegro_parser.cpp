@@ -2458,6 +2458,13 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         wxASSERT_MSG( offset % 4 == 0,
                       wxString::Format( "Allegro object at %#010zx, offset not aligned to 4 bytes", offset ) );
 
+        // Peek at the block type byte before ParseBlock consumes it so we
+        // have the value available for error messages if the type is unknown
+        // and ParseBlock returns nullptr.
+        uint8_t blockTypeByte = 0;
+        m_stream.GetU8( blockTypeByte );
+        m_stream.Seek( offset );
+
         bool                        endOfObjectsMarker = false;
         std::unique_ptr<BLOCK_BASE> block = blockParser.ParseBlock( endOfObjectsMarker );
 
@@ -2506,13 +2513,13 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
             {
                 THROW_IO_ERROR( wxString::Format(
                         "Do not have parser for block index %zu type %#02x available at offset %#010zx",
-                        aBoard.GetObjectCount(), block->GetBlockType(), offset ) );
+                        aBoard.GetObjectCount(), blockTypeByte, offset ) );
             }
             else
             {
                 wxLogTrace( traceAllegroParser,
                             wxString::Format( "Ending at unknown block, index %zu type %#04x at offset %#010zx",
-                                              aBoard.GetObjectCount(), block->GetBlockType(), offset ) );
+                                              aBoard.GetObjectCount(), blockTypeByte, offset ) );
 
                 wxFAIL_MSG( "Failed to create block" );
                 return;
