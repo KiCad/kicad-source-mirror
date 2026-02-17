@@ -170,6 +170,7 @@ static void RegisterDefaultConverters()
                 {
                     double val = constraint.GetValue().Min() / 1000000.0;
                     auto data = DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( type );
+                    data->SetRuleName( aRule->m_Name );
                     data->SetNumericInputValue( val );
                     data->SetConstraintCode( code );
                     return data;

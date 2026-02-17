@@ -56,14 +56,13 @@ public:
     { return { { 99, 119, 78, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_copper_to_hole_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 178, 198, 105, 1 } }; }
 };
 
 
@@ -106,14 +105,13 @@ public:
     { return { { 72, 92, 22, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_HOLE_TO_HOLE_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_to_hole_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 24, 1 } }; }
+    { return { { 165, 185, 105, 1 } }; }
 };
 
 
@@ -126,14 +124,13 @@ public:
     { return { { 54, 74, 38, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_maximum_allowed_deviation; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 82, 102, 82, 1 } }; }
 };
 
 
@@ -156,44 +153,40 @@ public:
     { return { { 45, 65, 35, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_annular_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 65, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 105, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_connection_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 100, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_item_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 205, 225, 92, 1 } }; }
 };
 
 
@@ -216,54 +209,49 @@ public:
     { return { { 86, 106, 14, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_through_hole; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 105, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_track_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 108, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_diameter; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 166, 186, 105, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_hole; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 166, 186, 105, 1 } }; }
 };
 
-// TODO: Image of wrong size
 class DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_via_diameter; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 20, 40, 20, 1 } }; }
+    { return { { 186, 206, 105, 1 } }; }
 };
 
 

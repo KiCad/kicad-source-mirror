@@ -68,13 +68,13 @@ public:
         VALIDATION_RESULT result;
 
         if( m_minRoutingWidth <= 0 )
-            result.AddError( _( "Minimum Routing Width is required" ) );
+            result.AddError( _( "Minimum Routing Width must be greater than 0" ) );
 
         if( m_preferredRoutingWidth <= 0 )
-            result.AddError( _( "Preferred Routing Width is required" ) );
+            result.AddError( _( "Preferred Routing Width must be greater than 0" ) );
 
         if( m_maxRoutingWidth <= 0 )
-            result.AddError( _( "Maximum Routing Width is required" ) );
+            result.AddError( _( "Maximum Routing Width must be greater than 0" ) );
 
         if( result.isValid )
         {

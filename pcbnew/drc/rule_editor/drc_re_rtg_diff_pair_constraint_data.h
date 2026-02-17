@@ -74,25 +74,25 @@ public:
         VALIDATION_RESULT result;
 
         if( m_minWidth <= 0 )
-            result.AddError( _( "Minimum Width is required" ) );
+            result.AddError( _( "Minimum Width must be greater than 0" ) );
 
         if( m_preferredWidth <= 0 )
-            result.AddError( _( "Preferred Width is required" ) );
+            result.AddError( _( "Preferred Width must be greater than 0" ) );
 
         if( m_maxWidth <= 0 )
-            result.AddError( _( "Maximum Width is required" ) );
+            result.AddError( _( "Maximum Width must be greater than 0" ) );
 
         if( m_minGap <= 0 )
-            result.AddError( _( "Minimum Gap is required" ) );
+            result.AddError( _( "Minimum Gap must be greater than 0" ) );
 
         if( m_preferredGap <= 0 )
-            result.AddError( _( "Preferred Gap is required" ) );
+            result.AddError( _( "Preferred Gap must be greater than 0" ) );
 
         if( m_maxGap <= 0 )
-            result.AddError( _( "Maximum Gap is required" ) );
+            result.AddError( _( "Maximum Gap must be greater than 0" ) );
 
         if( m_maxUncoupledLength <= 0 )
-            result.AddError( _( "Maximum Uncoupled Length is required" ) );
+            result.AddError( _( "Maximum Uncoupled Length must be greater than 0" ) );
 
         if( result.isValid )
         {
