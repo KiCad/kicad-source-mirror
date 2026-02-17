@@ -614,6 +614,18 @@ void PCB_EDIT_FRAME::StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItem
         return;
     }
 
+    // Don't start flashing if any of the items are being moved. The flash timer toggles
+    // selection hide/show which corrupts the VIEW overlay state during an active move.
+    for( const BOARD_ITEM* item : aItems )
+    {
+        if( item->IsMoving() )
+        {
+            wxLogTrace( traceCrossProbeFlash,
+                        "StartCrossProbeFlash(PCB): aborted (items are moving)" );
+            return;
+        }
+    }
+
     if( m_crossProbeFlashing )
     {
         wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash(PCB): restarting existing flash (phase=%d)",
@@ -656,6 +668,25 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     if( !selTool )
         return;
 
+    // Don't manipulate the selection while items are being moved. The move tool holds a
+    // live reference to the selection and toggling hide/show on selected items corrupts
+    // the VIEW overlay state, causing crashes.
+    for( const KIID& id : m_crossProbeFlashItems )
+    {
+        if( EDA_ITEM* item = GetBoard()->ResolveItem( id, true ) )
+        {
+            if( item->IsMoving() )
+            {
+                wxLogTrace( traceCrossProbeFlash,
+                            "Timer(PCB) phase=%d: items are moving, stopping flash",
+                            m_crossProbeFlashPhase );
+                m_crossProbeFlashing = false;
+                m_crossProbeFlashTimer.Stop();
+                return;
+            }
+        }
+    }
+
     // Prevent recursion / IPC during flashing
     bool prevGuard = m_probingSchToPcb;
     m_probingSchToPcb = true;
@@ -683,7 +714,8 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     if( GetCanvas() )
     {
         GetCanvas()->ForceRefresh();
-    wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): forced canvas refresh", m_crossProbeFlashPhase );
+        wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): forced canvas refresh",
+                    m_crossProbeFlashPhase );
     }
 
     m_probingSchToPcb = prevGuard;

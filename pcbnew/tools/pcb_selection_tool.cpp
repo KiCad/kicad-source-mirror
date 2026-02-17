@@ -2367,6 +2367,14 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
     if( m_selection.Front() && m_selection.Front()->IsMoving() )
         return;
 
+    // Also check the incoming items. If the cross-probe flash timer cleared the selection
+    // during a move, Front() would be null but the items are still being actively moved.
+    for( const BOARD_ITEM* item : aItems )
+    {
+        if( item->IsMoving() )
+            return;
+    }
+
     ClearSelection( true /*quiet mode*/ );
 
     // Perform individual selection of each item before processing the event.
