@@ -109,7 +109,7 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
     {
         for( const LIBRARY_TABLE_ROW* row : manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ) )
         {
-            if( row->Hidden() )
+            if( row->Disabled() || row->Hidden() )
                 continue;
 
             toLoad.emplace_back( row->Nickname() );
