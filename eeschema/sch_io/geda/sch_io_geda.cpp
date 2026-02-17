@@ -1532,7 +1532,7 @@ bool SCH_IO_GEDA::CanReadSchematicFile( const wxString& aFileName ) const
 
 int SCH_IO_GEDA::toKiCadDist( int aMils ) const
 {
-    return aMils * MILS_TO_IU;
+    return static_cast<int>( static_cast<int64_t>( aMils ) * MILS_TO_IU );
 }
 
 
