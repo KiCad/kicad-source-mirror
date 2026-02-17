@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-15 23:10+0000\n"
+"PO-Revision-Date: 2026-02-17 01:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -4410,8 +4410,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Ak je zaškrtnuté, spustia sa pri spustení projektu také nástroje, ako sú "
-"editory schém a plošných spojov s predtým otvorenými súbormi"
+"Ak je začiarknuté, pri spustení projektu sa spustia nástroje, ako sú editory "
+"schém a plošných spojov s predtým otvorenými súbormi"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
@@ -4439,7 +4439,7 @@ msgid ""
 "If set to 0, cache clearing is disabled"
 msgstr ""
 "Súbory 3D cache staršie ako toto sa odstránia.\n"
-"Ak je nastavená na 0, čistenie medzipamäte je zakázané"
+"Ak je nastavená na 0, čistenie cache je zakázané"
 
 #: common/dialogs/panel_common_settings_base.cpp:367
 msgid "days"
@@ -4562,7 +4562,7 @@ msgstr "Obnoviť jedinečné ID"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:490
 #, c-format
 msgid "folder with %s files"
-msgstr "adresár s %d súbormi"
+msgstr "priečinok s %s súbormi"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:540
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:563
@@ -9536,7 +9536,7 @@ msgstr "Vytvárať, odstraňovať a upravovať schematické symbolov"
 #: common/tool/actions.cpp:1104 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1041
 msgid "Footprint Library Browser"
-msgstr "Prezerač knižníc pudzier"
+msgstr "Prehliadač knižníc pudzier"
 
 #: common/tool/actions.cpp:1113
 #, fuzzy
@@ -10302,37 +10302,37 @@ msgstr "Všetky súbory"
 #: common/wildcards_and_files_ext.cpp:241
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:82
 msgid "KiCad symbol library files"
-msgstr "Súbory knižnice symbolov KiCad"
+msgstr "KiCad súbory knižnice symbolov"
 
 #: common/wildcards_and_files_ext.cpp:248
 msgid "KiCad project files"
-msgstr "Súbor projektu Kicad"
+msgstr "KiCad súbory projektov"
 
 #: common/wildcards_and_files_ext.cpp:254
 msgid "KiCad legacy project files"
-msgstr "Súbory starších projektov KiCad"
+msgstr "KiCad staršie verzie súborov projektov"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "All KiCad project files"
-msgstr "Všetky súbory projektu KiCad"
+msgstr "Všetky KiCad súbory projektov"
 
 #: common/wildcards_and_files_ext.cpp:268
 msgid "All KiCad schematic files"
-msgstr "Všetky schematické súbory KiCad-u"
+msgstr "Všetky KiCad súbory schém"
 
 #: common/wildcards_and_files_ext.cpp:275
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:74
 msgid "KiCad legacy schematic files"
-msgstr "KiCad staršie schematické súbory"
+msgstr "KiCad staršie verzie súborov schém"
 
 #: common/wildcards_and_files_ext.cpp:282
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:76
 msgid "KiCad s-expression schematic files"
-msgstr "Schematické súbory KiCad s-výraz"
+msgstr "KiCad súbory schém vo formáte s-expression"
 
 #: common/wildcards_and_files_ext.cpp:289
 msgid "Altium Project files"
-msgstr "Altium projektové súbory"
+msgstr "Altium súbory projektov"
 
 #: common/wildcards_and_files_ext.cpp:295
 msgid "CADSTAR Archive files"
@@ -10372,12 +10372,12 @@ msgstr "EasyEDA (JLCEDA) Pro súbory"
 #: common/wildcards_and_files_ext.cpp:345
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:302
 msgid "KiCad printed circuit board files"
-msgstr "KiCad súbory plošných spojov"
+msgstr "KiCad súbory dosiek plošných spojov"
 
 #: common/wildcards_and_files_ext.cpp:352
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:312
 msgid "KiCad footprint files"
-msgstr "KiCad súbory púzdier"
+msgstr "KiCad súbory puzdier"
 
 #: common/wildcards_and_files_ext.cpp:358
 msgid "KiCad footprint library paths"
@@ -10394,7 +10394,7 @@ msgstr "Cesty knižnice stopy KiCad"
 
 #: common/wildcards_and_files_ext.cpp:379
 msgid "Drawing sheet files"
-msgstr "Súbory listu výkresu"
+msgstr "Súbory listov výkresov"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "KiCad symbol footprint link files"
@@ -10402,7 +10402,7 @@ msgstr "KiCad súbory s odkazmi symbolov na puzdrá"
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
-msgstr "Súbory vŕtania"
+msgstr "Vŕtacie súbory"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "SVG files"
@@ -10766,9 +10766,9 @@ msgid "Footprint ID '%s' is not valid."
 msgstr "puzdro ID \"%s\" nie je platné."
 
 #: cvpcb/display_footprints_frame.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Knižnica '%s' sa nenachádza v tabuľke knižnice stopy."
+msgstr "Knižnica '%s' sa nenachádza v tabuľke knižnice puzdier."
 
 #: cvpcb/display_footprints_frame.cpp:439
 #: cvpcb/display_footprints_frame.cpp:463
@@ -13894,7 +13894,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
-msgstr "Zaškrtnutí způsobí, že pin bude ve všech jednotkách."
+msgstr "Ak je začiarknuté, tento vývod bude v všetkých jednotkách."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
@@ -14129,8 +14129,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"Cieľový adresár pre súbory vykreslenia. Môže byť absolútna alebo relatívna k "
-"schematickému umiestneniu hlavného súboru."
+"Cieľový adresár pre súbory vykreslenia. Môže byť absolútna alebo relatívna "
+"vzhľadom k umiestneniu hlavného súboru schémy."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -14393,8 +14393,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Cieľový adresár vykreslených súborov. Môže byť absolútny alebo relatívny k "
-"umiestneniu dosky."
+"Cieľový adresár pre súbory vykreslenia. Môže byť absolútna alebo relatívna "
+"vzhľadom k umiestneniu súboru dosky."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -15381,9 +15381,8 @@ msgid "Format %s"
 msgstr "Formát"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:247
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Neznáme>"
+msgstr "<neznámy>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:257
 #, fuzzy, c-format
@@ -15514,9 +15513,8 @@ msgid "Parameters"
 msgstr "Parametre"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:219
-#, fuzzy
 msgid "Code"
-msgstr "DCode:"
+msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
 msgid "Save {} in Value field as \"{}\""
@@ -15950,7 +15948,6 @@ msgstr ""
 "projektu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -15962,13 +15959,13 @@ msgid ""
 "symbols."
 msgstr ""
 "Táto schéma v súčasnosti používa na načítanie symbolov knižnice metódu "
-"vyhľadávania v zozname knižníc symbolov projektu. KiCad sa pokúsi mapovať "
-"existujúce symboly tak, aby používali novú tabuľku knižnice symbolov. "
-"Remapping zmení niektoré súbory projektu a schémy nemusia byť kompatibilné "
-"so staršími verziami KiCad. Všetky súbory, ktoré sú zmenené, sa zálohujú do "
-"priečinka \"remap_backup\" v priečinku projektu, ak potrebujete vrátiť zmeny "
-"späť. Ak sa rozhodnete tento krok preskočiť, budete zodpovední za manuálne "
-"premapovanie symbolov."
+"vyhľadávania v projektovom zozname knižníc symbolov. KiCad sa pokúsi "
+"priradiť existujúce symboly tak, aby používali novú tabuľku knižnice "
+"symbolov. Opätovné priradenie zmení niektoré súbory projektu a schémy "
+"nemusia byť kompatibilné so staršími verziami KiCad. Všetky súbory, ktoré sa "
+"zmenia, budú zálohované do priečinka \"remap_backup\" v priečinku projektu, "
+"v prípade potreby vrátiť zmeny späť. Ak sa rozhodnete tento krok preskočiť, "
+"budete musieť manuálne opätovne priradiť symboly."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:212
 #, fuzzy, c-format
@@ -17236,22 +17233,22 @@ msgstr ""
 "ktoré sa majú uložiť ako aktuálny formát (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Uložiť '%s' ako aktuálny formát (* .kicad_sym) a nahradiť starú položku v "
-"tabuľke?"
+"Uložiť '%s' v aktuálnom formáte (* .kicad_sym) a nahradiť staršiu verziu "
+"položky v tabuľke?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:945
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"Uložiť %d staršie knižnice ako aktuálny formát (* .kicad_sym) a nahradiť "
-"staršie položky v tabuľke?"
+"Uložiť %d staršie verzie knižnice ako aktuálny KiCad formát (* .kicad_sym) a "
+"nahradiť staršie položky v tabuľke?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:976
 #: pcbnew/dialogs/dialog_export_step.cpp:612
@@ -17446,6 +17443,8 @@ msgstr ""
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Výstupná cesta musí byť zadaná pre konverziu zo staršej verzie a z knižníc "
+"mimo KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1104
 #, fuzzy
@@ -18034,6 +18033,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
+"'%s' nie je KiCad súbor schémy.\n"
+"Pre súbory schém, iných než KiCad, použite Súbor -> Importovať."
 
 #: eeschema/files-io.cpp:286
 #, fuzzy
@@ -18753,9 +18754,9 @@ msgid "Could not find library file '%s'"
 msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Command error. Return code %d."
-msgstr "Chyba príkazu. Návratový kód %d"
+msgstr "Chyba príkazu. Návratový kód %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:164
 #: eeschema/sch_plotter.cpp:253 eeschema/sch_plotter.cpp:450
@@ -19348,7 +19349,7 @@ msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.h:83
 msgid "Altium schematic files"
-msgstr "Altium schematické súbory"
+msgstr "Altium súbory schém"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:88
 #, fuzzy
@@ -19578,6 +19579,9 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"Cesta k CADSTAR archívnym súborom schém (*.csa) súvisiacich k tejto CADSTAR "
+"knižnici súčiastok. Ak nie je zadaná žiadna cesta, predpokladá sa, že ide o "
+"súbor „symbol.csa“ v rovnakom priečinku."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
@@ -19585,6 +19589,9 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Názov knižnice puzdier súvisiacej so symbolmi v tejto knižnici. Mali by ste "
+"vytvoriť samostatnú položku pre CADSTAR PCB archívny súbor (*.cpa) v tabuľke "
+"knižníc puzdier. Ak nie je zadaný žiadny názov, použije sa „cadstarpcblib“."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, fuzzy, c-format
@@ -19593,7 +19600,7 @@ msgstr "Nie je možné vytvoriť stopu knižnice \"%s\""
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR Schematické archívne súbory"
+msgstr "CADSTAR archívne súbory schém"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
 msgid "CADSTAR Parts Library files"
@@ -19661,12 +19668,11 @@ msgstr "V importovanej knižnici sa nepodarilo nájsť %s"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:88
 msgid "Eagle XML schematic files"
-msgstr "Eagle XML schematické súbory"
+msgstr "Eagle XML súbory schém"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:93
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Orol ver. 6.x súbory knižnice XML"
+msgstr "Eagle XML súbory knižnice"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:147
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:324
@@ -19704,7 +19710,7 @@ msgstr ""
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr "Soubory EasyEDA (JLCEDA) Std"
+msgstr "EasyEDA (JLCEDA) Std súbory"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:84
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:75
@@ -19757,9 +19763,8 @@ msgstr ""
 "%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:45
-#, fuzzy
 msgid "KiCad HTTP library files"
-msgstr "Súbory knižnice symbolov KiCad"
+msgstr "KiCad HTTP súbory knižnice"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:118
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:290
@@ -19835,7 +19840,7 @@ msgstr "knižnicu \"%s\" nie je možné vymazať"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:80
 msgid "KiCad legacy symbol library files"
-msgstr "Súbory knižnice starších symbolov KiCad"
+msgstr "KiCad staršie verzie súborov knižnice symbolov"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:222
 msgid "expected unquoted string"
@@ -20101,9 +20106,8 @@ msgstr ""
 "Nainštalujte LTspice alebo umiestnite jeho súbory knižníc súbory do %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "Altiové schematické súbory"
+msgstr "LTspice súbory schém"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:53
 #, c-format
@@ -22708,8 +22712,8 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
-"Symboly v starších knižniciach nie je možné upravovať. Na migráciu do "
-"aktuálneho formátu použite Manage Symbol Libraries."
+"Symboly v starších verziách knižníc nie je možné upravovať.  Použite funkciu "
+"\"Spravovať knižnice symbolov\" pre migráciu do aktuálneho formátu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:908
 msgid "Manage symbol libraries"
@@ -24258,14 +24262,14 @@ msgstr "Nájdite v projekte staré symboly a premenujte ich / zachráňte"
 
 #: eeschema/tools/sch_actions.cpp:1070
 msgid "Remap Legacy Library Symbols..."
-msgstr "Premapovať symboly starej knižnice..."
+msgstr "Znovu priradiť symboly staršej verzie knižnice..."
 
 #: eeschema/tools/sch_actions.cpp:1071
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Premapujte odkazy na symboly knižnice v starších schémach na tabuľku "
+"Znovu priradiť odkazy symbolov v schémach starších verzií, na tabuľku "
 "knižnice symbolov"
 
 #: eeschema/tools/sch_actions.cpp:1078
@@ -24330,15 +24334,14 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Vytvorte kusovník pre aktuálnu schému"
 
 #: eeschema/tools/sch_actions.cpp:1129
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať staršiu verziu zoznamu materiálu..."
 
 #: eeschema/tools/sch_actions.cpp:1130
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "Vytvorte kusovník pre aktuálnu schému"
+msgstr ""
+"Generovať zoznam materiálu pre aktuálnu schému (staršia verzia generátora)"
 
 #: eeschema/tools/sch_actions.cpp:1137
 #, fuzzy
@@ -24955,14 +24958,12 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Stlačiť <ESC> pre zrušenie tvorby listu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3340
-#, fuzzy
 msgid "Modify sheet pin"
-msgstr "Pridajte špendlík na plech"
+msgstr "Upraviť vývod listu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3346
-#, fuzzy
 msgid "Modify schematic item"
-msgstr "Upravené"
+msgstr "Upraviť položku schémy"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3453
 #, fuzzy
@@ -25922,7 +25923,7 @@ msgstr "Vrstva"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:101
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "DCodes"
-msgstr "DCodes"
+msgstr "D-kódy"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:102
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
@@ -25936,7 +25937,7 @@ msgstr "Grafická vrstva %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:37
 msgid "Show D codes"
-msgstr "Zobraziť kódy D"
+msgstr "Zobraziť D-kódy"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:41
 #: pcbnew/dialogs/panel_edit_options_base.cpp:418
@@ -26157,7 +26158,7 @@ msgstr "Žiadne prázdne vrstvy na načítanie súboru."
 
 #: gerbview/excellon_read_drill_file.cpp:291
 msgid "Error reading EXCELLON drill file"
-msgstr "Chyba pri čítaní súboru EXCELLON drill"
+msgstr "Chyba pri čítaní EXCELLON vŕtacieho súboru"
 
 #: gerbview/excellon_read_drill_file.cpp:590
 #, c-format
@@ -26181,7 +26182,7 @@ msgstr "Nástroj %d nie je definovaný"
 #: gerbview/excellon_read_drill_file.cpp:1060
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
-msgstr "Neznámy kód Excellon G: &lt; %s &gt;"
+msgstr "Neznámy Excellon G-kód: &lt;%s &gt;"
 
 #: gerbview/files.cpp:44
 #, fuzzy
@@ -26280,7 +26281,7 @@ msgstr "Otvoriť súbory Gerber"
 
 #: gerbview/files.cpp:242
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Otvorené súbory NC (Excellon) vrtáka"
+msgstr "Otvoriť NC (Excellon) vŕtacie súbory"
 
 #: gerbview/files.cpp:279
 msgid "File not found:"
@@ -26349,7 +26350,7 @@ msgstr "Žiadny atribút"
 #: gerbview/gerber_draw_item.cpp:682
 #, c-format
 msgid "D Code %d"
-msgstr "Kód D %d"
+msgstr "D-kód %d"
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Graphic Layer"
@@ -26446,7 +26447,7 @@ msgstr "Vymažte posledné súbory ZIP"
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Vymažte posledné súbory vrtáka"
+msgstr "Vymazať nedávno otvorené vŕtacie súbory"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
@@ -26495,7 +26496,7 @@ msgstr "Otvorte posledný súbor Gerber"
 
 #: gerbview/menubar.cpp:88
 msgid "Open Recent Drill File"
-msgstr "Otvorte Posledný vrták"
+msgstr "Otvoriť nedávno otvorený vŕtací súbor"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
@@ -26519,7 +26520,7 @@ msgid ""
 "Warning: this file has no D-Code definition\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Upozornenie: tento súbor nemá definíciu D-kódu\n"
+"Upozornenie: tento súbor neobsahuje definíciu D-kódov\n"
 "Preto veľkosť niektorých položiek nie je definovaná"
 
 #: gerbview/readgerb.cpp:93
@@ -26527,13 +26528,12 @@ msgid ""
 "Warning: this file has some missing D-Code definitions\n"
 "Therefore the size of some items is undefined"
 msgstr ""
-"Varovanie: v tomto súbore chýbajú niektoré definície D-kódu\n"
+"Varovanie: v tomto súbore chýbajú niektoré definície D-kódov\n"
 "Preto veľkosť niektorých položiek nie je definovaná"
 
 #: gerbview/rs274d.cpp:417
-#, fuzzy
 msgid "Invalid Code Number"
-msgstr "Neplatné meno signálu"
+msgstr "Neplatný kód"
 
 #: gerbview/rs274d.cpp:624
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
@@ -26579,7 +26579,7 @@ msgstr "Zvýraznite položky s týmto atribútom clony"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
-msgstr "DCode:"
+msgstr "D-kód:"
 
 #: gerbview/toolbars_gerber.cpp:292
 msgid "<No selection>"
@@ -26606,12 +26606,11 @@ msgstr "Otvoriť súbory Gerberovho sprisahania..."
 
 #: gerbview/tools/gerbview_actions.cpp:55
 msgid "Open Excellon Drill File(s)..."
-msgstr "Otvoriť súbory Excellon Drill..."
+msgstr "Otvoriť Excellon vŕtacie súbory..."
 
 #: gerbview/tools/gerbview_actions.cpp:56
-#, fuzzy
 msgid "Open Excellon drill file(s) on a new layer."
-msgstr "Otvoriť súbory Excellon Drill..."
+msgstr "Otvoriť Excellon vŕtacie súbory na novej vrstve."
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
@@ -26627,7 +26626,7 @@ msgstr "Otvoriť archívny súbor ZIP..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "Otvorte komprimovaný archívny súbor (Gerber a Drill)"
+msgstr "Otvoriť komprimovaný súbor (Gerber a Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show Layers Manager"
@@ -26635,7 +26634,7 @@ msgstr "Zobraziť správcu vrstiev"
 
 #: gerbview/tools/gerbview_actions.cpp:82
 msgid "List DCodes..."
-msgstr "Zoznam DCód..."
+msgstr "Zoznam D-kódov..."
 
 #: gerbview/tools/gerbview_actions.cpp:83
 msgid "List D-codes defined in Gerber files"
@@ -26684,9 +26683,8 @@ msgid "Highlight Attribute"
 msgstr "Zvýraznite Atribút"
 
 #: gerbview/tools/gerbview_actions.cpp:150
-#, fuzzy
 msgid "Highlight DCode"
-msgstr "Zvýraznite Net"
+msgstr "Zvýrazniť D-kód"
 
 #: gerbview/tools/gerbview_actions.cpp:158
 msgid "Next Layer"
@@ -26740,12 +26738,11 @@ msgstr "Zobraziť negatívne objekty vo farbe duchov"
 
 #: gerbview/tools/gerbview_actions.cpp:221
 msgid "Show DCodes"
-msgstr "Zobraziť DCódy"
+msgstr "Zobraziť D-kódy"
 
 #: gerbview/tools/gerbview_actions.cpp:222
-#, fuzzy
 msgid "Show dcode numbers"
-msgstr "Zobraziť číslo dcode"
+msgstr "Zobraziť čísla D-kódov"
 
 #: gerbview/tools/gerbview_actions.cpp:228
 #, fuzzy
@@ -26786,7 +26783,7 @@ msgstr "Importujte súbor dosiek iných ako KiCad"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
-msgstr "Kódy D"
+msgstr "D-kódy"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:175
 #, fuzzy, c-format
@@ -26814,9 +26811,9 @@ msgid "Highlight Aperture Type '%s'"
 msgstr "Zvýraznite typ clony '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Zvýrazniť %s"
+msgstr "Zvýrazniť D-kód D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:537
@@ -26837,7 +26834,7 @@ msgstr "Položky"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Show DCodes identification"
-msgstr "Zobraziť identifikáciu DCodes"
+msgstr "Zobraziť identifikáciu D-kódov"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Show negative objects in this color"
@@ -27950,6 +27947,8 @@ msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
+"Exportovať zoznam materiálu \"BOM\" v staršom XML formáte použitom v schéme "
+"pomocou skriptov Python"
 
 #: kicad/cli/command_sym.h:31
 #, fuzzy
@@ -28404,17 +28403,16 @@ msgstr ""
 "importován."
 
 #: kicad/import_project.cpp:146
-#, fuzzy
 msgid "Import Altium Project Files"
-msgstr "Importujte súbory projektu Eagle"
+msgstr "Importovať Altium súbory projektu"
 
 #: kicad/import_project.cpp:154
 msgid "Import CADSTAR Archive Project Files"
-msgstr "Importujte súbory archívnych projektov CADSTAR"
+msgstr "Importovať CADSTAR archívne súbory projektu"
 
 #: kicad/import_project.cpp:162
 msgid "Import Eagle Project Files"
-msgstr "Importujte súbory projektu Eagle"
+msgstr "Importovať Eagle súbory projektu"
 
 #: kicad/import_project.cpp:169
 msgid "Import EasyEDA Std Backup"
@@ -28497,9 +28495,8 @@ msgid "Editors"
 msgstr "Upraviť"
 
 #: kicad/kicad_manager_frame.cpp:90
-#, fuzzy
 msgid "Project Files"
-msgstr "Načítať súbor projektu"
+msgstr "Súbory projektu"
 
 #: kicad/kicad_manager_frame.cpp:387
 #, fuzzy
@@ -28564,7 +28561,7 @@ msgstr "Importovať projekt CADSTAR..."
 
 #: kicad/menubar.cpp:120
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "Import schémy archívu CADSTAR a PCB (* .csa, * .cpa)"
+msgstr "Importovať CADSTAR archívne súbory schémy a DPS (* .csa, * .cpa)"
 
 #: kicad/menubar.cpp:124
 #, fuzzy
@@ -28608,11 +28605,11 @@ msgstr "& Zrušiť archiváciu projektu..."
 
 #: kicad/menubar.cpp:147 kicad/menubar.cpp:275
 msgid "Unarchive project files from zip archive"
-msgstr "Zrušiť archiváciu súborov projektu z archívu ZIP"
+msgstr "Obnoviť zo zip archívu súbory projektu"
 
 #: kicad/menubar.cpp:175
 msgid "Browse Project Files"
-msgstr "Prehliadajte súbory projektu"
+msgstr "Prehliadať súbory projektu"
 
 #: kicad/menubar.cpp:176
 msgid "Open project directory in file browser"
@@ -28628,7 +28625,7 @@ msgstr "Upravte lokálny súbor v textovom editore"
 
 #: kicad/menubar.cpp:268
 msgid "Archive all project files"
-msgstr "Archivuje všetky súbory projektu"
+msgstr "Archivovať všetky súbory projektu"
 
 #: kicad/menubar.cpp:285
 msgid "Reveal project folder in Finder"
@@ -29662,9 +29659,8 @@ msgid "Cloning Repository"
 msgstr "Klonovanie repozitára"
 
 #: kicad/tools/kicad_manager_control.cpp:192
-#, fuzzy
 msgid "No project files were found in the repository."
-msgstr "v tomto adresáři nejsou soubory Kicadu"
+msgstr "V tomto repozitári neboli nájdené žiadne súbory projektov."
 
 #: kicad/tools/kicad_manager_control.cpp:219
 #, fuzzy
@@ -34973,8 +34969,8 @@ msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
 msgstr ""
-"Po začiarknutí tohto políčka sa hodnota \"0,100\" zobrazí ako \"0,1\", aj "
-"keď je presnosť vyššia"
+"Ak je začiarknuté, hodnota \"0,100\" sa zobrazí ako \"0,1\", aj keď je "
+"presnosť vyššia"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 msgid "Dimension Text"
@@ -35996,7 +35992,7 @@ msgstr "Exportovať púzdro"
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
 #, c-format
 msgid "Process failed with exit code %d"
-msgstr ""
+msgstr "Proces zlyhal s ukončovacím kódom %d"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:192
 #, fuzzy
@@ -36072,18 +36068,18 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
-"Je-li zaškrtnuto: zkopíruje pouzdra 3D modelů do cílové složky\n"
-"Není-li zaškrtnuto: sloučí pouzdra 3D modelů v souboru desky vrml"
+"Ak je začiarknuté: skopíruje 3D modely puzdier do cieľového priečinku\n"
+"Ak nie je začiarknuté: vloží 3D modely puzdier do súboru dosky vrml"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:135
 msgid "Use relative paths to model files in board VRML file"
-msgstr "Použite relatívne cesty na modelovanie súborov v súbore VRML"
+msgstr "Použiť relatívne cesty pre súbory modelov v VRML súbore dosky"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:136
-#, fuzzy
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
-"Použite cesty pre modelové súbory v súbore VRML vo vzťahu k VRML súboru"
+"Použiť relatívne cesty pre súbory modelov vo VRML súbore dosky vzhľadom k "
+"tomuto VRML súboru"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:66
 msgid "VRML Export Options"
@@ -38421,7 +38417,7 @@ msgstr "NPTH, mechanické"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:447
 msgid "Board contains legacy teardrops."
-msgstr ""
+msgstr "Doska obsahuje teardropy staršej verzie."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:451
@@ -38810,8 +38806,8 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"Vytvorte súbor úloh Gerber, ktorý obsahuje informácie o nástenke,\n"
-"a zoznam vygenerovaných súborov grafu Gerber"
+"Generovať súbor úloh Gerber, ktorý obsahuje informácie o doske\n"
+"a zoznam generovaných súborov Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Coordinate format:"
@@ -38836,9 +38832,9 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
-"Použite formát súboru X2 Gerber.\n"
-"Do hlavičiek Gerber zahrňte hlavne atribúty X2.\n"
-"Ak nie je začiarknuté, použite formát X1.\n"
+"Použiť formát súboru X2 Gerber.\n"
+"Do hlavičiek Gerber zahrnúť  hlavne atribúty X2.\n"
+"Ak nie je začiarknuté, použiť formát X1.\n"
 "Vo formáte X1 sú tieto atribúty zahrnuté ako komentáre v súboroch."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
@@ -38846,15 +38842,14 @@ msgid "Include netlist attributes"
 msgstr "Zahrňte atribúty netlist"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Zahrňte metadáta netlistu a atribúty clony do súborov Gerber.\n"
-"Vo formáte X1 sú to komentáre.\n"
-"Používa sa na kontrolu konektivity v nástrojoch CAM a prehliadačoch Gerber."
+"Zahrnúť metadáta netlistu a atribúty apertúr do súborov Gerber.\n"
+"Sú to komentáre vo formáte X1.\n"
+"Používa sa na kontrolu prepojenia v nástrojoch CAM a prehliadačoch Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 #, fuzzy
@@ -39339,7 +39334,7 @@ msgstr "Neupravujte plôšky, ktoré majú rozdielnu orientáciu"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr "Neupravujte plôšky, ktoré majú rozdielny tvar"
+msgstr "Neupravujte plôšky, ktoré sú rozdielneho typu"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
@@ -39774,7 +39769,7 @@ msgstr "puzdro %s (%s), %s, otočenie %.1f st"
 #: pcbnew/pcb_dimension.cpp:2091 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:666
 msgid "Knockout"
-msgstr "Text v Negativu"
+msgstr "Invertovať"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
@@ -40254,7 +40249,7 @@ msgstr "Povolené funkcie"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:104
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr ""
+msgstr "Ak je začiarknuté, plôšky sa dajú posúvať vzhľadom na zvyšok puzdra."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
@@ -40352,9 +40347,8 @@ msgid "Automatically refill zones"
 msgstr "Pridať vyplnené zóny"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:430
-#, fuzzy
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr "Ak nie je začiarknuté, ťahaním myši sa vykoná operácia presunu (M)"
+msgstr "Ak je začiarknuté, zóny sa po každej úprave znovu vyplnia."
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:114
 msgid "Internal Layers"
@@ -41010,8 +41004,8 @@ msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 msgstr ""
-"Ak je začiarknuté, položka \"1.2300\" sa vykreslí ako \"1.23\", aj keď je "
-"nastavená presnosť zobrazovania ďalších číslic"
+"Ak je začiarknuté, položka \"1,2300\" sa vykreslí ako \"1,23\", aj keď je "
+"nastavená presnosť pri zobrazovaní ďalších číslic"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 #, fuzzy
@@ -44013,7 +44007,7 @@ msgstr "Nepodarilo sa vytvoriť súbor „%s“"
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
-msgstr "Všetky súbory rady KiCad"
+msgstr "Všetky KiCad súbory dosiek"
 
 #: pcbnew/files.cpp:179
 msgid "Open Board File"
@@ -44388,10 +44382,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Zápis / úprava starších knižníc (súborov .mod) nie je povolená\n"
-"Uložte aktuálnu knižnicu do nového formátu .pretty\n"
-"a aktualizujte svoju libovú tabuľku stopy\n"
-"aby ste uložili svoju stopu (súbor .kicad_mod) do priečinka knižnice .pretty"
+"Zápis/úprava starších verziíí knižníc (súborov .mod) nie je povolená\n"
+"uložte prosím aktuálnu knižnicu do nového formátu .pretty\n"
+"a aktualizujte svoju tabuľku knižníc puzdier\n"
+"pre uloženie svojho puzdra (súbor .kicad_mod) do priečinka knižnice .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 msgid ""
@@ -44400,10 +44394,10 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"Úpravy starších knižníc (súborov .mod) nie sú povolené\n"
+"Úpravy starších verzií knižníc (súborov .mod) nie sú povolené\n"
 "Uložte aktuálnu knižnicu v novom formáte .pretty\n"
-"a aktualizujte svoju libovú tabuľku stopy\n"
-"pred odstránením stopy"
+"a aktualizujte svoju tabuľku knižníc puzdier\n"
+"pred odstránením puzdra"
 
 #: pcbnew/footprint_libraries_utils.cpp:123
 msgid "Import Footprint"
@@ -44771,15 +44765,16 @@ msgid "Place at:"
 msgstr "Umiestniť cez"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:98
-#, fuzzy
 msgid "If not checked: use interactive placement."
-msgstr "Interaktívne umiestnenie"
+msgstr "Ak nie je začiarknuté, použiť interaktívne umiestnenie."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:142
 msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"Ak je začiarknuté, použiť vybranú vrstvu v tomto dialógovom okne\n"
+"Ak nie je začiarknuté, použiť aktívnu vrstvu z editora dosky"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 #, fuzzy
@@ -47076,7 +47071,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "Archívne súbory PCB CADSTAR"
+msgstr "PCB CADSTAR archívne súbory"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:361
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:198
@@ -47148,7 +47143,7 @@ msgstr "Orol ver. 6.x súbory PCB XML"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:142
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Orol ver. 6.x súbory knižnice XML"
+msgstr "Eagle ver. 6.x XML súbory knižnice"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:778
 #, fuzzy, c-format
@@ -47567,8 +47562,8 @@ msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Starší režim vypĺňania zón segmentu už nie je podporovaný.\n"
-"Zóny budú zkonvertované podľa najlepšej varianty."
+"Staršia verzia vypĺňania zón segmentu už nie je podporovaná.\n"
+"Zóny budú skonvertované na základe najlepších možností."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2560
 #, c-format
@@ -47603,11 +47598,11 @@ msgstr "Súbor '%s' je prázdny."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3052
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "Súbor '%s' nie je starou knižnicou."
+msgstr "Súbor '%s' nie je staršou verziou knižnice."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:77
 msgid "Legacy footprint library files"
-msgstr "Súbory starších knižníc puzdier"
+msgstr "Staršie verzie súborov knižníc puzdier"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:97
 #, c-format
@@ -47873,8 +47868,8 @@ msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"Starší stratégia vypĺňania zón už nie je podporovaná.\n"
-"Zóny budú zkonvertované podľa najlepšej varianty."
+"Staršia verzia stratégie vypĺňania zón už nie je podporovaná.\n"
+"Zóny budú skonvertované na základe najlepších možností."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:69
 #, c-format
@@ -49061,9 +49056,8 @@ msgid "Export Board Netlist"
 msgstr "Exportovať zoznam Netlist"
 
 #: pcbnew/tools/board_editor_control.cpp:443
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "KiCad netlist súbory"
+msgstr "KiCad netlist súbory dosky"
 
 #: pcbnew/tools/board_editor_control.cpp:457
 #, fuzzy, c-format
