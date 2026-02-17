@@ -255,16 +255,28 @@ private:
      */
     void rebuildBitmap( bool aResetID = true );
 
+    /**
+     * Ensure the cached wxBitmap is up-to-date with the current wxImage.
+     * Rebuilds the bitmap if it has been invalidated by a transform operation.
+     */
+    void ensureBitmapUpToDate() const;
+
     void updatePPI();
+
+    /**
+     * Mirror the wxImage pixel data in-place without allocating a new image.
+     */
+    static void mirrorImageInPlace( wxImage& aImage, FLIP_DIRECTION aFlipDirection );
 
     double    m_scale;              ///< The scaling factor of the bitmap
                                     ///< with #m_pixelSizeIu, controls the actual draw size.
-    wxMemoryBuffer m_imageData;     ///< The original image data in its original format.
+    mutable wxMemoryBuffer m_imageData; ///< Cached encoded image data (PNG/JPEG).
     wxBitmapType   m_imageType;     ///< The image type (png, jpeg, etc.).
 
     wxImage*  m_image;              ///< The raw, uncompressed image data.
     wxImage*  m_originalImage;      ///< Raw image data, not transformed by rotate/mirror.
-    wxBitmap* m_bitmap;             ///< The bitmap used to draw/plot image.
+    mutable wxBitmap* m_bitmap;     ///< The bitmap used to draw/plot image.
+    mutable bool      m_bitmapDirty;///< True when m_bitmap needs rebuilding from m_image.
     double    m_pixelSizeIu;        ///< The scaling factor of the bitmap to convert the bitmap
                                     ///< size (in pixels) to internal KiCad units.  This usually
                                     ///< does not change.

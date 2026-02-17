@@ -26,6 +26,7 @@
 
 #include <board.h>
 #include <kiid.h>
+#include <layer_ids.h>
 #include <pcb_reference_image.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -120,4 +121,54 @@ BOOST_DATA_TEST_CASE_F( REFERENCE_IMAGE_LOAD_TEST_FIXTURE, ReferenceImageLoading
 
     KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
                                    testCase.m_ExpectedBoardVersion );
+}
+
+
+/**
+ * Test that flipping a reference image changes its associated layer, matching
+ * the behavior of all other PCB item types.
+ */
+BOOST_FIXTURE_TEST_CASE( ReferenceImageFlipLayer, REFERENCE_IMAGE_LOAD_TEST_FIXTURE )
+{
+    const auto doBoardTest = [&]( const BOARD& aBoard )
+    {
+        KIID targetUuid( "7dde345e-020a-4fdd-af77-588b452be5e0" );
+
+        auto& image = static_cast<PCB_REFERENCE_IMAGE&>(
+                KI_TEST::RequireBoardItemWithTypeAndId( aBoard, PCB_REFERENCE_IMAGE_T,
+                                                        targetUuid ) );
+
+        BOOST_REQUIRE( image.GetReferenceImage().GetImage().GetSizePixels().x > 0 );
+
+        PCB_LAYER_ID origLayer = image.GetLayer();
+        VECTOR2I     origPos = image.GetPosition();
+
+        // Flip left-right and verify layer changes
+        image.Flip( origPos, FLIP_DIRECTION::LEFT_RIGHT );
+
+        PCB_LAYER_ID flippedLayer = aBoard.FlipLayer( origLayer );
+        BOOST_CHECK_EQUAL( image.GetLayer(), flippedLayer );
+
+        // Position should stay the same since we flipped around it
+        BOOST_CHECK_EQUAL( image.GetPosition(), origPos );
+
+        // Flip again to return to original state
+        image.Flip( origPos, FLIP_DIRECTION::LEFT_RIGHT );
+
+        BOOST_CHECK_EQUAL( image.GetLayer(), origLayer );
+        BOOST_CHECK_EQUAL( image.GetPosition(), origPos );
+
+        // Same test for top-bottom flip
+        image.Flip( origPos, FLIP_DIRECTION::TOP_BOTTOM );
+
+        BOOST_CHECK_EQUAL( image.GetLayer(), flippedLayer );
+        BOOST_CHECK_EQUAL( image.GetPosition(), origPos );
+
+        image.Flip( origPos, FLIP_DIRECTION::TOP_BOTTOM );
+
+        BOOST_CHECK_EQUAL( image.GetLayer(), origLayer );
+        BOOST_CHECK_EQUAL( image.GetPosition(), origPos );
+    };
+
+    KI_TEST::LoadAndTestBoardFile( "reference_images_load_save", true, doBoardTest );
 }

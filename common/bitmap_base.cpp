@@ -24,6 +24,8 @@
 
 #include "bitmap_base.h"
 
+#include <algorithm>      // for std::swap
+#include <cstring>        // for memcpy
 #include <gr_basic.h>
 #include <math/util.h>    // for KiROUND
 #include <memory>         // for make_unique, unique_ptr
@@ -42,6 +44,7 @@ BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
     m_scale  = 1.0;                     // 1.0 = original bitmap size
     m_imageType = wxBITMAP_TYPE_INVALID;
     m_bitmap = nullptr;
+    m_bitmapDirty = false;
     m_image  = nullptr;
     m_originalImage = nullptr;
     m_ppi    = 300;                     // the bitmap definition. the default is 300PPI
@@ -65,6 +68,7 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
 
     m_image = nullptr;
     m_bitmap = nullptr;
+    m_bitmapDirty = false;
     m_originalImage = nullptr;
 
     if( aSchBitmap.m_image )
@@ -85,10 +89,24 @@ void BITMAP_BASE::rebuildBitmap( bool aResetID )
         delete m_bitmap;
 
     m_bitmap  = new wxBitmap( *m_image );
+    m_bitmapDirty = false;
 
     if( aResetID )
         m_imageId = KIID();
 
+}
+
+
+void BITMAP_BASE::ensureBitmapUpToDate() const
+{
+    if( m_bitmapDirty && m_image )
+    {
+        if( m_bitmap )
+            delete m_bitmap;
+
+        m_bitmap = new wxBitmap( *m_image );
+        m_bitmapDirty = false;
+    }
 }
 
 
@@ -110,7 +128,6 @@ void BITMAP_BASE::updatePPI()
 void BITMAP_BASE::ImportData( BITMAP_BASE& aItem )
 {
     *m_image = *aItem.m_image;
-    *m_bitmap = *aItem.m_bitmap;
     *m_originalImage = *aItem.m_originalImage;
     m_imageId = aItem.m_imageId;
     m_scale = aItem.m_scale;
@@ -121,6 +138,8 @@ void BITMAP_BASE::ImportData( BITMAP_BASE& aItem )
     m_rotation = aItem.m_rotation;
     m_imageType = aItem.m_imageType;
     m_imageData = aItem.m_imageData;
+
+    rebuildBitmap( false );
 }
 
 
@@ -277,6 +296,8 @@ const BOX2I BITMAP_BASE::GetBoundingBox() const
 void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
                               const KIGFX::COLOR4D& aBackgroundColor ) const
 {
+    ensureBitmapUpToDate();
+
     if( m_bitmap == nullptr )
         return;
 
@@ -396,16 +417,80 @@ VECTOR2I BITMAP_BASE::GetSize() const
 {
     VECTOR2I size;
 
-    if( m_bitmap )
+    if( m_image )
     {
-        size.x = m_bitmap->GetWidth();
-        size.y = m_bitmap->GetHeight();
-
-        size.x = KiROUND( size.x * GetScalingFactor() );
-        size.y = KiROUND( size.y * GetScalingFactor() );
+        size.x = KiROUND( m_image->GetWidth() * GetScalingFactor() );
+        size.y = KiROUND( m_image->GetHeight() * GetScalingFactor() );
     }
 
     return size;
+}
+
+
+void BITMAP_BASE::mirrorImageInPlace( wxImage& aImage, FLIP_DIRECTION aFlipDirection )
+{
+    const int w = aImage.GetWidth();
+    const int h = aImage.GetHeight();
+
+    if( w == 0 || h == 0 )
+        return;
+
+    unsigned char* rgb = aImage.GetData();
+    unsigned char* alpha = aImage.HasAlpha() ? aImage.GetAlpha() : nullptr;
+    const int      bpp = 3;
+
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+    {
+        // Swap columns left-to-right within each row
+        for( int y = 0; y < h; ++y )
+        {
+            unsigned char* rowRgb = rgb + y * w * bpp;
+
+            for( int lo = 0, hi = w - 1; lo < hi; ++lo, --hi )
+            {
+                std::swap( rowRgb[lo * bpp + 0], rowRgb[hi * bpp + 0] );
+                std::swap( rowRgb[lo * bpp + 1], rowRgb[hi * bpp + 1] );
+                std::swap( rowRgb[lo * bpp + 2], rowRgb[hi * bpp + 2] );
+            }
+
+            if( alpha )
+            {
+                unsigned char* rowAlpha = alpha + y * w;
+
+                for( int lo = 0, hi = w - 1; lo < hi; ++lo, --hi )
+                    std::swap( rowAlpha[lo], rowAlpha[hi] );
+            }
+        }
+    }
+    else
+    {
+        // Swap entire rows top-to-bottom
+        const size_t rowBytes = w * bpp;
+        std::vector<unsigned char> tmpRgb( rowBytes );
+
+        for( int lo = 0, hi = h - 1; lo < hi; ++lo, --hi )
+        {
+            unsigned char* rowLo = rgb + lo * rowBytes;
+            unsigned char* rowHi = rgb + hi * rowBytes;
+            memcpy( tmpRgb.data(), rowLo, rowBytes );
+            memcpy( rowLo, rowHi, rowBytes );
+            memcpy( rowHi, tmpRgb.data(), rowBytes );
+        }
+
+        if( alpha )
+        {
+            std::vector<unsigned char> tmpAlpha( w );
+
+            for( int lo = 0, hi = h - 1; lo < hi; ++lo, --hi )
+            {
+                unsigned char* aLo = alpha + lo * w;
+                unsigned char* aHi = alpha + hi * w;
+                memcpy( tmpAlpha.data(), aLo, w );
+                memcpy( aLo, aHi, w );
+                memcpy( aHi, tmpAlpha.data(), w );
+            }
+        }
+    }
 }
 
 
@@ -413,27 +498,15 @@ void BITMAP_BASE::Mirror( FLIP_DIRECTION aFlipDirection )
 {
     if( m_image )
     {
-        // wxImage::Mirror() clear some parameters of the original image.
-        // We need to restore them, especially resolution and unit, to be
-        // sure image parameters saved in file are the right parameters, not
-        // the default values
-        int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
-        int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
-        int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
-
-        *m_image = m_image->Mirror( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT );
-
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONUNIT , unit);
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONX, resX);
-        m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY);
+        mirrorImageInPlace( *m_image, aFlipDirection );
 
         if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
             m_isMirroredY = !m_isMirroredY;
         else
             m_isMirroredX = !m_isMirroredX;
 
-        rebuildBitmap( false );
-        updateImageDataBuffer();
+        m_bitmapDirty = true;
+        m_imageData.Clear();
     }
 }
 
@@ -442,10 +515,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 {
     if( m_image )
     {
-        // wxImage::Rotate90() clear some parameters of the original image.
-        // We need to restore them, especially resolution and unit, to be
-        // sure image parameters saved in file are the right parameters, not
-        // the default values
+        // wxImage::Rotate90() clears resolution metadata, so preserve it
         int resX = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
         int resY = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
         int unit = m_image->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT );
@@ -458,8 +528,8 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
         m_image->SetOption( wxIMAGE_OPTION_RESOLUTIONY, resY );
 
         m_rotation += ( aRotateCCW ? ANGLE_90 : -ANGLE_90 );
-        rebuildBitmap( false );
-        updateImageDataBuffer();
+        m_bitmapDirty = true;
+        m_imageData.Clear();
     }
 }
 
@@ -470,8 +540,9 @@ void BITMAP_BASE::ConvertToGreyscale()
     {
         *m_image  = m_image->ConvertToGreyscale();
         *m_originalImage = m_originalImage->ConvertToGreyscale();
-        rebuildBitmap();
-        updateImageDataBuffer();
+        m_bitmapDirty = true;
+        m_imageData.Clear();
+        m_imageId = KIID();
     }
 }
 
