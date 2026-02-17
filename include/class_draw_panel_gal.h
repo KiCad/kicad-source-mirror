@@ -288,6 +288,9 @@ protected:
     /// True when canvas needs to be refreshed from idle handler
     bool                     m_needIdleRefresh;
 
+    /// Last cursor position sent to GAL for drawing
+    VECTOR2D                 m_lastCursorPosition;
+
     /// Interface for drawing objects on a 2D-surface
     KIGFX::GAL*              m_gal;
 

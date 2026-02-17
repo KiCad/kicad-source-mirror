@@ -263,6 +263,20 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
 
         cntUpd.Stop();
 
+        VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
+        bool viewDirty = m_view->IsDirty();
+        bool cursorMoved = ( cursorPos != m_lastCursorPosition );
+
+        // Skip the entire GL cycle when nothing has changed. The front buffer
+        // still shows the previous frame so there is nothing to redraw.
+        if( !viewDirty && !cursorMoved )
+        {
+            m_lastRepaintEnd = wxGetLocalTimeMillis();
+            return true;
+        }
+
+        m_lastCursorPosition = cursorPos;
+
         // GAL_DRAWING_CONTEXT can throw in the dtor, so we need to scope
         // the full lifetime inside the try block
         {
@@ -280,9 +294,9 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
             m_gal->SetGridColor( settings->GetGridColor() );
             m_gal->SetCursorColor( settings->GetCursorColor() );
 
-            // TODO: find why ClearScreen() must be called here in opengl mode
-            // and only if m_view->IsDirty() in Cairo mode to avoid display artifacts
-            // when moving the mouse cursor
+            // OpenGL double-buffering leaves the back buffer undefined after
+            // SwapBuffers, so a full clear is always required before compositing.
+            // Cairo only needs to clear when NONCACHED content changed.
             if( m_backend == GAL_TYPE_OPENGL )
                 m_gal->ClearScreen();
 
@@ -306,7 +320,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
                 isDirty = true;
             }
 
-            m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+            m_gal->DrawCursor( cursorPos );
 
             cntCtxDestroy.Start();
         }
@@ -398,8 +412,26 @@ void EDA_DRAW_PANEL_GAL::RequestRefresh()
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
-    if( !DoRePaint() )
-        RequestRefresh();
+    wxLongLong now = wxGetLocalTimeMillis();
+    wxLongLong delta = now - m_lastRepaintEnd;
+
+    // When vsync is available the driver throttles SwapBuffers, so we only need
+    // a small guard to avoid queueing work faster than the GPU can consume it.
+    // Without vsync, enforce a 60 FPS ceiling to prevent saturating the GPU.
+    int minPeriodMs = 3;
+
+    if( m_gal && m_gal->IsInitialized() && m_gal->GetSwapInterval() == 0 )
+        minPeriodMs = 16;
+
+    if( delta >= minPeriodMs )
+    {
+        if( !DoRePaint() )
+            RequestRefresh();
+    }
+    else if( !m_refreshTimer.IsRunning() )
+    {
+        m_refreshTimer.StartOnce( ( minPeriodMs - delta ).GetValue() );
+    }
 }
 
 
@@ -597,16 +629,7 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
     else
         m_eventDispatcher->DispatchWxEvent( aEvent );
 
-    // Give events time to process, based on last render duration
-    wxLongLong endDelta = wxGetLocalTimeMillis() - m_lastRepaintEnd;
-    long long  timeLimit = ( m_lastRepaintEnd - m_lastRepaintStart ).GetValue() / 5;
-
-    timeLimit = std::clamp( timeLimit, 3LL, 150LL );
-
-    if( endDelta > timeLimit )
-        Refresh();
-    else
-        RequestRefresh();
+    Refresh();
 }
 
 
