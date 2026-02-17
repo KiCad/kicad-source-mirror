@@ -775,16 +775,19 @@ void PrintBoardStats( const BOARD* aBoard, const std::string& aBoardName )
         }
     }
 
-    BOOST_TEST_MESSAGE( "\n=== Board Statistics: " << aBoardName << " ===" );
-    BOOST_TEST_MESSAGE( "  Layers: " << aBoard->GetCopperLayerCount() );
-    BOOST_TEST_MESSAGE( "  Nets: " << aBoard->GetNetCount() );
-    BOOST_TEST_MESSAGE( "  Footprints: " << aBoard->Footprints().size() );
-    BOOST_TEST_MESSAGE( "  Tracks: " << trackCount );
-    BOOST_TEST_MESSAGE( "  Vias: " << viaCount );
-    BOOST_TEST_MESSAGE( "  Arcs: " << arcCount );
-    BOOST_TEST_MESSAGE( "  SMD Pads: " << smdPadCount );
-    BOOST_TEST_MESSAGE( "  TH Pads: " << thPadCount );
-    BOOST_TEST_MESSAGE( "  Zones: " << aBoard->Zones().size() );
+    std::ostringstream ss;
+    ss << "\n=== Board Statistics: " << aBoardName << " ===\n"
+       << "  Layers: " << aBoard->GetCopperLayerCount() << "\n"
+       << "  Nets: " << aBoard->GetNetCount() << "\n"
+       << "  Footprints: " << aBoard->Footprints().size() << "\n"
+       << "  Tracks: " << trackCount << "\n"
+       << "  Vias: " << viaCount << "\n"
+       << "  Arcs: " << arcCount << "\n"
+       << "  SMD Pads: " << smdPadCount << "\n"
+       << "  TH Pads: " << thPadCount << "\n"
+       << "  Zones: " << aBoard->Zones().size();
+
+    BOOST_TEST_MESSAGE( ss.str() );
 }
 
 

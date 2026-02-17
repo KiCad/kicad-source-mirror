@@ -226,43 +226,6 @@ BOOST_AUTO_TEST_CASE( TrackWidths )
 
 
 /**
- * Test import of multiple Allegro board versions.
- * This ensures version-conditional parsing works correctly.
- */
-BOOST_AUTO_TEST_CASE( MultiVersionImport )
-{
-    // Test boards with different Allegro versions:
-    // - V166: mainBoard.brd, mainBoard2.brd, TRS80_POWER.brd, ProiectBoard.brd
-    // - V174: led_youtube.brd
-    // - V175: 8851_HW-U1-VCU118_REV2-0_071417.brd (large board)
-
-    std::vector<std::string> testBoards = {
-        "TRS80_POWER/TRS80_POWER.brd",      // V166
-        // "led_youtube/led_youtube.brd",      // V174 - requires additional block types for reference resolution
-        // "VCU118_REV2-0/8851_HW-U1-VCU118_REV2-0_071417.brd" // V175 - large, skip for quick tests
-    };
-
-    for( const std::string& boardName : testBoards )
-    {
-        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
-        {
-            std::unique_ptr<BOARD> board = LoadAllegroBoard( boardName );
-
-            BOOST_CHECK_MESSAGE( board != nullptr, boardName << " should load" );
-
-            if( board )
-            {
-                PrintBoardStats( board.get(), boardName );
-
-                BOOST_CHECK_GT( board->GetNetCount(), 0 );
-                BOOST_CHECK_GT( board->Footprints().size(), 0 );
-            }
-        }
-    }
-}
-
-
-/**
  * Test that pad numbers are set correctly.
  */
 BOOST_AUTO_TEST_CASE( PadNumbers )

@@ -327,6 +327,8 @@ void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aB
             {
                 BOOST_CHECK( board != nullptr );
                 BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
+
+                KI_TEST::PrintBoardStats( board, aBrdName );
             }
         }
     }
