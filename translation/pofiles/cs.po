@@ -22,15 +22,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-17 01:09+0000\n"
-"Last-Translator: Hynek Štětina <hynek.stetina@gmail.com>\n"
+"PO-Revision-Date: 2026-02-18 02:12+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -4028,7 +4028,7 @@ msgstr "Interval aktualizace:"
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
-msgstr ""
+msgstr "Počet minut mezi kontrolami aktualizací.  Nula kontroly zakáže."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 #: common/dialogs/panel_common_settings_base.cpp:347
@@ -4885,19 +4885,23 @@ msgstr "Kopírovat vloženou referenci"
 
 #: common/dialogs/panel_embedded_files.cpp:57
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Kopírovat odkaz na tento vložený soubor"
 
 #: common/dialogs/panel_embedded_files.cpp:217
 msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Některá pouzdra odkazují na smazané vložené soubory.\n"
+"Odstranit odkazy z pouzder?"
 
 #: common/dialogs/panel_embedded_files.cpp:222
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Některé symboly odkazují na smazané vložené soubory.\n"
+"Odstranit odkazy ze symbolů?"
 
 #: common/dialogs/panel_embedded_files.cpp:344
 #: common/dialogs/panel_embedded_files.cpp:460
@@ -4937,7 +4941,7 @@ msgstr "Vybrat soubor ke vložení"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Vložené soubory z nadřazeného symbolu nelze odstranit."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -36329,9 +36333,8 @@ msgid "Error loading footprint library table."
 msgstr "Chyba načtení tabulky knihovny pouzder."
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Vlastnosti skupiny"
+msgstr "Upravit vlastnosti skupiny"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
