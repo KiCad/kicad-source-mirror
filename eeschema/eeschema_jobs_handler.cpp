@@ -680,10 +680,38 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
     else
     {
+        // Normalize field names so that bare generated-field tokens (e.g. "QUANTITY") are
+        // accepted alongside the canonical "${QUANTITY}" form. Shell expansion of ${VAR}
+        // inside double quotes silently produces an empty string, so this also guards against
+        // that common CLI pitfall.
+        auto normalizeFieldName = [&dataModel]( const wxString& aName ) -> wxString
+        {
+            if( aName.IsEmpty() )
+                return wxEmptyString;
+
+            if( IsGeneratedField( aName ) )
+                return aName;
+
+            wxString wrapped = wxS( "${" ) + aName + wxS( "}" );
+
+            if( IsGeneratedField( wrapped ) && dataModel.GetFieldNameCol( wrapped ) != -1 )
+                return wrapped;
+
+            return aName;
+        };
+
         size_t i = 0;
 
-        for( const wxString& fieldName : aBomJob->m_fieldsOrdered )
+        for( const wxString& rawFieldName : aBomJob->m_fieldsOrdered )
         {
+            wxString fieldName = normalizeFieldName( rawFieldName );
+
+            if( fieldName.IsEmpty() )
+            {
+                i++;
+                continue;
+            }
+
             // Handle wildcard. We allow the wildcard anywhere in the list, but it needs to respect
             // fields that come before and after the wildcard.
             if( fieldName == wxS( "*" ) )
@@ -712,7 +740,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
                     for( const wxString& fieldInList : aBomJob->m_fieldsOrdered )
                     {
-                        if( fieldInList == field.name )
+                        if( normalizeFieldName( fieldInList ) == field.name )
                         {
                             fieldLaterInList = true;
                             break;
@@ -730,7 +758,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
             field.name = fieldName;
             field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-            field.groupBy = alg::contains( aBomJob->m_fieldsGroupBy, field.name );
+
+            field.groupBy = alg::contains( aBomJob->m_fieldsGroupBy, field.name )
+                            || alg::contains( aBomJob->m_fieldsGroupBy, rawFieldName );
 
             if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
                 field.label = aBomJob->m_fieldsLabels[i];
@@ -744,7 +774,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         }
 
         preset.sortAsc = aBomJob->m_sortAsc;
-        preset.sortField = aBomJob->m_sortField;
+        preset.sortField = normalizeFieldName( aBomJob->m_sortField );
         preset.filterString = aBomJob->m_filterString;
         preset.groupSymbols = aBomJob->m_groupSymbols;
         preset.excludeDNP = aBomJob->m_excludeDNP;

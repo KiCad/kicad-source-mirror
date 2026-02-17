@@ -299,24 +299,37 @@ def test_sch_export_erc( kitest: KiTestFixture,
 
 @pytest.mark.parametrize("test_file,output_fn,expected_headers,cli_args",
                             [
-                             # Default fields include ${QUANTITY} and ${DNP}
+                             # Default fields include QUANTITY and DNP
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_default.csv",
                               ["Refs", "Value", "Footprint", "Qty", "DNP"], []),
-                             # Explicit fields with ${QUANTITY}
+                             # Explicit fields with ${QUANTITY} (canonical form)
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_quantity.csv",
                               ["Refs", "Value", "Qty"],
-                              ["--fields", "Reference,Value,${QUANTITY}", "--labels", "Refs,Value,Qty"]),
-                             # Explicit fields with ${ITEM_NUMBER}
+                              ["--fields", "${QUANTITY},Reference,Value", "--labels", "Qty,Refs,Value"]),
+                             # Explicit fields with ${ITEM_NUMBER} (canonical form)
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_item_number.csv",
                               ["#", "Refs", "Value"],
                               ["--fields", "${ITEM_NUMBER},Reference,Value", "--labels", "#,Refs,Value"]),
+                             # Bare field names without ${} delimiters (shell-safe form)
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_bare_names.csv",
+                              ["Refs", "Value", "Qty", "DNP"],
+                              ["--fields", "Reference,Value,QUANTITY,DNP", "--labels", "Refs,Value,Qty,DNP"]),
+                             # Bare ITEM_NUMBER without ${} delimiters
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_bare_item.csv",
+                              ["#", "Refs", "Value"],
+                              ["--fields", "ITEM_NUMBER,Reference,Value", "--labels", "#,Refs,Value"]),
+                             # Bare EXCLUDE_FROM_BOM
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.bom_bare_excl.csv",
+                              ["Refs", "Value", "Excl BOM"],
+                              ["--fields", "Reference,Value,EXCLUDE_FROM_BOM",
+                               "--labels", "Refs,Value,Excl BOM"]),
                              ])
 def test_sch_export_bom( kitest,
                          test_file: str,
                          output_fn: str,
                          expected_headers: List[str],
                          cli_args: List[str] ):
-    """Test BOM export with various field configurations, including virtual fields like ${QUANTITY}."""
+    """Test BOM export with various field configurations, including virtual fields like QUANTITY."""
     input_file = kitest.get_data_file_path( test_file )
 
     output_filepath = kitest.get_output_path( "cli/" ).joinpath( output_fn )

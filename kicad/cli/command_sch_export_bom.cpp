@@ -51,7 +51,7 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
     // Field output options
     m_argParser.add_argument( ARG_FIELDS )
             .help( UTF8STDSTR( _( ARG_FIELDS_DESC ) ) )
-            .default_value( std::string( "Reference,Value,Footprint,${QUANTITY},${DNP}" ) )
+            .default_value( std::string( "Reference,Value,Footprint,QUANTITY,DNP" ) )
             .metavar( "FIELDS" );
 
     m_argParser.add_argument( ARG_LABELS )

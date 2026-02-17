@@ -53,7 +53,9 @@ namespace CLI
 
 //Options for controlling the fields and the grouping
 #define ARG_FIELDS "--fields"
-#define ARG_FIELDS_DESC "An ordered list of fields to export. See documentation for special substitutions."
+#define ARG_FIELDS_DESC "An ordered list of fields to export. Generated fields such as " \
+                        "QUANTITY, ITEM_NUMBER, DNP, EXCLUDE_FROM_BOM, EXCLUDE_FROM_BOARD, " \
+                        "and EXCLUDE_FROM_SIM can be specified with or without ${} delimiters."
 
 #define ARG_LABELS "--labels"
 #define ARG_LABELS_DESC "An ordered list of labels to apply the exported fields."
