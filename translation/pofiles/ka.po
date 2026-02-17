@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-05 20:38+0000\n"
+"PO-Revision-Date: 2026-02-18 09:09+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -18967,29 +18967,29 @@ msgid "Sheet '%s' pin '%s'"
 msgstr ""
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "ჭდე '%s'"
+msgstr "ჭდე '%s' მისამართზე (%s %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "გლობალური ჭდეები"
+msgstr "გლობალური ჭდე '%s' მისამართზე (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "იერარქიული ჭდეები"
+msgstr "იერარქიული ჭდე '%s' მისამართზე (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "შეერთებები"
+msgstr "შეერთება მისამართზე (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "ალამი 'დაკავშირებული არაა'"
+msgstr "დაკავშირებული არაა მისამართზე (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
 #, c-format
@@ -20005,14 +20005,14 @@ msgid "Failed to parse value: '%s'"
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "ნაკვალევი '%s' აღმოჩენილი არაა ბიბლიოთეკაში '%s'"
+msgstr "სიმბოლო '%s' gEDA ბიბლიოთეკებში აღმოჩენილი არაა."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3648
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "'%s'-ის გახსნა ჩავარდა."
+msgstr " გულისხმობვდით '%s'-ს?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3795
 #, c-format
@@ -20032,9 +20032,9 @@ msgid "Circular hierarchy detected for '%s', skipping."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4446
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "სქემის ჩატვირთვა ჩავარდა\n"
+msgstr "ქვესქემის '%s' ჩატვირთვა ჩავარდა: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4556
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3108
@@ -20043,14 +20043,14 @@ msgid "File '%s' is empty."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4711
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' სწორი ნაკვალევის იდენტიფიკატორი არაა"
+msgstr "ფაილი '%s' სწორი gEDA სქემა არაა."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4866
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "'%s'-ის გახსნა ჩავარდა."
+msgstr "გვერდის '%s' ჩატვირთვა ჩავარდა: %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
 msgid "gEDA / Lepton EDA schematic files"
@@ -28558,14 +28558,14 @@ msgid "File path for import report (default: stdout)"
 msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "არასწორი ფორმატი\n"
+msgstr "არასწორი ფორმატი: %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "არასწორი ლილვის ფორმატი\n"
+msgstr "არასწორი ანგარიშის ფორმატი: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -29383,9 +29383,9 @@ msgid "Unzipping project in '%s'.\n"
 msgstr ""
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "ვერ გავხსენი ნიმუშების ბილიკი '%s'"
+msgstr "ვერ გავხსენი gEDA / Lepto EDA-ის პროექტის ფაილი '%s'."
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
@@ -40450,9 +40450,8 @@ msgid "Protection features:"
 msgstr "დაცვის თვისებები:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
-#, fuzzy
 msgid "Backdrill:"
-msgstr "უკუბურღი"
+msgstr "უკუბურღი:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
 msgid "Both"
@@ -44666,9 +44665,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1370
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "წაკითხვის შეცდომა ფაილისთვის '%s'."
+msgstr "DRC წესების თავიდან ჩატვირთვა ჩავარდა: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
 msgid "Minimum Length must be greater than 0"
@@ -44823,9 +44822,8 @@ msgid "Remove this condition"
 msgstr "ამ პირობის წაშლა"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_constraint_data.h:57
-#, fuzzy
 msgid "Rule text cannot be empty"
-msgstr "ბილიკი ცარიელი ვერ იქნება."
+msgstr "წესის ტექსტი ცარიელი არ შეიძლება, იყოს"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:51
 #, fuzzy
@@ -44961,18 +44959,16 @@ msgid "Maximum Routing Width"
 msgstr "მაქსიმალური ტრაექტორიის სიგანე"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Minimum Width is required"
-msgstr "მინიმალური სიგანე:"
+msgstr "მინიმალური სიგანე აუცილებელია"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
 msgid "Preferred Width is required"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:83
-#, fuzzy
 msgid "Maximum Width is required"
-msgstr "მაქსიმალური სიგანე:"
+msgstr "მაქსიმალური სიგანე აუცილებელია"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:86
 msgid "Minimum Gap is required"
@@ -45101,9 +45097,9 @@ msgstr "გამტარი ნახვრეტის ზომა"
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:334
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:376
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "%s should not be empty."
-msgstr "ბილიკი ცარიელი ვერ იქნება."
+msgstr "%s ცარიელი ვერ იქნება."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:341
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:603
@@ -45161,14 +45157,12 @@ msgid "Rule name"
 msgstr "წესის სახელი"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:369
-#, fuzzy
 msgid "Rule name must be unique."
-msgstr "უნიკალურის გენერაცია"
+msgstr "წესის სახელი უნიკალური უნდა იყოს."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:377
-#, fuzzy
 msgid "Layer selection is required."
-msgstr "ფენის არჩევა:"
+msgstr "ფენის არჩევა აუცილებელია."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:850
 msgid "ERROR: No condition text provided for validation."
@@ -47085,14 +47079,14 @@ msgid "Changed group name from '%s' to '%s'."
 msgstr "ჯგუფის სახელი შეიცვალა '%s'-დან '%s'-ზე."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1811
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "ჯგუფის ბიბლიოთეკის ბმულის შეცვლა '%s'-ზე."
+msgstr "ჯგუფის ბიბლიოთეკის ბმულის შეცვლა '%s'-დან '%s'-ზე."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1817
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "ჯგუფის ბიბლიოთეკის ბმულის შეცვლა '%s'-ზე."
+msgstr "ჯგუფის ბიბლიოთეკის ბმული შეიცვალა '%s'-დან '%s'-ზე."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1857
 #, c-format
@@ -47873,9 +47867,8 @@ msgid "Creating tracks"
 msgstr "ზონების შექმნა"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:3696
-#, fuzzy
 msgid "Converting footprints"
-msgstr "ნაკვალევების შემოწმება..."
+msgstr "ნაკვალევების გადაყვანა"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2438
 msgid "Parsing Allegro objects"
@@ -49350,9 +49343,9 @@ msgid "Starting PADS PCB import"
 msgstr ""
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:527
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "ნაკვალევი '%s' აღმოჩენილი არაა ბიბლიოთეკაში '%s'"
+msgstr "ნაკვალევი '%s' decal-ის სიაში აღმოჩენილი არაა. ნაწილი გამოტოვებულია"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:861
 #, c-format
@@ -49367,9 +49360,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1199
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping track on non-copper layer %d"
-msgstr "ბილიკის გადართვა შემდეგ ჩართულ სპილენძის ფენაზე"
+msgstr "ბილიკის გამოტოვება არა-სპილენძის ფენაზე %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1432
 #, c-format
@@ -50343,19 +50336,19 @@ msgid "Board file was not updated\n"
 msgstr "დაფის ფაილი არ განახლებულა\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2830
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "'%s'-ისთვის დაშორებული მონაცემები აღმოჩენილი არაა."
+msgstr "'%s'-ისთვის ფაილის ფორმატის დადგენა შეუძლებელია\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2839
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "ფაილი აღმოჩენილი არაა: '%s'."
+msgstr "შეყვანის ფაილი აღმოჩენილი არაა: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2865
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "მდებარეობის მონაცემების გარეშე ფაილის სახელისთვის '%s'."
+msgstr "დამატება ფაილის ტიპისთვის '%s' აღმოჩენილი არაა\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2871
 #, c-format
@@ -50368,9 +50361,9 @@ msgid "Successfully saved imported board to '%s'\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3009
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "ნაკვალევის ჩატვირთვის შეცდომა: %s"
+msgstr "შეცდომა შემოტანისას: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -52115,23 +52108,27 @@ msgid "Reference area total components: %d"
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "მიმართვის გამოსახულების თვისებები"
+msgstr ""
+"მიმართვის არეს კომპონენტები:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "კომპონენტის სიის დამუშავება ჩავარდა: %s"
+msgstr "სამიზნე არეს ჯამური კომპონენტები: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1501
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "კომპონენტის სიის დამუშავება ჩავარდა: %s"
+msgstr ""
+"სამიზნე არეს კომპონენტები:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1553
 msgid ""
