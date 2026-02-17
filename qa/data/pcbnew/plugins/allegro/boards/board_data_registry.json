@@ -6,7 +6,8 @@
         },
         "BeagleBone-AI": {
             "formatVersion": "17.2",
-            "boardFile": "BeagleBone-AI.brd"
+            "boardFile": "BeagleBone-AI.brd",
+            "testLabels": ["slow-board"]
         },
         "copper_text": {
             "formatVersion": "17.4",
@@ -114,7 +115,8 @@
         },
         "VCU118_REV2-0": {
             "formatVersion": "16.6",
-            "boardFile": "8851_HW-U1-VCU118_REV2-0_071417.brd"
+            "boardFile": "8851_HW-U1-VCU118_REV2-0_071417.brd",
+            "testLabels": ["slow-board"]
         }
     }
 }

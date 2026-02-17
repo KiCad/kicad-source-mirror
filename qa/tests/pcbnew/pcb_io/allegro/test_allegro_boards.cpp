@@ -493,6 +493,28 @@ static const ALLEGRO_BLOCK_TEST_REGISTRY& buildTestRegistry()
 
 
 /**
+ * Get the labels associated with a board test, which can be used to e.g. filter tests.
+ */
+static std::vector<std::string> getBoardTestLabels( const nlohmann::json& boardTestJson )
+{
+    std::vector<std::string> labels;
+
+    if( boardTestJson.contains( "testLabels" ) && boardTestJson["testLabels"].is_array() )
+    {
+        for( const auto& label : boardTestJson["testLabels"] )
+        {
+            if( label.is_string() )
+            {
+                labels.push_back( label.get<std::string>() );
+            }
+        }
+    }
+
+    return labels;
+}
+
+
+/**
  * This function initializes the test suites for Allegro block and board parsing
  *
  * It reads about the minium information it needs to to construct the test cases
@@ -599,6 +621,8 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 
         const nlohmann::json& boardTestData = registry->GetBoardJson( boardTest.m_BrdName );
 
+        const std::vector<std::string> testLabels = getBoardTestLabels( boardTestData );
+
         if( boardTest.m_HasBoardFile )
         {
             const auto testRunFunction = [&]()
@@ -606,14 +630,19 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
                 RunBoardExpectations( boardTest.m_BrdName, boardTestData );
             };
 
-            boardSuite->add(
-                boost::unit_test::make_test_case(
+            boost::unit_test::test_case* testCase =                boost::unit_test::make_test_case(
                     testRunFunction,
                     boardTest.m_BrdName + "_Expectations",
                     __FILE__,
                     __LINE__
-                )
-            );
+                );
+
+            for( const std::string& label : testLabels )
+            {
+                testCase->add_label( label );
+            }
+
+            boardSuite->add( testCase );
         }
     }
 
