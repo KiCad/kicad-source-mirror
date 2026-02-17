@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-17 01:10+0000\n"
-"Last-Translator: Hynek Štětina <hynek.stetina@gmail.com>\n"
+"PO-Revision-Date: 2026-02-18 09:10+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
 "Language: cs\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -385,9 +385,8 @@ msgid "Reload board and refresh 3D view"
 msgstr "Znovu načíst desku a 3D modely"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytrasing"
+msgstr "Použít raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
 msgid "Render current view using Raytracing"
@@ -1396,9 +1395,8 @@ msgid "Resolution"
 msgstr "Rozlišení"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "3R řešení:"
+msgstr "rozlišení X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
 msgid "pixels/in"
@@ -1409,9 +1407,8 @@ msgid "pixels/mm"
 msgstr "pixelů/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "3R řešení:"
+msgstr "rozlišení Y:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
@@ -1578,14 +1575,12 @@ msgid "Disable thickness"
 msgstr "Zakázat tloušťku"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "Zakázat díry"
+msgstr "Zakázat díry mikroprokovů"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "Zakázat díry"
+msgstr "Zakázat všechny prokovené díry"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
@@ -2309,9 +2304,8 @@ msgid "Design block does not have a valid library ID."
 msgstr "Blok návrhu nemá platné ID knihovny."
 
 #: common/design_block_io.cpp:385
-#, fuzzy
 msgid "Design block does not have a schematic or board file."
-msgstr "Blok návrhu nemá platné ID knihovny."
+msgstr "Blok návrhu nemá soubor schématu ani desky."
 
 #: common/design_block_io.cpp:394
 #, c-format
@@ -2351,9 +2345,9 @@ msgstr "Složka '%s' návrhových bloků nelze odstranit."
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vnořená tabulka '%s' nenalezena."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -2918,9 +2912,8 @@ msgid "Custom"
 msgstr "Vlastní"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Název zdroje"
+msgstr "Název zdroje dat"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
@@ -2932,9 +2925,8 @@ msgid "Password"
 msgstr "Heslo"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Čas"
+msgstr "Časový limit"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 #, fuzzy
@@ -2953,14 +2945,12 @@ msgid "Tables"
 msgstr "Tabulka"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Bez připojení k databázi"
+msgstr "Nelze se připojit k databázi"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "Chyba datového souboru."
+msgstr "Chyba databáze"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
@@ -3064,14 +3054,13 @@ msgid "Grid Settings"
 msgstr "Nastavení mřížky"
 
 #: common/dialogs/dialog_group_properties.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Neplatný identifikátor knihovny"
+msgstr "Neplatný odkaz na knihovnu: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:138
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Vlastnosti skupiny"
+msgstr "Upravit vlastnosti skupiny"
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3476,27 +3465,26 @@ msgid "Close"
 msgstr "Zavřít"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Varování: Měřítko není číslem."
+msgstr "Varování: vlastní měřítko není číslo."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"Varování: Měřítko je nastaveno na velmi velkou hodnotu.\n"
-"Omezeno na %f."
+"Varování: vlastní měřítko je příliš velké.\n"
+"Bude omezeno na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"Varování: Měřítko je nastaveno na velmi malou hodnotu.\n"
-"Omezeno na %f."
+"Varování: vlastní měřítko je příliš malé.\n"
+"Bude omezeno na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:227
 #: common/dialogs/dialog_print_generic.cpp:284
@@ -3987,7 +3975,7 @@ msgstr "Interval aktualizace:"
 msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
-msgstr ""
+msgstr "Počet minut mezi kontrolami aktualizací.  Nula kontroly zakáže."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 msgid "minutes"
@@ -4244,14 +4232,15 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "Pokud je povoleno, použijte pro každý další řádek tabulky jinou barvu"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Zakázat makra apertur"
+msgstr "Zakázat vlastní kurzory"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Pokud povoleno, KiCad bude používat základní systémové kurzory místo "
+"vlastních"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4348,9 +4337,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Koeficient zatemnění v režimu s vysokým kontrastem:"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
-#, fuzzy
 msgid "Scaling"
-msgstr "Měřítka:"
+msgstr "Měřítko"
 
 #: common/dialogs/panel_common_settings_base.cpp:319
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4560,9 +4548,9 @@ msgstr "Varování: Duplicitní aliasy"
 #: common/dialogs/panel_design_block_lib_table.cpp:723
 #: eeschema/dialogs/panel_sym_lib_table.cpp:572
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
-msgstr "Soubor se jménem \"%s\" již existuje"
+msgstr "Položka jménem '%s' už existuje."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:724
 #: eeschema/dialogs/panel_sym_lib_table.cpp:573
@@ -4591,14 +4579,12 @@ msgstr "Přidat každopádně"
 #: common/dialogs/panel_design_block_lib_table.cpp:816
 #: eeschema/dialogs/panel_sym_lib_table.cpp:845
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:839
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
-"Při ukládání tabulky globální knihovny došlo k chybě:\n"
+"Při ukládání tabulky globálních knihoven nastala chyba:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:817
 #: common/dialogs/panel_design_block_lib_table.cpp:836
@@ -4619,11 +4605,12 @@ msgstr "Chyba zápisu souboru"
 #: common/dialogs/panel_design_block_lib_table.cpp:835
 #: eeschema/dialogs/panel_sym_lib_table.cpp:864
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Chyba při ukládání tabulky knihoven projektu."
+msgstr ""
+"Při ukládání tabulky projektových knihoven nastala chyba:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:924
 msgid "Design Block Libraries"
@@ -4679,24 +4666,28 @@ msgstr "Kopírovat vloženou referenci"
 
 #: common/dialogs/panel_embedded_files.cpp:59
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "Kopírovat odkaz na tento vložený soubor"
 
 #: common/dialogs/panel_embedded_files.cpp:207
 msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Některá pouzdra odkazují na smazané vložené soubory.\n"
+"Odstranit odkazy z pouzder?"
 
 #: common/dialogs/panel_embedded_files.cpp:212
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Některé symboly odkazují na smazané vložené soubory.\n"
+"Odstranit odkazy ze symbolů?"
 
 #: common/dialogs/panel_embedded_files.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Selhalo přidání souboru '%s'."
+msgstr "Selhalo čtení souboru '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:349
 #, c-format
@@ -4706,11 +4697,13 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Soubor '%s' je už vložený, avšak obsah souboru z disku se liší.\n"
+"\n"
+"Nahradit vložený soubor?"
 
 #: common/dialogs/panel_embedded_files.cpp:353
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "Vložené soubory"
+msgstr "Konflikt vložených souborů"
 
 #: common/dialogs/panel_embedded_files.cpp:355
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4733,7 +4726,7 @@ msgstr "Vybrat soubor ke vložení"
 
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Vložené soubory z nadřazeného symbolu nelze odstranit."
 
 #: common/dialogs/panel_embedded_files.cpp:463
 msgid "Select a directory to export files"
@@ -5033,9 +5026,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Akce | Výchozí klávesová zkratka | Popis"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "Chyba: Ploška musí mít kladnou velikost."
+msgstr "Měřítkem musí být kladné číslo."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5120,9 +5112,8 @@ msgid "Convert to Greyscale"
 msgstr "Převést na odstíny šedi"
 
 #: common/dialogs/panel_maintenance.cpp:90
-#, fuzzy
 msgid "File history cleared."
-msgstr "Velikost souboru historie:"
+msgstr "Historie souboru vymazána."
 
 #: common/dialogs/panel_maintenance.cpp:113
 #, fuzzy
@@ -5525,14 +5516,12 @@ msgstr "Status interpretu jazyka Python"
 
 #: common/dialogs/panel_printer_list.cpp:155
 #: common/dialogs/panel_printer_list.cpp:176
-#, fuzzy
 msgid "Default printer"
-msgstr "Výchozí písmo"
+msgstr "Výchozí tiskárna"
 
 #: common/dialogs/panel_printer_list_base.cpp:17
-#, fuzzy
 msgid "Printers"
-msgstr "Tisk"
+msgstr "Tiskárny"
 
 #: common/dialogs/panel_printer_list_base.cpp:27
 #: common/widgets/wx_html_report_panel.cpp:233
@@ -5836,14 +5825,12 @@ msgid "Pan and Rotate"
 msgstr "Posun a zvětšení"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Rychlost animace:"
+msgstr "Rychlost otáčení:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Směr:"
+msgstr "Obrátit směr otáčení"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
 msgid "Swap the direction of rotation"
@@ -5882,7 +5869,7 @@ msgstr ""
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>Následující tabulky globálních knihoven musí být vytvořeny:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 #, fuzzy
@@ -5891,12 +5878,11 @@ msgstr "Jak byste chtěli nakonfigurovat KiCad?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
-msgstr ""
+msgstr "Začít s vestavěnými knihovnami z KiCadu (doporučené)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Importovat nastavení z předchozí verze na:"
+msgstr "Importovat tabulky z předchozí verze"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -5906,9 +5892,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:50
-#, fuzzy
 msgid "Start with no libraries"
-msgstr "Knihovny pouzder"
+msgstr "Začít bez knihoven"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:63
 msgid ""
@@ -5919,9 +5904,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Aktualizovat"
+msgstr "Aktualizace"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
@@ -5948,9 +5932,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
-#, fuzzy
 msgid "Enable anonymous data collection"
-msgstr "Povolit animaci"
+msgstr "Povolit anonymní sběr dat"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6035,9 +6018,8 @@ msgid "Insert Spacer"
 msgstr "Vložit"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
-msgstr "Zadejte skupinu"
+msgstr "Vložit skupinu"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
@@ -6058,14 +6040,12 @@ msgid "Group"
 msgstr "Skupina"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:20
-#, fuzzy
 msgid "Customize toolbars"
-msgstr "Vlastní nastavení vrstev"
+msgstr "Upravit panel nástrojů"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "&Nástroje"
+msgstr "Panel nástrojů:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 #, fuzzy
@@ -6087,19 +6067,16 @@ msgid "Discard"
 msgstr "Vyřadit akci"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:505
-#, fuzzy
 msgid "New Rule"
-msgstr "Nový modul"
+msgstr "Nové pravidlo"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:508
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Vlastní pravidla"
+msgstr "Kopírovat pravidlo"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:511
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Smazat modul"
+msgstr "Smazat pravidlo"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:517
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6351,9 +6328,9 @@ msgid "Run: %s"
 msgstr "Pravidlo: %s"
 
 #: common/eda_base_frame.cpp:1305
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Soubor '%s' nenalezen."
+msgstr "Soubor '%s' nenalezen.\n"
 
 #: common/eda_base_frame.cpp:1308
 msgid "Do you want to remove it from list of recently opened files?"
@@ -6421,9 +6398,8 @@ msgstr "Barvy"
 #: common/eda_base_frame.cpp:1475 common/eda_base_frame.cpp:1489
 #: common/eda_base_frame.cpp:1497 common/eda_base_frame.cpp:1518
 #: common/eda_base_frame.cpp:1540
-#, fuzzy
 msgid "Toolbars"
-msgstr "&Nástroje"
+msgstr "Panely nástrojů"
 
 #: common/eda_base_frame.cpp:1445 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:133
@@ -6438,9 +6414,8 @@ msgid "Field Name Templates"
 msgstr "Šablony názvů polí"
 
 #: common/eda_base_frame.cpp:1452
-#, fuzzy
 msgid "Data Sources"
-msgstr "Název zdroje"
+msgstr "Zdroje dat"
 
 #: common/eda_base_frame.cpp:1453 eeschema/sim/simulator_frame.cpp:118
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
@@ -6516,9 +6491,8 @@ msgid "Packages and Updates"
 msgstr "Balíčky a aktualizace"
 
 #: common/eda_base_frame.cpp:1557
-#, fuzzy
 msgid "Maintenance"
-msgstr "Správce"
+msgstr "Údržba"
 
 #: common/eda_base_frame.cpp:1641 pcbnew/dialogs/dialog_export_odbpp.cpp:291
 #: pcbnew/tools/board_editor_control.cpp:505
@@ -6723,9 +6697,8 @@ msgid "Target"
 msgstr "Lícovací značky"
 
 #: common/eda_item.cpp:447 pcbnew/pcb_point.cpp:142
-#, fuzzy
 msgid "Point"
-msgstr "Body"
+msgstr "Bod"
 
 #: common/eda_item.cpp:448 pcbnew/tools/board_inspection_tool.cpp:1047
 msgid "Zone"
@@ -6741,7 +6714,7 @@ msgstr "InfoSítě"
 
 #: common/eda_item.cpp:452 pcbnew/pcb_barcode.cpp:415
 msgid "Barcode"
-msgstr ""
+msgstr "Čárový kód"
 
 #: common/eda_item.cpp:455 eeschema/sch_junction.cpp:302
 #: eeschema/sch_junction.h:102
@@ -7028,9 +7001,8 @@ msgstr "Konec Y"
 #: common/eda_shape.cpp:2782 eeschema/sch_tablecell.cpp:442
 #: eeschema/sch_textbox.cpp:606 pcbnew/pcb_tablecell.cpp:287
 #: pcbnew/pcb_textbox.cpp:860
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Poloměr rohu:"
+msgstr "Poloměr rohu"
 
 #: common/eda_shape.cpp:2810 common/stroke_params.cpp:297
 #: eeschema/sch_bus_entry.cpp:654 eeschema/sch_line.cpp:1302
@@ -7324,15 +7296,13 @@ msgstr ""
 "knihovnu pouzder s názvem footprints.pretty, použitých v projektu."
 
 #: common/env_vars.cpp:135
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad."
-msgstr "Adresář obsahující systémové skripty nainstalované s KiCadem"
+msgstr "Adresář obsahující systémové skripty nainstalované s KiCadem."
 
 #: common/env_vars.cpp:138
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad."
 msgstr ""
-"Adresář obsahující skripty specifické pro uživatele nainstalované s KiCadem"
+"Adresář obsahující skripty specifické pro uživatele nainstalované s KiCadem."
 
 #: common/env_vars.cpp:141
 #, c-format
@@ -8995,14 +8965,12 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Více knihoven nemůže sdílet stejnou přezdívku („%s“)."
 
 #: common/lib_table_notebook_panel.cpp:136
-#, fuzzy
 msgid ""
 "Error saving nested library table:\n"
 "\n"
 msgstr ""
-"Při ukládání tabulky globální knihovny došlo k chybě:\n"
+"Při ukládání vnořené tabulky knihoven došlo k chybě:\n"
 "\n"
-"%s"
 
 #: common/lib_table_notebook_panel.cpp:153
 msgid "Save changes to nested library table?"
