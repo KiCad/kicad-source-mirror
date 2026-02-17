@@ -418,6 +418,8 @@ public:
         AssembleBarcode();
     }
 
+    const wxString& GetLastError() const { return m_lastError; }
+
 private:
     int            m_width;      ///< Barcode width
     int            m_height;     ///< Barcode height
@@ -432,6 +434,7 @@ private:
     SHAPE_POLY_SET m_symbolPoly;      ///< Barcode symbol only (cached, centered at origin)
     SHAPE_POLY_SET m_textPoly;        ///< Human-readable text only (cached, centered/positioned)
     BOX2I          m_bbox;            ///< BBox of m_poly (ie: barcode + text)
+    wxString       m_lastError;
 };
 
 #endif // DIMENSION_H_

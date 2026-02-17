@@ -42,6 +42,7 @@
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_layer_box_selector.h>
+#include <wx/msgdlg.h>
 // For BOX2D viewport checks
 #include <math/box2.h>
 
@@ -235,6 +236,14 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_BARCODE_PROPERTIES::TransferDataFromWindow()
 {
+    transferDataToBarcode( m_dummyBarcode );
+
+    if( !m_dummyBarcode->GetText().empty() && m_dummyBarcode->GetSymbolPoly().OutlineCount() == 0 )
+    {
+        wxMessageBox( m_dummyBarcode->GetLastError(), _( "Barcode Error" ), wxOK | wxICON_ERROR, this );
+        return false;
+    }
+
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_currentBarcode );
 

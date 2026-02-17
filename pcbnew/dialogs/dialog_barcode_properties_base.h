@@ -20,8 +20,8 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/combobox.h>
 #include <wx/radiobox.h>

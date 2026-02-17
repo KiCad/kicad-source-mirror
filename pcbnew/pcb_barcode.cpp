@@ -52,6 +52,8 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
+constexpr int ECI_UTF8 = 26;
+
 PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_BARCODE_T ),
         m_width( pcbIUScale.mmToIU( 40 ) ),
@@ -301,6 +303,7 @@ void PCB_BARCODE::ComputeTextPoly()
 void PCB_BARCODE::ComputeBarcode()
 {
     m_symbolPoly.RemoveAllContours();
+    m_lastError.clear();
 
     std::unique_ptr<zint_symbol, decltype( &ZBarcode_Delete )> symbol( ZBarcode_Create(), &ZBarcode_Delete );
 
@@ -345,11 +348,31 @@ void PCB_BARCODE::ComputeBarcode()
     if( text.empty() )
         return;
 
-    if( ZBarcode_Encode( symbol.get(), dataPtr, length ) )
+    if( ( m_kind == BARCODE_T::QR_CODE || m_kind == BARCODE_T::DATA_MATRIX ) && !text.IsAscii() )
+    {
+        symbol->eci = ECI_UTF8;
+    }
+
+    if( ZBarcode_Encode( symbol.get(), dataPtr, length ) >= ZINT_ERROR )
+    {
+        if( !text.IsAscii() )
+        {
+            m_lastError = _( "This barcode type does not support international "
+                             "characters. Use QR Code or Data Matrix instead." );
+        }
+        else
+        {
+            m_lastError = wxString::FromUTF8( symbol->errtxt );
+        }
         return;
+        ;
+    }
 
     if( ZBarcode_Buffer_Vector( symbol.get(), 0 ) ) // 0 means success
+    {
+        m_lastError = wxString::FromUTF8( symbol->errtxt );
         return;
+    }
 
     for( zint_vector_rect* rect = symbol->vector->rectangles; rect != nullptr; rect = rect->next )
     {

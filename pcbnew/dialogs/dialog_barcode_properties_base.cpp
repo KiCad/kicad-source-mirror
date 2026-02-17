@@ -24,15 +24,21 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	wxBoxSizer* bGeneralSizer;
 	bGeneralSizer = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_staticText28 = new wxStaticText( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
-	bGeneralSizer->Add( m_staticText28, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer10->Add( m_staticText28, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bGeneralSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+	bSizer10->Add( 0, 3, 0, wxEXPAND, 5 );
 
 	m_textInput = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bGeneralSizer->Add( m_textInput, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer10->Add( m_textInput, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bGeneralSizer->Add( bSizer10, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
