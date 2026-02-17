@@ -448,3 +448,47 @@ BOOST_AUTO_TEST_CASE( PNSLayerRangeSwapBehavior )
     BOOST_CHECK( innerLayersRange4Layer.Overlaps( 2 ) );  // In2_Cu
     BOOST_CHECK( !innerLayersRange4Layer.Overlaps( 3 ) ); // B_Cu - should not overlap
 }
+
+
+/**
+ * Test that splitting a locked PNS segment preserves the locked marker on both halves.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/21564
+ * When a locked track is split by a new route connecting to its middle, both resulting
+ * segments must retain the locked state.
+ */
+BOOST_FIXTURE_TEST_CASE( PNSSegmentSplitPreservesLockedState, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+
+    VECTOR2I segStart( 0, 0 );
+    VECTOR2I segEnd( 10000000, 0 );
+    VECTOR2I splitPt( 5000000, 0 );
+
+    PNS::SEGMENT* lockedSeg = new PNS::SEGMENT( SEG( segStart, segEnd ), net );
+    lockedSeg->SetWidth( 250000 );
+    lockedSeg->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    lockedSeg->Mark( PNS::MK_LOCKED );
+
+    BOOST_CHECK( lockedSeg->IsLocked() );
+
+    world->AddRaw( lockedSeg );
+
+    // Clone the locked segment and set up two halves (simulating SplitAdjacentSegments)
+    std::unique_ptr<PNS::SEGMENT> clone1( PNS::Clone( *lockedSeg ) );
+    std::unique_ptr<PNS::SEGMENT> clone2( PNS::Clone( *lockedSeg ) );
+
+    clone1->SetEnds( segStart, splitPt );
+    clone2->SetEnds( splitPt, segEnd );
+
+    BOOST_CHECK_MESSAGE( clone1->IsLocked(),
+                         "First half of split locked segment must retain locked state" );
+    BOOST_CHECK_MESSAGE( clone2->IsLocked(),
+                         "Second half of split locked segment must retain locked state" );
+    BOOST_CHECK_EQUAL( clone1->Width(), lockedSeg->Width() );
+    BOOST_CHECK_EQUAL( clone2->Width(), lockedSeg->Width() );
+}
