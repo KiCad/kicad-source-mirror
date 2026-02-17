@@ -203,7 +203,7 @@ private:
     void initSymbolLibrary();
 
     /// Recursively scan a directory for .sym files and populate m_symLibrary.
-    void scanSymbolDir( const wxString& aDir );
+    void scanSymbolDir( const wxString& aDir, int aDepth = 0 );
 
     /// Parse an RC file (gafrc or gschemrc) for component-library directives.
     void parseRcFileForLibraries( const wxString& aPath, const wxString& aBaseDir );

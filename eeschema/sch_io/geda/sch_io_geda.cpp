@@ -2841,8 +2841,11 @@ void SCH_IO_GEDA::initSymbolLibrary()
 }
 
 
-void SCH_IO_GEDA::scanSymbolDir( const wxString& aDir )
+void SCH_IO_GEDA::scanSymbolDir( const wxString& aDir, int aDepth )
 {
+    if( aDepth > 20 )
+        return;
+
     wxDir dir( aDir );
 
     if( !dir.IsOpened() )
@@ -2857,8 +2860,7 @@ void SCH_IO_GEDA::scanSymbolDir( const wxString& aDir )
 
         if( wxDir::Exists( fullPath ) )
         {
-            // Recurse into subdirectories
-            scanSymbolDir( fullPath );
+            scanSymbolDir( fullPath, aDepth + 1 );
         }
         else if( filename.EndsWith( wxT( ".sym" ) ) )
         {
