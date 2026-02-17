@@ -37,7 +37,7 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
         m_data( aData ),
         m_unitsProvider( pcbIUScale, aUnits )
 {
-    SetBackgroundBitmap( BITMAPS::constraint_absolute_length_2 );
+    SetBackgroundBitmap( aData->GetOverlayBitmap() );
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 

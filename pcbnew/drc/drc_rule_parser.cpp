@@ -533,6 +533,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
     case T_min_resolved_spokes:       c.m_Type = MIN_RESOLVED_SPOKES_CONSTRAINT;       break;
     case T_solder_mask_expansion:     c.m_Type = SOLDER_MASK_EXPANSION_CONSTRAINT;     break;
+    case T_solder_mask_sliver:        c.m_Type = SOLDER_MASK_SLIVER_CONSTRAINT;        break;
     case T_solder_paste_abs_margin:   c.m_Type = SOLDER_PASTE_ABS_MARGIN_CONSTRAINT;   break;
     case T_solder_paste_rel_margin:   c.m_Type = SOLDER_PASTE_REL_MARGIN_CONSTRAINT;   break;
     case T_disallow:                  c.m_Type = DISALLOW_CONSTRAINT;                  break;
@@ -549,9 +550,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                        "physical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
                        "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                        "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
-                       "min_resolved_spokes, solder_mask_expansion, solder_paste_abs_margin, "
-                       "solder_paste_rel_margin, length, skew, via_count, via_dangling, via_diameter, "
-                       "diff_pair_gap, diff_pair_uncoupled or bridged_mask" ) );
+                       "min_resolved_spokes, solder_mask_expansion, solder_mask_sliver, "
+                       "solder_paste_abs_margin, solder_paste_rel_margin, length, skew, via_count, "
+                       "via_dangling, via_diameter, diff_pair_gap, diff_pair_uncoupled or bridged_mask" ) );
         return;
     }
 

@@ -149,4 +149,12 @@ private:
     double m_maxLength{ 0 };
 };
 
+class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA : public DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA
+{
+public:
+    using DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA;
+
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_matched_length_diff_pair; }
+};
+
 #endif // DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA_H_

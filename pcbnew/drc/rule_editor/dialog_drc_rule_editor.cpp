@@ -725,6 +725,7 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildHighspeedDesignRuleTree
 
     result.push_back( buildRuleTreeNodeData( "Matched length diff pair", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, MATCHED_LENGTH_DIFF_PAIR ) );
+
     result.push_back( buildRuleTreeNodeData( "Absolute length", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              ABSOLUTE_LENGTH ) );
 

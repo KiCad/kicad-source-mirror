@@ -139,6 +139,7 @@ static wxString GetConstraintCodeFromType( DRC_CONSTRAINT_T aType )
     case PHYSICAL_CLEARANCE_CONSTRAINT:      return "physical_clearance";
     case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT: return "physical_hole_clearance";
     case BRIDGED_MASK_CONSTRAINT:            return "bridged_mask";
+    case SOLDER_MASK_SLIVER_CONSTRAINT:      return "solder_mask_sliver";
     case ASSERTION_CONSTRAINT:               return "assertion";
     default:                                 return "";
     }

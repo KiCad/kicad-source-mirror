@@ -181,6 +181,24 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         return data;
     }
 
+    case MATCHED_LENGTH_DIFF_PAIR:
+    {
+        auto data = std::make_shared<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>();
+        data->SetRuleName( aRule.m_Name );
+        data->SetConstraintCode( "length" );
+
+        const DRC_CONSTRAINT* length = findConstraint( aRule, LENGTH_CONSTRAINT );
+
+        if( length )
+        {
+            data->SetMinimumLength( toMM( length->GetValue().Min() ) );
+            data->SetOptimumLength( toMM( length->GetValue().Opt() ) );
+            data->SetMaximumLength( toMM( length->GetValue().Max() ) );
+        }
+
+        return data;
+    }
+
     case CUSTOM_RULE:
     {
         auto data = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>();

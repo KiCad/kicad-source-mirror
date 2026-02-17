@@ -218,12 +218,12 @@ void DRC_PANEL_MATCHER::initClaims()
             std::set<DRC_CONSTRAINT_T>{},
             20 );
 
-    // Skew constraints
+    // Diff pair length matching (length + optional skew)
     m_claims.emplace_back(
             MATCHED_LENGTH_DIFF_PAIR,
+            std::set<DRC_CONSTRAINT_T>{ LENGTH_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{ SKEW_CONSTRAINT },
-            std::set<DRC_CONSTRAINT_T>{},
-            20 );
+            65 );
 
     // Diff pair gap only (when not combined with track_width)
     m_claims.emplace_back(
