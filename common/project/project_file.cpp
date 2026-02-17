@@ -150,10 +150,18 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                     for( const nlohmann::json& entry : membersJson )
                     {
                         if( entry.is_string() )
-                            members.push_back( entry.get<wxString>() );
+                        {
+                            wxString member = entry.get<wxString>().Strip( wxString::both );
+
+                            if( !member.IsEmpty() )
+                                members.push_back( member );
+                        }
                     }
 
-                    m_BusAliases.emplace( wxString::FromUTF8( it.key().c_str() ), std::move( members ) );
+                    wxString name = wxString::FromUTF8( it.key().c_str() ).Strip( wxString::both );
+
+                    if( !name.IsEmpty() )
+                        m_BusAliases.emplace( name, std::move( members ) );
                 }
             }, {} ) );
 

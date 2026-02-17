@@ -744,7 +744,7 @@ void SCH_IO_ALTIUM::CreateAliases()
         alias->SetName( harness.m_name );
 
         for( HARNESS::HARNESS_PORT& port : harness.m_ports )
-            alias->Members().push_back( port.m_name );
+            alias->AddMember( port.m_name );
 
         screen->AddBusAlias( alias );
 

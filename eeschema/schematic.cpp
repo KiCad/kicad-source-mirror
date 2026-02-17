@@ -703,7 +703,7 @@ void SCHEMATIC::loadBusAliasesFromProject()
         std::shared_ptr<BUS_ALIAS> busAlias = std::make_shared<BUS_ALIAS>();
 
         busAlias->SetName( alias.first );
-        busAlias->Members() = alias.second;
+        busAlias->SetMembers( alias.second );
 
         m_busAliases.push_back( busAlias );
     }
