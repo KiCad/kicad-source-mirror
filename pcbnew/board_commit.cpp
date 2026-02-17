@@ -688,6 +688,7 @@ void BOARD_COMMIT::Revert()
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
+    std::vector<BOARD_ITEM*> itemsToDelete;
 
     for( COMMIT_LINE& entry : m_entries )
     {
@@ -706,6 +707,8 @@ void BOARD_COMMIT::Revert()
                 if( boardItem->Type() != PCB_NETINFO_T )
                     view->Remove( boardItem );
 
+                connectivity->Remove( boardItem );
+
                 if( m_isFootprintEditor )
                 {
                     if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
@@ -718,8 +721,9 @@ void BOARD_COMMIT::Revert()
                 }
             }
 
-            // Item was staged for addition but is being reverted, so delete it
-            delete boardItem;
+            // Defer deletion until after OnItemsCompositeUpdate so that
+            // board listeners do not receive dangling pointers.
+            itemsToDelete.push_back( boardItem );
             entry.m_item = nullptr;
             continue;
 
@@ -784,6 +788,9 @@ void BOARD_COMMIT::Revert()
 
     if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
         board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
+
+    for( BOARD_ITEM* item : itemsToDelete )
+        delete item;
 
     if( m_isBoardEditor )
     {
