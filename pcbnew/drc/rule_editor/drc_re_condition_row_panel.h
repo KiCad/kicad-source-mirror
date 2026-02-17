@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include <memory>
 #include <wx/panel.h>
 #include <functional>
 
@@ -35,6 +36,7 @@ class wxBitmapButton;
 class wxStyledTextCtrl;
 class wxStyledTextEvent;
 class wxBoxSizer;
+class SCINTILLA_TRICKS; 
 
 /**
  * A single condition row in the condition group panel.
@@ -103,19 +105,20 @@ private:
     void onCustomQueryChanged( wxStyledTextEvent& aEvent );
     void updateVisibility();
 
-    bool               m_showObjectSelector;
+    bool                              m_showObjectSelector;
 
-    wxChoice*          m_objectChoice;
-    wxChoice*          m_conditionChoice;
-    NET_SELECTOR*      m_netSelector;
-    NETCLASS_SELECTOR* m_netclassSelector;
-    AREA_SELECTOR*     m_areaSelector;
-    wxStyledTextCtrl*  m_customQueryCtrl;
-    wxBitmapButton*    m_deleteBtn;
-    wxBoxSizer*        m_mainSizer;
-    wxBoxSizer*        m_contentSizer;
-    wxBoxSizer*        m_rowSizer;
+    wxChoice*                         m_objectChoice;
+    wxChoice*                         m_conditionChoice;
+    NET_SELECTOR*                     m_netSelector;
+    NETCLASS_SELECTOR*                m_netclassSelector;
+    AREA_SELECTOR*                    m_areaSelector;
+    wxStyledTextCtrl*                 m_customQueryCtrl;
+    std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
+    wxBitmapButton*                   m_deleteBtn;
+    wxBoxSizer*                       m_mainSizer;
+    wxBoxSizer*                       m_contentSizer;
+    wxBoxSizer*                       m_rowSizer;
 
-    std::function<void()> m_deleteCallback;
-    std::function<void()> m_changeCallback;
+    std::function<void()>             m_deleteCallback;
+    std::function<void()>             m_changeCallback;
 };

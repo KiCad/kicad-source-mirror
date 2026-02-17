@@ -33,6 +33,7 @@
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/stc/stc.h>
+#include <scintilla_tricks.h>
 #include <wx/regex.h>
 #include <wx/log.h>
 
@@ -110,6 +111,17 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
     m_customQueryCtrl->SetReadOnly( false );
     m_customQueryCtrl->SetUseHorizontalScrollBar( false );
     m_customQueryCtrl->SetMaxSize( wxSize( -1, 60 ) );
+
+    m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>(
+        m_customQueryCtrl, wxT( "()" ), false,
+        []( wxKeyEvent& aEvent )
+        {
+            aEvent.Skip();
+        },
+        []( wxStyledTextEvent& aEvent )
+        {
+        } );
+
     m_contentSizer->Add( m_customQueryCtrl, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     m_customQueryCtrl->Hide();
 
