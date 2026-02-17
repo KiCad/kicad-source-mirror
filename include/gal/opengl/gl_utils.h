@@ -42,8 +42,7 @@ public:
 
         if( aCanvas->GetEGLVersion( &eglMajor, &eglMinor ) )
             backend = wxString::Format( "EGL %d.%d", eglMajor, eglMinor );
-
-        if( int glxVersion = aCanvas->GetGLXVersion() )
+        else if( int glxVersion = aCanvas->GetGLXVersion() )
             backend = wxString::Format( "GLX %d.%d", glxVersion / 10, glxVersion % 10 );
 #endif
 
