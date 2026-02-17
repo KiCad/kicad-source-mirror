@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
 "PO-Revision-Date: 2026-02-17 07:11+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -21354,9 +21354,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Ungültige Hyperlink-URL \"%s\""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "%s kann nicht als Symbol geparst werden"
+msgstr "%s kann nicht als Header geparst werden."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -48104,16 +48104,17 @@ msgstr ""
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1209
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
-msgstr "Soll der Exportprozess abgebrochen werden?"
+msgstr ""
+"\n"
+"Sollen die Änderungen gespeichert werden?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1370
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "Datei \"%s\" konnte nicht gelesen werden."
+msgstr "Erneutes Laden der Designregeln schlug fehl: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
 msgid "Minimum Length must be greater than 0"
@@ -48513,9 +48514,10 @@ msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:102
-#, fuzzy
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "Via-Durchmesser ist kleiner als der minimale Via-Durchmesser (%s)."
+msgstr ""
+"Minimaler Via-Durchmesser darf nicht größer als der maximale Via-Durchmesser "
+"sein"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:106
 msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
@@ -49219,9 +49221,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Speicher erschöpft beim Laden der Platine \"%s\""
 
 #: pcbnew/files.cpp:737
-#, fuzzy
 msgid "Finalizing board"
-msgstr "Lade Platine\n"
+msgstr "Finalisiere Platine"
 
 #: pcbnew/files.cpp:782 pcbnew/pcb_edit_frame.cpp:1548
 msgid "Could not load component class assignment rules"
