@@ -26,6 +26,7 @@
 
 #include <bitmaps.h>
 #include <dialogs/rule_editor_data_base.h>
+#include <widgets/report_severity.h>
 #include "drc_re_overlay_types.h"
 #include "drc_rule_editor_enums.h"
 #include <string_utils.h>
@@ -110,6 +111,10 @@ public:
 
     void SetWasEdited( bool aEdited ) { m_wasEdited = aEdited; }
 
+    SEVERITY GetSeverity() const { return m_severity; }
+
+    void SetSeverity( SEVERITY aSeverity ) { m_severity = aSeverity; }
+
     void CopyFrom( const ICopyable& aSource ) override
     {
         const auto& source = dynamic_cast<const DRC_RE_BASE_CONSTRAINT_DATA&>( aSource );
@@ -122,6 +127,7 @@ public:
         m_generatedRule = source.m_generatedRule;
         m_originalRuleText = source.m_originalRuleText;
         m_wasEdited = source.m_wasEdited;
+        m_severity = source.m_severity;
     }
 
     /**
@@ -233,6 +239,7 @@ private:
     wxString m_generatedRule;
     wxString m_originalRuleText;
     bool     m_wasEdited = false;
+    SEVERITY m_severity = RPT_SEVERITY_UNDEFINED;
 };
 
 #endif // DRC_RE_BASE_CONSTRAINT_DATA_H_

@@ -301,6 +301,7 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
             ruleData->SetOriginalRuleText( entry.originalRuleText );
             ruleData->SetWasEdited( entry.wasEdited );
             ruleData->SetLayerSource( entry.layerSource );
+            ruleData->SetSeverity( entry.severity );
             node.m_nodeData = ruleData;
         }
 
@@ -1353,6 +1354,9 @@ void DIALOG_DRC_RULE_EDITOR::SaveRulesToFile()
         entry.condition = data->GetRuleCondition();
         entry.originalRuleText = data->GetOriginalRuleText();
         entry.wasEdited = data->WasEdited();
+        entry.severity = data->GetSeverity();
+        entry.layerCondition = LSET( data->GetLayers() );
+        entry.layerSource = data->GetLayerSource();
 
         entries.push_back( entry );
     }
