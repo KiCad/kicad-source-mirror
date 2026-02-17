@@ -456,6 +456,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
         BLK_0x03_FIELD::SUB_0x6C sub;
         sub.m_NumEntries = aStream.ReadU32();
 
+        if( sub.m_NumEntries > 1000000 )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    "Block 0x03 subtype 0x6C entry count %u exceeds limit at offset %#010zx",
+                    sub.m_NumEntries, aStream.Position() ) );
+        }
+
         sub.m_Entries.reserve( sub.m_NumEntries );
         for( uint32_t i = 0; i < sub.m_NumEntries; ++i )
         {
