@@ -233,6 +233,81 @@ BOOST_DATA_TEST_CASE_F( ZONE_FILL_TEST_FIXTURE, RegressionZoneFillTests,
 }
 
 
+/**
+ * Test for issue 23053: Zone clearance violations between zones with iterative refill.
+ *
+ * When iterative refill is enabled, zone-to-zone clearance knockouts were applied after
+ * the min-width deflate/inflate cycle. The reinflation could push copper into the zone
+ * clearance area, causing DRC clearance violations between different-net zones.
+ *
+ * Also verifies the non-iterative path produces no violations on the same board.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionZoneClearanceWithIterativeRefill, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    auto runDrcClearanceCheck =
+            [this]( bool aIterative ) -> int
+            {
+                ADVANCED_CFG& innerCfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+                innerCfg.m_ZoneFillIterativeRefill = aIterative;
+
+                KI_TEST::LoadBoard( m_settingsManager, "issue23053/issue23053", m_board );
+
+                BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+                KI_TEST::FillZones( m_board.get() );
+
+                std::vector<DRC_ITEM> violations;
+
+                std::map<KIID, EDA_ITEM*> itemMap;
+                m_board->FillItemMap( itemMap );
+                UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
+
+                bds.m_DRCEngine->SetViolationHandler(
+                        [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
+                             int aLayer,
+                             const std::function<void( PCB_MARKER* )>& aPathGenerator )
+                        {
+                            if( aItem->GetErrorCode() == DRCE_CLEARANCE )
+                            {
+                                BOARD_ITEM* itemA = m_board->ResolveItem( aItem->GetMainItemID() );
+                                BOARD_ITEM* itemB = m_board->ResolveItem( aItem->GetAuxItemID() );
+
+                                if( dynamic_cast<ZONE*>( itemA ) && dynamic_cast<ZONE*>( itemB ) )
+                                {
+                                    violations.push_back( *aItem );
+
+                                    BOOST_TEST_MESSAGE(
+                                            aItem->ShowReport( &unitsProvider,
+                                                               RPT_SEVERITY_ERROR, itemMap ) );
+                                }
+                            }
+                        } );
+
+                bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+                return static_cast<int>( violations.size() );
+            };
+
+    int iterativeViolations = runDrcClearanceCheck( true );
+
+    BOOST_CHECK_MESSAGE( iterativeViolations == 0,
+                         wxString::Format( "Iterative refill produced %d zone-to-zone clearance "
+                                           "violations (expected 0)", iterativeViolations ) );
+
+    int nonIterativeViolations = runDrcClearanceCheck( false );
+
+    BOOST_CHECK_MESSAGE( nonIterativeViolations == 0,
+                         wxString::Format( "Non-iterative refill produced %d zone-to-zone clearance "
+                                           "violations (expected 0)", nonIterativeViolations ) );
+}
+
+
 static const std::vector<wxString> RegressionSliverZoneFillTests_tests = {
     "issue16182"    // Slivers
 };

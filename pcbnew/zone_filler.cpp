@@ -2824,8 +2824,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     aFillPolys.BooleanSubtract( clearanceHoles );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In17_Cu, wxT( "after-trim-to-clearance-holes" ) );
 
-    // Cache the pre-knockout fill for iterative refill optimization (issue 21746)
-    // At this point, the fill has NOT been knocked out by higher-priority zones on different nets
+    // Cache the pre-knockout fill for iterative refill optimization (issue 21746).
+    // The cache stores the fill BEFORE zone-to-zone knockouts so the iterative refill can
+    // reclaim space when higher-priority zones have islands removed.
     if( iterativeRefill )
     {
         {
@@ -3762,87 +3763,79 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
     }
 
     // Subtract the FILLED area of higher-priority zones (with clearance for different nets).
-    // For same-net zones: subtract the filled area directly
-    // For different-net zones: subtract the filled area with appropriate clearance
-    // This replaces the original knockout logic to use actual fills after island removal.
+    // For same-net zones: subtract the filled area directly.
+    // For different-net zones: subtract the filled area with DRC-evaluated clearance plus
+    // extra_margin and m_maxError to match the margins used in the initial fill. Without these
+    // margins, polygon approximation error can produce fills that violate clearance (issue 23053).
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    int   extra_margin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
     BOX2I zoneBBox = aZone->GetBoundingBox();
-    int   zone_clearance = aZone->GetLocalClearance().value();
-    int   board_clearance = m_board->GetDesignSettings().m_MinClearance;
+    zoneBBox.Inflate( m_worstClearance + extra_margin );
+
+    auto evalRulesForItems =
+            [&bds]( DRC_CONSTRAINT_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
+                    PCB_LAYER_ID aEvalLayer ) -> int
+            {
+                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
+
+                if( c.IsNull() )
+                    return -1;
+                else
+                    return c.GetValue().Min();
+            };
+
+    auto knockoutZoneFill =
+            [&]( ZONE* otherZone )
+            {
+                if( otherZone == aZone )
+                    return;
+
+                if( !otherZone->GetLayerSet().test( aLayer ) )
+                    return;
+
+                if( otherZone->IsTeardropArea() )
+                    return;
+
+                if( !otherZone->HigherPriority( aZone ) )
+                    return;
+
+                if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
+                    return;
+
+                std::shared_ptr<SHAPE_POLY_SET> otherFill = otherZone->GetFilledPolysList( aLayer );
+
+                if( !otherFill || otherFill->OutlineCount() == 0 )
+                    return;
+
+                if( otherZone->SameNet( aZone ) )
+                {
+                    aFillPolys.BooleanSubtract( *otherFill );
+                }
+                else
+                {
+                    int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
+                                                              aZone, otherZone, aLayer ) );
+
+                    gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
+                                                            otherZone, aLayer ) );
+
+                    if( gap < 0 )
+                        return;
+
+                    SHAPE_POLY_SET inflatedFill = *otherFill;
+                    inflatedFill.Inflate( gap + extra_margin + m_maxError,
+                                          CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+                    aFillPolys.BooleanSubtract( inflatedFill );
+                }
+            };
 
     for( ZONE* otherZone : m_board->Zones() )
-    {
-        if( otherZone == aZone )
-            continue;
-
-        if( !otherZone->GetLayerSet().test( aLayer ) )
-            continue;
-
-        if( otherZone->IsTeardropArea() )
-            continue;
-
-        if( !otherZone->HigherPriority( aZone ) )
-            continue;
-
-        if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
-            continue;
-
-        std::shared_ptr<SHAPE_POLY_SET> otherFill = otherZone->GetFilledPolysList( aLayer );
-
-        if( !otherFill || otherFill->OutlineCount() == 0 )
-            continue;
-
-        if( otherZone->SameNet( aZone ) )
-        {
-            // Same net: subtract filled area directly
-            aFillPolys.BooleanSubtract( *otherFill );
-        }
-        else
-        {
-            // Different net: subtract filled area with clearance
-            int clearance = std::max( zone_clearance, otherZone->GetLocalClearance().value() );
-            clearance = std::max( clearance, board_clearance );
-
-            SHAPE_POLY_SET inflatedFill = *otherFill;
-            inflatedFill.Inflate( clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
-            aFillPolys.BooleanSubtract( inflatedFill );
-        }
-    }
+        knockoutZoneFill( otherZone );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( ZONE* otherZone : footprint->Zones() )
-        {
-            if( !otherZone->GetLayerSet().test( aLayer ) )
-                continue;
-
-            if( otherZone->IsTeardropArea() )
-                continue;
-
-            if( !otherZone->HigherPriority( aZone ) )
-                continue;
-
-            if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
-                continue;
-
-            std::shared_ptr<SHAPE_POLY_SET> otherFill = otherZone->GetFilledPolysList( aLayer );
-
-            if( !otherFill || otherFill->OutlineCount() == 0 )
-                continue;
-
-            if( otherZone->SameNet( aZone ) )
-            {
-                aFillPolys.BooleanSubtract( *otherFill );
-            }
-            else
-            {
-                int clearance = std::max( zone_clearance, otherZone->GetLocalClearance().value() );
-                clearance = std::max( clearance, board_clearance );
-
-                SHAPE_POLY_SET inflatedFill = *otherFill;
-                inflatedFill.Inflate( clearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
-                aFillPolys.BooleanSubtract( inflatedFill );
-            }
-        }
+            knockoutZoneFill( otherZone );
     }
 
     // Subtract keepout zones (rule areas with do-not-fill)
