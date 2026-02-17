@@ -321,6 +321,7 @@ PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
     m_unitEditorInstance->UpdateFrame( nullptr );
     m_fpEditorInstance->UpdateFrame( nullptr );
     m_urlEditorInstance->UpdateFrame( nullptr );
+    m_netSelectorEditorInstance->UpdateFrame( nullptr );
 }
 
 
