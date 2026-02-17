@@ -3156,6 +3156,15 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
     {
         for( PAD* pad : footprint->Pads() )
             items.push_back( pad );
+
+        for( ZONE* zone : footprint->Zones() )
+            items.push_back( zone );
+
+        for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
+        {
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( dwg ) )
+                items.push_back( bci );
+        }
     }
 
     for( ZONE* zone : Zones() )
