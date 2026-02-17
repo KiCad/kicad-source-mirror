@@ -1239,6 +1239,12 @@ const wxString* FUNCTION_INSTANCE::GetName() const
 
 const COMPONENT_INST& FUNCTION_INSTANCE::GetComponentInstance() const
 {
+    if( m_ComponentInstance.m_Target == nullptr )
+    {
+        THROW_IO_ERROR(
+                "FUNCTION_INSTANCE::GetComponentInstance: Null reference to COMPONENT_INST" );
+    }
+
     return static_cast<const COMPONENT_INST&>( *m_ComponentInstance.m_Target );
 }
 
