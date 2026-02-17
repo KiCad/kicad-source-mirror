@@ -1,0 +1,2182 @@
+{
+  "board": {
+    "3dviewports": [
+      {
+        "name": "TOP",
+        "ww": 1.0,
+        "wx": -8.277483940124512,
+        "wy": 8.277483940124512,
+        "wz": -16.0,
+        "xw": 0.0,
+        "xx": 1.0,
+        "xy": 0.0,
+        "xz": 0.0,
+        "yw": 0.0,
+        "yx": 0.0,
+        "yy": 1.0,
+        "yz": 0.0,
+        "zw": 0.0,
+        "zx": 0.0,
+        "zy": 0.0,
+        "zz": 1.0
+      }
+    ],
+    "design_settings": {
+      "defaults": {
+        "apply_defaults_to_fp_fields": false,
+        "apply_defaults_to_fp_shapes": false,
+        "apply_defaults_to_fp_text": false,
+        "board_outline_line_width": 0.1,
+        "copper_line_width": 0.2,
+        "copper_text_italic": false,
+        "copper_text_size_h": 1.5,
+        "copper_text_size_v": 1.5,
+        "copper_text_thickness": 0.3,
+        "copper_text_upright": false,
+        "courtyard_line_width": 0.05,
+        "dimension_precision": 4,
+        "dimension_units": 3,
+        "dimensions": {
+          "arrow_length": 1270000,
+          "extension_offset": 500000,
+          "keep_text_aligned": true,
+          "suppress_zeroes": true,
+          "text_position": 0,
+          "units_format": 0
+        },
+        "fab_line_width": 0.1,
+        "fab_text_italic": false,
+        "fab_text_size_h": 1.0,
+        "fab_text_size_v": 1.0,
+        "fab_text_thickness": 0.15,
+        "fab_text_upright": false,
+        "other_line_width": 0.15,
+        "other_text_italic": false,
+        "other_text_size_h": 1.0,
+        "other_text_size_v": 1.0,
+        "other_text_thickness": 0.15,
+        "other_text_upright": false,
+        "pads": {
+          "drill": 0.8,
+          "height": 1.27,
+          "width": 2.54
+        },
+        "silk_line_width": 0.15,
+        "silk_text_italic": false,
+        "silk_text_size_h": 1.0,
+        "silk_text_size_v": 1.0,
+        "silk_text_thickness": 0.15,
+        "silk_text_upright": false,
+        "zones": {
+          "min_clearance": 0.1
+        }
+      },
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        }
+      ],
+      "drc_exclusions": [
+        [
+          "copper_edge_clearance|155930532|153710000|e742b4f6-3fd2-4a57-ac98-a36e866d52a5|e8b5f514-2b72-45e6-a990-ddf3356d5011",
+          ""
+        ],
+        [
+          "copper_edge_clearance|155930532|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|0c30dccb-49af-4b47-9622-8d44b7e1a384",
+          ""
+        ],
+        [
+          "copper_edge_clearance|76930532|153710000|e742b4f6-3fd2-4a57-ac98-a36e866d52a5|2ddfda69-0d2c-420b-9120-0551e7daeb82",
+          ""
+        ],
+        [
+          "copper_edge_clearance|76930532|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|110a5e34-53e7-4902-b29e-0272cd50c6ba",
+          ""
+        ],
+        [
+          "courtyards_overlap|198681438|138905000|e1c4b724-371c-4635-9e2b-9d6f45b20c45|f88b928d-d5e7-401b-8043-6ef88b71cbb6",
+          "Edge connector inside SFP cage"
+        ],
+        [
+          "courtyards_overlap|237005000|70955000|5ad3f83a-20c6-4342-b4dd-259b41bfe433|5e983724-0a7a-42e8-a665-41bc506ad524",
+          ""
+        ],
+        [
+          "courtyards_overlap|239495000|72215000|57b41ce3-f723-4403-87d8-77a97972f657|5ad3f83a-20c6-4342-b4dd-259b41bfe433",
+          ""
+        ],
+        [
+          "npth_inside_courtyard|198600000|140100000|cd27cbdd-f0d3-4a3a-8548-fb4751e90ad3|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
+          ""
+        ],
+        [
+          "npth_inside_courtyard|198600000|149700000|d7d285a5-0876-4440-86b4-8cf3aa858538|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
+          ""
+        ],
+        [
+          "pth_inside_courtyard|221460000|59490000|ac7ae49a-658e-4721-9ab3-f39bfe362198|eb4c5595-14d9-49a0-96a9-b15a5f3510cb",
+          ""
+        ],
+        [
+          "pth_inside_courtyard|222430532|143710000|254f3ce1-fe5f-4928-8ea2-f8e6fed7d1ad|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
+          "Inentional, mounting stud unde SFP cage"
+        ],
+        [
+          "silk_edge_clearance|190058000|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|acf1cf96-976a-4d2f-83c4-bebd3e0e1b07",
+          ""
+        ],
+        [
+          "silk_edge_clearance|221758000|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|c045d629-a23c-4140-8adc-cd36e34f4b27",
+          ""
+        ],
+        [
+          "silk_edge_clearance|233930532|153032000|ef3cc068-45d7-44e3-a683-96bb14af87bd|e40eafb3-04ba-4dac-afa1-3c1e06e243b0",
+          ""
+        ],
+        [
+          "silk_edge_clearance|234001000|136772000|beba3198-dfc2-41b4-82d8-ce2e653b3190|88601146-bc99-4ff1-b11f-6475e84a197e",
+          ""
+        ],
+        [
+          "silk_edge_clearance|234001000|136772000|beba3198-dfc2-41b4-82d8-ce2e653b3190|e737886b-fc8c-460b-a9d0-e0436068d457",
+          ""
+        ],
+        [
+          "silk_edge_clearance|234001000|153032000|ef3cc068-45d7-44e3-a683-96bb14af87bd|e7a5dbb3-14af-47fe-8370-03fc9e29eb7e",
+          ""
+        ],
+        [
+          "silk_edge_clearance|239930532|56790000|4af03295-1084-4417-8cd1-43004859b565|2ae4faff-9c0a-4be4-b3db-bac16dae5cf3",
+          ""
+        ],
+        [
+          "silk_edge_clearance|239930532|70590000|4af03295-1084-4417-8cd1-43004859b565|cef6a8e1-8f04-4089-9320-70fce24bc756",
+          ""
+        ],
+        [
+          "silk_edge_clearance|59930532|119560000|403ff605-9b09-4a77-b2bd-88643e779501|6de21a3e-60b6-4adf-a1fe-6b60beb9de7e",
+          ""
+        ],
+        [
+          "silk_edge_clearance|59930532|87860000|403ff605-9b09-4a77-b2bd-88643e779501|8ea8553e-7e56-43bc-95cc-62e143da09dc",
+          ""
+        ],
+        [
+          "silk_over_copper|101973950|57735191|b7e23aaf-bec2-42f1-95d9-153f44ad6414|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|102000000|59645074|e10bd552-2e6a-40d3-a09e-6c61288829ff|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|105597099|59630491|c583f3b9-01d8-47a7-895f-ca70a66231f6|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|111805052|120278558|df1572ad-d4e1-4172-91ce-60f782b6edf7|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|221741001|58319548|c045d629-a23c-4140-8adc-cd36e34f4b27|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|221741001|58319548|e035d4d8-1be5-4d59-a8fe-90c6641f80d3|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|76855675|148186277|0981ecbb-4e17-4a98-8537-7138e3640830|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|76920532|75010451|910bd3d3-d4fa-4cf4-8f6e-6a7d98602c22|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|77104612|74931000|74f87c58-77cd-40e4-9238-934528b71b2b|00000000-0000-0000-0000-000000000000",
+          ""
+        ]
+      ],
+      "meta": {
+        "version": 2
+      },
+      "rule_severities": {
+        "annular_width": "error",
+        "clearance": "error",
+        "connection_width": "warning",
+        "copper_edge_clearance": "error",
+        "copper_sliver": "warning",
+        "courtyards_overlap": "error",
+        "creepage": "error",
+        "diff_pair_gap_out_of_range": "error",
+        "diff_pair_uncoupled_length_too_long": "error",
+        "drill_out_of_range": "error",
+        "duplicate_footprints": "warning",
+        "extra_footprint": "warning",
+        "footprint": "error",
+        "footprint_filters_mismatch": "ignore",
+        "footprint_symbol_mismatch": "warning",
+        "footprint_type_mismatch": "ignore",
+        "hole_clearance": "error",
+        "hole_to_hole": "error",
+        "holes_co_located": "error",
+        "invalid_outline": "error",
+        "isolated_copper": "warning",
+        "item_on_disabled_layer": "error",
+        "items_not_allowed": "error",
+        "length_out_of_range": "error",
+        "lib_footprint_issues": "warning",
+        "lib_footprint_mismatch": "ignore",
+        "malformed_courtyard": "error",
+        "microvia_drill_out_of_range": "error",
+        "mirrored_text_on_front_layer": "warning",
+        "missing_courtyard": "warning",
+        "missing_footprint": "warning",
+        "net_conflict": "warning",
+        "nonmirrored_text_on_back_layer": "warning",
+        "npth_inside_courtyard": "warning",
+        "padstack": "error",
+        "pth_inside_courtyard": "warning",
+        "shorting_items": "error",
+        "silk_edge_clearance": "warning",
+        "silk_over_copper": "warning",
+        "silk_overlap": "warning",
+        "skew_out_of_range": "error",
+        "solder_mask_bridge": "error",
+        "starved_thermal": "error",
+        "text_height": "warning",
+        "text_on_edge_cuts": "error",
+        "text_thickness": "warning",
+        "through_hole_pad_without_hole": "error",
+        "too_many_vias": "error",
+        "track_angle": "error",
+        "track_dangling": "warning",
+        "track_segment_length": "error",
+        "track_width": "error",
+        "tracks_crossing": "error",
+        "unconnected_items": "error",
+        "unresolved_variable": "error",
+        "via_dangling": "warning",
+        "zones_intersect": "error"
+      },
+      "rules": {
+        "max_error": 0.005,
+        "min_clearance": 0.1,
+        "min_connection": 0.1,
+        "min_copper_edge_clearance": 0.4,
+        "min_groove_width": 0.0,
+        "min_hole_clearance": 0.22,
+        "min_hole_to_hole": 0.25,
+        "min_microvia_diameter": 0.2,
+        "min_microvia_drill": 0.1,
+        "min_resolved_spokes": 1,
+        "min_silk_clearance": 0.0,
+        "min_text_height": 0.6,
+        "min_text_thickness": 0.0,
+        "min_through_hole_diameter": 0.1,
+        "min_track_width": 0.1,
+        "min_via_annular_width": 0.125,
+        "min_via_diameter": 0.45,
+        "solder_mask_to_copper_clearance": 0.0,
+        "use_height_for_length_calcs": true
+      },
+      "teardrop_options": [
+        {
+          "td_onpthpad": false,
+          "td_onroundshapesonly": false,
+          "td_onsmdpad": false,
+          "td_ontrackend": true,
+          "td_onvia": false
+        }
+      ],
+      "teardrop_parameters": [
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 0,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 2.0,
+          "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_round_shape",
+          "td_width_to_size_filter_ratio": 0.9
+        },
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 0,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 2.0,
+          "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_rect_shape",
+          "td_width_to_size_filter_ratio": 0.9
+        },
+        {
+          "td_allow_use_two_tracks": true,
+          "td_curve_segcount": 0,
+          "td_height_ratio": 1.0,
+          "td_length_ratio": 0.5,
+          "td_maxheight": 2.0,
+          "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
+          "td_target_name": "td_track_end",
+          "td_width_to_size_filter_ratio": 0.9
+        }
+      ],
+      "track_widths": [
+        0.0,
+        0.1,
+        0.15,
+        0.2,
+        0.3,
+        0.5,
+        0.75,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "tuning_pattern_settings": {
+        "diff_pair_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.2,
+          "single_sided": false,
+          "spacing": 1.0
+        },
+        "diff_pair_skew_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.2,
+          "single_sided": false,
+          "spacing": 0.6
+        },
+        "single_track_defaults": {
+          "corner_radius_percentage": 80,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.2,
+          "single_sided": false,
+          "spacing": 0.6
+        }
+      },
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 0.45,
+          "drill": 0.1
+        },
+        {
+          "diameter": 1.0,
+          "drill": 0.5
+        }
+      ],
+      "zones_allow_external_fillets": false
+    },
+    "ipc2581": {
+      "dist": "",
+      "distpn": "",
+      "internal_id": "",
+      "mfg": "",
+      "mpn": ""
+    },
+    "layer_pairs": [],
+    "layer_presets": [],
+    "viewports": []
+  },
+  "boards": [],
+  "cvpcb": {
+    "equivalence_files": []
+  },
+  "erc": {
+    "erc_exclusions": [],
+    "meta": {
+      "version": 0
+    },
+    "pin_map": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    ],
+    "rule_severities": {
+      "bus_definition_conflict": "error",
+      "bus_entry_needed": "error",
+      "bus_to_bus_conflict": "error",
+      "bus_to_net_conflict": "error",
+      "different_unit_footprint": "error",
+      "different_unit_net": "error",
+      "duplicate_reference": "error",
+      "duplicate_sheet_names": "error",
+      "endpoint_off_grid": "warning",
+      "extra_units": "error",
+      "footprint_filter": "ignore",
+      "footprint_link_issues": "warning",
+      "four_way_junction": "ignore",
+      "global_label_dangling": "warning",
+      "hier_label_mismatch": "error",
+      "label_dangling": "error",
+      "label_multiple_wires": "warning",
+      "lib_symbol_issues": "warning",
+      "lib_symbol_mismatch": "warning",
+      "missing_bidi_pin": "warning",
+      "missing_input_pin": "warning",
+      "missing_power_pin": "error",
+      "missing_unit": "warning",
+      "multiple_net_names": "warning",
+      "net_not_bus_member": "warning",
+      "no_connect_connected": "warning",
+      "no_connect_dangling": "warning",
+      "pin_not_connected": "error",
+      "pin_not_driven": "error",
+      "pin_to_pin": "error",
+      "power_pin_not_driven": "error",
+      "same_local_global_label": "warning",
+      "similar_label_and_power": "warning",
+      "similar_labels": "warning",
+      "similar_power": "warning",
+      "simulation_model_issue": "ignore",
+      "single_global_label": "ignore",
+      "unannotated": "error",
+      "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
+      "unit_value_mismatch": "error",
+      "unresolved_variable": "error",
+      "wire_dangling": "error"
+    }
+  },
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "jetson-agx-thor-baseboard.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "bus_width": 12,
+        "clearance": 0.1,
+        "diff_pair_gap": 5.0,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 5.0,
+        "line_style": 0,
+        "microvia_diameter": 0.45,
+        "microvia_drill": 0.1,
+        "name": "Default",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2147483647,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.1,
+        "via_diameter": 0.45,
+        "via_drill": 0.1,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "85Ohm-diff_DP",
+        "pcb_color": "rgb(0, 255, 0)",
+        "priority": 1,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "85Ohm-diff_PCIE",
+        "pcb_color": "rgb(255, 0, 255)",
+        "priority": 3,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "85Ohm-diff_SFI",
+        "pcb_color": "rgb(194, 194, 0)",
+        "priority": 0,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "85Ohm-diff_USB_SS",
+        "pcb_color": "rgb(0, 0, 255)",
+        "priority": 5,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "90Ohm-diff_CSI",
+        "pcb_color": "rgb(0, 255, 255)",
+        "priority": 2,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "90Ohm-diff_USB_2.0",
+        "pcb_color": "rgb(0, 0, 194)",
+        "priority": 4,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "wire_width": 6
+      }
+    ],
+    "meta": {
+      "version": 4
+    },
+    "net_colors": null,
+    "netclass_assignments": {
+      "/CSI/CAM0.CSI0_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI0_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI0_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI0_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI0_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI0_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI1_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI1_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI1_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI1_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI2_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI3_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI3_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI3_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM0.CSI3_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI0_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI1_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI1_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI1_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI1_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI2_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI3_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI3_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI3_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM1.CSI3_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI4_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI5_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI5_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI5_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM2.CSI5_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_CLK+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_CLK-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI6_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI7_D0+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI7_D0-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI7_D1+": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CAM3.CSI7_D1-": [
+        "90Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.CLK+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.CLK-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D0+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D0-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D1+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D1-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D2+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D2-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D3+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI0.D3-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.CLK+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.CLK-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D0+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D0-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D1+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D1-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D2+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D2-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D3+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI1.D3-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.CLK+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.CLK-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D0+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D0-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D1+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D1-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D2+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D2-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D3+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI2.D3-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.CLK+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.CLK-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D0+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D0-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D1+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D1-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D2+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D2-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D3+": [
+        "95Ohm-diff_CSI"
+      ],
+      "/CSI/CSI3.D3-": [
+        "95Ohm-diff_CSI"
+      ],
+      "/Expansion connector/DP1.AUX+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.AUX-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.HPD": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX0+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX0-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX1+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX1-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX2+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX2-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX3+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1.TX3-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP1{DP}": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.AUX+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.AUX-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.HPD": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX0+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX0-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX1+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX1-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX2+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX2-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX3+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2.TX3-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP2{DP}": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.AUX+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.AUX-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.HPD": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX0+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX0-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX1+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX1-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX2+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX2-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX3+": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3.TX3-": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/DP3{DP}": [
+        "85Ohm-diff_DP"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.CLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.CLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.RX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.RX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.TX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C2x1}.TX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.CLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.CLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.RX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.RX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.RX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.RX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.TX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.TX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.TX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PCIe_{C3x2}.TX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PER0_C2_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PER0_C2_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET0_C2_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET0_C2_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET0_C3_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET0_C3_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET1_C3_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/Expansion connector/PET1_C3_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_E_PET0_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_E_PET0_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET0_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET0_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET1_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET1_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET2_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET2_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET3_N": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/M2_M_PET3_P": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.CLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.CLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX2+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX2-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX3+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX3-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX4+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX4-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX5+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX5-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX6+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX6-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX7+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.RX7-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX2+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX2-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX3+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX3-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX4+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX4-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX5+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX5-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX6+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX6-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX7+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.TX7-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.~{CLKREQ}": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}.~{RST}": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C1x1}{PCIe}": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.CLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.CLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX2+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX2-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX3+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.RX3-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX0+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX0-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX1+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX1-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX2+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX2-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX3+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/PCIe_{C5x4}.TX3-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/M.2/USB3.D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/M.2/USB3.D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/M.2/USB3{USB}": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/M.2/WIFI_BT_USB_D_N": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/M.2/WIFI_BT_USB_D_P": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/Recovery USB/USB0.D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/Recovery USB/USB0.D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/Recovery USB/USBC2_CONN_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_CONN_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_CONN_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_CONN_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_RX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_RX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_RX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_RX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBC2_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS0.RX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS0.RX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS0.TX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS0.TX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS_RX_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS_RX_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS_TX_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/Recovery USB/USBSS_TX_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SFP/SFI.RX+": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI.RX-": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI.TX+": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI.TX-": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI_CONN_RX_N": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI_CONN_RX_P": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI_CONN_TX_N": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SFP/SFI_CONN_TX_P": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SoM_IO2/C2_REFCLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/SoM_IO2/C2_REFCLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/SoM_IO2/DP0.AUX+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.AUX-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.AUX_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.AUX_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.HPD": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX0+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX0-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX0_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX0_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX1+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX1-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX1_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX1_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX2+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX2-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX2_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX2_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX3+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX3-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX3_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP0.TX3_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.AUX_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.AUX_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX0_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX0_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX1_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX1_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX2_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX2_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX3_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP1.TX3_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.AUX_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.AUX_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX0_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX0_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX1_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX1_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX2_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX2_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX3_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP2.TX3_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.AUX_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.AUX_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX0_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX0_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX1_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX1_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX2_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX2_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX3_C+": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/DP3.TX3_C-": [
+        "85Ohm-diff_DP"
+      ],
+      "/SoM_IO2/PCIe_{C2x1}R_CLK+": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/SoM_IO2/PCIe_{C2x1}R_CLK-": [
+        "85Ohm-diff_PCIE"
+      ],
+      "/SoM_IO2/SFI_CLK+": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SoM_IO2/SFI_CLK-": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SoM_IO2/SFI_REFCLK+": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SoM_IO2/SFI_REFCLK-": [
+        "85Ohm-diff_SFI"
+      ],
+      "/SoM_IO2/USB1.D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/SoM_IO2/USB1.D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/SoM_IO2/USB2.D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/SoM_IO2/USB2.D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/SoM_IO2/USBSS1.RX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS1.RX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS1.TX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS1.TX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS2.RX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS2.RX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS2.TX+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/SoM_IO2/USBSS2.TX-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_CONN_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_CONN_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_CONN_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_CONN_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_RX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_RX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_RX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_RX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_SBU_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_SBU_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBC1_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBSS1_RX_C_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBSS1_RX_C_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBSS1_TX_C_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB DP Alt mode/USBSS1_TX_C_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Debug, PD/USBC0_D_N": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Debug, PD/USBC0_D_P": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Debug, PD/USB_FTDI_N": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Debug, PD/USB_FTDI_P": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Hub/USBC3_CONN_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_CONN_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_CONN_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_CONN_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Hub/USBC3_D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Hub/USBC3_RX_{1}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_RX_{1}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_RX_{2}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_RX_{2}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_TX_{1}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_TX_{1}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_TX_{2}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC3_TX_{2}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_CONN_TX1_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_CONN_TX1_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_CONN_TX2_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_CONN_TX2_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_D+": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Hub/USBC4_D-": [
+        "90Ohm-diff_USB_2.0"
+      ],
+      "/USB Hub/USBC4_RX_{1}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_RX_{1}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_RX_{2}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_RX_{2}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_TX_{1}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_TX_{1}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_TX_{2}+": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBC4_TX_{2}-": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBSS_RX_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBSS_RX_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBSS_TX_N": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/USBSS_TX_P": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "/USB Hub/VBUS_MON_UP": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "Net-(U21-VBUS_MON_UP)": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "unconnected-(C253-Pad1)": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "unconnected-(C254-Pad1)": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "unconnected-(C255-Pad1)": [
+        "85Ohm-diff_USB_SS"
+      ],
+      "unconnected-(C256-Pad1)": [
+        "85Ohm-diff_USB_SS"
+      ]
+    },
+    "netclass_patterns": []
+  },
+  "pcbnew": {
+    "last_paths": {
+      "gencad": "",
+      "idf": "",
+      "netlist": "",
+      "plot": "",
+      "pos_files": "",
+      "specctra_dsn": "",
+      "step": "",
+      "svg": "",
+      "vrml": ""
+    },
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "annotate_start_num": 0,
+    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_fmt_presets": [],
+    "bom_fmt_settings": {
+      "field_delimiter": ",",
+      "keep_line_breaks": false,
+      "keep_tabs": false,
+      "name": "CSV",
+      "ref_delimiter": ",",
+      "ref_range_delimiter": "",
+      "string_delimiter": "\""
+    },
+    "bom_presets": [],
+    "bom_settings": {
+      "exclude_dnp": true,
+      "fields_ordered": [
+        {
+          "group_by": false,
+          "label": "Reference",
+          "name": "Reference",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Qty",
+          "name": "${QUANTITY}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Value",
+          "name": "Value",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "DNP",
+          "name": "${DNP}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Exclude from BOM",
+          "name": "${EXCLUDE_FROM_BOM}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Exclude from Board",
+          "name": "${EXCLUDE_FROM_BOARD}",
+          "show": false
+        },
+        {
+          "group_by": true,
+          "label": "Footprint",
+          "name": "Footprint",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Datasheet",
+          "name": "Datasheet",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Color",
+          "name": "Color",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Current",
+          "name": "Current",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Dielectric",
+          "name": "Dielectric",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Displayed name",
+          "name": "Displayed name",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "IMax",
+          "name": "IMax",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "ISat",
+          "name": "ISat",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "License",
+          "name": "License",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Max. Curr.",
+          "name": "Max. Curr.",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Public",
+          "name": "Public",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Size",
+          "name": "Size",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Tolerance",
+          "name": "Tolerance",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Val",
+          "name": "Val",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Voltage",
+          "name": "Voltage",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Author",
+          "name": "Author",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
+        }
+      ],
+      "filter_string": "",
+      "group_symbols": true,
+      "include_excluded_from_bom": true,
+      "name": "",
+      "sort_asc": true,
+      "sort_field": "Value"
+    },
+    "connection_grid_size": 50.0,
+    "drawing": {
+      "dashed_lines_dash_length_ratio": 12.0,
+      "dashed_lines_gap_length_ratio": 3.0,
+      "default_line_thickness": 6.0,
+      "default_text_size": 50.0,
+      "field_names": [],
+      "intersheets_ref_own_page": false,
+      "intersheets_ref_prefix": "",
+      "intersheets_ref_short": false,
+      "intersheets_ref_show": false,
+      "intersheets_ref_suffix": "",
+      "junction_size_choice": 3,
+      "label_size_ratio": 0.375,
+      "operating_point_overlay_i_precision": 3,
+      "operating_point_overlay_i_range": "~A",
+      "operating_point_overlay_v_precision": 3,
+      "operating_point_overlay_v_range": "~V",
+      "overbar_offset_ratio": 1.23,
+      "pin_symbol_size": 25.0,
+      "text_offset_ratio": 0.15
+    },
+    "legacy_lib_dir": "",
+    "legacy_lib_list": [],
+    "meta": {
+      "version": 1
+    },
+    "net_format_name": "",
+    "page_layout_descr_file": "",
+    "plot_directory": "",
+    "space_save_all_events": true,
+    "spice_current_sheet_as_root": false,
+    "spice_external_command": "spice \"%I\"",
+    "spice_model_current_sheet_as_root": true,
+    "spice_save_all_currents": false,
+    "spice_save_all_dissipations": false,
+    "spice_save_all_voltages": false,
+    "subpart_first_id": 65,
+    "subpart_id_separator": 0
+  },
+  "sheets": [
+    [
+      "f569b0be-0afd-48b7-93ee-28582a4c645c",
+      "Root"
+    ],
+    [
+      "5e8e155a-019a-4868-a371-a2eb1e119b3e",
+      "SoM_IO"
+    ],
+    [
+      "656db8bb-c788-4c93-9592-ce18fa1a48a2",
+      "SoM_IO2"
+    ],
+    [
+      "33df10a9-5b30-4fa6-b34e-d62ce1b48c65",
+      "SoM_Power"
+    ],
+    [
+      "18ddd5dc-52e2-402c-b2e2-8bb33f110eab",
+      "Power"
+    ],
+    [
+      "3fd0fbfa-9a42-4c7b-8c1c-08c3e88df372",
+      "USB Hub"
+    ],
+    [
+      "ee0c56cd-dc85-44e4-b5e6-458df3809c6c",
+      "Recovery USB"
+    ],
+    [
+      "79924a89-4330-4c0a-9aa5-2a2f90ef321b",
+      "USB DP Alt mode"
+    ],
+    [
+      "12c19ba5-8fdc-4775-a33b-e8b1ade01b0a",
+      "USB Debug, PD"
+    ],
+    [
+      "5735e52d-0a61-43fd-a7c9-5087dffafe64",
+      "CSI"
+    ],
+    [
+      "a94d9c53-c5ac-439c-b57f-c8751a5ad590",
+      "SFP"
+    ],
+    [
+      "456a2f48-4934-4d0e-aaf0-f39b01ccc0c1",
+      "M.2"
+    ],
+    [
+      "f57c04fe-502b-4d07-880b-2cf807d3e5a1",
+      "Peripherals"
+    ],
+    [
+      "5fb038ee-4d59-43de-81a4-b4c993aa7149",
+      "Expansion connector"
+    ],
+    [
+      "24bfa3d1-0a03-41a0-8beb-0ef00bfb4ba3",
+      "DCDC"
+    ]
+  ],
+  "text_variables": {}
+}
