@@ -2501,7 +2501,16 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
                     if( blockStart % 4 != 0 )
                         blockStart -= ( blockStart % 4 );
 
+                    // After backward alignment the byte at blockStart may
+                    // differ from the non-zero byte we found. Verify it
+                    // still looks like a valid block type before continuing.
+                    uint8_t alignedByte = 0;
                     m_stream.Seek( blockStart );
+                    m_stream.GetU8( alignedByte );
+                    m_stream.Seek( blockStart );
+
+                    if( alignedByte == 0x00 || alignedByte > 0x3C )
+                        break;
 
                     wxLogTrace( traceAllegroParser,
                                 wxString::Format( "V18 zero gap from %#010zx to %#010zx, "
