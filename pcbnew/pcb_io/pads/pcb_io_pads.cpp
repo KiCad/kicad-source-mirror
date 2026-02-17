@@ -1798,10 +1798,14 @@ void PCB_IO_PADS::loadZones()
             fillPoly.Simplify();
         }
 
-        // Subtract each VOIDOUT region individually. PADS VOIDOUT shapes
-        // can extend beyond the HATOUT outline boundary (PADS clips at
-        // render time), so boolean subtraction is needed rather than
-        // treating them as contained holes.
+        // Collect all matching VOIDOUT regions into a single poly set and
+        // subtract in one operation. PADS VOIDOUT shapes can extend beyond
+        // the HATOUT outline boundary (PADS clips at render time), so
+        // boolean subtraction is needed rather than treating them as
+        // contained holes. Batching avoids Clipper2 precision accumulation
+        // from repeated sequential operations.
+        SHAPE_POLY_SET allVoids;
+
         for( const auto& void_def : pours )
         {
             if( void_def.style != PADS_IO::POUR_STYLE::VOIDOUT )
@@ -1820,12 +1824,12 @@ void PCB_IO_PADS::loadZones()
             if( parentIt->second != pour_def.owner_pour )
                 continue;
 
-            SHAPE_POLY_SET voidPoly;
-            voidPoly.NewOutline();
-            appendArcPoints( voidPoly.Outline( 0 ), void_def.points );
-
-            fillPoly.BooleanSubtract( voidPoly );
+            allVoids.NewOutline();
+            appendArcPoints( allVoids.Outline( allVoids.OutlineCount() - 1 ), void_def.points );
         }
+
+        if( allVoids.OutlineCount() > 0 )
+            fillPoly.BooleanSubtract( allVoids );
 
         zone->SetFilledPolysList( pourLayer, fillPoly );
         zone->SetIsFilled( true );

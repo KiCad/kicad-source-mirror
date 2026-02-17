@@ -1311,6 +1311,13 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
                     }
                     else if( nextIsArcEndpoint )
                     {
+                        if( pendingArc.radius == 0.0 )
+                        {
+                            double dx = ( x + px ) - pendingArc.cx;
+                            double dy = ( y + py ) - pendingArc.cy;
+                            pendingArc.radius = std::sqrt( dx * dx + dy * dy );
+                        }
+
                         pour.points.emplace_back( x + px, y + py, pendingArc );
                         nextIsArcEndpoint = false;
                     }

@@ -387,9 +387,10 @@ bool JSON_SETTINGS::Store()
             m_modified |= !param->MatchesFile( *this );
             param->Store( this );
         }
-        catch( ... )
+        catch( const std::exception& e )
         {
-            wxLogTrace( traceSettings, wxT( "param '%s' store err" ), param->GetJsonPath().c_str() );
+            wxLogTrace( traceSettings, wxT( "param '%s' store err: %s" ),
+                        param->GetJsonPath().c_str(), e.what() );
         }
     }
 
