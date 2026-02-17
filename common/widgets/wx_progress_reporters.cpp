@@ -98,7 +98,8 @@ bool WX_PROGRESS_REPORTER::updateUI()
 
     // Prevent wx from queuing timer events and slowing down
     // See https://github.com/wxWidgets/wxWidgets/issues/26192
-    wxEventLoopBase::GetActive()->YieldFor( wxEVT_CATEGORY_TIMER );
+    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
+        loop->YieldFor( wxEVT_CATEGORY_TIMER );
 
     return diag;
 }
@@ -120,7 +121,9 @@ bool GAUGE_PROGRESS_REPORTER::updateUI()
         cur = 0;
 
     wxGauge::SetValue( cur );
-    wxEventLoopBase::GetActive()->YieldFor( wxEVT_CATEGORY_UI );
+
+    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
+        loop->YieldFor( wxEVT_CATEGORY_UI );
 
     return true;  // No cancel button on a wxGauge
 }
