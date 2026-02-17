@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-17 01:09+0000\n"
+"PO-Revision-Date: 2026-02-17 07:11+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -11454,9 +11454,8 @@ msgid "KiCad design block path"
 msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:385
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "Cesty knižnice stopy KiCad"
+msgstr "Cesty KiCad knižníc návrhových blokov"
 
 #: common/wildcards_and_files_ext.cpp:392
 msgid "Drawing sheet files"
@@ -11523,14 +11522,12 @@ msgid "Legacy footprint export files"
 msgstr "Staršie verzie súborov exportovaných puzdier"
 
 #: common/wildcards_and_files_ext.cpp:493
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Súbor na kontrolu elektronických pravidiel"
+msgstr "Súbor kontroly pravidiel elektronického návrhu"
 
 #: common/wildcards_and_files_ext.cpp:499
-#, fuzzy
 msgid "SPICE library file"
-msgstr "Súbor knižnice spice"
+msgstr "SPICE súbor knižnice"
 
 #: common/wildcards_and_files_ext.cpp:505
 msgid "SPICE netlist file"
@@ -11586,19 +11583,17 @@ msgid "Jpeg file"
 msgstr "Súbor JPEG"
 
 #: common/wildcards_and_files_ext.cpp:593
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Zoznam klávesových skratiek"
+msgstr "Súbor klávesových skratiek"
 
 #: common/wildcards_and_files_ext.cpp:599
 msgid "KiCad jobset files"
 msgstr "Kicad súbory so sadami úloh"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Súbor rovnocennosti '%s' sa nenašiel v predvolených vyhľadávacích cestách."
+msgstr "Súbor ekvivalencie '%s' nebolo možné nájsť."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -11678,9 +11673,9 @@ msgid "Filtered by %s"
 msgstr "Filtrované podľa %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Chýba stopa"
+msgstr ": %i zhodných puzdier"
 
 #: cvpcb/cvpcb_mainframe.cpp:860
 #, c-format
@@ -11703,9 +11698,8 @@ msgid "Configuration Error"
 msgstr "Chyby v nastavení"
 
 #: cvpcb/cvpcb_mainframe.cpp:910
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Načítavajú sa knižnice stopy"
+msgstr "Načítať knižnice puzdier"
 
 #: cvpcb/cvpcb_mainframe.cpp:983
 #, c-format
@@ -11734,9 +11728,9 @@ msgid "Footprint Association File"
 msgstr "Súbor priradenia puzdra"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Súbor '%s' už v zozname existuje"
+msgstr "Súbor '%s' už v zozname existuje."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
 msgid "Footprint association files:"
@@ -11788,9 +11782,9 @@ msgid "Footprint Viewer"
 msgstr "Prehliadač puzdier"
 
 #: cvpcb/display_footprints_frame.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "puzdro ID \"%s\" nie je platné."
+msgstr "Puzdro ID '%s' nie je platné."
 
 #: cvpcb/display_footprints_frame.cpp:292
 #, c-format
@@ -11799,14 +11793,14 @@ msgstr "Knižnica '%s' sa nenachádza v tabuľke knižnice puzdier."
 
 #: cvpcb/display_footprints_frame.cpp:301
 #: cvpcb/display_footprints_frame.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "Stopa '%s' sa nenašla."
+msgstr "Puzdro '%s' nebolo nájdené."
 
 #: cvpcb/display_footprints_frame.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Pri načítaní písma sa vyskytla chyba '%s'."
+msgstr "Vyskytla sa chyba pri načítaní puzdra: %s"
 
 #: cvpcb/display_footprints_frame.cpp:378 pcbnew/footprint.cpp:2182
 #, c-format
@@ -11819,24 +11813,22 @@ msgid "Lib: %s"
 msgstr "Knižnica: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:118
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Niektoré z priradených stôp sú staršie položky bez názvov knižníc. Prajete "
+"Niektoré z priradených puzdier sú staršie verzie bez názvov knižníc. Prajete "
 "si, aby sa ich Kicad pokúsil previesť do nového požadovaného formátu LIB_ID? "
 "(Ak odpoviete nie, potom sa tieto priradenia zrušia a budete ich musieť "
 "znova priradiť manuálne.)"
 
 #: cvpcb/readwrite_dlgs.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Súčiastka \"%s\": puzdro \"%s \" <b>nenájdené</b> v žiadnej knižnici puzdier "
-"projektu.\n"
+"Súčiastka '%s' puzdro '%s' <b>neboli nenájdené</b> v žiadnej knižnici.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:154
 #, fuzzy, c-format
@@ -11881,14 +11873,12 @@ msgid "Footprint Filters:"
 msgstr "Filter puzdier:"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Filter puzdier:"
+msgstr "Filtre puzdier"
 
 #: cvpcb/toolbars_cvpcb.cpp:124
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Filter puzdier:"
+msgstr "Riadenie filtrovania puzdra"
 
 #: cvpcb/toolbars_display_footprints.cpp:50
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:76
