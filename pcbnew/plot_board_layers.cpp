@@ -1083,7 +1083,12 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
             if( !zone->IsOnLayer( aLayer ) )
                 continue;
 
-            SHAPE_POLY_SET area = *zone->GetFill( aLayer );
+            SHAPE_POLY_SET* fillData = zone->GetFill( aLayer );
+
+            if( !fillData )
+                continue;
+
+            SHAPE_POLY_SET area = *fillData;
 
             if( inflate != 0 )
                 exactPolys.Append( area );

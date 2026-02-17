@@ -119,8 +119,11 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                             {
                                 if( !zone->GetIsRuleArea() )
                                 {
-                                    fill = zone->GetFill( layer )->CloneDropTriangulation();
-                                    poly.Append( fill );
+                                    if( SHAPE_POLY_SET* zoneFill = zone->GetFill( layer ) )
+                                    {
+                                        fill = zoneFill->CloneDropTriangulation();
+                                        poly.Append( fill );
+                                    }
 
                                     // Report progress on board zones only.  Everything else is
                                     // in the noise.
