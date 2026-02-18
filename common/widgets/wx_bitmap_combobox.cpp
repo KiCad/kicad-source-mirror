@@ -52,6 +52,14 @@ wxSize WX_BITMAP_COMBOBOX::DoGetBestSize() const
         size.y = std::max( size.y, bmpSize.y + overhead + 4 );
     }
 
+    if( bmpSize.x > 0 )
+    {
+        // The width calculation in wxBitmapComboBox::DoGetBestSize on GTK is derived from the
+        // text-only wxComboBox best size and does not account for the pixbuf cell renderer.
+        // Add the bitmap width plus padding to prevent horizontal clipping.
+        size.x += bmpSize.x + 4;
+    }
+
 #if !wxCHECK_VERSION( 3, 2, 9 )
     // wxWidgets had a bug on GTK where the wxBitmapComboBox doesn't scale correctly with fontsize.
     // Fixed upstream in wxWidgets 3.2.9: https://github.com/wxWidgets/wxWidgets/issues/25468
