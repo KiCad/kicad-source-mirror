@@ -66,20 +66,26 @@ OUTLINE_FONT::EMBEDDING_PERMISSION OUTLINE_FONT::GetEmbeddingPermission() const
     if( !os2 )
         return EMBEDDING_PERMISSION::RESTRICTED;
 
-    // This allows the font to be exported from KiCad
-    if( os2->fsType == FT_FSTYPE_INSTALLABLE_EMBEDDING )
-        return EMBEDDING_PERMISSION::INSTALLABLE;
-
     // We don't support bitmap fonts, so this disables embedding
     if( os2->fsType & FT_FSTYPE_BITMAP_EMBEDDING_ONLY )
         return EMBEDDING_PERMISSION::RESTRICTED;
 
+    // Per the OpenType spec, only bits 0-3 of fsType define the embedding license.
+    // Bits 8-9 (no-subsetting, bitmap-only) are independent modifiers and must be
+    // masked off before checking the embedding permission level.
+    // See: http://freetype.org/freetype2/docs/reference/ft2-information_retrieval.html
+    FT_UShort embeddingBits = os2->fsType & 0x000F;
+
+    // This allows the font to be exported from KiCad
+    if( embeddingBits == FT_FSTYPE_INSTALLABLE_EMBEDDING )
+        return EMBEDDING_PERMISSION::INSTALLABLE;
+
     // This allows us to use the font in KiCad but not export
-    if( os2->fsType & FT_FSTYPE_EDITABLE_EMBEDDING )
+    if( embeddingBits & FT_FSTYPE_EDITABLE_EMBEDDING )
         return EMBEDDING_PERMISSION::EDITABLE;
 
     // This is not actually supported by KiCad ATM(2024)
-    if( os2->fsType & FT_FSTYPE_PREVIEW_AND_PRINT_EMBEDDING )
+    if( embeddingBits & FT_FSTYPE_PREVIEW_AND_PRINT_EMBEDDING )
         return EMBEDDING_PERMISSION::PRINT_PREVIEW_ONLY;
 
     // Anything else that is not explicitly enabled we treat as restricted.
