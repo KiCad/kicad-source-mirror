@@ -238,10 +238,17 @@ struct FILE_HEADER
     };
 
     uint32_t                m_Magic;
-    std::array<uint32_t, 4> m_Unknown1;
+
+    uint32_t                m_Unknown1a;        // 0x03
+    uint32_t                m_FileRole;         // 0x01 (.brd) or 0x02 (.dra) (?)
+    uint32_t                m_Unknown1b;        // 0x03
+    uint32_t                m_WriterProgram;    // 0x09 (Allegro) or 0x130000 (DB Doctor) (?)
+
     uint32_t                m_ObjectCount;
 
-    std::array<uint32_t, 9> m_Unknown2;
+    uint32_t                m_UnknownMagic;     // This is always 0x000a0d0a?
+    uint32_t                m_UnknownFlags;     // This looks like flags: 0x01000000, 0x0400000, 0x06000000
+    std::array<uint32_t, 7> m_Unknown2;
 
     // Linked lists grouping top-level elements by type
     LINKED_LIST m_LL_0x04;              // Net assignments

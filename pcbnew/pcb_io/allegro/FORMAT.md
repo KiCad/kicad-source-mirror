@@ -782,9 +782,9 @@ word1=tail, word2=head. V18 reverses this to word1=head, word2=tail.
 ### String Count
 
 Pre-V18 stores the string count as an explicit field in the header
-after the layer map. V18 stores it in `m_Unknown2[7]` (read during
+after the layer map. V18 stores it in `m_Unknown2[5]` (read during
 early header parsing) and has no separate field. Similarly,
-`m_0x27_End` is relocated to `m_Unknown2[4]`.
+`m_0x27_End` is relocated to `m_Unknown2[2]`.
 
 ### 0x35 File References
 

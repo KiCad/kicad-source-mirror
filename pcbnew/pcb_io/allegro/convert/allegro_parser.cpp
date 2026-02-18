@@ -118,6 +118,10 @@ static T ReadField( FILE_STREAM& aStream )
     {
         field = aStream.ReadS16();
     }
+    else if constexpr( std::is_same_v<T, FILE_HEADER::LINKED_LIST> )
+    {
+        field = ReadLL( aStream );
+    }
     else if constexpr( requires { std::tuple_size<T>::value; } )
     {
         for( size_t i = 0; i < std::tuple_size_v<T>; ++i )
@@ -190,8 +194,16 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
     m_fmtVer = FormatFromMagic( fileMagic );
 
     header->m_Magic = fileMagic;
-    ReadArrayU32( m_stream, header->m_Unknown1 );
+
+    header->m_Unknown1a = m_stream.ReadU32();
+    header->m_FileRole = m_stream.ReadU32();
+    header->m_Unknown1b = m_stream.ReadU32();
+    header->m_WriterProgram = m_stream.ReadU32();
+
     header->m_ObjectCount = m_stream.ReadU32();
+
+    header->m_UnknownMagic = m_stream.ReadU32();
+    header->m_UnknownFlags = m_stream.ReadU32();
     ReadArrayU32( m_stream, header->m_Unknown2 );
 
     if( m_fmtVer >= FMT_VER::V_180 )
@@ -238,8 +250,8 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
         header->m_0x35_End = m_stream.ReadU32();
 
         // 0x27_End and StringsCount relocated to Unknown2 in v18
-        header->m_0x27_End = header->m_Unknown2[4];
-        header->m_StringsCount = header->m_Unknown2[7];
+        header->m_0x27_End = header->m_Unknown2[2];
+        header->m_StringsCount = header->m_Unknown2[5];
     }
     else
     {
