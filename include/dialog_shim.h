@@ -253,6 +253,13 @@ private:
 
     void onInitDialog( wxInitDialogEvent& aEvent );
 
+    /**
+     * Set focus back to the parent frame's tool canvas if available, otherwise to the
+     * parent window. Prevents focus from landing on auxiliary panels like the properties
+     * panel when the mouse happens to hover over them at dialog close time.
+     */
+    void focusParentCanvas();
+
     std::string generateKey( const wxWindow* aWin ) const;
 
     void registerUndoRedoHandlers( wxWindowList& aChildren );

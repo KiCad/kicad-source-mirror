@@ -336,6 +336,24 @@ void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
 }
 
 
+void DIALOG_SHIM::focusParentCanvas()
+{
+    if( m_parentFrame )
+    {
+        wxWindow* canvas = m_parentFrame->GetToolCanvas();
+
+        if( canvas )
+        {
+            canvas->SetFocus();
+            return;
+        }
+    }
+
+    if( m_parent )
+        m_parent->SetFocus();
+}
+
+
 bool DIALOG_SHIM::Show( bool show )
 {
     bool ret;
@@ -426,9 +444,7 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
 
         SaveControlState();
-
-        if( m_parent )
-            m_parent->SetFocus();
+        focusParentCanvas();
     }
 
     return ret;
@@ -1370,9 +1386,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     event_loop.Run();
 
     m_qmodal_showing = false;
-
-    if( parent )
-        parent->SetFocus();
+    focusParentCanvas();
 
     return GetReturnCode();
 }
