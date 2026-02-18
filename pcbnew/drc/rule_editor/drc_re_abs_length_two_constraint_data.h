@@ -59,9 +59,9 @@ public:
         // Positions measured from constraint_absolute_lenght_2.png (~340x130)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 5, 25, 18, 1 },     // min_length (left arrow)
-            { 116, 136, 65, 2 },   // opt_length (bottom center arrow)
-            { 135, 155, 31, 3 },   // max_length (right arrow)
+            { 285, 315, 62, 1 },     // min_length (left arrow)
+            { 245, 275, 131, 2 },   // opt_length (bottom center arrow)
+            { 15, 45, 37, 3 },   // max_length (right arrow)
         };
     }
 
@@ -155,6 +155,15 @@ public:
     using DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA;
 
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_matched_length_diff_pair; }
+
+    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
+    {
+        return {
+            { 335, 365, 33, 1 },     // min_length
+            { 335, 365, 103, 2 },    // opt_length
+            { 335, 365, 173, 3 },    // max_length
+        };
+    }
 };
 
 #endif // DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA_H_

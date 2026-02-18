@@ -107,34 +107,6 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::SetupFieldStyling( wxControl* aControl )
 }
 
 
-double DRC_RE_BITMAP_OVERLAY_PANEL::GetScaleFactor() const
-{
-    double scale = GetContentScaleFactor();
-
-    // Round to nearest supported bitmap resolution (1.0, 1.5, or 2.0)
-    if( scale < 1.25 )
-        return 1.0;
-    else if( scale < 1.75 )
-        return 1.5;
-    else
-        return 2.0;
-}
-
-
-wxPoint DRC_RE_BITMAP_OVERLAY_PANEL::ScalePosition( int aX, int aY ) const
-{
-    double scale = GetScaleFactor();
-    return wxPoint( static_cast<int>( aX * scale ), static_cast<int>( aY * scale ) );
-}
-
-
-wxSize DRC_RE_BITMAP_OVERLAY_PANEL::ScaleSize( int aWidth, int aHeight ) const
-{
-    double scale = GetScaleFactor();
-    return wxSize( static_cast<int>( aWidth * scale ), static_cast<int>( aHeight * scale ) );
-}
-
-
 void DRC_RE_BITMAP_OVERLAY_PANEL::LoadBitmap()
 {
     if( m_bitmapId == BITMAPS::INVALID_BITMAP )
@@ -155,7 +127,7 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::SetBackgroundBitmap( BITMAPS aBitmap )
     LoadBitmap();
 
     if( m_bitmap.IsOk() )
-        SetMinSize( m_bitmap.GetSize() );
+        SetMinSize( m_baseBitmapSize );
 }
 
 
@@ -170,9 +142,9 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
             continue;
 
         // Calculate scaled position and size
-        wxPoint scaledPos = ScalePosition( pos.xStart, pos.yTop );
+        wxPoint scaledPos( pos.xStart, pos.yTop );
         int width = pos.xEnd - pos.xStart;
-        wxSize scaledSize( ScaleSize( width, 0 ).GetWidth(), ctrl->GetBestSize().GetHeight() );
+        wxSize scaledSize( width, ctrl->GetBestSize().GetHeight() );
 
         // Check bounds
         if( m_bitmap.IsOk() )
@@ -283,7 +255,7 @@ DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddCheckbox( const wxString& 
 
     SetupFieldStyling( checkbox );
 
-    wxPoint pos = ScalePosition( aPosition.xStart, aPosition.yTop );
+    wxPoint pos( aPosition.xStart, aPosition.yTop );
     checkbox->SetPosition( pos );
 
     // Create label if specified

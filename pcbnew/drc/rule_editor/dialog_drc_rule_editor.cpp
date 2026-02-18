@@ -859,7 +859,7 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
         { DRC_RULE_EDITOR_CONSTRAINT_NAME::MATCHED_LENGTH_DIFF_PAIR,
           []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
           {
-              return std::make_shared<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( data );
+              return std::make_shared<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( data );
           } }
     };
 

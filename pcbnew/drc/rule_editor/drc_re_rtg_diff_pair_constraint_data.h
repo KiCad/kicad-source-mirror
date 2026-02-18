@@ -59,13 +59,13 @@ public:
         // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 82, 102, 37, 1 },    // min_width (left side, top arrow)
-            { 152, 172, 34, 2 },    // opt_width (left side, middle)
-            { 240, 260, 25, 3 },    // max_width (left side, bottom)
-            { 107, 127, 44, 4 },   // min_gap (center-left, top)
-            { 193, 213, 40, 5 },   // opt_gap (center-left, middle)
-            { 300, 320, 32, 6 },   // max_gap (center-left, bottom)
-            { 60, 80, 102, 7 },   // max_uncoupled (right side)
+            { 164, 204, 74, 1 },    // min_width (left side, top arrow)
+            { 304, 344, 68, 2 },    // opt_width (left side, middle)
+            { 480, 520, 50, 3 },    // max_width (left side, bottom)
+            { 214, 254, 88, 4 },    // min_gap (center-left, top)
+            { 396, 426, 80, 5 },    // opt_gap (center-left, middle)
+            { 600, 640, 64, 6 },    // max_gap (center-left, bottom)
+            { 120, 160, 204, 7 },   // max_uncoupled (right side)
         };
     }
 

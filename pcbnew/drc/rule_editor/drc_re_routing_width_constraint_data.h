@@ -56,9 +56,9 @@ public:
         // Positions measured from constraint_routing_width.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 32, 52, 48, 1 },    // min_width (left arrow)
-            { 63, 83, 20, 2 },   // opt_width (bottom center arrow)
-            { 124, 144, 37, 3 },   // max_width (right arrow)
+            { 64, 104, 96, 1 },    // min_width (left arrow)
+            { 126, 166, 40, 2 },   // opt_width (bottom center arrow)
+            { 248, 288, 74, 3 },   // max_width (right arrow)
         };
     }
 

@@ -137,31 +137,6 @@ protected:
     void PositionFields();
 
     /**
-     * Get the current DPI scale factor.
-     *
-     * @return Scale factor (1.0, 1.5, or 2.0).
-     */
-    double GetScaleFactor() const;
-
-    /**
-     * Scale pixel coordinates from 1x bitmap space to current display space.
-     *
-     * @param aX X coordinate in 1x bitmap pixels.
-     * @param aY Y coordinate in 1x bitmap pixels.
-     * @return Scaled position as wxPoint.
-     */
-    wxPoint ScalePosition( int aX, int aY ) const;
-
-    /**
-     * Scale pixel dimensions from 1x bitmap space to current display space.
-     *
-     * @param aWidth Width in 1x bitmap pixels.
-     * @param aHeight Height in 1x bitmap pixels.
-     * @return Scaled size as wxSize.
-     */
-    wxSize ScaleSize( int aWidth, int aHeight ) const;
-
-    /**
      * Apply transparent styling to a field control.
      *
      * @param aControl The control to style.
@@ -206,9 +181,9 @@ DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddField( const wxString& aId
     SetupFieldStyling( control );
 
     // Position the field
-    wxPoint pos = ScalePosition( aPosition.xStart, aPosition.yTop );
+    wxPoint pos( aPosition.xStart, aPosition.yTop );
     int width = aPosition.xEnd - aPosition.xStart;
-    wxSize size( ScaleSize( width, 0 ).GetWidth(), control->GetBestSize().GetHeight() );
+    wxSize size( width, control->GetBestSize().GetHeight() );
     control->SetPosition( pos );
     control->SetSize( size );
 

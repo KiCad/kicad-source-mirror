@@ -54,8 +54,8 @@ public:
         // Positions measured from constraint_permitted_layers.png (~300x170)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 75, 82, 20, 1, _( "Allow top Layer" ), LABEL_POSITION::RIGHT },     // top layer checkbox (upper left)
-            { 75, 82, 100, 2, _( "Allow bottom Layer" ), LABEL_POSITION::RIGHT },  // bottom layer checkbox (lower left)
+            { 150, 164, 40, 1, _( "Allow top Layer" ), LABEL_POSITION::RIGHT },      // top layer checkbox (upper left)
+            { 150, 164, 200, 2, _( "Allow bottom Layer" ), LABEL_POSITION::RIGHT },  // bottom layer checkbox (lower left)
         };
     }
 

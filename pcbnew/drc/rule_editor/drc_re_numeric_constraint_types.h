@@ -33,7 +33,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_basic_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 28, 48, 20, 1 } }; }
+    { return { { 160, 190, 202, 1 } }; }
 };
 
 
@@ -43,7 +43,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_board_outline_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 87, 107, 104, 1 } }; }
+    { return { { 185, 215, 207, 1 } }; }
 };
 
 
@@ -53,7 +53,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_copper_to_edge_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 99, 119, 78, 1 } }; }
+    { return { { 205, 235, 157, 1 } }; }
 };
 
 class DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -62,7 +62,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_copper_to_hole_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 178, 198, 105, 1 } }; }
+    { return { { 200, 230, 107, 1 } }; }
 };
 
 
@@ -72,8 +72,9 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 80, 100, 102, 1 } }; }
+    { return { { 160, 190, 202, 1 } }; }
 };
+//175 215
 
 
 class DRC_RE_PHYSICAL_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -82,7 +83,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 28, 48, 16, 1 } }; }
+    { return { { 160, 190, 202, 1 } }; }
 };
 
 
@@ -92,7 +93,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_creepage_distance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 80, 100, 58, 1 } }; }
+    { return { { 175, 205, 117, 1 } }; }
 };
 
 
@@ -111,7 +112,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_to_hole_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 165, 185, 105, 1 } }; }
+    { return { { 185, 215, 107, 1 } }; }
 };
 
 
@@ -121,7 +122,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_to_hole_distance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 54, 74, 38, 1 } }; }
+    { return { { 110, 140, 77, 1 } }; }
 };
 
 class DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -130,7 +131,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_maximum_allowed_deviation; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 82, 102, 82, 1 } }; }
+    { return { { 45, 75, 47, 1 } }; }
 };
 
 
@@ -140,7 +141,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_maximum_via_count; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 83, 103, 67, 1 } }; }
+    { return { { 80, 110, 45, 1 } }; }
 };
 
 
@@ -150,7 +151,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_angular_ring; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 45, 65, 35, 1 } }; }
+    { return { { 95, 125, 77, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -159,7 +160,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_annular_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 186, 206, 65, 1 } }; }
+    { return { { 205, 235, 67, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -168,7 +169,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 186, 206, 105, 1 } }; }
+    { return { { 205, 235, 107, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -177,8 +178,9 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_connection_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 186, 206, 100, 1 } }; }
+    { return { { 195, 225, 77, 1 } }; }
 };
+
 
 class DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
@@ -186,7 +188,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_item_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 205, 225, 92, 1 } }; }
+    { return { { 190, 220, 92, 1 } }; }
 };
 
 
@@ -196,7 +198,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_soldermask_silver; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 80, 100, 47, 1 } }; }
+    { return { { 195, 225, 107, 1 } }; }
 };
 
 
@@ -206,7 +208,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_thermal_relief_spoke_count; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 86, 106, 14, 1 } }; }
+    { return { { 189, 210, 32, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -215,7 +217,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_through_hole; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 186, 206, 105, 1 } }; }
+    { return { { 200, 230, 107, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -224,7 +226,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_track_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 186, 206, 108, 1 } }; }
+    { return { { 205, 235, 112, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -233,7 +235,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_diameter; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 166, 186, 105, 1 } }; }
+    { return { { 185, 215, 107, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -242,7 +244,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_hole; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 166, 186, 105, 1 } }; }
+    { return { { 180, 210, 107, 1 } }; }
 };
 
 class DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
@@ -281,7 +283,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_soldermask_expansion; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 160, 180, 50, 1 } }; }
+    { return { { 345, 375, 47, 1 } }; }
 };
 
 
@@ -291,7 +293,7 @@ public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_solderpaste_expansion; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    { return { { 55, 75, 30, 1 } }; }
+    { return { { 245, 275, 67, 1 } }; }
 };
 
 
