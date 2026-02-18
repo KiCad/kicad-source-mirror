@@ -384,7 +384,7 @@ void DIALOG_DRC_RULE_EDITOR::RuleTreeItemSelectionChanged( RULE_TREE_ITEM_DATA* 
             rows.push_back( { type, ruleNode->m_nodeData->GetRuleName(), ruleNode->m_nodeData->GetComment() } );
         }
 
-        m_groupHeaderPanel = new PANEL_DRC_GROUP_HEADER( m_splitter, rows );
+        m_groupHeaderPanel = new PANEL_DRC_GROUP_HEADER( m_scrolledContentWin, rows );
         SetContentPanel( m_groupHeaderPanel );
         m_ruleEditorPanel = nullptr;
     }
@@ -396,7 +396,7 @@ void DIALOG_DRC_RULE_EDITOR::RuleTreeItemSelectionChanged( RULE_TREE_ITEM_DATA* 
         wxString        constraintName = paretNodeDetail->m_nodeName;
 
         m_ruleEditorPanel = new PANEL_DRC_RULE_EDITOR(
-                m_splitter, m_frame->GetBoard(),
+                m_scrolledContentWin, m_frame->GetBoard(),
                 static_cast<DRC_RULE_EDITOR_CONSTRAINT_NAME>( nodeDetail->m_nodeTypeMap.value_or( -1 ) ),
                 &constraintName, dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( nodeDetail->m_nodeData ) );
 

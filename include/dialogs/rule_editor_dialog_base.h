@@ -24,6 +24,7 @@
 #include <wx/srchctrl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/splitter.h>
+#include <wx/scrolwin.h>
 
 #include <variant>
 #include <optional>
@@ -233,6 +234,12 @@ public:
      * @param aContentPanel The new content panel to replace the existing one.
      */
     void SetContentPanel( wxPanel* aContentPanel );
+
+    /**
+     * Recalculates the scrolled content area's virtual size based on the current
+     * content panel's best size, and updates the scrollbar accordingly.
+     */
+    void RefreshContentScrollArea();
 
     /**
      * Adds a new rule tree item under the specified parent and updates the tree history.
@@ -460,6 +467,7 @@ protected:
     wxTreeCtrl*       m_ruleTreeCtrl;
     WX_INFOBAR*       m_infoBar;
     wxPanel*          m_contentPanel;
+    wxScrolledWindow* m_scrolledContentWin;
     wxSplitterWindow* m_splitter;
     wxSearchCtrl*     m_filterSearch;
     wxTextCtrl*       m_filterText;

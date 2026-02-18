@@ -156,9 +156,13 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
 
     treeCtrlPanel->Layout();
 
-    // Create the dynamic content panel
-    m_contentPanel = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
-    m_contentPanel->SetBackgroundColour( *wxLIGHT_GREY );
+    // Create a scrolled window for the dynamic content panel
+    m_scrolledContentWin = new wxScrolledWindow( m_splitter, wxID_ANY, wxDefaultPosition,
+                                                  wxDefaultSize, wxVSCROLL | wxBORDER_NONE );
+    m_scrolledContentWin->SetScrollRate( 0, 10 );
+    m_scrolledContentWin->SetBackgroundColour(
+            wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK ) );
+    m_contentPanel = nullptr;
 
     // Add the tree control panel to the splitter.
     // Calculate the minimum tree panel width based on the tree control's best size.
@@ -171,7 +175,7 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
 
     m_defaultSashPosition = minTreeWidth;
 
-    m_splitter->SplitVertically( treeCtrlPanel, m_contentPanel, m_defaultSashPosition );
+    m_splitter->SplitVertically( treeCtrlPanel, m_scrolledContentWin, m_defaultSashPosition );
 
     // Set gravity to 0 so the tree panel maintains its size and the content panel resizes
     m_splitter->SetSashGravity( 0.0 );
@@ -228,6 +232,13 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
     this->Bind( wxEVT_SIZE, &RULE_EDITOR_DIALOG_BASE::onResize, this );
 
     this->Bind( wxEVT_CLOSE_WINDOW, &RULE_EDITOR_DIALOG_BASE::onClose, this );
+
+    m_scrolledContentWin->Bind( wxEVT_SIZE,
+            [this]( wxSizeEvent& evt )
+            {
+                RefreshContentScrollArea();
+                evt.Skip();
+            } );
 }
 
 
@@ -360,24 +371,39 @@ void RULE_EDITOR_DIALOG_BASE::InitRuleTreeItems( const std::vector<RULE_TREE_NOD
 
 void RULE_EDITOR_DIALOG_BASE::SetContentPanel( wxPanel* aContentPanel )
 {
-    int sash_position = m_defaultSashPosition;
-
     if( m_contentPanel )
     {
-        sash_position = m_splitter->GetSashPosition();
-        m_splitter->Unsplit( m_contentPanel );
         unregisterUnitBinders( m_contentPanel );
         m_contentPanel->Destroy();
+        m_contentPanel = nullptr;
     }
 
     m_contentPanel = aContentPanel;
-    auto treeCtrlPanel = m_splitter->GetWindow1();
-    m_splitter->SplitVertically( treeCtrlPanel, m_contentPanel, sash_position );
+    m_scrolledContentWin->SetBackgroundColour( m_contentPanel->GetBackgroundColour() );
 
     resetUndoRedoForNewContent( m_contentPanel->GetChildren() );
 
     Layout();
+    CallAfter( [this]() { RefreshContentScrollArea(); } );
     Refresh();
+}
+
+
+void RULE_EDITOR_DIALOG_BASE::RefreshContentScrollArea()
+{
+    if( !m_contentPanel || !m_scrolledContentWin )
+        return;
+
+    m_contentPanel->Layout();
+
+    wxSize clientSize = m_scrolledContentWin->GetClientSize();
+    wxSize bestSize = m_contentPanel->GetBestSize();
+    int    width = clientSize.GetWidth();
+    int    height = std::max( clientSize.GetHeight(), bestSize.GetHeight() );
+
+    m_contentPanel->SetSize( width, height );
+    m_scrolledContentWin->SetVirtualSize( width, height );
+    m_scrolledContentWin->Refresh();
 }
 
 
