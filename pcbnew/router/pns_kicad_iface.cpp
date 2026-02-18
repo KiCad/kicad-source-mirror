@@ -892,6 +892,9 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
         for( PNS::ITEM* item : linkedSegs.Items() )
         {
+            if( item->Layer() != m_startLayer )
+                continue;
+
             PNS::LINKED_ITEM* li = static_cast<PNS::LINKED_ITEM*>( item );
 
             VECTOR2I anchor0 = li->Anchor( 0 );
@@ -924,20 +927,30 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
     }
 
     // Fallback to minimum width when no start position provided or no valid track found
-    int mval = INT_MAX;
+    int min_current_layer = INT_MAX;
+    int min_all_layers = INT_MAX;
 
     for( PNS::ITEM* item : linkedSegs.Items() )
     {
         int w = tryGetTrackWidth( item );
 
         if( w > 0 )
-            mval = std::min( w, mval );
+        {
+            min_all_layers = std::min( w, min_all_layers );
+
+            if( item->Layer() == m_startLayer )
+                min_current_layer = std::min( w, min_current_layer );
+        }
     }
 
-    if( mval == INT_MAX )
+    if( min_all_layers == INT_MAX )
         return false;
 
-    *aInheritedWidth = mval;
+    if( min_current_layer < INT_MAX )
+        *aInheritedWidth = min_current_layer;
+    else
+        *aInheritedWidth = min_all_layers;
+
     return true;
 }
 
