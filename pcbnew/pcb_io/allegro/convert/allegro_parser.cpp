@@ -1899,6 +1899,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
 
     ReadCond( aStream, aVer, data.m_Unknown3 );
 
+    if( data.m_NumItems > 1000000 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                "Block 0x36 item count %u exceeds limit at offset %#010zx",
+                data.m_NumItems, aStream.Position() ) );
+    }
+
     data.m_Items.reserve( data.m_NumItems );
     for( uint32_t i = 0; i < data.m_NumItems; ++i )
     {
@@ -2144,6 +2151,14 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
     ReadCond( aStream, aVer, data.m_Unknown );
 
     data.m_NumEntries = aStream.ReadU32();
+
+    if( data.m_NumEntries > 1000000 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                "Block 0x3C entry count %u exceeds limit at offset %#010zx",
+                data.m_NumEntries, aStream.Position() ) );
+    }
+
     data.m_Entries.reserve( data.m_NumEntries );
     for( uint32_t i = 0; i < data.m_NumEntries; ++i )
     {
