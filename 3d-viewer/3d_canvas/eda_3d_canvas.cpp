@@ -645,7 +645,7 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
     // Set up framebuffer objects for off-screen rendering
     GLuint framebuffer = 0;
     GLuint colorTexture = 0;
-    GLuint depthBuffer = 0;
+    GLuint depthStencilBuffer = 0;
     GLint  oldFramebuffer = 0;
     GLint  oldViewport[4];
 
@@ -667,11 +667,14 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0 );
 
-    // Create depth renderbuffer attachment
-    glGenRenderbuffers( 1, &depthBuffer );
-    glBindRenderbuffer( GL_RENDERBUFFER, depthBuffer );
-    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height );
-    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer );
+    // Create combined depth+stencil renderbuffer attachment.  The stencil buffer is required
+    // because the OpenGL renderer uses stencil operations to cut holes in copper layers and
+    // the board body (see OPENGL_RENDER_LIST::DrawCulled).
+    glGenRenderbuffers( 1, &depthStencilBuffer );
+    glBindRenderbuffer( GL_RENDERBUFFER, depthStencilBuffer );
+    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height );
+    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                               depthStencilBuffer );
 
     auto resetState = std::unique_ptr<void, std::function<void(void*)>>(
         reinterpret_cast<void*>(1),
@@ -680,7 +683,7 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
             glViewport( oldViewport[0], oldViewport[1], oldViewport[2], oldViewport[3] );
             glDeleteFramebuffers( 1, &framebuffer );
             glDeleteTextures( 1, &colorTexture );
-            glDeleteRenderbuffers( 1, &depthBuffer );
+            glDeleteRenderbuffers( 1, &depthStencilBuffer );
             gl_mgr->UnlockCtx( m_glRC );
             m_is_currently_painting.clear();
         }
