@@ -24,6 +24,8 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/data/test_case.hpp>
 
+#include <limits>
+
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
@@ -1298,6 +1300,38 @@ BOOST_AUTO_TEST_CASE( TransformIssue22475ArcToPolygon )
                          wxString::Format( "Polygon width %lld is too large (expected ~2020000)", (long long)bbox.GetWidth() ) );
     BOOST_CHECK_MESSAGE( bbox.GetHeight() <= 1000000,
                          wxString::Format( "Polygon height %lld is too large (expected ~400000)", (long long)bbox.GetHeight() ) );
+}
+
+
+/**
+ * Test that SHAPE_ARC::Collide handles arcs with near-INT_MAX radius without crashing.
+ * Reproduces a crash during PADS ASCII import where a near-collinear arc produced a
+ * radius exceeding INT_MAX, overflowing the CIRCLE(int) constructor and KiROUND.
+ */
+BOOST_AUTO_TEST_CASE( CollideNearlyFlatArcDoesNotOverflow )
+{
+    // Values from the core dump: a nearly-flat arc with enormous radius
+    const VECTOR2I start( 68208364, -8000 );
+    const VECTOR2I mid( 771364, 500000 );
+    const VECTOR2I end( 35224335, -7999 );
+    const int      width = 1270000;
+
+    SHAPE_ARC arc( start, mid, end, width );
+
+    // Radius should be near or above INT_MAX/2, triggering the segment fallback
+    BOOST_CHECK( arc.GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0 );
+
+    // Point near the arc endpoints.  Must not crash.
+    const VECTOR2I testPt( 35224298, -5381 );
+    int            actual = 0;
+    VECTOR2I       location;
+
+    BOOST_CHECK_NO_THROW( arc.Collide( testPt, 635000, &actual, &location ) );
+
+    // Segment near the arc.  Must not crash.
+    const SEG testSeg( VECTOR2I( 35224298, -5381 ), VECTOR2I( 35696364, -32988651 ) );
+
+    BOOST_CHECK_NO_THROW( arc.Collide( testSeg, 635000, &actual, &location ) );
 }
 
 

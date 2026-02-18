@@ -262,6 +262,39 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
 {
     VECTOR2I center = GetCenter();
     double   radius = VECTOR2D( center - m_start ).EuclideanNorm();
+
+    // CIRCLE and SHAPE_CIRCLE store radius as int.  When the radius exceeds representable
+    // range, fall back to segment-based candidate generation to avoid integer overflow.
+    if( radius >= (double) std::numeric_limits<int>::max() / 2.0 )
+    {
+        SEG arcSeg1( m_start, m_mid );
+        SEG arcSeg2( m_mid, m_end );
+
+        std::vector<VECTOR2I> candidatePts;
+        candidatePts.push_back( aSeg.NearestPoint( m_start ) );
+        candidatePts.push_back( aSeg.NearestPoint( m_mid ) );
+        candidatePts.push_back( aSeg.NearestPoint( m_end ) );
+        candidatePts.push_back( arcSeg1.NearestPoint( aSeg.A ) );
+        candidatePts.push_back( arcSeg1.NearestPoint( aSeg.B ) );
+        candidatePts.push_back( arcSeg2.NearestPoint( aSeg.A ) );
+        candidatePts.push_back( arcSeg2.NearestPoint( aSeg.B ) );
+        candidatePts.push_back( aSeg.A );
+        candidatePts.push_back( aSeg.B );
+
+        bool any_collides = false;
+
+        for( const VECTOR2I& candidate : candidatePts )
+        {
+            bool collides = Collide( candidate, aClearance, aActual, aLocation );
+            any_collides |= collides;
+
+            if( collides && ( !aActual || *aActual == 0 ) )
+                return true;
+        }
+
+        return any_collides;
+    }
+
     SHAPE_CIRCLE circle( center, radius );
     ecoord   clearance_sq = SEG::Square( aClearance );
 
@@ -314,6 +347,9 @@ int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer
     if( aSeg.A == aSeg.B )      // One point does not define a line....
         return 0;
 
+    if( GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0 )
+        return 0;
+
     CIRCLE circ( GetCenter(), GetRadius() );
 
     std::vector<VECTOR2I> intersections = circ.IntersectLine( aSeg );
@@ -332,6 +368,9 @@ int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer
 
 int SHAPE_ARC::Intersect( const CIRCLE& aCircle, std::vector<VECTOR2I>* aIpsBuffer ) const
 {
+    if( GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0 )
+        return 0;
+
     CIRCLE thiscirc( GetCenter(), GetRadius() );
 
     std::vector<VECTOR2I> intersections = thiscirc.Intersect( aCircle );
@@ -350,6 +389,12 @@ int SHAPE_ARC::Intersect( const CIRCLE& aCircle, std::vector<VECTOR2I>* aIpsBuff
 
 int SHAPE_ARC::Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const
 {
+    if( GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0
+        || aArc.GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0 )
+    {
+        return 0;
+    }
+
     CIRCLE thiscirc( GetCenter(), GetRadius() );
     CIRCLE othercirc( aArc.GetCenter(), aArc.GetRadius() );
 
@@ -785,6 +830,31 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
 
     VECTOR2L  center = GetCenter();
     double    radius = VECTOR2D( center - m_start ).EuclideanNorm();
+
+    // CIRCLE stores radius as int.  When the radius exceeds representable range the arc is
+    // nearly straight, so approximate it as two segments through the midpoint.
+    if( radius >= (double) std::numeric_limits<int>::max() / 2.0 )
+    {
+        SEG seg1( m_start, m_mid );
+        SEG seg2( m_mid, m_end );
+        int dist1 = seg1.Distance( aP );
+        int dist2 = seg2.Distance( aP );
+        int dist = std::min( dist1, dist2 );
+
+        if( dist <= minDist )
+        {
+            if( aActual )
+                *aActual = std::max( 0, dist - m_width / 2 );
+
+            if( aLocation )
+                *aLocation = ( dist1 <= dist2 ) ? seg1.NearestPoint( aP ) : seg2.NearestPoint( aP );
+
+            return true;
+        }
+
+        return false;
+    }
+
     CIRCLE    fullCircle( center, radius );
     VECTOR2D  nearestPt = fullCircle.NearestPoint( VECTOR2D( aP ) );
     int       dist = KiROUND( nearestPt.Distance( aP ) );
