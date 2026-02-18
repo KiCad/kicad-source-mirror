@@ -2439,8 +2439,25 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable ) const
 
 void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 {
-    // Don't write empty groups
-    if( aGroup->GetItems().empty() )
+    wxArrayString memberIds;
+
+    if( m_board )
+    {
+        const auto& cache = m_board->GetItemByIdCache();
+
+        for( EDA_ITEM* member : aGroup->GetItems() )
+        {
+            if( cache.find( member->m_Uuid ) != cache.end() )
+                memberIds.Add( member->m_Uuid.AsString() );
+        }
+    }
+    else
+    {
+        for( EDA_ITEM* member : aGroup->GetItems() )
+            memberIds.Add( member->m_Uuid.AsString() );
+    }
+
+    if( memberIds.size() <= 1 )
         return;
 
     m_out->Print( "(group %s", m_out->Quotew( aGroup->GetName() ).c_str() );
@@ -2452,11 +2469,6 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 
     if( aGroup->HasDesignBlockLink() )
         m_out->Print( "(lib_id \"%s\")", aGroup->GetDesignBlockLibId().Format().c_str() );
-
-    wxArrayString memberIds;
-
-    for( EDA_ITEM* member : aGroup->GetItems() )
-        memberIds.Add( member->m_Uuid.AsString() );
 
     memberIds.Sort();
 

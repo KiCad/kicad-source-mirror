@@ -220,26 +220,36 @@ void testSaveLoad( const std::vector<std::vector<ItemType>>& spec )
 }
 
 
-// Test saving & loading of a few configurations
+// Test saving & loading of a few configurations.
+// Groups with fewer than 2 members are not saved, so all round-trip tests
+// use groups with at least 2 members.
 BOOST_AUTO_TEST_CASE( HealthyGroups )
 {
     // Test board with no groups
     testSaveLoad( {} );
 
-    // Single group
-    testSaveLoad( { { TEXT0 } } );
+    // Single group with 2 members
     testSaveLoad( { { TEXT0, TEXT1 } } );
 
     // Two groups
     testSaveLoad( { { TEXT0, TEXT1 }, { TEXT2, TEXT3 } } );
     testSaveLoad( { { TEXT0, TEXT1 }, { TEXT2, GROUP0 } } );
 
-    // Subgroups by no cycle
-    testSaveLoad( { { TEXT0, GROUP1 }, { TEXT2 }, { TEXT3, GROUP0 } } );
-    testSaveLoad( { { TEXT0 }, { TEXT2 }, { GROUP1, GROUP0 } } );
-    testSaveLoad( { { TEXT0 }, { TEXT1 }, { TEXT2, NAME_GROUP3 }, { TEXT3 } } );
-    testSaveLoad( { { TEXT0 }, { TEXT1 }, { TEXT2, NAME_GROUP3 }, { TEXT3, GROUP0 } } );
-    testSaveLoad( { { TEXT0 }, { TEXT1 }, { TEXT2 }, { TEXT3 }, { NAME_GROUP3, GROUP0 } } );
+    // Subgroups with 2+ members each
+    testSaveLoad( { { TEXT0, TEXT1, GROUP1 }, { TEXT2, TEXT3 }, { TEXT4, GROUP0 } } );
+    testSaveLoad( { { TEXT0, TEXT1 }, { TEXT2, TEXT3 }, { GROUP1, GROUP0 } } );
+    testSaveLoad( { { TEXT0, TEXT1 }, { TEXT2, TEXT3 }, { TEXT4, NAME_GROUP3 }, { TEXT5, TEXT6 } } );
+}
+
+
+BOOST_AUTO_TEST_CASE( SingleMemberGroupsNotSaved )
+{
+    std::unique_ptr<BOARD> board1 = createBoard( { { TEXT0 } } );
+    auto path = std::filesystem::temp_directory_path() / "group_saveload_tst.kicad_pcb";
+    ::KI_TEST::DumpBoardToFile( *board1, path.string() );
+
+    std::unique_ptr<BOARD> board2 = ::KI_TEST::ReadBoardFromFileOrStream( path.string() );
+    BOOST_CHECK_EQUAL( board2->Groups().size(), 0u );
 }
 
 
