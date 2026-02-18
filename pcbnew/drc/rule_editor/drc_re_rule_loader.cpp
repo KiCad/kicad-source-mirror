@@ -196,6 +196,11 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
             data->SetMaximumLength( toMM( length->GetValue().Max() ) );
         }
 
+        const DRC_CONSTRAINT* skew = findConstraint( aRule, SKEW_CONSTRAINT );
+
+        if( skew )
+            data->SetMaxSkew( toMM( skew->GetValue().Max() ) );
+
         return data;
     }
 

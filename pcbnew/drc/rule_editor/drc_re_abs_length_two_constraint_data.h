@@ -164,6 +164,37 @@ public:
             { 335, 365, 173, 3 },    // max_length
         };
     }
+
+    double GetMaxSkew() const { return m_maxSkew; }
+
+    void SetMaxSkew( double aSkew ) { m_maxSkew = aSkew; }
+
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
+    {
+        std::vector<wxString> clauses = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::GetConstraintClauses( aContext );
+
+        if( m_maxSkew > 0 )
+        {
+            wxString skewClause = wxString::Format(
+                    wxS( "(constraint skew (max %smm))" ), formatDouble( m_maxSkew ) );
+            clauses.push_back( skewClause );
+        }
+
+        return clauses;
+    }
+
+    void CopyFrom( const ICopyable& aSource ) override
+    {
+        const auto& source =
+                dynamic_cast<const DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA&>( aSource );
+
+        DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::CopyFrom( source );
+
+        m_maxSkew = source.m_maxSkew;
+    }
+
+private:
+    double m_maxSkew{ 0 };
 };
 
 #endif // DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA_H_

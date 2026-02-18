@@ -915,6 +915,30 @@ BOOST_AUTO_TEST_CASE( PanelMatcherLengthConstraint )
     BOOST_CHECK( matches[0].claimedConstraints.count( LENGTH_CONSTRAINT ) > 0 );
 }
 
+BOOST_AUTO_TEST_CASE( PanelMatcherLengthAndSkewConstraint )
+{
+    // Rule with length + skew should match MATCHED_LENGTH_DIFF_PAIR, not ABSOLUTE_LENGTH
+    DRC_RULE rule( "MatchedLengthRule" );
+
+    DRC_CONSTRAINT length( LENGTH_CONSTRAINT );
+    length.Value().SetMin( 10000000 );
+    length.Value().SetOpt( 30000000 );
+    length.Value().SetMax( 50000000 );
+    rule.AddConstraint( length );
+
+    DRC_CONSTRAINT skew( SKEW_CONSTRAINT );
+    skew.Value().SetMax( 1000000 );
+    rule.AddConstraint( skew );
+
+    DRC_PANEL_MATCHER matcher;
+    std::vector<DRC_PANEL_MATCH> matches = matcher.MatchRule( rule );
+
+    BOOST_REQUIRE_EQUAL( matches.size(), 1 );
+    BOOST_CHECK_EQUAL( matches[0].panelType, MATCHED_LENGTH_DIFF_PAIR );
+    BOOST_CHECK( matches[0].claimedConstraints.count( LENGTH_CONSTRAINT ) > 0 );
+    BOOST_CHECK( matches[0].claimedConstraints.count( SKEW_CONSTRAINT ) > 0 );
+}
+
 BOOST_AUTO_TEST_CASE( PanelMatcherEmptyRule )
 {
     // Test: Rule with no constraints → no matches
@@ -1150,6 +1174,69 @@ BOOST_AUTO_TEST_CASE( RuleLoaderAbsoluteLengthFromText )
     BOOST_CHECK_CLOSE( lengthData->GetMinimumLength(), 10.0, 0.0001 );
     BOOST_CHECK_CLOSE( lengthData->GetOptimumLength(), 30.0, 0.0001 );
     BOOST_CHECK_CLOSE( lengthData->GetMaximumLength(), 50.0, 0.0001 );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderMatchedLengthWithSkew )
+{
+    // Rule with length + skew should load as MATCHED_LENGTH_DIFF_PAIR and preserve skew
+    wxString ruleText =
+        "(version 1)\n"
+        "(rule \"DP Length Match\"\n"
+        "    (constraint length (min 10mm) (opt 30mm) (max 50mm))\n"
+        "    (constraint skew (max 1mm)))";
+
+    DRC_RULE_LOADER loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, MATCHED_LENGTH_DIFF_PAIR );
+    BOOST_CHECK_EQUAL( entries[0].ruleName, "DP Length Match" );
+
+    auto matchedData =
+            std::dynamic_pointer_cast<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( matchedData );
+
+    BOOST_CHECK_CLOSE( matchedData->GetMinimumLength(), 10.0, 0.0001 );
+    BOOST_CHECK_CLOSE( matchedData->GetOptimumLength(), 30.0, 0.0001 );
+    BOOST_CHECK_CLOSE( matchedData->GetMaximumLength(), 50.0, 0.0001 );
+    BOOST_CHECK_CLOSE( matchedData->GetMaxSkew(), 1.0, 0.0001 );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderMatchedLengthRoundTrip )
+{
+    // Verify length+skew rule round-trips without losing skew
+    wxString ruleText =
+        "(version 1)\n"
+        "(rule \"DP Match RT\"\n"
+        "    (constraint length (min 10mm) (opt 30mm) (max 50mm))\n"
+        "    (constraint skew (max 2.5mm)))";
+
+    DRC_RULE_LOADER loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    entries[0].wasEdited = true;
+
+    DRC_RULE_SAVER saver;
+    wxString savedText = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK( savedText.Contains( "length" ) );
+    BOOST_CHECK( savedText.Contains( "skew" ) );
+    BOOST_CHECK( savedText.Contains( "2.5mm" ) );
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reloaded = loader.LoadFromString( savedText );
+
+    BOOST_REQUIRE_EQUAL( reloaded.size(), 1 );
+    BOOST_CHECK_EQUAL( reloaded[0].panelType, MATCHED_LENGTH_DIFF_PAIR );
+
+    auto reloadedData =
+            std::dynamic_pointer_cast<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( reloaded[0].constraintData );
+    BOOST_REQUIRE( reloadedData );
+
+    BOOST_CHECK_CLOSE( reloadedData->GetMaxSkew(), 2.5, 0.0001 );
+    BOOST_CHECK_CLOSE( reloadedData->GetMinimumLength(), 10.0, 0.0001 );
+    BOOST_CHECK_CLOSE( reloadedData->GetOptimumLength(), 30.0, 0.0001 );
+    BOOST_CHECK_CLOSE( reloadedData->GetMaximumLength(), 50.0, 0.0001 );
 }
 
 BOOST_AUTO_TEST_CASE( RuleLoaderWithCondition )
