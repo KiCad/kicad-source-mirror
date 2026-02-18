@@ -884,7 +884,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     // When a start position is provided, find the connected track whose far end is closest to
     // the cursor. Since all tracks share the pad/via endpoint, the far-end direction is a proxy
-    // for which track the user is pointing at.
+    // for which exit stub the user is pointing at.
     if( aStartPosition != VECTOR2I() )
     {
         PNS::ITEM*  closestItem = nullptr;
@@ -926,7 +926,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
         }
     }
 
-    // Fallback to minimum width when no start position provided or no valid track found
+    // Fallback to minimum width when no start position provided or no valid exit stub found
     int min_current_layer = INT_MAX;
     int min_all_layers = INT_MAX;
 

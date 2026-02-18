@@ -289,6 +289,7 @@ public:
     bool TestInheritTrackWidth( PNS::ITEM* aItem, int* aInheritedWidth,
                                 const VECTOR2I& aStartPosition = VECTOR2I() )
     {
+        m_startLayer = aItem->Layer();
         return inheritTrackWidth( aItem, aInheritedWidth, aStartPosition );
     }
 
@@ -605,16 +606,14 @@ BOOST_FIXTURE_TEST_CASE( PNSInheritTrackWidthCursorProximity, PNS_TEST_FIXTURE )
 
     // Narrow track going right (250um width)
     int narrowWidth = 250000;
-    PNS::SEGMENT* narrowSeg = new PNS::SEGMENT(
-            SEG( padPos, VECTOR2I( 5000000, 0 ) ), net );
+    PNS::SEGMENT* narrowSeg = new PNS::SEGMENT( SEG( padPos, VECTOR2I( 5000000, 0 ) ), net );
     narrowSeg->SetWidth( narrowWidth );
     narrowSeg->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
     world->AddRaw( narrowSeg );
 
     // Wide track going up (500um width)
     int wideWidth = 500000;
-    PNS::SEGMENT* wideSeg = new PNS::SEGMENT(
-            SEG( padPos, VECTOR2I( 0, -5000000 ) ), net );
+    PNS::SEGMENT* wideSeg = new PNS::SEGMENT( SEG( padPos, VECTOR2I( 0, -5000000 ) ), net );
     wideSeg->SetWidth( wideWidth );
     wideSeg->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
     world->AddRaw( wideSeg );
@@ -627,26 +626,22 @@ BOOST_FIXTURE_TEST_CASE( PNSInheritTrackWidthCursorProximity, PNS_TEST_FIXTURE )
 
     // Cursor near the narrow track (to the right) should select narrow width
     inherited = 0;
-    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
-                                                 VECTOR2I( 2000000, 0 ) ) );
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited, VECTOR2I( 2000000, 0 ) ) );
     BOOST_CHECK_EQUAL( inherited, narrowWidth );
 
     // Cursor near the wide track (upward) should select wide width
     inherited = 0;
-    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
-                                                 VECTOR2I( 0, -2000000 ) ) );
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited, VECTOR2I( 0, -2000000 ) ) );
     BOOST_CHECK_EQUAL( inherited, wideWidth );
 
     // Cursor slightly offset toward narrow track should still select narrow
     inherited = 0;
-    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
-                                                 VECTOR2I( 100000, 50000 ) ) );
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited, VECTOR2I( 100000, 50000 ) ) );
     BOOST_CHECK_EQUAL( inherited, narrowWidth );
 
     // Cursor slightly offset toward wide track should select wide
     inherited = 0;
-    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited,
-                                                 VECTOR2I( 50000, -100000 ) ) );
+    BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited, VECTOR2I( 50000, -100000 ) ) );
     BOOST_CHECK_EQUAL( inherited, wideWidth );
 }
 

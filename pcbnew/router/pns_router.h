@@ -104,8 +104,7 @@ enum DRAG_MODE
     virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, NET_HANDLE aNetCode ) = 0;
     virtual void HideItem( ITEM* aItem ) = 0;
     virtual void Commit() = 0;
-    virtual bool       ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, NET_HANDLE aNet,
-                                    VECTOR2D aStartPosition ) = 0;
+    virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, NET_HANDLE aNet, VECTOR2D aStartPosition ) = 0;
     virtual int  StackupHeight( int aFirstLayer, int aSecondLayer ) const = 0;
     virtual void EraseView() = 0;
     virtual int GetNetCode( NET_HANDLE aNet ) const = 0;
@@ -119,13 +118,13 @@ enum DRAG_MODE
 
     virtual long long int CalculateRoutedPathLength( const ITEM_SET& aLine, const SOLID* aStartPad,
                                                      const SOLID* aEndPad, const NETCLASS* aNetClass ) = 0;
-    virtual int64_t       CalculateRoutedPathDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad,
-                                                    const NETCLASS* aNetClass ) = 0;
-    virtual int64_t       CalculateLengthForDelay( int64_t aDesiredDelay, int aWidth, bool aIsDiffPairCoupled,
-                                                   int aDiffPairCouplingGap, int aPNSLayer, const NETCLASS* aNetClass ) = 0;
-    virtual int64_t       CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth,
-                                                           bool aIsDiffPairCoupled, int aDiffPairCouplingGap, int aPNSLayer,
-                                                           const NETCLASS* aNetClass ) = 0;
+    virtual int64_t CalculateRoutedPathDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad,
+                                              const NETCLASS* aNetClass ) = 0;
+    virtual int64_t CalculateLengthForDelay( int64_t aDesiredDelay, int aWidth, bool aIsDiffPairCoupled,
+                                             int aDiffPairCouplingGap, int aPNSLayer, const NETCLASS* aNetClass ) = 0;
+    virtual int64_t CalculateDelayForShapeLineChain( const SHAPE_LINE_CHAIN& aShape, int aWidth,
+                                                     bool aIsDiffPairCoupled, int aDiffPairCouplingGap, int aPNSLayer,
+                                                     const NETCLASS* aNetClass ) = 0;
     virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
     virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
 };
