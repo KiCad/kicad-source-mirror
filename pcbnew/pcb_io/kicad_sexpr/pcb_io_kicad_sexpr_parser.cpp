@@ -1257,32 +1257,43 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
 void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
 {
+    BOARD*     board = dynamic_cast<BOARD*>( aParent );
+    FOOTPRINT* footprint = board ? nullptr : dynamic_cast<FOOTPRINT*>( aParent );
+
+    // For footprint parents, build a one-time lookup map instead of scanning children
+    // on every call.  For board parents, use the board's existing item-by-id cache.
+    std::unordered_map<KIID, BOARD_ITEM*> fpItemMap;
+
+    if( footprint )
+    {
+        footprint->RunOnChildren(
+                [&]( BOARD_ITEM* child )
+                {
+                    fpItemMap.insert( { child->m_Uuid, child } );
+                } );
+    }
+
     auto getItem =
-            [&]( const KIID& aId )
+            [&]( const KIID& aId ) -> BOARD_ITEM*
             {
-                BOARD_ITEM* aItem = nullptr;
-
-                if( BOARD* board = dynamic_cast<BOARD*>( aParent ) )
+                if( board )
                 {
-                    aItem = board->GetItem( aId );
+                    return board->GetItem( aId );
                 }
-                else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aParent ) )
+                else if( footprint )
                 {
-                    footprint->RunOnChildren(
-                            [&]( BOARD_ITEM* child )
-                            {
-                                if( child->m_Uuid == aId )
-                                    aItem = child;
-                            } );
+                    auto it = fpItemMap.find( aId );
+
+                    return it != fpItemMap.end() ? it->second : nullptr;
                 }
 
-                return aItem;
+                return nullptr;
             };
 
     // Now that we've parsed the other Uuids in the file we can resolve the uuids referred
     // to in the group declarations we saw.
     //
-    // First add all group objects so subsequent GetItem() calls for nested groups work.
+    // First add all group objects so subsequent getItem() calls for nested groups work.
 
     std::vector<const GROUP_INFO*> groupTypeObjects;
 
@@ -1324,9 +1335,17 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
             group->SetLocked( true );
 
         if( groupInfo->parent->Type() == PCB_FOOTPRINT_T )
+        {
             static_cast<FOOTPRINT*>( groupInfo->parent )->Add( group, ADD_MODE::INSERT, true );
+
+            // Keep the footprint lookup map in sync with newly added groups
+            if( footprint )
+                fpItemMap.insert( { group->m_Uuid, group } );
+        }
         else
+        {
             static_cast<BOARD*>( groupInfo->parent )->Add( group, ADD_MODE::INSERT, true );
+        }
     }
 
     wxString error;

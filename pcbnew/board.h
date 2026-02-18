@@ -1404,8 +1404,9 @@ private:
     ZONES               m_zones;
     GENERATORS          m_generators;
 
-    // Cache for fast access to items in the containers above by KIID, including children
-    std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;
+    // Cache for fast access to items in the containers above by KIID, including children.
+    // Mutable because it's a performance cache that can be populated during const lookups.
+    mutable std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;
 
     std::map<int, LAYER> m_layers;                  // layer data
 
