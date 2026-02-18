@@ -547,15 +547,6 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
     ALLEGRO_COMPREHENSIVE_FIXTURE() {}
 
     /**
-     * Attempt to load an Allegro board, capturing all reporter messages.
-     * Returns the board (or nullptr on failure) and populates the reporter.
-     */
-    std::unique_ptr<BOARD> LoadBoardWithCapture( const std::string& aFilePath, CAPTURING_REPORTER& aReporter )
-    {
-        return KI_TEST::LoadBoardWithCapture( m_allegroPlugin, aFilePath, &aReporter );
-    }
-
-    /**
      * Get a cached board, loading it on first access. Boards loaded through this
      * method are shared across all test cases to avoid redundant parsing of large
      * Allegro files.
@@ -609,132 +600,6 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
 };
 
 BOOST_FIXTURE_TEST_SUITE( AllegroComprehensive, ALLEGRO_COMPREHENSIVE_FIXTURE )
-
-/**
- * Test TRS80_POWER.brd individually.
- */
-BOOST_AUTO_TEST_CASE( Individual_TRS80_POWER )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "TRS80_POWER/TRS80_POWER.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "TRS80_POWER.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "TRS80_POWER.brd should load successfully" );
-    PrintBoardStats( board.get(), "TRS80_POWER.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
-
-
-/**
- * Test led_youtube.brd individually.
- */
-BOOST_AUTO_TEST_CASE( Individual_led_youtube )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "led_youtube/led_youtube.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "led_youtube.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "led_youtube.brd should load successfully" );
-    PrintBoardStats( board.get(), "led_youtube.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
-
-
-/**
- * Test mainBoard.brd individually.
- */
-BOOST_AUTO_TEST_CASE( Individual_mainBoard )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "mainBoard/mainBoard.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "mainBoard.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "mainBoard.brd should load successfully" );
-    PrintBoardStats( board.get(), "mainBoard.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
-
-
-/**
- * Test mainBoard2.brd individually.
- */
-BOOST_AUTO_TEST_CASE( Individual_mainBoard2 )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "mainBoard2/mainBoard2.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "mainBoard2.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "mainBoard2.brd should load successfully" );
-    PrintBoardStats( board.get(), "mainBoard2.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
-
-
-/**
- * Test ProiectBoard.brd individually.
- */
-BOOST_AUTO_TEST_CASE( Individual_ProiectBoard )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "ProiectBoard/ProiectBoard.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "ProiectBoard.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "ProiectBoard.brd should load successfully" );
-    PrintBoardStats( board.get(), "ProiectBoard.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
-
-
-/**
- * Test BeagleBone_Black_RevC.brd individually.
- * This board has components on both top and bottom layers.
- */
-BOOST_AUTO_TEST_CASE( Individual_BeagleBone )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "BeagleBone_Black_RevC.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "BeagleBone_Black_RevC.brd should load successfully" );
-    PrintBoardStats( board.get(), "BeagleBone_Black_RevC.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-}
 
 
 /**
@@ -791,28 +656,6 @@ BOOST_AUTO_TEST_CASE( BeagleBone_OutermostZoneNets )
             BOOST_CHECK_EQUAL( largest->GetNetname(), wxString( wxS( "GND_EARTH" ) ) );
         }
     }
-}
-
-
-/**
- * Test 8851_HW-U1-VCU118_REV2-0_071417.brd individually.
- * This is a large, complex board that may take longer to load.
- */
-BOOST_AUTO_TEST_CASE( Individual_VCU118 )
-{
-    std::string dataPath = KI_TEST::AllegroBoardFile( "VCU118_REV2-0/8851_HW-U1-VCU118_REV2-0_071417.brd" );
-
-    CAPTURING_REPORTER reporter;
-    std::unique_ptr<BOARD> board = LoadBoardWithCapture( dataPath, reporter );
-
-    reporter.PrintAllMessages( "8851_HW-U1-VCU118_REV2-0_071417.brd" );
-
-    BOOST_REQUIRE_MESSAGE( board != nullptr, "VCU118 board should load successfully" );
-    PrintBoardStats( board.get(), "8851_HW-U1-VCU118_REV2-0_071417.brd" );
-
-    BOOST_CHECK_GT( board->GetNetCount(), 0 );
-    BOOST_CHECK_GT( board->Footprints().size(), 0 );
-    BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
 }
 
 
@@ -1657,42 +1500,6 @@ BOOST_AUTO_TEST_CASE( AllTracksPositiveWidth )
             }
 
             BOOST_CHECK_EQUAL( zeroWidthCount, 0 );
-        }
-    }
-}
-
-
-/**
- * Verify the import produces zero errors and bounded warnings per board.
- * This acts as a regression gate to ensure warning counts don't increase.
- */
-BOOST_AUTO_TEST_CASE( WarningBudget )
-{
-    std::vector<std::string> boards = GetAllBoardFiles();
-
-    for( const std::string& boardPath : boards )
-    {
-        CAPTURING_REPORTER     reporter;
-        std::string            boardName = std::filesystem::path( boardPath ).filename().string();
-        std::unique_ptr<BOARD> board = LoadBoardWithCapture( boardPath, reporter );
-
-        if( !board )
-            continue;
-
-        BOOST_TEST_CONTEXT( "Testing board: " << boardName )
-        {
-            BOOST_CHECK_EQUAL( reporter.GetErrorCount(), 0 );
-
-            if( reporter.GetWarningCount() > 0 )
-            {
-                BOOST_TEST_MESSAGE( boardName << ": " << reporter.GetWarningCount() << " warnings" );
-
-                for( const auto& msg : reporter.GetMessages() )
-                {
-                    if( msg.severity == RPT_SEVERITY_WARNING )
-                        BOOST_TEST_MESSAGE( "  " << msg.text );
-                }
-            }
         }
     }
 }

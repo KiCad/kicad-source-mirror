@@ -329,7 +329,25 @@ void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTest
                 BOOST_CHECK( board != nullptr );
                 BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
 
+                // Can allow a certain number of warnings, but no errors
                 BOOST_TEST( reporter.GetErrorCount() == 0 );
+
+                // Can check max warnings here if we want
+                if( reporter.GetWarningCount() > 0 )
+                {
+                    std::ostringstream ss;
+                    ss << aBrdName << ": " << reporter.GetWarningCount() << " warnings";
+
+                    for( const auto& msg : reporter.GetMessages() )
+                    {
+                        if( msg.severity == RPT_SEVERITY_WARNING )
+                        {
+                            ss << "\n  " << msg.text;
+                        }
+                    }
+
+                    BOOST_TEST_MESSAGE( ss.str() );
+                }
 
                 KI_TEST::PrintBoardStats( board, aBrdName );
             }
