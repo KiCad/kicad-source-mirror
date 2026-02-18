@@ -194,6 +194,64 @@ BOOST_AUTO_TEST_CASE( ParseSymbols_Count )
 }
 
 
+BOOST_AUTO_TEST_CASE( ParseSymbols_V52_DecalWithoutFontLines )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_decals.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+    BOOST_CHECK( parser.IsValid() );
+
+    const auto& header = parser.GetHeader();
+
+    BOOST_CHECK_EQUAL( header.product, "PADS-POWERLOGIC" );
+    BOOST_CHECK_EQUAL( header.version, "V5.2" );
+
+    const auto& symbols = parser.GetSymbolDefs();
+
+    BOOST_REQUIRE_EQUAL( symbols.size(), 1 );
+
+    const PADS_SCH::SYMBOL_DEF* pinb = parser.GetSymbolDef( "PINB" );
+    BOOST_REQUIRE( pinb != nullptr );
+
+    BOOST_CHECK_EQUAL( pinb->num_attrs, 4 );
+    BOOST_CHECK_EQUAL( pinb->num_pieces, 2 );
+    BOOST_CHECK_EQUAL( pinb->num_pins, 0 );
+    BOOST_CHECK_EQUAL( pinb->is_pin_decal, 1 );
+
+    // Verify attribute names were parsed correctly (not misaligned)
+    BOOST_REQUIRE_EQUAL( pinb->attrs.size(), 4 );
+    BOOST_CHECK_EQUAL( pinb->attrs[0].attr_name, "REF-DES" );
+    BOOST_CHECK_EQUAL( pinb->attrs[1].attr_name, "PART-TYPE" );
+    BOOST_CHECK_EQUAL( pinb->attrs[2].attr_name, "*" );
+    BOOST_CHECK_EQUAL( pinb->attrs[3].attr_name, "*" );
+
+    // Verify graphics were parsed correctly
+    BOOST_REQUIRE_EQUAL( pinb->graphics.size(), 2 );
+
+    const auto& openLine = pinb->graphics[0];
+    BOOST_CHECK( openLine.type == PADS_SCH::GRAPHIC_TYPE::POLYLINE );
+    BOOST_CHECK_EQUAL( openLine.line_width, 10.0 );
+    BOOST_REQUIRE_EQUAL( openLine.points.size(), 2 );
+    BOOST_CHECK_EQUAL( openLine.points[0].coord.x, 0.0 );
+    BOOST_CHECK_EQUAL( openLine.points[0].coord.y, 0.0 );
+    BOOST_CHECK_EQUAL( openLine.points[1].coord.x, 140.0 );
+    BOOST_CHECK_EQUAL( openLine.points[1].coord.y, 0.0 );
+
+    const auto& circle = pinb->graphics[1];
+    BOOST_CHECK( circle.type == PADS_SCH::GRAPHIC_TYPE::CIRCLE );
+    BOOST_CHECK_EQUAL( circle.line_width, 10.0 );
+    BOOST_CHECK_EQUAL( circle.center.x, 165.0 );
+    BOOST_CHECK_EQUAL( circle.center.y, 0.0 );
+    BOOST_CHECK_EQUAL( circle.radius, 25.0 );
+
+    // Font names should be empty since V5.2 doesn't have them
+    BOOST_CHECK( pinb->font1.empty() );
+    BOOST_CHECK( pinb->font2.empty() );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParseSymbols_Resistor )
 {
     std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt";

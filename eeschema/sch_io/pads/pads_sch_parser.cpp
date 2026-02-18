@@ -1013,33 +1013,23 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
         idx++;
     }
 
-    // Two font name lines
-    if( idx < aLines.size() )
+    // Two font name lines (optional, not present in older formats like V5.2)
+    if( idx < aLines.size() && aLines[idx].size() >= 2 && aLines[idx][0] == '"' )
     {
-        const std::string& fontLine = aLines[idx];
+        size_t qEnd = aLines[idx].find( '"', 1 );
 
-        if( fontLine.size() >= 2 && fontLine[0] == '"' )
-        {
-            size_t qEnd = fontLine.find( '"', 1 );
-
-            if( qEnd != std::string::npos )
-                aSymbol.font1 = fontLine.substr( 1, qEnd - 1 );
-        }
+        if( qEnd != std::string::npos )
+            aSymbol.font1 = aLines[idx].substr( 1, qEnd - 1 );
 
         idx++;
     }
 
-    if( idx < aLines.size() )
+    if( idx < aLines.size() && aLines[idx].size() >= 2 && aLines[idx][0] == '"' )
     {
-        const std::string& fontLine = aLines[idx];
+        size_t qEnd = aLines[idx].find( '"', 1 );
 
-        if( fontLine.size() >= 2 && fontLine[0] == '"' )
-        {
-            size_t qEnd = fontLine.find( '"', 1 );
-
-            if( qEnd != std::string::npos )
-                aSymbol.font2 = fontLine.substr( 1, qEnd - 1 );
-        }
+        if( qEnd != std::string::npos )
+            aSymbol.font2 = aLines[idx].substr( 1, qEnd - 1 );
 
         idx++;
     }
