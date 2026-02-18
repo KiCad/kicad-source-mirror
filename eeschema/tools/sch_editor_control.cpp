@@ -3339,103 +3339,6 @@ int SCH_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
-{
-    int      errors = 0;
-    wxString details;
-    bool     quiet = aEvent.Parameter<bool>();
-
-    // Repair duplicate IDs.
-    std::map<KIID, EDA_ITEM*> ids;
-    int                       duplicates = 0;
-
-    SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
-
-    auto processItem =
-            [&]( EDA_ITEM* aItem )
-            {
-                auto it = ids.find( aItem->m_Uuid );
-
-                if( it != ids.end() && it->second != aItem )
-                {
-                    duplicates++;
-                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
-                }
-
-                ids[ aItem->m_Uuid ] = aItem;
-            };
-
-    // Symbol IDs are the most important, so give them the first crack at "claiming" a
-    // particular KIID.
-
-    for( const SCH_SHEET_PATH& sheet : sheets )
-    {
-        SCH_SCREEN* screen = sheet.LastScreen();
-
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
-        {
-            processItem( item );
-
-            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins( &sheet ) )
-                processItem( pin );
-        }
-    }
-
-    for( const SCH_SHEET_PATH& sheet : sheets )
-    {
-        SCH_SCREEN* screen = sheet.LastScreen();
-
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            processItem( item );
-
-            if( item->Type() != SCH_GROUP_T )
-            {
-                item->RunOnChildren(
-                        [&]( SCH_ITEM* aChild )
-                        {
-                            processItem( item );
-                        },
-                        RECURSE_MODE::NO_RECURSE );
-            }
-        }
-    }
-
-    /*******************************
-     * Your test here
-     */
-
-    /*******************************
-     * Inform the user
-     */
-
-    if( duplicates )
-    {
-        errors += duplicates;
-        details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
-
-        // Rehash sheetpaths as we may have changed their uuids.
-        m_frame->Schematic().RefreshHierarchy();
-    }
-
-    if( errors )
-    {
-        m_frame->OnModify();
-
-        wxString msg = wxString::Format( _( "%d potential problems repaired." ), errors );
-
-        if( !quiet )
-            DisplayInfoMessage( m_frame, msg, details );
-    }
-    else if( !quiet )
-    {
-        DisplayInfoMessage( m_frame, _( "No errors found." ) );
-    }
-
-    return 0;
-}
-
-
 int SCH_EDITOR_CONTROL::GridFeedback( const TOOL_EVENT& aEvent )
 {
     if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
@@ -3658,8 +3561,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,      SCH_ACTIONS::toggleAnnotateAuto.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ReloadPlugins,           ACTIONS::pluginsReload.MakeEvent() );
-
-    Go( &SCH_EDITOR_CONTROL::RepairSchematic,         SCH_ACTIONS::repairSchematic.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary,  SCH_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
 

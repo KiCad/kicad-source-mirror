@@ -1360,13 +1360,6 @@ TOOL_ACTION SCH_ACTIONS::toggleAnnotateAuto( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::annotate ) );
 
-TOOL_ACTION SCH_ACTIONS::repairSchematic( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.repairSchematic" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Repair Schematic" ) )
-        .Tooltip( _( "Run various diagnostics and attempt to repair schematic" ) )
-        .Icon( BITMAPS::rescue ) );
-
 TOOL_ACTION SCH_ACTIONS::previousUnit( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.previousUnit" )
         .Scope( AS_GLOBAL )

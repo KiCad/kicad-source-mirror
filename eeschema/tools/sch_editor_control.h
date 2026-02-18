@@ -154,8 +154,6 @@ public:
 
     int GridFeedback( const TOOL_EVENT& aEvent );
 
-    int RepairSchematic( const TOOL_EVENT& aEvent );
-
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**

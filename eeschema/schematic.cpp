@@ -1259,9 +1259,10 @@ wxString SCHEMATIC::GetOperatingPoint( const wxString& aNetName, int aPrecision,
 }
 
 
-void SCHEMATIC::FixupJunctionsAfterImport()
+int SCHEMATIC::FixupJunctionsAfterImport()
 {
     SCH_SCREENS screens( Root() );
+    int         count = 0;
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
@@ -1273,6 +1274,8 @@ void SCHEMATIC::FixupJunctionsAfterImport()
         // Add missing junctions and breakup wires as needed
         for( const VECTOR2I& point : screen->GetNeededJunctions( allItems ) )
         {
+            count++;
+
             SCH_JUNCTION* junction = new SCH_JUNCTION( point );
             screen->Append( junction );
 
@@ -1284,6 +1287,8 @@ void SCHEMATIC::FixupJunctionsAfterImport()
             }
         }
     }
+
+    return count;
 }
 
 

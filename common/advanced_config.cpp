@@ -98,7 +98,6 @@ static const wxChar Skip3DModelFileCache[] = wxT( "Skip3DModelFileCache" );
 static const wxChar Skip3DModelMemoryCache[] = wxT( "Skip3DModelMemoryCache" );
 static const wxChar HideVersionFromTitle[] = wxT( "HideVersionFromTitle" );
 static const wxChar TraceMasks[] = wxT( "TraceMasks" );
-static const wxChar ShowRepairSchematic[] = wxT( "ShowRepairSchematic" );
 static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
 static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
@@ -274,7 +273,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_AllowManualCanvasScale = false;
     m_CompactSave = false;
     m_UpdateUIEventInterval = 0;
-    m_ShowRepairSchematic = false;
     m_EnablePcbDesignBlocks = true;
     m_EnableGenerators = false;
     m_EnableDrcRuleEditor = false;
@@ -512,9 +510,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::HideVersionFromTitle, &m_HideVersionFromTitle,
                                                            m_HideVersionFromTitle ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowRepairSchematic, &m_ShowRepairSchematic,
-                                                           m_ShowRepairSchematic ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ShowEventCounters, &m_ShowEventCounters,
                                                            m_ShowEventCounters ) );

@@ -309,9 +309,6 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( SCH_ACTIONS::rescueSymbols );
     toolsMenu->Add( SCH_ACTIONS::remapSymbols );
 
-    if( ADVANCED_CFG::GetCfg().m_ShowRepairSchematic )
-        toolsMenu->Add( SCH_ACTIONS::repairSchematic );
-
     toolsMenu->AppendSeparator();
     toolsMenu->Add( SCH_ACTIONS::editSymbolFields );
     toolsMenu->Add( SCH_ACTIONS::editSymbolLibraryLinks );

@@ -310,7 +310,7 @@ public:
      * This function is needed for some plugins (e.g. Legacy and Cadstar) in order to retain
      * connectivity after loading.
      */
-    void FixupJunctionsAfterImport();
+    int FixupJunctionsAfterImport();
 
     /**
      * Scan existing markers and record data from any that are Excluded.
