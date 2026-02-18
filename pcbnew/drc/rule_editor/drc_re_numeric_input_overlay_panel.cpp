@@ -26,6 +26,7 @@
 #include "drc_rule_editor_utils.h"
 
 #include <dialogs/rule_editor_dialog_base.h>
+#include <eda_base_frame.h>
 #include <base_units.h>
 #include <widgets/unit_binder.h>
 
@@ -42,9 +43,20 @@ DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
+    wxWindow* eventSource = nullptr;
+
+    for( wxWindow* win = aParent; win; win = win->GetParent() )
+    {
+        if( dynamic_cast<EDA_BASE_FRAME*>( win ) )
+        {
+            eventSource = win;
+            break;
+        }
+    }
+
     auto* valueField = AddField<wxTextCtrl>( wxS( "value" ), positions[0], wxTE_PROCESS_ENTER | wxTE_CENTRE );
-    m_valueBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, valueField->GetControl(), nullptr, false, false );
+    m_valueBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, valueField->GetControl(),
+                                                   valueField->GetLabel(), false, false );
     valueField->SetUnitBinder( m_valueBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )

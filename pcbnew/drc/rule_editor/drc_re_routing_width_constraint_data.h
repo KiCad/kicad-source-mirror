@@ -25,6 +25,7 @@
 #define DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA_H_
 
 #include "drc_re_base_constraint_data.h"
+#include "drc_re_overlay_types.h"
 
 
 class DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA : public DRC_RE_BASE_CONSTRAINT_DATA
@@ -56,9 +57,9 @@ public:
         // Positions measured from constraint_routing_width.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 64, 104, 96, 1 },    // min_width (left arrow)
-            { 126, 166, 40, 2 },   // opt_width (bottom center arrow)
-            { 248, 288, 74, 3 },   // max_width (right arrow)
+            { 64, 104, 96, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left arrow)
+            { 126, 166, 40, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_width (bottom center arrow)
+            { 248, 288, 74, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_width (right arrow)
         };
     }
 

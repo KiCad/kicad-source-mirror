@@ -26,6 +26,7 @@
 #include "drc_rule_editor_utils.h"
 
 #include <dialogs/rule_editor_dialog_base.h>
+#include <eda_base_frame.h>
 #include <base_units.h>
 #include <widgets/unit_binder.h>
 
@@ -43,17 +44,28 @@ DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
-    m_minTextHeightBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+    wxWindow* eventSource = nullptr;
 
-    auto* minTextHeightField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_height" ), positions[0],
-                                                                m_minTextHeightBinder.get(), wxTE_PROCESS_ENTER );
+    for( wxWindow* win = aParent; win; win = win->GetParent() )
+    {
+        if( dynamic_cast<EDA_BASE_FRAME*>( win ) )
+        {
+            eventSource = win;
+            break;
+        }
+    }
 
-    m_minTextThicknessBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, nullptr, nullptr, false, false );
+    auto* minTextHeightField = AddField<wxTextCtrl>( wxS( "min_text_height" ), positions[0], wxTE_PROCESS_ENTER );
+    m_minTextHeightBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextHeightField->GetControl(),
+                                           minTextHeightField->GetLabel(), false, false );
+    minTextHeightField->SetUnitBinder( m_minTextHeightBinder.get() );
 
-    auto* minTextThicknessField = AddFieldWithUnits<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1],
-                                                                m_minTextThicknessBinder.get(), wxTE_PROCESS_ENTER );
+    auto* minTextThicknessField = AddField<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1], wxTE_PROCESS_ENTER );
+    m_minTextThicknessBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextThicknessField->GetControl(),
+                                           minTextThicknessField->GetLabel(), false, false );
+    minTextThicknessField->SetUnitBinder( m_minTextThicknessBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

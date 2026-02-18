@@ -290,8 +290,16 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataFromWindow()
 DRC_RULE_EDITOR_CONTENT_PANEL_BASE*
 PANEL_DRC_RULE_EDITOR::getConstraintPanel( wxWindow* aParent, const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType )
 {
-    // Use millimeters as default unit since constraint data stores values in mm
     EDA_UNITS units = EDA_UNITS::MM;
+
+    for( wxWindow* win = GetParent(); win; win = win->GetParent() )
+    {
+        if( auto* frame = dynamic_cast<EDA_BASE_FRAME*>( win ) )
+        {
+            units = frame->GetUserUnits();
+            break;
+        }
+    }
 
     switch( aConstraintType )
     {

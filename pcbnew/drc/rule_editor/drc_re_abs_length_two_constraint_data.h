@@ -59,9 +59,9 @@ public:
         // Positions measured from constraint_absolute_lenght_2.png (~340x130)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 285, 315, 62, 1 },     // min_length (left arrow)
-            { 245, 275, 131, 2 },   // opt_length (bottom center arrow)
-            { 15, 45, 37, 3 },   // max_length (right arrow)
+            { 285, 315, 62, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length (left arrow)
+            { 245, 275, 131, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length (bottom center arrow)
+            { 15, 45, 37, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },    // max_length (right arrow)
         };
     }
 
@@ -159,9 +159,9 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 335, 365, 33, 1 },     // min_length
-            { 335, 365, 103, 2 },    // opt_length
-            { 335, 365, 173, 3 },    // max_length
+            { 335, 365, 33, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length
+            { 335, 365, 103, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length
+            { 335, 365, 173, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_length
         };
     }
 

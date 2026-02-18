@@ -59,8 +59,9 @@ public:
         // Positions measured from constraint_minimum_text_height_and_thickness.png (~300x200)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 230, 310, 55, 1 },   // min_text_height (right side, vertical dimension)
-            { 140, 220, 165, 2 },  // min_text_thickness (bottom, horizontal dimension)
+            { 230, 310, 55, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height (right side, vertical dimension)
+            { 140, 220, 165, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // min_text_thickness (bottom, horizontal dimension)
         };
     }
 

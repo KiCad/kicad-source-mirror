@@ -26,6 +26,7 @@
 #include "drc_rule_editor_utils.h"
 
 #include <base_units.h>
+#include <eda_base_frame.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
@@ -41,25 +42,39 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
+    wxWindow* eventSource = nullptr;
+
+    for( wxWindow* win = aParent; win; win = win->GetParent() )
+    {
+        if( dynamic_cast<EDA_BASE_FRAME*>( win ) )
+        {
+            eventSource = win;
+            break;
+        }
+    }
+
     // Create min length field
     auto* minLengthField = AddField<wxTextCtrl>( wxS( "min_length" ), positions[0],
                                                  wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_minLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, minLengthField->GetControl(), nullptr, false, false );
+    m_minLengthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minLengthField->GetControl(),
+                                           minLengthField->GetLabel(), false, false );
     minLengthField->SetUnitBinder( m_minLengthBinder.get() );
 
     // Create opt length field
     auto* optLengthField = AddField<wxTextCtrl>( wxS( "opt_length" ), positions[1],
                                                  wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_optLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, optLengthField->GetControl(), nullptr, false, false );
+    m_optLengthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, optLengthField->GetControl(),
+                                           optLengthField->GetLabel(), false, false );
     optLengthField->SetUnitBinder( m_optLengthBinder.get() );
 
     // Create max length field
     auto* maxLengthField = AddField<wxTextCtrl>( wxS( "max_length" ), positions[2],
                                                  wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxLengthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, maxLengthField->GetControl(), nullptr, false, false );
+    m_maxLengthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxLengthField->GetControl(),
+                                           maxLengthField->GetLabel(), false, false );
     maxLengthField->SetUnitBinder( m_maxLengthBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )

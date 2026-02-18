@@ -26,6 +26,7 @@
 #include "drc_rule_editor_utils.h"
 
 #include <base_units.h>
+#include <eda_base_frame.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
@@ -44,25 +45,40 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
 
     std::vector<DRC_RE_FIELD_POSITION> positions = m_data->GetFieldPositions();
 
+    wxWindow* eventSource = nullptr;
+
+    for( wxWindow* win = aParent; win; win = win->GetParent() )
+    {
+        if( dynamic_cast<EDA_BASE_FRAME*>( win ) )
+        {
+            eventSource = win;
+            break;
+        }
+    }
+
+
     // Create min width field
     auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0],
                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_minRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, minWidthField->GetControl(), nullptr, false, false );
+    m_minRoutingWidthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minWidthField->GetControl(),
+                                           minWidthField->GetLabel(), false, false );
     minWidthField->SetUnitBinder( m_minRoutingWidthBinder.get() );
 
     // Create preferred width field
     auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
                                                  wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_preferredRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, prefWidthField->GetControl(), nullptr, false, false );
+    m_preferredRoutingWidthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefWidthField->GetControl(),
+                                           prefWidthField->GetLabel(), false, false );
     prefWidthField->SetUnitBinder( m_preferredRoutingWidthBinder.get() );
 
     // Create max width field
     auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxRoutingWidthBinder = std::make_unique<UNIT_BINDER>(
-            &m_unitsProvider, this, nullptr, maxWidthField->GetControl(), nullptr, false, false );
+    m_maxRoutingWidthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxWidthField->GetControl(),
+                                           maxWidthField->GetLabel(), false, false );
     maxWidthField->SetUnitBinder( m_maxRoutingWidthBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )
