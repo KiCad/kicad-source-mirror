@@ -296,7 +296,7 @@ public:
 };
 
 
-void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
+void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
 {
     BOARD* board = nullptr;
 
@@ -304,8 +304,8 @@ void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aB
     {
         if( aBoardTestJson.contains( "boardFile" ) )
         {
-            const std::string boardFilePath = KI_TEST::GetPcbnewTestDataDir() + "plugins/allegro/boards/" + aBrdName
-                                              + "/" + aBoardTestJson["boardFile"].get<std::string>();
+            const std::string boardFilePath =
+                    KI_TEST::AllegroBoardDataDir( aBrdName ) + aBoardTestJson["boardFile"].get<std::string>();
 
             if( !std::filesystem::exists( boardFilePath ) )
             {
@@ -313,7 +313,8 @@ void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aB
                 return;
             }
 
-            board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
+            CAPTURING_REPORTER reporter;
+            board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().LoadAndCache( boardFilePath, &reporter );
 
             const bool expectLoadFailure = aBoardTestJson.value( "expectLoadFailure", false );
 
@@ -328,9 +329,32 @@ void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aB
                 BOOST_CHECK( board != nullptr );
                 BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
 
+                BOOST_TEST( reporter.GetErrorCount() == 0 );
+
                 KI_TEST::PrintBoardStats( board, aBrdName );
             }
         }
+    }
+}
+
+
+void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
+{
+    if( !aBoardTestJson.contains( "boardFile" ) )
+    {
+        BOOST_FAIL( "Board test JSON does not contain a 'boardFile' entry" );
+        return;
+    }
+
+    const std::string boardFilePath =
+            KI_TEST::AllegroBoardDataDir( aBrdName ) + aBoardTestJson["boardFile"].get<std::string>();
+
+    BOARD* board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
+
+    if( !board )
+    {
+        BOOST_FAIL( "Failed to load cached board for expectations test: " + boardFilePath );
+        return;
     }
 
     BOOST_TEST_CONTEXT( "Running board expectations" )
@@ -624,27 +648,50 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
         const nlohmann::json& boardTestData = registry->GetBoardJson( boardTest.m_BrdName );
 
         const std::vector<std::string> testLabels = getBoardTestLabels( boardTestData );
+        boost::unit_test::test_case*   loadingTestCase = nullptr;
 
         if( boardTest.m_HasBoardFile )
+        {
+            const auto testLoadFunction = [&]()
+            {
+                RunBoardLoad( boardTest.m_BrdName, boardTestData );
+            };
+
+            // The first test unit loads (and caches) the board.
+            loadingTestCase = boost::unit_test::make_test_case(
+                    testLoadFunction,
+                    "Import",
+                    __FILE__,
+                    __LINE__
+            );
+
+            for( const std::string& label : testLabels )
+            {
+                loadingTestCase->add_label( label );
+            }
+
+            boardSuite->add( loadingTestCase );
+        }
+
+        if( boardTest.m_HasExpectations )
         {
             const auto testRunFunction = [&]()
             {
                 RunBoardExpectations( boardTest.m_BrdName, boardTestData );
             };
 
-            boost::unit_test::test_case* testCase =                boost::unit_test::make_test_case(
+            boost::unit_test::test_case* expectationTestCase = boost::unit_test::make_test_case(
                     testRunFunction,
-                    boardTest.m_BrdName + "_Expectations",
+                    "Expectations",
                     __FILE__,
                     __LINE__
                 );
 
-            for( const std::string& label : testLabels )
-            {
-                testCase->add_label( label );
-            }
-
-            boardSuite->add( testCase );
+            // We can only run the expectations test after the board has been loaded
+            // and that test passes.
+            BOOST_REQUIRE( loadingTestCase != nullptr );
+            expectationTestCase->depends_on( loadingTestCase );
+            boardSuite->add( expectationTestCase );
         }
     }
 

@@ -307,8 +307,7 @@ private:
  * Attempt to load an board with a given IO plugin, capturing all reporter messages.
  * Returns the board (or nullptr on failure) and populates the reporter.
  */
-extern std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath,
-                                                    REPORTER& aReporter );
+std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath, REPORTER* aReporter );
 
 
 /**
@@ -322,17 +321,27 @@ class CACHED_BOARD_LOADER
 {
 public:
     /**
-     * Get a cached board for the given file path, or load it if not already cached.
-     *
-     * Probably will be implemented in terms of a PCB_IO inheritor.
+     * Load (or reload) board for the given file path and send the load messages to the given reporter.
      *
      * @param aFilePath the file path to load
+     * @param aReporter the reporter to capture load messages, or nullptr to ignore messages
      * @return a pointer to the cached board, or nullptr if loading failed
      */
-    virtual BOARD* GetCachedBoard( const std::string& aFilePath ) = 0;
+    BOARD* LoadAndCache( const std::string& aFilePath, REPORTER* aReporter );
+
+    /**
+     * Get a cached board for the given file path, or load it if not already cached,
+     * without forcing a reload.
+     */
+    BOARD* GetCachedBoard( const std::string& aFilePath );
 
 protected:
-    BOARD* getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath );
+    BOARD* getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath, bool aForceReload, REPORTER* aReporter );
+
+    /**
+     * Implementation of the board loader (probably plug in the PCB_IO plugin here)
+     */
+    virtual BOARD* getCachedBoard( const std::string& aFilePath, bool aForceReload, REPORTER* aReporter ) = 0;
 
 private:
     std::map<std::string, std::unique_ptr<BOARD>> m_boardCache;

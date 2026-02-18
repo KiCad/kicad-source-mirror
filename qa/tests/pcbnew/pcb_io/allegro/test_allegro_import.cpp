@@ -552,7 +552,7 @@ struct ALLEGRO_COMPREHENSIVE_FIXTURE
      */
     std::unique_ptr<BOARD> LoadBoardWithCapture( const std::string& aFilePath, CAPTURING_REPORTER& aReporter )
     {
-        return KI_TEST::LoadBoardWithCapture( m_allegroPlugin, aFilePath, aReporter );
+        return KI_TEST::LoadBoardWithCapture( m_allegroPlugin, aFilePath, &aReporter );
     }
 
     /**

@@ -14,9 +14,17 @@ Current test suites:
     and the conversion of binary data to the intermediate DB_OBJ form.
 - `AllegroBoards` - generalised tests on the full import of entire board files, with test cases
     generated from a registry of board files and the general board "expectation" data.
-  - Slow boards in this suite are labelled as `slow-board` and can be filtered out of the test runs when needed
+  - Slow boards in this suite are labelled as `slow-board` and can be filtered out of the test runs when needed.
+  - These test have the following sub-test units:
+    - `Import` - tests that the board file can be imported without errors
+    - `Expectations` - tests that check the imported board against the expectations defined for that board in the registry
+      (depends on the `Import` test, so will be skipped if the board fails to import)
+    - `Header` - tests on the header data parsing and any specific checks related to the header data
+    - `Blocks` - tests on the parsing of individual blocks and/or conversion of block data to DB_OBJ form.
+      These tests are strictly block-specific, so they don't have the wide board context.
 
-Tests in the `AllegroBlocks` and `AllegroBoards` suites are generated from the data in the `board_data_registry.json` file. These tests are organised into sub-suites based on the board name.
+Tests in the `AllegroBlocks` and `AllegroBoards` suites are generated from the data in the `board_data_registry.json` file.
+These tests are organised into sub-suites based on the board name.
 
 ## Running tests
 
@@ -27,6 +35,7 @@ The usual Boost test filtering works, so you can run tests like this:
 - Run just the AllegroBlocks test for the `Foo` boards: `qa_pcbnew -t 'AllegroBlocks/Foo'`
 - Run just the AllegroBoards tests, excluding slow boards: `qa_pcbnew -t 'AllegroBoards' -t '!@slow-board'` (note - single quotes avoid having the `!` interpreted by the shell)
 - Run block tests for the `Bar` board: `qa_pcbnew -t 'AllegroBlocks/Bar'`
+- Run just the loading test for all boards: `qa_pcbnew -t 'AllegroBoards/*/Import'`
 - Run block tests for `0x20` blocks in all boards: `qa_pcbnew -t 'AllegroBlocks/*/*0x20'`
 
 ## Expectations

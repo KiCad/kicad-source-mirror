@@ -77,7 +77,8 @@ KI_TEST::ALLEGRO_CACHED_LOADER& KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance()
 }
 
 
-BOARD* KI_TEST::ALLEGRO_CACHED_LOADER::GetCachedBoard( const std::string& aFilePath )
+BOARD* KI_TEST::ALLEGRO_CACHED_LOADER::getCachedBoard( const std::string& aFilePath, bool aForceReload,
+                                                       REPORTER* aReporter )
 {
-    return getCachedBoard( *m_allegroPlugin, aFilePath );
+    return CACHED_BOARD_LOADER::getCachedBoard( *m_allegroPlugin, aFilePath, aForceReload, aReporter );
 }

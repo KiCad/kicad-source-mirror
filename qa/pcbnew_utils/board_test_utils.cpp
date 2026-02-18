@@ -841,11 +841,12 @@ void CAPTURING_REPORTER::PrintAllMessages( const std::string& aContext ) const
 }
 
 
-std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath, REPORTER& aReporter )
+std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::string& aFilePath, REPORTER* aReporter )
 {
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
-    aIoPlugin.SetReporter( &aReporter );
+    if( aReporter )
+        aIoPlugin.SetReporter( aReporter );
 
     try
     {
@@ -854,31 +855,46 @@ std::unique_ptr<BOARD> LoadBoardWithCapture( PCB_IO& aIoPlugin, const std::strin
     }
     catch( const IO_ERROR& e )
     {
-        aReporter.Report( wxString::Format( "IO_ERROR: %s", e.What() ), RPT_SEVERITY_ERROR );
+        if( aReporter )
+            aReporter->Report( wxString::Format( "IO_ERROR: %s", e.What() ), RPT_SEVERITY_ERROR );
         return nullptr;
     }
     catch( const std::exception& e )
     {
-        aReporter.Report( wxString::Format( "Exception: %s", e.what() ), RPT_SEVERITY_ERROR );
+        if( aReporter )
+            aReporter->Report( wxString::Format( "Exception: %s", e.what() ), RPT_SEVERITY_ERROR );
         return nullptr;
     }
     catch( ... )
     {
-        aReporter.Report( "Unknown exception during load", RPT_SEVERITY_ERROR );
+        if( aReporter )
+            aReporter->Report( "Unknown exception during load", RPT_SEVERITY_ERROR );
         return nullptr;
     }
 }
 
 
-BOARD* CACHED_BOARD_LOADER::getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath )
+BOARD* CACHED_BOARD_LOADER::GetCachedBoard( const std::string& aFilePath )
+{
+    return getCachedBoard( aFilePath, false, nullptr );
+}
+
+
+BOARD* CACHED_BOARD_LOADER::LoadAndCache( const std::string& aFilePath, REPORTER* aReporter )
+{
+    return getCachedBoard( aFilePath, true, aReporter );
+}
+
+
+BOARD* CACHED_BOARD_LOADER::getCachedBoard( PCB_IO& aIoPlugin, const std::string& aFilePath, bool aForceReload,
+                                            REPORTER* aReporter )
 {
     auto it = m_boardCache.find( aFilePath );
 
-    if( it != m_boardCache.end() )
+    if( it != m_boardCache.end() && !aForceReload )
         return it->second.get();
 
-    CAPTURING_REPORTER reporter;
-    auto               board = KI_TEST::LoadBoardWithCapture( aIoPlugin, aFilePath, reporter );
+    auto               board = KI_TEST::LoadBoardWithCapture( aIoPlugin, aFilePath, aReporter );
     BOARD*             raw = board.get();
     m_boardCache[aFilePath] = std::move( board );
     return raw;

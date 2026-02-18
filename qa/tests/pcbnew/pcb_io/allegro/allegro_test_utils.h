@@ -41,11 +41,11 @@ public:
      */
     static ALLEGRO_CACHED_LOADER& GetInstance();
 
+protected:
     /**
-     * Implementation of CACHED_BOARD_LOADER interface, to get a cached board for the given file path, or load it if not already cached.
-     * using the PCB_IO_ALLEGRO plugin.
+     * Implementation of CACHED_BOARD_LOADER interface with our Allegro PCB_IO plugin.
      */
-    BOARD* GetCachedBoard( const std::string& aFilePath ) override;
+    BOARD* getCachedBoard( const std::string& aFilePath, bool aForceReload, REPORTER* aReporter ) override;
 
 private:
     ALLEGRO_CACHED_LOADER();
