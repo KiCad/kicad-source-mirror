@@ -2284,7 +2284,15 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
         }
     }
 
+    CLI_REPORTER reporter;
+
+    if( !m_reporter )
+        m_reporter = &reporter;
+
     DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
+
+    if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     return CLI::EXIT_CODES::SUCCESS;
 }

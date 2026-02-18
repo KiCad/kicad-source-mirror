@@ -156,6 +156,7 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
     m_outputFileName->SetValue( path );
 }
 
+
 void DIALOG_EXPORT_ODBPP::onFormatChoice( wxCommandEvent& event )
 {
     OnFmtChoiceOptionChanged();
@@ -191,6 +192,7 @@ void DIALOG_EXPORT_ODBPP::OnFmtChoiceOptionChanged()
 
     m_outputFileName->SetValue( fn );
 }
+
 
 void DIALOG_EXPORT_ODBPP::onOKClick( wxCommandEvent& event )
 {
@@ -372,16 +374,6 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                     return;
                 }
             }
-            else
-            {
-                msg = wxString::Format( _( "Output file '%s' already exists." ),
-                                        outputFn.GetFullPath() );
-
-                if( aReporter )
-                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
-
-                return;
-            }
         }
 
         tempFile.AssignDir( wxFileName::GetTempDir() );
@@ -425,16 +417,6 @@ void DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BO
                     DisplayErrorMessage( aParentFrame, msg );
                     return;
                 }
-            }
-            else
-            {
-                msg = wxString::Format( _( "Output directory '%s' already exists." ),
-                                        tempFile.GetFullPath() );
-
-                if( aReporter )
-                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
-
-                return;
             }
         }
     }
