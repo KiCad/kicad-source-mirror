@@ -260,31 +260,6 @@ BOOST_AUTO_TEST_CASE( PadNumbers )
 
 
 /**
- * Test that copper layers are set up correctly.
- */
-BOOST_AUTO_TEST_CASE( CopperLayers )
-{
-    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
-
-    BOOST_REQUIRE( board != nullptr );
-
-    int copperLayers = board->GetCopperLayerCount();
-
-    BOOST_TEST_MESSAGE( "Copper layer count: " << copperLayers );
-
-    // Should have at least 2 copper layers
-    BOOST_CHECK_GE( copperLayers, 2 );
-
-    // Verify layer names are set (not generic)
-    wxString topName = board->GetLayerName( F_Cu );
-    wxString botName = board->GetLayerName( B_Cu );
-
-    BOOST_TEST_MESSAGE( "Top copper name: " << topName );
-    BOOST_TEST_MESSAGE( "Bottom copper name: " << botName );
-}
-
-
-/**
  * Test that board outline is imported correctly.
  */
 BOOST_AUTO_TEST_CASE( BoardOutline )

@@ -119,6 +119,10 @@
                     "count": {
                         "min": 1
                     }
+                },
+                {
+                    "type": "layers",
+                    "cuNames": ["TOP", "BOTTOM"]
                 }
             ]
         },

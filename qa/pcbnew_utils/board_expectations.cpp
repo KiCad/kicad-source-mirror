@@ -43,21 +43,42 @@ public:
     {
         INT_MATCHER matcher;
 
-        if( aJson.contains( "exact" ) )
+        if( aJson.is_number() )
         {
-            int v = aJson["exact"];
+            int v = aJson.get<int>();
             matcher.m_min = v;
             matcher.m_max = v;
         }
+        else if( aJson.is_object() )
+        {
+            if( aJson.contains( "exact" ) )
+            {
+                int v = aJson["exact"];
+                matcher.m_min = v;
+                matcher.m_max = v;
+            }
+            else
+            {
+                if( aJson.contains( "min" ) )
+                    matcher.m_min = aJson["min"];
+
+                if( aJson.contains( "max" ) )
+                    matcher.m_max = aJson["max"];
+            }
+        }
         else
         {
-            if( aJson.contains( "min" ) )
-                matcher.m_min = aJson["min"];
-
-            if( aJson.contains( "max" ) )
-                matcher.m_max = aJson["max"];
+            throw std::runtime_error( "Invalid count expectation: " + aJson.dump() );
         }
 
+        return matcher;
+    }
+
+    static INT_MATCHER Exact( int aValue )
+    {
+        INT_MATCHER matcher;
+        matcher.m_min = aValue;
+        matcher.m_max = aValue;
         return matcher;
     }
 
@@ -272,6 +293,54 @@ private:
 };
 
 
+class LAYER_EXPECTATION : public BOARD_EXPECTATION
+{
+public:
+    std::optional<INT_MATCHER> m_CuCount;
+    std::vector<std::string>   m_CuNames;
+
+private:
+    void RunTest( const BOARD& aBrd ) const override
+    {
+        int actualCount = aBrd.GetCopperLayerCount();
+
+        if( m_CuCount.has_value() )
+        {
+            BOOST_TEST_CONTEXT( "Layer count: " + m_CuCount->Describe() )
+            {
+                m_CuCount->Test( actualCount );
+            }
+        }
+
+        if( !m_CuNames.empty() )
+        {
+            std::vector<std::string> actualNames;
+            const LSET               cuLayers = aBrd.GetLayerSet() & LSET::AllCuMask();
+
+            for( const auto& layer : cuLayers )
+            {
+                actualNames.push_back( aBrd.GetLayerName( layer ).ToStdString() );
+            }
+
+            BOOST_REQUIRE( actualNames.size() == m_CuNames.size() );
+
+            for( size_t i = 0; i < m_CuNames.size(); ++i )
+            {
+                BOOST_TEST_CONTEXT( "Expecting Cu layer name: '" << m_CuNames[i] << "'" )
+                {
+                    BOOST_TEST( actualNames[i] == m_CuNames[i] );
+                }
+            }
+        }
+    }
+
+    std::string GetName() const override
+    {
+        return std::string( "Layers: " ) + ( m_CuCount.has_value() ? m_CuCount->Describe() : "N/A" );
+    }
+};
+
+
 static std::unique_ptr<BOARD_EXPECTATION> createFootprintExpectation( const nlohmann::json& aExpectationEntry )
 {
     auto footprintExpectation = std::make_unique<FOOTPRINT_EXPECTATION>();
@@ -336,6 +405,32 @@ static std::unique_ptr<BOARD_EXPECTATION> createNetExpectation( const nlohmann::
 }
 
 
+static std::unique_ptr<BOARD_EXPECTATION> createLayerExpectation( const nlohmann::json& aExpectationEntry )
+{
+    auto layerExpectation = std::make_unique<LAYER_EXPECTATION>();
+
+    if( aExpectationEntry.contains( "cuNames" ) )
+    {
+        const auto&              cuNamesEntry = aExpectationEntry["cuNames"];
+        std::vector<std::string> cuNames = getStringArray( cuNamesEntry );
+        layerExpectation->m_CuNames = std::move( cuNames );
+    }
+
+    if( aExpectationEntry.contains( "count" ) )
+    {
+        const auto& countEntry = aExpectationEntry["cuCount"];
+        layerExpectation->m_CuCount = INT_MATCHER::FromJson( countEntry );
+    }
+    else if( layerExpectation->m_CuNames.size() > 0 )
+    {
+        // If specific layer names are specified, we expect that many layers
+        layerExpectation->m_CuCount = INT_MATCHER::Exact( static_cast<int>( layerExpectation->m_CuNames.size() ) );
+    }
+
+    return layerExpectation;
+}
+
+
 std::unique_ptr<BOARD_EXPECTATION_TEST> BOARD_EXPECTATION_TEST::CreateFromJson( const std::string&    aBrdName,
                                                                                 const nlohmann::json& aBrdExpectations )
 {
@@ -370,6 +465,10 @@ std::unique_ptr<BOARD_EXPECTATION_TEST> BOARD_EXPECTATION_TEST::CreateFromJson( 
         else if( expectationType == "net" )
         {
             expectation = createNetExpectation( expectationEntry );
+        }
+        else if( expectationType == "layers" )
+        {
+            expectation = createLayerExpectation( expectationEntry );
         }
         else
         {
