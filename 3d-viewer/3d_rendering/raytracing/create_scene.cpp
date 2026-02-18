@@ -64,9 +64,7 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
     float ca = 1.0f - aTransparency;
     ca       = 1.00f - 1.05f * ca * ca * ca;
 
-    // Squaring gray value makes darker colors more opaque, which improves appearance
-    // of dark solder masks like black where copper would otherwise show through
-    return glm::max( glm::min( aGrayColorValue * aGrayColorValue * ca + aaa, 1.0f ), 0.0f );
+    return glm::max( glm::min( aGrayColorValue * ca + aaa, 1.0f ), 0.0f );
 }
 
 /**

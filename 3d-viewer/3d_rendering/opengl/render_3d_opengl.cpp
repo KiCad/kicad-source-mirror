@@ -48,8 +48,8 @@
 
 /**
  * Attempt to control the transparency based on the gray value of the color.
- * This function applies a non-linear transformation that makes darker colors more opaque,
- * preventing copper show-through on dark solder masks like black.
+ * This function applies a non-linear transformation that reduces transparency
+ * for darker colors while preserving copper visibility through the solder mask.
  *
  * @param aGrayColorValue - diffuse gray value (0.0 to 1.0)
  * @param aTransparency - base transparency value (0.0 opaque to 1.0 transparent)
@@ -63,9 +63,7 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
     float ca = 1.0f - aTransparency;
     ca       = 1.00f - 1.05f * ca * ca * ca;
 
-    // Squaring gray value makes darker colors more opaque, which improves appearance
-    // of dark solder masks like black where copper would otherwise show through
-    return glm::clamp( aGrayColorValue * aGrayColorValue * ca + aaa, 0.0f, 1.0f );
+    return glm::clamp( aGrayColorValue * ca + aaa, 0.0f, 1.0f );
 }
 
 /**
