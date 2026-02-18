@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-18 21:26+0000\n"
+"PO-Revision-Date: 2026-02-19 09:32+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -9116,9 +9116,9 @@ msgid "Library not found in library table"
 msgstr "Knihovna nebyla nalezena v tabulce knihoven symbolů."
 
 #: common/libraries/library_manager.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Knihovna: "
+msgstr "Knihovna '%s': %s"
 
 #: common/libraries/library_manager.cpp:1336
 #, fuzzy, c-format
@@ -9653,9 +9653,9 @@ msgid "KiCad Classic"
 msgstr "KiCad klasik"
 
 #: common/startwizard/startwizard.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome to KiCad %s"
-msgstr "Vítejte v KiCadu %s!"
+msgstr "Vítejte v KiCadu %s"
 
 #: common/startwizard/startwizard.cpp:84
 msgid ""
@@ -11517,9 +11517,8 @@ msgid "Save..."
 msgstr "Uložit..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:149
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Zobrazení:"
+msgstr "PPI displeje: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:156
 msgid "Detect"
@@ -23834,9 +23833,8 @@ msgstr "Smazat měření"
 
 #: eeschema/sim/simulator_frame_ui.cpp:653
 #: eeschema/sim/simulator_frame_ui.cpp:674
-#, fuzzy
 msgid "Cursor "
-msgstr "Kurzor 1"
+msgstr "Kurzor "
 
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:1172
@@ -24396,9 +24394,8 @@ msgid "Select Symbol Library"
 msgstr "Vybrat knihovnu symbolu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:94
-#, fuzzy
 msgid "Library:"
-msgstr "Knihovna: "
+msgstr "Knihovna:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:113
 #: eeschema/tools/symbol_editor_control.cpp:925
@@ -27644,9 +27641,8 @@ msgid "Unable to access the symbol library manager."
 msgstr "Selhalo vytvoření souboru knihovny symbolu '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1286
-#, fuzzy
 msgid "Unable to parse the downloaded symbol."
-msgstr "Nelze vytvořit adresář pro stahování!"
+msgstr "Nelze zpracovat stažený symbol."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1301
 #, fuzzy
@@ -31823,9 +31819,9 @@ msgid "%d out of %d operations were initialized but not successful."
 msgstr ""
 
 #: kicad/project_template.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the template path '%s'"
-msgstr "Nelze otevřít cestu šablon!"
+msgstr "Nelze otevřít cestu šablon '%s'"
 
 #: kicad/project_template.cpp:59
 #, fuzzy, c-format
@@ -35910,9 +35906,8 @@ msgid "Min track width"
 msgstr "Minimální šířka spoje"
 
 #: pcbnew/board_statistics_report.cpp:574
-#, fuzzy
 msgid "Min drill diameter"
-msgstr "Minimální průměr díry: "
+msgstr "Minimální průměr díry"
 
 #: pcbnew/board_statistics_report.cpp:577
 #, fuzzy
@@ -36067,14 +36062,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "CHARAKTERISTIKA DESKY"
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:78
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Počet vrstev mědi:"
+msgstr "Počet vrstev mědi: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:82
-#, fuzzy
 msgid "Board thickness: "
-msgstr "Tloušťka desky:"
+msgstr "Tloušťka desky: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:89
 msgid "Board overall dimensions: "
@@ -36089,9 +36082,8 @@ msgid "Min hole diameter: "
 msgstr "Minimální průměr díry: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:107
-#, fuzzy
 msgid "Copper finish: "
-msgstr "Povrch mědi:"
+msgstr "Úprava měděného povrchu: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:110
 #, fuzzy
@@ -36107,9 +36099,8 @@ msgid "Press-fit pads: "
 msgstr ""
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:121
-#, fuzzy
 msgid "Plated board edge: "
-msgstr "Pokovené okraje desky"
+msgstr "Pokovené okraje desky: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:130
 msgid "Yes, Bevelled"
@@ -36745,7 +36736,7 @@ msgstr "Posun tvaru:"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:141
 msgid "Text & Graphics"
-msgstr "Text & grafika"
+msgstr "Text a grafika"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:148
 msgid "Defaults"
@@ -36839,9 +36830,8 @@ msgid "Min track width:"
 msgstr "Minimální šířka spoje:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:131
-#, fuzzy
 msgid "Min drill diameter:"
-msgstr "Minimální průměr díry: "
+msgstr "Minimální průměr díry:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:132
 #, fuzzy
@@ -42905,9 +42895,8 @@ msgid "Track and Via Dimensions"
 msgstr "Spoje a prokovy Rozměry"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:59
-#, fuzzy
 msgid "Target Skew: "
-msgstr "Cílové zkosení:"
+msgstr "Cílové zkosení: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:60
 #, fuzzy
@@ -43185,9 +43174,8 @@ msgid "Import references"
 msgstr "Reference modulu"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:313
-#, fuzzy
 msgid "Footprint:"
-msgstr "Pouzdro: "
+msgstr "Pouzdro:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:321
 #, fuzzy
@@ -43740,25 +43728,23 @@ msgid "Minimum clearance:"
 msgstr "Min. izolační mezera:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:64
-#, fuzzy
 msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimální izolační mezera mezi měděnými prvky, které nepatří do stejné "
-"sítě.  Je-li definována, jedná se o absolutní minimum, které nelze snížit "
-"třídou spojů, vlastními pravidly nebo jinými nastaveními."
+"Minimální izolační mezera mezi měděnými prvky, které nepatří do stejné sítě. "
+"Je-li definována, jedná se o absolutní minimum, které nelze snížit třídou "
+"spojů, vlastními pravidly nebo jinými nastaveními."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:75
 msgid "Minimum track width:"
 msgstr "Minimální šířka spoje:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:80
-#, fuzzy
 msgid ""
 "The minimum track width. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimální šířka spoje.  Pokud je nastavena, jedná se o absolutní minimum a "
+"Minimální šířka spoje. Pokud je nastavena, jedná se o absolutní minimum a "
 "nelze ji snížit pomocí Třídy spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:92
@@ -43774,12 +43760,11 @@ msgid "Minimum annular width:"
 msgstr "Minimální šířka prstence:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:114
-#, fuzzy
 msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimální šířka prstence.  Je-li nastavena, jedná se o absolutní minimum a "
+"Minimální šířka prstence. Je-li nastavena, jedná se o absolutní minimum a "
 "nelze ji snížit pomocí třídy spojů, vlastních pravidel nebo jiných nastavení."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
@@ -43787,11 +43772,10 @@ msgid "Minimum via diameter:"
 msgstr "Minimální průměr prokovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:130
-#, fuzzy
 msgid ""
 "The minimum via diameter. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minimální průměr prokovu.  Je-li nastaven, jedná se o absolutní minimum a "
+"Minimální průměr prokovu. Je-li nastaven, jedná se o absolutní minimum a "
 "nelze jej snížit pomocí třídy spojů, vlastních pravidel nebo jiných "
 "nastavení."
 
@@ -43800,27 +43784,25 @@ msgid "Copper to hole clearance:"
 msgstr "Izolační mezera díry a mědi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid ""
 "The minimum clearance between a hole and an unassociated copper item. If "
 "set, this can only be reduced by custom rules."
 msgstr ""
-"Minimální izolační mezera mezi otvorem a neasociovaným měděným prvkem.  "
-"Pokud je definován, jedná se o absolutní minimum, které nelze snížit "
-"vlastními pravidly nebo jinými parametry."
+"Minimální izolační mezera mezi otvorem a neasociovaným měděným prvkem. Pokud "
+"je definován, jedná se o absolutní minimum, které nelze snížit vlastními "
+"pravidly nebo jinými parametry."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:157
 msgid "Copper to edge clearance:"
 msgstr "Izolační mezera hrany a mědi:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:162
-#, fuzzy
 msgid ""
 "The minimum clearance between the board edge and any copper item. If set, "
 "this can only be reduced by custom rules."
 msgstr ""
-"Minimální izolační mezera mezi hranou desky a jakoukoli položkou mědi.  Je-"
-"li nastaveno, jedná se o absolutní minimum a nelze jej redukovat vlastními "
+"Minimální izolační mezera mezi hranou desky a jakoukoli položkou mědi. Je-li "
+"nastaveno, jedná se o absolutní minimum a nelze jej redukovat vlastními "
 "pravidly nebo jiným nastavením."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:173
@@ -43842,12 +43824,11 @@ msgid "Minimum through hole:"
 msgstr "Minimální průchozí díra:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum through-hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimální velikost průchozí díry.  Je-li nastavena, jedná se o absolutní "
+"Minimální velikost průchozí díry. Je-li nastavena, jedná se o absolutní "
 "minimum a nelze ji snížit pomocí třídy spojů, vlastních pravidel nebo jiných "
 "nastavení."
 
@@ -43856,13 +43837,12 @@ msgid "Hole to hole clearance:"
 msgstr "Izolační mezera mezi dírami:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:235
-#, fuzzy
 msgid ""
 "The minimum clearance between two drilled holes. If set, this can only be "
 "reduced by custom rules. (Note: does not apply to milled holes.)"
 msgstr ""
-"Minimální vzdálenost mezi dvěma vyvrtanými otvory.   Je-li nastaveno, jedná "
-"se o absolutní minimum a nelze jej redukovat vlastními pravidly nebo jiným "
+"Minimální vzdálenost mezi dvěma vyvrtanými otvory. Je-li nastaveno, jedná se "
+"o absolutní minimum a nelze jej redukovat vlastními pravidly nebo jiným "
 "nastavením. (Poznámka: nevztahuje se na frézované otvory.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:243
@@ -43874,12 +43854,11 @@ msgid "Minimum uVia diameter:"
 msgstr "Minimální průměr mikroprokov:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:276
-#, fuzzy
 msgid ""
 "The minimum diameter for micro-vias. If set, this can only be reduced by "
 "custom rules."
 msgstr ""
-"Minimální průměr pro mikro-prokovy.  Je-li nastaven, jedná se o absolutní "
+"Minimální průměr pro mikro-prokovy. Je-li nastaven, jedná se o absolutní "
 "minimum a nelze jej snížit pomocí třídy spojů, vlastních pravidel nebo "
 "jiných nastavení."
 
@@ -43888,12 +43867,11 @@ msgid "Minimum uVia hole:"
 msgstr "Minimální díra uProkovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:292
-#, fuzzy
 msgid ""
 "The minimum micro-via hole size. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"Minimální velikost otvoru mikro-prokovu.  Je-li nastavena, jedná se o "
+"Minimální velikost otvoru mikro-prokovu. Je-li nastavena, jedná se o "
 "absolutní minimum a nelze ji snížit pomocí tříd spojů, vlastních pravidel "
 "nebo jiných nastavení."
 
@@ -50418,9 +50396,8 @@ msgid "Press-fit pad"
 msgstr "Tisk stránky %d"
 
 #: pcbnew/pad.cpp:3244
-#, fuzzy
 msgid "Undefined"
-msgstr "Nedefinováno!"
+msgstr "Nedefinováno"
 
 #: pcbnew/pad.cpp:3256
 #, fuzzy
@@ -53608,14 +53585,14 @@ msgid "Importing '%s' using %s format...\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "DPS úspěšně přečíslována"
+msgstr "Importovaná deska byla úspěšně uložena do '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3009
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Chyba načítání pouzdra"
+msgstr "Chyba při importování: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -57801,9 +57778,9 @@ msgid "Design block placement failed - no footprints were placed."
 msgstr "Soubor s metadaty návrhových bloků '%s' nelze přečíst."
 
 #: pcbnew/tools/pcb_control.cpp:1614
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Pouzdro %s je uzamčeno, přeskakuji jeho odstranění.\n"
+msgstr "Pouzdro %s je uzamčeno a nemůže být umístěno."
 
 #: pcbnew/tools/pcb_control.cpp:1631
 #, fuzzy
@@ -57870,7 +57847,7 @@ msgstr "Vyřešeno izolační mezera pro vrstvu \\ \"margin \\\""
 
 #: pcbnew/tools/pcb_control.cpp:2473
 msgid "Pad Size"
-msgstr "Velikost plošky "
+msgstr "Velikost plošky"
 
 #: pcbnew/tools/pcb_control.cpp:2505
 msgid "Selected Items"
