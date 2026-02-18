@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-13 23:09+0000\n"
+"PO-Revision-Date: 2026-02-18 09:10+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -15114,15 +15114,14 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "Tutti i pin con numeri duplicati sono ponticelli"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
-#, fuzzy
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number.  "
 "Pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
-"Se abilitata, questo simbolo potrà avere più di un pin con lo stesso numero "
-"e i pin con lo stesso numero saranno considerati come collegati tra loro "
-"internamente."
+"Se abilitata, questo simbolo potrà avere più di un pin con lo stesso "
+"numero.  I pin con lo stesso numero saranno considerati come collegati tra "
+"loro internamente."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
@@ -21352,9 +21351,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "URL ipertestuale '%s' non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "Impossibile analizzare %s come simbolo"
+msgstr "Impossibile analizzare '%s' come intestazione."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -43336,7 +43335,6 @@ msgid "Place items in group:"
 msgstr "Piazza elementi in gruppo:"
 
 #: pcbnew/dialogs/panel_setup_condition_help_1clauses.h:2
-#, fuzzy
 msgid ""
 "### Clause\n"
 "\n"
@@ -43346,9 +43344,9 @@ msgid ""
 msgstr ""
 "### Proposizione\n"
 "\n"
-"    (condizione \"<espressione>\")\n"
+"    (condition \"<espressione>\")\n"
 "\n"
-"<br>"
+"<br>\n"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -47672,6 +47670,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Impossibile salvare a causa di errori di validazione nella regola '%s':\n"
+"\n"
+"%s"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:564
 msgid "Are you sure you want to delete?"
@@ -47682,54 +47683,53 @@ msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
 msgstr ""
+"Più regole con lo stesso nome hanno condizioni diverse. Le regole con lo "
+"stesso nome devono avere condizioni identiche per poter essere unite."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1204
-#, fuzzy
 msgid ""
 "The following rules have unsaved changes:\n"
 "\n"
 msgstr ""
-"I file seguenti verranno sovrascritti:\n"
+"Le seguenti regole presentano modifiche non salvate:\n"
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1209
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
-msgstr "Annullare il processo di esportazione?"
+msgstr ""
+"\n"
+"Salvare i cambiamenti?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1370
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "Fallita lettura del file '%s'."
+msgstr "Fallito ricaricamento regole DRC: '%s'"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Length must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "La lunghezza minima deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:89
-#, fuzzy
 msgid "Optimum Length must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "La lunghezza ottimale deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Length must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "La lunghezza massima deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
 msgid "Minimum Length cannot be greater than Optimum Length"
-msgstr ""
+msgstr "La lunghezza minima non può essere maggiore della lunghezza ottimale"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:99
 msgid "Optimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "La lunghezza ottimale non può essere maggiore della lunghezza massima"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:102
 msgid "Minimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "La lunghezza minima non può essere maggiore della lunghezza massima"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_panel_base.cpp:36
 msgid "Minimum Length"
@@ -47745,28 +47745,27 @@ msgstr "Lunghezza massima"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
 msgid "Allow 0°"
-msgstr ""
+msgstr "Permetti 0°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 90°"
-msgstr ""
+msgstr "Permetti 90°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
 msgid "Allow 180°"
-msgstr ""
+msgstr "Permetti 180°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
-msgstr ""
+msgstr "Permetti 270°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
 msgid "Allow All"
-msgstr ""
+msgstr "Permetti tutto"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:79
-#, fuzzy
 msgid "At least one orientation must be selected"
-msgstr "Bisogna selezionare almeno uno strato\n"
+msgstr "Bisogna selezionare almeno un orientamento"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
 msgid "0 Degrees"
@@ -47789,9 +47788,8 @@ msgid "All Orientations"
 msgstr "Tutti gli orientamenti"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
-#, fuzzy
 msgid "Allow"
-msgstr "Giallo"
+msgstr "Permetti"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_panel_base.cpp:31
 msgid "Check Me!"
@@ -47861,48 +47859,41 @@ msgid "Remove this condition"
 msgstr "Elimina questa condizione"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_constraint_data.h:57
-#, fuzzy
 msgid "Rule text cannot be empty"
-msgstr "Il testo non può essere vuoto."
+msgstr "Il testo della regola non può essere vuoto"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:51
-#, fuzzy
 msgid "Check Syntax"
-msgstr "Controlla la sintassi regole"
+msgstr "Controlla la sintassi"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:286
-#, fuzzy
 msgid "No rule text to check."
-msgstr "Nessun ulteriore elemento da mostrare"
+msgstr "Nessun testo regole da controllare."
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:296
-#, fuzzy
 msgid "Custom rule"
-msgstr "Regole personalizzate"
+msgstr "Regola personalizzata"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:302
 #, c-format
 msgid "ERROR at line %d, column %d: %s"
-msgstr ""
+msgstr "ERRORE alla riga %d, colonna %d: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:317
 msgid "Syntax check passed with warnings:\n"
-msgstr ""
+msgstr "Controllo della sintassi superato con avvisi:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:321
-#, fuzzy
 msgid "Syntax OK"
-msgstr "Aiuto sintattico"
+msgstr "Sintassi OK"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:80
-#, fuzzy
 msgid "Minimum Text Height must be greater than 0"
-msgstr "L'altezza dielettrico deve essere maggiore di 0"
+msgstr "L'altezza minima del testo deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:83
-#, fuzzy
 msgid "Minimum Text Thickness must be greater than 0"
-msgstr "Lo spessore dello strato segnali deve essere maggiore di 0"
+msgstr "Lo spessore minimo del testo deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:51
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp:53
@@ -47936,24 +47927,20 @@ msgid "Minimum Text Thickness"
 msgstr "Spessore minimo testo"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:90
-#, fuzzy
 msgid "Numeric input value must be greater than 0"
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "Il valore numerico in ingresso deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:57
-#, fuzzy
 msgid "Allow top Layer"
-msgstr "Tutti gli strati rame"
+msgstr "Permetti strato superiore"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:58
-#, fuzzy
 msgid "Allow bottom Layer"
-msgstr "Strato inferiore"
+msgstr "Permetti strato inferiore"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:67
-#, fuzzy
 msgid "At least one layer must be selected"
-msgstr "Bisogna selezionare almeno uno strato\n"
+msgstr "Bisogna selezionare almeno uno strato"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
 msgid "Top Layer"
@@ -47964,31 +47951,34 @@ msgid "Bottom Layer"
 msgstr "Strato inferiore"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
-#, fuzzy
 msgid "Minimum Routing Width is required"
-msgstr "Larghezza min di sbroglio"
+msgstr "La larghezza minima sbroglio è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
-#, fuzzy
 msgid "Preferred Routing Width is required"
-msgstr "Larghezza preferita di sbroglio"
+msgstr "La larghezza preferita sbroglio è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
-#, fuzzy
 msgid "Maximum Routing Width is required"
-msgstr "Larghezza max di sbroglio"
+msgstr "La larghezza massima sbroglio è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:82
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
 msgstr ""
+"La larghezza minima di sbroglio non può essere maggiore della larghezza "
+"preferita"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:85
 msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
 msgstr ""
+"La larghezza di sbroglio preferita non può essere maggiore della larghezza "
+"massima"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:88
 msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
 msgstr ""
+"La larghezza minima di sbroglio non può essere maggiore della larghezza "
+"massima"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_panel_base.cpp:36
 msgid "Minimum Routing Width"
@@ -48003,67 +47993,56 @@ msgid "Maximum Routing Width"
 msgstr "Larghezza max di sbroglio"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Minimum Width is required"
-msgstr "Larghezza minima"
+msgstr "La larghezza minima è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Preferred Width is required"
-msgstr "Larghezza preferita di sbroglio"
+msgstr "La larghezza preferita è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:83
-#, fuzzy
 msgid "Maximum Width is required"
-msgstr "Larghezza massima:"
+msgstr "La larghezza massima è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Gap is required"
-msgstr "Dimensioni minime isola:"
+msgstr "Lo spazio minimo è necessario"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:89
 msgid "Preferred Gap is required"
-msgstr ""
+msgstr "Lo spazio preferito è necessario"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Gap is required"
-msgstr "N° max backup per giorno:"
+msgstr "Lo spazio massimo è necessario"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:95
-#, fuzzy
 msgid "Maximum Uncoupled Length is required"
-msgstr "Lunghezza max disaccoppiamento"
+msgstr "La lunghezza max disaccoppiamento è necessaria"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:100
-#, fuzzy
 msgid "Minimum Width cannot be greater than Preferred Width"
-msgstr "La larghezza linea deve essere maggiore di zero."
+msgstr "La larghezza minima deve essere maggiore della preferita"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:103
-#, fuzzy
 msgid "Preferred Width cannot be greater than Maximum Width"
-msgstr ""
-"I raggi dei raccordi termici non possono essere meno della larghezza minima."
+msgstr "La larghezza preferita non può essere maggiore della massima"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:106
-#, fuzzy
 msgid "Minimum Width cannot be greater than Maximum Width"
-msgstr ""
-"I raggi dei raccordi termici non possono essere meno della larghezza minima."
+msgstr "La larghezza minima non può essere maggiore della larghezza"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:109
 msgid "Minimum Gap cannot be greater than Preferred Gap"
-msgstr ""
+msgstr "Lo spazio minimo non può essere maggiore del preferito"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:112
 msgid "Preferred Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "Lo spazio preferito non può essere maggiore del minimo"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:115
 msgid "Minimum Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "Lo spazio minimo non può essere maggiore del massimo"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp:33
 msgid "Max Uncoupled Length"
@@ -48091,58 +48070,58 @@ msgid "Preferred"
 msgstr "Preferito"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:76
-#, fuzzy
 msgid "Minimum Via Diameter must be greater than 0"
-msgstr "L'impedenza obiettivo deve essere maggiore di 0"
+msgstr "Il diametro minimo via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:79
-#, fuzzy
 msgid "Preferred Via Diameter must be greater than 0"
-msgstr "L'impedenza obiettivo deve essere maggiore di 0"
+msgstr "Il diametro preferito via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:82
-#, fuzzy
 msgid "Maximum Via Diameter must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "Il diametro massimo via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Via Hole Size must be greater than 0"
-msgstr "Lo spessore dello strato segnali deve essere maggiore di 0"
+msgstr "La dimensione minima del foro del via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:89
-#, fuzzy
 msgid "Preferred Via Hole Size must be greater than 0"
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "La dimensione preferita del foro del via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Via Hole Size must be greater than 0"
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "La dimensione massima del foro del via deve essere maggiore di 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:96
 msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
 msgstr ""
+"Il diametro minimo del via non può essere maggiore del diametro preferito"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:99
 msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
 msgstr ""
+"Il diametro preferito del via non può essere maggiore del diametro massimo"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:102
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr ""
+msgstr "Il diametro minimo del via non può essere maggiore del diametro massimo"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:106
 msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
 msgstr ""
+"La dimensione minima del foro del via non può essere maggiore della preferita"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:109
 msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr ""
+"La dimensione preferita del foro del via non può essere maggiore della "
+"massima"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:112
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr ""
+"La dimensione minima del foro del via non può essere maggiore della massima"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_panel_base.cpp:29
 #: pcbnew/tools/board_inspection_tool.cpp:657
@@ -48157,38 +48136,38 @@ msgstr "Dimensione foro via"
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:334
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:376
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:571
-#, fuzzy, c-format
+#, c-format
 msgid "%s should not be empty."
-msgstr "Il percorso non può essere vuoto."
+msgstr "%s non può essere vuoto."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:341
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:603
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid number."
-msgstr "La scala deve essere un numero positivo."
+msgstr "Il valore di %s deve essere un numero valido."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:348
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:390
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:557
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:591
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be greater than 0."
-msgstr "Il raggio deve essere maggiore di 0"
+msgstr "Il valore di %s deve essere maggiore di 0."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:383
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:585
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid integer."
-msgstr "Il valore del campo non può essere vuoto."
+msgstr "Il valore di %s deve essere un intero valido."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:417
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose %s."
-msgstr "Scegliere un file netlist valido."
+msgstr "Scegliere %s."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:447
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:484
@@ -48198,15 +48177,15 @@ msgstr "Scegliere un file netlist valido."
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:651
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:657
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:663
-#, fuzzy, c-format
+#, c-format
 msgid "%s value cannot be greater than %s value."
-msgstr "L'angolo dell'arco deve essere maggiore di 0"
+msgstr "Il valore %s deve essere maggiore del valore %s."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:533
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:681
-#, fuzzy, c-format
+#, c-format
 msgid "Please select at least one option from %s list."
-msgstr "Selezionare un file da importare."
+msgstr "Selezionare almeno una opzione dall'elenco %s."
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
 msgid "Rule type"
@@ -48217,14 +48196,12 @@ msgid "Rule name"
 msgstr "Nome regola"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:369
-#, fuzzy
 msgid "Rule name must be unique."
-msgstr "Il nome del sottomodello non è univoco: "
+msgstr "Il nome della regola deve essere univoco."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:377
-#, fuzzy
 msgid "Layer selection is required."
-msgstr "Selezione strato:"
+msgstr "La selezione dello strato è necessaria."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:850
 msgid "ERROR: No condition text provided for validation."
@@ -48249,14 +48226,13 @@ msgstr "Mostra corrispondenze"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:995
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1037
-#, fuzzy
 msgid "outer"
-msgstr "Non sbrogliato"
+msgstr "esterno"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1039
 msgid "inner"
-msgstr ""
+msgstr "interno"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
 msgid "Constraint"
@@ -48357,9 +48333,9 @@ msgid "Error creating drill report file '%s'"
 msgstr "Errore creando il file rapporto forature '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing drill report file '%s'"
-msgstr "Errore creando il file rapporto forature '%s'"
+msgstr "Errore nella scrittura del file rapporto forature '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:140
 #, c-format
@@ -48834,9 +48810,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memoria esaurita caricando il C.S. '%s'"
 
 #: pcbnew/files.cpp:737
-#, fuzzy
 msgid "Finalizing board"
-msgstr "Capovolgi scheda"
+msgstr "Finalizzazione scheda"
 
 #: pcbnew/files.cpp:782 pcbnew/pcb_edit_frame.cpp:1548
 msgid "Could not load component class assignment rules"
@@ -50279,6 +50254,9 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Attenzione: nell'impronta %s '%s' manca un nome di libreria. Utilizzare il "
+"formato completo 'Libreria:Impronta' per evitare la ripetizione delle "
+"notifiche di aggiornamento."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2197
 #, c-format
@@ -51075,6 +51053,11 @@ msgid ""
 "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
 "later and re-save, then import the resulting file."
 msgstr ""
+"Questo file è stato creato con %s, che utilizza un formato binario "
+"precedente ad Allegro 16.0 e non è supportato da questo importatore.\n"
+"\n"
+"Per importare questo progetto, aprilo in Cadence Allegro PCB Editor versione "
+"16.0 o successiva e salvalo nuovamente, quindi importa il file risultante."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:172
 msgid "Failed to build board from Allegro data"
@@ -52794,9 +52777,10 @@ msgid "Skipping track on non-copper layer %d"
 msgstr "Salto della traccia sul strato non rame %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1432
-#, fuzzy, c-format
+#, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
-msgstr "Testo sul strato non mappato %d assegnato allo strato Commenti"
+msgstr ""
+"Elemento RAME su strato non mappato %d assegnato in modo predefinito a F.Cu"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1661
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
