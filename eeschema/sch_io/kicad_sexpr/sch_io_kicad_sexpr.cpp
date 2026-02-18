@@ -548,6 +548,16 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         if( !sig.GetNetClass().IsEmpty() )
             m_out->Print( " (net_class %s)", m_out->Quotew( sig.GetNetClass() ).c_str() );
 
+        if( sig.GetColor() != KIGFX::COLOR4D::UNSPECIFIED )
+        {
+            const KIGFX::COLOR4D& c = sig.GetColor();
+            m_out->Print( " (color %d %d %d %s)",
+                          KiROUND( c.r * 255.0 ),
+                          KiROUND( c.g * 255.0 ),
+                          KiROUND( c.b * 255.0 ),
+                          FormatDouble2Str( c.a ).c_str() );
+        }
+
         m_out->Print( ")" );
     }
 

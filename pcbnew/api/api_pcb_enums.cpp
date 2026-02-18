@@ -308,6 +308,11 @@ CustomRuleConstraintType ToProtoEnum( DRC_CONSTRAINT_T aValue )
     case VIA_DANGLING_CONSTRAINT:         return CustomRuleConstraintType::CRCT_VIA_DANGLING;
     case BRIDGED_MASK_CONSTRAINT:         return CustomRuleConstraintType::CRCT_BRIDGED_MASK;
     case SOLDER_MASK_SLIVER_CONSTRAINT:   return CustomRuleConstraintType::CRCT_SOLDER_MASK_SLIVER;
+    case SIGNAL_LENGTH_CONSTRAINT:        return CustomRuleConstraintType::CRCT_SIGNAL_LENGTH;
+    case NET_CHAIN_STUB_LENGTH_CONSTRAINT:
+        return CustomRuleConstraintType::CRCT_NET_CHAIN_STUB_LENGTH;
+    case NET_CHAIN_RETURN_PATH_CONSTRAINT:
+        return CustomRuleConstraintType::CRCT_NET_CHAIN_RETURN_PATH;
 
     default:
         wxCHECK_MSG( false, CustomRuleConstraintType::CRCT_UNKNOWN,
@@ -358,6 +363,9 @@ DRC_CONSTRAINT_T FromProtoEnum( CustomRuleConstraintType aValue )
     case CustomRuleConstraintType::CRCT_VIA_DANGLING:          return VIA_DANGLING_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_BRIDGED_MASK:          return BRIDGED_MASK_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_SOLDER_MASK_SLIVER:    return SOLDER_MASK_SLIVER_CONSTRAINT;
+    case CustomRuleConstraintType::CRCT_SIGNAL_LENGTH:         return SIGNAL_LENGTH_CONSTRAINT;
+    case CustomRuleConstraintType::CRCT_NET_CHAIN_STUB_LENGTH: return NET_CHAIN_STUB_LENGTH_CONSTRAINT;
+    case CustomRuleConstraintType::CRCT_NET_CHAIN_RETURN_PATH: return NET_CHAIN_RETURN_PATH_CONSTRAINT;
 
     default:
         wxCHECK_MSG( false, NULL_CONSTRAINT,
