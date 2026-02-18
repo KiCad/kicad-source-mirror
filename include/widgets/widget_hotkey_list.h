@@ -47,7 +47,7 @@ public:
      * @param aParent is the parent widget.
      * @param aHotkeys is the #EDA_HOTKEY_CONFIG data: a hotkey store is constructed from this.
      */
-    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly );
+    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore );
 
     /**
      * Apply a filter string to the hotkey list, selecting which hotkeys to show.
@@ -162,7 +162,6 @@ private:
 
 private:
     HOTKEY_STORE&  m_hk_store;
-    bool           m_readOnly;
 
     std::unordered_map<long, wxString> m_reservedHotkeys;
 

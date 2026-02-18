@@ -42,7 +42,7 @@ class wxSearchCtrl;
 class PANEL_HOTKEYS_EDITOR : public RESETTABLE_PANEL
 {
 public:
-    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
+    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow );
     ~PANEL_HOTKEYS_EDITOR();
 
     std::vector<TOOL_ACTION*>& ActionsList() { return m_actions; }
@@ -90,7 +90,6 @@ private:
 
 protected:
     EDA_BASE_FRAME*            m_frame;
-    bool                       m_readOnly;
 
     std::vector<TOOL_ACTION*>  m_actions;
     HOTKEY_STORE               m_hotkeyStore;

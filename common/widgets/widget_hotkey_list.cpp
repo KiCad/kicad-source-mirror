@@ -513,16 +513,11 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 }
 
 
-WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore,
-                                        bool aReadOnly ) :
+WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore ) :
         wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
-        m_hk_store( aHotkeyStore ),
-        m_readOnly( aReadOnly )
+        m_hk_store( aHotkeyStore )
 {
-    wxString command_header = _( "Command" );
-
-    if( !m_readOnly )
-        command_header << wxS( " " ) << _( "(double-click to edit)" );
+    wxString command_header = _( "Command (double-click to edit)" );
 
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
@@ -568,13 +563,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     GetDataView()->SetIndent( 10 );
 
-    if( !m_readOnly )
-    {
-        // The event only apply if the widget is in editable mode
-        Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
-        Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
-        Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
-    }
+    Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
+    Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
+    Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
 }
 
 

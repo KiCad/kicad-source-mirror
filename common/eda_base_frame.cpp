@@ -1064,7 +1064,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         WX_BUSY_INDICATOR busy_cursor;
 
         WX_TREEBOOK*            book = dlg.GetTreebook();
-        PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
+        PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book );
         KIFACE*                 kiface = nullptr;
         std::vector<int>        expand;
 

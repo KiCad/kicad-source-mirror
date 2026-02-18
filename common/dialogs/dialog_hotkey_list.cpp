@@ -39,7 +39,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
     KIFACE*     kiface = nullptr;
 
-    m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
+    m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this );
 
     wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 
