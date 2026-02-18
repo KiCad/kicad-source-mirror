@@ -66,7 +66,7 @@ wxString SPICE_SIMULATOR::TypeToName( SIM_TYPE aType, bool aShortName )
     case ST_SP:      return aShortName ? wxString( wxT( "SP" ) )    : _( "S-Parameter Analysis" );
     case ST_FFT:     return aShortName ? wxString( wxT( "FFT" ) )   : _( "Frequency Content Analysis" );
     default:
-    case ST_UNKNOWN: return aShortName ? wxString( wxT( "??" ) )    : _( "Unknown" );
+    case ST_UNKNOWN: return aShortName ? wxString( wxT( "Custom" ) ) : _( "Custom" );
     }
 }
 

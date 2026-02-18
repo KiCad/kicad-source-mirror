@@ -37,6 +37,7 @@
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <sim/spice_circuit_model.h>
+#include <sim/spice_simulator.h>
 
 class TEST_NGSPICE_HELPERS
 {
@@ -195,6 +196,36 @@ BOOST_AUTO_TEST_CASE( VectorToSignal )
 
         BOOST_CHECK_EQUAL( retVal, step.type );
         BOOST_CHECK_EQUAL( outputSignalName.Cmp( step.signal ), 0 );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TypeToName )
+{
+    struct TEST_DATA
+    {
+        SIM_TYPE type;
+        wxString shortName;
+        wxString longName;
+    };
+
+    std::vector<struct TEST_DATA> testData = {
+        { ST_OP,      wxT( "OP" ),     _( "DC Operating Point" ) },
+        { ST_AC,      wxT( "AC" ),     _( "Small-Signal Analysis" ) },
+        { ST_DC,      wxT( "DC" ),     _( "DC Sweep Analysis" ) },
+        { ST_TRAN,    wxT( "TRAN" ),   _( "Transient Analysis" ) },
+        { ST_NOISE,   wxT( "NOISE" ),  _( "Noise Analysis" ) },
+        { ST_PZ,      wxT( "PZ" ),     _( "Pole-Zero Analysis" ) },
+        { ST_TF,      wxT( "TF" ),     _( "Transfer Function Analysis" ) },
+        { ST_SP,      wxT( "SP" ),     _( "S-Parameter Analysis" ) },
+        { ST_FFT,     wxT( "FFT" ),    _( "Frequency Content Analysis" ) },
+        { ST_UNKNOWN, wxT( "Custom" ), _( "Custom" ) },
+    };
+
+    for( auto& step : testData )
+    {
+        BOOST_CHECK_EQUAL( SPICE_SIMULATOR::TypeToName( step.type, true ), step.shortName );
+        BOOST_CHECK_EQUAL( SPICE_SIMULATOR::TypeToName( step.type, false ), step.longName );
     }
 }
 

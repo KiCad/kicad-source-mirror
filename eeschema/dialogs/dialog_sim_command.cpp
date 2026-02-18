@@ -621,7 +621,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
         m_commandType->Clear();
 
-        for( SIM_TYPE type : { ST_OP, ST_DC, ST_AC, ST_TRAN, ST_PZ, ST_NOISE, ST_SP, ST_FFT } )
+        for( SIM_TYPE type : { ST_OP, ST_DC, ST_AC, ST_TRAN, ST_PZ, ST_NOISE, ST_SP, ST_FFT, ST_UNKNOWN } )
         {
             m_commandType->Append( SPICE_SIMULATOR::TypeToName( type, true )
                                         + wxT( "  \u2014  " )
