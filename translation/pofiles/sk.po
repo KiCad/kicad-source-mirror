@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-17 01:10+0000\n"
+"PO-Revision-Date: 2026-02-18 02:12+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -6367,7 +6367,7 @@ msgstr "Vstup spoja"
 
 #: common/eda_item.cpp:415
 msgid "Bus Entry"
-msgstr "Vstup do zbernice"
+msgstr "Zbernicové pripojenie"
 
 #: common/eda_item.cpp:417 eeschema/sch_bitmap.cpp:194
 msgid "Bitmap"
@@ -7029,7 +7029,7 @@ msgstr "Nie je možné kopírovať súbor '%s'."
 
 #: common/gestfich.cpp:396
 msgid "Invalid directory name, cannot remove root"
-msgstr "Neplatný názov adresára, nie je možné odstrániť koreň"
+msgstr "Neplatný názov adresára, nie je možné odstrániť východzí"
 
 #: common/gestfich.cpp:404
 #, c-format
@@ -10388,9 +10388,8 @@ msgid "KiCad design block path"
 msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:372
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "Cesty knižnice stopy KiCad"
+msgstr "Cesty KiCad knižníc návrhových blokov"
 
 #: common/wildcards_and_files_ext.cpp:379
 msgid "Drawing sheet files"
@@ -10453,14 +10452,12 @@ msgid "Legacy footprint export files"
 msgstr "Staršie verzie súborov exportovaných puzdier"
 
 #: common/wildcards_and_files_ext.cpp:474
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Súbor na kontrolu elektronických pravidiel"
+msgstr "Súbor kontroly pravidiel elektronického návrhu"
 
 #: common/wildcards_and_files_ext.cpp:480
-#, fuzzy
 msgid "SPICE library file"
-msgstr "Súbor knižnice spice"
+msgstr "SPICE súbor knižnice"
 
 #: common/wildcards_and_files_ext.cpp:486
 msgid "SPICE netlist file"
@@ -10472,7 +10469,7 @@ msgstr "Súbor netlistov CadStar"
 
 #: common/wildcards_and_files_ext.cpp:498
 msgid "Symbol footprint association files"
-msgstr "Súbory priradenia symbolov a puzdier"
+msgstr "Súbory priradení symbolov a puzdier"
 
 #: common/wildcards_and_files_ext.cpp:504
 msgid "Zip file"
@@ -10516,19 +10513,17 @@ msgid "Jpeg file"
 msgstr "Súbor JPEG"
 
 #: common/wildcards_and_files_ext.cpp:568
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Zoznam klávesových skratiek"
+msgstr "Súbor klávesových skratiek"
 
 #: common/wildcards_and_files_ext.cpp:574
 msgid "KiCad jobset files"
 msgstr "Kicad súbory so sadami úloh"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr ""
-"Súbor rovnocennosti '%s' sa nenašiel v predvolených vyhľadávacích cestách."
+msgstr "Súbor ekvivalencie '%s' nebolo možné nájsť."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -10646,9 +10641,9 @@ msgid "Filtered by %s"
 msgstr "Filtrované podľa %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Chýba stopa"
+msgstr ": %i zhodných puzdier"
 
 #: cvpcb/cvpcb_mainframe.cpp:847
 #, c-format
@@ -10698,28 +10693,28 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 msgid "Footprint Association File"
-msgstr "Súbor priradenia puzdra"
+msgstr "Súbor priradení puzdier"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Súbor '%s' už v zozname existuje"
+msgstr "Súbor '%s' už v zozname existuje."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
 msgid "Footprint association files:"
-msgstr "Súbor priradenia puzdra:"
+msgstr "Súbor priradení puzdier:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 msgid "Add association file"
-msgstr "Pridať súbor priradenia"
+msgstr "Pridať súbor priradení"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
 msgid "Edit association file"
-msgstr "Upraviť súbor priradenia"
+msgstr "Upraviť súbor priradení"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
 msgid "Remove association file"
-msgstr "Odstrániť súbor priradenia"
+msgstr "Odstrániť súbor priradení"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Ref"
@@ -10740,10 +10735,10 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Priradenia puzdier zo schematického netlistu a súboru symbolov puzdier (."
-"cmp) sú konfliktné.\n"
+"Priradenia puzdra zo schematického netlistu a súboru priradení symbolov a "
+"puzdier (.cmp) sú v kolízii.\n"
 "\n"
-"Vyberte zadanie."
+"Vyberte prosím priradenie."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
@@ -10761,9 +10756,9 @@ msgid "Automatic Zoom on footprint change"
 msgstr "Automaticky prideľovať stopy"
 
 #: cvpcb/display_footprints_frame.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "puzdro ID \"%s\" nie je platné."
+msgstr "Puzdro ID '%s' nie je platné."
 
 #: cvpcb/display_footprints_frame.cpp:429
 #, c-format
@@ -10772,9 +10767,9 @@ msgstr "Knižnica '%s' sa nenachádza v tabuľke knižnice puzdier."
 
 #: cvpcb/display_footprints_frame.cpp:439
 #: cvpcb/display_footprints_frame.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "Stopa '%s' sa nenašla."
+msgstr "Puzdro '%s' nebolo nájdené."
 
 #: cvpcb/display_footprints_frame.cpp:451
 #, fuzzy
@@ -10792,31 +10787,28 @@ msgid "Lib: %s"
 msgstr "Knižnica: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:121
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Niektoré z priradených stôp sú staršie položky bez názvov knižníc. Prajete "
+"Niektoré z priradených puzdier sú staršie verzie bez názvov knižníc. Prajete "
 "si, aby sa ich Kicad pokúsil previesť do nového požadovaného formátu LIB_ID? "
 "(Ak odpoviete nie, potom sa tieto priradenia zrušia a budete ich musieť "
 "znova priradiť manuálne.)"
 
 #: cvpcb/readwrite_dlgs.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
-"Súčiastka \"%s\": puzdro \"%s \" <b>nenájdené</b> v žiadnej knižnici puzdier "
-"projektu.\n"
+"Súčiastka '%s' puzdro '%s' <b>neboli nenájdené</b> v žiadnej knižnici.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
-"Súčiastka \"%s\": puzdro \"%s\" bola nájdená v <b>niekoľkých</b> "
-"knižniciach.\n"
+"Súčiastka '%s': puzdro '%s' bola nájdená vo <b>viacerých</b> knižniciach.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "First check your footprint library table entries."
@@ -10854,35 +10846,32 @@ msgid "Footprint Filters:"
 msgstr "Filter puzdier:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
-#, fuzzy
 msgid "View Selected Footprint"
-msgstr "Zobraziť zvolené puzdro"
+msgstr "Zobraziť vybrané puzdro"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 msgid "Manage Footprint Association Files..."
-msgstr "Spravovať súbory asociácie puzdier..."
+msgstr "Spravovať súbory priradení puzdier..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
-"Upraviť zoznam súborov asociácie puzdier.  Tieto súbory sa používajú na "
-"automatické priraďovanie puzdier na základe hodnôt symbolov."
+"Upraviť zoznam súborov priradení puzdier.  Tieto súbory sú použité pri "
+"automatickom priraďovaní puzdier na základe hodnôt symbolov."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
 msgstr "Uložiť do schémy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr "Uložiť asociácie puzdier do polí schematických puzdier a súborov"
+msgstr "Uložiť priradenia puzdier do polí 'footprint' v schematických symboloch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Uložiť do schémy"
+msgstr "Uložiť do schémy a súboru"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
 msgid ""
@@ -10893,47 +10882,40 @@ msgstr ""
 "uložiť súbory so schémami"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
-msgstr "Vyberte ďalší nepriradený symbol"
+msgstr "Vybrať ďalší nepriradený symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
 msgstr "Vyberte ďalší symbol bez priradenia stopy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
-msgstr "Vyberte predchádzajúci nepriradený symbol"
+msgstr "Vybrať predchádzajúci nepriradený symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
 msgstr "Vyberte predchádzajúci symbol bez priradenia stopy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Priradiť puzdra"
+msgstr "Priradiť puzdro"
 
 #: cvpcb/tools/cvpcb_actions.cpp:132
-#, fuzzy
 msgid "Automatically Assign Footprints"
-msgstr "Automaticky prideľovať stopy"
+msgstr "Automaticky priradiť puzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Vyberte položku pre správu o riešení obmedzení."
+msgstr "Priradiť puzdra automaticky na základe súboru priradení puzdier"
 
 #: cvpcb/tools/cvpcb_actions.cpp:140
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Priradenia stôp"
+msgstr "Odstrániť priradenia puzdier"
 
 #: cvpcb/tools/cvpcb_actions.cpp:146
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Symbol: Priradenia stopy"
+msgstr "Odstrániť všetky priradenia puzdier"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
@@ -10961,22 +10943,21 @@ msgstr "Filtrujte zoznam stôp podľa knižnice"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
-msgstr "Vymazať všetky združenia?"
+msgstr "Odstrániť všetky priradenia?"
 
 #: eeschema/annotate.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Očíslované %s (jednotka %s) ako %s."
+msgstr "Vymazané očíslovanie %s (jednotka %s)."
 
 #: eeschema/annotate.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Vymazať očíslovanie"
+msgstr "Vymazané očíslovanie pre %s."
 
 #: eeschema/annotate.cpp:174
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "Vymazať očíslovanie"
+msgstr "Odstrániť očíslovanie"
 
 #: eeschema/annotate.cpp:278
 #, c-format
@@ -10984,7 +10965,7 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "Najdených a nahradených %d duplikovaných časových pečiatok."
 
 #: eeschema/annotate.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Aktualizované %s (jednotka %s) z %s na %s"
 
@@ -11012,9 +10993,8 @@ msgid "Added items via API"
 msgstr ""
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:521
-#, fuzzy
 msgid "Created items via API"
-msgstr "Vytvoriť Čiary"
+msgstr "Vytvorené položky pomocou API"
 
 #: eeschema/bom_plugins.cpp:47
 #, c-format
@@ -11042,14 +11022,12 @@ msgstr ""
 "Sieť %s je graficky pripojená k zbernici %s, ale nie je členom tejto zbernice"
 
 #: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Nespojené"
+msgstr "Nepripojené konce spojov"
 
 #: eeschema/connection_graph.cpp:3977
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Nespojené"
+msgstr "Nepripojený spoj k zbernicovému pripojeniu"
 
 #: eeschema/connection_graph.cpp:4310
 #, fuzzy, c-format
@@ -11067,10 +11045,10 @@ msgstr ""
 "označenie"
 
 #: eeschema/connection_graph.cpp:4392
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
-"Pin listu %s nemá vo vnútri listu žiadny zodpovedajúci hierarchický štítok"
+"Hierarchické označenie %s nemá zodpovedajúci vývod listu v nadradenom liste"
 
 #: eeschema/cross-probing.cpp:160
 #, c-format
@@ -12309,9 +12287,8 @@ msgstr "Exportuje dáta vo formáte Pcbnew"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:364
 #: eeschema/dialogs/dialog_export_netlist.cpp:425
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Iba aktuálny hárok"
+msgstr "Použiť aktuálny list ako východzí"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:365
 #: eeschema/dialogs/dialog_export_netlist.cpp:426
@@ -13636,13 +13613,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"Vyberte symbol, z ktorého chcete tento symbol odvodiť, alebo vyberte\n"
-"<Žiadne> pre koreňový symbol.\n"
+"Vyberať symbol, z ktorého sa tento symbol odvodí, alebo vyberte\n"
+"<Žiadne> pre východzí symbol.\n"
 "\n"
 "Odvodené symboly sa predtým označovali ako aliasy.\n"
 "Toto už neplatí a všetky symboly sú\n"
 "odvodené z iných symbolov alebo sú samostatné\n"
-"koreňové symboly."
+"ako východzie symboly."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
 #, fuzzy
@@ -14578,7 +14555,7 @@ msgstr "Aliasy autobusov"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:269 eeschema/files-io.cpp:279
 #: eeschema/picksymbol.cpp:127
 msgid "Root"
-msgstr "Koreň"
+msgstr "Východzí"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:273
 #: eeschema/dialogs/dialog_schematic_setup.cpp:280
@@ -16170,7 +16147,7 @@ msgstr "Vlastnosti textového poľa"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:175 eeschema/schematic.cpp:512
 msgid "<root sheet>"
-msgstr "<koreňový list>"
+msgstr "<východzí list>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:179
 #, fuzzy, c-format
@@ -16249,8 +16226,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"Aktualizujte asociácie stôp symbolov, ktorých stopy boli nahradené rôznymi "
-"stopami na PCB."
+"Aktualizovať priradenia symbolov, ktorých puzdra boli nahradené inými "
+"puzdrami na DPS."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -17346,8 +17323,8 @@ msgstr ""
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 msgstr ""
-"Nelze zkopírovat soubor '%s', protože bude přepsán novým souborem kořenového "
-"listu."
+"Nie je možné kopírovať súbor '%s', pretože bude prepísaný novým súborom "
+"východzieho listu."
 
 #: eeschema/eeschema_jobs_handler.cpp:193
 #, fuzzy
@@ -17950,7 +17927,7 @@ msgstr "Označenie referencie pozemku"
 
 #: eeschema/erc/erc_item.cpp:225
 msgid "Bus Entry needed"
-msgstr "Je potrebný vstup do autobusu"
+msgstr "Je potrebné zbernicové pripojenie"
 
 #: eeschema/erc/erc_report.cpp:48
 #, c-format
@@ -19057,7 +19034,7 @@ msgstr "Zbernica"
 
 #: eeschema/sch_bus_entry.cpp:531
 msgid "Bus Entry Type"
-msgstr "Typ vstupu na autobus"
+msgstr "Typ pripojenia zbernice"
 
 #: eeschema/sch_bus_entry.cpp:543 eeschema/sch_junction.cpp:319
 #: eeschema/sch_label.cpp:1275 eeschema/sch_line.cpp:954
@@ -19444,7 +19421,7 @@ msgstr ""
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:604
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "Schéma CADSTAR môže byť poškodená: neexistuje žiadny koreňový list."
+msgstr "Schéma CADSTAR môže byť poškodená: neexistuje žiadny východzí list."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:678
 #, c-format
@@ -24893,7 +24870,7 @@ msgstr "Pridať uzol"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1396
 msgid "Add Wire to Bus Entry"
-msgstr "Pridajte drôt na vstup zbernice"
+msgstr "Pridať pripojenie k zbernicovému pripojeniu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1471
 msgid "Junction location contains no joinable wires and/or pins."
@@ -36202,19 +36179,16 @@ msgid "Sheet: "
 msgstr "List "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "Popis:"
+msgstr "Prepojenie s knižnicou"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "Voľby editora schém"
+msgstr "Prepojenie so schémou"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "Footprint Association File"
+msgstr "Prepojenia puzdra"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -43696,7 +43670,7 @@ msgstr "Súbor netlistov IPC-D-356..."
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
-msgstr "Uložiť súbor asociácie stopy"
+msgstr "Uložiť súbor priradení puzdier"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:170
 #, fuzzy
@@ -44935,12 +44909,12 @@ msgstr "Exportujte znázornenie 3D dosky STEP"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Footprint Association (.cmp) File..."
-msgstr "Súbor Footprint Association (.cmp)..."
+msgstr "Súbor priradení puzdier (.cmp)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
-"Exportujte súbor priradenia stopy (* .cmp) pre schematickú spätnú anotáciu"
+"Export do súboru priradení puzdier (* .cmp) pre spätnú aktualizáciu schémy"
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Hyperlynx..."
@@ -45211,12 +45185,12 @@ msgstr "Zmeňte hodnotu %s z %s na %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:455
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Aktualizovať %s priradenie symbolov z %s na %s."
+msgstr "Aktualizovať priradenie symbolu %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Aktualizovať %s priradenie symbolov z %s na %s."
+msgstr "Aktualizované priradenie symbolu %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:527
 #, fuzzy, c-format
@@ -49614,9 +49588,8 @@ msgid "Select a footprint to diff with its library equivalent."
 msgstr "Prebieha kontrola stôp..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1560
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr "Vyberte položku pre správu o riešení obmedzení."
+msgstr "Vybrať puzdro pre správu o priradení puzdier."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1587
 #, fuzzy
@@ -51684,13 +51657,12 @@ msgid "Show differences between board footprint and its library equivalent"
 msgstr "Prebieha kontrola stôp..."
 
 #: pcbnew/tools/pcb_actions.cpp:1872
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "Importovať výber puzdier"
+msgstr "Zobraziť priradenia puzdier"
 
 #: pcbnew/tools/pcb_actions.cpp:1873
 msgid "Show footprint library and schematic symbol associations"
-msgstr "Ukázať asociácie medzi puzdrom knižnice a schematickým symbolom"
+msgstr "Zobraziť priradenia medzi puzdrom knižnice a schematickým symbolom"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
 msgid "Geographical Reannotate..."
