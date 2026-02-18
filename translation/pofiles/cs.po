@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-18 09:10+0000\n"
+"PO-Revision-Date: 2026-02-18 21:26+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -14532,11 +14532,9 @@ msgid "No symbols found in library '%s'."
 msgstr "Symbol %s nenalezen v knihovně '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr ""
-"Chyba při načítání desky.\n"
-"%s"
+msgstr "Chyba při načítání symbolu '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:586
 #, fuzzy
@@ -18654,9 +18652,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "Zpráva ERC uložena do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1335
-#, fuzzy
 msgid "Schematic file was not updated\n"
-msgstr "Soubor schématu '%s' nenalezen."
+msgstr "Soubor schématu nebyl aktualizován\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1353 eeschema/files-io.cpp:989
 #: eeschema/files-io.cpp:1038
@@ -20882,12 +20879,13 @@ msgstr ""
 "formátu Eagle XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+"Nepodařilo se načíst soubor '%s'.\n"
+"'%s' na řádku %d, sloupec %d, ofset %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1063
 #, c-format
@@ -21198,11 +21196,13 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Knihovnu symbolů '%s' nelze odstranit."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Knihovna '%s' již existuje."
+msgstr ""
+"Knihovna '%s' načtena s chybami:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:104
 msgid "The library cannot be saved until these errors are fixed manually."
@@ -23115,9 +23115,8 @@ msgid " is not a valid dV/dt value."
 msgstr " není platná hodnota dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1144
-#, fuzzy
 msgid "A dV/dt value is missing."
-msgstr "Chybí.\n"
+msgstr "Chybí hodnota dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1233
 #: eeschema/sim/kibis/ibis_parser.cpp:1248
@@ -24359,11 +24358,8 @@ msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1690
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1701
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"Aktuální konfigurace neobsahuje knihovnu '%s'.\n"
-"K úpravě konfigurace použijte Spravovat knihovny symbolů."
+msgstr "K úpravě konfigurace použijte Spravovat knihovny symbolů."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1691
 msgid "Library not found in symbol library table."
@@ -26721,11 +26717,13 @@ msgstr "Soubory SVG (*.svg)|*."
 
 #: eeschema/tools/sch_edit_table_tool.cpp:145
 #: pcbnew/tools/pcb_edit_table_tool.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "Selhalo otevření souboru \"%s\"."
+msgstr ""
+"Nepodařilo se otevřít soubor:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:146
 #: pcbnew/tools/pcb_edit_table_tool.cpp:187
@@ -26925,12 +26923,11 @@ msgid "No connected net selected."
 msgstr "Nevybrána žádná síť."
 
 #: eeschema/tools/sch_editor_control.cpp:2090 pcbnew/tools/pcb_control.cpp:1187
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Změna přípony souboru změní typ souboru.\n"
-"Chcete pokračovat?"
+"Vkládání dlouhého textového řetězce může být velmi pomalé.  Chcete "
+"pokračovat?"
 
 #: eeschema/tools/sch_editor_control.cpp:2145 pcbnew/tools/pcb_control.cpp:1152
 #, fuzzy
@@ -27556,9 +27553,8 @@ msgstr "Nelze číst"
 #: eeschema/widgets/panel_remote_symbol.cpp:964
 #: eeschema/widgets/panel_remote_symbol.cpp:1232
 #: eeschema/widgets/panel_remote_symbol.cpp:1409
-#, fuzzy
 msgid "Unable to load schematic settings."
-msgstr "Soubor schématu nelze načíst\n"
+msgstr "Nelze načíst nastavení schématu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:979
 #, fuzzy
@@ -38723,11 +38719,8 @@ msgid "Process failed with exit code %d"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:222
-#, fuzzy
 msgid "Do you want to cancel the export process?"
-msgstr ""
-"Použít relativní cestu k \n"
-"'%s'?"
+msgstr "Chcete zrušit export?"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:223
 #, fuzzy
@@ -39670,11 +39663,8 @@ msgid "Output File:"
 msgstr "Výstupní soubor:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:65
-#, fuzzy
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"Zadejte název souboru, pokud nechcete použít výchozí názvy souborů\n"
-"lze použít pouze při tisku aktuálního listu"
+msgstr "Zadejte název souboru, pokud nechcete používat výchozí názvy souborů"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:338
 #, c-format
@@ -43507,11 +43497,13 @@ msgstr "Šířka textu musí být mezi %s a %s."
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:231
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
-msgstr "Výška textu musí být mezi %s a %s."
+msgstr ""
+"%s: Neplatná velikost textu.\n"
+"Velikost musí být mezi %s a %s"
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:250
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:249
@@ -44309,13 +44301,12 @@ msgstr "Minimální šířka pájecí masky:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Minimální vzdálenost mezi otvory pájecí masky. Otvory podložky blíže než "
-"tato vzdálenost budou vykresleny jako jeden otvor."
+"Minimální vzdálenost mezi otvory v pájecí masce.\n"
+"Bližší otvory budou vykresleny jako jeden otvor."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 #, fuzzy
@@ -47407,13 +47398,12 @@ msgstr ""
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1209
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
 msgstr ""
-"Použít relativní cestu k \n"
-"'%s'?"
+"\n"
+"Chcete uložit změny?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1370
 #, fuzzy, c-format
@@ -47484,9 +47474,8 @@ msgid "Allow All"
 msgstr "Vyplnit vše"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:79
-#, fuzzy
 msgid "At least one orientation must be selected"
-msgstr "Musí být zadána alespoň jedna nebo více vrstev\n"
+msgstr "Alespoň jedna orientace musí být vybrána"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp:36
 #, fuzzy
@@ -47686,9 +47675,8 @@ msgid "Allow bottom Layer"
 msgstr "Spodní vrstva"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:67
-#, fuzzy
 msgid "At least one layer must be selected"
-msgstr "Musí být zadána alespoň jedna nebo více vrstev\n"
+msgstr "Alespoň jedna vrstva musí být vybrána"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_panel_base.cpp:36
 #, fuzzy
@@ -48033,11 +48021,13 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Generovat IPC-D-356 soubor netlistu"
 
 #: pcbnew/exporters/export_d356.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "IPC-D-356 netlist file created:\n"
 "'%s'."
-msgstr "Soubor IPC-D-356 netlistu..."
+msgstr ""
+"Soubor IPC-D-356 netlistu vytvořen:\n"
+"'%s'."
 
 #: pcbnew/exporters/export_footprint_associations.cpp:76
 msgid "Save Footprint Association File"
@@ -48369,9 +48359,8 @@ msgid "OCC exception creating contour %d: %s"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2371
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Plocha vynechána **\n"
+msgstr "** Plocha vynechána **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2461
 #: pcbnew/exporters/step/step_pcb_model.cpp:2478
@@ -49335,9 +49324,8 @@ msgid "Footprint '%s' saved."
 msgstr "Pouzdro '%s' uloženo."
 
 #: pcbnew/load_select_footprint.cpp:380
-#, fuzzy
 msgid "Error saving footprint library"
-msgstr "Ukládání knihovny pouzder\n"
+msgstr "Ukládání knihovny pouzder selhalo"
 
 #: pcbnew/load_select_footprint.cpp:384
 #, c-format
@@ -50659,11 +50647,12 @@ msgid "Edit Vertices"
 msgstr "Upravit vlastnosti..."
 
 #: pcbnew/pcb_base_frame.cpp:1217
-#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
-msgstr "Nastavení projektu bylo změněno. Uložit jej ?"
+msgstr ""
+"Knihovna obsahující současné pouzdro byla změněna.\n"
+"Načíst znovu pouzdro?"
 
 #: pcbnew/pcb_design_block_utils.cpp:70
 #, fuzzy, c-format
@@ -51112,14 +51101,15 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Polygonový tvar typu %d je ignorován (nepodporované)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2854
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium (%d) nemá ekvivalent KiCadu. Místo toho byl "
-"přesunut na vrstvu ECO1_USER."
+"Načítání knihovny '%s':\n"
+"Pouzdro %s má přerušované ohraničení na vrstvě Altium (%d) bez ekvivalentu v "
+"KiCadu. Bylo přesunuto na vrstvu Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2868
 #, fuzzy, c-format
@@ -51131,11 +51121,13 @@ msgstr ""
 "přesunuta na vrstvu ECO1_USER."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2911
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Polygonový tvar typu %d je ignorován (nepodporované)."
+msgstr ""
+"Chyba načítání knihovny '%s':\n"
+"Pouzdro %s obsahuje polygonový tvar typu %d (zatím nepodporováno)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2924
 #, fuzzy, c-format
@@ -51155,11 +51147,13 @@ msgid "Loading pads..."
 msgstr "Načítání plošek..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3566
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr "Pouzdro %s ploška %s není označen jako vícevrstvý, ale je TH ploška."
+msgstr ""
+"Chyba načítání knihovny '%s':\n"
+"Pouzdro %s, ploška %s není označena jako vícevrstvá, ale je TH ploška."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3579
 #, c-format
@@ -51167,11 +51161,13 @@ msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "Pouzdro %s ploška %s není označen jako vícevrstvý, ale je TH ploška."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3608
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Pouzdro %s ploška %s má čtvercovou díru (nepodporované)."
+msgstr ""
+"Načítání knihovny '%s':\n"
+"Pouzdro %s má čtvercovou díru v plošce %s (zatím nepodporováno)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3621
 #, c-format
@@ -51179,14 +51175,15 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Pouzdro %s ploška %s má čtvercovou díru (nepodporované)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3656
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Pouzdro %s má díru v plošce %s otočené %f stupňů. KiCad podporuje pouze 90 "
-"stupňů rotaci."
+"Načítání knihovny '%s':\n"
+"Pouzdro %s má díru v plošce %s otočenou o %d stupňů. KiCad podporuje pouze "
+"90stupňové rotace."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3671
 #, fuzzy, c-format
@@ -51198,11 +51195,13 @@ msgstr ""
 "stupňů rotaci."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3691
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Pouzdro %s ploška %s používá díru neznámého druhu %d."
+msgstr ""
+"Chyba načítání knihovny '%s':\n"
+"Pouzdro %s, ploška %s má díru neznámého druhu %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3705
 #, c-format
@@ -51210,11 +51209,13 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Pouzdro %s ploška %s používá díru neznámého druhu %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3770
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
-msgstr "Pouzdro %s ploška %s používá neznámý tvar plošky."
+msgstr ""
+"Chyba načítání knihovny '%s':\n"
+"Pouzdro %s, ploška %s má neznámý tvar."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3783
 #, fuzzy, c-format
@@ -51231,14 +51232,15 @@ msgstr ""
 "přesunuta do KiCad vrstvy Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3913
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Ploška bez mědi %s na vrstvě Altium (%d) nemá ekvivalent KiCadu. Byla "
-"přesunuta do KiCad vrstvy Eco1_User."
+"Načítání knihovny '%s':\n"
+"Pouzdro %s, ploška bez mědi %s na vrstvě Altium (%d) nemá v KiCadu "
+"ekvivalent. Byla přesunuta na vrstvu Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3928
 #, fuzzy, c-format
@@ -51830,11 +51832,9 @@ msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:269
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:273
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"Chyba při načítání desky.\n"
-"%s"
+msgstr "Chyba při načítání desky '%s': %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:296
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:397
@@ -52138,9 +52138,8 @@ msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1617
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "Stanovení údajů o DPS\n"
+msgstr "Generování CAD dat"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2738
 #, fuzzy
@@ -53414,9 +53413,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Načíst knihovny pouzder"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:448 pcbnew/pcbnew_jobs_handler.cpp:2879
-#, fuzzy
 msgid "Failed to load board\n"
-msgstr "Chyba čtení hodnoty slova."
+msgstr "Nepodařilo se načíst desku\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:514
 #, fuzzy, c-format
@@ -53425,9 +53423,8 @@ msgstr "Neplatný název vrstvy \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:551 pcbnew/pcbnew_jobs_handler.cpp:631
 #: pcbnew/pcbnew_jobs_handler.cpp:675
-#, fuzzy
 msgid "Unknown export format"
-msgstr "Neznámý formát netlistu.\n"
+msgstr "Neznámý formát exportu"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:605
 #, fuzzy, c-format
@@ -53466,19 +53463,18 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Nepodařilo se načíst '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1486
-#, fuzzy
 msgid "Successfully created genCAD file\n"
-msgstr "DPS úspěšně přečíslována"
+msgstr "Soubor genCAD byl úspěšně vygenerován\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1556
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'.\n"
-msgstr "Chyba při zápisu do souboru '%s'."
+msgstr "Chyba při zápisu do souboru '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1562
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Výstup z BOM zapsán do '%s'"
+msgstr "Statistiky desky zapsány do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1899 pcbnew/pcbnew_jobs_handler.cpp:1977
 #, fuzzy, c-format
@@ -53538,9 +53534,9 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2417
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Nepřipojené položky (%s)"
+msgstr "Nalezeno %d nepřipojených položek\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2423
 #, c-format
@@ -53548,24 +53544,22 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2439
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Nelze analyzovat repozitář: %s"
+msgstr "Nezdařilo se uložení DRC reportu do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2444
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Uložit soubor hlášení DRC"
+msgstr "DRC report uložen do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2451
-#, fuzzy
 msgid "Saved board\n"
-msgstr "Uložit desku"
+msgstr "Deska uložena\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2455
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Chyba čtení hodnoty slova."
+msgstr "Ukládání desky selhalo.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2561
 #, fuzzy, c-format
@@ -53577,14 +53571,12 @@ msgstr ""
 "Nepodařilo se přejmenovat dočasný soubor '%s."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2607
-#, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
-msgstr "DPS úspěšně přečíslována"
+msgstr "Úspěšně vytvořen IPC-D-356 soubor\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2612
-#, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
-msgstr "Selhalo vytvoření souboru."
+msgstr "Nepodařilo se vytvořit IPC-D-356 soubor\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2688
 msgid "Successfully saved board file using the latest format\n"
@@ -53596,14 +53588,14 @@ msgid "Board file was not updated\n"
 msgstr "Knihovna symbolů nebyla aktualizována\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2830
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "Nelze číst soubor '%s'."
+msgstr "Nepodařilo se zjistit formát souboru '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2839
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Soubor nenalezen: '%s'."
+msgstr "Vstupní soubor nenalezen: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2865
 #, fuzzy, c-format
@@ -57819,11 +57811,8 @@ msgid "Selected group contains no footprints to place."
 msgstr "Výběr neobsahuje položky s označenými sítěmi."
 
 #: pcbnew/tools/pcb_control.cpp:2003
-#, fuzzy
 msgid "Error loading board."
-msgstr ""
-"Chyba při načítání desky.\n"
-"%s"
+msgstr "Chyba při načítání desky."
 
 #: pcbnew/tools/pcb_control.cpp:2113
 #, fuzzy
