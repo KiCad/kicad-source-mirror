@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-16 02:11+0300\n"
-"PO-Revision-Date: 2026-02-18 09:09+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-18 21:26+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -31626,7 +31626,7 @@ msgstr "gEDA / Lepton EDA-Projekt ..."
 
 #: kicad/menubar.cpp:154
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "gEDA or Lepton EDA-Schaltplan und -platinenlayout importieren"
+msgstr "gEDA oder Lepton EDA-Schaltplan und -platinenlayout importieren"
 
 #: kicad/menubar.cpp:183
 msgid "Edit Advanced Config..."
@@ -55725,9 +55725,7 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1573
 msgid "Select item for constraints resolution..."
-msgstr ""
-"Einzelnes Element für einen Bericht zur Ermittlung von Einschränkungen "
-"auswählen."
+msgstr "Element für die Ermittlung von Einschränkungen auswählen ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1581
 msgid "Select a single item for a constraints resolution report."
