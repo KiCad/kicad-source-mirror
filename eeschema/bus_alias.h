@@ -24,7 +24,7 @@
 
 #include <memory>
 #include <vector>
-#include <wx/string.h>
+#include <wx/arrstr.h>
 
 
 class BUS_ALIAS
