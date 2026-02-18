@@ -3802,6 +3802,9 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
                     return;
 
+                if( !otherZone->HasFilledPolysForLayer( aLayer ) )
+                    return;
+
                 std::shared_ptr<SHAPE_POLY_SET> otherFill = otherZone->GetFilledPolysList( aLayer );
 
                 if( !otherFill || otherFill->OutlineCount() == 0 )
