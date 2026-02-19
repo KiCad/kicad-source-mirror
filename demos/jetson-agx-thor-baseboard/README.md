@@ -1,16 +1,15 @@
-# Jetson AGX Thor Baseboard
+# Antmicro baseboard for Jetson AGX Thor
 
-Copyright (c) 2025 [Antmicro](https://www.antmicro.com)
+Copyright (c) 2025-2026 [Antmicro](https://www.antmicro.com)
 
 ![Jetson Thor Baseboard](img/jetson-thor-baseboard-render.png)
 
 ## Overview
 
-This project contains open hardware design files for a baseboard supporting [NVIDIA Jetson AGX Thor (T5000)](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/) System on Module.
-The baseboard break-routes common IO-interfaces for standard desktop usage.
-The baseboard also features an FMC-style expansion connector, so it is possible to combine it with other baseboards and custom-designed accessories, in order to accelerate the development of new Thor-based products.
+This repository contains open hardware design files for Antmicro's baseboard for the [NVIDIA Jetson AGX Thor (T5000)](https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-thor/) System on Module.
+The baseboard break-routes common IO-interfaces for standard desktop usage and potential customizations for use in embedded products, [offered as a service](https://offering.antmicro.com/#/hw-process#overview).
+The baseboard also features an FMC-style expansion connector, and can be combined with custom-designed accessories in order to accelerate the development of new Thor-based products.
 The PCB design files were prepared in KiCad 9.x.
-The PCB layout design is currently in progress.
 
 ## Key features
 
@@ -30,7 +29,8 @@ The PCB layout design is currently in progress.
 * FAN connector
 * 100 x 180 mm (3.93 x 7.09 inch) PCB outline
 
-The Jeston AGX Thor Baseboard has two 50-pin FFC connectors which makes it electrically compatible with a variety of camera modules and video accessories developed by Antmicro. These are:
+The baseboard has two 50-pin FFC connectors which makes it electrically compatible with a variety of camera modules and video accessories developed by Antmicro. 
+These are:
 
 * [GMSL Deserializer Board](https://github.com/antmicro/gmsl-deserializer)
 * [SDI-MIPI Video Converter](https://github.com/antmicro/sdi-mipi-video-converter-hw)
@@ -41,10 +41,7 @@ In a basic configuration, the Jetson AGX Thor Baseboard should be powered with a
 
 ## Project structure
 
-The main directory contains KiCad PCB project files, the LICENSE, and a README.
-The remaining files are stored in the following directories:
-
-* `img` - contains graphics for this README
+The main directory contains KiCad PCB project files, the LICENSE, and this README, and the img directory contains graphics for this README.
 
 ## Licensing
 

@@ -78,128 +78,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "copper_edge_clearance|155930532|153710000|e742b4f6-3fd2-4a57-ac98-a36e866d52a5|e8b5f514-2b72-45e6-a990-ddf3356d5011",
-          ""
-        ],
-        [
-          "copper_edge_clearance|155930532|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|0c30dccb-49af-4b47-9622-8d44b7e1a384",
-          ""
-        ],
-        [
-          "copper_edge_clearance|76930532|153710000|e742b4f6-3fd2-4a57-ac98-a36e866d52a5|2ddfda69-0d2c-420b-9120-0551e7daeb82",
-          ""
-        ],
-        [
-          "copper_edge_clearance|76930532|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|110a5e34-53e7-4902-b29e-0272cd50c6ba",
-          ""
-        ],
-        [
-          "courtyards_overlap|198681438|138905000|e1c4b724-371c-4635-9e2b-9d6f45b20c45|f88b928d-d5e7-401b-8043-6ef88b71cbb6",
-          "Edge connector inside SFP cage"
-        ],
-        [
-          "courtyards_overlap|237005000|70955000|5ad3f83a-20c6-4342-b4dd-259b41bfe433|5e983724-0a7a-42e8-a665-41bc506ad524",
-          ""
-        ],
-        [
-          "courtyards_overlap|239495000|72215000|57b41ce3-f723-4403-87d8-77a97972f657|5ad3f83a-20c6-4342-b4dd-259b41bfe433",
-          ""
-        ],
-        [
-          "npth_inside_courtyard|198600000|140100000|cd27cbdd-f0d3-4a3a-8548-fb4751e90ad3|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
-          ""
-        ],
-        [
-          "npth_inside_courtyard|198600000|149700000|d7d285a5-0876-4440-86b4-8cf3aa858538|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
-          ""
-        ],
-        [
-          "pth_inside_courtyard|221460000|59490000|ac7ae49a-658e-4721-9ab3-f39bfe362198|eb4c5595-14d9-49a0-96a9-b15a5f3510cb",
-          ""
-        ],
-        [
-          "pth_inside_courtyard|222430532|143710000|254f3ce1-fe5f-4928-8ea2-f8e6fed7d1ad|e1c4b724-371c-4635-9e2b-9d6f45b20c45",
-          "Inentional, mounting stud unde SFP cage"
-        ],
-        [
-          "silk_edge_clearance|190058000|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|acf1cf96-976a-4d2f-83c4-bebd3e0e1b07",
-          ""
-        ],
-        [
-          "silk_edge_clearance|221758000|53710000|737bab9f-b85e-47bb-baa5-cfb1bb1432dd|c045d629-a23c-4140-8adc-cd36e34f4b27",
-          ""
-        ],
-        [
-          "silk_edge_clearance|233930532|153032000|ef3cc068-45d7-44e3-a683-96bb14af87bd|e40eafb3-04ba-4dac-afa1-3c1e06e243b0",
-          ""
-        ],
-        [
-          "silk_edge_clearance|234001000|136772000|beba3198-dfc2-41b4-82d8-ce2e653b3190|88601146-bc99-4ff1-b11f-6475e84a197e",
-          ""
-        ],
-        [
-          "silk_edge_clearance|234001000|136772000|beba3198-dfc2-41b4-82d8-ce2e653b3190|e737886b-fc8c-460b-a9d0-e0436068d457",
-          ""
-        ],
-        [
-          "silk_edge_clearance|234001000|153032000|ef3cc068-45d7-44e3-a683-96bb14af87bd|e7a5dbb3-14af-47fe-8370-03fc9e29eb7e",
-          ""
-        ],
-        [
-          "silk_edge_clearance|239930532|56790000|4af03295-1084-4417-8cd1-43004859b565|2ae4faff-9c0a-4be4-b3db-bac16dae5cf3",
-          ""
-        ],
-        [
-          "silk_edge_clearance|239930532|70590000|4af03295-1084-4417-8cd1-43004859b565|cef6a8e1-8f04-4089-9320-70fce24bc756",
-          ""
-        ],
-        [
-          "silk_edge_clearance|59930532|119560000|403ff605-9b09-4a77-b2bd-88643e779501|6de21a3e-60b6-4adf-a1fe-6b60beb9de7e",
-          ""
-        ],
-        [
-          "silk_edge_clearance|59930532|87860000|403ff605-9b09-4a77-b2bd-88643e779501|8ea8553e-7e56-43bc-95cc-62e143da09dc",
-          ""
-        ],
-        [
-          "silk_over_copper|101973950|57735191|b7e23aaf-bec2-42f1-95d9-153f44ad6414|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|102000000|59645074|e10bd552-2e6a-40d3-a09e-6c61288829ff|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|105597099|59630491|c583f3b9-01d8-47a7-895f-ca70a66231f6|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|111805052|120278558|df1572ad-d4e1-4172-91ce-60f782b6edf7|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|221741001|58319548|c045d629-a23c-4140-8adc-cd36e34f4b27|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|221741001|58319548|e035d4d8-1be5-4d59-a8fe-90c6641f80d3|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|76855675|148186277|0981ecbb-4e17-4a98-8537-7138e3640830|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|76920532|75010451|910bd3d3-d4fa-4cf4-8f6e-6a7d98602c22|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "silk_over_copper|77104612|74931000|74f87c58-77cd-40e4-9238-934528b71b2b|00000000-0000-0000-0000-000000000000",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -265,8 +144,8 @@
       "rules": {
         "max_error": 0.005,
         "min_clearance": 0.1,
-        "min_connection": 0.1,
-        "min_copper_edge_clearance": 0.4,
+        "min_connection": 0.0969,
+        "min_copper_edge_clearance": 0.3,
         "min_groove_width": 0.0,
         "min_hole_clearance": 0.22,
         "min_hole_to_hole": 0.25,
@@ -277,7 +156,7 @@
         "min_text_height": 0.6,
         "min_text_thickness": 0.0,
         "min_through_hole_diameter": 0.1,
-        "min_track_width": 0.1,
+        "min_track_width": 0.0969,
         "min_via_annular_width": 0.125,
         "min_via_diameter": 0.45,
         "solder_mask_to_copper_clearance": 0.0,

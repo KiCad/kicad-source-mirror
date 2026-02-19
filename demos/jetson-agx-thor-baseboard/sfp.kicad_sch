@@ -5,8 +5,8 @@
 	(uuid "1f26b972-a45f-4bcb-9f9b-66253b69520a")
 	(paper "A3")
 	(title_block
-		(title "Jetson AGX Thor Baseboard")
-		(date "2025-11-03")
+		(title "Antmicro Baseboard for Jetson AGX Thor")
+		(date "2026-02-17")
 		(rev "1.1.0")
 		(company "Antmicro Ltd")
 		(comment 1 "www.antmicro.com")
@@ -7106,7 +7106,7 @@
 			(fill
 				(type none)
 			)
-			(uuid e66e4298-0369-4ead-b74f-e85789deb3ca)
+			(uuid 68a6de38-6775-45c6-98aa-01fb4eb5c421)
 		)
 	)
 	(netclass_flag ""

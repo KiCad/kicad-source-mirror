@@ -5,8 +5,8 @@
 	(uuid "3badac48-8147-4958-9cac-1bc0028792b8")
 	(paper "A3")
 	(title_block
-		(title "Jetson AGX Thor Baseboard")
-		(date "2025-11-03")
+		(title "Antmicro Baseboard for Jetson AGX Thor")
+		(date "2026-02-17")
 		(rev "1.1.0")
 		(company "Antmicro Ltd")
 		(comment 1 "www.antmicro.com")
@@ -18987,7 +18987,7 @@
 	(rule_area
 		(polyline
 			(pts
-				(xy 313.5312 231.14) (xy 259.2387 231.14) (xy 259.08 200.66) (xy 313.3725 200.66)
+				(xy 313.5312 109.22) (xy 259.2387 109.22) (xy 259.08 78.74) (xy 313.3725 78.74)
 			)
 			(stroke
 				(width 0)
@@ -18996,7 +18996,7 @@
 			(fill
 				(type none)
 			)
-			(uuid 0c272ac7-69ab-4b9f-95e6-e94a1fef1850)
+			(uuid 2e6a0049-3a95-4d74-8f57-d41b8cd3aa1c)
 		)
 	)
 	(rule_area
@@ -19011,37 +19011,7 @@
 			(fill
 				(type none)
 			)
-			(uuid afe5014f-b285-47e9-a91f-5fa46e4f6ecf)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 313.5312 109.22) (xy 259.2387 109.22) (xy 259.08 78.74) (xy 313.3725 78.74)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid d113a3e5-412a-4b8b-8e22-f33cb8dc9bb6)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 271.145 193.675) (xy 259.08 193.675) (xy 259.08 187.96) (xy 271.145 187.96)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid ef219284-3853-4bef-a94e-2429d62e91ae)
+			(uuid 6ee68c9b-7808-46bc-bc35-dc10a7cde3f7)
 		)
 	)
 	(rule_area
@@ -19056,7 +19026,22 @@
 			(fill
 				(type none)
 			)
-			(uuid f48d4dc5-23b6-4598-b3d0-1efd2a98bca0)
+			(uuid 82729310-36ac-44d1-90ad-90cd2b78968d)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 313.5312 231.14) (xy 259.2387 231.14) (xy 259.08 200.66) (xy 313.3725 200.66)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 8e3e0e13-08bd-4ed1-81c6-01ed9a88fa5f)
 		)
 	)
 	(rule_area
@@ -19071,7 +19056,22 @@
 			(fill
 				(type none)
 			)
-			(uuid f9e4e9cb-1a1a-4154-8f09-26b2f0955f32)
+			(uuid dabe583b-7faf-44c0-92ed-8c812bab815e)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 271.145 193.675) (xy 259.08 193.675) (xy 259.08 187.96) (xy 271.145 187.96)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid e2c76a6f-5ae5-4505-978b-676cb9c17607)
 		)
 	)
 	(netclass_flag ""

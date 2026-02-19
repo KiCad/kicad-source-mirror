@@ -5,8 +5,8 @@
 	(uuid "80988dfb-cc60-4934-86e8-dc9c9a6a5d0b")
 	(paper "A3")
 	(title_block
-		(title "Jetson AGX Thor Baseboard")
-		(date "2025-11-03")
+		(title "Antmicro Baseboard for Jetson AGX Thor")
+		(date "2026-02-17")
 		(rev "1.1.0")
 		(company "Antmicro Ltd")
 		(comment 1 "www.antmicro.com")
@@ -16863,21 +16863,6 @@
 	(rule_area
 		(polyline
 			(pts
-				(xy 298.45 83.185) (xy 279.4 83.185) (xy 279.4 76.835) (xy 298.45 76.835)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 20728270-db4d-4d30-b38a-b9001a839d44)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
 				(xy 248.92 112.395) (xy 229.87 112.395) (xy 229.87 106.045) (xy 248.92 106.045)
 			)
 			(stroke
@@ -16887,7 +16872,22 @@
 			(fill
 				(type none)
 			)
-			(uuid bca42e6f-8696-487a-ae69-4968cb3cd38e)
+			(uuid 1e69e7ef-25f2-4bd3-957b-59adb9b9eff2)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 298.45 83.185) (xy 279.4 83.185) (xy 279.4 76.835) (xy 298.45 76.835)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 2893d67c-5c8f-4f5c-bdb7-0cdcf9fb27f3)
 		)
 	)
 	(netclass_flag ""
