@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 02:11+0300\n"
+"POT-Creation-Date: 2026-02-19 12:58+0300\n"
 "PO-Revision-Date: 2025-11-07 07:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -356,7 +356,7 @@ msgstr "3D 이미지 파일 이름"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:757
 #: common/eda_base_frame.cpp:1336 common/eda_base_frame.cpp:1340
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:339
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:341
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
@@ -1972,7 +1972,7 @@ msgstr "경로 '%s'을(를) '%s'에 대해 절대 경로로 만들 수 없습니
 msgid "Output directory '%s' created."
 msgstr "출력 디렉토리 '%s'이(가) 생성되었습니다."
 
-#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:315
+#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:317
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
@@ -2080,8 +2080,8 @@ msgstr "정보"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
 #: kicad/tools/kicad_manager_control.cpp:370
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:360
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:414
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
@@ -2228,7 +2228,7 @@ msgstr "전역 라이브러리 테이블 경로 '%s'을(를) 만들 수 없습�
 #: common/dialogs/panel_design_block_lib_table_base.cpp:99
 #: common/lib_tree_model_adapter.cpp:156 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:166
-#: common/widgets/widget_hotkey_list.cpp:530
+#: common/widgets/widget_hotkey_list.cpp:525
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_symbol.cpp:2144 eeschema/symbol_editor/symbol_editor.cpp:827
@@ -3169,7 +3169,7 @@ msgstr "제목 칸"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2332
+#: pcbnew/pcbnew_jobs_handler.cpp:2340
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
@@ -4900,8 +4900,8 @@ msgstr "파일 %s이(가) 이미 존재합니다."
 #: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:416
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:364
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:408
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:412
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/footprint_libraries_utils.cpp:380
@@ -5051,32 +5051,32 @@ msgstr "텍스트:"
 msgid "Graphics:"
 msgstr "그래픽:"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:78
+#: common/dialogs/panel_hotkeys_editor.cpp:77
 msgid "Type filter text"
 msgstr "필터 텍스트 입력"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:128
+#: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
 msgstr "모든 변경 사항 취소"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:129
+#: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
 msgstr "이 대화 상자에서 지금까지 변경한 모든 변경 사항 취소"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:137
+#: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
 msgstr "단축키 가져 오기 ..."
 
-#: common/dialogs/panel_hotkeys_editor.cpp:138
+#: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr "현재 값을 대체하여 외부 파일에서 단축키 정의 가져오기"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:201
+#: common/dialogs/panel_hotkeys_editor.cpp:196
 msgid "Import Hotkeys File:"
 msgstr "단축키 파일 가져오기:"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:254
+#: common/dialogs/panel_hotkeys_editor.cpp:249
 msgid "| Action | Default Hotkey | Description"
 msgstr "| 액션 | 기본 단축키 | 설명"
 
@@ -6106,7 +6106,7 @@ msgstr "도면 시트 편집기"
 msgid "Packages and Updates"
 msgstr "패키지와 업데이트"
 
-#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:325
+#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:327
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "폴더 '%s'에 대한 권한이 없습니다."
@@ -10170,19 +10170,16 @@ msgstr ""
 msgid "Confirm change"
 msgstr "확인"
 
-#: common/widgets/widget_hotkey_list.cpp:522
-msgid "Command"
-msgstr "커맨드"
-
-#: common/widgets/widget_hotkey_list.cpp:525
-msgid "(double-click to edit)"
+#: common/widgets/widget_hotkey_list.cpp:520
+#, fuzzy
+msgid "Command (double-click to edit)"
 msgstr "(더블 클릭으로 편집)"
 
-#: common/widgets/widget_hotkey_list.cpp:528
+#: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
 msgstr "단축키"
 
-#: common/widgets/widget_hotkey_list.cpp:529
+#: common/widgets/widget_hotkey_list.cpp:524
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
 #: eeschema/lib_symbol.cpp:320 eeschema/sch_symbol.cpp:545
 #: eeschema/symbol_editor/symbol_editor.cpp:1756
@@ -25854,7 +25851,7 @@ msgstr "잠금 파일이 이미 존재함"
 msgid "Failed to access lock file"
 msgstr "잠금 파일에 액세스 실패"
 
-#: include/panel_hotkeys_editor.h:57
+#: include/panel_hotkeys_editor.h:59
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "모든 단축키를 기본 제공되는 KiCad 기본값으로 되돌리기"
 
@@ -34069,34 +34066,29 @@ msgstr "ODB++ 파일 내보내기"
 msgid "The selected output file name is not a supported archive format."
 msgstr "선택한 출력 파일 이름이 지원되는 압축 파일 형식이 아닙니다."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:204
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:206
 msgid "Output file name cannot be empty."
 msgstr "출력파일 이름은 비워 둘 수 없습니다."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:223
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:225
 msgid "The output file name conflicts with the selected compression format."
 msgstr "출력 파일 이름이 선택한 압축 형식과 충돌합니다."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:356
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:358
 #, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "출력 파일 '%s'가 이미 있습니다. 덮어쓰시겠습니까?"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:369
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:371
 #, c-format
 msgid "Cannot remove existing output file '%s'."
 msgstr "기존 출력 파일 '%s'를 제거할 수 없음."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:377
-#, c-format
-msgid "Output file '%s' already exists."
-msgstr "출력 파일 %s가 이미 존재합니다."
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:393
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:385
 msgid "Cannot create temporary output directory."
 msgstr "임시 출력 디렉토리 '%s'를 생성할 수 없습니다."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:410
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:402
 #, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
@@ -34104,17 +34096,12 @@ msgid ""
 msgstr ""
 "출력 디렉터리 '%s'가 이미 존재하며 비어 있지 않습니다. 덮어쓰시겠습니까?"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:423
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:415
 #, c-format
 msgid "Cannot remove existing output directory '%s'."
 msgstr "기존 출력 디렉토리 '%s'를 제거할 수 없습니다."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:431
-#, c-format
-msgid "Output directory '%s' already exists."
-msgstr "출력 디렉토리 '%s'가 이미 존재합니다."
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:463
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:445
 #, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
@@ -34123,7 +34110,7 @@ msgstr ""
 "ODBPP 파일 '%s' 생성 오류.\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:506
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:488
 msgid "Compressing output"
 msgstr "결과물 압축"
 
@@ -51873,6 +51860,17 @@ msgstr "KiCad 회로도 심볼"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 도면 시트"
+
+#~ msgid "Command"
+#~ msgstr "커맨드"
+
+#, c-format
+#~ msgid "Output file '%s' already exists."
+#~ msgstr "출력 파일 %s가 이미 존재합니다."
+
+#, c-format
+#~ msgid "Output directory '%s' already exists."
+#~ msgstr "출력 디렉토리 '%s'가 이미 존재합니다."
 
 #, c-format
 #~ msgid "Symbol '%s' has multiple pins with the same pin number"

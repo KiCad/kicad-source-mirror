@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 02:11+0300\n"
+"POT-Creation-Date: 2026-02-19 12:58+0300\n"
 "PO-Revision-Date: 2025-12-11 08:00+0000\n"
 "Last-Translator: Vic <zz99681254z@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -337,7 +337,7 @@ msgstr "3D 圖像檔案名稱"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:757
 #: common/eda_base_frame.cpp:1336 common/eda_base_frame.cpp:1340
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:339
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:341
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "儲存檔案 '%s' 的權限不足。"
@@ -1972,7 +1972,7 @@ msgstr "不能使路徑 '%s' 相對於 '%s' 為絕對路徑。"
 msgid "Output directory '%s' created."
 msgstr "已建立輸出目錄 '%s'。"
 
-#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:315
+#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:317
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "無法建立輸出目錄 '%s'。"
@@ -2080,8 +2080,8 @@ msgstr "資訊"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
 #: kicad/tools/kicad_manager_control.cpp:370
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:360
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:414
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
@@ -2226,7 +2226,7 @@ msgstr "無法建立全域程式庫表路徑 '%s'。"
 #: common/dialogs/panel_design_block_lib_table_base.cpp:99
 #: common/lib_tree_model_adapter.cpp:156 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:166
-#: common/widgets/widget_hotkey_list.cpp:530
+#: common/widgets/widget_hotkey_list.cpp:525
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_symbol.cpp:2144 eeschema/symbol_editor/symbol_editor.cpp:827
@@ -3156,7 +3156,7 @@ msgstr "標題欄"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2332
+#: pcbnew/pcbnew_jobs_handler.cpp:2340
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "載入圖紙 '%s' 時出錯。"
@@ -4873,8 +4873,8 @@ msgstr "檔案 \"%s\" 已存在。"
 #: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:416
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:364
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:408
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:412
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/footprint_libraries_utils.cpp:380
@@ -5024,32 +5024,32 @@ msgstr "文字:"
 msgid "Graphics:"
 msgstr "圖形:"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:78
+#: common/dialogs/panel_hotkeys_editor.cpp:77
 msgid "Type filter text"
 msgstr "輸入篩選文字 (操作或快捷鍵名稱)"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:128
+#: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
 msgstr "撤銷所有變更"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:129
+#: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
 msgstr "撤銷到目前為止在此對話框中所作的所有修改"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:137
+#: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
 msgstr "匯入快捷鍵..."
 
-#: common/dialogs/panel_hotkeys_editor.cpp:138
+#: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr "從外部檔案匯入快捷鍵定義, 取代目前值"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:201
+#: common/dialogs/panel_hotkeys_editor.cpp:196
 msgid "Import Hotkeys File:"
 msgstr "匯入快捷鍵檔案:"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:254
+#: common/dialogs/panel_hotkeys_editor.cpp:249
 msgid "| Action | Default Hotkey | Description"
 msgstr "| 操作 | 預設快捷鍵 | 描述"
 
@@ -6070,7 +6070,7 @@ msgstr "圖框編輯器"
 msgid "Packages and Updates"
 msgstr "套件與更新"
 
-#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:325
+#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:327
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "資料夾 '%s' 的權限不足。"
@@ -10128,19 +10128,16 @@ msgstr "「%s」已分配給節「%s」中的「%s」。您確定要更改其分
 msgid "Confirm change"
 msgstr "確認修改"
 
-#: common/widgets/widget_hotkey_list.cpp:522
-msgid "Command"
-msgstr "命令"
-
-#: common/widgets/widget_hotkey_list.cpp:525
-msgid "(double-click to edit)"
+#: common/widgets/widget_hotkey_list.cpp:520
+#, fuzzy
+msgid "Command (double-click to edit)"
 msgstr "(雙擊編輯)"
 
-#: common/widgets/widget_hotkey_list.cpp:528
+#: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
 msgstr "快捷鍵"
 
-#: common/widgets/widget_hotkey_list.cpp:529
+#: common/widgets/widget_hotkey_list.cpp:524
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
 #: eeschema/lib_symbol.cpp:320 eeschema/sch_symbol.cpp:545
 #: eeschema/symbol_editor/symbol_editor.cpp:1756
@@ -25650,7 +25647,7 @@ msgstr "Lock 檔案已存在"
 msgid "Failed to access lock file"
 msgstr "無法訪問 Lock 檔案"
 
-#: include/panel_hotkeys_editor.h:57
+#: include/panel_hotkeys_editor.h:59
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "將所有快捷鍵設定為 KiCad 的預設值"
 
@@ -33824,51 +33821,41 @@ msgstr "匯出到檔案"
 msgid "The selected output file name is not a supported archive format."
 msgstr "所選輸出檔案名稱不是受支援的存檔格式。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:204
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:206
 msgid "Output file name cannot be empty."
 msgstr "變數名不能為空。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:223
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:225
 msgid "The output file name conflicts with the selected compression format."
 msgstr "輸出檔案名稱與選擇的壓縮格式衝突。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:356
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:358
 #, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "檔案 '%s' 已存在, 要覆蓋它嗎?"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:369
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:371
 #, c-format
 msgid "Cannot remove existing output file '%s'."
 msgstr "無法刪除現有的輸出檔‘%s’。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:377
-#, c-format
-msgid "Output file '%s' already exists."
-msgstr "檔案 \"%s\" 已存在。"
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:393
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:385
 msgid "Cannot create temporary output directory."
 msgstr "無法建立輸出目錄 '%s'。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:410
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:402
 #, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
 msgstr "輸出目錄 '%s' 已經存在且不為空。 你想覆蓋它嗎？"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:423
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:415
 #, c-format
 msgid "Cannot remove existing output directory '%s'."
 msgstr "無法建立輸出目錄 '%s'。"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:431
-#, c-format
-msgid "Output directory '%s' already exists."
-msgstr "已建立輸出目錄 '%s'。"
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:463
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:445
 #, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
@@ -33877,7 +33864,7 @@ msgstr ""
 "生成 IPC2581 檔案 '%s' 時出錯。\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:506
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:488
 msgid "Compressing output"
 msgstr "壓縮輸出"
 
@@ -51414,6 +51401,17 @@ msgstr "KiCad 原理圖符號"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 專案圖編輯器"
+
+#~ msgid "Command"
+#~ msgstr "命令"
+
+#, c-format
+#~ msgid "Output file '%s' already exists."
+#~ msgstr "檔案 \"%s\" 已存在。"
+
+#, c-format
+#~ msgid "Output directory '%s' already exists."
+#~ msgstr "已建立輸出目錄 '%s'。"
 
 #, c-format
 #~ msgid "Symbol '%s' has multiple pins with the same pin number"

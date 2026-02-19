@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 02:11+0300\n"
+"POT-Creation-Date: 2026-02-19 12:58+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6403,11 +6403,8 @@ msgstr ""
 msgid "Confirm change"
 msgstr "Confirm change"
 
-msgid "Command"
-msgstr "Command"
-
-msgid "(double-click to edit)"
-msgstr "(double-click to edit)"
+msgid "Command (double-click to edit)"
+msgstr "Command (double-click to edit)"
 
 msgid "Hotkey"
 msgstr "Hotkey"
@@ -23648,10 +23645,6 @@ msgstr "Output files '%s' already exists. Do you want to overwrite it?"
 msgid "Cannot remove existing output file '%s'."
 msgstr "Cannot remove existing output file '%s'."
 
-#, c-format
-msgid "Output file '%s' already exists."
-msgstr "Output file '%s' already exists."
-
 msgid "Cannot create temporary output directory."
 msgstr "Cannot create temporary output directory."
 
@@ -23666,10 +23659,6 @@ msgstr ""
 #, c-format
 msgid "Cannot remove existing output directory '%s'."
 msgstr "Cannot remove existing output directory '%s'."
-
-#, c-format
-msgid "Output directory '%s' already exists."
-msgstr "Output directory '%s' already exists."
 
 #, c-format
 msgid ""
@@ -37355,6 +37344,20 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Command"
+#~ msgstr "Command"
+
+#~ msgid "(double-click to edit)"
+#~ msgstr "(double-click to edit)"
+
+#, c-format
+#~ msgid "Output file '%s' already exists."
+#~ msgstr "Output file '%s' already exists."
+
+#, c-format
+#~ msgid "Output directory '%s' already exists."
+#~ msgstr "Output directory '%s' already exists."
 
 #, c-format
 #~ msgid "Symbol '%s' has multiple pins with the same pin number"

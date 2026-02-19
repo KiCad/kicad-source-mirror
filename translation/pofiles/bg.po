@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 02:11+0300\n"
+"POT-Creation-Date: 2026-02-19 12:58+0300\n"
 "PO-Revision-Date: 2025-02-27 07:25+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate."
 "org>\n"
@@ -331,7 +331,7 @@ msgstr "Име на файла на изображението"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:757
 #: common/eda_base_frame.cpp:1336 common/eda_base_frame.cpp:1340
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:339
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:341
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Няма права за запазване на файла „%s“."
@@ -2149,7 +2149,7 @@ msgstr "Невъзможност за създаване на файл %s"
 msgid "Output directory '%s' created."
 msgstr "Изходна директория:"
 
-#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:315
+#: common/common.cpp:417 pcbnew/dialogs/dialog_export_odbpp.cpp:317
 #, fuzzy, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Невъзможност за създаване на файл %s"
@@ -2264,8 +2264,8 @@ msgstr "Потвърждение"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:241 kicad/import_project.cpp:109
 #: kicad/tools/kicad_manager_control.cpp:370
 #: pcbnew/dialogs/dialog_export_idf.cpp:138
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:360
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:414
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:411
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:557
@@ -2411,7 +2411,7 @@ msgstr "Невъзможно отваряне на библиотечен фай
 #: common/dialogs/panel_design_block_lib_table_base.cpp:99
 #: common/lib_tree_model_adapter.cpp:156 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:166
-#: common/widgets/widget_hotkey_list.cpp:530
+#: common/widgets/widget_hotkey_list.cpp:525
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
 #: eeschema/sch_symbol.cpp:2144 eeschema/symbol_editor/symbol_editor.cpp:827
@@ -3384,7 +3384,7 @@ msgstr "Поставяне на блок"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2332
+#: pcbnew/pcbnew_jobs_handler.cpp:2340
 #, fuzzy, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Четене на връзки \"%s\""
@@ -5214,8 +5214,8 @@ msgstr "Библиотеката <%s> вече съществува."
 #: eeschema/tools/symbol_editor_control.cpp:568
 #: kicad/tools/kicad_manager_control.cpp:372
 #: pcbnew/dialogs/dialog_export_idf.cpp:139
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:362
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:416
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:364
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:408
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:412
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
 #: pcbnew/footprint_libraries_utils.cpp:380
@@ -5383,37 +5383,37 @@ msgstr "Текст:"
 msgid "Graphics:"
 msgstr "Графика"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:78
+#: common/dialogs/panel_hotkeys_editor.cpp:77
 #, fuzzy
 msgid "Type filter text"
 msgstr "Опресни стойностите"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:128
+#: common/dialogs/panel_hotkeys_editor.cpp:126
 #, fuzzy
 msgid "Undo All Changes"
 msgstr "Без промяна"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:129
+#: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
 msgstr ""
 
-#: common/dialogs/panel_hotkeys_editor.cpp:137
+#: common/dialogs/panel_hotkeys_editor.cpp:135
 #, fuzzy
 msgid "Import Hotkeys..."
 msgstr "Импорт на конфиг. горещи клавиши"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:138
+#: common/dialogs/panel_hotkeys_editor.cpp:136
 #, fuzzy
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr "Зареди съществуващ файл с конфиг. горещи клавиши"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:201
+#: common/dialogs/panel_hotkeys_editor.cpp:196
 #, fuzzy
 msgid "Import Hotkeys File:"
 msgstr "Импорт на конфиг. горещи клавиши"
 
-#: common/dialogs/panel_hotkeys_editor.cpp:254
+#: common/dialogs/panel_hotkeys_editor.cpp:249
 msgid "| Action | Default Hotkey | Description"
 msgstr ""
 
@@ -6530,7 +6530,7 @@ msgstr "Текстов редактор"
 msgid "Packages and Updates"
 msgstr "Проходна връзка > диаметър"
 
-#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:325
+#: common/eda_base_frame.cpp:1332 pcbnew/dialogs/dialog_export_odbpp.cpp:327
 #, fuzzy, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Нямате права за запис в папка <%s>."
@@ -11099,19 +11099,15 @@ msgstr ""
 msgid "Confirm change"
 msgstr "Потвърждение"
 
-#: common/widgets/widget_hotkey_list.cpp:522
-msgid "Command"
-msgstr "Команда"
-
-#: common/widgets/widget_hotkey_list.cpp:525
-msgid "(double-click to edit)"
+#: common/widgets/widget_hotkey_list.cpp:520
+msgid "Command (double-click to edit)"
 msgstr ""
 
-#: common/widgets/widget_hotkey_list.cpp:528
+#: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
 msgstr "Горещ клавиш"
 
-#: common/widgets/widget_hotkey_list.cpp:529
+#: common/widgets/widget_hotkey_list.cpp:524
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47
 #: eeschema/lib_symbol.cpp:320 eeschema/sch_symbol.cpp:545
 #: eeschema/symbol_editor/symbol_editor.cpp:1756
@@ -28013,7 +28009,7 @@ msgstr "Библиотеката <%s> вече съществува."
 msgid "Failed to access lock file"
 msgstr "Неуспешно създаване"
 
-#: include/panel_hotkeys_editor.h:57
+#: include/panel_hotkeys_editor.h:59
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr ""
 
@@ -36872,60 +36868,50 @@ msgstr "Създай SVG файл"
 msgid "The selected output file name is not a supported archive format."
 msgstr "Файл <%s> не е валиден Kicad файл за списък на веригите."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:204
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:206
 #, fuzzy
 msgid "Output file name cannot be empty."
 msgstr "Името на слоя неможе да бъде празно"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:223
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:225
 msgid "The output file name conflicts with the selected compression format."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:356
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:358
 #, fuzzy, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "Компонент \"%s\" вече съществува. Да го променя ли?"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:369
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:371
 #, fuzzy, c-format
 msgid "Cannot remove existing output file '%s'."
 msgstr "Компонент \"%s\" не е намерен в библиотека \"%s\"."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:377
-#, fuzzy, c-format
-msgid "Output file '%s' already exists."
-msgstr "Библиотеката <%s> вече съществува."
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:393
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:385
 #, fuzzy
 msgid "Cannot create temporary output directory."
 msgstr "Невъзможност за създаване на файл %s"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:410
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:402
 #, fuzzy, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
 msgstr "Компонент \"%s\" вече съществува в библиотека \"%s\"."
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:423
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:415
 #, fuzzy, c-format
 msgid "Cannot remove existing output directory '%s'."
 msgstr "Невъзможност за създаване на файл %s"
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:431
-#, fuzzy, c-format
-msgid "Output directory '%s' already exists."
-msgstr "Изходна директория:"
-
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:463
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:445
 #, fuzzy, c-format
 msgid ""
 "Error generating ODBPP files '%s'.\n"
 "%s"
 msgstr "Грешка при съхранение на библиотечен файл \""
 
-#: pcbnew/dialogs/dialog_export_odbpp.cpp:506
+#: pcbnew/dialogs/dialog_export_odbpp.cpp:488
 #, fuzzy
 msgid "Compressing output"
 msgstr "А4 принудително"
@@ -55704,6 +55690,17 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Текстов редактор"
+
+#~ msgid "Command"
+#~ msgstr "Команда"
+
+#, fuzzy, c-format
+#~ msgid "Output file '%s' already exists."
+#~ msgstr "Библиотеката <%s> вече съществува."
+
+#, fuzzy, c-format
+#~ msgid "Output directory '%s' already exists."
+#~ msgstr "Изходна директория:"
 
 #, fuzzy, c-format
 #~ msgid "Symbol '%s' has multiple pins with the same pin number"
