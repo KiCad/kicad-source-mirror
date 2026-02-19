@@ -143,6 +143,7 @@ private:
     int           GetNetCode( uint16_t aId ) const;
     const ARULE6* GetRule( ALTIUM_RULE_KIND aKind, const wxString& aName ) const;
     const ARULE6* GetRuleDefault( ALTIUM_RULE_KIND aKind ) const;
+    const ARULE6* GetRuleForPolygon( ALTIUM_RULE_KIND aKind ) const;
 
     void ParseFileHeader( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );

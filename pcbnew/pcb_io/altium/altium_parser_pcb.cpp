@@ -58,6 +58,29 @@ ALTIUM_LAYER altium_versioned_layer( ALTIUM_LAYER aV6Layer, ALTIUM_LAYER aV7Laye
 }
 
 
+bool altiumScopeExprMatchesPolygon( const wxString& aExpr )
+{
+    // INPOLY/ISPOLY are prefixes of INPOLYGON/ISPOLYGON, so two checks cover all four tokens.
+    wxString upper = aExpr.Upper();
+    return upper.Contains( wxT( "INPOLY" ) ) || upper.Contains( wxT( "ISPOLY" ) );
+}
+
+
+const ARULE6* selectAltiumPolygonRule( const std::vector<ARULE6>& aRulesByPriorityAsc )
+{
+    for( const ARULE6& rule : aRulesByPriorityAsc )
+    {
+        if( altiumScopeExprMatchesPolygon( rule.scope1expr )
+            || altiumScopeExprMatchesPolygon( rule.scope2expr ) )
+        {
+            return &rule;
+        }
+    }
+
+    return nullptr;
+}
+
+
 /*
  * Returns V7 layer ids for Mechanical 17 and above. Otherwise, V6 layer ids.
  */

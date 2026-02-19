@@ -621,7 +621,7 @@ struct ARULE6
     wxString name;
     int      priority = 0;
 
-    ALTIUM_RULE_KIND kind;
+    ALTIUM_RULE_KIND kind = ALTIUM_RULE_KIND::UNKNOWN;
 
     wxString scope1expr;
     wxString scope2expr;
@@ -663,6 +663,7 @@ struct ARULE6
 
     // TODO: implement different types of rules we need to parse
 
+    ARULE6() = default;
     explicit ARULE6( ALTIUM_BINARY_PARSER& aReader );
 };
 
@@ -952,6 +953,25 @@ struct AFILL6
 
     explicit AFILL6( ALTIUM_BINARY_PARSER& aReader );
 };
+
+
+/**
+ * Return true if an Altium rule scope expression targets polygon pour primitives
+ * (matches InPolygon, InPoly, IsPolygon, or IsPoly).
+ */
+bool altiumScopeExprMatchesPolygon( const wxString& aExpr );
+
+
+/**
+ * Select the highest Altium-priority rule whose scope references polygons.
+ *
+ * Altium priority 1 is the most specific; larger numeric values are more general.
+ * @p aRulesByPriorityAsc must be sorted by ARULE6::priority in ascending numeric
+ * order so the first polygon-scoped match is also the highest Altium priority.
+ *
+ * Returns nullptr if no rule references polygons.
+ */
+const ARULE6* selectAltiumPolygonRule( const std::vector<ARULE6>& aRulesByPriorityAsc );
 
 
 #endif //ALTIUM_PARSER_PCB_H
