@@ -1058,6 +1058,27 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         SyncView();
         break;
 
+    case MAIL_SCH_NAVIGATE_TO_SHEET:
+    {
+        wxString targetFile( payload );
+
+        for( SCH_SHEET_PATH& sheetPath : Schematic().Hierarchy() )
+        {
+            SCH_SCREEN* screen = sheetPath.LastScreen();
+
+            if( screen && screen->GetFileName() == targetFile )
+            {
+                m_toolManager->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheetPath );
+                payload = "success";
+                Raise();
+                return;
+            }
+        }
+
+        payload.clear();
+        break;
+    }
+
     default:;
 
     }

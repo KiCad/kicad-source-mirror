@@ -28,12 +28,17 @@
 
 
 #include <wx/regex.h>
+#include <wx/textfile.h>
+#include <wx/filename.h>
+
+#include <set>
 
 #include <confirm.h>
 #include <gestfich.h>
 #include <kiplatform/environment.h>
 #include <kiplatform/io.h>
 #include <kiway.h>
+#include <mail_type.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <wx/msgdlg.h>
@@ -173,6 +178,54 @@ void PROJECT_TREE_ITEM::Delete()
 }
 
 
+/**
+ * Scan a schematic file hierarchy to collect all sheet file paths.
+ *
+ * This performs a lightweight text scan of schematic files to find sheet references
+ * without fully loading the schematic. Used to determine if a file is part of the
+ * project hierarchy before deciding how to open it.
+ *
+ * @param aRootSchematic Full path to the root schematic file
+ * @param aSheetFiles Set to populate with all schematic file paths in the hierarchy
+ */
+static void ScanSchematicHierarchy( const wxString& aRootSchematic,
+                                    std::set<wxString>& aSheetFiles )
+{
+    if( aSheetFiles.count( aRootSchematic ) )
+        return;
+
+    aSheetFiles.insert( aRootSchematic );
+
+    wxTextFile file;
+
+    if( !file.Open( aRootSchematic ) )
+        return;
+
+    wxFileName rootFn( aRootSchematic );
+    wxString   rootDir = rootFn.GetPath();
+
+    wxRegEx sheetfileRe( "\\(property\\s+\"Sheetfile\"\\s+\"([^\"]+)\"" );
+
+    for( wxString line = file.GetFirstLine(); !file.Eof(); line = file.GetNextLine() )
+    {
+        if( sheetfileRe.Matches( line ) )
+        {
+            wxString sheetFile = sheetfileRe.GetMatch( line, 1 );
+
+            wxFileName sheetFn( sheetFile );
+
+            if( !sheetFn.IsAbsolute() )
+                sheetFn.MakeAbsolute( rootDir );
+
+            wxString fullPath = sheetFn.GetFullPath();
+
+            if( wxFileExists( fullPath ) )
+                ScanSchematicHierarchy( fullPath, aSheetFiles );
+        }
+    }
+}
+
+
 void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 {
     wxString             fullFileName = GetFileName();
@@ -204,13 +257,49 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 
     case TREE_FILE_TYPE::LEGACY_SCHEMATIC:
     case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
-        // Schematics not part of the project are opened in a separate process.
-        if( fullFileName == frame->SchFileName() || fullFileName == frame->SchLegacyFileName() )
+    {
+        wxString rootSchematic = frame->SchFileName();
+
+        if( rootSchematic.IsEmpty() )
+            rootSchematic = frame->SchLegacyFileName();
+
+        if( fullFileName == rootSchematic )
+        {
             toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
+        }
         else
-            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherSch, &fullFileName );
+        {
+            std::set<wxString> hierarchyFiles;
+
+            if( !rootSchematic.IsEmpty() && wxFileExists( rootSchematic ) )
+                ScanSchematicHierarchy( rootSchematic, hierarchyFiles );
+
+            bool isInHierarchy = hierarchyFiles.count( fullFileName ) > 0;
+
+            if( isInHierarchy )
+            {
+                KIWAY_PLAYER* schFrame = kiway.Player( FRAME_SCH, false );
+
+                if( !schFrame )
+                {
+                    toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
+                    schFrame = kiway.Player( FRAME_SCH, false );
+                }
+
+                if( schFrame )
+                {
+                    packet = fullFileName.ToStdString();
+                    kiway.ExpressMail( FRAME_SCH, MAIL_SCH_NAVIGATE_TO_SHEET, packet );
+                }
+            }
+            else
+            {
+                toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherSch, &fullFileName );
+            }
+        }
 
         break;
+    }
 
     case TREE_FILE_TYPE::LEGACY_PCB:
     case TREE_FILE_TYPE::SEXPR_PCB:

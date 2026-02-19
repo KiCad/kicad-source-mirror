@@ -1,0 +1,197 @@
+{
+  "appearance": {
+    "color_theme": "_builtin_default"
+  },
+  "aui": {
+    "properties_panel_width": -1,
+    "properties_splitter_proportion": 0.5,
+    "show_properties": true
+  },
+  "color_picker": {
+    "default_tab": 0
+  },
+  "cross_probing": {
+    "auto_highlight": true,
+    "center_on_items": true,
+    "on_selection": true,
+    "zoom_to_fit": true
+  },
+  "defaults": {
+    "line_width": 0,
+    "pin_length": 100,
+    "pin_name_size": 50,
+    "pin_num_size": 50,
+    "text_size": 50
+  },
+  "drag_pins_along_with_edges": true,
+  "edit_symbol_visible_columns": "0 1 2 3 4 5 6 7",
+  "field_editor": {
+    "field_widths": {},
+    "height": 0,
+    "width": 0
+  },
+  "find_replace": {
+    "find_history": [],
+    "find_string": "",
+    "match_case": false,
+    "match_mode": 0,
+    "replace_history": [],
+    "replace_string": "",
+    "search_and_replace": false
+  },
+  "graphics": {
+    "canvas_type": 1,
+    "highlight_factor": 0.5,
+    "select_factor": 0.75
+  },
+  "import_graphics": {
+    "dxf_units": 0,
+    "interactive_placement": true,
+    "line_width": 0.2,
+    "line_width_units": 0,
+    "origin_units": 0,
+    "origin_x": 0.0,
+    "origin_y": 0.0
+  },
+  "lib_table_width": 250,
+  "lib_tree": {
+    "column_widths": null,
+    "columns": [],
+    "open_libs": []
+  },
+  "library": {
+    "sort_mode": 0
+  },
+  "meta": {
+    "version": 1
+  },
+  "pin_table_visible_columns": "0 1 2 3 4 5 9 10",
+  "plugins": {
+    "actions": []
+  },
+  "printing": {
+    "background": false,
+    "color_theme": "",
+    "layers": [],
+    "monochrome": true,
+    "scale": 1.0,
+    "title_block": false,
+    "use_theme": false
+  },
+  "repeat": {
+    "label_delta": 1,
+    "pin_step": 100
+  },
+  "search_pane": {
+    "search_hidden_fields": true,
+    "selection_zoom": 1
+  },
+  "selection_filter": {
+    "graphics": true,
+    "images": true,
+    "labels": true,
+    "lockedItems": false,
+    "otherItems": true,
+    "pins": true,
+    "symbols": true,
+    "text": true,
+    "wires": true
+  },
+  "show_hidden_lib_fields": true,
+  "show_hidden_lib_pins": true,
+  "show_pin_alt_icons": true,
+  "show_pin_electrical_type": true,
+  "system": {
+    "file_history": [],
+    "first_run_shown": false,
+    "last_imperial_units": 5,
+    "last_metric_units": 1,
+    "max_undo_items": 0,
+    "show_import_issues": true,
+    "units": 5
+  },
+  "use_eeschema_color_settings": true,
+  "window": {
+    "cursor": {
+      "always_show_cursor": true,
+      "fullscreen_cursor": false
+    },
+    "display": 0,
+    "grid": {
+      "axes_enabled": false,
+      "fast_grid_1": 1,
+      "fast_grid_2": 2,
+      "last_size": 1,
+      "line_width": 1.0,
+      "min_spacing": 10.0,
+      "override_connected": true,
+      "override_connected_idx": 1,
+      "override_graphics": false,
+      "override_graphics_idx": 2,
+      "override_text": true,
+      "override_text_idx": 3,
+      "override_vias": false,
+      "override_vias_idx": 0,
+      "override_wires": true,
+      "override_wires_idx": 1,
+      "overrides_enabled": true,
+      "show": true,
+      "sizes": [
+        {
+          "name": "",
+          "x": "100 mil",
+          "y": "100 mil"
+        },
+        {
+          "name": "",
+          "x": "50 mil",
+          "y": "50 mil"
+        },
+        {
+          "name": "",
+          "x": "25 mil",
+          "y": "25 mil"
+        },
+        {
+          "name": "",
+          "x": "10 mil",
+          "y": "10 mil"
+        }
+      ],
+      "snap": 0,
+      "style": 0,
+      "user_grid_x": "",
+      "user_grid_y": ""
+    },
+    "maximized": false,
+    "mru_path": "",
+    "perspective": "",
+    "pos_x": 0,
+    "pos_y": 0,
+    "size_x": 0,
+    "size_y": 0,
+    "zoom_factors": [
+      0.05,
+      0.07,
+      0.1,
+      0.15,
+      0.2,
+      0.3,
+      0.5,
+      0.7,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.5,
+      6.5,
+      10.0,
+      15.0,
+      20.0,
+      30.0,
+      45.0,
+      65.0,
+      100.0
+    ]
+  }
+}

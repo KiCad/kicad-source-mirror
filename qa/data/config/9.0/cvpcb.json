@@ -1,0 +1,412 @@
+{
+  "appearance": {
+    "color_theme": "_builtin_default"
+  },
+  "color_picker": {
+    "default_tab": 0
+  },
+  "cross_probing": {
+    "auto_highlight": true,
+    "center_on_items": true,
+    "on_selection": true,
+    "zoom_to_fit": true
+  },
+  "filter_footprint": 0,
+  "filter_footprint_text": "",
+  "find_replace": {
+    "find_history": [],
+    "find_string": "",
+    "match_case": false,
+    "match_mode": 0,
+    "replace_history": [],
+    "replace_string": "",
+    "search_and_replace": false
+  },
+  "footprint_viewer": {
+    "autozoom": true,
+    "cursor": {
+      "always_show_cursor": true,
+      "fullscreen_cursor": false
+    },
+    "display": 0,
+    "grid": {
+      "axes_enabled": false,
+      "fast_grid_1": 15,
+      "fast_grid_2": 16,
+      "last_size": 15,
+      "line_width": 1.0,
+      "min_spacing": 10.0,
+      "override_connected": false,
+      "override_connected_idx": 16,
+      "override_graphics": false,
+      "override_graphics_idx": 15,
+      "override_text": false,
+      "override_text_idx": 18,
+      "override_vias": false,
+      "override_vias_idx": 18,
+      "override_wires": false,
+      "override_wires_idx": 19,
+      "overrides_enabled": true,
+      "show": true,
+      "sizes": [
+        {
+          "name": "",
+          "x": "1000 mil",
+          "y": "1000 mil"
+        },
+        {
+          "name": "",
+          "x": "500 mil",
+          "y": "500 mil"
+        },
+        {
+          "name": "",
+          "x": "250 mil",
+          "y": "250 mil"
+        },
+        {
+          "name": "",
+          "x": "200 mil",
+          "y": "200 mil"
+        },
+        {
+          "name": "",
+          "x": "100 mil",
+          "y": "100 mil"
+        },
+        {
+          "name": "",
+          "x": "50 mil",
+          "y": "50 mil"
+        },
+        {
+          "name": "",
+          "x": "25 mil",
+          "y": "25 mil"
+        },
+        {
+          "name": "",
+          "x": "20 mil",
+          "y": "20 mil"
+        },
+        {
+          "name": "",
+          "x": "10 mil",
+          "y": "10 mil"
+        },
+        {
+          "name": "",
+          "x": "5 mil",
+          "y": "5 mil"
+        },
+        {
+          "name": "",
+          "x": "2 mil",
+          "y": "2 mil"
+        },
+        {
+          "name": "",
+          "x": "1 mil",
+          "y": "1 mil"
+        },
+        {
+          "name": "",
+          "x": "5.0 mm",
+          "y": "5.0 mm"
+        },
+        {
+          "name": "",
+          "x": "2.5 mm",
+          "y": "2.5 mm"
+        },
+        {
+          "name": "",
+          "x": "1.0 mm",
+          "y": "1.0 mm"
+        },
+        {
+          "name": "",
+          "x": "0.5 mm",
+          "y": "0.5 mm"
+        },
+        {
+          "name": "",
+          "x": "0.25 mm",
+          "y": "0.25 mm"
+        },
+        {
+          "name": "",
+          "x": "0.2 mm",
+          "y": "0.2 mm"
+        },
+        {
+          "name": "",
+          "x": "0.1 mm",
+          "y": "0.1 mm"
+        },
+        {
+          "name": "",
+          "x": "0.05 mm",
+          "y": "0.05 mm"
+        },
+        {
+          "name": "",
+          "x": "0.025 mm",
+          "y": "0.025 mm"
+        },
+        {
+          "name": "",
+          "x": "0.01 mm",
+          "y": "0.01 mm"
+        }
+      ],
+      "snap": 0,
+      "style": 0,
+      "user_grid_x": "",
+      "user_grid_y": ""
+    },
+    "maximized": false,
+    "mru_path": "",
+    "perspective": "",
+    "pos_x": 0,
+    "pos_y": 0,
+    "show_graphic_fill": true,
+    "show_pad_fill": true,
+    "show_pad_number": true,
+    "show_text_fill": true,
+    "size_x": 0,
+    "size_y": 0,
+    "use_45_limit": true,
+    "zoom": 1.0,
+    "zoom_factors": [
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      1.5,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      20.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0,
+      300.0
+    ]
+  },
+  "footprints_pane_width": 0,
+  "graphics": {
+    "canvas_type": 1,
+    "highlight_factor": 0.5,
+    "select_factor": 0.75
+  },
+  "lib_tree": {
+    "column_widths": null,
+    "columns": [],
+    "open_libs": []
+  },
+  "libraries_pane_width": 0,
+  "meta": {
+    "version": 0
+  },
+  "plugins": {
+    "actions": []
+  },
+  "printing": {
+    "background": false,
+    "color_theme": "",
+    "layers": [],
+    "monochrome": true,
+    "scale": 1.0,
+    "title_block": false,
+    "use_theme": false
+  },
+  "search_pane": {
+    "search_hidden_fields": true,
+    "selection_zoom": 1
+  },
+  "system": {
+    "file_history": [],
+    "first_run_shown": false,
+    "last_imperial_units": 5,
+    "last_metric_units": 1,
+    "max_undo_items": 0,
+    "show_import_issues": true,
+    "units": 1
+  },
+  "window": {
+    "cursor": {
+      "always_show_cursor": true,
+      "fullscreen_cursor": false
+    },
+    "display": 0,
+    "grid": {
+      "axes_enabled": false,
+      "fast_grid_1": 15,
+      "fast_grid_2": 16,
+      "last_size": 15,
+      "line_width": 1.0,
+      "min_spacing": 10.0,
+      "override_connected": false,
+      "override_connected_idx": 16,
+      "override_graphics": false,
+      "override_graphics_idx": 15,
+      "override_text": false,
+      "override_text_idx": 18,
+      "override_vias": false,
+      "override_vias_idx": 18,
+      "override_wires": false,
+      "override_wires_idx": 19,
+      "overrides_enabled": true,
+      "show": true,
+      "sizes": [
+        {
+          "name": "",
+          "x": "1000 mil",
+          "y": "1000 mil"
+        },
+        {
+          "name": "",
+          "x": "500 mil",
+          "y": "500 mil"
+        },
+        {
+          "name": "",
+          "x": "250 mil",
+          "y": "250 mil"
+        },
+        {
+          "name": "",
+          "x": "200 mil",
+          "y": "200 mil"
+        },
+        {
+          "name": "",
+          "x": "100 mil",
+          "y": "100 mil"
+        },
+        {
+          "name": "",
+          "x": "50 mil",
+          "y": "50 mil"
+        },
+        {
+          "name": "",
+          "x": "25 mil",
+          "y": "25 mil"
+        },
+        {
+          "name": "",
+          "x": "20 mil",
+          "y": "20 mil"
+        },
+        {
+          "name": "",
+          "x": "10 mil",
+          "y": "10 mil"
+        },
+        {
+          "name": "",
+          "x": "5 mil",
+          "y": "5 mil"
+        },
+        {
+          "name": "",
+          "x": "2 mil",
+          "y": "2 mil"
+        },
+        {
+          "name": "",
+          "x": "1 mil",
+          "y": "1 mil"
+        },
+        {
+          "name": "",
+          "x": "5.0 mm",
+          "y": "5.0 mm"
+        },
+        {
+          "name": "",
+          "x": "2.5 mm",
+          "y": "2.5 mm"
+        },
+        {
+          "name": "",
+          "x": "1.0 mm",
+          "y": "1.0 mm"
+        },
+        {
+          "name": "",
+          "x": "0.5 mm",
+          "y": "0.5 mm"
+        },
+        {
+          "name": "",
+          "x": "0.25 mm",
+          "y": "0.25 mm"
+        },
+        {
+          "name": "",
+          "x": "0.2 mm",
+          "y": "0.2 mm"
+        },
+        {
+          "name": "",
+          "x": "0.1 mm",
+          "y": "0.1 mm"
+        },
+        {
+          "name": "",
+          "x": "0.05 mm",
+          "y": "0.05 mm"
+        },
+        {
+          "name": "",
+          "x": "0.025 mm",
+          "y": "0.025 mm"
+        },
+        {
+          "name": "",
+          "x": "0.01 mm",
+          "y": "0.01 mm"
+        }
+      ],
+      "snap": 0,
+      "style": 0,
+      "user_grid_x": "",
+      "user_grid_y": ""
+    },
+    "maximized": false,
+    "mru_path": "",
+    "perspective": "",
+    "pos_x": 0,
+    "pos_y": 0,
+    "size_x": 0,
+    "size_y": 0,
+    "zoom_factors": [
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      1.5,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      20.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0,
+      300.0
+    ]
+  }
+}
