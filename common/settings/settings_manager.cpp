@@ -812,7 +812,7 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
                    if( !extractVersion( verB ) )
                        return true;
 
-                   return compareVersions( verA, verB ) >= 0;
+                   return compareVersions( verA, verB ) > 0;
                } );
 
     return aPaths->size() > 0;
