@@ -2445,9 +2445,14 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
     {
         const auto& cache = m_board->GetItemByIdCache();
 
+        std::unordered_set<const EDA_ITEM*> validPtrs;
+
+        for( const auto& [uuid, item] : cache )
+            validPtrs.insert( item );
+
         for( EDA_ITEM* member : aGroup->GetItems() )
         {
-            if( cache.find( member->m_Uuid ) != cache.end() )
+            if( validPtrs.count( member ) )
                 memberIds.Add( member->m_Uuid.AsString() );
         }
     }
