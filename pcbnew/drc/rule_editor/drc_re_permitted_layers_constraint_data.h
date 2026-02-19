@@ -59,6 +59,25 @@ public:
         };
     }
 
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
+    {
+        wxString code = GetConstraintCode();
+
+        if( code.IsEmpty() )
+            code = wxS( "permitted_layers" );
+
+        wxString topState = m_topLayer ? wxS( "true" ) : wxS( "false" );
+        wxString bottomState = m_bottomLayer ? wxS( "true" ) : wxS( "false" );
+
+        return { wxString::Format( wxS( "(constraint %s (top %s) (bottom %s))" ),
+                                   code, topState, bottomState ) };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

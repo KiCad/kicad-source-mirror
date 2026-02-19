@@ -68,6 +68,50 @@ public:
         };
     }
 
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
+    {
+        wxString code = GetConstraintCode();
+
+        if( code.IsEmpty() )
+            code = wxS( "allowed_orientation" );
+
+        wxString clause;
+
+        if( m_allowAllDegrees )
+        {
+            clause = wxString::Format( wxS( "(constraint %s (any true))" ), code );
+        }
+        else
+        {
+            wxArrayString angles;
+
+            if( m_allowZeroDegreess )
+                angles.Add( wxS( "0" ) );
+
+            if( m_allowNinetyDegrees )
+                angles.Add( wxS( "90" ) );
+
+            if( m_allowOneEightyDegrees )
+                angles.Add( wxS( "180" ) );
+
+            if( m_allowTwoSeventyDegrees )
+                angles.Add( wxS( "270" ) );
+
+            if( angles.IsEmpty() )
+                clause = wxString::Format( wxS( "(constraint %s (angles none))" ), code );
+            else
+                clause = wxString::Format( wxS( "(constraint %s (angles %s))" ), code,
+                                           wxJoin( angles, ' ' ) );
+        }
+
+        return { clause };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;
