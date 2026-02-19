@@ -320,7 +320,16 @@ SENTRY* SENTRY::m_instance = nullptr;
 
 bool operator<( const ASSERT_CACHE_KEY& aKey1, const ASSERT_CACHE_KEY& aKey2 )
 {
-    return aKey1.file < aKey2.file || aKey1.line < aKey2.line || aKey1.func < aKey2.func || aKey1.cond < aKey2.cond;
+    if( aKey1.file != aKey2.file )
+        return aKey1.file < aKey2.file;
+
+    if( aKey1.line != aKey2.line )
+        return aKey1.line < aKey2.line;
+
+    if( aKey1.func != aKey2.func )
+        return aKey1.func < aKey2.func;
+
+    return aKey1.cond < aKey2.cond;
 }
 
 
