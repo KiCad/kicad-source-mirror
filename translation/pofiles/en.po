@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-16 02:11+0300\n"
+"POT-Creation-Date: 2026-02-19 12:57+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5554,24 +5554,24 @@ msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
-"offf: %d"
+"offset: %d"
 msgstr ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
-"offf: %d"
+"offset: %d"
 
 #, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
-"offf: %d"
+"offset: %d"
 msgstr ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
-"offf: %d"
+"offset: %d"
 
 msgid "Cannot parse time stamp in symbol section of netlist."
 msgstr "Cannot parse time stamp in symbol section of netlist."
@@ -9241,6 +9241,10 @@ msgstr "Symbol name '%s' already in use in library '%s'."
 
 msgid "Edit Symbol Properties"
 msgstr "Edit Symbol Properties"
+
+#, c-format
+msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
+msgstr "Pin '%s' in jumper pin group %d does not exist in this symbol."
 
 #, c-format
 msgid "This field is inherited from '%s'."
@@ -17819,12 +17823,6 @@ msgstr "Annotate Automatically"
 msgid "Toggle automatic annotation of new symbols"
 msgstr "Toggle automatic annotation of new symbols"
 
-msgid "Repair Schematic"
-msgstr "Repair Schematic"
-
-msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Run various diagnostics and attempt to repair schematic"
-
 msgid "Previous Symbol Unit"
 msgstr "Previous Symbol Unit"
 
@@ -18381,17 +18379,6 @@ msgstr "Symbols with broken library symbol links cannot be edited."
 
 msgid "Increment Annotations"
 msgstr "Increment Annotations"
-
-#, c-format
-msgid "%d duplicate IDs replaced.\n"
-msgstr "%d duplicate IDs replaced.\n"
-
-#, c-format
-msgid "%d potential problems repaired."
-msgstr "%d potential problems repaired."
-
-msgid "No errors found."
-msgstr "No errors found."
 
 #, c-format
 msgid "Design block %s does not have a schematic file."
@@ -20320,11 +20307,6 @@ msgstr "Precision of Gerber coordinates, valid options: 5 or 6"
 
 msgid "Use KiCad Gerber file extension"
 msgstr "Use KiCad Gerber file extension"
-
-msgid ""
-"This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
-msgstr ""
-"This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 
 msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
@@ -25035,6 +25017,9 @@ msgstr "(arc has null or very small size: %d nm)"
 msgid "Custom Rules"
 msgstr "Custom Rules"
 
+msgid "Barcode Error"
+msgstr "Barcode Error"
+
 msgid "Modify barcode"
 msgstr "Modify barcode"
 
@@ -26379,10 +26364,6 @@ msgstr "Output files '%s' already exists. Do you want to overwrite it?"
 msgid "Cannot remove existing output file '%s'."
 msgstr "Cannot remove existing output file '%s'."
 
-#, c-format
-msgid "Output file '%s' already exists."
-msgstr "Output file '%s' already exists."
-
 msgid "Cannot create temporary output directory."
 msgstr "Cannot create temporary output directory."
 
@@ -26397,10 +26378,6 @@ msgstr ""
 #, c-format
 msgid "Cannot remove existing output directory '%s'."
 msgstr "Cannot remove existing output directory '%s'."
-
-#, c-format
-msgid "Output directory '%s' already exists."
-msgstr "Output directory '%s' already exists."
 
 #, c-format
 msgid ""
@@ -27020,6 +26997,10 @@ msgid ""
 msgstr ""
 "You are trying to remove layers that are used by the footprint: %s.\n"
 "Please remove the objects that use these layers first."
+
+#, c-format
+msgid "Pad '%s' in jumper pad group %d does not exist in this footprint."
+msgstr "Pad '%s' in jumper pad group %d does not exist in this footprint."
 
 msgid "Unconstrained"
 msgstr "Unconstrained"
@@ -32720,6 +32701,9 @@ msgstr "version number"
 msgid "Incomplete statement."
 msgstr "Incomplete statement."
 
+msgid "No errors found."
+msgstr "No errors found."
+
 msgid "Missing rule name."
 msgstr "Missing rule name."
 
@@ -33638,14 +33622,14 @@ msgstr "Top Layer"
 msgid "Bottom Layer"
 msgstr "Bottom Layer"
 
-msgid "Minimum Routing Width is required"
-msgstr "Minimum Routing Width is required"
+msgid "Minimum Routing Width must be greater than 0"
+msgstr "Minimum Routing Width must be greater than 0"
 
-msgid "Preferred Routing Width is required"
-msgstr "Preferred Routing Width is required"
+msgid "Preferred Routing Width must be greater than 0"
+msgstr "Preferred Routing Width must be greater than 0"
 
-msgid "Maximum Routing Width is required"
-msgstr "Maximum Routing Width is required"
+msgid "Maximum Routing Width must be greater than 0"
+msgstr "Maximum Routing Width must be greater than 0"
 
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
 msgstr "Minimum Routing Width cannot be greater than Preferred Routing Width"
@@ -33665,26 +33649,26 @@ msgstr "Preferred Routing Width"
 msgid "Maximum Routing Width"
 msgstr "Maximum Routing Width"
 
-msgid "Minimum Width is required"
-msgstr "Minimum Width is required"
+msgid "Minimum Width must be greater than 0"
+msgstr "Minimum Width must be greater than 0"
 
-msgid "Preferred Width is required"
-msgstr "Preferred Width is required"
+msgid "Preferred Width must be greater than 0"
+msgstr "Preferred Width must be greater than 0"
 
-msgid "Maximum Width is required"
-msgstr "Maximum Width is required"
+msgid "Maximum Width must be greater than 0"
+msgstr "Maximum Width must be greater than 0"
 
-msgid "Minimum Gap is required"
-msgstr "Minimum Gap is required"
+msgid "Minimum Gap must be greater than 0"
+msgstr "Minimum Gap must be greater than 0"
 
-msgid "Preferred Gap is required"
-msgstr "Preferred Gap is required"
+msgid "Preferred Gap must be greater than 0"
+msgstr "Preferred Gap must be greater than 0"
 
-msgid "Maximum Gap is required"
-msgstr "Maximum Gap is required"
+msgid "Maximum Gap must be greater than 0"
+msgstr "Maximum Gap must be greater than 0"
 
-msgid "Maximum Uncoupled Length is required"
-msgstr "Maximum Uncoupled Length is required"
+msgid "Maximum Uncoupled Length must be greater than 0"
+msgstr "Maximum Uncoupled Length must be greater than 0"
 
 msgid "Minimum Width cannot be greater than Preferred Width"
 msgstr "Minimum Width cannot be greater than Preferred Width"
@@ -35730,6 +35714,13 @@ msgstr "Thermal Relief Spoke Angle"
 
 msgid "Thermal Relief Gap"
 msgstr "Thermal Relief Gap"
+
+msgid ""
+"This barcode type does not support international characters. Use QR Code or "
+"Data Matrix instead."
+msgstr ""
+"This barcode type does not support international characters. Use QR Code or "
+"Data Matrix instead."
 
 #, c-format
 msgid "Barcode '%s' on %s"
@@ -38990,6 +38981,14 @@ msgstr "KiCad board netlist files"
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
 msgstr "Orphaned net %s re-parented.\n"
+
+#, c-format
+msgid "%d duplicate IDs replaced.\n"
+msgstr "%d duplicate IDs replaced.\n"
+
+#, c-format
+msgid "%d potential problems repaired."
+msgstr "%d potential problems repaired."
 
 msgid "No board problems found."
 msgstr "No board problems found."
@@ -42636,6 +42635,81 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid ""
+#~ "Invalid footprint ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offf: %d"
+#~ msgstr ""
+#~ "Invalid footprint ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offf: %d"
+
+#, c-format
+#~ msgid ""
+#~ "Invalid lib_id ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offf: %d"
+#~ msgstr ""
+#~ "Invalid lib_id ID in\n"
+#~ "file: '%s'\n"
+#~ "line: %d\n"
+#~ "offf: %d"
+
+#~ msgid "Repair Schematic"
+#~ msgstr "Repair Schematic"
+
+#~ msgid "Run various diagnostics and attempt to repair schematic"
+#~ msgstr "Run various diagnostics and attempt to repair schematic"
+
+#~ msgid ""
+#~ "This command is deprecated as of KiCad 9.0, please use \"gerbers\" "
+#~ "instead\n"
+#~ msgstr ""
+#~ "This command is deprecated as of KiCad 9.0, please use \"gerbers\" "
+#~ "instead\n"
+
+#, c-format
+#~ msgid "Output file '%s' already exists."
+#~ msgstr "Output file '%s' already exists."
+
+#, c-format
+#~ msgid "Output directory '%s' already exists."
+#~ msgstr "Output directory '%s' already exists."
+
+#~ msgid "Minimum Routing Width is required"
+#~ msgstr "Minimum Routing Width is required"
+
+#~ msgid "Preferred Routing Width is required"
+#~ msgstr "Preferred Routing Width is required"
+
+#~ msgid "Maximum Routing Width is required"
+#~ msgstr "Maximum Routing Width is required"
+
+#~ msgid "Minimum Width is required"
+#~ msgstr "Minimum Width is required"
+
+#~ msgid "Preferred Width is required"
+#~ msgstr "Preferred Width is required"
+
+#~ msgid "Maximum Width is required"
+#~ msgstr "Maximum Width is required"
+
+#~ msgid "Minimum Gap is required"
+#~ msgstr "Minimum Gap is required"
+
+#~ msgid "Preferred Gap is required"
+#~ msgstr "Preferred Gap is required"
+
+#~ msgid "Maximum Gap is required"
+#~ msgstr "Maximum Gap is required"
+
+#~ msgid "Maximum Uncoupled Length is required"
+#~ msgstr "Maximum Uncoupled Length is required"
 
 #~ msgid ""
 #~ "### Clause\n"
@@ -58792,18 +58866,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Add Dimension"
 #~ msgstr "Add Dimension"
-
-#, c-format
-#~ msgid ""
-#~ "Invalid footprint ID in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
-#~ msgstr ""
-#~ "Invalid footprint ID in\n"
-#~ "file: '%s'\n"
-#~ "line: %d\n"
-#~ "offset: %d"
 
 #~ msgid "(trapazoid delta is too large)"
 #~ msgstr "(trapazoid delta is too large)"
