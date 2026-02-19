@@ -726,14 +726,17 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
                {
                    wxString titleA = *a->GetTemplate()->GetTitle();
                    wxString titleB = *b->GetTemplate()->GetTitle();
+                   int      cmp = titleA.CmpNoCase( titleB );
+
+                   if( cmp == 0 )
+                       return false;
 
                    if( titleA.CmpNoCase( "default" ) == 0 )
                        return true;
-
-                   if( titleB.CmpNoCase( "default" ) == 0 )
+                   else if( titleB.CmpNoCase( "default" ) == 0 )
                        return false;
 
-                   return titleA.CmpNoCase( titleB ) < 0;
+                   return cmp < 0;
                } );
 
     for( TEMPLATE_WIDGET* widget : m_templateWidgets )
