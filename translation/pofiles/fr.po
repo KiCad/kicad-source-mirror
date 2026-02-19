@@ -395,7 +395,7 @@ msgstr "Copier l'image 3D actuelle dans le presse-papiers"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Export Image..."
-msgstr "Éxporter Image..."
+msgstr "Exporter Image..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
 msgid "Export the Current View as an image file"
