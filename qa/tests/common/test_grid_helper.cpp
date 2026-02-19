@@ -308,4 +308,278 @@ BOOST_AUTO_TEST_CASE( SnapPointManagement )
     BOOST_CHECK( !snappedPoint.has_value() );
 }
 
+
+BOOST_AUTO_TEST_CASE( AlignGridWithNonPageOrigin )
+{
+    // Issue #21800: Grid snapping should produce positions that are exact multiples
+    // of the grid size relative to the grid origin, regardless of display origin setting.
+    // When grid sizes go through VECTOR2D, floating-point imprecision in the
+    // VECTOR2D -> VECTOR2I truncation could produce incorrect grid positions.
+
+    GRID_HELPER helper;
+    helper.SetGridSnapping( true );
+
+    // PCB IU_PER_MM = 1000000 (nanometers)
+    constexpr int IU_PER_MM = 1000000;
+
+    struct TestCase
+    {
+        const char* name;
+        double      gridSizeMM;
+        int         gridOriginX;
+        int         gridOriginY;
+        int         pointX;
+        int         pointY;
+        int         expectedX;
+        int         expectedY;
+    };
+
+    // Test various grid sizes, including ones that don't convert exactly from mm to nm
+    std::vector<TestCase> cases = {
+        // 1mm grid with non-zero origin
+        { "1mm grid, origin at 47.3mm",
+          1.0, 47300000, 25300000,
+          127400000, 95400000,
+          0, 0 },
+
+        // 0.5mm grid
+        { "0.5mm grid, origin at 47.3mm",
+          0.5, 47300000, 25300000,
+          127400000, 95400000,
+          0, 0 },
+
+        // 0.1mm grid (0.1 is NOT exact in IEEE 754 double)
+        { "0.1mm grid, origin at 47.3mm",
+          0.1, 47300000, 25300000,
+          127340000, 95340000,
+          0, 0 },
+
+        // 25 mil = 0.635mm (0.635 is NOT exact in IEEE 754 double)
+        { "25mil grid, origin at 47.625mm",
+          0.635, 47625000, 25400000,
+          127960000, 95250000,
+          0, 0 },
+
+        // 10 mil = 0.254mm (0.254 is NOT exact in IEEE 754 double)
+        { "10mil grid, origin at 47.752mm",
+          0.254, 47752000, 25400000,
+          127960000, 95250000,
+          0, 0 },
+
+        // 50 mil = 1.27mm
+        { "50mil grid, origin at 47.625mm",
+          1.27, 47625000, 25400000,
+          127960000, 95250000,
+          0, 0 },
+    };
+
+    // Compute all expected values using integer grid size (the ground truth)
+    for( auto& tc : cases )
+    {
+        int gridSizeIU = KiROUND( tc.gridSizeMM * IU_PER_MM );
+
+        tc.expectedX = KiROUND( double( tc.pointX - tc.gridOriginX ) / gridSizeIU )
+                       * gridSizeIU + tc.gridOriginX;
+        tc.expectedY = KiROUND( double( tc.pointY - tc.gridOriginY ) / gridSizeIU )
+                       * gridSizeIU + tc.gridOriginY;
+    }
+
+    for( const auto& tc : cases )
+    {
+        BOOST_TEST_CONTEXT( tc.name )
+        {
+            int gridSizeIU = KiROUND( tc.gridSizeMM * IU_PER_MM );
+
+            // Simulate the grid size coming through VECTOR2D (as it does from GAL)
+            VECTOR2D gridD( tc.gridSizeMM * IU_PER_MM, tc.gridSizeMM * IU_PER_MM );
+            VECTOR2D offsetD( tc.gridOriginX, tc.gridOriginY );
+
+            helper.SetGridSize( gridD );
+            helper.SetOrigin( VECTOR2I( tc.gridOriginX, tc.gridOriginY ) );
+
+            VECTOR2I point( tc.pointX, tc.pointY );
+
+            // Test AlignGrid with VECTOR2D parameters (the path that goes through
+            // implicit VECTOR2D -> VECTOR2I truncation in computeNearest)
+            VECTOR2I resultD = helper.AlignGrid( point, gridD, offsetD );
+
+            // Test AlignGrid with no parameters (uses GetGrid() which rounds properly)
+            VECTOR2I resultI = helper.AlignGrid( point );
+
+            BOOST_CHECK_EQUAL( resultD.x, tc.expectedX );
+            BOOST_CHECK_EQUAL( resultD.y, tc.expectedY );
+            BOOST_CHECK_EQUAL( resultI.x, tc.expectedX );
+            BOOST_CHECK_EQUAL( resultI.y, tc.expectedY );
+
+            // Verify that the result is on-grid
+            BOOST_CHECK_EQUAL( ( resultD.x - tc.gridOriginX ) % gridSizeIU, 0 );
+            BOOST_CHECK_EQUAL( ( resultD.y - tc.gridOriginY ) % gridSizeIU, 0 );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TruncationVsRoundingForGridSizes )
+{
+    // Test that VECTOR2D -> VECTOR2I truncation gives the same result as rounding
+    // for all standard KiCad grid sizes (defined in app_settings.cpp).
+    // If truncation differs from rounding, computeNearest gets a wrong grid size.
+
+    constexpr int IU_PER_MM = 1000000;
+
+    // All standard grid sizes from KiCad's default grid list (in mm)
+    std::vector<double> gridSizesMM = {
+        0.001, 0.0025, 0.005, 0.01, 0.025, 0.05,
+        0.1, 0.2, 0.25, 0.5,
+        1.0, 2.0, 2.5, 5.0, 10.0, 25.0, 50.0,
+        // Imperial equivalents (mils to mm)
+        0.0254,   // 1 mil
+        0.0508,   // 2 mil
+        0.1,      // ~3.937 mil
+        0.127,    // 5 mil
+        0.254,    // 10 mil
+        0.508,    // 20 mil
+        0.635,    // 25 mil
+        1.27,     // 50 mil
+        2.54,     // 100 mil
+    };
+
+    int failCount = 0;
+
+    for( double gridMM : gridSizesMM )
+    {
+        double gridD = gridMM * IU_PER_MM;
+        int gridTruncated = static_cast<int>( gridD );
+        int gridRounded = KiROUND( gridD );
+
+        if( gridTruncated != gridRounded )
+        {
+            BOOST_TEST_MESSAGE( "Grid " << gridMM << "mm: double=" << gridD
+                               << " truncated=" << gridTruncated
+                               << " rounded=" << gridRounded
+                               << " MISMATCH" );
+            failCount++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( failCount, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DisplayOriginDoesNotAffectSnapping )
+{
+    // Verify that grid snapping produces the same result regardless of what
+    // display origin is used. The display origin only affects how coordinates
+    // are shown to the user, not where items snap.
+
+    GRID_HELPER helper;
+    helper.SetGridSnapping( true );
+
+    constexpr int IU_PER_MM = 1000000;
+
+    // Grid: 1mm, origin at (47.3mm, 25.3mm)
+    int gridSize = 1 * IU_PER_MM;
+    VECTOR2I gridOrigin( 47300000, 25300000 );
+    VECTOR2D gridD( gridSize, gridSize );
+    VECTOR2D offsetD( gridOrigin );
+
+    helper.SetGridSize( gridD );
+    helper.SetOrigin( gridOrigin );
+
+    VECTOR2I testPoint( 127400000, 95400000 );
+
+    // Snap the point
+    VECTOR2I snapped = helper.AlignGrid( testPoint, gridD, offsetD );
+
+    // Expected: nearest grid point is 127300000, 95300000
+    BOOST_CHECK_EQUAL( snapped.x, 127300000 );
+    BOOST_CHECK_EQUAL( snapped.y, 95300000 );
+
+    // Verify the position is on-grid
+    BOOST_CHECK_EQUAL( ( snapped.x - gridOrigin.x ) % gridSize, 0 );
+    BOOST_CHECK_EQUAL( ( snapped.y - gridOrigin.y ) % gridSize, 0 );
+
+    // Simulate the display path. With display origin = grid origin, the displayed
+    // value should be an exact multiple of the grid size.
+    long long displayX = static_cast<long long>( snapped.x ) - gridOrigin.x;
+    double displayMM = static_cast<double>( displayX ) / IU_PER_MM;
+
+    // The displayed value should be exactly 80.0 mm
+    BOOST_CHECK_EQUAL( displayMM, 80.0 );
+
+    // Verify with different display origins
+    VECTOR2I auxOrigin( 30000000, 20000000 );
+    long long displayFromAux = static_cast<long long>( snapped.x ) - auxOrigin.x;
+    double displayFromAuxMM = static_cast<double>( displayFromAux ) / IU_PER_MM;
+
+    // Should be exactly 97.3 mm
+    BOOST_CHECK_CLOSE( displayFromAuxMM, 97.3, 1e-10 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DragMovementPreservesGridAlignment )
+{
+    // Simulate a drag operation: the movement delta between two grid-aligned
+    // cursor positions should keep the item on-grid.
+
+    GRID_HELPER helper;
+    helper.SetGridSnapping( true );
+
+    constexpr int IU_PER_MM = 1000000;
+
+    // Grid: 1mm, origin at (47.3mm, 25.3mm)
+    int gridSize = 1 * IU_PER_MM;
+    VECTOR2I gridOrigin( 47300000, 25300000 );
+    VECTOR2D gridD( gridSize, gridSize );
+    VECTOR2D offsetD( gridOrigin );
+
+    helper.SetGridSize( gridD );
+    helper.SetOrigin( gridOrigin );
+
+    // Footprint starts at a grid-aligned position
+    VECTOR2I fpPosition( 127300000, 95300000 );
+    BOOST_CHECK_EQUAL( ( fpPosition.x - gridOrigin.x ) % gridSize, 0 );
+    BOOST_CHECK_EQUAL( ( fpPosition.y - gridOrigin.y ) % gridSize, 0 );
+
+    // Simulate several drag steps
+    struct DragStep
+    {
+        VECTOR2I mousePos;
+    };
+
+    std::vector<DragStep> steps = {
+        { { 128500000, 96500000 } },
+        { { 129200000, 97100000 } },
+        { { 130800000, 98900000 } },
+        { { 131300000, 99300000 } },
+    };
+
+    VECTOR2I prevCursor = fpPosition;
+
+    for( const auto& step : steps )
+    {
+        // Snap cursor to grid
+        VECTOR2I cursor = helper.AlignGrid( step.mousePos, gridD, offsetD );
+
+        // Compute movement
+        VECTOR2I movement = cursor - prevCursor;
+
+        // Apply movement
+        fpPosition += movement;
+        prevCursor = cursor;
+
+        // Verify footprint is still on-grid after the move
+        BOOST_CHECK_EQUAL( ( fpPosition.x - gridOrigin.x ) % gridSize, 0 );
+        BOOST_CHECK_EQUAL( ( fpPosition.y - gridOrigin.y ) % gridSize, 0 );
+
+        // Verify display with grid origin shows a clean integer mm value
+        long long displayX = static_cast<long long>( fpPosition.x ) - gridOrigin.x;
+        double displayMM = static_cast<double>( displayX ) / IU_PER_MM;
+
+        // Should be an exact integer (no fractional mm)
+        BOOST_CHECK_EQUAL( displayMM, std::floor( displayMM ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
