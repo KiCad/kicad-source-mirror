@@ -108,13 +108,10 @@ void from_json( const nlohmann::json& aJson, wxRect& aRect )
 
 bool operator<( const wxRect& aLhs, const wxRect& aRhs )
 {
-    if( aLhs.GetSize() <  aRhs.GetSize() )
-        return true;
+    if( aLhs.GetSize() != aRhs.GetSize() )
+        return aLhs.GetSize() < aRhs.GetSize();
 
-    if( aLhs.GetPosition() < aRhs.GetPosition() )
-        return true;
-
-    return false;
+    return aLhs.GetPosition() < aRhs.GetPosition();
 }
 
 
