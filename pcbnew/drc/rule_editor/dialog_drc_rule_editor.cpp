@@ -301,6 +301,10 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
             ruleData->SetOriginalRuleText( entry.originalRuleText );
             ruleData->SetWasEdited( entry.wasEdited );
             ruleData->SetLayerSource( entry.layerSource );
+
+            if( !entry.layerSource.IsEmpty() )
+                ruleData->SetLayers( entry.layerCondition.Seq() );
+
             ruleData->SetSeverity( entry.severity );
             node.m_nodeData = ruleData;
         }

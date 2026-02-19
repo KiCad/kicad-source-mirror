@@ -246,6 +246,31 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataToWindow()
 }
 
 
+wxString PANEL_DRC_RULE_EDITOR::getSelectedLayerSource() const
+{
+    if( !m_layerListChoiceCtrl )
+        return wxEmptyString;
+
+    int sel = m_layerListChoiceCtrl->GetSelection();
+    if( sel <= 0 )
+        return wxEmptyString;
+
+    int layerValue = m_layerIDs[sel - 1];
+
+    switch( layerValue )
+    {
+    case LAYER_SEL_OUTER: return wxS( "outer" );
+    case LAYER_SEL_INNER: return wxS( "inner" );
+    case LAYER_SEL_TOP: return m_board ? m_board->GetLayerName( F_Cu ) : wxString();
+    case LAYER_SEL_BOTTOM: return m_board ? m_board->GetLayerName( B_Cu ) : wxString();
+    default:
+        if( layerValue >= 0 && m_board )
+            return m_board->GetLayerName( static_cast<PCB_LAYER_ID>( layerValue ) );
+        return wxEmptyString;
+    }
+}
+
+
 bool PANEL_DRC_RULE_EDITOR::TransferDataFromWindow()
 {
     if( m_constraintPanel )
@@ -254,6 +279,7 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataFromWindow()
     m_constraintData->SetRuleName( m_nameCtrl->GetValue() );
     m_constraintData->SetComment( m_commentCtrl->GetValue() );
     m_constraintData->SetLayers( getSelectedLayers() );
+    m_constraintData->SetLayerSource( getSelectedLayerSource() );
 
     // Use the new condition group panel
     wxString combined = m_conditionGroupPanel->BuildCondition();
@@ -1111,9 +1137,18 @@ std::vector<PCB_LAYER_ID> PANEL_DRC_RULE_EDITOR::getSelectedLayers()
 
     int layerValue = m_layerIDs[sel - 1];
 
-    // Synthetic layers don't map to single PCB_LAYER_IDs
+    // Translate pseudo-IDs to real layer IDs
     if( layerValue < 0 )
-        return {};
+    {
+        switch( layerValue )
+        {
+        case LAYER_SEL_OUTER: return { F_Cu, B_Cu };
+        case LAYER_SEL_INNER: return { In1_Cu };
+        case LAYER_SEL_TOP: return { F_Cu };
+        case LAYER_SEL_BOTTOM: return { B_Cu };
+        default: return {};
+        }
+    }
 
     return { static_cast<PCB_LAYER_ID>( layerValue ) };
 }
@@ -1143,6 +1178,28 @@ void PANEL_DRC_RULE_EDITOR::setSelectedLayers( const std::vector<PCB_LAYER_ID>& 
             {
                 m_layerListChoiceCtrl->SetSelection( static_cast<int>( i ) + 1 );
                 return;
+            }
+        }
+    }
+
+    // Map real layer IDs to Top/Bottom pseudo-entries (for TOP_BOTTOM_ANY dropdowns)
+    if( !aLayers.empty() )
+    {
+        PCB_LAYER_ID target = aLayers.front();
+        bool         isFront = IsFrontLayer( target );
+        bool         isBack = IsBackLayer( target );
+
+        if( isFront || isBack )
+        {
+            int pseudoId = isFront ? LAYER_SEL_TOP : LAYER_SEL_BOTTOM;
+
+            for( size_t i = 0; i < m_layerIDs.size(); ++i )
+            {
+                if( m_layerIDs[i] == pseudoId )
+                {
+                    m_layerListChoiceCtrl->SetSelection( static_cast<int>( i ) + 1 );
+                    return;
+                }
             }
         }
     }

@@ -53,7 +53,7 @@ public:
         // Positions measured from constraint_vias_under_smd.png (~280x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 90, 110, 150, 1, _("Allow"), LABEL_POSITION::RIGHT },    // checkbox (bottom left corner)
+            { 90, 110, 150, 1, _( "Disallow" ), LABEL_POSITION::RIGHT }, // checkbox (bottom left corner)
         };
     }
 
@@ -68,8 +68,7 @@ public:
         if( !m_boolInputValue )
             return {};
 
-        wxString code = GetConstraintCode();
-        return { wxString::Format( "(constraint %s)", code ) };
+        return { wxS( "(constraint disallow via)" ) };
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override

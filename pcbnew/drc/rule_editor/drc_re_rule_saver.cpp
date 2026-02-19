@@ -116,18 +116,22 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
     if( !aEntry.constraintData )
         return wxEmptyString;
 
-    RULE_GENERATION_CONTEXT ctx;
-    ctx.ruleName = aEntry.ruleName;
-    ctx.conditionExpression = aEntry.condition;
-    ctx.constraintCode = aEntry.constraintData->GetConstraintCode();
-    ctx.comment = aEntry.constraintData->GetComment();
+    wxString ruleText = aEntry.constraintData->GetGeneratedRule();
 
-    // Generate layer clause if layers are specified
-    if( aEntry.layerCondition.any() && aBoard )
-        ctx.layerClause = generateLayerClause( aEntry.layerCondition, aBoard );
+    if( ruleText.IsEmpty() )
+    {
+        RULE_GENERATION_CONTEXT ctx;
+        ctx.ruleName = aEntry.ruleName;
+        ctx.conditionExpression = aEntry.condition;
+        ctx.constraintCode = aEntry.constraintData->GetConstraintCode();
+        ctx.comment = aEntry.constraintData->GetComment();
 
-    // Generate the rule text from the constraint data
-    wxString ruleText = aEntry.constraintData->GenerateRule( ctx );
+        // Generate layer clause if layers are specified
+        if( aEntry.layerCondition.any() && aBoard )
+            ctx.layerClause = generateLayerClause( aEntry.layerCondition, aBoard );
+
+        ruleText = aEntry.constraintData->GenerateRule( ctx );
+    }
 
     // If severity is specified and not default, we need to inject it
     // The GenerateRule method should handle this, but we verify here

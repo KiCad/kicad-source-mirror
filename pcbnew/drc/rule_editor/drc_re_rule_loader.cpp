@@ -36,6 +36,7 @@
 #include "drc_re_abs_length_two_constraint_data.h"
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
+#include "drc_re_bool_input_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
 
@@ -200,6 +201,24 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( skew )
             data->SetMaxSkew( toMM( skew->GetValue().Max() ) );
+
+        return data;
+    }
+
+    case VIAS_UNDER_SMD:
+    {
+        auto data = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>();
+        data->SetRuleName( aRule.m_Name );
+        data->SetConstraintCode( wxS( "vias_under_smd" ) );
+
+        const DRC_CONSTRAINT* constraint = findConstraint( aRule, DISALLOW_CONSTRAINT );
+
+        if( constraint )
+        {
+            int viaFlags = DRC_DISALLOW_THROUGH_VIAS | DRC_DISALLOW_BLIND_VIAS | DRC_DISALLOW_BURIED_VIAS
+                           | DRC_DISALLOW_MICRO_VIAS;
+            data->SetBoolInputValue( ( constraint->m_DisallowFlags & viaFlags ) != 0 );
+        }
 
         return data;
     }

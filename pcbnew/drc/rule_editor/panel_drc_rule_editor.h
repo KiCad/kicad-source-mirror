@@ -164,6 +164,7 @@ private:
 private:
     void populateLayerSelector( DRC_LAYER_CATEGORY aCategory );
     std::vector<PCB_LAYER_ID> getSelectedLayers();
+    wxString                  getSelectedLayerSource() const;
     void setSelectedLayers( const std::vector<PCB_LAYER_ID>& aLayers,
                             const wxString& aLayerSource = wxEmptyString );
 
