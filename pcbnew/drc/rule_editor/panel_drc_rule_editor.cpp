@@ -51,19 +51,8 @@
 
 #include <drc/drc_rule_parser.h>
 #include <drc/rule_editor/panel_drc_rule_editor.h>
-#include <drc/rule_editor/drc_re_numeric_input_panel.h>
-#include <drc/rule_editor/drc_re_bool_input_panel.h>
-#include <drc/rule_editor/drc_re_via_style_panel.h>
-#include <drc/rule_editor/drc_re_abs_length_two_panel.h>
-#include <drc/rule_editor/drc_re_min_txt_ht_th_panel.h>
-#include <drc/rule_editor/drc_re_rtg_diff_pair_panel.h>
-#include <drc/rule_editor/drc_re_routing_width_panel.h>
-#include <drc/rule_editor/drc_re_permitted_layers_panel.h>
-#include <drc/rule_editor/drc_re_allowed_orientation_panel.h>
 #include <drc/rule_editor/drc_re_custom_rule_panel.h>
 #include "drc_re_condition_group_panel.h"
-
-// Overlay panels (new bitmap-based implementation)
 #include "drc_re_via_style_overlay_panel.h"
 #include "drc_re_routing_width_overlay_panel.h"
 #include "drc_re_rtg_diff_pair_overlay_panel.h"

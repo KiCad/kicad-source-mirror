@@ -27,10 +27,8 @@
 #include <wx/arrstr.h>
 #include <wx/bitmap.h>
 #include <wx/chartype.h>
-#include <wx/statbmp.h>
 #include <wx/tokenzr.h>
 
-#include <bitmaps.h>
 #include <confirm.h>
 #include <eda_text.h>
 #include <footprint_editor_settings.h>
@@ -60,12 +58,6 @@ public:
     virtual bool ValidateInputs( int* aErrorCount, wxString* aValidationMessage ) = 0;
 
     virtual wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) = 0;
-
-    wxStaticBitmap* GetConstraintImage(wxPanel* aParent, BITMAPS aBitMap)
-    {
-        return new wxStaticBitmap( aParent, wxID_ANY, KiBitmapBundle( aBitMap ),
-                                   wxDefaultPosition, wxSize( -1, 250 ), 0 );
-    }
 
 protected:
     static wxString sanitizeRuleName( const wxString& aRuleName )

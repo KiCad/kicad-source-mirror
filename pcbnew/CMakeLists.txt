@@ -320,24 +320,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/dialog_drc_rule_editor.cpp
     drc/rule_editor/panel_drc_rule_editor_base.cpp
     drc/rule_editor/panel_drc_rule_editor.cpp
-    drc/rule_editor/drc_re_numeric_input_panel_base.cpp
-    drc/rule_editor/drc_re_numeric_input_panel.cpp
-    drc/rule_editor/drc_re_bool_input_panel_base.cpp
-    drc/rule_editor/drc_re_bool_input_panel.cpp
-    drc/rule_editor/drc_re_via_style_panel_base.cpp
-    drc/rule_editor/drc_re_via_style_panel.cpp
-    drc/rule_editor/drc_re_abs_length_two_panel_base.cpp
-    drc/rule_editor/drc_re_abs_length_two_panel.cpp
-    drc/rule_editor/drc_re_min_txt_ht_th_panel_base.cpp
-    drc/rule_editor/drc_re_min_txt_ht_th_panel.cpp
-    drc/rule_editor/drc_re_rtg_diff_pair_panel_base.cpp
-    drc/rule_editor/drc_re_rtg_diff_pair_panel.cpp
-    drc/rule_editor/drc_re_routing_width_panel_base.cpp
-    drc/rule_editor/drc_re_routing_width_panel.cpp
-    drc/rule_editor/drc_re_permitted_layers_panel_base.cpp
-    drc/rule_editor/drc_re_permitted_layers_panel.cpp
-    drc/rule_editor/drc_re_allowed_orientation_panel_base.cpp
-    drc/rule_editor/drc_re_allowed_orientation_panel.cpp
     drc/rule_editor/drc_re_bitmap_overlay_panel.cpp
     drc/rule_editor/drc_re_object_selector_panel.cpp
     drc/rule_editor/drc_re_overlay_field.cpp
@@ -350,7 +332,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_bool_input_overlay_panel.cpp
     drc/rule_editor/drc_re_permitted_layers_overlay_panel.cpp
     drc/rule_editor/drc_re_allowed_orientation_overlay_panel.cpp
-    drc/rule_editor/drc_re_overlay_panel_factory.cpp
     drc/rule_editor/drc_re_condition_row_panel.cpp
     drc/rule_editor/drc_re_condition_group_panel.cpp
     drc/rule_editor/drc_re_custom_rule_panel.cpp
