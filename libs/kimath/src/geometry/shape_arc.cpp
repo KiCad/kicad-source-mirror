@@ -418,8 +418,9 @@ void SHAPE_ARC::update_values()
     m_radius = std::sqrt( ( VECTOR2D( m_start ) - m_center ).SquaredEuclideanNorm() );
 
     std::vector<VECTOR2I> points;
-    // Put start and end points in the point list
+    // Put start, mid, and end points in the point list
     points.push_back( m_start );
+    points.push_back( m_mid );
     points.push_back( m_end );
 
     EDA_ANGLE start_angle = GetStartAngle();
