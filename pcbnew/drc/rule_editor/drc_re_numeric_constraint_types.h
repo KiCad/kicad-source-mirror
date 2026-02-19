@@ -304,7 +304,7 @@ class DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPU
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_silk_to_silk_clearance; }
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_silk_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return { { 85, 105, 58, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
