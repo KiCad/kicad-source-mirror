@@ -51,7 +51,7 @@ static const wxChar* const traceAllegroParserBlocks = wxT( "KICAD_ALLEGRO_PARSER
 static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
-static FILE_HEADER::LINKED_LIST ReadLL( FILE_STREAM& aStream, FMT_VER aVer = FMT_VER::V_160 )
+static FILE_HEADER::LINKED_LIST ReadLL( FILE_STREAM& aStream, FMT_VER aVer )
 {
     uint32_t w1 = aStream.ReadU32();
     uint32_t w2 = aStream.ReadU32();
@@ -99,7 +99,7 @@ static void ReadArrayU32( FILE_STREAM& aStream, ARRAY& aArray )
 
 
 template <typename T>
-static T ReadField( FILE_STREAM& aStream )
+static T ReadField( FILE_STREAM& aStream, FMT_VER aFmtVer )
 {
     T field;
     if constexpr( std::is_same_v<T, uint32_t> )
@@ -120,7 +120,7 @@ static T ReadField( FILE_STREAM& aStream )
     }
     else if constexpr( std::is_same_v<T, FILE_HEADER::LINKED_LIST> )
     {
-        field = ReadLL( aStream );
+        field = ReadLL( aStream, aFmtVer );
     }
     else if constexpr( requires { std::tuple_size<T>::value; } )
     {
@@ -141,11 +141,11 @@ static T ReadField( FILE_STREAM& aStream )
  * version.
  */
 template <typename COND_T>
-static void ReadCond( FILE_STREAM& aStream, FMT_VER aVer, COND_T& aField )
+static void ReadCond( FILE_STREAM& aStream, FMT_VER aFmtVer, COND_T& aField )
 {
-    if( aField.exists( aVer ) )
+    if( aField.exists( aFmtVer ) )
     {
-        aField = ReadField<typename COND_T::value_type>( aStream );
+        aField = ReadField<typename COND_T::value_type>( aStream, aFmtVer );
     }
 }
 
@@ -189,6 +189,7 @@ FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
 std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 {
     auto header = std::make_unique<ALLEGRO::FILE_HEADER>();
+    const size_t headerStartPos = m_stream.Position();
 
     uint32_t fileMagic = m_stream.ReadU32();
     m_fmtVer = FormatFromMagic( fileMagic );
@@ -204,98 +205,72 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 
     header->m_UnknownMagic = m_stream.ReadU32();
     header->m_UnknownFlags = m_stream.ReadU32();
-    ReadArrayU32( m_stream, header->m_Unknown2 );
 
-    if( m_fmtVer >= FMT_VER::V_180 )
-    {
-        // V18 has 28 linked lists: 5 new at the front, then the same 22 as v16, then 1 new.
-        // Positions 0-4 are new v18-only LLs
-        header->m_LL_V18_1 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_V18_2 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_V18_3 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_V18_4 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_V18_5 = ReadLL( m_stream, m_fmtVer );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2_preV18 );
 
-        // Positions 5-22 match v16 positions 0-17
-        header->m_LL_0x04 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x06 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x0C = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_Shapes = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x14 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x1B_Nets = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x1C = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x24_0x28 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_Unknown1 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x2B = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x03_0x30 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x0A = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x1D_0x1E_0x1F = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_Unknown2 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x38 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x2C = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x0C_2 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_Unknown3 = ReadLL( m_stream, m_fmtVer );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2a_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2b_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_0x27_End_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2d_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2e_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_StringCount_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown2g_V18 );
 
-        // Positions 23-26 match v16 positions 18-21, but 0x36 and Unknown5 are swapped
-        header->m_LL_Unknown5 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x36 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_Unknown6 = ReadLL( m_stream, m_fmtVer );
-        header->m_LL_0x0A_2 = ReadLL( m_stream, m_fmtVer );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_1 );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_2 );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_3 );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_4 );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_5 );
 
-        // Position 27: new v18 LL
-        header->m_LL_V18_6 = ReadLL( m_stream, m_fmtVer );
+    // V18 positions 5-22 match v16 positions 0-17
+    header->m_LL_0x04 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x06 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x0C = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_Shapes = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x14 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x1B_Nets = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x1C = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x24_0x28 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_Unknown1 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x2B = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x03_0x30 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x0A = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x1D_0x1E_0x1F = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_Unknown2 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x38 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x2C = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x0C_2 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_Unknown3 = ReadLL( m_stream, m_fmtVer );
 
-        // V18 stores 0x35 extents as two scalars after the linked lists
-        header->m_0x35_Start = m_stream.ReadU32();
-        header->m_0x35_End = m_stream.ReadU32();
+    ReadCond( m_stream, m_fmtVer, header->m_0x35_Start_preV18 );
+    ReadCond( m_stream, m_fmtVer, header->m_0x35_End_preV18 );
 
-        // 0x27_End and StringsCount relocated to Unknown2 in v18
-        header->m_0x27_End = header->m_Unknown2[2];
-        header->m_StringsCount = header->m_Unknown2[5];
-    }
+    ReadCond( m_stream, m_fmtVer, header->m_LL_Unknown5_V18 );
+    header->m_LL_0x36 = ReadLL( m_stream, m_fmtVer );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_Unknown5_preV18 );
+
+    header->m_LL_Unknown6 = ReadLL( m_stream, m_fmtVer );
+    header->m_LL_0x0A_2 = ReadLL( m_stream, m_fmtVer );
+
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown3 );
+
+    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_6 );
+    ReadCond( m_stream, m_fmtVer, header->m_0x35_Start_V18 );
+    ReadCond( m_stream, m_fmtVer, header->m_0x35_End_V18 );
+
+    // Quick check that the positions line up
+    // (start of the m_AllegroVersion string is easy to find)
+    if( m_fmtVer < FMT_VER::V_180 )
+        wxASSERT( m_stream.Position() - headerStartPos == 0xF8 );
     else
-    {
-        // 18 linked lists in the shared header region
-        header->m_LL_0x04 = ReadLL( m_stream );
-        header->m_LL_0x06 = ReadLL( m_stream );
-        header->m_LL_0x0C = ReadLL( m_stream );
-        header->m_LL_Shapes = ReadLL( m_stream );
-        header->m_LL_0x14 = ReadLL( m_stream );
-        header->m_LL_0x1B_Nets = ReadLL( m_stream );
-        header->m_LL_0x1C = ReadLL( m_stream );
-        header->m_LL_0x24_0x28 = ReadLL( m_stream );
-        header->m_LL_Unknown1 = ReadLL( m_stream );
-        header->m_LL_0x2B = ReadLL( m_stream );
-        header->m_LL_0x03_0x30 = ReadLL( m_stream );
-        header->m_LL_0x0A = ReadLL( m_stream );
-        header->m_LL_0x1D_0x1E_0x1F = ReadLL( m_stream );
-        header->m_LL_Unknown2 = ReadLL( m_stream );
-        header->m_LL_0x38 = ReadLL( m_stream );
-        header->m_LL_0x2C = ReadLL( m_stream );
-        header->m_LL_0x0C_2 = ReadLL( m_stream );
-        header->m_LL_Unknown3 = ReadLL( m_stream );
-
-        header->m_0x35_Start = m_stream.ReadU32();
-        header->m_0x35_End = m_stream.ReadU32();
-        header->m_LL_0x36 = ReadLL( m_stream );
-        header->m_LL_Unknown5 = ReadLL( m_stream );
-        header->m_LL_Unknown6 = ReadLL( m_stream );
-        header->m_LL_0x0A_2 = ReadLL( m_stream );
-        header->m_Unknown3 = m_stream.ReadU32();
-    }
+        wxASSERT( m_stream.Position() - headerStartPos == 0x124 );
 
     m_stream.ReadBytes( header->m_AllegroVersion.data(), header->m_AllegroVersion.size() );
     header->m_Unknown4 = m_stream.ReadU32();
     header->m_MaxKey = m_stream.ReadU32();
 
-    if( m_fmtVer >= FMT_VER::V_180 )
-    {
-        header->m_Unknown5_V18 = ReadField<std::array<uint32_t, 9>>( m_stream );
-    }
-    else
-    {
-        header->m_Unknown5 = ReadField<std::array<uint32_t, 17>>( m_stream );
-    }
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown5_preV18 );
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown5_V18 );
 
     {
         uint8_t units = m_stream.ReadU8();
@@ -312,20 +287,18 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 
     header->m_Unknown6 = m_stream.ReadU32();
 
-    if( m_fmtVer < FMT_VER::V_180 )
-    {
-        header->m_Unknown7 = m_stream.ReadU32();
-        header->m_0x27_End = m_stream.ReadU32();
-    }
+    ReadCond( m_stream, m_fmtVer, header->m_Unknown7 );
+    ReadCond( m_stream, m_fmtVer, header->m_0x27_End_preV18 );
 
     header->m_Unknown8 = m_stream.ReadU32();
 
-    if( m_fmtVer < FMT_VER::V_180 )
-    {
-        header->m_StringsCount = m_stream.ReadU32();
-    }
+    ReadCond( m_stream, m_fmtVer, header->m_StringCount_preV18 );
 
     ReadArrayU32( m_stream, header->m_Unknown9 );
+
+    header->m_Unknown10a = m_stream.ReadU32();
+    header->m_Unknown10b = m_stream.ReadU32();
+    header->m_Unknown10c = m_stream.ReadU32();
 
     header->m_UnitsDivisor = m_stream.ReadU32();
 
@@ -337,8 +310,8 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
         header->m_LayerMap[i].m_LayerList0x2A = m_stream.ReadU32();
     }
 
-    wxLogTrace( traceAllegroParser, wxT( "Parsed header: %d objects, %d strings" ),
-                header->m_ObjectCount, header->m_StringsCount );
+    wxLogTrace( traceAllegroParser, wxT( "Parsed header: %d objects, %d strings" ), header->m_ObjectCount,
+                header->GetStringsCount() );
 
     return header;
 }
@@ -2490,7 +2463,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         m_progressReporter->SetMaxProgress( static_cast<int>( aBoard.m_Header->m_ObjectCount ) );
     }
 
-    BLOCK_PARSER blockParser( m_stream, ver, aBoard.m_Header->m_0x27_End );
+    BLOCK_PARSER blockParser( m_stream, ver, aBoard.m_Header->Get_0x27_End() );
 
     auto lastRefresh = std::chrono::steady_clock::now();
 
@@ -2610,6 +2583,26 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 }
 
 
+template <typename T>
+void dumpLL( const char* name, const T& ll )
+{
+    const auto dump = [&]( const FILE_HEADER::LINKED_LIST& ll )
+    {
+        wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x", name, ll.m_Head, ll.m_Tail );
+    };
+
+    if constexpr( std::is_same_v<T, FILE_HEADER::LINKED_LIST> )
+    {
+        dump( ll );
+    }
+    else if constexpr( std::is_same_v<T, COND_FIELD_BASE<FILE_HEADER::LINKED_LIST>> )
+    {
+        if( ll.has_value() )
+            dump( ll.value() );
+    }
+}
+
+
 std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
 {
     std::unique_ptr<BRD_DB> board = std::make_unique<BRD_DB>();
@@ -2635,14 +2628,15 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
         board->m_FmtVer = headerParser.GetFormatVersion();
 
         {
-            auto dumpLL = [&]( const char* name, const FILE_HEADER::LINKED_LIST& ll )
-            {
-                wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x",
-                            name, ll.m_Head, ll.m_Tail );
-            };
-
             wxLogTrace( traceAllegroParser, "Header linked lists (ver=%#010x):",
                         board->m_Header->m_Magic );
+
+            dumpLL( "V18_1", board->m_Header->m_LL_V18_1 );
+            dumpLL( "V18_2", board->m_Header->m_LL_V18_2 );
+            dumpLL( "V18_3", board->m_Header->m_LL_V18_3 );
+            dumpLL( "V18_4", board->m_Header->m_LL_V18_4 );
+            dumpLL( "V18_5", board->m_Header->m_LL_V18_5 );
+
             dumpLL( "0x04", board->m_Header->m_LL_0x04 );
             dumpLL( "0x06", board->m_Header->m_LL_0x06 );
             dumpLL( "0x0C", board->m_Header->m_LL_0x0C );
@@ -2661,10 +2655,13 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
             dumpLL( "0x2C", board->m_Header->m_LL_0x2C );
             dumpLL( "0x0C_2", board->m_Header->m_LL_0x0C_2 );
             dumpLL( "Unknown3", board->m_Header->m_LL_Unknown3 );
-            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5 );
+            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5_preV18 );
+            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5_V18 );
             dumpLL( "0x36", board->m_Header->m_LL_0x36 );
             dumpLL( "Unknown6", board->m_Header->m_LL_Unknown6 );
             dumpLL( "0x0A_2", board->m_Header->m_LL_0x0A_2 );
+
+            dumpLL( "V18_6", board->m_Header->m_LL_V18_6 );
         }
     }
     catch( const IO_ERROR& e )
@@ -2696,7 +2693,8 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
                 verStr ) );
     }
 
-    board->ReserveCapacity( board->m_Header->m_ObjectCount, board->m_Header->m_StringsCount );
+    const uint32_t stringsCount = board->m_Header->GetStringsCount();
+    board->ReserveCapacity( board->m_Header->m_ObjectCount, stringsCount );
 
     // Skip DB_OBJ creation for high-volume types (segments, graphics, arcs) that the
     // BOARD_BUILDER accesses only through raw BLOCK_BASE. Saves millions of allocations.
@@ -2704,10 +2702,10 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
 
     try
     {
-        ReadStringMap( m_stream, *board, board->m_Header->m_StringsCount );
+        ReadStringMap( m_stream, *board, stringsCount );
 
         wxLogTrace( traceAllegroPerf, wxT( "  ReadStringMap (%u strings): %.3f ms" ), //format:allow
-                    board->m_Header->m_StringsCount, parseTimer.msecs( true ) );
+                    stringsCount, parseTimer.msecs( true ) );
 
         readObjects( *board );
 

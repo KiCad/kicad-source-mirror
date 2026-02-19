@@ -83,6 +83,28 @@ looks up each block by key, and follows `m_Next` until 0 or the tail key.
 The `m_Key` field serves as a global block identifier. All blocks are
 indexed by key in a flat hash map (`m_ObjectKeyMap`).
 
+## Header
+
+Every file as a header block which is around 4kB in size. The header contains
+global file metadata and a set of linked list descriptors that point to the
+top-level blocks for each major category of data.
+
+Versions 16 and 17 have the same (or at least very similar) header layout,
+while version 18 introduces significant changes.
+
+* `m_Magic` - file magic number used for version detection.
+* `m_Unknown1a` - this always seems to be 0x03
+* `m_FileRole` - this seems to be:
+  * `0x01`: .brd files
+  * `0x02`: .dra footprint files
+* `m_Unknown1b` - this always seems to be 0x03
+* `m_writerProgram`
+  * `0x00000009`: Allegro editor
+  * `0x00130000`: DB Doctor utility
+
+The next block of 7 fields seems to have different meanings in v18 compared to
+earlier versions.
+
 ## Block Types
 
 | Type | Struct                  | Purpose                              |

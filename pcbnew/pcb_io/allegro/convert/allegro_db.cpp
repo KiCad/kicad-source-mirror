@@ -1554,7 +1554,7 @@ static void collectSentinelKeys( const FILE_HEADER& aHeader, DB& aDb )
     addTail( aHeader.m_LL_0x0C_2 );
     addTail( aHeader.m_LL_Unknown3 );
     addTail( aHeader.m_LL_0x36 );
-    addTail( aHeader.m_LL_Unknown5 );
+    addTail( aHeader.GetUnknown5() );
     addTail( aHeader.m_LL_Unknown6 );
     addTail( aHeader.m_LL_0x0A_2 );
 

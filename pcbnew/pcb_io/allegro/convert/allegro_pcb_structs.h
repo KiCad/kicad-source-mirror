@@ -248,7 +248,30 @@ struct FILE_HEADER
 
     uint32_t                m_UnknownMagic;     // This is always 0x000a0d0a?
     uint32_t                m_UnknownFlags;     // This looks like flags: 0x01000000, 0x0400000, 0x06000000
-    std::array<uint32_t, 7> m_Unknown2;
+
+    // In this block of 7 uint32s, it seems they have very different meanings pre and post v18
+
+    // Pre v18, these are all unknown
+    // - 3 and 4 are the same.
+    // - 5 and 6 arer of a similar size
+    COND_LT<FMT_VER::V_180, std::array<uint32_t, 7>> m_Unknown2_preV18;
+
+    // V18
+    COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2a_V18;          // Looks like an 'end pointer' like 0x27_end
+    COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2b_V18;          // 0x00
+    COND_GE<FMT_VER::V_180, uint32_t> m_0x27_End_V18;
+    COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2d_V18;          // 0x00
+    COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2e_V18;          // 25? (perhaps layer count?)
+    COND_GE<FMT_VER::V_180, uint32_t> m_StringCount_V18;
+    COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2g_V18;          // 0x00
+
+    // V180 has 6 additional linked lists in the header
+    // 5 of them are at the start
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_3;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_4;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_5;
 
     // Linked lists grouping top-level elements by type
     LINKED_LIST m_LL_0x04;              // Net assignments
@@ -270,25 +293,23 @@ struct FILE_HEADER
     LINKED_LIST m_LL_0x0C_2;            // Secondary pin definitions
     LINKED_LIST m_LL_Unknown3;
 
-    // For some reason the 0x35 extents are recorded here
-    uint32_t m_0x35_Start;
-    uint32_t m_0x35_End;
+    // For some reason the 0x35 extents are recorded in the header
+    COND_LT<FMT_VER::V_180, uint32_t> m_0x35_Start_preV18;
+    COND_LT<FMT_VER::V_180, uint32_t> m_0x35_End_preV18;
 
-    // And more linked lists
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_Unknown5_V18;
     LINKED_LIST m_LL_0x36;
-    LINKED_LIST m_LL_Unknown5;
+    COND_LT<FMT_VER::V_180, LINKED_LIST> m_LL_Unknown5_preV18;
+
     LINKED_LIST m_LL_Unknown6;
     LINKED_LIST m_LL_0x0A_2;
 
     COND_LT<FMT_VER::V_180, uint32_t> m_Unknown3;
 
-    // V180 has 6 additional linked lists in the header
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_3;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_4;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_5;
     COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_6;
+
+    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_Start_V18;
+    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_End_V18;
 
     // Fixed length string field
     std::array<char, 60> m_AllegroVersion;
@@ -297,7 +318,7 @@ struct FILE_HEADER
 
     uint32_t m_MaxKey;
 
-    COND_LT<FMT_VER::V_180, std::array<uint32_t, 17>> m_Unknown5;
+    COND_LT<FMT_VER::V_180, std::array<uint32_t, 17>> m_Unknown5_preV18;
     COND_GE<FMT_VER::V_180, std::array<uint32_t, 9>>  m_Unknown5_V18;
 
     BOARD_UNITS m_BoardUnits;
@@ -307,13 +328,18 @@ struct FILE_HEADER
     COND_LT<FMT_VER::V_180, uint32_t> m_Unknown7;
 
     // The end of the 0x27 object(?)
-    uint32_t m_0x27_End;
+    // In V18, this is relocated to m_0x27_End_V18
+    COND_LT<FMT_VER::V_180, uint32_t> m_0x27_End_preV18;
 
     uint32_t m_Unknown8;
 
-    uint32_t m_StringsCount;
+    COND_LT<FMT_VER::V_180, uint32_t> m_StringCount_preV18;
 
-    std::array<uint32_t, 53> m_Unknown9;
+    std::array<uint32_t, 50> m_Unknown9;
+
+    uint32_t m_Unknown10a;  // Often 0x000500FF
+    uint32_t m_Unknown10b;  // Similar to 0xFFA60000
+    uint32_t m_Unknown10c;  // Usually 0x01
 
     // E.g. 1000 for mils
     uint32_t m_UnitsDivisor;
@@ -325,6 +351,30 @@ struct FILE_HEADER
      * is a universal value. But there's no obvious nearby value of '25'.
      */
     std::array<LAYER_MAP_ENTRY, 25> m_LayerMap;
+
+    uint32_t GetStringsCount() const
+    {
+        if( m_StringCount_V18.has_value() )
+            return m_StringCount_V18.value();
+
+        return m_StringCount_preV18.value();
+    }
+
+    uint32_t Get_0x27_End() const
+    {
+        if( m_0x27_End_V18.has_value() )
+            return m_0x27_End_V18.value();
+
+        return m_0x27_End_preV18.value();
+    }
+
+    const LINKED_LIST& GetUnknown5() const
+    {
+        if( m_LL_Unknown5_V18.has_value() )
+            return m_LL_Unknown5_V18.value();
+
+        return m_LL_Unknown5_preV18.value();
+    }
 };
 
 
@@ -1058,6 +1108,12 @@ struct BLK_0x1C_PADSTACK
     COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
 
     /**
+     * V180 inserts 8 extra uint32s between the fixed arrays and the component table.
+     * Despite the name, this is read before the components, not after.
+     */
+    COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_V180Trailer;
+
+    /**
      * Fixed slot indices in the component table.
      *
      * The fixed slots come before the per-layer copper entries.
@@ -1130,12 +1186,6 @@ struct BLK_0x1C_PADSTACK
      * * >= 17.2: 10
      */
     std::vector<uint32_t> m_UnknownArrN;
-
-    /**
-     * V180 inserts 8 extra uint32s between the fixed arrays and the component table.
-     * Despite the name, this is read before the components, not after.
-     */
-    COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_V180Trailer;
 };
 
 
