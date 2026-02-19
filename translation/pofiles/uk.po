@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-15 23:07+0000\n"
+"PO-Revision-Date: 2026-02-20 12:09+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -9192,7 +9192,7 @@ msgstr "%s, %s і %d більше"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9200,13 +9200,13 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Некоректне ID посадкового місця в\n"
-"файл: %s\n"
+"файлі: '%s'\n"
 "ряд: %d\n"
-"позиція: %d."
+"зміщення: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -9216,7 +9216,7 @@ msgstr ""
 "Недійсний ідентифікатор lib_id у\n"
 "файлі: '%s'\n"
 "рядку: %d\n"
-"offf: %d"
+"зміщення: %d"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:115
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
@@ -11369,7 +11369,7 @@ msgstr "Підтвердити зміну"
 
 #: common/widgets/widget_hotkey_list.cpp:534
 msgid "Command (double-click to edit)"
-msgstr "Команда (подвійне клацання для редагування)"
+msgstr "Команда (натисніть двічі для редагування)"
 
 #: common/widgets/widget_hotkey_list.cpp:537
 msgid "Hotkey"
@@ -14682,7 +14682,7 @@ msgstr "Редагувати властивості символу"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:730
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "Вивід '%s' у групі перемичок %d не існує в цьому символі."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
