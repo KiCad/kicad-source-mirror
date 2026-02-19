@@ -158,49 +158,46 @@ void from_json( const nlohmann::json& aJson, wxAuiPaneInfo& aPaneInfo )
 
 bool operator<( const wxAuiPaneInfo& aLhs, const wxAuiPaneInfo& aRhs )
 {
-    if( aLhs.name < aRhs.name )
-        return true;
+    if( aLhs.name != aRhs.name )
+        return aLhs.name < aRhs.name;
 
-    if( aLhs.caption < aRhs.caption )
-        return true;
+    if( aLhs.caption != aRhs.caption )
+        return aLhs.caption < aRhs.caption;
 
-    if( aLhs.state < aRhs.state )
-        return true;
+    if( aLhs.state != aRhs.state )
+        return aLhs.state < aRhs.state;
 
-    if( aLhs.dock_direction < aRhs.dock_direction )
-        return true;
+    if( aLhs.dock_direction != aRhs.dock_direction )
+        return aLhs.dock_direction < aRhs.dock_direction;
 
-    if( aLhs.dock_layer < aRhs.dock_layer )
-        return true;
+    if( aLhs.dock_layer != aRhs.dock_layer )
+        return aLhs.dock_layer < aRhs.dock_layer;
 
-    if( aLhs.dock_row < aRhs.dock_row )
-        return true;
+    if( aLhs.dock_row != aRhs.dock_row )
+        return aLhs.dock_row < aRhs.dock_row;
 
-    if( aLhs.dock_pos < aRhs.dock_pos )
-        return true;
+    if( aLhs.dock_pos != aRhs.dock_pos )
+        return aLhs.dock_pos < aRhs.dock_pos;
 
-    if( aLhs.dock_proportion < aRhs.dock_proportion )
-        return true;
+    if( aLhs.dock_proportion != aRhs.dock_proportion )
+        return aLhs.dock_proportion < aRhs.dock_proportion;
 
-    if( aLhs.best_size < aRhs.best_size )
-        return true;
+    if( aLhs.best_size != aRhs.best_size )
+        return aLhs.best_size < aRhs.best_size;
 
-    if( aLhs.min_size < aRhs.min_size )
-        return true;
+    if( aLhs.min_size != aRhs.min_size )
+        return aLhs.min_size < aRhs.min_size;
 
-    if( aLhs.max_size < aRhs.max_size )
-        return true;
+    if( aLhs.max_size != aRhs.max_size )
+        return aLhs.max_size < aRhs.max_size;
 
-    if( aLhs.floating_pos < aRhs.floating_pos )
-        return true;
+    if( aLhs.floating_pos != aRhs.floating_pos )
+        return aLhs.floating_pos < aRhs.floating_pos;
 
-    if( aLhs.floating_size < aRhs.floating_size )
-        return true;
+    if( aLhs.floating_size != aRhs.floating_size )
+        return aLhs.floating_size < aRhs.floating_size;
 
-    if( aLhs.rect < aRhs.rect )
-        return true;
-
-    return false;
+    return aLhs.rect < aRhs.rect;
 }
 
 
