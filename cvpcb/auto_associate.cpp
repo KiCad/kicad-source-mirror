@@ -72,7 +72,7 @@ wxString GetQuotedText( wxString& text )
 // (m_ComponentValue member)
 bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIVALENCE& test )
 {
-    return ref.m_ComponentValue.Cmp( test.m_ComponentValue ) >= 0;
+    return ref.m_ComponentValue.Cmp( test.m_ComponentValue ) > 0;
 }
 
 
