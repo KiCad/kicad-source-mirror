@@ -23,6 +23,8 @@
 
 #include "tools/position_relative_tool.h"
 
+#include <set>
+
 #include <board_commit.h>
 #include <collectors.h>
 #include <dialogs/dialog_position_relative.h>
@@ -51,17 +53,30 @@
 /**
  * Move each item in the selection by the given vector.
  *
- * If any pads are part of a footprint, the whole footprint is moved.
+ * Pads that belong to footprints are promoted to their parent footprint so the whole footprint
+ * moves. A dedup set ensures each footprint is only moved once even when multiple of its pads
+ * are in the selection.
+ *
+ * @param aAllowFreePads when true, pads are moved individually without promotion.
  */
 static void moveSelectionBy( const PCB_SELECTION& aSelection, const VECTOR2I& aMoveVec,
-                             BOARD_COMMIT& commit )
+                             BOARD_COMMIT& commit, bool aAllowFreePads )
 {
+    std::set<BOARD_ITEM*> moved;
+
     for( EDA_ITEM* item : aSelection )
     {
         if( !item->IsBOARD_ITEM() )
             continue;
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+        if( boardItem->Type() == PCB_PAD_T && !aAllowFreePads )
+            boardItem = boardItem->GetParent();
+
+        if( !moved.insert( boardItem ).second )
+            continue;
+
         commit.Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
         boardItem->Move( aMoveVec );
     }
@@ -102,7 +117,6 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
-                sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
@@ -163,7 +177,6 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
-                sTool->FilterCollectorForFreePads( aCollector, false );
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
@@ -196,6 +209,10 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
     EDA_UNITS                  units = frame()->GetUserUnits();
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, pcbIUScale, units, invertXAxis, invertYAxis );
     STATUS_TEXT_POPUP          statusPopup( frame() );
+
+    bool allowFreePads = m_isFootprintEditor
+                         || ( frame()->GetPcbNewSettings()
+                              && frame()->GetPcbNewSettings()->m_AllowFreePads );
 
     // Some colour to make it obviously not just a ruler
     ruler.SetColor( view.GetPainter()->GetSettings()->GetLayerColor( LAYER_ANCHOR ) );
@@ -244,7 +261,7 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
             [&]( const VECTOR2I& aMoveVec )
             {
                 BOARD_COMMIT commit( frame() );
-                moveSelectionBy( selection, aMoveVec, commit );
+                moveSelectionBy( selection, aMoveVec, commit, allowFreePads );
                 commit.Push( _( "Set Relative Position Interactively" ) );
             };
 
@@ -429,7 +446,12 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
                                                        const VECTOR2I& aTranslation )
 {
     VECTOR2I aggregateTranslation = aPosAnchor + aTranslation - GetSelectionAnchorPosition();
-    moveSelectionBy( m_selection, aggregateTranslation, *m_commit );
+
+    bool allowFreePads = m_isFootprintEditor
+                         || ( frame()->GetPcbNewSettings()
+                              && frame()->GetPcbNewSettings()->m_AllowFreePads );
+
+    moveSelectionBy( m_selection, aggregateTranslation, *m_commit, allowFreePads );
     m_commit->Push( _( "Position Relative" ) );
 
     if( m_selection.IsHover() )
