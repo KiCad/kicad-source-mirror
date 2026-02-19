@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-19 09:56+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-20 12:09+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -10358,9 +10358,8 @@ msgid "Confirm change"
 msgstr "Änderung bestätigen"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(Doppelklicken zum Bearbeiten)"
+msgstr "Befehl (doppelklicken zum Bearbeiten)"
 
 #: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
