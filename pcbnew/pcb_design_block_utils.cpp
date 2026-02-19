@@ -446,7 +446,7 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
             addedCount++;
         }
 
-        if( addedCount >= 2 )
+        if( addedCount > 0 )
         {
             commit.Add( newGroup );
             commit.Push( _( "Group Items" ) );
@@ -584,7 +584,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             addedCount++;
         }
 
-        if( addedCount >= 2 )
+        if( addedCount > 0 )
         {
             commit.Add( newGroup );
             commit.Push( _( "Group Items" ) );
