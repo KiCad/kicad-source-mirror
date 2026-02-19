@@ -212,10 +212,10 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
     PCB_PICKER_TOOL* pickerTool = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     wxCHECK( pickerTool, /* void */ );
 
+    Hide();
+
     m_toolMgr->RunAction( PCB_ACTIONS::selectItemInteractively,
                           PCB_PICKER_TOOL::INTERACTIVE_PARAMS{ this, _( "Select reference item..." ) } );
-
-    Hide();
 }
 
 
@@ -315,6 +315,8 @@ void DIALOG_POSITION_RELATIVE::UpdatePickedItem( const EDA_ITEM* aItem )
         m_anchorItemPosition = item->GetPosition();
 
     Show( true );
+    Raise();
+    SetFocus();
 }
 
 
@@ -328,6 +330,8 @@ void DIALOG_POSITION_RELATIVE::UpdatePickedPoint( const std::optional<VECTOR2I>&
     updateAnchorInfo( nullptr );
 
     Show( true );
+    Raise();
+    SetFocus();
 }
 
 
