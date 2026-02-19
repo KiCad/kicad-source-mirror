@@ -271,16 +271,16 @@ bool operator<( const COLOR4D& lhs, const COLOR4D& rhs )
     if( lhs.m_text || rhs.m_text )
         return ( lhs.m_text ? *lhs.m_text : wxString() ) < ( rhs.m_text ? *rhs.m_text : wxString() );
 
-    if( lhs.r < rhs.r )
-        return true;
-    else if( lhs.g < rhs.g )
-        return true;
-    else if( lhs.b < rhs.b )
-        return true;
-    else if( lhs.a < rhs.a )
-        return true;
+    if( lhs.r != rhs.r )
+        return lhs.r < rhs.r;
 
-    return false;
+    if( lhs.g != rhs.g )
+        return lhs.g < rhs.g;
+
+    if( lhs.b != rhs.b )
+        return lhs.b < rhs.b;
+
+    return lhs.a < rhs.a;
 }
 
 
