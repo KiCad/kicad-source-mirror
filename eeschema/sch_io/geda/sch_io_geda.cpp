@@ -1538,7 +1538,7 @@ int SCH_IO_GEDA::toKiCadDist( int aMils ) const
 
 VECTOR2I SCH_IO_GEDA::toKiCad( int aGedaX, int aGedaY ) const
 {
-    return VECTOR2I( aGedaX * MILS_TO_IU, ( m_maxY - aGedaY ) * MILS_TO_IU );
+    return VECTOR2I( toKiCadDist( aGedaX ), toKiCadDist( m_maxY - aGedaY ) );
 }
 
 
@@ -2412,8 +2412,8 @@ void SCH_IO_GEDA::parsePath( const wxString& aLine, wxTextFile& aFile, size_t& a
     // Convert to KiCad IU (Y-down) by scaling X and negating+scaling Y.
     auto relToAbs = [&]( long dx, long dy ) -> VECTOR2I
     {
-        return currentPt + VECTOR2I( static_cast<int>( dx ) * MILS_TO_IU,
-                                     -static_cast<int>( dy ) * MILS_TO_IU );
+        return currentPt + VECTOR2I( toKiCadDist( static_cast<int>( dx ) ),
+                                     -toKiCadDist( static_cast<int>( dy ) ) );
     };
 
     while( pathTok.HasMoreTokens() )
@@ -3075,14 +3075,14 @@ void SCH_IO_GEDA::addSymbolPin( LIB_SYMBOL& aSymbol, int aX1, int aY1, int aX2, 
 
     // Symbol coordinates use the same mil system but are relative to the symbol origin.
     // The connection point goes at the tip, the other end is toward the symbol body.
-    VECTOR2I connPt( connX * MILS_TO_IU, -connY * MILS_TO_IU );
-    VECTOR2I bodyPt( otherX * MILS_TO_IU, -otherY * MILS_TO_IU );
+    VECTOR2I connPt( toKiCadDist( connX ), -toKiCadDist( connY ) );
+    VECTOR2I bodyPt( toKiCadDist( otherX ), -toKiCadDist( otherY ) );
 
     // PIN_ORIENTATION describes which direction the pin body extends FROM the
     // connection point, so the delta must point from connection toward body.
     int dx = otherX - connX;
     int dy = otherY - connY;
-    int length = KiROUND( std::hypot( dx, dy ) ) * MILS_TO_IU;
+    int length = toKiCadDist( KiROUND( std::hypot( dx, dy ) ) );
 
     PIN_ORIENTATION orient = PIN_ORIENTATION::PIN_RIGHT;
 
@@ -3163,10 +3163,10 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &dashlength );
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &dashspace );
 
-        VECTOR2I start( static_cast<int>( x1 ) * MILS_TO_IU,
-                        -static_cast<int>( y1 ) * MILS_TO_IU );
-        VECTOR2I end( static_cast<int>( x2 ) * MILS_TO_IU,
-                      -static_cast<int>( y2 ) * MILS_TO_IU );
+        VECTOR2I start( toKiCadDist( static_cast<int>( x1 ) ),
+                        -toKiCadDist( static_cast<int>( y1 ) ) );
+        VECTOR2I end( toKiCadDist( static_cast<int>( x2 ) ),
+                      -toKiCadDist( static_cast<int>( y2 ) ) );
 
         SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         shape->AddPoint( start );
@@ -3197,10 +3197,10 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &dashspace );
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &filltype );
 
-        VECTOR2I topLeft( static_cast<int>( x ) * MILS_TO_IU,
-                          -static_cast<int>( y + h ) * MILS_TO_IU );
-        VECTOR2I botRight( static_cast<int>( x + w ) * MILS_TO_IU,
-                           -static_cast<int>( y ) * MILS_TO_IU );
+        VECTOR2I topLeft( toKiCadDist( static_cast<int>( x ) ),
+                          -toKiCadDist( static_cast<int>( y + h ) ) );
+        VECTOR2I botRight( toKiCadDist( static_cast<int>( x + w ) ),
+                           -toKiCadDist( static_cast<int>( y ) ) );
 
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
         rect->SetStart( topLeft );
@@ -3239,8 +3239,8 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &dashspace );
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &filltype );
 
-        VECTOR2I center( static_cast<int>( cx ) * MILS_TO_IU,
-                         -static_cast<int>( cy ) * MILS_TO_IU );
+        VECTOR2I center( toKiCadDist( static_cast<int>( cx ) ),
+                         -toKiCadDist( static_cast<int>( cy ) ) );
 
         SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
         circle->SetCenter( center );
@@ -3275,8 +3275,8 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &color );
         if( tok.HasMoreTokens() ) tok.GetNextToken().ToLong( &linewidth );
 
-        VECTOR2I center( static_cast<int>( cx ) * MILS_TO_IU,
-                         -static_cast<int>( cy ) * MILS_TO_IU );
+        VECTOR2I center( toKiCadDist( static_cast<int>( cx ) ),
+                         -toKiCadDist( static_cast<int>( cy ) ) );
         int radius = toKiCadDist( static_cast<int>( r ) );
 
         double startRad = DEG2RAD( static_cast<double>( sa ) );
@@ -3370,16 +3370,16 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
             wxString pathToken = pathTok.GetNextToken();
 
             // Symbol path coordinates are in mils (Y-up). Convert to IU (Y-down).
-            auto symAbsPt = []( long aX, long aY ) -> VECTOR2I
+            auto symAbsPt = [this]( long aX, long aY ) -> VECTOR2I
             {
-                return VECTOR2I( static_cast<int>( aX ) * MILS_TO_IU,
-                                 -static_cast<int>( aY ) * MILS_TO_IU );
+                return VECTOR2I( toKiCadDist( static_cast<int>( aX ) ),
+                                 -toKiCadDist( static_cast<int>( aY ) ) );
             };
 
-            auto symRelPt = [&currentPt]( long aDx, long aDy ) -> VECTOR2I
+            auto symRelPt = [this, &currentPt]( long aDx, long aDy ) -> VECTOR2I
             {
-                return currentPt + VECTOR2I( static_cast<int>( aDx ) * MILS_TO_IU,
-                                             -static_cast<int>( aDy ) * MILS_TO_IU );
+                return currentPt + VECTOR2I( toKiCadDist( static_cast<int>( aDx ) ),
+                                             -toKiCadDist( static_cast<int>( aDy ) ) );
             };
 
             bool isRelative = ( pathToken.IsAscii() && islower( pathToken[0u] ) );
@@ -3667,7 +3667,7 @@ std::unique_ptr<LIB_SYMBOL> SCH_IO_GEDA::createFallbackSymbol( const wxString& a
     libSymbol->SetShowPinNumbers( true );
     libSymbol->SetShowPinNames( true );
 
-    int halfSize = DEFAULT_SYMBOL_SIZE_MILS * MILS_TO_IU / 2;
+    int halfSize = toKiCadDist( DEFAULT_SYMBOL_SIZE_MILS ) / 2;
 
     SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
     rect->SetStart( VECTOR2I( -halfSize, -halfSize ) );
