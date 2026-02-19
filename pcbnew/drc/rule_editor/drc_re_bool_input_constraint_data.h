@@ -68,7 +68,8 @@ public:
         if( !m_boolInputValue )
             return {};
 
-        return { wxS( "(constraint disallow via)" ) };
+        wxString code = GetConstraintCode();
+        return { wxString::Format( wxS( "(constraint %s)" ), code ) };
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override

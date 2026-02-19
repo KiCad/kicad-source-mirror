@@ -37,6 +37,7 @@
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
+#include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
 
@@ -205,11 +206,42 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         return data;
     }
 
+    case ALLOWED_ORIENTATION:
+    {
+        auto data = std::make_shared<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>();
+        data->SetRuleName( aRule.m_Name );
+        data->SetConstraintCode( wxS( "allowed_orientation" ) );
+
+        const DRC_CONSTRAINT* constraint = findConstraint( aRule, ASSERTION_CONSTRAINT );
+
+        if( constraint && constraint->m_Test )
+        {
+            wxString expr = constraint->m_Test->GetExpression();
+
+            data->SetIsZeroDegreesAllowed( expr.Contains( wxS( "== 0 deg" ) ) );
+            data->SetIsNinetyDegreesAllowed( expr.Contains( wxS( "== 90 deg" ) ) );
+            data->SetIsOneEightyDegreesAllowed( expr.Contains( wxS( "== 180 deg" ) ) );
+            data->SetIsTwoSeventyDegreesAllowed( expr.Contains( wxS( "== 270 deg" ) ) );
+
+            if( !data->GetIsZeroDegreesAllowed() && !data->GetIsNinetyDegreesAllowed()
+                && !data->GetIsOneEightyDegreesAllowed() && !data->GetIsTwoSeventyDegreesAllowed() )
+            {
+                data->SetIsAllDegreesAllowed( true );
+            }
+        }
+        else
+        {
+            data->SetIsAllDegreesAllowed( true );
+        }
+
+        return data;
+    }
+
     case VIAS_UNDER_SMD:
     {
         auto data = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>();
         data->SetRuleName( aRule.m_Name );
-        data->SetConstraintCode( wxS( "vias_under_smd" ) );
+        data->SetConstraintCode( wxS( "disallow via" ) );
 
         const DRC_CONSTRAINT* constraint = findConstraint( aRule, DISALLOW_CONSTRAINT );
 
@@ -284,8 +316,21 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
     // Match the rule to panels
     std::vector<DRC_PANEL_MATCH> matches = m_matcher.MatchRule( aRule );
 
-    for( const DRC_PANEL_MATCH& match : matches )
+    for( DRC_PANEL_MATCH& match : matches )
     {
+        if( match.panelType == PERMITTED_LAYERS && match.claimedConstraints.count( ASSERTION_CONSTRAINT ) )
+        {
+            const DRC_CONSTRAINT* assertion = findConstraint( aRule, ASSERTION_CONSTRAINT );
+
+            if( assertion && assertion->m_Test )
+            {
+                wxString expr = assertion->m_Test->GetExpression();
+
+                if( expr.Contains( wxS( "Orientation" ) ) && !expr.Contains( wxS( "Layer" ) ) )
+                    match.panelType = ALLOWED_ORIENTATION;
+            }
+        }
+
         auto constraintData = createConstraintData( match.panelType, aRule, match.claimedConstraints );
 
         if( constraintData )

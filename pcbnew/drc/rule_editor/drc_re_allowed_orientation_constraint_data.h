@@ -70,39 +70,30 @@ public:
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        wxString code = GetConstraintCode();
-
-        if( code.IsEmpty() )
-            code = wxS( "allowed_orientation" );
-
-        wxString clause;
-
         if( m_allowAllDegrees )
-        {
-            clause = wxString::Format( wxS( "(constraint %s (any true))" ), code );
-        }
-        else
-        {
-            wxArrayString angles;
+            return { wxS( "(constraint assertion \"A.Orientation == A.Orientation\")" ) };
 
-            if( m_allowZeroDegreess )
-                angles.Add( wxS( "0" ) );
+        wxArrayString terms;
 
-            if( m_allowNinetyDegrees )
-                angles.Add( wxS( "90" ) );
+        if( m_allowZeroDegreess )
+            terms.Add( wxS( "A.Orientation == 0 deg" ) );
 
-            if( m_allowOneEightyDegrees )
-                angles.Add( wxS( "180" ) );
+        if( m_allowNinetyDegrees )
+            terms.Add( wxS( "A.Orientation == 90 deg" ) );
 
-            if( m_allowTwoSeventyDegrees )
-                angles.Add( wxS( "270" ) );
+        if( m_allowOneEightyDegrees )
+            terms.Add( wxS( "A.Orientation == 180 deg" ) );
 
-            if( angles.IsEmpty() )
-                clause = wxString::Format( wxS( "(constraint %s (angles none))" ), code );
-            else
-                clause = wxString::Format( wxS( "(constraint %s (angles %s))" ), code,
-                                           wxJoin( angles, ' ' ) );
-        }
+        if( m_allowTwoSeventyDegrees )
+            terms.Add( wxS( "A.Orientation == 270 deg" ) );
+
+        if( terms.IsEmpty() )
+            return {};
+
+        wxString expr = wxJoin( terms, '|' );
+        expr.Replace( wxS( "|" ), wxS( " || " ) );
+
+        wxString clause = wxString::Format( wxS( "(constraint assertion \"%s\")" ), expr );
 
         return { clause };
     }

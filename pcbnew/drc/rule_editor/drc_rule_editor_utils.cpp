@@ -82,7 +82,7 @@ static const CODE_MAP sCodeMap = { { BASIC_CLEARANCE, "clearance" },
                                    { ABSOLUTE_LENGTH, "length" },
                                    { PERMITTED_LAYERS, "permitted_layers" },
                                    { ALLOWED_ORIENTATION, "allowed_orientation" },
-                                   { VIAS_UNDER_SMD, "vias_under_smd" } };
+                                   { VIAS_UNDER_SMD, "disallow via" } };
 
 static const REVERSE_CODE_MAP sCodeReverse = []
 {
@@ -878,13 +878,8 @@ wxString DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRA
 
     case PERMITTED_LAYERS:
     case VIAS_UNDER_SMD:
-        return wxString::Format( wxS( "(layer \"%s\")" ),
-                                 aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
-
     case ALLOWED_ORIENTATION:
-        // Orientation typically applies to footprints on a specific side
-        return wxString::Format( wxS( "(condition \"A.Layer == '%s'\")" ),
-                                 aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
+        return wxString::Format( wxS( "(layer \"%s\")" ), aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
 
     default:
         return wxEmptyString;
