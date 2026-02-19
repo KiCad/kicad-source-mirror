@@ -387,6 +387,9 @@ bool DIALOG_SHIM::Show( bool show )
 
         if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
         {
+            // Convert saved DIP size to logical pixels for the current monitor
+            wxSize restoredSize = FromDIP( savedDialogRect.GetSize() );
+
             if( m_useCalculatedSize )
             {
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
@@ -395,8 +398,8 @@ bool DIALOG_SHIM::Show( bool show )
             else
             {
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
-                         std::max( wxDialog::GetSize().x, savedDialogRect.GetSize().x ),
-                         std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ), 0 );
+                         std::max( wxDialog::GetSize().x, restoredSize.x ),
+                         std::max( wxDialog::GetSize().y, restoredSize.y ), 0 );
 
                 // Reset minimum size so the user can resize the dialog smaller than
                 // the saved size. We must clear the current minimum and invalidate
@@ -565,12 +568,13 @@ void DIALOG_SHIM::SaveControlState()
     std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
     std::map<std::string, nlohmann::json>& dlgMap = settings->CsInternals().m_dialogControlValues[ dialogKey ];
 
-    wxRect rect( GetPosition(), GetSize() );
+    wxPoint pos = GetPosition();
+    wxSize  dipSize = ToDIP( GetSize() );
     nlohmann::json geom;
-    geom[ "x" ] = rect.GetX();
-    geom[ "y" ] = rect.GetY();
-    geom[ "w" ] = rect.GetWidth();
-    geom[ "h" ] = rect.GetHeight();
+    geom[ "x" ] = pos.x;
+    geom[ "y" ] = pos.y;
+    geom[ "w" ] = dipSize.x;
+    geom[ "h" ] = dipSize.y;
     dlgMap[ "__geometry" ] = geom;
 
     std::function<void( wxWindow* )> saveFn =

@@ -38,13 +38,14 @@
 #include <wx/log.h>
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
+#include <wx/window.h>
 
 
 ///! The following environment variables will never be migrated from a previous version
 const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 
 ///! Update the schema version whenever a migration is required
-const int commonSchemaVersion = 4;
+const int commonSchemaVersion = 5;
 
 COMMON_SETTINGS::~COMMON_SETTINGS() = default;
 
@@ -482,6 +483,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &COMMON_SETTINGS::migrateSchema2to3, this ) );
     registerMigration( 3, 4, std::bind( &COMMON_SETTINGS::migrateSchema3to4, this ) );
+    registerMigration( 4, 5, std::bind( &COMMON_SETTINGS::migrateSchema4to5, this ) );
 }
 
 
@@ -655,6 +657,46 @@ bool COMMON_SETTINGS::migrateSchema3to4()
     catch( ... )
     {
         wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 3->4: /netclass_panel/shown_columns not found" ) );
+    }
+
+    return true;
+}
+
+
+bool COMMON_SETTINGS::migrateSchema4to5()
+{
+    try
+    {
+        nlohmann::json& controls = m_internals->At( "dialog" ).at( "controls" );
+
+        for( auto& [dlgKey, dlgVal] : controls.items() )
+        {
+            if( !dlgVal.is_object() )
+                continue;
+
+            auto geoIt = dlgVal.find( "__geometry" );
+
+            if( geoIt == dlgVal.end() || !geoIt->is_object() )
+                continue;
+
+            nlohmann::json& geom = *geoIt;
+
+            // Legacy values were stored in logical pixels. Convert to DIP using the
+            // primary display's scale factor (best approximation without window context).
+            int w = geom.value( "w", 0 );
+            int h = geom.value( "h", 0 );
+
+            wxSize dipSize = wxWindow::ToDIP( wxSize( w, h ), nullptr );
+            geom[ "w" ] = dipSize.x;
+            geom[ "h" ] = dipSize.y;
+
+            geom.erase( "dip" );
+        }
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings,
+                    wxT( "COMMON_SETTINGS::Migrate 4->5: dialog.controls not found" ) );
     }
 
     return true;

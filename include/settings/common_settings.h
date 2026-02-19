@@ -197,6 +197,7 @@ private:
     bool migrateSchema1to2();
     bool migrateSchema2to3();
     bool migrateSchema3to4();
+    bool migrateSchema4to5();
 
     struct LEGACY_3D_SEARCH_PATH
     {
