@@ -29,6 +29,10 @@
 #include <wx/dir.h>
 #include <wx/file.h>
 
+#ifdef _WIN32
+#include <process.h>
+#endif
+
 
 BOOST_AUTO_TEST_SUITE( JobsRunner )
 
@@ -88,6 +92,9 @@ BOOST_AUTO_TEST_CASE( SimpleCommand )
     BOOST_CHECK( output.Contains( wxS( "hello" ) ) );
 }
 
+#ifdef _WIN32
+#define getpid _getpid
+#endif
 
 BOOST_AUTO_TEST_CASE( GlobExpansion )
 {
