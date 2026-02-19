@@ -1101,9 +1101,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aStartItem->Net() ) );
 
         PNS::SEGMENT coupledTrack;
-        dummyTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
-        dummyTrack.SetLayer( m_startLayer );
-        dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( coupledNet ) );
+        coupledTrack.SetEnds( aStartItem->Anchor( 0 ), aStartItem->Anchor( 0 ) );
+        coupledTrack.SetLayer( m_startLayer );
+        coupledTrack.SetNet( static_cast<NETINFO_ITEM*>( coupledNet ) );
 
         if( !found
             && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack,
