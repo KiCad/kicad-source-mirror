@@ -174,7 +174,10 @@ void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDir
 {
     m_referenceImage.Flip( aCentre, aFlipDirection );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    if( GetBoard() )
+        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    else
+        SetLayer( FlipLayer( GetLayer() ) );
 }
 
 
