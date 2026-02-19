@@ -68,6 +68,7 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow ) :
         RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_frame( aFrame ),
+        m_includeGestures( false ),
         m_hotkeyStore()
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -163,7 +164,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
-    m_hotkeyStore.Init( m_actions, true );
+    m_hotkeyStore.Init( m_actions, m_includeGestures );
 
     if( !m_hotkeyListCtrl->TransferDataToControl() )
         return false;

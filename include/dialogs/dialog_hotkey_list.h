@@ -36,7 +36,8 @@ class PANEL_HOTKEYS_EDITOR;
 
 
 /**
- * A dialog that presents the user with a read-only list of hotkeys and their current bindings.
+ * A dialog that presents the user with a list of hotkeys and their current bindings,
+ * with support for editing.
  */
 class DIALOG_LIST_HOTKEYS: public DIALOG_SHIM
 {

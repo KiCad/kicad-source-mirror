@@ -324,7 +324,9 @@ int KeyCodeFromKeyName( const wxString& keyname )
 void DisplayHotkeyList( EDA_BASE_FRAME* aParent )
 {
     DIALOG_LIST_HOTKEYS dlg( aParent );
-    dlg.ShowModal();
+
+    if( dlg.ShowModal() == wxID_OK )
+        dlg.Kiway().CommonSettingsChanged( HOTKEYS_CHANGED );
 }
 
 

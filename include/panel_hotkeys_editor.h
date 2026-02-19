@@ -47,6 +47,8 @@ public:
 
     std::vector<TOOL_ACTION*>& ActionsList() { return m_actions; }
 
+    void SetIncludeGestures( bool aInclude ) { m_includeGestures = aInclude; }
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
@@ -90,6 +92,7 @@ private:
 
 protected:
     EDA_BASE_FRAME*            m_frame;
+    bool                       m_includeGestures;
 
     std::vector<TOOL_ACTION*>  m_actions;
     HOTKEY_STORE               m_hotkeyStore;

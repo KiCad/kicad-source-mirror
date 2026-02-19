@@ -40,6 +40,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     KIFACE*     kiface = nullptr;
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this );
+    m_hk_list->SetIncludeGestures( true );
 
     wxWindow* kicadMgr_window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 
@@ -71,6 +72,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
 
     wxStdDialogButtonSizer* sdb_sizer = new wxStdDialogButtonSizer;
     sdb_sizer->AddButton( new wxButton( this, wxID_OK ) );
+    sdb_sizer->AddButton( new wxButton( this, wxID_CANCEL ) );
     sdb_sizer->Realize();
 
     main_sizer->Add( sdb_sizer, 0, wxEXPAND | wxALL, margin );
