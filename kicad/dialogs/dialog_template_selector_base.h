@@ -100,8 +100,8 @@ class TEMPLATE_WIDGET_BASE : public wxPanel
 
 	protected:
 		wxStaticBitmap* m_bitmapIcon;
-		wxStaticText* m_staticTitle;
-		wxStaticText* m_staticDescription;
+		wxStaticText* m_titleLabel;
+		wxStaticText* m_descLabel;
 
 	public:
 

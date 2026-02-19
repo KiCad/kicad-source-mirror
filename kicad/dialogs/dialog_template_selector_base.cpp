@@ -187,13 +187,13 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerText;
 	bSizerText = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTitle = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTitle->Wrap( -1 );
-	bSizerText->Add( m_staticTitle, 0, wxBOTTOM, 0 );
+    m_titleLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleLabel->Wrap( -1 );
+	bSizerText->Add( m_titleLabel, 0, wxBOTTOM, 0 );
 
-	m_staticDescription = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticDescription->Wrap( -1 );
-	bSizerText->Add( m_staticDescription, 0, wxEXPAND, 0 );
+    m_descLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_descLabel->Wrap( -1 );
+	bSizerText->Add( m_descLabel, 0, wxEXPAND, 0 );
 
 
 	bSizerMain->Add( bSizerText, 1, wxEXPAND|wxALL, 5 );
