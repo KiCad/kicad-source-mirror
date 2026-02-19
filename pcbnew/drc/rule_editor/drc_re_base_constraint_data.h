@@ -128,6 +128,7 @@ public:
         m_originalRuleText = source.m_originalRuleText;
         m_wasEdited = source.m_wasEdited;
         m_severity = source.m_severity;
+        m_ruleCondition = source.m_ruleCondition;
     }
 
     /**
