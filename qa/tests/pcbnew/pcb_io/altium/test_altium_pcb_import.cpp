@@ -31,12 +31,14 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
+#include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <netinfo.h>
 #include <netclass.h>
 #include <project/net_settings.h>
+#include <zone.h>
 
 
 struct ALTIUM_PCB_IMPORT_FIXTURE
@@ -145,6 +147,136 @@ BOOST_AUTO_TEST_CASE( NetclassAssignment )
     // If there were pattern assignments, we should have found at least one assigned net
     BOOST_CHECK_MESSAGE( foundAssignedNet,
                          "At least one net should have a non-default netclass assigned" );
+}
+
+
+/**
+ * Verify that copper zones in imported Altium boards have non-zero local clearance values
+ * derived from rules whose scope expressions match polygons.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/18408
+ */
+static void checkAllCopperFillZonesHaveClearance( PCB_IO_ALTIUM_DESIGNER& aPlugin,
+                                                  const std::string& aRelativePath )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + aRelativePath;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    aPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int fillZoneCount = 0;
+    int fillZonesWithClearance = 0;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->IsOnCopperLayer() || zone->GetIsRuleArea() || zone->IsTeardropArea() )
+            continue;
+
+        fillZoneCount++;
+
+        if( zone->GetLocalClearance().has_value() && zone->GetLocalClearance().value() > 0 )
+            fillZonesWithClearance++;
+    }
+
+    BOOST_CHECK_GT( fillZoneCount, 0 );
+
+    BOOST_CHECK_MESSAGE( fillZonesWithClearance == fillZoneCount,
+                         wxString::Format( "%s: %d/%d copper fill zones have clearance set",
+                                           aRelativePath, fillZonesWithClearance,
+                                           fillZoneCount ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ZoneClearances_eDP )
+{
+    checkAllCopperFillZonesHaveClearance(
+            m_altiumPlugin, "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc" );
+}
+
+
+BOOST_AUTO_TEST_CASE( ZoneClearances_HiFive )
+{
+    checkAllCopperFillZonesHaveClearance( m_altiumPlugin,
+                                          "plugins/altium/HiFive/HiFive1.B01.PcbDoc" );
+}
+
+
+/**
+ * Test altiumScopeExprMatchesPolygon utility function.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/18408
+ *
+ * Validates that the scope expression matching correctly identifies polygon-related
+ * Altium rule scope expressions used for zone clearance rules.
+ */
+BOOST_AUTO_TEST_CASE( ScopeExprMatchesPolygon )
+{
+    // Positive matches: expressions that reference polygons
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "InPolygon" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "InPoly" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "IsPolygon" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "IsPoly" ) ) );
+
+    // Case insensitivity
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "inpolygon" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "INPOLYGON" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "inPOLY" ) ) );
+
+    // Contained within longer expressions
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "InPolygon And InNet('GND')" ) ) );
+    BOOST_CHECK( altiumScopeExprMatchesPolygon( wxT( "(InPoly) Or IsVia" ) ) );
+
+    // Negative matches: expressions that don't reference polygons
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "All" ) ) );
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "IsVia" ) ) );
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "IsTrack" ) ) );
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "InNet('GND')" ) ) );
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "InComponent('U1')" ) ) );
+    BOOST_CHECK( !altiumScopeExprMatchesPolygon( wxT( "" ) ) );
+}
+
+
+/**
+ * Verify selectAltiumPolygonRule honours Altium priority order (1 = highest).
+ * Regression guard for selecting a less-specific polygon rule when multiple
+ * polygon-scoped rules exist alongside default (All/All) rules.
+ */
+BOOST_AUTO_TEST_CASE( SelectAltiumPolygonRule_PriorityOrder )
+{
+    auto makeRule = []( int aPriority, const wxString& aScope1, const wxString& aScope2,
+                        int aClearance )
+    {
+        ARULE6 rule;
+        rule.priority = aPriority;
+        rule.scope1expr = aScope1;
+        rule.scope2expr = aScope2;
+        rule.clearanceGap = aClearance;
+        return rule;
+    };
+
+    // Sorted by priority ascending, matching the order produced by ParseRules6Data.
+    std::vector<ARULE6> rules = {
+        makeRule( 1, wxT( "InPolygon And InNet('GND')" ), wxT( "All" ), 100 ),
+        makeRule( 2, wxT( "InPolygon" ), wxT( "All" ), 200 ),
+        makeRule( 3, wxT( "All" ), wxT( "All" ), 300 ),
+        makeRule( 4, wxT( "All" ), wxT( "All" ), 400 ),
+    };
+
+    const ARULE6* selected = selectAltiumPolygonRule( rules );
+    BOOST_REQUIRE( selected != nullptr );
+    BOOST_CHECK_EQUAL( selected->priority, 1 );
+    BOOST_CHECK_EQUAL( selected->clearanceGap, 100 );
+
+    rules.erase( rules.begin() );
+    selected = selectAltiumPolygonRule( rules );
+    BOOST_REQUIRE( selected != nullptr );
+    BOOST_CHECK_EQUAL( selected->priority, 2 );
+    BOOST_CHECK_EQUAL( selected->clearanceGap, 200 );
+
+    rules.erase( rules.begin() );
+    BOOST_CHECK( selectAltiumPolygonRule( rules ) == nullptr );
+
+    BOOST_CHECK( selectAltiumPolygonRule( {} ) == nullptr );
 }
 
 

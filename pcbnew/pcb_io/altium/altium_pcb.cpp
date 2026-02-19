@@ -941,6 +941,22 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
     return nullptr;
 }
 
+
+const ARULE6* ALTIUM_PCB::GetRuleForPolygon( ALTIUM_RULE_KIND aKind ) const
+{
+    const auto rules = m_rules.find( aKind );
+
+    if( rules == m_rules.end() )
+        return nullptr;
+
+    if( const ARULE6* match = selectAltiumPolygonRule( rules->second ) )
+        return match;
+
+    // Fall back to the default (All/All) rule
+    return GetRuleDefault( aKind );
+}
+
+
 void ALTIUM_PCB::ParseFileHeader( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -2414,8 +2430,8 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
 
-        const ARULE6* planeClearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
-        const ARULE6* zoneClearanceRule = GetRule( ALTIUM_RULE_KIND::CLEARANCE, wxT( "PolygonClearance" ) );
+        const ARULE6* planeClearanceRule = GetRuleForPolygon( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
+        const ARULE6* zoneClearanceRule = GetRuleForPolygon( ALTIUM_RULE_KIND::CLEARANCE );
         int planeLayers = 0;
         int signalLayers = 0;
         int clearance = 0;
@@ -2440,7 +2456,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltium
         if( clearance > 0 )
             zone->SetLocalClearance( clearance );
 
-        const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
+        const ARULE6* polygonConnectRule = GetRuleForPolygon( ALTIUM_RULE_KIND::POLYGON_CONNECT );
 
         if( polygonConnectRule != nullptr )
         {
@@ -2531,7 +2547,8 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         m_rules[elem.kind].emplace_back( elem );
     }
 
-    // sort rules by priority
+    // Sort by ARULE6::priority ascending. Altium priority 1 is the most specific, so the
+    // first element after sorting is the highest-priority Altium rule.
     for( std::pair<const ALTIUM_RULE_KIND, std::vector<ARULE6>>& val : m_rules )
     {
         std::sort( val.second.begin(), val.second.end(),
