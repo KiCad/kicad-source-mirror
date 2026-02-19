@@ -870,13 +870,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     for( const PAD* pad : m_footprint->Pads() )
         availablePads.insert( pad->GetNumber() );
 
-    std::vector<std::set<wxString>>& jumpers = m_footprint->JumperPadGroups();
-    jumpers.clear();
+    std::vector<std::set<wxString>> newJumpers;
 
     for( int ii = 0; ii < m_jumperGroupsGrid->GetNumberRows(); ++ii )
     {
         wxStringTokenizer tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", \t\r\n", wxTOKEN_STRTOK );
-        std::set<wxString>& group = jumpers.emplace_back();
+        std::set<wxString>& group = newJumpers.emplace_back();
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -897,6 +896,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
             group.insert( token );
         }
     }
+
+    m_footprint->JumperPadGroups() = std::move( newJumpers );
 
     // Copy the models from the panel to the footprint
     std::vector<FP_3DMODEL>& panelList = m_3dPanel->GetModelList();
