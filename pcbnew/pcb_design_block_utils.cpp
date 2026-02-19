@@ -423,7 +423,7 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         newGroup->SetName( blk.GetLibId().GetUniStringLibItemName() );
         newGroup->SetDesignBlockLibId( blk.GetLibId() );
 
-        bool added = false;
+        int addedCount = 0;
 
         for( EDA_ITEM* edaItem : selection )
         {
@@ -443,10 +443,10 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
             commit.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
             newGroup->AddItem( item );
-            added = true;
+            addedCount++;
         }
 
-        if( added )
+        if( addedCount >= 2 )
         {
             commit.Add( newGroup );
             commit.Push( _( "Group Items" ) );
@@ -456,6 +456,7 @@ bool PCB_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
         }
         else
         {
+            newGroup->RemoveAll();
             delete newGroup;
         }
     }
@@ -560,7 +561,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         newGroup->SetName( aLibId.GetUniStringLibItemName() );
         newGroup->SetDesignBlockLibId( aLibId );
 
-        bool added = false;
+        int addedCount = 0;
 
         for( EDA_ITEM* edaItem : selection )
         {
@@ -580,10 +581,10 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
 
             commit.Modify( item, nullptr, RECURSE_MODE::NO_RECURSE );
             newGroup->AddItem( item );
-            added = true;
+            addedCount++;
         }
 
-        if( added )
+        if( addedCount >= 2 )
         {
             commit.Add( newGroup );
             commit.Push( _( "Group Items" ) );
@@ -593,6 +594,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
         }
         else
         {
+            newGroup->RemoveAll();
             delete newGroup;
         }
     }

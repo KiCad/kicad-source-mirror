@@ -885,6 +885,9 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
     {
         for( const auto& [targetArea, compatData] : m_areas.m_compatMap )
         {
+            if( compatData.m_groupableItems.size() < 2 )
+                continue;
+
             pruneExistingGroups( commit, compatData.m_affectedItems );
 
             PCB_GROUP* group = new PCB_GROUP( board() );
@@ -1533,7 +1536,7 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
             for( EDA_ITEM* item : pruneList )
                 group->RemoveItem( item );
 
-            if( group->GetItems().empty() )
+            if( group->GetItems().size() < 2 )
                 aCommit.Remove( group );
         }
     }
@@ -1710,6 +1713,10 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                 continue;
 
             if( ra.m_existsAlready && !m_areas.m_replaceExisting )
+                continue;
+
+            // A group needs at least 2 items (zone + at least 1 component)
+            if( ra.m_components.empty() )
                 continue;
 
             std::unordered_set<BOARD_ITEM*> toPrune;

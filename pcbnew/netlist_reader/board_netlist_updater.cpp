@@ -947,6 +947,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
             changed = true;
             m_commit.Modify( existingGroup, nullptr, RECURSE_MODE::NO_RECURSE );
             existingGroup->RemoveItem( aPcbFootprint );
+
+            if( existingGroup->GetItems().size() < 2 )
+            {
+                existingGroup->RemoveAll();
+                m_commit.Remove( existingGroup );
+            }
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );

@@ -2076,11 +2076,20 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     if( dlg.ShouldGroupItems() )
     {
-        group = new PCB_GROUP( m_frame->GetModel() );
+        size_t boardItemCount = std::count_if( list.begin(), list.end(),
+                                               []( const std::unique_ptr<EDA_ITEM>& ptr )
+                                               {
+                                                   return ptr->IsBOARD_ITEM();
+                                               } );
 
-        newItems.push_back( group );
-        selectedItems.push_back( group );
-        preview.Add( group );
+        if( boardItemCount >= 2 )
+        {
+            group = new PCB_GROUP( m_frame->GetModel() );
+
+            newItems.push_back( group );
+            selectedItems.push_back( group );
+            preview.Add( group );
+        }
     }
 
     if( dlg.ShouldFixDiscontinuities() )

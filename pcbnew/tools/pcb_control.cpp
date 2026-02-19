@@ -2064,48 +2064,63 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     {
         if( placeAsGroup )
         {
-            PCB_GROUP* group = new PCB_GROUP( brd );
-
-            if( aDesignBlock )
-            {
-                group->SetName( aDesignBlock->GetLibId().GetLibItemName() );
-                group->SetDesignBlockLibId( aDesignBlock->GetLibId() );
-            }
-            else
-            {
-                group->SetName( wxFileName( fileName ).GetName() );
-            }
-
-            // Get the selection tool selection
             PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
             PCB_SELECTION       selection = selTool->GetSelection();
 
-            for( EDA_ITEM* eda_item : selection )
-            {
-                if( eda_item->IsBOARD_ITEM() )
-                {
-                    if( static_cast<BOARD_ITEM*>( eda_item )->IsLocked() )
-                        group->SetLocked( true );
-                }
-            }
-
-            commit->Add( group );
+            // Count items that would be added to the group
+            int groupableCount = 0;
 
             for( EDA_ITEM* eda_item : selection )
             {
-                if( eda_item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
+                if( eda_item->IsBOARD_ITEM()
+                    && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
                 {
-                    commit->Modify( eda_item );
-                    group->AddItem( eda_item );
+                    groupableCount++;
                 }
             }
 
-            selTool->ClearSelection();
-            selTool->select( group );
+            if( groupableCount >= 2 )
+            {
+                PCB_GROUP* group = new PCB_GROUP( brd );
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-            m_frame->OnModify();
-            m_frame->Refresh();
+                if( aDesignBlock )
+                {
+                    group->SetName( aDesignBlock->GetLibId().GetLibItemName() );
+                    group->SetDesignBlockLibId( aDesignBlock->GetLibId() );
+                }
+                else
+                {
+                    group->SetName( wxFileName( fileName ).GetName() );
+                }
+
+                for( EDA_ITEM* eda_item : selection )
+                {
+                    if( eda_item->IsBOARD_ITEM() )
+                    {
+                        if( static_cast<BOARD_ITEM*>( eda_item )->IsLocked() )
+                            group->SetLocked( true );
+                    }
+                }
+
+                commit->Add( group );
+
+                for( EDA_ITEM* eda_item : selection )
+                {
+                    if( eda_item->IsBOARD_ITEM()
+                        && !static_cast<BOARD_ITEM*>( eda_item )->GetParentFootprint() )
+                    {
+                        commit->Modify( eda_item );
+                        group->AddItem( eda_item );
+                    }
+                }
+
+                selTool->ClearSelection();
+                selTool->select( group );
+
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+                m_frame->OnModify();
+                m_frame->Refresh();
+            }
         }
 
         // If we were provided a commit, let the caller control when to push it

@@ -176,7 +176,7 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
                 } );
     }
 
-    if( selection.Empty() )
+    if( selection.GetSize() < 2 )
         return 0;
 
     BOARD*       board = getModel<BOARD>();

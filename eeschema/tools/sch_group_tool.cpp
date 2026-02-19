@@ -150,7 +150,7 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
             selection.Remove( schItem );
     }
 
-    if( selection.Empty() )
+    if( selection.GetSize() < 2 )
         return 0;
 
     SCH_GROUP*  group = new SCH_GROUP;
