@@ -1873,6 +1873,9 @@ struct BLK_0x36_DEF_TABLE
     struct X10
     {
         std::array<uint8_t, 108> m_Unknown;
+
+        // V18 has an extra uint32 "somewhere" in this block
+        COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2;
     };
 
     using SubstructVariant = std::variant<X02, X03, X05, X06, FontDef_X08, X0B, X0C, X0D, X0F, X10>;

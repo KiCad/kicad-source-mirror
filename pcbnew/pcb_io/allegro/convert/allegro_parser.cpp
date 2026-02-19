@@ -2011,6 +2011,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
         {
             BLK_0x36_DEF_TABLE::X10 item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
+            ReadCond( aStream, aVer, item.m_Unknown2 );
             data.m_Items.emplace_back( std::move( item ) );
             break;
         }
