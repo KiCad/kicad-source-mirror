@@ -37,14 +37,25 @@ public:
     {
         wxString backend;
 
-#if wxCHECK_VERSION( 3, 3, 2 ) && defined( __WXGTK__ )
+#ifdef __WXGTK__
+    #if wxCHECK_VERSION( 3, 3, 2 )
         int eglMajor = 0, eglMinor = 0;
 
         if( aCanvas->GetEGLVersion( &eglMajor, &eglMinor ) )
             backend = wxString::Format( "EGL %d.%d", eglMajor, eglMinor );
         else if( int glxVersion = aCanvas->GetGLXVersion() )
             backend = wxString::Format( "GLX %d.%d", glxVersion / 10, glxVersion % 10 );
-#endif
+
+    #else // !wxCHECK_VERSION( 3, 3, 2 )
+        #if wxUSE_GLCANVAS_EGL
+            backend = "EGL";
+        #else
+            if( int glxVersion = aCanvas->GetGLXVersion() )
+                backend = wxString::Format( "GLX %d.%d", glxVersion / 10, glxVersion % 10 );
+        #endif
+
+    #endif // !wxCHECK_VERSION( 3, 3, 2 )
+#endif // __WXGTK__
 
         return backend;
     }

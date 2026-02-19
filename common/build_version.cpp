@@ -179,7 +179,11 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << "Version: " << version << eol << eol;
     aMsg << "Libraries:" << eol;
 
-    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
+    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString();
+#if wxUSE_GLCANVAS_EGL
+        aMsg << " (EGL)";
+#endif
+    aMsg << eol;
 
     aMsg << indent4 << "FreeType " << KIFONT::VERSION_INFO::FreeType() << eol;
     aMsg << indent4 << "HarfBuzz " << KIFONT::VERSION_INFO::HarfBuzz() << eol;
