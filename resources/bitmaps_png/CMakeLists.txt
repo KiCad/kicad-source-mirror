@@ -797,55 +797,6 @@ set( BMAPS_OTHER
     stroke_none
     twistedpair
     viacalc
-    constraint_absolute_lenght
-    constraint_absolute_lenght_2
-    constraint_allow_fillets_outside_zone_outline
-    constraint_allowed_orientation
-    constraint_basic_clearance
-    constraint_board_outline_clearance
-    constraint_copper_to_edge_clearance
-    constraint_copper_to_hole_clearance
-    constraint_corner_style
-    constraint_creepage_distance
-    constraint_daisy_chain_stub
-    constraint_daisy_chain_stub_2
-    constraint_hole_size
-    constraint_hole_to_hole_clearance
-    constraint_hole_to_hole_distance
-    constraint_matched_lenght_all_traces_in_group
-    constraint_matched_lenght_diff_pair
-    constraint_maximum_allowed_deviation
-    constraint_maximum_via_count
-    constraint_minimum_acute_angle
-    constraint_minimum_angular_ring
-    constraint_minimum_annular_width
-    constraint_minimum_clearance
-    constraint_minimum_connection_width
-    constraint_minimum_item_clearance
-    constraint_minimum_soldermask_silver
-    constraint_minimum_text_height_and_thickness
-    constraint_minimum_thermal_relief_spoke_count
-    constraint_minimum_through_hole
-    constraint_minimum_track_width
-    constraint_minimum_uvia_diameter
-    constraint_minimum_uvia_hole
-    constraint_minimum_via_diameter
-    constraint_net_antenna
-    constraint_parallel_limit
-    constraint_permitted_layers
-    constraint_routing_diff_pair
-    constraint_routing_width
-    constraint_short_circuit
-    constraint_silk_to_silk_clearance
-    constraint_silk_to_soldermask_clearance
-    constraint_SMD_corner
-    constraint_SMD_entry
-    constraint_SMD_to_plane_plus
-    constraint_soldermask_expansion
-    constraint_solderpaste_expansion
-    constraint_unrouted
-    constraint_via_style
-    constraint_vias_under_smd
     )
 
 
