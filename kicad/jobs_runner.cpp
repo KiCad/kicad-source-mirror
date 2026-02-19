@@ -84,7 +84,7 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
 
     // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
     int result = static_cast<int>(
-            wxExecute( const_cast<wchar_t**>( argv ), wxEXEC_SYNC, &process ) );
+            wxExecute( argv, wxEXEC_SYNC, &process ) );
 
     wxInputStream* inputStream = process.GetInputStream();
     wxInputStream* errorStream = process.GetErrorStream();

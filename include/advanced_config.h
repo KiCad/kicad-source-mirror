@@ -452,15 +452,6 @@ public:
     bool m_HideVersionFromTitle;
 
     /**
-     * Enable showing schematic repair output.
-     *
-     * Setting name: "ShowRepairSchematic"
-     * Valid values: 0 or 1
-     * Default value: 0
-     */
-    bool m_ShowRepairSchematic;
-
-    /**
      * Shows debugging event counters in various places.
      *
      * Setting name: "ShowEventCounters"

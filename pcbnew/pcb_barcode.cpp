@@ -365,10 +365,9 @@ void PCB_BARCODE::ComputeBarcode()
             m_lastError = wxString::FromUTF8( symbol->errtxt );
         }
         return;
-        ;
     }
 
-    if( ZBarcode_Buffer_Vector( symbol.get(), 0 ) ) // 0 means success
+    if( ZBarcode_Buffer_Vector( symbol.get(), 0 ) >= ZINT_ERROR )
     {
         m_lastError = wxString::FromUTF8( symbol->errtxt );
         return;
