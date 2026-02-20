@@ -289,10 +289,12 @@ bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aA
     // Special handling for the geometry shader
     if( aShaderType == SHADER_TYPE_GEOMETRY )
     {
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_VERTICES_OUT_EXT, maximumVertices );
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_INPUT_TYPE_EXT, geomInputType );
-        glProgramParameteriEXT( programNumber, GL_GEOMETRY_OUTPUT_TYPE_EXT, geomOutputType );
+        if( GLAD_GL_ARB_geometry_shader4 || GLAD_GL_EXT_geometry_shader4 )
+        {
+            glProgramParameteri( programNumber, GL_GEOMETRY_VERTICES_OUT_EXT, maximumVertices );
+            glProgramParameteri( programNumber, GL_GEOMETRY_INPUT_TYPE_EXT, geomInputType );
+            glProgramParameteri( programNumber, GL_GEOMETRY_OUTPUT_TYPE_EXT, geomOutputType );
+        }
     }
-
     return true;
 }

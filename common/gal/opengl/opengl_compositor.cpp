@@ -119,28 +119,28 @@ void OPENGL_COMPOSITOR::Initialize()
     assert( dims.x != 0 && dims.y != 0 );
 
     GLint maxBufSize;
-    glGetIntegerv( GL_MAX_RENDERBUFFER_SIZE_EXT, &maxBufSize );
+    glGetIntegerv( GL_MAX_RENDERBUFFER_SIZE, &maxBufSize );
 
     if( dims.x < 0 || dims.y < 0 || dims.x > maxBufSize || dims.y >= maxBufSize )
         throw std::runtime_error( "Requested render buffer size is not supported" );
 
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
-    glGenFramebuffersEXT( 1, &m_mainFbo );
+    glGenFramebuffers( 1, &m_mainFbo );
     checkGlError( "generating framebuffer", __FILE__, __LINE__ );
     bindFb( m_mainFbo );
 
     // Allocate memory for the depth buffer
     // Attach the depth buffer to the framebuffer
-    glGenRenderbuffersEXT( 1, &m_depthBuffer );
+    glGenRenderbuffers( 1, &m_depthBuffer );
     checkGlError( "generating renderbuffer", __FILE__, __LINE__ );
-    glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
+    glBindRenderbuffer( GL_RENDERBUFFER, m_depthBuffer );
     checkGlError( "binding renderbuffer", __FILE__, __LINE__ );
 
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8, dims.x, dims.y );
+    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, dims.x, dims.y );
     checkGlError( "creating renderbuffer storage", __FILE__, __LINE__ );
-    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_STENCIL_ATTACHMENT,
-                                  GL_RENDERBUFFER_EXT, m_depthBuffer );
+    glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                               GL_RENDERBUFFER, m_depthBuffer );
     checkGlError( "attaching renderbuffer", __FILE__, __LINE__ );
 
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
@@ -212,35 +212,35 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
 
     // Bind the texture to the specific attachment point, clear and rebind the screen
     bindFb( m_mainFbo );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
+    glFramebufferTexture2D( GL_FRAMEBUFFER, attachmentPoint, GL_TEXTURE_2D, textureTarget, 0 );
 
     // Check the status, exit if the framebuffer can't be created
-    GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
+    GLenum status = glCheckFramebufferStatus( GL_FRAMEBUFFER );
 
-    if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
+    if( status != GL_FRAMEBUFFER_COMPLETE )
     {
         switch( status )
         {
-        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
             throw std::runtime_error( "The framebuffer attachment points are incomplete." );
 
-        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
             throw std::runtime_error( "No images attached to the framebuffer." );
 
-        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
             throw std::runtime_error( "The framebuffer does not have at least one image attached to it." );
 
-        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
             throw std::runtime_error( "The framebuffer read buffer is incomplete." );
 
-        case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+        case GL_FRAMEBUFFER_UNSUPPORTED:
             throw std::runtime_error( "The combination of internal formats of the attached images violates "
                                       "an implementation-dependent set of restrictions." );
 
-        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
             throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers" );
 
-        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
             throw std::runtime_error( "Framebuffer incomplete layer targets errors." );
 
         case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
@@ -384,7 +384,7 @@ void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
 
     if( m_curFbo != aFb )
     {
-        glBindFramebufferEXT( GL_FRAMEBUFFER, aFb );
+        glBindFramebuffer( GL_FRAMEBUFFER, aFb );
         checkGlError( "switching framebuffer", __FILE__, __LINE__ );
         m_curFbo = aFb;
     }
@@ -402,11 +402,11 @@ void OPENGL_COMPOSITOR::clean()
 
     m_buffers.clear();
 
-    if( glDeleteFramebuffersEXT )
-        glDeleteFramebuffersEXT( 1, &m_mainFbo );
+    if( glDeleteFramebuffers )
+        glDeleteFramebuffers( 1, &m_mainFbo );
 
-    if( glDeleteRenderbuffersEXT )
-        glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
+    if( glDeleteRenderbuffers )
+        glDeleteRenderbuffers( 1, &m_depthBuffer );
 
     // Clean up difference shader
     if( m_differenceShaderInitialized && m_differenceShader != 0 )

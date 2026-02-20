@@ -2838,17 +2838,17 @@ void OPENGL_GAL::init()
 
 #if defined( __LINUX__ ) // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
 #ifdef DEBUG
-    if( glDebugMessageCallback || glDebugMessageCallbackARB )
+    if( glDebugMessageCallback )
         enableGlDebug( true );
 #endif
 #endif
 
     // Framebuffers have to be supported
-    if( !GLAD_GL_EXT_framebuffer_object && !GLAD_GL_VERSION_3_0 )
+    if( !GLAD_GL_ARB_framebuffer_object )
         throw std::runtime_error( "Framebuffer objects are not supported!" );
 
     // Vertex buffer has to be supported
-    if( !GLAD_GL_ARB_vertex_buffer_object && !GLAD_GL_VERSION_1_5 )
+    if( !GLAD_GL_ARB_vertex_buffer_object )
         throw std::runtime_error( "Vertex buffer objects are not supported!" );
 
     // Prepare shaders

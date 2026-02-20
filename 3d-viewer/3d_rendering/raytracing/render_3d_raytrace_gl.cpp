@@ -59,7 +59,7 @@ void RENDER_3D_RAYTRACE_GL::deletePbo()
     // Delete PBO if it was created
     if( m_openglSupportsVertexBufferObjects )
     {
-        if( glIsBufferARB( m_pboId ) )
+        if( glIsBuffer( m_pboId ) )
             glDeleteBuffers( 1, &m_pboId );
 
         m_pboId = GL_NONE;
@@ -156,18 +156,17 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                            premultiplyAlpha( m_boardAdapter.m_BgColorBot ) );
 
         // Bind PBO
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
+        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboId );
 
         // Get the PBO pixel pointer to write the data
-        uint8_t* ptrPBO = (uint8_t *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
-                                                     GL_WRITE_ONLY_ARB );
+        uint8_t* ptrPBO = (uint8_t *)glMapBuffer( GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY );
 
         if( ptrPBO )
         {
             renderPreview( ptrPBO );
 
             // release pointer to mapping buffer, this initialize the coping to PBO
-            glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
+            glUnmapBuffer( GL_PIXEL_UNPACK_BUFFER );
         }
 
         glWindowPos2i( m_xoffset, m_yoffset );
@@ -175,13 +174,12 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     else
     {
         // Bind PBO
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
+        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboId );
 
         if( m_renderState != RT_RENDER_STATE_FINISH )
         {
             // Get the PBO pixel pointer to write the data
-            uint8_t* ptrPBO = (uint8_t *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
-                                                         GL_WRITE_ONLY_ARB );
+            uint8_t* ptrPBO = (uint8_t *)glMapBuffer( GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY );
 
             if( ptrPBO )
             {
@@ -191,7 +189,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     requestRedraw = true;
 
                 // release pointer to mapping buffer, this initialize the coping to PBO
-                glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
+                glUnmapBuffer( GL_PIXEL_UNPACK_BUFFER );
             }
         }
 
@@ -209,7 +207,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_ALPHA_TEST );
     glDrawPixels( m_realBufferSize.x, m_realBufferSize.y, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
-    glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
+    glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
     return requestRedraw;
 }
@@ -217,7 +215,7 @@ bool RENDER_3D_RAYTRACE_GL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
 void RENDER_3D_RAYTRACE_GL::initPbo()
 {
-    if( GLEW_ARB_pixel_buffer_object )
+    if( GLAD_GL_VERSION_1_5 )
     {
         m_openglSupportsVertexBufferObjects = true;
 
@@ -228,17 +226,17 @@ void RENDER_3D_RAYTRACE_GL::initPbo()
         // http://www.songho.ca/opengl/gl_pbo.html
         // http://web.eecs.umich.edu/~sugih/courses/eecs487/lectures/25-PBO+Mipmapping.pdf
         // "create 2 pixel buffer objects, you need to delete them when program exits.
-        // glBufferDataARB with NULL pointer reserves only memory space."
+        // glBufferData with NULL pointer reserves only memory space."
 
         // This sets the number of RGBA pixels
         m_pboDataSize =  m_realBufferSize.x * m_realBufferSize.y * 4;
 
-        glGenBuffersARB( 1, &m_pboId );
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
-        glBufferDataARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboDataSize, 0, GL_STREAM_DRAW_ARB );
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
+        glGenBuffers( 1, &m_pboId );
+        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboId );
+        glBufferData( GL_PIXEL_UNPACK_BUFFER, m_pboDataSize, 0, GL_STREAM_DRAW );
+        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
         wxLogTrace( m_logTrace,
-                    wxT( "RENDER_3D_RAYTRACE_GL:: GLEW_ARB_pixel_buffer_object is supported" ) );
+                    wxT( "RENDER_3D_RAYTRACE_GL:: GL Version 1.5+ is supported" ) );
     }
 }
