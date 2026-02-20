@@ -33,7 +33,7 @@
 #include <wx/version.h>
 
 
-#if wxCHECK_VERSION( 3, 3, 2 )
+#if wxCHECK_VERSION( 3, 3, 3 )
     #include <GL/glew.h>
 
     #ifdef _WIN32
