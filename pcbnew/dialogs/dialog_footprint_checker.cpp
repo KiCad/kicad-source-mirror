@@ -89,15 +89,11 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
 {
     BOARD*     board = m_frame->GetBoard();
     FOOTPRINT* footprint = board->GetFirstFootprint();
-    wxString   msg;
 
     deleteAllMarkers();
 
     if( !footprint )
-    {
-        msg = _( "No footprint loaded." );
         return;
-    }
 
     auto errorHandler =
             [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, const BOARD_ITEM* aItemC,

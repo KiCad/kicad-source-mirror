@@ -480,9 +480,8 @@ void PANEL_DRC_RULE_EDITOR::onScintillaCharAdded( wxStyledTextEvent& aEvent )
 
     m_textConditionCtrl->SearchAnchor();
 
-    wxString rules = m_textConditionCtrl->GetText();
-    int      currentPos = m_textConditionCtrl->GetCurrentPos();
-    int      startPos = 0;
+    int currentPos = m_textConditionCtrl->GetCurrentPos();
+    int startPos = 0;
 
     for( int line = m_textConditionCtrl->LineFromPosition( currentPos ); line > 0; line-- )
     {

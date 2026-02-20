@@ -440,8 +440,6 @@ void PANEL_FP_LIB_TABLE::populatePluginList()
 
 bool PANEL_FP_LIB_TABLE::verifyTables()
 {
-    wxString msg;
-
     for( int page = 0 ; page < (int) m_notebook->GetPageCount(); ++page )
     {
         WX_GRID* grid = get_grid( page );
