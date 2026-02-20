@@ -38,6 +38,7 @@
 #include "drc_re_custom_rule_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
+#include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
 
@@ -202,6 +203,24 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( skew )
             data->SetMaxSkew( toMM( skew->GetValue().Max() ) );
+
+        return data;
+    }
+
+    case PERMITTED_LAYERS:
+    {
+        auto data = std::make_shared<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>();
+        data->SetRuleName( aRule.m_Name );
+
+        const DRC_CONSTRAINT* constraint = findConstraint( aRule, ASSERTION_CONSTRAINT );
+
+        if( constraint && constraint->m_Test )
+        {
+            wxString expr = constraint->m_Test->GetExpression();
+
+            data->SetTopLayerEnabled( expr.Contains( wxS( "F.Cu" ) ) );
+            data->SetBottomLayerEnabled( expr.Contains( wxS( "B.Cu" ) ) );
+        }
 
         return data;
     }

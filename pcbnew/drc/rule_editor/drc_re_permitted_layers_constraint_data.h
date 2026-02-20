@@ -61,16 +61,21 @@ public:
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        wxString code = GetConstraintCode();
+        wxArrayString terms;
 
-        if( code.IsEmpty() )
-            code = wxS( "permitted_layers" );
+        if( m_topLayer )
+            terms.Add( wxS( "A.Layer == 'F.Cu'" ) );
 
-        wxString topState = m_topLayer ? wxS( "true" ) : wxS( "false" );
-        wxString bottomState = m_bottomLayer ? wxS( "true" ) : wxS( "false" );
+        if( m_bottomLayer )
+            terms.Add( wxS( "A.Layer == 'B.Cu'" ) );
 
-        return { wxString::Format( wxS( "(constraint %s (top %s) (bottom %s))" ),
-                                   code, topState, bottomState ) };
+        if( terms.IsEmpty() )
+            return {};
+
+        wxString expr = wxJoin( terms, '|' );
+        expr.Replace( wxS( "|" ), wxS( " || " ) );
+
+        return { wxString::Format( wxS( "(constraint assertion \"%s\")" ), expr ) };
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override

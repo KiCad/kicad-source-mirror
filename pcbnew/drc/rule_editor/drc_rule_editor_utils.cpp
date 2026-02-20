@@ -833,7 +833,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     // TOP_BOTTOM_ANY: Constraints with simplified top/bottom/any selection
     case COURTYARD_CLEARANCE:
     case SILK_TO_SOLDERMASK_CLEARANCE:
-    case PERMITTED_LAYERS:
     case VIAS_UNDER_SMD:
     case ALLOWED_ORIENTATION:
         return DRC_LAYER_CATEGORY::TOP_BOTTOM_ANY;
@@ -852,6 +851,7 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
 
     // NO_LAYER_SELECTOR: Constraints where layer selection doesn't apply
     case MAXIMUM_VIA_COUNT:
+    case PERMITTED_LAYERS:
     case CUSTOM_RULE:
         return DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR;
 
@@ -876,7 +876,6 @@ wxString DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRA
                                  aIsTop ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ),
                                  aIsTop ? wxS( "F.Mask" ) : wxS( "B.Mask" ) );
 
-    case PERMITTED_LAYERS:
     case VIAS_UNDER_SMD:
     case ALLOWED_ORIENTATION:
         return wxString::Format( wxS( "(layer \"%s\")" ), aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );

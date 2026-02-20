@@ -129,8 +129,11 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
 
     // Hide layer selector for constraints where it doesn't apply
     if( m_layerCategory == DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR )
+    {
         m_LayersComboBoxSizer->Show( false );
-
+        m_staticText711->Show( false );
+        m_staticline111->Show( false );
+    }
 
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     m_btnShowMatches = new wxButton( this, wxID_ANY, "Show Matches" );
