@@ -41,11 +41,11 @@
 
 
 /*
-        Physical creepage tests.
+    Physical creepage tests.
 
-        Errors generated:
-        - DRCE_CREEPAGE
-    */
+    Errors generated:
+    - DRCE_CREEPAGE
+*/
 
 class DRC_TEST_PROVIDER_CREEPAGE : public DRC_TEST_PROVIDER
 {
@@ -78,6 +78,12 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
     m_board = m_drcEngine->GetBoard();
     m_reportedPairs.clear();
 
+    if( !m_drcEngine->HasRulesForConstraintType( CREEPAGE_CONSTRAINT ) )
+    {
+        REPORT_AUX( wxT( "No creepage constraints found. Tests not run." ) );
+        return true;    // continue with other tests
+    }
+
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CREEPAGE ) )
     {
         if( !reportPhase( _( "Checking creepage..." ) ) )
@@ -85,6 +91,7 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 
         testCreepage();
     }
+
     return !m_drcEngine->IsCancelled();
 }
 
@@ -98,7 +105,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     bci2.SetNetCode( aNetCodeB );
     bci1.SetLayer( aLayer );
     bci2.SetLayer( aLayer );
-
 
     DRC_CONSTRAINT constraint;
     constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1, &bci2, aLayer );
@@ -351,7 +357,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
 
                                 reportProgress( current++, total );
 
-                                if ( prevTestChangedGraph )
+                                if( prevTestChangedGraph )
                                 {
                                     size_t vectorSize = graph.m_connections.size();
 
@@ -360,6 +366,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                                         // We need to remove the connection from its endpoints' lists.
                                         graph.RemoveConnection( graph.m_connections[i], false );
                                     }
+
                                     graph.m_connections.resize( beConnectionsSize, nullptr );
 
                                     vectorSize = graph.m_nodes.size();
