@@ -540,7 +540,7 @@ public:
      */
     virtual void ProjectChanged() {}
 
-    const wxString& GetAboutTitle() const { return wxGetTranslation( m_aboutTitle ); }
+    wxString GetAboutTitle() const { return wxGetTranslation( m_aboutTitle ); }
 
     const wxString& GetUntranslatedAboutTitle() const { return m_aboutTitle; }
 

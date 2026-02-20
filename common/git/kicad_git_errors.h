@@ -41,7 +41,7 @@ public:
         return m_errorStrings;
     }
 
-    const wxString& PeekErrorString() const
+    wxString PeekErrorString() const
     {
         if( m_errorStrings.empty() )
             return _( "No error" );
