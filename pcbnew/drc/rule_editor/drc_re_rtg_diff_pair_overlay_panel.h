@@ -66,6 +66,7 @@ private:
     std::unique_ptr<UNIT_BINDER> m_preferredWidthBinder;
     std::unique_ptr<UNIT_BINDER> m_maxWidthBinder;
     std::unique_ptr<UNIT_BINDER> m_maxUncoupledLengthBinder;
+    std::unique_ptr<UNIT_BINDER> m_maxSkewBinder;
 };
 
 #endif // DRC_RE_RTG_DIFF_PAIR_OVERLAY_PANEL_H

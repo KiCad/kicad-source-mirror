@@ -59,13 +59,14 @@ public:
         // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 164, 204, 74, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
+            { 164, 204, 55, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
             { 304, 344, 68, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_width (left side, middle)
             { 480, 520, 50, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_width (left side, bottom)
             { 214, 254, 88, 4, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_gap (center-left, top)
-            { 396, 426, 80, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_gap (center-left, middle)
+            { 386, 426, 80, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_gap (center-left, middle)
             { 600, 640, 64, 6, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_gap (center-left, bottom)
             { 120, 160, 204, 7, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_uncoupled (right side)
+            { 800, 840, 168, 8, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew (to be added, right side)
         };
     }
 
@@ -93,6 +94,9 @@ public:
 
         if( m_maxUncoupledLength <= 0 )
             result.AddError( _( "Maximum Uncoupled Length must be greater than 0" ) );
+
+        if( m_maxSkew < 0 )
+            result.AddError( _( "Maximum Skew must be greater than or equal to 0" ) );
 
         if( result.isValid )
         {
@@ -141,7 +145,15 @@ public:
                 wxS( "(constraint diff_pair_uncoupled (max %s))" ),
                 formatDistance( m_maxUncoupledLength ) );
 
-        return { widthClause, gapClause, uncoupledClause };
+        std::vector<wxString> clauses = { widthClause, gapClause, uncoupledClause };
+
+        if( m_maxSkew > 0 )
+        {
+            wxString skewClause = wxString::Format( wxS( "(constraint skew (max %s))" ), formatDistance( m_maxSkew ) );
+            clauses.push_back( skewClause );
+        }
+
+        return clauses;
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
@@ -180,6 +192,10 @@ public:
 
     void SetMaxGap( double aMaxGap ) { m_maxGap = aMaxGap; }
 
+    double GetMaxSkew() { return m_maxSkew; }
+
+    void SetMaxSkew( double aMaxSkew ) { m_maxSkew = aMaxSkew; }
+
     void CopyFrom( const ICopyable& aSource ) override
     {
         const auto& source =
@@ -194,6 +210,7 @@ public:
         m_minGap = source.m_minGap;
         m_preferredGap = source.m_preferredGap;
         m_maxGap = source.m_maxGap;
+        m_maxSkew = source.m_maxSkew;
     }
 
 private:
@@ -204,6 +221,7 @@ private:
     double m_minGap{ 0 };
     double m_preferredGap{ 0 };
     double m_maxGap{ 0 };
+    double m_maxSkew{ 0 };
 };
 
 #endif // DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA_H_

@@ -717,8 +717,6 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildHighspeedDesignRuleTree
                                              DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;
 
-    result.push_back( buildRuleTreeNodeData( "Routing diff pair", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
-                                             ROUTING_DIFF_PAIR ) );
     result.push_back( buildRuleTreeNodeData( "Routing width", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              ROUTING_WIDTH ) );
     result.push_back( buildRuleTreeNodeData( "Maximum via count", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
@@ -726,6 +724,9 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildHighspeedDesignRuleTree
 
     result.push_back( buildRuleTreeNodeData( "Skew", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;
+
+    result.push_back( buildRuleTreeNodeData( "Routing diff pair", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
+                                             ROUTING_DIFF_PAIR ) );
 
     result.push_back( buildRuleTreeNodeData( "Length Matching", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;

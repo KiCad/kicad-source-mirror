@@ -65,11 +65,9 @@ void DRC_PANEL_MATCHER::initClaims()
 {
     // Priority 100: ROUTING_DIFF_PAIR claims track_width + diff_pair_gap + diff_pair_uncoupled
     // This must be checked before ROUTING_WIDTH which also wants track_width
-    m_claims.emplace_back(
-            ROUTING_DIFF_PAIR,
-            std::set<DRC_CONSTRAINT_T>{ TRACK_WIDTH_CONSTRAINT, DIFF_PAIR_GAP_CONSTRAINT },
-            std::set<DRC_CONSTRAINT_T>{ MAX_UNCOUPLED_CONSTRAINT },
-            100 );
+    m_claims.emplace_back( ROUTING_DIFF_PAIR,
+                           std::set<DRC_CONSTRAINT_T>{ TRACK_WIDTH_CONSTRAINT, DIFF_PAIR_GAP_CONSTRAINT },
+                           std::set<DRC_CONSTRAINT_T>{ MAX_UNCOUPLED_CONSTRAINT, SKEW_CONSTRAINT }, 100 );
 
     // Priority 90: VIA_STYLE claims via_diameter + hole_size
     m_claims.emplace_back(

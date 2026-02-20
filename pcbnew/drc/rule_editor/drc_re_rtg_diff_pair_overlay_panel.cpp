@@ -104,6 +104,11 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
                                            maxUncoupledField->GetLabel(), false, false );
     maxUncoupledField->SetUnitBinder( m_maxUncoupledLengthBinder.get() );
 
+    auto* maxSkewField = AddField<wxTextCtrl>( wxS( "max_skew" ), positions[7], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_maxSkewBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxSkewField->GetControl(),
+                                                     maxSkewField->GetLabel(), false, false );
+    maxSkewField->SetUnitBinder( m_maxSkewBinder.get() );
+
     auto notifyModified = [this]( wxCommandEvent& )
     {
         RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
@@ -118,6 +123,7 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
     prefGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
     maxGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
     maxUncoupledField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    maxSkewField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
 
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
@@ -133,6 +139,7 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
     prefGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
     maxGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
     maxUncoupledField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    maxSkewField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
     // Position all fields and update the panel layout
     PositionFields();
@@ -155,6 +162,7 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataToWindow()
     m_maxWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxWidth() ) );
 
     m_maxUncoupledLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxUncoupledLength() ) );
+    m_maxSkewBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
 
     return true;
 }
@@ -175,6 +183,7 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataFromWindow()
     m_data->SetMaxWidth( pcbIUScale.IUTomm( m_maxWidthBinder->GetDoubleValue() ) );
 
     m_data->SetMaxUncoupledLength( pcbIUScale.IUTomm( m_maxUncoupledLengthBinder->GetDoubleValue() ) );
+    m_data->SetMaxSkew( pcbIUScale.IUTomm( m_maxSkewBinder->GetDoubleValue() ) );
 
     return true;
 }
