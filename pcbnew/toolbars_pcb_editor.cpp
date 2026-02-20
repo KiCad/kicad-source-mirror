@@ -32,7 +32,9 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <eda_text.h>
 #include <footprint.h>
+#include <pcb_field.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <macros.h>

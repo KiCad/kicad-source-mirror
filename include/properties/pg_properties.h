@@ -195,6 +195,8 @@ public:
         m_scale = aScale;
     }
 
+    double GetScale() const { return m_scale; }
+
     wxValidator* DoGetValidator() const override;
 
     ///< Do not perform PG validation; the UX is not what we want.

@@ -664,3 +664,50 @@ BOOST_FIXTURE_TEST_CASE( ViaBothBackdrillAndPostMachining, BACKDRILL_TEST_FIXTUR
     // Note: The exact behavior depends on implementation - the drill goes TO In2_Cu
     // Let's check that at least the layers between start and end are detected
 }
+
+
+/**
+ * Verify that countersink angle is stored in decidegrees and the property system
+ * round-trips correctly. Regression test for GitLab #23134.
+ */
+BOOST_FIXTURE_TEST_CASE( CountersinkAngleDecidegrees, BACKDRILL_TEST_FIXTURE )
+{
+    int netCode = GetNetCode( "TestNet" );
+
+    PCB_VIA* via = new PCB_VIA( m_board.get() );
+    via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 130 ), pcbIUScale.mmToIU( 10 ) ) );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
+    via->SetNetCode( netCode );
+
+    via->SetFrontPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK );
+    via->SetFrontPostMachiningSize( pcbIUScale.mmToIU( 1.0 ) );
+
+    // 45 degrees = 450 decidegrees
+    via->SetFrontPostMachiningAngle( 450 );
+    BOOST_CHECK_EQUAL( via->GetFrontPostMachiningAngle(), 450 );
+
+    // 82 degrees = 820 decidegrees
+    via->SetFrontPostMachiningAngle( 820 );
+    BOOST_CHECK_EQUAL( via->GetFrontPostMachiningAngle(), 820 );
+
+    // 90 degrees = 900 decidegrees
+    via->SetFrontPostMachiningAngle( 900 );
+    BOOST_CHECK_EQUAL( via->GetFrontPostMachiningAngle(), 900 );
+
+    via->SetBackPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK );
+    via->SetBackPostMachiningSize( pcbIUScale.mmToIU( 1.2 ) );
+    via->SetBackPostMachiningAngle( 600 );  // 60 degrees
+    BOOST_CHECK_EQUAL( via->GetBackPostMachiningAngle(), 600 );
+
+    m_board->Add( via );
+
+    // Verify the internal storage matches the file format expectation.
+    // The file format stores degrees (angle / 10.0), so 450 decideg -> 45.0 deg in file.
+    const PADSTACK::POST_MACHINING_PROPS& frontPM = via->Padstack().FrontPostMachining();
+    BOOST_CHECK_EQUAL( frontPM.angle, 900 );
+
+    const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
+    BOOST_CHECK_EQUAL( backPM.angle, 600 );
+}

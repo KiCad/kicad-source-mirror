@@ -135,7 +135,21 @@ void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) c
 {
     wxVariant var = aProperty->GetValue();
 
-    if( var.GetType() == wxT( "std::optional<int>" ) )
+    if( PGPROPERTY_ANGLE* angleProp = dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) )
+    {
+        if( var.GetType() == wxT( "EDA_ANGLE" ) )
+        {
+            EDA_ANGLE_VARIANT_DATA* angleData =
+                    static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() );
+            m_unitBinder->ChangeAngleValue( angleData->Angle() );
+        }
+        else if( !aProperty->IsValueUnspecified() )
+        {
+            double scale = angleProp->GetScale();
+            m_unitBinder->ChangeDoubleValue( var.GetDouble() / scale );
+        }
+    }
+    else if( var.GetType() == wxT( "std::optional<int>" ) )
     {
         auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() );
 
@@ -222,11 +236,14 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         }
         else
         {
-            changed = ( aVariant.IsNull() || angle.AsDegrees() != aVariant.GetDouble() );
+            PGPROPERTY_ANGLE* angleProp = static_cast<PGPROPERTY_ANGLE*>( aProperty );
+            double             scaledValue = angle.AsDegrees() * angleProp->GetScale();
+
+            changed = ( aVariant.IsNull() || scaledValue != aVariant.GetDouble() );
 
             if( changed )
             {
-                aVariant = angle.AsDegrees();
+                aVariant = scaledValue;
                 m_unitBinder->SetValue( angle.AsDegrees() );
             }
         }

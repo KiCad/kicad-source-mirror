@@ -523,6 +523,22 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
             m_topPostMachine->SetSelection( 0 );
         }
 
+        if( m_viaStack && !primary_post_machining_mixed && primary_post_machining_set )
+        {
+            const PADSTACK::POST_MACHINING_PROPS& props = m_viaStack->FrontPostMachining();
+            m_topPostMachineSize1Binder.SetValue( props.size );
+
+            if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            {
+                m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+                m_topPostMachineSize2Binder.SetDoubleValue( props.angle / 10.0 );
+            }
+            else if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+            {
+                m_topPostMachineSize2Binder.SetValue( props.depth );
+            }
+        }
+
         if( secondary_post_machining_mixed )
         {
             m_bottomPostMachine->SetSelection( wxNOT_FOUND );
@@ -539,6 +555,22 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         else
         {
             m_bottomPostMachine->SetSelection( 0 );
+        }
+
+        if( m_viaStack && !secondary_post_machining_mixed && secondary_post_machining_set )
+        {
+            const PADSTACK::POST_MACHINING_PROPS& props = m_viaStack->BackPostMachining();
+            m_bottomPostMachineSize1Binder.SetValue( props.size );
+
+            if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            {
+                m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+                m_bottomPostMachineSize2Binder.SetDoubleValue( props.angle / 10.0 );
+            }
+            else if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+            {
+                m_bottomPostMachineSize2Binder.SetValue( props.depth );
+            }
         }
     }
 
@@ -871,10 +903,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             if( !m_topPostMachineSize2Binder.IsIndeterminate() )
             {
                 if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                    props.angle = m_topPostMachineSize2Binder.GetIntValue();
+                    props.angle = KiROUND( m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
                 else
                     props.depth = m_topPostMachineSize2Binder.GetIntValue();
             }
+
             frontPostMachining = props;
         }
 
@@ -894,10 +927,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             if( !m_bottomPostMachineSize2Binder.IsIndeterminate() )
             {
                 if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                    props.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+                    props.angle = KiROUND( m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
                 else
                     props.depth = m_bottomPostMachineSize2Binder.GetIntValue();
             }
+
             backPostMachining = props;
         }
 
@@ -1086,9 +1120,14 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     if( !m_topPostMachineSize2Binder.IsIndeterminate() )
                     {
                         if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                            props.angle = m_topPostMachineSize2Binder.GetIntValue();
+                        {
+                            props.angle = KiROUND(
+                                    m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
+                        }
                         else
+                        {
                             props.depth = m_topPostMachineSize2Binder.GetIntValue();
+                        }
                     }
                     else
                     {
@@ -1121,9 +1160,14 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     if( !m_bottomPostMachineSize2Binder.IsIndeterminate() )
                     {
                         if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                            props.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+                        {
+                            props.angle = KiROUND(
+                                    m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
+                        }
                         else
+                        {
                             props.depth = m_bottomPostMachineSize2Binder.GetIntValue();
+                        }
                     }
                     else
                     {
@@ -1584,16 +1628,18 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent
     {
         m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
         m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
+        m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
 
         if( m_topPostMachineSize2Binder.IsIndeterminate() || m_topPostMachineSize2Binder.GetDoubleValue() == 0 )
         {
-             m_topPostMachineSize2Binder.SetValue( "82" );
+             m_topPostMachineSize2Binder.SetDoubleValue( 82.0 );
         }
     }
     else if( selection == 2 ) // Counterbore
     {
         m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+        m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
     }
 }
 
@@ -1613,16 +1659,18 @@ void DIALOG_TRACK_VIA_PROPERTIES::onBottomPostMachineChange( wxCommandEvent& aEv
     {
         m_bottomPostMachineSize2Label->SetLabel( _( "Angle:" ) );
         m_bottomPostMachineSize2Units->SetLabel( _( "deg" ) );
+        m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
 
         if( m_bottomPostMachineSize2Binder.IsIndeterminate() || m_bottomPostMachineSize2Binder.GetDoubleValue() == 0 )
         {
-             m_bottomPostMachineSize2Binder.SetValue( "82" );
+             m_bottomPostMachineSize2Binder.SetDoubleValue( 82.0 );
         }
     }
     else if( selection == 2 ) // Counterbore
     {
         m_bottomPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_bottomPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+        m_bottomPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
     }
 }
 

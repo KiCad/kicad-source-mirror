@@ -852,9 +852,14 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_topPostMachineSize1Binder.SetValue( frontPostMachining.size );
 
     if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        m_topPostMachineSize2Binder.SetValue( frontPostMachining.angle );
+    {
+        m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+        m_topPostMachineSize2Binder.SetDoubleValue( frontPostMachining.angle / 10.0 );
+    }
     else
+    {
         m_topPostMachineSize2Binder.SetValue( frontPostMachining.depth );
+    }
 
     const PADSTACK::POST_MACHINING_PROPS& backPostMachining = m_previewPad->Padstack().BackPostMachining();
 
@@ -868,9 +873,14 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_bottomPostMachineSize1Binder.SetValue( backPostMachining.size );
 
     if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        m_bottomPostMachineSize2Binder.SetValue( backPostMachining.angle );
+    {
+        m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+        m_bottomPostMachineSize2Binder.SetDoubleValue( backPostMachining.angle / 10.0 );
+    }
     else
+    {
         m_bottomPostMachineSize2Binder.SetValue( backPostMachining.depth );
+    }
 
 
     updatePadLayersList( m_previewPad->GetLayerSet(), m_previewPad->GetRemoveUnconnected(),
@@ -2305,7 +2315,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     frontPostMachining.size = m_topPostMachineSize1Binder.GetIntValue();
 
     if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        frontPostMachining.angle = m_topPostMachineSize2Binder.GetIntValue();
+        frontPostMachining.angle = KiROUND( m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
     else
         frontPostMachining.depth = m_topPostMachineSize2Binder.GetIntValue();
 
@@ -2324,7 +2334,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     backPostMachining.size = m_bottomPostMachineSize1Binder.GetIntValue();
 
     if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        backPostMachining.angle = m_bottomPostMachineSize2Binder.GetIntValue();
+        backPostMachining.angle = KiROUND( m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
     else
         backPostMachining.depth = m_bottomPostMachineSize2Binder.GetIntValue();
 
@@ -2377,14 +2387,16 @@ void DIALOG_PAD_PROPERTIES::onTopPostMachining( wxCommandEvent& event )
     {
         m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
         m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
+        m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
 
         if( m_topPostMachineSize2Binder.IsIndeterminate() || m_topPostMachineSize2Binder.GetDoubleValue() == 0 )
-             m_topPostMachineSize2Binder.SetValue( "82" );
+             m_topPostMachineSize2Binder.SetDoubleValue( 82.0 );
     }
     else if( selection == 2 ) // Counterbore
     {
         m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_parent->GetUserUnits() ) );
+        m_topPostMachineSize2Binder.SetUnits( m_parent->GetUserUnits() );
     }
 }
 
@@ -2404,14 +2416,16 @@ void DIALOG_PAD_PROPERTIES::onBottomPostMachining( wxCommandEvent& event )
     {
         m_bottomPostMachineSize2Label->SetLabel( _( "Angle:" ) );
         m_bottomPostMachineSize2Units->SetLabel( _( "deg" ) );
+        m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
 
         if( m_bottomPostMachineSize2Binder.IsIndeterminate() || m_bottomPostMachineSize2Binder.GetDoubleValue() == 0 )
-             m_bottomPostMachineSize2Binder.SetValue( "82" );
+             m_bottomPostMachineSize2Binder.SetDoubleValue( 82.0 );
     }
     else if( selection == 2 ) // Counterbore
     {
         m_bottomPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_bottomPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_parent->GetUserUnits() ) );
+        m_bottomPostMachineSize2Binder.SetUnits( m_parent->GetUserUnits() );
     }
 }
 
