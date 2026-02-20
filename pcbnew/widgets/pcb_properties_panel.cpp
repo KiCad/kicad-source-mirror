@@ -399,6 +399,11 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     const wxString groupFields = _HKI( "Fields" );
 
+    // Make sure value comes immediately after reference.  (Reference is invariant, so was added by
+    // FOOTPRINT_DESC().  We *could* still add it here, but then the whole Fields section comes at
+    // the end, which isn't ideal.)
+    m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( _HKI( "Value" ) ), groupFields );
+
     for( const wxString& name : m_currentFieldNames )
     {
         if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), name ) )
@@ -410,6 +415,22 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
                                        } );
         }
     }
+
+    m_propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Link" ),
+                NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ),
+                groupFields );
+    m_propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Description" ),
+                NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetLibDescription ),
+                groupFields );
+    m_propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
+                NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
+                groupFields );
+
+    // Note: Also used by DRC engine
+    m_propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Component Class" ),
+                NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetComponentClassAsString ),
+                groupFields )
+            .SetIsHiddenFromLibraryEditors();
 
     PROPERTIES_PANEL::rebuildProperties( aSelection );
 }

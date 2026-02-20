@@ -4809,25 +4809,8 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
                     &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ),
                     groupFields );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
-                    &FOOTPRINT::SetValue, &FOOTPRINT::GetValueAsString ),
-                    groupFields );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Link" ),
-                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ),
-                    groupFields );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Description" ),
-                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetLibDescription ),
-                    groupFields );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
-                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
-                    groupFields );
-
-        // Note: Also used by DRC engine
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Component Class" ),
-                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetComponentClassAsString ),
-                    groupFields )
-                .SetIsHiddenFromLibraryEditors();
+        // Remaining fields are variant-specific, and so are added in PCB_PROPERTIES_PANEL::rebuildProperties().
 
         const wxString groupAttributes = _HKI( "Attributes" );
 

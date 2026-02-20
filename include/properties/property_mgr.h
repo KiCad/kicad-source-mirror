@@ -141,6 +141,14 @@ public:
     PROPERTY_BASE& AddProperty( PROPERTY_BASE* aProperty, const wxString& aGroup = wxEmptyString );
 
     /**
+     * Replace an existing property.  This is used to modify the implementation of a property without
+     * moving it in the display order.
+     * @param aProperty is the property to register.
+     * @param aGroup is an optional grouping key for the property
+     */
+    PROPERTY_BASE& ReplaceProperty( PROPERTY_BASE* aProperty, const wxString& aGroup );
+
+    /**
      * Replace an existing property for a specific type.
      *
      * It is used to modify a property that has been inherited from a base class.
