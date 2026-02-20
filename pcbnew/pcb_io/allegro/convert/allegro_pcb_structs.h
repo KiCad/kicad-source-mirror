@@ -1604,10 +1604,10 @@ struct BLK_0x2D_FOOTPRINT_INST
     uint32_t m_FirstPadPtr;
     uint32_t m_TextPtr;  // Points to 0x30
 
-    std::array<uint32_t, 4> m_UnknownPtrs1;
-
-    // Not 100% sure of verson here, but seems to be in BeagleBoneAi
-    // COND_GE<FMT_VER::V_172, uint32_t> m_groupAssignmentPtr;
+    uint32_t m_AssemblyPtr;
+    uint32_t m_AreasPtr;
+    uint32_t m_UnknownPtr1;
+    uint32_t m_UnknownPtr2;
 };
 
 

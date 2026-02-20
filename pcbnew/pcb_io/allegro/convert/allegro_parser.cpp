@@ -1585,9 +1585,11 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2D( FILE_STREAM& stream, FMT_VER
     data.m_GraphicPtr = stream.ReadU32();
     data.m_FirstPadPtr = stream.ReadU32();
     data.m_TextPtr = stream.ReadU32();
-    ReadArrayU32( stream, data.m_UnknownPtrs1 );
 
-    // ReadCond( stream, aVer, data.m_groupAssignmentPtr );
+    data.m_AssemblyPtr = stream.ReadU32();
+    data.m_AreasPtr = stream.ReadU32();
+    data.m_UnknownPtr1 = stream.ReadU32();
+    data.m_UnknownPtr2 = stream.ReadU32();
 
     return block;
 }

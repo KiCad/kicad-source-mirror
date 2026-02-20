@@ -110,6 +110,16 @@ private:
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Build a rectangular shape from a 0x24 RECT block.
+     */
+    std::unique_ptr<PCB_SHAPE> buildRect( const BLK_0x24_RECT& aRect, BOARD_ITEM_CONTAINER& aParent );
+
+    /**
+     * Build a graphic polygon from a 0x28 SHAPE block.
+     */
+    std::unique_ptr<PCB_SHAPE> buildPolygon( const BLK_0x28_SHAPE& aShape, BOARD_ITEM_CONTAINER& aParent );
+
+    /**
      * Construct "pad" items for a given 0x1C PADSTACK block.
      */
     std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,

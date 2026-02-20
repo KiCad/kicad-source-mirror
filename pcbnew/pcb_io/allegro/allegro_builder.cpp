@@ -1629,6 +1629,57 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
 }
 
 
+std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x24_RECT& aRect, BOARD_ITEM_CONTAINER& aParent )
+{
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent );
+
+    PCB_LAYER_ID layer = getLayer( aRect.m_Layer );
+    shape->SetLayer( layer );
+
+    shape->SetShape( SHAPE_T::RECTANGLE );
+
+    const int      width = scale( aRect.m_Coords[2] - aRect.m_Coords[0] );
+    const int      height = scale( aRect.m_Coords[3] - aRect.m_Coords[1] );
+    const VECTOR2I corner = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+
+    shape->SetStart( corner );
+    shape->SetEnd( corner + VECTOR2I{ width, -height } );
+
+    const int lineWidth = 0;
+    shape->SetWidth( lineWidth );
+
+    return shape;
+}
+
+
+std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildPolygon( const BLK_0x28_SHAPE& aPolygon, BOARD_ITEM_CONTAINER& aParent )
+{
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent );
+
+    PCB_LAYER_ID layer = getLayer( aPolygon.m_Layer );
+    shape->SetLayer( layer );
+
+    shape->SetShape( SHAPE_T::POLY );
+
+    SHAPE_LINE_CHAIN chain = buildOutline( aPolygon );
+
+    if( chain.PointCount() < 3 )
+    {
+        wxLogTrace( traceAllegroBuilder, "Polygon (0x28) with key %#010x has fewer than 3 points, skipping",
+                    aPolygon.m_Key );
+        return nullptr;
+    }
+
+    chain.SetClosed( true );
+    shape->SetPolyShape( chain );
+
+    const int lineWidth = 0;
+    shape->SetWidth( lineWidth );
+
+    return shape;
+}
+
+
 const BLK_0x07_COMPONENT_INST* BOARD_BUILDER::getFpInstRef( const BLK_0x2D_FOOTPRINT_INST& aFpInstance ) const
 {
     uint32_t refKey = 0x00;
@@ -2342,6 +2393,77 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         else
         {
             fp->Add( text.release() );
+        }
+    }
+
+    // Assembly drawing
+    LL_WALKER assemblyWalker{ aFpInstance.m_AssemblyPtr, aFpInstance.m_Key, m_brdDb };
+
+    for( const BLOCK_BASE* assemblyBlock : assemblyWalker )
+    {
+        const uint8_t               type = assemblyBlock->GetBlockType();
+        std::unique_ptr<BOARD_ITEM> item;
+
+        switch( type )
+        {
+        case 0x24:
+        {
+            const auto&                rect = static_cast<const BLOCK<BLK_0x24_RECT>&>( *assemblyBlock ).GetData();
+            std::unique_ptr<PCB_SHAPE> shape = buildRect( rect, *fp );
+
+            shape->Rotate( shape->GetStart(), fp->GetOrientation() );
+            item = std::move( shape );
+            break;
+        }
+        case 0x28:
+        {
+            const auto& polygon = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *assemblyBlock ).GetData();
+            item = buildPolygon( polygon, *fp );
+            break;
+        }
+        default:
+            break;
+        }
+
+        if( item )
+        {
+            canonicalizeLayer( item.get() );
+            fp->Add( item.release() );
+        }
+    }
+
+    // Areas (courtyards, etc)
+    LL_WALKER areaWalker{ aFpInstance.m_AreasPtr, aFpInstance.m_Key, m_brdDb };
+    for( const BLOCK_BASE* areaBlock : areaWalker )
+    {
+        const uint8_t               type = areaBlock->GetBlockType();
+        std::unique_ptr<BOARD_ITEM> item;
+
+        switch( type )
+        {
+        case 0x0E:
+        {
+            // These exist sometimes in this list, but not too clear how they work yet.
+            const auto& shapeSeg = static_cast<const BLOCK<BLK_0x0E_SHAPE_SEG>&>( *areaBlock ).GetData();
+
+            wxLogTrace( traceAllegroBuilder, "Footprint area with 0x0E shape segment in %s: layer=%s",
+                        fp->Reference().GetText(), layerInfoDisplayName( shapeSeg.m_Layer ) );
+            break;
+        }
+        case 0x28:
+        {
+            const auto& polygon = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *areaBlock ).GetData();
+            item = buildPolygon( polygon, *fp );
+            break;
+        }
+        default:
+            break;
+        }
+
+        if( item )
+        {
+            canonicalizeLayer( item.get() );
+            fp->Add( item.release() );
         }
     }
 
