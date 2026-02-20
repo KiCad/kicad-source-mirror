@@ -841,12 +841,6 @@ public:
 
     bool      m_ProbingSchToPcb;         // Recursion guard when synchronizing selection from schematic
 
-    // Cross-probe flashing support
-    wxTimer        m_crossProbeFlashTimer;   ///< Timer to toggle selection visibility for flash
-    int            m_crossProbeFlashPhase = 0; ///< Phase counter
-    std::vector<KIID> m_crossProbeFlashItems;  ///< Items to flash (by UUID)
-    bool           m_crossProbeFlashing = false; ///< Currently flashing guard
-
     void StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItems );
     void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
 
@@ -861,14 +855,14 @@ private:
      * the list of assignable hot keys since it's only available as an advanced configuration
      * option.
      */
-    TOOL_ACTION* m_exportNetlistAction;
+    TOOL_ACTION*           m_exportNetlistAction;
 
-    DIALOG_FIND* m_findDialog;
-    DIALOG_BOOK_REPORTER* m_inspectDrcErrorDlg;
-    DIALOG_BOOK_REPORTER* m_inspectClearanceDlg;
-    DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
-    DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
-    DIALOG_BOARD_SETUP*   m_boardSetupDlg;
+    DIALOG_FIND*           m_findDialog;
+    DIALOG_BOOK_REPORTER*  m_inspectDrcErrorDlg;
+    DIALOG_BOOK_REPORTER*  m_inspectClearanceDlg;
+    DIALOG_BOOK_REPORTER*  m_inspectConstraintsDlg;
+    DIALOG_BOOK_REPORTER*  m_footprintDiffDlg;
+    DIALOG_BOARD_SETUP*    m_boardSetupDlg;
 
     std::vector<LIB_ID>    m_designBlockHistoryList;
     PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
@@ -878,12 +872,18 @@ private:
     /**
      * Keep track of viewport so that track net labels can be adjusted when it changes.
      */
-    BOX2D        m_lastNetnamesViewport;
+    BOX2D             m_lastNetnamesViewport;
 
-    wxTimer*     m_eventCounterTimer;
+    wxTimer*          m_eventCounterTimer;
+
+    // Cross-probe flashing support
+    wxTimer           m_crossProbeFlashTimer;          ///< Timer to toggle selection visibility for flash
+    int               m_crossProbeFlashPhase = 0;      ///< Phase counter
+    std::vector<KIID> m_crossProbeFlashItems;          ///< Items to flash (by UUID)
+    bool              m_crossProbeFlashing = false;    ///< Currently flashing guard
 
 #ifdef KICAD_IPC_API
-    std::unique_ptr<API_HANDLER_PCB> m_apiHandler;
+    std::unique_ptr<API_HANDLER_PCB>    m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
 #endif
 };
