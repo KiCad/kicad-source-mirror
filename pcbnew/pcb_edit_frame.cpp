@@ -211,12 +211,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock = true;   // true to display sheet references
     m_SelTrackWidthBox = nullptr;
     m_SelViaSizeBox = nullptr;
-    m_currentVariantCtrl = nullptr;
-    m_show_layer_manager_tools = true;
+    m_CurrentVariantCtrl = nullptr;
+    m_ShowLayerManagerTools = true;
     m_supportsAutoSave = true;
-    m_probingSchToPcb = false;
-    m_show_search = false;
-    m_show_net_inspector = false;
+    m_ProbingSchToPcb = false;
+    m_ShowSearch = false;
+    m_ShowNetInspector = false;
     // Ensure timer has an owner before binding so it generates events.
     m_crossProbeFlashTimer.SetOwner( this );
     Bind( wxEVT_TIMER, &PCB_EDIT_FRAME::OnCrossProbeFlashTimer, this, m_crossProbeFlashTimer.GetId() );
@@ -393,11 +393,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     RestoreAuiLayout();
 
-    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
-    m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "LayersManager" ).Show( m_ShowLayerManagerTools );
+    m_auimgr.GetPane( "SelectionFilter" ).Show( m_ShowLayerManagerTools );
     m_auimgr.GetPane( PropertiesPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.show_properties );
-    m_auimgr.GetPane( NetInspectorPanelName() ).Show( m_show_net_inspector );
-    m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
+    m_auimgr.GetPane( NetInspectorPanelName() ).Show( m_ShowNetInspector );
+    m_auimgr.GetPane( SearchPaneName() ).Show( m_ShowSearch );
     m_auimgr.GetPane( DesignBlocksPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.design_blocks_show );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
@@ -688,8 +688,8 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     }
 
     // Prevent recursion / IPC during flashing
-    bool prevGuard = m_probingSchToPcb;
-    m_probingSchToPcb = true;
+    bool prevGuard = m_ProbingSchToPcb;
+    m_ProbingSchToPcb = true;
 
     if( m_crossProbeFlashPhase % 2 == 0 )
     {
@@ -718,7 +718,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
                     m_crossProbeFlashPhase );
     }
 
-    m_probingSchToPcb = prevGuard;
+    m_ProbingSchToPcb = prevGuard;
 
     m_crossProbeFlashPhase++;
 
@@ -1508,7 +1508,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manager
-    if( m_show_layer_manager_tools )
+    if( m_ShowLayerManagerTools )
     {
         m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
         m_auimgr.GetPane( wxS( "TabbedPanel" ) ).Show( false );
@@ -1670,9 +1670,9 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
-        m_show_search              = cfg->m_AuiPanels.show_search;
-        m_show_net_inspector       = cfg->m_AuiPanels.show_net_inspector;
+        m_ShowLayerManagerTools = cfg->m_AuiPanels.show_layer_manager;
+        m_ShowSearch            = cfg->m_AuiPanels.show_search;
+        m_ShowNetInspector      = cfg->m_AuiPanels.show_net_inspector;
     }
 }
 
@@ -1696,10 +1696,10 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
             cfg->m_AuiPanels.properties_splitter    = m_propertiesPanel->SplitterProportion();
         }
 
-        // ensure m_show_search is up to date (the pane can be closed)
+        // ensure m_ShowSearch is up to date (the pane can be closed)
         wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
-        m_show_search = searchPaneInfo.IsShown();
-        cfg->m_AuiPanels.show_search = m_show_search;
+        m_ShowSearch = searchPaneInfo.IsShown();
+        cfg->m_AuiPanels.show_search = m_ShowSearch;
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
@@ -1707,8 +1707,8 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         if( m_netInspectorPanel )
         {
             wxAuiPaneInfo& netInspectorhPaneInfo = m_auimgr.GetPane( NetInspectorPanelName() );
-            m_show_net_inspector = netInspectorhPaneInfo.IsShown();
-            cfg->m_AuiPanels.show_net_inspector = m_show_net_inspector;
+            m_ShowNetInspector = netInspectorhPaneInfo.IsShown();
+            cfg->m_AuiPanels.show_net_inspector = m_ShowNetInspector;
         }
 
         if( m_appearancePanel )

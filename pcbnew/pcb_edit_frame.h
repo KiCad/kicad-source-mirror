@@ -831,15 +831,15 @@ protected:
 public:
     wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;           // a choice box to display and select current via diameter
-    wxChoice* m_currentVariantCtrl;      // a choice box to display and select current variant
+    wxChoice* m_CurrentVariantCtrl;      // a choice box to display and select current variant
 
-    bool m_show_layer_manager_tools;
-    bool m_show_search;
-    bool m_show_net_inspector;
+    bool      m_ShowLayerManagerTools;
+    bool      m_ShowSearch;
+    bool      m_ShowNetInspector;
 
-    bool m_ZoneFillsDirty;          // Board has been modified since last zone fill.
+    bool      m_ZoneFillsDirty;          // Board has been modified since last zone fill.
 
-    bool m_probingSchToPcb;         // Recursion guard when synchronizing selection from schematic
+    bool      m_ProbingSchToPcb;         // Recursion guard when synchronizing selection from schematic
 
     // Cross-probe flashing support
     wxTimer        m_crossProbeFlashTimer;   ///< Timer to toggle selection visibility for flash

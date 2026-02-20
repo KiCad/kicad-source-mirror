@@ -425,17 +425,17 @@ void PCB_EDIT_FRAME::configureToolbars()
     auto variantSelectionCtrlFactory =
             [this]( ACTION_TOOLBAR* aToolbar )
             {
-                if( !m_currentVariantCtrl )
+                if( !m_CurrentVariantCtrl )
                 {
-                    m_currentVariantCtrl = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VARIANT_SELECT,
+                    m_CurrentVariantCtrl = new wxChoice( aToolbar, ID_AUX_TOOLBAR_PCB_VARIANT_SELECT,
                                                          wxDefaultPosition, wxDefaultSize, 0, nullptr );
                 }
 
-                m_currentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
+                m_CurrentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
 
                 UpdateVariantSelectionCtrl();
 
-                aToolbar->Add( m_currentVariantCtrl );
+                aToolbar->Add( m_CurrentVariantCtrl );
             };
 
     RegisterCustomToolbarControlFactory( PCB_ACTION_TOOLBAR_CONTROLS::currentVariant, variantSelectionCtrlFactory );
@@ -483,14 +483,14 @@ void PCB_EDIT_FRAME::ClearToolbarControl( int aId )
     {
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:    m_SelTrackWidthBox = nullptr;   break;
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:       m_SelViaSizeBox = nullptr;      break;
-    case ID_AUX_TOOLBAR_PCB_VARIANT_SELECT: m_currentVariantCtrl = nullptr; break;
+    case ID_AUX_TOOLBAR_PCB_VARIANT_SELECT: m_CurrentVariantCtrl = nullptr; break;
     }
 }
 
 
 void PCB_EDIT_FRAME::UpdateVariantSelectionCtrl()
 {
-    if( !m_currentVariantCtrl )
+    if( !m_CurrentVariantCtrl )
         return;
 
     if( !GetBoard() )
@@ -498,30 +498,30 @@ void PCB_EDIT_FRAME::UpdateVariantSelectionCtrl()
 
     wxArrayString variantNames = GetBoard()->GetVariantNamesForUI();
 
-    m_currentVariantCtrl->Set( variantNames );
+    m_CurrentVariantCtrl->Set( variantNames );
 
     int selectionIndex = 0;
     wxString currentVariant = GetBoard()->GetCurrentVariant();
 
     if( !currentVariant.IsEmpty() )
     {
-        int foundIndex = m_currentVariantCtrl->FindString( currentVariant );
+        int foundIndex = m_CurrentVariantCtrl->FindString( currentVariant );
 
         if( foundIndex != wxNOT_FOUND )
             selectionIndex = foundIndex;
     }
 
-    if( m_currentVariantCtrl->GetCount() > 0 )
-        m_currentVariantCtrl->SetSelection( selectionIndex );
+    if( m_CurrentVariantCtrl->GetCount() > 0 )
+        m_CurrentVariantCtrl->SetSelection( selectionIndex );
 }
 
 
 void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 {
-    if( !m_currentVariantCtrl )
+    if( !m_CurrentVariantCtrl )
         return;
 
-    int selection = m_currentVariantCtrl->GetSelection();
+    int selection = m_CurrentVariantCtrl->GetSelection();
 
     if( selection == wxNOT_FOUND || selection == 0 )
     {
@@ -530,7 +530,7 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     }
     else
     {
-        wxString selectedVariant = m_currentVariantCtrl->GetString( selection );
+        wxString selectedVariant = m_CurrentVariantCtrl->GetString( selection );
         GetBoard()->SetCurrentVariant( selectedVariant );
     }
 
@@ -707,14 +707,14 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
     wxAuiPaneInfo&   selectionFilter = m_auimgr.GetPane( "SelectionFilter" );
 
     // show auxiliary Vertical layers and visibility manager toolbar
-    m_show_layer_manager_tools = layersManager.IsShown();
+    m_ShowLayerManagerTools = layersManager.IsShown();
 
-    m_show_layer_manager_tools = !m_show_layer_manager_tools;
+    m_ShowLayerManagerTools = !m_ShowLayerManagerTools;
 
-    layersManager.Show( m_show_layer_manager_tools );
-    selectionFilter.Show( m_show_layer_manager_tools );
+    layersManager.Show( m_ShowLayerManagerTools );
+    selectionFilter.Show( m_ShowLayerManagerTools );
 
-    if( m_show_layer_manager_tools )
+    if( m_ShowLayerManagerTools )
     {
         SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
     }
@@ -731,13 +731,13 @@ void PCB_EDIT_FRAME::ToggleNetInspector()
     PCBNEW_SETTINGS* settings          = GetPcbNewSettings();
     wxAuiPaneInfo&   netInspectorPanel = m_auimgr.GetPane( NetInspectorPanelName() );
 
-    m_show_net_inspector = netInspectorPanel.IsShown();
+    m_ShowNetInspector = netInspectorPanel.IsShown();
 
-    m_show_net_inspector = !m_show_net_inspector;
+    m_ShowNetInspector = !m_ShowNetInspector;
 
-    netInspectorPanel.Show( m_show_net_inspector );
+    netInspectorPanel.Show( m_ShowNetInspector );
 
-    if( m_show_net_inspector )
+    if( m_ShowNetInspector )
     {
         SetAuiPaneSize( m_auimgr, netInspectorPanel, settings->m_AuiPanels.net_inspector_width, -1 );
         m_netInspectorPanel->OnShowPanel();
@@ -755,15 +755,15 @@ void PCB_EDIT_FRAME::ToggleSearch()
 {
     PCBNEW_SETTINGS* settings = GetPcbNewSettings();
 
-    // Ensure m_show_search is up to date (the pane can be closed outside the menu)
-    m_show_search = m_auimgr.GetPane( SearchPaneName() ).IsShown();
+    // Ensure m_ShowSearch is up to date (the pane can be closed outside the menu)
+    m_ShowSearch = m_auimgr.GetPane( SearchPaneName() ).IsShown();
 
-    m_show_search = !m_show_search;
+    m_ShowSearch = !m_ShowSearch;
 
     wxAuiPaneInfo& searchPaneInfo = m_auimgr.GetPane( SearchPaneName() );
-    searchPaneInfo.Show( m_show_search );
+    searchPaneInfo.Show( m_ShowSearch );
 
-    if( m_show_search )
+    if( m_ShowSearch )
     {
         searchPaneInfo.Direction( settings->m_AuiPanels.search_panel_dock_direction );
 

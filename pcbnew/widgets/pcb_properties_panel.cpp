@@ -148,7 +148,8 @@ class PG_NET_SELECTOR_EDITOR : public wxPGEditor
 public:
     static const wxString EDITOR_NAME;
 
-    PG_NET_SELECTOR_EDITOR( PCB_BASE_EDIT_FRAME* aFrame ) : m_frame( aFrame )
+    PG_NET_SELECTOR_EDITOR( PCB_BASE_EDIT_FRAME* aFrame ) :
+            m_frame( aFrame )
     {
     }
 
@@ -156,8 +157,8 @@ public:
 
     wxString GetName() const override { return EDITOR_NAME; }
 
-    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
-                                   const wxPoint& aPos, const wxSize& aSize ) const override
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty, const wxPoint& aPos,
+                                   const wxSize& aSize ) const override
     {
         NET_SELECTOR* editor = new NET_SELECTOR( aGrid->GetPanel(), wxID_ANY, aPos, aSize, 0 );
 
@@ -194,8 +195,7 @@ public:
         }
     }
 
-    bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
-                              wxWindow* aCtrl ) const override
+    bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty, wxWindow* aCtrl ) const override
     {
         NET_SELECTOR* editor = dynamic_cast<NET_SELECTOR*>( aCtrl );
 
@@ -206,8 +206,7 @@ public:
         return true;
     }
 
-    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow,
-                  wxEvent& aEvent ) const override
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow, wxEvent& aEvent ) const override
     {
         return false;
     }
@@ -215,6 +214,7 @@ public:
 private:
     PCB_BASE_EDIT_FRAME* m_frame;
 };
+
 
 const wxString PG_NET_SELECTOR_EDITOR::EDITOR_NAME = wxS( "PG_NET_SELECTOR_EDITOR" );
 
@@ -490,12 +490,10 @@ PROPERTY_BASE* PCB_PROPERTIES_PANEL::getPropertyFromEvent( const wxPropertyGridE
 
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( item );
 
-    wxCHECK_MSG( firstItem, nullptr,
-                 wxT( "getPropertyFromEvent for a property with nothing selected!") );
+    wxCHECK_MSG( firstItem, nullptr, wxT( "getPropertyFromEvent for a property with nothing selected!") );
 
     PROPERTY_BASE* property = m_propMgr.GetProperty( TYPE_HASH( *firstItem ), aEvent.GetPropertyName() );
-    wxCHECK_MSG( property, nullptr,
-                 wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
+    wxCHECK_MSG( property, nullptr, wxT( "getPropertyFromEvent for a property not found on the selected item!" ) );
 
     return property;
 }

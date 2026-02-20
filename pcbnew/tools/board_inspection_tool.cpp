@@ -1957,14 +1957,14 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
 
-    m_frame->m_probingSchToPcb = true; // recursion guard
+    m_frame->m_ProbingSchToPcb = true; // recursion guard
     {
         m_toolMgr->RunAction( ACTIONS::selectionClear );
 
         if( item )
             m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, item );
     }
-    m_frame->m_probingSchToPcb = false;
+    m_frame->m_ProbingSchToPcb = false;
 
     bool request3DviewRedraw = frame()->GetPcbNewSettings()->m_Display.m_Live3DRefresh;
 

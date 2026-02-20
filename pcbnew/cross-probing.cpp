@@ -645,7 +645,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             std::vector<BOARD_ITEM*> items =
                     FindItemsFromSyncSelection( paramStr.substr( modeEnd + 1 ) );
 
-            m_probingSchToPcb = true; // recursion guard
+            m_ProbingSchToPcb = true; // recursion guard
 
             if( selectConnections )
                 GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
@@ -655,7 +655,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             // Update 3D viewer highlighting
             Update3DView( false, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
-            m_probingSchToPcb = false;
+            m_ProbingSchToPcb = false;
 
             if( GetPcbNewSettings()->m_CrossProbing.flash_selection )
             {
