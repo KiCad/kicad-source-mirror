@@ -192,8 +192,13 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
             PCB_LAYER_ID bottom_layer;
             via->LayerPair( &top_layer, &bottom_layer );
 
-            if( DRILL_LAYER_PAIR( top_layer, bottom_layer ) != aSpan.Pair() )
+            // Skip vias not starting and ending on current layer pair
+            // (layer order has not matter)
+            if( DRILL_LAYER_PAIR( top_layer, bottom_layer ) != aSpan.Pair()
+                && DRILL_LAYER_PAIR( bottom_layer, top_layer ) != aSpan.Pair() )
+            {
                 continue;
+            }
 
             new_hole = HOLE_INFO();
             new_hole.m_ItemParent = via;
@@ -626,6 +631,7 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString( const DRI
 
     int layer1 = aSpan.Pair().first;
     int layer2 = aSpan.Pair().second;
+
     // In Gerber files, layers num are 1 to copper layer count instead of F_Cu to B_Cu
     // (0 to copper layer count-1)
     // Note also for a n copper layers board, gerber layers num are 1 ... n
@@ -634,13 +640,21 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString( const DRI
     // (Copper layer id) /2 + 1 if layer is not B_Cu
     if( layer1 == F_Cu )
         layer1 = 1;
+    else if( layer1 == B_Cu )
+        layer1 = m_pcb->GetCopperLayerCount();
     else
         layer1 = ( ( layer1 - B_Cu ) / 2 ) + 1;
 
-    if( layer2 == B_Cu )
+    if( layer2 == F_Cu )
+        layer2 = 1;
+    else if( layer2 == B_Cu )
         layer2 = m_pcb->GetCopperLayerCount();
     else
         layer2 = ( ( layer2 - B_Cu ) / 2) + 1;
+
+    // Ensure layer order is from top (smaller layer number) to bottom (bigger layer number)
+    if( layer1 > layer2 )
+        std::swap( layer1, layer2 );
 
     text << layer1 << wxT( "," ) << layer2;
 
