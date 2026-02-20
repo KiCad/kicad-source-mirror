@@ -58,12 +58,12 @@ public:
         // Positions measured from constraint_via_style.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 260, 340, 25, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_via_diameter (right side, top)
-            { 260, 340, 55, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_via_diameter (right side, middle)
-            { 260, 340, 85, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_via_diameter (right side, bottom)
-            { 260, 340, 115, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_via_hole (right side, below diameter)
-            { 260, 340, 145, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_via_hole
-            { 260, 340, 175, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_via_hole
+            { 300, 340, 15, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_via_diameter (right side, top)
+            { 300, 340, 45, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_via_diameter (right side, middle)
+            { 300, 340, 75, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_via_diameter (right side, bottom)
+            { 300, 340, 125, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_via_hole (right side, below diameter)
+            { 300, 340, 155, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_via_hole
+            { 300, 340, 185, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_via_hole
         };
     }
 

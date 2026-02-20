@@ -61,17 +61,17 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
                                            minViaDiameterField->GetLabel(), false, false );
     minViaDiameterField->SetUnitBinder( m_minViaDiameterBinder.get() );
 
-    auto* maxViaDiameterField = AddField<wxTextCtrl>( wxS( "max_via_diameter" ), positions[1], wxTE_PROCESS_ENTER );
-    m_maxViaDiameterBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxViaDiameterField->GetControl(),
-                                           maxViaDiameterField->GetLabel(), false, false );
-    maxViaDiameterField->SetUnitBinder( m_maxViaDiameterBinder.get() );
-
-    auto* prefViaDiameterField = AddField<wxTextCtrl>( wxS( "pref_via_diameter" ), positions[2], wxTE_PROCESS_ENTER );
+    auto* prefViaDiameterField = AddField<wxTextCtrl>( wxS( "pref_via_diameter" ), positions[1], wxTE_PROCESS_ENTER );
     m_prefViaDiameterBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefViaDiameterField->GetControl(),
                                            prefViaDiameterField->GetLabel(), false, false );
     prefViaDiameterField->SetUnitBinder( m_prefViaDiameterBinder.get() );
+
+    auto* maxViaDiameterField = AddField<wxTextCtrl>( wxS( "max_via_diameter" ), positions[2], wxTE_PROCESS_ENTER );
+    m_maxViaDiameterBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxViaDiameterField->GetControl(),
+                                           maxViaDiameterField->GetLabel(), false, false );
+    maxViaDiameterField->SetUnitBinder( m_maxViaDiameterBinder.get() );
 
     // Create via hole size fields (min/pref/max)
     auto* minViaHoleField = AddField<wxTextCtrl>( wxS( "min_via_hole" ), positions[3], wxTE_PROCESS_ENTER );
@@ -80,17 +80,17 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
                                            minViaHoleField->GetLabel(), false, false );
     minViaHoleField->SetUnitBinder( m_minViaHoleSizeBinder.get() );
 
-    auto* maxViaHoleField = AddField<wxTextCtrl>( wxS( "max_via_hole" ), positions[4], wxTE_PROCESS_ENTER );
-    m_maxViaHoleSizeBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxViaHoleField->GetControl(),
-                                           maxViaHoleField->GetLabel(), false, false );
-    maxViaHoleField->SetUnitBinder( m_maxViaHoleSizeBinder.get() );
-
-    auto* prefViaHoleField = AddField<wxTextCtrl>( wxS( "pref_via_hole" ), positions[5], wxTE_PROCESS_ENTER );
+    auto* prefViaHoleField = AddField<wxTextCtrl>( wxS( "pref_via_hole" ), positions[4], wxTE_PROCESS_ENTER );
     m_prefViaHoleSizeBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefViaHoleField->GetControl(),
                                            prefViaHoleField->GetLabel(), false, false );
     prefViaHoleField->SetUnitBinder( m_prefViaHoleSizeBinder.get() );
+
+    auto* maxViaHoleField = AddField<wxTextCtrl>( wxS( "max_via_hole" ), positions[5], wxTE_PROCESS_ENTER );
+    m_maxViaHoleSizeBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxViaHoleField->GetControl(),
+                                           maxViaHoleField->GetLabel(), false, false );
+    maxViaHoleField->SetUnitBinder( m_maxViaHoleSizeBinder.get() );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
