@@ -128,7 +128,7 @@ protected:
         { IPC4761_PRESET::IVA,           _( "Type IV-a (plugged and tented top)" ) },
         { IPC4761_PRESET::IVB,           _( "Type IV-b (plugged and tented both sides)" ) },
         { IPC4761_PRESET::IVA_INVERTED,  _( "Type IV-a (plugged and tented bottom)" ) },
-        { IPC4761_PRESET::V,             _( "Type V (filled )" ) },
+        { IPC4761_PRESET::V,             _( "Type V (filled)" ) },
         { IPC4761_PRESET::VIA,           _( "Type VI-a (filled and tented top)" ) },
         { IPC4761_PRESET::VIB,           _( "Type VI-b (filled and tented both sides)" ) },
         { IPC4761_PRESET::VIA_INVERTED,  _( "Type VI-a (filled and tented bottom)" ) },
