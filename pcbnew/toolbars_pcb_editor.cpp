@@ -41,6 +41,8 @@
 #include <pcb_layer_box_selector.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
+#include <eda_text.h>
+#include <pcb_field.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <router/pns_routing_settings.h>
