@@ -597,14 +597,8 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildElectricalRuleTreeNodes
     result.push_back( buildRuleTreeNodeData( "Clearance", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;
 
-    result.push_back( buildRuleTreeNodeData( "Basic clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
-                                             BASIC_CLEARANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Board outline clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, BOARD_OUTLINE_CLEARANCE ) );
     result.push_back( buildRuleTreeNodeData( "Minimum clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              MINIMUM_CLEARANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Minimum item clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MINIMUM_ITEM_CLEARANCE ) );
     result.push_back( buildRuleTreeNodeData( "Copper to edge clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, COPPER_TO_EDGE_CLEARANCE ) );
     result.push_back( buildRuleTreeNodeData( "Courtyard Clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
@@ -619,8 +613,6 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildElectricalRuleTreeNodes
 
     result.push_back( buildRuleTreeNodeData( "Minimum connection width", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, MINIMUM_CONNECTION_WIDTH ) );
-    result.push_back( buildRuleTreeNodeData( "Minimum track width", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
-                                             MINIMUM_TRACK_WIDTH ) );
 
     result.push_back( buildRuleTreeNodeData( "Hole Clearance", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;

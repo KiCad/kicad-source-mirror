@@ -1279,23 +1279,10 @@ BOOST_AUTO_TEST_CASE( RuleLoaderMultipleRules )
     BOOST_CHECK_EQUAL( entries[0].panelType, MINIMUM_CLEARANCE );
 
     BOOST_CHECK_EQUAL( entries[1].ruleName, "Rule B" );
-    BOOST_CHECK_EQUAL( entries[1].panelType, MINIMUM_TRACK_WIDTH );
+    BOOST_CHECK_EQUAL( entries[1].panelType, ROUTING_WIDTH );
 
     BOOST_CHECK_EQUAL( entries[2].ruleName, "Rule C" );
     BOOST_CHECK_EQUAL( entries[2].panelType, VIA_STYLE );
-}
-
-BOOST_AUTO_TEST_CASE( RuleLoaderRoutingWidth )
-{
-    wxString ruleText = "(version 1)\n"
-                        "(rule \"RoutingWidth\"\n"
-                        "    (constraint track_width (min 0.15mm) (opt 0.2mm) (max 0.3mm)))";
-
-    DRC_RULE_LOADER                        loader;
-    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
-
-    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
-    BOOST_CHECK_EQUAL( entries[0].panelType, ROUTING_WIDTH );
 }
 
 BOOST_AUTO_TEST_CASE( RuleLoaderEmptyRule )

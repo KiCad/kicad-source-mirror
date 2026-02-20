@@ -46,13 +46,9 @@
 using CODE_MAP = std::unordered_map<DRC_RULE_EDITOR_CONSTRAINT_NAME, const char*>;
 using REVERSE_CODE_MAP = std::unordered_map<wxString, DRC_RULE_EDITOR_CONSTRAINT_NAME, wxStringHash, wxStringEqual>;
 
-static const CODE_MAP sCodeMap = { { BASIC_CLEARANCE, "clearance" },
-                                   { BOARD_OUTLINE_CLEARANCE, "edge_clearance" },
-                                   { MINIMUM_CLEARANCE, "clearance" },
-                                   { MINIMUM_ITEM_CLEARANCE, "clearance" },
+static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { CREEPAGE_DISTANCE, "creepage" },
                                    { MINIMUM_CONNECTION_WIDTH, "connection_width" },
-                                   { MINIMUM_TRACK_WIDTH, "track_width" },
                                    { COPPER_TO_HOLE_CLEARANCE, "hole_clearance" },
                                    { HOLE_TO_HOLE_CLEARANCE, "hole_to_hole" },
                                    { MINIMUM_THERMAL_RELIEF_SPOKE_COUNT, "min_resolved_spokes" },
@@ -280,8 +276,6 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
 {
     switch( aConstraintType )
     {
-    case BASIC_CLEARANCE:
-    case BOARD_OUTLINE_CLEARANCE:
     case COPPER_TO_EDGE_CLEARANCE:
     case COPPER_TO_HOLE_CLEARANCE:
     case COURTYARD_CLEARANCE:
@@ -297,11 +291,9 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case MINIMUM_ANNULAR_WIDTH:
     case MINIMUM_CLEARANCE:
     case MINIMUM_CONNECTION_WIDTH:
-    case MINIMUM_ITEM_CLEARANCE:
     case MINIMUM_SOLDERMASK_SILVER:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
     case MINIMUM_THROUGH_HOLE:
-    case MINIMUM_TRACK_WIDTH:
     case MINIMUM_UVIA_DIAMETER:
     case MINIMUM_UVIA_HOLE:
     case MINIMUM_VIA_DIAMETER:
@@ -797,9 +789,7 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     switch( aConstraintType )
     {
     // COPPER_ONLY: Constraints that only apply to copper layers
-    case BASIC_CLEARANCE:
     case MINIMUM_CLEARANCE:
-    case MINIMUM_ITEM_CLEARANCE:
     case CREEPAGE_DISTANCE:
     case COPPER_TO_HOLE_CLEARANCE:
     case COPPER_TO_EDGE_CLEARANCE:
@@ -808,7 +798,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     case MINIMUM_UVIA_DIAMETER:
     case MINIMUM_UVIA_HOLE:
     case MINIMUM_ANNULAR_WIDTH:
-    case MINIMUM_TRACK_WIDTH:
     case MINIMUM_CONNECTION_WIDTH:
     case ROUTING_WIDTH:
     case ROUTING_DIFF_PAIR:
@@ -838,7 +827,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
         return DRC_LAYER_CATEGORY::TOP_BOTTOM_ANY;
 
     // GENERAL_ANY_LAYER: Constraints that can apply to any layer type
-    case BOARD_OUTLINE_CLEARANCE:
     case HOLE_TO_HOLE_CLEARANCE:
     case PHYSICAL_CLEARANCE:
     case HOLE_SIZE:
@@ -891,8 +879,6 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
 {
     switch( aType )
     {
-    case BASIC_CLEARANCE:                    return std::make_shared<DRC_RE_BASIC_CLEARANCE_CONSTRAINT_DATA>();
-    case BOARD_OUTLINE_CLEARANCE:            return std::make_shared<DRC_RE_BOARD_OUTLINE_CLEARANCE_CONSTRAINT_DATA>();
     case COPPER_TO_EDGE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_EDGE_CLEARANCE_CONSTRAINT_DATA>();
     case COPPER_TO_HOLE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>();
     case COURTYARD_CLEARANCE:                return std::make_shared<DRC_RE_COURTYARD_CLEARANCE_CONSTRAINT_DATA>();
@@ -907,11 +893,9 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>();
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>();
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>();
-    case MINIMUM_ITEM_CLEARANCE:             return std::make_shared<DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA>();
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>();
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
     case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>();
-    case MINIMUM_TRACK_WIDTH:                return std::make_shared<DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA>();
     case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>();
     case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>();
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
@@ -930,8 +914,6 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
 {
     switch( aType )
     {
-    case BASIC_CLEARANCE:                    return std::make_shared<DRC_RE_BASIC_CLEARANCE_CONSTRAINT_DATA>( aBase );
-    case BOARD_OUTLINE_CLEARANCE:            return std::make_shared<DRC_RE_BOARD_OUTLINE_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case COPPER_TO_EDGE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_EDGE_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case COPPER_TO_HOLE_CLEARANCE:           return std::make_shared<DRC_RE_COPPER_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case COURTYARD_CLEARANCE:                return std::make_shared<DRC_RE_COURTYARD_CLEARANCE_CONSTRAINT_DATA>( aBase );
@@ -946,11 +928,9 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_ITEM_CLEARANCE:             return std::make_shared<DRC_RE_MINIMUM_ITEM_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_TRACK_WIDTH:                return std::make_shared<DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );

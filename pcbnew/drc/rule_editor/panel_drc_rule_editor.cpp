@@ -83,10 +83,7 @@ static bool constraintNeedsTwoObjects( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstrai
 {
     switch( aConstraintType )
     {
-    case BASIC_CLEARANCE:
-    case BOARD_OUTLINE_CLEARANCE:
     case MINIMUM_CLEARANCE:
-    case MINIMUM_ITEM_CLEARANCE:
     case CREEPAGE_DISTANCE:
     case COPPER_TO_HOLE_CLEARANCE:
     case HOLE_TO_HOLE_CLEARANCE:
