@@ -59,6 +59,10 @@ public:
         {
             return { wxString::Format( "(constraint %s (max %s))", code, valueStr ) };
         }
+        else if( code == "min_resolved_spokes" )
+        {
+            return { wxString::Format( "(constraint %s %s)", code, valueStr ) };
+        }
         else if( code == "track_angle" )
         {
             return { wxString::Format( "(constraint %s (min %sdeg))", code, valueStr ) };

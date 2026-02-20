@@ -321,9 +321,10 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
                 if( constraint )
                 {
-                    // Use Min for most constraints, Max for via_count
                     if( type == VIA_COUNT_CONSTRAINT )
                         data->SetNumericInputValue( toMM( constraint->GetValue().Max() ) );
+                    else if( type == MIN_RESOLVED_SPOKES_CONSTRAINT )
+                        data->SetNumericInputValue( constraint->GetValue().Min() );
                     else
                         data->SetNumericInputValue( toMM( constraint->GetValue().Min() ) );
 
