@@ -296,6 +296,8 @@ static const std::unordered_map<LAYER_INFO, wxString> s_OptionalFixedMappings = 
 /**
  * Build a unique display name for a LAYER_INFO entry from the static maps above,
  * suitable for presentation in the layer mapping dialog.
+ *
+ * Refer to https://www.artwork.com/all2dxf/alleggeo.htm for layer orders.
  */
 static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
 {
@@ -322,15 +324,25 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::CLASS::BOUNDARY,         wxS( "Boundary" ) },
     };
 
-    static const std::unordered_map<uint8_t, wxString> s_SubclassNames = {
+    static const std::unordered_map<uint8_t, wxString> s_BoardGeomSubclassNames = {
+        { LAYER_INFO::SUBCLASS::BGEOM_OUTLINE,              wxS( "Outline" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_DIMENSION,            wxS( "Dimension" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_ComponentValueSubclassNames = {
         { LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM,             wxS( "Display Bottom" ) },
         { LAYER_INFO::SUBCLASS::DISPLAY_TOP,                wxS( "Display Top" ) },
         { LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM,          wxS( "Silkscreen Bottom" ) },
         { LAYER_INFO::SUBCLASS::SILKSCREEN_TOP,             wxS( "Silkscreen Top" ) },
         { LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM,            wxS( "Assembly Bottom" ) },
         { LAYER_INFO::SUBCLASS::ASSEMBLY_TOP,               wxS( "Assembly Top" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_DrawingFormatSubclassNames = {
         { LAYER_INFO::SUBCLASS::DFMT_OUTLINE,               wxS( "Outline" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_PackageGeometrySubclassNames = {
         { LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_BOTTOM,       wxS( "Display Bottom" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_TOP,          wxS( "Display Top" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_BODY_CENTER,          wxS( "Body Center" ) },
@@ -342,13 +354,32 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP,         wxS( "Assembly Top" ) },
         { LAYER_INFO::SUBCLASS::DFA_BOUND_BOTTOM,           wxS( "DFA Bound Bottom" ) },
         { LAYER_INFO::SUBCLASS::DFA_BOUND_TOP,              wxS( "DFA Bound Top" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_ManufacturingSubclassNames = {
         { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_BOTTOM,        wxS( "Autosilk Bottom" ) },
         { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_TOP,           wxS( "Autosilk Top" ) },
     };
+
+    static const std::unordered_map<uint8_t, const std::unordered_map<uint8_t, wxString>&> s_SubclassNameMaps = {
+        { LAYER_INFO::CLASS::BOARD_GEOMETRY,   s_BoardGeomSubclassNames },
+
+        // These classes all share the same subclass names
+        { LAYER_INFO::CLASS::COMPONENT_VALUE,  s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::DEVICE_TYPE,      s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::REF_DES,          s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::TOLERANCE,        s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::USER_PART_NUMBER, s_ComponentValueSubclassNames },
+
+        { LAYER_INFO::CLASS::DRAWING_FORMAT,   s_DrawingFormatSubclassNames },
+        { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, s_PackageGeometrySubclassNames },
+        { LAYER_INFO::CLASS::MANUFACTURING,    s_ManufacturingSubclassNames },
+    };
+
     // clang-format on
 
-    wxString className;
-    auto     classIt = s_ClassNames.find( aLayerInfo.m_Class );
+    wxString   className;
+    const auto classIt = s_ClassNames.find( aLayerInfo.m_Class );
 
     if( classIt != s_ClassNames.end() )
         className = classIt->second;
@@ -356,12 +387,29 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         className = wxString::Format( wxS( "Class_%02X" ), aLayerInfo.m_Class );
 
     wxString subclassName;
-    auto     subIt = s_SubclassNames.find( aLayerInfo.m_Subclass );
 
-    if( subIt != s_SubclassNames.end() )
-        subclassName = subIt->second;
+    // Find the right subclass name map for this class
+    auto classMapIt = s_SubclassNameMaps.find( aLayerInfo.m_Class );
+
+    if( classMapIt != s_SubclassNameMaps.end() )
+    {
+        const std::unordered_map<uint8_t, wxString>& subclassMap = classMapIt->second;
+
+        const auto subIt = subclassMap.find( aLayerInfo.m_Subclass );
+
+        if( subIt != subclassMap.end() )
+            subclassName = subIt->second;
+        else
+        {
+            // This subclass seems not to have a known name
+            subclassName = wxString::Format( wxS( "Subclass_%02X" ), aLayerInfo.m_Subclass );
+        }
+    }
     else
+    {
+        // Don't have a specific map for this class, just do a generic one.
         subclassName = wxString::Format( wxS( "Subclass_%02X" ), aLayerInfo.m_Subclass );
+    }
 
     return className + wxS( "/" ) + subclassName;
 }
