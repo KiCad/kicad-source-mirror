@@ -47,6 +47,7 @@ using namespace ALLEGRO;
  * @ingroup trace_env_vars
  */
 static const wxChar* const traceAllegroParser = wxT( "KICAD_ALLEGRO_PARSER" );
+static const wxChar* const traceAllegroParserBlocks = wxT( "KICAD_ALLEGRO_PARSER_BLOCKS" );
 static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
@@ -416,7 +417,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
 
-    wxLogTrace( traceAllegroParser, wxT( "  Parsed block 0x03: subtype %#02x, size %d" ), data.m_SubType, data.m_Size );
+    wxLogTrace( traceAllegroParserBlocks, wxT( "  Parsed block 0x03: subtype %#02x, size %d" ), data.m_SubType,
+                data.m_Size );
 
     switch( data.m_SubType )
     {
@@ -2567,7 +2569,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         {
             if( wxLog::IsAllowedTraceMask( traceAllegroParser ) )
             {
-                wxLogTrace( traceAllegroParser,
+                wxLogTrace( traceAllegroParserBlocks,
                             wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
                                               aBoard.GetObjectCount(), block->GetBlockType(), offset,
                                               m_stream.Position() ) );
