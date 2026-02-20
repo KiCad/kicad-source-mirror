@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-18 02:12+0000\n"
+"PO-Revision-Date: 2026-02-20 12:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -7806,7 +7806,7 @@ msgstr "Generovať zoznam materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:98
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Nastavenia úlohy exportu zoznamu materiálu"
+msgstr "Nastavenia úlohy generovania zoznamu materiálu"
 
 #: common/jobs/job_export_sch_bom.cpp:102
 msgid "Schematic: Generate Bill of Materials"
@@ -9539,9 +9539,8 @@ msgid "Footprint Library Browser"
 msgstr "Prehliadač knižníc pudzier"
 
 #: common/tool/actions.cpp:1113
-#, fuzzy
 msgid "Create, delete and edit board footprints"
-msgstr "Vytvárať, odstraňovať a upravovať puzdrá"
+msgstr "Vytvoriť, odstrániť a upraviť puzdrá"
 
 #: common/tool/actions.cpp:1122
 msgid "Show/hide the properties manager"
@@ -11292,16 +11291,16 @@ msgstr "Očíslovať schému"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
 msgid "Generate"
-msgstr "Vygenerovať"
+msgstr "Generovať"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
 msgid "(file missing)"
 msgstr "(chýba súbor)"
 
 #: eeschema/dialogs/dialog_bom.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Schéma pre túto dosku sa nenašla."
+msgstr "Vybratý skript generátora zoznamu materiálu %s nebolo možné nájsť."
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -11319,9 +11318,8 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:296
-#, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "Export netlistu si vyžaduje úplne anotovanú schému."
+msgstr "Generovanie zoznamu materiálu (BOM), vyžaduje plne očíslovanú schému."
 
 #: eeschema/dialogs/dialog_bom.cpp:301
 msgid "Failed to create file."
@@ -11342,29 +11340,25 @@ msgstr "Prezývka '%s' sa už používa."
 
 #: eeschema/dialogs/dialog_bom.cpp:375
 #: eeschema/dialogs/dialog_export_netlist.cpp:984
-#, fuzzy
 msgid "Generator File"
-msgstr "Súbor generátoru"
+msgstr "Súbor generátora"
 
 #: eeschema/dialogs/dialog_bom.cpp:394
-#, fuzzy
 msgid "Generator file name not found."
-msgstr "Názov súboru generátora sa nenašiel."
+msgstr "Názov súboru generátora sa nebol nájdený."
 
 #: eeschema/dialogs/dialog_bom.cpp:415
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "Pomoc pri generovaní zoznamu materiálov"
+msgstr "Pomoc pri generovaní zoznamu materiálu"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
-#, fuzzy
 msgid "BOM generator scripts:"
-msgstr "Skripty generátora kusovníka:"
+msgstr "Skripty generátora zoznamu materiálu (BOM):"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
-#, fuzzy
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Pridať do zoznamu nový generátor kusovníkov a jeho príkazový riadok"
+msgstr ""
+"Pridať do zoznamu nový generátor zoznamu materiálu a jeho príkazový riadok"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -11393,9 +11387,9 @@ msgstr ""
 "Nastavením tejto možnosti zobrazíte okno spusteného príkazu."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
-#, fuzzy
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Nastavením na 0 použijete predvolené hodnoty"
+msgstr ""
+"Obnoviť zoznam skriptov generátora zoznamu materiálu na predvolené nastavenia"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -11603,9 +11597,8 @@ msgid "Reset fields if empty in new symbol"
 msgstr "Ak sú nové symboly prázdne, vynulujte ich"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:140
-#, fuzzy
 msgid "Update field text"
-msgstr "Aktualizovať polia"
+msgstr "Aktualizovať text poľa"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:141
 msgid "Update field visibilities"
@@ -11620,9 +11613,8 @@ msgid "Update field positions"
 msgstr "Aktualizujte polohy polí"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:144
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Aktualizácia / resetovanie atribútov výroby"
+msgstr "Aktualizovať atribúty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:162
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:162
@@ -11642,19 +11634,16 @@ msgid "Update"
 msgstr "Aktualizovať"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:456
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Aktualizovať symbol..."
+msgstr "Aktualizovať symboly"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:563
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** symbol nebol nájdený ***"
+msgstr "*** Nenašli sa žiadne symboly zodpovedajúce kritériám ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** symbol nebol nájdený ***"
+msgstr "*** lib id symbolu nie je platný ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -11689,9 +11678,8 @@ msgid "Update all symbols in schematic"
 msgstr "Schematicky aktualizujte všetky symboly"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:31
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Aktualizovať vybraný symbol"
+msgstr "Aktualizovať vybraný symbol(y)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:34
 msgid "Update symbols matching reference designator:"
@@ -11710,9 +11698,8 @@ msgid "New library identifier:"
 msgstr "Nový identifikátor knižnice:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
-msgstr "Aktualizácia / resetovanie polí"
+msgstr "Aktualizovať/obnoviť polia"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -11741,9 +11728,8 @@ msgstr "Resetujte polia, ak sú v symbole knižnice prázdne"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Aktualizácia / resetovanie polí"
+msgstr "Aktualizovať/obnoviť text poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
@@ -11751,9 +11737,8 @@ msgid "Update/reset field visibilities"
 msgstr "Aktualizácia / reset viditeľnosti poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Aktualizácia / obnovenie veľkostí a štýlov polí"
+msgstr "Aktualizovať/obnoviť veľkosti a štýly textu poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
@@ -11762,9 +11747,8 @@ msgstr "Aktualizácia / reset pozícií polí"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Možnosti aktualizácie"
+msgstr "Skontrolovať všetky možnosti aktualizácie"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 #, fuzzy
@@ -11792,9 +11776,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Aktualizácia / resetovanie atribútov výroby"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definujte ako symbol sily"
+msgstr "Obnoviť vlastné symboly napájania"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
@@ -14223,23 +14206,23 @@ msgid "PDF Options"
 msgstr "Možnosti DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Vytvorte Gerbera na výrobu"
+msgstr "Generovať vyskakovacie okná vlastností"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "Generovať klikateľné odkazy pre hierarchické elementy"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:171
 #: pcbnew/dialogs/dialog_plot_base.cpp:418
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Generovať metadáta z premenných AUTHOR && SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:172
 #: pcbnew/dialogs/dialog_plot_base.cpp:419
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
 msgstr ""
+"Generovať vlastnosti PDF dokumentu z textových premenných AUTHOR a SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:179
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:109
@@ -24300,13 +24283,12 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "Exportujte súbor obsahujúci netlist v jednom z niekoľkých formátov"
 
 #: eeschema/tools/sch_actions.cpp:1122
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať zoznam materiálu..."
 
 #: eeschema/tools/sch_actions.cpp:1123
 msgid "Generate a bill of materials for the current schematic"
-msgstr "Vytvorte kusovník pre aktuálnu schému"
+msgstr "Generovať zoznam materiálu aktuálnej schémy"
 
 #: eeschema/tools/sch_actions.cpp:1129
 msgid "Generate Legacy Bill of Materials..."
@@ -24319,16 +24301,15 @@ msgstr ""
 "Generovať zoznam materiálu pre aktuálnu schému (staršia verzia generátora)"
 
 #: eeschema/tools/sch_actions.cpp:1137
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať zoznam materiálu (externe)..."
 
 #: eeschema/tools/sch_actions.cpp:1138
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Vytvorte kusovník pre aktuálnu schému"
+msgstr ""
+"Generovať zoznam materiálu aktuálnej schémy pomocou externého generátora"
 
 #: eeschema/tools/sch_actions.cpp:1144
 #, fuzzy
@@ -27073,6 +27054,8 @@ msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
 msgstr ""
+"Súbor sady úloh pre generovanie, ponechajte prázdny pre všetky výstupy "
+"definované v sade úloh"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -27166,9 +27149,8 @@ msgid ""
 msgstr "Nahradit modely STEP nebo IGS se stejným názvem namísto modelů VRML"
 
 #: kicad/cli/command_pcb_export_3d.cpp:113
-#, fuzzy
 msgid "Only generate a board with no components"
-msgstr "Generujte varovania pre podložky bez sietí"
+msgstr "Generovať len dosku bez súčiastok"
 
 #: kicad/cli/command_pcb_export_3d.cpp:117
 #: pcbnew/dialogs/dialog_export_step_base.cpp:68
@@ -27289,7 +27271,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_drill.cpp:48
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
 msgid "Generate Drill Files"
-msgstr "Generovať súbor vŕtania"
+msgstr "Generovať vŕtacie súbory"
 
 #: kicad/cli/command_pcb_export_drill.cpp:52
 msgid "Valid options excellon, gerber."
@@ -27323,13 +27305,12 @@ msgid "Minimal header"
 msgstr "Minimálna hlavička"
 
 #: kicad/cli/command_pcb_export_drill.cpp:85
-#, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "Vytvorte súbor pozície stopy pre výber a umiestnenie"
+msgstr "Generovať samostatné súbory pre NPTH a PTH otvory"
 
 #: kicad/cli/command_pcb_export_drill.cpp:89
 msgid "Generate map / summary of drill hits"
-msgstr "Vygenerování mapy / shrnutí průměrů vrtání"
+msgstr "Generovať mapy / zhrnutie použitých priemerov vrtákov"
 
 #: kicad/cli/command_pcb_export_drill.cpp:94
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27377,7 +27358,7 @@ msgstr "Přesnost souřadnic gerber by měla být buď 5 nebo 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Generovať DXF zo zoznamu vrstiev"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:47
 #: kicad/cli/command_pcb_export_gerber.cpp:43
@@ -27430,6 +27411,9 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
+"Generuje jeden súbor vo výstupnej ceste arg, ktorá funguje ako plná cesta s "
+"názvom súboru. COMMON_LAYER_LIST v tomto režime nefunguje. Namiesto toho "
+"LAYER_LIST ovláda všetky vykreslené vrstvy."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:104
 #: kicad/cli/command_pcb_export_svg.cpp:113
@@ -27437,6 +27421,9 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
+"Generuje jeden alebo viac súborov so správaním podobným vykresľovaniu "
+"grafického rozhrania KiCad. Daná výstupná cesta stanovuje adresár, v ktorom "
+"môžu byť výstupné súbory."
 
 #: kicad/cli/command_pcb_export_dxf.cpp:130
 #: kicad/cli/command_pcb_export_gencad.cpp:75
@@ -27476,13 +27463,14 @@ msgstr "Výklopné spodné pôdorysy"
 #: kicad/cli/command_pcb_export_gencad.cpp:42
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Generate unique pin names"
-msgstr "Generujte jedinečné názvy pinov"
+msgstr "Generovať jedinečné názvy vývodov"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:46
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
 msgstr ""
-"Vytvorte nový tvar pre každú inštanciu stopy (tvary nepoužívajte opakovane)"
+"Generovať nový tvar pre každé konkrétne puzdro (znova nevyužíva vytvorené "
+"tvary)"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:50
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
@@ -27505,9 +27493,8 @@ msgid "Do not use the extended X2 format"
 msgstr "Použiť rozšírený formát X2 (odporúčané)"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:75
-#, fuzzy
 msgid "Do not generate netlist attributes"
-msgstr "Zahrňte atribúty netlist"
+msgstr "Negenerovať atribúty netlistu"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:83
 #, fuzzy
@@ -27547,9 +27534,8 @@ msgid "Use the Gerber plot settings already configured in the board file"
 msgstr "Použít nastavení gerber plot již nakonfigurované v souboru desky"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:36
-#, fuzzy
 msgid "Generate PDF from a list of layers"
-msgstr "Vytvorte súbor netlistu IPC-D-356"
+msgstr "Generovať PDF zo zoznamu vrstiev"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:44
 #: kicad/cli/command_pcb_export_svg.cpp:52
@@ -27579,7 +27565,7 @@ msgstr "Šírka tepelného lúča nemôže byť menšia ako minimálna šírka."
 #: kicad/cli/command_pcb_export_pos.cpp:45
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:58
 msgid "Generate Position File"
-msgstr "Generovať pozičný súbor"
+msgstr "Generovať polohový súbor"
 
 #: kicad/cli/command_pcb_export_pos.cpp:49
 msgid ""
@@ -27644,7 +27630,7 @@ msgstr "Zadaná neplatná stopa\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:40
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "Generovať SVG výstupy daného zoznamu vrstiev"
 
 #: kicad/cli/command_pcb_export_svg.cpp:57
 #, fuzzy
@@ -27849,9 +27835,8 @@ msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr ""
 
 #: kicad/cli/command_sch_export_bom.cpp:36
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "Generovať rozpis &materiálu"
+msgstr "Generovať zoznam materiálu (BOM)"
 
 #: kicad/cli/command_sch_export_bom.cpp:179
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -27882,17 +27867,16 @@ msgid "Default font name"
 msgstr "Predvolené písmo:"
 
 #: kicad/cli/command_sch_export_plot.cpp:87
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Vytvorte Gerbera na výrobu"
+msgstr "Negenerovať vyskakovacie okná vlastností v PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:91
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr ""
+msgstr "Negenerovať klikateľné odkazy pre hierarchické elementy v PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:96
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "Negenerovať metadáta z premenných AUTHOR && SUBJECT v PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:105
 msgid "Avoid setting a background color (regardless of theme)"
@@ -27988,9 +27972,8 @@ msgid "Destination:"
 msgstr "Použitie"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
-#, fuzzy
 msgid "Generate error if no files copied"
-msgstr "Vytvorte súbor úloh Gerber"
+msgstr "Generovať chybu ak sa súbory neskopírujú"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
 #, fuzzy
@@ -28263,9 +28246,8 @@ msgid "Save Jobset"
 msgstr "Uložiť ako"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
-#, fuzzy
 msgid "Generate All Destinations"
-msgstr "Všeobecné voľby"
+msgstr "Generovať všetky výstupy"
 
 #: kicad/dialogs/panel_jobset_base.h:133
 msgid "Jobset Run Log"
@@ -29652,7 +29634,8 @@ msgstr "Používateľské šablóny"
 
 #: kicad/tools/kicad_manager_control.cpp:286
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "Nebola zvolená šablóna projektu. Nemožno vytvoriť nový projekt."
+msgstr ""
+"Nie je vybraná šablóna projektu.  Nie je možné vygenerovať nový projekt."
 
 #: kicad/tools/kicad_manager_control.cpp:294
 msgid "New Project Folder"
@@ -35389,9 +35372,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
-msgstr "Vytvorte súbor netlistu IPC-D-356"
+msgstr "Generovať súbor IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
 #: pcbnew/pcbnew_jobs_handler.cpp:2151
@@ -35404,9 +35386,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Operácia zápisu do súboru zlyhala."
+msgstr "Súbor IPC-2581 bol úspešne vygenerovaný."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -36316,7 +36297,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "Negenerovať porušenie DRC - „chýbajúci courtyard“"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:229
 msgid "Update Footprint from Library..."
@@ -36760,12 +36741,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:111
 msgid "Generate single file with both front and back positions"
-msgstr ""
+msgstr "Generovať jeden súbor s obidvoma - prednými a zadnými polohami"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
-#, fuzzy
 msgid "Generate Placement Files"
-msgstr "Generovať mapový súbor"
+msgstr "Generovať polohové súbory"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:39
 msgid "Export to GenCAD settings"
@@ -36834,9 +36814,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "Generovať mapový súbor"
+msgstr "Generovať mapu:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 #, fuzzy
@@ -37855,17 +37834,15 @@ msgstr "Súčiastky"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:42
 msgid "Replace existing placement rule areas"
-msgstr ""
+msgstr "Nahradiť existujúce oblasti pravidiel umiestnenia"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:45
-#, fuzzy
 msgid "Group footprints with their placement rule areas"
-msgstr "Súbory knižníc súčiastok"
+msgstr "Zoskupiť puzdrá s ich oblasťami pravidiel umiestnenia"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.h:55
-#, fuzzy
 msgid "Generate Multichannel Rule Areas"
-msgstr "Konvertovať na oblasť pravidiel"
+msgstr "Generovať viackanálovú oblasť pravidiel"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:25
 #, fuzzy
@@ -37913,7 +37890,7 @@ msgstr "Odstrániť položky zo skupiny"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.h:58
 msgid "Repeat Multichannel Layout"
-msgstr ""
+msgstr "Opakovať viackanálové rozloženie"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:149
 #, fuzzy
@@ -38541,7 +38518,7 @@ msgstr "Len aktuálna vrstva"
 
 #: pcbnew/dialogs/dialog_plot.cpp:226
 msgid "Generate Drill Files..."
-msgstr "Generovať súbory Drill..."
+msgstr "Generovať vŕtacie súbory..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:604
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:297
@@ -38761,7 +38738,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr "Vytvorte súbor úloh Gerber"
+msgstr "Generovať súbor úloh Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
@@ -38925,14 +38902,12 @@ msgid "Fit page to board"
 msgstr "Zlyhalo kopírovanie obrázku do schránky"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:412
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "Predvolené textové položky pre nové stopy:"
+msgstr "Generovať vyskakovacie okná vlastností pre predné puzdrá"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:415
-#, fuzzy
 msgid "Generate property popups for back footprints"
-msgstr "Vytvorte Gerbera na výrobu"
+msgstr "Generovať vyskakovacie okná vlastností pre zadné puzdrá"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, fuzzy
@@ -43642,7 +43617,7 @@ msgstr "Upraviť vlastnosti zóny"
 
 #: pcbnew/exporters/export_d356.cpp:395 pcbnew/tools/pcb_actions.cpp:1066
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Vytvorte súbor netlistu IPC-D-356"
+msgstr "Generovať IPC-D-356 netlist súbor"
 
 #: pcbnew/exporters/export_d356.cpp:407
 #, fuzzy, c-format
@@ -45733,22 +45708,20 @@ msgstr ""
 "spájkovacej pasty)."
 
 #: pcbnew/pad.cpp:2471
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"Negatívna vôľa znamená plochu menšiu ako vložka (obvyklá pre vôľu "
-"spájkovacej pasty)."
+"(záporná vôľa spájkovacej masky je väčšia ako plôška; nevygeneruje sa žiadna "
+"spájkovacia maska)"
 
 #: pcbnew/pad.cpp:2490
-#, fuzzy
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
 msgstr ""
-"Negatívna vôľa znamená plochu menšiu ako vložka (obvyklá pre vôľu "
-"spájkovacej pasty)."
+"(záporný okraj spájkovacej pasty je väčší ako plôška; nevygeneruje sa žiadna "
+"maska spájkovacej pasty)"
 
 #: pcbnew/pad.cpp:2497
 msgid "(negative corner radius is not allowed)"
@@ -47672,9 +47645,9 @@ msgid "Undefined Layers Warning"
 msgstr "Nedefinované vrstvy:"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1309
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "Nemožno vytvoriť výstupný adresár '%s'."
+msgstr "Nie je možné vygenerovať objekt typu '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1462
 #, c-format
@@ -49382,7 +49355,7 @@ msgstr "Vyberte dve položky pre správu o riešení klírensu."
 #: pcbnew/tools/board_inspection_tool.cpp:735
 #: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Cannot generate clearance report on empty group."
-msgstr "Nie je možné vygenerovať správu o zúčtovaní pre prázdnu skupinu."
+msgstr "Nie je možné vygenerovať prehľad o odstupoch pre prázdnu skupinu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:826
 #, fuzzy
@@ -49983,9 +49956,8 @@ msgid "No footprint problems found."
 msgstr "Nenájdené žiadne problémy s doskou."
 
 #: pcbnew/tools/generator_tool.cpp:173
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Odstrániť všetko"
+msgstr "Znovu vygenerovať všetko"
 
 #: pcbnew/tools/generator_tool.cpp:180
 #, fuzzy, c-format
@@ -49993,9 +49965,8 @@ msgid "Update %s"
 msgstr "Aktualizovať"
 
 #: pcbnew/tools/generator_tool.cpp:235
-#, fuzzy
 msgid "Regenerate Selected"
-msgstr "Výber mriežky"
+msgstr "Znovu vygenerovať vybrané"
 
 #: pcbnew/tools/generator_tool.cpp:254
 #, fuzzy
@@ -50203,9 +50174,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:1151
-#, fuzzy
 msgid "Auto-generate placement rule areas"
-msgstr "Generovať mapový súbor"
+msgstr "Automaticky generovať oblasti pravidiel umiestnenia"
 
 #: pcbnew/tools/multichannel_tool.cpp:1189
 #, fuzzy
@@ -51007,7 +50977,7 @@ msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1024
 msgid "Generate Gerbers for fabrication"
-msgstr "Vytvorte Gerbera na výrobu"
+msgstr "Generovať Gerber súbory pre výrobu"
 
 #: pcbnew/tools/pcb_actions.cpp:1030
 msgid "Drill Files (.drl)..."
@@ -51015,7 +50985,7 @@ msgstr "Vŕtať súbory (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1031
 msgid "Generate Excellon drill file(s)"
-msgstr "Generovať cvičné súbory Excellon"
+msgstr "Generovať Excellon vŕtacie súbory"
 
 #: pcbnew/tools/pcb_actions.cpp:1037
 #, fuzzy
@@ -51023,9 +50993,8 @@ msgid "Component Placement (.pos, .gbr)..."
 msgstr "Parametre súčasti"
 
 #: pcbnew/tools/pcb_actions.cpp:1038
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Vytvorte súbor pozície stopy pre výber a umiestnenie"
+msgstr "Generovať súbor(y) s umiestnením pre osadzovacie pick&place stroje"
 
 #: pcbnew/tools/pcb_actions.cpp:1044
 msgid "Footprint Report (.rpt)..."
@@ -51040,9 +51009,8 @@ msgid "IPC-2581 File (.xml)..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1052
-#, fuzzy
 msgid "Generate an IPC-2581 file"
-msgstr "Vytvorte súbor netlistu IPC-D-356"
+msgstr "Generovať IPC-2581 súbor"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 #, fuzzy
@@ -51050,9 +51018,8 @@ msgid "ODB++ Output File..."
 msgstr "Výstupný vývod"
 
 #: pcbnew/tools/pcb_actions.cpp:1059
-#, fuzzy
 msgid "Generate ODB++ output files"
-msgstr "Prepísať starý súbor"
+msgstr "Generovať ODB++ výstupné súbory"
 
 #: pcbnew/tools/pcb_actions.cpp:1065
 msgid "IPC-D-356 Netlist File..."
@@ -51965,14 +51932,12 @@ msgid "Performs automatic placement of components outside board area"
 msgstr "Vykoná automatické umiestnenie komponentov mimo oblasti dosky"
 
 #: pcbnew/tools/pcb_actions.cpp:2240
-#, fuzzy
 msgid "Generate Placement Rule Areas..."
-msgstr "Generovať mapový súbor"
+msgstr "Generovať oblasti pravidiel umiestnenia..."
 
 #: pcbnew/tools/pcb_actions.cpp:2241
-#, fuzzy
 msgid "Creates best-fit placement rule areas"
-msgstr "Generovať mapový súbor"
+msgstr "Generovať najvhodnejšie oblasti pravidiel umiestnenia"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 #, fuzzy
