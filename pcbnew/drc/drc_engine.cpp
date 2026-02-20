@@ -2553,15 +2553,24 @@ void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
 {
     std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
 
-    // Remove all entries for this item (across all layers)
-    auto it = m_ownClearanceCache.begin();
-
-    while( it != m_ownClearanceCache.end() )
+    if( m_board )
     {
-        if( it->first.m_uuid == aUuid )
-            it = m_ownClearanceCache.erase( it );
-        else
-            ++it;
+        LSET copperLayers = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+        for( PCB_LAYER_ID layer : copperLayers.Seq() )
+            m_ownClearanceCache.erase( DRC_OWN_CLEARANCE_CACHE_KEY{ aUuid, layer } );
+    }
+    else
+    {
+        auto it = m_ownClearanceCache.begin();
+
+        while( it != m_ownClearanceCache.end() )
+        {
+            if( it->first.m_uuid == aUuid )
+                it = m_ownClearanceCache.erase( it );
+            else
+                ++it;
+        }
     }
 }
 

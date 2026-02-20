@@ -1643,9 +1643,11 @@ void PCB_VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
     Padstack().Drill().end = aBottomLayer;
     SanitizeLayers();
 
-    // Invalidate clearance cache since layer can affect clearance rules
-    if( BOARD* board = GetBoard() )
-        board->InvalidateClearanceCache( m_Uuid );
+    if( !( GetFlags() & ROUTER_TRANSIENT ) )
+    {
+        if( BOARD* board = GetBoard() )
+            board->InvalidateClearanceCache( m_Uuid );
+    }
 }
 
 
@@ -1658,9 +1660,11 @@ void PCB_VIA::SetTopLayer( PCB_LAYER_ID aLayer )
     Padstack().Drill().start = aLayer;
     SanitizeLayers();
 
-    // Invalidate clearance cache since layer can affect clearance rules
-    if( BOARD* board = GetBoard() )
-        board->InvalidateClearanceCache( m_Uuid );
+    if( !( GetFlags() & ROUTER_TRANSIENT ) )
+    {
+        if( BOARD* board = GetBoard() )
+            board->InvalidateClearanceCache( m_Uuid );
+    }
 }
 
 
@@ -1673,9 +1677,11 @@ void PCB_VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
     Padstack().Drill().end = aLayer;
     SanitizeLayers();
 
-    // Invalidate clearance cache since layer can affect clearance rules
-    if( BOARD* board = GetBoard() )
-        board->InvalidateClearanceCache( m_Uuid );
+    if( !( GetFlags() & ROUTER_TRANSIENT ) )
+    {
+        if( BOARD* board = GetBoard() )
+            board->InvalidateClearanceCache( m_Uuid );
+    }
 }
 
 
