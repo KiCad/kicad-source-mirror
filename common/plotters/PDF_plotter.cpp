@@ -63,6 +63,7 @@ PDF_PLOTTER::~PDF_PLOTTER() = default;
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+
 std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
     // returns a string compatible with PDF string convention from a unicode string.
@@ -197,8 +198,7 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 }
 
 
-void PDF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
-                               double aScale, bool aMirror )
+void PDF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, double aScale, bool aMirror )
 {
     m_plotMirror    = aMirror;
     m_plotOffset    = aOffset;
@@ -295,8 +295,7 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 }
 
 
-void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
-                        int aCornerRadius )
+void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width, int aCornerRadius )
 {
     wxASSERT( m_workFile );
 
@@ -476,8 +475,10 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                     encodeDoubleForPlotter( path[0].x ), encodeDoubleForPlotter( path[0].y ) );
 
         for( int ii = 1; ii < (int) path.size(); ++ii )
+        {
             fmt::print( m_workFile, "{} {} l ",
                         encodeDoubleForPlotter( path[ii].x ), encodeDoubleForPlotter( path[ii].y ) );
+        }
     }
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
@@ -566,8 +567,10 @@ void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, in
                 encodeDoubleForPlotter( path[0].x ), encodeDoubleForPlotter( path[0].y ) );
 
     for( int ii = 1; ii < (int) path.size(); ++ii )
+    {
         fmt::print( m_workFile, "{} {} l ",
                     encodeDoubleForPlotter( path[ii].x ), encodeDoubleForPlotter( path[ii].y ) );
+    }
 
     // Close path and stroke and/or fill
     if( aFill == FILL_T::NO_FILL )
@@ -647,7 +650,9 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
                       || image.GetMaskRed() != aCurrImage.GetMaskRed()
                       || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
                       || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
+                    {
                         continue;
+                    }
 
                     int pixCount = image.GetWidth() * image.GetHeight();
 
@@ -879,8 +884,7 @@ void WriteImageStream( const wxImage& aImage, wxDataOutputStream& aOut, wxColor 
 
             if( aImage.HasMask() )
             {
-                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
-                    && b == aImage.GetMaskBlue() )
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen() && b == aImage.GetMaskBlue() )
                 {
                     r = bg.Red();
                     g = bg.Green();
@@ -922,11 +926,8 @@ void WriteImageSMaskStream( const wxImage& aImage, wxDataOutputStream& aOut )
                 unsigned char g = aImage.GetGreen( x, y );
                 unsigned char b = aImage.GetBlue( x, y );
 
-                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
-                    && b == aImage.GetMaskBlue() )
-                {
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen() && b == aImage.GetMaskBlue() )
                     a = 0;
-                }
 
                 aOut.Write8( a );
             }
@@ -1094,8 +1095,10 @@ void PDF_PLOTTER::ClosePage()
                     "/3DI true\n"
                     "/P {} 0 R\n"
                     ">>\n",
-                    encodeDoubleForPlotter( psPaperSize.x ), encodeDoubleForPlotter( psPaperSize.y ),
-                    m_3dModelHandle, pageHandle );
+                    encodeDoubleForPlotter( psPaperSize.x ),
+                    encodeDoubleForPlotter( psPaperSize.y ),
+                    m_3dModelHandle,
+                    pageHandle );
 
         closePdfObject();
     }
@@ -1221,8 +1224,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
 }
 
 
-int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft,
-                                 const VECTOR2I& aTopRight )
+int PDF_PLOTTER::emitGoToAction( int aPageHandle, const VECTOR2I& aBottomLeft, const VECTOR2I& aTopRight )
 {
     int actionHandle = allocPdfObject();
     startPdfObject( actionHandle );
@@ -1258,24 +1260,18 @@ int PDF_PLOTTER::emitGoToAction( int aPageHandle )
 }
 
 
-void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nextNode,
-                                   int prevNode )
+void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nextNode, int prevNode )
 {
     int nodeHandle = node->entryHandle;
     int prevHandle = -1;
     int nextHandle = -1;
 
-    for( std::vector<OUTLINE_NODE*>::iterator it = node->children.begin();
-         it != node->children.end(); it++ )
+    for( std::vector<OUTLINE_NODE*>::iterator it = node->children.begin(); it != node->children.end(); it++ )
     {
         if( it >= node->children.end() - 1 )
-        {
             nextHandle = -1;
-        }
         else
-        {
             nextHandle = ( *( it + 1 ) )->entryHandle;
-        }
 
         emitOutlineNode( *it, nodeHandle, nextHandle, prevHandle );
 
@@ -1291,18 +1287,14 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
                     "<<\n"
                     "/Title {}\n"
                     "/Parent {} 0 R\n",
-                    encodeStringForPlotter(node->title ),
+                    encodeStringForPlotter( node->title ),
                     parentHandle);
 
         if( nextNode > 0 )
-        {
             fmt::println( m_outputFile, "/Next {} 0 R", nextNode );
-        }
 
         if( prevNode > 0 )
-        {
             fmt::println( m_outputFile, "/Prev {} 0 R", prevNode );
-        }
 
         if( node->children.size() > 0 )
         {
@@ -1313,9 +1305,7 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
         }
 
         if( node->actionHandle != -1 )
-        {
             fmt::println( m_outputFile, "/A {} 0 R", node->actionHandle );
-        }
 
         fmt::println( m_outputFile, ">>" );
         closePdfObject();
@@ -1362,6 +1352,7 @@ int PDF_PLOTTER::emitOutline()
 
     return -1;
 }
+
 
 void PDF_PLOTTER::emitStrokeFonts()
 {
@@ -1558,6 +1549,7 @@ void PDF_PLOTTER::endPlotEmitResources()
         for( PDF_STROKE_FONT_SUBSET* subsetPtr : m_strokeFontManager->AllSubsets() )
         {
             const PDF_STROKE_FONT_SUBSET& subset = *subsetPtr;
+
             if( subset.FontHandle() >= 0 )
                 fmt::println( m_outputFile, "    {} {} 0 R", subset.ResourceName(), subset.FontHandle() );
         }
@@ -1571,9 +1563,7 @@ void PDF_PLOTTER::endPlotEmitResources()
     fmt::println( m_outputFile, "<<\n" );
 
     for( const auto& [imgHandle, image] : m_imageHandles )
-    {
         fmt::print( m_outputFile, "    /Im{} {} 0 R\n", imgHandle, imgHandle );
-    }
 
     fmt::println( m_outputFile, ">>" );
     closePdfObject();
@@ -1716,8 +1706,9 @@ void PDF_PLOTTER::endPlotEmitResources()
             if( !pageFound )
             {
                 // destination page is not being plotted, assign the NOP action to the link
-                fmt::print( m_outputFile, "/A << /Type /Action /S /NOP >>\n"
-                                          ">>\n" );
+                fmt::print( m_outputFile,
+                            "/A << /Type /Action /S /NOP >>\n"
+                            ">>\n" );
             }
         }
         else
@@ -1804,8 +1795,7 @@ void PDF_PLOTTER::endPlotEmitResources()
                     }
                 }
             }
-            else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" )
-                   || url.StartsWith( "file:" ) )
+            else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) || url.StartsWith( "file:" ) )
             {
                 wxString href = url;
 
@@ -1878,6 +1868,7 @@ function ShM(aEntries) {
     }
 }
 
+
 bool PDF_PLOTTER::EndPlot()
 {
     // We can end up here if there was nothing to plot
@@ -1888,9 +1879,7 @@ bool PDF_PLOTTER::EndPlot()
     ClosePage();
 
     if( !m_3dExportMode )
-    {
         endPlotEmitResources();
-    }
 
     /* The page tree: it's a B-tree but luckily we only have few pages!
        So we use just an array... The handle was allocated at the beginning,
@@ -1914,11 +1903,11 @@ bool PDF_PLOTTER::EndPlot()
 
     std::time_t time = std::time( nullptr );
     std::tm tm{};
-    #if defined( _WIN32 ) || defined( _MSC_VER )
+#if defined( _WIN32 ) || defined( _MSC_VER )
     localtime_s( &tm, &time );
-    #else
+#else
     localtime_r( &time, &tm );
-    #endif
+#endif
     std::string dt = fmt::format( "D:{:%Y:%m:%d:%H:%M:%S}", tm );
 
     if( m_title.IsEmpty() )
@@ -1947,10 +1936,9 @@ bool PDF_PLOTTER::EndPlot()
 
     // Let's dump in the outline
     int outlineHandle = -1;
+
     if( !m_3dExportMode )
-    {
         outlineHandle = emitOutline();
-    }
 
     // The catalog, at last
     int catalogHandle = startPdfObject();
@@ -1997,9 +1985,7 @@ bool PDF_PLOTTER::EndPlot()
                 m_xrefTable.size() );
 
     for( unsigned i = 1; i < m_xrefTable.size(); i++ )
-    {
         fmt::print( m_outputFile, "{:010d} 00000 n \n", m_xrefTable[i] );
-    }
 
     // Done the xref, go for the trailer
     fmt::print( m_outputFile,
@@ -2105,26 +2091,31 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
 
     // Render markup tree
     std::vector<OVERBAR_INFO> overbars;
-    renderMarkupNode( markupTree.get(), pos, t_size, aOrient, textMirrored, aWidth,
-                      aBold, aItalic, aFont, aFontMetrics, aV_justify, 0, overbars );
+    renderMarkupNode( markupTree.get(), pos, t_size, aOrient, textMirrored, aWidth, aBold, aItalic, aFont,
+                      aFontMetrics, aV_justify, 0, overbars );
 
     // Draw any overbars that were accumulated
     drawOverbars( overbars, aOrient, aFontMetrics );
 }
 
 
-VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPosition,
-                                  const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
-                                  bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
+VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPosition, const VECTOR2I& aSize,
+                                  const EDA_ANGLE& aOrient, bool aTextMirrored, int aWidth, bool aBold, bool aItalic,
                                   KIFONT::FONT* aFont, const KIFONT::METRICS& aFontMetrics,
                                   enum GR_TEXT_V_ALIGN_T aV_justify, TEXT_STYLE_FLAGS aTextStyle )
 {
     if( wxGetEnv( "KICAD_DEBUG_SYN_STYLE", nullptr ) )
     {
         int styleFlags = 0;
+
         if( aFont->IsOutline() )
-            styleFlags = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace() ? static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace()->style_flags : 0;
-        wxLogTrace( tracePdfPlotter, "renderWord enter word='%s' bold=%d italic=%d textStyle=%u styleFlags=%d", TO_UTF8( aWord ), (int) aBold, (int) aItalic, (unsigned) aTextStyle, styleFlags );
+        {
+            if( const FT_Face& face = static_cast<KIFONT::OUTLINE_FONT*>( aFont )->GetFace() )
+                styleFlags = (int) face->style_flags;
+        }
+
+        wxLogTrace( tracePdfPlotter, "renderWord enter word='%s' bold=%d italic=%d textStyle=%u styleFlags=%d",
+                    TO_UTF8( aWord ), (int) aBold, (int) aItalic, (unsigned) aTextStyle, styleFlags );
     }
 
     // Don't try to output a blank string, but handle space characters for word separation
@@ -2135,8 +2126,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     if( aWord == wxT( " " ) )
     {
         // Calculate space width and advance position
-        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic,
-                                                        aFontMetrics ).x / 2, 0 );
+        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic, aFontMetrics ).x / 2, 0 );
 
         if( aTextMirrored )
             spaceBox.x *= -1;
@@ -2161,8 +2151,8 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             {
                 if( !segment.IsEmpty() )
                 {
-                    pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold,
-                                      aItalic, aFont, aFontMetrics, aV_justify, aTextStyle );
+                    pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold, aItalic,
+                                      aFont, aFontMetrics, aV_justify, aTextStyle );
                     segment.clear();
                 }
 
@@ -2503,8 +2493,8 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
             while( str_tok.HasMoreTokens() )
             {
                 wxString word = str_tok.GetNextToken();
-                nextPosition = renderWord( word, nextPosition, currentSize, aOrient, aTextMirrored,
-                                           aWidth, aBaseBold || (currentStyle & TEXT_STYLE::BOLD),
+                nextPosition = renderWord( word, nextPosition, currentSize, aOrient, aTextMirrored, aWidth,
+                                           aBaseBold || (currentStyle & TEXT_STYLE::BOLD),
                                            aBaseItalic || (currentStyle & TEXT_STYLE::ITALIC),
                                            aFont, aFontMetrics, aV_justify, currentStyle );
             }
@@ -2516,9 +2506,9 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
     {
         VECTOR2I startPos = nextPosition;
 
-        nextPosition = renderMarkupNode( child.get(), nextPosition, currentSize, aOrient,
-                                         aTextMirrored, aWidth, aBaseBold, aBaseItalic,
-                                         aFont, aFontMetrics, aV_justify, currentStyle, aOverbars );
+        nextPosition = renderMarkupNode( child.get(), nextPosition, currentSize, aOrient, aTextMirrored, aWidth,
+                                         aBaseBold, aBaseItalic, aFont, aFontMetrics, aV_justify, currentStyle,
+                                         aOverbars );
 
         // Store overbar info for later rendering
         if( drawOverbar )
@@ -2541,6 +2531,7 @@ void PDF_PLOTTER::drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, cons
         VECTOR2D dir( overbar.endPos.x - overbar.startPos.x, overbar.endPos.y - overbar.startPos.y );
 
         double len = hypot( dir.x, dir.y );
+
         if( len <= 1e-6 )
         {
             // Fallback: derive direction from orientation angle
@@ -2575,7 +2566,7 @@ void PDF_PLOTTER::drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, cons
         {
         case GR_TEXT_V_ALIGN_CENTER: alignMult = overbar.isOutline ? 2.0 : 1.0; break;
         case GR_TEXT_V_ALIGN_TOP:    alignMult = overbar.isOutline ? 4.0 : 1.0; break;
-        default:                     alignMult = 1.0; break; // bottom
+        default:                     alignMult = 1.0;                           break; // bottom
         }
 
         if( alignMult > 1.0 )
@@ -2628,9 +2619,9 @@ void PDF_PLOTTER::PlotText( const VECTOR2I&        aPos,
     if( aAttributes.m_Mirrored )
         size.x = -size.x;
 
-    PDF_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size, aAttributes.m_Halign,
-                       aAttributes.m_Valign, aAttributes.m_StrokeWidth, aAttributes.m_Italic,
-                       aAttributes.m_Bold, aAttributes.m_Multiline, aFont, aFontMetrics, aData );
+    PDF_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size, aAttributes.m_Halign, aAttributes.m_Valign,
+                       aAttributes.m_StrokeWidth, aAttributes.m_Italic, aAttributes.m_Bold, aAttributes.m_Multiline,
+                       aFont, aFontMetrics, aData );
 }
 
 
@@ -2646,16 +2637,14 @@ void PDF_PLOTTER::HyperlinkMenu( const BOX2I& aBox, const std::vector<wxString>&
 }
 
 
-void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolReference,
-                            const wxString &aGroupName )
+void PDF_PLOTTER::Bookmark( const BOX2I& aLocation, const wxString& aSymbolReference, const wxString &aGroupName )
 {
 
     m_bookmarksInPage[aGroupName].push_back( std::make_pair( aLocation, aSymbolReference ) );
 }
 
 
-void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
-                               const std::vector<PDF_3D_VIEW>& a3DViews )
+void PDF_PLOTTER::Plot3DModel( const wxString& aSourcePath, const std::vector<PDF_3D_VIEW>& a3DViews )
 {
     std::map<float, int> m_fovMap;
     std::vector<int>     m_viewHandles;
@@ -2734,10 +2723,10 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
                 "/DV 0\n" );
 
     fmt::print( m_outputFile, "/VA [" );
+
     for( int viewHandle : m_viewHandles )
-    {
         fmt::print( m_outputFile, "{} 0 R ", viewHandle );
-    }
+
     fmt::print( m_outputFile, "]\n" );
 
     fmt::print( m_outputFile,
@@ -2754,18 +2743,19 @@ void PDF_PLOTTER::Plot3DModel( const wxString&                 aSourcePath,
     long imgStreamStart = ftell( m_outputFile );
 
     size_t model_stored_size = 0;
+
     {
         wxFFileOutputStream ffos( outputFFile );
         wxZlibOutputStream  zos( ffos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
 
         wxFFileInputStream fileStream( aSourcePath );
+
         if( !fileStream.IsOk() )
-        {
             wxLogError( _( "Failed to open 3D model file: %s" ), aSourcePath );
-        }
 
         zos.Write( fileStream );
     }
+
     fflush( m_outputFile );
     model_stored_size = ftell( m_outputFile );
     model_stored_size -= imgStreamStart; // Get the size of the compressed stream
