@@ -2368,24 +2368,11 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         {
             const auto& graphics = static_cast<const BLOCK<BLK_0x14_GRAPHIC>&>( *graphicsBlock ).GetData();
 
-            const uint8_t subclass = graphics.m_Layer.m_Subclass;
-            const bool isAssembly = ( subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP
-                                      || subclass == LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM );
-
             std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
             for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
             {
                 canonicalizeLayer( shape.get() );
-
-                if( isAssembly )
-                {
-                    auto courtyard = std::make_unique<PCB_SHAPE>( *shape );
-                    courtyard->SetLayer( F_CrtYd );
-                    courtyard->SetWidth( 0 );
-                    fp->Add( courtyard.release() );
-                }
-
                 fp->Add( shape.release() );
             }
         }
