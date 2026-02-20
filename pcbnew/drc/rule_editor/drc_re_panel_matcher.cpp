@@ -166,13 +166,13 @@ void DRC_PANEL_MATCHER::initClaims()
 
     // Size constraints
     m_claims.emplace_back(
-            HOLE_SIZE,
+            MINIMUM_THROUGH_HOLE,
             std::set<DRC_CONSTRAINT_T>{ HOLE_SIZE_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             20 );
 
     m_claims.emplace_back(
-            MINIMUM_VIA_DIAMETER,
+            MINIMUM_UVIA_DIAMETER,
             std::set<DRC_CONSTRAINT_T>{ VIA_DIAMETER_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             20 );
