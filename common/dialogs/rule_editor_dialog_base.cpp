@@ -198,7 +198,9 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
     mainSizer->Add( infoBarSizer, 0, wxEXPAND, 0 );
     mainSizer->Add( m_splitter, 1, wxEXPAND | wxBOTTOM, 5 );
     mainSizer->Add( m_sizerButtons, 0, wxALL | wxEXPAND, 5 );
-    SetSize( wxSize( 980, 680 ) );
+    if( aInitialSize != wxDefaultSize )
+        SetSize( aInitialSize );
+
     Layout();
 
     // Bind the context menu event
@@ -244,13 +246,40 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
 
 void RULE_EDITOR_DIALOG_BASE::finishInitialization()
 {
-    wxSize curSz = GetSize();
-    wxSize minSz = GetMinSize();
-
     finishDialogSettings();
 
-    curSz = GetSize();
-    minSz = GetMinSize();
+    // finishDialogSettings() calls GetSizer()->SetSizeHints() which inflates the dialog
+    // to the full unconstrained best size of the scrolled content area. Reset to the
+    // caller's initial size and a reasonable minimum so Show() doesn't inherit the
+    // inflated values.
+    SetMinSize( wxSize( 400, 500 ) );
+    SetSize( m_initialSize );
+
+    wxLogTrace( "debug_dlg_size", "finishInitialization: size=%dx%d minSize=%dx%d bestSize=%dx%d",
+                GetSize().x, GetSize().y, GetMinSize().x, GetMinSize().y, GetBestSize().x,
+                GetBestSize().y );
+}
+
+
+bool RULE_EDITOR_DIALOG_BASE::Show( bool show )
+{
+    bool ret = DIALOG_SHIM::Show( show );
+
+    if( show )
+    {
+        // DIALOG_SHIM::Show() sets SetMinSize(GetBestSize()) which includes the unconstrained
+        // height of the scrolled content area. Cap the minimum to a usable value so the user
+        // can resize the dialog smaller.
+        wxSize minSize = GetMinSize();
+
+        if( minSize.GetHeight() > 500 )
+            SetMinSize( wxSize( minSize.GetWidth(), 500 ) );
+
+        wxLogTrace( "debug_dlg_size", "Show: size=%dx%d minSize=%dx%d",
+                    GetSize().x, GetSize().y, GetMinSize().x, GetMinSize().y );
+    }
+
+    return ret;
 }
 
 

@@ -23,6 +23,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/appearance_controls.h>
 
+#include <wx/log.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <kiface_base.h>
@@ -71,7 +72,7 @@ const RULE_TREE_NODE* FindNodeById( const std::vector<RULE_TREE_NODE>& aNodes, i
 
 
 DIALOG_DRC_RULE_EDITOR::DIALOG_DRC_RULE_EDITOR( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
-        RULE_EDITOR_DIALOG_BASE( aParent, _( "Design Rule Editor" ), wxSize( 980, 680 ) ),
+        RULE_EDITOR_DIALOG_BASE( aParent, _( "Design Rule Editor" ), wxSize( 980, 800 ) ),
         PROGRESS_REPORTER_BASE( 1 ),
         m_reporter( nullptr ),
         m_nodeId( 0 )
@@ -122,14 +123,16 @@ bool DIALOG_DRC_RULE_EDITOR::TransferDataToWindow()
 {
     bool ok = RULE_EDITOR_DIALOG_BASE::TransferDataToWindow();
 
-    // Ensure minimum size is our intended small value after base sizing logic
     Layout();
-    SetMinSize( wxSize( 400, 300 ) );
+    SetMinSize( wxSize( 400, 500 ) );
+    SetSize( m_initialSize );
 
-    // If SetSizeHints inflated the height (e.g., to full display height), reset to the ctor's
-    // intended initial size so that any saved geometry can apply without being trumped by the
-    // current oversized height (Show() uses max(current, saved)).
-    SetSize( wxSize( 980, 680 ) );
+    wxLogTrace( "debug_dlg_size", "DRC TransferDataToWindow: size=%s minSize=%s",
+                GetSize().IsFullySpecified() ? wxString::Format( "%dx%d", GetSize().x, GetSize().y )
+                                             : wxString( "default" ),
+                GetMinSize().IsFullySpecified()
+                        ? wxString::Format( "%dx%d", GetMinSize().x, GetMinSize().y )
+                        : wxString( "default" ) );
 
     return ok;
 }

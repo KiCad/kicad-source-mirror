@@ -291,6 +291,8 @@ public:
 
     virtual void OnCancel( wxCommandEvent& aEvent ) = 0;
 
+    bool Show( bool show ) override;
+
 protected:
     void finishInitialization();
 
