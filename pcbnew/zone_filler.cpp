@@ -1038,18 +1038,18 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                             ++refillFinished;
                             ret.second++;
                         }
+                        else if( ret.second == 0 )
+                        {
+                            // Cache miss is a permanent failure. Skip both phases to avoid
+                            // an infinite retry loop.
+                            refillFinished += 2;
+                            ret.second = 2;
+                            continue;
+                        }
 
                         if( !cancelled )
                         {
-                            if( ret.second == 0 )
-                            {
-                                refillReturns[ii].first = tp.submit_task(
-                                        [&, idx = ii]()
-                                        {
-                                            return cached_refill_lambda( zonesToRefill[idx] );
-                                        } );
-                            }
-                            else if( ret.second == 1 )
+                            if( ret.second == 1 )
                             {
                                 refillReturns[ii].first = tp.submit_task(
                                         [&, idx = ii]()
