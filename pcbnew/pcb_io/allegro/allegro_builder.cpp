@@ -325,8 +325,26 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
     };
 
     static const std::unordered_map<uint8_t, wxString> s_BoardGeomSubclassNames = {
-        { LAYER_INFO::SUBCLASS::BGEOM_OUTLINE,              wxS( "Outline" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_CONSTRAINT_AREA,      wxS( "Constraint Area" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_OFF_GRID_AREA,        wxS( "Off Grid Area" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_BOTTOM,    wxS( "Soldermask Bottom" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_TOP,       wxS( "Soldermask Top" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_ASSEMBLY_DETAIL,      wxS( "Assembly Detail" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_BOTTOM,    wxS( "Silkscreen Bottom" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_TOP,       wxS( "Silkscreen Top" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SWITCH_AREA_BOTTOM,   wxS( "Switch Area Bottom" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_SWITCH_AREA_TOP,      wxS( "Switch Area Top" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_BOTH_ROOMS,           wxS( "Both Rooms" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_BOTTOM_ROOM,          wxS( "Bottom Room" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_TOP_ROOM,             wxS( "Top Room" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_PLACE_GRID_BOTTOM,    wxS( "Place Grid Bottom" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_PLACE_GRID_TOP,       wxS( "Place Grid Top" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_DIMENSION,            wxS( "Dimension" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_TOOLING_CORNERS,      wxS( "Tooling Corners" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_ASSEMBLY_NOTES,       wxS( "Assembly Notes" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_PLATING_BAR,          wxS( "Plating Bar" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_OUTLINE,              wxS( "Outline" ) },
+
     };
 
     static const std::unordered_map<uint8_t, wxString> s_ComponentValueSubclassNames = {
@@ -339,26 +357,54 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
     };
 
     static const std::unordered_map<uint8_t, wxString> s_DrawingFormatSubclassNames = {
+        { LAYER_INFO::SUBCLASS::DFMT_REVISION_DATA,         wxS( "Revision Data" ) },
+        { LAYER_INFO::SUBCLASS::DFMT_REVISION_BLOCK,        wxS( "Revision Block" ) },
+        { LAYER_INFO::SUBCLASS::DFMT_TITLE_DATA,            wxS( "Title Data" ) },
+        { LAYER_INFO::SUBCLASS::DFMT_TITLE_BLOCK,           wxS( "Title Block" ) },
         { LAYER_INFO::SUBCLASS::DFMT_OUTLINE,               wxS( "Outline" ) },
     };
 
     static const std::unordered_map<uint8_t, wxString> s_PackageGeometrySubclassNames = {
+        { LAYER_INFO::SUBCLASS::DFA_BOUND_BOTTOM,           wxS( "DFA Bound Bottom" ) },
+        { LAYER_INFO::SUBCLASS::DFA_BOUND_TOP,              wxS( "DFA Bound Top" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_BOTTOM,       wxS( "Display Bottom" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_TOP,          wxS( "Display Top" ) },
+        { LAYER_INFO::SUBCLASS::PGEOM_SOLDERMASK_BOTTOM,    wxS( "Soldermask Bottom" ) },
+        { LAYER_INFO::SUBCLASS::PGEOM_SOLDERMASK_TOP,       wxS( "Soldermask Top" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_BODY_CENTER,          wxS( "Body Center" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_SILKSCREEN_BOTTOM,    wxS( "Silkscreen Bottom" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_SILKSCREEN_TOP,       wxS( "Silkscreen Top" ) },
+        { LAYER_INFO::SUBCLASS::PGEOM_PAD_STACK_NAME,       wxS( "Pad Stack Name" ) },
+        { LAYER_INFO::SUBCLASS::PGEOM_PIN_NUMBER,           wxS( "Pin Number" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_PLACE_BOUND_BOTTOM,   wxS( "Place Bound Bottom" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_PLACE_BOUND_TOP,      wxS( "Place Bound Top" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_BOTTOM,      wxS( "Assembly Bottom" ) },
         { LAYER_INFO::SUBCLASS::PGEOM_ASSEMBLY_TOP,         wxS( "Assembly Top" ) },
-        { LAYER_INFO::SUBCLASS::DFA_BOUND_BOTTOM,           wxS( "DFA Bound Bottom" ) },
-        { LAYER_INFO::SUBCLASS::DFA_BOUND_TOP,              wxS( "DFA Bound Top" ) },
     };
 
     static const std::unordered_map<uint8_t, wxString> s_ManufacturingSubclassNames = {
-        { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_BOTTOM,        wxS( "Autosilk Bottom" ) },
-        { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_TOP,           wxS( "Autosilk Top" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_PROBE_BOTTOM,          wxS( "No Probe Bottom" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_PROBE_TOP,             wxS( "No Probe Top" ) },
+        { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_BOTTOM,          wxS( "AutoSilk Bottom" ) },
+        { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_TOP,             wxS( "AutoSilk Top" ) },
+        { LAYER_INFO::SUBCLASS::MFR_PROBE_BOTTOM,             wxS( "Probe Bottom" ) },
+        { LAYER_INFO::SUBCLASS::MFR_PROBE_TOP,                wxS( "Probe Top" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NCDRILL_FIGURE,           wxS( "NC Drill Figure" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NCDRILL_LEGEND,           wxS( "NC Drill Legend" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_GLOSS_INTERNAL,        wxS( "No Gloss Internal" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_GLOSS_BOTTOM,          wxS( "No Gloss Bottom" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_GLOSS_TOP,             wxS( "No Gloss Top" ) },
+        { LAYER_INFO::SUBCLASS::MFR_NO_GLOSS_ALL,             wxS( "No Gloss All" ) },
+        { LAYER_INFO::SUBCLASS::MFR_PHOTOPLOT_OUTLINE,        wxS( "Photoplot Outline" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_AnalysisSubclassNames = {
+        { LAYER_INFO::SUBCLASS::ANALYSIS_PCB_TEMPERATURE,     wxS( "PCB Temperature" ) },
+        { LAYER_INFO::SUBCLASS::ANALYSIS_HIGH_ISOCONTOUR,     wxS( "High IsoContour" ) },
+        { LAYER_INFO::SUBCLASS::ANALYSIS_MEDIUM3_ISOCONTOUR,  wxS( "Medium3 IsoContour" ) },
+        { LAYER_INFO::SUBCLASS::ANALYSIS_MEDIUM2_ISOCONTOUR,  wxS( "Medium2 IsoContour" ) },
+        { LAYER_INFO::SUBCLASS::ANALYSIS_MEDIUM1_ISOCONTOUR,  wxS( "Medium1 IsoContour" ) },
+        { LAYER_INFO::SUBCLASS::ANALYSIS_LOW_ISOCONTOUR,      wxS( "Low IsoContour" ) },
     };
 
     static const std::unordered_map<uint8_t, const std::unordered_map<uint8_t, wxString>&> s_SubclassNameMaps = {
@@ -374,8 +420,8 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::CLASS::DRAWING_FORMAT,   s_DrawingFormatSubclassNames },
         { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, s_PackageGeometrySubclassNames },
         { LAYER_INFO::CLASS::MANUFACTURING,    s_ManufacturingSubclassNames },
+        { LAYER_INFO::CLASS::ANALYSIS,         s_AnalysisSubclassNames },
     };
-
     // clang-format on
 
     wxString   className;

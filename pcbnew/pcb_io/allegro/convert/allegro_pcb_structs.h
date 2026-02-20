@@ -413,8 +413,25 @@ struct LAYER_INFO
     enum SUBCLASS
     {
         // BOARD_GEOMETRY
-        BGEOM_OUTLINE                = 0xEA,
-        BGEOM_DIMENSION              = 0xF9,
+        BGEOM_CONSTRAINT_AREA        = 0xEB,
+        BGEOM_OFF_GRID_AREA           = 0xEC,
+        BGEOM_SOLDERMASK_BOTTOM       = 0xED,
+        BGEOM_SOLDERMASK_TOP          = 0xEE,
+        BGEOM_ASSEMBLY_DETAIL         = 0xEF,
+        BGEOM_SILKSCREEN_BOTTOM       = 0xF0,
+        BGEOM_SILKSCREEN_TOP          = 0xF1,
+        BGEOM_SWITCH_AREA_BOTTOM      = 0xF2,
+        BGEOM_SWITCH_AREA_TOP         = 0xF3,
+        BGEOM_BOTH_ROOMS              = 0xF4,
+        BGEOM_BOTTOM_ROOM             = 0xF5,
+        BGEOM_TOP_ROOM                = 0xF6,
+        BGEOM_PLACE_GRID_BOTTOM       = 0xF7,
+        BGEOM_PLACE_GRID_TOP          = 0xF8,
+        BGEOM_DIMENSION               = 0xF9,
+        BGEOM_TOOLING_CORNERS         = 0xFA,
+        BGEOM_ASSEMBLY_NOTES          = 0xFB,
+        BGEOM_PLATING_BAR             = 0xFC,
+        BGEOM_OUTLINE                 = 0xFD,
 
         // COMPONENT_VALUE / DEVICE_TYPE / USER_PART_NUMBER
         // REF_DES / TOLERANCE
@@ -425,26 +442,52 @@ struct LAYER_INFO
         ASSEMBLY_BOTTOM              = 0xFC,
         ASSEMBLY_TOP                 = 0xFD,
 
+        // ANALYSIS
+        ANALYSIS_PCB_TEMPERATURE     = 0xF8,
+        ANALYSIS_HIGH_ISOCONTOUR     = 0xF9,
+        ANALYSIS_MEDIUM3_ISOCONTOUR  = 0xFA,
+        ANALYSIS_MEDIUM2_ISOCONTOUR  = 0xFB,
+        ANALYSIS_MEDIUM1_ISOCONTOUR  = 0xFC,
+        ANALYSIS_LOW_ISOCONTOUR      = 0xFD,
+
         // DRAWING_FORMAT
+        DFMT_REVISION_DATA           = 0xF9,
+        DFMT_REVISION_BLOCK          = 0xFA,
+        DFMT_TITLE_DATA              = 0xFB,
+        DFMT_TITLE_BLOCK             = 0xFC,
         DFMT_OUTLINE                 = 0xFD,
-        // DFMT_TITLE_BLOCK = 0xF?,
 
         // PACKAGE_GEOMETRY
+        DFA_BOUND_BOTTOM             = 0xEE,
+        DFA_BOUND_TOP                = 0xEF,
         PGEOM_DISPLAY_BOTTOM         = 0xF1,
         PGEOM_DISPLAY_TOP            = 0xF2,
+        PGEOM_SOLDERMASK_BOTTOM      = 0xF3,
+        PGEOM_SOLDERMASK_TOP         = 0xF4,
         PGEOM_BODY_CENTER            = 0xF5,
         PGEOM_SILKSCREEN_BOTTOM      = 0xF6,
         PGEOM_SILKSCREEN_TOP         = 0xF7,
+        PGEOM_PAD_STACK_NAME         = 0xF8,
+        PGEOM_PIN_NUMBER             = 0xF9,
         PGEOM_PLACE_BOUND_BOTTOM     = 0xFA,
         PGEOM_PLACE_BOUND_TOP        = 0xFB,
         PGEOM_ASSEMBLY_BOTTOM        = 0xFC,
         PGEOM_ASSEMBLY_TOP           = 0xFD,
-        DFA_BOUND_BOTTOM             = 0xEE,
-        DFA_BOUND_TOP                = 0xEF,
 
         // MANUFACTURING
+        MFR_NO_PROBE_BOTTOM          = 0xF1,
+        MFR_NO_PROBE_TOP             = 0xF2,
         MFR_AUTOSILK_BOTTOM          = 0xF3,
         MFR_AUTOSILK_TOP             = 0xF4,
+        MFR_PROBE_BOTTOM             = 0xF5,
+        MFR_PROBE_TOP                = 0xF6,
+        MFR_NCDRILL_FIGURE           = 0xF7,
+        MFR_NCDRILL_LEGEND           = 0xF8,
+        MFR_NO_GLOSS_INTERNAL        = 0xF9,
+        MFR_NO_GLOSS_BOTTOM          = 0xFA,
+        MFR_NO_GLOSS_TOP             = 0xFB,
+        MFR_NO_GLOSS_ALL             = 0xFC,
+        MFR_PHOTOPLOT_OUTLINE        = 0xFD,
     };
 
     uint8_t m_Class;
