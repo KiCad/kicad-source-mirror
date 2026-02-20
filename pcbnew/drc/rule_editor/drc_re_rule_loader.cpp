@@ -39,6 +39,7 @@
 #include "drc_re_bool_input_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_permitted_layers_constraint_data.h"
+#include "drc_re_numeric_constraint_types.h"
 #include "drc_rule_editor_utils.h"
 
 
@@ -151,6 +152,20 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( textThickness )
             data->SetMinTextThickness( toMM( textThickness->GetValue().Min() ) );
+
+        return data;
+    }
+
+    case MINIMUM_TRACK_WIDTH:
+    {
+        auto data = std::make_shared<DRC_RE_MINIMUM_TRACK_WIDTH_CONSTRAINT_DATA>();
+        data->SetRuleName( aRule.m_Name );
+        data->SetConstraintCode( "track_width" );
+
+        const DRC_CONSTRAINT* constraint = findConstraint( aRule, TRACK_WIDTH_CONSTRAINT );
+
+        if( constraint )
+            data->SetNumericInputValue( toMM( constraint->GetValue().Min() ) );
 
         return data;
     }
@@ -355,6 +370,14 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
                 if( expr.Contains( wxS( "Orientation" ) ) && !expr.Contains( wxS( "Layer" ) ) )
                     match.panelType = ALLOWED_ORIENTATION;
             }
+        }
+
+        if( match.panelType == ROUTING_WIDTH && match.claimedConstraints.count( TRACK_WIDTH_CONSTRAINT ) )
+        {
+            const DRC_CONSTRAINT* tw = findConstraint( aRule, TRACK_WIDTH_CONSTRAINT );
+
+            if( tw && !tw->GetValue().HasOpt() && !tw->GetValue().HasMax() )
+                match.panelType = MINIMUM_TRACK_WIDTH;
         }
 
         auto constraintData = createConstraintData( match.panelType, aRule, match.claimedConstraints );
