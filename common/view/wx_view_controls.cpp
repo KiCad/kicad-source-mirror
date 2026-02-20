@@ -466,6 +466,9 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             const int    rotation = aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
             const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
+
+
+            KI_TRACE( traceGalProfile, "Zoom: %.5f\n",  m_view->GetScale() * zoomScale );
             if( IsCursorWarpingEnabled() )
             {
                 CenterOnCursor();
@@ -476,6 +479,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
                 const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
                 m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
             }
+
+            aEvent.Skip();
 
             // Refresh the zoom level and mouse position on message panel
             // (mouse position has not changed, only the zoom level has changed):
