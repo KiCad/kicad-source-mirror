@@ -213,14 +213,17 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                 SCH_PIN* pa = static_cast<SCH_PIN*>( a );
                 SCH_PIN* pb = static_cast<SCH_PIN*>( b );
 
-                bool aGlobal = pa->GetLibPin()->GetParentSymbol()->IsGlobalPower();
-                bool bGlobal = pb->GetLibPin()->GetParentSymbol()->IsGlobalPower();
+                SYMBOL* aParent = pa->GetLibPin() ? pa->GetLibPin()->GetParentSymbol() : nullptr;
+                SYMBOL* bParent = pb->GetLibPin() ? pb->GetLibPin()->GetParentSymbol() : nullptr;
+
+                bool aGlobal = aParent && aParent->IsGlobalPower();
+                bool bGlobal = bParent && bParent->IsGlobalPower();
 
                 if( aGlobal != bGlobal )
                     return aGlobal;
 
-                bool aLocal = pa->GetLibPin()->GetParentSymbol()->IsLocalPower();
-                bool bLocal = pb->GetLibPin()->GetParentSymbol()->IsLocalPower();
+                bool aLocal = aParent && aParent->IsLocalPower();
+                bool bLocal = bParent && bParent->IsLocalPower();
 
                 if( aLocal != bLocal )
                     return aLocal;
@@ -1818,8 +1821,10 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
 
     for( const auto& [sheet, pin] : m_global_power_pins )
     {
+        SYMBOL* libParent = pin->GetLibPin() ? pin->GetLibPin()->GetParentSymbol() : nullptr;
+
         if( !pin->ConnectedItems( sheet ).empty()
-                && !pin->GetLibPin()->GetParentSymbol()->IsGlobalPower() )
+                && ( !libParent || !libParent->IsGlobalPower() ) )
         {
             // ERC will warn about this: user has wired up an invisible pin
             continue;
@@ -1834,7 +1839,7 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         // Proper modern power symbols get their net name from the value field
         // in the symbol, but we support legacy non-power symbols with global
         // power connections based on invisible, power-in, pin's names.
-        if( pin->GetLibPin()->GetParentSymbol()->IsGlobalPower() )
+        if( libParent && libParent->IsGlobalPower() )
             connection->SetName( pin->GetParentSymbol()->GetValue( true, &sheet, false ) );
         else
             connection->SetName( pin->GetShownName() );
@@ -3917,9 +3922,12 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         // but not for power symbols (with visible or legacy invisible pins).
         // We want to throw unconnected errors for power symbols even if they are connected to other
         // net items by name, because usually failing to connect them graphically is a mistake
+        SYMBOL* pinLibParent = ( pin && pin->GetLibPin() )
+                                       ? pin->GetLibPin()->GetParentSymbol() : nullptr;
+
         if( pin && !has_other_connections
                 && !pin->IsPower()
-                && !pin->GetLibPin()->GetParentSymbol()->IsPower() )
+                && ( !pinLibParent || !pinLibParent->IsPower() ) )
         {
             wxString name = pin->Connection( &sheet )->Name();
             wxString local_name = pin->Connection( &sheet )->Name( true );
@@ -3958,7 +3966,11 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 // We only apply this test to power symbols, because other symbols have
                 // pins that are meant to be dangling, but the power symbols have pins
                 // that are *not* meant to be dangling.
-                if( testPin->GetLibPin()->GetParentSymbol()->IsPower()
+                SYMBOL* testLibParent = testPin->GetLibPin()
+                                               ? testPin->GetLibPin()->GetParentSymbol()
+                                               : nullptr;
+
+                if( testLibParent && testLibParent->IsPower()
                     && testPin->ConnectedItems( sheet ).empty()
                     && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {

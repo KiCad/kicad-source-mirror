@@ -1436,9 +1436,9 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     // with legacy global power pins on non-power symbols
     if( IsGlobalPower() || IsLocalPower() )
     {
-        SYMBOL* parent = GetLibPin()->GetParentSymbol();
+        SYMBOL* parent = GetLibPin() ? GetLibPin()->GetParentSymbol() : nullptr;
 
-        if( parent->IsGlobalPower() || parent->IsLocalPower() )
+        if( parent && ( parent->IsGlobalPower() || parent->IsLocalPower() ) )
         {
             return EscapeString( symbol->GetValue( true, &aPath, false ), CTX_NETNAME );
         }
