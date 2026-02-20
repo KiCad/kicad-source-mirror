@@ -1476,10 +1476,20 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
     if( props->m_Reversal == BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED )
         text->SetMirrored( true );
 
-    if( props->m_Alignment == BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::CENTER )
+    switch( props->m_Alignment )
+    {
+    case BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::LEFT:
+        text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        break;
+    case BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::CENTER:
         text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-    else if( props->m_Alignment == BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::RIGHT )
+        break;
+    case BLK_0x30_STR_WRAPPER::TEXT_ALIGNMENT::RIGHT:
         text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        break;
+    default:
+        break;
+    }
 
     return text;
 }
