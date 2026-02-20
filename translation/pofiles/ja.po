@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-18 09:09+0000\n"
+"PO-Revision-Date: 2026-02-20 12:10+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -9195,7 +9195,7 @@ msgstr "%s と %s と %d ほか"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9203,13 +9203,13 @@ msgid ""
 "offset: %d"
 msgstr ""
 "不正なフットプリント ID\n"
-"ファイル: %s\n"
+"ファイル: '%s'\n"
 "行: %d\n"
-"オフセット: %d."
+"オフセット: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -14668,7 +14668,7 @@ msgstr "シンボル プロパティを編集"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:730
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "ピン '%s' (ジャンパー ピン グループ %d )はこのシンボルに存在しません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
@@ -36210,9 +36210,8 @@ msgid "Custom Rules"
 msgstr "カスタム ルール"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
-#, fuzzy
 msgid "Barcode Error"
-msgstr "バックアップ エラー"
+msgstr "バーコード エラー"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:255
 msgid "Modify barcode"
@@ -39023,7 +39022,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:890
 #, c-format
 msgid "Pad '%s' in jumper pad group %d does not exist in this footprint."
-msgstr ""
+msgstr "ピン '%s' (ジャンパー パッド グループ %d )はこのシンボルに存在しません。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
@@ -47709,19 +47708,16 @@ msgid "Bottom Layer"
 msgstr "裏面レイヤー"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:72
-#, fuzzy
 msgid "Minimum Routing Width must be greater than 0"
-msgstr "最小長さは0より大きくなければなりません"
+msgstr "最小配線幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:75
-#, fuzzy
 msgid "Preferred Routing Width must be greater than 0"
-msgstr "推奨ビア直径は0より大きくなければなりません"
+msgstr "推奨配線幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:78
-#, fuzzy
 msgid "Maximum Routing Width must be greater than 0"
-msgstr "最大長さは0より大きくなければなりません"
+msgstr "最大配線幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:83
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
@@ -47748,39 +47744,32 @@ msgid "Maximum Routing Width"
 msgstr "最大配線幅"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Minimum Width must be greater than 0"
-msgstr "最小長さは0より大きくなければなりません"
+msgstr "最小幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Preferred Width must be greater than 0"
-msgstr "推奨ビア直径は0より大きくなければなりません"
+msgstr "推奨幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:83
-#, fuzzy
 msgid "Maximum Width must be greater than 0"
-msgstr "最大長さは0より大きくなければなりません"
+msgstr "最大幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Gap must be greater than 0"
-msgstr "最小長さは0より大きくなければなりません"
+msgstr "最小ギャップは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:89
-#, fuzzy
 msgid "Preferred Gap must be greater than 0"
-msgstr "推奨ビア直径は0より大きくなければなりません"
+msgstr "推奨ギャップは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Gap must be greater than 0"
-msgstr "最大長さは0より大きくなければなりません"
+msgstr "最大ギャップは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:95
-#, fuzzy
 msgid "Maximum Uncoupled Length must be greater than 0"
-msgstr "最大長さは0より大きくなければなりません"
+msgstr "最大非結合長は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:100
 msgid "Minimum Width cannot be greater than Preferred Width"
@@ -50512,6 +50501,8 @@ msgid ""
 "This barcode type does not support international characters. Use QR Code or "
 "Data Matrix instead."
 msgstr ""
+"このバーコードタイプは国際文字をサポートしていません。QRコードか"
+"データマトリックスを代わりに使用してください。"
 
 #: pcbnew/pcb_barcode.cpp:526
 #, c-format
