@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-17 01:09+0000\n"
+"PO-Revision-Date: 2026-02-20 12:09+0000\n"
 "Last-Translator: Mitja Nemec <mitja.nemec@fe.uni-lj.si>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v9/sl/>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -44,7 +44,6 @@ msgstr "Ustvari sloje"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:982
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
-#, fuzzy
 msgid "No footprint loaded."
 msgstr "Nobeno podnožje ni naloženo."
 
@@ -73,101 +72,92 @@ msgid "Build Tech layers"
 msgstr "Zgradi tehnične sloje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:947
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
 msgstr "Gradnja tehničnega sloja %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Poenostavljanje poligonov bakrenih plasti"
+msgstr "Poenostavljanje poligonov bakrenih slojev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1213
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Izračun bakrenih skoznjih lukenj"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1267
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
 msgstr "Poenostavljanje %d bakrenih slojev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1310
-#, fuzzy
 msgid "Simplify holes contours"
-msgstr "Poenostavite konture lukenj"
+msgstr "Poenostavitev obrisa lukenj"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1330
-#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "Zgradi BVH za luknje in skoznike"
+msgstr "Gradnja BVH za luknje in skozne luknje"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:403
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Ločljivost ohranitve za:"
+msgstr "Napaka pri kreiranju OpenGL konteksta"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:434
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr "Vaša različica OpenGL ni podprta. Minimalna zahtevana verzija je 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Čas prikaza %.0f s"
+msgstr "Zadnji čas rendriranja %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Net %s NetClass %s"
+msgstr "Vozlišče %s\tRazred vozlišča %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:766
 #, fuzzy, c-format
 msgid "Pad %s\t"
-msgstr "%s in %s"
+msgstr "Nožica %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Območje pravil na %s"
+msgstr "Območje pravil na %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:799
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Območja"
+msgstr "Območje %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:466
-#, fuzzy
 msgid "Load OpenGL: board"
-msgstr "Naložite OpenGL: ploščo"
+msgstr "Nalagam OpenGL: plošča"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
-#, fuzzy
 msgid "Load OpenGL: holes and vias"
-msgstr "Naloži OpenGL: luknje in skoznike"
+msgstr "Nalagam OpenGL: luknje in skoznje luknje"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:546
-#, fuzzy
 msgid "Load OpenGL: layers"
-msgstr "Naloži OpenGL: sloje"
+msgstr "Nalagam OpenGL: sloje"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Naloži OpenGL sloj %d"
+msgstr "Nalagam OpenGL sloj %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:654
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:795
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2045
-#, fuzzy
 msgid "Loading 3D models..."
 msgstr "Nalaganje 3D modelov..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:663
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid "Reload time %.3f s"
-msgstr "Čas polnjenja %.3f s"
+msgstr "Čas ponovnega nalaganja %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:959
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:365
@@ -180,41 +170,37 @@ msgstr "Čas polnjenja %.3f s"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2692
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
 msgstr "Nalaganje %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:511
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_gl.cpp:107
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_ram.cpp:99
-#, fuzzy
 msgid "Loading..."
 msgstr "Poteka nalaganje ..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:391
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Load Raytracing: deska"
+msgstr "Nalaganje sledenja žarkov: vezje"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:565
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Load Raytracing: plasti"
+msgstr "Nalaganje sledenja žarkov: sloji"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Rendering time %.3f s"
-msgstr "Čas upodabljanja %.3f s"
+msgstr "Čas rendriranja %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Prikaz: %.0f %%"
+msgstr "Rendriranje: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:703
-#, fuzzy
 msgid "Rendering: Post processing shader"
-msgstr "Render: Shader za naknadno obdelavo"
+msgstr "Rendriranje: naknadno senčenje"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 #, fuzzy
@@ -231,7 +217,6 @@ msgstr "Izvozi trenutni pogled kot JPEG ..."
 #: common/eda_base_frame.cpp:1189 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1080 pcbnew/footprint_chooser_frame.cpp:326
 #: pcbnew/footprint_viewer_frame.cpp:988 pcbnew/pcb_base_frame.cpp:681
-#, fuzzy
 msgid "3D Viewer"
 msgstr "3D pogled"
 
@@ -241,7 +226,6 @@ msgid "Copy 3D Image"
 msgstr "Kopiraj 3D sliko"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
-#, fuzzy
 msgid "3D Grid"
 msgstr "3D mreža"
 
@@ -251,9 +235,8 @@ msgid "Raytracing"
 msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
-#, fuzzy
 msgid "Reset to Default Settings"
-msgstr "Ponastavi na začetne nastavitve"
+msgstr "Ponastavi na privzete nastavitve"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:312 cvpcb/menubar.cpp:79
@@ -264,7 +247,6 @@ msgstr "Ponastavi na začetne nastavitve"
 #: pcb_calculator/pcb_calculator_frame.cpp:233
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:479
 #: pcbnew/toolbars_footprint_viewer.cpp:193
-#, fuzzy
 msgid "&File"
 msgstr "&Datoteka"
 
@@ -273,7 +255,6 @@ msgstr "&Datoteka"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182 kicad/menubar.cpp:232
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:480
-#, fuzzy
 msgid "&Edit"
 msgstr "&Uredi"
 
@@ -284,7 +265,6 @@ msgstr "&Uredi"
 #: kicad/menubar.cpp:233 pagelayout_editor/menubar.cpp:152
 #: pcbnew/menubar_footprint_editor.cpp:245 pcbnew/menubar_pcb_editor.cpp:481
 #: pcbnew/toolbars_footprint_viewer.cpp:194
-#, fuzzy
 msgid "&View"
 msgstr "&Pogled"
 
@@ -292,9 +272,8 @@ msgstr "&Pogled"
 #: bitmap2component/bitmap2cmp_frame.cpp:313 cvpcb/menubar.cpp:81
 #: eeschema/sim/toolbars_simulator_frame.cpp:174 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:235 pcb_calculator/pcb_calculator_frame.cpp:234
-#, fuzzy
 msgid "&Preferences"
-msgstr "&Lastnosti"
+msgstr "&Nastavitve"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #, fuzzy
@@ -313,9 +292,8 @@ msgstr "Prikažite trenutni pogled z uporabo Raytracinga"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
-#, fuzzy
 msgid "KiCad 3D Viewer"
-msgstr "3D pogled"
+msgstr "KiCad 3D pogled"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:677
@@ -324,7 +302,6 @@ msgstr "3D pogled"
 #: pcbnew/footprint_edit_frame.cpp:252 pcbnew/footprint_edit_frame.cpp:1029
 #: pcbnew/pcb_edit_frame.cpp:328 pcbnew/pcb_edit_frame.cpp:1717
 #: pcbnew/tools/pcb_actions.cpp:1339
-#, fuzzy
 msgid "Appearance"
 msgstr "Videz"
 
