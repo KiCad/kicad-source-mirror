@@ -780,7 +780,7 @@ struct BLK_0x0D_PAD
 struct BLK_0x0E_SHAPE_SEG
 {
     uint8_t  m_T;
-    uint16_t m_T2;
+    LAYER_INFO m_Layer;
     uint32_t m_Key;
     uint32_t m_Next;
     uint32_t m_FpPtr;

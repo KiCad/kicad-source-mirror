@@ -783,7 +783,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VE
     auto& data = block->GetData();
 
     data.m_T = aStream.ReadU8();
-    data.m_T2 = aStream.ReadU16();
+    data.m_Layer = ParseLayerInfo( aStream );
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
     data.m_FpPtr = aStream.ReadU32();
