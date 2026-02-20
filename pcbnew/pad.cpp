@@ -963,9 +963,11 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
             break;
         }
 
-        // Invalidate clearance cache since pad type affects constraint evaluation
-        if( BOARD* board = GetBoard() )
-            board->InvalidateClearanceCache( m_Uuid );
+        if( !( GetFlags() & ROUTER_TRANSIENT ) )
+        {
+            if( BOARD* board = GetBoard() )
+                board->InvalidateClearanceCache( m_Uuid );
+        }
     }
 
     SetDirty();
@@ -1197,9 +1199,11 @@ void PAD::SetLayerSet( const LSET& aLayers )
     m_padStack.SetLayerSet( aLayers );
     SetDirty();
 
-    // Invalidate clearance cache since layer set can affect clearance rules
-    if( BOARD* board = GetBoard() )
-        board->InvalidateClearanceCache( m_Uuid );
+    if( !( GetFlags() & ROUTER_TRANSIENT ) )
+    {
+        if( BOARD* board = GetBoard() )
+            board->InvalidateClearanceCache( m_Uuid );
+    }
 }
 
 
