@@ -540,13 +540,27 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-                if( text && text->HasTextVars() )
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
                 {
-                    text->ClearRenderCache();
-                    text->ClearBoundingBoxCache();
-                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    if( text->HasTextVars() )
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
+                }
+
+                if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
+                {
+                    if( FOOTPRINT* fp = field->GetParentFootprint() )
+                    {
+                        if( !fp->GetVariants().empty() )
+                        {
+                            field->ClearRenderCache();
+                            field->ClearBoundingBoxCache();
+                            return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        }
+                    }
                 }
 
                 return 0;
