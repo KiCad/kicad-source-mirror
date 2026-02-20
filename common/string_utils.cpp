@@ -239,7 +239,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_JS_STR )
         {
-            if( c >= 0x7F || c == '\'' || c == '\\' || c == '(' || c == ')' )
+            if( c >= 0x7F || c == '\'' || c == '"' || c == '\\' || c == '(' || c == ')' )
             {
                 unsigned int code = c;
                 char buffer[16];
