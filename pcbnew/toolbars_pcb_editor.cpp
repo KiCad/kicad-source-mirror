@@ -536,7 +536,24 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 
     // Refresh the view and properties panel to show the new variant state
     UpdateProperties();
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                if( text && text->HasTextVars() )
+                {
+                    text->ClearRenderCache();
+                    text->ClearBoundingBoxCache();
+                    return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                }
+
+                return 0;
+            } );
+
     GetCanvas()->Refresh();
+
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 }
 
