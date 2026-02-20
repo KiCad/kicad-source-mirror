@@ -32,10 +32,12 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
+#include <pcb_field.h>
 #include <pcb_layer_box_selector.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
