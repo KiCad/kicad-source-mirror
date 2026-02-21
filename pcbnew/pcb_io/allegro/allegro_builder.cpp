@@ -85,7 +85,7 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x01: return BLK_FIELD( BLK_0x01_ARC, m_Next );
     case 0x04: return BLK_FIELD( BLK_0x04_NET_ASSIGNMENT, m_Next );
     case 0x05: return BLK_FIELD( BLK_0x05_TRACK, m_Next );
-    case 0x0E: return BLK_FIELD( BLK_0x0E_SHAPE_SEG, m_Next );
+    case 0x0E: return BLK_FIELD( BLK_0x0E_RECT, m_Next );
     case 0x14: return BLK_FIELD( BLK_0x14_GRAPHIC, m_Next );
     case 0x15:
     case 0x16:
@@ -1751,6 +1751,31 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x24_RECT& aRect,
 }
 
 
+std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x0E_RECT& aRect, BOARD_ITEM_CONTAINER& aParent )
+{
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent );
+
+    PCB_LAYER_ID layer = getLayer( aRect.m_Layer );
+    shape->SetLayer( layer );
+
+    shape->SetShape( SHAPE_T::RECTANGLE );
+
+    const VECTOR2I cornerA = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+    const VECTOR2I cornerB = scale( VECTOR2I{ aRect.m_Coords[2], aRect.m_Coords[3] } );
+
+    shape->SetStart( cornerA );
+    shape->SetEnd( cornerB );
+
+    const EDA_ANGLE angle{ static_cast<double>( aRect.m_Rotation ) / 1000.0, DEGREES_T };
+    shape->Rotate( cornerA, angle );
+
+    const int lineWidth = 0;
+    shape->SetWidth( lineWidth );
+
+    return shape;
+}
+
+
 std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildPolygon( const BLK_0x28_SHAPE& aPolygon, BOARD_ITEM_CONTAINER& aParent )
 {
     std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent );
@@ -2529,11 +2554,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         {
         case 0x0E:
         {
-            // These exist sometimes in this list, but not too clear how they work yet.
-            const auto& shapeSeg = static_cast<const BLOCK<BLK_0x0E_SHAPE_SEG>&>( *areaBlock ).GetData();
-
-            wxLogTrace( traceAllegroBuilder, "Footprint area with 0x0E shape segment in %s: layer=%s",
-                        fp->Reference().GetText(), layerInfoDisplayName( shapeSeg.m_Layer ) );
+            const auto& rect = static_cast<const BLOCK<BLK_0x0E_RECT>&>( *areaBlock ).GetData();
+            item = buildRect( rect, *fp );
             break;
         }
         case 0x28:

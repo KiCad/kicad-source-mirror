@@ -778,7 +778,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0D_PAD( FILE_STREAM& aStream, FM
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x0E_SHAPE_SEG>>( 0x0E, aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x0E_RECT>>( 0x0E, aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -804,6 +804,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0E( FILE_STREAM& aStream, FMT_VE
     {
         data.m_UnknownArr[i] = aStream.ReadU32();
     }
+
+    data.m_Rotation = aStream.ReadU32();
 
     return block;
 }

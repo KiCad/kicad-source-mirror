@@ -817,10 +817,9 @@ struct BLK_0x0D_PAD
 
 
 /**
- * Shape/fill segment linking a copper shape to its parent footprint. Contains coordinates
- * and parent pointer.
+ * Rectangular shape.
  */
-struct BLK_0x0E_SHAPE_SEG
+struct BLK_0x0E_RECT
 {
     uint8_t  m_T;
     LAYER_INFO m_Layer;
@@ -837,7 +836,9 @@ struct BLK_0x0E_SHAPE_SEG
 
     std::array<int32_t, 4> m_Coords;
 
-    std::array<uint32_t, 4> m_UnknownArr;
+    std::array<uint32_t, 3> m_UnknownArr;
+    /// Rotation in millidegrees
+    uint32_t m_Rotation;
 };
 
 
@@ -1391,6 +1392,8 @@ struct BLK_0x23_RATLINE
 /**
  * Rectangle defined by four coordinates. Appears on the m_LL_0x24_0x28 header linked
  * list for keepout areas and other rectangular regions. Has a layer and parent pointer.
+ *
+ * Not entirely clear how this differs from 0x0E yet.
  */
 struct BLK_0x24_RECT
 {

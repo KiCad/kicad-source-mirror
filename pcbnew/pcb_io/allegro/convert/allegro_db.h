@@ -169,7 +169,7 @@ struct DB_OBJ
         COMPONENT,      // 0x06
         COMPONENT_INST, // 0x07
         PIN_NUMBER,     // 0x08
-        SHAPE_SEG,      // 0x0E
+        x0e_RECT,       // 0x0E
         FUNCTION_SLOT,  // 0x0F
         FUNCTION_INST,  // 0x10
         PIN_NAME,       // 0x11
@@ -505,13 +505,14 @@ struct PIN_NUMBER : public DB_OBJ
 /**
  * 0x0E objects: ??
  */
-struct SHAPE_SEG_OBJ : public DB_OBJ
+struct RECT_OBJ : public DB_OBJ
 {
-    SHAPE_SEG_OBJ( const BRD_DB& aBrd, const BLK_0x0E_SHAPE_SEG& aBlk );
+    RECT_OBJ( const BRD_DB& aBrd, const BLK_0x0E_RECT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     DB_REF m_Next;
+    EDA_ANGLE m_Rotation;
 };
 
 

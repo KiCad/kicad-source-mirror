@@ -115,6 +115,12 @@ private:
     std::unique_ptr<PCB_SHAPE> buildRect( const BLK_0x24_RECT& aRect, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Build a graphic polygon from a 0x0E RECT block.
+     */
+    std::unique_ptr<PCB_SHAPE> buildRect( const BLK_0x0E_RECT& aShape, BOARD_ITEM_CONTAINER& aParent );
+
+
+    /**
      * Build a graphic polygon from a 0x28 SHAPE block.
      */
     std::unique_ptr<PCB_SHAPE> buildPolygon( const BLK_0x28_SHAPE& aShape, BOARD_ITEM_CONTAINER& aParent );

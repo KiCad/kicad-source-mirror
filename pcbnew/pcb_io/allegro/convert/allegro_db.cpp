@@ -51,7 +51,7 @@ static std::optional<uint32_t> GetBlockKey( const BLOCK_BASE& block )
     case 0x0A: return static_cast<const BLOCK<BLK_0x0A_DRC>&>( block ).GetData().m_Key;
     case 0x0C: return static_cast<const BLOCK<BLK_0x0C_PIN_DEF>&>( block ).GetData().m_Key;
     case 0x0D: return static_cast<const BLOCK<BLK_0x0D_PAD>&>( block ).GetData().m_Key;
-    case 0x0E: return static_cast<const BLOCK<BLK_0x0E_SHAPE_SEG>&>( block ).GetData().m_Key;
+    case 0x0E: return static_cast<const BLOCK<BLK_0x0E_RECT>&>( block ).GetData().m_Key;
     case 0x0F: return static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( block ).GetData().m_Key;
     case 0x10: return static_cast<const BLOCK<BLK_0x10_FUNCTION_INST>&>( block ).GetData().m_Key;
     case 0x11: return static_cast<const BLOCK<BLK_0x11_PIN_NAME>&>( block ).GetData().m_Key;
@@ -291,8 +291,8 @@ std::unique_ptr<DB_OBJ> BRD_DB::OBJ_FACTORY::CreateObject( const BLOCK_BASE& aBl
     }
     case 0x0E:
     {
-        const BLK_0x0E_SHAPE_SEG& pinBlk = BLK_DATA( aBlock, BLK_0x0E_SHAPE_SEG );
-        obj = std::make_unique<SHAPE_SEG_OBJ>( m_brdDb, pinBlk );
+        const BLK_0x0E_RECT& pinBlk = BLK_DATA( aBlock, BLK_0x0E_RECT );
+        obj = std::make_unique<RECT_OBJ>( m_brdDb, pinBlk );
         break;
     }
     case 0x0F:
@@ -882,16 +882,18 @@ const PIN_NAME* PIN_NUMBER::GetPinName() const
 }
 
 
-SHAPE_SEG_OBJ::SHAPE_SEG_OBJ( const BRD_DB& aBrd, const BLK_0x0E_SHAPE_SEG& aBlk ) :
-    DB_OBJ( DB_OBJ::TYPE::SHAPE_SEG, aBlk.m_Key )
+RECT_OBJ::RECT_OBJ( const BRD_DB& aBrd, const BLK_0x0E_RECT& aBlk ) :
+    DB_OBJ( DB_OBJ::TYPE::x0e_RECT, aBlk.m_Key )
 {
     m_Next.m_TargetKey = aBlk.m_Next;
     m_Next.m_EndKey = aBrd.m_Header->m_LL_Shapes.m_Tail;
-    m_Next.m_DebugName = "SHAPE_SEG_OBJ::m_Next";
+    m_Next.m_DebugName = "RECT_OBJ::m_Next";
+
+    m_Rotation = EDA_ANGLE( static_cast<double>( aBlk.m_Rotation ) / 1000.0, DEGREES_T );
 }
 
 
-bool SHAPE_SEG_OBJ::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+bool RECT_OBJ::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
 {
     bool ok = true;
 
