@@ -1737,12 +1737,14 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x24_RECT& aRect,
 
     shape->SetShape( SHAPE_T::RECTANGLE );
 
-    const int      width = scale( aRect.m_Coords[2] - aRect.m_Coords[0] );
-    const int      height = scale( aRect.m_Coords[3] - aRect.m_Coords[1] );
-    const VECTOR2I corner = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+    const VECTOR2I cornerA = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+    const VECTOR2I cornerB = scale( VECTOR2I{ aRect.m_Coords[2], aRect.m_Coords[3] } );
 
-    shape->SetStart( corner );
-    shape->SetEnd( corner + VECTOR2I{ width, -height } );
+    shape->SetStart( cornerA );
+    shape->SetEnd( cornerB );
+
+    const EDA_ANGLE angle{ static_cast<double>( aRect.m_Rotation ) / 1000.0, DEGREES_T };
+    shape->Rotate( cornerA, angle );
 
     const int lineWidth = 0;
     shape->SetWidth( lineWidth );
@@ -2519,11 +2521,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         {
         case 0x24:
         {
-            const auto&                rect = static_cast<const BLOCK<BLK_0x24_RECT>&>( *assemblyBlock ).GetData();
-            std::unique_ptr<PCB_SHAPE> shape = buildRect( rect, *fp );
-
-            shape->Rotate( shape->GetStart(), fp->GetOrientation() );
-            item = std::move( shape );
+            const auto& rect = static_cast<const BLOCK<BLK_0x24_RECT>&>( *assemblyBlock ).GetData();
+            item = buildRect( rect, *fp );
             break;
         }
         case 0x28:

@@ -1412,7 +1412,8 @@ struct BLK_0x24_RECT
 
     uint32_t m_Unknown3;
     uint32_t m_Unknown4;
-    uint32_t m_Unknown5;
+    /// Rotation in millidegrees
+    uint32_t m_Rotation;
 };
 
 

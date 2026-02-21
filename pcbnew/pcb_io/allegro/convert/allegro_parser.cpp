@@ -1318,7 +1318,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x24_RECT( FILE_STREAM& aStream, F
 
     data.m_Unknown3 = aStream.ReadU32();
     data.m_Unknown4 = aStream.ReadU32();
-    data.m_Unknown5 = aStream.ReadU32();
+    data.m_Rotation = aStream.ReadU32();
 
     return block;
 }
