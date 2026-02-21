@@ -531,6 +531,9 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !aStepJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aStepJob->m_variant );
+
     if( aStepJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -933,6 +936,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !aSvgJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aSvgJob->m_variant );
+
     if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
     {
         if( aSvgJob->GetConfiguredOutputPath().IsEmpty() )
@@ -1016,6 +1022,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !aDxfJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aDxfJob->m_variant );
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
@@ -1103,6 +1112,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !pdfJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( pdfJob->m_variant );
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
@@ -1192,6 +1204,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !psJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( psJob->m_variant );
+
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
     if( psJob->m_checkZonesBeforePlot )
@@ -1279,6 +1294,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !aGerberJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aGerberJob->m_variant );
 
     wxString outPath = resolveJobOutputPath( aJob, brd, &aGerberJob->m_drawingSheet );
 
@@ -1579,6 +1597,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !aGerberJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aGerberJob->m_variant );
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
@@ -2483,6 +2504,9 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !job->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( job->m_variant );
+
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
@@ -2626,6 +2650,9 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !job->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( job->m_variant );
 
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {

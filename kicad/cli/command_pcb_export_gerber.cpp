@@ -26,6 +26,8 @@
 #include <macros.h>
 #include <string_utils.h>
 
+#define ARG_VARIANT "--variant"
+
 
 CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName, IO_TYPE aOutputType ) :
         PCB_EXPORT_BASE_COMMAND( aName, IO_TYPE::FILE, aOutputType )
@@ -99,6 +101,11 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
     m_argParser.add_argument( ARG_CHECK_ZONES )
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_VARIANT )
+            .default_value( std::string( "" ) )
+            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
+            .metavar( "VARIANT" );
 }
 
 
@@ -114,6 +121,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_sketchDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS );
     aJob->m_crossoutDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS );
     aJob->SetVarOverrides( m_argDefineVars );
+    aJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
 
     aJob->m_plotFootprintValues = !m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
     aJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );

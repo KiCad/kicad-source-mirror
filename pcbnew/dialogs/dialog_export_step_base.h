@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxBoxSizer* bSizerTop;
 		wxStaticText* m_txtFormat;
 		wxChoice* m_choiceFormat;
+		wxStaticText* m_txtVariant;
+		wxChoice* m_choiceVariant;
 		wxStaticText* m_txtBrdFile;
 		wxTextCtrl* m_outputFileName;
 		STD_BITMAP_BUTTON* m_browseButton;

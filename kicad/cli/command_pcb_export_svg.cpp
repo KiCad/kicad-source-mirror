@@ -34,6 +34,7 @@
 #define ARG_FIT_PAGE_TO_BOARD "--fit-page-to-board"
 #define ARG_MODE_SINGLE "--mode-single"
 #define ARG_MODE_MULTI "--mode-multi"
+#define ARG_VARIANT "--variant"
 
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "svg", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
@@ -125,6 +126,11 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() :
     m_argParser.add_argument( ARG_CHECK_ZONES )
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_VARIANT )
+            .default_value( std::string( "" ) )
+            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
+            .metavar( "VARIANT" );
 }
 
 
@@ -172,6 +178,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     svgJob->SetVarOverrides( m_argDefineVars );
+    svgJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
 
     svgJob->m_argLayers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
     svgJob->m_argCommonLayers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );

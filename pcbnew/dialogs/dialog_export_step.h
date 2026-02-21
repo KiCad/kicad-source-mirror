@@ -52,6 +52,8 @@ protected:
     // Called to update filename extension after the output file format is changed
     void OnFmtChoiceOptionChanged();
 
+    wxString getSelectedVariant() const;
+
 private:
     PCB_EDIT_FRAME*    m_editFrame;
     JOB_EXPORT_PCB_3D* m_job;

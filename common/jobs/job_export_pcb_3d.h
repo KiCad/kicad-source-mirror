@@ -145,6 +145,7 @@ public:
 public:
     bool                      m_hasUserOrigin;
     wxString                  m_filename;
+    wxString                  m_variant;
 
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 

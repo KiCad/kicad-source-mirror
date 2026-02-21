@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,6 +29,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_choiceFormat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceFormatNChoices, m_choiceFormatChoices, 0 );
 	m_choiceFormat->SetSelection( 0 );
 	bSizerTop->Add( m_choiceFormat, 0, wxALL, 5 );
+
+	m_txtVariant = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtVariant->Wrap( -1 );
+	bSizerTop->Add( m_txtVariant, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxArrayString m_choiceVariantChoices;
+	m_choiceVariant = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceVariantChoices, 0 );
+	m_choiceVariant->SetSelection( 0 );
+	bSizerTop->Add( m_choiceVariant, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_txtBrdFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_txtBrdFile->Wrap( -1 );

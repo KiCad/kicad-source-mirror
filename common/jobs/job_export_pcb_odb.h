@@ -48,6 +48,7 @@ public:
 public:
     wxString       m_filename;
     wxString       m_drawingSheet;
+    wxString       m_variant;
 
     ODB_UNITS      m_units;
     int            m_precision;
