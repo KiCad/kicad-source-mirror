@@ -656,8 +656,13 @@ public:
         {
             const std::vector<CUSTOM_LAYER>* cLayerList = m_ClassCustomLayerLists.at( aLayerInfo.m_Class );
 
-            // if it is using the copper layer list, return that
-            if( cLayerList == m_ClassCustomLayerLists.at( LAYER_INFO::CLASS::ETCH ) )
+            // If it is using the copper layer list and the subclass is within the
+            // copper layer range, return the mapped copper layer. Non-ETCH classes
+            // can share the same layer list pointer, but their subclass values may
+            // exceed the copper layer count and must fall through to the custom
+            // layer mapping below.
+            if( cLayerList == m_ClassCustomLayerLists.at( LAYER_INFO::CLASS::ETCH )
+                && aLayerInfo.m_Subclass < cLayerList->size() )
             {
                 const PCB_LAYER_ID cuLayer = getNthCopperLayer( aLayerInfo.m_Subclass, cLayerList->size() );
                 // Remember this mapping

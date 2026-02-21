@@ -1784,7 +1784,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
+        if( IsValidLayer( item->GetLayer() ) && m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
             continue;
 
         // We want the bitmap bounding box just in the footprint editor
@@ -1915,7 +1915,7 @@ const BOX2I FOOTPRINT::GetLayerBoundingBox( const LSET& aLayers ) const
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
+        if( IsValidLayer( item->GetLayer() ) && m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
             continue;
 
         if( ( aLayers & item->GetLayerSet() ).none() )
@@ -2207,7 +2207,7 @@ PCB_LAYER_ID FOOTPRINT::GetSide() const
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( LSET::SideSpecificMask().test( item->GetLayer() ) )
+        if( IsValidLayer( item->GetLayer() ) && LSET::SideSpecificMask().test( item->GetLayer() ) )
             return GetLayer();
     }
 
