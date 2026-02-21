@@ -1919,12 +1919,25 @@ void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
             {
                 m_toolMgr->GetView()->Update( aChangedItem, KIGFX::REPAINT );
 
-                // Delete newly dangling lines:
-                // Find split segments (one segment is new, the other is changed) that
-                // we aren't dragging and don't have selected.
-                // Also catch drag wires (created with IS_NEW and SELECTED_BY_DRAG) that are dangling.
-                if( ( aChangedItem->HasFlag( IS_BROKEN ) || aChangedItem->HasFlag( IS_NEW ) )
-                    && aChangedItem->IsDangling() && !aChangedItem->IsSelected() )
+                if( aChangedItem->IsSelected() )
+                    return;
+
+                SCH_LINE* line = dynamic_cast<SCH_LINE*>( aChangedItem );
+
+                if( !line )
+                    return;
+
+                // Split segments that are dangling get trimmed back since they extend
+                // past the break point.
+                if( line->HasFlag( IS_BROKEN ) && line->IsDangling() )
+                {
+                    danglers.insert( aChangedItem );
+                }
+                // Drag wires that are completely disconnected (both ends dangling) are
+                // stubs that should be removed. Wires with only one connected end are
+                // still providing connectivity and must be preserved.
+                else if( line->HasFlag( IS_NEW ) && !line->HasFlag( IS_BROKEN )
+                         && line->IsStartDangling() && line->IsEndDangling() )
                 {
                     danglers.insert( aChangedItem );
                 }
