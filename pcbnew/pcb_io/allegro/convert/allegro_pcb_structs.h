@@ -475,6 +475,7 @@ struct LAYER_INFO
         PGEOM_ASSEMBLY_TOP           = 0xFD,
 
         // MANUFACTURING
+        MFR_XSECTION_CHART           = 0xF0,
         MFR_NO_PROBE_BOTTOM          = 0xF1,
         MFR_NO_PROBE_TOP             = 0xF2,
         MFR_AUTOSILK_BOTTOM          = 0xF3,

@@ -383,6 +383,7 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
     };
 
     static const std::unordered_map<uint8_t, wxString> s_ManufacturingSubclassNames = {
+        { LAYER_INFO::SUBCLASS::MFR_XSECTION_CHART,           wxS( "X-Section Chart" ) },
         { LAYER_INFO::SUBCLASS::MFR_NO_PROBE_BOTTOM,          wxS( "No Probe Bottom" ) },
         { LAYER_INFO::SUBCLASS::MFR_NO_PROBE_TOP,             wxS( "No Probe Top" ) },
         { LAYER_INFO::SUBCLASS::MFR_AUTOSILK_BOTTOM,          wxS( "AutoSilk Bottom" ) },
