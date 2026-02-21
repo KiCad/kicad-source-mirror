@@ -154,7 +154,7 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
                                              aFile,
                                              aLine );
 
-            DisplayErrorMessage( nullptr, "OpenGL Error", errorMsg );
+            DisplayErrorMessage( nullptr, "OpenGL Error", msg );
         }
     }
 
