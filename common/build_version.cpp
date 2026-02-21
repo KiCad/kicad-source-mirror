@@ -231,8 +231,9 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
         }
     }
 
-    aMsg << ", " << wxGetenv( "XDG_SESSION_DESKTOP" )
-         << ", " << wxGetenv( "XDG_SESSION_TYPE" );
+    aMsg << ", " << wxGetenv( "XDG_SESSION_TYPE" )
+         << ", " << wxGetenv( "XDG_CURRENT_DESKTOP" )
+         << ", " << wxGetenv( "XDG_SESSION_DESKTOP" );
 #endif
 
     wxString glMsg;
