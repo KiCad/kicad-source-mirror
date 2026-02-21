@@ -179,10 +179,26 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << "Version: " << version << eol << eol;
     aMsg << "Libraries:" << eol;
 
-    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString();
-#if wxUSE_GLCANVAS_EGL
-        aMsg << " (EGL)";
+    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << " ";
+
+#ifdef __WXGTK__
+    #if wxCHECK_VERSION( 3, 3, 2 )
+        #if wxHAS_EGL && wxHAS_GLX
+            aMsg << "EGL/GLX";
+        #elif wxHAS_EGL
+            aMsg << "EGL";
+        #elif wxHAS_GLX
+            aMsg << "GLX";
+        #endif
+    #else
+        #if wxUSE_GLCANVAS_EGL
+            aMsg << "EGL";
+        #else
+            aMsg << "GLX";
+        #endif
+    #endif
 #endif
+
     aMsg << eol;
 
     aMsg << indent4 << "FreeType " << KIFONT::VERSION_INFO::FreeType() << eol;
