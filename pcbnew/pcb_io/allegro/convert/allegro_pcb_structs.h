@@ -413,7 +413,8 @@ struct LAYER_INFO
     enum SUBCLASS
     {
         // BOARD_GEOMETRY
-        BGEOM_CONSTRAINT_AREA        = 0xEB,
+        BGEOM_OUTLINE                 = 0xEA,
+        BGEOM_CONSTRAINT_AREA         = 0xEB,
         BGEOM_OFF_GRID_AREA           = 0xEC,
         BGEOM_SOLDERMASK_BOTTOM       = 0xED,
         BGEOM_SOLDERMASK_TOP          = 0xEE,
@@ -431,7 +432,6 @@ struct LAYER_INFO
         BGEOM_TOOLING_CORNERS         = 0xFA,
         BGEOM_ASSEMBLY_NOTES          = 0xFB,
         BGEOM_PLATING_BAR             = 0xFC,
-        BGEOM_OUTLINE                 = 0xFD,
 
         // COMPONENT_VALUE / DEVICE_TYPE / USER_PART_NUMBER
         // REF_DES / TOLERANCE
