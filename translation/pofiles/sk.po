@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-20 12:09+0000\n"
+"PO-Revision-Date: 2026-02-22 21:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -4675,7 +4675,7 @@ msgstr "Nahradiť"
 
 #: common/dialogs/panel_embedded_files.cpp:355
 msgid "Reuse Existing"
-msgstr "Znovu použiť existujúci"
+msgstr "Znovu použiť existujúce"
 
 #: common/dialogs/panel_embedded_files.cpp:381
 #, c-format
@@ -6683,7 +6683,7 @@ msgstr "Označenie siete"
 #: common/eda_item.cpp:468 eeschema/sch_label.cpp:1388
 #: eeschema/sch_label.cpp:1915 eeschema/sch_label.h:470
 msgid "Directive Label"
-msgstr "Označenie smernice"
+msgstr "Označenie direktívy"
 
 #: common/eda_item.cpp:469 eeschema/sch_label.cpp:1389 eeschema/sch_label.h:553
 #: eeschema/tools/sch_edit_tool.cpp:269
@@ -9084,6 +9084,9 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"Výberom možnosti „Ponechať všetky súbory“ sa obnoví vybraný commit, ale "
+"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti „"
+"Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
 
 #: common/local_history.cpp:1744
 msgid "Cannot restore - the following files are open by another user:"
@@ -9684,7 +9687,7 @@ msgstr "Pridať knižnicu..."
 
 #: common/tool/actions.cpp:62
 msgid "Add an existing library folder"
-msgstr "Pridajte existujúci priečinok knižnice"
+msgstr "Pridať existujúci priečinok knižnice"
 
 #: common/tool/actions.cpp:70
 msgid "Open..."
@@ -12173,11 +12176,11 @@ msgstr "Radiť symboly podľa pozície &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:93
 msgid "Keep existing annotations"
-msgstr "Zachovať existujúce očíslovania"
+msgstr "Zachovať existujúce očíslovanie"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Reset existing annotations"
-msgstr "Obnoviť existujúce očíslovania"
+msgstr "Zrušiť existujúce očíslovanie"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
 msgid "Regroup symbol units"
@@ -13865,11 +13868,11 @@ msgstr "& Dĺžka špendlíka:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Global Label Properties"
-msgstr "Vlastnosti globálnej menovky"
+msgstr "Vlastnosti globálneho označenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:106
 msgid "Hierarchical Label Properties"
-msgstr "Vlastnosti hierarchickej menovky"
+msgstr "Vlastnosti hierarchického označenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:107
 #: eeschema/dialogs/dialog_label_properties_base.h:123
@@ -13877,9 +13880,8 @@ msgid "Label Properties"
 msgstr "Vlastnosti menovky"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:108
-#, fuzzy
 msgid "Directive Label Properties"
-msgstr "Vlastnosti hierarchickej menovky"
+msgstr "Vlastnosti označenia direktívy"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:109
 msgid "Hierarchical Sheet Pin Properties"
@@ -14318,14 +14320,12 @@ msgid "To Clipboard"
 msgstr "schránka"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:236
-#, fuzzy
 msgid "Replace all existing pins"
-msgstr "Vymeňte všetky zhody"
+msgstr "Nahradiť všetky existujúce vývody"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:239
-#, fuzzy
 msgid "Append to existing pins"
-msgstr "Pridať existující výkresový list"
+msgstr "Pridať k existujúcim vývodom"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
 #, fuzzy
@@ -17698,9 +17698,8 @@ msgid "Show hidden fields"
 msgstr "Zobraziť skryté polia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:116
-#, fuzzy
 msgid "Show directive labels"
-msgstr "Čistý štítok"
+msgstr "Zobraziť označenia direktív"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
 #, fuzzy
@@ -18102,9 +18101,8 @@ msgstr ""
 "zbernicou"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:70
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Globálny okraj štítkov:"
+msgstr "Pomer okrajov globálneho označenia:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:72
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
@@ -18582,6 +18580,9 @@ msgid ""
 "unique names differing only by white space characters.  Removing the white "
 "space characters will have no effect on existing symbol field names."
 msgstr ""
+"Môže to viesť k tomu, že sa zobrazia zdanlivo duplicitné názvy polí, ktoré "
+"sú však v skutočnosti jedinečné a líšia sa iba znakmi medzier.  Odstránenie "
+"znakov medzier nebude mať žiadny vplyv na existujúce názvy polí symbolu."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:225
 #, fuzzy
@@ -18716,7 +18717,7 @@ msgstr "Importovať nastavenia"
 
 #: eeschema/eeschema_jobs_handler.cpp:1152 pcbnew/pcbnew_jobs_handler.cpp:2031
 msgid "Output path must not conflict with existing path\n"
-msgstr ""
+msgstr "Výstupná cesta nesmie kolidovať s existujúcou cestou\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1160 pcbnew/pcbnew_jobs_handler.cpp:2038
 msgid ""
@@ -19099,7 +19100,7 @@ msgstr "Konfliktný problém medzi kolíkmi"
 
 #: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
-msgstr "Nesúlad medzi hierarchickými štítkami a čapmi listov"
+msgstr "Nesúlad medzi hierarchickými označeniami a vývodmi listov"
 
 #: eeschema/erc/erc_item.cpp:89
 msgid "Four connection points are joined together"
@@ -19533,9 +19534,8 @@ msgstr ""
 "\n"
 
 #: eeschema/files-io.cpp:1318
-#, fuzzy
 msgid "Saving will overwrite existing files."
-msgstr "Uloženie projektu do nového formátu súborov prepíše existujúce súbory."
+msgstr "Uloženie prepíše existujúce súbory."
 
 #: eeschema/files-io.cpp:1319
 #, fuzzy
@@ -20005,9 +20005,9 @@ msgid "Global label '%s' at (%s, %s)"
 msgstr "Globálna značka '%s'"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "Hierarchická značka '%s'"
+msgstr "Hierarchické označenie '%s' na (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
 #, fuzzy, c-format
@@ -20401,9 +20401,8 @@ msgid "Design block '%s' already has a schematic."
 msgstr "Symbol '%s' už v knižnici '%s' existuje"
 
 #: eeschema/sch_design_block_utils.cpp:67
-#, fuzzy
 msgid "Overwrite existing schematic?"
-msgstr "Prepísať existujúce prednastavenie?"
+msgstr "Prepísať existujúcu schému?"
 
 #: eeschema/sch_design_block_utils.cpp:82
 #: eeschema/sch_design_block_utils.cpp:259
@@ -21772,7 +21771,7 @@ msgstr "Analyzované třídy sítí"
 
 #: eeschema/sch_label.cpp:1561
 msgid "Hierarchical Labels"
-msgstr "Hierarchická označení"
+msgstr "Hierarchické označenia"
 
 #: eeschema/sch_label.cpp:1646
 #, c-format
@@ -21780,14 +21779,14 @@ msgid "Label '%s'"
 msgstr "Označení '%s'"
 
 #: eeschema/sch_label.cpp:1924
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Směrnice označení [%s %s]"
+msgstr "Označenie direktívy [%s (prázna)]"
 
 #: eeschema/sch_label.cpp:1928
 #, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Směrnice označení [%s %s]"
+msgstr "Označenie direktívy [%s %s]"
 
 #: eeschema/sch_label.cpp:2185
 #, c-format
@@ -21797,7 +21796,7 @@ msgstr "Globální označení '%s'"
 #: eeschema/sch_label.cpp:2331
 #, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Hierarchické označení '%s'"
+msgstr "Hierarchické označenie '%s'"
 
 #: eeschema/sch_label.cpp:2443
 #, fuzzy
@@ -22952,7 +22951,7 @@ msgid "Cannot create the schematic image"
 msgstr "Číslovanie schémy"
 
 #: eeschema/sheet.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
 "already defined in the schematic on systems that support case\n"
@@ -22962,14 +22961,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Názov súboru '%s' môže spôsobiť problémy s existujúcim názvom súboru\n"
-"už definované v schéme na systémoch, ktoré podporujú prípad\n"
-"necitlivé názvy súborov. Ak to skopírujete, spôsobí to problémy\n"
-"projekt do operačného systému, ktorý podporuje súbor nerozlišujúci veľké a "
-"malé písmená\n"
-"mien.\n"
+"Názov súboru „%s“ môže spôsobiť problémy s existujúcim názvom súboru,\n"
+"ktorý je už definovaný v schéme na systémoch, ktoré podporujú názvy \n"
+"súborov bez rozlišovania veľkých a malých písmen. Toto spôsobí problémy, \n"
+"ak skopírujete tento projekt do operačného systému, ktorý podporuje \n"
+"názvy súborov bez rozlišovania veľkých a malých písmen.\n"
 "\n"
-"Prajete si pokračovať?"
+"Chcete pokračovať?"
 
 #: eeschema/sheet.cpp:1019
 msgid "Do not show this message again."
@@ -25091,9 +25089,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr "Synchronizovať vývody listu a hierarchických označení"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
 #, fuzzy
@@ -25101,9 +25098,8 @@ msgid "Symbol name"
 msgstr "Názov symbolu:"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
-#, fuzzy
 msgid "Add Hierarchical Labels"
-msgstr "Pridajte hierarchický štítok"
+msgstr "Pridať hierarchické označenia"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
 #, fuzzy
@@ -25120,20 +25116,20 @@ msgid "Add Sheet Pins"
 msgstr "Pridajte špendlík"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
-#, fuzzy
 msgid "Delete Hierarchical Labels"
-msgstr "Odstrániť hierarchickú menovku"
+msgstr "Odstrániť hierarchické označenia"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr ""
+"Priradiť vybraný vývod listu a hierarchického označenia pomocou názvu "
+"označenia"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr ""
+"Priradiť vybraný vývod listu a hierarchického označenia pomocou názvu vývodu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -25196,7 +25192,7 @@ msgstr "Načítať súbor odkazov puzdra symbolu"
 
 #: eeschema/tools/assign_footprints.cpp:221
 msgid "Keep existing footprint field visibility"
-msgstr "Zachovať viditeľnosť existujúceho poľa stopy"
+msgstr "Zachovať existujúcu viditeľnosť polí puzdra"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Show all footprint fields"
@@ -25436,13 +25432,12 @@ msgid "Select/Expand Connection"
 msgstr "Vyberte / rozbaľte Pripojenie"
 
 #: eeschema/tools/sch_actions.cpp:112
-#, fuzzy
 msgid ""
 "Selects a connection or expands an existing selection to pins, symbols, or "
 "entire connections"
 msgstr ""
-"Vyberie pripojenie alebo rozšíri existujúci výber na križovatky, podložky "
-"alebo celé spojenia"
+"Vyberie pripojenie alebo rozšíri existujúci výber na vývody, symboly, alebo "
+"celé pripojenia"
 
 #: eeschema/tools/sch_actions.cpp:124 pcbnew/tools/pcb_actions.cpp:507
 #, fuzzy
@@ -25527,9 +25522,8 @@ msgid "New Symbol..."
 msgstr "Nový symbol..."
 
 #: eeschema/tools/sch_actions.cpp:191
-#, fuzzy
 msgid "Create a new symbol in an existing library"
-msgstr "Odvodiť od existujúceho symbolu:"
+msgstr "Vytvoriť nový symbol v existujúcej knižnici"
 
 #: eeschema/tools/sch_actions.cpp:197
 #, fuzzy
@@ -25537,9 +25531,8 @@ msgid "Derive from Existing Symbol..."
 msgstr "Odvodiť od existujúceho symbolu…"
 
 #: eeschema/tools/sch_actions.cpp:198
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Odvodiť od existujúceho symbolu:"
+msgstr "Vytvoriť nový symbol odvodený z existujúceho symbolu"
 
 #: eeschema/tools/sch_actions.cpp:204
 msgid "Edit Symbol"
@@ -25840,14 +25833,12 @@ msgid "Place Net Labels"
 msgstr "Menovka listu"
 
 #: eeschema/tools/sch_actions.cpp:549
-#, fuzzy
 msgid "Place Directive Labels"
-msgstr "Označenie smernice"
+msgstr "Umiestniť označenia direktív"
 
 #: eeschema/tools/sch_actions.cpp:559
-#, fuzzy
 msgid "Place Hierarchical Labels"
-msgstr "Hierarchická označení"
+msgstr "Umiestniť hierarchické označenia"
 
 #: eeschema/tools/sch_actions.cpp:569
 #, fuzzy
@@ -25879,11 +25870,10 @@ msgid "Place Pins from Sheet"
 msgstr "Umiestniť cez"
 
 #: eeschema/tools/sch_actions.cpp:597
-#, fuzzy
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Vývod listu %s nemá vo vnútri listu žiadne zodpovedajúce hierarchické "
-"označenie"
+"Pridať vývody listu z existujúcich hierarchických označení nachádzajúcich sa "
+"na danom liste"
 
 #: eeschema/tools/sch_actions.cpp:605
 #, fuzzy
@@ -25901,9 +25891,8 @@ msgid "Sync Selected Sheet Pins..."
 msgstr "Pinový hárok"
 
 #: eeschema/tools/sch_actions.cpp:612
-#, fuzzy
 msgid "Synchronize selected sheet pins and hierarchical labels"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr "Synchronizovať vybraný vývody listu a hierarchické označenia"
 
 #: eeschema/tools/sch_actions.cpp:619
 #, fuzzy
@@ -25911,9 +25900,8 @@ msgid "Sync All Sheet Pins..."
 msgstr "Pinový hárok"
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr "Synchronizovať všetky vývody listu a hierarchické označenia"
 
 #: eeschema/tools/sch_actions.cpp:627
 #, fuzzy
@@ -26144,25 +26132,23 @@ msgstr "Zmeniť na menovku"
 
 #: eeschema/tools/sch_actions.cpp:909
 msgid "Change existing item to a label"
-msgstr "Zmeňte existujúcu položku na štítok"
+msgstr "Zmeniť existujúcu položku na označenie"
 
 #: eeschema/tools/sch_actions.cpp:919
-#, fuzzy
 msgid "Change to Directive Label"
-msgstr "Zmeniť na hierarchickú menovku"
+msgstr "Zmeniť na označenie direktívy"
 
 #: eeschema/tools/sch_actions.cpp:920
-#, fuzzy
 msgid "Change existing item to a directive label"
-msgstr "Zmeňte existujúcu položku na štítok"
+msgstr "Zmeňte existujúcu položku na označenie direktívy"
 
 #: eeschema/tools/sch_actions.cpp:928
 msgid "Change to Hierarchical Label"
-msgstr "Zmeniť na hierarchickú menovku"
+msgstr "Zmeniť na hierarchické označenie"
 
 #: eeschema/tools/sch_actions.cpp:929
 msgid "Change existing item to a hierarchical label"
-msgstr "Zmeňte existujúcu položku na hierarchický štítok"
+msgstr "Zmeniť existujúcu položku na hierarchické označenie"
 
 #: eeschema/tools/sch_actions.cpp:937
 msgid "Change to Global Label"
@@ -26512,9 +26498,8 @@ msgid "Select corresponding items in PCB editor"
 msgstr "Zvýraznite zodpovedajúce položky v editore nástenky"
 
 #: eeschema/tools/sch_actions.cpp:1264
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "Čistý štítok"
+msgstr "Zobraziť označenia direktív"
 
 #: eeschema/tools/sch_actions.cpp:1270
 #, fuzzy
@@ -27141,7 +27126,7 @@ msgstr "Pridať text"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2189
 msgid "Add Hierarchical Label"
-msgstr "Pridajte hierarchický štítok"
+msgstr "Pridať hierarchické označenie"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2194
 #: eeschema/tools/sch_drawing_tools.cpp:2199
@@ -27157,7 +27142,7 @@ msgstr "Kliknite na hárok."
 #: eeschema/tools/sch_drawing_tools.cpp:2336
 #: eeschema/tools/sch_drawing_tools.cpp:3660
 msgid "No new hierarchical labels found."
-msgstr "Neboli nájdené nové hierarchické menovky."
+msgstr "Neboli nájdené nové hierarchické označenia."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2253
 #: eeschema/tools/sch_drawing_tools.cpp:3738
