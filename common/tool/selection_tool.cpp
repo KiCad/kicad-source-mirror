@@ -283,6 +283,28 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         int         limit = std::min( 100, aCollector->GetCount() );
         ACTION_MENU menu( true );
 
+        auto getItemDescription =
+                [&]( EDA_ITEM* item, int itemIdx )
+                {
+                    wxString desc = item->GetItemDescription( unitsProvider, false );
+
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        for( int i = 0; i < limit; ++i )
+                        {
+                            if( i == itemIdx )
+                                continue;
+
+                            EDA_ITEM* other = ( *aCollector )[i];
+
+                            if( other->GetItemDescription( unitsProvider, false ) == desc )
+                                return item->DisambiguateItemDescription( unitsProvider, false );
+                        }
+                    }
+
+                    return desc;
+                };
+
         for( int i = 0; i < limit; ++i )
         {
             EDA_ITEM* item = ( *aCollector )[i];
@@ -292,18 +314,18 @@ bool SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
             {
 #ifdef __WXMAC__
                 menuText = wxString::Format( "%s\t%d",
-                                             item->GetItemDescription( unitsProvider, false ),
+                                             getItemDescription( item, i ),
                                              i + 1 );
 #else
                 menuText = wxString::Format( "&%d  %s\t%d",
                                              i + 1,
-                                             item->GetItemDescription( unitsProvider, false ),
+                                             getItemDescription( item, i ),
                                              i + 1 );
 #endif
             }
             else
             {
-                menuText = item->GetItemDescription( unitsProvider, false );
+                menuText = getItemDescription( item, i );
             }
 
             menu.Add( menuText, i + 1, item->GetMenuImage() );

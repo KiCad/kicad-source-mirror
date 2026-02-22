@@ -1102,6 +1102,8 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
+    wxString DisambiguateItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
+
     BITMAPS GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
