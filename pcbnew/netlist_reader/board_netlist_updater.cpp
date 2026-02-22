@@ -1313,7 +1313,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
     {
         wxString                 name;
         const COMPONENT_VARIANT* variant;
-        LIB_ID                   activeFpid;
+        LIB_ID                   variantFPID;
     };
 
     std::vector<VARIANT_INFO> variantInfo;
@@ -1321,7 +1321,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
 
     for( const auto& [variantName, variant] : variants )
     {
-        LIB_ID activeFpid = aBaseFpid;
+        LIB_ID variantFPID = aBaseFpid;
 
         auto fieldIt = variant.m_fields.find( footprintFieldName );
 
@@ -1341,11 +1341,11 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             }
             else
             {
-                activeFpid = parsedId;
+                variantFPID = parsedId;
             }
         }
 
-        variantInfo.push_back( { variantName, &variant, activeFpid } );
+        variantInfo.push_back( { variantName, &variant, variantFPID } );
     }
 
     for( FOOTPRINT* footprint : aFootprints )
@@ -1371,13 +1371,13 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             const FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
 
             // Check if this footprint is the active one for this variant
-            bool isActiveFootprint = ( footprint->GetFPID() == info.activeFpid );
+            bool isAssociatedFootprint = ( footprint->GetFPID() == info.variantFPID );
 
             // If this footprint is not active for this variant, it should be DNP.
             // Otherwise, apply explicit overrides from schematic, or reset to base footprint value.
             bool targetDnp;
 
-            if( !isActiveFootprint )
+            if( !isAssociatedFootprint )
             {
                 targetDnp = true;
             }
