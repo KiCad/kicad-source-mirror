@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-17 01:10+0000\n"
+"PO-Revision-Date: 2026-02-22 21:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -7802,8 +7802,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
-"Nie można scalić: istnieją nieudostępnione zmiany. Proszę je zatwierdzić lub "
-"schować przed pobraniem nowej zawartości."
+"Nie można scalić: istnieją nieudostępnione zmiany. Należy je zatwierdzić lub "
+"schować przed pobraniem."
 
 #: common/git/libgit_backend.cpp:1106
 #, c-format
@@ -9243,7 +9243,7 @@ msgstr "%s, %s i %d więcej"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9251,9 +9251,9 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Niepoprawny ID footprintu w\n"
-"plik: %s\n"
+"plik: '%s'\n"
 "linia: %d\n"
-"przesunięcie: %d."
+"przesunięcie: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
@@ -14783,7 +14783,7 @@ msgstr "Edycja właściwości symbolu"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:730
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "Pin '%s' w grupie zworek %d nie istnieje w tym symbolu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
@@ -15506,6 +15506,8 @@ msgid ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
 msgstr ""
+"Folder, w którym zostaną zapisane pobrane dane symboli, footprintów i modeli "
+"3D."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:74
 msgid "Browse..."
@@ -15518,7 +15520,7 @@ msgstr "Prefiks nazwy skrótowej biblioteki:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Prefix that will be applied to the generated libraries."
-msgstr ""
+msgstr "Prefiks jaki zostanie dodany do wygenerowanych bibliotek."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
 msgid "Add libraries to:"
@@ -15542,7 +15544,7 @@ msgstr "Dodaje wygenerowane biblioteki do globalnych tabel bibliotek projektu."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:107
 msgid "Restore the default destination and prefix."
-msgstr ""
+msgstr "Przywraca domyślne wartości docelowe i prefix."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
 #, fuzzy
@@ -15562,11 +15564,14 @@ msgstr "Wybierz folder docelowy"
 msgid ""
 "Library names will be created with suffixes such as _symbols, _fp, and _3d."
 msgstr ""
+"Nazwy bibliotek będą tworzone z przyrostkami takimi jak _symbols, _fp oraz "
+"_3d."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:263
 #, c-format
 msgid "Will create libraries like %1$s_symbols, %1$s_fp, %1$s_3d, etc."
 msgstr ""
+"Tworzyć będzie biblioteki takie jak %1$s_symbols, %1$s_fp, %1$s_3d, itp."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:97
 msgid ""
@@ -16751,6 +16756,8 @@ msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
+"Pokazuje symbole oznaczone jako 'Nie umieszczaj' w tabeli.  To ustawienie "
+"kontroluje również czy symbole tak oznaczone pojawią się podczas eksportu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 #, fuzzy
@@ -16762,6 +16769,9 @@ msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
+"Pokazuje symbole oznaczone jako 'Nie umieszczaj w BOM' w tabeli.  To "
+"ustawienie kontroluje również czy symbole tak oznaczone pojawią się podczas "
+"eksportu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:971
 #, fuzzy
@@ -16891,7 +16901,7 @@ msgstr "'%s' już istnieje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2857
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Nie można skopiować domyślnego wariantu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2864
 msgid "Enter name for the copied variant:"
@@ -17079,6 +17089,9 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"Jest to przydatne przy dodawania symboli, które nie powinny być uwzględniane "
+"w \n"
+"eksportowanych plikach położeń używanych w maszynach typu pick and place"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2371
@@ -17431,13 +17444,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "Preferuj zmiany elementów składowych przed zmianą etykiet"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:85
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
+"Jeśli to możliwe, wykrywa zamiany footprintu bramek i stosuje odpowiadające "
+"im zamiany w częściach składowych symbolu zamiast zmieniać etykiety sieci."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:89
 msgid "Other fields"
@@ -17449,13 +17464,15 @@ msgstr "Zaktualizuj wszystkie pozostałe pola w symbolu z footprintu"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:95
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr ""
+msgstr "Preferuj zamiany pinów w symbolu przed zamianą etykiet"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:97
 msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
 msgstr ""
+"Jeśli to możliwe, zamień piny symboli, aby odpowiadały zamianom sieci pól "
+"footprintów; zamiast zmieniać etykiety sieci."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1015
@@ -17629,7 +17646,7 @@ msgstr "Wyróżniaj miganiem sondowane zaznaczenie"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:192
 msgid "Temporarily flash the newly cross-probed selection 3 times"
-msgstr ""
+msgstr "Tymczasowo migaj 3-krotnie dla nowo sondowanego wyboru"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -17800,13 +17817,15 @@ msgstr "Automatyczne numerowanie symboli"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid "Allow unconstrained pin swaps"
-msgstr ""
+msgstr "Dopuszczaj nieograniczone zamiany pinów"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
 msgstr ""
+"Umożliwia zamianę pozycji pinów w symbolach. Może powodować nieprawidłowe "
+"zmiany w projekcie; należy zachować ostrożność."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:85
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -21315,9 +21334,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Nieprawidłowy URL linku '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "Nie można przetworzyć %s jako symbolu"
+msgstr "Nie można przetworzyć '%s' jako nagłówka."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -27394,9 +27413,8 @@ msgstr "Plik biblioteki symboli '%s' jest pusty."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:231
 #: eeschema/widgets/panel_remote_symbol.cpp:241
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Nie można utworzyć pliku tymczasowego '%s'.</b>"
+msgstr "Nie można utworzyć pliku tymczasowego dla przeładowania symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:248
 #, fuzzy
@@ -27471,9 +27489,8 @@ msgid "Command '%s' is not supported."
 msgstr "%s nie jest obsługiwany."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:948
-#, fuzzy
 msgid "Unable to store payload."
-msgstr "Nie można otworzyć pliku"
+msgstr "Nie można zachować ładunku."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:964
 #: eeschema/widgets/panel_remote_symbol.cpp:1232
@@ -27512,9 +27529,8 @@ msgid "Failed to save the symbol library table."
 msgstr "Nie można było zapisać pliku biblioteki symboli '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1066
-#, fuzzy
 msgid "Unable to access the footprint library table."
-msgstr "Nie można utworzyć ramki przeglądarki footprintów"
+msgstr "Nie można uzyskać dostępu do tabeli bibliotek footprintów."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1085
 #, fuzzy
@@ -27527,9 +27543,8 @@ msgid "Failed to save the footprint library table."
 msgstr "Nie można było zapisać pliku biblioteki footprintów '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1145
-#, fuzzy
 msgid "No schematic editor is available for placement."
-msgstr "Użyj motywu kolorów edytora schematów"
+msgstr "Nie ma dostępnego edytora schematu by umieścić."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1152
 msgid "Downloaded symbol metadata is incomplete."
@@ -27554,14 +27569,12 @@ msgid "Unsupported transfer mode '%s'."
 msgstr "Niewspierany plik schematu '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1218
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[nie załadowano symbolu]"
+msgstr "Niewspierany typ przeładowania symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1224
-#, fuzzy
 msgid "No schematic editor is available to store symbols."
-msgstr "Brak dostępnego repozytorium do skonfigurowania go zdalnie"
+msgstr "Brak dostępnego edytora schematów by zachować symbole."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1277
 #, fuzzy
@@ -27573,9 +27586,8 @@ msgid "Unable to parse the downloaded symbol."
 msgstr "Nie można przeanalizować pobranego symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1301
-#, fuzzy
 msgid "Unable to save the downloaded symbol."
-msgstr "Wybierz folder gdzie skopiować pobrane bibloteki"
+msgstr "Nie można zapisać pobranego symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1349
 #, fuzzy
@@ -29079,14 +29091,12 @@ msgid "Delete Column"
 msgstr "Usuń kolumnę"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "Nie wybrano sieci."
+msgstr "Nie wybrano komórek"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "W wybranych elementach istnieje %zu zablokowanych elementów."
+msgstr "W wybranych elementach istnieją elementy nie będące komórkami"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
@@ -30428,9 +30438,8 @@ msgid "Duplicate Template"
 msgstr "Powiel parametry"
 
 #: kicad/dialogs/dialog_template_selector.cpp:338
-#, fuzzy
 msgid "Could not open template directory."
-msgstr "Nie można otworzyć folderu źródłowego: '%s'"
+msgstr "Nie można otworzyć folderu tymczasowego."
 
 #: kicad/dialogs/dialog_template_selector.cpp:347
 #, fuzzy
@@ -30458,9 +30467,8 @@ msgid "Template name cannot be empty."
 msgstr "Nazwa sieci nie może być pusta."
 
 #: kicad/dialogs/dialog_template_selector.cpp:402
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można odnaleźć folderu szablonów użytkownika."
 
 #: kicad/dialogs/dialog_template_selector.cpp:413
 #, fuzzy, c-format
@@ -30468,14 +30476,13 @@ msgid "Directory '%s' already exists."
 msgstr "Folder wyjściowy '%s' już istnieje."
 
 #: kicad/dialogs/dialog_template_selector.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można utworzyć folderu '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:430
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Nie można otworzyć folderu źródłowego: '%s'"
+msgstr "Nie można otworzyć folderu źródłowego szablonów."
 
 #: kicad/dialogs/dialog_template_selector.cpp:492
 #, c-format
@@ -30738,9 +30745,8 @@ msgid "Pre-configured Libraries"
 msgstr "Migracja bibliotek"
 
 #: kicad/dialogs/template_default_html.h:244
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "- Wspólne komponenty i footprinty aktualnie połączone"
+msgstr "Wspólne komponenty i footprinty aktualnie połączone i gotowe do użycia."
 
 #: kicad/dialogs/template_default_html.h:250
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
@@ -30790,9 +30796,9 @@ msgid "Create the project"
 msgstr "Utwórz nowy projekt"
 
 #: kicad/dialogs/template_default_html.h:411
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
-msgstr "Stwórz nowy projekt dla tego schematu"
+msgstr ""
+"Kliknij OK, aby utworzyć nowy folder projektu z zawartością tego szablonu."
 
 #: kicad/dialogs/template_default_html.h:417
 #, fuzzy
@@ -30800,9 +30806,8 @@ msgid "Open schematic and PCB"
 msgstr "Otwórz schemat"
 
 #: kicad/dialogs/template_default_html.h:418
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
-msgstr "Wyświetla nadrzędny arkusz w oknie edytora schematów"
+msgstr "Użyj Menedżera projektu, by uruchomić edytory schematów i płytek PCB."
 
 #: kicad/dialogs/template_default_html.h:424
 #, fuzzy
@@ -30818,9 +30823,8 @@ msgid "Add a description by creating"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:433
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "wewnątrz tego folderu szablonów."
 
 #: kicad/dialogs/template_default_html.h:541
 #, fuzzy
@@ -30842,9 +30846,8 @@ msgid "Browse to a different directory using the folder icon"
 msgstr "Przeglądaj w poszukiwaniu innego folderu używając ikony folderu"
 
 #: kicad/dialogs/template_default_html.h:549
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
-msgstr "Usuń wszystkie pliki kontroli wersji z katalogu projektu."
+msgstr "Użyj ikony odświeżania, aby ponownie załadować bieżący folder"
 
 #: kicad/dialogs/template_default_html.h:550
 #, fuzzy
@@ -30900,9 +30903,9 @@ msgid "Locate gEDA / Lepton EDA PCB"
 msgstr ""
 
 #: kicad/import_project.cpp:73
-#, fuzzy
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
-msgstr "Plik nie wydaje się być plikiem biblioteki programu CADSTAR"
+msgstr ""
+"Wybrany plik najprawdopodobniej nie jest schematem PADS ASCII ani płytką PCB."
 
 #: kicad/import_project.cpp:91
 msgid "KiCad Project Destination"
@@ -36183,9 +36186,8 @@ msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
 msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:350
-#, fuzzy
 msgid "No compatible component found in the target area."
-msgstr "Nie odnaleziono schematu podrzędnego w bieżącym projekcie"
+msgstr "Nie znaleziono zgodnego komponentu w obszarze docelowym."
 
 #: pcbnew/connectivity/topo_match.cpp:593
 msgid "One or both of the areas has no components assigned."
