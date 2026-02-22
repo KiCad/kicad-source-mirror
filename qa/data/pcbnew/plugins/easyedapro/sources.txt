@@ -19,3 +19,13 @@ License: CERN Open Hardware Licence Version 2 - Strongly Reciprocal
 Links:
 https://oshwhub.com/gloomyghost/yuzukih616
 https://github.com/YuzukiHD/YuzukiChameleon
+---------------------------------------------------------------------
+
+
+Project: LS2K0300Core (EasyEDA Pro v3 sample)
+
+Files:
+ProProject_LS2K0300Core_2025-11-14.epro2
+
+License: Provided by contributor for QA import compatibility testing
+Link: Internal test sample provided with the EasyEDA Pro v3 importer contribution

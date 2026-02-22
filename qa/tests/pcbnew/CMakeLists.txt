@@ -237,6 +237,7 @@ set( QA_PCBNEW_SRCS
     pcb_io/kicad_sexpr/test_kicad_sexpr.cpp
 
     pcb_io/easyedapro/test_easyedapro_import.cpp
+    pcb_io/easyedapro/test_easyedapro_v3_import.cpp
 
     pcb_io/diptrace/test_diptrace_import.cpp
     pcb_io/diptrace/test_diptrace_cross_link.cpp

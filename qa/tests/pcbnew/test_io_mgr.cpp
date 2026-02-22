@@ -149,6 +149,11 @@ static const std::vector<PCB_IO_PLUGIN_CASE> BoardPluginCases = {
         PCB_IO_MGR::EASYEDAPRO
     },
     {
+        "Basic EasyEDA Pro v3 epro2 project",
+        "plugins/easyedapro/ProProject_LS2K0300Core_2025-11-14.epro2",
+        PCB_IO_MGR::EASYEDAPRO_V3
+    },
+    {
         "Basic Altium Designer board file",
         "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc",
         PCB_IO_MGR::ALTIUM_DESIGNER
