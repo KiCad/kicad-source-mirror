@@ -1555,6 +1555,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case SCH_IO_MGR::SCH_LTSPICE:
     case SCH_IO_MGR::SCH_EASYEDA:
     case SCH_IO_MGR::SCH_EASYEDAPRO:
+    case SCH_IO_MGR::SCH_EASYEDAPRO_V3:
     case SCH_IO_MGR::SCH_PADS:
     case SCH_IO_MGR::SCH_GEDA:
     case SCH_IO_MGR::SCH_DIPTRACE:
