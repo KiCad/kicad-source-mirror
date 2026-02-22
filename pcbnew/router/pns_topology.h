@@ -45,7 +45,7 @@ public:
     struct CLUSTER
     {
         const ITEM* m_key = nullptr;
-        std::set<ITEM*> m_items;
+        std::vector<ITEM*> m_items;
     };
 
     typedef std::set<const JOINT*> JOINT_SET;

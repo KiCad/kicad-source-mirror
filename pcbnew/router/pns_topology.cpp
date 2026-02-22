@@ -853,6 +853,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
 
     BOX2I clusterBBox = aStart->Shape( aLayer )->BBox();
     int64_t initialArea = clusterBBox.GetArea();
+    std::unordered_set<ITEM*> processed;
 
     while( !pending.empty() )
     {
@@ -861,7 +862,12 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
 
         pending.pop_front();
 
-        cluster.m_items.insert( top );
+        if( processed.find( top ) == processed.end() )
+        {
+            cluster.m_items.push_back( top );
+        }
+
+        processed.insert( top );
 
         m_world->QueryColliding( top, obstacles, opts ); // only query touching objects
 
@@ -891,10 +897,11 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
             if( aAreaExpansionLimit > 0.0 && areaRatio > aAreaExpansionLimit )
                 break;
 
-            if( cluster.m_items.find( obs.m_item ) == cluster.m_items.end() &&
+            if( processed.find( obs.m_item ) == processed.end() &&
                 obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {
-                cluster.m_items.insert( obs.m_item );
+                processed.insert( obs.m_item );
+                cluster.m_items.push_back( obs.m_item );
                 pending.push_back( obs.m_item );
             }
         }
