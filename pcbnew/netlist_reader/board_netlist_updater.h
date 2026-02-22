@@ -114,7 +114,7 @@ private:
     FOOTPRINT* replaceFootprint( NETLIST& aNetlist, FOOTPRINT* aFootprint,
                                  COMPONENT* aNewComponent );
 
-    bool updateFootprintParameters( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
+    bool updateFootprintParameters( FOOTPRINT* aFootprint, COMPONENT* aNetlistComponent );
 
     bool updateFootprintGroup( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
 
