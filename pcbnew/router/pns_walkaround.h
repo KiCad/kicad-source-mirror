@@ -158,7 +158,7 @@ private:
     bool m_enabledPolicies[ MaxWalkPolicies ];
     NODE::OPT_OBSTACLE m_currentObstacle[ MaxWalkPolicies ];
     TOPOLOGY::CLUSTER m_currentCluster[ MaxWalkPolicies ];
-    std::optional<TOPOLOGY::CLUSTER> m_lastShortestCluster;
+    std::set<ITEM*> m_processedItems;
     RESULT m_currentResult;
     double m_initialLength;
 };
