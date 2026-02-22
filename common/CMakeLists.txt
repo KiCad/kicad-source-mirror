@@ -747,6 +747,7 @@ set( COMMON_IO_SRCS
     # EasyEDA pro
     io/easyedapro/easyedapro_parser.cpp
     io/easyedapro/easyedapro_import_utils.cpp
+    io/easyedapro/easyedapro_v3_parser.cpp
 
     # DipTrace
     io/diptrace/diptrace_binary_reader.cpp

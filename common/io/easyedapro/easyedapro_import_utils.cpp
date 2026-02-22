@@ -20,9 +20,11 @@
 
 #include "easyedapro_import_utils.h"
 #include "easyedapro_parser.h"
+#include "easyedapro_v3_parser.h"
 
 #include <io/common/plugin_common_choose_project.h>
 
+#include <algorithm>
 #include <ki_exception.h>
 #include <string_utils.h>
 #include <json_common.h>
@@ -34,6 +36,77 @@
 #include <wx/wfstream.h>
 #include <wx/mstream.h>
 #include <wx/txtstrm.h>
+
+
+namespace
+{
+
+static std::string ToStdString( const wxString& aStr )
+{
+    return std::string( aStr.ToUTF8() );
+}
+
+
+static nlohmann::json EmptyV3ProjectIndex()
+{
+    nlohmann::json project = nlohmann::json::object();
+    project["schematics"] = nlohmann::json::object();
+    project["boards"] = nlohmann::json::object();
+    project["pcbs"] = nlohmann::json::object();
+    project["symbols"] = nlohmann::json::object();
+    project["footprints"] = nlohmann::json::object();
+    project["devices"] = nlohmann::json::object();
+
+    return project;
+}
+
+
+static const nlohmann::json* FindMetaRow( const EASYEDAPRO::V3_DOC_RAW& aDoc )
+{
+    for( const EASYEDAPRO::V3_ROW& row : aDoc.rows )
+    {
+        if( row.type == wxS( "META" ) )
+            return &row.inner;
+    }
+
+    return nullptr;
+}
+
+
+static wxString MetaGetString( const EASYEDAPRO::V3_DOC_RAW& aDoc, const char* aKey,
+                               const wxString& aDefault = wxEmptyString )
+{
+    if( const nlohmann::json* meta = FindMetaRow( aDoc ) )
+        return EASYEDAPRO::V3GetString( *meta, aKey, aDefault );
+
+    return aDefault;
+}
+
+
+static int MetaGetInt( const EASYEDAPRO::V3_DOC_RAW& aDoc, const char* aKey, int aDefault = 0 )
+{
+    if( const nlohmann::json* meta = FindMetaRow( aDoc ) )
+        return EASYEDAPRO::V3GetInt( *meta, aKey, aDefault );
+
+    return aDefault;
+}
+
+
+static nlohmann::json MetaGetValue( const EASYEDAPRO::V3_DOC_RAW& aDoc, const char* aKey,
+                                    const nlohmann::json& aDefault )
+{
+    if( const nlohmann::json* meta = FindMetaRow( aDoc ) )
+    {
+        auto it = meta->find( aKey );
+
+        if( it != meta->end() )
+            return *it;
+    }
+
+    return aDefault;
+}
+
+} // namespace
 
 
 wxString EASYEDAPRO::ShortenLibName( wxString aProjectName )
@@ -329,4 +402,201 @@ EASYEDAPRO::AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput 
     }
 
     return stringMap;
+}
+
+
+nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser,
+                                                           bool                 aIncludeLibraryMetadata )
+{
+    nlohmann::json project = EmptyV3ProjectIndex();
+
+    struct SHEET_INFO
+    {
+        wxString uuid;
+        wxString name;
+        int      zIndex = 0;
+        int      order = 0;
+    };
+
+    std::map<wxString, std::vector<SHEET_INFO>> sheetsBySch;
+    int                                          pageOrder = 0;
+
+    for( const auto& [uuid, pageDoc] : aParser.GetRawDocs( wxS( "SCH_PAGE" ) ) )
+    {
+        wxString schematic = MetaGetString( pageDoc, "schematic" );
+
+        if( schematic.empty() )
+            schematic = V3GetString( pageDoc.head, "schematic" );
+
+        if( schematic.empty() )
+            continue;
+
+        SHEET_INFO info;
+        info.uuid = uuid;
+        info.name = MetaGetString( pageDoc, "title", uuid );
+        info.zIndex = MetaGetInt( pageDoc, "zIndex", 0 );
+        info.order = pageOrder++;
+
+        sheetsBySch[schematic].push_back( std::move( info ) );
+    }
+
+    std::map<wxString, wxString> schematicsByBoard;
+
+    for( const auto& [uuid, schDoc] : aParser.GetRawDocs( wxS( "SCH" ) ) )
+    {
+        nlohmann::json sch = nlohmann::json::object();
+        sch["name"] = ToStdString( MetaGetString( schDoc, "title", uuid ) );
+        sch["sheets"] = nlohmann::json::array();
+
+        auto pagesIt = sheetsBySch.find( uuid );
+
+        if( pagesIt != sheetsBySch.end() )
+        {
+            auto& pages = pagesIt->second;
+
+            std::sort( pages.begin(), pages.end(),
+                       []( const SHEET_INFO& aLeft, const SHEET_INFO& aRight )
+                       {
+                           if( aLeft.zIndex != aRight.zIndex )
+                               return aLeft.zIndex < aRight.zIndex;
+
+                           return aLeft.order < aRight.order;
+                       } );
+
+            int sheetId = 1;
+
+            for( const SHEET_INFO& page : pages )
+            {
+                sch["sheets"].push_back( nlohmann::json::object( {
+                        { "id", sheetId++ },
+                        { "name", ToStdString( page.name ) },
+                        { "uuid", ToStdString( page.uuid ) }
+                } ) );
+            }
+        }
+
+        project["schematics"][ToStdString( uuid )] = std::move( sch );
+
+        wxString board = MetaGetString( schDoc, "board" );
+
+        if( !board.empty() )
+            schematicsByBoard[board] = uuid;
+    }
+
+    std::map<wxString, wxString> boardTitles;
+
+    for( const auto& [uuid, boardDoc] : aParser.GetRawDocs( wxS( "BOARD" ) ) )
+        boardTitles[uuid] = MetaGetString( boardDoc, "title", uuid );
+
+    std::map<wxString, wxString> pcbsByBoard;
+
+    for( const auto& [uuid, pcbDoc] : aParser.GetRawDocs( wxS( "PCB" ) ) )
+    {
+        nlohmann::json pcb = nlohmann::json::object();
+        pcb["title"] = ToStdString( MetaGetString( pcbDoc, "title", uuid ) );
+
+        project["pcbs"][ToStdString( uuid )] = std::move( pcb );
+
+        wxString board = MetaGetString( pcbDoc, "board" );
+
+        if( !board.empty() )
+            pcbsByBoard[board] = uuid;
+    }
+
+    std::set<wxString> allBoardRefs;
+
+    for( const auto& [boardRef, schUuid] : schematicsByBoard )
+        allBoardRefs.insert( boardRef );
+
+    for( const auto& [boardRef, pcbUuid] : pcbsByBoard )
+        allBoardRefs.insert( boardRef );
+
+    for( const wxString& boardRef : allBoardRefs )
+    {
+        wxString boardName = boardRef;
+
+        if( auto it = boardTitles.find( boardRef ); it != boardTitles.end() )
+            boardName = it->second;
+
+        if( boardName.empty() )
+            boardName = boardRef;
+
+        nlohmann::json board = nlohmann::json::object();
+        auto           schIt = schematicsByBoard.find( boardRef );
+        auto           pcbIt = pcbsByBoard.find( boardRef );
+
+        board["schematic"] = schIt != schematicsByBoard.end() ? ToStdString( schIt->second ) : "";
+        board["pcb"] = pcbIt != pcbsByBoard.end() ? ToStdString( pcbIt->second ) : "";
+
+        project["boards"][ToStdString( boardName )] = std::move( board );
+    }
+
+    if( project["boards"].empty() && project["pcbs"].is_object() && project["pcbs"].size() == 1
+        && project["schematics"].is_object() && project["schematics"].size() == 1 )
+    {
+        auto pcbIt = project["pcbs"].begin();
+        auto schIt = project["schematics"].begin();
+
+        wxString pcbId = wxString::FromUTF8( pcbIt.key() );
+        wxString schId = wxString::FromUTF8( schIt.key() );
+        wxString boardName = wxString::FromUTF8( pcbIt.value().value( "title", pcbIt.key() ) );
+
+        if( boardName.empty() )
+            boardName = schId;
+
+        nlohmann::json board = nlohmann::json::object();
+        board["schematic"] = ToStdString( schId );
+        board["pcb"] = ToStdString( pcbId );
+
+        project["boards"][ToStdString( boardName )] = std::move( board );
+    }
+
+    if( !aIncludeLibraryMetadata )
+        return project;
+
+    for( const auto& [uuid, symDoc] : aParser.GetRawDocs( wxS( "SYMBOL" ) ) )
+    {
+        nlohmann::json sym = nlohmann::json::object();
+        sym["source"] = ToStdString( MetaGetString( symDoc, "source" ) );
+        sym["description"] = ToStdString( MetaGetString( symDoc, "description" ) );
+        sym["title"] = ToStdString( MetaGetString( symDoc, "title", uuid ) );
+        sym["display_title"] = sym["title"];
+        sym["version"] = "3";
+        sym["type"] = MetaGetInt( symDoc, "docType", static_cast<int>( SYMBOL_TYPE::NORMAL ) );
+        sym["tags"] = nlohmann::json::object();
+        sym["custom_tags"] = nlohmann::json::object();
+
+        project["symbols"][ToStdString( uuid )] = std::move( sym );
+    }
+
+    for( const auto& [uuid, fpDoc] : aParser.GetRawDocs( wxS( "FOOTPRINT" ) ) )
+    {
+        nlohmann::json fp = nlohmann::json::object();
+        fp["source"] = ToStdString( MetaGetString( fpDoc, "source" ) );
+        fp["description"] = ToStdString( MetaGetString( fpDoc, "description" ) );
+        fp["title"] = ToStdString( MetaGetString( fpDoc, "title", uuid ) );
+        fp["display_title"] = fp["title"];
+        fp["version"] = "3";
+        fp["type"] = static_cast<int>( FOOTPRINT_TYPE::NORMAL );
+        fp["tags"] = nlohmann::json::object();
+        fp["custom_tags"] = nlohmann::json::object();
+
+        project["footprints"][ToStdString( uuid )] = std::move( fp );
+    }
+
+    for( const auto& [uuid, deviceDoc] : aParser.GetRawDocs( wxS( "DEVICE" ) ) )
+    {
+        nlohmann::json dev = nlohmann::json::object();
+        dev["source"] = ToStdString( MetaGetString( deviceDoc, "source" ) );
+        dev["description"] = ToStdString( MetaGetString( deviceDoc, "description" ) );
+        dev["title"] = ToStdString( MetaGetString( deviceDoc, "title", uuid ) );
+        dev["version"] = "3";
+        dev["tags"] = nlohmann::json::object();
+        dev["custom_tags"] = nlohmann::json::object();
+        dev["attributes"] = MetaGetValue( deviceDoc, "attributes", nlohmann::json::object() );
+
+        project["devices"][ToStdString( uuid )] = std::move( dev );
+    }
+
+    return project;
 }

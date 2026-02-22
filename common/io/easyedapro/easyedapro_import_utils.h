@@ -35,6 +35,8 @@ struct IMPORT_PROJECT_DESC;
 namespace EASYEDAPRO
 {
 
+class V3_DOC_PARSER;
+
 wxString ShortenLibName( wxString aProjectName );
 
 LIB_ID ToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
@@ -61,6 +63,16 @@ std::vector<std::vector<nlohmann::json>> ParseJsonLinesWithSeparation( wxInputSt
                                                                        const wxString& aSource );
 
 std::map<wxString, wxString> AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput );
+
+/**
+ * Build a minimal legacy-style project index from parsed v3 raw documents.
+ *
+ * The result is compatible with ProjectToSelectorDialog and legacy metadata readers, and
+ * contains at least schematics / boards / pcbs. When @a aIncludeLibraryMetadata is true,
+ * symbols / footprints / devices maps are also populated from their META rows.
+ */
+nlohmann::json BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser,
+                                               bool                 aIncludeLibraryMetadata = true );
 
 } // namespace EASYEDAPRO
 
