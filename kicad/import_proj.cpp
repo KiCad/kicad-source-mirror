@@ -46,6 +46,7 @@
 
 #include <io/easyedapro/easyedapro_import_utils.h>
 #include <io/easyedapro/easyedapro_parser.h>
+#include <io/easyedapro/easyedapro_v3_parser.h>
 #include <io/common/plugin_common_choose_project.h>
 #include <io/pads/pads_common.h>
 #include <dialogs/dialog_import_choose_project.h>
@@ -174,36 +175,60 @@ void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, in
 }
 
 
-void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
+void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler( int aImportedSchFileType, int aImportedPcbFileType )
 {
-    wxFileName fname = m_InputFile;
+    const bool isV3 = aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3
+                      || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3;
 
-    if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
+    nlohmann::json project;
+
+    if( isV3 )
     {
-        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( fname.GetFullPath() );
+        // For v3, build a minimal legacy-format project from raw documents
+        EASYEDAPRO::V3_DOC_PARSER adapter( m_InputFile.GetFullPath() );
+        adapter.Load();
+        project = EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( adapter, false );
+    }
+    else
+    {
+        project = EASYEDAPRO::ReadProjectOrDeviceFile( m_InputFile.GetFullPath() );
+    }
 
-        std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
-        std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );
-        std::map<wxString, wxString>                  prjPcbNames = project.at( "pcbs" );
+    std::vector<IMPORT_PROJECT_DESC> toImport =
+            EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
 
-        std::vector<IMPORT_PROJECT_DESC> toImport =
-                EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
+    if( toImport.size() > 1 )
+        toImport = DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( m_frame, toImport );
 
-        if( toImport.size() > 1 )
-            toImport = DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( m_frame, toImport );
+    if( toImport.size() == 1 )
+    {
+        const IMPORT_PROJECT_DESC& desc = toImport[0];
+        wxString                   pcbId = desc.PCBId;
+        wxString                   schId = desc.SchematicId;
 
-        if( toImport.size() == 1 )
+        if( pcbId.empty() && project.contains( "pcbs" ) && project.at( "pcbs" ).is_object()
+            && project.at( "pcbs" ).size() == 1 )
         {
-            const IMPORT_PROJECT_DESC& desc = toImport[0];
+            pcbId = wxString::FromUTF8( project.at( "pcbs" ).begin().key() );
+        }
 
-            m_properties["pcb_id"] = desc.PCBId;
-            m_properties["sch_id"] = desc.SchematicId;
-        }
-        else
+        if( schId.empty() && project.contains( "schematics" )
+            && project.at( "schematics" ).is_object()
+            && project.at( "schematics" ).size() == 1 )
         {
-            m_properties["pcb_id"] = "";
-            m_properties["sch_id"] = "";
+            schId = wxString::FromUTF8( project.at( "schematics" ).begin().key() );
         }
+
+        if( !pcbId.empty() )
+            m_properties["pcb_id"] = pcbId;
+
+        if( !schId.empty() )
+            m_properties["sch_id"] = schId;
+    }
+    else
+    {
+        m_properties["pcb_id"] = "";
+        m_properties["sch_id"] = "";
     }
 }
 
@@ -643,13 +668,25 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
     // both imports must agree on the cache nickname up front
     setImportCacheNickname();
 
-    if( aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
-        || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO )
+    int importedSchFileType = aImportedSchFileType;
+    int importedPcbFileType = aImportedPcbFileType;
+
+    if( importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
+        || importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3
+        || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO
+        || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3 )
     {
-        EasyEDAProProjectHandler();
+        bool isV3 = EASYEDAPRO::V3_DOC_PARSER::IsV3Archive( m_InputFile.GetFullPath() );
+
+        importedSchFileType = isV3 ? SCH_IO_MGR::SCH_EASYEDAPRO_V3
+                                   : SCH_IO_MGR::SCH_EASYEDAPRO;
+        importedPcbFileType = isV3 ? PCB_IO_MGR::EASYEDAPRO_V3
+                                   : PCB_IO_MGR::EASYEDAPRO;
+
+        EasyEDAProProjectHandler( importedSchFileType, importedPcbFileType );
     }
-    else if( aImportedSchFileType == SCH_IO_MGR::SCH_ALTIUM
-             || aImportedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
+    else if( importedSchFileType == SCH_IO_MGR::SCH_ALTIUM
+             || importedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
     {
         AltiumProjectHandler();
         return;
@@ -706,6 +743,6 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
         return;
     }
 
-    ImportIndividualFile( SCHEMATIC_T, aImportedSchFileType );
-    ImportIndividualFile( PCB_T, aImportedPcbFileType );
+    ImportIndividualFile( SCHEMATIC_T, importedSchFileType );
+    ImportIndividualFile( PCB_T, importedPcbFileType );
 }
