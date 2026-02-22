@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-20 12:09+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-22 21:09+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -46726,7 +46726,7 @@ msgstr "%s Wärmefallen-Stegbreite: %s."
 #: pcbnew/drc/drc_engine.cpp:2076
 #, c-format
 msgid "Checking rule assertion '%s'."
-msgstr "Regelzusicherung ‚%s‘ wird überprüft."
+msgstr "Regelzusicherung \"%s\" wird überprüft."
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2101
 msgid "Electrical"
