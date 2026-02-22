@@ -79,7 +79,7 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_EAGLE:           return new SCH_IO_EAGLE();
     case SCH_EASYEDA:         return new SCH_IO_EASYEDA();
     case SCH_EASYEDAPRO:      return new SCH_IO_EASYEDAPRO();
-    case SCH_EASYEDAPRO_V3:   return new SCH_IO_EASYEDAPRO_V3();
+    case SCH_EASYEDAPRO_V3: return new SCH_IO_EASYEDAPRO_V3();
     case SCH_GEDA:            return new SCH_IO_GEDA();
     case SCH_LTSPICE:         return new SCH_IO_LTSPICE();
     case SCH_HTTP:            return new SCH_IO_HTTP_LIB();
@@ -107,7 +107,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
     case SCH_EASYEDA:         return wxString( wxT( "EasyEDA (JLCEDA) Std" ) );
     case SCH_EASYEDAPRO:      return wxString( wxT( "EasyEDA (JLCEDA) Pro" ) );
-    case SCH_EASYEDAPRO_V3:   return wxString( wxT( "EasyEDA (JLCEDA) Pro v3" ) );
+    case SCH_EASYEDAPRO_V3: return wxString( wxT( "EasyEDA (JLCEDA) Pro v3" ) );
     case SCH_GEDA:            return wxString( wxT( "gEDA / Lepton EDA" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     case SCH_HTTP:            return wxString( wxT( "HTTP" ) );

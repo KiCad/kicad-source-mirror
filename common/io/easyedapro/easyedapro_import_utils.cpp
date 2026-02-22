@@ -405,8 +405,7 @@ EASYEDAPRO::AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput 
 }
 
 
-nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser,
-                                                           bool                 aIncludeLibraryMetadata )
+nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser, bool aIncludeLibraryMetadata )
 {
     nlohmann::json project = EmptyV3ProjectIndex();
 
@@ -419,7 +418,7 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
     };
 
     std::map<wxString, std::vector<SHEET_INFO>> sheetsBySch;
-    int                                          pageOrder = 0;
+    int                                         pageOrder = 0;
 
     for( const auto& [uuid, pageDoc] : aParser.GetRawDocs( wxS( "SCH_PAGE" ) ) )
     {
@@ -467,11 +466,9 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
 
             for( const SHEET_INFO& page : pages )
             {
-                sch["sheets"].push_back( nlohmann::json::object( {
-                        { "id", sheetId++ },
-                        { "name", ToStdString( page.name ) },
-                        { "uuid", ToStdString( page.uuid ) }
-                } ) );
+                sch["sheets"].push_back( nlohmann::json::object( { { "id", sheetId++ },
+                                                                   { "name", ToStdString( page.name ) },
+                                                                   { "uuid", ToStdString( page.uuid ) } } ) );
             }
         }
 

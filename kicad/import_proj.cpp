@@ -177,8 +177,8 @@ void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, in
 
 void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler( int aImportedSchFileType, int aImportedPcbFileType )
 {
-    const bool isV3 = aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3
-                      || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3;
+    const bool isV3 =
+            aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3 || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3;
 
     nlohmann::json project;
 
@@ -194,8 +194,7 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler( int aImportedSchFileType, int
         project = EASYEDAPRO::ReadProjectOrDeviceFile( m_InputFile.GetFullPath() );
     }
 
-    std::vector<IMPORT_PROJECT_DESC> toImport =
-            EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
+    std::vector<IMPORT_PROJECT_DESC> toImport = EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
 
     if( toImport.size() > 1 )
         toImport = DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( m_frame, toImport );
@@ -212,8 +211,7 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler( int aImportedSchFileType, int
             pcbId = wxString::FromUTF8( project.at( "pcbs" ).begin().key() );
         }
 
-        if( schId.empty() && project.contains( "schematics" )
-            && project.at( "schematics" ).is_object()
+        if( schId.empty() && project.contains( "schematics" ) && project.at( "schematics" ).is_object()
             && project.at( "schematics" ).size() == 1 )
         {
             schId = wxString::FromUTF8( project.at( "schematics" ).begin().key() );
@@ -671,22 +669,17 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
     int importedSchFileType = aImportedSchFileType;
     int importedPcbFileType = aImportedPcbFileType;
 
-    if( importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
-        || importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3
-        || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO
-        || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3 )
+    if( importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO || importedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3
+        || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO || importedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3 )
     {
         bool isV3 = EASYEDAPRO::V3_DOC_PARSER::IsV3Archive( m_InputFile.GetFullPath() );
 
-        importedSchFileType = isV3 ? SCH_IO_MGR::SCH_EASYEDAPRO_V3
-                                   : SCH_IO_MGR::SCH_EASYEDAPRO;
-        importedPcbFileType = isV3 ? PCB_IO_MGR::EASYEDAPRO_V3
-                                   : PCB_IO_MGR::EASYEDAPRO;
+        importedSchFileType = isV3 ? SCH_IO_MGR::SCH_EASYEDAPRO_V3 : SCH_IO_MGR::SCH_EASYEDAPRO;
+        importedPcbFileType = isV3 ? PCB_IO_MGR::EASYEDAPRO_V3 : PCB_IO_MGR::EASYEDAPRO;
 
         EasyEDAProProjectHandler( importedSchFileType, importedPcbFileType );
     }
-    else if( importedSchFileType == SCH_IO_MGR::SCH_ALTIUM
-             || importedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
+    else if( importedSchFileType == SCH_IO_MGR::SCH_ALTIUM || importedPcbFileType == PCB_IO_MGR::ALTIUM_DESIGNER )
     {
         AltiumProjectHandler();
         return;

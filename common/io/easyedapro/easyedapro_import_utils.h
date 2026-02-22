@@ -71,8 +71,7 @@ std::map<wxString, wxString> AnyMapToStringMap( const std::map<wxString, nlohman
  * contains at least schematics / boards / pcbs. When @a aIncludeLibraryMetadata is true,
  * symbols / footprints / devices maps are also populated from their META rows.
  */
-nlohmann::json BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser,
-                                               bool                 aIncludeLibraryMetadata = true );
+nlohmann::json BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser, bool aIncludeLibraryMetadata = true );
 
 } // namespace EASYEDAPRO
 
