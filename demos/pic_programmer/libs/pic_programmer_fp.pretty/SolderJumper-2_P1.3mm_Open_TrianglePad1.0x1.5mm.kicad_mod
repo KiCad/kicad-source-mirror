@@ -1,14 +1,14 @@
 (footprint "SolderJumper-2_P1.3mm_Open_TrianglePad1.0x1.5mm"
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(layer "F.Cu")
 	(descr "SMD Solder Jumper, 1x1.5mm Triangular Pads, 0.3mm gap, open")
 	(tags "solder jumper open")
 	(property "Reference" "REF**"
 		(at 0 -1.8 0)
 		(layer "F.SilkS")
-		(uuid "be467b17-81bd-4af4-ad58-8ec227223312")
+		(uuid "97cd2fb3-ded5-4899-b036-361316418098")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 	(property "Value" "JUMPER"
 		(at 0 1.9 0)
 		(layer "F.Fab")
-		(uuid "03839f28-3722-483c-8f9e-8aca2c3f1b98")
+		(uuid "88c81bf0-c4d9-4e2a-bb45-63b1375064f0")
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "B.Fab")
 		(hide yes)
-		(uuid "4e4f292c-4e2d-4f3e-9651-abff31870b55")
+		(uuid "274fe1b5-d00c-4f97-88eb-67f611e04255")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -46,7 +46,7 @@
 		(unlocked yes)
 		(layer "B.Fab")
 		(hide yes)
-		(uuid "45bd7333-7e42-4d7e-bfb8-966f3c043d30")
+		(uuid "6fbc7388-d6e3-4a1e-ab28-6da992bc793a")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -57,25 +57,16 @@
 	)
 	(clearance 0.2)
 	(attr exclude_from_pos_files exclude_from_bom)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_line
-		(start 1.4 1)
-		(end 1.4 -1)
+		(start -1.4 -1)
+		(end -1.4 1)
 		(stroke
 			(width 0.12)
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "a3533f7d-46e7-478d-a2b9-b7540dcdda47")
-	)
-	(fp_line
-		(start 1.4 -1)
-		(end -1.4 -1)
-		(stroke
-			(width 0.12)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "25c69a6e-8324-4015-ae77-fa49a8893566")
+		(uuid "9ecdf44c-a473-468e-9e6a-c96ff7088b9c")
 	)
 	(fp_line
 		(start -1.4 1)
@@ -85,47 +76,27 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "0c4d8fdd-74a1-499e-acdf-fa7448acdc6d")
+		(uuid "672ea9a2-4767-4450-92ef-1857996da030")
 	)
 	(fp_line
-		(start -1.4 -1)
-		(end -1.4 1)
+		(start 1.4 -1)
+		(end -1.4 -1)
 		(stroke
 			(width 0.12)
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "d19b50f6-3e56-46af-a574-8eacc1265497")
+		(uuid "8bc6eb98-32c4-4d3c-b002-9e1f2ab39bab")
 	)
 	(fp_line
-		(start 1.65 -1.25)
-		(end 1.65 1.25)
+		(start 1.4 1)
+		(end 1.4 -1)
 		(stroke
-			(width 0.05)
+			(width 0.12)
 			(type solid)
 		)
-		(layer "F.CrtYd")
-		(uuid "71dcf5c5-1538-4c85-b00e-f5eb074668c2")
-	)
-	(fp_line
-		(start 1.65 -1.25)
-		(end -1.65 -1.25)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "04da0a56-e5cc-4b0c-b959-c6d4796170ce")
-	)
-	(fp_line
-		(start -1.65 1.25)
-		(end 1.65 1.25)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "2340852a-f559-4390-9fb5-fcc6ee19598a")
+		(layer "F.SilkS")
+		(uuid "6f7b45c5-aca2-43ff-8273-3d71e99dfbbd")
 	)
 	(fp_line
 		(start -1.65 1.25)
@@ -135,10 +106,40 @@
 			(type solid)
 		)
 		(layer "F.CrtYd")
-		(uuid "fa82854c-b5dd-47cd-b2f5-4e66813f7429")
+		(uuid "c083212a-c68d-4434-8f6a-a5eed5fe7b15")
+	)
+	(fp_line
+		(start -1.65 1.25)
+		(end 1.65 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d1ddeb8c-2f1b-4d5d-9f43-ad5f9e319a9a")
+	)
+	(fp_line
+		(start 1.65 -1.25)
+		(end -1.65 -1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f3dd4a33-79a6-4f1a-a5ea-d13eabe2cc13")
+	)
+	(fp_line
+		(start 1.65 -1.25)
+		(end 1.65 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "78818cbc-0daa-454f-8f68-70d32331ec69")
 	)
 	(pad "1" smd custom
-		(at -0.725 0 180)
+		(at -0.725 0)
 		(size 0.3 0.3)
 		(layers "F.Cu" "F.Mask")
 		(zone_connect 2)
@@ -155,10 +156,10 @@
 				(fill yes)
 			)
 		)
-		(uuid "ed6e4080-8902-4d84-84e3-6c37b8cee437")
+		(uuid "7094ffc6-8f3f-4f8b-8245-e65585602a3e")
 	)
 	(pad "2" smd custom
-		(at 0.725 0 180)
+		(at 0.725 0)
 		(size 0.3 0.3)
 		(layers "F.Cu" "F.Mask")
 		(zone_connect 2)
@@ -175,7 +176,7 @@
 				(fill yes)
 			)
 		)
-		(uuid "b2c179ac-502f-4103-95d1-8d69b2dbed5f")
+		(uuid "378e1757-1135-4525-86dc-09f1b7d5bb33")
 	)
 	(embedded_fonts no)
 )

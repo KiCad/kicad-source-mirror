@@ -1,4 +1,11 @@
 (fp_lib_table
-  (version 7)
-  (lib (name "footprints")(type "KiCad")(uri "${KIPRJMOD}/libs/pic_programmer_fp.pretty")(options "")(descr "project specific"))
+	(version 7)
+	(lib (name "footprints") (type "KiCad") (uri "${KIPRJMOD}/libs/pic_programmer_fp.pretty") (options "") (descr "project specific"))
+	(lib (name "LED_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/LED_THT.pretty") (options "") (descr ""))
+	(lib (name "Diode_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Diode_THT.pretty") (options "") (descr ""))
+	(lib (name "Connector_Dsub") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Connector_Dsub.pretty") (options "") (descr ""))
+	(lib (name "Package_TO_SOT_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Package_TO_SOT_THT.pretty") (options "") (descr ""))
+	(lib (name "Jumper") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Jumper.pretty") (options "") (descr ""))
+	(lib (name "Inductor_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Inductor_THT.pretty") (options "") (descr ""))
+	(lib (name "TerminalBlock_Altech") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/TerminalBlock_Altech.pretty") (options "") (descr ""))
 )
