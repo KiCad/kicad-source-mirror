@@ -736,11 +736,11 @@ set( BMAPS_CONSTRAINTS
     minimum-annular-width
     minimum-clearance
     minimum-connection-width
-    minimum-item-clearance
+    silk-to-silk-clearance
     minimum-soldermask-silver
     minimum-text-height-and-thickness
     minimum_thermal_relief_spoke_count
-    minimum-through-hole
+    minimum-drill-size
     minimum-track-width
     minimum-uvia-diameter
     minimum-uvia-hole

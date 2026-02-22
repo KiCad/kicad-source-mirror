@@ -704,7 +704,7 @@ enum class BITMAPS : unsigned int
     constraint_minimum_thermal_relief_spoke_count,
     constraint_minimum_annular_width,
     constraint_copper_to_edge_clearance,
-    constraint_minimum_through_hole,
+    constraint_minimum_drill_size,
     constraint_hole_size,
     constraint_hole_to_hole_distance,
     constraint_minimum_uvia_hole,

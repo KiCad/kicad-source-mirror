@@ -56,12 +56,9 @@ public:
 
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        // Positions measured from constraint_minimum_text_height_and_thickness.png (~300x200)
-        // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 230, 310, 55, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height (right side, vertical dimension)
-            { 140, 220, 165, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // min_text_thickness (bottom, horizontal dimension)
+            { 210, 250, 82, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height
+            { 105, 145, 197, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_thickness
         };
     }
 

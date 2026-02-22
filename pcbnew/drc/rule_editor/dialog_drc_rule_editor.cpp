@@ -645,8 +645,8 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildManufacturabilityRuleTr
                                              lastParentId, MINIMUM_ANNULAR_WIDTH ) );
     result.push_back( buildRuleTreeNodeData( "Hole", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;
-    result.push_back( buildRuleTreeNodeData( "Minimum through hole", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MINIMUM_THROUGH_HOLE ) );
+    result.push_back( buildRuleTreeNodeData( "Minimum drill size", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
+                                             lastParentId, MINIMUM_DRILL_SIZE ) );
     result.push_back( buildRuleTreeNodeData( "Hole to hole distance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, HOLE_TO_HOLE_DISTANCE ) );
     result.push_back( buildRuleTreeNodeData( "Minimum uvia hole", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,

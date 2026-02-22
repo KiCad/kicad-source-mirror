@@ -56,7 +56,7 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { COPPER_TO_EDGE_CLEARANCE, "edge_clearance" },
                                    { COURTYARD_CLEARANCE, "courtyard_clearance" },
                                    { PHYSICAL_CLEARANCE, "physical_clearance" },
-                                   { MINIMUM_THROUGH_HOLE, "hole_size" },
+                                   { MINIMUM_DRILL_SIZE, "hole_size" },
                                    { HOLE_SIZE, "hole_size" },
                                    { HOLE_TO_HOLE_DISTANCE, "hole_to_hole" },
                                    { MINIMUM_UVIA_HOLE, "hole_size" },
@@ -293,7 +293,7 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case MINIMUM_CONNECTION_WIDTH:
     case MINIMUM_SOLDERMASK_SILVER:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
-    case MINIMUM_THROUGH_HOLE:
+    case MINIMUM_DRILL_SIZE:
     case MINIMUM_UVIA_DIAMETER:
     case MINIMUM_UVIA_HOLE:
     case MINIMUM_VIA_DIAMETER:
@@ -831,7 +831,7 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     case PHYSICAL_CLEARANCE:
     case HOLE_SIZE:
     case HOLE_TO_HOLE_DISTANCE:
-    case MINIMUM_THROUGH_HOLE:
+    case MINIMUM_DRILL_SIZE:
     case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
     case MAXIMUM_ALLOWED_DEVIATION:
     case MINIMUM_ANGULAR_RING:
@@ -895,7 +895,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>();
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>();
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
-    case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>();
+    case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>();
     case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>();
     case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>();
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
@@ -930,7 +930,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_THROUGH_HOLE:               return std::make_shared<DRC_RE_MINIMUM_THROUGH_HOLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_DRILL_SIZE:                  return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );

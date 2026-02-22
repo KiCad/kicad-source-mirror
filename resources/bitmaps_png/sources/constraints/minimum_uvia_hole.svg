@@ -2,7 +2,7 @@
 <svg
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 24 24"
+   width="240" height="240" viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="minimum_uvia_hole.svg"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
@@ -95,7 +95,7 @@
       <path
          transform="scale(-0.6)"
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         style="fill:#1a81c4;fill-opacity:1;fill-rule:evenodd;stroke:#1a81c4;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#545454;fill-opacity:1;fill-rule:evenodd;stroke:#545454;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
          id="path2042" />
     </marker>
     <marker
@@ -109,11 +109,11 @@
       <path
          transform="scale(0.6)"
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         style="fill:#1a81c4;fill-opacity:1;fill-rule:evenodd;stroke:#1a81c4;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#545454;fill-opacity:1;fill-rule:evenodd;stroke:#545454;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
          id="path2032" />
     </marker>
     <style
-       id="style159427">.cls-1{fill:#1a81c4;}</style>
+       id="style159427">.cls-1{fill:#545454;}</style>
     <marker
        style="overflow:visible"
        id="marker2034-9"
@@ -125,7 +125,7 @@
       <path
          transform="scale(0.6)"
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         style="fill:#1a81c4;fill-opacity:1;fill-rule:evenodd;stroke:#1a81c4;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#545454;fill-opacity:1;fill-rule:evenodd;stroke:#545454;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
          id="path2032-1" />
     </marker>
     <marker
@@ -139,7 +139,7 @@
       <path
          transform="scale(-0.6)"
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         style="fill:#1a81c4;fill-opacity:1;fill-rule:evenodd;stroke:#1a81c4;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         style="fill:#545454;fill-opacity:1;fill-rule:evenodd;stroke:#545454;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
          id="path2042-7" />
     </marker>
   </defs>
@@ -156,21 +156,21 @@
        x="1"
        y="13" /></text>
   <path
-     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#marker2034);marker-end:url(#marker2044);paint-order:fill markers stroke"
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#marker2034);marker-end:url(#marker2044);paint-order:fill markers stroke"
      d="m 18.000113,10.5 v 3"
      id="path2025"
      sodipodi:nodetypes="cc" />
   <path
      id="circle1364-5-3-5"
-     style="fill:#f29100;fill-opacity:1;stroke:#006400;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+     style="fill:#f29100;fill-opacity:1;stroke:#1a81c4;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
      d="m 14.206175,7.795402 a 5.9472821,5.9462481 45 0 0 -8.4113928,-7.31e-4 5.9472821,5.9462481 45 0 0 7.33e-4,8.411391 5.9472821,5.9462481 45 0 0 8.4099268,-7.32e-4 5.9472821,5.9462481 45 0 0 7.33e-4,-8.409928 z m -2.747061,2.671065 a 2.1164097,2.1160416 45 0 1 0.03799,0.03801 2.1164097,2.1160416 45 0 1 2.58e-4,2.992792 2.1164097,2.1160416 45 0 1 -2.9927908,-2.61e-4 2.1164097,2.1160416 45 0 1 -2.62e-4,-2.992793 2.1164097,2.1160416 45 0 1 2.9547968,-0.03774 z" />
   <path
-     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;paint-order:fill markers stroke"
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;paint-order:fill markers stroke"
      d="m 20.050362,9.9502494 -10,-2.494e-4"
      id="path2028"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;paint-order:fill markers stroke"
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;paint-order:fill markers stroke"
      d="m 20.000113,14.025 -10,0.025"
      id="path3"
      sodipodi:nodetypes="cc" />

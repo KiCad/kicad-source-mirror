@@ -2,7 +2,7 @@
 <svg
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 24 24"
+   width="240" height="240" viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="minimum_connection_width.svg"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
@@ -12,9 +12,7 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   width="240"
-   height="240">
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"

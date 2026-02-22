@@ -211,12 +211,12 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_bitmapMinViaDrill = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaDrill, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_MinDrillTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum through hole:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_MinDrillTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum drill size:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MinDrillTitle->Wrap( -1 );
 	fgFeatureConstraints->Add( m_MinDrillTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 
 	m_MinDrillCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_MinDrillCtrl->SetToolTip( _("The minimum through-hole size. If set, this can only be reduced by custom rules.") );
+	m_MinDrillCtrl->SetToolTip( _("The minimum drill size. If set, this can only be reduced by custom rules.") );
 
 	fgFeatureConstraints->Add( m_MinDrillCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 

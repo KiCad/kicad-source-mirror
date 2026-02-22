@@ -68,6 +68,7 @@
 #include <wx/combobox.h>
 #include <toolbars_pcb_editor.h>
 #include <settings/settings_manager.h>
+#include <eda_text.h>
 
 #include "../scripting/python_scripting.h"
 

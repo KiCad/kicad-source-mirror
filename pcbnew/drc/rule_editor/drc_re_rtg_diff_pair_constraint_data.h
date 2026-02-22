@@ -59,14 +59,14 @@ public:
         // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 164, 204, 55, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
-            { 304, 344, 68, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_width (left side, middle)
-            { 480, 520, 50, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_width (left side, bottom)
-            { 214, 254, 88, 4, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_gap (center-left, top)
-            { 386, 426, 80, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_gap (center-left, middle)
-            { 600, 640, 64, 6, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_gap (center-left, bottom)
+            { 162, 202, 47, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
+            { 302, 342, 60, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_width (left side, middle)
+            { 480, 520, 42, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_width (left side, bottom)
+            { 214, 254, 213, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_gap (center-left, top)
+            { 386, 426, 213, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_gap (center-left, middle)
+            { 600, 640, 213, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_gap (center-left, bottom)
             { 120, 160, 204, 7, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_uncoupled (right side)
-            { 800, 840, 168, 8, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew (to be added, right side)
+            { 798, 838, 168, 8, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew (to be added, right side)
         };
     }
 

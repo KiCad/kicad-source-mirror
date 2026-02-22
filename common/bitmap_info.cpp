@@ -5046,7 +5046,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_minimum_soldermask_silver].emplace_back( BITMAPS::constraint_minimum_soldermask_silver, wxT( "constraint_minimum_soldermask_silver.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_text_height_and_thickness].emplace_back( BITMAPS::constraint_minimum_text_height_and_thickness, wxT( "constraint_minimum_text_height_and_thickness.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_thermal_relief_spoke_count].emplace_back( BITMAPS::constraint_minimum_thermal_relief_spoke_count, wxT( "constraint_minimum_thermal_relief_spoke_count.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_through_hole].emplace_back( BITMAPS::constraint_minimum_through_hole, wxT( "constraint_minimum_through_hole.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_minimum_drill_size].emplace_back( BITMAPS::constraint_minimum_drill_size, wxT( "constraint_minimum_drill_size.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_track_width].emplace_back( BITMAPS::constraint_minimum_track_width, wxT( "constraint_minimum_track_width.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_diameter].emplace_back( BITMAPS::constraint_minimum_uvia_diameter, wxT( "constraint_minimum_uvia_diameter.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_hole].emplace_back( BITMAPS::constraint_minimum_uvia_hole, wxT( "constraint_minimum_uvia_hole.png" ), -1, wxT( "light" ) );
@@ -5083,7 +5083,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_minimum_soldermask_silver].emplace_back( BITMAPS::constraint_minimum_soldermask_silver, wxT( "constraint_minimum_soldermask_silver_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_text_height_and_thickness].emplace_back( BITMAPS::constraint_minimum_text_height_and_thickness, wxT( "constraint_minimum_text_height_and_thickness_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_thermal_relief_spoke_count].emplace_back( BITMAPS::constraint_minimum_thermal_relief_spoke_count, wxT( "constraint_minimum_thermal_relief_spoke_count_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_through_hole].emplace_back( BITMAPS::constraint_minimum_through_hole, wxT( "constraint_minimum_through_hole_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_minimum_drill_size].emplace_back( BITMAPS::constraint_minimum_drill_size, wxT( "constraint_minimum_drill_size_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_track_width].emplace_back( BITMAPS::constraint_minimum_track_width, wxT( "constraint_minimum_track_width_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_diameter].emplace_back( BITMAPS::constraint_minimum_uvia_diameter, wxT( "constraint_minimum_uvia_diameter_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_hole].emplace_back( BITMAPS::constraint_minimum_uvia_hole, wxT( "constraint_minimum_uvia_hole_dark.png" ), -1, wxT( "dark" ) );
