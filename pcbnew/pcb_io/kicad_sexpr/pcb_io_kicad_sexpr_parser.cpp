@@ -5601,7 +5601,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             break;
 
         default:
-            Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, "
+            Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, variant, "
                        "autoplace_cost90, autoplace_cost180, attr, clearance, "
                        "embedded_files, fp_arc, fp_circle, fp_curve, fp_line, fp_poly, "
                        "fp_rect, fp_text, pad, group, generator, model, path, solder_mask_margin, "

@@ -702,31 +702,27 @@ bool PCB_PROPERTIES_PANEL::getItemValue( EDA_ITEM* aItem, PROPERTY_BASE* aProper
     // For FOOTPRINT variant-aware boolean properties, return variant-specific values
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
-        wxString   variantName;
+        FOOTPRINT*      footprint = static_cast<FOOTPRINT*>( aItem );
+        const wxString& propName = aProperty->Name();
+        wxString        variantName;
 
         if( footprint->GetBoard() )
             variantName = footprint->GetBoard()->GetCurrentVariant();
 
-        if( !variantName.IsEmpty() )
+        if( propName == _HKI( "Do not Populate" ) )
         {
-            wxString propName = aProperty->Name();
-
-            if( propName == _HKI( "Do not Populate" ) )
-            {
-                aValue = wxVariant( footprint->GetDNPForVariant( variantName ) );
-                return true;
-            }
-            else if( propName == _HKI( "Exclude From Bill of Materials" ) )
-            {
-                aValue = wxVariant( footprint->GetExcludedFromBOMForVariant( variantName ) );
-                return true;
-            }
-            else if( propName == _HKI( "Exclude From Position Files" ) )
-            {
-                aValue = wxVariant( footprint->GetExcludedFromPosFilesForVariant( variantName ) );
-                return true;
-            }
+            aValue = wxVariant( footprint->GetDNPForVariant( variantName ) );
+            return true;
+        }
+        else if( propName == _HKI( "Exclude From Bill of Materials" ) )
+        {
+            aValue = wxVariant( footprint->GetExcludedFromBOMForVariant( variantName ) );
+            return true;
+        }
+        else if( propName == _HKI( "Exclude From Position Files" ) )
+        {
+            aValue = wxVariant( footprint->GetExcludedFromPosFilesForVariant( variantName ) );
+            return true;
         }
     }
 
