@@ -296,71 +296,78 @@ wxString PATHS::GetStockEDALibraryPath()
 
 wxString PATHS::GetStockSymbolsPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockEDALibraryPath() );
+    fn.AppendDir( "symbols" );
 
-    path = GetStockEDALibraryPath() + wxT( "/symbols" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetStockFootprintsPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockEDALibraryPath() );
+    fn.AppendDir( "footprints" );
 
-    path = GetStockEDALibraryPath() + wxT( "/footprints" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetStockDesignBlocksPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockEDALibraryPath() );
+    fn.AppendDir( "blocks" );
 
-    path = GetStockEDALibraryPath() + wxT( "/blocks" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetStock3dmodelsPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockEDALibraryPath() );
+    fn.AppendDir( "3dmodels" );
 
-    path = GetStockEDALibraryPath() + wxT( "/3dmodels" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetStockScriptingPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockDataPath() );
+    fn.AppendDir( "scripting" );
 
-    path = GetStockDataPath() + wxT( "/scripting" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetStockTemplatesPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockEDALibraryPath() );
+    fn.AppendDir( "template" );
 
-    path = GetStockEDALibraryPath() + wxT( "/template" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 
 wxString PATHS::GetLocaleDataPath()
 {
-    wxString path;
+    wxFileName fn;
+    
+    fn.AssignDir( GetStockDataPath() );
+    fn.AppendDir( "internat" );
 
-    path = GetStockDataPath() + wxT( "/internat" );
-
-    return path;
+    return fn.GetPathWithSep();
 }
 
 

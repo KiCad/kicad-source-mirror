@@ -810,31 +810,13 @@ void COMMON_SETTINGS::InitializeEnvironment()
             }
         };
 
-    wxFileName basePath( PATHS::GetStockEDALibraryPath(), wxEmptyString );
-
-    wxFileName path( basePath );
-    path.AppendDir( wxT( "footprints" ) );
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ), path.GetFullPath() );
-
-    path = basePath;
-    path.AppendDir( wxT( "3dmodels" ) );
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), path.GetFullPath() );
-
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ),
-            PATHS::GetStockTemplatesPath() );
-
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ), PATHS::GetStockFootprintsPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), PATHS::GetStock3dmodelsPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ), PATHS::GetStockTemplatesPath() );
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
-
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
-            PATHS::GetDefault3rdPartyPath() );
-
-    path = basePath;
-    path.AppendDir( wxT( "symbols" ) );
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ), path.GetFullPath() );
-
-    path = basePath;
-    path.AppendDir( wxT( "blocks" ) );
-    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "DESIGN_BLOCK_DIR" ) ), path.GetFullPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ), PATHS::GetDefault3rdPartyPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ), PATHS::GetStockSymbolsPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "DESIGN_BLOCK_DIR" ) ), PATHS::GetStockDesignBlocksPath() );
 }
 
 
