@@ -148,7 +148,6 @@ struct APP_TEST : public wxApp
 
     bool OnInit() override
     {
-
         try
         {
             if( !program.OnPgmInit() )
@@ -176,8 +175,6 @@ struct APP_TEST : public wxApp
         {
             wxLogError( wxT( "Unhandled exception of unknown type" ) );
         }
-
-        program.OnPgmExit();
 
         return false;
     }
