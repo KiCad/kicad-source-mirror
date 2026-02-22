@@ -34,10 +34,9 @@
 #include <rc_json_schema.h>
 
 
-ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits, int aErcSeverities ) :
+ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits ) :
         m_sch( aSchematic ),
-        m_reportUnits( aReportUnits ),
-        m_ercSeverities( aErcSeverities )
+        m_reportUnits( aReportUnits )
 {
 }
 
@@ -61,7 +60,7 @@ wxString ERC_REPORT::GetTextReport()
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
     SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
-    errors.SetSeverities( m_ercSeverities );
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
     std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
 
@@ -139,7 +138,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
     SHEETLIST_ERC_ITEMS_PROVIDER errors( m_sch );
-    errors.SetSeverities( m_ercSeverities );
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
     std::map<SCH_SHEET_PATH, std::vector<ERC_ITEM*>> orderedItems;
 
@@ -163,6 +162,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         for( ERC_ITEM* item : orderedItems[sheetList[i]] )
         {
             SEVERITY severity = settings.GetSeverity( item->GetErrorCode() );
+
             RC_JSON::VIOLATION violation;
             item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
 

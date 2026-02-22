@@ -64,7 +64,7 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelMultipleWires, ERC_REGRESSION_TEST_FIXTURE )
 
         errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
-        ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM, RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+        ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
 
         BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
                              "Expected " << test.second << " errors in " << test.first.ToStdString()

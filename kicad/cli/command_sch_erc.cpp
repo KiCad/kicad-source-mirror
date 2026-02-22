@@ -90,7 +90,6 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     ercJob->SetVarOverrides( m_argDefineVars );
 
     int severity = 0;
-
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )
     {
         severity = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
