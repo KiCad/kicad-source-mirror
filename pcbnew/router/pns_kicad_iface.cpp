@@ -1257,6 +1257,12 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         PNS_PCBNEW_DEBUG_DECORATOR::Clear();
+        
+        for ( PNS::ITEM* item : m_clonedItems )
+        {
+            delete item;
+        }
+
         delete m_items;
     }
 
@@ -1302,7 +1308,16 @@ public:
         if( !m_view || !aItem )
             return;
 
-        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_iface, m_view );
+        PNS::ITEM* cloned = aItem->Clone();
+
+        if( auto line = dyn_cast<PNS::LINE*>( cloned ))
+        {
+            line->ClearLinks();
+        }
+
+        m_clonedItems.push_back( cloned );
+
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( cloned, m_iface, m_view );
 
         pitem->SetColor( aColor.WithAlpha( 0.5 ) );
         pitem->SetWidth( aOverrideWidth );
@@ -1362,7 +1377,6 @@ public:
 
     virtual void Message( const wxString& msg, const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
-        printf("PNS: %s\n", msg.c_str().AsChar() );
     }
 
 private:
@@ -1381,6 +1395,7 @@ private:
     PNS::ROUTER_IFACE* m_iface;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_items;
+    std::vector<PNS::ITEM*> m_clonedItems;
 
     double m_depth;
 };
