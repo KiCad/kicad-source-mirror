@@ -42,6 +42,7 @@
 #include <pcb_io/fabmaster/pcb_io_fabmaster.h>
 #include <pcb_io/easyeda/pcb_io_easyeda_plugin.h>
 #include <pcb_io/easyedapro/pcb_io_easyedapro.h>
+#include <pcb_io/easyedapro/pcb_io_easyedapro_v3.h>
 #include <pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcb_io/odbpp/pcb_io_odbpp.h>
 #include <pcb_io/pads/pcb_io_pads.h>
@@ -335,6 +336,11 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAProPlugin(
         PCB_IO_MGR::EASYEDAPRO,
         wxT( "EasyEDA / JLCEDA Pro" ),
         []() -> PCB_IO* { return new PCB_IO_EASYEDAPRO; });
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAProV3Plugin(
+        PCB_IO_MGR::EASYEDAPRO_V3,
+        wxT( "EasyEDA / JLCEDA Pro v3" ),
+        []() -> PCB_IO* { return new PCB_IO_EASYEDAPRO_V3; });
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
         PCB_IO_MGR::FABMASTER,

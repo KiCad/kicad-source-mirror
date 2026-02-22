@@ -61,6 +61,7 @@ public:
         EAGLE,
         EASYEDA,
         EASYEDAPRO,
+        EASYEDAPRO_V3,
         FABMASTER,
         GEDA_PCB, ///< Geda PCB file formats.
         PCAD,

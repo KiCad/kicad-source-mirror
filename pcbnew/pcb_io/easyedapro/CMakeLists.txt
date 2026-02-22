@@ -6,7 +6,9 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( EASYEDAPRO_SRCS
     pcb_io_easyedapro.cpp
+    pcb_io_easyedapro_v3.cpp
     pcb_io_easyedapro_parser.cpp
+    pcb_io_easyedapro_v3_parser.cpp
     )
 
 add_library( easyedapro STATIC ${EASYEDAPRO_SRCS} )
