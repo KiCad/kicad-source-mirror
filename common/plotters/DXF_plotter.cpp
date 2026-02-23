@@ -141,12 +141,14 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
     case DXF_UNITS::MM:
         m_unitScalingFactor = 0.00254;
         m_measurementDirective = 1;
+        m_insUnits = 4;
         break;
 
     case DXF_UNITS::INCH:
     default:
         m_unitScalingFactor = 0.0001;
         m_measurementDirective = 0;
+        m_insUnits = 1;
     }
 }
 
@@ -217,6 +219,10 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
             "1\n"
             "  9\n"
             "$MEASUREMENT\n"
+            "  70\n"
+            "%u\n"
+            "  9\n"
+            "$INSUNITS\n"
             "  70\n"
             "%u\n"
             "  0\n"
@@ -313,7 +319,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
             "-0.2\n"
             "  0\n"
             "ENDTAB\n",
-             GetMeasurementDirective() );
+             GetMeasurementDirective(), GetInsUnits() );
 
     // Text styles table
     // Defines 4 text styles, one for each bold/italic combination

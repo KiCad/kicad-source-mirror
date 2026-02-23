@@ -211,6 +211,16 @@ public:
         return m_measurementDirective;
     }
 
+    /**
+     * Get the correct value for the $INSUNITS header variable given the current units.
+     *
+     * @return the $INSUNITS value (1 = inches, 4 = millimeters)
+     */
+    unsigned int GetInsUnits() const
+    {
+        return m_insUnits;
+    }
+
 protected:
     void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                             const TEXT_ATTRIBUTES& aAttrs );
@@ -222,4 +232,5 @@ protected:
     DXF_UNITS    m_plotUnits;
     double       m_unitScalingFactor;
     unsigned int m_measurementDirective;
+    unsigned int m_insUnits;
 };
