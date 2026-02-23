@@ -586,7 +586,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
     report << wxS( "- " ) << _( "Front component density" ) << wxS( ": " );
 
     if( aData.hasOutline )
-        report << wxString::Format( "%.2f %", aData.frontFootprintDensity );
+        report << wxString::Format( "%.2f %%", aData.frontFootprintDensity );
     else
         report << _( "unknown" );
 
@@ -595,7 +595,7 @@ wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD*
     report << wxS( "- " ) << _( "Back component density" ) << wxS( ": " );
 
     if( aData.hasOutline )
-        report << wxString::Format( "%.2f %", aData.backFootprintDensity );
+        report << wxString::Format( "%.2f %%", aData.backFootprintDensity );
     else
         report << _( "unknown" );
 

@@ -23,6 +23,8 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <board_statistics.h>
+#include <board_statistics_report.h>
+#include <base_units.h>
 #include <algorithm>
 #include <vector>
 
@@ -141,6 +143,62 @@ BOOST_AUTO_TEST_CASE( DrillCompareStrictWeakOrderingViaPad )
     BOOST_CHECK( items[1].isPad );
     BOOST_CHECK( !items[2].isPad );
     BOOST_CHECK( !items[3].isPad );
+}
+
+
+/**
+ * Regression test for issue #23218. FormatBoardStatisticsReport crashed on MSVC
+ * due to an incomplete printf format specifier ("%.2f %" instead of "%.2f %%")
+ * in the component density lines.
+ */
+BOOST_AUTO_TEST_CASE( FormatReportWithDensity )
+{
+    BOARD_STATISTICS_DATA data;
+    InitializeBoardStatisticsData( data );
+
+    data.hasOutline = true;
+    data.boardWidth = 100000000;
+    data.boardHeight = 50000000;
+    data.boardArea = 5e15;
+    data.frontFootprintDensity = 42.57;
+    data.backFootprintDensity = 18.93;
+
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
+
+    wxString report;
+    BOOST_CHECK_NO_THROW(
+            report = FormatBoardStatisticsReport( data, nullptr, unitsProvider,
+                                                  wxT( "TestProject" ), wxT( "TestBoard" ) ) );
+
+    BOOST_CHECK( report.Contains( wxT( "42.57 %" ) ) );
+    BOOST_CHECK( report.Contains( wxT( "18.93 %" ) ) );
+}
+
+
+/**
+ * Verify FormatBoardStatisticsJson doesn't crash with density data.
+ */
+BOOST_AUTO_TEST_CASE( FormatJsonWithDensity )
+{
+    BOARD_STATISTICS_DATA data;
+    InitializeBoardStatisticsData( data );
+
+    data.hasOutline = true;
+    data.boardWidth = 100000000;
+    data.boardHeight = 50000000;
+    data.boardArea = 5e15;
+    data.frontFootprintDensity = 42.57;
+    data.backFootprintDensity = 18.93;
+
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
+
+    wxString json;
+    BOOST_CHECK_NO_THROW(
+            json = FormatBoardStatisticsJson( data, nullptr, unitsProvider,
+                                              wxT( "TestProject" ), wxT( "TestBoard" ) ) );
+
+    BOOST_CHECK( json.Contains( wxT( "42.57" ) ) );
+    BOOST_CHECK( json.Contains( wxT( "18.93" ) ) );
 }
 
 
