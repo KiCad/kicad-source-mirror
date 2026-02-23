@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( QuarterCircle )
     BOOST_CHECK( params.IsValid() );
 
     // Check radius (should be close to 1000000)
-    BOOST_CHECK_CLOSE( params.GetRadius(), radius, 0.1 );
+    BOOST_CHECK_CLOSE( params.GetRadius(), (double)radius, 0.1 );
 
     // Check arc angle (should be close to 90 degrees = PI/2 radians)
     BOOST_CHECK_CLOSE( params.GetArcAngle(), M_PI / 2.0, 0.1 );
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE( Semicircle )
     BOOST_CHECK( params.IsValid() );
 
     // Check radius
-    BOOST_CHECK_CLOSE( params.GetRadius(), radius, 0.1 );
+    BOOST_CHECK_CLOSE( params.GetRadius(), (double)radius, 0.1 );
 
     // Check arc angle (should be PI radians = 180 degrees)
     BOOST_CHECK_CLOSE( params.GetArcAngle(), M_PI, 0.1 );
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE( Semicircle )
     BOOST_CHECK_CLOSE( params.GetChordLength(), 2.0 * radius, 0.1 );
 
     // Check sagitta (should equal radius for semicircle)
-    BOOST_CHECK_CLOSE( params.GetSagitta(), radius, 0.1 );
+    BOOST_CHECK_CLOSE( params.GetSagitta(), (double)radius, 0.1 );
 
     // Check center offset (should be 0 for semicircle since center is on the chord)
     BOOST_CHECK_SMALL( params.GetCenterOffset(), 1.0 );
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE( ShallowArc )
     BOOST_CHECK( params.IsValid() );
 
     // Check radius (allow 0.5% tolerance for shallow arc)
-    BOOST_CHECK_CLOSE( params.GetRadius(), radius, 0.5 );
+    BOOST_CHECK_CLOSE( params.GetRadius(), (double)radius, 0.5 );
 
     // Check arc angle
     BOOST_CHECK_CLOSE( params.GetArcAngle(), arcAngleRad, 1.0 );
@@ -208,12 +208,12 @@ BOOST_AUTO_TEST_CASE( OffsetCenter )
     BOOST_CHECK( params.IsValid() );
 
     // Check radius
-    BOOST_CHECK_CLOSE( params.GetRadius(), radius, 0.1 );
+    BOOST_CHECK_CLOSE( params.GetRadius(), (double)radius, 0.1 );
 
     // Check center point
     VECTOR2D center = params.GetCenterPoint();
-    BOOST_CHECK_CLOSE( center.x, cx, 0.1 );
-    BOOST_CHECK_CLOSE( center.y, cy, 0.1 );
+    BOOST_CHECK_CLOSE( center.x, (double)cx, 0.1 );
+    BOOST_CHECK_CLOSE( center.y, (double)cy, 0.1 );
 }
 
 
@@ -240,8 +240,8 @@ BOOST_AUTO_TEST_CASE( ArcDirection )
     BOOST_REQUIRE( paramsCW.Compute( start, midCW, end ) );
 
     // Both should have same radius
-    BOOST_CHECK_CLOSE( paramsCCW.GetRadius(), radius, 0.1 );
-    BOOST_CHECK_CLOSE( paramsCW.GetRadius(), radius, 0.1 );
+    BOOST_CHECK_CLOSE( paramsCCW.GetRadius(), (double)radius, 0.1 );
+    BOOST_CHECK_CLOSE( paramsCW.GetRadius(), (double)radius, 0.1 );
 
     // Both should have same arc angle magnitude (PI)
     BOOST_CHECK_CLOSE( paramsCCW.GetArcAngle(), M_PI, 0.1 );
@@ -333,7 +333,7 @@ BOOST_AUTO_TEST_CASE( MajorArc )
     BOOST_CHECK( params.IsValid() );
 
     // Check radius
-    BOOST_CHECK_CLOSE( params.GetRadius(), radius, 0.5 );
+    BOOST_CHECK_CLOSE( params.GetRadius(), (double)radius, 0.5 );
 
     // Check arc angle (should be 270 degrees = 3*PI/2 radians)
     BOOST_CHECK_CLOSE( params.GetArcAngle(), 3.0 * M_PI / 2.0, 1.0 );

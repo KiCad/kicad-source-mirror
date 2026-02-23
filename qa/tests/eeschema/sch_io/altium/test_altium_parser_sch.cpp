@@ -161,8 +161,8 @@ BOOST_AUTO_TEST_CASE( SheetNameSlashRejection )
     wxString invalidName = wxT( "POWER PROTECTION/MONITORING" );
     wxString validationError = GetFieldValidationErrorMessage( FIELD_T::SHEET_NAME, invalidName );
 
-    BOOST_CHECK_MESSAGE( !validationError.empty(),
-                         wxT( "Sheet name with '/' should fail validation" ) );
+    BOOST_CHECK_MESSAGE( (!validationError.empty()) ,
+                         wxString::Format( "Sheet name with '/' should fail validation" ) );
 }
 
 /**
