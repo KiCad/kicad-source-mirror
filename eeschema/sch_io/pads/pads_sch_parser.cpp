@@ -1393,9 +1393,15 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
         bool isSpecial = ( pt.name == "$GND_SYMS" || pt.name == "$PWR_SYMS" ||
                            pt.name == "$OSR_SYMS" );
 
-        if( isSpecial )
+        // V5.2 uses "G:decalname swap num_pins" for gate definitions while V9.0+ uses
+        // "GATE num_variants num_pins swap" followed by decal name lines. Detect by
+        // checking whether the first content line starts with "G:".
+        bool isV52Gates = ( i < aLines.size() && aLines[i].size() >= 3
+                            && aLines[i][0] == 'G' && aLines[i][1] == ':' );
+
+        if( isSpecial && !isV52Gates )
         {
-            // Special symbol: keyword num_variants
+            // V9.0+ special symbol format: keyword num_variants, then variant lines
             if( i < aLines.size() )
             {
                 std::istringstream siss( aLines[i] );
@@ -1421,7 +1427,17 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
         }
         else if( i < aLines.size() )
         {
-            // Standard parts have GATE or CONN blocks
+            if( isSpecial )
+            {
+                if( pt.name == "$GND_SYMS" )
+                    pt.special_keyword = "GND";
+                else if( pt.name == "$PWR_SYMS" )
+                    pt.special_keyword = "PWR";
+                else
+                    pt.special_keyword = "OSR";
+            }
+
+            // Standard parts have GATE, CONN, or V5.2 G: blocks
             while( i < aLines.size() )
             {
                 const std::string& gline = aLines[i];
@@ -1482,6 +1498,94 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                     pt.gates.push_back( gate );
                     continue;
                 }
+                else if( keyword.size() >= 3 && keyword[0] == 'G' && keyword[1] == ':' )
+                {
+                    // V5.2 gate format: G:decal1[:decal2:...] swap_flag num_pins
+                    // Pin lines use dot-separated fields with multiple pins per line.
+                    if( pt.category == "CON" )
+                        pt.is_connector = true;
+
+                    GATE_DEF gate;
+
+                    std::string decalStr = keyword.substr( 2 );
+                    std::istringstream diss( decalStr );
+                    std::string decalName;
+
+                    while( std::getline( diss, decalName, ':' ) )
+                    {
+                        if( !decalName.empty() )
+                            gate.decal_names.push_back( decalName );
+                    }
+
+                    gate.num_decal_variants = static_cast<int>( gate.decal_names.size() );
+                    giss >> gate.swap_flag >> gate.num_pins;
+                    i++;
+
+                    int pinsRead = 0;
+
+                    while( pinsRead < gate.num_pins && i < aLines.size() )
+                    {
+                        const std::string& pline = aLines[i];
+
+                        if( pline.empty() || isSectionMarker( pline ) )
+                            break;
+
+                        if( ( pline[0] == 'G' && pline.size() >= 2 && pline[1] == ':' )
+                            || pline.find( "SIGPIN" ) == 0 )
+                        {
+                            break;
+                        }
+
+                        std::istringstream piss( pline );
+                        std::string pinToken;
+
+                        while( piss >> pinToken && pinsRead < gate.num_pins )
+                        {
+                            PARTTYPE_PIN pin;
+                            std::vector<std::string> fields;
+                            std::istringstream fiss( pinToken );
+                            std::string field;
+
+                            while( std::getline( fiss, field, '.' ) )
+                                fields.push_back( field );
+
+                            if( fields.size() >= 1 )
+                                pin.pin_id = fields[0];
+
+                            if( fields.size() >= 2 )
+                            {
+                                pin.swap_group =
+                                        PADS_COMMON::ParseInt( fields[1], 0, "V5.2 pin" );
+                            }
+
+                            if( fields.size() >= 3 && !fields[2].empty() )
+                                pin.pin_type = fields[2][0];
+
+                            if( fields.size() >= 4 )
+                                pin.pin_name = fields[3];
+
+                            gate.pins.push_back( pin );
+                            pinsRead++;
+                        }
+
+                        i++;
+                    }
+
+                    if( isSpecial )
+                    {
+                        PARTTYPE_DEF::SPECIAL_VARIANT sv;
+                        sv.decal_name =
+                                gate.decal_names.empty() ? "" : gate.decal_names[0];
+
+                        if( !gate.pins.empty() )
+                            sv.pin_type = std::string( 1, gate.pins[0].pin_type );
+
+                        pt.special_variants.push_back( sv );
+                    }
+
+                    pt.gates.push_back( gate );
+                    continue;
+                }
                 else if( keyword == "CONN" )
                 {
                     pt.is_connector = true;
@@ -1529,7 +1633,32 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                 else if( keyword == "SIGPIN" )
                 {
                     PARTTYPE_DEF::SIGPIN sp;
-                    giss >> sp.pin_number >> sp.net_name;
+                    std::string token;
+                    giss >> token;
+
+                    // V5.2 uses dot-separated fields (e.g. "1.50.DGND") while
+                    // V9.0+ uses space-separated "pin_number net_name".
+                    if( token.find( '.' ) != std::string::npos )
+                    {
+                        std::vector<std::string> fields;
+                        std::istringstream fiss( token );
+                        std::string field;
+
+                        while( std::getline( fiss, field, '.' ) )
+                            fields.push_back( field );
+
+                        if( fields.size() >= 1 )
+                            sp.pin_number = fields[0];
+
+                        if( fields.size() >= 3 )
+                            sp.net_name = fields.back();
+                    }
+                    else
+                    {
+                        sp.pin_number = token;
+                        giss >> sp.net_name;
+                    }
+
                     pt.sigpins.push_back( sp );
                     i++;
                     continue;

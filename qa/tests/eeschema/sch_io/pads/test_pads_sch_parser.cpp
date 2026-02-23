@@ -1156,6 +1156,182 @@ BOOST_AUTO_TEST_CASE( GetSignalsOnSheet )
 }
 
 
+BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_RegularPart_MultipleDecals )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_parttypes.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+    BOOST_CHECK( parser.IsValid() );
+
+    const auto& partTypes = parser.GetPartTypes();
+
+    // RES0805 should be parsed with G: gate format
+    auto it = partTypes.find( "RES0805" );
+    BOOST_REQUIRE( it != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& res = it->second;
+    BOOST_CHECK_EQUAL( res.category, "RES" );
+    BOOST_REQUIRE_EQUAL( res.gates.size(), 1 );
+
+    const PADS_SCH::GATE_DEF& resGate = res.gates[0];
+    BOOST_CHECK_EQUAL( resGate.num_decal_variants, 4 );
+    BOOST_CHECK_EQUAL( resGate.num_pins, 2 );
+    BOOST_CHECK_EQUAL( resGate.swap_flag, 0 );
+
+    // Decal names parsed from colon-separated G: field
+    BOOST_REQUIRE_EQUAL( resGate.decal_names.size(), 4 );
+    BOOST_CHECK_EQUAL( resGate.decal_names[0], "RESZ-H" );
+    BOOST_CHECK_EQUAL( resGate.decal_names[1], "RESZ-V" );
+    BOOST_CHECK_EQUAL( resGate.decal_names[2], "RESB-H" );
+    BOOST_CHECK_EQUAL( resGate.decal_names[3], "RESB-V" );
+
+    // Pin definitions from dot-separated tokens
+    BOOST_REQUIRE_EQUAL( resGate.pins.size(), 2 );
+    BOOST_CHECK_EQUAL( resGate.pins[0].pin_id, "1" );
+    BOOST_CHECK_EQUAL( resGate.pins[0].swap_group, 1 );
+    BOOST_CHECK_EQUAL( resGate.pins[0].pin_type, 'U' );
+    BOOST_CHECK_EQUAL( resGate.pins[1].pin_id, "2" );
+    BOOST_CHECK_EQUAL( resGate.pins[1].swap_group, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_MultiGatePart )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_parttypes.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& partTypes = parser.GetPartTypes();
+
+    auto it = partTypes.find( "PS2802-4-A" );
+    BOOST_REQUIRE( it != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& ps = it->second;
+    BOOST_CHECK_EQUAL( ps.category, "SOP" );
+    BOOST_REQUIRE_EQUAL( ps.gates.size(), 4 );
+
+    // Each gate should have 4 pins and reference the PS2802 decal
+    for( int g = 0; g < 4; g++ )
+    {
+        BOOST_CHECK_EQUAL( ps.gates[g].num_pins, 4 );
+        BOOST_REQUIRE_GE( ps.gates[g].decal_names.size(), 1 );
+        BOOST_CHECK_EQUAL( ps.gates[g].decal_names[0], "PS2802" );
+    }
+
+    // Verify specific pin names from first gate (AN, CATH, EMIT, COL)
+    BOOST_REQUIRE_EQUAL( ps.gates[0].pins.size(), 4 );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[0].pin_id, "1" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[0].pin_name, "AN" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[1].pin_id, "2" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[1].pin_name, "CATH" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[2].pin_id, "15" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[2].pin_name, "EMIT" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[3].pin_id, "16" );
+    BOOST_CHECK_EQUAL( ps.gates[0].pins[3].pin_name, "COL" );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_Connector )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_parttypes.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& partTypes = parser.GetPartTypes();
+
+    auto it = partTypes.find( "43650-0400" );
+    BOOST_REQUIRE( it != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& conn = it->second;
+    BOOST_CHECK_EQUAL( conn.category, "CON" );
+    BOOST_CHECK( conn.is_connector );
+    BOOST_REQUIRE_EQUAL( conn.gates.size(), 1 );
+    BOOST_CHECK_EQUAL( conn.gates[0].num_pins, 4 );
+    BOOST_REQUIRE_EQUAL( conn.gates[0].pins.size(), 4 );
+
+    // Connector pins should have S type
+    for( int p = 0; p < 4; p++ )
+    {
+        BOOST_CHECK_EQUAL( conn.gates[0].pins[p].pin_type, 'S' );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_SpecialSymbols )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_parttypes.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& partTypes = parser.GetPartTypes();
+
+    // $GND_SYMS
+    auto gndIt = partTypes.find( "$GND_SYMS" );
+    BOOST_REQUIRE( gndIt != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& gnd = gndIt->second;
+    BOOST_CHECK_EQUAL( gnd.special_keyword, "GND" );
+    BOOST_CHECK_EQUAL( gnd.gates.size(), 2 );
+    BOOST_REQUIRE_EQUAL( gnd.special_variants.size(), 2 );
+    BOOST_CHECK_EQUAL( gnd.special_variants[0].decal_name, "DGND" );
+    BOOST_CHECK_EQUAL( gnd.special_variants[0].pin_type, "G" );
+    BOOST_CHECK_EQUAL( gnd.special_variants[1].decal_name, "PWRGND" );
+
+    // V5.2 SIGPIN entries
+    BOOST_REQUIRE_EQUAL( gnd.sigpins.size(), 2 );
+    BOOST_CHECK_EQUAL( gnd.sigpins[0].pin_number, "1" );
+    BOOST_CHECK_EQUAL( gnd.sigpins[0].net_name, "DGND" );
+    BOOST_CHECK_EQUAL( gnd.sigpins[1].pin_number, "2" );
+    BOOST_CHECK_EQUAL( gnd.sigpins[1].net_name, "PWRGND" );
+
+    // $PWR_SYMS
+    auto pwrIt = partTypes.find( "$PWR_SYMS" );
+    BOOST_REQUIRE( pwrIt != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& pwr = pwrIt->second;
+    BOOST_CHECK_EQUAL( pwr.special_keyword, "PWR" );
+    BOOST_CHECK_EQUAL( pwr.gates.size(), 2 );
+    BOOST_REQUIRE_EQUAL( pwr.special_variants.size(), 2 );
+    BOOST_CHECK_EQUAL( pwr.special_variants[0].decal_name, "+5V" );
+    BOOST_CHECK_EQUAL( pwr.special_variants[0].pin_type, "P" );
+
+    BOOST_REQUIRE_EQUAL( pwr.sigpins.size(), 2 );
+    BOOST_CHECK_EQUAL( pwr.sigpins[0].net_name, "+5V" );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_SimplePart )
+{
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/v52_parttypes.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& partTypes = parser.GetPartTypes();
+
+    // MMSZ5260BT1 should map to ZENER decal
+    auto it = partTypes.find( "MMSZ5260BT1" );
+    BOOST_REQUIRE( it != partTypes.end() );
+
+    const PADS_SCH::PARTTYPE_DEF& diode = it->second;
+    BOOST_CHECK_EQUAL( diode.category, "DIO" );
+    BOOST_REQUIRE_EQUAL( diode.gates.size(), 1 );
+    BOOST_REQUIRE_EQUAL( diode.gates[0].decal_names.size(), 1 );
+    BOOST_CHECK_EQUAL( diode.gates[0].decal_names[0], "ZENER" );
+    BOOST_CHECK_EQUAL( diode.gates[0].num_pins, 2 );
+    BOOST_REQUIRE_EQUAL( diode.gates[0].pins.size(), 2 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
