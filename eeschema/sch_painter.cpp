@@ -2246,15 +2246,15 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
     if( drawingShadows && font->IsOutline() )
     {
-        VECTOR2I pos( aText->GetDrawPos() );
-
-        pos += text_offset;
-
-        if( aText->Type() == SCH_TEXT_T )
-            pos += aText->GetOffsetToMatchSCH_FIELD( nullptr );
-
         // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
-        boxText( *m_gal, shownText, pos, attrs, aText->GetFontMetrics() );
+        // Use GetBoundingBox() which correctly handles multiline text dimensions.
+        BOX2I bbox = aText->GetBoundingBox();
+
+        bbox.Inflate( attrs.m_StrokeWidth / 2, attrs.m_StrokeWidth * 2 );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->DrawRectangle( bbox.GetOrigin(), bbox.GetEnd() );
     }
     else if( aText->GetLayer() == LAYER_DEVICE )
     {
