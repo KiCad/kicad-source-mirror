@@ -32,7 +32,6 @@
 #define ARG_USE_DRILL_ORIGIN "--use-drill-origin"
 #define ARG_MODE_SINGLE "--mode-single"
 #define ARG_MODE_MULTI "--mode-multi"
-#define ARG_VARIANT "--variant"
 
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "dxf", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
@@ -117,10 +116,7 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() :
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 }
 
 
@@ -138,7 +134,9 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_sketchDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS );
     dxfJob->m_crossoutDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_CROSSOUT_DNP_FPS_ON_FAB_LAYERS );
     dxfJob->SetVarOverrides( m_argDefineVars );
-    dxfJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        dxfJob->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( dxfJob->m_filename ) )
     {

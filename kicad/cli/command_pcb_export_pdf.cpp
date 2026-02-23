@@ -28,7 +28,6 @@
 #define ARG_MODE_SEPARATE "--mode-separate"
 #define ARG_MODE_MULTIPAGE "--mode-multipage"
 #define ARG_MODE_SINGLE "--mode-single"
-#define ARG_VARIANT "--variant"
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "pdf", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
@@ -124,10 +123,7 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 }
 
 
@@ -139,7 +135,9 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->SetConfiguredOutputPath( m_argOutput );
     pdfJob->m_drawingSheet = m_argDrawingSheet;
     pdfJob->SetVarOverrides( m_argDefineVars );
-    pdfJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        pdfJob->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( pdfJob->m_filename ) )
     {

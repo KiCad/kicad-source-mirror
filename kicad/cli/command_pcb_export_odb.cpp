@@ -29,7 +29,6 @@
 
 #define ARG_COMPRESS "--compression"
 #define ARG_UNITS "--units"
-#define ARG_VARIANT "--variant"
 
 CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "odb" )
@@ -55,10 +54,7 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
             .help( std::string( "Units" ) )
             .choices( "mm", "in" );
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 }
 
 
@@ -70,7 +66,9 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
     job->SetConfiguredOutputPath( m_argOutput );
     job->m_drawingSheet = m_argDrawingSheet;
     job->SetVarOverrides( m_argDefineVars );
-    job->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        job->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( job->m_filename ) )
     {

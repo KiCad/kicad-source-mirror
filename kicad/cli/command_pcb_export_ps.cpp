@@ -32,7 +32,6 @@
 #define ARG_X_SCALE_FACTOR "--x-scale-factor"
 #define ARG_Y_SCALE_FACTOR "--y-scale-factor"
 #define ARG_FORCE_A4 "--force-a4"
-#define ARG_VARIANT "--variant"
 
 CLI::PCB_EXPORT_PS_COMMAND::PCB_EXPORT_PS_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "ps", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
@@ -144,10 +143,7 @@ CLI::PCB_EXPORT_PS_COMMAND::PCB_EXPORT_PS_COMMAND() :
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 }
 
 
@@ -159,7 +155,9 @@ int CLI::PCB_EXPORT_PS_COMMAND::doPerform( KIWAY& aKiway )
     psJob->SetConfiguredOutputPath( m_argOutput );
     psJob->m_drawingSheet = m_argDrawingSheet;
     psJob->SetVarOverrides( m_argDefineVars );
-    psJob->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        psJob->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( psJob->m_filename ) )
     {

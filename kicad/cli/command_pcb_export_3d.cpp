@@ -57,7 +57,6 @@
 #define ARG_VRML_MODELS_DIR "--models-dir"
 #define ARG_VRML_MODELS_RELATIVE "--models-relative"
 #define ARG_COMPONENT_FILTER "--component-filter"
-#define ARG_VARIANT "--variant"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
@@ -95,10 +94,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                                   "attribute" ) ) )
             .flag();
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 
     if( m_format != JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN
         && m_format != JOB_EXPORT_PCB_3D::FORMAT::VRML )
@@ -257,7 +253,10 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     params.m_IncludeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
     params.m_IncludeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
     params.m_Overwrite = m_argParser.get<bool>( ARG_FORCE );
-    step->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        step->m_variant = m_argVariantNames.front();
+
     step->SetConfiguredOutputPath( m_argOutput );
 
     step->m_filename = m_argInput;

@@ -31,7 +31,6 @@
 #include <locale_io.h>
 
 #define ARG_COMPRESS "--compress"
-#define ARG_VARIANT "--variant"
 
 #define ARG_BOM_COL_INT_ID "--bom-col-int-id"
 #define ARG_BOM_COL_MFG_PN "--bom-col-mfg-pn"
@@ -98,10 +97,7 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
                                 "Material Distributor Column" ) )
             .metavar( "FIELD_NAME" );
 
-    m_argParser.add_argument( ARG_VARIANT )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "Board variant for variant-aware DNP and BOM filtering" ) ) )
-            .metavar( "VARIANT" );
+    addVariantsArg();
 }
 
 
@@ -113,7 +109,9 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
     ipc2581Job->SetConfiguredOutputPath( m_argOutput );
     ipc2581Job->m_drawingSheet = m_argDrawingSheet;
     ipc2581Job->SetVarOverrides( m_argDefineVars );
-    ipc2581Job->m_variant = From_UTF8( m_argParser.get<std::string>( ARG_VARIANT ).c_str() );
+
+    if( !m_argVariantNames.empty() )
+        ipc2581Job->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( ipc2581Job->m_filename ) )
     {
