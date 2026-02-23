@@ -137,9 +137,9 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
                 const nlohmann::json& fpMeta = project.at( "footprints" ).at( uuidKey );
 
                 if( fpMeta.contains( "display_title" ) )
-                    fpTitle = fpMeta.at( "display_title" ).get<wxString>();
+                    fpTitle = EASYEDAPRO::V3GetString( fpMeta, "display_title", fpTitle );
                 else if( fpMeta.contains( "title" ) )
-                    fpTitle = fpMeta.at( "title" ).get<wxString>();
+                    fpTitle = EASYEDAPRO::V3GetString( fpMeta, "title", fpTitle );
             }
         }
         catch( ... )
