@@ -1594,9 +1594,9 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildArc( const BLK_0x01_ARC& aArc, co
     start = scale( start );
     end = scale( end );
 
-    VECTOR2I c = scale( VECTOR2D{ aArc.m_CenterX, aArc.m_CenterY } );
+    VECTOR2I c = scale( KiROUND( VECTOR2D{ aArc.m_CenterX, aArc.m_CenterY } ) );
 
-    int radius = scale( aArc.m_Radius );
+    int radius = scale( KiROUND( aArc.m_Radius ) );
 
     bool clockwise = ( aArc.m_SubType & 0x40 ) != 0;
 
