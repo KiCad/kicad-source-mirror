@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-20 12:10+0000\n"
+"PO-Revision-Date: 2026-02-23 22:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -8013,7 +8013,7 @@ msgstr "DXFの下書き線は現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:470
 msgid "DXF arc-aligned text not currently supported."
-msgstr "DXFの円弧テキストは現在サポートされていません。"
+msgstr "DXFの円弧揃えテキストは現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
@@ -9348,7 +9348,7 @@ msgstr "US リーガル 8.5 x 14in"
 
 #: common/page_info.cpp:66
 msgid "US Ledger 11 x 17in"
-msgstr "US リーガル 11x17in"
+msgstr "US レジャー 11x17in"
 
 #: common/paths.cpp:555
 #, c-format
@@ -26595,7 +26595,7 @@ msgstr "回路図から既存のデザイン バリアントを削除。"
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
-msgstr "文字揃え"
+msgstr "整列"
 
 #: eeschema/tools/sch_align_tool.cpp:361
 #: pcbnew/tools/align_distribute_tool.cpp:435
