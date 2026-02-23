@@ -20,6 +20,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 set( QA_PCBNEW_SRCS
+    # This is needed for the global mock objects
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
+
     # The main test entry points
     test_module.cpp
 

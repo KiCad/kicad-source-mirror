@@ -1,3 +1,9 @@
+# Add all the warnings to the files
+if( COMPILER_SUPPORTS_WARNINGS )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARN_FLAGS_CXX}")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
+endif()
+
 add_compile_definitions( PCBNEW )
 
 add_subdirectory(connectivity)
@@ -524,17 +530,6 @@ if( KICAD_IPC_API )
         )
 endif()
 
-
-if( COMPILER_SUPPORTS_WARNINGS )
-#Only compile our source files with the warnings, since the SWIG generated
-#files contain a lot of warnings, we just ignore it.
-    set_source_files_properties(
-        ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-        PROPERTIES COMPILE_FLAGS ${WARN_FLAGS_CXX}
-    )
-endif()
-
-
 #Disable all warnings for the SWIG file
 if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     if( MSYS )
@@ -792,9 +787,11 @@ add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
     ${PCBNEW_RESOURCES}
     )
-set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp pcbnew.cpp PROPERTIES
+
+set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB_EDITOR;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
     )
+
 target_link_libraries( pcbnew
     kicommon
     ${wxWidgets_LIBRARIES}
@@ -806,21 +803,18 @@ target_link_options( pcbnew PRIVATE
 
 #the main pcbnew program, in DSO form.
 add_library( pcbnew_kiface_objects OBJECT
-    pcbnew.cpp
     ${PCBNEW_SRCS}
     ${PCBNEW_COMMON_SRCS}
     ${PCBNEW_SCRIPTING_SRCS}
     )
 
-if( KICAD_USE_PCH AND CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+if( KICAD_USE_PCH )
     target_precompile_headers( pcbnew_kiface_objects
         PRIVATE
             <vector>
             <map>
             <memory>
             <unordered_map>
-            "board.h"
-            "footprint.h"
             <macros.h> )
 endif()
 
@@ -846,7 +840,9 @@ target_link_libraries( pcbnew_kiface_objects
         ${OCC_LIBRARIES}
     )
 
-add_library( pcbnew_kiface MODULE )
+add_library( pcbnew_kiface MODULE
+    pcbnew.cpp
+    )
 
 set_target_properties( pcbnew_kiface PROPERTIES
 #Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
@@ -894,8 +890,8 @@ target_link_libraries( pcbnew_kiface
         ${PCBNEW_KIFACE_LIBRARIES}
     )
 
-set_source_files_properties( pcbnew.cpp PROPERTIES
 #The KIFACE is in pcbnew.cpp, export it:
+set_source_files_properties( pcbnew.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 

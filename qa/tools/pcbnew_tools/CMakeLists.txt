@@ -20,6 +20,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 add_executable( qa_pcbnew_tools
+    # This is needed for the global mock objects
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
     # The main entry point
     pcbnew_tools.cpp
@@ -29,6 +31,13 @@ add_executable( qa_pcbnew_tools
     tools/polygon_generator/polygon_generator.cpp
 
     tools/polygon_triangulation/polygon_triangulation.cpp
+)
+
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
+    ${INC_AFTER}
 )
 
 # Anytime we link to the kiface_objects, we have to add a dependency on the last object

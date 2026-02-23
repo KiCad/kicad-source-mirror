@@ -22,6 +22,9 @@ set( QA_API_SRCS
     )
 
 add_executable( qa_api
+    # This is needed for the global mock objects
+    ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
+
     ${QA_API_SRCS}
     )
 
