@@ -2240,7 +2240,8 @@ bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 }
 
 
-bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONSTRAINT& aConstraint )
+bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONSTRAINT& aConstraint,
+                                       bool aUnconditionalOnly )
 {
     int  worst = 0;
     auto it = m_constraintMap.find( aConstraintId );
@@ -2249,6 +2250,9 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
     {
         for( DRC_ENGINE_CONSTRAINT* c : *it->second )
         {
+            if( aUnconditionalOnly && c->condition )
+                continue;
+
             int current = c->constraint.GetValue().Min();
 
             if( current > worst )

@@ -366,6 +366,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                 return !m_drcEngine->IsCancelled();
             } );
 
+    m_itemTree.clear();
+
     return !m_drcEngine->IsCancelled();
 }
 

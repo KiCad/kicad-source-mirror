@@ -45,11 +45,42 @@ bool DRC_CACHE_GENERATOR::Run()
 
     largestClearance = std::max( largestClearance, m_board->GetMaxClearanceValue() );
 
-    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
+    // Only consider unconditional constraints for the global maximum.  Conditional constraints
+    // (like the barcode physical clearance default) apply only to specific item types and
+    // should not inflate the R-tree query radius for all items on the board.
+    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint, true ) )
         largestPhysicalClearance = worstConstraint.GetValue().Min();
 
-    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
+    if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint, true ) )
         largestPhysicalClearance = std::max( largestPhysicalClearance, worstConstraint.GetValue().Min() );
+
+    // If the unconditional max is 0, check for conditional constraints that may still apply.
+    // Only include the conditional maximum if matching items actually exist on the board.
+    if( largestPhysicalClearance <= 0 )
+    {
+        int conditionalMax = 0;
+
+        if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
+            conditionalMax = worstConstraint.GetValue().Min();
+
+        if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
+            conditionalMax = std::max( conditionalMax, worstConstraint.GetValue().Min() );
+
+        if( conditionalMax > 0 )
+        {
+            bool hasMatchingItems = false;
+
+            forEachGeometryItem( { PCB_BARCODE_T }, LSET::AllLayersMask(),
+                    [&]( BOARD_ITEM* item ) -> bool
+                    {
+                        hasMatchingItems = true;
+                        return false;
+                    } );
+
+            if( hasMatchingItems )
+                largestPhysicalClearance = conditionalMax;
+        }
+    }
 
     // Ensure algorithmic safety
     largestClearance = std::min( largestClearance, INT_MAX / 3 );

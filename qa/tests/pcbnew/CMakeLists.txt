@@ -99,6 +99,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_via_dangling.cpp
     drc/test_drc_tuning_profiles.cpp
     drc/test_drc_creepage_issue21482.cpp
+    drc/test_drc_physical_clearance.cpp
     drc/test_drc_rule_editor.cpp
     drc/test_drc_bitmap_overlay_panel.cpp
 

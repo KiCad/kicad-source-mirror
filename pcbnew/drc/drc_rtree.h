@@ -170,7 +170,12 @@ public:
     void clear()
     {
         for( auto& [_, tree] : m_tree )
+        {
+            for( ITEM_WITH_SHAPE* el : *tree )
+                delete el;
+
             tree->RemoveAll();
+        }
 
         m_count = 0;
     }

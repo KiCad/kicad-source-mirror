@@ -286,7 +286,8 @@ public:
 
     REPORTER* GetLogReporter() const { return m_logReporter; }
 
-    bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint );
+    bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint,
+                               bool aUnconditionalOnly = false );
     std::set<int> QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId );
 
     std::vector<DRC_TEST_PROVIDER*> GetTestProviders() const { return m_testProviders; };
