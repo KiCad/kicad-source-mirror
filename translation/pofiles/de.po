@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-20 12:09+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-02-24 04:30+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -42566,27 +42566,27 @@ msgstr "%s Padformtyp unterscheidet sich auf Lage %s."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:386
 #, c-format
 msgid "%s size differs on layer %s."
-msgstr "Größe %s unterscheidet sich auf Ebene %s."
+msgstr "Größe %s unterscheidet sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:391
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "Trapez-Delta %s unterscheidet sich auf Ebene %s."
+msgstr "Trapez-Delta %s unterscheidet sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:399
 #, c-format
 msgid "%s rounded corners differ on layer %s."
-msgstr "Abgerundete Kanten %s unterscheiden sich auf Ebene %s."
+msgstr "Abgerundete Kanten %s unterscheiden sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:408
 #, c-format
 msgid "%s chamfered corner sizes differ on layer %s."
-msgstr "Größe der angefasten Kanten %s unterscheidet sich auf Ebene %s."
+msgstr "Größe der angefasten Kanten %s unterscheidet sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:414
 #, c-format
 msgid "%s chamfered corners differ on layer %s."
-msgstr "Angefaste Kanten %s unterscheiden sich auf Ebene %s."
+msgstr "Angefaste Kanten %s unterscheiden sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
 #, c-format
@@ -42606,7 +42606,7 @@ msgstr "%s Bohrgröße weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:479
 #, c-format
 msgid "%s shape primitives differ on layer %s."
-msgstr "Formprimitiven %s unterscheiden sich auf Ebene %s."
+msgstr "Formprimitive %s unterscheiden sich auf Lage %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
 #, c-format
