@@ -1373,6 +1373,11 @@ public:
             if( m_view->GetGAL() )
                 m_depth = m_view->GetGAL()->GetMinDepth();
         }
+
+        for( PNS::ITEM* item : m_clonedItems )
+            delete item;
+
+        m_clonedItems.clear();
     }
 
     virtual void Message( const wxString& msg, const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
