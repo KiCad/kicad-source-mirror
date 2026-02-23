@@ -459,6 +459,10 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
                 pattern->m_settings.m_isTimeDomain = false;
             }
         }
+        else if( aStartItem->GetEffectiveNetClass()->HasTuningProfile() )
+        {
+            pattern->m_settings.m_isTimeDomain = true;
+        }
     }
     else
     {
@@ -574,6 +578,11 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
                 m_settings.m_isTimeDomain = constraint.m_IsTimeDomain;
                 aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
             }
+            else if( track->GetEffectiveNetClass()->HasTuningProfile() )
+            {
+                m_settings.m_isTimeDomain = true;
+                aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
+            }
         }
         else
         {
@@ -604,6 +613,11 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
                     }
 
                     m_settings.m_isTimeDomain = constraint.m_IsTimeDomain;
+                    aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
+                }
+                else if( track->GetEffectiveNetClass()->HasTuningProfile() )
+                {
+                    m_settings.m_isTimeDomain = true;
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
