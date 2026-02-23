@@ -45,6 +45,7 @@
 #include <core/mirror.h>
 #include <trigo.h>
 #include <sch_label.h>
+#include <sch_rule_area.h>
 #include <magic_enum.hpp>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
@@ -1571,6 +1572,13 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel
 {
     m_pinLength = aClassLabel.m_pinLength;
     m_symbolSize = aClassLabel.m_symbolSize;
+}
+
+
+SCH_DIRECTIVE_LABEL::~SCH_DIRECTIVE_LABEL()
+{
+    for( SCH_RULE_AREA* ruleArea : m_connected_rule_areas )
+        ruleArea->RemoveDirective( this );
 }
 
 

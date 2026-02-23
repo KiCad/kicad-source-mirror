@@ -453,6 +453,13 @@ void SCH_RULE_AREA::RemoveItem( SCH_ITEM* aItem )
 }
 
 
+void SCH_RULE_AREA::RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel )
+{
+    m_directives.erase( aLabel );
+    m_prev_directives.erase( aLabel );
+}
+
+
 static struct SCH_RULE_AREA_DESC
 {
     SCH_RULE_AREA_DESC()
