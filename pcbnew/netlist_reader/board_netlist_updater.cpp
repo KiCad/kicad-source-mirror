@@ -1391,7 +1391,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                     {
                         if( aFootprints.size() > 1 )
                         {
-                            msg.Printf( add ? _( "Add %s '%s' attribute to varaint %s (footprint %s)." )
+                            msg.Printf( add ? _( "Add %s '%s' attribute to variant %s (footprint %s)." )
                                             : _( "Remove %s '%s' attribute from variant %s (footprint %s)." ),
                                         footprint->GetReference(),
                                         attrName,
@@ -1400,7 +1400,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                         }
                         else
                         {
-                            msg.Printf( add ? _( "Add %s '%s' attribute to varaint %s." )
+                            msg.Printf( add ? _( "Add %s '%s' attribute to variant %s." )
                                             : _( "Remove %s '%s' attribute from variant %s." ),
                                         footprint->GetReference(),
                                         attrName,
@@ -1411,7 +1411,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                     {
                         if( aFootprints.size() > 1 )
                         {
-                            msg.Printf( add ? _( "Added %s '%s' attribute to varaint %s (footprint %s)." )
+                            msg.Printf( add ? _( "Added %s '%s' attribute to variant %s (footprint %s)." )
                                             : _( "Removed %s '%s' attribute from variant %s (footprint %s)." ),
                                         footprint->GetReference(),
                                         attrName,
@@ -1420,7 +1420,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                         }
                         else
                         {
-                            msg.Printf( add ? _( "Added %s '%s' attribute to varaint %s." )
+                            msg.Printf( add ? _( "Added %s '%s' attribute to variant %s." )
                                             : _( "Removed %s '%s' attribute from variant %s." ),
                                         footprint->GetReference(),
                                         attrName,
