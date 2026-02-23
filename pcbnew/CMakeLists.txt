@@ -815,9 +815,12 @@ if( KICAD_USE_PCH )
             <map>
             <memory>
             <unordered_map>
-            "board.h"
-            "footprint.h"
-            <macros.h> )
+            <pcb_edit_frame.h>
+            <board.h>
+            <footprint.h>
+            <macros.h>
+            <pgm_base.h>
+            <wx/wx.h> )
 endif()
 
 #auto - generate specctra_lexer.h and specctra_keywords.cpp
