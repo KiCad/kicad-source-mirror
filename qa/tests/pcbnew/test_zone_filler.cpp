@@ -1229,3 +1229,68 @@ BOOST_FIXTURE_TEST_CASE( LargeCircleTeardropGeometry, ZONE_FILL_TEST_FIXTURE )
                          "Found teardrop with excessive concave vertices on large circle, "
                          "indicating anchor points may not be on circle edge" );
 }
+
+
+/**
+ * Test for issue 23123: Coincident pads from different footprints with different nets
+ * must each get proper zone treatment.
+ *
+ * When two pads occupy the same position with the same geometry but different nets, the
+ * zone filler's deduplication must not skip the second pad. A pad whose net differs from
+ * the zone needs clearance; a pad matching the zone net gets thermal relief. If the
+ * deduplication key omits the net code, the second pad is silently dropped and no
+ * clearance is created.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionCoincidentPadClearance, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue23123_minimal", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    // After filling, every pad whose net differs from the zone must have clearance.
+    // Check each zone/pad combination on each shared layer.
+    int violations = 0;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetIsRuleArea() )
+            continue;
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            if( !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( layer );
+
+            for( PAD* pad : m_board->GetPads() )
+            {
+                if( !pad->IsOnLayer( layer ) )
+                    continue;
+
+                if( pad->GetNetCode() == zone->GetNetCode() )
+                    continue;
+
+                std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
+                int clearance = padShape->GetClearance( fill.get() );
+
+                if( clearance < 1 )
+                {
+                    BOOST_TEST_MESSAGE( wxString::Format(
+                            "Pad %s (net %s) at (%d, %d) has zero clearance to zone %s "
+                            "on layer %s",
+                            pad->GetNumber(), pad->GetNetname(),
+                            pad->GetPosition().x, pad->GetPosition().y,
+                            zone->GetNetname(), m_board->GetLayerName( layer ) ) );
+                    violations++;
+                }
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( violations == 0,
+                         wxString::Format( "Found %d pads with missing zone clearance. "
+                                           "Coincident pads with different nets must not be "
+                                           "deduplicated in zone fill knockout.",
+                                           violations ) );
+}

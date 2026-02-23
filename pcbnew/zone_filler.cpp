@@ -221,17 +221,21 @@ namespace
 /// Key for deduplicating coincident pads.
 /// For circular pads: uses max of drill and pad size.
 /// For non-circular pads: uses pad size only.
+/// Net code is included so pads at the same position with different nets are not
+/// deduplicated, since they require different zone treatment (thermal vs clearance).
 struct PAD_KNOCKOUT_KEY
 {
     VECTOR2I  position;
     VECTOR2I  effectiveSize;   // For circular: max of drill and pad; otherwise pad size
     int       shape;           // PAD_SHAPE enum value
     EDA_ANGLE orientation;
+    int       netCode;
 
     bool operator==( const PAD_KNOCKOUT_KEY& other ) const
     {
         return position == other.position && effectiveSize == other.effectiveSize
-               && shape == other.shape && orientation == other.orientation;
+               && shape == other.shape && orientation == other.orientation
+               && netCode == other.netCode;
     }
 };
 
@@ -240,19 +244,23 @@ struct PAD_KNOCKOUT_KEY_HASH
     size_t operator()( const PAD_KNOCKOUT_KEY& key ) const
     {
         return hash_val( key.position.x, key.position.y, key.effectiveSize.x, key.effectiveSize.y,
-                         key.shape, key.orientation.AsDegrees() );
+                         key.shape, key.orientation.AsDegrees(), key.netCode );
     }
 };
 
 /// Key for deduplicating coincident vias (circular, so use max of drill and width)
+/// Net code is included so vias at the same position with different nets are not
+/// deduplicated, since they require different zone treatment.
 struct VIA_KNOCKOUT_KEY
 {
     VECTOR2I position;
     int      effectiveSize;    // max of drill and via width
+    int      netCode;
 
     bool operator==( const VIA_KNOCKOUT_KEY& other ) const
     {
-        return position == other.position && effectiveSize == other.effectiveSize;
+        return position == other.position && effectiveSize == other.effectiveSize
+               && netCode == other.netCode;
     }
 };
 
@@ -260,7 +268,7 @@ struct VIA_KNOCKOUT_KEY_HASH
 {
     size_t operator()( const VIA_KNOCKOUT_KEY& key ) const
     {
-        return hash_val( key.position.x, key.position.y, key.effectiveSize );
+        return hash_val( key.position.x, key.position.y, key.effectiveSize, key.netCode );
     }
 };
 
@@ -1635,7 +1643,8 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 }
 
                 PAD_KNOCKOUT_KEY padKey{ pad->GetPosition(), effectiveSize,
-                                         static_cast<int>( padShapeType ), pad->GetOrientation() };
+                                         static_cast<int>( padShapeType ),
+                                         pad->GetOrientation(), pad->GetNetCode() };
 
                 if( !processedPads.insert( padKey ).second )
                     continue;
@@ -1792,7 +1801,8 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
                 // Deduplicate coincident vias (circular, so use max of drill and width)
                 int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
-                VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize };
+                VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize,
+                                         via->GetNetCode() };
 
                 if( !processedVias.insert( viaKey ).second )
                     continue;
@@ -2001,7 +2011,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             }
 
             PAD_KNOCKOUT_KEY padKey{ pad->GetPosition(), effectiveSize,
-                                     static_cast<int>( padShape ), pad->GetOrientation() };
+                                     static_cast<int>( padShape ), pad->GetOrientation(),
+                                     pad->GetNetCode() };
 
             if( !processedPads.insert( padKey ).second )
                 continue;
@@ -2120,7 +2131,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( track );
             int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
-            VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize };
+            VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize, via->GetNetCode() };
 
             if( !processedVias.insert( viaKey ).second )
                 continue;
