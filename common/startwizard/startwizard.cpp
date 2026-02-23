@@ -169,6 +169,8 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
         if( !provider->NeedsUserInput() )
             continue;
 
+        provider->SetWasShown( true );
+
         STARTWIZARD_PAGE* page = new STARTWIZARD_PAGE( m_wizard, provider->GetPageName() );
         wxPanel*          panel = provider->GetWizardPanel( page, this );
         page->AddContent( panel );
@@ -217,7 +219,7 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
     {
         for( std::unique_ptr<STARTWIZARD_PROVIDER>& provider : m_providers )
         {
-            if( !provider->NeedsUserInput() )
+            if( !provider->WasShown() )
                 continue;
 
             provider->Finish();

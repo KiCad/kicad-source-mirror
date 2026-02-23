@@ -31,7 +31,10 @@ class STARTWIZARD;
 class KICOMMON_API STARTWIZARD_PROVIDER
 {
 public:
-    STARTWIZARD_PROVIDER( const wxString& aPageName ) : m_pageName( aPageName ) {}
+    STARTWIZARD_PROVIDER( const wxString& aPageName ) :
+            m_pageName( aPageName ),
+            m_wasShown( false )
+    {}
 
     virtual ~STARTWIZARD_PROVIDER() = default;
 
@@ -43,6 +46,9 @@ public:
 
     const wxString& GetPageName() const { return m_pageName; }
 
+    bool WasShown() const { return m_wasShown; }
+    void SetWasShown( bool aShown ) { m_wasShown = aShown; }
+
     virtual void Finish() {}
 
     /// Apply whatever actions and settings should happen if the user cancels the startup wizard
@@ -50,6 +56,7 @@ public:
 
 private:
     wxString m_pageName;
+    bool     m_wasShown;
 };
 
 #endif
