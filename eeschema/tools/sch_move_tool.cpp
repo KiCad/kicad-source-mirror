@@ -1355,6 +1355,13 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
 SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, const VECTOR2I& aCursorPos,
                                            bool aHasSheetPins, bool aIsGraphicsOnly, bool aCtrlDown )
 {
+    // Fields are children of their parent item and must not be dropped into a sheet
+    for( EDA_ITEM* it : aSelection )
+    {
+        if( it->Type() == SCH_FIELD_T )
+            return nullptr;
+    }
+
     // Determine potential target sheet
     SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetItem( aCursorPos, 0, SCH_SHEET_T ) );
 
