@@ -135,6 +135,12 @@ private:
     std::unique_ptr<PCB_SHAPE> buildPolygon( const BLK_0x28_SHAPE& aShape, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Build a drill marker from a 0x0C PIN_DEF block
+     */
+    std::vector<std::unique_ptr<BOARD_ITEM>> buildDrillMarker( const BLK_0x0C_PIN_DEF& aPinDef,
+                                                               BOARD_ITEM_CONTAINER&   aParent );
+
+    /**
      * Build a list of graphic items, e.g. from a table's pointer list.
      */
     std::vector<std::unique_ptr<BOARD_ITEM>> buildGraphicItems( const BLOCK_BASE&     aBlock,

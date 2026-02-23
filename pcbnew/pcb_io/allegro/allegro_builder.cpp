@@ -38,6 +38,7 @@
 #include <core/profile.h>
 
 #include <board_design_settings.h>
+#include <geometry/shape_utils.h>
 #include <project/net_settings.h>
 #include <footprint.h>
 #include <netclass.h>
@@ -1720,6 +1721,134 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
 }
 
 
+std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildDrillMarker( const BLK_0x0C_PIN_DEF& aPinDef,
+                                                                          BOARD_ITEM_CONTAINER&   aParent )
+{
+    using MS = BLK_0x0C_PIN_DEF::MARKER_SHAPE;
+    std::vector<std::unique_ptr<PCB_SHAPE>> shapes;
+
+    const uint32_t markerShape = aPinDef.GetShape();
+
+    PCB_LAYER_ID   layer = getLayer( aPinDef.m_Layer );
+    const VECTOR2I center = scale( VECTOR2I{ aPinDef.m_Coords[0], aPinDef.m_Coords[1] } );
+    const VECTOR2I size = scaleSize( VECTOR2I{ aPinDef.m_Size[0], aPinDef.m_Size[1] } );
+
+    const auto addLine = [&]( const SEG& aSeg )
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::SEGMENT );
+        shape->SetStart( aSeg.A );
+        shape->SetEnd( aSeg.B );
+        shapes.push_back( std::move( shape ) );
+    };
+
+    const auto addPolyPts = [&]( const std::vector<VECTOR2I>& aPts )
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::POLY );
+        shape->SetPolyPoints( aPts );
+        shapes.push_back( std::move( shape ) );
+    };
+
+    switch( markerShape )
+    {
+    case MS::CIRCLE:
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::CIRCLE );
+        shape->SetCenter( center );
+        shape->SetRadius( size.x / 2 );
+        shapes.push_back( std::move( shape ) );
+        break;
+    }
+    case MS::SQUARE:
+    case MS::RECTANGLE:
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::RECTANGLE );
+        shape->SetStart( center - size / 2 );
+        shape->SetEnd( center + size / 2 );
+        shapes.push_back( std::move( shape ) );
+        break;
+    }
+    case MS::CROSS:
+    {
+        std::unique_ptr<PCB_SHAPE> shape;
+
+        std::vector<SEG> segs = KIGEOM::MakeCrossSegments( center, size, ANGLE_0 );
+
+        for( const SEG& seg : segs )
+        {
+            addLine( seg );
+        }
+        break;
+    }
+    case MS::OBLONG_X:
+    case MS::OBLONG_Y:
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::RECTANGLE );
+        shape->SetStart( center - size / 2 );
+        shape->SetEnd( center + size / 2 );
+
+        int minSize = std::min( size.x, size.y );
+        shape->SetCornerRadius( minSize / 2 );
+        shapes.push_back( std::move( shape ) );
+        break;
+    }
+    case MS::TRIANGLE:
+    {
+        // This triangle is point-up
+        // Size follows fabmaster - the circumscribed circle of the triangle
+        std::vector<VECTOR2I> pts = KIGEOM::MakeRegularPolygonPoints( center, 3, size.x / 2, true, ANGLE_90 );
+        addPolyPts( pts );
+        break;
+    }
+    case MS::DIAMOND:
+    {
+        std::vector<VECTOR2I> pts = KIGEOM::MakeRegularPolygonPoints( center, 4, size.x / 2, true, ANGLE_90 );
+        addPolyPts( pts );
+        break;
+    }
+    case MS::PENTAGON:
+    {
+        // Not 100% sure which way this should point
+        std::vector<VECTOR2I> pts = KIGEOM::MakeRegularPolygonPoints( center, 5, size.x / 2, true, ANGLE_90 );
+        addPolyPts( pts );
+        break;
+    }
+    case MS::HEXAGON_X:
+    case MS::HEXAGON_Y:
+    {
+        EDA_ANGLE             startAngle = ( markerShape == MS::HEXAGON_X ) ? ANGLE_0 : ANGLE_90;
+        std::vector<VECTOR2I> pts = KIGEOM::MakeRegularPolygonPoints( center, 6, size.x / 2, true, startAngle );
+        addPolyPts( pts );
+        break;
+    }
+    case MS::OCTAGON:
+    {
+        EDA_ANGLE startAngle = FULL_CIRCLE / 16; // Start at 22.5 degrees to align flat sides with axes
+        // Octagons are measured across flats
+        std::vector<VECTOR2I> pts = KIGEOM::MakeRegularPolygonPoints( center, 8, size.x / 2, false, startAngle );
+        addPolyPts( pts );
+        break;
+    }
+    default:
+    {
+        wxLogTrace( traceAllegroBuilder, "Unsupported drill marker shape type %#04x for pin definition with key %#010x",
+                    markerShape, aPinDef.m_Key );
+        break;
+    }
+    }
+
+    std::vector<std::unique_ptr<BOARD_ITEM>> items;
+    for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
+    {
+        shape->SetLayer( layer );
+        shape->SetWidth( 0 );
+
+        items.push_back( std::move( shape ) );
+    }
+
+    return items;
+}
+
+
 std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildGraphicItems( const BLOCK_BASE&     aBlock,
                                                                            BOARD_ITEM_CONTAINER& aParent )
 {
@@ -1727,6 +1856,12 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildGraphicItems( const
 
     switch( aBlock.GetBlockType() )
     {
+    case 0x0c:
+    {
+        const auto& pinDef = static_cast<const BLOCK<BLK_0x0C_PIN_DEF>&>( aBlock ).GetData();
+        newItems = buildDrillMarker( pinDef, aParent );
+        break;
+    }
     case 0x0e:
     {
         const auto&                rect = static_cast<const BLOCK<BLK_0x0E_RECT>&>( aBlock ).GetData();

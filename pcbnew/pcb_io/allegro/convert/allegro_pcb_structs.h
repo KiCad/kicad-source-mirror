@@ -769,6 +769,23 @@ struct BLK_0x0A_DRC
  */
 struct BLK_0x0C_PIN_DEF
 {
+    enum MARKER_SHAPE
+    {
+        // These are in the same order as the pad shapes, at least for the 'simple' shapes
+        CIRCLE = 0x02,
+        OCTAGON = 0x03,
+        CROSS = 0x04,
+        SQUARE = 0x05,
+        RECTANGLE = 0x06,
+        DIAMOND = 0x07,
+        PENTAGON = 0x0a,
+        OBLONG_X = 0x0b,
+        OBLONG_Y = 0x0c,
+        HEXAGON_X = 0x0f,
+        HEXAGON_Y = 0x10,
+        TRIANGLE = 0x12,
+    };
+
     uint8_t    m_T;
     LAYER_INFO m_Layer;
     uint32_t m_Key;
@@ -793,6 +810,11 @@ struct BLK_0x0C_PIN_DEF
     std::array<uint32_t, 3> m_UnknownArray;
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown6;
+
+    uint32_t GetShape() const
+    {
+        return m_Shape16x.value_or( m_Shape.value_or( 0 ) );
+    }
 };
 
 
