@@ -1203,7 +1203,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
             PNS_DBG( Dbg(), AddItem, &currentLine->Via(), LIGHTRED, 10000, wxT( "current-line-via" ) );
         }
 
-        PNS_DBG( Dbg(), AddItem, vtmp.Clone(), LIGHTRED, 100000, wxT( "orig-via" ) );
+        PNS_DBG( Dbg(), AddItem, &vtmp, LIGHTRED, 100000, wxT( "orig-via" ) );
 
         lineCollision = vtmp.Shape( layer )->Collide( currentLine->Shape( -1 ),
                                                         clearance + currentLine->Width() / 2,

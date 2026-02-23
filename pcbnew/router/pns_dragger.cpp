@@ -480,11 +480,11 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 
         optimizer.SetRestrictArea( *affectedArea );
 
-        PNS_DBG( Dbg(), AddItem, aDragged.Clone(), RED, 0, wxT( "drag-preopt" ) );
+        PNS_DBG( Dbg(), AddItem, &aDragged, RED, 0, wxT( "drag-preopt" ) );
         aDragged.Line().Split( anchor );
 
         optimizer.Optimize( &aDragged, &draggedPostOpt, &origLine );
-        PNS_DBG( Dbg(), AddItem, aDragged.Clone(), GREEN, 0, wxT( "drag-postopt" ) );
+        PNS_DBG( Dbg(), AddItem, &aDragged, GREEN, 0, wxT( "drag-postopt" ) );
     }
     else
     {

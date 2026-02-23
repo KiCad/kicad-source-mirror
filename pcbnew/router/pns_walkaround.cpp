@@ -261,7 +261,7 @@ bool WALKAROUND::singleStep()
 
         if( shortest.has_value() )
         {
-            PNS_DBG( Dbg(), AddItem, shortest->Clone(), RED, 10000, wxString::Format( "shortest-l" ) );
+            PNS_DBG( Dbg(), AddItem, &shortest.value(), RED, 10000, wxString::Format( "shortest-l" ) );
 
             for( auto& item : m_processedItems )
             {

@@ -1006,7 +1006,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
             aNewHead.AppendVia( newHead.Via() );
 
         OPTIMIZER::Optimize( &aNewHead, effort, m_currentNode );
-        PNS_DBG( Dbg(), AddItem, aNewHead.Clone(), GREEN, 1000000, "head-sh-postopt" );
+        PNS_DBG( Dbg(), AddItem, &aNewHead, GREEN, 1000000, "head-sh-postopt" );
 
         return true;
     }
