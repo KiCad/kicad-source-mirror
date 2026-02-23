@@ -702,6 +702,14 @@ public:
     }
 
     /**
+     * Return whether this layer ID is something we mapped to, or the catch-all unmapped layer.
+     */
+    bool IsLayerMapped( PCB_LAYER_ID aLayerId ) const
+    {
+        return aLayerId != m_unmappedLayer;
+    }
+
+    /**
      * Allegro puts more graphics than just the polygon on PBT/B, but we don't want to always make a static
      * mapping, because some things on PBT/B _do_ belong to the courtyard layer in KiCad (polygons).
      *
@@ -1521,6 +1529,107 @@ const BLK_0x36_DEF_TABLE::FontDef_X08* BOARD_BUILDER::getFontDef( unsigned aInde
 }
 
 
+std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildLineSegment( const BLK_0x15_16_17_SEGMENT& aSegment,
+                                                            const LAYER_INFO& aLayerInfo, PCB_LAYER_ID aLayer,
+                                                            BOARD_ITEM_CONTAINER& aParent )
+{
+    VECTOR2I  start = scale( { aSegment.m_StartX, aSegment.m_StartY } );
+    VECTOR2I  end = scale( { aSegment.m_EndX, aSegment.m_EndY } );
+    const int width = scale( aSegment.m_Width );
+
+    if( !m_layerMapper->IsLayerMapped( aLayer ) )
+    {
+        wxLogTrace( traceAllegroBuilder, "Unmapped Seg: %#04x %#04x %s, %s", aLayerInfo.m_Class, aLayerInfo.m_Subclass,
+                    start.Format(), end.Format() );
+    }
+
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::SEGMENT );
+    shape->SetLayer( aLayer );
+    shape->SetStart( start );
+    shape->SetEnd( end );
+
+    {
+        int adjustedWidth = width;
+
+        if( adjustedWidth <= 0 )
+            adjustedWidth = m_board.GetDesignSettings().GetLineThickness( aLayer );
+
+        shape->SetWidth( adjustedWidth );
+    }
+
+    return shape;
+}
+
+
+std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildArc( const BLK_0x01_ARC& aArc, const LAYER_INFO& aLayerInfo,
+                                                    PCB_LAYER_ID aLayer, BOARD_ITEM_CONTAINER& aParent )
+{
+    VECTOR2I start{ aArc.m_StartX, aArc.m_StartY };
+    VECTOR2I end{ aArc.m_EndX, aArc.m_EndY };
+
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &aParent, SHAPE_T::ARC );
+
+    shape->SetLayer( aLayer );
+
+    if( aLayer == m_layerMapper->IsLayerMapped( aLayer ) )
+    {
+        wxLogTrace( traceAllegroBuilder, "Unmapped Arc: %#04x %#04x %s, %s", aLayerInfo.m_Class, aLayerInfo.m_Subclass,
+                    start.Format(), end.Format() );
+    }
+
+    start = scale( start );
+    end = scale( end );
+
+    VECTOR2I c = scale( VECTOR2D{ aArc.m_CenterX, aArc.m_CenterY } );
+
+    int radius = scale( aArc.m_Radius );
+
+    bool clockwise = ( aArc.m_SubType & 0x40 ) != 0;
+
+    {
+        int arcWidth = scale( aArc.m_Width );
+
+        if( arcWidth <= 0 )
+            arcWidth = m_board.GetDesignSettings().GetLineThickness( aLayer );
+
+        shape->SetWidth( arcWidth );
+    }
+
+    if( start == end )
+    {
+        shape->SetShape( SHAPE_T::CIRCLE );
+        shape->SetCenter( c );
+        shape->SetRadius( radius );
+    }
+    else
+    {
+        shape->SetShape( SHAPE_T::ARC );
+        EDA_ANGLE startangle( start - c );
+        EDA_ANGLE endangle( end - c );
+
+        startangle.Normalize();
+        endangle.Normalize();
+
+        EDA_ANGLE angle = endangle - startangle;
+
+        if( clockwise && angle < ANGLE_0 )
+            angle += ANGLE_360;
+        if( !clockwise && angle > ANGLE_0 )
+            angle -= ANGLE_360;
+
+        if( start == end )
+            angle = -ANGLE_360;
+
+        VECTOR2I mid = start;
+        RotatePoint( mid, c, -angle / 2.0 );
+
+        shape->SetArcGeometry( start, mid, end );
+    }
+
+    return shape;
+}
+
+
 std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper,
                                                        BOARD_ITEM_CONTAINER&       aParent )
 {
@@ -1615,107 +1724,27 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
         layer = m_layerMapper->GetPlaceBounds( true );
     else if( layer == B_CrtYd )
         layer = m_layerMapper->GetPlaceBounds( false );
+
     const LL_WALKER segWalker{ aGraphic.m_SegmentPtr, aGraphic.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* segBlock : segWalker )
     {
-        std::unique_ptr<PCB_SHAPE>& shape = shapes.emplace_back( std::make_unique<PCB_SHAPE>( &aParent ) );
-        shape->SetLayer( layer );
+        std::unique_ptr<PCB_SHAPE> shape;
 
         switch( segBlock->GetBlockType() )
         {
         case 0x01:
         {
             const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
-
-            VECTOR2I start{ arc.m_StartX, arc.m_StartY };
-            VECTOR2I end{ arc.m_EndX, arc.m_EndY };
-
-            if( layer == Cmts_User )
-            {
-                wxLogTrace( traceAllegroBuilder, "Unmapped Arc: %#04x %#04x %s, %s", aGraphic.m_Layer.m_Class,
-                            aGraphic.m_Layer.m_Subclass, start.Format(), end.Format() );
-            }
-
-            start = scale( start );
-            end = scale( end );
-
-            VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
-
-            int radius = safeScale( arc.m_Radius * m_scale );
-
-            bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
-
-            {
-                int arcWidth = safeScale( m_scale * arc.m_Width );
-
-                if( arcWidth <= 0 )
-                    arcWidth = m_board.GetDesignSettings().GetLineThickness( layer );
-
-                shape->SetWidth( arcWidth );
-            }
-
-            if( start == end )
-            {
-                shape->SetShape( SHAPE_T::CIRCLE );
-                shape->SetCenter( c );
-                shape->SetRadius( radius );
-            }
-            else
-            {
-                shape->SetShape( SHAPE_T::ARC );
-                EDA_ANGLE startangle( start - c );
-                EDA_ANGLE endangle( end - c );
-
-                startangle.Normalize();
-                endangle.Normalize();
-
-                EDA_ANGLE angle = endangle - startangle;
-
-                if( clockwise && angle < ANGLE_0 )
-                    angle += ANGLE_360;
-                if( !clockwise && angle > ANGLE_0 )
-                    angle -= ANGLE_360;
-
-                if( start == end )
-                    angle = -ANGLE_360;
-
-                VECTOR2I mid = start;
-                RotatePoint( mid, c, -angle / 2.0 );
-
-                shape->SetArcGeometry( start, mid, end );
-            }
+            shape = buildArc( arc, aGraphic.m_Layer, layer, aParent );
             break;
         }
         case 0x15:
         case 0x16:
         case 0x17:
         {
-            shape->SetShape( SHAPE_T::SEGMENT );
-
             const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
-            VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
-            VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-            const int   width = static_cast<int>( seg.m_Width );
-
-            if( layer == Cmts_User )
-            {
-                wxLogTrace( traceAllegroBuilder, "Unmapped Seg: %#04x %#04x %s, %s", aGraphic.m_Layer.m_Class,
-                            aGraphic.m_Layer.m_Subclass, start.Format(), end.Format() );
-            }
-
-            shape->SetStart( start );
-            shape->SetEnd( end );
-
-            {
-                int scaledWidth = safeScale( width * m_scale );
-
-                if( scaledWidth <= 0 )
-                    scaledWidth = m_board.GetDesignSettings().GetLineThickness( layer );
-
-                shape->SetWidth( scaledWidth );
-            }
-
+            shape = buildLineSegment( seg, aGraphic.m_Layer, layer, aParent );
             break;
         }
         default:
@@ -1723,6 +1752,9 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
             break;
         }
         }
+
+        if( shape )
+            shapes.push_back( std::move( shape ) );
     }
 
     return shapes;

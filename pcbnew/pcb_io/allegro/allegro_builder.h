@@ -104,6 +104,15 @@ private:
     wxString get0x30StringValue( uint32_t a0x30Key ) const;
 
     /**
+     * Build a single line segment
+     */
+    std::unique_ptr<PCB_SHAPE> buildLineSegment( const BLK_0x15_16_17_SEGMENT& aSegment, const LAYER_INFO& aLayerInfo,
+                                                 PCB_LAYER_ID aLayer, BOARD_ITEM_CONTAINER& aParent );
+
+    std::unique_ptr<PCB_SHAPE> buildArc( const BLK_0x01_ARC& aArc, const LAYER_INFO& aLayerInfo, PCB_LAYER_ID aLayer,
+                                         BOARD_ITEM_CONTAINER& aParent );
+
+    /**
      * Build the shapes from an 0x14 shape list
      */
     std::vector<std::unique_ptr<PCB_SHAPE>> buildShapes( const BLK_0x14_GRAPHIC& aGraphicList, BOARD_ITEM_CONTAINER& aParent );
