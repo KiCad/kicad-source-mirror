@@ -837,8 +837,10 @@ if( KICAD_USE_PCH )
             <set>
             <string>
             <vector>
+            <clipper2/clipper.h>
+            <eda_draw_frame.h>
             <kiid.h>
-            <pgm_base.h>
+            <pgm_base.h>            
             <wx/wx.h>
              )
 endif()
