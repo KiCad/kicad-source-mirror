@@ -1692,7 +1692,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x30_STR_WRAPPER( FILE_STREAM& aSt
     ReadCond( aStream, aVer, data.m_Unknown3 );
 
     data.m_StrGraphicPtr = aStream.ReadU32();
-    data.m_Unknown4 = aStream.ReadU32();
+
+    ReadCond( aStream, aVer, data.m_PtrGroup_17x );
+    ReadCond( aStream, aVer, data.m_Unknown4 );
 
     if( data.m_Font16x.exists( aVer ) )
     {
@@ -1707,7 +1709,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x30_STR_WRAPPER( FILE_STREAM& aSt
     data.m_Unknown5 = aStream.ReadU32();
     data.m_Rotation = aStream.ReadU32();
 
-    ReadCond( aStream, aVer, data.m_Ptr3_16x );
+    ReadCond( aStream, aVer, data.m_PtrGroup_16x );
 
     return block;
 }

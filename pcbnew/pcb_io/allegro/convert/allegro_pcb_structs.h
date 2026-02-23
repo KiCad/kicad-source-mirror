@@ -1736,7 +1736,9 @@ struct BLK_0x30_STR_WRAPPER
     COND_GE<FMT_VER::V_174, uint32_t>        m_Unknown3;
 
     uint32_t m_StrGraphicPtr;
-    uint32_t m_Unknown4;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_PtrGroup_17x;
+    COND_LT<FMT_VER::V_172, uint32_t> m_Unknown4;
 
     COND_LT<FMT_VER::V_172, TEXT_PROPERTIES> m_Font16x;
 
@@ -1748,7 +1750,12 @@ struct BLK_0x30_STR_WRAPPER
     uint32_t m_Unknown5;
     uint32_t m_Rotation;  ///< Millidegrees
 
-    COND_LT<FMT_VER::V_172, uint32_t> m_Ptr3_16x;
+    COND_LT<FMT_VER::V_172, uint32_t> m_PtrGroup_16x;
+
+    uint32_t GetGroupPtr() const
+    {
+        return m_PtrGroup_17x.value_or( m_PtrGroup_16x.value_or( 0 ) );
+    }
 };
 
 

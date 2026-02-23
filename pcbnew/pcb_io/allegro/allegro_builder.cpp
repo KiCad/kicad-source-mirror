@@ -84,6 +84,7 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     switch( type )
     {
     case 0x01: return BLK_FIELD( BLK_0x01_ARC, m_Next );
+    case 0x03: return BLK_FIELD( BLK_0x03_FIELD, m_Next );
     case 0x04: return BLK_FIELD( BLK_0x04_NET_ASSIGNMENT, m_Next );
     case 0x05: return BLK_FIELD( BLK_0x05_TRACK, m_Next );
     case 0x0E: return BLK_FIELD( BLK_0x0E_RECT, m_Next );
@@ -234,6 +235,12 @@ struct std::hash<LAYER_INFO>
 // clang-format off
 static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
 
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_OUTLINE},              Edge_Cuts},
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_TOP},       F_SilkS},
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_BOTTOM},    B_SilkS},
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_TOP},       F_Mask},
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_BOTTOM},    B_Mask},
+
     { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::ASSEMBLY_BOTTOM},            B_Fab},
     { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::ASSEMBLY_TOP},               F_Fab},
 
@@ -268,7 +275,9 @@ static const std::unordered_map<LAYER_INFO, wxString> s_OptionalFixedMappings = 
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_TOP},          "DISPLAY_TOP" },
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_DISPLAY_BOTTOM},       "DISPLAY_BOTTOM" },
     { { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, LAYER_INFO::SUBCLASS::PGEOM_BODY_CENTER},          "BODY_CENTER" },
+
     { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_DIMENSION},            "DIMENSION" },
+
     { { LAYER_INFO::CLASS::DRAWING_FORMAT,   LAYER_INFO::SUBCLASS::DFMT_OUTLINE},               "PAGE_OUTLINE" },
 
     { { LAYER_INFO::CLASS::COMPONENT_VALUE,  LAYER_INFO::SUBCLASS::DISPLAY_BOTTOM},             "DISPLAY_BOTTOM" },
@@ -290,6 +299,8 @@ static const std::unordered_map<LAYER_INFO, wxString> s_OptionalFixedMappings = 
     { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::DISPLAY_TOP},                "DISPLAY_TOP" },
     { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::SILKSCREEN_BOTTOM},          "USER_PART_NUM_BOTTOM"},
     { { LAYER_INFO::CLASS::USER_PART_NUMBER, LAYER_INFO::SUBCLASS::SILKSCREEN_TOP},             "USER_PART_NUM_TOP"},
+
+    { { LAYER_INFO::CLASS::MANUFACTURING,    LAYER_INFO::SUBCLASS::MFR_XSECTION_CHART},         "XSECTION_CHART" },
 };
 
 // clang-format on
@@ -3400,49 +3411,12 @@ int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
 
 void BOARD_BUILDER::createBoardText()
 {
-    // Collect all 0x30 keys that appear in footprint text chains so we can skip them.
-    // Board-level text is identified by exclusion: any 0x30 block NOT referenced from a
-    // footprint is a board-level text object.
-    std::unordered_set<uint32_t> footprintTextKeys;
-
-    const LL_WALKER fpDefWalker( m_brdDb.m_Header->m_LL_0x2B, m_brdDb );
-
-    for( const BLOCK_BASE* fpContainer : fpDefWalker )
-    {
-        if( fpContainer->GetBlockType() != 0x2B )
-            continue;
-
-        const auto& fpBlock =
-                static_cast<const BLOCK<BLK_0x2B_FOOTPRINT_DEF>&>( *fpContainer ).GetData();
-
-        const LL_WALKER instWalker( fpBlock.m_FirstInstPtr, fpBlock.m_Key, m_brdDb );
-
-        for( const BLOCK_BASE* instBlock : instWalker )
-        {
-            if( instBlock->GetBlockType() != 0x2D )
-                continue;
-
-            const auto& fpInst =
-                    static_cast<const BLOCK<BLK_0x2D_FOOTPRINT_INST>&>( *instBlock ).GetData();
-
-            const LL_WALKER textWalker( fpInst.m_TextPtr, fpInst.m_Key, m_brdDb );
-
-            for( const BLOCK_BASE* textBlock : textWalker )
-            {
-                if( textBlock->GetBlockType() == 0x30 )
-                    footprintTextKeys.insert( textBlock->GetKey() );
-            }
-        }
-    }
-
+    const LL_WALKER textWalker( m_brdDb.m_Header->m_LL_0x03_0x30, m_brdDb );
     int textCount = 0;
 
-    for( const auto& block : m_brdDb.m_Blocks )
+    for( const BLOCK_BASE* block : textWalker )
     {
         if( block->GetBlockType() != 0x30 )
-            continue;
-
-        if( footprintTextKeys.count( block->GetKey() ) )
             continue;
 
         const auto& strWrapper =
@@ -3452,6 +3426,14 @@ void BOARD_BUILDER::createBoardText()
 
         if( !text )
             continue;
+
+        // If the text is referenced from a group, it's not board-level text,
+        // and we'll pick up up while iterating the group elsewhere.
+        if( strWrapper.GetGroupPtr() != 0 )
+        {
+            // In a group
+            continue;
+        }
 
         wxLogTrace( traceAllegroBuilder, "  Board text '%s' on layer %s at (%d, %d)",
                     text->GetText(), m_board.GetLayerName( text->GetLayer() ),
