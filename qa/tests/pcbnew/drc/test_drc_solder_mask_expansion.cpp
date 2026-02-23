@@ -26,8 +26,11 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pad.h>
+#include <pcb_track.h>
+#include <pcb_shape.h>
 #include <footprint.h>
 #include <drc/drc_engine.h>
+#include <core/profile.h>
 #include <settings/settings_manager.h>
 
 
@@ -128,4 +131,81 @@ BOOST_FIXTURE_TEST_CASE( FootprintLevelSolderMaskExpansion, DRC_SOLDER_MASK_EXPA
     // overriding the footprint's margin
     int expansionWithPadMargin = padWithOwnMargin->GetSolderMaskExpansion( F_Mask );
     BOOST_CHECK_EQUAL( expansionWithPadMargin, 200000 );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SolderMaskExpansionPerformance, DRC_SOLDER_MASK_EXPANSION_TEST_FIXTURE )
+{
+    // Verify that GetSolderMaskExpansion is fast when no custom DRC rules exist.
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23213
+    //
+    // Before the fix, GetSolderMaskExpansion called EvalRules for every item even when no
+    // custom rules existed, causing a 10-14x DRC slowdown vs KiCad 9.
+
+    KI_TEST::LoadBoard( m_settingsManager, "stonehenge", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+
+    BOOST_REQUIRE( !bds.m_DRCEngine->HasRulesForConstraintType( SOLDER_MASK_EXPANSION_CONSTRAINT ) );
+
+    // Collect all items that would be queried during the solder mask test
+    std::vector<PAD*>       pads;
+    std::vector<PCB_TRACK*> tracks;
+    std::vector<PCB_SHAPE*> shapes;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+            pads.push_back( pad );
+
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
+        {
+            if( item->Type() == PCB_SHAPE_T )
+                shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+        }
+    }
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+        tracks.push_back( track );
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+            shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+    }
+
+    // Simulate the access pattern from the solder mask bridge test: call GetSolderMaskExpansion
+    // many times for each item (once per potential collision pair).
+    const int iterations = 1000;
+
+    PROF_TIMER timer;
+
+    for( int i = 0; i < iterations; ++i )
+    {
+        for( PAD* pad : pads )
+            pad->GetSolderMaskExpansion( F_Mask );
+
+        for( PCB_TRACK* track : tracks )
+            track->GetSolderMaskExpansion();
+
+        for( PCB_SHAPE* shape : shapes )
+            shape->GetSolderMaskExpansion();
+    }
+
+    timer.Stop();
+
+    int totalCalls = iterations * ( pads.size() + tracks.size() + shapes.size() );
+
+    BOOST_TEST_MESSAGE( wxString::Format( "%d calls to GetSolderMaskExpansion took %0.1f ms "
+                                          "(%0.0f ns/call)",
+                                          totalCalls, timer.msecs(),
+                                          timer.msecs() * 1e6 / totalCalls ) );
+
+    // With the fix (direct property lookup), this should be well under 100ms.
+    // Without the fix (EvalRules for every call), this was ~500ms+ even in debug builds.
+    // Use a generous threshold to avoid flakiness on slow CI machines.
+    BOOST_CHECK_MESSAGE( timer.msecs() < 500.0,
+                         wxString::Format( "GetSolderMaskExpansion too slow: %0.1f ms for %d calls",
+                                           timer.msecs(), totalCalls ) );
 }

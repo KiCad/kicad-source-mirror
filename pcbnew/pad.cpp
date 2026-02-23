@@ -1653,7 +1653,9 @@ int PAD::GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const
 
     std::optional<int> margin;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine
+        && GetBoard()->GetDesignSettings().m_DRCEngine->HasRulesForConstraintType(
+                   SOLDER_MASK_EXPANSION_CONSTRAINT ) )
     {
         DRC_CONSTRAINT              constraint;
         std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
@@ -1671,6 +1673,12 @@ int PAD::GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const
         {
             if( FOOTPRINT* parentFootprint = GetParentFootprint() )
                 margin = parentFootprint->GetLocalSolderMaskMargin();
+        }
+
+        if( !margin.has_value() )
+        {
+            if( const BOARD* brd = GetBoard() )
+                margin = brd->GetDesignSettings().m_SolderMaskExpansion;
         }
     }
 
@@ -1709,25 +1717,42 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
     std::optional<int>    margin;
     std::optional<double> mratio;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    std::shared_ptr<DRC_ENGINE> drcEngine;
+
+    if( GetBoard() )
+        drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+
+    bool hasAbsRules = drcEngine
+                       && drcEngine->HasRulesForConstraintType( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT );
+    bool hasRelRules = drcEngine
+                       && drcEngine->HasRulesForConstraintType( SOLDER_PASTE_REL_MARGIN_CONSTRAINT );
+
+    if( hasAbsRules || hasRelRules )
     {
-        DRC_CONSTRAINT              constraint;
-        std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+        DRC_CONSTRAINT constraint;
 
-        constraint = drcEngine->EvalRules( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+        if( hasAbsRules )
+        {
+            constraint = drcEngine->EvalRules( SOLDER_PASTE_ABS_MARGIN_CONSTRAINT, this, nullptr,
+                                               aLayer );
 
-        if( constraint.m_Value.HasOpt() )
-            margin = constraint.m_Value.Opt();
+            if( constraint.m_Value.HasOpt() )
+                margin = constraint.m_Value.Opt();
+        }
 
-        constraint = drcEngine->EvalRules( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, this, nullptr, aLayer );
+        if( hasRelRules )
+        {
+            constraint = drcEngine->EvalRules( SOLDER_PASTE_REL_MARGIN_CONSTRAINT, this, nullptr,
+                                               aLayer );
 
-        if( constraint.m_Value.HasOpt() )
-            mratio = constraint.m_Value.Opt() / 1000.0;
+            if( constraint.m_Value.HasOpt() )
+                mratio = constraint.m_Value.Opt() / 1000.0;
+        }
     }
-    else
+
+    if( !margin.has_value() )
     {
         margin = m_padStack.SolderPasteMargin( aLayer );
-        mratio = m_padStack.SolderPasteMarginRatio( aLayer );
 
         if( !margin.has_value() )
         {
@@ -1735,10 +1760,27 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
                 margin = parentFootprint->GetLocalSolderPasteMargin();
         }
 
+        if( !margin.has_value() )
+        {
+            if( const BOARD* brd = GetBoard() )
+                margin = brd->GetDesignSettings().m_SolderPasteMargin;
+        }
+    }
+
+    if( !mratio.has_value() )
+    {
+        mratio = m_padStack.SolderPasteMarginRatio( aLayer );
+
         if( !mratio.has_value() )
         {
             if( FOOTPRINT* parentFootprint = GetParentFootprint() )
                 mratio = parentFootprint->GetLocalSolderPasteMarginRatio();
+        }
+
+        if( !mratio.has_value() )
+        {
+            if( const BOARD* brd = GetBoard() )
+                mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
         }
     }
 

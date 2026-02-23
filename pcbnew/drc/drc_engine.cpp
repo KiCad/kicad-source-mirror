@@ -909,8 +909,14 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
         if( m_logReporter )
             m_logReporter->Report( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
 
+        PROF_TIMER providerTimer;
+
         if( !provider->RunTests( aUnits ) )
             break;
+
+        providerTimer.Stop();
+        wxLogTrace( traceDrcProfile, "DRC provider '%s' took %0.3f ms",
+                    provider->GetName(), providerTimer.msecs() );
     }
 
     timer.Stop();
