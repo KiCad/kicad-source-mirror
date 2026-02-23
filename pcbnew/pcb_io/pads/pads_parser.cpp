@@ -1367,7 +1367,7 @@ void PARSER::parseSectionPARTDECAL( std::ifstream& aStream )
             std::string type;
             int corners = 0;
             double width = 0;
-            int linestyle = 0, level = 0;
+            int level = 0;
 
             if( !( iss2 >> type >> corners >> width ) )
             {
@@ -1383,7 +1383,6 @@ void PARSER::parseSectionPARTDECAL( std::ifstream& aStream )
                 int val2 = 0;
                 if( iss2 >> val2 )
                 {
-                    linestyle = val1;
                     level = val2;
                 }
                 else
@@ -2006,11 +2005,11 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
 
                         // Check for optional flags (numeric)
                         std::streampos pos = iss.tellg();
-                        int flags = 0;
+                        int td_flags = 0;
 
-                        if( iss >> flags )
+                        if( iss >> td_flags )
                         {
-                            teardrop.pad_flags = flags;
+                            teardrop.pad_flags = td_flags;
                         }
                         else
                         {
@@ -2024,11 +2023,11 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
                         iss >> teardrop.net_width >> teardrop.net_length;
 
                         std::streampos pos = iss.tellg();
-                        int flags = 0;
+                        int td_flags = 0;
 
-                        if( iss >> flags )
+                        if( iss >> td_flags )
                         {
-                            teardrop.net_flags = flags;
+                            teardrop.net_flags = td_flags;
                         }
                         else
                         {
@@ -2721,9 +2720,9 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 std::string shape_type;
                 int corners = 0;
                 double width = 0.0;
-                int flags = 0;
+                int piece_flags = 0;
                 int level = 0;
-                piss >> shape_type >> corners >> width >> flags >> level;
+                piss >> shape_type >> corners >> width >> piece_flags >> level;
 
                 if( shape_type == "CLOSED" || shape_type == "OPEN" || shape_type == "BRDCLS" )
                 {
@@ -2879,9 +2878,9 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 std::string shape_type;
                 int corners = 0;
                 double width = 0;
-                int flags = 0;
+                int piece_flags = 0;
                 int level = 0;
-                piss >> shape_type >> corners >> width >> flags >> level;
+                piss >> shape_type >> corners >> width >> piece_flags >> level;
 
                 dim.layer = level;
 
@@ -3063,10 +3062,10 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 std::string shape_type;
                 int corners = 0;
                 double width = 0;
-                int flags = 0;
+                int piece_flags = 0;
                 int level = 0;
                 std::string restrictions;
-                piss >> shape_type >> corners >> width >> flags >> level >> restrictions;
+                piss >> shape_type >> corners >> width >> piece_flags >> level >> restrictions;
 
                 if( level > 0 )
                     keepout.layers.push_back( level );
@@ -3260,9 +3259,9 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 std::string shape_type;
                 int corners = 0;
                 double width = 0;
-                int flags = 0;
+                int piece_flags = 0;
                 int level = 0;
-                piss >> shape_type >> corners >> width >> flags >> level;
+                piss >> shape_type >> corners >> width >> piece_flags >> level;
 
                 COPPER_SHAPE copper;
                 copper.name = name;
@@ -3387,9 +3386,9 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 std::string shape_type;
                 int corners = 0;
                 double width = 0;
-                int flags = 0;
+                int piece_flags = 0;
                 int level = 0;
-                piss >> shape_type >> corners >> width >> flags >> level;
+                piss >> shape_type >> corners >> width >> piece_flags >> level;
 
                 GRAPHIC_LINE graphic;
                 graphic.name = name;

@@ -215,9 +215,9 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             if( !paramsRoot[7].IsEmpty() )
                 layer = Convert( paramsRoot[7] );
 
-            std::map<wxString, wxString> paramMap;
+            std::map<wxString, wxString> innerParamMap;
 
-            for( int i = 1; i < paramParts.size(); i += 2 )
+            for( int i = 1; i < (int) paramParts.size(); i += 2 )
             {
                 wxString key = paramParts[i - 1];
                 wxString value = paramParts[i];
@@ -225,13 +225,13 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 if( key == wxS( "package" ) )
                     packageName = value;
 
-                paramMap[key] = value;
+                innerParamMap[key] = value;
             }
 
             parts.RemoveAt( 0 );
 
             VECTOR2D   pcbOrigin = m_relOrigin;
-            FOOTPRINT* fp = ParseFootprint( fpOrigin, orientation, layer, board, paramMap,
+            FOOTPRINT* fp = ParseFootprint( fpOrigin, orientation, layer, board, innerParamMap,
                                             aFootprintMap, parts );
 
             if( !fp )
@@ -250,7 +250,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             wxString      netname = arr[3];
             wxArrayString data = wxSplit( arr[4], ' ', '\0' );
 
-            for( int i = 3; i < data.size(); i += 2 )
+            for( int i = 3; i < (int) data.size(); i += 2 )
             {
                 VECTOR2D start, end;
                 start.x = RelPosX( data[i - 3] );
@@ -286,12 +286,12 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
         }
         else if( elType == wxS( "CIRCLE" ) )
         {
-            auto   shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::CIRCLE );
+            auto   circleShape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::CIRCLE );
             double width = ConvertSize( arr[4] );
-            shape->SetWidth( width );
+            circleShape->SetWidth( width );
 
             PCB_LAYER_ID layer = LayerToKi( arr[5] );
-            shape->SetLayer( layer );
+            circleShape->SetLayer( layer );
 
             VECTOR2D center;
             center.x = RelPosX( arr[1] );
@@ -299,57 +299,57 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
             double radius = ConvertSize( arr[3] );
 
-            shape->SetCenter( center );
-            shape->SetEnd( center + VECTOR2I( radius, 0 ) );
+            circleShape->SetCenter( center );
+            circleShape->SetEnd( center + VECTOR2I( radius, 0 ) );
 
             if( IsCopperLayer( layer ) )
-                shape->SetNet( getOrAddNetItem( arr[8] ) );
+                circleShape->SetNet( getOrAddNetItem( arr[8] ) );
 
-            aContainer->Add( shape.release(), ADD_MODE::APPEND );
+            aContainer->Add( circleShape.release(), ADD_MODE::APPEND );
         }
         else if( elType == wxS( "RECT" ) )
         {
-            auto   shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::RECTANGLE );
+            auto   rectShape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::RECTANGLE );
             double width = ConvertSize( arr[8] );
-            shape->SetWidth( width );
+            rectShape->SetWidth( width );
 
             PCB_LAYER_ID layer = LayerToKi( arr[5] );
-            shape->SetLayer( layer );
+            rectShape->SetLayer( layer );
 
             bool filled = arr[9] != wxS( "none" );
-            shape->SetFilled( filled );
+            rectShape->SetFilled( filled );
 
-            VECTOR2D start;
-            start.x = RelPosX( arr[1] );
-            start.y = RelPosY( arr[2] );
+            VECTOR2D rectStart;
+            rectStart.x = RelPosX( arr[1] );
+            rectStart.y = RelPosY( arr[2] );
 
-            VECTOR2D size;
-            size.x = ConvertSize( arr[3] );
-            size.y = ConvertSize( arr[4] );
+            VECTOR2D rectSize;
+            rectSize.x = ConvertSize( arr[3] );
+            rectSize.y = ConvertSize( arr[4] );
 
-            shape->SetStart( start );
-            shape->SetEnd( start + size );
+            rectShape->SetStart( rectStart );
+            rectShape->SetEnd( rectStart + rectSize );
 
             if( IsCopperLayer( layer ) )
-                shape->SetNet( getOrAddNetItem( arr[11] ) );
+                rectShape->SetNet( getOrAddNetItem( arr[11] ) );
 
-            aContainer->Add( shape.release(), ADD_MODE::APPEND );
+            aContainer->Add( rectShape.release(), ADD_MODE::APPEND );
         }
         else if( elType == wxS( "ARC" ) )
         {
-            std::unique_ptr<PCB_SHAPE> shape =
+            std::unique_ptr<PCB_SHAPE> arcShape =
                     std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::ARC );
 
-            double width = ConvertSize( arr[1] );
-            shape->SetWidth( width );
+            double arcWidth = ConvertSize( arr[1] );
+            arcShape->SetWidth( arcWidth );
 
             PCB_LAYER_ID layer = LayerToKi( arr[2] );
-            shape->SetLayer( layer );
+            arcShape->SetLayer( layer );
 
             if( IsCopperLayer( layer ) )
-                shape->SetNet( getOrAddNetItem( arr[3] ) );
+                arcShape->SetNet( getOrAddNetItem( arr[3] ) );
 
-            VECTOR2D start, end;
+            VECTOR2D arcStart, arcEnd;
             VECTOR2D rad( 10, 10 );
             bool     isFar = false;
             bool     cw = false;
@@ -368,7 +368,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                     aOut += ch;
                     pos++;
 
-                    if( pos == data.size() )
+                    if( pos == (int) data.size() )
                         break;
 
                     ch = data[pos];
@@ -385,7 +385,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                     readNumber( xStr );
                     readNumber( yStr );
 
-                    start = VECTOR2D( Convert( xStr ), Convert( yStr ) );
+                    arcStart = VECTOR2D( Convert( xStr ), Convert( yStr ) );
                 }
                 else if( sym == 'A' )
                 {
@@ -401,11 +401,11 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                     isFar = farFlag == wxS( "1" );
                     cw = cwFlag == wxS( "1" );
                     rad = VECTOR2D( Convert( radX ), Convert( radY ) );
-                    end = VECTOR2D( Convert( endX ), Convert( endY ) );
+                    arcEnd = VECTOR2D( Convert( endX ), Convert( endY ) );
                 }
-            } while( pos < data.size() );
+            } while( pos < (int) data.size() );
 
-            VECTOR2D delta = end - start;
+            VECTOR2D delta = arcEnd - arcStart;
 
             double d = delta.EuclideanNorm();
             double h = sqrt( std::max( 0.0, rad.x * rad.x - d * d / 4 ) );
@@ -415,16 +415,16 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             //( !far && !cw ) => -h
             //( far && !cw ) => h
             VECTOR2D arcCenter =
-                    start + delta / 2 + delta.Perpendicular().Resize( ( isFar ^ cw ) ? h : -h );
+                    arcStart + delta / 2 + delta.Perpendicular().Resize( ( isFar ^ cw ) ? h : -h );
 
             if( !cw )
-                std::swap( start, end );
+                std::swap( arcStart, arcEnd );
 
-            shape->SetStart( RelPos( start ) );
-            shape->SetEnd( RelPos( end ) );
-            shape->SetCenter( RelPos( arcCenter ) );
+            arcShape->SetStart( RelPos( arcStart ) );
+            arcShape->SetEnd( RelPos( arcEnd ) );
+            arcShape->SetCenter( RelPos( arcCenter ) );
 
-            aContainer->Add( shape.release(), ADD_MODE::APPEND );
+            aContainer->Add( arcShape.release(), ADD_MODE::APPEND );
         }
         else if( elType == wxS( "DIMENSION" ) )
         {
@@ -444,16 +444,16 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 for( int segId = 0; segId < chain.SegmentCount(); segId++ )
                 {
                     SEG  seg = chain.CSegment( segId );
-                    auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::SEGMENT );
+                    auto dimSeg = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::SEGMENT );
 
-                    shape->SetLayer( layer );
-                    shape->SetWidth( lineWidth );
-                    shape->SetStart( seg.A );
-                    shape->SetEnd( seg.B );
+                    dimSeg->SetLayer( layer );
+                    dimSeg->SetWidth( lineWidth );
+                    dimSeg->SetStart( seg.A );
+                    dimSeg->SetEnd( seg.B );
 
-                    group->AddItem( shape.get() );
+                    group->AddItem( dimSeg.get() );
 
-                    aContainer->Add( shape.release(), ADD_MODE::APPEND );
+                    aContainer->Add( dimSeg.release(), ADD_MODE::APPEND );
                 }
             }
 
@@ -470,14 +470,14 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             {
                 for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                 {
-                    auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
+                    auto cutoutShape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
 
-                    shape->SetLayer( Edge_Cuts );
-                    shape->SetFilled( false );
-                    shape->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
-                    shape->SetPolyShape( poly );
+                    cutoutShape->SetLayer( Edge_Cuts );
+                    cutoutShape->SetFilled( false );
+                    cutoutShape->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
+                    cutoutShape->SetPolyShape( poly );
 
-                    aContainer->Add( shape.release(), ADD_MODE::APPEND );
+                    aContainer->Add( cutoutShape.release(), ADD_MODE::APPEND );
                 }
             }
             else
@@ -757,17 +757,17 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                         {
-                            auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
+                            auto svgShape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
 
-                            shape->SetFilled( true );
-                            shape->SetPolyShape( poly );
-                            shape->SetLayer( klayer );
-                            shape->SetWidth( 0 );
+                            svgShape->SetFilled( true );
+                            svgShape->SetPolyShape( poly );
+                            svgShape->SetLayer( klayer );
+                            svgShape->SetWidth( 0 );
 
                             if( group )
-                                group->AddItem( shape.get() );
+                                group->AddItem( svgShape.get() );
 
-                            aContainer->Add( shape.release(), ADD_MODE::APPEND );
+                            aContainer->Add( svgShape.release(), ADD_MODE::APPEND );
                         }
 
                         if( group )
@@ -1015,7 +1015,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 wxArrayString data = wxSplit( arr[10], ' ', '\0' );
 
                 SHAPE_LINE_CHAIN chain;
-                for( int i = 1; i < data.size(); i += 2 )
+                for( int i = 1; i < (int) data.size(); i += 2 )
                 {
                     VECTOR2D pt;
                     pt.x = RelPosX( data[i - 1] );

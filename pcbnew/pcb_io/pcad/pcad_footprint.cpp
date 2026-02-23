@@ -235,7 +235,6 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
     XNODE*            tNode = nullptr;
     XNODE*                  pNode = nullptr;
     wxString          propValue;
-    long long         i = 0;
     int               PCadLayer = 0;
     long              num = 0;
     int                     width = 0;
@@ -268,8 +267,6 @@ void PCAD_FOOTPRINT::DoLayerContentsObjects( XNODE* aNode, PCAD_FOOTPRINT* aFoot
 
     while( lNode )
     {
-        i++;
-
         if( lNode->GetName() == wxT( "line" ) )
         {
             line = new PCAD_LINE( m_callbacks, m_board );

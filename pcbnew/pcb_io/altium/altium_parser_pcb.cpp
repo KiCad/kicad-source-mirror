@@ -1275,7 +1275,7 @@ ATEXT6::ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aSt
         aReader.ReadBytes( fontData, sizeof( fontData ) );
         barcode_fontname = wxString( fontData, wxMBConvUTF16LE(), sizeof( fontData ) ).BeforeFirst( '\0' );
 
-        uint8_t unk8_2 = aReader.Read<uint8_t>();
+        aReader.Read<uint8_t>();
         wxLogTrace( traceAltiumImport, " Unk8_2: %u\n", unk8 );
 
         layer_v7 = static_cast<ALTIUM_LAYER>( aReader.Read<uint32_t>() );

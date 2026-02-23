@@ -649,7 +649,7 @@ void PCAD_PCB::ExtractOutlinePointsFromEnhancedPolygon( const wxString& aActualC
 
 void PCAD_PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
 {
-    XNODE *      iNode, *lNode, *pNode, *epNode;
+    XNODE *      iNode, *lNode, *pNode;
     long         PCadLayer = 0;
     int          x, y, i, j, targetInd;
     wxRealPoint* xchgPoint;

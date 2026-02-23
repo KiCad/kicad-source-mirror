@@ -356,18 +356,8 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
 
     const single_row& header = rows[aRow];
 
-    int pad_name_col        = getColFromName( aRow, "PADNAME" );
-    int pad_num_col         = getColFromName( aRow, "RECNUMBER" );
-    int pad_lay_col         = getColFromName( aRow, "LAYER" );
-    int pad_fix_col         = getColFromName( aRow, "FIXFLAG" );
-    int pad_via_col         = getColFromName( aRow, "VIAFLAG" );
-    int pad_shape_col       = getColFromName( aRow, "PADSHAPE1" );
-    int pad_width_col       = getColFromName( aRow, "PADWIDTH" );
-    int pad_height_col      = getColFromName( aRow, "PADHGHT" );
-    int pad_xoff_col        = getColFromName( aRow, "PADXOFF" );
-    int pad_yoff_col        = getColFromName( aRow, "PADYOFF" );
-    int pad_flash_col       = getColFromName( aRow, "PADFLASH" );
-    int pad_shape_name_col  = getColFromName( aRow, "PADSHAPENAME" );
+    int pad_num_col = getColFromName( aRow, "RECNUMBER" );
+    int pad_lay_col = getColFromName( aRow, "LAYER" );
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
@@ -382,18 +372,8 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
             continue;
         }
 
-        auto& pad_name = row[pad_name_col];
         auto& pad_num = row[pad_num_col];
         auto& pad_layer = row[pad_lay_col];
-        auto& pad_is_fixed = row[pad_fix_col];
-        auto& pad_is_via = row[pad_via_col];
-        auto& pad_shape = row[pad_shape_col];
-        auto& pad_width = row[pad_width_col];
-        auto& pad_height = row[pad_height_col];
-        auto& pad_xoff = row[pad_xoff_col];
-        auto& pad_yoff = row[pad_yoff_col];
-        auto& pad_flash = row[pad_flash_col];
-        auto& pad_shapename = row[pad_shape_name_col];
 
         // This layer setting seems to be unused
         if( pad_layer == "INTERNAL_PAD_DEF" || pad_layer == "internal_pad_def" )
@@ -438,18 +418,16 @@ size_t FABMASTER::processPadStacks( size_t aRow )
     if( scale_factor <= 0.0 )
         return -1;
 
-    int pad_name_col        = getColFromName( aRow, "PADNAME" );
-    int pad_num_col         = getColFromName( aRow, "RECNUMBER" );
-    int pad_lay_col         = getColFromName( aRow, "LAYER" );
-    int pad_fix_col         = getColFromName( aRow, "FIXFLAG" );
-    int pad_via_col         = getColFromName( aRow, "VIAFLAG" );
-    int pad_shape_col       = getColFromName( aRow, "PADSHAPE1" );
-    int pad_width_col       = getColFromName( aRow, "PADWIDTH" );
-    int pad_height_col      = getColFromName( aRow, "PADHGHT" );
-    int pad_xoff_col        = getColFromName( aRow, "PADXOFF" );
-    int pad_yoff_col        = getColFromName( aRow, "PADYOFF" );
-    int pad_flash_col       = getColFromName( aRow, "PADFLASH" );
-    int pad_shape_name_col  = getColFromName( aRow, "PADSHAPENAME" );
+    int pad_name_col       = getColFromName( aRow, "PADNAME" );
+    int pad_num_col        = getColFromName( aRow, "RECNUMBER" );
+    int pad_lay_col        = getColFromName( aRow, "LAYER" );
+    int pad_via_col        = getColFromName( aRow, "VIAFLAG" );
+    int pad_shape_col      = getColFromName( aRow, "PADSHAPE1" );
+    int pad_width_col      = getColFromName( aRow, "PADWIDTH" );
+    int pad_height_col     = getColFromName( aRow, "PADHGHT" );
+    int pad_xoff_col       = getColFromName( aRow, "PADXOFF" );
+    int pad_yoff_col       = getColFromName( aRow, "PADYOFF" );
+    int pad_shape_name_col = getColFromName( aRow, "PADSHAPENAME" );
 
     for( ; rownum < rows.size() && rows[rownum].size() > 0 && rows[rownum][0] == "S"; ++rownum )
     {
@@ -468,14 +446,12 @@ size_t FABMASTER::processPadStacks( size_t aRow )
         auto& pad_name = row[pad_name_col];
         auto& pad_num = row[pad_num_col];
         auto& pad_layer = row[pad_lay_col];
-        auto& pad_is_fixed = row[pad_fix_col];
         auto& pad_is_via = row[pad_via_col];
         auto& pad_shape = row[pad_shape_col];
         auto& pad_width = row[pad_width_col];
         auto& pad_height = row[pad_height_col];
         auto& pad_xoff = row[pad_xoff_col];
         auto& pad_yoff = row[pad_yoff_col];
-        auto& pad_flash = row[pad_flash_col];
         auto& pad_shapename = row[pad_shape_name_col];
 
         // This layer setting seems to be unused
@@ -732,10 +708,6 @@ size_t FABMASTER::processSimpleLayers( size_t aRow )
 
 bool FABMASTER::assignLayers()
 {
-    bool has_l1 = false;
-    int max_layer = 0;
-    std::string max_layer_name;
-
     std::vector<std::pair<std::string, int>> extra_layers
     {
         { "ASSEMBLY_TOP", F_Fab },
@@ -898,10 +870,7 @@ size_t FABMASTER::processLayers( size_t aRow )
         auto& layer_sort = row[layer_sort_col];
         auto& layer_subclass = row[layer_subclass_col];
         auto& layer_art = row[layer_art_col];
-        auto& layer_use = row[layer_use_col];
         auto& layer_cond = row[layer_cond_col];
-        auto& layer_er = row[layer_er_col];
-        auto& layer_rho = row[layer_rho_col];
         auto& layer_mat = row[layer_mat_col];
 
         if( layer_mat == "AIR" )
@@ -1610,7 +1579,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
                 gr->second.elements = std::make_unique<graphic_element>();
             }
 
-            auto result = gr->second.elements->emplace( std::move( gr_item ) );
+            gr->second.elements->emplace( std::move( gr_item ) );
         }
     }
 
@@ -1907,19 +1876,19 @@ size_t FABMASTER::processFootprints( size_t aRow )
             continue;
         }
 
-        const wxString& refdes = row[refdes_col];
+        const wxString& comp_refdes = row[refdes_col];
 
         if( row[symx_col].empty() || row[symy_col].empty() || row[symrotate_col].empty() )
         {
             wxLogError( _( "Missing X, Y, or rotation data in row %zu for refdes %s. "
                            "This may be an unplaced component." ),
-                        rownum, refdes );
+                        rownum, comp_refdes );
             continue;
         }
 
         auto cmp = std::make_unique<COMPONENT>();
 
-        cmp->refdes = refdes;
+        cmp->refdes = comp_refdes;
         cmp->cclass = parseCompClass( row[compclass_col] );
         cmp->pn = row[comppartnum_col];
         cmp->height = row[compheight_col];
@@ -2403,7 +2372,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
         bool has_multiple = mod.second.size() > 1;
 
-        for( int i = 0; i < mod.second.size(); ++i )
+        for( int i = 0; i < (int) mod.second.size(); ++i )
         {
             auto& src = mod.second[i];
 
@@ -2755,21 +2724,21 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                                         if( seg->shape == GR_SHAPE_LINE )
                                         {
-                                            const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
+                                            const GRAPHIC_LINE* line_seg = static_cast<const GRAPHIC_LINE*>( seg.get() );
 
                                             if( poly_outline.VertexCount( 0, hole_idx ) == 0 )
-                                                poly_outline.Append( src->start_x, src->start_y,
+                                                poly_outline.Append( line_seg->start_x, line_seg->start_y,
                                                                      0, hole_idx );
 
-                                            poly_outline.Append( src->end_x, src->end_y, 0,
+                                            poly_outline.Append( line_seg->end_x, line_seg->end_y, 0,
                                                                  hole_idx );
                                         }
                                         else if( seg->shape == GR_SHAPE_ARC )
                                         {
-                                            const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
+                                            const GRAPHIC_ARC* arc_seg = static_cast<const GRAPHIC_ARC*>( seg.get() );
                                             SHAPE_LINE_CHAIN&  chain = poly_outline.Hole( 0, hole_idx );
 
-                                            chain.Append( src->result );
+                                            chain.Append( arc_seg->result );
                                         }
                                     }
                                 }
@@ -3038,9 +3007,6 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 {
     const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
     auto net_it = netinfo.find( aLine->netname );
-
-    int  last_subseq = 0;
-    ZONE* new_zone = nullptr;
 
     for( const auto& seg : aLine->segment )
     {

@@ -992,11 +992,9 @@ void ODB_LAYER_ENTITY::InitAuxilliaryData()
         }
 
         wxString dLayerName;
-        bool     drill_value = false;
 
         if( std::get<2>( layer_pair ) != PCB_LAYER_ID::UNDEFINED_LAYER )
         {
-            drill_value = true;
             dLayerName = wxString::Format( "%s_%s-%s", featureName,
                                            m_board->GetLayerName( std::get<1>( layer_pair ) ),
                                            m_board->GetLayerName( std::get<2>( layer_pair ) ) );
@@ -1224,7 +1222,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
         ODB_COMPONENT& comp = iter->second->InitComponentData( fp, eda_pkg );
 
-        for( int i = 0; i < fp->Pads().size(); ++i )
+        for( int i = 0; i < (int) fp->Pads().size(); ++i )
         {
             PAD*  pad = fp->Pads()[i];
             auto& eda_net = m_edaData.GetNet( pad->GetNetCode() );
@@ -1405,8 +1403,7 @@ bool ODB_STEP_ENTITY::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 
 void ODB_STEP_ENTITY::MakeLayerEntity()
 {
-    LSET                layers = m_board->GetEnabledLayers();
-    const NETINFO_LIST& nets = m_board->GetNetInfo();
+    LSET layers = m_board->GetEnabledLayers();
 
     // To avoid the overhead of repeatedly cycling through the layers and nets,
     // we pre-sort the board items into a map of layer -> net -> items

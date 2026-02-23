@@ -395,7 +395,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         ++m_numCopperLayers;
     }
 
-    wxASSERT( m_numCopperLayers == cadstarBoardStackup.size() );
+    wxASSERT( m_numCopperLayers == (int) cadstarBoardStackup.size() );
     wxASSERT( cadstarBoardStackup.back().ConstructionLayers.size() == 0 );
 
     // Create a new stackup from default stackup list
@@ -603,7 +603,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
         case LAYER_TYPE::DOC:
 
-            if( currentDocLayer >= docLayers.size() )
+            if( currentDocLayer >= (int) docLayers.size() )
                 currentDocLayer = 0;
 
             kicadLayerID = docLayers.at( currentDocLayer++ );
@@ -853,8 +853,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponen
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent,
                                                      FOOTPRINT* aFootprint )
 {
-    bool compCopperError = false;
-
     for( COMPONENT_COPPER compCopper : aComponent.ComponentCoppers )
     {
         int lineThickness = getKiCadLength( getCopperCode( compCopper.CopperCodeID ).CopperWidth );
@@ -2272,7 +2270,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                                                    "This has been ignored." ),
                                                 netnameForErrorReporting, pin.ComponentID ) );
             }
-            else if( ( pin.PadID - (long) 1 ) > footprint->Pads().size() )
+            else if( ( pin.PadID - (long) 1 ) > (long) footprint->Pads().size() )
             {
                 wxLogWarning( wxString::Format( _( "The net '%s' references non-existent pad index '%d' in "
                                                    "component '%s'. This has been ignored." ),
@@ -3589,13 +3587,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     // Find prefix and suffix:
     wxString prefix = wxEmptyString;
     wxString suffix = wxEmptyString;
-    size_t   startpos = aCadstarDim.Text.Text.Find( wxT( "<@DISTANCE" ) );
+    int      startpos = aCadstarDim.Text.Text.Find( wxT( "<@DISTANCE" ) );
 
     if( startpos != wxNOT_FOUND )
     {
         prefix = ParseTextFields( aCadstarDim.Text.Text.SubString( 0, startpos - 1 ), &m_context );
         wxString remainingStr = aCadstarDim.Text.Text.Mid( startpos );
-        size_t   endpos = remainingStr.Find( "@>" );
+        int      endpos = remainingStr.Find( "@>" );
         suffix = ParseTextFields( remainingStr.Mid( endpos + 2 ), &m_context );
     }
 
@@ -3787,7 +3785,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
     // Build a set of unique TEMPLATE_IDs of all the zones that intersect with another one
     std::set<TEMPLATE_ID> intersectingIDs;
 
-    for( const std::pair<TEMPLATE_ID, std::set<TEMPLATE_ID>>& idPair : winningOverlaps )
+    for( const auto& idPair : winningOverlaps )
     {
         intersectingIDs.insert( idPair.first );
         intersectingIDs.insert( idPair.second.begin(), idPair.second.end() );
@@ -3827,7 +3825,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
     }
 
     // Verify
-    for( const std::pair<TEMPLATE_ID, std::set<TEMPLATE_ID>>& idPair : winningOverlaps )
+    for( const auto& idPair : winningOverlaps )
     {
         const TEMPLATE_ID& winningID = idPair.first;
 
@@ -3970,7 +3968,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 
 PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLayerNum, bool aDetectMaxLayer )
 {
-    if( aDetectMaxLayer && aLayerNum == m_numCopperLayers )
+    if( aDetectMaxLayer && aLayerNum == (unsigned int) m_numCopperLayers )
         return PCB_LAYER_ID::B_Cu;
 
     switch( aLayerNum )

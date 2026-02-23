@@ -1226,7 +1226,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         if( m_layermap.find( layer_num ) != m_layermap.end() )
             continue;
 
-        if( ii >= m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
+        if( ii >= (size_t) m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
             && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
             && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1 && layer_num <= ALTIUM_LAYER::MECHANICAL_16 )
             && !( layer_num >= ALTIUM_LAYER::V7_MECHANICAL_17 && layer_num <= ALTIUM_LAYER::V7_MECHANICAL_LAST ) )
@@ -1282,7 +1282,7 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
 
         iLdesc.Name            = curLayer.name;
         iLdesc.PermittedLayers = validRemappingLayers;
-        iLdesc.Required        = ii < m_board->GetCopperLayerCount() || layer_num == ALTIUM_LAYER::BOTTOM_LAYER;
+        iLdesc.Required        = ii < (size_t) m_board->GetCopperLayerCount() || layer_num == ALTIUM_LAYER::BOTTOM_LAYER;
 
         inputLayers.push_back( iLdesc );
         altiumLayerNameMap.insert( { curLayer.name, layer_num } );
@@ -1397,8 +1397,6 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
         if( lineChain.IsArcStart( i ) )
         {
             const SHAPE_ARC& currentArc = lineChain.Arc( lineChain.ArcIndex( i ) );
-            int              nextShape = lineChain.NextShape( i );
-            bool             isLastShape = nextShape < 0;
 
             std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::ARC );
 
@@ -1497,8 +1495,6 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
 
     ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
-    uint16_t componentId = 0;
-
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
@@ -1556,8 +1552,6 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
 
         m_components.emplace_back( footprint.get() );
         m_board->Add( footprint.release(), ADD_MODE::APPEND );
-
-        componentId++;
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1601,8 +1595,6 @@ void ALTIUM_PCB::ConvertComponentBody6ToFootprintItem( const ALTIUM_PCB_COMPOUND
 
         return;
     }
-
-    const VECTOR2I& fpPosition = aFootprint->GetPosition();
 
     EMBEDDED_FILES::EMBEDDED_FILE* file = new EMBEDDED_FILES::EMBEDDED_FILE();
     file->name = aElem.modelName;
@@ -4544,7 +4536,6 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     wxString    kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
     BOARD_ITEM* item = pcbText.get();
     EDA_TEXT*   text = pcbText.get();
-    int         margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
 
     if( isTextbox )
     {
@@ -4579,7 +4570,6 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
     BOARD_ITEM* item = fpText.get();
     EDA_TEXT*   text = fpText.get();
-    PCB_FIELD*  field = nullptr;
 
     bool isTextbox = aElem.isFrame && !aElem.isInverted; // Textbox knockout is not supported
     bool toAdd = false;
@@ -4588,13 +4578,11 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     {
         item = &aFootprint->Reference(); // TODO: handle multiple layers
         text = &aFootprint->Reference();
-        field = &aFootprint->Reference();
     }
     else if( aElem.isComment )
     {
         item = &aFootprint->Value(); // TODO: handle multiple layers
         text = &aFootprint->Value();
-        field = &aFootprint->Value();
     }
     else
     {

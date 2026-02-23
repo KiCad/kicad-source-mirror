@@ -61,7 +61,7 @@ void PCB_IO_ODBPP::CreateEntity()
 
 bool PCB_IO_ODBPP::GenerateFiles( ODB_TREE_WRITER& writer )
 {
-    for( const auto entity : m_entities )
+    for( const auto& entity : m_entities )
     {
         if( !entity->CreateDirectoryTree( writer ) )
         {
