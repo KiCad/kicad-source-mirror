@@ -817,12 +817,19 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         group->SetName( group->GetName() + wxString::Format( "%d", suffix++ ) );
                 }
 
+                bool autoAnnotate = !keepAnnotations && cfg->m_AnnotatePanel.automatic;
+
                 // Select all new items
                 for( EDA_ITEM* item : screen->Items() )
                 {
                     if( !item->HasFlag( SKIP_STRUCT ) )
                     {
-                        if( item->Type() == SCH_SYMBOL_T && !keepAnnotations )
+                        // When auto-annotating, preserve original refs so that
+                        // AnnotateSymbols can build correct locked groups for
+                        // multi-unit symbols before assigning new references.
+                        // Clearing first would leave locked groups empty, causing
+                        // units from different same-value arrays to get mixed.
+                        if( item->Type() == SCH_SYMBOL_T && !keepAnnotations && !autoAnnotate )
                             static_cast<SCH_SYMBOL*>( item )->ClearAnnotation( &sheetPath, false );
 
                         if( item->Type() == SCH_LINE_T )
@@ -869,13 +876,16 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                 if( !keepAnnotations )
                 {
-                    if( cfg->m_AnnotatePanel.automatic )
+                    if( autoAnnotate )
                     {
                         NULL_REPORTER reporter;
                         m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
                                                   (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true /* recursive */,
-                                                  schSettings.m_AnnotateStartNum, false, false, false, reporter );
+                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod,
+                                                  true /* recursive */,
+                                                  schSettings.m_AnnotateStartNum,
+                                                  true /* aResetAnnotation */,
+                                                  false, false, reporter );
                     }
 
                     // Annotation will clear selection, so we need to restore it
