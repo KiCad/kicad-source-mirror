@@ -133,7 +133,7 @@ public:
     /**
      * return AllCuMask( MAX_CU_LAYERS );
      */
-    static LSET AllCuMask();
+    static const LSET& AllCuMask();
 
     /**
      * Return a mask holding the Front and Bottom layers.

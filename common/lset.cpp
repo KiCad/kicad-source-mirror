@@ -605,7 +605,7 @@ LSET LSET::AllCuMask( int aCuLayerCount )
 }
 
 
-LSET LSET::AllCuMask()
+const LSET& LSET::AllCuMask()
 {
     static LSET s_savedMax = allCuMask( MAX_CU_LAYERS );
 

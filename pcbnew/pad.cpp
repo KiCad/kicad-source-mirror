@@ -1591,7 +1591,7 @@ bool PAD::IsOnCopperLayer() const
                 return false;
     }
 
-    return ( GetLayerSet() & LSET::AllCuMask() ).any();
+    return ( m_padStack.LayerSet() & LSET::AllCuMask() ).any();
 }
 
 
