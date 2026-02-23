@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-18 02:12+0000\n"
+"PO-Revision-Date: 2026-02-24 04:30+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -7528,7 +7528,7 @@ msgstr "DXFの下書き線は現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:470
 msgid "DXF arc-aligned text not currently supported."
-msgstr "DXFの円弧テキストは現在サポートされていません。"
+msgstr "DXFの円弧揃えテキストは現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
