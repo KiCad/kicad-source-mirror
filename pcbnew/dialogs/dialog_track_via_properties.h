@@ -101,7 +101,5 @@ private:
     /// The currently-shown copper layer of the edited via(s)
     PCB_LAYER_ID m_editLayer;
     std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
-    bool                 m_backdrillStartIndeterminate;
-    bool                 m_backdrillEndIndeterminate;
-    bool                 m_padstackDirty;
+    bool                        m_padstackDirty;
 };

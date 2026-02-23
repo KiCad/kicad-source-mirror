@@ -30,6 +30,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
+#include <padstack.h>
 #include <pcb_track.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -74,8 +75,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_tracks( false ),
         m_vias( false ),
         m_editLayer( PADSTACK::ALL_LAYERS ),
-        m_backdrillStartIndeterminate( false ),
-        m_backdrillEndIndeterminate( false ),
         m_padstackDirty( false )
 {
     m_useCalculatedSize = true;
@@ -122,11 +121,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_backDrillFrontLayer->SetUndefinedLayerName( _( "None" ) );
     m_backDrillFrontLayer->Resync();
 
-    m_ViaStartLayer11->SetLayersHotkeys( false );
-    m_ViaStartLayer11->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-    m_ViaStartLayer11->SetBoardFrame( aParent );
-    m_ViaStartLayer11->SetUndefinedLayerName( _( "None" ) );
-    m_ViaStartLayer11->Resync();
+    m_backDrillBackLayer->SetLayersHotkeys( false );
+    m_backDrillBackLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_backDrillBackLayer->SetBoardFrame( aParent );
+    m_backDrillBackLayer->SetUndefinedLayerName( _( "None" ) );
+    m_backDrillBackLayer->Resync();
 
     wxFont infoFont = KIUI::GetSmallInfoFont( this );
     m_techLayersLabel->SetFont( infoFont );
@@ -180,12 +179,15 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
     // The selection layer for tracks
     int track_selection_layer = -1;
 
-    int backdrill_start_layer = UNDEFINED_LAYER;
-    int backdrill_end_layer = UNDEFINED_LAYER;
-    bool backdrill_start_layer_set = false;
-    bool backdrill_end_layer_set = false;
-    bool backdrill_start_layer_mixed = false;
-    bool backdrill_end_layer_mixed = false;
+    // Drill information for vias
+    int  secondary_drill_end_layer       = UNDEFINED_LAYER;
+    bool secondary_drill_end_layer_mixed = false;
+
+    int  tertiary_drill_end_layer        = UNDEFINED_LAYER;
+    bool tertiary_drill_end_layer_mixed  = false;
+
+    BACKDRILL_MODE backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
+    bool backdrill_dir_mixed = false;
 
     std::optional<PAD_DRILL_POST_MACHINING_MODE> primary_post_machining_value;
     bool primary_post_machining_set = false;
@@ -298,19 +300,27 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     m_viaNotFree->SetValue( !v->GetIsFree() );
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
 
-                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
-
                     primary_post_machining_value = v->Padstack().FrontPostMachining().mode;
                     primary_post_machining_set = true;
 
                     secondary_post_machining_value = v->Padstack().BackPostMachining().mode;
                     secondary_post_machining_set = true;
 
-                    backdrill_start_layer = secondaryDrill.start;
-                    backdrill_start_layer_set = true;
+                    const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
+                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
 
-                    backdrill_end_layer = secondaryDrill.end;
-                    backdrill_end_layer_set = true;
+                    tertiary_drill_end_layer  = tertiaryDrill.end;
+                    secondary_drill_end_layer = secondaryDrill.end;
+
+                    // Determine types of backdrills (top = secondary, bottom = tertiary)
+                    if( tertiary_drill_end_layer != UNDEFINED_LAYER && secondary_drill_end_layer != UNDEFINED_LAYER)
+                        backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTH;
+                    else if( tertiary_drill_end_layer != UNDEFINED_LAYER )
+                        backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTTOM;
+                    else if( secondary_drill_end_layer != UNDEFINED_LAYER )
+                        backdrill_dir = BACKDRILL_MODE::BACKDRILL_TOP;
+                    else
+                        backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
 
                     selection_first_layer = v->TopLayer();
                     selection_last_layer = v->BottomLayer();
@@ -389,19 +399,35 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     if( static_cast<int>( getViaConfiguration( v ) ) != m_protectionFeatures->GetSelection() )
                         m_protectionFeatures->SetSelection( m_protectionFeatures->Append( INDETERMINATE_STATE ) );
 
-                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
-
                     if( primary_post_machining_set && primary_post_machining_value != v->Padstack().FrontPostMachining().mode )
                         primary_post_machining_mixed = true;
 
                     if( secondary_post_machining_set && secondary_post_machining_value != v->Padstack().BackPostMachining().mode )
                         secondary_post_machining_mixed = true;
 
-                    if( backdrill_start_layer_set && backdrill_start_layer != secondaryDrill.start )
-                        backdrill_start_layer_mixed = true;
+                    const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
+                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
 
-                    if( backdrill_end_layer_set && backdrill_end_layer != secondaryDrill.end )
-                        backdrill_end_layer_mixed = true;
+                    BACKDRILL_MODE new_backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
+
+                    // Determine types of backdrills (top = secondary, bottom = tertiary)
+                    if( tertiaryDrill.end != UNDEFINED_LAYER && secondaryDrill.end != UNDEFINED_LAYER)
+                        new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTH;
+                    else if( tertiaryDrill.end != UNDEFINED_LAYER )
+                        new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTTOM;
+                    else if( secondaryDrill.end != UNDEFINED_LAYER )
+                        new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_TOP;
+                    else
+                        new_backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
+
+                    if( secondary_drill_end_layer != secondaryDrill.end )
+                        secondary_drill_end_layer_mixed = true;
+
+                    if( tertiary_drill_end_layer != tertiaryDrill.end )
+                        tertiary_drill_end_layer_mixed = true;
+
+                    if( backdrill_dir != new_backdrill_dir )
+                        backdrill_dir_mixed = true;
                 }
 
                 if( v->IsLocked() )
@@ -451,57 +477,40 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
         m_ViaEndLayer->SetLayerSelection( selection_last_layer );
 
-        if( backdrill_start_layer_mixed )
+        // Set backdrill controls
+
+        // Backdrill direction selector
+        if( backdrill_dir_mixed )
+            m_backDrillChoice->SetSelection( wxNOT_FOUND );
+        else
+            m_backDrillChoice->SetSelection( static_cast<int>( backdrill_dir ) );
+
+        // Top backdrill control
+        if( secondary_drill_end_layer_mixed )
         {
-            m_backdrillStartIndeterminate = true;
             m_backDrillFrontLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
             m_backDrillFrontLayer->Resync();
             m_backDrillFrontLayer->SetLayerSelection( UNDEFINED_LAYER );
         }
         else
         {
-            m_backdrillStartIndeterminate = false;
-
-            if( !backdrill_start_layer_set )
-                backdrill_start_layer = UNDEFINED_LAYER;
-
             m_backDrillFrontLayer->SetUndefinedLayerName( _( "None" ) );
             m_backDrillFrontLayer->Resync();
-            m_backDrillFrontLayer->SetLayerSelection( backdrill_start_layer );
+            m_backDrillFrontLayer->SetLayerSelection( secondary_drill_end_layer );
         }
 
-        if( backdrill_end_layer_mixed )
+        // Bottom backdrill control
+        if( tertiary_drill_end_layer_mixed )
         {
-            m_backdrillEndIndeterminate = true;
-            m_ViaStartLayer11->SetUndefinedLayerName( INDETERMINATE_STATE );
-            m_ViaStartLayer11->Resync();
-            m_ViaStartLayer11->SetLayerSelection( UNDEFINED_LAYER );
-        }
-        else
-        {
-            m_backdrillEndIndeterminate = false;
-
-            if( !backdrill_end_layer_set )
-                backdrill_end_layer = UNDEFINED_LAYER;
-
-            m_ViaStartLayer11->SetUndefinedLayerName( _( "None" ) );
-            m_ViaStartLayer11->Resync();
-            m_ViaStartLayer11->SetLayerSelection( backdrill_end_layer );
-        }
-
-        // Set Backdrill Choice
-        if( backdrill_start_layer_mixed || backdrill_end_layer_mixed )
-        {
-             m_backDrillChoice->SetSelection( wxNOT_FOUND );
+            m_backDrillBackLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_backDrillBackLayer->Resync();
+            m_backDrillBackLayer->SetLayerSelection( UNDEFINED_LAYER );
         }
         else
         {
-            if( backdrill_start_layer != UNDEFINED_LAYER )
-                m_backDrillChoice->SetSelection( 2 ); // Top
-            else if( backdrill_end_layer != UNDEFINED_LAYER )
-                m_backDrillChoice->SetSelection( 1 ); // Bottom
-            else
-                m_backDrillChoice->SetSelection( 0 ); // None
+            m_backDrillBackLayer->SetUndefinedLayerName( _( "None" ) );
+            m_backDrillBackLayer->Resync();
+            m_backDrillBackLayer->SetLayerSelection( tertiary_drill_end_layer );
         }
 
         // Post Machining
@@ -852,36 +861,69 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         if( m_ViaEndLayer->GetLayerSelection() != UNDEFINED_LAYER )
             endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
 
-        std::optional<int> secondaryDrill;
+        int drillSize = 0;
 
         // Calculate backdrill size (10% larger than drill)
         if( viaDrill.has_value() )
         {
-            secondaryDrill = viaDrill.value() * 1.1;
+            drillSize = viaDrill.value() * 1.1;
         }
         else if( !m_viaDrill.IsIndeterminate() )
         {
-             secondaryDrill = m_viaDrill.GetIntValue() * 1.1;
+            drillSize = m_viaDrill.GetIntValue() * 1.1;
         }
 
+        std::optional<int> secondaryDrill;
+        std::optional<int> tertiaryDrill;
         std::optional<PCB_LAYER_ID> secondaryStartLayer;
         std::optional<PCB_LAYER_ID> secondaryEndLayer;
+        std::optional<PCB_LAYER_ID> tertiaryStartLayer;
+        std::optional<PCB_LAYER_ID> tertiaryEndLayer;
 
-        int backdrillChoice = m_backDrillChoice->GetSelection();
+        BACKDRILL_MODE backdrillChoice = static_cast<BACKDRILL_MODE>( m_backDrillChoice->GetSelection() );
 
-        if( backdrillChoice == 1 ) // Bottom
+        switch( backdrillChoice )
         {
-            secondaryStartLayer = B_Cu;
-            if( m_ViaStartLayer11->GetLayerSelection() != UNDEFINED_LAYER )
-                secondaryEndLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer11->GetLayerSelection() );
-        }
-        else if( backdrillChoice == 2 ) // Top
-        {
+        case BACKDRILL_MODE::NO_BACKDRILL:
+            // Do nothing to leave optionals empty
+            break;
+
+        case BACKDRILL_MODE::BACKDRILL_BOTTOM:
+            // Bottom backdrill is always the tertiary drill
+            tertiaryDrill      = drillSize;
+            tertiaryStartLayer = B_Cu;
+
+            if( m_backDrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                tertiaryEndLayer = static_cast<PCB_LAYER_ID>( m_backDrillBackLayer->GetLayerSelection() );
+
+            break;
+
+        case BACKDRILL_MODE::BACKDRILL_TOP:
+            // Top backdrill is always the secondary drill
+            secondaryDrill      = drillSize;
             secondaryStartLayer = F_Cu;
+
             if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
                 secondaryEndLayer = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
+
+            break;
+
+        case BACKDRILL_MODE::BACKDRILL_BOTH:
+            // Top backdrill is always the secondary drill and Bottom backdrill is always the tertiary drill
+            secondaryDrill      = drillSize;
+            secondaryStartLayer = F_Cu;
+
+            if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                secondaryEndLayer = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
+
+            tertiaryDrill      = drillSize;
+            tertiaryStartLayer = B_Cu;
+
+            if( m_backDrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                tertiaryEndLayer = static_cast<PCB_LAYER_ID>( m_backDrillBackLayer->GetLayerSelection() );
+
+            break;
         }
-        // Choice 0 is None, so optional values remain empty
 
         // Post Machining
         std::optional<PADSTACK::POST_MACHINING_PROPS> frontPostMachining;
@@ -934,11 +976,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
             backPostMachining = props;
         }
-
-        // Tertiary drill not supported in new UI for now
-        std::optional<int> tertiaryDrill;
-        std::optional<PCB_LAYER_ID> tertiaryStartLayer;
-        std::optional<PCB_LAYER_ID> tertiaryEndLayer;
 
         int copperLayerCount = m_frame->GetBoard() ? m_frame->GetBoard()->GetCopperLayerCount() : 0;
 
@@ -1057,48 +1094,86 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 }
 
                 // Backdrill
-                int backdrillChoice = m_backDrillChoice->GetSelection();
-                if( backdrillChoice != wxNOT_FOUND )
+                PADSTACK::DRILL_PROPS tertiaryDrill;
+                PADSTACK::DRILL_PROPS secondaryDrill;
+
+                secondaryDrill.start = UNDEFINED_LAYER;
+                secondaryDrill.end   = UNDEFINED_LAYER;
+                secondaryDrill.size  = {0, 0};
+                secondaryDrill.shape  = PAD_DRILL_SHAPE::UNDEFINED;
+
+                tertiaryDrill.start = UNDEFINED_LAYER;
+                tertiaryDrill.end   = UNDEFINED_LAYER;
+                tertiaryDrill.size  = {0, 0};
+                tertiaryDrill.shape  = PAD_DRILL_SHAPE::UNDEFINED;
+
+
+                // Calculate backdrill size (10% larger than drill)
+                int drillSize = via->GetDrillValue();
+                if( !m_viaDrill.IsIndeterminate() )
+                    drillSize = m_viaDrill.GetIntValue();
+
+                drillSize = drillSize * 1.1;
+
+                BACKDRILL_MODE backdrillChoice = static_cast<BACKDRILL_MODE>( m_backDrillChoice->GetSelection() );
+
+                switch( backdrillChoice )
                 {
-                    PADSTACK::DRILL_PROPS secondaryDrill;
+                case BACKDRILL_MODE::NO_BACKDRILL:
+                    // No back drill
+                    break;
+
+                case BACKDRILL_MODE::BACKDRILL_BOTTOM:
+                    // Bottom backdrill is always the tertiary drill
+                    tertiaryDrill.size  = VECTOR2I( drillSize, drillSize );
+                    tertiaryDrill.start = B_Cu;
+                    tertiaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+                    if( m_backDrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                        tertiaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillBackLayer->GetLayerSelection() );
+
+                    break;
+
+                case BACKDRILL_MODE::BACKDRILL_TOP:
+                    // Top backdrill is always the secondary drill
+                    secondaryDrill.size  = VECTOR2I( drillSize, drillSize );
+                    secondaryDrill.start = F_Cu;
                     secondaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
 
-                    // Calculate size (10% larger)
-                    int drillSize = via->GetDrillValue();
-                    if( !m_viaDrill.IsIndeterminate() )
-                        drillSize = m_viaDrill.GetIntValue();
+                    if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                        secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
 
-                    secondaryDrill.size = VECTOR2I( drillSize * 1.1, drillSize * 1.1 );
+                    break;
 
-                    if( backdrillChoice == 0 ) // None
-                    {
-                        secondaryDrill.start = UNDEFINED_LAYER;
-                        secondaryDrill.end = UNDEFINED_LAYER;
-                        secondaryDrill.size = { 0, 0 };
-                        secondaryDrill.shape = PAD_DRILL_SHAPE::UNDEFINED;
-                    }
-                    else if( backdrillChoice == 1 ) // Bottom
-                    {
-                        secondaryDrill.start = B_Cu;
-                        if( m_ViaStartLayer11->GetLayerSelection() != UNDEFINED_LAYER )
-                            secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_ViaStartLayer11->GetLayerSelection() );
-                        else
-                            secondaryDrill.end = UNDEFINED_LAYER; // Or keep existing?
-                    }
-                    else if( backdrillChoice == 2 ) // Top
-                    {
-                        secondaryDrill.start = F_Cu;
-                        if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                            secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
-                        else
-                            secondaryDrill.end = UNDEFINED_LAYER;
-                    }
+                case BACKDRILL_MODE::BACKDRILL_BOTH:
+                    // Top backdrill is always the secondary drill and Bottom backdrill is always the tertiary drill
+                    secondaryDrill.size  = VECTOR2I( drillSize, drillSize );
+                    secondaryDrill.start = F_Cu;
+                    secondaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
 
-                    if( via->Padstack().SecondaryDrill() != secondaryDrill )
-                    {
-                        m_viaStack->SecondaryDrill() = secondaryDrill;
-                        updatePadstack = true;
-                    }
+                    if( m_backDrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                        secondaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillFrontLayer->GetLayerSelection() );
+
+                    tertiaryDrill.size  = VECTOR2I( drillSize, drillSize );
+                    tertiaryDrill.start = B_Cu;
+                    tertiaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+                    if( m_backDrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                        tertiaryDrill.end = static_cast<PCB_LAYER_ID>( m_backDrillBackLayer->GetLayerSelection() );
+
+                    break;
+                }
+
+                if( via->Padstack().SecondaryDrill() != secondaryDrill )
+                {
+                    m_viaStack->SecondaryDrill() = secondaryDrill;
+                    updatePadstack = true;
+                }
+
+                if( via->Padstack().TertiaryDrill() != tertiaryDrill )
+                {
+                    m_viaStack->TertiaryDrill() = tertiaryDrill;
+                    updatePadstack = true;
                 }
 
                 // Post Machining
@@ -1608,8 +1683,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onBackdrillChange( wxCommandEvent& aEvent )
     m_backDrillFrontLayer->Enable( enableTop );
     m_backDrillFrontLayerLabel->Enable( enableTop );
 
-    m_ViaStartLayer11->Enable( enableBottom ); // Back layer selector
-    m_backDrillBackLayer->Enable( enableBottom ); // Back layer label
+    m_backDrillBackLayer->Enable( enableBottom ); // Back layer selector
+    m_backDrillBackLayerLabel->Enable( enableBottom ); // Back layer label
 }
 
 

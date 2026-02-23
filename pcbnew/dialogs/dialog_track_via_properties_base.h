@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -118,8 +118,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_backDrillChoice;
 		wxStaticText* m_backDrillFrontLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_backDrillFrontLayer;
-		wxStaticText* m_backDrillBackLayer;
-		PCB_LAYER_BOX_SELECTOR* m_ViaStartLayer11;
+		wxStaticText* m_backDrillBackLayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_backDrillBackLayer;
 		wxStaticText* m_postMachineSectionLabel;
 		wxStaticLine* m_staticline21;
 		wxStaticText* m_topPostMachineLabel;
