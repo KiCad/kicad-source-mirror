@@ -326,6 +326,8 @@ if( KICAD_USE_PCH )
             <set>
             <string>
             <vector>
+            <kiid.h>
+            <pgm_base.h>
             <wx/wx.h>
              )
 endif()
