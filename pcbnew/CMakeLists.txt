@@ -815,6 +815,8 @@ if( KICAD_USE_PCH )
             <map>
             <memory>
             <unordered_map>
+            "board.h"
+            "footprint.h"
             <macros.h> )
 endif()
 
