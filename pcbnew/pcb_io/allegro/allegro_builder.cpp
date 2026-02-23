@@ -494,9 +494,10 @@ class ALLEGRO::LAYER_MAPPER
     };
 
 public:
-    LAYER_MAPPER( const BRD_DB& aRawBoard, BOARD& aBoard,
-                  const LAYER_MAPPING_HANDLER& aLayerMappingHandler ) :
-            m_brdDb( aRawBoard ), m_board( aBoard ), m_layerMappingHandler( aLayerMappingHandler )
+    LAYER_MAPPER( const BRD_DB& aRawBoard, BOARD& aBoard, const LAYER_MAPPING_HANDLER& aLayerMappingHandler ) :
+            m_layerMappingHandler( aLayerMappingHandler ),
+            m_brdDb( aRawBoard ),
+            m_board( aBoard )
     {}
 
     void ProcessLayerList( uint8_t aClass, const BLK_0x2A_LAYER_LIST& aList )
@@ -543,15 +544,15 @@ public:
      */
     void FinalizeLayers()
     {
-        auto it = m_ClassCustomLayerLists.find( LAYER_INFO::CLASS::ETCH );
+        auto customLayerIt = m_ClassCustomLayerLists.find( LAYER_INFO::CLASS::ETCH );
 
-        if( it == m_ClassCustomLayerLists.end() || !it->second )
+        if( customLayerIt == m_ClassCustomLayerLists.end() || !customLayerIt->second )
         {
             wxLogTrace( traceAllegroBuilder, "No ETCH layer class found; cannot finalize layers" );
             return;
         }
 
-        const std::vector<CUSTOM_LAYER>& etchLayers = *it->second;
+        const std::vector<CUSTOM_LAYER>& etchLayers = *customLayerIt->second;
         const size_t                     numCuLayers = etchLayers.size();
 
         m_board.GetDesignSettings().SetCopperLayerCount( numCuLayers );
@@ -631,23 +632,23 @@ public:
         {
             const wxString displayName = layerInfoDisplayName( layerInfo );
 
-            auto it = resolvedMapping.find( displayName );
+            auto rmIt = resolvedMapping.find( displayName );
 
-            if( it != resolvedMapping.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER )
+            if( rmIt != resolvedMapping.end() && rmIt->second != PCB_LAYER_ID::UNDEFINED_LAYER )
             {
-                m_staticLayerOverrides[layerInfo] = it->second;
+                m_staticLayerOverrides[layerInfo] = rmIt->second;
             }
         }
 
         // Apply custom layer mapping from the handler result
         for( const auto& [layerInfo, dialogName] : m_customLayerDialogNames )
         {
-            auto it = resolvedMapping.find( dialogName );
+            auto rmIt = resolvedMapping.find( dialogName );
 
-            if( it != resolvedMapping.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER )
+            if( rmIt != resolvedMapping.end() && rmIt->second != PCB_LAYER_ID::UNDEFINED_LAYER )
             {
-                m_customLayerToKiMap[layerInfo] = it->second;
-                m_board.SetLayerName( it->second, dialogName );
+                m_customLayerToKiMap[layerInfo] = rmIt->second;
+                m_board.SetLayerName( rmIt->second, dialogName );
             }
         }
     }
@@ -2621,9 +2622,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
 
     for( const BLOCK_BASE* assemblyBlock : assemblyWalker )
     {
-        const uint8_t               type = assemblyBlock->GetBlockType();
-        std::unique_ptr<BOARD_ITEM> item;
-
         std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *assemblyBlock, *fp );
 
         for( std::unique_ptr<BOARD_ITEM>& item : shapes )
@@ -2637,8 +2635,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
     LL_WALKER areaWalker{ aFpInstance.m_AreasPtr, aFpInstance.m_Key, m_brdDb };
     for( const BLOCK_BASE* areaBlock : areaWalker )
     {
-        const uint8_t type = areaBlock->GetBlockType();
-
         std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *areaBlock, *fp );
 
         for( std::unique_ptr<BOARD_ITEM>& item : shapes )

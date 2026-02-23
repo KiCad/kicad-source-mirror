@@ -460,7 +460,6 @@ void DB::visitLinkedList( const FILE_HEADER::LINKED_LIST            aLList,
                           std::function<const DB_REF&( const DB_OBJ& aObj )> aVisitor ) const
 {
     const DB_OBJ* node = Resolve( aLList.m_Head );
-    uint32_t lastKey = aLList.m_Head;
 
     size_t iterations = 0;
 
@@ -479,7 +478,6 @@ void DB::visitLinkedList( const FILE_HEADER::LINKED_LIST            aLList,
             THROW_IO_ERROR( wxString::Format( "Excessive list length: key was %#010x", nextRef.m_TargetKey ) );
         }
 
-        lastKey = nextRef.m_TargetKey;
         node = nextRef.m_Target;
     }
 }
@@ -1717,17 +1715,17 @@ void BRD_DB::VisitComponents( VIEW_OBJS_VISITOR aVisitor ) const
 
         viewObjs.m_Component = &component;
 
-        const auto compInstVisitor = [&]( const DB_OBJ& aObj )
+        const auto compInstVisitor = [&]( const DB_OBJ& aCompInst )
         {
-            wxLogTrace( "ALLEGRO_EXTRACT", "Visiting component instance key %#010x", aObj.GetKey() );
+            wxLogTrace( "ALLEGRO_EXTRACT", "Visiting component instance key %#010x", aCompInst.GetKey() );
 
-            if( aObj.GetType() != DB_OBJ::TYPE::COMPONENT_INST )
+            if( aCompInst.GetType() != DB_OBJ::TYPE::COMPONENT_INST )
             {
-                wxLogTrace( "ALLEGRO_EXTRACT", "  Not a component instance, skipping key %#010x", aObj.GetKey() );
+                wxLogTrace( "ALLEGRO_EXTRACT", "  Not a component instance, skipping key %#010x", aCompInst.GetKey() );
                 return;
             }
 
-            const COMPONENT_INST& compInst = static_cast<const COMPONENT_INST&>( aObj );
+            const COMPONENT_INST& compInst = static_cast<const COMPONENT_INST&>( aCompInst );
 
             const FUNCTION_INSTANCE& funcInst = compInst.GetFunctionInstance();
             viewObjs.m_ComponentInstance = &compInst;
@@ -1822,7 +1820,7 @@ void BRD_DB::VisitConnectedGeometry( VIEW_OBJS_VISITOR aVisitor ) const
 
     const auto netVisitor = [&]( const VIEW_OBJS& aViewObjs )
     {
-        const NET& net = *aViewObjs.m_Net;
+        // const NET& net = *aViewObjs.m_Net;
 
         // const NET_ASSIGN* netAssign = net.GetAssignment();
 

@@ -2165,8 +2165,6 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
 
 std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjectsMarker )
 {
-    const size_t offset = m_stream.Position();
-
     // Read the type of the object
     // The file can end here without error.
     uint8_t type = 0x00;
@@ -2459,7 +2457,6 @@ std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjec
 
 void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 {
-    const uint32_t magic = aBoard.m_Header->m_Magic;
     const FMT_VER  ver = aBoard.m_FmtVer;
 
     if( m_progressReporter )
@@ -2590,21 +2587,16 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
 
 template <typename T>
-void dumpLL( const char* name, const T& ll )
+void dumpLL( const char* name, const T& aLL )
 {
-    const auto dump = [&]( const FILE_HEADER::LINKED_LIST& ll )
-    {
-        wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x", name, ll.m_Head, ll.m_Tail );
-    };
-
     if constexpr( std::is_same_v<T, FILE_HEADER::LINKED_LIST> )
     {
-        dump( ll );
+        wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x", name, aLL.m_Head, aLL.m_Tail );
     }
     else if constexpr( std::is_same_v<T, COND_FIELD_BASE<FILE_HEADER::LINKED_LIST>> )
     {
-        if( ll.has_value() )
-            dump( ll.value() );
+        if( aLL.has_value() )
+            dumpLL( aLL.value() );
     }
 }
 

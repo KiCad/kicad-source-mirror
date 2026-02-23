@@ -172,7 +172,7 @@ private:
 template <FMT_VER MinVersion, typename T>
 struct COND_GE : public COND_FIELD_BASE<T>
 {
-    constexpr bool exists( FMT_VER ver ) const { return ver >= MinVersion; }
+    constexpr bool exists( FMT_VER ver ) const override { return ver >= MinVersion; }
 
     using COND_FIELD_BASE<T>::operator=;
 };
@@ -185,7 +185,7 @@ struct COND_GE : public COND_FIELD_BASE<T>
 template <FMT_VER MaxVersion, typename T>
 struct COND_LT : public COND_FIELD_BASE<T>
 {
-    constexpr bool exists( FMT_VER ver ) const { return ver < MaxVersion; }
+    constexpr bool exists( FMT_VER ver ) const override { return ver < MaxVersion; }
 
     using COND_FIELD_BASE<T>::operator=;
 };
@@ -193,12 +193,12 @@ struct COND_LT : public COND_FIELD_BASE<T>
 
 /**
  * This is a conditional field that only exists in versions of a file
- * less than a certain version.
+ * less than a certain version and greater than or equal to a certain version.
  */
 template <FMT_VER GEVersion, FMT_VER LTVersion, typename T>
 struct COND_GE_LT : public COND_FIELD_BASE<T>
 {
-    constexpr bool exists( FMT_VER ver ) const { return ver >= GEVersion && ver < LTVersion; }
+    constexpr bool exists( FMT_VER ver ) const override { return ver >= GEVersion && ver < LTVersion; }
 
     using COND_FIELD_BASE<T>::operator=;
 };
