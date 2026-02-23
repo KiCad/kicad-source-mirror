@@ -476,6 +476,16 @@ public:
         return m_measurementDirective;
     }
 
+    /**
+     * Get the correct value for the $INSUNITS header variable given the current units.
+     *
+     * @return the $INSUNITS value (1 = inches, 4 = millimeters)
+     */
+    unsigned int GetInsUnits() const
+    {
+        return m_insUnits;
+    }
+
     // Finds the nearest legacy color to the given RGB values (aR, aG, aB).
     int FindNearestLegacyColor( int aR, int aG, int aB );
 
@@ -493,4 +503,5 @@ protected:
     DXF_UNITS    m_plotUnits;
     double       m_unitScalingFactor;
     unsigned int m_measurementDirective;
+    unsigned int m_insUnits;
 };
