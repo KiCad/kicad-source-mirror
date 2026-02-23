@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-19 09:56+0000\n"
+"PO-Revision-Date: 2026-02-24 04:31+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -4566,7 +4566,7 @@ msgstr "Souhlasím s odesláním anonymních výkazů"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr "Obnovení jedinečného ID"
+msgstr "Obnovit jedinečné ID"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:464
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:490
@@ -4945,7 +4945,7 @@ msgstr "Vložené soubory z nadřazeného symbolu nelze odstranit."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
-msgstr "Zvolte složku pro GenCAD export"
+msgstr "Zvolte složku pro export souborů"
 
 #: common/dialogs/panel_embedded_files.cpp:479
 #, c-format
@@ -14663,7 +14663,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:743
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:193
 msgid "Do not populate"
-msgstr "Není osazeno (DNP)"
+msgstr "Není osazeno"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
 #: eeschema/sch_field.cpp:1239 eeschema/sch_label.cpp:1249
@@ -16752,9 +16752,8 @@ msgid "Zoom vertically"
 msgstr "Zrcadlit vertikálně"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "Vertikální pohyb touchpadu nebo kolečka:"
+msgstr "Vertikální pohyb touchpadu nebo kolečka"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
@@ -17055,7 +17054,7 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
-"VAROVÁNÍ: Schéma má chyby očíslování, použijte editor schémat k jejich "
+"Varování: schéma má chybné očíslování, použijte editor schémat k jeho "
 "opravě\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:423
@@ -24844,24 +24843,20 @@ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Nastavit na zadané hodnoty:"
+msgstr "Omezit na hodnoty z řady E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Nastavit na zadané hodnoty:"
+msgstr "Omezit na hodnoty z řady E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Nastavit na zadané hodnoty:"
+msgstr "Omezit na hodnoty z řady E96."
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Nastavit na zadané hodnoty:"
+msgstr "Omezit na hodnoty z řady E192."
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -27016,9 +27011,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "Barevné téma k použití (výchozí nastavení schématu)"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
-#, fuzzy
 msgid "Default font name"
-msgstr "Výchozí písmo:"
+msgstr "Výchozí písmo"
 
 #: kicad/cli/command_sch_export_plot.cpp:87
 #, fuzzy
@@ -27287,9 +27281,8 @@ msgid "Source"
 msgstr "Zdroj"
 
 #: kicad/dialogs/panel_jobset.cpp:152
-#, fuzzy
 msgid "No output messages"
-msgstr "Zprávy:"
+msgstr "Žádné výstupní zprávy"
 
 #: kicad/dialogs/panel_jobset.cpp:224
 #, fuzzy
@@ -31654,9 +31647,8 @@ msgid "Enable Teardrops"
 msgstr "Přidat označení"
 
 #: pcbnew/board_connected_item.cpp:294
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "Nejlepší délka:"
+msgstr "Nejlepší poměr délek"
 
 #: pcbnew/board_connected_item.cpp:301
 msgid "Max Length"
@@ -34771,9 +34763,8 @@ msgstr ""
 "spojené. Standard je 0,001 mm."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:107
-#, fuzzy
 msgid "Export 3D Model"
-msgstr "Exportovat modul:"
+msgstr "Exportovat 3D model"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
 #, c-format
@@ -35627,9 +35618,8 @@ msgid "Gerber X2"
 msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
-#, fuzzy
 msgid "Generate map:"
-msgstr "Vygenerovat soubor mapy"
+msgstr "Vygenerovat soubor mapy:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Origin:"
@@ -35640,9 +35630,8 @@ msgid "Absolute"
 msgstr "Absolutní"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:150
-#, fuzzy
 msgid "Zeros:"
-msgstr "Nuly"
+msgstr "Nuly:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:154
 msgid "Decimal format (recommended)"
@@ -36237,9 +36226,8 @@ msgid "-- leave unchanged --  "
 msgstr "-- nechat beze změny --  "
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:162
-#, fuzzy
 msgid "Via size:"
-msgstr "Velikost prokovu"
+msgstr "Velikost prokovu:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:171
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:384
@@ -38136,9 +38124,8 @@ msgid "Lights Intensity"
 msgstr "Intenzita"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
-#, fuzzy
 msgid "Camera:"
-msgstr "Možnosti kamery"
+msgstr "Kamera:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
 #, fuzzy
@@ -38367,9 +38354,8 @@ msgstr "Technické vrstvy"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "Pájecí maska nahoře:"
+msgstr "Pájecí maska"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
@@ -43230,9 +43216,9 @@ msgid "Full Length"
 msgstr "Plná délka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2211
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "Cílové zkosení:"
+msgstr "Cílové zkosení: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2212
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2234
@@ -43246,9 +43232,9 @@ msgid "Skew Constraints: %s"
 msgstr "Omezení díry: min. %s."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2233
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Cílová délka:"
+msgstr "Cílová délka: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 #, fuzzy, c-format
@@ -43300,14 +43286,12 @@ msgid "Tuning Mode"
 msgstr "Režim tisku"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2661
-#, fuzzy
 msgid "Min Amplitude"
-msgstr "Min amplituda (Amin):"
+msgstr "Minimální amplituda"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2668
-#, fuzzy
 msgid "Max Amplitude"
-msgstr "Max amplituda (Amax):"
+msgstr "Maximální amplituda"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2675
 #, fuzzy
@@ -43320,19 +43304,16 @@ msgid "Min Spacing"
 msgstr "Min odstup (s):"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2687
-#, fuzzy
 msgid "Corner Radius %"
-msgstr "Poloměr rohu:"
+msgstr "Poloměr rohu %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2709
-#, fuzzy
 msgid "Target Length"
-msgstr "Cílová délka:"
+msgstr "Cílová délka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2718
-#, fuzzy
 msgid "Target Skew"
-msgstr "Cílové zkosení:"
+msgstr "Cílové zkosení"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2726
 #, fuzzy
@@ -44468,14 +44449,12 @@ msgid "Corner Radius Ratio"
 msgstr "Spustit simulaci"
 
 #: pcbnew/pad.cpp:2892
-#, fuzzy
 msgid "Corner Radius Size"
-msgstr "Poloměr rohu:"
+msgstr "Poloměr rohu"
 
 #: pcbnew/pad.cpp:2898
-#, fuzzy
 msgid "Hole Shape"
-msgstr "Tvar díry:"
+msgstr "Tvar díry"
 
 #: pcbnew/pad.cpp:2902
 msgid "Hole Size X"
@@ -44555,9 +44534,8 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Potlačit koncové nuly"
 
 #: pcbnew/pcb_dimension.cpp:1875
-#, fuzzy
 msgid "Arrow Direction"
-msgstr "Směr:"
+msgstr "Směr šipky"
 
 #: pcbnew/pcb_dimension.cpp:1888
 #, fuzzy
@@ -46563,9 +46541,8 @@ msgstr "Technické vrstvy"
 
 #: pcbnew/pcb_shape.cpp:977 pcbnew/pcb_tablecell.cpp:218
 #: pcbnew/pcb_textbox.cpp:815 pcbnew/pcb_track.cpp:2162
-#, fuzzy
 msgid "Soldermask"
-msgstr "Pájecí maska nahoře:"
+msgstr "Pájecí maska"
 
 #: pcbnew/pcb_target.cpp:151
 #, fuzzy
@@ -48357,9 +48334,8 @@ msgid "Some of the track segments could not be filleted."
 msgstr "Některé soubory projektu nelze zálohovat."
 
 #: pcbnew/tools/edit_tool.cpp:1314
-#, fuzzy
 msgid "Arc radius:"
-msgstr "Oblouk, poloměr %s"
+msgstr "Poloměr oblouku:"
 
 #: pcbnew/tools/edit_tool.cpp:1319
 #, fuzzy
@@ -48550,9 +48526,8 @@ msgid "Click on new member..."
 msgstr "Klikněte na nového člena..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1202
-#, fuzzy
 msgid "Group Items"
-msgstr "Členové skupiny:"
+msgstr "Seskupit položky"
 
 #: pcbnew/tools/group_tool.cpp:319 pcbnew/tools/pcb_actions.cpp:1209
 #, fuzzy
@@ -50809,9 +50784,8 @@ msgid "Append Board"
 msgstr "Připojit desku..."
 
 #: pcbnew/tools/pcb_control.cpp:1642
-#, fuzzy
 msgid "Active Layer"
-msgstr "Neaktivní vrstvy:"
+msgstr "Aktivní vrstva"
 
 #: pcbnew/tools/pcb_control.cpp:1643 pcbnew/widgets/appearance_controls.cpp:375
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -52089,9 +52063,9 @@ msgid "Teardrop %s %s"
 msgstr "Slzy %s %s"
 
 #: pcbnew/zone.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Úroveň priority zóny:"
+msgstr "Zóna %s %s, priorita %d"
 
 #: pcbnew/zone.cpp:1144
 #, fuzzy, c-format
