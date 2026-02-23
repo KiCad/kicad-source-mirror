@@ -2593,10 +2593,10 @@ void dumpLL( const char* name, const T& aLL )
     {
         wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x", name, aLL.m_Head, aLL.m_Tail );
     }
-    else if constexpr( std::is_same_v<T, COND_FIELD_BASE<FILE_HEADER::LINKED_LIST>> )
+    else if constexpr( std::is_base_of_v<COND_FIELD_BASE<FILE_HEADER::LINKED_LIST>, T> )
     {
         if( aLL.has_value() )
-            dumpLL( aLL.value() );
+            dumpLL( name, aLL.value() );
     }
 }
 
