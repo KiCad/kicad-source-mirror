@@ -1067,8 +1067,10 @@ protected:
     {
         m_worldScale = m_screenDPI * m_worldUnitLength * m_zoomFactor;
 
-        if( Pgm().GetCommonSettings() )
-            m_worldScale *= Pgm().GetCommonSettings()->m_Appearance.zoom_correction_factor;
+        PGM_BASE* pgm = PgmOrNull();
+
+        if( pgm && pgm->GetCommonSettings() )
+            m_worldScale *= pgm->GetCommonSettings()->m_Appearance.zoom_correction_factor;
     }
 
     /**
