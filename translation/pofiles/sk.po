@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-22 21:09+0000\n"
+"PO-Revision-Date: 2026-02-23 22:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -8728,7 +8728,7 @@ msgstr "Vnorené prekovy"
 
 #: common/layer_id.cpp:133
 msgid "Micro-vias"
-msgstr "Mikro-prekovy"
+msgstr "Mikroprekovy"
 
 #: common/layer_id.cpp:134
 msgid "Via holes"
@@ -12057,8 +12057,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr ""
-"%s aj %s sú pripojené k rovnakým položkám; %s sa použije v zozname netlistov"
+msgstr "%s aj %s sú pripojené k rovnakým položkám; %s sa použije v netliste"
 
 #: eeschema/connection_graph.cpp:3703
 #, c-format
@@ -13556,9 +13555,8 @@ msgid "Buses && bus labels"
 msgstr "Autobusy && štítky autobusov"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
-#, fuzzy
 msgid "Label fields"
-msgstr "Polia so symbolmi"
+msgstr "Polia označení"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:57
 msgid "Sheet titles"
@@ -13650,9 +13648,8 @@ msgid "-- leave unchanged --"
 msgstr "- nechať nezmenené -"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:244
-#, fuzzy
 msgid "(labels only)"
-msgstr "Viditeľné (iba polia)"
+msgstr "(iba označenia)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:275
 msgid "H Align:"
@@ -13877,7 +13874,7 @@ msgstr "Vlastnosti hierarchického označenia"
 #: eeschema/dialogs/dialog_label_properties.cpp:107
 #: eeschema/dialogs/dialog_label_properties_base.h:123
 msgid "Label Properties"
-msgstr "Vlastnosti menovky"
+msgstr "Vlastnosti označenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:108
 msgid "Directive Label Properties"
@@ -13888,9 +13885,8 @@ msgid "Hierarchical Sheet Pin Properties"
 msgstr "Hierarchické vlastnosti čapu listu"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:495
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "Názov siete nemôže byť prázdny."
+msgstr "Označenie nemôže byť prázdne."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:558
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:603
@@ -13902,7 +13898,7 @@ msgstr "Počet"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:627
 msgid "Edit Label Properties"
-msgstr "Upraviť vlastnosti menovky"
+msgstr "Upraviť vlastnosti označenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:726
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:707
@@ -13922,7 +13918,7 @@ msgstr "Prvých %d polí je povinných."
 #: eeschema/dialogs/dialog_label_properties_base.cpp:41
 #: eeschema/dialogs/dialog_label_properties_base.cpp:48
 msgid "Label:"
-msgstr "Názov:"
+msgstr "Označenie:"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:34
 #: eeschema/dialogs/dialog_label_properties_base.cpp:50
@@ -13930,9 +13926,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "Zadajte text, ktorý sa má v schéme použiť"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
-#, fuzzy
 msgid "Multiple label input"
-msgstr "Viac vrstiev"
+msgstr "Viacnásobné zadanie označenia"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14785,6 +14780,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
+"Lokálne symboly napájania vytvárajú označenia, ktoré sú obmedzené na list, v "
+"ktorom sú použité"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:196
 msgid "Pin Text Options"
@@ -15019,11 +15016,11 @@ msgstr "Vlastnosti vývodu"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:111
 msgid "Conflicting Labels"
-msgstr "Konfliktné štítky"
+msgstr "Konfliktné označenia"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:112
 msgid "New Label"
-msgstr "Nový štítok"
+msgstr "Nové označenie"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:221
 msgid "Updated"
@@ -15034,17 +15031,17 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
-"Táto schéma má jeden alebo viac autobusov s viac ako jedným štítkom.\n"
+"Táto schéma má jednu alebo viac zberníc s viac ako jedným označením.\n"
 "To bolo povolené v predchádzajúcich verziách KiCad, ale už to nie je "
-"povolené."
+"prípustné."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
-"Prosím, zvoľte nový názov pre každý z autobusov uvedených nižšie.\n"
-"Na základe štítkov pripevnených k autobusu vám bol navrhnutý názov."
+"Prosím, zvoľte nový názov pre každú zbernicu uvedenú nižšie.\n"
+"Názov bude navrhnutý na základe označení pripojených k zbernici."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -17462,9 +17459,10 @@ msgid "Net names"
 msgstr "Čisté mená"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
-msgstr "Aktualizujte hodnoty symbolov, ktoré boli nahradené v editore PCB."
+msgstr ""
+"Aktualizovať schematické označenia spojov tak, aby zodpovedali názvom spojov "
+"z editora DPS."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
 msgid ""
@@ -17473,13 +17471,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
-msgstr ""
+msgstr "Uprednostňovať zámenu jednotiek symbolu pred zámenou označenia"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:85
 msgid ""
 "When possible, detect footprint gate swaps and apply corresponding symbol "
 "unit swaps instead of changing net labels."
 msgstr ""
+"Ak je to možné, zistiť zámeny hradiel puzdra a namiesto zmeny označenia "
+"spoja použiť zodpovedajúcu zámenu jednotiek symbolu."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:89
 msgid "Other fields"
@@ -17491,13 +17491,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:95
 msgid "Prefer symbol pin swaps over label swaps"
-msgstr ""
+msgstr "Uprednostniť zámenu vývodov symbolu pred zámenou označenia"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:97
 msgid ""
 "When possible, swap symbol pins to match footprint pad net swaps instead of "
 "changing net labels."
 msgstr ""
+"Ak je to možné, namiesto zmeny označenia spojov zameniť vývody symbolu tak, "
+"aby zodpovedali zámenám spoja na plôške puzdra."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:59
 #: eeschema/tools/backannotate.cpp:1015
@@ -18006,7 +18008,7 @@ msgstr "& Vertikálna rozteč:"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:343
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:127
 msgid "Label increment:"
-msgstr "Prírastok štítku:"
+msgstr "Prírastok označenia:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:362
 msgid "Dialog Preferences"
@@ -18086,19 +18088,17 @@ msgid "Overbar offset ratio:"
 msgstr "Pomer odsadenia textu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
-#, fuzzy
 msgid "Label offset ratio:"
-msgstr "Pomer odsadenia textu:"
+msgstr "Pomer odsadenia označenia:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:57
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:62
-#, fuzzy
 msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Percento veľkosti textu na posunutie textu nad alebo pod vodičom alebo "
-"zbernicou"
+"Percento veľkosti textu určujúce veľkosť posunutia nad (alebo pod) spoj, "
+"zbernicu, alebo vývod"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:70
 msgid "Global label margin ratio:"
@@ -18106,11 +18106,9 @@ msgstr "Pomer okrajov globálneho označenia:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:72
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Percento veľkosti textu na posunutie textu nad alebo pod vodičom alebo "
-"zbernicou"
+"Percento veľkosti textu určujúce veľkosť medzery okolo globálneho označenia"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:100
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:158
@@ -18483,7 +18481,7 @@ msgstr "Všeobecné nastavenia"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:156
 msgid "Keep pins attached when dragging edges"
-msgstr ""
+msgstr "Udržať prilepené vývody pri presúvaní hrán"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
 #, fuzzy
@@ -18894,7 +18892,7 @@ msgstr "Nástroj %d nie je definovaný"
 #: eeschema/erc/erc.cpp:796
 #, c-format
 msgid "Label connects more than one wire at %d, %d"
-msgstr ""
+msgstr "Označenie prepája viac ako jeden spoj na %d, %d"
 
 #: eeschema/erc/erc.cpp:876
 #, fuzzy, c-format
@@ -18997,14 +18995,12 @@ msgid "Checking pins..."
 msgstr "Kontrolujú sa vývody..."
 
 #: eeschema/erc/erc.cpp:2134
-#, fuzzy
 msgid "Checking similar labels..."
-msgstr "Kontrolujú sa štítky..."
+msgstr "Kontrolujú sa podobné označenia..."
 
 #: eeschema/erc/erc.cpp:2142
-#, fuzzy
 msgid "Checking local and global labels..."
-msgstr "Kontrolujú sa štítky..."
+msgstr "Kontrolujú sa lokálne a globálne označenia..."
 
 #: eeschema/erc/erc.cpp:2150
 msgid "Checking for unresolved variables..."
@@ -19049,9 +19045,8 @@ msgid "Checking for four way junctions..."
 msgstr "Prebieha kontrola definícií stopy nádvoria..."
 
 #: eeschema/erc/erc.cpp:2223
-#, fuzzy
 msgid "Checking for labels on more than one wire..."
-msgstr "Prebieha kontrola stôp..."
+msgstr "Kontrolujú sa označenia na viacerých spojoch..."
 
 #: eeschema/erc/erc.cpp:2231
 #, fuzzy
@@ -19108,7 +19103,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:93
 msgid "Label connects more than one wire"
-msgstr ""
+msgstr "Označenie prepája viac ako jeden spoj"
 
 #: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
@@ -19119,18 +19114,16 @@ msgid "Unconnected \"no connection\" flag"
 msgstr "Vlajka nepripojeného \"žiadne pripojenie\""
 
 #: eeschema/erc/erc_item.cpp:105
-#, fuzzy
 msgid "Label not connected"
-msgstr "Pin nie je pripojený"
+msgstr "Nepripojené označenie"
 
 #: eeschema/erc/erc_item.cpp:109
-#, fuzzy
 msgid "Label connected to only one pin"
-msgstr "Štítok nie je k ničomu pripojený"
+msgstr "Označenie pripojené len k jednému vývodu"
 
 #: eeschema/erc/erc_item.cpp:113
 msgid "Labels are similar (lower/upper case difference only)"
-msgstr "Štítky sú podobné (iba rozdiel medzi malými a veľkými písmenami)"
+msgstr "Označenia sú podobné (rozdiel len medzi malými a veľkými písmenami)"
 
 #: eeschema/erc/erc_item.cpp:117
 #, fuzzy
@@ -19138,18 +19131,18 @@ msgid "Power pins are similar (lower/upper case difference only)"
 msgstr "Štítky sú podobné (iba rozdiel medzi malými a veľkými písmenami)"
 
 #: eeschema/erc/erc_item.cpp:121
-#, fuzzy
 msgid "Power pin and label are similar (lower/upper case difference only)"
-msgstr "Štítky sú podobné (iba rozdiel medzi malými a veľkými písmenami)"
+msgstr ""
+"Vývod napájania a označenie sú podobné (iba rozdiel medzi malými a veľkými "
+"písmenami)"
 
 #: eeschema/erc/erc_item.cpp:125
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "Globálna značka nie je nikde inde v schéme pripojená"
+msgstr "Zdá sa, že globálne označenie je v schéme len raz"
 
 #: eeschema/erc/erc_item.cpp:129
 msgid "Local and global labels have same name"
-msgstr ""
+msgstr "Lokálne a globálne označenia majú rovnaký názov"
 
 #: eeschema/erc/erc_item.cpp:133
 msgid "Different footprint assigned in another unit of the symbol"
@@ -19277,7 +19270,7 @@ msgstr "Je potrebné zbernicové pripojenie"
 #: eeschema/fields_data_model.cpp:55 eeschema/sch_label.cpp:1387
 #: eeschema/sch_label.h:413 pcbnew/dialogs/dialog_layer_selection_base.cpp:231
 msgid "Label"
-msgstr "Menovka"
+msgstr "Označenie"
 
 #: eeschema/fields_grid_table.cpp:329 eeschema/files-io.cpp:1179
 #: eeschema/tools/sch_editor_control.cpp:425
@@ -19995,14 +19988,14 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Vývody listu"
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "Štítok '%s'"
+msgstr "Označenie '%s' na (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "Globálna značka '%s'"
+msgstr "Globálne označenie '%s' na (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
 #, c-format
@@ -20030,9 +20023,9 @@ msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
 msgstr "Pripojenie zbernice k zbernici (%s,%s) do (%s,%s)"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "Globálna značka '%s'"
+msgstr "Označenie triedy spojov '%s' na (%s, %s)"
 
 #: eeschema/net_navigator.cpp:198
 #, fuzzy, c-format
@@ -20742,7 +20735,7 @@ msgstr "Port napájení s neznámým stylem importovaný jako typ 'Bar'."
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:699
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "Symbol napájania vytvára globálny štítok s názvom '%s'"
+msgstr "Symbol napájania vytvára globálne označenie s názvom '%s'"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4107
 #, c-format
@@ -20952,7 +20945,9 @@ msgstr ""
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1582
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "Nelze nastavit textové proměnné, protože není připojen žádný projekt."
+msgstr ""
+"Textové premenné nebolo možné nastaviť, pretože nie je pripojený žiadny "
+"projekt."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2116
 #, c-format
@@ -21776,7 +21771,7 @@ msgstr "Hierarchické označenia"
 #: eeschema/sch_label.cpp:1646
 #, c-format
 msgid "Label '%s'"
-msgstr "Označení '%s'"
+msgstr "Označenie '%s'"
 
 #: eeschema/sch_label.cpp:1924
 #, c-format
@@ -21791,7 +21786,7 @@ msgstr "Označenie direktívy [%s %s]"
 #: eeschema/sch_label.cpp:2185
 #, c-format
 msgid "Global Label '%s'"
-msgstr "Globální označení '%s'"
+msgstr "Globálne označenie '%s'"
 
 #: eeschema/sch_label.cpp:2331
 #, c-format
@@ -22703,19 +22698,17 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_textbox.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Text box '%s'"
-msgstr "Text '%s'"
+msgstr "Textové pole '%s'"
 
 #: eeschema/sch_textbox.cpp:473 pcbnew/pcb_textbox.cpp:514
-#, fuzzy
 msgid "Box Width"
-msgstr "Šírka textu"
+msgstr "Šírka poľa"
 
 #: eeschema/sch_textbox.cpp:475 pcbnew/pcb_textbox.cpp:516
-#, fuzzy
 msgid "Box Height"
-msgstr "Výška textu"
+msgstr "Výška poľa"
 
 #: eeschema/sch_textbox.cpp:612 pcbnew/pcb_textbox.cpp:888
 msgid "Margins"
@@ -25365,7 +25358,7 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:1396
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Zmeniť %s vývod %s siete označený z '%s' na '%s'."
+msgstr "Zmeniť %s vývod %s spoja označený z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:1414
 #, fuzzy, c-format
@@ -25376,7 +25369,7 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:1423
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Pridať označenie '%s' na %s vývod siete %s."
+msgstr "Pridať označenie '%s' na %s vývod spoja %s."
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
 #, fuzzy
@@ -25714,9 +25707,8 @@ msgstr "Nakresli čiaru"
 
 #: eeschema/tools/sch_actions.cpp:387 eeschema/tools/sch_actions.cpp:656
 #: pcbnew/tools/pcb_actions.cpp:223
-#, fuzzy
 msgid "Draw Text Boxes"
-msgstr "Nakresli čiaru"
+msgstr "Kresliť textové polia"
 
 #: eeschema/tools/sch_actions.cpp:395 eeschema/tools/sch_actions.cpp:1495
 #: pagelayout_editor/tools/pl_actions.cpp:45 pcbnew/tools/pcb_actions.cpp:110
@@ -25828,9 +25820,8 @@ msgid "Place Wire to Bus Entries"
 msgstr "Umiestni spoj do zbernice"
 
 #: eeschema/tools/sch_actions.cpp:541
-#, fuzzy
 msgid "Place Net Labels"
-msgstr "Menovka listu"
+msgstr "Umiestniť označenia spojov"
 
 #: eeschema/tools/sch_actions.cpp:549
 msgid "Place Directive Labels"
@@ -25914,9 +25905,8 @@ msgid "Import sheet into project"
 msgstr "Importovať špendlík listu"
 
 #: eeschema/tools/sch_actions.cpp:638
-#, fuzzy
 msgid "Place Global Labels"
-msgstr "Otočiť globálnu menovku"
+msgstr "Umiestniť globálne označenia"
 
 #: eeschema/tools/sch_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:231
 #, fuzzy
@@ -26026,24 +26016,20 @@ msgid "Swap the selected symbol pins' positions"
 msgstr "Otočí vybraté položky v smere hodinových ručičiek"
 
 #: eeschema/tools/sch_actions.cpp:805 eeschema/tools/sch_edit_tool.cpp:1777
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "Zamieňajte vrstvy"
+msgstr "Zameniť označenia vývodov"
 
 #: eeschema/tools/sch_actions.cpp:806
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "Zobraziť potkan pre vybranú sieť"
+msgstr "Zameniť označenia pripojené k vybraným vývodom"
 
 #: eeschema/tools/sch_actions.cpp:812 eeschema/tools/sch_edit_tool.cpp:1859
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Jednotky"
+msgstr "Zameniť označenie jednotiek"
 
 #: eeschema/tools/sch_actions.cpp:813
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "Duplikuje vybraté položky"
+msgstr "Zameniť označenia medzi vybranými jednotkami"
 
 #: eeschema/tools/sch_actions.cpp:829
 msgid "Edit Reference Designator..."
@@ -26128,7 +26114,7 @@ msgstr "Prepínajte medzi reprezentáciami DeMorgan"
 
 #: eeschema/tools/sch_actions.cpp:908
 msgid "Change to Label"
-msgstr "Zmeniť na menovku"
+msgstr "Zmeniť na označenie"
 
 #: eeschema/tools/sch_actions.cpp:909
 msgid "Change existing item to a label"
@@ -26152,11 +26138,11 @@ msgstr "Zmeniť existujúcu položku na hierarchické označenie"
 
 #: eeschema/tools/sch_actions.cpp:937
 msgid "Change to Global Label"
-msgstr "Zmeniť hierarchickú menovku"
+msgstr "Zmeniť na globálne onačenie"
 
 #: eeschema/tools/sch_actions.cpp:938
 msgid "Change existing item to a global label"
-msgstr "Zmeňte existujúcu položku na globálny štítok"
+msgstr "Zmeniť existujúcu položku na globálne označenie"
 
 #: eeschema/tools/sch_actions.cpp:946
 msgid "Change to Text"
@@ -26164,17 +26150,15 @@ msgstr "Zmeniť na text"
 
 #: eeschema/tools/sch_actions.cpp:947
 msgid "Change existing item to a text comment"
-msgstr "Zmeňte existujúcu položku na textový komentár"
+msgstr "Zmeniť existujúcu položku na textový komentár"
 
 #: eeschema/tools/sch_actions.cpp:955
-#, fuzzy
 msgid "Change to Text Box"
-msgstr "Zmeniť na text"
+msgstr "Zmeniť na textové pole"
 
 #: eeschema/tools/sch_actions.cpp:956
-#, fuzzy
 msgid "Change existing item to a text box"
-msgstr "Zmeňte existujúcu položku na textový komentár"
+msgstr "Zmeniť existujúcu položku na textové pole"
 
 #: eeschema/tools/sch_actions.cpp:964 eeschema/tools/sch_edit_tool.cpp:3185
 msgid "Cleanup Sheet Pins"
@@ -26252,9 +26236,8 @@ msgid "Clear Net Highlighting"
 msgstr "Vymazať zvýraznenie siete"
 
 #: eeschema/tools/sch_actions.cpp:1034
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "Vymazať zvýraznenie siete"
+msgstr "Zrušiť všetky existujúce zvýraznenia spojov"
 
 #: eeschema/tools/sch_actions.cpp:1043
 msgid "Highlight Nets"
@@ -26479,13 +26462,12 @@ msgid "Export Symbols..."
 msgstr "Exportovať púzdro"
 
 #: eeschema/tools/sch_actions.cpp:1237
-#, fuzzy
 msgid ""
 "Add symbols from schematic to a new or an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Pridajte stopy použité na palube do existujúcej knižnice stopy\n"
-"(neodstráni ďalšie stopy z tejto knižnice)"
+"Pridať symboly zo schémy do novej alebo existujúcej knižnice symbolov\n"
+"(neodstráni iné symboly z tejto knižnice)"
 
 #: eeschema/tools/sch_actions.cpp:1244
 #, fuzzy
@@ -26989,9 +26971,8 @@ msgid "Remove Design Variant..."
 msgstr "Odstrániť zásuvný modul"
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "Nastala chyba pri pokuse o vytlačenie schémy."
+msgstr "Odstrániť existujúci variant návrhu zo schémy."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 #, fuzzy
@@ -27132,7 +27113,7 @@ msgstr "Pridať hierarchické označenie"
 #: eeschema/tools/sch_drawing_tools.cpp:2199
 #: eeschema/tools/sch_drawing_tools.cpp:2204
 msgid "Add Label"
-msgstr "Pridať menovku"
+msgstr "Pridať označenie"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2217
 msgid "Click over a sheet."
@@ -27151,9 +27132,8 @@ msgstr "Pridajte špendlík"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2588
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:502
-#, fuzzy
 msgid "Add Text Box"
-msgstr "Pridať text"
+msgstr "Pridať textové pole"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2597
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:508
@@ -27293,16 +27273,20 @@ msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
+"Každý vybraný vývod musí mať presne jedno pripojené označenie spoja a žiadne "
+"iné pripojenia vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1809
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
+"Každý vývod vybraných jednotiek musí mať presne jedno pripojené označenie "
+"spoja a žiadne iné pripojenia vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1902
 msgid "Label value cannot go below zero"
-msgstr "Hodnota štítku nemôže byť nižšia ako nula"
+msgstr "Hodnota označenia nemôže klesnúť pod nulu"
 
 #: eeschema/tools/sch_edit_tool.cpp:1982
 msgid "Repeat Item"
@@ -27398,9 +27382,10 @@ msgid "No nets selected."
 msgstr "Nie je vybratá sieť."
 
 #: eeschema/tools/sch_editor_control.cpp:1210
-#, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
-msgstr "Sieť musí byť označená, aby mohla byť priradená sieťová trieda."
+msgstr ""
+"Všetky vybrané spoje musia byť označené, aby mohli byť priradené k triede "
+"spojov."
 
 #: eeschema/tools/sch_editor_control.cpp:1361
 #, fuzzy
@@ -28287,9 +28272,8 @@ msgid "Do not update library tables"
 msgstr "Súbory knižníc puzdier"
 
 #: eeschema/widgets/symbol_library_save_as_filedlg_hook.h:44
-#, fuzzy
 msgid "Update existing library table entry"
-msgstr "Pridajte existujúcu knižnicu do tabuľky"
+msgstr "Aktualizovať existujúcu položku tabuľky knižnice"
 
 #: eeschema/widgets/symbol_library_save_as_filedlg_hook.h:45
 #, fuzzy
@@ -29790,6 +29774,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Cesta k listu výkresu, toto prepíše akýkoľvek existujúci hárok definovaný "
+"projektom"
 
 #: kicad/cli/command.cpp:220
 msgid ""
@@ -30130,9 +30116,8 @@ msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 msgstr ""
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
-msgstr "Platné možnosti excellon, gerber."
+msgstr "Platné možnosti sú: frézovanie, alternatívne."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
 #, fuzzy
@@ -32743,9 +32728,8 @@ msgid "New Project..."
 msgstr "Nový projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Odvodiť od existujúceho symbolu:"
+msgstr "Vytvoriť nový projekt na základe existujúceho projektu"
 
 #: kicad/tools/kicad_manager_actions.cpp:51
 msgid "Clone Project from Repository..."
@@ -32927,7 +32911,7 @@ msgstr "Vytvorí nový projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:511
 msgid "Open Existing Project"
-msgstr "Otvorí existujúci projekt"
+msgstr "Otvoriť existujúci projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:555
 #, fuzzy
@@ -33301,7 +33285,7 @@ msgstr "Súbor '%s' bol načítaný"
 
 #: pagelayout_editor/files.cpp:132
 msgid "Append Existing Drawing Sheet"
-msgstr "Pridať existující výkresový list"
+msgstr "Pripojiť existujúci list výkresu"
 
 #: pagelayout_editor/files.cpp:145 pagelayout_editor/files.cpp:173
 #, c-format
@@ -33445,13 +33429,11 @@ msgstr "Pridať uzol"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid "Append Existing Drawing Sheet..."
-msgstr "Pridať existující výkresový list..."
+msgstr "Pripojiť existujúci list výkresu..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
-#, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr ""
-"Pripojte existujúci súbor návrhu rozloženia stránky k aktuálnemu súboru"
+msgstr "Pripojiť existujúci súbor listu výkresu k aktuálnemu súboru"
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
@@ -36123,7 +36105,7 @@ msgstr "Úseky stopy"
 
 #: pcbnew/board.cpp:2216 pcbnew/pcb_draw_panel_gal.cpp:743
 msgid "Unrouted"
-msgstr "Neodvedený"
+msgstr "Nenaroutované"
 
 #: pcbnew/board_connected_item.cpp:258
 msgid "NetClass"
@@ -38327,9 +38309,8 @@ msgid "Footprint Annotation"
 msgstr "Orientácia puzdier"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:518
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "Nahraďte zhody v referenčných označeniach"
+msgstr "Ponechať existujúce referenčné označenia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
 #, fuzzy
@@ -38342,13 +38323,12 @@ msgid "Create Array"
 msgstr "Vytvoriť pole"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:228
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Táto položka sa nachádzala na neexistujúcej alebo zakázanej vrstve.\n"
-"Bol presunutý do prvej povolenej vrstvy."
+"Táto položka sa nachádzala na neexistujúcej vrstve.\n"
+"Bola presunutá na prvú definovanú vrstvu."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:318
 msgid "Edit Dimension Properties"
@@ -39181,9 +39161,9 @@ msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr "Súbor '%s' už existuje. Chcete prepísať tento súbor?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "Dočasný súbor '%s' nemožno premenovať na súbor knižnice stopy '%s'"
+msgstr "Nie je možné odstrániť existujúci výstupný súbor '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:347
 #, fuzzy
@@ -39198,9 +39178,9 @@ msgid ""
 msgstr "Symbol '%s' už v knižnici '%s' existuje"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "Nie je možné vytvoriť výstupný adresár '%s'."
+msgstr "Nie je možné odstrániť výstupný adresár '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:404
 #, fuzzy, c-format
@@ -40835,9 +40815,8 @@ msgid "Round pads only"
 msgstr "Pomer zaobleného polomeru"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
-#, fuzzy
 msgid "Existing teardrops only"
-msgstr "Aktualizujte netlist"
+msgstr "Iba existujúce teardropy"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 #, fuzzy
@@ -42973,13 +42952,13 @@ msgid "Jump over obstacles"
 msgstr "Skáčte cez prekážky"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
-#, fuzzy
 msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Ak je táto možnosť povolená, smerovač sa pokúsi presunúť kolízne stopy za "
-"pevné prekážky (napr. Podložky) namiesto toho, aby \"odrážali\" kolíziu späť"
+"Ak je táto možnosť povolená, router sa pokúsi presunúť spoje ktoré kolidujú, "
+"až za pevné prekážky (napr. vývody) namiesto toho, aby \"odrážali\" kolíziu "
+"späť"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2945
@@ -42995,6 +42974,8 @@ msgid ""
 "If the new track has the same connection as an already existing track, the "
 "old track is removed."
 msgstr ""
+"Ak má nový spoj rovnaké pripojenie ako už existujúci spoj, starý spoj sa "
+"odstráni."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -43005,7 +42986,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Ak je táto možnosť povolená, smerovač sa snaží čistým spôsobom obchádzať "
+"Ak je táto možnosť povolená, router sa snaží čistým spôsobom obchádzať "
 "plôšky/prekovy, vyhnutím sa ostrým uhlom a zubatým spojom."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
@@ -43017,8 +42998,8 @@ msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
-"Ak je táto možnosť povolená, smerovač sa pokúsi zlúčiť niekoľko zubatých "
-"segmentov do jedného priameho (režim pretiahnutia)."
+"Ak je táto možnosť povolená, router sa pokúsi zlúčiť niekoľko zubatých "
+"segmentov do jedného priameho (režim ťahania)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid "Suggest track finish"
@@ -43064,7 +43045,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:62
 msgid "Interactive Router Settings"
-msgstr "Nastavenia interaktívneho smerovača"
+msgstr "Nastavenia interaktívneho routera"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:216
 #, fuzzy
@@ -43664,7 +43645,7 @@ msgstr "Popis nadradenej stopy"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:507
 msgid "Edit Text Box Properties"
-msgstr "Upraviť vlastnosti textové poľa"
+msgstr "Upraviť vlastnosti textového poľa"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
 msgid "Border width:"
@@ -44005,9 +43986,9 @@ msgid ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
-"Za normálnych okolností by sa mali stopy na doske meniť, aby zodpovedali "
-"zmenám priraďovania footprintov vykonaným v schéme. Zrušte začiarknutie "
-"tohto políčka, iba ak nechcete meniť existujúce stopy na doske."
+"Normálne by sa puzdrá na doske mali zmeniť tak, aby zodpovedali zmenám "
+"priradenia puzdra vykonaným v schéme. Zrušte začiarknutie iba vtedy, ak "
+"nechcete zmeniť existujúce puzdrá na doske."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:50
 msgid "Delete footprints with no symbols"
@@ -44505,10 +44486,10 @@ msgid "Footprint Library Tables"
 msgstr "Knižnica stopy nie je povolená."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Súbor '%s' už existuje. Chcete prepísať tento súbor?"
+msgstr "Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:580
 #, fuzzy, c-format
@@ -45147,8 +45128,8 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
-"Typ medenej vrstvy pre smerovač a ďalšie externé smerovače.\n"
-"Vrstvy výkonovej roviny sú odstránené z ponúk vrstiev Freeroutera."
+"Typ medenej vrstvy pre Freerouter a iné externé routre.\n"
+"Napájacie vrstvy sú odstránené z ponúk vrstiev Freeroutera."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:538
 #, fuzzy
@@ -50035,9 +50016,8 @@ msgid "current length"
 msgstr "Cieľová dĺžka:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2046
-#, fuzzy
 msgid "Routed Lengths"
-msgstr "Dĺžka dosky"
+msgstr "Naroutovaná dĺžka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2052
 #, fuzzy
@@ -50045,14 +50025,12 @@ msgid "Routed Delays"
 msgstr "Dĺžka dosky"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2061 pcbnew/pcb_track.cpp:2365
-#, fuzzy
 msgid "Routed Length"
-msgstr "Dĺžka dosky"
+msgstr "Naroutovaná dĺžka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2065 pcbnew/pcb_track.cpp:2378
-#, fuzzy
 msgid "Routed Delay"
-msgstr "Dĺžka dosky"
+msgstr "Naroutované oneskorenie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2073 pcbnew/pad.cpp:3656
 #: pcbnew/pcb_track.cpp:2370
@@ -51684,9 +51662,8 @@ msgid "Design block '%s' already has a layout."
 msgstr "Symbol '%s' už v knižnici '%s' existuje"
 
 #: pcbnew/pcb_design_block_utils.cpp:72
-#, fuzzy
 msgid "Overwrite existing layout?"
-msgstr "Prepísať existujúce prednastavenie?"
+msgstr "Prepísať existujúce rozloženie ?"
 
 #: pcbnew/pcb_design_block_utils.cpp:155 pcbnew/pcb_design_block_utils.cpp:220
 #: pcbnew/pcb_design_block_utils.cpp:326
@@ -52357,7 +52334,7 @@ msgstr "Načítavanie textu..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4768
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
-msgstr ""
+msgstr "Neznáme zarovnanie textového poľa %d, aText %s"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4924
 msgid "Loading rectangles..."
@@ -52492,14 +52469,15 @@ msgstr ""
 "dizajnérske pravidlá."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Oblasť CADSTAR '%s' v komponente knižnice '%s' nemá ekvivalent KiCad. Táto "
-"oblasť nie je ani obchádzkovou oblasťou via orroute. Oblasť sa nedovážala."
+"Oblasť CADSTAR '%s' v komponente knižnice '%s' nemá ekvivalent v KiCade. "
+"Táto oblasť nie je ani prekov ani zakázanou oblasťou routovania. Oblasť sa "
+"neimportovala."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1077
 #, c-format
@@ -52808,10 +52786,10 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"Dizajn CADSTAR obsahuje siete s priradenou 'triedou siete'. KiCad nemá "
+"Dizajn CADSTAR obsahuje spoje s priradenou triedou spojov. KiCad nemá "
 "ekvivalent k čistej triede CADSTAR, takže tieto prvky neboli importované. "
-"Poznámka: KiCad verzia 'Net Class' je bližšia k 'CAD Route Code' (ktorý bol "
-"importovaný pre všetky siete) programu CADSTAR."
+"Poznámka: KiCad verzia triedy spojov je bližšia k 'CAD Route Code' (ktorý "
+"bol importovaný pre všetky spoje) programu CADSTAR."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3915
 #, fuzzy
@@ -52968,9 +52946,9 @@ msgid "Could not find units value, defaulting to mils."
 msgstr "Nepodarilo sa nájsť hodnotu jednotiek, predvolene sú nastavené mils."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
+msgstr "Nepodarilo sa nájsť stĺpec označenia %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:378
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:461
@@ -54142,9 +54120,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_textbox.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
-msgstr "Text PCB '%s' na %s"
+msgstr "DPS textové pole '%s' na %s"
 
 #: pcbnew/pcb_textbox.cpp:871
 #, fuzzy
@@ -54850,9 +54828,8 @@ msgid "board minimum track width"
 msgstr "Minimálna šírka:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1011 pcbnew/router/router_tool.cpp:921
-#, fuzzy
 msgid "existing track"
-msgstr "Pri vytváraní spojov"
+msgstr "existujúci spoj"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1037
 #, fuzzy
@@ -54869,7 +54846,7 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Túto zónu nemôže spracovať smerovač.\n"
+"Túto zónu nemôže spracovať router.\n"
 "Prosím skontrolujte, či nejde o samopretínajúci sa mnohouholník."
 
 #: pcbnew/router/pns_kicad_iface.cpp:2770
@@ -54941,7 +54918,7 @@ msgstr "Miesto cez Via"
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Pridá priechodný otvor cez na konci aktuálne vedenej trasy."
+msgstr "Pridá prekov na konci aktuálne routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid "Place Blind/Buried Via"
@@ -54949,7 +54926,7 @@ msgstr "Vložiť slepú/vnorenú prechodku"
 
 #: pcbnew/router/router_tool.cpp:134
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr "Na konci aktuálne smerovanej trasy pridá slepého alebo zakopaného cez."
+msgstr "Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
 
 #: pcbnew/router/router_tool.cpp:144
 msgid "Place Microvia"
@@ -54957,7 +54934,7 @@ msgstr "Miesto Microvia"
 
 #: pcbnew/router/router_tool.cpp:145
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Pridá mikroviu na koniec aktuálne smerovanej trasy."
+msgstr "Pridá mikro prekov na koniec aktuálne routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:155
 msgid "Select Layer and Place Through Via..."
@@ -54968,8 +54945,7 @@ msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Vyberte vrstvu a potom pridajte priechodný otvor cez na konci aktuálne "
-"smerovanej trasy."
+"Vybrať vrstvu a potom pridať prekov na konci aktuálne routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:166
 msgid "Select Layer and Place Blind/Buried Via..."
@@ -54980,8 +54956,8 @@ msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
-"Vyberte vrstvu a potom na koniec aktuálne smerovanej trasy pridajte slepú "
-"alebo zakopanú cestu."
+"Vybrať vrstvu a potom na koniec aktuálne routovaného spoja pridať slepý "
+"alebo pochovaný prekov."
 
 #: pcbnew/router/router_tool.cpp:175
 #, fuzzy
@@ -54989,12 +54965,11 @@ msgid "Select Layer and Place Micro Via..."
 msgstr "Vyberte vrstvu a vložte ju cez..."
 
 #: pcbnew/router/router_tool.cpp:176
-#, fuzzy
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Vyberte vrstvu a potom pridajte priechodný otvor cez na konci aktuálne "
-"smerovanej trasy."
+"Vybrať vrstvu a potom pridať mikro prekov na konci aktuálne routovaného "
+"spoja."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Custom Track/Via Size..."
@@ -55010,7 +54985,7 @@ msgstr "Prepnite držanie stopy"
 
 #: pcbnew/router/router_tool.cpp:196
 msgid "Switches posture of the currently routed track."
-msgstr "Prepne pozíciu aktuálne smerovanej trasy."
+msgstr "Prepne spôsob zalomenia práve routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:204
 #, fuzzy
@@ -55071,7 +55046,7 @@ msgstr "Použite Počiatočnú šírku stopy"
 
 #: pcbnew/router/router_tool.cpp:279
 msgid "Route using the width of the starting track."
-msgstr "Trasa využíva šírku počiatočnej stopy."
+msgstr "Šírka routovania podľa šírky spoja na začiatku."
 
 #: pcbnew/router/router_tool.cpp:283 pcbnew/router/router_tool.cpp:408
 msgid "Use Net Class Values"
@@ -55147,7 +55122,7 @@ msgstr "Šírka %s, medzera %s, cez medzeru %s"
 
 #: pcbnew/router/router_tool.cpp:512
 msgid "Interactive Router"
-msgstr "Interaktívny smerovač"
+msgstr "Interaktívny router"
 
 #: pcbnew/router/router_tool.cpp:591
 #, fuzzy
@@ -55155,9 +55130,8 @@ msgid "Track Corner Mode"
 msgstr "Spoj blízko plôšky"
 
 #: pcbnew/router/router_tool.cpp:677
-#, fuzzy
 msgid "Save router log"
-msgstr "Uložiť projekt do"
+msgstr "Uložiť súbor denníka routera"
 
 #: pcbnew/router/router_tool.cpp:1272
 #, fuzzy
@@ -55393,6 +55367,9 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Vyberte predvolenú šírku pre nové spoje. Všimnite si, že táto šírka môže byť "
+"prepísaná minimálnou šírkou z nastavenia dosky alebo šírkou existujúceho "
+"spoja, ak je povolená funkcia „Použiť existujúcu šírku spoja“."
 
 #: pcbnew/toolbars_pcb_editor.cpp:585
 msgid "Track: use netclass width"
@@ -55554,7 +55531,7 @@ msgstr "Duplicitná zóna"
 
 #: pcbnew/tools/board_editor_control.cpp:1713
 msgid "Selection contains no items with labeled nets."
-msgstr "Výber neobsahuje položky s označenými sieťami."
+msgstr "Výber neobsahuje položky s označenými spojmi."
 
 #: pcbnew/tools/board_inspection_tool.cpp:70
 #, fuzzy
@@ -56133,9 +56110,8 @@ msgid "Draw Line"
 msgstr "Nakreslite čiaru"
 
 #: pcbnew/tools/drawing_tool.cpp:453
-#, fuzzy
 msgid "Draw Text Box"
-msgstr "Nakresli čiaru"
+msgstr "Kresliť textové pole"
 
 #: pcbnew/tools/drawing_tool.cpp:453
 msgid "Draw Rectangle"
@@ -56924,9 +56900,8 @@ msgid "Add a Zone Cutout"
 msgstr "Pridajte výrez zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:358
-#, fuzzy
 msgid "Add a cutout to an existing zone or rule area"
-msgstr "Pridajte oblasť výrezu pre existujúcu zónu"
+msgstr "Pridať výrez do existujúcej zóny alebo oblasti pravidiel"
 
 #: pcbnew/tools/pcb_actions.cpp:369
 msgid "Add a Similar Zone"
@@ -56934,7 +56909,7 @@ msgstr "Pridajte podobnú zónu"
 
 #: pcbnew/tools/pcb_actions.cpp:370
 msgid "Add a zone with the same settings as an existing zone"
-msgstr "Pridajte zónu s rovnakými nastaveniami ako existujúca zóna"
+msgstr "Pridať zónu s rovnakými nastaveniami ako má existujúca zóna"
 
 #: pcbnew/tools/pcb_actions.cpp:390
 msgid "Place the Footprint Anchor"
@@ -57587,13 +57562,12 @@ msgid "Export Footprints..."
 msgstr "Púzdra naviac:"
 
 #: pcbnew/tools/pcb_actions.cpp:1216
-#, fuzzy
 msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Pridajte stopy použité na palube do existujúcej knižnice stopy\n"
-"(neodstráni ďalšie stopy z tejto knižnice)"
+"Pridať puzdra z dosky do novej alebo existujúcej knižnice puzdier\n"
+"(neodstráni ostatné puzdrá z tejto knižnice)"
 
 #: pcbnew/tools/pcb_actions.cpp:1223
 msgid "Board Setup..."
@@ -57621,7 +57595,7 @@ msgstr "Relácia Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:1238
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importujte smerovaný súbor relácie Specctra (* .ses)"
+msgstr "Importovať súbor relácie routera Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:1244
 #, fuzzy
@@ -57784,14 +57758,12 @@ msgid "Automatically select track width"
 msgstr "Automaticky priblížiť tak, aby sa zmestilo"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Automatická šírka spojov: ak začínajú na už existujúcom spoji, použiť jeho "
-"šírku\n"
-"inak použiť aktuálnu šírku"
+"Pri routovaní z existujúceho spoja použiť jeho šírku namiesto aktuálne "
+"nastavenej šírky"
 
 #: pcbnew/tools/pcb_actions.cpp:1415
 msgid "Duplicate Zone onto Layer..."
@@ -58430,8 +58402,8 @@ msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr ""
-"Vyberie pripojenie alebo rozšíri existujúci výber na križovatky, podložky "
-"alebo celé spojenia"
+"Vybrať pripojenie alebo rozšíriť existujúci výber na spojenia, vývody alebo "
+"celé pripojenia"
 
 #: pcbnew/tools/pcb_actions.cpp:2355
 #, fuzzy
@@ -58779,7 +58751,7 @@ msgstr "Aktualizovať všetky ladiace tvary"
 
 #: pcbnew/tools/pcb_actions.cpp:2712
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr "Pokúsiť sa preladiť existujúce ladiace tvary v rámci ich hraníc"
+msgstr "Pokúsiť sa znovu ladiť existujúce ladiace tvary v rámci ich hraníc"
 
 #: pcbnew/tools/pcb_actions.cpp:2719
 #, fuzzy
@@ -60327,9 +60299,8 @@ msgid "Priority"
 msgstr "Priorita"
 
 #: pcbnew/widgets/search_handlers.cpp:333
-#, fuzzy
 msgid "Textbox"
-msgstr "Text poz X"
+msgstr "Textové pole"
 
 #: pcbnew/widgets/search_handlers.cpp:420
 #: pcbnew/widgets/search_handlers.cpp:503
