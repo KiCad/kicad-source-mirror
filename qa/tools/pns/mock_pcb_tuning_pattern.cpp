@@ -320,7 +320,7 @@ void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
 const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
 {
-   
+    return STRING_ANY_MAP();
 }
 
 
@@ -363,6 +363,7 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
 int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 {
+    return 0;
 }
 
 
