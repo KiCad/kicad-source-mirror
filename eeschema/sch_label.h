@@ -450,7 +450,7 @@ public:
 
     SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel );
 
-    ~SCH_DIRECTIVE_LABEL() { }
+    ~SCH_DIRECTIVE_LABEL() override;
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;

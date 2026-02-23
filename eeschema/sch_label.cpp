@@ -1683,6 +1683,13 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel
 }
 
 
+SCH_DIRECTIVE_LABEL::~SCH_DIRECTIVE_LABEL()
+{
+    for( SCH_RULE_AREA* ruleArea : m_connected_rule_areas )
+        ruleArea->RemoveDirective( this );
+}
+
+
 void SCH_DIRECTIVE_LABEL::Serialize( google::protobuf::Any& aContainer ) const
 {
     UNIMPLEMENTED_FOR( GetClass() );

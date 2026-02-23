@@ -170,6 +170,9 @@ public:
     /// Remove an item from this rule area's caches (called when the item is deleted).
     void RemoveItem( SCH_ITEM* aItem );
 
+    /// Remove a directive label from this rule area's caches (called when the label is deleted).
+    void RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel );
+
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;
     std::unordered_set<KIID>                 m_itemIDs;
