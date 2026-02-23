@@ -90,17 +90,6 @@ void WALKAROUND::RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aClu
     }
 }
 
-static wxString policy2string ( WALKAROUND::WALK_POLICY policy )
-{
-    switch(policy)
-    {
-        case WALKAROUND::WP_CCW: return wxT("ccw");
-        case WALKAROUND::WP_CW: return wxT("cw");
-        case WALKAROUND::WP_SHORTEST: return wxT("shortest");
-    }
-    return wxT("?");
-}
-
 bool WALKAROUND::singleStep()
 {
     TOPOLOGY topo( m_world );
@@ -242,7 +231,7 @@ bool WALKAROUND::singleStep()
 
         if( st_cw && st_ccw )
         {
-            if( !cw_coll && !ccw_coll || ( cw_coll && ccw_coll) )
+            if( ( !cw_coll && !ccw_coll ) || ( cw_coll && ccw_coll ) )
             {
                 if( path_cw.CLine().Length() > path_ccw.CLine().Length() )
                 {

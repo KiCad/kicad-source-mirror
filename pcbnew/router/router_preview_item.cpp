@@ -248,7 +248,7 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
 
     gal->SetIsFill( false );
 
-    for( int s = 0; s < aL->GetSegmentCount(); s++ )
+    for( int s = 0; s < (int) aL->GetSegmentCount(); s++ )
     {
         SEG seg = aL->GetSegment( s );
 

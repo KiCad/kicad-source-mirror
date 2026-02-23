@@ -303,7 +303,7 @@ protected:
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
-            Check( menuIdx, useIndex && bds.GetTrackWidthIndex() == i );
+            Check( menuIdx, useIndex && bds.GetTrackWidthIndex() == (int) i );
         }
 
         AppendSeparator();
@@ -331,7 +331,7 @@ protected:
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
-            Check( menuIdx, useIndex && bds.GetViaSizeIndex() == i );
+            Check( menuIdx, useIndex && bds.GetViaSizeIndex() == (int) i );
         }
     }
 
@@ -457,7 +457,7 @@ protected:
 
             int menuIdx = ID_POPUP_PCB_SELECT_DIFFPAIR1 + i - 1;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
-            Check( menuIdx, !bds.UseCustomDiffPairDimensions() && bds.GetDiffPairIndex() == i );
+            Check( menuIdx, !bds.UseCustomDiffPairDimensions() && bds.GetDiffPairIndex() == (int) i );
         }
     }
 
@@ -1046,7 +1046,6 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     {
         size_t idx = 0;
         size_t target_idx = 0;
-        PCB_LAYER_ID lastTargetLayer = m_lastTargetLayer;
 
         for( size_t i = 0; i < layers.size(); i++ )
         {
@@ -1148,8 +1147,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         }
     }
 
-    BOARD_DESIGN_SETTINGS& bds        = board()->GetDesignSettings();
-    const int              layerCount = bds.GetCopperLayerCount();
+    BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
 
     PCB_LAYER_ID pairTop    = frame()->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = frame()->GetScreen()->m_Route_Layer_BOTTOM;
@@ -1556,7 +1554,6 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
-            bool forceFinish = evt->Modifier( MD_SHIFT );
             bool forceCommit = false;
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, false, forceCommit ) )
@@ -1830,7 +1827,6 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
             if( frame->GetActiveLayer() != originalLayer )
                 frame->SetActiveLayer( originalLayer );
 
-            VECTOR2I ignore;
             m_startItem = m_router->GetWorld()->FindItemByParent( anchor->Parent() );
             m_startSnapPoint = anchor->Pos();
             m_router->SetMode( mode );
@@ -2265,12 +2261,12 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
     {
         return selection.Front()->IsType( GENERAL_COLLECTOR::DraggableItems );
     }
-    else if( selection.CountType( PCB_FOOTPRINT_T ) == selection.Size() )
+    else if( selection.CountType( PCB_FOOTPRINT_T ) == (size_t) selection.Size() )
     {
         // Footprints cannot be dragged freely.
         return !( aDragMode & PNS::DM_FREE_ANGLE );
     }
-    else if( selection.CountType( PCB_TRACE_T ) == selection.Size() )
+    else if( selection.CountType( PCB_TRACE_T ) == (size_t) selection.Size() )
     {
         return true;
     }
@@ -2351,7 +2347,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_startItem = nullptr;
 
-    PNS::ITEM*    startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
 
     bool showCourtyardConflicts = frame()->GetPcbNewSettings()->m_ShowCourtyardCollisions;

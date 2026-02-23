@@ -161,9 +161,7 @@ private:
     bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
 
 
-    int                     m_mode;
     bool                    m_dragStatus;
-    PNS_MODE                m_currentMode;
     DRAG_MODE               m_dragMode;
     std::vector<MDRAG_LINE> m_mdragLines;
     std::vector<PNS::ITEM*> m_leaderSegments;

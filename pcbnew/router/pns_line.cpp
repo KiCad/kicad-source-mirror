@@ -432,8 +432,9 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
     bool appendV = true;
     int  lastDst = INT_MAX;
 
-    int i = 0;
 #ifdef TOM_EXTRA_DEBUG
+    int i = 0;
+
     for( VERTEX* &v: vts )
     {
         if( v.indexh < 0 && v.type == ON_EDGE )
@@ -1191,8 +1192,6 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
     int firstLink = 0;
     int lastLink  = std::max( 0, static_cast<int>( m_links.size() ) - 1 );
     int linkIdx   = 0;
-
-    int numPoints = static_cast<int>( m_line.PointCount() );
 
     for( int i = 0; i >= 0 && i < m_line.PointCount(); i = m_line.NextShape( i ) )
     {

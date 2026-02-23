@@ -500,7 +500,6 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
 bool DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
 {
         WALKAROUND walkaround( aNode, Router() );
-    bool       ok = false;
     walkaround.SetSolidsOnly( false );
     walkaround.SetDebugDecorator( Dbg() );
     walkaround.SetLogger( Logger() );

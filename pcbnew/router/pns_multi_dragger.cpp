@@ -81,8 +81,6 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         }
     }
 
-    int n = 0;
-
     bool anyStrictCornersFound = false;
     bool anyStrictMidSegsFound = false;
 
@@ -149,19 +147,19 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                     if( !aPrimitives.Contains( lseg ) )
                         continue;
 
-                        int d = lseg->Seg().Distance( aP );
+                    int d = lseg->Seg().Distance( aP );
 
-                        l.midSeg = lseg->Seg();
-                        l.isMidSeg = true;
-                        l.leaderSegIndex = lidx;
-                        l.leaderSegDistance = d + thr;
+                    l.midSeg = lseg->Seg();
+                    l.isMidSeg = true;
+                    l.leaderSegIndex = lidx;
+                    l.leaderSegDistance = d + thr;
 
-                        if( d < thr && !l.isStrict )
-                        {
-                            l.isCorner = false;
-                            l.isStrict = true;
-                            l.leaderSegDistance = 0;
-                        }
+                    if( d < thr && !l.isStrict )
+                    {
+                        l.isCorner = false;
+                        l.isStrict = true;
+                        l.leaderSegDistance = 0;
+                    }
                 }
             }
 
@@ -379,7 +377,6 @@ bool MULTI_DRAGGER::FixRoute( bool aForceCommit )
 bool MULTI_DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
 {
     WALKAROUND walkaround( aNode, Router() );
-    bool       ok = false;
     walkaround.SetSolidsOnly( false );
     walkaround.SetDebugDecorator( Dbg() );
     walkaround.SetLogger( Logger() );
@@ -487,7 +484,7 @@ bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLine
         totalLength[attempt] = 0;
         fail = false;
 
-        for( int lidx = 0; lidx < aCompletedLines.size(); lidx++ )
+        for( int lidx = 0; lidx < (int) aCompletedLines.size(); lidx++ )
         {
             MDRAG_LINE& l = aCompletedLines[attempt ? aCompletedLines.size() - 1 - lidx : lidx];
 
@@ -569,19 +566,15 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
     m_lastNode = m_world->Branch();
 
 
-    int nclipped = 0;
-    for( int l1 = 0; l1 < aCompletedLines.size(); l1++ )
+    for( int l1 = 0; l1 < (int)aCompletedLines.size(); l1++ )
     {
-        for( int l2 = l1 + 1; l2 < aCompletedLines.size(); l2++ )
+        for( int l2 = l1 + 1; l2 < (int)aCompletedLines.size(); l2++ )
         {
             const auto& l1l = aCompletedLines[l1].draggedLine;
             auto l2l        = aCompletedLines[l2].draggedLine;
 
             if( clipToOtherLine( m_lastNode, l1l, l2l ) )
-            {
                 aCompletedLines[l2].draggedLine = l2l;
-                nclipped++;
-            }
         }
     }
 

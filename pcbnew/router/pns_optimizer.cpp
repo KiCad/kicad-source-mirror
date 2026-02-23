@@ -223,8 +223,6 @@ bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine
     bool p1_in = m_allowedArea.Contains( p1 );
     bool p2_in = m_allowedArea.Contains( p2 );
 
-    auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-
     if( p1_in && p2_in )
         return true;
 
@@ -470,7 +468,6 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
     SHAPE_LINE_CHAIN& line = aLine->Line();
 
     int step = line.PointCount() - 3;
-    int iter = 0;
     int segs_pre = line.SegmentCount();
 
     if( step < 0 )
@@ -480,7 +477,6 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
 
     while( true )
     {
-        iter++;
         int n_segs = current_path.SegmentCount();
         int max_step = n_segs - 2;
 
@@ -611,14 +607,6 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
 
 bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
 {
-    DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-
-    if( aRoot )
-    {
-        //PNS_DBG( dbg, AddItem, aRoot, BLUE, 100000, wxT( "root-line" ) );
-    }
-
-
     if( !aResult )
         return false;
 
@@ -856,7 +844,6 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth, const SHAPE* aSha
     if( aPermitDiagonal )
     {
         int l = aWidth + std::min( s.x, s.y ) / 2;
-        VECTOR2I d_diag;
 
         if( s.x >= s.y )
         {
@@ -1422,9 +1409,6 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur, const SHAPE_LINE_CH
 
     if (!dirA.IsObtuse( dirCenter) || !dirCenter.IsObtuse(dirB))
         return false;
-
-    //VECTOR2I perp = (center.B - center.A).Perpendicular();
-    VECTOR2I guideA, guideB ;
 
     SEG guide;
     int initial;

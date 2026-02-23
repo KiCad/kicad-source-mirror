@@ -256,7 +256,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( !aCandidate->Collide( m_item, m_node, m_layerContext.value_or( -1 ), m_ctx ) )
             return true;
 
-        if( m_ctx->options.m_limitCount > 0 && m_ctx->obstacles.size() >= m_ctx->options.m_limitCount )
+        if( m_ctx->options.m_limitCount > 0 && (int) m_ctx->obstacles.size() >= m_ctx->options.m_limitCount )
             return false;
 
         return true;
@@ -285,7 +285,7 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
     m_index->Query( aItem, m_maxClearance, visitor );
 
     // if we haven't found enough items, look in the root branch as well.
-    if( !isRoot() && ( ctx.obstacles.size() < aOpts.m_limitCount || aOpts.m_limitCount < 0 ) )
+    if( !isRoot() && ( (int) ctx.obstacles.size() < aOpts.m_limitCount || aOpts.m_limitCount < 0 ) )
     {
         visitor.SetWorld( m_root, this );
         m_root->m_index->Query( aItem, m_maxClearance, visitor );
@@ -299,7 +299,6 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
     DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
-    const int                 clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
     OBSTACLES                 obstacleList;
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
@@ -343,7 +342,6 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
             };
 
     SHAPE_LINE_CHAIN obstacleHull;
-    DEBUG_DECORATOR* debugDecorator = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
     int layer = aLine->Layer();
 
@@ -1130,10 +1128,6 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) );
 
-                int      nSegs     = line.PointCount();
-                VECTOR2I last      = nSegs ? line.CLastPoint() : VECTOR2I();
-                ssize_t lastShape = nSegs ? line.ArcIndex( static_cast<ssize_t>( nSegs ) - 1 ) : -1;
-
                 line.Append( arcReversed[i] ? sa->Reversed() : *sa );
             }
 
@@ -1290,7 +1284,7 @@ void NODE::FixupVirtualVias()
 
     for( auto vvia : vvias )
     {
-        Add( ItemCast<VIA>( std::move( std::unique_ptr<VVIA>( vvia ) ) ) );
+        Add( ItemCast<VIA>( std::unique_ptr<VVIA>( vvia ) ) );
     }
 }
 

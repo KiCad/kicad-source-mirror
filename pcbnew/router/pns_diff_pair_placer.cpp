@@ -201,7 +201,6 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
                                     bool aPFirst, bool aWindCw, bool aSolidsOnly )
 {
     WALKAROUND walkaround( aNode, Router() );
-    WALKAROUND::STATUS wf1;
 
     walkaround.SetSolidsOnly( aSolidsOnly );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );

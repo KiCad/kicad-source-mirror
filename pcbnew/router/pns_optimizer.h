@@ -265,8 +265,7 @@ class AREA_CONSTRAINT : public OPT_CONSTRAINT
 public:
     AREA_CONSTRAINT( NODE* aWorld, const  BOX2I& aAllowedArea, bool aAllowedAreaStrict ) :
         OPT_CONSTRAINT( aWorld ),
-        m_allowedArea ( aAllowedArea ),
-        m_allowedAreaStrict ( aAllowedAreaStrict )
+        m_allowedArea ( aAllowedArea )
     {
     };
 
@@ -276,7 +275,6 @@ public:
 
 private:
     BOX2I m_allowedArea;
-    bool m_allowedAreaStrict;
 };
 
 
@@ -315,18 +313,13 @@ class RESTRICT_VERTEX_RANGE_CONSTRAINT: public OPT_CONSTRAINT
 {
 public:
     RESTRICT_VERTEX_RANGE_CONSTRAINT( NODE* aWorld, int aStart, int aEnd ) :
-        OPT_CONSTRAINT( aWorld ),
-        m_start( aStart ),
-        m_end( aEnd )
+        OPT_CONSTRAINT( aWorld )
     {
     };
 
     virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
                         const SHAPE_LINE_CHAIN& aCurrentPath,
                         const SHAPE_LINE_CHAIN& aReplacement ) override;
-private:
-    int m_start;
-    int m_end;
 };
 
 
@@ -337,7 +330,6 @@ public:
                                    int aAngleMask ) :
         OPT_CONSTRAINT( aWorld ),
         m_minCorners( aMinCorners ),
-        m_maxCorners( aMaxCorners ),
         m_angleMask( aAngleMask )
     {
     };
@@ -348,7 +340,6 @@ public:
 
 private:
     int m_minCorners;
-    int m_maxCorners;
     int m_angleMask;
 };
 

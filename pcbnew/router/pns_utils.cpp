@@ -125,8 +125,6 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalk
         auto ip_in = sa_in.IntersectLines( sb_in );
 
         seg = line.CSegment( i );
-        auto lead = ( pp + pp2 ) / 2;
-
         s.Append( *ip_out );
         reverse_line.push_back( *ip_in );
     }
@@ -186,7 +184,6 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     double d = (double)aSeg.GetWidth() / 2.0 + cl;
     double x = 2.0 / ( 1.0 + M_SQRT2 ) * d;
     int dr = KiROUND( d );
-    int xr = KiROUND( x );
     int xr2 = KiROUND( x / 2.0 );
 
     const VECTOR2I a = aSeg.GetSeg().A;

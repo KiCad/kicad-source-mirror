@@ -93,9 +93,6 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
         }
     }
 
-    int old_sc = aOld.SegmentCount();
-    int old_lc = aOld.LinkCount();
-
     if( aOld.EndsWithVia() )
     {
         LINKED_ITEM* viaLink = nullptr;
@@ -652,18 +649,6 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 
     bool shoveOK = ShoveObstacleLine( aCurrent, obstacleLine, shovedLine );
 
-    const double extensionWalkThreshold = 1.0;
-
-    double obsLen = obstacleLine.CLine().Length();
-    double shovedLen = shovedLine.CLine().Length();
-    double extensionFactor = 0.0;
-
-    if( obsLen != 0.0f )
-        extensionFactor = shovedLen / obsLen - 1.0;
-
-    //if( extensionFactor > extensionWalkThreshold )
-      //  return SH_TRY_WALK;
-
     assert( obstacleLine.LayersOverlap( &shovedLine ) );
 
     if( Dbg() )
@@ -948,8 +933,6 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
 
         if( !obs && !spTag.m_locked )
         {
-            int i;
-
             PNS_DBG( Dbg(), Message, wxString::Format( "pop-sp node=%p depth=%d", spTag.m_node, spTag.m_node->Depth() ) );
 
             pruneRootLines( spTag.m_node );
@@ -969,7 +952,7 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
 
     SPRINGBACK_TAG& spTag = m_nodeStack.back();
 
-    for( int i = 0; i < spTag.m_draggedVias.size(); i++ )
+    for( int i = 0; i < (int) spTag.m_draggedVias.size(); i++ )
     {
         if (spTag.m_draggedVias[i].valid)
         {
@@ -1192,7 +1175,6 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
 
     int clearance = getClearance( aCurrent, aObstacleVia );
     VECTOR2I mtv;
-    int rank = -1;
 
     bool lineCollision = false;
     bool viaCollision = false;
@@ -1404,8 +1386,6 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
 void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
 {
-    int d = 0;
-
     for( std::vector<LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
         if( i->ContainsLink( aSeg ) )
@@ -1442,8 +1422,6 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
         {
             i++;
         }
-
-        d++;
     }
 
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end() ; )
@@ -1500,7 +1478,6 @@ bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
 
 bool SHOVE::pruneLineFromOptimizerQueue( const LINE& aLine )
 {
-    int pre = m_optimizerQueue.size();
     for( std::vector<LINE>::iterator i = m_optimizerQueue.begin(); i != m_optimizerQueue.end(); )
     {
         bool found = false;
@@ -2099,15 +2076,13 @@ void SHOVE::runOptimizer( NODE* aNode )
 
     std::set<const ITEM*> itemsChk;
 
-    auto iface = Router()->GetInterface();
-
     for( int pass = 0; pass < n_passes; pass++ )
     {
         std::reverse( m_optimizerQueue.begin(), m_optimizerQueue.end() );
 
         PNS_DBG( Dbg(), Message, wxString::Format( wxT( "optimize %d lines, pass %d"), (int)m_optimizerQueue.size(), (int)pass ) );
 
-        for( int i = 0; i < m_optimizerQueue.size(); i++ )
+        for( int i = 0; i < (int) m_optimizerQueue.size(); i++ )
         {
             LINE& lineToOpt = m_optimizerQueue[i];
             LINE* rootLine = nullptr;
@@ -2290,8 +2265,6 @@ void removeHead( NODE *aNode, LINE& head )
 
 void SHOVE::removeHeads()
 {
-    auto iface = Router()->GetInterface();
-
     NODE::ITEM_VECTOR removed, added;
 
     m_currentNode->GetUpdatedItems( removed, added );
