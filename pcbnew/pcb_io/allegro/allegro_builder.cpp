@@ -1585,7 +1585,7 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildArc( const BLK_0x01_ARC& aArc, co
 
     shape->SetLayer( aLayer );
 
-    if( aLayer == m_layerMapper->IsLayerMapped( aLayer ) )
+    if( !m_layerMapper->IsLayerMapped( aLayer ) )
     {
         wxLogTrace( traceAllegroBuilder, "Unmapped Arc: %#04x %#04x %s, %s", aLayerInfo.m_Class, aLayerInfo.m_Subclass,
                     start.Format(), end.Format() );
