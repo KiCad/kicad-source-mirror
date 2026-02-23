@@ -42,6 +42,7 @@
 #include <footprint.h>
 #include <netclass.h>
 #include <pad.h>
+#include <pcb_group.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -102,6 +103,7 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x32: return BLK_FIELD( BLK_0x32_PLACED_PAD, m_Next );
     case 0x24: return BLK_FIELD( BLK_0x24_RECT, m_Next );
     case 0x28: return BLK_FIELD( BLK_0x28_SHAPE, m_Next );
+    case 0x2C: return BLK_FIELD( BLK_0x2C_TABLE, m_Next );
     case 0x33: return BLK_FIELD( BLK_0x33_VIA, m_Next );
     case 0x36: return BLK_FIELD( BLK_0x36_DEF_TABLE, m_Next );
     default: return 0;
@@ -1704,6 +1706,65 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
 }
 
 
+std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildGraphicItems( const BLOCK_BASE&     aBlock,
+                                                                           BOARD_ITEM_CONTAINER& aParent )
+{
+    std::vector<std::unique_ptr<BOARD_ITEM>> newItems;
+
+    switch( aBlock.GetBlockType() )
+    {
+    case 0x0e:
+    {
+        const auto&                rect = static_cast<const BLOCK<BLK_0x0E_RECT>&>( aBlock ).GetData();
+        std::unique_ptr<PCB_SHAPE> shape = buildRect( rect, aParent );
+        if( shape )
+            newItems.push_back( std::move( shape ) );
+        break;
+    }
+    case 0x14:
+    {
+        const auto& graphicContainer = static_cast<const BLOCK<BLK_0x14_GRAPHIC>&>( aBlock ).GetData();
+        std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphicContainer, aParent );
+        for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
+            newItems.push_back( std::move( shape ) );
+        break;
+    }
+    case 0x24:
+    {
+        const auto&                rect = static_cast<const BLOCK<BLK_0x24_RECT>&>( aBlock ).GetData();
+        std::unique_ptr<PCB_SHAPE> shape = buildRect( rect, aParent );
+        if( shape )
+            newItems.push_back( std::move( shape ) );
+        break;
+    }
+    case 0x28:
+    {
+        const auto&                shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( aBlock ).GetData();
+        std::unique_ptr<PCB_SHAPE> shape = buildPolygon( shapeData, aParent );
+        if( shape )
+            newItems.push_back( std::move( shape ) );
+        break;
+    }
+    case 0x30:
+    {
+        const auto& strWrapper = static_cast<const BLOCK<BLK_0x30_STR_WRAPPER>&>( aBlock ).GetData();
+
+        std::unique_ptr<BOARD_ITEM> newItem = buildPcbText( strWrapper, aParent );
+        if( newItem )
+            newItems.push_back( std::move( newItem ) );
+        break;
+    }
+    default:
+    {
+        wxLogTrace( traceAllegroBuilder, "    Unhandled block type for buildItems: %#04x", aBlock.GetBlockType() );
+        break;
+    }
+    }
+
+    return newItems;
+};
+
+
 PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
 {
     return m_layerMapper->GetLayer( aLayerInfo );
@@ -1749,6 +1810,8 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
         }
         default:
         {
+            wxLogTrace( traceAllegroBuilder, "    Unhandled block type in BLK_0x14_GRAPHIC: %#04x",
+                        segBlock->GetBlockType() );
             break;
         }
         }
@@ -2550,25 +2613,9 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         const uint8_t               type = assemblyBlock->GetBlockType();
         std::unique_ptr<BOARD_ITEM> item;
 
-        switch( type )
-        {
-        case 0x24:
-        {
-            const auto& rect = static_cast<const BLOCK<BLK_0x24_RECT>&>( *assemblyBlock ).GetData();
-            item = buildRect( rect, *fp );
-            break;
-        }
-        case 0x28:
-        {
-            const auto& polygon = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *assemblyBlock ).GetData();
-            item = buildPolygon( polygon, *fp );
-            break;
-        }
-        default:
-            break;
-        }
+        std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *assemblyBlock, *fp );
 
-        if( item )
+        for( std::unique_ptr<BOARD_ITEM>& item : shapes )
         {
             canonicalizeLayer( item.get() );
             fp->Add( item.release() );
@@ -2579,28 +2626,11 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
     LL_WALKER areaWalker{ aFpInstance.m_AreasPtr, aFpInstance.m_Key, m_brdDb };
     for( const BLOCK_BASE* areaBlock : areaWalker )
     {
-        const uint8_t               type = areaBlock->GetBlockType();
-        std::unique_ptr<BOARD_ITEM> item;
+        const uint8_t type = areaBlock->GetBlockType();
 
-        switch( type )
-        {
-        case 0x0E:
-        {
-            const auto& rect = static_cast<const BLOCK<BLK_0x0E_RECT>&>( *areaBlock ).GetData();
-            item = buildRect( rect, *fp );
-            break;
-        }
-        case 0x28:
-        {
-            const auto& polygon = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *areaBlock ).GetData();
-            item = buildPolygon( polygon, *fp );
-            break;
-        }
-        default:
-            break;
-        }
+        std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *areaBlock, *fp );
 
-        if( item )
+        for( std::unique_ptr<BOARD_ITEM>& item : shapes )
         {
             canonicalizeLayer( item.get() );
             fp->Add( item.release() );
@@ -3607,6 +3637,94 @@ void BOARD_BUILDER::createZones()
 }
 
 
+void BOARD_BUILDER::createTables()
+{
+    wxLogTrace( traceAllegroBuilder, "Creating tables from m_LL_0x2C" );
+
+    const LL_WALKER tableWalker( m_brdDb.m_Header->m_LL_0x2C, m_brdDb );
+    for( const BLOCK_BASE* block : tableWalker )
+    {
+        if( block->GetBlockType() != 0x2C )
+            continue;
+
+        const BLK_0x2C_TABLE& tableData = static_cast<const BLOCK<BLK_0x2C_TABLE>&>( *block ).GetData();
+
+        const wxString& tableName = m_brdDb.GetString( tableData.m_StringPtr );
+
+        const BLOCK_BASE* keyTable = m_brdDb.GetObjectByKey( tableData.m_Ptr1 );
+
+        wxLogTrace( traceAllegroBuilder, "  Table '%s' (key %#010x, table block key %#010x)", tableName,
+                    tableData.m_Key, tableData.m_Ptr1 );
+
+        if( !keyTable )
+        {
+            wxLogTrace( traceAllegroBuilder, "    Key table pointer %#010x is invalid", tableData.m_Ptr1 );
+            continue;
+        }
+
+        std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
+        group->SetName( tableName );
+
+        std::vector<std::unique_ptr<BOARD_ITEM>> newItems;
+
+        switch( keyTable->GetBlockType() )
+        {
+        case 0x37:
+        {
+            const BLK_0x37_PTR_ARRAY& ptrArray = static_cast<const BLOCK<BLK_0x37_PTR_ARRAY>&>( *keyTable ).GetData();
+
+            wxLogTrace( traceAllegroBuilder, "    Pointer array with %zu entries",
+                        static_cast<size_t>( ptrArray.m_Count ) );
+
+            for( uint32_t ptrIndex = 0; ptrIndex < ptrArray.m_Count; ptrIndex++ )
+            {
+                uint32_t ptrKey = ptrArray.m_Ptrs[ptrIndex];
+
+                if( ptrKey == 0 )
+                    continue;
+
+                const BLOCK_BASE* entryBlock = m_brdDb.GetObjectByKey( ptrKey );
+
+                if( !entryBlock )
+                {
+                    wxLogTrace( traceAllegroBuilder, "      Entry pointer %#010x is invalid", ptrKey );
+                    continue;
+                }
+
+                for( std::unique_ptr<BOARD_ITEM>& newItem : buildGraphicItems( *entryBlock, m_board ) )
+                {
+                    newItems.push_back( std::move( newItem ) );
+                }
+            }
+
+            break;
+        }
+        case 0x3c:
+        {
+            const BLK_0x3C_KEY_LIST& keyList = static_cast<const BLOCK<BLK_0x3C_KEY_LIST>&>( *keyTable ).GetData();
+
+            wxLogTrace( traceAllegroBuilder, "    Key list with %zu entries",
+                        static_cast<size_t>( keyList.m_NumEntries ) );
+            break;
+        }
+        default:
+        {
+            wxLogTrace( traceAllegroBuilder, "    Table has unhandled key table type %#04x", keyTable->GetBlockType() );
+            break;
+        }
+        }
+
+        for( std::unique_ptr<BOARD_ITEM>& newItem : newItems )
+        {
+            m_board.Add( newItem.get(), ADD_MODE::APPEND );
+            group->AddItem( newItem.release() );
+        }
+
+        m_board.Add( group.release(), ADD_MODE::APPEND );
+    }
+}
+
+
 void BOARD_BUILDER::applyZoneFills()
 {
     if( m_zoneFillShapes.empty() )
@@ -3947,6 +4065,9 @@ bool BOARD_BUILDER::BuildBoard()
 
     createZones();
     wxLogTrace( traceAllegroPerf, wxT( "  createZones: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+
+    createTables();
+    wxLogTrace( traceAllegroPerf, wxT( "  createTables: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     if( m_progressReporter )
         m_progressReporter->KeepRefreshing();

@@ -135,6 +135,12 @@ private:
     std::unique_ptr<PCB_SHAPE> buildPolygon( const BLK_0x28_SHAPE& aShape, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Build a list of graphic items, e.g. from a table's pointer list.
+     */
+    std::vector<std::unique_ptr<BOARD_ITEM>> buildGraphicItems( const BLOCK_BASE&     aBlock,
+                                                                BOARD_ITEM_CONTAINER& aParent );
+
+    /**
      * Construct "pad" items for a given 0x1C PADSTACK block.
      */
     std::vector<std::unique_ptr<BOARD_ITEM>> buildPadItems( const BLK_0x1C_PADSTACK& aPadstack, FOOTPRINT& aFp,
@@ -184,6 +190,7 @@ private:
     void createBoardOutline();
     void createBoardText();
     void createZones();
+    void createTables();
     void applyZoneFills();
     void enablePadTeardrops();
     void applyConstraintSets();
