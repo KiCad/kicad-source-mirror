@@ -190,6 +190,9 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         for( const auto& [ layer, layerIslands ] : zoneIslands )
         {
+            if( !IsCopperLayer( layer ) )
+                continue;
+
             for( int polyIdx : layerIslands.m_IsolatedOutlines )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
