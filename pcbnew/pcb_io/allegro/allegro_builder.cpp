@@ -3651,10 +3651,13 @@ void BOARD_BUILDER::createTables()
         {
             const BLK_0x37_PTR_ARRAY& ptrArray = static_cast<const BLOCK<BLK_0x37_PTR_ARRAY>&>( *keyTable ).GetData();
 
-            wxLogTrace( traceAllegroBuilder, "    Pointer array with %zu entries",
-                        static_cast<size_t>( ptrArray.m_Count ) );
+            uint32_t count = std::min( ptrArray.m_Count,
+                                       static_cast<uint32_t>( ptrArray.m_Ptrs.size() ) );
 
-            for( uint32_t ptrIndex = 0; ptrIndex < ptrArray.m_Count; ptrIndex++ )
+            wxLogTrace( traceAllegroBuilder, "    Pointer array with %zu entries",
+                        static_cast<size_t>( count ) );
+
+            for( uint32_t ptrIndex = 0; ptrIndex < count; ptrIndex++ )
             {
                 uint32_t ptrKey = ptrArray.m_Ptrs[ptrIndex];
 
