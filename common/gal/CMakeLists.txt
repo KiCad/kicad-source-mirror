@@ -55,6 +55,17 @@ set( GAL_SRCS
 
 add_library( gal SHARED ${GAL_SRCS} )
 
+if( KICAD_USE_PCH )
+    target_precompile_headers( gal
+        PRIVATE
+            <kicommon.h>
+            <gal/graphics_abstraction_layer.h>
+            <kiid.h>
+            <pgm_base.h>
+            <wx/wx.h>
+             )
+endif()
+
 if( WIN32 )
     # we need the gdiplus library for cairo printing on windows
     set( GDI_PLUS_LIBRARIES gdiplus )
