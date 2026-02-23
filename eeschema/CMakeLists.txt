@@ -603,8 +603,9 @@ if( KICAD_USE_PCH )
             <unordered_map>
             <core/json_serializers.h>
             <sch_edit_frame.h>
-            <string_utils.h>
             <schematic.h>
+            <sim/sim_model.h>
+            <string_utils.h>
             <pgm_base.h>
             <wx/wx.h> )
 endif()
