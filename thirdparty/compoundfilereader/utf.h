@@ -49,7 +49,7 @@ static bool GetNextCodePointFromUTF16(const T* u16, size_t len, size_t* pos, uin
     return true;
 }
 
-static int CodePointToUTF8(uint32_t cp, uint32_t* c1, uint32_t* c2, uint32_t* c3, uint32_t* c4)
+static inline int CodePointToUTF8(uint32_t cp, uint32_t* c1, uint32_t* c2, uint32_t* c3, uint32_t* c4)
 {
     if (cp < 0x80)
     {

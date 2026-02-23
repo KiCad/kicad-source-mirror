@@ -39,7 +39,7 @@ namespace ALLEGRO
 {
 
 class BLOCK_BASE;
-class DB_OBJ;
+struct DB_OBJ;
 class DB_OBJ_RESOLVER;
 
 
@@ -318,7 +318,7 @@ public:
 };
 
 
-struct BRD_DB;
+class BRD_DB;
 struct COMPONENT;
 struct COMPONENT_INST;
 struct FOOTPRINT_INSTANCE;

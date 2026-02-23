@@ -62,8 +62,8 @@ public:
         int layer;
 
         EVENT_ENTRY() :
-                layer( 0 ),
-                type( EVT_START_ROUTE )
+                type( EVT_START_ROUTE ),
+                layer( 0 )
         {
         }
 

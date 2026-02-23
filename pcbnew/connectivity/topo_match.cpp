@@ -991,8 +991,9 @@ int main()
 
 COMPONENT::COMPONENT( const wxString& aRef, FOOTPRINT* aParentFp,
                       std::optional<VECTOR2I> aRaOffset ) :
+        m_raOffset( aRaOffset ),
         m_reference( aRef ),
-        m_parentFootprint( aParentFp ), m_raOffset( aRaOffset )
+        m_parentFootprint( aParentFp )
 {
     m_prefix = UTIL::GetRefDesPrefix( aRef );
 }

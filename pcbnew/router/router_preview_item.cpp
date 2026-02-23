@@ -42,8 +42,8 @@ using namespace KIGFX;
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IFACE* aIface,
                                           KIGFX::VIEW* aView, int aFlags ) :
         EDA_ITEM( NOT_USED ),
-        m_iface( aIface ),
         m_view( aView ),
+        m_iface( aIface ),
         m_shape( nullptr ),
         m_hole( nullptr ),
         m_flags( aFlags )
@@ -91,8 +91,8 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IF
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE* aIface,
                                           KIGFX::VIEW* aView ) :
         EDA_ITEM( NOT_USED ),
-        m_iface( aIface ),
         m_view( aView ),
+        m_iface( aIface ),
         m_flags( 0 )
 {
     m_shape = aShape.Clone();
