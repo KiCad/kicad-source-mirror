@@ -1346,8 +1346,7 @@ bool FOOTPRINT::HasVariant( const wxString& aVariantName ) const
 bool FOOTPRINT::GetDNPForVariant( const wxString& aVariantName ) const
 {
     // Empty variant name means default
-    if( aVariantName.IsEmpty()
-        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
         return IsDNP();
 
     const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
@@ -1363,8 +1362,7 @@ bool FOOTPRINT::GetDNPForVariant( const wxString& aVariantName ) const
 bool FOOTPRINT::GetExcludedFromBOMForVariant( const wxString& aVariantName ) const
 {
     // Empty variant name means default
-    if( aVariantName.IsEmpty()
-        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
         return IsExcludedFromBOM();
 
     const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
@@ -1380,8 +1378,7 @@ bool FOOTPRINT::GetExcludedFromBOMForVariant( const wxString& aVariantName ) con
 bool FOOTPRINT::GetExcludedFromPosFilesForVariant( const wxString& aVariantName ) const
 {
     // Empty variant name means default
-    if( aVariantName.IsEmpty()
-        || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
         return IsExcludedFromPosFiles();
 
     const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
@@ -1394,12 +1391,10 @@ bool FOOTPRINT::GetExcludedFromPosFilesForVariant( const wxString& aVariantName 
 }
 
 
-wxString FOOTPRINT::GetFieldValueForVariant( const wxString& aVariantName,
-                                              const wxString& aFieldName ) const
+wxString FOOTPRINT::GetFieldValueForVariant( const wxString& aVariantName, const wxString& aFieldName ) const
 {
     // Check variant-specific override first
-    if( !aVariantName.IsEmpty()
-        && aVariantName.CmpNoCase( GetDefaultVariantName() ) != 0 )
+    if( !aVariantName.IsEmpty() && aVariantName.CmpNoCase( GetDefaultVariantName() ) != 0 )
     {
         const FOOTPRINT_VARIANT* variant = GetVariant( aVariantName );
 
@@ -2106,10 +2101,14 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull( PCB_LAYER_ID aLayer ) const
 void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg, msg2;
+    wxString variant;
+
+    if( BOARD* board = GetBoard() )
+        variant = board->GetCurrentVariant();
 
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( UnescapeString( Reference().GetText() ),
-                        UnescapeString( Value().GetText() ) );
+                        UnescapeString( GetFieldValueForVariant( variant, GetCanonicalFieldName( FIELD_T::VALUE ) ) ) );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_CHOOSER )
@@ -2138,6 +2137,8 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     default:   /* unsided: user-layers only, etc. */                           break;
     }
 
+    aList.emplace_back( _( "Rotation" ), wxString::Format( wxT( "%.4g" ), GetOrientation().AsDegrees() ) );
+
     auto addToken = []( wxString* aStr, const wxString& aAttr )
                     {
                         if( !aStr->IsEmpty() )
@@ -2152,36 +2153,31 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( IsLocked() )
         addToken( &status, _( "Locked" ) );
 
-    if( m_fpStatus & FP_is_PLACED )
+    if( IsPlaced() )
         addToken( &status, _( "autoplaced" ) );
 
-    if( m_attributes & FP_BOARD_ONLY )
+    if( IsBoardOnly() )
         addToken( &attrs, _( "not in schematic" ) );
 
-    if( m_attributes & FP_EXCLUDE_FROM_POS_FILES )
+    if( GetExcludedFromPosFilesForVariant( variant ) )
         addToken( &attrs, _( "exclude from pos files" ) );
 
-    if( m_attributes & FP_EXCLUDE_FROM_BOM )
+    if( GetExcludedFromBOMForVariant( variant ) )
         addToken( &attrs, _( "exclude from BOM" ) );
 
-    if( m_attributes & FP_DNP )
+    if( GetDNPForVariant( variant ) )
         addToken( &attrs, _( "DNP" ) );
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs );
 
-    aList.emplace_back( _( "Rotation" ), wxString::Format( wxT( "%.4g" ),
-                                                           GetOrientation().AsDegrees() ) );
-
     if( !m_componentClassCacheProxy->GetComponentClass()->IsEmpty() )
     {
-        aList.emplace_back(
-                _( "Component Class" ),
-                m_componentClassCacheProxy->GetComponentClass()->GetHumanReadableName() );
+        aList.emplace_back( _( "Component Class" ),
+                            m_componentClassCacheProxy->GetComponentClass()->GetHumanReadableName() );
     }
 
     msg.Printf( _( "Footprint: %s" ), m_fpid.GetUniStringLibId() );
-    msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" )
-                                                            : m_3D_Drawings.front().m_Filename );
+    msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" ) : m_3D_Drawings.front().m_Filename );
     aList.emplace_back( msg, msg2 );
 
     msg.Printf( _( "Doc: %s" ), m_libDescription );

@@ -981,8 +981,7 @@ public:
      * @param aFieldName The field name.
      * @return The field value for the specified variant.
      */
-    wxString GetFieldValueForVariant( const wxString& aVariantName,
-                                      const wxString& aFieldName ) const;
+    wxString GetFieldValueForVariant( const wxString& aVariantName, const wxString& aFieldName ) const;
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
@@ -1007,8 +1006,7 @@ public:
      */
     PAD* GetPad( const VECTOR2I& aPosition, const LSET& aLayerMask = LSET::AllLayersMask() );
 
-    std::vector<const PAD*> GetPads( const wxString& aPadNumber,
-                                     const PAD* aIgnore = nullptr ) const;
+    std::vector<const PAD*> GetPads( const wxString& aPadNumber, const PAD* aIgnore = nullptr ) const;
 
     /**
      * Return the number of pads.

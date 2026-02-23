@@ -69,6 +69,7 @@
 #include <toolbars_pcb_editor.h>
 #include <settings/settings_manager.h>
 #include <eda_text.h>
+#include <tools/pcb_control.h>
 
 #include "../scripting/python_scripting.h"
 
@@ -572,6 +573,9 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
             } );
 
     GetCanvas()->Refresh();
+
+    TOOL_EVENT dummy;
+    m_toolManager->GetTool<PCB_CONTROL>()->UpdateMessagePanel( dummy );
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 }
