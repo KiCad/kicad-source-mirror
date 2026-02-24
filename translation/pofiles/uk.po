@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-20 12:09+0000\n"
+"PO-Revision-Date: 2026-02-24 22:07+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
 "source/uk/>\n"
@@ -14939,15 +14939,13 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "Усі контакти з дублікатними номерами є перемичками"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
-#, fuzzy
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number.  "
 "Pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
-"Коли цей символ увімкнено, він може мати більше одного контакту з однаковим "
-"номером, і контакти з однаковим номером вважатимуться внутрішньо з'єднаними "
-"перемичкою."
+"Якщо цю опцію ввімкнено, символ може мати більше ніж один вивід з однаковим "
+"номером.  Виводи з однаковими номерами вважатимуться внутрішньо з’єднаними."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
@@ -21141,9 +21139,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Недійсний URL-адреса гіперпосилання '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "Неможливо розібрати %s як символ"
+msgstr "Не вдалося розпізнати '%s' як заголовок."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -29633,10 +29631,9 @@ msgid "Valid options are: route, alternate."
 msgstr "Допустимі варіанти: основний маршрут, альтернативний."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
 msgstr ""
-"Вихідні одиниці вимірювання, допустимі варіанти: дюйми (in), міліметри (mm)"
+"Одиниці вимірювання виводу, доступні варіанти: дюйми (in), міліметри (mm)"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -29669,9 +29666,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "Згенерувати файл спеціально для наметів"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "Допустимі варіанти: pdf,gerberx2,ps,dxf,svg"
+msgstr "Допустимі варіанти: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -30067,9 +30063,8 @@ msgid "No drawing sheet"
 msgstr "Не креслити форматну рамку"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Експорт списку нетлів у форматі KiCad"
+msgstr "Імпортувати файл плати (PCB) стороннього формату у формат KiCad"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
