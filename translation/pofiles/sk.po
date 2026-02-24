@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:58+0300\n"
-"PO-Revision-Date: 2026-02-23 06:09+0000\n"
+"PO-Revision-Date: 2026-02-24 04:31+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -2104,7 +2104,7 @@ msgstr "NEZNÁMY (%d)"
 
 #: common/design_block_io.cpp:137
 msgid "KiCad Design Block folders"
-msgstr "Adresáre návrhových  blokov KiCad"
+msgstr "Adresáre návrhových blokov KiCad"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3017
@@ -8233,7 +8233,7 @@ msgstr "Slepé/vnorené prekovy"
 
 #: common/layer_id.cpp:131
 msgid "Micro-vias"
-msgstr "Mikro-prekovy"
+msgstr "Mikroprekovy"
 
 #: common/layer_id.cpp:132
 msgid "Via holes"
@@ -8261,7 +8261,7 @@ msgstr "Nepokovované otvory"
 #: pcbnew/widgets/appearance_controls.cpp:2591
 #: pcbnew/widgets/search_handlers.cpp:405
 msgid "Ratsnest"
-msgstr "Naznačené spoje"
+msgstr "Vzdušné prepojenia"
 
 #: common/layer_id.cpp:138
 msgid "DRC warnings"
@@ -8295,7 +8295,7 @@ msgstr "Osi mriežky"
 
 #: common/layer_id.cpp:153
 msgid "Locked item shadow"
-msgstr "Tieň na uzamknutom prvku"
+msgstr "Tieň uzamknutého prvku"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
@@ -8839,7 +8839,7 @@ msgstr "Nastavenia stránky..."
 
 #: common/tool/actions.cpp:130
 msgid "Settings for paper size and title block info"
-msgstr "Nastavenia pre veľkosť papiera a informácie o rohovom bloku"
+msgstr "Nastavenia pre veľkosť papiera a informácie v popisnom poli listu"
 
 #: common/tool/actions.cpp:138
 msgid "Print..."
@@ -10381,7 +10381,7 @@ msgstr "Cesty knižnice stopy KiCad"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "KiCad design block path"
-msgstr ""
+msgstr "Cesta ku KiCad návrhovým blokom"
 
 #: common/wildcards_and_files_ext.cpp:372
 msgid "KiCad design block library paths"
@@ -11181,6 +11181,8 @@ msgid ""
 "Delete design block library '%s' from disk? This will delete all design "
 "blocks within the library."
 msgstr ""
+"Odstrániť knižnicu návrhových blokov '%s' z disku? Týmto sa odstránia všetky "
+"návrhové bloky v knižnici."
 
 #: eeschema/design_block_utils.cpp:498
 #, c-format
@@ -14124,9 +14126,8 @@ msgid "Plot drawing sheet"
 msgstr "Dokončite výkresový list"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:69
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Vytlačte orámovanie a razítko"
+msgstr "Vykreslenie okraja a popisného poľa listu výkresu"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:78
 #: eeschema/printing/dialog_print_base.cpp:35
@@ -17435,9 +17436,8 @@ msgstr "Filter výberu"
 #: eeschema/eeschema_settings.cpp:135 eeschema/menubar.cpp:192
 #: eeschema/sch_edit_frame.cpp:1957 eeschema/sch_edit_frame.cpp:1963
 #: eeschema/tools/sch_actions.cpp:149
-#, fuzzy
 msgid "Design Blocks"
-msgstr "Pravidlá návrhu"
+msgstr "Návrhové bloky"
 
 #: eeschema/erc/erc.cpp:80 eeschema/erc/erc.cpp:97
 msgid "Input Pin"
@@ -18154,9 +18154,8 @@ msgid "Failed to save %s."
 msgstr "Vytvorenie zlyhalo"
 
 #: eeschema/files-io.cpp:1054
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Varovanie o uložení projektu"
+msgstr "Varovanie na uzamknutý súbor"
 
 #: eeschema/files-io.cpp:1056
 #, fuzzy
@@ -18811,7 +18810,7 @@ msgstr "Hodiny"
 
 #: eeschema/pin_type.cpp:103 eeschema/sch_pin.cpp:2105
 msgid "Inverted clock"
-msgstr "Obrátené hodiny"
+msgstr "Negované hodiny"
 
 #: eeschema/pin_type.cpp:104 eeschema/sch_pin.cpp:2106
 msgid "Input low"
@@ -18819,7 +18818,7 @@ msgstr "Vstup je nízky"
 
 #: eeschema/pin_type.cpp:105 eeschema/sch_pin.cpp:2107
 msgid "Clock low"
-msgstr "Nízke hodiny"
+msgstr "Hodiny akt. v nule"
 
 #: eeschema/pin_type.cpp:106 eeschema/sch_pin.cpp:2108
 msgid "Output low"
@@ -18827,7 +18826,7 @@ msgstr "Nízky výkon"
 
 #: eeschema/pin_type.cpp:107 eeschema/sch_pin.cpp:2109
 msgid "Falling edge clock"
-msgstr "Špičkové hodiny"
+msgstr "Hodiny akt. zostupnou hranou"
 
 #: eeschema/pin_type.cpp:108 eeschema/sch_pin.cpp:2110
 msgid "NonLogic"
@@ -36834,9 +36833,8 @@ msgid "Rebuild Selected"
 msgstr "Nie je vybraný žiadny autobus"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
-#, fuzzy
 msgid "Rebuild this type"
-msgstr "Znovu postavte Ratsnest"
+msgstr "Znovu vytvoriť tento typ"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
 #, fuzzy
@@ -38949,19 +38947,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 #: pcbnew/router/router_tool.cpp:2811
 msgid "Shove"
-msgstr "Šup"
+msgstr "Odsunúť"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:51
 msgid "Shove vias"
-msgstr "Strčte priechody"
+msgstr "Odsunúť prekovy"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Ak je deaktivovaná, s priechodmi sa zaobchádza ako s nepohyblivými predmetmi "
-"a budú sa objímať namiesto strkať."
+"Ak je deaktivované, s prekovmi sa zaobchádza ako s nepohyblivými predmetmi a "
+"budú sa obchádzať namiesto odsúvať."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
@@ -40226,17 +40224,16 @@ msgstr "Zachyťte kurzor, keď sa myš priblíži ku grafickým kontrolným bodo
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:381
 msgid "Always show selected ratsnest"
-msgstr "Vždy zobrazovať vybrané krysy"
+msgstr "Vždy zobrazovať vybrané vzdušné prepojenia"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:384
 #: pcbnew/tools/pcb_actions.cpp:1375
 msgid "Show ratsnest with curved lines"
-msgstr "Zobraziť ratsnest so zakrivenými čiarami"
+msgstr "Zobraziť vzdušné prepojenia zaoblenými čiarami"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:390
-#, fuzzy
 msgid "Ratsnest line thickness:"
-msgstr "Hrúbka čiary:"
+msgstr "Hrúbka čiary vzdušných prepojení:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:420
 msgid "Draw an outline to show the sheet size."
@@ -48555,7 +48552,7 @@ msgstr "Prepnite držanie stopy"
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Switches posture of the currently routed track."
-msgstr "Prepne pozíciu aktuálne smerovanej trasy."
+msgstr "Prepne spôsob zalomenia práve routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:199
 #, fuzzy
@@ -48576,7 +48573,7 @@ msgstr "Použite Počiatočnú šírku stopy"
 
 #: pcbnew/router/router_tool.cpp:245
 msgid "Route using the width of the starting track."
-msgstr "Trasa využíva šírku počiatočnej stopy."
+msgstr "Šírka routovania podľa šírky spoja na začiatku."
 
 #: pcbnew/router/router_tool.cpp:249 pcbnew/router/router_tool.cpp:374
 msgid "Use Net Class Values"
@@ -48652,12 +48649,11 @@ msgstr "Šírka %s, medzera %s, cez medzeru %s"
 
 #: pcbnew/router/router_tool.cpp:479
 msgid "Interactive Router"
-msgstr "Interaktívny smerovač"
+msgstr "Interaktívny router"
 
 #: pcbnew/router/router_tool.cpp:600
-#, fuzzy
 msgid "Save router log"
-msgstr "Uložiť projekt do"
+msgstr "Uložiť súbor denníka routera"
 
 #: pcbnew/router/router_tool.cpp:1124
 #, fuzzy
@@ -50403,9 +50399,8 @@ msgid "Snap to Objects on All Layers"
 msgstr "Vykresliť popis listu na všetkých vrstvách"
 
 #: pcbnew/tools/pcb_actions.cpp:391
-#, fuzzy
 msgid "Enables snapping to objects on all visible layers"
-msgstr "Ratsnestové čiary sa zobrazujú položkám vo viditeľných vrstvách"
+msgstr "Povolenie prichytávania k objektom na všetkých viditeľných vrstvách"
 
 #: pcbnew/tools/pcb_actions.cpp:397
 msgid "Toggle Snapping Between Active and All Layers"
@@ -50923,7 +50918,7 @@ msgstr "Relácia Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:1010
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importujte smerovaný súbor relácie Specctra (* .ses)"
+msgstr "Importovať súbor relácie routera Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:1016
 #, fuzzy
@@ -51063,9 +51058,8 @@ msgid "Toggle Lock"
 msgstr "Prepnúť zámok"
 
 #: pcbnew/tools/pcb_actions.cpp:1174
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Zobraziť ratsnest vybraných položiek"
+msgstr "Zamknúť alebo odomknúť vybrané položky"
 
 #: pcbnew/tools/pcb_actions.cpp:1182
 #, fuzzy
@@ -51147,24 +51141,22 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Zvýraznite všetky medené predmety v sieti"
 
 #: pcbnew/tools/pcb_actions.cpp:1288
-#, fuzzy
 msgid "Hide Net in Ratsnest"
-msgstr "Zvýraznite Ratsnest"
+msgstr "Skryť spoj vo vzdušných spojoch"
 
 #: pcbnew/tools/pcb_actions.cpp:1289
-#, fuzzy
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Přesunout vybrané sítě z pravého seznamu do levého"
+msgstr ""
+"Skrytie vybraných spojov vo vzdušných spojoch nepripojených čiar/oblúkov"
 
 #: pcbnew/tools/pcb_actions.cpp:1296
-#, fuzzy
 msgid "Show Net in Ratsnest"
-msgstr "Zobraziť Ratsnest"
+msgstr "Zobraziť spoj vo vzdušných spojoch"
 
 #: pcbnew/tools/pcb_actions.cpp:1297
-#, fuzzy
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Přesunout vybrané sítě z pravého seznamu do levého"
+msgstr ""
+"Zobrazenie vybraných spojov vo vzdušných spojoch nepripojených čiar/oblúkov"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
 msgid "Switch to Schematic Editor"
@@ -51176,14 +51168,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Otvorí existujúci projekt schémy"
 
 #: pcbnew/tools/pcb_actions.cpp:1315
-#, fuzzy
 msgid "Local Ratsnest"
-msgstr "Zobraziť Ratsnest"
+msgstr "Lokálne vzdušné spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
-#, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Zobraziť ratsnest vybraných položiek"
+msgstr "Prepnúť zobrazenie vzdušných spojov vybraných položiek"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Scripting Console"
@@ -51219,7 +51209,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Show Ratsnest"
-msgstr "Zobraziť Ratsnest"
+msgstr "Zobraziť vzdušné spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Show lines/arcs representing missing connections on the board"
@@ -51227,20 +51217,18 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Curved Ratsnest Lines"
-msgstr "Zakrivené čiary Ratsnest"
+msgstr "Zaoblené vzdušné spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:1381
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Režim zobrazenia jednej vrstvy (3-stavový)"
+msgstr "Režim vzdušných spojov (3-stavový)"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Cyklus medzi zobrazením vyplnených zón, zón s drôtovými schémami a "
-"načrtnutých zón"
+"Prepínanie medzi zobrazením vzdušných spojov pre všetky vrstvy, len "
+"viditeľné vrstvy a žiadne"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 #, fuzzy
@@ -51248,11 +51236,12 @@ msgid "Net Color Mode (3-state)"
 msgstr "Režim zobrazenia jednej vrstvy (3-stavový)"
 
 #: pcbnew/tools/pcb_actions.cpp:1388
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "Sieť a farby netclass sú zobrazené iba na krysom hniezde"
+msgstr ""
+"Prepínanie medzi farebným nastavením spojov a triedy spojov pre všetky "
+"spoje, iba vzdušné spoje a žiadne"
 
 #: pcbnew/tools/pcb_actions.cpp:1395
 msgid "Sketch Tracks"
@@ -51757,14 +51746,12 @@ msgstr ""
 "celé pripojenia"
 
 #: pcbnew/tools/pcb_actions.cpp:2114
-#, fuzzy
 msgid "Unroute Selected"
-msgstr "Výber mriežky"
+msgstr "Unroutovať vybrané"
 
 #: pcbnew/tools/pcb_actions.cpp:2115
-#, fuzzy
 msgid "Unroutes selected items to the nearest pad."
-msgstr "Zarovná vybrané položky k ľavému okraju"
+msgstr "Unroutuje vybrané položky po najbližiu plôšku."
 
 #: pcbnew/tools/pcb_actions.cpp:2129
 msgid "Select All Tracks in Net"
@@ -51913,30 +51900,27 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2260
 msgid "Route Single Track"
-msgstr "Trasa jednej trate"
+msgstr "Routovať jednotlivý spoj"
 
 #: pcbnew/tools/pcb_actions.cpp:2261
-#, fuzzy
 msgid "Route tracks"
-msgstr "Zamknuté spoje"
+msgstr "Routovať spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:2272
-#, fuzzy
 msgid "Route Differential Pair"
-msgstr "Diferenciálny pár trasy"
+msgstr "Routovať diferenciálny pár"
 
 #: pcbnew/tools/pcb_actions.cpp:2273
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Diferenciálny pár trasy"
+msgstr "Routovať diferenciálne páry"
 
 #: pcbnew/tools/pcb_actions.cpp:2283
 msgid "Interactive Router Settings..."
-msgstr "Nastavenia interaktívneho smerovača..."
+msgstr "Nastavenia interaktívneho routera..."
 
 #: pcbnew/tools/pcb_actions.cpp:2284
 msgid "Open Interactive Router settings"
-msgstr "Otvorte nastavenia interaktívneho smerovača"
+msgstr "Otvoriť nastavenia interaktívneho routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2290
 msgid "Differential Pair Dimensions..."
@@ -51948,37 +51932,35 @@ msgstr "Otvorte nastavenia rozmerov diferenciálnych párov"
 
 #: pcbnew/tools/pcb_actions.cpp:2297
 msgid "Router Highlight Mode"
-msgstr "Režim zvýraznenia smerovača"
+msgstr "Zvýrazňujúci režim routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2298
 msgid "Switch router to highlight mode"
-msgstr "Prepnite smerovač na režim zvýraznenia"
+msgstr "Prepnutie routera do režimu zvýrazňovania"
 
 #: pcbnew/tools/pcb_actions.cpp:2305
 msgid "Router Shove Mode"
-msgstr "Režim zasunutia smerovača"
+msgstr "Odsúvací režim routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
 msgid "Switch router to shove mode"
-msgstr "Prepnite smerovač na režim strčenie"
+msgstr "Prepnúť router do režimu odsúvania"
 
 #: pcbnew/tools/pcb_actions.cpp:2313
 msgid "Router Walkaround Mode"
-msgstr "Režim obchádzania smerovača"
+msgstr "Obchádzajúci režim routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2314
 msgid "Switch router to walkaround mode"
-msgstr "Prepnite smerovač do režimu obídenia"
+msgstr "Prepnutie routera do režimu obchádzania"
 
 #: pcbnew/tools/pcb_actions.cpp:2321
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Režim zasunutia smerovača"
+msgstr "Prepínať režim routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2322
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Prepnite smerovač na režim strčenie"
+msgstr "Prepnutie routera na nasledujúci režim"
 
 #: pcbnew/tools/pcb_actions.cpp:2327
 msgid "Set Layer Pair..."
@@ -52008,12 +51990,14 @@ msgstr "Zvyšuje priehľadnosť aktuálnej vrstvy"
 
 #: pcbnew/tools/pcb_actions.cpp:2381
 msgid "Route From Other End"
-msgstr "Táhni spoj z opačného konce"
+msgstr "Routovať spoj z opačného konca"
 
 #: pcbnew/tools/pcb_actions.cpp:2382
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
+"Commitnúť aktuálny segment a začať nový segment z najbližšieho konca "
+"vzdušného spoja."
 
 #: pcbnew/tools/pcb_actions.cpp:2388
 msgid "Attempt Finish"
@@ -52022,34 +52006,34 @@ msgstr "Pokus o dokončení"
 #: pcbnew/tools/pcb_actions.cpp:2389
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
+"Pokusy o dokončenie aktuálneho routovania k najbližšiemu koncu vzdušného "
+"spoja."
 
 #: pcbnew/tools/pcb_actions.cpp:2396
-#, fuzzy
 msgid "Route Selected"
-msgstr "Výber mriežky"
+msgstr "Routovať vybrané"
 
 #: pcbnew/tools/pcb_actions.cpp:2397
-#, fuzzy
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr "Zarovná vybrané položky k ľavému okraju"
+msgstr "Sekvenčné routovanie vybraných položiek z ukotvenia vzdušného spoja."
 
 #: pcbnew/tools/pcb_actions.cpp:2405
-#, fuzzy
 msgid "Route Selected From Other End"
-msgstr "Výber mriežky"
+msgstr "Routovať vybrané z iného konca"
 
 #: pcbnew/tools/pcb_actions.cpp:2406
-#, fuzzy
 msgid "Sequentially route selected items from other end of ratsnest anchor."
-msgstr "Zarovná vybrané položky k ľavému okraju"
+msgstr ""
+"Sekvenčné routovanie vybraných položiek z iného konca ukotvenia vzdušného "
+"spoja."
 
 #: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Attempt Finish Selected (Autoroute)"
-msgstr ""
+msgstr "Pokúsiť sa o dokončenie vybraného (autoroute)"
 
 #: pcbnew/tools/pcb_actions.cpp:2415
 msgid "Sequentially attempt to automatically route all selected pads."
-msgstr ""
+msgstr "Postupne sa pokúsiť automaticky routovať všetky vybrané plôšky."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
 #, fuzzy
@@ -52057,9 +52041,8 @@ msgid "Cancel Current Item"
 msgstr "Zrušiť aktuálny nástroj"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Z výberu vytvorí grafické čiary"
+msgstr "Preskočiť aktuálnu položku a routovať ďalšiu vybranú položku."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -52528,7 +52511,7 @@ msgstr "Ukážte stopy, ktoré sú na zadnej strane paluby"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show unconnected nets as a ratsnest"
-msgstr "Ukážte neprepojené siete ako potkan"
+msgstr "Zobraziť nepripojené spoje ako vzdušné spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC Warnings"
@@ -52707,7 +52690,7 @@ msgstr "Sieť a farby netclass sú zobrazené na všetkých medených predmetoch
 #: pcbnew/widgets/appearance_controls.cpp:731
 #: pcbnew/widgets/appearance_controls.cpp:2592
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Sieť a farby netclass sú zobrazené iba na krysom hniezde"
+msgstr "Farby spojov a triedy spojov použiť iba na vzdušné spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:738
 #: pcbnew/widgets/appearance_controls.cpp:2595
@@ -52716,26 +52699,24 @@ msgstr "Sieť a farby netclass nie sú zobrazené"
 
 #: pcbnew/widgets/appearance_controls.cpp:749
 #: pcbnew/widgets/appearance_controls.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Zobrazenie Ratsnest:"
+msgstr "Zobrazenie vzdušných spojov (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:751
 #: pcbnew/widgets/appearance_controls.cpp:2602
 msgid "Ratsnest display:"
-msgstr "Zobrazenie Ratsnest:"
+msgstr "Zobrazenie vzdušných spojov:"
 
 #: pcbnew/widgets/appearance_controls.cpp:756
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
-msgstr "Vyberte, ktoré riadky ratsnest sa majú zobraziť"
+msgstr "Vybrať ktoré vzdušné spoje zobraziť"
 
 #: pcbnew/widgets/appearance_controls.cpp:766
 #: pcbnew/widgets/appearance_controls.cpp:2608
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Ratsnestové riadky sa zobrazujú položkám vo všetkých vrstvách"
+msgstr "Zobraziť čiary vzdušných spojov pre položky na všetkých vrstvách"
 
 #: pcbnew/widgets/appearance_controls.cpp:771
 #: pcbnew/widgets/appearance_controls.cpp:2610
@@ -52744,15 +52725,13 @@ msgstr "Viditeľné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:773
 #: pcbnew/widgets/appearance_controls.cpp:2611
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Ratsnestové čiary sa zobrazujú položkám vo viditeľných vrstvách"
+msgstr "Zobraziť čiary vzdušných spojov pre položky na viditeľných vrstvách"
 
 #: pcbnew/widgets/appearance_controls.cpp:780
 #: pcbnew/widgets/appearance_controls.cpp:2614
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Skryť naznačené spoje dosky"
+msgstr "Skryť všetky čiary vzdušných spojov"
 
 #: pcbnew/widgets/appearance_controls.cpp:931
 #, fuzzy
@@ -52793,12 +52772,12 @@ msgstr "Skryť všetky ostatné siete"
 #: pcbnew/widgets/appearance_controls.cpp:984
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr "Kliknutím skryjete ratsnest pre %s"
+msgstr "Kliknutím skryť vzdušné spoje pre %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:985
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr "Kliknite a zobrazte ratsnest pre %s"
+msgstr "Kliknutím zobraziť vzdušné spoje pre %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:994
 #, fuzzy
@@ -53194,7 +53173,7 @@ msgstr "Skryť všetky ostatné netclassy"
 #: pcbnew/widgets/appearance_controls.cpp:2516
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Zobraziť alebo skryť potkan pre siete v %s"
+msgstr "Zobraziť alebo skryť vzdušné spoje pre %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:3512
 msgid ""
