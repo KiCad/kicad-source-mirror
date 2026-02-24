@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-19 12:58+0300\n"
+"POT-Creation-Date: 2026-02-25 01:09+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6335,6 +6335,9 @@ msgstr "%d objects selected"
 msgid "Basic Properties"
 msgstr "Basic Properties"
 
+msgid "Exclusions"
+msgstr "Exclusions"
+
 msgid "Toggle zooming to selections in the search pane"
 msgstr "Toggle zooming to selections in the search pane"
 
@@ -7834,9 +7837,6 @@ msgstr "Edit ignored tests"
 #, c-format
 msgid "Ignored Tests (%s)"
 msgstr "Ignored Tests (%s)"
-
-msgid "Exclusions"
-msgstr "Exclusions"
 
 msgid "Delete Marker"
 msgstr "Delete Marker"
@@ -11395,6 +11395,10 @@ msgstr "Bus Entry needed"
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC report (%s, Encoding UTF8)\n"
+
+#, c-format
+msgid "Report includes: %s\n"
+msgstr "Report includes: %s\n"
 
 #, c-format
 msgid ""
@@ -31196,6 +31200,14 @@ msgstr "%s pad %s not found in %s."
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "Processing symbol '%s:%s'."
+
+#, c-format
+msgid ""
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
+msgstr ""
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 
 #, c-format
 msgid "Multiple footprints found for %s."
