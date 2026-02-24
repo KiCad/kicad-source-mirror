@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-19 12:57+0300\n"
-"PO-Revision-Date: 2026-02-24 04:30+0000\n"
+"PO-Revision-Date: 2026-02-24 22:07+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -12895,9 +12895,8 @@ msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr "Schéma není plně očíslované. Výsledky ERC budou neúplné."
 
 #: eeschema/dialogs/dialog_erc.cpp:230 pcbnew/dialogs/dialog_drc.cpp:284
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Vybraté položky"
+msgstr "Krížové zvýraznenie vybraných položiek"
 
 #: eeschema/dialogs/dialog_erc.cpp:231
 #, fuzzy
@@ -17655,21 +17654,22 @@ msgstr "Zvýraznite všetky medené predmety v sieti"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 #: pcbnew/dialogs/panel_display_options_base.cpp:174
 msgid "Center view on cross-probed items"
-msgstr "Pohľad do stredu na predmety s krížovou sondou"
+msgstr "Vycentrovať pohľad na krížovo zvýraznené položky"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:51
 msgid "Ensures that cross-probed symbols are visible in the current view"
 msgstr ""
+"Zabezpečí, že krížovo zvýraznené symboly budú viditeľné v aktuálnom zobrazení"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
 #: pcbnew/dialogs/panel_display_options_base.cpp:180
 msgid "Zoom to fit cross-probed items"
-msgstr "Priblížením prispôsobíte položky s krížovým testom"
+msgstr "Priblížiť na krížovo zvýraznené položky"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 #: pcbnew/dialogs/panel_display_options_base.cpp:184
 msgid "Highlight cross-probed nets"
-msgstr "Zvýraznite siete s krížovými sondami"
+msgstr "Zvýrazniť krížovo zvýraznené spoje"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -17677,14 +17677,13 @@ msgstr "Zvýraznite siete, keď sú zvýraznené v editore PCB"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:190
-#, fuzzy
 msgid "Flash cross-probed selection"
-msgstr "Výber zväčšenia"
+msgstr "Zablikať s krížovo zvýrazneným výberom"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:66
 #: pcbnew/dialogs/panel_display_options_base.cpp:192
 msgid "Temporarily flash the newly cross-probed selection 3 times"
-msgstr ""
+msgstr "Dočasne trikrát zablikať s novým krížovo zvýrazneným výberom"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Default font:"
@@ -28633,7 +28632,7 @@ msgstr "Režim kreslenia"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "Načrtnite blikané položky"
+msgstr "Obrys flash položiek"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:61
 msgid ""
@@ -28643,11 +28642,11 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
-msgstr "Náčrt čiary"
+msgstr "Obrys čiar"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:68
 msgid "Sketch polygons"
-msgstr "Náčrt mnohouholníkov"
+msgstr "Obrys mnohouholníkov"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:70
 msgid "Display polygon items in outline mode"
@@ -29404,7 +29403,7 @@ msgstr "Posunúť dosku dole"
 
 #: gerbview/tools/gerbview_actions.cpp:187
 msgid "Sketch Lines"
-msgstr "Skica riadky"
+msgstr "Obrys čiar"
 
 #: gerbview/tools/gerbview_actions.cpp:188
 msgid "Show lines in outline mode"
@@ -29412,7 +29411,7 @@ msgstr "Zobraziť čiary v režime osnovy"
 
 #: gerbview/tools/gerbview_actions.cpp:197
 msgid "Sketch Flashed Items"
-msgstr "Načrtnite flashované položky"
+msgstr "Obrys flash položiek"
 
 #: gerbview/tools/gerbview_actions.cpp:198
 msgid "Show flashed items in outline mode"
@@ -29420,7 +29419,7 @@ msgstr "Zobraziť blikajúce položky v režime osnovy"
 
 #: gerbview/tools/gerbview_actions.cpp:207
 msgid "Sketch Polygons"
-msgstr "Náčrt mnohouholníkov"
+msgstr "Obrys mnohouholníkov"
 
 #: gerbview/tools/gerbview_actions.cpp:208
 msgid "Show polygons in outline mode"
@@ -42459,7 +42458,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
-msgstr "Ukážka podložky v režime náčrtu"
+msgstr "Náhľad plôšok v obryse"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
 #, fuzzy
@@ -42591,9 +42590,8 @@ msgid "Cross-out"
 msgstr "Krížové sondovanie"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Náčrtné podložky na fab vrstvách"
+msgstr "Obrys plôšok na fab vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -57942,7 +57940,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1684
 msgid "Sketch Tracks"
-msgstr "Skladby náčrtu"
+msgstr "Obrys spojov"
 
 #: pcbnew/tools/pcb_actions.cpp:1685
 msgid "Show tracks in outline mode"
@@ -57950,7 +57948,7 @@ msgstr "Zobraziť spoje v režime okrajov"
 
 #: pcbnew/tools/pcb_actions.cpp:1692
 msgid "Sketch Pads"
-msgstr "Náčrtové podložky"
+msgstr "Obrys plôšok"
 
 #: pcbnew/tools/pcb_actions.cpp:1693
 msgid "Show pads in outline mode"
@@ -57958,7 +57956,7 @@ msgstr "Zobraziť podložky v režime osnovy"
 
 #: pcbnew/tools/pcb_actions.cpp:1700
 msgid "Sketch Vias"
-msgstr "Skica Vias"
+msgstr "Obrys prekovov"
 
 #: pcbnew/tools/pcb_actions.cpp:1701
 msgid "Show vias in outline mode"
@@ -57966,7 +57964,7 @@ msgstr "Zobraziť prechodky v režime okrajov"
 
 #: pcbnew/tools/pcb_actions.cpp:1708
 msgid "Sketch Graphic Items"
-msgstr "Načrtnite grafické položky"
+msgstr "Obrys grafických položiek"
 
 #: pcbnew/tools/pcb_actions.cpp:1709
 msgid "Show graphic items in outline mode"
@@ -57974,7 +57972,7 @@ msgstr "Zobraziť grafické položky v režime osnovy"
 
 #: pcbnew/tools/pcb_actions.cpp:1716
 msgid "Sketch Text Items"
-msgstr "Načrtnite textové položky"
+msgstr "Obrys textových položiek"
 
 #: pcbnew/tools/pcb_actions.cpp:1717
 msgid "Show footprint texts in line mode"
