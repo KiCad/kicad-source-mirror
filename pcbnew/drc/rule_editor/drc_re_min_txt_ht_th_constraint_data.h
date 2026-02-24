@@ -83,6 +83,27 @@ public:
         return result;
     }
 
+    std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
+    {
+        auto formatDimension = []( double aValue )
+        {
+            return formatDouble( aValue ) + wxS( "mm" );
+        };
+
+        wxString heightClause =
+                wxString::Format( wxS( "(constraint text_height (min %s))" ), formatDimension( m_minTextHeight ) );
+
+        wxString thicknessClause = wxString::Format( wxS( "(constraint text_thickness (min %s))" ),
+                                                     formatDimension( m_minTextThickness ) );
+
+        return { heightClause, thicknessClause };
+    }
+
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        return buildRule( aContext, GetConstraintClauses( aContext ) );
+    }
+
     void CopyFrom( const ICopyable& aSource ) override
     {
         const auto& source =
