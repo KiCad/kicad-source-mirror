@@ -55,7 +55,7 @@
 KICOMMON_API wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType );
 
 
-#define LINE_READER_LINE_DEFAULT_MAX        1000000
+#define LINE_READER_LINE_DEFAULT_MAX        16000000
 #define LINE_READER_LINE_INITIAL_SIZE       5000
 
 /**
