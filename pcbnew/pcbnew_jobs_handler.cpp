@@ -1458,10 +1458,10 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
     if( aGencadJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = LoadBoard( aGencadJob->m_filename, true ); // Ensure m_board is of type BOARD*
+    BOARD* brd = getBoard( aGencadJob->m_filename );
 
-    if( brd == nullptr )
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     GENCAD_EXPORTER exporter( brd );
 
