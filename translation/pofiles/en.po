@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-19 12:57+0300\n"
+"POT-Creation-Date: 2026-02-25 01:08+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5876,9 +5876,6 @@ msgstr "Select Settings Path"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "<unknown>"
-msgstr "<unknown>"
-
 #, c-format
 msgid "Close %s"
 msgstr "Close %s"
@@ -10405,6 +10402,9 @@ msgstr "P"
 #, c-format
 msgid "Format %s"
 msgstr "Format %s"
+
+msgid "<unknown>"
+msgstr "<unknown>"
 
 #, c-format
 msgid "No model named '%s' in library."
@@ -20377,13 +20377,6 @@ msgstr "Exclude all footprints with the Do Not Populate flag set"
 msgid "Include board edge layer (Gerber only)"
 msgstr "Include board edge layer (Gerber only)"
 
-msgid ""
-"Board variant for variant-aware filtering (DNP, BOM, position file "
-"exclusions)"
-msgstr ""
-"Board variant for variant-aware filtering (DNP, BOM, position file "
-"exclusions)"
-
 msgid "Invalid format\n"
 msgstr "Invalid format\n"
 
@@ -26478,6 +26471,9 @@ msgstr "STPZ"
 msgid "U3D"
 msgstr "U3D"
 
+msgid "Variant:"
+msgstr "Variant:"
+
 msgid "Board Options"
 msgstr "Board Options"
 
@@ -30077,15 +30073,13 @@ msgstr "The minimum slot width from DRC creepage checks"
 msgid "Holes"
 msgstr "Holes"
 
-msgid "Minimum through hole:"
-msgstr "Minimum through hole:"
+msgid "Minimum drill size:"
+msgstr "Minimum drill size:"
 
 msgid ""
-"The minimum through-hole size. If set, this can only be reduced by custom "
-"rules."
+"The minimum drill size. If set, this can only be reduced by custom rules."
 msgstr ""
-"The minimum through-hole size. If set, this can only be reduced by custom "
-"rules."
+"The minimum drill size. If set, this can only be reduced by custom rules."
 
 msgid "Hole to hole clearance:"
 msgstr "Hole to hole clearance:"
@@ -33476,15 +33470,6 @@ msgstr "Optimum Length cannot be greater than Maximum Length"
 msgid "Minimum Length cannot be greater than Maximum Length"
 msgstr "Minimum Length cannot be greater than Maximum Length"
 
-msgid "Minimum Length"
-msgstr "Minimum Length"
-
-msgid "Optimum Length"
-msgstr "Optimum Length"
-
-msgid "Maximum Length"
-msgstr "Maximum Length"
-
 msgid "Allow 0°"
 msgstr "Allow 0°"
 
@@ -33503,26 +33488,8 @@ msgstr "Allow All"
 msgid "At least one orientation must be selected"
 msgstr "At least one orientation must be selected"
 
-msgid "0 Degrees"
-msgstr "0 Degrees"
-
-msgid "90 Degrees"
-msgstr "90 Degrees"
-
-msgid "180 Degrees"
-msgstr "180 Degrees"
-
-msgid "270 Degrees"
-msgstr "270 Degrees"
-
-msgid "All Orientations"
-msgstr "All Orientations"
-
-msgid "Allow"
-msgstr "Allow"
-
-msgid "Check Me!"
-msgstr "Check Me!"
+msgid "Disallow"
+msgstr "Disallow"
 
 msgid "Where conditions match:"
 msgstr "Where conditions match:"
@@ -33594,16 +33561,6 @@ msgstr "Minimum Text Height must be greater than 0"
 msgid "Minimum Text Thickness must be greater than 0"
 msgstr "Minimum Text Thickness must be greater than 0"
 
-#, c-format
-msgid "%.2f"
-msgstr "%.2f"
-
-msgid "Minimum Text Height"
-msgstr "Minimum Text Height"
-
-msgid "Minimum Text Thickness"
-msgstr "Minimum Text Thickness"
-
 msgid "Numeric input value must be greater than 0"
 msgstr "Numeric input value must be greater than 0"
 
@@ -33615,12 +33572,6 @@ msgstr "Allow bottom Layer"
 
 msgid "At least one layer must be selected"
 msgstr "At least one layer must be selected"
-
-msgid "Top Layer"
-msgstr "Top Layer"
-
-msgid "Bottom Layer"
-msgstr "Bottom Layer"
 
 msgid "Minimum Routing Width must be greater than 0"
 msgstr "Minimum Routing Width must be greater than 0"
@@ -33639,15 +33590,6 @@ msgstr "Preferred Routing Width cannot be greater than Maximum Routing Width"
 
 msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
 msgstr "Minimum Routing Width cannot be greater than Maximum Routing Width"
-
-msgid "Minimum Routing Width"
-msgstr "Minimum Routing Width"
-
-msgid "Preferred Routing Width"
-msgstr "Preferred Routing Width"
-
-msgid "Maximum Routing Width"
-msgstr "Maximum Routing Width"
 
 msgid "Minimum Width must be greater than 0"
 msgstr "Minimum Width must be greater than 0"
@@ -33670,6 +33612,9 @@ msgstr "Maximum Gap must be greater than 0"
 msgid "Maximum Uncoupled Length must be greater than 0"
 msgstr "Maximum Uncoupled Length must be greater than 0"
 
+msgid "Maximum Skew must be greater than or equal to 0"
+msgstr "Maximum Skew must be greater than or equal to 0"
+
 msgid "Minimum Width cannot be greater than Preferred Width"
 msgstr "Minimum Width cannot be greater than Preferred Width"
 
@@ -33688,23 +33633,8 @@ msgstr "Preferred Gap cannot be greater than Maximum Gap"
 msgid "Minimum Gap cannot be greater than Maximum Gap"
 msgstr "Minimum Gap cannot be greater than Maximum Gap"
 
-msgid "Max Uncoupled Length"
-msgstr "Max Uncoupled Length"
-
-msgid "Minimum"
-msgstr "Minimum"
-
-msgid "Maximum"
-msgstr "Maximum"
-
-msgid "Preferred"
-msgstr "Preferred"
-
 msgid "Minimum Via Diameter must be greater than 0"
 msgstr "Minimum Via Diameter must be greater than 0"
-
-msgid "Preferred Via Diameter must be greater than 0"
-msgstr "Preferred Via Diameter must be greater than 0"
 
 msgid "Maximum Via Diameter must be greater than 0"
 msgstr "Maximum Via Diameter must be greater than 0"
@@ -33712,35 +33642,14 @@ msgstr "Maximum Via Diameter must be greater than 0"
 msgid "Minimum Via Hole Size must be greater than 0"
 msgstr "Minimum Via Hole Size must be greater than 0"
 
-msgid "Preferred Via Hole Size must be greater than 0"
-msgstr "Preferred Via Hole Size must be greater than 0"
-
 msgid "Maximum Via Hole Size must be greater than 0"
 msgstr "Maximum Via Hole Size must be greater than 0"
-
-msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
-msgstr "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
-
-msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
 
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
 msgstr "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
 
-msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
-msgstr "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
-
-msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
-msgstr "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
-
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
-
-msgid "Via Diameter"
-msgstr "Via Diameter"
-
-msgid "Via Hole Size"
-msgstr "Via Hole Size"
 
 #, c-format
 msgid "%s should not be empty."
@@ -35207,60 +35116,66 @@ msgid "Invalid footprint ID '%s' for variant '%s' on %s."
 msgstr "Invalid footprint ID '%s' for variant '%s' on %s."
 
 #, c-format
-msgid "Add %s:%s 'Do not place' variant attribute."
-msgstr "Add %s:%s 'Do not place' variant attribute."
+msgid "Add %s '%s' attribute to variant %s (footprint %s)."
+msgstr "Add %s '%s' attribute to variant %s (footprint %s)."
 
 #, c-format
-msgid "Remove %s:%s 'Do not place' variant attribute."
-msgstr "Remove %s:%s 'Do not place' variant attribute."
+msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
+msgstr "Remove %s '%s' attribute from variant %s (footprint %s)."
 
 #, c-format
-msgid "Added %s:%s 'Do not place' variant attribute."
-msgstr "Added %s:%s 'Do not place' variant attribute."
+msgid "Add %s '%s' attribute to variant %s."
+msgstr "Add %s '%s' attribute to variant %s."
 
 #, c-format
-msgid "Removed %s:%s 'Do not place' variant attribute."
-msgstr "Removed %s:%s 'Do not place' variant attribute."
+msgid "Remove %s '%s' attribute from variant %s."
+msgstr "Remove %s '%s' attribute from variant %s."
 
 #, c-format
-msgid "Add %s:%s 'exclude from BOM' variant attribute."
-msgstr "Add %s:%s 'exclude from BOM' variant attribute."
+msgid "Added %s '%s' attribute to variant %s (footprint %s)."
+msgstr "Added %s '%s' attribute to variant %s (footprint %s)."
 
 #, c-format
-msgid "Remove %s:%s 'exclude from BOM' variant attribute."
-msgstr "Remove %s:%s 'exclude from BOM' variant attribute."
+msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
+msgstr "Removed %s '%s' attribute from variant %s (footprint %s)."
 
 #, c-format
-msgid "Added %s:%s 'exclude from BOM' variant attribute."
-msgstr "Added %s:%s 'exclude from BOM' variant attribute."
+msgid "Added %s '%s' attribute to variant %s."
+msgstr "Added %s '%s' attribute to variant %s."
 
 #, c-format
-msgid "Removed %s:%s 'exclude from BOM' variant attribute."
-msgstr "Removed %s:%s 'exclude from BOM' variant attribute."
+msgid "Removed %s '%s' attribute from variant %s."
+msgstr "Removed %s '%s' attribute from variant %s."
+
+msgid "Do not place"
+msgstr "Do not place"
+
+msgid "exclude from position files"
+msgstr "exclude from position files"
 
 #, c-format
-msgid "Add %s:%s 'exclude from position files' variant attribute."
-msgstr "Add %s:%s 'exclude from position files' variant attribute."
+msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
+msgstr "Change %s field '%s' to '%s' on variant %s (footprint %s)."
 
 #, c-format
-msgid "Remove %s:%s 'exclude from position files' variant attribute."
-msgstr "Remove %s:%s 'exclude from position files' variant attribute."
+msgid "Change %s field '%s' to '%s' on variant %s."
+msgstr "Change %s field '%s' to '%s' on variant %s."
 
 #, c-format
-msgid "Added %s:%s 'exclude from position files' variant attribute."
-msgstr "Added %s:%s 'exclude from position files' variant attribute."
+msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
+msgstr "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
 
 #, c-format
-msgid "Removed %s:%s 'exclude from position files' variant attribute."
-msgstr "Removed %s:%s 'exclude from position files' variant attribute."
+msgid "Changed %s field '%s' to '%s' on variant %s."
+msgstr "Changed %s field '%s' to '%s' on variant %s."
 
 #, c-format
-msgid "Change %s:%s field '%s' to '%s'."
-msgstr "Change %s:%s field '%s' to '%s'."
+msgid "Remove variant %s:%s no longer associated with footprint %s."
+msgstr "Remove variant %s:%s no longer associated with footprint %s."
 
 #, c-format
-msgid "Changed %s:%s field '%s' to '%s'."
-msgstr "Changed %s:%s field '%s' to '%s'."
+msgid "Removed variant %s:%s no longer associated with footprint %s."
+msgstr "Removed variant %s:%s no longer associated with footprint %s."
 
 #, c-format
 msgid "Reconnect via from %s to %s."
@@ -39036,9 +38951,6 @@ msgstr "Zones have insufficient overlap for merging."
 msgid "Some zone netcodes did not match and were not merged."
 msgstr "Some zone netcodes did not match and were not merged."
 
-msgid "Some zone priorities did not match and were not merged."
-msgstr "Some zone priorities did not match and were not merged."
-
 msgid "Some zones were rule areas and were not merged."
 msgstr "Some zones were rule areas and were not merged."
 
@@ -39127,6 +39039,9 @@ msgstr "Connection width resolution for:"
 #, c-format
 msgid "Resolved min connection width: %s."
 msgstr "Resolved min connection width: %s."
+
+msgid "Via Diameter"
+msgstr "Via Diameter"
 
 msgid "Via diameter resolution for:"
 msgstr "Via diameter resolution for:"
@@ -42635,6 +42550,172 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid ""
+#~ "Board variant for variant-aware filtering (DNP, BOM, position file "
+#~ "exclusions)"
+#~ msgstr ""
+#~ "Board variant for variant-aware filtering (DNP, BOM, position file "
+#~ "exclusions)"
+
+#~ msgid "Minimum through hole:"
+#~ msgstr "Minimum through hole:"
+
+#~ msgid ""
+#~ "The minimum through-hole size. If set, this can only be reduced by custom "
+#~ "rules."
+#~ msgstr ""
+#~ "The minimum through-hole size. If set, this can only be reduced by custom "
+#~ "rules."
+
+#~ msgid "Minimum Length"
+#~ msgstr "Minimum Length"
+
+#~ msgid "Optimum Length"
+#~ msgstr "Optimum Length"
+
+#~ msgid "Maximum Length"
+#~ msgstr "Maximum Length"
+
+#~ msgid "0 Degrees"
+#~ msgstr "0 Degrees"
+
+#~ msgid "90 Degrees"
+#~ msgstr "90 Degrees"
+
+#~ msgid "180 Degrees"
+#~ msgstr "180 Degrees"
+
+#~ msgid "270 Degrees"
+#~ msgstr "270 Degrees"
+
+#~ msgid "All Orientations"
+#~ msgstr "All Orientations"
+
+#~ msgid "Allow"
+#~ msgstr "Allow"
+
+#~ msgid "Check Me!"
+#~ msgstr "Check Me!"
+
+#, c-format
+#~ msgid "%.2f"
+#~ msgstr "%.2f"
+
+#~ msgid "Minimum Text Height"
+#~ msgstr "Minimum Text Height"
+
+#~ msgid "Minimum Text Thickness"
+#~ msgstr "Minimum Text Thickness"
+
+#~ msgid "Top Layer"
+#~ msgstr "Top Layer"
+
+#~ msgid "Bottom Layer"
+#~ msgstr "Bottom Layer"
+
+#~ msgid "Minimum Routing Width"
+#~ msgstr "Minimum Routing Width"
+
+#~ msgid "Preferred Routing Width"
+#~ msgstr "Preferred Routing Width"
+
+#~ msgid "Maximum Routing Width"
+#~ msgstr "Maximum Routing Width"
+
+#~ msgid "Max Uncoupled Length"
+#~ msgstr "Max Uncoupled Length"
+
+#~ msgid "Minimum"
+#~ msgstr "Minimum"
+
+#~ msgid "Maximum"
+#~ msgstr "Maximum"
+
+#~ msgid "Preferred"
+#~ msgstr "Preferred"
+
+#~ msgid "Preferred Via Diameter must be greater than 0"
+#~ msgstr "Preferred Via Diameter must be greater than 0"
+
+#~ msgid "Preferred Via Hole Size must be greater than 0"
+#~ msgstr "Preferred Via Hole Size must be greater than 0"
+
+#~ msgid "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
+#~ msgstr "Minimum Via Diameter cannot be greater than Preferred Via Diameter"
+
+#~ msgid "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
+#~ msgstr "Preferred Via Diameter cannot be greater than Maximum Via Diameter"
+
+#~ msgid "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
+#~ msgstr ""
+#~ "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size"
+
+#~ msgid "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
+#~ msgstr ""
+#~ "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size"
+
+#~ msgid "Via Hole Size"
+#~ msgstr "Via Hole Size"
+
+#, c-format
+#~ msgid "Add %s:%s 'Do not place' variant attribute."
+#~ msgstr "Add %s:%s 'Do not place' variant attribute."
+
+#, c-format
+#~ msgid "Remove %s:%s 'Do not place' variant attribute."
+#~ msgstr "Remove %s:%s 'Do not place' variant attribute."
+
+#, c-format
+#~ msgid "Added %s:%s 'Do not place' variant attribute."
+#~ msgstr "Added %s:%s 'Do not place' variant attribute."
+
+#, c-format
+#~ msgid "Removed %s:%s 'Do not place' variant attribute."
+#~ msgstr "Removed %s:%s 'Do not place' variant attribute."
+
+#, c-format
+#~ msgid "Add %s:%s 'exclude from BOM' variant attribute."
+#~ msgstr "Add %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+#~ msgid "Remove %s:%s 'exclude from BOM' variant attribute."
+#~ msgstr "Remove %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+#~ msgid "Added %s:%s 'exclude from BOM' variant attribute."
+#~ msgstr "Added %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+#~ msgid "Removed %s:%s 'exclude from BOM' variant attribute."
+#~ msgstr "Removed %s:%s 'exclude from BOM' variant attribute."
+
+#, c-format
+#~ msgid "Add %s:%s 'exclude from position files' variant attribute."
+#~ msgstr "Add %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+#~ msgid "Remove %s:%s 'exclude from position files' variant attribute."
+#~ msgstr "Remove %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+#~ msgid "Added %s:%s 'exclude from position files' variant attribute."
+#~ msgstr "Added %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+#~ msgid "Removed %s:%s 'exclude from position files' variant attribute."
+#~ msgstr "Removed %s:%s 'exclude from position files' variant attribute."
+
+#, c-format
+#~ msgid "Change %s:%s field '%s' to '%s'."
+#~ msgstr "Change %s:%s field '%s' to '%s'."
+
+#, c-format
+#~ msgid "Changed %s:%s field '%s' to '%s'."
+#~ msgstr "Changed %s:%s field '%s' to '%s'."
+
+#~ msgid "Some zone priorities did not match and were not merged."
+#~ msgstr "Some zone priorities did not match and were not merged."
 
 #, c-format
 #~ msgid ""
