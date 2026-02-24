@@ -60,6 +60,10 @@ DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_F
     if( !m_frame->GetBoard()->IsLayerEnabled( m_bitmap.GetLayer() ) )
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
+    // Don't show locked control in the footprint editor
+    if( m_frame->GetBoard()->IsFootprintHolder() )
+        m_cbLocked->Show(false);
+
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_frame );
     m_LayerSelectionCtrl->Resync();
@@ -92,9 +96,13 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
 
     m_LayerSelectionCtrl->SetLayerSelection( m_bitmap.GetLayer() );
 
-    m_cbLocked->SetValue( m_bitmap.IsLocked() );
-    m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas and can only be "
-                               "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
+    // Don't populate the locked control in the footprint editor
+    if( !m_frame->GetBoard()->IsFootprintHolder() )
+    {
+        m_cbLocked->SetValue( m_bitmap.IsLocked() );
+        m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas and can only be "
+                                "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
+    }
 
     m_imageEditor->TransferDataToWindow();
     VECTOR2I size = m_imageEditor->GetImageSize();
@@ -119,7 +127,10 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
         // Set position, etc.
         m_bitmap.SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
         m_bitmap.SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
-        m_bitmap.SetLocked( m_cbLocked->GetValue() );
+
+        // Only save locked status on non-footprint editor windows
+        if( !m_frame->GetBoard()->IsFootprintHolder() )
+            m_bitmap.SetLocked( m_cbLocked->GetValue() );
 
         return true;
     }
