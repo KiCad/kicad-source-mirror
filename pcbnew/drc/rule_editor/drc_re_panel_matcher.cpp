@@ -140,9 +140,15 @@ void DRC_PANEL_MATCHER::initClaims()
             std::set<DRC_CONSTRAINT_T>{},
             30 );
 
-    m_claims.emplace_back(
+   m_claims.emplace_back(
             COURTYARD_CLEARANCE,
             std::set<DRC_CONSTRAINT_T>{ COURTYARD_CLEARANCE_CONSTRAINT },
+            std::set<DRC_CONSTRAINT_T>{},
+            30 );
+
+   m_claims.emplace_back(
+            MINIMUM_SOLDERMASK_SILVER,
+            std::set<DRC_CONSTRAINT_T>{ SOLDER_MASK_SLIVER_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             30 );
 

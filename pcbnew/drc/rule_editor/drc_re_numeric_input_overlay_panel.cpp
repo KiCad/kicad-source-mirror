@@ -24,6 +24,7 @@
 #include "drc_re_numeric_input_overlay_panel.h"
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_rule_editor_utils.h"
+#include "drc_re_validator_numeric_ctrl.h"
 
 #include <dialogs/rule_editor_dialog_base.h>
 #include <eda_base_frame.h>
@@ -58,6 +59,8 @@ DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
     m_valueBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, valueField->GetControl(),
                                                    valueField->GetLabel(), false, false );
     valueField->SetUnitBinder( m_valueBinder.get() );
+
+    valueField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, m_data->IsIntegerOnly() ) );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
@@ -106,6 +109,48 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataFromWindow()
 bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
                                                          wxString* aValidationMessage )
 {
+    ClearFieldErrors();
+
+    wxTextCtrl* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() ); // "value" field is index 0
+
+    if( ctrl )
+    {
+        wxValidator* validator = ctrl->GetValidator();
+
+        if( validator && !validator->Validate( this ) )
+        {
+            auto* numValidator = dynamic_cast<VALIDATOR_NUMERIC_CTRL*>( validator );
+
+            if( numValidator )
+            {
+                wxString errorMsg;
+
+                switch( numValidator->GetValidationState() )
+                {
+                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::Empty: errorMsg = wxS( "Value is required." ); break;
+                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotNumeric:
+                    errorMsg = wxS( "Value must be a number." );
+                    break;
+                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotInteger:
+                    errorMsg = wxS( "Value must be a whole number." );
+                    break;
+                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotGreaterThanZero:
+                    errorMsg = wxS( "Value must be greater than 0." );
+                    break;
+                default: break;
+                }
+
+                if( !errorMsg.IsEmpty() )
+                {
+                    ( *aErrorCount )++;
+                    *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, errorMsg );
+                    ShowFieldError( wxS( "value" ) );
+                    return false;
+                }
+            }
+        }
+    }
+
     TransferDataFromWindow();
 
     VALIDATION_RESULT result = m_data->Validate();

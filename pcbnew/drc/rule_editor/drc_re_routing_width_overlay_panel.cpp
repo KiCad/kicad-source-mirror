@@ -24,6 +24,7 @@
 #include "drc_re_routing_width_overlay_panel.h"
 #include "drc_re_routing_width_constraint_data.h"
 #include "drc_rule_editor_utils.h"
+#include "drc_re_validator_numeric_ctrl.h"
 
 #include <base_units.h>
 #include <eda_base_frame.h>
@@ -64,6 +65,7 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minWidthField->GetControl(),
                                            minWidthField->GetLabel(), false, false );
     minWidthField->SetUnitBinder( m_minRoutingWidthBinder.get() );
+    minWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     // Create preferred width field
     auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
@@ -72,6 +74,7 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefWidthField->GetControl(),
                                            prefWidthField->GetLabel(), false, false );
     prefWidthField->SetUnitBinder( m_preferredRoutingWidthBinder.get() );
+    prefWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     // Create max width field
     auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
@@ -80,6 +83,7 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxWidthField->GetControl(),
                                            maxWidthField->GetLabel(), false, false );
     maxWidthField->SetUnitBinder( m_maxRoutingWidthBinder.get() );
+    maxWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

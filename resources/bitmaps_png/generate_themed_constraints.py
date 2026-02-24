@@ -51,7 +51,6 @@ CONSTRAINT_FILES = {
     'minimum-soldermask-silver.svg': 'minimum-soldermask-silver.svg',
     'solderpaste-expansion.svg': 'solderpaste-expansion.svg',
     'maximum_allowed_deviation.svg': 'maximum-allowed-deviation.svg',
-    'minimum-angular-ring.svg': 'minimum-angular-ring.svg',
     'matched-lenght-diff-pair.svg': 'matched-length-diff-pair.svg',
 }
 

@@ -91,15 +91,18 @@ public:
         if( m_maxLength <= 0 )
             result.AddError( _( "Maximum Length must be greater than 0" ) );
 
-        // Validate min <= opt <= max
-        if( m_minLength > m_optLength )
-            result.AddError( _( "Minimum Length cannot be greater than Optimum Length" ) );
+        if( result.isValid )
+        {
+            // Validate min <= opt <= max
+            if( m_minLength > m_optLength )
+                result.AddError( _( "Minimum Length cannot be greater than Optimum Length" ) );
 
-        if( m_optLength > m_maxLength )
-            result.AddError( _( "Optimum Length cannot be greater than Maximum Length" ) );
+            if( m_optLength > m_maxLength )
+                result.AddError( _( "Optimum Length cannot be greater than Maximum Length" ) );
 
-        if( m_minLength > m_maxLength )
-            result.AddError( _( "Minimum Length cannot be greater than Maximum Length" ) );
+            if( m_minLength > m_maxLength )
+                result.AddError( _( "Minimum Length cannot be greater than Maximum Length" ) );
+        }
 
         return result;
     }

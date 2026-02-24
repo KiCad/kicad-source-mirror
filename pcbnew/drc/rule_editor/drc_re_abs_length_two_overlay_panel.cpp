@@ -24,6 +24,7 @@
 #include "drc_re_abs_length_two_overlay_panel.h"
 #include "drc_re_abs_length_two_constraint_data.h"
 #include "drc_rule_editor_utils.h"
+#include "drc_re_validator_numeric_ctrl.h"
 
 #include <base_units.h>
 #include <eda_base_frame.h>
@@ -60,6 +61,7 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minLengthField->GetControl(),
                                            minLengthField->GetLabel(), false, false );
     minLengthField->SetUnitBinder( m_minLengthBinder.get() );
+    minLengthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     // Create opt length field
     auto* optLengthField = AddField<wxTextCtrl>( wxS( "opt_length" ), positions[1],
@@ -68,6 +70,7 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, optLengthField->GetControl(),
                                            optLengthField->GetLabel(), false, false );
     optLengthField->SetUnitBinder( m_optLengthBinder.get() );
+    optLengthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     // Create max length field
     auto* maxLengthField = AddField<wxTextCtrl>( wxS( "max_length" ), positions[2],
@@ -76,6 +79,7 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxLengthField->GetControl(),
                                            maxLengthField->GetLabel(), false, false );
     maxLengthField->SetUnitBinder( m_maxLengthBinder.get() );
+    maxLengthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

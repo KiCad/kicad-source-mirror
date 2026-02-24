@@ -23,6 +23,7 @@
 
 #include "drc_re_validator_numeric_ctrl.h"
 
+#include <clocale>
 
 VALIDATOR_NUMERIC_CTRL::VALIDATOR_NUMERIC_CTRL( bool aCanBeZero, bool aIntegerOnly ) :
         m_isIntegerOnly( aIntegerOnly ),
@@ -34,7 +35,7 @@ VALIDATOR_NUMERIC_CTRL::VALIDATOR_NUMERIC_CTRL( bool aCanBeZero, bool aIntegerOn
 
 wxObject* VALIDATOR_NUMERIC_CTRL::Clone() const
 {
-    return new VALIDATOR_NUMERIC_CTRL();
+    return new VALIDATOR_NUMERIC_CTRL( m_canBeZero, m_isIntegerOnly );
 }
 
 
@@ -48,7 +49,7 @@ bool VALIDATOR_NUMERIC_CTRL::Validate( wxWindow* aParent )
         return false;
     }
 
-    wxString value = textCtrl->GetValue();
+    wxString value = textCtrl->GetValue().Strip( wxString::both );
 
     if( value.IsEmpty() )
     {
@@ -56,29 +57,43 @@ bool VALIDATOR_NUMERIC_CTRL::Validate( wxWindow* aParent )
         return false;
     }
 
+    const struct lconv* lc = localeconv();
+    wxChar              decimal_point = lc->decimal_point[0];
+
+    wxString buf( value );
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
     long   intVal;
     double floatVal;
 
-    if( m_isIntegerOnly && !value.ToLong( &intVal ) )
+    if( m_isIntegerOnly )
     {
-        m_validationState = VALIDATION_STATE::NotInteger;
-        return false;
-    }
-    else if( !m_isIntegerOnly && !value.ToDouble( &floatVal ) )
-    {
-        m_validationState = VALIDATION_STATE::NotNumeric;
-        return false;
-    }
+        if( !buf.ToLong( &intVal ) )
+        {
+            m_validationState = VALIDATION_STATE::NotInteger;
+            return false;
+        }
 
-    if( m_isIntegerOnly && !m_canBeZero && value.ToLong( &intVal ) && intVal <= 0 )
-    {
-        m_validationState = VALIDATION_STATE::NotGreaterThanZero;
-        return false;
+        if( !m_canBeZero && intVal <= 0 )
+        {
+            m_validationState = VALIDATION_STATE::NotGreaterThanZero;
+            return false;
+        }
     }
-    else if( !m_isIntegerOnly && !m_canBeZero && value.ToDouble( &floatVal ) && floatVal <= 0.0 )
+    else
     {
-        m_validationState = VALIDATION_STATE::NotGreaterThanZero;
-        return false;
+        if( !buf.ToDouble( &floatVal ) )
+        {
+            m_validationState = VALIDATION_STATE::NotNumeric;
+            return false;
+        }
+
+        if( !m_canBeZero && floatVal <= 0.0 )
+        {
+            m_validationState = VALIDATION_STATE::NotGreaterThanZero;
+            return false;
+        }
     }
 
     m_validationState = VALIDATION_STATE::Valid;

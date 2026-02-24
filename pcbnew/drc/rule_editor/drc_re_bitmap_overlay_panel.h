@@ -157,6 +157,7 @@ private:
      */
     void PositionLabel( DRC_RE_OVERLAY_FIELD* aField );
 
+protected:
     wxBitmap                                        m_bitmap;       ///< Current background bitmap
     BITMAPS                                         m_bitmapId;     ///< BITMAPS enum value
     wxSize                                          m_baseBitmapSize; ///< Bitmap size at 1x scale

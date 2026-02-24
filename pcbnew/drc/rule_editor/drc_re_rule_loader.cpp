@@ -387,11 +387,40 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             }
         }
 
+        if( match.panelType == SILK_TO_SILK_CLEARANCE && match.claimedConstraints.count( SILK_CLEARANCE_CONSTRAINT ) )
+        {
+            if( !condition.IsEmpty()
+                && ( condition.Contains( wxS( "F.Mask" ) ) || condition.Contains( wxS( "B.Mask" ) ) ) )
+            {
+                match.panelType = SILK_TO_SOLDERMASK_CLEARANCE;
+            }
+        }
+
         auto constraintData = createConstraintData( match.panelType, aRule, match.claimedConstraints );
+
+        if( match.panelType == SILK_TO_SOLDERMASK_CLEARANCE && constraintData )
+        {
+            bool         isFront = condition.Contains( wxS( "F.SilkS" ) );
+            PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
+            constraintData->SetLayers( { layer } );
+            constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
+
+            wxString cleanedCondition = condition;
+            cleanedCondition.Replace( wxS( "A.Layer == 'F.SilkS' && B.Layer == 'F.Mask'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "A.Layer == 'B.SilkS' && B.Layer == 'B.Mask'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+            cleanedCondition.Trim( true ).Trim( false );
+            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+
+            constraintData->SetRuleCondition( cleanedCondition );
+        }
 
         if( constraintData )
         {
-            if( match.panelType != VIA_STYLE )
+            if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
                 constraintData->SetRuleCondition( condition );
 
             DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name,

@@ -66,8 +66,6 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { MINIMUM_SOLDERMASK_SILVER, "solder_mask_sliver" },
                                    { SOLDERMASK_EXPANSION, "solder_mask_expansion" },
                                    { SOLDERPASTE_EXPANSION, "solder_paste_abs_margin" },
-                                   { MAXIMUM_ALLOWED_DEVIATION, "maximum_allowed_deviation" },
-                                   { MINIMUM_ANGULAR_RING, "annular_width" },
                                    { MATCHED_LENGTH_DIFF_PAIR, "length" },
                                    { ROUTING_DIFF_PAIR, "diff_pair_gap" },
                                    { ROUTING_WIDTH, "track_width" },
@@ -295,9 +293,7 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case HOLE_SIZE:
     case HOLE_TO_HOLE_DISTANCE:
     case MATCHED_LENGTH_DIFF_PAIR:
-    case MAXIMUM_ALLOWED_DEVIATION:
     case MAXIMUM_VIA_COUNT:
-    case MINIMUM_ANGULAR_RING:
     case MINIMUM_ANNULAR_WIDTH:
     case MINIMUM_CLEARANCE:
     case MINIMUM_CONNECTION_WIDTH:
@@ -838,8 +834,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     case HOLE_TO_HOLE_DISTANCE:
     case MINIMUM_DRILL_SIZE:
     case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
-    case MAXIMUM_ALLOWED_DEVIATION:
-    case MINIMUM_ANGULAR_RING:
         return DRC_LAYER_CATEGORY::GENERAL_ANY_LAYER;
 
     // NO_LAYER_SELECTOR: Constraints where layer selection doesn't apply
@@ -891,9 +885,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>();
     case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>();
     case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>();
-    case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>();
     case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>();
-    case MINIMUM_ANGULAR_RING:               return std::make_shared<DRC_RE_MINIMUM_ANGULAR_RING_CONSTRAINT_DATA>();
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>();
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>();
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>();
@@ -923,9 +915,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>( aBase );
     case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>( aBase );
     case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>( aBase );
-    case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>( aBase );
     case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_ANGULAR_RING:               return std::make_shared<DRC_RE_MINIMUM_ANGULAR_RING_CONSTRAINT_DATA>( aBase );
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );

@@ -56,7 +56,12 @@ public:
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
         wxString code = GetConstraintCode();
-        wxString valueStr = formatDouble( m_numericInputValue );
+        wxString valueStr;
+
+        if( code == "via_count" || code == "min_resolved_spokes" )
+            valueStr = wxString::Format( "%d", (int) m_numericInputValue );
+        else
+            valueStr = formatDouble( m_numericInputValue );
 
         if( code == "via_count" )
         {
@@ -69,10 +74,6 @@ public:
         else if( code == "track_angle" )
         {
             return { wxString::Format( "(constraint %s (min %sdeg))", code, valueStr ) };
-        }
-        else if( code == "maximum_allowed_deviation" )
-        {
-            return { wxString::Format( "(constraint %s (max %smm))", code, valueStr ) };
         }
         else
         {
@@ -88,6 +89,8 @@ public:
     double GetNumericInputValue() { return m_numericInputValue; }
 
     void SetNumericInputValue( double aNumericInput ) { m_numericInputValue = aNumericInput; }
+
+    virtual bool IsIntegerOnly() const { return false; }
 
     VALIDATION_RESULT Validate() const override
     {

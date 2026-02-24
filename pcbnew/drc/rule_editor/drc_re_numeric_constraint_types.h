@@ -110,40 +110,19 @@ public:
     }
 };
 
-class DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
-{
-public:
-    using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_maximum_allowed_deviation; }
-    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    {
-        return { { 45 + DRC_RE_OVERLAY_XO, 75 + DRC_RE_OVERLAY_XO, 47 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
-    }
-};
-
 
 class DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_maximum_via_count; }
+    bool                               IsIntegerOnly() const override { return true; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return { { 165 + DRC_RE_OVERLAY_XO, 205 + DRC_RE_OVERLAY_XO, 57 + DRC_RE_OVERLAY_YO, 1 } };
     }
 };
 
-
-class DRC_RE_MINIMUM_ANGULAR_RING_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
-{
-public:
-    using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_angular_ring; }
-    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    {
-        return { { 95 + DRC_RE_OVERLAY_XO, 125 + DRC_RE_OVERLAY_XO, 77 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
-    }
-};
 
 class DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
@@ -155,6 +134,7 @@ public:
         return { { 207 + DRC_RE_OVERLAY_XO, 237 + DRC_RE_OVERLAY_XO, 67 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
+
 
 class DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
@@ -196,6 +176,7 @@ class DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA : public DRC_RE_NUMERIC
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_thermal_relief_spoke_count; }
+    bool    IsIntegerOnly() const override { return true; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return { { 189 + DRC_RE_OVERLAY_XO, 210 + DRC_RE_OVERLAY_XO, 32 + DRC_RE_OVERLAY_YO, 1 } };

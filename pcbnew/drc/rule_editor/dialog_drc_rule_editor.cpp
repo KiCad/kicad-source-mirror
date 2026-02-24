@@ -678,18 +678,6 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildManufacturabilityRuleTr
     result.push_back( buildRuleTreeNodeData( "Solderpaste expansion", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, SOLDERPASTE_EXPANSION ) );
 
-    result.push_back( buildRuleTreeNodeData( "Deviation", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
-    lastParentId = m_nodeId;
-
-    result.push_back( buildRuleTreeNodeData( "Maximum allowed deviation", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MAXIMUM_ALLOWED_DEVIATION ) );
-
-    result.push_back( buildRuleTreeNodeData( "Annular Ring", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
-    lastParentId = m_nodeId;
-
-    result.push_back( buildRuleTreeNodeData( "Minimum annular ring", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MINIMUM_ANGULAR_RING ) );
-
     return result;
 }
 

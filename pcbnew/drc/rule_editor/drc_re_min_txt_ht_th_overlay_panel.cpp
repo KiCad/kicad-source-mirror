@@ -24,6 +24,7 @@
 #include "drc_re_min_txt_ht_th_overlay_panel.h"
 #include "drc_re_min_txt_ht_th_constraint_data.h"
 #include "drc_rule_editor_utils.h"
+#include "drc_re_validator_numeric_ctrl.h"
 
 #include <dialogs/rule_editor_dialog_base.h>
 #include <eda_base_frame.h>
@@ -60,12 +61,14 @@ DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextHeightField->GetControl(),
                                            minTextHeightField->GetLabel(), false, false );
     minTextHeightField->SetUnitBinder( m_minTextHeightBinder.get() );
+    minTextHeightField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     auto* minTextThicknessField = AddField<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1], wxTE_PROCESS_ENTER );
     m_minTextThicknessBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextThicknessField->GetControl(),
                                            minTextThicknessField->GetLabel(), false, false );
     minTextThicknessField->SetUnitBinder( m_minTextThicknessBinder.get() );
+    minTextThicknessField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
