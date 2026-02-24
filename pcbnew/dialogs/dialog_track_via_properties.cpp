@@ -187,15 +187,27 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
     bool tertiary_drill_end_layer_mixed  = false;
 
     BACKDRILL_MODE backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
-    bool backdrill_dir_mixed = false;
+    bool           backdrill_dir_mixed = false;
 
     std::optional<PAD_DRILL_POST_MACHINING_MODE> primary_post_machining_value;
     bool primary_post_machining_set = false;
     bool primary_post_machining_mixed = false;
+    int  primary_post_machining_size = 0;
+    bool primary_post_machining_size_mixed = false;
+    int  primary_post_machining_depth = 0;
+    bool primary_post_machining_depth_mixed = false;
+    int  primary_post_machining_angle = 0;
+    bool primary_post_machining_angle_mixed = false;
 
     std::optional<PAD_DRILL_POST_MACHINING_MODE> secondary_post_machining_value;
     bool secondary_post_machining_set = false;
     bool secondary_post_machining_mixed = false;
+    int  secondary_post_machining_size = 0;
+    bool secondary_post_machining_size_mixed = false;
+    int  secondary_post_machining_depth = 0;
+    bool secondary_post_machining_depth_mixed = false;
+    int  secondary_post_machining_angle = 0;
+    bool secondary_post_machining_angle_mixed = false;
 
     m_padstackDirty = false;
 
@@ -302,9 +314,15 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
                     primary_post_machining_value = v->Padstack().FrontPostMachining().mode;
                     primary_post_machining_set = true;
+                    primary_post_machining_size = v->Padstack().FrontPostMachining().size;
+                    primary_post_machining_depth = v->Padstack().FrontPostMachining().depth;
+                    primary_post_machining_angle = v->Padstack().FrontPostMachining().angle;
 
                     secondary_post_machining_value = v->Padstack().BackPostMachining().mode;
                     secondary_post_machining_set = true;
+                    secondary_post_machining_size = v->Padstack().BackPostMachining().size;
+                    secondary_post_machining_depth = v->Padstack().BackPostMachining().depth;
+                    secondary_post_machining_angle = v->Padstack().BackPostMachining().angle;
 
                     const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
                     const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
@@ -399,11 +417,35 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     if( static_cast<int>( getViaConfiguration( v ) ) != m_protectionFeatures->GetSelection() )
                         m_protectionFeatures->SetSelection( m_protectionFeatures->Append( INDETERMINATE_STATE ) );
 
-                    if( primary_post_machining_set && primary_post_machining_value != v->Padstack().FrontPostMachining().mode )
-                        primary_post_machining_mixed = true;
+                    if( primary_post_machining_set )
+                    {
+                        if( primary_post_machining_value != v->Padstack().FrontPostMachining().mode )
+                            primary_post_machining_mixed = true;
 
-                    if( secondary_post_machining_set && secondary_post_machining_value != v->Padstack().BackPostMachining().mode )
-                        secondary_post_machining_mixed = true;
+                        if( primary_post_machining_size != v->Padstack().FrontPostMachining().size )
+                            primary_post_machining_size_mixed = true;
+
+                        if( primary_post_machining_depth != v->Padstack().FrontPostMachining().depth )
+                            primary_post_machining_depth_mixed = true;
+
+                        if( primary_post_machining_angle != v->Padstack().FrontPostMachining().angle )
+                            primary_post_machining_angle_mixed = true;
+                    }
+
+                    if( secondary_post_machining_set )
+                    {
+                        if( secondary_post_machining_value != v->Padstack().BackPostMachining().mode )
+                            secondary_post_machining_mixed = true;
+
+                        if( secondary_post_machining_size != v->Padstack().BackPostMachining().size )
+                            secondary_post_machining_size_mixed = true;
+
+                        if( secondary_post_machining_depth != v->Padstack().BackPostMachining().depth )
+                            secondary_post_machining_depth_mixed = true;
+
+                        if( secondary_post_machining_angle != v->Padstack().BackPostMachining().angle )
+                            secondary_post_machining_angle_mixed = true;
+                    }
 
                     const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
                     const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
@@ -517,69 +559,123 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         if( primary_post_machining_mixed )
         {
             m_topPostMachine->SetSelection( wxNOT_FOUND );
+            m_topPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+            m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+            m_topPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
         }
         else if( primary_post_machining_set && primary_post_machining_value.has_value() )
         {
             switch( primary_post_machining_value.value() )
             {
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: m_topPostMachine->SetSelection( 2 ); break;
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: m_topPostMachine->SetSelection( 1 ); break;
-            default: m_topPostMachine->SetSelection( 0 ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE:
+                m_topPostMachine->SetSelection( 2 );
+
+                if( primary_post_machining_size_mixed )
+                    m_topPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_topPostMachineSize1Binder.SetValue( primary_post_machining_size );
+
+                m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+
+                if( primary_post_machining_depth_mixed )
+                    m_topPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_topPostMachineSize2Binder.SetValue( primary_post_machining_depth );
+
+                break;
+
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK:
+                m_topPostMachine->SetSelection( 1 );
+
+                if( primary_post_machining_size_mixed )
+                    m_topPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_topPostMachineSize1Binder.SetValue( primary_post_machining_size );
+
+                m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+
+                if( primary_post_machining_angle_mixed )
+                    m_topPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_topPostMachineSize2Binder.SetDoubleValue( primary_post_machining_angle / 10.0 );
+
+                break;
+
+            default:
+                m_topPostMachine->SetSelection( 0 );
+                m_topPostMachineSize1Binder.SetValue( wxEmptyString );
+                m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+                m_topPostMachineSize2Binder.SetValue( wxEmptyString );
+                break;
             }
         }
         else
         {
             m_topPostMachine->SetSelection( 0 );
-        }
-
-        if( m_viaStack && !primary_post_machining_mixed && primary_post_machining_set )
-        {
-            const PADSTACK::POST_MACHINING_PROPS& props = m_viaStack->FrontPostMachining();
-            m_topPostMachineSize1Binder.SetValue( props.size );
-
-            if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-            {
-                m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
-                m_topPostMachineSize2Binder.SetDoubleValue( props.angle / 10.0 );
-            }
-            else if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
-            {
-                m_topPostMachineSize2Binder.SetValue( props.depth );
-            }
+            m_topPostMachineSize1Binder.SetValue( wxEmptyString );
+            m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+            m_topPostMachineSize2Binder.SetValue( wxEmptyString );
         }
 
         if( secondary_post_machining_mixed )
         {
             m_bottomPostMachine->SetSelection( wxNOT_FOUND );
+            m_bottomPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+            m_bottomPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+            m_bottomPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
         }
         else if( secondary_post_machining_set && secondary_post_machining_value.has_value() )
         {
             switch( secondary_post_machining_value.value() )
             {
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE: m_bottomPostMachine->SetSelection( 2 ); break;
-            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK: m_bottomPostMachine->SetSelection( 1 ); break;
-            default: m_bottomPostMachine->SetSelection( 0 ); break;
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE:
+                m_bottomPostMachine->SetSelection( 2 );
+
+                if( secondary_post_machining_size_mixed )
+                    m_bottomPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_bottomPostMachineSize1Binder.SetValue( secondary_post_machining_size );
+
+                m_bottomPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+
+                if( secondary_post_machining_depth_mixed )
+                    m_bottomPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_bottomPostMachineSize2Binder.SetValue( secondary_post_machining_depth );
+
+                break;
+
+            case PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK:
+                m_bottomPostMachine->SetSelection( 1 );
+
+                if( secondary_post_machining_size_mixed )
+                    m_bottomPostMachineSize1Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_bottomPostMachineSize1Binder.SetValue( secondary_post_machining_size );
+
+                m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
+
+                if( secondary_post_machining_angle_mixed )
+                    m_bottomPostMachineSize2Binder.SetValue( INDETERMINATE_STATE );
+                else
+                    m_bottomPostMachineSize2Binder.SetDoubleValue( secondary_post_machining_angle / 10.0 );
+
+                break;
+
+            default:
+                m_bottomPostMachine->SetSelection( 0 );
+                m_bottomPostMachineSize1Binder.SetValue( wxEmptyString );
+                m_bottomPostMachineSize2Binder.SetValue( wxEmptyString );
+                m_bottomPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+                break;
             }
         }
         else
         {
             m_bottomPostMachine->SetSelection( 0 );
-        }
-
-        if( m_viaStack && !secondary_post_machining_mixed && secondary_post_machining_set )
-        {
-            const PADSTACK::POST_MACHINING_PROPS& props = m_viaStack->BackPostMachining();
-            m_bottomPostMachineSize1Binder.SetValue( props.size );
-
-            if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-            {
-                m_bottomPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
-                m_bottomPostMachineSize2Binder.SetDoubleValue( props.angle / 10.0 );
-            }
-            else if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
-            {
-                m_bottomPostMachineSize2Binder.SetValue( props.depth );
-            }
+            m_bottomPostMachineSize1Binder.SetValue( wxEmptyString );
+            m_bottomPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+            m_bottomPostMachineSize2Binder.SetValue( wxEmptyString );
         }
     }
 
@@ -932,10 +1028,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         if( m_topPostMachine->GetSelection() != wxNOT_FOUND )
         {
             PADSTACK::POST_MACHINING_PROPS props;
+
             switch( m_topPostMachine->GetSelection() )
             {
-            case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-            case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+            case 1:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+            case 2:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
             default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
             }
 
@@ -956,10 +1053,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         if( m_bottomPostMachine->GetSelection() != wxNOT_FOUND )
         {
             PADSTACK::POST_MACHINING_PROPS props;
+
             switch( m_bottomPostMachine->GetSelection() )
             {
-            case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-            case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+            case 1:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+            case 2:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
             default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
             }
 
@@ -1192,10 +1290,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( m_topPostMachine->GetSelection() != wxNOT_FOUND )
                 {
                     PADSTACK::POST_MACHINING_PROPS props;
+
                     switch( m_topPostMachine->GetSelection() )
                     {
-                    case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-                    case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+                    case 1:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+                    case 2:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
                     default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
                     }
 
@@ -1207,14 +1306,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     if( !m_topPostMachineSize2Binder.IsIndeterminate() )
                     {
                         if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                        {
-                            props.angle = KiROUND(
-                                    m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
-                        }
+                            props.angle = KiROUND( m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
                         else
-                        {
                             props.depth = m_topPostMachineSize2Binder.GetIntValue();
-                        }
                     }
                     else
                     {
@@ -1232,10 +1326,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( m_bottomPostMachine->GetSelection() != wxNOT_FOUND )
                 {
                     PADSTACK::POST_MACHINING_PROPS props;
+
                     switch( m_bottomPostMachine->GetSelection() )
                     {
-                    case 1: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-                    case 2: props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
+                    case 1:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+                    case 2:  props.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
                     default: props.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
                     }
 
@@ -1247,14 +1342,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     if( !m_bottomPostMachineSize2Binder.IsIndeterminate() )
                     {
                         if( props.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-                        {
-                            props.angle = KiROUND(
-                                    m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
-                        }
+                            props.angle = KiROUND( m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
                         else
-                        {
                             props.depth = m_bottomPostMachineSize2Binder.GetIntValue();
-                        }
                     }
                     else
                     {
@@ -1727,6 +1817,12 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent
         m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
         m_topPostMachineSize2Binder.SetUnits( m_frame->GetUserUnits() );
+    }
+    else
+    {
+        m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
+        m_topPostMachineSize2Units->SetLabel( _( "deg" ) );
+        m_topPostMachineSize2Binder.SetUnits( EDA_UNITS::DEGREES );
     }
 }
 

@@ -344,7 +344,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	viaRightColumn = new wxBoxSizer( wxVERTICAL );
 
 	wxGridBagSizer* gbSizer4;
-	gbSizer4 = new wxGridBagSizer( 3, 0 );
+	gbSizer4 = new wxGridBagSizer( 1, 0 );
 	gbSizer4->SetFlexibleDirection( wxBOTH );
 	gbSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -358,7 +358,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->SetSelection( 0 );
 	m_ViaTypeChoice->Enable( false );
 
-	gbSizer4->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer4->Add( m_ViaTypeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 2 );
 
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
@@ -382,7 +382,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
 	m_annularRingsCtrl->SetSelection( 0 );
-	gbSizer4->Add( m_annularRingsCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 4 );
+	gbSizer4->Add( m_annularRingsCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 
 	m_protectionPresetsLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Protection features:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_protectionPresetsLabel->Wrap( -1 );
@@ -393,7 +393,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_protectionFeatures->SetSelection( 0 );
 	m_protectionFeatures->SetToolTip( _("Select which protection feature according to IPC-4761 the via should have.") );
 
-	gbSizer4->Add( m_protectionFeatures, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 4 );
+	gbSizer4->Add( m_protectionFeatures, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 
 
 	gbSizer4->AddGrowableCol( 1 );
@@ -495,38 +495,38 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_topPostMachineLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Top:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineLabel->Wrap( -1 );
-	fgSizer9->Add( m_topPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer9->Add( m_topPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_topPostMachineChoices[] = { _("None"), _("Countersink"), _("Counterbore") };
 	int m_topPostMachineNChoices = sizeof( m_topPostMachineChoices ) / sizeof( wxString );
 	m_topPostMachine = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_topPostMachineNChoices, m_topPostMachineChoices, 0 );
 	m_topPostMachine->SetSelection( 0 );
-	fgSizer9->Add( m_topPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_topPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 
 	fgSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_topPostMachineSize1Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize1Label->Wrap( -1 );
-	fgSizer9->Add( m_topPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer9->Add( m_topPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_topPostMachineSize1 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_topPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_topPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_topPostMachineSize1Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize1Units->Wrap( -1 );
-	fgSizer9->Add( m_topPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer9->Add( m_topPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_topPostMachineSize2Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize2Label->Wrap( -1 );
-	fgSizer9->Add( m_topPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer9->Add( m_topPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_topPostMachineSize2 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_topPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_topPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_topPostMachineSize2Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_topPostMachineSize2Units->Wrap( -1 );
-	fgSizer9->Add( m_topPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer9->Add( m_topPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerPostMachine->Add( fgSizer9, 1, wxEXPAND, 5 );
@@ -542,38 +542,38 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_bottomPostMachineLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Bottom:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineLabel->Wrap( -1 );
-	fgSizer10->Add( m_bottomPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer10->Add( m_bottomPostMachineLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_bottomPostMachineChoices[] = { _("None"), _("Countersink"), _("Counterbore") };
 	int m_bottomPostMachineNChoices = sizeof( m_bottomPostMachineChoices ) / sizeof( wxString );
 	m_bottomPostMachine = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_bottomPostMachineNChoices, m_bottomPostMachineChoices, 0 );
 	m_bottomPostMachine->SetSelection( 0 );
-	fgSizer10->Add( m_bottomPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_bottomPostMachine, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 
 	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_bottomPostMachineSize1Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize1Label->Wrap( -1 );
-	fgSizer10->Add( m_bottomPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize1Label, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_bottomPostMachineSize1 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_bottomPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize1, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_bottomPostMachineSize1Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize1Units->Wrap( -1 );
-	fgSizer10->Add( m_bottomPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize1Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_bottomPostMachineSize2Label = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize2Label->Wrap( -1 );
-	fgSizer10->Add( m_bottomPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize2Label, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_bottomPostMachineSize2 = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_bottomPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize2, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	m_bottomPostMachineSize2Units = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bottomPostMachineSize2Units->Wrap( -1 );
-	fgSizer10->Add( m_bottomPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer10->Add( m_bottomPostMachineSize2Units, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerPostMachine->Add( fgSizer10, 1, wxEXPAND, 5 );
