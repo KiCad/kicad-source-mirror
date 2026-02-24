@@ -250,13 +250,19 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     if( !m_embeddedFiles->TransferDataToWindow() )
         return false;
 
+    wxString variantName;
+
+    if( m_footprint->GetBoard() )
+        variantName = m_footprint->GetBoard()->GetCurrentVariant();
+
     // Footprint Fields
     for( PCB_FIELD* srcField : m_footprint->GetFields() )
     {
         wxCHECK2( srcField, continue );
 
         PCB_FIELD field( *srcField );
-        field.SetText( m_footprint->GetBoard()->ConvertKIIDsToCrossReferences( field.GetText() ) );
+        wxString  text = m_footprint->GetFieldValueForVariant( variantName, field.GetName() );
+        field.SetText( m_footprint->GetBoard()->ConvertKIIDsToCrossReferences( text ) );
 
         m_fields->push_back( field );
     }
@@ -287,9 +293,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
         m_componentType->SetSelection( 2 );
 
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
-    m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
-    m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
-    m_cbDNP->SetValue( m_footprint->GetAttributes() & FP_DNP );
+
+    m_excludeFromPosFiles->SetValue( m_footprint->GetExcludedFromPosFilesForVariant( variantName ) );
+    m_excludeFromBOM->SetValue( m_footprint->GetExcludedFromBOMForVariant( variantName ) );
+    m_cbDNP->SetValue( m_footprint->GetDNPForVariant( variantName ) );
 
     // Local Clearances
 
@@ -546,6 +553,17 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // Update fields
     BOARD* board = m_footprint->GetBoard();
 
+    wxString variantName;
+
+    if( board )
+        variantName = board->GetCurrentVariant();
+
+    // Save base field values before deletion so we can detect variant changes
+    std::map<wxString, wxString> baseFieldValues;
+
+    for( PCB_FIELD* existing : m_footprint->GetFields() )
+        baseFieldValues[existing->GetName()] = existing->GetText();
+
     for( PCB_FIELD* existing : m_footprint->GetFields() )
     {
         if( board )
@@ -561,7 +579,27 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     for( PCB_FIELD& field : *m_fields )
     {
         PCB_FIELD* newField = field.CloneField();
-        newField->SetText( commit.GetBoard()->ConvertCrossReferencesToKIIDs( field.GetText() ) );
+        wxString   newText = commit.GetBoard()->ConvertCrossReferencesToKIIDs( field.GetText() );
+
+        if( !variantName.IsEmpty() )
+        {
+            auto     it = baseFieldValues.find( field.GetName() );
+            wxString baseText = ( it != baseFieldValues.end() ) ? it->second : wxString();
+
+            FOOTPRINT_VARIANT* variant = m_footprint->GetVariant( variantName );
+
+            if( !variant )
+                variant = m_footprint->AddVariant( variantName );
+
+            if( variant )
+                variant->SetFieldValue( field.GetName(), newText );
+
+            newField->SetText( baseText );
+        }
+        else
+        {
+            newField->SetText( newText );
+        }
 
         if( !field.IsMandatory() )
             newField->SetOrdinal( ordinal++ );
@@ -618,14 +656,41 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( m_boardOnly->GetValue() )
         attributes |= FP_BOARD_ONLY;
 
-    if( m_excludeFromPosFiles->GetValue() )
-        attributes |= FP_EXCLUDE_FROM_POS_FILES;
+    if( !variantName.IsEmpty() )
+    {
+        FOOTPRINT_VARIANT* variant = m_footprint->GetVariant( variantName );
 
-    if( m_excludeFromBOM->GetValue() )
-        attributes |= FP_EXCLUDE_FROM_BOM;
+        if( !variant )
+            variant = m_footprint->AddVariant( variantName );
 
-    if( m_cbDNP->GetValue() )
-        attributes |= FP_DNP;
+        if( variant )
+        {
+            variant->SetExcludedFromPosFiles( m_excludeFromPosFiles->GetValue() );
+            variant->SetExcludedFromBOM( m_excludeFromBOM->GetValue() );
+            variant->SetDNP( m_cbDNP->GetValue() );
+        }
+
+        // Preserve base attribute flags for these three properties
+        if( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
+            attributes |= FP_EXCLUDE_FROM_POS_FILES;
+
+        if( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
+            attributes |= FP_EXCLUDE_FROM_BOM;
+
+        if( m_footprint->GetAttributes() & FP_DNP )
+            attributes |= FP_DNP;
+    }
+    else
+    {
+        if( m_excludeFromPosFiles->GetValue() )
+            attributes |= FP_EXCLUDE_FROM_POS_FILES;
+
+        if( m_excludeFromBOM->GetValue() )
+            attributes |= FP_EXCLUDE_FROM_BOM;
+
+        if( m_cbDNP->GetValue() )
+            attributes |= FP_DNP;
+    }
 
     m_footprint->SetAttributes( attributes );
 

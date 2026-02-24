@@ -576,10 +576,8 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 
     GetCanvas()->Refresh();
 
-    TOOL_EVENT dummy;
-    m_toolManager->GetTool<PCB_CONTROL>()->UpdateMessagePanel( dummy );
-
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
+    m_toolManager->ProcessEvent( EVENTS::SelectedItemsModified );
 }
 
 
