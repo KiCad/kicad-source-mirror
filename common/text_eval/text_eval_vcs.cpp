@@ -23,7 +23,6 @@
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <wx/string.h>
-#include <wx/arrstr.h>
 #include <map>
 
 namespace TEXT_EVAL_VCS
@@ -31,14 +30,8 @@ namespace TEXT_EVAL_VCS
 // Private implementation details
 namespace
 {
-    std::string Unknown()
-    {
-        return _( "<unknown>" ).ToStdString();
-    }
-
     git_repository* OpenRepo( const std::string& aPath )
     {
-        // Check if git backend is available (may be nullptr in tests or non-GUI contexts)
         if( !GetGitBackend() )
             return nullptr;
 
@@ -160,14 +153,14 @@ namespace
         git_repository* repo = OpenRepo( "." );
 
         if( !repo )
-            return { Unknown(), 0 };
+            return { std::string(), 0 };
 
         git_oid head_oid;
 
         if( git_reference_name_to_id( &head_oid, repo, "HEAD" ) != 0 )
         {
             CloseRepo( repo );
-            return { Unknown(), 0 };
+            return { std::string(), 0 };
         }
 
         git_strarray tag_names;
@@ -175,7 +168,7 @@ namespace
         if( git_tag_list_match( &tag_names, aMatch.empty() ? "*" : aMatch.c_str(), repo ) != 0 )
         {
             CloseRepo( repo );
-            return { Unknown(), 0 };
+            return { std::string(), 0 };
         }
 
         // Build map of commit OID -> tag name upfront
@@ -219,13 +212,13 @@ namespace
         if( git_revwalk_new( &walker, repo ) != 0 )
         {
             CloseRepo( repo );
-            return { Unknown(), 0 };
+            return { std::string(), 0 };
         }
 
         git_revwalk_sorting( walker, GIT_SORT_TOPOLOGICAL | GIT_SORT_TIME );
         git_revwalk_push( walker, &head_oid );
 
-        DescribeInfo result{ Unknown(), 0 };
+        DescribeInfo result{ std::string(), 0 };
         int          distance = 0;
         git_oid      commit_oid;
 
@@ -253,14 +246,14 @@ namespace
         git_repository* repo = OpenRepo( aPath );
 
         if( !repo )
-            return Unknown();
+            return std::string();
 
         git_oid oid = GetFileCommit( repo, aPath );
 
         if( git_oid_is_zero( &oid ) )
         {
             CloseRepo( repo );
-            return Unknown();
+            return std::string();
         }
 
         git_commit* commit = nullptr;
@@ -293,14 +286,14 @@ std::string GetCommitHash( const std::string& aPath, int aLength )
     git_repository* repo = OpenRepo( aPath );
 
     if( !repo )
-        return Unknown();
+        return std::string();
 
     git_oid oid = GetFileCommit( repo, aPath );
 
     if( git_oid_is_zero( &oid ) )
     {
         CloseRepo( repo );
-        return Unknown();
+        return std::string();
     }
 
     int  length = std::max( 4, std::min( aLength, GIT_OID_HEXSZ ) );
@@ -380,7 +373,7 @@ std::string GetBranch()
     git_repository* repo = OpenRepo( "." );
 
     if( !repo )
-        return Unknown();
+        return std::string();
 
     KIGIT_COMMON common( repo );
     wxString     branchName = common.GetCurrentBranchName();
@@ -422,7 +415,7 @@ int64_t GetCommitTimestamp( const std::string& aPath )
 std::string GetCommitDate( const std::string& aPath )
 {
     int64_t timestamp = GetCommitTimestamp( aPath );
-    return timestamp > 0 ? std::to_string( timestamp ) : Unknown();
+    return timestamp > 0 ? std::to_string( timestamp ) : std::string();
 }
 
 } // namespace TEXT_EVAL_VCS

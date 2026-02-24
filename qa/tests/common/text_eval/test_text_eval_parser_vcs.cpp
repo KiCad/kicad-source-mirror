@@ -23,19 +23,35 @@
 
 /**
  * @file
- * Test suite for text_eval_parser VCS functionality
+ * Test suite for text_eval_parser VCS functionality.
+ *
+ * Creates a temporary git repository so tests are self-contained and work
+ * regardless of whether the build directory is inside the source tree.
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
+#include <git2.h>
 
 #include <chrono>
+#include <fstream>
 #include <regex>
 
+#include <wx/dir.h>
+#include <wx/filename.h>
+#include <wx/utils.h>
+
+
+static const char* TEST_AUTHOR_NAME  = "Test Author";
+static const char* TEST_AUTHOR_EMAIL = "test@kicad.example";
+static const char* TEST_COMMIT_MSG   = "Initial test commit";
+
+
 /**
- * Fixture to set up and tear down the git backend for VCS tests.
+ * Fixture that creates a temporary git repo with one committed file.
+ * This gives every VCS function a known, deterministic environment.
  */
 struct VCS_TEST_FIXTURE
 {
@@ -44,17 +60,118 @@ struct VCS_TEST_FIXTURE
         m_backend = new LIBGIT_BACKEND();
         m_backend->Init();
         SetGitBackend( m_backend );
+
+        m_originalDir = wxGetCwd();
+
+        m_tempDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
+                    + wxString::Format( "kicad_vcs_test_%d", wxGetProcessId() );
+
+        wxFileName::Mkdir( m_tempDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        m_repoReady = initRepo();
+
+        if( m_repoReady )
+            wxSetWorkingDirectory( m_tempDir );
     }
 
     ~VCS_TEST_FIXTURE()
     {
+        wxSetWorkingDirectory( m_originalDir );
+
+        if( wxFileName::DirExists( m_tempDir ) )
+            wxFileName::Rmdir( m_tempDir, wxPATH_RMDIR_RECURSIVE );
+
         SetGitBackend( nullptr );
         m_backend->Shutdown();
         delete m_backend;
     }
 
+    bool repoReady() const { return m_repoReady; }
+
+private:
+    bool initRepo()
+    {
+        git_repository* repo = nullptr;
+
+        if( git_repository_init( &repo, m_tempDir.ToUTF8().data(), 0 ) != 0 )
+            return false;
+
+        // Configure author identity
+        git_config* config = nullptr;
+
+        if( git_repository_config( &config, repo ) == 0 )
+        {
+            git_config_set_string( config, "user.name", TEST_AUTHOR_NAME );
+            git_config_set_string( config, "user.email", TEST_AUTHOR_EMAIL );
+            git_config_free( config );
+        }
+
+        // Write a file into the working tree
+        wxString filePath = m_tempDir + wxFileName::GetPathSeparator() + wxT( "test.txt" );
+
+        {
+            std::ofstream f( filePath.ToStdString() );
+            f << "test content\n";
+        }
+
+        // Stage it
+        git_index* index = nullptr;
+
+        if( git_repository_index( &index, repo ) != 0 )
+        {
+            git_repository_free( repo );
+            return false;
+        }
+
+        git_index_add_bypath( index, "test.txt" );
+        git_index_write( index );
+
+        // Build a tree from the index
+        git_oid treeOid;
+
+        if( git_index_write_tree( &treeOid, index ) != 0 )
+        {
+            git_index_free( index );
+            git_repository_free( repo );
+            return false;
+        }
+
+        git_index_free( index );
+
+        git_tree* tree = nullptr;
+
+        if( git_tree_lookup( &tree, repo, &treeOid ) != 0 )
+        {
+            git_repository_free( repo );
+            return false;
+        }
+
+        // Create the initial commit (no parents)
+        git_signature* sig = nullptr;
+
+        if( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ) != 0 )
+        {
+            git_tree_free( tree );
+            git_repository_free( repo );
+            return false;
+        }
+
+        git_oid commitOid;
+        int     err = git_commit_create_v( &commitOid, repo, "HEAD", sig, sig, nullptr,
+                                           TEST_COMMIT_MSG, tree, 0 );
+
+        git_signature_free( sig );
+        git_tree_free( tree );
+        git_repository_free( repo );
+        return err == 0;
+    }
+
     LIBGIT_BACKEND* m_backend;
+    wxString        m_originalDir;
+    wxString        m_tempDir;
+    bool            m_repoReady;
 };
+
 
 BOOST_FIXTURE_TEST_SUITE( TextEvalParserVcs, VCS_TEST_FIXTURE )
 
@@ -63,99 +180,80 @@ BOOST_FIXTURE_TEST_SUITE( TextEvalParserVcs, VCS_TEST_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( VcsIdentifierFormatting )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
     {
         std::string expression;
         int         expectedLength;
-        bool        shouldError;
     };
 
     const std::vector<TestCase> cases = {
-        // Different identifier lengths
-        { "@{vcsidentifier()}", 40, false },   // Full SHA-1
-        { "@{vcsidentifier(40)}", 40, false }, // Explicit full
-        { "@{vcsidentifier(7)}", 7, false },   // Short
-        { "@{vcsidentifier(8)}", 8, false },   // 8 chars
-        { "@{vcsidentifier(12)}", 12, false }, // Medium
-        { "@{vcsidentifier(4)}", 4, false },   // Minimum (clamped)
+        { "@{vcsidentifier()}", 40 },
+        { "@{vcsidentifier(40)}", 40 },
+        { "@{vcsidentifier(7)}", 7 },
+        { "@{vcsidentifier(8)}", 8 },
+        { "@{vcsidentifier(12)}", 12 },
+        { "@{vcsidentifier(4)}", 4 },
 
-        // File variants
-        { "@{vcsfileidentifier(\".\")}", 40, false },
-        { "@{vcsfileidentifier(\".\", 8)}", 8, false },
+        { "@{vcsfileidentifier(\".\")}", 40 },
+        { "@{vcsfileidentifier(\".\", 8)}", 8 },
     };
+
+    std::regex hexPattern( "^[0-9a-f]+$" );
 
     for( const auto& testCase : cases )
     {
         auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
-        if( testCase.shouldError )
-        {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK_MESSAGE( !evaluator.HasErrors(), "Error in expression: " + testCase.expression + " Errors: "
-                                                                 + evaluator.GetErrorSummary().ToStdString() );
+        BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
+                             "Error in expression: " + testCase.expression + " Errors: "
+                                     + evaluator.GetErrorSummary().ToStdString() );
 
-            // If in a git repo, validate format
-            if( !result.IsEmpty() )
-            {
-                BOOST_CHECK_EQUAL( result.Length(), testCase.expectedLength );
-
-                // Should be valid hex
-                std::regex hexPattern( "^[0-9a-f]+$" );
-                BOOST_CHECK( std::regex_match( result.ToStdString(), hexPattern ) );
-            }
-        }
+        BOOST_CHECK_EQUAL( result.Length(), testCase.expectedLength );
+        BOOST_CHECK( std::regex_match( result.ToStdString(), hexPattern ) );
     }
 }
 
 /**
- * Test VCS branch and author information
+ * Test VCS branch and author information against known fixture values
  */
 BOOST_AUTO_TEST_CASE( VcsBranchAndAuthorInfo )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
     auto branch = evaluator.Evaluate( "@{vcsbranch()}" );
-    auto author = evaluator.Evaluate( "@{vcsauthor()}" );
+    BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK( !branch.IsEmpty() );
+
     auto authorEmail = evaluator.Evaluate( "@{vcsauthoremail()}" );
-    auto committer = evaluator.Evaluate( "@{vcscommitter()}" );
+    BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( authorEmail, TEST_AUTHOR_EMAIL );
+
     auto committerEmail = evaluator.Evaluate( "@{vcscommitteremail()}" );
-
     BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( committerEmail, TEST_AUTHOR_EMAIL );
 
-    // If in a VCS repo, validate email format
-    if( !authorEmail.IsEmpty() )
-    {
-        BOOST_CHECK( authorEmail.Contains( "@" ) );
-    }
+    auto author = evaluator.Evaluate( "@{vcsauthor()}" );
+    BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( author, TEST_AUTHOR_NAME );
 
-    if( !committerEmail.IsEmpty() )
-    {
-        BOOST_CHECK( committerEmail.Contains( "@" ) );
-    }
+    auto committer = evaluator.Evaluate( "@{vcscommitter()}" );
+    BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( committer, TEST_AUTHOR_NAME );
 
-    // File variants
-    auto fileAuthor = evaluator.Evaluate( "@{vcsfileauthor(\".\")}" );
+    // File variants should return the same values since there's only one commit
     auto fileAuthorEmail = evaluator.Evaluate( "@{vcsfileauthoremail(\".\")}" );
-    auto fileCommitter = evaluator.Evaluate( "@{vcsfilecommitter(\".\")}" );
-    auto fileCommitterEmail = evaluator.Evaluate( "@{vcsfilecommitteremail(\".\")}" );
-
     BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( fileAuthorEmail, TEST_AUTHOR_EMAIL );
 
-    // Validate file variant email formats
-    if( !fileAuthorEmail.IsEmpty() )
-    {
-        BOOST_CHECK( fileAuthorEmail.Contains( "@" ) );
-    }
-
-    if( !fileCommitterEmail.IsEmpty() )
-    {
-        BOOST_CHECK( fileCommitterEmail.Contains( "@" ) );
-    }
+    auto fileCommitterEmail = evaluator.Evaluate( "@{vcsfilecommitteremail(\".\")}" );
+    BOOST_CHECK( !evaluator.HasErrors() );
+    BOOST_CHECK_EQUAL( fileCommitterEmail, TEST_AUTHOR_EMAIL );
 }
 
 /**
@@ -163,39 +261,27 @@ BOOST_AUTO_TEST_CASE( VcsBranchAndAuthorInfo )
  */
 BOOST_AUTO_TEST_CASE( VcsDirtyStatus )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
     {
         std::string expression;
-        bool        shouldError;
     };
 
     const std::vector<TestCase> cases = {
-        // Dirty status (returns 0 or 1)
-        { "@{vcsdirty()}", false },
-        { "@{vcsdirty(0)}", false }, // Exclude untracked
-        { "@{vcsdirty(1)}", false }, // Include untracked
+        { "@{vcsdirty()}" },
+        { "@{vcsdirty(0)}" },
+        { "@{vcsdirty(1)}" },
     };
 
     for( const auto& testCase : cases )
     {
         auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
-        if( testCase.shouldError )
-        {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK( !evaluator.HasErrors() );
-
-            // If in a repo, validate format - dirty status should be 0 or 1
-            if( !result.IsEmpty() )
-            {
-                BOOST_CHECK( result == "0" || result == "1" );
-            }
-        }
+        BOOST_CHECK( !evaluator.HasErrors() );
+        BOOST_CHECK( result == "0" || result == "1" );
     }
 }
 
@@ -204,34 +290,20 @@ BOOST_AUTO_TEST_CASE( VcsDirtyStatus )
  */
 BOOST_AUTO_TEST_CASE( VcsDirtySuffix )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
-    struct TestCase
-    {
-        std::string expression;
-        bool        shouldError;
+    const std::vector<std::string> cases = {
+        "@{vcsdirtysuffix()}",
+        "@{vcsdirtysuffix(\"-modified\")}",
+        "@{vcsdirtysuffix(\"+\", 1)}",
     };
 
-    const std::vector<TestCase> cases = {
-        // Dirty suffix (returns string or empty)
-        { "@{vcsdirtysuffix()}", false },
-        { "@{vcsdirtysuffix(\"-modified\")}", false },
-        { "@{vcsdirtysuffix(\"+\", 1)}", false },
-    };
-
-    for( const auto& testCase : cases )
+    for( const auto& expr : cases )
     {
-        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
-
-        if( testCase.shouldError )
-        {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK( !evaluator.HasErrors() );
-            // Suffix can be any string or empty, just validate no errors
-        }
+        evaluator.Evaluate( wxString::FromUTF8( expr ) );
+        BOOST_CHECK( !evaluator.HasErrors() );
     }
 }
 
@@ -240,46 +312,32 @@ BOOST_AUTO_TEST_CASE( VcsDirtySuffix )
  */
 BOOST_AUTO_TEST_CASE( VcsLabelsAndDistance )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
-    struct TestCase
-    {
-        std::string expression;
-        bool        shouldError;
+    const std::vector<std::string> cases = {
+        "@{vcsnearestlabel()}",
+        "@{vcsnearestlabel(\"\")}",
+        "@{vcsnearestlabel(\"v*\")}",
+        "@{vcsnearestlabel(\"\", 0)}",
+        "@{vcsnearestlabel(\"\", 1)}",
+
+        "@{vcslabeldistance()}",
+        "@{vcslabeldistance(\"v*\")}",
+        "@{vcslabeldistance(\"\", 1)}",
     };
 
-    const std::vector<TestCase> cases = {
-        // Label functions
-        { "@{vcsnearestlabel()}", false },
-        { "@{vcsnearestlabel(\"\")}", false },
-        { "@{vcsnearestlabel(\"v*\")}", false },  // Match v* labels
-        { "@{vcsnearestlabel(\"\", 0)}", false }, // Annotated only
-        { "@{vcsnearestlabel(\"\", 1)}", false }, // Any labels
+    std::regex numberPattern( "^[0-9]+$" );
 
-        // Distance functions
-        { "@{vcslabeldistance()}", false },
-        { "@{vcslabeldistance(\"v*\")}", false },
-        { "@{vcslabeldistance(\"\", 1)}", false },
-    };
-
-    for( const auto& testCase : cases )
+    for( const auto& expr : cases )
     {
-        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
+        BOOST_CHECK( !evaluator.HasErrors() );
 
-        if( testCase.shouldError )
+        if( !result.IsEmpty() && expr.find( "distance" ) != std::string::npos )
         {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK( !evaluator.HasErrors() );
-
-            // Distance should be a valid number if not empty
-            if( !result.IsEmpty() && testCase.expression.find( "distance" ) != std::string::npos )
-            {
-                std::regex numberPattern( "^[0-9]+$" );
-                BOOST_CHECK( std::regex_match( result.ToStdString(), numberPattern ) );
-            }
+            BOOST_CHECK( std::regex_match( result.ToStdString(), numberPattern ) );
         }
     }
 }
@@ -289,42 +347,36 @@ BOOST_AUTO_TEST_CASE( VcsLabelsAndDistance )
  */
 BOOST_AUTO_TEST_CASE( VcsCommitDate )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
     {
         std::string expression;
         std::regex  pattern;
-        bool        shouldError;
     };
 
     const std::vector<TestCase> cases = {
-        // Different date formats
-        { "@{vcscommitdate()}", std::regex( "^([0-9]{4}-[0-9]{2}-[0-9]{2}|)$" ), false },
-        { "@{vcscommitdate(\"ISO\")}", std::regex( "^([0-9]{4}-[0-9]{2}-[0-9]{2}|)$" ), false },
-        { "@{vcscommitdate(\"US\")}", std::regex( "^([0-9]{2}/[0-9]{2}/[0-9]{4}|)$" ), false },
-        { "@{vcscommitdate(\"EU\")}", std::regex( "^([0-9]{2}/[0-9]{2}/[0-9]{4}|)$" ), false },
+        { "@{vcscommitdate()}", std::regex( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) },
+        { "@{vcscommitdate(\"ISO\")}", std::regex( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) },
+        { "@{vcscommitdate(\"US\")}", std::regex( "^[0-9]{2}/[0-9]{2}/[0-9]{4}$" ) },
+        { "@{vcscommitdate(\"EU\")}", std::regex( "^[0-9]{2}/[0-9]{2}/[0-9]{4}$" ) },
 
-        // File variant
-        { "@{vcsfilecommitdate(\".\")}", std::regex( "^([0-9]{4}-[0-9]{2}-[0-9]{2}|)$" ), false },
+        { "@{vcsfilecommitdate(\".\")}", std::regex( "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ) },
     };
 
     for( const auto& testCase : cases )
     {
         auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
 
-        if( testCase.shouldError )
-        {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK_MESSAGE( !evaluator.HasErrors(), "Error in expression: " + testCase.expression + " Errors: "
-                                                                 + evaluator.GetErrorSummary().ToStdString() );
+        BOOST_CHECK_MESSAGE( !evaluator.HasErrors(),
+                             "Error in expression: " + testCase.expression + " Errors: "
+                                     + evaluator.GetErrorSummary().ToStdString() );
 
-            // Validate format if result is not empty
-            BOOST_CHECK( std::regex_match( result.ToStdString(), testCase.pattern ) );
-        }
+        BOOST_CHECK_MESSAGE( std::regex_match( result.ToStdString(), testCase.pattern ),
+                             "Bad date format for " + testCase.expression + ": "
+                                     + result.ToStdString() );
     }
 }
 
@@ -333,12 +385,12 @@ BOOST_AUTO_TEST_CASE( VcsCommitDate )
  */
 BOOST_AUTO_TEST_CASE( VcsPerformance )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
 
-    // Test that VCS operations are reasonably fast
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Perform many VCS operations
     for( int i = 0; i < 100; ++i )
     {
         auto result = evaluator.Evaluate( "@{vcsidentifier(7)}" );
@@ -348,7 +400,6 @@ BOOST_AUTO_TEST_CASE( VcsPerformance )
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
 
-    // Should complete in reasonable time (less than 2 seconds for 100 operations)
     BOOST_CHECK_LT( duration.count(), 2000 );
 }
 
@@ -357,42 +408,28 @@ BOOST_AUTO_TEST_CASE( VcsPerformance )
  */
 BOOST_AUTO_TEST_CASE( VcsMixedExpressions )
 {
+    BOOST_TEST_REQUIRE( repoReady() );
+
     EXPRESSION_EVALUATOR evaluator;
     evaluator.SetVariable( wxString( "PROJECT" ), wxString( "MyProject" ) );
 
-    struct TestCase
-    {
-        std::string expression;
-        bool        shouldError;
+    const std::vector<std::string> cases = {
+        "Version: @{vcsbranch()}",
+        "Commit: @{vcsidentifier(7)}",
+        "Author: @{vcsauthor()} <@{vcsauthoremail()}>",
+
+        "${PROJECT} @{vcsbranch()}",
+        "Built from @{vcsnearestlabel()}@{vcsdirtysuffix()}",
+
+        "Distance: @{vcslabeldistance() + 0}",
     };
 
-    const std::vector<TestCase> cases = {
-        // Mixed with text
-        { "Version: @{vcsbranch()}", false },
-        { "Commit: @{vcsidentifier(7)}", false },
-        { "Author: @{vcsauthor()} <@{vcsauthoremail()}>", false },
-
-        // Mixed with variables
-        { "${PROJECT} @{vcsbranch()}", false },
-        { "Built from @{vcsnearestlabel()}@{vcsdirtysuffix()}", false },
-
-        // Mixed with calculations
-        { "Distance: @{vcslabeldistance() + 0}", false },
-    };
-
-    for( const auto& testCase : cases )
+    for( const auto& expr : cases )
     {
-        auto result = evaluator.Evaluate( wxString::FromUTF8( testCase.expression ) );
+        auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
 
-        if( testCase.shouldError )
-        {
-            BOOST_CHECK( evaluator.HasErrors() );
-        }
-        else
-        {
-            BOOST_CHECK( !evaluator.HasErrors() );
-            BOOST_CHECK( !result.IsEmpty() );
-        }
+        BOOST_CHECK( !evaluator.HasErrors() );
+        BOOST_CHECK( !result.IsEmpty() );
     }
 }
 

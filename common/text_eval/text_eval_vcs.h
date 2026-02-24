@@ -35,7 +35,7 @@ namespace TEXT_EVAL_VCS
  *
  * @param aPath Optional file path for file-specific queries. Defaults to "." for repo HEAD.
  * @param aLength Optional hash length (4-40). Defaults to 40 for full SHA-1.
- * @return Commit hash as hex string, or empty string if not in a VCS repository.
+ * @return Commit hash as hex string, or empty if not in a VCS repository.
  */
 std::string GetCommitHash( const std::string& aPath = ".", int aLength = 40 );
 

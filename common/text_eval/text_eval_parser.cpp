@@ -677,7 +677,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     }
 
     // VCS functions (return strings!)
-    else if( name == "vcsidentifier" && argc <= 1 )
+    // Empty results from the VCS layer mean "not in a repository" or "no data available"
+    auto vcsResult = []( const std::string& aResult ) -> std::string
+    {
+        return aResult.empty() ? "<unknown>" : aResult;
+    };
+
+    if( name == "vcsidentifier" && argc <= 1 )
     {
         int length = 40; // Full identifier by default
 
@@ -689,7 +695,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
                 length = static_cast<int>( lenResult.GetValue() );
         }
 
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitHash( ".", length ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( ".", length ) ) );
     }
     else if( name == "vcsnearestlabel" && argc <= 2 )
     {
@@ -707,7 +713,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
                 anyTags = tagsResult.GetValue() != 0.0;
         }
 
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetNearestTag( match, anyTags ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetNearestTag( match, anyTags ) ) );
     }
     else if( name == "vcslabeldistance" && argc <= 2 )
     {
@@ -761,23 +767,23 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     }
     else if( name == "vcsauthor" && argc == 0 )
     {
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthor( "." ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthor( "." ) ) );
     }
     else if( name == "vcsauthoremail" && argc == 0 )
     {
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthorEmail( "." ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( "." ) ) );
     }
     else if( name == "vcscommitter" && argc == 0 )
     {
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitter( "." ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitter( "." ) ) );
     }
     else if( name == "vcscommitteremail" && argc == 0 )
     {
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitterEmail( "." ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( "." ) ) );
     }
     else if( name == "vcsbranch" && argc == 0 )
     {
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetBranch() );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetBranch() ) );
     }
     else if( name == "vcscommitdate" && argc <= 1 )
     {
@@ -789,7 +795,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( "." );
 
         if( timestamp == 0 )
-            return MakeValue<Value>( "" );
+            return MakeValue<Value>( vcsResult( std::string() ) );
 
         int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
         return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
@@ -809,27 +815,27 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
                 length = static_cast<int>( lenResult.GetValue() );
         }
 
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitHash( filePath, length ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( filePath, length ) ) );
     }
     else if( name == "vcsfileauthor" && argc == 1 )
     {
         std::string filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthor( filePath ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthor( filePath ) ) );
     }
     else if( name == "vcsfileauthoremail" && argc == 1 )
     {
         std::string filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitter" && argc == 1 )
     {
         std::string filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitter( filePath ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitter( filePath ) ) );
     }
     else if( name == "vcsfilecommitteremail" && argc == 1 )
     {
         std::string filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) );
+        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitdate" && argc >= 1 && argc <= 2 )
     {
@@ -842,7 +848,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( filePath );
 
         if( timestamp == 0 )
-            return MakeValue<Value>( "" );
+            return MakeValue<Value>( vcsResult( std::string() ) );
 
         int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
         return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
