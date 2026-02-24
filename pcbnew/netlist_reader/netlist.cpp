@@ -199,7 +199,22 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         else
             fpOnBoard = m_pcb->FindFootprintByReference( component->GetReference() );
 
-        bool footprintMisMatch = fpOnBoard && fpOnBoard->GetFPID() != component->GetFPID();
+        // When the schematic-side FPID has no library nickname (legacy format), match
+        // only by item name so we don't flag a mismatch against a fully qualified board FPID.
+        bool footprintMisMatch = false;
+
+        if( fpOnBoard )
+        {
+            if( component->GetFPID().IsLegacy() )
+            {
+                footprintMisMatch =
+                        fpOnBoard->GetFPID().GetLibItemName() != component->GetFPID().GetLibItemName();
+            }
+            else
+            {
+                footprintMisMatch = fpOnBoard->GetFPID() != component->GetFPID();
+            }
+        }
 
         if( footprintMisMatch && !aNetlist.GetReplaceFootprints() )
         {

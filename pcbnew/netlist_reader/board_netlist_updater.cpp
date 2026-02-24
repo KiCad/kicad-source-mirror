@@ -1292,6 +1292,31 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     EscapeHTML( component->GetFPID().Format().wx_str() ) );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
+        const LIB_ID& compFpid = component->GetFPID();
+
+        if( compFpid.IsLegacy() )
+        {
+            msg.Printf( _( "Warning: %s footprint '%s' is missing a library name. "
+                           "Use the full 'Library:Footprint' format to avoid repeated update "
+                           "notifications." ),
+                        component->GetReference(),
+                        EscapeHTML( compFpid.Format().wx_str() ) );
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            ++m_warningCount;
+        }
+
+        // When the schematic-side FPID has no library nickname (legacy format like
+        // "DGG56" instead of "Package_SO:DGG56"), matching should compare only the
+        // footprint item name. Otherwise the board footprint (which always has a library
+        // nickname) will never match, causing perpetual "change footprint" notifications.
+        auto fpidMatches = [&]( const LIB_ID& aBoardFpid, const LIB_ID& aExpectedFpid ) -> bool
+        {
+            if( aExpectedFpid.IsLegacy() )
+                return aBoardFpid.GetLibItemName() == aExpectedFpid.GetLibItemName();
+
+            return aBoardFpid == aExpectedFpid;
+        };
+
         int matchCount = 0;
 
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -1321,7 +1346,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             {
                 FOOTPRINT* tmp = footprint;
 
-                if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
+                if( m_replaceFootprints && !fpidMatches( footprint->GetFPID(), compFpid ) )
                     tmp = replaceFootprint( aNetlist, footprint, component );
 
                 if( !tmp )
