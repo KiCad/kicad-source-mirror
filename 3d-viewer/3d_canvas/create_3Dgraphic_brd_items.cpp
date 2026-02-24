@@ -108,10 +108,12 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
     if( aOwner && aOwner->IsKnockout() )
     {
-        SHAPE_POLY_SET  finalPoly;
-        const PCB_TEXT* pcbText = static_cast<const PCB_TEXT*>( aOwner );
+        SHAPE_POLY_SET finalPoly;
 
-        pcbText->TransformTextToPolySet( finalPoly, 0, aOwner->GetMaxError(), ERROR_INSIDE );
+        if( const PCB_TEXTBOX* pcbTextBox = dynamic_cast<const PCB_TEXTBOX*>( aOwner ) )
+            pcbTextBox->TransformTextToPolySet( finalPoly, 0, aOwner->GetMaxError(), ERROR_INSIDE );
+        else if( const PCB_TEXT* pcbText = dynamic_cast<const PCB_TEXT*>( aOwner ) )
+            pcbText->TransformTextToPolySet( finalPoly, 0, aOwner->GetMaxError(), ERROR_INSIDE );
 
         // Do not call finalPoly.Fracture() here: ConvertPolygonToTriangles() call it
         // if needed, and Fracture() called twice can create bad results and is useless
