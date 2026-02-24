@@ -2,6 +2,10 @@
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
     "date": "2025-08-20T22:30:33+0000",
+    "included_severities": [
+        "error",
+        "warning"
+    ],
     "kicad_version": "9.0.4",
     "sheets": [
         {

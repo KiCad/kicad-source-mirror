@@ -170,7 +170,7 @@ def test_sch_export_pythonbom( kitest,
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,expected_exit_code,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.rpt", 1, False, 0, []),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.rpt", 1, False, 0, ["--format=report"]),
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.json", 5, False,0, ["--format=json"]),
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.json", 9, False,0, ["--format=json"]),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.erc.unitsin.rpt", 1, False, 0, ["--format=report", "--units=in"]),
                              ])
 def test_sch_export_erc( kitest,
