@@ -738,70 +738,35 @@ void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFiel
         SetRef( aPath, aFieldText );
         break;
 
-    case FIELD_T::FOOTPRINT:
-    {
-        wxString defaultText = GetFootprintFieldText( false, nullptr, false );
-
-        if( aFieldText != defaultText )
-        {
-            if( aVariantName.IsEmpty() )
-            {
-                SetFootprintFieldText( aFieldText );
-            }
-            else
-            {
-                wxCHECK( aPath, /* void */ );
-
-                SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
-
-                wxCHECK( instance, /* void */ );
-
-                if( instance->m_Variants.contains( aVariantName ) )
-                {
-                    instance->m_Variants[aVariantName].m_Fields[aFieldName] = aFieldText;
-                }
-                else
-                {
-                    SCH_SYMBOL_VARIANT newVariant( aVariantName );
-
-                    newVariant.InitializeAttributes( *this );
-                    newVariant.m_Fields[aFieldName] = aFieldText;
-                    instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
-                }
-            }
-        }
-
-        break;
-    }
-
     default:
     {
         wxString defaultText = field->GetText( aPath );
 
-        if( aFieldText != defaultText )
+        if( aVariantName.IsEmpty() )
         {
-            if( aVariantName.IsEmpty() )
-            {
+            if( aFieldText != defaultText )
                 field->SetText( aFieldText );
-            }
-            else
+        }
+        else
+        {
+            SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
+
+            wxCHECK( instance, /* void */ );
+
+            if( instance->m_Variants.contains( aVariantName ) )
             {
-                SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
-
-                wxCHECK( instance, /* void */ );
-
-                if( instance->m_Variants.contains( aVariantName ) )
-                {
+                if( aFieldText != defaultText )
                     instance->m_Variants[aVariantName].m_Fields[aFieldName] = aFieldText;
-                }
                 else
-                {
-                    SCH_SYMBOL_VARIANT newVariant( aVariantName );
+                    instance->m_Variants[aVariantName].m_Fields.erase( aFieldName );
+            }
+            else if( aFieldText != defaultText )
+            {
+                SCH_SYMBOL_VARIANT newVariant( aVariantName );
 
-                    newVariant.InitializeAttributes( *this );
-                    newVariant.m_Fields[aFieldName] = aFieldText;
-                    instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
-                }
+                newVariant.InitializeAttributes( *this );
+                newVariant.m_Fields[aFieldName] = aFieldText;
+                instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
             }
         }
 
