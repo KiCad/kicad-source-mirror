@@ -820,6 +820,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
     {
         aFootprint->SetFPID( LIB_ID( wxEmptyString, aFootprint->GetFPID().GetLibItemName() ) );
 
+        // Clear selected, brightened, temp flags, edit flags, the whole shebang.
+        aFootprint->RunOnChildren(
+                []( BOARD_ITEM* child )
+                {
+                    child->ClearFlags();
+                },
+                RECURSE_MODE::RECURSE );
+
         FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
         adapter->SaveFootprint( aLibraryName, aFootprint );
 
