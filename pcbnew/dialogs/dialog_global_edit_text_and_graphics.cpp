@@ -140,6 +140,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
         m_footprintFilter->Show( false );
     }
 
+    // Allow indeterminate state in font control and rebuild list
+    m_fontCtrl->SetHasIndeterminateChoice();
+    m_fontCtrl->RefreshFonts();
+
     m_layerFilter->SetBoardFrame( m_parent );
     m_layerFilter->SetLayersHotkeys( false );
     m_layerFilter->Resync();
@@ -184,7 +188,6 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
 
-    m_fontCtrl->Append( INDETERMINATE_ACTION );
     m_fontCtrl->SetStringSelection( INDETERMINATE_ACTION );
 
     m_textWidth.SetValue( INDETERMINATE_ACTION );

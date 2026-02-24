@@ -95,6 +95,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
 
     m_lineStyle->Append( INDETERMINATE_ACTION );
 
+    // Allow indeterminate state in font control and rebuild list
+    m_fontCtrl->SetHasIndeterminateChoice();
+    m_fontCtrl->RefreshFonts();
+
     m_textColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
@@ -139,7 +143,6 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     if( g_netFilter.IsEmpty() && !m_parent->GetHighlightedConnection().IsEmpty() )
         m_netFilter->SetValue( m_parent->GetHighlightedConnection() );
 
-    m_fontCtrl->Append( INDETERMINATE_ACTION );
     m_fontCtrl->SetStringSelection( INDETERMINATE_ACTION );
 
     m_textSize.SetValue( INDETERMINATE_ACTION );

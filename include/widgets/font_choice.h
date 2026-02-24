@@ -36,6 +36,12 @@ public:
     void RefreshFonts();
 
     /**
+     * Set if the choice selection should show the INDETERMINATE_ACTION option at the top
+     * of the font selection list.
+     */
+    void SetHasIndeterminateChoice( bool aHasChoice = true ) { m_hasIndeterminateChoice = aHasChoice; }
+
+    /**
      * Set the selection in wxChoice widget
      * @param aFont is the fotn to select
      * @param aSilentMode allow or not a wxEVT_CHOICE on selection
@@ -75,6 +81,7 @@ private:
     int                m_systemFontCount;
     wxString           m_notFound;
     wxArrayString      m_fullFontList;
+    bool               m_hasIndeterminateChoice;
     bool               m_isFiltered;
     wxString           m_lastText;
     wxString           m_originalSelection;  // Store original selection when popup opens

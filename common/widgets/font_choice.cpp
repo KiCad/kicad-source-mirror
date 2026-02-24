@@ -21,6 +21,7 @@
 #include <kiplatform/ui.h>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
+#include <widgets/ui_common.h>
 
 #include <wx/dc.h>
 #include <wx/event.h>
@@ -181,6 +182,7 @@ FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize 
 {
     m_systemFontCount = nChoices;
     m_notFound = wxS( " " ) + _( "<not found>" );
+    m_hasIndeterminateChoice = false;
     m_isFiltered = false;
     m_lastText = wxEmptyString;
     m_originalSelection = wxEmptyString;
@@ -231,6 +233,9 @@ void FONT_CHOICE::RefreshFonts()
     // Store the full font list for filtering
     m_fullFontList.Clear();
 
+    if( m_hasIndeterminateChoice )
+        m_fullFontList.Add( INDETERMINATE_ACTION );
+
     if( m_systemFontCount > 1 )
         m_fullFontList.Add( _( "Default Font" ) );
 
@@ -241,6 +246,9 @@ void FONT_CHOICE::RefreshFonts()
 
     Freeze();
     clearList();
+
+    if( m_hasIndeterminateChoice )
+        Append( INDETERMINATE_ACTION );
 
     if( m_systemFontCount > 1 )
         Append( _( "Default Font" ) );
@@ -294,6 +302,10 @@ bool FONT_CHOICE::HaveFontSelection() const
 KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic, bool aForDrawingSheet ) const
 {
     if( GetSelection() <= 0 )
+    {
+        return nullptr;
+    }
+    else if( GetValue() == INDETERMINATE_ACTION )
     {
         return nullptr;
     }
