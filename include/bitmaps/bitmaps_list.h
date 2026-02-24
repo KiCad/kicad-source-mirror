@@ -705,6 +705,7 @@ enum class BITMAPS : unsigned int
     constraint_copper_to_edge_clearance,
     constraint_minimum_drill_size,
     constraint_hole_size,
+    constraint_hole_to_hole_clearance,
     constraint_hole_to_hole_distance,
     constraint_minimum_via_diameter,
     constraint_via_style,
