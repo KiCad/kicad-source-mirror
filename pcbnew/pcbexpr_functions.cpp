@@ -1505,6 +1505,9 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 
     RegisterFunc( wxT( "isPlated()" ), isPlatedFunc );
 
+    // When adding new geometry-dependent functions (functions whose result depends on item
+    // position/shape rather than item properties), also add the function name to the
+    // geometryFunctions set in PCBEXPR_UCODE::CreateFuncCall() (pcbexpr_evaluator.cpp).
     RegisterFunc( wxT( "insideCourtyard('x') DEPRECATED" ), intersectsCourtyardFunc );
     RegisterFunc( wxT( "insideFrontCourtyard('x') DEPRECATED" ), intersectsFrontCourtyardFunc );
     RegisterFunc( wxT( "insideBackCourtyard('x') DEPRECATED" ), intersectsBackCourtyardFunc );

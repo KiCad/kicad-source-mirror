@@ -28,6 +28,7 @@
 #include <pcbnew/board.h>
 #include <pcbnew/pad.h>
 #include <pcbnew/pcb_track.h>
+#include <pcbnew/pcbexpr_evaluator.h>
 
 #include <geometry/shape_circle.h>
 #include <router/pns_item.h>
@@ -643,5 +644,53 @@ BOOST_FIXTURE_TEST_CASE( PNSInheritTrackWidthCursorProximity, PNS_TEST_FIXTURE )
     inherited = 0;
     BOOST_CHECK( m_iface->TestInheritTrackWidth( pad, &inherited, VECTOR2I( 50000, -100000 ) ) );
     BOOST_CHECK_EQUAL( inherited, wideWidth );
+}
+
+
+/**
+ * Test that PCBEXPR_UCODE correctly identifies geometry-dependent functions during compilation.
+ *
+ * Regression test for PNS track drag performance. The geometry-dependent flag controls whether
+ * segment-by-segment DRC evaluation is performed during routing. When no geometry-dependent
+ * functions exist in clearance rules, the expensive per-segment evaluation is skipped.
+ */
+BOOST_AUTO_TEST_CASE( PCBExprGeometryDependentFunctionDetection )
+{
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+
+    auto compileAndCheck = [&]( const wxString& aExpr, bool aExpectGeometry )
+    {
+        PCBEXPR_UCODE   ucode;
+        PCBEXPR_CONTEXT ctx( 0, F_Cu );
+
+        bool ok = compiler.Compile( aExpr.ToUTF8().data(), &ucode, &ctx );
+        BOOST_CHECK_MESSAGE( ok, "Failed to compile: " + aExpr );
+
+        if( ok )
+        {
+            BOOST_CHECK_MESSAGE( ucode.HasGeometryDependentFunctions() == aExpectGeometry,
+                                 wxString::Format( "Expression '%s': expected geometry=%s, got %s",
+                                                   aExpr,
+                                                   aExpectGeometry ? "true" : "false",
+                                                   ucode.HasGeometryDependentFunctions()
+                                                           ? "true" : "false" ) );
+        }
+    };
+
+    // Property-based conditions should NOT be geometry-dependent
+    compileAndCheck( wxT( "A.NetClass == 'Power'" ), false );
+    compileAndCheck( wxT( "A.Type == 'via'" ), false );
+    compileAndCheck( wxT( "A.NetName == '/VCC'" ), false );
+
+    // Geometry-dependent functions SHOULD be detected
+    compileAndCheck( wxT( "A.intersectsCourtyard('U1')" ), true );
+    compileAndCheck( wxT( "A.intersectsArea('Zone1')" ), true );
+    compileAndCheck( wxT( "A.enclosedByArea('Zone1')" ), true );
+    compileAndCheck( wxT( "A.intersectsFrontCourtyard('U1')" ), true );
+    compileAndCheck( wxT( "A.intersectsBackCourtyard('U1')" ), true );
+
+    // Deprecated aliases should also be detected
+    compileAndCheck( wxT( "A.insideCourtyard('U1')" ), true );
+    compileAndCheck( wxT( "A.insideArea('Zone1')" ), true );
 }
 

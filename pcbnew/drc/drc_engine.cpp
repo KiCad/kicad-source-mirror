@@ -740,6 +740,7 @@ void DRC_ENGINE::compileRules()
     }
 
     m_hasExplicitClearanceRules = false;
+    m_hasGeometryDependentRules = false;
     m_explicitConstraints.clear();
 
     for( auto& [constraintType, ruleList] : m_constraintMap )
@@ -752,6 +753,13 @@ void DRC_ENGINE::compileRules()
 
                 if( constraintType == CLEARANCE_CONSTRAINT )
                     m_hasExplicitClearanceRules = true;
+
+                if( !m_hasGeometryDependentRules
+                    && c->condition
+                    && c->condition->HasGeometryDependentFunctions() )
+                {
+                    m_hasGeometryDependentRules = true;
+                }
             }
         }
     }

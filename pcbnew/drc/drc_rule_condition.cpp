@@ -116,3 +116,9 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
 }
 
 
+bool DRC_RULE_CONDITION::HasGeometryDependentFunctions() const
+{
+    return m_ucode && m_ucode->HasGeometryDependentFunctions();
+}
+
+

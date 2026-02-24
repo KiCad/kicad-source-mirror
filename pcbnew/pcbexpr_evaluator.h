@@ -48,6 +48,11 @@ public:
     virtual std::unique_ptr<LIBEVAL::VAR_REF> CreateVarRef( const wxString& aVar,
                                                             const wxString& aField ) override;
     virtual LIBEVAL::FUNC_CALL_REF CreateFuncCall( const wxString& aName ) override;
+
+    bool HasGeometryDependentFunctions() const { return m_hasGeometryDependentFunctions; }
+
+private:
+    bool m_hasGeometryDependentFunctions = false;
 };
 
 

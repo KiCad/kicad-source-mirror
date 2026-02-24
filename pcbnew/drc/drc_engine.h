@@ -269,6 +269,8 @@ public:
 
     bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
+    bool HasGeometryDependentRules() const { return m_hasGeometryDependentRules; }
+
     bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
     bool GetTestFootprints() const { return m_testFootprints; }
 
@@ -388,6 +390,7 @@ protected:
     // Uses shared_mutex for reader-writer pattern (many concurrent reads, exclusive writes).
     mutable std::shared_mutex m_clearanceCacheMutex;
     bool m_hasExplicitClearanceRules = false;
+    bool m_hasGeometryDependentRules = false;
     bool m_hasDiffPairClearanceOverrides = false;
     std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>> m_explicitConstraints;
 };

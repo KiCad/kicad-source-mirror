@@ -495,8 +495,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         return line->CLine().SegmentCount() > 1;
     };
 
-    bool lineANeedsSegmentEval = isMultiSegmentLine( aItemA, parentA );
-    bool lineBNeedsSegmentEval = isMultiSegmentLine( aItemB, parentB );
+    bool lineANeedsSegmentEval = false;
+    bool lineBNeedsSegmentEval = false;
+
+    if( drcEngine->HasGeometryDependentRules() )
+    {
+        lineANeedsSegmentEval = isMultiSegmentLine( aItemA, parentA );
+        lineBNeedsSegmentEval = isMultiSegmentLine( aItemB, parentB );
+    }
 
     // Evaluate segments of a multi-segment LINE against a single opposing item.
     auto evaluateLineSegments = [&]( const PNS::ITEM* aLineItem, BOARD_ITEM* aOpposingItem,
