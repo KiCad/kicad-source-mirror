@@ -1105,13 +1105,15 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto globalRatsnestCond =
             [this] (const SELECTION& )
             {
-                return GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest;
+                PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+                return cfg && cfg->m_Display.m_ShowGlobalRatsnest;
             };
 
     auto curvedRatsnestCond =
             [this] (const SELECTION& )
             {
-                return GetPcbNewSettings()->m_Display.m_DisplayRatsnestLinesCurved;
+                PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+                return cfg && cfg->m_Display.m_DisplayRatsnestLinesCurved;
             };
 
     auto netHighlightCond =
@@ -1146,19 +1148,22 @@ void PCB_EDIT_FRAME::setupUIConditions()
     const auto isArcKeepCenterMode =
             [this]( const SELECTION& )
             {
-                return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+                PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+                return cfg && cfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
             };
 
     const auto isArcKeepEndpointMode =
             [this]( const SELECTION& )
             {
-                return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+                PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+                return cfg && cfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
             };
 
     const auto isArcKeepRadiusMode =
             [this]( const SELECTION& )
             {
-                return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
+                PCBNEW_SETTINGS* cfg = GetPcbNewSettings();
+                return cfg && cfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE;
             };
 
     mgr->SetConditions( ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
