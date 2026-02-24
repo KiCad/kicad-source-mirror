@@ -421,17 +421,10 @@ void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
 }
 
 
-void SCH_SHEET::AddOptionalField( const SCH_FIELD& aField )
+SCH_FIELD* SCH_SHEET::AddField( const SCH_FIELD& aField )
 {
-    SCH_FIELD* field = GetField( aField.GetId() );
-
-    if( ( aField.GetId() == FIELD_T::SHEET_FILENAME ) || ( aField.GetId() == FIELD_T::SHEET_NAME ) )
-        return;
-
-    if( field )
-        *field = aField;
-    else
-        m_fields.emplace_back( aField );
+    m_fields.emplace_back( aField );
+    return &m_fields.back();
 }
 
 

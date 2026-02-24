@@ -118,16 +118,11 @@ public:
     void SetFields( const std::vector<SCH_FIELD>& aFields );
 
     /**
-     * Add an optional @aField to the list of fields.
-     *
-     * If @aField already exists in the field list, it replaces the existing field.  If @aField does not exist,
-     * it is added to the field list.
+     * Add a @aField to the list of fields.
      *
      * @note This has no affect if @aField is the sheet file name or sheet name fields.
-     *
-     * @param aField is the field to add.
      */
-    void AddOptionalField( const SCH_FIELD& aField );
+    SCH_FIELD* AddField( const SCH_FIELD& aField );
 
     void SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath = nullptr,
                        const wxString& aVariantName = wxEmptyString );

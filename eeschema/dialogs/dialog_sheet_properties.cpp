@@ -374,17 +374,17 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
     wxString variantName = m_frame->Schematic().GetCurrentVariant();
 
-    for( int ii = m_fields->GetNumberRows() - 1; ii >= 0; ii-- )
-    {
-        SCH_FIELD& field = m_fields->at( ii );
+    int ordinal = 42;   // Arbitrarily larger than any mandatory FIELD_T ids.
 
+    for( SCH_FIELD& field : *m_fields )
+    {
         if( field.IsMandatory() )
             continue;
 
         const wxString& fieldName = field.GetCanonicalName();
 
         if( field.IsEmpty() )
-            m_fields->erase( m_fields->begin() + ii );
+            continue;
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
 
@@ -393,7 +393,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
         if( !existingField )
         {
-            m_sheet->AddOptionalField( field );
+            tmp = m_sheet->AddField( field );
+            tmp->SetParent( m_sheet );
         }
         else
         {
@@ -407,10 +408,35 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
                 // Restore the default field text for existing fields.
                 tmp->SetText( defaultText, &instance );
 
-                tmp->SetText( m_sheet->Schematic()->ConvertRefsToKIIDs( field.GetText() ),
-                              &instance, variantName );
+                wxString variantText = m_sheet->Schematic()->ConvertRefsToKIIDs( field.GetText() );
+                tmp->SetText( variantText, &instance, variantName );
             }
         }
+
+        if( !field.IsMandatory() )
+            field.SetOrdinal( ordinal++ );
+    }
+
+    for( int ii = (int) m_sheet->GetFields().size() - 1; ii >= 0; ii-- )
+    {
+        SCH_FIELD& sheetField = m_sheet->GetFields()[ii];
+
+        if( sheetField.IsMandatory() )
+            continue;
+
+        bool found = false;
+
+        for( const SCH_FIELD& editedField : *m_fields )
+        {
+            if( editedField.GetName() == sheetField.GetName() )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if( !found )
+            m_sheet->GetFields().erase( m_sheet->GetFields().begin() + ii );
     }
 
     m_sheet->SetBorderWidth( m_borderWidth.GetIntValue() );
