@@ -26,6 +26,16 @@
 
 #include <wx/string.h>
 
+// GTK renders native controls with slightly different baseline/padding than macOS Cocoa.
+// These offsets shift all overlay field positions to compensate.
+#ifdef __WXGTK__
+constexpr int DRC_RE_OVERLAY_XO = -3;
+constexpr int DRC_RE_OVERLAY_YO = -5;
+#else
+constexpr int DRC_RE_OVERLAY_XO = 0;
+constexpr int DRC_RE_OVERLAY_YO = 0;
+#endif
+
 
 /**
  * Specifies the position of a label relative to its associated field.

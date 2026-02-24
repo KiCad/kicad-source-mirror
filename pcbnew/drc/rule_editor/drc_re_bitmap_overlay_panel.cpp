@@ -29,7 +29,6 @@
 #include <wx/bmpbndl.h>
 #include <wx/checkbox.h>
 #include <wx/dcclient.h>
-#include <wx/log.h>
 #include <wx/stattext.h>
 
 
@@ -145,18 +144,6 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         wxPoint scaledPos( pos.xStart, pos.yTop );
         int width = pos.xEnd - pos.xStart;
         wxSize scaledSize( width, ctrl->GetBestSize().GetHeight() );
-
-        // Check bounds
-        if( m_bitmap.IsOk() )
-        {
-            wxSize bmpSize = m_bitmap.GetSize();
-
-            if( scaledPos.x + scaledSize.GetWidth() > bmpSize.GetWidth() ||
-                scaledPos.y + scaledSize.GetHeight() > bmpSize.GetHeight() )
-            {
-                wxLogWarning( "Field '%s' position exceeds bitmap bounds", field->GetFieldId() );
-            }
-        }
 
         ctrl->SetPosition( scaledPos );
         ctrl->SetSize( scaledSize );

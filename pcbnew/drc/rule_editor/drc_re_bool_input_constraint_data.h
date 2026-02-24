@@ -53,7 +53,7 @@ public:
         // Positions measured from constraint_vias_under_smd.png (~280x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 90, 110, 150, 1, _( "Disallow" ), LABEL_POSITION::RIGHT }, // checkbox (bottom left corner)
+            { 90 + DRC_RE_OVERLAY_XO, 110 + DRC_RE_OVERLAY_XO, 150 + DRC_RE_OVERLAY_YO, 1, _( "Disallow" ), LABEL_POSITION::RIGHT }, // checkbox (bottom left corner)
         };
     }
 

@@ -57,9 +57,9 @@ public:
         // Positions measured from constraint_routing_width.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 64, 104, 96, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left arrow)
-            { 126, 166, 40, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_width (bottom center arrow)
-            { 248, 288, 74, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_width (right arrow)
+            { 64 + DRC_RE_OVERLAY_XO, 104 + DRC_RE_OVERLAY_XO, 96 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left arrow)
+            { 126 + DRC_RE_OVERLAY_XO, 166 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_width (bottom center arrow)
+            { 248 + DRC_RE_OVERLAY_XO, 288 + DRC_RE_OVERLAY_XO, 74 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_width (right arrow)
         };
     }
 

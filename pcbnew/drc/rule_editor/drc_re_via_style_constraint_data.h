@@ -58,12 +58,12 @@ public:
         // Positions measured from constraint_via_style.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 300, 340, 15, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_via_diameter (right side, top)
-            { 300, 340, 45, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_via_diameter (right side, middle)
-            { 300, 340, 75, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_via_diameter (right side, bottom)
-            { 300, 340, 125, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_via_hole (right side, below diameter)
-            { 300, 340, 155, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_via_hole
-            { 300, 340, 185, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_via_hole
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 15 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_via_diameter (right side, top)
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 45 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_via_diameter (right side, middle)
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 75 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_via_diameter (right side, bottom)
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 125 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_via_hole (right side, below diameter)
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 155 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_via_hole
+            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 185 + DRC_RE_OVERLAY_YO, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_via_hole
         };
     }
 
