@@ -75,6 +75,8 @@
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
 #include <generators/pcb_tuning_pattern.h>
+#include <project/project_file.h>
+#include <project/tuning_profiles.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -461,7 +463,14 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         }
         else if( aStartItem->GetEffectiveNetClass()->HasTuningProfile() )
         {
-            pattern->m_settings.m_isTimeDomain = true;
+            // Check if the tuning profile has time domain tuning enabled
+            const std::shared_ptr<TUNING_PROFILES> tuningParams =
+                    board->GetProject()->GetProjectFile().TuningProfileParameters();
+            TUNING_PROFILE& profile =
+                    tuningParams->GetTuningProfile( aStartItem->GetEffectiveNetClass()->GetTuningProfile() );
+
+            if( profile.m_EnableTimeDomainTuning )
+                pattern->m_settings.m_isTimeDomain = true;
         }
     }
     else
