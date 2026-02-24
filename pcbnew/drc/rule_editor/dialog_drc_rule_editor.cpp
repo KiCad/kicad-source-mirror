@@ -619,8 +619,6 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildElectricalRuleTreeNodes
 
     result.push_back( buildRuleTreeNodeData( "Copper to hole clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, COPPER_TO_HOLE_CLEARANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Hole to hole clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, HOLE_TO_HOLE_CLEARANCE ) );
 
     result.push_back( buildRuleTreeNodeData( "Spoke Count", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;

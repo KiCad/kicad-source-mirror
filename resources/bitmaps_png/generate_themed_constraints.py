@@ -42,7 +42,6 @@ CONSTRAINT_FILES = {
     'minimum_connection_width.svg': 'minimum-connection-width.svg',
     'minimum_track_width.svg': 'minimum-track-width.svg',
     'copper_to_hole_clearance.svg': 'copper-to-hole-clearance.svg',
-    'hole_to_hole_clearance.svg': 'hole-to-hole-clearance.svg',
     'minimum_annular_width.svg': 'minimum-annular-width.svg',
     'minimum_drill_size.svg': 'minimum-drill-size.svg',
     'hole-to-hole-distance.svg': 'hole-to-hole-distance.svg',

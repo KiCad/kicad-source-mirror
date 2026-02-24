@@ -700,7 +700,6 @@ enum class BITMAPS : unsigned int
     constraint_silk_to_silk_clearance,
     constraint_minimum_track_width,
     constraint_copper_to_hole_clearance,
-    constraint_hole_to_hole_clearance,
     constraint_minimum_thermal_relief_spoke_count,
     constraint_minimum_annular_width,
     constraint_copper_to_edge_clearance,

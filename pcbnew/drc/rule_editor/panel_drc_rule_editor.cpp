@@ -86,7 +86,6 @@ static bool constraintNeedsTwoObjects( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstrai
     case MINIMUM_CLEARANCE:
     case CREEPAGE_DISTANCE:
     case COPPER_TO_HOLE_CLEARANCE:
-    case HOLE_TO_HOLE_CLEARANCE:
     case PHYSICAL_CLEARANCE:
     case HOLE_TO_HOLE_DISTANCE: return true;
     default: return false;

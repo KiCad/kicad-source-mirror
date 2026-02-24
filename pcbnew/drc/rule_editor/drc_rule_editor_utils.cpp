@@ -50,7 +50,6 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { CREEPAGE_DISTANCE, "creepage" },
                                    { MINIMUM_CONNECTION_WIDTH, "connection_width" },
                                    { COPPER_TO_HOLE_CLEARANCE, "hole_clearance" },
-                                   { HOLE_TO_HOLE_CLEARANCE, "hole_to_hole" },
                                    { MINIMUM_THERMAL_RELIEF_SPOKE_COUNT, "min_resolved_spokes" },
                                    { MINIMUM_ANNULAR_WIDTH, "annular_width" },
                                    { COPPER_TO_EDGE_CLEARANCE, "edge_clearance" },
@@ -294,7 +293,6 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case PHYSICAL_CLEARANCE:
     case CREEPAGE_DISTANCE:
     case HOLE_SIZE:
-    case HOLE_TO_HOLE_CLEARANCE:
     case HOLE_TO_HOLE_DISTANCE:
     case MATCHED_LENGTH_DIFF_PAIR:
     case MAXIMUM_ALLOWED_DEVIATION:
@@ -835,7 +833,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
         return DRC_LAYER_CATEGORY::TOP_BOTTOM_ANY;
 
     // GENERAL_ANY_LAYER: Constraints that can apply to any layer type
-    case HOLE_TO_HOLE_CLEARANCE:
     case PHYSICAL_CLEARANCE:
     case HOLE_SIZE:
     case HOLE_TO_HOLE_DISTANCE:
@@ -893,7 +890,6 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case PHYSICAL_CLEARANCE:                 return std::make_shared<DRC_RE_PHYSICAL_CLEARANCE_CONSTRAINT_DATA>();
     case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>();
     case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>();
-    case HOLE_TO_HOLE_CLEARANCE:             return std::make_shared<DRC_RE_HOLE_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>();
     case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>();
     case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>();
     case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>();
@@ -926,7 +922,6 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case PHYSICAL_CLEARANCE:                 return std::make_shared<DRC_RE_PHYSICAL_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case CREEPAGE_DISTANCE:                  return std::make_shared<DRC_RE_CREEPAGE_DISTANCE_CONSTRAINT_DATA>( aBase );
     case HOLE_SIZE:                          return std::make_shared<DRC_RE_HOLE_SIZE_CONSTRAINT_DATA>( aBase );
-    case HOLE_TO_HOLE_CLEARANCE:             return std::make_shared<DRC_RE_HOLE_TO_HOLE_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case HOLE_TO_HOLE_DISTANCE:              return std::make_shared<DRC_RE_HOLE_TO_HOLE_DISTANCE_CONSTRAINT_DATA>( aBase );
     case MAXIMUM_ALLOWED_DEVIATION:          return std::make_shared<DRC_RE_MAXIMUM_ALLOWED_DEVIATION_CONSTRAINT_DATA>( aBase );
     case MAXIMUM_VIA_COUNT:                  return std::make_shared<DRC_RE_MAXIMUM_VIA_COUNT_CONSTRAINT_DATA>( aBase );

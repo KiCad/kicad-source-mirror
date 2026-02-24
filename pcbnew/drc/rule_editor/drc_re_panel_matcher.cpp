@@ -134,8 +134,8 @@ void DRC_PANEL_MATCHER::initClaims()
             std::set<DRC_CONSTRAINT_T>{},
             30 );
 
-    m_claims.emplace_back(
-            HOLE_TO_HOLE_CLEARANCE,
+   m_claims.emplace_back(
+            HOLE_TO_HOLE_DISTANCE,
             std::set<DRC_CONSTRAINT_T>{ HOLE_TO_HOLE_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             30 );
