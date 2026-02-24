@@ -158,7 +158,7 @@ public:
      *
      * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo.
      */
-    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList );
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRehatchShapes = true );
 
     /**
      * Check if the undo and redo operations are currently blocked.
