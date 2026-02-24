@@ -225,28 +225,6 @@ public:
 };
 
 
-class DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
-{
-public:
-    using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_diameter; }
-    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    {
-        return { { 185 + DRC_RE_OVERLAY_XO, 215 + DRC_RE_OVERLAY_XO, 107 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
-    }
-};
-
-class DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
-{
-public:
-    using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_uvia_hole; }
-    std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
-    {
-        return { { 183 + DRC_RE_OVERLAY_XO, 213 + DRC_RE_OVERLAY_XO, 107 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
-    }
-};
-
 class DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:

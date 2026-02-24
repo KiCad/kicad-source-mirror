@@ -742,8 +742,6 @@ set( BMAPS_CONSTRAINTS
     minimum_thermal_relief_spoke_count
     minimum-drill-size
     minimum-track-width
-    minimum-uvia-diameter
-    minimum-uvia-hole
     minimum-via-diameter
     permitted-layers
     routing-diff-pair

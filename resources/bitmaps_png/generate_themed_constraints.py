@@ -46,8 +46,6 @@ CONSTRAINT_FILES = {
     'minimum_annular_width.svg': 'minimum-annular-width.svg',
     'minimum_drill_size.svg': 'minimum-drill-size.svg',
     'hole-to-hole-distance.svg': 'hole-to-hole-distance.svg',
-    'minimum_uvia_hole.svg': 'minimum-uvia-hole.svg',
-    'minimum_uvia_diameter.svg': 'minimum-uvia-diameter.svg',
     'minimum_via_diameter.svg': 'minimum-via-diameter.svg',
     'silk-to-soldermask-clearance.svg': 'silk-to-soldermask-clearance.svg',
     'silk-to-silk-clearance.svg': 'silk-to-silk-clearance.svg',

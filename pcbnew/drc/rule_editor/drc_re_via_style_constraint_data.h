@@ -27,6 +27,16 @@
 #include "drc_re_base_constraint_data.h"
 
 
+enum class VIA_STYLE_TYPE
+{
+    ANY = 0,
+    THROUGH,
+    MICRO,
+    BLIND,
+    BURIED
+};
+
+
 class DRC_RE_VIA_STYLE_CONSTRAINT_DATA : public DRC_RE_BASE_CONSTRAINT_DATA
 {
 public:
@@ -37,15 +47,16 @@ public:
     {
     }
 
-    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName,
-                                               double aMinViaDiameter, double aMaxViaDiameter,
-                                               double aPreferredViaDiameter, double aMinViaHoleSize,
-                                               double aMaxViaHoleSize,
-                                               double aPreferredViaHoleSize ) :
+    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName, double aMinViaDiameter,
+                                               double aMaxViaDiameter, double aMinViaHoleSize, double aMaxViaHoleSize,
+                                               VIA_STYLE_TYPE aViaType = VIA_STYLE_TYPE::ANY ) :
+
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
-            m_minViaDiameter( aMinViaDiameter ), m_preferredViaDiameter( aPreferredViaDiameter ),
-            m_maxViaDiameter( aMaxViaDiameter ), m_minViaHoleSize( aMinViaHoleSize ),
-            m_preferredViaHoleSize( aPreferredViaHoleSize ), m_maxViaHoleSize( aMaxViaHoleSize )
+            m_minViaDiameter( aMinViaDiameter ),
+            m_maxViaDiameter( aMaxViaDiameter ),
+            m_minViaHoleSize( aMinViaHoleSize ),
+            m_maxViaHoleSize( aMaxViaHoleSize ),
+            m_viaType( aViaType )
     {
     }
 
@@ -58,12 +69,16 @@ public:
         // Positions measured from constraint_via_style.png bitmap
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 15 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_via_diameter (right side, top)
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 45 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_via_diameter (right side, middle)
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 75 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_via_diameter (right side, bottom)
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 125 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_via_hole (right side, below diameter)
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 155 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_via_hole
-            { 300 + DRC_RE_OVERLAY_XO, 340 + DRC_RE_OVERLAY_XO, 185 + DRC_RE_OVERLAY_YO, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_via_hole
+            { 155 + DRC_RE_OVERLAY_XO, 195 + DRC_RE_OVERLAY_XO, 10 + DRC_RE_OVERLAY_YO, 0, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // [0] min_via_diameter
+            { 245 + DRC_RE_OVERLAY_XO, 285 + DRC_RE_OVERLAY_XO, 10 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // [1] max_via_diameter
+            { 195 + DRC_RE_OVERLAY_XO, 235 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // [2] min_via_hole
+            { 285 + DRC_RE_OVERLAY_XO, 325 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // [3] max_via_hole
+            { 420 + DRC_RE_OVERLAY_XO, 510 + DRC_RE_OVERLAY_XO, 110 + DRC_RE_OVERLAY_YO, 4, _( "Via type:" ),
+              LABEL_POSITION::LEFT }, // [4] via_type dropdown
         };
     }
 
@@ -75,9 +90,6 @@ public:
         if( m_minViaDiameter <= 0 )
             result.AddError( _( "Minimum Via Diameter must be greater than 0" ) );
 
-        if( m_preferredViaDiameter <= 0 )
-            result.AddError( _( "Preferred Via Diameter must be greater than 0" ) );
-
         if( m_maxViaDiameter <= 0 )
             result.AddError( _( "Maximum Via Diameter must be greater than 0" ) );
 
@@ -85,28 +97,11 @@ public:
         if( m_minViaHoleSize <= 0 )
             result.AddError( _( "Minimum Via Hole Size must be greater than 0" ) );
 
-        if( m_preferredViaHoleSize <= 0 )
-            result.AddError( _( "Preferred Via Hole Size must be greater than 0" ) );
-
         if( m_maxViaHoleSize <= 0 )
             result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
 
-        // Validate min <= preferred <= max for diameter
-        if( m_minViaDiameter > m_preferredViaDiameter )
-            result.AddError( _( "Minimum Via Diameter cannot be greater than Preferred Via Diameter" ) );
-
-        if( m_preferredViaDiameter > m_maxViaDiameter )
-            result.AddError( _( "Preferred Via Diameter cannot be greater than Maximum Via Diameter" ) );
-
         if( m_minViaDiameter > m_maxViaDiameter )
             result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
-
-        // Validate min <= preferred <= max for hole size
-        if( m_minViaHoleSize > m_preferredViaHoleSize )
-            result.AddError( _( "Minimum Via Hole Size cannot be greater than Preferred Via Hole Size" ) );
-
-        if( m_preferredViaHoleSize > m_maxViaHoleSize )
-            result.AddError( _( "Preferred Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
 
         if( m_minViaHoleSize > m_maxViaHoleSize )
             result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
@@ -121,24 +116,32 @@ public:
             return formatDouble( aValue ) + wxS( "mm" );
         };
 
-        wxString diaClause = wxString::Format(
-                wxS( "(constraint via_diameter (min %s) (opt %s) (max %s))" ),
-                formatDimension( m_minViaDiameter ),
-                formatDimension( m_preferredViaDiameter ),
-                formatDimension( m_maxViaDiameter ) );
+        wxString diaClause =
+                wxString::Format( wxS( "(constraint via_diameter (min %s) (max %s))" ),
+                                  formatDimension( m_minViaDiameter ), formatDimension( m_maxViaDiameter ) );
 
-        wxString drillClause = wxString::Format(
-                wxS( "(constraint hole_size (min %s) (opt %s) (max %s))" ),
-                formatDimension( m_minViaHoleSize ),
-                formatDimension( m_preferredViaHoleSize ),
-                formatDimension( m_maxViaHoleSize ) );
+        wxString drillClause =
+                wxString::Format( wxS( "(constraint hole_size (min %s) (max %s))" ),
+                                  formatDimension( m_minViaHoleSize ), formatDimension( m_maxViaHoleSize ) );
 
         return { diaClause, drillClause };
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
     {
-        return buildRule( aContext, GetConstraintClauses( aContext ) );
+        RULE_GENERATION_CONTEXT ctx = aContext;
+
+        wxString viaTypeCondition = GetViaTypeCondition();
+
+        if( !viaTypeCondition.IsEmpty() )
+        {
+            if( ctx.conditionExpression.IsEmpty() )
+                ctx.conditionExpression = viaTypeCondition;
+            else
+                ctx.conditionExpression = viaTypeCondition + wxS( " && " ) + ctx.conditionExpression;
+        }
+
+        return buildRule( ctx, GetConstraintClauses( ctx ) );
     }
 
     double GetMinViaDiameter() { return m_minViaDiameter; }
@@ -149,13 +152,6 @@ public:
 
     void SetMaxViaDiameter( double aMaxViaDiameter ) { m_maxViaDiameter = aMaxViaDiameter; }
 
-    double GetPreferredViaDiameter() { return m_preferredViaDiameter; }
-
-    void SetPreferredViaDiameter( double aPreferredViaDiameter )
-    {
-        m_preferredViaDiameter = aPreferredViaDiameter;
-    }
-
     double GetMinViaHoleSize() { return m_minViaHoleSize; }
 
     void SetMinViaHoleSize( double aMinViaHoleSize ) { m_minViaHoleSize = aMinViaHoleSize; }
@@ -164,11 +160,21 @@ public:
 
     void SetMaxViaHoleSize( double aMaxViaHoleSize ) { m_maxViaHoleSize = aMaxViaHoleSize; }
 
-    double GetPreferredViaHoleSize() { return m_preferredViaHoleSize; }
+    VIA_STYLE_TYPE GetViaType() const { return m_viaType; }
 
-    void SetPreferredViaHoleSize( double aPreferredViaHoleSize )
+    void SetViaType( VIA_STYLE_TYPE aType ) { m_viaType = aType; }
+
+    wxString GetViaTypeCondition() const
     {
-        m_preferredViaHoleSize = aPreferredViaHoleSize;
+        switch( m_viaType )
+        {
+        case VIA_STYLE_TYPE::THROUGH: return wxS( "A.Via_Type == 'Through'" );
+        case VIA_STYLE_TYPE::MICRO: return wxS( "A.Via_Type == 'Micro'" );
+        case VIA_STYLE_TYPE::BLIND: return wxS( "A.Via_Type == 'Blind'" );
+        case VIA_STYLE_TYPE::BURIED: return wxS( "A.Via_Type == 'Buried'" );
+        case VIA_STYLE_TYPE::ANY:
+        default: return wxEmptyString;
+        }
     }
 
     void CopyFrom( const ICopyable& aSource ) override
@@ -179,19 +185,18 @@ public:
 
         m_minViaDiameter = source.m_minViaDiameter;
         m_maxViaDiameter = source.m_maxViaDiameter;
-        m_preferredViaDiameter = source.m_preferredViaDiameter;
         m_minViaHoleSize = source.m_minViaHoleSize;
         m_maxViaHoleSize = source.m_maxViaHoleSize;
-        m_preferredViaHoleSize = source.m_preferredViaHoleSize;
+
+        m_viaType = source.m_viaType;
     }
 
 private:
-    double m_minViaDiameter{ 0 };
-    double m_preferredViaDiameter{ 0 };
-    double m_maxViaDiameter{ 0 };
-    double m_minViaHoleSize{ 0 };
-    double m_preferredViaHoleSize{ 0 };
-    double m_maxViaHoleSize{ 0 };
+    double         m_minViaDiameter{ 0 };
+    double         m_maxViaDiameter{ 0 };
+    double         m_minViaHoleSize{ 0 };
+    double         m_maxViaHoleSize{ 0 };
+    VIA_STYLE_TYPE m_viaType{ VIA_STYLE_TYPE::ANY };
 };
 
 #endif // DRC_RE_VIA_STYLE_CONSTRAINT_DATA_H_

@@ -5048,8 +5048,6 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_minimum_thermal_relief_spoke_count].emplace_back( BITMAPS::constraint_minimum_thermal_relief_spoke_count, wxT( "constraint_minimum_thermal_relief_spoke_count.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_drill_size].emplace_back( BITMAPS::constraint_minimum_drill_size, wxT( "constraint_minimum_drill_size.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_track_width].emplace_back( BITMAPS::constraint_minimum_track_width, wxT( "constraint_minimum_track_width.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_diameter].emplace_back( BITMAPS::constraint_minimum_uvia_diameter, wxT( "constraint_minimum_uvia_diameter.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_hole].emplace_back( BITMAPS::constraint_minimum_uvia_hole, wxT( "constraint_minimum_uvia_hole.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_via_diameter].emplace_back( BITMAPS::constraint_minimum_via_diameter, wxT( "constraint_minimum_via_diameter.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_permitted_layers].emplace_back( BITMAPS::constraint_permitted_layers, wxT( "constraint_permitted_layers.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_routing_diff_pair].emplace_back( BITMAPS::constraint_routing_diff_pair, wxT( "constraint_routing_diff_pair.png" ), -1, wxT( "light" ) );
@@ -5085,8 +5083,6 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_minimum_thermal_relief_spoke_count].emplace_back( BITMAPS::constraint_minimum_thermal_relief_spoke_count, wxT( "constraint_minimum_thermal_relief_spoke_count_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_drill_size].emplace_back( BITMAPS::constraint_minimum_drill_size, wxT( "constraint_minimum_drill_size_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_track_width].emplace_back( BITMAPS::constraint_minimum_track_width, wxT( "constraint_minimum_track_width_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_diameter].emplace_back( BITMAPS::constraint_minimum_uvia_diameter, wxT( "constraint_minimum_uvia_diameter_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::constraint_minimum_uvia_hole].emplace_back( BITMAPS::constraint_minimum_uvia_hole, wxT( "constraint_minimum_uvia_hole_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_minimum_via_diameter].emplace_back( BITMAPS::constraint_minimum_via_diameter, wxT( "constraint_minimum_via_diameter_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_permitted_layers].emplace_back( BITMAPS::constraint_permitted_layers, wxT( "constraint_permitted_layers_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_routing_diff_pair].emplace_back( BITMAPS::constraint_routing_diff_pair, wxT( "constraint_routing_diff_pair_dark.png" ), -1, wxT( "dark" ) );

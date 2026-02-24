@@ -59,8 +59,6 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { MINIMUM_DRILL_SIZE, "hole_size" },
                                    { HOLE_SIZE, "hole_size" },
                                    { HOLE_TO_HOLE_DISTANCE, "hole_to_hole" },
-                                   { MINIMUM_UVIA_HOLE, "hole_size" },
-                                   { MINIMUM_UVIA_DIAMETER, "via_diameter" },
                                    { MINIMUM_VIA_DIAMETER, "via_diameter" },
                                    { VIA_STYLE, "via_style" },
                                    { MINIMUM_TEXT_HEIGHT_AND_THICKNESS, "text_height" },
@@ -202,15 +200,29 @@ static void RegisterDefaultConverters()
             if( diaConstraint && holeConstraint )
             {
                 double minDia = diaConstraint->GetValue().Min() / 1000000.0;
-                double optDia = diaConstraint->GetValue().Opt() / 1000000.0;
                 double maxDia = diaConstraint->GetValue().Max() / 1000000.0;
 
                 double minDrill = holeConstraint->GetValue().Min() / 1000000.0;
-                double optDrill = holeConstraint->GetValue().Opt() / 1000000.0;
                 double maxDrill = holeConstraint->GetValue().Max() / 1000000.0;
 
-                auto data = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name,
-                    minDia, maxDia, optDia, minDrill, maxDrill, optDrill );
+                VIA_STYLE_TYPE viaType = VIA_STYLE_TYPE::ANY;
+
+                if( aRule->m_Condition )
+                {
+                    wxString expr = aRule->m_Condition->GetExpression();
+
+                    if( expr.Contains( wxS( "'Micro'" ) ) )
+                        viaType = VIA_STYLE_TYPE::MICRO;
+                    else if( expr.Contains( wxS( "'Through'" ) ) )
+                        viaType = VIA_STYLE_TYPE::THROUGH;
+                    else if( expr.Contains( wxS( "'Blind'" ) ) )
+                        viaType = VIA_STYLE_TYPE::BLIND;
+                    else if( expr.Contains( wxS( "'Buried'" ) ) )
+                        viaType = VIA_STYLE_TYPE::BURIED;
+                }
+
+                auto data = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name, minDia, maxDia,
+                                                                                minDrill, maxDrill, viaType );
                 data->SetConstraintCode( "via_style" );
                 return data;
             }
@@ -294,8 +306,6 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case MINIMUM_SOLDERMASK_SILVER:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
     case MINIMUM_DRILL_SIZE:
-    case MINIMUM_UVIA_DIAMETER:
-    case MINIMUM_UVIA_HOLE:
     case MINIMUM_VIA_DIAMETER:
     case SILK_TO_SILK_CLEARANCE:
     case SILK_TO_SOLDERMASK_CLEARANCE:
@@ -795,8 +805,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     case COPPER_TO_EDGE_CLEARANCE:
     case VIA_STYLE:
     case MINIMUM_VIA_DIAMETER:
-    case MINIMUM_UVIA_DIAMETER:
-    case MINIMUM_UVIA_HOLE:
     case MINIMUM_ANNULAR_WIDTH:
     case MINIMUM_CONNECTION_WIDTH:
     case ROUTING_WIDTH:
@@ -896,8 +904,6 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>();
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
     case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>();
-    case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>();
-    case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>();
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
     case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>();
     case SILK_TO_SOLDERMASK_CLEARANCE:       return std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>();
@@ -930,9 +936,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_DRILL_SIZE:                  return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_UVIA_DIAMETER:              return std::make_shared<DRC_RE_MINIMUM_UVIA_DIAMETER_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_UVIA_HOLE:                  return std::make_shared<DRC_RE_MINIMUM_UVIA_HOLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );
     case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case SILK_TO_SOLDERMASK_CLEARANCE:       return std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>( aBase );

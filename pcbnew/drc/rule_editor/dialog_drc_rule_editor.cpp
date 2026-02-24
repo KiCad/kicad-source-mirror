@@ -649,10 +649,6 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildManufacturabilityRuleTr
                                              lastParentId, MINIMUM_DRILL_SIZE ) );
     result.push_back( buildRuleTreeNodeData( "Hole to hole distance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, HOLE_TO_HOLE_DISTANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Minimum uvia hole", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
-                                             MINIMUM_UVIA_HOLE ) );
-    result.push_back( buildRuleTreeNodeData( "Minimum uvia diameter", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MINIMUM_UVIA_DIAMETER ) );
     result.push_back(
             buildRuleTreeNodeData( "Via style", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId, VIA_STYLE ) );
 

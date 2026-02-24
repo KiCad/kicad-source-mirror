@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_SUITE( DRC_RULE_EDITOR )
 
 BOOST_AUTO_TEST_CASE( RoundTripViaStyle )
 {
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA original( 0, 0, "My_Via_Rule", 0.5, 0.8, 0.6, 0.2, 0.4, 0.3 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA original( 0, 0, "My_Via_Rule", 0.5, 0.8, 0.2, 0.4 );
     original.SetConstraintCode( "via_style" );
     original.SetRuleCondition( "A.NetClass == 'Power'" );
 
@@ -68,10 +68,8 @@ BOOST_AUTO_TEST_CASE( RoundTripViaStyle )
     BOOST_CHECK_EQUAL( parsed->GetRuleCondition(), original.GetRuleCondition() );
     BOOST_CHECK_CLOSE( parsed->GetMinViaDiameter(), original.GetMinViaDiameter(), 0.0001 );
     BOOST_CHECK_CLOSE( parsed->GetMaxViaDiameter(), original.GetMaxViaDiameter(), 0.0001 );
-    BOOST_CHECK_CLOSE( parsed->GetPreferredViaDiameter(), original.GetPreferredViaDiameter(), 0.0001 );
     BOOST_CHECK_CLOSE( parsed->GetMinViaHoleSize(), original.GetMinViaHoleSize(), 0.0001 );
     BOOST_CHECK_CLOSE( parsed->GetMaxViaHoleSize(), original.GetMaxViaHoleSize(), 0.0001 );
-    BOOST_CHECK_CLOSE( parsed->GetPreferredViaHoleSize(), original.GetPreferredViaHoleSize(), 0.0001 );
 }
 
 BOOST_AUTO_TEST_CASE( RoundTripRoutingWidth )
@@ -104,7 +102,7 @@ BOOST_AUTO_TEST_CASE( SaveRules )
 {
     std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> rules;
 
-    auto rule1 = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, "ViaRule", 0.5, 0.8, 0.6, 0.2, 0.4, 0.3 );
+    auto rule1 = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, "ViaRule", 0.5, 0.8, 0.2, 0.4 );
     rule1->SetConstraintCode( "via_style" );
     rule1->SetRuleCondition( "A.NetClass == 'Power'" );
     rules.push_back( rule1 );
@@ -290,7 +288,7 @@ BOOST_AUTO_TEST_CASE( FactoryRegistration )
 
 BOOST_AUTO_TEST_CASE( ValidateViaStyleValid )
 {
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "ValidRule", 0.5, 0.8, 0.6, 0.2, 0.4, 0.3 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "ValidRule", 0.5, 0.8, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -301,7 +299,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleValid )
 BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidMinGreaterThanMax )
 {
     // min > max for via diameter
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "InvalidRule", 0.9, 0.5, 0.6, 0.2, 0.4, 0.3 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "InvalidRule", 0.9, 0.5, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -321,7 +319,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidMinGreaterThanMax )
 BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidNegativeValues )
 {
     // Negative values
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "NegativeRule", -0.5, 0.8, 0.6, 0.2, 0.4, 0.3 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "NegativeRule", -0.5, 0.8, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -1005,10 +1003,8 @@ BOOST_AUTO_TEST_CASE( RuleLoaderViaStyleFromText )
     BOOST_REQUIRE( viaData );
 
     BOOST_CHECK_CLOSE( viaData->GetMinViaDiameter(), 0.5, 0.0001 );
-    BOOST_CHECK_CLOSE( viaData->GetPreferredViaDiameter(), 0.6, 0.0001 );
     BOOST_CHECK_CLOSE( viaData->GetMaxViaDiameter(), 0.8, 0.0001 );
     BOOST_CHECK_CLOSE( viaData->GetMinViaHoleSize(), 0.2, 0.0001 );
-    BOOST_CHECK_CLOSE( viaData->GetPreferredViaHoleSize(), 0.3, 0.0001 );
     BOOST_CHECK_CLOSE( viaData->GetMaxViaHoleSize(), 0.4, 0.0001 );
 }
 
@@ -1417,10 +1413,8 @@ BOOST_AUTO_TEST_CASE( RuleSaverViaStyleRule )
     auto viaData = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>();
     viaData->SetRuleName( "ViaTest" );
     viaData->SetMinViaDiameter( 0.5 );
-    viaData->SetPreferredViaDiameter( 0.6 );
     viaData->SetMaxViaDiameter( 0.8 );
     viaData->SetMinViaHoleSize( 0.2 );
-    viaData->SetPreferredViaHoleSize( 0.3 );
     viaData->SetMaxViaHoleSize( 0.4 );
     entry.constraintData = viaData;
     entry.wasEdited = true;

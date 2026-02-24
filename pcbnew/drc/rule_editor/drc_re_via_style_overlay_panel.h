@@ -25,7 +25,7 @@
 #define DRC_RE_VIA_STYLE_OVERLAY_PANEL_H
 
 #include <memory>
-
+#include <wx/choice.h>
 #include <units_provider.h>
 
 #include "drc_re_bitmap_overlay_panel.h"
@@ -34,6 +34,7 @@ enum class EDA_UNITS;
 
 class DRC_RE_VIA_STYLE_CONSTRAINT_DATA;
 class UNIT_BINDER;
+class wxStaticText;
 
 
 /**
@@ -60,14 +61,15 @@ private:
 
     UNITS_PROVIDER m_unitsProvider;
 
+    wxChoice*     m_viaTypeChoice;
+    wxStaticText* m_viaTypeLabel;
+
     // Unit binders for via diameter fields
     std::unique_ptr<UNIT_BINDER> m_minViaDiameterBinder;
-    std::unique_ptr<UNIT_BINDER> m_prefViaDiameterBinder;
     std::unique_ptr<UNIT_BINDER> m_maxViaDiameterBinder;
 
     // Unit binders for via hole size fields
     std::unique_ptr<UNIT_BINDER> m_minViaHoleSizeBinder;
-    std::unique_ptr<UNIT_BINDER> m_prefViaHoleSizeBinder;
     std::unique_ptr<UNIT_BINDER> m_maxViaHoleSizeBinder;
 };
 

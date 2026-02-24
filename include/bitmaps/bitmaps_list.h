@@ -707,8 +707,6 @@ enum class BITMAPS : unsigned int
     constraint_minimum_drill_size,
     constraint_hole_size,
     constraint_hole_to_hole_distance,
-    constraint_minimum_uvia_hole,
-    constraint_minimum_uvia_diameter,
     constraint_minimum_via_diameter,
     constraint_via_style,
     constraint_minimum_text_height_and_thickness,

@@ -85,15 +85,43 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         if( viaDia )
         {
             data->SetMinViaDiameter( toMM( viaDia->GetValue().Min() ) );
-            data->SetPreferredViaDiameter( toMM( viaDia->GetValue().Opt() ) );
             data->SetMaxViaDiameter( toMM( viaDia->GetValue().Max() ) );
         }
 
         if( holeSize )
         {
             data->SetMinViaHoleSize( toMM( holeSize->GetValue().Min() ) );
-            data->SetPreferredViaHoleSize( toMM( holeSize->GetValue().Opt() ) );
             data->SetMaxViaHoleSize( toMM( holeSize->GetValue().Max() ) );
+        }
+
+        if( aRule.m_Condition )
+        {
+            wxString expr = aRule.m_Condition->GetExpression();
+
+            if( expr.Contains( wxS( "'Micro'" ) ) )
+                data->SetViaType( VIA_STYLE_TYPE::MICRO );
+            else if( expr.Contains( wxS( "'Through'" ) ) )
+                data->SetViaType( VIA_STYLE_TYPE::THROUGH );
+            else if( expr.Contains( wxS( "'Blind'" ) ) )
+                data->SetViaType( VIA_STYLE_TYPE::BLIND );
+            else if( expr.Contains( wxS( "'Buried'" ) ) )
+                data->SetViaType( VIA_STYLE_TYPE::BURIED );
+
+            // Strip the via type condition so it doesn't duplicate on save
+            wxString cleanedCondition = expr;
+            cleanedCondition.Replace( wxS( "A.Via_Type == 'Micro'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "A.Via_Type == 'Through'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "A.Via_Type == 'Blind'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "A.Via_Type == 'Buried'" ), wxS( "" ) );
+
+            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+            cleanedCondition.Trim( true ).Trim( false );
+            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+
+            data->SetRuleCondition( cleanedCondition );
         }
 
         return data;
@@ -363,7 +391,8 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         if( constraintData )
         {
-            constraintData->SetRuleCondition( condition );
+            if( match.panelType != VIA_STYLE )
+                constraintData->SetRuleCondition( condition );
 
             DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name,
                                              condition, aRule.m_Severity, aRule.m_LayerCondition );
