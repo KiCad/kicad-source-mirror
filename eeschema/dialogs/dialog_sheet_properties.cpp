@@ -482,8 +482,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
 bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
-    return m_frame->ChangeSheetFile( m_sheet, aNewFilename, m_clearAnnotationNewItems,
-                                     m_isUndoable, m_sourceSheetFilename );
+    return m_frame->ChangeSheetFile( m_sheet, aNewFilename, m_clearAnnotationNewItems, m_isUndoable,
+                                     m_sourceSheetFilename );
 }
 
 
@@ -513,8 +513,7 @@ void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
             if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
             {
-                DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
-                                                      newName ) );
+                DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), newName ) );
                 event.Veto();
                 m_delayedFocusRow = event.GetRow();
                 m_delayedFocusColumn = event.GetCol();
