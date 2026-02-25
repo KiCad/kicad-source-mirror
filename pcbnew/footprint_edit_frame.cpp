@@ -35,7 +35,6 @@
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
 #include <python/scripting/pcb_scripting_tool.h>
-#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <project/net_settings.h>
@@ -55,6 +54,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project_pcb.h>
+#include <string_utils.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
