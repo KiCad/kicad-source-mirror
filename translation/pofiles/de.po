@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-23 22:10+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-02-25 22:31+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -38741,9 +38741,8 @@ msgid "U3D"
 msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
-#, fuzzy
 msgid "Variant:"
-msgstr "Varianten:"
+msgstr "Variante:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 msgid "Board Options"
@@ -43936,16 +43935,14 @@ msgid "Holes"
 msgstr "Löcher"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:214
-#, fuzzy
 msgid "Minimum drill size:"
-msgstr "DuKo Minimalbohrdurchmesser:"
+msgstr "Mindestbohrdurchmesser:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum drill size. If set, this can only be reduced by custom rules."
 msgstr ""
-"Die minimale Mikro-Via-Lochgröße. Falls gesetzt, kann diese nur durch "
+"Der minimale Bohrdurchmesser. Falls gesetzt, kann diese nur durch "
 "benutzerdefinierte Regeln verringert werden."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
@@ -48124,9 +48121,8 @@ msgid "At least one orientation must be selected"
 msgstr "Es muss mindestens eine Orientierung ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
-#, fuzzy
 msgid "Disallow"
-msgstr "Ausgeschaltet"
+msgstr "Verweigern"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
@@ -48305,9 +48301,8 @@ msgid "Maximum Uncoupled Length must be greater than 0"
 msgstr "Die maximale ungekoppelte Länge muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:99
-#, fuzzy
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Der maximale Spalt muss größer als 0 sein"
+msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:104
 msgid "Minimum Width cannot be greater than Preferred Width"
@@ -50342,82 +50337,80 @@ msgstr "Ungültige Footprint-ID \"%s\" für Variante \"%s\" auf %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1394
 #, c-format
 msgid "Add %s '%s' attribute to variant %s (footprint %s)."
-msgstr ""
+msgstr "Attribut %s \"%s\" zu Variante %s (Footprint %s) hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
-msgstr "Entferne %s:%s Variantenattribut \"Von Stückliste ausschließen\"."
+msgstr "Attribut %s \"%s\" von Variante %s (Footprint %s) entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s."
-msgstr "Füge %s Feld \"%s\" mit Wert \"%s\" hinzu."
+msgstr "Attribut %s \"%s\" zu Variante %s hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s."
-msgstr "Entferne %s:%s Variantenattribut \"Von Stückliste ausschließen\"."
+msgstr "Attribut %s \"%s\" zu Variante %s entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "%s hinzugefügt (Footprint \"%s\")."
+msgstr "Attribut %s \"%s\" zu Variante %s (Footprint %s) hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1415
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
-msgstr "%s:%s Variantenattribut \"Von Stückliste ausschließen\" entfernt."
+msgstr "Attribut %s \"%s\" von Variante %s (Footprint %s) entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1423
 #, c-format
 msgid "Added %s '%s' attribute to variant %s."
-msgstr ""
+msgstr "Attribut %s \"%s\" zu Variante %s hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s."
-msgstr "%s:%s Variantenattribut \"Von Stückliste ausschließen\" entfernt."
+msgstr "Attribut %s \"%s\" von Variante %s entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
-#, fuzzy
 msgid "Do not place"
 msgstr "Nicht bestücken"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1497
-#, fuzzy
 msgid "exclude from position files"
-msgstr "Von Positionsdateien ausschließen"
+msgstr "von Positionsdateien ausschließen"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "Ändere %s:%s Feld von \"%s\" zu \"%s\"."
+msgstr "%s Feld \"%s\" zu \"%s\" in Variante %s (Footprint %s) ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s."
-msgstr "Ändere %s:%s Feld von \"%s\" zu \"%s\"."
+msgstr "%s Feld \"%s\" zu \"%s\" in Variante %s ändern."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1543
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "%s:%s Feld von \"%s\" zu \"%s\" geändert."
+msgstr "%s Feld \"%s\" zu \"%s\" in Variante %s (Footprint %s) geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1552
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s."
-msgstr "%s:%s Feld von \"%s\" zu \"%s\" geändert."
+msgstr "%s Feld \"%s\" zu \"%s\" in Variante %s geändert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1573
 #, c-format
 msgid "Remove variant %s:%s no longer associated with footprint %s."
-msgstr ""
+msgstr "Variante %s entfernen: %s ist nicht mehr mit Footprint %s verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1580
 #, c-format
 msgid "Removed variant %s:%s no longer associated with footprint %s."
-msgstr ""
+msgstr "Variante %s entfernt: %s ist nicht mehr mit Footprint %s verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1668
 #, c-format
@@ -50511,8 +50504,8 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
-"Warnung: %s Footprint \"%s\" fehlt ein Bibliotheksname. Die vollständige "
-"Form \"Bibliothek:Footprint\" verwenden, um wiederholte "
+"Warnung: %s Footprint \"%s\" fehlt ein Bibliotheksname. Das vollständige "
+"Format \"Bibliothek:Footprint\" verwenden, um wiederholte "
 "Aktualisierungsbenachrichtigungen zu vermeiden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2273
