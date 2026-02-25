@@ -956,6 +956,7 @@ public:
         if( aFromFile )
         {
             path = promptForFile();
+
             if( path.IsEmpty() )
                 return {};
         }
@@ -988,7 +989,7 @@ public:
             {
                 std::vector<wxString>& cols = csvData[i];
 
-                auto pin = std::make_unique<SCH_PIN>( &aSym );
+                std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( &aSym );
 
                 // Ignore cells that stick out to the right of the headers
                 size_t maxCol = std::min( headerCols.size(), cols.size() );
@@ -1005,6 +1006,7 @@ public:
                 pins.emplace_back( std::move( pin ) );
             }
         }
+
         return pins;
     }
 
@@ -1548,7 +1550,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
         m_pins.clear();
     }
 
-    for( auto& newPin : newPins )
+    for( std::unique_ptr<SCH_PIN>& newPin : newPins )
         m_pins.push_back( newPin.release() );
 
     m_cbGroup->SetValue( false );
