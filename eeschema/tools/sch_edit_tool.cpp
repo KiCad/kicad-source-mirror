@@ -3355,16 +3355,16 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
         commit.Modify( symbol, screen );
 
         if( aEvent.IsAction( &SCH_ACTIONS::setDNP ) )
-            symbol->SetDNP( new_state );
+            symbol->SetDNP( new_state, sheet, variant );
 
         if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSimulation ) )
-            symbol->SetExcludedFromSim( new_state );
+            symbol->SetExcludedFromSim( new_state, sheet, variant );
 
         if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) )
-            symbol->SetExcludedFromBOM( new_state );
+            symbol->SetExcludedFromBOM( new_state, sheet, variant );
 
         if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) )
-            symbol->SetExcludedFromBoard( new_state );
+            symbol->SetExcludedFromBoard( new_state, sheet, variant );
     }
 
     if( !commit.Empty() )
