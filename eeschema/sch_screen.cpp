@@ -903,14 +903,21 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 }
 
 
-void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
-                       const std::vector<SCH_ITEM*>& aItems ) const
+void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const std::vector<SCH_ITEM*>& aItems ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector<SCH_ITEM*>   junctions;
     std::vector<SCH_ITEM*>   bitmaps;
     std::vector<SCH_SYMBOL*> symbols;
     std::vector<SCH_ITEM*>   other;
+    double                   hopOverScale;
+    int                      defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+
+    if( !aItems.empty() && aItems[0]->Schematic() )
+    {
+        hopOverScale = aItems[0]->Schematic()->Settings().m_HopOverScale;
+        defaultLineWidth = aItems[0]->Schematic()->Settings().m_DefaultLineWidth;
+    }
 
     for( SCH_ITEM* item : aItems )
     {
@@ -976,7 +983,9 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
         aPlotter->SetCurrentLineWidth( lineWidth );
 
         if( item->Type() != SCH_LINE_T )
+        {
             item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
+        }
         else
         {
             SCH_LINE* aLine = static_cast<SCH_LINE*>( item );
@@ -987,7 +996,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts,
             }
             else
             {
-                double arcRadius = lineWidth * aLine->Schematic()->Settings().m_HopOverScale;
+                double arcRadius = defaultLineWidth * hopOverScale;
                 std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( this, arcRadius );
 
                 for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )

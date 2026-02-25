@@ -1787,9 +1787,13 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     double             highlightAlpha = 0.6;
     EESCHEMA_SETTINGS* eeschemaCfg = eeconfig();
     double             hopOverScale = 0.0;
+    int                defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
     if( aLine->Schematic() )    // Can be nullptr when run from the color selection panel
+    {
         hopOverScale = aLine->Schematic()->Settings().m_HopOverScale;
+        defaultLineWidth = aLine->Schematic()->Settings().m_DefaultLineWidth;
+    }
 
     if( eeschemaCfg )
     {
@@ -1914,8 +1918,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     if( aLine->IsWire() && hopOverScale > 0.0 )
     {
-        double   lineWidth = getLineWidth( aLine, false, drawingNetColorHighlights );
-        double   arcRadius = lineWidth * hopOverScale;
+        double arcRadius = defaultLineWidth * hopOverScale;
         curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(), arcRadius );
     }
     else
@@ -1932,8 +1935,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
                                             // there are always 2 points in list for a segment
         {
             VECTOR2I end( curr_wire_shape[ii].x, curr_wire_shape[ii].y );
-            drawLine( start, end, lineStyle,
-                      ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
+            drawLine( start, end, lineStyle, ( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows ), width );
         }
         else   // This is the start point of a arc. there are always 3 points in list for an arc
         {
