@@ -1,9 +1,9 @@
 install( DIRECTORY
     complex_hierarchy
-    custom_pads_test
+    cm5_minima
     ecc83
-    flat_hierarchy
     interf_u
+    jetson-agx-thor-baseboard
     kit-dev-coldfire-xilinx_5213
     microwave
     multichannel
@@ -14,8 +14,6 @@ install( DIRECTORY
     simulation
     "sonde xilinx"
     stickhub
-    test_pads_inside_pads
-    test_xil_95108
     tiny_tapeout
     video
     vme-wren
