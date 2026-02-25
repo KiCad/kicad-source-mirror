@@ -101,6 +101,26 @@ set( PCBNEW_PNS_QA_SRCS
 add_library( pnsrouter STATIC ${PCBNEW_PNS_SRCS} )
 add_library( pnsrouter_qa STATIC ${PCBNEW_PNS_QA_SRCS} )
 
+if( KICAD_USE_PCH )
+    target_precompile_headers( pnsrouter
+        PRIVATE
+            <board.h>
+            <clipper2/clipper.h>
+            <kiid.h>
+            <pgm_base.h>
+            <wx/wx.h>
+            )
+
+    target_precompile_headers( pnsrouter_qa
+        PRIVATE
+            <board.h>
+            <clipper2/clipper.h>
+            <kiid.h>
+            <pgm_base.h>
+            <wx/wx.h>
+            )
+endif()
+
 target_link_libraries( pnsrouter PRIVATE
     common
 )
