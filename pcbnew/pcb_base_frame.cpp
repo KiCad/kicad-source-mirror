@@ -33,7 +33,7 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
-#include <3d_viewer/eda_3d_viewer_frame.h>          // To include VIEWER3D_FRAMENAME
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <advanced_config.h>
 #include <base_units.h>
 #include <board.h>
