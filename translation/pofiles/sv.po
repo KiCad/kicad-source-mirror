@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:09+0300\n"
-"PO-Revision-Date: 2025-12-24 09:00+0000\n"
+"PO-Revision-Date: 2026-02-25 23:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4955,7 +4955,7 @@ msgstr "Välj en fil att bädda in"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Inbäddade filer ärvda från överordnad symbol kan inte tas bort."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -9791,7 +9791,6 @@ msgstr ""
 "För att donera till KiCad-projektet, besök %s"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
 msgstr "Fotavtrycksväljare"
 
@@ -10252,9 +10251,8 @@ msgid "Confirm change"
 msgstr "Bekräfta ändring"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(dubbelklicka för att redigera)"
+msgstr "Kommando (dubbelklicka för att redigera)"
 
 #: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
@@ -17298,9 +17296,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Stift %s är anslutet till både %s och %s"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Stift %s är anslutet till både %s och %s"
+msgstr "Stift %s i symbol '%s' är anslutet till olika nät: %s och %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17465,9 +17463,8 @@ msgstr ""
 "utgångsstift"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Duplicera zonkonturer på ett annat lager"
+msgstr "Duplicerade stift med olika nät"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -17629,9 +17626,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC-rapport (%s, Kodning UTF8)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "Rapportfiler"
+msgstr "Rapporten innehåller: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -18846,9 +18843,9 @@ msgid "Show Field Name"
 msgstr "Visa fältnamn"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:937
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Fel vid inläsning av kretsschema '%s'."
+msgstr "Fel vid inläsning av Altium-kretsschema: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:983
 #, c-format
@@ -18952,9 +18949,9 @@ msgid "File not found %s."
 msgstr "Fil %s hittades inte."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4976
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Fel vid uppräkning av symbolbibliotek '%s': %s"
+msgstr "Fel vid tolkning av Altium-bibliotek: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4999
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -19260,11 +19257,13 @@ msgstr ""
 "importeras."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Ogiltigt kragstackslager '%s' i fil '%s' på rad %d, position %d."
+msgstr ""
+"Kunde inte läsa fil '%s'.\n"
+"'%s' på rad %d, kolumn %d, position %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -19710,9 +19709,8 @@ msgstr "Okänt SCH_FILE_T-värde: %d"
 
 #: eeschema/sch_item.cpp:137 eeschema/sch_item.cpp:157
 #: eeschema/sch_item.cpp:646
-#, fuzzy
 msgid "All units"
-msgstr "Alla objekt"
+msgstr "Alla enheter"
 
 #: eeschema/sch_item.cpp:148 eeschema/sch_item.cpp:184
 #: eeschema/sch_item.cpp:668
@@ -21734,9 +21732,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Fel vid uppräkning av symbolbibliotek '%s': %s"
+msgstr "Fel vid tolkning av SPICE-bibliotek '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -28413,22 +28411,20 @@ msgid "Switch to Branch"
 msgstr "Byt till gren"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Aktivera Git-synkronisering"
+msgstr "Aktivera Git-integration"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Återaktivera Git-integration för detta projekt"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Aktivera Git-synkronisering"
+msgstr "Deaktivera Git-synkronisering"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Deaktivera Git-integratin för detta projekt"
 
 #: kicad/project_tree_pane.cpp:1121
 #, c-format
@@ -44371,6 +44367,9 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Varning: %s fotavtryck '%s' saknar ett biblioteksnamn. Använd fullständigt "
+"'Bibliotek:Fotavtryck'-format för att undvika återkommande "
+"uppdateringsmeddelanden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
 #, c-format
@@ -45139,9 +45138,9 @@ msgid "Loading board data..."
 msgstr "Läser in mönsterkortsdata..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Filen '%s' kunde inte skapas."
+msgstr "Lager '%s' kunde inte tilldelas och kommer att hoppas över."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1262
 msgid "Loading netclasses..."
@@ -46759,6 +46758,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' har icke-ASCII-tecken i sin beteckning; konverterad till '%s' "
+"för OBD++-export."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -46766,6 +46767,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' har tvetydig beteckning efter konvertering; bytt beteckning "
+"till '%s' för OBD++-export."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"
@@ -47274,9 +47277,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Skriptkonsol"
+msgstr "Skript-initialisering"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
@@ -49810,13 +49812,12 @@ msgid "Create bill of materials from board"
 msgstr "Skapa materialförteckning från mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "Välj 3D-modell"
+msgstr "Samla och inbädda 3D-modeller"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "Samla fotavtrycks 3D-modeller och bädda in dem i mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -50777,14 +50778,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Försök att sekventiellt dra ledningar för alla valda lödytor."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Avbryt nuvarande verktyg"
+msgstr "Avbryt nuvarande objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Skapa konturlinjer runt det valda objektet"
+msgstr "Hoppa över nuvarande objekt och dra ledare för nästa valda objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -50961,14 +50960,13 @@ msgid "Selected 2D Length"
 msgstr "Vald 2D-längd"
 
 #: pcbnew/tools/pcb_control.cpp:2088
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Bädda in modell"
+msgstr "Bädda in 3D-modeller"
 
 #: pcbnew/tools/pcb_control.cpp:2089
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 3D-modell(er) bäddades in med lyckat resultat."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
