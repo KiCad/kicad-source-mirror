@@ -858,6 +858,8 @@ wxArrayString* DSNLEXER::ReadCommentLines()
     return ret;
 }
 
+// Skip the white space and also accept both normal numbers and scientfic notation
+#define FROM_CHARS_FLAGS ( fast_float::chars_format::skip_white_space | fast_float::chars_format::general )
 
 double DSNLEXER::parseDouble()
 {
@@ -867,7 +869,7 @@ double DSNLEXER::parseDouble()
 
     double                 dval{};
     fast_float::from_chars_result res = fast_float::from_chars( str.data(), str.data() + str.size(), dval,
-                                                                fast_float::chars_format::skip_white_space );
+                                                                FROM_CHARS_FLAGS );
 
     if( res.ec != std::errc() )
     {

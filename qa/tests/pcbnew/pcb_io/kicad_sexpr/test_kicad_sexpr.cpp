@@ -31,6 +31,7 @@
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <board.h>
+#include <pcb_shape.h>
 #include <zone.h>
 
 
@@ -125,6 +126,32 @@ BOOST_AUTO_TEST_CASE( Issue23125_EmptyZoneDiscarded )
     ZONE* z = testBoard->Zones()[0];
     BOOST_CHECK_NO_THROW( z->GetPosition() );
     BOOST_CHECK( z->GetNumCorners() > 0 );
+}
+
+
+/**
+ * Verify the parser still can read floating point values written in scientific notation.
+ * Even though the KiCad file writter doesn't write using scientific notation anymore, at one
+ * point it did, so the parser must still support reading it.
+ */
+BOOST_AUTO_TEST_CASE( ScientificNotationLoading )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/kicad_sexpr/";
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    kicadPlugin.LoadBoard( dataPath + "ScientificNotation.kicad_pcb", testBoard.get() );
+
+    // The file contains 1 arc with scientific notation in its coordinates
+    BOOST_CHECK_EQUAL( testBoard->Drawings().size(), 1 );
+
+    PCB_SHAPE* arc = dynamic_cast<PCB_SHAPE*>( testBoard->Drawings().front() );
+
+    // The arc's midpoint should be located at (4.17, -4.5e-05) in file units
+    BOOST_REQUIRE( arc );
+    BOOST_TEST( arc->GetArcMid().x == 4170000 );
+    BOOST_TEST( arc->GetArcMid().y == -45 );
 }
 
 
