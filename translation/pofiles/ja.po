@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:09+0300\n"
-"PO-Revision-Date: 2026-02-24 04:30+0000\n"
+"PO-Revision-Date: 2026-02-25 23:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -17589,9 +17589,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC レポート (%s, エンコーディング UTF8)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "レポート ファイル"
+msgstr "レポート に含まれるもの: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -44184,6 +44184,8 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"警告: %s の フットプリント '%s' にライブラリ名がありません。再度警告されない"
+"よためにも、完全な 'Library:Footprint' フォーマットを使用してください。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
 #, c-format
