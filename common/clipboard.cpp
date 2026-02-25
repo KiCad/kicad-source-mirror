@@ -270,7 +270,7 @@ bool GetTabularDataFromClipboard( std::vector<std::vector<wxString>>& aData )
 
     if( isOpen )
     {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        if( wxTheClipboard->IsSupported( wxDF_TEXT ) || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
         {
             wxTextDataObject data;
 
