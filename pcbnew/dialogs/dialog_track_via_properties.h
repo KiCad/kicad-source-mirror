@@ -81,10 +81,12 @@ private:
     UNIT_BINDER          m_viaX, m_viaY;
     UNIT_BINDER          m_viaDiameter, m_viaDrill;
 
-    UNIT_BINDER          m_topPostMachineSize1Binder;
-    UNIT_BINDER          m_topPostMachineSize2Binder;
-    UNIT_BINDER          m_bottomPostMachineSize1Binder;
-    UNIT_BINDER          m_bottomPostMachineSize2Binder;
+    UNIT_BINDER          m_backdrillFrontSize;
+    UNIT_BINDER          m_backdrillBackSize;
+    UNIT_BINDER          m_topPostMachineSize1;
+    UNIT_BINDER          m_topPostMachineSize2;
+    UNIT_BINDER          m_bottomPostMachineSize1;
+    UNIT_BINDER          m_bottomPostMachineSize2;
 
     UNIT_BINDER          m_teardropHDPercent;
     UNIT_BINDER          m_teardropLenPercent;

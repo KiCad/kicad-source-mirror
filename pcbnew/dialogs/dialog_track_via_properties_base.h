@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -115,28 +115,34 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_protectionFeatures;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_backdrillLabel;
-		wxChoice* m_backDrillChoice;
-		wxStaticText* m_backDrillFrontLayerLabel;
-		PCB_LAYER_BOX_SELECTOR* m_backDrillFrontLayer;
-		wxStaticText* m_backDrillBackLayerLabel;
-		PCB_LAYER_BOX_SELECTOR* m_backDrillBackLayer;
+		wxChoice* m_backdrillChoice;
+		wxStaticText* m_backdrillFrontSizeLabel;
+		wxTextCtrl* m_backdrillFrontSizeCtrl;
+		wxStaticText* m_backdrillFrontSizeUnits;
+		wxStaticText* m_backdrillFrontLayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_backdrillFrontLayer;
+		wxStaticText* m_backdrillBackSizeLabel;
+		wxTextCtrl* m_backdrillBackSizeCtrl;
+		wxStaticText* m_backdrillBackSizeUnits;
+		wxStaticText* m_backdrillBackLayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_backdrillBackLayer;
 		wxStaticText* m_postMachineSectionLabel;
 		wxStaticLine* m_staticline21;
 		wxStaticText* m_topPostMachineLabel;
 		wxChoice* m_topPostMachine;
 		wxStaticText* m_topPostMachineSize1Label;
-		wxTextCtrl* m_topPostMachineSize1;
+		wxTextCtrl* m_topPostMachineSize1Ctrl;
 		wxStaticText* m_topPostMachineSize1Units;
 		wxStaticText* m_topPostMachineSize2Label;
-		wxTextCtrl* m_topPostMachineSize2;
+		wxTextCtrl* m_topPostMachineSize2Ctrl;
 		wxStaticText* m_topPostMachineSize2Units;
 		wxStaticText* m_bottomPostMachineLabel;
 		wxChoice* m_bottomPostMachine;
 		wxStaticText* m_bottomPostMachineSize1Label;
-		wxTextCtrl* m_bottomPostMachineSize1;
+		wxTextCtrl* m_bottomPostMachineSize1Ctrl;
 		wxStaticText* m_bottomPostMachineSize1Units;
 		wxStaticText* m_bottomPostMachineSize2Label;
-		wxTextCtrl* m_bottomPostMachineSize2;
+		wxTextCtrl* m_bottomPostMachineSize2Ctrl;
 		wxStaticText* m_bottomPostMachineSize2Units;
 		wxStaticLine* m_staticline4;
 		wxBoxSizer* m_legacyTeardropsWarning;
