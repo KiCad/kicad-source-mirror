@@ -3,7 +3,7 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021, 2022.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024, 2025, 2026.
 # Hanna Breisand <weblate.org@breisand.se>, 2022, 2024, 2025.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2025-12-31 05:05+0000\n"
+"PO-Revision-Date: 2026-02-25 22:31+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -4426,7 +4426,6 @@ msgid "Reset Unique Id"
 msgstr "Återställ unikt id"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
 msgstr "Designblocksbibliotekstabell"
 
@@ -4436,9 +4435,9 @@ msgstr "Designblocksbibliotekstabell"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "%s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:378
 #: eeschema/dialogs/panel_sym_lib_table.cpp:332
@@ -4657,9 +4656,9 @@ msgstr ""
 "Radera från symbolerna också?"
 
 #: common/dialogs/panel_embedded_files.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Det gick inte att lägga till filen '%s'."
+msgstr "Det gick inte att läsa filen '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:349
 #, c-format
@@ -4669,11 +4668,14 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"En fil med namn '%s' är redan inbäddad, men filen på disk har annat "
+"innehåll. \n"
+"\n"
+"Vill du ersätta den inbäddade filen med den nya versionen?"
 
 #: common/dialogs/panel_embedded_files.cpp:353
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "Inbäddade filer"
+msgstr "Konflikt mellan inbäddade filer"
 
 #: common/dialogs/panel_embedded_files.cpp:355
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
@@ -4681,9 +4683,8 @@ msgid "Replace"
 msgstr "Ersätt"
 
 #: common/dialogs/panel_embedded_files.cpp:355
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "Lägg till befintlig"
+msgstr "Använd befintlig"
 
 #: common/dialogs/panel_embedded_files.cpp:381
 #, c-format
@@ -4696,7 +4697,7 @@ msgstr "Välj en fil att bädda in"
 
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr "Inbäddade filer ärvda från en överordnad symbol kan inte tas bort."
+msgstr "Inbäddade filer ärvda från överordnad symbol kan inte tas bort."
 
 #: common/dialogs/panel_embedded_files.cpp:463
 msgid "Select a directory to export files"
@@ -5999,26 +6000,22 @@ msgid "Top auxiliary"
 msgstr "Övre extra"
 
 #: common/dialogs/panel_toolbar_customization.cpp:153
-#, fuzzy
 msgid "Insert Separator"
 msgstr "Infoga avskiljare"
 
 #: common/dialogs/panel_toolbar_customization.cpp:159
-#, fuzzy
 msgid "Insert Spacer"
 msgstr "Infoga mellanrum"
 
 #: common/dialogs/panel_toolbar_customization.cpp:160
-#, fuzzy
 msgid "Insert Group"
 msgstr "Infoga grupp"
 
 #: common/dialogs/panel_toolbar_customization.cpp:381
 #: common/dialogs/panel_toolbar_customization.cpp:655
 #: common/dialogs/panel_toolbar_customization.cpp:659
-#, fuzzy
 msgid "Separator"
-msgstr "Radavskiljare"
+msgstr "Avskiljare"
 
 #: common/dialogs/panel_toolbar_customization.cpp:390
 #, c-format
@@ -6036,9 +6033,8 @@ msgid "Customize toolbars"
 msgstr "Anpassa verktygslister"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Verktygslister"
+msgstr "Verktygslist:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6054,24 +6050,20 @@ msgstr "Spara"
 #: common/dialogs/rule_editor_dialog_base.cpp:481
 #: common/dialogs/rule_editor_dialog_base.cpp:499
 #: kicad/kicad_manager_frame.cpp:973
-#, fuzzy
 msgid "Discard"
-msgstr "Förkasta handling"
+msgstr "Kasta"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:560
-#, fuzzy
 msgid "New Rule"
-msgstr "Ny modul"
+msgstr "Ny regel"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:563
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Användardefinierade regler"
+msgstr "Kopiera regel"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:566
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Radera fil"
+msgstr "Radera regel"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:572
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6321,25 +6313,21 @@ msgid "Run: %s"
 msgstr "Utför: %s"
 
 #: common/eda_base_frame.cpp:1305
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Filen '%s' hittades inte."
+msgstr "Filen '%s' hittades inte.\n"
 
 #: common/eda_base_frame.cpp:1308
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr ""
-"\n"
-"Vill du skriva över alla av dem, eller ge nya namn till de nya symbolerna?"
+msgstr "Vill du ta bort den från listan över nyligen öppnade filer?"
 
 #: common/eda_base_frame.cpp:1309
 msgid "Remove"
 msgstr "Ta bort"
 
 #: common/eda_base_frame.cpp:1310
-#, fuzzy
 msgid "Keep"
-msgstr "Spärrzon"
+msgstr "Behåll"
 
 #: common/eda_base_frame.cpp:1359
 msgid "Preferences"
@@ -6441,9 +6429,8 @@ msgstr "Förinställningar för grafik"
 
 #: common/eda_base_frame.cpp:1478
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Lagernamn"
+msgstr "Användarlagernamn"
 
 #: common/eda_base_frame.cpp:1483 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -7761,9 +7748,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1106
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Sammanslagning misslyckades"
+msgstr "Sammanslagning misslyckades: %s"
 
 #: common/git/libgit_backend.cpp:1122
 msgid ""
@@ -7777,14 +7764,14 @@ msgid "Rebase failed to start: %s"
 msgstr "Start av grenflytt misslyckades"
 
 #: common/git/libgit_backend.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Överlämning av grenflytt misslyckades"
+msgstr "Överlämning av grenflytt misslyckades: %s"
 
 #: common/git/libgit_backend.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Avslut av grenflytt misslyckades"
+msgstr "Avslut av grenflytt misslyckades: %s"
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -7883,9 +7870,9 @@ msgid "Failed to open git repository: %s"
 msgstr "Lyckades inte öppna git-förvar: %s"
 
 #: common/history_lock.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Lyckades inte öppna git-förvar: %s"
+msgstr "Lyckades inte sätta arbetskatalog för git-förvar till %s: %s"
 
 #: common/history_lock.cpp:207
 msgid "Cannot acquire index lock: repository not open"
@@ -8343,7 +8330,6 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Exportera inställningar för åtgärden exportera mönsterkortsstatistik"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
 msgstr "Mönsterkort: Exportera mönsterkortsstatistik"
 
@@ -8423,19 +8409,16 @@ msgid "PCB: Perform DRC"
 msgstr "Mönsterkort: Utför designregelkontroll"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Importera"
+msgstr "Importera mönsterkort"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Importera inställningar"
+msgstr "Inställningar för mönsterkortsimport"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Importera"
+msgstr "Mönsterkort: Importera"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -8889,9 +8872,8 @@ msgid "Error loading library '%s'"
 msgstr "Fel vid inläsning av bibliotek '%s'"
 
 #: common/lib_table_grid_tricks.cpp:107
-#, fuzzy
 msgid "Edit Settings..."
-msgstr "Redigera inställningar"
+msgstr "Redigera inställningar..."
 
 #: common/lib_table_grid_tricks.cpp:114
 msgid "Open Library Table"
@@ -8914,9 +8896,8 @@ msgid "Unset Visible Flag"
 msgstr "Nollställ synlighetsflagga"
 
 #: common/lib_table_grid_tricks.cpp:160
-#, fuzzy
 msgid "Edit Options..."
-msgstr "Redigeringsalternativ"
+msgstr "Redigeringsalternativ..."
 
 #: common/lib_table_grid_tricks.cpp:161
 msgid "Edit options for this library entry"
@@ -9086,9 +9067,9 @@ msgid "Library not found in library table"
 msgstr "Biblioteket hittades inte i bibliotektabellen"
 
 #: common/libraries/library_manager.cpp:1132
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s': %s"
-msgstr "Bibliotek: "
+msgstr "Bibliotek '%s': %s"
 
 #: common/libraries/library_manager.cpp:1349
 #, c-format
@@ -9161,12 +9142,11 @@ msgstr ""
 
 #: common/local_history.cpp:1744
 msgid "Cannot restore - the following files are open by another user:"
-msgstr ""
+msgstr "Kan inte återställa - följande filer har öppnats av en annan användare:"
 
 #: common/local_history.cpp:1746
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Sammanslagning misslyckades"
+msgstr "Återställning misslyckades"
 
 #: common/local_history.cpp:1943
 msgid "Select snapshot"
@@ -9196,7 +9176,7 @@ msgstr "%s, %s och %d till"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9206,11 +9186,11 @@ msgstr ""
 "Ogiltigt fotavtrycks-ID i\n"
 "fil: '%s'\n"
 "rad: %d\n"
-"förskjutning: %d."
+"position: %d."
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -9220,7 +9200,7 @@ msgstr ""
 "Ogiltigt lib_id-ID i\n"
 "fil: '%s'\n"
 "rad: %d\n"
-"förskjutning: %d"
+"position: %d"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:115
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
@@ -9691,7 +9671,6 @@ msgid "Quit %s"
 msgstr "Avsluta %s"
 
 #: common/tool/action_toolbar.cpp:1131
-#, fuzzy
 msgid "Grid selector"
 msgstr "Rutnätsväljare"
 
@@ -9700,7 +9679,6 @@ msgid "Grid Selection box"
 msgstr "Ruta för val av rutnätsstorlek"
 
 #: common/tool/action_toolbar.cpp:1144
-#, fuzzy
 msgid "Zoom selector"
 msgstr "Zoomväljare"
 
@@ -10895,7 +10873,6 @@ msgstr ""
 "För att donera till KiCad-projektet, besök %s"
 
 #: common/tool/common_tools.cpp:620
-#, fuzzy
 msgid "Footprint Browser"
 msgstr "Fotavtrycksväljare"
 
@@ -11155,19 +11132,17 @@ msgid "Select Path"
 msgstr "Välj sökväg"
 
 #: common/widgets/kistatusbar.cpp:146
-#, fuzzy
 msgid "View load messages"
-msgstr "Infomeddelanden:"
+msgstr "Visa inläsningsmeddelanden"
 
 #: common/widgets/kistatusbar.cpp:410
 #, c-format
 msgid "View %zu load message(s)"
-msgstr ""
+msgstr "Visa %zu inläsningsmeddelande(n)"
 
 #: common/widgets/kistatusbar.cpp:458
-#, fuzzy
 msgid "Load Messages"
-msgstr "Meddelanden"
+msgstr "Läs in meddelanden"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11445,13 +11420,12 @@ msgid "Save..."
 msgstr "Spara..."
 
 #: common/widgets/zoom_correction_ctrl.cpp:149
-#, fuzzy
 msgid "Display PPI: "
-msgstr "Visa"
+msgstr "Bildskärmens PPI: "
 
 #: common/widgets/zoom_correction_ctrl.cpp:156
 msgid "Detect"
-msgstr ""
+msgstr "Detektera"
 
 #: common/wildcards_and_files_ext.cpp:236
 msgid "All files"
@@ -11501,14 +11475,12 @@ msgid "Eagle XML files"
 msgstr "Eagle XML-filer"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "PADS nätlistefiler"
+msgstr "PADS ASCII-filer"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Arkivera alla projektfiler"
+msgstr "gEDA / Lepton EDA projektfiler"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -11902,9 +11874,9 @@ msgid "Footprint '%s' not found."
 msgstr "Fotavtryck '%s' hittades inte."
 
 #: cvpcb/display_footprints_frame.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Fel vid inläsning av fotavtryck"
+msgstr "Fel vid inläsning av fotavtryck: %s"
 
 #: cvpcb/display_footprints_frame.cpp:378 pcbnew/footprint.cpp:2179
 #, c-format
@@ -12285,9 +12257,8 @@ msgid "Reset existing annotations"
 msgstr "Återställ befintliga numreringar"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Gruppera symboler"
+msgstr "Omgruppera symbolenheter"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13776,9 +13747,9 @@ msgstr "Bildegenskaper"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:47
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Importera symbol"
+msgstr "Importera symboler från %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:62
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:539
@@ -13789,40 +13760,41 @@ msgid "Import"
 msgstr "Importera"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:101
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Det gick inte att läsa in biblioteket\n"
+msgstr ""
+"Det gick inte att hitta en insticksmodul för att läsa in detta bibliotek."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Kunde inte importera symbolbiblioteket '%s'."
+msgstr "Kan inte läsa symbolbibliotek '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Symbolbiblioteksfilen '%s' är tom."
+msgstr "Symbolbibliotek '%s' är tomt."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:299
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d symboler valda, %d överordnade symboler inkluderas automatiskt"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Ingen symbol vald"
+msgstr "%d symboler valda"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:503
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "Skugga på konflikter"
+msgstr "Lös importkonflikter"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:510
 msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Följande symboler finns redan i målbiblioteket. Välj hur du vill hantera "
+"respektive konflikt:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:517
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
@@ -13836,9 +13808,8 @@ msgid "Action"
 msgstr "Åtgärd"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:532
-#, fuzzy
 msgid "Skip All"
-msgstr "Hoppa över"
+msgstr "Hoppa över alla"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
 #: eeschema/symbol_editor/symbol_editor.cpp:987
@@ -13846,7 +13817,6 @@ msgid "Overwrite All"
 msgstr "Skriv över alla"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
 msgstr "Ingen symbol vald"
 
@@ -14242,9 +14212,8 @@ msgid "Highlight on Cross-probe"
 msgstr "Framhäv vid korsrefererens"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1450
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "Framhäver objekt på ritytan när det väljs i tabellen"
+msgstr "Framhäver motsvarande stift på ritytan när det väljs i tabellen"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1688
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
@@ -14307,9 +14276,8 @@ msgid "Group by name"
 msgstr "Gruppera efter namn"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "Gruppera valda"
+msgstr "Gruppera valda stift"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
@@ -14696,7 +14664,7 @@ msgstr "Redigera symbolegenskaper"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:730
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "Stift '%s' i grupp %d av byglade stift, existerar inte i denna symbol."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
@@ -14953,14 +14921,13 @@ msgid "All pins with duplicate numbers are jumpers"
 msgstr "Alla lödytor med samma nummer är byglar"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
-#, fuzzy
 msgid ""
 "When enabled, this symbol can have more than one pin with the same number.  "
 "Pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
-"När aktiverat, kan denna symbol ha mera än ett stift med samma nummer, och "
-"stift med samma nummer kommer att anses vara internt sammankopplade."
+"När aktiverat, kan denna symbol ha mera än ett stift med samma nummer.  "
+"Stift med samma nummer kommer att anses vara internt sammankopplade."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
@@ -15236,9 +15203,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:40
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Design variant:"
-msgstr "Beteckning"
+msgstr "Designvariant:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
@@ -16750,58 +16716,51 @@ msgstr ""
 "Vänligen använd ett annat namn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2745
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Kan inte radera sista toppnivåarket."
+msgstr "Kan inte radera standardvarianten."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2784
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Kan inte skapa kretsschemabilden"
+msgstr "Kan inte byta namn på standardvarianten."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2791
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Ange namn för ny variant"
+msgstr "Ange namn för ny variant:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2791
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Ta bort variant..."
+msgstr "Byt namn på variant"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2802
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2875
 #: eeschema/toolbars_sch_editor.cpp:430
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "Variabelnamn kan inte utelämnas."
+msgstr "Variantnamn kan inte utelämnas."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2809
 #: eeschema/toolbars_sch_editor.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "'%s' är en reserverad snabbtangent i KiCad och kan inte tilldelas."
+msgstr "'%s' är ett reserverat variantnamn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2825
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2882
 #: eeschema/toolbars_sch_editor.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "'%s' finns redan."
+msgstr "Variant '%s' finns redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2857
 msgid "Cannot copy the default variant."
-msgstr ""
+msgstr "Kan inte kopiera standardvarianten."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2864
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Ange namn för den nya mallen:"
+msgstr "Ange namn för den kopierade varianten:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2864
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "Varianter"
+msgstr "Kopiera designvariant"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -16899,9 +16858,8 @@ msgid "Alternate Assignment"
 msgstr "Alternativ uppgift"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr "Varianter"
+msgstr " Designvariant"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:418 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -16978,6 +16936,9 @@ msgid ""
 "This is useful for adding symbols that should not be included in the \n"
 "exported position files used for pick and place machines"
 msgstr ""
+"Detta är användbart för att lägga till symboler som inte skall inkluderas i "
+"\n"
+"exporterade positionsfiler för plock- och placeringsmaskiner"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2371
@@ -17321,15 +17282,17 @@ msgid "Net names"
 msgstr "Nätnamn"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:73
-#, fuzzy
 msgid "Update schematic net labels to match net names from the PCB editor."
-msgstr "Uppdatera symbolvärden som har ersatts i mönsterkortsredigeraren."
+msgstr ""
+"Uppdatera kertsschemats nätetiketter till att matcha nätnamn från "
+"mönsterkortsredigeraren."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:79
-#, fuzzy
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
-msgstr "Uppdatera alla andra fält i symbolen från fotavtrycket"
+msgstr ""
+"Uppdatera symbolattributsflaggor som till exempel \"monteras ej\" till att "
+"matcha fotavtrycket."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -18266,14 +18229,12 @@ msgid "Keep pins attached when dragging edges"
 msgstr "Håll stift anslutna vid förflyttning av konturer"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
-#, fuzzy
 msgid "Symbol Library Tables"
-msgstr "Symbolbibliotekstabell"
+msgstr "Symbolbibliotekstabeller"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:398
-#, fuzzy
 msgid "folder with .kicad_sym files"
-msgstr "mapp med %s filer"
+msgstr "mapp med .kicad_sym-filer"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:447
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:437
@@ -18620,10 +18581,9 @@ msgid "Unresolved text variable in drawing sheet"
 msgstr "Oupplöst textvariabel i ritningsarket"
 
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr ""
-"Fältnamnet '%s' innehåller efterföljande och/eller inledande mellanslag."
+msgstr "Fältnamnet innehåller inledande eller efterföljande mellanslag: '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -18682,9 +18642,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Stift %s är anslutet till både %s och %s"
 
 #: eeschema/erc/erc.cpp:1352
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Stift %s är anslutet till både %s och %s"
+msgstr "Stift %s i symbol '%s' är anslutet till olika nät: %s och %s"
 
 #: eeschema/erc/erc.cpp:1423
 #, c-format
@@ -18775,9 +18735,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Söker efter olösta variabler..."
 
 #: eeschema/erc/erc.cpp:2158
-#, fuzzy
 msgid "Checking field names..."
-msgstr "Kontrollerar arknamn..."
+msgstr "Kontrollerar fältnamn..."
 
 #: eeschema/erc/erc.cpp:2166
 msgid "Checking SPICE models..."
@@ -18847,9 +18806,8 @@ msgstr ""
 "utgångsstift"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Duplicera zonkonturer på ett annat lager"
+msgstr "Duplicerade stift med olika nät"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -18946,10 +18904,8 @@ msgid "Pin name resembles stacked pin"
 msgstr "Stiftnamn påminner om överlagrat stift"
 
 #: eeschema/erc/erc_item.cpp:169
-#, fuzzy
 msgid "Field name has leading or trailing whitespace"
-msgstr ""
-"Fältnamnet '%s' innehåller efterföljande och/eller inledande mellanslag."
+msgstr "Fältnamnet innehåller inledande eller efterföljande mellanslag"
 
 #: eeschema/erc/erc_item.cpp:173 pcbnew/drc/drc_item.cpp:221
 #: pcbnew/drc/drc_rule_parser.cpp:93
@@ -19516,9 +19472,8 @@ msgid "Exclude from board settings differ."
 msgstr "Inställning undanta från mönsterkortsinställningar är olika."
 
 #: eeschema/lib_symbol.cpp:2181
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Inställning undanta från simulering är olika."
+msgstr "Inställning uteslut från positionsfiler är olika."
 
 #: eeschema/lib_symbol.cpp:2416 eeschema/symbol_editor/symbol_editor.cpp:1751
 msgid "Datasheet"
@@ -19569,7 +19524,6 @@ msgid "Exclude from Bill of Materials"
 msgstr "Utelämna från komponentlistan"
 
 #: eeschema/lib_symbol.cpp:2464
-#, fuzzy
 msgid "Exclude from Position Files"
 msgstr "Uteslut från positionsfiler"
 
@@ -19635,12 +19589,11 @@ msgid "Panels"
 msgstr "Paneler"
 
 #: eeschema/menubar.cpp:196
-#, fuzzy
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
-"Installera en fjärrsymbolserver med hjälp av Insticksmoduls- och "
-"innehållshanteraren"
+"För att aktivera: Installera en fjärrsymbolserver med hjälp av "
+"Insticksmoduls- och innehållshanteraren"
 
 #: eeschema/menubar.cpp:330
 msgid "Variants"
@@ -19673,14 +19626,14 @@ msgid "P&references"
 msgstr "I&nställningar"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Ledning från %s, %s till %s, %s"
+msgstr "Ledning från (%s, %s) till (%s, %s)"
 
 #: eeschema/net_navigator.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
-msgstr "Buss från %s, %s till %s, %s"
+msgstr "Buss från (%s, %s) till (%s, %s)"
 
 #: eeschema/net_navigator.cpp:81
 msgid "Graphic line not connectable"
@@ -19697,44 +19650,44 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Ark '%s' stift '%s'"
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "Etikett '%s' vid %s, %s"
+msgstr "Etikett '%s' vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "Global etikett '%s' vid %s, %s"
+msgstr "Global etikett '%s' vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "Hierarkisk etikett '%s' vid %s, %s"
+msgstr "Hierarkisk etikett '%s' vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "Knutpunkt vid %s, %s"
+msgstr "Knutpunkt vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "Ingen anslutning vid %s, %s"
+msgstr "Ingen anslutning vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Buss-till-lednings-post från %s, %s till %s, %s"
+msgstr "Buss-till-lednings-post från (%s, %s) till (%s, %s)"
 
 #: eeschema/net_navigator.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Buss-till-buss-post från %s, %s till %s, %s"
+msgstr "Buss-till-buss-post från (%s, %s) till (%s, %s)"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "Nätklassetikett '%s' vid %s, %s"
+msgstr "Nätklassetikett '%s' vid (%s, %s)"
 
 #: eeschema/net_navigator.cpp:198
 #, c-format
@@ -20157,7 +20110,6 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Spara ändringar i '%s' innan stängning?"
 
 #: eeschema/sch_edit_frame.cpp:1322
-#, fuzzy
 msgid ""
 "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the main KiCad "
@@ -20234,14 +20186,12 @@ msgid "Find in Net Inspector"
 msgstr "Hitta i nätinspektör"
 
 #: eeschema/sch_edit_frame.cpp:3030
-#, fuzzy
 msgid "Select variant name to remove:"
-msgstr "Välj variantnamn att ta bort"
+msgstr "Välj variantnamn att ta bort:"
 
 #: eeschema/sch_edit_frame.cpp:3031
-#, fuzzy
 msgid "Remove Design Variant"
-msgstr "Ta bort variant..."
+msgstr "Ta bort designvariant"
 
 #: eeschema/sch_field.cpp:909
 #, c-format
@@ -20327,9 +20277,9 @@ msgid "Importing %s"
 msgstr "Importerar %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Fel vid inläsning av kretsschema '%s'."
+msgstr "Fel vid inläsning av Altium-kretsschema: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1012
 #, c-format
@@ -20433,9 +20383,9 @@ msgid "File not found %s."
 msgstr "Fil %s hittades inte."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5136
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Fel vid inläsning av bibliotek '%s'"
+msgstr "Fel vid tolkning av Altium-bibliotek: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5159
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -20746,8 +20696,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Kan inte läsa fil '%s'.\n"
-"'%s' på rad %d, kolumn %d, offset %d"
+"Kunde inte läsa fil '%s'.\n"
+"'%s' på rad %d, kolumn %d, position %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1063
 #, c-format
@@ -20823,14 +20773,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "Kunde inte tolka värde: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3646
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "Symbol '%s' hittades inte i bibliotek '%s'."
+msgstr "Symbol '%s' hittades inte i gEDA-bibliotek."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3650
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Kunde inte öppna '%s'."
+msgstr " Menade du '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3797
 #, c-format
@@ -20838,21 +20788,23 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
+"Symbolversionskonflikt för '%s' (%s): Kretsschemat har symbolversion %s, "
+"bibliotekets symbol har symbolversion %s."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr ""
+msgstr "Hierarkisk källa '%s' hittades inte, skapar ett tomt symbolark."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4100
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr ""
+msgstr "Cirkulär hierarki detekterad för '%s', hoppar över."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4448
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "Det gick inte att spara kretsschemat '%s'"
+msgstr "Det gick inte att läsa in underkretsschemat '%s': %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4558
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3108
@@ -20861,19 +20813,18 @@ msgid "File '%s' is empty."
 msgstr "Filen %s är tom."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4713
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a valid gEDA schematic."
-msgstr "'%s' är inte ett giltigt SPICE-värde."
+msgstr "Fil '%s' är inte ett giltigt gEDA-kretsschema."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4868
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "Det gick inte att läsa in '%s'."
+msgstr "Det gick inte att läsa in sida '%s': %s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:458
-#, fuzzy
 msgid "gEDA / Lepton EDA schematic files"
-msgstr "Eagle XML kretsschemafiler"
+msgstr "gEDA / Lepton EDA kretsschemafiler"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:212
 #, c-format
@@ -21064,15 +21015,17 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Symbolbibliotekskatalog '%s' kan inte raderas."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Biblioteket '%s' finns redan."
+msgstr ""
+"Biblioteket '%s' lästes in med fel:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:104
 msgid "The library cannot be saved until these errors are fixed manually."
-msgstr ""
+msgstr "Biblioteket kan inte sparas förrän dessa fel rättas manuellt."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:187
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:361
@@ -21087,6 +21040,9 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"Biblioteket kan inte sparas förrän dessa fel har rättats manuellt."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:220
 #, c-format
@@ -21096,6 +21052,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Kan inte spara bibliotek '%s' eftersom det hade tolkningsfel vid inläsning. "
+"\n"
+" \n"
+"Att spara skulle orsaka att symboler som inte kunde laddas skulle förloras "
+"permanent. \n"
+"Vänligen rätta biblioteksfilen manuellt innan den sparas."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:272
 #, c-format
@@ -21113,6 +21075,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Fel vid tolkning av symbol vid rad %d: %s \n"
+"Hoppar över symbol och fortsätter."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:309
 #, c-format
@@ -21167,9 +21131,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Ogiltig URL i hyperlänk '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "Kan inte tolka %s som en symbol"
+msgstr "Kan inte tolka %s som en header."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:942
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1097
@@ -21321,14 +21285,12 @@ msgid "LTspice schematic files"
 msgstr "LTspice kretsschemafiler"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:47
-#, fuzzy
 msgid "PADS Logic schematic files"
-msgstr "LTspice kretsschemafiler"
+msgstr "PADS Logic kretsschemafiler"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:52
-#, fuzzy
 msgid "PADS Logic library files"
-msgstr "Eagle XML biblioteksfiler"
+msgstr "PADS Logic biblioteksfiler"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:47 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -22990,7 +22952,6 @@ msgid "The submodel name is missing."
 msgstr "Submodellnamnet saknas."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
-#, fuzzy
 msgid "The submodel mode is missing."
 msgstr "Delmodellläget saknas."
 
@@ -23751,9 +23712,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "Fel vid inläsning av bibliotek '%s'"
+msgstr "Fel vid tolkning av SPICE-bibliotek '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -31648,22 +31609,20 @@ msgid "Switch to Branch"
 msgstr "Byt till gren"
 
 #: kicad/project_tree_pane.cpp:1074
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Aktivera Git-synkronisering"
+msgstr "Aktivera Git-integration"
 
 #: kicad/project_tree_pane.cpp:1075
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Återaktivera Git-integration för detta projekt"
 
 #: kicad/project_tree_pane.cpp:1079
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Aktivera Git-synkronisering"
+msgstr "Deaktivera Git-synkronisering"
 
 #: kicad/project_tree_pane.cpp:1080
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Deaktivera Git-integratin för detta projekt"
 
 #: kicad/project_tree_pane.cpp:1137
 #, c-format
@@ -49636,6 +49595,9 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Varning: %s fotavtryck '%s' saknar ett biblioteksnamn. Använd fullständigt "
+"'Bibliotek:Fotavtryck'-format för att undvika återkommande "
+"uppdateringsmeddelanden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2273
 #, c-format
@@ -50556,9 +50518,9 @@ msgid "Loading board data..."
 msgstr "Läser in mönsterkortsdata..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Filen '%s' kunde inte skapas."
+msgstr "Lager '%s' kunde inte tilldelas och kommer att hoppas över."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1430
 msgid "Loading netclasses..."
@@ -52097,6 +52059,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' har icke-ASCII-tecken i sin beteckning; konverterad till '%s' "
+"för OBD++-export."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:88
 #, c-format
@@ -52104,6 +52068,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' har tvetydig beteckning efter konvertering; bytt beteckning "
+"till '%s' för OBD++-export."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1208
 msgid "Failed to add component data"
@@ -53190,9 +53156,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:108
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:121
-#, fuzzy
 msgid "Scripting init"
-msgstr "Skriptkonsol"
+msgstr "Skript-initialisering"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:119
 #, c-format
@@ -56017,11 +55982,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 msgid "Collect And Embed 3D Models"
-msgstr "Samla och bädda in 3D-modeller"
+msgstr "Samla och inbädda 3D-modeller"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "Samla fotavtryckens 3D-modeller och bädda in dem i mönsterkortet"
+msgstr "Samla fotavtrycks 3D-modeller och bädda in dem i mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Switch Track Width to Next"
@@ -56913,14 +56878,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Försök att sekventiellt dra ledningar för alla valda lödytor."
 
 #: pcbnew/tools/pcb_actions.cpp:2676
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Avbryt nuvarande verktyg"
+msgstr "Avbryt nuvarande objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:2677
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Skapa konturlinjer runt det valda objektet"
+msgstr "Hoppa över nuvarande objekt och dra ledare för nästa valda objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid ""
@@ -57195,7 +57158,7 @@ msgstr "Bädda in 3D-modeller"
 #: pcbnew/tools/pcb_control.cpp:2901
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr "%d 3D-modeller bäddades in framgångsrikt."
+msgstr "%d 3D-modell(er) bäddades in med lyckat resultat."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2671
 msgid "Resize Table Cells"
