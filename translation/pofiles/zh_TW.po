@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:09+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
-"Last-Translator: Vic <zz99681254z@gmail.com>\n"
+"PO-Revision-Date: 2026-02-25 23:09+0000\n"
+"Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -1749,7 +1749,7 @@ msgstr "錯誤"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
 msgid "Replace Loaded File?"
-msgstr "取代並尋找下一項?"
+msgstr "要取代目前載入的檔案嗎？"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
 #, fuzzy
@@ -2271,7 +2271,7 @@ msgstr "Bug 追蹤"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Report or examine bugs - "
-msgstr "報告或檢查 Bug - "
+msgstr "報告或檢查 Bug - . "
 
 #: common/dialog_about/AboutDialog_main.cpp:158
 msgid "KiCad users group and community"
@@ -4896,7 +4896,7 @@ msgstr "選擇要嵌入的檔案"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "從父項符號繼承來的嵌入檔案無法刪除。"
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -7107,6 +7107,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"無法合併(merge)：你有尚未暫存的變更。請先提交或暫存這些變更，再進行拉取(pull)"
+"。"
 
 #: common/git/git_pull_handler.cpp:399
 msgid "Could not merge commits"
@@ -7133,6 +7135,8 @@ msgid ""
 "Cannot rebase: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"無法變基(rebase)：你有尚未暫存的變更。請先提交或暫存這些變更，再進行拉取"
+"(pull)."
 
 #: common/git/git_pull_handler.cpp:543
 msgid "Conflicts detected during rebase"
@@ -8402,6 +8406,12 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad無法使用 '%s'.。\n"
+"\n"
+"1. 請在 Windows 設定或群組原則中停用「受控資料夾存取 (Controlled folder "
+"access)」\n"
+"2.請確認沒有其他防毒軟體干擾 KiCad 的運作\n"
+"3. 請確認已正確設定相關存取權限"
 
 #: common/pgm_base.cpp:218
 msgid "No default editor found, you must choose one."
@@ -12094,7 +12104,7 @@ msgstr "ERC 作業設定"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:274
 msgid "Export netlist in KiCad format"
-msgstr "以 KiCad 格式匯出網路表"
+msgstr "以 KiCad 格式匯出網路表(Netlist)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:279
 msgid "Export netlist in OrcadPCB2 format"
@@ -12760,9 +12770,8 @@ msgid "Enter the text to be used within the schematic"
 msgstr "輸入文字將在原理圖中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
-#, fuzzy
 msgid "Multiple label input"
-msgstr "多層"
+msgstr "多重標籤輸入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -13182,7 +13191,7 @@ msgstr "欄位名稱「%s」已存在。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "您確定要移除欄位「%s」嗎？"
+msgstr "您確定要移除這個「%s」欄位嗎？"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:917
 #, fuzzy
@@ -15972,7 +15981,7 @@ msgstr "高亮度顯示被交叉探測的網路"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "當 PCB 編輯器中高亮顯示走線時，同步高亮顯示其網路"
+msgstr "當在 PCB 編輯器中將走線高亮顯示時，同步高亮顯示其所屬的網路"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Default font:"
@@ -23192,9 +23201,8 @@ msgid "Previous Net Item"
 msgstr "上一圖紙"
 
 #: eeschema/tools/sch_actions.cpp:1086
-#, fuzzy
 msgid "Select previous item on the current net"
-msgstr "選擇遊標下的連接項"
+msgstr "選取目前網路中的上一個項目"
 
 #: eeschema/tools/sch_actions.cpp:1091
 msgid "Export Drawing to Clipboard"
@@ -37327,9 +37335,8 @@ msgid "x"
 msgstr "2x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外觀"
+msgstr "外觀預設組態："
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -37384,18 +37391,16 @@ msgid "°"
 msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:258
-#, fuzzy
 msgid "Lights Intensity"
-msgstr "強度"
+msgstr "燈光強度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
 msgid "Camera:"
 msgstr "相機:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:307
-#, fuzzy
 msgid "Lights Position"
-msgstr "燈光配置"
+msgstr "燈光位置"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:315
 msgid "Side lights elevation:"
