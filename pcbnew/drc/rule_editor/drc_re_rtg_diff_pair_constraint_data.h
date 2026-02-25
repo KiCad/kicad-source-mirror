@@ -38,7 +38,7 @@ public:
     {
     }
 
-    explicit DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName,
+    explicit DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
                                                        double aMaxUncoupledLength, double aMinWidth,
                                                        double aPreferredWidth, double aMaxWidth,
                                                        double aMinGap, double aPreferredGap,

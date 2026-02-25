@@ -38,7 +38,7 @@ public:
     }
 
     explicit DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA( int aId, int aParentId,
-                                                   double aNumericInputValue, wxString aRuleName ) :
+                                                   double aNumericInputValue, const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
             m_numericInputValue( aNumericInputValue )
     {

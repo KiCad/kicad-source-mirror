@@ -38,7 +38,7 @@ public:
     {
     }
 
-    explicit DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName,
+    explicit DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
                                                    double aMinRoutingWidth,
                                                    double aPreferredRoutingWidth,
                                                    double aMaxRoutingWidth ) :

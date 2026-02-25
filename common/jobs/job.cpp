@@ -20,6 +20,7 @@
 
 #include <jobs/job.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <common.h>
 #include <project.h>
 

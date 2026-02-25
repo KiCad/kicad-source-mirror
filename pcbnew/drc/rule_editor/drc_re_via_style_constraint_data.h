@@ -47,8 +47,9 @@ public:
     {
     }
 
-    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName, double aMinViaDiameter,
-                                               double aMaxViaDiameter, double aMinViaHoleSize, double aMaxViaHoleSize,
+    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
+                                               double aMinViaDiameter, double aMaxViaDiameter,
+                                               double aMinViaHoleSize, double aMaxViaHoleSize,
                                                VIA_STYLE_TYPE aViaType = VIA_STYLE_TYPE::ANY ) :
 
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),

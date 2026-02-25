@@ -38,7 +38,7 @@ public:
     {
     }
 
-    explicit DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA( int aId, int aParentId, wxString aRuleName,
+    explicit DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
                                                       bool aTopLayer, bool aBottomLayer ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ), m_topLayer( aTopLayer ),
             m_bottomLayer( aBottomLayer )

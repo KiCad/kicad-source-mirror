@@ -203,7 +203,7 @@ private:
      *
      * @return True if the rule name is unique, false otherwise.
      */
-    bool validateRuleName( int aNodeId, wxString aRuleName );
+    bool validateRuleName( int aNodeId, const wxString& aRuleName );
 
     /**
      * Deletes a rule tree node by its ID.

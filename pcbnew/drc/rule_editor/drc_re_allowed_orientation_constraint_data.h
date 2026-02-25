@@ -41,7 +41,7 @@ public:
     explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA(
             int aId, int aParentId, bool aAllowZeroDegreess, bool aAllowNinetyDegreess,
             bool aAllowOneEightyDegreess, bool aAllowTwoSeventyDegreess, bool aAllowAllDegreess,
-            wxString aRuleName ) :
+            const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
             m_allowZeroDegreess( aAllowZeroDegreess ), m_allowNinetyDegrees( aAllowNinetyDegreess ),
             m_allowOneEightyDegrees( aAllowOneEightyDegreess ),

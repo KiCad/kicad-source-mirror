@@ -42,7 +42,7 @@ public:
                                                          double   aMinLength,
                                                          double   aOptLength,
                                                          double   aMaxLength,
-                                                         wxString aRuleName ) :
+                                                         const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
             m_minLength( aMinLength ),
             m_optLength( aOptLength ),

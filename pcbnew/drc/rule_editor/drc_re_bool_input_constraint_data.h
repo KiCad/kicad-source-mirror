@@ -38,7 +38,7 @@ public:
     }
 
     explicit DRC_RE_BOOL_INPUT_CONSTRAINT_DATA( int aId, int aParentId, bool aBoolInputValue,
-                                                wxString aRuleName ) :
+                                                const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
             m_boolInputValue( aBoolInputValue )
     {

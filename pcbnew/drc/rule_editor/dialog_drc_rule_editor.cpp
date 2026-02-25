@@ -1045,7 +1045,7 @@ int DIALOG_DRC_RULE_EDITOR::highlightMatchingItems( int aNodeId )
 }
 
 
-bool DIALOG_DRC_RULE_EDITOR::validateRuleName( int aNodeId, wxString aRuleName )
+bool DIALOG_DRC_RULE_EDITOR::validateRuleName( int aNodeId, const wxString& aRuleName )
 {
     auto it = std::find_if( m_ruleTreeNodeDatas.begin(), m_ruleTreeNodeDatas.end(),
                             [aNodeId, aRuleName]( const RULE_TREE_NODE& node )

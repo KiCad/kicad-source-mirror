@@ -39,7 +39,7 @@ public:
     }
 
     explicit DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA( int aId, int aParentId,
-                                                                   wxString aRuleName,
+                                                                   const wxString& aRuleName,
                                                                    double   aMinTextHeight,
                                                                    double   aMinTextThickness ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
