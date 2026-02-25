@@ -1014,18 +1014,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         if( m_ViaEndLayer->GetLayerSelection() != UNDEFINED_LAYER )
             endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
 
-        int drillSize = 0;
-
-        // Calculate backdrill size (10% larger than drill)
-        if( viaDrill.has_value() )
-        {
-            drillSize = viaDrill.value() * 1.1;
-        }
-        else if( !m_viaDrill.IsIndeterminate() )
-        {
-            drillSize = m_viaDrill.GetIntValue() * 1.1;
-        }
-
         std::optional<int> secondaryDrill;
         std::optional<int> tertiaryDrill;
         std::optional<PCB_LAYER_ID> secondaryStartLayer;
@@ -1035,16 +1023,17 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
         if( m_backdrillChoice->GetSelection() != wxNOT_FOUND )
         {
-            BACKDRILL_MODE backdrillChoice =
-                    static_cast<BACKDRILL_MODE>( m_backdrillChoice->GetSelection() );
-
-            switch( backdrillChoice )
+            switch( static_cast<BACKDRILL_MODE>( m_backdrillChoice->GetSelection() ) )
             {
             case BACKDRILL_MODE::NO_BACKDRILL:
                 break;
 
             case BACKDRILL_MODE::BACKDRILL_BOTTOM:
-                tertiaryDrill      = drillSize;
+                if( m_backdrillBackSize.IsIndeterminate() || m_backdrillBackSize.IsNull() )
+                    tertiaryDrill = m_viaStack->TertiaryDrill().size.x;
+                else
+                    tertiaryDrill = m_backdrillBackSize.GetIntValue();
+
                 tertiaryStartLayer = B_Cu;
 
                 if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
@@ -1056,7 +1045,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 break;
 
             case BACKDRILL_MODE::BACKDRILL_TOP:
-                secondaryDrill      = drillSize;
+                if( m_backdrillFrontSize.IsIndeterminate() || m_backdrillFrontSize.IsNull() )
+                    secondaryDrill = m_viaStack->SecondaryDrill().size.x;
+                else
+                    secondaryDrill = m_backdrillFrontSize.GetIntValue();
+
                 secondaryStartLayer = F_Cu;
 
                 if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
@@ -1068,7 +1061,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 break;
 
             case BACKDRILL_MODE::BACKDRILL_BOTH:
-                secondaryDrill      = drillSize;
+                if( m_backdrillFrontSize.IsIndeterminate() || m_backdrillFrontSize.IsNull() )
+                    secondaryDrill = m_viaStack->SecondaryDrill().size.x;
+                else
+                    secondaryDrill = m_backdrillFrontSize.GetIntValue();
+
                 secondaryStartLayer = F_Cu;
 
                 if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
@@ -1077,7 +1074,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_backdrillFrontSize.IsIndeterminate() )
                     secondaryDrill = m_backdrillFrontSize.GetIntValue();
 
-                tertiaryDrill      = drillSize;
+                if( m_backdrillBackSize.IsIndeterminate() || m_backdrillBackSize.IsNull() )
+                    tertiaryDrill = m_viaStack->TertiaryDrill().size.x;
+                else
+                    tertiaryDrill = m_backdrillBackSize.GetIntValue();
+
                 tertiaryStartLayer = B_Cu;
 
                 if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
@@ -1276,9 +1277,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( m_backdrillChoice->GetSelection() != wxNOT_FOUND )
                 {
-                    BACKDRILL_MODE backdrillChoice = static_cast<BACKDRILL_MODE>( m_backdrillChoice->GetSelection() );
-
-                    switch( backdrillChoice )
+                    switch( static_cast<BACKDRILL_MODE>( m_backdrillChoice->GetSelection() ) )
                     {
                     case BACKDRILL_MODE::NO_BACKDRILL:
                         break;
