@@ -30,6 +30,7 @@
 #ifndef _OGL_ATT_LIST_H
 #define _OGL_ATT_LIST_H
 
+#include <kicad_gl/kiglad.h> // Must be included first
 #include <wx/glcanvas.h>
 
 /// Anti-aliasing options

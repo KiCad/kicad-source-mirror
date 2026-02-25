@@ -27,6 +27,7 @@
 #ifndef HIDPI_GL_CANVAS_H
 #define HIDPI_GL_CANVAS_H
 
+#include <kicad_gl/kiglad.h> // Must be included first
 #include <wx/glcanvas.h>
 
 #include <view/view_controls.h>
