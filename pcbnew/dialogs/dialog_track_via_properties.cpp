@@ -1165,6 +1165,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 m_ViaDiameterCtrl->SelectAll();
                 m_ViaDiameterCtrl->SetFocus();
             }
+
             // Other fields might not have direct focus targets in new UI or I'd need to map them
             return false;
         }
