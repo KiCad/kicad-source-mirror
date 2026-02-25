@@ -1764,39 +1764,34 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     if( !elem.showPinName )
         pin->SetNameTextSize( 0 );
 
-    // Altium gives the pin body end location.  Compute the connection point (electrical end)
-    // from the body end and pin length in the pin's orientation direction.
+    // Altium gives the pin body end location (elem.location) and the pre-computed
+    // electrical connection point (elem.kicadLocation) which accounts for pin length
+    // with combined integer+fractional arithmetic to avoid rounding errors.
     VECTOR2I bodyEnd = elem.location;
-    VECTOR2I pinLocation = bodyEnd;
+    VECTOR2I pinLocation = elem.kicadLocation;
 
     switch( elem.orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
-        pinLocation.x += elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
         pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
-        pinLocation.y -= elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
-        pinLocation.x -= elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         pin->SetOrientation( PIN_ORIENTATION::PIN_UP );
-        pinLocation.y += elem.pinlength;
         break;
 
     default:
         m_errorMessages.emplace( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );
         break;
     }
-
-    // TODO: position can be sometimes off a little bit!
 
     if( schSymbol )
     {
