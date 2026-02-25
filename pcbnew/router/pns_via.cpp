@@ -270,6 +270,7 @@ VIA* VIA::Clone() const
         v->m_shapes[layer] = SHAPE_CIRCLE( m_pos, shape.GetRadius() );
 
     v->SetHoleLayers( m_holeLayers );
+    v->m_unconnectedLayerMode = m_unconnectedLayerMode;
     v->m_secondaryHoleLayers = m_secondaryHoleLayers;
     v->m_secondaryDrill = m_secondaryDrill;
     v->m_primaryPostMachining = m_primaryPostMachining;
