@@ -13293,7 +13293,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">0</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">0</property>
+                                        <property name="row">1</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13358,7 +13358,7 @@
                                         <property name="colspan">2</property>
                                         <property name="column">1</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
-                                        <property name="row">0</property>
+                                        <property name="row">1</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxBitmapComboBox" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13427,7 +13427,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">0</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13458,7 +13458,7 @@
                                           <property name="gripper">0</property>
                                           <property name="hidden">0</property>
                                           <property name="id">wxID_ANY</property>
-                                          <property name="label">Size:</property>
+                                          <property name="label">Top backdrill size:</property>
                                           <property name="markup">0</property>
                                           <property name="max_size"></property>
                                           <property name="maximize_button">0</property>
@@ -13492,7 +13492,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">1</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxTextCtrl" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13560,7 +13560,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">2</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13652,7 +13652,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">0</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">0</property>
+                                        <property name="row">1</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13717,7 +13717,7 @@
                                         <property name="colspan">2</property>
                                         <property name="column">1</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
-                                        <property name="row">0</property>
+                                        <property name="row">1</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxBitmapComboBox" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13786,7 +13786,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">0</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13817,7 +13817,7 @@
                                           <property name="gripper">0</property>
                                           <property name="hidden">0</property>
                                           <property name="id">wxID_ANY</property>
-                                          <property name="label">Size:</property>
+                                          <property name="label">Bottom backdrill size:</property>
                                           <property name="markup">0</property>
                                           <property name="max_size"></property>
                                           <property name="maximize_button">0</property>
@@ -13851,7 +13851,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">1</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxTextCtrl" expanded="true">
                                           <property name="BottomDockable">1</property>
@@ -13919,7 +13919,7 @@
                                         <property name="colspan">1</property>
                                         <property name="column">2</property>
                                         <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                        <property name="row">1</property>
+                                        <property name="row">0</property>
                                         <property name="rowspan">1</property>
                                         <object class="wxStaticText" expanded="true">
                                           <property name="BottomDockable">1</property>

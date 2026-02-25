@@ -1214,23 +1214,23 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_backDrillTopLayerLabel->Wrap( -1 );
 	m_backDrillTopLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
 
-	gbBackdrillLeftCol->Add( m_backDrillTopLayerLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillLeftCol->Add( m_backDrillTopLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillTopLayer = new wxBitmapComboBox( sbBackdrill->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_backDrillTopLayer->SetToolTip( _("The backdrill must pass through this layer") );
 
-	gbBackdrillLeftCol->Add( m_backDrillTopLayer, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbBackdrillLeftCol->Add( m_backDrillTopLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_backDrillTopSizeLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillTopSizeLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Top backdrill size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillTopSizeLabel->Wrap( -1 );
-	gbBackdrillLeftCol->Add( m_backDrillTopSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillLeftCol->Add( m_backDrillTopSizeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillTopSize = new wxTextCtrl( sbBackdrill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbBackdrillLeftCol->Add( m_backDrillTopSize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillLeftCol->Add( m_backDrillTopSize, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillTopSizeUnits = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillTopSizeUnits->Wrap( -1 );
-	gbBackdrillLeftCol->Add( m_backDrillTopSizeUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillLeftCol->Add( m_backDrillTopSizeUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bBackdrillColumns->Add( gbBackdrillLeftCol, 1, wxEXPAND|wxLEFT, 15 );
@@ -1247,23 +1247,23 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_backDrillBottomLayerLabel->Wrap( -1 );
 	m_backDrillBottomLayerLabel->SetToolTip( _("The backdrill must pass through this layer") );
 
-	gbBackdrillRightCol->Add( m_backDrillBottomLayerLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillRightCol->Add( m_backDrillBottomLayerLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillBottomLayer = new wxBitmapComboBox( sbBackdrill->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_backDrillBottomLayer->SetToolTip( _("The backdrill must pass through this layer") );
 
-	gbBackdrillRightCol->Add( m_backDrillBottomLayer, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbBackdrillRightCol->Add( m_backDrillBottomLayer, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_backDrillBottomSizeLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backDrillBottomSizeLabel = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("Bottom backdrill size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillBottomSizeLabel->Wrap( -1 );
-	gbBackdrillRightCol->Add( m_backDrillBottomSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillRightCol->Add( m_backDrillBottomSizeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillBottomSize = new wxTextCtrl( sbBackdrill->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbBackdrillRightCol->Add( m_backDrillBottomSize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillRightCol->Add( m_backDrillBottomSize, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backDrillBottomSizeUnits = new wxStaticText( sbBackdrill->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backDrillBottomSizeUnits->Wrap( -1 );
-	gbBackdrillRightCol->Add( m_backDrillBottomSizeUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbBackdrillRightCol->Add( m_backDrillBottomSizeUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bBackdrillColumns->Add( gbBackdrillRightCol, 1, wxEXPAND, 5 );
