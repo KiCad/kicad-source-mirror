@@ -249,12 +249,18 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     SET_INT_VALUE( ROW_FAB,    COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_FAB ] );
     SET_INT_VALUE( ROW_OTHERS, COL_TEXT_THICKNESS, bds.m_TextThickness[ LAYER_CLASS_OTHERS ] );
 
+    attr = new wxGridCellAttr;
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER ); \
+    m_grid->SetAttr( ROW_HEADER, COL_TEXT_ITALIC, attr ); \
     m_grid->SetCellValue(  ROW_HEADER, COL_TEXT_ITALIC, _( "Italic" ) );
     SET_BOOL_VALUE(  ROW_SILK,   COL_TEXT_ITALIC, bds.m_TextItalic[ LAYER_CLASS_SILK ] );
     SET_BOOL_VALUE(  ROW_COPPER, COL_TEXT_ITALIC, bds.m_TextItalic[ LAYER_CLASS_COPPER ] );
     SET_BOOL_VALUE(  ROW_FAB,    COL_TEXT_ITALIC, bds.m_TextItalic[ LAYER_CLASS_FAB ] );
     SET_BOOL_VALUE(  ROW_OTHERS, COL_TEXT_ITALIC, bds.m_TextItalic[ LAYER_CLASS_OTHERS ] );
 
+    attr = new wxGridCellAttr;
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER ); \
+    m_grid->SetAttr( ROW_HEADER, COL_TEXT_UPRIGHT, attr ); \
     m_grid->SetCellValue(  ROW_HEADER, COL_TEXT_UPRIGHT, _( "Keep Upright" ) );
     SET_BOOL_VALUE(  ROW_SILK,   COL_TEXT_UPRIGHT, bds.m_TextUpright[ LAYER_CLASS_SILK ] );
     SET_BOOL_VALUE(  ROW_COPPER, COL_TEXT_UPRIGHT, bds.m_TextUpright[ LAYER_CLASS_COPPER ] );
