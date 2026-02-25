@@ -34,7 +34,6 @@
 #include <dialogs/rule_editor_data_base.h>
 
 class WX_INFOBAR;
-class wxDragImage;
 
 /**
  * Enumeration representing the available context menu options for the rule editor tree.
@@ -497,7 +496,7 @@ private:
     RULE_TREE_ITEM_DATA*        m_selectedData;
     wxTreeItemId                m_previousId;
     wxTreeItemId                m_draggedItem;
-    wxDragImage*                m_dragImage;
+    wxTreeItemId                m_dropTargetItem;
 
     std::unordered_map<int, std::tuple<wxString, std::vector<int>, wxTreeItemId>> m_treeHistoryData;
 };

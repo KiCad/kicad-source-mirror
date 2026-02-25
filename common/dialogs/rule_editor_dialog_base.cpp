@@ -31,10 +31,8 @@
 #include <wx/stc/stc.h>
 #include <wx/menu.h>
 #include <wx/log.h>
-#include <wx/dragimag.h> // For wxDragImage
 #include <wx/wx.h>
 #include <wx/dnd.h>
-#include <wx/dcmemory.h> // Include for wxMemoryDC
 #include <wx/dcclient.h> // Include for wxClientDC if needed
 #include <wx/dcbuffer.h> // Include for double-buffered drawing
 #include <wx/bitmap.h>
@@ -81,8 +79,7 @@ RULE_EDITOR_DIALOG_BASE::RULE_EDITOR_DIALOG_BASE( wxWindow* aParent, const wxStr
         m_title( aTitle ),
         m_selectedData( nullptr ),
         m_previousId( nullptr ),
-        m_draggedItem( nullptr ),
-        m_dragImage( nullptr )
+        m_draggedItem( nullptr )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
@@ -306,12 +303,6 @@ RULE_EDITOR_DIALOG_BASE::~RULE_EDITOR_DIALOG_BASE()
 
     m_selectedData = nullptr;
     m_previousId = nullptr;
-
-    if( m_dragImage )
-    {
-        delete m_dragImage;
-        m_dragImage = nullptr;
-    }
 }
 
 
@@ -794,18 +785,6 @@ void RULE_EDITOR_DIALOG_BASE::onRuleTreeItemLeftDown( wxMouseEvent& aEvent )
     if( item.IsOk() )
     {
         m_draggedItem = item;
-
-        wxString   text = m_ruleTreeCtrl->GetItemText( item );
-        wxMemoryDC dc;
-        wxBitmap   bitmap( 200, 30 );
-        dc.SelectObject( bitmap );
-        dc.SetBackground( *wxWHITE_BRUSH );
-        dc.Clear();
-        dc.SetFont( *wxNORMAL_FONT );
-        dc.DrawText( text, 5, 5 );
-        dc.SelectObject( wxNullBitmap );
-
-        m_dragImage = new wxDragImage( bitmap );
         m_isDragging = false;
     }
 
@@ -815,43 +794,48 @@ void RULE_EDITOR_DIALOG_BASE::onRuleTreeItemLeftDown( wxMouseEvent& aEvent )
 
 void RULE_EDITOR_DIALOG_BASE::onRuleTreeItemMouseMotion( wxMouseEvent& aEvent )
 {
-    if( aEvent.Dragging() && m_draggedItem.IsOk() && m_dragImage )
+    if( aEvent.Dragging() && m_draggedItem.IsOk() )
     {
-        wxPoint currentPos = aEvent.GetPosition();
+        m_isDragging = true;
 
-        if( !m_isDragging )
+        // Clear previous highlight
+        if( m_dropTargetItem.IsOk() )
         {
-            if( !m_dragImage->BeginDrag( wxPoint( 0, 0 ), m_ruleTreeCtrl, true ) )
-            {
-                delete m_dragImage;
-                m_dragImage = nullptr;
-                return;
-            }
-
-            m_dragImage->Show();
-            m_isDragging = true;
+            m_ruleTreeCtrl->SetItemBackgroundColour( m_dropTargetItem, wxNullColour );
+            m_dropTargetItem = wxTreeItemId();
         }
-        else
+
+        // Highlight item under cursor
+        int          flags;
+        wxTreeItemId hitItem = m_ruleTreeCtrl->HitTest( aEvent.GetPosition(), flags );
+
+        if( hitItem.IsOk() && hitItem != m_draggedItem )
         {
-            m_dragImage->Move( currentPos );
+            wxTreeItemId hitParent = m_ruleTreeCtrl->GetItemParent( hitItem );
+            wxTreeItemId dragParent = m_ruleTreeCtrl->GetItemParent( m_draggedItem );
+
+            if( hitParent == dragParent )
+            {
+                m_ruleTreeCtrl->SetItemBackgroundColour(
+                        hitItem, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+                m_dropTargetItem = hitItem;
+            }
         }
     }
 
     aEvent.Skip();
 }
 
-
 void RULE_EDITOR_DIALOG_BASE::onRuleTreeItemLeftUp( wxMouseEvent& aEvent )
 {
     if( m_draggedItem.IsOk() && m_isDragging )
     {
-        if( m_dragImage )
+        m_isDragging = false;
+
+        if( m_dropTargetItem.IsOk() )
         {
-            m_dragImage->Hide();
-            m_dragImage->EndDrag();
-            delete m_dragImage;
-            m_dragImage = nullptr;
-            m_isDragging = false;
+            m_ruleTreeCtrl->SetItemBackgroundColour( m_dropTargetItem, wxNullColour );
+            m_dropTargetItem = wxTreeItemId();
         }
 
         wxPoint      pos = aEvent.GetPosition();
