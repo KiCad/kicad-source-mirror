@@ -514,6 +514,25 @@ void DIALOG_DRC_RULE_EDITOR::OnCancel( wxCommandEvent& aEvent )
         }
     }
 
+    // Purge unsaved new rules from memory so they don't reappear on reopen
+    std::vector<int> newRuleNodeIds;
+
+    for( const RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
+    {
+        if( node.m_nodeType == RULE && node.m_nodeData && node.m_nodeData->IsNew() )
+            newRuleNodeIds.push_back( node.m_nodeId );
+    }
+
+    for( int nodeId : newRuleNodeIds )
+    {
+        auto it = m_treeHistoryData.find( nodeId );
+
+        if( it != m_treeHistoryData.end() )
+            DeleteRuleTreeItem( std::get<2>( it->second ), nodeId );
+
+        deleteTreeNodeData( nodeId );
+    }
+
     aEvent.Skip();
 }
 
@@ -1131,6 +1150,9 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
         if( node.m_nodeType != RULE )
             continue;
 
+        if( node.m_nodeData && node.m_nodeData->IsNew() )
+            continue;
+
         auto constraintData = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( node.m_nodeData );
 
         if( constraintData )
@@ -1323,6 +1345,9 @@ void DIALOG_DRC_RULE_EDITOR::SaveRulesToFile()
         auto data = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( node.m_nodeData );
 
         if( !data )
+            continue;
+
+        if( node.m_nodeData->IsNew() )
             continue;
 
         DRC_RE_LOADED_PANEL_ENTRY entry;

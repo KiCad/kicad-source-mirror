@@ -1061,7 +1061,12 @@ void RULE_EDITOR_DIALOG_BASE::restoreRuleTree( const wxTreeItemId& aParent, cons
 
 wxTreeItemId RULE_EDITOR_DIALOG_BASE::appendRuleTreeItem( const RULE_TREE_NODE& aNode, wxTreeItemId aParent )
 {
-    wxTreeItemId currentTreeItemId = m_ruleTreeCtrl->AppendItem( aParent, aNode.m_nodeName );
+    wxString displayName = aNode.m_nodeName;
+
+    if( aNode.m_nodeData && aNode.m_nodeData->IsNew() )
+        displayName += wxS( " *" );
+
+    wxTreeItemId currentTreeItemId = m_ruleTreeCtrl->AppendItem( aParent, displayName );
 
     RULE_TREE_ITEM_DATA* itemData = new RULE_TREE_ITEM_DATA( aNode.m_nodeId, aParent, currentTreeItemId );
     m_ruleTreeCtrl->SetItemData( currentTreeItemId, itemData );
