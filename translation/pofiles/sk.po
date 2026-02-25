@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-24 23:36+0000\n"
+"PO-Revision-Date: 2026-02-25 22:31+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -3016,7 +3016,7 @@ msgstr "Nastavenie mriežky"
 #: common/dialogs/dialog_group_properties.cpp:115
 #, c-format
 msgid "Invalid library link: '%s'"
-msgstr "Neplatný odkaz na knižnicu: '%s'"
+msgstr "Neplatné knižničné prepojenie: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:138
 msgid "Edit Group Properties"
@@ -3030,7 +3030,7 @@ msgstr "Názov skupiny:"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:319
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:383
 msgid "Library link:"
-msgstr "Odkaz na knižnicu:"
+msgstr "Knižničné prepojenie:"
 
 #: common/dialogs/dialog_group_properties_base.cpp:47 eeschema/sch_item.cpp:844
 #: pcbnew/board_item.cpp:451
@@ -8978,7 +8978,7 @@ msgstr "Zobraziť"
 
 #: common/libraries/library_manager.cpp:142
 msgid "A reference to this library table already exists"
-msgstr "Odkaz na túto tabuľku knižnice už existuje"
+msgstr "Referencia na túto tabuľku knižnice už existuje"
 
 #: common/libraries/library_manager.cpp:310
 msgid "Added by Plugin and Content Manager"
@@ -11165,7 +11165,7 @@ msgstr "Hľadať Metadáta"
 
 #: common/widgets/search_pane.cpp:56
 msgid "Search library links, descriptions and keywords"
-msgstr ""
+msgstr "Hľadať knižničné prepojenia, popisy a kľúčové slová"
 
 #: common/widgets/unit_binder.cpp:360
 #, c-format
@@ -12130,7 +12130,7 @@ msgstr "Výber"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:52
 msgid "Recurse into subsheets"
-msgstr "Opakovať do podlistov"
+msgstr "Rekurzívne do podlistov"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:60
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:49
@@ -12815,11 +12815,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "Aktuálna referencia knižnice"
+msgstr "Aktuálna referencia na knižnicu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "Nový odkaz na knižnicu"
+msgstr "Nová referencia na knižnicu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -12851,7 +12851,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "Odkazy na knižnicu symbolov"
+msgstr "Referencie na knižnicu symbolov"
 
 #: eeschema/dialogs/dialog_erc.cpp:124
 msgid "Run ERC"
@@ -15373,9 +15373,8 @@ msgid "Open output file with associated application after successful plot"
 msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:90
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Tlač schémy"
+msgstr "Vykresliť schému"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
 #, fuzzy
@@ -15472,8 +15471,8 @@ msgid ""
 "The following changes are recommended to update the project."
 msgstr ""
 "Táto schéma bola vytvorená pomocou starších knižníc symbolov, ktoré ju môžu "
-"narušiť. Niektoré symboly bude možno potrebné prepojiť s iným názvom "
-"symbolu. Niektoré symboly bude možno potrebné \"zachrániť\" (skopírovať a "
+"narušiť.  Niektoré symboly bude možno potrebné prepojiť s iným názvom "
+"symbolu.  Niektoré symboly bude možno potrebné \"zachrániť\" (skopírovať a "
 "premenovať) do novej knižnice.\n"
 "\n"
 "Na aktualizáciu projektu sa odporúčajú nasledujúce zmeny."
@@ -16389,9 +16388,8 @@ msgid "Right:"
 msgstr "Vpravo:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:892
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Nastavenie dosky"
+msgstr "Nastavenie vykreslenia"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 #, fuzzy
@@ -18588,6 +18586,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:138 pcbnew/pcbnew_jobs_handler.cpp:294
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr ""
+"Vykresľovanie do HPGL formátu už nie je podporované od KiCad verzie 10.0."
 
 #: eeschema/eeschema_jobs_handler.cpp:210
 #, fuzzy
@@ -18599,6 +18598,7 @@ msgstr "Nepodarilo sa načítať schému '%s'\n"
 #: kicad/cli/command_sch_export_plot.cpp:131 pcbnew/pcbnew_jobs_handler.cpp:282
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0.\n"
 msgstr ""
+"Vykresľovanie do HPGL formátu už nie je podporované od KiCad verzie 10.0.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:363
 #: eeschema/eeschema_jobs_handler.cpp:522
@@ -18661,9 +18661,9 @@ msgid "Wrote bill of materials to '%s'."
 msgstr "Generovať rozpis &materiálu"
 
 #: eeschema/eeschema_jobs_handler.cpp:1025
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Zmeniť symbol %s z '%s' na '%s'\n"
+msgstr "Vykresľovanie symbolu '%s' jednotky %d do '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1106
 #: eeschema/eeschema_jobs_handler.cpp:1215 pcbnew/pcbnew_jobs_handler.cpp:2083
@@ -19366,7 +19366,7 @@ msgstr ""
 "Knižnice symbolov definované v zozname knižníc symbolov súboru projektu už "
 "nie sú podporované a budú odstránené.\n"
 "\n"
-"To môže za určitých podmienok spôsobiť nefunkčné odkazy na knižnice symbolov."
+"Za určitých podmienok to môže spôsobiť nefunkčné knižničné prepojenia."
 
 #: eeschema/files-io.cpp:518
 msgid "Do not show this dialog again."
@@ -20848,8 +20848,9 @@ msgid ""
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
 msgstr ""
-"Definícia časti '%s' odkazuje na symbol '%s' (alternatívny '%s'), ktorý sa "
-"nenašiel v knižnici symbolov. Diel nebol načítaný do knižnice KiCad."
+"Definícia súčiastky '%s' obsahuje referenciu na symbol '%s' (alternatívny "
+"'%s'), ktorý sa nenašiel v knižnici symbolov. Súčiastka nebola načítaná do "
+"knižnice KiCad."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:707
 #, fuzzy, c-format
@@ -20866,8 +20867,8 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
-"Symbol '%s' odkazuje na časť '%s', ktorú sa v knižnici nenašla. Symbol nebol "
-"načítaný"
+"Symbol '%s' obsahuje referenciu na súčiastku '%s', ktorá sa v knižnici "
+"nenašla. Symbol nebol načítaný"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:839
 #, c-format
@@ -20875,8 +20876,8 @@ msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
-"Symbol ID '%s' odkazuje na symbol knižnice '%s', ktorý sa v knižnici "
-"nenašiel. Exportovali ste všetky položky vzoru?"
+"Symbol ID '%s' obsahuje referenciu na symbol knižnice '%s', ktorý sa v "
+"knižnici nenašiel. Exportovali ste všetky položky návrhu?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:851
 #, c-format
@@ -21557,9 +21558,9 @@ msgstr "Neplatný identifikátor knižnice symbolov"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5155
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6969
-#, fuzzy, c-format
+#, c-format
 msgid "Group library link %s contains invalid character '%c'"
-msgstr "Meno súčiastky '%s' nenájdené v knižnici '%s'."
+msgstr "Skupina knižničného prepojenia %s obsahuje neplatný znak '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5161
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6976
@@ -21887,25 +21888,24 @@ msgid "Pin Name"
 msgstr "Názov špendlíka"
 
 #: eeschema/sch_plotter.cpp:117
-#, fuzzy
 msgid "No sheets to plot."
-msgstr "Importovať špendlík listu"
+msgstr "Žiadne listy k vykresleniu."
 
 #: eeschema/sch_plotter.cpp:227 pcbnew/pcbnew_jobs_handler.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Nepodarilo sa načítať '%s'\n"
+msgstr "Vykreslené do '%s'.\n"
 
 #: eeschema/sch_plotter.cpp:401 eeschema/sch_plotter.cpp:557
 #: eeschema/sch_plotter.cpp:728 pcbnew/pcb_plotter.cpp:288
 #, c-format
 msgid "Plotted to '%s'."
-msgstr "Vykresleno na '%s'."
+msgstr "Vykreslené do '%s'."
 
 #: eeschema/sch_plotter.cpp:854
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "Selhal zápis souborů vykreslení do složky '%s'."
+msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka '%s'."
 
 #: eeschema/sch_reference_list.cpp:640
 #, c-format
@@ -21953,7 +21953,7 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Identifikátor knižnice s odkazom na schematický symbol '%s' nie je platný. "
+"Referencia schematického symbolu '%s' knižničného prepojenia nie je platná. "
 "Nepodarilo sa prepojiť symbol knižnice."
 
 #: eeschema/sch_screen.cpp:775
@@ -22145,9 +22145,8 @@ msgstr "Zrcadlit Y"
 
 #: eeschema/sch_symbol.cpp:3897 eeschema/widgets/search_handlers.cpp:170
 #: pcbnew/footprint.cpp:4819 pcbnew/widgets/search_handlers.cpp:126
-#, fuzzy
 msgid "Library Link"
-msgstr "Odkaz na knihovnu"
+msgstr "Knižničné prepojenie"
 
 #: eeschema/sch_symbol.cpp:3901 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4822 pcbnew/plot_board_layers.cpp:190
@@ -22733,17 +22732,17 @@ msgid ""
 "schematic hierarchy."
 msgstr ""
 "Zmeny v liste nie je možné vykonať, pretože cieľový list už má niekde v "
-"schematickej hierarchii list '%s', alebo jeden z jeho pod-listov ako "
+"schematickej hierarchii list '%s', alebo jeden z jeho podlistov ako "
 "nadradený."
 
 #: eeschema/sheet.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"V schéme '%s' neboli premapované odkazy na knižnicu symbolov do tabuľky "
+"V schéme '%s' neboli premapované knižničné prepojenia symbolov do tabuľky "
 "knižnice symbolov. Pred importom do aktuálneho projektu je potrebné najskôr "
 "premapovať projekt, ku ktorému táto schéma patrí."
 
@@ -22841,7 +22840,6 @@ msgid "Continue Load Schematic"
 msgstr "Pokračujte v načítaní schémy"
 
 #: eeschema/sheet.cpp:590
-#, fuzzy
 msgid ""
 "There are library names in the selected schematic that are missing from the "
 "current project library table.  This may result in broken symbol library "
@@ -22849,12 +22847,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V načítanej schéme sú názvy knižníc, ktoré v tabuľke knižnice projektu "
-"chýbajú. To môže mať za následok nefunkčné odkazy na knižnicu symbolov pre "
-"načítanú schému. Prajete si pokračovať?"
+"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú v aktuálnej projektovej "
+"tabuľke knižníc.  To môže mať za následok nefunkčné referencie na knižnicu "
+"symbolov pre načítanú schému. \n"
+"\n"
+"Prajete si pokračovať?"
 
 #: eeschema/sheet.cpp:630
-#, fuzzy
 msgid ""
 "The selected file was created as part of a different project.  Linking the "
 "file to this project may result in missing or incorrect symbol library "
@@ -22862,10 +22861,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V aktuálnej tabuľke knižnice existuje duplicitný názov knižnice, ktorý "
-"odkazuje na inú knižnicu. Tento konflikt nie je možné vyriešiť a môže mať za "
-"následok nefunkčné odkazy na knižnicu symbolov pre schému. Prajete si "
-"pokračovať?"
+"Vybraný súbor bol vytvorený ako súčasť iného projektu.  Prepojenie súboru s "
+"týmto projektom môže mať za následok chýbajúce alebo nesprávne referencie na "
+"knižnicu symbolov.\n"
+"\n"
+"Chcete pokračovať?"
 
 #: eeschema/sheet.cpp:646
 #, fuzzy, c-format
@@ -22873,7 +22873,6 @@ msgid "Error loading the symbol library table '%s'."
 msgstr "Pri načítaní tabuľky knižnice symbolov '%s' sa vyskytla chyba."
 
 #: eeschema/sheet.cpp:675
-#, fuzzy
 msgid ""
 "There are symbol library names in the selected schematic that are missing "
 "from the selected schematic project library table.  This may result in "
@@ -22881,12 +22880,13 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"V načítanej schéme sú názvy knižníc, ktoré chýbajú v tabuľke načítanej "
-"schémy knižnice projektu. To môže mať za následok nefunkčné odkazy na "
-"knižnicu symbolov pre schému. Prajete si pokračovať?"
+"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú vo zvolenej projektovej "
+"tabuľke knižníc.  To môže mať za následok nefunkčné referencie na knižnicu "
+"symbolov.\n"
+"\n"
+"Prajete si pokračovať?"
 
 #: eeschema/sheet.cpp:736
-#, fuzzy
 msgid ""
 "A duplicate library name that references a different library exists in the "
 "current library table.  This conflict cannot be resolved and may result in "
@@ -22896,8 +22896,9 @@ msgid ""
 msgstr ""
 "V aktuálnej tabuľke knižnice existuje duplicitný názov knižnice, ktorý "
 "odkazuje na inú knižnicu. Tento konflikt nie je možné vyriešiť a môže mať za "
-"následok nefunkčné odkazy na knižnicu symbolov pre schému. Prajete si "
-"pokračovať?"
+"následok nefunkčné odkazy na knižnicu symbolov pre schému.\n"
+"\n"
+"Prajete si pokračovať?"
 
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1206
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1256
@@ -23117,9 +23118,8 @@ msgid "No C_comp values are available."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
-#, fuzzy
 msgid "Missing or invalid Temperature Range value."
-msgstr "Nárast teploty:"
+msgstr "Chýbajúca alebo neplatná hodnota teplotného rozsahu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
 msgid "Missing or invalid Voltage Range value."
@@ -23959,9 +23959,8 @@ msgid "Resistance (swept)"
 msgstr "Odpor"
 
 #: eeschema/sim/sim_plot_tab.cpp:952
-#, fuzzy
 msgid "Temperature (swept)"
-msgstr "Nárast teploty"
+msgstr "Teplota (s prebehom)"
 
 #: eeschema/sim/sim_plot_tab.cpp:970
 msgid "Voltage (measured)"
@@ -23989,11 +23988,10 @@ msgid " (phase)"
 msgstr " AC fáza:"
 
 #: eeschema/sim/sim_tab.cpp:91 eeschema/sim/sim_tab.cpp:108
-#, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Táto simulácia neposkytuje žiadne zápletky. Výsledky nájdete v okne konzoly"
+"Táto simulácia neposkytuje žiadne grafy. Výsledky nájdete v okne konzoly."
 
 #: eeschema/sim/simulator_frame.cpp:340
 #, fuzzy
@@ -24175,7 +24173,7 @@ msgstr "Signál"
 #: eeschema/sim/simulator_frame_ui_base.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:246 pcbnew/dialogs/dialog_plot_base.h:154
 msgid "Plot"
-msgstr "Obsah"
+msgstr "Vykresliť"
 
 #: eeschema/sim/simulator_frame_ui.cpp:742
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
@@ -24206,6 +24204,8 @@ msgid ""
 "The current analysis must have a plot in order to tune the value of a "
 "passive R, L, C model or voltage or current source."
 msgstr ""
+"Aktuálna analýza musí mať graf, aby bolo možné vyladiť hodnotu pasívneho "
+"modelu R, L, C alebo zdroja napätia alebo prúdu."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1705
 #: eeschema/sim/simulator_frame_ui.cpp:1730
@@ -24230,9 +24230,8 @@ msgid "Error: simulation type not defined.\n"
 msgstr "Chyba: typ simulácie nie je definovaný!\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1838
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "Chyba: typ simulácie nepodporuje vykreslenie!\n"
+msgstr "Chyba: typ simulácie nepodporuje vykreslenie grafu.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3372
 #: eeschema/sim/simulator_frame_ui.cpp:3488
@@ -26261,14 +26260,13 @@ msgid "Edit a table of fields from all symbols in the schematic"
 msgstr "Hromadné úpravy polí všetkých symbolov v schéme"
 
 #: eeschema/tools/sch_actions.cpp:1106
-#, fuzzy
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Upraviť odkazy na knižnicu symbolov..."
+msgstr "Hromadne upraviť knižničné prepojenia symbolov..."
 
 #: eeschema/tools/sch_actions.cpp:1107
-#, fuzzy
 msgid "Edit a table of links between schematic and library symbols"
-msgstr "Upraviť odkazy medzi schematickými symbolmi a symbolmi knižnice"
+msgstr ""
+"Upraviť tabuľku prepojení medzi schematickými symbolmi a symbolmi knižnice"
 
 #: eeschema/tools/sch_actions.cpp:1113
 msgid "Assign Footprints..."
@@ -26344,7 +26342,7 @@ msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Znovu priradiť odkazy symbolov v schémach starších verzií, na tabuľku "
+"Znovu priradiť referencie symbolov v schémach starších verzií, na tabuľku "
 "knižnice symbolov"
 
 #: eeschema/tools/sch_actions.cpp:1170
@@ -26827,24 +26825,20 @@ msgid "Save the current set of analysis tabs and settings to another location"
 msgstr "Uložiť aktuálny dokument na iné miesto"
 
 #: eeschema/tools/sch_actions.cpp:1655
-#, fuzzy
 msgid "Export Current Plot as PNG..."
-msgstr "Exportovať aktuálne zobrazenie ako PNG..."
+msgstr "Exportovať aktuálny graf do PNG..."
 
 #: eeschema/tools/sch_actions.cpp:1661
-#, fuzzy
 msgid "Export Current Plot as CSV..."
-msgstr "Exportovať aktuálne zobrazenie ako PNG..."
+msgstr "Exportovať aktuálny graf do CSV..."
 
 #: eeschema/tools/sch_actions.cpp:1667
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "Exportovať výkres do schránky"
+msgstr "Exportovať aktuálny graf do schránky"
 
 #: eeschema/tools/sch_actions.cpp:1673
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Exportovať aktuálne zobrazenie ako PNG..."
+msgstr "Exportovať aktuálny graf do schémy"
 
 #: eeschema/tools/sch_actions.cpp:1679
 #, fuzzy
@@ -26870,13 +26864,12 @@ msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1701
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D modely"
+msgstr "Vykreslenie v tmavom režime"
 
 #: eeschema/tools/sch_actions.cpp:1702
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "Vykreslenie s tmavým pozadím"
 
 #: eeschema/tools/sch_actions.cpp:1707
 msgid "Edit Analysis Tab..."
@@ -26884,7 +26877,7 @@ msgstr "Upraviť tabuľku analýz"
 
 #: eeschema/tools/sch_actions.cpp:1708
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "Upraviť SPICE príkaz a nastavenie grafu na aktuálnej karte analýzy"
 
 #: eeschema/tools/sch_actions.cpp:1715
 msgid "Run Simulation"
@@ -27383,20 +27376,19 @@ msgid "Failed to paste cells"
 msgstr "Vytvorenie zlyhalo"
 
 #: eeschema/tools/sch_editor_control.cpp:2266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The pasted sheet '%s'\n"
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Prilepený hárok '%s'\n"
-"bolo zrušené, pretože cieľové miesto už má hárok alebo jednu z jeho "
-"čiastkových hárkov ako nadradené."
+"Prilepenie list '%s'\n"
+"bolo zrušené, pretože cieľ už má list alebo jeden z jeho podlistov ako "
+"nadradený."
 
 #: eeschema/tools/sch_editor_control.cpp:2850
-#, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr "knižnicu \"%s\" nie je možné vymazať"
+msgstr "Symboly s nefunkčnými knižničnými prepojeniami nie je možné upravovať."
 
 #: eeschema/tools/sch_editor_control.cpp:2937
 #, fuzzy
@@ -27751,19 +27743,16 @@ msgid "Create a new project for this schematic"
 msgstr "Vytvorte nový projekt pre túto nástenku"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Opakovať do podlistov"
+msgstr "Nekopírovať podlisty"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Iba aktuálny hárok"
+msgstr "Kopírovať iba interné podlisty"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Pridať list"
+msgstr "Kopírovať všetky podlisty"
 
 #: eeschema/widgets/hierarchy_pane.cpp:500
 msgid "Edit Page Number"
@@ -28929,7 +28918,7 @@ msgstr "Súbor sa nenašiel:"
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
-"<b> Súbor úlohy Gerber nemožno načítať ako súbor vykreslenia </b> <i> %s </i>"
+"<b>Súbor úlohy Gerber nemožno načítať ako súbor vykreslenia</b> <i>%s</i>"
 
 #: gerbview/files.cpp:318
 #, fuzzy
@@ -29270,12 +29259,11 @@ msgstr "Otvoriť súbory Gerberovho sprisahania..."
 
 #: gerbview/tools/gerbview_actions.cpp:48
 msgid "Open Gerber Plot File(s)..."
-msgstr "Otvoriť súbory Gerberovho sprisahania..."
+msgstr "Otvoriť vykreslené súbory Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:49
-#, fuzzy
 msgid "Open Gerber plot file(s) on a new layer."
-msgstr "Otvoriť súbory Gerberovho sprisahania..."
+msgstr "Otvoriť vykreslené súbory Gerber na novej vrstve..."
 
 #: gerbview/tools/gerbview_actions.cpp:55
 msgid "Open Excellon Drill File(s)..."
@@ -29291,7 +29279,7 @@ msgstr "Otvoriť Gerber Job File..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "Otvorte súbor úloh Gerber a s ním spojené súbory Gerber plot"
+msgstr "Otvoriť súbor úloh Gerber a s ním spojené vykreslené súbory Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
@@ -30068,8 +30056,8 @@ msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"Vrstvy zahrnuté na každém vykreslení, čárkou oddělený seznam nepřeložených "
-"názvů vrstev tak, aby obsahovaly např. F.Cu,B.Cu"
+"Vrstvy zahrnuté na každom vykreslení, čiarkou oddelený zoznam zahrnutých "
+"nepreložených názvov vrstiev napr. F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_drill.cpp:51
 #: pcbnew/dialogs/dialog_gendrill_base.h:90
@@ -30081,9 +30069,8 @@ msgid "Valid options excellon, gerber."
 msgstr "Platné možnosti excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
-msgstr "Platné možnosti excellon, gerber."
+msgstr "Platné možnosti sú: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
@@ -30214,12 +30201,11 @@ msgstr "Odpočítať spájkovaciu masku od potlače"
 #: kicad/cli/command_pcb_export_dxf.cpp:75
 #: pcbnew/dialogs/dialog_plot_base.cpp:337
 msgid "Plot graphic items using their contours"
-msgstr "Vykreslite grafické prvky pomocou ich obrysov"
+msgstr "Vykresliť grafické položky pomocou ich obrysov"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:79
-#, fuzzy
 msgid "Plot using the drill/place file origin"
-msgstr "Použite pôvod súboru drill / place"
+msgstr "Vykresliť na základe počiatku súradníc súboru vŕtania/umiestnenia"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:83
 #: kicad/cli/command_pcb_export_gerber.cpp:50
@@ -30318,9 +30304,8 @@ msgid "Save the origin coordinates in the file"
 msgstr "Uložte súradnice začiatku do súboru"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:39
-#, fuzzy
 msgid "Plot given layers to a single Gerber file"
-msgstr "Všetky vrstvy v jednom súbore"
+msgstr "Vykresliť dané vrstvy v jednom súbore Gerber"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:70
 #, fuzzy
@@ -30357,11 +30342,14 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Vykresliť viac súborov Gerber pre DPS, vrátane možnosti použiť uložené "
+"nastavenie vykresľovania"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:37
-#, fuzzy
 msgid "Use the Gerber plot settings already configured in the board file"
-msgstr "Použít nastavení gerber plot již nakonfigurované v souboru desky"
+msgstr ""
+"Použít nastavenie vykresľovania Gerber, ktoré sú už nakonfigurované v súbore "
+"dosky"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
 msgid "No longer supported as of KiCad 10.0."
@@ -30384,14 +30372,12 @@ msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Barevné téma k použití (bude výchozí v nastavení pcbnew)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:104
-#, fuzzy
 msgid "Plot the layers to individual PDF files"
-msgstr "Všetky vrstvy v jednom súbore"
+msgstr "Vykresliť vrstvy v individuálnych súboroch PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:108
-#, fuzzy
 msgid "Plot the layers to a single PDF file with multiple pages"
-msgstr "Všetky vrstvy v jednom súbore"
+msgstr "Vykresliť vrstvy do jedného PDF súboru s viacerými stránkami"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:181
 #, fuzzy
@@ -31350,9 +31336,8 @@ msgid "Pre-configured Libraries"
 msgstr "Migrovať knižnice..."
 
 #: kicad/dialogs/template_default_html.h:244
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "Nové ID knižnice stopy:"
+msgstr "Všeobecné symboly a puzdrá sú už prepojené a pripravené na použitie."
 
 #: kicad/dialogs/template_default_html.h:250
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
@@ -33729,9 +33714,8 @@ msgid "Electrical Resistivity in Ohm*m at 20 deg C"
 msgstr "Elektrický odpor v Ohm * m"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:268
-#, fuzzy
 msgid "Temperature coefficient"
-msgstr "Nárast teploty"
+msgstr "Teplotný koeficient"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:26
 #, fuzzy
@@ -33782,9 +33766,8 @@ msgid "ohm-meter"
 msgstr "Ohm-meter"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
-#, fuzzy
 msgid "Temperature Coefficient:"
-msgstr "Nárast teploty:"
+msgstr "Teplotný koeficient:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:95
 msgid "Thermal coefficient at 20 deg C"
@@ -33821,9 +33804,8 @@ msgid "Application"
 msgstr "Pomocné aplikácie"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:175
-#, fuzzy
 msgid "Cable temperature:"
-msgstr "Okolitá teplota:"
+msgstr "Teplota kábla:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:177
 msgid "Off-Load max conductor temp. Reference: 20 deg C"
@@ -35136,7 +35118,7 @@ msgstr "Relatívna dielektrická konštanta (epsilon r)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
-msgstr "Maximálne prijateľný nárast teploty"
+msgstr "Maximálny prijateľný nárast teploty"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:180
 msgid "Pulse rise time:"
@@ -35186,7 +35168,7 @@ msgstr "Odhadovaná amplitúda:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:278
 msgid "Based on temperature rise"
-msgstr "Na základe zvýšenia teploty"
+msgstr "Na základe nárastu teploty"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:290
 msgid "Capacitance:"
@@ -37039,6 +37021,7 @@ msgstr "Neplatný identifikátor knižnice symbolov"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
+"Nesúlad knižničného prepojenia: %s očakáva '%s' ale kandidát %s je '%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:1105
 #, fuzzy, c-format
@@ -40391,9 +40374,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:313
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:430
 #: pcbnew/dialogs/dialog_plot.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka \"%s\"."
+msgstr "Nebolo možné zapísať súbory vykreslenia do priečinka '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:341
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:465
@@ -41126,9 +41109,8 @@ msgid "By layer:"
 msgstr "Na vrstvu:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
-#, fuzzy
 msgid "By parent footprint library link:"
-msgstr "Nové ID knižnice stopy:"
+msgstr "Knižničné prepojenie nadradeného puzdra:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:161
@@ -42437,13 +42419,12 @@ msgid "Preview pad in sketch mode"
 msgstr "Náhľad plôšok v obryse"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Pred vykonaním KDR znova naplňte všetky zóny"
+msgstr "Znovu vyplniť zóny pred vykresľovaním"
 
 #: pcbnew/dialogs/dialog_plot.cpp:192
 msgid "Plot on All Layers"
-msgstr "Kresliť na všetky vrstvy"
+msgstr "Vykresliť na všetkých vrstvách"
 
 #: pcbnew/dialogs/dialog_plot.cpp:221
 #, fuzzy
@@ -42507,7 +42488,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:1218
 msgid "No layer selected, Nothing to plot"
-msgstr "Nie je vybratá žiadna vrstva, nie je čo vykresľovať"
+msgstr "Nie je vybraná žiadna vrstva, nie je čo vykresľovať"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1281
 msgid "Warning: Scale option set to a very small value"
@@ -42571,7 +42552,7 @@ msgstr "Obrys plôšok na fab vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "Pri vykresľovaní zahrňte obrysy výplne do vrstiev F.Fab a B.Fab"
+msgstr "Pri vykresľovaní zahrnúť obrysy plôšok do vrstiev F.Fab a B.Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:142
 #, fuzzy
@@ -42580,7 +42561,7 @@ msgstr "Zahrnuté vrstvy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:145
 msgid "Check zone fills before plotting"
-msgstr "Pred vykreslením skontrolujte výplne zón"
+msgstr "Skontrolovať výplň zón pred vykresľovaním"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -42608,6 +42589,7 @@ msgid "3:1"
 msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:170
+#, fuzzy
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
@@ -42616,11 +42598,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:174
 msgid "Mirrored plot"
-msgstr "Zrkadlové vykreslenie"
+msgstr "Vykresliť zrkadlovo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:177
 msgid "Negative plot"
-msgstr "Negatívne vykreslenie"
+msgstr "Vykresliť inverzne"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:194
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
@@ -42782,19 +42764,17 @@ msgid "The units to use for the exported DXF file"
 msgstr "Jednotky, ktoré sa majú použiť pre exportovaný súbor DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:356
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "Na vykreslenie textov použite písmo Pcbnew"
+msgstr "Použiť KiCad font pre vykreslenie textu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:357
-#, fuzzy
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Začiarknutím tohto políčka použijete písmo ťahu Pcbnew\n"
-"Zrušte začiarknutie, ak chcete riadkové texty ASCII vykresliť ako "
-"upraviteľný text (pomocou písma DXF)"
+"Začiarknite pre použitie KiCad fontu\n"
+"Zrušte začiarknutie, ak chcete jednoriadkové ASCII texty vykresliť ako "
+"editovateľný text (pomocou DXF fontu)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:361
 #: pcbnew/dialogs/dialog_plot_base.cpp:435
@@ -44501,9 +44481,9 @@ msgid "3D Model(s)"
 msgstr "3D modely"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name %s already in use."
-msgstr "Názov vrstvy '%s' sa už používa."
+msgstr "Názov vrstvy %s sa už používa."
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
 #, fuzzy
@@ -45170,7 +45150,7 @@ msgid "Layer name \"signal\" is reserved."
 msgstr "Názov vrstvy \"signál\" je vyhradený."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
 msgstr "Názov vrstvy '%s' sa už používa."
 
@@ -45246,13 +45226,13 @@ msgstr "Minimálna šírka mostíka spájkovacej masky:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:77
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:82
-#, fuzzy
 msgid ""
 "Minimum distance between openings in the solder mask.\n"
 "Pad openings closer than this distance will be plotted as a single opening."
 msgstr ""
-"Minimální vzdálenost mezi otvory pájecí masky. Otvory podložky blíže než "
-"tato vzdálenost budou vykresleny jako jeden otvor."
+"Minimálna vzdialenosť medzi otvormi v spájkovacej maske.\n"
+"Otvory plôšok bližšie ako je táto vzdialenosť, budú vykreslené jako jeden "
+"otvor."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
 #, fuzzy
@@ -46905,7 +46885,7 @@ msgstr "%s medzera tepelného reliéfu: %s."
 #: pcbnew/drc/drc_engine.cpp:2014
 #, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "%s šírka teplotného profilu: %s."
+msgstr "%s šírka ramena tepelného prepojenia: %s."
 
 #: pcbnew/drc/drc_engine.cpp:2082
 #, fuzzy, c-format
@@ -50816,14 +50796,14 @@ msgid "Changed group name from '%s' to '%s'."
 msgstr "Zmeniť hodnotu %s z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "%s zbernica z (%s,%s) do (%s,%s)"
+msgstr "Zmeniť skupinu knižničného prepojenia z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1893
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "%s zbernica z (%s,%s) do (%s,%s)"
+msgstr "Zmenená skupina knižničného prepojenia z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1933
 #, fuzzy, c-format
@@ -52480,10 +52460,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"Šablona CADSTAR '%s' má teplotní reliéf v původním provedení, ale šířka "
-"paprsku (%.2f mm) je tenčí než minimální tloušťka zóny (%.2f mm).KiCad "
-"požaduje zachování minimální tloušťky zóny. Proto byla minimální tloušťka "
-"použita jako nová šířka paprsku a bude použito při příštím vyplnění zóny."
+"Šablona CADSTAR '%s' má tepelný reliéf v pôvodnom prevedení, ale šírka "
+"ramena tepelného prepojenia (%.2f mm) je tenšia ako minimálna šírky zóny "
+"(%.2f mm).KiCad vyžaduje zachovanie minimálnej šírky zóny. Preto bola "
+"minimálna šírka použitá jako nová šírka ramena tep. prepojenia a bude "
+"použitá pri nasledujúcom vyplnení zóny."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2072
 #, c-format
@@ -53555,9 +53536,8 @@ msgid "Marker (%s)"
 msgstr "Značka (%s)"
 
 #: pcbnew/pcb_plotter.cpp:79
-#, fuzzy
 msgid "No layers selected for plotting."
-msgstr "Nie je vybratá vrstva."
+msgstr "Nie je vybraná žiadna vrstva pre vykresľovanie."
 
 #: pcbnew/pcb_plotter.cpp:496
 #, fuzzy, c-format
@@ -54356,9 +54336,9 @@ msgid "At least one layer must be specified\n"
 msgstr "Musia byť vybrané najmenej dva priame segmenty trate.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1433 pcbnew/pcbnew_jobs_handler.cpp:1676
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Nepodarilo sa načítať '%s'\n"
+msgstr "Nepodarilo sa vykresliť do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1504
 #, fuzzy
@@ -54412,9 +54392,9 @@ msgstr ""
 "hľadanie."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2238
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Zmeniť stopu %s z '%s' na '%s'\n"
+msgstr "Vykresľovanie puzdra '%s' do '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2267
 msgid "Error creating svg file"
@@ -54529,6 +54509,7 @@ msgstr "Viac vrstiev"
 #: pcbnew/plot_board_layers.cpp:1283
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr ""
+"Vykresľovanie do formátu HPDL už nie je podporované od KiCad verzie 10.0"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:106
 #, c-format
@@ -60080,7 +60061,7 @@ msgstr "Nová sieť"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1704
 #, c-format
 msgid "Net name '%s' is already in use."
-msgstr "Názov siete '%s' sa už používa."
+msgstr "Názov spoja '%s' sa už používa."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1682
 msgid "Rename Net"
