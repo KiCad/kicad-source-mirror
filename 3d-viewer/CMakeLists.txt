@@ -110,6 +110,18 @@ set(3D-VIEWER_SRCS
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})
 add_dependencies( 3d-viewer pcbcommon )
 
+if( KICAD_USE_PCH )
+    target_precompile_headers( 3d-viewer
+        PRIVATE
+            <3d_canvas/board_adapter.h>
+            <clipper2/clipper.h>
+            <kiid.h>
+            <board.h>
+            <pgm_base.h>
+            <wx/wx.h>
+            )
+endif()
+
 target_link_libraries( 3d-viewer
     PRIVATE
         gal
