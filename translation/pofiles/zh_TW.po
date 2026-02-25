@@ -16,13 +16,14 @@
 # reimu105 <peter112548@gmail.com>, 2025.
 # Shuwn Hsu <shuwn@sray.dev>, 2025.
 # Vic <zz99681254z@gmail.com>, 2025.
+# Che-Hsien Su <jonassu1101@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2025-12-11 08:00+0000\n"
-"Last-Translator: Vic <zz99681254z@gmail.com>\n"
+"PO-Revision-Date: 2026-02-25 22:31+0000\n"
+"Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -30,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -1344,9 +1345,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "接腳"
+msgstr "輸入接腳"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1357,9 +1357,8 @@ msgid "Height:"
 msgstr "高度:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "低解析度"
+msgstr "解析度"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
 msgid "X resolution:"
@@ -1380,7 +1379,7 @@ msgstr "Y 軸解析度:"
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d 像素"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1493,9 +1492,8 @@ msgid "Show model bounding boxes"
 msgstr "顯示模型邊框"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (slow)"
-msgstr "顯示銅層和技術層的厚度 (非常慢)"
+msgstr "顯示銅層和技術層的厚度 (稍慢)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1861,9 +1859,8 @@ msgid "Errors"
 msgstr "錯誤"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:589
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "取代並尋找下一項?"
+msgstr "要取代目前載入的檔案嗎？"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:590
 #, fuzzy
@@ -2323,9 +2320,8 @@ msgstr "未知的導通孔類型 %s "
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:139
 #: pcbnew/footprint_library_adapter.cpp:485
-#, fuzzy
 msgid "Internal error"
-msgstr "內層"
+msgstr "內部錯誤"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:793
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
@@ -2388,7 +2384,7 @@ msgstr "Bug 追蹤"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Report or examine bugs - "
-msgstr "報告或檢查 Bug - "
+msgstr "報告或檢查 Bug - . "
 
 #: common/dialog_about/AboutDialog_main.cpp:158
 msgid "KiCad users group and community"
@@ -4656,7 +4652,7 @@ msgstr "選擇要嵌入的檔案"
 
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "從父項符號繼承來的嵌入檔案無法刪除。"
 
 #: common/dialogs/panel_embedded_files.cpp:463
 msgid "Select a directory to export files"
@@ -5230,9 +5226,8 @@ msgid "Right button drag:"
 msgstr "右鍵拖動:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
-#, fuzzy
 msgid "Pan on mouse movement with key:"
-msgstr "按鍵配合滑鼠移動進行平移:"
+msgstr "按住此按鍵並拖動滑鼠以平移："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -6306,7 +6301,7 @@ msgstr "滑鼠與觸控板"
 
 #: common/eda_base_frame.cpp:1399
 msgid "SpaceMouse"
-msgstr ""
+msgstr "空間滑鼠"
 
 #: common/eda_base_frame.cpp:1402
 msgid "Hotkeys"
@@ -7703,6 +7698,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"無法合併(merge)：你有尚未暫存的變更。請先提交或暫存這些變更，再進行拉取(pull)"
+"。"
 
 #: common/git/libgit_backend.cpp:1106
 #, fuzzy, c-format
@@ -9330,6 +9327,12 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad無法使用 '%s'.。\n"
+"\n"
+"1. 請在 Windows 設定或群組原則中停用「受控資料夾存取 (Controlled folder "
+"access)」\n"
+"2.請確認沒有其他防毒軟體干擾 KiCad 的運作\n"
+"3. 請確認已正確設定相關存取權限"
 
 #: common/pgm_base.cpp:240
 msgid "No default editor found, you must choose one."
@@ -13017,7 +13020,7 @@ msgstr "將所有「$\\text{\\%s}$」違規的嚴重程度變更為警告"
 #: eeschema/dialogs/dialog_erc.cpp:788 pcbnew/dialogs/dialog_drc.cpp:796
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr "忽略所有「$\\text{\\%s}$」違規"
+msgstr "忽略所有「%s」違規"
 
 #: eeschema/dialogs/dialog_erc.cpp:789 pcbnew/dialogs/dialog_drc.cpp:797
 msgid "Violations will not be checked or reported"
@@ -13158,7 +13161,7 @@ msgstr "ERC 作業設定"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:272
 msgid "Export netlist in KiCad format"
-msgstr "以 $\\text{KiCad}$ 格式匯出網路表"
+msgstr "以 KiCad 格式匯出網路表(Netlist)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:277
 msgid "Export netlist in OrcadPCB2 format"
@@ -13876,7 +13879,7 @@ msgstr "輸入文字將在原理圖中使用"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:63
 msgid "Multiple label input"
-msgstr "多層標籤輸入"
+msgstr "多重標籤輸入"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:69
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:42
@@ -14370,7 +14373,7 @@ msgstr "欄位必須要有一個名稱。"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:809
 #, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "您確定要移除欄位「$\\text{\\%s}$」嗎？"
+msgstr "您確定要移除這個「%s」欄位嗎？"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:757
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:857
@@ -14607,7 +14610,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 #, c-format
 msgid "This field is inherited from '%s'."
-msgstr "此欄位繼承自「$\\text{\\%s}$」。"
+msgstr "此欄位繼承自「%s」。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:802
 #, c-format
@@ -17391,7 +17394,7 @@ msgstr "高亮度顯示被交叉探測的網路"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "當 $\\text{PCB}$ 編輯器中高亮顯示走線時，同步高亮顯示其網路"
+msgstr "當在 PCB 編輯器中將走線高亮顯示時，同步高亮顯示其所屬的網路"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:65
 #: pcbnew/dialogs/panel_display_options_base.cpp:190
@@ -25529,7 +25532,7 @@ msgstr "上一個網路項目"
 
 #: eeschema/tools/sch_actions.cpp:1178
 msgid "Select previous item on the current net"
-msgstr "選擇目前網路上的前一個項目"
+msgstr "選取目前網路中的上一個項目"
 
 #: eeschema/tools/sch_actions.cpp:1183
 msgid "Export Drawing to Clipboard"
@@ -41485,9 +41488,8 @@ msgid "x"
 msgstr "2x"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:71
-#, fuzzy
 msgid "Appearance preset:"
-msgstr "外觀"
+msgstr "外觀預設組態："
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:81
 msgid "Background style:"
@@ -41557,7 +41559,7 @@ msgstr "°"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:258
 msgid "Lights Intensity"
-msgstr "光源強度"
+msgstr "燈光強度"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:289
 msgid "Camera:"
