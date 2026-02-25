@@ -633,7 +633,12 @@ void RULE_EDITOR_DIALOG_BASE::onRuleTreeItemActivated( wxTreeEvent& aEvent )
             dynamic_cast<RULE_TREE_ITEM_DATA*>( m_ruleTreeCtrl->GetItemData( aEvent.GetItem() ) );
 
     if( itemData &&
-        isEnabled( itemData, RULE_EDITOR_TREE_CONTEXT_OPT::ADD_RULE ) )
+        isEnabled( itemData, RULE_EDITOR_TREE_CONTEXT_OPT::DUPLICATE_RULE ) )
+    {
+        DuplicateRule( itemData );
+    }
+    else if( itemData &&
+            isEnabled( itemData, RULE_EDITOR_TREE_CONTEXT_OPT::ADD_RULE ) )
     {
         AddNewRule( itemData );
     }
