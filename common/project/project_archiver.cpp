@@ -275,7 +275,9 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     size_t uncompressedBytes = 0;
     PROJECT_ARCHIVER_DIR_ZIP_TRAVERSER traverser( aSrcDir );
 
-    projectDir.Traverse( traverser );
+    // Do not include hidden directories (e.g. .git, .history) or files.
+    // wxDIR_DEFAULT includes wxDIR_HIDDEN, so specify flags explicitly.
+    projectDir.Traverse( traverser, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
 
     for( const wxString& fileName : traverser.GetFilesToArchive() )
     {
@@ -346,10 +348,12 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
                     return wxString::Format( wxT( "%zu bytes" ), aSize );
             };
 
-    size_t        zipBytesCnt       = ostream.GetSize();
-
     if( zipstream.Close() )
     {
+        // Read the final compressed size after Close() so the zip central directory
+        // bytes are included in the count.
+        size_t zipBytesCnt = ostream.GetSize();
+
         msg.Printf( _( "Zip archive '%s' created (%s uncompressed, %s compressed)." ),
                     aDestFile,
                     reportSize( uncompressedBytes ),
@@ -358,7 +362,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
     }
     else
     {
-        msg.Printf( wxT( "Failed to create file '%s'." ), aDestFile );
+        msg.Printf( _( "Failed to create file '%s'." ), aDestFile );
         aReporter.Report( msg, RPT_SEVERITY_ERROR );
         success = false;
     }
