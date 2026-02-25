@@ -1,4 +1,0 @@
-(sym_lib_table
-  (version 7)
-  (lib (name "carte_test_schlib")(type "KiCad")(uri "${KIPRJMOD}/carte_test_schlib.kicad_sym")(options "")(descr ""))
-)

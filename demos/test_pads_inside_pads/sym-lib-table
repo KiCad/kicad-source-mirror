@@ -1,4 +1,0 @@
-(sym_lib_table
-  (version 7)
-  (lib (name "test_pads_inside_pads_schlib")(type "KiCad")(uri "${KIPRJMOD}/test_pads_inside_pads_schlib.kicad_sym")(options "")(descr ""))
-)
