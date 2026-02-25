@@ -89,7 +89,17 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    m_valueBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetNumericInputValue() ) );
+    if( m_data->IsIntegerOnly() )
+    {
+        auto* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() );
+
+        if( ctrl )
+            ctrl->SetValue( wxString::Format( "%d", (int) m_data->GetNumericInputValue() ) );
+    }
+    else
+    {
+        m_valueBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetNumericInputValue() ) );
+    }
 
     return true;
 }
@@ -100,7 +110,21 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataFromWindow()
     if( !m_data )
         return false;
 
-    m_data->SetNumericInputValue( pcbIUScale.IUTomm( m_valueBinder->GetDoubleValue() ) );
+    if( m_data->IsIntegerOnly() )
+    {
+        auto* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() );
+
+        if( ctrl )
+        {
+            long val = 0;
+            ctrl->GetValue().Strip( wxString::both ).ToLong( &val );
+            m_data->SetNumericInputValue( static_cast<double>( val ) );
+        }
+    }
+    else
+    {
+        m_data->SetNumericInputValue( pcbIUScale.IUTomm( m_valueBinder->GetDoubleValue() ) );
+    }
 
     return true;
 }
