@@ -378,9 +378,6 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     for( SCH_FIELD& field : *m_fields )
     {
-        if( field.IsMandatory() )
-            continue;
-
         const wxString& fieldName = field.GetCanonicalName();
 
         if( field.IsEmpty() )
