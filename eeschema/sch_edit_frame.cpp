@@ -3048,27 +3048,10 @@ void SCH_EDIT_FRAME::RemoveVariant()
         OnModify();
     }
 
-    int      selected = m_currentVariantCtrl->GetSelection();
-    wxString tmp;
+    if( Schematic().GetCurrentVariant() == variantName )
+        SetCurrentVariant( wxEmptyString );
 
-    if( selected != wxNOT_FOUND )
-        tmp = m_currentVariantCtrl->GetString( selected );
-
-    m_currentVariantCtrl->Set( Schematic().GetVariantNamesForUI() );
-
-    if( selected != wxNOT_FOUND )
-    {
-        if( tmp != variantName )
-        {
-            selected = m_currentVariantCtrl->FindString( tmp );
-            m_currentVariantCtrl->SetSelection( selected );
-        }
-        else
-        {
-            m_currentVariantCtrl->SetSelection( 0 );
-            SetCurrentVariant( wxEmptyString );
-        }
-    }
+    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
 
     GetCanvas()->Refresh();
 }
