@@ -2757,10 +2757,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
                 ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer );
         }
     }
-    else if( aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
-    {
-        ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, Edge_Cuts );
-    }
     else
     {
         if( m_reporter )
