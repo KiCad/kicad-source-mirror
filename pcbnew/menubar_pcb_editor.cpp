@@ -396,11 +396,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->Add( ACTIONS::showCalculatorTools );
 
-    if( ADVANCED_CFG::GetCfg().m_EnableDrcRuleEditor )
-    {
-        toolsMenu->AppendSeparator();
-        toolsMenu->Add( PCB_ACTIONS::drcRuleEditor );
-    }
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::drcRuleEditor );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );

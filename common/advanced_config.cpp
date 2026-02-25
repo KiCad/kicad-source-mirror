@@ -105,7 +105,6 @@ static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
 static const wxChar EnablePcbDesignBlocks[] = wxT( "EnablePcbDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
-static const wxChar EnableDrcRuleEditor[] = wxT( "EnableDrcRuleEditor" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
 static const wxChar EnableLibDir[] = wxT( "EnableLibDir" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
@@ -275,7 +274,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_UpdateUIEventInterval = 0;
     m_EnablePcbDesignBlocks = true;
     m_EnableGenerators = false;
-    m_EnableDrcRuleEditor = false;
     m_EnableLibWithText = false;
     m_EnableLibDir = false;
 
@@ -539,9 +537,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableGenerators, &m_EnableGenerators,
                                                            m_EnableGenerators ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableDrcRuleEditor, &m_EnableDrcRuleEditor,
-                                                           m_EnableDrcRuleEditor ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableAPILogging, &m_EnableAPILogging,
                                                            m_EnableAPILogging ) );
