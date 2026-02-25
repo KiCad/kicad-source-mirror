@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-23 22:09+0000\n"
+"PO-Revision-Date: 2026-02-25 22:32+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -38239,7 +38239,6 @@ msgid "U3D"
 msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
-#, fuzzy
 msgid "Variant:"
 msgstr "バリアント:"
 
@@ -43367,17 +43366,15 @@ msgid "Holes"
 msgstr "穴"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:214
-#, fuzzy
 msgid "Minimum drill size:"
-msgstr "孤立した導体部分の最小サイズ:"
+msgstr "最小ドリルサイズ:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum drill size. If set, this can only be reduced by custom rules."
 msgstr ""
-"マイクロビアホールの最小サイズ。設定されている場合、カスタムルールによっての"
-"み小さくできます。"
+"最小ドリルサイズ。設定されている場合、カスタムルールによってのみ小さくできま"
+"す。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
 msgid "Hole to hole clearance:"
@@ -47493,9 +47490,8 @@ msgid "At least one orientation must be selected"
 msgstr "少なくとも1つの向きを選択する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
-#, fuzzy
 msgid "Disallow"
-msgstr "無効化"
+msgstr "許可しない"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
@@ -47668,9 +47664,8 @@ msgid "Maximum Uncoupled Length must be greater than 0"
 msgstr "最大非結合長は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:99
-#, fuzzy
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "最大ギャップは0より大きくなければなりません"
+msgstr "最大遅延差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:104
 msgid "Minimum Width cannot be greater than Preferred Width"
@@ -49666,86 +49661,88 @@ msgstr ""
 "ます。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1394
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s (footprint %s)."
-msgstr ""
-"シンボル %s を追加できませんでした。フットプリント %s が見つからなかったこと"
-"が原因です。"
+msgstr "%s の属性 '%s' をバリアント %s に追加 (フットプリント %s )。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
-msgstr "%s:%s の '部品表(BOM)から除外 'のバリアント属性を削除します。"
+msgstr "%s の属性 '%s' をバリアント %s から削除 (フットプリント %s )。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s."
-msgstr "フィールド '%s' に '%s' を値 '%s' として追加しました。"
+msgstr "%s の属性 '%s' をバリアント %s に追加。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s."
-msgstr "%s:%s の '部品表(BOM)から除外 'のバリアント属性を削除します。"
+msgstr "%s の属性 '%s' をバリアント %s から削除。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "%s (フットプリント '%s')を追加します。"
+msgstr "%s の属性 '%s' をバリアント %s に追加した (フットプリント %s )。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1415
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
-msgstr "%s:%s の '部品表(BOM)から除外' のバリアント属性を削除しました。"
+msgstr "%s の属性 '%s' をバリアント %s から削除した (フットプリント %s )。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1423
 #, c-format
 msgid "Added %s '%s' attribute to variant %s."
-msgstr ""
+msgstr "%s の属性 '%s' をバリアント %s に追加した。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s."
-msgstr "%s:%s の '部品表(BOM)から除外' のバリアント属性を削除しました。"
+msgstr "%s の属性 '%s' をバリアント %s から削除した。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
-#, fuzzy
 msgid "Do not place"
-msgstr "未実装"
+msgstr "未実装(DNP)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1497
-#, fuzzy
 msgid "exclude from position files"
 msgstr "部品位置情報ファイル から除外"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "%s:%s フィールドの値を '%s' から '%s' に変更します。"
+msgstr ""
+"%s のフィールド値を '%s' から '%s'に変更 バリアント %s 上(フットプリント %s )"
+"。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s."
-msgstr "%s:%s フィールドの値を '%s' から '%s' に変更します。"
+msgstr "%s のフィールド値を '%s' から '%s'に変更 バリアント %s 。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1543
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "%s:%s フィールドの値を '%s' から '%s' に変更しました。"
+msgstr ""
+"%s のフィールド値を '%s' から '%s'に変更した バリアント %s 上(フットプリント "
+"%s )。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1552
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s."
-msgstr "%s:%s フィールドの値を '%s' から '%s' に変更しました。"
+msgstr "%s のフィールド値を '%s' から '%s'に変更した バリアント %s 。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1573
-#, fuzzy, c-format
+#, c-format
 msgid "Remove variant %s:%s no longer associated with footprint %s."
-msgstr "コンポーネント %s パッド %s がフットプリント %s に見つかりません。"
+msgstr "%s の バリアント %s を削除。フットプリント %s とは関連付けられなくなります。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1580
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant %s:%s no longer associated with footprint %s."
-msgstr "コンポーネント %s パッド %s がフットプリント %s に見つかりません。"
+msgstr ""
+"%s の バリアント %s を削除した。フットプリント %s とは関連付けられなくなった"
+"。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1668
 #, c-format
@@ -49839,9 +49836,8 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
-"警告: %s フットプリント '%s' にライブラリ名がありません。完全な 'Library:"
-"Footprint' 形式を使用するようにしてください。(繰り返しの更新通知を回避のた"
-"め)。"
+"警告: %s の フットプリント '%s' にライブラリ名がありません。再度警告されない"
+"よためにも、完全な 'Library:Footprint' フォーマットを使用してください。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2273
 #, c-format
