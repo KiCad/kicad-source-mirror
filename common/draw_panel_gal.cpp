@@ -260,6 +260,14 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
             // This can happen when we don't catch `at()` calls
             wxLogTrace( traceDrawPanel, wxS( "Out of Range error: %s" ), err.what() );
         }
+        catch( std::runtime_error& err )
+        {
+            // Handle GL errors (e.g. glMapBuffer failure) that surface during UpdateItems().
+            // These can occur on macOS under memory pressure when embedding large 3D models.
+            // Log and continue so the outer handler can decide whether to switch backends.
+            wxLogTrace( traceDrawPanel, wxS( "Runtime error during UpdateItems: %s" ), err.what() );
+            throw;
+        }
 
         cntUpd.Stop();
 
