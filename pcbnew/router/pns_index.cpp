@@ -32,7 +32,9 @@ void INDEX::Add( ITEM* aItem )
 
     if( m_subIndices.size() <= static_cast<size_t>( range.End() ) )
     {
-        for( int i = 0; i <= range.End(); ++i )
+        int startIdx = static_cast<int>( m_subIndices.size() );
+
+        for( int i = startIdx; i <= range.End(); ++i )
             m_subIndices.emplace_back( std::make_unique<ITEM_SHAPE_INDEX>( i ) );
     }
 
