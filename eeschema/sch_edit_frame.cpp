@@ -1979,6 +1979,13 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 }
 
 
+void SCH_EDIT_FRAME::ProjectChanged()
+{
+    if( m_designBlocksPane )
+        m_designBlocksPane->RefreshLibs();
+}
+
+
 void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 {
     if( !GetHighlightedConnection().IsEmpty() )
