@@ -2615,7 +2615,10 @@ void PCB_IO_PADS::loadBoardSetup()
     bds.m_SolderMaskExpansion = scaleSize( designRules.mask_clearance );
     bds.m_CopperEdgeClearance = scaleSize( designRules.copper_edge_clearance );
 
-    bds.GetDefaultZoneSettings().m_ZoneClearance = scaleSize( designRules.default_clearance );
+    // Do not set the default zone clearance from the PADS design rules.  In PADS,
+    // zone (copper pour) clearance is resolved through the net/netclass clearance
+    // rules rather than a board-level zone clearance setting.  The default netclass
+    // clearance set below is the correct mapping for PADS' DEFAULTCLEAR value.
 
     bds.SetCustomTrackWidth( scaleSize( designRules.default_track_width ) );
     bds.SetCustomViaSize( scaleSize( designRules.default_via_size ) );

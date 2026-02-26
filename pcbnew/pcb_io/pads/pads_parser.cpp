@@ -4627,16 +4627,30 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                     m_design_rules.hole_to_hole = val;
                 }
                 else if( token == "OUTLINE_TO_TRACK" || token == "OUTLINE_TO_VIA"
-                         || token == "OUTLINE_TO_PAD" || token == "OUTLINE_TO_COPPER" )
+                         || token == "OUTLINE_TO_PAD" || token == "OUTLINE_TO_COPPER"
+                         || token == "OUTLINE_TO_SMD" )
                 {
                     m_design_rules.copper_edge_clearance =
                             std::min( m_design_rules.copper_edge_clearance, val );
                 }
-                else
+                else if( token.rfind( "SAME_NET_", 0 ) == 0 || token == "BODY_TO_BODY"
+                         || token == "MAX_TRACK_WIDTH"
+                         || token.rfind( "TEXT_TO_", 0 ) == 0
+                         || token.rfind( "COPPER_TO_", 0 ) == 0 )
                 {
-                    // All clearance values (TRACK_TO_TRACK, VIA_TO_*, PAD_TO_*,
-                    // SMD_TO_*, COPPER_TO_*, TEXT_TO_*, DRILL_TO_*) contribute to
-                    // the global minimum copper clearance
+                    // Exclude same-net spacings, physical body clearances, text
+                    // clearances, and copper-pour clearances from the inter-net
+                    // copper clearance.  In PADS the copper-pour (zone) clearance
+                    // is resolved through the net/netclass rules, so it must not
+                    // override the board-level default.
+                }
+                else if( token == "TRACK_TO_TRACK" || token.rfind( "VIA_TO_", 0 ) == 0
+                         || token.rfind( "PAD_TO_", 0 ) == 0
+                         || token.rfind( "SMD_TO_", 0 ) == 0
+                         || token.rfind( "DRILL_TO_", 0 ) == 0 )
+                {
+                    // Standard inter-net copper clearance values determine the
+                    // board-level default clearance.
                     m_design_rules.default_clearance =
                             std::min( m_design_rules.default_clearance, val );
                 }
