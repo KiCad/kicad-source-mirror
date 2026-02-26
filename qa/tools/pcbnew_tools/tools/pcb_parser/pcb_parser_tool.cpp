@@ -209,6 +209,8 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
     { wxCMD_LINE_SWITCH, "v", "verbose", _( "print parsing information" ).mb_str() },
     { wxCMD_LINE_OPTION, "p", "plugin", _( "parser plugin to use (kicad, allegro)" ).mb_str(),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
+    { wxCMD_LINE_OPTION, "l", "loop", _( "number of times to loop when parsing from stdin (for AFL)" ).mb_str(),
+            wxCMD_LINE_VAL_NUMBER },
     { wxCMD_LINE_PARAM, nullptr, nullptr, _( "input file" ).mb_str(), wxCMD_LINE_VAL_STRING,
             wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
     { wxCMD_LINE_NONE }
@@ -260,14 +262,18 @@ int pcb_parser_main_func( int argc, char** argv )
         std::cerr << fmt::format( "Unknown plugin: {}", plugin.ToStdString() ) << std::endl;
         return KI_TEST::RET_CODES::BAD_CMDLINE;
     }
-
     const PLUGIN_TYPE pluginType = pluginIt->second;
+
+    long              aflLoopCount = 1;
+    cl_parser.Found( "loop", &aflLoopCount );
 
     if( file_count == 0 )
     {
         // Parse the file provided on stdin - used by AFL to drive the
         // program
-        // while (__AFL_LOOP(2))
+#ifdef __AFL_COMPILER
+        while( __AFL_LOOP( aflLoopCount ) )
+#endif
         {
             ok = parse( std::cin, pluginType, verbose );
         }
