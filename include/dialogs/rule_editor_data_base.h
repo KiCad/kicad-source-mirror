@@ -141,7 +141,7 @@ private:
     std::optional<int> m_parentId; // Optional parent ID of the rule.
     wxString           m_ruleName;
     wxString           m_comment;
-    bool               m_isNew; /**< Flag indicating if the user is creating a new rule (true) 
+    bool               m_isNew = false; /**< Flag indicating if the user is creating a new rule (true) 
                                               or editing an existing rule (false). */
 };
 
