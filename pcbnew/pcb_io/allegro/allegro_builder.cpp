@@ -676,7 +676,9 @@ public:
             // can share the same layer list pointer, but their subclass values may
             // exceed the copper layer count and must fall through to the custom
             // layer mapping below.
-            if( cLayerList == m_ClassCustomLayerLists.at( LAYER_INFO::CLASS::ETCH )
+            const auto etchIt = m_ClassCustomLayerLists.find( LAYER_INFO::CLASS::ETCH );
+            if( etchIt != m_ClassCustomLayerLists.end()
+                && cLayerList == etchIt->second
                 && aLayerInfo.m_Subclass < cLayerList->size() )
             {
                 const PCB_LAYER_ID cuLayer = getNthCopperLayer( aLayerInfo.m_Subclass, cLayerList->size() );
