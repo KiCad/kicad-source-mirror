@@ -1097,4 +1097,147 @@ BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
 }
 
 
+/**
+ * Verify that SMD pads with explicit solder mask and paste mask stack entries
+ * are imported with F.Mask and F.Paste layers enabled (issue 23254).
+ *
+ * synthetic_mask_paste.asc defines four footprints:
+ *   U1 SMD_WITH_MASK_PASTE  - pad stack has explicit layers 21 (F.Mask) and 23 (F.Paste)
+ *   U2 SMD_WITH_MASK_ONLY   - pad stack has explicit layer 21 (F.Mask) only
+ *   U3 SMD_NO_MASK          - pad stack has only copper entries (-2, -1, 0)
+ *   U4 PTH_WITH_MASK        - PTH pad with explicit mask layers
+ *
+ * Before the fix, all mask/paste PADS layer entries mapped to UNDEFINED_LAYER
+ * via the copper-only mapPadsLayer lambda and were silently dropped, leaving
+ * SMD pads with only F.Cu in their layer set.
+ */
+BOOST_AUTO_TEST_CASE( ImportMaskPasteLayers )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_mask_paste.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+    BOOST_REQUIRE_EQUAL( board->Footprints().size(), 5 );
+
+    auto findFP = [&]( const wxString& aRef ) -> FOOTPRINT*
+    {
+        for( FOOTPRINT* fp : board->Footprints() )
+            if( fp->GetReference() == aRef )
+                return fp;
+        return nullptr;
+    };
+
+    // U1: explicit F.Mask (layer 21) and F.Paste (layer 23) in pad stack
+    {
+        FOOTPRINT* u1 = findFP( "U1" );
+        BOOST_REQUIRE_MESSAGE( u1, "U1 should exist" );
+        BOOST_REQUIRE_EQUAL( u1->Pads().size(), 1 );
+
+        PAD* pad = u1->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),    "U1 pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Mask ),  "U1 pad should have F.Mask (explicit in stack)" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Paste ), "U1 pad should have F.Paste (explicit in stack)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),   "U1 SMD pad should not be on B.Cu" );
+    }
+
+    // U2: explicit F.Mask (layer 21) only; F.Paste added by fallback
+    {
+        FOOTPRINT* u2 = findFP( "U2" );
+        BOOST_REQUIRE_MESSAGE( u2, "U2 should exist" );
+        BOOST_REQUIRE_EQUAL( u2->Pads().size(), 1 );
+
+        PAD* pad = u2->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),    "U2 pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Mask ),  "U2 pad should have F.Mask (explicit in stack)" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Paste ), "U2 pad should have F.Paste (fallback for SMD)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),   "U2 SMD pad should not be on B.Cu" );
+    }
+
+    // U3: no mask entries; both F.Mask and F.Paste added by fallback
+    {
+        FOOTPRINT* u3 = findFP( "U3" );
+        BOOST_REQUIRE_MESSAGE( u3, "U3 should exist" );
+        BOOST_REQUIRE_EQUAL( u3->Pads().size(), 1 );
+
+        PAD* pad = u3->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),    "U3 pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Mask ),  "U3 pad should have F.Mask (SMD fallback)" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Paste ), "U3 pad should have F.Paste (SMD fallback)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),   "U3 SMD pad should not be on B.Cu" );
+    }
+
+    // U4: PTH pad with explicit F.Mask (layer 21) and B.Mask (layer 28).
+    // No paste layers are present in the stack, so F.Paste/B.Paste must not be set.
+    {
+        FOOTPRINT* u4 = findFP( "U4" );
+        BOOST_REQUIRE_MESSAGE( u4, "U4 should exist" );
+        BOOST_REQUIRE_EQUAL( u4->Pads().size(), 1 );
+
+        PAD* pad = u4->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),     "U4 PTH pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( B_Cu ),     "U4 PTH pad should be on B.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Mask ),   "U4 pad should have F.Mask (explicit in stack)" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( B_Mask ),   "U4 pad should have B.Mask (explicit in stack)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( F_Paste ), "U4 PTH pad should not have F.Paste" );
+    }
+
+    // U5: SMD pad with explicit zero-size F.Paste entry (layer 23 size 0).
+    // A zero-size entry means "intentionally no paste on this layer".
+    // The SMD fallback must not re-enable F.Paste for this pad.
+    {
+        FOOTPRINT* u5 = findFP( "U5" );
+        BOOST_REQUIRE_MESSAGE( u5, "U5 should exist" );
+        BOOST_REQUIRE_EQUAL( u5->Pads().size(), 1 );
+
+        PAD* pad = u5->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),     "U5 pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Mask ),   "U5 pad should have F.Mask (SMD fallback)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( F_Paste ), "U5 pad should NOT have F.Paste (explicitly zero-size)" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),    "U5 SMD pad should not be on B.Cu" );
+    }
+}
+
+
+/**
+ * Smoke test: the reporter's original reproduction file loads and has SMD pads
+ * with F.Mask and F.Paste set (issue 23254).
+ */
+BOOST_AUTO_TEST_CASE( ImportMaskPasteLayersIssue23254 )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23254/issue23254.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    bool foundSmdWithMask = false;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD && pad->IsOnLayer( F_Mask )
+                && pad->IsOnLayer( F_Paste ) )
+            {
+                foundSmdWithMask = true;
+                break;
+            }
+        }
+
+        if( foundSmdWithMask )
+            break;
+    }
+
+    BOOST_CHECK_MESSAGE( foundSmdWithMask,
+                         "At least one SMD pad in issue23254.asc should have F.Mask and F.Paste" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

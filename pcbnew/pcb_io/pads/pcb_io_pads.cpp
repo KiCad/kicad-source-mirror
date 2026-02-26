@@ -751,6 +751,25 @@ void PCB_IO_PADS::loadFootprints()
                         }
                     }
 
+                    // Track mask/paste layers explicitly present in the stack regardless
+                    // of size. A zero-size entry means "intentionally no pad on this layer"
+                    // and must suppress the SMD fallback for that layer.
+                    LSET explicitly_seen_tech;
+
+                    for( const auto& layer_def : stack )
+                    {
+                        if( layer_def.layer > 0 )
+                        {
+                            PCB_LAYER_ID check = getMappedLayer( layer_def.layer );
+
+                            if( check == F_Mask || check == B_Mask
+                                || check == F_Paste || check == B_Paste )
+                            {
+                                explicitly_seen_tech.set( check );
+                            }
+                        }
+                    }
+
                     for( const auto& layer_def : stack )
                     {
                         if( layer_def.layer == 0 )
@@ -788,7 +807,22 @@ void PCB_IO_PADS::loadFootprints()
 
                         PCB_LAYER_ID kicad_layer = mapPadsLayer( layer_def.layer );
 
-                        if( kicad_layer != UNDEFINED_LAYER )
+                        if( kicad_layer == UNDEFINED_LAYER && layer_def.layer > 0 )
+                        {
+                            // For non-copper layers, check if they're mask/paste layers.
+                            // PADS pad stacks can include explicit solder mask and paste
+                            // mask entries that must be preserved in KiCad.
+                            // layer_def.layer > 0 skips the copper sentinels -2 (top)
+                            // and -1 (bottom), which mapPadsLayer already resolved above.
+                            PCB_LAYER_ID tech_layer = getMappedLayer( layer_def.layer );
+
+                            if( tech_layer == F_Mask || tech_layer == B_Mask
+                                || tech_layer == F_Paste || tech_layer == B_Paste )
+                            {
+                                layer_set.set( tech_layer );
+                            }
+                        }
+                        else if( kicad_layer != UNDEFINED_LAYER )
                         {
                             layer_set.set( kicad_layer );
                             convertPadShape( layer_def, pad, kicad_layer, part_orient );
@@ -799,6 +833,37 @@ void PCB_IO_PADS::loadFootprints()
                     {
                         layer_set.set( F_Cu );
                         convertPadShape( stack[0], pad, F_Cu, part_orient );
+                    }
+
+                    // For SMD pads, enable mask/paste layers that the stack did not
+                    // explicitly mention. A zero-size stack entry for a mask/paste layer
+                    // means "intentionally disabled" and is tracked in explicitly_seen_tech,
+                    // so only layers absent from the stack entirely get the fallback.
+                    if( drill == 0 )
+                    {
+                        if( layer_set.test( F_Cu ) && !layer_set.test( F_Mask )
+                            && !explicitly_seen_tech.test( F_Mask ) )
+                        {
+                            layer_set.set( F_Mask );
+                        }
+
+                        if( layer_set.test( F_Cu ) && !layer_set.test( F_Paste )
+                            && !explicitly_seen_tech.test( F_Paste ) )
+                        {
+                            layer_set.set( F_Paste );
+                        }
+
+                        if( layer_set.test( B_Cu ) && !layer_set.test( B_Mask )
+                            && !explicitly_seen_tech.test( B_Mask ) )
+                        {
+                            layer_set.set( B_Mask );
+                        }
+
+                        if( layer_set.test( B_Cu ) && !layer_set.test( B_Paste )
+                            && !explicitly_seen_tech.test( B_Paste ) )
+                        {
+                            layer_set.set( B_Paste );
+                        }
                     }
 
                     if( slot_length > 0 && slot_length != drill )
@@ -843,7 +908,11 @@ void PCB_IO_PADS::loadFootprints()
                         else
                             pad->SetAttribute( PAD_ATTRIB::NPTH );
 
-                        layer_set = LSET::AllCuMask();
+                        // Preserve any explicit mask/paste layer bits accumulated
+                        // during stack iteration before expanding to all copper layers.
+                        LSET mask_paste_bits =
+                                layer_set & LSET( { F_Mask, B_Mask, F_Paste, B_Paste } );
+                        layer_set = LSET::AllCuMask() | mask_paste_bits;
                     }
 
                     pad->SetLayerSet( layer_set );
