@@ -51,6 +51,7 @@ public:
     bool ValidateInputs( int* aErrorCount, wxString* aValidationMessage ) override;
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override;
+    void     UpdateRuleName( const wxString& aName );
 
 private:
     void onScintillaCharAdded( wxStyledTextEvent& aEvent );

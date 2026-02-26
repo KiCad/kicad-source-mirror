@@ -74,6 +74,7 @@
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
+#include "drc_re_custom_rule_panel.h"
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -180,12 +181,16 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "[PANEL_DRC_RULE_EDITOR] inserting conditionGroupPanel" ) );
     m_conditionControlsSizer->Insert( 0, m_conditionGroupPanel, 0, wxEXPAND | wxBOTTOM, 5 );
 
-    m_nameCtrl->Bind( wxEVT_TEXT, [this]( wxCommandEvent& )
+    if( aConstraintType == CUSTOM_RULE )
     {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    });
+        m_conditionGroupPanel->Hide();
+        m_conditionHeaderTitle->Hide();
+        m_syntaxHelp->Hide();
+        m_staticline8->Hide();
+        m_LayersComboBoxSizer->Show( false );
+        m_staticText711->Hide();
+        m_staticline111->Hide();
+    }
 
     m_commentCtrl->Bind( wxEVT_TEXT, [this]( wxCommandEvent& )                                                            
     {                                                                                                                   
@@ -197,6 +202,21 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     // Hide the base class syntax check controls since we use inline validation
     m_checkSyntaxBtnCtrl->Hide();
     m_syntaxErrorReport->Hide();
+
+    m_nameCtrl->Bind( wxEVT_TEXT,
+                      [this]( wxCommandEvent& )
+                      {
+                          RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
+                          if( dlg )
+                              dlg->SetModified();
+
+                          if( m_constraintType == CUSTOM_RULE )
+                          {
+                              auto* customPanel = dynamic_cast<DRC_RE_CUSTOM_RULE_PANEL*>( m_constraintPanel );
+                              if( customPanel )
+                                  customPanel->UpdateRuleName( m_nameCtrl->GetValue() );
+                          }
+                      } );
 
     m_netClassRegex.Compile( "^NetClass\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_netNameRegex.Compile( "^NetName\\s*[!=]=\\s*$", wxRE_ADVANCED );

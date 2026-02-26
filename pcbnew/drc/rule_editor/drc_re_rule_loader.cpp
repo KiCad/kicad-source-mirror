@@ -40,6 +40,7 @@
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_numeric_constraint_types.h"
+#include "drc_re_custom_rule_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
 
@@ -420,6 +421,34 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         if( constraintData )
         {
+            if( match.panelType == CUSTOM_RULE )
+            {
+                auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( constraintData );
+                if( customData )
+                {
+                    wxString body = aOriginalText;
+
+                    body.Replace( wxS( "(version 1)" ), wxS( "" ) );
+
+                    int ruleStart = body.Find( wxS( "(rule " ) );
+                    if( ruleStart != wxNOT_FOUND )
+                    {
+                        int nameStart = body.find( '"', ruleStart );
+                        int nameEnd = body.find( '"', nameStart + 1 );
+                        if( nameEnd != wxNOT_FOUND )
+                        {
+                            body = body.Mid( nameEnd + 1 );
+                            body.Trim( false );
+
+                            if( body.EndsWith( wxS( ")" ) ) )
+                                body = body.Left( body.Length() - 1 );
+                            body.Trim( true );
+                        }
+                    }
+                    customData->SetRuleText( body );
+                }
+            }
+
             if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
                 constraintData->SetRuleCondition( condition );
 
@@ -443,7 +472,27 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>();
         customData->SetRuleName( aRule.m_Name );
         customData->SetRuleCondition( condition );
-        customData->SetRuleText( aOriginalText );
+
+        wxString body = aOriginalText;
+        body.Replace( wxS( "(version 1)" ), wxS( "" ) );
+
+        int ruleStart = body.Find( wxS( "(rule " ) );
+        if( ruleStart != wxNOT_FOUND )
+        {
+            int nameStart = body.find( '"', ruleStart );
+            int nameEnd = body.find( '"', nameStart + 1 );
+            if( nameEnd != wxNOT_FOUND )
+            {
+                body = body.Mid( nameEnd + 1 );
+                body.Trim( false );
+
+                if( body.EndsWith( wxS( ")" ) ) )
+                    body = body.Left( body.Length() - 1 );
+                body.Trim( true );
+            }
+        }
+
+        customData->SetRuleText( body );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( CUSTOM_RULE, customData, aRule.m_Name, condition,
                                          aRule.m_Severity, aRule.m_LayerCondition );

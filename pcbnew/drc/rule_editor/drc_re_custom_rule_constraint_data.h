@@ -49,6 +49,17 @@ public:
 
     void SetRuleText( const wxString& aText ) { m_ruleText = aText; }
 
+    wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
+    {
+        if( m_ruleText.IsEmpty() )
+            return wxEmptyString;
+
+        wxString ruleName = aContext.ruleName;
+        ruleName.Replace( wxS( "\"" ), wxS( "\\\"" ) );
+
+        return wxString::Format( wxS( "(rule \"%s\"\n%s)" ), ruleName, m_ruleText );
+    }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

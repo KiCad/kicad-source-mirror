@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <kiface_base.h>
+#include <drc/drc_rule_parser.h>
 
 #include "dialog_drc_rule_editor.h"
 #include "panel_drc_rule_editor.h"
@@ -190,7 +191,7 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::GetDefaultRuleTreeItems()
     result.push_back( buildRuleTreeNodeData( "Custom", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, lastParentId ) );
     int customItemId = m_nodeId;
     result.push_back(
-            buildRuleTreeNodeData( "Custom Rule", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, customItemId, CUSTOM_RULE ) );
+            buildRuleTreeNodeData( "Custom rule", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, customItemId, CUSTOM_RULE ) );
 
     return result;
 }
@@ -620,9 +621,9 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildElectricalRuleTreeNodes
                                              MINIMUM_CLEARANCE ) );
     result.push_back( buildRuleTreeNodeData( "Copper to edge clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, COPPER_TO_EDGE_CLEARANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Courtyard Clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
+    result.push_back( buildRuleTreeNodeData( "Courtyard clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              COURTYARD_CLEARANCE ) );
-    result.push_back( buildRuleTreeNodeData( "Physical Clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
+    result.push_back( buildRuleTreeNodeData( "Physical clearance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              PHYSICAL_CLEARANCE ) );
     result.push_back( buildRuleTreeNodeData( "Creepage distance", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT, lastParentId,
                                              CREEPAGE_DISTANCE ) );
@@ -993,6 +994,30 @@ int DIALOG_DRC_RULE_EDITOR::highlightMatchingItems( int aNodeId )
     // Ensure we use the latest text from the condition editor
     m_ruleEditorPanel->TransferDataFromWindow();
     wxString condition = m_ruleEditorPanel->GetConstraintData()->GetRuleCondition();
+
+    if( condition.IsEmpty() )
+    {
+        wxString ruleText = m_ruleEditorPanel->GetConstraintData()->GetGeneratedRule();
+
+        if( !ruleText.IsEmpty() )
+        {
+            wxString fullText = wxS( "(version 1)\n" ) + ruleText;
+
+            try
+            {
+                std::vector<std::shared_ptr<DRC_RULE>> rules;
+                DRC_RULES_PARSER                       parser( fullText, wxS( "ShowMatches" ) );
+                parser.Parse( rules, nullptr );
+
+                if( !rules.empty() && rules[0]->m_Condition )
+                    condition = rules[0]->m_Condition->GetExpression();
+            }
+            catch( PARSE_ERROR& )
+            {
+                return -1;
+            }
+        }
+    }
 
     wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
                 wxS( "[ShowMatches] nodeId=%d, condition='%s'" ), aNodeId, condition );
