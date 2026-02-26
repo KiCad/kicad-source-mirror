@@ -207,6 +207,11 @@ void DB_REF_CHAIN::Visit( std::function<void ( DB_OBJ& aObj )> aVisitor )
 
 void BRD_DB::ReserveCapacity( size_t aObjectCount, size_t aStringCount )
 {
+    // The object and strings count come from user input directly
+    // clamp them in case we get a gigantic number
+    aObjectCount = std::min( aObjectCount, static_cast<size_t>( 1e6 ) );
+    aStringCount = std::min( aStringCount, static_cast<size_t>( 1e6 ) );
+
     m_Blocks.reserve( aObjectCount );
     m_ObjectKeyMap.reserve( aObjectCount );
     reserveObjects( aObjectCount );
