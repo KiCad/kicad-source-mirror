@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-25 22:31+0000\n"
+"PO-Revision-Date: 2026-02-26 23:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -7759,9 +7759,9 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Start av grenflytt misslyckades"
+msgstr "Start av grenflytt misslyckades: %s"
 
 #: common/git/libgit_backend.cpp:1151
 #, c-format
@@ -23249,6 +23249,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"Simulation kraschade (%s). Detta orsakas vanligen av en bugg i ngspice eller "
+"en ogiltig nätlista. Simulatorn nollställs."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -23489,7 +23491,6 @@ msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulatorn kräver ett fullständigt numrerat schema."
 
 #: eeschema/sim/simulator_frame.cpp:423
-#, fuzzy
 msgid ""
 "You must run a TRAN simulation first; its results will be used for the fast "
 "Fourier transform."
@@ -23649,6 +23650,8 @@ msgstr "Markör 2"
 msgid ""
 "Workbook file '%s' not found. Loading simulation settings from schematic."
 msgstr ""
+"Arbetsboksfil '%s' hittades inte. Läser in simulationsinställningar från "
+"kretsschemat."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1437
 #: eeschema/sim/simulator_frame_ui.cpp:3211
@@ -24408,19 +24411,19 @@ msgid "Unable to find a reader for '%s'."
 msgstr "Det gick inte att hitta en visare för '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot import symbol '%s': %s"
-msgstr "Kunde inte importera symbolbiblioteket '%s'."
+msgstr "Kan inte importera symbol '%s': %s"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:158
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "Importerade %d symbol(er), hoppade över %d."
 
 #: eeschema/symbol_library_manager.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Error deleting symbol %s from library '%s'."
-msgstr "Fel vid inläsning av symbol %s från bibliotek '%s'."
+msgstr "Fel vid radering av symbol %s från bibliotek '%s'."
 
 #: eeschema/symbol_library_manager.cpp:385
 msgid "Symbol not found."
@@ -24520,14 +24523,12 @@ msgid "Break sheet pin and hierarchical label association(s)"
 msgstr "Bryt association(er) för arkstift och hierarkisk(a) etikett(er)"
 
 #: eeschema/toolbars_sch_editor.cpp:55 pcbnew/toolbars_pcb_editor.cpp:134
-#, fuzzy
 msgid "Current variant"
 msgstr "Nuvarande variant"
 
 #: eeschema/toolbars_sch_editor.cpp:56
-#, fuzzy
 msgid "Selects the current schematic variant"
-msgstr "Kontroll för att välja aktuell variant av kretsschemat"
+msgstr "Väljer aktuell variant av kretsschemat"
 
 #: eeschema/toolbars_sch_editor.cpp:94 pcbnew/toolbars_footprint_editor.cpp:75
 #: pcbnew/toolbars_pcb_editor.cpp:172
@@ -24544,24 +24545,20 @@ msgid "Select the current variant to display and edit."
 msgstr "Välj den nuvarande varianten för att visa och redigera."
 
 #: eeschema/toolbars_sch_editor.cpp:305
-#, fuzzy
 msgid "Add New Design Variant..."
-msgstr "Lägg till variant..."
+msgstr "Lägg till ny designvariant..."
 
 #: eeschema/toolbars_sch_editor.cpp:385
-#, fuzzy
 msgid "New Design Variant"
-msgstr "Ny variant"
+msgstr "Ny designvariant"
 
 #: eeschema/toolbars_sch_editor.cpp:391
-#, fuzzy
 msgid "Variant name:"
-msgstr "Variantnamn"
+msgstr "Variantnamn:"
 
 #: eeschema/toolbars_sch_editor.cpp:400
-#, fuzzy
 msgid "Description (optional):"
-msgstr "Beskrivning:"
+msgstr "Beskrivning (valfritt):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -25236,12 +25233,10 @@ msgid "Synchronize selected sheet pins and hierarchical labels"
 msgstr "Synkronisera valda arkstift och hierarkiska etiketter"
 
 #: eeschema/tools/sch_actions.cpp:619
-#, fuzzy
 msgid "Sync All Sheet Pins..."
 msgstr "Synkronisera alla arkstift..."
 
 #: eeschema/tools/sch_actions.cpp:620
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
 msgstr "Synkronisera alla arkstift och hierarkiska etiketter"
 
@@ -26225,24 +26220,20 @@ msgid "Show SPICE Netlist"
 msgstr "Visa SPICE-nätlista"
 
 #: eeschema/tools/sch_actions.cpp:1756
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "Lägg till variant..."
+msgstr "Lägg till designvariant..."
 
 #: eeschema/tools/sch_actions.cpp:1757
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "Lägg till ny variant till kretsschemat."
+msgstr "Lägg till ny designvariant till kretsschemat."
 
 #: eeschema/tools/sch_actions.cpp:1762
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "Ta bort variant..."
+msgstr "Ta bort designvariant..."
 
 #: eeschema/tools/sch_actions.cpp:1763
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "Ta bort en befintlig variant från kretsschemat."
+msgstr "Ta bort en befintlig designvariant från kretsschemat."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -26292,9 +26283,8 @@ msgid "Could not find design block %s."
 msgstr "Kunde inte hitta designblock %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:751
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "Designblocket %s har ingen kretsschemafil."
+msgstr "Designblocket har ingen kretsschemafil att placera ut."
 
 #: eeschema/tools/sch_drawing_tools.cpp:912
 msgid "Add Design Block"
@@ -28409,7 +28399,6 @@ msgid "Aperture highlight"
 msgstr "Framhäv bländare"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "DCode-väljare"
 
@@ -28844,6 +28833,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
+"När flera varianter specificeras, måste utmatningssökvägen innehålla $"
+"{VARIANT} för att generera separata utmatnigsfiler för respektive variant.\n"
 
 #: kicad/cli/command.cpp:144
 msgid "Input file"
@@ -28854,9 +28845,8 @@ msgid "Input directory"
 msgstr "Katalog för indata"
 
 #: kicad/cli/command.cpp:158
-#, fuzzy
 msgid "Input file or directory"
-msgstr "Katalog för indata"
+msgstr "Fil eller katalog för indata"
 
 #: kicad/cli/command.cpp:174
 msgid "Output file"
@@ -28867,9 +28857,8 @@ msgid "Output directory"
 msgstr "Katalog för utdata"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "Katalog för indata"
+msgstr "Fil eller katalog för utdata"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -28898,6 +28887,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided the default variant is output."
 msgstr ""
+"Variantnamn(en) för utmatning kan användas flera gånger för att specificera "
+"flera varianter.\n"
+"När flera varianter specificeras, använd ${VARIANT} i utmatningssökvägen för "
+"att generera separata filer för respektive variant.\n"
+"När inget --variant-argument tillhandahålls, matas standardvarianten ut."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -29211,24 +29205,21 @@ msgid "Valid options excellon, gerber."
 msgstr "Giltiga alternativ är: excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
-msgstr "Giltiga alternativ är: absolute,plot"
+msgstr "Giltiga alternativ är: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr "Giltiga alternativ är: decimal,suppressleading,suppresstrailing,keep."
+msgstr ""
+"Giltiga alternativ är: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
 msgstr "Giltiga alternativ är: route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
-msgstr "Utmatningens måttenhet; giltiga alternativ: in,mm"
+msgstr "Utmatningens måttenhet; giltiga alternativ: in, mm"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -29261,9 +29252,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "Generera en fil särskilt för täckning av vior"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "Giltiga alternativ: pdf,gerberx2,ps,dxf,svg"
+msgstr "Giltiga alternativ: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -29520,25 +29510,22 @@ msgid "Generate Position File"
 msgstr "Skapa positionsfil"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Giltiga alternativ: front,back,both. Gerber-formatet stödjer bara \"front\" "
-"eller \"back\"."
+"Giltiga alternativ: front, back, both. Gerber-formatet stödjer bara "
+"\"front\" eller \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "Giltiga alternativ: ascii,csv,gerber"
+msgstr "Giltiga alternativ: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:60
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
 msgstr ""
 "Utmatningens måttenhet; endast ascii eller csv-format; giltiga alternativ: "
-"in,mm"
+"in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:64
 msgid ""
@@ -29657,41 +29644,42 @@ msgid "No drawing sheet"
 msgstr "Inget ritningsark"
 
 #: kicad/cli/command_pcb_import.cpp:42
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Exportera nätlista i KiCad-format"
+msgstr "Importera en icke KiCad mönsterkortsfil till KiCad-format"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
 "Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
 "solidworks (default: auto)"
 msgstr ""
+"Anvisning för inmatningsformat: auto, pads, altium, eagle, cadstar, "
+"fabmaster, pcad, solidworks (förval: auto)"
 
 #: kicad/cli/command_pcb_import.cpp:52
 msgid "JSON file with layer name mappings"
-msgstr ""
+msgstr "JSON-fil med lagernamnstilldelningar"
 
 #: kicad/cli/command_pcb_import.cpp:56
 msgid "Use automatic layer mapping (default behavior)"
-msgstr ""
+msgstr "Använd automatisk lagertilldelning (förvalt beteende)"
 
 #: kicad/cli/command_pcb_import.cpp:61
 msgid "Import report format: none, json, text (default: none)"
-msgstr ""
+msgstr "Format för importrapport: none, json, text (förval: none)"
 
 #: kicad/cli/command_pcb_import.cpp:66
 msgid "File path for import report (default: stdout)"
-msgstr ""
+msgstr "Filsökväg för importrapport (förval: stdout)"
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "Ogiltigt format\n"
+msgstr "Ogiltigt format: %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "Ogiltigt rapportformat\n"
+msgstr "Ogiltigt rapportformat: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -30115,12 +30103,11 @@ msgstr "Redigera mall"
 
 #: kicad/dialogs/dialog_template_selector.cpp:296
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "Öppna mall (skrivskyddad)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:297
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "Öppna Temamappen"
+msgstr "Öppna mallmappen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:298
 #: kicad/dialogs/dialog_template_selector.cpp:371
@@ -30183,14 +30170,12 @@ msgid "Project Template Selector"
 msgstr "Projektmallväljare"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "Skapa nytt projekt från mall"
+msgstr "Nyligen använda projektmallar"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "Mall"
+msgstr "Alla mallar"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -30201,9 +30186,8 @@ msgid "System Templates"
 msgstr "Systemmallar"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "Baksida"
+msgstr "Gå tillbaka"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -30426,16 +30410,17 @@ msgstr "Välj en mall"
 msgid ""
 "Templates provide pre-configured project structures to jumpstart your design."
 msgstr ""
+"Mallar tillhandahåller förkonfigurerade projektstrukturer för att "
+"snabbstarta din design."
 
 #: kicad/dialogs/template_default_html.h:243
-#, fuzzy
 msgid "Pre-configured Libraries"
 msgstr "Förkonfigurerade bibliotek"
 
 #: kicad/dialogs/template_default_html.h:244
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "- Vanliga komponenter och fotavtryck är redan länkade"
+msgstr ""
+"Vanliga symboler och fotavtryck är redan länkade och färdiga att använda."
 
 #: kicad/dialogs/template_default_html.h:250
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
@@ -30447,118 +30432,105 @@ msgid ""
 "Electrical and mechanical constraints configured for the intended "
 "application."
 msgstr ""
+"Elektriska och mekaniska begränsningar konfigurerade för den avsedda "
+"användningen."
 
 #: kicad/dialogs/template_default_html.h:257
-#, fuzzy
 msgid "Board Stackups"
-msgstr "Mönsterkortets lageruppbyggnad"
+msgstr "Mönsterkorts-lageruppbyggnader"
 
 #: kicad/dialogs/template_default_html.h:258
 msgid "Layer configurations optimized for common manufacturing processes."
-msgstr ""
+msgstr "Lageruppbyggnader optimerade för vanliga tillverkningsprocesser."
 
 #: kicad/dialogs/template_default_html.h:265
 msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
+"Nyligen använda mallar visas längst upp. Använd mapp-ikonen för att bläddra "
+"i användaranpassade mallkataloger."
 
 #: kicad/dialogs/template_default_html.h:399
 msgid "Template"
 msgstr "Mall"
 
 #: kicad/dialogs/template_default_html.h:403
-#, fuzzy
 msgid ""
 "This template does not include a description. You can still use it to create "
 "a new project."
 msgstr ""
-"Denn projektmall innehåller inte ännu en informationssida. Du kan ändå "
-"använda den för att skapa ett nytt projekt."
+"Denna projektmall innehåller ingen beskrivning. Du kan ändå använda den för "
+"att skapa ett nytt projekt."
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "To use this template"
-msgstr "För att använda denna mall:"
+msgstr "För att använda denna mall"
 
 #: kicad/dialogs/template_default_html.h:410
 msgid "Create the project"
 msgstr "Skapa projektet"
 
 #: kicad/dialogs/template_default_html.h:411
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
 msgstr ""
-"Klicka OK nedan. KiCad kommer att skapa en ny projektkatalog med innehållet "
-"från denna mall."
+"Klicka OK för att skapa en ny projektkatalog med innehållet från denna mall."
 
 #: kicad/dialogs/template_default_html.h:417
 msgid "Open schematic and PCB"
 msgstr "Öppna kretsschema och mönsterkort"
 
 #: kicad/dialogs/template_default_html.h:418
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr ""
-"Använd projekthanterarträdet eller starta kretsschema- och "
-"mönsterkortsredigerarna för att börja designa."
+"Använd projekthanteraren för att starta kretsschema- och "
+"mönsterkortsredigerarna."
 
 #: kicad/dialogs/template_default_html.h:424
-#, fuzzy
 msgid "Review settings"
-msgstr "Förhandsgranska inställningar"
+msgstr "Granska inställningar"
 
 #: kicad/dialogs/template_default_html.h:425
-#, fuzzy
 msgid "Verify libraries, design rules, and board stackup match your needs."
 msgstr ""
-"Bekräfta att symbol-/fotavtrycksbibliotek, designregler och mönsterkorts "
-"lageruppbyggnad passar dina behov."
+"Bekräfta att bibliotek, designregler och mönsterkorts lageruppbyggnad passar "
+"dina behov."
 
 #: kicad/dialogs/template_default_html.h:432
 msgid "Add a description by creating"
-msgstr ""
+msgstr "Lägg till en beskrivning genom att skapa"
 
 #: kicad/dialogs/template_default_html.h:433
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "Det gick inte att hitta mallkatalogen."
+msgstr "i filsystemsmappen för denna mall."
 
 #: kicad/dialogs/template_default_html.h:541
 msgid "No Templates Found"
 msgstr "Inga mallar hittades"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "The selected directory does not contain any project templates."
-msgstr "Den valda mallkatalogen innehåller inga mallar."
+msgstr "Den valda katalogen innehåller inga projektmallar."
 
 #: kicad/dialogs/template_default_html.h:546
-#, fuzzy
 msgid "Suggestions"
-msgstr "Fråga"
+msgstr "Förslag"
 
 #: kicad/dialogs/template_default_html.h:548
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
-msgstr "Bläddra till ett annat mallbibliotek med hjälp av katalogikonen"
+msgstr "Bläddra till en annan mapp med hjälp av mappikonen"
 
 #: kicad/dialogs/template_default_html.h:549
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
 msgstr "Klicka ikonen ladda om för att läsa in nuvarande katalog på nytt"
 
 #: kicad/dialogs/template_default_html.h:550
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "Systemmallar"
+msgstr "Byt till flik för systemets mallar"
 
 #: kicad/dialogs/template_default_html.h:556
-#, fuzzy
 msgid "Each template needs a 'meta' folder containing configuration files."
-msgstr ""
-"Mallar är sorterade i underkataloger. Varje mall behöver en 'meta'-katalog "
-"med konfigurationsfiler."
+msgstr "Varje mall behöver en 'meta'-katalog med konfigurationsfiler."
 
 #: kicad/files-io.cpp:42
 msgid "KiCad project file"
@@ -30587,27 +30559,26 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "Packar upp projektet i '%s'\n"
 
 #: kicad/import_proj.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "Det gick inte att öppna/skapa sökvägen '%s'."
+msgstr "Det gick inte att öppna gEDA / Lepton EDA projektfil '%s'."
 
 #: kicad/import_proj.cpp:464 kicad/import_proj.cpp:475
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr ""
+msgstr "Sök efter gEDA / Lepton EDA kretsschema"
 
 #: kicad/import_proj.cpp:573
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "EasyEDA (JLCEDA) Pro filer"
+msgstr "gEDA / Lepton EDA mönsterkortsfiler"
 
 #: kicad/import_proj.cpp:576
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr ""
+msgstr "Sök efter gEDA / Lepton EDA mönsterkort"
 
 #: kicad/import_project.cpp:73
-#, fuzzy
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
-msgstr "Filen verkar inte vara en CADSTAR komponentbiblioteksfil"
+msgstr ""
+"Den valda filen verkar inte vara ett PADS ASCII kretsschema eller mönsterkort"
 
 #: kicad/import_project.cpp:91
 msgid "KiCad Project Destination"
@@ -30654,14 +30625,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Importera EasyEDA Pro projekt"
 
 #: kicad/import_project.cpp:202
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "Importera Altium projektfiler"
+msgstr "Importera PADS projektfiler"
 
 #: kicad/import_project.cpp:210
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Importera Eagle Project-filer"
+msgstr "Importera gEDA / Lepton EDA projektfiler"
 
 #: kicad/jobs_runner.cpp:243
 #, c-format
@@ -30764,11 +30733,12 @@ msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
 msgstr ""
+"KiCad hittade osparade ändringar från föregående session som är nyare än de "
+"sparade projektfilerna."
 
 #: kicad/kicad_manager_frame.cpp:967
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "Ångra ändringar"
+msgstr "Rädda osparade ändringar"
 
 #: kicad/kicad_manager_frame.cpp:969
 msgid ""
@@ -30777,6 +30747,10 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"Detta kan inträffa om din förra session avslutades oväntat.\n"
+"\n"
+"Välj \"Återställ\" för att rädda dessa ändringar, eller \"Kasta\" för att "
+"behålla de sparade filerna i sin nuvarande form."
 
 #: kicad/kicad_manager_frame.cpp:1144
 msgid "Edit File in Text Editor"
@@ -30867,24 +30841,21 @@ msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
 msgstr "Importera EasyEDA (JLCEDA) Professional kretsschema och mönsterkort"
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "PADS Project..."
-msgstr "CADSTAR-projekt..."
+msgstr "PADS-projekt..."
 
 #: kicad/menubar.cpp:150
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "Importera CADSTAR-arkivschemat och PCB (*.csa, *.cpa)"
+msgstr ""
+"Importera PADS Logic-kretsschema och PADS ASCII mönsterkort (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "EAGLE-projekt..."
+msgstr "gEDA / Lepton EDA-projekt..."
 
 #: kicad/menubar.cpp:154
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr "Importera EAGLE CAD XML-schemat och kort"
+msgstr "Importera gEDA eller Lepton EDA kretsschema och mönsterkortslayout"
 
 #: kicad/menubar.cpp:183
 msgid "Edit Advanced Config..."
@@ -35866,11 +35837,9 @@ msgstr ""
 "i nät %s."
 
 #: pcbnew/connectivity/topo_match.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
-msgstr ""
-"Lödyta %s tillhörande %s är i nät %s men dess motsvarighet i tilltänkt %s är "
-"i nät %s."
+msgstr "Lödyta %s tillhörande %s har inkonsekvent nättilldelning i kandidat %s."
 
 #: pcbnew/connectivity/topo_match.cpp:350
 msgid "No compatible component found in the target area."
@@ -35958,9 +35927,8 @@ msgid "Custom Rules"
 msgstr "Användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
-#, fuzzy
 msgid "Barcode Error"
-msgstr "Säkerhetskopieringsfel"
+msgstr "Fel på streckkod"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:255
 msgid "Modify barcode"
@@ -38037,9 +38005,8 @@ msgid "U3D"
 msgstr "U3D"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
-#, fuzzy
 msgid "Variant:"
-msgstr "Varianter:"
+msgstr "Variant:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 msgid "Board Options"
