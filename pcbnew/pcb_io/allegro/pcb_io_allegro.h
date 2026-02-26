@@ -63,5 +63,7 @@ public:
 
     // -----</PUBLIC PCB_IO API>-------------------------------------------------
 
+    bool LoadBoardFromData( const uint8_t* aData, size_t aSize, BOARD& aBoard );
+
     PCB_IO_ALLEGRO();
 };

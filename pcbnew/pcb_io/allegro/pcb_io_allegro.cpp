@@ -137,7 +137,17 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     if( !mappedFile->Data() || mappedFile->Size() == 0 )
         THROW_IO_ERROR( wxString::Format( wxS( "File is empty: %s" ), aFileName ) );
 
-    ALLEGRO::FILE_STREAM allegroStream( mappedFile->Data(), mappedFile->Size() );
+    if( !LoadBoardFromData( mappedFile->Data(), mappedFile->Size(), *m_board ) )
+        return nullptr;
+
+    (void) deleter.release();
+    return m_board;
+}
+
+
+bool PCB_IO_ALLEGRO::LoadBoardFromData( const uint8_t* aData, size_t aSize, BOARD& aBoard )
+{
+    ALLEGRO::FILE_STREAM allegroStream( aData, aSize );
 
     ALLEGRO::PARSER parser( allegroStream, m_progressReporter );
 
@@ -157,8 +167,7 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     wxLogTrace( traceAllegroPerf, wxT( "Phase 1 (binary parse): %.3f ms" ), phaseTimer.msecs() ); //format:allow
 
     // Import Phase 2: turn the C++ structs into the KiCad BOARD
-    ALLEGRO::BOARD_BUILDER builder( *brdDb, *m_board, *m_reporter, m_progressReporter,
-                                    m_layer_mapping_handler );
+    ALLEGRO::BOARD_BUILDER builder( *brdDb, aBoard, *m_reporter, m_progressReporter, m_layer_mapping_handler );
 
     phaseTimer.Start();
     const bool phase2Ok = builder.BuildBoard();
@@ -170,15 +179,14 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     {
         wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Phase 2 board construction failed" );
         m_reporter->Report( _( "Failed to build board from Allegro data" ), RPT_SEVERITY_ERROR );
-        return nullptr;
+        return false;
     }
 
     wxLogTrace( wxT( "KICAD_ALLEGRO" ), "Board construction completed successfully" );
     wxLogTrace( traceAllegroPerf, wxT( "LoadBoard total (Phase 1 + Phase 2): %.3f ms" ), totalTimer.msecs() ); //format:allow
 
-    m_board->m_LegacyNetclassesLoaded = true;
-    m_board->m_LegacyDesignSettingsLoaded = true;
+    aBoard.m_LegacyNetclassesLoaded = true;
+    aBoard.m_LegacyDesignSettingsLoaded = true;
 
-    (void) deleter.release();
-    return m_board;
+    return true;
 }

@@ -31,14 +31,16 @@
 
 #include <fmt/format.h>
 
-#include <common.h>
-#include <core/profile.h>
-
 #include <board.h>
 #include <board_item.h>
+#include <common.h>
+#include <core/profile.h>
+#include <richio.h>
+
+#include <pcb_io/allegro/pcb_io_allegro.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
-#include <richio.h>
+
 #include <qa_utils/stdstream_line_reader.h>
 
 
@@ -94,15 +96,66 @@ private:
 };
 
 
+class ALLEGRO_BRD_STREAM_PARSER : public STREAM_PARSER
+{
+public:
+    void PrepareStream( std::istream& aStream ) override
+    {
+        // Allegro parser expects to mmap the stream, so we need to
+        // dump it all in memory to simulate that.
+        m_buffer.assign( std::istreambuf_iterator<char>( aStream ), std::istreambuf_iterator<char>() );
+
+        // Check if stream reading failed
+        if( aStream.fail() && !aStream.eof() )
+        {
+            THROW_IO_ERROR( _( "Failed to read from input stream" ) );
+        }
+    }
+
+    std::unique_ptr<BOARD_ITEM> Parse() override
+    {
+        PCB_IO_ALLEGRO         allegroParser;
+        std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+        if( !allegroParser.LoadBoardFromData( m_buffer.data(), m_buffer.size(), *board ) )
+        {
+            return nullptr;
+        }
+
+        return board;
+    }
+
+private:
+    std::vector<uint8_t> m_buffer;
+};
+
+
+enum class PLUGIN_TYPE
+{
+    KICAD_SEXPR,
+    ALLEGRO
+};
+
+
 /**
  * Parse a PCB or footprint file from the given input stream
  *
  * @param aStream the input stream to read from
  * @return success, duration (in us)
  */
-bool parse( std::istream& aStream, bool aVerbose )
+bool parse( std::istream& aStream, PLUGIN_TYPE aPluginType, bool aVerbose )
 {
-    std::unique_ptr<STREAM_PARSER> parser = std::make_unique<SEXPR_STREAM_PARSER>();
+    std::unique_ptr<STREAM_PARSER> parser;
+
+    switch( aPluginType )
+    {
+    case PLUGIN_TYPE::KICAD_SEXPR:
+        parser = std::make_unique<SEXPR_STREAM_PARSER>();
+        break;
+    case PLUGIN_TYPE::ALLEGRO:
+        parser = std::make_unique<ALLEGRO_BRD_STREAM_PARSER>();
+        break;
+    }
 
     try
     {
@@ -154,6 +207,8 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
     { wxCMD_LINE_SWITCH, "h", "help", _( "displays help on the command line parameters" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
     { wxCMD_LINE_SWITCH, "v", "verbose", _( "print parsing information" ).mb_str() },
+    { wxCMD_LINE_OPTION, "p", "plugin", _( "parser plugin to use (kicad, allegro)" ).mb_str(),
+            wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
     { wxCMD_LINE_PARAM, nullptr, nullptr, _( "input file" ).mb_str(), wxCMD_LINE_VAL_STRING,
             wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
     { wxCMD_LINE_NONE }
@@ -163,6 +218,12 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
 enum PARSER_RET_CODES
 {
     PARSE_FAILED = KI_TEST::RET_CODES::TOOL_SPECIFIC,
+};
+
+
+static const std::map<std::string, PLUGIN_TYPE> pluginTypeMap = {
+    { "kicad", PLUGIN_TYPE::KICAD_SEXPR },
+    { "allegro", PLUGIN_TYPE::ALLEGRO },
 };
 
 
@@ -190,13 +251,25 @@ int pcb_parser_main_func( int argc, char** argv )
     bool         ok = true;
     const size_t file_count = cl_parser.GetParamCount();
 
+    wxString plugin;
+    cl_parser.Found( "plugin", &plugin );
+
+    auto pluginIt = pluginTypeMap.find( plugin.ToStdString() );
+    if( pluginIt == pluginTypeMap.end() )
+    {
+        std::cerr << fmt::format( "Unknown plugin: {}", plugin.ToStdString() ) << std::endl;
+        return KI_TEST::RET_CODES::BAD_CMDLINE;
+    }
+
+    const PLUGIN_TYPE pluginType = pluginIt->second;
+
     if( file_count == 0 )
     {
         // Parse the file provided on stdin - used by AFL to drive the
         // program
         // while (__AFL_LOOP(2))
         {
-            ok = parse( std::cin, verbose );
+            ok = parse( std::cin, pluginType, verbose );
         }
     }
     else
@@ -206,7 +279,7 @@ int pcb_parser_main_func( int argc, char** argv )
         // well as manual testing
         for( unsigned i = 0; i < file_count; i++ )
         {
-            const auto filename = cl_parser.GetParam( i ).ToStdString();
+            const std::string filename = cl_parser.GetParam( i ).ToStdString();
 
             if( verbose )
                 std::cout << fmt::format( "Parsing: {}", filename ) << std::endl;
@@ -214,7 +287,7 @@ int pcb_parser_main_func( int argc, char** argv )
             std::ifstream fin;
             fin.open( filename );
 
-            ok = ok && parse( fin, verbose );
+            ok = ok && parse( fin, pluginType, verbose );
         }
     }
 
@@ -226,5 +299,5 @@ int pcb_parser_main_func( int argc, char** argv )
 
 
 static bool registered = UTILITY_REGISTRY::Register( { "pcb_parser",
-                                                       "Parse a KiCad PCB file",
+                                                       "Parse a PCB file",
                                                        pcb_parser_main_func } );
