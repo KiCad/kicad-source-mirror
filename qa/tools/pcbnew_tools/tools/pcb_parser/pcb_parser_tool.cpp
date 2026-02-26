@@ -25,12 +25,16 @@
 
 #include <cstdio>
 #include <string>
-#include <common.h>
-#include <core/profile.h>
 
 #include <wx/cmdline.h>
 #include <wx/msgout.h>
 
+#include <fmt/format.h>
+
+#include <common.h>
+#include <core/profile.h>
+
+#include <board.h>
 #include <board_item.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
@@ -42,6 +46,55 @@ using PARSE_DURATION = std::chrono::microseconds;
 
 
 /**
+ * In order to support fuzz testing, we need to be able to parse from stdin.
+ * The PCB_IO interface is designed to parse from a file, so this class is a simple
+ * wrapper that needs to be implemented to wrap a plugin's core parser function.
+ */
+class STREAM_PARSER
+{
+public:
+    virtual ~STREAM_PARSER() = default;
+
+    /**
+     * Take some input stream and prepare it for parsing.  This may involve reading
+     * the whole stream into memory, or it may involve setting up some kind of streaming
+     * reader.
+     *
+     * @throw IO_ERROR if there is a problem reading from the stream
+     */
+    virtual void PrepareStream( std::istream& aStream ) = 0;
+
+    /**
+     * Actually perform the parsing and return a BOARD_ITEM if successful, or nullptr if not.
+     *
+     * @throw IO_ERROR if there is a parse failure
+     */
+    virtual std::unique_ptr<BOARD_ITEM> Parse() = 0;
+};
+
+
+class SEXPR_STREAM_PARSER : public STREAM_PARSER
+{
+public:
+    void PrepareStream( std::istream& aStream ) override
+    {
+        m_reader.SetStream( aStream );
+
+        m_parser = std::make_unique<PCB_IO_KICAD_SEXPR_PARSER>( &m_reader, nullptr, nullptr );
+    }
+
+    std::unique_ptr<BOARD_ITEM> Parse() override
+    {
+        return std::unique_ptr<BOARD_ITEM>{ m_parser->Parse() };
+    }
+
+private:
+    STDISTREAM_LINE_READER                     m_reader;
+    std::unique_ptr<PCB_IO_KICAD_SEXPR_PARSER> m_parser;
+};
+
+
+/**
  * Parse a PCB or footprint file from the given input stream
  *
  * @param aStream the input stream to read from
@@ -49,19 +102,29 @@ using PARSE_DURATION = std::chrono::microseconds;
  */
 bool parse( std::istream& aStream, bool aVerbose )
 {
-    // Take input from stdin
-    STDISTREAM_LINE_READER reader;
-    reader.SetStream( aStream );
+    std::unique_ptr<STREAM_PARSER> parser = std::make_unique<SEXPR_STREAM_PARSER>();
 
-    PCB_IO_KICAD_SEXPR_PARSER  parser( &reader, nullptr, nullptr );
-    BOARD_ITEM* board = nullptr;
+    try
+    {
+        parser->PrepareStream( aStream );
+    }
+    catch( const IO_ERROR& e )
+    {
+        if( aVerbose )
+        {
+            std::cerr << fmt::format( "Error preparing stream: {}", e.What().ToStdString() ) << std::endl;
+        }
+        return false;
+    }
+
+    std::unique_ptr<BOARD_ITEM> board = nullptr;
 
     PARSE_DURATION duration{};
 
     try
     {
         PROF_TIMER timer;
-        board = parser.Parse();
+        board = parser->Parse();
 
         duration = timer.SinceStart<PARSE_DURATION>();
     }
@@ -71,7 +134,16 @@ bool parse( std::istream& aStream, bool aVerbose )
 
     if( aVerbose )
     {
-        std::cout << "Took: " << duration.count() << "us" << std::endl;
+        std::cout << fmt::format( "Took: {}us", duration.count() ) << std::endl;
+
+        if( !board )
+        {
+            std::cout << "Parsing failed" << std::endl;
+        }
+        else
+        {
+            std::cout << fmt::format( "  {} nets", board->GetBoard()->GetNetCount() ) << std::endl;
+        }
     }
 
     return board != nullptr;
@@ -137,7 +209,7 @@ int pcb_parser_main_func( int argc, char** argv )
             const auto filename = cl_parser.GetParam( i ).ToStdString();
 
             if( verbose )
-                std::cout << "Parsing: " << filename << std::endl;
+                std::cout << fmt::format( "Parsing: {}", filename ) << std::endl;
 
             std::ifstream fin;
             fin.open( filename );
