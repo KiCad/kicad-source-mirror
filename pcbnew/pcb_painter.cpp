@@ -1680,6 +1680,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         // Drawing components of compound shapes in outline mode produces a mess.
         bool simpleShapes = !outline_mode;
 
+        // When this layer has post-machining (counterbore/countersink), GetEffectiveShape returns
+        // the counterbore hole circle (for DRC purposes), not the actual copper shape.  Force the
+        // slower TransformShapeToPolygon path which always returns the correct copper shape.
+        if( IsCopperLayer( pcbLayer ) && aPad->GetPostMachiningKnockout( pcbLayer ) > 0 )
+            simpleShapes = false;
+
         if( simpleShapes )
         {
             if( ( margin.x != margin.y && aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
@@ -1879,13 +1885,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             m_gal->DrawPolygon( polySet );
         }
 
-        // Draw post-machining indicator if this layer is post-machined
+        // Draw backdrill indicators (semi-circles extending into the hole)
+        // Drawn on copper layer so they appear above the annular ring
         if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSizeX() > 0 )
         {
             VECTOR2D holePos = aPad->GetPosition() + aPad->GetOffset( pcbLayer );
-
-            // Draw backdrill indicators (semi-circles extending into the hole)
-            // Drawn on copper layer so they appear above the annular ring
             VECTOR2I secDrill = aPad->GetSecondaryDrillSize();
             VECTOR2I terDrill = aPad->GetTertiaryDrillSize();
 
@@ -1902,9 +1906,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                                         aPad->GetTertiaryDrillStartLayer(),
                                         aPad->GetTertiaryDrillEndLayer() );
             }
-
-            drawPostMachiningIndicator( aPad, holePos, pcbLayer );
         }
+    }
+
+    if( !m_pcbSettings.IsPrinting() && IsCopperLayer( pcbLayer ) && aPad->GetDrillSizeX() > 0 )
+    {
+        VECTOR2D holePos = aPad->GetPosition() + aPad->GetOffset( pcbLayer );
+        drawPostMachiningIndicator( aPad, holePos, pcbLayer );
     }
 
     if( IsClearanceLayer( aLayer )
