@@ -1294,3 +1294,47 @@ BOOST_FIXTURE_TEST_CASE( RegressionCoincidentPadClearance, ZONE_FILL_TEST_FIXTUR
                                            "deduplicated in zone fill knockout.",
                                            violations ) );
 }
+
+
+/**
+ * Verify zone fills clear PTH pads on different nets.
+ *
+ * After fill, DRC must report zero zone-to-pad clearance violations.  Clipper2
+ * rounds corridor-cut vertices to integer coordinates; they can land within 1nm
+ * of a segment endpoint but are not true pinch points.  Exact collinearity
+ * detection keeps them from triggering splits that extend triangles into knockout
+ * areas.
+ */
+BOOST_FIXTURE_TEST_CASE( ZoneViaNetClearance, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "connect/connect", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    KI_TEST::FillZones( m_board.get() );
+
+    std::vector<DRC_ITEM> violations;
+
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() == DRCE_CLEARANCE )
+                {
+                    BOARD_ITEM* item_a = m_board->ResolveItem( aItem->GetMainItemID() );
+                    BOARD_ITEM* item_b = m_board->ResolveItem( aItem->GetAuxItemID() );
+
+                    ZONE* zone_a = dynamic_cast<ZONE*>( item_a );
+                    ZONE* zone_b = dynamic_cast<ZONE*>( item_b );
+
+                    if( zone_a || zone_b )
+                        violations.push_back( *aItem );
+                }
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_CHECK_EQUAL( violations.size(), 0 );
+}
