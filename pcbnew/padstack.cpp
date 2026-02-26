@@ -1218,6 +1218,15 @@ const PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
     {
         if( m_copperProps.count( aLayer ) )
             return m_copperProps.at( aLayer );
+
+        // For CUSTOM mode, fall back to ALL_LAYERS if available (e.g. for layers not yet
+        // explicitly defined).  If ALL_LAYERS is also absent (e.g. after a FlipLayers()
+        // that renamed the only entry from F_Cu to B_Cu), return whatever entry is first.
+        if( m_copperProps.count( ALL_LAYERS ) )
+            return m_copperProps.at( ALL_LAYERS );
+
+        wxASSERT( !m_copperProps.empty() );
+        return m_copperProps.begin()->second;
     }
 
     return m_copperProps.at( ALL_LAYERS );
@@ -1276,7 +1285,13 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     if( m_copperProps.count( aLayer ) )
         return aLayer;
 
-    return ALL_LAYERS;
+    // For CUSTOM mode, if ALL_LAYERS is present use it as the default; otherwise return the
+    // first available layer (e.g. after FlipLayers renamed ALL_LAYERS from F_Cu to B_Cu).
+    if( m_copperProps.count( ALL_LAYERS ) )
+        return ALL_LAYERS;
+
+    wxASSERT( !m_copperProps.empty() );
+    return m_copperProps.begin()->first;
 }
 
 

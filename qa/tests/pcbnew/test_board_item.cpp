@@ -346,4 +346,45 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 }
 
 
+/**
+ * Regression test for issue #23234:
+ * Changing padstack mode to Custom on a flipped footprint's pad and pressing OK caused an
+ * "Unhandled exception" (std::out_of_range) because PADSTACK::CopperLayer( F_Cu ) fell through
+ * to m_copperProps.at( ALL_LAYERS ) after FlipLayers() had renamed the F_Cu key to B_Cu.
+ */
+BOOST_AUTO_TEST_CASE( Issue23234_CustomPadstackFlip )
+{
+    // Create a board with two copper layers so Flip works correctly
+    BOARD board;
+    FOOTPRINT footprint( &board );
+    PAD pad( &footprint );
+
+    // Set up a circular SMD pad on F_Cu (NORMAL padstack mode)
+    pad.SetAttribute( PAD_ATTRIB::SMD );
+    pad.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
+    LSET smd_layers;
+    smd_layers.set( F_Cu );
+    pad.SetLayerSet( smd_layers );
+
+    // Switch padstack to CUSTOM mode (as the dialog does when user selects "Custom")
+    pad.Padstack().SetMode( PADSTACK::MODE::CUSTOM );
+
+    // Now flip the pad (as TransferDataFromWindow does for pads on flipped footprints).
+    // This renames the F_Cu key in m_copperProps to B_Cu.
+    // After this, ALL_LAYERS (= F_Cu) is no longer in m_copperProps.
+    pad.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
+
+    // These calls must NOT throw std::out_of_range.
+    // Before the fix, CopperLayer( ALL_LAYERS ) called m_copperProps.at( F_Cu ) which threw
+    // because F_Cu was not in the map (it had been renamed to B_Cu by FlipLayers).
+    BOOST_CHECK_NO_THROW( pad.GetShape( PADSTACK::ALL_LAYERS ) );
+    BOOST_CHECK_NO_THROW( pad.GetSize( PADSTACK::ALL_LAYERS ) );
+    BOOST_CHECK_NO_THROW( pad.Padstack().EffectiveLayerFor( PADSTACK::ALL_LAYERS ) );
+
+    // Verify the returned shape is sane (the B_Cu props, which were originally F_Cu props)
+    BOOST_CHECK( pad.GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
