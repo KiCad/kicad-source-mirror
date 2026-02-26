@@ -474,7 +474,9 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
                         [&]( const LIBRARY_TABLE_ROW& aRow )
                         {
                             wxString path = GetFullURI( &aRow, true );
-                            return path.StartsWith( *packagesPath ) && !wxFile::Exists( path );
+
+                            return path.StartsWith( *packagesPath )
+                                   && !wxFileName::Exists( path );
                         } );
 
                 table->Rows().erase( toErase.begin(), toErase.end() );
