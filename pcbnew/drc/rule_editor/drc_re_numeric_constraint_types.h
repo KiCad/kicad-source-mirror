@@ -131,7 +131,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_annular_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 207 + DRC_RE_OVERLAY_XO, 237 + DRC_RE_OVERLAY_XO, 67 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 209 + DRC_RE_OVERLAY_XO, 239 + DRC_RE_OVERLAY_XO, 67 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -154,7 +154,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_connection_width; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 195 + DRC_RE_OVERLAY_XO, 225 + DRC_RE_OVERLAY_XO, 75 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 230 + DRC_RE_OVERLAY_XO, 270 + DRC_RE_OVERLAY_XO, 104 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -179,7 +179,7 @@ public:
     bool    IsIntegerOnly() const override { return true; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 189 + DRC_RE_OVERLAY_XO, 210 + DRC_RE_OVERLAY_XO, 32 + DRC_RE_OVERLAY_YO, 1 } };
+        return { { 176 + DRC_RE_OVERLAY_XO, 206 + DRC_RE_OVERLAY_XO, 32 + DRC_RE_OVERLAY_YO, 1 } };
     }
 };
 
@@ -190,7 +190,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_drill_size; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 205 + DRC_RE_OVERLAY_XO, 235 + DRC_RE_OVERLAY_XO, 107 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 209 + DRC_RE_OVERLAY_XO, 239 + DRC_RE_OVERLAY_XO, 107 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -214,7 +214,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_silk_to_silk_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 232 + DRC_RE_OVERLAY_XO, 272 + DRC_RE_OVERLAY_XO, 92 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 385 + DRC_RE_OVERLAY_XO, 425 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -226,7 +226,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_silk_to_soldermask_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 20 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_XO, 20 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 230 + DRC_RE_OVERLAY_XO, 270 + DRC_RE_OVERLAY_XO, 20 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -238,7 +238,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_soldermask_expansion; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 345 + DRC_RE_OVERLAY_XO, 375 + DRC_RE_OVERLAY_XO, 47 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 348 + DRC_RE_OVERLAY_XO, 378 + DRC_RE_OVERLAY_XO, 47 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 

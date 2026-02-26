@@ -59,12 +59,12 @@ public:
         // Positions measured from constraint_routing_diff_pair.png bitmap (~570x160)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 162 + DRC_RE_OVERLAY_XO, 202 + DRC_RE_OVERLAY_XO, 47 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
-            { 302 + DRC_RE_OVERLAY_XO, 342 + DRC_RE_OVERLAY_XO, 60 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_width (left side, middle)
-            { 480 + DRC_RE_OVERLAY_XO, 520 + DRC_RE_OVERLAY_XO, 42 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_width (left side, bottom)
-            { 214 + DRC_RE_OVERLAY_XO, 254 + DRC_RE_OVERLAY_XO, 213 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_gap (center-left, top)
-            { 386 + DRC_RE_OVERLAY_XO, 426 + DRC_RE_OVERLAY_XO, 213 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_gap (center-left, middle)
-            { 600 + DRC_RE_OVERLAY_XO, 640 + DRC_RE_OVERLAY_XO, 213 + DRC_RE_OVERLAY_YO, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_gap (center-left, bottom)
+            { 162 + DRC_RE_OVERLAY_XO, 202 + DRC_RE_OVERLAY_XO, 39 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left side, top arrow)
+            { 302 + DRC_RE_OVERLAY_XO, 342 + DRC_RE_OVERLAY_XO, 39 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT },  // opt_width (left side, middle)
+            { 480 + DRC_RE_OVERLAY_XO, 520 + DRC_RE_OVERLAY_XO, 39 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },  // max_width (left side, bottom)
+            { 213 + DRC_RE_OVERLAY_XO, 253 + DRC_RE_OVERLAY_XO, 215 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_gap (center-left, top)
+            { 386 + DRC_RE_OVERLAY_XO, 426 + DRC_RE_OVERLAY_XO, 215 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_gap (center-left, middle)
+            { 600 + DRC_RE_OVERLAY_XO, 640 + DRC_RE_OVERLAY_XO, 215 + DRC_RE_OVERLAY_YO, 6, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_gap (center-left, bottom)
             { 120 + DRC_RE_OVERLAY_XO, 160 + DRC_RE_OVERLAY_XO, 204 + DRC_RE_OVERLAY_YO, 7, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_uncoupled (right side)
             { 798 + DRC_RE_OVERLAY_XO, 838 + DRC_RE_OVERLAY_XO, 168 + DRC_RE_OVERLAY_YO, 8, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew (to be added, right side)
         };

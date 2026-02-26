@@ -58,8 +58,8 @@ public:
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
             { 64 + DRC_RE_OVERLAY_XO, 104 + DRC_RE_OVERLAY_XO, 96 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_width (left arrow)
-            { 126 + DRC_RE_OVERLAY_XO, 166 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_width (bottom center arrow)
-            { 248 + DRC_RE_OVERLAY_XO, 288 + DRC_RE_OVERLAY_XO, 74 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_width (right arrow)
+            { 125 + DRC_RE_OVERLAY_XO, 165 + DRC_RE_OVERLAY_XO, 39 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_width (bottom center arrow)
+            { 246 + DRC_RE_OVERLAY_XO, 286 + DRC_RE_OVERLAY_XO, 72 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_width (right arrow)
         };
     }
 
