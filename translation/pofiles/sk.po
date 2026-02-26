@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-25 22:31+0000\n"
+"PO-Revision-Date: 2026-02-26 23:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -4962,7 +4962,7 @@ msgstr "Importovať súbor kl. skratiek:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:253
 msgid "| Action | Default Hotkey | Description"
-msgstr "| Akcia | Prednastavená klávesová akratka | Popis"
+msgstr "| Akcia | Predvolená klávesová skratka | Popis"
 
 #: common/dialogs/panel_image_editor.cpp:80
 msgid "Scale must be a positive number."
@@ -11657,7 +11657,7 @@ msgstr ": %i zhodných puzdier"
 #: cvpcb/cvpcb_mainframe.cpp:860
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr "Popis: %s; Kľúčové slová: %s"
+msgstr "Popis: %s;  Kľúčové slová: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:892
 #, c-format
@@ -22151,9 +22151,8 @@ msgstr "Knižničné prepojenie"
 #: eeschema/sch_symbol.cpp:3901 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4822 pcbnew/plot_board_layers.cpp:190
 #: pcbnew/widgets/search_handlers.cpp:127
-#, fuzzy
 msgid "Library Description"
-msgstr "Popis"
+msgstr "Popis knižnice"
 
 #: eeschema/sch_symbol.cpp:3973 pcbnew/footprint.cpp:4839
 #: pcbnew/widgets/pcb_properties_panel.cpp:590
@@ -25029,16 +25028,15 @@ msgid "KiCad Symbol Library Browser"
 msgstr "Prehliadač knižnice symbolov"
 
 #: eeschema/symbol_viewer_frame.cpp:179
-#, fuzzy
 msgid ""
 "Filter on symbol name, keywords, description and pin count.\n"
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pin count."
 msgstr ""
-"Filtrujte podľa názvu stopy, kľúčových slov, popisu a počtu podložiek.\n"
-"Hľadané výrazy sú oddelené medzerami. Všetky hľadané výrazy sa musia "
+"Filtrovať podľa názvu symbolu, kľúčových slov, popisu a počtu vývodov.\n"
+"Hľadané výrazy sú oddelené medzerami.  Všetky hľadané výrazy sa musia "
 "zhodovať.\n"
-"Termín, ktorý je číslom, sa bude zhodovať aj s počtom podložiek."
+"Výraz, ktorý je číslom, sa bude zhodovať aj s počtom vývodov."
 
 #: eeschema/symbol_viewer_frame.cpp:1063 pcbnew/footprint_viewer_frame.cpp:989
 #: pcbnew/footprint_viewer_frame.cpp:993
@@ -25142,9 +25140,8 @@ msgid "Variant name:"
 msgstr "Názov premennej"
 
 #: eeschema/toolbars_sch_editor.cpp:400
-#, fuzzy
 msgid "Description (optional):"
-msgstr "Popis:"
+msgstr "Popis (voliteľné):"
 
 #: eeschema/toolbars_symbol_viewer.cpp:146
 msgid "Symbol Viewer"
@@ -31155,9 +31152,8 @@ msgid "No."
 msgstr "Nie"
 
 #: kicad/dialogs/panel_jobset.cpp:72
-#, fuzzy
 msgid "Job Description"
-msgstr "Popis"
+msgstr "Popis úlohy"
 
 #: kicad/dialogs/panel_jobset.cpp:73
 msgid "Source"
@@ -31203,9 +31199,8 @@ msgid "Open Output"
 msgstr "Výstup"
 
 #: kicad/dialogs/panel_jobset.cpp:436
-#, fuzzy
 msgid "Edit Job Description"
-msgstr "Popis"
+msgstr "Upraviť popis úlohy"
 
 #: kicad/dialogs/panel_jobset.cpp:437
 msgid "Edit Job Settings..."
@@ -31375,6 +31370,8 @@ msgid ""
 "This template does not include a description. You can still use it to create "
 "a new project."
 msgstr ""
+"Táto šablóna neobsahuje popis. Je možné ju však použiť na vytvorenie nového "
+"projektu."
 
 #: kicad/dialogs/template_default_html.h:406
 #, fuzzy
@@ -31412,7 +31409,7 @@ msgstr ""
 
 #: kicad/dialogs/template_default_html.h:432
 msgid "Add a description by creating"
-msgstr ""
+msgstr "Pridať popis vytvorením"
 
 #: kicad/dialogs/template_default_html.h:433
 #, fuzzy
@@ -38770,9 +38767,10 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"Aktualizácia / resetovanie reťazcov: tieto popisy musia pokryť dva prípady: "
-"používateľ vykonal prepísanie stopy na PCB a chce ich odstrániť, alebo "
-"používateľ vykonal zmeny v stope knižnice a chce ich rozšíriť späť na PCB."
+"Aktualizovať/obnoviť reťazce: sú dva prípady ktoré tieto popisy musia "
+"pokryť: používateľ vykonal prepísanie puzdra na DPS a chce ich odstrániť, "
+"alebo používateľ vykonal zmeny v puzdre v knižnice a chce ich preniesť späť "
+"na DPS."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
 #, fuzzy
@@ -43592,7 +43590,7 @@ msgstr "Text udržiavajte vo zvislej polohe"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:275
 msgid "Parent footprint description"
-msgstr "Popis nadradenej stopy"
+msgstr "Popis nadradeného puzdra"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:507
 msgid "Edit Text Box Properties"
@@ -49499,9 +49497,8 @@ msgid "Footprint Chooser"
 msgstr "Kontrola stopy"
 
 #: pcbnew/footprint_chooser_frame.cpp:150
-#, fuzzy
 msgid "Show/hide description panel"
-msgstr "Zobraziť / skryť správcu vzhľadu"
+msgstr "Zobraziť/skryť panel s popisom"
 
 #: pcbnew/footprint_chooser_frame.cpp:161
 #, fuzzy
@@ -49746,10 +49743,10 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Filtrujte podľa názvu stopy, kľúčových slov, popisu a počtu podložiek.\n"
-"Hľadané výrazy sú oddelené medzerami. Všetky hľadané výrazy sa musia "
+"Filtrovať podľa názvu puzdra, kľúčových slov, popisu a počtu plôšok.\n"
+"Hľadané výrazy sú oddelené medzerami.  Všetky hľadané výrazy sa musia "
 "zhodovať.\n"
-"Termín, ktorý je číslom, sa bude zhodovať aj s počtom podložiek."
+"Výraz, ktorý je číslom, sa bude zhodovať aj s počtom plôšok."
 
 #: pcbnew/footprint_wizard_frame.cpp:86
 #: pcbnew/footprint_wizard_frame_functions.cpp:45
@@ -50285,12 +50282,11 @@ msgstr "Symetrický"
 
 #: pcbnew/microwave/microwave_polygon.cpp:167
 msgid "Read Shape Description File..."
-msgstr "Čítať súbor popisu tvaru..."
+msgstr "Čítať súbor s popisom tvaru..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:209
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Čítať súbor popisu tvaru..."
+msgstr "Čítať súbor popisu tvaru"
 
 #: pcbnew/microwave/microwave_polygon.cpp:313
 msgid "Shape has a null size."
@@ -50865,9 +50861,9 @@ msgid "Added variant '%s'."
 msgstr "Pridať %s (stopa '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2385
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Zmeniť stopu %s z '%s' na '%s'"
+msgstr "Aktualizovaný popis varianty '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2414
 #, fuzzy, c-format
