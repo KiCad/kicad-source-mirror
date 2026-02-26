@@ -158,7 +158,14 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->GetTreeCtrl()->SetMinSize( ctrlSize );
     m_treebook->Layout();
 
-    finishDialogSettings();
+    // Note: do NOT call finishDialogSettings() here.  At this point the lazy pages have not
+    // yet been resolved, so the sizer minimum is computed from empty placeholder pages.
+    // On GTK+X11, finishDialogSettings() stores a "resize to sizer minimum" operation that
+    // is deferred until the window is realized by the window manager.  If that deferred
+    // operation fires after onPageChanged() has already grown the dialog to fit the real
+    // page content, it shrinks the dialog back to the placeholder minimum, cutting off the
+    // bottom of the page.  The dialog minimum and size are correctly established by
+    // onPageChanged() once the selected page is resolved.
 }
 
 
