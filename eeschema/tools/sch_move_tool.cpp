@@ -1494,9 +1494,13 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
             if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
                 isLineModeConstrained = cfg->m_Drawing.line_mode != LINE_MODE::LINE_MODE_FREE;
 
-            // Only partially selected drag lines in orthogonal line mode need special handling
+            // Only partially selected drag lines in orthogonal line mode need special handling.
+            // Skip newly-created connectivity wires added to maintain connectivity at junctions:
+            // these are marked with both IS_NEW and SELECTED_BY_DRAG; they already have the
+            // correct endpoint constraint and don't need orthogonal bending
             if( ( m_mode == DRAG ) && isLineModeConstrained && line
-                && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
+                && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT )
+                && !line->HasFlag( SELECTED_BY_DRAG | IS_NEW ) )
             {
                 orthoLineDrag( aCommit, line, splitDelta, aXBendCount, aYBendCount, aGrid );
             }
