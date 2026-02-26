@@ -23,6 +23,8 @@
 
 #include "convert/allegro_db.h"
 
+#include <set>
+
 #include <wx/log.h>
 
 #include <ki_exception.h>
@@ -166,12 +168,20 @@ bool DB_REF_CHAIN::Resolve( const DB_OBJ_RESOLVER& aResolver )
     }
 
     DB_OBJ* n = aResolver.Resolve( m_Head );
+    std::set<uint32_t> visitedKeys;
 
     while( n != nullptr )
     {
         m_Chain.push_back( n );
 
         uint32_t nextKey = m_NextKeyGetter( *n );
+
+        if( visitedKeys.count( nextKey ) > 0 )
+        {
+            THROW_IO_ERROR( wxString::Format( "Detected loop in DB_REF_CHAIN at key %#010x for %s",
+                                              nextKey, m_DebugName ? m_DebugName : "<unknown>" ) );
+        }
+        visitedKeys.insert( nextKey );
 
         if( nextKey == m_Tail )
         {
