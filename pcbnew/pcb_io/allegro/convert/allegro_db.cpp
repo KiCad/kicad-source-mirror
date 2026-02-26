@@ -1085,6 +1085,12 @@ bool FOOTPRINT_DEF::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     // Set backlink from instances to parent
     m_Instances.Visit( [&]( DB_OBJ& aObj )
     {
+        if( aObj.GetType() != DB_OBJ::TYPE::FP_INST )
+        {
+            wxLogTrace( "ALLEGRO_EXTRACT", "FOOTPRINT_DEF::ResolveRefs: Unexpected type in footprint instance chain: %d", static_cast<int>( aObj.GetType() ) );
+            return;
+        }
+
         FOOTPRINT_INSTANCE& fpInst = static_cast<FOOTPRINT_INSTANCE&>( aObj );
         fpInst.m_Parent = this;
     } );
