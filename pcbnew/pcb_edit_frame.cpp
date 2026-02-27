@@ -2946,7 +2946,17 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     }
     else
     {
-        aNew->Models() = aExisting->Models();  // Linked list of 3D models.
+        // Preserve model references and all embedded model data.
+        aNew->Models() = aExisting->Models();
+
+        for( const auto& [name, file] : aExisting->GetEmbeddedFiles()->EmbeddedFileMap() )
+        {
+            if( file->type != EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL )
+                continue;
+
+            aNew->GetEmbeddedFiles()->RemoveFile( name, true );
+            aNew->GetEmbeddedFiles()->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
+        }
     }
 
     // Updating other parameters
