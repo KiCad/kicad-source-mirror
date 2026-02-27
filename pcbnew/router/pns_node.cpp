@@ -25,6 +25,7 @@
 #include <utility>
 
 #include <math/vector2d.h>
+#include <thread_pool.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
@@ -299,7 +300,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
     DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
-    OBSTACLES                 obstacleList;
+    OBSTACLES                 obstacleSet;
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
@@ -308,14 +309,138 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         // Disabling the cache will lead to slowness.
 
         const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &s, obstacleList, aOpts );
+        QueryColliding( &s, obstacleSet, aOpts );
     }
 
     if( aLine->EndsWithVia() )
-        QueryColliding( &aLine->Via(), obstacleList, aOpts );
+        QueryColliding( &aLine->Via(), obstacleSet, aOpts );
 
-    if( obstacleList.empty() )
+    if( obstacleSet.empty() )
         return OPT_OBSTACLE();
+
+    // Convert to indexed vector for parallel access.
+    std::vector<OBSTACLE> obstacles( obstacleSet.begin(), obstacleSet.end() );
+    const int             numObstacles = (int) obstacles.size();
+
+    const int      layer = aLine->Layer();
+    RULE_RESOLVER* ruleResolver = GetRuleResolver();
+    const bool     simplifyHull = ( cornerMode == DIRECTION_45::MITERED_90
+                                    || cornerMode == DIRECTION_45::ROUNDED_90 );
+    const bool     hasVia = aLine->EndsWithVia();
+
+    auto makeHull = [&]( const SHAPE_LINE_CHAIN& cachedHull ) -> SHAPE_LINE_CHAIN
+    {
+        if( simplifyHull )
+        {
+            BOX2I            bbox = cachedHull.BBox();
+            SHAPE_LINE_CHAIN hull;
+            hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
+            hull.Append( bbox.GetRight(), bbox.GetTop()    );
+            hull.Append( bbox.GetRight(), bbox.GetBottom() );
+            hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+            return hull;
+        }
+
+        return cachedHull;
+    };
+
+    // The first step here is sequential since GetClearance() and HullCache() are not thread-safe.
+    // So, we populate all caches first and copy the returned hull references into owned values
+    // before releasing the sequential phase.
+    struct ObstacleHullData
+    {
+        SHAPE_LINE_CHAIN lineHull;
+        SHAPE_LINE_CHAIN viaHull; // only populated when hasVia
+    };
+
+    std::vector<ObstacleHullData> hullData( numObstacles );
+
+    for( int i = 0; i < numObstacles; i++ )
+    {
+        const OBSTACLE& obstacle = obstacles[i];
+
+        int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
+                            + aLine->Width() / 2;
+
+        hullData[i].lineHull = makeHull( ruleResolver->HullCache( obstacle.m_item, clearance,
+                                                                   0, layer ) );
+
+        if( hasVia )
+        {
+            const VIA& via = aLine->Via();
+            int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
+                               + via.Diameter( aLine->Layer() ) / 2;
+
+            hullData[i].viaHull = makeHull( ruleResolver->HullCache( obstacle.m_item,
+                                                                      viaClearance, 0, layer ) );
+        }
+    }
+
+    // Run the obstacle finding in parallel and bring the results together afte
+    struct ObstacleResult
+    {
+        int      dist = INT_MAX;
+        VECTOR2I ip;
+    };
+
+    std::vector<ObstacleResult> results( numObstacles );
+    const SHAPE_LINE_CHAIN&     linePath = aLine->CLine();
+
+    auto processObstacle = [&]( int i )
+    {
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> ips;
+        ObstacleResult& result = results[i];
+
+        HullIntersection( hullData[i].lineHull, linePath, ips );
+
+        for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : ips )
+        {
+            if( !ip.valid )
+                continue;
+
+            int dist = linePath.PathLength( ip.p, ip.index_their );
+
+            if( dist < result.dist )
+            {
+                result.dist = dist;
+                result.ip = ip.p;
+            }
+        }
+
+        if( hasVia )
+        {
+            ips.clear();
+            HullIntersection( hullData[i].viaHull, linePath, ips );
+
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : ips )
+            {
+                if( !ip.valid )
+                    continue;
+
+                int dist = linePath.PathLength( ip.p, ip.index_their );
+
+                if( dist < result.dist )
+                {
+                    result.dist = dist;
+                    result.ip = ip.p;
+                }
+            }
+        }
+    };
+
+    constexpr int PARALLEL_THRESHOLD = 4;
+
+    if( numObstacles > PARALLEL_THRESHOLD )
+    {
+        thread_pool& tp = GetKiCadThreadPool();
+        auto futures = tp.submit_loop( 0, numObstacles, [&]( int i ) { processObstacle( i ); } );
+        futures.wait();
+    }
+    else
+    {
+        for( int i = 0; i < numObstacles; i++ )
+            processObstacle( i );
+    }
 
     OBSTACLE nearest;
     nearest.m_head = nullptr;
@@ -323,99 +448,21 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     nearest.m_distFirst = INT_MAX;
     nearest.m_maxFanoutWidth = 0;
 
-    bool foundZeroDistance = false;
-
-    auto updateNearest =
-            [&]( const SHAPE_LINE_CHAIN::INTERSECTION& pt, const OBSTACLE& obstacle )
-            {
-                int dist = aLine->CLine().PathLength( pt.p, pt.index_their );
-
-                if( dist < nearest.m_distFirst )
-                {
-                    nearest = obstacle;
-                    nearest.m_distFirst = dist;
-                    nearest.m_ipFirst = pt.p;
-
-                    if( dist == 0 )
-                        foundZeroDistance = true;
-                }
-            };
-
-    SHAPE_LINE_CHAIN obstacleHull;
-    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
-    int layer = aLine->Layer();
-
-    RULE_RESOLVER* ruleResolver = GetRuleResolver();
-    bool           simplifyHull = ( cornerMode == DIRECTION_45::MITERED_90
-                                  || cornerMode == DIRECTION_45::ROUNDED_90 );
-
-    for( const OBSTACLE& obstacle : obstacleList )
+    for( int i = 0; i < numObstacles; i++ )
     {
-        if( foundZeroDistance )
-            break;
-
-        int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
-                            + aLine->Width() / 2;
-
-        const SHAPE_LINE_CHAIN& cachedHull = ruleResolver->HullCache( obstacle.m_item, clearance,
-                                                                      0, layer );
-
-        if( simplifyHull )
+        if( results[i].dist < nearest.m_distFirst )
         {
-            BOX2I bbox = cachedHull.BBox();
-            obstacleHull.Clear();
-            obstacleHull.Append( bbox.GetLeft(),  bbox.GetTop()    );
-            obstacleHull.Append( bbox.GetRight(), bbox.GetTop()    );
-            obstacleHull.Append( bbox.GetRight(), bbox.GetBottom() );
-            obstacleHull.Append( bbox.GetLeft(),  bbox.GetBottom() );
-        }
-        else
-        {
-            obstacleHull = cachedHull;
-        }
+            nearest = obstacles[i];
+            nearest.m_distFirst = results[i].dist;
+            nearest.m_ipFirst = results[i].ip;
 
-        intersectingPts.clear();
-        HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
-
-        for( const auto& ip : intersectingPts )
-        {
-            if( ip.valid )
-                updateNearest( ip, obstacle );
-        }
-
-        if( aLine->EndsWithVia() )
-        {
-            const VIA& via = aLine->Via();
-            int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
-                               + via.Diameter( aLine->Layer() ) / 2;
-
-            const SHAPE_LINE_CHAIN& viaCachedHull = ruleResolver->HullCache( obstacle.m_item,
-                                                                             viaClearance, 0, layer );
-
-            if( simplifyHull )
-            {
-                BOX2I bbox = viaCachedHull.BBox();
-                obstacleHull.Clear();
-                obstacleHull.Append( bbox.GetLeft(),  bbox.GetTop()    );
-                obstacleHull.Append( bbox.GetRight(), bbox.GetTop()    );
-                obstacleHull.Append( bbox.GetRight(), bbox.GetBottom() );
-                obstacleHull.Append( bbox.GetLeft(),  bbox.GetBottom() );
-            }
-            else
-            {
-                obstacleHull = viaCachedHull;
-            }
-
-            intersectingPts.clear();
-            HullIntersection( obstacleHull, aLine->CLine(), intersectingPts );
-
-            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                updateNearest( ip, obstacle );
+            if( results[i].dist == 0 )
+                break;
         }
     }
 
     if( nearest.m_distFirst == INT_MAX )
-        nearest = (*obstacleList.begin());
+        nearest = obstacles[0];
 
     return nearest;
 }

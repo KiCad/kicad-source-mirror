@@ -124,3 +124,7 @@ endif()
 target_link_libraries( pnsrouter PRIVATE
     common
 )
+
+target_link_libraries( pnsrouter_qa PRIVATE
+    common
+)
