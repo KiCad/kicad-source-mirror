@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-26 23:09+0000\n"
+"PO-Revision-Date: 2026-02-28 01:09+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -32311,9 +32311,8 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "Välj vilket origo som ska användas för statusfältets koordinatvisning"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
-msgstr "Sidoväljare"
+msgstr "Sidväljare"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:182
 msgid "Select the page to simulate item displays"
@@ -38434,9 +38433,8 @@ msgstr "3D-modeller"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Absolut marginal för lodpasta:"
+msgstr "Marginal för lodpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:136
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -38448,6 +38446,10 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
+"Specifik marginal för lodpasta, giltig för detta fotavtryck.\n"
+"Mata in ett absolut värde (t.ex. -0,1mm), en procentsats (t.ex. -5%) eller "
+"båda (t.ex. -0,1mm -5%).\n"
+"Om fältet lämnas tomt, används det globalt satta värdet."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:285
 msgid ""
@@ -38645,15 +38647,16 @@ msgstr "Tillåt överbryggade lödmasköppningar mellan lödytor"
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:47
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:152
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
-#, fuzzy
 msgid ""
 "Solder paste clearance relative to pad size.\n"
 "Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
 "g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Globalt värde för frigång mellan lödytor och lödmasken.\n"
-"Detta värde kan ersättas av lokalt definierade värden för ett fotavtryck "
+"Marginal för lodpasta relativt till lödytans storlek.\n"
+"Mata in ett absolut värde (t.ex. -0,1mm), en procentsats (t.ex. -5%) eller "
+"båda (t.ex. -0,1mm -5%).\n"
+"Detta värde kan åsidosättas av lokalt definierade värden för ett fotavtryck "
 "eller en lödyta."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:329
@@ -38760,6 +38763,7 @@ msgstr ""
 #, c-format
 msgid "Pad '%s' in jumper pad group %d does not exist in this footprint."
 msgstr ""
+"Lödyta '%s' i grupp av byglade lödytor %d existerar inte i detta fotavtryck."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
@@ -40450,6 +40454,11 @@ msgid ""
 "g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
+"Specifik marginal för lodpasta, giltig för denna lödyta.\n"
+"Mata in ett absolut värde (t.ex. -0,1mm), en procentsats (t.ex. -5%) eller "
+"båda (t.ex. -0,1mm -5%).\n"
+"Om fältet lämnas tomt, kommer värde definierat i fotavtryck eller globalt "
+"satt värde att användas."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:673
 #, c-format
@@ -40821,12 +40830,10 @@ msgid "Mechanical"
 msgstr "Mekaniska"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Castellated pad (TH only)"
 msgstr "Krenelerad lödyta (endast för hålmonteringshål)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
-#, fuzzy
 msgid "Press-fit (round TH only)"
 msgstr "Presspassad lödyta (endast för runda hålmonteringshål)"
 
@@ -40942,7 +40949,6 @@ msgstr ""
 "Om 0 används det fotavtryckets lokala värde eller det globala värdet."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1102
-#, fuzzy
 msgid "Hole Post Machining"
 msgstr "Efterbearbetning av hål"
 
@@ -40966,9 +40972,8 @@ msgid "Backdrill"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Övre/nedre"
+msgstr "Övre & nedre"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
@@ -40993,9 +40998,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Förhandsgranska lödytan i skissläge"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Fyll om alla zoner innan designregelkontroll utförs"
+msgstr "Fyll om alla zoner innan plottning utförs"
 
 #: pcbnew/dialogs/dialog_plot.cpp:192
 msgid "Plot on All Layers"
@@ -42244,7 +42248,6 @@ msgid "Both"
 msgstr "Båda"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:477
-#, fuzzy
 msgid "Hole Post-machining"
 msgstr "Efterbearbetning av hål"
 
@@ -42502,7 +42505,6 @@ msgid "Add Custom Assignment"
 msgstr "Lägg till användardefinierad tilldelning"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:78
-#, fuzzy
 msgid "Component class:"
 msgstr "Komponentklass:"
 
@@ -42544,19 +42546,16 @@ msgid "Show library"
 msgstr "Visa bibliotek"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:368
-#, fuzzy
 msgid "Footprint field:"
-msgstr "Fotavtrycksfält"
+msgstr "Fotavtrycks fält:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:378
-#, fuzzy
 msgid "Field value:"
 msgstr "Fältvärde:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "Arknamn"
+msgstr "Arknamn:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -42865,9 +42864,8 @@ msgid "Default Properties for New Graphic Items"
 msgstr "Förinställda egenskaper för nya grafiska objekt"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:114
-#, fuzzy
 msgid "Footprint Library Tables"
-msgstr "Fotavtrycksbibliotekstabell"
+msgstr "Fotavtrycksbibliotekstabeller"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:554
 #, c-format
@@ -42913,9 +42911,8 @@ msgid "Layer name %s already in use."
 msgstr "Lagernamnet %s används redan."
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:26
-#, fuzzy
 msgid "User layers:"
-msgstr "Användarlager"
+msgstr "Användardefinierade lager:"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:30
 msgid "7"
@@ -43047,6 +43044,11 @@ msgid ""
 "\n"
 "<br>\n"
 msgstr ""
+"### Regel\n"
+"\n"
+"    (villkor \"<uttryck>\")\n"
+"\n"
+"<br>\n"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -43056,6 +43058,12 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Notes\n"
+"\n"
+"Använd Ctrl+/ för att göra raden(raderna) till kommentar, eller icke "
+"kommentar.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:59
 msgid "Minimum clearance:"
@@ -43148,16 +43156,14 @@ msgid "Holes"
 msgstr "Hål"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:214
-#, fuzzy
 msgid "Minimum drill size:"
-msgstr "Minsta rutnätsavstånd:"
+msgstr "Minsta borrdiameter:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:219
-#, fuzzy
 msgid ""
 "The minimum drill size. If set, this can only be reduced by custom rules."
 msgstr ""
-"Minsta storlek för mikrovior. Om angiven, kan den bara minskas med hjälp av "
+"Minsta diameter för borr. Om angiven, kan den bara minskas med hjälp av "
 "användardefinierade regler."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:230
@@ -43505,17 +43511,14 @@ msgid "Pad %s of %s on %s"
 msgstr "Lödyta %s av %s på %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone."
 msgstr ""
 "Objekt har hittats i borttagna lager. Den här åtgärden tar bort alla objekt "
-"från borttagna lager och kan inte ångras.\n"
-"Vill du fortsätta?"
+"från borttagna lager och kan inte ångras."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:933
-#, fuzzy
 msgid "Show Details"
 msgstr "Visa detaljer"
 
