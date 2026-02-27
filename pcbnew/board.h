@@ -1045,7 +1045,7 @@ public:
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
      * @return the board's bounding box.
      */
-    BOX2I ComputeBoundingBox( bool aBoardEdgesOnly, bool aPhysicalLayersOnly ) const;
+    BOX2I ComputeBoundingBox( bool aBoardEdgesOnly = false, bool aPhysicalLayersOnly = false ) const;
 
     const BOX2I GetBoundingBox() const override
     {
