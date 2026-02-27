@@ -150,32 +150,40 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
                                                                      const LENGTH_DELAY_LAYER_OPT  aLayerOpt,
                                                                      const LENGTH_DELAY_DOMAIN_OPT aDomain ) const
 {
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "========== CalculateLengthDetails START ==========" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: input has %zu items" ), aItems.size() );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimisations - OptimiseViaLayers=%d, MergeTracks=%d, OptimiseTracesInPads=%d, InferViaInPad=%d" ),
-                aOptimisations.OptimiseViaLayers, aOptimisations.MergeTracks,
-                aOptimisations.OptimiseTracesInPads, aOptimisations.InferViaInPad );
+    const bool doTrace = wxLog::IsAllowedTraceMask( wxT( "PNS_TUNE" ) );
 
-    // Count initial items by type
-    int initialPads = 0, initialVias = 0, initialLines = 0, initialUnknown = 0;
-    for( const LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
+    if( doTrace )
     {
-        switch( item.Type() )
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "========== CalculateLengthDetails START ==========" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: input has %zu items" ), aItems.size() );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimisations - OptimiseViaLayers=%d, MergeTracks=%d, OptimiseTracesInPads=%d, InferViaInPad=%d" ),
+                    aOptimisations.OptimiseViaLayers, aOptimisations.MergeTracks,
+                    aOptimisations.OptimiseTracesInPads, aOptimisations.InferViaInPad );
+
+        // Count initial items by type
+        int initialPads = 0, initialVias = 0, initialLines = 0, initialUnknown = 0;
+
+        for( const LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
         {
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD:  initialPads++;    break;
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA:  initialVias++;    break;
-            case LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE: initialLines++;   break;
-            default:                                        initialUnknown++; break;
+            switch( item.Type() )
+            {
+                case LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD:  initialPads++;    break;
+                case LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA:  initialVias++;    break;
+                case LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE: initialLines++;   break;
+                default:                                        initialUnknown++; break;
+            }
         }
+
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: initial items - PADs=%d, VIAs=%d, LINEs=%d, UNKNOWN=%d" ),
+                    initialPads, initialVias, initialLines, initialUnknown );
     }
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: initial items - PADs=%d, VIAs=%d, LINEs=%d, UNKNOWN=%d" ),
-                initialPads, initialVias, initialLines, initialUnknown );
 
     // If this set of items has not been optimised, optimise for shortest electrical path
     if( aOptimisations.OptimiseViaLayers || aOptimisations.MergeTracks || aOptimisations.MergeTracks )
     {
-        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: performing optimisations..." ) );
+        if( doTrace )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: performing optimisations..." ) );
 
         std::vector<LENGTH_DELAY_CALCULATION_ITEM*> pads;
         std::vector<LENGTH_DELAY_CALCULATION_ITEM*> lines;
@@ -208,19 +216,25 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
 
         if( aOptimisations.OptimiseViaLayers )
         {
-            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimising via layers (%zu vias)" ), vias.size() );
+            if( doTrace )
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimising via layers (%zu vias)" ), vias.size() );
+
             optimiseViaLayers( vias, lines, linesPositionMap, padsPositionMap );
         }
 
         if( aOptimisations.MergeTracks )
         {
-            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: merging tracks (%zu lines)" ), lines.size() );
+            if( doTrace )
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: merging tracks (%zu lines)" ), lines.size() );
+
             mergeLines( lines, linesPositionMap );
         }
 
         if( aOptimisations.OptimiseTracesInPads )
         {
-            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimising traces in pads" ) );
+            if( doTrace )
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: optimising traces in pads" ) );
+
             optimiseTracesInPads( pads, lines );
         }
     }
@@ -230,7 +244,9 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
     // Create the layer detail maps if required
     if( aLayerOpt == LENGTH_DELAY_LAYER_OPT::WITH_LAYER_DETAIL )
     {
-        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: creating layer detail maps" ) );
+        if( doTrace )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: creating layer detail maps" ) );
+
         details.LayerLengths = std::make_unique<std::map<PCB_LAYER_ID, int64_t>>();
 
         if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL )
@@ -238,14 +254,18 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
     }
 
     const bool useHeight = m_board->GetDesignSettings().m_UseHeightForLengthCalcs;
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: useHeight=%d" ), useHeight );
+
+    if( doTrace )
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: useHeight=%d" ), useHeight );
 
     // If this is a contiguous set of items, check if we have an inferred fanout via at either end. Note that this
     // condition only arises as a result of how PNS assembles tuning paths - for DRC / net inspector calculations these
     // fanout vias will be present in the object set and therefore do not need to be inferred
     if( aOptimisations.InferViaInPad && useHeight )
     {
-        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: inferring vias in pads" ) );
+        if( doTrace )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: inferring vias in pads" ) );
+
         inferViaInPad( aStartPad, aItems.front(), details );
         inferViaInPad( aEndPad, aItems.back(), details );
     }
@@ -254,7 +274,8 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
     int processedPads = 0, processedVias = 0, processedLines = 0;
     int mergedRetired = 0, unknownType = 0;
 
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: processing %zu items..." ), aItems.size() );
+    if( doTrace )
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: processing %zu items..." ), aItems.size() );
 
     for( const LENGTH_DELAY_CALCULATION_ITEM& item : aItems )
     {
@@ -288,8 +309,9 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
             details.NumVias += 1;
             processedVias++;
 
-            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: via from layer %d to %d, height=%lld" ),
-                        layerStart, layerEnd, viaHeight );
+            if( doTrace )
+                wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: via from layer %d to %d, height=%lld" ),
+                            layerStart, layerEnd, viaHeight );
         }
         else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
         {
@@ -298,20 +320,24 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
             details.NumPads += 1;
             processedPads++;
 
-            if( padToDie > 0 )
+            if( doTrace && padToDie > 0 )
                 wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: pad with pad-to-die length=%lld" ), padToDie );
         }
     }
 
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: processed items - PADs=%d, VIAs=%d, LINEs=%d" ),
-                processedPads, processedVias, processedLines );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: skipped items - merged/retired=%d, unknown=%d" ),
-                mergedRetired, unknownType );
+    if( doTrace )
+    {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: processed items - PADs=%d, VIAs=%d, LINEs=%d" ),
+                    processedPads, processedVias, processedLines );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: skipped items - merged/retired=%d, unknown=%d" ),
+                    mergedRetired, unknownType );
+    }
 
     // Calculate the time domain statistics if required
     if( aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL && !aItems.empty() )
     {
-        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: calculating time domain statistics" ) );
+        if( doTrace )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: calculating time domain statistics" ) );
 
         // TODO(JJ): Populate this
         TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
@@ -342,17 +368,21 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
             }
         }
 
-        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: total delays - Track=%lld, Via=%lld, PadToDie=%lld" ),
-                    details.TrackDelay, details.ViaDelay, details.PadToDieDelay );
+        if( doTrace )
+            wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: total delays - Track=%lld, Via=%lld, PadToDie=%lld" ),
+                        details.TrackDelay, details.ViaDelay, details.PadToDieDelay );
     }
 
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: RESULTS:" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Track length: %lld" ), details.TrackLength );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Via length: %d (from %d vias)" ), details.ViaLength, details.NumVias );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Pad-to-die length: %d (from %d pads)" ), details.PadToDieLength, details.NumPads );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  TOTAL LENGTH: %lld" ), details.TotalLength() );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "========== CalculateLengthDetails END ==========" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
+    if( doTrace )
+    {
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: RESULTS:" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Track length: %lld" ), details.TrackLength );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Via length: %d (from %d vias)" ), details.ViaLength, details.NumVias );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  Pad-to-die length: %d (from %d pads)" ), details.PadToDieLength, details.NumPads );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "  TOTAL LENGTH: %lld" ), details.TotalLength() );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "========== CalculateLengthDetails END ==========" ) );
+        wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
+    }
 
     return details;
 }

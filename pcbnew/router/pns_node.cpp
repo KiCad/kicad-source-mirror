@@ -428,7 +428,11 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         }
     };
 
-    constexpr int PARALLEL_THRESHOLD = 4;
+    // submit_loop divides work into min(thread_count, numObstacles) blocks, each submitted as
+    // a separate future with a mutex-guarded priority queue push. With too few obstacles, the
+    // lock overhead and thread wakeup latency exceed the geometry work per task. 32 obstacles
+    // ensures each thread gets enough items to amortize the submission cost.
+    constexpr int PARALLEL_THRESHOLD = 32;
 
     if( numObstacles > PARALLEL_THRESHOLD )
     {
