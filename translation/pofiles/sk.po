@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:09+0300\n"
-"PO-Revision-Date: 2026-02-25 23:10+0000\n"
+"PO-Revision-Date: 2026-02-27 01:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -11709,7 +11709,7 @@ msgstr "Nový identifikátor knižnice:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 msgid "Update/Reset Fields"
-msgstr "Aktualizovať/obnoviť polia"
+msgstr "Aktualizovať/resetovať polia"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
@@ -11739,21 +11739,21 @@ msgstr "Resetujte polia, ak sú v symbole knižnice prázdne"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
 msgid "Update/reset field text"
-msgstr "Aktualizovať/obnoviť text poľa"
+msgstr "Aktualizovať/resetovať text poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:75
 msgid "Update/reset field visibilities"
-msgstr "Aktualizácia / reset viditeľnosti poľa"
+msgstr "Aktualizovať/resetovať viditeľnosti poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
 msgid "Update/reset field text sizes and styles"
-msgstr "Aktualizovať/obnoviť veľkosti a štýly textu poľa"
+msgstr "Aktualizovať/resetovať veľkosti a štýly textu poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:81
 msgid "Update/reset field positions"
-msgstr "Aktualizácia / reset pozícií polí"
+msgstr "Aktualizovať/resetovať pozície poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:124
@@ -11770,9 +11770,8 @@ msgid "Update keywords and footprint filters"
 msgstr "Aktualizovať stopu %s z '%s' na '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "Aktualizácia / reset viditeľnosti poľa"
+msgstr "Aktualizovať/resetovať viditeľnosť názvu/čísla vývodu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 #, fuzzy
@@ -11780,9 +11779,8 @@ msgid "Reset alternate pin to default"
 msgstr "Obnovte pôvodné parametre sprievodcu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Aktualizácia / resetovanie atribútov výroby"
+msgstr "Aktualizovať/resetovať atribúty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
 msgid "Reset custom power symbols"
@@ -35204,9 +35202,10 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"Aktualizácia / resetovanie reťazcov: tieto popisy musia pokryť dva prípady: "
-"používateľ vykonal prepísanie stopy na PCB a chce ich odstrániť, alebo "
-"používateľ vykonal zmeny v stope knižnice a chce ich rozšíriť späť na PCB."
+"Aktualizovať/obnoviť reťazce: sú dva prípady ktoré tieto popisy musia "
+"pokryť: používateľ vykonal prepísanie puzdra na DPS a chce ich odstrániť, "
+"alebo používateľ vykonal zmeny v puzdre v knižnice a chce ich preniesť späť "
+"na DPS."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:323
 #, fuzzy
@@ -39668,7 +39667,7 @@ msgstr "Text udržiavajte vo zvislej polohe"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:264
 msgid "Parent footprint description"
-msgstr "Popis nadradenej stopy"
+msgstr "Popis nadradeného puzdra"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:274
 msgid "Update Thickness According to Text Size"
@@ -44397,10 +44396,10 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"Filtrujte podľa názvu stopy, kľúčových slov, popisu a počtu podložiek.\n"
-"Hľadané výrazy sú oddelené medzerami. Všetky hľadané výrazy sa musia "
+"Filtrovať podľa názvu puzdra, kľúčových slov, popisu a počtu plôšok.\n"
+"Hľadané výrazy sú oddelené medzerami.  Všetky hľadané výrazy sa musia "
 "zhodovať.\n"
-"Termín, ktorý je číslom, sa bude zhodovať aj s počtom podložiek."
+"Výraz, ktorý je číslom, sa bude zhodovať aj s počtom plôšok."
 
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:81
@@ -44959,12 +44958,11 @@ msgstr "Symetrický"
 
 #: pcbnew/microwave/microwave_polygon.cpp:167
 msgid "Read Shape Description File..."
-msgstr "Čítať súbor popisu tvaru..."
+msgstr "Čítať súbor s popisom tvaru..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:209
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Čítať súbor popisu tvaru..."
+msgstr "Čítať súbor popisu tvaru"
 
 #: pcbnew/microwave/microwave_polygon.cpp:313
 msgid "Shape has a null size."
