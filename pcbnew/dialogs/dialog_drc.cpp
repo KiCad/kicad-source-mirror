@@ -235,15 +235,16 @@ bool DIALOG_DRC::updateUI()
     int newValue = KiROUND( cur * 1000.0 );
     m_gauge->SetValue( newValue );
 
-    // There is significant overhead on at least Windows when updateUi is called constantly thousands of times
-    // in the drc process and safeyieldfor is called each time.
-    // Gate the yield to a limited rate which still allows the UI to function without slowing down the main thread
-    // which is also running DRC
+    // Gating the yield avoids the overhead of calling SafeYieldFor thousands of times per DRC run.
+    // wxEVT_CATEGORY_UI and wxEVT_CATEGORY_USER_INPUT are sufficient: UI keeps the gauge visually updated,
+    // user input allows the Cancel button to respond. wxEVT_CATEGORY_NATIVE_EVENTS is intentionally
+    // excluded — on GTK it triggers GDK focus/expose events on every yield which causes the dialog to
+    // flicker and steal focus continuously during the run (see issue #22916).
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    if( std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastUpdateUi ).count()
-        > 100 )
+
+    if( std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastUpdateUi ).count() > 100 )
     {
-        Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_NATIVE_EVENTS );
+        Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_UI | wxEVT_CATEGORY_USER_INPUT );
         m_lastUpdateUi = now;
     }
 
