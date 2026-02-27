@@ -61,6 +61,7 @@
 #include "drc_re_numeric_input_overlay_panel.h"
 #include "drc_re_bool_input_overlay_panel.h"
 #include "drc_re_allowed_orientation_overlay_panel.h"
+#include "drc_re_vias_under_smd_overlay_panel.h"
 #include "drc_re_permitted_layers_overlay_panel.h"
 
 #include <eda_units.h>
@@ -73,6 +74,7 @@
 #include "drc_re_routing_width_constraint_data.h"
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
+#include "drc_re_vias_under_smd_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
 #include "drc_re_custom_rule_panel.h"
 #include <properties/property.h>
@@ -370,6 +372,10 @@ PANEL_DRC_RULE_EDITOR::getConstraintPanel( wxWindow* aParent, const DRC_RULE_EDI
         return new DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL(
                 aParent,
                 dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( m_constraintData ).get() );
+
+    case VIAS_UNDER_SMD:
+        return new DRC_RE_VIAS_UNDER_SMD_OVERLAY_PANEL(
+                aParent, dynamic_pointer_cast<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( m_constraintData ).get() );
 
     case CUSTOM_RULE:
         return new DRC_RE_CUSTOM_RULE_PANEL(

@@ -336,6 +336,7 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_via_style_overlay_panel.cpp
     drc/rule_editor/drc_re_numeric_input_overlay_panel.cpp
     drc/rule_editor/drc_re_bool_input_overlay_panel.cpp
+    drc/rule_editor/drc_re_vias_under_smd_overlay_panel.cpp
     drc/rule_editor/drc_re_permitted_layers_overlay_panel.cpp
     drc/rule_editor/drc_re_allowed_orientation_overlay_panel.cpp
     drc/rule_editor/drc_re_condition_row_panel.cpp

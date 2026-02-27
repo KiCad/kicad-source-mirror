@@ -39,6 +39,7 @@
 #include <drc/rule_editor/drc_re_base_constraint_data.h>
 #include <drc/rule_editor/drc_re_numeric_input_constraint_data.h>
 #include <drc/rule_editor/drc_re_bool_input_constraint_data.h>
+#include <drc/rule_editor/drc_re_vias_under_smd_constraint_data.h>
 #include <drc/rule_editor/drc_re_panel_matcher.h>
 #include <drc/rule_editor/drc_re_rule_loader.h>
 #include <drc/rule_editor/drc_re_rule_saver.h>
@@ -1981,6 +1982,165 @@ BOOST_AUTO_TEST_CASE( RuleSaverSilkToSoldermaskNoExtraCondition )
     BOOST_CHECK( result.Contains( "B.Mask" ) );
     BOOST_CHECK( result.Contains( "(condition" ) );
     BOOST_CHECK( !result.Contains( "(layer" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ValidateViasUnderSmdValid )
+{
+    // Valid: at least one via type is selected
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data1( 0, 0, "OnlyMicro", false, true, false, false );
+    VALIDATION_RESULT                     result1 = data1.Validate();
+    BOOST_CHECK( result1.isValid );
+    BOOST_CHECK( result1.errors.empty() );
+
+    // Valid: all selected
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data2( 0, 0, "AllVias", true, true, true, true );
+    VALIDATION_RESULT                     result2 = data2.Validate();
+    BOOST_CHECK( result2.isValid );
+    BOOST_CHECK( result2.errors.empty() );
+}
+
+BOOST_AUTO_TEST_CASE( ValidateViasUnderSmdInvalid )
+{
+    // Invalid: no via type selected
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data( 0, 0, "NoneSelected", false, false, false, false );
+    VALIDATION_RESULT                     result = data.Validate();
+    BOOST_CHECK( !result.isValid );
+    BOOST_CHECK( !result.errors.empty() );
+
+    bool foundError = false;
+    for( const auto& error : result.errors )
+    {
+        if( error.find( "At least one via type must be selected" ) != std::string::npos )
+            foundError = true;
+    }
+    BOOST_CHECK( foundError );
+}
+
+BOOST_AUTO_TEST_CASE( ViasUnderSmdClauseGeneration )
+{
+    RULE_GENERATION_CONTEXT ctx;
+    ctx.ruleName = "TestRule";
+    ctx.constraintCode = "disallow_via";
+
+    // All four selected - shorthand "via" used
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA allData( 0, 0, "AllRule", true, true, true, true );
+    auto                                  clauses = allData.GetConstraintClauses( ctx );
+    BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
+    BOOST_CHECK( clauses[0].Contains( "disallow via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "through_via" ) );
+
+    // Only micro_via selected - specific token
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA microOnly( 0, 0, "MicroRule", false, true, false, false );
+    clauses = microOnly.GetConstraintClauses( ctx );
+    BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
+    BOOST_CHECK( clauses[0].Contains( "micro_via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "through_via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "blind_via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "buried_via" ) );
+
+    // Through + blind selected - both tokens, no shorthand
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA twoTypes( 0, 0, "TwoRule", true, false, true, false );
+    clauses = twoTypes.GetConstraintClauses( ctx );
+    BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
+    BOOST_CHECK( clauses[0].Contains( "through_via" ) );
+    BOOST_CHECK( clauses[0].Contains( "blind_via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "micro_via" ) );
+    BOOST_CHECK( !clauses[0].Contains( "buried_via" ) );
+
+    // None selected - empty
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA noneData( 0, 0, "NoneRule", false, false, false, false );
+    clauses = noneData.GetConstraintClauses( ctx );
+    BOOST_CHECK( clauses.empty() );
+}
+
+BOOST_AUTO_TEST_CASE( IntegrationViasUnderSmdRoundTrip )
+{
+    // Load a rule with only micro_via disallowed
+    wxString originalText = "(version 1)\n"
+                            "(rule \"ViasUnderSmdTest\"\n"
+                            "    (constraint disallow micro_via)\n"
+                            "    (condition \"A.insideArea('BGA*')\"))";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( originalText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, VIAS_UNDER_SMD );
+
+    auto viaData = std::dynamic_pointer_cast<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( viaData );
+
+    // Only micro_via should be checked
+    BOOST_CHECK( !viaData->GetDisallowThroughVias() );
+    BOOST_CHECK( viaData->GetDisallowMicroVias() );
+    BOOST_CHECK( !viaData->GetDisallowBlindVias() );
+    BOOST_CHECK( !viaData->GetDisallowBuriedVias() );
+
+    // Mark as edited and save
+    entries[0].wasEdited = true;
+    DRC_RULE_SAVER saver;
+    wxString       savedText = saver.GenerateRulesText( entries, nullptr );
+
+    // Verify saved text preserves specific via type (not blanket "via")
+    BOOST_CHECK( savedText.Contains( "micro_via" ) );
+    BOOST_CHECK( !savedText.Contains( "through_via" ) );
+    BOOST_CHECK( !savedText.Contains( "blind_via" ) );
+    BOOST_CHECK( !savedText.Contains( "buried_via" ) );
+
+    // Reload and verify roundtrip
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reloadedEntries = loader.LoadFromString( savedText );
+    BOOST_REQUIRE_EQUAL( reloadedEntries.size(), 1 );
+
+    auto reloadedData =
+            std::dynamic_pointer_cast<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( reloadedEntries[0].constraintData );
+    BOOST_REQUIRE( reloadedData );
+
+    BOOST_CHECK( !reloadedData->GetDisallowThroughVias() );
+    BOOST_CHECK( reloadedData->GetDisallowMicroVias() );
+    BOOST_CHECK( !reloadedData->GetDisallowBlindVias() );
+    BOOST_CHECK( !reloadedData->GetDisallowBuriedVias() );
+
+    // Test blanket "via" sets all four flags
+    wxString blanketText = "(version 1)\n"
+                           "(rule \"BlanketVia\"\n"
+                           "    (constraint disallow via)\n"
+                           "    (condition \"A.insideArea('BGA*')\"))";
+
+    entries = loader.LoadFromString( blanketText );
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+
+    auto blanketData = std::dynamic_pointer_cast<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( blanketData );
+
+    BOOST_CHECK( blanketData->GetDisallowThroughVias() );
+    BOOST_CHECK( blanketData->GetDisallowMicroVias() );
+    BOOST_CHECK( blanketData->GetDisallowBlindVias() );
+    BOOST_CHECK( blanketData->GetDisallowBuriedVias() );
+
+    // Test multiple specific types roundtrip
+    wxString multiText = "(version 1)\n"
+                         "(rule \"TwoVias\"\n"
+                         "    (constraint disallow through_via blind_via)\n"
+                         "    (condition \"A.insideArea('BGA*')\"))";
+
+    entries = loader.LoadFromString( multiText );
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+
+    auto multiData = std::dynamic_pointer_cast<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( multiData );
+
+    BOOST_CHECK( multiData->GetDisallowThroughVias() );
+    BOOST_CHECK( !multiData->GetDisallowMicroVias() );
+    BOOST_CHECK( multiData->GetDisallowBlindVias() );
+    BOOST_CHECK( !multiData->GetDisallowBuriedVias() );
+
+    entries[0].wasEdited = true;
+    savedText = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK( savedText.Contains( "through_via" ) );
+    BOOST_CHECK( savedText.Contains( "blind_via" ) );
+    BOOST_CHECK( !savedText.Contains( "micro_via" ) );
+    BOOST_CHECK( !savedText.Contains( "buried_via" ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

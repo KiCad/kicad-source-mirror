@@ -73,7 +73,7 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { ABSOLUTE_LENGTH, "length" },
                                    { PERMITTED_LAYERS, "permitted_layers" },
                                    { ALLOWED_ORIENTATION, "allowed_orientation" },
-                                   { VIAS_UNDER_SMD, "disallow via" } };
+                                   { VIAS_UNDER_SMD, "disallow_via" } };
 
 static const REVERSE_CODE_MAP sCodeReverse = []
 {
@@ -275,7 +275,6 @@ bool DRC_RULE_EDITOR_UTILS::IsBoolInputType( const DRC_RULE_EDITOR_CONSTRAINT_NA
 {
     switch( aConstraintType )
     {
-    case VIAS_UNDER_SMD: return true;
     default: return false;
     }
 }

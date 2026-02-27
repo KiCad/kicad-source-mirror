@@ -37,6 +37,7 @@
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
+#include "drc_re_vias_under_smd_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_numeric_constraint_types.h"
@@ -295,17 +296,18 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
     case VIAS_UNDER_SMD:
     {
-        auto data = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>();
+        auto data = std::make_shared<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>();
         data->SetRuleName( aRule.m_Name );
-        data->SetConstraintCode( wxS( "disallow via" ) );
+        data->SetConstraintCode( wxS( "disallow_via" ) );
 
         const DRC_CONSTRAINT* constraint = findConstraint( aRule, DISALLOW_CONSTRAINT );
 
         if( constraint )
         {
-            int viaFlags = DRC_DISALLOW_THROUGH_VIAS | DRC_DISALLOW_BLIND_VIAS | DRC_DISALLOW_BURIED_VIAS
-                           | DRC_DISALLOW_MICRO_VIAS;
-            data->SetBoolInputValue( ( constraint->m_DisallowFlags & viaFlags ) != 0 );
+            data->SetDisallowThroughVias( ( constraint->m_DisallowFlags & DRC_DISALLOW_THROUGH_VIAS ) != 0 );
+            data->SetDisallowMicroVias( ( constraint->m_DisallowFlags & DRC_DISALLOW_MICRO_VIAS ) != 0 );
+            data->SetDisallowBlindVias( ( constraint->m_DisallowFlags & DRC_DISALLOW_BLIND_VIAS ) != 0 );
+            data->SetDisallowBuriedVias( ( constraint->m_DisallowFlags & DRC_DISALLOW_BURIED_VIAS ) != 0 );
         }
 
         return data;
