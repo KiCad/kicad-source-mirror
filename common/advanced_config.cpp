@@ -271,7 +271,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowEventCounters = false;
     m_AllowManualCanvasScale = false;
     m_CompactSave = false;
-    m_UpdateUIEventInterval = 0;
+    m_UpdateUIEventInterval = 50;
     m_EnablePcbDesignBlocks = true;
     m_EnableGenerators = false;
     m_EnableLibWithText = false;

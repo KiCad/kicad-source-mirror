@@ -1463,6 +1463,11 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
         handleLayerSwitch( ACT_PlaceThroughVia.MakeEvent(), true );
     }
 
+    // Throttle wxEVT_UPDATE_UI during routing — the idle sweep fires between every Wait()
+    // iteration and its cost dominates at interactive frame rates.
+    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
+    wxUpdateUIEvent::SetUpdateInterval( 200 );
+
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
@@ -1634,6 +1639,8 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             evt->SetPassEvent();
         }
     }
+
+    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     m_router->CommitRouting();
     // Reset to normal for next route
@@ -2069,6 +2076,9 @@ void ROUTER_TOOL::performDragging( int aMode )
     m_gridHelper->SetAuxAxes( true, m_startSnapPoint );
     frame()->UndoRedoBlock( true );
 
+    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
+    wxUpdateUIEvent::SetUpdateInterval( 200 );
+
     while( TOOL_EVENT* evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
@@ -2162,6 +2172,8 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         handleCommonEvents( *evt );
     }
+
+    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     view()->ClearPreview();
     view()->ShowPreview( false );
@@ -2540,6 +2552,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // Send an initial movement to prime the collision detection
     m_router->Move( p, nullptr );
 
+    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
+    wxUpdateUIEvent::SetUpdateInterval( 200 );
+
     bool hasMouseMoved = false;
     bool hasMultidragCancelled = false;
 
@@ -2739,6 +2754,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &newItems );
     }
+
+    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     m_gridHelper->SetAuxAxes( false );
     controls()->SetAutoPan( false );
