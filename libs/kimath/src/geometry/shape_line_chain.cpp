@@ -1713,7 +1713,8 @@ struct compareOriginDistance
     bool operator()( const SHAPE_LINE_CHAIN::INTERSECTION& aA,
                      const SHAPE_LINE_CHAIN::INTERSECTION& aB ) const
     {
-        return ( m_origin - aA.p ).EuclideanNorm() < ( m_origin - aB.p ).EuclideanNorm();
+        return ( VECTOR2L( m_origin ) - aA.p ).SquaredEuclideanNorm()
+               < ( VECTOR2L( m_origin ) - aB.p ).SquaredEuclideanNorm();
     }
 
     VECTOR2I m_origin;
@@ -1722,9 +1723,26 @@ struct compareOriginDistance
 
 int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
 {
-    for( int s = 0; s < SegmentCount(); s++ )
+    const int segCount = SegmentCount();
+    const int ptCount = static_cast<int>( m_points.size() );
+
+    const int segMinX = std::min( aSeg.A.x, aSeg.B.x );
+    const int segMaxX = std::max( aSeg.A.x, aSeg.B.x );
+    const int segMinY = std::min( aSeg.A.y, aSeg.B.y );
+    const int segMaxY = std::max( aSeg.A.y, aSeg.B.y );
+
+    for( int s = 0; s < segCount; s++ )
     {
-        OPT_VECTOR2I p = CSegment( s ).Intersect( aSeg );
+        const VECTOR2I& ptA = m_points[s];
+        const VECTOR2I& ptB = m_points[s + 1 < ptCount ? s + 1 : 0];
+
+        if( std::max( ptA.x, ptB.x ) < segMinX || std::min( ptA.x, ptB.x ) > segMaxX
+            || std::max( ptA.y, ptB.y ) < segMinY || std::min( ptA.y, ptB.y ) > segMaxY )
+        {
+            continue;
+        }
+
+        OPT_VECTOR2I p = SEG( ptA, ptB, s ).Intersect( aSeg );
 
         if( p )
         {
@@ -1747,9 +1765,26 @@ int SHAPE_LINE_CHAIN::Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const
 
 bool SHAPE_LINE_CHAIN::Intersects( const SEG& aSeg ) const
 {
-    for( int s = 0; s < SegmentCount(); s++ )
+    const int segCount = SegmentCount();
+    const int ptCount = static_cast<int>( m_points.size() );
+
+    const int segMinX = std::min( aSeg.A.x, aSeg.B.x );
+    const int segMaxX = std::max( aSeg.A.x, aSeg.B.x );
+    const int segMinY = std::min( aSeg.A.y, aSeg.B.y );
+    const int segMaxY = std::max( aSeg.A.y, aSeg.B.y );
+
+    for( int s = 0; s < segCount; s++ )
     {
-        if( CSegment( s ).Intersects( aSeg ) )
+        const VECTOR2I& ptA = m_points[s];
+        const VECTOR2I& ptB = m_points[s + 1 < ptCount ? s + 1 : 0];
+
+        if( std::max( ptA.x, ptB.x ) < segMinX || std::min( ptA.x, ptB.x ) > segMaxX
+            || std::max( ptA.y, ptB.y ) < segMinY || std::min( ptA.y, ptB.y ) > segMaxY )
+        {
+            continue;
+        }
+
+        if( SEG( ptA, ptB ).Intersects( aSeg ) )
             return true;
     }
 
@@ -1757,54 +1792,98 @@ bool SHAPE_LINE_CHAIN::Intersects( const SEG& aSeg ) const
 }
 
 
-static inline void addIntersection( SHAPE_LINE_CHAIN::INTERSECTIONS& aIps, int aPc,
-                                    const SHAPE_LINE_CHAIN::INTERSECTION& aP )
-{
-    if( aIps.size() == 0 )
-    {
-        aIps.push_back( aP );
-        return;
-    }
-
-    aIps.push_back( aP );
-}
-
-
 int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
                                  bool aExcludeColinearAndTouching, BOX2I* aChainBBox ) const
 {
-    BOX2I bb_other = aChainBBox ? *aChainBBox : aChain.BBox();
+    const int ourSegCount = SegmentCount();
+    const int theirSegCount = aChain.SegmentCount();
 
-    for( int s1 = 0; s1 < SegmentCount(); s1++ )
+    if( ourSegCount == 0 || theirSegCount == 0 )
+        return 0;
+
+    const BOX2I_MINMAX           bbOther( aChainBBox ? *aChainBBox : aChain.BBox() );
+    const int                    ourPtCount = static_cast<int>( m_points.size() );
+    const int                    theirPtCount = static_cast<int>( aChain.CPoints().size() );
+    const std::vector<VECTOR2I>& theirPts = aChain.CPoints();
+
+    // Pre-build SEGs for the other chain so each is constructed exactly once
+    std::vector<SEG> theirSegs( theirSegCount );
+
+    for( int i = 0; i < theirSegCount; i++ )
     {
-        const SEG& a = CSegment( s1 );
-        const BOX2I bb_cur( a.A, a.B - a.A );
+        const VECTOR2I& pa = theirPts[i];
+        const VECTOR2I& pb = theirPts[i + 1 < theirPtCount ? i + 1 : 0];
+        theirSegs[i] = SEG( pa, pb, i );
+    }
 
-        if( !bb_other.Intersects( bb_cur ) )
-            continue;
+    // Compact extent array for cache-friendly scanning, sorted by minX
+    struct SEG_EXTENT
+    {
+        int minX, maxX, minY, maxY;
+        int segIdx;
+    };
 
-        for( int s2 = 0; s2 < aChain.SegmentCount(); s2++ )
+    std::vector<SEG_EXTENT> sorted( theirSegCount );
+
+    for( int i = 0; i < theirSegCount; i++ )
+    {
+        const SEG& s = theirSegs[i];
+        sorted[i] = { std::min( s.A.x, s.B.x ), std::max( s.A.x, s.B.x ),
+                       std::min( s.A.y, s.B.y ), std::max( s.A.y, s.B.y ), i };
+    }
+
+    std::sort( sorted.begin(), sorted.end(),
+               []( const SEG_EXTENT& a, const SEG_EXTENT& b ) { return a.minX < b.minX; } );
+
+    for( int s1 = 0; s1 < ourSegCount; s1++ )
+    {
+        const VECTOR2I& a1 = m_points[s1];
+        const VECTOR2I& b1 = m_points[s1 + 1 < ourPtCount ? s1 + 1 : 0];
+
+        const int ourMinX = std::min( a1.x, b1.x );
+        const int ourMaxX = std::max( a1.x, b1.x );
+        const int ourMinY = std::min( a1.y, b1.y );
+        const int ourMaxY = std::max( a1.y, b1.y );
+
+        if( ourMaxX < bbOther.m_Left || ourMinX > bbOther.m_Right
+            || ourMaxY < bbOther.m_Top || ourMinY > bbOther.m_Bottom )
         {
-            const SEG& b = aChain.CSegment( s2 );
-            INTERSECTION is;
+            continue;
+        }
 
+        const SEG a( a1, b1, s1 );
+
+        // Find the right boundary in the sorted extents: first entry where minX > ourMaxX.
+        // Everything past this point is too far right to overlap.
+        auto rightEnd = std::upper_bound( sorted.begin(), sorted.end(), ourMaxX,
+                                          []( int val, const SEG_EXTENT& e )
+                                          {
+                                              return val < e.minX;
+                                          } );
+
+        for( auto jt = sorted.begin(); jt != rightEnd; ++jt )
+        {
+            if( jt->maxX < ourMinX || jt->maxY < ourMinY || jt->minY > ourMaxY )
+                continue;
+
+            const SEG& b = theirSegs[jt->segIdx];
+
+            INTERSECTION is;
             is.index_our = s1;
-            is.index_their = s2;
+            is.index_their = jt->segIdx;
             is.is_corner_our = false;
             is.is_corner_their = false;
             is.valid = true;
 
             OPT_VECTOR2I p = a.Intersect( b );
 
-            bool coll = a.Collinear( b );
-
-            if( coll && ! aExcludeColinearAndTouching )
+            if( !aExcludeColinearAndTouching && a.Collinear( b ) )
             {
                 if( a.Contains( b.A ) )
                 {
                     is.p = b.A;
                     is.is_corner_their = true;
-                    addIntersection(aIp, PointCount(), is);
+                    aIp.push_back( is );
                 }
 
                 if( a.Contains( b.B ) )
@@ -1812,14 +1891,14 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                     is.p = b.B;
                     is.index_their++;
                     is.is_corner_their = true;
-                    addIntersection( aIp, PointCount(), is );
+                    aIp.push_back( is );
                 }
 
                 if( b.Contains( a.A ) )
                 {
                     is.p = a.A;
                     is.is_corner_our = true;
-                    addIntersection( aIp, PointCount(), is );
+                    aIp.push_back( is );
                 }
 
                 if( b.Contains( a.B ) )
@@ -1827,7 +1906,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                     is.p = a.B;
                     is.index_our++;
                     is.is_corner_our = true;
-                    addIntersection( aIp, PointCount(), is );
+                    aIp.push_back( is );
                 }
             }
             else if( p )
@@ -1858,7 +1937,7 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
                     is.index_their++;
                 }
 
-                addIntersection( aIp, PointCount(), is );
+                aIp.push_back( is );
             }
         }
     }
@@ -2015,44 +2094,73 @@ bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist ) con
 
 const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersecting() const
 {
-    const size_t     segCount = SegmentCount();
-    std::vector<SEG> segments( segCount );
+    const int  segCount = SegmentCount();
+    const int  ptCount = static_cast<int>( m_points.size() );
+    const bool closed = m_closed;
 
-    for( size_t s = 0; s < segCount; s++ )
-        segments[s] = CSegment( s );
+    if( segCount < 2 )
+        return std::optional<INTERSECTION>();
 
-    for( size_t s1 = 0; s1 < segCount; s1++ )
+    // Index of the second endpoint of segment i, handling the closed-chain wrap
+    auto endIdx = [ptCount]( int i )
     {
-        const SEG& cs1 = segments[s1];
+        int next = i + 1;
+        return next < ptCount ? next : 0;
+    };
 
-        for( size_t s2 = s1 + 1; s2 < segCount; s2++ )
+    for( int s1 = 0; s1 < segCount; s1++ )
+    {
+        const VECTOR2I& a1 = m_points[s1];
+        const VECTOR2I& b1 = m_points[endIdx( s1 )];
+
+        // Expand by 2 to account for Contains() tolerance (SquaredDistance <= 3)
+        const int s1MinX = std::min( a1.x, b1.x ) - 2;
+        const int s1MaxX = std::max( a1.x, b1.x ) + 2;
+        const int s1MinY = std::min( a1.y, b1.y ) - 2;
+        const int s1MaxY = std::max( a1.y, b1.y ) + 2;
+
+        for( int s2 = s1 + 1; s2 < segCount; s2++ )
         {
-            const SEG&     cs2 = segments[s2];
-            const VECTOR2I s2a = cs2.A, s2b = cs2.B;
+            const VECTOR2I& a2 = m_points[s2];
+            const VECTOR2I& b2 = m_points[endIdx( s2 )];
 
-            if( s1 + 1 != s2 && cs1.Contains( s2a ) )
+            const int s2MinX = std::min( a2.x, b2.x );
+            const int s2MaxX = std::max( a2.x, b2.x );
+
+            if( s1MaxX < s2MinX || s2MaxX < s1MinX )
+                continue;
+
+            const int s2MinY = std::min( a2.y, b2.y );
+            const int s2MaxY = std::max( a2.y, b2.y );
+
+            if( s1MaxY < s2MinY || s2MaxY < s1MinY )
+                continue;
+
+            const SEG seg1( a1, b1, s1 );
+
+            if( s1 + 1 != s2 && seg1.Contains( a2 ) )
             {
                 INTERSECTION is;
                 is.index_our = s1;
                 is.index_their = s2;
-                is.p = s2a;
+                is.p = a2;
                 return is;
             }
-            else if( cs1.Contains( s2b ) &&
+            else if( seg1.Contains( b2 ) &&
                      // for closed polylines, the ending point of the
                      // last segment == starting point of the first segment
                      // this is a normal case, not self intersecting case
-                     !( IsClosed() && s1 == 0 && s2 == segCount - 1 ) )
+                     !( closed && s1 == 0 && s2 == segCount - 1 ) )
             {
                 INTERSECTION is;
                 is.index_our = s1;
                 is.index_their = s2;
-                is.p = s2b;
+                is.p = b2;
                 return is;
             }
             else
             {
-                OPT_VECTOR2I p = cs1.Intersect( cs2, true );
+                OPT_VECTOR2I p = seg1.Intersect( SEG( a2, b2, s2 ), true );
 
                 if( p )
                 {
@@ -2066,7 +2174,7 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
         }
     }
 
-    return std::optional<SHAPE_LINE_CHAIN::INTERSECTION>();
+    return std::optional<INTERSECTION>();
 }
 
 
