@@ -1870,7 +1870,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
     ConnectBoardShapes( shapes, SHAPE_JOIN_DISTANCE );
 
     // Center the board
-    BOX2I     outlineBbox = aBoard->ComputeBoundingBox( true );
+    BOX2I     outlineBbox = aBoard->ComputeBoundingBox( true, true );
     PAGE_INFO pageInfo = aBoard->GetPageSettings();
 
     VECTOR2D pageCenter( pcbIUScale.MilsToIU( pageInfo.GetWidthMils() / 2 ),

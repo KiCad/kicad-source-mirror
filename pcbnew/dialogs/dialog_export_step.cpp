@@ -572,7 +572,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         }
         else if( m_rbBoardCenterOrigin->GetValue() )
         {
-            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
+            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true, true );
             double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
             double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
             LOCALE_IO dummy;
@@ -667,7 +667,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         }
         else if( m_rbBoardCenterOrigin->GetValue() )
         {
-            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true );
+            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true, true );
             double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
             double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
             LOCALE_IO dummy;

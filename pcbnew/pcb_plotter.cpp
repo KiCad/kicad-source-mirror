@@ -85,7 +85,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
     if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() ) // Page is board boundary size
     {
-        BOX2I     bbox = m_board->ComputeBoundingBox( false );
+        BOX2I     bbox = m_board->ComputeBoundingBox( false, false );
         PAGE_INFO currPageInfo = m_board->GetPageSettings();
 
         currPageInfo.SetWidthMils( bbox.GetWidth() / pcbIUScale.IU_PER_MILS );

@@ -1150,7 +1150,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard, const PCB
         autocenter  = (aPlotOpts->GetScale() != 1.0) || aPlotOpts->GetAutoScale();
     }
 
-    BOX2I    bbox = aBoard->ComputeBoundingBox( false );
+    BOX2I    bbox = aBoard->ComputeBoundingBox( false, false );
     VECTOR2I boardCenter = bbox.Centre();
     VECTOR2I boardSize = bbox.GetSize();
 
@@ -1382,7 +1382,7 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
             // done in the driver (if supported)
             if( aPlotOpts->GetNegative() )
             {
-                BOX2I bbox = aBoard->ComputeBoundingBox( false );
+                BOX2I bbox = aBoard->ComputeBoundingBox( false, false );
                 FillNegativeKnockout( plotter, bbox );
             }
 

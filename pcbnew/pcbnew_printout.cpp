@@ -273,7 +273,7 @@ void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 
 BOX2I PCBNEW_PRINTOUT::getBoundingBox()
 {
-    return m_board->ComputeBoundingBox( false );
+    return m_board->ComputeBoundingBox( false, false );
 }
 
 

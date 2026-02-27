@@ -104,7 +104,7 @@ int BOARD_EDITOR_CONTROL::ExportVRML( const TOOL_EVENT& aEvent )
     else
     {
         // Origin = board center:
-        BOX2I  bbox = board->ComputeBoundingBox( true );
+        BOX2I  bbox = board->ComputeBoundingBox( true, true );
         aXRef = pcbIUScale.IUTomm( bbox.GetCenter().x );
         aYRef = pcbIUScale.IUTomm( bbox.GetCenter().y );
     }
