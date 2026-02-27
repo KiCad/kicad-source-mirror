@@ -136,7 +136,10 @@ private:
     RC_TREE_MODEL*                     m_unconnectedTreeModel;  // wx reference-counted ptr
     RC_TREE_MODEL*                     m_fpWarningsTreeModel;   // wx reference-counted ptr
 
-    /// Used to slow down the rate of yields in updateUi()
+    /// Used to throttle visual refresh in updateUi()
     std::chrono::steady_clock::time_point m_lastUpdateUi;
+
+    /// Used to throttle event loop yields in updateUi()
+    std::chrono::steady_clock::time_point m_lastYieldUi;
 };
 
