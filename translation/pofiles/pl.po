@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-22 21:09+0000\n"
+"PO-Revision-Date: 2026-02-28 01:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -17951,6 +17951,9 @@ msgid ""
 "Install schematic data sources from the Plugin and Content Manager. Data "
 "sources extend KiCad by linking schematic items to external data providers."
 msgstr ""
+"Zainstaluj źródła danych schematów za pomocą Menedżera wtyczek. Źródła "
+"danych rozszerzają KiCad, łącząc elementy schematów z zewnętrznymi "
+"dostawcami danych."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:64
 #, fuzzy
@@ -17964,7 +17967,7 @@ msgstr "Trasowanie DXF nie jest obecnie obsługiwane."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:137
 msgid "Installed data sources are listed above."
-msgstr ""
+msgstr "Zainstalowane źródła danych są wyszczególnione poniżej."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:283
 #, c-format
@@ -18635,7 +18638,7 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1397
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr ""
+msgstr "Zapis schematu z użyciem najnowszego formatu zakończony powodzeniem\n"
 
 #: eeschema/eeschema_settings.cpp:72 eeschema/tools/sch_actions.cpp:1052
 msgid "Net Navigator"
@@ -19049,7 +19052,7 @@ msgstr "Nie można połączyć się ze zdalnym"
 
 #: eeschema/erc/erc_item.cpp:165
 msgid "Pin name resembles stacked pin"
-msgstr ""
+msgstr "Nazwa pinu odpowiada stosowi pinów"
 
 #: eeschema/erc/erc_item.cpp:169
 msgid "Field name has leading or trailing whitespace"
@@ -19757,6 +19760,7 @@ msgstr "Panele"
 msgid ""
 "Install a remote symbol server using the Plugin and Content Manager to enable"
 msgstr ""
+"Zainstaluj zdalny serwer symboli za pomocą Menadżera wtyczek by go włączyć"
 
 #: eeschema/menubar.cpp:330
 #, fuzzy
@@ -19891,7 +19895,7 @@ msgstr "Błąd I/O podczas zapisu listy sieci: %s"
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:124
 #, c-format
 msgid "Formatting error writing netlist: %s"
-msgstr ""
+msgstr "Błąd formatowania podczas zapisu listy sieci: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:534
 #, c-format
@@ -20978,16 +20982,18 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
+"Wersja symbolu nie zgadza się z '%s' (%s): na schemacie %s, w bibliotece %s."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
 msgstr ""
+"Źródło hierarchii '%s' nie zostało znalezione, tworzenie pustego arkusza."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4100
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr ""
+msgstr "Wykryto zapętloną hierarchię w '%s', pominięto."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4448
 #, c-format
@@ -21215,7 +21221,7 @@ msgstr ""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:104
 msgid "The library cannot be saved until these errors are fixed manually."
-msgstr ""
+msgstr "Biblioteka nie może zostać zapisana do czasu ręcznego usunięcia błędów."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:187
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:361
@@ -21230,6 +21236,9 @@ msgid ""
 "\n"
 "The library cannot be saved until these errors are fixed manually."
 msgstr ""
+"\n"
+"\n"
+"Biblioteka nie może zostać zapisana do czasu ręcznego usunięcia tych błędów."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:220
 #, c-format
@@ -21239,6 +21248,12 @@ msgid ""
 "Saving would permanently lose symbols that could not be loaded.\n"
 "Please fix the library file manually before saving."
 msgstr ""
+"Nie można zapisać biblioteki '%s', ponieważ wystąpił błąd parsowania podczas "
+"ładowania.\n"
+"\n"
+"Zapisanie spowodowałoby trwałą utratę symboli, których nie można było "
+"załadować.\n"
+"Proszę naprawić plik biblioteki ręcznie przed zapisaniem."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:272
 #, fuzzy, c-format
@@ -21257,6 +21272,8 @@ msgid ""
 "Error parsing symbol at line %d: %s\n"
 "Skipping symbol and continuing."
 msgstr ""
+"Błąd parsowania symbolu w linii %d:%s\n"
+"Symbol pominięto, a przetwarzanie jest kontynuowane."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:309
 #, c-format
@@ -22875,19 +22892,19 @@ msgstr "Brakuje opcjonalnej wartości."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:546
 msgid "Missing or invalid C_comp_gnd_clamp value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość C_comp_gnd_clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:555
 msgid "Missing or invalid C_comp_power_clamp value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość C_comp_power_clamp."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:564
 msgid "Missing or invalid C_comp_pullup value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość C_comp_pullup."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:573
 msgid "Missing or invalid C_comp_pulldown value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość C_comp_pulldown."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
 msgid "No C_comp values are available."
@@ -22904,19 +22921,19 @@ msgstr "Brak lub nieprawidłowa wartość Zakres Napięcia."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość Pullup Reference."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:619
 msgid "Missing or invalid Pulldown Reference value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość Pulldown Reference."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:628
 msgid "Missing or invalid GND Clamp Reference value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość GND Clamp Reference."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:637
 msgid "Missing or invalid POWER Clamp Reference value."
-msgstr ""
+msgstr "Brak lub niepoprawna wartość POWER Clamp Reference."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:647
 #, fuzzy
@@ -23142,7 +23159,7 @@ msgstr "Nie spodziewano się tak wielu argumentów"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1533
 msgid "Submodel name is not unique: "
-msgstr ""
+msgstr "Nazwa submodelu nie jest unikatowa: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1585
 msgid "Unknown keyword in "
@@ -23158,19 +23175,19 @@ msgstr "Nieprawidłowe dane narastania"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1733
 msgid "The submodel name is missing."
-msgstr ""
+msgstr "Brak nazwy submodelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1740
 msgid "The submodel mode is missing."
-msgstr ""
+msgstr "Brak trybu submodelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1760
 msgid " is not a recognised submodel mode."
-msgstr ""
+msgstr " nie jest rozpoznanym trybem submodelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1856
 msgid " is not a recognised Submodel Spec subparameter."
-msgstr ""
+msgstr " nie jest rozpoznanym parametrem Submodel Spec."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1915
 msgid "Missing pin name/number for matrix row."
@@ -23209,7 +23226,7 @@ msgstr "Zbyt dużo danych dla tego rzędu matrycy."
 #: eeschema/sim/kibis/ibis_parser.cpp:2043
 #: eeschema/sim/kibis/ibis_parser.cpp:2073
 msgid "Element location is outside the matrix."
-msgstr ""
+msgstr "Pozycja elementu znajduje się poza macierzą."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2048
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
@@ -23257,7 +23274,7 @@ msgstr " nie zostało rozpoznane jako typ modelu podrzędnego."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2449
 msgid "The Submodel_type value is missing."
-msgstr ""
+msgstr "Brak wartości Submodel_type."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
@@ -36259,9 +36276,8 @@ msgid "Knockout"
 msgstr "W negatywie"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:59
-#, fuzzy
 msgid "If checked, the barcode will be inverted with a margin around it"
-msgstr "Jeśli zaznaczone, ten pin będzie występował we wszystkich jednostkach."
+msgstr "Jeśli zaznaczone, kod kreskowy będzie odwrócony z marginesem wokół"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:63
 #, fuzzy
@@ -36422,11 +36438,12 @@ msgid "PCB has %d empty or invalid reference designations."
 msgstr "PCB posiada %d pustych lub nieprawidłowych odnośników."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:407
-#, fuzzy
 msgid ""
 "You may wish to run DRC with 'Test for parity between PCB and schematic' "
 "checked."
-msgstr "Testuj czy występuje zgodność pomiędzy PCB a schematem"
+msgstr ""
+"Można uruchomić test DRC z zaznaczoną opcją 'Test zgodności między płytką "
+"drukowaną a schematem'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:411
 #, c-format
@@ -38353,9 +38370,8 @@ msgid "U3D"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:33
-#, fuzzy
 msgid "Variant:"
-msgstr "Twórcy bibliotek"
+msgstr "Wariant:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 msgid "Board Options"
@@ -45520,14 +45536,12 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:890
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:952
-#, fuzzy
 msgid "Signal layer thickness must be greater than 0"
-msgstr "Grubość musi być większa niż zero."
+msgstr "Grubość warstwy sygnałowej musi być większa niż zero"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:901
-#, fuzzy
 msgid "Reference layer not found in stackup"
-msgstr "Odnośnik '%s' nie został znaleziony."
+msgstr "Warstwa odnośników nie została znaleziona w stosie warstw"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:907
 msgid "Reference layer must be different to signal layer"
@@ -45584,15 +45598,15 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1189
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1291
-#, fuzzy
 msgid "Diff pair gap must be greater than 0 to calculate width"
-msgstr "Dystans pomiędzy ścieżkami musi być większy niż zero."
+msgstr ""
+"Dystans pomiędzy ścieżkami pary różnicowej musi być większy niż zero by "
+"określić szerokość"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1196
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1298
-#, fuzzy
 msgid "Width must be greater than 0 to calculate diff pair gap"
-msgstr "Grubość linii musi być większa niż zero dla niewypełnionego okręgu."
+msgstr "Grubość musi być większa niż zero by określić dystans pary różnicowej"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1203
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:1305
@@ -45890,9 +45904,9 @@ msgstr "klasa sieci '%s' (mikroprzelotka)"
 
 #: pcbnew/drc/drc_engine.cpp:469 pcbnew/drc/drc_engine.cpp:495
 #: pcbnew/drc/drc_engine.cpp:513 pcbnew/drc/drc_engine.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "tuning profile '%s'"
-msgstr "Rozpakowywanie pliku '%s'."
+msgstr "profil dostrajania '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:595
 #, fuzzy, c-format
@@ -46564,9 +46578,8 @@ msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr "Słowo kluczowe '%s' jest przestarzałe.  Proszę użyć '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:121
-#, fuzzy
 msgid "Unresolved text variable."
-msgstr "Nierozwiązana zmienna tekstowa"
+msgstr "Nierozwiązana zmienna tekstowa."
 
 #: pcbnew/drc/drc_rule_parser.cpp:123
 #, c-format
@@ -46599,9 +46612,8 @@ msgid "Missing ')'."
 msgstr "Brakuje ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:200 pcbnew/drc/drc_rule_parser.cpp:266
-#, fuzzy
 msgid "version number"
-msgstr "Brak informacji o numerze wersji."
+msgstr "numer wersji"
 
 #: pcbnew/drc/drc_rule_parser.cpp:210 pcbnew/drc/drc_rule_parser.cpp:276
 #: pcbnew/drc/drc_rule_parser.cpp:357 pcbnew/drc/drc_rule_parser.cpp:420
@@ -47272,14 +47284,14 @@ msgid "Checking board footprints against library..."
 msgstr "Porównywanie footprintów na płytce z ich źródłami w bibliotece..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1134
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'"
-msgstr "Biblioteka footprintów '%s' nie została znaleziona w '%s'."
+msgstr "Biblioteka footprintów '%s' nie została znaleziona w '%s'"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1184
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'"
-msgstr "Footprint '%s' nie odpowiada jego kopii w bibliotece '%s'."
+msgstr "Footprint '%s' nie odpowiada jego kopii w bibliotece '%s'"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:118
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:129
@@ -47395,25 +47407,25 @@ msgid "Missing footprint %s (%s)"
 msgstr "Brakujący footprint %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)"
-msgstr "Wartość (%s) nie odpowiada wartości symbolu (%s)."
+msgstr "Wartość (%s) nie odpowiada wartości symbolu (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match footprint given by symbol (%s)"
-msgstr "%s nie odpowiada footprintowi podanemu przez symbol (%s)."
+msgstr "%s nie odpowiada footprintowi podanemu przez symbol (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)"
-msgstr "%s nie odpowiada filtrowi footprintu z symbolu (%s)."
+msgstr "%s nie odpowiada filtrowi footprintu z symbolu (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ"
-msgstr "Ustawienie '%s' różni się."
+msgstr "Ustawienia '%s' różnią się"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:236
 #, c-format
@@ -47426,24 +47438,23 @@ msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
 msgstr "Pole %s różni się (PCB: '%s', schemat: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:273
-#, fuzzy
 msgid "No corresponding pin found in schematic"
-msgstr "Nie znaleziono odpowiedniego pinu na schemacie."
+msgstr "Nie znaleziono odpowiedniego pinu na schemacie"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "Pad missing net given by schematic (%s)"
-msgstr "Pole nie posiada sieci nadanej na schemacie (%s)."
+msgstr "Pole nie posiada sieci nadanej na schemacie (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
-msgstr "Sieć pola (%s) nie pasuje do sieci nadanej na schemacie (%s)."
+msgstr "Sieć pola (%s) nie pasuje do sieci nadanej na schemacie (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "No pad found for pin %s in schematic"
-msgstr "Nie znaleziono pola dla pinu %s na schemacie."
+msgstr "Nie znaleziono pola dla pinu %s na schemacie"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:365
 msgid "Checking PCB to schematic parity..."
@@ -47625,9 +47636,9 @@ msgstr ""
 "Czy chcesz zapisać zmiany?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1369
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "Nie można odczytać pliku '%s'."
+msgstr "Nie można przeładować zasad DRC: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
 #, fuzzy
@@ -47758,9 +47769,8 @@ msgid "Remove this condition"
 msgstr "Użyj założeń początkowych"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_constraint_data.h:57
-#, fuzzy
 msgid "Rule text cannot be empty"
-msgstr "Pole tekstu nie może być puste."
+msgstr "Treść reguły nie może być pusta"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:50
 #, fuzzy
@@ -47769,9 +47779,8 @@ msgstr "Sprawdź składnię reguł"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:286
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:288
-#, fuzzy
 msgid "No rule text to check."
-msgstr "Nie ma więcej elementów do pokazania"
+msgstr "Nie ma treści reguł do sprawdzenia."
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:299
 #, fuzzy
@@ -47798,9 +47807,8 @@ msgid "Minimum Text Height must be greater than 0"
 msgstr "Kąt łuku musi być większy niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:81
-#, fuzzy
 msgid "Minimum Text Thickness must be greater than 0"
-msgstr "Grubość musi być większa niż zero."
+msgstr "Minimalna grubość tekstu musi być większa niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:97
 #, fuzzy
@@ -47889,19 +47897,16 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Promień musi być większy niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:104
-#, fuzzy
 msgid "Minimum Width cannot be greater than Preferred Width"
-msgstr "Grubość linii musi być większa niż zero."
+msgstr "Minimalna grubość nie może być większa niż preferowana"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:107
-#, fuzzy
 msgid "Preferred Width cannot be greater than Maximum Width"
-msgstr "Łącza termiczne muszą być grubsze niż minimalna szerokość ścieżki."
+msgstr "Preferowana szerokość nie może być większa niż Maksymalna szerokość"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:110
-#, fuzzy
 msgid "Minimum Width cannot be greater than Maximum Width"
-msgstr "Łącza termiczne muszą być grubsze niż minimalna szerokość ścieżki."
+msgstr "Minimalna szerokość nie może być większa niż Maksymalna szerokość"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:113
 msgid "Minimum Gap cannot be greater than Preferred Gap"
@@ -47926,9 +47931,8 @@ msgid "Maximum Via Diameter must be greater than 0"
 msgstr "Promień musi być większy niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:98
-#, fuzzy
 msgid "Minimum Via Hole Size must be greater than 0"
-msgstr "Grubość musi być większa niż zero."
+msgstr "Minimalna średnica otworu przelotki musi być większa niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:101
 #, fuzzy
@@ -47936,9 +47940,10 @@ msgid "Maximum Via Hole Size must be greater than 0"
 msgstr "Promień musi być większy niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:104
-#, fuzzy
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "Rozmiar przelotki jest mniejsza niż minimalny rozmiar (%s)."
+msgstr ""
+"Minimalna średnica przelotki nie może być większa niż Maksymalna średnica "
+"przelotki"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:107
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
@@ -48008,9 +48013,8 @@ msgid "Rule name"
 msgstr "Zmień nazwę"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:394
-#, fuzzy
 msgid "Rule name must be unique."
-msgstr "Generuj unikalny"
+msgstr "Nazwa reguły musi być unikalna."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:402
 msgid "Layer selection is required."
@@ -48148,14 +48152,14 @@ msgid "Created file '%s'."
 msgstr "Utworzono plik '%s'."
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating drill report file '%s'"
-msgstr "Błąd podczas zapisywania pliku '%s'."
+msgstr "Błąd podczas tworzenia raportu wierceń '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1239
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing drill report file '%s'"
-msgstr "Błąd podczas zapisywania pliku '%s'."
+msgstr "Błąd podczas zapisywania raportu wierceń '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:140
 #, c-format
@@ -48287,9 +48291,8 @@ msgid "Warnings:\n"
 msgstr "Ostrzeżenia:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:725
-#, fuzzy
 msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
-msgstr "** ShapeUpgrade_UnifySameDomain wygenerowało pusty kształt **"
+msgstr "ShapeUpgrade_UnifySameDomain wygenerowało pusty kształt."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:736
 msgid ""
@@ -49903,9 +49906,9 @@ msgid "Add %s '%s' attribute to variant %s (footprint %s)."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
-msgstr "Usuń dla %s:%s atrybut wariantu 'Wyklucz z BOM'."
+msgstr "Usuń %s atrybutów '%s' z wariantu %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
 #, fuzzy, c-format
@@ -49913,19 +49916,19 @@ msgid "Add %s '%s' attribute to variant %s."
 msgstr "Dodaj pole %s '%s' z wartością '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s."
-msgstr "Usuń dla %s:%s atrybut wariantu 'Wyklucz z BOM'."
+msgstr "Usuń %s atrybutów '%s' z wariantu %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "Dodano %s (footprint '%s')."
+msgstr "Dodano %s atrybutów '%s' do wariantu %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1415
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
-msgstr "Usunięto z %s:%s atrybut wariantu 'Wyklucz z BOM'."
+msgstr "Usunięto %s atrybutów '%s' z wariantu %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1423
 #, c-format
@@ -49933,9 +49936,9 @@ msgid "Added %s '%s' attribute to variant %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s."
-msgstr "Usunięto z %s:%s atrybut wariantu 'Wyklucz z BOM'."
+msgstr "Usunięto %s atrybutów '%s' z wariantu %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
 #, fuzzy
@@ -49948,9 +49951,9 @@ msgid "exclude from position files"
 msgstr "Wyklucz z plików położeń"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "Zmień pole %s:%s '%s' na '%s'."
+msgstr "Zmień %s pól '%s' na '%s' w wariancie %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1532
 #, fuzzy, c-format
@@ -49958,9 +49961,9 @@ msgid "Change %s field '%s' to '%s' on variant %s."
 msgstr "Zmień pole %s:%s '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1543
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "Zmieniam pole %s:%s '%s' na '%s'."
+msgstr "Zmieniam %s pól '%s' na '%s' w wariancie %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1552
 #, fuzzy, c-format
@@ -53161,14 +53164,12 @@ msgid "removed annular ring"
 msgstr "usunięty pierścień pola"
 
 #: pcbnew/pcb_track.cpp:1785
-#, fuzzy
 msgid "Via diameter is too small."
-msgstr "Rozmiar przelotki jest zbyt mały"
+msgstr "Średnica przelotki jest zbyt mała."
 
 #: pcbnew/pcb_track.cpp:1792
-#, fuzzy
 msgid "Via drill is too small."
-msgstr "Otwór jest zbyt mały"
+msgstr "Średnica otworu przelotki jest zbyt mała."
 
 #: pcbnew/pcb_track.cpp:1799
 msgid "No via hole size defined."
@@ -53184,9 +53185,8 @@ msgid "Via hole size must be smaller than via diameter"
 msgstr "Rozmiar wiercenia musi być mniejszy niż rozmiar przelotki"
 
 #: pcbnew/pcb_track.cpp:1834
-#, fuzzy
 msgid "Via layer must be a copper layer."
-msgstr "Jeśli potrzebna jest dolna warstwa sygnałowa"
+msgstr "Warstwa przelotki musi być warstwą sygnałową."
 
 #: pcbnew/pcb_track.cpp:1846
 msgid "Via layer is outside the board stack."
@@ -53197,14 +53197,12 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr "Warstwa początkowa i końcowa przelotki nie może być taka sama"
 
 #: pcbnew/pcb_track.cpp:1873
-#, fuzzy
 msgid "Backdrill diameter is too small."
-msgstr "Rozmiar przelotki jest zbyt mały"
+msgstr "Średnica owiertu odwrotnego jest zbyt mała."
 
 #: pcbnew/pcb_track.cpp:1889
-#, fuzzy
 msgid "Tertiary backdrill diameter is too small."
-msgstr "Rozmiar przelotki jest zbyt mały"
+msgstr "Trzeciorzędna średnica owiertu odwrotnego jest zbyt mała."
 
 #: pcbnew/pcb_track.cpp:2321
 msgid "Track (arc)"
@@ -55077,29 +55075,24 @@ msgid "Place via"
 msgstr "Umieść przelotkę"
 
 #: pcbnew/tools/drc_tool.cpp:322
-#, fuzzy
 msgid "Edit Footprint Properties..."
-msgstr "Modyfikacja właściwości footprintu"
+msgstr "Edycja właściwości footprintu..."
 
 #: pcbnew/tools/drc_tool.cpp:327
-#, fuzzy
 msgid "Edit Pad Properties..."
-msgstr "Modyfikacja właściwości pola lutowniczego"
+msgstr "Edycja właściwości pola lutowniczego..."
 
 #: pcbnew/tools/drc_tool.cpp:337
-#, fuzzy
 msgid "Edit Dimension Properties..."
-msgstr "Edycja właściwości linii wymiarowych"
+msgstr "Edycja właściwości linii wymiarowych..."
 
 #: pcbnew/tools/drc_tool.cpp:339
-#, fuzzy
 msgid "Edit Field Properties..."
-msgstr "Edycja właściwości etykiety"
+msgstr "Edycja właściwości pól..."
 
 #: pcbnew/tools/drc_tool.cpp:341
-#, fuzzy
 msgid "Edit Text Properties..."
-msgstr "Edytuj właściwości tekstu"
+msgstr "Edytuj właściwości tekstu..."
 
 #: pcbnew/tools/edit_tool.cpp:170
 msgid "Shape Modification"
@@ -55901,18 +55894,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Przesuwa wybrane elementy pojedynczo"
 
 #: pcbnew/tools/pcb_actions.cpp:602
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Przesuwanie z odniesieniem"
+msgstr "Przesuwanie z odniesieniem..."
 
 #: pcbnew/tools/pcb_actions.cpp:603
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Przenosi wybrane elementy z określonym punktem początkowym"
 
 #: pcbnew/tools/pcb_actions.cpp:611
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Kopiowanie z odniesieniem"
+msgstr "Kopiowanie z odniesieniem..."
 
 #: pcbnew/tools/pcb_actions.cpp:612
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -59167,9 +59158,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Usuwanie izolowanych obszarów miedzi..."
 
 #: pcbnew/zone_filler.cpp:994
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Ponownie wypełnij strefy po dokonaniu zmian na płytce"
+msgstr "Ponowne wypełnianie stref po usunięciu wysp..."
 
 #: pcbnew/zone_filler.cpp:1413
 msgid "Prototype zone fill enabled. Disable setting and refill?"
