@@ -46,6 +46,17 @@ class SHAPE;
 const ssize_t                     SHAPE_LINE_CHAIN::SHAPE_IS_PT = -1;
 const std::pair<ssize_t, ssize_t> SHAPE_LINE_CHAIN::SHAPES_ARE_PT = { SHAPE_IS_PT, SHAPE_IS_PT };
 
+namespace
+{
+// Compact bounding-box record used inside SHAPE_LINE_CHAIN::Intersect.
+// Hoisted to file scope so thread_local scratch vectors can reference the type.
+struct SEG_EXTENT
+{
+    int minX, maxX, minY, maxY;
+    int segIdx;
+};
+}
+
 
 int getArcPolygonizationMaxError()
 {
@@ -1806,9 +1817,13 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
     const int                    theirPtCount = static_cast<int>( aChain.CPoints().size() );
     const std::vector<VECTOR2I>& theirPts = aChain.CPoints();
 
-    // Pre-build SEGs for the other chain so each is constructed exactly once
-    std::vector<SEG> theirSegs( theirSegCount );
+    thread_local std::vector<SEG>        theirSegs;
+    thread_local std::vector<SEG_EXTENT> sorted;
 
+    theirSegs.resize( theirSegCount );
+    sorted.resize( theirSegCount );
+
+    // Pre-build SEGs for the other chain so each is constructed exactly once
     for( int i = 0; i < theirSegCount; i++ )
     {
         const VECTOR2I& pa = theirPts[i];
@@ -1817,14 +1832,6 @@ int SHAPE_LINE_CHAIN::Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& 
     }
 
     // Compact extent array for cache-friendly scanning, sorted by minX
-    struct SEG_EXTENT
-    {
-        int minX, maxX, minY, maxY;
-        int segIdx;
-    };
-
-    std::vector<SEG_EXTENT> sorted( theirSegCount );
-
     for( int i = 0; i < theirSegCount; i++ )
     {
         const SEG& s = theirSegs[i];
