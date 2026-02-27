@@ -428,16 +428,20 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         }
     };
 
-    // submit_loop divides work into min(thread_count, numObstacles) blocks, each submitted as
-    // a separate future with a mutex-guarded priority queue push. With too few obstacles, the
-    // lock overhead and thread wakeup latency exceed the geometry work per task. 32 obstacles
-    // ensures each thread gets enough items to amortize the submission cost.
-    constexpr int PARALLEL_THRESHOLD = 32;
+    // Each task submission locks the thread pool's priority queue mutex, and thread wakeup
+    // latency is ~5-20µs. With too few items per block the synchronization cost exceeds the
+    // geometry work. Use a minimum chunk size so blocks are always worth dispatching, while
+    // still entering the parallel path at a lower obstacle count than a flat threshold allows.
+    constexpr int MIN_OBSTACLES_PER_BLOCK = 8;
+    constexpr int PARALLEL_THRESHOLD      = MIN_OBSTACLES_PER_BLOCK;
 
     if( numObstacles > PARALLEL_THRESHOLD )
     {
-        thread_pool& tp = GetKiCadThreadPool();
-        auto futures = tp.submit_loop( 0, numObstacles, [&]( int i ) { processObstacle( i ); } );
+        thread_pool& tp       = GetKiCadThreadPool();
+        std::size_t numBlocks = std::max<std::size_t>( 1, numObstacles / MIN_OBSTACLES_PER_BLOCK );
+
+        auto futures = tp.submit_loop( 0, numObstacles, [&]( int i ) { processObstacle( i ); },
+                                       numBlocks );
         futures.wait();
     }
     else
