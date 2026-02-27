@@ -45,23 +45,27 @@ class DB_OBJ_RESOLVER;
 
 struct RESOLVABLE
 {
+    RESOLVABLE( const DB_OBJ* aParent, const char* aDebugName = nullptr ) :
+            m_Parent( aParent ),
+            m_DebugName( aDebugName )
+    {
+    }
+
     virtual bool Resolve( const DB_OBJ_RESOLVER& aResolver ) = 0;
 
-    const char* m_DebugName = nullptr;
+    virtual std::string DebugString() const;
+
+    const DB_OBJ* m_Parent;
+    const char*   m_DebugName;
 };
 
 
 struct DB_REF : public RESOLVABLE
 {
-    explicit constexpr DB_REF( uint32_t aTargetKey ) :
+    DB_REF( const DB_OBJ* aParent, uint32_t aTargetKey, const char* aDebugName ) :
+            RESOLVABLE( aParent, aDebugName ),
             m_TargetKey( aTargetKey ),
-            m_EndKey( 0 ),
             m_Target( nullptr )
-    {
-    }
-
-    constexpr DB_REF() :
-            DB_REF( 0 )
     {
     }
 
@@ -76,21 +80,23 @@ struct DB_REF : public RESOLVABLE
     DB_OBJ*  m_Target;
 };
 
-static constexpr DB_REF DB_NULLREF = {};
+static DB_REF DB_NULLREF{ nullptr, 0, "<NULL>" };
 
 /**
  * Chain of DB references that lead from the head to the tail
  */
 struct DB_REF_CHAIN : public RESOLVABLE
 {
-    DB_REF_CHAIN( uint32_t aHead, uint32_t aTail ) :
+    DB_REF_CHAIN( const DB_OBJ* aParent, uint32_t aHead, uint32_t aTail, const char* aDebugName ) :
+            RESOLVABLE( aParent ),
             m_Head( aHead ),
             m_Tail( aTail )
     {
+        m_DebugName = aDebugName;
     }
 
-    DB_REF_CHAIN() :
-            DB_REF_CHAIN( 0, 0 )
+    DB_REF_CHAIN( const DB_OBJ* aParent ) :
+            DB_REF_CHAIN( aParent, 0, 0, "<unknown>" )
     {
     }
 
@@ -102,7 +108,9 @@ struct DB_REF_CHAIN : public RESOLVABLE
     void Visit( std::function<void( const DB_OBJ& aObj )> aVisitor ) const;
     void Visit( std::function<void( DB_OBJ& aObj )> aVisitor );
 
-    std::function<uint32_t( const DB_OBJ& )> m_NextKeyGetter;
+    std::function<const DB_REF&( const DB_OBJ& )> m_NextRefGetter;
+
+    // The head/tail key values
     uint32_t                                 m_Head;
     uint32_t                                 m_Tail;
 
@@ -113,14 +121,10 @@ struct DB_REF_CHAIN : public RESOLVABLE
 
 struct DB_STR_REF : public RESOLVABLE
 {
-    explicit constexpr DB_STR_REF( uint32_t aTargetKey ) :
+    DB_STR_REF( const DB_OBJ* aParent, uint32_t aTargetKey, const char* aDebugName ) :
+            RESOLVABLE( aParent, aDebugName ),
             m_StringKey( aTargetKey ),
             m_String( nullptr )
-    {
-    }
-
-    constexpr DB_STR_REF() :
-            DB_STR_REF( 0 )
     {
     }
 
@@ -130,7 +134,7 @@ struct DB_STR_REF : public RESOLVABLE
     const wxString* m_String;
 };
 
-static constexpr DB_STR_REF DB_STRNULLREF = {};
+static const DB_STR_REF DB_STRNULLREF{ nullptr, 0, "<NULL>" };
 
 /**
  * Some interface that can yield DB_OBJs for keys
@@ -160,39 +164,7 @@ public:
  */
 struct DB_OBJ
 {
-    enum class TYPE
-    {
-        ARC,
-        FIELD,          // 0x03 subtype 0x68...
-        TRACK,          // 0x05
-        NET_ASSIGN,     // 0x04
-        COMPONENT,      // 0x06
-        COMPONENT_INST, // 0x07
-        PIN_NUMBER,     // 0x08
-        x0e_RECT,       // 0x0E
-        FUNCTION_SLOT,  // 0x0F
-        FUNCTION_INST,  // 0x10
-        PIN_NAME,       // 0x11
-        XREF,           // 0x12
-        GRAPHIC_SEG,    // 0x14
-        LINE,           // 0x15, 0x16, 0x17
-        NET,            // 0x1B
-        x20,            // 0x20
-        SHAPE,          // 0x28
-        FP_DEF,         // 0x2B
-        FP_INST,        // 0x2D
-        CONNECTION,     // 0x2E
-        PLACED_PAD,     // 0x32
-        VIA,            // 0x33
-        KEEPOUT,        // 0x34
-        x35,
-        x36,
-        x37,
-        FILM_LAYER_LIST, // 0x39
-        FILM,            // 0x3a
-        x3b,
-        x3c,
-    };
+    using TYPE_ID = uint8_t;
 
     // Where this block was in the file (for debugging)
     struct FILE_LOC
@@ -201,20 +173,32 @@ struct DB_OBJ
         uint8_t m_BlockType;
     };
 
-    DB_OBJ( TYPE aType, uint32_t aKey ) :
+    DB_OBJ( uint32_t aKey ) :
             m_Valid( false ),
-            m_Type( aType ),
             m_Key( aKey ),
             m_Loc( 0, 0 )
     {
     }
 
     DB_OBJ() :
-            DB_OBJ( TYPE::ARC, 0 )
+            DB_OBJ( 0 )
     {
     }
 
     virtual ~DB_OBJ() {}
+
+    /**
+     * All blocks are denoted by a type which allows dispatch to the appropriate subclass.
+     */
+    virtual TYPE_ID GetType() const = 0;
+
+    /*
+     * A type name for debugging/tracing purposes.
+     */
+    virtual const char* TypeName() const
+    {
+        return "<UNNAMED>";
+    }
 
     /**
      * Called when all objects in the DB are read and can be resolved by their IDs by other objects.
@@ -229,14 +213,21 @@ struct DB_OBJ
      */
     virtual bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) = 0;
 
-    TYPE GetType() const { return m_Type; }
-
     uint32_t GetKey() const { return m_Key; }
 
+    /**
+     * Return the reference to the next object in the default chain for this object.
+     *
+     * Some methods of iterating use other "nexts" in the object, fo those you should use
+     * the appropriate field instead of this method.
+     */
+    virtual const DB_REF& GetNext() const
+    {
+        return DB_NULLREF;
+    }
+
     // Set to true when the object is fully resolved and valid
-    bool     m_Valid;
-    // The type of this object
-    TYPE     m_Type;
+    bool m_Valid;
     // The unique key of this object in the DB
     uint32_t m_Key;
     // Location in the file (for debugging)
@@ -318,6 +309,65 @@ public:
 };
 
 
+enum BRD_TYPE
+{
+    BRD_ARC,            // 0x01
+    BRD_FIELD,          // 0x03 subtype 0x68...
+    BRD_TRACK,          // 0x05
+    BRD_NET_ASSIGN,     // 0x04
+    BRD_COMPONENT,      // 0x06
+    BRD_COMPONENT_INST, // 0x07
+    BRD_PIN_NUMBER,     // 0x08
+    BRD_x0e_RECT,       // 0x0E
+    BRD_FUNCTION_SLOT,  // 0x0F
+    BRD_FUNCTION_INST,  // 0x10
+    BRD_PIN_NAME,       // 0x11
+    BRD_XREF,           // 0x12
+    BRD_GRAPHIC_SEG,    // 0x14
+    BRD_LINE,           // 0x15, 0x16, 0x17
+    BRD_NET,            // 0x1B
+    BRD_x20,            // 0x20
+    BRD_SHAPE,          // 0x28
+    BRD_FP_DEF,         // 0x2B
+    BRD_FP_INST,        // 0x2D
+    BRD_CONNECTION,     // 0x2E
+    BRD_PLACED_PAD,     // 0x32
+    BRD_VIA,            // 0x33
+    BRD_KEEPOUT,        // 0x34
+    BRD_x35,
+    BRD_x36,
+    BRD_x37,
+    BRD_FILM_LAYER_LIST, // 0x39
+    BRD_FILM,            // 0x3a
+    BRD_x3b,
+    BRD_x3c,
+};
+
+struct BRD_DB_OBJ : public DB_OBJ
+{
+    BRD_DB_OBJ( BRD_TYPE aType, uint32_t aKey ) :
+            DB_OBJ( aKey ),
+            m_Type( aType )
+    {
+    }
+
+    BRD_DB_OBJ() :
+            DB_OBJ()
+    {
+    }
+
+    TYPE_ID GetType() const override
+    {
+        return static_cast<TYPE_ID>( m_Type );
+    }
+
+    BRD_TYPE GetBrdType() const { return m_Type; }
+
+private:
+    BRD_TYPE m_Type;
+};
+
+
 class BRD_DB;
 struct COMPONENT;
 struct COMPONENT_INST;
@@ -330,16 +380,19 @@ struct PIN_NAME;
 struct PIN_NUMBER;
 struct TRACK;
 
+
 /**
  * 0x01 ARC objects
  */
-struct ARC : public DB_OBJ
+struct ARC : public BRD_DB_OBJ
 {
     ARC( const BLK_0x01_ARC& aBlk );
 
     DB_REF m_Parent;
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "ARC"; }
 };
 
 
@@ -348,11 +401,13 @@ struct ARC : public DB_OBJ
  *
  * These can be of several subtypes
  */
-struct FIELD : public DB_OBJ
+struct FIELD : public BRD_DB_OBJ
 {
     FIELD( const BLK_0x03_FIELD& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override { return true; }
+
+    const char* TypeName() const override { return "FIELD"; }
 
     uint8_t m_SubType;
     DB_REF  m_Next;
@@ -403,11 +458,13 @@ private:
 /**
  * 0x04 NET_ASSIGN objects
  */
-struct NET_ASSIGN : public DB_OBJ
+struct NET_ASSIGN : public BRD_DB_OBJ
 {
     NET_ASSIGN( const BRD_DB& aBrd, const BLK_0x04_NET_ASSIGNMENT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "NET_ASSIGN"; }
 
     DB_REF m_Next;
     ///< Reference to an 0x1B NET object
@@ -415,14 +472,14 @@ struct NET_ASSIGN : public DB_OBJ
     ///< Reference to an 0x05 TRACK or 0x32 PLACED_PAD object
     DB_REF m_ConnItem;
 
-    const NET& GetNet() const;
+    const ALLEGRO::NET& GetNet() const;
 };
 
 
 /**
  * 0x05 TRACK
  */
-struct TRACK : public DB_OBJ
+struct TRACK : public BRD_DB_OBJ
 {
     TRACK( const BRD_DB& aBrd, const BLK_0x05_TRACK& aBlk );
 
@@ -431,17 +488,20 @@ struct TRACK : public DB_OBJ
     DB_REF m_Next;
 };
 
+struct COMPONENT_INST;
 
 /**
  * COMPONENT 0x06 objects.
  *
  * One per component definition (symbol) in the library.
  */
-struct COMPONENT : public DB_OBJ
+struct COMPONENT : public BRD_DB_OBJ
 {
     COMPONENT( const BRD_DB& aBrd, const BLK_0x06_COMPONENT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "COMPONENT"; }
 
     DB_REF m_Next;
     DB_STR_REF m_CompDeviceType;
@@ -461,16 +521,18 @@ struct COMPONENT : public DB_OBJ
  *
  * These represent instances of COMPONENTs placed on the board.
  */
-struct COMPONENT_INST : public DB_OBJ
+struct COMPONENT_INST : public BRD_DB_OBJ
 {
     COMPONENT_INST( const BLK_0x07_COMPONENT_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
+    const char* TypeName() const override { return "COMPONENT_INST"; }
+
     DB_REF     m_Next;
     DB_STR_REF   m_TextStr;
     DB_REF       m_FunctionInst;
-    DB_REF       m_X03Chain;
+    DB_REF_CHAIN m_X03Chain;
     DB_REF_CHAIN m_Pads;
 
     COMPONENT* m_ParentComponent = nullptr;
@@ -487,15 +549,17 @@ struct COMPONENT_INST : public DB_OBJ
 /**
  * 0x08 objects.
  */
-struct PIN_NUMBER : public DB_OBJ
+struct PIN_NUMBER : public BRD_DB_OBJ
 {
     PIN_NUMBER( const BLK_0x08_PIN_NUMBER& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
+    const char* TypeName() const override { return "PIN_NUMBER"; }
+
+    DB_REF     m_Next;
     DB_STR_REF m_PinNumberStr;
     DB_REF     m_PinName;
-    DB_REF     m_Next;
 
     const wxString* GetNumber() const;
     const PIN_NAME* GetPinName() const;
@@ -505,11 +569,13 @@ struct PIN_NUMBER : public DB_OBJ
 /**
  * 0x0E objects: ??
  */
-struct RECT_OBJ : public DB_OBJ
+struct RECT_OBJ : public BRD_DB_OBJ
 {
     RECT_OBJ( const BRD_DB& aBrd, const BLK_0x0E_RECT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "RECT_OBJ"; }
 
     DB_REF m_Next;
     EDA_ANGLE m_Rotation;
@@ -519,16 +585,17 @@ struct RECT_OBJ : public DB_OBJ
 /**
  * A FUNCTION_SLOT (0x0F) object represents a single function slot within a symbol.
  */
-struct FUNCTION_SLOT : public DB_OBJ
+struct FUNCTION_SLOT : public BRD_DB_OBJ
 {
     FUNCTION_SLOT( const BLK_0x0F_FUNCTION_SLOT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
+    const char* TypeName() const override { return "FUNCTION_SLOT"; }
+
     DB_STR_REF m_SlotName;
     wxString m_CompDeviceType;
 
-    DB_REF m_NextSlot;
     DB_REF m_Component;
     DB_REF m_PinName;
 
@@ -540,11 +607,13 @@ struct FUNCTION_SLOT : public DB_OBJ
  * A FUNCTION (0x10) object represents a logical function, which is an
  * _instance_ of a single function slot within a symbol.
  */
-struct FUNCTION_INSTANCE : public DB_OBJ
+struct FUNCTION_INSTANCE : public BRD_DB_OBJ
 {
     FUNCTION_INSTANCE( const BLK_0x10_FUNCTION_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "FUNCTION_INSTANCE"; }
 
     DB_REF     m_Slot;
     DB_REF     m_Fields;
@@ -560,11 +629,13 @@ struct FUNCTION_INSTANCE : public DB_OBJ
 /**
  * 0x11 objects.
  */
-struct PIN_NAME: public DB_OBJ
+struct PIN_NAME : public BRD_DB_OBJ
 {
     PIN_NAME( const BLK_0x11_PIN_NAME& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "PIN_NAME"; }
 
     DB_REF     m_Next;
     DB_STR_REF m_PinNameStr;
@@ -578,11 +649,13 @@ struct PIN_NAME: public DB_OBJ
 /**
  * 0x12 objects.
  */
-struct XREF_OBJ : public DB_OBJ
+struct XREF_OBJ : public BRD_DB_OBJ
 {
     XREF_OBJ( const BLK_0x12_XREF& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "XREF_OBJ"; }
 
     DB_REF m_Ptr1;
     DB_REF m_Ptr2;
@@ -593,11 +666,13 @@ struct XREF_OBJ : public DB_OBJ
 /**
  * 0x14 objects (a line or arc graphic segment)
  */
-struct GRAPHIC_SEG: public DB_OBJ
+struct GRAPHIC_SEG : public BRD_DB_OBJ
 {
     GRAPHIC_SEG( const BRD_DB& aBrd, const BLK_0x14_GRAPHIC& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "GRAPHIC_SEG"; }
 
     DB_REF m_Next;
     DB_REF m_Parent;
@@ -612,11 +687,13 @@ struct GRAPHIC_SEG: public DB_OBJ
 /**
  * LINE objects (0x15, 0x16, 0x17)
  */
-struct LINE : public DB_OBJ
+struct LINE : public BRD_DB_OBJ
 {
     LINE( const BLK_0x15_16_17_SEGMENT& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "LINE"; }
 
     DB_REF m_Parent;
     DB_REF m_Next;
@@ -630,7 +707,7 @@ struct LINE : public DB_OBJ
 /**
  * 0x1B NET objects
  */
-struct NET : public DB_OBJ
+struct NET : public BRD_DB_OBJ
 {
     enum class STATUS
     {
@@ -642,6 +719,8 @@ struct NET : public DB_OBJ
     NET( const BRD_DB& aBrd, const BLK_0x1B_NET& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "NET"; }
 
     DB_REF m_Next;
     DB_STR_REF m_NetNameStr;
@@ -668,12 +747,14 @@ struct NET : public DB_OBJ
 /**
  * 0x20 objects. Purpose unknown.
  */
-class UNKNOWN_0x20 : public DB_OBJ
+class UNKNOWN_0x20 : public BRD_DB_OBJ
 {
 public:
     UNKNOWN_0x20( const BRD_DB& aBrd, const BLK_0x20_UNKNOWN& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "UNKNOWN_0x20"; }
 
     DB_REF m_Next;
 };
@@ -682,23 +763,24 @@ public:
 /**
  * 0x28 SHAPE objects
  */
-class SHAPE : public DB_OBJ
+class SHAPE : public BRD_DB_OBJ
 {
 public:
     SHAPE( const BRD_DB& aBrd, const BLK_0x28_SHAPE& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
+    const char* TypeName() const override { return "SHAPE"; }
+
     DB_REF m_Next;
-    DB_REF m_Parent;
-    DB_REF m_Segments;
+    DB_REF_CHAIN m_Segments;
 };
 
 
 /**
  * 0x2B objects
  */
-struct FOOTPRINT_DEF : public DB_OBJ
+struct FOOTPRINT_DEF : public BRD_DB_OBJ
 {
     FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B_FOOTPRINT_DEF& aBlk );
 
@@ -709,6 +791,8 @@ struct FOOTPRINT_DEF : public DB_OBJ
     DB_REF_CHAIN m_Instances;
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "FOOTPRINT_DEF"; }
 
     /**
      * Get the library path for this footprint definition
@@ -724,11 +808,13 @@ struct FOOTPRINT_DEF : public DB_OBJ
 /**
  * 0x2D objects
  */
-struct FOOTPRINT_INSTANCE : public DB_OBJ
+struct FOOTPRINT_INSTANCE : public BRD_DB_OBJ
 {
     FOOTPRINT_INSTANCE( const BLK_0x2D_FOOTPRINT_INST& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "FOOTPRINT_INSTANCE"; }
 
     DB_REF m_Next;
     DB_REF m_ComponentInstance;
@@ -739,6 +825,9 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
 
     // Chain of PLACED_PADs
     DB_REF_CHAIN m_Pads;
+
+    // Chain of graphic segments (SEGMENT, ARC)
+    DB_REF_CHAIN m_Graphics;
 
     // Backlink to the parent footprint definition
     FOOTPRINT_DEF* m_Parent;
@@ -751,11 +840,13 @@ struct FOOTPRINT_INSTANCE : public DB_OBJ
 /**
  * 0x2E objects.
  */
-struct CONNECTION_OBJ : public DB_OBJ
+struct CONNECTION_OBJ : public BRD_DB_OBJ
 {
     CONNECTION_OBJ( const BRD_DB& aBrd, const BLK_0x2E_CONNECTION& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "CONNECTION_OBJ"; }
 
     DB_REF m_Next;
     DB_REF m_NetAssign;
@@ -768,11 +859,13 @@ struct CONNECTION_OBJ : public DB_OBJ
 /**
  * 0x32 Placed Pad objects.
  */
-struct PLACED_PAD : public DB_OBJ
+struct PLACED_PAD : public BRD_DB_OBJ
 {
     PLACED_PAD( const BRD_DB& aBrd, const BLK_0x32_PLACED_PAD& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "PLACED_PAD"; }
 
     DB_REF m_Next;
     DB_REF m_NextInFp;
@@ -794,11 +887,13 @@ struct PLACED_PAD : public DB_OBJ
 /**
  * 0x33 VIA objects.
  */
-struct VIA: public DB_OBJ
+struct VIA : public BRD_DB_OBJ
 {
     VIA( const BRD_DB& aBrd, const BLK_0x33_VIA& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "VIA"; }
 
     DB_REF m_Next;
     DB_REF m_NetAssign;

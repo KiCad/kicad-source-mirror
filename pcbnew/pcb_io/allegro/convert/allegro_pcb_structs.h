@@ -712,6 +712,11 @@ struct BLK_0x08_PIN_NUMBER
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
     uint32_t m_Ptr4;
+
+    uint32_t GetStrPtr() const
+    {
+        return m_StrPtr.value_or( m_StrPtr16x.value_or( 0 ) );
+    }
 };
 
 
@@ -1656,6 +1661,11 @@ struct BLK_0x2D_FOOTPRINT_INST
     uint32_t m_AreasPtr;
     uint32_t m_UnknownPtr1;
     uint32_t m_UnknownPtr2;
+
+    uint32_t GetInstRef() const
+    {
+        return m_InstRef.value_or( m_InstRef16x.value_or( 0 ) );
+    }
 };
 
 

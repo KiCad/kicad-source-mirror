@@ -181,19 +181,16 @@ bool parse( std::istream& aStream, PLUGIN_TYPE aPluginType, bool aVerbose )
 
         duration = timer.SinceStart<PARSE_DURATION>();
     }
-    catch( const IO_ERROR& )
+    catch( const IO_ERROR& e )
     {
+        std::cout << "Parsing failed: " << e.What() << std::endl;
     }
 
     if( aVerbose )
     {
         std::cout << fmt::format( "Took: {}us", duration.count() ) << std::endl;
 
-        if( !board )
-        {
-            std::cout << "Parsing failed" << std::endl;
-        }
-        else
+        if( board )
         {
             std::cout << fmt::format( "  {} nets", board->GetBoard()->GetNetCount() ) << std::endl;
         }

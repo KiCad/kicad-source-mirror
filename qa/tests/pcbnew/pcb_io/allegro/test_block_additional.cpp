@@ -107,7 +107,7 @@ static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlock
 static const std::unordered_map<BLOCK_TEST_KEY, DB_OBJ_TEST_FUNC> additionalDbObjTests{
     { { "Olympus_15061-1b_v165",      0x0131553c }, []( const DB_OBJ& obj )
         {
-            BOOST_REQUIRE( obj.GetType() == DB_OBJ::TYPE::x20 );
+            BOOST_REQUIRE( obj.GetType() == BRD_x20 );
 
             const auto& blk = static_cast<const UNKNOWN_0x20&>( obj );
             BOOST_TEST( blk.m_Next.m_TargetKey == 0x824DF8F0 );
