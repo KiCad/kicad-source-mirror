@@ -33,7 +33,8 @@
 /**
  * Some handy preset values for common outset distances.
  */
-static const std::vector<int> s_outsetPresetValue{
+static const std::vector<int> s_outsetPresetValue
+{
     // Outsetting a 0.1mm line to touch a 0.1mm line
     pcbIUScale.mmToIU( 0.1 ),
     // 0.12mm line to touch a 0.1mm line
@@ -53,7 +54,8 @@ static const std::vector<int> s_outsetPresetValue{
 
 // Ther user can also get the current board design settings widths
 // with the "Layer Default" button.
-static const std::vector<int> s_presetLineWidths{
+static const std::vector<int> s_presetLineWidths
+{
     // Courtyard
     pcbIUScale.mmToIU( 0.05 ),
     pcbIUScale.mmToIU( 0.1 ),
@@ -63,7 +65,8 @@ static const std::vector<int> s_presetLineWidths{
     pcbIUScale.mmToIU( 0.2 ),
 };
 
-static const std::vector<int> s_presetGridRounding{
+static const std::vector<int> s_presetGridRounding
+{
     // 0.01 is a common IPC grid round-off value
     pcbIUScale.mmToIU( 0.01 ),
 };
@@ -75,8 +78,7 @@ static std::vector<int> s_lineWidthRecentValues;
 static std::vector<int> s_gridRoundingRecentValues;
 
 
-DIALOG_OUTSET_ITEMS::DIALOG_OUTSET_ITEMS( PCB_BASE_FRAME&             aParent,
-                                          OUTSET_ROUTINE::PARAMETERS& aParams ) :
+DIALOG_OUTSET_ITEMS::DIALOG_OUTSET_ITEMS( PCB_BASE_FRAME& aParent, OUTSET_ROUTINE::PARAMETERS& aParams ) :
         DIALOG_OUTSET_ITEMS_BASE( &aParent ),
         m_parent( aParent ),
         m_params( aParams ),

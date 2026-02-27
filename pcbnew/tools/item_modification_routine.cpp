@@ -78,8 +78,7 @@ std::pair<VECTOR2I*, VECTOR2I*> GetSharedEndpoints( SEG& aSegA, SEG& aSegB )
 } // namespace
 
 
-bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE&                aLine,
-                                                                const std::optional<SEG>& aSeg )
+bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine, const std::optional<SEG>& aSeg )
 {
     wxASSERT_MSG( aLine.GetShape() == SHAPE_T::SEGMENT, "Can only modify segments" );
 
@@ -194,6 +193,7 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
     AddSuccess();
 }
 
+
 wxString LINE_CHAMFER_ROUTINE::GetCommitDescription() const
 {
     return _( "Chamfer Lines" );
@@ -228,8 +228,7 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
         return;
     }
 
-    std::optional<CHAMFER_RESULT> chamfer_result =
-            ComputeChamferPoints( seg_a, seg_b, m_chamferParams );
+    std::optional<CHAMFER_RESULT> chamfer_result = ComputeChamferPoints( seg_a, seg_b, m_chamferParams );
 
     if( !chamfer_result )
     {
@@ -237,7 +236,7 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
         return;
     }
 
-    auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+    std::unique_ptr<PCB_SHAPE> tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
 
     tSegment->SetStart( chamfer_result->m_chamfer.A );
     tSegment->SetEnd( chamfer_result->m_chamfer.B );
@@ -278,8 +277,7 @@ std::optional<wxString> DOGBONE_CORNER_ROUTINE::GetStatusMessage( int aSegmentCo
         if( !msg.empty() )
             msg += " ";
 
-        msg += _( "Some of the dogbone corners are too narrow to fit a "
-                  "cutter of the specified radius." );
+        msg += _( "Some of the dogbone corners are too narrow to fit a cutter of the specified radius." );
 
         if( !m_params.AddSlots )
             msg += _( " Consider enabling the 'Add Slots' option." );
@@ -340,11 +338,13 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
     const VECTOR2I vecB = ( seg_b.A == corner ? seg_b.B - corner : seg_b.A - corner );
     // Normalize (resize) to common length to form bisector reliably
     int maxLen = std::max( vecA.EuclideanNorm(), vecB.EuclideanNorm() );
+
     if( maxLen == 0 )
     {
         wxLogTrace( "DOGBONE", "Skip: degenerate corner (maxLen==0)" );
         return;
     }
+
     VECTOR2I vecAn = vecA.Resize( maxLen );
     VECTOR2I vecBn = vecB.Resize( maxLen );
     VECTOR2I bisectorOutward = vecAn + vecBn; // direction inside angle region
@@ -369,8 +369,8 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
         return;
     }
 
-    std::optional<DOGBONE_RESULT> dogbone_result =
-            ComputeDogbone( seg_a, seg_b, m_params.DogboneRadiusIU, m_params.AddSlots );
+    std::optional<DOGBONE_RESULT> dogbone_result = ComputeDogbone( seg_a, seg_b, m_params.DogboneRadiusIU,
+                                                                   m_params.AddSlots );
 
     if( !dogbone_result )
     {
@@ -382,8 +382,7 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     if( dogbone_result->m_small_arc_mouth )
     {
-        wxLogTrace( "DOGBONE", "Info: small arc mouth (slots %s)",
-                    m_params.AddSlots ? "enabled" : "disabled" );
+        wxLogTrace( "DOGBONE", "Info: small arc mouth (slots %s)", m_params.AddSlots ? "enabled" : "disabled" );
         // The arc is too small to fit the radius
         m_haveNarrowMouths = true;
     }
@@ -399,18 +398,19 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
         aShape.SetLocked( aLineA.IsLocked() );
     };
 
-    const auto addSegment = [&]( const SEG& aSeg )
-    {
-        if( aSeg.Length() == 0 )
-            return;
+    const auto addSegment =
+            [&]( const SEG& aSeg )
+            {
+                if( aSeg.Length() == 0 )
+                    return;
 
-        auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
-        tSegment->SetStart( aSeg.A );
-        tSegment->SetEnd( aSeg.B );
+                auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+                tSegment->SetStart( aSeg.A );
+                tSegment->SetEnd( aSeg.B );
 
-        copyProps( *tSegment );
-        handler.AddNewItem( std::move( tSegment ) );
-    };
+                copyProps( *tSegment );
+                handler.AddNewItem( std::move( tSegment ) );
+            };
 
     tArc->SetArcGeometry( dogbone_result->m_arc.GetP0(), dogbone_result->m_arc.GetArcMid(),
                           dogbone_result->m_arc.GetP1() );
@@ -438,6 +438,7 @@ bool DOGBONE_CORNER_ROUTINE::EnsureBoardOutline() const
     m_boardOutlineCached = true;
 
     BOARD* board = dynamic_cast<BOARD*>( GetBoard() );
+
     if( !board )
     {
         wxLogTrace( "DOGBONE", "EnsureBoardOutline: board cast failed" );
@@ -499,25 +500,26 @@ void LINE_EXTENSION_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     CHANGE_HANDLER& handler = GetHandler();
 
-    const auto line_extender = [&]( const SEG& aSeg, PCB_SHAPE& aLine )
-    {
-        // If the intersection point is not already n the line, we'll extend to it
-        if( !aSeg.Contains( *intersection ) )
-        {
-            const int dist_start = ( *intersection - aSeg.A ).EuclideanNorm();
-            const int dist_end = ( *intersection - aSeg.B ).EuclideanNorm();
+    const auto line_extender =
+            [&]( const SEG& aSeg, PCB_SHAPE& aLine )
+            {
+                // If the intersection point is not already n the line, we'll extend to it
+                if( !aSeg.Contains( *intersection ) )
+                {
+                    const int dist_start = ( *intersection - aSeg.A ).EuclideanNorm();
+                    const int dist_end = ( *intersection - aSeg.B ).EuclideanNorm();
 
-            const VECTOR2I& furthest_pt = ( dist_start < dist_end ) ? aSeg.B : aSeg.A;
-            // Note, the drawing tool has COORDS_PADDING of 20mm, but we need a larger buffer
-            // or we are not able to select the generated segments
-            unsigned int    edge_padding = static_cast<unsigned>( pcbIUScale.mmToIU( 200 ) );
-            VECTOR2I        new_end = GetClampedCoords( *intersection, edge_padding );
+                    const VECTOR2I& furthest_pt = ( dist_start < dist_end ) ? aSeg.B : aSeg.A;
+                    // Note, the drawing tool has COORDS_PADDING of 20mm, but we need a larger buffer
+                    // or we are not able to select the generated segments
+                    unsigned int    edge_padding = static_cast<unsigned>( pcbIUScale.mmToIU( 200 ) );
+                    VECTOR2I        new_end = GetClampedCoords( *intersection, edge_padding );
 
-            handler.MarkItemModified( aLine );
-            aLine.SetStart( furthest_pt );
-            aLine.SetEnd( new_end );
-        }
-    };
+                    handler.MarkItemModified( aLine );
+                    aLine.SetStart( furthest_pt );
+                    aLine.SetEnd( new_end );
+                }
+            };
 
     line_extender( seg_a, aLineA );
     line_extender( seg_b, aLineB );
@@ -533,12 +535,11 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
     switch( aPcbShape.GetShape() )
     {
     case SHAPE_T::POLY:
-    {
         poly = std::make_unique<SHAPE_POLY_SET>( aPcbShape.GetPolyShape() );
         // Arcs cannot be handled by polygon boolean transforms
         poly->ClearArcs();
         break;
-    }
+
     case SHAPE_T::RECTANGLE:
     {
         poly = std::make_unique<SHAPE_POLY_SET>();
@@ -548,11 +549,11 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
         poly->NewOutline();
 
         for( const VECTOR2I& pt : rect_pts )
-        {
             poly->Append( pt );
-        }
+
         break;
     }
+
     case SHAPE_T::CIRCLE:
     {
         poly = std::make_unique<SHAPE_POLY_SET>();
@@ -563,10 +564,9 @@ void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
         poly->Append( arc );
         break;
     }
+
     default:
-    {
         break;
-    }
     }
 
     if( !poly )
@@ -622,8 +622,7 @@ void POLYGON_BOOLEAN_ROUTINE::Finalize()
         // there must be a layer set by now.
         wxASSERT( m_layer >= 0 );
 
-        std::unique_ptr<PCB_SHAPE> new_poly_shape =
-                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
+        std::unique_ptr<PCB_SHAPE> new_poly_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
 
         SHAPE_POLY_SET poly_set = m_workingPolygons.UnitSet( i );
 
@@ -757,8 +756,7 @@ std::optional<wxString> OUTSET_ROUTINE::GetStatusMessage() const
 static SHAPE_RECT GetRectRoundedToGridOutwards( const SHAPE_RECT& aRect, int aGridSize )
 {
     const VECTOR2I newPos = KIGEOM::RoundNW( aRect.GetPosition(), aGridSize );
-    const VECTOR2I newOpposite =
-            KIGEOM::RoundSE( aRect.GetPosition() + aRect.GetSize(), aGridSize );
+    const VECTOR2I newOpposite = KIGEOM::RoundSE( aRect.GetPosition() + aRect.GetSize(), aGridSize );
     return SHAPE_RECT( newPos, newOpposite );
 }
 
@@ -787,128 +785,128 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
     CHANGE_HANDLER& handler = GetHandler();
 
-    const auto addPolygonalChain = [&]( const SHAPE_LINE_CHAIN& aChain )
-    {
-        SHAPE_POLY_SET new_poly( aChain );
+    const auto addPolygonalChain =
+            [&]( const SHAPE_LINE_CHAIN& aChain )
+            {
+                SHAPE_POLY_SET new_poly( aChain );
 
-        std::unique_ptr<PCB_SHAPE> new_shape =
-                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
+                std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
 
-        new_shape->SetPolyShape( new_poly );
-        new_shape->SetLayer( layer );
-        new_shape->SetWidth( width );
+                new_shape->SetPolyShape( new_poly );
+                new_shape->SetLayer( layer );
+                new_shape->SetWidth( width );
 
-        handler.AddNewItem( std::move( new_shape ) );
-    };
+                handler.AddNewItem( std::move( new_shape ) );
+            };
 
     // Iterate the SHAPE_LINE_CHAIN in the polygon, pulling out
     // segments and arcs to create new PCB_SHAPE primitives.
-    const auto addChain = [&]( const SHAPE_LINE_CHAIN& aChain )
-    {
-        // Prefer to add a polygonal chain if there are no arcs
-        // as this permits boolean ops
-        if( aChain.ArcCount() == 0 )
-        {
-            addPolygonalChain( aChain );
-            return;
-        }
+    const auto addChain =
+            [&]( const SHAPE_LINE_CHAIN& aChain )
+            {
+                // Prefer to add a polygonal chain if there are no arcs
+                // as this permits boolean ops
+                if( aChain.ArcCount() == 0 )
+                {
+                    addPolygonalChain( aChain );
+                    return;
+                }
 
-        for( size_t si = 0; si < aChain.GetSegmentCount(); ++si )
-        {
-            const SEG seg = aChain.GetSegment( si );
+                for( size_t si = 0; si < aChain.GetSegmentCount(); ++si )
+                {
+                    const SEG seg = aChain.GetSegment( si );
 
-            if( seg.Length() == 0 )
-                continue;
+                    if( seg.Length() == 0 )
+                        continue;
 
-            if( aChain.IsArcSegment( si ) )
-                continue;
+                    if( aChain.IsArcSegment( si ) )
+                        continue;
 
-            std::unique_ptr<PCB_SHAPE> new_shape =
-                    std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
-            new_shape->SetStart( seg.A );
-            new_shape->SetEnd( seg.B );
-            new_shape->SetLayer( layer );
-            new_shape->SetWidth( width );
+                    std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+                    new_shape->SetStart( seg.A );
+                    new_shape->SetEnd( seg.B );
+                    new_shape->SetLayer( layer );
+                    new_shape->SetWidth( width );
 
-            handler.AddNewItem( std::move( new_shape ) );
-        }
+                    handler.AddNewItem( std::move( new_shape ) );
+                }
 
-        for( size_t ai = 0; ai < aChain.ArcCount(); ++ai )
-        {
-            const SHAPE_ARC& arc = aChain.Arc( ai );
+                for( size_t ai = 0; ai < aChain.ArcCount(); ++ai )
+                {
+                    const SHAPE_ARC& arc = aChain.Arc( ai );
 
-            if( arc.GetRadius() == 0 || arc.GetP0() == arc.GetP1() )
-                continue;
+                    if( arc.GetRadius() == 0 || arc.GetP0() == arc.GetP1() )
+                        continue;
 
-            std::unique_ptr<PCB_SHAPE> new_shape =
-                    std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
-            new_shape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
-            new_shape->SetLayer( layer );
-            new_shape->SetWidth( width );
+                    std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::ARC );
+                    new_shape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
+                    new_shape->SetLayer( layer );
+                    new_shape->SetWidth( width );
 
-            handler.AddNewItem( std::move( new_shape ) );
-        }
-    };
+                    handler.AddNewItem( std::move( new_shape ) );
+                }
+            };
 
-    const auto addPoly = [&]( const SHAPE_POLY_SET& aPoly )
-    {
-        for( int oi = 0; oi < aPoly.OutlineCount(); ++oi )
-        {
-            addChain( aPoly.Outline( oi ) );
-        }
-    };
+    const auto addPoly =
+            [&]( const SHAPE_POLY_SET& aPoly )
+            {
+                for( int oi = 0; oi < aPoly.OutlineCount(); ++oi )
+                {
+                    addChain( aPoly.Outline( oi ) );
+                }
+            };
 
-    const auto addRect = [&]( const SHAPE_RECT& aRect )
-    {
-        std::unique_ptr<PCB_SHAPE> new_shape =
-                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::RECTANGLE );
+    const auto addRect =
+            [&]( const SHAPE_RECT& aRect )
+            {
+                std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::RECTANGLE );
 
-        if( !m_params.gridRounding.has_value() )
-        {
-            new_shape->SetPosition( aRect.GetPosition() );
-            new_shape->SetRectangleWidth( aRect.GetWidth() );
-            new_shape->SetRectangleHeight( aRect.GetHeight() );
-        }
-        else
-        {
-            const SHAPE_RECT grid_rect =
-                    GetRectRoundedToGridOutwards( aRect, *m_params.gridRounding );
-            new_shape->SetPosition( grid_rect.GetPosition() );
-            new_shape->SetRectangleWidth( grid_rect.GetWidth() );
-            new_shape->SetRectangleHeight( grid_rect.GetHeight() );
-        }
+                if( !m_params.gridRounding.has_value() )
+                {
+                    new_shape->SetPosition( aRect.GetPosition() );
+                    new_shape->SetRectangleWidth( aRect.GetWidth() );
+                    new_shape->SetRectangleHeight( aRect.GetHeight() );
+                }
+                else
+                {
+                    const SHAPE_RECT grid_rect = GetRectRoundedToGridOutwards( aRect, *m_params.gridRounding );
+                    new_shape->SetPosition( grid_rect.GetPosition() );
+                    new_shape->SetRectangleWidth( grid_rect.GetWidth() );
+                    new_shape->SetRectangleHeight( grid_rect.GetHeight() );
+                }
 
-        new_shape->SetLayer( layer );
-        new_shape->SetWidth( width );
+                new_shape->SetLayer( layer );
+                new_shape->SetWidth( width );
 
-        handler.AddNewItem( std::move( new_shape ) );
-    };
+                handler.AddNewItem( std::move( new_shape ) );
+            };
 
-    const auto addCircle = [&]( const CIRCLE& aCircle )
-    {
-        std::unique_ptr<PCB_SHAPE> new_shape =
-                std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::CIRCLE );
-        new_shape->SetCenter( aCircle.Center );
-        new_shape->SetRadius( aCircle.Radius );
-        new_shape->SetLayer( layer );
-        new_shape->SetWidth( width );
+    const auto addCircle =
+            [&]( const CIRCLE& aCircle )
+            {
+                std::unique_ptr<PCB_SHAPE> new_shape = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::CIRCLE );
+                new_shape->SetCenter( aCircle.Center );
+                new_shape->SetRadius( aCircle.Radius );
+                new_shape->SetLayer( layer );
+                new_shape->SetWidth( width );
 
-        handler.AddNewItem( std::move( new_shape ) );
-    };
+                handler.AddNewItem( std::move( new_shape ) );
+            };
 
-    const auto addCircleOrRect = [&]( const CIRCLE& aCircle )
-    {
-        if( m_params.roundCorners )
-        {
-            addCircle( aCircle );
-        }
-        else
-        {
-            const VECTOR2I   rVec{ aCircle.Radius, aCircle.Radius };
-            const SHAPE_RECT rect{ aCircle.Center - rVec, aCircle.Center + rVec };
-            addRect( rect );
-        }
-    };
+    const auto addCircleOrRect =
+            [&]( const CIRCLE& aCircle )
+            {
+                if( m_params.roundCorners )
+                {
+                    addCircle( aCircle );
+                }
+                else
+                {
+                    const VECTOR2I   rVec{ aCircle.Radius, aCircle.Radius };
+                    const SHAPE_RECT rect{ aCircle.Center - rVec, aCircle.Center + rVec };
+                    addRect( rect );
+                }
+            };
 
     switch( aItem.Type() )
     {
@@ -931,14 +929,11 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             box.Inflate( m_params.outsetDistance );
 
             int radius = m_params.outsetDistance;
+
             if( pad_shape == PAD_SHAPE::ROUNDRECT )
-            {
                 radius += pad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
-            }
             else if( pad_shape == PAD_SHAPE::OVAL )
-            {
                 radius += std::min( pad_size.x, pad_size.y ) / 2;
-            }
 
             radius = m_params.roundCorners ? radius : 0;
 
@@ -952,6 +947,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             AddSuccess();
             break;
         }
+
         case PAD_SHAPE::CIRCLE:
         {
             const int radius = pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2 + m_params.outsetDistance;
@@ -960,11 +956,11 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             AddSuccess();
             break;
         }
+
         case PAD_SHAPE::TRAPEZOID:
-        {
             // Not handled yet, but could use a generic convex polygon outset method.
             break;
-        }
+
         default:
             // Other pad shapes are not supported with exact outsets
             break;
@@ -1009,14 +1005,15 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             AddSuccess();
             break;
         }
+
         case SHAPE_T::CIRCLE:
         {
-            const CIRCLE circle( pcb_shape.GetCenter(),
-                                 pcb_shape.GetRadius() + m_params.outsetDistance );
+            const CIRCLE circle( pcb_shape.GetCenter(), pcb_shape.GetRadius() + m_params.outsetDistance );
             addCircleOrRect( circle );
             AddSuccess();
             break;
         }
+
         case SHAPE_T::SEGMENT:
         {
             // For now just make the whole stadium shape and let the user delete the unwanted bits
@@ -1044,8 +1041,8 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             AddSuccess();
             break;
         }
+
         case SHAPE_T::ARC:
-        {
             // Not 100% sure what a sensible non-round outset of an arc is!
             // (not sure it's that important in practice)
 
@@ -1081,7 +1078,6 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             }
 
             break;
-        }
 
         default:
             // Other shapes are not supported with exact outsets
@@ -1091,13 +1087,12 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
         break;
     }
+
     default:
         // Other item types are not supported with exact outsets
         break;
     }
 
     if( m_params.deleteSourceItems )
-    {
         handler.DeleteItem( aItem );
-    }
 }

@@ -159,14 +159,11 @@ public:
         SetupStandardButtons();
 
         m_rbMimicLineWidth->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
-                                     wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
-                                     nullptr, this );
+                                     wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ), nullptr, this );
         m_rbCenterline->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
-                                 wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
-                                 nullptr, this );
+                                 wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ), nullptr, this );
         m_rbBoundingHull->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
-                                   wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
-                                   nullptr, this );
+                                   wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ), nullptr, this );
 
         finishDialogSettings();
     }
@@ -237,10 +234,10 @@ private:
 
 
 CONVERT_TOOL::CONVERT_TOOL() :
-    PCB_TOOL_BASE( "pcbnew.Convert" ),
-    m_selectionTool( nullptr ),
-    m_menu( nullptr ),
-    m_frame( nullptr )
+        PCB_TOOL_BASE( "pcbnew.Convert" ),
+        m_selectionTool( nullptr ),
+        m_menu( nullptr ),
+        m_frame( nullptr )
 {
     initUserSettings();
 }
@@ -383,8 +380,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                     polySet.Simplify();
 
                     // Now inflate the bounding hull by cfg.m_Gap
-                    polySet.Inflate( cfg.m_Gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, bds.m_MaxError,
-                                     ERROR_OUTSIDE );
+                    polySet.Inflate( cfg.m_Gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, bds.m_MaxError, ERROR_OUTSIDE );
                 }
                 else
                 {
@@ -1440,7 +1436,8 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
 
     // Persistent settings between dialog invocations
     // Init with some sensible defaults
-    static OUTSET_ROUTINE::PARAMETERS outset_params_fp_edit{
+    static OUTSET_ROUTINE::PARAMETERS outset_params_fp_edit
+    {
         pcbIUScale.mmToIU( 0.25 ), // A common outset value
         false,
         false,
@@ -1451,7 +1448,8 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
         false,
     };
 
-    static OUTSET_ROUTINE::PARAMETERS outset_params_pcb_edit{
+    static OUTSET_ROUTINE::PARAMETERS outset_params_pcb_edit
+    {
         pcbIUScale.mmToIU( 1 ),
         true,
         true,
