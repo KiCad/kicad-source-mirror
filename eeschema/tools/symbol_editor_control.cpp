@@ -972,6 +972,24 @@ int SYMBOL_EDITOR_CONTROL::ChangeUnit( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::PreviousSymbol( const TOOL_EVENT& aEvent )
+{
+    if( SYMBOL_VIEWER_FRAME* viewerFrame = static_cast<SYMBOL_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        viewerFrame->SelectPreviousSymbol();
+
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::NextSymbol( const TOOL_EVENT& aEvent )
+{
+    if( SYMBOL_VIEWER_FRAME* viewerFrame = static_cast<SYMBOL_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        viewerFrame->SelectNextSymbol();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 {
     DIALOG_LIB_FIELDS_TABLE::SCOPE scope = DIALOG_LIB_FIELDS_TABLE::SCOPE_LIBRARY;
@@ -1036,4 +1054,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::PreviousSymbol,        SCH_ACTIONS::previousSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::NextSymbol,            SCH_ACTIONS::nextSymbol.MakeEvent() );
 }

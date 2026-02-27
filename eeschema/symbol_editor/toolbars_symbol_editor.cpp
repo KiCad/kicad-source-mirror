@@ -110,14 +110,9 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
         break;
 
     case TOOLBAR_LOC::TOP_MAIN:
-        config.AppendAction( SCH_ACTIONS::newSymbol );
-
-/* TODO (ISM): Handle visibility changes
-        if( !IsSymbolFromSchematic() )
-            config.AppendAction( ACTIONS::saveAll );
-        else
-            config.AppendAction( ACTIONS::save );
-*/
+        config.AppendAction( SCH_ACTIONS::newSymbol )
+              .AppendAction( ACTIONS::saveAll )
+              .AppendAction( ACTIONS::save );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::undo )

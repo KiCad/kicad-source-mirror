@@ -46,15 +46,8 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_VIEWER_TOOLBAR_SETTINGS::DefaultTool
         return std::nullopt;
 
     case TOOLBAR_LOC::TOP_MAIN:
-        /* TODO (ISM): Move these to actions
-        m_tbTopMain->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-            KiScaledBitmap( BITMAPS::lib_previous, this ),
-            _( "Display previous symbol" ) );
-
-        m_tbTopMain->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-                KiScaledBitmap( BITMAPS::lib_next, this ),
-                _( "Display next symbol" ) );
-        */
+        config.AppendAction( SCH_ACTIONS::previousSymbol )
+              .AppendAction( SCH_ACTIONS::nextSymbol );
 
         config.AppendSeparator()
               .AppendAction( ACTIONS::zoomRedraw )

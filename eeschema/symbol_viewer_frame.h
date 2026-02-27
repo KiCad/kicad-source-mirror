@@ -89,13 +89,14 @@ public:
     /**
      * Set the selected library in the library window.
      */
-    void SetSelectedLibrary( const wxString& aLibName,
-                             const wxString& aSubLibName = wxEmptyString );
+    void SetSelectedLibrary( const wxString& aLibName, const wxString& aSubLibName = wxEmptyString );
 
     /**
      * Set the selected symbol.
      */
     void SetSelectedSymbol( const wxString& aSymbolName );
+    void SelectNextSymbol();
+    void SelectPreviousSymbol();
 
     // Accessors:
     /**
@@ -146,8 +147,6 @@ private:
     void OnSymFilter( wxCommandEvent& aEvent );
     void OnCharHook( wxKeyEvent& aEvent ) override;
 
-    void onSelectNextSymbol( wxCommandEvent& aEvent );
-    void onSelectPreviousSymbol( wxCommandEvent& aEvent );
     void onSelectSymbolUnit( wxCommandEvent& aEvent );
     void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
 
