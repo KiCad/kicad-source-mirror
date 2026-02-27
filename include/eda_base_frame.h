@@ -200,6 +200,8 @@ public:
     static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
                                      ACTION_CONDITIONS aCond );
 
+    void onUpdateUI( wxUpdateUIEvent& aEvent );
+
     virtual void OnMove( wxMoveEvent& aEvent )
     {
         aEvent.Skip();
@@ -826,6 +828,9 @@ private:
 
     /// Map containing the UI update handlers registered with wx for each action.
     std::map<int, UIUpdateHandler> m_uiUpdateMap;
+
+    /// True once the single wxID_ANY UPDATE_UI handler has been bound.
+    bool m_uiUpdateHandlerBound;
 
     /// Set by the close window event handler after frames are asked if they can close.
     /// Allows other functions when called to know our state is cleanup.

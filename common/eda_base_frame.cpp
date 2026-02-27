@@ -192,6 +192,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
     m_tbTopAux = nullptr;
     m_tbRight      = nullptr;
     m_tbLeft   = nullptr;
+    m_uiUpdateHandlerBound = false;
 
     commonInit( aFrameType );
 
@@ -447,25 +448,37 @@ void EDA_BASE_FRAME::OnMenuEvent( wxMenuEvent& aEvent )
 
 void EDA_BASE_FRAME::RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions )
 {
-    UIUpdateHandler evtFunc = std::bind( &EDA_BASE_FRAME::HandleUpdateUIEvent,
-                                         std::placeholders::_1,
-                                         this,
-                                         aConditions );
+    // Bind a single wxID_ANY dispatcher on first use rather than one Bind() per action.
+    // wxEvtHandler::SearchDynamicEventTable does a linear scan through all dynamic bindings
+    // for every event dispatch (including mouse motion), so 150 individual bindings cost
+    // O(150) per event regardless of event type. One wxID_ANY binding costs O(1).
+    if( !m_uiUpdateHandlerBound )
+    {
+        Bind( wxEVT_UPDATE_UI, &EDA_BASE_FRAME::onUpdateUI, this );
+        m_uiUpdateHandlerBound = true;
+    }
 
-    m_uiUpdateMap[aID] = evtFunc;
-
-    Bind( wxEVT_UPDATE_UI, evtFunc, aID );
+    m_uiUpdateMap[aID] = std::bind( &EDA_BASE_FRAME::HandleUpdateUIEvent,
+                                    std::placeholders::_1,
+                                    this,
+                                    aConditions );
 }
 
 
 void EDA_BASE_FRAME::UnregisterUIUpdateHandler( int aID )
 {
-    const auto it = m_uiUpdateMap.find( aID );
+    m_uiUpdateMap.erase( aID );
+}
 
-    if( it == m_uiUpdateMap.end() )
-        return;
 
-    Unbind( wxEVT_UPDATE_UI, it->second, aID );
+void EDA_BASE_FRAME::onUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    const auto it = m_uiUpdateMap.find( aEvent.GetId() );
+
+    if( it != m_uiUpdateMap.end() )
+        it->second( aEvent );
+    else
+        aEvent.Skip();
 }
 
 
