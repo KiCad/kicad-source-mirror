@@ -127,8 +127,26 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
         ctx.comment = aEntry.constraintData->GetComment();
 
         // Generate layer clause if layers are specified
-        if( aEntry.layerCondition.any() && aBoard )
-            ctx.layerClause = generateLayerClause( aEntry.layerCondition, aBoard );
+        if( aEntry.layerCondition.any() )
+        {
+            if( aEntry.panelType == SILK_TO_SOLDERMASK_CLEARANCE )
+            {
+                bool isFront = aEntry.layerCondition.test( F_SilkS );
+                wxString silkCond = wxString::Format(
+                        wxS( "A.Layer == '%s' && B.Layer == '%s'" ),
+                        isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ),
+                        isFront ? wxS( "F.Mask" ) : wxS( "B.Mask" ) );
+
+                if( !ctx.conditionExpression.IsEmpty() )
+                    ctx.conditionExpression = silkCond + wxS( " && " ) + ctx.conditionExpression;
+                else
+                    ctx.conditionExpression = silkCond;
+            }
+            else if( aBoard )
+            {
+                ctx.layerClause = generateLayerClause( aEntry.layerCondition, aBoard );
+            }
+        }
 
         ruleText = aEntry.constraintData->GenerateRule( ctx );
     }

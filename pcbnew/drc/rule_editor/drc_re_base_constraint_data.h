@@ -213,8 +213,24 @@ protected:
             }
         }
 
+        wxString condExpr = aContext.conditionExpression;
+
         if( !aContext.layerClause.IsEmpty() )
-            rule << wxS( "\t" ) << aContext.layerClause << wxS( "\n" );
+        {
+            if( aContext.layerClause.StartsWith( wxS( "(condition " ) ) )
+            {
+                wxString expr = aContext.layerClause.AfterFirst( '"' ).BeforeLast( '"' );
+
+                if( !condExpr.IsEmpty() )
+                    condExpr = expr + wxS( " && " ) + condExpr;
+                else
+                    condExpr = expr;
+            }
+            else
+            {
+                rule << wxS( "\t" ) << aContext.layerClause << wxS( "\n" );
+            }
+        }
 
         for( const wxString& clause : aConstraintClauses )
         {
@@ -224,8 +240,8 @@ protected:
             rule << wxS( "\t" ) << clause << wxS( "\n" );
         }
 
-        if( !aContext.conditionExpression.IsEmpty() )
-            rule << wxS( "\t(condition \"" ) << quoteString( aContext.conditionExpression ) << wxS( "\")\n" );
+        if( !condExpr.IsEmpty() )
+            rule << wxS( "\t(condition \"" ) << quoteString( condExpr ) << wxS( "\")\n" );
 
         rule << wxS( ")" );
 

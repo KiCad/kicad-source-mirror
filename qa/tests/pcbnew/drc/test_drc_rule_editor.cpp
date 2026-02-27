@@ -34,6 +34,7 @@
 #include <drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h>
 #include <drc/rule_editor/drc_re_allowed_orientation_constraint_data.h>
 #include <drc/rule_editor/drc_rule_editor_enums.h>
+#include <drc/rule_editor/drc_re_numeric_constraint_types.h> 
 #include <drc/drc_rule.h>
 #include <drc/rule_editor/drc_re_base_constraint_data.h>
 #include <drc/rule_editor/drc_re_numeric_input_constraint_data.h>
@@ -1915,6 +1916,71 @@ BOOST_AUTO_TEST_CASE( ItemFilterExcludesNetInfoAndGenerator )
             break;
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE( RuleSaverSilkToSoldermaskWithCondition )
+{
+    // Test: Silk-to-soldermask merges layer condition with user condition
+    // into a single (condition ...) clause, not two separate ones.
+    DRC_RE_LOADED_PANEL_ENTRY entry;
+    entry.panelType = SILK_TO_SOLDERMASK_CLEARANCE;
+    entry.ruleName = "SilkMaskTest";
+    entry.condition = "A.NetClass == 'Power'";
+    entry.wasEdited = true;
+    entry.layerCondition = LSET( { F_SilkS } );
+
+    auto data = std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>();
+    data->SetRuleName( "SilkMaskTest" );
+    data->SetConstraintCode( "silk_clearance" );
+    data->SetRuleCondition( "A.NetClass == 'Power'" );
+    data->SetNumericInputValue( 0.15 );
+    entry.constraintData = data;
+
+    DRC_RULE_SAVER saver;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = { entry };
+    wxString result = saver.GenerateRulesText( entries, nullptr );
+
+    // Should have a single merged condition, not two (condition ...) lines
+    BOOST_CHECK( result.Contains( "F.SilkS" ) );
+    BOOST_CHECK( result.Contains( "F.Mask" ) );
+    BOOST_CHECK( result.Contains( "Power" ) );
+    BOOST_CHECK( !result.Contains( "(layer" ) );
+
+    // Count occurrences of "(condition" — must be exactly one
+    int condCount = 0;
+    size_t pos = 0;
+    while( ( pos = result.find( "(condition", pos ) ) != wxString::npos )
+    {
+        condCount++;
+        pos++;
+    }
+    BOOST_CHECK_EQUAL( condCount, 1 );
+}
+
+BOOST_AUTO_TEST_CASE( RuleSaverSilkToSoldermaskNoExtraCondition )
+{
+    // Test: Silk-to-soldermask without extra condition still produces
+    // a condition clause, not a (layer ...) clause.
+    DRC_RE_LOADED_PANEL_ENTRY entry;
+    entry.panelType = SILK_TO_SOLDERMASK_CLEARANCE;
+    entry.ruleName = "SilkMaskSimple";
+    entry.wasEdited = true;
+    entry.layerCondition = LSET( { B_SilkS } );
+
+    auto data = std::make_shared<DRC_RE_SILK_TO_SOLDERMASK_CLEARANCE_CONSTRAINT_DATA>();
+    data->SetRuleName( "SilkMaskSimple" );
+    data->SetConstraintCode( "silk_clearance" );
+    data->SetNumericInputValue( 0.1 );
+    entry.constraintData = data;
+
+    DRC_RULE_SAVER saver;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = { entry };
+    wxString result = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK( result.Contains( "B.SilkS" ) );
+    BOOST_CHECK( result.Contains( "B.Mask" ) );
+    BOOST_CHECK( result.Contains( "(condition" ) );
+    BOOST_CHECK( !result.Contains( "(layer" ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
