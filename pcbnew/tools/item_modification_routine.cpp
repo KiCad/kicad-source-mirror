@@ -1093,6 +1093,8 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         break;
     }
 
-    if( m_params.deleteSourceItems )
+    // It would be nice if we could differentiate which items went with which in the mixed success/failure
+    // case, but since we can't it's better to err on the side of safety.
+    if( m_params.deleteSourceItems && GetSuccesses() > 0 && GetFailures() == 0 )
         handler.DeleteItem( aItem );
 }
