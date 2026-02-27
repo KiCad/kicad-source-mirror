@@ -63,6 +63,7 @@
 #include <wx/log.h>
 
 #include <memory>
+#include <unordered_set>
 
 #include <advanced_config.h>
 #include <pcbnew_settings.h>
@@ -685,13 +686,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
 void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems )
 {
-    std::set<const PNS::ITEM*> remainingItems( aItems.begin(), aItems.end() );
+    if( aItems.empty() )
+        return;
+
+    std::unordered_set<const PNS::ITEM*> dirtyItems( aItems.begin(), aItems.end() );
 
     for( auto it = m_clearanceCache.begin(); it != m_clearanceCache.end(); )
     {
-        bool dirty = remainingItems.count( it->first.A ) || remainingItems.count( it->first.B );
-
-        if( dirty )
+        if( dirtyItems.contains( it->first.A ) || dirtyItems.contains( it->first.B ) )
             it = m_clearanceCache.erase( it );
         else
             ++it;
@@ -699,7 +701,7 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>
 
     for( auto it = m_hullCache.begin(); it != m_hullCache.end(); )
     {
-        if( remainingItems.count( it->first.item ) )
+        if( dirtyItems.contains( it->first.item ) )
             it = m_hullCache.erase( it );
         else
             ++it;
