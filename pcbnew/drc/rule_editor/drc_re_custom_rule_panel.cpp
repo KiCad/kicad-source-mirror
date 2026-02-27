@@ -308,7 +308,7 @@ void DRC_RE_CUSTOM_RULE_PANEL::onCheckSyntax( wxCommandEvent& aEvent )
     }
 
     wxString body = m_textCtrl->GetText();
-    wxString ruleName = m_constraintData ? m_constraintData->GetRuleName() : wxS( "test" );
+    wxString ruleName = m_constraintData ? m_constraintData->GetRuleName() : wxString( wxS( "test" ) );
     ruleName.Replace( wxS( "\"" ), wxS( "\\\"" ) );
     wxString rulesText = wxString::Format( wxS( "(version 1)\n(rule \"%s\"\n%s)" ), ruleName, body );
 
