@@ -167,8 +167,10 @@ void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
 
     // If the user has a field named "Keywords", then prefer that.  Otherwise add the KiCad
     // keywords.
-    if( !aColumnMap.contains( _( "Keywords" ) ) )
-        aColumnMap[_( "Keywords" )] = GetShownKeyWords();
+    const wxString& localizedKeywords = _( "Keywords" );
+
+    if( !aColumnMap.contains( localizedKeywords ) )
+        aColumnMap[localizedKeywords] = GetShownKeyWords();
 }
 
 
