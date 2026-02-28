@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/platform.h>
 #include <wx/version.h>
 
 #if ( defined( __unix__ ) and not defined( __APPLE__ ) )
