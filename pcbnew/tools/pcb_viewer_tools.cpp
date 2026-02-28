@@ -382,22 +382,10 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         // move or drag when origin set updates rules
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            auto snap = LEADER_MODE::DIRECT;
-
-            if( frame()->IsType( FRAME_PCB_EDITOR ) )
-            {
-                snap = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AngleSnapMode;
-            }
-            else if( frame()->IsType( FRAME_FOOTPRINT_EDITOR ) )
-            {
-                snap = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AngleSnapMode;
-            }
-            else
-            {
-                snap = frame()->GetViewerSettingsBase()->m_ViewersDisplay.m_AngleSnapMode;
-            }
-
-            twoPtMgr.SetAngleSnap( snap );
+            // The measurement tool always measures in a direct line; holding Shift
+            // constrains to 45° increments for convenience.
+            twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) ? LEADER_MODE::DEG45
+                                                              : LEADER_MODE::DIRECT );
             twoPtMgr.SetEnd( cursorPos );
 
             view.SetVisible( &ruler, true );
