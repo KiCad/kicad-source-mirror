@@ -157,14 +157,19 @@ class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA : public DRC_RE_ABSOLUTE_L
 public:
     using DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA;
 
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_matched_length_diff_pair; }
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_matched_length_diff_pair_v2; }
 
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 335 + DRC_RE_OVERLAY_XO, 365 + DRC_RE_OVERLAY_XO, 33 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length
-            { 335 + DRC_RE_OVERLAY_XO, 365 + DRC_RE_OVERLAY_XO, 103 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length
-            { 335 + DRC_RE_OVERLAY_XO, 365 + DRC_RE_OVERLAY_XO, 173 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_length
+            { 527 + DRC_RE_OVERLAY_XO, 567 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // min_length
+            { 670 + DRC_RE_OVERLAY_XO, 710 + DRC_RE_OVERLAY_XO, 162 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // opt_length
+            { 817 + DRC_RE_OVERLAY_XO, 857 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // max_length
+            { 777 + DRC_RE_OVERLAY_XO, 815 + DRC_RE_OVERLAY_XO, -3 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // max_skew
         };
     }
 
@@ -194,6 +199,16 @@ public:
         DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::CopyFrom( source );
 
         m_maxSkew = source.m_maxSkew;
+    }
+
+    VALIDATION_RESULT Validate() const override
+    {
+        VALIDATION_RESULT result = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::Validate();
+
+        if( m_maxSkew < 0 )
+            result.AddError( _( "Maximum Skew must be greater than or equal to 0" ) );
+
+        return result;
     }
 
 private:

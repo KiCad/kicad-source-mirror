@@ -333,6 +333,7 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_rtg_diff_pair_overlay_panel.cpp
     drc/rule_editor/drc_re_min_txt_ht_th_overlay_panel.cpp
     drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp
+    drc/rule_editor/drc_re_matched_length_diff_pair_overlay_panel.cpp
     drc/rule_editor/drc_re_via_style_overlay_panel.cpp
     drc/rule_editor/drc_re_numeric_input_overlay_panel.cpp
     drc/rule_editor/drc_re_bool_input_overlay_panel.cpp

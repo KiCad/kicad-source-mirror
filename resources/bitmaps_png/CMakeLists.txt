@@ -730,6 +730,7 @@ set( BMAPS_CONSTRAINTS
     hole-to-hole-distance
     length
     matched-length-diff-pair
+    matched-length-diff-pair-v2
     maximum-allowed-deviation
     maximum-via-count
     minimum-angular-ring

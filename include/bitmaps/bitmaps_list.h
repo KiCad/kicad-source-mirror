@@ -717,6 +717,7 @@ enum class BITMAPS : unsigned int
     constraint_maximum_allowed_deviation,
     constraint_minimum_angular_ring,
     constraint_matched_length_diff_pair,
+    constraint_matched_length_diff_pair_v2,
     constraint_routing_diff_pair,
     constraint_routing_width,
     constraint_clearance,

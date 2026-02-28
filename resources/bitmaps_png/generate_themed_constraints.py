@@ -52,6 +52,7 @@ CONSTRAINT_FILES = {
     'solderpaste-expansion.svg': 'solderpaste-expansion.svg',
     'maximum_allowed_deviation.svg': 'maximum-allowed-deviation.svg',
     'matched-lenght-diff-pair.svg': 'matched-length-diff-pair.svg',
+    "matched-length-diff-pair-v2.svg": "matched-length-diff-pair-v2.svg",
 }
 
 

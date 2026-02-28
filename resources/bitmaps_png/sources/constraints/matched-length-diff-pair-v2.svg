@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="850"
+   height="260"
+   viewBox="0 0 850 260"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="constraint_matched_length_diff_pair_meander.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.89263174"
+     inkscape:cx="430.74874"
+     inkscape:cy="138.91507"
+     inkscape:window-width="1512"
+     inkscape:window-height="839"
+     inkscape:window-x="0"
+     inkscape:window-y="34"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg14" />
+  <defs
+     id="defs2">
+    <!-- Inward-pointing arrowheads for dimension lines -->
+    <marker
+       id="ah-start"
+       markerWidth="10"
+       markerHeight="6"
+       refX="0"
+       refY="4"
+       orient="auto"
+       markerUnits="userSpaceOnUse"
+       viewBox="0 0 10 6"
+       preserveAspectRatio="xMidYMid">
+      <polygon
+         points="0,1 10,4 0,7"
+         fill="#B0B0B0"
+         id="polygon1" />
+    </marker>
+    <marker
+       id="ah-end"
+       markerWidth="10"
+       markerHeight="6"
+       refX="10"
+       refY="4"
+       orient="auto"
+       markerUnits="userSpaceOnUse"
+       viewBox="0 0 10 6"
+       preserveAspectRatio="xMidYMid">
+      <polygon
+         points="10,1 0,4 10,7"
+         fill="#B0B0B0"
+         id="polygon2" />
+    </marker>
+  </defs>
+  <!-- ===== PADS ===== -->
+  <!-- Left pads (round, through-hole style) -->
+  <circle
+     cx="30"
+     cy="75"
+     r="10"
+     fill="#5b9bd5"
+     id="circle2" />
+  <circle
+     cx="30"
+     cy="125"
+     r="10"
+     fill="#5B9BD5"
+     id="circle3" />
+  <!-- Right pads (rectangular, SMD style) -->
+  <rect
+     x="794.49725"
+     y="91.655205"
+     width="24"
+     height="24"
+     rx="3"
+     fill="#5b9bd5"
+     id="rect3" />
+  <rect
+     x="747.22162"
+     y="112.6461"
+     width="24"
+     height="24"
+     rx="3"
+     fill="#5b9bd5"
+     id="rect4" />
+  <!-- ===== DIFF PAIR TRACES ===== -->
+  <!-- Coupled differential pair with constant spacing (16px center-to-center).
+       At turns: outer trace R=30, inner trace R=14.
+       Channel pitch = 44px. 8 channels of meander.
+       y_top=38 (top turn centers), y_bot=108 (bottom turn centers).
+       Traces converge from pad spacing (50px) to pair spacing (16px) at entry/exit. -->
+  <!-- Trace P (top/outer at top turns, inner at bottom turns) -->
+  <path
+     d="M 40,75 H 70 C 82.150264,75 92,65.150264 92,53 V 38 c 0,-16.568554 13.43146,-29.999987 30,-29.999987 16.56854,0 30,13.431433 30,29.999987 v 70 c -0.2766,6.92805 5.7148,13.10725 13.44679,13.10725 C 173.17878,121.10725 180,114.92805 180,108 V 38 c 0,-16.568554 13.43146,-29.999987 30,-29.999987 16.56854,0 30,13.431433 30,29.999987 v 70 c 0.2766,9.6941 7.37443,13.66046 15.10642,13.66046 7.73199,0 13.44679,-5.07278 12.89358,-13.66046 V 38 c 0,-16.568554 13.43146,-29.999987 30,-29.999987 16.56854,0 30,13.431433 30,29.999987 v 70 c 0.20009,8.07518 5.86783,15.01317 13.59982,15.01317 7.73199,0 14.60027,-6.33772 14.40018,-15.01317 V 38 c 0,-16.568554 13.43146,-29.999987 30,-29.999987 16.56854,0 29.62284,13.435726 30,29.999987 l 1.00545,44.157924 c -0.22012,13.430703 7.15554,21.866686 22,21.999996 h 357"
+     stroke="#5b9bd5"
+     stroke-width="7"
+     fill="none"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="path4"
+     sodipodi:nodetypes="cssssscscssscscssscscsssccc" />
+  <!-- Trace N (bottom/inner at top turns, outer at bottom turns) -->
+  <path
+     d="m 40,125 h 46 c 12.150264,0 22,-9.84974 22,-22 V 38 c 0,-7.731992 6.26801,-13.999994 14,-13.999994 7.73199,0 14,6.268002 14,13.999994 v 70 c 0.2766,17.73041 12.32504,31.68282 28.89358,31.68282 C 181.46212,139.68282 196,129.32627 196,108 V 38 c 0,-7.731992 6.26801,-13.999994 14,-13.999994 7.73199,0 14,6.268002 14,13.999994 v 70 c 0.2766,18.83683 14.53788,31.40622 31.10642,31.40622 16.56854,0 29.44679,-11.18637 28.89358,-31.40622 V 38 c 0,-7.731992 6.26801,-13.999994 14,-13.999994 7.73199,0 14,6.268002 14,13.999994 v 70 c 0,16.64651 12.83119,31.62797 29.39973,31.62797 16.56854,0 31.20054,-12.78046 30.60027,-31.62797 V 38 c 0,-7.731992 6.26801,-13.999994 14,-13.999994 7.73199,0 14,6.268002 14,13.999994 v 59.802222 c -0.0434,13.047588 13.94904,26.944898 29.14694,26.548058 L 747,125"
+     stroke="#5b9bd5"
+     stroke-width="7"
+     fill="none"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="path5"
+     sodipodi:nodetypes="cssssscscssscscssscscsssccc" />
+  <!-- ===== LENGTH DIMENSION ARROWS (below traces) ===== -->
+  <!-- Common left extension line (dashed, from pad area down to arrows) -->
+  <line
+     x1="20.16864"
+     y1="140"
+     x2="20.16864"
+     y2="204.44565"
+     stroke="#707070"
+     stroke-width="0.7"
+     stroke-dasharray="3, 3"
+     id="line5" />
+  <!-- Min length: x=30 to x=285, y=190 -->
+  <line
+     x1="524.33136"
+     y1="138.8214"
+     x2="524.33136"
+     y2="154.8214"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line6" />
+  <line
+     x1="30.978367"
+     y1="147.80708"
+     x2="513.7215"
+     y2="147.80708"
+     stroke="#b0b0b0"
+     stroke-width="2.06386"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line7"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(290, 183) -->
+  <!-- Opt length: x=30 to x=475, y=210 -->
+  <line
+     x1="666.53131"
+     y1="167.05452"
+     x2="666.53131"
+     y2="183.05452"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line8" />
+  <line
+     x1="30.206526"
+     y1="174.81697"
+     x2="655.6615"
+     y2="174.81697"
+     stroke="#b0b0b0"
+     stroke-width="1.77832"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line9"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(480, 203) -->
+  <!-- Max length: x=30 to x=700, y=230 -->
+  <line
+     x1="819.27112"
+     y1="194.58308"
+     x2="819.27112"
+     y2="210.58308"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line10"
+     style="stroke-width:1.123;stroke-dasharray:none" />
+  <line
+     x1="30.613073"
+     y1="203.02974"
+     x2="808.76239"
+     y2="203.02974"
+     stroke="#b0b0b0"
+     stroke-width="1.61654"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line11"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(705, 223) -->
+  <!-- ===== SKEW DIMENSION ARROW (right side) ===== -->
+  <!-- Brackets the extra meander section of trace N -->
+  <line
+     x1="819.00098"
+     y1="25.205948"
+     x2="819.00098"
+     y2="106.14098"
+     stroke="#808080"
+     stroke-width="0.971719"
+     id="line12" />
+  <line
+     x1="771.53912"
+     y1="25.091061"
+     x2="771.53912"
+     y2="128.11938"
+     stroke="#808080"
+     stroke-width="1.09636"
+     id="line13" />
+  <line
+     x1="781.61816"
+     y1="30.48731"
+     x2="808.73627"
+     y2="30.48731"
+     stroke="#b0b0b0"
+     stroke-width="1.4277"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line14"
+     style="stroke-width:1.0841;stroke-dasharray:none;marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(773, 161) -->
+</svg>
