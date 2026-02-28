@@ -283,7 +283,7 @@ VIEW::VIEW() :
         l.target         = TARGET_CACHED;
     }
 
-    sortOrderedLayers();
+    SortOrderedLayers();
 
     m_preview.reset( new KIGFX::VIEW_GROUP() );
     Add( m_preview.get() );
@@ -658,11 +658,12 @@ void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuri
 }
 
 
-void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder )
+void VIEW::SetLayerOrder( int aLayer, int aRenderingOrder, bool aAutoSort )
 {
     m_layers[aLayer].renderingOrder = aRenderingOrder;
 
-    sortOrderedLayers();
+    if( aAutoSort )
+        SortOrderedLayers();
 }
 
 
@@ -705,7 +706,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
     // Transfer reordered data (using the copy assignment operator ):
     m_layers = new_map;
 
-    sortOrderedLayers();
+    SortOrderedLayers();
 
     for( VIEW_ITEM* item : *m_allItems )
     {
@@ -910,7 +911,7 @@ void VIEW::ClearTopLayers()
 
 void VIEW::UpdateAllLayersOrder()
 {
-    sortOrderedLayers();
+    SortOrderedLayers();
 
     if( m_gal->IsVisible() )
     {
@@ -1289,7 +1290,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 }
 
 
-void VIEW::sortOrderedLayers()
+void VIEW::SortOrderedLayers()
 {
     int n = 0;
 
@@ -1619,7 +1620,7 @@ std::unique_ptr<VIEW> VIEW::DataReference() const
     std::unique_ptr<VIEW> ret = std::make_unique<VIEW>();
     ret->m_allItems = m_allItems;
     ret->m_layers = m_layers;
-    ret->sortOrderedLayers();
+    ret->SortOrderedLayers();
     return ret;
 }
 

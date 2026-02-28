@@ -510,8 +510,10 @@ public:
      *
      * @param aLayer is the layer.
      * @param aRenderingOrder is an arbitrary number denoting the rendering order.
+     * @param aAutoSort set to false to avoid sorting. In that case,
+                        call SortOrderedLayers() after setting all layer orders.
      */
-    void SetLayerOrder( int aLayer, int aRenderingOrder );
+    void SetLayerOrder( int aLayer, int aRenderingOrder, bool aAutoSort = true );
 
     /**
      * Return rendering order of a particular layer. Lower values are rendered first.
@@ -520,6 +522,12 @@ public:
      * @return Rendering order of a particular layer.
      */
     int GetLayerOrder( int aLayer ) const;
+
+    /**
+     * Sorts m_orderedLayers after layer rendering order has changed.
+     * Must be called after calling SetLayerOrder with aAutoSort = false
+     */ 
+    void SortOrderedLayers();
 
     /**
      * Change the order of given layer ids, so after sorting the order corresponds to layers
@@ -812,9 +820,6 @@ protected:
      *                   drawing mode for cached items.
      */
     void draw( VIEW_GROUP* aGroup, bool aImmediate = false );
-
-    /// Sort m_orderedLayers when layer rendering order has changed.
-    void sortOrderedLayers();
 
     /// Clear cached GAL group numbers (*ONLY* numbers stored in VIEW_ITEMs, not group objects
     /// used by GAL).
