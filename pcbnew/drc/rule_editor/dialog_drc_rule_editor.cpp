@@ -43,6 +43,7 @@
 #include "drc_re_permitted_layers_constraint_data.h"
 #include "drc_re_allowed_orientation_constraint_data.h"
 #include "drc_re_custom_rule_constraint_data.h"
+#include "drc_re_vias_under_smd_constraint_data.h"
 #include "drc_re_rule_loader.h"
 #include "drc_re_rule_saver.h"
 #include <drc/drc_engine.h>
@@ -862,6 +863,11 @@ RULE_TREE_NODE DIALOG_DRC_RULE_EDITOR::buildRuleTreeNode( RULE_TREE_ITEM_DATA* a
           []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
           {
               return std::make_shared<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( data );
+          } },
+        { DRC_RULE_EDITOR_CONSTRAINT_NAME::VIAS_UNDER_SMD,
+          []( const DRC_RE_BASE_CONSTRAINT_DATA& data )
+          {
+              return std::make_shared<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( data );
           } }
     };
 
