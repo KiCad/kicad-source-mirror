@@ -28,6 +28,8 @@
 #include <optional>
 
 #include <board.h>
+#include <pcb_shape.h>
+
 
 using namespace KI_TEST;
 
@@ -341,6 +343,70 @@ private:
 };
 
 
+class CIRCLE_EXPECTATION : public BOARD_EXPECTATION
+{
+public:
+    std::optional<VECTOR2I>    m_Position;
+    std::optional<int>         m_Radius;
+    std::optional<std::string> m_LayerName;
+
+    void RunTest( const BOARD& aBrd ) const override
+    {
+        bool found = false;
+
+        for( const auto& drawing : aBrd.Drawings() )
+        {
+            if( drawing->Type() != PCB_SHAPE_T )
+                continue;
+
+            const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( *drawing );
+
+            if( shape.GetShape() == SHAPE_T::CIRCLE )
+            {
+                const VECTOR2I     actualPos = shape.GetPosition();
+                const int          actualRadius = shape.GetRadius();
+                const PCB_LAYER_ID actualLayer = shape.GetLayer();
+
+                bool layerMatches = true;
+                if( m_LayerName.has_value() && m_LayerName != "*" )
+                {
+                    wxString actualLayerName = aBrd.GetLayerName( actualLayer );
+                    layerMatches = ( actualLayerName == m_LayerName );
+                }
+
+                bool positionMatches = !m_Position.has_value() || ( actualPos == m_Position );
+                bool radiusMatches = !m_Radius.has_value() || ( actualRadius == m_Radius );
+
+                if( positionMatches && radiusMatches && layerMatches )
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        BOOST_TEST( found );
+    }
+
+    std::string GetName() const override
+    {
+        std::ostringstream ss;
+        ss << "Circle:";
+        if( m_Position.has_value() )
+            ss << " position (" << pcbIUScale.IUTomm( m_Position->x ) << " mm, " << pcbIUScale.IUTomm( m_Position->y )
+               << " mm),";
+
+        if( m_Radius.has_value() )
+            ss << " radius " << pcbIUScale.IUTomm( *m_Radius ) << " mm,";
+
+        if( m_LayerName.has_value() )
+            ss << " layer '" << *m_LayerName << "'";
+
+        return ss.str();
+    }
+};
+
+
 static std::unique_ptr<BOARD_EXPECTATION> createFootprintExpectation( const nlohmann::json& aExpectationEntry )
 {
     auto footprintExpectation = std::make_unique<FOOTPRINT_EXPECTATION>();
@@ -431,6 +497,99 @@ static std::unique_ptr<BOARD_EXPECTATION> createLayerExpectation( const nlohmann
 }
 
 
+/**
+ * Parse a dimension from JSON, which can be either an integer (in mm) or a string with units (e.g. "25 mil")
+ *
+ * @param aJson The JSON value to parse
+ * @return The parsed dimension in internal units (IU)
+ */
+static int parsePcbDim( const nlohmann::json& aJson )
+{
+    if( aJson.is_number_integer() )
+    {
+        return pcbIUScale.mmToIU( aJson.get<int>() );
+    }
+    else if( aJson.is_string() )
+    {
+        const std::string& dimStr = aJson.get<std::string>();
+        double             dimIu = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MM, dimStr );
+        return KiROUND( dimIu );
+    }
+
+    throw std::runtime_error( "Expected dimension to be an integer or a string with units" );
+}
+
+
+static int parsePcbDim( const nlohmann::json& aJson, const std::string& aFieldName )
+{
+    if( !aJson.contains( aFieldName ) )
+    {
+        throw std::runtime_error( "Expectation entry must have a '" + aFieldName + "' field" );
+    }
+
+    return parsePcbDim( aJson[aFieldName] );
+}
+
+
+static VECTOR2I parsePosition( const nlohmann::json& aJson, const std::string& aFieldName )
+{
+    if( !aJson.contains( aFieldName ) )
+    {
+        throw std::runtime_error( "Expectation entry must have a '" + aFieldName + "' field" );
+    }
+
+    const auto& field = aJson[aFieldName];
+    if( !field.is_array() || field.size() != 2 )
+    {
+        throw std::runtime_error( "Expectation entry must have a '" + aFieldName
+                                  + "' field with an array of 2 entries" );
+    }
+
+    VECTOR2I pos;
+    pos.x = parsePcbDim( field[0] );
+    pos.y = parsePcbDim( field[1] );
+    return pos;
+}
+
+
+static std::unique_ptr<BOARD_EXPECTATION> createCircleExpectation( const nlohmann::json& aExpectationEntry )
+{
+    auto circleExpectation = std::make_unique<CIRCLE_EXPECTATION>();
+
+    circleExpectation->m_Position = parsePosition( aExpectationEntry, "position" );
+    circleExpectation->m_Radius = parsePcbDim( aExpectationEntry, "radius" );
+
+    if( !aExpectationEntry.contains( "layer" ) || !aExpectationEntry["layer"].is_string() )
+    {
+        throw std::runtime_error( "Circle expectation must have a 'layer' field with a string value" );
+    }
+
+    circleExpectation->m_LayerName = wxString( aExpectationEntry["layer"].get<std::string>() );
+
+    return circleExpectation;
+}
+
+
+static std::unique_ptr<BOARD_EXPECTATION> createGraphicExpectation( const nlohmann::json& aExpectationEntry )
+{
+    const auto& shapeEntry = aExpectationEntry["shape"];
+
+    if( !shapeEntry.is_string() )
+    {
+        throw std::runtime_error( "Graphic expectation must have a string 'shape' field" );
+    }
+
+    const std::string shape = shapeEntry.get<std::string>();
+
+    if( shape == "circle" )
+    {
+        return createCircleExpectation( aExpectationEntry );
+    }
+
+    throw std::runtime_error( "Unsupported graphic shape: " + shape );
+}
+
+
 std::unique_ptr<BOARD_EXPECTATION_TEST> BOARD_EXPECTATION_TEST::CreateFromJson( const std::string&    aBrdName,
                                                                                 const nlohmann::json& aBrdExpectations )
 {
@@ -469,6 +628,10 @@ std::unique_ptr<BOARD_EXPECTATION_TEST> BOARD_EXPECTATION_TEST::CreateFromJson( 
         else if( expectationType == "layers" )
         {
             expectation = createLayerExpectation( expectationEntry );
+        }
+        else if( expectationType == "graphic" )
+        {
+            expectation = createGraphicExpectation( expectationEntry );
         }
         else
         {

@@ -98,7 +98,16 @@
         },
         "ProiectBoard": {
             "formatVersion": "16.6",
-            "boardFile": "ProiectBoard.brd"
+            "boardFile": "ProiectBoard.brd",
+            "boardExpectations": [
+                {
+                    "type": "graphic",
+                    "shape": "circle",
+                    "position": ["-215 mil", "-2272 mil"],
+                    "radius": "25 mil",
+                    "layer": "DISPLAY_TOP"
+                }
+            ]
         },
         "rects": {
             "formatVersion": "17.4",
