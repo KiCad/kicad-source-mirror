@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-28 01:09+0000\n"
+"PO-Revision-Date: 2026-03-01 02:11+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -12950,11 +12950,11 @@ msgstr ""
 "Pri všetkých porušeniach pravidla '%s' zmeňte závažnosť na hodnotu Chyba"
 
 #: eeschema/dialogs/dialog_erc.cpp:776 eeschema/dialogs/dialog_erc.cpp:783
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
-"Závažnosti porušenia je možné upraviť v dialógovom okne Nastavenie dosky..."
+"Závažnosti porušenia je možné upraviť aj v dialógovom okne Nastavenie "
+"schémy..."
 
 #: eeschema/dialogs/dialog_erc.cpp:781 pcbnew/dialogs/dialog_drc.cpp:790
 #, c-format
@@ -12986,13 +12986,12 @@ msgstr "Upraviť závažnosti porušenia..."
 #: eeschema/dialogs/dialog_erc.cpp:810
 #, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Upraviť pripojenie rozstupu mriežky:"
+msgstr "Upraviť rozstup pripojovacej mriežky:"
 
 #: eeschema/dialogs/dialog_erc.cpp:822 eeschema/dialogs/dialog_erc.cpp:857
 #: pcbnew/dialogs/dialog_drc.cpp:813 pcbnew/dialogs/dialog_drc.cpp:865
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "Vylúčenie"
+msgstr "Komentár k vylúčeniu"
 
 #: eeschema/dialogs/dialog_erc.cpp:948
 #: eeschema/dialogs/dialog_schematic_setup.cpp:107
@@ -13657,9 +13656,9 @@ msgid "Cannot read symbol library '%s'."
 msgstr "Nie je možné prečítať knižnicu symbolov '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Súbor knižnice symbolov '%s' je prázdny."
+msgstr "Knižnica symbolov '%s' je prázdna."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:299
 #, c-format
@@ -13667,14 +13666,13 @@ msgid "%d symbols selected, %d parents auto-included"
 msgstr ""
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Nie je vybratý žiadny symbol"
+msgstr "%d vybraných symbolov"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:503
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "Zamknuté položky"
+msgstr "Vyriešiť konflikty pri importe"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:510
 msgid ""
@@ -13694,45 +13692,38 @@ msgid "Action"
 msgstr "Akcia"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:532
-#, fuzzy
 msgid "Skip All"
-msgstr "Preskočiť"
+msgstr "Preskočiť všetko"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
 #: eeschema/symbol_editor/symbol_editor.cpp:987
-#, fuzzy
 msgid "Overwrite All"
-msgstr "Prepísať"
+msgstr "Prepísať všetko"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "Nie je vybratý žiadny symbol"
+msgstr "0 vybraných symbolov"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
-#, fuzzy
 msgid "Start reference designator:"
-msgstr "Predvolený označovač referencie:"
+msgstr "Počiatočné referenčné označenie:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:30
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:44
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
-"Toto je názov symbolu v knižnici,\n"
-"a tiež predvolená hodnota súčasti pri načítaní v schéme."
+"Názov symbolu v knižnici a taktiež predvolená\n"
+"hodnota symbolu pri načítaní do schémy."
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:37
-#, fuzzy
 msgid "Increment by:"
-msgstr "Krok prírastku:"
+msgstr "Prírastok o:"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:54
-#, fuzzy
 msgid "All sheets"
-msgstr "Pridať list"
+msgstr "Všetky listy"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
 #, fuzzy
