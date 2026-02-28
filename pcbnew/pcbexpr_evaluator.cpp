@@ -530,20 +530,12 @@ LIBEVAL::VALUE* PCBEXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
 LIBEVAL::FUNC_CALL_REF PCBEXPR_UCODE::CreateFuncCall( const wxString& aName )
 {
-    static const std::set<wxString> geometryFunctions = {
-        wxT( "intersectscourtyard" ),  wxT( "intersectsfrontcourtyard" ),
-        wxT( "intersectsbackcourtyard" ), wxT( "intersectsarea" ),
-        wxT( "enclosedbyarea" ),
-        wxT( "insidecourtyard" ),      wxT( "insidefrontcourtyard" ),
-        wxT( "insidebackcourtyard" ),  wxT( "insidearea" )
-    };
-
     wxString nameLower = aName.Lower();
 
-    if( geometryFunctions.count( nameLower ) )
-        m_hasGeometryDependentFunctions = true;
-
     PCBEXPR_BUILTIN_FUNCTIONS& registry = PCBEXPR_BUILTIN_FUNCTIONS::Instance();
+
+    if( registry.IsGeometryDependent( nameLower ) )
+        m_hasGeometryDependentFunctions = true;
 
     return registry.Get( nameLower );
 }

@@ -1505,19 +1505,18 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 
     RegisterFunc( wxT( "isPlated()" ), isPlatedFunc );
 
-    // When adding new geometry-dependent functions (functions whose result depends on item
-    // position/shape rather than item properties), also add the function name to the
-    // geometryFunctions set in PCBEXPR_UCODE::CreateFuncCall() (pcbexpr_evaluator.cpp).
-    RegisterFunc( wxT( "insideCourtyard('x') DEPRECATED" ), intersectsCourtyardFunc );
-    RegisterFunc( wxT( "insideFrontCourtyard('x') DEPRECATED" ), intersectsFrontCourtyardFunc );
-    RegisterFunc( wxT( "insideBackCourtyard('x') DEPRECATED" ), intersectsBackCourtyardFunc );
-    RegisterFunc( wxT( "intersectsCourtyard('x')" ), intersectsCourtyardFunc );
-    RegisterFunc( wxT( "intersectsFrontCourtyard('x')" ), intersectsFrontCourtyardFunc );
-    RegisterFunc( wxT( "intersectsBackCourtyard('x')" ), intersectsBackCourtyardFunc );
+    // Geometry-dependent functions depend on item position/shape rather than item properties.
+    // The third argument marks them so that CreateFuncCall() can detect them automatically.
+    RegisterFunc( wxT( "insideCourtyard('x') DEPRECATED" ), intersectsCourtyardFunc, true );
+    RegisterFunc( wxT( "insideFrontCourtyard('x') DEPRECATED" ), intersectsFrontCourtyardFunc, true );
+    RegisterFunc( wxT( "insideBackCourtyard('x') DEPRECATED" ), intersectsBackCourtyardFunc, true );
+    RegisterFunc( wxT( "intersectsCourtyard('x')" ), intersectsCourtyardFunc, true );
+    RegisterFunc( wxT( "intersectsFrontCourtyard('x')" ), intersectsFrontCourtyardFunc, true );
+    RegisterFunc( wxT( "intersectsBackCourtyard('x')" ), intersectsBackCourtyardFunc, true );
 
-    RegisterFunc( wxT( "insideArea('x') DEPRECATED" ), intersectsAreaFunc );
-    RegisterFunc( wxT( "intersectsArea('x')" ), intersectsAreaFunc );
-    RegisterFunc( wxT( "enclosedByArea('x')" ), enclosedByAreaFunc );
+    RegisterFunc( wxT( "insideArea('x') DEPRECATED" ), intersectsAreaFunc, true );
+    RegisterFunc( wxT( "intersectsArea('x')" ), intersectsAreaFunc, true );
+    RegisterFunc( wxT( "enclosedByArea('x')" ), enclosedByAreaFunc, true );
 
     RegisterFunc( wxT( "isMicroVia()" ), isMicroVia );
     RegisterFunc( wxT( "isBlindVia()" ), isBlindVia );
