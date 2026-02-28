@@ -735,6 +735,26 @@ public:
                 m_board.SetLayerName( rmIt->second, dialogName );
             }
         }
+
+        // Enable all the layers we ended up mapping to
+        LSET enabledLayersMask = m_board.GetEnabledLayers();
+        int userLayers = 0;
+        for( const auto& [name, layerId] : resolvedMapping )
+        {
+            if( layerId != PCB_LAYER_ID::UNDEFINED_LAYER )
+                enabledLayersMask |= LSET{ layerId };
+
+            if( IsUserLayer( layerId ) )
+                userLayers++;
+
+            wxLogTrace( traceAllegroBuilder, "Mapping Allegro layer '%s' to KiCad layer '%s' (%d)", name,
+                        m_board.GetLayerName( layerId ), layerId );
+
+            m_board.SetLayerName( layerId, name );
+        }
+        m_board.SetEnabledLayers( enabledLayersMask );
+        wxLogTrace( traceAllegroBuilder, "After mapping, there are %d user layers", userLayers );
+        m_board.GetDesignSettings().SetUserDefinedLayerCount( userLayers );
     }
 
     PCB_LAYER_ID GetLayer( const LAYER_INFO& aLayerInfo )
@@ -897,7 +917,7 @@ private:
     PCB_LAYER_ID addUserLayer( const wxString& aName )
     {
         const PCB_LAYER_ID lId = getNthUserLayer( m_numUserLayersUsed++ );
-        m_board.GetDesignSettings().SetUserDefinedLayerCount( m_numUserLayersUsed );
+        m_board.GetDesignSettings().SetUserDefinedLayerCount( m_board.GetDesignSettings().GetUserDefinedLayerCount() + 1 );
         m_board.SetLayerName( lId, aName );
         wxLogTrace( traceAllegroBuilder, "Adding user layer %s: %s", LayerName( lId ), aName );
         return lId;
