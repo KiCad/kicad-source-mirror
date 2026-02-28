@@ -38,14 +38,15 @@ public:
     {
     }
 
-    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA(
-            int aId, int aParentId, bool aAllowZeroDegreess, bool aAllowNinetyDegreess,
-            bool aAllowOneEightyDegreess, bool aAllowTwoSeventyDegreess, bool aAllowAllDegreess,
-            const wxString& aRuleName ) :
+    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA( int aId, int aParentId, bool aAllowZeroDegreess,
+                                                         bool aAllowNinetyDegreess, bool aAllowOneEightyDegreess,
+                                                         bool aAllowTwoSeventyDegreess, bool aAllowAllDegreess,
+                                                         const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
-            m_allowZeroDegreess( aAllowZeroDegreess ), m_allowNinetyDegrees( aAllowNinetyDegreess ),
-            m_allowOneEightyDegrees( aAllowOneEightyDegreess ),
-            m_allowTwoSeventyDegrees( aAllowTwoSeventyDegreess ),
+            m_allowZeroDegreess( aAllowZeroDegreess || aAllowAllDegreess ),
+            m_allowNinetyDegrees( aAllowNinetyDegreess || aAllowAllDegreess ),
+            m_allowOneEightyDegrees( aAllowOneEightyDegreess || aAllowAllDegreess ),
+            m_allowTwoSeventyDegrees( aAllowTwoSeventyDegreess || aAllowAllDegreess ),
             m_allowAllDegrees( aAllowAllDegreess )
     {
     }
@@ -70,9 +71,6 @@ public:
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        if( m_allowAllDegrees )
-            return { wxS( "(constraint assertion \"A.Orientation == A.Orientation\")" ) };
-
         wxArrayString terms;
 
         if( m_allowZeroDegreess )
@@ -108,8 +106,7 @@ public:
         VALIDATION_RESULT result;
 
         // At least one orientation must be selected
-        if( !m_allowZeroDegreess && !m_allowNinetyDegrees && !m_allowOneEightyDegrees
-            && !m_allowTwoSeventyDegrees && !m_allowAllDegrees )
+        if( !m_allowZeroDegreess && !m_allowNinetyDegrees && !m_allowOneEightyDegrees && !m_allowTwoSeventyDegrees )
         {
             result.AddError( _( "At least one orientation must be selected" ) );
         }
@@ -150,6 +147,14 @@ public:
     void SetIsAllDegreesAllowed( bool aAllowAllDegrees )
     {
         m_allowAllDegrees = aAllowAllDegrees;
+
+        if( aAllowAllDegrees )
+        {
+            m_allowZeroDegreess = true;
+            m_allowNinetyDegrees = true;
+            m_allowOneEightyDegrees = true;
+            m_allowTwoSeventyDegrees = true;
+        }
     }
 
     void CopyFrom( const ICopyable& aSource ) override

@@ -45,45 +45,6 @@
 #include "drc_rule_editor_utils.h"
 
 
-namespace
-{
-
-// Extract the body of a custom DRC rule from raw text, stripping the outer
-// (rule "name" ...) envelope and trailing parenthesis.
-wxString extractCustomRuleBody( const wxString& aOriginalText )
-{
-    wxString body = aOriginalText;
-    body.Replace( wxS( "(version 1)" ), wxS( "" ) );
-
-    int ruleStart = body.Find( wxS( "(rule " ) );
-
-    if( ruleStart != wxNOT_FOUND )
-    {
-        int nameStart = body.find( '"', ruleStart );
-
-        if( nameStart != wxNOT_FOUND )
-        {
-            int nameEnd = body.find( '"', nameStart + 1 );
-
-            if( nameEnd != wxNOT_FOUND )
-            {
-                body = body.Mid( nameEnd + 1 );
-                body.Trim( false );
-
-                if( body.EndsWith( wxS( ")" ) ) )
-                    body = body.Left( body.Length() - 1 );
-
-                body.Trim( true );
-            }
-        }
-    }
-
-    return body;
-}
-
-} // anonymous namespace
-
-
 DRC_RULE_LOADER::DRC_RULE_LOADER()
 {
 }
@@ -104,6 +65,27 @@ const DRC_CONSTRAINT* DRC_RULE_LOADER::findConstraint( const DRC_RULE& aRule, DR
     }
 
     return nullptr;
+}
+
+
+wxString DRC_RULE_LOADER::extractRuleBody( const wxString& aOriginalText )
+{
+    int ruleKeyword = aOriginalText.Find( wxS( "rule " ) );
+    if( ruleKeyword == wxNOT_FOUND )
+        return aOriginalText;
+
+    int bodyStart = aOriginalText.find( '(', ruleKeyword + 5 );
+    if( bodyStart == (int) wxString::npos )
+        return aOriginalText;
+
+    wxString body = aOriginalText.Mid( bodyStart );
+    body.Trim( true );
+
+    if( body.EndsWith( wxS( ")" ) ) )
+        body = body.Left( body.Length() - 1 );
+    body.Trim( true );
+
+    return body;
 }
 
 
@@ -319,11 +301,24 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
             data->SetIsOneEightyDegreesAllowed( expr.Contains( wxS( "== 180 deg" ) ) );
             data->SetIsTwoSeventyDegreesAllowed( expr.Contains( wxS( "== 270 deg" ) ) );
 
-            if( !data->GetIsZeroDegreesAllowed() && !data->GetIsNinetyDegreesAllowed()
-                && !data->GetIsOneEightyDegreesAllowed() && !data->GetIsTwoSeventyDegreesAllowed() )
+            if( data->GetIsZeroDegreesAllowed() && data->GetIsNinetyDegreesAllowed()
+                && data->GetIsOneEightyDegreesAllowed() && data->GetIsTwoSeventyDegreesAllowed() )
             {
                 data->SetIsAllDegreesAllowed( true );
+                return data;
             }
+
+            if( data->GetIsZeroDegreesAllowed() || data->GetIsNinetyDegreesAllowed()
+                || data->GetIsOneEightyDegreesAllowed() || data->GetIsTwoSeventyDegreesAllowed() )
+            {
+                return data;
+            }
+
+            // Non-standard angles cannot be represented by the
+            // orientation panel, fall back to custom rule
+            auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>();
+            customData->SetRuleName( aRule.m_Name );
+            return customData;
         }
         else
         {
@@ -440,7 +435,19 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         auto constraintData = createConstraintData( match.panelType, aRule, match.claimedConstraints );
 
-        if( match.panelType == SILK_TO_SOLDERMASK_CLEARANCE && constraintData )
+        if( !constraintData )
+            continue;
+
+        // If createConstraintData returned a custom rule fallback (e.g. non-standard
+        // orientation angles), update the panel type to match the actual data type
+        auto customFallback = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( constraintData );
+
+        if( customFallback && match.panelType != CUSTOM_RULE )
+        {
+            match.panelType = CUSTOM_RULE;
+        }
+
+        if( match.panelType == SILK_TO_SOLDERMASK_CLEARANCE )
         {
             bool         isFront = condition.Contains( wxS( "F.SilkS" ) );
             PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
@@ -460,31 +467,25 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             constraintData->SetRuleCondition( cleanedCondition );
         }
 
-        if( constraintData )
+        if( match.panelType == CUSTOM_RULE && customFallback )
         {
-            if( match.panelType == CUSTOM_RULE )
-            {
-                auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( constraintData );
-
-                if( customData )
-                    customData->SetRuleText( extractCustomRuleBody( aOriginalText ) );
-            }
-
-            if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
-                constraintData->SetRuleCondition( condition );
-
-            DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name,
-                                             condition, aRule.m_Severity, aRule.m_LayerCondition );
-
-            // Preserve original layer source text for round-trip fidelity
-            entry.layerSource = aRule.m_LayerSource;
-
-            // Store original text only for the first entry to avoid duplication issues
-            if( entries.empty() )
-                entry.originalRuleText = aOriginalText;
-
-            entries.push_back( std::move( entry ) );
+            customFallback->SetRuleText( extractRuleBody( aOriginalText ) );
         }
+
+        if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
+            constraintData->SetRuleCondition( condition );
+
+        DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name, condition, aRule.m_Severity,
+                                         aRule.m_LayerCondition );
+
+        // Preserve original layer source text for round-trip fidelity
+        entry.layerSource = aRule.m_LayerSource;
+
+        // Store original text only for the first entry to avoid duplication issues
+        if( entries.empty() )
+            entry.originalRuleText = aOriginalText;
+
+        entries.push_back( std::move( entry ) );
     }
 
     // If no matches, create a custom rule entry
@@ -494,7 +495,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         customData->SetRuleName( aRule.m_Name );
         customData->SetRuleCondition( condition );
 
-        customData->SetRuleText( extractCustomRuleBody( aOriginalText ) );
+        customData->SetRuleText( extractRuleBody( aOriginalText ) );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( CUSTOM_RULE, customData, aRule.m_Name, condition,
                                          aRule.m_Severity, aRule.m_LayerCondition );

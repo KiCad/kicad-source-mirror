@@ -2143,4 +2143,104 @@ BOOST_AUTO_TEST_CASE( IntegrationViasUnderSmdRoundTrip )
     BOOST_CHECK( !savedText.Contains( "buried_via" ) );
 }
 
+BOOST_AUTO_TEST_CASE( RuleLoaderNonStandardOrientationFallsBackToCustom )
+{
+    // Quoted name
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"Angled\"\n"
+                        "    (constraint assertion \"A.Orientation == 46 deg\")\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
+
+    auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( customData );
+    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "46 deg" ) ) );
+    BOOST_CHECK( !customData->GetRuleText().Contains( wxS( "Angled" ) ) );
+
+    // Unquoted name
+    wxString ruleTextUnquoted = "(version 1)\n"
+                                "(rule Angled\n"
+                                "    (constraint assertion \"A.Orientation == 46 deg\")\n"
+                                ")";
+
+    entries = loader.LoadFromString( ruleTextUnquoted );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
+
+    auto customDataUnquoted =
+            std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( customDataUnquoted );
+    BOOST_CHECK( customDataUnquoted->GetRuleText().Contains( wxS( "46 deg" ) ) );
+    BOOST_CHECK( !customDataUnquoted->GetRuleText().Contains( wxS( "Angled" ) ) );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderStandardOrientationLoadsStructured )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"Standard\"\n"
+                        "    (constraint assertion \"A.Orientation == 0 deg || A.Orientation == 90 deg\")\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ALLOWED_ORIENTATION );
+
+    auto orientData =
+            std::dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( orientData );
+    BOOST_CHECK( orientData->GetIsZeroDegreesAllowed() );
+    BOOST_CHECK( orientData->GetIsNinetyDegreesAllowed() );
+    BOOST_CHECK( !orientData->GetIsOneEightyDegreesAllowed() );
+    BOOST_CHECK( !orientData->GetIsAllDegreesAllowed() );
+
+    // Single-line variant
+    wxString singleLine = "(version 1) (rule \"SingleLine\" (constraint assertion \"A.Orientation == 0 deg || "
+                          "A.Orientation == 90 deg\"))";
+
+    entries = loader.LoadFromString( singleLine );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ALLOWED_ORIENTATION );
+
+    auto singleLineData =
+            std::dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( singleLineData );
+    BOOST_CHECK( singleLineData->GetIsZeroDegreesAllowed() );
+    BOOST_CHECK( singleLineData->GetIsNinetyDegreesAllowed() );
+    BOOST_CHECK( !singleLineData->GetIsOneEightyDegreesAllowed() );
+    BOOST_CHECK( !singleLineData->GetIsAllDegreesAllowed() );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderAllowAllOrientationLoadsStructured )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"AllAngles\"\n"
+                        "    (constraint assertion \"A.Orientation == 0 deg || A.Orientation == 90 deg || "
+                        "A.Orientation == 180 deg || A.Orientation == 270 deg\")\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ALLOWED_ORIENTATION );
+
+    auto orientData =
+            std::dynamic_pointer_cast<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( orientData );
+    BOOST_CHECK( orientData->GetIsAllDegreesAllowed() );
+    BOOST_CHECK( orientData->GetIsZeroDegreesAllowed() );
+    BOOST_CHECK( orientData->GetIsNinetyDegreesAllowed() );
+    BOOST_CHECK( orientData->GetIsOneEightyDegreesAllowed() );
+    BOOST_CHECK( orientData->GetIsTwoSeventyDegreesAllowed() );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -65,11 +65,31 @@ DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL::DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PAN
             dlg->SetModified();
     };
 
-    m_zeroDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_ninetyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_oneEightyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_twoSeventyDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_allDegreesCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
+    auto onIndividualCheckbox = [this, notifyModified]( wxCommandEvent& evt )
+    {
+        bool allChecked = m_zeroDegreesCheckbox->GetValue() && m_ninetyDegreesCheckbox->GetValue()
+                          && m_oneEightyDegreesCheckbox->GetValue() && m_twoSeventyDegreesCheckbox->GetValue();
+        m_allDegreesCheckbox->SetValue( allChecked );
+
+        notifyModified( evt );
+    };
+
+    auto onAllDegreesCheckbox = [this, notifyModified]( wxCommandEvent& evt )
+    {
+        bool checked = m_allDegreesCheckbox->GetValue();
+        m_zeroDegreesCheckbox->SetValue( checked );
+        m_ninetyDegreesCheckbox->SetValue( checked );
+        m_oneEightyDegreesCheckbox->SetValue( checked );
+        m_twoSeventyDegreesCheckbox->SetValue( checked );
+
+        notifyModified( evt );
+    };
+
+    m_zeroDegreesCheckbox->Bind( wxEVT_CHECKBOX, onIndividualCheckbox );
+    m_ninetyDegreesCheckbox->Bind( wxEVT_CHECKBOX, onIndividualCheckbox );
+    m_oneEightyDegreesCheckbox->Bind( wxEVT_CHECKBOX, onIndividualCheckbox );
+    m_twoSeventyDegreesCheckbox->Bind( wxEVT_CHECKBOX, onIndividualCheckbox );
+    m_allDegreesCheckbox->Bind( wxEVT_CHECKBOX, onAllDegreesCheckbox );
 
     PositionFields();
     TransferDataToWindow();
@@ -106,7 +126,9 @@ bool DRC_RE_ALLOWED_ORIENTATION_OVERLAY_PANEL::TransferDataFromWindow()
     m_data->SetIsNinetyDegreesAllowed( m_ninetyDegreesCheckbox->GetValue() );
     m_data->SetIsOneEightyDegreesAllowed( m_oneEightyDegreesCheckbox->GetValue() );
     m_data->SetIsTwoSeventyDegreesAllowed( m_twoSeventyDegreesCheckbox->GetValue() );
-    m_data->SetIsAllDegreesAllowed( m_allDegreesCheckbox->GetValue() );
+    m_data->SetIsAllDegreesAllowed( m_zeroDegreesCheckbox->GetValue() && m_ninetyDegreesCheckbox->GetValue()
+                                    && m_oneEightyDegreesCheckbox->GetValue()
+                                    && m_twoSeventyDegreesCheckbox->GetValue() );
 
     return true;
 }

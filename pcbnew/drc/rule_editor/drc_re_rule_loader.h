@@ -115,6 +115,15 @@ private:
      */
     wxString extractRuleText( const wxString& aContent, const wxString& aRuleName );
 
+    /**
+     * Extract the body of a rule from its original text, stripping the
+     * (rule "name" ...) wrapper. Handles both quoted and unquoted rule names.
+     *
+     * @param aOriginalText The full original text of a single rule.
+     * @return The inner body (constraints, conditions) without the rule wrapper.
+     */
+    wxString extractRuleBody( const wxString& aOriginalText );
+
     DRC_PANEL_MATCHER m_matcher;
 };
 
