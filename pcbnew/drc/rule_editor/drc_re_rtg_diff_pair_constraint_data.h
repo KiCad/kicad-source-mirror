@@ -74,50 +74,69 @@ public:
     {
         VALIDATION_RESULT result;
 
-        if( m_minWidth <= 0 )
-            result.AddError( _( "Minimum Width must be greater than 0" ) );
+        bool hasWidth = m_minWidth > 0 || m_preferredWidth > 0 || m_maxWidth > 0;
 
-        if( m_preferredWidth <= 0 )
-            result.AddError( _( "Preferred Width must be greater than 0" ) );
+        if( hasWidth )
+        {
+            if( m_minWidth <= 0 )
+                result.AddError( _( "Minimum Width must be greater than 0" ) );
 
-        if( m_maxWidth <= 0 )
-            result.AddError( _( "Maximum Width must be greater than 0" ) );
+            if( m_preferredWidth <= 0 )
+                result.AddError( _( "Preferred Width must be greater than 0" ) );
 
-        if( m_minGap <= 0 )
-            result.AddError( _( "Minimum Gap must be greater than 0" ) );
+            if( m_maxWidth <= 0 )
+                result.AddError( _( "Maximum Width must be greater than 0" ) );
+        }
 
-        if( m_preferredGap <= 0 )
-            result.AddError( _( "Preferred Gap must be greater than 0" ) );
+        bool hasGap = m_minGap > 0 || m_preferredGap > 0 || m_maxGap > 0;
 
-        if( m_maxGap <= 0 )
-            result.AddError( _( "Maximum Gap must be greater than 0" ) );
+        if( hasGap )
+        {
+            if( m_minGap <= 0 )
+                result.AddError( _( "Minimum Gap must be greater than 0" ) );
 
-        if( m_maxUncoupledLength <= 0 )
-            result.AddError( _( "Maximum Uncoupled Length must be greater than 0" ) );
+            if( m_preferredGap <= 0 )
+                result.AddError( _( "Preferred Gap must be greater than 0" ) );
+
+            if( m_maxGap <= 0 )
+                result.AddError( _( "Maximum Gap must be greater than 0" ) );
+        }
+
+        if( m_maxUncoupledLength < 0 )
+            result.AddError( _( "Maximum Uncoupled Length must be greater than or equal to 0" ) );
 
         if( m_maxSkew < 0 )
             result.AddError( _( "Maximum Skew must be greater than or equal to 0" ) );
 
         if( result.isValid )
         {
-            if( m_minWidth > m_preferredWidth )
-                result.AddError( _( "Minimum Width cannot be greater than Preferred Width" ) );
+            if( hasWidth )
+            {
+                if( m_minWidth > m_preferredWidth )
+                    result.AddError( _( "Minimum Width cannot be greater than Preferred Width" ) );
 
-            if( m_preferredWidth > m_maxWidth )
-                result.AddError( _( "Preferred Width cannot be greater than Maximum Width" ) );
+                if( m_preferredWidth > m_maxWidth )
+                    result.AddError( _( "Preferred Width cannot be greater than Maximum Width" ) );
 
-            if( m_minWidth > m_maxWidth )
-                result.AddError( _( "Minimum Width cannot be greater than Maximum Width" ) );
+                if( m_minWidth > m_maxWidth )
+                    result.AddError( _( "Minimum Width cannot be greater than Maximum Width" ) );
+            }
 
-            if( m_minGap > m_preferredGap )
-                result.AddError( _( "Minimum Gap cannot be greater than Preferred Gap" ) );
+            if( hasGap )
+            {
+                if( m_minGap > m_preferredGap )
+                    result.AddError( _( "Minimum Gap cannot be greater than Preferred Gap" ) );
 
-            if( m_preferredGap > m_maxGap )
-                result.AddError( _( "Preferred Gap cannot be greater than Maximum Gap" ) );
+                if( m_preferredGap > m_maxGap )
+                    result.AddError( _( "Preferred Gap cannot be greater than Maximum Gap" ) );
 
-            if( m_minGap > m_maxGap )
-                result.AddError( _( "Minimum Gap cannot be greater than Maximum Gap" ) );
+                if( m_minGap > m_maxGap )
+                    result.AddError( _( "Minimum Gap cannot be greater than Maximum Gap" ) );
+            }
         }
+
+        if( !hasWidth && !hasGap && m_maxUncoupledLength <= 0 && m_maxSkew <= 0 )
+            result.AddError( _( "At least one constraint must be specified" ) );
 
         return result;
     }
@@ -129,28 +148,31 @@ public:
             return formatDouble( aValue ) + wxS( "mm" );
         };
 
-        wxString widthClause = wxString::Format(
-                wxS( "(constraint track_width (min %s) (opt %s) (max %s))" ),
-                formatDistance( m_minWidth ),
-                formatDistance( m_preferredWidth ),
-                formatDistance( m_maxWidth ) );
+        std::vector<wxString> clauses;
 
-        wxString gapClause = wxString::Format(
-                wxS( "(constraint diff_pair_gap (min %s) (opt %s) (max %s))" ),
-                formatDistance( m_minGap ),
-                formatDistance( m_preferredGap ),
-                formatDistance( m_maxGap ) );
+        if( m_minWidth > 0 || m_preferredWidth > 0 || m_maxWidth > 0 )
+        {
+            clauses.push_back( wxString::Format( wxS( "(constraint track_width (min %s) (opt %s) (max %s))" ),
+                                                 formatDistance( m_minWidth ), formatDistance( m_preferredWidth ),
+                                                 formatDistance( m_maxWidth ) ) );
+        }
 
-        wxString uncoupledClause = wxString::Format(
-                wxS( "(constraint diff_pair_uncoupled (max %s))" ),
-                formatDistance( m_maxUncoupledLength ) );
+        if( m_minGap > 0 || m_preferredGap > 0 || m_maxGap > 0 )
+        {
+            clauses.push_back( wxString::Format( wxS( "(constraint diff_pair_gap (min %s) (opt %s) (max %s))" ),
+                                                 formatDistance( m_minGap ), formatDistance( m_preferredGap ),
+                                                 formatDistance( m_maxGap ) ) );
+        }
 
-        std::vector<wxString> clauses = { widthClause, gapClause, uncoupledClause };
+        if( m_maxUncoupledLength > 0 )
+        {
+            clauses.push_back( wxString::Format( wxS( "(constraint diff_pair_uncoupled (max %s))" ),
+                                                 formatDistance( m_maxUncoupledLength ) ) );
+        }
 
         if( m_maxSkew > 0 )
         {
-            wxString skewClause = wxString::Format( wxS( "(constraint skew (max %s))" ), formatDistance( m_maxSkew ) );
-            clauses.push_back( skewClause );
+            clauses.push_back( wxString::Format( wxS( "(constraint skew (max %s))" ), formatDistance( m_maxSkew ) ) );
         }
 
         return clauses;
