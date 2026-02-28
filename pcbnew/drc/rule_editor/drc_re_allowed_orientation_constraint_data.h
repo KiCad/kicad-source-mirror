@@ -38,16 +38,16 @@ public:
     {
     }
 
-    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA( int aId, int aParentId, bool aAllowZeroDegreess,
-                                                         bool aAllowNinetyDegreess, bool aAllowOneEightyDegreess,
-                                                         bool aAllowTwoSeventyDegreess, bool aAllowAllDegreess,
+    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA( int aId, int aParentId, bool aAllowZeroDegrees,
+                                                         bool aAllowNinetyDegrees, bool aAllowOneEightyDegrees,
+                                                         bool aAllowTwoSeventyDegrees, bool aAllowAllDegrees,
                                                          const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
-            m_allowZeroDegreess( aAllowZeroDegreess || aAllowAllDegreess ),
-            m_allowNinetyDegrees( aAllowNinetyDegreess || aAllowAllDegreess ),
-            m_allowOneEightyDegrees( aAllowOneEightyDegreess || aAllowAllDegreess ),
-            m_allowTwoSeventyDegrees( aAllowTwoSeventyDegreess || aAllowAllDegreess ),
-            m_allowAllDegrees( aAllowAllDegreess )
+            m_allowZeroDegrees( aAllowZeroDegrees || aAllowAllDegrees ),
+            m_allowNinetyDegrees( aAllowNinetyDegrees || aAllowAllDegrees ),
+            m_allowOneEightyDegrees( aAllowOneEightyDegrees || aAllowAllDegrees ),
+            m_allowTwoSeventyDegrees( aAllowTwoSeventyDegrees || aAllowAllDegrees ),
+            m_allowAllDegrees( aAllowAllDegrees )
     {
     }
 
@@ -73,7 +73,7 @@ public:
     {
         wxArrayString terms;
 
-        if( m_allowZeroDegreess )
+        if( m_allowZeroDegrees )
             terms.Add( wxS( "A.Orientation == 0 deg" ) );
 
         if( m_allowNinetyDegrees )
@@ -106,7 +106,7 @@ public:
         VALIDATION_RESULT result;
 
         // At least one orientation must be selected
-        if( !m_allowZeroDegreess && !m_allowNinetyDegrees && !m_allowOneEightyDegrees && !m_allowTwoSeventyDegrees )
+        if( !m_allowZeroDegrees && !m_allowNinetyDegrees && !m_allowOneEightyDegrees && !m_allowTwoSeventyDegrees )
         {
             result.AddError( _( "At least one orientation must be selected" ) );
         }
@@ -114,12 +114,9 @@ public:
         return result;
     }
 
-    bool GetIsZeroDegreesAllowed() { return m_allowZeroDegreess; }
+    bool GetIsZeroDegreesAllowed() { return m_allowZeroDegrees; }
 
-    void SetIsZeroDegreesAllowed( bool aAllowZeroDegreess )
-    {
-        m_allowZeroDegreess = aAllowZeroDegreess;
-    }
+    void SetIsZeroDegreesAllowed( bool aAllowZeroDegrees ) { m_allowZeroDegrees = aAllowZeroDegrees; }
 
     bool GetIsNinetyDegreesAllowed() { return m_allowNinetyDegrees; }
 
@@ -150,7 +147,7 @@ public:
 
         if( aAllowAllDegrees )
         {
-            m_allowZeroDegreess = true;
+            m_allowZeroDegrees = true;
             m_allowNinetyDegrees = true;
             m_allowOneEightyDegrees = true;
             m_allowTwoSeventyDegrees = true;
@@ -164,7 +161,7 @@ public:
 
         DRC_RE_BASE_CONSTRAINT_DATA::CopyFrom( source );
 
-        m_allowZeroDegreess = source.m_allowZeroDegreess;
+        m_allowZeroDegrees = source.m_allowZeroDegrees;
         m_allowNinetyDegrees = source.m_allowNinetyDegrees;
         m_allowOneEightyDegrees = source.m_allowOneEightyDegrees;
         m_allowTwoSeventyDegrees = source.m_allowTwoSeventyDegrees;
@@ -172,7 +169,7 @@ public:
     }
 
 private:
-    bool m_allowZeroDegreess{ false };
+    bool m_allowZeroDegrees{ false };
     bool m_allowNinetyDegrees{ false };
     bool m_allowOneEightyDegrees{ false };
     bool m_allowTwoSeventyDegrees{ false };
