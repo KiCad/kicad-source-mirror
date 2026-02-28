@@ -3832,16 +3832,28 @@ void BOARD_BUILDER::createTables()
             }
             }
         }
-        std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
-        group->SetName( tableName );
 
-        for( std::unique_ptr<BOARD_ITEM>& newItem : newItems )
+        if( newItems.size() > 0 )
         {
-            m_board.Add( newItem.get(), ADD_MODE::APPEND );
-            group->AddItem( newItem.release() );
-        }
+            wxLogTrace( traceAllegroBuilder, "  Creating group '%s' with %zu items", tableName, newItems.size() );
 
-        m_board.Add( group.release(), ADD_MODE::APPEND );
+            std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
+            group->SetName( tableName );
+
+            std::vector<BOARD_ITEM*> bulkAddedItems;
+            bulkAddedItems.reserve( newItems.size() + 1 );
+            bulkAddedItems.push_back( group.get() );
+
+            for( std::unique_ptr<BOARD_ITEM>& newItem : newItems )
+            {
+                m_board.Add( newItem.get(), ADD_MODE::BULK_APPEND );
+                bulkAddedItems.push_back( newItem.get() );
+                group->AddItem( newItem.release() );
+            }
+
+            m_board.Add( group.release(), ADD_MODE::BULK_APPEND );
+            m_board.FinalizeBulkAdd( bulkAddedItems );
+        }
     }
 }
 
