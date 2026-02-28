@@ -38,6 +38,7 @@ win64_build:
       -DVCPKG_BUILD_TYPE=debug `
       -DVCPKG_INSTALL_OPTIONS="--x-abi-tools-use-exact-versions" `
       -DVCPKG_OVERLAY_TRIPLETS="$Env:CI_PROJECT_DIR/tools/custom_vcpkg_triplets" `
+      -DKICAD_USE_PCH=OFF `
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
