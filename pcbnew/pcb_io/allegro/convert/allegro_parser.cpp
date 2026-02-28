@@ -1532,7 +1532,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x2C_TABLE( FILE_STREAM& aStream, 
     auto& data = block->GetData();
 
     data.m_Type = aStream.ReadU8();
-    data.m_T2 = aStream.ReadU16();
+    data.m_SubType = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
 

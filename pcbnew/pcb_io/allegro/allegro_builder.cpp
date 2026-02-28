@@ -3765,6 +3765,12 @@ void BOARD_BUILDER::createTables()
 
         const BLK_0x2C_TABLE& tableData = static_cast<const BLOCK<BLK_0x2C_TABLE>&>( *block ).GetData();
 
+        if( tableData.m_SubType != BLK_0x2C_TABLE::SUBTYPE::SUBTYPE_GRAPHICAL_GROUP )
+        {
+            // 0x2c tables can have lots of subtypes. Only 0x110 seems useful to iterate in this way for now.
+            continue;
+        }
+
         const wxString& tableName = m_brdDb.GetString( tableData.m_StringPtr );
 
         std::vector<std::unique_ptr<BOARD_ITEM>> newItems;

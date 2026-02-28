@@ -1618,8 +1618,33 @@ struct BLK_0x2B_FOOTPRINT_DEF
  */
 struct BLK_0x2C_TABLE
 {
+    /**
+     * The subtype of a table.
+     *
+     * Not all of these are clear, but these are the ones that have been observed so far.
+     */
+    enum SUBTYPE
+    {
+        SUBTYPE_UNKNOWN = 0,
+
+        SUBTYPE_0x05 = 0x05,
+        SUBTYPE_0x06 = 0x06,
+        SUBTYPE_0x0c = 0x0c,
+        SUBTYPE_0x15 = 0x15,
+        SUBTYPE_0x16 = 0x16,
+        SUBTYPE_0x20 = 0x20,
+        SUBTYPE_0x23 = 0x23,
+
+        SUBTYPE_0x102 = 0x102,
+        SUBTYPE_0x103 = 0x103,
+        SUBTYPE_0x107 = 0x107,
+
+        /// Used for drill charts and x-section charts
+        SUBTYPE_GRAPHICAL_GROUP = 0x110,
+    };
+
     uint8_t  m_Type;
-    uint16_t m_T2;
+    uint16_t m_SubType;
     uint32_t m_Key;
     uint32_t m_Next;
 
