@@ -96,11 +96,14 @@ public:
         if( m_maxViaHoleSize <= 0 )
             result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
 
-        if( m_minViaDiameter > m_maxViaDiameter )
-            result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
+        if( result.isValid )
+        {
+            if( m_minViaDiameter > m_maxViaDiameter )
+                result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
 
-        if( m_minViaHoleSize > m_maxViaHoleSize )
-            result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
+            if( m_minViaHoleSize > m_maxViaHoleSize )
+                result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
+        }
 
         return result;
     }
