@@ -23,6 +23,7 @@
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <wx/string.h>
+#include <wx/arrstr.h> // REQUIRED for wxString vector export on MSVC
 #include <map>
 
 namespace TEXT_EVAL_VCS
