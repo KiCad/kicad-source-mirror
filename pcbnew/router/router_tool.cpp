@@ -89,6 +89,31 @@ using namespace std::placeholders;
 
 using namespace KIGFX;
 
+namespace
+{
+
+// Saves and restores the global wxUpdateUIEvent interval so it cannot leak on
+// early returns or exceptions.
+class UI_UPDATE_INTERVAL_GUARD
+{
+public:
+    UI_UPDATE_INTERVAL_GUARD( long aNewInterval ) :
+            m_saved( wxUpdateUIEvent::GetUpdateInterval() )
+    {
+        wxUpdateUIEvent::SetUpdateInterval( aNewInterval );
+    }
+
+    ~UI_UPDATE_INTERVAL_GUARD()
+    {
+        wxUpdateUIEvent::SetUpdateInterval( m_saved );
+    }
+
+private:
+    long m_saved;
+};
+
+} // anonymous namespace
+
 /**
  * Flags used by via tool actions
  */
@@ -1463,10 +1488,9 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
         handleLayerSwitch( ACT_PlaceThroughVia.MakeEvent(), true );
     }
 
-    // Throttle wxEVT_UPDATE_UI during routing — the idle sweep fires between every Wait()
+    // Throttle wxEVT_UPDATE_UI during routing. The idle sweep fires between every Wait()
     // iteration and its cost dominates at interactive frame rates.
-    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
-    wxUpdateUIEvent::SetUpdateInterval( 200 );
+    UI_UPDATE_INTERVAL_GUARD uiGuard( 200 );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -1639,8 +1663,6 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             evt->SetPassEvent();
         }
     }
-
-    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     m_router->CommitRouting();
     // Reset to normal for next route
@@ -2076,8 +2098,7 @@ void ROUTER_TOOL::performDragging( int aMode )
     m_gridHelper->SetAuxAxes( true, m_startSnapPoint );
     frame()->UndoRedoBlock( true );
 
-    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
-    wxUpdateUIEvent::SetUpdateInterval( 200 );
+    UI_UPDATE_INTERVAL_GUARD uiGuard( 200 );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -2172,8 +2193,6 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         handleCommonEvents( *evt );
     }
-
-    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     view()->ClearPreview();
     view()->ShowPreview( false );
@@ -2552,8 +2571,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // Send an initial movement to prime the collision detection
     m_router->Move( p, nullptr );
 
-    long savedUIInterval = wxUpdateUIEvent::GetUpdateInterval();
-    wxUpdateUIEvent::SetUpdateInterval( 200 );
+    UI_UPDATE_INTERVAL_GUARD uiGuard( 200 );
 
     bool hasMouseMoved = false;
     bool hasMultidragCancelled = false;
@@ -2754,8 +2772,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &newItems );
     }
-
-    wxUpdateUIEvent::SetUpdateInterval( savedUIInterval );
 
     m_gridHelper->SetAuxAxes( false );
     controls()->SetAutoPan( false );
