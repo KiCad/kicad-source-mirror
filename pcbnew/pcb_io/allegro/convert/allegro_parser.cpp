@@ -2023,15 +2023,15 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x37( FILE_STREAM& aStream, FMT_VE
     data.m_T = aStream.ReadU8();
     data.m_T2 = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
-    data.m_Ptr1 = aStream.ReadU32();
-    data.m_Unknown1 = aStream.ReadU32();
+    data.m_GroupPtr = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
     data.m_Capacity = aStream.ReadU32();
     data.m_Count = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
 
     ReadArrayU32( aStream, data.m_Ptrs );
 
-    ReadCond( aStream, aVer, data.m_UnknownArr );
+    ReadCond( aStream, aVer, data.m_Unknown3 );
 
     return block;
 }

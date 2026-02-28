@@ -426,6 +426,12 @@ std::unique_ptr<DB_OBJ> BRD_DB::OBJ_FACTORY::CreateObject( const BLOCK_BASE& aBl
         obj =  std::make_unique<VIA>( m_brdDb, viaBlk );
         break;
     }
+    case 0x37:
+    {
+        const BLK_0x37_PTR_ARRAY& arrBlk = BLK_DATA( aBlock, BLK_0x37_PTR_ARRAY );
+        obj = std::make_unique<PTR_ARRAY>( m_brdDb, arrBlk );
+        break;
+    }
     default:
         break;
     }
@@ -1428,6 +1434,36 @@ bool VIA::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     bool ok = true;
 
     ok &= m_Next.Resolve( aResolver );
+
+    return ok;
+}
+
+
+PTR_ARRAY::PTR_ARRAY( const BRD_DB& aBrd, const BLK_0x37_PTR_ARRAY& aBlk ) :
+    BRD_DB_OBJ( BRD_PTR_ARRAY, aBlk.m_Key ),
+    m_Next( this, aBlk.m_Next, "m_Next" ),
+    m_Parent( this, aBlk.m_GroupPtr, "m_GroupPtr" )
+{
+    m_Ptrs.reserve( aBlk.m_Count );
+    for( size_t i = 0; i < aBlk.m_Count; ++i )
+    {
+        m_Ptrs.emplace_back( this, aBlk.m_Ptrs[i], nullptr );
+    }
+}
+
+
+bool PTR_ARRAY::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
+{
+    bool ok = true;
+
+    ok &= m_Next.Resolve( aResolver );
+    ok &= m_Parent.Resolve( aResolver );
+
+    for( auto& ptr : m_Ptrs )
+    {
+        // These may point to objects we don't parse, so don't fail if resolution fails
+        ptr.Resolve( aResolver );
+    }
 
     return ok;
 }

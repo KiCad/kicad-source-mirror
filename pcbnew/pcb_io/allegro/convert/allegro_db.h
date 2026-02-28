@@ -336,7 +336,7 @@ enum BRD_TYPE
     BRD_KEEPOUT,        // 0x34
     BRD_x35,
     BRD_x36,
-    BRD_x37,
+    BRD_PTR_ARRAY,       // 0x37
     BRD_FILM_LAYER_LIST, // 0x39
     BRD_FILM,            // 0x3a
     BRD_x3b,
@@ -900,6 +900,25 @@ struct VIA : public BRD_DB_OBJ
     BOX2I m_Bounds;
 };
 
+
+/**
+ * 0x37 PTR_ARRAY objects.
+ */
+struct PTR_ARRAY : public BRD_DB_OBJ
+{
+    PTR_ARRAY( const BRD_DB& aBrd, const BLK_0x37_PTR_ARRAY& aBlk );
+
+    bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
+
+    const char* TypeName() const override { return "PTR_ARRAY"; }
+
+    const DB_REF& GetNext() const override { return m_Next; }
+
+    DB_REF m_Next;
+    DB_REF m_Parent;
+
+    std::vector<DB_REF> m_Ptrs;
+};
 
 /**
  * When processing a view, some objects are available and some are not.

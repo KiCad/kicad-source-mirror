@@ -2038,15 +2038,15 @@ struct BLK_0x37_PTR_ARRAY
     uint8_t  m_T;
     uint16_t m_T2;
     uint32_t m_Key;
-    uint32_t m_Ptr1;
-    uint32_t m_Unknown1;
+    uint32_t m_GroupPtr;
+    uint32_t m_Next;
     uint32_t m_Capacity;
     uint32_t m_Count;
     uint32_t m_Unknown2;
 
     std::array<uint32_t, 100> m_Ptrs;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_UnknownArr;
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 };
 
 

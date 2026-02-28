@@ -108,6 +108,7 @@ static uint32_t GetPrimaryNext( const BLOCK_BASE& aBlock )
     case 0x2C: return BLK_FIELD( BLK_0x2C_TABLE, m_Next );
     case 0x33: return BLK_FIELD( BLK_0x33_VIA, m_Next );
     case 0x36: return BLK_FIELD( BLK_0x36_DEF_TABLE, m_Next );
+    case 0x37: return BLK_FIELD( BLK_0x37_PTR_ARRAY, m_Next );
     default: return 0;
     }
 }
@@ -3766,71 +3767,73 @@ void BOARD_BUILDER::createTables()
 
         const wxString& tableName = m_brdDb.GetString( tableData.m_StringPtr );
 
-        const BLOCK_BASE* keyTable = m_brdDb.GetObjectByKey( tableData.m_Ptr1 );
-
-        wxLogTrace( traceAllegroBuilder, "  Table '%s' (key %#010x, table block key %#010x)", tableName,
-                    tableData.m_Key, tableData.m_Ptr1 );
-
-        if( !keyTable )
-        {
-            wxLogTrace( traceAllegroBuilder, "    Key table pointer %#010x is invalid", tableData.m_Ptr1 );
-            continue;
-        }
-
-        std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
-        group->SetName( tableName );
-
         std::vector<std::unique_ptr<BOARD_ITEM>> newItems;
 
-        switch( keyTable->GetBlockType() )
+        LL_WALKER keyTableWalker{ tableData.m_Ptr1, block->GetKey(), m_brdDb };
+
+        for( const BLOCK_BASE* keyTable : keyTableWalker )
         {
-        case 0x37:
-        {
-            const BLK_0x37_PTR_ARRAY& ptrArray = static_cast<const BLOCK<BLK_0x37_PTR_ARRAY>&>( *keyTable ).GetData();
+            wxLogTrace( traceAllegroBuilder, "  Table '%s' (key %#010x, table block key %#010x)", tableName,
+                        tableData.m_Key, tableData.m_Ptr1 );
 
-            uint32_t count = std::min( ptrArray.m_Count,
-                                       static_cast<uint32_t>( ptrArray.m_Ptrs.size() ) );
-
-            wxLogTrace( traceAllegroBuilder, "    Pointer array with %zu entries",
-                        static_cast<size_t>( count ) );
-
-            for( uint32_t ptrIndex = 0; ptrIndex < count; ptrIndex++ )
+            if( !keyTable )
             {
-                uint32_t ptrKey = ptrArray.m_Ptrs[ptrIndex];
-
-                if( ptrKey == 0 )
-                    continue;
-
-                const BLOCK_BASE* entryBlock = m_brdDb.GetObjectByKey( ptrKey );
-
-                if( !entryBlock )
-                {
-                    wxLogTrace( traceAllegroBuilder, "      Entry pointer %#010x is invalid", ptrKey );
-                    continue;
-                }
-
-                for( std::unique_ptr<BOARD_ITEM>& newItem : buildGraphicItems( *entryBlock, m_board ) )
-                {
-                    newItems.push_back( std::move( newItem ) );
-                }
+                wxLogTrace( traceAllegroBuilder, "    Key table pointer %#010x is invalid", tableData.m_Ptr1 );
+                continue;
             }
 
-            break;
-        }
-        case 0x3c:
-        {
-            const BLK_0x3C_KEY_LIST& keyList = static_cast<const BLOCK<BLK_0x3C_KEY_LIST>&>( *keyTable ).GetData();
+            switch( keyTable->GetBlockType() )
+            {
+            case 0x37:
+            {
+                const BLK_0x37_PTR_ARRAY& ptrArray =
+                        static_cast<const BLOCK<BLK_0x37_PTR_ARRAY>&>( *keyTable ).GetData();
 
-            wxLogTrace( traceAllegroBuilder, "    Key list with %zu entries",
-                        static_cast<size_t>( keyList.m_NumEntries ) );
-            break;
+                uint32_t count = std::min( ptrArray.m_Count, static_cast<uint32_t>( ptrArray.m_Ptrs.size() ) );
+
+                wxLogTrace( traceAllegroBuilder, "    Pointer array with %zu entries", static_cast<size_t>( count ) );
+
+                for( uint32_t ptrIndex = 0; ptrIndex < count; ptrIndex++ )
+                {
+                    uint32_t ptrKey = ptrArray.m_Ptrs[ptrIndex];
+
+                    if( ptrKey == 0 )
+                        continue;
+
+                    const BLOCK_BASE* entryBlock = m_brdDb.GetObjectByKey( ptrKey );
+
+                    if( !entryBlock )
+                    {
+                        wxLogTrace( traceAllegroBuilder, "      Entry pointer %#010x is invalid", ptrKey );
+                        continue;
+                    }
+
+                    for( std::unique_ptr<BOARD_ITEM>& newItem : buildGraphicItems( *entryBlock, m_board ) )
+                    {
+                        newItems.push_back( std::move( newItem ) );
+                    }
+                }
+
+                break;
+            }
+            case 0x3c:
+            {
+                const BLK_0x3C_KEY_LIST& keyList = static_cast<const BLOCK<BLK_0x3C_KEY_LIST>&>( *keyTable ).GetData();
+
+                wxLogTrace( traceAllegroBuilder, "    Key list with %zu entries",
+                            static_cast<size_t>( keyList.m_NumEntries ) );
+                break;
+            }
+            default:
+            {
+                wxLogTrace( traceAllegroBuilder, "    Table has unhandled key table type %#04x",
+                            keyTable->GetBlockType() );
+                break;
+            }
+            }
         }
-        default:
-        {
-            wxLogTrace( traceAllegroBuilder, "    Table has unhandled key table type %#04x", keyTable->GetBlockType() );
-            break;
-        }
-        }
+        std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
+        group->SetName( tableName );
 
         for( std::unique_ptr<BOARD_ITEM>& newItem : newItems )
         {
