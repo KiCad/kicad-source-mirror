@@ -492,7 +492,10 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
                                          aRule.m_LayerCondition );
 
         // Preserve original layer source text for round-trip fidelity
-        entry.layerSource = aRule.m_LayerSource;
+        wxString source = aRule.m_LayerSource;
+        if( source.StartsWith( wxS( "'" ) ) && source.EndsWith( wxS( "'" ) ) )
+            source = source.Mid( 1, source.Length() - 2 );
+        entry.layerSource = source;
 
         // Store original text only for the first entry to avoid duplication issues
         if( entries.empty() )
@@ -512,7 +515,10 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         DRC_RE_LOADED_PANEL_ENTRY entry( CUSTOM_RULE, customData, aRule.m_Name, condition,
                                          aRule.m_Severity, aRule.m_LayerCondition );
-        entry.layerSource = aRule.m_LayerSource;
+        wxString                  source = aRule.m_LayerSource;
+        if( source.StartsWith( wxS( "'" ) ) && source.EndsWith( wxS( "'" ) ) )
+            source = source.Mid( 1, source.Length() - 2 );
+        entry.layerSource = source;
         entry.originalRuleText = aOriginalText;
         entries.push_back( std::move( entry ) );
     }
