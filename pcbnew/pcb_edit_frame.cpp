@@ -1119,8 +1119,19 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto netHighlightCond =
             [this]( const SELECTION& )
             {
-                KIGFX::RENDER_SETTINGS* settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
-                return !settings->GetHighlightNetCodes().empty();
+                if( auto* canvas = GetCanvas() )
+                {
+                    if( auto* view = canvas->GetView() )
+                    {
+                        if( auto* painter = view->GetPainter() )
+                        {
+                            if( auto* settings = painter->GetSettings() )
+                                return !settings->GetHighlightNetCodes().empty();
+                        }
+                    }
+                }
+
+                return false;
             };
 
     auto enableNetHighlightCond =

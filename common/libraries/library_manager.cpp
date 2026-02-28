@@ -479,9 +479,10 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
                                    && !wxFileName::Exists( path );
                         } );
 
+                bool hadRemovals = !toErase.empty();
                 table->Rows().erase( toErase.begin(), toErase.end() );
 
-                if( !toErase.empty() )
+                if( hadRemovals )
                 {
                     table->Save().map_error(
                             []( const LIBRARY_ERROR& aError )

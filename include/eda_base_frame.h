@@ -200,8 +200,6 @@ public:
     static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
                                      ACTION_CONDITIONS aCond );
 
-    void onUpdateUI( wxUpdateUIEvent& aEvent );
-
     virtual void OnMove( wxMoveEvent& aEvent )
     {
         aEvent.Skip();
@@ -752,6 +750,8 @@ protected:
     DECLARE_EVENT_TABLE()
 
 private:
+    void onUpdateUI( wxUpdateUIEvent& aEvent );
+
     /**
      * (with its unexpected name so it does not collide with the real OnWindowClose()
      * function provided in derived classes) is called just before a window
