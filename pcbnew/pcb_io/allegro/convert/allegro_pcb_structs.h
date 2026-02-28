@@ -403,6 +403,7 @@ struct LAYER_INFO
         VIA_KEEPOUT          = 0x13,
         ANTI_ETCH            = 0x14,
         BOUNDARY             = 0x15,
+        CONSTRAINTS_REGION   = 0x16,
     };
 
     /**
@@ -489,6 +490,9 @@ struct LAYER_INFO
         MFR_NO_GLOSS_TOP             = 0xFB,
         MFR_NO_GLOSS_ALL             = 0xFC,
         MFR_PHOTOPLOT_OUTLINE        = 0xFD,
+
+        // CONSTRAINTS_REGION
+        CREG_ALL                     = 0xFD,
     };
 
     uint8_t m_Class;
@@ -1628,6 +1632,7 @@ struct BLK_0x2C_TABLE
         SUBTYPE_UNKNOWN = 0,
 
         SUBTYPE_0x05 = 0x05,
+
         SUBTYPE_0x06 = 0x06,
         SUBTYPE_0x0c = 0x0c,
         SUBTYPE_0x15 = 0x15,
@@ -1635,7 +1640,9 @@ struct BLK_0x2C_TABLE
         SUBTYPE_0x20 = 0x20,
         SUBTYPE_0x23 = 0x23,
 
+        /// Some kind of net match group
         SUBTYPE_0x102 = 0x102,
+        /// Diff pair
         SUBTYPE_0x103 = 0x103,
         SUBTYPE_0x107 = 0x107,
 

@@ -318,25 +318,26 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
 {
     // clang-format off
     static const std::unordered_map<uint8_t, wxString> s_ClassNames = {
-        { LAYER_INFO::CLASS::BOARD_GEOMETRY,   wxS( "Board Geometry" ) },
-        { LAYER_INFO::CLASS::COMPONENT_VALUE,  wxS( "Component Value" ) },
-        { LAYER_INFO::CLASS::DEVICE_TYPE,      wxS( "Device Type" ) },
-        { LAYER_INFO::CLASS::DRAWING_FORMAT,   wxS( "Drawing Format" ) },
-        { LAYER_INFO::CLASS::ETCH,             wxS( "Etch" ) },
-        { LAYER_INFO::CLASS::MANUFACTURING,    wxS( "Manufacturing" ) },
-        { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, wxS( "Package Geometry" ) },
-        { LAYER_INFO::CLASS::PACKAGE_KEEPIN,   wxS( "Package Keepin" ) },
-        { LAYER_INFO::CLASS::PACKAGE_KEEPOUT,  wxS( "Package Keepout" ) },
-        { LAYER_INFO::CLASS::PIN,              wxS( "Pin" ) },
-        { LAYER_INFO::CLASS::REF_DES,          wxS( "Ref Des" ) },
-        { LAYER_INFO::CLASS::ROUTE_KEEPIN,     wxS( "Route Keepin" ) },
-        { LAYER_INFO::CLASS::ROUTE_KEEPOUT,    wxS( "Route Keepout" ) },
-        { LAYER_INFO::CLASS::TOLERANCE,        wxS( "Tolerance" ) },
-        { LAYER_INFO::CLASS::USER_PART_NUMBER, wxS( "User Part Number" ) },
-        { LAYER_INFO::CLASS::VIA_CLASS,        wxS( "Via Class" ) },
-        { LAYER_INFO::CLASS::VIA_KEEPOUT,      wxS( "Via Keepout" ) },
-        { LAYER_INFO::CLASS::ANTI_ETCH,        wxS( "Anti Etch" ) },
-        { LAYER_INFO::CLASS::BOUNDARY,         wxS( "Boundary" ) },
+        { LAYER_INFO::CLASS::BOARD_GEOMETRY,        wxS( "Board Geometry" ) },
+        { LAYER_INFO::CLASS::COMPONENT_VALUE,       wxS( "Component Value" ) },
+        { LAYER_INFO::CLASS::DEVICE_TYPE,           wxS( "Device Type" ) },
+        { LAYER_INFO::CLASS::DRAWING_FORMAT,        wxS( "Drawing Format" ) },
+        { LAYER_INFO::CLASS::ETCH,                  wxS( "Etch" ) },
+        { LAYER_INFO::CLASS::MANUFACTURING,         wxS( "Manufacturing" ) },
+        { LAYER_INFO::CLASS::PACKAGE_GEOMETRY,      wxS( "Package Geometry" ) },
+        { LAYER_INFO::CLASS::PACKAGE_KEEPIN,        wxS( "Package Keepin" ) },
+        { LAYER_INFO::CLASS::PACKAGE_KEEPOUT,       wxS( "Package Keepout" ) },
+        { LAYER_INFO::CLASS::PIN,                   wxS( "Pin" ) },
+        { LAYER_INFO::CLASS::REF_DES,               wxS( "Ref Des" ) },
+        { LAYER_INFO::CLASS::ROUTE_KEEPIN,          wxS( "Route Keepin" ) },
+        { LAYER_INFO::CLASS::ROUTE_KEEPOUT,         wxS( "Route Keepout" ) },
+        { LAYER_INFO::CLASS::TOLERANCE,             wxS( "Tolerance" ) },
+        { LAYER_INFO::CLASS::USER_PART_NUMBER,      wxS( "User Part Number" ) },
+        { LAYER_INFO::CLASS::VIA_CLASS,             wxS( "Via Class" ) },
+        { LAYER_INFO::CLASS::VIA_KEEPOUT,           wxS( "Via Keepout" ) },
+        { LAYER_INFO::CLASS::ANTI_ETCH,             wxS( "Anti Etch" ) },
+        { LAYER_INFO::CLASS::BOUNDARY,              wxS( "Boundary" ) },
+        { LAYER_INFO::CLASS::CONSTRAINTS_REGION,    wxS( "Constraints Region" ) },
     };
 
     static const std::unordered_map<uint8_t, wxString> s_BoardGeomSubclassNames = {
@@ -423,20 +424,25 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::SUBCLASS::ANALYSIS_LOW_ISOCONTOUR,      wxS( "Low IsoContour" ) },
     };
 
+    static const std::unordered_map<uint8_t, wxString> s_ConstraintSubclassNames = {
+        { LAYER_INFO::SUBCLASS::CREG_ALL,                     wxS( "All" ) },
+    };
+
     static const std::unordered_map<uint8_t, const std::unordered_map<uint8_t, wxString>&> s_SubclassNameMaps = {
-        { LAYER_INFO::CLASS::BOARD_GEOMETRY,   s_BoardGeomSubclassNames },
+        { LAYER_INFO::CLASS::BOARD_GEOMETRY,        s_BoardGeomSubclassNames },
 
         // These classes all share the same subclass names
-        { LAYER_INFO::CLASS::COMPONENT_VALUE,  s_ComponentValueSubclassNames },
-        { LAYER_INFO::CLASS::DEVICE_TYPE,      s_ComponentValueSubclassNames },
-        { LAYER_INFO::CLASS::REF_DES,          s_ComponentValueSubclassNames },
-        { LAYER_INFO::CLASS::TOLERANCE,        s_ComponentValueSubclassNames },
-        { LAYER_INFO::CLASS::USER_PART_NUMBER, s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::COMPONENT_VALUE,       s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::DEVICE_TYPE,           s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::REF_DES,               s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::TOLERANCE,             s_ComponentValueSubclassNames },
+        { LAYER_INFO::CLASS::USER_PART_NUMBER,      s_ComponentValueSubclassNames },
 
-        { LAYER_INFO::CLASS::DRAWING_FORMAT,   s_DrawingFormatSubclassNames },
-        { LAYER_INFO::CLASS::PACKAGE_GEOMETRY, s_PackageGeometrySubclassNames },
-        { LAYER_INFO::CLASS::MANUFACTURING,    s_ManufacturingSubclassNames },
-        { LAYER_INFO::CLASS::ANALYSIS,         s_AnalysisSubclassNames },
+        { LAYER_INFO::CLASS::DRAWING_FORMAT,        s_DrawingFormatSubclassNames },
+        { LAYER_INFO::CLASS::PACKAGE_GEOMETRY,      s_PackageGeometrySubclassNames },
+        { LAYER_INFO::CLASS::MANUFACTURING,         s_ManufacturingSubclassNames },
+        { LAYER_INFO::CLASS::ANALYSIS,              s_AnalysisSubclassNames },
+        { LAYER_INFO::CLASS::CONSTRAINTS_REGION,    s_ConstraintSubclassNames },
     };
     // clang-format on
 
@@ -1391,6 +1397,10 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
         return wxEmptyString;
 
     const wxString& name = m_brdDb.GetString( tbl->m_StringPtr );
+
+    wxLogTrace( traceAllegroBuilder, "Resolving match group name for NET '%s': found table at key %#010x, subtype %#x, name '%s'",
+                m_brdDb.GetString( aNet.m_NetName ), tableKey, tbl->m_SubType, name );
+
     return name;
 }
 
@@ -1994,6 +2004,13 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x24_RECT& aRect,
 
     const int lineWidth = 0;
     shape->SetWidth( lineWidth );
+
+    if( aRect.m_Coords[0] == 1334202 )
+    {
+        wxLogTrace( traceAllegroBuilder, "Debug rect with coords [%d, %d, %d, %d], rotation %u, layer %#02x:%#02x",
+                    aRect.m_Coords[0], aRect.m_Coords[1], aRect.m_Coords[2], aRect.m_Coords[3],
+                    aRect.m_Rotation, aRect.m_Layer.m_Class, aRect.m_Layer.m_Subclass );
+    }
 
     return shape;
 }
