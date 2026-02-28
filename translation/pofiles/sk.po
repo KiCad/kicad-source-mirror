@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-26 23:09+0000\n"
+"PO-Revision-Date: 2026-02-28 01:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -241,7 +241,7 @@ msgstr "Presunúť dosku"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
-msgstr "Obnoviť pôvodné nastavenia"
+msgstr "Obnoviť predvolené nastavenia"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:313 cvpcb/menubar.cpp:79
@@ -2231,7 +2231,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3507
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr "Nedostatočné oprávnenia ku odstráneniu zložky '%s'."
+msgstr "Nedostatočné oprávnenia na odstránenie priečinku '%s'."
 
 #: common/design_block_io.cpp:223
 #, c-format
@@ -2650,7 +2650,7 @@ msgstr "Náhľad (starý/nový):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Obnoviť na prednastavené"
+msgstr "Obnoviť predvolené"
 
 #: common/dialogs/dialog_configure_paths.cpp:247
 #: common/dialogs/dialog_configure_paths.cpp:314
@@ -4605,7 +4605,7 @@ msgstr "Dostupné náhrady cesty:"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:105
 msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
-"Toto je tabuľka iba na čítanie, ktorá zobrazuje príslušné premenné "
+"Toto je tabuľka len na čítanie, ktorá zobrazuje príslušné premenné "
 "prostredia."
 
 #: common/dialogs/panel_embedded_files.cpp:58
@@ -4631,7 +4631,7 @@ msgstr ""
 #: common/dialogs/panel_embedded_files.cpp:337
 #, c-format
 msgid "Failed to read file '%s'."
-msgstr "Nepodarilo sa prečítať súbor '%s'."
+msgstr "Nepodarilo sa načítať súbor '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:349
 #, c-format
@@ -5089,11 +5089,11 @@ msgstr ""
 
 #: common/dialogs/panel_maintenance_base.cpp:51
 msgid "Reset All Dialogs to Defaults"
-msgstr "Všetky dialógy obnoviť na predvolené hodnoty"
+msgstr "Obnoviť predvolené pre všetky dialógy"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
 msgid "Reset All Program Settings to Defaults"
-msgstr "Obnoviť všetky nastavenia programu na predvolené hodnoty"
+msgstr "Obnoviť predvolené všetky nastavenia programu"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5311,12 +5311,12 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings_base.cpp:328
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
 msgid "Reset to Mouse Defaults"
-msgstr "Obnoviť na predvolené nasatavenie myši"
+msgstr "Obnoviť predvolené nastavenie myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:331
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
 msgid "Reset to Trackpad Defaults"
-msgstr "Obnoviť na predvolené pre touchpad"
+msgstr "Obnoviť predvolené pre trackpad"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1496
@@ -6023,7 +6023,7 @@ msgstr ""
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3636
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3662
 msgid "Failed to read image data."
-msgstr "Obrázok sa nepodarilo sa načítať."
+msgstr "Nepodarilo sa načítať dáta obrázku."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:984
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:67
@@ -6410,7 +6410,7 @@ msgstr "Údržba"
 #: pcbnew/tools/board_editor_control.cpp:505
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "Nedostatočné oprávnenia k priečinku '%s'."
+msgstr "Nedostatočné oprávnenia na odstránenie priečinku '%s'."
 
 #: common/eda_base_frame.cpp:1868
 msgid "Set Language"
@@ -7361,7 +7361,7 @@ msgstr "Zdrojový adresár neexistuje: %s"
 #: common/gestfich.cpp:649
 #, c-format
 msgid "Could not read file: %s"
-msgstr "Nepodarilo sa prečítať súbor: %s"
+msgstr "Nepodarilo sa načítať súbor: %s"
 
 #: common/git/kicad_git_common.cpp:904
 #, c-format
@@ -7617,7 +7617,7 @@ msgstr "Nepodarilo sa získať dáta zo vzdialeného úložiska '%s': %s"
 
 #: common/git/libgit_backend.cpp:825
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Nepodarilo sa prečítať 'FETCH_HEAD'"
+msgstr "Nepodarilo sa načítať 'FETCH_HEAD'"
 
 #: common/git/libgit_backend.cpp:833
 msgid "Could not lookup commit"
@@ -8075,7 +8075,7 @@ msgstr ""
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Nepodarilo sa prečítať ZIP archív '%s'"
+msgstr "Nepodarilo sa načítať ZIP archív '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:272
 #: common/io/easyedapro/easyedapro_import_utils.cpp:311
@@ -8423,9 +8423,7 @@ msgstr "Nepodarilo sa načítať knižnicu kiface '%s'."
 #: common/kiway.cpp:291
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
-"Nepodarilo sa prečítať názov inštancie a verziu symbolov v knižnici kiface "
-"'%s'."
+msgstr "Nepodarilo sa načítať názov inštancie a verziu z kiface knižnice '%s'."
 
 #: common/kiway.cpp:452
 msgid "Error loading editor."
@@ -9010,7 +9008,7 @@ msgstr "Cesta tabuľky knižnice '%s' neexistuje"
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Vyskytla sa neočakávaná chyba pri čítaní tabuľky knižnice %s "
+msgstr "Vyskytla sa neočakávaná chyba pri načítaní tabuľky knižnice %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:233
@@ -9020,7 +9018,7 @@ msgstr ""
 
 #: common/libraries/library_table_parser.cpp:219
 msgid "An unexpected error occurred while reading library table"
-msgstr "Pri čítaní tabuľky knižnice sa vyskytla neočakávaná chyba"
+msgstr "Vyskytla sa neočakávaná chyba pri načítaní tabuľky knižnice"
 
 #: common/local_history.cpp:1490
 msgid ""
@@ -9432,7 +9430,7 @@ msgstr "Súbor '%s' neexistuje."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3235
 #, c-format
 msgid "Unable to read file '%s'."
-msgstr "Nepodarilo sa prečítať súbor '%s'."
+msgstr "Nepodarilo sa načítať súbor '%s'."
 
 #: common/richio.cpp:164
 #, c-format
@@ -11101,7 +11099,7 @@ msgstr "<vytvoriť sieť>"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:480
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 msgid "Reset to Defaults"
-msgstr "Obnoviť na predvolené"
+msgstr "Obnoviť predvolené"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Reveal Preferences in Finder"
@@ -11114,7 +11112,7 @@ msgstr "Otvoriť adresár s nastaveniami"
 #: common/widgets/paged_dialog.cpp:333
 #, c-format
 msgid "Reset %s to Defaults"
-msgstr "Obnoviť %s na predvolené"
+msgstr "Obnoviť predvolené pre %s"
 
 #: common/widgets/panel_design_block_chooser.cpp:403
 #: cvpcb/cvpcb_mainframe.cpp:985
@@ -12291,7 +12289,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Obnoviť zoznam skriptov generátora zoznamu materiálu na predvolené nastavenia"
+"Obnoviť predvolené nastavenia pre zoznam skriptov generátora zoznamu "
+"materiálu"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -12619,7 +12618,7 @@ msgstr "Nový identifikátor knižnice:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 msgid "Update/Reset Fields"
-msgstr "Aktualizovať/obnoviť polia"
+msgstr "Aktualizovať/resetovať polia"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:41
@@ -12650,51 +12649,47 @@ msgstr "Resetujte polia, ak sú v symbole knižnice prázdne"
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
 msgid "Update/reset field text"
-msgstr "Aktualizovať/obnoviť text poľa"
+msgstr "Aktualizovať/resetovať text poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:76
 msgid "Update/reset field visibilities"
-msgstr "Aktualizácia / reset viditeľnosti poľa"
+msgstr "Aktualizovať/resetovať viditeľnosti poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
 msgid "Update/reset field text sizes and styles"
-msgstr "Aktualizovať/obnoviť veľkosti a štýly textu poľa"
+msgstr "Aktualizovať/resetovať veľkosti a štýly textu poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:84
 msgid "Update/reset field positions"
-msgstr "Aktualizácia / reset pozícií polí"
+msgstr "Aktualizovať/resetovať pozície poľa"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
 msgid "Check All Update Options"
-msgstr "Skontrolovať všetky možnosti aktualizácie"
+msgstr "Začiarknuť všetky možnosti aktualizácie"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
 msgid "Update symbol shape and pins"
 msgstr "Aktualizovať tvar symbolu a vývodov"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Aktualizovať stopu %s z '%s' na '%s'"
+msgstr "Aktualizovať kľúčové slová a filtre puzdier"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibilities"
-msgstr "Aktualizácia / reset viditeľnosti poľa"
+msgstr "Aktualizovať/resetovať viditeľnosti názvu/čísla vývodu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Aktualizácia / resetovanie atribútov výroby"
+msgstr "Aktualizovať/resetovať atribúty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:148
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Možnosti aktualizácie"
+msgstr "Zrušiť začiarknutie všetkých možností aktualizácie"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
 msgid "Update Symbols from Library"
@@ -12705,19 +12700,18 @@ msgid "Connected to database successfully"
 msgstr "Úspěšně připojeno k databázi"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Prebieha kontrola sieťových pripojení..."
+msgstr "Pripojenie k databáze zlyhalo: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Pripojenie podložky k zónam:"
+msgstr "Bez pripojenia k databáze"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Načítavajú sa knižnice symbolov"
+msgstr "Načítaných %zu knižníc"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -12728,40 +12722,33 @@ msgid "Username:"
 msgstr "Používateľské meno:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Konektor:"
+msgstr "Pripojovací reťazec:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Konfigurácia svetla"
+msgstr "Znova načítať konfiguráciu"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "načítať existujúci súbor s nastavením kláv. skratiek"
+msgstr "Znova načítať konfiguračný súbor databázovej knižnice"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Vyhľadávam..."
+msgstr "Ukladanie do cache"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Veľkosť stránky:"
+msgstr "Veľkosť cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "Koľko číslic presnosti sa má zobraziť"
+msgstr "Koľko databázových dotazov uložiť do cache"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Symbol vo vyrovnávacej pamäti:"
+msgstr "Časový limit cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -12769,14 +12756,13 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "Súbory knižnice symbolov KiCad"
+msgstr "Nastavenia databázovej knižnice"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "Identifikátor knižnice symbolov \"%s\" nie je platný."
+msgstr "Identifikátor knižničného symbolu %s nie je platný."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:645
 #, c-format
@@ -12826,20 +12812,18 @@ msgid "Map Orphans"
 msgstr "Mapa Siroty"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some symbols are orphaned (the linked symbol is not found anywhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Ak niektoré komponenty osireli (prepojený symbol sa nikde nenachádza),\n"
+"Ak sú niektoré symboly osamotené (prepojený symbol sa nikde nenachádza),\n"
 "pokúste sa nájsť kandidáta s rovnakým menom v jednej z načítaných knižníc "
 "symbolov."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Aktualizujte symboly z knižnice"
+msgstr "Aktualizovať polia symbolu z novej knižnice"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
@@ -12870,23 +12854,20 @@ msgid "Cross-probe Selected Items"
 msgstr "Krížové zvýraznenie vybraných položiek"
 
 #: eeschema/dialogs/dialog_erc.cpp:231
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Zvýraznite všetky medené predmety v sieti"
+msgstr "Zvýrazniť zodpovedajúce položky na ploche pri vybratí v ERC zozname"
 
 #: eeschema/dialogs/dialog_erc.cpp:235 pcbnew/dialogs/dialog_drc.cpp:289
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Stred na strane"
+msgstr "Vycentrovať na krížovo zvýraznené"
 
 #: eeschema/dialogs/dialog_erc.cpp:236 pcbnew/dialogs/dialog_drc.cpp:290
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:240
-#, fuzzy
 msgid "Show all errors"
-msgstr "Zobraziť všetky priechody"
+msgstr "Zobraziť všetky chyby"
 
 #: eeschema/dialogs/dialog_erc.cpp:241
 msgid "Show duplicate ERC markers on all applicable pins"
@@ -12916,9 +12897,8 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "Symbol(y) %d vyžadují očíslování.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:540
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC zrušil používateľ.<br><br>"
+msgstr "-------- ERC zrušený používateľom.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:542 pcbnew/dialogs/dialog_drc.cpp:425
 msgid "Done.<br><br>"
@@ -12950,9 +12930,8 @@ msgid "Edit exclusion comment..."
 msgstr "Upraviť komentár vylúčenia..."
 
 #: eeschema/dialogs/dialog_erc.cpp:742 pcbnew/dialogs/dialog_drc.cpp:748
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Vylúčte toto porušenie"
+msgstr "Vylúčiť toto porušenie"
 
 #: eeschema/dialogs/dialog_erc.cpp:743 eeschema/dialogs/dialog_erc.cpp:747
 #: pcbnew/dialogs/dialog_drc.cpp:749 pcbnew/dialogs/dialog_drc.cpp:753
@@ -12961,9 +12940,8 @@ msgid "It will be excluded from the %s list"
 msgstr "Bude vylúčené zo zoznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:746 pcbnew/dialogs/dialog_drc.cpp:752
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "Upraviť komentár vylúčenia..."
+msgstr "Vylúčiť s komentárom..."
 
 #: eeschema/dialogs/dialog_erc.cpp:774 pcbnew/dialogs/dialog_drc.cpp:783
 #, c-format
@@ -13037,9 +13015,9 @@ msgid "Formatting"
 msgstr "Formátovanie"
 
 #: eeschema/dialogs/dialog_erc.cpp:1150 pcbnew/dialogs/dialog_gendrill.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Súbor hlásenia %s vytvorený"
+msgstr "Súbor správy '%s' vytvorený."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:76
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
@@ -13092,9 +13070,9 @@ msgstr "stránku"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:106
 #: pcbnew/dialogs/dialog_drc_base.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Porušenia (%d)"
+msgstr "Porušenia (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:114
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
@@ -13103,9 +13081,9 @@ msgstr "Upraviť ignorované testy"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:124
 #: pcbnew/dialogs/dialog_drc_base.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Nepripojené položky (%d)"
+msgstr "Ignorované testy (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:164
 #: pcbnew/dialogs/dialog_drc_base.cpp:210
@@ -13128,29 +13106,24 @@ msgid "ERC Job Settings"
 msgstr "Nastavenia úlohy ERC"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:272
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "Export do formátu GenCAD"
+msgstr "Exportovať netlist v KiCad formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:277
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Exportuje dáta vo formáte Pcbnew"
+msgstr "Exportovať netlist v OrcadPCB2 formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:282
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Exportuje dáta vo formáte Pcbnew"
+msgstr "Exportovať netlist v Allegro formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:287
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Export do formátu GenCAD"
+msgstr "Exportovať netlist v CadStar formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:292
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Export do formátu GenCAD"
+msgstr "Exportovať netlist v PADS formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
@@ -13158,9 +13131,8 @@ msgid "Export Netlist"
 msgstr "Exportovať zoznam Netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Exportuje dáta vo formáte Pcbnew"
+msgstr "Exportovať netlist v SPICE formáte"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_export_netlist.cpp:397
@@ -13169,15 +13141,13 @@ msgstr "Použiť aktuálny list ako východzí"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:353
 #: eeschema/dialogs/dialog_export_netlist.cpp:398
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Vymazať existujúce číslovanie v"
+msgstr "Exportovať netlist iba pre aktuálny list"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:356
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
-#, fuzzy
 msgid "Save all voltages"
-msgstr "Uložiť všetky zmeny"
+msgstr "Uložiť všetky napätia"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:357
 msgid "Write a directive to save all voltages (.save all)"
@@ -13185,9 +13155,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:360
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
-#, fuzzy
 msgid "Save all currents"
-msgstr "Globálne knižnice"
+msgstr "Uložiť všetky prúdy"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:361
 msgid "Write a directive to save all currents (.probe alli)"
@@ -13195,9 +13164,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:364
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Maximálna odchýlka:"
+msgstr "Uložiť všetky stratové výkony"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:365
 msgid ""
@@ -13216,20 +13184,18 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:375
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Príkaz externého simulátora:"
+msgstr "Spustiť príkaz externého simulátora:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:376
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Zadajte príkazový riadok a spustite spice\n"
-"Zvyčajne <cesta k binárnemu koreniu>% I\n"
-"% Bude nahradený skutočným názvom netlist spice"
+"Zadať príkazový riadok na spustenie SPICE\n"
+"Zvyčajne '<cesta k binárnemu súboru SPICE> \"%I\"'\n"
+"%I bude nahradené cestou k súboru netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:394
 msgid "Export netlist as a SPICE .subckt model"
@@ -13250,15 +13216,13 @@ msgstr "%s Export"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:585
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Export netlistu si vyžaduje úplne anotovanú schému."
+msgstr "Export netlistu vyžaduje úplne očíslovanú schému."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:645
 #: eeschema/dialogs/dialog_export_netlist.cpp:684
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Príkaz externého simulátora:"
+msgstr "externý simulátor nebol nájdený"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:646
 #: eeschema/dialogs/dialog_export_netlist.cpp:685
@@ -13283,35 +13247,29 @@ msgid "Maximum number of plugins already added to dialog."
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:882
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Chyba. Musíte uviesť názov"
+msgstr "Je potrebné poskytnúť názov generátoru netlistu"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
-#, fuzzy
 msgid "Output path:"
-msgstr "Výstup"
+msgstr "Výstupná cesta:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:59
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "Export..."
+msgstr "Pridať exportér..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:62
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "Odstrániť roh"
+msgstr "Odstrániť exportér"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "Príkazový riadok na spustenie generátora:"
+msgstr "Príkazový riadok pre spustenie exportéra:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Prehliadať generátory..."
+msgstr "Prehliadať skripty..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
@@ -13334,29 +13292,25 @@ msgid "Unit:"
 msgstr "Jednotka:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Zobraziť vlastnosti položky"
+msgstr "Názov súboru listu môže byť upravený iba v okne vlastností listu."
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:316
-#, fuzzy
 msgid "Show field name"
-msgstr "Nový názov poľa:"
+msgstr "Zobraziť názov poľa"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
 msgid "Show the field name in addition to its value"
 msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:122
-#, fuzzy
 msgid "Allow automatic placement"
-msgstr "Pravidlá automatického umiestnenia"
+msgstr "Povoliť automatické umiestnenie"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:125
-#, fuzzy
 msgid "Allow automatic placement of this field in the schematic"
-msgstr "Vykoná automatické umiestnenie vybraných komponentov"
+msgstr "Povoliť automatické umiestnenie tohto poľa v schéme"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:138
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:169
@@ -13386,9 +13340,8 @@ msgstr "Písmo:"
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:95
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:87
-#, fuzzy
 msgid "KiCad Font"
-msgstr "Skončí KiCad"
+msgstr "KiCad písmo"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
@@ -13402,9 +13355,8 @@ msgstr "Zarovnať vľavo"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:125
 #: eeschema/dialogs/dialog_text_properties_base.cpp:128
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:137
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "Zarovnajte na vodorovný stred"
+msgstr "Zarovnať na vodorovný stred"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:182
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:131
@@ -13426,9 +13378,8 @@ msgstr "Zarovnať hore"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:155
 #: eeschema/dialogs/dialog_text_properties_base.cpp:148
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:161
-#, fuzzy
 msgid "Align vertical center"
-msgstr "Zarovnajte na Vertical Center"
+msgstr "Zarovnať na zvislý stred"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:202
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:161
@@ -13440,15 +13391,13 @@ msgstr "Zarovnať dole"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:212
 #: eeschema/dialogs/dialog_text_properties_base.cpp:163
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Horizontálne vľavo"
+msgstr "Vodorovný text"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:217
 #: eeschema/dialogs/dialog_text_properties_base.cpp:168
-#, fuzzy
 msgid "Vertical text"
-msgstr "Zvislý"
+msgstr "Zvislý text"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:229
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:194
@@ -13551,25 +13500,21 @@ msgid "Filter Items"
 msgstr "Filtrovať položky"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:87
-#, fuzzy
 msgid "By field name:"
-msgstr "Názov poľa"
+msgstr "Podľa názvu poľa:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:97
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Predvolený označovač referencie:"
+msgstr "Podľa označenia nadradenej referencie:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "Filtrovanie položiek podľa ID nadradenej knižnice symbolov:"
+msgstr "Podľa knižničného ID nadradeného symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Filtrovanie položiek podľa typu nadradeného symbolu:"
+msgstr "Podľa typu nadradeného symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -13588,9 +13533,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:109
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:149
-#, fuzzy
 msgid "Selected items only"
-msgstr "& Iba výber"
+msgstr "Iba vybrané položky"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -13598,9 +13542,8 @@ msgstr "Nastavený na"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:185
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:239
-#, fuzzy
 msgid "Text color:"
-msgstr "Čisté farby:"
+msgstr "Farba textu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
 #: eeschema/pin_type.cpp:114 eeschema/sch_pin.cpp:1946
@@ -13631,9 +13574,8 @@ msgstr "H Zarovnať:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:295
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:309
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:319
-#, fuzzy
 msgid "(fields only)"
-msgstr "Viditeľné (iba polia)"
+msgstr "(iba polia)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:299
 msgid "V Align:"
@@ -13659,9 +13601,8 @@ msgstr "Štýl čiary:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:380
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:155
 #: eeschema/dialogs/dialog_text_properties_base.cpp:272
-#, fuzzy
 msgid "Fill color:"
-msgstr "Farba čiary:"
+msgstr "Farba výplne:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:389
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:72
@@ -13689,15 +13630,14 @@ msgstr ""
 #: eeschema/dialogs/dialog_image_properties.cpp:81
 #: eeschema/dialogs/dialog_image_properties_base.h:48
 #: eeschema/sch_bitmap.cpp:317 pcbnew/pcb_reference_image.cpp:367
-#, fuzzy
 msgid "Image Properties"
-msgstr "Vlastnosti cieľa"
+msgstr "Vlastnosti obrázku"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:47
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Symbol importu"
+msgstr "Importovať symboly z %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:62
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:539
@@ -13712,9 +13652,9 @@ msgid "Unable to find a plugin to read this library."
 msgstr "Nepodarilo sa nájsť doplnok pre čítanie tejto knižnice."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Knižnicu symbolov '%s' nie je možné importovať."
+msgstr "Nie je možné prečítať knižnicu symbolov '%s'."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:121
 #, fuzzy, c-format
@@ -15747,9 +15687,9 @@ msgstr "Schematická parita"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:154
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:96
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "Projekt chýba alebo je iba na čítanie. Zmeny sa neuložia."
+msgstr ""
+"Projekt chýba alebo je len na čítanie. Nastavenia nebude možné upravovať."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:191
 #, fuzzy, c-format
@@ -16504,9 +16444,8 @@ msgid "No model named '%s' in library."
 msgstr "Názov siete '%s' sa už používa."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:332
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Nepodarilo sa vytvoriť súbor knižnice symbolov '%s'"
+msgstr "Nepodarilo sa načítať simulačný model z polí."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:540
 #, fuzzy
@@ -16710,9 +16649,9 @@ msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "Prvých %d polí je povinných."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists."
-msgstr "Súbor %s už existuje."
+msgstr "Názov poľa %s už existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
 #, fuzzy
@@ -16865,9 +16804,9 @@ msgstr "Názov %s je vyhradený a nemožno ho tu použiť"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2825
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2882
 #: eeschema/toolbars_sch_editor.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s' already exists."
-msgstr "'%s' už existuje."
+msgstr "Variant '%s' už existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2857
 msgid "Cannot copy the default variant."
@@ -17121,13 +17060,13 @@ msgid "Symbol Properties"
 msgstr "Vlastnosti symbolov"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"Premapovanie nie je možné, pretože nemáte oprávnenie na zápis do priečinka "
-"projektu '%s'."
+"Premapovanie nie je možné, pretože nemáte dostatočné oprávnenia na zápis do "
+"priečinka projektu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
 msgid ""
@@ -17490,7 +17429,7 @@ msgstr "Nadradeny symbol:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
-msgstr "Aktualizácia / resetovanie polí"
+msgstr "Aktualizovať/resetovať polia"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 #, fuzzy
@@ -17504,7 +17443,7 @@ msgstr "Ak sú nové symboly prázdne, vynulujte ich"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:80
 msgid "Update/reset field sizes and styles"
-msgstr "Aktualizácia / obnovenie veľkostí a štýlov polí"
+msgstr "Aktualizovať/resetovať veľkosti a štýly poľa"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:236
 #: eeschema/sch_label.cpp:2355
@@ -19420,9 +19359,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:820
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "Schematický súbor '%s' je už otvorený."
+msgstr "Schéma je iba na čítanie"
 
 #: eeschema/files-io.cpp:850
 #, fuzzy
@@ -19449,16 +19387,14 @@ msgid "Import Schematic"
 msgstr "Import schémy"
 
 #: eeschema/files-io.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na čítanie súboru '%s'."
 
 #: eeschema/files-io.cpp:951
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Žiadny program pre čítanie zadaného súboru: '%s'."
 
 #: eeschema/files-io.cpp:1050 pagelayout_editor/files.cpp:179
 #: pagelayout_editor/files.cpp:194 pagelayout_editor/files.cpp:229
@@ -20092,9 +20028,8 @@ msgid "Symbol unit '%s' is already placed (on sheet '%s')"
 msgstr "Schematický súbor '%s' je už otvorený."
 
 #: eeschema/picksymbol.cpp:132
-#, fuzzy
 msgid "Unit Already Placed"
-msgstr "Pohyb a umiestnenie"
+msgstr "Jednotka je už umiestnená"
 
 #: eeschema/picksymbol.cpp:133
 #, fuzzy, c-format
@@ -20273,9 +20208,9 @@ msgstr "Vytvorí nový adresár"
 #: eeschema/sch_base_frame.cpp:761
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1173
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1238
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "Knižnica %s už existuje."
+msgstr "Knižnica '%s' už existuje."
 
 #: eeschema/sch_base_frame.cpp:766
 #, fuzzy, c-format
@@ -20361,9 +20296,9 @@ msgid "Bus Alias %s Members"
 msgstr "Bus Alias %s členov"
 
 #: eeschema/sch_design_block_utils.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Návrhový blok '%s' už obsahuje schému."
 
 #: eeschema/sch_design_block_utils.cpp:67
 msgid "Overwrite existing schematic?"
@@ -20721,9 +20656,9 @@ msgstr "Obnovovací súbor '%s' sa nenašiel."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4319
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4338
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Dokončite výkresový list"
+msgstr "Chyba pri čítaní obrázku %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4331
 #, c-format
@@ -21005,9 +20940,9 @@ msgid "CADSTAR Parts Library files"
 msgstr "CADSTAR súbory knižnice súčiastok"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Dokončite výkresový list"
+msgstr "Chyba pri čítaní databázovej tabuľky %s: %s"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:289
 #, c-format
@@ -21040,7 +20975,7 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Nepodarilo sa prečítať súbor '%s'.\n"
+"Nepodarilo sa načítať súbor '%s'.\n"
 "'%s' na riadku %d, v stĺpci %d, offset %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1063
@@ -21267,9 +21202,9 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "atribúty poľa textu komponentu musia mať šírku 3 znaky"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2196
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "Knižnica %s už existuje."
+msgstr "Knižnica symbolov '%s' už existuje."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2220
 #, fuzzy, c-format
@@ -21295,11 +21230,9 @@ msgid "Unexpected end of file."
 msgstr "Neočakávaný koniec súboru"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na čítanie knižnice '%s'."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:197
 msgid "symbol document library file is empty"
@@ -21343,14 +21276,14 @@ msgid "Save Anyway"
 msgstr "Určite uložiť"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1751
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library file '%s' already exists."
-msgstr "Knižnica %s už existuje."
+msgstr "Súbor knižnice symbolov %s už existuje."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1756
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library path '%s' already exists."
-msgstr "Knižnica %s už existuje."
+msgstr "Cesta knižnice symbolov %s už existuje."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1786
 #, fuzzy, c-format
@@ -21552,9 +21485,8 @@ msgid "Invalid symbol library name"
 msgstr "Neplatný identifikátor knižnice symbolov"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3158
-#, fuzzy
 msgid "Invalid symbol library ID"
-msgstr "Neplatný identifikátor knižnice symbolov"
+msgstr "Neplatné ID knižnice symbolov"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5155
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6969
@@ -21564,9 +21496,8 @@ msgstr "Skupina knižničného prepojenia %s obsahuje neplatný znak '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5161
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6976
-#, fuzzy
 msgid "Invalid library ID"
-msgstr "Neplatný identifikátor knižnice symbolov"
+msgstr "Neplatné ID knižnice"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:223
 #, c-format
@@ -22759,7 +22690,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/sheet.cpp:237 kicad/tools/kicad_manager_control.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
 msgstr "'%s' už existuje."
 
@@ -22926,11 +22857,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Názov súboru „%s“ môže spôsobiť problémy s existujúcim názvom súboru,\n"
-"ktorý je už definovaný v schéme na systémoch, ktoré podporujú názvy \n"
-"súborov bez rozlišovania veľkých a malých písmen. Toto spôsobí problémy, \n"
-"ak skopírujete tento projekt do operačného systému, ktorý podporuje \n"
-"názvy súborov bez rozlišovania veľkých a malých písmen.\n"
+"Názov súboru '%s' môže spôsobiť problémy s existujúcim názvom súboru,\n"
+"ktorý je už definovaný v schéme, na systémoch ktoré nerozlišujú veľké a "
+"malé\n"
+"písmená. Toto spôsobí problémy,  ak skopírujete tento projekt do \n"
+"operačného systému, ktorý nerozlišuje veľké a malé písmená.\n"
 "\n"
 "Chcete pokračovať?"
 
@@ -23364,13 +23295,12 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1273
 msgid "Failed to read a double."
-msgstr "Nepodarilo sa prečíťať double."
+msgstr "Nepodarilo sa načítať hodnotu double."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1279
 #: eeschema/sim/kibis/ibis_parser.cpp:1323
-#, fuzzy
 msgid "Failed to read a word."
-msgstr "Nepodarilo sa načítať '%s'"
+msgstr "Nepodarilo sa načítať hodnotu word."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1316
 #, fuzzy
@@ -23474,9 +23404,8 @@ msgid "Failed to read a matrix element."
 msgstr "Nepodarilo sa načítať element matice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2061
-#, fuzzy
 msgid "Failed to read a matrix pin name."
-msgstr "Obrázok sa nepodarilo sa načítať."
+msgstr "Nepodarilo sa načítať názov vývodu matice."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2236
 msgid "Typ-Min-Max Values requires at least Typ."
@@ -23505,7 +23434,7 @@ msgstr "Neznáma polarita "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2413
 msgid "Continued reading a model that did not begin. ( internal error )"
-msgstr "Pokračování čtení modelu, který nezačal. ( interní chyba )"
+msgstr "Pokračovanie v čítaní modelu, ktorý sa nezačal. (vnútorná chyba)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2442
 #, fuzzy
@@ -23530,7 +23459,7 @@ msgstr "Neplatný vstup vývodu: 6 hodnot z tabulky s pouze 3."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2678
 msgid "Can't read a R, L or C value for a pin."
-msgstr "Nelze číst hodnotu R, L nebo C pro vývod."
+msgstr "Nie je možné prečítať hodnotu R, L alebo C pre vývod."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2701
 #, fuzzy
@@ -23810,13 +23739,12 @@ msgid "No simulation model definition found."
 msgstr "Spice Model Editor"
 
 #: eeschema/sim/sim_model.cpp:586 eeschema/sim/sim_model.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error reading simulation model from symbol '%s':\n"
 "%s"
 msgstr ""
-"Chyba pri načítaní knižnice symbolov %s.\n"
-"\n"
+"Chyba pri načítaní simulačného modelu zo symbolu '%s':\n"
 "%s"
 
 #: eeschema/sim/sim_model.cpp:725
@@ -24030,7 +23958,7 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame.cpp:483 eeschema/sim/simulator_frame.cpp:867
 msgid "Another simulation is already running."
-msgstr "Simulacia uz bezi."
+msgstr "Iná simulácia už beží."
 
 #: eeschema/sim/simulator_frame.cpp:558
 #, c-format
@@ -24628,9 +24556,9 @@ msgstr ""
 "Symbol %s je odvodeným symbolom.  Grafiku symbolu nebude možné upraviť."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1017
-#, fuzzy
 msgid "Library is read-only.  Changes cannot be saved to this library."
-msgstr "Súbory knižníc puzdier"
+msgstr ""
+"Knižnica je len na čítanie.  Zmeny v tejto knižnici nie je možné uložiť."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1019
 #, fuzzy
@@ -24779,9 +24707,9 @@ msgstr "Vytvoriť knižnicu symbolov"
 #: eeschema/symbol_editor/symbol_editor.cpp:372
 #: eeschema/symbol_editor/symbol_editor.cpp:1119
 #: eeschema/tools/symbol_editor_control.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Symbol '%s' už v knižnici '%s' existuje."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:783
 #, fuzzy
@@ -24800,11 +24728,13 @@ msgid "A library must be specified."
 msgstr "Nebol zadaná knižnica."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:919
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
-msgstr "Súbory knižníc puzdier"
+msgstr ""
+"Knižnica '%s' je len na čítanie. Vyberte inú knižnicu, do ktorej chcete "
+"uložiť symbol '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:936
 #, c-format
@@ -24818,17 +24748,18 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Symbol '%s' už v knižnici '%s' existuje. Chcete ho prepísať?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following symbols in the inheritance chain of '%s' already exist in "
 "library '%s':\n"
-msgstr "Symbol „%s“ už v knižnici „%s“ existuje"
+msgstr ""
+"Nasledujúce symboly v reťazci dedičnosti '%s' už existujú v knižnici '%s':\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:984
 msgid ""
@@ -24846,9 +24777,9 @@ msgid "Export Symbol"
 msgstr "Symbol exportu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1112
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is read-only."
-msgstr "Knižnica '%s' je iba na čítanie."
+msgstr "Knižnica '%s' je len na čítanie."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1152
 #, fuzzy, c-format
@@ -24856,16 +24787,14 @@ msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "Pri pokuse o načítanie súboru knižnice symbolov '%s' sa vyskytla chyba"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1160
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Symbol '%s' už v knižnici '%s' existuje."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1175
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na uloženie knižnice '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1194
 #, fuzzy, c-format
@@ -24970,7 +24899,7 @@ msgstr "Importujte symbol do aktuálnej knižnice"
 #: pcbnew/load_select_footprint.cpp:353
 #, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Nepodarilo sa nájsť čítačku '%s'"
+msgstr "Nepodarilo sa nájsť prehliadač pre '%s'"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:146
 #, fuzzy, c-format
@@ -26974,12 +26903,11 @@ msgstr "*** nový symbol má príliš málo jednotiek ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:656
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Všetky jednotky tohto symbolu sú už umiestnené."
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Pohyb a umiestnenie"
+msgstr "Požadovaná jednotka je už umiestnená."
 
 #: eeschema/tools/sch_drawing_tools.cpp:741
 #: eeschema/tools/sch_editor_control.cpp:3394
@@ -27161,9 +27089,8 @@ msgid "Symbol Unit"
 msgstr "Symbol Unit"
 
 #: eeschema/tools/sch_edit_tool.cpp:113
-#, fuzzy
 msgid " (already placed)"
-msgstr "Pohyb a umiestnenie"
+msgstr " (už umiestnené)"
 
 #: eeschema/tools/sch_edit_tool.cpp:133
 #, fuzzy, c-format
@@ -27379,7 +27306,7 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Prilepenie list '%s'\n"
+"Vloženie listu '%s'\n"
 "bolo zrušené, pretože cieľ už má list alebo jeden z jeho podlistov ako "
 "nadradený."
 
@@ -27719,7 +27646,7 @@ msgstr "Upraviť vlastnosti vývodu"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:230
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr "Táto pozícia je už obsadená iným pinom v jednotke %d."
+msgstr "Táto pozícia je už obsadená iným vývodom v jednotke %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
@@ -28948,9 +28875,9 @@ msgid "Skipped file '%s' (unknown type)."
 msgstr "Informácie: preskočiť súbor '%s' (neznámy typ)"
 
 #: gerbview/files.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b> rozbalený súbor %s chyba čítania </b>"
+msgstr "<b>chyba čítania rozbaleného súboru %s</b>"
 
 #: gerbview/files.cpp:661
 msgid "Open Zip File"
@@ -29591,16 +29518,15 @@ msgstr "Dvojité kliknutie ľavým tlačidlom alebo stredné kliknutie zmení fa
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr "Obnovte všetky farby v tejto téme na predvolené hodnoty KiCad"
+msgstr "Obnoviť predvolené KiCad hodnoty pre všetky farby v tejto téme"
 
 #: include/libeval_compiler/libeval_compiler.h:374
 msgid "Malformed expression"
 msgstr "Znetvorený výraz"
 
 #: include/lockfile.h:106
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Súbor %s už existuje."
+msgstr "Súbor zámku už existuje"
 
 #: include/lockfile.h:125
 #, fuzzy
@@ -29609,7 +29535,7 @@ msgstr "Nepodarilo sa načítať schému '%s'"
 
 #: include/panel_hotkeys_editor.h:57
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "Obnoviť všetky klávesové skratky na KiCad-om predvolené hodnoty"
+msgstr "Obnoviť predvolené KiCad hodnoty pre všetky klávesové skratky"
 
 #: include/stroke_params.h:87
 msgid "Leave unchanged"
@@ -29679,7 +29605,7 @@ msgstr "Zobraziť alebo skryť %s"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
-msgstr "Obnovte všetky nastavenia na tejto stránke na pôvodné hodnoty"
+msgstr "Obnoviť predvolené hodnoty pre všetky nastavenia na tejto stránke"
 
 #: include/widgets/wx_infobar.h:111
 msgid "Hide this message."
@@ -30345,7 +30271,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_gerbers.cpp:37
 msgid "Use the Gerber plot settings already configured in the board file"
 msgstr ""
-"Použít nastavenie vykresľovania Gerber, ktoré sú už nakonfigurované v súbore "
+"Použiť nastavenia vykresľovania Gerber, ktoré sú už nakonfigurované v súbore "
 "dosky"
 
 #: kicad/cli/command_pcb_export_hpgl.cpp:30
@@ -30957,9 +30883,8 @@ msgid "Extant"
 msgstr ""
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:311
-#, fuzzy
 msgid "Reset to default"
-msgstr "Obnoviť na predvolené hodnoty"
+msgstr "Obnoviť predvolené"
 
 #: kicad/dialogs/dialog_executecommand_job_settings.cpp:154
 msgid "<value set at runtime>"
@@ -30990,7 +30915,7 @@ msgstr "Používateľské šablóny"
 
 #: kicad/dialogs/dialog_template_selector.cpp:296
 msgid "Open Template (Read-Only)"
-msgstr ""
+msgstr "Otvoriť šablónu (len na čítanie)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:297
 #, fuzzy
@@ -31040,9 +30965,9 @@ msgid "Could not find user templates directory."
 msgstr "Nepodarilo sa vytvoriť adresár '%s'"
 
 #: kicad/dialogs/dialog_template_selector.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Výstupný adresár '%s' vytvorený."
+msgstr "Adresár '%s' už existuje."
 
 #: kicad/dialogs/dialog_template_selector.cpp:405
 #, fuzzy, c-format
@@ -31658,9 +31583,9 @@ msgid "Error opening jobs file"
 msgstr "Chyba počas vytvárania súboru svg"
 
 #: kicad/kicad_manager_frame.cpp:920 kicad/kicad_manager_frame.cpp:1241
-#, fuzzy, c-format
+#, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
-msgstr "Súbor PCB '%s' je už otvorený."
+msgstr "Projekt '%s' je už otvorený '%s' v '%s'."
 
 #: kicad/kicad_manager_frame.cpp:965
 msgid ""
@@ -32332,8 +32257,8 @@ msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Balíček s identifikátorem %s je již nainstalován. Chcete ji aktualizovat na "
-"verzi z vybraného souboru?"
+"Balíček s identifikátorom %s je už nainštalovaný. Chcete ho aktualizovať na "
+"verziu z vybraného súboru?"
 
 #: kicad/pcm/pcm_task_manager.cpp:408
 #, fuzzy
@@ -32621,9 +32546,8 @@ msgid "Waiting for Git operations to finish..."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1758
-#, fuzzy
 msgid "The selected directory is already a Git project."
-msgstr "Vybraný adresár už je používaný ako git projekt."
+msgstr "Vybraný adresár už je ako Git projekt."
 
 #: kicad/project_tree_pane.cpp:1765
 #, fuzzy
@@ -32823,11 +32747,9 @@ msgstr "Nový priečinok projektu"
 
 #: kicad/tools/kicad_manager_control.cpp:342
 #: kicad/tools/kicad_manager_control.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na zápis do priečinku '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:361
 msgid "Overwriting files:"
@@ -33263,9 +33185,8 @@ msgid "Save Drawing Sheet As"
 msgstr "Uchopiť list"
 
 #: pagelayout_editor/files.cpp:280
-#, fuzzy
 msgid "Layout file is read only."
-msgstr "Knižnica '%s' je iba na čítanie."
+msgstr "Súbor s rozložením je len na čítanie."
 
 #: pagelayout_editor/pl_editor_frame.cpp:106
 #, fuzzy
@@ -34617,7 +34538,7 @@ msgstr "Nepodarilo sa prečítať dátový súbor '%s'."
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:260
 msgid "This regulator is already in list. Aborted"
-msgstr "Tento regulátor už je v zozname. Zrušené"
+msgstr "Tento regulátor je už v zozname. Prerušené"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:292
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:117
@@ -37010,9 +36931,8 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:1084
 #: pcbnew/connectivity/topo_match.cpp:1087
-#, fuzzy
 msgid "(no library ID)"
-msgstr "Neplatný identifikátor knižnice symbolov"
+msgstr "(bez ID knižnice)"
 
 #: pcbnew/connectivity/topo_match.cpp:1090
 #, c-format
@@ -37529,7 +37449,7 @@ msgstr "Názov predstavenstva"
 #: pcbnew/dialogs/dialog_board_setup.cpp:273
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr ""
-"Projekt chýba alebo je iba na čítanie. Niektoré nastavenia nebudú "
+"Projekt chýba alebo je len na čítanie. Niektoré nastavenia nebudú "
 "editovateľné."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:356
@@ -38726,7 +38646,7 @@ msgstr "Zmeniť zodpovedajúcu hodnotu puzdier:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
 msgid "Change footprints with library id:"
-msgstr "Zmeniť puzdra zodpovedajúce id knižnice:"
+msgstr "Zmeniť puzdrá s ID knižnice:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
 msgid "Update text layers and visibilities"
@@ -38767,7 +38687,7 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"Aktualizovať/obnoviť reťazce: sú dva prípady ktoré tieto popisy musia "
+"Aktualizovať/resetovať reťazce: sú dva prípady ktoré tieto popisy musia "
 "pokryť: používateľ vykonal prepísanie puzdra na DPS a chce ich odstrániť, "
 "alebo používateľ vykonal zmeny v puzdre v knižnice a chce ich preniesť späť "
 "na DPS."
@@ -38820,11 +38740,11 @@ msgstr "Aktualizovať hodnotu zhody stôp:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 msgid "Update footprints with library id:"
-msgstr "Aktualizovať stopy pomocou ID knižnice:"
+msgstr "Aktualizovať puzdrá s ID knižnice:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:81
 msgid "New footprint library id:"
-msgstr "Nové ID knižnice stopy:"
+msgstr "Nové ID knižnice puzdra:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 #, fuzzy
@@ -38833,7 +38753,7 @@ msgstr "Odstráňte textové položky, ktoré nie sú v knižnej stope"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
-msgstr "Aktualizácia / resetovanie textových vrstiev a viditeľnosti"
+msgstr "Aktualizovať/resetovať textových vrstiev a viditeľností"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
 #, fuzzy
@@ -38846,13 +38766,12 @@ msgid "Update/reset text positions"
 msgstr "Aktualizácia / reset pozícií polí"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
-#, fuzzy
 msgid "Update/reset text content"
-msgstr "Aktualizácia / resetovanie polí"
+msgstr "Aktualizovať/resetovať textový obsah"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:136
 msgid "Update/reset fabrication attributes"
-msgstr "Aktualizácia / resetovanie atribútov výroby"
+msgstr "Aktualizovať/resetovať atribútov výroby"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 #, fuzzy
@@ -38861,7 +38780,7 @@ msgstr "Lokálne potlačenia a nastavenia"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
 msgid "Update/reset 3D models"
-msgstr "Aktualizácia / resetovanie 3D modelov"
+msgstr "Aktualizovať/resetovať 3D modelov"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:93
 msgid "Update Footprints from Library"
@@ -38898,11 +38817,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581.cpp:254 pcbnew/files.cpp:1028
 #: pcbnew/files.cpp:1152 pcbnew/footprint_libraries_utils.cpp:283
 #: pcbnew/pcb_design_block_utils.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na zápis súboru '%s'."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:262
 msgid "Generate IPC-2581 File"
@@ -39104,9 +39021,9 @@ msgid "The output file name conflicts with the selected compression format."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
-msgstr "Súbor '%s' už existuje. Chcete prepísať tento súbor?"
+msgstr "Výstupné súbory '%s' už existujú. Chcete ich prepísať?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:334
 #, c-format
@@ -39119,11 +39036,12 @@ msgid "Cannot create temporary output directory."
 msgstr "Nie je možné vytvoriť výstupný adresár '%s'."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr ""
+"Výstupný adresár '%s' už  existuje a nie je prázdny. Chcete ho prepísať?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:376
 #, c-format
@@ -39460,6 +39378,8 @@ msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
 msgstr ""
+"Zakáže zápis parametrických kriviek. Optimalizuje veľkosť súboru a časy "
+"zápisu/čítania, ale môže znížiť kompatibilitu s iným softvérom."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:276
 #, fuzzy
@@ -40002,13 +39922,12 @@ msgid "Clearance Overrides && Pad Connections"
 msgstr "Lokálne potlačenia a nastavenia"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Momentálne priradené ID knižnice a ID stopy. Pomocou príkazu \"Zmeniť "
-"stopu...\" môžete priradiť inú stopu."
+"ID knižnice a ID puzdra sú priradené.  Pomocou príkazu \"Zmeniť puzdro...\" "
+"môžete priradiť iné puzdro."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:120
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:133
@@ -40029,9 +39948,9 @@ msgstr "Názov stopy nesmie obsahovať '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:517
 #: pcbnew/tools/footprint_editor_control.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "V knižniciach nemožno nájsť niektoré puzdra"
+msgstr "Puzdro '%s' už existuje v knižnici '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:631
 #, fuzzy, c-format
@@ -41241,9 +41160,9 @@ msgid "Changes Applied to PCB"
 msgstr "Zmeny aplikované na PCB"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Čitam Netlistu \"%s\".\n"
+msgstr "Čítanie súboru netlistu '%s'.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:221
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -42272,11 +42191,12 @@ msgid "Allow teardrops to span 2 track segments"
 msgstr "Diera blízko spoja"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:679
-#, fuzzy
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
-msgstr "Diera blízko spoja"
+msgstr ""
+"Umožňuje rozšíriť \"teardrop\" na 2 spoje, ak je prvý segment spoja príliš "
+"krátky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:703
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:314
@@ -42763,16 +42683,16 @@ msgstr "Jednotky, ktoré sa majú použiť pre exportovaný súbor DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:356
 msgid "Use KiCad font to plot text"
-msgstr "Použiť KiCad font pre vykreslenie textu"
+msgstr "Použiť písmo KiCad, pre vykreslenie textu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:357
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Začiarknite pre použitie KiCad fontu\n"
+"Začiarknite pre použitie KiCad písma\n"
 "Zrušte začiarknutie, ak chcete jednoriadkové ASCII texty vykresliť ako "
-"editovateľný text (pomocou DXF fontu)"
+"editovateľný text (pomocou DXF písma)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:361
 #: pcbnew/dialogs/dialog_plot_base.cpp:435
@@ -46342,9 +46262,8 @@ msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Šírka tepelného lúča nemôže byť menšia ako minimálna šírka."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:451
-#, fuzzy
 msgid "All zone layers already overridden."
-msgstr "Všetky používateľom definované vrstvy už boli pridané."
+msgstr "Všetky vrstvy so zónami už boli prepísané."
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:474
 #, fuzzy
@@ -47284,7 +47203,7 @@ msgstr "Znetvorený výraz"
 
 #: pcbnew/drc/drc_rule_parser.cpp:347
 msgid "'layer' keyword already present."
-msgstr ""
+msgstr "kľúčové slovo 'vrstva' je už prítomné."
 
 #: pcbnew/drc/drc_rule_parser.cpp:380
 #, fuzzy
@@ -47306,9 +47225,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Chýba typ obmedzenia.|  Očakávané %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "Pravidlo sa uplatnilo; potlačí predchádzajúce obmedzenia."
+msgstr "Pravidlo už má '%s' obmedzení."
 
 #: pcbnew/drc/drc_rule_parser.cpp:662
 #, fuzzy
@@ -48186,7 +48105,7 @@ msgstr "(%s maximálna šírka %s; skutočná %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:198
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(znaky písma TrueType s nedostatočnou hrúbkou ťahu)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:212
 #, fuzzy, c-format
@@ -49182,7 +49101,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2953
 msgid "Compress read or write error"
-msgstr ""
+msgstr "Chyba čítania alebo zápisu pri kompresii"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2988
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -49264,9 +49183,9 @@ msgstr ""
 "ktoré využívali hrúbky čiary hranice dosky vo vrstve Edge Cuts."
 
 #: pcbnew/files.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Súbor PCB '%s' je už otvorený."
+msgstr "DPS '%s' je už otvorený '%s' v '%s'."
 
 #: pcbnew/files.cpp:527
 msgid "The current PCB has been modified.  Save changes?"
@@ -49549,12 +49468,9 @@ msgid "Open in library %s"
 msgstr "Aktualizujte symboly z knižnice"
 
 #: pcbnew/footprint_edit_frame.cpp:674
-#, fuzzy, c-format
+#, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr ""
-"Chyba pri načítaní stopy %s z knižnice %s.\n"
-"\n"
-"%s"
+msgstr "Upraviť puzdro z knižnice, označenej len na čítanie %s."
 
 #: pcbnew/footprint_edit_frame.cpp:678
 msgid "Save as editable copy"
@@ -49720,7 +49636,7 @@ msgstr "Uložiť stopu"
 #: pcbnew/footprint_libraries_utils.cpp:1130
 #, c-format
 msgid "Footprint %s already exists in %s."
-msgstr "Footprint %s už existuje v %s."
+msgstr "Puzdro %s už existuje v %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:1177
 #, c-format
@@ -51457,9 +51373,9 @@ msgid ""
 msgstr "Nastavenie projektu bolo zmenené. Uložiť ho?"
 
 #: pcbnew/pcb_design_block_utils.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a layout."
-msgstr "Symbol '%s' už v knižnici '%s' existuje"
+msgstr "Návrhový blok '%s' už obsahuje rozloženie."
 
 #: pcbnew/pcb_design_block_utils.cpp:72
 msgid "Overwrite existing layout?"
@@ -51560,9 +51476,8 @@ msgid "New PCB file is unsaved"
 msgstr "Nový súbor PCB je neuložený"
 
 #: pcbnew/pcb_edit_frame.cpp:1889
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Iba plocha na palube"
+msgstr "Súbor dosky je len na čítanie."
 
 #: pcbnew/pcb_edit_frame.cpp:1935
 msgid "PCB file changes are unsaved"
@@ -51592,6 +51507,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Vyskytla sa chyba pri čítaní netlistu.  Nahláste tento problém tímu KiCad "
+"pomocou menu Pomocník->Nahlásiť chybu."
 
 #: pcbnew/pcb_edit_frame.cpp:2999
 msgid "Edit design rules"
@@ -52709,12 +52626,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:527
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr ""
-"Chyba pri načítaní stopy %s z knižnice %s.\n"
-"\n"
-"%s"
+msgstr "Chyba pri načítaní puzdra '%s' z knižnice '%s': %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:414
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:470
@@ -52894,7 +52808,7 @@ msgstr "Neplatné meno signálu"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
 msgid "Could not read file "
-msgstr "Nebolo možné prečítať súbor "
+msgstr "Nebolo možné načítať súbor "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
@@ -53187,11 +53101,9 @@ msgid "Footprint file name '%s' is not valid."
 msgstr "Názov súboru puzdra \"%s\" nie je platný."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3401
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
-"%s"
+msgstr "Nedostatočné oprávnenia na odstránenie '%s'."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3534
 #, fuzzy, c-format
@@ -55296,7 +55208,7 @@ msgstr "Odomknúť"
 
 #: pcbnew/tools/board_editor_control.cpp:1492
 msgid "Zones have insufficient overlap for merging."
-msgstr ""
+msgstr "Na zlúčenie, sa zóny dostatočne neprekrývajú."
 
 #: pcbnew/tools/board_editor_control.cpp:1547
 #, fuzzy
@@ -56238,6 +56150,8 @@ msgid ""
 "The footprint could not be added to the selected library ('%s'). This "
 "library is read-only."
 msgstr ""
+"Puzdro nebolo možné pridať do vybranej knižnice ('%s'). Táto knižnica je "
+"určená len na čítanie."
 
 #: pcbnew/tools/footprint_editor_control.cpp:464
 #, fuzzy
@@ -57387,7 +57301,7 @@ msgstr "Importovať Netlist"
 
 #: pcbnew/tools/pcb_actions.cpp:1231
 msgid "Read netlist and update board connectivity"
-msgstr "Prečítajte si netlist a aktualizujte pripojenie na doske"
+msgstr "Načítať netlist a aktualizovať spojenia na doske"
 
 #: pcbnew/tools/pcb_actions.cpp:1237
 #, fuzzy
@@ -58591,7 +58505,7 @@ msgstr "Obnovte pôvodné parametre sprievodcu"
 
 #: pcbnew/tools/pcb_actions.cpp:2798
 msgid "Reset wizard parameters to default"
-msgstr "Obnovte pôvodné parametre sprievodcu"
+msgstr "Obnoviť predvolené parametre sprievodcu"
 
 #: pcbnew/tools/pcb_actions.cpp:2804
 #, fuzzy
@@ -59836,7 +59750,7 @@ msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 msgstr ""
-"Aktuálna farebná téma je iba na čítanie.  Pre úpravy farieb, vytvorte novú "
+"Aktuálna farebná téma je len na čítanie.  Pre úpravy farieb, vytvorte novú "
 "tému v nastaveniach."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
