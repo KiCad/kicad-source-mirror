@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-01-01 13:37+0000\n"
+"PO-Revision-Date: 2026-03-01 02:11+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -14174,9 +14174,9 @@ msgstr "Kép tulajdonságok"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:47
 #: eeschema/dialogs/dialog_import_symbol_select_base.h:64
-#, fuzzy, c-format
+#, c-format
 msgid "Import Symbols from %s"
-msgstr "Rajzjel importálása"
+msgstr "Rajzjelek importálása innen: %s"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:62
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:539
@@ -14187,19 +14187,18 @@ msgid "Import"
 msgstr "Importálás"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:101
-#, fuzzy
 msgid "Unable to find a plugin to read this library."
-msgstr "Nem sikerült betölteni a könyvtárat\n"
+msgstr "Nem találtunk megfelelő plugint a könyvtár olvasásához."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "A(z) \"%s\" könyvtár nem importálható."
+msgstr "A(z) \"%s\" rajzjel könyvtár nem olvasható."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "A(z) \"%s\" könyvtár fájl üres."
+msgstr "A(z) \"%s\" rajzjel könyvtár fájl üres."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:299
 #, c-format
@@ -14207,9 +14206,9 @@ msgid "%d symbols selected, %d parents auto-included"
 msgstr ""
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d symbols selected"
-msgstr "Nincs rajzjel kiválasztva"
+msgstr "%d rajzjel kiválasztva"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:503
 msgid "Resolve Import Conflicts"
@@ -14229,9 +14228,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:122
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:159
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
-#, fuzzy
 msgid "Action"
-msgstr "Műveletek"
+msgstr "Művelet"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:532
 #, fuzzy
@@ -14244,7 +14242,6 @@ msgid "Overwrite All"
 msgstr "Mindent felülír"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
 msgstr "Nincs rajzjel kiválasztva"
 
