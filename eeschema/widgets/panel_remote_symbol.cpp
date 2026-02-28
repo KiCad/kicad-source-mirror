@@ -324,6 +324,7 @@ PANEL_REMOTE_SYMBOL::PANEL_REMOTE_SYMBOL( SCH_EDIT_FRAME* aParent ) :
                 onKicadMessage( payload );
             } );
     m_webView->SetHandleExternalLinks( true );
+    m_webView->BindLoadedEvent();
 
     if( wxWebView* browser = m_webView->GetWebView() )
     {
