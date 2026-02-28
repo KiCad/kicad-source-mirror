@@ -279,6 +279,19 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
             data->SetTopLayerEnabled( expr.Contains( wxS( "F.Cu" ) ) );
             data->SetBottomLayerEnabled( expr.Contains( wxS( "B.Cu" ) ) );
+
+            // Check for layer references the panel can't represent
+            wxString remaining = expr;
+            remaining.Replace( wxS( "A.Layer == 'F.Cu'" ), wxS( "" ) );
+            remaining.Replace( wxS( "A.Layer == 'B.Cu'" ), wxS( "" ) );
+
+            if( remaining.Contains( wxS( "A.Layer" ) ) )
+            {
+                // Inner or non-standard layers — fall back to custom rule
+                auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>();
+                customData->SetRuleName( aRule.m_Name );
+                return customData;
+            }
         }
 
         return data;

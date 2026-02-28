@@ -2243,4 +2243,41 @@ BOOST_AUTO_TEST_CASE( RuleLoaderAllowAllOrientationLoadsStructured )
     BOOST_CHECK( orientData->GetIsTwoSeventyDegreesAllowed() );
 }
 
+BOOST_AUTO_TEST_CASE( RuleLoaderPermittedLayersInnerLayerFallsBackToCustom )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"InnerLayers\"\n"
+                        "    (constraint assertion \"A.Layer == 'F.Cu' || A.Layer == 'In1.Cu'\")\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
+
+    auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( customData );
+    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "In1.Cu" ) ) );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderPermittedLayersStandardLoadsStructured )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"StandardLayers\"\n"
+                        "    (constraint assertion \"A.Layer == 'F.Cu' || A.Layer == 'B.Cu'\")\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, PERMITTED_LAYERS );
+
+    auto layerData = std::dynamic_pointer_cast<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( layerData );
+    BOOST_CHECK( layerData->GetTopLayerEnabled() );
+    BOOST_CHECK( layerData->GetBottomLayerEnabled() );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
