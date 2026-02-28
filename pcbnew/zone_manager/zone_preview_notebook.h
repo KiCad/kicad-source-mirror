@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <unordered_map>
+#include <math/vector2d.h>
 #include <wx/window.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
@@ -47,4 +47,7 @@ public:
 
 private:
     PCB_BASE_FRAME* m_pcbFrame;
+    bool            m_hasSavedZoom;
+    double          m_savedScale;
+    VECTOR2D        m_savedCenter;
 };

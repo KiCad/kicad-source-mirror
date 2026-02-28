@@ -24,6 +24,8 @@
 
 #include "zone_preview_canvas.h"
 #include <wx/gdicmn.h>
+#include <wx/intl.h>
+#include <wx/menu.h>
 #include <wx/string.h>
 
 #include <base_screen.h>
@@ -104,7 +106,9 @@ ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID
                                           const wxPoint& aPosition, const wxSize& aSize, GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, wxDefaultSize, aOptions, aGalType ),
         m_pcb( aPcb ),
-        m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) )
+        m_layer( aLayer ),
+        m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
+        m_zoomLocked( false )
 {
     m_view->UseDrawPriority( true );
     m_painter = std::make_unique<ZONE_PAINTER>( m_gal, FRAME_FOOTPRINT_PREVIEW );
@@ -126,8 +130,26 @@ ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID
     Bind( wxEVT_SIZE,
           [this]( wxSizeEvent& aEvent )
           {
-              ZoomFitScreen();
+              if( !m_zoomLocked )
+                  ZoomFitScreen();
+
               aEvent.Skip();
+          } );
+
+    Bind( wxEVT_RIGHT_UP,
+          [this]( wxMouseEvent& aEvent )
+          {
+              wxMenu menu;
+              menu.Append( wxID_ANY, _( "Zoom to Fit" ) );
+
+              menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+                         [this]( wxCommandEvent& )
+                         {
+                             UnlockZoom();
+                             ZoomFitScreen();
+                         } );
+
+              PopupMenu( &menu );
           } );
 
     StartDrawing();
@@ -191,4 +213,19 @@ void ZONE_PREVIEW_CANVAS::ZoomFitScreen()
     m_view->SetScale( scale );
     m_view->SetCenter( bBox.Centre() );
     RequestRefresh();
+}
+
+
+void ZONE_PREVIEW_CANVAS::LockZoom( double aScale, const VECTOR2D& aCenter )
+{
+    m_zoomLocked = true;
+    m_view->SetScale( aScale );
+    m_view->SetCenter( aCenter );
+    RequestRefresh();
+}
+
+
+void ZONE_PREVIEW_CANVAS::UnlockZoom()
+{
+    m_zoomLocked = false;
 }

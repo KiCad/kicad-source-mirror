@@ -59,8 +59,10 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     m_sizerZoneOP->InsertSpacer( m_sizerZoneOP->GetItemCount(), 5 );
 #endif
 
+    m_btnMoveTop->SetBitmap( KiBitmapBundle( BITMAPS::small_top ) );
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_btnMoveBottom->SetBitmap( KiBitmapBundle( BITMAPS::small_bottom ) );
 
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, m_zoneSettingsBag );
     m_sizerProperties->Add( m_panelZoneProperties, 0,  wxEXPAND, 5 );
@@ -95,6 +97,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     Bind( EVT_ZONES_OVERVIEW_COUNT_CHANGE, &DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange, this );
     Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
     Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
+    Bind( wxEVT_CHAR_HOOK, &DIALOG_ZONE_MANAGER::OnDialogCharHook, this );
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED,
           [this]( wxNotebookEvent& aEvent )
           {
@@ -113,6 +116,24 @@ DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 
 bool DIALOG_ZONE_MANAGER::TransferDataToWindow()
 {
+    m_layerFilter->Clear();
+    m_layerFilter->Append( _( "All Layers" ) );
+
+    LSET   usedLayers;
+    BOARD* board = m_pcbFrame->GetBoard();
+
+    for( ZONE* zone : m_zoneSettingsBag.GetClonedZoneList() )
+        usedLayers |= zone->GetLayerSet();
+
+    for( PCB_LAYER_ID layer : usedLayers.Seq() )
+    {
+        m_layerFilter->Append( board->GetLayerName( layer ),
+                               reinterpret_cast<void*>( static_cast<intptr_t>( layer ) ) );
+    }
+
+    m_modelZonesOverview->SetLayerFilter( UNDEFINED_LAYER );
+    m_layerFilter->SetSelection( 0 );
+
     m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(), m_viewZonesOverview->GetSelection() );
 
     if( m_modelZonesOverview->GetCount() )
@@ -131,6 +152,7 @@ void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelChange( wxDataViewItem const& aI
     {
         m_viewZonesOverview->Select( aItem );
         m_viewZonesOverview->EnsureVisible( aItem );
+        SelectZoneTableItem( aItem );
     }
     else
     {
@@ -158,9 +180,44 @@ void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelChange( wxDataViewItem const& aI
 void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
 {
     aEvent.Skip();
+}
 
-    if( aEvent.GetKeyCode() == WXK_DOWN || aEvent.GetKeyCode() == WXK_UP )
-        Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
+
+void DIALOG_ZONE_MANAGER::OnDialogCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_UP )
+    {
+        NavigateZoneSelection( -1 );
+    }
+    else if( aEvent.GetKeyCode() == WXK_DOWN )
+    {
+        NavigateZoneSelection( 1 );
+    }
+    else
+    {
+        aEvent.Skip();
+    }
+}
+
+
+void DIALOG_ZONE_MANAGER::NavigateZoneSelection( int aDirection )
+{
+    unsigned count = m_modelZonesOverview->GetCount();
+
+    if( count == 0 )
+        return;
+
+    wxDataViewItem current = m_viewZonesOverview->GetSelection();
+    unsigned       currentRow = 0;
+
+    if( current.IsOk() )
+        currentRow = m_modelZonesOverview->GetRow( current );
+
+    int newRow = (int) currentRow + aDirection;
+    newRow = std::max( 0, std::min( newRow, (int) count - 1 ) );
+
+    if( !current.IsOk() || (unsigned) newRow != currentRow )
+        PostProcessZoneViewSelChange( m_modelZonesOverview->GetItem( (unsigned) newRow ) );
 }
 
 
@@ -309,6 +366,12 @@ void DIALOG_ZONE_MANAGER::OnDrop( wxDataViewEvent& aEvent )
 #endif // wxUSE_DRAG_AND_DROP
 
 
+void DIALOG_ZONE_MANAGER::OnMoveTopClick( wxCommandEvent& aEvent )
+{
+    MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_TO_TOP );
+}
+
+
 void DIALOG_ZONE_MANAGER::OnMoveUpClick( wxCommandEvent& aEvent )
 {
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_UP );
@@ -318,6 +381,12 @@ void DIALOG_ZONE_MANAGER::OnMoveUpClick( wxCommandEvent& aEvent )
 void DIALOG_ZONE_MANAGER::OnMoveDownClick( wxCommandEvent& aEvent )
 {
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_DOWN );
+}
+
+
+void DIALOG_ZONE_MANAGER::OnMoveBottomClick( wxCommandEvent& aEvent )
+{
+    MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_TO_BOTTOM );
 }
 
 
@@ -349,6 +418,27 @@ void DIALOG_ZONE_MANAGER::OnFilterCtrlEnter( wxCommandEvent& aEvent )
     PostProcessZoneViewSelChange( m_modelZonesOverview->ApplyFilter( aEvent.GetString(),
                                                                      m_viewZonesOverview->GetSelection() ) );
     aEvent.Skip();
+}
+
+
+void DIALOG_ZONE_MANAGER::OnLayerFilterChanged( wxCommandEvent& aEvent )
+{
+    int sel = m_layerFilter->GetSelection();
+
+    if( sel <= 0 )
+    {
+        m_modelZonesOverview->SetLayerFilter( UNDEFINED_LAYER );
+    }
+    else
+    {
+        void*        data = m_layerFilter->GetClientData( sel );
+        PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( reinterpret_cast<intptr_t>( data ) );
+        m_modelZonesOverview->SetLayerFilter( layer );
+    }
+
+    PostProcessZoneViewSelChange(
+            m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
+                                               m_viewZonesOverview->GetSelection() ) );
 }
 
 
@@ -418,8 +508,8 @@ void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
 {
     unsigned count = aEvent.GetInt();
 
-    for( STD_BITMAP_BUTTON* btn : { m_btnMoveDown, m_btnMoveUp } )
-        btn->Enable( count == m_zoneSettingsBag.GetClonedZoneList().size() );
+    for( STD_BITMAP_BUTTON* btn : { m_btnMoveTop, m_btnMoveUp, m_btnMoveDown, m_btnMoveBottom } )
+        btn->Enable( count > 1 );
 }
 
 

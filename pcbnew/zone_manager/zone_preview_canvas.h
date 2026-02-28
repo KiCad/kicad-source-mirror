@@ -26,6 +26,7 @@
 #pragma once
 
 #include <board_item.h>
+#include <math/vector2d.h>
 #include <wx/gdicmn.h>
 #include <zone.h>
 #include <memory>
@@ -50,8 +51,12 @@ public:
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const;
 
+    void LockZoom( double aScale, const VECTOR2D& aCenter );
+    void UnlockZoom();
+
 private:
     BOARD*                                     m_pcb;
     int                                        m_layer;
     std::unique_ptr<BOARD_EDGES_BOUNDING_ITEM> m_pcb_bounding_box;
+    bool                                       m_zoomLocked;
 };

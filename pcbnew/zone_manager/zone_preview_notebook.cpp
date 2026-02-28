@@ -33,6 +33,7 @@
 #include <board.h>
 #include <zone.h>
 #include <gal/color4d.h>
+#include <view/view.h>
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <zone_manager/zone_preview_canvas.h>
@@ -75,7 +76,10 @@ private:
 
 ZONE_PREVIEW_NOTEBOOK::ZONE_PREVIEW_NOTEBOOK( wxWindow* aParent, PCB_BASE_FRAME* aPcbFrame ) :
         wxNotebook( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
-        m_pcbFrame( aPcbFrame )
+        m_pcbFrame( aPcbFrame ),
+        m_hasSavedZoom( false ),
+        m_savedScale( 1.0 ),
+        m_savedCenter( 0, 0 )
 {
     Bind( wxEVT_BOOKCTRL_PAGE_CHANGED, &ZONE_PREVIEW_NOTEBOOK::OnPageChanged, this );
 
@@ -108,7 +112,20 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
     int preferredLayer = UNDEFINED_LAYER;
 
     if( GetSelection() >= 0 && GetSelection() < (int) GetPageCount() )
-        preferredLayer = static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetCurrentPage() )->GetLayer();
+    {
+        ZONE_PREVIEW_NOTEBOOK_PAGE* curPage =
+                static_cast<ZONE_PREVIEW_NOTEBOOK_PAGE*>( GetCurrentPage() );
+        preferredLayer = curPage->GetLayer();
+
+        KIGFX::VIEW* view = curPage->GetCanvas()->GetView();
+
+        if( view )
+        {
+            m_savedScale = view->GetScale();
+            m_savedCenter = view->GetCenter();
+            m_hasSavedZoom = true;
+        }
+    }
 
     while( GetPageCount() )
         RemovePage( 0 );
@@ -122,13 +139,18 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
     {
         BOARD*                      board = m_pcbFrame->GetBoard();
         wxString                    layerName = board->GetLayerName( layer );
-        ZONE_PREVIEW_NOTEBOOK_PAGE* page = new ZONE_PREVIEW_NOTEBOOK_PAGE( this, board, aZone, layer,
-                                                                           m_pcbFrame->GetGalDisplayOptions(),
-                                                                           m_pcbFrame->GetCanvas()->GetBackend() );
+        ZONE_PREVIEW_NOTEBOOK_PAGE* page =
+                new ZONE_PREVIEW_NOTEBOOK_PAGE( this, board, aZone, layer,
+                                               m_pcbFrame->GetGalDisplayOptions(),
+                                               m_pcbFrame->GetCanvas()->GetBackend() );
 
         AddPage( page, layerName, false, layer );
         page->Layout();
-        page->GetCanvas()->ZoomFitScreen();
+
+        if( m_hasSavedZoom )
+            page->GetCanvas()->LockZoom( m_savedScale, m_savedCenter );
+        else
+            page->GetCanvas()->ZoomFitScreen();
 
         if( layer == preferredLayer )
             preferredPage = page;

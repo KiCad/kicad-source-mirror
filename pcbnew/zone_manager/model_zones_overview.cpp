@@ -98,7 +98,8 @@ MODEL_ZONES_OVERVIEW::MODEL_ZONES_OVERVIEW( wxWindow* aParent, PCB_BASE_FRAME* a
         m_frame( aFrame ),
         m_zoneSettingsBag( aZoneSettingsBag ),
         m_sortByName( true ),
-        m_sortByNet( true )
+        m_sortByNet( true ),
+        m_layerFilter( UNDEFINED_LAYER )
 {
     m_filteredZones = m_zoneSettingsBag.GetClonedZoneList();
     Reset( m_filteredZones.size() );
@@ -150,6 +151,12 @@ void MODEL_ZONES_OVERVIEW::EnableFitterByName( bool aEnable )
 void MODEL_ZONES_OVERVIEW::EnableFitterByNet( bool aEnable )
 {
     m_sortByNet = aEnable;
+}
+
+
+void MODEL_ZONES_OVERVIEW::SetLayerFilter( PCB_LAYER_ID aLayer )
+{
+    m_layerFilter = aLayer;
 }
 
 
@@ -209,6 +216,39 @@ std::optional<unsigned> MODEL_ZONES_OVERVIEW::MoveZoneIndex( unsigned aIndex, ZO
             return SwapZonePriority( aIndex, aIndex + 1 );
 
         break;
+
+    case ZONE_INDEX_MOVEMENT::MOVE_TO_TOP:
+        if( aIndex >= 1 && GetCount() > 1 )
+        {
+            unsigned cur = aIndex;
+
+            while( cur > 0 )
+            {
+                SwapZonePriority( cur, cur - 1 );
+                --cur;
+            }
+
+            return 0u;
+        }
+
+        break;
+
+    case ZONE_INDEX_MOVEMENT::MOVE_TO_BOTTOM:
+        if( aIndex + 1 < GetCount() )
+        {
+            unsigned cur = aIndex;
+            const unsigned last = GetCount() - 1;
+
+            while( cur < last )
+            {
+                SwapZonePriority( cur, cur + 1 );
+                ++cur;
+            }
+
+            return last;
+        }
+
+        break;
     }
 
     return std::optional<unsigned>{};
@@ -251,6 +291,9 @@ wxDataViewItem MODEL_ZONES_OVERVIEW::ApplyFilter( wxString const& aFilterText, w
 
     for( ZONE* zone : m_zoneSettingsBag.GetClonedZoneList() )
     {
+        if( m_layerFilter != UNDEFINED_LAYER && !zone->GetLayerSet().Contains( m_layerFilter ) )
+            continue;
+
         if( ( m_sortByName && zone->GetZoneName().Lower().Contains( lowerFilterText ) )
             || ( m_sortByNet && zone->GetNetname().Lower().Contains( lowerFilterText ) ) )
         {
@@ -271,7 +314,14 @@ wxDataViewItem MODEL_ZONES_OVERVIEW::ClearFilter( wxDataViewItem aSelection )
         return {};
 
     ZONE* zone = GetZone( aSelection );
-    m_filteredZones = m_zoneSettingsBag.GetClonedZoneList();
+    m_filteredZones.clear();
+
+    for( ZONE* z : m_zoneSettingsBag.GetClonedZoneList() )
+    {
+        if( m_layerFilter == UNDEFINED_LAYER || z->GetLayerSet().Contains( m_layerFilter ) )
+            m_filteredZones.push_back( z );
+    }
+
     SortFilteredZones();
     Reset( GetCount() );
     OnRowCountChange();

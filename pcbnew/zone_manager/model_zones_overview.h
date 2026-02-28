@@ -48,7 +48,9 @@ wxDECLARE_EVENT( EVT_ZONES_OVERVIEW_COUNT_CHANGE, wxCommandEvent );
 enum class ZONE_INDEX_MOVEMENT
 {
     MOVE_UP,
-    MOVE_DOWN
+    MOVE_DOWN,
+    MOVE_TO_TOP,
+    MOVE_TO_BOTTOM
 };
 
 
@@ -82,6 +84,8 @@ public:
     void EnableFitterByName( bool aEnable );
 
     void EnableFitterByNet( bool aEnable );
+
+    void SetLayerFilter( PCB_LAYER_ID aLayer );
 
     void GetValueByRow( wxVariant& aVariant, unsigned aRow, unsigned aCol ) const override;
 
@@ -137,4 +141,5 @@ private:
     std::vector<ZONE*> m_filteredZones;
     bool               m_sortByName;
     bool               m_sortByNet;
+    PCB_LAYER_ID       m_layerFilter;
 };
