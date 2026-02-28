@@ -45,6 +45,45 @@
 #include "drc_rule_editor_utils.h"
 
 
+namespace
+{
+
+// Extract the body of a custom DRC rule from raw text, stripping the outer
+// (rule "name" ...) envelope and trailing parenthesis.
+wxString extractCustomRuleBody( const wxString& aOriginalText )
+{
+    wxString body = aOriginalText;
+    body.Replace( wxS( "(version 1)" ), wxS( "" ) );
+
+    int ruleStart = body.Find( wxS( "(rule " ) );
+
+    if( ruleStart != wxNOT_FOUND )
+    {
+        int nameStart = body.find( '"', ruleStart );
+
+        if( nameStart != wxNOT_FOUND )
+        {
+            int nameEnd = body.find( '"', nameStart + 1 );
+
+            if( nameEnd != wxNOT_FOUND )
+            {
+                body = body.Mid( nameEnd + 1 );
+                body.Trim( false );
+
+                if( body.EndsWith( wxS( ")" ) ) )
+                    body = body.Left( body.Length() - 1 );
+
+                body.Trim( true );
+            }
+        }
+    }
+
+    return body;
+}
+
+} // anonymous namespace
+
+
 DRC_RULE_LOADER::DRC_RULE_LOADER()
 {
 }
@@ -426,29 +465,9 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             if( match.panelType == CUSTOM_RULE )
             {
                 auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( constraintData );
+
                 if( customData )
-                {
-                    wxString body = aOriginalText;
-
-                    body.Replace( wxS( "(version 1)" ), wxS( "" ) );
-
-                    int ruleStart = body.Find( wxS( "(rule " ) );
-                    if( ruleStart != wxNOT_FOUND )
-                    {
-                        int nameStart = body.find( '"', ruleStart );
-                        int nameEnd = body.find( '"', nameStart + 1 );
-                        if( nameEnd != wxNOT_FOUND )
-                        {
-                            body = body.Mid( nameEnd + 1 );
-                            body.Trim( false );
-
-                            if( body.EndsWith( wxS( ")" ) ) )
-                                body = body.Left( body.Length() - 1 );
-                            body.Trim( true );
-                        }
-                    }
-                    customData->SetRuleText( body );
-                }
+                    customData->SetRuleText( extractCustomRuleBody( aOriginalText ) );
             }
 
             if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
@@ -475,26 +494,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         customData->SetRuleName( aRule.m_Name );
         customData->SetRuleCondition( condition );
 
-        wxString body = aOriginalText;
-        body.Replace( wxS( "(version 1)" ), wxS( "" ) );
-
-        int ruleStart = body.Find( wxS( "(rule " ) );
-        if( ruleStart != wxNOT_FOUND )
-        {
-            int nameStart = body.find( '"', ruleStart );
-            int nameEnd = body.find( '"', nameStart + 1 );
-            if( nameEnd != wxNOT_FOUND )
-            {
-                body = body.Mid( nameEnd + 1 );
-                body.Trim( false );
-
-                if( body.EndsWith( wxS( ")" ) ) )
-                    body = body.Left( body.Length() - 1 );
-                body.Trim( true );
-            }
-        }
-
-        customData->SetRuleText( body );
+        customData->SetRuleText( extractCustomRuleBody( aOriginalText ) );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( CUSTOM_RULE, customData, aRule.m_Name, condition,
                                          aRule.m_Severity, aRule.m_LayerCondition );
