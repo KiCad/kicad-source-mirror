@@ -359,6 +359,81 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
 }
 
 
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
+        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
+        const std::string& aPinNumber )
+{
+    std::string cacheKey = aPartType.name + ":" + aSymbolDef.name + ":" + aPinNumber;
+    auto it = m_symbolCache.find( cacheKey );
+
+    if( it != m_symbolCache.end() )
+        return it->second.get();
+
+    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aSymbolDef.name ) );
+
+    for( const auto& graphic : aSymbolDef.graphics )
+    {
+        std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
+
+        for( SCH_SHAPE* shape : shapes )
+            libSymbol->AddDrawItem( shape );
+    }
+
+    // Create pin(s) from the CAEDECAL but override the pin number
+    for( size_t p = 0; p < aSymbolDef.pins.size(); p++ )
+    {
+        SYMBOL_PIN pin = aSymbolDef.pins[p];
+        pin.number = aPinNumber;
+
+        if( !aPartType.gates.empty() && p < aPartType.gates[0].pins.size() )
+        {
+            pin.name = aPartType.gates[0].pins[p].pin_name;
+
+            if( aPartType.gates[0].pins[p].pin_type != 0 )
+                pin.type = PADS_SCH_PARSER::ParsePinTypeChar( aPartType.gates[0].pins[p].pin_type );
+        }
+
+        SCH_PIN* schPin = createPin( pin, libSymbol );
+
+        if( schPin )
+            libSymbol->AddDrawItem( schPin );
+    }
+
+    for( const auto& text : aSymbolDef.texts )
+    {
+        if( text.content.empty() )
+            continue;
+
+        SCH_TEXT* schText = new SCH_TEXT(
+                VECTOR2I( toKiCadUnits( text.position.x ),
+                          -toKiCadUnits( text.position.y ) ),
+                wxString::FromUTF8( text.content ), LAYER_DEVICE );
+
+        if( text.size > 0.0 )
+        {
+            int scaledSize = toKiCadUnits( text.size );
+            int charHeight = static_cast<int>(
+                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+            int charWidth = static_cast<int>(
+                        scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+            schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
+        }
+
+        if( text.rotation != 0.0 )
+            schText->SetTextAngleDegrees( text.rotation );
+
+        libSymbol->AddDrawItem( schText );
+    }
+
+    libSymbol->SetShowPinNumbers( false );
+    libSymbol->SetShowPinNames( false );
+
+    m_symbolCache[cacheKey] = std::unique_ptr<LIB_SYMBOL>( libSymbol );
+
+    return libSymbol;
+}
+
+
 bool PADS_SCH_SYMBOL_BUILDER::HasSymbol( const std::string& aName ) const
 {
     return m_symbolCache.find( aName ) != m_symbolCache.end();

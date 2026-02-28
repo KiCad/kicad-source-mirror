@@ -152,6 +152,22 @@ public:
                                             const SYMBOL_DEF& aSymbolDef );
 
     /**
+     * Get or create a single-pin connector symbol with a specific pin number.
+     *
+     * PADS connectors use one CAEDECAL symbol for all pin placements, but each
+     * placement represents a different pin number. This creates a variant with
+     * the correct pin number for each connector pin placement.
+     *
+     * @param aPartType   The connector PARTTYPE definition.
+     * @param aSymbolDef  The CAEDECAL symbol definition with graphics.
+     * @param aPinNumber  The pin number string for this connector pin (e.g. "15").
+     * @return Pointer to the symbol (owned by this builder).
+     */
+    LIB_SYMBOL* GetOrCreateConnectorPinSymbol( const PARTTYPE_DEF& aPartType,
+                                                const SYMBOL_DEF&   aSymbolDef,
+                                                const std::string&  aPinNumber );
+
+    /**
      * Add hidden power pins from PARTTYPE SIGPIN entries to an existing symbol.
      *
      * Each SIGPIN becomes an invisible PT_POWER_IN pin at position (0,0).

@@ -23,6 +23,8 @@
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
 #include <sch_io/sch_io_mgr.h>
+#include <sch_screen.h>
+#include <sch_sheet.h>
 #include <settings/settings_manager.h>
 
 

@@ -54,6 +54,50 @@
 
 
 /**
+ * Extract the numeric connector pin suffix from a reference designator.
+ * For "J12-15" returns "15", for "J12-1" returns "1".
+ * Returns empty string if no numeric suffix is found.
+ */
+static std::string extractConnectorPinNumber( const std::string& aRef )
+{
+    size_t sepPos = aRef.rfind( '-' );
+
+    if( sepPos == std::string::npos )
+        sepPos = aRef.rfind( '.' );
+
+    if( sepPos != std::string::npos && sepPos + 1 < aRef.size()
+        && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
+    {
+        return aRef.substr( sepPos + 1 );
+    }
+
+    return "";
+}
+
+
+/**
+ * Extract the base reference from a connector reference designator.
+ * For "J12-15" returns "J12", for "J12-1" returns "J12".
+ * Returns the full reference if no numeric suffix is found.
+ */
+static std::string extractConnectorBaseRef( const std::string& aRef )
+{
+    size_t sepPos = aRef.rfind( '-' );
+
+    if( sepPos == std::string::npos )
+        sepPos = aRef.rfind( '.' );
+
+    if( sepPos != std::string::npos && sepPos + 1 < aRef.size()
+        && std::isdigit( static_cast<unsigned char>( aRef[sepPos + 1] ) ) )
+    {
+        return aRef.substr( 0, sepPos );
+    }
+
+    return aRef;
+}
+
+
+/**
  * Strip any alphabetic gate suffix (e.g. "-A", ".B") from a PADS reference designator,
  * returning the base refdes that matches the PCB footprint naming convention.
  */
@@ -435,6 +479,9 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
     if( m_progressReporter )
         m_progressReporter->BeginPhase( 2 );
 
+    // Track connector base references for wire-endpoint label creation
+    std::set<std::string> connectorBaseRefs;
+
     // Place symbols on each sheet
     for( auto& [sheetNum, ctx] : sheetContexts )
     {
@@ -446,8 +493,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
             LIB_SYMBOL*  libSymbol = nullptr;
             bool         isMultiGate = false;
+            bool         isConnector = false;
             bool         isPower = false;
             std::string  libItemName;
+            std::string  connectorPinNumber;
 
             if( ptIt != parser.GetPartTypes().end() )
             {
@@ -463,7 +512,6 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                 }
                 else if( !ptDef.gates.empty() )
                 {
-                    // Single-gate PARTTYPE: build with pin remapping
                     const PADS_SCH::GATE_DEF& gate = ptDef.gates[0];
                     int idx = std::max( 0, part.gate_index );
                     std::string decalName;
@@ -475,7 +523,23 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                     const PADS_SCH::SYMBOL_DEF* symDef = parser.GetSymbolDef( decalName );
 
-                    if( symDef )
+                    connectorPinNumber = ptDef.is_connector
+                                                ? extractConnectorPinNumber( part.reference )
+                                                : std::string();
+
+                    if( symDef && !connectorPinNumber.empty() )
+                    {
+                        // Single-pin connector placement (e.g. J12-15).
+                        // Each placement gets a symbol variant with the correct pin number.
+                        libSymbol = symbolBuilder.GetOrCreateConnectorPinSymbol(
+                                ptDef, *symDef, connectorPinNumber );
+                        libItemName = decalName + "_pin" + connectorPinNumber;
+                        isConnector = true;
+
+                        connectorBaseRefs.insert(
+                                extractConnectorBaseRef( part.reference ) );
+                    }
+                    else if( symDef )
                     {
                         libSymbol = symbolBuilder.GetOrCreatePartTypeSymbol( ptDef, *symDef );
                         libItemName = decalName;
@@ -639,7 +703,10 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                 if( cat == "CAP" || cat == "RES" || cat == "IND" )
                 {
-                    auto valIt = part.attr_overrides.find( "VALUE1" );
+                    auto valIt = part.attr_overrides.find( "VALUE" );
+
+                    if( valIt == part.attr_overrides.end() )
+                        valIt = part.attr_overrides.find( "VALUE1" );
 
                     if( valIt != part.attr_overrides.end() && !valIt->second.empty() )
                     {
@@ -647,7 +714,8 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 
                         for( const auto& attr : part.attributes )
                         {
-                            if( attr.name == "VALUE1" || attr.name == "Value1" )
+                            if( attr.name == "VALUE" || attr.name == "VALUE1"
+                                || attr.name == "Value1" )
                             {
                                 SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE );
                                 int fx = schIUScale.MilsToIU( KiROUND( attr.position.x ) );
@@ -692,6 +760,31 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                                               symbol->GetUnit() );
 
             symbol->ClearFlags();
+
+            // For connector pins, create a local label at the pin position
+            // before transferring ownership to the screen.
+            // The matching label at the wire endpoint creates the electrical connection.
+            if( isConnector && !connectorPinNumber.empty() )
+            {
+                std::string baseRef = extractConnectorBaseRef( part.reference );
+                wxString labelText = wxString::Format( wxT( "%s.%s" ),
+                        wxString::FromUTF8( baseRef ),
+                        wxString::FromUTF8( connectorPinNumber ) );
+
+                VECTOR2I pinPos = symbol->GetPosition();
+                std::vector<SCH_PIN*> pins = symbol->GetPins();
+
+                if( !pins.empty() )
+                    pinPos = pins[0]->GetPosition();
+
+                SCH_LABEL* label = new SCH_LABEL( pinPos, labelText );
+                int labelSize = schIUScale.MilsToIU( 50 );
+                label->SetTextSize( VECTOR2I( labelSize, labelSize ) );
+                label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                label->SetFlags( IS_NEW );
+                ctx.screen->Append( label );
+            }
+
             ctx.screen->Append( symbolPtr.release() );
         }
     }
@@ -770,6 +863,95 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                     line->SetEndPoint( end );
                     line->SetConnectivityDirty();
                     ctx.screen->Append( line );
+                }
+            }
+        }
+
+        // Create local labels at wire endpoints that reference connector pins
+        for( const PADS_SCH::SCH_SIGNAL& signal : sheetSignals )
+        {
+            for( const PADS_SCH::WIRE_SEGMENT& wire : signal.wires )
+            {
+                if( wire.vertices.size() < 2 )
+                    continue;
+
+                // Check endpoint_a for connector pin reference
+                if( wire.endpoint_a.find( '.' ) != std::string::npos
+                    && wire.endpoint_a.find( "@@@" ) == std::string::npos )
+                {
+                    size_t dotPos = wire.endpoint_a.find( '.' );
+                    std::string ref = wire.endpoint_a.substr( 0, dotPos );
+
+                    if( connectorBaseRefs.count( ref ) )
+                    {
+                        const auto& vtx = wire.vertices.front();
+                        VECTOR2I pos(
+                                schIUScale.MilsToIU( KiROUND( vtx.x ) ),
+                                pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
+
+                        // Compute label orientation from adjacent vertex
+                        const auto& adj = wire.vertices[1];
+                        VECTOR2I adjPos(
+                                schIUScale.MilsToIU( KiROUND( adj.x ) ),
+                                pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
+
+                        int dx = adjPos.x - pos.x;
+                        int dy = adjPos.y - pos.y;
+                        SPIN_STYLE orient = SPIN_STYLE::RIGHT;
+
+                        if( std::abs( dx ) >= std::abs( dy ) )
+                            orient = ( dx > 0 ) ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT;
+                        else
+                            orient = ( dy > 0 ) ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
+
+                        wxString labelText = wxString::FromUTF8( wire.endpoint_a );
+                        SCH_LABEL* label = new SCH_LABEL( pos, labelText );
+                        int labelSize = schIUScale.MilsToIU( 50 );
+                        label->SetTextSize( VECTOR2I( labelSize, labelSize ) );
+                        label->SetSpinStyle( orient );
+                        label->SetFlags( IS_NEW );
+                        ctx.screen->Append( label );
+                    }
+                }
+
+                // Check endpoint_b for connector pin reference
+                if( wire.endpoint_b.find( '.' ) != std::string::npos
+                    && wire.endpoint_b.find( "@@@" ) == std::string::npos )
+                {
+                    size_t dotPos = wire.endpoint_b.find( '.' );
+                    std::string ref = wire.endpoint_b.substr( 0, dotPos );
+
+                    if( connectorBaseRefs.count( ref ) )
+                    {
+                        const auto& vtx = wire.vertices.back();
+                        VECTOR2I pos(
+                                schIUScale.MilsToIU( KiROUND( vtx.x ) ),
+                                pageHeightIU - schIUScale.MilsToIU( KiROUND( vtx.y ) ) );
+
+                        // Compute label orientation from adjacent vertex
+                        size_t lastIdx = wire.vertices.size() - 1;
+                        const auto& adj = wire.vertices[lastIdx - 1];
+                        VECTOR2I adjPos(
+                                schIUScale.MilsToIU( KiROUND( adj.x ) ),
+                                pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
+
+                        int dx = adjPos.x - pos.x;
+                        int dy = adjPos.y - pos.y;
+                        SPIN_STYLE orient = SPIN_STYLE::RIGHT;
+
+                        if( std::abs( dx ) >= std::abs( dy ) )
+                            orient = ( dx > 0 ) ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT;
+                        else
+                            orient = ( dy > 0 ) ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
+
+                        wxString labelText = wxString::FromUTF8( wire.endpoint_b );
+                        SCH_LABEL* label = new SCH_LABEL( pos, labelText );
+                        int labelSize = schIUScale.MilsToIU( 50 );
+                        label->SetTextSize( VECTOR2I( labelSize, labelSize ) );
+                        label->SetSpinStyle( orient );
+                        label->SetFlags( IS_NEW );
+                        ctx.screen->Append( label );
+                    }
                 }
             }
         }

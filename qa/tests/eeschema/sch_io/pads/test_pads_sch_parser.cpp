@@ -1332,6 +1332,64 @@ BOOST_AUTO_TEST_CASE( ParsePartTypes_V52_SimplePart )
 }
 
 
+BOOST_AUTO_TEST_CASE( SymbolBuilder_ConnectorPinSymbol )
+{
+    PADS_SCH::PARAMETERS params;
+    params.units = PADS_SCH::UNIT_TYPE::MILS;
+    PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( params );
+
+    // Create a minimal connector PARTTYPE and symbol def
+    PADS_SCH::PARTTYPE_DEF connPt;
+    connPt.name = "TEST_CONN";
+    connPt.is_connector = true;
+    connPt.category = "CON";
+
+    PADS_SCH::GATE_DEF gate;
+    gate.num_pins = 1;
+    gate.decal_names.push_back( "EXTIN" );
+
+    PADS_SCH::PARTTYPE_PIN pin;
+    pin.pin_id = "1";
+    pin.pin_type = 'S';
+    gate.pins.push_back( pin );
+    connPt.gates.push_back( gate );
+
+    PADS_SCH::SYMBOL_DEF symDef;
+    symDef.name = "EXTIN";
+    symDef.gate_count = 1;
+
+    PADS_SCH::SYMBOL_PIN symPin;
+    symPin.number = "1";
+    symPin.position.x = 0;
+    symPin.position.y = 0;
+    symPin.length = 100;
+    symDef.pins.push_back( symPin );
+
+    // Pin 15 variant should have pin number "15"
+    LIB_SYMBOL* sym15 = builder.GetOrCreateConnectorPinSymbol( connPt, symDef, "15" );
+    BOOST_REQUIRE( sym15 != nullptr );
+
+    auto pins15 = sym15->GetPins();
+    BOOST_REQUIRE_EQUAL( pins15.size(), 1u );
+    BOOST_CHECK_EQUAL( pins15[0]->GetNumber(), "15" );
+
+    // Pin 1 variant should have pin number "1"
+    LIB_SYMBOL* sym1 = builder.GetOrCreateConnectorPinSymbol( connPt, symDef, "1" );
+    BOOST_REQUIRE( sym1 != nullptr );
+
+    auto pins1 = sym1->GetPins();
+    BOOST_REQUIRE_EQUAL( pins1.size(), 1u );
+    BOOST_CHECK_EQUAL( pins1[0]->GetNumber(), "1" );
+
+    // Different pin numbers should produce different cached symbols
+    BOOST_CHECK_NE( sym15, sym1 );
+
+    // Same pin number should return cached symbol
+    LIB_SYMBOL* sym15again = builder.GetOrCreateConnectorPinSymbol( connPt, symDef, "15" );
+    BOOST_CHECK_EQUAL( sym15, sym15again );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
