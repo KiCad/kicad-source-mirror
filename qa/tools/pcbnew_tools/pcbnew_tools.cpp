@@ -23,9 +23,15 @@
 
 #include <qa_utils/utility_program.h>
 
+#include <wx/init.h>
+
 int main( int argc, char** argv )
 {
+    wxInitialize( argc, argv );
     KI_TEST::COMBINED_UTILITY c_util;
 
-    return c_util.HandleCommandLine( argc, argv );
+    int ret = c_util.HandleCommandLine( argc, argv );
+
+    wxUninitialize();
+    return ret;
 }
