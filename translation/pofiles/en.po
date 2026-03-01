@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 01:08+0300\n"
+"POT-Creation-Date: 2026-03-01 09:48+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -17214,6 +17214,12 @@ msgstr "Show Hidden Pins"
 msgid "Show Hidden Fields"
 msgstr "Show Hidden Fields"
 
+msgid "Display previous symbol"
+msgstr "Display previous symbol"
+
+msgid "Display next symbol"
+msgstr "Display next symbol"
+
 msgid "Draw Pins"
 msgstr "Draw Pins"
 
@@ -28492,8 +28498,14 @@ msgstr "Top backdrill must-cut:"
 msgid "The backdrill must pass through this layer"
 msgstr "The backdrill must pass through this layer"
 
+msgid "Top backdrill size:"
+msgstr "Top backdrill size:"
+
 msgid "Bottom backdrill must-cut:"
 msgstr "Bottom backdrill must-cut:"
+
+msgid "Bottom backdrill size:"
+msgstr "Bottom backdrill size:"
 
 msgid "Preview pad in sketch mode"
 msgstr "Preview pad in sketch mode"
@@ -33609,8 +33621,8 @@ msgstr "Preferred Gap must be greater than 0"
 msgid "Maximum Gap must be greater than 0"
 msgstr "Maximum Gap must be greater than 0"
 
-msgid "Maximum Uncoupled Length must be greater than 0"
-msgstr "Maximum Uncoupled Length must be greater than 0"
+msgid "Maximum Uncoupled Length must be greater than or equal to 0"
+msgstr "Maximum Uncoupled Length must be greater than or equal to 0"
 
 msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maximum Skew must be greater than or equal to 0"
@@ -33633,6 +33645,9 @@ msgstr "Preferred Gap cannot be greater than Maximum Gap"
 msgid "Minimum Gap cannot be greater than Maximum Gap"
 msgstr "Minimum Gap cannot be greater than Maximum Gap"
 
+msgid "At least one constraint must be specified"
+msgstr "At least one constraint must be specified"
+
 msgid "Minimum Via Diameter must be greater than 0"
 msgstr "Minimum Via Diameter must be greater than 0"
 
@@ -33650,6 +33665,9 @@ msgstr "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
 
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
+
+msgid "At least one via type must be selected"
+msgstr "At least one via type must be selected"
 
 #, c-format
 msgid "%s should not be empty."
@@ -38103,6 +38121,9 @@ msgstr "Not filled"
 msgid "Via Properties"
 msgstr "Via Properties"
 
+msgid "Post-machining"
+msgstr "Post-machining"
+
 msgid "Layer Top"
 msgstr "Layer Top"
 
@@ -42550,6 +42571,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Maximum Uncoupled Length must be greater than 0"
+#~ msgstr "Maximum Uncoupled Length must be greater than 0"
 
 #~ msgid ""
 #~ "Board variant for variant-aware filtering (DNP, BOM, position file "
@@ -51844,12 +51868,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "SSH Private Key"
 #~ msgstr "SSH Private Key"
-
-#~ msgid "Display previous symbol"
-#~ msgstr "Display previous symbol"
-
-#~ msgid "Display next symbol"
-#~ msgstr "Display next symbol"
 
 #~ msgid "&Archive Project..."
 #~ msgstr "&Archive Project…"
