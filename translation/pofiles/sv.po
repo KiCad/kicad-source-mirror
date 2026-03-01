@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 02:11+0000\n"
+"PO-Revision-Date: 2026-03-01 17:37+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -15744,7 +15744,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-"med i komponentlistan för bestyckning (BOM), till exempel optiska riktmärken "
+"med i komponentlistan för bestyckning, till exempel optiska riktmärken "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:55
@@ -16203,7 +16203,7 @@ msgstr "Användarkonfiguration"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "Spice"
-msgstr "SPICE"
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
@@ -20322,7 +20322,7 @@ msgstr "Objekt av typ \"blanket\" stöds för närvarande inte."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5016
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Okänt eller oväntat post-ID %d funnet i %s."
+msgstr "Okänt eller oväntat post-id %d funnet i %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1654
 #, c-format
@@ -29255,7 +29255,7 @@ msgstr "Generera rapport över borrträffar"
 
 #: kicad/cli/command_pcb_export_drill.cpp:101
 msgid "Report output file path"
-msgstr "Rapportera utmatningsfils sökväg"
+msgstr "Sökväg för rapportfil"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
@@ -29303,8 +29303,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
-"Varning: Rapportsökväg angiven utan --generate-report, ingen rapport kommer "
-"att genereras\n"
+"Varning: Rapportfilssökväg given utan --generate-report, ingen rapport "
+"kommer att skapas\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -47210,8 +47210,9 @@ msgid "Disallow"
 msgstr "Tillåt inte"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
+#, fuzzy
 msgid "Where conditions match:"
-msgstr ""
+msgstr "När villkor uppfylls:"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:50
 msgid "Where object matches:"
@@ -47378,14 +47379,12 @@ msgid "Maximum Gap must be greater than 0"
 msgstr "Största mellanrum måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:106
-#, fuzzy
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "Maximal okopplad längd måste vara större än noll"
+msgstr "Maximal okopplad längd måste vara större än eller lika med noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:109
-#, fuzzy
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Maximal skevning måste vara större än noll"
+msgstr "Maximal skevning måste vara större än eller lika med noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:116
 msgid "Minimum Width cannot be greater than Preferred Width"
@@ -47414,7 +47413,7 @@ msgstr "Minsta mellanrum kan inte vara större än största mellanrum"
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:139
 #, fuzzy
 msgid "At least one constraint must be specified"
-msgstr "Minst ett lager måste specificeras\n"
+msgstr "Minst en begränsning måste specificeras"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:87
 msgid "Minimum Via Diameter must be greater than 0"
@@ -47441,9 +47440,8 @@ msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr "Minsta viahåldiameter kan inte vara större än största viahåldiameter"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
-#, fuzzy
 msgid "At least one via type must be selected"
-msgstr "Minst ett lager måste väljas"
+msgstr "Minst en viatyp måste väljas"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:331
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:373
@@ -47549,12 +47547,11 @@ msgstr "inre"
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
 #, fuzzy
 msgid "Constraint"
-msgstr "Begränsningar"
+msgstr "Begränsning"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:73
-#, fuzzy
 msgid "Conditions"
-msgstr "Villkor:"
+msgstr "Villkor"
 
 #: pcbnew/edit_zone_helpers.cpp:86
 msgid "Edit Zone Properties"
@@ -47649,9 +47646,9 @@ msgid "Error creating drill report file '%s'"
 msgstr "Fel uppstod vid försök att skapa borr-rapportfil '%s'"
 
 #: pcbnew/exporters/gendrill_writer_base.cpp:1239
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing drill report file '%s'"
-msgstr "Fel uppstod vid försök att skapa borr-rapportfil '%s'"
+msgstr "Fel uppstod vid försök att skriva borr-rapportfil '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:140
 #, c-format
@@ -47711,14 +47708,20 @@ msgid ""
 "Try disabling 'Fuse Shapes' option, reducing board complexity, or freeing up "
 "system memory.\n"
 msgstr ""
+"\n"
+"** Slut på minne vid export av %s fil. **\n"
+"Mönsterkortet har kanske för många objekt (t.ex. vior, ledare, komponenter) "
+"att bearbeta med det tillgängliga systemminnet.\n"
+"Försök att deaktivera alternativet 'sammanfoga former', reducera "
+"mönsterkortets komplexitet eller frigöra systemminne.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1352
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Kunde inte lägga till 3D-modell för %s.\n"
+"\n"
 "OpenCASCADE-fel: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1359
@@ -47726,13 +47729,14 @@ msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
 msgstr ""
+"Detta fel kan indikera otillräckligt minne. Överväg att deaktivera "
+"alternativet 'sammanfoga former', minska antalet vior/komponenter eller "
+"frigöra systemminne.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** Fel vid export av %s-fil. Export avbruten. **\n"
+msgstr "** Fel vid export av %s-fil. Export avbruten. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1373
 #, c-format
@@ -47744,6 +47748,13 @@ msgid ""
 "Try disabling 'Fuse Shapes', reducing board complexity, or freeing up system "
 "memory.\n"
 msgstr ""
+"\n"
+"** Oväntat fel vid export av %s-fil. **\n"
+"Detta kan orsakas av otillräckligt systemminne, särskilt när mönsterkort med "
+"många vior eller komponenter exporteras med alternativet 'sammanfoga former' "
+"aktiverat.\n"
+"Försök med att deaktivera 'sammanfoga former', reducera mönsterkortets "
+"komplexitet eller frigöra systemminne.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1386
 #, c-format
@@ -47759,6 +47770,9 @@ msgid ""
 "Out of memory while fusing shapes. Consider disabling shape fusing, reducing "
 "the number of objects (e.g., vias), or freeing system memory."
 msgstr ""
+"Slut på minne när former sammanfogades. Överväg att deaktivera "
+"sammanslagning av former, reducera antalet objekt (t.ex. vior) eller frigöra "
+"systemminne."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:676
 #, c-format
@@ -47767,12 +47781,17 @@ msgid ""
 "This may indicate insufficient memory. Consider disabling shape fusing or "
 "reducing board complexity."
 msgstr ""
+"OpenCASCADE-fel vid sammanslagning av former: %s\n"
+"Detta kan indikera otillräckligt minne. Överväg att deaktivera "
+"sammanslagning av former eller reducera mönsterkortets komplexitet."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:686
 msgid ""
 "Problems encountered while fusing shapes. This operation is memory-"
 "intensive; insufficient memory may cause failures."
 msgstr ""
+"Problem uppstod vid sammanslagning av former. Denna åtgärd är "
+"minnesintensiv; otillräckligt minne kan orsaka fel."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:692
 #: pcbnew/exporters/step/step_pcb_model.cpp:2598
@@ -47785,20 +47804,21 @@ msgid "Warnings:\n"
 msgstr "Varningar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:725
-#, fuzzy
 msgid "ShapeUpgrade_UnifySameDomain produced a null shape."
-msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **"
+msgstr "ShapeUpgrade_UnifySameDomain producerade en tom form (null-form)."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:736
 msgid ""
 "Out of memory while unifying shape domains. Consider disabling shape fusing "
 "or reducing the number of objects."
 msgstr ""
+"Slut på minne vid sammanslagning av form-domäner. Överväg att deaktivera "
+"sammanslagning av former eller reducera antalet objekt."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:743
 #, c-format
 msgid "OpenCASCADE error while unifying shapes: %s"
-msgstr ""
+msgstr "OpenCASCADE-fel vid sammanslagning av former: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:999
 msgid "OCC error adding pad/via polygon."
@@ -48092,9 +48112,8 @@ msgid "Memory exhausted loading PCB '%s'"
 msgstr "Slut på minne vid inläsning av mönsterkort '%s'"
 
 #: pcbnew/files.cpp:737
-#, fuzzy
 msgid "Finalizing board"
-msgstr "Läser in mönsterkort\n"
+msgstr "Färdigställer mönsterkort"
 
 #: pcbnew/files.cpp:782 pcbnew/pcb_edit_frame.cpp:1596
 msgid "Could not load component class assignment rules"
@@ -49314,9 +49333,9 @@ msgid "Add %s to group '%s'."
 msgstr "Lägg till %s till grupp '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
-msgstr "Lägg till %s till grupp '%s'."
+msgstr "Lade till %s till grupp '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1109
 #, c-format
@@ -49370,92 +49389,87 @@ msgstr "Uppdaterade metadata för enhet %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1356
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2081
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid footprint ID '%s' for variant '%s' on %s."
-msgstr ""
-"Ogiltigt fotavtrycks-ID i\n"
-"fil: '%s'\n"
-"rad: %d"
+msgstr "Ogiltigt fotavtrycks-ID '%s' för variant '%s' på %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1394
 #, c-format
 msgid "Add %s '%s' attribute to variant %s (footprint %s)."
-msgstr ""
+msgstr "Lägg till %s attribut '%s' till variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
-msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr "Ta bort %s attribut '%s' från variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s."
-msgstr "Lägg till %s fält '%s' med värde '%s'."
+msgstr "Lägg till %s attribut '%s' till variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s."
-msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr "Ta bort %s attribut '%s' från variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "Lade till %s (fotavtryck '%s')."
+msgstr "Lade till %s attribut '%s' till variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1415
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
-msgstr "Tog bort tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr "Tog bort %s attribut '%s' från variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1423
 #, c-format
 msgid "Added %s '%s' attribute to variant %s."
-msgstr ""
+msgstr "Lade till %s attribut '%s' till variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s."
-msgstr "Tog bort tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr "Tog bort %s attribut '%s' från variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
-#, fuzzy
 msgid "Do not place"
 msgstr "Monteras ej"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1497
-#, fuzzy
 msgid "exclude from position files"
-msgstr "Uteslut från positionsfiler"
+msgstr "uteslut från positionsfiler"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "Ändra %s värde av fält '%s' till '%s'."
+msgstr "Ändra %s fält '%s' till '%s' i variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s."
-msgstr "Ändra %s värde av fält '%s' till '%s'."
+msgstr "Ändra %s fält '%s' till '%s' i variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1543
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
-msgstr "Ändra %s värde av fält '%s' till '%s'."
+msgstr "Ändra %s fält '%s' till '%s' i variant %s (fotavtryck %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1552
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s."
-msgstr "Ändra %s värde av fält '%s' till '%s'."
+msgstr "Ändra %s fält '%s' till '%s' i variant %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1573
 #, c-format
 msgid "Remove variant %s:%s no longer associated with footprint %s."
-msgstr ""
+msgstr "Ta bort variant %s: %s är inte längre associerad med fotavtryck %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1580
 #, c-format
 msgid "Removed variant %s:%s no longer associated with footprint %s."
-msgstr ""
+msgstr "Tog bort variant %s: %s är inte längre associerad med fotavtryck %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1668
 #, c-format
@@ -49504,24 +49518,24 @@ msgstr ""
 "Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna till nät \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1867
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name from '%s' to '%s'."
 msgstr "Ändra gruppnamn från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1873
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name from '%s' to '%s'."
-msgstr "Ändra gruppnamn från '%s' till '%s'."
+msgstr "Ändrade gruppnamn från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Change group library link from '%s' to '%s'."
-msgstr "Ändra gruppbibliotekslänk till '%s'."
+msgstr "Ändra gruppbibliotekslänk från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1893
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group library link from '%s' to '%s'."
-msgstr "Ändrade gruppbibliotekslänk till '%s'."
+msgstr "Ändrade gruppbibliotekslänk från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1933
 #, c-format
@@ -49578,24 +49592,23 @@ msgid "Removed unused net %s."
 msgstr "Tog bort oanvänt nät %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2342
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "Uppdaterar nät..."
+msgstr "Uppdaterar designvarianter..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2370
-#, fuzzy, c-format
+#, c-format
 msgid "Added variant '%s'."
-msgstr "Lade till %s (fotavtryck '%s')."
+msgstr "Lade till variant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2385
-#, fuzzy, c-format
+#, c-format
 msgid "Updated description for variant '%s'."
-msgstr "Uppdaterade %s fotavtrycksfilter till '%s'."
+msgstr "Uppdaterade beskrivning för variant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2414
-#, fuzzy, c-format
+#, c-format
 msgid "Removed variant '%s'."
-msgstr "Ta bort variant..."
+msgstr "Tog bort variant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2426
 msgid "Update Netlist"
@@ -49924,7 +49937,6 @@ msgid "Undefined"
 msgstr "Odefinierad"
 
 #: pcbnew/pad.cpp:3302
-#, fuzzy
 msgid "Not post-machined"
 msgstr "Inte efterbearbetad"
 
@@ -50074,6 +50086,8 @@ msgid ""
 "This barcode type does not support international characters. Use QR Code or "
 "Data Matrix instead."
 msgstr ""
+"Denna streckkodstyp stödjer inte internationella tecken. Använd QR Code "
+"eller Data Matrix istället."
 
 #: pcbnew/pcb_barcode.cpp:526
 #, c-format
@@ -50344,23 +50358,20 @@ msgid "Constructing caches"
 msgstr "Motstridiga etiketter"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4197
-#, fuzzy
 msgid "Creating nets"
-msgstr "Skapar objekt"
+msgstr "Skapar nät"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4206
-#, fuzzy
 msgid "Creating tracks"
-msgstr "befintlig ledare"
+msgstr "Skapar ledare"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4245
-#, fuzzy
 msgid "Converting footprints"
-msgstr "Centrera på fotavtryck"
+msgstr "Konverterar fotavtryck"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2464
 msgid "Parsing Allegro objects"
-msgstr ""
+msgstr "Tolkar Allegro-objekt"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2687
 #, c-format
@@ -50371,16 +50382,20 @@ msgid ""
 "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
 "later and re-save, then import the resulting file."
 msgstr ""
+"Denna fil skapades med %s, som använder ett binärt format som är tidigare än "
+"Allegro 16.0 och inte stöds av denna importrutin.\n"
+"\n"
+"För att importera denna design, öppna den i Cadence Allegro "
+"mönsterkortsredigerare version 16.0 eller senare och spara på nytt, "
+"importera sedan den resulterande filen."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:181
-#, fuzzy
 msgid "Failed to build board from Allegro data"
-msgstr "Det gick inte att lägga till komponentdata"
+msgstr "Det gick inte att skapa mönsterkort från Allegro-data"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:39
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Allegro nätlistefiler"
+msgstr "Allegro mönsterkortsfiler"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:176
 #, c-format
@@ -51023,7 +51038,7 @@ msgstr ""
 "stöds inte."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
 msgstr ""
 "Det gick inte att hitta komponenten '%s' i biblioteket (Symdef ID: '%s')"
@@ -51244,7 +51259,6 @@ msgstr ""
 "har importerats för alla nät)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3913
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -51252,9 +51266,9 @@ msgid ""
 "this."
 msgstr ""
 "CADSTAR-designen innehåller nät med en 'Avståndsklass' tilldelad. KiCad har "
-"inte som motsvarar CADSTAR:s avståndsklass varför dessa element inte "
-"importerades. Vänligen granska designreglerna eftersom kopparzoner påverkas "
-"av detta."
+"ingen motsvarighet till CADSTAR:s avståndsklass varför dessa element inte "
+"importerades. Vänligen granska designreglerna eftersom kopparzoner kan "
+"påverkas av detta."
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -51597,23 +51611,21 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrycksbibliotek '%s' kan inte tas bort."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Via token contains %d parameters, expected at least 10."
-msgstr "Elementtoken innehåller %d parametrar."
+msgstr "Via-token innehåller %d parametrar, förväntas minst 10."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "gEDA / Lepton EDA mönsterkortsfil"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "gEDA PCB fotavtrycksfil"
+msgstr "gEDA / Lepton EDA mönsterkorts fotavtrycksfil"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "gEDA PCB fotavtrycksbibliotekskatalog"
+msgstr "gEDA / Lepton EDA mönsterkorts fotavtrycksbibliotekskatalog"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:427
 msgid "Generating content section"
@@ -51792,9 +51804,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Fotavtrycksbiblioteket '%s' är skrivskyddat."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "Kan inte öppna filen '%s'"
+msgstr "Varing i filen '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1637
 #, c-format
@@ -52042,59 +52054,60 @@ msgstr "ODB++ produktionsfil"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:129
 msgid "Starting PADS PCB import"
-msgstr ""
+msgstr "Påbörjar PADS PCB-import"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:530
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'"
+msgstr "Fotavtryck '%s' hittades inte i dekal-listan, delen hoppas över"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:977
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr ""
+msgstr "Hoppar över dekalobjekt på icke tilldelat lager %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1238
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
-msgstr ""
+msgstr "Text på icke tilldelat lager %d tilldelat till kommentarslagret"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1315
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping track on non-copper layer %d"
-msgstr "Flytta ledare till nästa aktiva kopparlager"
+msgstr "Hoppar över ledare på icke-kopparlager %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1548
 #, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
-msgstr ""
+msgstr "KOPPAR-objekt på icke tilldelat lager %d, använder standardlager F.Cu"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1794
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
-msgstr ""
+msgstr "Hoppar över kopparfyllning på icke tilldelat lager %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2090
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr ""
+msgstr "Hoppar över spärrzon på icke tilldelat lager %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2114
 msgid "Skipping keepout with no valid layers"
-msgstr ""
+msgstr "Hoppar över spärrzon utan giltiga lager"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2311
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
 msgstr ""
+"Importerade %zu fotavtryck, %d nät, %zu ledare, %zu vior, %zu kopparzoner"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:109
 msgid "Starting PADS binary PCB import"
-msgstr ""
+msgstr "Påbörjar PADS binär PCB import"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -53067,34 +53080,34 @@ msgid "Board file was not updated\n"
 msgstr "Mönsterkortsfil uppdaterades inte\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2865
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine file format for '%s'\n"
-msgstr "Kunde inte skriva fil '%s'."
+msgstr "Kunde inte fastställa filformat för '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2874
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Filen hittades inte: '%s'."
+msgstr "Inmatningsfil hittades inte: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2900
-#, fuzzy, c-format
+#, c-format
 msgid "No plugin found for file type '%s'\n"
-msgstr "Inget placeringsdata för filnamn '%s'."
+msgstr "Ingen insticksmodul för filtyp '%s' hittades.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2906
 #, c-format
 msgid "Importing '%s' using %s format...\n"
-msgstr ""
+msgstr "Importerar '%s', använder format %s...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported board to '%s'\n"
-msgstr "Lyckades exportera VRML till %s"
+msgstr "Lyckades spara importerat mönsterkort till '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3044
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Fel vid inläsning av fotavtryck"
+msgstr "Fel vid import: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -53301,6 +53314,10 @@ msgid ""
 "spacing. Adjust the differential pair settings or start from a location with "
 "the correct gap."
 msgstr ""
+"Det differentiella parets ledaravstånd vid startpunkten överensstämmer inte "
+"med det konfigurerade avståndet. Detta kan hända i 'neckdown'-områden där "
+"ledare har smalare bredd och ledaravstånd. Ändra inställningarna för det "
+"differentiella paret eller börja på ett ställe med korrekt ledaravstånd."
 
 #: pcbnew/router/router_tool.cpp:147
 msgid "Place Through Via"
@@ -53713,9 +53730,8 @@ msgid "Control to select the via diameter"
 msgstr "Kontrollobjekt för val av viadiameter"
 
 #: pcbnew/toolbars_pcb_editor.cpp:135
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "Kontrollobjekt för val av viadiameter"
+msgstr "Kontrollobjekt för val av aktuell variant"
 
 #: pcbnew/toolbars_pcb_editor.cpp:218
 msgid "Track routing tools"
@@ -54119,17 +54135,21 @@ msgstr "Villkor för:"
 #: pcbnew/tools/board_inspection_tool.cpp:915
 #, fuzzy
 msgid "Select first item for clearance resolution..."
-msgstr "Välj två objekt för en rapport om upplösning av godkännande."
+msgstr ""
+"Välj det första objektet för vilket isolationsavstånd och frigång skall "
+"fastställas..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
-#, fuzzy
 msgid "Select second item for clearance resolution..."
-msgstr "Välj två objekt för en rapport om upplösning av godkännande."
+msgstr ""
+"Välj det andra objektet för vilket isolationsavstånd och frigång skall "
+"fastställas..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:936
-#, fuzzy
 msgid "Select two different items for clearance resolution."
-msgstr "Välj två objekt för en rapport om upplösning av godkännande."
+msgstr ""
+"Välj två olika objekt för vilka isolationsavstånd och frigång skall "
+"fastställas..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:959
 #: pcbnew/tools/board_inspection_tool.cpp:972
@@ -54861,7 +54881,7 @@ msgstr "Kunde inte skapa kontur kring vissa av objekten."
 #: pcbnew/tools/multichannel_tool.cpp:88
 #, fuzzy
 msgid "(none)"
-msgstr "ingen"
+msgstr "(ingen)"
 
 #: pcbnew/tools/multichannel_tool.cpp:138
 #: pcbnew/tools/multichannel_tool.cpp:1493
@@ -54877,14 +54897,13 @@ msgid "No Rule Areas to repeat layout to have been found."
 msgstr "Inga regelområden att upprepa layouten till har hittats."
 
 #: pcbnew/tools/multichannel_tool.cpp:728
-#, fuzzy
 msgid "Checking Rule Area compatibility..."
-msgstr "Kontrollerar regelområden..."
+msgstr "Kontrollerar regelområdets kompatibilitet..."
 
 #: pcbnew/tools/multichannel_tool.cpp:753
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
-msgstr ""
+msgstr "Löser topologi %d av %d (%d/%d komponenter)"
 
 #: pcbnew/tools/multichannel_tool.cpp:788
 #, c-format
@@ -54916,26 +54935,30 @@ msgstr "Kopierade till %d regelområden."
 #: pcbnew/tools/multichannel_tool.cpp:1499
 #, c-format
 msgid "Reference area total components: %d"
-msgstr ""
+msgstr "Referensområdets totala antal komponenter: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1500
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "Referensbildsegenskaper"
+msgstr ""
+"Referensområdets komponenter:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "Det gick inte att tolka komponentlistan: %s"
+msgstr "Målområdets totala antal komponenter: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1504
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "Det gick inte att tolka komponentlistan: %s"
+msgstr ""
+"Målområdets komponenter: \n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1556
 msgid ""
@@ -55234,28 +55257,24 @@ msgid "Apply linked design block layout to selected group"
 msgstr "Tillämpa länkad designblockslayout på vald grupp"
 
 #: pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Spara aktuellt mönsterkort som designblock..."
+msgstr "Spara mönsterkort som designblock..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
 msgstr "Skapa ett nytt designblock från det aktuella mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Uppdatera designblocksbibliotek"
+msgstr "Uppdatera designblock från mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Lägg till valt designblock till aktuellt mönsterkort"
+msgstr "Sätt designblockets layout till aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Skapa ett nytt desigblock från det aktuella urvalet"
+msgstr "Sätt desigblockets layout till det aktuella urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:559
 msgid "Open in Footprint Editor"
@@ -55410,12 +55429,10 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Förenkla polygonkonturer genom att ta bort onödiga punkter"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "Redigera alternativ..."
+msgstr "Redigera hörn..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
-#, fuzzy
 msgid "Edit polygon corners using a table"
 msgstr "Redigera polygonhörn med hjälp av tabell"
 
@@ -56068,14 +56085,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Öppna kretsschemat i kretsschemaredigeraren"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "Designregler"
+msgstr "Designregelredigerare"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
-msgstr "Designregler"
+msgstr "Öppna fönstret för redigering av designregler"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -56469,7 +56484,6 @@ msgid "Distribute Horizontally by Centers"
 msgstr "Fördela horisontellt enligt mittpunkter"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
@@ -57000,9 +57014,8 @@ msgid "Invalid clipboard contents"
 msgstr "Ogiltigt urklippsinnehåll"
 
 #: pcbnew/tools/pcb_control.cpp:1433
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "Designblock '%s' har redan en layout."
+msgstr "Designblocket har ingen layout att placera ut."
 
 #: pcbnew/tools/pcb_control.cpp:1498 pcbnew/tools/pcb_control.cpp:1723
 #, c-format
@@ -57010,9 +57023,9 @@ msgid "Design block %s does not have a board file."
 msgstr "Designblock %s har ingen mönsterkortsfil."
 
 #: pcbnew/tools/pcb_control.cpp:1579
-#, fuzzy
 msgid "Design block placement failed - no footprints were placed."
-msgstr "Metadatafilen '%s' för designblock kunde inte läsas."
+msgstr ""
+"Utplacering av designblock misslyckades - inga fotavtryck placerades ut."
 
 #: pcbnew/tools/pcb_control.cpp:1614
 #, c-format
@@ -57020,9 +57033,8 @@ msgid "Footprint %s is locked and cannot be placed."
 msgstr "Fotavtryck %s är låst och kan inte placeras ut."
 
 #: pcbnew/tools/pcb_control.cpp:1631
-#, fuzzy
 msgid "Selected group contains no footprints to place."
-msgstr "Urvalet innehåller inga objekt med namngivna nät."
+msgstr "Vald grupp innehåller inga fotavtryck att placera ut."
 
 #: pcbnew/tools/pcb_control.cpp:2003
 msgid "Error loading board."
@@ -57075,9 +57087,8 @@ msgid "Resolved Margin Clearance"
 msgstr "Fastställd frigång till kant"
 
 #: pcbnew/tools/pcb_control.cpp:2488
-#, fuzzy
 msgid "Pad Size"
-msgstr "Sidstorlek"
+msgstr "Lödytans storlek"
 
 #: pcbnew/tools/pcb_control.cpp:2520
 msgid "Selected Items"
@@ -57092,14 +57103,12 @@ msgid "Selected 2D Copper Area"
 msgstr "Vald 2D kopparyta"
 
 #: pcbnew/tools/pcb_control.cpp:2697
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "Vald 2D kopparyta"
+msgstr "Vald 2D-yta"
 
 #: pcbnew/tools/pcb_control.cpp:2699
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "Vald 2D kopparyta"
+msgstr "Vald 2D total yta"
 
 #: pcbnew/tools/pcb_control.cpp:2757
 msgid "Place Board Characteristics"
@@ -58180,14 +58189,12 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Använd /.../ för att ange ett reguljärt uttryck.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1222
-#, fuzzy
 msgid "Auto-fit Column"
-msgstr "Autofyll zon(er)"
+msgstr "Autopassa kolumn"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1223
-#, fuzzy
 msgid "Auto-fit All Columns"
-msgstr "Autofyll zon(er)"
+msgstr "Autopassa alla kolumner"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1247
 msgid "Filter by Net Name"
@@ -58491,9 +58498,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Ta bort isolerade kopparöar ..."
 
 #: pcbnew/zone_filler.cpp:994
-#, fuzzy
 msgid "Refilling zones after island removal..."
-msgstr "Återfyll zoner efter att ändringar gjorts på mönsterkortet"
+msgstr "Återfyller zoner efter borttagning av öar..."
 
 #: pcbnew/zone_filler.cpp:1413
 msgid "Prototype zone fill enabled. Disable setting and refill?"
