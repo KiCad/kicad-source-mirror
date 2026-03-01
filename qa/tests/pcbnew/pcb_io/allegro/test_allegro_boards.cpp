@@ -296,6 +296,26 @@ public:
 };
 
 
+static void AssertNoErrors( const CAPTURING_REPORTER& aReporter )
+{
+    if( aReporter.GetErrorCount() > 0 )
+    {
+        std::ostringstream ss;
+        ss << "Expected no errors, but found " << aReporter.GetErrorCount() << " errors:";
+
+        for( const auto& msg : aReporter.GetMessages() )
+        {
+            if( msg.severity == RPT_SEVERITY_ERROR )
+            {
+                ss << "\n  " << msg.text;
+            }
+        }
+        BOOST_TEST_MESSAGE( ss.str() );
+    }
+    BOOST_TEST( aReporter.GetErrorCount() == 0 );
+}
+
+
 void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
 {
     BOARD* board = nullptr;
@@ -330,7 +350,7 @@ void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTest
                 BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
 
                 // Can allow a certain number of warnings, but no errors
-                BOOST_TEST( reporter.GetErrorCount() == 0 );
+                AssertNoErrors( reporter );
 
                 // Can check max warnings here if we want
                 if( reporter.GetWarningCount() > 0 )
