@@ -135,6 +135,12 @@ private:
     std::unique_ptr<PCB_SHAPE> buildPolygon( const BLK_0x28_SHAPE& aShape, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Build graphics from an 0x28 SHAPE, with separate items per segment/arc
+     */
+    std::vector<std::unique_ptr<PCB_SHAPE>> buildPolygonShapes( const BLK_0x28_SHAPE& aShape,
+                                                                BOARD_ITEM_CONTAINER& aParent );
+
+    /**
      * Build a drill marker from a 0x0C PIN_DEF block
      */
     std::vector<std::unique_ptr<BOARD_ITEM>> buildDrillMarker( const BLK_0x0C_PIN_DEF& aPinDef,
@@ -193,7 +199,7 @@ private:
     void setupLayers();
     void createNets();
     void createTracks();
-    void createBoardOutline();
+    void createBoardShapes();
     void createBoardText();
     void createZones();
     void createTables();

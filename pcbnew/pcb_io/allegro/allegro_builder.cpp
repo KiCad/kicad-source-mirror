@@ -502,6 +502,26 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
 
 
 /**
+ * Some layers map to KiCad rule areas (zones) - for example a package keepout
+ * on ALL maps to a rule area in KiCad.
+ *
+ * Keepins are bit trickier, but they're still rule areas and might need
+ * custom DRC rules.
+ */
+static bool layerIsZone( const LAYER_INFO& aLayerInfo )
+{
+    if ( aLayerInfo.m_Class == LAYER_INFO::CLASS::PACKAGE_KEEPIN ||
+         aLayerInfo.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPIN ||
+         aLayerInfo.m_Class == LAYER_INFO::CLASS::PACKAGE_KEEPOUT ||
+         aLayerInfo.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT ||
+         aLayerInfo.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT )
+        return true;
+
+    return false;
+}
+
+
+/**
  * Class to handle the mapping for Allegro CLASS/SUBCLASS idiom to KiCad layers.
  */
 class ALLEGRO::LAYER_MAPPER
@@ -2095,6 +2115,92 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildPolygon( const BLK_0x28_SHAPE& aP
 }
 
 
+std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildPolygonShapes( const BLK_0x28_SHAPE& aShapeData,
+                                                                           BOARD_ITEM_CONTAINER& aParent )
+{
+    std::vector<std::unique_ptr<PCB_SHAPE>> shapes;
+
+    PCB_LAYER_ID layer = getLayer( aShapeData.m_Layer );
+
+    // Walk the segments in this shape and create PCB_SHAPE objects on Edge_Cuts
+    const LL_WALKER segWalker{ aShapeData.m_FirstSegmentPtr, aShapeData.m_Key, m_brdDb };
+
+    for( const BLOCK_BASE* segBlock : segWalker )
+    {
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &m_board );
+        shape->SetLayer( layer );
+        shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( layer ) );
+
+        switch( segBlock->GetBlockType() )
+        {
+        case 0x01:
+        {
+            const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
+
+            VECTOR2I start = scale( { arc.m_StartX, arc.m_StartY } );
+            VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
+            VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
+
+            int radius = safeScale( arc.m_Radius * m_scale );
+            if( start == end )
+            {
+                shape->SetShape( SHAPE_T::CIRCLE );
+                shape->SetCenter( c );
+                shape->SetRadius( radius );
+            }
+            else
+            {
+                shape->SetShape( SHAPE_T::ARC );
+
+                bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
+
+                EDA_ANGLE startangle( start - c );
+                EDA_ANGLE endangle( end - c );
+
+                startangle.Normalize();
+                endangle.Normalize();
+
+                EDA_ANGLE angle = endangle - startangle;
+
+                if( clockwise && angle < ANGLE_0 )
+                    angle += ANGLE_360;
+
+                if( !clockwise && angle > ANGLE_0 )
+                    angle -= ANGLE_360;
+
+                VECTOR2I mid = start;
+                RotatePoint( mid, c, -angle / 2.0 );
+
+                shape->SetArcGeometry( start, mid, end );
+            }
+            break;
+        }
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        {
+            const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
+            VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
+            VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
+
+            shape->SetShape( SHAPE_T::SEGMENT );
+            shape->SetStart( start );
+            shape->SetEnd( end );
+            shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( layer ) );
+            break;
+        }
+        default:
+            wxLogTrace( traceAllegroBuilder, "  Unhandled segment type in outline: %#04x", segBlock->GetBlockType() );
+            continue;
+        }
+
+        shapes.push_back( std::move( shape ) );
+    }
+
+    return shapes;
+}
+
+
 const BLK_0x07_COMPONENT_INST* BOARD_BUILDER::getFpInstRef( const BLK_0x2D_FOOTPRINT_INST& aFpInstance ) const
 {
     uint32_t refKey = 0x00;
@@ -3146,171 +3252,66 @@ void BOARD_BUILDER::createTracks()
 }
 
 
-void BOARD_BUILDER::createBoardOutline()
+void BOARD_BUILDER::createBoardShapes()
 {
-    wxLogTrace( traceAllegroBuilder, "Creating board outline" );
-
-    std::vector<BOARD_ITEM*> outlineItems;
-
-    // Track unique line segments to avoid duplicates. Some Allegro files store the board
-    // outline on both BOARD_GEOMETRY:OUTLINE and DRAWING_FORMAT:OUTLINE layers, which
-    // produces duplicate (sometimes direction-reversed) edges.
-    std::set<std::tuple<int, int, int, int>> uniqueSegments;
-
-    auto isNewSegment = [&]( const VECTOR2I& a, const VECTOR2I& b ) -> bool
-    {
-        VECTOR2I p1 = a, p2 = b;
-
-        if( p1.x > p2.x || ( p1.x == p2.x && p1.y > p2.y ) )
-            std::swap( p1, p2 );
-
-        return uniqueSegments.emplace( p1.x, p1.y, p2.x, p2.y ).second;
-    };
+    wxLogTrace( traceAllegroBuilder, "Creating shapes" );
 
     // Walk through LL_0x24_0x28 which contains rectangles (0x24) and shapes (0x28)
     const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
     int             shapeCount = 0;
 
+    std::vector<std::unique_ptr<BOARD_ITEM>> outlineItems;
+
     for( const BLOCK_BASE* block : shapeWalker )
     {
-        if( block->GetBlockType() == 0x24 )
+        shapeCount++;
+
+        switch( block->GetBlockType() )
+        {
+        case 0x24:
         {
             const BLK_0x24_RECT& rectData = static_cast<const BLOCK<BLK_0x24_RECT>&>( *block ).GetData();
 
-            if( !m_layerMapper->IsOutlineLayer( rectData.m_Layer ) )
+            // These are zones, we don't handle them here
+            if( layerIsZone( rectData.m_Layer ) )
                 continue;
 
-            shapeCount++;
-
-            // Create 4 segments from the rectangle coordinates
-            // Coords are: [0]=left, [1]=bottom, [2]=right, [3]=top
-            VECTOR2I bl = scale( { rectData.m_Coords[0], rectData.m_Coords[1] } );
-            VECTOR2I tr = scale( { rectData.m_Coords[2], rectData.m_Coords[3] } );
-            VECTOR2I br = scale( { rectData.m_Coords[2], rectData.m_Coords[1] } );
-            VECTOR2I tl = scale( { rectData.m_Coords[0], rectData.m_Coords[3] } );
-            int      width = m_board.GetDesignSettings().GetLineThickness( Edge_Cuts );
-
-            auto makeSegment = [&]( const VECTOR2I& start, const VECTOR2I& end )
-            {
-                if( !isNewSegment( start, end ) )
-                    return;
-
-                auto shape = std::make_unique<PCB_SHAPE>( &m_board );
-                shape->SetLayer( Edge_Cuts );
-                shape->SetShape( SHAPE_T::SEGMENT );
-                shape->SetStart( start );
-                shape->SetEnd( end );
-                shape->SetWidth( width );
-                outlineItems.push_back( shape.get() );
-                m_board.Add( shape.release(), ADD_MODE::BULK_APPEND );
-            };
-
-            makeSegment( bl, br );
-            makeSegment( br, tr );
-            makeSegment( tr, tl );
-            makeSegment( tl, bl );
-            continue;
+            std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            outlineItems.push_back( std::move( rectShape ) );
+            break;
         }
-
-        if( block->GetBlockType() != 0x28 )
-            continue;
-
-        const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
-
-        if( !m_layerMapper->IsOutlineLayer( shapeData.m_Layer ) )
-            continue;
-
-        shapeCount++;
-
-        // Walk the segments in this shape and create PCB_SHAPE objects on Edge_Cuts
-        const LL_WALKER segWalker{ shapeData.m_FirstSegmentPtr, shapeData.m_Key, m_brdDb };
-
-        for( const BLOCK_BASE* segBlock : segWalker )
+        case 0x28:
         {
-            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( &m_board );
-            shape->SetLayer( Edge_Cuts );
+            const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
 
-            switch( segBlock->GetBlockType() )
-            {
-            case 0x01:
-            {
-                const auto& arc = static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
-
-                VECTOR2I start = scale( { arc.m_StartX, arc.m_StartY } );
-                VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
-                VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
-
-                int radius = safeScale( arc.m_Radius * m_scale );
-
-                shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( Edge_Cuts ) );
-
-                if( start == end )
-                {
-                    shape->SetShape( SHAPE_T::CIRCLE );
-                    shape->SetCenter( c );
-                    shape->SetRadius( radius );
-                }
-                else
-                {
-                    shape->SetShape( SHAPE_T::ARC );
-
-                    bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
-
-                    EDA_ANGLE startangle( start - c );
-                    EDA_ANGLE endangle( end - c );
-
-                    startangle.Normalize();
-                    endangle.Normalize();
-
-                    EDA_ANGLE angle = endangle - startangle;
-
-                    if( clockwise && angle < ANGLE_0 )
-                        angle += ANGLE_360;
-
-                    if( !clockwise && angle > ANGLE_0 )
-                        angle -= ANGLE_360;
-
-                    VECTOR2I mid = start;
-                    RotatePoint( mid, c, -angle / 2.0 );
-
-                    shape->SetArcGeometry( start, mid, end );
-                }
-                break;
-            }
-            case 0x15:
-            case 0x16:
-            case 0x17:
-            {
-                const auto& seg = static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock ).GetData();
-                VECTOR2I    start = scale( { seg.m_StartX, seg.m_StartY } );
-                VECTOR2I    end = scale( { seg.m_EndX, seg.m_EndY } );
-
-                if( !isNewSegment( start, end ) )
-                    continue;
-
-                shape->SetShape( SHAPE_T::SEGMENT );
-                shape->SetStart( start );
-                shape->SetEnd( end );
-                shape->SetWidth( m_board.GetDesignSettings().GetLineThickness( Edge_Cuts ) );
-                break;
-            }
-            default:
-                wxLogTrace( traceAllegroBuilder, "  Unhandled segment type in outline: %#04x", segBlock->GetBlockType() );
+            // These are zones, we don't handle them here
+            if( layerIsZone( shapeData.m_Layer ) )
                 continue;
-            }
 
-            outlineItems.push_back( shape.get() );
-            m_board.Add( shape.release(), ADD_MODE::BULK_APPEND );
+            std::vector<std::unique_ptr<PCB_SHAPE>> shapeItems = buildPolygonShapes( shapeData, m_board );
+
+            for( auto& shapeItem : shapeItems )
+                outlineItems.push_back( std::move( shapeItem ) );
+            break;
+        }
+        default:
+        {
+            wxLogTrace( traceAllegroBuilder, "  Unhandled block type in outline walker: %#04x", block->GetBlockType() );
+            break;
+        }
         }
     }
 
-    if( !outlineItems.empty() )
+    std::vector<BOARD_ITEM*> addedItems;
+    for( std::unique_ptr<BOARD_ITEM>& item : outlineItems )
     {
-        m_board.FinalizeBulkAdd( outlineItems );
+        addedItems.push_back( item.get() );
+        m_board.Add( item.release(), ADD_MODE::BULK_APPEND );
     }
 
-    wxLogTrace( traceAllegroBuilder, "Found %d outline items, created %zu board outline segments",
-                shapeCount, outlineItems.size() );
+    m_board.FinalizeBulkAdd( addedItems );
+
+    wxLogTrace( traceAllegroBuilder, "Found %d shape items, created %zu board shapes", shapeCount, addedItems.size() );
 }
 
 
@@ -3760,7 +3761,7 @@ void BOARD_BUILDER::createZones()
                     mergedCount, boundaryCount - mergedCount, boundaryCount );
     }
 
-    // Walk m_LL_0x24_0x28 for keepout shapes
+    // Walk m_LL_0x24_0x28 for keepout/in shapes
     const LL_WALKER keepoutWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
 
     for( const BLOCK_BASE* block : keepoutWalker )
@@ -3771,14 +3772,10 @@ void BOARD_BUILDER::createZones()
         const BLK_0x28_SHAPE& shapeData =
                 static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
 
-        bool isRouteKeepout = ( shapeData.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
-        bool isViaKeepout = ( shapeData.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
-
-        if( !isRouteKeepout && !isViaKeepout )
+        if( !layerIsZone( shapeData.m_Layer ) )
             continue;
 
-        wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x",
-                    isRouteKeepout ? wxS( "ROUTE_KEEPOUT" ) : wxS( "VIA_KEEPOUT" ),
+        wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x", layerInfoDisplayName( shapeData.m_Layer ),
                     shapeData.m_Key );
 
         std::unique_ptr<ZONE> zone = buildZone( shapeData, NETINFO_LIST::UNCONNECTED );
@@ -4239,8 +4236,8 @@ bool BOARD_BUILDER::BuildBoard()
     if( m_progressReporter )
         m_progressReporter->KeepRefreshing();
 
-    createBoardOutline();
-    wxLogTrace( traceAllegroPerf, wxT( "  createBoardOutline: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
+    createBoardShapes();
+    wxLogTrace( traceAllegroPerf, wxT( "  createBoardShapes: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
 
     createBoardText();
     wxLogTrace( traceAllegroPerf, wxT( "  createBoardText: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
