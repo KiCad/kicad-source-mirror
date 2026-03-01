@@ -985,7 +985,7 @@ BOARD_BUILDER::~BOARD_BUILDER()
 }
 
 
-static int safeScale( double aValue )
+static int clampForScale( double aValue )
 {
     double result = std::round( aValue );
 
@@ -1001,19 +1001,24 @@ static int safeScale( double aValue )
 
 VECTOR2I BOARD_BUILDER::scale( const VECTOR2I& aVector ) const
 {
-    return VECTOR2I{ safeScale( aVector.x * m_scale ), safeScale( -aVector.y * m_scale ) };
+    return VECTOR2I{
+        clampForScale( aVector.x * m_scale ),
+        clampForScale( -aVector.y * m_scale ),
+    };
 }
 
 int BOARD_BUILDER::scale( int aValue ) const
 {
-    return safeScale( aValue * m_scale );
+    return clampForScale( aValue * m_scale );
 }
 
 
 VECTOR2I BOARD_BUILDER::scaleSize( const VECTOR2I& aSize ) const
 {
-    return VECTOR2I{ safeScale( std::abs( aSize.x ) * m_scale ),
-                     safeScale( std::abs( aSize.y ) * m_scale ) };
+    return VECTOR2I{
+        clampForScale( std::abs( aSize.x ) * m_scale ),
+        clampForScale( std::abs( aSize.y ) * m_scale ),
+    };
 }
 
 
@@ -1787,9 +1792,9 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
         return nullptr;
 
     text->SetText( strGraphic->m_Value );
-    text->SetTextWidth( safeScale( m_scale * fontDef->m_CharWidth ) );
-    text->SetTextHeight( safeScale( m_scale * fontDef->m_CharHeight ) );
-    text->SetTextThickness( std::max( 1, safeScale( m_scale * fontDef->m_CharHeight ) / 8 ) );
+    text->SetTextWidth( scale( fontDef->m_CharWidth ) );
+    text->SetTextHeight( scale( fontDef->m_CharHeight ) );
+    text->SetTextThickness( std::max( 1, scale( fontDef->m_CharHeight ) / 8 ) );
 
     const EDA_ANGLE textAngle{ static_cast<double>( aStrWrapper.m_Rotation ) / 1000.0, DEGREES_T };
     text->SetTextAngle( textAngle );
@@ -2179,7 +2184,7 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildPolygonShapes( const
             VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
             VECTOR2I c = scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
 
-            int radius = safeScale( arc.m_Radius * m_scale );
+            int radius = scale( arc.m_Radius );
             if( start == end )
             {
                 shape->SetShape( SHAPE_T::CIRCLE );
