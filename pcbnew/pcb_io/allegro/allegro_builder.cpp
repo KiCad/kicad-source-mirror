@@ -3326,7 +3326,7 @@ void BOARD_BUILDER::createTracks()
                 case 0x28:
                 {
                     // 0x28 shapes on the net chain are computed copper fills.
-                    // Collect them for zone net fallback and fill polygon import.
+                    // Collect them for zone fill polygon import.
                     const BLK_0x28_SHAPE& fillShape =
                             static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *connItemBlock ).GetData();
 
@@ -4032,43 +4032,7 @@ void BOARD_BUILDER::createZones()
         if( shapeData.m_Layer.m_Class != LAYER_INFO::CLASS::BOUNDARY )
             continue;
 
-        int netCode = resolveShapeNet( shapeData );
-
-        // Fallback: if the pointer chain didn't resolve a net, look for a computed
-        // copper fill on the same layer whose bounding box contains this zone's bbox.
-        if( netCode == NETINFO_LIST::UNCONNECTED && !m_zoneFillShapes.empty() )
-        {
-            LAYER_INFO etchLayer{};
-            etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
-            etchLayer.m_Subclass = shapeData.m_Layer.m_Subclass;
-            PCB_LAYER_ID zoneLayer = getLayer( etchLayer );
-
-            if( zoneLayer != UNDEFINED_LAYER )
-            {
-                const SHAPE_LINE_CHAIN& zoneOutline = buildOutline( shapeData );
-                BOX2I                  zoneBbox = zoneOutline.BBox();
-
-                for( const ZoneFillEntry& fill : m_zoneFillShapes )
-                {
-                    if( fill.layer != zoneLayer || fill.netCode == NETINFO_LIST::UNCONNECTED )
-                        continue;
-
-                    const SHAPE_LINE_CHAIN& fillOutline = buildOutline( *fill.shape );
-                    BOX2I                   fillBbox = fillOutline.BBox();
-
-                    if( zoneBbox.Contains( fillBbox ) || fillBbox.Contains( zoneBbox ) )
-                    {
-                        netCode = fill.netCode;
-
-                        wxLogTrace( traceAllegroBuilder,
-                                    "  BOUNDARY %#010x: resolved net via fill fallback -> code %d",
-                                    shapeData.m_Key, netCode );
-                        break;
-                    }
-                }
-            }
-        }
-
+        int                   netCode = resolveShapeNet( shapeData );
         std::unique_ptr<ZONE> zone = buildZone( *block, netCode );
 
         if( zone )

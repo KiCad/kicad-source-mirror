@@ -2088,9 +2088,9 @@ struct BLK_0x37_PTR_ARRAY
     uint32_t m_Count;
     uint32_t m_Unknown2;
 
-    std::array<uint32_t, 100> m_Ptrs;
-
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+
+    std::array<uint32_t, 100> m_Ptrs;
 };
 
 

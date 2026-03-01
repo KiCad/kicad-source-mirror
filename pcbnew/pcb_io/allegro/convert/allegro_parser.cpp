@@ -2036,9 +2036,9 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x37( FILE_STREAM& aStream, FMT_VE
     data.m_Count = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
 
-    ReadArrayU32( aStream, data.m_Ptrs );
-
     ReadCond( aStream, aVer, data.m_Unknown3 );
+
+    ReadArrayU32( aStream, data.m_Ptrs );
 
     return block;
 }
