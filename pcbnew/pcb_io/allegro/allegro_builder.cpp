@@ -4319,6 +4319,7 @@ void BOARD_BUILDER::applyZoneFills()
                 if( fillPolySet.VertexCount() < 3 )
                     continue;
 
+                fillPolySet.ClearArcs();
                 BOX2I fillBbox = fillPolySet.BBox();
                 BOX2I zoneBbox = zone->GetBoundingBox();
 
@@ -4332,7 +4333,6 @@ void BOARD_BUILDER::applyZoneFills()
                 if( fillCut.Area() > 1 )
                     continue;
 
-                fillPolySet.ClearArcs();
                 combinedFill.BooleanAdd( fillPolySet );
 
                 matched[i] = true;
