@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 02:11+0000\n"
+"PO-Revision-Date: 2026-03-01 17:38+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -6255,7 +6255,7 @@ msgstr "Odstrániť"
 
 #: common/eda_base_frame.cpp:1323
 msgid "Keep"
-msgstr "Ponechať"
+msgstr "Zachovať"
 
 #: common/eda_base_frame.cpp:1372
 msgid "Preferences"
@@ -6597,7 +6597,7 @@ msgstr "Značka"
 #: common/eda_item.cpp:444 pcbnew/pcb_dimension.cpp:631
 #: pcbnew/widgets/search_handlers.cpp:335
 msgid "Dimension"
-msgstr "Rozmer"
+msgstr "Kóta"
 
 #: common/eda_item.cpp:445 pcbnew/pcb_dimension.cpp:1351
 #: pcbnew/pcb_dimension.cpp:1518
@@ -7934,7 +7934,7 @@ msgstr "Oblúkovo zarovnaný text DXF momentálne nie je podporovaný."
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
 msgid "DXF dimensions not currently supported."
-msgstr "Kóty DXF momentálne nie sú podporované."
+msgstr "DXF kóty nie sú momentálne podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:516
 msgid "DXF hatches not currently supported."
@@ -9047,7 +9047,7 @@ msgstr ""
 
 #: common/local_history.cpp:1507
 msgid "Keep All Files"
-msgstr "Ponechať všetky súbory"
+msgstr "Zachovať všetky súbory"
 
 #: common/local_history.cpp:1507 eeschema/files-io.cpp:641
 msgid "Abort"
@@ -9059,9 +9059,9 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
-"Výberom možnosti „Ponechať všetky súbory“ sa obnoví vybraný commit, ale "
-"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti "
-"„Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
+"Výberom možnosti „Zachovať všetky súbory“ sa obnoví vybraný commit, ale "
+"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti „"
+"Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
 
 #: common/local_history.cpp:1744
 msgid "Cannot restore - the following files are open by another user:"
@@ -10067,25 +10067,29 @@ msgstr ""
 
 #: common/tool/actions.cpp:586
 msgid "Keep Arc Center, Adjust Radius"
-msgstr "Ponechať stred oblúka, upraviť polomer"
+msgstr "Zachovať stred oblúka, upraviť polomer"
 
 #: common/tool/actions.cpp:587
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Prepnúť režim úpravy oblúka tak, aby sa zachoval stred s možnosťou upraviť "
+"polomer a koncové body"
 
 #: common/tool/actions.cpp:593
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr ""
+msgstr "Zachovať koncové body oblúka alebo smer východiskového bodu"
 
 #: common/tool/actions.cpp:594
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Prepnúť režim úpravy oblúka tak, aby sa zachovali koncové body alebo smer "
+"druhého bodu"
 
 #: common/tool/actions.cpp:600
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Zachovať polomer a stred oblúka, prispôsobiť uhol"
+msgstr "Zachovať polomer a stred oblúka, s možnosťou prispôsobiť uhol"
 
 #: common/tool/actions.cpp:601
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
@@ -10315,7 +10319,7 @@ msgstr "Pripnúť knižnicu"
 
 #: common/tool/actions.cpp:955
 msgid "Keep the library at the top of the list"
-msgstr "Držať knižnicu na vrchu zoznamu"
+msgstr "Zachovať knižnicu na začiatku zoznamu"
 
 #: common/tool/actions.cpp:960
 msgid "Unpin Library"
@@ -10323,7 +10327,7 @@ msgstr "Uvoľniť knižnicu"
 
 #: common/tool/actions.cpp:961
 msgid "No longer keep the library at the top of the list"
-msgstr "Uvoľniť knižnicu z vrchu zoznamu"
+msgstr "Nezachovať knižnicu na začiatku zoznamu"
 
 #: common/tool/actions.cpp:966
 msgid "Library Tree"
@@ -14170,23 +14174,20 @@ msgid "Group by name"
 msgstr "Zoskupiť podľa názvu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:141
-#, fuzzy
 msgid "Group Selected Pins"
-msgstr "Vybraná skupina"
+msgstr "Zoskupiť vybrané vývody"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:170
 msgid "Filter by unit:"
 msgstr "Filtrovať podľa jednotky:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:178
-#, fuzzy
 msgid "Filter by body style:"
-msgstr "Filtrovať položky podľa siete:"
+msgstr "Filtrovať podľa štýlu tela:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:186
-#, fuzzy
 msgid "Filter by selection"
-msgstr "Výber filtra"
+msgstr "Filtrovať podľa výberu"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:198
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:381
@@ -14199,24 +14200,20 @@ msgid "Export"
 msgstr "Export"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:203
-#, fuzzy
 msgid "Export all pins"
-msgstr "Exportovať zoznam Netlist"
+msgstr "Exportovať všetky vývody"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:206
-#, fuzzy
 msgid "Export only shown pins"
-msgstr "Exportná stopa"
+msgstr "Exportovať iba zobrazené vývody"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:212
-#, fuzzy
 msgid "To File..."
-msgstr "Commit-núť súbor..."
+msgstr "Do súboru..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:218
-#, fuzzy
 msgid "To Clipboard"
-msgstr "schránka"
+msgstr "Do schránky"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:236
 msgid "Replace all existing pins"
@@ -14227,48 +14224,40 @@ msgid "Append to existing pins"
 msgstr "Pridať k existujúcim vývodom"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:248
-#, fuzzy
 msgid "From File..."
-msgstr "Commit-núť súbor..."
+msgstr "Zo súboru..."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:254
-#, fuzzy
 msgid "From Clipboard"
-msgstr "Exportovať do schránky"
+msgstr "Zo schránky"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:97
 msgid "Pin Table"
 msgstr "Tabuľka vývodov"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Symbol napájania"
+msgstr "Vrátiť symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:104
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "Vrátiť '%s' na poslednú uloženú verziu?"
+msgstr "Vrátiť symbol na jeho poslednú uloženú verziu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear cell"
-msgstr "Izolačná medzera"
+msgstr "Vymazať bunku"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:105
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Vymažte posledné súbory vrtáka"
+msgstr "Vymazať hodnotu bunky"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Vytvoriť nové púzdro"
+msgstr "Vytvoriť odvodený symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Odvodiť od existujúceho symbolu:"
+msgstr "Vytvoriť nový symbol odvodený z vybraného"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:129
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
@@ -14290,42 +14279,36 @@ msgstr "Zobraziť technický list v prehliadači"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:382
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:389
-#, fuzzy
 msgid "Expand left panel"
-msgstr "Aktualizovať"
+msgstr "Rozbaliť ľavý panel"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:387
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:394
-#, fuzzy
 msgid "Collapse left panel"
-msgstr "&Vymazať všetko"
+msgstr "Zbaliť ľavý panel"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "Meno súčiastky '%s' nenájdené v knižnici '%s'."
+msgstr "Súvisiaci symbol nebol nájdený v knižnici '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library '%s'."
-msgstr "Meno súčiastky '%s' nenájdené v knižnici '%s'."
+msgstr "Symbol nebol nájdený v knižnici '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr ""
-"Chyba načítania dosky.\n"
-"%s"
+msgstr "Chyba načítania symbolu '%s': %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:586
-#, fuzzy
 msgid "No related symbols could be loaded from the library."
-msgstr "Aktualizujte symboly tak, aby zahŕňali všetky zmeny z knižnice"
+msgstr "Z knižnice sa nepodarilo načítať žiadne súvisiace symboly."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:588
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Aktualizujte symboly tak, aby zahŕňali všetky zmeny z knižnice"
+msgstr "Z knižnice sa nepodarilo načítať žiadne súvisiace symboly."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:690
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:757
@@ -14346,26 +14329,25 @@ msgstr "Pole musí mať názov."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:725
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to remove the field '%s'?"
-msgstr "Naozaj chcete odstrániť '%s'?"
+msgstr "Naozaj chcete odstrániť pole '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:757
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:857
-#, fuzzy
 msgid "Rename Field"
-msgstr "Premenovať súbor"
+msgstr "Premenovať pole"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Súbor %s už existuje."
+msgstr "Pole s názvom %s už existuje."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:816
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Fields Table ('%s' Library)"
-msgstr "Polia symbolov"
+msgstr "Tabuľka polí symbolov (knižnica '%s')"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1033
 #: eeschema/dialogs/dialog_rescue_each.cpp:117
@@ -14373,22 +14355,19 @@ msgid "Symbol Name"
 msgstr "Názov symbolu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1045
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "Vyloučit z BOM"
+msgstr "Vylúčiť zo zoznamu materiálu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1046
 #: eeschema/sch_sheet.cpp:2158 eeschema/sch_symbol.cpp:3961
-#, fuzzy
 msgid "Exclude From Simulation"
-msgstr "Vyloučit ze simulace"
+msgstr "Vylúčiť zo simulácie"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1047
 #: eeschema/sch_sheet.cpp:2155 eeschema/sch_symbol.cpp:1448
 #: eeschema/sch_symbol.cpp:3969
-#, fuzzy
 msgid "Exclude From Board"
-msgstr "Vyloučit z desky"
+msgstr "Vylúčiť z dosky"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/symbol_editor/symbol_editor.cpp:1742
@@ -14396,23 +14375,20 @@ msgid "Power Symbol"
 msgstr "Symbol Napajania"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1050
-#, fuzzy
 msgid "Local Power Symbol"
-msgstr "Symbol Napajania"
+msgstr "Lokálny symbol napájania"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:49
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:56
 #: eeschema/fields_data_model.cpp:55
-#, fuzzy
 msgid "BOM Name"
-msgstr "Základný názov"
+msgstr "Názov zoznamu materiálu"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:50
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:57
 #: eeschema/fields_data_model.cpp:56
-#, fuzzy
 msgid "Include"
-msgstr "Zahrnúť &prekovy"
+msgstr "Zahrnúť"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:51
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:58
@@ -14421,14 +14397,12 @@ msgid "Group By"
 msgstr "Zoskupiť podľa"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Whole Library"
-msgstr "Nová knižnica"
+msgstr "Celá knižnica"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:110
-#, fuzzy
 msgid "Related Symbols Only"
-msgstr "Premapovať symboly"
+msgstr "Iba súvisiace symboly"
 
 #: eeschema/dialogs/dialog_lib_fields_table_base.cpp:119
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:216
@@ -14441,9 +14415,9 @@ msgid "Group symbols together based on common properties"
 msgstr "Zoskupte symboly na základe spoločných vlastností"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Odvodiť od symbolu:"
+msgstr "Odvodenie zo symbolu '%s'."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:130
@@ -14468,26 +14442,20 @@ msgstr "Počet jednotiek v balení:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:78
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:307
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Všetky jednotky nie sú zameniteľné"
+msgstr "Všetky jednotky sú zameniteľné"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
-#, fuzzy
 msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Začiarknutím tejto možnosti povolíte, aby sa symboly s viacerými jednotkami "
-"mohli líšiť\n"
-"prvkov. Zrušte začiarknutie tejto možnosti, keď sú všetky jednotky symbolov "
-"rovnaké, s výnimkou\n"
-"pre čísla pinov."
+"Zaškrtnite túto možnosť, ak sú všetky jednotky symbolu rovnaké okrem \n"
+"čísel vývodov."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:83
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Vytvorte symbol s alternatívnym štýlom tela (DeMorgan)"
+msgstr "Vytvoriť symbol s alternatívnym štýlom tela (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:86
 msgid "Create symbol as power symbol"
@@ -14515,12 +14483,11 @@ msgstr "Vylúčiť z hracieho plánu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:95
 msgid "Keep linked datasheet"
-msgstr "Ponechať prepojený technický list"
+msgstr "Zachovať prepojený technický list"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
-#, fuzzy
 msgid "Keep linked footprint"
-msgstr "Udržujte stopy"
+msgstr "Zachovať prepojené puzdro"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:101
 #, fuzzy
@@ -14528,9 +14495,8 @@ msgid "Transfer user-defined fields"
 msgstr "Používateľom definované"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:104
-#, fuzzy
 msgid "Keep content of user-defined fields"
-msgstr "Vymazať obsah vybraných buniek"
+msgstr "Zachovať obsah používateľom definovaných polí"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:122
 msgid "Pin name position offset:"
@@ -15379,9 +15345,8 @@ msgid "Please enter a library prefix."
 msgstr "Prosím, zadajte prefix knižnice."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:191
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Vybrať predvoľbu:"
+msgstr "Vybrať cieľový adresár"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:258
 msgid ""
@@ -16611,7 +16576,7 @@ msgstr "Umiestnite opakované kópie"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:80
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "Symbol nechajte vybraný pre ďalšie kliknutia."
+msgstr "Zachovať symbol vybraný, pre ďalšie kliknutia."
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:82
 msgid "Place all units"
@@ -16897,13 +16862,12 @@ msgid "Leave blank to disable ranges."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:315
-#, fuzzy
 msgid "Keep tabs"
-msgstr "Držte sa mimo priechodov"
+msgstr "Zachovať karty"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:318
 msgid "Keep line breaks"
-msgstr "Zachovať zalomenie riadkov"
+msgstr "Zachovať zalomenia riadkov"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:324
 #, fuzzy
@@ -17722,20 +17686,18 @@ msgstr "Režim polohy:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Stred kruhu (%s, %s), polomer %s"
+msgstr "Zachovať stred, s možnosťou upraviť polomer"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Zachovať koncové body alebo smer východiskového bodu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:50
 #: pcbnew/dialogs/panel_edit_options_base.cpp:66
-#, fuzzy
 msgid "Keep center and radius, adjust endpoints"
-msgstr "Stred kruhu (%s, %s), polomer %s"
+msgstr "Zachovať stred a polomer, s možnosťou upraviť koncové body"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #, fuzzy
@@ -18384,7 +18346,7 @@ msgstr "Všeobecné nastavenia"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:156
 msgid "Keep pins attached when dragging edges"
-msgstr "Udržať prilepené vývody pri presúvaní hrán"
+msgstr "Zachovať pripojené vývody pri ťahaní hrán"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:124
 #, fuzzy
@@ -18491,9 +18453,8 @@ msgid "Remove White Space"
 msgstr "Odstrániť 3D tvar"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:226
-#, fuzzy
 msgid "Keep White Space"
-msgstr "Chráňte podložky"
+msgstr "Zachovať medzery"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -22867,7 +22828,7 @@ msgstr "Vytvoriť nový hárok"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:67
 msgid "Dimension of matrices should be >= 1."
-msgstr ""
+msgstr "Rozmer matíc by mal byť >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:75
 msgid "There are NaN elements in a matrix."
@@ -26639,9 +26600,8 @@ msgid "Drag"
 msgstr "Ťahať"
 
 #: eeschema/tools/sch_actions.cpp:1547
-#, fuzzy
 msgid "Move items while keeping their connections"
-msgstr "Zmazať spojenie"
+msgstr "Presunúť položky so zachovaním pripojení"
 
 #: eeschema/tools/sch_actions.cpp:1554 eeschema/tools/sch_move_tool.cpp:2617
 #: eeschema/tools/symbol_editor_move_tool.cpp:498
@@ -28088,9 +28048,8 @@ msgstr "Umiestniť cez"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:44
 #: pcbnew/widgets/pcb_design_block_pane.cpp:45
-#, fuzzy
 msgid "Keep annotations"
-msgstr "Zachovať existujúce očíslovania"
+msgstr "Zachovať očíslovania"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:106
 #: pcbnew/widgets/pcb_design_block_pane.cpp:100
@@ -28808,9 +28767,8 @@ msgid "Top paste"
 msgstr "Najlepšie spájkovacia pasta"
 
 #: gerbview/files.cpp:234
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Držte sa mimo priechodov"
+msgstr "Keep-out vrstva"
 
 #: gerbview/files.cpp:235
 msgid "Mechanical layers"
@@ -29998,6 +29956,8 @@ msgstr "Platné možnosti sú: absolute, plot"
 #: kicad/cli/command_pcb_export_drill.cpp:66
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
 msgstr ""
+"Platné možnosti sú: desatinné, potlačiť úvodné nuly, potlačiť koncové nuly, "
+"zachovať."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Valid options are: route, alternate."
@@ -31607,6 +31567,10 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"Toto sa môže stať, ak sa vaša predchádzajúca relácia neočakávane skončila.\n"
+"\n"
+"Vyberte možnosť „Obnoviť“, ak chcete obnoviť tieto zmeny, alebo možnosť „"
+"Zahodiť“, ak chcete zachovať aktuálne uložené súbory."
 
 #: kicad/kicad_manager_frame.cpp:1144
 #, fuzzy
@@ -32013,13 +31977,12 @@ msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
-"Nelze ověřit integritu staženého balíčku, hash neodpovídá. Opravdu chcete "
-"tento soubor ponechat?"
+"Integritu stiahnutého balíka sa nebolo možné overiť, hash sa nezhoduje. "
+"Naozaj chcete tento súbor zachovať?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:549
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "Chráňte medené odlievanie"
+msgstr "Zachovať stiahnutý súbor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:598
 #: kicad/pcm/pcm_task_manager.cpp:383
@@ -36524,7 +36487,7 @@ msgstr "Oblasť"
 #: pcbnew/widgets/panel_selection_filter.cpp:229
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "Rozmer"
+msgstr "Rozmery"
 
 #: pcbnew/board_statistics_report.cpp:560
 #, fuzzy
@@ -37480,9 +37443,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:125
 #: pcbnew/dialogs/dialog_render_job_base.cpp:43
-#, fuzzy
 msgid "Dimensions:"
-msgstr "Rozmer"
+msgstr "Rozmery:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:127
 #, fuzzy
@@ -38177,7 +38139,7 @@ msgstr "Orientácia puzdier"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:518
 msgid "Keep existing reference designators"
-msgstr "Ponechať existujúce referenčné označenia"
+msgstr "Zachovať existujúce referenčné označenia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
 #, fuzzy
@@ -38199,7 +38161,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:318
 msgid "Edit Dimension Properties"
-msgstr "Upraviť rozmery"
+msgstr "Upraviť vlastnosti kóty"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -38217,7 +38179,7 @@ msgstr "Nakreslite tvar okolo vedúceho textu"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr "Formát dimenzie"
+msgstr "Formát kóty"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
