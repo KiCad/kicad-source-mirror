@@ -3513,6 +3513,7 @@ const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) c
                 EDA_ANGLE endAngle( end - center );
                 startAngle.Normalize();
                 endAngle.Normalize();
+
                 EDA_ANGLE arcAngle = endAngle - startAngle;
 
                 if( clockwise && arcAngle < ANGLE_0 )
@@ -3521,7 +3522,10 @@ const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) c
                 if( !clockwise && arcAngle > ANGLE_0 )
                     arcAngle -= ANGLE_360;
 
-                SHAPE_ARC shapeArc( center, start, arcAngle );
+                VECTOR2I mid = start;
+                RotatePoint( mid, center, -arcAngle / 2.0 );
+
+                SHAPE_ARC shapeArc( start, mid, end, 0 );
                 outline.Append( shapeArc );
             }
 
@@ -3619,6 +3623,7 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) con
                 EDA_ANGLE endAngle( end - center );
                 startAngle.Normalize();
                 endAngle.Normalize();
+
                 EDA_ANGLE arcAngle = endAngle - startAngle;
 
                 if( clockwise && arcAngle < ANGLE_0 )
@@ -3627,7 +3632,10 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) con
                 if( !clockwise && arcAngle > ANGLE_0 )
                     arcAngle -= ANGLE_360;
 
-                SHAPE_ARC shapeArc( center, start, arcAngle );
+                VECTOR2I mid = start;
+                RotatePoint( mid, center, -arcAngle / 2.0 );
+
+                SHAPE_ARC shapeArc( start, mid, end, 0 );
                 outline.Append( shapeArc );
             }
 
