@@ -2413,68 +2413,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
                 break;
             }
 
-            SHAPE_LINE_CHAIN outline;
-            const LL_WALKER  segWalker{ shapeData->m_FirstSegmentPtr, shapeData->m_Key, m_brdDb };
-
-            for( const BLOCK_BASE* segBlock : segWalker )
-            {
-                switch( segBlock->GetBlockType() )
-                {
-                case 0x01:
-                {
-                    const auto& arc =
-                            static_cast<const BLOCK<BLK_0x01_ARC>&>( *segBlock ).GetData();
-                    VECTOR2I start = scale( { arc.m_StartX, arc.m_StartY } );
-                    VECTOR2I end = scale( { arc.m_EndX, arc.m_EndY } );
-                    VECTOR2I center =
-                            scale( KiROUND( VECTOR2D{ arc.m_CenterX, arc.m_CenterY } ) );
-
-                    if( start == end )
-                    {
-                        SHAPE_ARC shapeArc( center, start, ANGLE_360 );
-                        outline.Append( shapeArc );
-                    }
-                    else
-                    {
-                        bool clockwise = ( arc.m_SubType & 0x40 ) != 0;
-
-                        EDA_ANGLE startAngle( start - center );
-                        EDA_ANGLE endAngle( end - center );
-                        startAngle.Normalize();
-                        endAngle.Normalize();
-                        EDA_ANGLE arcAngle = endAngle - startAngle;
-
-                        if( clockwise && arcAngle < ANGLE_0 )
-                            arcAngle += ANGLE_360;
-
-                        if( !clockwise && arcAngle > ANGLE_0 )
-                            arcAngle -= ANGLE_360;
-
-                        SHAPE_ARC shapeArc( center, start, arcAngle );
-                        outline.Append( shapeArc );
-                    }
-                    break;
-                }
-                case 0x15:
-                case 0x16:
-                case 0x17:
-                {
-                    const auto& seg =
-                            static_cast<const BLOCK<BLK_0x15_16_17_SEGMENT>&>( *segBlock )
-                                    .GetData();
-                    VECTOR2I start = scale( { seg.m_StartX, seg.m_StartY } );
-
-                    if( outline.PointCount() == 0 || outline.CLastPoint() != start )
-                        outline.Append( start );
-
-                    VECTOR2I end = scale( { seg.m_EndX, seg.m_EndY } );
-                    outline.Append( end );
-                    break;
-                }
-                default:
-                    break;
-                }
-            }
+            SHAPE_LINE_CHAIN outline = buildSegmentChain( shapeData->m_FirstSegmentPtr );
 
             if( outline.PointCount() >= 3 )
             {
@@ -4318,6 +4257,8 @@ void BOARD_BUILDER::applyZoneFills()
                 continue;
 
             SHAPE_POLY_SET combinedFill;
+            SHAPE_POLY_SET zoneOutline = *zone->Outline();
+            zoneOutline.ClearArcs();
 
             for( size_t i : indexIt->second )
             {
@@ -4331,17 +4272,19 @@ void BOARD_BUILDER::applyZoneFills()
                 BOX2I fillBbox = fillPolySet.BBox();
                 BOX2I zoneBbox = zone->GetBoundingBox();
 
-                if( !zoneBbox.GetInflated( 1 ).Contains( fillBbox ) )
+                // Etch shapes can be slightly outside the boundary
+                const int c_epsilon = pcbIUScale.MilsToIU( 1.0 );
+
+                if( !zoneBbox.GetInflated( c_epsilon ).Contains( fillBbox ) )
                     continue;
 
                 // Check that the fill is approximately fully contained within the zone outline
                 SHAPE_POLY_SET fillCut( fillPolySet );
-                SHAPE_POLY_SET zoneOutline = *zone->Outline();
 
-                zoneOutline.ClearArcs();
                 fillCut.BooleanSubtract( zoneOutline );
+                fillCut.Deflate( c_epsilon, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_HIGH_DEF );
 
-                if( fillCut.Area() > 1 )
+                if( fillCut.Area() > 0 )
                     continue;
 
                 combinedFill.BooleanAdd( fillPolySet );
@@ -4351,7 +4294,10 @@ void BOARD_BUILDER::applyZoneFills()
 
             if( combinedFill.OutlineCount() > 0 )
             {
-                // Allegro fill data is well-formed, skip Clipper2 Simplify
+                // Make sure the fills stay within the zone outline.
+                combinedFill.BooleanIntersection( zoneOutline );
+
+                // Skip Clipper2 Simplify because we've already done a boolean operation.
                 if( combinedFill.HasHoles() )
                     combinedFill.Fracture( /* aSimplify */ false );
 
