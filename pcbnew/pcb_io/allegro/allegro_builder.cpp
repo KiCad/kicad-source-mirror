@@ -529,11 +529,9 @@ static bool layerIsZone( const LAYER_INFO& aLayerInfo )
 
 
 /**
- * Some blocks report layer info - if they do, return it
- *
- * It's an error to request this from a block that doesn't support it.
+ * Some blocks report layer info - if they do, return it else std::nullopt
  */
-static LAYER_INFO expectLayerFromBlock( const BLOCK_BASE& aBlock )
+static std::optional<LAYER_INFO> tryLayerFromBlock( const BLOCK_BASE& aBlock )
 {
     switch( aBlock.GetBlockType() )
     {
@@ -541,6 +539,11 @@ static LAYER_INFO expectLayerFromBlock( const BLOCK_BASE& aBlock )
     {
         const auto& net = BlockDataAs<BLK_0x0E_RECT>( aBlock );
         return net.m_Layer;
+    }
+    case 0x14:
+    {
+        const auto& trace = BlockDataAs<BLK_0x14_GRAPHIC>( aBlock );
+        return trace.m_Layer;
     }
     case 0x24:
     {
@@ -554,8 +557,23 @@ static LAYER_INFO expectLayerFromBlock( const BLOCK_BASE& aBlock )
     }
     }
 
+    return std::nullopt;
+}
+
+
+/**
+ * Get a layer from a block that has layer info.
+
+ * It's an error to request this from a block that doesn't support it.
+ */
+LAYER_INFO expectLayerFromBlock( const BLOCK_BASE& aBlock )
+{
+    std::optional<LAYER_INFO> layerInfo = tryLayerFromBlock( aBlock );
+
     // Programming error - should only call this function if we're sure the block has layer info
-    wxCHECK( false, LAYER_INFO() );
+    wxCHECK( layerInfo.has_value(), LAYER_INFO() );
+
+    return layerInfo.value();
 }
 
 
@@ -653,16 +671,6 @@ public:
             inputLayers.push_back( desc );
         }
 
-        for( const auto& [layerInfo, kiLayer] : s_LayerKiMap )
-        {
-            INPUT_LAYER_DESC desc;
-            desc.Name = layerInfoDisplayName( layerInfo );
-            desc.AutoMapLayer = kiLayer;
-            desc.PermittedLayers = LSET::AllLayersMask();
-            desc.Required = false;
-            inputLayers.push_back( desc );
-        }
-
         // Add non-ETCH custom layers so they appear in the layer mapping dialog
         const std::vector<CUSTOM_LAYER>* etchList = m_ClassCustomLayerLists[LAYER_INFO::CLASS::ETCH];
         int nextAutoUser = 0;
@@ -693,6 +701,28 @@ public:
 
                 m_customLayerDialogNames[li] = desc.Name;
             }
+        }
+
+        // The layers that maybe lump together multiple Allegro class:subclasses
+        // into a single, named, KiCad layer
+        for( const auto& [layerName, kiLayer] : m_MappedOptionalLayers )
+        {
+            INPUT_LAYER_DESC desc;
+            desc.Name = layerName;
+            desc.AutoMapLayer = kiLayer;
+            desc.PermittedLayers = LSET::AllLayersMask();
+            desc.Required = false;
+            inputLayers.push_back( desc );
+        }
+
+        for( const auto& [layerInfo, kiLayer] : s_LayerKiMap )
+        {
+            INPUT_LAYER_DESC desc;
+            desc.Name = layerInfoDisplayName( layerInfo );
+            desc.AutoMapLayer = kiLayer;
+            desc.PermittedLayers = LSET::AllLayersMask();
+            desc.Required = false;
+            inputLayers.push_back( desc );
         }
 
         std::map<wxString, PCB_LAYER_ID> resolvedMapping = m_layerMappingHandler( inputLayers );
@@ -763,12 +793,9 @@ public:
         if( m_customLayerToKiMap.count( aLayerInfo ) )
             return m_customLayerToKiMap.at( aLayerInfo );
 
-        // Check for user-remapped static layers first, then the defaults
+        // Check for user-remapped static layers first
         if( m_staticLayerOverrides.count( aLayerInfo ) )
             return m_staticLayerOverrides.at( aLayerInfo );
-
-        if( s_LayerKiMap.count( aLayerInfo ) )
-            return s_LayerKiMap.at( aLayerInfo );
 
         // Next, have a look and see if the class:subclass was recorded as a custom layer
         if( m_ClassCustomLayerLists.count( aLayerInfo.m_Class ) )
@@ -795,7 +822,7 @@ public:
             {
                 // This subclass maps to a custom layer in this class
                 const CUSTOM_LAYER& cLayer = cLayerList->at( aLayerInfo.m_Subclass );
-                return mapCustomLayer( aLayerInfo, cLayer.m_Name );
+                return MapCustomLayer( aLayerInfo, cLayer.m_Name );
             }
         }
 
@@ -805,8 +832,14 @@ public:
         if( s_OptionalFixedMappings.count( aLayerInfo ) )
         {
             const wxString& layerName = s_OptionalFixedMappings.at( aLayerInfo );
-            return mapCustomLayer( aLayerInfo, layerName );
+            return MapCustomLayer( aLayerInfo, layerName );
         }
+
+        // Finally, fallback to the static mapping for any layers we haven't got a custom map for
+        // We do this last so that it can be overridden for example if we want to remap
+        // OUTLINE and DESIGN_OUTLINE to different layers.
+        if( s_LayerKiMap.count( aLayerInfo ) )
+            return s_LayerKiMap.at( aLayerInfo );
 
         // Keep a record of what we failed to map
         if( m_unknownLayers.count( aLayerInfo ) == 0 )
@@ -857,23 +890,14 @@ public:
                || aLayerInfo.m_Subclass == LAYER_INFO::SUBCLASS::BGEOM_OUTLINE;
     }
 
-private:
-    static PCB_LAYER_ID getNthCopperLayer( int aNum, int aTotal )
-    {
-        if( aNum == 0 )
-            return F_Cu;
-        if( aNum == aTotal - 1 )
-            return B_Cu;
-        return ToLAYER_ID( 2 * ( aNum + 1 ) );
-    }
-
-    static PCB_LAYER_ID getNthUserLayer( int aNum )
-    {
-        aNum = std::min( aNum, MAX_USER_DEFINED_LAYERS - 1 );
-        return ToLAYER_ID( static_cast<int>( User_1 ) + 2 * aNum );
-    }
-
-    PCB_LAYER_ID mapCustomLayer( const LAYER_INFO& aLayerInfo, const wxString& aLayerName )
+    /**
+     * Record a specific class:subclass layer as mapping to some KiCad user layer, with a given name
+     *
+     * Usually, you don't need this as they are registered as needed based on layers found in the board,
+     * but sometimes you need to override the default mapping, say when you detect that the
+     * "lumped" layers need to be split.
+     */
+    PCB_LAYER_ID MapCustomLayer( const LAYER_INFO& aLayerInfo, const wxString& aLayerName )
     {
         // See if we have mapped this layer name under a different class:subclass
         if( m_MappedOptionalLayers.count( aLayerName ) )
@@ -895,10 +919,26 @@ private:
         return lId;
     }
 
+private:
+    static PCB_LAYER_ID getNthCopperLayer( int aNum, int aTotal )
+    {
+        if( aNum == 0 )
+            return F_Cu;
+        if( aNum == aTotal - 1 )
+            return B_Cu;
+        return ToLAYER_ID( 2 * ( aNum + 1 ) );
+    }
+
+    static PCB_LAYER_ID getNthUserLayer( int aNum )
+    {
+        aNum = std::min( aNum, MAX_USER_DEFINED_LAYERS - 1 );
+        return ToLAYER_ID( static_cast<int>( User_1 ) + 2 * aNum );
+    }
+
     /**
      * Create or find a mapped layer with a given name, but not specifically bound to a specific class:subclass.
      *
-     * This is useful when some items on a class:sublcass need to be placed on a KiCad layer other than the usual
+     * This is useful when some items on a class:subclass need to be placed on a KiCad layer other than the usual
      * mapping (non-polygon PLACE_BOUND_TOP items, for example)
      */
     PCB_LAYER_ID mapCustomLayerByName( const wxString& aLayerName )
@@ -1621,6 +1661,49 @@ void BOARD_BUILDER::applyMatchGroups()
 }
 
 
+/**
+ * Look through some lists for a list of layers used.
+ *
+ * This isn't yet exhaustive, not sure if it needs to be. We could scan every single
+ * block if we wanted, but that would be a lot of blocks without layers. So walking
+ * lists seems more efficient.
+ *
+ * The primary goal is to look for colliding layers like OUTLINE/DESIGN_OUTLINE
+ * so that we can remap one of them to something else.
+ *
+ * We could also use this to find all the used layers and present them in the
+ * mapping dialog rather than auto-creating them layer during buildout.
+ */
+static std::unordered_set<LAYER_INFO> ScanForLayers( const BRD_DB& aDb )
+{
+    std::unordered_set<LAYER_INFO> layersFound;
+
+    const auto& addLayer = [&]( std::optional<LAYER_INFO>& info )
+    {
+        if( info.has_value() )
+        {
+            layersFound.insert( std::move( info.value() ) );
+        }
+    };
+
+    const auto& simpleWalker = [&]( const FILE_HEADER::LINKED_LIST& aLL )
+    {
+        LL_WALKER walker{ aLL, aDb };
+        for( const BLOCK_BASE* block : walker )
+        {
+            std::optional<LAYER_INFO> info = tryLayerFromBlock( *block );
+            addLayer( info );
+        }
+    };
+
+    simpleWalker( aDb.m_Header->m_LL_Shapes );
+    simpleWalker( aDb.m_Header->m_LL_0x24_0x28 );
+    simpleWalker( aDb.m_Header->m_LL_0x14 );
+
+    return layersFound;
+}
+
+
 void BOARD_BUILDER::setupLayers()
 {
     wxLogTrace( traceAllegroBuilder, "Setting up layer mapping from Allegro to KiCad" );
@@ -1643,6 +1726,29 @@ void BOARD_BUILDER::setupLayers()
             continue;
 
         m_layerMapper->ProcessLayerList( classNum, *layerList );
+    }
+
+    std::unordered_set<LAYER_INFO> layersFound = ScanForLayers( m_brdDb );
+
+    wxLogTrace( traceAllegroBuilder, "Scanned %zu layers", layersFound.size() );
+    for( const LAYER_INFO& info : layersFound )
+    {
+        wxLogTrace( traceAllegroBuilder, " - %#02x:%#02x (%s)", info.m_Class, info.m_Subclass,
+                    layerInfoDisplayName( info ) );
+    }
+
+    // The outline is sometimes on OUTLINE and sometimes on DESIGN_OUTLINE, and sometimes
+    // on both. In the first two cases, whichever it is goes to Edge.Cuts, but in the both case,
+    // we send one to a User layer
+    const LAYER_INFO outlineInfo{ LAYER_INFO::CLASS::BOARD_GEOMETRY, LAYER_INFO::SUBCLASS::BGEOM_OUTLINE };
+    const LAYER_INFO designOutlineInfo{ LAYER_INFO::CLASS::BOARD_GEOMETRY, LAYER_INFO::SUBCLASS::BGEOM_DESIGN_OUTLINE };
+
+    if( layersFound.count( outlineInfo ) && layersFound.count( designOutlineInfo ) )
+    {
+        // Both layers found, remap DESIGN_OUTLINE to a user layer
+        wxLogTrace( traceAllegroBuilder,
+                    "Both OUTLINE and DESIGN_OUTLINE layers found, remapping DESIGN_OUTLINE to a user layer" );
+        m_layerMapper->MapCustomLayer( designOutlineInfo, layerInfoDisplayName( designOutlineInfo ) );
     }
 
     m_layerMapper->FinalizeLayers();
@@ -4016,7 +4122,7 @@ void BOARD_BUILDER::createZones()
                 const SHAPE_LINE_CHAIN& candidateChain = candidatePolygon[lineChainId];
 
                 if( primaryChain.PointCount() != candidateChain.PointCount()
-                    || primaryChain.BBox() != candidateChain.BBox() 
+                    || primaryChain.BBox() != candidateChain.BBox()
                     || !primaryChain.CompareGeometry( candidateChain ) )
                 {
                     polygonsDiffer = true;
