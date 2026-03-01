@@ -160,8 +160,24 @@ private:
     std::unique_ptr<FOOTPRINT>               buildFootprint( const BLK_0x2D_FOOTPRINT_INST& aFpInstance );
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
-    std::unique_ptr<ZONE>                    buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode );
-    const SHAPE_LINE_CHAIN&                  buildOutline( const BLK_0x28_SHAPE& aShape ) const;
+
+    /**
+     * Build a ZONE from an 0x0E, 0x24 or 0x28 block.
+     */
+    std::unique_ptr<ZONE> buildZone( const BLOCK_BASE& aBlock, int aNetcode );
+
+    SHAPE_LINE_CHAIN buildOutline( const BLK_0x0E_RECT& aRect ) const;
+    SHAPE_LINE_CHAIN buildOutline( const BLK_0x24_RECT& aRect ) const;
+    SHAPE_LINE_CHAIN buildOutline( const BLK_0x28_SHAPE& aShape ) const;
+
+    /**
+     * Try to build a zone outline for the given block, returning nullptr if the block doesn't have the expected
+     * structure or data for a zone outline.
+     *
+     * Internally caches built outlines by block key.
+     */
+    const SHAPE_LINE_CHAIN* tryBuildZoneOutline( const BLOCK_BASE& aBlock );
+
 
     /**
      * Walk a geometry chain (0x01 arcs and 0x15-17 segments) starting from the given key,

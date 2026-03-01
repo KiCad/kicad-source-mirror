@@ -66,7 +66,14 @@ static const wxChar* const traceAllegroBuilder = wxT( "KICAD_ALLEGRO_BUILDER" );
 static const wxChar* const traceAllegroPerf = wxT( "KICAD_ALLEGRO_PERF" );
 
 
-#define BLK_FIELD( BLK_T, FIELD ) static_cast<const BLOCK<BLK_T>&>( aBlock ).GetData().FIELD
+template <typename BLK_T>
+const BLK_T& BlockDataAs( const BLOCK_BASE& aBlock )
+{
+    return static_cast<const BLOCK<BLK_T>&>( aBlock ).GetData();
+}
+
+
+#define BLK_FIELD( BLK_T, FIELD ) BlockDataAs<BLK_T>( aBlock ).FIELD
 
 
 /**
@@ -518,6 +525,37 @@ static bool layerIsZone( const LAYER_INFO& aLayerInfo )
         return true;
 
     return false;
+}
+
+
+/**
+ * Some blocks report layer info - if they do, return it
+ *
+ * It's an error to request this from a block that doesn't support it.
+ */
+static LAYER_INFO expectLayerFromBlock( const BLOCK_BASE& aBlock )
+{
+    switch( aBlock.GetBlockType() )
+    {
+    case 0x0e:
+    {
+        const auto& net = BlockDataAs<BLK_0x0E_RECT>( aBlock );
+        return net.m_Layer;
+    }
+    case 0x24:
+    {
+        const auto& rect = BlockDataAs<BLK_0x24_RECT>( aBlock );
+        return rect.m_Layer;
+    }
+    case 0x28:
+    {
+        const auto& shape = BlockDataAs<BLK_0x28_SHAPE>( aBlock );
+        return shape.m_Layer;
+    }
+    }
+
+    // Programming error - should only call this function if we're sure the block has layer info
+    wxCHECK( false, LAYER_INFO() );
 }
 
 
@@ -3401,15 +3439,46 @@ const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey ) c
 }
 
 
-const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
+SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x0E_RECT& aRect ) const
 {
-    auto it = m_outlineCache.find( aShape.m_Key );
+    SHAPE_LINE_CHAIN outline;
 
-    if( it != m_outlineCache.end() )
-        return it->second;
+    VECTOR2I topLeft = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+    VECTOR2I botRight = scale( VECTOR2I{ aRect.m_Coords[2], aRect.m_Coords[3] } );
+    VECTOR2I topRight{ botRight.x, topLeft.y };
+    VECTOR2I botLeft{ topLeft.x, botRight.y };
 
-    SHAPE_LINE_CHAIN& outline = m_outlineCache[aShape.m_Key];
-    const LL_WALKER   segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
+    outline.Append( topLeft );
+    outline.Append( topRight );
+    outline.Append( botRight );
+    outline.Append( botLeft );
+
+    return outline;
+}
+
+
+SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x24_RECT& aRect ) const
+{
+    SHAPE_LINE_CHAIN outline;
+
+    VECTOR2I topLeft = scale( VECTOR2I{ aRect.m_Coords[0], aRect.m_Coords[1] } );
+    VECTOR2I botRight = scale( VECTOR2I{ aRect.m_Coords[2], aRect.m_Coords[3] } );
+    VECTOR2I topRight{ botRight.x, topLeft.y };
+    VECTOR2I botLeft{ topLeft.x, botRight.y };
+
+    outline.Append( topLeft );
+    outline.Append( topRight );
+    outline.Append( botRight );
+    outline.Append( botLeft );
+
+    return outline;
+}
+
+
+SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) const
+{
+    SHAPE_LINE_CHAIN outline;
+    const LL_WALKER  segWalker{ aShape.m_FirstSegmentPtr, aShape.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* segBlock : segWalker )
     {
@@ -3474,28 +3543,132 @@ const SHAPE_LINE_CHAIN& BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShap
 }
 
 
-std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, int aNetcode )
+const SHAPE_LINE_CHAIN* BOARD_BUILDER::tryBuildZoneOutline( const BLOCK_BASE& aBlock )
 {
-    bool isCopperZone = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ETCH
-                          || aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY );
-    bool isRouteKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
-    bool isViaKeepout = ( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
+    auto it = m_outlineCache.find( aBlock.GetKey() );
+
+    if( it != m_outlineCache.end() )
+        return &it->second;
+
+    std::optional<SHAPE_LINE_CHAIN> outline;
+
+    switch( aBlock.GetBlockType() )
+    {
+    case 0x0E:
+    {
+        const auto& rectData = BlockDataAs<BLK_0x0E_RECT>( aBlock );
+        outline = buildOutline( rectData );
+        break;
+    }
+    case 0x24:
+    {
+        const auto& rectData = BlockDataAs<BLK_0x24_RECT>( aBlock );
+        outline = buildOutline( rectData );
+        break;
+    }
+    case 0x28:
+    {
+        const auto& shapeData = BlockDataAs<BLK_0x28_SHAPE>( aBlock );
+        outline = buildOutline( shapeData );
+        break;
+    }
+    default:
+        wxLogTrace( traceAllegroBuilder, "  Unhandled block type in tryBuildZoneOutline: %#04x",
+                    aBlock.GetBlockType() );
+        return nullptr;
+    }
+
+    if( outline.has_value() )
+    {
+        if( outline->PointCount() < 3 )
+        {
+            wxLogTrace( traceAllegroBuilder, "  Not enough points for polygon (%d)", outline->PointCount() );
+            return nullptr;
+        }
+
+        outline->SetClosed( true );
+
+        // Cache the outline for future reference
+        m_outlineCache[aBlock.GetKey()] = std::move( *outline );
+        return &m_outlineCache[aBlock.GetKey()];
+    }
+
+    wxLogTrace( traceAllegroBuilder, "  Failed to build polygon in tryBuildZoneOutline: %#04x, key: %#010x",
+                aBlock.GetBlockType(), aBlock.GetKey() );
+    return nullptr;
+}
+
+
+static LSET getRuleAreaLayers( const LAYER_INFO& aLayerInfo, PCB_LAYER_ID aDefault )
+{
+    LSET layerSet{ aDefault };
+
+    switch( aLayerInfo.m_Class )
+    {
+    case LAYER_INFO::CLASS::ROUTE_KEEPOUT:
+    case LAYER_INFO::CLASS::VIA_KEEPOUT:
+    case LAYER_INFO::CLASS::PACKAGE_KEEPOUT:
+    {
+        switch( aLayerInfo.m_Subclass )
+        {
+        case LAYER_INFO::SUBCLASS::KEEPOUT_ALL:
+            layerSet = LSET::AllCuMask();
+            break;
+        case LAYER_INFO::SUBCLASS::KEEPOUT_TOP:
+            layerSet = LSET{ F_Cu };
+            break;
+        case LAYER_INFO::SUBCLASS::KEEPOUT_BOTTOM:
+            layerSet = LSET{ B_Cu };
+            break;
+        default:
+            wxLogTrace( traceAllegroBuilder, "  Unhandled keepout layer subclass %#02x, using default layers",
+                        aLayerInfo.m_Subclass );
+        }
+        break;
+    }
+    case LAYER_INFO::CLASS::ROUTE_KEEPIN:
+    case LAYER_INFO::CLASS::PACKAGE_KEEPIN:
+    {
+        // This can be ALL, but can it be anything else?
+        if( aLayerInfo.m_Subclass == LAYER_INFO::SUBCLASS::KEEPOUT_ALL )
+            layerSet = LSET::AllCuMask();
+        else
+            wxLogTrace( traceAllegroBuilder, "  Unhandled keepin layer subclass %#02x, using default layers",
+                        aLayerInfo.m_Subclass );
+        break;
+    }
+    default:
+        wxLogTrace( traceAllegroBuilder, "  Unhandled non-copper zone layer class %#02x, using default layers",
+                    aLayerInfo.m_Class );
+        break;
+    }
+
+    return layerSet;
+}
+
+
+std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aNetcode )
+{
+    const LAYER_INFO layerInfo = expectLayerFromBlock( aBlock );
+
+    bool isCopperZone = ( layerInfo.m_Class == LAYER_INFO::CLASS::ETCH
+                          || layerInfo.m_Class == LAYER_INFO::CLASS::BOUNDARY );
 
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
     if( isCopperZone )
     {
         // BOUNDARY shares the ETCH layer list, so resolve subclass via ETCH class
-        if( aShape.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY )
+        if( layerInfo.m_Class == LAYER_INFO::CLASS::BOUNDARY )
         {
             LAYER_INFO etchLayer{};
             etchLayer.m_Class = LAYER_INFO::CLASS::ETCH;
-            etchLayer.m_Subclass = aShape.m_Layer.m_Subclass;
+            etchLayer.m_Subclass = layerInfo.m_Subclass;
             layer = getLayer( etchLayer );
         }
         else
         {
-            layer = getLayer( aShape.m_Layer );
+            layer = getLayer( layerInfo );
         }
     }
     else
@@ -3505,21 +3678,19 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
 
     if( isCopperZone && layer == UNDEFINED_LAYER )
     {
-        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - unmapped copper layer class=%#02x subclass=%#02x",
-                    aShape.m_Key, aShape.m_Layer.m_Class, aShape.m_Layer.m_Subclass );
+        wxLogTrace( traceAllegroBuilder, "  Skipping shape on layer %#02x:%#02x - unmapped copper layer",
+                    layerInfo.m_Class, layerInfo.m_Subclass );
         return nullptr;
     }
 
-    SHAPE_LINE_CHAIN outline = buildOutline( aShape );
+    const SHAPE_LINE_CHAIN* const outline = tryBuildZoneOutline( aBlock );
 
-    if( outline.PointCount() < 3 )
+    if( !outline )
     {
-        wxLogTrace( traceAllegroBuilder, "  Skipping shape %#010x - not enough points for polygon (%d)",
-                    aShape.m_Key, outline.PointCount() );
+        wxLogTrace( traceAllegroBuilder, "  Skipping zone with type %#04x, key %#010x - failed to build outline",
+                    aBlock.GetBlockType(), aBlock.GetKey() );
         return nullptr;
     }
-
-    outline.SetClosed( true );
 
     auto zone = std::make_unique<ZONE>( &m_board );
     zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
@@ -3531,20 +3702,36 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLK_0x28_SHAPE& aShape, in
     }
     else
     {
+        LSET layerSet = getRuleAreaLayers( layerInfo, Cmts_User );
+
+        bool isRouteKeepout = ( layerInfo.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPOUT );
+        bool isViaKeepout = ( layerInfo.m_Class == LAYER_INFO::CLASS::VIA_KEEPOUT );
+        bool isPackageKeepout = ( layerInfo.m_Class == LAYER_INFO::CLASS::PACKAGE_KEEPOUT );
+        bool isRouteKeepin = ( layerInfo.m_Class == LAYER_INFO::CLASS::ROUTE_KEEPIN );
+        bool isPackageKeepin = ( layerInfo.m_Class == LAYER_INFO::CLASS::PACKAGE_KEEPIN );
+
         zone->SetIsRuleArea( true );
-        zone->SetLayerSet( LSET::AllCuMask() );
+        zone->SetLayerSet( layerSet );
         zone->SetDoNotAllowTracks( isRouteKeepout );
         zone->SetDoNotAllowVias( isViaKeepout );
         zone->SetDoNotAllowZoneFills( isRouteKeepout || isViaKeepout );
         zone->SetDoNotAllowPads( false );
-        zone->SetDoNotAllowFootprints( false );
+        zone->SetDoNotAllowFootprints( isPackageKeepout );
+
+        // Zones utedon't have native keepin functions, so we leave a note for the user here
+        // Later, we could consider adding a custom DRC rule for this (or KiCad could add native keepin
+        // zone support)
+        if( isRouteKeepin )
+            zone->SetZoneName( "Route Keepin" );
+        else if( isPackageKeepin )
+            zone->SetZoneName( "Package Keepin" );
     }
 
     // Set net code AFTER layer assignment. SetNetCode checks IsOnCopperLayer() and
     // forces net=0 if the zone isn't on a copper layer yet.
     zone->SetNetCode( aNetcode );
 
-    zone->AddPolygon( outline );
+    zone->AddPolygon( *outline );
     return zone;
 }
 
@@ -3687,7 +3874,7 @@ void BOARD_BUILDER::createZones()
             }
         }
 
-        std::unique_ptr<ZONE> zone = buildZone( shapeData, netCode );
+        std::unique_ptr<ZONE> zone = buildZone( *block, netCode );
 
         if( zone )
         {
@@ -3766,19 +3953,39 @@ void BOARD_BUILDER::createZones()
 
     for( const BLOCK_BASE* block : keepoutWalker )
     {
-        if( block->GetBlockType() != 0x28 )
-            continue;
+        std::unique_ptr<ZONE> zone;
 
-        const BLK_0x28_SHAPE& shapeData =
-                static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+        switch( block->GetBlockType() )
+        {
+        case 0x24:
+        {
+            const BLK_0x24_RECT& rectData = static_cast<const BLOCK<BLK_0x24_RECT>&>( *block ).GetData();
 
-        if( !layerIsZone( shapeData.m_Layer ) )
-            continue;
+            if( !layerIsZone( rectData.m_Layer ) )
+                continue;
 
-        wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x", layerInfoDisplayName( shapeData.m_Layer ),
-                    shapeData.m_Key );
+            wxLogTrace( traceAllegroBuilder, "  Processing %s rect %#010x", layerInfoDisplayName( rectData.m_Layer ),
+                        rectData.m_Key );
 
-        std::unique_ptr<ZONE> zone = buildZone( shapeData, NETINFO_LIST::UNCONNECTED );
+            zone = buildZone( *block, NETINFO_LIST::UNCONNECTED );
+            break;
+        }
+        case 0x28:
+        {
+            const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+
+            if( !layerIsZone( shapeData.m_Layer ) )
+                continue;
+
+            wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x", layerInfoDisplayName( shapeData.m_Layer ),
+                        shapeData.m_Key );
+
+            zone = buildZone( *block, NETINFO_LIST::UNCONNECTED );
+            break;
+        }
+        default:
+            break;
+        }
 
         if( zone )
         {
