@@ -170,14 +170,12 @@ private:
     SHAPE_LINE_CHAIN buildOutline( const BLK_0x24_RECT& aRect ) const;
     SHAPE_LINE_CHAIN buildOutline( const BLK_0x28_SHAPE& aShape ) const;
 
-    /**
-     * Try to build a zone outline for the given block, returning nullptr if the block doesn't have the expected
-     * structure or data for a zone outline.
-     *
-     * Internally caches built outlines by block key.
-     */
-    const SHAPE_LINE_CHAIN* tryBuildZoneOutline( const BLOCK_BASE& aBlock );
+    SHAPE_POLY_SET shapeToPolySet( const BLK_0x28_SHAPE& aShape ) const;
 
+    /**
+     * Try to build a zone shape for the given block, with holes.
+     */
+    SHAPE_POLY_SET tryBuildZoneShape( const BLOCK_BASE& aBlock );
 
     /**
      * Walk a geometry chain (0x01 arcs and 0x15-17 segments) starting from the given key,

@@ -3658,59 +3658,76 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x28_SHAPE& aShape ) con
 }
 
 
-const SHAPE_LINE_CHAIN* BOARD_BUILDER::tryBuildZoneOutline( const BLOCK_BASE& aBlock )
+SHAPE_POLY_SET BOARD_BUILDER::shapeToPolySet( const BLK_0x28_SHAPE& aShape ) const
 {
-    auto it = m_outlineCache.find( aBlock.GetKey() );
+    SHAPE_POLY_SET   polySet;
+    SHAPE_LINE_CHAIN outline = buildSegmentChain( aShape.m_FirstSegmentPtr );
 
-    if( it != m_outlineCache.end() )
-        return &it->second;
+    if( outline.PointCount() < 3 )
+    {
+        wxLogTrace( traceAllegroBuilder, "  Not enough points for polygon (%d)", outline.PointCount() );
+        return polySet;
+    }
 
-    std::optional<SHAPE_LINE_CHAIN> outline;
+    outline.SetClosed( true );
+    polySet.AddOutline( outline );
+
+    // Walk 0x34 KEEPOUT chain from m_Ptr4 for holes
+    uint32_t holeKey = aShape.m_FirstKeepoutPtr;
+
+    while( holeKey != 0 )
+    {
+        const BLOCK_BASE* holeBlock = m_brdDb.GetObjectByKey( holeKey );
+
+        if( !holeBlock || holeBlock->GetBlockType() != 0x34 )
+            break;
+
+        const auto& keepout = static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
+
+        SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_FirstSegmentPtr );
+
+        if( holeOutline.PointCount() >= 3 )
+        {
+            holeOutline.SetClosed( true );
+            polySet.AddHole( holeOutline );
+        }
+
+        holeKey = keepout.m_Next;
+    }
+
+    return polySet;
+}
+
+
+SHAPE_POLY_SET ALLEGRO::BOARD_BUILDER::tryBuildZoneShape( const BLOCK_BASE& aBlock )
+{
+    SHAPE_POLY_SET polySet;
 
     switch( aBlock.GetBlockType() )
     {
     case 0x0E:
     {
         const auto& rectData = BlockDataAs<BLK_0x0E_RECT>( aBlock );
-        outline = buildOutline( rectData );
+        polySet = SHAPE_POLY_SET( buildOutline( rectData ) );
         break;
     }
     case 0x24:
     {
         const auto& rectData = BlockDataAs<BLK_0x24_RECT>( aBlock );
-        outline = buildOutline( rectData );
+        polySet = SHAPE_POLY_SET( buildOutline( rectData ) );
         break;
     }
     case 0x28:
     {
         const auto& shapeData = BlockDataAs<BLK_0x28_SHAPE>( aBlock );
-        outline = buildOutline( shapeData );
+        polySet = shapeToPolySet( shapeData );
         break;
     }
     default:
-        wxLogTrace( traceAllegroBuilder, "  Unhandled block type in tryBuildZoneOutline: %#04x",
-                    aBlock.GetBlockType() );
-        return nullptr;
+        wxLogTrace( traceAllegroBuilder, "  Unhandled block type in tryBuildZoneShape: %#04x", aBlock.GetBlockType() );
     }
 
-    if( outline.has_value() )
-    {
-        if( outline->PointCount() < 3 )
-        {
-            wxLogTrace( traceAllegroBuilder, "  Not enough points for polygon (%d)", outline->PointCount() );
-            return nullptr;
-        }
-
-        outline->SetClosed( true );
-
-        // Cache the outline for future reference
-        m_outlineCache[aBlock.GetKey()] = std::move( *outline );
-        return &m_outlineCache[aBlock.GetKey()];
-    }
-
-    wxLogTrace( traceAllegroBuilder, "  Failed to build polygon in tryBuildZoneOutline: %#04x, key: %#010x",
-                aBlock.GetBlockType(), aBlock.GetKey() );
-    return nullptr;
+    return polySet;
 }
 
 
@@ -3798,9 +3815,9 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aN
         return nullptr;
     }
 
-    const SHAPE_LINE_CHAIN* const outline = tryBuildZoneOutline( aBlock );
+    const SHAPE_POLY_SET zoneShape = tryBuildZoneShape( aBlock );
 
-    if( !outline )
+    if( zoneShape.OutlineCount() != 1 )
     {
         wxLogTrace( traceAllegroBuilder, "  Skipping zone with type %#04x, key %#010x - failed to build outline",
                     aBlock.GetBlockType(), aBlock.GetKey() );
@@ -3846,7 +3863,9 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aN
     // forces net=0 if the zone isn't on a copper layer yet.
     zone->SetNetCode( aNetcode );
 
-    zone->AddPolygon( *outline );
+    for( const SHAPE_LINE_CHAIN& chain : zoneShape.CPolygon( 0 ) )
+        zone->AddPolygon( chain );
+
     return zone;
 }
 
@@ -4004,7 +4023,7 @@ void BOARD_BUILDER::createZones()
         }
     }
 
-    // Merge zones with identical outlines and same net into multi-layer zones.
+    // Merge zones with identical polygons and same net into multi-layer zones.
     // Allegro often defines the same zone outline on multiple copper layers (e.g.
     // a ground pour spanning all layers). KiCad represents this as a single zone
     // with multiple fill layers.
@@ -4015,9 +4034,9 @@ void BOARD_BUILDER::createZones()
         if( merged[i] )
             continue;
 
-        ZONE*                     primary = boundaryZones[i].get();
-        const SHAPE_LINE_CHAIN&   primaryOutline = primary->Outline()->COutline( 0 );
-        LSET                      layers = primary->GetLayerSet();
+        ZONE*                          primary = boundaryZones[i].get();
+        const SHAPE_POLY_SET::POLYGON& primaryPolygon = primary->Outline()->CPolygon( 0 );
+        LSET                           layers = primary->GetLayerSet();
 
         for( size_t j = i + 1; j < boundaryZones.size(); j++ )
         {
@@ -4029,15 +4048,28 @@ void BOARD_BUILDER::createZones()
             if( candidate->GetNetCode() != primary->GetNetCode() )
                 continue;
 
-            const SHAPE_LINE_CHAIN& candidateOutline = candidate->Outline()->COutline( 0 );
+            const SHAPE_POLY_SET::POLYGON& candidatePolygon = candidate->Outline()->CPolygon( 0 );
 
-            if( primaryOutline.PointCount() != candidateOutline.PointCount() )
+            if( primaryPolygon.size() != candidatePolygon.size() )
                 continue;
 
-            if( primaryOutline.BBox() != candidateOutline.BBox() )
-                continue;
+            bool polygonsDiffer = false;
 
-            if( primaryOutline.CompareGeometry( candidateOutline ) )
+            for( size_t lineChainId = 0; lineChainId < primaryPolygon.size(); lineChainId++ )
+            {
+                const SHAPE_LINE_CHAIN& primaryChain = primaryPolygon[lineChainId];
+                const SHAPE_LINE_CHAIN& candidateChain = candidatePolygon[lineChainId];
+
+                if( primaryChain.PointCount() != candidateChain.PointCount()
+                    || primaryChain.BBox() != candidateChain.BBox() 
+                    || !primaryChain.CompareGeometry( candidateChain ) )
+                {
+                    polygonsDiffer = true;
+                    break;
+                }
+            }
+
+            if( !polygonsDiffer )
             {
                 layers |= candidate->GetLayerSet();
                 merged[j] = true;
@@ -4045,8 +4077,7 @@ void BOARD_BUILDER::createZones()
 
                 wxLogTrace( traceAllegroBuilder, "  Merging zone on %s into zone on %s (net %d)",
                             m_board.GetLayerName( candidate->GetFirstLayer() ),
-                            m_board.GetLayerName( primary->GetFirstLayer() ),
-                            primary->GetNetCode() );
+                            m_board.GetLayerName( primary->GetFirstLayer() ), primary->GetNetCode() );
             }
         }
 
@@ -4275,50 +4306,28 @@ void BOARD_BUILDER::applyZoneFills()
             for( size_t i : indexIt->second )
             {
                 const ZoneFillEntry& fill = m_zoneFillShapes[i];
-                const SHAPE_LINE_CHAIN& cachedOutline = buildOutline( *fill.shape );
+                SHAPE_POLY_SET       fillPolySet = shapeToPolySet( *fill.shape );
 
-                if( cachedOutline.PointCount() < 3 )
+                if( fillPolySet.VertexCount() < 3 )
                     continue;
 
-                SHAPE_LINE_CHAIN fillOutline = cachedOutline;
-                fillOutline.SetClosed( true );
-                fillOutline.ClearArcs();
-
-                BOX2I fillBbox = fillOutline.BBox();
+                BOX2I fillBbox = fillPolySet.BBox();
                 BOX2I zoneBbox = zone->GetBoundingBox();
 
-                if( !fillBbox.Intersects( zoneBbox ) )
+                if( !zoneBbox.GetInflated( 1 ).Contains( fillBbox ) )
                     continue;
 
-                combinedFill.AddOutline( fillOutline );
-                int outlineIdx = combinedFill.OutlineCount() - 1;
+                // Check that the fill is approximately fully contained within the zone outline
+                SHAPE_POLY_SET fillCut( fillPolySet );
+                fillCut.BooleanSubtract( *zone->Outline() );
+
+                if( fillCut.Area() > 1 )
+                    continue;
+
+                fillPolySet.ClearArcs();
+                combinedFill.BooleanAdd( fillPolySet );
+
                 matched[i] = true;
-
-                // Walk 0x34 KEEPOUT chain from m_Ptr4 for clearance holes
-                uint32_t holeKey = fill.shape->m_Ptr4;
-
-                while( holeKey != 0 )
-                {
-                    const BLOCK_BASE* holeBlock = m_brdDb.GetObjectByKey( holeKey );
-
-                    if( !holeBlock || holeBlock->GetBlockType() != 0x34 )
-                        break;
-
-                    const auto& keepout =
-                            static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
-
-                    SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_Ptr2 );
-
-                    if( holeOutline.PointCount() >= 3 )
-                    {
-                        holeOutline.SetClosed( true );
-                        holeOutline.ClearArcs();
-                        combinedFill.AddHole( holeOutline, outlineIdx );
-                        totalHoles++;
-                    }
-
-                    holeKey = keepout.m_Next;
-                }
             }
 
             if( combinedFill.OutlineCount() > 0 )
@@ -4369,7 +4378,7 @@ void BOARD_BUILDER::applyZoneFills()
         polySet.AddOutline( outline );
 
         // Walk 0x34 KEEPOUT chain for clearance holes
-        uint32_t holeKey = fill.shape->m_Ptr4;
+        uint32_t holeKey = fill.shape->m_FirstKeepoutPtr;
 
         while( holeKey != 0 )
         {
@@ -4381,7 +4390,7 @@ void BOARD_BUILDER::applyZoneFills()
             const auto& keepout =
                     static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
 
-            SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_Ptr2 );
+            SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_FirstSegmentPtr );
 
             if( holeOutline.PointCount() >= 3 )
             {
@@ -4393,43 +4402,50 @@ void BOARD_BUILDER::applyZoneFills()
             holeKey = keepout.m_Next;
         }
 
-        if( polySet.HasHoles() )
-            polySet.Fracture( /* aSimplify */ false );
+        polySet.Simplify();
 
-        const bool isDynCopperShape = ( fill.shape->m_Unknown2.value_or( 0 ) & 0x1000 ) != 0;
-
-        if( isDynCopperShape )
+        for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
         {
-            auto zone = std::make_unique<ZONE>( &m_board );
+            SHAPE_POLY_SET fractured( poly );
+            fractured.Fracture( /* aSimplify */ false );
 
-            zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
-            zone->SetLayer( fill.layer );
-            zone->SetNetCode( fill.netCode );
-            zone->SetLocalClearance( 0 );
-            zone->SetPadConnection( ZONE_CONNECTION::FULL );
-            zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
-            zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER );
+            const bool isDynCopperShape = ( fill.shape->m_Unknown2.value_or( 0 ) & 0x1000 ) != 0;
 
-            zone->AddPolygon( outline );
-            zone->SetFilledPolysList( fill.layer, polySet );
-            zone->SetIsFilled( true );
-            zone->SetNeedRefill( false );
-            zone->CalculateFilledArea();
+            if( isDynCopperShape )
+            {
+                auto zone = std::make_unique<ZONE>( &m_board );
 
-            m_board.Add( zone.release(), ADD_MODE::APPEND );
-            teardropCount++;
-        }
-        else
-        {
-            auto shape = std::make_unique<PCB_SHAPE>( &m_board, SHAPE_T::POLY );
-            shape->SetPolyShape( polySet );
-            shape->SetFilled( true );
-            shape->SetLayer( fill.layer );
-            shape->SetNetCode( fill.netCode );
-            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
+                zone->SetLayer( fill.layer );
+                zone->SetNetCode( fill.netCode );
+                zone->SetLocalClearance( 0 );
+                zone->SetPadConnection( ZONE_CONNECTION::FULL );
+                zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+                zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER );
 
-            m_board.Add( shape.release(), ADD_MODE::APPEND );
-            copperShapeCount++;
+                for( const SHAPE_LINE_CHAIN& chain : poly )
+                    zone->AddPolygon( chain );
+
+                zone->SetFilledPolysList( fill.layer, fractured );
+                zone->SetIsFilled( true );
+                zone->SetNeedRefill( false );
+                zone->CalculateFilledArea();
+
+                m_board.Add( zone.release(), ADD_MODE::APPEND );
+                teardropCount++;
+            }
+            else
+            {
+                auto shape = std::make_unique<PCB_SHAPE>( &m_board, SHAPE_T::POLY );
+                shape->SetPolyShape( fractured );
+                shape->SetFilled( true );
+                shape->SetLayer( fill.layer );
+                shape->SetNetCode( fill.netCode );
+                shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+
+                m_board.Add( shape.release(), ADD_MODE::APPEND );
+                copperShapeCount++;
+            }
         }
     }
 

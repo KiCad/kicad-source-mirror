@@ -1518,7 +1518,7 @@ struct BLK_0x28_SHAPE
 
     uint32_t m_Ptr2;
     uint32_t m_Ptr3;
-    uint32_t m_Ptr4;
+    uint32_t m_FirstKeepoutPtr;
     uint32_t m_FirstSegmentPtr;
     uint32_t m_Unknown4;
     uint32_t m_Unknown5;
@@ -1952,7 +1952,7 @@ struct BLK_0x34_KEEPOUT
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
     uint32_t m_Flags;
-    uint32_t m_Ptr2;
+    uint32_t m_FirstSegmentPtr;
     uint32_t m_Ptr3;
     uint32_t m_Unknown2;
 };

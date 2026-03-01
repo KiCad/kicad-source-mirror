@@ -1406,7 +1406,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x28_SHAPE( FILE_STREAM& aStream, 
 
     data.m_Ptr2 = aStream.ReadU32();
     data.m_Ptr3 = aStream.ReadU32();
-    data.m_Ptr4 = aStream.ReadU32();
+    data.m_FirstKeepoutPtr = aStream.ReadU32();
     data.m_FirstSegmentPtr = aStream.ReadU32();
     data.m_Unknown4 = aStream.ReadU32();
     data.m_Unknown5 = aStream.ReadU32();
@@ -1856,7 +1856,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x34_KEEPOUT( FILE_STREAM& aStream
     ReadCond( aStream, aVer, data.m_Unknown1 );
 
     data.m_Flags = aStream.ReadU32();
-    data.m_Ptr2 = aStream.ReadU32();
+    data.m_FirstSegmentPtr = aStream.ReadU32();
     data.m_Ptr3 = aStream.ReadU32();
     data.m_Unknown2 = aStream.ReadU32();
 
