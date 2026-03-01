@@ -239,6 +239,7 @@ struct std::hash<LAYER_INFO>
 static const std::unordered_map<LAYER_INFO, PCB_LAYER_ID> s_LayerKiMap = {
 
     { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_OUTLINE},              Edge_Cuts},
+    { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_DESIGN_OUTLINE},       Edge_Cuts},
     { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_TOP},       F_SilkS},
     { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SILKSCREEN_BOTTOM},    B_SilkS},
     { { LAYER_INFO::CLASS::BOARD_GEOMETRY,   LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_TOP},       F_Mask},
@@ -342,6 +343,7 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
     };
 
     static const std::unordered_map<uint8_t, wxString> s_BoardGeomSubclassNames = {
+        { LAYER_INFO::SUBCLASS::BGEOM_OUTLINE,              wxS( "Outline" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_CONSTRAINT_AREA,      wxS( "Constraint Area" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_OFF_GRID_AREA,        wxS( "Off Grid Area" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_SOLDERMASK_BOTTOM,    wxS( "Soldermask Bottom" ) },
@@ -360,7 +362,7 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::SUBCLASS::BGEOM_TOOLING_CORNERS,      wxS( "Tooling Corners" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_ASSEMBLY_NOTES,       wxS( "Assembly Notes" ) },
         { LAYER_INFO::SUBCLASS::BGEOM_PLATING_BAR,          wxS( "Plating Bar" ) },
-        { LAYER_INFO::SUBCLASS::BGEOM_OUTLINE,              wxS( "Outline" ) },
+        { LAYER_INFO::SUBCLASS::BGEOM_DESIGN_OUTLINE,       wxS( "Design Outline" ) },
 
     };
 
