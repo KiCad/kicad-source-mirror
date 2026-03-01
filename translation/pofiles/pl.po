@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 06:35+0000\n"
+"PO-Revision-Date: 2026-03-01 17:37+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -10295,9 +10295,8 @@ msgid "Confirm change"
 msgstr "Potwierdź zmianę"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(kliknij dwukrotnie by zmienić)"
+msgstr "Polecenie (kliknij dwukrotnie by zmienić)"
 
 #: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
@@ -44558,11 +44557,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Strefa miedzi '%s' nie ma połączenia z żadnym polem."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
-"Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma połączenia z żadnym "
-"polem."
+"Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma żadnych pól "
+"połączonych z siecią \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
