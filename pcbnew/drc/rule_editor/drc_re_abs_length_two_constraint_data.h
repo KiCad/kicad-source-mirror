@@ -59,9 +59,9 @@ public:
         // Positions measured from constraint_absolute_lenght_2.png (~340x130)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 285 + DRC_RE_OVERLAY_XO, 315 + DRC_RE_OVERLAY_XO, 62 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length (left arrow)
-            { 245 + DRC_RE_OVERLAY_XO, 275 + DRC_RE_OVERLAY_XO, 131 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length (bottom center arrow)
-            { 15 + DRC_RE_OVERLAY_XO, 45 + DRC_RE_OVERLAY_XO, 37 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },    // max_length (right arrow)
+            { 525 + DRC_RE_OVERLAY_XO, 565 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length (left arrow)
+            { 668 + DRC_RE_OVERLAY_XO, 708 + DRC_RE_OVERLAY_XO, 163 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length (bottom center arrow)
+            { 820 + DRC_RE_OVERLAY_XO, 860 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },    // max_length (right arrow)
         };
     }
 
@@ -162,14 +162,10 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 527 + DRC_RE_OVERLAY_XO, 567 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // min_length
-            { 670 + DRC_RE_OVERLAY_XO, 710 + DRC_RE_OVERLAY_XO, 162 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // opt_length
-            { 817 + DRC_RE_OVERLAY_XO, 857 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // max_length
-            { 777 + DRC_RE_OVERLAY_XO, 815 + DRC_RE_OVERLAY_XO, -3 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // max_skew
+            { 527 + DRC_RE_OVERLAY_XO, 567 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_length
+            { 670 + DRC_RE_OVERLAY_XO, 710 + DRC_RE_OVERLAY_XO, 162 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length
+            { 819 + DRC_RE_OVERLAY_XO, 859 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_length
+            { 777 + DRC_RE_OVERLAY_XO, 815 + DRC_RE_OVERLAY_XO, -1 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew
         };
     }
 

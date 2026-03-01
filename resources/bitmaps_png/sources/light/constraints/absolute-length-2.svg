@@ -1,138 +1,173 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   width="400"
-   height="248"
-   viewBox="0 0 105.83332 65.616667"
+   width="850"
+   height="260"
+   viewBox="0 0 850 260"
    version="1.1"
-   id="svg5"
-   sodipodi:docname="absolute-lenght-2.svg"
-   inkscape:version="1.2.1 (9c6d41e4, 2022-07-14)"
-   xml:space="preserve"
+   id="svg14"
+   sodipodi:docname="constraint_absolute_length.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
-     id="namedview7"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview14"
      pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
+     bordercolor="#000000"
+     borderopacity="0.25"
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     showgrid="true"
-     inkscape:zoom="2"
-     inkscape:cx="113.75"
-     inkscape:cy="102.25"
-     inkscape:window-width="1366"
-     inkscape:window-height="663"
+     inkscape:zoom="0.79318995"
+     inkscape:cx="443.14732"
+     inkscape:cy="124.18211"
+     inkscape:window-width="1512"
+     inkscape:window-height="838"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="34"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer2"
-     showguides="true"
-     inkscape:lockguides="false"><inkscape:grid
-       type="xygrid"
-       id="grid1049"
-       empcolor="#3f3fff"
-       empopacity="0.25098039"
-       color="#ceceff"
-       opacity="0.1254902"
-       empspacing="2"
-       spacingx="0.13229166"
-       spacingy="0.13229166"
-       originx="-6.3499988"
-       originy="-4.2333335" /><sodipodi:guide
-       position="31.749999,35.983331"
-       orientation="0,-1"
-       id="guide4044"
-       inkscape:locked="false" /><sodipodi:guide
-       position="39.158332,38.629164"
-       orientation="0,-1"
-       id="guide22482"
-       inkscape:locked="false" /><sodipodi:guide
-       position="41.804163,33.3375"
-       orientation="0,-1"
-       id="guide22484"
-       inkscape:locked="false" /></sodipodi:namedview><defs
-     id="defs2"><marker
-   style="overflow:visible"
-   id="TriangleStart"
-   refX="0"
-   refY="0"
-   orient="auto-start-reverse"
-   inkscape:stockid="TriangleStart"
-   markerWidth="5.3244081"
-   markerHeight="6.155385"
-   viewBox="0 0 5.3244081 6.1553851"
-   inkscape:isstock="true"
-   inkscape:collect="always"
-   preserveAspectRatio="xMidYMid"><path
-     transform="scale(0.5)"
-     style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
-     d="M 5.77,0 -2.88,5 V -5 Z"
-     id="path135" /></marker><inkscape:path-effect
-   effect="fillet_chamfer"
-   id="path-effect11489"
-   is_visible="true"
-   lpeversion="1"
-   nodesatellites_param="F,0,0,1,0,2,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,2,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-   unit="px"
-   method="auto"
-   mode="F"
-   radius="0"
-   chamfer_steps="1"
-   flexible="false"
-   use_knot_distance="true"
-   apply_no_radius="true"
-   apply_with_radius="true"
-   only_selected="false"
-   hide_knots="false" />
-        
-    </defs><g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Tracks"
-     style="display:inline"
-     transform="translate(-19.049957,-8.4666616)"><path
-       style="opacity:0.598465;fill:none;stroke:#f29100;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="M 79.904121,38.099994 H 35.454124"
-       id="path18328"
-       sodipodi:nodetypes="cc" /><path
-       style="opacity:1;fill:none;stroke:#f29100;stroke-width:5.29167;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="M 55.562456,38.099994 H 35.454124"
-       id="path19961"
-       sodipodi:nodetypes="cc" /></g><g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="Arrows"
-     transform="translate(3.1749965,-2.1166664)"
-     style="display:inline"><path
-       style="display:inline;opacity:1;fill:none;stroke:#000fe5;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleStart)"
-       d="M 60.589585,40.216664 H 35.831682"
-       id="path19963"
-       sodipodi:nodetypes="cc" /><path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="M 58.472918,31.749998 V 21.166666"
-       id="path20777" /><path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="M 12.964587,40.216663 V 21.166665"
-       id="path3302" /><path
-       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-       d="M 33.602086,40.216664 V 31.749998"
-       id="path4042" /><path
-       style="display:inline;opacity:1;fill:none;stroke:#000fe5;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleStart)"
-       d="m 70.379167,22.224998 h -9.525"
-       id="path4046"
-       sodipodi:nodetypes="cc" /><path
-       style="display:inline;opacity:1;fill:none;stroke:#000fe5;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleStart)"
-       d="m 1.0583375,22.224998 9.3927075,0"
-       id="path4048"
-       sodipodi:nodetypes="cc" /><path
-       style="display:inline;opacity:1;fill:none;stroke:#000fe5;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleStart)"
-       d="m 1.0583375,38.099998 9.3927075,0"
-       id="path4050"
-       sodipodi:nodetypes="cc" /></g></svg>
+     inkscape:current-layer="svg14" />
+  <defs
+     id="defs2">
+    <!-- Inward-pointing arrowheads for dimension lines -->
+    <marker
+       id="ah-start"
+       markerWidth="10"
+       markerHeight="6"
+       refX="0"
+       refY="4"
+       orient="auto"
+       markerUnits="userSpaceOnUse"
+       viewBox="0 0 10 6"
+       preserveAspectRatio="xMidYMid">
+      <polygon
+         points="0,1 10,4 0,7"
+         fill="#B0B0B0"
+         id="polygon1" />
+    </marker>
+    <marker
+       id="ah-end"
+       markerWidth="10"
+       markerHeight="6"
+       refX="10"
+       refY="4"
+       orient="auto"
+       markerUnits="userSpaceOnUse"
+       viewBox="0 0 10 6"
+       preserveAspectRatio="xMidYMid">
+      <polygon
+         points="10,1 0,4 10,7"
+         fill="#B0B0B0"
+         id="polygon2" />
+    </marker>
+  </defs>
+  <!-- ===== PADS ===== -->
+  <!-- Left pads (round, through-hole style) -->
+  <circle
+     cx="30"
+     cy="90"
+     r="10"
+     fill="#5b9bd5"
+     id="circle2" />
+  <!-- Right pads (rectangular, SMD style) -->
+  <rect
+     x="794.49725"
+     y="107"
+     width="24"
+     height="24"
+     rx="3"
+     fill="#5b9bd5"
+     id="rect3" />
+  <!-- ===== SINGLE TRACE WITH MEANDER ===== -->
+  <!-- Uniform serpentine: R=22 semicircular turns, 44px channel pitch,
+       y_top=38, y_bot=108. Entry/exit via quarter-arc transitions. -->
+  <path
+     d="M 40,90 H 70 C 82.150264,90 92,80.150264 92,68 V 38 c 0,-12.150273 9.84974,-21.99999 22,-21.99999 12.15026,0 22,9.849717 22,21.99999 v 70 c 0.21322,11.30374 9.63652,19.7908 21.78678,19.7908 12.15027,0 22.42644,-8.06062 22.21322,-19.7908 V 38 c 0,-12.150273 9.84974,-21.99999 22,-21.99999 12.15026,0 22,9.849717 22,21.99999 v 70 c 0,13.00949 10.91583,19.36436 23.06609,19.36436 12.15027,0 21.14713,-5.502 20.93391,-19.36436 V 38 c 0,-12.150273 9.84974,-21.99999 22,-21.99999 12.15026,0 22,9.849717 22,21.99999 v 70 c 0.42644,13.22271 9.84974,19.57758 22,19.57758 12.15026,0 22,-5.07556 22,-19.57758 V 38 c 0,-12.150273 9.84974,-21.99999 22,-21.99999 12.15026,0 22,9.849717 22,21.99999 v 70 c -0.21322,13.22271 10.06295,19.57758 22.21322,19.57758 12.15026,0 22.21322,-5.07556 21.78678,-19.57758 V 38 c 0,-12.150273 9.84974,-21.99999 22,-21.99999 12.15026,0 22,9.849717 22,21.99999 v 59 c -0.003,15.35172 6.64828,22.2164 22,22 h 285"
+     stroke="#5b9bd5"
+     stroke-width="7"
+     fill="none"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="path4"
+     sodipodi:nodetypes="cssssscscssscscssscscssscscsssccc" />
+  <!-- ===== LENGTH DIMENSION ARROWS (below traces) ===== -->
+  <!-- Common left extension line (dashed, from pad area down to arrows) -->
+  <line
+     x1="20.16864"
+     y1="140"
+     x2="20.16864"
+     y2="204.44565"
+     stroke="#707070"
+     stroke-width="0.7"
+     stroke-dasharray="3, 3"
+     id="line5" />
+  <!-- Min length: x=30 to x=285, y=190 -->
+  <line
+     x1="524.33136"
+     y1="138.8214"
+     x2="524.33136"
+     y2="154.8214"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line6" />
+  <line
+     x1="30.978367"
+     y1="147.80708"
+     x2="513.7215"
+     y2="147.80708"
+     stroke="#b0b0b0"
+     stroke-width="2.06386"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line7"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(290, 183) -->
+  <!-- Opt length: x=30 to x=475, y=210 -->
+  <line
+     x1="666.53131"
+     y1="167.05452"
+     x2="666.53131"
+     y2="183.05452"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line8" />
+  <line
+     x1="30.206526"
+     y1="174.81697"
+     x2="655.6615"
+     y2="174.81697"
+     stroke="#b0b0b0"
+     stroke-width="1.77832"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line9"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(480, 203) -->
+  <!-- Max length: x=30 to x=700, y=230 -->
+  <line
+     x1="819.27112"
+     y1="194.58308"
+     x2="819.27112"
+     y2="210.58308"
+     stroke="#808080"
+     stroke-width="0.7"
+     id="line10"
+     style="stroke-width:1.123;stroke-dasharray:none" />
+  <line
+     x1="30.613073"
+     y1="203.02974"
+     x2="808.76239"
+     y2="203.02974"
+     stroke="#b0b0b0"
+     stroke-width="1.61654"
+     marker-start="url(#ah-start)"
+     marker-end="url(#ah-end)"
+     id="line11"
+     style="marker-start:url(#ah-end);marker-end:url(#ah-start)" />
+  <!-- Field position: ~(705, 223) -->
+  <!-- ===== SKEW DIMENSION ARROW (right side) ===== -->
+  <!-- Brackets the extra meander section of trace N -->
+  <!-- Field position: ~(773, 161) -->
+</svg>
