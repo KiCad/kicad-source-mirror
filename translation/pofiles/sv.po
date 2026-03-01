@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-28 01:09+0000\n"
+"PO-Revision-Date: 2026-03-01 02:11+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
@@ -45137,12 +45137,10 @@ msgid "Diff pair gap calculation failed"
 msgstr "Beräkning av differentialpars ledaravstånd misslyckades"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:45
-#, fuzzy
 msgid "Single"
-msgstr "En körning"
+msgstr "Enkel"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:54
-#, fuzzy
 msgid "Target impedance:"
 msgstr "Målimpedans:"
 
@@ -45151,7 +45149,6 @@ msgid "ohms"
 msgstr "Ohm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:81
-#, fuzzy
 msgid "Enable time domain tuning"
 msgstr "Aktivera ledarjustering i tidsdomän"
 
@@ -45193,7 +45190,6 @@ msgid "ps/cm"
 msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:187
-#, fuzzy
 msgid "Via delay overrides:"
 msgstr "Undantag för fördröjning i vior:"
 
@@ -47091,9 +47087,8 @@ msgid "Checking thermal reliefs..."
 msgstr "Kontrollerar termisk avlastning..."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:75
-#, fuzzy
 msgid "Design Rule Editor"
-msgstr "Designregler"
+msgstr "Designregelredigerare"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:502
 #, c-format
@@ -47102,96 +47097,94 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Kan inte spara på grund av valideringsfel i regel '%s':\n"
+"\n"
+"%s"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:572
-#, fuzzy
 msgid "Are you sure you want to delete?"
-msgstr "Är du säker på att du vill ta bort hela kortet?"
+msgstr "Är du säker på att du vill radera?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1181
 msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
 msgstr ""
+"Flera regler med samma namn har olika villkor. Regel med samma namn måste ha "
+"identiska villkor för att kunna slås samman."
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1200
-#, fuzzy
 msgid ""
 "The following rules have unsaved changes:\n"
 "\n"
 msgstr ""
-"Följande filer kommer skrivas över:\n"
+"Följande regler har osparade ändringar:\n"
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1205
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
-msgstr "Vill du avbryta den pågående exporten?"
+msgstr ""
+"\n"
+"Vill du spara dina ändringar?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1369
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reload DRC rules: %s"
-msgstr "Det gick inte att lägga till filen '%s'."
+msgstr "Kunde inte läsa in designregler på nytt: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
-#, fuzzy
 msgid "Minimum Length must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Minsta längd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:89
-#, fuzzy
 msgid "Optimum Length must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Optimal längd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:92
-#, fuzzy
 msgid "Maximum Length must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Maximal längd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
 msgid "Minimum Length cannot be greater than Optimum Length"
-msgstr ""
+msgstr "Minsta längd kan inte vara större än optimal längd"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:99
 msgid "Optimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "Optimal längd kan inte vara större än maximal längd"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:102
 msgid "Minimum Length cannot be greater than Maximum Length"
-msgstr ""
+msgstr "Minsta längd kan inte vara större än maximal längd"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
 msgid "Allow 0°"
-msgstr ""
+msgstr "Tillåt 0°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 90°"
-msgstr ""
+msgstr "Tillåt 90°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
 msgid "Allow 180°"
-msgstr ""
+msgstr "Tillåt 180°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
-msgstr ""
+msgstr "Tillåt 270°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
-#, fuzzy
 msgid "Allow All"
-msgstr "Fyll alla"
+msgstr "Tillåt alla"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:114
-#, fuzzy
 msgid "At least one orientation must be selected"
-msgstr "Minst ett lager måste specificeras\n"
+msgstr "Minst en riktning måste väljas"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
-#, fuzzy
 msgid "Disallow"
-msgstr "Deaktiverad"
+msgstr "Tillåt inte"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:49
 msgid "Where conditions match:"
@@ -47202,36 +47195,32 @@ msgid "Where object matches:"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:56
-#, fuzzy
 msgid "Add another condition"
-msgstr "Lägg till ett centrummått"
+msgstr "Lägg till ytterligare villkor"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:204
 msgid "AND"
-msgstr ""
+msgstr "OCH"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:205
-#, fuzzy
 msgid "OR"
-msgstr "R"
+msgstr "ELLER"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:206
 msgid "AND NOT"
-msgstr ""
+msgstr "OCH ICKE"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:207
 msgid "OR NOT"
-msgstr ""
+msgstr "ELLER ICKE"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:59
-#, fuzzy
 msgid "Object A"
-msgstr "Föremål"
+msgstr "Objekt A"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:60
-#, fuzzy
 msgid "Object B"
-msgstr "Föremål"
+msgstr "Objekt B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:71
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -47250,9 +47239,8 @@ msgstr "Nätklass"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:74
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:29
-#, fuzzy
 msgid "Within Area"
-msgstr "Konturens area"
+msgstr "Inom område"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:75
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:30
@@ -47261,235 +47249,203 @@ msgid "Custom Query"
 msgstr "Användardefinierade regler"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:132
-#, fuzzy
 msgid "Remove this condition"
-msgstr "Använd initiala tillstånd"
+msgstr "Ta bort detta villkor"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_constraint_data.h:57
-#, fuzzy
 msgid "Rule text cannot be empty"
-msgstr "Text kan inte utelämnas."
+msgstr "Regeltext kan inte lämnas tom"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:50
-#, fuzzy
 msgid "Check Syntax"
-msgstr "Kontrollera regelsyntax"
+msgstr "Kontrollera syntax"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:286
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:288
-#, fuzzy
 msgid "No rule text to check."
-msgstr "Inga fler objekt att visa"
+msgstr "Ingen regeltext att kontrollera"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:299
-#, fuzzy
 msgid "Custom rule"
-msgstr "Användardefinierade regler"
+msgstr "Användardefinierad regel"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:305
 #, c-format
 msgid "ERROR at line %d, column %d: %s"
-msgstr ""
+msgstr "FEL på rad %d, kolumn %d: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:320
 msgid "Syntax check passed with warnings:\n"
-msgstr ""
+msgstr "Syntaxkontroll godkänd med varningar:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:324
-#, fuzzy
 msgid "Syntax OK"
-msgstr "Syntaxhjälp"
+msgstr "Syntax OK"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:78
-#, fuzzy
 msgid "Minimum Text Height must be greater than 0"
-msgstr "Dielektrisk höjd måste vara större än noll"
+msgstr "Minsta texthöjd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:81
-#, fuzzy
 msgid "Minimum Text Thickness must be greater than 0"
-msgstr "Signallagrets tjocklek måste vara större än noll"
+msgstr "Minsta textvikt måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:97
-#, fuzzy
 msgid "Numeric input value must be greater than 0"
-msgstr "Bågvinkeln måste vara större än 0"
+msgstr "Inmatat numeriskt värde måste vara större än 0"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:57
-#, fuzzy
 msgid "Allow top Layer"
-msgstr "Alla kopparlager"
+msgstr "Tillåt översta lagret"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:58
-#, fuzzy
 msgid "Allow bottom Layer"
-msgstr "Bottenlager"
+msgstr "Tillåt nedersta lagret"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:91
-#, fuzzy
 msgid "At least one layer must be selected"
-msgstr "Minst ett lager måste specificeras\n"
+msgstr "Minst ett lager måste väljas"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:72
-#, fuzzy
 msgid "Minimum Routing Width must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Minsta ledarbredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:75
-#, fuzzy
 msgid "Preferred Routing Width must be greater than 0"
-msgstr "Målimpedans måste vara större än noll"
+msgstr "Önskad ledarbredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:78
-#, fuzzy
 msgid "Maximum Routing Width must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Största ledarbredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:83
 msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
-msgstr ""
+msgstr "Minsta ledarbredd kan inte vara större än önskad ledarbredd"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:86
 msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
-msgstr ""
+msgstr "Önskad ledarbredd kan inte vara större än största ledarbredd"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:89
 msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
-msgstr ""
+msgstr "Minsta ledarbredd kan inte vara större än största ledarbredd"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:78
-#, fuzzy
 msgid "Minimum Width must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Minsta bredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:81
-#, fuzzy
 msgid "Preferred Width must be greater than 0"
-msgstr "Målimpedans måste vara större än noll"
+msgstr "Önskad bredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:84
-#, fuzzy
 msgid "Maximum Width must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Största bredd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:87
-#, fuzzy
 msgid "Minimum Gap must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Minsta mellanrum måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:90
-#, fuzzy
 msgid "Preferred Gap must be greater than 0"
-msgstr "Målimpedans måste vara större än noll"
+msgstr "Önskat mellanrum måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:93
-#, fuzzy
 msgid "Maximum Gap must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Största mellanrum måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:96
-#, fuzzy
 msgid "Maximum Uncoupled Length must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Maximal okopplad längd måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:99
 #, fuzzy
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Maximal skevning måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:104
-#, fuzzy
 msgid "Minimum Width cannot be greater than Preferred Width"
-msgstr "Linjebredden måste vara större än noll."
+msgstr "Minsta bredd kan inte vara större än önskad bredd"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:107
-#, fuzzy
 msgid "Preferred Width cannot be greater than Maximum Width"
-msgstr ""
-"Bredd på eker för termisk avlastning kan inte vara mindre än minsta bredd."
+msgstr "Önskad bredd kan inte vara större än största bredd"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:110
-#, fuzzy
 msgid "Minimum Width cannot be greater than Maximum Width"
-msgstr ""
-"Bredd på eker för termisk avlastning kan inte vara mindre än minsta bredd."
+msgstr "Minsta bredd kan inte vara större än största bredd"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:113
 msgid "Minimum Gap cannot be greater than Preferred Gap"
-msgstr ""
+msgstr "Minsta mellanrum kan inte vara större än önskat mellanrum"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:116
 msgid "Preferred Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "Önskat mellanrum kan inte vara större än största mellanrum"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:119
 msgid "Minimum Gap cannot be greater than Maximum Gap"
-msgstr ""
+msgstr "Minsta mellanrum kan inte vara större än största mellanrum"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:91
-#, fuzzy
 msgid "Minimum Via Diameter must be greater than 0"
-msgstr "Målimpedans måste vara större än noll"
+msgstr "Minsta viadiameter måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:94
-#, fuzzy
 msgid "Maximum Via Diameter must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Största viadiameter måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:98
-#, fuzzy
 msgid "Minimum Via Hole Size must be greater than 0"
-msgstr "Signallagrets tjocklek måste vara större än noll"
+msgstr "Minsta håldiameter måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:101
-#, fuzzy
 msgid "Maximum Via Hole Size must be greater than 0"
-msgstr "Radien måste vara större än noll"
+msgstr "Största håldiameter måste vara större än noll"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:104
-#, fuzzy
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "Via diameter mindre än minsta via diameter (%s)."
+msgstr "Minsta viadiameter kan inte vara större än största viadiameter"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:107
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
-msgstr ""
+msgstr "Minsta viahåldiameter kan inte vara större än största viahåldiameter"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:336
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:378
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:573
-#, fuzzy, c-format
+#, c-format
 msgid "%s should not be empty."
-msgstr "Sökväg kan inte vara tom."
+msgstr "%s borde inte vara tom."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:343
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:605
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid number."
-msgstr "Skala måste vara ett positivt tal."
+msgstr "Värdet för %s måste vara ett giltigt tal."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:350
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:392
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:559
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:593
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:611
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be greater than 0."
-msgstr "Radien måste vara större än noll."
+msgstr "Värdet för %s måste vara större än noll."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:385
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:587
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "The value of %s must be a valid integer."
-msgstr "Fältets värde kan inte utelämnas."
+msgstr "Värdet för %s måste vara ett giltigt heltal."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:419
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose %s."
-msgstr "Vänligen välj en giltig nätliste-fil."
+msgstr "Vänligen välj %s."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:449
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:486
@@ -47499,69 +47455,62 @@ msgstr "Vänligen välj en giltig nätliste-fil."
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:653
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:659
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:665
-#, fuzzy, c-format
+#, c-format
 msgid "%s value cannot be greater than %s value."
-msgstr "Bågvinkeln måste vara större än 0"
+msgstr "Värdet för %s kan inte vara större än värdet för %s."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:535
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Please select at least one option from %s list."
-msgstr "Vänligen välj en fil att importera."
+msgstr "Vänligen välj minst ett alternativ från listan över %s."
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:42
 msgid "Rule type"
 msgstr "Regeltyp"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "Byt Namn"
+msgstr "Regelnamn"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:394
-#, fuzzy
 msgid "Rule name must be unique."
-msgstr "Submodellnamnet är inte unikt. "
+msgstr "Regelnamnet måste vara unikt."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:402
-#, fuzzy
 msgid "Layer selection is required."
-msgstr "Lagval:"
+msgstr "Ett urval av lager behövs."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:874
 msgid "ERROR: No condition text provided for validation."
-msgstr ""
+msgstr "FEL: Ingen villkorstext har tillhandahållits för kontroll."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:885
-#, fuzzy
 msgid "DRC rule"
-msgstr "DRC regler"
+msgstr "Designregel"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:993
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "Visa alla fel"
+msgstr "Visa matchningar (fel)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "Färgteman (%d)"
+msgstr "Visa matchningar (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1005
-#, fuzzy
 msgid "Show Matches"
-msgstr "Visa ledare"
+msgstr "Visa matchningar"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1019
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1061
-#, fuzzy
 msgid "outer"
-msgstr "Ej ledningsdragna"
+msgstr "yttre"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1021
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1063
 msgid "inner"
-msgstr ""
+msgstr "inre"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:52
 #, fuzzy
