@@ -4328,7 +4328,10 @@ void BOARD_BUILDER::applyZoneFills()
 
                 // Check that the fill is approximately fully contained within the zone outline
                 SHAPE_POLY_SET fillCut( fillPolySet );
-                fillCut.BooleanSubtract( *zone->Outline() );
+                SHAPE_POLY_SET zoneOutline = *zone->Outline();
+
+                zoneOutline.ClearArcs();
+                fillCut.BooleanSubtract( zoneOutline );
 
                 if( fillCut.Area() > 1 )
                     continue;
