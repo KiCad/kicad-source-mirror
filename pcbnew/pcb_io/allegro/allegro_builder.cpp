@@ -3301,31 +3301,31 @@ void BOARD_BUILDER::createBoardShapes()
 
     // Walk through LL_0x24_0x28 which contains rectangles (0x24) and shapes (0x28)
     const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_0x24_0x28, m_brdDb );
-    int             shapeCount = 0;
+    int             blockCount = 0;
 
-    std::vector<std::unique_ptr<BOARD_ITEM>> outlineItems;
+    std::vector<std::unique_ptr<BOARD_ITEM>> newItems;
 
     for( const BLOCK_BASE* block : shapeWalker )
     {
-        shapeCount++;
+        blockCount++;
 
         switch( block->GetBlockType() )
         {
         case 0x24:
         {
-            const BLK_0x24_RECT& rectData = static_cast<const BLOCK<BLK_0x24_RECT>&>( *block ).GetData();
+            const BLK_0x24_RECT& rectData = BlockDataAs<BLK_0x24_RECT>( *block );
 
             // These are zones, we don't handle them here
             if( layerIsZone( rectData.m_Layer ) )
                 continue;
 
             std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
-            outlineItems.push_back( std::move( rectShape ) );
+            newItems.push_back( std::move( rectShape ) );
             break;
         }
         case 0x28:
         {
-            const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+            const BLK_0x28_SHAPE& shapeData = BlockDataAs<BLK_0x28_SHAPE>( *block );
 
             // These are zones, we don't handle them here
             if( layerIsZone( shapeData.m_Layer ) )
@@ -3334,7 +3334,7 @@ void BOARD_BUILDER::createBoardShapes()
             std::vector<std::unique_ptr<PCB_SHAPE>> shapeItems = buildPolygonShapes( shapeData, m_board );
 
             for( auto& shapeItem : shapeItems )
-                outlineItems.push_back( std::move( shapeItem ) );
+                newItems.push_back( std::move( shapeItem ) );
             break;
         }
         default:
@@ -3345,8 +3345,98 @@ void BOARD_BUILDER::createBoardShapes()
         }
     }
 
+    wxLogTrace( traceAllegroBuilder, "  Found %d shape blocks", blockCount, newItems.size() );
+    blockCount = 0;
+
+    LL_WALKER outline2Walker( m_brdDb.m_Header->m_LL_Shapes, m_brdDb );
+    for( const BLOCK_BASE* block : outline2Walker )
+    {
+        blockCount++;
+
+        // Skip boundary layer shapes - these are handled in the zones phase
+        const auto shouldSkip = []( const LAYER_INFO& aLayer ) -> bool
+        {
+            return aLayer.m_Class == LAYER_INFO::CLASS::BOUNDARY;
+        };
+
+        switch( block->GetBlockType() )
+        {
+        case 0x0E:
+        {
+            const BLK_0x0E_RECT& rectData = BlockDataAs<BLK_0x0E_RECT>( *block );
+
+            if( shouldSkip( rectData.m_Layer ) )
+                continue;
+
+            std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            newItems.push_back( std::move( rectShape ) );
+            break;
+        }
+        case 0x24:
+        {
+            const BLK_0x24_RECT& rectData = BlockDataAs<BLK_0x24_RECT>( *block );
+
+            if( shouldSkip( rectData.m_Layer ) )
+                continue;
+
+            std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            newItems.push_back( std::move( rectShape ) );
+            break;
+        }
+        case 0x28:
+        {
+            const BLK_0x28_SHAPE& shapeData = BlockDataAs<BLK_0x28_SHAPE>( *block );
+
+            if( shouldSkip( shapeData.m_Layer ) )
+                continue;
+
+            std::vector<std::unique_ptr<PCB_SHAPE>> shapeItems = buildPolygonShapes( shapeData, m_board );
+
+            for( auto& shapeItem : shapeItems )
+                newItems.push_back( std::move( shapeItem ) );
+            break;
+        }
+        default:
+        {
+            wxLogTrace( traceAllegroBuilder, "  Unhandled block type in outline walker: %#04x", block->GetBlockType() );
+            break;
+        }
+        }
+    }
+
+    wxLogTrace( traceAllegroBuilder, "  Found %d outline items in m_LL_Shapes", blockCount );
+    blockCount = 0;
+
+    LL_WALKER graphicContainerWalker( m_brdDb.m_Header->m_LL_0x14, m_brdDb );
+    for( const BLOCK_BASE* block : graphicContainerWalker )
+    {
+        blockCount++;
+
+        switch( block->GetBlockType() )
+        {
+        case 0x14:
+        {
+            const auto& graphicContainer = BlockDataAs<BLK_0x14_GRAPHIC>( *block );
+
+            std::vector<std::unique_ptr<PCB_SHAPE>> graphicItems = buildShapes( graphicContainer, m_board );
+
+            for( auto& item : graphicItems )
+                newItems.push_back( std::move( item ) );
+            break;
+        }
+        default:
+        {
+            wxLogTrace( traceAllegroBuilder, "  Unhandled block type in graphic container walker: %#04x",
+                        block->GetBlockType() );
+            break;
+        }
+        }
+    }
+
+    wxLogTrace( traceAllegroBuilder, "  Found %d graphic container items", blockCount );
+
     std::vector<BOARD_ITEM*> addedItems;
-    for( std::unique_ptr<BOARD_ITEM>& item : outlineItems )
+    for( std::unique_ptr<BOARD_ITEM>& item : newItems )
     {
         addedItems.push_back( item.get() );
         m_board.Add( item.release(), ADD_MODE::BULK_APPEND );
@@ -3354,7 +3444,7 @@ void BOARD_BUILDER::createBoardShapes()
 
     m_board.FinalizeBulkAdd( addedItems );
 
-    wxLogTrace( traceAllegroBuilder, "Found %d shape items, created %zu board shapes", shapeCount, addedItems.size() );
+    wxLogTrace( traceAllegroBuilder, "Created %zu board shapes", addedItems.size() );
 }
 
 
