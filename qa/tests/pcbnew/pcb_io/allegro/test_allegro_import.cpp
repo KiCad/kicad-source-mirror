@@ -34,6 +34,7 @@
 #include <pcbnew/pcb_io/allegro/pcb_io_allegro.h>
 
 #include <board.h>
+#include <geometry/shape_utils.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -259,6 +260,105 @@ BOOST_AUTO_TEST_CASE( PadNumbers )
 }
 
 
+static unsigned CountOutlineElements( const BOARD& board )
+{
+    unsigned count = 0;
+    for( const BOARD_ITEM* item : board.Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+
+static void AssertOutlineValid( const BOARD& aBoard )
+{
+    // Verify outline forms a closed contour by checking that all segments connect
+    std::vector<SEG> outlineSegs;
+
+    for( BOARD_ITEM* item : aBoard.Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            switch( shape->GetShape() )
+            {
+            case SHAPE_T::SEGMENT:
+            case SHAPE_T::ARC:
+            case SHAPE_T::BEZIER:
+            {
+                outlineSegs.push_back( SEG( shape->GetStart(), shape->GetEnd() ) );
+                break;
+            }
+            case SHAPE_T::RECTANGLE:
+            {
+                // Rectangles are stored as a single item but represent 4 segments
+                VECTOR2I start = shape->GetStart();
+                VECTOR2I end = shape->GetEnd();
+
+                for( const auto& seg : KIGEOM::BoxToSegs( BOX2I( start, end ) ) )
+                {
+                    outlineSegs.push_back( seg );
+                }
+                break;
+            }
+            case SHAPE_T::POLY:
+            {
+                std::vector<VECTOR2I> polyPoints = shape->GetPolyPoints();
+
+                for( size_t i = 0; i < polyPoints.size() - 1; i++ )
+                {
+                    VECTOR2I start = polyPoints[i];
+                    VECTOR2I end = polyPoints[( i + 1 ) % polyPoints.size()];
+                    outlineSegs.emplace_back( start, end );
+                }
+                break;
+            }
+            case SHAPE_T::CIRCLE:
+                // Not really sure what we can do here? Zero-length seg?
+                outlineSegs.push_back( SEG( shape->GetStart(), shape->GetStart() ) );
+                break;
+            default:
+                BOOST_WARN_MESSAGE(
+                        false, "Unexpected shape type in board outline: " << static_cast<int>( shape->GetShape() ) );
+            }
+        }
+    }
+
+    if( !outlineSegs.empty() )
+    {
+        // For a valid closed outline, the sum of all segment lengths should equal the perimeter
+        // and each endpoint should connect to another endpoint
+        int connectedCount = 0;
+
+        for( const SEG& seg : outlineSegs )
+        {
+            for( const SEG& other : outlineSegs )
+            {
+                if( &other == &seg )
+                    continue;
+
+                // Check if this shape's start connects to another shape's start or end
+                if( seg.A == other.A || seg.A == other.B )
+                    connectedCount++;
+
+                // Check if this shape's end connects to another shape's start or end
+                if( seg.B == other.A || seg.B == other.B )
+                    connectedCount++;
+            }
+        }
+
+        // Each segment should connect at both ends for a closed outline
+        // For 4 segments, we expect 8 connections (2 per segment)
+        BOOST_TEST_MESSAGE( "Connected endpoints: " << connectedCount );
+        BOOST_CHECK_GE( connectedCount, outlineSegs.size() * 2 );
+    }
+}
+
+
 /**
  * Test that board outline is imported correctly.
  */
@@ -269,66 +369,14 @@ BOOST_AUTO_TEST_CASE( BoardOutline )
     BOOST_REQUIRE( board != nullptr );
 
     // Count shapes on Edge_Cuts layer
-    int outlineSegmentCount = 0;
+    int outlineSegmentCount = CountOutlineElements( *board );
 
-    for( BOARD_ITEM* item : board->Drawings() )
-    {
-        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
-        {
-            outlineSegmentCount++;
-        }
-    }
-
-    BOOST_TEST_MESSAGE( "Board outline segments: " << outlineSegmentCount );
+    BOOST_TEST_MESSAGE( "Board outline elements: " << outlineSegmentCount );
 
     // Board should have an outline - TRS80_POWER.brd has a rectangular outline (4 segments)
-    BOOST_CHECK_GE( outlineSegmentCount, 4 );
+    BOOST_CHECK_GE( outlineSegmentCount, 1 );
 
-    // Verify outline forms a closed contour by checking that all segments connect
-    std::vector<PCB_SHAPE*> outlineShapes;
-
-    for( BOARD_ITEM* item : board->Drawings() )
-    {
-        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
-        {
-            outlineShapes.push_back( static_cast<PCB_SHAPE*>( item ) );
-        }
-    }
-
-    if( !outlineShapes.empty() )
-    {
-        // For a valid closed outline, the sum of all segment lengths should equal the perimeter
-        // and each endpoint should connect to another endpoint
-        int connectedCount = 0;
-
-        for( PCB_SHAPE* shape : outlineShapes )
-        {
-            VECTOR2I start = shape->GetStart();
-            VECTOR2I end = shape->GetEnd();
-
-            for( PCB_SHAPE* other : outlineShapes )
-            {
-                if( other == shape )
-                    continue;
-
-                VECTOR2I otherStart = other->GetStart();
-                VECTOR2I otherEnd = other->GetEnd();
-
-                // Check if this shape's start connects to another shape's start or end
-                if( start == otherStart || start == otherEnd )
-                    connectedCount++;
-
-                // Check if this shape's end connects to another shape's start or end
-                if( end == otherStart || end == otherEnd )
-                    connectedCount++;
-            }
-        }
-
-        // Each segment should connect at both ends for a closed outline
-        // For 4 segments, we expect 8 connections (2 per segment)
-        BOOST_TEST_MESSAGE( "Connected endpoints: " << connectedCount );
-        BOOST_CHECK_GE( connectedCount, outlineShapes.size() * 2 );
-    }
+    AssertOutlineValid( *board );
 }
 
 
