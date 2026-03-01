@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:08+0300\n"
-"PO-Revision-Date: 2026-02-28 01:10+0000\n"
+"PO-Revision-Date: 2026-03-01 06:35+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -17961,9 +17961,8 @@ msgid "Manage Data Sources..."
 msgstr "Zarządzaj bibliotekami symboli..."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:124
-#, fuzzy
 msgid "No data sources are currently installed."
-msgstr "Trasowanie DXF nie jest obecnie obsługiwane."
+msgstr "Żadne z źródeł danych nie jest obecnie zainstalowane."
 
 #: eeschema/dialogs/panel_sch_data_sources.cpp:137
 msgid "Installed data sources are listed above."
@@ -23278,7 +23277,7 @@ msgstr "Brak wartości Submodel_type."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2456
 msgid " is not a recognised Submodel subparameter."
-msgstr ""
+msgstr " nie został rozpoznany jako subparametr submodelu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2616
 msgid "A [Package] line requires exactly 4 elements."
@@ -23482,6 +23481,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
+"Symulacja przerwana (%s). Powodem jest najczęściej błąd w ngspica lub błędną "
+"listą sieci. Symulacja zostanie zresetowana."
 
 #: eeschema/sim/ngspice.cpp:551
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -23884,6 +23885,8 @@ msgstr "Kursor 2"
 msgid ""
 "Workbook file '%s' not found. Loading simulation settings from schematic."
 msgstr ""
+"Skoroszyt '%s' nie został znaleziony. Ładowanie ustawień symulacji ze "
+"schematu."
 
 #: eeschema/sim/simulator_frame_ui.cpp:1437
 #: eeschema/sim/simulator_frame_ui.cpp:3211
@@ -24572,6 +24575,8 @@ msgid ""
 "Deleting a base symbol will delete all symbols derived from it.\n"
 "\n"
 msgstr ""
+"Usunięcie symbolu bazowego spowoduje usunięcia jego symboli potomnych.\n"
+"\n"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1269
 msgid " (base)\n"
@@ -24652,7 +24657,7 @@ msgstr "Nie można zaimportować symbolu '%s': %s"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:158
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
-msgstr ""
+msgstr "Zaimportowano %d symboli, pominięto %d."
 
 #: eeschema/symbol_library_manager.cpp:179
 #, fuzzy, c-format
@@ -24948,6 +24953,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
+"Można by zamienić %s pinów %s oraz %s, aby dopasować je do PCB, ale symbol "
+"jest współdzielony w innych projektach."
 
 #: eeschema/tools/backannotate.cpp:1260
 #, c-format
@@ -24955,6 +24962,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
+"Można by zamienić %s pinów %s oraz %s, aby dopasować je do PCB, ale symbol "
+"jest współdzielony w innych projektach (%s)."
 
 #: eeschema/tools/backannotate.cpp:1270
 #, c-format
@@ -24962,11 +24971,15 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
+"Można by zamienić %s pinów %s oraz %s, aby dopasować je do PCB, ale symbol "
+"jest użyty w wielu instancjach schematu (%s)."
 
 #: eeschema/tools/backannotate.cpp:1278
 #, c-format
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
 msgstr ""
+"Można by zamienić %s pinów %s oraz %s, aby dopasować je do PCB, ale symbol "
+"jest współdzielony."
 
 #: eeschema/tools/backannotate.cpp:1285
 #, c-format
@@ -24974,11 +24987,13 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
 msgstr ""
+"Można by zamienić %s pinów %s oraz %s, aby dopasować je do PCB, ale "
+"bezwarunkowa opcja zamiany pinów jest wyłączona w ustawieniach."
 
 #: eeschema/tools/backannotate.cpp:1321
 #, c-format
 msgid "Swap %s pins %s and %s to match PCB."
-msgstr ""
+msgstr "Zamieniam %s pinów %s oraz %s, aby dopasować je do PCB."
 
 #: eeschema/tools/backannotate.cpp:1396
 #, c-format
@@ -25003,7 +25018,7 @@ msgstr "Rysuj strefę z regułami"
 
 #: eeschema/tools/sch_actions.cpp:51
 msgid "Show the electrical rules checker window"
-msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych schematu"
 
 #: eeschema/tools/sch_actions.cpp:57
 msgid "Symbol Checker"
@@ -25235,7 +25250,7 @@ msgstr "Edycja pól symboli..."
 
 #: eeschema/tools/sch_actions.cpp:297
 msgid "Edit a table of fields from all symbols related to the selected symbol"
-msgstr ""
+msgstr "Edycja tabeli pól ze wszystkich symboli powiązanych z wybranym symbolem"
 
 #: eeschema/tools/sch_actions.cpp:303
 msgid "Add Symbol to Schematic"
@@ -25779,15 +25794,17 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
+"Konwertuj powtórzone piny w tym samym miejscu na pojedynczy pin za pomocą "
+"notacji skumulowanej"
 
 #: eeschema/tools/sch_actions.cpp:997
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1473
 msgid "Explode Stacked Pin"
-msgstr ""
+msgstr "Rozszerz skumulowany pin"
 
 #: eeschema/tools/sch_actions.cpp:998
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr ""
+msgstr "Konwertuj skumulowane piny na indywidualne powtórzone piny"
 
 #: eeschema/tools/sch_actions.cpp:1004
 msgid "Break"
@@ -26708,9 +26725,8 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_table_tool.cpp:146
 #: pcbnew/tools/pcb_edit_table_tool.cpp:187
-#, fuzzy
 msgid "Export Error"
-msgstr "Eksportuj w formacie STEP"
+msgstr "Eksportuj błąd"
 
 #: eeschema/tools/sch_edit_tool.cpp:87
 msgid "Symbol Unit"
@@ -26762,6 +26778,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
+"Zamiana pinów jest wyłączona dla symboli współdzielonych w innych "
+"projektach. Powiel arkusz, aby edytować piny niezależnie."
 
 #: eeschema/tools/sch_edit_tool.cpp:1592
 #, c-format
@@ -26769,6 +26787,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Zamiana pinów jest wyłączona dla symboli współdzielonych w innych projektach "
+"(%s). Powiel arkusz, aby edytować piny niezależnie."
 
 #: eeschema/tools/sch_edit_tool.cpp:1602
 #, c-format
@@ -26776,24 +26796,32 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Zamiana pinów jest wyłączona dla symboli użytych wielokrotnie w wielu "
+"instancjach arkusza (%s). Powiel arkusz, aby edytować piny niezależnie."
 
 #: eeschema/tools/sch_edit_tool.cpp:1609
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
+"Zamiana pinów jest wyłączona dla symboli współdzielonych. Powiel arkusz, aby "
+"edytować piny niezależnie."
 
 #: eeschema/tools/sch_edit_tool.cpp:1753
 msgid ""
 "Each selected pin must have exactly one attached net label and no other pin "
 "connections."
 msgstr ""
+"Każdy wybrany pin musi posiadać dokładnie jedną przypiętą etykietę i żadnych "
+"innych połączeń z innymi pinami."
 
 #: eeschema/tools/sch_edit_tool.cpp:1809
 msgid ""
 "Each pin of selected units must have exactly one attached net label and no "
 "other pin connections."
 msgstr ""
+"Każdy pin w wybranej części składowej musi posiadać dokładnie jedną "
+"przypiętą etykietę i żadnych innych połączeń z innymi pinami."
 
 #: eeschema/tools/sch_edit_tool.cpp:1902
 msgid "Label value cannot go below zero"
@@ -26878,6 +26906,7 @@ msgstr "Uwzględnij porty zasilania przy eksporcie"
 #: eeschema/tools/sch_editor_control.cpp:658
 msgid "Update schematic symbols to link to exported symbols"
 msgstr ""
+"Uaktualnij symbole na schemacie by połączyć je z eksportowanymi symbolami"
 
 #: eeschema/tools/sch_editor_control.cpp:1064
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -27209,10 +27238,11 @@ msgstr "Edycja pinów"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1190
 msgid "At least two pins are needed to convert to stacked pins"
 msgstr ""
+"Muszą wystąpić co najmniej dwa piny by móc je skonwertować na pin skumulowany"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1200
 msgid "All pins must be at the same location"
-msgstr ""
+msgstr "Wszystkie piny muszą być w tej samej lokacji"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1385
 #, c-format
@@ -28745,7 +28775,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
-msgstr "Odczytaj plik archiwum ZIP..."
+msgstr "Otwórz plik archiwum ZIP..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
@@ -29224,7 +29254,7 @@ msgstr "Biblioteka footprintów nie istnieje lub nie jest dostępna\n"
 msgid "Upgrades the footprint library to the current kicad version format"
 msgstr ""
 "Aktualizuje bibliotekę footprintów do bieżącego formatu bibliotek programu "
-"KiCAD"
+"KiCad"
 
 #: kicad/cli/command_fp_upgrade.cpp:41
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -30303,7 +30333,7 @@ msgstr "Plik z symbolem nie istnieje lub nie masz do niego dostępu\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
 msgid "Upgrades the symbol library to the current kicad version format"
-msgstr "Aktualizuje bibliotekę symboli do bieżącego formatu programu KiCAD"
+msgstr "Aktualizuje bibliotekę symboli do bieżącego formatu programu KiCad"
 
 #: kicad/cli/command_sym_upgrade.cpp:44
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -31005,9 +31035,8 @@ msgid "Export STEPZ"
 msgstr "Eksportuj w formacie STEPZ"
 
 #: kicad/kicad_cli.cpp:141
-#, fuzzy
 msgid "Export U3D"
-msgstr "Eksportuj DXF"
+msgstr "Eksportuj U3D"
 
 #: kicad/kicad_cli.cpp:166
 msgid "Export PS"
@@ -31616,7 +31645,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"Nie można załadować URL %s\n"
+"Nie można załadować URL %s \n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -32102,9 +32131,8 @@ msgid "Restore Project from Local History..."
 msgstr "Klonuj projekt z repozytorium..."
 
 #: kicad/tools/kicad_manager_actions.cpp:239
-#, fuzzy
 msgid "Restore project files from local history"
-msgstr "Rozpakowuje pliki projektu z archiwum ZIP"
+msgstr "Przywraca pliki projektu z lokalnej historii plików"
 
 #: kicad/tools/kicad_manager_actions.cpp:246
 #, fuzzy
@@ -33236,9 +33264,9 @@ msgid ""
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
-"Biorąc pod uwagę napięcie znamionowe i kategorię OVC, urządzenie powinno "
-"wytrzymać tę wartość bez uszkodzenia izolacji. To napięcie impulsowe jest "
-"falą standardową 1,2/50µs"
+"Biorąc pod uwagę napięcie znamionowe i kategorię przepięć, urządzenie "
+"powinno wytrzymać tę wartość bez uszkodzenia izolacji. To napięcie impulsowe "
+"jest falą standardową 1,2/50µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -39395,7 +39423,7 @@ msgstr "Opóźnienie od pola do krzemu"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:688
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:3264
 msgid "Through-hole"
-msgstr "PTH, Na wylot"
+msgstr "Na wylot"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:126
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:259
@@ -39406,9 +39434,8 @@ msgstr "Złącze"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:128
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:282
-#, fuzzy
 msgid "Aperture"
-msgstr "Apertury SMD"
+msgstr "Apertura"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:559
 #, fuzzy
@@ -40264,7 +40291,8 @@ msgstr "Plik z listą sieci:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Łącz footprinty używając pól \"tstamp\" komponentów (unikalne ID)"
+msgstr ""
+"Łącz footprinty używając pól tstamp komponentów (unikalne identyfikatory)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
@@ -40883,7 +40911,7 @@ msgstr "%s, %s oraz połączone warstwy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1589
 msgid "Error: Through hole pad has no hole."
-msgstr "Błąd: Pole lutownicze THT nie posiada otworu."
+msgstr "Błąd: Pole lutownicze na wylot nie posiada otworu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1594
 msgid "Pad Properties Errors"
@@ -41390,9 +41418,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Podgląd pól lutowniczych jako zarys"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
-#, fuzzy
 msgid "Refill zones before plotting"
-msgstr "Wypełnij wszystkie strefy przed przeprowadzeniem kontroli DRC"
+msgstr "Wypełnij wszystkie strefy przed rysowaniem"
 
 #: pcbnew/dialogs/dialog_plot.cpp:192
 msgid "Plot on All Layers"
@@ -43758,7 +43785,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
-msgstr "Gdy dodawane są footprinty na PCB"
+msgstr "Gdy dodawane są footprinty na płytkę"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Apply board defaults to footprint fields"
@@ -46519,7 +46546,7 @@ msgstr "Typ footprintu nie odpowiada polom footprintu"
 
 #: pcbnew/drc/drc_item.cpp:294
 msgid "Through hole pad has no hole"
-msgstr "Pole lutownicze THT nie posiada otworu"
+msgstr "Pole lutownicze na wylot nie posiada otworu"
 
 #: pcbnew/drc/drc_item.cpp:298
 msgid "Mirrored text on front layer"
@@ -55538,11 +55565,13 @@ msgid "Target area total components: %d"
 msgstr "Komponentów w sumie na obszarze docelowym: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:1504
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "Wystąpił błąd przy parsowaniu listy komponentów: %s"
+msgstr ""
+"Komponentów na obszarze docelowym: \n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1556
 #, fuzzy
@@ -55833,7 +55862,7 @@ msgstr "Zamyka tworzony właśnie obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:464
 msgid "Show the design rules checker window"
-msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych PCB"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych"
 
 #: pcbnew/tools/pcb_actions.cpp:473
 msgid "Add selected design block to current board"
