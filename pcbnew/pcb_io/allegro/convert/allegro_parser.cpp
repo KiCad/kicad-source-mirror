@@ -277,9 +277,16 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
 
         switch( units )
         {
-        case BOARD_UNITS::IMPERIAL:
-        case BOARD_UNITS::METRIC: header->m_BoardUnits = static_cast<BOARD_UNITS>( units ); break;
-        default: THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
+        case BOARD_UNITS::MILS:
+        case BOARD_UNITS::INCHES:
+        case BOARD_UNITS::MILLIMETERS:
+        case BOARD_UNITS::CENTIMETERS:
+        case BOARD_UNITS::MICROMETERS:
+            header->m_BoardUnits = static_cast<BOARD_UNITS>( units );
+            break;
+
+        default:
+            THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
         }
 
         m_stream.Skip( 3 );

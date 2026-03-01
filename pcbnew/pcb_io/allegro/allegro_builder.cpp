@@ -37,6 +37,7 @@
 
 #include <core/profile.h>
 
+#include <base_units.h>
 #include <board_design_settings.h>
 #include <geometry/shape_utils.h>
 #include <project/net_settings.h>
@@ -884,15 +885,23 @@ BOARD_BUILDER::BOARD_BUILDER( const BRD_DB& aRawBoard, BOARD& aBoard, REPORTER& 
         m_layerMappingHandler( aLayerMappingHandler ),
         m_layerMapper( std::make_unique<LAYER_MAPPER>( m_brdDb, m_board, m_layerMappingHandler ) )
 {
-    // Internal coordinates are always stored in mils / divisor, regardless of the
-    // "board units" flag (which controls UI display only, not internal storage).
-    // 1 mil = 25400 nm (KiCad internal units are nanometers).
-    static constexpr double NM_PER_MIL = 25400.0;
+    // Internal coordinates are stored in <base> / <divisor> units.
+
+    const std::map<BOARD_UNITS, int> c_baseScales = { { BOARD_UNITS::MILS, pcbIUScale.MilsToIU( 1 ) },
+                                                      { BOARD_UNITS::INCHES, pcbIUScale.MilsToIU( 1000 ) },
+                                                      { BOARD_UNITS::MILLIMETERS, pcbIUScale.mmToIU( 1 ) },
+                                                      { BOARD_UNITS::CENTIMETERS, pcbIUScale.mmToIU( 10 ) },
+                                                      { BOARD_UNITS::MICROMETERS, pcbIUScale.mmToIU( 0.001 ) } };
 
     if( m_brdDb.m_Header->m_UnitsDivisor == 0 )
         THROW_IO_ERROR( "Board units divisor is 0" );
 
-    m_scale = NM_PER_MIL / m_brdDb.m_Header->m_UnitsDivisor;
+    if( !c_baseScales.contains( m_brdDb.m_Header->m_BoardUnits ) )
+        THROW_IO_ERROR( "Unknown board units" );
+
+    double baseScale( c_baseScales.at( m_brdDb.m_Header->m_BoardUnits ) );
+
+    m_scale = baseScale / m_brdDb.m_Header->m_UnitsDivisor;
 }
 
 

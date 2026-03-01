@@ -206,8 +206,11 @@ struct COND_GE_LT : public COND_FIELD_BASE<T>
 
 enum BOARD_UNITS
 {
-    IMPERIAL = 0x01,
-    METRIC = 0x03,
+    MILS = 0x01,
+    INCHES = 0x02,
+    MILLIMETERS = 0x03,
+    CENTIMETERS = 0x04,
+    MICROMETERS = 0x05,
 };
 
 
