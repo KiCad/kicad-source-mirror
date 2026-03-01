@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-02-28 02:09+0000\n"
+"PO-Revision-Date: 2026-03-01 17:37+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -14668,7 +14668,7 @@ msgid ""
 msgstr ""
 "Det här är användbart för att lägga till symboler kopplade till fotavtryck "
 "på mönsterkortet som man inte vill få\n"
-"med i komponentlistan för bestyckning (BOM), till exempel optiska riktmärken "
+"med i komponentlistan för bestyckning, till exempel optiska riktmärken "
 "(siktmärken) och logotyper"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -15025,7 +15025,7 @@ msgstr "Användarkonfiguration"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "Spice"
-msgstr "SPICE"
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
@@ -18886,7 +18886,7 @@ msgstr "Objekt av typ \"blanket\" stöds för närvarande inte."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Okänt eller oväntat post-ID %d funnet i %s."
+msgstr "Okänt eller oväntat post-id %d funnet i %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1607
 #, c-format
@@ -26488,9 +26488,8 @@ msgid "Generate report of drill hits"
 msgstr "Generera karta / översikt över borrträffar"
 
 #: kicad/cli/command_pcb_export_drill.cpp:100
-#, fuzzy
 msgid "Report output file path"
-msgstr "Välj utmatningssökväg"
+msgstr "Sökväg för rapportfil"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -26534,6 +26533,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Varning: Rapportfilssökväg given utan --generate-report, ingen rapport "
+"kommer att skapas\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -44355,9 +44356,10 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Kopparzon '%s' har inga lödytor anslutna."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna."
+msgstr ""
+"Kopparzon på lager %s vid (%s, %s) har inga lödytor anslutna till nät \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
