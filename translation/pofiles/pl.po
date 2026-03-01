@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-25 01:09+0300\n"
-"PO-Revision-Date: 2026-02-23 06:09+0000\n"
+"PO-Revision-Date: 2026-03-01 06:35+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -22894,7 +22894,7 @@ msgstr "Rysuj strefę z regułami"
 
 #: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
-msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych schematu"
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
@@ -25900,7 +25900,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
-msgstr "Odczytaj plik archiwum ZIP..."
+msgstr "Otwórz plik archiwum ZIP..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
@@ -26323,7 +26323,7 @@ msgstr "Biblioteka footprintów nie istnieje lub nie jest dostępna\n"
 msgid "Upgrades the footprint library to the current kicad version format"
 msgstr ""
 "Aktualizuje bibliotekę footprintów do bieżącego formatu bibliotek programu "
-"KiCAD"
+"KiCad"
 
 #: kicad/cli/command_fp_upgrade.cpp:40
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -27247,7 +27247,7 @@ msgstr "Plik z symbolem nie istnieje lub nie masz do niego dostępu\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
 msgid "Upgrades the symbol library to the current kicad version format"
-msgstr "Aktualizuje bibliotekę symboli do bieżącego formatu programu KiCAD"
+msgstr "Aktualizuje bibliotekę symboli do bieżącego formatu programu KiCad"
 
 #: kicad/cli/command_sym_upgrade.cpp:44
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -28253,7 +28253,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"Nie można załadować URL %s\n"
+"Nie można załadować URL %s \n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -29859,9 +29859,9 @@ msgid ""
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
-"Biorąc pod uwagę napięcie znamionowe i kategorię OVC, urządzenie powinno "
-"wytrzymać tę wartość bez uszkodzenia izolacji. To napięcie impulsowe jest "
-"falą standardową 1,2/50µs"
+"Biorąc pod uwagę napięcie znamionowe i kategorię przepięć, urządzenie "
+"powinno wytrzymać tę wartość bez uszkodzenia izolacji. To napięcie impulsowe "
+"jest falą standardową 1,2/50µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -36494,7 +36494,8 @@ msgstr "Plik z listą sieci:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr "Łącz footprinty używając pól \"tstamp\" komponentów (unikalne ID)"
+msgstr ""
+"Łącz footprinty używając pól tstamp komponentów (unikalne identyfikatory)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
@@ -36904,7 +36905,7 @@ msgstr "%s, %s oraz połączone warstwy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1426
 msgid "Error: Through hole pad has no hole."
-msgstr "Błąd: Pole lutownicze THT nie posiada otworu."
+msgstr "Błąd: Pole lutownicze na wylot nie posiada otworu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1431
 msgid "Pad Properties Errors"
@@ -36946,7 +36947,7 @@ msgstr "Typ pola:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2731
 msgid "Through-hole"
-msgstr "PTH, Na wylot"
+msgstr "Na wylot"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "Edge Connector"
@@ -39727,7 +39728,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
-msgstr "Gdy dodawane są footprinty na PCB"
+msgstr "Gdy dodawane są footprinty na płytkę"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:66
 msgid "Apply board defaults to footprint fields"
@@ -41950,7 +41951,7 @@ msgstr "Typ footprintu nie odpowiada polom footprintu"
 
 #: pcbnew/drc/drc_item.cpp:290
 msgid "Through hole pad has no hole"
-msgstr "Pole lutownicze THT nie posiada otworu"
+msgstr "Pole lutownicze na wylot nie posiada otworu"
 
 #: pcbnew/drc/drc_item.cpp:294
 msgid "Mirrored text on front layer"
@@ -49509,7 +49510,7 @@ msgstr "Zamyka tworzony właśnie obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Show the design rules checker window"
-msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych PCB"
+msgstr "Pokazuje okno narzędzia do kontroli reguł projektowych"
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Open in Footprint Editor"
