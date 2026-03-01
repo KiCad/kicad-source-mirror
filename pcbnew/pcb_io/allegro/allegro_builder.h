@@ -268,7 +268,6 @@ private:
     mutable std::unordered_map<uint32_t, SHAPE_LINE_CHAIN> m_segChainCache;
 
     // Conversion factor from internal units to nanometers.
-    // Internal coordinates are in mils / divisor, so scale = 25400 / divisor.
     double m_scale;
 };
 
