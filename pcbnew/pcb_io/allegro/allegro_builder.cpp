@@ -3708,13 +3708,21 @@ SHAPE_POLY_SET ALLEGRO::BOARD_BUILDER::tryBuildZoneShape( const BLOCK_BASE& aBlo
     case 0x0E:
     {
         const auto& rectData = BlockDataAs<BLK_0x0E_RECT>( aBlock );
-        polySet = SHAPE_POLY_SET( buildOutline( rectData ) );
+
+        SHAPE_LINE_CHAIN chain( buildOutline( rectData ) );
+        chain.SetClosed( true );
+
+        polySet = SHAPE_POLY_SET( chain );
         break;
     }
     case 0x24:
     {
         const auto& rectData = BlockDataAs<BLK_0x24_RECT>( aBlock );
-        polySet = SHAPE_POLY_SET( buildOutline( rectData ) );
+
+        SHAPE_LINE_CHAIN chain( buildOutline( rectData ) );
+        chain.SetClosed( true );
+
+        polySet = SHAPE_POLY_SET( chain );
         break;
     }
     case 0x28:
