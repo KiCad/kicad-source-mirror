@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 06:35+0000\n"
+"PO-Revision-Date: 2026-03-01 17:37+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -2331,9 +2331,9 @@ msgstr "Folder '%s' przeznaczony na bloki projektowe nie może zostać usunięty
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Nie znaleziono pliku '%s'."
+msgstr "Nie znaleziono zagnieżdżonej tabeli '%s'."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -4443,9 +4443,8 @@ msgid "Reset Unique Id"
 msgstr "Zresetuj identyfikator instalacji"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "Biblioteki bloków projektowych"
+msgstr "Tabele bibliotek bloków projektowych"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -6078,9 +6077,8 @@ msgstr "Zapisz"
 #: common/dialogs/rule_editor_dialog_base.cpp:472
 #: common/dialogs/rule_editor_dialog_base.cpp:490
 #: kicad/kicad_manager_frame.cpp:973
-#, fuzzy
 msgid "Discard"
-msgstr "Porzuć zmiany"
+msgstr "Porzuć"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:551
 msgid "New Rule"
@@ -6458,9 +6456,8 @@ msgstr "Domyślne ustawienia grafiki"
 
 #: common/eda_base_frame.cpp:1491
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Nazwy warstwy"
+msgstr "Nazwy warstw użytkownika"
 
 #: common/eda_base_frame.cpp:1496 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -8370,7 +8367,6 @@ msgid "Export Board Statistics Job Settings"
 msgstr "Ustawienia zadania eksportu statystyki płytki"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
 msgstr "PCB: Eksport statystyk płytki"
 
@@ -8450,19 +8446,16 @@ msgid "PCB: Perform DRC"
 msgstr "PCB: Przeprowadź kontrolę DRC"
 
 #: common/jobs/job_pcb_import.cpp:59
-#, fuzzy
 msgid "Import PCB"
-msgstr "Importuj"
+msgstr "Importuj PCB"
 
 #: common/jobs/job_pcb_import.cpp:65
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Importuj ustawienia"
+msgstr "Importuj PCB oraz ustawienia zadań"
 
 #: common/jobs/job_pcb_import.cpp:69
-#, fuzzy
 msgid "PCB: Import"
-msgstr "Importuj"
+msgstr "PCB: Import"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -9234,14 +9227,14 @@ msgstr ""
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:944
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Niepoprawny lib_id identyfikatora\n"
+"Niepoprawny lib_id identyfikatora w\n"
 "plik: '%s'\n"
 "linia: %d\n"
 "przesunięcie: %d"
@@ -9658,9 +9651,8 @@ msgid "For help, please visit "
 msgstr "By uzyskać pomoc, proszę odwiedzić "
 
 #: common/startwizard/startwizard.cpp:160
-#, fuzzy
 msgid "KiCad Setup"
-msgstr "Ustawienia projektowe płytki"
+msgstr "Ustawienia programu KiCad"
 
 #: common/startwizard/startwizard.cpp:204
 msgid ""
@@ -9679,9 +9671,8 @@ msgid "Footprint library table"
 msgstr "Tabela bibliotek footprintów"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:117
-#, fuzzy
 msgid "Design Block library table"
-msgstr "Biblioteki bloków projektowych"
+msgstr "Tabela bibliotek bloku projektowego"
 
 #: common/startwizard/startwizard_provider_libraries.cpp:136
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
@@ -9704,9 +9695,8 @@ msgid "Select Settings Path"
 msgstr "Wybierz ścieżkę z plikami ustawień"
 
 #: common/startwizard/startwizard_provider_settings.cpp:183
-#, fuzzy
 msgid "Configuration"
-msgstr "Potwierdzenie"
+msgstr "Konfiguracja"
 
 #: common/tool/action_menu.cpp:224 common/tool/action_menu.cpp:229
 #, c-format
@@ -9719,7 +9709,6 @@ msgid "Quit %s"
 msgstr "Zakończ %s"
 
 #: common/tool/action_toolbar.cpp:1131
-#, fuzzy
 msgid "Grid selector"
 msgstr "Wybór siatki"
 
@@ -9728,7 +9717,6 @@ msgid "Grid Selection box"
 msgstr "Rozwijane menu z wyborem siatki"
 
 #: common/tool/action_toolbar.cpp:1144
-#, fuzzy
 msgid "Zoom selector"
 msgstr "Wybór powiększenia"
 
@@ -9761,19 +9749,16 @@ msgid "Displays the current unit"
 msgstr "Wyświetla obecną jednostkę"
 
 #: common/tool/action_toolbar.cpp:1177
-#, fuzzy
 msgid "Symbol body style selector"
-msgstr "Notacja symboli składowych"
+msgstr "Wybór reprezentacji symbolu"
 
 #: common/tool/action_toolbar.cpp:1178
-#, fuzzy
 msgid "Displays the current body style"
-msgstr "Wyświetla obecną jednostkę"
+msgstr "Wyświetla obecną reprezentację"
 
 #: common/tool/action_toolbar.cpp:1184
-#, fuzzy
 msgid "Allow moving of locked items with the mouse"
-msgstr "Dopuszczaj zaznaczanie zablokowanych elementów"
+msgstr "Dopuszczaj przesuwanie myszą zablokowanych elementów"
 
 #: common/tool/actions.cpp:47
 msgid "New..."
@@ -9974,9 +9959,8 @@ msgid "Paste item(s) from clipboard"
 msgstr "Wklej element(y) ze schowka"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Rysuj prostokąt zaznaczenia"
+msgstr "Używaj prostokątnego zaznaczenia"
 
 #: common/tool/actions.cpp:360
 msgid "Lasso"
@@ -10199,9 +10183,8 @@ msgid "Edit Table..."
 msgstr "Edytuj tabelę..."
 
 #: common/tool/actions.cpp:574
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "Eksportuj jako CSV..."
+msgstr "Eksportuj tabelę jako CSV..."
 
 #: common/tool/actions.cpp:575
 msgid "Export table contents to CSV file with resolved text variables"
@@ -10234,11 +10217,10 @@ msgid "Keep Arc Radius and Center, adjust angle"
 msgstr "Zachowaj promień i punkt centralny łuku, reguluj kąt"
 
 #: common/tool/actions.cpp:601
-#, fuzzy
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
-"Przełącza tryb edycji łuku, aby zachować promień podczas przesuwania punktów "
-"końcowych"
+"Przełącza tryb edycji łuku, aby zachować promień podczas przesuwania punktu "
+"końcowego"
 
 #: common/tool/actions.cpp:608
 msgid "Cycle Arc Editing Mode"
@@ -10933,9 +10915,8 @@ msgid "Footprint Browser"
 msgstr "Przeglądarka footprintów"
 
 #: common/tool/design_block_control.cpp:115
-#, fuzzy
 msgid "New Design Block Library"
-msgstr "Biblioteki bloków projektowych"
+msgstr "Nowa biblioteka bloków projektowych"
 
 #: common/tool/group_tool.cpp:46
 msgid "Grouping"
@@ -11198,9 +11179,8 @@ msgid "View %zu load message(s)"
 msgstr "Podgląd %zu załadowanych wiadomości"
 
 #: common/widgets/kistatusbar.cpp:458
-#, fuzzy
 msgid "Load Messages"
-msgstr "Wiadomości"
+msgstr "Wczytaj wiadomości"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11398,9 +11378,8 @@ msgid "Confirm change"
 msgstr "Potwierdź zmianę"
 
 #: common/widgets/widget_hotkey_list.cpp:534
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(kliknij dwukrotnie by zmienić)"
+msgstr "Polecenie (kliknij dwukrotnie by zmienić)"
 
 #: common/widgets/widget_hotkey_list.cpp:537
 msgid "Hotkey"
@@ -11535,14 +11514,12 @@ msgid "Eagle XML files"
 msgstr "Pliki Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:308
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "Pliki listy sieci PADS"
+msgstr "Pliki PADS ASCII"
 
 #: common/wildcards_and_files_ext.cpp:314
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Zarchiwizuj wszystkie pliki projektu"
+msgstr "Pliki projektów gEDA / Lepton EDA"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "OrcadPCB2 netlist files"
@@ -12026,9 +12003,8 @@ msgstr "Kontrolki filtra footprintów"
 #: eeschema/toolbars_sch_editor.cpp:85 gerbview/toolbars_gerber.cpp:62
 #: pcbnew/toolbars_footprint_editor.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:85 pcbnew/toolbars_pcb_editor.cpp:166
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Wysokość poprzeczki"
+msgstr "Tryby celownika"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
 msgid "View Selected Footprint"
@@ -12222,12 +12198,12 @@ msgid "Unconnected wire to bus entry"
 msgstr "Niepodłączone wejście do magistrali"
 
 #: eeschema/connection_graph.cpp:4370
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Etykieta hierarchiczna \"%s\" arkusza głównego nie może zostać połączona do "
+"Etykieta hierarchiczna '%s' arkusza głównego nie może zostać połączona do "
 "nieistniejącego arkusza nadrzędnego"
 
 #: eeschema/connection_graph.cpp:4436
@@ -12330,9 +12306,8 @@ msgid "Reset existing annotations"
 msgstr "Resetuj bieżącą numerację"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Grupuj symbole"
+msgstr "Przegrupuj części składowe symboli"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
@@ -13031,28 +13006,25 @@ msgstr ""
 "niekompletne."
 
 #: eeschema/dialogs/dialog_erc.cpp:230 pcbnew/dialogs/dialog_drc.cpp:295
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Wybrane elementy"
+msgstr "Wybrane sondowane elementy"
 
 #: eeschema/dialogs/dialog_erc.cpp:231
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Podświetla symbole odpowiadające wybranym footprintom"
+msgstr ""
+"Podświetla symbole na kanwie odpowiadające wybranym elementom na liście ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:235 pcbnew/dialogs/dialog_drc.cpp:300
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Wycentruj w miejscu kursora"
+msgstr "Wycentruj w miejscu sondowania"
 
 #: eeschema/dialogs/dialog_erc.cpp:236 pcbnew/dialogs/dialog_drc.cpp:301
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr "Podczas sondowania, przesuń kanwę by element sondowany był widoczny"
 
 #: eeschema/dialogs/dialog_erc.cpp:240
-#, fuzzy
 msgid "Show all errors"
-msgstr "Pokaż wszystkie wersje"
+msgstr "Pokaż wszystkie błędy"
 
 #: eeschema/dialogs/dialog_erc.cpp:241
 msgid "Show duplicate ERC markers on all applicable pins"
@@ -13082,7 +13054,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d symboli wymaga ponumerowania.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:540
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC przerwany przez użytkownika.<br><br>"
 
@@ -13494,7 +13465,6 @@ msgid "Show field name"
 msgstr "Pokaż nazwę pola"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "Pokaż nazwę pola jako dodatek do jego wartości"
 
@@ -41397,19 +41367,17 @@ msgstr "Liczba"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284 pcbnew/pcb_track.cpp:3179
-#, fuzzy
 msgid "Backdrill"
-msgstr "Wypełnienie drugoplanowe"
+msgstr "Owiert odwrotny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
-#, fuzzy
 msgid "Top & bottom"
-msgstr "Góra/dół"
+msgstr "Góra i dół"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:461
 msgid "Top backdrill must-cut:"
-msgstr ""
+msgstr "Górny owiert odwrotny musi przeciąć:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1215
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
@@ -41417,24 +41385,22 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1253
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:498
 msgid "The backdrill must pass through this layer"
-msgstr ""
+msgstr "Górny owiert odwrotny musi być przeprowadzony przez tą warstwę"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Top backdrill size:"
-msgstr "Brak znacznika wiercenia"
+msgstr "Rozmiar górnego owiertu odwrotnego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
 msgid "Bottom backdrill must-cut:"
-msgstr ""
+msgstr "Dolny owiert odwrotny musi przeciąć:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Bottom backdrill size:"
-msgstr "Opisowa dolna"
+msgstr "Rozmiar dolnego owiertu odwrotnego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
@@ -47971,9 +47937,8 @@ msgid "Minimum Gap cannot be greater than Maximum Gap"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:139
-#, fuzzy
 msgid "At least one constraint must be specified"
-msgstr "Musi zostać określona przynajmniej jedna warstwa\n"
+msgstr "Musi zostać określone przynajmniej jedno ograniczenie"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:87
 #, fuzzy
@@ -50084,8 +50049,8 @@ msgstr "Strefa miedzi '%s' nie ma połączenia z żadnym polem."
 #, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
-"Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma połączenia z żadnym "
-"polem sieci \"%s\"."
+"Strefa miedzi na warstwie %s na pozycji (%s, %s) nie ma żadnych pól "
+"połączonych z siecią \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1867
 #, fuzzy, c-format
