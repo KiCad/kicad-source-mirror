@@ -497,6 +497,14 @@ struct LAYER_INFO
 
         // CONSTRAINTS_REGION
         CREG_ALL                     = 0xFD,
+
+        // PACKAGE_KEEPIN / ROUTE_KEEPIN
+        KEEPIN_ALL                   = 0xFD,
+
+        // PACKAGE_KEEPOUT / ROUTE_KEEPOUT / VIA_KEEPOUT
+        KEEPOUT_BOTTOM               = 0xFB,
+        KEEPOUT_TOP                  = 0xFC,
+        KEEPOUT_ALL                  = 0xFD,
     };
 
     uint8_t m_Class;

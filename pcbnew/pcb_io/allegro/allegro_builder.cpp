@@ -431,6 +431,16 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::SUBCLASS::CREG_ALL,                     wxS( "All" ) },
     };
 
+    static const std::unordered_map<uint8_t, wxString> s_KeepinSubclassNames = {
+        { LAYER_INFO::SUBCLASS::KEEPIN_ALL,                   wxS( "All" ) },
+    };
+
+    static const std::unordered_map<uint8_t, wxString> s_KeepoutSubclassNames = {
+        { LAYER_INFO::SUBCLASS::KEEPOUT_ALL,                  wxS( "All" ) },
+        { LAYER_INFO::SUBCLASS::KEEPOUT_TOP,                  wxS( "Top" ) },
+        { LAYER_INFO::SUBCLASS::KEEPOUT_BOTTOM,               wxS( "Bottom" ) },
+    };
+
     static const std::unordered_map<uint8_t, const std::unordered_map<uint8_t, wxString>&> s_SubclassNameMaps = {
         { LAYER_INFO::CLASS::BOARD_GEOMETRY,        s_BoardGeomSubclassNames },
 
@@ -446,6 +456,11 @@ static wxString layerInfoDisplayName( const LAYER_INFO& aLayerInfo )
         { LAYER_INFO::CLASS::MANUFACTURING,         s_ManufacturingSubclassNames },
         { LAYER_INFO::CLASS::ANALYSIS,              s_AnalysisSubclassNames },
         { LAYER_INFO::CLASS::CONSTRAINTS_REGION,    s_ConstraintSubclassNames },
+        { LAYER_INFO::CLASS::PACKAGE_KEEPIN,        s_KeepinSubclassNames },
+        { LAYER_INFO::CLASS::PACKAGE_KEEPOUT,       s_KeepoutSubclassNames },
+        { LAYER_INFO::CLASS::ROUTE_KEEPIN,          s_KeepinSubclassNames },
+        { LAYER_INFO::CLASS::ROUTE_KEEPOUT,         s_KeepoutSubclassNames },
+        { LAYER_INFO::CLASS::VIA_KEEPOUT,           s_KeepoutSubclassNames },
     };
     // clang-format on
 
