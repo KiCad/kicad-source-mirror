@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 01:09+0300\n"
+"POT-Creation-Date: 2026-03-01 09:48+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -17910,6 +17910,12 @@ msgstr "Generate independent files for NPTH and PTH holes"
 msgid "Generate map / summary of drill hits"
 msgstr "Generate map / summary of drill hits"
 
+msgid "Generate report of drill hits"
+msgstr "Generate report of drill hits"
+
+msgid "Report output file path"
+msgstr "Report output file path"
+
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr "Valid options: pdf,gerberx2,ps,dxf,svg"
 
@@ -17936,6 +17942,13 @@ msgstr "Invalid origin mode specified\n"
 
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "Gerber coordinate precision should be either 5 or 6\n"
+
+msgid ""
+"Warning: Report path supplied without --generate-report, no report will be "
+"generated\n"
+msgstr ""
+"Warning: Report path supplied without --generate-report, no report will be "
+"generated\n"
 
 msgid "Generate a DXF from a list of layers"
 msgstr "Generate a DXF from a list of layers"
@@ -31182,8 +31195,8 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Copper zone '%s' has no pads connected."
 
 #, c-format
-msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
+msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
+msgstr "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 
 #, c-format
 msgid ""
@@ -37356,6 +37369,10 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+#~ msgstr "Copper zone on layer %s at (%s, %s) has no pads connected."
 
 #~ msgid "Command"
 #~ msgstr "Command"

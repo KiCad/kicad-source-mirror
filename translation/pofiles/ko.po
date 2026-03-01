@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 01:09+0300\n"
+"POT-Creation-Date: 2026-03-01 09:48+0300\n"
 "PO-Revision-Date: 2025-11-07 07:51+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
@@ -390,7 +390,7 @@ msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:1012
+#: pcbnew/dialogs/dialog_drc.cpp:1013
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:125
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:466
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
@@ -2057,7 +2057,7 @@ msgstr "확인 (&O)"
 #: eeschema/symbol_editor/symbol_editor.cpp:503
 #: eeschema/symbol_editor/symbol_editor.cpp:1298
 #: eeschema/symbol_editor/symbol_editor.cpp:1696
-#: pcbnew/dialogs/dialog_drc.cpp:1013 pcbnew/dialogs/dialog_export_vrml.cpp:128
+#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
@@ -3170,7 +3170,7 @@ msgstr "제목 칸"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2340
+#: pcbnew/pcbnew_jobs_handler.cpp:2372
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "도면 시트 '%s'을(를) 불러오는 중에 오류가 발생했습니다."
@@ -3500,7 +3500,7 @@ msgstr "인쇄 미리보기"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:396
+#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:397
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 #: pcbnew/dialogs/dialog_export_2581.cpp:60
 #: pcbnew/dialogs/dialog_export_step.cpp:111
@@ -3817,7 +3817,7 @@ msgstr "확인"
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:376
+#: pcbnew/dialogs/dialog_drc.cpp:377
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr "취소"
@@ -5693,7 +5693,7 @@ msgstr "네트 클래스"
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
-#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/pcb_marker.cpp:229
+#: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "무시"
 
@@ -7658,15 +7658,15 @@ msgstr "3D 모델 작업 설정 내보내기"
 msgid "PCB: Export 3D Model"
 msgstr "PCB: 3D 모델 내보내기"
 
-#: common/jobs/job_export_pcb_drill.cpp:123
+#: common/jobs/job_export_pcb_drill.cpp:132
 msgid "Export drill data"
 msgstr "드릴 데이터 내보내기"
 
-#: common/jobs/job_export_pcb_drill.cpp:129
+#: common/jobs/job_export_pcb_drill.cpp:138
 msgid "Export Drill Data Job Settings"
 msgstr "드릴 데이터 작업 설정 내보내기"
 
-#: common/jobs/job_export_pcb_drill.cpp:132
+#: common/jobs/job_export_pcb_drill.cpp:141
 msgid "PCB: Export Drill Data"
 msgstr "PCB: 드릴 데이터 내보내기"
 
@@ -8563,7 +8563,7 @@ msgstr "파일 추출 오류!"
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
-#: pcbnew/dialogs/dialog_drc.cpp:1103 pcbnew/dialogs/dialog_export_2581.cpp:318
+#: pcbnew/dialogs/dialog_drc.cpp:1104 pcbnew/dialogs/dialog_export_2581.cpp:318
 #: pcbnew/dialogs/dialog_export_idf.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml.cpp:226
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:356
@@ -10216,7 +10216,7 @@ msgstr "정보:"
 #: common/widgets/wx_html_report_panel.cpp:372
 #: eeschema/dialogs/dialog_erc.cpp:1065
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
-#: pcbnew/dialogs/dialog_drc.cpp:1069
+#: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
 msgstr "보고서 파일 저장"
 
@@ -11941,21 +11941,21 @@ msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 "회로도가 완전히 주석 처리되지 않았습니다. ERC 결과는 불완전할 것입니다."
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1297
+#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr "제외 항목도 삭제 하시겠습니까?"
 
 #: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
-#: pcbnew/dialogs/dialog_drc.cpp:1297 pcbnew/dialogs/dialog_drc_base.cpp:219
+#: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "모든 마커 삭제"
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1299
+#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr "오류 및 경고에 한함"
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr "오류, 경고 및 예외"
 
@@ -11968,50 +11968,50 @@ msgstr "%d개의 심볼에 주석이 필요합니다.<br><br>"
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- 사용자가 ERC를 취소했습니다.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:390
+#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr "완료되었습니다.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:699
+#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr "오류"
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr "경고"
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr "적절함"
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:722
+#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr "해당 위반에 대한 예외를 삭제"
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "%s 리스트에 다시 배치됩니다"
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:726
+#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
 msgid "Edit exclusion comment..."
 msgstr "제외 설명 수정..."
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:739
+#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
 msgid "Exclude this violation"
 msgstr "이 위반 제외"
 
 #: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
-#: pcbnew/dialogs/dialog_drc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:744
+#: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "%s 목록에서 제외됩니다"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
 msgid "Exclude with comment..."
 msgstr "주석으로 제외..."
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:765
+#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "모든 '%s' 위반에 대한 심각도를 오류로 변경"
@@ -12021,17 +12021,17 @@ msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr "위반 심각도는 회로도 설정... 대화 상자에서도 변경할 수 있음"
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:772
+#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "모든 '%s' 위반에 대한 심각도를 경고로 변경"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:778
+#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "모든 '%s' 위반 무시"
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr "위반 사항을 확인하거나 보고하지 않음"
 
@@ -12044,7 +12044,7 @@ msgstr "핀 간 충돌 표시 편집..."
 msgid "Open the Schematic Setup... dialog"
 msgstr "회로도 설정... 대화 창 열기"
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:784
+#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr "위반 심각도 변경..."
 
@@ -12053,7 +12053,7 @@ msgid "Edit connection grid spacing..."
 msgstr "연결 그리드 간격 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
-#: pcbnew/dialogs/dialog_drc.cpp:795 pcbnew/dialogs/dialog_drc.cpp:848
+#: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 msgid "Exclusion Comment"
 msgstr "제외 설명"
 
@@ -12064,8 +12064,8 @@ msgstr "핀 충돌 표시"
 
 #: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
-#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:994
-#: pcbnew/dialogs/dialog_drc.cpp:1036
+#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
+#: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr "위반 심각도"
 
@@ -16925,9 +16925,9 @@ msgstr "회로도 로드 실패\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
-#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1521
-#: pcbnew/pcbnew_jobs_handler.cpp:1932 pcbnew/pcbnew_jobs_handler.cpp:2128
-#: pcbnew/pcbnew_jobs_handler.cpp:2222
+#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1552
+#: pcbnew/pcbnew_jobs_handler.cpp:1963 pcbnew/pcbnew_jobs_handler.cpp:2159
+#: pcbnew/pcbnew_jobs_handler.cpp:2253
 msgid "Failed to create output directory\n"
 msgstr "출력 디렉토리 생성 실패\n"
 
@@ -16978,8 +16978,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "플로팅 심볼 '%s' 단위 %d ~ '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1721
-#: pcbnew/pcbnew_jobs_handler.cpp:1794
+#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1825
 msgid "Unable to load library\n"
 msgstr "라이브러리를 로드할 수 없습니다.\n"
 
@@ -16989,16 +16989,16 @@ msgid "There is no symbol selected to save."
 msgstr "저장하기 위해 선택한 심볼이 없습니다."
 
 #: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
-#: pcbnew/pcbnew_jobs_handler.cpp:1810
+#: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, c-format
 msgid "Exporting %s"
 msgstr "%s 내보내기"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1690
+#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr "출력 경로는 기존 경로와 충돌하지 않아야 합니다\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1697
+#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -17012,7 +17012,7 @@ msgstr "심볼 라이브러리를 업데이트된 형식으로 저장\n"
 msgid "Symbol library was not updated\n"
 msgstr "심볼 라이브러리가 업데이트되지 않음\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2055
+#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, c-format
 msgid "Found %d violations\n"
 msgstr "%d 개의 위반 발견\n"
@@ -18620,16 +18620,16 @@ msgstr "[저장되지 않음]"
 msgid "[no schematic loaded]"
 msgstr "[불러온 회로도가 없습니다]"
 
-#: eeschema/sch_edit_frame.cpp:1986
+#: eeschema/sch_edit_frame.cpp:1993
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "강조 표시된 네트: %s"
 
-#: eeschema/sch_edit_frame.cpp:2176
+#: eeschema/sch_edit_frame.cpp:2183
 msgid "Save Symbol to Schematic"
 msgstr "회로도에 심볼 저장"
 
-#: eeschema/sch_edit_frame.cpp:2282 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2289 eeschema/tools/sch_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr "라이브러리와 심볼 비교"
 
@@ -18729,7 +18729,7 @@ msgid "Blanket not currently supported."
 msgstr "블랭킷은 현재 지원되지 않음."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1549
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4857
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "알 수 없거나 예상치 못한 레코드 ID %d가 %s에 있습니다."
@@ -18740,66 +18740,66 @@ msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "기호 \"%s\"가 시트\"%s\"의 인덱스 %d에서 \"%s\"기호로 대체됨."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1792
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3862
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3971
 msgid "Pin has unexpected orientation."
 msgstr "예기치 않은 핀 방향."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1840
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1850
 msgid "Pin has unexpected electrical type."
 msgstr "핀에 예기치 않은 전기 유형이 있습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1845
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1855
 msgid "Pin has unexpected outer edge type."
 msgstr "핀에 예기치 않은 외부 모서리 타입이 있습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1848
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1858
 msgid "Pin has unexpected inner edge type."
 msgstr "핀에 예기치 않은 내부 모서리 타입이 있습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2254
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2357
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "베지어 곡선에는 %d 개의 조절점이 있습니다. 최소 2개가 필요합니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3848
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "알 수 없는 스타일의 전원 포트를 '바' 유형으로 가져왔습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3788
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3897
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3956
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4065
 #, c-format
 msgid "Port %s has no connections."
 msgstr "포트 %s에 연결이 없습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4148
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4257
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "내장된 파일 %s을 저장소에서 찾을 수 없습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4165
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4184
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4274
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4293
 #, c-format
 msgid "Error reading image %s."
 msgstr "이미지 %s를 읽는 동안 오류가 발생했습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4177
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4286
 #, c-format
 msgid "File not found %s."
 msgstr "%s 파일을 찾을 수 없습니다."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4976
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5096
 #, fuzzy, c-format
 msgid "Error parsing Altium library: %s"
 msgstr "심볼 라이브러리 '%s' 열거 중 오류 발생: %s"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4999
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5119
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Altium Schematic Library 파일 버전 5.0이 필요함"
 
@@ -26038,7 +26038,7 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "DRC 위반이 있는 경우 0이 아닌 종료 코드 반환"
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:291
-#: kicad/cli/command_pcb_export_drill.cpp:150
+#: kicad/cli/command_pcb_export_drill.cpp:161
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:132
 msgid "Invalid units specified\n"
@@ -26194,85 +26194,101 @@ msgstr ""
 "각 플롯에 포함할 레이어, 포함할 변환되지 않은 레이어 이름의 쉼표로 구분된 목"
 "록(예: F.Cu,B.Cu)"
 
-#: kicad/cli/command_pcb_export_drill.cpp:48
+#: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
 msgid "Generate Drill Files"
 msgstr "드릴 파일 생성"
 
-#: kicad/cli/command_pcb_export_drill.cpp:52
+#: kicad/cli/command_pcb_export_drill.cpp:54
 msgid "Valid options excellon, gerber."
 msgstr "유효한 옵션 excellon, gerber."
 
-#: kicad/cli/command_pcb_export_drill.cpp:57
+#: kicad/cli/command_pcb_export_drill.cpp:59
 msgid "Valid options are: absolute,plot"
 msgstr "유효한 옵션: 절대, 플롯"
 
-#: kicad/cli/command_pcb_export_drill.cpp:63
+#: kicad/cli/command_pcb_export_drill.cpp:65
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "유효한 옵션: 십진수, 선행 억제, 후행 억제, 유지."
 
-#: kicad/cli/command_pcb_export_drill.cpp:68
+#: kicad/cli/command_pcb_export_drill.cpp:70
 msgid "Valid options are: route,alternate."
 msgstr "유효한 옵션: 라우트, 대체입니다.."
 
-#: kicad/cli/command_pcb_export_drill.cpp:73
+#: kicad/cli/command_pcb_export_drill.cpp:75
 msgid "Output units, valid options:in,mm"
 msgstr "출력 단위, 유효한 옵션:in,mm"
 
-#: kicad/cli/command_pcb_export_drill.cpp:77
+#: kicad/cli/command_pcb_export_drill.cpp:79
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "Mirror Y axis"
 msgstr "Y축을 기준으로 미러"
 
-#: kicad/cli/command_pcb_export_drill.cpp:81
+#: kicad/cli/command_pcb_export_drill.cpp:83
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Minimal header"
 msgstr "최소 헤더"
 
-#: kicad/cli/command_pcb_export_drill.cpp:85
+#: kicad/cli/command_pcb_export_drill.cpp:87
 msgid "Generate independent files for NPTH and PTH holes"
 msgstr "NPTH & PTH 홀에 대한 독립 파일 생성"
 
-#: kicad/cli/command_pcb_export_drill.cpp:89
+#: kicad/cli/command_pcb_export_drill.cpp:91
 msgid "Generate map / summary of drill hits"
 msgstr "맵 생성 / 드릴 요약"
 
-#: kicad/cli/command_pcb_export_drill.cpp:94
+#: kicad/cli/command_pcb_export_drill.cpp:95
+#, fuzzy
+msgid "Generate report of drill hits"
+msgstr "맵 생성 / 드릴 요약"
+
+#: kicad/cli/command_pcb_export_drill.cpp:100
+#, fuzzy
+msgid "Report output file path"
+msgstr "출력 경로 선택"
+
+#: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr "유효한 옵션: pdf,gerberx2,ps,dxf,svg"
 
-#: kicad/cli/command_pcb_export_drill.cpp:98
+#: kicad/cli/command_pcb_export_drill.cpp:109
 msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr "거버 좌표의 정밀도(5 또는 6)"
 
-#: kicad/cli/command_pcb_export_drill.cpp:117
+#: kicad/cli/command_pcb_export_drill.cpp:128
 msgid "Output must be a directory\n"
 msgstr "출력은 디렉토리여야 합니다.\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:134
+#: kicad/cli/command_pcb_export_drill.cpp:145
 msgid "Invalid drill format\n"
 msgstr "잘못된 드릴 형식\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:174
+#: kicad/cli/command_pcb_export_drill.cpp:185
 msgid "Invalid zeros format specified\n"
 msgstr "제로 형식이 잘못 지정됨\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:191
+#: kicad/cli/command_pcb_export_drill.cpp:202
 msgid "Invalid oval drill format specified\n"
 msgstr "타원형 드릴 형식이 잘못 지정됨\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:219
+#: kicad/cli/command_pcb_export_drill.cpp:230
 msgid "Invalid map format specified\n"
 msgstr "맵 형식이 잘못 지정됨\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:235
+#: kicad/cli/command_pcb_export_drill.cpp:246
 msgid "Invalid origin mode specified\n"
 msgstr "원점 모드가 잘못 지정됨\n"
 
-#: kicad/cli/command_pcb_export_drill.cpp:247
+#: kicad/cli/command_pcb_export_drill.cpp:259
 #: kicad/cli/command_pcb_export_gerber.cpp:148
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "거버 좌표 정밀도는 5 또는 6이어야 함\n"
+
+#: kicad/cli/command_pcb_export_drill.cpp:271
+msgid ""
+"Warning: Report path supplied without --generate-report, no report will be "
+"generated\n"
+msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -31911,7 +31927,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(호의 크기가 0이거나 매우 작음: %d nm)"
 
 #: pcbnew/cross-probing.cpp:103 pcbnew/dialogs/dialog_board_setup.cpp:194
-#: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/pcb_edit_frame.cpp:2620
+#: pcbnew/dialogs/dialog_drc.cpp:279 pcbnew/pcb_edit_frame.cpp:2620
 msgid "Custom Rules"
 msgstr "사용자 정의 규칙"
 
@@ -33641,52 +33657,52 @@ msgstr "치수 속성"
 msgid "Run DRC"
 msgstr "DRC 실행"
 
-#: pcbnew/dialogs/dialog_drc.cpp:333
+#: pcbnew/dialogs/dialog_drc.cpp:334
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr "DRC 미 완료: 사용자 정의 설계 규칙을 컴파일할 수 없습니다."
 
-#: pcbnew/dialogs/dialog_drc.cpp:335 pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/dialogs/dialog_drc.cpp:336 pcbnew/tools/board_inspection_tool.cpp:215
 msgid "Show design rules."
 msgstr "디자인 규칙을 표시합니다."
 
-#: pcbnew/dialogs/dialog_drc.cpp:388
+#: pcbnew/dialogs/dialog_drc.cpp:389
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC가 사용자에 의해 취소되었습니다.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:731
+#: pcbnew/dialogs/dialog_drc.cpp:732
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "규칙 '%s' 위반에 대한 모든 제외 제거"
 
-#: pcbnew/dialogs/dialog_drc.cpp:733
+#: pcbnew/dialogs/dialog_drc.cpp:734
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr "해당 항목은 %s 목록에 다시 배치됨"
 
-#: pcbnew/dialogs/dialog_drc.cpp:749
+#: pcbnew/dialogs/dialog_drc.cpp:750
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "규칙 '%s'의 모든 위반 제외..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:751
+#: pcbnew/dialogs/dialog_drc.cpp:752
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr "해당 항목은 %s 목록에서 제외됨"
 
-#: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:774
+#: pcbnew/dialogs/dialog_drc.cpp:768 pcbnew/dialogs/dialog_drc.cpp:775
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "위반 심각도는 보드 설정... 대화 상자에서도 변경할 수 있음"
 
-#: pcbnew/dialogs/dialog_drc.cpp:785
+#: pcbnew/dialogs/dialog_drc.cpp:786
 msgid "Open the Board Setup... dialog"
 msgstr "기판 설정... 대화창 열기"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1098
+#: pcbnew/dialogs/dialog_drc.cpp:1099
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "보고서 파일 '%s' 생성됨<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1444
+#: pcbnew/dialogs/dialog_drc.cpp:1445
 msgid "not run"
 msgstr "실행 안함"
 
@@ -33909,7 +33925,7 @@ msgid "Generate IPC-2581 File"
 msgstr "IPC-2581 파일 생성"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
-#: pcbnew/pcbnew_jobs_handler.cpp:2151
+#: pcbnew/pcbnew_jobs_handler.cpp:2182
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -37577,7 +37593,7 @@ msgstr "서로 다른 유형의 패드 수정하지 않기"
 msgid "Push Pad Properties"
 msgstr "패드 속성을 푸시"
 
-#: pcbnew/dialogs/dialog_reference_image_properties.cpp:88
+#: pcbnew/dialogs/dialog_reference_image_properties.cpp:95
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
@@ -42270,7 +42286,7 @@ msgstr "이들은 타원 패드로 출력되었습니다."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:726
+#: pcbnew/exporters/step/exporter_step.cpp:748
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "기판의 외곽선이 잘못되었습니다. DRC를 실행하여 전체 분석을 진행하세요."
@@ -42330,11 +42346,11 @@ msgstr ""
 "%s에 3D 모델을 추가할 수 없습니다.\n"
 "OpenCASCADE 오류: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:834
+#: pcbnew/exporters/step/exporter_step.cpp:861
 msgid "Could not create PCB solid model.\n"
 msgstr "PCB 솔리드 모델을 생성할 수 없습니다.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:900
+#: pcbnew/exporters/step/exporter_step.cpp:927
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -42343,7 +42359,7 @@ msgstr ""
 "** STEP 보드 모델을 빌드하는 동안 오류가 발생했습니다. 내보내기가 중단되었습"
 "니다. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:925
+#: pcbnew/exporters/step/exporter_step.cpp:952
 #, c-format
 msgid ""
 "\n"
@@ -42352,8 +42368,8 @@ msgstr ""
 "\n"
 "** %s 파일을 쓰는 중 오류 발생. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:942
-#: pcbnew/exporters/step/exporter_step.cpp:950
+#: pcbnew/exporters/step/exporter_step.cpp:969
+#: pcbnew/exporters/step/exporter_step.cpp:977
 #, c-format
 msgid ""
 "\n"
@@ -42362,7 +42378,7 @@ msgstr ""
 "\n"
 "** %s 파일을 내보내는 중 오류 발생. 내보내기가 중단됨 **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:959
+#: pcbnew/exporters/step/exporter_step.cpp:986
 #, c-format
 msgid ""
 "\n"
@@ -43840,37 +43856,37 @@ msgstr "비아가 %s에서 %s(으)로 다시 연결되었습니다."
 msgid "Via connected to unknown net (%s)."
 msgstr "비아가 알 수 없는 네트 (%s) 에 연결되었습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1118
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "구리 영역 '%s'을(를) %s에서 %s(으)로 다시 연결합니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1125
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1145
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "구리 영역을 %s에서 %s(으)로 다시 연결합니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1148
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "구리 영역 '%s'이(가) %s에서 %s(으)로 다시 연결되었습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1155
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1175
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "구리 영역이 %s에서 %s(으)로 다시 연결되었습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1188
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "구리 영역 '%s' 에는 연결된 패드가 없습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1185
-#, c-format
-msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
+#, fuzzy, c-format
+msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr "레이어 %s의 (%s, %s) 구리 영역에는 연결된 패드가 없습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1228
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
@@ -43879,58 +43895,58 @@ msgstr ""
 "심볼 %s에는 번호가 없는 핀이 있습니다. 이 핀은 %s의 패드와 일치시킬 수 없습니"
 "다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1238
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "%s 패드 %s을(를) %s에서 찾을 수 없습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1290
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1311
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "심볼 '%s:%s' 처리 중입니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1299
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr "%s에서 여러 풋프린트 발견됨."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "사용하지 않은 %s 풋프린트를 제거할 수 없음(풋프린트가 잠겨 있음)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1426
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "사용하지 않는 풋프린트 %s를 제거할 수 없음(풋프린트가 잠겨 있음)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1460
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr "사용하지 않은 풋프린트 %s을(를) 제거합니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1469
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr "사용하지 않은 풋프린트 %s을(를) 제거했습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1479
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1500
 #, c-format
 msgid "Removed unused net %s."
 msgstr "사용하지 않은 네트 %s을(를) 제거했습니다."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1491
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1512
 msgid "Update Netlist"
 msgstr "네트리스트 업데이트"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1515
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1536
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "총 경고: %d개, 오류: %d개."
@@ -44456,7 +44472,7 @@ msgstr ""
 "다. 회로도로부터 PCB를 생성하거나 업데이트하려면, KiCad 프로젝트 매니저를 실"
 "행하여 프로젝트를 생성하세요."
 
-#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2008
+#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2039
 msgid "Eeschema netlist"
 msgstr "Eeschema 네트리스트"
 
@@ -46667,79 +46683,79 @@ msgstr "'%s'로 플롯 실패.\n"
 msgid "Successfully created genCAD file\n"
 msgstr "성공적으로 genCAD 파일을 생성함\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1564 pcbnew/pcbnew_jobs_handler.cpp:1637
+#: pcbnew/pcbnew_jobs_handler.cpp:1595 pcbnew/pcbnew_jobs_handler.cpp:1668
 #, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "전면 위치 데이터를 '%s'에 저장함.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1582 pcbnew/pcbnew_jobs_handler.cpp:1660
+#: pcbnew/pcbnew_jobs_handler.cpp:1613 pcbnew/pcbnew_jobs_handler.cpp:1691
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "위치 데이터를 '%s'에 다시 작성함.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1611
+#: pcbnew/pcbnew_jobs_handler.cpp:1642
 #, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "위치 데이터를 '%s'에 저장함.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1707
+#: pcbnew/pcbnew_jobs_handler.cpp:1738
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "풋프린트 라이브러리 경로가 존재하지 않거나 액세스할 수 없음\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1747
+#: pcbnew/pcbnew_jobs_handler.cpp:1778
 msgid "Unable to save library\n"
 msgstr "라이브러리를 저장할 수 없음\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1753
+#: pcbnew/pcbnew_jobs_handler.cpp:1784
 msgid "Footprint library was not updated\n"
 msgstr "풋프린트 라이브러리가 업데이트되지 않음\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1831
+#: pcbnew/pcbnew_jobs_handler.cpp:1862
 msgid "The given footprint could not be found to export."
 msgstr "내보낼 지정된 풋프린트를 찾을 수 없습니다."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1873
+#: pcbnew/pcbnew_jobs_handler.cpp:1904
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "풋프린트 '%s'를 '%s'로 플로팅\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1924
 msgid "Error creating svg file"
 msgstr "svg 파일 생성 오류"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1961 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1992 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "회로도 동일성 테스트에는 완전한 주석이 달린 회로도가 필요합니다."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1982 pcbnew/pcbnew_jobs_handler.cpp:2015
+#: pcbnew/pcbnew_jobs_handler.cpp:2013 pcbnew/pcbnew_jobs_handler.cpp:2046
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "패리티 테스트를 위한 회로도 네트리스트를 가져오지 못함.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2037 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2068 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2058
+#: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "%d개의 미연결 항목 발견\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2064
+#: pcbnew/pcbnew_jobs_handler.cpp:2095
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "%d 회로도 패리티 문제 발견\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2080
+#: pcbnew/pcbnew_jobs_handler.cpp:2111
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "ERC 보고서를 %s에 저장할 수 없음\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2085
+#: pcbnew/pcbnew_jobs_handler.cpp:2116
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "DRC 보고서를 %s에 저장함\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2184
+#: pcbnew/pcbnew_jobs_handler.cpp:2215
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -46748,11 +46764,11 @@ msgstr ""
 "IPC2581 파일 '%s' 생성 오류.\n"
 "임시 파일 '%s'의 이름을 변경하지 못함."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2232
+#: pcbnew/pcbnew_jobs_handler.cpp:2263
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "IPC-D-356 파일을 성공적으로 생성함\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2237
+#: pcbnew/pcbnew_jobs_handler.cpp:2268
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "IPC-D-356 파일을 생성하지 못했음\n"
 

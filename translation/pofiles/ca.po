@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 01:09+0300\n"
+"POT-Creation-Date: 2026-03-01 09:48+0300\n"
 "PO-Revision-Date: 2025-05-11 14:03+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
@@ -360,7 +360,7 @@ msgstr "No teniu permisos d'escriptura per a desar el fitxer «%s»."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:1012
+#: pcbnew/dialogs/dialog_drc.cpp:1013
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:125
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:466
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
@@ -2164,7 +2164,7 @@ msgstr "D'ac&ord"
 #: eeschema/symbol_editor/symbol_editor.cpp:503
 #: eeschema/symbol_editor/symbol_editor.cpp:1298
 #: eeschema/symbol_editor/symbol_editor.cpp:1696
-#: pcbnew/dialogs/dialog_drc.cpp:1013 pcbnew/dialogs/dialog_export_vrml.cpp:128
+#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
@@ -3301,7 +3301,7 @@ msgstr "Bloc del títol"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2340
+#: pcbnew/pcbnew_jobs_handler.cpp:2372
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Error en carregar la fulla de dibuix '%s'."
@@ -3636,7 +3636,7 @@ msgstr "Vista prèvia de la impressió"
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:396
+#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:397
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 #: pcbnew/dialogs/dialog_export_2581.cpp:60
 #: pcbnew/dialogs/dialog_export_step.cpp:111
@@ -3959,7 +3959,7 @@ msgstr "D'acord"
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:376
+#: pcbnew/dialogs/dialog_drc.cpp:377
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr "Cancel·la"
@@ -5933,7 +5933,7 @@ msgstr "Classe de xarxa"
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
-#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/pcb_marker.cpp:229
+#: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "Ignora"
 
@@ -7985,17 +7985,17 @@ msgstr "Selecciona el model 3D"
 msgid "PCB: Export 3D Model"
 msgstr "Selecciona el model 3D"
 
-#: common/jobs/job_export_pcb_drill.cpp:123
+#: common/jobs/job_export_pcb_drill.cpp:132
 #, fuzzy
 msgid "Export drill data"
 msgstr "Pasta de soldadura frontal"
 
-#: common/jobs/job_export_pcb_drill.cpp:129
+#: common/jobs/job_export_pcb_drill.cpp:138
 #, fuzzy
 msgid "Export Drill Data Job Settings"
 msgstr "Edita les opcions de la línia"
 
-#: common/jobs/job_export_pcb_drill.cpp:132
+#: common/jobs/job_export_pcb_drill.cpp:141
 #, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "Pasta de soldadura frontal"
@@ -8976,7 +8976,7 @@ msgstr "Error quan s'extreia el fitxer!"
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
-#: pcbnew/dialogs/dialog_drc.cpp:1103 pcbnew/dialogs/dialog_export_2581.cpp:318
+#: pcbnew/dialogs/dialog_drc.cpp:1104 pcbnew/dialogs/dialog_export_2581.cpp:318
 #: pcbnew/dialogs/dialog_export_idf.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml.cpp:226
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:356
@@ -10747,7 +10747,7 @@ msgstr "Informació:"
 #: common/widgets/wx_html_report_panel.cpp:372
 #: eeschema/dialogs/dialog_erc.cpp:1065
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
-#: pcbnew/dialogs/dialog_drc.cpp:1069
+#: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
 msgstr "Desa el fitxer de l'informe"
 
@@ -12480,21 +12480,21 @@ msgstr ""
 "L'esquemàtic no està completament anotat. Els resultats de l'ERC seran "
 "incomplets."
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1297
+#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr "Vols eliminar també totes les exclusions?"
 
 #: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
-#: pcbnew/dialogs/dialog_drc.cpp:1297 pcbnew/dialogs/dialog_drc_base.cpp:219
+#: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Elimina tots els marcadors"
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1299
+#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr "Només errors i alertes"
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr "Errors, Alertes i Exclusions"
 
@@ -12507,53 +12507,53 @@ msgstr "%d símbol(s) requereix una anotació.<br><br>"
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC cancel·lat per l'usuari.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:390
+#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr "Fet.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:699
+#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr "errors"
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr "alertes"
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr "apropiat"
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:722
+#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr "Elimina l'exclusió d'aquesta infracció"
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Es tornarà a col·locar a la llista %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:726
+#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
 #, fuzzy
 msgid "Edit exclusion comment..."
 msgstr "Edita el model d'Spice..."
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:739
+#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
 #, fuzzy
 msgid "Exclude this violation"
 msgstr "Exclou aquesta infracció"
 
 #: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
-#: pcbnew/dialogs/dialog_drc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:744
+#: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Serà exclòs de la llista %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
 #, fuzzy
 msgid "Exclude with comment..."
 msgstr "Edita el model d'Spice..."
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:765
+#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Canvia la gravetat a Error per totes les infraccions de '%s'"
@@ -12566,17 +12566,17 @@ msgstr ""
 "Les severitats de les violacions també poden ser editades al diàleg de "
 "configuració de la placa"
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:772
+#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Canvia la gravetat a Alerta per a totes les infraccions de '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:778
+#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignora totes las infraccions de '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr "Las infraccions no es comprobaran ni s'informaran"
 
@@ -12589,7 +12589,7 @@ msgstr "Edita el mapa de conflictes pin-a-pin..."
 msgid "Open the Schematic Setup... dialog"
 msgstr "Obre el diàleg de Configuració de l'esquema"
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:784
+#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr "Edita la gravetat de les infraccions..."
 
@@ -12599,7 +12599,7 @@ msgid "Edit connection grid spacing..."
 msgstr "Espaiat min de la quadrícula:"
 
 #: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
-#: pcbnew/dialogs/dialog_drc.cpp:795 pcbnew/dialogs/dialog_drc.cpp:848
+#: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 #, fuzzy
 msgid "Exclusion Comment"
 msgstr "Exclusions"
@@ -12611,8 +12611,8 @@ msgstr "Mapa de conflictes de pins"
 
 #: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
-#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:994
-#: pcbnew/dialogs/dialog_drc.cpp:1036
+#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
+#: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr "Severitat de l'infracció"
 
@@ -17780,9 +17780,9 @@ msgstr "No s'ha pogut carregar el fitxer de l'esquemàtic\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
-#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1521
-#: pcbnew/pcbnew_jobs_handler.cpp:1932 pcbnew/pcbnew_jobs_handler.cpp:2128
-#: pcbnew/pcbnew_jobs_handler.cpp:2222
+#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1552
+#: pcbnew/pcbnew_jobs_handler.cpp:1963 pcbnew/pcbnew_jobs_handler.cpp:2159
+#: pcbnew/pcbnew_jobs_handler.cpp:2253
 #, fuzzy
 msgid "Failed to create output directory\n"
 msgstr "Impossible de crear fitxer <%s>"
@@ -17835,8 +17835,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Canvia el símbol %s de '%s' a '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1721
-#: pcbnew/pcbnew_jobs_handler.cpp:1794
+#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1825
 msgid "Unable to load library\n"
 msgstr "No s'ha pogut carregar la biblioteca\n"
 
@@ -17846,16 +17846,16 @@ msgid "There is no symbol selected to save."
 msgstr "No hi ha cap símbol seleccionat per desar."
 
 #: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
-#: pcbnew/pcbnew_jobs_handler.cpp:1810
+#: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, fuzzy, c-format
 msgid "Exporting %s"
 msgstr "S'està esperant %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1690
+#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1697
+#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -17870,7 +17870,7 @@ msgstr "Identificador de biblioteca de símbols invàlid"
 msgid "Symbol library was not updated\n"
 msgstr "Biblioteca de símbols no habilitada."
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2055
+#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Permet la violació del DRC"
@@ -19570,17 +19570,17 @@ msgstr "[No desat]"
 msgid "[no schematic loaded]"
 msgstr "[no hi ha un esquemàtic carregat]"
 
-#: eeschema/sch_edit_frame.cpp:1986
+#: eeschema/sch_edit_frame.cpp:1993
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Xarxa realçada: %s"
 
-#: eeschema/sch_edit_frame.cpp:2176
+#: eeschema/sch_edit_frame.cpp:2183
 #, fuzzy
 msgid "Save Symbol to Schematic"
 msgstr "Importa un esquemàtic"
 
-#: eeschema/sch_edit_frame.cpp:2282 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2289 eeschema/tools/sch_actions.cpp:61
 #, fuzzy
 msgid "Compare Symbol with Library"
 msgstr "Actualitza Símbols des de la biblioteca..."
@@ -19685,7 +19685,7 @@ msgid "Blanket not currently supported."
 msgstr "Actualment no està suportada la màscara de compilació."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1549
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4857
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "Fitxer inesperat '%s' trobat a la biblioteca '%s'."
@@ -19696,67 +19696,67 @@ msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1792
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3862
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3971
 msgid "Pin has unexpected orientation."
 msgstr "El pin té una orientació inesperada."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1840
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1850
 msgid "Pin has unexpected electrical type."
 msgstr "El pin té un tipus elèctric inesperat."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1845
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1855
 msgid "Pin has unexpected outer edge type."
 msgstr "El pin té un tipus de vora exterior inesperat."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1848
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1858
 msgid "Pin has unexpected inner edge type."
 msgstr "El pin té un tipus de vora interior inesperat."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2254
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2357
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "El bezier té %d punts de control. Se n'esperen almenys 2."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3848
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 #, fuzzy
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "El port d'alimentació té un estil desconegut, utilitza la barra."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3788
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3897
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "El símbol d'alimentació crea una etiqueta global amb el nom '%s'"
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3956
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4065
 #, c-format
 msgid "Port %s has no connections."
 msgstr "El port %s no té connexions."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4148
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4257
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "No s'ha trobat el fitxer incrustat %s a l'emmagatzematge."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4165
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4184
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4274
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4293
 #, c-format
 msgid "Error reading image %s."
 msgstr "Error al llegir la imatge %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4177
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4286
 #, c-format
 msgid "File not found %s."
 msgstr "No s'ha trobat el fitxer %s."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4976
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5096
 #, fuzzy, c-format
 msgid "Error parsing Altium library: %s"
 msgstr "Error en crear la biblioteca de símbols '%s'."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4999
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5119
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -27456,7 +27456,7 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:291
-#: kicad/cli/command_pcb_export_drill.cpp:150
+#: kicad/cli/command_pcb_export_drill.cpp:161
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:132
 #, fuzzy
@@ -27621,95 +27621,111 @@ msgid ""
 "names to include such as F.Cu,B.Cu"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:48
+#: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
 #, fuzzy
 msgid "Generate Drill Files"
 msgstr "Genera el fitxer de perforació"
 
-#: kicad/cli/command_pcb_export_drill.cpp:52
+#: kicad/cli/command_pcb_export_drill.cpp:54
 msgid "Valid options excellon, gerber."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:57
+#: kicad/cli/command_pcb_export_drill.cpp:59
 msgid "Valid options are: absolute,plot"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:63
+#: kicad/cli/command_pcb_export_drill.cpp:65
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:68
+#: kicad/cli/command_pcb_export_drill.cpp:70
 msgid "Valid options are: route,alternate."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:73
+#: kicad/cli/command_pcb_export_drill.cpp:75
 msgid "Output units, valid options:in,mm"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:77
+#: kicad/cli/command_pcb_export_drill.cpp:79
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 #, fuzzy
 msgid "Mirror Y axis"
 msgstr "Reflecteix l'eix y"
 
-#: kicad/cli/command_pcb_export_drill.cpp:81
+#: kicad/cli/command_pcb_export_drill.cpp:83
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Minimal header"
 msgstr "Capçalera mínima"
 
-#: kicad/cli/command_pcb_export_drill.cpp:85
+#: kicad/cli/command_pcb_export_drill.cpp:87
 #, fuzzy
 msgid "Generate independent files for NPTH and PTH holes"
 msgstr ""
 "Genera el fitxer de les posicions de les empremtes per agafar-les i "
 "posicionar-les"
 
-#: kicad/cli/command_pcb_export_drill.cpp:89
+#: kicad/cli/command_pcb_export_drill.cpp:91
 msgid "Generate map / summary of drill hits"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:94
+#: kicad/cli/command_pcb_export_drill.cpp:95
+#, fuzzy
+msgid "Generate report of drill hits"
+msgstr "Genera el fitxer de perforació excellon2"
+
+#: kicad/cli/command_pcb_export_drill.cpp:100
+#, fuzzy
+msgid "Report output file path"
+msgstr "Selecciona Camí"
+
+#: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:98
+#: kicad/cli/command_pcb_export_drill.cpp:109
 msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:117
+#: kicad/cli/command_pcb_export_drill.cpp:128
 #, fuzzy
 msgid "Output must be a directory\n"
 msgstr "Directori de sortida:"
 
-#: kicad/cli/command_pcb_export_drill.cpp:134
+#: kicad/cli/command_pcb_export_drill.cpp:145
 #, fuzzy
 msgid "Invalid drill format\n"
 msgstr "Format del fitxer d'arxiu invàlid."
 
-#: kicad/cli/command_pcb_export_drill.cpp:174
+#: kicad/cli/command_pcb_export_drill.cpp:185
 #, fuzzy
 msgid "Invalid zeros format specified\n"
 msgstr "S'ha especificat una empremta invàlida"
 
-#: kicad/cli/command_pcb_export_drill.cpp:191
+#: kicad/cli/command_pcb_export_drill.cpp:202
 #, fuzzy
 msgid "Invalid oval drill format specified\n"
 msgstr "S'ha especificat una empremta invàlida"
 
-#: kicad/cli/command_pcb_export_drill.cpp:219
+#: kicad/cli/command_pcb_export_drill.cpp:230
 #, fuzzy
 msgid "Invalid map format specified\n"
 msgstr "S'ha especificat una empremta invàlida"
 
-#: kicad/cli/command_pcb_export_drill.cpp:235
+#: kicad/cli/command_pcb_export_drill.cpp:246
 #, fuzzy
 msgid "Invalid origin mode specified\n"
 msgstr "S'ha especificat una empremta invàlida"
 
-#: kicad/cli/command_pcb_export_drill.cpp:247
+#: kicad/cli/command_pcb_export_drill.cpp:259
 #: kicad/cli/command_pcb_export_gerber.cpp:148
 msgid "Gerber coordinate precision should be either 5 or 6\n"
+msgstr ""
+
+#: kicad/cli/command_pcb_export_drill.cpp:271
+msgid ""
+"Warning: Report path supplied without --generate-report, no report will be "
+"generated\n"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
@@ -33605,7 +33621,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:103 pcbnew/dialogs/dialog_board_setup.cpp:194
-#: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/pcb_edit_frame.cpp:2620
+#: pcbnew/dialogs/dialog_drc.cpp:279 pcbnew/pcb_edit_frame.cpp:2620
 msgid "Custom Rules"
 msgstr "Normes personalitzades"
 
@@ -35408,57 +35424,57 @@ msgstr "Propietats de dimensions"
 msgid "Run DRC"
 msgstr "Executa DRC"
 
-#: pcbnew/dialogs/dialog_drc.cpp:333
+#: pcbnew/dialogs/dialog_drc.cpp:334
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
 "DRC incomplet: no s'han pogut compilar les normes de disseny personalitzades."
 
-#: pcbnew/dialogs/dialog_drc.cpp:335 pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/dialogs/dialog_drc.cpp:336 pcbnew/tools/board_inspection_tool.cpp:215
 msgid "Show design rules."
 msgstr "Mostra les normes de disseny."
 
-#: pcbnew/dialogs/dialog_drc.cpp:388
+#: pcbnew/dialogs/dialog_drc.cpp:389
 #, fuzzy
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- ERC cancel·lat per l'usuari.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:731
+#: pcbnew/dialogs/dialog_drc.cpp:732
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Elimina totes les exclusions per infracció de la norma '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:733
+#: pcbnew/dialogs/dialog_drc.cpp:734
 #, fuzzy, c-format
 msgid "They will be placed back in the %s list"
 msgstr "Es tornarà a col·locar a la llista %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:749
+#: pcbnew/dialogs/dialog_drc.cpp:750
 #, fuzzy, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "Exclou totes les infraccions de la norma '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:751
+#: pcbnew/dialogs/dialog_drc.cpp:752
 #, fuzzy, c-format
 msgid "They will be excluded from the %s list"
 msgstr "Serà exclòs de la llista %s"
 
-#: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:774
+#: pcbnew/dialogs/dialog_drc.cpp:768 pcbnew/dialogs/dialog_drc.cpp:775
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Les severitats de les violacions també poden ser editades al diàleg de "
 "configuració de la placa"
 
-#: pcbnew/dialogs/dialog_drc.cpp:785
+#: pcbnew/dialogs/dialog_drc.cpp:786
 #, fuzzy
 msgid "Open the Board Setup... dialog"
 msgstr "Configuració de &les capes"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1098
+#: pcbnew/dialogs/dialog_drc.cpp:1099
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "S'ha creat el fitxer de l'informe '%s'<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1444
+#: pcbnew/dialogs/dialog_drc.cpp:1445
 msgid "not run"
 msgstr "no executat"
 
@@ -35699,7 +35715,7 @@ msgid "Generate IPC-2581 File"
 msgstr "Genera el fitxer netlist IPC-D-356"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
-#: pcbnew/pcbnew_jobs_handler.cpp:2151
+#: pcbnew/pcbnew_jobs_handler.cpp:2182
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -39639,7 +39655,7 @@ msgstr "No modifiquis els pads que tinguin un tipus diferent"
 msgid "Push Pad Properties"
 msgstr "Propietats del pad"
 
-#: pcbnew/dialogs/dialog_reference_image_properties.cpp:88
+#: pcbnew/dialogs/dialog_reference_image_properties.cpp:95
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
@@ -44072,7 +44088,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:726
+#: pcbnew/exporters/step/exporter_step.cpp:748
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 #, fuzzy
 msgid "Board outline is malformed. Run DRC for a full analysis."
@@ -44131,12 +44147,12 @@ msgid ""
 "OpenCASCADE error: %s\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:834
+#: pcbnew/exporters/step/exporter_step.cpp:861
 #, fuzzy
 msgid "Could not create PCB solid model.\n"
 msgstr "No es pot escriure a la carpeta «%s»."
 
-#: pcbnew/exporters/step/exporter_step.cpp:900
+#: pcbnew/exporters/step/exporter_step.cpp:927
 #, fuzzy
 msgid ""
 "\n"
@@ -44145,7 +44161,7 @@ msgstr ""
 "\n"
 "** Error en escriure el fitxer STEP. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:925
+#: pcbnew/exporters/step/exporter_step.cpp:952
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -44154,8 +44170,8 @@ msgstr ""
 "\n"
 "** Error en escriure el fitxer STEP. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:942
-#: pcbnew/exporters/step/exporter_step.cpp:950
+#: pcbnew/exporters/step/exporter_step.cpp:969
+#: pcbnew/exporters/step/exporter_step.cpp:977
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -44164,7 +44180,7 @@ msgstr ""
 "\n"
 "** Error en escriure el fitxer STEP. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:959
+#: pcbnew/exporters/step/exporter_step.cpp:986
 #, c-format
 msgid ""
 "\n"
@@ -45725,96 +45741,96 @@ msgstr "S'ha tornat a connectar la via de %s a %s."
 msgid "Via connected to unknown net (%s)."
 msgstr "Elements no connectats (%s)"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1118
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr "Torna a connectar la zona de coure '%s' de %s a %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1125
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1145
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr "S'ha tornat a connectar la zona de coure de %s a %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1148
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "S'ha tornat a connectar la zona de coure '%s' de %s a %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1155
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1175
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr "S'ha tornat a connectar la zona de coure de %s a %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1188
 #, fuzzy, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1185
-#, c-format
-msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
+#, fuzzy, c-format
+msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr "La zona de coure a la capa %s a (%s, %s) no té pads connectats."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1228
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, fuzzy, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr "El símbol té més unitats que les definides"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1238
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr "No s'ha trobat %s pad %s a %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1290
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1311
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr "S'està processant el símbol '%s:%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1299
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, fuzzy, c-format
 msgid "Multiple footprints found for %s."
 msgstr "S'han trobat múltiples empremtes de '%s'."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, fuzzy, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr "No es pot eliminar l'empremta no utilitzada %s (bloquejada)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1426
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, fuzzy, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr "No es pot eliminar l'empremta no utilitzada %s (bloquejada)."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1460
 #, fuzzy, c-format
 msgid "Remove unused footprint %s."
 msgstr "Suprimeix el component %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1469
 #, fuzzy, c-format
 msgid "Removed unused footprint %s."
 msgstr "Suprimeix el component %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1479
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1500
 #, fuzzy, c-format
 msgid "Removed unused net %s."
 msgstr "Suprimeix el component %s."
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1491
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1512
 #, fuzzy
 msgid "Update Netlist"
 msgstr "Actualitza el netlist"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1515
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1536
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Nombre total d'advertiments: %d, errors: %d."
@@ -46419,7 +46435,7 @@ msgstr ""
 "mode independent. Per crear/actualitzar PCBs des de l'esquemàtic, executa el "
 "shell de KiCad i crea un projecte."
 
-#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2008
+#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2039
 #, fuzzy
 msgid "Eeschema netlist"
 msgstr "Netlist d'EEschema"
@@ -48559,80 +48575,80 @@ msgstr "No s'ha pogut carregar '%s'."
 msgid "Successfully created genCAD file\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1564 pcbnew/pcbnew_jobs_handler.cpp:1637
+#: pcbnew/pcbnew_jobs_handler.cpp:1595 pcbnew/pcbnew_jobs_handler.cpp:1668
 #, fuzzy, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Exporta l'empremta"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1582 pcbnew/pcbnew_jobs_handler.cpp:1660
+#: pcbnew/pcbnew_jobs_handler.cpp:1613 pcbnew/pcbnew_jobs_handler.cpp:1691
 #, fuzzy, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "No es pot crear el directori de sortida '%s'."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1611
+#: pcbnew/pcbnew_jobs_handler.cpp:1642
 #, fuzzy, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Exporta l'empremta"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1707
+#: pcbnew/pcbnew_jobs_handler.cpp:1738
 #, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "no es pot eliminar la biblioteca d'empremtes «%s»"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1747
+#: pcbnew/pcbnew_jobs_handler.cpp:1778
 #, fuzzy
 msgid "Unable to save library\n"
 msgstr "no hi ha cap biblioteca activa"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1753
+#: pcbnew/pcbnew_jobs_handler.cpp:1784
 #, fuzzy
 msgid "Footprint library was not updated\n"
 msgstr "Biblioteca d'empremtes no habilitada."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1831
+#: pcbnew/pcbnew_jobs_handler.cpp:1862
 #, fuzzy
 msgid "The given footprint could not be found to export."
 msgstr ""
 "No s'ha pogut trobar el fitxer d'equivalències «%s» als camins "
 "predeterminats de cerca."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1873
+#: pcbnew/pcbnew_jobs_handler.cpp:1904
 #, fuzzy, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Canvia l'empremta %s de '%s' a '%s'"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1924
 #, fuzzy
 msgid "Error creating svg file"
 msgstr "Error mentre es llegia el fitxer."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1961 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1992 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 "Les proves de paritat de l'esquemàtic requereixen un esquemàtic completament "
 "anotat."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1982 pcbnew/pcbnew_jobs_handler.cpp:2015
+#: pcbnew/pcbnew_jobs_handler.cpp:2013 pcbnew/pcbnew_jobs_handler.cpp:2046
 #, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "No s'ha pogut carregar el fitxer de l'esquemàtic\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2037 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2068 pcbnew/tools/drc_tool.cpp:200
 #, fuzzy
 msgid "DRC"
 msgstr "ERC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2058
+#: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, fuzzy, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Elements no connectats (%s)"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2064
+#: pcbnew/pcbnew_jobs_handler.cpp:2095
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2080
+#: pcbnew/pcbnew_jobs_handler.cpp:2111
 #, fuzzy, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr ""
@@ -48640,12 +48656,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2085
+#: pcbnew/pcbnew_jobs_handler.cpp:2116
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "Desa el fitxer de l'informe DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2184
+#: pcbnew/pcbnew_jobs_handler.cpp:2215
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -48654,12 +48670,12 @@ msgstr ""
 "Error en desar el fitxer de la placa '%s'.\n"
 "No s'ha pogut canviar el nom al fitxer temporal '%s'."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2232
+#: pcbnew/pcbnew_jobs_handler.cpp:2263
 #, fuzzy
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Error mentre es llegia el fitxer."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2237
+#: pcbnew/pcbnew_jobs_handler.cpp:2268
 #, fuzzy
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "No s'ha pogut crear del fitxer '%s'."

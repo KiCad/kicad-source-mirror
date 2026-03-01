@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-25 01:09+0300\n"
+"POT-Creation-Date: 2026-03-01 09:48+0300\n"
 "PO-Revision-Date: 2026-01-15 23:01+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v9/et/>\n"
@@ -347,7 +347,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:1012
+#: pcbnew/dialogs/dialog_drc.cpp:1013
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:125
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:466
 #: pcbnew/drc/drc_item.cpp:229 pcbnew/pcb_marker.cpp:233
@@ -2009,7 +2009,7 @@ msgstr "&OK"
 #: eeschema/symbol_editor/symbol_editor.cpp:503
 #: eeschema/symbol_editor/symbol_editor.cpp:1298
 #: eeschema/symbol_editor/symbol_editor.cpp:1696
-#: pcbnew/dialogs/dialog_drc.cpp:1013 pcbnew/dialogs/dialog_export_vrml.cpp:128
+#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/dialogs/dialog_export_vrml.cpp:128
 #: pcbnew/drc/drc_item.cpp:225 pcbnew/import_gfx/dialog_import_graphics.cpp:293
 #: pcbnew/pcb_marker.cpp:231
 msgid "Warning"
@@ -3080,7 +3080,7 @@ msgstr "Tiitelnurk"
 #: common/dialogs/dialog_page_settings.cpp:483
 #: eeschema/eeschema_jobs_handler.cpp:232 pagelayout_editor/files.cpp:243
 #: pagelayout_editor/pl_editor_frame.cpp:358
-#: pcbnew/pcbnew_jobs_handler.cpp:2340
+#: pcbnew/pcbnew_jobs_handler.cpp:2372
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr ""
@@ -3405,7 +3405,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:125
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:396
+#: pcbnew/dialogs/dialog_drc.cpp:147 pcbnew/dialogs/dialog_drc.cpp:397
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:165
 #: pcbnew/dialogs/dialog_export_2581.cpp:60
 #: pcbnew/dialogs/dialog_export_step.cpp:111
@@ -3719,7 +3719,7 @@ msgstr "OK"
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:66
-#: pcbnew/dialogs/dialog_drc.cpp:376
+#: pcbnew/dialogs/dialog_drc.cpp:377
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
 msgstr ""
@@ -5537,7 +5537,7 @@ msgstr ""
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
-#: pcbnew/dialogs/dialog_drc.cpp:1014 pcbnew/pcb_marker.cpp:229
+#: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr ""
 
@@ -7467,15 +7467,15 @@ msgstr "Loo tsoonid"
 msgid "PCB: Export 3D Model"
 msgstr "Loo tsoonid"
 
-#: common/jobs/job_export_pcb_drill.cpp:123
+#: common/jobs/job_export_pcb_drill.cpp:132
 msgid "Export drill data"
 msgstr ""
 
-#: common/jobs/job_export_pcb_drill.cpp:129
+#: common/jobs/job_export_pcb_drill.cpp:138
 msgid "Export Drill Data Job Settings"
 msgstr ""
 
-#: common/jobs/job_export_pcb_drill.cpp:132
+#: common/jobs/job_export_pcb_drill.cpp:141
 #, fuzzy
 msgid "PCB: Export Drill Data"
 msgstr "Loo tsoonid"
@@ -8389,7 +8389,7 @@ msgstr ""
 #: gerbview/export_to_pcbnew.cpp:67 pagelayout_editor/files.cpp:214
 #: pcbnew/build_BOM_from_board.cpp:102
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
-#: pcbnew/dialogs/dialog_drc.cpp:1103 pcbnew/dialogs/dialog_export_2581.cpp:318
+#: pcbnew/dialogs/dialog_drc.cpp:1104 pcbnew/dialogs/dialog_export_2581.cpp:318
 #: pcbnew/dialogs/dialog_export_idf.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml.cpp:226
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:356
@@ -10035,7 +10035,7 @@ msgstr ""
 #: common/widgets/wx_html_report_panel.cpp:372
 #: eeschema/dialogs/dialog_erc.cpp:1065
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
-#: pcbnew/dialogs/dialog_drc.cpp:1069
+#: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
 msgstr ""
 
@@ -11635,21 +11635,21 @@ msgstr ""
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1297
+#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
-#: pcbnew/dialogs/dialog_drc.cpp:1297 pcbnew/dialogs/dialog_drc_base.cpp:219
+#: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1299
+#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr ""
 
@@ -11662,50 +11662,50 @@ msgstr ""
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:390
+#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:699
+#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:722
+#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:726
+#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
 msgid "Edit exclusion comment..."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:739
+#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
 msgid "Exclude this violation"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
-#: pcbnew/dialogs/dialog_drc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:744
+#: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
 msgid "Exclude with comment..."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:765
+#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr ""
@@ -11715,17 +11715,17 @@ msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:772
+#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:778
+#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr ""
 
@@ -11738,7 +11738,7 @@ msgstr ""
 msgid "Open the Schematic Setup... dialog"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:784
+#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr ""
 
@@ -11747,7 +11747,7 @@ msgid "Edit connection grid spacing..."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
-#: pcbnew/dialogs/dialog_drc.cpp:795 pcbnew/dialogs/dialog_drc.cpp:848
+#: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 msgid "Exclusion Comment"
 msgstr ""
 
@@ -11758,8 +11758,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
-#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:994
-#: pcbnew/dialogs/dialog_drc.cpp:1036
+#: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
+#: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr ""
 
@@ -16495,9 +16495,9 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
-#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1521
-#: pcbnew/pcbnew_jobs_handler.cpp:1932 pcbnew/pcbnew_jobs_handler.cpp:2128
-#: pcbnew/pcbnew_jobs_handler.cpp:2222
+#: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1552
+#: pcbnew/pcbnew_jobs_handler.cpp:1963 pcbnew/pcbnew_jobs_handler.cpp:2159
+#: pcbnew/pcbnew_jobs_handler.cpp:2253
 msgid "Failed to create output directory\n"
 msgstr ""
 
@@ -16547,8 +16547,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1721
-#: pcbnew/pcbnew_jobs_handler.cpp:1794
+#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: pcbnew/pcbnew_jobs_handler.cpp:1825
 msgid "Unable to load library\n"
 msgstr ""
 
@@ -16558,16 +16558,16 @@ msgid "There is no symbol selected to save."
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
-#: pcbnew/pcbnew_jobs_handler.cpp:1810
+#: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, fuzzy, c-format
 msgid "Exporting %s"
 msgstr "Loo tsoonid"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1690
+#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1697
+#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -16580,7 +16580,7 @@ msgstr ""
 msgid "Symbol library was not updated\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2055
+#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, c-format
 msgid "Found %d violations\n"
 msgstr ""
@@ -18131,16 +18131,16 @@ msgstr ""
 msgid "[no schematic loaded]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1986
+#: eeschema/sch_edit_frame.cpp:1993
 #, c-format
 msgid "Highlighted net: %s"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:2176
+#: eeschema/sch_edit_frame.cpp:2183
 msgid "Save Symbol to Schematic"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:2282 eeschema/tools/sch_actions.cpp:61
+#: eeschema/sch_edit_frame.cpp:2289 eeschema/tools/sch_actions.cpp:61
 msgid "Compare Symbol with Library"
 msgstr ""
 
@@ -18238,7 +18238,7 @@ msgid "Blanket not currently supported."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1549
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4857
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr ""
@@ -18249,66 +18249,66 @@ msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1792
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3862
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3971
 msgid "Pin has unexpected orientation."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1840
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1850
 msgid "Pin has unexpected electrical type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1845
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1855
 msgid "Pin has unexpected outer edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:1848
+#: eeschema/sch_io/altium/sch_io_altium.cpp:1858
 msgid "Pin has unexpected inner edge type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:2254
+#: eeschema/sch_io/altium/sch_io_altium.cpp:2357
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3739
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3848
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3788
+#: eeschema/sch_io/altium/sch_io_altium.cpp:3897
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:3956
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4065
 #, c-format
 msgid "Port %s has no connections."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4148
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4257
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4165
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4184
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4274
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4293
 #, c-format
 msgid "Error reading image %s."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4177
+#: eeschema/sch_io/altium/sch_io_altium.cpp:4286
 #, c-format
 msgid "File not found %s."
 msgstr ""
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4976
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5096
 #, fuzzy, c-format
 msgid "Error parsing Altium library: %s"
 msgstr "Jalajälg puudub."
 
-#: eeschema/sch_io/altium/sch_io_altium.cpp:4999
+#: eeschema/sch_io/altium/sch_io_altium.cpp:5119
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr ""
 
@@ -25160,7 +25160,7 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:291
-#: kicad/cli/command_pcb_export_drill.cpp:150
+#: kicad/cli/command_pcb_export_drill.cpp:161
 #: kicad/cli/command_pcb_export_dxf.cpp:160
 #: kicad/cli/command_pcb_export_pos.cpp:145 kicad/cli/command_sch_erc.cpp:132
 msgid "Invalid units specified\n"
@@ -25314,84 +25314,98 @@ msgid ""
 "names to include such as F.Cu,B.Cu"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:48
+#: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
 msgid "Generate Drill Files"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:52
+#: kicad/cli/command_pcb_export_drill.cpp:54
 msgid "Valid options excellon, gerber."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:57
+#: kicad/cli/command_pcb_export_drill.cpp:59
 msgid "Valid options are: absolute,plot"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:63
+#: kicad/cli/command_pcb_export_drill.cpp:65
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:68
+#: kicad/cli/command_pcb_export_drill.cpp:70
 msgid "Valid options are: route,alternate."
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:73
+#: kicad/cli/command_pcb_export_drill.cpp:75
 msgid "Output units, valid options:in,mm"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:77
+#: kicad/cli/command_pcb_export_drill.cpp:79
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "Mirror Y axis"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:81
+#: kicad/cli/command_pcb_export_drill.cpp:83
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Minimal header"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:85
+#: kicad/cli/command_pcb_export_drill.cpp:87
 msgid "Generate independent files for NPTH and PTH holes"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:89
+#: kicad/cli/command_pcb_export_drill.cpp:91
 msgid "Generate map / summary of drill hits"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:94
+#: kicad/cli/command_pcb_export_drill.cpp:95
+msgid "Generate report of drill hits"
+msgstr ""
+
+#: kicad/cli/command_pcb_export_drill.cpp:100
+msgid "Report output file path"
+msgstr ""
+
+#: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:98
+#: kicad/cli/command_pcb_export_drill.cpp:109
 msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:117
+#: kicad/cli/command_pcb_export_drill.cpp:128
 msgid "Output must be a directory\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:134
+#: kicad/cli/command_pcb_export_drill.cpp:145
 msgid "Invalid drill format\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:174
+#: kicad/cli/command_pcb_export_drill.cpp:185
 msgid "Invalid zeros format specified\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:191
+#: kicad/cli/command_pcb_export_drill.cpp:202
 msgid "Invalid oval drill format specified\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:219
+#: kicad/cli/command_pcb_export_drill.cpp:230
 msgid "Invalid map format specified\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:235
+#: kicad/cli/command_pcb_export_drill.cpp:246
 msgid "Invalid origin mode specified\n"
 msgstr ""
 
-#: kicad/cli/command_pcb_export_drill.cpp:247
+#: kicad/cli/command_pcb_export_drill.cpp:259
 #: kicad/cli/command_pcb_export_gerber.cpp:148
 msgid "Gerber coordinate precision should be either 5 or 6\n"
+msgstr ""
+
+#: kicad/cli/command_pcb_export_drill.cpp:271
+msgid ""
+"Warning: Report path supplied without --generate-report, no report will be "
+"generated\n"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
@@ -30774,7 +30788,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr ""
 
 #: pcbnew/cross-probing.cpp:103 pcbnew/dialogs/dialog_board_setup.cpp:194
-#: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/pcb_edit_frame.cpp:2620
+#: pcbnew/dialogs/dialog_drc.cpp:279 pcbnew/pcb_edit_frame.cpp:2620
 msgid "Custom Rules"
 msgstr ""
 
@@ -32447,52 +32461,52 @@ msgstr ""
 msgid "Run DRC"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:333
+#: pcbnew/dialogs/dialog_drc.cpp:334
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:335 pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/dialogs/dialog_drc.cpp:336 pcbnew/tools/board_inspection_tool.cpp:215
 msgid "Show design rules."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:388
+#: pcbnew/dialogs/dialog_drc.cpp:389
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:731
+#: pcbnew/dialogs/dialog_drc.cpp:732
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:733
+#: pcbnew/dialogs/dialog_drc.cpp:734
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:749
+#: pcbnew/dialogs/dialog_drc.cpp:750
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:751
+#: pcbnew/dialogs/dialog_drc.cpp:752
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:767 pcbnew/dialogs/dialog_drc.cpp:774
+#: pcbnew/dialogs/dialog_drc.cpp:768 pcbnew/dialogs/dialog_drc.cpp:775
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:785
+#: pcbnew/dialogs/dialog_drc.cpp:786
 msgid "Open the Board Setup... dialog"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:1098
+#: pcbnew/dialogs/dialog_drc.cpp:1099
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:1444
+#: pcbnew/dialogs/dialog_drc.cpp:1445
 msgid "not run"
 msgstr ""
 
@@ -32710,7 +32724,7 @@ msgid "Generate IPC-2581 File"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:305
-#: pcbnew/pcbnew_jobs_handler.cpp:2151
+#: pcbnew/pcbnew_jobs_handler.cpp:2182
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -36228,7 +36242,7 @@ msgstr ""
 msgid "Push Pad Properties"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_reference_image_properties.cpp:88
+#: pcbnew/dialogs/dialog_reference_image_properties.cpp:95
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
@@ -40286,7 +40300,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:726
+#: pcbnew/exporters/step/exporter_step.cpp:748
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
@@ -40342,32 +40356,32 @@ msgid ""
 "OpenCASCADE error: %s\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:834
+#: pcbnew/exporters/step/exporter_step.cpp:861
 msgid "Could not create PCB solid model.\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:900
+#: pcbnew/exporters/step/exporter_step.cpp:927
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:925
+#: pcbnew/exporters/step/exporter_step.cpp:952
 #, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:942
-#: pcbnew/exporters/step/exporter_step.cpp:950
+#: pcbnew/exporters/step/exporter_step.cpp:969
+#: pcbnew/exporters/step/exporter_step.cpp:977
 #, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:959
+#: pcbnew/exporters/step/exporter_step.cpp:986
 #, c-format
 msgid ""
 "\n"
@@ -41800,96 +41814,96 @@ msgstr ""
 msgid "Via connected to unknown net (%s)."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1118
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1125
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1145
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1148
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1155
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1175
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1168
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1188
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1185
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
 #, c-format
-msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
+msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1228
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
 msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1238
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
 msgid "%s pad %s not found in %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1290
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1311
 #, c-format
 msgid "Processing symbol '%s:%s'."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1299
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1389
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, c-format
 msgid "Multiple footprints found for %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1421
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1426
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1439
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1460
 #, c-format
 msgid "Remove unused footprint %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1448
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1469
 #, c-format
 msgid "Removed unused footprint %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1479
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1500
 #, c-format
 msgid "Removed unused net %s."
 msgstr ""
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1491
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1512
 #, fuzzy
 msgid "Update Netlist"
 msgstr "Loo tsoonid"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:1515
+#: pcbnew/netlist_reader/board_netlist_updater.cpp:1536
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr ""
@@ -42397,7 +42411,7 @@ msgid ""
 "project manager and create a project."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2008
+#: pcbnew/pcb_edit_frame.cpp:2038 pcbnew/pcbnew_jobs_handler.cpp:2039
 msgid "Eeschema netlist"
 msgstr ""
 
@@ -44376,90 +44390,90 @@ msgstr ""
 msgid "Successfully created genCAD file\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1564 pcbnew/pcbnew_jobs_handler.cpp:1637
+#: pcbnew/pcbnew_jobs_handler.cpp:1595 pcbnew/pcbnew_jobs_handler.cpp:1668
 #, fuzzy, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Loo tsoonid"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1582 pcbnew/pcbnew_jobs_handler.cpp:1660
+#: pcbnew/pcbnew_jobs_handler.cpp:1613 pcbnew/pcbnew_jobs_handler.cpp:1691
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1611
+#: pcbnew/pcbnew_jobs_handler.cpp:1642
 #, fuzzy, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Loo tsoonid"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1707
+#: pcbnew/pcbnew_jobs_handler.cpp:1738
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1747
+#: pcbnew/pcbnew_jobs_handler.cpp:1778
 msgid "Unable to save library\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1753
+#: pcbnew/pcbnew_jobs_handler.cpp:1784
 msgid "Footprint library was not updated\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1831
+#: pcbnew/pcbnew_jobs_handler.cpp:1862
 msgid "The given footprint could not be found to export."
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1873
+#: pcbnew/pcbnew_jobs_handler.cpp:1904
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1893
+#: pcbnew/pcbnew_jobs_handler.cpp:1924
 msgid "Error creating svg file"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1961 pcbnew/tools/drc_tool.cpp:160
+#: pcbnew/pcbnew_jobs_handler.cpp:1992 pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1982 pcbnew/pcbnew_jobs_handler.cpp:2015
+#: pcbnew/pcbnew_jobs_handler.cpp:2013 pcbnew/pcbnew_jobs_handler.cpp:2046
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2037 pcbnew/tools/drc_tool.cpp:200
+#: pcbnew/pcbnew_jobs_handler.cpp:2068 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
 msgstr "DRC"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2058
+#: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2064
+#: pcbnew/pcbnew_jobs_handler.cpp:2095
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2080
+#: pcbnew/pcbnew_jobs_handler.cpp:2111
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2085
+#: pcbnew/pcbnew_jobs_handler.cpp:2116
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2184
+#: pcbnew/pcbnew_jobs_handler.cpp:2215
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2232
+#: pcbnew/pcbnew_jobs_handler.cpp:2263
 msgid "Successfully created IPC-D-356 file\n"
 msgstr ""
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2237
+#: pcbnew/pcbnew_jobs_handler.cpp:2268
 msgid "Failed to create IPC-D-356 file\n"
 msgstr ""
 
