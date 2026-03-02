@@ -1369,6 +1369,19 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 for( SCH_ITEM* test_item : overlapping_items )
                     connection_map[point].push_back( test_item );
             }
+
+            // Junctions connect wires that pass through their position as midpoints.
+            // This handles schematics where a wire was not split at a junction point,
+            // which can happen when a wire is placed over an existing junction without
+            // the schematic topology being updated.
+            if( item->Type() == SCH_JUNCTION_T )
+            {
+                VECTOR2I    point = item->GetPosition();
+                SCH_SCREEN* screen = aSheet.LastScreen();
+
+                for( SCH_LINE* wire : screen->GetBusesAndWires( point, true ) )
+                    connection_map[point].push_back( wire );
+            }
         }
     }
 
