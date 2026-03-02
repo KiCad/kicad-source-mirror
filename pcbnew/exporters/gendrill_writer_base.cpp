@@ -1286,7 +1286,7 @@ unsigned GENDRILL_WRITER_BASE::printToolSummary( FILE* out, bool aSummaryNPTH ) 
 
         // List the tool number assigned to each drill in mm then in inches.
         int tool_number = ii+1;
-        fmt::print( 0, "    T{}  {:2.3f}mm  {:2.4f}\"  ", tool_number,
+        fmt::print( out, "    T{}  {:2.3f}mm  {:2.4f}\"  ", tool_number,
                    diameter_in_mm( tool.m_Diameter ),
                    diameter_in_inches( tool.m_Diameter ) );
 
