@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 06:35+0000\n"
+"PO-Revision-Date: 2026-03-02 18:10+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:381
@@ -13184,9 +13184,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:94
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Törölje a színeket a kapcsolásirajz szerkesztő színeinek használatához"
+msgstr ""
+"Törölje a színeket a kapcsolási rajz szerkesztő színeinek használatához."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -18780,14 +18780,14 @@ msgid "Graphic line not connectable"
 msgstr "Nem csatlakoztatott kivezetés"
 
 #: eeschema/net_navigator.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "Rajzjel %s, [%s]"
+msgstr "Rajzjel '%s', láb '%s'"
 
 #: eeschema/net_navigator.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Lap kivezető láb hozzáadása"
+msgstr "Oldal '%s', láb '%s'"
 
 #: eeschema/net_navigator.cpp:113
 #, fuzzy, c-format
