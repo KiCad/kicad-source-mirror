@@ -128,12 +128,13 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     UpdateAnnotationWarning();
 
-    Layout();
-
     SetFocus();
 
     syncCheckboxes();
     updateDisplayedCounts();
+
+    Layout();
+    GetSizer()->Fit( this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

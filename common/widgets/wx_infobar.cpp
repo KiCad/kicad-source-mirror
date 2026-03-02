@@ -30,6 +30,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/timer.h>
+#include <wx/dcclient.h>
 #include <eda_base_frame.h>
 
 #ifdef __WXMSW__
@@ -236,11 +237,28 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     if( !sizer )
         return;
 
-    wxSizerItem* text = sizer->GetItem( 1 );
+    // wx3.3 moved the sizer we previously wanted deeper into sizers...
+    // do we actually still need this for wx3.3?
+    #if wxCHECK_VERSION( 3, 3, 0 )
+    wxSizerItem* outerSizer = sizer->GetItem( (size_t) 0 );
+    wxSizerItem* textSizer = nullptr;
 
-    if( text )
+    if (outerSizer->IsSizer())
     {
-        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+        wxBoxSizer* innerSizer1 = dynamic_cast<wxBoxSizer*>( outerSizer->GetSizer() );
+        wxBoxSizer* innerSizer2 =
+                dynamic_cast<wxBoxSizer*>( innerSizer1->GetItem((size_t)0)->GetSizer() );
+
+        if( innerSizer2 )
+            textSizer = innerSizer2->GetItem( 1 );
+    }
+    #else
+    wxSizerItem* textSizer = sizer->GetItem( 1 );
+    #endif
+
+    if( textSizer )
+    {
+        if( wxStaticText* textCtrl = dynamic_cast<wxStaticText*>( textSizer->GetWindow() ) )
             textCtrl->SetLabelText( m_message );
     }
 
@@ -257,9 +275,9 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );
 
-    if( text )
+    if( textSizer )
     {
-        if( auto textCtrl = dynamic_cast<wxStaticText*>( text->GetWindow() ) )
+        if( wxStaticText* textCtrl = dynamic_cast<wxStaticText*>( textSizer->GetWindow() ) )
         {
             // Re-wrap the text (this is done automatically later but we need it now)
             // And count how many lines we need.  If we have embedded newlines, then
@@ -267,10 +285,18 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
             // min height for the control.  The min height of the text control will be the size
             // of a single line of text.  This assumes that two lines of text are larger
             // than the height of the icon for the bar.
-            textCtrl->Wrap( text->GetSize().GetWidth() );
-            wxString new_text = textCtrl->GetLabel();
-            int      height = ( new_text.Freq( '\n' ) + 1 ) * text->GetMinSize().GetHeight();
-            SetMinSize( wxSize( GetSize().GetWidth(), height ) );
+            textCtrl->Wrap( -1 );
+            wxString wrapped_text = textCtrl->GetLabel();
+            int line_count = wrapped_text.Freq( '\n' ) + 1;
+            int txt_h, txt_v;
+            wxWindowDC dc( textCtrl );
+            dc.GetTextExtent( wxT( "Xp" ), &txt_h, &txt_v );
+
+            int      height = txt_v * line_count;
+            int      margins = txt_v - 1;
+            SetMinSize( wxSize( GetSize().GetWidth(), height + margins ) );
+
+            textCtrl->Wrap( -1 );
         }
     }
 
@@ -504,13 +530,13 @@ void INFOBAR_REPORTER::Finalize()
     switch( m_severity )
     {
     case RPT_SEVERITY_UNDEFINED: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_INFO: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_ACTION: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_WARNING: icon = wxICON_WARNING; break;
-    case RPT_SEVERITY_ERROR: icon = wxICON_ERROR; break;
-    case RPT_SEVERITY_IGNORE: icon = wxICON_INFORMATION; break;
-    case RPT_SEVERITY_DEBUG: icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_INFO:      icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_EXCLUSION: icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_ACTION:    icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_WARNING:   icon = wxICON_WARNING;     break;
+    case RPT_SEVERITY_ERROR:     icon = wxICON_ERROR;       break;
+    case RPT_SEVERITY_IGNORE:    icon = wxICON_INFORMATION; break;
+    case RPT_SEVERITY_DEBUG:     icon = wxICON_INFORMATION; break;
     }
 
     if( m_message->EndsWith( wxS( "\n" ) ) )
