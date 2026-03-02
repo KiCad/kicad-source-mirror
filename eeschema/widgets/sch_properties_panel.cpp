@@ -190,57 +190,59 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( it->second );
     }
 
+    auto netlistCallback = [this]()
+    {
+        SCH_SELECTION& sel = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
+        LIB_SYMBOL*    libSymbol = nullptr;
+
+        for( EDA_ITEM* item : sel )
+        {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                if( !libSymbol )
+                    libSymbol = symbol->GetLibSymbolRef().get();
+                else if( libSymbol != symbol->GetLibSymbolRef().get() )
+                    return std::string( "" );
+            }
+        }
+
+        if( !libSymbol )
+            return std::string( "" );
+
+        wxString      symbolNetlist;
+        wxArrayString pins;
+
+        for( SCH_PIN* pin : libSymbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+        if( !pins.IsEmpty() )
+            symbolNetlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        symbolNetlist << wxS( "\r" );
+
+        wxArrayString fpFilters = libSymbol->GetFPFilters();
+
+        if( !fpFilters.IsEmpty() )
+            symbolNetlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+        symbolNetlist << wxS( "\r" );
+
+        return symbolNetlist.ToStdString();
+    };
+
     it = wxPGGlobalVars->m_mapEditorClasses.find( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
 
     if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
     {
         m_fpEditorInstance = static_cast<PG_FPID_EDITOR*>( it->second );
         m_fpEditorInstance->UpdateFrame( m_frame );
+        m_fpEditorInstance->UpdateCallback( netlistCallback );
     }
     else
     {
-        PG_FPID_EDITOR* fpEditor = new PG_FPID_EDITOR( m_frame,
-                [this]()
-                {
-                    SCH_SELECTION& sel = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
-                    LIB_SYMBOL*    libSymbol = nullptr;
-
-                    for( EDA_ITEM* item : sel )
-                    {
-                        if( item->Type() == SCH_SYMBOL_T )
-                        {
-                            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-                            if( !libSymbol )
-                                libSymbol = symbol->GetLibSymbolRef().get();
-                            else if( libSymbol != symbol->GetLibSymbolRef().get() )
-                                return std::string( "" );
-                        }
-                    }
-
-                    if( !libSymbol )
-                        return std::string( "" );
-
-                    wxString      symbolNetlist;
-                    wxArrayString pins;
-
-                    for( SCH_PIN* pin : libSymbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
-                        pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
-
-                    if( !pins.IsEmpty() )
-                        symbolNetlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
-
-                    symbolNetlist << wxS( "\r" );
-
-                    wxArrayString fpFilters = libSymbol->GetFPFilters();
-
-                    if( !fpFilters.IsEmpty() )
-                        symbolNetlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
-
-                    symbolNetlist << wxS( "\r" );
-
-                    return symbolNetlist.ToStdString();
-                } );
+        PG_FPID_EDITOR* fpEditor = new PG_FPID_EDITOR( m_frame, netlistCallback );
         m_fpEditorInstance = static_cast<PG_FPID_EDITOR*>( wxPropertyGrid::RegisterEditorClass( fpEditor ) );
     }
 

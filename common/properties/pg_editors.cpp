@@ -523,6 +523,12 @@ void PG_FPID_EDITOR::UpdateFrame( EDA_DRAW_FRAME* aFrame )
 }
 
 
+void PG_FPID_EDITOR::UpdateCallback( const std::function<std::string()>& aNetlistCallback )
+{
+    m_netlistCallback = aNetlistCallback;
+}
+
+
 wxString PG_FPID_EDITOR::BuildEditorName( EDA_DRAW_FRAME* aFrame )
 {
     if( !aFrame )
@@ -552,6 +558,9 @@ bool PG_FPID_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wx
 {
     if( aEvent.GetEventType() == wxEVT_BUTTON )
     {
+        if( !m_frame )
+            return true;
+
         wxString fpid = aProperty->GetValue().GetString();
 
         if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_frame ) )
@@ -623,6 +632,9 @@ bool PG_URL_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxW
 {
     if( aEvent.GetEventType() == wxEVT_BUTTON )
     {
+        if( !m_frame )
+            return true;
+
         wxString filename = aProperty->GetValue().GetString();
 
         if( filename.IsEmpty() || filename == wxS( "~" ) )

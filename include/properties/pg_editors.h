@@ -138,6 +138,8 @@ public:
 
     void UpdateFrame( EDA_DRAW_FRAME* aFrame );
 
+    void UpdateCallback( const std::function<std::string()>& aNetlistCallback );
+
     static wxString BuildEditorName( EDA_DRAW_FRAME* aFrame );
 
     wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
