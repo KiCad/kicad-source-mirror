@@ -536,12 +536,37 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             constraintData->SetRuleCondition( cleanedCondition );
         }
 
+        if( match.panelType == VIAS_UNDER_SMD )
+        {
+            wxString cleanedCondition = condition;
+
+            cleanedCondition.Replace( wxS( "A.Pad_Type == 'SMD'" ), wxS( "" ) );
+            cleanedCondition.Replace( wxS( "B.Pad_Type == 'SMD'" ), wxS( "" ) );
+
+            // Strip empty parentheses left over from removing pad type condition
+            wxString prev;
+            do
+            {
+                prev = cleanedCondition;
+                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
+            } while( cleanedCondition != prev );
+
+            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+            cleanedCondition.Trim( true ).Trim( false );
+            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+
+            constraintData->SetRuleCondition( cleanedCondition );
+        }
+
         if( match.panelType == CUSTOM_RULE && customFallback )
         {
             customFallback->SetRuleText( extractRuleBody( aOriginalText ) );
         }
 
-        if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE )
+        if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE && match.panelType != VIAS_UNDER_SMD )
             constraintData->SetRuleCondition( condition );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name, condition, aRule.m_Severity,

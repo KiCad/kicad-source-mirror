@@ -24,7 +24,7 @@
 #include "drc_re_panel_matcher.h"
 
 #include <algorithm>
-
+#include <drc/drc_rule_condition.h>
 
 /**
  * Panel Claim Priority System
@@ -307,6 +307,13 @@ std::vector<DRC_PANEL_MATCH> DRC_PANEL_MATCHER::MatchRule( const DRC_RULE& aRule
 
         if( matchesClaim( claim, remaining, &claimed ) )
         {
+           // VIAS_UNDER_SMD requires Pad_Type == 'SMD' in the condition
+           if( claim.panelType == VIAS_UNDER_SMD )
+           {
+                if( !aRule.m_Condition || !aRule.m_Condition->GetExpression().Contains( wxS( "Pad_Type == 'SMD'" ) ) )
+                        continue;
+           }
+
             matches.emplace_back( claim.panelType, claimed );
 
             // Remove claimed constraints from remaining set

@@ -103,7 +103,16 @@ public:
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
     {
-        return buildRule( aContext, GetConstraintClauses( aContext ) );
+        RULE_GENERATION_CONTEXT ctx = aContext;
+
+        wxString padTypeCondition = wxS( "A.Pad_Type == 'SMD'" );
+
+        if( ctx.conditionExpression.IsEmpty() )
+            ctx.conditionExpression = padTypeCondition;
+        else
+            ctx.conditionExpression = padTypeCondition + wxS( " && " ) + ctx.conditionExpression;
+
+        return buildRule( ctx, GetConstraintClauses( ctx ) );
     }
 
     bool GetDisallowThroughVias() const { return m_disallowThroughVias; }
