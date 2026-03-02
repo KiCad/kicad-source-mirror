@@ -488,14 +488,33 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 
         if( match.panelType == SILK_TO_SOLDERMASK_CLEARANCE )
         {
-            bool         isFront = condition.Contains( wxS( "F.SilkS" ) );
-            PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
-            constraintData->SetLayers( { layer } );
-            constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
-
             wxString cleanedCondition = condition;
-            cleanedCondition.Replace( wxS( "A.Layer == 'F.SilkS' && B.Layer == 'F.Mask'" ), wxS( "" ) );
-            cleanedCondition.Replace( wxS( "A.Layer == 'B.SilkS' && B.Layer == 'B.Mask'" ), wxS( "" ) );
+
+            bool hasBothSides = condition.Contains( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask') || (A.Layer == "
+                                                         "'B.SilkS' && B.Layer == 'B.Mask')" ) );
+
+            if( hasBothSides )
+            {
+                constraintData->SetLayers( { F_SilkS, B_SilkS } );
+                constraintData->SetLayerSource( wxS( "" ) );
+
+                cleanedCondition.Replace( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask') || (A.Layer == 'B.SilkS' "
+                                               "&& B.Layer == 'B.Mask')" ),
+                                          wxS( "" ) );
+            }
+            else
+            {
+                bool         isFront = condition.Contains( wxS( "F.SilkS" ) );
+                PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
+                constraintData->SetLayers( { layer } );
+                constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
+
+                cleanedCondition.Replace( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask')" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "(A.Layer == 'B.SilkS' && B.Layer == 'B.Mask')" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "A.Layer == 'F.SilkS' && B.Layer == 'F.Mask'" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "A.Layer == 'B.SilkS' && B.Layer == 'B.Mask'" ), wxS( "" ) );
+            }
+
             cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
             cleanedCondition.Trim( true ).Trim( false );
             if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
