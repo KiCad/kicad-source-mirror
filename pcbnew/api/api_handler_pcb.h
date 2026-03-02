@@ -103,6 +103,9 @@ private:
 
     HANDLER_RESULT<Empty> handleSetBoardOrigin( const HANDLER_CONTEXT<SetBoardOrigin>& aCtx );
 
+    HANDLER_RESULT<BoardLayerNameResponse> handleGetBoardLayerName(
+            const HANDLER_CONTEXT<GetBoardLayerName>& aCtx );
+
     HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox(
             const HANDLER_CONTEXT<commands::GetBoundingBox>& aCtx );
 
