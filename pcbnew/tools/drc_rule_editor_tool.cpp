@@ -97,6 +97,10 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
     Activate();
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
+    // If the dialog was closed (X or Cancel), destroy it so rules reload from file
+    if( m_drcRuleEditorDlg && !m_drcRuleEditorDlg->IsShown() )
+        DestroyDRCRuleEditorDialog();
+
     if( !m_drcRuleEditorDlg )
     {
         m_drcRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
@@ -107,10 +111,10 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
         else
             m_drcRuleEditorDlg->Show( true );
     }
-    else // The dialog is just not visible (because the user has double clicked on an error item)
+    else
     {
-        updatePointers();
-        m_drcRuleEditorDlg->Show( true );
+        // Dialog is still visible but behind other windows, bring to front
+        m_drcRuleEditorDlg->Raise();
     }
 }
 
