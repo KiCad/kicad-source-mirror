@@ -38,20 +38,35 @@ namespace KIGIT
 
 git_repository* PROJECT_GIT_UTILS::GetRepositoryForFile( const char* aFilename )
 {
-    return GetGitBackend()->GetRepositoryForFile( aFilename );
+    GIT_BACKEND* backend = GetGitBackend();
+
+    if( !backend )
+        return nullptr;
+
+    return backend->GetRepositoryForFile( aFilename );
 }
 
 
 int PROJECT_GIT_UTILS::CreateBranch( git_repository* aRepo, const wxString& aBranchName )
 {
-    return GetGitBackend()->CreateBranch( aRepo, aBranchName );
+    GIT_BACKEND* backend = GetGitBackend();
+
+    if( !backend )
+        return -1;
+
+    return backend->CreateBranch( aRepo, aBranchName );
 }
 
 
 bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                                    bool aRemoveGitDir, wxString* aErrors )
 {
-    return GetGitBackend()->RemoveVCS( aRepo, aProjectPath, aRemoveGitDir, aErrors );
+    GIT_BACKEND* backend = GetGitBackend();
+
+    if( !backend )
+        return false;
+
+    return backend->RemoveVCS( aRepo, aProjectPath, aRemoveGitDir, aErrors );
 }
 
 
