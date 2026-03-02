@@ -126,14 +126,23 @@ wxString DRC_RE_CUSTOM_RULE_PANEL::GenerateRule( const RULE_GENERATION_CONTEXT& 
     wxString ruleName = aContext.ruleName;
     ruleName.Replace( wxS( "\"" ), wxS( "\\\"" ) );
 
-    wxString rule = wxString::Format( wxS( "(rule \"%s\"\n%s)" ), ruleName, body );
+    wxString rule;
+    rule << wxS( "(rule \"" ) << ruleName << wxS( "\"\n" );
 
     if( !aContext.comment.IsEmpty() )
     {
-        wxString comment = aContext.comment;
-        comment.Replace( wxS( "\n" ), wxS( " " ) );
-        rule = wxS( "# " ) + comment + wxS( "\n" ) + rule;
+        wxArrayString lines = wxSplit( aContext.comment, '\n', '\0' );
+
+        for( const wxString& line : lines )
+        {
+            if( line.IsEmpty() )
+                continue;
+
+            rule << wxS( "\t# " ) << line << wxS( "\n" );
+        }
     }
+
+    rule << body << wxS( ")" );
 
     return rule;
 }

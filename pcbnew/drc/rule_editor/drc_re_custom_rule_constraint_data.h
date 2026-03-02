@@ -57,7 +57,25 @@ public:
         wxString ruleName = aContext.ruleName;
         ruleName.Replace( wxS( "\"" ), wxS( "\\\"" ) );
 
-        return wxString::Format( wxS( "(rule \"%s\"\n%s)" ), ruleName, m_ruleText );
+        wxString rule;
+        rule << wxS( "(rule \"" ) << ruleName << wxS( "\"\n" );
+
+        if( !aContext.comment.IsEmpty() )
+        {
+            wxArrayString lines = wxSplit( aContext.comment, '\n', '\0' );
+
+            for( const wxString& line : lines )
+            {
+                if( line.IsEmpty() )
+                    continue;
+
+                rule << wxS( "\t# " ) << line << wxS( "\n" );
+            }
+        }
+
+        rule << m_ruleText << wxS( ")" );
+
+        return rule;
     }
 
     VALIDATION_RESULT Validate() const override
