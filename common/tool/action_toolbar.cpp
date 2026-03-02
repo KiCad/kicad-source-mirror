@@ -726,13 +726,17 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
 
     bool handled = false;
 
-    if( m_toolManager && type == wxEVT_COMMAND_TOOL_CLICKED  && id >= TOOL_ACTION::GetBaseUIId() )
+    if( m_toolManager && type == wxEVT_COMMAND_TOOL_CLICKED )
     {
         const auto actionIt = m_toolActions.find( id );
+        const auto cancelIt = m_toolCancellable.find( id );
+
+        // Determine if the tool is actually cancellable
+        bool isCancellable = ( cancelIt != m_toolCancellable.end() ) ? cancelIt->second : false;
 
         // The toolbar item is toggled before the event is sent, so we check for it not being
         // toggled to see if it was toggled originally
-        if( m_toolCancellable[id] && !GetToolToggled( id ) )
+        if( isCancellable && !GetToolToggled( id ) )
         {
             // Send a cancel event
             m_toolManager->CancelTool();
