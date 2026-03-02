@@ -339,6 +339,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
+    if( !aPlotJob->GetOutputPathIsDirectory() && aPlotJob->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( GetDefaultPlotExtension( format ) );
+
+        aPlotJob->SetConfiguredOutputPath( fn.GetFullName() );
+    }
+
     wxString outPath = aPlotJob->GetFullOutputPath( &sch->Prj() );
 
     if( !PATHS::EnsurePathExists( outPath, !aPlotJob->GetOutputPathIsDirectory() ) )
