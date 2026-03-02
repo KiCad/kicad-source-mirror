@@ -509,17 +509,28 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
                 constraintData->SetLayers( { layer } );
                 constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
 
-                cleanedCondition.Replace( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask')" ), wxS( "" ) );
-                cleanedCondition.Replace( wxS( "(A.Layer == 'B.SilkS' && B.Layer == 'B.Mask')" ), wxS( "" ) );
                 cleanedCondition.Replace( wxS( "A.Layer == 'F.SilkS' && B.Layer == 'F.Mask'" ), wxS( "" ) );
                 cleanedCondition.Replace( wxS( "A.Layer == 'B.SilkS' && B.Layer == 'B.Mask'" ), wxS( "" ) );
             }
 
+            // Strip empty parentheses left over from removing layer conditions
+            wxString prev;
+            do
+            {
+                prev = cleanedCondition;
+                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
+            } while( cleanedCondition != prev );
+
             cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+            cleanedCondition.Replace( wxS( "|| ||" ), wxS( "||" ) );
             cleanedCondition.Trim( true ).Trim( false );
             if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
                 cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
             if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+            if( cleanedCondition.StartsWith( wxS( "||" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "||" ) ) )
                 cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
 
             constraintData->SetRuleCondition( cleanedCondition );
