@@ -124,6 +124,15 @@ private:
      */
     wxString extractRuleBody( const wxString& aOriginalText );
 
+    /**
+     * Extract comment lines from a rule.
+     * Comments are lines starting with # inside the rule block.
+     *
+     * @param aOriginalText Rule text.
+     * @return Extracted comment text (empty if none).
+     */
+    wxString extractRuleComment( const wxString& aOriginalText );
+
     DRC_PANEL_MATCHER m_matcher;
 };
 

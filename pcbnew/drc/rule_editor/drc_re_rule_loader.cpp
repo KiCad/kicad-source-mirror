@@ -89,6 +89,32 @@ wxString DRC_RULE_LOADER::extractRuleBody( const wxString& aOriginalText )
 }
 
 
+wxString DRC_RULE_LOADER::extractRuleComment( const wxString& aOriginalText )
+{
+    wxString      comment;
+    wxArrayString lines = wxSplit( aOriginalText, '\n', '\0' );
+
+    for( const wxString& line : lines )
+    {
+        wxString trimmed = line;
+        trimmed.Trim( false );
+
+        if( trimmed.StartsWith( wxS( "#" ) ) )
+        {
+            wxString commentLine = trimmed.Mid( 1 );
+            commentLine.Trim( false );
+
+            if( !comment.IsEmpty() )
+                comment += wxS( "\n" );
+
+            comment += commentLine;
+        }
+    }
+
+    return comment;
+}
+
+
 std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>
 DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
                                         const DRC_RULE&                   aRule,
@@ -497,6 +523,10 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             source = source.Mid( 1, source.Length() - 2 );
         entry.layerSource = source;
 
+        wxString comment = extractRuleComment( aOriginalText );
+        if( !comment.IsEmpty() )
+            constraintData->SetComment( comment );
+
         // Store original text only for the first entry to avoid duplication issues
         if( entries.empty() )
             entry.originalRuleText = aOriginalText;
@@ -510,6 +540,10 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>();
         customData->SetRuleName( aRule.m_Name );
         customData->SetRuleCondition( condition );
+
+        wxString comment = extractRuleComment( aOriginalText );
+        if( !comment.IsEmpty() )
+            customData->SetComment( comment );
 
         customData->SetRuleText( extractRuleBody( aOriginalText ) );
 
