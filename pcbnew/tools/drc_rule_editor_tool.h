@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 #include <tools/pcb_tool_base.h>
-
+#include <wx/datetime.h>
 
 class PCB_EDIT_FRAME;
 class DIALOG_DRC_RULE_EDITOR;
@@ -80,6 +80,7 @@ private:
     BOARD*                      m_pcb;
     DIALOG_DRC_RULE_EDITOR*     m_drcRuleEditorDlg;
     std::shared_ptr<DRC_ENGINE> m_drcEngine;
+    wxDateTime                  m_lastRulesFileModTime;
 };
 
 

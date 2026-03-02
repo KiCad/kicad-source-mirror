@@ -97,14 +97,28 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
     Activate();
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    // If the dialog was closed (X or Cancel), destroy it so rules reload from file
-    if( m_drcRuleEditorDlg && !m_drcRuleEditorDlg->IsShown() )
-        DestroyDRCRuleEditorDialog();
+    // Check if the rules file changed on disk since the dialog was last loaded
+    if( m_drcRuleEditorDlg )
+    {
+        wxFileName rulesFile( m_editFrame->GetDesignRulesPath() );
+        wxDateTime currentModTime;
+
+        if( rulesFile.FileExists() )
+            currentModTime = rulesFile.GetModificationTime();
+
+        if( !currentModTime.IsValid() || currentModTime != m_lastRulesFileModTime )
+            DestroyDRCRuleEditorDialog();
+    }
 
     if( !m_drcRuleEditorDlg )
     {
         m_drcRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
         updatePointers();
+
+        wxFileName rulesFile( m_editFrame->GetDesignRulesPath() );
+
+        if( rulesFile.FileExists() )
+            m_lastRulesFileModTime = rulesFile.GetModificationTime();
 
         if( show_dlg_modal )
             m_drcRuleEditorDlg->ShowModal();
@@ -113,7 +127,8 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
     }
     else
     {
-        // Dialog is still visible but behind other windows, bring to front
+        // File unchanged, bring existing dialog to front
+        m_drcRuleEditorDlg->Show( true );
         m_drcRuleEditorDlg->Raise();
     }
 }
