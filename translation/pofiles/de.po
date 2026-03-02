@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-02-25 23:09+0000\n"
+"PO-Revision-Date: 2026-03-02 18:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26767,14 +26767,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Bohrplan / Zusammenfassung der Bohrvorgänge erzeugen"
 
 #: kicad/cli/command_pcb_export_drill.cpp:95
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Bohrplan / Zusammenfassung der Bohrvorgänge erzeugen"
+msgstr "Zusammenfassung der Bohrvorgänge erzeugen"
 
 #: kicad/cli/command_pcb_export_drill.cpp:100
-#, fuzzy
 msgid "Report output file path"
-msgstr "Ausgangspfad auswählen"
+msgstr "Ausgabepfad für Bericht"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -26818,6 +26816,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Warnung: Pfad für Bericht ohne --generate-report angegeben; es wird kein "
+"Bericht erzeugt\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -44771,9 +44771,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Kupferzone \"%s\" hat keine verbundenen Pads."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "Kupferzone auf Lage %s bei (%s, %s) hat keine verbundenen Pads."
+msgstr ""
+"Kupferzone auf Lage %s bei (%s, %s) hat keine Pads, die mit dem Netz \"%s\" "
+"verbunden sind."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
