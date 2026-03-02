@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-02-24 04:31+0000\n"
+"PO-Revision-Date: 2026-03-02 18:10+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -25494,7 +25494,7 @@ msgstr "Přeskočený soubor '%s' (neznámý typ)."
 #: gerbview/files.cpp:596
 #, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b> rozbalený soubor %s chyba čtení </b>"
+msgstr "<b>chyba čtení rozbaleného souboru %s</b>"
 
 #: gerbview/files.cpp:647
 msgid "Open Zip File"
