@@ -307,12 +307,12 @@ std::vector<DRC_PANEL_MATCH> DRC_PANEL_MATCHER::MatchRule( const DRC_RULE& aRule
 
         if( matchesClaim( claim, remaining, &claimed ) )
         {
-           // VIAS_UNDER_SMD requires Pad_Type == 'SMD' in the condition
-           if( claim.panelType == VIAS_UNDER_SMD )
-           {
+            // VIAS_UNDER_SMD requires Pad_Type == 'SMD' in the condition
+            if( claim.panelType == VIAS_UNDER_SMD )
+            {
                 if( !aRule.m_Condition || !aRule.m_Condition->GetExpression().Contains( wxS( "Pad_Type == 'SMD'" ) ) )
-                        continue;
-           }
+                    continue;
+            }
 
             matches.emplace_back( claim.panelType, claimed );
 

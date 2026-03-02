@@ -566,7 +566,8 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             customFallback->SetRuleText( extractRuleBody( aOriginalText ) );
         }
 
-        if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE && match.panelType != VIAS_UNDER_SMD )
+        if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE
+            && match.panelType != VIAS_UNDER_SMD )
             constraintData->SetRuleCondition( condition );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name, condition, aRule.m_Severity,
