@@ -5037,6 +5037,12 @@ SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
         }
     }
 
+    if( !table->GetCell( 0, 0 ) )
+    {
+        THROW_PARSE_ERROR( _( "Invalid table: no cells defined" ), CurSource(), CurLine(), CurLineNumber(),
+                           CurOffset() );
+    }
+
     return table.release();
 }
 
