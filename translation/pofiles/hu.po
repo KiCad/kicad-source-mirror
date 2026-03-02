@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 02:11+0000\n"
+"PO-Revision-Date: 2026-03-02 18:09+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -14233,9 +14233,8 @@ msgid "Action"
 msgstr "Művelet"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:532
-#, fuzzy
 msgid "Skip All"
-msgstr "Kihagy"
+msgstr "Összes kihagyása"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:533
 #: eeschema/symbol_editor/symbol_editor.cpp:987
@@ -14301,9 +14300,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_junction_props_base.cpp:68
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:95
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Törölje a színeket a kapcsolásirajz szerkesztő színeinek használatához"
+msgstr ""
+"Törölje a színeket a kapcsolási rajz szerkesztő színeinek használatához."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -20113,7 +20112,6 @@ msgid "Pin Display"
 msgstr "Megjelenés"
 
 #: eeschema/lib_symbol.cpp:2438
-#, fuzzy
 msgid "Show Pin Number"
 msgstr "Lábszámozás megjelenítése"
 
@@ -20122,9 +20120,8 @@ msgid "Show Pin Name"
 msgstr "Lábnév megjelenítése"
 
 #: eeschema/lib_symbol.cpp:2444
-#, fuzzy
 msgid "Place Pin Names Inside"
-msgstr "Lábak nevei a láb felé kerüljenek"
+msgstr "Lábak nevei belülre"
 
 #: eeschema/lib_symbol.cpp:2448
 #, fuzzy
@@ -20251,14 +20248,14 @@ msgid "P&references"
 msgstr "Beállítások"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Vonal (%s, %s) és (%s, %s) között"
+msgstr "Vezeték (%s, %s) és (%s, %s) között"
 
 #: eeschema/net_navigator.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
-msgstr "%s busz (%s, %s) és (%s, %s) között"
+msgstr "Busz (%s, %s) és (%s, %s) között"
 
 #: eeschema/net_navigator.cpp:81
 #, fuzzy
@@ -20266,34 +20263,34 @@ msgid "Graphic line not connectable"
 msgstr "Nem csatlakoztatott kivezetés"
 
 #: eeschema/net_navigator.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "Rajzjel %s, [%s]"
+msgstr "Rajzjel '%s', láb '%s'"
 
 #: eeschema/net_navigator.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Lap kivezető láb hozzáadása"
+msgstr "Oldal '%s', láb '%s'"
 
 #: eeschema/net_navigator.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at (%s, %s)"
-msgstr "A(z) \"%s\" szöveg a (%s, %s) pozícióban"
+msgstr "\"%s\" címke itt: (%s, %s)"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "%s globális címke"
+msgstr "\"%s\" globális címke itt: (%s, %s)"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "%s hierarchikus címke"
+msgstr "\"%s\" hierarchikus címke itt: (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "Csomópont mérete:"
+msgstr "Csomópont itt: (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
 #, fuzzy, c-format
