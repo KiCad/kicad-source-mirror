@@ -3949,6 +3949,16 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
 
     sheet->SetFields( fields );
 
+    if( !sheet->GetField( FIELD_T::SHEET_NAME ) )
+    {
+        THROW_PARSE_ERROR( _( "Missing sheet name property" ), CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
+    if( !sheet->GetField( FIELD_T::SHEET_FILENAME ) )
+    {
+        THROW_PARSE_ERROR( _( "Missing sheet file property" ), CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
     return sheet.release();
 }
 
