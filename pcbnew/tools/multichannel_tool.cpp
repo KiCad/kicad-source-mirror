@@ -1437,8 +1437,10 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
     using namespace TMATCH;
 
     PROF_TIMER timerBuild;
-    std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components ) );
-    std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components,
+                                                                                       aTargetArea->m_components ) );
+    std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components,
+                                                                                         aRefArea->m_components ) );
     timerBuild.Stop();
 
     wxLogTrace( traceMultichannelTool, wxT( "Graph construction: %s (%d + %d components)" ),

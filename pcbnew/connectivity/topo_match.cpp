@@ -160,7 +160,8 @@ std::unordered_map<int, int> buildBaseNetMapping( const BACKTRACK_STAGE& aMatche
 
 bool checkCandidateNetConsistency( const std::unordered_map<int, int>& aBaseMapping,
                                    COMPONENT* aRef, COMPONENT* aTgt,
-                                   TOPOLOGY_MISMATCH_REASON& aReason )
+                                   TOPOLOGY_MISMATCH_REASON& aReason,
+                                   const std::unordered_set<int>& aExternalNets )
 {
     if( aRef->Pins().size() != aTgt->Pins().size() )
     {
@@ -181,6 +182,13 @@ bool checkCandidateNetConsistency( const std::unordered_map<int, int>& aBaseMapp
     {
         int refNet = aRef->Pins()[i]->GetNetCode();
         int tgtNet = aTgt->Pins()[i]->GetNetCode();
+
+        // Pads on external (global/power) nets are shared with the outside world and may be
+        // tied to different global nets in different channels (e.g. an address-select pin tied
+        // to +3V3 in one channel and GND in another).  Skip them in the net-consistency check
+        // so such legitimate differences do not cause false topology-mismatch errors.
+        if( aExternalNets.count( refNet ) || aExternalNets.count( tgtNet ) )
+            continue;
 
         auto baseIt = aBaseMapping.find( refNet );
 
@@ -294,7 +302,8 @@ CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                            
         localReason.m_candidate = cmpTarget->GetParent()->GetReferenceAsString();
 
         PROF_TIMER timerNet;
-        bool netResult = checkCandidateNetConsistency( baseNetMapping, aRef, cmpTarget, localReason );
+        bool netResult = checkCandidateNetConsistency( baseNetMapping, aRef, cmpTarget, localReason,
+                                                       m_externalNets );
         timerNet.Stop();
         netCheckMs += timerNet.msecs();
 
@@ -522,8 +531,10 @@ void CONNECTION_GRAPH::sortByPinCount()
 }
 
 
-void CONNECTION_GRAPH::BuildConnectivity()
+void CONNECTION_GRAPH::BuildConnectivity( const std::unordered_set<int>& aExternalNets )
 {
+    m_externalNets = aExternalNets;
+
     std::map<int, std::vector<PIN*>> nets;
 
     sortByPinCount();
@@ -541,6 +552,13 @@ void CONNECTION_GRAPH::BuildConnectivity()
 
     for( auto& [netcode, pins] : nets )
     {
+        // Skip nets that extend beyond this channel's footprint set.  Global power nets
+        // (GND, VCC, etc.) are shared across channels and can create spurious intra-channel
+        // connections that cause false topology mismatches when hierarchical pins are tied
+        // directly to those nets.
+        if( aExternalNets.count( netcode ) )
+            continue;
+
         wxLogTrace( traceTopoMatch, wxT( "net %d: %d connections\n" ), netcode,
                     (int) pins.size() );
 
@@ -1132,7 +1150,8 @@ void CONNECTION_GRAPH::AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset )
 
 
 std::unique_ptr<CONNECTION_GRAPH>
-CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps )
+CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
+                                         const std::set<FOOTPRINT*>& aOtherChannelFps )
 {
     auto cgraph = std::make_unique<CONNECTION_GRAPH>();
     VECTOR2I ref(0, 0);
@@ -1141,13 +1160,50 @@ CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps )
         ref = (*aFps.begin())->GetPosition();
 
     for( auto fp : aFps )
-    {
         cgraph->AddFootprint( fp, fp->GetPosition() - ref );
+
+    // Collect all net codes present in this footprint set.
+    std::unordered_set<int> localNets;
+
+    for( const FOOTPRINT* fp : aFps )
+    {
+        for( const PAD* pad : fp->Pads() )
+        {
+            if( pad->GetNetCode() > 0 )
+                localNets.insert( pad->GetNetCode() );
+        }
     }
 
-    cgraph->BuildConnectivity();
+    // Collect all net codes present in the comparison channel's footprint set.
+    std::unordered_set<int> otherChannelNets;
 
-    return std::move(cgraph);
+    for( const FOOTPRINT* fp : aOtherChannelFps )
+    {
+        for( const PAD* pad : fp->Pads() )
+        {
+            if( pad->GetNetCode() > 0 )
+                otherChannelNets.insert( pad->GetNetCode() );
+        }
+    }
+
+    // A net is "external" (cross-channel) only if it appears in both this channel and the
+    // other channel.  Power/global rails (GND, VCC, etc.) appear in every channel and must
+    // be excluded from intra-channel topology comparison because configuration pins may
+    // legitimately be tied to different rails in different channels (e.g. I2C address
+    // selection via pull-up to different supplies).  Signal nets that escape to a board
+    // connector are NOT excluded here; those signals are part of the topology and both
+    // channels should route them identically.
+    std::unordered_set<int> externalNets;
+
+    for( int netCode : localNets )
+    {
+        if( otherChannelNets.count( netCode ) )
+            externalNets.insert( netCode );
+    }
+
+    cgraph->BuildConnectivity( externalNets );
+
+    return cgraph;
 }
 
 

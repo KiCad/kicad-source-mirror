@@ -201,9 +201,11 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
                     if( !targetArea.m_ruleName.Contains( ruleName ) )
                         continue;
 
-                    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_components );
+                    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea.m_components,
+                                                                          targetArea.m_components );
                     auto cgTarget =
-                        CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_components );
+                        CONNECTION_GRAPH::BuildFromFootprintSet( targetArea.m_components,
+                                                                  refArea.m_components );
 
                     TMATCH::COMPONENT_MATCHES result;
 
@@ -717,8 +719,10 @@ BOOST_FIXTURE_TEST_CASE( FindIsomorphismCancellation, MULTICHANNEL_TEST_FIXTURE 
     BOOST_REQUIRE( refArea != nullptr );
     BOOST_REQUIRE( targetArea != nullptr );
 
-    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea->m_components );
-    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( targetArea->m_components );
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea->m_components,
+                                                          targetArea->m_components );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( targetArea->m_components,
+                                                              refArea->m_components );
 
     // Pre-cancelled: should return false immediately with empty result
     {
@@ -781,6 +785,89 @@ BOOST_FIXTURE_TEST_CASE( FindIsomorphismCancellation, MULTICHANNEL_TEST_FIXTURE 
 
         BOOST_TEST_MESSAGE( "Default params FindIsomorphism still succeeds" );
     }
+}
+
+
+/**
+ * Test that topology matching succeeds when hierarchical pins are connected directly
+ * to global nets (issue 21739).
+ *
+ * When address-select pins (AD0, AD2) are tied directly to GND or +3V3 in the parent
+ * schematic, those pads end up on a global net that also includes power-supply and
+ * pull-up pads from other components in the channel.  Without the fix this creates
+ * different intra-channel connection counts between channels, producing a false
+ * topology-mismatch error.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchGlobalNetHierarchicalPins, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue21739/topology_mismatch", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Found %d rule areas",
+                                          static_cast<int>( ruleData->m_areas.size() ) ) );
+
+    BOOST_REQUIRE( ruleData->m_areas.size() >= 2 );
+
+    RULE_AREA* ch0Area = nullptr;
+    RULE_AREA* ch1Area = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( !ra.m_zone )
+            continue;
+
+        wxString source = ra.m_zone->GetPlacementAreaSource();
+
+        if( source == wxT( "/i2c_thingy_ch0/" ) )
+            ch0Area = &ra;
+        else if( source == wxT( "/i2c_thingy_ch1/" ) )
+            ch1Area = &ra;
+    }
+
+    BOOST_REQUIRE_MESSAGE( ch0Area != nullptr, "Could not find i2c_thingy_ch0 rule area" );
+    BOOST_REQUIRE_MESSAGE( ch1Area != nullptr, "Could not find i2c_thingy_ch1 rule area" );
+
+    BOOST_TEST_MESSAGE( wxString::Format( "ch0 components: %d, ch1 components: %d",
+                                          static_cast<int>( ch0Area->m_components.size() ),
+                                          static_cast<int>( ch1Area->m_components.size() ) ) );
+
+    BOOST_CHECK_EQUAL( ch0Area->m_components.size(), ch1Area->m_components.size() );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( ch0Area->m_components,
+                                                          ch1Area->m_components );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( ch1Area->m_components,
+                                                              ch0Area->m_components );
+
+    TMATCH::COMPONENT_MATCHES result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    if( !status )
+    {
+        for( const auto& reason : details )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s <-> %s: %s",
+                                                  reason.m_reference, reason.m_candidate,
+                                                  reason.m_reason ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( status,
+                         "Topology match failed for channels with hierarchical pins "
+                         "tied to global nets (issue 21739)" );
 }
 
 

@@ -191,12 +191,13 @@ public:
     CONNECTION_GRAPH();
     ~CONNECTION_GRAPH();
 
-    void   BuildConnectivity();
+    void   BuildConnectivity( const std::unordered_set<int>& aExternalNets = {} );
     void   AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset );
     bool   FindIsomorphism( CONNECTION_GRAPH* target, COMPONENT_MATCHES& result,
                             std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
                             const ISOMORPHISM_PARAMS& aParams = {} );
-    static std::unique_ptr<CONNECTION_GRAPH> BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps );
+    static std::unique_ptr<CONNECTION_GRAPH> BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
+                                                                     const std::set<FOOTPRINT*>& aOtherChannelFps = {} );
     std::vector<COMPONENT*> &Components() { return m_components; }
 
 private:
@@ -221,7 +222,8 @@ private:
                                                     std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
                                                     const std::atomic<bool>* aCancelled = nullptr );
 
-    std::vector<COMPONENT*> m_components;
+    std::vector<COMPONENT*>   m_components;
+    std::unordered_set<int>   m_externalNets;
 
 };
 
