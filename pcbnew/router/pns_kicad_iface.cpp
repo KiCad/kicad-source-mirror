@@ -1760,7 +1760,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
         if( !layers[ layer ] )
             continue;
 
-        for( int polyId = 0; polyId < poly->TriangulatedPolyCount(); polyId++ )
+        for( unsigned int polyId = 0; polyId < poly->TriangulatedPolyCount(); polyId++ )
         {
             const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = poly->TriangulatedPolygon( polyId );
 

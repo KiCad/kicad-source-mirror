@@ -264,10 +264,10 @@ public:
     ///! The properties of a padstack drill.  Drill position is always the pad position (origin).
     struct DRILL_PROPS
     {
-        VECTOR2I size;  ///< Drill diameter (x == y) or slot dimensions (x != y)
-        PAD_DRILL_SHAPE shape;
-        PCB_LAYER_ID start;
-        PCB_LAYER_ID end;
+        VECTOR2I        size;                            ///< Drill diameter (x == y) or slot dimensions (x != y)
+        PAD_DRILL_SHAPE shape = PAD_DRILL_SHAPE::UNDEFINED;
+        PCB_LAYER_ID    start = UNDEFINED_LAYER;
+        PCB_LAYER_ID    end   = UNDEFINED_LAYER;
 
         std::optional<bool> is_filled; ///< True if the drill hole should be filled completely
         std::optional<bool> is_capped; ///< True if the drill hole should be capped

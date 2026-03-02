@@ -103,14 +103,14 @@ bool PIN::IsIsomorphic( const PIN& b, TOPOLOGY_MISMATCH_REASON& aReason ) const
 
     std::vector<bool> matches( m_conns.size() );
 
-    for( int i = 0; i < m_conns.size(); i++ )
+    for( size_t i = 0; i < m_conns.size(); i++ )
         matches[i] = false;
 
-    int nref = 0;
+    size_t nref = 0;
 
     for( auto& cref : m_conns )
     {
-        for( int i = 0; i < m_conns.size(); i++ )
+        for( size_t i = 0; i < m_conns.size(); i++ )
         {
             if( b.m_conns[i]->IsTopologicallySimilar( *cref ) )
             {
@@ -122,7 +122,7 @@ bool PIN::IsIsomorphic( const PIN& b, TOPOLOGY_MISMATCH_REASON& aReason ) const
         nref++;
     }
 
-    for( int i = 0; i < m_conns.size(); i++ )
+    for( size_t i = 0; i < m_conns.size(); i++ )
     {
         if( !matches[i] )
         {
@@ -276,7 +276,6 @@ CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                            
     aMismatchReasons.clear();
     std::vector<COMPONENT*> matches;
     int  candidatesChecked = 0;
-    int  skippedLocked = 0;
 
     // Build the net consistency map from locked pairs once for this entire evaluation
     // pass, rather than rebuilding it from scratch for every candidate.
@@ -287,10 +286,7 @@ CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                            
     for( COMPONENT* cmpTarget : aStructuralMatches )
     {
         if( partialMatches.m_locked.find( cmpTarget ) != partialMatches.m_locked.end() )
-        {
-            skippedLocked++;
             continue;
-        }
 
         candidatesChecked++;
 
@@ -672,7 +668,6 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
 
     stack.push_back( top );
 
-    bool matchFound = false;
     int  nloops = 0;
 
     while( !stack.empty() )
@@ -748,7 +743,8 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
             continue;
         }
 
-        if( current.m_currentMatch >= 0 && current.m_currentMatch >= current.m_matches.size() )
+        if( current.m_currentMatch >= 0
+            && static_cast<size_t>( current.m_currentMatch ) >= current.m_matches.size() )
         {
             wxLogTrace( traceTopoMatch, wxT( "stk: No more matches, going up [level=%d]\n" ),
                         (int) stack.size() );

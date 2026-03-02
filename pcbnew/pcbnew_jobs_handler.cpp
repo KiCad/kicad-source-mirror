@@ -2831,7 +2831,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile );
         break;
 
-    case JOB_PCB_IMPORT::FORMAT::PADS:
+    case JOB_PCB_IMPORT::FORMAT::PADS_ASCII:
         fileType = PCB_IO_MGR::PADS;
         break;
 

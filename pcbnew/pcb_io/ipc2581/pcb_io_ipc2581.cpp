@@ -800,19 +800,19 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
                 wxXmlNode* poly_node = appendNode( outline_node, "Polygon" );
                 addLineDesc( outline_node, 0, LINE_STYLE::SOLID );
 
-                const std::vector<VECTOR2I>& pts = aPoly.CPoints();
+                const std::vector<VECTOR2I>& polyPts = aPoly.CPoints();
                 wxXmlNode* point_node = appendNode( poly_node, "PolyBegin" );
-                addXY( point_node, pts.front() );
+                addXY( point_node, polyPts.front() );
 
-                for( size_t ii = 1; ii < pts.size(); ++ii )
+                for( size_t ii = 1; ii < polyPts.size(); ++ii )
                 {
                     wxXmlNode* poly_step_node =
                             appendNode( poly_node, "PolyStepSegment" );
-                    addXY( poly_step_node, pts[ii] );
+                    addXY( poly_step_node, polyPts[ii] );
                 }
 
                 point_node = appendNode( poly_node, "PolyStepSegment" );
-                addXY( point_node, pts.front() );
+                addXY( point_node, polyPts.front() );
             } );
 
     //TODO: handle multiline text
@@ -2394,19 +2394,19 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 
     LSEQ layer_seq = aVia->GetLayerSet().Seq();
 
-    auto addPadShape{ [&]( PCB_LAYER_ID layer, const PCB_VIA* aVia, const wxString& name,
-                           bool drill ) -> void
+    auto addPadShape{ [&]( PCB_LAYER_ID aLayer, const PCB_VIA* aViaShape, const wxString& aLayerRef,
+                           bool aDrill ) -> void
                       {
                           PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
 
-                          if( drill )
-                              shape.SetEnd( { KiROUND( aVia->GetDrillValue() / 2.0 ), 0 } );
+                          if( aDrill )
+                              shape.SetEnd( { KiROUND( aViaShape->GetDrillValue() / 2.0 ), 0 } );
                           else
-                              shape.SetEnd( { KiROUND( aVia->GetWidth( layer ) / 2.0 ), 0 } );
+                              shape.SetEnd( { KiROUND( aViaShape->GetWidth( aLayer ) / 2.0 ), 0 } );
 
                           wxXmlNode* padStackPadDefNode =
                                   appendNode( padStackDefNode, "PadstackPadDef" );
-                          addAttribute( padStackPadDefNode, "layerRef", name );
+                          addAttribute( padStackPadDefNode, "layerRef", aLayerRef );
                           addAttribute( padStackPadDefNode, "padUse", "REGULAR" );
 
                           addLocationNode( padStackPadDefNode, 0.0, 0.0 );
@@ -2901,16 +2901,16 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                     parent = otherSideViewNode;
                 }
 
-                wxString name;
+                wxString nodeName;
 
                 if( aLayer == F_SilkS || aLayer == B_SilkS )
-                    name = "SilkScreen";
+                    nodeName = "SilkScreen";
                 else if( aLayer == F_Fab || aLayer == B_Fab )
-                    name = "AssemblyDrawing";
+                    nodeName = "AssemblyDrawing";
                 else
                     wxASSERT( false );
 
-                wxXmlNode* new_node = appendNode( parent, name );
+                wxXmlNode* new_node = appendNode( parent, nodeName );
                 return new_node;
             };
 

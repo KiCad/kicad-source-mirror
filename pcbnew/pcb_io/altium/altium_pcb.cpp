@@ -1922,7 +1922,6 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     }
 
     VECTOR2I referencePoint0 = aElem.referencePoint.at( 0 );
-    VECTOR2I referencePoint1 = aElem.referencePoint.at( 1 );
 
     std::unique_ptr<PCB_DIM_RADIAL> dimension = std::make_unique<PCB_DIM_RADIAL>( m_board );
 

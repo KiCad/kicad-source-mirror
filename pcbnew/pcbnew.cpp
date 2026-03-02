@@ -671,7 +671,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
                 {
                     if( token == "sheetfile" )
                     {
-                        for( const wxString& extension : { wxT( ".sch" ), wxT( ".kicad_sch" ) } )
+                        for( const wxString extension : { wxT( ".sch" ), wxT( ".kicad_sch" ) } )
                         {
                             if( value == aSrcProjectName + extension )
                             {

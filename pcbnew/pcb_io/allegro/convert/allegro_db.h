@@ -51,6 +51,8 @@ struct RESOLVABLE
     {
     }
 
+    virtual ~RESOLVABLE() = default;
+
     virtual bool Resolve( const DB_OBJ_RESOLVER& aResolver ) = 0;
 
     virtual std::string DebugString() const;

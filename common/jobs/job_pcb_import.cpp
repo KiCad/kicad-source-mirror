@@ -25,7 +25,7 @@
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_IMPORT::FORMAT,
                               {
                                   { JOB_PCB_IMPORT::FORMAT::AUTO, "auto" },
-                                  { JOB_PCB_IMPORT::FORMAT::PADS, "pads" },
+                                  { JOB_PCB_IMPORT::FORMAT::PADS_ASCII, "pads" },
                                   { JOB_PCB_IMPORT::FORMAT::ALTIUM, "altium" },
                                   { JOB_PCB_IMPORT::FORMAT::EAGLE, "eagle" },
                                   { JOB_PCB_IMPORT::FORMAT::CADSTAR, "cadstar" },

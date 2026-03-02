@@ -83,7 +83,7 @@ int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     }
     else if( format == wxS( "pads" ) )
     {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::PADS;
+        importJob->m_format = JOB_PCB_IMPORT::FORMAT::PADS_ASCII;
     }
     else if( format == wxS( "altium" ) )
     {

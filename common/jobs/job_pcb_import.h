@@ -40,7 +40,7 @@ public:
     enum class FORMAT
     {
         AUTO,
-        PADS,
+        PADS_ASCII,
         ALTIUM,
         EAGLE,
         CADSTAR,

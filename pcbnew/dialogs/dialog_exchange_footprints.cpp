@@ -102,14 +102,14 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_upperSizer->Layout();
 
     // initialize controls based on update mode in case there is no saved state yet
-    m_removeExtraBox->SetValue(          m_updateMode ? false : false );
+    m_removeExtraBox->SetValue(          false );
     m_resetTextItemLayers->SetValue(     m_updateMode ? false : true  );
     m_resetTextItemEffects->SetValue(    m_updateMode ? false : true  );
     m_resetTextItemPositions->SetValue(  m_updateMode ? false : true  );
     m_resetTextItemContent->SetValue(    m_updateMode ? false : true  );
     m_resetFabricationAttrs->SetValue(   m_updateMode ? false : true  );
-    m_resetClearanceOverrides->SetValue( m_updateMode ? true  : true  );
-    m_reset3DModels->SetValue(           m_updateMode ? true  : true  );
+    m_resetClearanceOverrides->SetValue( true );
+    m_reset3DModels->SetValue(           true );
 
     // initialize match-mode
     if( m_updateMode )

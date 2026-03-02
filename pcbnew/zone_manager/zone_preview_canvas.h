@@ -56,7 +56,6 @@ public:
 
 private:
     BOARD*                                     m_pcb;
-    int                                        m_layer;
     std::unique_ptr<BOARD_EDGES_BOUNDING_ITEM> m_pcb_bounding_box;
     bool                                       m_zoomLocked;
 };

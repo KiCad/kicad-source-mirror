@@ -7636,8 +7636,8 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
 {
     T token = NextTok();
 
-    std::optional<bool> front( std::nullopt );
-    std::optional<bool> back( std::nullopt );
+    std::optional<bool> front{};
+    std::optional<bool> back{};
 
     if( token != T_LEFT && aAllowLegacyFormat )
     {
@@ -7665,7 +7665,16 @@ PCB_IO_KICAD_SEXPR_PARSER::parseFrontBackOptBool( bool aAllowLegacyFormat )
             token = NextTok();
         }
 
+        // GCC false-positive: both front and back are initialized to {} above and can only be
+        // set or reset inside this loop, never left in an indeterminate state.
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
         return { front, back };
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#pragma GCC diagnostic pop
+#endif
     }
 
     while( token != T_RIGHT )

@@ -356,7 +356,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                 return nearestP;
             };
 
-            int      minDist0, minDist1, minhull0, minhull1;
+            int      minDist0 = -1, minDist1 = -1, minhull0 = -1, minhull1 = -1;
             VECTOR2I p0 = minDistP( l_base.CPoint( 0 ), minDist0, minhull0 );
             VECTOR2I p1 = minDistP( l_base.CLastPoint(), minDist1, minhull1 );
 

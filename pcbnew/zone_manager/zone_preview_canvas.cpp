@@ -106,7 +106,6 @@ ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, ZONE* aZone, PCB_LAYER_ID
                                           const wxPoint& aPosition, const wxSize& aSize, GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, wxDefaultSize, aOptions, aGalType ),
         m_pcb( aPcb ),
-        m_layer( aLayer ),
         m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
         m_zoomLocked( false )
 {

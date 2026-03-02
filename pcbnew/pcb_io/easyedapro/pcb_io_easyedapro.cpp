@@ -236,8 +236,8 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
                 pcbLines = &lineBlocks[0];
 
             wxString           boardKey = pcbUuid + wxS( "_0" );
-            wxScopedCharBuffer cb = boardKey.ToUTF8();
-            wxString           boardPouredKey = wxBase64Encode( cb.data(), cb.length() );
+            wxScopedCharBuffer boardKeyBuffer = boardKey.ToUTF8();
+            wxString           boardPouredKey = wxBase64Encode( boardKeyBuffer.data(), boardKeyBuffer.length() );
 
             const std::multimap<wxString, EASYEDAPRO::POURED>& boardPoured =
                     get_def( m_projectData->m_Poured, boardPouredKey );
