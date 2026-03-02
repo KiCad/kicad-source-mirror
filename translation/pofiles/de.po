@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-01 17:38+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -41759,9 +41759,8 @@ msgstr "Die rückseitige Bohrung (Backdrill) muss diese Lage einschließen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Top backdrill size:"
-msgstr "Obers. Backdrillgröße"
+msgstr "Obers. Backdrillgröße:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
@@ -41770,9 +41769,8 @@ msgstr "Unters. Backdrill-Ziellage:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Bottom backdrill size:"
-msgstr "Unters. Backdrillgröße"
+msgstr "Unters. Backdrillgröße:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
@@ -48318,9 +48316,8 @@ msgid "Maximum Gap must be greater than 0"
 msgstr "Der maximale Spalt muss größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:106
-#, fuzzy
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "Die maximale ungekoppelte Länge muss größer als 0 sein"
+msgstr "Die maximale ungekoppelte Länge muss größer als oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:109
 msgid "Maximum Skew must be greater than or equal to 0"
@@ -48351,9 +48348,8 @@ msgid "Minimum Gap cannot be greater than Maximum Gap"
 msgstr "Der Mindestspalt darf nicht größer sein als der maximale Spalt"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:139
-#, fuzzy
 msgid "At least one constraint must be specified"
-msgstr "Mindestens eine Lage muss angegeben werden\n"
+msgstr "Mindestens eine Einschränkung muss angegeben werden"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:87
 msgid "Minimum Via Diameter must be greater than 0"
@@ -48384,9 +48380,8 @@ msgstr ""
 "sein"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
-#, fuzzy
 msgid "At least one via type must be selected"
-msgstr "Mindestens eine Lage muss ausgewählt werden"
+msgstr "Mindestens ein Via-Typ muss ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:331
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:373
@@ -54063,9 +54058,8 @@ msgid "Via Properties"
 msgstr "Via-Eigenschaften"
 
 #: pcbnew/pcb_track.cpp:3180
-#, fuzzy
 msgid "Post-machining"
-msgstr "Obers. Nachbearbeitung"
+msgstr "Nachbearbeitung"
 
 #: pcbnew/pcb_track.cpp:3191 pcbnew/widgets/pcb_properties_panel.cpp:653
 msgid "Layer Top"
