@@ -115,6 +115,20 @@ message SetBoardOrigin
   kiapi.common.types.Vector2 origin = 3;
 }
 
+message GetBoardLayerName
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  kiapi.board.types.BoardLayer layer = 2;
+}
+
+message BoardLayerNameResponse
+{
+  // The name of the layer shown in the KiCad GUI, which may be a default value like "F.Cu" or may
+  // have been customized by the user.
+  string name = 1;
+}
+
 /*
  * Net management
  */
