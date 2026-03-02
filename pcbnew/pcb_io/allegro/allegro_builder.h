@@ -27,6 +27,8 @@
 #include <functional>
 #include <memory>
 #include <unordered_map>
+#include <vector>
+#include <unordered_set>
 
 #include <convert/allegro_pcb_structs.h>
 #include <convert/allegro_db.h>
@@ -163,8 +165,11 @@ private:
 
     /**
      * Build a ZONE from an 0x0E, 0x24 or 0x28 block.
+     * 
+     * @param aRelatedBlocks are blocks to get net (0x1B) and fill (0x28) info from
      */
-    std::unique_ptr<ZONE> buildZone( const BLOCK_BASE& aBlock, int aNetcode );
+    std::unique_ptr<ZONE> buildZone( const BLOCK_BASE&                     aBoundaryBlock,
+                                     const std::vector<const BLOCK_BASE*>& aRelatedBlocks );
 
     SHAPE_LINE_CHAIN buildOutline( const BLK_0x0E_RECT& aRect ) const;
     SHAPE_LINE_CHAIN buildOutline( const BLK_0x24_RECT& aRect ) const;
@@ -184,10 +189,9 @@ private:
     const SHAPE_LINE_CHAIN& buildSegmentChain( uint32_t aStartKey ) const;
 
     /**
-     * Resolve the net code for a BOUNDARY shape by following the pointer chain:
-     * BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 array -> first entry -> 0x1B NET
+     * Get blocks that are related to the BOUNDARY shape, i.e. NET and SHAPE (fill) info.
      */
-    int resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const;
+    std::vector<const BLOCK_BASE*> getShapeRelatedBlocks( const BLK_0x28_SHAPE& aShape ) const;
 
     /**
      * Follow m_MatchGroupPtr through the 0x26/0x2C pointer chain to get
@@ -255,7 +259,10 @@ private:
         PCB_LAYER_ID          layer;
     };
 
-    std::vector<ZoneFillEntry> m_zoneFillShapes;
+    std::unordered_map<uint32_t, ZoneFillEntry> m_zoneFillShapes;
+
+    // Keys that have been used as zone fills already
+    std::unordered_set<uint32_t> m_usedZoneFillShapes;
 
     std::unique_ptr<LAYER_MAPPER> m_layerMapper;
 

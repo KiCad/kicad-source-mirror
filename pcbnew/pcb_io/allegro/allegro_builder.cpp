@@ -3326,14 +3326,14 @@ void BOARD_BUILDER::createTracks()
                 case 0x28:
                 {
                     // 0x28 shapes on the net chain are computed copper fills.
-                    // Collect them for zone fill polygon import.
+                    // Collect them for teardrop and polygon import.
                     const BLK_0x28_SHAPE& fillShape =
                             static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *connItemBlock ).GetData();
 
                     PCB_LAYER_ID fillLayer = getLayer( fillShape.m_Layer );
 
                     if( fillLayer != UNDEFINED_LAYER )
-                        m_zoneFillShapes.push_back( { &fillShape, netCode, fillLayer } );
+                        m_zoneFillShapes[fillShape.m_Key] = { &fillShape, netCode, fillLayer };
 
                     break;
                 }
@@ -3840,9 +3840,11 @@ static LSET getRuleAreaLayers( const LAYER_INFO& aLayerInfo, PCB_LAYER_ID aDefau
 }
 
 
-std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aNetcode )
+std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&                     aBoundaryBlock,
+                                                const std::vector<const BLOCK_BASE*>& aRelatedBlocks )
 {
-    const LAYER_INFO layerInfo = expectLayerFromBlock( aBlock );
+    int              netCode = NETINFO_LIST::UNCONNECTED;
+    const LAYER_INFO layerInfo = expectLayerFromBlock( aBoundaryBlock );
 
     bool isCopperZone = ( layerInfo.m_Class == LAYER_INFO::CLASS::ETCH
                           || layerInfo.m_Class == LAYER_INFO::CLASS::BOUNDARY );
@@ -3876,12 +3878,12 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aN
         return nullptr;
     }
 
-    const SHAPE_POLY_SET zoneShape = tryBuildZoneShape( aBlock );
+    const SHAPE_POLY_SET zoneShape = tryBuildZoneShape( aBoundaryBlock );
 
     if( zoneShape.OutlineCount() != 1 )
     {
         wxLogTrace( traceAllegroBuilder, "  Skipping zone with type %#04x, key %#010x - failed to build outline",
-                    aBlock.GetBlockType(), aBlock.GetKey() );
+                    aBoundaryBlock.GetBlockType(), aBoundaryBlock.GetKey() );
         return nullptr;
     }
 
@@ -3911,7 +3913,7 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aN
         zone->SetDoNotAllowPads( false );
         zone->SetDoNotAllowFootprints( isPackageKeepout );
 
-        // Zones utedon't have native keepin functions, so we leave a note for the user here
+        // Zones don't have native keepin functions, so we leave a note for the user here
         // Later, we could consider adding a custom DRC rule for this (or KiCad could add native keepin
         // zone support)
         if( isRouteKeepin )
@@ -3920,21 +3922,77 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE& aBlock, int aN
             zone->SetZoneName( "Package Keepin" );
     }
 
+    SHAPE_POLY_SET combinedFill;
+
+    for( const BLOCK_BASE* block : aRelatedBlocks )
+    {
+        if( !block )
+            continue;
+
+        switch( block->GetBlockType() )
+        {
+        case 0x1B:
+        {
+            auto it = m_netCache.find( block->GetKey() );
+
+            if( it != m_netCache.end() )
+            {
+                wxLogTrace( traceAllegroBuilder, "  Resolved BOUNDARY %#010x -> net '%s' (code %d)",
+                            aBoundaryBlock.GetKey(), it->second->GetNetname(), it->second->GetNetCode() );
+
+                netCode = it->second->GetNetCode();
+            }
+            else
+            {
+                m_reporter.Report( wxString::Format( "Could not find net key %#010x in cache for BOUNDARY %#010x",
+                                                     block->GetKey(), aBoundaryBlock.GetKey() ),
+                                   RPT_SEVERITY_WARNING );
+            }
+            break;
+        }
+        case 0x28:
+        {
+            const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+
+            SHAPE_POLY_SET fillPolySet = shapeToPolySet( shapeData );
+            fillPolySet.ClearArcs();
+            combinedFill.Append( fillPolySet );
+
+            m_usedZoneFillShapes.emplace( block->GetKey() );
+            break;
+        }
+        default: break;
+        }
+    }
+
     // Set net code AFTER layer assignment. SetNetCode checks IsOnCopperLayer() and
     // forces net=0 if the zone isn't on a copper layer yet.
-    zone->SetNetCode( aNetcode );
+    zone->SetNetCode( netCode );
 
     for( const SHAPE_LINE_CHAIN& chain : zoneShape.CPolygon( 0 ) )
         zone->AddPolygon( chain );
+
+    // Add zone fills
+    if( isCopperZone && !combinedFill.IsEmpty() )
+    {
+        combinedFill.BooleanIntersection( *zone->Outline() );
+        combinedFill.Fracture( true );
+
+        zone->SetFilledPolysList( layer, combinedFill );
+
+        zone->SetIsFilled( true );
+        zone->SetNeedRefill( false );
+    }
 
     return zone;
 }
 
 
-int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
+std::vector<const BLOCK_BASE*> BOARD_BUILDER::getShapeRelatedBlocks( const BLK_0x28_SHAPE& aShape ) const
 {
-    // Follow pointer chain: BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 -> m_Ptrs[0] -> 0x1B NET
-    uint32_t ptr7Key = 0;
+    // Follow pointer chain: BOUNDARY.Ptr7 -> 0x2C TABLE -> Ptr1 -> 0x37 -> m_Ptrs
+    std::vector<const BLOCK_BASE*> ret;
+    uint32_t                       ptr7Key = 0;
 
     if( aShape.m_Ptr7.has_value() )
         ptr7Key = aShape.m_Ptr7.value();
@@ -3942,30 +4000,25 @@ int BOARD_BUILDER::resolveShapeNet( const BLK_0x28_SHAPE& aShape ) const
         ptr7Key = aShape.m_Ptr7_16x.value();
 
     if( ptr7Key == 0 )
-        return NETINFO_LIST::UNCONNECTED;
+        return ret;
 
     const BLK_0x2C_TABLE* tbl = expectBlockByKey<BLK_0x2C_TABLE>( ptr7Key, 0x2C );
 
     if( !tbl )
-        return NETINFO_LIST::UNCONNECTED;
+        return ret;
 
     const BLK_0x37_PTR_ARRAY* ptrArray = expectBlockByKey<BLK_0x37_PTR_ARRAY>( tbl->m_Ptr1, 0x37 );
 
     if( !ptrArray || ptrArray->m_Count == 0 )
-        return NETINFO_LIST::UNCONNECTED;
+        return ret;
 
-    uint32_t netKey = ptrArray->m_Ptrs[0];
-    auto it = m_netCache.find( netKey );
+    const size_t count = std::min( std::min( ptrArray->m_Count, ptrArray->m_Capacity ), 100u );
+    ret.resize( count );
 
-    if( it != m_netCache.end() )
-    {
-        wxLogTrace( traceAllegroBuilder, "  Resolved BOUNDARY %#010x -> net '%s' (code %d)",
-                    aShape.m_Key, it->second->GetNetname(), it->second->GetNetCode() );
-        return it->second->GetNetCode();
-    }
+    for( size_t i = 0; i < count; i++ )
+        ret[i] = m_brdDb.GetObjectByKey( ptrArray->m_Ptrs[i] );
 
-    wxLogTrace( traceAllegroBuilder, "  BOUNDARY %#010x: net key %#010x not in cache", aShape.m_Key, netKey );
-    return NETINFO_LIST::UNCONNECTED;
+    return ret;
 }
 
 
@@ -4032,14 +4085,12 @@ void BOARD_BUILDER::createZones()
         if( shapeData.m_Layer.m_Class != LAYER_INFO::CLASS::BOUNDARY )
             continue;
 
-        int                   netCode = resolveShapeNet( shapeData );
-        std::unique_ptr<ZONE> zone = buildZone( *block, netCode );
+        std::unique_ptr<ZONE> zone = buildZone( *block, getShapeRelatedBlocks( shapeData ) );
 
         if( zone )
         {
-            wxLogTrace( traceAllegroBuilder, "  Zone %#010x net=%d layer=%s (subclass=%#04x)",
-                        shapeData.m_Key, netCode,
-                        m_board.GetLayerName( zone->GetFirstLayer() ),
+            wxLogTrace( traceAllegroBuilder, "  Zone %#010x net=%d layer=%s (subclass=%#04x)", shapeData.m_Key,
+                        zone->GetNetCode(), m_board.GetLayerName( zone->GetFirstLayer() ),
                         shapeData.m_Layer.m_Subclass );
 
             zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
@@ -4059,9 +4110,10 @@ void BOARD_BUILDER::createZones()
         if( merged[i] )
             continue;
 
-        ZONE*                          primary = boundaryZones[i].get();
-        const SHAPE_POLY_SET::POLYGON& primaryPolygon = primary->Outline()->CPolygon( 0 );
-        LSET                           layers = primary->GetLayerSet();
+        ZONE*                                            primary = boundaryZones[i].get();
+        const SHAPE_POLY_SET::POLYGON&                   primaryPolygon = primary->Outline()->CPolygon( 0 );
+        LSET                                             layers = primary->GetLayerSet();
+        std::unordered_map<PCB_LAYER_ID, SHAPE_POLY_SET> mergedFills;
 
         for( size_t j = i + 1; j < boundaryZones.size(); j++ )
         {
@@ -4096,6 +4148,12 @@ void BOARD_BUILDER::createZones()
 
             if( !polygonsDiffer )
             {
+                for( PCB_LAYER_ID layer : candidate->GetLayerSet() )
+                {
+                    if( SHAPE_POLY_SET* fill = candidate->GetFill( layer ) )
+                        mergedFills[layer] = *fill;
+                }
+
                 layers |= candidate->GetLayerSet();
                 merged[j] = true;
                 mergedCount++;
@@ -4107,7 +4165,21 @@ void BOARD_BUILDER::createZones()
         }
 
         if( layers != primary->GetLayerSet() )
+        {
+            for( PCB_LAYER_ID layer : primary->GetLayerSet() )
+            {
+                if( SHAPE_POLY_SET* fill = primary->GetFill( layer ) )
+                    mergedFills[layer] = *fill;
+            }
+
             primary->SetLayerSet( layers );
+
+            for( const auto& [layer, fill] : mergedFills )
+                primary->SetFilledPolysList( layer, fill );
+
+            primary->SetNeedRefill( false );
+            primary->SetIsFilled( true );
+        }
 
         m_board.Add( boundaryZones[i].release(), ADD_MODE::APPEND );
     }
@@ -4138,7 +4210,7 @@ void BOARD_BUILDER::createZones()
             wxLogTrace( traceAllegroBuilder, "  Processing %s rect %#010x", layerInfoDisplayName( rectData.m_Layer ),
                         rectData.m_Key );
 
-            zone = buildZone( *block, NETINFO_LIST::UNCONNECTED );
+            zone = buildZone( *block, {} );
             break;
         }
         case 0x28:
@@ -4151,7 +4223,7 @@ void BOARD_BUILDER::createZones()
             wxLogTrace( traceAllegroBuilder, "  Processing %s shape %#010x", layerInfoDisplayName( shapeData.m_Layer ),
                         shapeData.m_Key );
 
-            zone = buildZone( *block, NETINFO_LIST::UNCONNECTED );
+            zone = buildZone( *block, {} );
             break;
         }
         default:
@@ -4292,100 +4364,6 @@ void BOARD_BUILDER::applyZoneFills()
     wxLogTrace( traceAllegroBuilder, "Applying zone fill polygons from %zu collected fills",
                 m_zoneFillShapes.size() );
 
-    int fillCount = 0;
-    int totalHoles = 0;
-    std::vector<bool> matched( m_zoneFillShapes.size(), false );
-
-    // Index fills by (layer, netCode) to avoid scanning all fills for each zone
-    std::unordered_map<uint64_t, std::vector<size_t>> fillIndex;
-
-    for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
-    {
-        const ZoneFillEntry& fill = m_zoneFillShapes[i];
-        uint64_t key = ( static_cast<uint64_t>( fill.layer ) << 32 )
-                       | static_cast<uint32_t>( fill.netCode );
-        fillIndex[key].push_back( i );
-    }
-
-    for( ZONE* zone : m_board.Zones() )
-    {
-        if( zone->GetIsRuleArea() || zone->GetNetCode() == NETINFO_LIST::UNCONNECTED )
-            continue;
-
-        bool hasFill = false;
-
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
-        {
-            if( !IsCopperLayer( layer ) )
-                continue;
-
-            uint64_t key = ( static_cast<uint64_t>( layer ) << 32 )
-                           | static_cast<uint32_t>( zone->GetNetCode() );
-            auto indexIt = fillIndex.find( key );
-
-            if( indexIt == fillIndex.end() )
-                continue;
-
-            SHAPE_POLY_SET combinedFill;
-            SHAPE_POLY_SET zoneOutline = *zone->Outline();
-            zoneOutline.ClearArcs();
-
-            for( size_t i : indexIt->second )
-            {
-                const ZoneFillEntry& fill = m_zoneFillShapes[i];
-                SHAPE_POLY_SET       fillPolySet = shapeToPolySet( *fill.shape );
-
-                if( fillPolySet.VertexCount() < 3 )
-                    continue;
-
-                fillPolySet.ClearArcs();
-                BOX2I fillBbox = fillPolySet.BBox();
-                BOX2I zoneBbox = zone->GetBoundingBox();
-
-                // Etch shapes can be slightly outside the boundary
-                const int c_epsilon = pcbIUScale.MilsToIU( 1.0 );
-
-                if( !zoneBbox.GetInflated( c_epsilon ).Contains( fillBbox ) )
-                    continue;
-
-                // Check that the fill is approximately fully contained within the zone outline
-                SHAPE_POLY_SET fillCut( fillPolySet );
-
-                fillCut.BooleanSubtract( zoneOutline );
-                fillCut.Deflate( c_epsilon, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_HIGH_DEF );
-
-                if( fillCut.Area() > 0 )
-                    continue;
-
-                combinedFill.BooleanAdd( fillPolySet );
-
-                matched[i] = true;
-            }
-
-            if( combinedFill.OutlineCount() > 0 )
-            {
-                // Make sure the fills stay within the zone outline.
-                combinedFill.BooleanIntersection( zoneOutline );
-
-                // Skip Clipper2 Simplify because we've already done a boolean operation.
-                if( combinedFill.HasHoles() )
-                    combinedFill.Fracture( /* aSimplify */ false );
-
-                zone->SetFilledPolysList( layer, combinedFill );
-                hasFill = true;
-                fillCount++;
-            }
-        }
-
-        if( hasFill )
-        {
-            zone->SetIsFilled( true );
-            zone->SetNeedRefill( false );
-        }
-    }
-
-    wxLogTrace( traceAllegroPerf, wxT( "    applyZoneFills matched loop: %.3f ms (%d fills, %d holes)" ), //format:allow
-                fillTimer.msecs( true ), fillCount, totalHoles );
 
     // Unmatched ETCH shapes are either standalone copper polygons or dynamic copper
     // (teardrops/fillets). On V172+ boards, m_Unknown2 bit 12 (0x1000) marks auto-generated
@@ -4394,49 +4372,12 @@ void BOARD_BUILDER::applyZoneFills()
     int copperShapeCount = 0;
     int teardropCount = 0;
 
-    for( size_t i = 0; i < m_zoneFillShapes.size(); i++ )
+    for( const auto& [fillKey, fill] : m_zoneFillShapes )
     {
-        if( matched[i] )
+        if( m_usedZoneFillShapes.contains( fillKey ) )
             continue;
 
-        const ZoneFillEntry& fill = m_zoneFillShapes[i];
-
-        SHAPE_LINE_CHAIN outline = buildOutline( *fill.shape );
-
-        if( outline.PointCount() < 3 )
-            continue;
-
-        outline.SetClosed( true );
-        outline.ClearArcs();
-
-        SHAPE_POLY_SET polySet;
-        polySet.AddOutline( outline );
-
-        // Walk 0x34 KEEPOUT chain for clearance holes
-        uint32_t holeKey = fill.shape->m_FirstKeepoutPtr;
-
-        while( holeKey != 0 )
-        {
-            const BLOCK_BASE* holeBlock = m_brdDb.GetObjectByKey( holeKey );
-
-            if( !holeBlock || holeBlock->GetBlockType() != 0x34 )
-                break;
-
-            const auto& keepout =
-                    static_cast<const BLOCK<BLK_0x34_KEEPOUT>&>( *holeBlock ).GetData();
-
-            SHAPE_LINE_CHAIN holeOutline = buildSegmentChain( keepout.m_FirstSegmentPtr );
-
-            if( holeOutline.PointCount() >= 3 )
-            {
-                holeOutline.SetClosed( true );
-                holeOutline.ClearArcs();
-                polySet.AddHole( holeOutline );
-            }
-
-            holeKey = keepout.m_Next;
-        }
-
+        SHAPE_POLY_SET polySet = shapeToPolySet( *fill.shape );
         polySet.Simplify();
 
         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
@@ -4486,11 +4427,6 @@ void BOARD_BUILDER::applyZoneFills()
 
     wxLogTrace( traceAllegroPerf, wxT( "    applyZoneFills unmatched loop: %.3f ms (%d shapes, %d teardrops)" ), //format:allow
                 fillTimer.msecs( true ), copperShapeCount, teardropCount );
-
-    wxLogTrace( traceAllegroBuilder,
-                "Applied fills to %d zone/layer pairs (%d clearance holes), "
-                "created %d standalone copper shapes, %d teardrop zones",
-                fillCount, totalHoles, copperShapeCount, teardropCount );
 }
 
 

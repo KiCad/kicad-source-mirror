@@ -325,16 +325,17 @@ BOUNDARY 0x28 shape
        └─ 0x2C TABLE
             └─ m_Ptr1
                  └─ 0x37 pointer array
-                      └─ m_Ptrs[0]
+                      └─ m_Ptrs[0] (usually)
                            └─ 0x1B NET block
 ```
 
 The `m_Ptr7` field is version-conditional: `m_Ptr7` exists in V172+,
 `m_Ptr7_16x` exists in pre-V172. One or the other will be populated.
 
-The 0x37 pointer array's `m_Ptrs[0]` holds the key of the 0x1B NET
-block that owns this zone. The `m_Count` field indicates how many
-entries are valid in the array.
+The 0x37 pointer array holds keys of blocks, of which the 0x1B NET
+block provides net information and 0x28 SHAPE blocks specify fills.
+The `m_Count` field indicates how many entries are specified in the 
+array. Some keys may be invalid.
 
 ## Board Outline
 
