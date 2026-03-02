@@ -114,9 +114,10 @@ bool DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    m_minLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinimumLength() ) );
-    m_optLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
-    m_maxLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaximumLength() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinimumLength() ) );
+    m_optLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
+    m_maxLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaximumLength() ) );
 
     return true;
 }

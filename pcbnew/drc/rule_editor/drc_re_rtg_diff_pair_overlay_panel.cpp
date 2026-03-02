@@ -153,16 +153,17 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataToWindow()
         return false;
 
     // Convert mm values to internal units and set them in the binders
-    m_minGapBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinGap() ) );
-    m_preferredGapBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredGap() ) );
-    m_maxGapBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxGap() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinGap() ) );
+    m_preferredGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredGap() ) );
+    m_maxGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxGap() ) );
 
-    m_minWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinWidth() ) );
-    m_preferredWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredWidth() ) );
-    m_maxWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxWidth() ) );
+    m_minWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinWidth() ) );
+    m_preferredWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredWidth() ) );
+    m_maxWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxWidth() ) );
 
-    m_maxUncoupledLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxUncoupledLength() ) );
-    m_maxSkewBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
+    m_maxUncoupledLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxUncoupledLength() ) );
+    m_maxSkewBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
 
     return true;
 }

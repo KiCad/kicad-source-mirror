@@ -197,11 +197,12 @@ bool DRC_RE_VIA_STYLE_OVERLAY_PANEL::TransferDataToWindow()
         return false;
 
     // Convert mm values to internal units and set them in the unit binders
-    m_minViaDiameterBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaDiameter() ) );
-    m_maxViaDiameterBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaDiameter() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minViaDiameterBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaDiameter() ) );
+    m_maxViaDiameterBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaDiameter() ) );
 
-    m_minViaHoleSizeBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaHoleSize() ) );
-    m_maxViaHoleSizeBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaHoleSize() ) );
+    m_minViaHoleSizeBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaHoleSize() ) );
+    m_maxViaHoleSizeBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaHoleSize() ) );
 
     m_viaTypeChoice->SetSelection( static_cast<int>( m_data->GetViaType() ) );
 

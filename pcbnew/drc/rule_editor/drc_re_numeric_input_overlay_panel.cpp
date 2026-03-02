@@ -94,11 +94,11 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataToWindow()
         auto* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() );
 
         if( ctrl )
-            ctrl->SetValue( wxString::Format( "%d", (int) m_data->GetNumericInputValue() ) );
+            ctrl->ChangeValue( wxString::Format( "%d", (int) m_data->GetNumericInputValue() ) );
     }
     else
     {
-        m_valueBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetNumericInputValue() ) );
+        m_valueBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetNumericInputValue() ) );
     }
 
     return true;

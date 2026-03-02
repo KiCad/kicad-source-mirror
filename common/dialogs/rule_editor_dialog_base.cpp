@@ -488,6 +488,19 @@ void RULE_EDITOR_DIALOG_BASE::SetModified()
 
     if( m_cancelRuleButton && m_ruleTreeCtrl->IsEnabled() )
         m_cancelRuleButton->SetLabelText( _( "Discard" ) );
+
+    if( m_selectedData )
+    {
+        wxTreeItemId itemId = m_selectedData->GetTreeItemId();
+        if( itemId.IsOk() )
+        {
+            wxString currentText = m_ruleTreeCtrl->GetItemText( itemId );
+            if( !currentText.EndsWith( wxS( " *" ) ) )
+            {
+                m_ruleTreeCtrl->SetItemText( itemId, currentText + wxS( " *" ) );
+            }
+        }
+    }
 }
 
 

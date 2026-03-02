@@ -100,8 +100,9 @@ bool DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    m_minTextHeightBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinTextHeight() ) );
-    m_minTextThicknessBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinTextThickness() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minTextHeightBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinTextHeight() ) );
+    m_minTextThicknessBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinTextThickness() ) );
 
     return true;
 }

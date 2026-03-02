@@ -251,8 +251,8 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataToWindow()
 {
     if( m_constraintData )
     {
-        m_nameCtrl->SetValue( m_constraintData->GetRuleName() );
-        m_commentCtrl->SetValue( m_constraintData->GetComment() );
+        m_nameCtrl->ChangeValue( m_constraintData->GetRuleName() );
+        m_commentCtrl->ChangeValue( m_constraintData->GetComment() );
         setSelectedLayers( m_constraintData->GetLayers(), m_constraintData->GetLayerSource() );
         wxString cond = m_constraintData->GetRuleCondition();
 

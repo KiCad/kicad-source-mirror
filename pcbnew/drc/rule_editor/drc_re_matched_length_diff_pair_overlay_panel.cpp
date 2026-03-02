@@ -120,10 +120,11 @@ bool DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    m_minLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinimumLength() ) );
-    m_optLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
-    m_maxLengthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaximumLength() ) );
-    m_maxSkewBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinimumLength() ) );
+    m_optLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptimumLength() ) );
+    m_maxLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaximumLength() ) );
+    m_maxSkewBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
 
     return true;
 }

@@ -119,9 +119,10 @@ bool DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::TransferDataToWindow()
         return false;
 
     // Convert mm values to internal units and set them in the binders
-    m_minRoutingWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMinRoutingWidth() ) );
-    m_preferredRoutingWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredRoutingWidth() ) );
-    m_maxRoutingWidthBinder->SetDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxRoutingWidth() ) );
+    // Use ChangeDoubleValue to avoid triggering modification events during loading
+    m_minRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinRoutingWidth() ) );
+    m_preferredRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredRoutingWidth() ) );
+    m_maxRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxRoutingWidth() ) );
 
     return true;
 }
