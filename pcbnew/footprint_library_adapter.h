@@ -76,6 +76,16 @@ public:
      */
     long long GenerateTimestamp( const wxString* aNickname );
 
+    /**
+     * Checks whether the library on disk has changed since it was last enumerated into
+     * PreloadedFootprints and, if so, clears the stale cache and re-enumerates the library
+     * synchronously.  This allows external changes such as git branch switches to be picked
+     * up without restarting KiCad.
+     *
+     * @param aNickname is the library to check and potentially refresh.
+     */
+    void RefreshLibraryIfChanged( const wxString& aNickname );
+
     bool FootprintExists( const wxString& aNickname, const wxString& aName );
 
     /**
@@ -184,6 +194,10 @@ private:
     /// These are cloned during library enumeration so GetFootprints() returns instantly.
     static LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> PreloadedFootprints;
     static std::shared_mutex PreloadedFootprintsMutex;
+
+    /// Per-library filesystem timestamps recorded when PreloadedFootprints was last populated.
+    /// Used by RefreshLibraryIfChanged() to detect external modifications.
+    std::map<wxString, long long> m_preloadedTimestamps;
 };
 
 #endif //FOOTPRINT_LIBRARY_ADAPTER_H

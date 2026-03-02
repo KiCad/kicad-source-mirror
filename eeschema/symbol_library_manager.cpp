@@ -39,6 +39,8 @@
 #include <locale_io.h>
 #include <confirm.h>
 #include <string_utils.h>
+#include <wildcards_and_files_ext.h>
+#include <kiplatform/io.h>
 #include <libraries/library_manager.h>
 #include <libraries/symbol_library_adapter.h>
 
@@ -86,7 +88,23 @@ int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 
     if( auto uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
     {
-        return std::hash<std::string>{}( aLibrary.ToStdString() + uri->ToStdString() );
+        // Mix a file modification timestamp into the hash so that external changes (e.g. a git
+        // branch switch) are detected by the library tree synchronizer without a restart.
+        wxFileName fn( *uri );
+        long long  mtime = 0;
+
+        wxLogNull silence;
+
+        fn.Normalize( wxPATH_NORM_ALL );
+
+        if( fn.DirExists() )
+            mtime = KIPLATFORM::IO::TimestampDir( fn.GetFullPath(),
+                        wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+        else if( fn.IsFileReadable() )
+            mtime = fn.GetModificationTime().GetValue().GetValue();
+
+        size_t base = std::hash<std::string>{}( aLibrary.ToStdString() + uri->ToStdString() );
+        return static_cast<int>( base ^ static_cast<size_t>( mtime ) );
     }
 
     return -1;

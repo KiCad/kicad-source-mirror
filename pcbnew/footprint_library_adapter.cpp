@@ -101,9 +101,13 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
         }
     }
 
+    // GetLibraryTimestamp() reads the filesystem, so do it before taking the lock.
+    long long timestamp = plugin->GetLibraryTimestamp( aUri );
+
     {
         std::unique_lock lock( PreloadedFootprintsMutex );
         PreloadedFootprints.Get()[nickname] = std::move( footprints );
+        m_preloadedTimestamps[nickname] = timestamp;
     }
 
     // Clear the plugin's FP_CACHE now that we've copied footprints to PreloadedFootprints.
@@ -226,6 +230,36 @@ long long FOOTPRINT_LIBRARY_ADAPTER::GenerateTimestamp( const wxString* aNicknam
     }
 
     return hash;
+}
+
+
+void FOOTPRINT_LIBRARY_ADAPTER::RefreshLibraryIfChanged( const wxString& aNickname )
+{
+    std::optional<LIB_DATA*> maybeLib = fetchIfLoaded( aNickname );
+
+    if( !maybeLib )
+        return;
+
+    LIB_DATA* lib = *maybeLib;
+    PCB_IO*   plugin = dynamic_cast<PCB_IO*>( lib->plugin.get() );
+
+    if( !plugin )
+        return;
+
+    wxString  uri = getUri( lib->row );
+    long long currentTimestamp = plugin->GetLibraryTimestamp( uri );
+
+    {
+        std::shared_lock lock( PreloadedFootprintsMutex );
+        auto tsIt = m_preloadedTimestamps.find( aNickname );
+
+        if( tsIt != m_preloadedTimestamps.end() && tsIt->second == currentTimestamp )
+            return;
+
+        wxLogTrace( traceLibraries, "FP: %s changed on disk, re-enumerating", aNickname );
+    }
+
+    enumerateLibrary( lib, uri );
 }
 
 

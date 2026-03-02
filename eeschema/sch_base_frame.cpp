@@ -836,12 +836,10 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 
 void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
 {
-    LEGACY_SYMBOL_LIBS* libs = PROJECT_SCH::LegacySchLibs( &Prj() );
-
     wxLogTrace( traceLibWatch, "OnSymChange: %s, watcher file: %s",
                 aEvent.GetPath().GetFullPath(), m_watcherFileName.GetFullPath() );
 
-    if( !libs || !m_watcher || !m_watcher.get() || m_watcherFileName.GetPath().IsEmpty() )
+    if( !m_watcher || !m_watcher.get() || m_watcherFileName.GetPath().IsEmpty() )
         return;
 
     if( aEvent.GetPath() != m_watcherFileName )
