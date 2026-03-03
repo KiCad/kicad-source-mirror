@@ -1064,12 +1064,12 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
         if( m_board == nullptr )
             m_board = new BOARD();
 
-        item = (BOARD_ITEM*) parseBOARD();
+        item = parseBOARD();
         break;
 
     case T_module:      // legacy token
     case T_footprint:
-        item = (BOARD_ITEM*) parseFOOTPRINT( initial_comments.release() );
+        item = parseFOOTPRINT( initial_comments.release() );
 
         // Locking a footprint has no meaning outside of a board.
         item->SetLocked( false );

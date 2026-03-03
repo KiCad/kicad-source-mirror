@@ -85,7 +85,7 @@ VECTOR2I BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-        BOARD_ITEM_CONTAINER( (BOARD_ITEM*) nullptr, PCB_T ),
+        BOARD_ITEM_CONTAINER( nullptr, PCB_T ),
         m_LegacyDesignSettingsLoaded( false ),
         m_LegacyCopperEdgeClearanceLoaded( false ),
         m_LegacyNetclassesLoaded( false ),
