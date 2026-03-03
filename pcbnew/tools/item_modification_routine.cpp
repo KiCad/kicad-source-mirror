@@ -928,6 +928,12 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             BOX2I box{ pad.GetPosition() - pad_size / 2, pad_size };
             box.Inflate( m_params.outsetDistance );
 
+            if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+            {
+                AddFailure();
+                break;
+            }
+
             int radius = m_params.outsetDistance;
 
             if( pad_shape == PAD_SHAPE::ROUNDRECT )
@@ -935,7 +941,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
             else if( pad_shape == PAD_SHAPE::OVAL )
                 radius += std::min( pad_size.x, pad_size.y ) / 2;
 
-            radius = m_params.roundCorners ? radius : 0;
+            radius = m_params.roundCorners ? std::max( radius, 0 ) : 0;
 
             // No point doing a SHAPE_RECT as we may need to rotate it
             ROUNDRECT      rrect( box, radius );
@@ -951,6 +957,13 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
         case PAD_SHAPE::CIRCLE:
         {
             const int radius = pad.GetSize( PADSTACK::ALL_LAYERS ).x / 2 + m_params.outsetDistance;
+
+            if( radius <= 0 )
+            {
+                AddFailure();
+                break;
+            }
+
             const CIRCLE circle( pad.GetPosition(), radius );
             addCircleOrRect( circle );
             AddSuccess();
@@ -979,13 +992,19 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
                        VECTOR2I{ pcb_shape.GetRectangleWidth(), pcb_shape.GetRectangleHeight() } };
             box.Inflate( m_params.outsetDistance );
 
+            if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+            {
+                AddFailure();
+                break;
+            }
+
             box.Normalize();
 
             SHAPE_RECT rect( box );
             int        cornerRadius = pcb_shape.GetCornerRadius();
 
             if( m_params.roundCorners )
-                cornerRadius += m_params.outsetDistance;
+                cornerRadius = std::max( cornerRadius + m_params.outsetDistance, 0 );
 
             if( m_params.gridRounding.has_value() )
                 rect = GetRectRoundedToGridOutwards( rect, *m_params.gridRounding );
@@ -1008,7 +1027,15 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
         case SHAPE_T::CIRCLE:
         {
-            const CIRCLE circle( pcb_shape.GetCenter(), pcb_shape.GetRadius() + m_params.outsetDistance );
+            const int newRadius = pcb_shape.GetRadius() + m_params.outsetDistance;
+
+            if( newRadius <= 0 )
+            {
+                AddFailure();
+                break;
+            }
+
+            const CIRCLE circle( pcb_shape.GetCenter(), newRadius );
             addCircleOrRect( circle );
             AddSuccess();
             break;
@@ -1016,6 +1043,12 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
         case SHAPE_T::SEGMENT:
         {
+            if( m_params.outsetDistance <= 0 )
+            {
+                AddFailure();
+                break;
+            }
+
             // For now just make the whole stadium shape and let the user delete the unwanted bits
             const SEG seg( pcb_shape.GetStart(), pcb_shape.GetEnd() );
 
