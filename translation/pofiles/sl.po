@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-02-20 12:10+0000\n"
+"PO-Revision-Date: 2026-03-03 19:09+0000\n"
 "Last-Translator: Mitja Nemec <mitja.nemec@fe.uni-lj.si>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sl/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -124,9 +124,9 @@ msgid "Net %s\tNet class %s"
 msgstr "Vozlišče %s\tRazred vozlišča %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "Nožica %s\t"
+msgstr "Priključek %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1028
 #, c-format
@@ -293,35 +293,31 @@ msgstr "Videz"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:723
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "&Urejevalnik ..."
+msgstr "Prevzemi nastavitve iz urejevalnika tiskanega vezja"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:350
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:724
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Nastavitve filtra"
+msgstr "Prevzemi izvozne nastavitve"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:567
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:753
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:940
 #: pcbnew/pcbnew_jobs_handler.cpp:810
-#, fuzzy
 msgid "legacy colors"
-msgstr "Neto barve:"
+msgstr "Standardne barve"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750
-#, fuzzy
 msgid "3D Image File Name"
-msgstr "Ime datoteke 3D slike"
+msgstr "Datoteka s 3D sliko"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:803
 #: common/eda_base_frame.cpp:1658 common/eda_base_frame.cpp:1662
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Za shranjevanje datoteke '%s' nimate ustreznih dovoljenj."
 
@@ -358,208 +354,171 @@ msgstr "Za shranjevanje datoteke '%s' nimate ustreznih dovoljenj."
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:462
 #: pcbnew/drc/drc_item.cpp:233 pcbnew/pcb_marker.cpp:241
 #: pcbnew/widgets/appearance_controls.cpp:2833
-#, fuzzy
 msgid "Error"
 msgstr "Napaka"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:981
-#, fuzzy
 msgid "Failed to copy image to clipboard"
 msgstr "Kopiranje slike v odložišče ni uspelo"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:995
-#, fuzzy
 msgid "Can't save file"
 msgstr "Datoteke ni mogoče shraniti"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Reload board"
-msgstr "Ponovno naloži ploščo"
+msgstr "Ponovno naloži tiskano vezje"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
-#, fuzzy
 msgid "Reload board and refresh 3D view"
-msgstr "Ponovno naložite ploščo in 3D modele"
+msgstr "Ponovno naložite tiskano vezje in 3D modele"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
-#, fuzzy
 msgid "Use raytracing"
-msgstr "Raytracing"
+msgstr "Uporabi sledenje žarkom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
-#, fuzzy
 msgid "Render current view using Raytracing"
-msgstr "Prikažite trenutni pogled z uporabo Raytracinga"
+msgstr "Prikažite trenutni pogled z uporabo sledenja žarkom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
-#, fuzzy
 msgid "Copy 3D image to clipboard"
 msgstr "Kopiraj 3D sliko v odložišče"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Copy the current 3D image to the clipboard"
 msgstr "Kopiraj 3D sliko v odložišče"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
-#, fuzzy
 msgid "Export Image..."
-msgstr "Uredi oznako"
+msgstr "Izvozi sliko ..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Izvozi trenutni pogled kot PNG ..."
+msgstr "Izvozi trenutni pogled kot sliko"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Hierarhični priključek"
+msgstr "Postavi os vrtenja"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:81
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Sredinsko vrtenje vrtenja (srednji klik miške)"
+msgstr ""
+"Postavi točko okoli katere se bo vrtelo tiskano vezje (s sredinskim klikom "
+"miške)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
-#, fuzzy
 msgid "Rotate X Clockwise"
 msgstr "Zavrtite X v smeri urnega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:96
-#, fuzzy
 msgid "Rotate X Counterclockwise"
-msgstr "Zasukaj v obratni smeri urinega kazalca"
+msgstr "Zavrtite X v obratni smeri urinega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
-#, fuzzy
 msgid "Rotate Y Clockwise"
 msgstr "Zavrtite Y v smeri urnega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:112
-#, fuzzy
 msgid "Rotate Y Counterclockwise"
-msgstr "Zasukaj v obratni smeri urinega kazalca"
+msgstr "Zavrtite Y v obratni smeri urinega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
-#, fuzzy
 msgid "Rotate Z Clockwise"
 msgstr "Zavrtite Z v smeri urnega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Rotate Z Counterclockwise"
-msgstr "Zasukaj v obratni smeri urinega kazalca"
+msgstr "Zavrtite Z v obratni smeri urinega kazalca"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:139
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Premakni desko levo"
+msgstr "Premakni tiskano vezje levo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:148
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Premakni desko desno"
+msgstr "Premakni tiskano vezje desno"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:157
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Premakni desko gor"
+msgstr "Premakni tiskano vezje gor"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Premakni desko navzdol"
+msgstr "Premakni tiskano vezje navzdol"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:175
-#, fuzzy
 msgid "Home View"
-msgstr "Pogled domov"
+msgstr "Privzeti pogled"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Ponovno nariši s privzetim pogledom in povečavo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:184
-#, fuzzy
 msgid "Flip Board"
-msgstr "Flip Board"
+msgstr "Poglej na tiskano vezje z druge strani"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:185
-#, fuzzy
 msgid "Flip the board view"
-msgstr "Obrni pogled plošče"
+msgstr "Poglej na tiskano vezje z druge strani (zrcalni pogled)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:193
-#, fuzzy
 msgid "Toggle Orthographic Projection"
-msgstr "Preklop pravopisne projekcije"
+msgstr "Preklopi med ortografskim in perspektivnim pogledom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:203
-#, fuzzy
 msgid "Enable/disable orthographic projection"
-msgstr "Omogoči / onemogoči pravopisno projekcijo"
+msgstr "Omogoči / onemogoči ortografski pogled"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:226
-#, fuzzy
 msgid "View Front"
 msgstr "Pogled spredaj"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:211
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
-#, fuzzy
 msgid "View Back"
-msgstr "Pogled nazaj"
+msgstr "Pogled od zadaj"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:220
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:216
-#, fuzzy
 msgid "View Left"
-msgstr "Pogled levo"
+msgstr "Pogled z leve"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:229
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:221
-#, fuzzy
 msgid "View Right"
-msgstr "Pogled desno"
+msgstr "Pogled z desne"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:236
-#, fuzzy
 msgid "View Top"
-msgstr "Poglej na vrh"
+msgstr "Poglej od vrha"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:247
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:241
-#, fuzzy
 msgid "View Bottom"
 msgstr "Pogled od spodaj"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
-#, fuzzy
 msgid "No 3D Grid"
 msgstr "Brez 3D mreže"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
-#, fuzzy
 msgid "3D Grid 10mm"
 msgstr "3D mreža 10 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:269
-#, fuzzy
 msgid "3D Grid 5mm"
 msgstr "3D mreža 5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:276
-#, fuzzy
 msgid "3D Grid 2.5mm"
 msgstr "3D mreža 2,5 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:283
-#, fuzzy
 msgid "3D Grid 1mm"
 msgstr "3D mreža 1mm"
 
