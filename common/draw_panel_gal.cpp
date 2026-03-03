@@ -193,7 +193,7 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    DoRePaint();
+    Refresh( false );
 }
 
 
@@ -248,35 +248,48 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
 
     try
     {
-        cntUpd.Start();
-
-        try
-        {
-            m_view->UpdateItems();
-        }
-        catch( std::out_of_range& err )
-        {
-            // Don't do anything here but don't fail
-            // This can happen when we don't catch `at()` calls
-            wxLogTrace( traceDrawPanel, wxS( "Out of Range error: %s" ), err.what() );
-        }
-        catch( std::runtime_error& err )
-        {
-            // Handle GL errors (e.g. glMapBuffer failure) that surface during UpdateItems().
-            // These can occur on macOS under memory pressure when embedding large 3D models.
-            // Log and continue so the outer handler can decide whether to switch backends.
-            wxLogTrace( traceDrawPanel, wxS( "Runtime error during UpdateItems: %s" ), err.what() );
-            throw;
-        }
-
-        cntUpd.Stop();
-
         VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
         bool viewDirty = m_view->IsDirty();
         bool cursorMoved = ( cursorPos != m_lastCursorPosition );
+        bool hasPendingItemUpdates = m_view->HasPendingItemUpdates();
 
-        // Skip the entire GL cycle when nothing has changed. The front buffer
-        // still shows the previous frame so there is nothing to redraw.
+        // Skip all update work when nothing has changed since the previous frame.
+        if( !viewDirty && !cursorMoved && !hasPendingItemUpdates )
+        {
+            m_lastRepaintEnd = wxGetLocalTimeMillis();
+            return true;
+        }
+
+        if( hasPendingItemUpdates )
+        {
+            cntUpd.Start();
+
+            try
+            {
+                m_view->UpdateItems();
+            }
+            catch( std::out_of_range& err )
+            {
+                // Don't do anything here but don't fail
+                // This can happen when we don't catch `at()` calls
+                wxLogTrace( traceDrawPanel, wxS( "Out of Range error: %s" ), err.what() );
+            }
+            catch( std::runtime_error& err )
+            {
+                // Handle GL errors (e.g. glMapBuffer failure) that surface during UpdateItems().
+                // These can occur on macOS under memory pressure when embedding large 3D models.
+                // Log and continue so the outer handler can decide whether to switch backends.
+                wxLogTrace( traceDrawPanel, wxS( "Runtime error during UpdateItems: %s" ),
+                            err.what() );
+                throw;
+            }
+
+            cntUpd.Stop();
+            viewDirty = m_view->IsDirty();
+        }
+
+        // After processing item updates, skip the GL cycle when neither the
+        // view targets nor the cursor position have changed.
         if( !viewDirty && !cursorMoved )
         {
             m_lastRepaintEnd = wxGetLocalTimeMillis();
@@ -422,13 +435,14 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     wxLongLong now = wxGetLocalTimeMillis();
     wxLongLong delta = now - m_lastRepaintEnd;
+    bool galInitialized = m_gal && m_gal->IsInitialized();
 
     // When vsync is available the driver throttles SwapBuffers, so we only need
     // a small guard to avoid queueing work faster than the GPU can consume it.
     // Without vsync, enforce a 60 FPS ceiling to prevent saturating the GPU.
     int minPeriodMs = 3;
 
-    if( m_gal && m_gal->IsInitialized() && m_gal->GetSwapInterval() == 0 )
+    if( galInitialized && m_gal->GetSwapInterval() == 0 )
         minPeriodMs = 16;
 
     if( delta >= minPeriodMs )

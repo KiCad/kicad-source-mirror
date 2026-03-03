@@ -686,6 +686,14 @@ public:
     void UpdateItems();
 
     /**
+     * @return true when at least one item has queued update flags that still need processing.
+     */
+    bool HasPendingItemUpdates() const
+    {
+        return m_hasPendingItemUpdates;
+    }
+
+    /**
      * Update all items in the view according to the given flags.
      *
      * @param aUpdateFlags is is according to KIGFX::VIEW_UPDATE_FLAGS
@@ -907,6 +915,8 @@ protected:
 
     /// Flag to reverse the draw order when using draw priority.
     bool m_reverseDrawOrder;
+
+    /// True when at least one item has deferred update flags that still need processing.
+    mutable bool m_hasPendingItemUpdates;
 };
 } // namespace KIGFX
-

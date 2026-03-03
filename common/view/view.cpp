@@ -246,7 +246,8 @@ VIEW::VIEW() :
     m_gal( nullptr ),
     m_useDrawPriority( false ),
     m_nextDrawPriority( 0 ),
-    m_reverseDrawOrder( false )
+    m_reverseDrawOrder( false ),
+    m_hasPendingItemUpdates( false )
 {
     // Set m_boundary to define the max area size. The default area size
     // is defined here as the max value of a int.
@@ -724,6 +725,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
         viewData->reorderGroups( aReorderMap );
 
         viewData->m_requiredUpdate |= COLOR;
+        m_hasPendingItemUpdates = true;
     }
 
     UpdateItems();
@@ -1486,6 +1488,9 @@ void VIEW::UpdateItems()
     if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
         return;
 
+    if( !m_hasPendingItemUpdates )
+        return;
+
     unsigned int cntGeomUpdate = 0;
     bool         anyUpdated = false;
 
@@ -1571,15 +1576,23 @@ void VIEW::UpdateItems()
 
     KI_TRACE( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u\n" ),
               cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
+
+    m_hasPendingItemUpdates = false;
 }
 
 
 void VIEW::UpdateAllItems( int aUpdateFlags )
 {
+    if( aUpdateFlags == NONE )
+        return;
+
     for( VIEW_ITEM* item : *m_allItems )
     {
         if( item && item->viewPrivData() )
+        {
             item->viewPrivData()->m_requiredUpdate |= aUpdateFlags;
+            m_hasPendingItemUpdates = true;
+        }
     }
 }
 
@@ -1587,6 +1600,9 @@ void VIEW::UpdateAllItems( int aUpdateFlags )
 void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
                                         std::function<bool( VIEW_ITEM* )> aCondition )
 {
+    if( aUpdateFlags == NONE )
+        return;
+
     for( VIEW_ITEM* item : *m_allItems )
     {
         if( !item )
@@ -1595,7 +1611,10 @@ void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
         if( aCondition( item ) )
         {
             if( item->viewPrivData() )
+            {
                 item->viewPrivData()->m_requiredUpdate |= aUpdateFlags;
+                m_hasPendingItemUpdates = true;
+            }
         }
     }
 }
@@ -1609,7 +1628,13 @@ void VIEW::UpdateAllItemsConditionally( std::function<int( VIEW_ITEM* )> aItemFl
             continue;
 
         if( item->viewPrivData() )
-            item->viewPrivData()->m_requiredUpdate |= aItemFlagsProvider( item );
+        {
+            int flags = aItemFlagsProvider( item );
+            item->viewPrivData()->m_requiredUpdate |= flags;
+
+            if( flags != NONE )
+                m_hasPendingItemUpdates = true;
+        }
     }
 }
 
@@ -1620,6 +1645,7 @@ std::unique_ptr<VIEW> VIEW::DataReference() const
     std::unique_ptr<VIEW> ret = std::make_unique<VIEW>();
     ret->m_allItems = m_allItems;
     ret->m_layers = m_layers;
+    ret->m_hasPendingItemUpdates = m_hasPendingItemUpdates;
     ret->SortOrderedLayers();
     return ret;
 }
@@ -1708,6 +1734,7 @@ void VIEW::Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const
     assert( aUpdateFlags != NONE );
 
     viewData->m_requiredUpdate |= aUpdateFlags;
+    m_hasPendingItemUpdates = true;
 }
 
 
