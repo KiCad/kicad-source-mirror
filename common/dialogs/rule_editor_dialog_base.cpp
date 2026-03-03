@@ -518,6 +518,9 @@ void RULE_EDITOR_DIALOG_BASE::ClearModified()
 
 void RULE_EDITOR_DIALOG_BASE::DeleteRuleTreeItem( wxTreeItemId aItemId, const int& aNodeId )
 {
+    if( m_selectedData && m_selectedData->GetNodeId() == aNodeId )
+        m_selectedData = nullptr;
+
     m_ruleTreeCtrl->Delete( aItemId );
     m_treeHistoryData.erase( aNodeId );
 }

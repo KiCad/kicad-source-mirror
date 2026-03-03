@@ -601,9 +601,9 @@ void DIALOG_DRC_RULE_EDITOR::RemoveRule( int aNodeId )
     {
         int nodeId = itemData->GetNodeId();
 
+        SetModified();
         DeleteRuleTreeItem( GetCurrentlySelectedRuleTreeItemData()->GetTreeItemId(), nodeId );
         deleteTreeNodeData( nodeId );
-        SetModified();
     }
 
     SetControlsEnabled( true );
