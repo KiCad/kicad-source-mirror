@@ -294,7 +294,7 @@ public:
      * @return the row, or a nullopt if it does not exist
      */
     std::optional<LIBRARY_TABLE_ROW*> GetRow( LIBRARY_TABLE_TYPE aType, const wxString &aNickname,
-                                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
+                                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
     std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( LIBRARY_TABLE_TYPE aType, const wxString &aUri,
                                                     LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
@@ -315,7 +315,7 @@ public:
      * @return the URI for the given library, or nullopt if the nickname is not a valid library
      */
     std::optional<wxString> GetFullURI( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
-                                        bool aSubstituted = false ) const;
+                                        bool aSubstituted = false );
 
     static wxString GetFullURI( const LIBRARY_TABLE_ROW* aRow, bool aSubstituted = false );
 
@@ -344,6 +344,10 @@ private:
     std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> m_adapters;
 
     mutable std::mutex m_adaptersMutex;
+
+    typedef std::tuple<LIBRARY_TABLE_TYPE, LIBRARY_TABLE_SCOPE, wxString> ROW_CACHE_KEY;
+
+    std::map<ROW_CACHE_KEY, LIBRARY_TABLE_ROW*> m_rowCache;
 };
 
 #endif //LIBRARY_MANAGER_H

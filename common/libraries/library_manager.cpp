@@ -35,6 +35,8 @@
 
 #include <libraries/library_manager.h>
 
+#include "../../../../../../Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGPDFDictionary.h"
+
 using namespace std::chrono_literals;
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
@@ -58,6 +60,8 @@ LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                                   std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
+    m_rowCache.clear();
+
     auto getTarget =
             [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
             {
@@ -681,12 +685,20 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
 
 
 std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::GetRow( LIBRARY_TABLE_TYPE  aType, const wxString& aNickname,
-                                                           LIBRARY_TABLE_SCOPE aScope ) const
+                                                           LIBRARY_TABLE_SCOPE aScope )
 {
+    auto key = std::tie( aType, aScope, aNickname );
+
+    if( m_rowCache.contains( key ) )
+        return m_rowCache.at( key );
+
     for( LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
     {
         if( row->Nickname() == aNickname )
+        {
+            m_rowCache[key] = row;
             return row;
+        }
     }
 
     return std::nullopt;
@@ -741,7 +753,7 @@ void LIBRARY_MANAGER::ReloadTables( LIBRARY_TABLE_SCOPE aScope,
 
 
 std::optional<wxString> LIBRARY_MANAGER::GetFullURI( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
-                                                     bool aSubstituted ) const
+                                                     bool aSubstituted )
 {
     if( std::optional<const LIBRARY_TABLE_ROW*> result = GetRow( aType, aNickname ) )
         return GetFullURI( *result, aSubstituted );
