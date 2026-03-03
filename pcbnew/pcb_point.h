@@ -55,6 +55,11 @@ public:
         return aItem && PCB_POINT_T == aItem->Type();
     }
 
+    struct cmp_points
+    {
+        bool operator()( const PCB_POINT* a, const PCB_POINT* b ) const;
+    };
+
     void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
     VECTOR2I GetPosition() const override { return m_pos; }
 

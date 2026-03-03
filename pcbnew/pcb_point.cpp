@@ -59,6 +59,27 @@ PCB_POINT::PCB_POINT( BOARD_ITEM* aParent, const VECTOR2I& aPos, int aSize ) :
 }
 
 
+bool PCB_POINT::cmp_points::operator()( const PCB_POINT* a, const PCB_POINT* b ) const
+{
+    if( a->GetLayer() != b->GetLayer() )
+        return a->GetLayer() < b->GetLayer();
+
+    if( a->GetPosition().x != b->GetPosition().x )
+        return a->GetPosition().x < b->GetPosition().x;
+
+    if( a->GetPosition().y != b->GetPosition().y )
+        return a->GetPosition().y < b->GetPosition().y;
+
+    if( a->GetSize() != b->GetSize() )
+        return a->GetSize() < b->GetSize();
+
+    if( a->m_Uuid != b->m_Uuid )
+        return a->m_Uuid < b->m_Uuid;
+
+    return a < b;
+}
+
+
 bool PCB_POINT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Compute the hit on the bars of the X
