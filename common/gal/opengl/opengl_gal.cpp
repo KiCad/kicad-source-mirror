@@ -46,6 +46,7 @@
 #include <wx/frame.h>
 
 #include <macros.h>
+#include <optional>
 #include <geometry/geometry_utils.h>
 #include <thread_pool.h>
 
@@ -476,6 +477,11 @@ OPENGL_GAL::~OPENGL_GAL()
 
 wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 {
+    static std::optional<wxString> cached;
+
+    if( cached.has_value() )
+        return *cached;
+
     wxString retVal = wxEmptyString;
 
     wxFrame* testFrame = new wxFrame( nullptr, wxID_ANY, wxT( "" ), wxDefaultPosition,
@@ -503,6 +509,7 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
     delete opengl_gal;
     delete testFrame;
 
+    cached = retVal;
     return retVal;
 }
 
