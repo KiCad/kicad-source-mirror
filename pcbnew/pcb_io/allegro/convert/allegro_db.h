@@ -175,15 +175,16 @@ struct DB_OBJ
         uint8_t m_BlockType;
     };
 
-    DB_OBJ( uint32_t aKey ) :
+    DB_OBJ( uint32_t aKey, uint32_t aNextKey ) :
             m_Valid( false ),
             m_Key( aKey ),
-            m_Loc( 0, 0 )
+            m_Loc( 0, 0 ),
+            m_Next( aNextKey ? DB_REF( this, aNextKey, "m_Next" ) : DB_NULLREF )
     {
     }
 
     DB_OBJ() :
-            DB_OBJ( 0 )
+            DB_OBJ( 0, 0 )
     {
     }
 
@@ -225,7 +226,7 @@ struct DB_OBJ
      */
     virtual const DB_REF& GetNext() const
     {
-        return DB_NULLREF;
+        return m_Next;
     }
 
     // Set to true when the object is fully resolved and valid
@@ -234,6 +235,8 @@ struct DB_OBJ
     uint32_t m_Key;
     // Location in the file (for debugging)
     FILE_LOC m_Loc;
+    // The default next reference for this object, used for default iteration methods
+    DB_REF m_Next;
 };
 
 
@@ -347,8 +350,8 @@ enum BRD_TYPE
 
 struct BRD_DB_OBJ : public DB_OBJ
 {
-    BRD_DB_OBJ( BRD_TYPE aType, uint32_t aKey ) :
-            DB_OBJ( aKey ),
+    BRD_DB_OBJ( BRD_TYPE aType, uint32_t aKey, uint32_t aNextKey ) :
+            DB_OBJ( aKey, aNextKey ),
             m_Type( aType )
     {
     }
@@ -412,7 +415,6 @@ struct FIELD : public BRD_DB_OBJ
     const char* TypeName() const override { return "FIELD"; }
 
     uint8_t m_SubType;
-    DB_REF  m_Next;
 
     // Unclear if just hdr1 or both are needed for a complete field type determination
     uint32_t m_Hdr1;
@@ -468,7 +470,6 @@ struct NET_ASSIGN : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "NET_ASSIGN"; }
 
-    DB_REF m_Next;
     ///< Reference to an 0x1B NET object
     DB_REF m_Net;
     ///< Reference to an 0x05 TRACK or 0x32 PLACED_PAD object
@@ -486,8 +487,6 @@ struct TRACK : public BRD_DB_OBJ
     TRACK( const BRD_DB& aBrd, const BLK_0x05_TRACK& aBlk );
 
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
-
-    DB_REF m_Next;
 };
 
 struct COMPONENT_INST;
@@ -505,7 +504,6 @@ struct COMPONENT : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "COMPONENT"; }
 
-    DB_REF m_Next;
     DB_STR_REF m_CompDeviceType;
     DB_STR_REF m_SymbolName;
     DB_REF_CHAIN m_Instances;
@@ -531,7 +529,6 @@ struct COMPONENT_INST : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "COMPONENT_INST"; }
 
-    DB_REF     m_Next;
     DB_STR_REF   m_TextStr;
     DB_REF       m_FunctionInst;
     DB_REF_CHAIN m_X03Chain;
@@ -559,7 +556,6 @@ struct PIN_NUMBER : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "PIN_NUMBER"; }
 
-    DB_REF     m_Next;
     DB_STR_REF m_PinNumberStr;
     DB_REF     m_PinName;
 
@@ -579,7 +575,6 @@ struct RECT_OBJ : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "RECT_OBJ"; }
 
-    DB_REF m_Next;
     EDA_ANGLE m_Rotation;
 };
 
@@ -639,7 +634,6 @@ struct PIN_NAME : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "PIN_NAME"; }
 
-    DB_REF     m_Next;
     DB_STR_REF m_PinNameStr;
     DB_REF     m_PinNumber;
 
@@ -676,7 +670,6 @@ struct GRAPHIC_SEG : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "GRAPHIC_SEG"; }
 
-    DB_REF m_Next;
     DB_REF m_Parent;
     DB_REF m_Segment; // ARC or LINE
 
@@ -698,7 +691,6 @@ struct LINE : public BRD_DB_OBJ
     const char* TypeName() const override { return "LINE"; }
 
     DB_REF m_Parent;
-    DB_REF m_Next;
 
     VECTOR2I m_Start;
     VECTOR2I m_End;
@@ -724,7 +716,6 @@ struct NET : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "NET"; }
 
-    DB_REF m_Next;
     DB_STR_REF m_NetNameStr;
     // Not clear if this is ever not 1 entry, but 0x04s have a next field
     DB_REF_CHAIN m_NetAssignments;
@@ -757,8 +748,6 @@ public:
     bool ResolveRefs( const DB_OBJ_RESOLVER& aResolver ) override;
 
     const char* TypeName() const override { return "UNKNOWN_0x20"; }
-
-    DB_REF m_Next;
 };
 
 
@@ -774,7 +763,6 @@ public:
 
     const char* TypeName() const override { return "SHAPE"; }
 
-    DB_REF m_Next;
     DB_REF_CHAIN m_Segments;
 };
 
@@ -786,7 +774,6 @@ struct FOOTPRINT_DEF : public BRD_DB_OBJ
 {
     FOOTPRINT_DEF( const BRD_DB& aBrd, const BLK_0x2B_FOOTPRINT_DEF& aBlk );
 
-    DB_REF     m_Next;
     DB_STR_REF m_FpStr;
     DB_REF     m_SymLibPath;
 
@@ -818,7 +805,6 @@ struct FOOTPRINT_INSTANCE : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "FOOTPRINT_INSTANCE"; }
 
-    DB_REF m_Next;
     DB_REF m_ComponentInstance;
     double m_X;
     double m_Y;
@@ -850,7 +836,6 @@ struct CONNECTION_OBJ : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "CONNECTION_OBJ"; }
 
-    DB_REF m_Next;
     DB_REF m_NetAssign;
     DB_REF m_Connection;
     VECTOR2I m_Position;
@@ -869,7 +854,6 @@ struct PLACED_PAD : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "PLACED_PAD"; }
 
-    DB_REF m_Next;
     DB_REF m_NextInFp;
     DB_REF m_NextInCompInst;
     // DB_REF m_Ratline; // 0x23;
@@ -897,7 +881,6 @@ struct VIA : public BRD_DB_OBJ
 
     const char* TypeName() const override { return "VIA"; }
 
-    DB_REF m_Next;
     DB_REF m_NetAssign;
     BOX2I m_Bounds;
 };
@@ -916,7 +899,6 @@ struct PTR_ARRAY : public BRD_DB_OBJ
 
     const DB_REF& GetNext() const override { return m_Next; }
 
-    DB_REF m_Next;
     DB_REF m_Parent;
 
     std::vector<DB_REF> m_Ptrs;
