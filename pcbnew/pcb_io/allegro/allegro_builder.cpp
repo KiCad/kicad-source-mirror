@@ -3955,7 +3955,6 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
             const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
 
             SHAPE_POLY_SET fillPolySet = shapeToPolySet( shapeData );
-            fillPolySet.ClearArcs();
             combinedFill.Append( fillPolySet );
 
             m_usedZoneFillShapes.emplace( block->GetKey() );
@@ -3975,7 +3974,12 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
     // Add zone fills
     if( isCopperZone && !combinedFill.IsEmpty() )
     {
-        combinedFill.BooleanIntersection( *zone->Outline() );
+        SHAPE_POLY_SET zoneOutline = *zone->Outline();
+
+        combinedFill.ClearArcs();
+        zoneOutline.ClearArcs();
+
+        combinedFill.BooleanIntersection( zoneOutline );
         combinedFill.Fracture( true );
 
         zone->SetFilledPolysList( layer, combinedFill );
