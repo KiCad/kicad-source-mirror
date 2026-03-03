@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 19:09+0000\n"
+"PO-Revision-Date: 2026-03-03 21:47+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -13765,9 +13765,8 @@ msgid "Junction Properties"
 msgstr "Vlastnosti spojenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:94
-#, fuzzy
 msgid "Pin length:"
-msgstr "& Dĺžka špendlíka:"
+msgstr "Dĺžka vývodu:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Global Label Properties"
@@ -14947,8 +14946,8 @@ msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"Synchronizovaný režim vývodů je povolen.\n"
-"Podobné vývody budou upraveny, bez ohledu na tuto možnost."
+"Režim synchronizácie vývodov je povolený.\n"
+"Podobné vývody budú upravené, bez ohľadu na túto možnosť."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:324
 msgid "If checked, this pin will exist in all units."
@@ -16739,9 +16738,8 @@ msgid "Edit"
 msgstr "Upraviť"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:278
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Milimetre"
+msgstr "Oddeľovač polí:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:282
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:300
