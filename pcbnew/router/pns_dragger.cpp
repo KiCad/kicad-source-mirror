@@ -615,8 +615,15 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         if( preShoveNode )
             preShoveNode->Remove( draggedPreShove );
 
+        int policy = SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS;
+
+        PNS_DBG( Dbg(), Message, wxString::Format( "drag seg index %d", m_draggedSegmentIndex ) );
+
+        if( m_mode == DM_CORNER && m_draggedSegmentIndex == 0 )
+            policy |= SHOVE::SHP_REVERSED;
+
         m_shove->ClearHeads();
-        m_shove->AddHeads( draggedPreShove, SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS );
+        m_shove->AddHeads( draggedPreShove, policy );
         ok = m_shove->Run() == SHOVE::SH_OK;
 
         LINE draggedPostShove( draggedPreShove );

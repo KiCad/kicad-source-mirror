@@ -63,7 +63,8 @@ public:
         SHP_WALK_BACK = 0x4,
         SHP_IGNORE = 0x8,
         SHP_DONT_OPTIMIZE = 0x10,
-        SHP_DONT_LOCK_ENDPOINTS = 0x20
+        SHP_DONT_LOCK_ENDPOINTS = 0x20,
+        SHP_REVERSED = 0x40
     };
 
 
@@ -250,8 +251,8 @@ private:
                     bool aAllowRedundantSegments = true,
                       NODE *aNode = nullptr );
 
-    ROOT_LINE_ENTRY* findRootLine( const LINE& aLine );
-    ROOT_LINE_ENTRY* findRootLine( const LINKED_ITEM *aItem );
+    ROOT_LINE_ENTRY* findRootLine( const LINE& aLine ) const;
+    ROOT_LINE_ENTRY* findRootLine( const LINKED_ITEM *aItem ) const;
     ROOT_LINE_ENTRY* touchRootLine( const LINE& aLine );
     ROOT_LINE_ENTRY* touchRootLine( const LINKED_ITEM *aItem );
     void pruneRootLines( NODE *aRemovedNode );
