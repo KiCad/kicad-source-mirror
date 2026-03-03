@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"PO-Revision-Date: 2026-03-03 19:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -2914,11 +2914,11 @@ msgstr "Chyba databázy"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
-msgstr "Veľkosť mriežky X mimo rozsah."
+msgstr "Veľkosť mriežky X je mimo rozsah."
 
 #: common/dialogs/dialog_grid_settings.cpp:91
 msgid "Grid size Y out of range."
-msgstr "Veľkosť mriežky Y mimo rozsah."
+msgstr "Veľkosť mriežky Y je mimo rozsah."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
@@ -3011,7 +3011,7 @@ msgstr "Pripojené"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "Nastavenie mriežky"
+msgstr "Nastavenia mriežky"
 
 #: common/dialogs/dialog_group_properties.cpp:115
 #, c-format
@@ -4813,7 +4813,7 @@ msgstr "Vždy"
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
 msgid "When grid shown"
-msgstr "Keď je zobrazená mriežka"
+msgstr "Ak je mriežka zobrazená"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -4902,7 +4902,7 @@ msgstr "Mriežka 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1084
 msgid "Grid Overrides"
-msgstr "Prepísanie mriežky"
+msgstr "Prepísania mriežky"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -7852,7 +7852,7 @@ msgstr "Odstrániť z výberu"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "Ignorovať mriežku"
+msgstr "Ignorovať prichytávanie k mriežke"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
@@ -10363,15 +10363,15 @@ msgstr "Prepnúť na rýchlu mriežku 1"
 
 #: common/tool/actions.cpp:1028
 msgid "Switch to Fast Grid 2"
-msgstr "Prepnite na Fast Grid 2"
+msgstr "Prepnúť na rýchlu mriežku 2"
 
 #: common/tool/actions.cpp:1035
 msgid "Cycle Fast Grid"
-msgstr "Rýchlo prepnúť mriežku"
+msgstr "Cyklicky prepínať rýchlu mriežku"
 
 #: common/tool/actions.cpp:1042
 msgid "Switch to Next Grid"
-msgstr "Prepnúť na ďalšiu mriežku"
+msgstr "Prepnúť na nasledujúcu mriežku"
 
 #: common/tool/actions.cpp:1049
 msgid "Switch to Previous Grid"
@@ -10387,23 +10387,24 @@ msgstr "Umiestniť počiatočný bod mriežky"
 
 #: common/tool/actions.cpp:1065
 msgid "Reset Grid Origin"
-msgstr "Obnoviť počiatok mriežky"
+msgstr "Resetovať počiatok mriežky"
 
 #: common/tool/actions.cpp:1075
 msgid "Show Grid"
-msgstr "Zobraziť m&riežku"
+msgstr "Zobraziť mriežku"
 
 #: common/tool/actions.cpp:1076
 msgid "Display background grid in the edit window"
-msgstr "Zobraziť mriežku pozadia v okne editora"
+msgstr "Zobraziť mriežku v pozadí v okne editora"
 
 #: common/tool/actions.cpp:1085
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
+"Umožňuje použiť mriežky špecifické pre prvky, ktoré prepíšu aktuálnu mriežku"
 
 #: common/tool/actions.cpp:1093
 msgid "Edit grid definitions"
-msgstr "Upraviť rozmery mriežky"
+msgstr "Upraviť definície mriežky"
 
 #: common/tool/actions.cpp:1099
 msgid "Grid Origin..."
@@ -12989,9 +12990,8 @@ msgid "Edit violation severities..."
 msgstr "Upraviť závažnosti porušenia..."
 
 #: eeschema/dialogs/dialog_erc.cpp:810
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Upraviť rozstup pripojovacej mriežky:"
+msgstr "Upraviť rozstup pripojovacej mriežky..."
 
 #: eeschema/dialogs/dialog_erc.cpp:822 eeschema/dialogs/dialog_erc.cpp:857
 #: pcbnew/dialogs/dialog_drc.cpp:824 pcbnew/dialogs/dialog_drc.cpp:876
@@ -13610,7 +13610,6 @@ msgstr "Farba výplne:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:389
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:72
-#, fuzzy
 msgid "Junction size:"
 msgstr "Veľkosť spojovacieho bodu:"
 
@@ -13731,9 +13730,8 @@ msgid "All sheets"
 msgstr "Všetky listy"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.h:49
-#, fuzzy
 msgid "Increment Annotations From"
-msgstr "Vymazať očíslovanie"
+msgstr "Zvyšovať číslovania od"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:114
 msgid "Edit Junction"
@@ -14971,7 +14969,7 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"Tento vývod nie je na mriežke %d mils, preto ho nebude jednoduché v schéme "
+"Tento vývod nie je na mriežke %d mil, preto ho nebude jednoduché v schéme "
 "pripojiť.\n"
 "Chcete pokračovať?"
 
@@ -17769,9 +17767,7 @@ msgstr "Automatické nahradenie & nízkeho poľa na zmenu zarovnania"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:297
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr ""
-"Všetky spôsoby a spôsoby zarovnania automaticky umiestnených polí do siete s "
-"veľkosťou 50 mil"
+msgstr "Vždy zarovnať automaticky umiestnené polia na mriežku 50 mil"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:306
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:101
@@ -17930,9 +17926,8 @@ msgid "Medium"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:156
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Konektor:"
+msgstr "Pripojovacia mriežka:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:182
 msgid "Inter-sheet References"
@@ -18814,9 +18809,8 @@ msgid "Checking footprint assignments against footprint filters..."
 msgstr "Prebieha kontrola stôp..."
 
 #: eeschema/erc/erc.cpp:2207
-#, fuzzy
 msgid "Checking for off grid pins and wires..."
-msgstr "Prebieha kontrola stôp..."
+msgstr "Kontrola umiestnenia vývodov a vodičov mimo mriežky..."
 
 #: eeschema/erc/erc.cpp:2215
 #, fuzzy
@@ -18846,9 +18840,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Duplicitné názvy listov v rámci daného listu"
 
 #: eeschema/erc/erc_item.cpp:49
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "Vývod symbolu nebo spoj mimo mřížku"
+msgstr "Vývod symbolu alebo spoj je umiestnený mimo pripojovacej mriežky"
 
 #: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
@@ -24317,7 +24310,9 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:367
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> z %s tela."
+msgstr ""
+"<b>Vývod %s je umiestnený mimo mriežky</b> %s na pozícii <b>(%s, %s)</b> z "
+"%s štýlu tela."
 
 #: eeschema/symbol_checker.cpp:377
 #, c-format
@@ -24325,19 +24320,21 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v jednotke %c z "
-"%s tela."
+"<b>Vývod je umiestnený mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v "
+"jednotke %c štýlu tela %s."
 
 #: eeschema/symbol_checker.cpp:391
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b>."
+msgstr ""
+"<b>Vývod je umiestnený mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:399
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v jednotke %c."
+"<b>Vývod je umiestnený mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v "
+"jednotke %c."
 
 #: eeschema/symbol_checker.cpp:441
 #, c-format
@@ -26500,9 +26497,8 @@ msgstr "Presunúť položky so zachovaním pripojení"
 
 #: eeschema/tools/sch_actions.cpp:1554 eeschema/tools/sch_move_tool.cpp:2617
 #: eeschema/tools/symbol_editor_move_tool.cpp:498
-#, fuzzy
 msgid "Align Items to Grid"
-msgstr "Zarovnajte prvky do mriežky"
+msgstr "Zarovnať prvky na mriežku"
 
 #: eeschema/tools/sch_actions.cpp:1561 eeschema/tools/sch_align_tool.cpp:221
 #: pcbnew/tools/align_distribute_tool.cpp:257 pcbnew/tools/pcb_actions.cpp:2213
@@ -29285,7 +29281,7 @@ msgstr "Zobraziť negatívne objekty v tejto farbe"
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 #: pcbnew/widgets/appearance_controls.cpp:357
 msgid "Show the (x,y) grid dots"
-msgstr "Zobraziť bodky mriežky (x, y)"
+msgstr "Zobraziť raster mriežky (x, y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:139
 msgid "Show drawing sheet border and title block"
@@ -37096,9 +37092,9 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"Pozícia súčastky bude zahrnutá\n"
-"pred triedením do tejto mriežky.\n"
-"Pomáha to pri nesprávne zarovnaných častiach."
+"Pozícia komponentu bude pred usporiadaním \n"
+"zrovnaná na túto mriežku.\n"
+"Toto pomáha pri nesprávne zarovnaných častiach."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:165
 msgid "Reannotation Scope"
@@ -37708,9 +37704,8 @@ msgid "Bad parameters"
 msgstr "Chybné parametre"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
-#, fuzzy
 msgid "Grid Array Size"
-msgstr "Grid Array"
+msgstr "Veľkosť poľa mriežky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Horizontal count:"
@@ -37798,9 +37793,8 @@ msgid "Columns"
 msgstr "Stĺpce"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
-#, fuzzy
 msgid "Grid Position"
-msgstr "Koncová pozícia"
+msgstr "Pozícia mriežky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
@@ -37879,7 +37873,7 @@ msgstr "Začiatok číslovania podložky:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:294
 msgid "Grid Array"
-msgstr "Grid Array"
+msgstr "Pole mriežky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:303
 #, fuzzy
