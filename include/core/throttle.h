@@ -36,7 +36,7 @@ class THROTTLE
 public:
     explicit THROTTLE( std::chrono::milliseconds aInterval ) :
             m_interval( aInterval ),
-            m_last( std::chrono::steady_clock::time_point::min() )
+            m_last( std::chrono::steady_clock::now() - aInterval )
     {
     }
 
