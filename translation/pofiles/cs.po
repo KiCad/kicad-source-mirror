@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 19:10+0000\n"
+"PO-Revision-Date: 2026-03-03 21:47+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -9098,9 +9098,9 @@ msgid "Library '%s': %s"
 msgstr "Knihovna '%s': %s"
 
 #: common/libraries/library_manager.cpp:1352
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s not found"
-msgstr "Knihovna '%s' nenalezena."
+msgstr "Knihovna '%s' nenalezena"
 
 #: common/libraries/library_table.cpp:67
 #, fuzzy, c-format
@@ -9149,12 +9149,11 @@ msgstr "Smazat adresář"
 
 #: common/local_history.cpp:1507
 msgid "Proceed"
-msgstr ""
+msgstr "Pokračovat"
 
 #: common/local_history.cpp:1507
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Všechny soubory"
+msgstr "Zachovat všechny soubory"
 
 #: common/local_history.cpp:1507 eeschema/files-io.cpp:641
 msgid "Abort"
@@ -25016,7 +25015,7 @@ msgstr "Vytvoří soubor PNG z aktuálního pohledu"
 
 #: eeschema/tools/sch_actions.cpp:144 pcbnew/tools/pcb_actions.cpp:520
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Uložit výběr jako blok návrhu..."
 
 #: eeschema/tools/sch_actions.cpp:145 pcbnew/tools/pcb_actions.cpp:521
 #, fuzzy
@@ -25333,7 +25332,7 @@ msgstr "Umístit návrhový blok"
 
 #: eeschema/tools/sch_actions.cpp:493
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Přidat vybraný blok návrhu do aktuálního listu"
 
 #: eeschema/tools/sch_actions.cpp:501 pcbnew/tools/pcb_actions.cpp:481
 #, fuzzy
@@ -26513,7 +26512,7 @@ msgstr "*** nový symbol má příliš málo jednotek ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:656
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Všechny jednotky symbolu jsou již umístěny."
 
 #: eeschema/tools/sch_drawing_tools.cpp:666
 #, fuzzy
@@ -26535,9 +26534,8 @@ msgid "Design block has no schematic to place."
 msgstr "Blok návrhu nemá platné ID knihovny."
 
 #: eeschema/tools/sch_drawing_tools.cpp:912
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Přidat signály na graf"
+msgstr "Přidat blok návrhu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:913
 #, fuzzy
@@ -27553,7 +27551,7 @@ msgstr "Použít barevné téma editoru schémat"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1153
 msgid "Downloaded symbol metadata is incomplete."
-msgstr ""
+msgstr "Metadata staženého symbolu jsou nekompletní."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1165
 #, fuzzy
@@ -27710,7 +27708,7 @@ msgstr "Umístit návrhový blok"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:119
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Umístit blok návrhu do nového listu."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:125
 msgid ""
@@ -29910,7 +29908,7 @@ msgstr "Nastavení měřítka Y pro přesné vykreslení"
 
 #: kicad/cli/command_pcb_export_ps.cpp:133
 msgid "Force A4 paper size."
-msgstr "Vynutit velikost A4."
+msgstr "Vynutit velikost papíru A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 #, fuzzy
@@ -29928,16 +29926,14 @@ msgid "Exclude footprints without pads"
 msgstr "Vyloučit pouzdra bez plošek"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
-msgstr "Odečíst otvory od plochy desky"
+msgstr "Odečíst plochu otvorů od plochy desky"
 
 #: kicad/cli/command_pcb_export_stats.cpp:57
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:208
 #: pcbnew/dialogs/dialog_board_stats_job_base.cpp:62
-#, fuzzy
 msgid "Subtract holes from copper areas"
-msgstr "Odečíst otvory od plochy desky"
+msgstr "Odečíst plochu otvorů od plochy mědi"
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
@@ -29992,14 +29988,14 @@ msgid "File path for import report (default: stdout)"
 msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid format: %s\n"
-msgstr "Neplatný formát\n"
+msgstr "Neplatný formát: %s\n"
 
 #: kicad/cli/command_pcb_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid report format: %s\n"
-msgstr "Neplatný formát zprávy\n"
+msgstr "Neplatný formát hlášení: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -30067,27 +30063,31 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
-msgstr ""
+msgstr "Otočit desku, formát 'X,Y,Z' tj. pro izometrický pohled '-45,0,45'"
 
 #: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita vrchního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita spodního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita bočního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita osvícení kamerou, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:323
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Výška bočního osvícení ve stupních, rozsah: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:339
 #, fuzzy
@@ -30211,6 +30211,8 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
+"Výstupní formát netlistu, možnosti: kicadsexpr, kicadxml, cadstar, "
+"orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:62
 msgid "Color theme to use (will default to schematic settings)"
@@ -30246,6 +30248,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Seznam stránek pro tisk, čísla jsou oddělena čárkou, pokud není zadán, bude "
+"vytištěno vše"
 
 #: kicad/cli/command_sch_export_plot.cpp:113
 #: kicad/cli/command_sch_export_plot.cpp:119
@@ -30403,7 +30407,7 @@ msgstr "Zprávy:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ignorovat nenulovou návratovou hodnotu"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 #, fuzzy
@@ -30541,7 +30545,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "&Remind Me Later"
-msgstr ""
+msgstr "&Připomenout později"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -30746,9 +30750,8 @@ msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr "Správa balíčků ke stažení z repozitářů KiCadu a třetích stran"
 
 #: kicad/dialogs/template_default_html.h:234
-#, fuzzy
 msgid "Select a Template"
-msgstr "Vybrat soubor"
+msgstr "Vybrat šablonu"
 
 #: kicad/dialogs/template_default_html.h:236
 msgid ""
@@ -30792,9 +30795,8 @@ msgid ""
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:399
-#, fuzzy
 msgid "Template"
-msgstr "Uživatelské šablony"
+msgstr "Šablona"
 
 #: kicad/dialogs/template_default_html.h:403
 msgid ""
@@ -31054,7 +31056,7 @@ msgstr "Export PS"
 
 #: kicad/kicad_cli.cpp:437
 msgid "prints version information and exits"
-msgstr ""
+msgstr "vypíše informaci o verzi a skončí"
 
 #: kicad/kicad_manager_frame.cpp:99
 msgid "Editors"
@@ -31562,6 +31564,8 @@ msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Zadaná URL nevypadá jako platný repozitář s KiCad balíčky. Zkontrolujte "
+"prosím URL."
 
 #: kicad/pcm/pcm.cpp:303
 msgid "Fetching repository packages"
@@ -33311,6 +33315,9 @@ msgid ""
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
+"Pro zadané jmenovité napětí a kategorii přepětí by mělo zařízení vydržet "
+"tuto hodnotu bez průrazu izolace. Toto impulzní napětí má standardní průběh "
+"1.2/50µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -33605,7 +33612,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Výpočet proudu je podhodnocen kvůli dlouhé době přepalování."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -33644,7 +33651,7 @@ msgstr "Vypočítat"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:85
 msgid "Rhodium"
-msgstr ""
+msgstr "Rhodium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:89
 msgid "Platinum"
@@ -33652,7 +33659,7 @@ msgstr "Platina"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:93
 msgid "Palladium"
-msgstr ""
+msgstr "Palladium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:97
 msgid "Gold"
@@ -33665,11 +33672,11 @@ msgstr "Nerezová ocel 18-9"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:105
 msgid "Inconel"
-msgstr ""
+msgstr "Inconel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:109
 msgid "Indium"
-msgstr ""
+msgstr "Indium"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:113
 #, fuzzy
@@ -33690,11 +33697,11 @@ msgstr "Rtuť"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:129
 msgid "ENEPIG (Ni/Pd/Au)"
-msgstr ""
+msgstr "ENEPIG (Ni/Pd/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:133
 msgid "ENIG (Ni/Au)"
-msgstr ""
+msgstr "ENIG (Ni/Au)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:137
 msgid "Nickel"
@@ -33721,7 +33728,7 @@ msgstr "Mosaz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:157
 msgid "Beryllium copper"
-msgstr ""
+msgstr "Beryliová měď"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:161
 #, fuzzy
@@ -33730,7 +33737,7 @@ msgstr "Bezolovnatý HAL"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:165
 msgid "Phosphor bronze"
-msgstr ""
+msgstr "Fosforový bronz"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:169
 msgid "Bronze"
@@ -33742,11 +33749,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:177
 msgid "Solder 63/37 (Eutectic)"
-msgstr ""
+msgstr "Pájka 63/37 (Eutektická)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:181
 msgid "Solder 60/40 (Leaded)"
-msgstr ""
+msgstr "Pájka 60/40 (Olovnatá)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:185
 msgid "Tin"
@@ -33796,7 +33803,7 @@ msgstr "Zinek"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:229
 msgid "Steel, zinc-plated"
-msgstr ""
+msgstr "Pozinkovaná ocel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:233
 msgid "Manganese"
@@ -36861,7 +36868,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "Opravit přerušené ohraničení desky"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:179
@@ -41572,9 +41579,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Varování: Měřítko je nastaveno na velmi velkou hodnotu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1356
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Adresář '%s' neexistuje"
+msgstr "Adresář '%s' neexistuje."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "Plot format:"
@@ -41625,7 +41632,7 @@ msgstr "Obrys plošek na výrobních vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "Vykreslit ohraničení plošek na vrstvy F.Fab a B.Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:142
 #, fuzzy
@@ -45452,7 +45459,7 @@ msgstr "Pod hranicí plochy"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:364
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Izolované ostrovy menší než toto budou odstraněny"
 
 #: pcbnew/drc/drc_cache_generator.cpp:179
 #, fuzzy
@@ -47011,14 +47018,12 @@ msgid "%s (gap %s)"
 msgstr "%s (strana %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:220
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "Texty nejsou dovoleny ve vrstvě obrysu desky"
+msgstr "(na vrstvě Edge.Cuts jsou podezřelé položky)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:244
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "Texty nejsou dovoleny ve vrstvě obrysu desky"
+msgstr "(na vrstvě Edge.Cuts nebyly nalezeny hrany)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:326
 #, c-format
