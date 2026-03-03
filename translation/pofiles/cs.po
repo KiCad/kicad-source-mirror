@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 19:09+0000\n"
+"PO-Revision-Date: 2026-03-04 00:03+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -22792,7 +22792,7 @@ msgstr "Vytvoří soubor PNG z aktuálního pohledu"
 
 #: eeschema/tools/sch_actions.cpp:163
 msgid "Save Selection as Design Block..."
-msgstr ""
+msgstr "Uložit výběr jako blok návrhu..."
 
 #: eeschema/tools/sch_actions.cpp:164
 #, fuzzy
@@ -23056,7 +23056,7 @@ msgstr "Umístit návrhový blok"
 
 #: eeschema/tools/sch_actions.cpp:459
 msgid "Add selected design block to current sheet"
-msgstr ""
+msgstr "Přidat vybraný blok návrhu do aktuálního listu"
 
 #: eeschema/tools/sch_actions.cpp:470
 msgid "Place No Connect Flags"
@@ -24062,12 +24062,11 @@ msgstr "*** nový symbol má příliš málo jednotek ***"
 
 #: eeschema/tools/sch_drawing_tools.cpp:617
 msgid "All units of this symbol are already placed."
-msgstr ""
+msgstr "Všechny jednotky symbolu jsou již umístěny."
 
 #: eeschema/tools/sch_drawing_tools.cpp:781
-#, fuzzy
 msgid "Add Design Block"
-msgstr "Přidat signály na graf"
+msgstr "Přidat blok návrhu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:782
 #, fuzzy
@@ -24683,7 +24682,7 @@ msgstr "Symbol nechte vybraný při dalších kliknutích."
 
 #: eeschema/widgets/design_block_pane.cpp:124
 msgid "Place the design block as a new sheet."
-msgstr ""
+msgstr "Umístit blok návrhu do nového listu."
 
 #: eeschema/widgets/design_block_pane.cpp:130
 msgid ""
@@ -26898,27 +26897,31 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
-msgstr ""
+msgstr "Otočit desku, formát 'X,Y,Z' tj. pro izometrický pohled '-45,0,45'"
 
 #: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita vrchního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita spodního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita bočního osvícení, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
+"Intenzita osvícení kamerou, formát 'R,G,B' nebo jediné číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:323
 msgid "Side lights elevation angle in degrees, range: 0-90"
-msgstr ""
+msgstr "Výška bočního osvícení ve stupních, rozsah: 0-90"
 
 #: kicad/cli/command_pcb_render.cpp:339
 #, fuzzy
@@ -27032,6 +27035,8 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
+"Výstupní formát netlistu, možnosti: kicadsexpr, kicadxml, cadstar, "
+"orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:68
 msgid "Color theme to use (will default to schematic settings)"
@@ -27063,6 +27068,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Seznam stránek pro tisk, čísla jsou oddělena čárkou, pokud není zadán, bude "
+"vytištěno vše"
 
 #: kicad/cli/command_sch_export_plot.cpp:118
 msgid "Pen size [mm]"
@@ -27198,7 +27205,7 @@ msgstr "Zprávy:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:82
 msgid "Ignore non-zero exit code"
-msgstr ""
+msgstr "Ignorovat nenulovou návratovou hodnotu"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:92
 #, fuzzy
@@ -27229,7 +27236,7 @@ msgstr "Složka:"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
 msgid "Would you like to automatically check for updates on startup?"
-msgstr ""
+msgstr "Kontrolovat dostupnost nových aktualizací po spuštění?"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
 msgid "Check for Updates"
@@ -27258,7 +27265,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "&Remind Me Later"
-msgstr ""
+msgstr "&Připomenout později"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:61
 msgid ""
@@ -27605,7 +27612,7 @@ msgstr "Export PS"
 
 #: kicad/kicad_cli.cpp:403
 msgid "prints version information and exits"
-msgstr ""
+msgstr "vypíše informaci o verzi a skončí"
 
 #: kicad/kicad_manager_frame.cpp:89
 msgid "Editors"
@@ -28058,6 +28065,8 @@ msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
+"Zadaná URL nevypadá jako platný repozitář s KiCad balíčky. Zkontrolujte "
+"prosím URL."
 
 #: kicad/pcm/pcm.cpp:303
 msgid "Fetching repository packages"
@@ -29786,6 +29795,9 @@ msgid ""
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
+"Pro zadané jmenovité napětí a kategorii přepětí by mělo zařízení vydržet "
+"tuto hodnotu bez průrazu izolace. Toto impulzní napětí má standardní průběh "
+"1.2/50µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -30077,7 +30089,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
+msgstr "Výpočet proudu je podhodnocen kvůli dlouhé době přepalování."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -32821,7 +32833,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "Opravit přerušené ohraničení desky"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -33040,7 +33052,7 @@ msgstr "Název zóny:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:31
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
+msgstr "Unikátní označení této zóny pro identifikaci v DRC"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -33281,7 +33293,7 @@ msgstr "Minimální velikost prokovu:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:291
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Izolované ostrovy menší než toto budou odstraněny"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:136
 msgid "Copper Zone Properties"
@@ -37365,9 +37377,9 @@ msgid "Warning: Scale option set to a very large value"
 msgstr "Varování: Měřítko je nastaveno na velmi velkou hodnotu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1377
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist."
-msgstr "Adresář '%s' neexistuje"
+msgstr "Adresář '%s' neexistuje."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 msgid "Plot format:"
@@ -37418,7 +37430,7 @@ msgstr "Obrys plošek na výrobních vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "Vykreslit ohraničení plošek na vrstvy F.Fab a B.Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 #, fuzzy
@@ -42102,14 +42114,12 @@ msgid "Checking length constraints..."
 msgstr "Kontrola připojení sítě..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:121
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "Texty nejsou dovoleny ve vrstvě obrysu desky"
+msgstr "(na vrstvě Edge.Cuts jsou podezřelé položky)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:147
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "Texty nejsou dovoleny ve vrstvě obrysu desky"
+msgstr "(na vrstvě Edge.Cuts nebyly nalezeny hrany)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:233
 #, c-format
