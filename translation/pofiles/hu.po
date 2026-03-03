@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"PO-Revision-Date: 2026-03-03 19:09+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -31976,9 +31976,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
-#, fuzzy
 msgid "KiCad Calculator Tools"
-msgstr "Elektronikai kalkulátor"
+msgstr "KiCad Elektronikai Kalkulátor"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:168
 #, fuzzy
@@ -31986,14 +31985,12 @@ msgid "General system design"
 msgstr "Általános Beállítások"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:170
-#, fuzzy
 msgid "Regulators"
 msgstr "Feszültségszabályozók"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:171
-#, fuzzy
 msgid "Resistor Calculator"
-msgstr "PCB Calculator - Elektronikai méretező kalkulátor"
+msgstr "Ellenállás kalkulátor"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:173
 msgid "Power, current and isolation"
@@ -32044,13 +32041,12 @@ msgid "Color Code"
 msgstr "Színkód"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:191
-#, fuzzy
 msgid "Board Classes"
 msgstr "Panel osztályok"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:192
 msgid "Galvanic Corrosion"
-msgstr ""
+msgstr "Galvánkorrózió"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:363
 #, fuzzy
