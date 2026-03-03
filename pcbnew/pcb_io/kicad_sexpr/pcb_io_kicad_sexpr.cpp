@@ -1411,8 +1411,8 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         m_out->Print( ")" );
     }
 
-    Format( (BOARD_ITEM*) &aFootprint->Reference() );
-    Format( (BOARD_ITEM*) &aFootprint->Value() );
+    Format( &aFootprint->Reference() );
+    Format( &aFootprint->Value() );
 
     std::set<PAD*, FOOTPRINT::cmp_pads> sorted_pads( aFootprint->Pads().begin(),
                                                      aFootprint->Pads().end() );
