@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 19:10+0000\n"
+"PO-Revision-Date: 2026-03-03 21:47+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -35770,7 +35770,6 @@ msgstr "Hullámimpedancia"
 #: pcb_calculator/transline_ident.cpp:383
 #: pcb_calculator/transline_ident.cpp:417
 #: pcb_calculator/transline_ident.cpp:456
-#, fuzzy
 msgid "Electrical length"
 msgstr "Elektromos hosszúság"
 
@@ -35778,7 +35777,6 @@ msgstr "Elektromos hosszúság"
 #: pcb_calculator/transline_ident.cpp:219
 #: pcb_calculator/transline_ident.cpp:338
 #: pcb_calculator/transline_ident.cpp:370
-#, fuzzy
 msgid "Gap width"
 msgstr "Hézag szélesség"
 
