@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"PO-Revision-Date: 2026-03-03 19:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -4437,8 +4437,8 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Zpoždění po první změně k vytvoření záložního souboru desky na disku.\n"
-"Pokud nastaveno na 0, automatické zálohování je vypnuto"
+"Zpoždění mezi první změnou a zálohováním desky.\n"
+"Pokud je nastaveno na 0, je automatické zálohování vypnuto"
 
 #: common/dialogs/panel_common_settings_base.cpp:351
 msgid "File history size:"
@@ -26977,6 +26977,8 @@ msgstr "Schémata"
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
+"Provede kontrolu pravidel elektrického návrhu (ERC) na schématu a vytvoří "
+"hlášení"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
@@ -27133,9 +27135,8 @@ msgid "version info format (plain, commit, about)"
 msgstr ""
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
-#, fuzzy
 msgid "Destination:"
-msgstr "Označení"
+msgstr "Cíl:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
 #, fuzzy
@@ -28615,9 +28616,8 @@ msgid "New Project from Template..."
 msgstr "Nový projekt ze šablony..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
-#, fuzzy
 msgid "Create a new project based on an existing project"
-msgstr "Odvozeno od stávajícího symbolu:"
+msgstr "Vytvořit nový projekt podle existujícího projektu"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 #, fuzzy
@@ -29655,7 +29655,7 @@ msgstr "Délka:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:203
 msgid "Length includes the return path"
-msgstr ""
+msgstr "Délka zahrnuje návratovou cestu"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:215
 msgid "Resistance DC:"
@@ -32928,9 +32928,8 @@ msgid "Filter items by layer:"
 msgstr "Filtrování položek podle vrstvy:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:160
-#, fuzzy
 msgid "Progress:"
-msgstr "Celkový postup"
+msgstr "Postup:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:82
 msgid "Cleanup Tracks and Vias"
@@ -33554,9 +33553,8 @@ msgid "Full circle"
 msgstr "kružnice"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:363
-#, fuzzy
 msgid "Angle between items:"
-msgstr "Vzdálenost mezi páskem a kovovým povrchem"
+msgstr "Úhel mezi položkami:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:367
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:142
@@ -39509,7 +39507,7 @@ msgstr "mikro Prokovy"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia diameter:"
-msgstr "Minimální průměr mikroprokov:"
+msgstr "Minimální průměr mikroprokovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:263
 msgid ""
@@ -41204,18 +41202,16 @@ msgid "Track angle"
 msgstr "Úhel oblouku:"
 
 #: pcbnew/drc/drc_item.cpp:129
-#, fuzzy
 msgid "Track segment length"
-msgstr "Segmenty spoje"
+msgstr "Délka segmentu spoje"
 
 #: pcbnew/drc/drc_item.cpp:133
 msgid "Annular width"
 msgstr "Šířka prstence"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Hole size out of range"
-msgstr "Vrtání mimo rozsah"
+msgstr "Velikost díry je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Via diameter"
@@ -41231,9 +41227,8 @@ msgid "Padstack is not valid"
 msgstr "Typ stránky není platný"
 
 #: pcbnew/drc/drc_item.cpp:153
-#, fuzzy
 msgid "Micro via hole size out of range"
-msgstr "Vrtání mikro prokovu mimo rozsah"
+msgstr "Velikost díry mikroprokovu je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "Courtyards overlap"
@@ -41284,14 +41279,12 @@ msgid "Pad net doesn't match schematic"
 msgstr "Síť plošky neodpovídá schématu"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Footprint attributes don't match symbol"
-msgstr "Pouzdro se neshoduje s kopií v knihovně"
+msgstr "Atributy pouzdra se neshodují se symbolem"
 
 #: pcbnew/drc/drc_item.cpp:205
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "Pouzdro se neshoduje s kopií v knihovně"
+msgstr "Pouzdro se neshoduje s filtry symbolu"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -41370,11 +41363,11 @@ msgstr "Ploška s průchozí dírou nemá žádný otvor"
 
 #: pcbnew/drc/drc_item.cpp:294
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Zrcadlový text na vrchní vrstvě"
 
 #: pcbnew/drc/drc_item.cpp:298
 msgid "Non-Mirrored text on back layer"
-msgstr ""
+msgstr "Nezrcadlový text na spodní vrstvě"
 
 #: pcbnew/drc/drc_item.cpp:494
 #, c-format
@@ -44401,7 +44394,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2501
 msgid "(negative corner radius is not allowed)"
-msgstr ""
+msgstr "(záporný poloměr rohu není povolen)"
 
 #: pcbnew/pad.cpp:2503
 #, fuzzy
