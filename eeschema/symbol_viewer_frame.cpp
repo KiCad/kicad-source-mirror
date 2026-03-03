@@ -631,8 +631,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
             for( LIB_SYMBOL* symbol : symbols )
             {
-                std::vector<SEARCH_TERM> searchTerms = symbol->GetSearchTerms();
-                int                      matched = matcher.ScoreTerms( searchTerms );
+                int matched = matcher.ScoreTerms( symbol->GetSearchTerms() );
 
                 if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)symbol->GetPinCount() )
                     matched++;

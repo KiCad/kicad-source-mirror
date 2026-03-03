@@ -363,7 +363,7 @@ public:
     wxString GetLibNickname() const override { return m_fpid.GetLibNickname(); }
     wxString GetDesc() override { return GetLibDescription(); }
     int GetPinCount() override { return static_cast<int>( GetUniquePadCount( DO_NOT_INCLUDE_NPTH ) ); }
-    std::vector<SEARCH_TERM> GetSearchTerms() override;
+    std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     wxString GetLibDescription() const { return m_libDescription; }
     void     SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }
@@ -1388,6 +1388,8 @@ private:
 
     // Optional unit mapping information for multi-unit symbols
     std::vector<FP_UNIT_INFO> m_unitInfo;
+
+    std::vector<SEARCH_TERM> m_searchTerms;
 };
 
 #endif     // FOOTPRINT_H

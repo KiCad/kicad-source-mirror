@@ -90,9 +90,7 @@ void FOOTPRINT_FILTER_IT::increment()
 
             for( std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : m_filter->m_pattern_filters )
             {
-                std::vector<SEARCH_TERM> searchTerms = candidate.GetSearchTerms();
-
-                if( !matcher->ScoreTerms( searchTerms ) )
+                if( !matcher->ScoreTerms( candidate.GetSearchTerms() ) )
                 {
                     exclude = true;
                     break;

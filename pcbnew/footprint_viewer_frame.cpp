@@ -511,8 +511,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
             for( FOOTPRINT* footprint : footprints )
             {
-                std::vector<SEARCH_TERM> searchTerms = footprint->GetSearchTerms();
-                int                      matched = matcher.ScoreTerms( searchTerms );
+                int matched = matcher.ScoreTerms( footprint->GetSearchTerms() );
 
                 if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) )
                     matched++;

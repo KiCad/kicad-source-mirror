@@ -22,22 +22,23 @@
 #include <wx/tokenzr.h>
 
 
-std::vector<SEARCH_TERM> DESIGN_BLOCK::GetSearchTerms()
+std::vector<SEARCH_TERM>& DESIGN_BLOCK::GetSearchTerms()
 {
-    std::vector<SEARCH_TERM> terms;
+    m_searchTerms.clear();
+    m_searchTerms.reserve( 6 );
 
-    terms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
-    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
-    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
 
     wxStringTokenizer keywordTokenizer( GetKeywords(), wxS( " " ), wxTOKEN_STRTOK );
 
     while( keywordTokenizer.HasMoreTokens() )
-        terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
+        m_searchTerms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
     // Also include keywords as one long string, just in case
-    terms.emplace_back( SEARCH_TERM( GetKeywords(), 1 ) );
-    terms.emplace_back( SEARCH_TERM( GetDesc(), 1 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetKeywords(), 1 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetDesc(), 1 ) );
 
-    return terms;
+    return m_searchTerms;
 }

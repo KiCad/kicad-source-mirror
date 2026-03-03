@@ -83,15 +83,24 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
 
+    std::unordered_set<wxString> pinned;
+    std::ranges::copy( cfg->m_Session.pinned_symbol_libs, std::inserter( pinned, pinned.begin() ) );
+    std::ranges::copy( project.m_PinnedSymbolLibs, std::inserter( pinned, pinned.begin() ) );
+
     auto addFunc =
             [&]( const wxString& aLibName, const std::vector<LIB_SYMBOL*>& aSymbolList,
                  const wxString& aDescription )
             {
-                std::vector<LIB_TREE_ITEM*> treeItems( aSymbolList.begin(), aSymbolList.end() );
-                bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, aLibName )
-                              || alg::contains( project.m_PinnedSymbolLibs, aLibName );
+                LIB_TREE_NODE_LIBRARY& lib_node =
+                        DoAddLibraryNode( aLibName, aDescription, pinned.contains( aLibName ) );
 
-                DoAddLibrary( aLibName, aDescription, treeItems, pinned, false );
+                for( LIB_TREE_ITEM* item: aSymbolList )
+                {
+                    if( item )
+                        lib_node.AddItem( item );
+                }
+
+                lib_node.AssignIntrinsicRanks( m_shownColumns, false );
             };
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();

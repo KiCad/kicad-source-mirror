@@ -150,7 +150,7 @@ public:
     int GetSubUnitCount() const override { return GetUnitCount(); }
 
     const LIB_ID& GetLibId() const override { return m_libId; }
-    void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
+    void SetLibId( const LIB_ID& aLibId );
 
     LIB_ID GetSourceLibId() const { return m_sourceLibId; }
     void SetSourceLibId( const LIB_ID& aLibId ) { m_sourceLibId = aLibId; }
@@ -158,10 +158,7 @@ public:
     wxString GetLibNickname() const override { return GetLibraryName(); }
 
     ///< Sets the Description field text value
-    void SetDescription( const wxString& aDescription )
-    {
-        GetDescriptionField().SetText( aDescription );
-    }
+    void SetDescription( const wxString& aDescription );
 
     ///< Gets the Description field text value */
     wxString GetDescription() const override
@@ -177,7 +174,7 @@ public:
 
     wxString GetShownDescription( int aDepth = 0 ) const override;
 
-    void SetKeyWords( const wxString& aKeyWords ) { m_keyWords = aKeyWords; }
+    void SetKeyWords( const wxString& aKeyWords );
 
     wxString GetKeyWords() const override
     {
@@ -192,7 +189,7 @@ public:
 
     wxString GetShownKeyWords( int aDepth = 0 ) const override;
 
-    std::vector<SEARCH_TERM> GetSearchTerms() override;
+    std::vector<SEARCH_TERM>& GetSearchTerms() override { return m_searchTermsCache; }
 
     void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) override;
 
@@ -205,7 +202,7 @@ public:
     const wxString GetLibraryName() const;
 
     LEGACY_SYMBOL_LIB* GetLib() const          { return m_library; }
-    void SetLib( LEGACY_SYMBOL_LIB* aLibrary ) { m_library = aLibrary; }
+    void SetLib( LEGACY_SYMBOL_LIB* aLibrary );
 
     timestamp_t GetLastModDate() const { return m_lastModDate; }
 
@@ -870,6 +867,11 @@ private:
 
     void deleteAllFields();
 
+    void cacheSearchTerms();
+    void cachePinCount();
+    void cacheShownDescription();
+    void cacheChooserFields();
+
 private:
     std::shared_ptr<LIB_SYMBOL> m_me;
     std::weak_ptr<LIB_SYMBOL>   m_parent;   ///< Use for inherited symbols.
@@ -908,4 +910,12 @@ private:
 
     std::map<int, wxString> m_unitDisplayNames;
     std::vector<wxString>   m_bodyStyleNames;
+
+    // Caches for things that are expensive to compute but required every time
+    // the symbol chooser or other library list is created
+
+    std::vector<SEARCH_TERM> m_searchTermsCache;
+    int m_pinCountCache;
+    wxString m_shownDescriptionCache;
+    std::map<wxString, wxString> m_chooserFieldsCache;
 };

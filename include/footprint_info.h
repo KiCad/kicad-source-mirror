@@ -83,7 +83,7 @@ public:
         return m_keywords;
     }
 
-    std::vector<SEARCH_TERM> GetSearchTerms() override;
+    std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     unsigned GetPadCount()
     {
@@ -139,6 +139,8 @@ protected:
     unsigned        m_unique_pad_count; ///< Number of unique pads
     wxString        m_doc;              ///< Footprint description.
     wxString        m_keywords;         ///< Footprint keywords.
+
+    std::vector<SEARCH_TERM> m_searchTerms;
 };
 
 

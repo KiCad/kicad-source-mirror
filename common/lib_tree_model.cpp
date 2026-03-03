@@ -33,7 +33,7 @@
 
 void LIB_TREE_NODE::RebuildSearchTerms( const std::vector<wxString>& aShownColumns )
 {
-    m_SearchTerms = m_sourceSearchTerms;
+    m_SearchTerms.assign( m_sourceSearchTerms.begin(), m_sourceSearchTerms.end() );
 
     for( const auto& [name, value] : m_Fields )
     {

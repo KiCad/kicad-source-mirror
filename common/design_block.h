@@ -39,7 +39,7 @@ public:
     wxString GetName() const override { return m_lib_id.GetLibItemName(); }
     wxString GetLibNickname() const override { return m_lib_id.GetLibNickname(); }
     wxString GetDesc() override { return GetLibDescription(); }
-    std::vector<SEARCH_TERM> GetSearchTerms() override;
+    std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     void          SetLibId( const LIB_ID& aName ) { m_lib_id = aName; }
     const LIB_ID& GetLibId() const { return m_lib_id; }
@@ -73,6 +73,7 @@ private:
     wxString m_keywords;       ///< Search keywords to find design block in library.
 
     nlohmann::ordered_map<wxString, wxString> m_fields;
+    std::vector<SEARCH_TERM> m_searchTerms;
 };
 
 #endif

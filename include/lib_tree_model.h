@@ -26,6 +26,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <span>
 #include <wx/string.h>
 #include <eda_pattern_match.h>
 #include <lib_tree_item.h>
@@ -149,7 +150,7 @@ public:
     bool        m_IsAlreadyPlacedGroup;
 
 protected:
-    std::vector<SEARCH_TERM> m_sourceSearchTerms;
+    std::span<SEARCH_TERM> m_sourceSearchTerms;
 };
 
 

@@ -100,17 +100,35 @@ static std::shared_ptr<LIB_SYMBOL> GetSafeRootSymbol( const LIB_SYMBOL* aSymbol,
 
 wxString LIB_SYMBOL::GetShownDescription( int aDepth ) const
 {
-    wxString shownText = GetDescriptionField().GetShownText( false, aDepth );
+    return m_shownDescriptionCache;
+}
+
+void LIB_SYMBOL::cacheShownDescription()
+{
+    wxString shownText = GetDescriptionField().GetShownText( false, 0 );
 
     if( shownText.IsEmpty() && IsDerived() )
     {
         std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
 
         if( root.get() != this )
-            shownText = root->GetDescriptionField().GetShownText( false, aDepth );
+            shownText = root->GetDescriptionField().GetShownText( false, 0 );
     }
+}
 
-    return shownText;
+
+void LIB_SYMBOL::SetDescription( const wxString& aDescription )
+{
+    GetDescriptionField().SetText( aDescription );
+    cacheSearchTerms();
+    cacheShownDescription();
+}
+
+
+void LIB_SYMBOL::SetKeyWords( const wxString& aKeyWords )
+{
+    m_keyWords = aKeyWords;
+    cacheSearchTerms();
 }
 
 
@@ -129,48 +147,64 @@ wxString LIB_SYMBOL::GetShownKeyWords( int aDepth ) const
 }
 
 
-std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
+enum SEARCH_TERM_CACHE_INDEX
 {
-    std::vector<SEARCH_TERM> terms;
+    STCI_LIB_NICKNAME = 0,
+    STCI_LIB_SYMBOL_NAME,
+    STCI_LIB_ID
+};
 
-    terms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
-    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
-    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+
+void LIB_SYMBOL::cacheSearchTerms()
+{
+    m_searchTermsCache.clear();
+    m_searchTermsCache.reserve( 6 );
+
+    // Order matters, see SEARCH_TERM_CACHE_INDEX
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetName(), 8 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
 
     wxStringTokenizer keywordTokenizer( GetShownKeyWords(), " \t\r\n", wxTOKEN_STRTOK );
 
     while( keywordTokenizer.HasMoreTokens() )
-        terms.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
+        m_searchTermsCache.emplace_back( SEARCH_TERM( keywordTokenizer.GetNextToken(), 4 ) );
 
     // Also include keywords as one long string, just in case
-    terms.emplace_back( SEARCH_TERM( GetShownKeyWords(), 1 ) );
-    terms.emplace_back( SEARCH_TERM( GetShownDescription(), 1 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownKeyWords(), 1 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetShownDescription(), 1 ) );
 
     wxString footprint = GetFootprint();
 
     if( !footprint.IsEmpty() )
-        terms.emplace_back( SEARCH_TERM( footprint, 1 ) );
-
-    return terms;
+        m_searchTermsCache.emplace_back( SEARCH_TERM( footprint, 1 ) );
 }
 
 
 void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
 {
+    aColumnMap = m_chooserFieldsCache;
+}
+
+
+void LIB_SYMBOL::cacheChooserFields()
+{
+    m_chooserFieldsCache.clear();
+
     for( SCH_ITEM& item : m_drawings[SCH_FIELD_T] )
     {
         SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         if( field->ShowInChooser() )
-            aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText( false );
+            m_chooserFieldsCache[field->GetName()] = field->EDA_TEXT::GetShownText( false );
     }
 
     // If the user has a field named "Keywords", then prefer that.  Otherwise add the KiCad
     // keywords.
     const wxString localizedKeywords = _( "Keywords" );
 
-    if( !aColumnMap.contains( localizedKeywords ) )
-        aColumnMap[localizedKeywords] = GetShownKeyWords();
+    if( !m_chooserFieldsCache.contains( localizedKeywords ) )
+        m_chooserFieldsCache[localizedKeywords] = GetShownKeyWords();
 }
 
 
@@ -198,6 +232,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     m_options = ENTRY_NORMAL;
     m_unitsLocked = false;
     m_duplicatePinNumbersAreJumpers = false;
+    m_library = nullptr;
 
     auto addField = [&]( FIELD_T id, bool visible )
     {
@@ -216,6 +251,10 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     SetName( aName );
     SetParent( aParent );
     SetLib( aLibrary );
+    cacheSearchTerms();
+    cachePinCount();
+    cacheShownDescription();
+    cacheChooserFields();
 }
 
 
@@ -263,6 +302,10 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary, 
     }
 
     SetParent( aSymbol.m_parent.lock().get() );
+    m_searchTermsCache = aSymbol.m_searchTermsCache;
+    m_pinCountCache = aSymbol.m_pinCountCache;
+    m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
+    m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
 }
 
 
@@ -307,6 +350,11 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     SetParent( aSymbol.m_parent.lock().get() );
 
     EMBEDDED_FILES::operator=( aSymbol );
+
+    m_searchTermsCache = aSymbol.m_searchTermsCache;
+    m_pinCountCache = aSymbol.m_pinCountCache;
+    m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
+    m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
 
     return *this;
 }
@@ -433,6 +481,23 @@ void LIB_SYMBOL::SetName( const wxString& aName )
 {
     m_name = aName;
     m_libId.SetLibItemName( aName );
+
+    if( m_searchTermsCache.empty() )
+        cacheSearchTerms();
+
+    m_searchTermsCache[STCI_LIB_SYMBOL_NAME].Text = aName;
+    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format();
+}
+
+
+void LIB_SYMBOL::SetLibId( const LIB_ID& aLibId )
+{
+    m_libId = aLibId;
+
+    if( m_searchTermsCache.empty() )
+        cacheSearchTerms();
+
+    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format();
 }
 
 
@@ -624,6 +689,17 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
     }
 
     return retv;
+}
+
+
+void LIB_SYMBOL::SetLib( LEGACY_SYMBOL_LIB* aLibrary )
+{
+    m_library = aLibrary;
+
+    if( m_searchTermsCache.empty() )
+        cacheSearchTerms();
+
+    m_searchTermsCache[STCI_LIB_NICKNAME].Text = GetLibraryName();
 }
 
 
@@ -1012,6 +1088,9 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 
         if( aSort )
             m_drawings.sort();
+
+        cachePinCount();
+        cacheChooserFields();
     }
 }
 
@@ -1176,15 +1255,19 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
 
 int LIB_SYMBOL::GetPinCount()
 {
-    int count = 0;
+    return m_pinCountCache;
+}
+
+
+void LIB_SYMBOL::cachePinCount()
+{
+    m_pinCountCache = 0;
 
     for( SCH_PIN* pin : GetGraphicalPins( 0 /* all units */, 1 /* single body style */ ) )
     {
         int pinCount = pin->GetStackedPinCount();
-        count += pinCount;
+        m_pinCountCache += pinCount;
     }
-
-    return count;
 }
 
 
@@ -1370,6 +1453,8 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
 void LIB_SYMBOL::deleteAllFields()
 {
     m_drawings[SCH_FIELD_T].clear();
+    cacheSearchTerms();
+    cacheChooserFields();
 }
 
 
@@ -1393,6 +1478,8 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
     }
 
     m_drawings.sort();
+    cacheSearchTerms();
+    cacheChooserFields();
 }
 
 
