@@ -42,18 +42,42 @@ namespace KI_TEST
 class BOARD_EXPECTATION
 {
 public:
-    // This class c an be handled via the base class pointer
+    // This class can be handled via the base class pointer
     virtual ~BOARD_EXPECTATION() = default;
 
     virtual void RunTest( const BOARD& aBrd ) const = 0;
 
     virtual std::string GetName() const = 0;
+
+    /**
+     * Set a comment to be included in the test output for this expectation, which can be used to provide more
+     * details about the expectation.
+     */
+    void               SetComment( std::string aComment ) { m_Comment = std::move( aComment ); }
+    const std::string& GetComment() const { return m_Comment; }
+
+private:
+    std::string m_Comment;
 };
 
 
 class BOARD_EXPECTATION_TEST
 {
 public:
+    /**
+     * Lightweight descriptor for a BOARD_EXPECTATION_TEST, which can be used to refer to the test
+     * unambiguously. Intended to be used for registering the test with the test runner at static init.
+     */
+    struct DESCRIPTOR
+    {
+        /// If the test has a name, it's that, else an index - this is for naming the test for filtering
+        std::string m_TestName;
+        /// Tags associated with the test, which can be used for filtering
+        std::vector<std::string> m_Tags;
+        /// Handy ref to the JSON entry for this expectations test, which saves looking it up again
+        const nlohmann::json& m_TestJson;
+    };
+
     BOARD_EXPECTATION_TEST( const std::string& aBrdName ) :
             m_BrdName( aBrdName )
     {
@@ -67,10 +91,26 @@ public:
     static std::unique_ptr<BOARD_EXPECTATION_TEST> CreateFromJson( const std::string&    aBrdName,
                                                                    const nlohmann::json& aBrdExpectations );
 
-private:
-    std::vector<std::unique_ptr<BOARD_EXPECTATION>> m_expectations;
+    /**
+     * Extracts expectation tests from the given JSON array and returns a list of test references that can be used to run the tests.
+     *
+     * This is intended to be used to extract the expectation tests from the JSON at static init time to
+     * register the tests with the test runner.
+     * This does not actually create the expectation test objects, just extracts the minimal information needed
+     * to register them.
+     */
+    static std::vector<DESCRIPTOR> ExtractExpectationTestsFromJson( const nlohmann::json& aExpectationArray );
 
-    std::string m_BrdName;
+    /**
+     * Constructs a BOARD_EXPECTATION_TEST from the given JSON definition, and runs it on the given board.
+     */
+    static void RunFromRef( const std::string& aBrdName, const BOARD& aBoard,
+                            const BOARD_EXPECTATION_TEST::DESCRIPTOR& aExpectationTestRef );
+
+private:
+    std::unique_ptr<BOARD_EXPECTATION> m_expectation;
+    std::string                        m_BrdName;
+    bool                               m_skip = false;
 };
 
 } // namespace KI_TEST

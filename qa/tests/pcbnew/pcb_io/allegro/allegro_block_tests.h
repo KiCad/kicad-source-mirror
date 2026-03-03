@@ -54,9 +54,9 @@ struct HEADER_TEST_INFO
 };
 
 /**
- * A single block of test data, along with the expected result of parsing it.
+ * A complete description of a block test.
  */
-struct BLK_TEST_INFO
+struct BLOCK_TEST_INFO
 {
     /// The type of the block, as in the first byte
     uint8_t m_BlockType;
@@ -64,12 +64,10 @@ struct BLK_TEST_INFO
     size_t m_BlockOffset;
     /// Whether to skip this test while parsers don't support a certain format
     bool m_Skip;
-    /// The raw bytes of the block, as copied from the file
+    /// The the source of the block data (probably a filename)
     std::string m_DataSource;
-    /// An optional function to validate the contents of the parsed block if parsing is expected to succeed
-    std::function<void( const ALLEGRO::BLOCK_BASE& )> m_ValidateFunc;
 
-    friend std::ostream& operator<<( std::ostream& os, const BLK_TEST_INFO& aTestInfo )
+    friend std::ostream& operator<<( std::ostream& os, const BLOCK_TEST_INFO& aTestInfo )
     {
         wxString msg = wxString::Format( "Block type %#02x at offset %#010zx", aTestInfo.m_BlockType,
                                          aTestInfo.m_BlockOffset );
@@ -90,7 +88,7 @@ struct BOARD_TEST_DEF
     // If there is a header test for this board, it will be stored here, else nullptr
     std::unique_ptr<HEADER_TEST_INFO> m_HeaderTest;
     // List of block tests for this board
-    std::vector<BLK_TEST_INFO> m_BlockTests;
+    std::vector<BLOCK_TEST_INFO> m_BlockTests;
     // A KiCad board expectation test to run against the parsed board, or nullptr
     std::unique_ptr<BOARD_EXPECTATION_TEST> m_BrdExpectations;
 };

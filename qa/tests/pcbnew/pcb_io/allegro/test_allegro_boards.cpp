@@ -43,7 +43,7 @@
 #include <convert/allegro_parser.h>
 
 /**
- * @file test_allegro_blocks.cpp
+ * @file test_allegro_boards.cpp
  *
  * This file contains unit tests for parsing individual Allegro blocks and headers, loading from
  * declarative test definitions in JSON files and binary data files.
@@ -55,6 +55,55 @@
 
 using namespace ALLEGRO;
 using namespace KI_TEST;
+
+
+/**
+ * Just enough information about a block-level test to be able to name and register
+ * it with the test runner at static init time.
+ */
+struct ALLEGRO_BLOCK_TEST_DESCRIPTOR
+{
+    uint8_t m_BlockType;
+    size_t  m_BlockOffset;
+    /// Handy ref to the JSON entry for this block test
+    const nlohmann::json& m_BlockTestJson;
+};
+
+/**
+ * Just enough information about the board test to be able to name and register any
+ * tests for this board.
+ */
+struct ALLEGRO_BOARD_TEST_DESCRIPTOR
+{
+    // The board name in the JSON registry
+    std::string m_BrdName;
+
+    bool                                       m_HasHeaderTest;
+    std::vector<ALLEGRO_BLOCK_TEST_DESCRIPTOR> m_BlockTests;
+    bool                                       m_HasBoardFile;
+
+    /// List of expectation tests found in the JSON for this board
+    std::vector<BOARD_EXPECTATION_TEST::DESCRIPTOR> m_ExpectationTests;
+};
+
+
+/**
+ * The registry of known Allegro board and block tests,
+ * populated at static init time by reading the JSON registry file.
+ *
+ * (We need to do this at static init time to be able to register
+ * named Boost test cases).
+ */
+struct ALLEGRO_BLOCK_TEST_REGISTRY
+{
+    nlohmann::json                             m_Json;
+    std::vector<ALLEGRO_BOARD_TEST_DESCRIPTOR> m_BoardTests;
+
+    const nlohmann::json& GetBoardJson( const std::string& aBoardName ) const
+    {
+        return m_Json["boards"][aBoardName];
+    }
+};
 
 
 static std::vector<uint8_t> loadDataByUri( const std::string& aDataSource )
@@ -117,7 +166,7 @@ ALLEGRO::FMT_VER getFormatVersionFromStr( const std::string& aFmtVerStr )
 static std::unique_ptr<HEADER_TEST_INFO> createHeaderTestEntry( const std::string&    boardDir,
                                                                 const nlohmann::json& headerTestEntry )
 {
-    std::unique_ptr<HEADER_TEST_INFO> headerTest = nullptr;
+    std::unique_ptr<HEADER_TEST_INFO> headerTest;
 
     if( !headerTestEntry.is_object() )
     {
@@ -131,39 +180,25 @@ static std::unique_ptr<HEADER_TEST_INFO> createHeaderTestEntry( const std::strin
 }
 
 
-static BLK_TEST_INFO createBlockTestEntry( const std::string& boardDir, const nlohmann::json& blockTestEntry )
+static BLOCK_TEST_INFO createBlockTestEntry( const std::string&                   boardDir,
+                                             const ALLEGRO_BLOCK_TEST_DESCRIPTOR& aBlockTestDescriptor )
 {
-    if( !blockTestEntry.contains( "type" ) || !blockTestEntry["type"].is_string() )
-    {
-        throw std::runtime_error( "Block test entry is missing a valid 'type' field" );
-    }
+    const nlohmann::json& blockTestJson = aBlockTestDescriptor.m_BlockTestJson;
+    const bool skipBlock = blockTestJson.value( "skip", false );
 
-    const std::string blockTypeStr = blockTestEntry["type"];
-    const uint8_t     blockType = std::stoul( blockTypeStr, nullptr, 0 );
-
-    const std::string block_offset = blockTestEntry["offset"];
-    const size_t      blockOffset = std::stoul( block_offset, nullptr, 0 );
-
-    const bool skipBlock = blockTestEntry.value( "skip", false );
+    const uint8_t& blockType = aBlockTestDescriptor.m_BlockType;
+    const size_t&  blockOffset = aBlockTestDescriptor.m_BlockOffset;
 
     // Default block data location is a file with a name based on the block type and offset
     wxString blockDataLoc = wxString::Format( "0x%02x_0x%08zx.bin", blockType, blockOffset );
 
     const std::string blockDataUri = std::string( "file://" ) + boardDir + blockDataLoc.ToStdString();
 
-    const auto blockTestCallback = [&]( const ALLEGRO::BLOCK_BASE& aBlock )
-    {
-        // For now, we don't have any specific expectations for the contents of the block, but we could add some if needed.
-        // For example, commonly used fields.
-        // Often just parsing successfully is enough.
-    };
-
-    return BLK_TEST_INFO{
+    return BLOCK_TEST_INFO{
             blockType,
             blockOffset,
             skipBlock,
             blockDataUri,
-            blockTestCallback,
     };
 }
 
@@ -171,19 +206,16 @@ static BLK_TEST_INFO createBlockTestEntry( const std::string& boardDir, const nl
 struct BOARD_TEST_INFO
 {
     std::string      m_BrdName;
-    std::string      m_BrdPath;
     ALLEGRO::FMT_VER m_FormatVersion;
 };
 
 
 static BOARD_TEST_INFO createBoardTestInfo( const std::string& aBrdName, const nlohmann::json& boardTestEntry )
 {
-    const std::string boardDir = AllegroBoardDataDir( aBrdName );
-
     const ALLEGRO::FMT_VER formatVersion =
             getFormatVersionFromStr( boardTestEntry.value( "formatVersion", "unknown" ) );
 
-    return BOARD_TEST_INFO{ aBrdName, boardDir, formatVersion };
+    return BOARD_TEST_INFO{ aBrdName, formatVersion };
 }
 
 
@@ -240,10 +272,10 @@ public:
 
 
     void RunBlockTest( const std::string& aBrdName, const nlohmann::json& aBoardTestJson,
-                       const nlohmann::json& aBlockTestJson )
+                       const ALLEGRO_BLOCK_TEST_DESCRIPTOR& aBlockTest )
     {
         const BOARD_TEST_INFO brdDef = createBoardTestInfo( aBrdName, aBoardTestJson );
-        const BLK_TEST_INFO   blockTest = createBlockTestEntry( AllegroBoardDataDir( aBrdName ), aBlockTestJson );
+        const BLOCK_TEST_INFO blockTest = createBlockTestEntry( AllegroBoardDataDir( aBrdName ), aBlockTest );
 
         BOOST_TEST_CONTEXT( wxString::Format( "Testing block type %#02x at offset %#010zx from board %s",
                                               blockTest.m_BlockType, blockTest.m_BlockOffset, aBrdName ) )
@@ -265,14 +297,6 @@ public:
 
             // Compare the result to the expected results
             BOOST_REQUIRE( block != nullptr );
-
-            if( blockTest.m_ValidateFunc )
-            {
-                BOOST_TEST_CONTEXT( "Validating block contents" )
-                {
-                    blockTest.m_ValidateFunc( *block );
-                }
-            }
 
             // The parser should have consumed all the data in the block
             BOOST_TEST( fileStream.Position() == data.size() );
@@ -376,157 +400,99 @@ void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTest
 }
 
 
-void RunBoardExpectations( const std::string& aBrdName, const nlohmann::json& aBoardTestJson )
+static uint8_t getByteFromHexStr( const nlohmann::json& aJsonEntry, const std::string& aFieldName )
 {
-    if( !aBoardTestJson.contains( "boardFile" ) )
+    if( !aJsonEntry.contains( aFieldName ) )
     {
-        BOOST_FAIL( "Board test JSON does not contain a 'boardFile' entry" );
-        return;
+        throw std::runtime_error( "Block test entry is missing the '" + aFieldName + "' field" );
     }
 
-    const std::string boardFilePath =
-            KI_TEST::AllegroBoardDataDir( aBrdName ) + aBoardTestJson["boardFile"].get<std::string>();
-
-    BOARD* board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
-
-    if( !board )
+    if( aJsonEntry[aFieldName].is_number_unsigned() )
     {
-        BOOST_FAIL( "Failed to load cached board for expectations test: " + boardFilePath );
-        return;
+        const unsigned long value = aJsonEntry[aFieldName].get<unsigned long>();
+        if( value > 0xFF )
+        {
+            throw std::runtime_error( "Value is too large to fit in a byte: " + std::to_string( value ) );
+        }
+        return static_cast<uint8_t>( value );
+    }
+    else if( aJsonEntry[aFieldName].is_string() )
+    {
+        const std::string aHexStr = aJsonEntry[aFieldName];
+
+        const unsigned long value = std::stoul( aHexStr, nullptr, 0 );
+        if( value > 0xFF )
+        {
+            throw std::runtime_error( "Value is too large to fit in a byte: " + aHexStr );
+        }
+        return static_cast<uint8_t>( value );
     }
 
-    BOOST_TEST_CONTEXT( "Running board expectations" )
+    throw std::runtime_error( "Block test entry has an invalid '" + aFieldName
+                              + "' field (must be a byte value as a number or hex string)" );
+}
+
+
+static ALLEGRO_BLOCK_TEST_DESCRIPTOR createBlockTestDescriptor( const nlohmann::json& aBlockTestJson )
+{
+    const uint8_t blockType = getByteFromHexStr( aBlockTestJson, "type" );
+
+    if( !aBlockTestJson.contains( "offset" ) || !aBlockTestJson["offset"].is_string() )
     {
-        std::unique_ptr<BOARD_EXPECTATION_TEST> boardExpectationTest = nullptr;
-
-        // There are default expectations that apply unless otherwise specified
-        {
-            bool hasContent = board->GetNetCount() > 0 || board->Footprints().size() > 0;
-            BOOST_CHECK( hasContent ); // The board should have some content (e.g. nets or footprints)
-        }
-
-        // Load board expectations from the JSON file and create expectation objects
-        if( aBoardTestJson.contains( "boardExpectations" ) )
-        {
-            boardExpectationTest = BOARD_EXPECTATION_TEST::CreateFromJson( aBrdName, aBoardTestJson["boardExpectations"] );
-        }
-
-        if( boardExpectationTest )
-        {
-            boardExpectationTest->RunTest( *board );
-        }
+        throw std::runtime_error( "Block test entry is missing a valid 'offset' field" );
     }
+
+    const std::string block_offset = aBlockTestJson["offset"];
+    const size_t      blockOffset = std::stoul( block_offset, nullptr, 0 );
+
+    return ALLEGRO_BLOCK_TEST_DESCRIPTOR{
+        blockType,
+        blockOffset,
+        aBlockTestJson,
+    };
 }
 
 
 /**
- * Just enough information about the board and block tests to be able to name and
- * register the test cases and look up the definitions at runtime.
- */
-struct ALLEGRO_BLOCK_TEST
-{
-    uint8_t m_BlockType;
-    size_t  m_BlockOffset;
-    /// Handy ref to the JSON entry for this block test
-    const nlohmann::json& m_BlockTestJson;
-};
-
-/**
- * Just enough information about the board test to be able to name and register any
- * tests for this board.
- */
-struct ALLEGRO_BOARD_TEST_REF
-{
-    // The board name in the JSON registry
-    std::string m_BrdName;
-
-    // Handy ref to the JSON entry for this board test
-    const nlohmann::json& m_BrdTestJson;
-
-    bool                            m_HasHeaderTest;
-    std::vector<ALLEGRO_BLOCK_TEST> m_BlockTests;
-    bool                            m_HasBoardFile;
-    bool                            m_HasExpectations;
-};
-
-
-/**
- * The registry of known Allegro board and block tests,
- * populated at static init time by reading the JSON registry file.
- *
- * (We need to do this at static init time to be able to register
- * named Boost test cases).
- */
-struct ALLEGRO_BLOCK_TEST_REGISTRY
-{
-    nlohmann::json                      m_Json;
-    std::vector<ALLEGRO_BOARD_TEST_REF> m_BoardTests;
-
-    const nlohmann::json& GetBoardJson( const std::string& aBoardName ) const
-    {
-        return m_Json["boards"][aBoardName];
-    }
-};
-
-
-/**
- * Construct a list of test definitions for the boards we have test data for,
+ * Construct a list of test descriptrs (lightweight objects) for the boards we have test data for,
  * by reading the registry JSON file.
  *
  * These definitions will then be bound to the test cases. This all happens at static init
- * time, but the data loads and tests will run at runtime.
+ * time, but the main work of data loading and test setup and running will run at runtime.
  */
-static std::vector<ALLEGRO_BOARD_TEST_REF> getBoardTestDefinitions( const nlohmann::json& aJson )
+static std::vector<ALLEGRO_BOARD_TEST_DESCRIPTOR> getBoardTestDefinitions( const nlohmann::json& aJson )
 {
-    // For now, we just return a hardcoded list of the boards we have test data for, but in the future
-    // we could make this dynamic by e.g. scanning the data dir or having a registry file.
-
     if( !aJson.contains( "boards" ) || !aJson["boards"].is_object() )
     {
         throw std::runtime_error( "Test register JSON file does not contain a valid 'boards' object." );
     }
 
-    // Iterate the "boards" dict
-    std::vector<ALLEGRO_BOARD_TEST_REF> boardTests;
+    std::vector<ALLEGRO_BOARD_TEST_DESCRIPTOR> boardTests;
 
-    // Build only the very basic test definitions here, just enough to construct the test cases metadata
     for( auto& [boardName, boardEntry] : aJson["boards"].items() )
     {
-        ALLEGRO_BOARD_TEST_REF boardTestRef{
+        ALLEGRO_BOARD_TEST_DESCRIPTOR boardTestRef{
             .m_BrdName = boardName,
-            .m_BrdTestJson = boardEntry,
             .m_HasHeaderTest = boardEntry.contains( "header" ),
             .m_BlockTests = {},
             .m_HasBoardFile = boardEntry.contains( "boardFile" ),
-            .m_HasExpectations = boardEntry.contains( "boardExpectations" ),
+            .m_ExpectationTests = {},
         };
 
         if( boardEntry.contains( "blocks" ) && boardEntry["blocks"].is_array() )
         {
             for( const auto& blockTestEntry : boardEntry["blocks"] )
             {
-                if( !blockTestEntry.contains( "type" ) || !blockTestEntry["type"].is_string() )
-                {
-                    throw std::runtime_error( "Block test entry is missing a valid 'type' field" );
-                }
-
-                if( !blockTestEntry.contains( "offset" ) || !blockTestEntry["offset"].is_string() )
-                {
-                    throw std::runtime_error( "Block test entry is missing a valid 'offset' field" );
-                }
-
-                const std::string blockTypeStr = blockTestEntry["type"];
-                const uint8_t     blockType = std::stoul( blockTypeStr, nullptr, 0 );
-
-                const std::string block_offset = blockTestEntry["offset"];
-                const size_t      blockOffset = std::stoul( block_offset, nullptr, 0 );
-
-                boardTestRef.m_BlockTests.push_back( ALLEGRO_BLOCK_TEST{
-                        blockType,
-                        blockOffset,
-                        blockTestEntry,
-                } );
+                boardTestRef.m_BlockTests.emplace_back( createBlockTestDescriptor( blockTestEntry ) );
             }
+        }
+
+        if( boardEntry.contains( "boardExpectations" ) )
+        {
+            const auto& expectationsEntry = boardEntry["boardExpectations"];
+
+            boardTestRef.m_ExpectationTests =
+                    BOARD_EXPECTATION_TEST::ExtractExpectationTestsFromJson( expectationsEntry );
         }
 
         boardTests.push_back( std::move( boardTestRef ) );
@@ -542,11 +508,12 @@ static const ALLEGRO_BLOCK_TEST_REGISTRY& buildTestRegistry()
     {
         ALLEGRO_BLOCK_TEST_REGISTRY reg;
 
-        // There is currently one registry file, but we could have more
+        // There is currently one registry file, but we could have more, e.g. if we
+        // stored the test definitions on a per-board basis in the board data dirs
         const std::filesystem::path testRegisterJsonPath( AllegroBoardDataDir( "" ) + "board_data_registry.json" );
         std::ifstream               jsonFileStream( testRegisterJsonPath );
 
-        reg.m_Json = nlohmann::json::parse( jsonFileStream, nullptr, false, true );
+        reg.m_Json = nlohmann::json::parse( jsonFileStream, nullptr, true, true );
         reg.m_BoardTests = getBoardTestDefinitions( reg.m_Json );
 
         return reg;
@@ -581,11 +548,11 @@ static std::vector<std::string> getBoardTestLabels( const nlohmann::json& boardT
 /**
  * This function initializes the test suites for Allegro block and board parsing
  *
- * It reads about the minium information it needs to to construct the test cases
+ * It reads about the minimum information it needs to to construct the test cases
  * (i.e. it needs to know the name and which tests are present).
  *
  * Each test case will call the appropriate test function (e.g. RunHeaderTest or RunBlockTest)
- * at runtime, which will construct more complete test implementions and then run them.
+ * at runtime, which will construct more complete test implementations and then run them.
  */
 static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 {
@@ -605,7 +572,7 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
         // Register one failing test to report the error, so that we don't just silently skip all the tests
         const auto failingTestFunction = [=]()
         {
-            BOOST_FAIL( msg );
+            BOOST_TEST( false, msg );
         };
 
         blockSuite->add(
@@ -620,7 +587,7 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
         return suites;
     }
 
-    for( const ALLEGRO_BOARD_TEST_REF& boardTest : registry->m_BoardTests )
+    for( const ALLEGRO_BOARD_TEST_DESCRIPTOR& boardTest : registry->m_BoardTests )
     {
         BTS* boardSuite = BOOST_TEST_SUITE( boardTest.m_BrdName );
         blockSuite->add( boardSuite );
@@ -648,10 +615,12 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 
         for( const auto& blockTest : boardTest.m_BlockTests )
         {
-            const auto testRunFunction = [&]()
+            // All these captures come from data stored in a static variable, so  we can take them
+            // by reference here.
+            const auto testRunFunction = [&boardTest, &boardTestJson, &blockTest]()
             {
                 ALLEGRO_BLOCK_TEST_FIXTURE fixture;
-                fixture.RunBlockTest( boardTest.m_BrdName, boardTestJson, blockTest.m_BlockTestJson );
+                fixture.RunBlockTest( boardTest.m_BrdName, boardTestJson, blockTest );
             };
 
             wxString testName =
@@ -672,7 +641,7 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
     // and will have access to the fully parsed board (and obviously be much slower)
     BTS* boardSuites = suites.emplace_back( BOOST_TEST_SUITE( "AllegroBoards" ) );
 
-    for( const ALLEGRO_BOARD_TEST_REF& boardTest : registry->m_BoardTests )
+    for( const ALLEGRO_BOARD_TEST_DESCRIPTOR& boardTest : registry->m_BoardTests )
     {
         if( !boardTest.m_HasBoardFile )
         {
@@ -690,7 +659,7 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
 
         if( boardTest.m_HasBoardFile )
         {
-            const auto testLoadFunction = [&]()
+            const auto testLoadFunction = [&boardTest, &boardTestData]()
             {
                 RunBoardLoad( boardTest.m_BrdName, boardTestData );
             };
@@ -711,25 +680,56 @@ static std::vector<boost::unit_test::test_suite*> buildAllegroBoardSuites()
             boardSuite->add( loadingTestCase );
         }
 
-        if( boardTest.m_HasExpectations )
+        if( boardTest.m_ExpectationTests.size() > 0 )
         {
-            const auto testRunFunction = [&]()
-            {
-                RunBoardExpectations( boardTest.m_BrdName, boardTestData );
-            };
+            BTS* expectationsSuite = BOOST_TEST_SUITE( "Expectations" );
+            boardSuite->add( expectationsSuite );
 
-            boost::unit_test::test_case* expectationTestCase = boost::unit_test::make_test_case(
-                    testRunFunction,
-                    "Expectations",
-                    __FILE__,
-                    __LINE__
+            for( const BOARD_EXPECTATION_TEST::DESCRIPTOR& expectationTestRef : boardTest.m_ExpectationTests )
+            {
+                const auto testRunFunction = [&boardTest, &boardTestData, &expectationTestRef]()
+                {
+                    if( !boardTestData.contains( "boardFile" ) )
+                    {
+                        BOOST_FAIL(
+                                "Board test JSON does not contain a 'boardFile' entry - cannot run expectations test" );
+                        return;
+                    }
+
+                    const std::string boardFilePath = KI_TEST::AllegroBoardDataDir( boardTest.m_BrdName )
+                                                      + boardTestData["boardFile"].get<std::string>();
+
+                    const BOARD* board = KI_TEST::ALLEGRO_CACHED_LOADER::GetInstance().GetCachedBoard( boardFilePath );
+
+                    if( !board )
+                    {
+                        BOOST_FAIL( "Failed to load cached board for expectations test: " + boardFilePath );
+                        return;
+                    }
+
+                    KI_TEST::BOARD_EXPECTATION_TEST::RunFromRef( boardTest.m_BrdName, *board, expectationTestRef );
+                };
+
+                boost::unit_test::test_case* expectationTestCase = boost::unit_test::make_test_case(
+                        testRunFunction,
+                        expectationTestRef.m_TestName,
+                        __FILE__,
+                        __LINE__
                 );
+
+                // Label the expectations test case with any tags from the JSON
+                for( const std::string& label : expectationTestRef.m_Tags )
+                {
+                    expectationTestCase->add_label( label );
+                }
+
+                expectationsSuite->add( expectationTestCase );
+            }
 
             // We can only run the expectations test after the board has been loaded
             // and that test passes.
             BOOST_REQUIRE( loadingTestCase != nullptr );
-            expectationTestCase->depends_on( loadingTestCase );
-            boardSuite->add( expectationTestCase );
+            expectationsSuite->depends_on( loadingTestCase );
         }
     }
 
