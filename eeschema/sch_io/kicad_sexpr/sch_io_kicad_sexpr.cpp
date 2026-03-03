@@ -811,11 +811,26 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     if( !aSymbol->GetInstances().empty() )
     {
         std::map<KIID, std::vector<SCH_SYMBOL_INSTANCE>> projectInstances;
+        std::set<KIID>                                   currentProjectKeys;
 
         m_out->Print( "(instances" );
 
         wxString projectName;
         KIID     rootSheetUuid = aSchematic.Root().m_Uuid;
+
+        // Collect top-level sheet UUIDs to identify current project instances.
+        // When root is virtual (niluuid), Path() skips it, so instance paths
+        // start with the real top-level sheet UUID, not niluuid.
+
+        if( rootSheetUuid == niluuid )
+        {
+            for( const SCH_SHEET* sheet : aSchematic.GetTopLevelSheets() )
+                currentProjectKeys.insert( sheet->m_Uuid );
+        }
+        else
+        {
+            currentProjectKeys.insert( rootSheetUuid );
+        }
 
         for( const SCH_SYMBOL_INSTANCE& inst : aSymbol->GetInstances() )
         {
@@ -830,7 +845,6 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             // paths may include the virtual root, but SCH_SHEET_PATH::Path() skips it. We need
             // to normalize the path by removing the virtual root before comparison.
             KIID_PATH pathToCheck = inst.m_Path;
-            bool hasVirtualRoot = false;
 
             // If root is virtual (niluuid) and path starts with virtual root, strip it
             if( rootSheetUuid == niluuid && !pathToCheck.empty() && pathToCheck[0] == niluuid )
@@ -838,7 +852,6 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                 if( pathToCheck.size() > 1 )
                 {
                     pathToCheck.erase( pathToCheck.begin() );
-                    hasVirtualRoot = true;
                 }
                 else
                 {
@@ -850,7 +863,8 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             // Check if this instance is orphaned (no matching sheet path)
             // For virtual root, we check if the first real sheet matches one of the top-level sheets
             // For non-virtual root, we check if it matches the root sheet UUID
-            bool belongsToThisProject = hasVirtualRoot || pathToCheck[0] == rootSheetUuid;
+            bool belongsToThisProject = currentProjectKeys.count( pathToCheck[0] );
+
             bool isOrphaned = belongsToThisProject && !aSheetList.GetSheetPathByKIIDPath( pathToCheck );
 
             // Keep all instance data when copying to the clipboard.  They may be needed on paste.
@@ -878,7 +892,10 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                            return aLhs.m_Path < aRhs.m_Path;
                        } );
 
-            projectName = instances[0].m_ProjectName;
+            if( currentProjectKeys.count( uuid ) )
+                projectName = m_schematic->Project().GetProjectName();
+            else
+                projectName = instances[0].m_ProjectName;
 
             m_out->Print( "(project %s", m_out->Quotew( projectName ).c_str() );
 
@@ -1096,6 +1113,18 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
         KIID rootSheetUuid = m_schematic->Root().m_Uuid;
         bool inProjectClause = false;
 
+        std::set<KIID> currentProjectKeys;
+
+        if( rootSheetUuid == niluuid )
+        {
+            for( const SCH_SHEET* sheet : m_schematic->GetTopLevelSheets() )
+                currentProjectKeys.insert( sheet->m_Uuid );
+        }
+        else
+        {
+            currentProjectKeys.insert( rootSheetUuid );
+        }
+
         for( size_t i = 0; i < sheetInstances.size(); i++ )
         {
             // If the instance data is part of this design but no longer has an associated sheet
@@ -1103,8 +1132,10 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
             // current project from accumulating in the schematic files.
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
-            if( ( sheetInstances[i].m_Path[0] == rootSheetUuid )
-                    && !aSheetList.GetSheetPathByKIIDPath( sheetInstances[i].m_Path, false ) )
+            bool belongsToThisProject =
+                    !sheetInstances[i].m_Path.empty() && currentProjectKeys.count( sheetInstances[i].m_Path[0] );
+
+            if( belongsToThisProject && !aSheetList.GetSheetPathByKIIDPath( sheetInstances[i].m_Path, false ) )
             {
                 if( inProjectClause && ( ( i + 1 == sheetInstances.size() )
                         || lastProjectUuid != sheetInstances[i+1].m_Path[0] ) )
@@ -1120,7 +1151,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
             {
                 wxString projectName;
 
-                if( sheetInstances[i].m_Path[0] == rootSheetUuid )
+                if( belongsToThisProject )
                     projectName = m_schematic->Project().GetProjectName();
                 else
                     projectName = sheetInstances[i].m_ProjectName;
