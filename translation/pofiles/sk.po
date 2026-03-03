@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 19:10+0000\n"
+"PO-Revision-Date: 2026-03-04 00:03+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -2261,7 +2261,7 @@ msgstr "Sledovanie chýb"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Report or examine bugs - "
-msgstr "Nahlásiť alebo skontroľovať chyby - "
+msgstr "Nahlásiť alebo skontrolovať chyby - "
 
 #: common/dialog_about/AboutDialog_main.cpp:158
 msgid "KiCad users group and community"
@@ -2442,7 +2442,7 @@ msgstr "&Pomocník"
 #: common/dialogs/dialog_book_reporter_base.h:45
 #: common/dialogs/dialog_rc_job.cpp:27
 msgid "Report"
-msgstr "Prehľad"
+msgstr "Protokol"
 
 #: common/dialogs/dialog_assign_netclass.cpp:95
 msgid "<b>Currently matching nets:</b>"
@@ -3654,12 +3654,12 @@ msgstr "Varovania"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
+msgstr "Označiť úlohu ako neúspešnú, ak sa vyskytnú porušenia"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:56
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Nahlásiť všetky chyby pre každú stopu"
+msgstr "Hlásiť všetky chyby pre každý spoj"
 
 #: common/dialogs/dialog_rc_job_base.cpp:80 kicad/cli/command_pcb_drc.cpp:60
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
@@ -4554,7 +4554,7 @@ msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr "Súhlasím s odosielaním anonymných reportov"
+msgstr "Súhlasím s odosielaním anonymných protokolov"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
@@ -10250,12 +10250,12 @@ msgstr "Info:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
-msgstr "Uložiť súbor správy"
+msgstr "Uložiť súbor protokolu"
 
 #: common/widgets/wx_html_report_panel.cpp:389
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nie je možné zapísať správy do súboru '%s'."
+msgstr "Nie je možné zapísať protokol do súboru '%s'."
 
 #: common/widgets/wx_html_report_panel.cpp:391
 msgid "File save error"
@@ -10434,7 +10434,7 @@ msgstr "Json súbory"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Report files"
-msgstr "Súbory správ"
+msgstr "Súbory protokolov"
 
 #: common/wildcards_and_files_ext.cpp:444
 msgid "Component placement files"
@@ -12130,7 +12130,7 @@ msgstr "Formátovanie"
 #: eeschema/dialogs/dialog_erc.cpp:1093 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, c-format
 msgid "Report file '%s' created."
-msgstr "Súbor správy '%s' vytvorený."
+msgstr "Súbor protokolu '%s' vytvorený."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:59
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
@@ -12836,9 +12836,8 @@ msgid "Junction Properties"
 msgstr "Vlastnosti spojenia"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:130
-#, fuzzy
 msgid "Pin length:"
-msgstr "& Dĺžka špendlíka:"
+msgstr "Dĺžka vývodu:"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:138
 msgid "Global Label Properties"
@@ -13768,8 +13767,8 @@ msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"Synchronizovaný režim vývodů je povolen.\n"
-"Podobné vývody budou upraveny, bez ohledu na tuto možnost."
+"Režim synchronizácie vývodov je povolený.\n"
+"Podobné vývody budú upravené, bez ohľadu na túto možnosť."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
@@ -15551,9 +15550,8 @@ msgid "Edit"
 msgstr "Upraviť"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Milimetre"
+msgstr "Oddeľovač polí:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:219
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:237
@@ -17252,12 +17250,12 @@ msgstr "Povoliť porušenie KDR\n"
 #: eeschema/eeschema_jobs_handler.cpp:1211
 #, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Nepodarilo sa uložiť  ERC správy do %s\n"
+msgstr "Nepodarilo sa uložiť  ERC protokol do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Uložiť súbor hlásenia DRC\n"
+msgstr "ERC protokol uložený do %s\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:960
 #, fuzzy
@@ -17606,14 +17604,14 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Označenia sú podobné (rozdiel len medzi malými a veľkými písmenami)"
 
 #: eeschema/erc/erc_item.cpp:117
-#, fuzzy
 msgid "Power pins are similar (lower/upper case difference only)"
-msgstr "Štítky sú podobné (iba rozdiel medzi malými a veľkými písmenami)"
+msgstr ""
+"Napájacie vývody sú podobné (iba rozdiel medzi malými a veľkými písmenami)"
 
 #: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
 msgstr ""
-"Vývod napájania a označenie sú podobné (iba rozdiel medzi malými a veľkými "
+"Napájací vývod a označenie sú podobné (iba rozdiel medzi malými a veľkými "
 "písmenami)"
 
 #: eeschema/erc/erc_item.cpp:125
@@ -26827,38 +26825,48 @@ msgstr ""
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
+"Spustí kontrolu pravidiel návrhu (DRC) na doske plošných spojov a vytvorí "
+"protokol"
 
 #: kicad/cli/command_pcb_drc.cpp:52 kicad/cli/command_sch_erc.cpp:50
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "Formát výstupného súboru. možnosti: json, textový protokol"
 
 #: kicad/cli/command_pcb_drc.cpp:65 kicad/cli/command_sch_erc.cpp:55
 msgid "Report units; valid options: in, mm, mils"
-msgstr "Jednotky hlásenia; platné možnosti: in, mm, mils"
+msgstr "Jednotky protokolu; platné možnosti: in, mm, mil"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia DRC, čo je ekvivalentné zahrnutiu všetkých ostatných "
+"argumentov závažnosti porušení"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia DRC úrovne chyby, toto je možné kombinovať s "
+"ostatnými argumentmi závažnosti"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia DRC úrovne varovania, toto je možné kombinovať s "
+"ostatnými argumentmi závažnosti"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky vylúčené porušenia DRC, toto je možné kombinovať s ostatnými "
+"argumentmi závažnosti"
 
 #: kicad/cli/command_pcb_drc.cpp:89
 msgid "Return a nonzero exit code if DRC violations exist"
@@ -26873,9 +26881,8 @@ msgid "Invalid units specified\n"
 msgstr "Neplatná predpona jednotky\n"
 
 #: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:148
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "Minimálna šírka spoja\n"
+msgstr "Neplatný formát protokolu\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
@@ -27080,14 +27087,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Generovať mapy / zhrnutie použitých priemerov vrtákov"
 
 #: kicad/cli/command_pcb_export_drill.cpp:95
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Generovať mapy / zhrnutie použitých priemerov vrtákov"
+msgstr "Generovať protokol použitých priemerov vrtákov"
 
 #: kicad/cli/command_pcb_export_drill.cpp:100
-#, fuzzy
 msgid "Report output file path"
-msgstr "Zvoľte cestu"
+msgstr "Výstupná cesta pre protokol"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -27138,6 +27143,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Upozornenie: Ak je cesta k protokolu zadaná bez --generate-report, "
+"nevygeneruje sa žiadna výsledná správa\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -27582,30 +27589,39 @@ msgstr "Schéma"
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
+"Spustí kontrolu elektrických pravidiel (ERC) na schéme a vytvorí protokol"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia ERC, čo je ekvivalentné zahrnutiu všetkých ostatných "
+"argumentov závažnosti porušení"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia ERC úrovne chyby, toto je možné kombinovať s "
+"ostatnými argumentmi závažnosti"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky porušenia ERC úrovne varovania, toto je možné kombinovať s "
+"ostatnými argumentmi závažnosti"
 
 #: kicad/cli/command_sch_erc.cpp:73
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Hlásiť všetky vylúčené porušenia ERC, toto je možné kombinovať s ostatnými "
+"argumentmi závažnosti"
 
 #: kicad/cli/command_sch_erc.cpp:78
 msgid "Return a nonzero exit code if ERC violations exist"
@@ -27739,9 +27755,8 @@ msgid "Symbol library does not exist or is not accessible\n"
 msgstr "Schéma '%s' neexistuje. Prajete si ho vytvoriť?\n"
 
 #: kicad/cli/command_version.cpp:35
-#, fuzzy
 msgid "Reports the version info in various formats"
-msgstr "Kreslení v různých formátech"
+msgstr "Hlási informácie o verzii v rôznych formátoch"
 
 #: kicad/cli/command_version.cpp:39
 msgid "version info format (plain, commit, about)"
@@ -28830,9 +28845,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
-"Hash staženého archívu pro balíček %s neodpovídá vstupu repozitáře. To může "
-"znamenat problém s balíčkem, pokud problém přetrvává nahlásit správci "
-"repozitáře."
+"Stiahnutý hash archívu pre balík %s sa nezhoduje so záznamom v repozitári. "
+"Môže to znamenať problém s balíkom. Ak problém pretrváva, nahláste to "
+"správcom repozitára."
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
@@ -33550,7 +33565,7 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
-"Štatistická správa PCB\n"
+"Štatistický protokol DPS\n"
 "======================"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
@@ -33624,7 +33639,7 @@ msgstr "Vrtné otvory"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:260
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:195
 msgid "Generate Report File..."
-msgstr "Generovať súbor správy..."
+msgstr "Generovať súbor protokolu..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
@@ -34893,7 +34908,7 @@ msgstr "Otvorte dialógové okno Nastavenie dosky..."
 #: pcbnew/dialogs/dialog_drc.cpp:1099
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr "Súbor hlásenia '%s' vytvorený<br>"
+msgstr "Súbor protokolu '%s' vytvorený<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1445
 msgid "not run"
@@ -36458,17 +36473,17 @@ msgid "Placement file: '%s'."
 msgstr "Vložte súbor: '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
 msgstr ""
-"Bol vytvorený súbor správy stopy:\n"
-"'%s'"
+"Vytvorený súbor protokolu puzdra:\n"
+"'%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:610
 msgid "Footprint Report"
-msgstr "Správa o stope"
+msgstr "Protokol puzdra"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 #, fuzzy
@@ -36521,7 +36536,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:487
 msgid "Save Drill Report File"
-msgstr "Uložte súbor s vrtákom"
+msgstr "Uložiť súbor protokolu vŕtania"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:23
 msgid "Output folder:"
@@ -45699,8 +45714,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
-"Vyskytla sa chyba pri čítaní netlistu.  Nahláste tento problém tímu KiCad "
-"pomocou menu Pomocník->Nahlásiť chybu."
+"Vyskytla sa chyba pri čítaní netlistu.  Prosím, nahláste tento problém KiCad "
+"tímu, pomocou menu Pomocník->Nahlásiť chybu."
 
 #: pcbnew/pcb_edit_frame.cpp:2076
 #, fuzzy, c-format
@@ -45725,17 +45740,16 @@ msgid "Export Hyperlynx Layout"
 msgstr "Exportovať rozloženie Hyperlynx"
 
 #: pcbnew/pcb_edit_frame.cpp:2755
-#, fuzzy
 msgid "Violation Report"
-msgstr "Závažnosť porušenia"
+msgstr "Protokol porušenia"
 
 #: pcbnew/pcb_edit_frame.cpp:2765
 msgid "Clearance Report"
-msgstr "Správa o klírense"
+msgstr "Protokol minimálnych vzdialeností"
 
 #: pcbnew/pcb_edit_frame.cpp:2775
 msgid "Constraints Report"
-msgstr "Správa o obmedzeniach"
+msgstr "Protokol návrhových obmedzení"
 
 #: pcbnew/pcb_edit_frame.cpp:2785 pcbnew/tools/pcb_actions.cpp:1865
 #, fuzzy
@@ -48019,12 +48033,12 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:2111
 #, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Nepodarilo sa uložiť DRC správy do %s\n"
+msgstr "Nepodaril sa uložiť protokol DRC do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2116
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Uložiť súbor hlásenia DRC\n"
+msgstr "Uložený súbor protokolu DRC do %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2215
 #, fuzzy, c-format
@@ -48813,9 +48827,8 @@ msgid "[netclass %s]"
 msgstr "[netclass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:213
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "Správa je neúplná: nebolo možné zostaviť pravidlá návrhu."
+msgstr "Protokol je neúplný: nebolo možné zostaviť vlastné pravidlá návrhu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
 #, fuzzy
@@ -49060,7 +49073,9 @@ msgstr "Vyberte dve položky pre správu o riešení klírensu."
 #: pcbnew/tools/board_inspection_tool.cpp:735
 #: pcbnew/tools/board_inspection_tool.cpp:748
 msgid "Cannot generate clearance report on empty group."
-msgstr "Nie je možné vygenerovať prehľad o odstupoch pre prázdnu skupinu."
+msgstr ""
+"Nie je možné vygenerovať protokol minimálnych vzdialeností pre prázdnu "
+"skupinu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:826
 #, fuzzy
