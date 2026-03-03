@@ -27,6 +27,7 @@
 
 #include <wx/settings.h>
 
+#include <core/throttle.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <lib_symbol_library_manager.h>
@@ -70,12 +71,10 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem
 }
 
 
-#define PROGRESS_INTERVAL_MILLIS 120
-
 void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
                                               std::function<void( int, int, const wxString& )> aProgressCallback )
 {
-    wxLongLong nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
+    THROTTLE progressThrottle( std::chrono::milliseconds( 120 ) );
 
     m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();
@@ -87,11 +86,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     {
         const wxString& name = it->get()->m_Name;
 
-        if( wxGetUTCTimeMillis() > nextUpdate )
-        {
+        if( progressThrottle.Ready() )
             aProgressCallback( i, max, name );
-            nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
-        }
 
         // Check the table row directly rather than adapter->HasLibrary(), which requires the
         // library to be fully loaded. After table reloads (e.g. adding a new library), all
@@ -137,11 +133,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
 
         if( m_libHashes.count( libName ) == 0 )
         {
-            if( wxGetUTCTimeMillis() > nextUpdate )
-            {
+            if( progressThrottle.Ready() )
                 aProgressCallback( i++, max, libName );
-                nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
-            }
 
             auto optRow = adapter->GetRow( libName );
             wxCHECK2( optRow.has_value(), continue );

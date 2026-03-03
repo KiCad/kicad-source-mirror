@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/evtloop.h>
 #include <thread>
+#include <widgets/wx_event_utils.h>
 #include <widgets/wx_progress_reporters.h>
 
 
@@ -96,10 +96,7 @@ bool WX_PROGRESS_REPORTER::updateUI()
     // Returns false when cancelled (if it's a cancellable dialog)
     bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
-    // Prevent wx from queuing timer events and slowing down
-    // See https://github.com/wxWidgets/wxWidgets/issues/26192
-    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
-        loop->YieldFor( wxEVT_CATEGORY_TIMER );
+    DrainPendingEvents();
 
     return diag;
 }
@@ -122,8 +119,7 @@ bool GAUGE_PROGRESS_REPORTER::updateUI()
 
     wxGauge::SetValue( cur );
 
-    if( wxEventLoopBase* loop = wxEventLoopBase::GetActive() )
-        loop->YieldFor( wxEVT_CATEGORY_UI );
+    DrainPendingEvents( wxEVT_CATEGORY_UI );
 
     return true;  // No cancel button on a wxGauge
 }

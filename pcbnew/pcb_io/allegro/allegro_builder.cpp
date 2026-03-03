@@ -24,7 +24,6 @@
 
 #include "allegro_builder.h"
 
-#include <chrono>
 #include <cmath>
 #include <limits>
 #include <set>
@@ -36,6 +35,7 @@
 #include <wx/log.h>
 
 #include <core/profile.h>
+#include <core/throttle.h>
 
 #include <base_units.h>
 #include <board_design_settings.h>
@@ -4585,7 +4585,7 @@ bool BOARD_BUILDER::BuildBoard()
     const LL_WALKER          fpWalker( m_brdDb.m_Header->m_LL_0x2B, m_brdDb );
     std::vector<BOARD_ITEM*> bulkAddedItems;
 
-    auto lastRefresh = std::chrono::steady_clock::now();
+    THROTTLE refreshThrottle( std::chrono::milliseconds( 100 ) );
 
     for( const BLOCK_BASE* fpContainer : fpWalker )
     {
@@ -4626,16 +4626,8 @@ bool BOARD_BUILDER::BuildBoard()
                     }
                 }
 
-                if( m_progressReporter )
-                {
-                    auto now = std::chrono::steady_clock::now();
-
-                    if( now - lastRefresh >= std::chrono::milliseconds( 100 ) )
-                    {
-                        m_progressReporter->KeepRefreshing();
-                        lastRefresh = now;
-                    }
-                }
+                if( m_progressReporter && refreshThrottle.Ready() )
+                    m_progressReporter->KeepRefreshing();
             }
         }
     }

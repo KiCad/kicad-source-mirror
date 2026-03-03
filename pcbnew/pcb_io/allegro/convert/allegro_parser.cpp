@@ -25,7 +25,6 @@
 #include "convert/allegro_parser.h"
 
 #include <array>
-#include <chrono>
 #include <cstring>
 
 #include <wx/sstream.h>
@@ -33,6 +32,7 @@
 #include <wx/translation.h>
 
 #include <core/profile.h>
+#include <core/throttle.h>
 #include <core/type_helpers.h>
 #include <ki_exception.h>
 
@@ -2475,7 +2475,7 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
     BLOCK_PARSER blockParser( m_stream, ver, aBoard.m_Header->Get_0x27_End() );
 
-    auto lastRefresh = std::chrono::steady_clock::now();
+    THROTTLE refreshThrottle( std::chrono::milliseconds( 100 ) );
 
     while( true )
     {
@@ -2577,16 +2577,8 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
             {
                 m_progressReporter->AdvanceProgress();
 
-                if( ( aBoard.GetObjectCount() & 0x3F ) == 0 )
-                {
-                    auto now = std::chrono::steady_clock::now();
-
-                    if( now - lastRefresh >= std::chrono::milliseconds( 100 ) )
-                    {
-                        m_progressReporter->KeepRefreshing();
-                        lastRefresh = now;
-                    }
-                }
+                if( ( aBoard.GetObjectCount() & 0x3F ) == 0 && refreshThrottle.Ready() )
+                    m_progressReporter->KeepRefreshing();
             }
         }
     }

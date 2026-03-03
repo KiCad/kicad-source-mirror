@@ -24,6 +24,7 @@
  */
 
 #include <confirm.h>
+#include <core/throttle.h>
 #include <dialog_drc.h>
 #include <board_design_settings.h>
 #include <kiface_base.h>
@@ -81,8 +82,8 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_markersTreeModel( nullptr ),
         m_unconnectedTreeModel( nullptr ),
         m_fpWarningsTreeModel( nullptr ),
-        m_lastUpdateUi( std::chrono::steady_clock::now() ),
-        m_lastYieldUi( std::chrono::steady_clock::now() )
+        m_updateThrottle( std::chrono::milliseconds( 100 ) ),
+        m_yieldThrottle( std::chrono::milliseconds( 2000 ) )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
     KIPLATFORM::UI::SetFloatLevel( this );
@@ -228,27 +229,17 @@ bool DIALOG_DRC::updateUI()
         m_gauge->SetValue( newValue );
     }
 
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-
     // Repaint the dialog at ~10Hz using Update() which processes only pending expose/
     // draw events without entering the full platform event loop.
-    if( std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastUpdateUi ).count()
-        > 100 )
-    {
+    if( m_updateThrottle.Ready() )
         Update();
-        m_lastUpdateUi = now;
-    }
 
     // Yield to the event loop infrequently so the cancel button remains functional.
     // On some Linux systems with glycin-enabled gdk-pixbuf (2.44+), entering the GTK event
     // loop triggers heavyweight sandbox process spawning that can add hundreds of milliseconds
     // per call, so we keep this interval long.
-    if( std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastYieldUi ).count()
-        > 2000 )
-    {
+    if( m_yieldThrottle.Ready() )
         Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_NATIVE_EVENTS );
-        m_lastYieldUi = now;
-    }
 
     return !m_cancelled;
 }

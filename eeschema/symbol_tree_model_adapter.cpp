@@ -37,8 +37,6 @@
 #include <trace_helpers.h>
 #include <libraries/symbol_library_adapter.h>
 
-#define PROGRESS_INTERVAL_MILLIS 33      // 30 FPS refresh rate
-
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
 SYMBOL_TREE_MODEL_ADAPTER::Create( SCH_BASE_FRAME* aParent, SYMBOL_LIBRARY_ADAPTER* aManager )

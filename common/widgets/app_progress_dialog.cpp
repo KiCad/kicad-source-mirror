@@ -24,6 +24,7 @@
 #include <wx/version.h>
 #include <wx/sizer.h>
 #include <widgets/app_progress_dialog.h>
+#include <widgets/wx_event_utils.h>
 
 APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString& aMessage,
                                           int aMaximum, wxWindow* aParent,
@@ -54,5 +55,9 @@ bool APP_PROGRESS_DIALOG::Update( int aValue, const wxString& aNewMsg, bool* aSk
         m_appProgressIndicator.SetValue( aValue );
     }
 
-    return APP_PROGRESS_DIALOG_BASE::Update( aValue, aNewMsg, aSkip );
+    bool diag = APP_PROGRESS_DIALOG_BASE::Update( aValue, aNewMsg, aSkip );
+
+    DrainPendingEvents();
+
+    return diag;
 }
