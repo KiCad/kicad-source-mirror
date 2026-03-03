@@ -1070,10 +1070,6 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
         {
             if( m_boardAdapter.IsFootprintShown( fp ) )
             {
-                // Skip 3D models for footprints that are DNP in the current variant
-                if( fp->GetDNPForVariant( currentVariant ) )
-                    continue;
-
                 const bool isFlipped = fp->IsFlipped();
 
                 if( aGetTop == !isFlipped || aGetBot == isFlipped )

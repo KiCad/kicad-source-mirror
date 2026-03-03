@@ -1931,10 +1931,6 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
         if( !fp->Models().empty()
           && m_boardAdapter.IsFootprintShown( fp ) )
         {
-            // Skip 3D models for footprints that are DNP in the current variant
-            if( fp->GetDNPForVariant( currentVariant ) )
-                continue;
-
             double zpos = m_boardAdapter.GetFootprintZPos( fp->IsFlipped() );
 
             VECTOR2I pos = fp->GetPosition();
