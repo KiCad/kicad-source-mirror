@@ -2059,7 +2059,7 @@ BOOST_AUTO_TEST_CASE( IntegrationViasUnderSmdRoundTrip )
     wxString originalText = "(version 1)\n"
                             "(rule \"ViasUnderSmdTest\"\n"
                             "    (constraint disallow micro_via)\n"
-                            "    (condition \"A.insideArea('BGA*')\"))";
+                            "    (condition \"A.Pad_Type == 'SMD' && A.insideArea('BGA*')\"))";
 
     DRC_RULE_LOADER                        loader;
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( originalText );
@@ -2104,7 +2104,7 @@ BOOST_AUTO_TEST_CASE( IntegrationViasUnderSmdRoundTrip )
     wxString blanketText = "(version 1)\n"
                            "(rule \"BlanketVia\"\n"
                            "    (constraint disallow via)\n"
-                           "    (condition \"A.insideArea('BGA*')\"))";
+                           "    (condition \"A.Pad_Type == 'SMD' && A.insideArea('BGA*')\"))";
 
     entries = loader.LoadFromString( blanketText );
     BOOST_REQUIRE_EQUAL( entries.size(), 1 );
@@ -2121,7 +2121,7 @@ BOOST_AUTO_TEST_CASE( IntegrationViasUnderSmdRoundTrip )
     wxString multiText = "(version 1)\n"
                          "(rule \"TwoVias\"\n"
                          "    (constraint disallow through_via blind_via)\n"
-                         "    (condition \"A.insideArea('BGA*')\"))";
+                         "    (condition \"A.Pad_Type == 'SMD' && A.insideArea('BGA*')\"))";
 
     entries = loader.LoadFromString( multiText );
     BOOST_REQUIRE_EQUAL( entries.size(), 1 );

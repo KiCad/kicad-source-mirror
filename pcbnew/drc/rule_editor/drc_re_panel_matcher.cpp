@@ -172,7 +172,7 @@ void DRC_PANEL_MATCHER::initClaims()
 
     // Size constraints
     m_claims.emplace_back(
-            MINIMUM_DRILL_SIZE,
+            HOLE_SIZE,
             std::set<DRC_CONSTRAINT_T>{ HOLE_SIZE_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             20 );
