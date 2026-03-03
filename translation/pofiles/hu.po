@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-03 21:47+0000\n"
+"PO-Revision-Date: 2026-03-04 00:03+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
@@ -37128,14 +37128,12 @@ msgid "90"
 msgstr "90°"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:159
-#, fuzzy
 msgid "Min margin X:"
-msgstr "Margók:"
+msgstr "Min X margó:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:170
-#, fuzzy
 msgid "Min margin Y:"
-msgstr "Margók:"
+msgstr "Min Y margó:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "Code 39 (ISO 16388)"
