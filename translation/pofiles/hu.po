@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-04 00:03+0000\n"
+"PO-Revision-Date: 2026-03-04 22:15+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -35750,9 +35750,8 @@ msgid "Export zones on external conductor layers."
 msgstr "Elem egy letiltott rétegen"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:134
-#, fuzzy
 msgid "Export inner conductor layers"
-msgstr "Belső vezetőréteg"
+msgstr "Belső vezetőrétegek exportálása"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Fuse shapes (time consuming)"
@@ -35820,7 +35819,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "VRML modellek lecserélése azonos nevű STEP modellekre"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:255
 msgid "Overwrite old file"
