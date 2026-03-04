@@ -233,7 +233,7 @@ public:
      *
      * @return true if the repaint attempt was successful.
      */
-    bool DoRePaint();
+    bool DoRePaint( bool aAllowSkip = true );
 
     /**
      * Create an overlay for rendering debug graphics.

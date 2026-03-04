@@ -193,11 +193,11 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    Refresh( false );
+    DoRePaint( false );
 }
 
 
-bool EDA_DRAW_PANEL_GAL::DoRePaint()
+bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
     if( !m_refreshMutex.try_lock() )
         return false;
@@ -254,7 +254,9 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
         bool hasPendingItemUpdates = m_view->HasPendingItemUpdates();
 
         // Skip all update work when nothing has changed since the previous frame.
-        if( !viewDirty && !cursorMoved && !hasPendingItemUpdates )
+        // Never skip when responding to a native paint event or explicit ForceRefresh
+        // because the window content may have been invalidated by the OS.
+        if( aAllowSkip && !viewDirty && !cursorMoved && !hasPendingItemUpdates )
         {
             m_lastRepaintEnd = wxGetLocalTimeMillis();
             return true;
@@ -290,7 +292,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
 
         // After processing item updates, skip the GL cycle when neither the
         // view targets nor the cursor position have changed.
-        if( !viewDirty && !cursorMoved )
+        if( aAllowSkip && !viewDirty && !cursorMoved )
         {
             m_lastRepaintEnd = wxGetLocalTimeMillis();
             return true;
@@ -478,7 +480,7 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
         }
     }
 
-    DoRePaint();
+    DoRePaint( false );
 }
 
 
