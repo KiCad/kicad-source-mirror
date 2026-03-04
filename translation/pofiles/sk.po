@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-04 16:20+0000\n"
+"PO-Revision-Date: 2026-03-04 22:15+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -594,11 +594,11 @@ msgstr "Zobraziť telo dosky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show front copper / surface finish color"
-msgstr "Zobraziť farbu medi / povrchovej úpravy nahore"
+msgstr "Zobraziť prednú farbu medi / povrchovej úpravy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Show back copper / surface finish color"
-msgstr "Zobraziť farbu medi / povrchovej úpravy nadol"
+msgstr "Zobraziť zadnú farbu medi / povrchovej úpravy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Adhesive"
@@ -618,11 +618,11 @@ msgstr "Zobraziť spájkovaciu pastu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
-msgstr "Zobraziť predný popis"
+msgstr "Zobraziť prednú potlač"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
-msgstr "Zobraziť zadný popis"
+msgstr "Zobraziť zadnú potlač"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
@@ -900,7 +900,7 @@ msgstr "3D Osi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background Start"
-msgstr "Zčiatok pozadia"
+msgstr "Začiatok pozadia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:127
 msgid "Background gradient start color"
@@ -1118,7 +1118,7 @@ msgstr "Skrátiť popis na prstenec prekovu"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Skrátiť popis na hrany spájkovacej masky"
+msgstr "Skrátiť potlač na hrany spájkovacej masky"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
@@ -3259,7 +3259,7 @@ msgstr "Vlastná šírka strany."
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr "Exportovať na ďalšie strany"
+msgstr "Exportovať do ďalších listov"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:450
 #: eeschema/erc/erc_item.cpp:425 eeschema/sch_marker.cpp:387
@@ -4269,7 +4269,7 @@ msgstr "Svetlo"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
-msgstr "Pouziť ikony pre svetlé pozadie okien"
+msgstr "Použiť ikony navrhnuté pre svetlé pozadie okna"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
 #: gerbview/gerber_draw_item.cpp:725
@@ -4278,7 +4278,7 @@ msgstr "Tmavá"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 msgid "Use icons designed for dark window backgrounds"
-msgstr "Pouziť ikony pre tmavé pozadie okien"
+msgstr "Použiť ikony navrhnuté pre tmavé pozadie okna"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 #: common/dialogs/panel_common_settings_base.cpp:245
@@ -4507,15 +4507,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:438
 msgid "Maximum total backup size:"
-msgstr "Maximálna celková velkosť zálohy:"
+msgstr "Maximálna celková veľkosť zálohy:"
 
 #: common/dialogs/panel_common_settings_base.cpp:440
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
-"Ak celková veľkosť záložných súborov prekročí tento limit, staré zálohy sa "
-"odstránia (bez obmedzenia nastavená na 0)"
+"Ak celková veľkosť záložných súborov prekročí tento limit, staré zálohy budú "
+"odstránené (bez obmedzenia nastavená na 0)"
 
 #: common/dialogs/panel_common_settings_base.cpp:447
 msgid "MB"
@@ -5607,7 +5607,7 @@ msgstr "Triedy spojov"
 #: pcbnew/tools/board_inspection_tool.cpp:643
 #: pcbnew/tools/board_inspection_tool.cpp:1194 pcbnew/zone.cpp:2130
 msgid "Clearance"
-msgstr "Izolačná medzera"
+msgstr "Minimálna vzdialenosť"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
@@ -5743,8 +5743,7 @@ msgstr "Nahradenie textu"
 
 #: common/draw_panel_gal.cpp:317 common/draw_panel_gal.cpp:506
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
-"Nepodarilo sa použiť OpenGL, vrátilo sa späť k softvérovému vykresľovaniu"
+msgstr "Nebolo možné použiť OpenGL, návrat k softvérovému vykresľovaniu"
 
 #: common/draw_panel_gal.cpp:325
 msgid "Graphics error"
@@ -8077,7 +8076,7 @@ msgstr "Vývody"
 
 #: common/layer_id.cpp:93
 msgid "Sheet borders"
-msgstr "Okraje listu"
+msgstr "Rám listu"
 
 #: common/layer_id.cpp:94
 msgid "Sheet backgrounds"
@@ -8197,11 +8196,11 @@ msgstr "Prúdy prevádzkového bodu"
 
 #: common/layer_id.cpp:123
 msgid "Footprints front"
-msgstr "puzdra nahor"
+msgstr "Puzdrá predné"
 
 #: common/layer_id.cpp:124
 msgid "Footprints back"
-msgstr "puzdra nadol"
+msgstr "Puzdrá zadné"
 
 #: common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
@@ -9099,7 +9098,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:447
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Prepnúť zlúčené bunky tabuľky späť na samostatné bunky."
 
 #: common/tool/actions.cpp:454
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
@@ -10365,7 +10364,7 @@ msgstr "PADS netlist súbory"
 
 #: common/wildcards_and_files_ext.cpp:333
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "Zálohovací archív EasyEDA (JLCEDA) Std"
 
 #: common/wildcards_and_files_ext.cpp:339
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
@@ -12038,7 +12037,7 @@ msgstr "Odstráňte vylúčenie z tohto porušenia"
 #: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr "Bude umiestnená späť do zoznamu %s"
+msgstr "Bude umiestnené späť do zoznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
 msgid "Edit exclusion comment..."
@@ -12597,7 +12596,7 @@ msgstr "Ostatné polia hárka"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:66
 msgid "Sheet borders && backgrounds"
-msgstr "Orámovanie a pozadie hárka"
+msgstr "Okraje h. listu && pozadie"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filters"
@@ -13983,7 +13982,7 @@ msgstr "E"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr "Návrat na použivateľskú cestu '%s'."
+msgstr "Návrat na používateľskú cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:542
 #: eeschema/dialogs/dialog_plot_schematic.cpp:580
@@ -14068,11 +14067,11 @@ msgstr "Vyberte farebný motív, ktorý sa použije na vykreslenie"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
 msgid "Plot background color"
-msgstr "Farba pozadia vykreslenia"
+msgstr "Vykresliť pozadie farbou"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:96
 msgid "Plot the background color if the output format supports it"
-msgstr "Ak to výstupný formát podporuje, vykresliť farbu pozadia"
+msgstr "Ak to výstupný formát podporuje, vykresliť pozadie farbou"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:100
 #, fuzzy
@@ -16355,7 +16354,7 @@ msgstr "Predvolené hodnoty pre nové objekty"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
 msgid "Sheet border:"
-msgstr "Okraj listu:"
+msgstr "Okraj h. listu:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 msgid "Sheet background:"
@@ -26971,13 +26970,12 @@ msgid "Export elements on inner copper layers"
 msgstr "Položka na deaktivovanej vrstve"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces"
-msgstr "Exportovať grafický popis."
+msgstr "Exportovať grafiky potlače ako sady rovinných povrchov"
 
 #: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
+msgstr "Exportovať vrstvy spájkovacej masky ako sady rovinných povrchov"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
@@ -30039,9 +30037,8 @@ msgid "Lines width"
 msgstr "Hrúbka čiar"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "Minimálna vzdialenosť:"
+msgstr "Minimálny odstup"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 #, fuzzy
@@ -30467,9 +30464,8 @@ msgid "kV"
 msgstr "V"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
-#, fuzzy
 msgid "Compute the clearance and creepage distances"
-msgstr "Zadat tloušťku izolační mezery (v jednotkách)"
+msgstr "Prepočítať minimálnu vzdialenosť a povrchovú cestu"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 #, fuzzy
@@ -30628,12 +30624,18 @@ msgid ""
 "A coating that could easily delaminate in the lifespan of the product (such "
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
+"Povrchová úprava a zalievanie môžu umožniť zníženie minimálnych vzdialeností "
+"a povrchových ciest. Kalkulačka to nepodporuje.\n"
+"\n"
+"Povrchová úprava, ktorá sa môže počas životnosti výrobku ľahko odlupovať "
+"(napríklad spájkovacia maska), by sa nemala zohľadňovať pri znižovaní týchto "
+"hodnôt."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:122
 msgid "Clearance:"
-msgstr "Medzera:"
+msgstr "Minimálna vzdialenosť:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 #, fuzzy
@@ -30656,6 +30658,8 @@ msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
+"plné: min. vzdialenosť\n"
+"čiarkované: povrchová cesta"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
 #, fuzzy
@@ -31495,11 +31499,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Priemer voľného otvoru:"
+msgstr "Priemer izolačného otvoru:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Priemer voľného otvoru v základnej rovine (rovinách)"
+msgstr "Priemer izolačného otvoru v uzemňovacej rovine (rovinách)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -31549,16 +31553,14 @@ msgid "nanoseconds"
 msgstr "nanosekundy"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
-#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
-"Výstraha:\n"
-"Cez priemer podložky> = Svetlý priemer otvoru.\n"
-"Niektoré parametre nemožno vypočítať pre cestu\n"
-"vo vnútri medenej zóny."
+"Upozornenie:\n"
+"Priemer prekovu > = priemer otvoru izolačnej medzery.\n"
+"Niektoré parametre nemožno vypočítať pre prekov vo vnútri medenej zóny."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
@@ -32539,7 +32541,7 @@ msgstr "Najlepšie spájkovacia pasta"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:668
 msgid "Top Solder Mask"
-msgstr "Špičková spájkovacia maska"
+msgstr "Vrchná spájkovacia maska"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:709
 msgid "Bottom Solder Mask"
@@ -35523,19 +35525,16 @@ msgid "Export silkscreen"
 msgstr "Predná hodvábna obrazovka"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:73
-#, fuzzy
 msgid "Export silkscreen graphics as a set of flat faces."
-msgstr "Exportovať grafický popis."
+msgstr "Exportovať grafiky potlače ako sady rovinných povrchov."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:77
-#, fuzzy
 msgid "Export solder mask"
-msgstr "Predná spájkovacia maska"
+msgstr "Exportovať spájkovaciu masku"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:78
-#, fuzzy
 msgid "Export solder mask layers as a set of flat faces."
-msgstr "Exportovať grafiku prednej nespájkovacej masky."
+msgstr "Exportovať vrstvy spájkovacej masky ako sady rovinných povrchov."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:82
 #, fuzzy
@@ -36090,7 +36089,7 @@ msgstr "Upraviť knižnicu puzdra..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:234
 msgid "Clearances"
-msgstr "Rozstup"
+msgstr "Odstupy"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 #, fuzzy
@@ -36101,7 +36100,7 @@ msgstr "Ak chcete použiť hodnoty nastavenia dosky, nastavte hodnoty na 0."
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:968
 msgid "Pad clearance:"
-msgstr "Odstup od podložky:"
+msgstr "Min. vzdialenosť od plôšky:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
 msgid ""
@@ -36109,17 +36108,16 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"Toto je miestna čistá výška pre všetky podložky tejto stopy\n"
-"Ak je 0, použijú sa hodnoty Netclass\n"
-"Táto hodnota môže byť nahradená lokálnou hodnotou podložky."
+"Toto je lokálna minimálna vzdialenosť od spoja pre všetky plôšky puzdra\n"
+"Ak je 0, použijú sa hodnoty nastavenia triedy spojov\n"
+"Táto hodnota môže byť nahradená lokálnou hodnotou plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:981
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:60
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "Ďalšie voľby:"
+msgstr "Zväčšenie spájkovacej masky:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:293
 msgid ""
@@ -36128,16 +36126,15 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"Toto je miestna vzdialenosť medzi doštičkami a spájkovacou maskou pre túto "
-"stopu.\n"
-"Táto hodnota môže byť nahradená lokálnou hodnotou podložky.\n"
+"Toto je lokálna odstup medzi plôškami a spájkovacou maskou pre toto puzdro.\n"
+"Táto hodnota môže byť nahradená lokálnou hodnotou z nastavenia plôšky.\n"
 "Ak je 0, použije sa globálna hodnota."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:304
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:720
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Povoliť mostík v spájkovacej maske medzi plôškami"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:275
@@ -36167,7 +36164,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1007
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:162
 msgid "Solder paste relative clearance:"
-msgstr "Relatívna vôľa spájkovacej pasty:"
+msgstr "Relatívny odstup spájkovacej pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
 #, fuzzy, c-format
@@ -36195,7 +36192,7 @@ msgstr ""
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
-"Poznámka: Hodnoty spájkovacej masky a pasty sa používajú iba pre podložky na "
+"Poznámka: hodnoty spájkovacej masky a pasty sa používajú iba pre plôšky na "
 "medených vrstvách."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:349
@@ -36315,11 +36312,12 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Toto je miestna čistá výška pre všetky podložky tejto stopy.\n"
-"Ak je 0, použijú sa hodnoty Netclass.\n"
-"Túto hodnotu je možné prepísať v jednotlivých lokálnych položkách po "
-"jednotlivých položkách\n"
-"Karta Odbavenie a nastavenie v časti Vlastnosti podložky."
+"Toto je lokálna min. vzdialenosť od spojov pre všetky plôšky pre toto "
+"puzdro.\n"
+"Ak je 0, použijú sa hodnoty z nastavenia triedy spojov.\n"
+"Táto hodnota môže byť prepísaná v lokálnych nastaveniach jednotlivých "
+"plôšok\n"
+"v karte Odstup a nastavenia vo vlastnostiach plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
 msgid ""
@@ -36329,12 +36327,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Toto je miestna vzdialenosť medzi doštičkami a spájkovacou maskou pre\n"
-"táto stopa.\n"
-"Ak je 0, použije sa globálna hodnota.\n"
-"Túto hodnotu je možné prepísať v jednotlivých lokálnych položkách po "
-"jednotlivých položkách\n"
-"Karta Odbavenie a nastavenie v časti Vlastnosti podložky."
+"Toto je lokálny odstup plôšok a spájkovacej masky pre toto puzdro.\n"
+"Ak je 0, použije sa globálna hodnoty.\n"
+"Táto hodnota môže byť prepísaná v lokálnych nastaveniach\n"
+"jednotlivých plôšok v karte\n"
+"Odstup a nastavenia vo vlastnostiach plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:277
 #, fuzzy
@@ -36356,7 +36353,7 @@ msgstr ""
 "Karta Odbavenie a nastavenie v časti Vlastnosti podložky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -36368,14 +36365,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Toto je pomer miestneho klírensu v percentách medzi podložkami a\n"
-"spájkovacia pasta pre túto stopu.\n"
-"Hodnota 10 znamená, že hodnota vôle je 10 percent veľkosti podložky.\n"
-"Konečná hodnota klírensu je súčtom tejto hodnoty a hodnoty klírensu.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky.\n"
-"Túto hodnotu je možné prepísať v jednotlivých lokálnych položkách po "
-"jednotlivých položkách\n"
-"Karta Odbavenie a nastavenie v časti Vlastnosti podložky."
+"Toto je lokálny pomer odstupu ako percentuálna šírka a výška plôšky pre toto "
+"puzdro.\n"
+"Hodnota 10 znamená, že hodnota vodorovného odstupu je 10% šírky plôšky a "
+"vertikálneho odstupu je 10% výšky plôšky.\n"
+"Výsledná hodnota odstupu je súčet týchto hodnôt a absolútnej hodnoty "
+"odstupu.\n"
+"Táto hodnota môže byť prepísaná v lokálnych nastaveniach jednotlivých plôšok "
+"v karte Odstup a nastavenia vo vlastnostiach plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 #, fuzzy
@@ -37393,7 +37390,7 @@ msgstr "Aktualizujte fyzické stohovanie"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
-msgstr "Predvolené hodnoty spájkovacej masky / pasty"
+msgstr "Predvolené hodnoty spájkovacej masky/pasty"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Text && graphics default properties"
@@ -37759,7 +37756,7 @@ msgstr "zadná strana (zrkadlová)"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:602
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
-msgstr "Predná strana"
+msgstr "predná strana"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:857
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
@@ -38040,7 +38037,7 @@ msgstr "Zadná hodvábna obrazovka"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Front solder mask"
-msgstr "Nespájkovacia maska nahor"
+msgstr "Predná spájkovacia maska"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Back solder mask"
@@ -38196,7 +38193,7 @@ msgstr "Uhol paprsku:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
 msgid "Clearance Overrides"
-msgstr "Izolačná medzera Prepísanie"
+msgstr "Prepísať odstupy"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
 msgid "Leave values blank to use parent footprint or netclass values."
@@ -38208,30 +38205,32 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Pozitívna vôľa znamená plochu väčšiu ako podložka (obvyklá pre vôľu masky)."
+"Kladná hodnota odstupu znamená plochu väčšiu ako je plôška (zvyčajne pre "
+"odstup masky)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:958
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Negatívna vôľa znamená plochu menšiu ako podložka (obvyklá pre vôľu pasty)."
+"Záporná hodnota odstupu znamená plochu menšiu ako plôška (zvyčajne pre "
+"odstup pasty)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:970
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Toto je miestna čistá výška pre túto podložku.\n"
-"Ak je 0, použije sa lokálna hodnota stopy alebo hodnota Netclass."
+"Toto je lokálna vzdialenosť od spoja pre túto plôšku.\n"
+"Ak je 0, použije sa lokálna hodnota alebo hodnota z nastavenia triedy spojov."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:983
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Toto je miestna vzdialenosť medzi touto podložkou a spájkovacou maskou.\n"
-"Ak je 0, použije sa lokálna hodnota stopy alebo globálna hodnota."
+"Toto je lokálny odstup plôšky a spájkovacej masky.\n"
+"Ak je 0, použije sa lokálna hodnota puzdra alebo globálna hodnota."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:996
 msgid ""
@@ -38366,7 +38365,7 @@ msgstr "Výstupný adresár:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Sieťotlač odstráňte z oblastí bez spájkovacej masky"
+msgstr "Odstrániť potlač z oblastí bez spájkovacej masky"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
 #, fuzzy
@@ -38463,17 +38462,16 @@ msgstr "Vykresliť inverzne"
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Minimálna šírka a/alebo okraj globálnej spájkovacej masky nie sú nastavené "
-"na 0. "
+"Globálna hodnota minimálnej šírky a/alebo okraja spájkovacej masky nie sú "
+"nastavené na 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"Očakávajte 0 a použite ich obmedzenia, najmä pre min. šírku spájkovacej "
-"masky."
+"Väčšina výrobcov dosiek očakáva 0 a používa vlastné obmedzenia pre minimálnu "
+"šírku spájkovacej masky."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -39384,9 +39382,8 @@ msgstr "Technické vrstvy"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
-#, fuzzy
 msgid "Solder mask"
-msgstr "Ďalšie voľby:"
+msgstr "Spájkovacia maska"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
@@ -39395,13 +39392,12 @@ msgid "Expansion:"
 msgstr "Vylúčenie"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:262
-#, fuzzy
 msgid ""
 "This is the local clearance between the shape and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Toto je miestna vzdialenosť medzi touto podložkou a spájkovacou maskou.\n"
-"Ak je 0, použije sa lokálna hodnota stopy alebo globálna hodnota."
+"Toto je lokálny odstup tvaru a otvoru spájkovacej masky.\n"
+"Ponechajte prázdne pre použitie hodnoty definovanej v nastavení dosky."
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -39586,17 +39582,16 @@ msgid "Pre-defined sizes:"
 msgstr "Preddefinované veľkosti:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:202
-#, fuzzy
 msgid ""
 "This is the local clearance between the track and the solder mask opening.\n"
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
-"Toto je miestna vzdialenosť medzi touto podložkou a spájkovacou maskou.\n"
-"Ak je 0, použije sa lokálna hodnota stopy alebo globálna hodnota."
+"Toto je lokálna minimálna vzdialenosť spoja a otvoru spájkovacej masky.\n"
+"Ponechajte prázdne pre použitie hodnoty definovanej v nastavení dosky."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
-msgstr ""
+msgstr "Predná/vnútorná/zadná"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -40944,17 +40939,17 @@ msgstr "Aktuálne nastavenia:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Positive clearance means a solder mask opening bigger than the pad (typical "
 "for solder mask clearance)."
 msgstr ""
-"Globálna vzdialenosť medzi doštičkami a spájkovacou pastou.\n"
-"Táto hodnota môže byť nahradená miestnymi hodnotami pre stopu alebo "
-"podložku.\n"
-"Konečná hodnota klírensu je súčet tejto hodnoty a pomeru hodnoty klírensu."
+"Globálny odstup spájkovacej masky medzi plôškami a spájkovacou maskou.\n"
+"Táto hodnota môže byť nahradená lokálnymi hodnotami z nastavenia puzdra "
+"alebo plôšky.\n"
+"Kladná hodnota odstupu znamená väčší otvor masky ako je plôška (zvyčajne pre "
+"odstup spájkovacej masky)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
 #, fuzzy
@@ -41031,7 +41026,6 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:164
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:169
-#, fuzzy
 msgid ""
 "Global clearance ratio between pads and the solder paste as a percentage of "
 "the pad size.\n"
@@ -41040,12 +41034,12 @@ msgid ""
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
 msgstr ""
-"Pomer globálneho klírensu v percentách medzi doštičkami a spájkovacou "
-"pastou.\n"
-"Hodnota 10 znamená, že hodnota vôle je 10 percent veľkosti podložky.\n"
-"Táto hodnota môže byť nahradená miestnymi hodnotami pre stopu alebo "
-"podložku.\n"
-"Konečná hodnota klírensu je súčet tejto hodnoty a hodnoty klírensu."
+"Globálny pomer odstupu medzi plôškami a spájkovacou pastou ako percentuálna "
+"veľkosť plôšky.\n"
+"Hodnota 10 znamená, že hodnota odstupu je 10% veľkosti plôšky.\n"
+"Táto hodnota môže byť prepísaná lokálnymi hodnotami pre puzdro alebo "
+"plôšku.\n"
+"Konečná hodnota odstupu je súčet týchto hodnôt a absolútnej hodnoty odstupu."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:183
 msgid ""
@@ -41845,7 +41839,7 @@ msgstr "Názvy hárkov"
 #: pcbnew/drc/drc_engine.cpp:841 pcbnew/drc/drc_engine.cpp:851
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Lokálne prepísať na %s; izolačná medzera: %s."
+msgstr "Lokálne prepísať na %s; odstup: %s."
 
 #: pcbnew/drc/drc_engine.cpp:866 pcbnew/drc/drc_engine.cpp:1522
 #: pcbnew/drc/drc_engine.cpp:1538
@@ -42736,9 +42730,9 @@ msgid "Pad %s"
 msgstr "%s a %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "%s has clearance override."
-msgstr "Obrysy klírensu"
+msgstr "%s má prepísanú hodnotu odstupu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
 #, fuzzy, c-format
@@ -42747,9 +42741,9 @@ msgstr "Ďalšie voľby:"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:279
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder paste clearance override."
-msgstr "Absolútna vôľa spájkovacej pasty:"
+msgstr "%s má prepísanú hodnotu odstupu spájkovacej pasty."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:293
 #, fuzzy, c-format
@@ -43939,9 +43933,8 @@ msgid "Overrides"
 msgstr "Prepísať"
 
 #: pcbnew/footprint.cpp:4280 pcbnew/pad.cpp:2943
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Obrysy klírensu"
+msgstr "Prepísať odstup"
 
 #: pcbnew/footprint.cpp:4285 pcbnew/pad.cpp:2953
 #, fuzzy
