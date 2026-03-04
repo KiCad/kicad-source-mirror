@@ -35,7 +35,7 @@
 #include "pns_log_file.h"
 #include "pns_log_viewer_frame.h"
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace boost::unit_test;
 
@@ -213,7 +213,7 @@ std::vector<PNS_TEST_CASE*> createTestCases()
     return testCases;
 }
 
-static test_suite* init_pns_test_suite( int argc, char* argv[] )
+static bool init_pns_test_suite()
 {
     test_suite* pnsTestSuite = BOOST_TEST_SUITE( "pns_regressions" );
 
@@ -226,7 +226,7 @@ static test_suite* init_pns_test_suite( int argc, char* argv[] )
     }
 
     framework::master_test_suite().add( pnsTestSuite );
-    return 0;
+    return true;
 }
 
 int main( int argc, char* argv[] )
