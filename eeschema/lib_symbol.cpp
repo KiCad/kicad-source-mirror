@@ -486,7 +486,7 @@ void LIB_SYMBOL::SetName( const wxString& aName )
         cacheSearchTerms();
 
     m_searchTermsCache[STCI_LIB_SYMBOL_NAME].Text = aName;
-    m_searchTermsCache[STCI_LIB_ID].Text = wxString( GetLIB_ID().Format() );
+    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format().wx_str();
 }
 
 
@@ -497,7 +497,7 @@ void LIB_SYMBOL::SetLibId( const LIB_ID& aLibId )
     if( m_searchTermsCache.empty() )
         cacheSearchTerms();
 
-    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format();
+    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format().wx_str();
 }
 
 
