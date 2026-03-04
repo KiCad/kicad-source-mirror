@@ -86,49 +86,54 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     IMPORT_PROJ_HELPER importProj( this, schFileExts, pcbFileExts );
     importProj.m_InputFile = inputPath;
 
-    // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
-    // file is actually selected.
-    wxDirDialog prodlg( this, _( "KiCad Project Destination" ), importProj.m_InputFile.GetPath(),
-                        wxDD_DEFAULT_STYLE );
-
-    if( prodlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxString targetDir = prodlg.GetPath();
-
-    importProj.m_TargetProj.SetPath( targetDir );
-    importProj.m_TargetProj.SetName( importProj.m_InputFile.GetName() );
-    importProj.m_TargetProj.SetExt( FILEEXT::ProjectFileExtension );
-    importProj.m_TargetProj.MakeAbsolute();
-
-    // Check if the project directory exists and is empty
-    if( !importProj.m_TargetProj.DirExists() )
+    // Loop to allow the user to retry directory selection when cancelling the "not empty" warning
+    for( ;; )
     {
-        if( !importProj.m_TargetProj.Mkdir() )
-        {
-            msg.Printf( _( "Folder '%s' could not be created.\n\n"
-                           "Make sure you have write permissions and try again." ),
-                        importProj.m_TargetProj.GetPath() );
-            DisplayErrorMessage( this, msg );
+        // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
+        // file is actually selected.
+        wxDirDialog prodlg( this, _( "KiCad Project Destination" ),
+                            importProj.m_InputFile.GetPath(), wxDD_DEFAULT_STYLE );
+
+        if( prodlg.ShowModal() == wxID_CANCEL )
             return;
+
+        wxString targetDir = prodlg.GetPath();
+
+        importProj.m_TargetProj.SetPath( targetDir );
+        importProj.m_TargetProj.SetName( importProj.m_InputFile.GetName() );
+        importProj.m_TargetProj.SetExt( FILEEXT::ProjectFileExtension );
+        importProj.m_TargetProj.MakeAbsolute();
+
+        if( !importProj.m_TargetProj.DirExists() )
+        {
+            if( !importProj.m_TargetProj.Mkdir() )
+            {
+                msg.Printf( _( "Folder '%s' could not be created.\n\n"
+                               "Make sure you have write permissions and try again." ),
+                            importProj.m_TargetProj.GetPath() );
+                DisplayErrorMessage( this, msg );
+                continue;
+            }
+
+            break;
         }
-    }
-    else
-    {
+
         wxDir targetDirTest( targetDir );
+
         if( targetDirTest.IsOpened() && targetDirTest.HasFiles() )
         {
             msg = _( "The selected directory is not empty.  We recommend you "
                      "create projects in their own clean directory.\n\nDo you "
                      "want to create a new empty directory for the project?" );
 
-            KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
+            KIDIALOG dlg( this, msg, _( "Confirmation" ),
+                          wxYES_NO | wxCANCEL | wxICON_WARNING );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-            if( dlg.ShowModal() == wxID_YES )
+            int result = dlg.ShowModal();
+
+            if( result == wxID_YES )
             {
-                // Append a new directory with the same name of the project file
-                // Keep iterating until we find an empty directory
                 importProj.FindEmptyTargetDir();
 
                 if( !wxMkdir( importProj.m_TargetProj.GetPath() ) )
@@ -139,12 +144,22 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
                     KICAD_MESSAGE_DIALOG dirErrorDlg( this, msg, _( "Error" ),
                                                       wxOK_DEFAULT | wxICON_ERROR );
                     dirErrorDlg.ShowModal();
-                    return;
+                    continue;
                 }
+
+                break;
             }
+            else if( result == wxID_NO )
+            {
+                break;
+            }
+
+            // wxID_CANCEL — go back to directory selection
+            continue;
         }
 
         targetDirTest.Close();
+        break;
     }
 
     CreateNewProject( importProj.m_TargetProj.GetFullPath(), false /* Don't create stub files */ );
