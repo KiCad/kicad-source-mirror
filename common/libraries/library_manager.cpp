@@ -58,7 +58,10 @@ LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
 void LIBRARY_MANAGER::loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                                   std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
-    m_rowCache.clear();
+    {
+        std::lock_guard lock( m_rowCacheMutex );
+        m_rowCache.clear();
+    }
 
     auto getTarget =
             [&]() -> std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_TABLE>>&
@@ -685,16 +688,20 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
 std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::GetRow( LIBRARY_TABLE_TYPE  aType, const wxString& aNickname,
                                                            LIBRARY_TABLE_SCOPE aScope )
 {
-    auto key = std::tie( aType, aScope, aNickname );
+    {
+        std::lock_guard lock( m_rowCacheMutex );
+        auto            key = std::make_tuple( aType, aScope, aNickname );
 
-    if( m_rowCache.contains( key ) )
-        return m_rowCache.at( key );
+        if( auto it = m_rowCache.find( key ); it != m_rowCache.end() )
+            return it->second;
+    }
 
     for( LIBRARY_TABLE_ROW* row : Rows( aType, aScope, true ) )
     {
         if( row->Nickname() == aNickname )
         {
-            m_rowCache[key] = row;
+            std::lock_guard lock( m_rowCacheMutex );
+            m_rowCache[std::make_tuple( aType, aScope, aNickname )] = row;
             return row;
         }
     }
