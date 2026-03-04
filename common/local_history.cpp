@@ -917,10 +917,14 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     size_t keptBytes = 0;
     std::vector<git_oid> keep;
 
+    git_odb* odb = nullptr;
+    git_repository_odb( &odb, repo );
+
     std::function<size_t( git_tree* )> accountTree = [&]( git_tree* tree )
     {
         size_t added = 0;
         size_t cnt = git_tree_entrycount( tree );
+
         for( size_t i = 0; i < cnt; ++i )
         {
             const git_tree_entry* entry = git_tree_entry_byindex( tree, i );
@@ -931,13 +935,11 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
 
                 if( seenBlobs.find( *bid ) == seenBlobs.end() )
                 {
-                    git_blob* blob = nullptr;
+                    size_t         len = 0;
+                    git_object_t   type = GIT_OBJECT_ANY;
 
-                    if( git_blob_lookup( &blob, repo, bid ) == 0 )
-                    {
-                        added += git_blob_rawsize( blob );
-                        git_blob_free( blob );
-                    }
+                    if( odb && git_odb_read_header( &len, &type, odb, bid ) == 0 )
+                        added += len;
 
                     seenBlobs.insert( *bid );
                 }
@@ -953,6 +955,7 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
                 }
             }
         }
+
         return added;
     };
 
@@ -977,6 +980,8 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
         else
             break; // stop once limit exceeded
     }
+
+    git_odb_free( odb );
 
     if( keep.empty() )
         keep.push_back( commits.front() ); // ensure at least head
