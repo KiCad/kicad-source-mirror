@@ -138,6 +138,7 @@ static const wxChar MaxPastedTextLength[] = wxT( "MaxPastedTextLength" );
 static const wxChar PNSProcessClusterTimeout[] = wxT( "PNSProcessClusterTimeout" );
 static const wxChar FollowBranchTimeout[] = wxT( "FollowBranchTimeoutMs" );
 static const wxChar ImportSkipComponentBodies[] = wxT( "ImportSkipComponentBodies" );
+static const wxChar ImportSkipLayerMapping[] = wxT( "ImportSkipLayerMapping" );
 static const wxChar ScreenDPI[] = wxT( "ScreenDPI" );
 static const wxChar EnableUseAuiPerspective[] = wxT( "EnableUseAuiPerspective" );
 static const wxChar HistoryLockStaleTimeout[] = wxT( "HistoryLockStaleTimeout" );
@@ -331,6 +332,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_FollowBranchTimeout = 500; // Default: 500 ms
 
     m_ImportSkipComponentBodies = false;
+    m_ImportSkipLayerMapping = false;
 
     m_ScreenDPI = 91;
 
@@ -642,6 +644,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipComponentBodies,
                                                            &m_ImportSkipComponentBodies, m_ImportSkipComponentBodies ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::ImportSkipLayerMapping,
+                                                           &m_ImportSkipLayerMapping, m_ImportSkipLayerMapping ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::ScreenDPI, &m_ScreenDPI, m_ScreenDPI, 50, 500 ) );
 

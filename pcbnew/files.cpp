@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include <advanced_config.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <core/arraydim.h>
@@ -625,8 +626,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( LAYER_MAPPABLE_PLUGIN* mappable_pi = dynamic_cast<LAYER_MAPPABLE_PLUGIN*>( pi.get() ) )
         {
-            mappable_pi->RegisterCallback( std::bind( DIALOG_MAP_LAYERS::RunModal,
-                                                      this, std::placeholders::_1 ) );
+            if( !ADVANCED_CFG::GetCfg().m_ImportSkipLayerMapping )
+            {
+                mappable_pi->RegisterCallback( std::bind( DIALOG_MAP_LAYERS::RunModal,
+                                                          this, std::placeholders::_1 ) );
+            }
         }
 
         if( PROJECT_CHOOSER_PLUGIN* chooser_pi = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() ) )

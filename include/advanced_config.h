@@ -867,6 +867,18 @@ public:
     bool m_ImportSkipComponentBodies;
 
     /**
+     * Skip the layer mapping step when importing.
+     *
+     * This can be convenient to speed up imports when testing other aspects of the import,
+     * as you don't need to interact with the layer mapping dialog.
+     *
+     * Setting name: "ImportSkipLayerMapping"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_ImportSkipLayerMapping;
+
+    /**
      * Screen DPI setting for display calculations.
      *
      * This setting controls the assumed screen DPI for various display calculations.
