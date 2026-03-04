@@ -910,7 +910,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
     std::vector<SCH_ITEM*>   bitmaps;
     std::vector<SCH_SYMBOL*> symbols;
     std::vector<SCH_ITEM*>   other;
-    double                   hopOverScale;
+    double                   hopOverScale = 0.0;
     int                      defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
     if( !aItems.empty() && aItems[0]->Schematic() )
