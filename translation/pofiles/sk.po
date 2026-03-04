@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-04 00:03+0000\n"
+"PO-Revision-Date: 2026-03-04 16:20+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -6259,7 +6259,7 @@ msgstr "Vlastnosti"
 #: common/eda_draw_frame.cpp:1247 pcbnew/pcb_edit_frame.cpp:362
 #: pcbnew/pcb_edit_frame.cpp:1720 pcbnew/tools/pcb_actions.cpp:1346
 msgid "Net Inspector"
-msgstr "Sieťový inšpektor"
+msgstr "Inšpektor spojov"
 
 #: common/eda_item.cpp:384
 msgid "Screen"
@@ -49078,9 +49078,8 @@ msgstr ""
 "skupinu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:826
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie pripojenia zóny pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:834
 msgid "Thermal-relief gap resolution for:"
@@ -49111,9 +49110,8 @@ msgstr "Šírka lúča tepelného reliéfu:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:880
 #: pcbnew/tools/board_inspection_tool.cpp:928
-#, fuzzy
 msgid "Zone clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie minimálnych vzdialeností zóny pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:884
 #, c-format
@@ -49151,9 +49149,8 @@ msgid "Diff Pair"
 msgstr "Diferenčné páry"
 
 #: pcbnew/tools/board_inspection_tool.cpp:997
-#, fuzzy
 msgid "Diff-pair gap resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie medzery diferenciálneho páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1002
 #, fuzzy, c-format
@@ -49161,9 +49158,8 @@ msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Obmedzenia šírky: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1010
-#, fuzzy
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Diferenčná odpojená dĺžka je príliš dlhá"
+msgstr "Vyhodnotenie max. dĺžky nespriahnutého úseku diferenciálneho páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1016
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -49176,12 +49172,11 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1064
 msgid "Silkscreen clearance resolution for:"
-msgstr "Rozlíšenie voľného priestoru pre:"
+msgstr "Vyhodnotenie minimálnych vzdialeností potlače pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1092
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie minimálnych vzdialeností montážnej oblasti pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1211
 #, fuzzy
@@ -49245,7 +49240,8 @@ msgstr "Vyhodnotenie zakázanej oblasti pre:"
 #: pcbnew/tools/board_inspection_tool.cpp:1478
 #: pcbnew/tools/board_inspection_tool.cpp:1502
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr "Správa môže byť neúplná: niektoré nádvoria stopy sú poškodené."
+msgstr ""
+"Protokol môže byť neúplný: niektoré montážne oblasti puzdra sú neplatné."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1480
 #: pcbnew/tools/board_inspection_tool.cpp:1504
@@ -49267,7 +49263,7 @@ msgstr "Prebieha kontrola stôp..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1560
 msgid "Select a footprint for a footprint associations report."
-msgstr "Vybrať puzdro pre správu o priradení puzdier."
+msgstr "Vyberte puzdro pre protokol priradení."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1587
 #, fuzzy
@@ -50696,11 +50692,11 @@ msgstr "Generovať súbor(y) s umiestnením pre osadzovacie pick&place stroje"
 
 #: pcbnew/tools/pcb_actions.cpp:1044
 msgid "Footprint Report (.rpt)..."
-msgstr "Správa o stope (.rpt)..."
+msgstr "Protokol puzdra (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1045
 msgid "Create report of all footprints from current board"
-msgstr "Vytvorte správu o všetkých stopách z aktuálnej rady"
+msgstr "Vytvoriť protokol o všetkých puzdrách aktuálnej dosky"
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 msgid "IPC-2581 File (.xml)..."
@@ -50924,9 +50920,8 @@ msgid "Show the Python scripting console"
 msgstr "Zobraziť skriptovaciu konzolu Python"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "Ukážte inšpektora siete"
+msgstr "Zobraziť/skryť inšpektora spojov"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
@@ -51274,25 +51269,23 @@ msgid "Shows board statistics"
 msgstr "Zobrazuje štatistiku nástenky"
 
 #: pcbnew/tools/pcb_actions.cpp:1851
-#, fuzzy
 msgid "Clearance Resolution"
-msgstr "Rozlíšenie klírensu..."
+msgstr "Vyhodnotenie min. vzdialeností"
 
 #: pcbnew/tools/pcb_actions.cpp:1852
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Zobraziť rozlíšenie voľného priestoru pre aktívnu vrstvu medzi dvoma "
-"vybranými objektmi"
+"Zobraziť vyhodnotenie min. vzdialeností pre aktívnu vrstvu medzi dvoma "
+"vybranými objektami"
 
 #: pcbnew/tools/pcb_actions.cpp:1858
-#, fuzzy
 msgid "Constraints Resolution"
-msgstr "Riešenie obmedzení..."
+msgstr "Vyhodnotenie návrhových obmedzení"
 
 #: pcbnew/tools/pcb_actions.cpp:1859
 msgid "Show constraints resolution for the selected object"
-msgstr "Zobraziť rozlíšenie obmedzení pre vybratý objekt"
+msgstr "Zobraziť vyhodnotenie návrhových obmedzení pre vybraný objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:1866
 #, fuzzy
@@ -52920,7 +52913,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
-msgstr "Ukážte inšpektora siete"
+msgstr "Zobraziť inšpektora spojov"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
@@ -52946,9 +52939,8 @@ msgstr "Nepoužívajte UUID puzdra ako prefix pre cestu."
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "Nakonfigurujte triedy sietí"
+msgstr "Konfigurovať inšpektora netlistu"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:363
 msgid "No footprint selected"
@@ -53091,13 +53083,12 @@ msgid "Show / Hide Columns"
 msgstr "Zobraziť skryté špendlíky"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1589
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "Uložiť súbor správy"
+msgstr "Uložiť súbor protokolu inšpektora spojov"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1590
 msgid "Report file"
-msgstr "Nahlásiť súbor"
+msgstr "súbor protokolu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1611
 #, fuzzy, c-format
