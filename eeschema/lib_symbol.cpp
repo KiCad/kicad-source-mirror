@@ -537,6 +537,15 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
 }
 
 
+wxString LIB_SYMBOL::GetFootprint()
+{
+    if( !GetField( FIELD_T::FOOTPRINT ) )
+        return wxEmptyString;
+
+    return GetFootprintField().GetShownText( false );
+}
+
+
 std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
 {
     std::unique_ptr<LIB_SYMBOL> retv;

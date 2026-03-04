@@ -146,7 +146,7 @@ public:
 
     LIB_ID GetLIB_ID() const override { return m_libId; }
     wxString GetDesc() override { return GetShownDescription(); }
-    wxString GetFootprint() override { return GetFootprintField().GetShownText( false ); }
+    wxString GetFootprint() override;
     int GetSubUnitCount() const override { return GetUnitCount(); }
 
     const LIB_ID& GetLibId() const override { return m_libId; }
