@@ -273,8 +273,6 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 
 std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAltiumLayer ) const
 {
-    static std::set<ALTIUM_LAYER> altiumLayersWithWarning;
-
     if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER || aAltiumLayer == ALTIUM_LAYER::KEEP_OUT_LAYER )
     {
         int layerCount = m_board ? m_board->GetCopperLayerCount() : 32;
@@ -293,23 +291,7 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
     PCB_LAYER_ID klayer = GetKicadLayer( aAltiumLayer );
 
     if( klayer == UNDEFINED_LAYER )
-    {
-        auto it = m_layerNames.find( aAltiumLayer );
-        wxString layerName = it != m_layerNames.end() ? it->second : wxString::Format( wxT( "(%d)" ),
-                                                                                      (int) aAltiumLayer );
-
-        if( m_reporter && altiumLayersWithWarning.insert( aAltiumLayer ).second )
-        {
-            m_reporter->Report( wxString::Format(
-                    _( "Altium layer %s has no KiCad equivalent. It has been moved to KiCad "
-                       "layer Eco1_User." ), layerName ), RPT_SEVERITY_INFO );
-        }
-
-        klayer = Eco1_User;
-
-        if( m_board )
-            m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( { klayer } ) );
-    }
+        return {};
 
     return { klayer };
 }
@@ -1207,83 +1189,94 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
     bool frontCourtyardMapped = false;
     bool backCourtyardMapped = false;
 
-    auto next =
-            [&]( size_t ii ) -> size_t
-            {
-                // Within the copper stack, the nextId can be used to hop over unused layers in
-                // a particular Altium board.  The IDs start with ALTIUM_LAYER::UNKNOWN but the
-                // first copper layer in the array will be ALTIUM_LAYER::TOP_LAYER.
-                if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
-                    return curLayer.nextId - 1;
-                else
-                    return ii + 1;
-            };
-
-    for( size_t ii = 0; ii < aStackup.size(); ii = next( ii ) )
+    for( size_t ii = 0; ii < aStackup.size(); ii++ )
     {
         curLayer = aStackup[ii];
         layer_num = static_cast<ALTIUM_LAYER>( curLayer.layerId );
 
-        if( m_layermap.find( layer_num ) != m_layermap.end() )
+        // Skip UI-only layers and pseudo-layers that have no physical representation
+        if( layer_num == ALTIUM_LAYER::MULTI_LAYER
+            || layer_num == ALTIUM_LAYER::CONNECTIONS
+            || layer_num == ALTIUM_LAYER::BACKGROUND
+            || layer_num == ALTIUM_LAYER::DRC_ERROR_MARKERS
+            || layer_num == ALTIUM_LAYER::SELECTIONS
+            || layer_num == ALTIUM_LAYER::VISIBLE_GRID_1
+            || layer_num == ALTIUM_LAYER::VISIBLE_GRID_2
+            || layer_num == ALTIUM_LAYER::PAD_HOLES
+            || layer_num == ALTIUM_LAYER::VIA_HOLES )
+        {
             continue;
-
-        if( ii >= (size_t) m_board->GetCopperLayerCount() && layer_num != ALTIUM_LAYER::BOTTOM_LAYER
-            && !( layer_num >= ALTIUM_LAYER::TOP_OVERLAY && layer_num <= ALTIUM_LAYER::BOTTOM_SOLDER )
-            && !( layer_num >= ALTIUM_LAYER::MECHANICAL_1 && layer_num <= ALTIUM_LAYER::MECHANICAL_16 )
-            && !( layer_num >= ALTIUM_LAYER::V7_MECHANICAL_17 && layer_num <= ALTIUM_LAYER::V7_MECHANICAL_LAST ) )
-        {
-            if( layer_num < ALTIUM_LAYER::BOTTOM_LAYER )
-                continue;
-
-            iLdesc.AutoMapLayer = PCB_LAYER_ID::UNDEFINED_LAYER;
         }
-        else
-        {
-            // Check if the layer name indicates a courtyard layer
-            if( IsLayerNameCourtyard( curLayer.name ) )
-            {
-                bool isTopSide = IsLayerNameTopSide( curLayer.name );
 
-                if( isTopSide && !frontCourtyardMapped )
-                {
-                    iLdesc.AutoMapLayer = F_CrtYd;
-                    frontCourtyardMapped = true;
-                }
-                else if( !isTopSide && !backCourtyardMapped )
-                {
-                    iLdesc.AutoMapLayer = B_CrtYd;
-                    backCourtyardMapped = true;
-                }
-                else if( !frontCourtyardMapped )
-                {
-                    iLdesc.AutoMapLayer = F_CrtYd;
-                    frontCourtyardMapped = true;
-                }
-                else if( !backCourtyardMapped )
-                {
-                    iLdesc.AutoMapLayer = B_CrtYd;
-                    backCourtyardMapped = true;
-                }
-                else
-                {
-                    iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
-                }
-            }
-            // Check if the layer name indicates an assembly layer (map to Fab)
-            else if( IsLayerNameAssembly( curLayer.name ) )
+        // Skip disabled mechanical layers (mapped to UNDEFINED_LAYER by
+        // HelperFillMechanicalLayerAssignments)
+        auto existingMapping = m_layermap.find( layer_num );
+
+        if( existingMapping != m_layermap.end()
+            && existingMapping->second == PCB_LAYER_ID::UNDEFINED_LAYER )
+        {
+            continue;
+        }
+
+        // Skip unused copper layers not present in the board's stackup. Used copper layers
+        // were added to m_layermap during stackup parsing; any copper layer not in the map
+        // is unused and should not appear in the dialog.
+        if( layer_num >= ALTIUM_LAYER::TOP_LAYER && layer_num <= ALTIUM_LAYER::BOTTOM_LAYER
+            && existingMapping == m_layermap.end() )
+        {
+            continue;
+        }
+
+        // Use existing mapping as auto-match default if available
+        if( existingMapping != m_layermap.end() )
+        {
+            iLdesc.AutoMapLayer = existingMapping->second;
+        }
+        // Check if the layer name indicates a courtyard layer
+        else if( IsLayerNameCourtyard( curLayer.name ) )
+        {
+            bool isTopSide = IsLayerNameTopSide( curLayer.name );
+
+            if( isTopSide && !frontCourtyardMapped )
             {
-                bool isTopSide = IsLayerNameTopSide( curLayer.name );
-                iLdesc.AutoMapLayer = isTopSide ? F_Fab : B_Fab;
+                iLdesc.AutoMapLayer = F_CrtYd;
+                frontCourtyardMapped = true;
+            }
+            else if( !isTopSide && !backCourtyardMapped )
+            {
+                iLdesc.AutoMapLayer = B_CrtYd;
+                backCourtyardMapped = true;
+            }
+            else if( !frontCourtyardMapped )
+            {
+                iLdesc.AutoMapLayer = F_CrtYd;
+                frontCourtyardMapped = true;
+            }
+            else if( !backCourtyardMapped )
+            {
+                iLdesc.AutoMapLayer = B_CrtYd;
+                backCourtyardMapped = true;
             }
             else
             {
                 iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
             }
         }
+        // Check if the layer name indicates an assembly layer (map to Fab)
+        else if( IsLayerNameAssembly( curLayer.name ) )
+        {
+            bool isTopSide = IsLayerNameTopSide( curLayer.name );
+            iLdesc.AutoMapLayer = isTopSide ? F_Fab : B_Fab;
+        }
+        else
+        {
+            iLdesc.AutoMapLayer = GetKicadLayer( layer_num );
+        }
 
         iLdesc.Name            = curLayer.name;
         iLdesc.PermittedLayers = validRemappingLayers;
-        iLdesc.Required        = ii < (size_t) m_board->GetCopperLayerCount() || layer_num == ALTIUM_LAYER::BOTTOM_LAYER;
+        iLdesc.Required        = layer_num >= ALTIUM_LAYER::TOP_LAYER
+                                 && layer_num <= ALTIUM_LAYER::BOTTOM_LAYER;
 
         inputLayers.push_back( iLdesc );
         altiumLayerNameMap.insert( { curLayer.name, layer_num } );
@@ -1316,6 +1309,17 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         ALTIUM_LAYER altiumID     = altiumLayerNameMap.at( layerPair.first );
         m_layermap.insert_or_assign( altiumID, layerPair.second );
         enabledLayers |= LSET( { layerPair.second } );
+    }
+
+    // Explicitly mark unmatched dialog layers as UNDEFINED_LAYER so they are not imported
+    // via the GetKicadLayer() hardcoded switch fallthrough
+    for( const auto& [name, altLayer] : altiumLayerNameMap )
+    {
+        if( reMappedLayers.find( name ) == reMappedLayers.end()
+            || reMappedLayers.at( name ) == PCB_LAYER_ID::UNDEFINED_LAYER )
+        {
+            m_layermap.insert_or_assign( altLayer, PCB_LAYER_ID::UNDEFINED_LAYER );
+        }
     }
 
     m_board->SetEnabledLayers( enabledLayers );
