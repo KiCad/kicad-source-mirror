@@ -24,7 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <limits>
 #include <cmath>
 #include <functional>
 #include <stack>
@@ -34,6 +33,8 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_point.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>

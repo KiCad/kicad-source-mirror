@@ -31,7 +31,6 @@
 #define KICAD_CLIPBOARD_H
 
 #include <board_item.h>
-#include <footprint.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <memory.h>

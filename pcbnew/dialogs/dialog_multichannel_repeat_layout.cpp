@@ -31,6 +31,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <zone.h>
 #include <board.h>
+#include <footprint.h>
 
 
 DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_FRAME* aFrame,

@@ -30,6 +30,11 @@
 
 #include <kicad_gl/kiglad.h>
 
+class EDA_3D_CANVAS;
+class BOARD_ADAPTER;
+class REPORTER;
+
+
 class RENDER_3D_RAYTRACE_GL : public RENDER_3D_RAYTRACE_BASE
 {
 public:

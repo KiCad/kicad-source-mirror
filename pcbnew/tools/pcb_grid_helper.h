@@ -30,10 +30,10 @@
 
 #include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
-#include <board.h>
-#include <footprint.h>
 #include <geometry/intersection.h>
 #include <geometry/nearest.h>
+
+#include <board.h>
 
 
 class LSET;
@@ -73,32 +73,9 @@ public:
 
     VECTOR2I SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>& aPads );
 
-    virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem ) override
-    {
-        // If the item being removed is involved in the snap, clear the snap item
-        if( m_snapItem )
-        {
-            for( EDA_ITEM* eda_item : m_snapItem->items )
-            {
-                if( eda_item->IsBOARD_ITEM() )
-                {
-                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+    void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem ) override;
 
-                    if( item == aRemovedItem || item->GetParentFootprint() == aRemovedItem )
-                    {
-                        m_snapItem = std::nullopt;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    virtual void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override
-    {
-        // This is a bulk-remove.  Simply clearing the snap item will be the most performant.
-        m_snapItem = std::nullopt;
-    }
+    void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
 
     /**
      * Chooses the "best" snap anchor around the given point, optionally taking layers from

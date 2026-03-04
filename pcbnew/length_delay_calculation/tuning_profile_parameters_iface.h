@@ -27,6 +27,7 @@
 #include <length_delay_calculation/length_delay_calculation_item.h>
 #include <netclass.h>
 
+class BOARD;
 class LENGTH_DELAY_CALCULATION;
 
 /**

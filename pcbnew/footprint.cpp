@@ -23,6 +23,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#include "footprint.h"
+
 #include <magic_enum.hpp>
 
 #include <algorithm>
@@ -46,7 +49,6 @@
 #include <embedded_files.h>
 #include <font/font.h>
 #include <font/outline_font.h>
-#include <footprint.h>
 #include <geometry/convex_hull.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>

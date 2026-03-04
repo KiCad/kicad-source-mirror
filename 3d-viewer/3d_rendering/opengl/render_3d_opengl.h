@@ -43,6 +43,7 @@
 #include "3d_cache/3d_info.h"
 
 #include <geometry/eda_angle.h>
+#include <pad.h> // For PAD_DRILL_POST_MACHINING_MODE
 
 #include <map>
 

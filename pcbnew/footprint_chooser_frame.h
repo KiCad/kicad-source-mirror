@@ -34,6 +34,7 @@
 #include <3d_canvas/board_adapter.h>
 #include <3d_rendering/track_ball.h>
 
+class EDA_3D_CANVAS;
 class PANEL_FOOTPRINT_CHOOSER;
 class wxCheckBox;
 class BITMAP_BUTTON;

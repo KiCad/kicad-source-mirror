@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include <advanced_config.h>
+#include <board_item.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>
@@ -469,6 +470,35 @@ VECTOR2I PCB_GRID_HELPER::SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>
     }
 
     return nearestOrigin ? nearestOrigin->pos : aMousePos;
+}
+
+
+void PCB_GRID_HELPER::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem )
+{
+    // If the item being removed is involved in the snap, clear the snap item
+    if( m_snapItem )
+    {
+        for( EDA_ITEM* eda_item : m_snapItem->items )
+        {
+            if( eda_item->IsBOARD_ITEM() )
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+
+                if( item == aRemovedItem || item->GetParentFootprint() == aRemovedItem )
+                {
+                    m_snapItem = std::nullopt;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+void PCB_GRID_HELPER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    // This is a bulk-remove.  Simply clearing the snap item will be the most performant.
+    m_snapItem = std::nullopt;
 }
 
 

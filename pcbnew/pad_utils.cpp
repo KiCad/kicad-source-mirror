@@ -23,6 +23,8 @@
 
 #include "pad_utils.h"
 
+#include <pad.h>
+
 
 double PAD_UTILS::GetDefaultIpcRoundingRatio( const PAD& aPad, PCB_LAYER_ID aLayer )
 {

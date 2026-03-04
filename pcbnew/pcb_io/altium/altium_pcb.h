@@ -85,6 +85,7 @@ enum class ALTIUM_PCB_DIR
 
 
 class BOARD;
+class EDA_TEXT;
 class FP_SHAPE;
 class PCB_SHAPE;
 class PCB_TEXTBOX;

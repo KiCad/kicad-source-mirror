@@ -26,13 +26,13 @@
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
-#include <eda_shape.h>
 #include <layer_ids.h> // PCB_LAYER_ID
 #include <font/font.h>
 #include <geometry/shape_segment.h>
 #include <stroke_params.h>
 #include <memory>
 #include "odb_entity.h"
+
 
 struct ODB_DRILL_SPAN
 {
@@ -102,11 +102,13 @@ class PROGRESS_REPORTER;
 class NETINFO_ITEM;
 class PAD;
 class PCB_SHAPE;
+class PCB_TRACK;
 class PCB_VIA;
 class PROGRESS_REPORTER;
 class SHAPE_POLY_SET;
 class SHAPE_SEGMENT;
 class EDA_DATA;
+class ZONE;
 
 
 class PCB_IO_ODBPP : public PCB_IO

@@ -25,9 +25,10 @@
 #ifndef PCB_IO_EASYEDA_PLUGIN_H_
 #define PCB_IO_EASYEDA_PLUGIN_H_
 
-#include <footprint.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
+
+class FOOTPRINT;
 
 class PCB_IO_EASYEDA : public PCB_IO
 {

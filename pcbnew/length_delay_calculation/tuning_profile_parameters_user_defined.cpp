@@ -25,6 +25,7 @@
 
 #include <board.h>
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <project/project_file.h>
 

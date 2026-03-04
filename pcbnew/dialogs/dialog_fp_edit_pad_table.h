@@ -88,4 +88,3 @@ private:
     std::unique_ptr<UNITS_PROVIDER>   m_unitsProvider;
     bool                              m_summaryDirty;
 };
-

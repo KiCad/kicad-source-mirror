@@ -30,18 +30,14 @@
 #ifndef __CONNECTIVITY_ALGO_H
 #define __CONNECTIVITY_ALGO_H
 
-#include <board.h>
-#include <pad.h>
-#include <footprint.h>
-#include <zone.h>
-
 #include <geometry/shape_poly_set.h>
 
-#include <memory>
 #include <algorithm>
-#include <functional>
-#include <vector>
 #include <deque>
+#include <functional>
+#include <list>
+#include <memory>
+#include <vector>
 
 #include <connectivity/connectivity_rtree.h>
 #include <connectivity/connectivity_data.h>
@@ -51,6 +47,7 @@ class CN_RATSNEST_NODES;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
+class FOOTPRINT;
 class ZONE;
 class PROGRESS_REPORTER;
 

@@ -85,6 +85,7 @@ class BASE_SET {};
 #include <exporters/gendrill_excellon_writer.h>
 #include <exporters/gendrill_gerber_writer.h>
 #include <exporters/gerber_jobfile_writer.h>
+#include <footprint.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/pcb_io.h>
 
@@ -149,5 +150,3 @@ HANDLE_EXCEPTIONS(WriteDRCReport)
 %include plugins.i
 %include units.i
 %include version.i
-
-

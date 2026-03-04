@@ -21,12 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_COMPONENT_H
-#define PCB_COMPONENT_H
+#pragma once
+
+#include <memory>
 
 #include <netlist_reader/netlist.h>
-#include <footprint.h>
-#include <memory>
 
 
 /**
@@ -39,17 +38,11 @@ public:
                    const wxString&          aReference,
                    const wxString&          aValue,
                    const KIID_PATH&         aPath,
-                   const std::vector<KIID>& aKiids )
-        : COMPONENT( aFPID, aReference, aValue, aPath, aKiids )
-    {
-    }
+                   const std::vector<KIID>& aKiids );
 
-    virtual ~PCB_COMPONENT() { };
+    virtual ~PCB_COMPONENT();
 
-    FOOTPRINT* GetFootprint( bool aRelease = false )
-    {
-        return ( aRelease ) ? m_footprint.release() : m_footprint.get();
-    }
+    FOOTPRINT* GetFootprint( bool aRelease = false );
 
     void SetFootprint( FOOTPRINT* aFootprint );
 
@@ -60,5 +53,3 @@ private:
 
 
 typedef boost::ptr_vector< PCB_COMPONENT > PCB_COMPONENTS;
-
-#endif  // PCB_COMPONENT_H

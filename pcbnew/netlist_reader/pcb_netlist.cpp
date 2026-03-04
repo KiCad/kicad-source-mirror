@@ -23,14 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include "pcb_netlist.h"
+
+#include <wx/tokenzr.h>
+#include <wx/log.h>
 
 #include <footprint.h>
 #include <richio.h>
 #include <string_utils.h>
-#include <wx/tokenzr.h>
-#include <wx/log.h>
 
 
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
@@ -38,6 +38,33 @@ int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
     return aOut->Print( aNestLevel, "(pin_net %s %s)",
                         aOut->Quotew( m_pinName ).c_str(),
                         aOut->Quotew( m_netName ).c_str() );
+}
+
+COMPONENT::COMPONENT( const LIB_ID&            aFPID,
+                      const wxString&          aReference,
+                      const wxString&          aValue,
+                      const KIID_PATH&         aPath,
+                      const std::vector<KIID>& aKiids )
+{
+    m_fpid             = aFPID;
+    m_reference        = aReference;
+    m_value            = aValue;
+    m_pinCount         = 0;
+    m_path             = aPath;
+    m_kiids            = aKiids;
+    m_duplicatePadNumbersAreJumpers = false;
+    m_group            = nullptr;
+}
+
+
+COMPONENT::~COMPONENT()
+{
+}
+
+
+FOOTPRINT* COMPONENT::GetFootprint( bool aRelease )
+{
+    return ( aRelease ) ? m_footprint.release() : m_footprint.get();
 }
 
 

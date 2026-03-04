@@ -26,7 +26,6 @@
 #define DRC_RTREE_H_
 
 #include <board_item.h>
-#include <pad.h>
 #include <pcb_field.h>
 #include <memory>
 #include <unordered_set>

@@ -39,6 +39,7 @@
 #include <gestfich.h>
 #include <paths.h>
 #include <pcbnew_settings.h>
+#include <footprint.h>
 #include <footprint_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>

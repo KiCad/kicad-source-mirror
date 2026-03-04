@@ -26,7 +26,6 @@
 
 
 #include <board.h>
-#include <footprint.h>
 
 /**
  * The ASCII format of the kicad place file is:

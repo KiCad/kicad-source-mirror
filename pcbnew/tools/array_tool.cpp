@@ -26,6 +26,7 @@
 #include <array_options.h>
 #include <array_pad_number_provider.h>
 #include <dialogs/dialog_create_array.h>
+#include <footprint.h>
 #include <pad.h>
 #include <pcb_generator.h>
 #include <pcb_group.h>

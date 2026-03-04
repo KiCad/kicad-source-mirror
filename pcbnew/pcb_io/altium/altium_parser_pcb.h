@@ -27,11 +27,17 @@
 
 #include <cstdint>
 #include <cstring>
+#include <limits>
+#include <map>
 #include <memory>
+#include <set>
 #include <vector>
 
-#include <footprint.h>
 #include <wx/gdicmn.h>
+
+#include <math/vector2d.h>
+#include <math/vector3.h>
+
 
 // tthis constant specifies an unconnected net
 const uint16_t ALTIUM_NET_UNCONNECTED = std::numeric_limits<uint16_t>::max();

@@ -36,6 +36,7 @@
 #include <reporter.h>
 #include <thread_pool.h>
 #include <lset.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

@@ -22,14 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/button.h>
+#include <wx/checkbox.h>
+#include <wx/splitter.h>
+
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <kiway.h>
 #include <kiway_mail.h>
 #include <board.h>
-#include <wx/button.h>
-#include <wx/checkbox.h>
-#include <wx/splitter.h>
+#include <footprint.h>
 #include <kiplatform/ui.h>
 #include <lset.h>
 #include <widgets/panel_footprint_chooser.h>
@@ -889,5 +891,3 @@ void FOOTPRINT_CHOOSER_FRAME::setupUIConditions()
 #undef CHECK
     // clang-format on
 }
-
-

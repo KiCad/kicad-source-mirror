@@ -21,8 +21,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "netlist_reader/pcb_component.h"
+
 #include <footprint.h>
-#include <netlist_reader/pcb_component.h>
+
+
+PCB_COMPONENT::PCB_COMPONENT( const LIB_ID&            aFPID,
+                              const wxString&          aReference,
+                              const wxString&          aValue,
+                              const KIID_PATH&         aPath,
+                              const std::vector<KIID>& aKiids )
+    : COMPONENT( aFPID, aReference, aValue, aPath, aKiids )
+{
+}
+
+
+PCB_COMPONENT::~PCB_COMPONENT() {};
+
+
+FOOTPRINT* PCB_COMPONENT::GetFootprint( bool aRelease )
+{
+    return ( aRelease ) ? m_footprint.release() : m_footprint.get();
+}
 
 
 void PCB_COMPONENT::SetFootprint( FOOTPRINT* aFootprint )

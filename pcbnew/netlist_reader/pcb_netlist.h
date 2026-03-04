@@ -31,13 +31,15 @@
 #include <json_common.h>
 #include <unordered_set>
 
+#include <kiid.h>
 #include <lib_id.h>
-#include <footprint.h>
 #include <ctl_flags.h>
 #include <case_insensitive_map.h>
 
 
 class REPORTER;
+class FOOTPRINT;
+class OUTPUTFORMATTER;
 
 
 /**
@@ -123,19 +125,9 @@ public:
                const wxString&          aReference,
                const wxString&          aValue,
                const KIID_PATH&         aPath,
-               const std::vector<KIID>& aKiids )
-    {
-        m_fpid             = aFPID;
-        m_reference        = aReference;
-        m_value            = aValue;
-        m_pinCount         = 0;
-        m_path             = aPath;
-        m_kiids            = aKiids;
-        m_duplicatePadNumbersAreJumpers = false;
-        m_group            = nullptr;
-    }
+               const std::vector<KIID>& aKiids );
 
-    virtual ~COMPONENT() { };
+    virtual ~COMPONENT();
 
     void AddNet( const wxString& aPinName, const wxString& aNetName, const wxString& aPinFunction,
                  const wxString& aPinType )
@@ -193,10 +185,7 @@ public:
     void SetPinCount( int aPinCount ) { m_pinCount = aPinCount; }
     int GetPinCount() const { return m_pinCount; }
 
-    FOOTPRINT* GetFootprint( bool aRelease = false )
-    {
-        return ( aRelease ) ? m_footprint.release() : m_footprint.get();
-    }
+    FOOTPRINT* GetFootprint( bool aRelease = false );
 
     void SetFootprint( FOOTPRINT* aFootprint );
 

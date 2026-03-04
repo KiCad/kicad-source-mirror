@@ -35,6 +35,7 @@
 #include <filename_resolver.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <pcb_fields_grid_table.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
 #include <kiplatform/ui.h>

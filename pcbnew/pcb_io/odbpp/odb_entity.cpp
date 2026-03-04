@@ -21,6 +21,7 @@
 
 #include <base_units.h>
 #include <optional>
+#include <board.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
 #include <build_version.h>
 #include <callback_gal.h>

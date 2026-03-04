@@ -40,6 +40,8 @@
 #include <board_design_settings.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <ratsnest/ratsnest_data.h>
 #include <progress_reporter.h>

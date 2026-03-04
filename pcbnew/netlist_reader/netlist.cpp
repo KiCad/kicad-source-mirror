@@ -39,6 +39,7 @@ using namespace std::placeholders;
 #include <board.h>
 #include <component_classes/component_class_manager.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <spread_footprints.h>
 #include <ratsnest/ratsnest_data.h>

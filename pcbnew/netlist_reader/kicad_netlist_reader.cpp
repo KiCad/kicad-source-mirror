@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/log.h>
+
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <string_utils.h>
 #include <json_common.h>

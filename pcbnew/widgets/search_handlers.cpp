@@ -18,6 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "search_handlers.h"
+
+#include <board.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <pcb_marker.h>
@@ -34,7 +37,6 @@
 #include <zone.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include "search_handlers.h"
 
 
 void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
@@ -43,6 +45,23 @@ void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
     SelectItems( item );
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::properties );
+}
+
+
+wxString PCB_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+{
+    if( m_frame->IsClosing() )
+        return wxEmptyString;
+
+    if( aRow >= static_cast<int>(m_hitlist.size() ) )
+        return wxEmptyString;
+
+    BOARD_ITEM* item = m_hitlist[aRow];
+
+    if( !item )
+        return wxEmptyString;
+
+    return getResultCell( item, aCol );
 }
 
 

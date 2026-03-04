@@ -28,6 +28,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <project/net_settings.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <footprint.h>
@@ -505,4 +506,3 @@ int GLOBAL_EDIT_TOOL::EditTeardrops( const TOOL_EVENT& aEvent )
     dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     return 0;
 }
-

@@ -37,7 +37,6 @@
 #include <zone_settings_bag.h>
 #include <widgets/unit_binder.h>
 #include <zone.h>
-#include <pad.h>
 #include <board.h>
 #include <trigo.h>
 #include <eda_pattern_match.h>

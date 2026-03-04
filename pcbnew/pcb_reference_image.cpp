@@ -31,6 +31,7 @@
 #include <common.h>
 #include <core/mirror.h>
 #include <eda_draw_frame.h>
+#include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <plotters/plotter.h>

@@ -33,12 +33,12 @@
 #include <tools/pcb_picker_tool.h>
 #include <connectivity/topo_match.h>
 
-#include <pad.h>
-#include <footprint.h>
 #include <reporter.h>
 #include <zone_settings.h>
 
 class wxWindow;
+class EDA_ITEM;
+class FOOTPRINT;
 
 struct REPEAT_LAYOUT_OPTIONS
 {

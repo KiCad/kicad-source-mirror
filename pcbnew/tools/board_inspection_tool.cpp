@@ -21,8 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tools/board_inspection_tool.h"
+
 #include <bitmaps.h>
 #include <collectors.h>
+#include <footprint.h>
 #include <pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
@@ -40,7 +43,6 @@
 #include <kiplatform/ui.h>
 #include <status_popup.h>
 #include <string_utils.h>
-#include <tools/board_inspection_tool.h>
 #include <footprint_library_adapter.h>
 #include <pcb_shape.h>
 #include <widgets/appearance_controls.h>

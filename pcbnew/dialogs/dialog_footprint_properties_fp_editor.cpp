@@ -59,6 +59,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <widgets/text_ctrl_eval.h>
 #include <widgets/wx_grid.h>
+#include <zone.h>
 
 #include <footprint_library_adapter.h>
 #include <project_pcb.h>

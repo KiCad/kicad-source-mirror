@@ -27,10 +27,11 @@
 
 #include <vector>
 
-#include <footprint.h>
 #include <base_units.h>
 #include <math/vector2d.h>
-#include <board.h>
+
+class FOOTPRINT;
+
 
 /**
  * Footprints (after loaded by reading a netlist for instance) are moved

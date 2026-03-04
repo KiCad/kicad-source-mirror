@@ -29,6 +29,7 @@
 #include <math/util.h>
 
 #include <wx/log.h>
+#include <wx/translation.h>
 
 #include "altium_parser_pcb.h"
 #include "io/altium/altium_binary_parser.h"

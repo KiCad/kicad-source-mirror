@@ -25,8 +25,6 @@
 
 #pragma once
 
-#include <board.h>
-#include <footprint.h>
 #include <dialogs/dialog_board_reannotate_base.h>
 #include <layer_ids.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -181,4 +179,3 @@ private:
     std::vector<REFDES_PREFIX_INFO> m_refDesPrefixInfos;
     std::vector<wxString>           m_excludeArray;
 };
-

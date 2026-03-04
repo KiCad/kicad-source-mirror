@@ -31,8 +31,11 @@
 #include <connectivity/connectivity_algo.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/font.h>
+#include <footprint.h>
 #include <hash_eda.h>
+#include <pad.h>
 #include <pcb_dimension.h>
+#include <pcb_field.h>
 #include <pcb_shape.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>

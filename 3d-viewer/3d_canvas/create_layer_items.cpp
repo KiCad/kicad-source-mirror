@@ -35,13 +35,16 @@
 #include "raytracing/shapes2D/triangle_2d.h"
 #include <board_design_settings.h>
 #include <board.h>
+#include <footprint.h>
 #include <layer_range.h>
 #include <lset.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
+#include <pad.h>
 #include <pcb_barcode.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <zone.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <core/profile.h>

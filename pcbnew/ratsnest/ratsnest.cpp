@@ -23,6 +23,7 @@
  */
 
 #include <pcb_edit_frame.h>
+#include <board.h>
 #include <footprint.h>
 #include <ratsnest/ratsnest_data.h>
 
@@ -41,4 +42,3 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
     if( aDisplayStatus )
         SetMsgPanel( m_pcb );
 }
-

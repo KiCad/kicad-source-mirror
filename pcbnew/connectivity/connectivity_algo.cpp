@@ -33,8 +33,11 @@
 #include <connectivity/connectivity_algo.h>
 #include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
+#include <board.h>
 #include <board_commit.h>
 #include <thread_pool.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
 

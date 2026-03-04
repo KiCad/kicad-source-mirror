@@ -26,6 +26,7 @@
 #include <pcb_board_outline.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
@@ -33,7 +34,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
-#include "drc_rtree.h"
+#include <drc/drc_rtree.h>
 
 /*
     Board edge clearance test. Checks all items for their mechanical clearances against the board

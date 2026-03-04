@@ -28,6 +28,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <geometry/geometry_utils.h>
+#include <pad.h>
 #include <pcb_track.h>
 
 

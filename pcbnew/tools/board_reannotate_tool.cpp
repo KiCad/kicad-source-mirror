@@ -23,12 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tools/board_reannotate_tool.h"
+
+#include <wx/filedlg.h>
+
+#include <footprint.h>
 #include <pcb_group.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
-#include <wx/filedlg.h>
-#include <tools/board_reannotate_tool.h>
 
 
 BOARD_REANNOTATE_TOOL::BOARD_REANNOTATE_TOOL() :

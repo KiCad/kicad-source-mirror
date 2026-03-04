@@ -24,10 +24,9 @@
 #ifndef PCBNEW_ARRAY_PAD_NAME_PROVIDER__H
 #define PCBNEW_ARRAY_PAD_NAME_PROVIDER__H
 
+#include <set>
 
 #include <array_options.h>
-#include <footprint.h>
-#include <board_commit.h>
 
 /**
  * Simple class that sequentially provides numbers from an #ARRAY_OPTIONS object, making sure

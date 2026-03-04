@@ -20,6 +20,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <wx/filedlg.h>
@@ -39,13 +45,9 @@
 #include <geometry/geometry_utils.h>
 #include <bitmaps.h>
 #include <confirm.h>
+#include <footprint.h>
 #include <lset.h>
 #include <trace_helpers.h>
-#include <algorithm>
-#include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
 #include <pcb_layer_box_selector.h>
@@ -57,6 +59,7 @@
 #include <dialogs/dialog_dimension_properties.h>
 #include <dialogs/dialog_table_properties.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pad.h>
 #include <pcb_target.h>
 #include <pcb_point.h>
 #include <pcb_track.h>

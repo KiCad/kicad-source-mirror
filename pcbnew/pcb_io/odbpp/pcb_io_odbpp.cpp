@@ -28,6 +28,8 @@
 #include "odb_entity.h"
 #include "wx/log.h"
 
+#include <footprint.h>
+
 
 double      PCB_IO_ODBPP::m_scale = 1.0 / PCB_IU_PER_MM;
 double      PCB_IO_ODBPP::m_symbolScale = 1.0 / PL_IU_PER_MM;

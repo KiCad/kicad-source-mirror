@@ -28,6 +28,7 @@
 #include <board.h>
 #include <build_version.h>
 #include <core/ignore.h>
+#include <footprint.h>
 #include <font/fontconfig.h>
 #include <pad.h>
 #include <pcb_group.h>

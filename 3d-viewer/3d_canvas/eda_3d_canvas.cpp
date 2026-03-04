@@ -28,6 +28,8 @@
 
 #include <wx/tokenzr.h>
 
+#include <fmt/format.h>
+
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
 #include <eda_3d_viewer_frame.h>
@@ -38,6 +40,7 @@
 #include <build_version.h>
 #include <settings/color_settings.h>
 #include <board.h>
+#include <footprint.h>
 #include <pad.h>
 #include <pcb_field.h>
 #include <pcb_track.h>
@@ -54,9 +57,8 @@
 #include <string_utils.h>
 #include <mail_type.h>
 #include <kiway_mail.h>
-#include <fmt/format.h>
-
 #include <widgets/wx_busy_indicator.h>
+#include <zone.h>
 
 
 /**

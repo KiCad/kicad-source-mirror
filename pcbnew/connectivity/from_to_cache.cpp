@@ -19,8 +19,11 @@
 
 #include <cstdio>
 #include <memory>
+
 #include <reporter.h>
 #include <board.h>
+#include <footprint.h>
+#include <pad.h>
 #include <string_utils.h>
 
 #include <pcbexpr_evaluator.h>
@@ -29,6 +32,7 @@
 #include <connectivity/connectivity_algo.h>
 
 #include <connectivity/from_to_cache.h>
+
 
 void FROM_TO_CACHE::buildEndpointList( )
 {

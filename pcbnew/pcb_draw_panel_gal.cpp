@@ -34,6 +34,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <macros.h>
 #include <pcb_generator.h>

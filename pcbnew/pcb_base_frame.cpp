@@ -45,6 +45,7 @@
 #include <footprint_library_adapter.h>
 #include <lset.h>
 #include <kiface_base.h>
+#include <pad.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
@@ -55,6 +56,7 @@
 #include <project_pcb.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <zone.h>
 
 #include <math/vector2d.h>
 #include <math/vector2wx.h>

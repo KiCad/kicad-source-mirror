@@ -23,6 +23,7 @@
 
 #include <common.h>
 #include <board_design_settings.h>
+#include <pad.h>
 #include <pcb_board_outline.h>
 #include <footprint.h>
 #include <thread_pool.h>
@@ -306,4 +307,3 @@ bool DRC_CACHE_GENERATOR::Run()
 
     return !m_drcEngine->IsCancelled();
 }
-

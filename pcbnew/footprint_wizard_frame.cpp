@@ -24,6 +24,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "footprint_wizard_frame.h"
+
+#include <wx/listbox.h>
+#include <wx/numformatter.h>
+#include <wx/statline.h>
+#include <wx/tokenzr.h>
+#include <wx/wupdlock.h>
+
+#include <json_common.h>
+
 #include <kiface_base.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
@@ -34,17 +44,12 @@
 #include <grid_tricks.h>
 #include <board.h>
 #include <project/net_settings.h>
+#include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <pcbnew_id.h>
 #include <widgets/aui_json_serializer.h>
-#include <wx/listbox.h>
-#include <wx/statline.h>
 
-#include <nlohmann/json.hpp>
-#include <wx/tokenzr.h>
-#include <wx/numformatter.h>
-#include <wx/wupdlock.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -59,7 +64,6 @@
 #include <tools/footprint_wizard_tools.h>
 #include <toolbars_footprint_wizard.h>
 #include <python/scripting/pcb_scripting_tool.h>
-#include "footprint_wizard_frame.h"
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, PCB_BASE_EDIT_FRAME )

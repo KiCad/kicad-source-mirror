@@ -23,11 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <config.h> // to define strncasecmp for some platforms
 #include <richio.h>
 #include <string_utils.h>
 
 #include "pcb_netlist.h"
-#include "netlist_reader.h"
+#include <netlist_reader/netlist_reader.h>
+
 
 void LEGACY_NETLIST_READER::LoadNetlist()
 {

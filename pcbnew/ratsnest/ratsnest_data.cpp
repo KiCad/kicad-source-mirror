@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <algorithm>
 #include <cassert>
 #include <limits>
+#include <list>
 
 #include <delaunator.hpp>
 
@@ -678,4 +679,3 @@ bool RN_NET::NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I&
 
     return rv;
 }
-

@@ -39,21 +39,7 @@ public:
             m_frame( aFrame )
     {}
 
-    wxString GetResultCell( int aRow, int aCol ) override
-    {
-        if( m_frame->IsClosing() )
-            return wxEmptyString;
-
-        if( aRow >= static_cast<int>(m_hitlist.size() ) )
-            return wxEmptyString;
-
-        BOARD_ITEM* item = m_hitlist[aRow];
-
-        if( !item )
-            return wxEmptyString;
-
-        return getResultCell( item, aCol );
-    }
+    wxString GetResultCell( int aRow, int aCol ) override;
 
     void Sort( int aCol, bool aAscending, std::vector<long>* aSelection ) override;
 

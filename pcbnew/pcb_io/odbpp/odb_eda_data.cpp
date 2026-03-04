@@ -23,6 +23,8 @@
 #include <base_units.h>
 #include <build_version.h>
 #include <hash_eda.h>
+#include <footprint.h>
+#include <pad.h>
 #include <string_utils.h>
 
 #include <netinfo.h>

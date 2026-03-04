@@ -22,6 +22,7 @@
 #include <wx/log.h>
 
 #include <board.h>
+#include <footprint.h>
 
 #include "odb_component.h"
 #include "odb_util.h"

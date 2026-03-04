@@ -23,7 +23,9 @@
 
 #pragma once
 
-#include <pad.h>
+#include <layer_ids.h>
+
+class PAD;
 
 namespace PAD_UTILS
 {

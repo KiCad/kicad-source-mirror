@@ -26,17 +26,24 @@
 #include "dialog_board_statistics.h"
 #include <board_statistics.h>
 
+#include <algorithm>
+
 #include <wx/filedlg.h>
 
+#include <board.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <pad.h>
+#include <pcb_edit_frame.h>
 #include <macros.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/ui_common.h>
 #include <widgets/wx_grid.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <algorithm>
+
+
 
 
 #define COL_LABEL 0

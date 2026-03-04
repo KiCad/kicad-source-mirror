@@ -38,22 +38,22 @@
 #include "../3d_viewer/eda_3d_viewer_settings.h"
 
 #include <layer_ids.h>
-#include <pad.h>
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
-#include <zone.h>
-#include <footprint.h>
 #include <reporter.h>
 #include <dialogs/dialog_color_picker.h>
 
 class COLOR_SETTINGS;
+class FOOTPRINT;
+class PAD;
 class PCB_BARCODE;
 class PCB_TEXTBOX;
 class PCB_TRACK;
+class ZONE;
 
 /// A type that stores a container of 2d objects for each layer id
 typedef std::map<PCB_LAYER_ID, BVH_CONTAINER_2D*> MAP_CONTAINER_2D_BASE;

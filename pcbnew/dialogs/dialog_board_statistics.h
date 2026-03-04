@@ -26,16 +26,11 @@
 #ifndef _DIALOG_BOARD_STATISTICS_H
 #define _DIALOG_BOARD_STATISTICS_H
 
-
-#include <board.h>
-#include <footprint.h>
 #include <dialog_board_statistics_base.h>
-#include <board_statistics.h>
 #include <board_statistics_report.h>
-#include <pcb_base_frame.h>
-#include <pcb_edit_frame.h>
-#include <project.h>
-#include <wx/datetime.h>
+
+
+class PCB_EDIT_FRAME;
 
 /**
  * Dialog to show common board info.

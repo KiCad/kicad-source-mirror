@@ -43,6 +43,7 @@
 #include <widgets/wx_listbox.h>
 #include <widgets/wx_aui_utils.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pad.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>
@@ -1086,4 +1087,3 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_VIEWER_FRAME::GetModel() const
 {
     return GetBoard()->GetFirstFootprint();
 }
-

@@ -30,6 +30,7 @@
 #include <component_classes/component_class_manager.h>
 #include <footprint.h>
 #include <lset.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>

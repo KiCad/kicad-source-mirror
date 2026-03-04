@@ -26,11 +26,16 @@
 #include "dialog_board_reannotate.h"
 
 #include <algorithm>
+
+#include <wx/tokenzr.h>
+#include <wx/valtext.h>
+
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <confirm.h>
 #include <ctype.h>
+#include <footprint.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>  // StrNumCmp
 #include <kiface_base.h>
@@ -39,8 +44,6 @@
 #include <richio.h>
 #include <tool/grid_menu.h>
 #include <widgets/wx_html_report_panel.h>
-#include <wx/tokenzr.h>
-#include <wx/valtext.h>
 
 
 bool g_SortYFirst;

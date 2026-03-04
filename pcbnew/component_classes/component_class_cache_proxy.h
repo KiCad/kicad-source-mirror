@@ -23,7 +23,8 @@
 
 #include <component_classes/component_class.h>
 #include <component_classes/component_class_manager.h>
-#include <footprint.h>
+
+class FOOTPRINT;
 
 /*
  * A class which acts as a cache-aware proxy for a FOOTPRINT's component class.

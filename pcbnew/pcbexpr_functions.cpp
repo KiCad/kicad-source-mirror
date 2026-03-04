@@ -25,13 +25,17 @@
 #include <cstdio>
 #include <memory>
 #include <mutex>
+
 #include <wx/log.h>
+
 #include <board.h>
 #include <board_design_settings.h>
 #include <component_classes/component_class.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_engine.h>
+#include <footprint.h>
 #include <lset.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <geometry/shape_segment.h>

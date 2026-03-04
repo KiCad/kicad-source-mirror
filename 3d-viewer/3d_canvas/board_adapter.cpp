@@ -34,6 +34,7 @@
 #include <3d_rendering/raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
 #include <dialogs/dialog_color_picker.h>
+#include <footprint.h>
 #include <layer_range.h>
 #include <3d_math.h>
 #include "3d_fastmath.h"

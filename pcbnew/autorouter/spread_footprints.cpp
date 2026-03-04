@@ -34,9 +34,12 @@
  * their selection.
  */
 
-#include <spread_footprints.h>
+#include "spread_footprints.h"
+
 #include <optional>
 #include <algorithm>
+
+#include <footprint.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
 #include <confirm.h>

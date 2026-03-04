@@ -28,9 +28,10 @@
 #define _DIALOG_PAD_PROPERTIES_H_
 
 #include <pcb_base_frame.h>
+
 #include <wx/valnum.h>
+
 #include <board.h>
-#include <footprint.h>
 #include <padstack.h>
 #include <pcb_shape.h>
 #include <origin_viewitem.h>
@@ -39,6 +40,8 @@
 #include <pcb_draw_panel_gal.h>
 #include <widgets/unit_binder.h>
 #include <widgets/margin_offset_binder.h>
+
+class PAD;
 
 /**
  * DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,

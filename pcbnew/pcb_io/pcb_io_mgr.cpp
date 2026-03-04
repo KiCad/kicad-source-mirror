@@ -26,6 +26,7 @@
 #include <wx/uri.h>
 
 #include <config.h>
+#include <footprint.h>
 #include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
 #include <libraries/library_table.h>

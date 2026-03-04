@@ -25,6 +25,8 @@
 
 #include <wx/log.h>
 
+#include "footprint.h"
+#include "pad.h"
 #include "pcb_shape.h"
 #include "odb_defines.h"
 #include "pcb_track.h"

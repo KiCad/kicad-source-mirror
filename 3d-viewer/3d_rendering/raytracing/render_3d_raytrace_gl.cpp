@@ -30,10 +30,13 @@
 #include <chrono>
 #include <thread>
 
+#include <wx/log.h>
+
 #include "render_3d_raytrace_gl.h"
 #include "../common_ogl/ogl_utils.h"
+
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
-#include <wx/log.h>
+#include <eda_3d_canvas.h>
 
 
 RENDER_3D_RAYTRACE_GL::RENDER_3D_RAYTRACE_GL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,

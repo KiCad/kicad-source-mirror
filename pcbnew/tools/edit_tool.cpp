@@ -43,6 +43,7 @@
 #include <pcb_table.h>
 #include <pcb_generator.h>
 #include <zone.h>
+#include <pad.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
