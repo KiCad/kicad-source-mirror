@@ -23,21 +23,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "tracks_cleaner.h"
+
 #include <atomic>
 #include <bit>
 
-#include <reporter.h>
 #include <board_commit.h>
 #include <cleanup_item.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
+#include <drc/drc_rtree.h>
+#include <reporter.h>
 #include <thread_pool.h>
 #include <lset.h>
+#include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/global_edit_tool.h>
-#include <drc/drc_rtree.h>
-#include <tracks_cleaner.h>
+
 
 TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit ) :
         m_brd( aPcb ),

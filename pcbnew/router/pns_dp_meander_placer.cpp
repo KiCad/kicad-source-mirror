@@ -21,6 +21,10 @@
 
 #include <optional>
 
+#include <core/typeinfo.h>
+
+#include <board_connected_item.h>
+
 #include "pns_node.h"
 #include "pns_itemset.h"
 #include "pns_topology.h"
@@ -28,6 +32,7 @@
 #include "pns_diff_pair.h"
 #include "pns_router.h"
 #include "pns_solid.h"
+
 
 namespace PNS {
 

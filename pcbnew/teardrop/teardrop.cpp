@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "teardrop/teardrop.h"
 
 #include <confirm.h>
 
@@ -32,7 +33,6 @@
 #include <board_commit.h>
 
 #include <connectivity/connectivity_data.h>
-#include <teardrop/teardrop.h>
 #include <drc/drc_rtree.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/rtree.h>
@@ -530,5 +530,3 @@ void TEARDROP_MANAGER::AddTeardropsOnTracks( BOARD_COMMIT& aCommit,
         }
     }
 }
-
-

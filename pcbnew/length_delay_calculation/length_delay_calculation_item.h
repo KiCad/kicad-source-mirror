@@ -27,7 +27,7 @@
 #include <geometry/shape_line_chain.h>
 #include <layer_ids.h>
 #include <pad.h>
-#include <pcb_track.h>
+#include <pcb_track_types.h>
 
 /**
  * Lightweight class which holds a pad, via, or a routed trace outline.  Proxied objects passed by pointer are not

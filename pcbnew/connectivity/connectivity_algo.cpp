@@ -36,6 +36,7 @@
 #include <board_commit.h>
 #include <thread_pool.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
 
 #include <wx/log.h>
 

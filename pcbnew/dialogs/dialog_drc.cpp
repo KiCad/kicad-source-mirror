@@ -40,6 +40,7 @@
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_marker.h>
+#include <pcb_track.h>
 #include <pgm_base.h>
 #include <wx/app.h>
 #include <wx/filedlg.h>

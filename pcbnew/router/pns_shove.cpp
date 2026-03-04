@@ -21,9 +21,12 @@
 
 #include <deque>
 #include <cassert>
-#include <math/box2.h>
 
 #include <wx/log.h>
+
+#include <math/box2.h>
+
+#include <board_item.h>
 
 #include "pns_arc.h"
 #include "pns_line.h"
@@ -234,7 +237,7 @@ LINE SHOVE::assembleLine( const LINKED_ITEM* aSeg, int* aIndex, bool aPreCleanup
 // line wraps around the start of the "pusher", it's likely shoved in wrong direction.
 
 // Update: there's no concept of an orientation of an open curve...
-// Update 2: Tom has learnt a bit more geometry and understood we may need another 
+// Update 2: Tom has learnt a bit more geometry and understood we may need another
 // heuristic/external hint here: We've always assumed it's the last point of the head line is the
 // "pusher", but dragging a trace corner (instead of routing)
 bool SHOVE::checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine,
@@ -251,7 +254,7 @@ bool SHOVE::checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine
     {
         cp = aCurLine.CPoint( -1 );
     }
-    
+
     SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( cp );
     checker.AddPolyline( aObstacleLine.CLine() );
     checker.AddPolyline( aShovedLine.CLine().Reverse() );
@@ -2655,4 +2658,3 @@ const VIA_HANDLE SHOVE::GetModifiedHeadVia( int aIndex ) const
 
 
 }
-

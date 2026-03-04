@@ -37,6 +37,7 @@
 #include <kiid.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <zone_filler.h>
 #include <length_delay_calculation/length_delay_calculation.h>
@@ -48,6 +49,22 @@
 #define CHECK_ENUM_CLASS_EQUAL( L, R )                                                      \
     BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
 
+
+// Test printer for VIACLASS
+void boost::test_tools::tt_detail::print_log_value<VIATYPE>::operator()( std::ostream& os, const VIATYPE& viaType ) const
+{
+    // clang-format off
+    switch( viaType )
+    {
+        case VIATYPE::THROUGH:      os << "THROUGH";        break;
+        case VIATYPE::BLIND:        os << "BLIND";          break;
+        case VIATYPE::BURIED:       os << "BURIED";         break;
+        case VIATYPE::MICROVIA:     os << "MICROVIA";       break;
+        default:
+            os << "UNKNOWN_VIA_TYPE(" << static_cast<int>( viaType ) << ")";
+    }
+    // clang-format on
+}
 
 namespace KI_TEST
 {

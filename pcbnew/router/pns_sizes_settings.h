@@ -25,7 +25,9 @@
 #include <map>
 #include <optional>
 
-#include "pcb_track.h" // for VIATYPE_T
+#include <wx/string.h>
+
+#include <pcb_track_types.h> // for VIATYPE_T
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;

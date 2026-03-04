@@ -19,6 +19,9 @@
  */
 
 #include "pns_multi_dragger.h"
+
+#include <core/typeinfo.h>
+
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 #include "pns_walkaround.h"
@@ -744,7 +747,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
             primaryDragged->SetSnapThreshhold( snapThreshold );
             primaryDragged->DragCorner( aP, primaryDragged->PointCount() - 1, false );
 
-         
+
             if( primaryDragged->SegmentCount() > 0 )
             {
                 SEG lastPrimDrag = primaryDragged->CSegment( -1 );
@@ -760,11 +763,11 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         lastPrimDrag = lastPreDrag;
                     }
                 }
-            
+
                 perp = (lastPrimDrag.B - lastPrimDrag.A).Perpendicular();
                 primaryLastSegDir = DIRECTION_45( lastPrimDrag );
 
-                
+
                 PNS_DBG( Dbg(), AddItem, &(*primaryDragged), LIGHTGRAY, 100000, "prim" );
                 PNS_DBG( Dbg(), AddShape, SEG(lastPrimDrag.B, lastPrimDrag.B + perp), LIGHTGRAY, 100000, wxString::Format("prim-perp-seg") );
             } else {

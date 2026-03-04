@@ -22,11 +22,11 @@
 
 #include <board_statistics.h>
 #include <units_provider.h>
+#include <pcb_track_types.h>
 
 #include <vector>
 
 class BOARD;
-enum class VIATYPE : int;
 
 struct BOARD_STATISTICS_OPTIONS
 {

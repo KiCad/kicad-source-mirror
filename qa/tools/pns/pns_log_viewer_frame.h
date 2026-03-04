@@ -29,7 +29,9 @@
 #define __PNS_LOG_VIEWER_FRAME_H
 
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <pad.h>
 #include <pcb_painter.h>
+#include <pcb_track.h>
 #include <pcb_test_frame.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <reporter.h>

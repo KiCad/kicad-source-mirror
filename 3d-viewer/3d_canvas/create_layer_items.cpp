@@ -23,6 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <vector>
+#include <thread>
+#include <algorithm>
+#include <atomic>
+
+#include <wx/log.h>
+
 #include "board_adapter.h"
 #include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
 #include "raytracing/shapes2D/triangle_2d.h"
@@ -32,12 +39,9 @@
 #include <lset.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
-#include <vector>
-#include <thread>
-#include <algorithm>
-#include <atomic>
-#include <wx/log.h>
 #include <pcb_barcode.h>
+#include <pcb_shape.h>
+#include <pcb_track.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <core/profile.h>

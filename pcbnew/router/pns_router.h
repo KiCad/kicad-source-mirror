@@ -31,6 +31,11 @@
 #include "pns_sizes_settings.h"
 #include "pns_node.h"
 
+#include <layer_ids.h>
+
+
+class NETCLASS;
+
 namespace KIGFX
 {
 

@@ -19,10 +19,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "pns_meander_skew_placer.h"
+
+#include <core/typeinfo.h>
+#include <board_connected_item.h>
+
 #include "pns_node.h"
 #include "pns_itemset.h"
 #include "pns_topology.h"
-#include "pns_meander_skew_placer.h"
 #include "pns_solid.h"
 
 #include "pns_router.h"

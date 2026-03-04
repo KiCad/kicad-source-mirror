@@ -29,7 +29,6 @@
 
 #include <board.h>
 #include <footprint.h>
-#include <pcb_track.h>
 #include <dialog_board_statistics_base.h>
 #include <board_statistics.h>
 #include <board_statistics_report.h>

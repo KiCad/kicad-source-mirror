@@ -33,7 +33,9 @@
 #include <font/font.h>
 #include <hash_eda.h>
 #include <pcb_dimension.h>
+#include <pcb_shape.h>
 #include <pcb_textbox.h>
+#include <pcb_track.h>
 #include <pgm_base.h>
 #include <progress_reporter.h>
 #include <settings/settings_manager.h>

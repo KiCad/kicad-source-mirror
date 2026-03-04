@@ -862,4 +862,3 @@ private:
     double m_creepageTarget;
     double m_creepageTargetSquared;
 };
-

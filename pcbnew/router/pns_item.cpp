@@ -27,6 +27,9 @@
 #include <geometry/shape_compound.h>
 #include <geometry/shape_poly_set.h>
 
+#include <board_item.h>
+
+
 typedef VECTOR2I::extended_type ecoord;
 
 namespace PNS {

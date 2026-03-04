@@ -30,6 +30,11 @@
 #include <connectivity/connectivity_items.h>
 #include <trigo.h>
 
+#include <footprint.h>
+#include <pad.h>
+#include <pcb_shape.h>
+#include <pcb_track.h>
+
 #include <wx/log.h>
 
 int CN_ITEM::AnchorCount() const

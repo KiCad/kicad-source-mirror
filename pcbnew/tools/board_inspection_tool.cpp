@@ -48,6 +48,7 @@
 #include <widgets/footprint_diff_widget.h>
 #include <drc/drc_item.h>
 #include <pad.h>
+#include <pcb_track.h>
 #include <project_pcb.h>
 #include <view/view_controls.h>
 

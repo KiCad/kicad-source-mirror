@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <zone.h>
 #include <pcb_edit_frame.h>
+#include <pcb_track.h>
 #include <pcbnew_id.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>

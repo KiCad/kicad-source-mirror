@@ -20,9 +20,10 @@
  */
 
 #include <chrono>
-#include <advanced_config.h>
 #include <optional>
 
+#include <advanced_config.h>
+#include <core/typeinfo.h>
 #include <geometry/shape_line_chain.h>
 
 #include "pns_walkaround.h"
@@ -402,4 +403,3 @@ void WALKAROUND::SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies)
 }
 
 }
-

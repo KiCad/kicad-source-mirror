@@ -36,6 +36,7 @@
 
 #include <gal/color4d.h>
 
+#include <layer_ids.h>
 #include <eda_item.h>
 
 namespace PNS {

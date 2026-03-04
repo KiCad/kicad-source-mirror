@@ -26,8 +26,12 @@
 
 #include <core/kicad_algo.h>
 #include <algorithm>
+
+#include <wx/log.h>
+
 #include "pns_item.h"
 #include "pns_linked_item.h"
+
 
 namespace PNS
 {

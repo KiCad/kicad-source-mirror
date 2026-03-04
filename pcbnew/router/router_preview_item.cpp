@@ -19,16 +19,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <deque>
-#include <gal/color4d.h>
+#include "router_preview_item.h"
 
+#include <deque>
+
+#include <board_item.h>
+#include <board_connected_item.h>
+#include <gal/color4d.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <pcb_painter.h>
 #include <trigo.h>
-
-#include "router_preview_item.h"
 
 #include "pns_arc.h"
 #include "pns_line.h"

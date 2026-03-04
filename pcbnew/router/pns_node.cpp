@@ -29,6 +29,7 @@
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
+#include <pcb_track.h>
 #include <zone.h>
 
 #include <wx/log.h>
@@ -1855,4 +1856,3 @@ VIA* NODE::FindViaByHandle ( const VIA_HANDLE& handle ) const
 }
 
 }
-

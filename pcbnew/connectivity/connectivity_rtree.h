@@ -24,6 +24,7 @@
 #ifndef PCBNEW_CONNECTIVITY_RTREE_H_
 #define PCBNEW_CONNECTIVITY_RTREE_H_
 
+#include <layer_ids.h>
 #include <math/box2.h>
 #include <router/pns_layerset.h>
 

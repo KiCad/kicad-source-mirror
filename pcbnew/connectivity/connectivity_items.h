@@ -29,13 +29,6 @@
 #ifndef PCBNEW_CONNECTIVITY_ITEMS_H
 #define PCBNEW_CONNECTIVITY_ITEMS_H
 
-#include <board.h>
-#include <pad.h>
-#include <footprint.h>
-#include <pcb_track.h>
-#include <pcb_shape.h>
-#include <zone.h>
-
 #include <geometry/shape_poly_set.h>
 
 #include <algorithm>
@@ -50,6 +43,7 @@
 
 class CN_ITEM;
 class CN_CLUSTER;
+class PCB_SHAPE;
 
 
 /**

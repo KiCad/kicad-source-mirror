@@ -50,6 +50,7 @@ class BOARD_ITEM;
 class ZONE;
 class RN_DATA;
 class RN_NET;
+class PCB_ARC;
 class PCB_TRACK;
 class PCB_VIA;
 class PAD;

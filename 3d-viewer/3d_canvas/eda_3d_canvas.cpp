@@ -40,6 +40,7 @@
 #include <board.h>
 #include <pad.h>
 #include <pcb_field.h>
+#include <pcb_track.h>
 #include <reporter.h>
 #include <widgets/wx_infobar.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility

@@ -20,11 +20,15 @@
  */
 
 #include "pns_logger.h"
-#include "pns_item.h"
-#include "pns_via.h"
 
 #include <wx/log.h>
 #include <wx/tokenzr.h>
+
+#include <board_item.h>
+
+#include "pns_item.h"
+#include "pns_via.h"
+
 
 namespace PNS {
 

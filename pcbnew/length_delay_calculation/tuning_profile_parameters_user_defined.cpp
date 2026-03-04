@@ -21,9 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "length_delay_calculation/tuning_profile_parameters_user_defined.h"
+
 #include <board.h>
 #include <length_delay_calculation/length_delay_calculation.h>
-#include <length_delay_calculation/tuning_profile_parameters_user_defined.h>
+#include <pcb_track.h>
 #include <project/project_file.h>
 
 

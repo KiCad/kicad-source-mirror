@@ -18,8 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/crt.h>
 #include <wx/dir.h>
+#include <wx/zipstrm.h>
+#include <wx/filename.h>
 #include <wx/tokenzr.h>
+#include <wx/wfstream.h>
+
+#include <nlohmann/json.hpp>
+
 #include "pcbnew_jobs_handler.h"
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -50,7 +57,6 @@
 #include <jobs/job_pcb_drc.h>
 #include <jobs/job_pcb_import.h>
 #include <jobs/job_pcb_upgrade.h>
-#include <nlohmann/json.hpp>
 #include <eda_units.h>
 #include <lset.h>
 #include <cli/exit_codes.h>
@@ -61,7 +67,6 @@
 #include <plotters/plotters_pslike.h>
 #include <tool/tool_manager.h>
 #include <tools/drc_tool.h>
-#include <wx/crt.h>
 #include <filename_resolver.h>
 #include <gerber_jobfile_writer.h>
 #include "gerber_placefile_writer.h"
@@ -81,6 +86,7 @@
 #include <pcbplot.h>
 #include <pcb_plotter.h>
 #include <pcb_edit_frame.h>
+#include <pcb_track.h>
 #include <pgm_base.h>
 #include <3d_rendering/raytracing/render_3d_raytrace_ram.h>
 #include <3d_rendering/track_ball.h>
@@ -90,9 +96,6 @@
 #include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
-#include <wx/filename.h>
 #include <kiplatform/io.h>
 #include <settings/settings_manager.h>
 #include <dialogs/dialog_gendrill.h>
@@ -1733,7 +1736,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF:        mapFormat = PLOT_FORMAT::PDF;    break;
     }
 
-    
+
     if( aDrillJob->m_generateReport && aDrillJob->m_reportPath.IsEmpty() )
     {
         wxFileName fn = outPath;

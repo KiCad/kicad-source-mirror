@@ -21,12 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <length_delay_calculation/length_delay_calculation.h>
+#include "length_delay_calculation/length_delay_calculation.h"
+
+#include <wx/log.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <geometry/geometry_utils.h>
-#include <wx/log.h>
+#include <pcb_track.h>
 
 
 bool LENGTH_DELAY_CALCULATION::findArcPadIntersection( const SHAPE_ARC&                       aArc,

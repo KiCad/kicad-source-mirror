@@ -25,12 +25,12 @@
 #define KICAD_TRACKS_CLEANER_H
 
 #include <mutex>
-#include <pcb_track.h>
 #include <board.h>
 
 class BOARD_COMMIT;
 class CLEANUP_ITEM;
 class REPORTER;
+class PCB_TRACK;
 
 
 // Helper class used to clean tracks and vias

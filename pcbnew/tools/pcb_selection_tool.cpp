@@ -37,6 +37,7 @@ using namespace std::placeholders;
 #include <pcb_point.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
+#include <pcb_track.h>
 #include <pcb_marker.h>
 #include <pcb_generator.h>
 #include <pcb_base_edit_frame.h>

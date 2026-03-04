@@ -22,6 +22,10 @@
 #include <optional>
 #include <memory>
 
+#include <wx/log.h>
+
+#include <board_item.h>
+
 #include "pns_arc.h"
 #include "pns_debug_decorator.h"
 #include "pns_line_placer.h"
@@ -33,7 +37,6 @@
 #include "pns_walkaround.h"
 #include "pns_mouse_trail_tracer.h"
 
-#include <wx/log.h>
 
 namespace PNS {
 
@@ -2186,4 +2189,3 @@ int FIXED_TAIL::StageCount() const
 }
 
 }
-

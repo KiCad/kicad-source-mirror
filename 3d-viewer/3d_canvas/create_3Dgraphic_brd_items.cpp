@@ -40,6 +40,7 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
+#include <pcb_track.h>
 #include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>

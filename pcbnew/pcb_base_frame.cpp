@@ -50,6 +50,7 @@
 #include <pcbnew_settings.h>
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
+#include <pcb_track.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
 #include <trace_helpers.h>

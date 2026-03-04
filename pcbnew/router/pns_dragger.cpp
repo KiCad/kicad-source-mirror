@@ -19,13 +19,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pns_arc.h"
-
 #include "pns_dragger.h"
+
+#include <core/typeinfo.h>
+
+#include "pns_arc.h"
 #include "pns_shove.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 #include "pns_walkaround.h"
+
 
 namespace PNS {
 

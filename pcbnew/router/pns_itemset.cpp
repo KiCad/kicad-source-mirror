@@ -20,6 +20,9 @@
  */
 
 #include "pns_itemset.h"
+
+#include <core/typeinfo.h>
+
 #include "pns_line.h"
 #include "pns_segment.h"
 

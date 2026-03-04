@@ -28,7 +28,8 @@
 #include <math/box2.h>
 #include <optional>
 
-#include "pcb_track.h"
+#include <pcb_track_types.h>
+#include <padstack.h>
 
 #include "pns_item.h"
 #include "pns_linked_item.h"

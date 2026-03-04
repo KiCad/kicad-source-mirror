@@ -20,8 +20,10 @@
     * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
     */
 
-#include <drc/drc_creepage_utils.h>
+#include "drc/drc_creepage_utils.h"
+
 #include <geometry/intersection.h>
+#include <pcb_track.h>
 #include <thread_pool.h>
 
 

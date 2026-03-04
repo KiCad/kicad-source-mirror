@@ -23,8 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/3d/camera.h>
 #include "board_adapter.h"
+
+#include <wx/log.h>
+
+#include <gal/3d/camera.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -39,7 +42,7 @@
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <wx/log.h>
+#include <pcb_track.h>
 #include <pcbnew_settings.h>
 #include <advanced_config.h>
 
