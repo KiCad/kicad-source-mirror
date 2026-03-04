@@ -2956,7 +2956,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
                 layerMappings[layerName.ToStdString()] = {
                     { "kicad_layer", LSET::Name( layer ).ToStdString() },
-                    { "method", job->m_autoMap ? "auto" : "manual" }
+                    { "method", "auto" }
                 };
             }
 

@@ -28,8 +28,6 @@
 
 
 #define ARG_FORMAT "--format"
-#define ARG_LAYER_MAP "--layer-map"
-#define ARG_AUTO_MAP "--auto-map"
 #define ARG_REPORT_FORMAT "--report-format"
 #define ARG_REPORT_FILE "--report-file"
 
@@ -46,15 +44,6 @@ CLI::PCB_IMPORT_COMMAND::PCB_IMPORT_COMMAND() : COMMAND( "import" )
             .help( UTF8STDSTR( _( "Input format hint: auto, pads, altium, eagle, cadstar, "
                                   "fabmaster, pcad, solidworks (default: auto)" ) ) )
             .metavar( "FORMAT" );
-
-    m_argParser.add_argument( ARG_LAYER_MAP )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "JSON file with layer name mappings" ) ) )
-            .metavar( "FILE" );
-
-    m_argParser.add_argument( ARG_AUTO_MAP )
-            .help( UTF8STDSTR( _( "Use automatic layer mapping (default behavior)" ) ) )
-            .flag();
 
     m_argParser.add_argument( ARG_REPORT_FORMAT )
             .default_value( std::string( "none" ) )
@@ -114,11 +103,6 @@ int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
         wxFprintf( stderr, _( "Invalid format: %s\n" ), format );
         return EXIT_CODES::ERR_ARGS;
     }
-
-    wxString layerMapFile = From_UTF8( m_argParser.get<std::string>( ARG_LAYER_MAP ).c_str() );
-    importJob->m_layerMapFile = layerMapFile;
-
-    importJob->m_autoMap = m_argParser.get<bool>( ARG_AUTO_MAP ) || layerMapFile.IsEmpty();
 
     wxString reportFormat = From_UTF8( m_argParser.get<std::string>( ARG_REPORT_FORMAT ).c_str() );
 

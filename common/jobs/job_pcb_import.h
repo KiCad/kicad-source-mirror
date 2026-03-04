@@ -58,8 +58,6 @@ public:
 
     wxString      m_inputFile;
     FORMAT        m_format = FORMAT::AUTO;
-    wxString      m_layerMapFile;
-    bool          m_autoMap = true;
     REPORT_FORMAT m_reportFormat = REPORT_FORMAT::NONE;
     wxString      m_reportFile;
 };
