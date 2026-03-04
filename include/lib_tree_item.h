@@ -63,6 +63,9 @@ public:
      */
     virtual bool IsRoot() const { return true; }
 
+    /// For symbols that could be a power symbol
+    virtual bool IsPowerSymbol() const { return false; }
+
     /**
      * For items with footprint fields.
      */

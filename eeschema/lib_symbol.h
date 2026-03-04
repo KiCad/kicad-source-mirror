@@ -267,6 +267,9 @@ public:
     bool IsPower() const override;
     bool IsNormal() const override;
 
+    // LIB_TREE_ITEM interface
+    bool IsPowerSymbol() const override { return IsPower(); }
+
     void SetGlobalPower();
     void SetLocalPower();
     void SetNormal();

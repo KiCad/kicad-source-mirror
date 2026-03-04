@@ -145,6 +145,7 @@ public:
     LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
     int         m_Unit;        // Actual unit, or zero
     bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
+    bool        m_IsPower;     // Indicates if the symbol is a local or global power symbol
 
     bool        m_IsRecentlyUsedGroup;
     bool        m_IsAlreadyPlacedGroup;

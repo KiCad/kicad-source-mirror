@@ -143,6 +143,7 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       m_PinCount( 0 ),
       m_Unit( 0 ),
       m_IsRoot( false ),
+      m_IsPower( false ),
       m_IsRecentlyUsedGroup( false ),
       m_IsAlreadyPlacedGroup( false )
 {}
@@ -193,6 +194,7 @@ LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     m_sourceSearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
+    m_IsPower = aItem->IsPowerSymbol();
 
     if( aItem->GetSubUnitCount() > 1 )
     {
@@ -223,6 +225,7 @@ void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
     m_sourceSearchTerms = aItem->GetSearchTerms();
 
     m_IsRoot = aItem->IsRoot();
+    m_IsPower = aItem->IsPowerSymbol();
     m_Children.clear();
 
     for( int u = 1; u <= aItem->GetSubUnitCount(); ++u )
