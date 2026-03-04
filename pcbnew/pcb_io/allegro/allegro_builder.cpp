@@ -4064,67 +4064,34 @@ void BOARD_BUILDER::createBoardText()
 }
 
 
-void BOARD_BUILDER::createZones()
+/**
+ * Merges zones with identical outlines snd nets on different layers into single multi-layer zones.
+ *
+ * The merged zones (and any non-identical zones) are returned, the zones merged from are destroyed,
+ */
+static std::vector<std::unique_ptr<ZONE>> MergeZones( std::vector<std::unique_ptr<ZONE>> aZones, const BOARD& aBoard )
 {
-    wxLogTrace( traceAllegroBuilder, "Creating zones from m_LL_Shapes and m_LL_0x24_0x28" );
+    std::vector<std::unique_ptr<ZONE>> deduplicatedZones;
+    size_t                             mergedCount = 0;
+    size_t                             originalCount = aZones.size();
+    std::vector<bool>                  merged( aZones.size(), false );
 
-    int boundaryCount = 0;
-    int mergedCount = 0;
-    int keepoutCount = 0;
-
-    std::vector<std::unique_ptr<ZONE>> boundaryZones;
-
-    // Walk m_LL_Shapes to find BOUNDARY shapes (zone outlines).
-    // BOUNDARY shapes use class 0x15 with copper layer subclass indices.
-    const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_Shapes, m_brdDb );
-
-    for( const BLOCK_BASE* block : shapeWalker )
-    {
-        if( block->GetBlockType() != 0x28 )
-            continue;
-
-        const BLK_0x28_SHAPE& shapeData =
-                static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
-
-        if( shapeData.m_Layer.m_Class != LAYER_INFO::CLASS::BOUNDARY )
-            continue;
-
-        std::unique_ptr<ZONE> zone = buildZone( *block, getShapeRelatedBlocks( shapeData ) );
-
-        if( zone )
-        {
-            wxLogTrace( traceAllegroBuilder, "  Zone %#010x net=%d layer=%s (subclass=%#04x)", shapeData.m_Key,
-                        zone->GetNetCode(), m_board.GetLayerName( zone->GetFirstLayer() ),
-                        shapeData.m_Layer.m_Subclass );
-
-            zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
-            boundaryZones.push_back( std::move( zone ) );
-            boundaryCount++;
-        }
-    }
-
-    // Merge zones with identical polygons and same net into multi-layer zones.
-    // Allegro often defines the same zone outline on multiple copper layers (e.g.
-    // a ground pour spanning all layers). KiCad represents this as a single zone
-    // with multiple fill layers.
-    std::vector<bool> merged( boundaryZones.size(), false );
-
-    for( size_t i = 0; i < boundaryZones.size(); i++ )
+    for( size_t i = 0; i < aZones.size(); i++ )
     {
         if( merged[i] )
             continue;
 
-        ZONE*                                            primary = boundaryZones[i].get();
+        ZONE*                                            primary = aZones[i].get();
         const SHAPE_POLY_SET::POLYGON&                   primaryPolygon = primary->Outline()->CPolygon( 0 );
         LSET                                             layers = primary->GetLayerSet();
         std::unordered_map<PCB_LAYER_ID, SHAPE_POLY_SET> mergedFills;
 
-        for( size_t j = i + 1; j < boundaryZones.size(); j++ )
+        for( size_t j = i + 1; j < aZones.size(); j++ )
         {
             if( merged[j] )
                 continue;
 
-            ZONE* candidate = boundaryZones[j].get();
+            ZONE* candidate = aZones[j].get();
 
             if( candidate->GetNetCode() != primary->GetNetCode() )
                 continue;
@@ -4163,8 +4130,8 @@ void BOARD_BUILDER::createZones()
                 mergedCount++;
 
                 wxLogTrace( traceAllegroBuilder, "  Merging zone on %s into zone on %s (net %d)",
-                            m_board.GetLayerName( candidate->GetFirstLayer() ),
-                            m_board.GetLayerName( primary->GetFirstLayer() ), primary->GetNetCode() );
+                            aBoard.GetLayerName( candidate->GetFirstLayer() ),
+                            aBoard.GetLayerName( primary->GetFirstLayer() ), primary->GetNetCode() );
             }
         }
 
@@ -4185,14 +4152,69 @@ void BOARD_BUILDER::createZones()
             primary->SetIsFilled( true );
         }
 
-        m_board.Add( boundaryZones[i].release(), ADD_MODE::APPEND );
+        // Keep this zone
+        deduplicatedZones.push_back( std::move( aZones[i] ) );
     }
 
     if( mergedCount > 0 )
     {
         wxLogTrace( traceAllegroBuilder,
-                    "  Merged %d zones into multi-layer zones (%d zones remain from %d)",
-                    mergedCount, boundaryCount - mergedCount, boundaryCount );
+                    "  Merged %zu zones into multi-layer zones (%zu zones remain from %zu)",
+                    mergedCount, originalCount - mergedCount, originalCount );
+    }
+
+    return deduplicatedZones;
+}
+
+
+template <std::derived_from<BOARD_ITEM> T>
+void BulkAddToBoard( BOARD& aBoard, std::vector<std::unique_ptr<T>>&& aItems )
+{
+    std::vector<BOARD_ITEM*> rawPointers;
+    rawPointers.reserve( aItems.size() );
+
+    for( std::unique_ptr<T>& item : aItems )
+    {
+        rawPointers.push_back( item.get() );
+        aBoard.Add( item.release(), ADD_MODE::BULK_APPEND );
+    }
+
+    aBoard.FinalizeBulkAdd( rawPointers );
+}
+
+
+void BOARD_BUILDER::createZones()
+{
+    wxLogTrace( traceAllegroBuilder, "Creating zones from m_LL_Shapes and m_LL_0x24_0x28" );
+
+    std::vector<std::unique_ptr<ZONE>> boundaryZones;
+    std::vector<std::unique_ptr<ZONE>> keepoutZones;
+
+    // Walk m_LL_Shapes to find BOUNDARY shapes (zone outlines).
+    // BOUNDARY shapes use class 0x15 with copper layer subclass indices.
+    const LL_WALKER shapeWalker( m_brdDb.m_Header->m_LL_Shapes, m_brdDb );
+
+    for( const BLOCK_BASE* block : shapeWalker )
+    {
+        if( block->GetBlockType() != 0x28 )
+            continue;
+
+        const BLK_0x28_SHAPE& shapeData = static_cast<const BLOCK<BLK_0x28_SHAPE>&>( *block ).GetData();
+
+        if( shapeData.m_Layer.m_Class != LAYER_INFO::CLASS::BOUNDARY )
+            continue;
+
+        std::unique_ptr<ZONE> zone = buildZone( *block, getShapeRelatedBlocks( shapeData ) );
+
+        if( zone )
+        {
+            wxLogTrace( traceAllegroBuilder, "  Zone %#010x net=%d layer=%s (subclass=%#04x)", shapeData.m_Key,
+                        zone->GetNetCode(), m_board.GetLayerName( zone->GetFirstLayer() ),
+                        shapeData.m_Layer.m_Subclass );
+
+            zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+            boundaryZones.push_back( std::move( zone ) );
+        }
     }
 
     // Walk m_LL_0x24_0x28 for keepout/in shapes
@@ -4236,14 +4258,25 @@ void BOARD_BUILDER::createZones()
 
         if( zone )
         {
-            m_board.Add( zone.release(), ADD_MODE::APPEND );
-            keepoutCount++;
+            keepoutZones.push_back( std::move( zone ) );
         }
     }
 
-    wxLogTrace( traceAllegroBuilder,
-                "Created %d zone outlines (%d merged), %d keepout areas",
-                boundaryCount - mergedCount, mergedCount, keepoutCount );
+    int keepoutCount = keepoutZones.size();
+    int boundaryCount = boundaryZones.size();
+
+    // Merge zones with identical polygons and same net into multi-layer zones.
+    // Allegro often defines the same zone outline on multiple copper layers (e.g.
+    // a ground pour spanning all layers). KiCad represents this as a single zone
+    // with multiple fill layers.
+    std::vector<std::unique_ptr<ZONE>> mergedZones = MergeZones( std::move( boundaryZones ), m_board );
+    int                                mergedCount = mergedZones.size();
+
+    BulkAddToBoard( m_board, std::move( mergedZones ) );
+    BulkAddToBoard( m_board, std::move( keepoutZones ) );
+
+    wxLogTrace( traceAllegroBuilder, "Created %d zone outlines (%d merged away), %d keepout areas", mergedCount,
+                boundaryCount - mergedCount, keepoutCount );
 }
 
 
@@ -4340,19 +4373,12 @@ void BOARD_BUILDER::createTables()
             std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
             group->SetName( tableName );
 
-            std::vector<BOARD_ITEM*> bulkAddedItems;
-            bulkAddedItems.reserve( newItems.size() + 1 );
-            bulkAddedItems.push_back( group.get() );
+            for( const auto& item : newItems )
+                group->AddItem( item.get() );
 
-            for( std::unique_ptr<BOARD_ITEM>& newItem : newItems )
-            {
-                m_board.Add( newItem.get(), ADD_MODE::BULK_APPEND );
-                bulkAddedItems.push_back( newItem.get() );
-                group->AddItem( newItem.release() );
-            }
+            newItems.push_back( std::move( group ) );
 
-            m_board.Add( group.release(), ADD_MODE::BULK_APPEND );
-            m_board.FinalizeBulkAdd( bulkAddedItems );
+            BulkAddToBoard( m_board, std::move( newItems ) );
         }
     }
 }
