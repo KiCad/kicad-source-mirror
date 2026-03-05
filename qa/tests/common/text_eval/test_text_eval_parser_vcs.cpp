@@ -64,7 +64,7 @@ struct VCS_TEST_FIXTURE
         m_originalDir = wxGetCwd();
 
         m_tempDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
-                    + wxString::Format( "kicad_vcs_test_%d", wxGetProcessId() );
+                    + wxString::Format( "kicad_vcs_test_%ld", wxGetProcessId() );
 
         wxFileName::Mkdir( m_tempDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
