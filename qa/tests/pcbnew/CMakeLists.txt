@@ -48,6 +48,7 @@ set( QA_PCBNEW_SRCS
     test_graphics_load_save.cpp
     test_graphics_import_mgr.cpp
     test_group_load_save.cpp
+    test_footprint.cpp
     test_footprint_load_save.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp

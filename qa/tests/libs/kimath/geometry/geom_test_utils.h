@@ -33,6 +33,7 @@
 
 #include <qa_utils/numeric.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/geometry/geometry.h>
 
 /**
  * @brief Utility functions for testing geometry functions.
@@ -326,10 +327,6 @@ inline bool SegmentsHaveSameEndPoints( const SEG& aSeg1, const SEG& aSeg2 )
 
 } // namespace GEOM_TEST
 
-
-// Stream printing for geometry types
-
-std::ostream& boost_test_print_type( std::ostream& os, const SHAPE_LINE_CHAIN& c );
 
 // Not clear why boost_test_print_type doesn't work on Debian specifically for this type,
 // but this works on all platforms

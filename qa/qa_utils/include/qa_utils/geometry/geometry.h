@@ -21,14 +21,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef QA_UNIT_TEST_UTILS_GEOM__H
-#define QA_UNIT_TEST_UTILS_GEOM__H
+#pragma once
 
 #include <qa_utils/numeric.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <math/box2.h>
 #include <math/vector2d.h>
+
+class SHAPE_LINE_CHAIN;
 
 
 /**
@@ -40,6 +41,9 @@ std::ostream& boost_test_print_type( std::ostream& os, const BOX2<T>& aBox )
     os << "BOX[ " << aBox.GetOrigin() << " + " << aBox.GetSize() << " ]";
     return os;
 }
+
+// Stream printing for geometry types
+std::ostream& boost_test_print_type( std::ostream& os, const SHAPE_LINE_CHAIN& c );
 
 namespace KI_TEST
 {
@@ -65,6 +69,11 @@ bool IsBoxWithinTol( const BOX& aBox, const BOX& aExp, typename BOX::coord_type 
            && IsVecWithinTol<VEC>( aBox.GetSize(), aExp.GetSize(), aTol * 2 );
 }
 
-} // namespace KI_TEST
+/**
+ * Check that two chains are cyclically equal.
+ *
+ * I.e. [A, B, C] and [B, C, A] are the same.
+ */
+bool ChainsAreCyclicallyEqual( const SHAPE_LINE_CHAIN& aChainA, const SHAPE_LINE_CHAIN& aChainB, int aTol );
 
-#endif // QA_UNIT_TEST_UTILS_GEOM__H
+} // namespace KI_TEST

@@ -26,6 +26,7 @@ set( QA_UTIL_COMMON_SRC
 
     uuid_test_utils.cpp
 
+    geometry/geometry.cpp
     geometry/line_chain_construction.cpp
     geometry/poly_set_construction.cpp
     geometry/seg_construction.cpp

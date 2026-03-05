@@ -2951,17 +2951,21 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     for( PCB_POINT* point : m_points )
         point->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
+    // Swap the courtyard sides, then mirror in the same way as everything else.
+    std::swap( m_courtyard_cache_back, m_courtyard_cache_front );
+    m_courtyard_cache_back.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+
+    m_courtyard_cache_front.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+
+    m_cachedHull.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+
     // Now rotate 180 deg if required
     if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         Rotate( aCentre, ANGLE_180 );
 
-    m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
-
-    m_cachedHull.Mirror( m_pos, aFlipDirection );
-
-    // The courtyard caches must be rebuilt after geometry change
-    BuildCourtyardCaches();
 }
 
 
@@ -3057,27 +3061,32 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_orient = aNewAngle;
     m_orient.Normalize180();
 
+    const VECTOR2I rotationCenter = GetPosition();
+
     for( PCB_FIELD* field : m_fields )
-        field->Rotate( GetPosition(), angleChange );
+        field->Rotate( rotationCenter, angleChange );
 
     for( PAD* pad : m_pads )
-        pad->Rotate( GetPosition(), angleChange );
+        pad->Rotate( rotationCenter, angleChange );
 
     for( ZONE* zone : m_zones )
-        zone->Rotate( GetPosition(), angleChange );
+        zone->Rotate( rotationCenter, angleChange );
 
     for( BOARD_ITEM* item : m_drawings )
-        item->Rotate( GetPosition(), angleChange );
+        item->Rotate( rotationCenter, angleChange );
 
     for( PCB_POINT* point : m_points )
-        point->Rotate( GetPosition(), angleChange );
+        point->Rotate( rotationCenter, angleChange );
 
-    m_boundingBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
-    m_hullCacheTimeStamp = 0;
 
-    // The courtyard caches need to be rebuilt, as the geometry has changed
-    BuildCourtyardCaches();
+    m_courtyard_cache_front.Rotate( angleChange, rotationCenter );
+    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+
+    m_courtyard_cache_back.Rotate( angleChange, rotationCenter );
+    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+
+    m_cachedHull.Rotate( angleChange, rotationCenter );
 }
 
 
