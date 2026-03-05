@@ -84,6 +84,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_options( aOptions ),
         m_eventDispatcher( nullptr ),
         m_lostFocus( false ),
+        m_glRecoveryAttempted( false ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -350,11 +351,30 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
         // ctx goes out of scope here so destructor would be called
         cntCtxDestroy.Stop();
+
+        // OpenGL frame completed successfully, allow future recovery attempts
+        m_glRecoveryAttempted = false;
     }
     catch( std::exception& err )
     {
         if( GAL_FALLBACK != m_backend )
         {
+            // Sleep/wake and GPU resets can invalidate the entire GL context. Try a
+            // full OpenGL reinit once before falling back to software rendering.
+            if( !m_glRecoveryAttempted )
+            {
+                m_glRecoveryAttempted = true;
+                GAL_TYPE prevBackend = m_backend;
+                m_backend = GAL_TYPE_NONE;
+
+                if( SwitchBackend( prevBackend ) )
+                {
+                    StartDrawing();
+                    return true;
+                }
+            }
+
+            m_glRecoveryAttempted = false;
             SwitchBackend( GAL_FALLBACK );
 
             DisplayInfoMessage( m_parent,

@@ -314,6 +314,9 @@ protected:
     /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
     bool                     m_lostFocus;
 
+    /// Set after an OpenGL recovery attempt to prevent infinite retry loops
+    bool                     m_glRecoveryAttempted;
+
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;
