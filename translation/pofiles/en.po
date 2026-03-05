@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-01 09:48+0300\n"
+"POT-Creation-Date: 2026-03-05 22:08+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -13801,6 +13801,9 @@ msgstr "Invalid sheet pin name"
 msgid "Empty sheet pin name"
 msgstr "Empty sheet pin name"
 
+msgid "Schematic polyline has too few points"
+msgstr "Schematic polyline has too few points"
+
 msgid "No schematic object"
 msgstr "No schematic object"
 
@@ -13809,6 +13812,15 @@ msgstr "Invalid symbol library name"
 
 msgid "Invalid symbol library ID"
 msgstr "Invalid symbol library ID"
+
+msgid "Missing sheet name property"
+msgstr "Missing sheet name property"
+
+msgid "Missing sheet file property"
+msgstr "Missing sheet file property"
+
+msgid "Invalid table: no cells defined"
+msgstr "Invalid table: no cells defined"
 
 #, c-format
 msgid "Group library link %s contains invalid character '%c'"
@@ -20454,12 +20466,6 @@ msgid ""
 msgstr ""
 "Input format hint: auto, pads, altium, eagle, cadstar, fabmaster, pcad, "
 "solidworks (default: auto)"
-
-msgid "JSON file with layer name mappings"
-msgstr "JSON file with layer name mappings"
-
-msgid "Use automatic layer mapping (default behavior)"
-msgstr "Use automatic layer mapping (default behavior)"
 
 msgid "Import report format: none, json, text (default: none)"
 msgstr "Import report format: none, json, text (default: none)"
@@ -28064,9 +28070,6 @@ msgstr "Reset to the current Y offset from the reference position."
 msgid "Offset Item"
 msgstr "Offset Item"
 
-msgid "Outset must be a positive value."
-msgstr "Outset must be a positive value."
-
 msgid "Line width must be a positive value."
 msgstr "Line width must be a positive value."
 
@@ -33464,23 +33467,17 @@ msgstr ""
 msgid "Failed to reload DRC rules: %s"
 msgstr "Failed to reload DRC rules: %s"
 
-msgid "Minimum Length must be greater than 0"
-msgstr "Minimum Length must be greater than 0"
-
 msgid "Optimum Length must be greater than 0"
 msgstr "Optimum Length must be greater than 0"
 
-msgid "Maximum Length must be greater than 0"
-msgstr "Maximum Length must be greater than 0"
+msgid "Tolerance must be greater than or equal to 0"
+msgstr "Tolerance must be greater than or equal to 0"
 
-msgid "Minimum Length cannot be greater than Optimum Length"
-msgstr "Minimum Length cannot be greater than Optimum Length"
+msgid "Tolerance is too large: resulting minimum length is not positive"
+msgstr "Tolerance is too large: resulting minimum length is not positive"
 
-msgid "Optimum Length cannot be greater than Maximum Length"
-msgstr "Optimum Length cannot be greater than Maximum Length"
-
-msgid "Minimum Length cannot be greater than Maximum Length"
-msgstr "Minimum Length cannot be greater than Maximum Length"
+msgid "Maximum Skew must be greater than or equal to 0"
+msgstr "Maximum Skew must be greater than or equal to 0"
 
 msgid "Allow 0°"
 msgstr "Allow 0°"
@@ -33567,6 +33564,9 @@ msgstr "Syntax check passed with warnings:\n"
 msgid "Syntax OK"
 msgstr "Syntax OK"
 
+msgid "Within diff pairs"
+msgstr "Within diff pairs"
+
 msgid "Minimum Text Height must be greater than 0"
 msgstr "Minimum Text Height must be greater than 0"
 
@@ -33585,65 +33585,23 @@ msgstr "Allow bottom Layer"
 msgid "At least one layer must be selected"
 msgstr "At least one layer must be selected"
 
-msgid "Minimum Routing Width must be greater than 0"
-msgstr "Minimum Routing Width must be greater than 0"
+msgid "Optimum Width must be greater than 0"
+msgstr "Optimum Width must be greater than 0"
 
-msgid "Preferred Routing Width must be greater than 0"
-msgstr "Preferred Routing Width must be greater than 0"
+msgid "Width Tolerance must be greater than or equal to 0"
+msgstr "Width Tolerance must be greater than or equal to 0"
 
-msgid "Maximum Routing Width must be greater than 0"
-msgstr "Maximum Routing Width must be greater than 0"
+msgid "Width Tolerance must be less than Optimum Width"
+msgstr "Width Tolerance must be less than Optimum Width"
 
-msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
-msgstr "Minimum Routing Width cannot be greater than Preferred Routing Width"
+msgid "Gap Tolerance must be greater than or equal to 0"
+msgstr "Gap Tolerance must be greater than or equal to 0"
 
-msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
-msgstr "Preferred Routing Width cannot be greater than Maximum Routing Width"
-
-msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
-msgstr "Minimum Routing Width cannot be greater than Maximum Routing Width"
-
-msgid "Minimum Width must be greater than 0"
-msgstr "Minimum Width must be greater than 0"
-
-msgid "Preferred Width must be greater than 0"
-msgstr "Preferred Width must be greater than 0"
-
-msgid "Maximum Width must be greater than 0"
-msgstr "Maximum Width must be greater than 0"
-
-msgid "Minimum Gap must be greater than 0"
-msgstr "Minimum Gap must be greater than 0"
-
-msgid "Preferred Gap must be greater than 0"
-msgstr "Preferred Gap must be greater than 0"
-
-msgid "Maximum Gap must be greater than 0"
-msgstr "Maximum Gap must be greater than 0"
+msgid "Gap Tolerance must be less than Optimum Gap"
+msgstr "Gap Tolerance must be less than Optimum Gap"
 
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
 msgstr "Maximum Uncoupled Length must be greater than or equal to 0"
-
-msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Maximum Skew must be greater than or equal to 0"
-
-msgid "Minimum Width cannot be greater than Preferred Width"
-msgstr "Minimum Width cannot be greater than Preferred Width"
-
-msgid "Preferred Width cannot be greater than Maximum Width"
-msgstr "Preferred Width cannot be greater than Maximum Width"
-
-msgid "Minimum Width cannot be greater than Maximum Width"
-msgstr "Minimum Width cannot be greater than Maximum Width"
-
-msgid "Minimum Gap cannot be greater than Preferred Gap"
-msgstr "Minimum Gap cannot be greater than Preferred Gap"
-
-msgid "Preferred Gap cannot be greater than Maximum Gap"
-msgstr "Preferred Gap cannot be greater than Maximum Gap"
-
-msgid "Minimum Gap cannot be greater than Maximum Gap"
-msgstr "Minimum Gap cannot be greater than Maximum Gap"
 
 msgid "At least one constraint must be specified"
 msgstr "At least one constraint must be specified"
@@ -33654,14 +33612,14 @@ msgstr "Minimum Via Diameter must be greater than 0"
 msgid "Maximum Via Diameter must be greater than 0"
 msgstr "Maximum Via Diameter must be greater than 0"
 
+msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
+msgstr "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
+
 msgid "Minimum Via Hole Size must be greater than 0"
 msgstr "Minimum Via Hole Size must be greater than 0"
 
 msgid "Maximum Via Hole Size must be greater than 0"
 msgstr "Maximum Via Hole Size must be greater than 0"
-
-msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
-msgstr "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
 
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
 msgstr "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
@@ -35913,14 +35871,6 @@ msgstr "Unknown Extended Primitive Information type: '%s'."
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 stream has unexpected length for subrecord 6: %d."
-
-#, c-format
-msgid ""
-"Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
-"Eco1_User."
-msgstr ""
-"Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
-"Eco1_User."
 
 #, c-format
 msgid "'%s' was not parsed correctly."
@@ -42571,6 +42521,94 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "JSON file with layer name mappings"
+#~ msgstr "JSON file with layer name mappings"
+
+#~ msgid "Use automatic layer mapping (default behavior)"
+#~ msgstr "Use automatic layer mapping (default behavior)"
+
+#~ msgid "Outset must be a positive value."
+#~ msgstr "Outset must be a positive value."
+
+#~ msgid "Minimum Length must be greater than 0"
+#~ msgstr "Minimum Length must be greater than 0"
+
+#~ msgid "Maximum Length must be greater than 0"
+#~ msgstr "Maximum Length must be greater than 0"
+
+#~ msgid "Minimum Length cannot be greater than Optimum Length"
+#~ msgstr "Minimum Length cannot be greater than Optimum Length"
+
+#~ msgid "Optimum Length cannot be greater than Maximum Length"
+#~ msgstr "Optimum Length cannot be greater than Maximum Length"
+
+#~ msgid "Minimum Length cannot be greater than Maximum Length"
+#~ msgstr "Minimum Length cannot be greater than Maximum Length"
+
+#~ msgid "Minimum Routing Width must be greater than 0"
+#~ msgstr "Minimum Routing Width must be greater than 0"
+
+#~ msgid "Preferred Routing Width must be greater than 0"
+#~ msgstr "Preferred Routing Width must be greater than 0"
+
+#~ msgid "Maximum Routing Width must be greater than 0"
+#~ msgstr "Maximum Routing Width must be greater than 0"
+
+#~ msgid "Minimum Routing Width cannot be greater than Preferred Routing Width"
+#~ msgstr ""
+#~ "Minimum Routing Width cannot be greater than Preferred Routing Width"
+
+#~ msgid "Preferred Routing Width cannot be greater than Maximum Routing Width"
+#~ msgstr ""
+#~ "Preferred Routing Width cannot be greater than Maximum Routing Width"
+
+#~ msgid "Minimum Routing Width cannot be greater than Maximum Routing Width"
+#~ msgstr "Minimum Routing Width cannot be greater than Maximum Routing Width"
+
+#~ msgid "Minimum Width must be greater than 0"
+#~ msgstr "Minimum Width must be greater than 0"
+
+#~ msgid "Preferred Width must be greater than 0"
+#~ msgstr "Preferred Width must be greater than 0"
+
+#~ msgid "Maximum Width must be greater than 0"
+#~ msgstr "Maximum Width must be greater than 0"
+
+#~ msgid "Minimum Gap must be greater than 0"
+#~ msgstr "Minimum Gap must be greater than 0"
+
+#~ msgid "Preferred Gap must be greater than 0"
+#~ msgstr "Preferred Gap must be greater than 0"
+
+#~ msgid "Maximum Gap must be greater than 0"
+#~ msgstr "Maximum Gap must be greater than 0"
+
+#~ msgid "Minimum Width cannot be greater than Preferred Width"
+#~ msgstr "Minimum Width cannot be greater than Preferred Width"
+
+#~ msgid "Preferred Width cannot be greater than Maximum Width"
+#~ msgstr "Preferred Width cannot be greater than Maximum Width"
+
+#~ msgid "Minimum Width cannot be greater than Maximum Width"
+#~ msgstr "Minimum Width cannot be greater than Maximum Width"
+
+#~ msgid "Minimum Gap cannot be greater than Preferred Gap"
+#~ msgstr "Minimum Gap cannot be greater than Preferred Gap"
+
+#~ msgid "Preferred Gap cannot be greater than Maximum Gap"
+#~ msgstr "Preferred Gap cannot be greater than Maximum Gap"
+
+#~ msgid "Minimum Gap cannot be greater than Maximum Gap"
+#~ msgstr "Minimum Gap cannot be greater than Maximum Gap"
+
+#, c-format
+#~ msgid ""
+#~ "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
+#~ "Eco1_User."
+#~ msgstr ""
+#~ "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
+#~ "Eco1_User."
 
 #~ msgid "Maximum Uncoupled Length must be greater than 0"
 #~ msgstr "Maximum Uncoupled Length must be greater than 0"
