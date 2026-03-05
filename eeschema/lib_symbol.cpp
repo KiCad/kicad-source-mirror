@@ -114,6 +114,8 @@ void LIB_SYMBOL::cacheShownDescription()
         if( root.get() != this )
             shownText = root->GetDescriptionField().GetShownText( false, 0 );
     }
+
+    m_shownDescriptionCache = shownText;
 }
 
 
