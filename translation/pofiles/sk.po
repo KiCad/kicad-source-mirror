@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2026-03-04 22:15+0000\n"
+"PO-Revision-Date: 2026-03-05 19:06+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -1766,8 +1766,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
-"Zobraziť, alebo schovať, telo dosky\n"
-"Ak schovať, tak budú zobrazené iba medené a sieťotlačové vrstvy."
+"Zobraziť, alebo skryť, telo dosky\n"
+"Ak skryť, tak budú zobrazené iba medené vrstvy a vrstvy potlače."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:249
 msgid "Reload board and 3D models"
@@ -15734,7 +15734,7 @@ msgstr "Vyplňte farbou obrysu tela"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:202
 msgid "Fill with body background color"
-msgstr "Vyplňte farbou pozadia tela"
+msgstr "Vyplniť telo farbou pozadia"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:205
 msgid "Fill with:"
@@ -16991,9 +16991,9 @@ msgid "Symbol library table mapping complete!"
 msgstr "Mapovanie tabuľky knižnice symbolov je dokončené!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "Nie je možné vytvoriť priečinok '%s' s premapovaním projektu."
+msgstr "Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:356
 #: eeschema/dialogs/dialog_symbol_remap.cpp:529
@@ -17017,9 +17017,9 @@ msgstr "Prerušiť záchranu"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:481
 #: eeschema/dialogs/dialog_symbol_remap.cpp:497
 #: eeschema/dialogs/dialog_symbol_remap.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Zálohuje sa súbor '%s' do súboru '%s'."
+msgstr "Zálohovanie súboru '%s' do súboru '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:387
 #: eeschema/dialogs/dialog_symbol_remap.cpp:429
@@ -17028,14 +17028,14 @@ msgstr "Zálohuje sa súbor '%s' do súboru '%s'."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:489
 #: eeschema/dialogs/dialog_symbol_remap.cpp:505
 #: eeschema/dialogs/dialog_symbol_remap.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "Zlyhalo zálohovanie súboru \"%s\".\n"
+msgstr "Nepodarilo sa zálohovať súboru '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "Nepodarilo sa vytvorenie zložky zálohy \"%s\"\n"
+msgstr "Nepodarilo sa vytvoriť priečinok zálohy '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:528
 msgid "Some of the project files could not be backed up."
@@ -17407,9 +17407,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"Niektoré položky majú rovnaku farbu ako pozadie\n"
-"a nebudú vidieť na obrazovke. Naozaj\n"
-"chete tieto farby použiť?"
+"Niektoré položky majú rovnakú farbu ako pozadie\n"
+"a nebudú vidieť na obrazovke.  Naozaj\n"
+"chcete použiť tieto farby?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:207
 msgid "(symbol editor only)"
@@ -20003,7 +20003,7 @@ msgstr "Vytlačte (alebo nevytlačte) odkazy na rám."
 #: eeschema/printing/dialog_print_base.cpp:55
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:217
 msgid "Print background color"
-msgstr "Farba pozadia tlače"
+msgstr "Tlačiť farba pozadia"
 
 #: eeschema/printing/dialog_print_base.cpp:61
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:220
@@ -20383,9 +20383,8 @@ msgid "Go to Page %s (%s)"
 msgstr "Prejsť na stránku %s (%s)"
 
 #: eeschema/sch_field.cpp:992
-#, fuzzy
 msgid "Back to Previous Selected Sheet"
-msgstr "Vytvoriť plôšku z označených tvarov"
+msgstr "Späť na predchádzajúci vybraný list"
 
 #: eeschema/sch_field.cpp:1687
 #, fuzzy
@@ -21769,7 +21768,7 @@ msgstr "Chyba I/O %s řešení knihovny symbolu %s"
 #: eeschema/sch_screen.cpp:814
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
-msgstr "Využití mezipaměti pro definování symbolu '%s:%s' odkaz '%s'."
+msgstr "Návrat do cache pamäti pre nastavenie symbolu '%s:%s' odkaz '%s'."
 
 #: eeschema/sch_screen.cpp:848
 #, c-format
@@ -21802,9 +21801,8 @@ msgid "Body outline color"
 msgstr "Vyplňte farbou obrysu tela"
 
 #: eeschema/sch_shape.cpp:550
-#, fuzzy
 msgid "Body background color"
-msgstr "Farba pozadia vykreslenia"
+msgstr "Farba pozadia tela"
 
 #: eeschema/sch_shape.cpp:551
 #, fuzzy
@@ -21866,7 +21864,7 @@ msgstr "Barva okraje"
 
 #: eeschema/sch_sheet.cpp:2150 pcbnew/dialogs/dialog_plot_base.cpp:438
 msgid "Background Color"
-msgstr "Barva pozadí"
+msgstr "Farba pozadia"
 
 #: eeschema/sch_sheet.cpp:2162 eeschema/sch_symbol.cpp:1449
 #: eeschema/sch_symbol.cpp:3965 pcbnew/footprint.cpp:4842
@@ -22038,14 +22036,12 @@ msgid "Cell Properties"
 msgstr "Použi všetky nastavenia"
 
 #: eeschema/sch_tablecell.cpp:466
-#, fuzzy
 msgid "Background Fill"
 msgstr "Výplň pozadia"
 
 #: eeschema/sch_tablecell.cpp:470
-#, fuzzy
 msgid "Background Fill Color"
-msgstr "Barva pozadí"
+msgstr "Farba výplne pozadia"
 
 #: eeschema/sch_text.cpp:390
 #, c-format
@@ -22627,6 +22623,14 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"V načítanom súbore schémy sa nachádzajú hierarchické listy staršej verzie "
+"súboru, čo má za následok  chýbajúce údaje o inštanciách symbolov.  To bude "
+"mať za následok, že všetky symboly v načítanej schéme budú používať buď "
+"predvolené nastavenie inštancie, alebo sa vrátia k nastaveniam symbolov z "
+"knižnice.  Načítanie projektu, ktorý používa tento súbor schémy, a uloženie "
+"do najnovšej verzie súboru vyrieši tento problém.\n"
+"\n"
+"Chcete pokračovať?"
 
 #: eeschema/sheet.cpp:566 eeschema/sheet.cpp:594 eeschema/sheet.cpp:634
 #: eeschema/sheet.cpp:679 eeschema/sheet.cpp:740
@@ -24482,9 +24486,9 @@ msgid "Loading library '%s'..."
 msgstr "Načítava sa knižnica '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1436
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to '%s'."
-msgstr "Zálohu sa nepodarilo uložiť do priečinka '%s'"
+msgstr "Nepodarilo sa uložiť zálohu do '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1688
 #, fuzzy, c-format
@@ -24974,7 +24978,7 @@ msgstr "Nepodarilo sa otvoriť súbor odkazu symbol-puzdro '%s'."
 
 #: eeschema/tools/backannotate.cpp:82
 msgid "Select at least one property to back annotate."
-msgstr "Vyberte aspoň jednu vlastnosť, pre spätné očíslovanie."
+msgstr "Vyberte aspoň jednu vlastnosť pre spätné číslovanie."
 
 #: eeschema/tools/backannotate.cpp:104
 #, fuzzy
@@ -26400,11 +26404,11 @@ msgstr "Skoč hore v aktuálnej hierarchii schém"
 
 #: eeschema/tools/sch_actions.cpp:1426
 msgid "Navigate Back"
-msgstr "Prejsť dole"
+msgstr "Prejsť späť"
 
 #: eeschema/tools/sch_actions.cpp:1427
 msgid "Move backward in sheet navigation history"
-msgstr "Přesune se dozadu v historii navigace"
+msgstr "Presunúť sa dozadu v histórii prechádzania"
 
 #: eeschema/tools/sch_actions.cpp:1434
 #, fuzzy
@@ -26470,9 +26474,8 @@ msgid "Undo Last Segment"
 msgstr "Vrátiť späť posledný segment"
 
 #: eeschema/tools/sch_actions.cpp:1518
-#, fuzzy
 msgid "Walks the current line back one segment."
-msgstr "Zvyšuje priehľadnosť aktuálnej vrstvy"
+msgstr "Prejsť na aktuálnej čiare o jeden segment späť."
 
 #: eeschema/tools/sch_actions.cpp:1525
 #, fuzzy
@@ -26651,7 +26654,7 @@ msgstr "Vykreslenie v tmavom režime"
 
 #: eeschema/tools/sch_actions.cpp:1714
 msgid "Draw plots with a black background"
-msgstr "Kresliť grafy s tmavým pozadím"
+msgstr "Kresliť grafy s čiernym pozadím"
 
 #: eeschema/tools/sch_actions.cpp:1719
 msgid "Edit Analysis Tab..."
@@ -29298,7 +29301,7 @@ msgstr "Zobraziť hranice listu výkresu"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:143
 msgid "PCB Background"
-msgstr "Pozadie PCB"
+msgstr "DPS pozadie"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:162
 #: pcbnew/widgets/appearance_controls.cpp:1935
@@ -29761,9 +29764,8 @@ msgid "Export zones"
 msgstr "Exportné jednotky:"
 
 #: kicad/cli/command_pcb_export_3d.cpp:151
-#, fuzzy
 msgid "Export elements on inner copper layers"
-msgstr "Položka na deaktivovanej vrstve"
+msgstr "Exportovať prvky na vnútorných medených vrstvách"
 
 #: kicad/cli/command_pcb_export_3d.cpp:155
 msgid "Export silkscreen graphics as a set of flat faces"
@@ -30145,7 +30147,7 @@ msgstr "Generovať PDF zo zoznamu vrstiev"
 #: kicad/cli/command_pcb_export_ps.cpp:47
 #: kicad/cli/command_pcb_export_svg.cpp:53
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr ""
+msgstr "Zrkadliť dosku (užitočné pre zobrazenie spodných vrstiev)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:88
 #: kicad/cli/command_pcb_export_ps.cpp:92
@@ -30194,6 +30196,8 @@ msgid ""
 "Use negative X coordinates for footprints on bottom layer (ascii or csv "
 "formats only)"
 msgstr ""
+"Pre puzdrá na spodnej vrstve, použiť záporné súradnice X (iba vo formátoch "
+"ascii alebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:69
 #, fuzzy
@@ -30370,6 +30374,8 @@ msgstr "Nastavenie vykreslovania"
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
+"Pozadie obrázka. Možnosti: %s. Predvolené: priehľadné pre PNG, nepriehľadné "
+"pre JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:252
 #, fuzzy, c-format
@@ -30440,9 +30446,8 @@ msgid "Invalid preset\n"
 msgstr "Minimálna šírka spoja\n"
 
 #: kicad/cli/command_pcb_render.cpp:357
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Vyplniť pozadie"
+msgstr "Neplatné pozadie\n"
 
 #: kicad/cli/command_pcb_render.cpp:363
 #, fuzzy
@@ -30595,7 +30600,7 @@ msgstr "Negenerovať metadáta z premenných AUTHOR && SUBJECT v PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:100
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr ""
+msgstr "Nenastavovať farbu pozadia (bez ohľadu na tému)"
 
 #: kicad/cli/command_sch_export_plot.cpp:106
 msgid ""
@@ -30875,9 +30880,8 @@ msgid "System Templates"
 msgstr "Systémové šablóny"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "Zadná"
+msgstr "Prejsť späť"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -31330,7 +31334,7 @@ msgstr "Importovať Eagle súbory projektu"
 
 #: kicad/import_project.cpp:188
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Importovať EasyEDA Std zálohu"
 
 #: kicad/import_project.cpp:195
 #, fuzzy
@@ -31561,7 +31565,7 @@ msgstr "Importujte schému XML EAGLE CAD a dosku"
 
 #: kicad/menubar.cpp:140
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr "Zálohování EasyEDA std (JLCEDA)..."
+msgstr "Záloha EasyEDA (JLCEDA) Std..."
 
 #: kicad/menubar.cpp:141
 #, fuzzy
@@ -36112,7 +36116,7 @@ msgstr "Medené vrstvy:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr ""
+msgstr "Vybrať počet medených vrstiev v skladbe vrstiev"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
@@ -36410,7 +36414,6 @@ msgid "Front copper area"
 msgstr "Predná medená vrstva"
 
 #: pcbnew/board_statistics_report.cpp:562
-#, fuzzy
 msgid "Back copper area"
 msgstr "Zadná medená vrstva"
 
@@ -36434,24 +36437,20 @@ msgid "Board stackup thickness"
 msgstr "Hrúbka dosky:"
 
 #: pcbnew/board_statistics_report.cpp:581
-#, fuzzy
 msgid "Front footprint area"
-msgstr "Exportná stopa"
+msgstr "Predná oblasť puzdier"
 
 #: pcbnew/board_statistics_report.cpp:583
-#, fuzzy
 msgid "Back footprint area"
-msgstr "Zamknite stopu"
+msgstr "Zadná oblasť puzdier"
 
 #: pcbnew/board_statistics_report.cpp:586
-#, fuzzy
 msgid "Front component density"
-msgstr "Exportovať súčiastku"
+msgstr "Predná hustota súčiastok"
 
 #: pcbnew/board_statistics_report.cpp:595
-#, fuzzy
 msgid "Back component density"
-msgstr "Kontrola komponentu "
+msgstr "Zadná hustota súčiastok"
 
 #: pcbnew/board_statistics_report.cpp:619
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:38
@@ -36581,9 +36580,8 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "CHARAKTERISTIKA DESKY"
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:78
-#, fuzzy
 msgid "Copper layer count: "
-msgstr "Počet medených vrstiev:"
+msgstr "Počet medených vrstiev: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:82
 #, fuzzy
@@ -37011,14 +37009,12 @@ msgid "Change Log"
 msgstr "Zmeniť na"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:365
-#, fuzzy
 msgid "Front Footprints"
-msgstr "Exportná stopa"
+msgstr "Predné puzdrá"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:365
-#, fuzzy
 msgid "Back Footprints"
-msgstr "Zamknite stopu"
+msgstr "Zadné puzdrá"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:369
 #, fuzzy
@@ -37142,14 +37138,14 @@ msgstr "Rozsah prečíslovania"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:117
 #: pcbnew/footprint.cpp:2135
 msgid "Front"
-msgstr "Predná"
+msgstr "Predné"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_render_job.cpp:37
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:122
 msgid "Back"
-msgstr "Zadná"
+msgstr "Zadné"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:193
 msgid "Exclude locked footprints"
@@ -37173,11 +37169,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:226
 msgid "Front reference start:"
-msgstr "Predný referenčný štart:"
+msgstr "Referenčný počiatok prednej strany:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:228
 msgid "Starting reference designation for front."
-msgstr "Počiatočné referenčné označenie pre prednú časť."
+msgstr "Počiatočné referenčné označenie pre prednú stranu."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:233
 msgid "Default is 1"
@@ -37185,23 +37181,23 @@ msgstr "Predvolená hodnota je 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:238
 msgid "Back reference start:"
-msgstr "Spätný odkaz na začiatok:"
+msgstr "Referenčný počiatok zadnej strany:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:240
 msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"Blank pokračuje spredu alebo zadajte číslo väčšie ako je najvyššie "
-"referenčné označenie na prednej strane."
+"Zadajte číslo väčšie ako najvyššie referenčné označenie na prednej strane, "
+"alebo ponechajte pole prázdne pre pokračovanie z prednej strany."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
-"Ponechajte prázdne alebo nulové číslo alebo zadajte číslo väčšie ako "
-"najvyššie referenčné označenie na prednej strane."
+"Zadajte číslo väčšie ako najvyššie referenčné označenie na prednej strane, "
+"alebo ponechajte pole prázdne alebo nulové."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:250
 msgid "Front prefix:"
@@ -37225,7 +37221,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:272
 msgid "Remove front prefix"
-msgstr "Odstrániť predný prefix"
+msgstr "Odstrániť prefix prednej strany"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:273
 msgid ""
@@ -37361,14 +37357,12 @@ msgid "Dimensions:"
 msgstr "Rozmery:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:127
-#, fuzzy
 msgid "Front copper area:"
-msgstr "Predná medená vrstva"
+msgstr "Predná medená oblasť:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:128
-#, fuzzy
 msgid "Back copper area:"
-msgstr "Zadná medená vrstva"
+msgstr "Zadná medená oblasť:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:129
 msgid "Min track clearance:"
@@ -37390,24 +37384,20 @@ msgid "Board stackup thickness:"
 msgstr "Hrúbka dosky:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:133
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "Predná medená vrstva"
+msgstr "Predná oblasť puzdier:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
-#, fuzzy
 msgid "Front footprint density:"
-msgstr "Exportná stopa"
+msgstr "Predná hustota puzdier:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "Zadná medená vrstva"
+msgstr "Zadná oblasť puzdier:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:136
-#, fuzzy
 msgid "Back footprint density:"
-msgstr "Zamknite stopu"
+msgstr "Zadná hustota puzdier:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:479
 #, fuzzy, c-format
@@ -39880,9 +39870,8 @@ msgid "Use custom stackup"
 msgstr "Použiť vlastné hodnoty..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:200
-#, fuzzy
 msgid "Copper layers"
-msgstr "Medené vrstvy:"
+msgstr "Medené vrstvy"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
 #, fuzzy
@@ -40169,9 +40158,9 @@ msgstr "Nebolo možné zapísať súbory vykreslenia do priečinka '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:341
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Predná strana (horná strana) zakladač: \"%s\"."
+msgstr "Súbor umiestenia prednej strany (vrchnej strany): '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:344
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:367
@@ -40183,9 +40172,9 @@ msgstr "Počet komponentov: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:364
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:508
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Zadná strana (spodná strana) umiestniť priečinok: \"%s\"."
+msgstr "Súbor umiestenia zadnej strany (spodnej strany): '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:371
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:518
@@ -40247,11 +40236,11 @@ msgstr "Zahrňte okrajovú vrstvu dosky"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:123
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "Pre puzdrá na spodnej vrstve, použiť záporné súradnice X"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:126
 msgid "Generate single file with both front and back positions"
-msgstr "Generovať jeden súbor s obidvoma - prednými a zadnými polohami"
+msgstr "Generovať jeden súbor s obidvoma - prednými a zadnými pozíciami"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:81
 msgid "Generate Placement Files"
@@ -41190,16 +41179,15 @@ msgstr "Upraviť mapovania importovaných vrstiev"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:125
 msgid "Top/Front layer:"
-msgstr "Horná / predná vrstva:"
+msgstr "Vrchná/predná vrstva:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:164
 msgid "Bottom/Back layer:"
-msgstr "Spodná / zadná vrstva:"
+msgstr "Spodná/zadná vrstva:"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:210
-#, fuzzy
 msgid "Copper Layer Pair Presets"
-msgstr "Medené vrstvy:"
+msgstr "Predvoľby párov medených vrstiev"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:228
 #, fuzzy
@@ -41212,7 +41200,7 @@ msgstr "Vybratie vrstvy"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:82
 msgid "Select Copper Layer Pair"
-msgstr "Vyberte pár medi"
+msgstr "Vybrať pár medených vrstiev"
 
 #: pcbnew/dialogs/dialog_map_layers.cpp:237
 #: pcbnew/dialogs/dialog_map_layers.cpp:245
@@ -41950,7 +41938,7 @@ msgstr "Zadná spájkovacia pasta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid "Front silk screen"
-msgstr "Popis nahor"
+msgstr "Predná potlač"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:586
 msgid "Back silk screen"
@@ -42249,10 +42237,9 @@ msgstr "Vybrať výrobné vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:664
 msgid "Select All Copper Layers"
-msgstr "Vybrať všetky vrstvy medi"
+msgstr "Vybrať všetky medené vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:665
-#, fuzzy
 msgid "Deselect All Copper Layers"
 msgstr "Zrušiť výber všetkých medených vrstiev"
 
@@ -44686,6 +44673,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Ak je táto možnosť povolená, vzdialenosť medzi medenými vrstvami bude "
+"zahrnutá do výpočtov dĺžky spojov pre spoje s prekovmi. Ak je táto možnosť "
+"zakázaná, výška prekovov sa ignoruje."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
 msgid "Default Properties for New Dimension Objects"
@@ -44772,7 +44762,7 @@ msgstr "Mimo dosky, výrobná"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:171
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Ak chcete lepiacu šablónu na prednú stranu dosky"
+msgstr "Ak chcete šablónu lepidla pre prednú stranu dosky"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:181
 #: pcbnew/dialogs/panel_setup_layers.cpp:199
@@ -44786,13 +44776,12 @@ msgid "On-board, non-copper"
 msgstr "Na doske, bez medi"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:189
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Ak chcete vrstvu spájkovacej pasty na prednú stranu dosky"
+msgstr "Ak chcete vrstvu spájkovacej pasty pre prednú stranu dosky"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:207
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "Ak chcete na prednú stranu dosky vrstvu hodvábneho plátna"
+msgstr "Ak chcete vrstvu potlače pre prednú stranu dosky"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:225
 msgid "If you want a solder mask layer for the front of the board"
@@ -44844,9 +44833,9 @@ msgid "If you want a layer for documentation drawings"
 msgstr "Ak chcete vrstvu pre kresby dokumentácie"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:475
-#, fuzzy
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "Pomocou ovládacieho prvku '%s' môžete zmeniť počet vrstiev medi."
+msgstr ""
+"Použiť stránku fyzickej skladby vrstiev pre zmenu počtu medených vrstiev."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:486
 msgid "signal"
@@ -44873,9 +44862,8 @@ msgstr ""
 "Napájacie vrstvy sú odstránené z ponúk vrstiev Freeroutera."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:538
-#, fuzzy
 msgid "Off-board, front"
-msgstr "Mimo plavby, testovanie"
+msgstr "Mimo dosky, predná strana"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:539
 #, fuzzy
@@ -44886,6 +44874,8 @@ msgstr "Mimo plavby, testovanie"
 msgid ""
 "Auxiliary layers do not flip with board side, while back and front layers do."
 msgstr ""
+"Pomocné vrstvy sa neprevracajú spolu s doskou, zatiaľ čo zadná a predná "
+"vrstva áno."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:880
 #, c-format
@@ -45958,11 +45948,12 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:970
 msgid "Bottom reference layer not found in stackup"
-msgstr ""
+msgstr "Spodná referenčná vrstva sa nenašla v skladbe vrstiev"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:976
 msgid "Bottom reference layer must be below signal layer in board stackup"
 msgstr ""
+"Spodná referenčná vrstva musí byť pod signálnou vrstvou v skladbe vrstiev"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:999
 #, fuzzy
@@ -46941,7 +46932,7 @@ msgstr "Plôška (THT) s vývodom nemá žiadný otvor"
 
 #: pcbnew/drc/drc_item.cpp:298
 msgid "Mirrored text on front layer"
-msgstr ""
+msgstr "Zrkadlený text na prednej vrstve"
 
 #: pcbnew/drc/drc_item.cpp:302
 msgid "Non-Mirrored text on back layer"
@@ -47929,6 +47920,7 @@ msgstr "obmedzenia nastavenia dosky"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:824
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
+"Apertúra prednej spájkovacej masky premosťujú položky s rozdielnymi signálmi"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:603
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:699
@@ -48289,9 +48281,8 @@ msgid "Allow top Layer"
 msgstr "Všetky medené vrstvy"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:58
-#, fuzzy
 msgid "Allow bottom Layer"
-msgstr "Spodná vrstva"
+msgstr "Povoliť spodnú vrstvu"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:91
 #, fuzzy
@@ -49167,7 +49158,7 @@ msgstr "Bočná strana"
 
 #: pcbnew/footprint.cpp:2136
 msgid "Back (Flipped)"
-msgstr "Chrbát (prevrátený)"
+msgstr "Dole (prevrátene)"
 
 #: pcbnew/footprint.cpp:2157
 msgid "autoplaced"
@@ -51023,9 +51014,8 @@ msgid "Backdrill both"
 msgstr ""
 
 #: pcbnew/pad.cpp:3337
-#, fuzzy
 msgid "Front, back and connected layers"
-msgstr "%s, %s a spojené vrstvy"
+msgstr "Predná, zadná a prepojené vrstvy"
 
 #: pcbnew/pad.cpp:3386
 #, fuzzy
@@ -53887,16 +53877,15 @@ msgstr "Vrchná vrstva"
 
 #: pcbnew/pcb_track.cpp:3194 pcbnew/widgets/pcb_properties_panel.cpp:654
 msgid "Layer Bottom"
-msgstr "Dno vrstvy"
+msgstr "Spodná vrstva"
 
 #: pcbnew/pcb_track.cpp:3197
 msgid "Via Type"
 msgstr "Cez Type"
 
 #: pcbnew/pcb_track.cpp:3199
-#, fuzzy
 msgid "Front tenting"
-msgstr "Formátovanie"
+msgstr "Predný tenting (prekrytie prekovov maskou)"
 
 #: pcbnew/pcb_track.cpp:3201
 #, fuzzy
@@ -53904,9 +53893,8 @@ msgid "Back tenting"
 msgstr "Úpravy stopy"
 
 #: pcbnew/pcb_track.cpp:3203
-#, fuzzy
 msgid "Front covering"
-msgstr "Formátovanie"
+msgstr "Predný covering"
 
 #: pcbnew/pcb_track.cpp:3205
 #, fuzzy
@@ -53914,9 +53902,8 @@ msgid "Back covering"
 msgstr "Úpravy stopy"
 
 #: pcbnew/pcb_track.cpp:3207
-#, fuzzy
 msgid "Front plugging"
-msgstr "Formátovanie"
+msgstr "Predný plugging"
 
 #: pcbnew/pcb_track.cpp:3209
 #, fuzzy
@@ -53933,21 +53920,20 @@ msgid "Filling"
 msgstr "Vyplniť"
 
 #: pcbnew/pcb_track.cpp:3289
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "Formátovanie"
+msgstr "Predné dodatočné obrobenie"
 
 #: pcbnew/pcb_track.cpp:3292
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "Veľkosť predného dod. obrobenia"
 
 #: pcbnew/pcb_track.cpp:3307
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "Hĺbka predného dod. obrobenia"
 
 #: pcbnew/pcb_track.cpp:3321
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "Uhol predného dod. obrobenia"
 
 #: pcbnew/pcb_track.cpp:3335
 #, fuzzy
@@ -53992,7 +53978,7 @@ msgstr "Nádvorie stopy nie je jediný uzavretý tvar."
 
 #: pcbnew/pcbexpr_functions.cpp:548
 msgid "Footprint has no front courtyard."
-msgstr "Stopa nemá predné nádvorie."
+msgstr "Puzdro nemá zhora žiadnu montážnu oblasť."
 
 #: pcbnew/pcbexpr_functions.cpp:563
 msgid "Footprint has no back courtyard."
@@ -54115,9 +54101,9 @@ msgid "Wrote board statistics to '%s'.\n"
 msgstr "Nemožno vytvoriť výstupný adresár '%s'."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1920 pcbnew/pcbnew_jobs_handler.cpp:1998
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote front position data to '%s'.\n"
-msgstr "Exportná stopa"
+msgstr "Predné polohové dáta zapísané do súboru '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1938 pcbnew/pcbnew_jobs_handler.cpp:2022
 #, fuzzy, c-format
@@ -54802,7 +54788,7 @@ msgstr "Odstráňte nepoužívanú sieť '%s'."
 
 #: pcbnew/sel_layer.cpp:745
 msgid "Warning: top and bottom layers are same."
-msgstr "Upozornenie: horná a spodná vrstva sú rovnaké."
+msgstr "Upozornenie: vrchná a spodná vrstva sú rovnaké."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:102
 msgid "BOARD exported OK."
@@ -58168,9 +58154,8 @@ msgid "Tune Skew of a Differential Pair"
 msgstr "Naladiť rozdiel dĺžok diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2629
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "Zvyšuje priehľadnosť aktuálnej vrstvy"
+msgstr "Prejsť na aktuálnom spoji o jeden segment späť."
 
 #: pcbnew/tools/pcb_actions.cpp:2635
 msgid "Route From Other End"
@@ -58859,11 +58844,11 @@ msgstr "Zobraziť ako zrkadlový obraz"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Footprints Front"
-msgstr "Stopy vpredu"
+msgstr "Predné puzdrá"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprints that are on board's front"
-msgstr "Ukážte stopy, ktoré sú na prednej strane paluby"
+msgstr "Ukázať puzdrá, ktoré sú na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Back"
@@ -58962,7 +58947,7 @@ msgstr "Predné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:393
 msgid "Front Assembly View"
-msgstr "Pohľad spredu"
+msgstr "Predný pohľad osadenia"
 
 #: pcbnew/widgets/appearance_controls.cpp:396
 msgid "Back Layers"
@@ -58970,7 +58955,7 @@ msgstr "Zadné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:399
 msgid "Back Assembly View"
-msgstr "Pohľad zozadu"
+msgstr "Zadný pohľad osadenia"
 
 #: pcbnew/widgets/appearance_controls.cpp:451
 #, c-format
@@ -59194,7 +59179,7 @@ msgstr "Spájkovacia pasta na zadnej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1705
 msgid "Silkscreen on board's front"
-msgstr "Sieťotlač na prednej strane dosky"
+msgstr "Potlač na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1706
 msgid "Silkscreen on board's back"
@@ -59231,7 +59216,7 @@ msgstr "Obrys okraja dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1715
 msgid "Footprint courtyards on board's front"
-msgstr "Stopy nádvorí na prednej strane paluby"
+msgstr "Montážna oblasť puzdier na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1716
 msgid "Footprint courtyards on board's back"
@@ -59239,11 +59224,11 @@ msgstr "Stopy nádvorí na zadnej strane paluby"
 
 #: pcbnew/widgets/appearance_controls.cpp:1717
 msgid "Footprint assembly on board's front"
-msgstr "Zostava stopy na prednej strane dosky"
+msgstr "Osadenie puzdier na prednej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1718
 msgid "Footprint assembly on board's back"
-msgstr "Zostava stopy na zadnej strane dosky"
+msgstr "Osadenie puzdier na zadnej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1719
 msgid "User defined layer 1"
@@ -59491,7 +59476,7 @@ msgstr "Skryť všetky nekovové vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1943
 msgid "Show Only Front Assembly Layers"
-msgstr "Zobraziť iba vrstvy spredu"
+msgstr "Zobraziť iba predné osadzovacie vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1946
 msgid "Show Only Front Layers"
@@ -59507,7 +59492,7 @@ msgstr "Zobraziť iba zadné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1959
 msgid "Show Only Back Assembly Layers"
-msgstr "Zobraziť iba zadné vrstvy zostavy"
+msgstr "Zobraziť iba zadné osadzovacie vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:2334
 #, c-format
