@@ -138,6 +138,18 @@ public:
                        const nlohmann::json_uri& aUri = nlohmann::json_uri( "#" ) ) const;
 
     /**
+     * @brief Validates json against a specific definition using the given validator
+     *
+     * @param aJson JSON object to validate
+     * @param aValidator schema validator to use
+     * @param aUri JSON URI of a definition to validate against
+     * @throws std::invalid_argument on validation failure
+     */
+    void ValidateJson( const nlohmann::json&          aJson,
+                       const JSON_SCHEMA_VALIDATOR&    aValidator,
+                       const nlohmann::json_uri&       aUri ) const;
+
+    /**
      * @brief Verifies SHA256 hash of a binary stream
      *
      * @param aStream input stream
@@ -281,12 +293,14 @@ public:
      * @param aOutput output stream
      * @param aReporter progress dialog to use
      * @param aSizeLimit maximum download size, 0 for unlimited
+     * @param aAccept optional Accept header value for content negotiation
      * @return true if download was successful
      * @return false if download failed or was too large
      */
     bool DownloadToStream( const wxString& aUrl, std::ostream* aOutput,
                            PROGRESS_REPORTER* aReporter,
-                           const size_t       aSizeLimit = DEFAULT_DOWNLOAD_MEM_LIMIT );
+                           const size_t       aSizeLimit = DEFAULT_DOWNLOAD_MEM_LIMIT,
+                           const std::string& aAccept = "" );
 
     /**
      * @brief Get the approximate measure of how much given package matches the search term
@@ -370,7 +384,8 @@ private:
      * @return true if packages were successfully downloaded, verified and parsed
      */
     bool fetchPackages( const wxString& aUrl, const std::optional<wxString>& aHash,
-                        std::vector<PCM_PACKAGE>& aPackages, PROGRESS_REPORTER* aReporter );
+                        std::vector<PCM_PACKAGE>& aPackages, PROGRESS_REPORTER* aReporter,
+                        int aSchemaVersion = 1 );
 
     /**
      * @brief Get the cached repository metadata
@@ -396,7 +411,8 @@ private:
     time_t getCurrentTimestamp() const;
 
     DIALOG_PCM*                                  m_dialog;
-    std::unique_ptr<JSON_SCHEMA_VALIDATOR>       m_schema_validator;
+    std::unique_ptr<JSON_SCHEMA_VALIDATOR>       m_schema_v1_validator;
+    std::unique_ptr<JSON_SCHEMA_VALIDATOR>       m_schema_v2_validator;
     wxString                                     m_3rdparty_path;
     wxString                                     m_cache_path;
     std::unordered_map<wxString, PCM_REPOSITORY> m_repository_cache;

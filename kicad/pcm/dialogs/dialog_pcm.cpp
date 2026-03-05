@@ -349,6 +349,9 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 
         for( const PCM_PACKAGE& pkg : packages )
         {
+            if( pkg.type == PT_INVALID )
+                continue;
+
             PACKAGE_VIEW_DATA package_data( pkg );
 
             if( m_packageBitmaps.count( package_data.package.identifier ) > 0 )

@@ -147,6 +147,7 @@ struct PCM_REPOSITORY
     std::optional<PCM_CONTACT>            maintainer;
 
     // Not serialized fields
+    int                      schema_version = 1;
     std::vector<PCM_PACKAGE> package_list;
     // pkg id to index of package from package_list for quick lookup
     std::unordered_map<wxString, size_t> package_map;

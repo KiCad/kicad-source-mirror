@@ -20,6 +20,10 @@
 
 #include "pcm_data.h"
 
+#include <wx/log.h>
+
+static const wxChar tracePcm[] = wxT( "KICAD_PCM" );
+
 
 template <typename T>
 void to_optional( const json& j, const char* key, std::optional<T>& dest )
@@ -120,6 +124,13 @@ void from_json( const json& j, PCM_PACKAGE& p )
     j.at( "description_full" ).get_to( p.description_full );
     j.at( "identifier" ).get_to( p.identifier );
     j.at( "type" ).get_to( p.type );
+
+    if( p.type == PT_INVALID )
+    {
+        wxLogTrace( tracePcm, wxS( "Skipping package '%s' with unrecognized type '%s'" ),
+                    p.identifier, wxString( j.at( "type" ).get<std::string>() ) );
+    }
+
     j.at( "author" ).get_to( p.author );
     j.at( "license" ).get_to( p.license );
     j.at( "resources" ).get_to( p.resources );

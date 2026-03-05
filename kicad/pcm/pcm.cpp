@@ -58,6 +58,8 @@
  */
 static const wxChar tracePcm[] = wxT( "KICAD_PCM" );
 
+static const std::string PCM_ACCEPT_V2 = "application/vnd.kicad.pcm.v2+json";
+
 
 const std::tuple<int, int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
         GetMajorMinorPatchTuple();
@@ -81,12 +83,18 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( std::function<void( int )> aAvai
 {
     ReadEnvVar();
 
-    // Read and store pcm schema
-    wxFileName schema_file( PATHS::GetStockDataPath( true ), wxS( "pcm.v1.schema.json" ) );
-    schema_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-    schema_file.AppendDir( wxS( "schemas" ) );
+    // Read and store pcm schemas
+    wxFileName schema_v1_file( PATHS::GetStockDataPath( true ), wxS( "pcm.v1.schema.json" ) );
+    schema_v1_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    schema_v1_file.AppendDir( wxS( "schemas" ) );
 
-    m_schema_validator = std::make_unique<JSON_SCHEMA_VALIDATOR>( schema_file );
+    m_schema_v1_validator = std::make_unique<JSON_SCHEMA_VALIDATOR>( schema_v1_file );
+
+    wxFileName schema_v2_file( PATHS::GetStockDataPath( true ), wxS( "pcm.v2.schema.json" ) );
+    schema_v2_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    schema_v2_file.AppendDir( wxS( "schemas" ) );
+
+    m_schema_v2_validator = std::make_unique<JSON_SCHEMA_VALIDATOR>( schema_v2_file );
 
     // Load currently installed packages
     wxFileName f( PATHS::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
@@ -193,7 +201,8 @@ void PLUGIN_CONTENT_MANAGER::ReadEnvVar()
 
 bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostream* aOutput,
                                                PROGRESS_REPORTER* aReporter,
-                                               const size_t       aSizeLimit )
+                                               const size_t       aSizeLimit,
+                                               const std::string& aAccept )
 {
     bool size_exceeded = false;
 
@@ -227,6 +236,9 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
     curl.SetFollowRedirects( true );
     curl.SetTransferCallback( callback, 250000L );
 
+    if( !aAccept.empty() )
+        curl.SetHeader( "Accept", aAccept );
+
     int code = curl.Perform();
 
     if( !aReporter->IsCancelled() )
@@ -256,8 +268,11 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
 
     aReporter->SetTitle( _( "Fetching repository" ) );
 
-    if( !DownloadToStream( aUrl, &repository_stream, aReporter, 20480 ) )
+    if( !DownloadToStream( aUrl, &repository_stream, aReporter, 20480,
+                           PCM_ACCEPT_V2 ) )
+    {
         return false;
+    }
 
     nlohmann::json repository_json;
 
@@ -265,9 +280,24 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
     {
         repository_stream >> repository_json;
 
-        ValidateJson( repository_json, nlohmann::json_uri( "#/definitions/Repository" ) );
+        int schema_version = 1;
+
+        if( repository_json.contains( "schema_version" ) )
+            schema_version = repository_json["schema_version"].get<int>();
+
+        if( schema_version >= 2 )
+        {
+            ValidateJson( repository_json, *m_schema_v2_validator,
+                          nlohmann::json_uri( "#/definitions/Repository" ) );
+        }
+        else
+        {
+            ValidateJson( repository_json, *m_schema_v1_validator,
+                          nlohmann::json_uri( "#/definitions/Repository" ) );
+        }
 
         aRepository = repository_json.get<PCM_REPOSITORY>();
+        aRepository.schema_version = schema_version;
     }
     catch( const std::exception& e )
     {
@@ -289,20 +319,31 @@ void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
                                            const nlohmann::json_uri& aUri ) const
 {
     THROWING_ERROR_HANDLER error_handler;
-    m_schema_validator->Validate( aJson, error_handler, aUri );
+    m_schema_v1_validator->Validate( aJson, error_handler, aUri );
+}
+
+
+void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&       aJson,
+                                           const JSON_SCHEMA_VALIDATOR& aValidator,
+                                           const nlohmann::json_uri&    aUri ) const
+{
+    THROWING_ERROR_HANDLER error_handler;
+    aValidator.Validate( aJson, error_handler, aUri );
 }
 
 
 bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                aUrl,
                                             const std::optional<wxString>& aHash,
                                             std::vector<PCM_PACKAGE>&      aPackages,
-                                            PROGRESS_REPORTER*             aReporter )
+                                            PROGRESS_REPORTER*             aReporter,
+                                            int                            aSchemaVersion )
 {
     std::stringstream packages_stream;
 
     aReporter->SetTitle( _( "Fetching repository packages" ) );
 
-    if( !DownloadToStream( aUrl, &packages_stream, aReporter ) )
+    if( !DownloadToStream( aUrl, &packages_stream, aReporter, DEFAULT_DOWNLOAD_MEM_LIMIT,
+                           PCM_ACCEPT_V2 ) )
     {
         if( m_dialog )
             wxLogError( _( "Unable to load repository packages url." ) );
@@ -323,7 +364,12 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                aUrl,
     try
     {
         nlohmann::json packages_json = nlohmann::json::parse( packages_stream.str() );
-        ValidateJson( packages_json, nlohmann::json_uri( "#/definitions/PackageArray" ) );
+
+        const JSON_SCHEMA_VALIDATOR& validator =
+                ( aSchemaVersion >= 2 ) ? *m_schema_v2_validator : *m_schema_v1_validator;
+
+        ValidateJson( packages_json, validator,
+                      nlohmann::json_uri( "#/definitions/PackageArray" ) );
 
         aPackages = packages_json["packages"].get<std::vector<PCM_PACKAGE>>();
     }
@@ -454,7 +500,8 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
     {
         // Cache doesn't exist or is out of date
         if( !fetchPackages( current_repo.packages.url, current_repo.packages.sha256,
-                            current_repo.package_list, reporter.get() ) )
+                            current_repo.package_list, reporter.get(),
+                            current_repo.schema_version ) )
         {
             return false;
         }
