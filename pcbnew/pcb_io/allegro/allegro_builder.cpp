@@ -2220,13 +2220,6 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildRect( const BLK_0x24_RECT& aRect,
     const int lineWidth = 0;
     shape->SetWidth( lineWidth );
 
-    if( aRect.m_Coords[0] == 1334202 )
-    {
-        wxLogTrace( traceAllegroBuilder, "Debug rect with coords [%d, %d, %d, %d], rotation %u, layer %#02x:%#02x",
-                    aRect.m_Coords[0], aRect.m_Coords[1], aRect.m_Coords[2], aRect.m_Coords[3],
-                    aRect.m_Rotation, aRect.m_Layer.m_Class, aRect.m_Layer.m_Subclass );
-    }
-
     return shape;
 }
 
