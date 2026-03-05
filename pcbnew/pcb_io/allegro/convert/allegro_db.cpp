@@ -577,7 +577,7 @@ bool ARC::ResolveRefs( const DB_OBJ_RESOLVER& aResolver )
     m_Parent.Resolve( aResolver );
     ok &= m_Next.Resolve( aResolver );
 
-    return true;
+    return ok;
 }
 
 
