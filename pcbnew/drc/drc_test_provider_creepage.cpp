@@ -127,7 +127,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     std::shared_ptr<GRAPH_NODE> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
     std::shared_ptr<GRAPH_NODE> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
 
-
     aGraph.GeneratePaths( creepageValue, aLayer );
 
     std::vector<std::shared_ptr<GRAPH_NODE>> temp_nodes;
@@ -135,8 +134,8 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     std::copy_if( aGraph.m_nodes.begin(), aGraph.m_nodes.end(), std::back_inserter( temp_nodes ),
                   []( std::shared_ptr<GRAPH_NODE> aNode )
                   {
-                      return !!aNode && aNode->m_parent && aNode->m_parent->IsConductive()
-                             && aNode->m_connectDirectly && aNode->m_type == GRAPH_NODE::POINT;
+                      return !!aNode && aNode->m_parent && !aNode->m_parent->IsConductive()
+                             && !aNode->m_connectDirectly && aNode->m_type == GRAPH_NODE::POINT;
                   } );
 
     alg::for_all_pairs( temp_nodes.begin(), temp_nodes.end(),
@@ -152,21 +151,6 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
                                 return;
 
                             if( ( aN1->m_parent ) != ( aN2->m_parent ) )
-                                return;
-
-
-                            if( aN1->m_parent->IsConductive() )
-                                return;
-
-                            if( aN1->m_connectDirectly || aN2->m_connectDirectly )
-                                return;
-
-                            // We are only looking for points on circles and arcs
-
-                            if( aN1->m_type != GRAPH_NODE::POINT )
-                                return;
-
-                            if( aN2->m_type != GRAPH_NODE::POINT )
                                 return;
 
                             aN1->m_parent->ConnectChildren( aN1, aN2, aGraph );

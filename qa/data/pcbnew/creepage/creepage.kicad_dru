@@ -1,0 +1,13 @@
+(version 1)
+
+(rule "0.5HV-HV_CRE"
+   (constraint creepage (min 3.0mm))
+   (condition "A.hasNetclass('0.5HV') && B.hasNetclass('HV')"))
+
+(rule "GND-HV_CRE"
+   (constraint creepage (min 8.0mm))
+   (condition "A.hasNetclass('GND') && B.hasNetclass('HV')"))
+
+(rule "GND-0.5HV_CRE"
+   (constraint creepage (min 3.0mm))
+   (condition "A.hasNetclass('GND') && B.hasNetclass('0.5HV')"))
