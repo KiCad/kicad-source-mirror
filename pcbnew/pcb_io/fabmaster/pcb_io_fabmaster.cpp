@@ -32,6 +32,10 @@
 #include <common.h>
 #include <macros.h>
 
+#include <algorithm>
+#include <fstream>
+#include <string>
+
 
 PCB_IO_FABMASTER::PCB_IO_FABMASTER() : PCB_IO( wxS( "Fabmaster" ) )
 {
@@ -40,6 +44,57 @@ PCB_IO_FABMASTER::PCB_IO_FABMASTER() : PCB_IO( wxS( "Fabmaster" ) )
 
 PCB_IO_FABMASTER::~PCB_IO_FABMASTER()
 {
+}
+
+
+bool PCB_IO_FABMASTER::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PCB_IO::CanReadBoard( aFileName ) )
+        return false;
+
+    std::ifstream file( aFileName.fn_str() );
+
+    if( !file.is_open() )
+        return false;
+
+    // Fabmaster files are !-delimited ASCII with known column headers.
+    // Scan the first 100 lines for rows containing at least two ! delimiters
+    // and a recognized Fabmaster column name.
+    static const char* keywords[] = {
+        "REFDES", "COMPCLASS", "NETNAME", "SUBCLASS", "GRAPHICDATANAME",
+        "SYMNAME", "PINNAME", "VIAX", "PADSHAPENAME", "PADNAME", "LAYERSORT"
+    };
+
+    std::string line;
+    int linesRead = 0;
+
+    while( std::getline( file, line ) && linesRead < 100 )
+    {
+        linesRead++;
+
+        int delimCount = 0;
+
+        for( char ch : line )
+        {
+            if( ch == '!' )
+                delimCount++;
+        }
+
+        if( delimCount < 2 )
+            continue;
+
+        // Uppercase the line for case-insensitive matching
+        std::string upper = line;
+        std::transform( upper.begin(), upper.end(), upper.begin(), ::toupper );
+
+        for( const char* kw : keywords )
+        {
+            if( upper.find( kw ) != std::string::npos )
+                return true;
+        }
+    }
+
+    return false;
 }
 
 

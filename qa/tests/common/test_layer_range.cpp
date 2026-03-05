@@ -115,6 +115,48 @@ BOOST_AUTO_TEST_CASE( SingleLayerRange )
     BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
 }
 
+BOOST_AUTO_TEST_CASE( ZeroLayerCountClampedToTwo )
+{
+    LAYER_RANGE               range( F_Cu, B_Cu, 0 );
+    std::vector<PCB_LAYER_ID> expected = { F_Cu, B_Cu };
+    std::vector<PCB_LAYER_ID> result;
+
+    for( auto layer : range )
+    {
+        result.push_back( layer );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
+}
+
+BOOST_AUTO_TEST_CASE( OneLayerCountClampedToTwo )
+{
+    LAYER_RANGE               range( F_Cu, B_Cu, 1 );
+    std::vector<PCB_LAYER_ID> expected = { F_Cu, B_Cu };
+    std::vector<PCB_LAYER_ID> result;
+
+    for( auto layer : range )
+    {
+        result.push_back( layer );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
+}
+
+BOOST_AUTO_TEST_CASE( NegativeLayerCountClampedToTwo )
+{
+    LAYER_RANGE               range( F_Cu, B_Cu, -5 );
+    std::vector<PCB_LAYER_ID> expected = { F_Cu, B_Cu };
+    std::vector<PCB_LAYER_ID> result;
+
+    for( auto layer : range )
+    {
+        result.push_back( layer );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
+}
+
 BOOST_AUTO_TEST_CASE( MaxLayerCount )
 {
     LAYER_RANGE               range( F_Cu, B_Cu, PCB_LAYER_ID_COUNT );

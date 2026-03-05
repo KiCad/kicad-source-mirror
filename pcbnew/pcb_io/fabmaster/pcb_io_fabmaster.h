@@ -44,6 +44,8 @@ public:
         return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
     }
 
+    bool CanReadBoard( const wxString& aFileName ) const override;
+
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 

@@ -19,6 +19,8 @@
 
 #include <layer_ids.h>
 
+#include <algorithm>
+
 #ifndef LAYER_RANGE_H
 #define LAYER_RANGE_H
 
@@ -113,7 +115,7 @@ private:
 
 public:
     LAYER_RANGE( PCB_LAYER_ID start, PCB_LAYER_ID stop, int layer_count ) :
-            m_start( start ), m_stop( stop ), m_layer_count( layer_count )
+            m_start( start ), m_stop( stop ), m_layer_count( std::max( layer_count, 2 ) )
     {
             if( start & 1 || stop & 1 )
                 throw std::invalid_argument( "Only works for copper layers" );
