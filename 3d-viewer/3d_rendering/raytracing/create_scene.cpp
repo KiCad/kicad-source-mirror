@@ -1925,8 +1925,6 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer,
         return;
     }
 
-    const wxString currentVariant = m_boardAdapter.GetBoard()->GetCurrentVariant();
-
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
