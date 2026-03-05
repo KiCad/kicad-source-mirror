@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-01 09:48+0300\n"
+"POT-Creation-Date: 2026-03-05 22:09+0300\n"
 "PO-Revision-Date: 2026-01-04 00:01+0000\n"
 "Last-Translator: Herman van der Vaart <vaarttuig@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
@@ -352,7 +352,7 @@ msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 #: common/dialogs/panel_embedded_files.cpp:530
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
-#: eeschema/dialogs/dialog_erc.cpp:905
+#: eeschema/dialogs/dialog_erc.cpp:906
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:906
@@ -2052,7 +2052,7 @@ msgstr "&OK"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
 #: common/kidialog.cpp:125 common/paths.cpp:556
-#: eeschema/dialogs/dialog_erc.cpp:906
+#: eeschema/dialogs/dialog_erc.cpp:907
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
@@ -3506,7 +3506,7 @@ msgstr "Afdrukvoorbeeld"
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
-#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:490
+#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:491
 #: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
@@ -3831,7 +3831,7 @@ msgstr "OK"
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:487 common/tool/actions.cpp:159
-#: eeschema/dialogs/dialog_erc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:451
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:968
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
@@ -5765,7 +5765,7 @@ msgstr "Netklasse"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
+#: eeschema/dialogs/dialog_erc.cpp:908 eeschema/sch_marker.cpp:373
 #: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "Negeren"
@@ -6439,8 +6439,8 @@ msgstr "Busverbinding"
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:391 pcbnew/zone.cpp:934
+#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:63
+#: eeschema/sch_rule_area.cpp:403 pcbnew/zone.cpp:934
 msgid "Rule Area"
 msgstr "Regelgebied"
 
@@ -6588,7 +6588,7 @@ msgstr "Lengte"
 msgid "Angle"
 msgstr "Hoek"
 
-#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:395
+#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:407
 msgid "Points"
 msgstr "Punten"
 
@@ -8682,7 +8682,7 @@ msgstr "Bestand '%s' uitpakken."
 msgid "Error extracting file!"
 msgstr "Fout bij het uitpakken van bestand!"
 
-#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1098
+#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1099
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -10372,7 +10372,7 @@ msgid "Info:"
 msgstr "Informatie:"
 
 #: common/widgets/wx_html_report_panel.cpp:372
-#: eeschema/dialogs/dialog_erc.cpp:1065
+#: eeschema/dialogs/dialog_erc.cpp:1066
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
@@ -11140,7 +11140,7 @@ msgstr "Annotatie voltooid."
 msgid "Added items via API"
 msgstr "Items toegevoegd via API"
 
-#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:521
+#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:522
 msgid "Created items via API"
 msgstr "Items aangemaakt via API"
 
@@ -12138,147 +12138,147 @@ msgstr "Symboolbibliotheekverwijzingen"
 msgid "Run ERC"
 msgstr "ERC uitvoeren"
 
-#: eeschema/dialogs/dialog_erc.cpp:174
+#: eeschema/dialogs/dialog_erc.cpp:175
 msgid "Show Annotation dialog"
 msgstr "Annotatiescherm weergeven"
 
-#: eeschema/dialogs/dialog_erc.cpp:187
+#: eeschema/dialogs/dialog_erc.cpp:188
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 "Het schema is niet volledig geannoteerd. ERC-resultaten zullen onvolledig "
 "zijn."
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
+#: eeschema/dialogs/dialog_erc.cpp:341 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr "Uitzonderingen ook verwijderen?"
 
-#: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
+#: eeschema/dialogs/dialog_erc.cpp:341 eeschema/dialogs/dialog_erc_base.cpp:173
 #: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Alle markeringen verwijderen"
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr "Alleen fouten en waarschuwingen"
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
+#: eeschema/dialogs/dialog_erc.cpp:344 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr "Fouten, waarschuwingen en uitzonderingen"
 
-#: eeschema/dialogs/dialog_erc.cpp:475
+#: eeschema/dialogs/dialog_erc.cpp:476
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d symbool(en) vereisen annotatie. <br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:482
+#: eeschema/dialogs/dialog_erc.cpp:483
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC geannuleerd door gebruiker.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
+#: eeschema/dialogs/dialog_erc.cpp:485 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr "Klaar.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr "fouten"
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr "waarschuwingen"
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
+#: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr "passend"
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr "Uitzondering voor deze overtreding verwijderen"
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
+#: eeschema/dialogs/dialog_erc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Het wordt teruggeplaatst in de %s-lijst"
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
+#: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:727
 msgid "Edit exclusion comment..."
 msgstr "Uitzonderingsopmerking bewerken..."
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
+#: eeschema/dialogs/dialog_erc.cpp:684 pcbnew/dialogs/dialog_drc.cpp:740
 msgid "Exclude this violation"
 msgstr "Overtreding uitzonderen"
 
-#: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
+#: eeschema/dialogs/dialog_erc.cpp:685 eeschema/dialogs/dialog_erc.cpp:689
 #: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Het wordt weggelaten van de %s -lijst"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
+#: eeschema/dialogs/dialog_erc.cpp:688 pcbnew/dialogs/dialog_drc.cpp:744
 msgid "Exclude with comment..."
 msgstr "Uitzonderen met opmerking..."
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
+#: eeschema/dialogs/dialog_erc.cpp:707 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Ernst van alle '%s'-overtredingen naar fout wijzigen"
 
-#: eeschema/dialogs/dialog_erc.cpp:708 eeschema/dialogs/dialog_erc.cpp:715
+#: eeschema/dialogs/dialog_erc.cpp:709 eeschema/dialogs/dialog_erc.cpp:716
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "De ernst van overtredingen kan ook worden aangepast in het schema-"
 "instellingenscherm"
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
+#: eeschema/dialogs/dialog_erc.cpp:714 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Ernst van alle '%s'-overtredingen naar waarschuwing wijzigen"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Alle '%s'-overtredingen negeren"
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
+#: eeschema/dialogs/dialog_erc.cpp:722 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr "Overtredingen worden niet gecontroleerd of gerapporteerd"
 
-#: eeschema/dialogs/dialog_erc.cpp:729
+#: eeschema/dialogs/dialog_erc.cpp:730
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Pin-naar-pin conflicttabel bewerken..."
 
-#: eeschema/dialogs/dialog_erc.cpp:730 eeschema/dialogs/dialog_erc.cpp:736
-#: eeschema/dialogs/dialog_erc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:731 eeschema/dialogs/dialog_erc.cpp:737
+#: eeschema/dialogs/dialog_erc.cpp:744
 msgid "Open the Schematic Setup... dialog"
 msgstr "Schema-instellingenscherm openen"
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
+#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr "Ernst van overtredingen bewerken..."
 
-#: eeschema/dialogs/dialog_erc.cpp:742
+#: eeschema/dialogs/dialog_erc.cpp:743
 msgid "Edit connection grid spacing..."
 msgstr "Verbindingsrasterafstand bewerken..."
 
-#: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
+#: eeschema/dialogs/dialog_erc.cpp:755 eeschema/dialogs/dialog_erc.cpp:791
 #: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 msgid "Exclusion Comment"
 msgstr "Uitzonderingsopmerking"
 
-#: eeschema/dialogs/dialog_erc.cpp:878
+#: eeschema/dialogs/dialog_erc.cpp:879
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
 msgstr "Pinconflicttabel"
 
-#: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
+#: eeschema/dialogs/dialog_erc.cpp:883 eeschema/dialogs/dialog_erc.cpp:1013
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
 #: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
 #: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr "Ernst van overtreding"
 
-#: eeschema/dialogs/dialog_erc.cpp:886
+#: eeschema/dialogs/dialog_erc.cpp:887
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
@@ -12286,7 +12286,7 @@ msgstr "Ernst van overtreding"
 msgid "Formatting"
 msgstr "Opmaak"
 
-#: eeschema/dialogs/dialog_erc.cpp:1093 pcbnew/dialogs/dialog_gendrill.cpp:518
+#: eeschema/dialogs/dialog_erc.cpp:1094 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Rapportbestand '%s' aangemaakt."
@@ -13670,7 +13670,7 @@ msgid "Derive from symbol:"
 msgstr "Afleiden van symbool:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:400
+#: eeschema/sch_rule_area.cpp:412
 msgid "<None>"
 msgstr "<None>"
 
@@ -17200,11 +17200,11 @@ msgstr ""
 msgid "Failed to load schematic\n"
 msgstr "Kan schemabestand niet openen\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:346
-#: eeschema/eeschema_jobs_handler.cpp:491
-#: eeschema/eeschema_jobs_handler.cpp:718
-#: eeschema/eeschema_jobs_handler.cpp:847
-#: eeschema/eeschema_jobs_handler.cpp:1171 pcbnew/pcbnew_jobs_handler.cpp:441
+#: eeschema/eeschema_jobs_handler.cpp:355
+#: eeschema/eeschema_jobs_handler.cpp:500
+#: eeschema/eeschema_jobs_handler.cpp:727
+#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:1180 pcbnew/pcbnew_jobs_handler.cpp:441
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
@@ -17214,9 +17214,9 @@ msgstr "Kan schemabestand niet openen\n"
 msgid "Failed to create output directory\n"
 msgstr "Kan uitvoermap niet aanmaken\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:413
-#: eeschema/eeschema_jobs_handler.cpp:535
-#: eeschema/eeschema_jobs_handler.cpp:819
+#: eeschema/eeschema_jobs_handler.cpp:422
+#: eeschema/eeschema_jobs_handler.cpp:544
+#: eeschema/eeschema_jobs_handler.cpp:828
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
@@ -17224,90 +17224,90 @@ msgstr ""
 "Waarschuwing: schema heeft annotatiefouten, gebruik de schema-editor om ze "
 "op te lossen\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:423
-#: eeschema/eeschema_jobs_handler.cpp:545
-#: eeschema/eeschema_jobs_handler.cpp:829
+#: eeschema/eeschema_jobs_handler.cpp:432
+#: eeschema/eeschema_jobs_handler.cpp:554
+#: eeschema/eeschema_jobs_handler.cpp:838
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Waarschuwing: gedupliceerde bladnamen.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:474
+#: eeschema/eeschema_jobs_handler.cpp:483
 msgid "Unknown netlist format.\n"
 msgstr "Onbekende netlijstindeling.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:621
+#: eeschema/eeschema_jobs_handler.cpp:630
 #, c-format
 msgid "BOM preset '%s' not found"
 msgstr "BOM-voorinstelling '%s' niet gevonden"
 
-#: eeschema/eeschema_jobs_handler.cpp:726
-#: eeschema/eeschema_jobs_handler.cpp:934
+#: eeschema/eeschema_jobs_handler.cpp:735
+#: eeschema/eeschema_jobs_handler.cpp:943
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Kan doelbestand '%s' niet openen"
 
-#: eeschema/eeschema_jobs_handler.cpp:760
+#: eeschema/eeschema_jobs_handler.cpp:769
 #, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "Voorinstelling BOM-indeling '%s' niet gevonden"
 
-#: eeschema/eeschema_jobs_handler.cpp:785
-#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:794
+#: eeschema/eeschema_jobs_handler.cpp:865
 #, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Stuklijst (BOM) geschreven naar '%s'."
 
-#: eeschema/eeschema_jobs_handler.cpp:908
+#: eeschema/eeschema_jobs_handler.cpp:917
 #, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Plotten van symbool '%s' eenheid %d naar '%s'\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: eeschema/eeschema_jobs_handler.cpp:997
+#: eeschema/eeschema_jobs_handler.cpp:1101 pcbnew/pcbnew_jobs_handler.cpp:1752
 #: pcbnew/pcbnew_jobs_handler.cpp:1825
 msgid "Unable to load library\n"
 msgstr "Kan bibliotheek niet laden\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1004
+#: eeschema/eeschema_jobs_handler.cpp:1013
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 msgid "There is no symbol selected to save."
 msgstr "Er is geen symbool geselecteerd om op te slaan."
 
-#: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: eeschema/eeschema_jobs_handler.cpp:1046 pcbnew/pcbnew_jobs_handler.cpp:1168
 #: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, c-format
 msgid "Exporting %s"
 msgstr "%s exporteren"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
+#: eeschema/eeschema_jobs_handler.cpp:1076 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr "Uitvoerpad moet niet conflicteren met bestaand pad\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
+#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 "Uitvoerpad moet opgegeven zijn om verouderde en niet-KiCad-bibliotheken om "
 "te zetten.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1104
+#: eeschema/eeschema_jobs_handler.cpp:1113
 msgid "Saving symbol library in updated format\n"
 msgstr "Opslaan van symboolbibliotheek in nieuwe bestandsindeling\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1123
+#: eeschema/eeschema_jobs_handler.cpp:1132
 msgid "Symbol library was not updated\n"
 msgstr "Symboolbibliotheek was niet bijgewerkt\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
+#: eeschema/eeschema_jobs_handler.cpp:1205 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, c-format
 msgid "Found %d violations\n"
 msgstr "%d overtredingen gevonden\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1211
+#: eeschema/eeschema_jobs_handler.cpp:1220
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Kan ERC-rapport niet opslaan naar %s\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1216
+#: eeschema/eeschema_jobs_handler.cpp:1225
 #, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "ERC-rapport opgeslagen naar %s\n"
@@ -19611,13 +19611,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "tekstattributen van symboolvelden moeten 3 tekens breed zijn"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2243
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1654
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1657
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Symboolbibliotheek '%s' bestaat al."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1680
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1683
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Bibliotheek '%s' kan niet worden verwijderd."
@@ -19958,7 +19958,7 @@ msgid "Net"
 msgstr "Net"
 
 #: eeschema/sch_label.cpp:1390 eeschema/sch_line.cpp:897
-#: eeschema/sch_rule_area.cpp:405
+#: eeschema/sch_rule_area.cpp:417
 msgid "Resolved netclass"
 msgstr "Toegewezen netklasse"
 
@@ -20158,7 +20158,7 @@ msgstr "Verschillende aantallen eenheden voor item %s%s%s en %s%s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Verschillende waarden voor %s%d%s (%s) en %s%d%s (%s)"
 
-#: eeschema/sch_rule_area.cpp:198
+#: eeschema/sch_rule_area.cpp:210
 msgid "Schematic rule area"
 msgstr "Schemaregelgebied"
 
@@ -31942,12 +31942,12 @@ msgstr "km/u"
 msgid "mi/h"
 msgstr "mijl/u"
 
-#: pcbnew/api/api_handler_pcb.cpp:522
+#: pcbnew/api/api_handler_pcb.cpp:523
 #, fuzzy
 msgid "Modified items via API"
 msgstr "Items toegevoegd via API"
 
-#: pcbnew/api/api_handler_pcb.cpp:685
+#: pcbnew/api/api_handler_pcb.cpp:686
 msgid "Deleted items via API"
 msgstr "Items verwijderd via API"
 

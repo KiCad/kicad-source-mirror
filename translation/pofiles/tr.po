@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-01 09:48+0300\n"
+"POT-Creation-Date: 2026-03-05 22:09+0300\n"
 "PO-Revision-Date: 2026-03-05 19:06+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
@@ -347,7 +347,7 @@ msgstr "Dosya '%s' kaydetmek için yeterli izin yok."
 #: common/dialogs/panel_embedded_files.cpp:530
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
-#: eeschema/dialogs/dialog_erc.cpp:905
+#: eeschema/dialogs/dialog_erc.cpp:906
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:906
@@ -2038,7 +2038,7 @@ msgstr "&Tamam"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
 #: common/kidialog.cpp:125 common/paths.cpp:556
-#: eeschema/dialogs/dialog_erc.cpp:906
+#: eeschema/dialogs/dialog_erc.cpp:907
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
@@ -3491,7 +3491,7 @@ msgstr "Yazdırma Önizleme"
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
-#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:490
+#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:491
 #: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
@@ -3815,7 +3815,7 @@ msgstr "Tamam"
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:487 common/tool/actions.cpp:159
-#: eeschema/dialogs/dialog_erc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:451
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:968
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
@@ -5732,7 +5732,7 @@ msgstr "Ağ Sınıfı"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
+#: eeschema/dialogs/dialog_erc.cpp:908 eeschema/sch_marker.cpp:373
 #: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "Yok Say"
@@ -6403,8 +6403,8 @@ msgstr "Veri Yolu Girişi"
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:391 pcbnew/zone.cpp:934
+#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:63
+#: eeschema/sch_rule_area.cpp:403 pcbnew/zone.cpp:934
 msgid "Rule Area"
 msgstr "Kural Alanı"
 
@@ -6552,7 +6552,7 @@ msgstr "Uzunluk"
 msgid "Angle"
 msgstr "Açı"
 
-#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:395
+#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:407
 msgid "Points"
 msgstr "Noktalar"
 
@@ -8602,7 +8602,7 @@ msgstr "'%s' dosyası çıkartılıyor."
 msgid "Error extracting file!"
 msgstr "Dosya çıkarılırken hata oluştu!"
 
-#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1098
+#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1099
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -10272,7 +10272,7 @@ msgid "Info:"
 msgstr "Bilgi:"
 
 #: common/widgets/wx_html_report_panel.cpp:372
-#: eeschema/dialogs/dialog_erc.cpp:1065
+#: eeschema/dialogs/dialog_erc.cpp:1066
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
@@ -11024,7 +11024,7 @@ msgstr "Numaralandırma tamamlandı."
 msgid "Added items via API"
 msgstr "API aracılığıyla eklenen ögeler"
 
-#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:521
+#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:522
 msgid "Created items via API"
 msgstr "API aracılığıyla ögeler oluşturuldu"
 
@@ -12006,148 +12006,148 @@ msgstr "Sembol Kütüphane Referansları"
 msgid "Run ERC"
 msgstr "ERC (Elektriksel Kural Kontrolü) çalıştır"
 
-#: eeschema/dialogs/dialog_erc.cpp:174
+#: eeschema/dialogs/dialog_erc.cpp:175
 msgid "Show Annotation dialog"
 msgstr "Numaralandırma iletişim kutusunu göster"
 
-#: eeschema/dialogs/dialog_erc.cpp:187
+#: eeschema/dialogs/dialog_erc.cpp:188
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 "Şematik tam olarak numaralandırılmış değil. ERC (Elektriksel Kural Kontrolü) "
 "sonuçları eksik olacaktır."
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
+#: eeschema/dialogs/dialog_erc.cpp:341 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr "Dışlamalar da silinsin mi?"
 
-#: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
+#: eeschema/dialogs/dialog_erc.cpp:341 eeschema/dialogs/dialog_erc_base.cpp:173
 #: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Tüm İşaretleyicileri Sil"
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr "Yalnızca Hatalar ve Uyarılar"
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
+#: eeschema/dialogs/dialog_erc.cpp:344 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr "Hatalar, Uyarılar ve Dışlamalar"
 
-#: eeschema/dialogs/dialog_erc.cpp:475
+#: eeschema/dialogs/dialog_erc.cpp:476
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:482
+#: eeschema/dialogs/dialog_erc.cpp:483
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr ""
 "-------- ERC (Elektriksel Kural Kontrolü) kullanıcı tarafından iptal edildi. "
 "<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
+#: eeschema/dialogs/dialog_erc.cpp:485 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr "Bitti.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr "hatalar"
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr "uyarılar"
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
+#: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr "uygun"
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr "Bu ihlal için dışlamayı kaldır"
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
+#: eeschema/dialogs/dialog_erc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "%s listesine geri yerleştirilecektir"
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
+#: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:727
 msgid "Edit exclusion comment..."
 msgstr "Hariç tutma yorumunu düzenle..."
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
+#: eeschema/dialogs/dialog_erc.cpp:684 pcbnew/dialogs/dialog_drc.cpp:740
 msgid "Exclude this violation"
 msgstr "Bu ihlali hariç tut"
 
-#: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
+#: eeschema/dialogs/dialog_erc.cpp:685 eeschema/dialogs/dialog_erc.cpp:689
 #: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "%s listesinden çıkarılacak"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
+#: eeschema/dialogs/dialog_erc.cpp:688 pcbnew/dialogs/dialog_drc.cpp:744
 msgid "Exclude with comment..."
 msgstr "Yorum ekleyerek hariç tut..."
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
+#: eeschema/dialogs/dialog_erc.cpp:707 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Tüm '%s' ihlallerinin önem derecesini Hata olarak değiştir"
 
-#: eeschema/dialogs/dialog_erc.cpp:708 eeschema/dialogs/dialog_erc.cpp:715
+#: eeschema/dialogs/dialog_erc.cpp:709 eeschema/dialogs/dialog_erc.cpp:716
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "İhlal şiddetleri ayrıca Şematik Ayarları... penceresinde de düzenlenebilir"
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
+#: eeschema/dialogs/dialog_erc.cpp:714 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Tüm '%s' ihlallerinin önem derecesini Uyarı olarak değiştir"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Tüm '%s' ihlallerini yoksay"
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
+#: eeschema/dialogs/dialog_erc.cpp:722 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr "İhlaller kontrol edilmeyecek veya bildirilmeyecek"
 
-#: eeschema/dialogs/dialog_erc.cpp:729
+#: eeschema/dialogs/dialog_erc.cpp:730
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Pin pin'e çakışma haritasını düzenle..."
 
-#: eeschema/dialogs/dialog_erc.cpp:730 eeschema/dialogs/dialog_erc.cpp:736
-#: eeschema/dialogs/dialog_erc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:731 eeschema/dialogs/dialog_erc.cpp:737
+#: eeschema/dialogs/dialog_erc.cpp:744
 msgid "Open the Schematic Setup... dialog"
 msgstr "Şematik Kurulum... iletişim kutusunu aç"
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
+#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr "İhlal önem derecelerini düzenle..."
 
-#: eeschema/dialogs/dialog_erc.cpp:742
+#: eeschema/dialogs/dialog_erc.cpp:743
 msgid "Edit connection grid spacing..."
 msgstr "Bağlantı ızgara aralığını düzenle..."
 
-#: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
+#: eeschema/dialogs/dialog_erc.cpp:755 eeschema/dialogs/dialog_erc.cpp:791
 #: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 msgid "Exclusion Comment"
 msgstr "Hariç tutma Yorumu"
 
-#: eeschema/dialogs/dialog_erc.cpp:878
+#: eeschema/dialogs/dialog_erc.cpp:879
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
 msgstr "Pin Çakışmaları Haritası"
 
-#: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
+#: eeschema/dialogs/dialog_erc.cpp:883 eeschema/dialogs/dialog_erc.cpp:1013
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
 #: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
 #: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr "İhlal Önem Derecesi"
 
-#: eeschema/dialogs/dialog_erc.cpp:886
+#: eeschema/dialogs/dialog_erc.cpp:887
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
@@ -12155,7 +12155,7 @@ msgstr "İhlal Önem Derecesi"
 msgid "Formatting"
 msgstr "Biçimlendirme"
 
-#: eeschema/dialogs/dialog_erc.cpp:1093 pcbnew/dialogs/dialog_gendrill.cpp:518
+#: eeschema/dialogs/dialog_erc.cpp:1094 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, c-format
 msgid "Report file '%s' created."
 msgstr "'%s' rapor dosyası oluşturuldu."
@@ -13532,7 +13532,7 @@ msgid "Derive from symbol:"
 msgstr "Sembolden türet:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:400
+#: eeschema/sch_rule_area.cpp:412
 msgid "<None>"
 msgstr "<Yok>"
 
@@ -17038,11 +17038,11 @@ msgstr ""
 msgid "Failed to load schematic\n"
 msgstr "Şematik yüklenemedi\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:346
-#: eeschema/eeschema_jobs_handler.cpp:491
-#: eeschema/eeschema_jobs_handler.cpp:718
-#: eeschema/eeschema_jobs_handler.cpp:847
-#: eeschema/eeschema_jobs_handler.cpp:1171 pcbnew/pcbnew_jobs_handler.cpp:441
+#: eeschema/eeschema_jobs_handler.cpp:355
+#: eeschema/eeschema_jobs_handler.cpp:500
+#: eeschema/eeschema_jobs_handler.cpp:727
+#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:1180 pcbnew/pcbnew_jobs_handler.cpp:441
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
@@ -17052,9 +17052,9 @@ msgstr "Şematik yüklenemedi\n"
 msgid "Failed to create output directory\n"
 msgstr "Çıktı dizini oluşturulamadı\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:413
-#: eeschema/eeschema_jobs_handler.cpp:535
-#: eeschema/eeschema_jobs_handler.cpp:819
+#: eeschema/eeschema_jobs_handler.cpp:422
+#: eeschema/eeschema_jobs_handler.cpp:544
+#: eeschema/eeschema_jobs_handler.cpp:828
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
@@ -17062,90 +17062,90 @@ msgstr ""
 "Uyarı: şematik açıklama hatalarına sahiptir, lütfen bunları düzeltmek için "
 "şematik düzenleyiciyi kullanın\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:423
-#: eeschema/eeschema_jobs_handler.cpp:545
-#: eeschema/eeschema_jobs_handler.cpp:829
+#: eeschema/eeschema_jobs_handler.cpp:432
+#: eeschema/eeschema_jobs_handler.cpp:554
+#: eeschema/eeschema_jobs_handler.cpp:838
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Uyarı: yinelenen sayfa adları.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:474
+#: eeschema/eeschema_jobs_handler.cpp:483
 msgid "Unknown netlist format.\n"
 msgstr "Bilinmeyen ağ listesi biçimi.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:621
+#: eeschema/eeschema_jobs_handler.cpp:630
 #, c-format
 msgid "BOM preset '%s' not found"
 msgstr "BOM malzeme listesi ön ayarı '%s' bulunamadı"
 
-#: eeschema/eeschema_jobs_handler.cpp:726
-#: eeschema/eeschema_jobs_handler.cpp:934
+#: eeschema/eeschema_jobs_handler.cpp:735
+#: eeschema/eeschema_jobs_handler.cpp:943
 #, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Hedef '%s' açılamıyor"
 
-#: eeschema/eeschema_jobs_handler.cpp:760
+#: eeschema/eeschema_jobs_handler.cpp:769
 #, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "BOM biçimi ön ayarı '%s' bulunamadı"
 
-#: eeschema/eeschema_jobs_handler.cpp:785
-#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:794
+#: eeschema/eeschema_jobs_handler.cpp:865
 #, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Malzeme listesi '%s' adresine yazıldı."
 
-#: eeschema/eeschema_jobs_handler.cpp:908
+#: eeschema/eeschema_jobs_handler.cpp:917
 #, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "'%s' sembolü %d biriminden '%s' birimine çiziliyor\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: eeschema/eeschema_jobs_handler.cpp:997
+#: eeschema/eeschema_jobs_handler.cpp:1101 pcbnew/pcbnew_jobs_handler.cpp:1752
 #: pcbnew/pcbnew_jobs_handler.cpp:1825
 msgid "Unable to load library\n"
 msgstr "Kütüphane yüklenemiyor\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1004
+#: eeschema/eeschema_jobs_handler.cpp:1013
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 msgid "There is no symbol selected to save."
 msgstr "Kaydedilecek bir sembol seçilmedi."
 
-#: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: eeschema/eeschema_jobs_handler.cpp:1046 pcbnew/pcbnew_jobs_handler.cpp:1168
 #: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, c-format
 msgid "Exporting %s"
 msgstr "%s Dışa Aktarılıyor"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
+#: eeschema/eeschema_jobs_handler.cpp:1076 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr "Çıktı yolu mevcut yolla çakışmamalıdır\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
+#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 "Eski ve KiCad dışı kütüphaneleri dönüştürmek için çıkış yolu "
 "belirtilmelidir.\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1104
+#: eeschema/eeschema_jobs_handler.cpp:1113
 msgid "Saving symbol library in updated format\n"
 msgstr "Sembol kütüphanesi güncellenmiş biçimde kaydediliyor\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1123
+#: eeschema/eeschema_jobs_handler.cpp:1132
 msgid "Symbol library was not updated\n"
 msgstr "Sembol kütüphanesi güncellenmedi\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
+#: eeschema/eeschema_jobs_handler.cpp:1205 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, c-format
 msgid "Found %d violations\n"
 msgstr "%d ihlal bulundu\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1211
+#: eeschema/eeschema_jobs_handler.cpp:1220
 #, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "ERC (Elektriksel Kural Kontrolü) raporu %s'ye kaydedilemiyor\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1216
+#: eeschema/eeschema_jobs_handler.cpp:1225
 #, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "ERC (Elektriksel Kural Kontrolü) Raporu %s'ye kaydedildi\n"
@@ -19417,13 +19417,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "sembol alanı metin öznitelikleri 3 karakter genişliğinde olmalıdır"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2243
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1654
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1657
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "'%s' sembol kütüphanesi zaten var."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1680
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1683
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "'%s' sembol kütüphanesi silinemiyor."
@@ -19762,7 +19762,7 @@ msgid "Net"
 msgstr "Ağ"
 
 #: eeschema/sch_label.cpp:1390 eeschema/sch_line.cpp:897
-#: eeschema/sch_rule_area.cpp:405
+#: eeschema/sch_rule_area.cpp:417
 msgid "Resolved netclass"
 msgstr "Çözümlenen ağ sınıfı"
 
@@ -19961,7 +19961,7 @@ msgstr "Öğe %s%s%s ve %s%s%s için farklı birim sayıları\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "%s%d%s (%s) ve %s%d%s (%s) için farklı değerler"
 
-#: eeschema/sch_rule_area.cpp:198
+#: eeschema/sch_rule_area.cpp:210
 msgid "Schematic rule area"
 msgstr "Şematik kural alanı"
 
@@ -31589,11 +31589,11 @@ msgstr "km/h"
 msgid "mi/h"
 msgstr "mi/h"
 
-#: pcbnew/api/api_handler_pcb.cpp:522
+#: pcbnew/api/api_handler_pcb.cpp:523
 msgid "Modified items via API"
 msgstr "API aracılığıyla değiştirilen ögeler"
 
-#: pcbnew/api/api_handler_pcb.cpp:685
+#: pcbnew/api/api_handler_pcb.cpp:686
 msgid "Deleted items via API"
 msgstr "API aracılığıyla silinen ögeler"
 

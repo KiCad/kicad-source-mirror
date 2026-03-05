@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-01 09:48+0300\n"
+"POT-Creation-Date: 2026-03-05 22:09+0300\n"
 "PO-Revision-Date: 2025-04-30 19:05+0000\n"
 "Last-Translator: Stian Kristensen <stiank@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -335,7 +335,7 @@ msgstr "Utilstrekkelige tillatelser til å lagre filen '%s'."
 #: common/dialogs/panel_embedded_files.cpp:530
 #: common/dialogs/panel_setup_severities.cpp:44 common/kidialog.cpp:126
 #: eeschema/dialogs/dialog_design_block_properties.cpp:103
-#: eeschema/dialogs/dialog_erc.cpp:905
+#: eeschema/dialogs/dialog_erc.cpp:906
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1830
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2237
 #: eeschema/erc/erc_item.cpp:81 eeschema/files-io.cpp:906
@@ -2059,7 +2059,7 @@ msgstr "&OK"
 
 #: common/confirm.cpp:187 common/dialogs/panel_setup_severities.cpp:44
 #: common/kidialog.cpp:125 common/paths.cpp:556
-#: eeschema/dialogs/dialog_erc.cpp:906
+#: eeschema/dialogs/dialog_erc.cpp:907
 #: eeschema/dialogs/dialog_plot_schematic.cpp:556
 #: eeschema/dialogs/dialog_plot_schematic.cpp:569
 #: eeschema/dialogs/dialog_plot_schematic.cpp:591
@@ -3530,7 +3530,7 @@ msgstr "Utskriftsforhåndsvisning"
 #: common/tool/action_menu.cpp:214 common/tool/action_menu.cpp:219
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:86
 #: eeschema/dialogs/dialog_change_symbols.cpp:165
-#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:490
+#: eeschema/dialogs/dialog_erc.cpp:120 eeschema/dialogs/dialog_erc.cpp:491
 #: eeschema/dialogs/dialog_export_netlist.cpp:310
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
 #: eeschema/dialogs/dialog_plot_schematic.cpp:82
@@ -3866,7 +3866,7 @@ msgstr "OK"
 #: common/dialogs/git/dialog_git_commit.cpp:152
 #: common/dialogs/git/dialog_git_switch.cpp:73
 #: common/dialogs/panel_embedded_files.cpp:487 common/tool/actions.cpp:159
-#: eeschema/dialogs/dialog_erc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:451
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1362 eeschema/sheet.cpp:782
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:968
 #: eeschema/symbol_editor/symbol_editor.cpp:1029
@@ -5863,7 +5863,7 @@ msgstr "Netto klasse"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
-#: eeschema/dialogs/dialog_erc.cpp:907 eeschema/sch_marker.cpp:373
+#: eeschema/dialogs/dialog_erc.cpp:908 eeschema/sch_marker.cpp:373
 #: pcbnew/dialogs/dialog_drc.cpp:1015 pcbnew/pcb_marker.cpp:229
 msgid "Ignore"
 msgstr "Ignorer"
@@ -6569,8 +6569,8 @@ msgstr "Bussoppføring"
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:51
-#: eeschema/sch_rule_area.cpp:391 pcbnew/zone.cpp:934
+#: common/eda_item.cpp:419 eeschema/sch_rule_area.cpp:63
+#: eeschema/sch_rule_area.cpp:403 pcbnew/zone.cpp:934
 msgid "Rule Area"
 msgstr "Regelområde"
 
@@ -6723,7 +6723,7 @@ msgstr "Lengde"
 msgid "Angle"
 msgstr "Vinkel"
 
-#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:395
+#: common/eda_shape.cpp:1023 eeschema/sch_rule_area.cpp:407
 msgid "Points"
 msgstr "Punkter"
 
@@ -8961,7 +8961,7 @@ msgstr "Pakk ut filen \"%s\"\n"
 msgid "Error extracting file!"
 msgstr "Feil ved utpakking av fil!"
 
-#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1098
+#: common/project/project_archiver.cpp:250 eeschema/dialogs/dialog_erc.cpp:1099
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:63
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:55
@@ -10752,7 +10752,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/widgets/wx_html_report_panel.cpp:372
-#: eeschema/dialogs/dialog_erc.cpp:1065
+#: eeschema/dialogs/dialog_erc.cpp:1066
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:1070
 msgid "Save Report File"
@@ -11542,7 +11542,7 @@ msgstr "Kommentar fullført."
 msgid "Added items via API"
 msgstr ""
 
-#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:521
+#: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:522
 #, fuzzy
 msgid "Created items via API"
 msgstr "Lag soner"
@@ -12481,150 +12481,150 @@ msgstr "Symbolbibliotek Referanser"
 msgid "Run ERC"
 msgstr "Kjør ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:174
+#: eeschema/dialogs/dialog_erc.cpp:175
 msgid "Show Annotation dialog"
 msgstr "Vis dialogbok for merknader"
 
-#: eeschema/dialogs/dialog_erc.cpp:187
+#: eeschema/dialogs/dialog_erc.cpp:188
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:340 pcbnew/dialogs/dialog_drc.cpp:1298
+#: eeschema/dialogs/dialog_erc.cpp:341 pcbnew/dialogs/dialog_drc.cpp:1298
 msgid "Delete exclusions too?"
 msgstr "Vil du slette unntak også?"
 
-#: eeschema/dialogs/dialog_erc.cpp:340 eeschema/dialogs/dialog_erc_base.cpp:173
+#: eeschema/dialogs/dialog_erc.cpp:341 eeschema/dialogs/dialog_erc_base.cpp:173
 #: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Slett alle markører"
 
-#: eeschema/dialogs/dialog_erc.cpp:342 pcbnew/dialogs/dialog_drc.cpp:1300
+#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
 msgstr "Bare feil og advarsler"
 
-#: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1301
+#: eeschema/dialogs/dialog_erc.cpp:344 pcbnew/dialogs/dialog_drc.cpp:1301
 msgid "Errors, Warnings and Exclusions"
 msgstr "Feil, advarsler og unntak"
 
-#: eeschema/dialogs/dialog_erc.cpp:475
+#: eeschema/dialogs/dialog_erc.cpp:476
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:482
+#: eeschema/dialogs/dialog_erc.cpp:483
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC kansellert av bruker. <br> <br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:484 pcbnew/dialogs/dialog_drc.cpp:391
+#: eeschema/dialogs/dialog_erc.cpp:485 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
 msgstr "Ferdig. <br> <br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:700
+#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
 msgid "errors"
 msgstr "feil"
 
-#: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:701
+#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:701
 msgid "warnings"
 msgstr "advarsler"
 
-#: eeschema/dialogs/dialog_erc.cpp:651 pcbnew/dialogs/dialog_drc.cpp:702
+#: eeschema/dialogs/dialog_erc.cpp:652 pcbnew/dialogs/dialog_drc.cpp:702
 msgid "appropriate"
 msgstr "passende"
 
-#: eeschema/dialogs/dialog_erc.cpp:674 pcbnew/dialogs/dialog_drc.cpp:723
+#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:723
 msgid "Remove exclusion for this violation"
 msgstr "Fjern ekskludering for dette bruddet"
 
-#: eeschema/dialogs/dialog_erc.cpp:675 pcbnew/dialogs/dialog_drc.cpp:724
+#: eeschema/dialogs/dialog_erc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:724
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Den vil bli plassert tilbake i %s -listen"
 
-#: eeschema/dialogs/dialog_erc.cpp:678 pcbnew/dialogs/dialog_drc.cpp:727
+#: eeschema/dialogs/dialog_erc.cpp:679 pcbnew/dialogs/dialog_drc.cpp:727
 #, fuzzy
 msgid "Edit exclusion comment..."
 msgstr "Rediger kryddermodell ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:683 pcbnew/dialogs/dialog_drc.cpp:740
+#: eeschema/dialogs/dialog_erc.cpp:684 pcbnew/dialogs/dialog_drc.cpp:740
 #, fuzzy
 msgid "Exclude this violation"
 msgstr "Utelukk dette bruddet"
 
-#: eeschema/dialogs/dialog_erc.cpp:684 eeschema/dialogs/dialog_erc.cpp:688
+#: eeschema/dialogs/dialog_erc.cpp:685 eeschema/dialogs/dialog_erc.cpp:689
 #: pcbnew/dialogs/dialog_drc.cpp:741 pcbnew/dialogs/dialog_drc.cpp:745
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Det vil bli ekskludert fra %s -listen"
 
-#: eeschema/dialogs/dialog_erc.cpp:687 pcbnew/dialogs/dialog_drc.cpp:744
+#: eeschema/dialogs/dialog_erc.cpp:688 pcbnew/dialogs/dialog_drc.cpp:744
 #, fuzzy
 msgid "Exclude with comment..."
 msgstr "Rediger kryddermodell ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:706 pcbnew/dialogs/dialog_drc.cpp:766
+#: eeschema/dialogs/dialog_erc.cpp:707 pcbnew/dialogs/dialog_drc.cpp:766
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Endre alvorlighetsgraden til Feil for alle brudd på %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:708 eeschema/dialogs/dialog_erc.cpp:715
+#: eeschema/dialogs/dialog_erc.cpp:709 eeschema/dialogs/dialog_erc.cpp:716
 #, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
 "Alvorlighetsgraden av brudd kan også redigeres i dialogboksen Oppsett ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:773
+#: eeschema/dialogs/dialog_erc.cpp:714 pcbnew/dialogs/dialog_drc.cpp:773
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Endre alvorlighetsgraden til Advarsel for alle brudd på '%s'"
 
-#: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:779
+#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignorer alle '%s' - brudd"
 
-#: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:780
+#: eeschema/dialogs/dialog_erc.cpp:722 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
 msgstr "Brudd vil ikke bli sjekket eller rapportert"
 
-#: eeschema/dialogs/dialog_erc.cpp:729
+#: eeschema/dialogs/dialog_erc.cpp:730
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Rediger pin-to-pin konfliktkart ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:730 eeschema/dialogs/dialog_erc.cpp:736
-#: eeschema/dialogs/dialog_erc.cpp:743
+#: eeschema/dialogs/dialog_erc.cpp:731 eeschema/dialogs/dialog_erc.cpp:737
+#: eeschema/dialogs/dialog_erc.cpp:744
 msgid "Open the Schematic Setup... dialog"
 msgstr "Åpne dialogboksen Skjematisk oppsett ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:735 pcbnew/dialogs/dialog_drc.cpp:785
+#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:785
 msgid "Edit violation severities..."
 msgstr "Rediger alvorlighetsgraden ..."
 
-#: eeschema/dialogs/dialog_erc.cpp:742
+#: eeschema/dialogs/dialog_erc.cpp:743
 #, fuzzy
 msgid "Edit connection grid spacing..."
 msgstr "Min rutenettavstand:"
 
-#: eeschema/dialogs/dialog_erc.cpp:754 eeschema/dialogs/dialog_erc.cpp:790
+#: eeschema/dialogs/dialog_erc.cpp:755 eeschema/dialogs/dialog_erc.cpp:791
 #: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
 #, fuzzy
 msgid "Exclusion Comment"
 msgstr "Unnlatelser"
 
-#: eeschema/dialogs/dialog_erc.cpp:878
+#: eeschema/dialogs/dialog_erc.cpp:879
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
 msgstr "Pin konflikter kart"
 
-#: eeschema/dialogs/dialog_erc.cpp:882 eeschema/dialogs/dialog_erc.cpp:1012
+#: eeschema/dialogs/dialog_erc.cpp:883 eeschema/dialogs/dialog_erc.cpp:1013
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
 #: pcbnew/dialogs/dialog_board_setup.cpp:203 pcbnew/dialogs/dialog_drc.cpp:995
 #: pcbnew/dialogs/dialog_drc.cpp:1037
 msgid "Violation Severity"
 msgstr "Brudd Alvorlighetsgrad"
 
-#: eeschema/dialogs/dialog_erc.cpp:886
+#: eeschema/dialogs/dialog_erc.cpp:887
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:63
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
@@ -12632,7 +12632,7 @@ msgstr "Brudd Alvorlighetsgrad"
 msgid "Formatting"
 msgstr "Formatering"
 
-#: eeschema/dialogs/dialog_erc.cpp:1093 pcbnew/dialogs/dialog_gendrill.cpp:518
+#: eeschema/dialogs/dialog_erc.cpp:1094 pcbnew/dialogs/dialog_gendrill.cpp:518
 #, fuzzy, c-format
 msgid "Report file '%s' created."
 msgstr "Rapportfil '%s' opprettet\n"
@@ -14087,7 +14087,7 @@ msgid "Derive from symbol:"
 msgstr "Avled fra symbol:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:148
-#: eeschema/sch_rule_area.cpp:400
+#: eeschema/sch_rule_area.cpp:412
 msgid "<None>"
 msgstr "<Ingen>"
 
@@ -17834,11 +17834,11 @@ msgstr ""
 msgid "Failed to load schematic\n"
 msgstr "Kunne ikke laste inn skjematisk \"%s\""
 
-#: eeschema/eeschema_jobs_handler.cpp:346
-#: eeschema/eeschema_jobs_handler.cpp:491
-#: eeschema/eeschema_jobs_handler.cpp:718
-#: eeschema/eeschema_jobs_handler.cpp:847
-#: eeschema/eeschema_jobs_handler.cpp:1171 pcbnew/pcbnew_jobs_handler.cpp:441
+#: eeschema/eeschema_jobs_handler.cpp:355
+#: eeschema/eeschema_jobs_handler.cpp:500
+#: eeschema/eeschema_jobs_handler.cpp:727
+#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:1180 pcbnew/pcbnew_jobs_handler.cpp:441
 #: pcbnew/pcbnew_jobs_handler.cpp:571 pcbnew/pcbnew_jobs_handler.cpp:834
 #: pcbnew/pcbnew_jobs_handler.cpp:933 pcbnew/pcbnew_jobs_handler.cpp:1024
 #: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1259
@@ -17849,101 +17849,101 @@ msgstr "Kunne ikke laste inn skjematisk \"%s\""
 msgid "Failed to create output directory\n"
 msgstr "Kan ikke opprette katalogen \"%s\""
 
-#: eeschema/eeschema_jobs_handler.cpp:413
-#: eeschema/eeschema_jobs_handler.cpp:535
-#: eeschema/eeschema_jobs_handler.cpp:819
+#: eeschema/eeschema_jobs_handler.cpp:422
+#: eeschema/eeschema_jobs_handler.cpp:544
+#: eeschema/eeschema_jobs_handler.cpp:828
 msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:423
-#: eeschema/eeschema_jobs_handler.cpp:545
-#: eeschema/eeschema_jobs_handler.cpp:829
+#: eeschema/eeschema_jobs_handler.cpp:432
+#: eeschema/eeschema_jobs_handler.cpp:554
+#: eeschema/eeschema_jobs_handler.cpp:838
 #, fuzzy
 msgid "Warning: duplicate sheet names.\n"
 msgstr "Advarsel: Duplisert kallenavn"
 
-#: eeschema/eeschema_jobs_handler.cpp:474
+#: eeschema/eeschema_jobs_handler.cpp:483
 #, fuzzy
 msgid "Unknown netlist format.\n"
 msgstr "ukjent via type %d"
 
-#: eeschema/eeschema_jobs_handler.cpp:621
+#: eeschema/eeschema_jobs_handler.cpp:630
 #, fuzzy, c-format
 msgid "BOM preset '%s' not found"
 msgstr "Fil %s ble ikke funnet."
 
-#: eeschema/eeschema_jobs_handler.cpp:726
-#: eeschema/eeschema_jobs_handler.cpp:934
+#: eeschema/eeschema_jobs_handler.cpp:735
+#: eeschema/eeschema_jobs_handler.cpp:943
 #, fuzzy, c-format
 msgid "Unable to open destination '%s'"
 msgstr "Kan ikke analysere '%s' i '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:760
+#: eeschema/eeschema_jobs_handler.cpp:769
 #, fuzzy, c-format
 msgid "BOM format preset '%s' not found"
 msgstr "Fotavtrykk \"%s\" ble ikke funnet."
 
-#: eeschema/eeschema_jobs_handler.cpp:785
-#: eeschema/eeschema_jobs_handler.cpp:856
+#: eeschema/eeschema_jobs_handler.cpp:794
+#: eeschema/eeschema_jobs_handler.cpp:865
 #, fuzzy, c-format
 msgid "Wrote bill of materials to '%s'."
 msgstr "Lagre bilag"
 
-#: eeschema/eeschema_jobs_handler.cpp:908
+#: eeschema/eeschema_jobs_handler.cpp:917
 #, fuzzy, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Endre %s -verdien fra '%s' til '%s'."
 
-#: eeschema/eeschema_jobs_handler.cpp:988
-#: eeschema/eeschema_jobs_handler.cpp:1092 pcbnew/pcbnew_jobs_handler.cpp:1752
+#: eeschema/eeschema_jobs_handler.cpp:997
+#: eeschema/eeschema_jobs_handler.cpp:1101 pcbnew/pcbnew_jobs_handler.cpp:1752
 #: pcbnew/pcbnew_jobs_handler.cpp:1825
 #, fuzzy
 msgid "Unable to load library\n"
 msgstr "Kan ikke laste inn %s fil"
 
-#: eeschema/eeschema_jobs_handler.cpp:1004
+#: eeschema/eeschema_jobs_handler.cpp:1013
 #: eeschema/symbol_editor/symbol_editor.cpp:1098
 msgid "There is no symbol selected to save."
 msgstr "Det er ikke valgt noe symbol for å lagre."
 
-#: eeschema/eeschema_jobs_handler.cpp:1037 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: eeschema/eeschema_jobs_handler.cpp:1046 pcbnew/pcbnew_jobs_handler.cpp:1168
 #: pcbnew/pcbnew_jobs_handler.cpp:1841
 #, fuzzy, c-format
 msgid "Exporting %s"
 msgstr "Forventer %s"
 
-#: eeschema/eeschema_jobs_handler.cpp:1067 pcbnew/pcbnew_jobs_handler.cpp:1721
+#: eeschema/eeschema_jobs_handler.cpp:1076 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1728
+#: eeschema/eeschema_jobs_handler.cpp:1084 pcbnew/pcbnew_jobs_handler.cpp:1728
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 
-#: eeschema/eeschema_jobs_handler.cpp:1104
+#: eeschema/eeschema_jobs_handler.cpp:1113
 #, fuzzy
 msgid "Saving symbol library in updated format\n"
 msgstr "Ugyldig symbolbibliotekidentifikator"
 
-#: eeschema/eeschema_jobs_handler.cpp:1123
+#: eeschema/eeschema_jobs_handler.cpp:1132
 #, fuzzy
 msgid "Symbol library was not updated\n"
 msgstr "Symbolbiblioteket ikke aktivert."
 
-#: eeschema/eeschema_jobs_handler.cpp:1196 pcbnew/pcbnew_jobs_handler.cpp:2086
+#: eeschema/eeschema_jobs_handler.cpp:1205 pcbnew/pcbnew_jobs_handler.cpp:2086
 #, fuzzy, c-format
 msgid "Found %d violations\n"
 msgstr "Tillat DRC-brudd"
 
-#: eeschema/eeschema_jobs_handler.cpp:1211
+#: eeschema/eeschema_jobs_handler.cpp:1220
 #, fuzzy, c-format
 msgid "Unable to save ERC report to %s\n"
 msgstr "Kan ikke analysere '%s' i '%s'"
 
-#: eeschema/eeschema_jobs_handler.cpp:1216
+#: eeschema/eeschema_jobs_handler.cpp:1225
 #, fuzzy, c-format
 msgid "Saved ERC Report to %s\n"
 msgstr "Lagre rapporten i filen"
@@ -20291,13 +20291,13 @@ msgid "symbol field text attributes must be 3 characters wide"
 msgstr "komponentfelttekstattributter må være tre tegn brede"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2243
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1654
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1657
 #, fuzzy, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Bibliotek %s eksisterer allerede."
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2269
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1680
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1683
 #, fuzzy, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "biblioteket \"%s\" kan ikke slettes"
@@ -20668,7 +20668,7 @@ msgid "Net"
 msgstr "Nett"
 
 #: eeschema/sch_label.cpp:1390 eeschema/sch_line.cpp:897
-#: eeschema/sch_rule_area.cpp:405
+#: eeschema/sch_rule_area.cpp:417
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Tildelt Netclass"
@@ -20872,7 +20872,7 @@ msgstr "Ulike verdier for %s %d %s (%s) og %s %d %s (%s)"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Ulike verdier for %s %d %s (%s) og %s %d %s (%s)"
 
-#: eeschema/sch_rule_area.cpp:198
+#: eeschema/sch_rule_area.cpp:210
 #, fuzzy
 msgid "Schematic rule area"
 msgstr "Skjematisk markør"
@@ -33194,12 +33194,12 @@ msgstr ""
 msgid "mi/h"
 msgstr ""
 
-#: pcbnew/api/api_handler_pcb.cpp:522
+#: pcbnew/api/api_handler_pcb.cpp:523
 #, fuzzy
 msgid "Modified items via API"
 msgstr "Lag soner"
 
-#: pcbnew/api/api_handler_pcb.cpp:685
+#: pcbnew/api/api_handler_pcb.cpp:686
 #, fuzzy
 msgid "Deleted items via API"
 msgstr "Slett disse"
