@@ -168,6 +168,38 @@ public:
                                                 const std::string&  aPinNumber );
 
     /**
+     * Build a multi-unit connector symbol where each unit represents one pin.
+     *
+     * PADS connectors place each pin individually on the schematic. This creates
+     * a multi-unit KiCad symbol where each unit has the connector decal graphics
+     * and one pin with the correct pin number, allowing all placements to share
+     * one reference designator.
+     *
+     * @param aPartType    The connector PARTTYPE definition.
+     * @param aSymbolDef   The CAEDECAL symbol definition with per-pin graphics.
+     * @param aPinNumbers  Ordered list of pin numbers (one unit per pin).
+     * @return A new multi-unit LIB_SYMBOL. Caller takes ownership.
+     */
+    LIB_SYMBOL* BuildMultiUnitConnectorSymbol( const PARTTYPE_DEF&            aPartType,
+                                                const SYMBOL_DEF&              aSymbolDef,
+                                                const std::vector<std::string>& aPinNumbers );
+
+    /**
+     * Get or create a multi-unit connector symbol, cached by base reference.
+     *
+     * @param aPartType    The connector PARTTYPE definition.
+     * @param aSymbolDef   The CAEDECAL symbol definition with per-pin graphics.
+     * @param aPinNumbers  Ordered list of pin numbers.
+     * @param aCacheKey    Unique key for caching (e.g. PARTTYPE name + base ref).
+     * @return Pointer to the symbol (owned by this builder).
+     */
+    LIB_SYMBOL* GetOrCreateMultiUnitConnectorSymbol(
+            const PARTTYPE_DEF&             aPartType,
+            const SYMBOL_DEF&               aSymbolDef,
+            const std::vector<std::string>& aPinNumbers,
+            const std::string&              aCacheKey );
+
+    /**
      * Add hidden power pins from PARTTYPE SIGPIN entries to an existing symbol.
      *
      * Each SIGPIN becomes an invisible PT_POWER_IN pin at position (0,0).

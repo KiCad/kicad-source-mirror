@@ -1390,6 +1390,125 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_ConnectorPinSymbol )
 }
 
 
+BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
+{
+    PADS_SCH::PARAMETERS params;
+    params.units = PADS_SCH::UNIT_TYPE::MILS;
+    PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( params );
+
+    PADS_SCH::PARTTYPE_DEF connPt;
+    connPt.name = "TEST_MULTICONN";
+    connPt.is_connector = true;
+    connPt.category = "CON";
+
+    PADS_SCH::GATE_DEF gate;
+    gate.num_pins = 4;
+    gate.decal_names.push_back( "EXTIN" );
+
+    for( int i = 1; i <= 4; i++ )
+    {
+        PADS_SCH::PARTTYPE_PIN pin;
+        pin.pin_id = std::to_string( i );
+        pin.pin_type = 'S';
+        gate.pins.push_back( pin );
+    }
+
+    connPt.gates.push_back( gate );
+
+    PADS_SCH::SYMBOL_DEF symDef;
+    symDef.name = "EXTIN";
+    symDef.gate_count = 1;
+
+    PADS_SCH::SYMBOL_PIN symPin;
+    symPin.number = "1";
+    symPin.position.x = 0;
+    symPin.position.y = 0;
+    symPin.length = 100;
+    symDef.pins.push_back( symPin );
+
+    std::vector<std::string> pinNumbers = { "1", "2", "3", "4" };
+    std::string cacheKey = "TEST_MULTICONN:conn:J1";
+
+    LIB_SYMBOL* multiSym =
+            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
+    BOOST_REQUIRE( multiSym != nullptr );
+
+    BOOST_CHECK_EQUAL( multiSym->GetUnitCount(), 4 );
+
+    for( int unit = 1; unit <= 4; unit++ )
+    {
+        std::vector<SCH_PIN*> unitPins;
+
+        for( SCH_PIN* pin : multiSym->GetPins() )
+        {
+            if( pin->GetUnit() == unit )
+                unitPins.push_back( pin );
+        }
+
+        BOOST_REQUIRE_EQUAL( unitPins.size(), 1u );
+        BOOST_CHECK_EQUAL( unitPins[0]->GetNumber(), std::to_string( unit ) );
+    }
+
+    // Same cache key should return the same symbol
+    LIB_SYMBOL* cached =
+            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
+    BOOST_CHECK_EQUAL( multiSym, cached );
+
+    // Different cache key should produce a new symbol
+    LIB_SYMBOL* other =
+            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, "other_key" );
+    BOOST_CHECK_NE( multiSym, other );
+}
+
+
+BOOST_AUTO_TEST_CASE( V9_MultiGate_TL082_FromFile )
+{
+    std::string testFile = "/home/seth/Downloads/ATS-501 Tape Template (1).txt";
+
+    if( !wxFileExists( wxString::FromUTF8( testFile ) ) )
+    {
+        BOOST_TEST_MESSAGE( "Skipping: test file not present" );
+        return;
+    }
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& partTypes = parser.GetPartTypes();
+    auto ptIt = partTypes.find( "TL082" );
+    BOOST_REQUIRE( ptIt != partTypes.end() );
+
+    const auto& tl082 = ptIt->second;
+    BOOST_REQUIRE_EQUAL( tl082.gates.size(), 2u );
+    BOOST_CHECK_EQUAL( tl082.gates[0].num_pins, 5 );
+    BOOST_CHECK_EQUAL( tl082.gates[1].num_pins, 3 );
+    BOOST_CHECK_EQUAL( tl082.gates[0].decal_names[0], "TL082A" );
+    BOOST_CHECK_EQUAL( tl082.gates[1].decal_names[0], "TL082" );
+
+    const auto& params = parser.GetParameters();
+    PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( params );
+
+    LIB_SYMBOL* sym = builder.BuildMultiUnitSymbol( tl082, parser.GetSymbolDefs() );
+    BOOST_REQUIRE( sym != nullptr );
+    BOOST_CHECK_EQUAL( sym->GetUnitCount(), 2 );
+
+    int unit1Pins = 0, unit2Pins = 0;
+
+    for( auto* pin : sym->GetPins() )
+    {
+        if( pin->GetUnit() == 1 )
+            unit1Pins++;
+        else if( pin->GetUnit() == 2 )
+            unit2Pins++;
+    }
+
+    BOOST_CHECK_EQUAL( unit1Pins, 5 );
+    BOOST_CHECK_EQUAL( unit2Pins, 3 );
+
+    delete sym;
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

@@ -253,13 +253,16 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol(
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol(
         const PARTTYPE_DEF& aPartType, const std::vector<SYMBOL_DEF>& aSymbolDefs )
 {
-    auto it = m_symbolCache.find( aPartType.name );
+    // Use a prefixed key to avoid collision with CAEDECAL symbols that may
+    // share the same name as the PARTTYPE (e.g. both named "TL082").
+    std::string cacheKey = "parttype:" + aPartType.name;
+    auto        it = m_symbolCache.find( cacheKey );
 
     if( it != m_symbolCache.end() )
         return it->second.get();
 
     LIB_SYMBOL* newSymbol = BuildMultiUnitSymbol( aPartType, aSymbolDefs );
-    m_symbolCache[aPartType.name] = std::unique_ptr<LIB_SYMBOL>( newSymbol );
+    m_symbolCache[cacheKey] = std::unique_ptr<LIB_SYMBOL>( newSymbol );
 
     return newSymbol;
 }
@@ -431,6 +434,116 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol(
     m_symbolCache[cacheKey] = std::unique_ptr<LIB_SYMBOL>( libSymbol );
 
     return libSymbol;
+}
+
+
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol(
+        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
+        const std::vector<std::string>& aPinNumbers )
+{
+    int unitCount = static_cast<int>( aPinNumbers.size() );
+    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aPartType.name ) );
+    libSymbol->SetUnitCount( unitCount, false );
+    libSymbol->LockUnits( true );
+
+    // Build a lookup from pin ID to PARTTYPE pin definition
+    std::map<std::string, const PARTTYPE_PIN*> ptPinById;
+
+    if( !aPartType.gates.empty() )
+    {
+        for( const auto& ptPin : aPartType.gates[0].pins )
+            ptPinById[ptPin.pin_id] = &ptPin;
+    }
+
+    for( int u = 0; u < unitCount; u++ )
+    {
+        int unit = u + 1;
+
+        for( const auto& graphic : aSymbolDef.graphics )
+        {
+            std::vector<SCH_SHAPE*> shapes = createShapes( graphic );
+
+            for( SCH_SHAPE* shape : shapes )
+            {
+                shape->SetUnit( unit );
+                libSymbol->AddDrawItem( shape );
+            }
+        }
+
+        // One pin per unit with the correct pin number
+        if( !aSymbolDef.pins.empty() )
+        {
+            SYMBOL_PIN pin = aSymbolDef.pins[0];
+            pin.number = aPinNumbers[u];
+
+            auto ptPinIt = ptPinById.find( aPinNumbers[u] );
+
+            if( ptPinIt != ptPinById.end() )
+            {
+                if( ptPinIt->second->pin_type != 0 )
+                    pin.type = PADS_SCH_PARSER::ParsePinTypeChar( ptPinIt->second->pin_type );
+
+                if( !ptPinIt->second->pin_name.empty() )
+                    pin.name = ptPinIt->second->pin_name;
+            }
+
+            SCH_PIN* schPin = createPin( pin, libSymbol );
+
+            if( schPin )
+            {
+                schPin->SetUnit( unit );
+                libSymbol->AddDrawItem( schPin );
+            }
+        }
+
+        for( const auto& text : aSymbolDef.texts )
+        {
+            if( text.content.empty() )
+                continue;
+
+            SCH_TEXT* schText = new SCH_TEXT(
+                    VECTOR2I( toKiCadUnits( text.position.x ),
+                              -toKiCadUnits( text.position.y ) ),
+                    wxString::FromUTF8( text.content ), LAYER_DEVICE );
+
+            if( text.size > 0.0 )
+            {
+                int scaledSize = toKiCadUnits( text.size );
+                int charHeight = static_cast<int>(
+                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+                int charWidth = static_cast<int>(
+                            scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+                schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
+            }
+
+            if( text.rotation != 0.0 )
+                schText->SetTextAngleDegrees( text.rotation );
+
+            schText->SetUnit( unit );
+            libSymbol->AddDrawItem( schText );
+        }
+    }
+
+    libSymbol->SetShowPinNumbers( true );
+    libSymbol->SetShowPinNames( false );
+
+    return libSymbol;
+}
+
+
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitConnectorSymbol(
+        const PARTTYPE_DEF& aPartType, const SYMBOL_DEF& aSymbolDef,
+        const std::vector<std::string>& aPinNumbers, const std::string& aCacheKey )
+{
+    auto it = m_symbolCache.find( aCacheKey );
+
+    if( it != m_symbolCache.end() )
+        return it->second.get();
+
+    LIB_SYMBOL* newSymbol = BuildMultiUnitConnectorSymbol( aPartType, aSymbolDef, aPinNumbers );
+    m_symbolCache[aCacheKey] = std::unique_ptr<LIB_SYMBOL>( newSymbol );
+
+    return newSymbol;
 }
 
 
