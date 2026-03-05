@@ -60,9 +60,8 @@ private:
 
     UNITS_PROVIDER m_unitsProvider;
 
-    std::unique_ptr<UNIT_BINDER> m_minLengthBinder;
     std::unique_ptr<UNIT_BINDER> m_optLengthBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxLengthBinder;
+    std::unique_ptr<UNIT_BINDER> m_toleranceBinder;
 };
 
 #endif // DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL_H

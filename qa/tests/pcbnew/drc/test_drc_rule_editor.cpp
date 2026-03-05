@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairInvalid )
     bool foundWidthError = false;
     for( const auto& error : result1.errors )
     {
-        if( error.find( "Minimum Width cannot be greater than Maximum Width" ) != std::string::npos )
+        if( error.find( "Width Tolerance must be less than Optimum Width" ) != std::string::npos )
             foundWidthError = true;
     }
     BOOST_CHECK( foundWidthError );
@@ -451,7 +451,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairInvalid )
     bool foundNegativeError = false;
     for( const auto& error : result2.errors )
     {
-        if( error.find( "must be greater than 0" ) != std::string::npos )
+        if( error.find( "must be greater than or equal to 0" ) != std::string::npos )
             foundNegativeError = true;
     }
     BOOST_CHECK( foundNegativeError );

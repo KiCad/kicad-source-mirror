@@ -82,28 +82,35 @@ public:
     {
         VALIDATION_RESULT result;
 
-        // Validate via diameter values are positive
-        if( m_minViaDiameter <= 0 )
-            result.AddError( _( "Minimum Via Diameter must be greater than 0" ) );
+        bool hasDiameter = m_minViaDiameter > 0 || m_maxViaDiameter > 0;
+        bool hasHoleSize = m_minViaHoleSize > 0 || m_maxViaHoleSize > 0;
 
-        if( m_maxViaDiameter <= 0 )
-            result.AddError( _( "Maximum Via Diameter must be greater than 0" ) );
-
-        // Validate via hole size values are positive
-        if( m_minViaHoleSize <= 0 )
-            result.AddError( _( "Minimum Via Hole Size must be greater than 0" ) );
-
-        if( m_maxViaHoleSize <= 0 )
-            result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
-
-        if( result.isValid )
+        if( hasDiameter )
         {
-            if( m_minViaDiameter > m_maxViaDiameter )
-                result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
+            if( m_minViaDiameter <= 0 )
+                result.AddError( _( "Minimum Via Diameter must be greater than 0" ) );
 
-            if( m_minViaHoleSize > m_maxViaHoleSize )
+            if( m_maxViaDiameter <= 0 )
+                result.AddError( _( "Maximum Via Diameter must be greater than 0" ) );
+
+            if( m_minViaDiameter > 0 && m_maxViaDiameter > 0 && m_minViaDiameter > m_maxViaDiameter )
+                result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
+        }
+
+        if( hasHoleSize )
+        {
+            if( m_minViaHoleSize <= 0 )
+                result.AddError( _( "Minimum Via Hole Size must be greater than 0" ) );
+
+            if( m_maxViaHoleSize <= 0 )
+                result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
+
+            if( m_minViaHoleSize > 0 && m_maxViaHoleSize > 0 && m_minViaHoleSize > m_maxViaHoleSize )
                 result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
         }
+
+        if( !hasDiameter && !hasHoleSize )
+            result.AddError( _( "At least one constraint must be specified" ) );
 
         return result;
     }
@@ -115,15 +122,23 @@ public:
             return formatDouble( aValue ) + wxS( "mm" );
         };
 
-        wxString diaClause =
-                wxString::Format( wxS( "(constraint via_diameter (min %s) (max %s))" ),
-                                  formatDimension( m_minViaDiameter ), formatDimension( m_maxViaDiameter ) );
+        std::vector<wxString> clauses;
 
-        wxString drillClause =
-                wxString::Format( wxS( "(constraint hole_size (min %s) (max %s))" ),
-                                  formatDimension( m_minViaHoleSize ), formatDimension( m_maxViaHoleSize ) );
+        if( m_minViaDiameter > 0 && m_maxViaDiameter > 0 )
+        {
+            clauses.push_back( wxString::Format( wxS( "(constraint via_diameter (min %s) (max %s))" ),
+                                                 formatDimension( m_minViaDiameter ),
+                                                 formatDimension( m_maxViaDiameter ) ) );
+        }
 
-        return { diaClause, drillClause };
+        if( m_minViaHoleSize > 0 && m_maxViaHoleSize > 0 )
+        {
+            clauses.push_back( wxString::Format( wxS( "(constraint hole_size (min %s) (max %s))" ),
+                                                 formatDimension( m_minViaHoleSize ),
+                                                 formatDimension( m_maxViaHoleSize ) ) );
+        }
+
+        return clauses;
     }
 
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override

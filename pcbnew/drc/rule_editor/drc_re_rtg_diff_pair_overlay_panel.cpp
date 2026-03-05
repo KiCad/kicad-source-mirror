@@ -31,6 +31,7 @@
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
+#include <wx/stattext.h>
 
 
 DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
@@ -56,58 +57,63 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
         }
     }
 
-    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0], wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_minWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minWidthField->GetControl(),
-                                           minWidthField->GetLabel(), false, false );
-    minWidthField->SetUnitBinder( m_minWidthBinder.get() );
+    auto* optWidthField = AddField<wxTextCtrl>( wxS( "opt_width" ), positions[0], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_optWidthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, optWidthField->GetControl(),
+                                           optWidthField->GetLabel(), false, false );
+    optWidthField->SetUnitBinder( m_optWidthBinder.get() );
 
-    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
-                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_preferredWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefWidthField->GetControl(),
-                                           prefWidthField->GetLabel(), false, false );
-    prefWidthField->SetUnitBinder( m_preferredWidthBinder.get() );
+    auto* widthTolField =
+            AddField<wxTextCtrl>( wxS( "width_tolerance" ), positions[1], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_widthToleranceBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, widthTolField->GetControl(),
+                                           widthTolField->GetLabel(), false, false );
+    widthTolField->SetUnitBinder( m_widthToleranceBinder.get() );
 
-    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
-                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxWidthField->GetControl(),
-                                           maxWidthField->GetLabel(), false, false );
-    maxWidthField->SetUnitBinder( m_maxWidthBinder.get() );
+    auto* optGapField = AddField<wxTextCtrl>( wxS( "opt_gap" ), positions[2], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_optGapBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, optGapField->GetControl(),
+                                                    optGapField->GetLabel(), false, false );
+    optGapField->SetUnitBinder( m_optGapBinder.get() );
 
-    // Create gap fields (min/pref/max) — positions[3..5]
-    auto* minGapField = AddField<wxTextCtrl>( wxS( "min_gap" ), positions[3],
-                                              wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_minGapBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minGapField->GetControl(),
-                                                    minGapField->GetLabel(), false, false );
-    minGapField->SetUnitBinder( m_minGapBinder.get() );
+    auto* gapTolField = AddField<wxTextCtrl>( wxS( "gap_tolerance" ), positions[3], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_gapToleranceBinder = std::make_unique<UNIT_BINDER>(
+            &m_unitsProvider, eventSource, nullptr, gapTolField->GetControl(), gapTolField->GetLabel(), false, false );
+    gapTolField->SetUnitBinder( m_gapToleranceBinder.get() );
 
-    auto* prefGapField = AddField<wxTextCtrl>( wxS( "pref_gap" ), positions[4],
-                                               wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_preferredGapBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefGapField->GetControl(),
-                                           prefGapField->GetLabel(), false, false );
-    prefGapField->SetUnitBinder( m_preferredGapBinder.get() );
-
-    auto* maxGapField = AddField<wxTextCtrl>( wxS( "max_gap" ), positions[5],
-                                              wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxGapBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxGapField->GetControl(),
-                                                    maxGapField->GetLabel(), false, false );
-    maxGapField->SetUnitBinder( m_maxGapBinder.get() );
-
-    // Create max uncoupled length field — positions[6]
-    auto* maxUncoupledField = AddField<wxTextCtrl>( wxS( "max_uncoupled" ), positions[6],
-                                                    wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    auto* maxUncoupledField =
+            AddField<wxTextCtrl>( wxS( "max_uncoupled" ), positions[4], wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxUncoupledLengthBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxUncoupledField->GetControl(),
                                            maxUncoupledField->GetLabel(), false, false );
     maxUncoupledField->SetUnitBinder( m_maxUncoupledLengthBinder.get() );
 
-    auto* maxSkewField = AddField<wxTextCtrl>( wxS( "max_skew" ), positions[7], wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxSkewBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxSkewField->GetControl(),
-                                                     maxSkewField->GetLabel(), false, false );
-    maxSkewField->SetUnitBinder( m_maxSkewBinder.get() );
+    {
+        const DRC_RE_FIELD_POSITION& optPos = positions[0];
+        const DRC_RE_FIELD_POSITION& tolPos = positions[1];
+        int                          fieldHeight = optWidthField->GetControl()->GetBestSize().GetHeight();
+
+        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
+        wxSize        pmSize = plusMinus->GetBestSize();
+        wxStaticText* optMmLabel = optWidthField->GetLabel();
+        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
+        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
+        plusMinus->SetPosition(
+                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
+    }
+
+    {
+        const DRC_RE_FIELD_POSITION& optPos = positions[2];
+        const DRC_RE_FIELD_POSITION& tolPos = positions[3];
+        int                          fieldHeight = optGapField->GetControl()->GetBestSize().GetHeight();
+
+        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
+        wxSize        pmSize = plusMinus->GetBestSize();
+        wxStaticText* optMmLabel = optGapField->GetLabel();
+        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
+        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
+        plusMinus->SetPosition(
+                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
+    }
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
@@ -116,14 +122,11 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
             dlg->SetModified();
     };
 
-    minWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    prefWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    minGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    prefGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    optWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    widthTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    optGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    gapTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
     maxUncoupledField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxSkewField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
 
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
@@ -132,14 +135,11 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
             dlg->OnSave( aEvent );
     };
 
-    minWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    prefWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    minGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    prefGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    optWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    widthTolField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    optGapField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    gapTolField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
     maxUncoupledField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxSkewField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
     // Position all fields and update the panel layout
     PositionFields();
@@ -154,16 +154,13 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataToWindow()
 
     // Convert mm values to internal units and set them in the binders
     // Use ChangeDoubleValue to avoid triggering modification events during loading
-    m_minGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinGap() ) );
-    m_preferredGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredGap() ) );
-    m_maxGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxGap() ) );
+    m_optWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptWidth() ) );
+    m_widthToleranceBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetWidthTolerance() ) );
 
-    m_minWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinWidth() ) );
-    m_preferredWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredWidth() ) );
-    m_maxWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxWidth() ) );
+    m_optGapBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptGap() ) );
+    m_gapToleranceBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetGapTolerance() ) );
 
     m_maxUncoupledLengthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxUncoupledLength() ) );
-    m_maxSkewBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxSkew() ) );
 
     return true;
 }
@@ -175,16 +172,13 @@ bool DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::TransferDataFromWindow()
         return false;
 
     // Read values from binders (in internal units) and convert to mm for storage
-    m_data->SetMinGap( pcbIUScale.IUTomm( m_minGapBinder->GetDoubleValue() ) );
-    m_data->SetPreferredGap( pcbIUScale.IUTomm( m_preferredGapBinder->GetDoubleValue() ) );
-    m_data->SetMaxGap( pcbIUScale.IUTomm( m_maxGapBinder->GetDoubleValue() ) );
+    m_data->SetOptWidth( pcbIUScale.IUTomm( m_optWidthBinder->GetDoubleValue() ) );
+    m_data->SetWidthTolerance( pcbIUScale.IUTomm( m_widthToleranceBinder->GetDoubleValue() ) );
 
-    m_data->SetMinWidth( pcbIUScale.IUTomm( m_minWidthBinder->GetDoubleValue() ) );
-    m_data->SetPreferredWidth( pcbIUScale.IUTomm( m_preferredWidthBinder->GetDoubleValue() ) );
-    m_data->SetMaxWidth( pcbIUScale.IUTomm( m_maxWidthBinder->GetDoubleValue() ) );
+    m_data->SetOptGap( pcbIUScale.IUTomm( m_optGapBinder->GetDoubleValue() ) );
+    m_data->SetGapTolerance( pcbIUScale.IUTomm( m_gapToleranceBinder->GetDoubleValue() ) );
 
     m_data->SetMaxUncoupledLength( pcbIUScale.IUTomm( m_maxUncoupledLengthBinder->GetDoubleValue() ) );
-    m_data->SetMaxSkew( pcbIUScale.IUTomm( m_maxSkewBinder->GetDoubleValue() ) );
 
     return true;
 }

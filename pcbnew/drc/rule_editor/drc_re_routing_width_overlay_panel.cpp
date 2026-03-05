@@ -31,6 +31,7 @@
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
+#include <wx/stattext.h>
 #include <dialogs/rule_editor_dialog_base.h>
 
 

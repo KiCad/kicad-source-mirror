@@ -34,6 +34,7 @@ enum class EDA_UNITS;
 
 class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA;
 class UNIT_BINDER;
+class wxCheckBox;
 
 
 class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL : public DRC_RE_BITMAP_OVERLAY_PANEL
@@ -56,10 +57,11 @@ private:
 
     UNITS_PROVIDER m_unitsProvider;
 
-    std::unique_ptr<UNIT_BINDER> m_minLengthBinder;
     std::unique_ptr<UNIT_BINDER> m_optLengthBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxLengthBinder;
+    std::unique_ptr<UNIT_BINDER> m_toleranceBinder;
     std::unique_ptr<UNIT_BINDER> m_maxSkewBinder;
+
+    wxCheckBox* m_withinDiffPairsCheckbox;
 };
 
 #endif // DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL_H

@@ -38,15 +38,11 @@ public:
     {
     }
 
-    explicit DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA( int aId, int aParentId,
-                                                         double   aMinLength,
-                                                         double   aOptLength,
-                                                         double   aMaxLength,
+    explicit DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA( int aId, int aParentId, double aOptLength, double aTolerance,
                                                          const wxString& aRuleName ) :
             DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
-            m_minLength( aMinLength ),
             m_optLength( aOptLength ),
-            m_maxLength( aMaxLength )
+            m_tolerance( aTolerance )
     {
     }
 
@@ -56,52 +52,43 @@ public:
 
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        // Positions measured from constraint_absolute_lenght_2.png (~340x130)
         // Format: { xStart, xEnd, yTop, tabOrder }
+        // Two fields side-by-side, opt_length and tolerance
         return {
-            { 525 + DRC_RE_OVERLAY_XO, 565 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },  // min_length (left arrow)
-            { 668 + DRC_RE_OVERLAY_XO, 708 + DRC_RE_OVERLAY_XO, 163 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length (bottom center arrow)
-            { 820 + DRC_RE_OVERLAY_XO, 860 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },    // max_length (right arrow)
+            { 80 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // opt_length
+            { 160 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // tolerance
         };
     }
-
-    double GetMinimumLength() const { return m_minLength; }
-
-    void SetMinimumLength( double aLength ) { m_minLength = aLength; }
 
     double GetOptimumLength() const { return m_optLength; }
 
     void SetOptimumLength( double aLength ) { m_optLength = aLength; }
 
-    double GetMaximumLength() const { return m_maxLength; }
+    double GetTolerance() const { return m_tolerance; }
 
-    void SetMaximumLength( double aLength ) { m_maxLength = aLength; }
+    void SetTolerance( double aTolerance ) { m_tolerance = aTolerance; }
+
+    // Computed from opt +/- tolerance
+    double GetMinimumLength() const { return m_optLength - m_tolerance; }
+
+    double GetMaximumLength() const { return m_optLength + m_tolerance; }
 
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;
 
-        // Validate length values are positive
-        if( m_minLength <= 0 )
-            result.AddError( _( "Minimum Length must be greater than 0" ) );
-
         if( m_optLength <= 0 )
             result.AddError( _( "Optimum Length must be greater than 0" ) );
 
-        if( m_maxLength <= 0 )
-            result.AddError( _( "Maximum Length must be greater than 0" ) );
+        if( m_tolerance < 0 )
+            result.AddError( _( "Tolerance must be greater than or equal to 0" ) );
 
         if( result.isValid )
         {
-            // Validate min <= opt <= max
-            if( m_minLength > m_optLength )
-                result.AddError( _( "Minimum Length cannot be greater than Optimum Length" ) );
-
-            if( m_optLength > m_maxLength )
-                result.AddError( _( "Optimum Length cannot be greater than Maximum Length" ) );
-
-            if( m_minLength > m_maxLength )
-                result.AddError( _( "Minimum Length cannot be greater than Maximum Length" ) );
+            if( GetMinimumLength() <= 0 )
+                result.AddError( _( "Tolerance is too large: resulting minimum length is not positive" ) );
         }
 
         return result;
@@ -119,12 +106,9 @@ public:
         if( code.IsEmpty() )
             code = wxS( "length" );
 
-        wxString clause = wxString::Format(
-                wxS( "(constraint %s (min %s) (opt %s) (max %s))" ),
-                code,
-                formatDistance( m_minLength ),
-                formatDistance( m_optLength ),
-                formatDistance( m_maxLength ) );
+        wxString clause = wxString::Format( wxS( "(constraint %s (min %s) (opt %s) (max %s))" ), code,
+                                            formatDistance( GetMinimumLength() ), formatDistance( m_optLength ),
+                                            formatDistance( GetMaximumLength() ) );
 
         return { clause };
     }
@@ -141,15 +125,13 @@ public:
 
         DRC_RE_BASE_CONSTRAINT_DATA::CopyFrom( source );
 
-        m_minLength = source.m_minLength;
         m_optLength = source.m_optLength;
-        m_maxLength = source.m_maxLength;
+        m_tolerance = source.m_tolerance;
     }
 
 private:
-    double m_minLength{ 0 };
     double m_optLength{ 0 };
-    double m_maxLength{ 0 };
+    double m_tolerance{ 0 };
 };
 
 class DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA : public DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA
@@ -162,10 +144,12 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 527 + DRC_RE_OVERLAY_XO, 567 + DRC_RE_OVERLAY_XO, 133 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_length
-            { 670 + DRC_RE_OVERLAY_XO, 710 + DRC_RE_OVERLAY_XO, 162 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // opt_length
-            { 819 + DRC_RE_OVERLAY_XO, 859 + DRC_RE_OVERLAY_XO, 190 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_length
-            { 777 + DRC_RE_OVERLAY_XO, 815 + DRC_RE_OVERLAY_XO, -1 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ), LABEL_POSITION::RIGHT }, // max_skew
+            { 80 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_XO, 130 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // opt_length
+            { 160 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_XO, 130 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // tolerance
+            { 25 + DRC_RE_OVERLAY_XO, 65 + DRC_RE_OVERLAY_XO, 0 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
+              LABEL_POSITION::RIGHT }, // max_skew
         };
     }
 
@@ -173,14 +157,28 @@ public:
 
     void SetMaxSkew( double aSkew ) { m_maxSkew = aSkew; }
 
+    bool GetWithinDiffPairs() const { return m_withinDiffPairs; }
+
+    void SetWithinDiffPairs( bool aWithinDiffPairs ) { m_withinDiffPairs = aWithinDiffPairs; }
+
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
         std::vector<wxString> clauses = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::GetConstraintClauses( aContext );
 
         if( m_maxSkew > 0 )
         {
-            wxString skewClause = wxString::Format(
-                    wxS( "(constraint skew (max %smm))" ), formatDouble( m_maxSkew ) );
+            wxString skewClause;
+
+            if( m_withinDiffPairs )
+            {
+                skewClause = wxString::Format( wxS( "(constraint skew (max %smm) (within_diff_pairs))" ),
+                                               formatDouble( m_maxSkew ) );
+            }
+            else
+            {
+                skewClause = wxString::Format( wxS( "(constraint skew (max %smm))" ), formatDouble( m_maxSkew ) );
+            }
+
             clauses.push_back( skewClause );
         }
 
@@ -195,6 +193,7 @@ public:
         DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::CopyFrom( source );
 
         m_maxSkew = source.m_maxSkew;
+        m_withinDiffPairs = source.m_withinDiffPairs;
     }
 
     VALIDATION_RESULT Validate() const override
@@ -209,6 +208,7 @@ public:
 
 private:
     double m_maxSkew{ 0 };
+    bool   m_withinDiffPairs{ false };
 };
 
 #endif // DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA_H_

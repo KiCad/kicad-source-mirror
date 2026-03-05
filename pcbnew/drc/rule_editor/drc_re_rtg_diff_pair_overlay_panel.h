@@ -59,14 +59,11 @@ private:
 
     UNITS_PROVIDER m_unitsProvider;
 
-    std::unique_ptr<UNIT_BINDER> m_minGapBinder;
-    std::unique_ptr<UNIT_BINDER> m_preferredGapBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxGapBinder;
-    std::unique_ptr<UNIT_BINDER> m_minWidthBinder;
-    std::unique_ptr<UNIT_BINDER> m_preferredWidthBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxWidthBinder;
+    std::unique_ptr<UNIT_BINDER> m_optWidthBinder;
+    std::unique_ptr<UNIT_BINDER> m_widthToleranceBinder;
+    std::unique_ptr<UNIT_BINDER> m_optGapBinder;
+    std::unique_ptr<UNIT_BINDER> m_gapToleranceBinder;
     std::unique_ptr<UNIT_BINDER> m_maxUncoupledLengthBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxSkewBinder;
 };
 
 #endif // DRC_RE_RTG_DIFF_PAIR_OVERLAY_PANEL_H

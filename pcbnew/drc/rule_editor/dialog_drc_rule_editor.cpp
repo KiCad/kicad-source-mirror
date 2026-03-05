@@ -604,6 +604,8 @@ void DIALOG_DRC_RULE_EDITOR::RemoveRule( int aNodeId )
         SetModified();
         DeleteRuleTreeItem( GetCurrentlySelectedRuleTreeItemData()->GetTreeItemId(), nodeId );
         deleteTreeNodeData( nodeId );
+        SaveRulesToFile();
+        ClearModified();
     }
 
     SetControlsEnabled( true );
@@ -688,8 +690,8 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::buildManufacturabilityRuleTr
     result.push_back( buildRuleTreeNodeData( "Soldermask", DRC_RULE_EDITOR_ITEM_TYPE::CATEGORY, aParentId ) );
     lastParentId = m_nodeId;
 
-    result.push_back( buildRuleTreeNodeData( "Minimum soldermask silver", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
-                                             lastParentId, MINIMUM_SOLDERMASK_SILVER ) );
+    result.push_back( buildRuleTreeNodeData( "Minimum soldermask sliver", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
+                                             lastParentId, MINIMUM_SOLDERMASK_SLIVER ) );
     result.push_back( buildRuleTreeNodeData( "Soldermask expansion", DRC_RULE_EDITOR_ITEM_TYPE::CONSTRAINT,
                                              lastParentId, SOLDERMASK_EXPANSION ) );
 
