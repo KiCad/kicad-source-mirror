@@ -56,14 +56,14 @@ DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL::DRC_RE_MIN_TXT_HT_TH_OVERLAY_PANEL(
         }
     }
 
-    auto* minTextHeightField = AddField<wxTextCtrl>( wxS( "min_text_height" ), positions[0], wxTE_PROCESS_ENTER );
+    auto* minTextHeightField = AddField<wxTextCtrl>( wxS( "min_text_height" ), positions[0], wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_minTextHeightBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextHeightField->GetControl(),
                                            minTextHeightField->GetLabel(), false, false );
     minTextHeightField->SetUnitBinder( m_minTextHeightBinder.get() );
     minTextHeightField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    auto* minTextThicknessField = AddField<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1], wxTE_PROCESS_ENTER );
+    auto* minTextThicknessField = AddField<wxTextCtrl>( wxS( "min_text_thickness" ), positions[1], wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_minTextThicknessBinder =
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minTextThicknessField->GetControl(),
                                            minTextThicknessField->GetLabel(), false, false );
