@@ -18,7 +18,6 @@
  */
 
 #include <jobs/job_pcb_import.h>
-#include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
 
@@ -62,6 +61,3 @@ wxString JOB_PCB_IMPORT::GetSettingsDialogTitle() const
 {
     return _( "PCB Import Job Settings" );
 }
-
-
-REGISTER_JOB( pcb_import, _HKI( "PCB: Import" ), KIWAY::FACE_PCB, JOB_PCB_IMPORT );
