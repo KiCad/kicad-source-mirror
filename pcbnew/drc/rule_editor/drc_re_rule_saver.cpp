@@ -139,7 +139,7 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
                 silkCond = wxS( "L == 'F.Mask' || L == 'B.Mask'" );
 
             if( !ctx.conditionExpression.IsEmpty() )
-                ctx.conditionExpression = silkCond + wxS( " && " ) + ctx.conditionExpression;
+                ctx.conditionExpression = wxS( "(" ) + silkCond + wxS( ") && " ) + ctx.conditionExpression;
             else
                 ctx.conditionExpression = silkCond;
         }
@@ -155,7 +155,7 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
                 silkCond = wxS( "L == 'F.SilkS' || L == 'B.SilkS'" );
 
             if( !ctx.conditionExpression.IsEmpty() )
-                ctx.conditionExpression = silkCond + wxS( " && " ) + ctx.conditionExpression;
+                ctx.conditionExpression = wxS( "(" ) + silkCond + wxS( ") && " ) + ctx.conditionExpression;
             else
                 ctx.conditionExpression = silkCond;
         }

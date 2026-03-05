@@ -115,6 +115,34 @@ wxString DRC_RULE_LOADER::extractRuleComment( const wxString& aOriginalText )
 }
 
 
+wxString DRC_RULE_LOADER::cleanStrippedCondition( const wxString& aCondition )
+{
+    wxString cleaned = aCondition;
+
+    // Strip empty parentheses left over from removing conditions
+    wxString prev;
+    do
+    {
+        prev = cleaned;
+        cleaned.Replace( wxS( "()" ), wxS( "" ) );
+    } while( cleaned != prev );
+
+    cleaned.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+    cleaned.Replace( wxS( "|| ||" ), wxS( "||" ) );
+    cleaned.Trim( true ).Trim( false );
+    if( cleaned.StartsWith( wxS( "&&" ) ) )
+        cleaned = cleaned.Mid( 2 ).Trim( false );
+    if( cleaned.EndsWith( wxS( "&&" ) ) )
+        cleaned = cleaned.Left( cleaned.Length() - 2 ).Trim( true );
+    if( cleaned.StartsWith( wxS( "||" ) ) )
+        cleaned = cleaned.Mid( 2 ).Trim( false );
+    if( cleaned.EndsWith( wxS( "||" ) ) )
+        cleaned = cleaned.Left( cleaned.Length() - 2 ).Trim( true );
+
+    return cleaned;
+}
+
+
 std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>
 DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
                                         const DRC_RULE&                   aRule,
@@ -163,14 +191,7 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
             cleanedCondition.Replace( wxS( "A.Via_Type == 'Blind'" ), wxS( "" ) );
             cleanedCondition.Replace( wxS( "A.Via_Type == 'Buried'" ), wxS( "" ) );
 
-            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
-            cleanedCondition.Trim( true ).Trim( false );
-            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-
-            data->SetRuleCondition( cleanedCondition );
+            data->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
         }
 
         return data;
@@ -477,9 +498,14 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         if( match.panelType == SILK_TO_SILK_CLEARANCE && match.claimedConstraints.count( SILK_CLEARANCE_CONSTRAINT ) )
         {
             if( !condition.IsEmpty()
-                && ( condition.Contains( wxS( "F.Mask" ) ) || condition.Contains( wxS( "B.Mask" ) ) ) )
+                && ( condition.Contains( wxS( "L == 'F.Mask'" ) ) || condition.Contains( wxS( "L == 'B.Mask'" ) ) ) )
             {
                 match.panelType = SILK_TO_SOLDERMASK_CLEARANCE;
+            }
+            else if( !condition.IsEmpty() && !condition.Contains( wxS( "L == 'F.SilkS'" ) )
+                     && !condition.Contains( wxS( "L == 'B.SilkS'" ) ) )
+            {
+                match.panelType = CUSTOM_RULE;
             }
         }
 
@@ -522,27 +548,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
                 cleanedCondition.Replace( wxS( "L == 'B.Mask'" ), wxS( "" ) );
             }
 
-            // Strip empty parentheses left over from removing layer conditions
-            wxString prev;
-            do
-            {
-                prev = cleanedCondition;
-                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
-            } while( cleanedCondition != prev );
-
-            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
-            cleanedCondition.Replace( wxS( "|| ||" ), wxS( "||" ) );
-            cleanedCondition.Trim( true ).Trim( false );
-            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-            if( cleanedCondition.StartsWith( wxS( "||" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "||" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-
-            constraintData->SetRuleCondition( cleanedCondition );
+            constraintData->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
         }
 
         if( match.panelType == SILK_TO_SILK_CLEARANCE )
@@ -569,27 +575,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
                 cleanedCondition.Replace( wxS( "L == 'B.SilkS'" ), wxS( "" ) );
             }
 
-            // Strip empty parentheses left over from removing layer conditions
-            wxString prev;
-            do
-            {
-                prev = cleanedCondition;
-                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
-            } while( cleanedCondition != prev );
-
-            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
-            cleanedCondition.Replace( wxS( "|| ||" ), wxS( "||" ) );
-            cleanedCondition.Trim( true ).Trim( false );
-            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-            if( cleanedCondition.StartsWith( wxS( "||" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "||" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-
-            constraintData->SetRuleCondition( cleanedCondition );
+            constraintData->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
         }
 
         if( match.panelType == VIAS_UNDER_SMD )
@@ -599,22 +585,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             cleanedCondition.Replace( wxS( "A.Pad_Type == 'SMD'" ), wxS( "" ) );
             cleanedCondition.Replace( wxS( "B.Pad_Type == 'SMD'" ), wxS( "" ) );
 
-            // Strip empty parentheses left over from removing pad type condition
-            wxString prev;
-            do
-            {
-                prev = cleanedCondition;
-                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
-            } while( cleanedCondition != prev );
-
-            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
-            cleanedCondition.Trim( true ).Trim( false );
-            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
-            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
-                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
-
-            constraintData->SetRuleCondition( cleanedCondition );
+            constraintData->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
         }
 
         if( match.panelType == CUSTOM_RULE && customFallback )
@@ -623,7 +594,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         }
 
         if( match.panelType != VIA_STYLE && match.panelType != SILK_TO_SOLDERMASK_CLEARANCE
-            && match.panelType != VIAS_UNDER_SMD )
+            && match.panelType != SILK_TO_SILK_CLEARANCE && match.panelType != VIAS_UNDER_SMD )
             constraintData->SetRuleCondition( condition );
 
         DRC_RE_LOADED_PANEL_ENTRY entry( match.panelType, constraintData, aRule.m_Name, condition, aRule.m_Severity,

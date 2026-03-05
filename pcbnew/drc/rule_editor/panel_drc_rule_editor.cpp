@@ -1163,7 +1163,12 @@ std::vector<PCB_LAYER_ID> PANEL_DRC_RULE_EDITOR::getSelectedLayers()
     int sel = m_layerListChoiceCtrl->GetSelection();
 
     if( sel <= 0 )
+    {
+        if( m_layerCategory == DRC_LAYER_CATEGORY::SILKSCREEN_ONLY )
+            return { F_SilkS, B_SilkS };
+
         return {};
+    }
 
     int layerValue = m_layerIDs[sel - 1];
 

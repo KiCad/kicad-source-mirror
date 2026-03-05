@@ -133,6 +133,12 @@ private:
      */
     wxString extractRuleComment( const wxString& aOriginalText );
 
+    /**
+     * Clean up a condition string after auto-generated tokens have been removed.
+     * Strips empty parentheses, collapsed operators, and dangling leading/trailing operators.
+     */
+    wxString cleanStrippedCondition( const wxString& aCondition );
+
     DRC_PANEL_MATCHER m_matcher;
 };
 
