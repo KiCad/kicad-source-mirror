@@ -53,6 +53,8 @@ CONSTRAINT_FILES = {
     'maximum_allowed_deviation.svg': 'maximum-allowed-deviation.svg',
     'matched-lenght-diff-pair.svg': 'matched-length-diff-pair.svg',
     "matched-length-diff-pair-v2.svg": "matched-length-diff-pair-v2.svg",
+    'routing-diff-pair.svg': 'routing-diff-pair.svg',
+    'routing-width.svg': 'routing-width.svg',
 }
 
 
