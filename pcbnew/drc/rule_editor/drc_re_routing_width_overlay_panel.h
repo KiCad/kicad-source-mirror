@@ -60,9 +60,8 @@ private:
 
     UNITS_PROVIDER m_unitsProvider;
 
-    std::unique_ptr<UNIT_BINDER> m_minRoutingWidthBinder;
-    std::unique_ptr<UNIT_BINDER> m_preferredRoutingWidthBinder;
-    std::unique_ptr<UNIT_BINDER> m_maxRoutingWidthBinder;
+    std::unique_ptr<UNIT_BINDER> m_optWidthBinder;
+    std::unique_ptr<UNIT_BINDER> m_widthToleranceBinder;
 };
 
 #endif // DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL_H

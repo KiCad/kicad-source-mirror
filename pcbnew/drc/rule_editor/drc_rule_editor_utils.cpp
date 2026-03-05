@@ -63,7 +63,7 @@ static const CODE_MAP sCodeMap = { { MINIMUM_CLEARANCE, "clearance" },
                                    { MINIMUM_TEXT_HEIGHT_AND_THICKNESS, "text_height" },
                                    { SILK_TO_SILK_CLEARANCE, "silk_clearance" },
                                    { SILK_TO_SOLDERMASK_CLEARANCE, "silk_clearance" },
-                                   { MINIMUM_SOLDERMASK_SILVER, "solder_mask_sliver" },
+                                   { MINIMUM_SOLDERMASK_SLIVER, "solder_mask_sliver" },
                                    { SOLDERMASK_EXPANSION, "solder_mask_expansion" },
                                    { SOLDERPASTE_EXPANSION, "solder_paste_abs_margin" },
                                    { MATCHED_LENGTH_DIFF_PAIR, "length" },
@@ -175,13 +175,18 @@ static void RegisterDefaultConverters()
                 }
                 else if( code == "track_width" )
                 {
-                     double minW = constraint.GetValue().Min() / 1000000.0;
-                     double optW = constraint.GetValue().Opt() / 1000000.0;
-                     double maxW = constraint.GetValue().Max() / 1000000.0;
+                    double minW = constraint.GetValue().Min() / 1000000.0;
+                    double optW = constraint.GetValue().Opt() / 1000000.0;
+                    double maxW = constraint.GetValue().Max() / 1000000.0;
 
-                     auto data = std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, 0, aRule->m_Name, minW, optW, maxW );
-                     data->SetConstraintCode( code );
-                     return data;
+                    double tol = 0;
+                    if( optW > 0 )
+                        tol = std::max( optW - minW, maxW - optW );
+
+                    auto data =
+                            std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, 0, aRule->m_Name, optW, tol );
+                    data->SetConstraintCode( code );
+                    return data;
                 }
             }
             return nullptr;
@@ -296,7 +301,7 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case MINIMUM_ANNULAR_WIDTH:
     case MINIMUM_CLEARANCE:
     case MINIMUM_CONNECTION_WIDTH:
-    case MINIMUM_SOLDERMASK_SILVER:
+    case MINIMUM_SOLDERMASK_SLIVER:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
     case MINIMUM_DRILL_SIZE:
     case MINIMUM_VIA_DIAMETER:
@@ -812,7 +817,7 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
         return DRC_LAYER_CATEGORY::SILKSCREEN_ONLY;
 
     // SOLDERMASK_ONLY: Constraints that only apply to soldermask layers
-    case MINIMUM_SOLDERMASK_SILVER:
+    case MINIMUM_SOLDERMASK_SLIVER:
     case SOLDERMASK_EXPANSION:
         return DRC_LAYER_CATEGORY::SOLDERMASK_ONLY;
 
@@ -888,7 +893,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>();
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>();
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>();
-    case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>();
+    case MINIMUM_SOLDERMASK_SLIVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SLIVER_CONSTRAINT_DATA>();
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
     case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>();
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
@@ -918,7 +923,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_ANNULAR_WIDTH:              return std::make_shared<DRC_RE_MINIMUM_ANNULAR_WIDTH_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CLEARANCE:                  return std::make_shared<DRC_RE_MINIMUM_CLEARANCE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_CONNECTION_WIDTH:           return std::make_shared<DRC_RE_MINIMUM_CONNECTION_WIDTH_CONSTRAINT_DATA>( aBase );
-    case MINIMUM_SOLDERMASK_SILVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SILVER_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_SOLDERMASK_SLIVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SLIVER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
     case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );

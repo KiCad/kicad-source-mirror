@@ -188,28 +188,23 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( trackWidth )
         {
-            data->SetMinWidth( toMM( trackWidth->GetValue().Min() ) );
-            data->SetPreferredWidth( toMM( trackWidth->GetValue().Opt() ) );
-            data->SetMaxWidth( toMM( trackWidth->GetValue().Max() ) );
+            double opt = toMM( trackWidth->GetValue().Opt() );
+            double min = toMM( trackWidth->GetValue().Min() );
+            data->SetOptWidth( opt );
+            data->SetWidthTolerance( opt - min );
         }
 
         if( diffGap )
         {
-            data->SetMinGap( toMM( diffGap->GetValue().Min() ) );
-            data->SetPreferredGap( toMM( diffGap->GetValue().Opt() ) );
-            data->SetMaxGap( toMM( diffGap->GetValue().Max() ) );
+            double opt = toMM( diffGap->GetValue().Opt() );
+            double min = toMM( diffGap->GetValue().Min() );
+            data->SetOptGap( opt );
+            data->SetGapTolerance( opt - min );
         }
 
         if( uncoupled )
         {
             data->SetMaxUncoupledLength( toMM( uncoupled->GetValue().Max() ) );
-        }
-
-        const DRC_CONSTRAINT* skew = findConstraint( aRule, SKEW_CONSTRAINT );
-
-        if( skew )
-        {
-            data->SetMaxSkew( toMM( skew->GetValue().Max() ) );
         }
 
         return data;
@@ -243,9 +238,18 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( trackWidth )
         {
-            data->SetMinRoutingWidth( toMM( trackWidth->GetValue().Min() ) );
-            data->SetPreferredRoutingWidth( toMM( trackWidth->GetValue().Opt() ) );
-            data->SetMaxRoutingWidth( toMM( trackWidth->GetValue().Max() ) );
+            double opt = toMM( trackWidth->GetValue().Opt() );
+            double min = toMM( trackWidth->GetValue().Min() );
+            double max = toMM( trackWidth->GetValue().Max() );
+
+            data->SetOptWidth( opt );
+
+            if( opt > 0 )
+            {
+                double tolFromMin = opt - min;
+                double tolFromMax = max - opt;
+                data->SetWidthTolerance( std::max( tolFromMin, tolFromMax ) );
+            }
         }
 
         return data;
@@ -261,9 +265,11 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( length )
         {
-            data->SetMinimumLength( toMM( length->GetValue().Min() ) );
-            data->SetOptimumLength( toMM( length->GetValue().Opt() ) );
-            data->SetMaximumLength( toMM( length->GetValue().Max() ) );
+            double minMM = toMM( length->GetValue().Min() );
+            double optMM = toMM( length->GetValue().Opt() );
+            double maxMM = toMM( length->GetValue().Max() );
+            data->SetOptimumLength( optMM );
+            data->SetTolerance( ( maxMM - minMM ) / 2.0 );
         }
 
         return data;
@@ -279,15 +285,20 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( length )
         {
-            data->SetMinimumLength( toMM( length->GetValue().Min() ) );
-            data->SetOptimumLength( toMM( length->GetValue().Opt() ) );
-            data->SetMaximumLength( toMM( length->GetValue().Max() ) );
+            double minMM = toMM( length->GetValue().Min() );
+            double optMM = toMM( length->GetValue().Opt() );
+            double maxMM = toMM( length->GetValue().Max() );
+            data->SetOptimumLength( optMM );
+            data->SetTolerance( ( maxMM - minMM ) / 2.0 );
         }
 
         const DRC_CONSTRAINT* skew = findConstraint( aRule, SKEW_CONSTRAINT );
 
         if( skew )
+        {
             data->SetMaxSkew( toMM( skew->GetValue().Max() ) );
+            data->SetWithinDiffPairs( skew->GetOption( DRC_CONSTRAINT::OPTIONS::SKEW_WITHIN_DIFF_PAIRS ) );
+        }
 
         return data;
     }
@@ -490,27 +501,72 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         {
             wxString cleanedCondition = condition;
 
-            bool hasBothSides = condition.Contains( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask') || (A.Layer == "
-                                                         "'B.SilkS' && B.Layer == 'B.Mask')" ) );
+            // New format: L == 'F.Mask' || L == 'B.Mask'
+            bool hasBothSides = condition.Contains( wxS( "L == 'F.Mask' || L == 'B.Mask'" ) );
 
             if( hasBothSides )
             {
                 constraintData->SetLayers( { F_SilkS, B_SilkS } );
                 constraintData->SetLayerSource( wxS( "" ) );
 
-                cleanedCondition.Replace( wxS( "(A.Layer == 'F.SilkS' && B.Layer == 'F.Mask') || (A.Layer == 'B.SilkS' "
-                                               "&& B.Layer == 'B.Mask')" ),
-                                          wxS( "" ) );
+                cleanedCondition.Replace( wxS( "L == 'F.Mask' || L == 'B.Mask'" ), wxS( "" ) );
             }
             else
+            {
+                bool         isFront = condition.Contains( wxS( "F.Mask" ) );
+                PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
+                constraintData->SetLayers( { layer } );
+                constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
+
+                cleanedCondition.Replace( wxS( "L == 'F.Mask'" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "L == 'B.Mask'" ), wxS( "" ) );
+            }
+
+            // Strip empty parentheses left over from removing layer conditions
+            wxString prev;
+            do
+            {
+                prev = cleanedCondition;
+                cleanedCondition.Replace( wxS( "()" ), wxS( "" ) );
+            } while( cleanedCondition != prev );
+
+            cleanedCondition.Replace( wxS( "&& &&" ), wxS( "&&" ) );
+            cleanedCondition.Replace( wxS( "|| ||" ), wxS( "||" ) );
+            cleanedCondition.Trim( true ).Trim( false );
+            if( cleanedCondition.StartsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "&&" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+            if( cleanedCondition.StartsWith( wxS( "||" ) ) )
+                cleanedCondition = cleanedCondition.Mid( 2 ).Trim( false );
+            if( cleanedCondition.EndsWith( wxS( "||" ) ) )
+                cleanedCondition = cleanedCondition.Left( cleanedCondition.Length() - 2 ).Trim( true );
+
+            constraintData->SetRuleCondition( cleanedCondition );
+        }
+
+        if( match.panelType == SILK_TO_SILK_CLEARANCE )
+        {
+            wxString cleanedCondition = condition;
+
+            bool hasBothSides = condition.Contains( wxS( "L == 'F.SilkS' || L == 'B.SilkS'" ) );
+
+            if( hasBothSides )
+            {
+                constraintData->SetLayers( { F_SilkS, B_SilkS } );
+                constraintData->SetLayerSource( wxS( "" ) );
+
+                cleanedCondition.Replace( wxS( "L == 'F.SilkS' || L == 'B.SilkS'" ), wxS( "" ) );
+            }
+            else if( condition.Contains( wxS( "L == 'F.SilkS'" ) ) || condition.Contains( wxS( "L == 'B.SilkS'" ) ) )
             {
                 bool         isFront = condition.Contains( wxS( "F.SilkS" ) );
                 PCB_LAYER_ID layer = isFront ? F_SilkS : B_SilkS;
                 constraintData->SetLayers( { layer } );
                 constraintData->SetLayerSource( isFront ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ) );
 
-                cleanedCondition.Replace( wxS( "A.Layer == 'F.SilkS' && B.Layer == 'F.Mask'" ), wxS( "" ) );
-                cleanedCondition.Replace( wxS( "A.Layer == 'B.SilkS' && B.Layer == 'B.Mask'" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "L == 'F.SilkS'" ), wxS( "" ) );
+                cleanedCondition.Replace( wxS( "L == 'B.SilkS'" ), wxS( "" ) );
             }
 
             // Strip empty parentheses left over from removing layer conditions

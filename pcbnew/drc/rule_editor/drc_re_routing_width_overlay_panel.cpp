@@ -58,32 +58,37 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
     }
 
 
-    // Create min width field
-    auto* minWidthField = AddField<wxTextCtrl>( wxS( "min_width" ), positions[0],
-                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_minRoutingWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, minWidthField->GetControl(),
-                                           minWidthField->GetLabel(), false, false );
-    minWidthField->SetUnitBinder( m_minRoutingWidthBinder.get() );
-    minWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
+    // Create opt width field
+    auto* optWidthField = AddField<wxTextCtrl>( wxS( "opt_width" ), positions[0], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_optWidthBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, optWidthField->GetControl(),
+                                           optWidthField->GetLabel(), false, false );
+    optWidthField->SetUnitBinder( m_optWidthBinder.get() );
+    optWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    // Create preferred width field
-    auto* prefWidthField = AddField<wxTextCtrl>( wxS( "pref_width" ), positions[1],
-                                                 wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_preferredRoutingWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, prefWidthField->GetControl(),
-                                           prefWidthField->GetLabel(), false, false );
-    prefWidthField->SetUnitBinder( m_preferredRoutingWidthBinder.get() );
-    prefWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
+    // Create width tolerance field
+    auto* widthTolField =
+            AddField<wxTextCtrl>( wxS( "width_tolerance" ), positions[1], wxTE_CENTRE | wxTE_PROCESS_ENTER );
+    m_widthToleranceBinder =
+            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, widthTolField->GetControl(),
+                                           widthTolField->GetLabel(), false, false );
+    widthTolField->SetUnitBinder( m_widthToleranceBinder.get() );
+    widthTolField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    // Create max width field
-    auto* maxWidthField = AddField<wxTextCtrl>( wxS( "max_width" ), positions[2],
-                                                wxTE_CENTRE | wxTE_PROCESS_ENTER );
-    m_maxRoutingWidthBinder =
-            std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxWidthField->GetControl(),
-                                           maxWidthField->GetLabel(), false, false );
-    maxWidthField->SetUnitBinder( m_maxRoutingWidthBinder.get() );
-    maxWidthField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
+    // Add ± label between opt width and tolerance
+    {
+        const DRC_RE_FIELD_POSITION& optPos = positions[0];
+        const DRC_RE_FIELD_POSITION& tolPos = positions[1];
+        int                          fieldHeight = optWidthField->GetControl()->GetBestSize().GetHeight();
+
+        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
+        wxSize        pmSize = plusMinus->GetBestSize();
+        wxStaticText* optMmLabel = optWidthField->GetLabel();
+        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
+        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
+        plusMinus->SetPosition(
+                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
+    }
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
@@ -92,9 +97,8 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
             dlg->SetModified();
     };
 
-    minWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    prefWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    optWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
+    widthTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
 
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
@@ -103,9 +107,8 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
             dlg->OnSave( aEvent );
     };
 
-    minWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    prefWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    optWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
+    widthTolField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
 
     // Position all fields and update the panel layout
     PositionFields();
@@ -118,11 +121,8 @@ bool DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    // Convert mm values to internal units and set them in the binders
-    // Use ChangeDoubleValue to avoid triggering modification events during loading
-    m_minRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinRoutingWidth() ) );
-    m_preferredRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetPreferredRoutingWidth() ) );
-    m_maxRoutingWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxRoutingWidth() ) );
+    m_optWidthBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetOptWidth() ) );
+    m_widthToleranceBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetWidthTolerance() ) );
 
     return true;
 }
@@ -133,10 +133,8 @@ bool DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::TransferDataFromWindow()
     if( !m_data )
         return false;
 
-    // Read values from binders (in internal units) and convert to mm for storage
-    m_data->SetMinRoutingWidth( pcbIUScale.IUTomm( m_minRoutingWidthBinder->GetDoubleValue() ) );
-    m_data->SetPreferredRoutingWidth( pcbIUScale.IUTomm( m_preferredRoutingWidthBinder->GetDoubleValue() ) );
-    m_data->SetMaxRoutingWidth( pcbIUScale.IUTomm( m_maxRoutingWidthBinder->GetDoubleValue() ) );
+    m_data->SetOptWidth( pcbIUScale.IUTomm( m_optWidthBinder->GetDoubleValue() ) );
+    m_data->SetWidthTolerance( pcbIUScale.IUTomm( m_widthToleranceBinder->GetDoubleValue() ) );
 
     return true;
 }
