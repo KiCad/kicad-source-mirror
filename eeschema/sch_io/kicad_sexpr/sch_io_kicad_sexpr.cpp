@@ -851,7 +851,10 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                            return aLhs.m_Path < aRhs.m_Path;
                        } );
 
-            projectName = instances[0].m_ProjectName;
+            if( uuid == rootSheetUuid )
+                projectName = aSchematic.Prj().GetProjectName();
+            else
+                projectName = instances[0].m_ProjectName;
 
             m_out->Print( "(project %s", m_out->Quotew( projectName ).c_str() );
 
