@@ -18,6 +18,7 @@
  */
 
 #include <jobs/job_pcb_import.h>
+#include <wx/intl.h>
 #include <i18n_utility.h>
 
 
