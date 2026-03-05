@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2025-10-03 15:54+0000\n"
+"PO-Revision-Date: 2026-03-05 19:06+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:381
@@ -834,7 +834,7 @@ msgstr "Kullanıcı tanımlı katman 45'i göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:114
 msgid "Through-hole Models"
-msgstr "THT Modelleri"
+msgstr "Tam delikli Modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 msgid "SMD Models"
@@ -4431,8 +4431,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"İİşaretlenirse, bir projeyi başlatmak, önceden açık dosyalara sahip şematik "
-"ve pano editörleri gibi araçları da başlatır"
+"İşaretlenirse, bir proje başlatıldığında daha önce açık olan dosyalarla "
+"birlikte şematik ve kart düzenleyiciler gibi araçlar da başlatılır"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
@@ -4959,7 +4959,7 @@ msgstr "Gömülecek bir dosya seçin"
 
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
-msgstr ""
+msgstr "Üst sembolden miras alınan gömülü dosyalar kaldırılamaz."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -7192,6 +7192,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Birleştirilemiyor: Henüz aşamalandırılmamış değişiklikleriniz var. Lütfen "
+"çekme işleminden önce kaydedin veya saklayın."
 
 #: common/git/git_pull_handler.cpp:399
 msgid "Could not merge commits"
@@ -8488,6 +8490,12 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad '%s' klasörünü kullanamadı.\n"
+"\n"
+"1. Windows ayarlarında veya Grup İlkesinde 'Denetimli klasör erişimini' "
+"devre dışı bırakın\n"
+"2. Başka bir antivirüs yazılımının KiCad ile çakışmadığından emin olun\n"
+"3. Doğru izinlerin ayarlandığından emin olun"
 
 #: common/pgm_base.cpp:218
 msgid "No default editor found, you must choose one."
@@ -12587,7 +12595,7 @@ msgstr "Tüm birimler için ortak"
 #: eeschema/dialogs/dialog_field_properties_base.cpp:291
 #: eeschema/dialogs/dialog_text_properties_base.cpp:334
 msgid "Common to all body styles"
-msgstr "Tüm gövde stillerine ortak"
+msgstr "Tüm gövde stilleri için ortak"
 
 #: eeschema/dialogs/dialog_field_properties_base.h:104
 msgid "Text Item Properties"
@@ -13493,9 +13501,9 @@ msgid "Edit Symbol Properties"
 msgstr "Sembol Özelliklerini Düzenle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:607
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Bu dosya zaten açık."
+msgstr "Bu alan '%s' ögesinden miras alınmıştır."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:637
 #, c-format
@@ -19517,7 +19525,7 @@ msgstr "Geçersiz sembol dönüştürme sayısı %s"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:818
 #, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Geçersiz köprü metni URL'si '%s'"
+msgstr "Geçersiz bağlantı adresi '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:980
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2213
@@ -19679,9 +19687,8 @@ msgstr "Tüm ögeler"
 
 #: eeschema/sch_item.cpp:148 eeschema/sch_item.cpp:184
 #: eeschema/sch_item.cpp:668
-#, fuzzy
 msgid "All body styles"
-msgstr "Tüm gövde stillerine ortak"
+msgstr "Tüm gövde stilleri"
 
 #: eeschema/sch_item.cpp:594 eeschema/sch_item.cpp:661
 #: eeschema/sch_symbol.cpp:3122 eeschema/tools/sch_edit_tool.cpp:138
@@ -22732,7 +22739,7 @@ msgstr "Kural Alanı Çiz"
 
 #: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
-msgstr "Elektriksel Kural Denetleyicisi (ERC) penceresini göster"
+msgstr "Elektriksel Kural Denetleyicisi penceresini göster"
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
@@ -26503,6 +26510,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Uyarı: Rapor yolu --generate-report seçeneği belirtilmeden sağlandı, rapor "
+"oluşturulmayacak\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -26831,6 +26840,7 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
+"Kart diziliminde tanımlanan renkler, ön ayardaki renkleri geçersiz kılar"
 
 #: kicad/cli/command_pcb_render.cpp:269
 #, fuzzy
@@ -26978,7 +26988,7 @@ msgstr ""
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr "Dışa Aktarma Araçları (Ağ Listesi, PDF, BOM vb.)"
+msgstr "Dışa aktarma araçları (ağ listesi, pdf, malzeme listesi, vb.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:36
 msgid "Generate a Bill of Materials (BOM)"
@@ -28008,7 +28018,7 @@ msgstr "Depo paketleri getiriliyor"
 
 #: kicad/pcm/pcm.cpp:308
 msgid "Unable to load repository packages url."
-msgstr "Depo paketlerinin URL'si yüklenemedi."
+msgstr "Depo paket adresi yüklenemiyor."
 
 #: kicad/pcm/pcm.cpp:318
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -28086,7 +28096,7 @@ msgstr "İndirme dizini oluşturulamıyor!"
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Paket URL'si indiriliyor: '%s'"
+msgstr "Paket adresi indiriliyor: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:146
 #, c-format
@@ -28094,7 +28104,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"URL %s indirilemedi\n"
+"%s adresinden indirme başarısız oldu\n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -28390,7 +28400,7 @@ msgstr "Git izlemeyi etkinleştir"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Bu proje için Git entegrasyonunu yeniden etkinleştirin"
 
 #: kicad/project_tree_pane.cpp:1063
 #, fuzzy
@@ -28399,7 +28409,7 @@ msgstr "Git izlemeyi etkinleştir"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Bu proje için Git entegrasyonunu devre dışı bırakın"
 
 #: kicad/project_tree_pane.cpp:1121
 #, c-format
@@ -32686,7 +32696,7 @@ msgstr "???"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:177
 msgid "N/A"
-msgstr "YOK"
+msgstr "Yok"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1643
 msgid "PTH"
@@ -34042,7 +34052,7 @@ msgstr "Şematik Paritesi (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:107 pcbnew/tools/pcb_actions.cpp:420
 msgid "Design Rules Checker"
-msgstr "Tasarım Kuralları Denetleyicisi (DRC)"
+msgstr "Tasarım Kuralları Denetleyicisi"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -39234,7 +39244,8 @@ msgid ""
 msgstr ""
 "### Notlar\n"
 "\n"
-"Satır(lar)a yorum eklemek veya yorumu kaldırmak için Ctrl+/ kullanın.\n"
+"Satır(lar)ı yorum satırı yapmak veya yorum satırını kaldırmak için Ctrl+/ "
+"kullanın.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -43215,7 +43226,7 @@ msgstr "(ped %s birden fazla net-tie ped grubunda görünüyor)"
 
 #: pcbnew/footprint.cpp:4197 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
 msgid "Inherited"
-msgstr "devralınan"
+msgstr "miras alınmış"
 
 #: pcbnew/footprint.cpp:4201 pcbnew/pad.cpp:2768 pcbnew/zone.cpp:1890
 msgid "Thermal reliefs for PTH"
@@ -44341,6 +44352,8 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
 "Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Uyarı: %s ayak izi '%s' için kütüphane adı eksik. Tekrarlanan güncelleme "
+"bildirimlerini önlemek için tam 'Kütüphane:Ayakİzi' formatını kullanın."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, c-format
@@ -46288,7 +46301,7 @@ msgstr "İçerik bölümü oluşturuluyor"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Ped desteklenmeyen tipte; atlandı."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1286
 msgid "Generating history section"
@@ -46308,6 +46321,8 @@ msgstr "'%s' ayak izi '%s' kütüphanesinde bulunamadı."
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
+"\"%s\" bileşeninde OEM referansı eksik; malzeme listesi (BOM) girdisi "
+"atlanacak."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1491
 msgid "Generating CAD data"
@@ -46324,6 +46339,8 @@ msgstr ""
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Yinelenen ayak izi işaretçileriyle karşılaşıldı; IPC-2581 çıktısı hatalı "
+"olabilir."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2808
 #, c-format
@@ -46333,16 +46350,20 @@ msgstr "Katman %s, Ağ %s dışa aktarılıyor"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2844
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Geçit desteklenmeyen ped yığını kullanıyor; delme verilerinden çıkarıldı."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2870
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Ped desteklenmeyen ped yığını kullanıyor; delik delme verilerinden çıkarıldı."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3012
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
 msgstr ""
+"IPC-2581 revizyon B'de damlacıklar desteklenmez; bunlar bölgeler olarak dışa "
+"aktarıldı."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3378
 msgid "Generating logistic section"
@@ -46716,6 +46737,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"'%s' bileşeninin tanımlayıcısında ASCII olmayan karakterler var; ODB++ dışa "
+"aktarımı için '%s' olarak dönüştürüldü."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -46723,6 +46746,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"'%s' bileşeni, dönüştürme sonrasında belirsiz bir tanımlayıcıya sahip; ODB++ "
+"dışa aktarımı için '%s' olarak yeniden adlandırıldı."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"
@@ -47215,6 +47240,8 @@ msgstr "Proje ayak izi kütüphaneleri yüklenirken hata oluştu."
 msgid ""
 "Failed first phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Python C API aracılığıyla Python modülü '%s' başlatılırken ilk aşama "
+"başarısız oldu."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
@@ -47227,6 +47254,8 @@ msgstr "Komut Dosyası Konsolu"
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
 msgstr ""
+"Python C API aracılığıyla Python modülü '%s' başlatılırken ikinci aşama "
+"başarısız oldu."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -49187,7 +49216,7 @@ msgstr "Devam eden taslağı kapat"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Show the design rules checker window"
-msgstr "Tasarım Kuralları Denetleyicisi (DRC) penceresini göster"
+msgstr "Tasarım Kuralları Denetleyicisi penceresini göster"
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Open in Footprint Editor"
@@ -49751,7 +49780,7 @@ msgstr "3B Model Seç"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr ""
+msgstr "Ayak izi 3B modellerini topla ve kartın içine yerleştir"
 
 #: pcbnew/tools/pcb_actions.cpp:1089
 msgid "Switch Track Width to Next"
@@ -50903,7 +50932,7 @@ msgstr "Gömülü Model"
 #: pcbnew/tools/pcb_control.cpp:2089
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d adet 3B model başarıyla kartın içine yerleştirildi."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2384
 msgid "Resize Table Cells"
@@ -52228,7 +52257,7 @@ msgstr ""
 
 #: pcbnew/zones.h:61
 msgid "inherited"
-msgstr "Devralınan"
+msgstr "miras alınmış"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
