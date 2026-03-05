@@ -1175,8 +1175,11 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
 {
     bool allValid = true;
 
-    // Track rule names and their conditions to detect same-name different-condition conflicts
-    std::map<wxString, std::set<wxString>> ruleConditions;
+    // Track (ruleName, layerSource) pairs and their conditions to detect conflicts.
+    // Rules with the same name and same layer scope must share the same condition to be
+    // merged correctly. Rules with different layer scopes are saved as separate rules and
+    // are allowed to have different conditions.
+    std::map<std::pair<wxString, wxString>, std::set<wxString>> ruleConditions;
 
     for( RULE_TREE_NODE& node : m_ruleTreeNodeDatas )
     {
@@ -1209,21 +1212,21 @@ bool DIALOG_DRC_RULE_EDITOR::validateAllRules( std::map<wxString, wxString>& aEr
                 allValid = false;
             }
 
-            // Track conditions for same-name different-condition validation
             wxString ruleName = constraintData->GetRuleName();
             wxString condition = constraintData->GetRuleCondition();
-            ruleConditions[ruleName].insert( condition );
+            wxString layerSource = constraintData->GetLayerSource();
+            ruleConditions[std::make_pair( ruleName, layerSource )].insert( condition );
         }
     }
 
-    // Check for same-name different-condition conflicts
-    for( const auto& [ruleName, conditions] : ruleConditions )
+    // Check for same-name same-layer different-condition conflicts
+    for( const auto& [key, conditions] : ruleConditions )
     {
         if( conditions.size() > 1 )
         {
             wxString errorMsg = _( "Multiple rules with the same name have different conditions. "
                                    "Rules with the same name must have identical conditions to be merged." );
-            aErrors[ruleName] = errorMsg;
+            aErrors[key.first] = errorMsg;
             allValid = false;
         }
     }

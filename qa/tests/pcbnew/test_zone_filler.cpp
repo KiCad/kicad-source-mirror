@@ -1338,3 +1338,85 @@ BOOST_FIXTURE_TEST_CASE( ZoneViaNetClearance, ZONE_FILL_TEST_FIXTURE )
 
     BOOST_CHECK_EQUAL( violations.size(), 0 );
 }
+
+
+/**
+ * Verify that custom DRC rules with identical conditions but different layer scopes
+ * are both applied correctly during zone fill.
+ *
+ * Two rules: outer layer 4.6mm clearance, inner layer 2.3mm clearance, both with
+ * the same condition "A.hasNetclass('HV') && B.hasNetclass('LV')". After fill,
+ * the zone-to-zone clearance should match the rule for that layer.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23339
+ */
+BOOST_FIXTURE_TEST_CASE( ZoneLayerSpecificRules, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue23339_zone_layer_rules", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    // First verify that EvalRules returns the correct clearance per layer
+    ZONE* hvZone = nullptr;
+    ZONE* lvZone = nullptr;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetNetname() == "HV_NET" )
+            hvZone = zone;
+        else if( zone->GetNetname() == "LV_NET" )
+            lvZone = zone;
+    }
+
+    BOOST_REQUIRE( hvZone );
+    BOOST_REQUIRE( lvZone );
+
+    // Outer layer rule should give 4.6mm clearance on F.Cu
+    DRC_CONSTRAINT outerConstraint = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT,
+                                                                   hvZone, lvZone, F_Cu );
+
+    BOOST_TEST_MESSAGE( "F.Cu clearance: " << outerConstraint.GetValue().Min()
+                        << " (expected " << pcbIUScale.mmToIU( 4.6 ) << ")" );
+    BOOST_CHECK_EQUAL( outerConstraint.GetValue().Min(), pcbIUScale.mmToIU( 4.6 ) );
+
+    // Inner layer rule should give 2.3mm clearance on In1.Cu
+    DRC_CONSTRAINT innerConstraint = bds.m_DRCEngine->EvalRules( CLEARANCE_CONSTRAINT,
+                                                                   hvZone, lvZone, In1_Cu );
+
+    BOOST_TEST_MESSAGE( "In1.Cu clearance: " << innerConstraint.GetValue().Min()
+                        << " (expected " << pcbIUScale.mmToIU( 2.3 ) << ")" );
+    BOOST_CHECK_EQUAL( innerConstraint.GetValue().Min(), pcbIUScale.mmToIU( 2.3 ) );
+
+    // Now fill zones and check that fills actually respect the clearances
+    KI_TEST::FillZones( m_board.get() );
+
+    // Run DRC and verify no clearance violations between zones
+    std::vector<DRC_ITEM> violations;
+
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() == DRCE_CLEARANCE )
+                {
+                    BOARD_ITEM* item_a = m_board->ResolveItem( aItem->GetMainItemID() );
+                    BOARD_ITEM* item_b = m_board->ResolveItem( aItem->GetAuxItemID() );
+
+                    ZONE* zone_a = dynamic_cast<ZONE*>( item_a );
+                    ZONE* zone_b = dynamic_cast<ZONE*>( item_b );
+
+                    if( zone_a && zone_b )
+                    {
+                        BOOST_TEST_MESSAGE( "Zone-to-zone clearance violation on layer "
+                                            << aLayer << ": " << aItem->GetErrorMessage( true ) );
+                        violations.push_back( *aItem );
+                    }
+                }
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_CHECK_EQUAL( violations.size(), 0 );
+}

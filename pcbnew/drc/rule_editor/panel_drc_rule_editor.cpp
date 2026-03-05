@@ -283,8 +283,25 @@ wxString PANEL_DRC_RULE_EDITOR::getSelectedLayerSource() const
     {
     case LAYER_SEL_OUTER: return wxS( "outer" );
     case LAYER_SEL_INNER: return wxS( "inner" );
-    case LAYER_SEL_TOP: return m_board ? m_board->GetLayerName( F_Cu ) : wxString();
-    case LAYER_SEL_BOTTOM: return m_board ? m_board->GetLayerName( B_Cu ) : wxString();
+    case LAYER_SEL_TOP:
+        switch( m_constraintType )
+        {
+        case COURTYARD_CLEARANCE:          return wxS( "F.CrtYd" );
+        case SILK_TO_SOLDERMASK_CLEARANCE: return wxS( "F.SilkS" );
+        case VIAS_UNDER_SMD:
+        case ALLOWED_ORIENTATION:          return wxS( "F.Cu" );
+        default:                           return m_board ? m_board->GetLayerName( F_Cu ) : wxString();
+        }
+
+    case LAYER_SEL_BOTTOM:
+        switch( m_constraintType )
+        {
+        case COURTYARD_CLEARANCE:          return wxS( "B.CrtYd" );
+        case SILK_TO_SOLDERMASK_CLEARANCE: return wxS( "B.SilkS" );
+        case VIAS_UNDER_SMD:
+        case ALLOWED_ORIENTATION:          return wxS( "B.Cu" );
+        default:                           return m_board ? m_board->GetLayerName( B_Cu ) : wxString();
+        }
     default:
         if( layerValue >= 0 && m_board )
             return m_board->GetLayerName( static_cast<PCB_LAYER_ID>( layerValue ) );

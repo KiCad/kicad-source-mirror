@@ -1,0 +1,12 @@
+(version 1)
+
+(rule "high to low keepaway outer layer"
+	(condition "A.hasNetclass('HV') && B.hasNetclass('LV')")
+	(constraint clearance (min 4.6mm))
+	(layer outer)
+)
+(rule "high to low keepaway inner layer"
+	(condition "A.hasNetclass('HV') && B.hasNetclass('LV')")
+	(constraint clearance (min 2.3mm))
+	(layer inner)
+)
