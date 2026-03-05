@@ -365,11 +365,17 @@ public:
         m_start = aStart;
         m_end = aEnd;
         m_width = aWidth;
+        m_pos = ( aStart + aEnd ) / 2;
     }
 
     VECTOR2I GetStart() const { return m_start; };
     VECTOR2I GetEnd() const { return m_end; };
     double   GetWidth() const { return m_width; };
+
+    int GetRadius() const override
+    {
+        return (int) ( ( m_start - m_end ).EuclideanNorm() / 2 ) + (int) ( m_width / 2 );
+    };
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
                                         double aMaxSquaredWeight ) const override;

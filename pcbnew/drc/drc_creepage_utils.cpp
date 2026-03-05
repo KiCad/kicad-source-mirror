@@ -525,8 +525,10 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
         case SHAPE_T::SEGMENT:
         {
             BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             a = new BE_SHAPE_POINT( d->GetEnd() );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             break;
         }
@@ -534,12 +536,16 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
         case SHAPE_T::RECTANGLE:
         {
             BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             a = new BE_SHAPE_POINT( d->GetEnd() );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
+            a->SetParent( d );
             m_shapeCollection.push_back( a );
             break;
         }
@@ -548,6 +554,7 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
             for( const VECTOR2I& p : d->GetPolyPoints() )
             {
                 BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
+                a->SetParent( d );
                 m_shapeCollection.push_back( a );
             }
 
@@ -2395,6 +2402,53 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
     {
         for( size_t i = 0; i < parentEntries.size(); ++i )
             searchParent( i );
+    }
+
+    // Generate work items for same-parent node pairs. The cross-parent search above
+    // skips pairs where parent1 == parent2, but creepage paths between different edge
+    // segments of the same slot (which share a footprint grandparent) are needed for
+    // the path to navigate around the slot geometry. Also handles null-parent nodes
+    // (e.g. NPTH pad shapes) which were excluded from the RTree search entirely.
+    for( const auto& [parent, net_groups] : parent_net_groups )
+    {
+        std::vector<std::shared_ptr<GRAPH_NODE>> sameParentNodes;
+
+        for( const auto& [net, nodeList] : net_groups )
+            sameParentNodes.insert( sameParentNodes.end(), nodeList.begin(), nodeList.end() );
+
+        for( size_t i = 0; i < sameParentNodes.size(); i++ )
+        {
+            for( size_t j = i + 1; j < sameParentNodes.size(); j++ )
+            {
+                auto& gn1 = sameParentNodes[i];
+                auto& gn2 = sameParentNodes[j];
+
+                // ConnectChildren already handles nodes on the same CREEP_SHAPE
+                if( gn1->m_parent == gn2->m_parent )
+                    continue;
+
+                // Skip same-net conductive pairs
+                if( gn1->m_parent->IsConductive() && gn2->m_parent->IsConductive()
+                    && gn1->m_net == gn2->m_net )
+                {
+                    continue;
+                }
+
+                VECTOR2I pos1 = gn1->m_parent->GetPos();
+                VECTOR2I pos2 = gn2->m_parent->GetPos();
+                int      r1 = gn1->m_parent->GetRadius();
+                int      r2 = gn2->m_parent->GetRadius();
+
+                int64_t centerDistSq = ( pos1 - pos2 ).SquaredEuclideanNorm();
+                double  threshold = aMaxWeight + r1 + r2;
+                double  thresholdSq = threshold * threshold;
+
+                if( (double) centerDistSq > thresholdSq )
+                    continue;
+
+                work_items.push_back( { gn1, gn2 } );
+            }
+        }
     }
 
     auto processWorkItems =
