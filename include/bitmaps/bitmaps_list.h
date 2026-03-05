@@ -713,7 +713,7 @@ enum class BITMAPS : unsigned int
     constraint_via_style,
     constraint_minimum_text_height_and_thickness,
     constraint_silk_to_soldermask_clearance,
-    constraint_minimum_soldermask_silver,
+    constraint_minimum_soldermask_sliver,
     constraint_soldermask_expansion,
     constraint_solderpaste_expansion,
     constraint_maximum_allowed_deviation,

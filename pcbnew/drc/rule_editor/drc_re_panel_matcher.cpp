@@ -71,10 +71,10 @@ void DRC_PANEL_MATCHER::initClaims()
 
     // Priority 90: VIA_STYLE claims via_diameter + hole_size
     m_claims.emplace_back(
-            VIA_STYLE,
-            std::set<DRC_CONSTRAINT_T>{ VIA_DIAMETER_CONSTRAINT, HOLE_SIZE_CONSTRAINT },
-            std::set<DRC_CONSTRAINT_T>{},
-            90 );
+              VIA_STYLE,
+              std::set<DRC_CONSTRAINT_T>{},
+              std::set<DRC_CONSTRAINT_T>{ VIA_DIAMETER_CONSTRAINT, HOLE_SIZE_CONSTRAINT },
+              90 );
 
     // Priority 80: MINIMUM_TEXT_HEIGHT_THICKNESS claims text_height + text_thickness
     m_claims.emplace_back(
@@ -147,7 +147,7 @@ void DRC_PANEL_MATCHER::initClaims()
             30 );
 
    m_claims.emplace_back(
-            MINIMUM_SOLDERMASK_SILVER,
+            MINIMUM_SOLDERMASK_SLIVER,
             std::set<DRC_CONSTRAINT_T>{ SOLDER_MASK_SLIVER_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             30 );
@@ -273,6 +273,9 @@ bool DRC_PANEL_MATCHER::matchesClaim( const DRC_PANEL_CLAIM&            aClaim,
         if( aConstraints.find( optional ) != aConstraints.end() )
             claimed.insert( optional );
     }
+
+    if( claimed.empty() )
+        return false;
 
     if( aClaimedOut )
         *aClaimedOut = claimed;

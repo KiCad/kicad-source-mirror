@@ -740,7 +740,7 @@ set( BMAPS_CONSTRAINTS
     minimum-clearance
     minimum-connection-width
     silk-to-silk-clearance
-    minimum-soldermask-silver
+    minimum-soldermask-sliver
     minimum-text-height-and-thickness
     minimum_thermal_relief_spoke_count
     minimum-drill-size
