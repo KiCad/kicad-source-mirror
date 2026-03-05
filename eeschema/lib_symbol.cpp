@@ -1083,6 +1083,8 @@ void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
         if( &*i == aItem )
         {
             items.erase( i );
+            cachePinCount();
+            cacheChooserFields();
             break;
         }
     }
