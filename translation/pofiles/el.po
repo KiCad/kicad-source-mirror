@@ -6,13 +6,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023, 2025.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# Theodoros Asimakopoulos <theoasima@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-01 09:48+0300\n"
-"PO-Revision-Date: 2025-10-20 04:51+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2026-03-05 19:06+0000\n"
+"Last-Translator: Theodoros Asimakopoulos <theoasima@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
 "source/el/>\n"
 "Language: el\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -39,7 +40,7 @@ msgstr ""
 #: common/properties/pg_editors.cpp:631
 #: common/widgets/grid_text_button_helpers.cpp:255
 msgid "All Files"
-msgstr "Όλα τα Αρχεία"
+msgstr "Όλα τα αρχεία"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:339
 msgid "Build board outline"
@@ -77,12 +78,12 @@ msgstr "Δημιουργία ζωνών"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1313
 msgid "Build Tech layers"
-msgstr "Κατασκευή Τεχνικών επιπέδων"
+msgstr "Κατασκευή τεχνικών επιπέδων"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1390
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Κατασκευή Τεχνικού επιπέδου %d"
+msgstr "Κατασκευή τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1672
 msgid "Simplifying copper layer polygons"
@@ -137,7 +138,7 @@ msgstr "Έδρα %s\t"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1028
 #, c-format
 msgid "Rule area %s\t"
-msgstr "Περιοχή Κανόνων σε %s\t"
+msgstr "Περιοχή κανόνων σε %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1030
 #, c-format
@@ -165,7 +166,7 @@ msgstr "Φόρτωση OpenGL επίπεδο %s"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:890
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2233
 msgid "Loading 3D models..."
-msgstr "Φόρτωση 3Δ μοντέλων..."
+msgstr "Φόρτωση 3D μοντέλων..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:945
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1071
@@ -223,21 +224,21 @@ msgstr "Απόδοση: Σκίαση μετά την επεξεργασία"
 #: common/tool/actions.cpp:1270 pcbnew/footprint_chooser_frame.cpp:362
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:665
 msgid "3D Viewer"
-msgstr "3Δ Προβολή"
+msgstr "3D προβολή"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:76
 msgid "3D Grid"
-msgstr "3Δ Πλέγμα"
+msgstr "3D πλέγμα"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:43
 msgid "Rotate Board"
-msgstr "Περιστροφή Πλακέτας"
+msgstr "Περιστροφή πλακέτας"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:57
 msgid "Move Board"
-msgstr "Μετακίνηση Πλακέτας"
+msgstr "Μετακίνηση πλακέτας"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -283,7 +284,7 @@ msgstr "&Προτιμήσεις"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:108
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:67
 msgid "KiCad 3D Viewer"
-msgstr "3Δ Προβολή KiCad"
+msgstr "3D προβολή KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:175
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:633
@@ -318,7 +319,7 @@ msgstr "χρώματα παρακαταθήκης"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:750
 msgid "3D Image File Name"
-msgstr "Όνομα Αρχείου Εικόνας 3Δ"
+msgstr "Όνομα αρχείου εικόνας 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:803
 #: common/eda_base_frame.cpp:1658 common/eda_base_frame.cpp:1662
@@ -389,7 +390,7 @@ msgstr "Απόδοση τρέχουσας προβολής με χρήση Raytr
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Copy 3D image to clipboard"
-msgstr "Αντιγραφή 3Δ εικόνας στο πρόχειρο"
+msgstr "Αντιγραφή 3D εικόνας στο πρόχειρο"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Copy the current 3D image to the clipboard"
@@ -2495,7 +2496,7 @@ msgstr "Προγραμματιστές Πακέτων"
 #: common/dialog_about/dialog_about.cpp:108
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI αντικείμενα σε χρήση %u"
 
 #: common/dialog_about/dialog_about.cpp:115
 #, c-format
@@ -3997,6 +3998,8 @@ msgid ""
 "Number of minutes between remote update checks.  Zero disables automatic "
 "checks."
 msgstr ""
+"Αριθμός λεπτών μεταξύ των ελέγχων απομακρυσμένης ενημέρωσης.  Το  μηδέν "
+"απενεργοποιεί  τους αυτόματους ελέγχους."
 
 #: common/dialogs/git/panel_git_repos_base.cpp:50
 msgid "minutes"
@@ -4736,6 +4739,10 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Ένα αρχείο με το όνομα «%s» είναι ήδη ενσωματωμένο, αλλά το αρχείο στον "
+"δίσκο έχει διαφορετικό περιεχόμενο.\n"
+"\n"
+"Θέλετε να αντικαταστήσετε το ενσωματωμένο αρχείο με τη νέα έκδοση;"
 
 #: common/dialogs/panel_embedded_files.cpp:353
 #, fuzzy
