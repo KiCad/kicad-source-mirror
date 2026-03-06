@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
 "PO-Revision-Date: 2026-03-06 23:42+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Last-Translator: Ahmet Saygın ÖĞÜLMÜŞ <ogulmus.ahmetsaygin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -26857,8 +26857,7 @@ msgstr "Alt ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
-"Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
+msgstr "Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
