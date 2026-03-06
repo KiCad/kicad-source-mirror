@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
 "PO-Revision-Date: 2026-03-06 22:44+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v9/es_MX/>\n"
 "Language: es_MX\n"
@@ -9163,8 +9163,7 @@ msgstr "Agregar columna después"
 
 #: common/tool/actions.cpp:419
 msgid "Insert a new table column after the selected cell(s)"
-msgstr ""
-"Insertar una nueva columna de tabla después de las celdas seleccionadas"
+msgstr "Insertar una nueva columna de tabla después de las celdas seleccionadas"
 
 #: common/tool/actions.cpp:425
 msgid "Delete Row(s)"
@@ -17426,8 +17425,7 @@ msgstr "El pin %s está conectado tanto a %s como a %s"
 #: eeschema/erc/erc.cpp:1300
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr ""
-"El pin %s en el símbolo '%s' está conectado a redes diferentes: %s y %s"
+msgstr "El pin %s en el símbolo '%s' está conectado a redes diferentes: %s y %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -22338,8 +22336,7 @@ msgstr "Crear una copia editable"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:961
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr ""
-"¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
+msgstr "¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 msgid "Select type of item to save"
@@ -22505,8 +22502,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr ""
-"El símbolo '%s' ya existe en la biblioteca '%s'. ¿Desea sobrescribirlo?"
+msgstr "El símbolo '%s' ya existe en la biblioteca '%s'. ¿Desea sobrescribirlo?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
 #, c-format
@@ -26607,8 +26603,7 @@ msgstr "Exportar gráficos de serigrafía como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
-"Exportar capas de máscara de soldadura como un conjunto de caras planas"
+msgstr "Exportar capas de máscara de soldadura como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
@@ -31500,8 +31495,8 @@ msgstr ""
 "mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "donde:<br>\n"
 "___I___ es la corriente máxima en A<br>\n"
 "___&Delta;T___ es el incremento de temperatura sobre la ambiente en "
@@ -41047,8 +41042,8 @@ msgstr ""
 "### Items\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
-"binarias)_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -42285,8 +42280,7 @@ msgstr "Falta la expresión de aserción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
-"La opción within_diff_pairs no es válida para este tipo de restricción."
+msgstr "La opción within_diff_pairs no es válida para este tipo de restricción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:511
 msgid "Missing min value."
@@ -43329,8 +43323,8 @@ msgstr "Error al agregar borde del segmento (%d %d) -> (%d %d)"
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Error al agregar curva de arco desde (%d %d), arco p0 (%d %d), medio (%d "
-"%d), p1 (%d %d)"
+"Error al agregar curva de arco desde (%d %d), arco p0 (%d %d), medio (%d %d)"
+", p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1648
 #, c-format
@@ -44556,8 +44550,8 @@ msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está "
-"bloqueada)."
+"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está bloqueada)"
+"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, c-format
@@ -46866,8 +46860,7 @@ msgstr "Exportando capa %s, red %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2844
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr ""
-"La vía usa un padstack no soportado; se omitió de los datos de taladro."
+msgstr "La vía usa un padstack no soportado; se omitió de los datos de taladro."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2870
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
@@ -51334,8 +51327,7 @@ msgstr "Cancelar elemento actual"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
 msgid "Skip current item and route next selected item."
-msgstr ""
-"Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
+msgstr "Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
