@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:09+0300\n"
-"PO-Revision-Date: 2026-03-05 19:06+0000\n"
+"PO-Revision-Date: 2026-03-06 20:10+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -7220,6 +7220,8 @@ msgid ""
 "Cannot rebase: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Yeniden temellendirme yapılamıyor: kaydedilmemiş değişiklikleriniz var. "
+"Lütfen çekme işleminden önce bunları işleyin veya saklayın."
 
 #: common/git/git_pull_handler.cpp:543
 msgid "Conflicts detected during rebase"
@@ -7500,9 +7502,9 @@ msgstr "API Yanıtı:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:282
 #: common/http_lib/http_lib_connection.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
-msgstr "API Yanıtı:  %s"
+msgstr "API Yanıtı: %s"
 
 #: common/http_lib/http_lib_connection.cpp:360
 #, c-format
@@ -9353,9 +9355,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Kütüphaneyi artık listenin başında tutma"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Kütüphane Tablosu Hatası"
+msgstr "Kütüphane Tablosu"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -9777,9 +9778,8 @@ msgstr ""
 "KiCad projesine bağış yapmak için %s adresini ziyaret edin"
 
 #: common/tool/common_tools.cpp:615
-#, fuzzy
 msgid "Footprint Browser"
-msgstr "Ayak İzi Seçici"
+msgstr "Ayak İzi Tarayıcı"
 
 #: common/tool/library_editor_control.cpp:177
 msgid "New name:"
@@ -9938,7 +9938,7 @@ msgstr "Ayak izi bulunamadı."
 #: pcbnew/footprint_edit_frame.cpp:1143
 #: pcbnew/widgets/panel_footprint_chooser.cpp:71
 msgid "Loading Footprint Libraries"
-msgstr "Ayak İzi Kitaplıkları Yükleniyor"
+msgstr "Ayak İzi Kütüphaneleri Yükleniyor"
 
 #: common/widgets/footprint_select_widget.cpp:139
 msgid "No default footprint"
@@ -10239,9 +10239,8 @@ msgid "Confirm change"
 msgstr "Değişikliği Onayla"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy
 msgid "Command (double-click to edit)"
-msgstr "(düzenlemek için çift tıkla)"
+msgstr "Komut (düzenlemek için çift tıklayın)"
 
 #: common/widgets/widget_hotkey_list.cpp:523
 msgid "Hotkey"
@@ -10830,8 +10829,7 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:150
 #, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr ""
-"Elemanın '%s' ayak çizimi '%s' herhangi bir kütüphanede<b> bulunamadı</b>.\n"
+msgstr "'%s' bileşeninin '%s' ayak izi hiçbir kütüphanede <b>bulunamadı</b>.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:157
 #, c-format
@@ -11677,9 +11675,8 @@ msgid "*** No symbols matching criteria found ***"
 msgstr "*** Kriterlere uyan sembol bulunamadı ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "*** sembol bulunamadı ***"
+msgstr "*** sembol kütüphane kimliği geçersiz ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
 msgid "*** symbol not found ***"
@@ -12042,8 +12039,8 @@ msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 #: eeschema/dialogs/dialog_erc.cpp:483
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr ""
-"-------- ERC (Elektriksel Kural Kontrolü) kullanıcı tarafından iptal edildi. "
-"<br><br>"
+"-------- Elektriksel Kural Kontrolü kullanıcı tarafından iptal edildi. <br>"
+"<br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:485 pcbnew/dialogs/dialog_drc.cpp:391
 msgid "Done.<br><br>"
@@ -13235,34 +13232,28 @@ msgid "Pin Table"
 msgstr "Pin Tablosu"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Güç Sembolü"
+msgstr "Sembolü geri al"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
-#, fuzzy
 msgid "Revert the symbol to its last saved state"
-msgstr "'%s' değerini kaydedilen son sürüme mi döndürüyorsunuz?"
+msgstr "Sembolü son kaydedilmiş durumuna geri al"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear cell"
-msgstr "Boşluk"
+msgstr "Hücreyi temizle"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:85
-#, fuzzy
 msgid "Clear the cell value"
-msgstr "Son kullanılan Matkap Dosyalarını Temizle"
+msgstr "Hücre değerini temizle"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create Derived Symbol"
-msgstr "Güç sembolü olarak sembol oluştur"
+msgstr "Türetilmiş Sembol Oluştur"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:87
-#, fuzzy
 msgid "Create a new symbol derived from the selected one"
-msgstr "Mevcut bir sembolden türetilen yeni bir sembol oluşturun"
+msgstr "Seçilenden türetilmiş yeni bir sembol oluştur"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:109
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:95
@@ -13283,9 +13274,9 @@ msgid "Show datasheet in browser"
 msgstr "Veri sayfasını tarayıcıda göster"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Sembol Kütüphaneleri"
+msgstr "Sembol Kütüphanesi Alanları: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1231
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13298,19 +13289,18 @@ msgid "Group By"
 msgstr "Grupla"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "%s sembolü '%s' kütüphanesinde bulunamadı."
+msgstr "%s kütüphanesinde sembol bulunamadı."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "Semboller yüklenirken hata:"
+msgstr "'%s' sembolü yüklenirken hata: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
-#, fuzzy
 msgid "No symbols could be loaded from the library."
-msgstr "Kütüphanedeki değişiklikleri içerecek şekilde sembolleri güncelle"
+msgstr "Kütüphaneden semboller yüklenemedi."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:681
 #: eeschema/dialogs/dialog_lib_fields.cpp:726
@@ -13342,9 +13332,9 @@ msgid "Rename Field"
 msgstr "Alanı Yeniden Adlandır"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:738
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already exists."
-msgstr "Alan adı %s zaten mevcut."
+msgstr "'%s' alan adı zaten mevcut."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:765
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:790
@@ -13353,9 +13343,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Alanı kaldırmak istediğinizden emin misiniz '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:917
-#, fuzzy
 msgid "Exclude From BOM"
-msgstr "BOM malzeme listesinden Hariç Tutuldu"
+msgstr "Malzeme listesinden Hariç Tut"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3143
@@ -13373,9 +13362,8 @@ msgid "Power Symbol"
 msgstr "Güç Sembolü"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
-#, fuzzy
 msgid "Library Fields Editor"
-msgstr "Kütüphane Düzenleyici"
+msgstr "Kütüphane Alanları Düzenleyici"
 
 #: eeschema/dialogs/dialog_lib_new_symbol.cpp:118
 #, c-format
@@ -17286,9 +17274,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s hem %s aynı zamanda %s'ye bağlı"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pin %s hem %s aynı zamanda %s'ye bağlı"
+msgstr "%s bacağı, '%s' sembolünde farklı ağlara bağlı: %s ve %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17448,9 +17436,8 @@ msgid "Input Power pin not driven by any Output Power pins"
 msgstr "Giriş Güç pimi herhangi bir Çıkış Güç pimi tarafından sürülmez"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Bölge anahatlarını farklı bir katmana çoğalt"
+msgstr "Farklı ağlara sahip yinelenen pinler"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -17606,9 +17593,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "ERC (Elektriksel Kural Kontrolü) raporu (%s, UTF8 Kodlaması)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "Rapor dosyaları"
+msgstr "Rapor şunları içerir: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -17890,9 +17877,9 @@ msgstr "Projeyi Kaydetmeyi İptal Et"
 
 #: eeschema/files-io.cpp:1243 eeschema/files-io.cpp:1269 pcbnew/files.cpp:1227
 #: pcbnew/files.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not autosave files to read-only folder:  '%s'"
-msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
+msgstr "Salt okunur klasöre otomatik kayıt dosyaları kaydedilemedi: '%s'"
 
 #: eeschema/files-io.cpp:1335
 msgid "Importing Schematic"
@@ -18822,9 +18809,9 @@ msgid "Show Field Name"
 msgstr "Alan Adını Göster"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:937
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "'%s' şeması yüklenirken hata oluştu."
+msgstr "Altium şematiği ayrıştırılırken hata: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:983
 #, c-format
@@ -18930,9 +18917,9 @@ msgid "File not found %s."
 msgstr "Dosya bulunamadı %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5096
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "'%s' sembol kütüphanesi numaralandırılırken hata oluştu: %s"
+msgstr "Altium kütüphanesi ayrıştırılırken hata: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5119
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -19231,11 +19218,13 @@ msgstr ""
 "içe aktarılabilir."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr "Geçersiz ped yığını katmanı '%s': '%s' dosyası, satır %d, ofset %d."
+msgstr ""
+"'%s' dosyası okunamıyor.\n"
+"'%s' de satır %d, sütun %d, konum %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1041
 #, c-format
@@ -19681,9 +19670,8 @@ msgstr "Bilinmeyen SCH_FILE_T değeri: %d"
 
 #: eeschema/sch_item.cpp:137 eeschema/sch_item.cpp:157
 #: eeschema/sch_item.cpp:646
-#, fuzzy
 msgid "All units"
-msgstr "Tüm ögeler"
+msgstr "Tüm birimler"
 
 #: eeschema/sch_item.cpp:148 eeschema/sch_item.cpp:184
 #: eeschema/sch_item.cpp:668
@@ -21705,9 +21693,9 @@ msgid "Format"
 msgstr "Biçim"
 
 #: eeschema/sim/spice_library_parser.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "'%s' sembol kütüphanesi numaralandırılırken hata oluştu: %s"
+msgstr "SPICE kütüphanesi '%s' ayrıştırılırken hata: %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
@@ -21993,13 +21981,13 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b> Kapalı ızgara pimi %s </b> %s konumunda <b> (%s, %s) </b>."
+msgstr "<b>Izgara dışı pin %s</b> %s, konum <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Izgara dışı pin %s</b> %s konumunda <b>(%s, %s)</b>biriminde %c içinde."
+"<b>Izgara dışı pin %s</b> %s konumunda <b>(%s, %s)</b> biriminde %c içinde."
 
 #: eeschema/symbol_checker.cpp:402
 #, c-format
@@ -22577,11 +22565,11 @@ msgstr "Sayfa pini ve hiyerarşik etiket ilişkilerini ayır"
 
 #: eeschema/toolbars_symbol_viewer.cpp:52
 msgid "Display previous symbol"
-msgstr "Önceki sembolü göster"
+msgstr "Önceki sembolü görüntüle"
 
 #: eeschema/toolbars_symbol_viewer.cpp:56
 msgid "Display next symbol"
-msgstr "Sonraki sembolü göster"
+msgstr "Sonraki sembolü görüntüle"
 
 #: eeschema/toolbars_symbol_viewer.cpp:109
 msgid "Symbol Viewer"
@@ -24559,9 +24547,8 @@ msgid "SVG File Name"
 msgstr "SVG Dosya Adı"
 
 #: eeschema/tools/symbol_editor_control.cpp:955
-#, fuzzy
 msgid "Library Fields"
-msgstr "Kütüphaneler"
+msgstr "Kütüphane Alanları"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:299
 msgid "Place Pin"
@@ -24678,7 +24665,7 @@ msgstr "(sayfa %s)"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:69
 msgid "Loading Design Block Libraries"
-msgstr "Tasarım Blok Kütüphaneleri Yükleniyor"
+msgstr "Tasarım Bloğu Kütüphaneleri Yükleniyor"
 
 #: eeschema/widgets/panel_design_block_chooser.cpp:275
 msgid "Updating Design Block Libraries"
@@ -25328,7 +25315,7 @@ msgstr "<b>Yüklü değil:</b> <i>%s</i>"
 #: gerbview/files.cpp:46
 #, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr "<b> Bellek okuma tükendi:</b> <i>%s</i>"
+msgstr "<b>Okuma sırasında bellek tükendi:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:208
 msgid "Gerber files"
@@ -26071,9 +26058,8 @@ msgid "Show import issues"
 msgstr "İçe aktarma sorunlarını göster"
 
 #: include/widgets/filedlg_open_embed_file.h:40
-#, fuzzy
 msgid "Embed file"
-msgstr "Dosya Göm"
+msgstr "Gömülü dosya"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
@@ -26459,14 +26445,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Sondaj isabetlerinin haritasını / özetini oluşturun"
 
 #: kicad/cli/command_pcb_export_drill.cpp:95
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Sondaj isabetlerinin haritasını / özetini oluşturun"
+msgstr "Delme vuruşlarının raporunu oluştur"
 
 #: kicad/cli/command_pcb_export_drill.cpp:100
-#, fuzzy
 msgid "Report output file path"
-msgstr "Çıkış yolunu seç"
+msgstr "Rapor çıktı dosya yolu"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -26843,13 +26827,12 @@ msgstr ""
 "Kart diziliminde tanımlanan renkler, ön ayardaki renkleri geçersiz kılar"
 
 #: kicad/cli/command_pcb_render.cpp:269
-#, fuzzy
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
 msgstr ""
-"Zemin, gölgeler ve sonrası işleme etkinleştirir, kalite ön ayarında devre "
-"dışı bırakılmış olsa bile"
+"Kalite ayarında devre dışı bırakılmış olsa bile zemin, gölgeler ve son "
+"işlemeyi etkinleştir"
 
 #: kicad/cli/command_pcb_render.cpp:274
 msgid "Use perspective projection instead of orthogonal"
@@ -28394,18 +28377,16 @@ msgid "Switch to Branch"
 msgstr "Branch'a Geç"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Git izlemeyi etkinleştir"
+msgstr "Git Entegrasyonunu Etkinleştir"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
 msgstr "Bu proje için Git entegrasyonunu yeniden etkinleştirin"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Git izlemeyi etkinleştir"
+msgstr "Git Entegrasyonunu Devre Dışı Bırak"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
@@ -32317,9 +32298,9 @@ msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"<br/>PCB'de %d boş veya geçersiz referans atamaları var.<br/>'Baskı Devre "
-"ile şematik arasındaki pariteyi test et' seçeneği işaretli olarak DRC "
-"çalıştırmanız önerilir.\n"
+"<br/>Baskı Devrede %d adet boş veya geçersiz referans tanımı var.<br/>'Baskı "
+"Devre ve şematik arasındaki uyumu test et' seçeneği işaretliyken Tasarım "
+"Kuralı Kontrolü çalıştırmanız önerilir.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
 #, c-format
@@ -32700,7 +32681,7 @@ msgstr "Yok"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1643
 msgid "PTH"
-msgstr "Delik Boyutu Toleransı"
+msgstr "Kaplamalı Geçişli Delik"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:513 pcbnew/pad.cpp:1646
 msgid "NPTH"
@@ -34239,7 +34220,6 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "'%s' dosyasını yazmak için yetersiz izinler."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:283
-#, fuzzy
 msgid "Generate IPC-2581 File"
 msgstr "IPC-2581 dosyası oluştur"
 
@@ -34254,9 +34234,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:324
-#, fuzzy
 msgid "IPC-2581 file generated successfully."
-msgstr "Dosya oluşturma başarılı."
+msgstr "IPC-2581 dosyası başarıyla oluşturuldu."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -35129,7 +35108,7 @@ msgstr "Kütüphane Ayak İzini Düzenle..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:234
 msgid "Clearances"
-msgstr "Açıklık"
+msgstr "Açıklıklar"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 msgid "Leave values blank to use Board Setup values."
@@ -35218,8 +35197,8 @@ msgid ""
 msgstr ""
 "Bu, bu ayak izi için ped genişliği ve yüksekliğinin yüzdesi olarak uygulanan "
 "yerel aralık oranıdır.\n"
-"10 değeri, yatay aralık değerinin ped genişliğinin Yüzde 10'u ve dikey "
-"aralık değerinin ped yüksekliğinin Yüzde 10'u olduğu anlamına gelir.\n"
+"10 değeri, yatay aralık değerinin ped genişliğinin 10% o ve dikey aralık "
+"değerinin ped yüksekliğinin 10% o olduğu anlamına gelir.\n"
 "Bu değer, bir pedin yerel değeriyle geçersiz kılınabilir.\n"
 "Son aralık değeri, bu değer ile mutlak aralık değerinin toplamıdır.\n"
 "Negatif bir değer, ped boyutundan daha küçük bir stensil açıklığı anlamına "
@@ -35401,8 +35380,8 @@ msgid ""
 msgstr ""
 "Bu, bu ayak izi için ped genişliği ve yüksekliğinin yüzdesi olarak uygulanan "
 "yerel aralık oranıdır.\n"
-"10 değeri, yatay aralık değerinin ped genişliğinin Yüzde 10'u ve dikey "
-"aralık değerinin ped yüksekliğinin Yüzde 10'u olduğu anlamına gelir.\n"
+"10 değeri, yatay aralık değerinin ped genişliğinin 10% o ve dikey aralık "
+"değerinin ped yüksekliğinin 10% o olduğu anlamına gelir.\n"
 "Son aralık değeri, bu değer ile mutlak aralık değerinin toplamıdır.\n"
 "Negatif bir değer, ped boyutundan daha küçük bir stensil açıklığı anlamına "
 "gelir.\n"
@@ -35515,9 +35494,8 @@ msgid "Footprint Report"
 msgstr "Ayak İzi Raporu"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
-#, fuzzy
 msgid "Plain text"
-msgstr "Metin Bul"
+msgstr "Düz metin"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:59
 msgid "Gerber X3"
@@ -40154,179 +40132,183 @@ msgid ""
 msgstr ""
 "### Kısıtlamalar\n"
 "\n"
-"| Kısıtlama türü            | Argüman "
-"türü                                                                                                          "
-"| "
-"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+"| Kısıtlama türü            | Argüman türü"
+"                                                                                                          "
+"| Açıklama"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Geçitlerdeki halka genişliğini kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                        "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | \"&lt;"
-"ifade>\"                                                                                                          "
-"| Verilen ifadeyi kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `annular_width`           | min/opt/max"
+"                                                                                                           "
+"| Geçitlerdeki halka genişliğini kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
+"| `assertion`               | \"&lt;ifade>"
+"\"                                                                                                          "
+"| Verilen ifadeyi kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `clearance`               | min"
+"                                                                                                                   "
 "| Farklı ağlara ait bakır nesneler arasındaki **elektriksel** boşluğu "
 "belirtir. (Netten bağımsız nesneler arası boşluk için `physical_clearance` "
 "kullanın.)<br><br>Bakır nesnelerin üst üste gelmesine (çarpışmasına) izin "
 "vermek için, `min` değeri sıfırdan küçük bir `clearance` kısıtlaması "
-"oluşturun (örneğin, `-1`)."
-"<br>                                                                                                                            "
+"oluşturun (örneğin, `-1`).<br>"
+"                                                                                                                            "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
 "| Footprint courtyard'ları arasındaki boşluğu kontrol eder ve herhangi iki "
 "courtyard `min` mesafesinden daha yakınsa hata üretir. Eğer bir footprint'in "
-"courtyard şekli yoksa, bu kısıtlamadan hata üretilmez."
-"<br>                                                                                                                                                                                                                                        "
+"courtyard şekli yoksa, bu kısıtlamadan hata üretilmez.<br>"
+"                                                                                                                                                                                                                                        "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
-"| Farklı ağlara ait bakır nesneler arasındaki sızıntı mesafesini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                            "
+"| `creepage`                | min"
+"                                                                                                                   "
+"| Farklı ağlara ait bakır nesneler arasındaki sızıntı mesafesini "
+"belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
+"| `diff_pair_gap`           | min/opt/max"
+"                                                                                                           "
 "| Diferansiyel çiftlerde birbirine paralel olan eşleşmiş izler arasındaki "
 "boşluğu kontrol eder. Diferansiyel çift boşluğu, çiftin eşleşmemiş "
-"bölümlerinde test edilmez (örneğin, bir bileşenden çıkış yapılan kısımlar)."
-"<br>                                                                                                                                                                                                                              "
+"bölümlerinde test edilmez (örneğin, bir bileşenden çıkış yapılan kısımlar)"
+".<br>"
+"                                                                                                                                                                                                                              "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
+"| `diff_pair_uncoupled`     | max"
+"                                                                                                                   "
 "| Bir diferansiyel çift izinin, çiftin diğer kutup izinden ayrı olarak ne "
 "kadar mesafe boyunca yönlendirildiğini kontrol eder (örneğin, bir bileşenden "
 "çıkış yapılırken veya başka bir nesneyi (geçit gibi) geçmek için ayrıldığı "
-"durumlar)."
-"<br>                                                                                                                                                                                                          "
+"durumlar).<br>"
+"                                                                                                                                                                                                          "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Yasaklanacak bir veya daha fazla nesne türünü boşlukla ayırarak belirtin. "
-"Örneğin, `(constraint disallow track)` veya `(constraint disallow track via "
-"pad)`. Bu türde bir nesne kural koşuluyla eşleşirse, DRC hatası oluşturulur."
-"<br><br>Bu kısıtlama temelde bir keepout alanı kuralıyla aynıdır, ancak daha "
-"spesifik keepout kısıtlamaları oluşturmak için kullanılabilir."
-"<br>                                                                      |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
+"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
+"`footprint`<br> | Yasaklanacak bir veya daha fazla nesne türünü boşlukla "
+"ayırarak belirtin. Örneğin, `(constraint disallow track)` veya `(constraint "
+"disallow track via pad)`. Bu türde bir nesne kural koşuluyla eşleşirse, DRC "
+"hatası oluşturulur.<br><br>Bu kısıtlama temelde bir keepout alanı kuralıyla "
+"aynıdır, ancak daha spesifik keepout kısıtlamaları oluşturmak için "
+"kullanılabilir.<br>"
+"                                                                      |\n"
+"| `edge_clearance`          | min/opt/max"
+"                                                                                                           "
 "| Nesneler ile PCB kenarı arasındaki boşluğu kontrol eder.<br><br>Bu aynı "
-"zamanda \"freze toleransı\" olarak da düşünülebilir, çünkü PCB kenarı `Edge."
-"Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini içerir. "
-"(Delme toleransı için `physical_hole_clearance` "
-"kullanın.)<br>                                                                                                                                                                "
+"zamanda \"freze toleransı\" olarak da düşünülebilir, çünkü PCB kenarı "
+"`Edge.Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini "
+"içerir. (Delme toleransı için `physical_hole_clearance` kullanın.)<br>"
+"                                                                                                                                                                "
 "|\n"
-"| `length`                  | min/"
-"max                                                                                                               "
+"| `length`                  | min/max"
+"                                                                                                               "
 "| Kural koşuluyla eşleşen ağların toplam yönlendirme uzunluğunu kontrol eder "
 "ve `min` değerinin altında (belirtilmişse) veya `max` değerinin üzerinde "
-"(belirtilmişse) olan her ağ için hata üretir."
-"<br>                                                                                                                                                                                                                                                   "
+"(belirtilmişse) olan her ağ için hata üretir.<br>"
+"                                                                                                                                                                                                                                                   "
 "|\n"
-"| `hole`                    | min/"
-"max                                                                                                               "
+"| `hole`                    | min/max"
+"                                                                                                               "
 "| Pad veya geçitdeki delik çapını kontrol eder. Oval delikler için, küçük "
 "(minör) çap `min` değerine, büyük (major) çap `max` değerine karşı test "
-"edilir."
-"<br>                                                                                                                                                                                                                                                                                             "
+"edilir.<br>"
+"                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
+"| `hole_clearance`          | min"
+"                                                                                                                   "
 "| Pad veya geçit delikleri ile farklı ağa ait bakır nesneler arasındaki "
-"boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından ölçülür."
-"<br>                                                                                                                                                                                                                                                                                                     "
+"boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından ölçülür.<br>"
+"                                                                                                                                                                                                                                                                                                     "
 "|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
 "| Pad ve geçitlerdeki mekanik olarak delinmiş delikler arasındaki boşluğu "
 "kontrol eder. Boşluk delik merkezleri arasında değil, çapları arasında "
 "ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarını korumak içindir. "
 "**Lazerle delinmiş** (mikrogeçit) ve diğer mekanik olmayan delikler "
 "arasındaki boşluk kontrol edilmez, aynı şekilde **freze ile açılmış** (oval "
-"şekilli) delikler de kontrol edilmez."
-"<br>                                         |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
+"şekilli) delikler de kontrol edilmez.<br>"
+"                                         |\n"
+"| `physical_clearance`      | min"
+"                                                                                                                   "
 "| Belirli bir katmandaki (bakır olmayan katmanlar dahil) iki nesne "
 "arasındaki boşluğu kontrol eder.<br><br>`clearance` kısıtlamasına göre daha "
 "genel amaçlı kontroller yapabilir, ancak çok daha yavaştır. Mümkün olduğunda "
-"`clearance` kullanın."
-"<br>                                                                                                                                                                                                     "
+"`clearance` kullanın.<br>"
+"                                                                                                                                                                                                     "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
 "| Netten bağımsız olarak, pad veya geçit delikleri ile diğer nesneler "
 "arasındaki boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından "
 "ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak da düşünülebilir "
 "çünkü yalnızca **yuvarlak** delikleri içerir (freze toleransı için "
-"`edge_clearance` kullanın)."
-"<br>                                                                                                                            "
+"`edge_clearance` kullanın).<br>"
+"                                                                                                                            "
 "|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
+"| `silk_clearance`          | min/opt/max"
+"                                                                                                           "
 "| Silkscreen katmanlarındaki nesneler ile diğer nesneler arasındaki boşluğu "
-"kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                             "
+"kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                   "
+"| `skew`                    | max"
+"                                                                                                                   "
 "| Kural koşuluyla eşleşen ağların toplam skew'ını (çarpıklık) kontrol eder, "
 "yani her bir ağın uzunluğu ile kural tarafından eşleşen tüm ağların uzunluk "
 "ortalaması arasındaki farkı hesaplar. Bu farkın mutlak değeri `max` değerini "
-"aşarsa, hata üretilir."
-"<br>                                                                                                                                                                                           "
+"aşarsa, hata üretilir.<br>"
+"                                                                                                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
 "| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki boşluğun "
-"genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                       "
+"genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
 "| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki bağlantı "
-"çubuklarının genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                          "
+"çubuklarının genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
+"| `track_width`             | min/opt/max"
+"                                                                                                           "
 "| İz ve yay segmentlerinin genişliğini kontrol eder. `min` değerinin altında "
 "(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) genişliğe "
-"sahip her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                            "
+"sahip her segment için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                            "
 "|\n"
-"| `track_angle`             | min/opt/"
-"max                                                                                                           "
+"| `track_angle`             | min/opt/max"
+"                                                                                                           "
 "| Bağlı iki iz segmenti arasındaki açıyı kontrol eder. `min` değerinin "
 "altında (belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) açıya "
-"sahip her bağlı çift için hata üretilir."
-"<br>                                                                                                                                                                                                                                                           "
+"sahip her bağlı çift için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                           "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
+"| `track_segment_length`    | min/max"
+"                                                                                                               "
 "| İz ve yay segmentlerinin uzunluğunu kontrol eder. `min` değerinin altında "
 "(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) uzunluğa sahip "
-"her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                              "
+"her segment için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                              "
 "|\n"
-"| `via_count`               | "
-"max                                                                                                                   "
+"| `via_count`               | max"
+"                                                                                                                   "
 "| Kural koşuluyla eşleşen her ağdaki geçit sayısını sayar. Eşleşen herhangi "
-"bir ağdaki geçit sayısı `max` değerini aşarsa, o ağ için hata üretilir."
-"<br>                                                                                                                                                                                                                                                                                                   "
+"bir ağdaki geçit sayısı `max` değerini aşarsa, o ağ için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Bir zone ile bir pad arasındaki bağlantı türünü belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                           "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
+"`none`                                                                                "
+"| Bir zone ile bir pad arasındaki bağlantı türünü belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "\n"
 "\n"
@@ -40736,7 +40718,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -40883,160 +40864,146 @@ msgid ""
 msgstr ""
 "### Daha Fazla Örnek\n"
 "\n"
-"    (rule \"copper keepout\"\n"
-"       (constraint disallow track via zone)\n"
-"       (condition \"A.intersectsArea('zone3')\"))\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
-"    (rule \"BGA neckdown\"\n"
-"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # kapatılmış via'ların üzerine serigrafi gelmesini önle\n"
-"    (rule silk_over_via\n"
-"       (constraint silk_clearance (min 0.2mm))\n"
-"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"    # tenteli via'ların üzerinde serigrafi önle\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Farklı Ağlardaki Via'lar Arasındaki Mesafe\"\n"
-"        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
-"\n"
-"    (rule \"Farklı Ağlardaki Pedler Arasındaki Boşluk\"\n"
-"        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"    (rule \"Farklı Netlerdeki Via'lar Arasındaki Mesafe\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Via Deliği ile Yol Arasındaki Boşluk\"\n"
-"        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-"\n"
-"    (rule \"Ped ile Yol Arasındaki Boşluk\"\n"
-"        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"    (rule \"Farklı Netlerdeki Pad'ler Arasındaki Boşluk\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
-"        (constraint edge_clearance (min 0.8mm))\n"
-"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
+"\n"
+"    (rule \"Via Deliği ile İz Arasındaki Boşluk\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Pad ile İz Arasındaki Boşluk\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    (rule \"Maksimum Mekanik Delik Çapı\"\n"
-"        (constraint hole_size (max 6.3mm))\n"
-"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-"\n"
-"    (rule \"Maksimum PTH Delik Çapı\"\n"
-"        (constraint hole_size (max 6.35mm))\n"
-"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"    (rule \"1mm kesim alanına boşluk\"\n"
+"        (constraint edge_clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
 "\n"
-"    # belirli bir diferansiyel çift için en uygun aralığı belirle\n"
-"    (rule \"dp clock gap\"\n"
-"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"    (rule \"Mekanik Delik Boyutu Maksimum\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    # herhangi bir diferansiyel çiftin etrafında daha geniş bir boşluk "
-"belirle\n"
-"    (rule \"dp clearance\"\n"
-"        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"    (rule \"PTH Delik Boyutu Maksimum\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # soğutucu pedlerinde termal bağlantı kullanma\n"
-"    (rule heat_sink_pad\n"
-"        (constraint zone_connection solid)\n"
-"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"    # belirli bir diferansiyel çift için optimal boşluk belirt\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # dört termal bağlantı kolunun da ana bölgeye bağlanmasını zorunlu kıl\n"
-"    (rule fully_spoked_pads\n"
-"        (constraint min_resolved_spokes 4))\n"
-"\n"
-"    # tüm bölgeler için termal bağlantı aralığını ve kol genişliğini ayarla\n"
-"    (rule defined_relief\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil)))\n"
-"\n"
-"    # GND ve PWR bölgeleri için termal bağlantı aralığı ve kol genişliğinin "
-"üzerine yaz\n"
-"    (rule defined_relief_pwr\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil))\n"
-"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"\n"
-"    # kapasitörlerin yerleşim alanlarının altına bakır dolgu yapılmasını "
-"engelle\n"
-"    (rule no_copper_under_caps\n"
-"        (constraint physical_clearance (min 0mm))\n"
-"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"    # herhangi bir diferansiyel çift etrafında daha büyük boşluk belirt\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # SMD pedlerinden lehimin yayılmasını engelle\n"
-"    (rule holes_in_pads\n"
-"        (constraint physical_hole_clearance (min 0.2mm))\n"
-"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"    # ısı yaya pad'lerinde termal relief kullanma\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
 "\n"
-"    # lehim maskesi payı üzerine yazmalara izin verme\n"
-"    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
-"        (condition \"A.Type == 'Pad'\"))\n"
+"    # tüm dört termal relief ispitinin ana zone'a bağlanmasını gerektir\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
 "\n"
+"    # tüm zone'lar için termal relief boşluğu ve ispit genişliği ayarla\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # bileşenler ve kart kenarı arasında mekanik boşluk olmasını zorunlu "
-"kıl\n"
-"    (rule front_mechanical_board_edge_clearance\n"
-"        (layer \"F.Courtyard\")\n"
-"        (constraint physical_clearance (min 3mm))\n"
-"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"    # GND ve PWR zone'ları için termal relief boşluğu ve ispit genişliğini "
+"geçersiz kıl\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
 "\n"
-"\n"
-"    # konektörler için serigrafinin kart kenarı ile kesişmesine izin ver\n"
-"    (rule silk_board_edge_clearance\n"
-"        (constraint silk_clearance)\n"
-"        (severity ignore)\n"
-"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
-"\n"
-"\n"
-"    # akım taşıma kapasitesini kontrol et\n"
-"    (rule high-current\n"
-"        (constraint track_width (min 1.0mm))\n"
-"        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.hasNetclass('Power')\"))\n"
+"    # kapasitörlerin koruma alanları altında bakır dolguyu önle\n"
+"    (rule no_copper_under_caps\n"
+"        (constraint physical_clearance (min 0mm))\n"
+"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
 "\n"
 "\n"
-"    # ayrı matkap ucu ve freze ucu boyut kısıtlamaları\n"
-"    (rule \"Kaplamalı delik boyutu\"\n"
-"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"    (rule \"Kaplamalı yuva boyutu\"\n"
-"        (constraint hole_size (min 0.5mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"    # SMD pad'lerinden lehim emilmesini önle\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # lehim maskesi kenar geçersiz kılmalarını yasakla\n"
+"    (rule \"lehim maskesi kenar geçersiz kılmalarını yasakla\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
-"    # Üreticinin mikro-via'ları lazerle delmeden -önce- kör/gömülü via "
-"deliklerini\n"
-"    # mekanik olarak deleceği bilindiğinde, kör/gömülü via'dan mikro-via'ya\n"
-"    # olan delikten-deliğe ihlallerine izin ver.\n"
-"    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
-"        (constraint hole_to_hole)\n"
-"        (severity ignore))\n"
+"    # bileşenler ile kart kenarı arasında mekanik boşluk uygula\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # Via'lar için lehim maskesi genişlemesi yok.\n"
-"    (rule \"via'larda maske genişlemesi yok\"\n"
-"        (constraint solder_mask_expansion (opt 0mm))\n"
-"        (condition \"A.type == via\"))\n"
+"    # konektörler için serigrafinin kart kenarıyla kesişmesine izin ver\n"
+"    (rule silk_board_edge_clearance\n"
+"        (constraint silk_clearance)\n"
+"        (severity ignore)\n"
+"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # DNP ayak izlerinden lehim pastasını kaldır.\n"
-"    (rule remove_solder_paste_from_DNP\n"
-"        (constraint solder_paste_abs_margin (opt -50mm))\n"
-"        (condition \"A.Do_not_Populate\"))\n"
+"    # akım taşıma kapasitesini kontrol et\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.hasNetclass('Power')\"))\n"
+"\n"
+"\n"
+"    # delme ucu ve freze kesici boyutu kısıtlamalarını ayır\n"
+"    (rule \"Kaplanmış delik boyutu\"\n"
+"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"    (rule \"Kaplanmış yuva boyutu\"\n"
+"        (constraint hole_size (min 0.5mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"\n"
+"\n"
+"    # kör/gömülü ile mikro-via delik-delik ihlallerine izin ver, eğer "
+"fabrika\n"
+"    # kör/gömülü via deliklerini lazerle delmeden önce mekanik olarak "
+"delecekse.\n"
+"    # mikro geçitler\n"
+"    (rule hole_to_hole_uvia_exclusion\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
+"        (constraint hole_to_hole)\n"
+"        (severity ignore))\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
@@ -41103,7 +41070,7 @@ msgstr "Diferansiyel Çiftler"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
-msgstr "Açıklık"
+msgstr "Aralık"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "Via Gap"
@@ -41945,9 +41912,8 @@ msgid "Checking copper graphic clearances..."
 msgstr "Bakır grafik boşlukları kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:181
-#, fuzzy
 msgid "Checking copper graphic hole clearances..."
-msgstr "Bakır grafik boşlukları kontrol ediliyor..."
+msgstr "Bakır grafik delik açıklıkları kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:189
 msgid "Checking copper zone clearances..."
@@ -42821,9 +42787,8 @@ msgstr ""
 "Yeniden yükleme süresi %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
-#, fuzzy
 msgid "** Got problems while fusing shapes **"
-msgstr "** Şekilleri birleştirirken sorunlar oluştu **\n"
+msgstr "** Şekilleri birleştirirken sorunlar oluştu **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:2072
@@ -42836,137 +42801,130 @@ msgid "Warnings:\n"
 msgstr "Uyarılar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
-#, fuzzy
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr "** ShapeUpgrade_UnifySameDomain boş bir şekil üretti **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain boş bir şekil üretti **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:945
-#, fuzzy
 msgid "OCC error adding pad/via polygon."
-msgstr "OCC ped/geçit çokgeni eklerken hata.\n"
+msgstr "Ped/geçit çokgeni eklenirken OCC hatası."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add shape (%d points) to copper layer %s."
-msgstr "(%d noktalı) şekil, bakır katmanı %s 'ye eklenemedi.\n"
+msgstr "Şekil (%d nokta) bakır katmanı %s eklenemedi."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "No model defined for %s."
-msgstr "%s için tanımlanmış model yok.\n"
+msgstr "%s için model tanımlanmamış."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1233
-#, fuzzy, c-format
+#, c-format
 msgid "No model for filename '%s'."
-msgstr "'%s' dosya adı için model yok.\n"
+msgstr "'%s' dosya adı için model yok."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1245
-#, fuzzy, c-format
+#, c-format
 msgid "No location data for filename '%s'."
-msgstr "'%s' dosya adı için konum verisi yok.\n"
+msgstr "'%s' dosya adı için konum verisi yok."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1256
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add component with filename '%s'."
-msgstr "'%s' dosya adına sahip bileşen eklenemedi.\n"
+msgstr "'%s' dosya adına sahip bileşen eklenemedi."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1426
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building shape segment: %s"
-msgstr "OCC şekil segmenti oluştururken istisna: %s\n"
+msgstr "Şekil parçası oluşturulurken OCC istisnası: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1441
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception building face: %s"
-msgstr "OCC yüzey oluştururken istisna: %s\n"
+msgstr "Yüzey oluşturulurken OCC istisnası: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1453
 #: pcbnew/exporters/step/step_pcb_model.cpp:1849
-#, fuzzy
 msgid "Failed to create a prismatic shape"
-msgstr "Prizmatik bir şekil oluşturulamadı\n"
+msgstr "Prizmatik şekil oluşturulamadı"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1524
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to make segment edge (%d %d) -> (%d %d), skipping"
-msgstr "Segment kenarı (%d %d) -> (%d %d) oluşturulamadı, atlanıyor\n"
+msgstr "Parça kenarı oluşturulamadı (%d %d) -> (%d %d), atlanıyor"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1536
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add segment edge (%d %d) -> (%d %d)"
-msgstr "Segment kenarı (%d %d) -> (%d %d) eklenemedi\n"
+msgstr "Parça kenarı eklenemedi (%d %d) -> (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Yay eğrisi (%d %d) noktasından, yay p0 (%d %d), orta (%d %d), p1 (%d %d) "
-"noktasına eklenemedi\n"
+"Yay eğrisi eklenemedi: başlangıç (%d %d), yay p0 (%d %d), orta (%d %d), p1 "
+"(%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1648
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close wire at %d, %d -> %d, %d **"
-msgstr "Yol (%d %d -> %d %d) konumunda kapatılamadı **\n"
+msgstr "Tel kapatılamadı: %d, %d -> %d, %d **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1658
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating wire: %s"
-msgstr "Yol oluşturulurken OCC istisnası: %s\n"
+msgstr "Tel oluşturulurken OCC istisnası: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire not done (contour points %d): OCC error %d\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Yol tamamlanmadı (kontur noktaları %d): OCC hatası %d\n"
-"z: %g; sınırlayıcı kutu: %s\n"
+"Tel tamamlanamadı (çevre noktaları %d): OCC hatası %d\n"
+"z: %g; sınırlayıcı kutu: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wire self-interference check failed\n"
 "z: %g; bounding box: %s"
 msgstr ""
-"Yol öz-girişim kontrolü başarısız oldu\n"
-"z: %g; sınırlayıcı kutu: %s\n"
+"Tel kendi kendine girişim denetimi başarısız\n"
+"z: %g; sınırlayıcı kutu: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1782
-#, fuzzy
 msgid "Using non-simplified polygon."
-msgstr "Basitleştirilmemiş çokgen kullanılıyor.\n"
+msgstr "Basitleştirilmemiş çokgen kullanılıyor."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1830
-#, fuzzy, c-format
+#, c-format
 msgid "OCC exception creating contour %d: %s"
-msgstr "Kontur %d oluşturulurken OCC istisnası: %s\n"
+msgstr "Çevre %d oluşturulurken OCC istisnası: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1860
-#, fuzzy
 msgid "** Face skipped **"
-msgstr "** Yüzey atlandı **\n"
+msgstr "** Yüzey atlandı **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1950
 #: pcbnew/exporters/step/step_pcb_model.cpp:1967
-#, fuzzy
 msgid "OCC error creating main outline."
-msgstr "Ana dış hat oluşturulurken OCC hatası.\n"
+msgstr "Ana dış hat oluşturulurken OCC hatası."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1976
-#, fuzzy
 msgid "OCC error creating hole in main outline."
-msgstr "Ana dış hatta delik oluşturulurken OCC hatası.\n"
+msgstr "Ana çevre çizgisinde delik oluşturulurken OCC hatası."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2018
-#, fuzzy, c-format
+#, c-format
 msgid "Subtracting holes for %s"
-msgstr "%s için delikler çıkarılıyor\n"
+msgstr "%s için delikler çıkarılıyor"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2062
-#, fuzzy, c-format
+#, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** %s ağı '%s' kesilirken sorunlar oluştu **\n"
+msgstr "** %s ağı '%s' kesilirken sorun oluştu **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2116
 msgid "shapes"
@@ -42985,9 +42943,9 @@ msgstr "geçitler"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2489
 #: pcbnew/exporters/step/step_pcb_model.cpp:3451
 #: pcbnew/exporters/step/step_pcb_model.cpp:3520
-#, fuzzy, c-format
+#, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "Geçerli Baskı Devre montajı yok; '%s' çıktı dosyası oluşturulamıyor.\n"
+msgstr "Geçerli Baskı Devre montajı yok; '%s' çıktı dosyası oluşturulamıyor."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2422
 msgid "Failed to set STEP product name, but will attempt to continue."
@@ -43001,19 +42959,19 @@ msgstr "Yüzey eğrisi modu ayarlanamadı, ancak devam edilmeye çalışılacak.
 #: pcbnew/exporters/step/step_pcb_model.cpp:3428
 #: pcbnew/exporters/step/step_pcb_model.cpp:3501
 #: pcbnew/exporters/step/step_pcb_model.cpp:3550
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr "Geçici dosya '%s', '%s' olarak yeniden adlandırılamıyor.\n"
+msgstr "Geçici dosya '%s', '%s' olarak yeniden adlandırılamıyor."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2945
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "'%s' için gerçek dosya türü belirlenemiyor.\n"
+msgstr "'%s' için gerçek dosya türü belirlenemiyor."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2954
-#, fuzzy, c-format
+#, c-format
 msgid "Could not transfer model data from file '%s'."
-msgstr "'%s' dosyasından model verisi aktarılamadı.\n"
+msgstr "Dosya '%s' konumundan model verileri aktarılamadı."
 
 #: pcbnew/files.cpp:151
 msgid "All KiCad Board Files"
@@ -44323,9 +44281,11 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "Bakır bölge '%s'e bağlı ped yok."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr "%s katmanındaki (%s, %s) bakır bölgesinin bağlı pedi yok."
+msgstr ""
+"%s katmanındaki (%s, %s) konumundaki bakır bölgenin, \"%s\" ağına bağlı "
+"hiçbir pedi yok."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
@@ -45115,9 +45075,9 @@ msgid "Loading board data..."
 msgstr "Kart verileri yükleniyor..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "'%s' katmanı eşlenemedi ve atlanacak."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1262
 msgid "Loading netclasses..."
@@ -46313,9 +46273,10 @@ msgid "Generating BOM section"
 msgstr "BOM (Malzeme Listesi) bölümü oluşturuluyor"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1371
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "'%s' ayak izi '%s' kütüphanesinde bulunamadı."
+msgstr ""
+"%s ayak izi sözlükte bulunamadı; malzeme listesi verileri eksik olabilir."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1387
 #, c-format
@@ -46329,11 +46290,10 @@ msgid "Generating CAD data"
 msgstr "CAD verisi oluşturma"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2240
-#, fuzzy
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
-"Kart dış hattı eksik veya hatalı. Tam analiz için DRC (Tasarım Kuralı "
-"Kontrolü) çalıştırın."
+"Kart ana hattı geçersiz veya eksik.  Lütfen Tasarım Kuralı Kontrolü "
+"çalıştırın."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2623
 msgid ""
@@ -46374,9 +46334,8 @@ msgid "Saving file"
 msgstr "Dosya kaydediliyor"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3422
-#, fuzzy
 msgid "Failed to save IPC-2581 data to buffer."
-msgstr "Dosyayı ara belleğe kaydetme başarısız oldu"
+msgstr "IPC-2581 verileri arabelleğe kaydedilemedi."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -47188,7 +47147,7 @@ msgstr "Şematik ağ listesi denklik testleri için alınamadı.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2068 pcbnew/tools/drc_tool.cpp:200
 msgid "DRC"
-msgstr "DRC (Tasarım Kuralı Kontrolü)"
+msgstr "Tasarım Kuralı Kontrolü"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, c-format
@@ -47245,9 +47204,8 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:103
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:116
-#, fuzzy
 msgid "Scripting init"
-msgstr "Komut Dosyası Konsolu"
+msgstr "Betik başlatma"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:114
 #, c-format
@@ -47873,7 +47831,7 @@ msgstr "Yol `%s` salt okunur."
 
 #: pcbnew/tools/board_editor_control.cpp:458
 msgid "I/O Error"
-msgstr "Kullanıcı ÖM Hatası"
+msgstr "G/Ç Hatası"
 
 #: pcbnew/tools/board_editor_control.cpp:557
 #, c-format
@@ -48699,7 +48657,7 @@ msgstr "Ayak İzlerini Paketle"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "Açı yakalama kılavuzları: Y, D, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
@@ -48898,9 +48856,8 @@ msgid "Some of the items could not be outset."
 msgstr "Ögelerin bazıları dışarı taşınamadı."
 
 #: pcbnew/tools/item_modification_routine.cpp:937
-#, fuzzy
 msgid "Cannot create rectangle outset"
-msgstr "'%s' kütüphane tablo yolu oluşturulamıyor."
+msgstr "Dikdörtgen dış kenar oluşturulamıyor"
 
 #: pcbnew/tools/multichannel_tool.cpp:405
 msgid "Select a reference Rule Area to copy from..."
@@ -49774,9 +49731,8 @@ msgid "Create bill of materials from board"
 msgstr "Karttan malzeme listesi oluştur"
 
 #: pcbnew/tools/pcb_actions.cpp:1079
-#, fuzzy
 msgid "Collect And Embed 3D Models"
-msgstr "3B Model Seç"
+msgstr "3B Modellerini Topla ve Göm"
 
 #: pcbnew/tools/pcb_actions.cpp:1080
 msgid "Collect footprint 3D models and embed them into the board"
@@ -50744,14 +50700,12 @@ msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Seçilen tüm pedleri otomatik olarak sırayla yönlendirmeye çalışır."
 
 #: pcbnew/tools/pcb_actions.cpp:2422
-#, fuzzy
 msgid "Cancel Current Item"
-msgstr "Geçerli aracı iptal et"
+msgstr "Geçerli Ögeyi İptal Et"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
-#, fuzzy
 msgid "Skip current item and route next selected item."
-msgstr "Seçili ögeden dış çizgiler oluşturur"
+msgstr "Geçerli ögeyi atla ve sonraki seçili ögeyi yönlendir."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -50925,9 +50879,8 @@ msgid "Selected 2D Length"
 msgstr "Seçili 2D Uzunluk"
 
 #: pcbnew/tools/pcb_control.cpp:2088
-#, fuzzy
 msgid "Embed 3D Models"
-msgstr "Gömülü Model"
+msgstr "Gömülü 3B Modeller"
 
 #: pcbnew/tools/pcb_control.cpp:2089
 #, c-format
@@ -52049,9 +52002,8 @@ msgid "Filled Area"
 msgstr "Doldurulmuş Alan"
 
 #: pcbnew/zone.cpp:888
-#, fuzzy
 msgid "Outline Area"
-msgstr "Kural Alanı"
+msgstr "Ana Hat Alanı"
 
 #: pcbnew/zone.cpp:900
 msgid "Corner Count"
