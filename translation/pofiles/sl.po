@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-03 19:09+0000\n"
-"Last-Translator: Mitja Nemec <mitja.nemec@fe.uni-lj.si>\n"
+"PO-Revision-Date: 2026-03-07 00:06+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v9/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -15535,8 +15535,7 @@ msgstr "Nadomestno ime priključka"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 #, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
-"Nadomestne dodelitve priključkov niso na voljo za De Morganove simbole."
+msgstr "Nadomestne dodelitve priključkov niso na voljo za De Morganove simbole."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 #, fuzzy
@@ -15586,8 +15585,7 @@ msgstr "Način za sinhronizirano urejanje nožic"
 #: eeschema/dialogs/dialog_pin_properties.cpp:454
 #, fuzzy
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr ""
-"Način sinhroniziranih priključkov. Nov priključek bo dodan vsem enotam."
+msgstr "Način sinhroniziranih priključkov. Nov priključek bo dodan vsem enotam."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 #, fuzzy
@@ -20101,8 +20099,7 @@ msgstr ""
 #: eeschema/files-io.cpp:405
 #, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr ""
-"Na seznamu knjižnice simbolov projektne datoteke najden nezakonit vnos."
+msgstr "Na seznamu knjižnice simbolov projektne datoteke najden nezakonit vnos."
 
 #: eeschema/files-io.cpp:406
 #, fuzzy
@@ -24251,8 +24248,7 @@ msgstr "AC faza:"
 #, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr ""
-"Ta simulacija ne daje nobenih izrisov. Za rezultate glejte okno konzole"
+msgstr "Ta simulacija ne daje nobenih izrisov. Za rezultate glejte okno konzole"
 
 #: eeschema/sim/simulator_frame.cpp:332
 #, fuzzy
@@ -25579,8 +25575,7 @@ msgstr "Spremeni %s priključek %s oznako vozlišča z '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:721
 #, fuzzy, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr ""
-"Omrežja %s ni mogoče spremeniti v '%s', ker ga poganja napajalni zatič."
+msgstr "Omrežja %s ni mogoče spremeniti v '%s', ker ga poganja napajalni zatič."
 
 #: eeschema/tools/backannotate.cpp:730
 #, fuzzy, c-format
@@ -32863,8 +32858,7 @@ msgstr "Dodaj obstoječo datoteko postavitve strani ..."
 #: pagelayout_editor/tools/pl_actions.cpp:90
 #, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr ""
-"Obstoječi datoteki dodajte obstoječo datoteko zasnove postavitve strani"
+msgstr "Obstoječi datoteki dodajte obstoječo datoteko zasnove postavitve strani"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 #, fuzzy
@@ -32955,8 +32949,8 @@ msgstr ""
 "* __a__ dušenje v dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (izguba)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> v </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ven </sub> \\ * A - R2___\n"
 
@@ -33003,8 +32997,8 @@ msgstr ""
 "* __a__ dušenje v dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (izguba)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> v </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ven </sub> \\ * A - R2___\n"
 
@@ -37161,8 +37155,7 @@ msgstr "Izbrišite skladbe v celoti iz blazinic"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:63
 #, fuzzy
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
-"Izbrišite skladbe, ki imajo začetni in končni položaj znotraj blazinice"
+msgstr "Izbrišite skladbe, ki imajo začetni in končni položaj znotraj blazinice"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:71
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:46
@@ -39564,8 +39557,8 @@ msgid ""
 "selection filter."
 msgstr ""
 "Odtis je zaklenjen: ni ga mogoče prosto premikati ali samodejno postaviti in "
-"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje "
-"»Zaklenjeni elementi«."
+"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje »"
+"Zaklenjeni elementi«."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:425
 #, fuzzy, c-format
@@ -39877,8 +39870,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Trenutno dodeljena ID knjižnice in ID odtisa. Uporabite “Change "
-"Footprint ...”, če želite dodeliti drug odtis."
+"Trenutno dodeljena ID knjižnice in ID odtisa. Uporabite “Change Footprint "
+"...”, če želite dodeliti drug odtis."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -43020,8 +43013,8 @@ msgid ""
 "filter."
 msgstr ""
 "Odtis je zaklenjen: ni ga mogoče prosto premikati ali samodejno postaviti in "
-"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje "
-"»Zaklenjeni elementi«."
+"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje »"
+"Zaklenjeni elementi«."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
 #, fuzzy
@@ -49512,8 +49505,7 @@ msgstr "Imena zatiča ni mogoče razčleniti v odseku s simboli net na seznamu."
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 #, fuzzy
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr ""
-"Imena omrežja ni mogoče razčleniti v odseku s simboli mreže na seznamu."
+msgstr "Imena omrežja ni mogoče razčleniti v odseku s simboli mreže na seznamu."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, fuzzy, c-format
@@ -49543,8 +49535,7 @@ msgstr "Za simbol \"%s\" ni določen odtis.\n"
 #: pcbnew/netlist_reader/netlist.cpp:221
 #, fuzzy, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
-"Odtis strani %s je spremenjen: odtis plošče \"%s\", odtis mreže \"%s\"."
+msgstr "Odtis strani %s je spremenjen: odtis plošče \"%s\", odtis mreže \"%s\"."
 
 #: pcbnew/netlist_reader/netlist.cpp:244
 #, fuzzy, c-format
@@ -49713,8 +49704,7 @@ msgstr ""
 #: pcbnew/pad.cpp:2294
 #, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr ""
-"Opozorilo: Fiducialne lastnosti ni mogoče nastaviti na blazinicah NPTH."
+msgstr "Opozorilo: Fiducialne lastnosti ni mogoče nastaviti na blazinicah NPTH."
 
 #: pcbnew/pad.cpp:2298
 #, fuzzy
@@ -49724,14 +49714,12 @@ msgstr "Opozorilo: Lastnosti testpoint ni mogoče nastaviti na blazinicah NPTH."
 #: pcbnew/pad.cpp:2301
 #, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr ""
-"Opozorilo: Lastnosti hladilnika ni mogoče nastaviti na blazinicah NPTH."
+msgstr "Opozorilo: Lastnosti hladilnika ni mogoče nastaviti na blazinicah NPTH."
 
 #: pcbnew/pad.cpp:2304
 #, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr ""
-"Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
+msgstr "Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
 
 #: pcbnew/pad.cpp:2307
 #, fuzzy
@@ -49741,8 +49729,7 @@ msgstr "Opozorilo: Lastnost BGA lahko nastavite samo na blazinice SMD."
 #: pcbnew/pad.cpp:2310
 #, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr ""
-"Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
+msgstr "Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
 
 #: pcbnew/pad.cpp:2326
 #, fuzzy
@@ -55525,8 +55512,7 @@ msgstr "Vrtanje / postavitev izvora datoteke"
 #: pcbnew/tools/pcb_actions.cpp:1153
 #, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr ""
-"Postavite izvorno točko za vrtalne datoteke in datoteke položaja odtisa"
+msgstr "Postavite izvorno točko za vrtalne datoteke in datoteke položaja odtisa"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
 #, fuzzy
