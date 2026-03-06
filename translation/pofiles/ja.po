@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:08+0300\n"
-"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"PO-Revision-Date: 2026-03-06 20:11+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -21130,9 +21130,8 @@ msgid "Empty sheet pin name"
 msgstr "空のシートピン名"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2932
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "形状に点がありません。"
+msgstr "回路図ポリラインのポイントが少なすぎます"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3021
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3034
@@ -21149,19 +21148,16 @@ msgid "Invalid symbol library ID"
 msgstr "不正なシンボル ライブラリ識別子"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3954
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "%s へのシート名引数がありません。"
+msgstr "シート名プロパティがありません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3960
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "%s へのシート名引数がありません。"
+msgstr "シートファイルプロパティがありません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5054
-#, fuzzy
 msgid "Invalid table: no cells defined"
-msgstr "不正なマップ ファイル形式が指定されています\n"
+msgstr "不正テーブル: セルが定義されていません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5179
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6969
@@ -33112,7 +33108,7 @@ msgstr "<= 2%"
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
 msgid "Tolerance"
-msgstr "誤差"
+msgstr "許容差"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
@@ -34002,11 +33998,11 @@ msgstr "三端子レギュレーターのみ、Adjust ピンの電流。"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
-msgstr "全体の誤差:"
+msgstr "全体の許容差:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
 msgid "Resistor tolerance:"
-msgstr "抵抗の誤差:"
+msgstr "抵抗の許容差:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
@@ -36793,7 +36789,7 @@ msgstr "基板外形の線の不連続性を補正"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:179
 msgid "Tolerance:"
-msgstr "許容誤差:"
+msgstr "許容差:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:144
@@ -38222,7 +38218,7 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"基板外形がないか、%.3f mm の許容誤差で閉じられていません。\n"
+"基板外形がないか、%.3f mm の許容差で閉じられていません。\n"
 "完全な解析のためにDRCを実行してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
@@ -38443,7 +38439,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:276
 msgid "Board outline chaining tolerance:"
-msgstr "基板外形の線を接続とする許容値:"
+msgstr "基板外形の線を接続する許容差:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:280
 msgid "Tight (0.001 mm)"
@@ -38462,8 +38458,8 @@ msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
-"許容値は基板外形の線を作るときに、接続されているとみなす２点間の距離を規定し"
-"ます。"
+"許容差は基板外形の線をかたちずくるときに、接続されているとみなす２点間の距離"
+"を規定します。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:108
 msgid "Export 3D Model"
@@ -47475,13 +47471,12 @@ msgid "Optimum Length must be greater than 0"
 msgstr "最適な長さは0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:86
-#, fuzzy
 msgid "Tolerance must be greater than or equal to 0"
-msgstr "最大遅延差は0以上である必要があります"
+msgstr "許容差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:91
 msgid "Tolerance is too large: resulting minimum length is not positive"
-msgstr ""
+msgstr "許容差が大きすぎます: 計算結果の最小長さは正値ではありません"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:204
 msgid "Maximum Skew must be greater than or equal to 0"
@@ -47610,9 +47605,8 @@ msgid "Syntax OK"
 msgstr "構文確認成功"
 
 #: pcbnew/drc/rule_editor/drc_re_matched_length_diff_pair_overlay_panel.cpp:103
-#, fuzzy
 msgid "Within diff pairs"
-msgstr "差動ペアの配線: %s"
+msgstr "差動ペア内"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:78
 msgid "Minimum Text Height must be greater than 0"
@@ -47639,31 +47633,26 @@ msgid "At least one layer must be selected"
 msgstr "一つ以上のレイヤーを選択する必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
-#, fuzzy
 msgid "Optimum Width must be greater than 0"
-msgstr "最小幅は0より大きくなければなりません"
+msgstr "最適な幅は0より大きくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:85
-#, fuzzy
 msgid "Width Tolerance must be greater than or equal to 0"
-msgstr "最大遅延差は0以上である必要があります"
+msgstr "幅の許容差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:88
-#, fuzzy
 msgid "Width Tolerance must be less than Optimum Width"
-msgstr "最小幅は最大幅より大きくすることは出来ません"
+msgstr "幅の許容差は最適な幅より小さくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:96
-#, fuzzy
 msgid "Gap Tolerance must be greater than or equal to 0"
-msgstr "最大遅延差は0以上である必要があります"
+msgstr "ギャップ許容差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:99
-#, fuzzy
 msgid "Gap Tolerance must be less than Optimum Gap"
-msgstr "クリアランスは %f\" / %f mm より小さい必要があります。"
+msgstr "ギャップ許容差は最適ギャップより小さくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:103
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
@@ -55150,7 +55139,7 @@ msgstr "図形を単純化する"
 
 #: pcbnew/tools/edit_tool.cpp:2017 pcbnew/tools/edit_tool.cpp:2087
 msgid "Tolerance value:"
-msgstr "許容値:"
+msgstr "許容差値:"
 
 #: pcbnew/tools/edit_tool.cpp:2051 pcbnew/tools/pcb_actions.cpp:780
 msgid "Simplify Polygons"
