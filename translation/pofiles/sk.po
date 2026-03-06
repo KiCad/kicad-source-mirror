@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 23:34+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-03-06 23:35+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -2196,8 +2196,7 @@ msgstr ""
 #: common/design_block_lib_table.cpp:348
 #, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr ""
-"súbory design-block-lib-table neobsahujú žiadnu knižnicu s názvom '%s'."
+msgstr "súbory design-block-lib-table neobsahujú žiadnu knižnicu s názvom '%s'."
 
 #: common/design_block_lib_table.cpp:610 common/fp_lib_table.cpp:607
 #: eeschema/symbol_lib_table.cpp:605
@@ -10171,8 +10170,7 @@ msgstr "Nastaviť klávesovú skratku"
 #: common/widgets/widget_hotkey_list.cpp:387
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr ""
-"'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
+msgstr "'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Edit..."
@@ -10871,8 +10869,7 @@ msgstr "Uložiť do schémy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr ""
-"Uložiť priradenia puzdier do polí 'footprint' v schematických symboloch"
+msgstr "Uložiť priradenia puzdier do polí 'footprint' v schematických symboloch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
@@ -15759,8 +15756,7 @@ msgstr "Mapovanie tabuľky knižnice symbolov je dokončené!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr ""
-"Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
+msgstr "Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:358
 #: eeschema/dialogs/dialog_symbol_remap.cpp:531
@@ -16156,39 +16152,32 @@ msgid "Show hidden fields"
 msgstr "Zobraziť skryté polia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:109
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Chyby ERC"
+msgstr "Zobraziť ERC chyby"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:112
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Varovania ERC"
+msgstr "Zobraziť ERC varovania"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Vylúčenia KDR"
+msgstr "Zobraziť ERC vylúčenia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:118
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "Zmazať atribút vylúčenia zo simulácie"
+msgstr "Označiť položky, ktoré sú vylúčené zo simulácie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:122
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Zobraziť hranice strany"
+msgstr "Zobraziť OP napätia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:125
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Globálne knižnice"
+msgstr "Zobraziť OP prúdy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:128
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "Zobraziť indikátor <žiadna sieť>"
+msgstr "Zobraziť ikonu indikujúcu alternatívnu funkciu vývodu"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:131
 msgid "Show page limi&ts"
@@ -16196,9 +16185,8 @@ msgstr "Zobraziť hranice strany"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:141
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:100
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Zvýraznenie výberu"
+msgstr "Výber && Zvýraznenie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 msgid "Draw selected child items"
@@ -16734,31 +16722,26 @@ msgid "Pan right/left"
 msgstr "Posun vpravo/vľavo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "Posun nahor/nadol:"
+msgstr "Posun nahor/nadol"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
-#, fuzzy
 msgid "Zoom horizontally"
-msgstr "Distribuovať horizontálne"
+msgstr "Priblížiť vodorovne"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
-#, fuzzy
 msgid "Zoom vertically"
-msgstr "zvislo"
+msgstr "Priblížiť zvislo"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:33
-#, fuzzy
 msgid "Vertical Touchpad or Scroll Wheel Movement"
-msgstr "Vertikálny pohyb pomocou touchpadu alebo rolovacieho kolieska:"
+msgstr "Vertikálny pohyb touchpadu alebo rolovacieho kolieska"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "Upravené"
+msgstr "Modifikátor"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -16771,42 +16754,36 @@ msgid "Action"
 msgstr "Akcia"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "Žiadny"
+msgstr "Žiadny:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
 msgstr ""
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal Touchpad Movement"
-msgstr "Horizontálny počet:"
+msgstr "Horizontálny pohyb touchpadu"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
 msgstr ""
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Použite farebný motív Eeschema"
+msgstr "Použiť farebnú tému editora schémy"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:30
-#, fuzzy
 msgid "Use theme:"
-msgstr "Čas nábehu:"
+msgstr "Použiť tému:"
 
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:41
 msgid "Show pin &electrical type"
@@ -16821,13 +16798,12 @@ msgid "&Default line width:"
 msgstr "& Predvolená šírka riadku:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:44
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
-"Nastavit na 0, aby symboly mohly zdědit šířku čáry od\n"
-"svého nadřazeného schématu"
+"Nastaviť na 0, pre zdedenie vlastnosti šírky čiar\n"
+"zo schémy"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:59
 msgid "D&efault pin length:"
@@ -16846,9 +16822,8 @@ msgid "&Pitch of repeated pins:"
 msgstr "& Rozstup opakovaných kolíkov:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:140
-#, fuzzy
 msgid "General Editing"
-msgstr "Všeobecné nastavenia"
+msgstr "Všeobecné úpravy"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Keep pins attached when dragging edges"
@@ -16909,14 +16884,12 @@ msgstr "Varovanie: Duplicitná prezývka"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:862
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1094
-#, fuzzy
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
 msgstr ""
-"\n"
-"\n"
-"Táto operácia zmení aktuálne číslovanie a nemožno ju vrátiť späť."
+"Táto akcia resetuje Vašu globálnu tabuľku knižníc na disku a nedá sa vrátiť "
+"späť."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:931
 msgid ""
@@ -16975,19 +16948,16 @@ msgstr "Pridajte existujúcu knižnicu do tabuľky"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
-#, fuzzy
 msgid "Reset Libraries"
-msgstr "Vybrať knižnicu"
+msgstr "Resetovať knižnice"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:45
-#, fuzzy
 msgid "Project Field Name Templates"
-msgstr "Šablóny názvov polí projektu:"
+msgstr "Šablóny názvov polí projektu"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:51
-#, fuzzy
 msgid "Global Field Name Templates"
-msgstr "Globálne šablóny názvov polí:"
+msgstr "Globálne šablóny názvov polí"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
 #, fuzzy, c-format
@@ -17005,9 +16975,8 @@ msgstr ""
 "znakov medzier nebude mať žiadny vplyv na existujúce názvy polí symbolu."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:221
-#, fuzzy
 msgid "Remove White Space"
-msgstr "Odstrániť 3D tvar"
+msgstr "Odstrániť medzery"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:222
 msgid "Keep White Space"
@@ -17046,9 +17015,8 @@ msgstr ""
 "východzieho listu."
 
 #: eeschema/eeschema_jobs_handler.cpp:193
-#, fuzzy
 msgid "Failed to load schematic\n"
-msgstr "Nepodarilo sa načítať schému '%s'\n"
+msgstr "Nepodarilo sa načítať schému\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:355
 #: eeschema/eeschema_jobs_handler.cpp:500
@@ -17061,9 +17029,8 @@ msgstr "Nepodarilo sa načítať schému '%s'\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1387 pcbnew/pcbnew_jobs_handler.cpp:1552
 #: pcbnew/pcbnew_jobs_handler.cpp:1963 pcbnew/pcbnew_jobs_handler.cpp:2159
 #: pcbnew/pcbnew_jobs_handler.cpp:2253
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nie je možné vytvoriť adresár '%s'\n"
+msgstr "Nepodarilo sa vytvoriť výstupný adresár\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:422
 #: eeschema/eeschema_jobs_handler.cpp:544
@@ -17078,19 +17045,17 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:432
 #: eeschema/eeschema_jobs_handler.cpp:554
 #: eeschema/eeschema_jobs_handler.cpp:838
-#, fuzzy
 msgid "Warning: duplicate sheet names.\n"
-msgstr "Varovanie: Duplicitné prezývky\n"
+msgstr "Upozornenie: duplicitné názvy listu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:483
-#, fuzzy
 msgid "Unknown netlist format.\n"
-msgstr "Neznámy formát súboru <%s>\n"
+msgstr "Neznámy formát netlistu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:630
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "Súbor '%s' sa nenašiel."
+msgstr "Predvoľba BOM '%s' nebola nájdená"
 
 #: eeschema/eeschema_jobs_handler.cpp:735
 #: eeschema/eeschema_jobs_handler.cpp:943
@@ -17099,15 +17064,15 @@ msgid "Unable to open destination '%s'"
 msgstr "Nepodarilo sa otvoriť cieľ '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "Stopa '%s' sa nenašla."
+msgstr "Predvoľba formátu BOM '%s' nebola nájdená"
 
 #: eeschema/eeschema_jobs_handler.cpp:794
 #: eeschema/eeschema_jobs_handler.cpp:865
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote bill of materials to '%s'."
-msgstr "Generovať rozpis &materiálu"
+msgstr "Zapísaný zoznam materiálu do '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:917
 #, c-format
@@ -40017,8 +39982,7 @@ msgstr "Skryté knižnice puzdier nie sú ešte podporované."
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr ""
-"Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
+msgstr "Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, fuzzy, c-format
@@ -48147,8 +48111,7 @@ msgstr "Vložiť slepú/vnorenú prechodku"
 
 #: pcbnew/router/router_tool.cpp:130
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
+msgstr "Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
 
 #: pcbnew/router/router_tool.cpp:140
 msgid "Place Microvia"
