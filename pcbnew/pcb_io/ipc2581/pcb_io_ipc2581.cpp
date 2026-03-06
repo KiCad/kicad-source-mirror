@@ -1353,14 +1353,14 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
     if( aPad.GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
     {
         VECTOR2I  drill_size = aPad.GetDrillSize();
-        EDA_ANGLE rotation = aPad.GetOrientation();
+        EDA_ANGLE rotation = aPad.GetOrientation().Normalize();
 
         // IPC-2581C requires width >= height for Oval primitive
         // Swap dimensions if needed and adjust rotation accordingly
         if( drill_size.y > drill_size.x )
         {
             std::swap( drill_size.x, drill_size.y );
-            rotation += ANGLE_90;
+            rotation = ( rotation + ANGLE_90 ).Normalize();
         }
 
         // Add Xform if rotation is needed (must come before Feature per IPC-2581C schema)
