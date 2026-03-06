@@ -3471,13 +3471,18 @@ void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6
     else
     {
         pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
-        int altiumIdx = 0;
 
-        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, 32 ) )
+        LSET cuLayers = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+        for( PCB_LAYER_ID layer : cuLayers )
         {
-            pad->Padstack().SetSize( VECTOR2I( aElem.diameter_by_layer[altiumIdx],
-                                               aElem.diameter_by_layer[altiumIdx] ), layer );
-            altiumIdx++;
+            int altiumIdx = CopperLayerToOrdinal( layer );
+
+            if( altiumIdx < 32 )
+            {
+                pad->Padstack().SetSize( VECTOR2I( aElem.diameter_by_layer[altiumIdx],
+                                                   aElem.diameter_by_layer[altiumIdx] ), layer );
+            }
         }
     }
 
@@ -4205,7 +4210,9 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         {
             via->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
 
-            for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
+            LSET cuLayers = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+            for( PCB_LAYER_ID layer : cuLayers )
             {
                 int altiumLayer = CopperLayerToOrdinal( layer );
                 wxCHECK2_MSG( altiumLayer < 32, break,
