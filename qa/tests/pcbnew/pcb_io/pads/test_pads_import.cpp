@@ -1240,4 +1240,99 @@ BOOST_AUTO_TEST_CASE( ImportMaskPasteLayersIssue23254 )
 }
 
 
+/**
+ * Verify that the issue23352 demo board imports square pads, per-pad
+ * thermal connections, and netclass rules correctly.
+ */
+BOOST_AUTO_TEST_CASE( ImportIssue23352 )
+{
+    PCB_IO_PADS plugin;
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23352.asc";
+
+    std::unique_ptr<BOARD> board;
+    board.reset( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+    BOOST_REQUIRE( board != nullptr );
+
+    // Issue 1: Square pads should be imported as RECTANGLE, not CIRCLE.
+    // The CON_2X1M part has PAD 1 with shape "S" (square) on F_Cu.
+    bool foundSquarePad = false;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE )
+            {
+                foundSquarePad = true;
+                break;
+            }
+        }
+
+        if( foundSquarePad )
+            break;
+    }
+
+    BOOST_CHECK_MESSAGE( foundSquarePad,
+                         "At least one pad should have RECTANGLE shape (square pad import)" );
+
+    // Issue 2: Zone connection should default to FULL (solid), not THERMAL.
+    // Pads with RT/ST entries should have per-pad THERMAL override.
+    bool foundZoneWithFull = false;
+    bool foundPadWithThermal = false;
+    bool foundPadWithoutThermal = false;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( zone->GetPadConnection() == ZONE_CONNECTION::FULL )
+        {
+            foundZoneWithFull = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundZoneWithFull,
+                         "Zones should default to FULL (solid) connection" );
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL )
+                foundPadWithThermal = true;
+            else
+                foundPadWithoutThermal = true;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundPadWithThermal,
+                         "Pads with RT/ST entries should have per-pad THERMAL connection" );
+    BOOST_CHECK_MESSAGE( foundPadWithoutThermal,
+                         "Pads without RT/ST entries should not have per-pad THERMAL override" );
+
+    // Issue 3: Netclasses should be imported with their rules.
+    const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    const auto& netclasses = bds.m_NetSettings->GetNetclasses();
+
+    auto nc1It = netclasses.find( wxT( "NETTCLASS1" ) );
+    auto nc2It = netclasses.find( wxT( "NETTCLASS2" ) );
+
+    BOOST_CHECK_MESSAGE( nc1It != netclasses.end(), "NETTCLASS1 should exist" );
+    BOOST_CHECK_MESSAGE( nc2It != netclasses.end(), "NETTCLASS2 should exist" );
+
+    if( nc1It != netclasses.end() )
+    {
+        BOOST_CHECK_MESSAGE( nc1It->second->HasTrackWidth(),
+                             "NETTCLASS1 should have a track width rule" );
+    }
+
+    if( nc2It != netclasses.end() )
+    {
+        BOOST_CHECK_MESSAGE( nc2It->second->HasTrackWidth(),
+                             "NETTCLASS2 should have a track width rule" );
+        BOOST_CHECK_MESSAGE( nc2It->second->HasClearance(),
+                             "NETTCLASS2 should have a clearance rule" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

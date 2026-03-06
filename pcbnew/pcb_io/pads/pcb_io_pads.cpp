@@ -770,6 +770,58 @@ void PCB_IO_PADS::loadFootprints()
                         }
                     }
 
+                    // Pre-scan copper layers to detect whether the pad needs
+                    // per-layer shapes.  In PADS, layer -2 is top copper and
+                    // layer -1 is bottom copper, and they can have different
+                    // shapes (e.g. square on top, round on bottom).  KiCad's
+                    // PADSTACK in NORMAL mode stores a single shape for all
+                    // layers, so we must switch to FRONT_INNER_BACK when the
+                    // front and back shapes differ.
+                    if( has_explicit_layers )
+                    {
+                        std::string front_shape;
+                        std::string back_shape;
+                        double front_sizeA = 0;
+                        double back_sizeA = 0;
+                        double front_sizeB = 0;
+                        double back_sizeB = 0;
+
+                        for( const auto& layer_def : stack )
+                        {
+                            if( layer_def.sizeA <= 0 )
+                                continue;
+
+                            if( layer_def.shape == "RT" || layer_def.shape == "ST"
+                                || layer_def.shape == "RA" || layer_def.shape == "SA" )
+                            {
+                                continue;
+                            }
+
+                            PCB_LAYER_ID mapped = mapPadsLayer( layer_def.layer );
+
+                            if( mapped == F_Cu && front_shape.empty() )
+                            {
+                                front_shape = layer_def.shape;
+                                front_sizeA = layer_def.sizeA;
+                                front_sizeB = layer_def.sizeB;
+                            }
+                            else if( mapped == B_Cu && back_shape.empty() )
+                            {
+                                back_shape = layer_def.shape;
+                                back_sizeA = layer_def.sizeA;
+                                back_sizeB = layer_def.sizeB;
+                            }
+                        }
+
+                        if( !front_shape.empty() && !back_shape.empty()
+                            && ( front_shape != back_shape
+                                 || front_sizeA != back_sizeA
+                                 || front_sizeB != back_sizeB ) )
+                        {
+                            pad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+                        }
+                    }
+
                     for( const auto& layer_def : stack )
                     {
                         if( layer_def.layer == 0 )
@@ -797,10 +849,31 @@ void PCB_IO_PADS::loadFootprints()
                             continue;
 
                         // RT/ST are thermal relief spoke patterns for plane layers.
+                        // RA/SA are anti-pad (clearance) shapes for plane layers.
                         // KiCad computes thermal reliefs from zone settings, so skip
-                        // these to avoid overwriting the actual pad shape.
-                        if( layer_def.shape == "RT" || layer_def.shape == "ST"
-                            || layer_def.shape == "RA" || layer_def.shape == "SA" )
+                        // these to avoid overwriting the actual pad shape.  However,
+                        // the presence of RT/ST indicates this pad should have thermal
+                        // relief rather than a solid connection to copper pours.
+                        if( layer_def.shape == "RT" || layer_def.shape == "ST" )
+                        {
+                            pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+
+                            if( layer_def.thermal_spoke_width > 0 )
+                            {
+                                pad->SetLocalThermalSpokeWidthOverride(
+                                        decalScaler( layer_def.thermal_spoke_width ) );
+                            }
+
+                            if( layer_def.thermal_spoke_orientation != 0.0 )
+                            {
+                                pad->SetThermalSpokeAngleDegrees(
+                                        layer_def.thermal_spoke_orientation );
+                            }
+
+                            continue;
+                        }
+
+                        if( layer_def.shape == "RA" || layer_def.shape == "SA" )
                         {
                             continue;
                         }
@@ -1829,7 +1902,7 @@ void PCB_IO_PADS::loadZones()
             zone->SetThermalReliefGap( scaleSize( params.thermal_min_clearance ) );
             zone->SetThermalReliefSpokeWidth( scaleSize( params.thermal_line_width ) );
 
-            zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
+            zone->SetPadConnection( ZONE_CONNECTION::FULL );
         }
 
         pourZoneMap[pour_def.name] = zone;
