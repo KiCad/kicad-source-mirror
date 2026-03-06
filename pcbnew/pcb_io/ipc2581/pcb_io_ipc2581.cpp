@@ -2673,30 +2673,23 @@ bool PCB_IO_IPC2581::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
 
     wxXmlNode* outlineNode = appendNode( aParentNode, "Outline" );
 
-    // Outlines can only have one polygon according to the IPC-2581 spec, so
-    // if there are more than one, we need to combine them into a single polygon
-    const SHAPE_LINE_CHAIN* outline = &aPolySet.Outline( 0 );
-    SHAPE_LINE_CHAIN        bbox_outline;
-    BOX2I                   bbox = outline->BBox();
+    const SHAPE_POLY_SET* source = &aPolySet;
+    SHAPE_POLY_SET        merged;
 
     if( aPolySet.OutlineCount() > 1 )
     {
-        for( int ii = 1; ii < aPolySet.OutlineCount(); ++ii )
-        {
-            wxCHECK2( aPolySet.Outline( ii ).PointCount() >= 3, continue );
-            bbox.Merge( aPolySet.Outline( ii ).BBox() );
-        }
+        merged = aPolySet;
+        merged.Simplify();
 
-        bbox_outline.Append( bbox.GetLeft(), bbox.GetTop() );
-        bbox_outline.Append( bbox.GetRight(), bbox.GetTop() );
-        bbox_outline.Append( bbox.GetRight(), bbox.GetBottom() );
-        bbox_outline.Append( bbox.GetLeft(), bbox.GetBottom() );
-        outline = &bbox_outline;
+        if( merged.OutlineCount() > 0 )
+            source = &merged;
     }
 
-
-    if( !addPolygonNode( outlineNode, *outline ) )
-        wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to outline" ) );
+    for( int ii = 0; ii < source->OutlineCount(); ++ii )
+    {
+        if( !addPolygonNode( outlineNode, source->Outline( ii ) ) )
+            wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to outline" ) );
+    }
 
     if( !outlineNode->GetChildren() )
     {
