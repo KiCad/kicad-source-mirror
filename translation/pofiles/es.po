@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-05 22:08+0300\n"
+"POT-Creation-Date: 2026-03-06 12:40-0800\n"
 "PO-Revision-Date: 2026-03-06 20:11+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
@@ -1796,7 +1796,7 @@ msgid "Image Converter"
 msgstr "Conversor de imágenes"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Conversor de imágenes de KiCad"
 
@@ -2141,7 +2141,7 @@ msgid "&Open Anyway"
 msgstr "&Abrir de todos modos"
 
 #: common/confirm.cpp:68 common/confirm.cpp:107
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1250
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1253
 msgid "Save Changes?"
 msgstr "¿Guardar cambios?"
 
@@ -2217,7 +2217,7 @@ msgid "&No"
 msgstr "&No"
 
 #: common/design_block_io.cpp:51 common/design_block_io.cpp:61
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2356,7 +2356,7 @@ msgstr "Error interno"
 #: eeschema/sch_symbol.cpp:3317 eeschema/sch_symbol.cpp:3905
 #: eeschema/symbol_editor/symbol_editor.cpp:1750
 #: eeschema/symbol_viewer_frame.cpp:389 pcbnew/footprint.cpp:4828
-#: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:193
+#: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:194
 msgid "Keywords"
 msgstr "Palabras clave"
 
@@ -2466,7 +2466,7 @@ msgstr "Símbolos"
 
 #: common/dialog_about/AboutDialog_main.cpp:915
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
-#: pcbnew/plot_board_layers.cpp:211
+#: pcbnew/plot_board_layers.cpp:212
 #: pcbnew/widgets/panel_selection_filter.cpp:221
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:138
@@ -2850,7 +2850,7 @@ msgstr "Campos predeterminados"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:329
 #: pcbnew/footprint_wizard_frame.cpp:339 pcbnew/pcb_dimension.cpp:641
-#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:166
+#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/pcb_properties_panel.cpp:405
 #: pcbnew/widgets/search_handlers.cpp:141
 msgid "Value"
@@ -3104,6 +3104,7 @@ msgstr "Nombre del proyecto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1693
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3112,6 +3113,7 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:802
 #: eeschema/widgets/hierarchy_pane.cpp:808
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Esquema"
 
@@ -3158,7 +3160,7 @@ msgstr "Caja de título"
 #: common/dialogs/dialog_page_settings.cpp:465
 #: eeschema/eeschema_jobs_handler.cpp:249 pagelayout_editor/files.cpp:254
 #: pagelayout_editor/pl_editor_frame.cpp:369
-#: pcbnew/pcbnew_jobs_handler.cpp:2804
+#: pcbnew/pcbnew_jobs_handler.cpp:2818
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Error al cargar la hoja de dibujo '%s'."
@@ -4562,7 +4564,7 @@ msgstr "Será necesario cambiar uno de los apodos."
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:549
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:569
 #: eeschema/dialogs/panel_sym_lib_table.cpp:594
-#: kicad/project_tree_pane.cpp:1774 pcbnew/dialogs/panel_fp_lib_table.cpp:691
+#: kicad/project_tree_pane.cpp:1778 pcbnew/dialogs/panel_fp_lib_table.cpp:691
 #: pcbnew/tools/pcb_actions.cpp:727
 msgid "Skip"
 msgstr "Saltear"
@@ -5473,7 +5475,7 @@ msgstr ""
 "Cuando la API de KiCad está habilitada, los plugins y otros programas que se "
 "ejecutan en este ordenador pueden conectarse a KiCad."
 
-#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1214
+#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1261
 msgid "Enable KiCad API"
 msgstr "Activar API de KiCad"
 
@@ -6131,7 +6133,7 @@ msgid "Error switching GAL backend"
 msgstr "Error al cambiar el motor gráfico GAL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3642
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3643
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3662
 msgid "Failed to read image data."
 msgstr "Fallo al leer datos de imagen."
@@ -6331,13 +6333,13 @@ msgstr "Número de coma flotante no válido"
 
 #: common/eda_base_frame.cpp:511 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:959
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:976
 msgid "Undo"
 msgstr "Deshacer"
 
 #: common/eda_base_frame.cpp:520 common/tool/actions.cpp:301
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:960
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:977
 msgid "Redo"
 msgstr "Rehacer"
 
@@ -6389,7 +6391,7 @@ msgstr "SpaceMouse"
 msgid "Hotkeys"
 msgstr "Atajos de teclado"
 
-#: common/eda_base_frame.cpp:1421 kicad/project_tree_pane.cpp:1086
+#: common/eda_base_frame.cpp:1421 kicad/project_tree_pane.cpp:1090
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -6541,7 +6543,7 @@ msgstr "No se ha encontrado el archivo de documentación «%s»."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "Tipo MIME desconocido para el archivo de documentación '%s'"
 
-#: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1187
+#: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1214
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 msgid "Override locks"
 msgstr "Ignorar bloqueos"
@@ -6645,7 +6647,7 @@ msgstr "Pantalla"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/load_select_footprint.cpp:296 pcbnew/pad.cpp:1854
 #: pcbnew/pcb_barcode.cpp:435 pcbnew/pcb_shape.cpp:700 pcbnew/pcb_text.cpp:276
-#: pcbnew/plot_board_layers.cpp:170
+#: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Huella"
 
@@ -7135,7 +7137,7 @@ msgstr "Centrado"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1086
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1103
 msgid "Top"
 msgstr "Superior"
 
@@ -7147,7 +7149,7 @@ msgstr "Superior"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1088
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1105
 msgid "Bottom"
 msgstr "Inferior"
 
@@ -7270,8 +7272,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"La ruta base de las bibliotecas de huellas instaladas localmente (carpetas ."
-"pretty)."
+"La ruta base de las bibliotecas de huellas instaladas localmente "
+"(carpetas .pretty)."
 
 #: common/env_vars.cpp:114
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -7312,8 +7314,8 @@ msgid ""
 msgstr ""
 "Definida internamente por KiCad (no puede editarse) y contiene la ruta "
 "absoluta del proyecto activo. Esta variable de entorno puede utilizarse para "
-"definir archivos y rutas relativas al proyecto activo. Por ejemplo, "
-"${KIPRJMOD}/libs/footprints.pretty puede definirse como una carpeta que "
+"definir archivos y rutas relativas al proyecto activo. Por ejemplo, $"
+"{KIPRJMOD}/libs/footprints.pretty puede definirse como una carpeta que "
 "contiene una biblioteca de huellas específica al proyecto, de nombre "
 "footprints.pretty."
 
@@ -7648,7 +7650,7 @@ msgstr "Fallo al obtener confirmación: %s"
 msgid "Failed to create author signature: %s"
 msgstr "Fallo al crear la firma del autor: %s"
 
-#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2306
+#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2312
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Fallo al crear la confirmación: %s"
@@ -7818,7 +7820,7 @@ msgstr "La finalización del rebase falló: %s"
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:140
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:964
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:981
 #: pcbnew/tools/edit_tool.cpp:3027
 msgid "Cut"
 msgstr "Cortar"
@@ -7836,7 +7838,7 @@ msgstr ""
 #: eeschema/tools/sch_actions.cpp:250 kicad/dialogs/panel_jobset.cpp:439
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:76
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:965
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:982
 msgid "Copy"
 msgstr "Copiar"
 
@@ -7849,7 +7851,7 @@ msgstr "Copiar las celdas seleccionadas al portapapeles"
 #: eeschema/tools/sch_editor_control.cpp:2798
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1739
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:966
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:983
 #: pcbnew/tools/pcb_control.cpp:1380
 msgid "Paste"
 msgstr "Pegar"
@@ -7861,10 +7863,10 @@ msgstr "Pegar celdas del portapapeles a la matriz en la celda activa"
 #: common/grid_tricks.cpp:388 common/tool/actions.cpp:404
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2092
 #: eeschema/tools/symbol_editor_edit_tool.cpp:858
-#: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1010
+#: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1014
 #: pcbnew/dialogs/panel_setup_rules.cpp:143
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:593
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:967
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:984
 #: pcbnew/tools/edit_tool.cpp:2997 pcbnew/tools/edit_tool.cpp:3040
 msgid "Delete"
 msgstr "Eliminar"
@@ -7885,7 +7887,7 @@ msgstr "Vaciar contenido de las celdas seleccionadas"
 #: pcbnew/dialogs/dialog_import_settings.cpp:100
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:101
 #: pcbnew/dialogs/panel_setup_rules.cpp:147
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:971
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:988
 msgid "Select All"
 msgstr "Seleccionar todo"
 
@@ -8293,16 +8295,16 @@ msgstr "Exportar HPGL"
 msgid "PCB: Export HPGL"
 msgstr "PCB: Exportar HPGL"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:72
-#: pcbnew/dialogs/dialog_export_2581_base.h:88
+#: common/jobs/job_export_pcb_ipc2581.cpp:74
+#: pcbnew/dialogs/dialog_export_2581_base.h:90
 msgid "Export IPC-2581"
 msgstr "Exportar IPC-2581"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:78
+#: common/jobs/job_export_pcb_ipc2581.cpp:80
 msgid "Export IPC-2581 Job Settings"
 msgstr "Ajustes de tarea de exportación IPC-2581"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:91
+#: common/jobs/job_export_pcb_ipc2581.cpp:93
 msgid "PCB: Export IPC-2581"
 msgstr "PCB: Exportar IPC-2581"
 
@@ -8464,10 +8466,6 @@ msgstr "Importar PCB"
 #: common/jobs/job_pcb_import.cpp:63
 msgid "PCB Import Job Settings"
 msgstr "Ajustes de tarea de importación de PCB"
-
-#: common/jobs/job_pcb_import.cpp:67
-msgid "PCB: Import"
-msgstr "PCB: Importar"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -9050,12 +9048,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Faltan las unidades de '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Error de tipo entre '%s' y %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Error de tipo entre %lf y '%s'"
 
@@ -9503,7 +9499,7 @@ msgstr "¡Error al extraer el archivo!"
 #: eeschema/sch_plotter.cpp:736 gerbview/export_to_pcbnew.cpp:65
 #: pagelayout_editor/files.cpp:224 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:475
-#: pcbnew/dialogs/dialog_drc.cpp:1112 pcbnew/dialogs/dialog_export_2581.cpp:297
+#: pcbnew/dialogs/dialog_drc.cpp:1112 pcbnew/dialogs/dialog_export_2581.cpp:302
 #: pcbnew/dialogs/dialog_export_idf.cpp:130
 #: pcbnew/dialogs/dialog_export_vrml.cpp:139
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:335
@@ -9736,55 +9732,55 @@ msgstr "Cerrar %s"
 msgid "Quit %s"
 msgstr "Cerrar %s"
 
-#: common/tool/action_toolbar.cpp:1135
+#: common/tool/action_toolbar.cpp:1162
 msgid "Grid selector"
 msgstr "Selector de cuadrícula"
 
-#: common/tool/action_toolbar.cpp:1136
+#: common/tool/action_toolbar.cpp:1163
 msgid "Grid Selection box"
 msgstr "Cuadro de selección de cuadrícula"
 
-#: common/tool/action_toolbar.cpp:1148
+#: common/tool/action_toolbar.cpp:1175
 msgid "Zoom selector"
 msgstr "Selector de zoom"
 
-#: common/tool/action_toolbar.cpp:1149
+#: common/tool/action_toolbar.cpp:1176
 msgid "Zoom Selection box"
 msgstr "Cuadro Selección de zum"
 
-#: common/tool/action_toolbar.cpp:1161
+#: common/tool/action_toolbar.cpp:1188
 msgid "IPC/Scripting plugins"
 msgstr "Complementos IPC/Scripting"
 
-#: common/tool/action_toolbar.cpp:1162
+#: common/tool/action_toolbar.cpp:1189
 msgid "Region to hold the IPC/Scripting action buttons"
 msgstr "Región para los botones de acción IPC/Scripting"
 
-#: common/tool/action_toolbar.cpp:1167
+#: common/tool/action_toolbar.cpp:1194
 msgid "Layer selector"
 msgstr "Selector de capa"
 
-#: common/tool/action_toolbar.cpp:1168
+#: common/tool/action_toolbar.cpp:1195
 msgid "Control to select the layer"
 msgstr "Control para seleccionar la capa"
 
-#: common/tool/action_toolbar.cpp:1175
+#: common/tool/action_toolbar.cpp:1202
 msgid "Symbol unit selector"
 msgstr "Selector de unidad de símbolo"
 
-#: common/tool/action_toolbar.cpp:1176
+#: common/tool/action_toolbar.cpp:1203
 msgid "Displays the current unit"
 msgstr "Muestra la unidad actual"
 
-#: common/tool/action_toolbar.cpp:1181
+#: common/tool/action_toolbar.cpp:1208
 msgid "Symbol body style selector"
 msgstr "Selector de estilo de cuerpo de símbolo"
 
-#: common/tool/action_toolbar.cpp:1182
+#: common/tool/action_toolbar.cpp:1209
 msgid "Displays the current body style"
 msgstr "Muestra el estilo de cuerpo actual"
 
-#: common/tool/action_toolbar.cpp:1188
+#: common/tool/action_toolbar.cpp:1215
 msgid "Allow moving of locked items with the mouse"
 msgstr "Permitir mover elementos bloqueados con el ratón"
 
@@ -10174,7 +10170,8 @@ msgstr "Añadir columna después"
 
 #: common/tool/actions.cpp:533
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Insertar una nueva columna de tabla después de las celdas seleccionadas"
+msgstr ""
+"Insertar una nueva columna de tabla después de las celdas seleccionadas"
 
 #: common/tool/actions.cpp:539
 msgid "Delete Row(s)"
@@ -10353,13 +10350,13 @@ msgstr "Alejar sobre cursor"
 
 #: common/tool/actions.cpp:766 common/widgets/mathplot.cpp:1415
 #: pcbnew/dialogs/panel_setup_rules.cpp:151
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:975
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:992
 msgid "Zoom In"
 msgstr "Acercar"
 
 #: common/tool/actions.cpp:772 common/widgets/mathplot.cpp:1416
 #: pcbnew/dialogs/panel_setup_rules.cpp:152
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:976
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:993
 msgid "Zoom Out"
 msgstr "Alejar"
 
@@ -11865,7 +11862,7 @@ msgstr "Archivo de proyecto: «%s»"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:95
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:183
-#: kicad/project_tree_pane.cpp:1100
+#: kicad/project_tree_pane.cpp:1104
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "No se ha seleccionado ningún editor de texto en KiCad. Elija uno."
 
@@ -12227,7 +12224,7 @@ msgstr "Extremo de línea sin conectar"
 msgid "Unconnected wire to bus entry"
 msgstr "Línea no conectada a entrada de bus"
 
-#: eeschema/connection_graph.cpp:4384
+#: eeschema/connection_graph.cpp:4380
 #, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
@@ -12236,14 +12233,14 @@ msgstr ""
 "La etiqueta jerárquica '%s' en la página raíz no se puede conectar a una "
 "página padre inexistente"
 
-#: eeschema/connection_graph.cpp:4450
+#: eeschema/connection_graph.cpp:4446
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "El puerto de hoja %s no tiene una etiqueta jerárquica correspondiente en la "
 "hoja"
 
-#: eeschema/connection_graph.cpp:4467
+#: eeschema/connection_graph.cpp:4463
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "La etiqueta jerárquica %s no está conectada a la hoja pricipal"
@@ -12544,8 +12541,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -12625,8 +12622,8 @@ msgstr ""
 "<nombre del archivo de salida>\n"
 "```\n"
 "\n"
-"En Windows, si el script generador deseado para un BOM CSV es `C:\\Users\\u"
-"sername\\kicad\\my_python_script.py`, la línea de comandos sería:\n"
+"En Windows, si el script generador deseado para un BOM CSV es `C:"
+"\\Users\\username\\kicad\\my_python_script.py`, la línea de comandos sería:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
@@ -14285,7 +14282,8 @@ msgstr "Seleccionar archivo de datos de pines"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1044
 #, c-format
 msgid "Unknown columns in data: %s. These columns will be ignored."
-msgstr "Columnas desconocidas en los datos: %s. Estas columnas serán ignoradas."
+msgstr ""
+"Columnas desconocidas en los datos: %s. Estas columnas serán ignoradas."
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1203
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:152
@@ -16633,6 +16631,7 @@ msgid "Code"
 msgstr "Código"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Guardar {} en campo de valor como \"{}\""
 
@@ -17470,8 +17469,8 @@ msgstr "Actualizar/restablecer los tamaños y estilos de los campos"
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:236
 #: eeschema/sch_label.cpp:2355
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
-#: pcbnew/dialogs/panel_setup_rules.cpp:982
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:884 pcbnew/pcb_text.cpp:695
+#: pcbnew/dialogs/panel_setup_rules.cpp:985
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:901 pcbnew/pcb_text.cpp:695
 msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
@@ -18500,7 +18499,7 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:1496 pcbnew/pcbnew_jobs_handler.cpp:1563
 #: pcbnew/pcbnew_jobs_handler.cpp:1710 pcbnew/pcbnew_jobs_handler.cpp:1877
 #: pcbnew/pcbnew_jobs_handler.cpp:2168 pcbnew/pcbnew_jobs_handler.cpp:2308
-#: pcbnew/pcbnew_jobs_handler.cpp:2527 pcbnew/pcbnew_jobs_handler.cpp:2625
+#: pcbnew/pcbnew_jobs_handler.cpp:2527 pcbnew/pcbnew_jobs_handler.cpp:2639
 msgid "Failed to create output directory\n"
 msgstr "Error al crear el directorio de salida\n"
 
@@ -18623,7 +18622,8 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1397
 msgid "Successfully saved schematic file using the latest format\n"
-msgstr "Archivo de esquema guardado correctamente con el formato más reciente\n"
+msgstr ""
+"Archivo de esquema guardado correctamente con el formato más reciente\n"
 
 #: eeschema/eeschema_settings.cpp:72 eeschema/tools/sch_actions.cpp:1064
 msgid "Net Navigator"
@@ -18708,7 +18708,8 @@ msgstr "Variable de texto sin resolver en la hoja de dibujo"
 #: eeschema/erc/erc.cpp:467 eeschema/erc/erc.cpp:495
 #, c-format
 msgid "Field name has leading or trailing whitespace: '%s'"
-msgstr "El nombre del campo tiene espacios en blanco al inicio o al final: '%s'"
+msgstr ""
+"El nombre del campo tiene espacios en blanco al inicio o al final: '%s'"
 
 #: eeschema/erc/erc.cpp:552
 #, c-format
@@ -19404,7 +19405,7 @@ msgstr "Derivado de"
 msgid "Error loading symbol %s from library '%s'."
 msgstr "Ha ocurrido un error al cargar el símbolo %s desde la biblioteca '%s'."
 
-#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:766
+#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:813
 #: pcbnew/zone.cpp:989
 msgid "Unknown"
 msgstr "Desconocido"
@@ -21366,26 +21367,26 @@ msgstr "Nombre de biblioteca de símbolos inválido"
 msgid "Invalid symbol library ID"
 msgstr "ID de biblioteca de símbolos inválido"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3954
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3956
 msgid "Missing sheet name property"
 msgstr "Falta la propiedad de nombre de página"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3960
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3962
 msgid "Missing sheet file property"
 msgstr "Falta la propiedad de archivo de página"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5054
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5056
 msgid "Invalid table: no cells defined"
 msgstr "Tabla no válida: no se han definido celdas"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5179
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5181
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6969
 #, c-format
 msgid "Group library link %s contains invalid character '%c'"
 msgstr ""
 "El enlace de biblioteca del grupo %s contiene el carácter no válido '%c'"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5185
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5187
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6976
 msgid "Invalid library ID"
 msgstr "ID de biblioteca no válido"
@@ -21963,7 +21964,7 @@ msgid "Library Link"
 msgstr "Enlace de biblioteca"
 
 #: eeschema/sch_symbol.cpp:3901 eeschema/widgets/search_handlers.cpp:171
-#: pcbnew/footprint.cpp:4825 pcbnew/plot_board_layers.cpp:190
+#: pcbnew/footprint.cpp:4825 pcbnew/plot_board_layers.cpp:191
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
 msgstr "Descripción de biblioteca"
@@ -22380,8 +22381,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22432,9 +22433,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -22501,9 +22502,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{sobrelínea}</samp><br> &nbsp;<br><samp>~{CLK}"
 "</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>sobrelínea</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>sobrelínea</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22524,8 +22525,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:campo}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>valor_del_campo</i> del símbolo <i>refdes</i>"
-"</samp></td>\n"
+"        <td>&nbsp;<br><samp><i>valor_del_campo</i> del símbolo <i>refdes</"
+"i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -22600,8 +22601,8 @@ msgstr ""
 "samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
-"\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
+"td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Las comparaciones numéricas también funcionan</"
 "samp></td>\n"
@@ -22617,8 +22618,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:REFERENCE(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Referencia completa con unidad para el pin</samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp>Referencia completa con unidad para el pin</"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:REFERENCE(3)}</samp></td>\n"
@@ -22628,8 +22629,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Referencia sin letra de unidad para el pin</samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp>Referencia sin letra de unidad para el pin</"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
@@ -22745,8 +22746,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>J1B</samp> (cuando ROW=0, pin 2 en unidad B)</td>"
-"\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (cuando ROW=0, pin 2 en unidad B)</"
+"td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>\n"
@@ -22790,9 +22791,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22861,11 +22861,11 @@ msgstr ""
 "samp> funcionan incluso si el pin está en una unidad diferente a la de la "
 "página actual.</p>\n"
 "<p><b>Referencias a celdas de tabla:</b> La función <samp>CELL()</samp> solo "
-"funciona en celdas de tabla. Use <samp>${CELL(\"A0\")}</samp> o <samp>${CELL"
-"(fila, col)}</samp> para hacer referencia a otras celdas de la misma tabla. "
-"Los números de fila y columna comienzan en 0 (A0 es la primera fila, primera "
-"columna). CELL devuelve el valor evaluado/mostrado, no el texto sin procesar "
-"de la celda.</p>\n"
+"funciona en celdas de tabla. Use <samp>${CELL(\"A0\")}</samp> o <samp>$"
+"{CELL(fila, col)}</samp> para hacer referencia a otras celdas de la misma "
+"tabla. Los números de fila y columna comienzan en 0 (A0 es la primera fila, "
+"primera columna). CELL devuelve el valor evaluado/mostrado, no el texto sin "
+"procesar de la celda.</p>\n"
 "<p><b>Variables anidadas:</b> Las variables pueden contener otras variables. "
 "Las variables internas se expanden primero. Profundidad máxima de "
 "anidamiento: 6 niveles.</p>\n"
@@ -23721,11 +23721,11 @@ msgstr "Error al crear el archivo temporal de salida"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
-"Kibis todavía no soporta valores DUT. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis todavía no soporta valores DUT. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:956
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -24705,7 +24705,8 @@ msgstr "Crear una copia editable"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1026
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
+msgstr ""
+"¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1030
 msgid "Select type of item to save"
@@ -27267,7 +27268,8 @@ msgstr "Incluir símbolos de alimentación en la exportación"
 
 #: eeschema/tools/sch_editor_control.cpp:658
 msgid "Update schematic symbols to link to exported symbols"
-msgstr "Actualizar símbolos del esquema para vincular a los símbolos exportados"
+msgstr ""
+"Actualizar símbolos del esquema para vincular a los símbolos exportados"
 
 #: eeschema/tools/sch_editor_control.cpp:1064
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -28915,7 +28917,7 @@ msgid "Clear Recent Job Files"
 msgstr "Limpiar archivos de trabajo recientes"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "Visor Gerber de KiCad"
 
@@ -29791,7 +29793,8 @@ msgstr "Exportar gráficos de serigrafía como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:159
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "Exportar capas de máscara de soldadura como un conjunto de caras planas"
+msgstr ""
+"Exportar capas de máscara de soldadura como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:163
 msgid "Fuse overlapping geometry together"
@@ -29855,8 +29858,8 @@ msgstr "Formato especificado inválido\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
-"Lista separada por comas de los nombres no traducidos a incluir, ej: F.Cu,B."
-"Cu"
+"Lista separada por comas de los nombres no traducidos a incluir, ej: "
+"F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:48
 msgid ""
@@ -30042,7 +30045,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_dxf.cpp:143
 #: kicad/cli/command_pcb_export_gencad.cpp:74
 #: kicad/cli/command_pcb_export_gerber.cpp:140
-#: kicad/cli/command_pcb_export_ipc2581.cpp:118
+#: kicad/cli/command_pcb_export_ipc2581.cpp:125
 #: kicad/cli/command_pcb_export_ipcd356.cpp:46
 #: kicad/cli/command_pcb_export_odb.cpp:75
 #: kicad/cli/command_pcb_export_pdf.cpp:144
@@ -31612,7 +31615,7 @@ msgstr "Instalar"
 msgid "Uninstall"
 msgstr "Desinstalar"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:161 kicad/pcm/dialogs/dialog_pcm.cpp:404
+#: kicad/pcm/dialogs/dialog_pcm.cpp:161 kicad/pcm/dialogs/dialog_pcm.cpp:407
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
@@ -31638,13 +31641,13 @@ msgstr ""
 msgid "Install Package"
 msgstr "Instalar paquete"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:421
+#: kicad/pcm/dialogs/dialog_pcm.cpp:424
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
 msgstr "Pendiente (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:461
+#: kicad/pcm/dialogs/dialog_pcm.cpp:464
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
@@ -31831,30 +31834,30 @@ msgstr "Mostrar todas las versiones"
 msgid "Download"
 msgstr "Descargar"
 
-#: kicad/pcm/pcm.cpp:114
+#: kicad/pcm/pcm.cpp:122
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "Error al cargar la lista de paquetes instalados: %s"
 
-#: kicad/pcm/pcm.cpp:213 kicad/update_manager.cpp:123
+#: kicad/pcm/pcm.cpp:222 kicad/update_manager.cpp:123
 #, c-format
 msgid "Downloading %lld/%lld kB"
 msgstr "Descargando %lld/%lld kB"
 
-#: kicad/pcm/pcm.cpp:240 kicad/update_manager.cpp:158
+#: kicad/pcm/pcm.cpp:252 kicad/update_manager.cpp:158
 msgid "Download is too large."
 msgstr "La descarga es muy grande."
 
-#: kicad/pcm/pcm.cpp:257
+#: kicad/pcm/pcm.cpp:269
 msgid "Fetching repository"
 msgstr "Obteniendo repositorio"
 
-#: kicad/pcm/pcm.cpp:276
+#: kicad/pcm/pcm.cpp:306
 #, c-format
 msgid "Unable to parse repository: %s"
 msgstr "No se pudo analizar el repositorio: %s"
 
-#: kicad/pcm/pcm.cpp:277
+#: kicad/pcm/pcm.cpp:307
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
@@ -31862,21 +31865,21 @@ msgstr ""
 "El URL provisto no parece apuntar a un repositorio de paquetes de KiCad "
 "válido. Verifique el URL."
 
-#: kicad/pcm/pcm.cpp:303
+#: kicad/pcm/pcm.cpp:343
 msgid "Fetching repository packages"
 msgstr "Obteniendo paquetes del repositorio"
 
-#: kicad/pcm/pcm.cpp:308
+#: kicad/pcm/pcm.cpp:349
 msgid "Unable to load repository packages url."
 msgstr "No se pudo cargar la URL del paquete de repositorio."
 
-#: kicad/pcm/pcm.cpp:318
+#: kicad/pcm/pcm.cpp:359
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 "La suma de comprobación de los paquetes no coincide. El repositorio podría "
 "estar dañado."
 
-#: kicad/pcm/pcm.cpp:334
+#: kicad/pcm/pcm.cpp:380
 #, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
@@ -31887,22 +31890,22 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:418
+#: kicad/pcm/pcm.cpp:464
 msgid "Failed to parse locally stored repository.json."
 msgstr "Fallo al analizar repository.json almacenado localmente."
 
-#: kicad/pcm/pcm.cpp:446
+#: kicad/pcm/pcm.cpp:492
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
 "La antememoria de paquetes del repositorio actual está dañada y se volverá a "
 "descargar."
 
-#: kicad/pcm/pcm.cpp:499
+#: kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
 msgstr "Descargando recursos"
 
-#: kicad/pcm/pcm.cpp:519
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
@@ -31910,27 +31913,27 @@ msgstr ""
 "La suma de comprobación del archivo de recursos no coincide y no se usará. "
 "El repositorio podría estar dañado."
 
-#: kicad/pcm/pcm.cpp:762
+#: kicad/pcm/pcm.cpp:809
 msgid "Local file"
 msgstr "Archivo local"
 
-#: kicad/pcm/pcm.cpp:1115
+#: kicad/pcm/pcm.cpp:1162
 msgid "PCM Update"
 msgstr "Actualización PCM"
 
-#: kicad/pcm/pcm.cpp:1127
+#: kicad/pcm/pcm.cpp:1174
 msgid "Preparing to fetch repositories"
 msgstr "Preparándose para obtener repositorios"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1192
 msgid "Fetching repository..."
 msgstr "Obteniendo repositorio..."
 
-#: kicad/pcm/pcm.cpp:1158
+#: kicad/pcm/pcm.cpp:1205
 msgid "Reviewing packages..."
 msgstr "Revisando paquetes..."
 
-#: kicad/pcm/pcm.cpp:1212
+#: kicad/pcm/pcm.cpp:1259
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
@@ -32107,225 +32110,225 @@ msgstr "Nombre de la carpeta:"
 msgid "Create New Directory"
 msgstr "Crear carpeta nueva"
 
-#: kicad/project_tree_pane.cpp:920
+#: kicad/project_tree_pane.cpp:924
 msgid "Switch to this Project"
 msgstr "Cambiar a este proyecto"
 
-#: kicad/project_tree_pane.cpp:921
+#: kicad/project_tree_pane.cpp:925
 msgid "Close all editors, and switch to the selected project"
 msgstr "Cerrar y cambiar al proyecto seleccionado"
 
-#: kicad/project_tree_pane.cpp:928
+#: kicad/project_tree_pane.cpp:932
 msgid "New Directory..."
 msgstr "Nueva carpeta..."
 
-#: kicad/project_tree_pane.cpp:929
+#: kicad/project_tree_pane.cpp:933
 msgid "Create a New Directory"
 msgstr "Crear una carpeta nueva"
 
-#: kicad/project_tree_pane.cpp:937 kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:941 kicad/project_tree_pane.cpp:951
 msgid "Reveal in Finder"
 msgstr "Revelar en Finder"
 
-#: kicad/project_tree_pane.cpp:938
+#: kicad/project_tree_pane.cpp:942
 msgid "Reveals the directory in a Finder window"
 msgstr "Revela el directorio en una ventana de Finder"
 
-#: kicad/project_tree_pane.cpp:940
+#: kicad/project_tree_pane.cpp:944
 msgid "Open Directory in File Explorer"
 msgstr "Abrir carpeta en el explorador de archivos"
 
-#: kicad/project_tree_pane.cpp:941 pcbnew/tools/pcb_actions.cpp:1185
+#: kicad/project_tree_pane.cpp:945 pcbnew/tools/pcb_actions.cpp:1185
 msgid "Opens the directory in the default system file manager"
 msgstr "Abre el directorio en el gestor de archivos del sistema"
 
-#: kicad/project_tree_pane.cpp:948
+#: kicad/project_tree_pane.cpp:952
 msgid "Reveals the directories in a Finder window"
 msgstr "Revela las carpetas en una ventana de Finder"
 
-#: kicad/project_tree_pane.cpp:950
+#: kicad/project_tree_pane.cpp:954
 msgid "Open Directories in File Explorer"
 msgstr "Abrir carpetas en el explorador de archivos"
 
-#: kicad/project_tree_pane.cpp:951
+#: kicad/project_tree_pane.cpp:955
 msgid "Opens the directories in the default system file manager"
 msgstr "Abre los directorios en el gestor de archivos del sistema"
 
-#: kicad/project_tree_pane.cpp:962
+#: kicad/project_tree_pane.cpp:966
 msgid "Open the file in a Text Editor"
 msgstr "Abrir el archivo con un editor de texto"
 
-#: kicad/project_tree_pane.cpp:964
+#: kicad/project_tree_pane.cpp:968
 msgid "Open files in a Text Editor"
 msgstr "Abrir archivos en un editor de texto"
 
-#: kicad/project_tree_pane.cpp:966
+#: kicad/project_tree_pane.cpp:970
 msgid "Edit in a Text Editor"
 msgstr "Editar en un editor de texto"
 
-#: kicad/project_tree_pane.cpp:972
+#: kicad/project_tree_pane.cpp:976
 msgid "Run Jobs"
 msgstr "Ejecutar tareas"
 
-#: kicad/project_tree_pane.cpp:980
+#: kicad/project_tree_pane.cpp:984
 msgid "Rename File..."
 msgstr "Renombrar archivo..."
 
-#: kicad/project_tree_pane.cpp:981
+#: kicad/project_tree_pane.cpp:985
 msgid "Rename file"
 msgstr "Renombrar archivo"
 
-#: kicad/project_tree_pane.cpp:985
+#: kicad/project_tree_pane.cpp:989
 msgid "Rename Files..."
 msgstr "Renombrar archivos..."
 
-#: kicad/project_tree_pane.cpp:986
+#: kicad/project_tree_pane.cpp:990
 msgid "Rename files"
 msgstr "Renombrar archivos"
 
-#: kicad/project_tree_pane.cpp:996
+#: kicad/project_tree_pane.cpp:1000
 msgid "Delete the file and its content"
 msgstr "Eliminar el archivo y sus contenidos"
 
-#: kicad/project_tree_pane.cpp:998
+#: kicad/project_tree_pane.cpp:1002
 msgid "Delete the files and their contents"
 msgstr "Eliminar los archivos y sus contenidos"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1017
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
-#: kicad/project_tree_pane.cpp:1025
+#: kicad/project_tree_pane.cpp:1029
 msgid "Add Project to Version Control..."
 msgstr "Añadir proyecto al control de versiones..."
 
-#: kicad/project_tree_pane.cpp:1026
+#: kicad/project_tree_pane.cpp:1030
 msgid "Initialize a new repository"
 msgstr "Inicializar un nuevo repositorio"
 
-#: kicad/project_tree_pane.cpp:1030
+#: kicad/project_tree_pane.cpp:1034
 msgid "Commit Project..."
 msgstr "Confirmar proyecto..."
 
-#: kicad/project_tree_pane.cpp:1031 kicad/project_tree_pane.cpp:1045
+#: kicad/project_tree_pane.cpp:1035 kicad/project_tree_pane.cpp:1049
 msgid "Commit changes to the local repository"
 msgstr "Confirmar cambios al repositorio local"
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1038
 msgid "Push"
 msgstr "Enviar (push)"
 
-#: kicad/project_tree_pane.cpp:1035
+#: kicad/project_tree_pane.cpp:1039
 msgid "Push committed local changes to remote repository"
 msgstr "Enviar cambios confirmados localmente al repositorio remoto"
 
-#: kicad/project_tree_pane.cpp:1038
+#: kicad/project_tree_pane.cpp:1042
 msgid "Pull"
 msgstr "Recibir (pull)"
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1043
 msgid "Pull changes from remote repository into local"
 msgstr "Recibir cambios desde el repositorio remoto al local"
 
-#: kicad/project_tree_pane.cpp:1044
+#: kicad/project_tree_pane.cpp:1048
 msgid "Commit File..."
 msgstr "Confirmar (commit) archivo..."
 
-#: kicad/project_tree_pane.cpp:1059
+#: kicad/project_tree_pane.cpp:1063
 msgid "Switch to branch "
 msgstr "Cambiar a rama "
 
-#: kicad/project_tree_pane.cpp:1064
+#: kicad/project_tree_pane.cpp:1068
 msgid "Other..."
 msgstr "Otros..."
 
-#: kicad/project_tree_pane.cpp:1065
+#: kicad/project_tree_pane.cpp:1069
 msgid "Switch to a different branch"
 msgstr "Cambiar a una rama distinta"
 
-#: kicad/project_tree_pane.cpp:1068
+#: kicad/project_tree_pane.cpp:1072
 msgid "Switch to Branch"
 msgstr "Cambiar a rama"
 
-#: kicad/project_tree_pane.cpp:1074
+#: kicad/project_tree_pane.cpp:1078
 msgid "Enable Git Integration"
 msgstr "Activar integración Git"
 
-#: kicad/project_tree_pane.cpp:1075
+#: kicad/project_tree_pane.cpp:1079
 msgid "Re-enable Git integration for this project"
 msgstr "Reactivar la integración Git para este proyecto"
 
-#: kicad/project_tree_pane.cpp:1079
+#: kicad/project_tree_pane.cpp:1083
 msgid "Disable Git Integration"
 msgstr "Desactivar integración Git"
 
-#: kicad/project_tree_pane.cpp:1080
+#: kicad/project_tree_pane.cpp:1084
 msgid "Disable Git integration for this project"
 msgstr "Desactivar la integración Git para este proyecto"
 
-#: kicad/project_tree_pane.cpp:1137
+#: kicad/project_tree_pane.cpp:1141
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Cambiar nombre de archivo: '%s'"
 
-#: kicad/project_tree_pane.cpp:1139
+#: kicad/project_tree_pane.cpp:1143
 msgid "Change filename"
 msgstr "Cambiar nombre de archivo"
 
-#: kicad/project_tree_pane.cpp:1499
+#: kicad/project_tree_pane.cpp:1503
 msgid "Network path: not monitoring folder changes"
 msgstr "Ruta de red: no se supervisan cambios en la carpeta"
 
-#: kicad/project_tree_pane.cpp:1505
+#: kicad/project_tree_pane.cpp:1509
 msgid "Local path: monitoring folder changes"
 msgstr "Ruta local: supervisando cambios en la carpeta"
 
-#: kicad/project_tree_pane.cpp:1690
+#: kicad/project_tree_pane.cpp:1694
 msgid "Please wait"
 msgstr "Espere"
 
-#: kicad/project_tree_pane.cpp:1690
+#: kicad/project_tree_pane.cpp:1694
 msgid "Waiting for Git operations to finish..."
 msgstr "Esperando a que finalicen las operaciones Git..."
 
-#: kicad/project_tree_pane.cpp:1758
+#: kicad/project_tree_pane.cpp:1762
 msgid "The selected directory is already a Git project."
 msgstr "El directorio seleccionado ya es un proyecto Git."
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1769
 msgid "Failed to initialize Git project."
 msgstr "No se pudo inicializar el proyecto Git."
 
-#: kicad/project_tree_pane.cpp:1773
+#: kicad/project_tree_pane.cpp:1777
 msgid "Set default remote"
 msgstr "Fijar el remoto por defecto"
 
-#: kicad/project_tree_pane.cpp:1789
+#: kicad/project_tree_pane.cpp:1793
 msgid "Failed to set default remote."
 msgstr "Fallo al fijar el remoto por defecto."
 
-#: kicad/project_tree_pane.cpp:1797 kicad/project_tree_pane.cpp:1828
-#: kicad/project_tree_pane.cpp:1851
+#: kicad/project_tree_pane.cpp:1801 kicad/project_tree_pane.cpp:1832
+#: kicad/project_tree_pane.cpp:1855
 msgid "Fetch Remote"
 msgstr "Obtener del remoto"
 
-#: kicad/project_tree_pane.cpp:1835
+#: kicad/project_tree_pane.cpp:1839
 msgid "Failed to pull project"
 msgstr "No se pudo descargar el proyecto"
 
-#: kicad/project_tree_pane.cpp:1858
+#: kicad/project_tree_pane.cpp:1862
 msgid "Failed to push project"
 msgstr "Fallo al enviar el proyecto"
 
-#: kicad/project_tree_pane.cpp:2203
+#: kicad/project_tree_pane.cpp:2209
 msgid "The selected directory is not a Git project."
 msgstr "El directorio seleccionado no es un proyecto Git."
 
-#: kicad/project_tree_pane.cpp:2290
+#: kicad/project_tree_pane.cpp:2296
 msgid "Discarding commit due to empty commit message."
 msgstr "Descartando confirmación debido a un mensaje de confirmación vacío."
 
-#: kicad/project_tree_pane.cpp:2296
+#: kicad/project_tree_pane.cpp:2302
 msgid "Discarding commit due to empty file selection."
 msgstr "Descartando confirmación debido a una selección de archivos vacía."
 
@@ -35154,12 +35157,12 @@ msgstr ""
 "mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; H)"
-"<sup>0,725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
+"H)<sup>0,725</sup>___</center>\n"
 "donde:<br>\n"
 "___I___ es la corriente máxima en A<br>\n"
-"___&Delta;T___ es la elevación de temperatura sobre la ambiente en &deg;C<br>"
-"\n"
+"___&Delta;T___ es la elevación de temperatura sobre la ambiente en "
+"&deg;C<br>\n"
 "___W___ es el ancho en mils<br>\n"
 "___H___ es el grosor (altura) en mils<br>\n"
 "___K___ es 0,024 para pistas internas o 0,048 para pistas externas\n"
@@ -36308,10 +36311,10 @@ msgstr "NPTH"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:395
 #: pcbnew/dialogs/dialog_export_2581.cpp:166
 #: pcbnew/dialogs/dialog_export_2581.cpp:173
-#: pcbnew/dialogs/dialog_export_2581.cpp:417
+#: pcbnew/dialogs/dialog_export_2581.cpp:429
 #: pcbnew/dialogs/dialog_export_2581.h:95
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:177
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:164
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:188
 #: pcbnew/widgets/search_handlers.cpp:889
 #: pcbnew/widgets/search_handlers.cpp:890
 msgid "N/A"
@@ -38350,8 +38353,8 @@ msgstr "Permisos insuficientes para escribir el archivo '%s'."
 msgid "Generate IPC-2581 File"
 msgstr "Generar archivo IPC-2581"
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:284
-#: pcbnew/pcbnew_jobs_handler.cpp:2550
+#: pcbnew/dialogs/dialog_export_2581.cpp:289
+#: pcbnew/pcbnew_jobs_handler.cpp:2564
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -38360,7 +38363,7 @@ msgstr ""
 "Error al generar el archivo IPC-2581 '%s'.\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:303
+#: pcbnew/dialogs/dialog_export_2581.cpp:308
 msgid "IPC-2581 file generated successfully."
 msgstr "Archivo IPC-2581 generado correctamente."
 
@@ -38401,16 +38404,28 @@ msgstr "Comprimir salida"
 msgid "Compress output into 'zip' file"
 msgstr "Comprimir la salida a un archivo 'zip'"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:108
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:94
+#, fuzzy
+msgid "BOM revision:"
+msgstr "Revisión:"
+
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:96
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:101
+msgid ""
+"Revision string for the BOM section. Auto-populated from schematic title "
+"block revision"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:119
 msgid "BOM Columns"
 msgstr "Columnas de BOM"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:121
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:132
 msgid "Internal ID:"
 msgstr "ID interno:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:123
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:131
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:134
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:142
 msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
@@ -38418,37 +38433,37 @@ msgstr ""
 "El número de identificación de parte usado internamente durante el diseño.\n"
 "Este número debe de ser único para cada parte."
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:127
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:138
 msgid "Generate unique"
 msgstr "Generar único"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:135
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:146
 msgid "Manufacturer P/N:"
 msgstr "N/P del fabricante:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:137
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:145
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:148
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:156
 msgid "Column containing the manufacturer part number"
 msgstr "Columna que contiene el número de parte del fabricante"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:141
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:165
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:152
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:176
 msgid "Omit"
 msgstr "Omitir"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:149
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 msgid "Manufacturer:"
 msgstr "Fabricante:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:161
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:172
 msgid "Distributor P/N:"
 msgstr "P/N del distribuidor:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:169
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:180
 msgid "Column containing the distributor part number"
 msgstr "Columna que contiene el número de parte del distribuidor"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:173
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:184
 msgid "Distributor:"
 msgstr "Distribuidor:"
 
@@ -39130,8 +39145,8 @@ msgstr "Margen de pasta de soldadura:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Margen local de pasta de soldadura para esta huella.\n"
@@ -39222,7 +39237,7 @@ msgstr "Desplazamiento Y"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:68
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:80
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:56
-#: pcbnew/plot_board_layers.cpp:162
+#: pcbnew/plot_board_layers.cpp:163
 msgid "Reference designator"
 msgstr "Indicador de referencia"
 
@@ -39341,8 +39356,8 @@ msgstr "Permitir aperturas de máscara de soldadura puenteadas entre pads"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Margen de pasta de soldadura relativo al tamaño del pad.\n"
@@ -41091,7 +41106,8 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr "Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
+msgstr ""
+"Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -41152,8 +41168,8 @@ msgstr "Propiedades de pad por defecto para la herramienta de añadir pad"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Margen local de pasta de soldadura para este pad.\n"
@@ -44431,26 +44447,26 @@ msgstr "Reglas de DRC"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:745
 #: pcbnew/drc/drc_rule_condition.cpp:64
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:923
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:940
 msgid "ERROR:"
 msgstr "ERROR:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:777
+#: pcbnew/dialogs/panel_setup_rules.cpp:780
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
 msgstr "Las reglas '%s' y '%s' comparten la misma condición."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:797
+#: pcbnew/dialogs/panel_setup_rules.cpp:800
 #, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
 msgstr "La regla '%s' hace referencia a la clase de nodo '%s' no definida."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:820
+#: pcbnew/dialogs/panel_setup_rules.cpp:823
 #, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
 msgstr "La regla '%s' hace referencia a capa(s) no definida(s): %s."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:884
+#: pcbnew/dialogs/panel_setup_rules.cpp:887
 msgid "Design rules cannot be added without a project"
 msgstr "No se pueden añadir reglas de diseño sin un proyecto"
 
@@ -44537,8 +44553,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -44742,115 +44758,110 @@ msgid ""
 msgstr ""
 "### Restricciones\n"
 "\n"
-"| Tipo de restricción       | Tipo de argumento"
-"                                                                                                     "
-"| Descripción"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"| Tipo de restricción       | Tipo de "
+"argumento                                                                                                     "
+"| "
+"Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------"
-"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Comprueba el ancho de los anillos anulares en las vías."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                           "
-"| Comprueba el ancho de los anillos anulares en las vías.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
-"| `assertion`               | \"&lt;expresión>"
-"\"                                                                                                      "
-"| Comprueba la expresión indicada.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                    "
+"| `assertion`               | "
+"\"&lt;expresión>\"                                                                                                      "
+"| Comprueba la expresión indicada."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
 "| Comprueba si hay puentes de máscara de soldadura entre elementos de cobre. "
 "Esta restricción no acepta un valor min/opt/max. Combinada con una cláusula "
 "de severidad, esta restricción puede usarse para permitir o prohibir el "
-"puenteo de máscara de soldadura en diversas condiciones.<br>"
-"                                                                                                                                                             "
+"puenteo de máscara de soldadura en diversas condiciones."
+"<br>                                                                                                                                                             "
 "|\n"
-"| `clearance`               | min"
-"                                                                                                                   "
+"| `clearance`               | "
+"min                                                                                                                   "
 "| Especifica el margen **eléctrico** entre objetos de cobre de redes "
 "diferentes. (Véase `physical_clearance` para especificar el margen entre "
 "objetos independientemente de la red.)<br><br>Para permitir que los objetos "
 "de cobre se superpongan (colisionen), cree una restricción `clearance` con "
-"el valor `min` inferior a cero (por ejemplo, `-1`).<br>"
-"                                                                                              "
+"el valor `min` inferior a cero (por ejemplo, `-1`)."
+"<br>                                                                                              "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                   "
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
 "| Comprueba el margen entre las áreas de cortesía de las huellas y genera un "
 "error si dos áreas de cortesía están más cerca que la distancia `min`. Si "
 "una huella no tiene forma de área de cortesía, esta restricción no generará "
-"errores.<br>"
-"                                                                                                                                                                                                           "
+"errores."
+"<br>                                                                                                                                                                                                           "
 "|\n"
-"| `creepage`                | min"
-"                                                                                                                   "
-"| Especifica la distancia de fuga entre objetos de cobre de redes "
-"diferentes.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                         "
+"| `creepage`                | "
+"min                                                                                                                   "
+"| Especifica la distancia de fuga entre objetos de cobre de redes diferentes."
+"<br>                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                           "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
 "| Comprueba la separación entre las pistas acopladas de un par diferencial. "
 "Las pistas acopladas son segmentos paralelos entre sí. La separación del par "
 "diferencial no se verifica en las porciones no acopladas (por ejemplo, la "
-"salida desde un componente).<br>"
-"                                                                                                                                                                                       "
+"salida desde un componente)."
+"<br>                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                   "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
 "| Comprueba la distancia en la que una pista de par diferencial se enruta "
 "desacoplada de la pista de polaridad opuesta del par (por ejemplo, donde el "
 "par se separa desde un componente, o se desacopla para rodear otro objeto "
-"como una vía).<br>"
-"                                                                                                                                                                                                        "
+"como una vía)."
+"<br>                                                                                                                                                                                                        "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`through_via`<br>"
-"`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>"
-"`graphic`<br>`hole`<br>`footprint`<br> | Especifique uno o más tipos de "
-"objeto a prohibir, separados por espacios. Por ejemplo, `(constraint "
-"disallow track)` o `(constraint disallow track via pad)`. Si un objeto de "
-"este tipo coincide con la condición de la regla, se generará un error de "
-"DRC.<br><br>Esta restricción es esencialmente lo mismo que un área "
-"restringida, pero puede usarse para crear restricciones más específicas.<br>"
-"                                                   |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                           "
+"| `disallow`                | "
+"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Especifique uno o más tipos de objeto a prohibir, separados por espacios. "
+"Por ejemplo, `(constraint disallow track)` o `(constraint disallow track via "
+"pad)`. Si un objeto de este tipo coincide con la condición de la regla, se "
+"generará un error de DRC.<br><br>Esta restricción es esencialmente lo mismo "
+"que un área restringida, pero puede usarse para crear restricciones más "
+"específicas.<br>                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
 "| Comprueba el margen entre objetos y el borde de la placa.<br><br>También "
 "puede considerarse como la \"tolerancia de fresado\", ya que el borde de la "
 "placa incluirá todos los elementos gráficos de la capa `Edge.Cuts` así como "
 "cualquier agujero *ovalado* de pad. (Véase `physical_hole_clearance` para la "
-"tolerancia de taladrado.)<br>"
-"                                                                                                              "
+"tolerancia de "
+"taladrado.)<br>                                                                                                              "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                               "
+"| `length`                  | min/"
+"max                                                                                                               "
 "| Comprueba la longitud total enrutada de las redes que coinciden con la "
 "condición de la regla y genera un error para cada red que esté por debajo "
 "del valor `min` (si se especifica) o por encima del valor `max` (si se "
-"especifica).<br>"
-"                                                                                                                                                                                                                 "
+"especifica)."
+"<br>                                                                                                                                                                                                                 "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                               "
+"| `hole`                    | min/"
+"max                                                                                                               "
 "| Comprueba el tamaño (diámetro) de un agujero taladrado en un pad o vía. "
 "Para agujeros ovalados, el diámetro menor se comprobará contra el valor "
 "`min` (si se especifica) y el diámetro mayor se comprobará contra el valor "
-"`max` (si se especifica).<br>"
-"                                                                                                                                                                                               "
+"`max` (si se especifica)."
+"<br>                                                                                                                                                                                               "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                   "
+"| `hole_clearance`          | "
+"min                                                                                                                   "
 "| Comprueba el margen entre un agujero taladrado en un pad o vía y objetos "
 "de cobre de una red diferente. El margen se mide desde el diámetro del "
-"agujero, no desde su centro.<br>"
-"                                                                                                                                                                                                                                                                       "
+"agujero, no desde su centro."
+"<br>                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                   "
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
 "| Comprueba el margen entre agujeros taladrados mecánicamente en pads y "
 "vías. El margen se mide entre los diámetros de los agujeros, no entre sus "
 "centros.<br><br>Esta restricción es exclusivamente para la protección de las "
@@ -44858,108 +44869,106 @@ msgstr ""
 "(microvías) y otros agujeros no taladrados mecánicamente, ni el margen entre "
 "agujeros **fresados** (ovalados) y otros agujeros no taladrados "
 "mecánicamente.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                   "
+"| `physical_clearance`      | "
+"min                                                                                                                   "
 "| Comprueba el margen entre dos objetos en una capa dada (incluidas las "
 "capas sin cobre).<br><br>Aunque puede realizar comprobaciones más generales "
-"que `clearance`, es mucho más lento. Use `clearance` cuando sea posible.<br>"
-"                                                                                                                                                                                                                          "
+"que `clearance`, es mucho más lento. Use `clearance` cuando sea posible."
+"<br>                                                                                                                                                                                                                          "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                   "
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
 "| Comprueba el margen entre un agujero taladrado en un pad o vía y otro "
 "objeto, independientemente de la red. El margen se mide desde el diámetro "
 "del agujero, no desde su centro.<br><br>También puede considerarse como la "
 "\"tolerancia de taladrado\", ya que solo incluye agujeros **redondos** "
-"(véase `edge_clearance` para la tolerancia de fresado).<br>"
-"                                                                                             "
+"(véase `edge_clearance` para la tolerancia de fresado)."
+"<br>                                                                                             "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                           "
-"| Comprueba el margen entre objetos en capas de serigrafía y otros "
-"objetos.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                           "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Comprueba el margen entre objetos en capas de serigrafía y otros objetos."
+"<br>                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                   "
+"| `skew`                    | "
+"max                                                                                                                   "
 "| Comprueba la desviación total de las redes que coinciden con la condición "
 "de la regla, es decir, la diferencia entre la longitud de cada red y el "
 "promedio de todas las longitudes de cada red que coincide con la regla. Si "
 "el valor absoluto de la diferencia entre ese promedio y la longitud de "
-"cualquier red supera el valor `max` de la restricción, se generará un "
-"error.<br>"
-"                                                                      |\n"
-"| `solder_mask_expansion`   | opt"
-"                                                                                                                   "
+"cualquier red supera el valor `max` de la restricción, se generará un error."
+"<br>                                                                      |\n"
+"| `solder_mask_expansion`   | "
+"opt                                                                                                                   "
 "| Especifica la expansión de la máscara de soldadura para pads, formas y "
 "pistas.                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `solder_paste_abs_margin` | opt"
-"                                                                                                                   "
+"| `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
 "| Especifica el margen absoluto de pasta de soldadura para pads. Normalmente "
 "negativo para reducir la pasta.<br><br>El margen final de pasta de soldadura "
 "será el margen absoluto más el margen "
 "relativo.                                                                                                                                                                                                                                                  "
 "|\n"
-"| `solder_paste_rel_margin` | opt"
-"                                                                                                                   "
+"| `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
 "| Especifica el margen relativo de pasta de soldadura para pads. Normalmente "
 "negativo para reducir la pasta.<br><br>El margen final de pasta de soldadura "
 "será el margen absoluto más el margen "
 "relativo.                                                                                                                                                                                                                                                  "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                   "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
 "| Especifica el ancho del espacio entre un pad y una zona con conexión de "
-"alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                             "
+"alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                   "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
 "| Especifica el ancho de los radios que conectan un pad a una zona con "
-"conexión de alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                    "
+"conexión de alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                           "
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
 "| Comprueba el ancho de los segmentos de pista y arco. Se generará un error "
 "para cada segmento que tenga un ancho inferior al valor `min` (si se "
-"especifica) o superior al valor `max` (si se especifica).<br>"
-"                                                                                                                                                                                                                                            "
+"especifica) o superior al valor `max` (si se especifica)."
+"<br>                                                                                                                                                                                                                                            "
 "|\n"
-"| `track_angle`             | min/opt/max"
-"                                                                                                           "
+"| `track_angle`             | min/opt/"
+"max                                                                                                           "
 "| Comprueba el ángulo entre dos segmentos de pista conectados. Se generará "
 "un error para cada par conectado con un ángulo inferior al valor `min` (si "
-"se especifica) o superior al valor `max` (si se especifica).<br>"
-"                                                                                                                                                                                                                                    "
+"se especifica) o superior al valor `max` (si se especifica)."
+"<br>                                                                                                                                                                                                                                    "
 "|\n"
-"| `track_segment_length`    | min/max"
-"                                                                                                               "
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
 "| Comprueba la longitud de los segmentos de pista y arco. Se generará un "
 "error para cada segmento que tenga una longitud inferior al valor `min` (si "
-"se especifica) o superior al valor `max` (si se especifica).<br>"
-"                                                                                                                                                                                                                                     "
+"se especifica) o superior al valor `max` (si se especifica)."
+"<br>                                                                                                                                                                                                                                     "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                   "
+"| `via_count`               | "
+"max                                                                                                                   "
 "| Cuenta el número de vías en cada red que coincide con la condición de la "
 "regla. Si ese número supera el valor `max` de la restricción en cualquier "
-"red coincidente, se generará un error para esa red.<br>"
-"                                                                                                                                                                                                                                              "
+"red coincidente, se generará un error para esa red."
+"<br>                                                                                                                                                                                                                                              "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
 "| Comprueba si hay vías no conectadas o conectadas en una sola capa. Esta "
 "restricción no acepta un valor min/opt/max. Combinada con una cláusula de "
 "severidad, esta restricción puede usarse para permitir o prohibir vías "
-"colgantes en diversas condiciones.<br>"
-"                                                                                                                                                                                         "
+"colgantes en diversas condiciones."
+"<br>                                                                                                                                                                                         "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                "
-"| Especifica el tipo de conexión entre una zona y un pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                             "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| Especifica el tipo de conexión entre una zona y un pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
 "\n"
 "\n"
@@ -44978,8 +44987,8 @@ msgstr ""
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
-"_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
+"binarias)_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -45149,8 +45158,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45343,8 +45352,8 @@ msgstr ""
 "```\n"
 "> Verdadero si todo `A` se encuentra dentro del contorno de la zona dada.\n"
 "\n"
-"> Nota: esta es potencialmente una llamada más costosa que `intersectsArea()"
-"`.\n"
+"> Nota: esta es potencialmente una llamada más costosa que "
+"`intersectsArea()`.\n"
 "Use `intersectsArea()` cuando sea posible.\n"
 "\n"
 "\n"
@@ -45534,13 +45543,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45695,13 +45704,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45815,8 +45824,8 @@ msgstr ""
 "enterrada antes de\n"
 "    # perforar con láser las microvías.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -47077,7 +47086,8 @@ msgstr "Expresión de afirmación faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:705
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr "La opción within_diff_pairs no es válida para este tipo de restricción."
+msgstr ""
+"La opción within_diff_pairs no es válida para este tipo de restricción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:719
 msgid "Missing min value."
@@ -47220,7 +47230,7 @@ msgstr "Comprobando el solapamiento del patios de huellas..."
 msgid "Checking creepage..."
 msgstr "Comprobando distancia de fuga..."
 
-#: pcbnew/drc/drc_test_provider_creepage.cpp:182
+#: pcbnew/drc/drc_test_provider_creepage.cpp:166
 #, c-format
 msgid "(%s creepage %s; actual %s)"
 msgstr "(%s distancia de fuga %s; real %s)"
@@ -47839,7 +47849,8 @@ msgstr "Al pad le falta la red indicada por el esquema (%s)"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:298
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
-msgstr "La red del pad (%s) no coincide con la red indicada por el esquema (%s)"
+msgstr ""
+"La red del pad (%s) no coincide con la red indicada por el esquema (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:331
 #, c-format
@@ -48007,7 +48018,7 @@ msgstr ""
 msgid "Are you sure you want to delete?"
 msgstr "¿Está seguro de que desea eliminar?"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1224
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1227
 msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
@@ -48015,7 +48026,7 @@ msgstr ""
 "Varias reglas con el mismo nombre tienen condiciones diferentes. Las reglas "
 "con el mismo nombre deben tener condiciones idénticas para poder fusionarse."
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1243
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1246
 msgid ""
 "The following rules have unsaved changes:\n"
 "\n"
@@ -48023,7 +48034,7 @@ msgstr ""
 "Las siguientes reglas tienen cambios sin guardar:\n"
 "\n"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1248
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1251
 msgid ""
 "\n"
 "Do you want to save your changes?"
@@ -48031,7 +48042,7 @@ msgstr ""
 "\n"
 "¿Desea guardar los cambios?"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1415
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1418
 #, c-format
 msgid "Failed to reload DRC rules: %s"
 msgstr "Error al recargar las reglas DRC: %s"
@@ -48050,7 +48061,12 @@ msgstr ""
 "La tolerancia es demasiado grande: la longitud mínima resultante no es "
 "positiva"
 
-#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:204
+#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:210
+#, fuzzy
+msgid "At least one constraint must be defined"
+msgstr "Se debe especificar al menos una restricción"
+
+#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:216
 msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "La desviación máxima debe ser mayor o igual que 0"
 
@@ -48121,7 +48137,7 @@ msgstr "Objeto B"
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:71
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:62
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1046
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1063
 msgid "Any"
 msgstr "Cualquiera"
 
@@ -48204,16 +48220,16 @@ msgstr "Permitir capa inferior"
 msgid "At least one layer must be selected"
 msgstr "Se debe seleccionar al menos una capa"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:69
 msgid "Optimum Width must be greater than 0"
 msgstr "El ancho óptimo debe ser mayor que 0"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:72
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:85
 msgid "Width Tolerance must be greater than or equal to 0"
 msgstr "La tolerancia de ancho debe ser mayor o igual que 0"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:75
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:88
 msgid "Width Tolerance must be less than Optimum Width"
 msgstr "La tolerancia de ancho debe ser menor que el ancho óptimo"
@@ -48328,42 +48344,42 @@ msgstr "Tipo de regla"
 msgid "Rule name"
 msgstr "Nombre de regla"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:426
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:443
 msgid "Rule name must be unique."
 msgstr "El nombre de regla debe ser único."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:434
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:451
 msgid "Layer selection is required."
 msgstr "Se requiere seleccionar una capa."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:906
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:923
 msgid "ERROR: No condition text provided for validation."
 msgstr "ERROR: No se proporcionó texto de condición para la validación."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:917
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:934
 msgid "DRC rule"
 msgstr "Regla DRC"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1025
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1042
 msgid "Show Matches (error)"
 msgstr "Mostrar coincidencias (error)"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1029
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1046
 #, c-format
 msgid "Show Matches (%d)"
 msgstr "Mostrar coincidencias (%d)"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1037
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1054
 msgid "Show Matches"
 msgstr "Mostrar coincidencias"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1051
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1093
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1068
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1110
 msgid "outer"
 msgstr "externas"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1053
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1095
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1070
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1112
 msgid "inner"
 msgstr "internas"
 
@@ -48952,7 +48968,8 @@ msgstr "Finalizando placa"
 
 #: pcbnew/files.cpp:786 pcbnew/pcb_edit_frame.cpp:1600
 msgid "Could not load component class assignment rules"
-msgstr "No se pudieron cargar las reglas de asignación de clases de componentes"
+msgstr ""
+"No se pudieron cargar las reglas de asignación de clases de componentes"
 
 #: pcbnew/files.cpp:842 pcbnew/footprint_libraries_utils.cpp:467
 #: pcbnew/footprint_libraries_utils.cpp:1157 pcbnew/tools/pcb_control.cpp:151
@@ -48975,7 +48992,7 @@ msgid "Error saving custom rules file '%s'."
 msgstr "Error al guardar el archivo de reglas personalizadas '%s'."
 
 #: pcbnew/files.cpp:1094 pcbnew/files.cpp:1185
-#: pcbnew/pcb_design_block_utils.cpp:112 pcbnew/pcbnew_jobs_handler.cpp:2737
+#: pcbnew/pcb_design_block_utils.cpp:112 pcbnew/pcbnew_jobs_handler.cpp:2751
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -49234,8 +49251,8 @@ msgstr ""
 "No se permite escribir/modificar bibliotecas de legado (archivos .mod)\n"
 "Por favor, guarde la biblioteca actual en el nuevo formato .pretty\n"
 "y actualice su tabla de bibliotecas de huellas\n"
-"para guardar la huella (un archivo .kicad_mod) en la carpeta de biblioteca ."
-"pretty"
+"para guardar la huella (un archivo .kicad_mod) en la carpeta de "
+"biblioteca .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:75
 msgid ""
@@ -49965,8 +49982,8 @@ msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está bloqueada)"
-"."
+"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está "
+"bloqueada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:353
 #, c-format
@@ -50152,7 +50169,8 @@ msgstr "Añadir el atributo 'los números de pad duplicados son puentes' de %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:878
 #, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "Eliminar el atributo 'los números de pad duplicados son puentes' de %s."
+msgstr ""
+"Eliminar el atributo 'los números de pad duplicados son puentes' de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:892
 #, c-format
@@ -50408,8 +50426,8 @@ msgstr "Procesando el símbolo '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2007
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Advertencia: a la huella '%s' de %s le falta el nombre de biblioteca. Use el "
 "formato completo 'Biblioteca:Huella' para evitar notificaciones de "
@@ -51280,8 +51298,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "Este archivo no parece estar en un formato válido de PCB Binary Version 6.0. "
-"En Altium Designer, asegúrese de guardar como \"PCB Binary Files (*."
-"PcbDoc)\"."
+"En Altium Designer, asegúrese de guardar como \"PCB Binary Files (*.PcbDoc)"
+"\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:558
 #, c-format
@@ -51471,7 +51489,7 @@ msgstr "Cargando arcos..."
 msgid "Loading pads..."
 msgstr "Cargando pads..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3558
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3563
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51481,12 +51499,12 @@ msgstr ""
 "El pad %s de la huella %s no está marcado como multicapa, pero es un pad de "
 "agujero pasante."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3571
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3576
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "Huella %s pad %s no marcado como multicapa, pero es un pad pasante."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3600
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3605
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51495,12 +51513,12 @@ msgstr ""
 "Cargando biblioteca '%s':\n"
 "La huella %s pad %s tiene un agujero cuadrado (aún no soportado)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3613
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3618
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Huella %s pad %s tiene un orificio cuadrado (todavía no soportado)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3648
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3653
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51511,7 +51529,7 @@ msgstr ""
 "La huella %s pad %s tiene una rotación de agujero de %d grados. KiCad solo "
 "admite rotaciones de 90 grados."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3663
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3668
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
@@ -51520,7 +51538,7 @@ msgstr ""
 "La huella %s pad %s tiene una rotación de agujero de %d grados. KiCad solo "
 "admite rotaciones de 90 grados."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3683
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3688
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51529,12 +51547,12 @@ msgstr ""
 "Error al cargar la biblioteca '%s':\n"
 "El pad %s de la huella %s usa un agujero de tipo desconocido %d."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3697
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3762
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3767
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51543,12 +51561,12 @@ msgstr ""
 "Error al cargar la biblioteca '%s':\n"
 "El pad %s de la huella %s usa una forma de pad desconocida."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3775
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3780
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "La huella %s pad %s usa una forma de pad desconocida."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3877
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3882
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -51557,7 +51575,7 @@ msgstr ""
 "Se ha encontrado un pad que no es de cobre %s en una capa de Altium (%d) sin "
 "un equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3905
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3910
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51568,7 +51586,7 @@ msgstr ""
 "El pad sin cobre %s de la huella %s se encontró en una capa de Altium (%d) "
 "sin equivalente en KiCad. Se ha movido a la capa Eco1_User de KiCad."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3920
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3925
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -51577,36 +51595,36 @@ msgstr ""
 "El pad sin cobre %s de la huella %s se encontró en una capa de Altium (%d) "
 "sin equivalente en KiCad. Se ha movido a la capa Eco1_User de KiCad."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3948
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3953
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Un pad que no es de cobre %s está conectado a una red, esto no está "
 "soportado."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3959
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3964
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 "Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3969
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3974
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Un pad que no es de cobre %s tiene un apilado de pads complejo (todavía no "
 "soportado)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4116
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4121
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "El pad sin cobre %s usa una forma de pad desconocida."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4129
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4134
 msgid "Loading vias..."
 msgstr "Cargando vías..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4177
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4182
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -51614,24 +51632,24 @@ msgstr ""
 "Una vía de capa %d a %d utiliza una capa que no es de cobre, esto no está "
 "soportado."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4240
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4247
 msgid "Loading tracks..."
 msgstr "Cargando pistas..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4457
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4464
 msgid "Loading unicode strings..."
 msgstr "Cargando cadenas unicode..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4471
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4478
 msgid "Loading text..."
 msgstr "Cargando texto..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4756
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4763
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Justificación de cuadro de texto desconocida %d, aText %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4912
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4919
 msgid "Loading rectangles..."
 msgstr "Cargando rectángulos..."
 
@@ -52493,71 +52511,71 @@ msgstr "Archivo de huella PCB de gEDA / Lepton EDA"
 msgid "gEDA / Lepton EDA PCB footprint library directory"
 msgstr "Directorio de biblioteca de huellas PCB de gEDA / Lepton EDA"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:432
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:437
 msgid "Generating content section"
 msgstr "Generando sección de contenido"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1018
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1024
 msgid "Pad has unsupported type; it was skipped."
 msgstr "El pad tiene un tipo no soportado; se ha omitido."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1409
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1415
 msgid "Generating history section"
 msgstr "Generando sección de historia"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1437
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3823
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1443
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3872
 msgid "Generating BOM section"
 msgstr "Generando sección de BOM"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1498
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1504
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
 msgstr ""
 "Huella %s no encontrada en el diccionario; los datos de la lista de "
 "materiales pueden estar incompletos."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1514
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1520
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
 "Al componente \"%s\" le falta la referencia OEM; la entrada de la lista de "
 "materiales se omitirá."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1621
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1635
 msgid "Generating CAD data"
 msgstr "Generando datos de CAD"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2740
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2747
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
 "El contorno de la placa no es válido o no existe. Ejecute la verificación de "
 "reglas de diseño."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3143
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3204
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
 "Se encontraron punteros de huellas duplicados; la salida IPC-2581 puede ser "
 "incorrecta."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3328
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3386
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Exportando capa %s, red %s"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3364
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3422
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 "La vía usa un padstack no soportado; se ha omitido de los datos de taladro."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3391
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3449
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 "El pad usa un padstack no soportado; el agujero se ha omitido de los datos "
 "de taladro."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3534
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3592
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
@@ -52565,15 +52583,15 @@ msgstr ""
 "Las lágrimas no son compatibles con la revisión B de IPC-2581; se exportaron "
 "como zonas."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4019
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4072
 msgid "Generating logistic section"
 msgstr "Generando sección logística"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4031
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4118
 msgid "Saving file"
 msgstr "Guardando archivo"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4063
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4150
 msgid "Failed to save IPC-2581 data to buffer."
 msgstr "Error al guardar los datos IPC-2581 en el búfer."
 
@@ -52939,44 +52957,44 @@ msgstr "Iniciando importación de PCB PADS"
 msgid "Footprint '%s' not found in decal list, part skipped"
 msgstr "Huella '%s' no encontrada en la lista de calcas, pieza omitida"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:977
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1050
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
 msgstr "Omitiendo elemento de calcomanía en capa no mapeada %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1238
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1311
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
 msgstr "Texto en capa no mapeada %d asignado a la capa de comentarios"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1315
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1388
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
 #, c-format
 msgid "Skipping track on non-copper layer %d"
 msgstr "Omitiendo pista en capa sin cobre %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1548
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1621
 #, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr "Elemento de COBRE en capa no mapeada %d, asignado a F.Cu por defecto"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1794
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1867
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "Omitiendo relleno en capa no mapeada %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2090
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2163
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "Omitiendo área restringida en capa no mapeada %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2114
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2187
 msgid "Skipping keepout with no valid layers"
 msgstr "Omitiendo área restringida sin capas válidas"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2311
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2384
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
@@ -53018,8 +53036,8 @@ msgid ""
 msgstr ""
 "El archivo seleccionado contiene múltiples huellas. Solo se importará la "
 "primera.\n"
-"Para cargar todas las huellas, añádalo como biblioteca usando "
-"Preferencias -> Gestionar bibliotecas de huellas..."
+"Para cargar todas las huellas, añádalo como biblioteca usando Preferencias "
+"-> Gestionar bibliotecas de huellas..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -53054,8 +53072,8 @@ msgstr "Clave para el <b>login</b> en algún servidor especial de bibliotecas."
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Introduzca el módulo de python que implementa las funciones de PCB_IO::"
-"Footprint*()."
+"Introduzca el módulo de python que implementa las funciones de "
+"PCB_IO::Footprint*()."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -53437,8 +53455,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -53485,9 +53503,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{sobrelínea}</samp><br> &nbsp;<br><samp>~{CLK}"
 "</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>sobrelínea</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>sobrelínea</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -53536,8 +53554,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:campo}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>valor_del_campo</i> de la huella <i>refdes</i>"
-"</samp></td>\n"
+"        <td>&nbsp;<br><samp><i>valor_del_campo</i> de la huella <i>refdes</"
+"i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:REFERENCE}</samp></td>\n"
@@ -53685,8 +53703,8 @@ msgstr ""
 "samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"Alto\", \"Bajo\")}</samp></td>"
-"\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"Alto\", \"Bajo\")}</samp></"
+"td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Las comparaciones numéricas también funcionan</"
 "samp></td>\n"
@@ -54090,7 +54108,7 @@ msgstr ""
 msgid "Loading Footprint Libraries"
 msgstr "Cargando bibliotecas de huellas"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:452 pcbnew/pcbnew_jobs_handler.cpp:2918
+#: pcbnew/pcbnew_jobs_handler.cpp:452 pcbnew/pcbnew_jobs_handler.cpp:2932
 msgid "Failed to load board\n"
 msgstr "Error al cargar la placa\n"
 
@@ -54233,7 +54251,7 @@ msgstr "Placa guardada\n"
 msgid "Failed to save board.\n"
 msgstr "Error al guardar la placa.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2589
+#: pcbnew/pcbnew_jobs_handler.cpp:2603
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -54242,48 +54260,48 @@ msgstr ""
 "Error al generar el archivo IPC-2581 '%s'.\n"
 "No se pudo renombrar el archivo temporal '%s."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2635
+#: pcbnew/pcbnew_jobs_handler.cpp:2649
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "Archivo IPC-D-356 creado correctamente\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2640
+#: pcbnew/pcbnew_jobs_handler.cpp:2654
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "Error al crear el archivo IPC-D-356\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2727
+#: pcbnew/pcbnew_jobs_handler.cpp:2741
 msgid "Successfully saved board file using the latest format\n"
 msgstr "Archivo de placa guardado correctamente con el formato más reciente\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2731
+#: pcbnew/pcbnew_jobs_handler.cpp:2745
 msgid "Board file was not updated\n"
 msgstr "El archivo de placa no se actualizó\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2869
+#: pcbnew/pcbnew_jobs_handler.cpp:2883
 #, c-format
 msgid "Unable to determine file format for '%s'\n"
 msgstr "No se puede determinar el formato del archivo para '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2878
+#: pcbnew/pcbnew_jobs_handler.cpp:2892
 #, c-format
 msgid "Input file not found: '%s'\n"
 msgstr "Archivo de entrada no encontrado: '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2904
+#: pcbnew/pcbnew_jobs_handler.cpp:2918
 #, c-format
 msgid "No plugin found for file type '%s'\n"
 msgstr "No se encontró ningún complemento para el tipo de archivo '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2910
+#: pcbnew/pcbnew_jobs_handler.cpp:2924
 #, c-format
 msgid "Importing '%s' using %s format...\n"
 msgstr "Importando '%s' con formato %s...\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2926
+#: pcbnew/pcbnew_jobs_handler.cpp:2940
 #, c-format
 msgid "Successfully saved imported board to '%s'\n"
 msgstr "Placa importada guardada correctamente en '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:3048
+#: pcbnew/pcbnew_jobs_handler.cpp:3062
 #, c-format
 msgid "Error during import: %s\n"
 msgstr "Error durante la importación: %s\n"
@@ -54292,7 +54310,7 @@ msgstr "Error durante la importación: %s\n"
 msgid "Multiple Layers"
 msgstr "Múltiples capas"
 
-#: pcbnew/plot_board_layers.cpp:1283
+#: pcbnew/plot_board_layers.cpp:1307
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr "El trazado HPGL ya no es compatible a partir de KiCad 10.0"
 
@@ -58065,7 +58083,8 @@ msgstr "Cancelar elemento actual"
 
 #: pcbnew/tools/pcb_actions.cpp:2677
 msgid "Skip current item and route next selected item."
-msgstr "Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
+msgstr ""
+"Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid ""
@@ -59810,94 +59829,102 @@ msgstr "alivios térmicos para PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] error al cargar: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Mapa de bits;Conversor;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Conversor de mapas de bits en componentes"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Crear un componente desde un mapa de bits para utilizarlo con KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Editor de esquemas de KiCad (independiente)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Herramienta de captura de esquema"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editor de esquemas independiente para esquemas de KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Visor de archivos Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Ver archivos Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projectmanager;Administrador;Proyecto;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "Suite EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Conjunto de herramientas para el diseño de esquemas y de placas de circuitos"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculadora de placas de KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "PCB;Placa;Calculadora;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "Calculadora de placas"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculadora para varios cálculos relacionados con la electrónica"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Placa;Circuito;Diseño;Editor;Huella;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editor de placas de KiCad (independiente)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Editor de placas"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor de placas independiente para placas de KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Una suite EDA para el diseño de esquemas y placas de circuitos"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "Placa de circuito impreso"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -59955,6 +59982,9 @@ msgstr "Símbolo esquemático de KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Hoja de dibujo de KiCad"
+
+#~ msgid "PCB: Import"
+#~ msgstr "PCB: Importar"
 
 #, fuzzy
 #~ msgid "Outset must be a positive value."
@@ -60835,8 +60865,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -60887,9 +60917,9 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -60976,8 +61006,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Definición de bus</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Redes resultantes</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61028,9 +61058,9 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -62354,12 +62384,6 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "Crear una nueva biblioteca de huellas que contenga todas las huellas "
 #~ "usadas en la placa\n"
 #~ "(si la biblioteca ya existe, será remplazada)"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Placa de circuito impreso"
 
 #, c-format
 #~ msgid ""
@@ -65691,8 +65715,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -65824,13 +65848,13 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -65914,8 +65938,9 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+#~ "pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Cláusulas de nivel superior\n"
 #~ "\n"
@@ -66163,13 +66188,13 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"  \n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"  \n"
@@ -66926,8 +66951,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
 #~ "functions."
 #~ msgstr ""
-#~ "Introduzca el símbolo de python que implementa las funciones SCH_PLUGIN::"
-#~ "Symbol*()."
+#~ "Introduzca el símbolo de python que implementa las funciones "
+#~ "SCH_PLUGIN::Symbol*()."
 
 #~ msgid "Gerber (experimental)"
 #~ msgstr "Gerber (experimental)"
@@ -67601,8 +67626,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -67791,8 +67816,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -74422,8 +74447,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
-#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons "
+#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Solo DXF:\n"
@@ -75855,8 +75880,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "Una variable de entorno equivale a una cadena de texto.<br>Se utiliza "
 #~ "principalmente en rutas para hacer KiCad portabe entre plataformas."
 #~ "<br><br>>Si una variable de entorno se define como <b>MYLIBPATH</b> con "
-#~ "un valor <b>e:/kicad_libs</b>, entonces el nombre de una librería "
-#~ "<b>${MYLIBPATH}/milibreria.lib</b>, se expande a <b>e:/kicad_libs/"
+#~ "un valor <b>e:/kicad_libs</b>, entonces el nombre de una librería <b>$"
+#~ "{MYLIBPATH}/milibreria.lib</b>, se expande a <b>e:/kicad_libs/"
 #~ "milibreria.lib</b><br><br><b>Nota:</b><br>Solo los caracteres "
 #~ "<b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> están permitidos en los "
 #~ "nombres de las variables de entorno y el nombre no puede comenzar con una "
@@ -79935,8 +79960,8 @@ msgstr "Hoja de dibujo de KiCad"
 
 #~ msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 #~ msgstr ""
-#~ "Archivo s-expr de placas de circuito impreso de KiCad (*.kicad_pcb)|*."
-#~ "kicad_pcb"
+#~ "Archivo s-expr de placas de circuito impreso de KiCad (*.kicad_pcb)|"
+#~ "*.kicad_pcb"
 
 #~ msgid "Component-footprint link file (*.cmp)|*cmp"
 #~ msgstr "Archivo de vínculo Componente-Huella (*.cmp)|*cmp"
@@ -80667,8 +80692,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ msgstr "Trazar líneas en modo contorno"
 
 #~ msgid ""
-#~ "Otherwise plot with sketch lines in layers that don't support polygons (*."
-#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab) and plot in outline "
+#~ "Otherwise plot with sketch lines in layers that don't support polygons "
+#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab) and plot in outline "
 #~ "mode in other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "En otro caso trazar con líneas de boceto en capas que no soportan "

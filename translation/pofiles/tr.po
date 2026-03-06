@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-05 22:08+0300\n"
+"POT-Creation-Date: 2026-03-06 12:40-0800\n"
 "PO-Revision-Date: 2026-03-06 20:35+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
@@ -1796,7 +1796,7 @@ msgid "Image Converter"
 msgstr "Resim Dönüştürücü"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "KiCad Resim Dönüştürücü"
 
@@ -2138,7 +2138,7 @@ msgid "&Open Anyway"
 msgstr "&Yine de Aç"
 
 #: common/confirm.cpp:68 common/confirm.cpp:107
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1250
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1253
 msgid "Save Changes?"
 msgstr "Değişiklikler Kaydedilsin mi?"
 
@@ -2214,7 +2214,7 @@ msgid "&No"
 msgstr "&Hayır"
 
 #: common/design_block_io.cpp:51 common/design_block_io.cpp:61
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2349,7 +2349,7 @@ msgstr "Dahili hata"
 #: eeschema/sch_symbol.cpp:3317 eeschema/sch_symbol.cpp:3905
 #: eeschema/symbol_editor/symbol_editor.cpp:1750
 #: eeschema/symbol_viewer_frame.cpp:389 pcbnew/footprint.cpp:4828
-#: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:193
+#: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:194
 msgid "Keywords"
 msgstr "Anahtar kelimeler"
 
@@ -2459,7 +2459,7 @@ msgstr "Semboller"
 
 #: common/dialog_about/AboutDialog_main.cpp:915
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:37
-#: pcbnew/plot_board_layers.cpp:211
+#: pcbnew/plot_board_layers.cpp:212
 #: pcbnew/widgets/panel_selection_filter.cpp:221
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:138
@@ -2842,7 +2842,7 @@ msgstr "Varsayılan Alanlar"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:329
 #: pcbnew/footprint_wizard_frame.cpp:339 pcbnew/pcb_dimension.cpp:641
-#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:166
+#: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:167
 #: pcbnew/widgets/pcb_properties_panel.cpp:405
 #: pcbnew/widgets/search_handlers.cpp:141
 msgid "Value"
@@ -3096,6 +3096,7 @@ msgstr "Proje Adı"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1693
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "Baskı Devre"
 
@@ -3104,6 +3105,7 @@ msgstr "Baskı Devre"
 #: eeschema/widgets/hierarchy_pane.cpp:802
 #: eeschema/widgets/hierarchy_pane.cpp:808
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Şematik"
 
@@ -3150,7 +3152,7 @@ msgstr "Başlık Bloğu"
 #: common/dialogs/dialog_page_settings.cpp:465
 #: eeschema/eeschema_jobs_handler.cpp:249 pagelayout_editor/files.cpp:254
 #: pagelayout_editor/pl_editor_frame.cpp:369
-#: pcbnew/pcbnew_jobs_handler.cpp:2804
+#: pcbnew/pcbnew_jobs_handler.cpp:2818
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Çizim sayfası '%s' yüklenirken hata oluştu."
@@ -4549,7 +4551,7 @@ msgstr "Takma adlardan birinin değiştirilmesi gerekecek."
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:549
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:569
 #: eeschema/dialogs/panel_sym_lib_table.cpp:594
-#: kicad/project_tree_pane.cpp:1774 pcbnew/dialogs/panel_fp_lib_table.cpp:691
+#: kicad/project_tree_pane.cpp:1778 pcbnew/dialogs/panel_fp_lib_table.cpp:691
 #: pcbnew/tools/pcb_actions.cpp:727
 msgid "Skip"
 msgstr "Atla"
@@ -5443,7 +5445,7 @@ msgstr ""
 "KiCad API etkinleştirildiğinde, bu bilgisayarda çalışan eklentiler ve diğer "
 "yazılımlar KiCad'e bağlanabilir."
 
-#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1214
+#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1261
 msgid "Enable KiCad API"
 msgstr "KiCad API'sini Etkinleştir"
 
@@ -6093,7 +6095,7 @@ msgid "Error switching GAL backend"
 msgstr "GAL arka ucu değiştirilirken hata oluştu"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3642
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3643
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3662
 msgid "Failed to read image data."
 msgstr "Resim verisi okunamadı."
@@ -6293,13 +6295,13 @@ msgstr "Geçersiz sinyal adı"
 
 #: common/eda_base_frame.cpp:511 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:959
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:976
 msgid "Undo"
 msgstr "Geri al"
 
 #: common/eda_base_frame.cpp:520 common/tool/actions.cpp:301
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:960
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:977
 msgid "Redo"
 msgstr "Yinele"
 
@@ -6351,7 +6353,7 @@ msgstr "Uzay Faresi"
 msgid "Hotkeys"
 msgstr "Kısayol Tuşları"
 
-#: common/eda_base_frame.cpp:1421 kicad/project_tree_pane.cpp:1086
+#: common/eda_base_frame.cpp:1421 kicad/project_tree_pane.cpp:1090
 msgid "Version Control"
 msgstr "Sürüm Kontrolü"
 
@@ -6503,7 +6505,7 @@ msgstr "Belge dosyası '%s' bulunamadı."
 msgid "Unknown MIME type for documentation file '%s'"
 msgstr "'%s' belge dosyası için bilinmeyen MIME türü"
 
-#: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1187
+#: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1214
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 msgid "Override locks"
 msgstr "Kilitleri geçersiz kıl"
@@ -6607,7 +6609,7 @@ msgstr "Ekran"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/load_select_footprint.cpp:296 pcbnew/pad.cpp:1854
 #: pcbnew/pcb_barcode.cpp:435 pcbnew/pcb_shape.cpp:700 pcbnew/pcb_text.cpp:276
-#: pcbnew/plot_board_layers.cpp:170
+#: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
 msgstr "Ayak izi"
 
@@ -7097,7 +7099,7 @@ msgstr "Merkez"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1086
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1103
 msgid "Top"
 msgstr "Üst"
 
@@ -7109,7 +7111,7 @@ msgstr "Üst"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:430
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1088
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1105
 msgid "Bottom"
 msgstr "Alt"
 
@@ -7274,9 +7276,9 @@ msgstr ""
 "KiCad tarafından dahili olarak tanımlanır (düzenlenemez) ve şu anda yüklü "
 "olan proje dosyasının mutlak yoluna ayarlanır.  Bu ortam değişkeni, şu anda "
 "yüklü olan projeye göre dosyaları ve yolları tanımlamak için "
-"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, footprints."
-"pretty adlı projeye özgü ayak izi kütüphanesi içeren bir klasör olarak "
-"tanımlanabilir."
+"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, "
+"footprints.pretty adlı projeye özgü ayak izi kütüphanesi içeren bir klasör "
+"olarak tanımlanabilir."
 
 #: common/env_vars.cpp:135
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -7611,7 +7613,7 @@ msgstr "Commit alınamadı: %s"
 msgid "Failed to create author signature: %s"
 msgstr "Yazar imzası oluşturulamadı: %s"
 
-#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2306
+#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2312
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Taahhüt oluşturulamadı: %s"
@@ -7781,7 +7783,7 @@ msgstr "Yeniden temellendirme tamamlaması başarısız: %s"
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:140
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:964
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:981
 #: pcbnew/tools/edit_tool.cpp:3027
 msgid "Cut"
 msgstr "Kes"
@@ -7797,7 +7799,7 @@ msgstr "Seçili hücreleri temizle ve orijinal içeriği panoya yerleştir"
 #: eeschema/tools/sch_actions.cpp:250 kicad/dialogs/panel_jobset.cpp:439
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:76
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:965
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:982
 msgid "Copy"
 msgstr "Kopyala"
 
@@ -7810,7 +7812,7 @@ msgstr "Seçili hücreleri panoya kopyala"
 #: eeschema/tools/sch_editor_control.cpp:2798
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1739
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:966
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:983
 #: pcbnew/tools/pcb_control.cpp:1380
 msgid "Paste"
 msgstr "Yapıştır"
@@ -7822,10 +7824,10 @@ msgstr "Panodaki hücreleri geçerli hücredeki matrise yapıştır"
 #: common/grid_tricks.cpp:388 common/tool/actions.cpp:404
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2092
 #: eeschema/tools/symbol_editor_edit_tool.cpp:858
-#: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1010
+#: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1014
 #: pcbnew/dialogs/panel_setup_rules.cpp:143
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:593
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:967
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:984
 #: pcbnew/tools/edit_tool.cpp:2997 pcbnew/tools/edit_tool.cpp:3040
 msgid "Delete"
 msgstr "Sil"
@@ -7846,7 +7848,7 @@ msgstr "Seçilen hücrelerin içeriğini temizle"
 #: pcbnew/dialogs/dialog_import_settings.cpp:100
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:101
 #: pcbnew/dialogs/panel_setup_rules.cpp:147
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:971
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:988
 msgid "Select All"
 msgstr "Tümünü Seç"
 
@@ -8249,16 +8251,16 @@ msgstr "HPGL'yi dışa aktar"
 msgid "PCB: Export HPGL"
 msgstr "Baskı Devre: HPGL Dışa Aktar"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:72
-#: pcbnew/dialogs/dialog_export_2581_base.h:88
+#: common/jobs/job_export_pcb_ipc2581.cpp:74
+#: pcbnew/dialogs/dialog_export_2581_base.h:90
 msgid "Export IPC-2581"
 msgstr "IPC-2581 Dışa Aktar"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:78
+#: common/jobs/job_export_pcb_ipc2581.cpp:80
 msgid "Export IPC-2581 Job Settings"
 msgstr "IPC-2581 Dışa Aktarma İş Ayarları"
 
-#: common/jobs/job_export_pcb_ipc2581.cpp:91
+#: common/jobs/job_export_pcb_ipc2581.cpp:93
 msgid "PCB: Export IPC-2581"
 msgstr "Baskı Devre: IPC-2581 Dışa Aktar"
 
@@ -8420,10 +8422,6 @@ msgstr "Baskı Devre İçe Aktar"
 #: common/jobs/job_pcb_import.cpp:63
 msgid "PCB Import Job Settings"
 msgstr "Baskı Devre İçe Aktarma İş Ayarları"
-
-#: common/jobs/job_pcb_import.cpp:67
-msgid "PCB: Import"
-msgstr "Baskı Devre: İçe Aktar"
 
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
@@ -9003,12 +9001,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "'%s' için eksik birimler| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1184
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "'%s' ile %lf arasında tür uyumsuzluğu"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1190
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf ile '%s' arasında tür uyumsuzluğu"
 
@@ -9440,7 +9436,7 @@ msgstr "Dosya çıkarılırken hata oluştu!"
 #: eeschema/sch_plotter.cpp:736 gerbview/export_to_pcbnew.cpp:65
 #: pagelayout_editor/files.cpp:224 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:475
-#: pcbnew/dialogs/dialog_drc.cpp:1112 pcbnew/dialogs/dialog_export_2581.cpp:297
+#: pcbnew/dialogs/dialog_drc.cpp:1112 pcbnew/dialogs/dialog_export_2581.cpp:302
 #: pcbnew/dialogs/dialog_export_idf.cpp:130
 #: pcbnew/dialogs/dialog_export_vrml.cpp:139
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:335
@@ -9671,55 +9667,55 @@ msgstr "%s'i kapat"
 msgid "Quit %s"
 msgstr "%s'ten çık"
 
-#: common/tool/action_toolbar.cpp:1135
+#: common/tool/action_toolbar.cpp:1162
 msgid "Grid selector"
 msgstr "Izgara seçici"
 
-#: common/tool/action_toolbar.cpp:1136
+#: common/tool/action_toolbar.cpp:1163
 msgid "Grid Selection box"
 msgstr "Izgara Seçim kutusu"
 
-#: common/tool/action_toolbar.cpp:1148
+#: common/tool/action_toolbar.cpp:1175
 msgid "Zoom selector"
 msgstr "Yakınlaştırma seçici"
 
-#: common/tool/action_toolbar.cpp:1149
+#: common/tool/action_toolbar.cpp:1176
 msgid "Zoom Selection box"
 msgstr "Yakınlaştırma Seçim Kutusu"
 
-#: common/tool/action_toolbar.cpp:1161
+#: common/tool/action_toolbar.cpp:1188
 msgid "IPC/Scripting plugins"
 msgstr "IPC/Betik eklentileri"
 
-#: common/tool/action_toolbar.cpp:1162
+#: common/tool/action_toolbar.cpp:1189
 msgid "Region to hold the IPC/Scripting action buttons"
 msgstr "IPC/Scripting eylem düğmelerini tutacak bölge"
 
-#: common/tool/action_toolbar.cpp:1167
+#: common/tool/action_toolbar.cpp:1194
 msgid "Layer selector"
 msgstr "Katman seçici"
 
-#: common/tool/action_toolbar.cpp:1168
+#: common/tool/action_toolbar.cpp:1195
 msgid "Control to select the layer"
 msgstr "Katman seçim denetimi"
 
-#: common/tool/action_toolbar.cpp:1175
+#: common/tool/action_toolbar.cpp:1202
 msgid "Symbol unit selector"
 msgstr "Sembol birimi seçici"
 
-#: common/tool/action_toolbar.cpp:1176
+#: common/tool/action_toolbar.cpp:1203
 msgid "Displays the current unit"
 msgstr "Mevcut birimi gösterir"
 
-#: common/tool/action_toolbar.cpp:1181
+#: common/tool/action_toolbar.cpp:1208
 msgid "Symbol body style selector"
 msgstr "Sembol gövde stili seçici"
 
-#: common/tool/action_toolbar.cpp:1182
+#: common/tool/action_toolbar.cpp:1209
 msgid "Displays the current body style"
 msgstr "Geçerli gövde stilini görüntüler"
 
-#: common/tool/action_toolbar.cpp:1188
+#: common/tool/action_toolbar.cpp:1215
 msgid "Allow moving of locked items with the mouse"
 msgstr "Kilitli ögelerin fare ile taşınmasına izin ver"
 
@@ -10283,13 +10279,13 @@ msgstr "İmleçte Uzaklaştır"
 
 #: common/tool/actions.cpp:766 common/widgets/mathplot.cpp:1415
 #: pcbnew/dialogs/panel_setup_rules.cpp:151
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:975
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:992
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
 #: common/tool/actions.cpp:772 common/widgets/mathplot.cpp:1416
 #: pcbnew/dialogs/panel_setup_rules.cpp:152
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:976
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:993
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
@@ -11794,7 +11790,7 @@ msgstr "Proje dosyası: '%s'"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:95
 #: eeschema/dialogs/dialog_bom.cpp:403
 #: gerbview/tools/gerbview_inspection_tool.cpp:183
-#: kicad/project_tree_pane.cpp:1100
+#: kicad/project_tree_pane.cpp:1104
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "KiCad'de metin düzenleyicisi seçilmedi.  Lütfen birini seçin."
 
@@ -12148,7 +12144,7 @@ msgstr "Bağlantısız yol bitiş noktası"
 msgid "Unconnected wire to bus entry"
 msgstr "Veriyoluna bağlanmamış yol"
 
-#: eeschema/connection_graph.cpp:4384
+#: eeschema/connection_graph.cpp:4380
 #, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
@@ -12156,12 +12152,12 @@ msgid ""
 msgstr ""
 "Sıralamalı etiket '%s' kök şemada, mevcut olmayan bir üst şemaya bağlanamaz"
 
-#: eeschema/connection_graph.cpp:4450
+#: eeschema/connection_graph.cpp:4446
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "%s sayfa pininin sayfa içinde eşleşen bir hiyerarşik etiketi yok"
 
-#: eeschema/connection_graph.cpp:4467
+#: eeschema/connection_graph.cpp:4463
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "%s hiyerarşik etiketinin üst sayfada eşleşen bir sayfa pini yok"
@@ -12463,8 +12459,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -12542,8 +12538,9 @@ msgstr ""
 "python <betik_dosya_adı> <girdi_dosya_adı> <çıktı_dosya_adı>\n"
 "```\n"
 "\n"
-"Windows'ta, bir CSV BOM'u için istenen oluşturucu betiği `C:\\Users\\u"
-"sername\\kicad\\my_python_script.py` ise, komut satırı şöyle olacaktır:\n"
+"Windows'ta, bir CSV BOM'u için istenen oluşturucu betiği `C:"
+"\\Users\\username\\kicad\\my_python_script.py` ise, komut satırı şöyle "
+"olacaktır:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
@@ -13000,8 +12997,8 @@ msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 #: eeschema/dialogs/dialog_erc.cpp:540
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr ""
-"-------- Elektriksel Kural Kontrolü kullanıcı tarafından iptal edildi. <br>"
-"<br>"
+"-------- Elektriksel Kural Kontrolü kullanıcı tarafından iptal edildi. "
+"<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:542 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "Done.<br><br>"
@@ -15436,8 +15433,8 @@ msgid ""
 msgstr ""
 "Bu şema, şemayı kırabilecek eski sembol kütüphaneleri kullanılarak "
 "yapılmıştır..  Sbazı sembollerin farklı bir sembol adına bağlanması "
-"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye "
-"\"kurtarılması\" (kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
+"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye \"kurtarılması\" "
+"(kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
 "\n"
 "Projeyi güncellemek için aşağıdaki değişiklikler önerilir."
 
@@ -16524,6 +16521,7 @@ msgid "Code"
 msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Kaydet {} in Değer alanı olarak\"{}\""
 
@@ -17348,8 +17346,8 @@ msgstr "Alan boyutlarını ve stillerini güncelle/sıfırla"
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:236
 #: eeschema/sch_label.cpp:2355
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
-#: pcbnew/dialogs/panel_setup_rules.cpp:982
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:884 pcbnew/pcb_text.cpp:695
+#: pcbnew/dialogs/panel_setup_rules.cpp:985
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:901 pcbnew/pcb_text.cpp:695
 msgid "Syntax Help"
 msgstr "Sözdizimi Yardımı"
 
@@ -18364,7 +18362,7 @@ msgstr "HPGL'ye çizim (plotlama) KiCad 10.0 itibarıyla artık desteklenmiyor.\
 #: pcbnew/pcbnew_jobs_handler.cpp:1496 pcbnew/pcbnew_jobs_handler.cpp:1563
 #: pcbnew/pcbnew_jobs_handler.cpp:1710 pcbnew/pcbnew_jobs_handler.cpp:1877
 #: pcbnew/pcbnew_jobs_handler.cpp:2168 pcbnew/pcbnew_jobs_handler.cpp:2308
-#: pcbnew/pcbnew_jobs_handler.cpp:2527 pcbnew/pcbnew_jobs_handler.cpp:2625
+#: pcbnew/pcbnew_jobs_handler.cpp:2527 pcbnew/pcbnew_jobs_handler.cpp:2639
 msgid "Failed to create output directory\n"
 msgstr "Çıktı dizini oluşturulamadı\n"
 
@@ -18587,7 +18585,8 @@ msgstr "%s sembolünde yerleştirilmemiş %s birimleri var"
 #: eeschema/erc/erc.cpp:684
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
-msgstr "%s sembolünün, %s birimlerinde yerleştirilmemiş giriş güç bacakları var"
+msgstr ""
+"%s sembolünün, %s birimlerinde yerleştirilmemiş giriş güç bacakları var"
 
 #: eeschema/erc/erc.cpp:690
 #, c-format
@@ -19250,7 +19249,7 @@ msgstr "Türetilmiş"
 msgid "Error loading symbol %s from library '%s'."
 msgstr "'%s' kütüphanesinden %s sembolü yüklenirken hata oluştu."
 
-#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:766
+#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:813
 #: pcbnew/zone.cpp:989
 msgid "Unknown"
 msgstr "Bilinmiyor"
@@ -20825,7 +20824,8 @@ msgstr "HTTP kütüphane ayarları dosyası %s'nin kök URL'si eksik."
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:242
 #, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "HTTP kütüphane ayarları dosyası %s geçersiz bir kütüphane türüne sahip."
+msgstr ""
+"HTTP kütüphane ayarları dosyası %s geçersiz bir kütüphane türüne sahip."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:283
 #, c-format
@@ -21174,25 +21174,25 @@ msgstr "Geçersiz sembol kütüphanesi adı"
 msgid "Invalid symbol library ID"
 msgstr "Geçersiz sembol kütüphanesi kimliği"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3954
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3956
 msgid "Missing sheet name property"
 msgstr "Sayfa adı özelliği eksik"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3960
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3962
 msgid "Missing sheet file property"
 msgstr "Sayfa dosya özelliği eksik"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5054
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5056
 msgid "Invalid table: no cells defined"
 msgstr "Geçersiz tablo: hiçbir hücre tanımlanmamış"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5179
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5181
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6969
 #, c-format
 msgid "Group library link %s contains invalid character '%c'"
 msgstr "Grup kütüphane bağlantısı %s geçersiz karakter '%c' içeriyor"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5185
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5187
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6976
 msgid "Invalid library ID"
 msgstr "Geçersiz kütüphane kimliği"
@@ -21765,7 +21765,7 @@ msgid "Library Link"
 msgstr "Kütüphane Bağlantısı"
 
 #: eeschema/sch_symbol.cpp:3901 eeschema/widgets/search_handlers.cpp:171
-#: pcbnew/footprint.cpp:4825 pcbnew/plot_board_layers.cpp:190
+#: pcbnew/footprint.cpp:4825 pcbnew/plot_board_layers.cpp:191
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
 msgstr "Kütüphane sı"
@@ -22182,8 +22182,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22234,9 +22234,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -22303,9 +22303,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{üst çizgi}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>üst çizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>üst çizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22389,8 +22389,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
-"\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
+"td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Koşullu metin görüntüleme</samp></td>\n"
 "    </tr>\n"
@@ -22398,12 +22398,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
-"\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
+"td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Sayısal karşılaştırmalar da çalışır</samp></td>\n"
 "    </tr>\n"
@@ -22480,8 +22480,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Tüm alternatif pin fonksiyonları (temel ad hariç)"
-"</samp></td>\n"
+"        <td>&nbsp;<br><samp>Tüm alternatif pin fonksiyonları (temel ad "
+"hariç)</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
@@ -22585,9 +22585,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Tanımı</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Sonuç Netler</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22656,9 +22655,9 @@ msgstr ""
 "<p><b>Tablo Hücre Referansları:</b> <samp>CELL()</samp> fonksiyonu yalnızca "
 "tablo hücrelerinde çalışır. Aynı tablodaki diğer hürelere başvurmak için "
 "<samp>${CELL(\"A0\")}</samp> veya <samp>${CELL(satır, sütun)}</samp> "
-"kullanın. Satır ve sütun numaraları 0 tabanlıdır (A0 ilk satır, ilk sütundur)"
-". CELL, ham hücre metnini değil hesaplanmış/görüntülenen değeri döndürür.</p>"
-"\n"
+"kullanın. Satır ve sütun numaraları 0 tabanlıdır (A0 ilk satır, ilk "
+"sütundur). CELL, ham hücre metnini değil hesaplanmış/görüntülenen değeri "
+"döndürür.</p>\n"
 "<p><b>İç İçe Değişkenler:</b> Değişkenler başka değişkenler içerebilir. İç "
 "değişkenler önce genişletilir. Maksimum iç içe derinlik: 6 seviye.</p>\n"
 "<p><b>Hata Mesajları:</b></p>\n"
@@ -23508,8 +23507,8 @@ msgstr "Geçici çıktı dosyası oluşturulurken hata oluştu"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
 "Kirby's henüz DUT değerlerini desteklemiyor. https://ibis.org/summits/nov16a/"
 "chen.pdf"
@@ -28647,7 +28646,7 @@ msgid "Clear Recent Job Files"
 msgstr "Son kullanılan İş Dosyalarını Temizle"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber Görüntüleyici"
 
@@ -29605,7 +29604,8 @@ msgstr "Geçerli seçenekler: mutlak, çizim"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr "Geçerli seçenekler: ondalık, baştakini kaldır, sondakini kaldır, sakla."
+msgstr ""
+"Geçerli seçenekler: ondalık, baştakini kaldır, sondakini kaldır, sakla."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Valid options are: route, alternate."
@@ -29765,7 +29765,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_dxf.cpp:143
 #: kicad/cli/command_pcb_export_gencad.cpp:74
 #: kicad/cli/command_pcb_export_gerber.cpp:140
-#: kicad/cli/command_pcb_export_ipc2581.cpp:118
+#: kicad/cli/command_pcb_export_ipc2581.cpp:125
 #: kicad/cli/command_pcb_export_ipcd356.cpp:46
 #: kicad/cli/command_pcb_export_odb.cpp:75
 #: kicad/cli/command_pcb_export_pdf.cpp:144
@@ -30131,8 +30131,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Dönme noktasını kart merkezine göre santimetre cinsinden ayarla, format 'X,Y,"
-"Z', örneğin: '-10,2,0'"
+"Dönme noktasını kart merkezine göre santimetre cinsinden ayarla, format "
+"'X,Y,Z', örneğin: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -31333,7 +31333,7 @@ msgstr "Yükle"
 msgid "Uninstall"
 msgstr "Kaldır"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:161 kicad/pcm/dialogs/dialog_pcm.cpp:404
+#: kicad/pcm/dialogs/dialog_pcm.cpp:161 kicad/pcm/dialogs/dialog_pcm.cpp:407
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
@@ -31359,13 +31359,13 @@ msgstr ""
 msgid "Install Package"
 msgstr "Paketi Yükle"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:421
+#: kicad/pcm/dialogs/dialog_pcm.cpp:424
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
 msgstr "Beklemede (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:461
+#: kicad/pcm/dialogs/dialog_pcm.cpp:464
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
@@ -31552,30 +31552,30 @@ msgstr "Tüm sürümleri göster"
 msgid "Download"
 msgstr "İndir"
 
-#: kicad/pcm/pcm.cpp:114
+#: kicad/pcm/pcm.cpp:122
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "Yüklü paket listesi yüklenirken hata oluştu: %s"
 
-#: kicad/pcm/pcm.cpp:213 kicad/update_manager.cpp:123
+#: kicad/pcm/pcm.cpp:222 kicad/update_manager.cpp:123
 #, c-format
 msgid "Downloading %lld/%lld kB"
 msgstr "%lld/%lld kB indiriliyor"
 
-#: kicad/pcm/pcm.cpp:240 kicad/update_manager.cpp:158
+#: kicad/pcm/pcm.cpp:252 kicad/update_manager.cpp:158
 msgid "Download is too large."
 msgstr "İndirme boyutu çok büyük."
 
-#: kicad/pcm/pcm.cpp:257
+#: kicad/pcm/pcm.cpp:269
 msgid "Fetching repository"
 msgstr "Depo alınıyor"
 
-#: kicad/pcm/pcm.cpp:276
+#: kicad/pcm/pcm.cpp:306
 #, c-format
 msgid "Unable to parse repository: %s"
 msgstr "Depo çözümlenemiyor: %s"
 
-#: kicad/pcm/pcm.cpp:277
+#: kicad/pcm/pcm.cpp:307
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
@@ -31583,19 +31583,19 @@ msgstr ""
 "Verilen depo URL'si geçerli bir KiCad paket deposu gibi görünmüyor. Lütfen "
 "URL'yi iki kez kontrol edin."
 
-#: kicad/pcm/pcm.cpp:303
+#: kicad/pcm/pcm.cpp:343
 msgid "Fetching repository packages"
 msgstr "Depo paketleri getiriliyor"
 
-#: kicad/pcm/pcm.cpp:308
+#: kicad/pcm/pcm.cpp:349
 msgid "Unable to load repository packages url."
 msgstr "Depo paket adresi yüklenemiyor."
 
-#: kicad/pcm/pcm.cpp:318
+#: kicad/pcm/pcm.cpp:359
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr "Paketlerin karması eşleşmiyor. Depo bozulmuş olabilir."
 
-#: kicad/pcm/pcm.cpp:334
+#: kicad/pcm/pcm.cpp:380
 #, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
@@ -31606,20 +31606,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:418
+#: kicad/pcm/pcm.cpp:464
 msgid "Failed to parse locally stored repository.json."
 msgstr "Yerel olarak depolanan repository.json dosyası ayrıştırılamadı."
 
-#: kicad/pcm/pcm.cpp:446
+#: kicad/pcm/pcm.cpp:492
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr "Geçerli depo için paket önbelleği bozuldu, yeniden indirilecek."
 
-#: kicad/pcm/pcm.cpp:499
+#: kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
 msgstr "Kaynakları indirme"
 
-#: kicad/pcm/pcm.cpp:519
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
@@ -31627,27 +31627,27 @@ msgstr ""
 "Kaynaklar dosyası karması eşleşmiyor ve kullanılmayacak. Depo bozulmuş "
 "olabilir."
 
-#: kicad/pcm/pcm.cpp:762
+#: kicad/pcm/pcm.cpp:809
 msgid "Local file"
 msgstr "Yerel dosya"
 
-#: kicad/pcm/pcm.cpp:1115
+#: kicad/pcm/pcm.cpp:1162
 msgid "PCM Update"
 msgstr "PCM Güncellemesi"
 
-#: kicad/pcm/pcm.cpp:1127
+#: kicad/pcm/pcm.cpp:1174
 msgid "Preparing to fetch repositories"
 msgstr "Depoları almaya hazırlanıyor"
 
-#: kicad/pcm/pcm.cpp:1145
+#: kicad/pcm/pcm.cpp:1192
 msgid "Fetching repository..."
 msgstr "Depo getiriliyor..."
 
-#: kicad/pcm/pcm.cpp:1158
+#: kicad/pcm/pcm.cpp:1205
 msgid "Reviewing packages..."
 msgstr "Paketler inceleniyor..."
 
-#: kicad/pcm/pcm.cpp:1212
+#: kicad/pcm/pcm.cpp:1259
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
@@ -31822,225 +31822,225 @@ msgstr "Dizin adı:"
 msgid "Create New Directory"
 msgstr "Yeni Dizin Oluştur"
 
-#: kicad/project_tree_pane.cpp:920
+#: kicad/project_tree_pane.cpp:924
 msgid "Switch to this Project"
 msgstr "Bu Projeye Geç"
 
-#: kicad/project_tree_pane.cpp:921
+#: kicad/project_tree_pane.cpp:925
 msgid "Close all editors, and switch to the selected project"
 msgstr "Tüm düzenleyicileri kapatın ve seçilen projeye geçin"
 
-#: kicad/project_tree_pane.cpp:928
+#: kicad/project_tree_pane.cpp:932
 msgid "New Directory..."
 msgstr "Yeni Dizin..."
 
-#: kicad/project_tree_pane.cpp:929
+#: kicad/project_tree_pane.cpp:933
 msgid "Create a New Directory"
 msgstr "Yeni Bir Dizin Oluştur"
 
-#: kicad/project_tree_pane.cpp:937 kicad/project_tree_pane.cpp:947
+#: kicad/project_tree_pane.cpp:941 kicad/project_tree_pane.cpp:951
 msgid "Reveal in Finder"
 msgstr "Bulucu'da Göster"
 
-#: kicad/project_tree_pane.cpp:938
+#: kicad/project_tree_pane.cpp:942
 msgid "Reveals the directory in a Finder window"
 msgstr "Dizini bir Bulucu penceresinde gösterir"
 
-#: kicad/project_tree_pane.cpp:940
+#: kicad/project_tree_pane.cpp:944
 msgid "Open Directory in File Explorer"
 msgstr "Dosya Gezgini'nde Dizini Aç"
 
-#: kicad/project_tree_pane.cpp:941 pcbnew/tools/pcb_actions.cpp:1185
+#: kicad/project_tree_pane.cpp:945 pcbnew/tools/pcb_actions.cpp:1185
 msgid "Opens the directory in the default system file manager"
 msgstr "Dizini varsayılan sistem dosya yöneticisinde açar"
 
-#: kicad/project_tree_pane.cpp:948
+#: kicad/project_tree_pane.cpp:952
 msgid "Reveals the directories in a Finder window"
 msgstr "Dizinleri bir Bulucu penceresinde gösterir"
 
-#: kicad/project_tree_pane.cpp:950
+#: kicad/project_tree_pane.cpp:954
 msgid "Open Directories in File Explorer"
 msgstr "Dosya Gezgini'nde Dizinleri Aç"
 
-#: kicad/project_tree_pane.cpp:951
+#: kicad/project_tree_pane.cpp:955
 msgid "Opens the directories in the default system file manager"
 msgstr "Dizinleri varsayılan sistem dosya yöneticisinde açar"
 
-#: kicad/project_tree_pane.cpp:962
+#: kicad/project_tree_pane.cpp:966
 msgid "Open the file in a Text Editor"
 msgstr "Dosyayı Metin Düzenleyicide Aç"
 
-#: kicad/project_tree_pane.cpp:964
+#: kicad/project_tree_pane.cpp:968
 msgid "Open files in a Text Editor"
 msgstr "Dosyaları Metin Düzenleyicide Aç"
 
-#: kicad/project_tree_pane.cpp:966
+#: kicad/project_tree_pane.cpp:970
 msgid "Edit in a Text Editor"
 msgstr "Bir Metin Düzenleyicide Düzenle"
 
-#: kicad/project_tree_pane.cpp:972
+#: kicad/project_tree_pane.cpp:976
 msgid "Run Jobs"
 msgstr "İşleri Çalıştır"
 
-#: kicad/project_tree_pane.cpp:980
+#: kicad/project_tree_pane.cpp:984
 msgid "Rename File..."
 msgstr "Dosyayı Yeniden Adlandır..."
 
-#: kicad/project_tree_pane.cpp:981
+#: kicad/project_tree_pane.cpp:985
 msgid "Rename file"
 msgstr "Dosyayı yeniden adlandır"
 
-#: kicad/project_tree_pane.cpp:985
+#: kicad/project_tree_pane.cpp:989
 msgid "Rename Files..."
 msgstr "Dosyaları Yeniden Adlandır..."
 
-#: kicad/project_tree_pane.cpp:986
+#: kicad/project_tree_pane.cpp:990
 msgid "Rename files"
 msgstr "Dosyayı yeniden adlandır"
 
-#: kicad/project_tree_pane.cpp:996
+#: kicad/project_tree_pane.cpp:1000
 msgid "Delete the file and its content"
 msgstr "Dosyayı ve içeriğini silin"
 
-#: kicad/project_tree_pane.cpp:998
+#: kicad/project_tree_pane.cpp:1002
 msgid "Delete the files and their contents"
 msgstr "Dosyaları ve içeriklerini silin"
 
-#: kicad/project_tree_pane.cpp:1013
+#: kicad/project_tree_pane.cpp:1017
 msgid "Move to Trash"
 msgstr "Çöp Kutusuna Taşı"
 
-#: kicad/project_tree_pane.cpp:1025
+#: kicad/project_tree_pane.cpp:1029
 msgid "Add Project to Version Control..."
 msgstr "Sürüm Kontrolüne Proje Ekle..."
 
-#: kicad/project_tree_pane.cpp:1026
+#: kicad/project_tree_pane.cpp:1030
 msgid "Initialize a new repository"
 msgstr "Yeni bir depo başlat"
 
-#: kicad/project_tree_pane.cpp:1030
+#: kicad/project_tree_pane.cpp:1034
 msgid "Commit Project..."
 msgstr "Projeyi İşle..."
 
-#: kicad/project_tree_pane.cpp:1031 kicad/project_tree_pane.cpp:1045
+#: kicad/project_tree_pane.cpp:1035 kicad/project_tree_pane.cpp:1049
 msgid "Commit changes to the local repository"
 msgstr "Değişiklikleri yerel depoya aktarın"
 
-#: kicad/project_tree_pane.cpp:1034
+#: kicad/project_tree_pane.cpp:1038
 msgid "Push"
 msgstr "Yolla"
 
-#: kicad/project_tree_pane.cpp:1035
+#: kicad/project_tree_pane.cpp:1039
 msgid "Push committed local changes to remote repository"
 msgstr "İşlenen yerel değişiklikleri uzak depoya gönder"
 
-#: kicad/project_tree_pane.cpp:1038
+#: kicad/project_tree_pane.cpp:1042
 msgid "Pull"
 msgstr "Çek"
 
-#: kicad/project_tree_pane.cpp:1039
+#: kicad/project_tree_pane.cpp:1043
 msgid "Pull changes from remote repository into local"
 msgstr "Değişiklikleri uzak depodan yerel depoya çek"
 
-#: kicad/project_tree_pane.cpp:1044
+#: kicad/project_tree_pane.cpp:1048
 msgid "Commit File..."
 msgstr "Dosyayı İşle..."
 
-#: kicad/project_tree_pane.cpp:1059
+#: kicad/project_tree_pane.cpp:1063
 msgid "Switch to branch "
 msgstr "Şubeye geç "
 
-#: kicad/project_tree_pane.cpp:1064
+#: kicad/project_tree_pane.cpp:1068
 msgid "Other..."
 msgstr "Diğer..."
 
-#: kicad/project_tree_pane.cpp:1065
+#: kicad/project_tree_pane.cpp:1069
 msgid "Switch to a different branch"
 msgstr "Farklı bir dala geç"
 
-#: kicad/project_tree_pane.cpp:1068
+#: kicad/project_tree_pane.cpp:1072
 msgid "Switch to Branch"
 msgstr "Branch'a Geç"
 
-#: kicad/project_tree_pane.cpp:1074
+#: kicad/project_tree_pane.cpp:1078
 msgid "Enable Git Integration"
 msgstr "Git Entegrasyonunu Etkinleştir"
 
-#: kicad/project_tree_pane.cpp:1075
+#: kicad/project_tree_pane.cpp:1079
 msgid "Re-enable Git integration for this project"
 msgstr "Bu proje için Git entegrasyonunu yeniden etkinleştirin"
 
-#: kicad/project_tree_pane.cpp:1079
+#: kicad/project_tree_pane.cpp:1083
 msgid "Disable Git Integration"
 msgstr "Git Entegrasyonunu Devre Dışı Bırak"
 
-#: kicad/project_tree_pane.cpp:1080
+#: kicad/project_tree_pane.cpp:1084
 msgid "Disable Git integration for this project"
 msgstr "Bu proje için Git entegrasyonunu devre dışı bırakın"
 
-#: kicad/project_tree_pane.cpp:1137
+#: kicad/project_tree_pane.cpp:1141
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Dosya adını değiştir: '%s'"
 
-#: kicad/project_tree_pane.cpp:1139
+#: kicad/project_tree_pane.cpp:1143
 msgid "Change filename"
 msgstr "Dosya adını değiştir"
 
-#: kicad/project_tree_pane.cpp:1499
+#: kicad/project_tree_pane.cpp:1503
 msgid "Network path: not monitoring folder changes"
 msgstr "Ağ yolu: klasör değişikliklerini izleme"
 
-#: kicad/project_tree_pane.cpp:1505
+#: kicad/project_tree_pane.cpp:1509
 msgid "Local path: monitoring folder changes"
 msgstr "Yerel yol: klasör değişikliklerini izleme"
 
-#: kicad/project_tree_pane.cpp:1690
+#: kicad/project_tree_pane.cpp:1694
 msgid "Please wait"
 msgstr "Lütfen bekle"
 
-#: kicad/project_tree_pane.cpp:1690
+#: kicad/project_tree_pane.cpp:1694
 msgid "Waiting for Git operations to finish..."
 msgstr "Git işlemlerinin bitmesi bekleniyor..."
 
-#: kicad/project_tree_pane.cpp:1758
+#: kicad/project_tree_pane.cpp:1762
 msgid "The selected directory is already a Git project."
 msgstr "Seçilen dizin zaten bir Git projesi."
 
-#: kicad/project_tree_pane.cpp:1765
+#: kicad/project_tree_pane.cpp:1769
 msgid "Failed to initialize Git project."
 msgstr "(Git) projesi başlatılamadı."
 
-#: kicad/project_tree_pane.cpp:1773
+#: kicad/project_tree_pane.cpp:1777
 msgid "Set default remote"
 msgstr "Varsayılan uzaktan ayarla"
 
-#: kicad/project_tree_pane.cpp:1789
+#: kicad/project_tree_pane.cpp:1793
 msgid "Failed to set default remote."
 msgstr "Varsayılan uzaktan ayarlanamadı."
 
-#: kicad/project_tree_pane.cpp:1797 kicad/project_tree_pane.cpp:1828
-#: kicad/project_tree_pane.cpp:1851
+#: kicad/project_tree_pane.cpp:1801 kicad/project_tree_pane.cpp:1832
+#: kicad/project_tree_pane.cpp:1855
 msgid "Fetch Remote"
 msgstr "Uzak Sunucudan Getir"
 
-#: kicad/project_tree_pane.cpp:1835
+#: kicad/project_tree_pane.cpp:1839
 msgid "Failed to pull project"
 msgstr "Proje çekilemedi"
 
-#: kicad/project_tree_pane.cpp:1858
+#: kicad/project_tree_pane.cpp:1862
 msgid "Failed to push project"
 msgstr "Proje gönderilemedi"
 
-#: kicad/project_tree_pane.cpp:2203
+#: kicad/project_tree_pane.cpp:2209
 msgid "The selected directory is not a Git project."
 msgstr "Seçilen dizin bir Git projesi değil."
 
-#: kicad/project_tree_pane.cpp:2290
+#: kicad/project_tree_pane.cpp:2296
 msgid "Discarding commit due to empty commit message."
 msgstr "Boş işlem mesajı nedeniyle işlem reddediliyor."
 
-#: kicad/project_tree_pane.cpp:2296
+#: kicad/project_tree_pane.cpp:2302
 msgid "Discarding commit due to empty file selection."
 msgstr "Boş dosya seçimi nedeniyle işlem reddediliyor."
 
@@ -35996,10 +35996,10 @@ msgstr "NPTH"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:395
 #: pcbnew/dialogs/dialog_export_2581.cpp:166
 #: pcbnew/dialogs/dialog_export_2581.cpp:173
-#: pcbnew/dialogs/dialog_export_2581.cpp:417
+#: pcbnew/dialogs/dialog_export_2581.cpp:429
 #: pcbnew/dialogs/dialog_export_2581.h:95
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:177
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:164
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:188
 #: pcbnew/widgets/search_handlers.cpp:889
 #: pcbnew/widgets/search_handlers.cpp:890
 msgid "N/A"
@@ -36309,7 +36309,8 @@ msgstr "Nakavt"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:59
 msgid "If checked, the barcode will be inverted with a margin around it"
-msgstr "İşaretlenirse, barkod ters çevrilir ve etrafında bir kenar boşluğu olur"
+msgstr ""
+"İşaretlenirse, barkod ters çevrilir ve etrafında bir kenar boşluğu olur"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:63
 msgid "Show text"
@@ -38035,8 +38036,8 @@ msgstr "'%s' dosyasını yazmak için yetersiz izinler."
 msgid "Generate IPC-2581 File"
 msgstr "IPC-2581 dosyası oluştur"
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:284
-#: pcbnew/pcbnew_jobs_handler.cpp:2550
+#: pcbnew/dialogs/dialog_export_2581.cpp:289
+#: pcbnew/pcbnew_jobs_handler.cpp:2564
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -38045,7 +38046,7 @@ msgstr ""
 "IPC-2581 dosyası '%s' oluşturulurken hata oluştu.\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_export_2581.cpp:303
+#: pcbnew/dialogs/dialog_export_2581.cpp:308
 msgid "IPC-2581 file generated successfully."
 msgstr "IPC-2581 dosyası başarıyla oluşturuldu."
 
@@ -38086,16 +38087,28 @@ msgstr "Çıktıyı sıkıştır"
 msgid "Compress output into 'zip' file"
 msgstr "Çıktıyı 'zip' dosyasına sıkıştırın"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:108
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:94
+#, fuzzy
+msgid "BOM revision:"
+msgstr "Revizyon:"
+
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:96
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:101
+msgid ""
+"Revision string for the BOM section. Auto-populated from schematic title "
+"block revision"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:119
 msgid "BOM Columns"
 msgstr "BOM malzeme listesi Sütunları"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:121
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:132
 msgid "Internal ID:"
 msgstr "Dahili Kimlik:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:123
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:131
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:134
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:142
 msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
@@ -38103,37 +38116,37 @@ msgstr ""
 "Tasarım sırasında dahili olarak kullanılan parça kimlik numarası.\n"
 "Bu numara her parça için benzersiz olmalıdır."
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:127
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:138
 msgid "Generate unique"
 msgstr "Benzersiz oluştur"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:135
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:146
 msgid "Manufacturer P/N:"
 msgstr "Üretici Parça Numarası (P/N):"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:137
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:145
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:148
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:156
 msgid "Column containing the manufacturer part number"
 msgstr "Üretici parça numarasını içeren sütun"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:141
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:165
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:152
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:176
 msgid "Omit"
 msgstr "Hariç Tut"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:149
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 msgid "Manufacturer:"
 msgstr "Üretici:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:161
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:172
 msgid "Distributor P/N:"
 msgstr "Distribütör P/N:"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:169
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:180
 msgid "Column containing the distributor part number"
 msgstr "Distribütör parça numarasını içeren sütun"
 
-#: pcbnew/dialogs/dialog_export_2581_base.cpp:173
+#: pcbnew/dialogs/dialog_export_2581_base.cpp:184
 msgid "Distributor:"
 msgstr "Dağıtıcı:"
 
@@ -38808,8 +38821,8 @@ msgstr "Lehim pastası açıklığı:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Bu ayak izi için yerel lehim pastası açıklığı.\n"
@@ -38900,7 +38913,7 @@ msgstr "Y Ofseti"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:68
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:80
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:56
-#: pcbnew/plot_board_layers.cpp:162
+#: pcbnew/plot_board_layers.cpp:163
 msgid "Reference designator"
 msgstr "Referans tanımlayıcı"
 
@@ -39015,8 +39028,8 @@ msgstr "Pedler arasında köprülenmiş lehim maskesi açıklıklarına izin ver
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Ped boyutuna göre lehim pastası açıklığı.\n"
@@ -40810,8 +40823,8 @@ msgstr "Ped Ekleme Aracı için Varsayılan Ped Özellikleri"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Bu ped için yerel lehim pastası açıklığı.\n"
@@ -44061,26 +44074,26 @@ msgstr "DRC (Tasarım Kuralı Kontrolü) kuralları"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:745
 #: pcbnew/drc/drc_rule_condition.cpp:64
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:923
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:940
 msgid "ERROR:"
 msgstr "HATA:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:777
+#: pcbnew/dialogs/panel_setup_rules.cpp:780
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
 msgstr "'%s' ve '%s' kuralları aynı koşulu paylaşıyor."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:797
+#: pcbnew/dialogs/panel_setup_rules.cpp:800
 #, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
 msgstr "'%s' kuralı, tanımlanmamış '%s' ağ sınıfına başvuruyor."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:820
+#: pcbnew/dialogs/panel_setup_rules.cpp:823
 #, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
 msgstr "'%s' kuralı, tanımlanmamış katman(lar)a başvuruyor: %s."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:884
+#: pcbnew/dialogs/panel_setup_rules.cpp:887
 msgid "Design rules cannot be added without a project"
 msgstr "Tasarım kuralları proje olmadan eklenemez"
 
@@ -44166,8 +44179,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -44371,218 +44384,214 @@ msgid ""
 msgstr ""
 "### Kısıtlamalar\n"
 "\n"
-"| Kısıtlama türü            | Argüman türü"
-"                                                                                                         "
-"| Açıklama"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+"| Kısıtlama türü            | Argüman "
+"türü                                                                                                         "
+"| "
+"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                               "
 "|\n"
-"|---------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------"
-"|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Via'lardaki halka genişliğini denetler."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                           "
-"| Via'lardaki halka genişliğini denetler.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                            "
-"|\n"
-"| `assertion`               | \"&lt;ifade>"
-"\"                                                                                                          "
-"| Verilen ifadeyi denetler.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `assertion`               | "
+"\"&lt;ifade>\"                                                                                                          "
+"| Verilen ifadeyi denetler."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
 "| Bakır nesneler arasındaki lehim maskesi köprülerini denetler.  Bu "
 "kısıtlama min/opt/max değeri almaz.  Bir önem derecesi maddesiyle birlikte, "
 "çeşitli koşullarda lehim maskesi köprülemeye izin vermek veya yasaklamak "
-"için kullanılabilir.<br>"
-"                                                                                                                                                                                                          "
+"için kullanılabilir."
+"<br>                                                                                                                                                                                                          "
 "|\n"
-"| `clearance`               | min"
-"                                                                                                                   "
+"| `clearance`               | "
+"min                                                                                                                   "
 "| Farklı netlerdeki bakır nesneler arasındaki **elektriksel** boşluğu "
 "belirtir.  (Netten bağımsız olarak nesneler arasındaki boşluğu belirtmek "
 "için `physical_clearance` bölümüne bakın.)<br><br>Bakır nesnelerin "
 "örtüşmesine (çakışmasına) izin vermek için `min` değeri sıfırdan küçük "
-"(örneğin `-1`) olan bir `clearance` kısıtlaması oluşturun.<br>"
-"                                                                                                 "
+"(örneğin `-1`) olan bir `clearance` kısıtlaması oluşturun."
+"<br>                                                                                                 "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                   "
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
 "| Bileşen koruma alanları (courtyard) arasındaki boşluğu denetler; herhangi "
 "iki koruma alanı `min` mesafesinden yakınsa hata üretir.  Bir bileşende "
-"koruma alanı şekli yoksa bu kısıtlamadan hata üretilmez.<br>"
-"                                                                                                                                                                                                                                        "
+"koruma alanı şekli yoksa bu kısıtlamadan hata üretilmez."
+"<br>                                                                                                                                                                                                                                        "
 "|\n"
-"| `creepage`                | min"
-"                                                                                                                   "
+"| `creepage`                | "
+"min                                                                                                                   "
 "| Farklı netlerdeki bakır nesneler arasındaki yüzey kaçak mesafesini "
-"belirtir.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                       "
+"belirtir."
+"<br>                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                           "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
 "| Diferansiyel çift içindeki eşleşmiş izler arasındaki boşluğu denetler.  "
 "Eşleşmiş izler, birbirine paralel olan segmentlerdir.  Diferansiyel çift "
 "boşluğu, çiftin eşleşmemiş bölümlerinde (örneğin bileşenden çıkış fanout'u) "
-"test edilmez.<br>"
-"                                                                                                                                                                                                        "
+"test edilmez."
+"<br>                                                                                                                                                                                                        "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                   "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
 "| Bir diferansiyel çift izinin, çiftteki diğer polarite izinden bağımsız "
 "olarak yönlendirildiği mesafeyi denetler (örneğin çiftin bileşenden çıkış "
 "yaptığı veya bir via gibi başka bir nesneyi aşmak için bağının koptuğu "
-"yerler).<br>"
-"                                                                                                                                                                                                                   "
+"yerler)."
+"<br>                                                                                                                                                                                                                   "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`through_via`<br>"
-"`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>"
-"`graphic`<br>`hole`<br>`footprint`<br> | İzin verilmeyecek bir veya daha "
-"fazla nesne türünü boşlukla ayırarak belirtin.  Örneğin `(constraint "
-"disallow track)` veya `(constraint disallow track via pad)`.  Bu türdeki bir "
-"nesne kural koşuluyla eşleşirse DRC hatası oluşturulur.<br><br>Bu kısıtlama "
-"özünde bir yasak alan kuralıyla aynıdır; ancak daha özel yasak alan "
-"kısıtlamaları oluşturmak için kullanılabilir.<br>"
-"                                                                   |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                           "
+"| `disallow`                | "
+"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| İzin verilmeyecek bir veya daha fazla nesne türünü boşlukla ayırarak "
+"belirtin.  Örneğin `(constraint disallow track)` veya `(constraint disallow "
+"track via pad)`.  Bu türdeki bir nesne kural koşuluyla eşleşirse DRC hatası "
+"oluşturulur.<br><br>Bu kısıtlama özünde bir yasak alan kuralıyla aynıdır; "
+"ancak daha özel yasak alan kısıtlamaları oluşturmak için kullanılabilir."
+"<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
 "| Nesneler ile kart kenarı arasındaki boşluğu denetler.<br><br>Bu aynı "
 "zamanda \"frezeleme toleransı\" olarak da düşünülebilir; zira kart kenarı "
 "`Edge.Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini "
-"kapsar.  (Delme toleransı için `physical_hole_clearance` bölümüne bakın.)<br>"
-"                                                                                                                                                      "
+"kapsar.  (Delme toleransı için `physical_hole_clearance` bölümüne "
+"bakın.)<br>                                                                                                                                                      "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                               "
+"| `length`                  | min/"
+"max                                                                                                               "
 "| Kural koşuluyla eşleşen netlerin toplam yönlendirme uzunluğunu denetler; "
 "`min` değerinin (belirtilmişse) altında veya `max` değerinin (belirtilmişse) "
-"üzerinde olan her net için hata üretir.<br>"
-"                                                                                                                                                                                                                                                      "
+"üzerinde olan her net için hata üretir."
+"<br>                                                                                                                                                                                                                                                      "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                               "
+"| `hole`                    | min/"
+"max                                                                                                               "
 "| Pad veya via'daki delme deliğinin boyutunu (çapını) denetler.  Oval "
 "delikler için küçük (minör) çap `min` değeriyle (belirtilmişse), büyük "
-"(majör) çap `max` değeriyle (belirtilmişse) karşılaştırılır.<br>"
-"                                                                                                                                                                                                                                           "
+"(majör) çap `max` değeriyle (belirtilmişse) karşılaştırılır."
+"<br>                                                                                                                                                                                                                                           "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                   "
+"| `hole_clearance`          | "
+"min                                                                                                                   "
 "| Pad veya via'daki delme deliği ile farklı bir netteki bakır nesneler "
 "arasındaki boşluğu denetler.  Boşluk, delik merkezinden değil çapından "
-"ölçülür.<br>"
-"                                                                                                                                                                                                                                                                                              "
+"ölçülür."
+"<br>                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                   "
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
 "| Pad ve via'lardaki mekanik olarak delinmiş delikler arasındaki boşluğu "
 "denetler.  Boşluk, deliklerin merkezleri arasında değil çapları arasında "
 "ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarının korunması içindir.  "
 "**Lazerle delinmiş** (mikro-via) ve mekanik olmayan diğer delikler "
 "arasındaki boşluk denetlenmez; **frezelenmiş** (oval şekilli) ve mekanik "
 "olmayan diğer delikler arasındaki boşluk da denetlenmez.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                   "
+"| `physical_clearance`      | "
+"min                                                                                                                   "
 "| Belirli bir katmandaki (bakır dışı katmanlar dahil) iki nesne arasındaki "
 "boşluğu denetler.<br><br>`clearance`'a kıyasla daha genel amaçlı denetimler "
-"yapabilse de çok daha yavaştır.  Mümkün olduğunca `clearance` kullanın.<br>"
-"                                                                                                                                                                                                                      "
+"yapabilse de çok daha yavaştır.  Mümkün olduğunca `clearance` kullanın."
+"<br>                                                                                                                                                                                                                      "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                   "
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
 "| Pad veya via'daki delme deliği ile netten bağımsız olarak başka bir nesne "
 "arasındaki boşluğu denetler. Boşluk, delik merkezinden değil çapından "
 "ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak da düşünülebilir; "
 "yalnızca **yuvarlak** delikleri kapsar (frezeleme toleransı için "
-"`edge_clearance` bölümüne bakın).<br>"
-"                                                                                                                    "
+"`edge_clearance` bölümüne bakın)."
+"<br>                                                                                                                    "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                           "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
 "| Serigrafi katmanlarındaki nesneler ile diğer nesneler arasındaki boşluğu "
-"denetler.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                "
+"denetler."
+"<br>                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                   "
+"| `skew`                    | "
+"max                                                                                                                   "
 "| Kural koşuluyla eşleşen netlerin toplam sapmasını denetler; yani her netin "
 "uzunluğu ile kuralla eşleşen tüm netlerin ortalama uzunluğu arasındaki farkı "
 "hesaplar.  Herhangi bir netin ortalamayla arasındaki farkın mutlak değeri "
-"kısıtlamanın `max` değerini aşarsa hata üretilir.<br>"
-"                                                                                                                                                               "
+"kısıtlamanın `max` değerini aşarsa hata üretilir."
+"<br>                                                                                                                                                               "
 "|\n"
-"| `solder_mask_expansion`   | opt"
-"                                                                                                                   "
-"| Pad'ler, şekiller ve izler için lehim maskesi genişlemesini belirtir.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                               "
+"| `solder_mask_expansion`   | "
+"opt                                                                                                                   "
+"| Pad'ler, şekiller ve izler için lehim maskesi genişlemesini belirtir."
+"<br>                                                                                                                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `solder_paste_abs_margin` | opt"
-"                                                                                                                   "
+"| `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
 "| Pad'ler için mutlak lehim macunu boşluğunu belirtir.  Genellikle macunu "
 "içe çekmek için negatif.<br><br>Son lehim macunu boşluğu mutlak boşluk artı "
-"göreli boşluk olacaktır.<br>"
-"                                                                                                                                                                                                                                                                        "
+"göreli boşluk olacaktır."
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_paste_rel_margin` | opt"
-"                                                                                                                   "
+"| `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
 "| Pad'ler için göreli lehim macunu boşluğunu belirtir.  Genellikle macunu "
 "içe çekmek için negatif.<br><br>Son lehim macunu boşluğu mutlak boşluk artı "
-"göreli boşluk olacaktır.<br>"
-"                                                                                                                                                                                                                                                                        "
+"göreli boşluk olacaktır."
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                   "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
 "| Termal relief bağlantısına sahip bir pad ile zone arasındaki boşluk "
-"genişliğini belirtir.<br>"
-"                                                                                                                                                                                                                                                                                                                                                         "
+"genişliğini belirtir."
+"<br>                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                   "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
 "| Termal relief bağlantısına sahip bir pad'i zone'a bağlayan ispitlerin "
-"genişliğini belirtir.<br>"
-"                                                                                                                                                                                                                                                                                                                                                       "
+"genişliğini belirtir."
+"<br>                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                           "
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
 "| İz ve yay segmentlerinin genişliğini denetler.  `min` değerinin "
 "(belirtilmişse) altında veya `max` değerinin (belirtilmişse) üzerinde "
-"genişliğe sahip her segment için hata üretilir.<br>"
-"                                                                                                                                                                                                                                                             "
+"genişliğe sahip her segment için hata üretilir."
+"<br>                                                                                                                                                                                                                                                             "
 "|\n"
-"| `track_angle`             | min/opt/max"
-"                                                                                                           "
+"| `track_angle`             | min/opt/"
+"max                                                                                                           "
 "| Birbirine bağlı iki iz segmenti arasındaki açıyı denetler.  Açısı `min` "
 "değerinin (belirtilmişse) altında veya `max` değerinin (belirtilmişse) "
-"üzerinde olan her bağlı çift için hata üretilir.<br>"
-"                                                                                                                                                                                                                                                  "
+"üzerinde olan her bağlı çift için hata üretilir."
+"<br>                                                                                                                                                                                                                                                  "
 "|\n"
-"| `track_segment_length`    | min/max"
-"                                                                                                               "
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
 "| İz ve yay segmentlerinin uzunluğunu denetler.  Uzunluğu `min` değerinin "
 "(belirtilmişse) altında veya `max` değerinin (belirtilmişse) üzerinde olan "
-"her segment için hata üretilir.<br>"
-"                                                                                                                                                                                                                                                               "
+"her segment için hata üretilir."
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                   "
+"| `via_count`               | "
+"max                                                                                                                   "
 "| Kural koşuluyla eşleşen her netteki via sayısını sayar.  Bu sayı eşleşen "
 "herhangi bir nette kısıtlamanın `max` değerini aşarsa o net için hata "
-"üretilir.<br>"
-"                                                                                                                                                                                                                                                                                         "
+"üretilir."
+"<br>                                                                                                                                                                                                                                                                                         "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
 "| Bağlantısız veya yalnızca bir katmanda bağlı via'ları denetler.  Bu "
 "kısıtlama min/opt/max değeri almaz.  Bir önem derecesi maddesiyle birlikte, "
 "çeşitli koşullarda sallanan via'lara izin vermek veya yasaklamak için "
-"kullanılabilir.<br>"
-"                                                                                                                                                                                                                 "
+"kullanılabilir."
+"<br>                                                                                                                                                                                                                 "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                "
-"| Zone ile pad arasında kurulacak bağlantı türünü belirtir.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                         "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| Zone ile pad arasında kurulacak bağlantı türünü belirtir."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "\n"
 "\n"
@@ -44769,8 +44778,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -44955,8 +44964,8 @@ msgid ""
 msgstr ""
 "### İfade Fonksiyonları\n"
 "\n"
-"Tüm fonksiyon parametreleri basit joker karakterleri destekler (`*` ve `?`)"
-".\n"
+"Tüm fonksiyon parametreleri basit joker karakterleri destekler (`*` ve `?"
+"`).\n"
 "\n"
 "\n"
 "```\n"
@@ -45151,13 +45160,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45312,13 +45321,13 @@ msgstr ""
 "\n"
 "    (rule \"Farklı Netlerdeki Via'lar Arasındaki Mesafe\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Farklı Netlerdeki Pad'ler Arasındaki Boşluk\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Deliği ile İz Arasındaki Boşluk\"\n"
@@ -45429,8 +45438,8 @@ msgstr ""
 "delecekse.\n"
 "    # \n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -46827,7 +46836,7 @@ msgstr "Çakışan ayak izi yerleşimleri kontrol ediliyor..."
 msgid "Checking creepage..."
 msgstr "Sızıntı yolu kontrol ediliyor..."
 
-#: pcbnew/drc/drc_test_provider_creepage.cpp:182
+#: pcbnew/drc/drc_test_provider_creepage.cpp:166
 #, c-format
 msgid "(%s creepage %s; actual %s)"
 msgstr "(%s sızıntı yolu %s; gerçek %s)"
@@ -47606,7 +47615,7 @@ msgstr ""
 msgid "Are you sure you want to delete?"
 msgstr "Silmek istediğinize emin misiniz?"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1224
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1227
 msgid ""
 "Multiple rules with the same name have different conditions. Rules with the "
 "same name must have identical conditions to be merged."
@@ -47614,7 +47623,7 @@ msgstr ""
 "Aynı isme sahip birden çok kuralın farklı koşulları var. Aynı isme sahip "
 "kuralların birleştirilebilmesi için koşullarının aynı olması gerekir."
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1243
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1246
 msgid ""
 "The following rules have unsaved changes:\n"
 "\n"
@@ -47622,7 +47631,7 @@ msgstr ""
 "Aşağıdaki kuralların kaydedilmemiş değişiklikleri var:\n"
 "\n"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1248
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1251
 msgid ""
 "\n"
 "Do you want to save your changes?"
@@ -47630,7 +47639,7 @@ msgstr ""
 "\n"
 "Değişikliklerinizi kaydetmek istiyor musunuz?"
 
-#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1415
+#: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1418
 #, c-format
 msgid "Failed to reload DRC rules: %s"
 msgstr "Tasarım Kuralı Kontrolü yeniden yüklenemedi: %s"
@@ -47647,7 +47656,12 @@ msgstr "Tolerans 0'dan büyük veya eşit olmalıdır"
 msgid "Tolerance is too large: resulting minimum length is not positive"
 msgstr "Tolerans çok büyük: sonuçtaki minimum uzunluk pozitif değil"
 
-#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:204
+#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:210
+#, fuzzy
+msgid "At least one constraint must be defined"
+msgstr "En az bir kısıtlama belirtilmelidir"
+
+#: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:216
 msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maksimum Kayma 0'dan büyük veya eşit olmalıdır"
 
@@ -47718,7 +47732,7 @@ msgstr "B Nesnesi"
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:71
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:62
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1046
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1063
 msgid "Any"
 msgstr "Herhangi"
 
@@ -47801,16 +47815,16 @@ msgstr "Alt Katmana İzin Ver"
 msgid "At least one layer must be selected"
 msgstr "En az bir katman seçilmelidir"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:71
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:69
 msgid "Optimum Width must be greater than 0"
 msgstr "Optimum Genişlik 0'dan büyük olmalıdır"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:74
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:72
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:85
 msgid "Width Tolerance must be greater than or equal to 0"
 msgstr "Genişlik Toleransı 0'dan büyük veya eşit olmalıdır"
 
-#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:77
+#: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:75
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:88
 msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Genişlik Toleransı, Optimum Genişlikten küçük olmalıdır"
@@ -47923,42 +47937,42 @@ msgstr "Kural türü"
 msgid "Rule name"
 msgstr "Kural adı"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:426
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:443
 msgid "Rule name must be unique."
 msgstr "Kural adı benzersiz olmalıdır."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:434
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:451
 msgid "Layer selection is required."
 msgstr "Katman seçimi gereklidir."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:906
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:923
 msgid "ERROR: No condition text provided for validation."
 msgstr "HATA: Doğrulama için hiçbir koşul metni sağlanmadı."
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:917
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:934
 msgid "DRC rule"
 msgstr "Tasarım Kuralı Kontrolü kuralı"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1025
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1042
 msgid "Show Matches (error)"
 msgstr "Eşleşmeleri Göster (hata)"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1029
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1046
 #, c-format
 msgid "Show Matches (%d)"
 msgstr "Eşleşmeleri Göster (%d)"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1037
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1054
 msgid "Show Matches"
 msgstr "Eşleşmeleri Göster"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1051
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1093
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1068
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1110
 msgid "outer"
 msgstr "dış"
 
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1053
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1095
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1070
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1112
 msgid "inner"
 msgstr "iç"
 
@@ -48558,7 +48572,7 @@ msgid "Error saving custom rules file '%s'."
 msgstr "'%s' özel kurallar dosyası kaydedilirken hata oluştu."
 
 #: pcbnew/files.cpp:1094 pcbnew/files.cpp:1185
-#: pcbnew/pcb_design_block_utils.cpp:112 pcbnew/pcbnew_jobs_handler.cpp:2737
+#: pcbnew/pcb_design_block_utils.cpp:112 pcbnew/pcbnew_jobs_handler.cpp:2751
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -49968,8 +49982,8 @@ msgstr "İşlem sembolü '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2007
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Uyarı: %s ayak izi '%s' için kütüphane adı eksik. Tekrarlanan güncelleme "
 "bildirimlerini önlemek için tam 'Kütüphane:Ayakİzi' formatını kullanın."
@@ -51026,7 +51040,7 @@ msgstr "Yaylar yükleniyor..."
 msgid "Loading pads..."
 msgstr "Pedler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3558
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3563
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51035,13 +51049,13 @@ msgstr ""
 "'%s' kütüphanesi yüklenirken hata oluştu:\n"
 "Ayak izi %s pedi %s çok katmanlı olarak işaretlenmemiş, ancak bir TH pedi."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3571
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3576
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Ayak izi %s pedi %s çok katmanlı olarak işaretlenmemiş, ancak bir TH pedidir."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3600
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3605
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51050,12 +51064,12 @@ msgstr ""
 "'%s' kütüphanesi yükleniyor:\n"
 "Ayak izi %s pedi %s kare bir deliğe sahip (henüz desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3613
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3618
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Ayak izi %s ped %s kare bir deliğe sahip (henüz desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3648
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3653
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51066,7 +51080,7 @@ msgstr ""
 "Ayak izi %s ped %s, %d derece delik dönüşüne sahip. KiCad yalnızca 90 derece "
 "dönüşleri destekler."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3663
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3668
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
@@ -51075,7 +51089,7 @@ msgstr ""
 "Ayak izi %s ped %s, %d derece delik dönüşüne sahip. KiCad yalnızca 90 derece "
 "dönüşleri destekler."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3683
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3688
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51084,12 +51098,12 @@ msgstr ""
 "'%s' kütüphanesi yüklenirken hata oluştu:\n"
 "Ayak izi %s pedi %s bilinmeyen türde bir delik kullanıyor %d."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3697
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Ayak izi %s ped %s bilinmeyen türde bir %d delik kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3762
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3767
 #, c-format
 msgid ""
 "Error loading library '%s':\n"
@@ -51098,12 +51112,12 @@ msgstr ""
 "Kütüphane '%s' yüklenirken hata oluştu:\n"
 "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3775
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3780
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3877
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3882
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -51112,7 +51126,7 @@ msgstr ""
 "KiCad karşılığı olmayan %s numaralı bakırsız ped, bir Altium katmanında (%d) "
 "bulundu. KiCad'in Eco1_User katmanına taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3905
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3910
 #, c-format
 msgid ""
 "Loading library '%s':\n"
@@ -51123,7 +51137,7 @@ msgstr ""
 "Ayak izi %s bakır olmayan ped %s, KiCad eşdeğeri olmayan bir Altium "
 "katmanında (%d) bulundu. KiCad katmanı Eco1_User'a taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3920
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3925
 #, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
@@ -51132,32 +51146,32 @@ msgstr ""
 "Ayak izi %s, bakırsız ped %s, KiCad karşılığı olmayan bir Altium katmanında "
 "(%d) bulundu. KiCad'in Eco1_User katmanına taşındı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3948
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3953
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Bakır olmayan ped %s desteklenmeyen bir ağa bağlı."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3959
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3964
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Bakır olmayan ped %s'de desteklenmeyen bir delik var."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:3969
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:3974
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Bakır olmayan ped %s'nin karmaşık bir ped yığını var (henüz desteklenmiyor)."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4116
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4121
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "Bakır olmayan ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4129
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4134
 msgid "Loading vias..."
 msgstr "Geçitler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4177
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4182
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -51165,24 +51179,24 @@ msgstr ""
 "%d katmanından %d katmanına geçiş, desteklenmeyen bakır olmayan bir katman "
 "kullanıyor."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4240
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4247
 msgid "Loading tracks..."
 msgstr "İzler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4457
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4464
 msgid "Loading unicode strings..."
 msgstr "Unicode dizeler yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4471
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4478
 msgid "Loading text..."
 msgstr "Metin yükleniyor..."
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4756
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4763
 #, c-format
 msgid "Unknown textbox justification %d, aText %s"
 msgstr "Bilinmeyen metin kutusu hizalaması %d, aText %s"
 
-#: pcbnew/pcb_io/altium/altium_pcb.cpp:4912
+#: pcbnew/pcb_io/altium/altium_pcb.cpp:4919
 msgid "Loading rectangles..."
 msgstr "Dikdörtgenler yükleniyor..."
 
@@ -52008,69 +52022,69 @@ msgstr "gEDA / Lepton EDA PCB ayak izi dosyası"
 msgid "gEDA / Lepton EDA PCB footprint library directory"
 msgstr "gEDA / Lepton EDA PCB ayak izi kütüphane dizini"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:432
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:437
 msgid "Generating content section"
 msgstr "İçerik bölümü oluşturuluyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1018
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1024
 msgid "Pad has unsupported type; it was skipped."
 msgstr "Ped desteklenmeyen tipte; atlandı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1409
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1415
 msgid "Generating history section"
 msgstr "Geçmiş bölümü oluşturuluyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1437
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3823
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1443
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3872
 msgid "Generating BOM section"
 msgstr "BOM (Malzeme Listesi) bölümü oluşturuluyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1498
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1504
 #, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
 msgstr ""
 "%s ayak izi sözlükte bulunamadı; malzeme listesi verileri eksik olabilir."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1514
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1520
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
 msgstr ""
 "\"%s\" bileşeninde OEM referansı eksik; malzeme listesi (BOM) girdisi "
 "atlanacak."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1621
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1635
 msgid "Generating CAD data"
 msgstr "CAD verisi oluşturma"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2740
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2747
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
 "Kart ana hattı geçersiz veya eksik.  Lütfen Tasarım Kuralı Kontrolü "
 "çalıştırın."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3143
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3204
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
 "Yinelenen ayak izi işaretçileriyle karşılaşıldı; IPC-2581 çıktısı hatalı "
 "olabilir."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3328
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3386
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Katman %s, Ağ %s dışa aktarılıyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3364
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3422
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 "Geçit desteklenmeyen ped yığını kullanıyor; delme verilerinden çıkarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3391
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3449
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 "Ped desteklenmeyen ped yığını kullanıyor; delik delme verilerinden çıkarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3534
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3592
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
@@ -52078,15 +52092,15 @@ msgstr ""
 "IPC-2581 revizyon B'de damlacıklar desteklenmez; bunlar bölgeler olarak dışa "
 "aktarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4019
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4072
 msgid "Generating logistic section"
 msgstr "Lojistik bölümü oluşturuluyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4031
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4118
 msgid "Saving file"
 msgstr "Dosya kaydediliyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4063
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4150
 msgid "Failed to save IPC-2581 data to buffer."
 msgstr "IPC-2581 verileri arabelleğe kaydedilemedi."
 
@@ -52444,46 +52458,46 @@ msgstr "PADS PCB içe aktarımı başlatılıyor"
 msgid "Footprint '%s' not found in decal list, part skipped"
 msgstr "'%s' ayak izi desen listesinde bulunamadı, parça atlandı"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:977
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1050
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
 msgstr "Eşlenmemiş %d katmanındaki desen ögesi atlanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1238
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1311
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
 msgstr "Eşlenmemiş %d katmanındaki metin, Yorumlar katmanına atandı"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1315
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1388
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:409
 #, c-format
 msgid "Skipping track on non-copper layer %d"
 msgstr "Bakır olmayan %d katmanındaki yol atlanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1548
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1621
 #, c-format
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr ""
 "Eşlenmemiş %d katmanındaki BAKIR ögesi, varsayılan olarak F.Cu katmanına "
 "atanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1794
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1867
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "Eşlenmemiş %d katmanındaki dolgu atlanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2090
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2163
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "Eşlenmemiş %d katmanındaki engellenmiş alan atlanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2114
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2187
 msgid "Skipping keepout with no valid layers"
 msgstr "Geçerli katmanı olmayan engellenmiş alan atlanıyor"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2311
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2384
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
@@ -52939,8 +52953,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -53587,7 +53601,7 @@ msgstr "Eksik hasComponentClass() bileşen sınıfı adı argümanı"
 msgid "Loading Footprint Libraries"
 msgstr "Ayak İzi Kütüphaneleri Yükleniyor"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:452 pcbnew/pcbnew_jobs_handler.cpp:2918
+#: pcbnew/pcbnew_jobs_handler.cpp:452 pcbnew/pcbnew_jobs_handler.cpp:2932
 msgid "Failed to load board\n"
 msgstr "'%s' yüklenemedi\n"
 
@@ -53727,7 +53741,7 @@ msgstr "Kart kaydedildi\n"
 msgid "Failed to save board.\n"
 msgstr "Kart kaydedilemedi.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2589
+#: pcbnew/pcbnew_jobs_handler.cpp:2603
 #, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
@@ -53736,48 +53750,48 @@ msgstr ""
 "IPC-2581 dosyası '%s' oluşturulurken hata oluştu.\n"
 "Geçici dosya '%s' yeniden adlandırılamadı."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2635
+#: pcbnew/pcbnew_jobs_handler.cpp:2649
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "IPC-D-356 dosyası başarıyla oluşturuldu\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2640
+#: pcbnew/pcbnew_jobs_handler.cpp:2654
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "IPC-D-356 dosyası oluşturulamadı\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2727
+#: pcbnew/pcbnew_jobs_handler.cpp:2741
 msgid "Successfully saved board file using the latest format\n"
 msgstr "Kart dosyası en son format kullanılarak başarıyla kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2731
+#: pcbnew/pcbnew_jobs_handler.cpp:2745
 msgid "Board file was not updated\n"
 msgstr "Kart dosyası güncellenmedi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2869
+#: pcbnew/pcbnew_jobs_handler.cpp:2883
 #, c-format
 msgid "Unable to determine file format for '%s'\n"
 msgstr "'%s' için dosya formatı belirlenemiyor\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2878
+#: pcbnew/pcbnew_jobs_handler.cpp:2892
 #, c-format
 msgid "Input file not found: '%s'\n"
 msgstr "Girdi dosyası bulunamadı: '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2904
+#: pcbnew/pcbnew_jobs_handler.cpp:2918
 #, c-format
 msgid "No plugin found for file type '%s'\n"
 msgstr "'%s' dosya türü için eklenti bulunamadı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2910
+#: pcbnew/pcbnew_jobs_handler.cpp:2924
 #, c-format
 msgid "Importing '%s' using %s format...\n"
 msgstr "'%s', %s formatı kullanılarak içe aktarılıyor...\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2926
+#: pcbnew/pcbnew_jobs_handler.cpp:2940
 #, c-format
 msgid "Successfully saved imported board to '%s'\n"
 msgstr "İçe aktarılan kart başarıyla '%s' konumuna kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:3048
+#: pcbnew/pcbnew_jobs_handler.cpp:3062
 #, c-format
 msgid "Error during import: %s\n"
 msgstr "İçe aktarma sırasında hata: %s\n"
@@ -53786,7 +53800,7 @@ msgstr "İçe aktarma sırasında hata: %s\n"
 msgid "Multiple Layers"
 msgstr "Çoklu Katmanlar"
 
-#: pcbnew/plot_board_layers.cpp:1283
+#: pcbnew/plot_board_layers.cpp:1307
 msgid "HPGL plotting is no longer supported as of KiCad 10.0"
 msgstr "HPGL çizimi KiCad 10.0 itibarıyla artık desteklenmiyor"
 
@@ -54863,8 +54877,8 @@ msgstr "Bölge boşluğu: %s."
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr ""
-"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz kılınmıştır ;"
-"açıklık: %s."
+"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz "
+"kılınmıştır ;açıklık: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1135
 #, c-format
@@ -59252,95 +59266,103 @@ msgstr "delik içi kaplamalı geçit için termal rölyef"
 msgid "[INFO] load failed: %s"
 msgstr "[BİLGİ] yükleme başarısız oldu: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component/Bileşen Dönüştürücü;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Bitmap/Bileşen Dönüştürücü"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "KiCad ile kullanmak için bir bitmap'ten bir bileşen oluşturun"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad Şematik Düzenleyici (Bağımsız)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Şematik Çizim Aracı"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "KiCad şemaları için bağımsız şematik düzenleyici"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "şema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Gerber Dosyası Görüntüleyici"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Gerber dosyalarını görüntüleyin"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;Baskı Devre;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Proje Yöneticisi;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "EDA Paketi"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Şematik tasarım ve Baskı Devre yerleşimi için araç paketi"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "KiCad Baskı Devre Hesaplayıcı"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "KiCad Baskı Devre Hesaplayıcı;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "Baskı Devre Hesaplayıcı"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Elektronikle ilgili çeşitli hesaplamalar için hesap makinesi"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr ""
 "Baskı Devre Düzenleyici;Baskı Devre;Devre;Yerleşim;Tasarım;Düzenleyici;Ayak "
 "İzi;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad Baskı Devre Düzenleyici (Bağımsız)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Baskı Devre Yerleşim Düzenleyici"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "KiCad kartları için bağımsız devre kartı editörü"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Şematik ve devre kartı tasarımı için bir EDA paketi"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "Devre Kartı"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -59398,6 +59420,9 @@ msgstr "KiCad Şematik Sembol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Çizim Sayfası"
+
+#~ msgid "PCB: Import"
+#~ msgstr "Baskı Devre: İçe Aktar"
 
 #~ msgid "JSON file with layer name mappings"
 #~ msgstr "Katman adı eşlemelerini içeren JSON dosyası"
@@ -60386,8 +60411,8 @@ msgstr "KiCad Çizim Sayfası"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -60438,9 +60463,9 @@ msgstr "KiCad Çizim Sayfası"
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -60526,8 +60551,8 @@ msgstr "KiCad Çizim Sayfası"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Veriyolu Tanımı</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Oluşan Ağlar</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -60578,9 +60603,9 @@ msgstr "KiCad Çizim Sayfası"
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -61854,12 +61879,6 @@ msgstr "KiCad Çizim Sayfası"
 #~ "Kartta kullanılan ayak izlerini içeren yeni bir ayak izi kütüphanesi "
 #~ "oluştur\n"
 #~ "(kütüphane zaten varsa değiştirilecektir)"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Devre Kartı"
 
 #, c-format
 #~ msgid ""
@@ -65449,8 +65468,8 @@ msgstr "KiCad Çizim Sayfası"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -65582,13 +65601,13 @@ msgstr "KiCad Çizim Sayfası"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -65672,8 +65691,9 @@ msgstr "KiCad Çizim Sayfası"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+#~ "pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Üst Düzey Yan tümceler\n"
 #~ "\n"
@@ -67072,8 +67092,8 @@ msgstr "KiCad Çizim Sayfası"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -67262,8 +67282,8 @@ msgstr "KiCad Çizim Sayfası"
 #~ "\n"
 #~ "Linux'ta:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 
 #, fuzzy, c-format
