@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:08+0300\n"
-"PO-Revision-Date: 2026-03-06 20:18+0000\n"
+"PO-Revision-Date: 2026-03-06 20:35+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -17289,9 +17289,8 @@ msgid "_1"
 msgstr "_1"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:113
-#, fuzzy
 msgid "Allow reference reuse"
-msgstr "Nastavenia farieb"
+msgstr "Povoliť znovu použiť referencie"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:147
 msgid ""
@@ -17382,39 +17381,32 @@ msgid "Show directive labels"
 msgstr "Zobraziť označenia direktív"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:120
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Chyby ERC"
+msgstr "Zobraziť ERC chyby"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:124
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Varovania ERC"
+msgstr "Zobraziť ERC varovania"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:128
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Vylúčenia KDR"
+msgstr "Zobraziť ERC vylúčenia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:131
-#, fuzzy
 msgid "Mark items which are excluded from simulation"
-msgstr "Zmazať atribút vylúčenia zo simulácie"
+msgstr "Označiť položky, ktoré sú vylúčené zo simulácie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:135
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Zobraziť hranice strany"
+msgstr "Zobraziť OP napätia"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:139
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Globálne knižnice"
+msgstr "Zobraziť OP prúdy"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:143
-#, fuzzy
 msgid "Show pin alternate mode indicator icons"
-msgstr "Zobraziť indikátor <žiadna sieť>"
+msgstr "Zobraziť ikonu indikujúcu alternatívnu funkciu vývodu"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Show page limi&ts"
@@ -17422,9 +17414,8 @@ msgstr "Zobraziť hranice strany"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_display_options_base.cpp:138
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Zvýraznenie výberu"
+msgstr "Výber && Zvýraznenie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:167
 msgid "Draw selected child items"
@@ -30763,9 +30754,8 @@ msgid "Recent project templates"
 msgstr "Vytvoriť nový projekt zo šablóny"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "Používateľské šablóny"
+msgstr "Všetky šablóny"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
