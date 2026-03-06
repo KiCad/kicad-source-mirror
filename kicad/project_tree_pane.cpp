@@ -701,6 +701,10 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
         if( m_TreeProject->GetGitRepo() )
         {
+            // Reset the cancel flag so git operations work after project switches.
+            // EmptyTreePrj() sets this to true during shutdown.
+            m_TreeProject->GitCommon()->SetCancelled( false );
+
             const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
 
             if( canonicalWorkDir )
@@ -1946,6 +1950,8 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
         if( m_TreeProject->GetGitRepo() )
         {
+            m_TreeProject->GitCommon()->SetCancelled( false );
+
             const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
 
             if( canonicalWorkDir )
