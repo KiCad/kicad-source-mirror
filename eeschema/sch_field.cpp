@@ -1297,6 +1297,12 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         vjustify = GR_TEXT_V_ALIGN_CENTER;
         textpos = GetBoundingBox().Centre();
     }
+    else if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+    {
+        // Library-symbol exports (CLI/symbol editor) provide an item offset in the same coordinate
+        // frame as body graphics/pins.  Apply the same transform+offset pipeline to field text.
+        textpos = renderSettings->TransformCoordinate( textpos ) + aOffset;
+    }
     else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_parent );
