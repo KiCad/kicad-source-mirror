@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 20:14+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-07 00:20+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -2203,8 +2203,7 @@ msgstr "No se puede eliminar la biblioteca de bloques de diseño «%s»."
 #: common/design_block_io.cpp:339
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr ""
-"No se ha podido leer el archivo de metadatos del bloque de diseño «%s»."
+msgstr "No se ha podido leer el archivo de metadatos del bloque de diseño «%s»."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
@@ -22417,8 +22416,7 @@ msgstr "La configuración actual no incluye la biblioteca de símbolos '%s'."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1558
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"Utilice Gestionar bibliotecas de símbolos para editar la configuración."
+msgstr "Utilice Gestionar bibliotecas de símbolos para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
 msgid "Library not found in symbol library table."
@@ -27005,8 +27003,8 @@ msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Opciones válidas: front,back,both. El formato Gerber solo admite «front» y "
-"«back»."
+"Opciones válidas: front,back,both. El formato Gerber solo admite «front» y «"
+"back»."
 
 #: kicad/cli/command_pcb_export_pos.cpp:54
 msgid "Valid options: ascii,csv,gerber"
