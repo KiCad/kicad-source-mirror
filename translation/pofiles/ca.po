@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2025-05-11 14:03+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-03-06 22:34+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -538,8 +538,7 @@ msgstr "Mostra els models 3D"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 #, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr ""
-"Commuta els models 3D pels components del tipus 'Muntats en superfície'"
+msgstr "Commuta els models 3D pels components del tipus 'Muntats en superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
@@ -565,8 +564,7 @@ msgstr "Mostrar models 3D marcats com a DNP"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 #, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr ""
-"Commuta els models 3D pels components del tipus 'Muntats en superfície'"
+msgstr "Commuta els models 3D pels components del tipus 'Muntats en superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
@@ -4761,8 +4759,7 @@ msgstr "Un sobrenom de la fila de la taula de biblioteques està buit."
 #: common/dialogs/panel_design_block_lib_table.cpp:544
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:567
 msgid "A library table row path cell is empty."
-msgstr ""
-"Una cel·la del camí de la fila de la taula de la biblioteca està buida."
+msgstr "Una cel·la del camí de la fila de la taula de la biblioteca està buida."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:571
@@ -5317,8 +5314,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Aquesta escala proporciona una mida d'imatge molt grossa (%.1f mm o %.2f "
-"mil). N'estàs segur?"
+"Aquesta escala proporciona una mida d'imatge molt grossa (%.1f mm o %.2f mil)"
+". N'estàs segur?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
 #, fuzzy
@@ -7105,8 +7102,7 @@ msgstr "El camí base de les biblioteques d'empremtes instal·lades localment."
 
 #: common/env_vars.cpp:109
 msgid "A directory containing project templates installed with KiCad."
-msgstr ""
-"La carpeta que conté les plantilles de projecte instal·lades per KiCad."
+msgstr "La carpeta que conté les plantilles de projecte instal·lades per KiCad."
 
 #: common/env_vars.cpp:111
 msgid ""
@@ -11203,8 +11199,7 @@ msgstr "Fitxer de projecte: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1084
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
-"No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
+msgstr "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 msgid "Footprint Association File"
@@ -20821,8 +20816,7 @@ msgstr "Recorrent al cau per definir el símbol '%s:%s' enllaç '%s'."
 #: eeschema/sch_screen.cpp:798
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
-"No s'ha trobat el símbol de biblioteca pel símbol d'esquemàtic '%s %s'."
+msgstr "No s'ha trobat el símbol de biblioteca pel símbol d'esquemàtic '%s %s'."
 
 #: eeschema/sch_shape.cpp:537
 #, c-format
@@ -21259,9 +21253,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -21298,8 +21292,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definició de Bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Xarxes resultants</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -25654,8 +25649,7 @@ msgstr ""
 #: pcbnew/tools/footprint_editor_control.cpp:675
 #, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr ""
-"No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
+msgstr "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: eeschema/tools/symbol_editor_control.cpp:505
 #: eeschema/widgets/panel_symbol_chooser.cpp:705
@@ -40173,8 +40167,7 @@ msgstr "Reverteix els canvis"
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 #, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr ""
-"La mida de perforació de la via és més petita que el diàmetre de la via"
+msgstr "La mida de perforació de la via és més petita que el diàmetre de la via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:651
 msgid "Via start layer and end layer cannot be the same"
@@ -43386,8 +43379,7 @@ msgstr "S'estan verificant els marges dels coures a la vora de la placa..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:153
 msgid "Checking silk to board edge clearances..."
-msgstr ""
-"S'estan verificant els marges de la serigrafia a la vora de la placa..."
+msgstr "S'estan verificant els marges de la serigrafia a la vora de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -46152,8 +46144,7 @@ msgstr "Error: la mida de la cantonada és negativa."
 #: pcbnew/pad.cpp:2400
 #, fuzzy, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr ""
-"La mida de perforació de la via és més petita que el diàmetre de la via"
+msgstr "La mida de perforació de la via és més petita que el diàmetre de la via"
 
 #: pcbnew/pad.cpp:2424
 #, fuzzy
@@ -48234,8 +48225,8 @@ msgstr ""
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"introduïu el mòdul de python que implementi les funcions "
-"PLUGIN::Footprint*()."
+"introduïu el mòdul de python que implementi les funcions PLUGIN::Footprint*()"
+"."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
