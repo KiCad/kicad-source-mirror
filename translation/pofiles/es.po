@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
 "PO-Revision-Date: 2026-03-07 00:23+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -9192,8 +9192,7 @@ msgstr "Añadir columna después"
 
 #: common/tool/actions.cpp:419
 msgid "Insert a new table column after the selected cell(s)"
-msgstr ""
-"Insertar una nueva columna de tabla después de las celdas seleccionadas"
+msgstr "Insertar una nueva columna de tabla después de las celdas seleccionadas"
 
 #: common/tool/actions.cpp:425
 msgid "Delete Row(s)"
@@ -22356,8 +22355,7 @@ msgstr "Crear una copia editable"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:961
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr ""
-"¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
+msgstr "¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 msgid "Select type of item to save"
@@ -26617,8 +26615,7 @@ msgstr "Exportar gráficos de serigrafía como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
-msgstr ""
-"Exportar capas de máscara de soldadura como un conjunto de caras planas"
+msgstr "Exportar capas de máscara de soldadura como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
@@ -31506,12 +31503,12 @@ msgstr ""
 "mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
-"H)<sup>0,725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; H)"
+"<sup>0,725</sup>___</center>\n"
 "donde:<br>\n"
 "___I___ es la corriente máxima en A<br>\n"
-"___&Delta;T___ es la elevación de temperatura sobre la ambiente en "
-"&deg;C<br>\n"
+"___&Delta;T___ es la elevación de temperatura sobre la ambiente en &deg;C<br>"
+"\n"
 "___W___ es el ancho en mils<br>\n"
 "___H___ es el grosor (altura) en mils<br>\n"
 "___K___ es 0,024 para pistas internas o 0,048 para pistas externas\n"
@@ -37004,8 +37001,7 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
-"Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
+msgstr "Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -41019,8 +41015,8 @@ msgstr ""
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
-"binarias)_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -42257,8 +42253,7 @@ msgstr "Expresión de afirmación faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr ""
-"La opción within_diff_pairs no es válida para este tipo de restricción."
+msgstr "La opción within_diff_pairs no es válida para este tipo de restricción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:511
 msgid "Missing min value."
@@ -44522,8 +44517,8 @@ msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está "
-"bloqueada)."
+"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está bloqueada)"
+"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, c-format
@@ -47288,8 +47283,8 @@ msgid ""
 msgstr ""
 "El archivo seleccionado contiene múltiples huellas. Solo se importará la "
 "primera.\n"
-"Para cargar todas las huellas, añádalo como biblioteca usando Preferencias "
-"-> Gestionar bibliotecas de huellas..."
+"Para cargar todas las huellas, añádalo como biblioteca usando "
+"Preferencias -> Gestionar bibliotecas de huellas..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -51299,8 +51294,7 @@ msgstr "Cancelar elemento actual"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
 msgid "Skip current item and route next selected item."
-msgstr ""
-"Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
+msgstr "Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
