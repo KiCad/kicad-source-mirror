@@ -3580,15 +3580,6 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
 
-                    // Per IPC-2581 schema, element order in Features must be: Xform, Location, Feature
-                    EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
-
-                    if( fp_angle != ANGLE_0 )
-                    {
-                        wxXmlNode* xformNode = appendNode( tempFeature, "Xform" );
-                        addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
-                    }
-
                     addLocationNode( tempFeature, *shape );
                     addShape( tempFeature, *shape );
                 }
