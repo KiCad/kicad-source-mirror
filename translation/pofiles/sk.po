@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 20:10+0000\n"
+"PO-Revision-Date: 2026-03-06 22:20+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -16423,9 +16423,8 @@ msgid "Alias name '%s' already in use."
 msgstr "Názov aliasu '%s' sa už používa."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:340
-#, fuzzy
 msgid "Member net/alias name cannot be empty."
-msgstr "Názov siete nemôže byť prázdny."
+msgstr "Názov člena spoja/aliasu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 #, fuzzy
@@ -16437,9 +16436,8 @@ msgid "Alias"
 msgstr "Alias"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
-#, fuzzy
 msgid "(source)"
-msgstr "Zdroj"
+msgstr "(zdroj)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
 #, fuzzy, c-format
@@ -16491,9 +16489,8 @@ msgid "Default text size:"
 msgstr "Predvolená veľkosť textu:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Pomer odsadenia textu:"
+msgstr "Pomer odsadenia nad čiaru:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -16558,9 +16555,8 @@ msgid "Show inter-sheet references"
 msgstr "Zobraziť odkazy medzi hárkami"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:202
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Zobraziť odkazy na stopy"
+msgstr "Zobraziť vlastné referencie stránky"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:206
 msgid "Standard (1,2,3)"
@@ -16595,15 +16591,13 @@ msgstr "Prerušované čiary"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:254
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:32
-#, fuzzy
 msgid "Dash length:"
-msgstr "Cez dĺžku:"
+msgstr "Dĺžka čiarky:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:261
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:39
-#, fuzzy
 msgid "Gap length:"
-msgstr "Cez dĺžku:"
+msgstr "Dĺžka medzery:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:271
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
@@ -16611,94 +16605,78 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "Délky pomlčky a bodu jsou poměry šířky linky."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:279
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Prevádzkový bod"
+msgstr "Prekrytie prevádzkového bodu"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Uložiť všetky zmeny"
+msgstr "Rozsah (napätia):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
 #: pcb_calculator/widgets/unit_selector.cpp:255
-#, fuzzy
 msgid "mV"
-msgstr "V"
+msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "kV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:307
 msgid "Significant digits (currents):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Globálne knižnice"
+msgstr "Rozsah (prúdy):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:271
@@ -16707,34 +16685,28 @@ msgid "uA"
 msgstr "µA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "kA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
@@ -16750,20 +16722,17 @@ msgstr "Generovať chybu"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "Nespojený"
+msgstr "Bez akcie"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "Posun vľavo/vpravo:"
+msgstr "Posun vľavo/vpravo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
-#, fuzzy
 msgid "Pan right/left"
-msgstr "Posunúť doprava"
+msgstr "Posun vpravo/vľavo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
 #, fuzzy
