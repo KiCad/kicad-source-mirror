@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
 "PO-Revision-Date: 2026-03-06 23:40+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: İclal Gör <iclallgor@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -17227,8 +17227,7 @@ msgstr "%s sembolünde yerleştirilmemiş %s birimleri var"
 #: eeschema/erc/erc.cpp:659
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr ""
-"%s sembolü, yerleştirilmemiş %s biriminde giriş güç pinlerine sahiptir."
+msgstr "%s sembolü, yerleştirilmemiş %s biriminde giriş güç pinlerine sahiptir."
 
 #: eeschema/erc/erc.cpp:666
 #, c-format
@@ -19953,8 +19952,7 @@ msgstr "Şematik kural alanı"
 #: eeschema/sch_screen.cpp:695 eeschema/sch_screen.cpp:787
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
-"Şematik sembol '%s %s' kütüphane tanımlayıcısı '%s' olarak ayarlanıyor."
+msgstr "Şematik sembol '%s %s' kütüphane tanımlayıcısı '%s' olarak ayarlanıyor."
 
 #: eeschema/sch_screen.cpp:711
 #, c-format
@@ -30979,8 +30977,8 @@ msgstr ""
 "Bir elektrokimyasal çiftin anodu oksitlenir ve aşınır, katoda ise üzerine "
 "eritilmiş metaller kaplanır ancak korunur.<br>\n"
 "Pozitif bir sayı, sıranın anodik (-) ve kolonun katodik (+) olduğunu "
-"gösterir, soğuk ve sıcak renk tonları da sıraların potansiyelini gösterir."
-"<br>\n"
+"gösterir, soğuk ve sıcak renk tonları da sıraların potansiyelini "
+"gösterir.<br>\n"
 "EN 50310, 300 mV'un altında bir voltaj farkı önermektedir. Bilinen "
 "uygulamalar, ana çift (yani ENIG yüzey kaplaması) arasında üçüncü bir arayüz "
 "metali kullanır.<br>\n"
@@ -45588,8 +45586,7 @@ msgstr "Grup tanımlarında grup kimliği %s bulunamadı."
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr ""
-"Grup haritasında %s alt grubu bulunamadı (üst grup kimliği=%s, Adı=%s)."
+msgstr "Grup haritasında %s alt grubu bulunamadı (üst grup kimliği=%s, Adı=%s)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1481
 #, c-format
