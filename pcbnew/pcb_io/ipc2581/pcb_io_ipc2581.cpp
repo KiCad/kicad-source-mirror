@@ -2189,7 +2189,7 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
 
         if( add_node && !vec.empty() )
         {
-            wxXmlNode* node = appendNode( aCadLayerNode, "LAYER" );
+            wxXmlNode* node = appendNode( aCadLayerNode, "Layer" );
             addAttribute( node, "layerFunction", layerFunction );
             addAttribute( node, "polarity", "POSITIVE" );
 
@@ -2211,17 +2211,17 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
                     if( second_external )
                         addAttribute( node, "side", "ALL" );
                     else
-                        addAttribute( node, "side", "FRONT" );
+                        addAttribute( node, "side", "TOP" );
                 }
                 else
                 {
                     if( second_external )
-                        addAttribute( node, "side", "BACK" );
+                        addAttribute( node, "side", "BOTTOM" );
                     else
                         addAttribute( node, "side", "INTERNAL" );
                 }
 
-                wxXmlNode* spanNode = appendNode( node, "SPAN" );
+                wxXmlNode* spanNode = appendNode( node, "Span" );
                 addAttribute( spanNode, "fromLayer", genLayerString( std::get<1>( layers ), "LAYER" ) );
                 addAttribute( spanNode, "toLayer", genLayerString( std::get<2>( layers ), "LAYER" ) );
             }
