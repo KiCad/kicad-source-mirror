@@ -27,6 +27,7 @@
 #include <lset.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
+#include <trigo.h>
 #include <pcb_base_frame.h>
 #include <math/util.h>      // for KiROUND
 #include <board.h>
@@ -642,27 +643,50 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 && (   ( onFrontFab && footprint->GetLayer() == F_Cu )
                     || ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
         {
-            BOX2I                 rect;
             const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( footprint->GetLayer() );
+            VECTOR2I              center = footprint->GetPosition();
+            EDA_ANGLE             orient = footprint->GetOrientation();
+
+            // Compute a tight oriented bounding box by un-rotating the shape into the
+            // footprint's local frame, taking the axis-aligned BBox there, then rotating
+            // the four corners back into world coordinates.
+            BOX2I localRect;
 
             if( courtyard.IsEmpty() )
-                rect = footprint->GetEffectiveShape()->BBox();
+            {
+                std::shared_ptr<SHAPE> shape = footprint->GetEffectiveShape();
+                shape->Rotate( -orient, center );
+                localRect = shape->BBox();
+            }
             else
-                rect = courtyard.BBox();
+            {
+                SHAPE_POLY_SET temp( courtyard );
+                temp.Rotate( -orient, center );
+                localRect = temp.BBox();
+            }
 
-            int   width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
+            VECTOR2I corner1( localRect.GetLeft(), localRect.GetTop() );
+            VECTOR2I corner2( localRect.GetRight(), localRect.GetTop() );
+            VECTOR2I corner3( localRect.GetRight(), localRect.GetBottom() );
+            VECTOR2I corner4( localRect.GetLeft(), localRect.GetBottom() );
+
+            RotatePoint( corner1, center, orient );
+            RotatePoint( corner2, center, orient );
+            RotatePoint( corner3, center, orient );
+            RotatePoint( corner4, center, orient );
+
+            int width = aBoard->GetDesignSettings().m_LineThickness[ LAYER_CLASS_FAB ];
 
             // Use DNP cross color from color scheme
             COLOR4D dnpMarkerColor = aPlotOpt.ColorSettings()->GetColor( LAYER_DNP_MARKER );
+
             if( dnpMarkerColor != COLOR4D::UNSPECIFIED )
                 aPlotter->SetColor( dnpMarkerColor );
             else
                 aPlotter->SetColor( aPlotOpt.ColorSettings()->GetColor( onFrontFab ? F_Fab : B_Fab ) );
 
-            aPlotter->ThickSegment( rect.GetOrigin(), rect.GetEnd(), width, nullptr );
-            aPlotter->ThickSegment( VECTOR2I( rect.GetLeft(), rect.GetBottom() ),
-                                    VECTOR2I( rect.GetRight(), rect.GetTop() ),
-                                    width, nullptr );
+            aPlotter->ThickSegment( corner1, corner3, width, nullptr );
+            aPlotter->ThickSegment( corner2, corner4, width, nullptr );
         }
 
         aPlotter->EndBlock( nullptr );
