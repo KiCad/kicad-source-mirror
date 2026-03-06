@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:08+0300\n"
-"PO-Revision-Date: 2026-03-06 20:14+0000\n"
+"PO-Revision-Date: 2026-03-06 20:35+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
@@ -16196,7 +16196,7 @@ msgstr "Spice Simülasyon"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
-msgstr "PSpice Dosyası"
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "LTSpice"
