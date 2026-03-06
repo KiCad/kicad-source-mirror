@@ -125,6 +125,7 @@ static const std::vector<std::string> VALIDATION_TEST_BOARDS = {
     "issue7241.kicad_pcb",
     "issue10906.kicad_pcb",
     "issue22798.kicad_pcb",
+    "padstacks_complex.kicad_pcb",
 };
 
 } // anonymous namespace
@@ -515,6 +516,45 @@ BOOST_AUTO_TEST_CASE( SmdPadSolderMaskExport_Issue16658 )
     // Also check for LayerFeature element with mask layer reference
     bool hasLayerFeature = FileContainsPattern( tempPath, wxT( "<LayerFeature" ) );
     BOOST_CHECK_MESSAGE( hasLayerFeature, "IPC-2581 export should contain LayerFeature elements" );
+}
+
+
+/**
+ * Test that footprints with empty references produce valid XML attributes.
+ *
+ * Footprints with blank GetReference() must not produce empty refDes,
+ * RefDes/@name, or PinRef/@componentRef attributes, which are
+ * schema-invalid qualified names.
+ */
+BOOST_AUTO_TEST_CASE( EmptyRefDesProducesValidXml )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "padstacks_complex.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    for( char version : { 'B', 'C' } )
+    {
+        BOOST_TEST_CONTEXT( "Version " << version )
+        {
+            wxString tempPath = CreateTempFile();
+
+            std::map<std::string, UTF8> props;
+            props["units"] = "mm";
+            props["version"] = std::string( 1, version );
+            props["sigfig"] = "3";
+
+            m_ipc2581Plugin.SaveBoard( tempPath, board.get(), &props );
+            BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+            BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "refDes=\"\"" ) ),
+                                 "Empty refDes attribute found" );
+            BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "<RefDes name=\"\"" ) ),
+                                 "Empty RefDes/@name attribute found" );
+            BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "componentRef=\"\"" ) ),
+                                 "Empty PinRef/@componentRef attribute found" );
+        }
+
+        m_ipc2581Plugin = PCB_IO_IPC2581();
+    }
 }
 
 

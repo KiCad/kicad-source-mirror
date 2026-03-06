@@ -350,7 +350,12 @@ wxString PCB_IO_IPC2581::componentName( FOOTPRINT* aFootprint )
     if( m_footprint_refdes_reverse_dict.count( aFootprint ) )
         return m_footprint_refdes_reverse_dict.at( aFootprint );
 
-    wxString baseName = genString( aFootprint->GetReference(), "CMP" );
+    wxString ref = aFootprint->GetReference();
+
+    if( ref.IsEmpty() )
+        ref = wxT( "NOREF_" ) + aFootprint->m_Uuid.AsString().Left( 8 );
+
+    wxString baseName = genString( ref, "CMP" );
     wxString name = baseName;
     int      suffix = 1;
 
