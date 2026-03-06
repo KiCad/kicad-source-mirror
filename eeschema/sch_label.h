@@ -238,7 +238,7 @@ public:
      *
      * @param aIncrement = the increment value to add to the number ending the text.
      */
-    bool IncrementLabel( int aIncrement );
+    virtual bool IncrementLabel( int aIncrement );
 
     void Move( const VECTOR2I& aMoveVector ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
@@ -507,6 +507,9 @@ public:
 
     /// @brief Determines dangling state from connectivity and cached connected rule areas
     virtual bool IsDangling() const override;
+
+    /// Increment the netclass and component class labels if possible
+    bool IncrementLabel( int aIncrement ) override;
 
 private:
     int       m_pinLength;
