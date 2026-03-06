@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:09+0300\n"
-"PO-Revision-Date: 2026-03-02 18:10+0000\n"
+"PO-Revision-Date: 2026-03-06 20:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -29548,7 +29548,7 @@ msgstr "<= 2%"
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
 msgid "Tolerance"
-msgstr "誤差"
+msgstr "許容差"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
@@ -30367,11 +30367,11 @@ msgstr "三端子レギュレーターのみ、Adjust ピンの電流。"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
-msgstr "全体の誤差:"
+msgstr "全体の許容差:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
 msgid "Resistor tolerance:"
-msgstr "抵抗の誤差:"
+msgstr "抵抗の許容差:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:214
@@ -32753,7 +32753,7 @@ msgstr "基板外形の線の不連続性を補正"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
 msgid "Tolerance:"
-msgstr "許容誤差:"
+msgstr "許容差:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:144
@@ -34431,7 +34431,7 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"基板外形がないか、%.3f mm の許容誤差で閉じられていません。\n"
+"基板外形がないか、%.3f mm の許容差で閉じられていません。\n"
 "完全な解析のためにDRCを実行してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:615
@@ -34637,7 +34637,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:263
 msgid "Board outline chaining tolerance:"
-msgstr "基板外形の線を接続とする許容値:"
+msgstr "基板外形の線を接続する許容差:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
 msgid "Tight (0.001 mm)"
@@ -34656,8 +34656,8 @@ msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 msgstr ""
-"許容値は基板外形の線を作るときに、接続されているとみなす２点間の距離を規定し"
-"ます。"
+"許容差は基板外形の線をかたちずくるときに、接続されているとみなす２点間の距離"
+"を規定します。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:107
 msgid "Export 3D Model"
@@ -48527,7 +48527,7 @@ msgstr "図形を単純化する"
 
 #: pcbnew/tools/edit_tool.cpp:1654 pcbnew/tools/edit_tool.cpp:1723
 msgid "Tolerance value:"
-msgstr "許容値:"
+msgstr "許容差値:"
 
 #: pcbnew/tools/edit_tool.cpp:1688 pcbnew/tools/pcb_actions.cpp:624
 msgid "Simplify Polygons"
