@@ -730,6 +730,7 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
     {
         const auto actionIt = m_toolActions.find( id );
         const auto cancelIt = m_toolCancellable.find( id );
+        const auto groupIt  = m_actionGroups.find( id );
 
         // Determine if the tool is actually cancellable
         bool isCancellable = ( cancelIt != m_toolCancellable.end() ) ? cancelIt->second : false;
@@ -740,6 +741,32 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
         {
             // Send a cancel event
             m_toolManager->CancelTool();
+            handled = true;
+        }
+        else if( groupIt != m_actionGroups.end() && m_toolKinds[id] )
+        {
+            // For toggle-type groups (units, crosshair, line modes), cycle to the next action
+            ACTION_GROUP*                       group   = groupIt->second.get();
+            const std::vector<const TOOL_ACTION*>& actions = group->GetActions();
+            const TOOL_ACTION*                  current = actionIt->second;
+
+            const TOOL_ACTION* next = actions[0];
+
+            for( size_t i = 0; i < actions.size(); ++i )
+            {
+                if( actions[i]->GetId() == current->GetId() )
+                {
+                    next = actions[( i + 1 ) % actions.size()];
+                    break;
+                }
+            }
+
+            evt = next->MakeEvent();
+            evt->SetHasPosition( false );
+            m_toolManager->ProcessEvent( *evt );
+            m_toolManager->GetToolHolder()->RefreshCanvas();
+
+            doSelectAction( group, *next );
             handled = true;
         }
         else if( actionIt != m_toolActions.end() )
