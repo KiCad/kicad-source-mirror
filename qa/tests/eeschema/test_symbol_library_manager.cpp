@@ -356,4 +356,94 @@ BOOST_AUTO_TEST_CASE( DeletedSymbolsAreRemovedFromFile )
 }
 
 
+/**
+ * Test that saving symbols to a new file using buffered mode works when the target file
+ * does not yet exist.
+ *
+ * This exercises the same code path as "Save Library As" in the symbol editor: a fresh
+ * SCH_IO plugin instance buffers symbols and then flushes to a new file path. Before the
+ * fix, cacheLib() would call Load() on the non-existent target file and throw, resulting
+ * in an empty library (header only).
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23337
+ */
+BOOST_AUTO_TEST_CASE( SaveLibraryAsToNewFile )
+{
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( tempDir );
+    wxFileName::Mkdir( tempDir );
+
+    wxString srcPath = wxFileName( tempDir, wxS( "source.kicad_sym" ) ).GetFullPath();
+    wxString dstPath = wxFileName( tempDir, wxS( "destination.kicad_sym" ) ).GetFullPath();
+
+    // Create a source library with two symbols (one parent, one derived)
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        plugin->CreateLibrary( srcPath );
+
+        auto parent = std::make_unique<LIB_SYMBOL>( wxS( "Parent" ) );
+        parent->GetValueField().SetText( wxS( "Parent" ) );
+        parent->GetReferenceField().SetText( wxS( "U" ) );
+        LIB_SYMBOL* parentPtr = parent.get();
+
+        plugin->SaveSymbol( srcPath, new LIB_SYMBOL( *parent ) );
+
+        auto derived = std::make_unique<LIB_SYMBOL>( wxS( "Derived" ) );
+        derived->GetValueField().SetText( wxS( "Derived" ) );
+        derived->SetParent( parentPtr );
+
+        plugin->SaveSymbol( srcPath, new LIB_SYMBOL( *derived ) );
+        plugin->SaveLibrary( srcPath );
+    }
+
+    // Simulate "Save Library As" to a new file that does not exist yet.
+    // This mirrors the else-branch in SYMBOL_LIBRARY_MANAGER::SaveLibrary.
+    {
+        IO_RELEASER<SCH_IO> srcPlugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        IO_RELEASER<SCH_IO> dstPlugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
+
+        LIB_SYMBOL* loadedParent = srcPlugin->LoadSymbol( srcPath, wxS( "Parent" ) );
+        LIB_SYMBOL* loadedDerived = srcPlugin->LoadSymbol( srcPath, wxS( "Derived" ) );
+        BOOST_REQUIRE( loadedParent != nullptr );
+        BOOST_REQUIRE( loadedDerived != nullptr );
+
+        // Buffer symbols into the destination plugin using the target path (which
+        // does not exist yet). This must not throw.
+        BOOST_CHECK_NO_THROW(
+                dstPlugin->SaveSymbol( dstPath, new LIB_SYMBOL( *loadedParent ), &properties ) );
+
+        LIB_SYMBOL* newDerived = new LIB_SYMBOL( *loadedDerived );
+        LIB_SYMBOL* dstParent = dstPlugin->LoadSymbol( dstPath, wxS( "Parent" ), &properties );
+        BOOST_REQUIRE( dstParent != nullptr );
+        newDerived->SetParent( dstParent );
+
+        BOOST_CHECK_NO_THROW(
+                dstPlugin->SaveSymbol( dstPath, newDerived, &properties ) );
+
+        BOOST_CHECK_NO_THROW( dstPlugin->SaveLibrary( dstPath ) );
+    }
+
+    // Reload the destination library and verify both symbols are present
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+        LIB_SYMBOL* parent = plugin->LoadSymbol( dstPath, wxS( "Parent" ) );
+        LIB_SYMBOL* derived = plugin->LoadSymbol( dstPath, wxS( "Derived" ) );
+
+        BOOST_CHECK_MESSAGE( parent != nullptr,
+                             "Parent symbol should exist in the saved-as library" );
+        BOOST_CHECK_MESSAGE( derived != nullptr,
+                             "Derived symbol should exist in the saved-as library" );
+
+        if( derived )
+            BOOST_CHECK( derived->IsDerived() );
+    }
+
+    if( wxFileName::DirExists( tempDir ) )
+        wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

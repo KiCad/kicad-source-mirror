@@ -1654,7 +1654,7 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
         delete m_cache;
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryFileName );
 
-        if( !isBuffering( aProperties ) || isNewCache )
+        if( !isBuffering( aProperties ) || ( isNewCache && m_cache->isLibraryPathValid() ) )
         {
             m_cache->Load();
             m_cache->m_modHash = oldModifyHash + 1;

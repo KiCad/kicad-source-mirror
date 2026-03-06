@@ -220,12 +220,12 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                                  wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
                                                    symbol->GetName() ) );
 
-                    LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(), &properties );
+                    LIB_SYMBOL* libParent = pi->LoadSymbol( aFileName, oldParent->GetName(), &properties );
 
                     if( !libParent )
                     {
                         libParent = new LIB_SYMBOL( *oldParent );
-                        pi->SaveSymbol( aLibrary, libParent, &properties );
+                        pi->SaveSymbol( aFileName, libParent, &properties );
                     }
                     else
                     {
@@ -247,11 +247,11 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
                     newSymbol = new LIB_SYMBOL( *symbol );
                     newSymbol->SetParent( libParent );
-                    pi->SaveSymbol( aLibrary, newSymbol, &properties );
+                    pi->SaveSymbol( aFileName, newSymbol, &properties );
                 }
-                else if( !pi->LoadSymbol( aLibrary, symbol->GetName(), &properties ) )
+                else if( !pi->LoadSymbol( aFileName, symbol->GetName(), &properties ) )
                 {
-                    pi->SaveSymbol( aLibrary, new LIB_SYMBOL( *symbol ), &properties );
+                    pi->SaveSymbol( aFileName, new LIB_SYMBOL( *symbol ), &properties );
                 }
             }
             catch( ... )
