@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:08+0300\n"
 "PO-Revision-Date: 2026-03-06 20:11+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -21392,9 +21392,8 @@ msgid "Empty sheet pin name"
 msgstr "Leerer Schaltplanpinname"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2932
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "Die Form hat keine Punkte."
+msgstr "Schalplanlinienzug hat zu wenig Punkte"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3021
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3034
@@ -21411,14 +21410,12 @@ msgid "Invalid symbol library ID"
 msgstr "Ungültige Symbolbibliotheks-ID"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3954
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "Fehlendes Schaltplanname-Argument für %s."
+msgstr "Schaltplanname-Eigenschaft fehlt"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3960
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "Fehlendes Schaltplanname-Argument für %s."
+msgstr "Schaltplandatei-Eigenschaft fehlt"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5054
 msgid "Invalid table: no cells defined"
@@ -48239,9 +48236,8 @@ msgid "Syntax OK"
 msgstr "Syntax OK"
 
 #: pcbnew/drc/rule_editor/drc_re_matched_length_diff_pair_overlay_panel.cpp:103
-#, fuzzy
 msgid "Within diff pairs"
-msgstr "Route Differenzialpaar: %s"
+msgstr "Innerh. Differenzialpaaren"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:78
 msgid "Minimum Text Height must be greater than 0"
@@ -48282,13 +48278,12 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Die Breitentoleranz muss kleiner als die optimale Breite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:96
-#, fuzzy
 msgid "Gap Tolerance must be greater than or equal to 0"
-msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
+msgstr "Die Spalttoleranz muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:99
 msgid "Gap Tolerance must be less than Optimum Gap"
-msgstr ""
+msgstr "Die Spalttoleranz muss kleiner als der optimale Spalt sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:103
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
