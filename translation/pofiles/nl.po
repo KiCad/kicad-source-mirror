@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
 "PO-Revision-Date: 2026-03-06 23:08+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -49167,8 +49167,7 @@ msgstr "Omkeren"
 
 #: pcbnew/tools/edit_tool.cpp:2717
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
-"Gebruik het scherm met footprinteigenschappen om velden te verwijderen."
+msgstr "Gebruik het scherm met footprinteigenschappen om velden te verwijderen."
 
 #: pcbnew/tools/edit_tool.cpp:2877
 msgid "Move Exactly"
