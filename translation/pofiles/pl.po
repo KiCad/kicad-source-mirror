@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-01 17:37+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2026-03-06 23:15+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2730,8 +2730,8 @@ msgstr ""
 "bibliotek %s służącej do dostępu do bibliotek.  Aby program KiCad miał "
 "dostęp do \n"
 "bibliotek %s, należy skonfigurować tabelę bibliotek %s. Proszę wybrać \n"
-"jedną z opcji pokazanych poniżej.  Gdy nie ma pewności, którą opcję "
-"wybrać, \n"
+"jedną z opcji pokazanych poniżej.  Gdy nie ma pewności, którą opcję wybrać, "
+"\n"
 "prosimy wybrać opcję domyślną."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
@@ -6916,8 +6916,7 @@ msgstr "Zawiera ścieżkę bazową do plików kształtów 3D (foldery .3Dshapes)
 
 #: common/env_vars.cpp:107
 msgid "The base path of the locally installed symbol libraries."
-msgstr ""
-"Zawiera bazową ścieżkę do zainstalowanych w systemie bibliotek symboli."
+msgstr "Zawiera bazową ścieżkę do zainstalowanych w systemie bibliotek symboli."
 
 #: common/env_vars.cpp:109
 msgid "A directory containing project templates installed with KiCad."
@@ -6957,13 +6956,11 @@ msgstr ""
 
 #: common/env_vars.cpp:123
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr ""
-"Folder zawierający szablony projektów zainstalowanych razem z programem"
+msgstr "Folder zawierający szablony projektów zainstalowanych razem z programem"
 
 #: common/env_vars.cpp:125
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr ""
-"Folder zawierający szablony projektów zainstalowanych razem z programem"
+msgstr "Folder zawierający szablony projektów zainstalowanych razem z programem"
 
 #: common/env_vars.cpp:128
 #, c-format
@@ -9326,8 +9323,7 @@ msgstr "Cofnij ostatnie powiększenie"
 
 #: common/tool/actions.cpp:676 common/widgets/mathplot.cpp:1404
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
-"Przywróć powiększenie do poziomu sprzed ostatniej operacji powiększania"
+msgstr "Przywróć powiększenie do poziomu sprzed ostatniej operacji powiększania"
 
 #: common/tool/actions.cpp:682 common/widgets/mathplot.cpp:1405
 msgid "Redo Last Zoom"
@@ -10214,8 +10210,7 @@ msgstr "Panoramuj do zaznaczenia"
 
 #: common/widgets/search_pane.cpp:49
 msgid "Toggle panning to selections in the search pane"
-msgstr ""
-"Przełącza opcję panoramowania na wybrane elementy w panelu wyszukiwania"
+msgstr "Przełącza opcję panoramowania na wybrane elementy w panelu wyszukiwania"
 
 #: common/widgets/search_pane.cpp:53
 msgid "Search Hidden Fields"
@@ -10661,8 +10656,7 @@ msgstr ""
 #: cvpcb/cvpcb.cpp:206
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr ""
-"Wystąpił błąd przy próbie załadowania globalnej biblioteki footprintów."
+msgstr "Wystąpił błąd przy próbie załadowania globalnej biblioteki footprintów."
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
@@ -11646,8 +11640,8 @@ msgstr ""
 "wyjściowego>\n"
 "```\n"
 "\n"
-"W systemie Windows, jeśli żądanym skryptem generatora dla CSV BOM jest `C:"
-"\\Users\\<nazwa_użytkownika>\\kicad\\my_python_script.py`, wiersz polecenia "
+"W systemie Windows, jeśli żądanym skryptem generatora dla CSV BOM jest `C:\\U"
+"sers\\<nazwa_użytkownika>\\kicad\\my_python_script.py`, wiersz polecenia "
 "będzie wyglądał następująco:\n"
 "\n"
 "```\n"
@@ -19015,8 +19009,7 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3848
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:373
 msgid "Power Port with unknown style imported as 'Bar' type."
-msgstr ""
-"Port zasilania z nieznanym stylem zaimportowano jako styl grubej linii."
+msgstr "Port zasilania z nieznanym stylem zaimportowano jako styl grubej linii."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3897
 #: eeschema/sch_io/easyeda/sch_easyeda_parser.cpp:1000
@@ -20136,8 +20129,7 @@ msgstr "Wracam do pamięci podręcznej, aby ustawić symbol '%s:%s' łącze '%s'
 #: eeschema/sch_screen.cpp:798
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
-"Nie znaleziono symbolu bibliotecznego dla symbolu na schemacie '%s %s'."
+msgstr "Nie znaleziono symbolu bibliotecznego dla symbolu na schemacie '%s %s'."
 
 #: eeschema/sch_shape.cpp:537
 #, c-format
@@ -20545,12 +20537,12 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~negacja</samp><br> &nbsp;<br><samp>~CLK</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~negacja</samp><br> &nbsp;<br><samp>~CLK</samp>"
+"<br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>negacja</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>negacja</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20587,8 +20579,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definicja Magistrali</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Wynikowe sieci</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -21307,8 +21300,7 @@ msgstr "Model posiada tylko jedną parę przebiegów, zredukowano dokładność"
 
 #: eeschema/sim/kibis/kibis.cpp:874 eeschema/sim/kibis/kibis.cpp:1080
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr ""
-"Sterownik wymaga przynajmniej jednego podciągania: pullup lub pulludown"
+msgstr "Sterownik wymaga przynajmniej jednego podciągania: pullup lub pulludown"
 
 #: eeschema/sim/kibis/kibis.cpp:1063 eeschema/sim/kibis/kibis.cpp:1072
 msgid ""
@@ -21655,8 +21647,7 @@ msgstr "Podczas tworzenia listy sieci wystąpiły ostrzeżenia."
 
 #: eeschema/sim/simulator_frame.cpp:371
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Symulator wymaga by elementy na schemacie zostały w pełni ponumerowane."
+msgstr "Symulator wymaga by elementy na schemacie zostały w pełni ponumerowane."
 
 #: eeschema/sim/simulator_frame.cpp:415
 msgid ""
@@ -22067,8 +22058,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:222
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr ""
-"<b>Symbol zasilania nie powinien posiadać alternatywnej reprezentacji</"
-"b><br><br>"
+"<b>Symbol zasilania nie powinien posiadać alternatywnej reprezentacji</b><br>"
+"<br>"
 
 #: eeschema/symbol_checker.cpp:228
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -24067,8 +24058,7 @@ msgstr "Zapisz kopię bieżącego arkusza jako..."
 
 #: eeschema/tools/sch_actions.cpp:1454
 msgid "Save a copy of the current sheet to another location or name"
-msgstr ""
-"Zapisuje kopię bieżącego arkusza w innej lokalizacji lub pod inną nazwą"
+msgstr "Zapisuje kopię bieżącego arkusza w innej lokalizacji lub pod inną nazwą"
 
 #: eeschema/tools/sch_actions.cpp:1468
 msgid "New Analysis Tab..."
@@ -24145,8 +24135,7 @@ msgstr "Edytuj zakładkę analizy..."
 
 #: eeschema/tools/sch_actions.cpp:1545
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
-"Edytuje polecenia SPICE i ustawienia wykresu dla bieżącej karty analizy"
+msgstr "Edytuje polecenia SPICE i ustawienia wykresu dla bieżącej karty analizy"
 
 #: eeschema/tools/sch_actions.cpp:1552
 msgid "Run Simulation"
@@ -25279,8 +25268,7 @@ msgstr "Wymuszona przeźroczystość:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
-msgstr ""
-"Nieprzezroczystość w trybie wyświetlania z wymuszonym przezroczystością"
+msgstr "Nieprzezroczystość w trybie wyświetlania z wymuszonym przezroczystością"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:96
 msgid "Page Size"
@@ -25573,8 +25561,8 @@ msgstr "Nie znaleziono pliku:"
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
-"<b>Plik zadań Gerber nie może zostać załadowany jako plik do wydruku</"
-"b><i>%s</i>"
+"<b>Plik zadań Gerber nie może zostać załadowany jako plik do wydruku</b><i>"
+"%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -31156,8 +31144,8 @@ msgstr ""
 "być używane tylko do szacowania prądu.\n"
 "\n"
 "Kalkulator szacuje energię potrzebną do podgrzania przewodnika<br>\n"
-"do jego temperatury topnienia, a także energię potrzebną do zmiany fazy."
-"<br>\n"
+"do jego temperatury topnienia, a także energię potrzebną do zmiany fazy.<br>"
+"\n"
 "Energia ta jest następnie porównywana z energią rozpraszaną przez "
 "rezystancję w postaci przewodu."
 
@@ -31381,8 +31369,8 @@ msgstr ""
 "(10 mm).\n"
 "\n"
 "Wzór z normy IPC 2221 to\n"
-"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
-"H)<sup>0,725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; H)"
+"<sup>0,725</sup>___</center>\n"
 "gdzie:<br>\n"
 "___I___ = maksymalny prąd w amperach<br>\n"
 "___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w "
@@ -36092,8 +36080,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:144
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
-msgstr ""
-"Ścieżki o wielkości zbliżonej do pola lub przelotki nie wymagają łezek."
+msgstr "Ścieżki o wielkości zbliżonej do pola lub przelotki nie wymagają łezek."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:188
 msgid "(as a percentage of pad/via minor dimension)"
@@ -37628,8 +37615,8 @@ msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
-"Użyj rozszerzeń plików Gerber zaproponowanych przez firmę Protel "
-"(.GBL, .GTL, itd.)\n"
+"Użyj rozszerzeń plików Gerber zaproponowanych przez firmę Protel (.GBL, "
+".GTL, itd.)\n"
 "Opcja nie zalecana. Oficjalnym rozszerzeniem jest .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
@@ -38409,8 +38396,7 @@ msgstr "Grubość linii musi być większa niż zero dla niewypełnionego okręg
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1215
 msgid "Line width must be greater than zero for an unfilled rectangle."
-msgstr ""
-"Grubość linii musi być większa niż zero dla niewypełnionego prostokąta."
+msgstr "Grubość linii musi być większa niż zero dla niewypełnionego prostokąta."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1221
 msgid "Line width must be greater than zero for an unfilled polygon."
@@ -39791,8 +39777,7 @@ msgstr "Na płytce, nie jest warstwą miedzi"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:133
 msgid "If you want a solder paste layer for front side of the board"
-msgstr ""
-"Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płytki"
+msgstr "Jeśli potrzebna jest warstwa pasty lutowniczej po stronie górnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:151
 msgid "If you want a silk screen layer for the front side of the board"
@@ -39800,13 +39785,11 @@ msgstr "Jeśli potrzebna jest warstwa opisowa po stronie górnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:169
 msgid "If you want a solder mask layer for the front of the board"
-msgstr ""
-"Jeśli potrzebna jest warstwa maski lutowniczej po stronie górnej płytki"
+msgstr "Jeśli potrzebna jest warstwa maski lutowniczej po stronie górnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:193
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr ""
-"Jeśli potrzebna jest warstwa maski lutowniczej po stronie dolnej płytki"
+msgstr "Jeśli potrzebna jest warstwa maski lutowniczej po stronie dolnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:211
 msgid "If you want a silk screen layer for the back side of the board"
@@ -39814,8 +39797,7 @@ msgstr "Jeśli potrzebna jest warstwa opisowa po stronie dolnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:229
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr ""
-"Jeśli potrzebna jest warstwa pasty lutowniczej po stronie dolnej płytki"
+msgstr "Jeśli potrzebna jest warstwa pasty lutowniczej po stronie dolnej płytki"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:247
 msgid "If you want an adhesive layer for the back side of the board"
@@ -44606,8 +44588,8 @@ msgstr ""
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
 msgstr ""
-"Nie było można usunąć nieużywanego footprintu %s (footprint jest "
-"zablokowany)."
+"Nie było można usunąć nieużywanego footprintu %s (footprint jest zablokowany)"
+"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1460
 #, c-format
@@ -44697,8 +44679,7 @@ msgstr "Nie ma zdefiniowanego footprintu dla symbolu %s."
 #: pcbnew/netlist_reader/netlist.cpp:221
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
-"Footprint %s zmieniony: footprint na płytce '%s', na liście sieci '%s'."
+msgstr "Footprint %s zmieniony: footprint na płytce '%s', na liście sieci '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:244
 #, c-format
@@ -44873,8 +44854,7 @@ msgstr "(właściwość 'mechaniczne' jest używana tylko dla pól PTH)"
 
 #: pcbnew/pad.cpp:2326
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
-msgstr ""
-"(pla lutownicze złącza nie posiadają warstw pasty; należy użyć pól SMD)"
+msgstr "(pla lutownicze złącza nie posiadają warstw pasty; należy użyć pól SMD)"
 
 #: pcbnew/pad.cpp:2334
 msgid "(SMD pad has a hole)"
@@ -45633,8 +45613,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3739
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
-"Pole nie będące polem miedzi %s posiada otwór, co nie jest obsługiwane."
+msgstr "Pole nie będące polem miedzi %s posiada otwór, co nie jest obsługiwane."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3749
 #, c-format
@@ -45922,8 +45901,7 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1549
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr ""
-"Nieoczekiwany typ wymiaru (identyfikator %s). Nie został zaimportowany."
+msgstr "Nieoczekiwany typ wymiaru (identyfikator %s). Nie został zaimportowany."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1684
 #, c-format
@@ -46036,8 +46014,8 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 "Szablon CADSTAR '%s' ma w oryginalnym projekcie łącza termiczne, lecz "
-"szerokość łącza (%.2f mm) jest cieńsza niż minimalna grubość strefy (%.2f "
-"mm). KiCad wymaga zachowania minimalnej grubości strefy. Dlatego jako nową "
+"szerokość łącza (%.2f mm) jest cieńsza niż minimalna grubość strefy (%.2f mm)"
+". KiCad wymaga zachowania minimalnej grubości strefy. Dlatego jako nową "
 "szerokość łącza zastosowano minimalną grubość, która zostanie zastosowana "
 "przy następnym wypełnieniu stref."
 
@@ -46137,8 +46115,8 @@ msgid ""
 msgstr ""
 "Kod kreskowania CADSTAR '%s' ma różne szerokości linii dla każdego "
 "kreskowania. KiCad obsługuje tylko jedną szerokość. Importowane kreskowanie "
-"wykorzystuje szerokość zdefiniowaną w pierwszej definicji kreskowania, tj."
-"%.2f mm."
+"wykorzystuje szerokość zdefiniowaną w pierwszej definicji kreskowania, "
+"tj.%.2f mm."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3635
 #, c-format
@@ -46560,8 +46538,7 @@ msgstr "Token \"Element\" zawiera %d parametrów."
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3050
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr ""
-"Folder biblioteki '%s' posiada podkatalogi, których się niespodziewano."
+msgstr "Folder biblioteki '%s' posiada podkatalogi, których się niespodziewano."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:991
 #, c-format
@@ -48231,13 +48208,11 @@ msgstr ""
 
 #: pcbnew/tools/board_editor_control.cpp:1389
 msgid "Some zone priorities did not match and were not merged."
-msgstr ""
-"Niektóre priorytety stref nie pasowały do siebie i nie zostały scalone."
+msgstr "Niektóre priorytety stref nie pasowały do siebie i nie zostały scalone."
 
 #: pcbnew/tools/board_editor_control.cpp:1395
 msgid "Some zones were rule areas and were not merged."
-msgstr ""
-"Niektóre ze stref są strefami z ograniczeniami i nie zostały połączone."
+msgstr "Niektóre ze stref są strefami z ograniczeniami i nie zostały połączone."
 
 #: pcbnew/tools/board_editor_control.cpp:1401
 msgid "Some zone layer sets did not match and were not merged."
@@ -48572,8 +48547,7 @@ msgstr "Analiza prześwitu pary różnicowej dla:"
 #: pcbnew/tools/board_inspection_tool.cpp:1002
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr ""
-"Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1010
 msgid "Diff-pair max uncoupled length resolution for:"
@@ -48650,8 +48624,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:1443
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr ""
-"Przeanalizowano ograniczenia wysokości: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia wysokości: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1459
 #, c-format
@@ -52632,8 +52605,7 @@ msgstr "Konwerter map bitowych na symbole"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
-"Tworzy komponent z mapy bitowej by można go było użyć w programie KiCad"
+msgstr "Tworzy komponent z mapy bitowej by można go było użyć w programie KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
