@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-05 22:08+0300\n"
-"PO-Revision-Date: 2026-03-05 19:06+0000\n"
+"PO-Revision-Date: 2026-03-06 20:18+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -12870,7 +12870,7 @@ msgstr "Krížové zvýraznenie vybraných položiek"
 
 #: eeschema/dialogs/dialog_erc.cpp:231
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Zvýrazniť zodpovedajúce položky na ploche pri vybratí v ERC zozname"
+msgstr "Zvýrazniť zodpovedajúce položky na ploche pri vybraní v ERC zozname"
 
 #: eeschema/dialogs/dialog_erc.cpp:235 pcbnew/dialogs/dialog_drc.cpp:292
 msgid "Center on Cross-probe"
@@ -13531,7 +13531,7 @@ msgstr "Podľa typu nadradeného symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
-msgstr "Symboly bez moci"
+msgstr "Nie napájacie symboly"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
@@ -13758,16 +13758,14 @@ msgid "Diameter:"
 msgstr "Priemer:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:64
-#, fuzzy
 msgid "Set diameter to 0 to use schematic's junction dot size."
-msgstr "Prepnite na editor schém"
+msgstr "Nastaviť priemer na 0, ak sa má použiť veľkosť bodu spojenia v schéme."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:68
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:95
-#, fuzzy
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Obnovte všetky farby v tejto téme na predvolené hodnoty KiCad"
+msgstr "Vymazať farby pre použitie farieb schematického editora."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -13806,9 +13804,8 @@ msgstr "Označenie nemôže byť prázdne."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:603
 #: eeschema/dialogs/dialog_sheet_properties.cpp:386
 #: eeschema/dialogs/dialog_symbol_properties.cpp:781 include/project.h:44
-#, fuzzy
 msgid "untitled"
-msgstr "Počet"
+msgstr "nepomenované"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:627
 msgid "Edit Label Properties"
@@ -13819,14 +13816,13 @@ msgstr "Upraviť vlastnosti označenia"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:516
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:780
 #: eeschema/dialogs/dialog_symbol_properties.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
 msgstr "Názov poľa '%s' sa už používa."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:789
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "Prvých %d polí je povinných."
+msgstr "Prvé pole je povinné."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:32
 #: eeschema/dialogs/dialog_label_properties_base.cpp:41
@@ -13867,9 +13863,8 @@ msgstr "Pomoc so syntaxou"
 #: pcbnew/dialogs/dialog_text_properties.cpp:106
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:89
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:31
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Zobraziť okno konzoly"
+msgstr "Zobraziť okno pomocníka syntaxe."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
@@ -14080,9 +14075,8 @@ msgstr "Jednotka"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_item.cpp:816 eeschema/sch_item.cpp:899
 #: eeschema/sch_symbol.cpp:3942 eeschema/tools/sch_edit_tool.cpp:148
-#, fuzzy
 msgid "Body Style"
-msgstr "Štýl pokosu:"
+msgstr "Štýl tela"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:344
 #, c-format
@@ -14093,9 +14087,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1016
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1574
-#, fuzzy
 msgid "Select pin data file"
-msgstr "Vybrať súbor"
+msgstr "Vybrať súbor s údajmi vývodov"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1044
 #, c-format
@@ -14110,14 +14103,12 @@ msgstr "Iba na čítanie"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1451
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:970
-#, fuzzy
 msgid "Highlight on Cross-probe"
-msgstr "Zvýraznite siete s krížovými sondami"
+msgstr "Krížové zvýraznenie"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1452
-#, fuzzy
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
-msgstr "Zvýraznite všetky medené predmety v sieti"
+msgstr "Zvýrazniť zodpovedajúci vývod na ploche pri jeho vybraní v tabuľke"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1690
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:984
@@ -14465,7 +14456,7 @@ msgstr "Vytvoriť symbol s alternatívnym štýlom tela (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:86
 msgid "Create symbol as power symbol"
-msgstr "Vytvorte symbol ako symbol sily"
+msgstr "Vytvoriť symbol ako symbol napájania"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:89
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:259
@@ -14496,9 +14487,8 @@ msgid "Keep linked footprint"
 msgstr "Zachovať prepojené puzdro"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:101
-#, fuzzy
 msgid "Transfer user-defined fields"
-msgstr "Používateľom definované"
+msgstr "Preniesť používateľom definované polia"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:104
 msgid "Keep content of user-defined fields"
@@ -14534,31 +14524,27 @@ msgid "Fields must have a name."
 msgstr "Polia musia mať názov."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:487
-#, fuzzy
 msgid "Derived symbol must have a parent selected"
-msgstr "Aliased symbol musí mať vybratého rodiča"
+msgstr "Odvodený symbol musí mať vybraný nadradený symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:498
 msgid "Delete extra units from symbol?"
 msgstr "Zmazať navyše jednotky zo súčiastky?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
-#, fuzzy
 msgid "Symbol must have at least 1 body style"
-msgstr "Pole musí mať názov."
+msgstr "Symbol musí mať minimálne 1 štýl tela"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:529
-#, fuzzy
 msgid "Delete extra body styles from symbol?"
-msgstr "Zmazať navyše jednotky zo súčiastky?"
+msgstr "Odstrániť dodatočné štýly tela zo súčiastky?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:553
 #: eeschema/symbol_editor/symbol_editor.cpp:364
 #: eeschema/symbol_editor/symbol_editor.cpp:913
 #: eeschema/tools/symbol_editor_control.cpp:578
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Pole musí mať názov."
+msgstr "Symbol musí mať názov."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:567
 #, c-format
@@ -14576,9 +14562,9 @@ msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
-#, fuzzy, c-format
+#, c-format
 msgid "This field is inherited from '%s'."
-msgstr "Tento súborje už otvorený."
+msgstr "Toto pole je zdedené z '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:802
 #, c-format
@@ -14632,24 +14618,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:167
 msgid "Define as power symbol"
-msgstr "Definujte ako symbol sily"
+msgstr "Definovať ako symbol napájania"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid ""
 "Power symbols define a global net with the value as a netname.\n"
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
-"Nastavením tejto možnosti sa príslušný symbol zobrazí v\n"
-"dialógové okno \"pridať napájací port\". Hodnotový text uzamkne, aby bol "
-"chránený\n"
-"z úprav v Eescheme. Symbol nebude zahrnutý v\n"
-"kusovník a nemožno im priradiť stopu."
+"Symboly napájania definujú globálny signál s hodnotou ako názov spoja.\n"
+"Nebudú zahrnuté v zozname materiálu a nemožno im priradiť puzdro."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Define as local power symbol"
-msgstr "Definujte ako symbol sily"
+msgstr "Definovať ako lokálny symbol napájania"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:179
 msgid ""
@@ -14740,9 +14721,8 @@ msgstr "jednotky"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:146
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:203
 #: eeschema/dialogs/dialog_text_properties_base.cpp:86
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Zakázať symbol pre simuláciu"
+msgstr "Vylúčiť zo simulácie"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:265
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
@@ -14753,14 +14733,12 @@ msgid "Exclude from position files"
 msgstr "Vylúčiť z polohových súborov"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
-#, fuzzy
 msgid "Symbol Units"
-msgstr "Symbol Unit"
+msgstr "Jednotky symbolu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:292
-#, fuzzy
 msgid "Number of units:"
-msgstr "Počet prvkov:"
+msgstr "Počet jednotiek:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:294
 msgid "Enter the number of units for a symbol that contains more than one unit"
@@ -14775,34 +14753,29 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:315
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "Zadajte číslo strany pre cestu hárku %s"
+msgstr "Zobrazovaný názov jednotky (voliteľné):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:351
 #: eeschema/lib_symbol.cpp:2589
-#, fuzzy
 msgid "Body Styles"
-msgstr "Štýl pokosu:"
+msgstr "Štýly tela"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:353
-#, fuzzy
 msgid "Single body style"
-msgstr "Spoločné pre všetky štýly tela"
+msgstr "Jeden štýl tela"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:359
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:365
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "Spoločné pre všetky štýly tela"
+msgstr "Vlastné štýly tela:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "Štýl pokosu:"
+msgstr "Jednotky && Štýly tela"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:444
 msgid "Footprint filters:"
@@ -14835,9 +14808,8 @@ msgid "Footprint Filters"
 msgstr "Filter Puzdier"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:492
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "Odstránenie atribútu %s „vylúčiť z kusovníka“."
+msgstr "Všetky vývody s duplicitnými číslami sú prepojky"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
 msgid ""
@@ -14847,14 +14819,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
-#, fuzzy
 msgid "Explicit jumper pin groups:"
-msgstr "Aktualizujte vlastnosti %s."
+msgstr "Explicitná skupina prepojok vývodu:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:555
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Pripojenie podložky"
+msgstr "Pripojenia vývodu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:568
 msgid "Edit Simulation Model..."
@@ -14881,14 +14851,12 @@ msgid "Combo!"
 msgstr "Kombinácia!"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr "Prepnite na editor schém"
+msgstr "Nastaviť na 0 pre použitie predvolenej šírky čiary schémy."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:66
-#, fuzzy
 msgid "Line Properties"
-msgstr "Vlastnosti vývodu"
+msgstr "Vlastnosti čiary"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:111
 msgid "Conflicting Labels"
@@ -14938,17 +14906,16 @@ msgstr "Alternatívny názov PIN"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:226
 #: eeschema/dialogs/dialog_symbol_properties.cpp:355
-#, fuzzy
 msgid ""
 "Alternate pin assignments are not available for symbols with multiple body "
 "styles."
 msgstr ""
-"Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
+"Alternatívne priradenia vývodu nie sú k dispozici pre symboly s "
+"viacnásobnými štýlmi tela."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:304
-#, fuzzy
 msgid "Exit sync pins mode"
-msgstr "Upraviť list"
+msgstr "Ukončiť režim synchr. vývodov"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:319
 msgid ""
@@ -14982,9 +14949,8 @@ msgstr ""
 "Chcete pokračovať?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:431
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Režim úprav synchronizovaných kolíkov"
+msgstr "Režim synchronizovania vývodov"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:433
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -15047,9 +15013,8 @@ msgstr "Spoločné pre všetky & jednotky v symbole"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "Spoločné pre všetky štýly tela"
+msgstr "&Spoločné pre všetky štýly tela"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -15062,9 +15027,8 @@ msgid "Preview:"
 msgstr "Náhľad:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Alternatívne definície špendlíkov"
+msgstr "Definície alternatívnych funkcií vývodu"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:103
 msgid "Pin Properties"
@@ -15103,14 +15067,13 @@ msgstr "Návrat na používateľskú cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:415
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Nie je možné otvoriť súbor '%s'"
+msgstr "Nie je možné normalizovať cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:421
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Vytvorte kusovník pre aktuálnu schému"
+msgstr "Pre aktuálnu schému nie je definovaný žiadny projekt ani cesta."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
@@ -15129,9 +15092,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:40
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Design variant:"
-msgstr "Použitie"
+msgstr "Variant návrhu:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
@@ -15214,9 +15176,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr "Ak to výstupný formát podporuje, vykresliť pozadie farbou"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:112
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "Minimálna šírka:"
+msgstr "Minimálna šírka čiary:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:117
 msgid ""
@@ -15228,9 +15189,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:137
 #: pcbnew/dialogs/dialog_plot_base.cpp:407
-#, fuzzy
 msgid "PDF Options"
-msgstr "Možnosti DXF"
+msgstr "Možnosti PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:139
 msgid "Generate property popups"
@@ -15267,9 +15227,8 @@ msgid "Other Options"
 msgstr "Ďalšie možnosti"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:179
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Jeden súbor na vrstvu"
+msgstr "Otvoriť súbor po vykreslení"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:180
 msgid "Open output file with associated application after successful plot"
@@ -15280,9 +15239,8 @@ msgid "Plot Schematic"
 msgstr "Vykresliť schému"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:44
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "Importovať nastavenia"
+msgstr "Nastavenia vzdialeného symbolu"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:58
 msgid ""
@@ -15291,9 +15249,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:65
-#, fuzzy
 msgid "Destination directory:"
-msgstr "Použitie"
+msgstr "Cieľový adresár:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:71
 msgid ""
@@ -15314,23 +15271,20 @@ msgid "Prefix that will be applied to the generated libraries."
 msgstr "Prefix, ktorý sa použije na vygenerované knižnice."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:89
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "Načítavajú sa knižnice symbolov"
+msgstr "Pridať knižnice do:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:93
-#, fuzzy
 msgid "Project library table"
-msgstr "Knižnica symbolov nie je povolená."
+msgstr "Projektová tabuľka knižníc"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
 msgid "Adds the generated libraries to the project's library tables."
 msgstr "Pridať vygenerované knižnice do tabuliek knižníc projektu."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:98
-#, fuzzy
 msgid "Global library table"
-msgstr "Knižnica symbolov nie je povolená."
+msgstr "Globálna tabuľka knižníc"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
 msgid "Adds the generated libraries to the global library tables."
@@ -15341,9 +15295,8 @@ msgid "Restore the default destination and prefix."
 msgstr "Obnoviť predvolený cieľ a prefix."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
-#, fuzzy
 msgid "Please choose a destination directory."
-msgstr "Vyberte platný súbor netlistu."
+msgstr "Prosím, vyberte cieľový adresár."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:158
 msgid "Please enter a library prefix."
@@ -15393,9 +15346,8 @@ msgid "Rescue Symbols"
 msgstr "Záchranné symboly"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:146
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Zobraziť strom symbolov"
+msgstr "Preskočiť záchranu symbolu"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:223
 #, c-format
@@ -15468,9 +15420,8 @@ msgstr "Do&zadu"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Rozlišovať malé a veľké písmená"
+msgstr "Zhoda pri &veľkosti písmen"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -16511,9 +16462,9 @@ msgstr "Postupne umiestnite všetky jednotky symbolu."
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:133
 #: eeschema/symbol_chooser_frame.cpp:117 pcbnew/footprint_chooser_frame.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr " Vyberte symbol (%d načítaných položiek)"
+msgstr " (%d položiek načítaných)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:732
 msgid "Qty"
@@ -16524,9 +16475,9 @@ msgid "#"
 msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:844
-#, fuzzy, c-format
+#, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "Prvých %d polí je povinných."
+msgstr "Prvých %d polí je povinných a názvy nemôžu byť menené."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:871
 #, c-format
@@ -16534,9 +16485,8 @@ msgid "Field name %s already exists."
 msgstr "Názov poľa %s už existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
-#, fuzzy
 msgid "Include 'DNP' Symbols"
-msgstr "Zahrnúť púzdra"
+msgstr "Zahrnúť 'DNP' symboly"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:957
 msgid ""
@@ -16545,9 +16495,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
-#, fuzzy
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "Vyloučit z BOM"
+msgstr "Zahrnúť 'Vylúčiť z BOM' symboly"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:963
 msgid ""
@@ -16556,89 +16505,78 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:971
-#, fuzzy
 msgid "Highlight corresponding item on canvas when it is selected in the table"
-msgstr "Zvýraznite všetky medené predmety v sieti"
+msgstr "Zvýrazniť zodpovedajúcu položku na ploche pri jej vybraní v tabuľke"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:975
-#, fuzzy
 msgid "Select on Cross-probe"
-msgstr "Vybrať položky"
+msgstr "Vybrať krížovo zvýraznené"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:976
-#, fuzzy
 msgid "Select corresponding item on canvas when it is selected in the table"
-msgstr "Zvýraznite zodpovedajúce položky v editore nástenky"
+msgstr "Vybrať zodpovedajúce položky na ploche ak sú vybrané v tabuľke"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1162
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "Stĺpec Referencie nemožno skryť."
+msgstr "Stĺpec 'množstvo' nie je možné zoskupiť."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1171
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "Stĺpec Referencie nemožno skryť."
+msgstr "Stĺpec 'číslo položky' nie je možné zoskupiť."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1400
 msgid "Bill of Materials Output File"
 msgstr "Výstupný súbor so zoznamom materiálov"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1416
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
-"Nie je možné vytvoriť relatívnu cestu (cieľový objem sa líši od objemu "
-"súboru)!"
+"Cestu nie je možné nastaviť ako relatívnu (cieľové množstvo sa líši od "
+"množstva schematického súboru)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1450
-#, fuzzy
 msgid "Unsaved data"
-msgstr "[Neuložené]"
+msgstr "Neuložené dáta"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1451
-#, fuzzy
 msgid "Changes have not yet been saved. Export unsaved data?"
-msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
+msgstr "Zmeny doteraz neboli uložené. Exportovať neuložené dáta?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1475
-#, fuzzy
 msgid "No output file specified in Export tab."
-msgstr "Názov súboru nie je špecifikovaný pre exportovanie"
+msgstr "Názov výstupného súboru nie je špecifikovaný v záložke 'Exportovať'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Nebolo možné vytvoriť súbor \"%s\"."
+msgstr "Nebolo možné otvoriť/vytvoriť cestu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka \"%s\"."
+msgstr "Nebolo možné vytvoriť výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1506
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka \"%s\"."
+msgstr "Nepodarilo sa zapísať výstup BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1513
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Nemožno vytvoriť výstupný adresár '%s'."
+msgstr "BOM zapísaný do výstupu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "Názov predvoľby vrstvy:"
+msgstr "Názov predvoľby BOM:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
-#, fuzzy
 msgid "Save BOM Preset"
-msgstr "Uložiť predvoľbu vrstvy"
+msgstr "Uložiť predvoľbu BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1878
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2280
@@ -16649,37 +16587,32 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2745
-#, fuzzy
 msgid "Cannot delete the default variant."
-msgstr "Nie je možné určiť okraje dosky."
+msgstr "Nie je možné odstrániť predvolený variant."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2784
-#, fuzzy
 msgid "Cannot rename the default variant."
-msgstr "Číslovanie schémy"
+msgstr "Nie je možné premenovať predvolený variant."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2791
-#, fuzzy
 msgid "Enter new variant name:"
-msgstr "Zadajte názov stopy:"
+msgstr "Zadajte názov nového variantu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2791
-#, fuzzy
 msgid "Rename Design Variant"
-msgstr "Odstrániť zásuvný modul"
+msgstr "Premenovať variant návrhu"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2802
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2875
 #: eeschema/toolbars_sch_editor.cpp:430
-#, fuzzy
 msgid "Variant name cannot be empty."
-msgstr "Názov premennej nemôže byť prázdny."
+msgstr "Názov variantu nemôže byť prázdny."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2809
 #: eeschema/toolbars_sch_editor.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved variant name."
-msgstr "Názov %s je vyhradený a nemožno ho tu použiť"
+msgstr "'%s' je vyhradený názov variantu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2825
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2882
@@ -16693,54 +16626,44 @@ msgid "Cannot copy the default variant."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2864
-#, fuzzy
 msgid "Enter name for the copied variant:"
-msgstr "Zadajte číslo strany pre cestu hárku %s"
+msgstr "Zadajte názov skopírovaného variantu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2864
-#, fuzzy
 msgid "Copy Design Variant"
-msgstr "Knihovníci"
+msgstr "Kopírovať variant návrhu"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
-#, fuzzy
 msgid "Add a new field"
-msgstr "Pridať pole"
+msgstr "Pridať nové pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:84
-#, fuzzy
 msgid "Rename selected field"
-msgstr "Výber mriežky"
+msgstr "Premenovať vybrané pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:92
-#, fuzzy
 msgid "Remove selected field"
-msgstr "Symbol napájania"
+msgstr "Odstrániť vybrané pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
-#, fuzzy
 msgid "View presets:"
-msgstr "Predvoľby:"
+msgstr "Zobraziť predvoľby:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "Schematická parita"
+msgstr "Schematické varianty:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:207
-#, fuzzy
 msgid "Entire Project"
-msgstr "Rozbaliť projekt"
+msgstr "Celý projekt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:207
-#, fuzzy
 msgid "Current Sheet Only"
-msgstr "Iba aktuálny hárok"
+msgstr "Iba aktuálny list"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:207
-#, fuzzy
 msgid "Current Sheet and Down"
-msgstr "Iba aktuálny hárok"
+msgstr "Iba aktuálny a podradené listy"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:266
 msgid "Edit"
@@ -16756,23 +16679,20 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:287
-#, fuzzy
 msgid "String delimiter:"
-msgstr "Počiatočné napätie:"
+msgstr "Oddeľovač reťazcov:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:291
 msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:296
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Referenčné označenie"
+msgstr "Referenčný oddeľovač:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:305
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Okraje strany"
+msgstr "Oddeľovač rozsahu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:309
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -16792,14 +16712,12 @@ msgid "Keep line breaks"
 msgstr "Zachovať zalomenia riadkov"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:324
-#, fuzzy
 msgid "Format presets:"
-msgstr "Formát"
+msgstr "Prednastavenia formátu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:144
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "Polia symbolov"
+msgstr "Tabuľka polí symbolov"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:152
 msgid "Base Name"
@@ -16811,9 +16729,8 @@ msgid "Alternate Assignment"
 msgstr "Alternatívne priradenie"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:408
-#, fuzzy
 msgid " Design Variant"
-msgstr "Knihovníci"
+msgstr " Variant návrhu"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:509
 #: eeschema/lib_symbol.cpp:470 eeschema/symbol_editor/symbol_edit_frame.h:47
@@ -16822,9 +16739,8 @@ msgid "Standard"
 msgstr "Štandardné"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
-#, fuzzy
 msgid "Body style:"
-msgstr "Štýl pokosu:"
+msgstr "Štýl tela:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:151
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:361
@@ -16924,14 +16840,12 @@ msgid "Base Pin Name"
 msgstr "Názov základného kolíka"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:312
-#, fuzzy
 msgid "Pin Functions"
-msgstr "Križovatky"
+msgstr "Funkcie vývodu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:329
-#, fuzzy
 msgid "Simulation Model..."
-msgstr "Simulátor..."
+msgstr "Simulačný model..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:110
 msgid "Symbol Properties"
@@ -16967,11 +16881,10 @@ msgstr ""
 "budete musieť manuálne opätovne priradiť symboly."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Pridanie knižnice \"%s\", súboru \"%s\" do tabuľky knižnice symbolov "
-"projektu."
+"Pridanie knižnice '%s', súboru '%s' do projektovej tabuľky knižnice symbolov."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:247
 msgid "Created project symbol library table.\n"
@@ -16983,7 +16896,7 @@ msgid "No symbol %s found in symbol library table."
 msgstr "Žiadny symbol %s nenájdený v tabuľke knižnice symbolov."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "Symbol '%s' mapovaný do knižnice symbolov '%s'."
 
@@ -17057,66 +16970,55 @@ msgstr "Upraviť tabuľku"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Cell contents:"
-msgstr "&Obsah"
+msgstr "Obsah bunky:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
-#, fuzzy
 msgid "External border"
-msgstr "Externé údaje"
+msgstr "Vonkajšie ohraničenie"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "Okraje listu"
+msgstr "Ohraničenie hlavičky"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
-#, fuzzy
 msgid "Row lines"
-msgstr "Nakresli čiaru"
+msgstr "Linka riadkov"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
-#, fuzzy
 msgid "Column lines"
-msgstr "Stĺpce"
+msgstr "Linka stĺpcov"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:538 pcbnew/dialogs/dialog_table_properties_base.h:73
 #: pcbnew/pcb_table.cpp:850
-#, fuzzy
 msgid "Table Properties"
-msgstr "Vlastnosti menovky"
+msgstr "Vlastnosti tabuľky"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:424
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:421
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "Vlastnosti symbolov"
+msgstr "Upraviť vlastnosti bunky tabuľky"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:108
-#, fuzzy
 msgid "Horizontal alignment:"
-msgstr "Vodorovne opačne"
+msgstr "Vodorovné zarovnanie:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:110
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "Vodorovne opačne"
+msgstr "Zarovnať vodorovne"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:138
-#, fuzzy
 msgid "Vertical alignment:"
-msgstr "Zvislo dole"
+msgstr "Zvislé zarovnanie:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:140
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "Zvislo dole"
+msgstr "Zarovnať zvislo"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:249
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:297
@@ -17126,9 +17028,8 @@ msgstr "- zmiešané hodnoty -"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:249
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:297
-#, fuzzy
 msgid "Set Color..."
-msgstr "Farba spájkovacej pasty..."
+msgstr "Nastaviť farbu..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:287
 msgid "Background fill:"
@@ -17136,9 +17037,8 @@ msgstr "Výplň pozadia:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:239
-#, fuzzy
 msgid "Cell margins:"
-msgstr "Zobraz vzduš. priest. od"
+msgstr "Okraje bunky:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:393
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:281
@@ -17147,9 +17047,8 @@ msgstr "Upraviť vlastnosti tabuľky a obsah buniek"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.h:102
 #: pcbnew/dialogs/dialog_tablecell_properties_base.h:95
-#, fuzzy
 msgid "Table Cell Properties"
-msgstr "Vlastnosti menovky"
+msgstr "Vlastnosti bunky tabuľky"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:61
 #: pcbnew/dialogs/dialog_textbox_properties_base.h:109
@@ -17161,9 +17060,9 @@ msgid "<root sheet>"
 msgstr "<východzí list>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s (%s)"
-msgstr "Prejsť na stránku %s (%s)"
+msgstr "Stránka %s (%s)"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:503
 msgid ""
@@ -17190,14 +17089,12 @@ msgid "Make this text item a clickable hyperlink"
 msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:318
-#, fuzzy
 msgid "Private to symbol editor"
-msgstr "Upravujte pomocou editora symbolov"
+msgstr "Súkromné pre editor symbolov"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:36
 #: pcbnew/dialogs/dialog_import_netlist.cpp:69
 #: pcbnew/dialogs/dialog_update_pcb.cpp:45
-#, fuzzy
 msgid "Changes to Be Applied"
 msgstr "Zmeny, ktoré sa majú uplatniť"
 
@@ -17298,9 +17195,8 @@ msgstr "Aktualizovať schému z DPS"
 
 #: eeschema/dialogs/dialog_update_symbol_fields.cpp:222
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:67
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Odstrániť polia"
+msgstr "Aktualizovať polia symbolu"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 msgid "Parent symbol:"
@@ -17311,14 +17207,12 @@ msgid "Update/reset Fields"
 msgstr "Aktualizovať/resetovať polia"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Odstráňte polia, ak nie sú v novom symbole"
+msgstr "Odstrániť polia, ak nie sú v nadradenom symbole"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Ak sú nové symboly prázdne, vynulujte ich"
+msgstr "Resetovať polia, ak sú prázdne v nadradenom symbole."
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:80
 msgid "Update/reset field sizes and styles"
@@ -17337,38 +17231,34 @@ msgid "User-defined Signals"
 msgstr "Používateľom definované signály"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Drôty"
+msgstr "Spoj/Zbernica"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:235
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Migrovať autobusy"
+msgstr "Spoje/Zbernice"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
 msgid "Wire/bus width:"
 msgstr "Šírka cesty/zbernice:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:91
-#, fuzzy
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr "Prepnite na editor schém"
+msgstr ""
+"Nastaviť šírku na 0 pre použitie šírky spoja/zbernice z nastavení triedy "
+"spojov."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
-#, fuzzy
 msgid "Wire & Bus Properties"
-msgstr "Vlastnosti segmentu čiary"
+msgstr "Vlastnosti spoja & zbernice"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets"
-msgstr "Predvoľby pre zoznam materiálov:"
+msgstr "Predvoľby zoznamu materiálu"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
-#, fuzzy
 msgid "Bill of Materials Formatting Presets"
-msgstr "Predvoľby formátovania pre zoznam materiálov:"
+msgstr "Predvoľby formátovania zoznamu materiálu"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -17432,14 +17322,12 @@ msgid "Cross-probing"
 msgstr "Krížové sondovanie"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
-#, fuzzy
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Priraďte stopu vybraným symbolom"
+msgstr "Vybrať/zvýrazniť objekty zodpovedajúce vybraným na DPS"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
-#, fuzzy
 msgid "Highlight symbols corresponding to selected footprints"
-msgstr "Zvýraznite všetky medené predmety v sieti"
+msgstr "Zvýrazniť symboly zodpovedajúce vybraným puzdrám"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:49
 #: pcbnew/dialogs/panel_display_options_base.cpp:174
@@ -17681,9 +17569,8 @@ msgid "Sheet background:"
 msgstr "Pozadie listu:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:115
-#, fuzzy
 msgid "Power Symbols:"
-msgstr "Symbol Napajania"
+msgstr "Symboly napájania:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
 #: eeschema/widgets/search_handlers.cpp:476
@@ -19578,14 +19465,12 @@ msgid "Symbol Definition"
 msgstr "Symbol Unit"
 
 #: eeschema/lib_symbol.cpp:2527
-#, fuzzy
 msgid "Define as Power Symbol"
-msgstr "Definujte ako symbol sily"
+msgstr "Definovať ako symbol napájania"
 
 #: eeschema/lib_symbol.cpp:2531
-#, fuzzy
 msgid "Define as Local Power Symbol"
-msgstr "Definujte ako symbol sily"
+msgstr "Definovať ako lokálny symbol napájania"
 
 #: eeschema/lib_symbol.cpp:2536
 #, fuzzy
@@ -20576,8 +20461,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCadu. Načítala "
-"sa iba hlavná varianta ('%s')."
+"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCadu. Načítal sa "
+"iba hlavný variant ('%s')."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:397
 msgid ""
@@ -20689,13 +20574,13 @@ msgstr ""
 "veľa kolíkov. Očakávaný počet špendlíkov je 1, ale našlo sa %d."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"ID symbolu '%s' je neznámeho typu. Nie je to ani komponent, ani čistý "
-"výkon / symbol. Symbol nebol načítaný."
+"Symbol s ID '%s' je neznámeho typu. Nie je to ani symbol, alebo spoj "
+"napájania / symbol. Symbol nebol načítaný."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1010
 #, fuzzy, c-format
@@ -21917,7 +21802,7 @@ msgstr "Hierarchický vývod listu %s"
 
 #: eeschema/sch_symbol.cpp:2666
 msgid "Power symbol"
-msgstr "Symbol napájení"
+msgstr "Symbol napájania"
 
 #: eeschema/sch_symbol.cpp:2681
 msgid "flags"
@@ -23672,9 +23557,8 @@ msgid "Invalid IBIS model '%s'"
 msgstr "Neplatný identifikátor knižnice symbolov"
 
 #: eeschema/sim/sim_model_ibis.cpp:333
-#, fuzzy
 msgid "Power supply"
-msgstr "Symbol napájania"
+msgstr "Napájací zdroj"
 
 #: eeschema/sim/sim_model_ibis.cpp:343
 #, fuzzy
@@ -24775,9 +24659,8 @@ msgid "Parent"
 msgstr "Rodič"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1744
-#, fuzzy
 msgid "Power Symbol (Local)"
-msgstr "Symbol Napajania"
+msgstr "Symbol napájania (lokálny)"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:47
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:79
@@ -25564,9 +25447,8 @@ msgid ""
 msgstr "Uložte aktuálny symbol do schémy"
 
 #: eeschema/tools/sch_actions.cpp:482
-#, fuzzy
 msgid "Place Power Symbols"
-msgstr "Symbol Napajania"
+msgstr "Umiestniť symboly napájania"
 
 #: eeschema/tools/sch_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:472
 #: pcbnew/tools/pcb_control.cpp:2128
@@ -27134,9 +27016,8 @@ msgid "Export symbols to library:"
 msgstr "Aktualizovať symboly z knižnice..."
 
 #: eeschema/tools/sch_editor_control.cpp:657
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Aktualizovať puzdra na doske tak, aby za odkazovali na novú knižnicu?"
+msgstr "Zahrnúť symboly napájania do exportu"
 
 #: eeschema/tools/sch_editor_control.cpp:658
 msgid "Update schematic symbols to link to exported symbols"
@@ -37913,7 +37794,7 @@ msgstr "Začiatok číslovania podložky:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:294
 msgid "Grid Array"
-msgstr "Pole mriežky"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:303
 #, fuzzy
@@ -38413,9 +38294,8 @@ msgid "If unchecked, only the first error will be reported for each track"
 msgstr "Ak nie je začiarknuté, bude hlásená iba prvá chyba pre každý spoj"
 
 #: pcbnew/dialogs/dialog_drc.cpp:288
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "Zvýraznite všetky medené predmety v sieti"
+msgstr "Zvýrazniť zodpovedajúce položky na ploche pri vybraní v zozname DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:371
 #, fuzzy
@@ -41580,7 +41460,7 @@ msgstr "0.1%"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr ""
+msgstr "Zaokrúhliť nahor na násobky mriežky (ak je to možné)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -41591,9 +41471,8 @@ msgid "Round corners (when possible)"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
-#, fuzzy
 msgid "Grid size:"
-msgstr "Veľkosť &mriežky:"
+msgstr "Veľkosť mriežky:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
@@ -43962,14 +43841,12 @@ msgid "Show all fields when parent footprint is selected"
 msgstr "Aliased symbol musí mať vybratého rodiča"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:168
-#, fuzzy
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Zvýraznite zodpovedajúce položky v editore nástenky"
+msgstr "Vybrať/zvýrazniť objekty zodpovedajúce vybraným v schéme"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:170
-#, fuzzy
 msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Priraďte stopu vybraným symbolom"
+msgstr "Zvýrazniť puzdrá zodpovedajúce vybraným symbolom"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:176
 msgid "Ensures that cross-probed footprints are visible in the current view"
@@ -44969,14 +44846,12 @@ msgid "Add User Defined Layer..."
 msgstr "Pridať používateľom definovanú vrstvu..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:29
-#, fuzzy
 msgid ""
 "Consult your PCB manufacturer's specifications for solder mask expansion, "
 "web width, and clearance settings."
 msgstr ""
-"Použite odporúčanie vášho penziónu na vôľu spájkovacej masky a minimálnu "
-"šírku mostíka.\n"
-"Ak nie je zadaná žiadna hodnota, odporúča sa nastavenie na nulu."
+"Informácie o odstupe spájkovacej masky, šírke mostíka a nastaveniach min. "
+"vzdialeností nájdete v špecifikáciách výrobcu PCB."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:33
 msgid ""
@@ -44985,9 +44860,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:46
-#, fuzzy
 msgid "Solder Mask Settings"
-msgstr "Aktuálne nastavenia:"
+msgstr "Nastavenia spájkovacej masky"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:67
@@ -45004,7 +44878,6 @@ msgstr ""
 "odstup spájkovacej masky)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:75
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "Minimálna šírka mostíka spájkovacej masky:"
 
@@ -45019,7 +44892,6 @@ msgstr ""
 "otvor."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:90
-#, fuzzy
 msgid "Solder mask to copper clearance:"
 msgstr "Odstup spájkovacej masky:"
 
@@ -45030,16 +44902,23 @@ msgid ""
 "different net than the solder mask opening's parent.\n"
 "Distances smaller than this minimum will create a DRC error."
 msgstr ""
+"Minimálna vzdialenosť medzi otvorom spájkovacej masky a medeným objektom s "
+"iným spojom, ako má otvor masky na spájkovanie.\n"
+"Vzdialenosti menšie ako toto minimum spôsobia chybu DRC."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:105
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Povoliť mostíky medzi otvormi v spájkovacej maske medzi plôškami v rámci "
+"puzdier"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:106
 msgid ""
 "Disable DRC error checking for solder mask aperture bridging between pads in "
 "the same footprint."
 msgstr ""
+"Vypnúť kontrolu chýb DRC pre apertúry spájkovacej masky mostíkov medzi "
+"plôškami v tom istom puzdre."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:113
 #, fuzzy
@@ -45052,6 +44931,8 @@ msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
+"Prekryté (tented): prekovy sú pokryté spájkovacou maskou.\n"
+"Neprekryté (not tented): prekovy nie sú zakryté spájkovacou maskou."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 #, fuzzy
@@ -46398,9 +46279,9 @@ msgid "%s min thickness: %s."
 msgstr "%s minimálna hrúbka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1262
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; solder mask expansion: %s."
-msgstr "Lokálne prepísať na %s; izolačná medzera: %s."
+msgstr "Lokálne prepísať v %s; zväčšenie spájkovacej masky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1290
 #, c-format
@@ -46456,9 +46337,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "\"Kontroluje sa šírka tepelného profilu %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1389
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Kontroluje sa veľkosť diery %s: min %s."
+msgstr "Kontroluje sa %s zväčšenie spájkovacej masky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1395
 #, fuzzy, c-format
@@ -46882,11 +46763,11 @@ msgstr "Medený prúžok"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Premostenie apertúrou spájkovacej masky nad rôznymi spojmi"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Silkscreen clipped by solder mask"
-msgstr "Popis orezaný spájkovacou maskou"
+msgstr "Potlač orezaná spájkovacou maskou"
 
 #: pcbnew/drc/drc_item.cpp:249
 msgid "Silkscreen clipped by board edge"
@@ -47341,9 +47222,9 @@ msgid "%s has clearance override."
 msgstr "%s má prepísanú hodnotu odstupu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder mask expansion override."
-msgstr "Ďalšie voľby:"
+msgstr "%s má zväčšenie spájkovacej masky prepísané."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:273
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:280
@@ -47668,9 +47549,8 @@ msgid "Pad clearance overridden."
 msgstr "Obrysy klírensu"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:873
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "Ďalšie voľby:"
+msgstr "Prepísané zväčšenie spájkovacej masky."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:881
 #, fuzzy
@@ -47921,37 +47801,34 @@ msgid "Running sliver detection on copper layers..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:59
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "obmedzenia nastavenia dosky"
+msgstr "minimálna šírka spájkovacej masky z nastavení dosky"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:601
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:697
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:824
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
-"Apertúra prednej spájkovacej masky premosťujú položky s rozdielnymi signálmi"
+"Apertúra prednej spájkovacej masky premosťuje položky s rozdielnymi signálmi"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:603
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:699
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:826
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
+"Apertúra zadnej spájkovacej masky premosťuje položky s rozdielnymi signálmi"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:932
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "Zostavovanie zón..."
+msgstr "Vytváranie spájkovacej masky..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:942
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "Kontrola izolačnej medzery diera k diere..."
+msgstr "Kontrola minimálnej vzdialenosti spájkovacej masky od potlače..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:947
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "Kontrolujú sa šírky rozchodu..."
+msgstr "Kontrolujú sa minimálne šírky mostíkov v spájkovacej maske..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:77
 msgid "Checking text dimensions..."
@@ -49636,16 +49513,14 @@ msgstr "Diferenčné páry"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2574 pcbnew/pcb_shape.cpp:1124
 #: pcbnew/pcb_tablecell.cpp:285 pcbnew/pcb_textbox.cpp:864
 #: pcbnew/pcb_track.cpp:3161
-#, fuzzy
 msgid "Soldermask"
-msgstr "Ďalšie voľby:"
+msgstr "Spájkovacia maska"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2578 pcbnew/pad.cpp:3718
 #: pcbnew/pcb_shape.cpp:1129 pcbnew/pcb_tablecell.cpp:286
 #: pcbnew/pcb_textbox.cpp:865 pcbnew/pcb_track.cpp:3164
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Miestna marža Soldermask"
+msgstr "Prepísaný okraj spájkovacej masky"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2584
 #, fuzzy
@@ -50858,21 +50733,20 @@ msgstr ""
 "Varování: Záporné hodnoty místní izolační mezery nebudou mít žádný účinek."
 
 #: pcbnew/pad.cpp:3002
-#, fuzzy
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
 msgstr ""
-"Negatívna vôľa znamená plochu menšiu ako vložka (obvyklá pre vôľu "
-"spájkovacej pasty)."
+"(záporná hodnota odstupu spájkovacej masky je väčšia ako niektoré základné "
+"tvary; výsledok môže prekvapujúci)"
 
 #: pcbnew/pad.cpp:3012
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
 msgstr ""
-"(záporná vôľa spájkovacej masky je väčšia ako plôška; nevygeneruje sa žiadna "
-"spájkovacia maska)"
+"(záporná hodnota odstupu spájkovacej masky je väčšia ako plôška; "
+"nevygeneruje sa žiadna spájkovacia maska)"
 
 #: pcbnew/pad.cpp:3031
 msgid ""
@@ -51895,8 +51769,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCad-u. Načítala "
-"sa iba varianta '%s'."
+"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCad-u. Načítal "
+"sa iba variant '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:167
 msgid ""
@@ -55435,18 +55309,17 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Obmedzenia šírky: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1679
-#, fuzzy
 msgid "Solder Mask"
-msgstr "Ďalšie voľby:"
+msgstr "Spájkovacia maska"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1680
 msgid "Solder mask expansion resolution for:"
 msgstr "Vyhodnotenie zväčšenia spájkovacej masky pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1688
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved solder mask expansion: %s."
-msgstr "Ďalšie voľby:"
+msgstr "Vyriešené zväčšenie spájkovacej masky: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1697
 msgid "Solder paste absolute clearance resolution for:"
