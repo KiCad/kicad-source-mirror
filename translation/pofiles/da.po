@@ -11,16 +11,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2025-01-23 15:38+0000\n"
-"Last-Translator: John Beard <john.j.beard@gmail.com>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
-"source/da/>\n"
+"PO-Revision-Date: 2026-03-06 23:59+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/kicad/v9/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:381
@@ -1326,8 +1325,7 @@ msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
-"3D-Viewer skal være lukket og genåbnet for at anvende denne indstilling"
+msgstr "3D-Viewer skal være lukket og genåbnet for at anvende denne indstilling"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 #, fuzzy
@@ -7172,8 +7170,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Basisstien til lokalt installerede systemfodsporbiblioteker (.pretty "
-"folders)."
+"Basisstien til lokalt installerede systemfodsporbiblioteker (.pretty folders)"
+"."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -11659,8 +11657,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
-"Net %s er grafisk forbundet med bus %s, men er ikke medlem af denne bus"
+msgstr "Net %s er grafisk forbundet med bus %s, men er ikke medlem af denne bus"
 
 #: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
 #, fuzzy
@@ -11964,8 +11961,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:296
 #, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/dialogs/dialog_bom.cpp:301
 #, fuzzy
@@ -12936,8 +12932,7 @@ msgstr "%s Eksport"
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 #, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:718
 #: eeschema/dialogs/dialog_export_netlist.cpp:757
@@ -19687,8 +19682,7 @@ msgstr "Åbn skematisk"
 #: eeschema/sch_edit_frame.cpp:1463
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
@@ -21494,8 +21488,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>D [0..7 ]</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </"
-"td>\n"
+"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> <br> </td>\n"
@@ -21516,8 +21510,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> præfiks {net1 net2 ...} </samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </"
-"td>\n"
+"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> USB1 {DP DM} </samp> </td>\n"
@@ -22659,8 +22653,7 @@ msgstr "Der var fejl under netlisteksporten, afbrudt."
 #: eeschema/sim/simulator_frame.cpp:371
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/sim/simulator_frame.cpp:415
 msgid ""
@@ -23840,8 +23833,7 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:353
 #, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/tools/backannotate.cpp:356
 #, fuzzy
@@ -30834,8 +30826,8 @@ msgstr ""
 "* __a__ dæmpning i dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (tabet)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> i </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ud </sub> \\ * A - R2___\n"
 
@@ -30882,8 +30874,8 @@ msgstr ""
 "* __a__ dæmpning i dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (tabet)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> i </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ud </sub> \\ * A - R2___\n"
 
@@ -35687,8 +35679,7 @@ msgstr "Bliv tilpasset dimensionen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr ""
-"Indstil automatisk tekstretningen, så den svarer til dimensionslinjerne"
+msgstr "Indstil automatisk tekstretningen, så den svarer til dimensionslinjerne"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
@@ -38877,8 +38868,7 @@ msgstr "Affasningshjørner:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:289
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr ""
-"Fasede hjørner. Positionen er i forhold til en padorientering 0 grader."
+msgstr "Fasede hjørner. Positionen er i forhold til en padorientering 0 grader."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:296
@@ -39392,8 +39382,7 @@ msgstr ""
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr ""
-"forvent 0 og brug deres begrænsninger, især til lodde maske min bredde."
+msgstr "forvent 0 og brug deres begrænsninger, især til lodde maske min bredde."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -39529,8 +39518,8 @@ msgstr ""
 "Indstil global breddekorrektion for nøjagtig bredde PostScript-output.\n"
 "Denne bredde korrektion er beregnet til at kompensere spor bredde og også "
 "fejl på pads og vias størrelse.\n"
-"Den rimelige breddekorrektionsværdi skal være i området [- "
-"(MinTrackWidth-1), + (MinClearanceValue-1)]."
+"Den rimelige breddekorrektionsværdi skal være i området [- (MinTrackWidth-1)"
+", + (MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -46671,8 +46660,7 @@ msgstr "Skift til PCB Editor"
 #: pcbnew/pcb_edit_frame.cpp:236
 #, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/pcb_edit_frame.cpp:502
 msgid "New PCB file is unsaved"
@@ -49009,8 +48997,7 @@ msgstr "Fejl ved udpakning af fil!\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1992 pcbnew/tools/drc_tool.cpp:160
 #, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2013 pcbnew/pcbnew_jobs_handler.cpp:2046
 #, fuzzy
@@ -49744,8 +49731,7 @@ msgstr "Ingen bestyrelsesproblemer fundet."
 #: pcbnew/tools/board_editor_control.cpp:647
 #, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr ""
-"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""
