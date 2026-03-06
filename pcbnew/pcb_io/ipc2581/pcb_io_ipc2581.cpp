@@ -436,7 +436,8 @@ wxXmlNode* PCB_IO_IPC2581::generateContentSection()
     if( m_progressReporter )
         m_progressReporter->AdvancePhase( _( "Generating content section" ) );
 
-    wxXmlNode* contentNode = appendNode( m_xml_root, "Content" );
+    m_contentNode = appendNode( m_xml_root, "Content" );
+    wxXmlNode* contentNode = m_contentNode;
     addAttribute( contentNode,  "roleRef", "Owner" );
 
     wxXmlNode* node = appendNode( contentNode, "FunctionMode" );
@@ -3924,6 +3925,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     delete m_xml_doc;
     m_xml_doc = nullptr;
     m_xml_root = nullptr;
+    m_contentNode = nullptr;
     m_lastAppendedNode = nullptr;
 
     m_board = aBoard;
@@ -4025,8 +4027,42 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     generateHistorySection();
 
     wxXmlNode* ecad_node = generateEcadSection();
-    generateBOMSection( ecad_node );
-    generateAvlSection();
+    wxXmlNode* bom_node = generateBOMSection( ecad_node );
+    wxXmlNode* avl_node = generateAvlSection();
+
+    // Insert BomRef/AvlRef into Content section per IPC-2581C 4.1.1.2.
+    // They go after LayerRef and before Dictionary* nodes.
+    if( m_contentNode && ( bom_node || avl_node ) )
+    {
+        wxXmlNode* insertBefore = nullptr;
+
+        for( wxXmlNode* child = m_contentNode->GetChildren(); child; child = child->GetNext() )
+        {
+            if( child->GetName().StartsWith( "Dictionary" ) )
+            {
+                insertBefore = child;
+                break;
+            }
+        }
+
+        auto insertRef =
+                [&]( const wxString& aNodeName, wxXmlNode* aSection )
+                {
+                    if( !aSection )
+                        return;
+
+                    wxXmlNode* ref = new wxXmlNode( wxXML_ELEMENT_NODE, aNodeName );
+                    ref->AddAttribute( "name", aSection->GetAttribute( "name" ) );
+
+                    if( insertBefore )
+                        m_contentNode->InsertChild( ref, insertBefore );
+                    else
+                        m_contentNode->AddChild( ref );
+                };
+
+        insertRef( "BomRef", bom_node );
+        insertRef( "AvlRef", avl_node );
+    }
 
     if( m_progressReporter )
     {

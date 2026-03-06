@@ -609,4 +609,33 @@ BOOST_AUTO_TEST_CASE( FlippedComponentRotation )
 }
 
 
+/**
+ * Test that Content section includes BomRef when BOM is emitted
+ */
+BOOST_AUTO_TEST_CASE( ContentBomRef )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "issue12609.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    wxString tempPath = CreateTempFile();
+
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "3";
+
+    m_ipc2581Plugin.SaveBoard( tempPath, board.get(), &props );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    bool hasBom = FileContainsPattern( tempPath, wxT( "<Bom " ) );
+    bool hasBomRef = FileContainsPattern( tempPath, wxT( "<BomRef " ) );
+
+    if( hasBom )
+    {
+        BOOST_CHECK_MESSAGE( hasBomRef,
+                             "Content should have BomRef when Bom section is present" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

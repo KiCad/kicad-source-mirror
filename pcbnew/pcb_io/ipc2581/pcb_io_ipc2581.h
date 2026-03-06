@@ -73,6 +73,7 @@ public:
         m_progress_reporter = nullptr;
         m_xml_doc = nullptr;
         m_xml_root = nullptr;
+        m_contentNode = nullptr;
         m_lastAppendedNode = nullptr;
     }
 
@@ -365,6 +366,7 @@ private:
 
     wxXmlDocument*          m_xml_doc;
     wxXmlNode*              m_xml_root;
+    wxXmlNode*              m_contentNode;
 
     wxXmlNode*              m_lastAppendedNode;     ///< Optimization for appendNode to avoid O(n) child traversal
 };
