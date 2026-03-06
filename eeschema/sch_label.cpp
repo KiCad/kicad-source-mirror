@@ -1967,6 +1967,24 @@ bool SCH_DIRECTIVE_LABEL::IsDangling() const
     return m_isDangling && m_connected_rule_areas.empty();
 }
 
+bool SCH_DIRECTIVE_LABEL::IncrementLabel( int aIncrement )
+{
+    for( SCH_FIELD& field : m_fields )
+    {
+        if( field.GetCanonicalName() == wxT( "Netclass" ) || field.GetCanonicalName() == wxT( "Component Class" ) )
+        {
+            wxString text = field.GetText();
+
+            if( IncrementString( text, aIncrement ) )
+            {
+                field.SetText( text );
+            }
+        }
+    }
+
+    return true;
+}
+
 
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_GLOBAL_LABEL_T )
