@@ -228,8 +228,15 @@ void DRC_PANEL_MATCHER::initClaims()
     m_claims.emplace_back(
             MATCHED_LENGTH_DIFF_PAIR,
             std::set<DRC_CONSTRAINT_T>{ LENGTH_CONSTRAINT, SKEW_CONSTRAINT },
-            std::set<DRC_CONSTRAINT_T>{},
+            std::set<DRC_CONSTRAINT_T>{ },
             65 );
+
+    // Skew-only (when not combined with length) still goes to matched length diff pair
+    m_claims.emplace_back(
+            MATCHED_LENGTH_DIFF_PAIR,
+            std::set<DRC_CONSTRAINT_T>{ SKEW_CONSTRAINT },
+            std::set<DRC_CONSTRAINT_T>{},
+            55 );
 
     // Diff pair gap only (when not combined with track_width)
     m_claims.emplace_back(
@@ -237,6 +244,13 @@ void DRC_PANEL_MATCHER::initClaims()
             std::set<DRC_CONSTRAINT_T>{ DIFF_PAIR_GAP_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{ MAX_UNCOUPLED_CONSTRAINT },
             15 );
+
+    // Diff pair uncoupled only (when not combined with track_width or gap)                                           
+    m_claims.emplace_back(
+            ROUTING_DIFF_PAIR,
+            std::set<DRC_CONSTRAINT_T>{ MAX_UNCOUPLED_CONSTRAINT },
+            std::set<DRC_CONSTRAINT_T>{},
+            10 );
 
     // Priority 5: Bool constraints
     m_claims.emplace_back(

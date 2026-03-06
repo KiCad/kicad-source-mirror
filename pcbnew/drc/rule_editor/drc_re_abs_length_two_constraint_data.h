@@ -163,7 +163,10 @@ public:
 
     std::vector<wxString> GetConstraintClauses( const RULE_GENERATION_CONTEXT& aContext ) const override
     {
-        std::vector<wxString> clauses = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::GetConstraintClauses( aContext );
+        std::vector<wxString> clauses;
+
+        if( GetOptimumLength() > 0 )
+            clauses = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::GetConstraintClauses( aContext );
 
         if( m_maxSkew > 0 )
         {
@@ -198,7 +201,16 @@ public:
 
     VALIDATION_RESULT Validate() const override
     {
-        VALIDATION_RESULT result = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::Validate();
+        VALIDATION_RESULT result;
+
+        bool hasLength = ( GetOptimumLength() > 0 || GetTolerance() > 0 );
+        bool hasSkew = ( m_maxSkew != 0 );
+
+        if( !hasLength && !hasSkew )
+            result.AddError( _( "At least one constraint must be defined" ) );
+
+        if( hasLength )
+            result = DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA::Validate();
 
         if( m_maxSkew < 0 )
             result.AddError( _( "Maximum Skew must be greater than or equal to 0" ) );
