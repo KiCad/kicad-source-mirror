@@ -2835,23 +2835,24 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                                                        : fp->GetCourtyard( B_CrtYd );
 
     if( courtyard_primary.OutlineCount() > 0 )
+    {
         addOutlineNode( packageNode, courtyard_primary, courtyard_primary.Outline( 0 ).Width(),
                         LINE_STYLE::SOLID );
+    }
+    else
+    {
+        SHAPE_POLY_SET bbox = fp->GetBoundingHull();
+        addOutlineNode( packageNode, bbox );
+    }
 
     if( courtyard_other.OutlineCount() > 0 )
     {
         if( m_version > 'B' )
         {
-            otherSideViewNode = appendNode( packageNode, "OtherSideView" );
+            otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
             addOutlineNode( otherSideViewNode, courtyard_other, courtyard_other.Outline( 0 ).Width(),
                             LINE_STYLE::SOLID );
         }
-    }
-
-    if( !courtyard_primary.OutlineCount() && !courtyard_other.OutlineCount() )
-    {
-        SHAPE_POLY_SET bbox = fp->GetBoundingHull();
-        addOutlineNode( packageNode, bbox );
     }
 
     wxXmlNode* pickupPointNode = appendNode( packageNode, "PickupPoint" );
@@ -3105,6 +3106,9 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         addPadStack( &dummy, pad );
     }
 
+    if( otherSideViewNode )
+        packageNode->AddChild( otherSideViewNode );
+
     return packageNode;
 }
 
@@ -3163,9 +3167,6 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
             wxXmlNode* xformNode = appendNode( componentNode, "Xform" );
 
             EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
-
-            if( fp->IsFlipped() )
-                fp_angle = fp_angle.Invert().Normalize();
 
             if( fp_angle != ANGLE_0 )
                 addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
