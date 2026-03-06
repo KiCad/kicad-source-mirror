@@ -2753,7 +2753,10 @@ void PCB_IO_IPC2581::generateProfile( wxXmlNode* aStepNode )
         wxLogTrace( traceIpc2581, wxS( "Failed to add polygon to profile" ) );
         aStepNode->RemoveChild( profileNode );
         deleteNode( profileNode );
+        return;
     }
+
+    addPolygonCutouts( profileNode, board_outline.Polygon( 0 ) );
 }
 
 
