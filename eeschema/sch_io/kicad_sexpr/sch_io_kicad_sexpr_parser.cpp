@@ -3380,6 +3380,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                         case T_variant:
                         {
                             SCH_SYMBOL_VARIANT variant;
+                            variant.InitializeAttributes( *symbol );
 
                             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                             {
@@ -3843,6 +3844,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                         case T_variant:
                         {
                             SCH_SHEET_VARIANT variant;
+                            variant.InitializeAttributes( *sheet );
 
                             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                             {

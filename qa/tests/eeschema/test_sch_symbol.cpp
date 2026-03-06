@@ -1046,4 +1046,60 @@ BOOST_AUTO_TEST_CASE( VariantSwitchInvalidatesBoundingBoxCache )
 }
 
 
+/**
+ * Verify that variant attributes are initialized from the symbol defaults, not all-false.
+ *
+ * When a variant's attributes match the symbol's default, the serializer omits them.
+ * On reload the parser must initialize those attributes from the symbol's defaults rather
+ * than from the VARIANT constructor defaults (all false).
+ *
+ * This test verifies InitializeAttributes correctly copies from the symbol.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23347
+ */
+BOOST_AUTO_TEST_CASE( VariantAttributeInitFromSymbol )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    // Set all default attributes to true on the symbol
+    symbol->SetDNP( true );
+    symbol->SetExcludedFromBOM( true );
+    symbol->SetExcludedFromSim( true );
+    symbol->SetExcludedFromBoard( true );
+    symbol->SetExcludedFromPosFiles( true );
+
+    // Default-constructed variant has all-false attributes
+    SCH_SYMBOL_VARIANT defaultVariant( wxS( "Default" ) );
+    BOOST_CHECK( !defaultVariant.m_DNP );
+    BOOST_CHECK( !defaultVariant.m_ExcludedFromBOM );
+    BOOST_CHECK( !defaultVariant.m_ExcludedFromSim );
+    BOOST_CHECK( !defaultVariant.m_ExcludedFromBoard );
+    BOOST_CHECK( !defaultVariant.m_ExcludedFromPosFiles );
+
+    // InitializeAttributes should copy the symbol's attributes
+    SCH_SYMBOL_VARIANT initializedVariant( wxS( "Initialized" ) );
+    initializedVariant.InitializeAttributes( *symbol );
+
+    BOOST_CHECK_MESSAGE( initializedVariant.m_DNP,
+                         "InitializeAttributes should copy DNP from symbol" );
+    BOOST_CHECK_MESSAGE( initializedVariant.m_ExcludedFromBOM,
+                         "InitializeAttributes should copy ExcludedFromBOM from symbol" );
+    BOOST_CHECK_MESSAGE( initializedVariant.m_ExcludedFromSim,
+                         "InitializeAttributes should copy ExcludedFromSim from symbol" );
+    BOOST_CHECK_MESSAGE( initializedVariant.m_ExcludedFromBoard,
+                         "InitializeAttributes should copy ExcludedFromBoard from symbol" );
+    BOOST_CHECK_MESSAGE( initializedVariant.m_ExcludedFromPosFiles,
+                         "InitializeAttributes should copy ExcludedFromPosFiles from symbol" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
