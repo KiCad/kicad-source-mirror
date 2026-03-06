@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 20:10+0000\n"
+"PO-Revision-Date: 2026-03-06 22:20+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
@@ -7712,7 +7712,7 @@ msgstr "Delik verilerini dışa aktar"
 
 #: common/jobs/job_export_pcb_drill.cpp:138
 msgid "Export Drill Data Job Settings"
-msgstr "Matkap Veri İş Ayarlarını Dışa Aktar"
+msgstr "Delme Veri İş Ayarlarını Dışa Aktar"
 
 #: common/jobs/job_export_pcb_drill.cpp:141
 msgid "PCB: Export Drill Data"
@@ -10431,7 +10431,7 @@ msgstr "KiCad sembol ayak izi bağlantı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
-msgstr "Matkap dosyaları"
+msgstr "Delme dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "SVG files"
@@ -25277,7 +25277,7 @@ msgstr "Dosyayı yüklemek için boş katman yok."
 
 #: gerbview/excellon_read_drill_file.cpp:291
 msgid "Error reading EXCELLON drill file"
-msgstr "EXCELLON matkap dosyasını okurken hata oluştu"
+msgstr "EXCELLON delme dosyasını okurken hata oluştu"
 
 #: gerbview/excellon_read_drill_file.cpp:590
 #, c-format
@@ -25549,7 +25549,7 @@ msgstr "Son kullanılan Zip Dosyalarını Temizle"
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Son kullanılan Matkap Dosyalarını Temizle"
+msgstr "Son kullanılan Delme Dosyalarını Temizle"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
@@ -26239,8 +26239,7 @@ msgstr "Geçersiz rapor biçimi\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
-"Dışa aktarma yardımcı programları (Gerber, matkap, konum dosyaları, vb.)"
+msgstr "Dışa aktarma yardımcı programları (Gerber, delme, konum dosyaları, vb.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
 msgid ""
@@ -26269,7 +26268,7 @@ msgstr "Çıktı kaynağı için Izgara Kaynağını kullanın"
 
 #: kicad/cli/command_pcb_export_3d.cpp:104
 msgid "Use Drill Origin for output origin"
-msgstr "Çıktı kaynağı için Matkap Kaynağı kullanın"
+msgstr "Çıktı kaynağı için Delme Kaynağı kullanın"
 
 #: kicad/cli/command_pcb_export_3d.cpp:108
 msgid ""
@@ -26467,7 +26466,7 @@ msgstr "Çıktı bir dizin olmalıdır\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:145
 msgid "Invalid drill format\n"
-msgstr "Geçersiz matkap biçimi\n"
+msgstr "Geçersiz delme biçimi\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:185
 msgid "Invalid zeros format specified\n"
@@ -26475,7 +26474,7 @@ msgstr "Geçersiz sıfır biçimi belirtildi\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:202
 msgid "Invalid oval drill format specified\n"
-msgstr "Geçersiz oval matkap biçimi belirtildi\n"
+msgstr "Geçersiz oval delme biçimi belirtildi\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:230
 msgid "Invalid map format specified\n"
@@ -29288,7 +29287,7 @@ msgstr "Minimum boşluk"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diameter - drill)"
-msgstr "Via: (çap - matkap)"
+msgstr "Geçit: (çap - delme)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diameter - drill)"
@@ -33152,12 +33151,12 @@ msgstr "Termal rölyefler"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "PTH için Rölyefler"
+msgstr "Kaplamalı Geçişli Delik için Rölyefler"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
 msgid "Thermal relief gap:"
-msgstr "Isı tahliye boşluğu:"
+msgstr "Termal rölyef aralığı:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:165
@@ -33165,8 +33164,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
-"Bölgenin doldurulmuş alanı ile termal tahliye telleri ile bağlanmış bir ped "
-"arasında açık tutulacak mesafe."
+"Termal rölyef kollarıyla bağlı bir ped ile bölgenin dolu alanı arasında boş "
+"bırakılacak mesafe."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:170
@@ -35537,7 +35536,7 @@ msgstr "Bir GenCAD dışa aktarma dosya adı seçin"
 #: pcbnew/dialogs/dialog_gendrill.cpp:436
 #, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "Matkap yazılamadı ve/veya dosyaları '%s' klasörüne eşlenemedi."
+msgstr "Delme yazılamadı ve/veya dosyaları '%s' klasörüne eşlenemedi."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:487
 msgid "Save Drill Report File"
@@ -35549,7 +35548,7 @@ msgstr "Çıkış klasörü:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Excellon"
-msgstr "Excellon Matkap"
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -37102,7 +37101,7 @@ msgstr "Termal Rölyef Geçersiz Kılmaları"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:889
 msgid "Relief gap:"
-msgstr "Boşluğu doldur:"
+msgstr "Rölyef aralığı:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:900
 msgid "Spoke width:"
@@ -37200,7 +37199,7 @@ msgstr "Mevcut seçimi aşağı taşı"
 
 #: pcbnew/dialogs/dialog_plot.cpp:226
 msgid "Generate Drill Files..."
-msgstr "Matkap Dosyaları Oluştur..."
+msgstr "Delme Dosyaları Oluştur..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:604
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:297
@@ -38410,7 +38409,7 @@ msgstr "Geçit deliği boyutu, geçit çapından küçük olmalı"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:651
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Başlangıç katmanı ve bitiş katmanı aynı olamaz"
+msgstr "Geçit başlangıç katmanı ve bitiş katmanı aynı olamaz"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:919
 msgid "Edit Track/Via Properties"
@@ -39451,7 +39450,7 @@ msgstr "Bölge dış hattı dışında pah/fillete izin ver"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:436
 msgid "Minimum thermal relief spoke count:"
-msgstr "Minimum termal tahliye tel sayısı:"
+msgstr "Minimum termal rölyef kol sayısı:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:455
 msgid "Length Tuning"
@@ -40133,177 +40132,183 @@ msgid ""
 msgstr ""
 "### Kısıtlamalar\n"
 "\n"
-"| Kısıtlama türü            | Argüman "
-"türü                                                                                                          "
-"| "
-"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+"| Kısıtlama türü            | Argüman türü"
+"                                                                                                          "
+"| Açıklama"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Geçitlerdeki halka genişliğini kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                        "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | "
-"\"&lt;ifade>\"                                                                                                          "
-"| Verilen ifadeyi kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `annular_width`           | min/opt/max"
+"                                                                                                           "
+"| Geçitlerdeki halka genişliğini kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
+"| `assertion`               | \"&lt;ifade>"
+"\"                                                                                                          "
+"| Verilen ifadeyi kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `clearance`               | min"
+"                                                                                                                   "
 "| Farklı ağlara ait bakır nesneler arasındaki **elektriksel** boşluğu "
 "belirtir. (Netten bağımsız nesneler arası boşluk için `physical_clearance` "
 "kullanın.)<br><br>Bakır nesnelerin üst üste gelmesine (çarpışmasına) izin "
 "vermek için, `min` değeri sıfırdan küçük bir `clearance` kısıtlaması "
-"oluşturun (örneğin, `-1`)."
-"<br>                                                                                                                            "
+"oluşturun (örneğin, `-1`).<br>"
+"                                                                                                                            "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
 "| Footprint courtyard'ları arasındaki boşluğu kontrol eder ve herhangi iki "
 "courtyard `min` mesafesinden daha yakınsa hata üretir. Eğer bir footprint'in "
-"courtyard şekli yoksa, bu kısıtlamadan hata üretilmez."
-"<br>                                                                                                                                                                                                                                        "
+"courtyard şekli yoksa, bu kısıtlamadan hata üretilmez.<br>"
+"                                                                                                                                                                                                                                        "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
-"| Farklı ağlara ait bakır nesneler arasındaki sızıntı mesafesini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                            "
+"| `creepage`                | min"
+"                                                                                                                   "
+"| Farklı ağlara ait bakır nesneler arasındaki sızıntı mesafesini "
+"belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
+"| `diff_pair_gap`           | min/opt/max"
+"                                                                                                           "
 "| Diferansiyel çiftlerde birbirine paralel olan eşleşmiş izler arasındaki "
 "boşluğu kontrol eder. Diferansiyel çift boşluğu, çiftin eşleşmemiş "
-"bölümlerinde test edilmez (örneğin, bir bileşenden çıkış yapılan kısımlar)."
-"<br>                                                                                                                                                                                                                              "
+"bölümlerinde test edilmez (örneğin, bir bileşenden çıkış yapılan kısımlar)"
+".<br>"
+"                                                                                                                                                                                                                              "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
+"| `diff_pair_uncoupled`     | max"
+"                                                                                                                   "
 "| Bir diferansiyel çift izinin, çiftin diğer kutup izinden ayrı olarak ne "
 "kadar mesafe boyunca yönlendirildiğini kontrol eder (örneğin, bir bileşenden "
 "çıkış yapılırken veya başka bir nesneyi (geçit gibi) geçmek için ayrıldığı "
-"durumlar)."
-"<br>                                                                                                                                                                                                          "
+"durumlar).<br>"
+"                                                                                                                                                                                                          "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Yasaklanacak bir veya daha fazla nesne türünü boşlukla ayırarak belirtin. "
-"Örneğin, `(constraint disallow track)` veya `(constraint disallow track via "
-"pad)`. Bu türde bir nesne kural koşuluyla eşleşirse, DRC hatası oluşturulur."
-"<br><br>Bu kısıtlama temelde bir keepout alanı kuralıyla aynıdır, ancak daha "
-"spesifik keepout kısıtlamaları oluşturmak için kullanılabilir."
-"<br>                                                                      |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
+"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
+"`footprint`<br> | Yasaklanacak bir veya daha fazla nesne türünü boşlukla "
+"ayırarak belirtin. Örneğin, `(constraint disallow track)` veya `(constraint "
+"disallow track via pad)`. Bu türde bir nesne kural koşuluyla eşleşirse, DRC "
+"hatası oluşturulur.<br><br>Bu kısıtlama temelde bir keepout alanı kuralıyla "
+"aynıdır, ancak daha spesifik keepout kısıtlamaları oluşturmak için "
+"kullanılabilir.<br>"
+"                                                                      |\n"
+"| `edge_clearance`          | min/opt/max"
+"                                                                                                           "
 "| Nesneler ile PCB kenarı arasındaki boşluğu kontrol eder.<br><br>Bu aynı "
 "zamanda \"freze toleransı\" olarak da düşünülebilir, çünkü PCB kenarı "
 "`Edge.Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini "
-"içerir. (Delme toleransı için `physical_hole_clearance` "
-"kullanın.)<br>                                                                                                                                                                "
+"içerir. (Delme toleransı için `physical_hole_clearance` kullanın.)<br>"
+"                                                                                                                                                                "
 "|\n"
-"| `length`                  | min/"
-"max                                                                                                               "
+"| `length`                  | min/max"
+"                                                                                                               "
 "| Kural koşuluyla eşleşen ağların toplam yönlendirme uzunluğunu kontrol eder "
 "ve `min` değerinin altında (belirtilmişse) veya `max` değerinin üzerinde "
-"(belirtilmişse) olan her ağ için hata üretir."
-"<br>                                                                                                                                                                                                                                                   "
+"(belirtilmişse) olan her ağ için hata üretir.<br>"
+"                                                                                                                                                                                                                                                   "
 "|\n"
-"| `hole`                    | min/"
-"max                                                                                                               "
+"| `hole`                    | min/max"
+"                                                                                                               "
 "| Pad veya geçitdeki delik çapını kontrol eder. Oval delikler için, küçük "
 "(minör) çap `min` değerine, büyük (major) çap `max` değerine karşı test "
-"edilir."
-"<br>                                                                                                                                                                                                                                                                                             "
+"edilir.<br>"
+"                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
+"| `hole_clearance`          | min"
+"                                                                                                                   "
 "| Pad veya geçit delikleri ile farklı ağa ait bakır nesneler arasındaki "
-"boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından ölçülür."
-"<br>                                                                                                                                                                                                                                                                                                     "
+"boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından ölçülür.<br>"
+"                                                                                                                                                                                                                                                                                                     "
 "|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
 "| Pad ve geçitlerdeki mekanik olarak delinmiş delikler arasındaki boşluğu "
 "kontrol eder. Boşluk delik merkezleri arasında değil, çapları arasında "
-"ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarını korumak içindir. "
+"ölçülür.<br><br>Bu kısıtlama yalnızca delme uçlarını korumak içindir. "
 "**Lazerle delinmiş** (mikrogeçit) ve diğer mekanik olmayan delikler "
 "arasındaki boşluk kontrol edilmez, aynı şekilde **freze ile açılmış** (oval "
-"şekilli) delikler de kontrol edilmez."
-"<br>                                         |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
+"şekilli) delikler de kontrol edilmez.<br>"
+"                                         |\n"
+"| `physical_clearance`      | min"
+"                                                                                                                   "
 "| Belirli bir katmandaki (bakır olmayan katmanlar dahil) iki nesne "
 "arasındaki boşluğu kontrol eder.<br><br>`clearance` kısıtlamasına göre daha "
 "genel amaçlı kontroller yapabilir, ancak çok daha yavaştır. Mümkün olduğunda "
-"`clearance` kullanın."
-"<br>                                                                                                                                                                                                     "
+"`clearance` kullanın.<br>"
+"                                                                                                                                                                                                     "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
 "| Netten bağımsız olarak, pad veya geçit delikleri ile diğer nesneler "
 "arasındaki boşluğu kontrol eder. Boşluk deliğin merkezinden değil, çapından "
 "ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak da düşünülebilir "
 "çünkü yalnızca **yuvarlak** delikleri içerir (freze toleransı için "
-"`edge_clearance` kullanın)."
-"<br>                                                                                                                            "
+"`edge_clearance` kullanın).<br>"
+"                                                                                                                            "
 "|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
+"| `silk_clearance`          | min/opt/max"
+"                                                                                                           "
 "| Silkscreen katmanlarındaki nesneler ile diğer nesneler arasındaki boşluğu "
-"kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                             "
+"kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                   "
+"| `skew`                    | max"
+"                                                                                                                   "
 "| Kural koşuluyla eşleşen ağların toplam skew'ını (çarpıklık) kontrol eder, "
 "yani her bir ağın uzunluğu ile kural tarafından eşleşen tüm ağların uzunluk "
 "ortalaması arasındaki farkı hesaplar. Bu farkın mutlak değeri `max` değerini "
-"aşarsa, hata üretilir."
-"<br>                                                                                                                                                                                           "
+"aşarsa, hata üretilir.<br>"
+"                                                                                                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
 "| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki boşluğun "
-"genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                       "
+"genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
 "| Bir pad ile thermal-relief bağlantısı olan bir zone arasındaki bağlantı "
-"çubuklarının genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                          "
+"çubuklarının genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
+"| `track_width`             | min/opt/max"
+"                                                                                                           "
 "| İz ve yay segmentlerinin genişliğini kontrol eder. `min` değerinin altında "
 "(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) genişliğe "
-"sahip her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                            "
+"sahip her segment için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                            "
 "|\n"
-"| `track_angle`             | min/opt/"
-"max                                                                                                           "
+"| `track_angle`             | min/opt/max"
+"                                                                                                           "
 "| Bağlı iki iz segmenti arasındaki açıyı kontrol eder. `min` değerinin "
 "altında (belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) açıya "
-"sahip her bağlı çift için hata üretilir."
-"<br>                                                                                                                                                                                                                                                           "
+"sahip her bağlı çift için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                           "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
+"| `track_segment_length`    | min/max"
+"                                                                                                               "
 "| İz ve yay segmentlerinin uzunluğunu kontrol eder. `min` değerinin altında "
 "(belirtilmişse) veya `max` değerinin üzerinde (belirtilmişse) uzunluğa sahip "
-"her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                              "
+"her segment için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                              "
 "|\n"
-"| `via_count`               | "
-"max                                                                                                                   "
+"| `via_count`               | max"
+"                                                                                                                   "
 "| Kural koşuluyla eşleşen her ağdaki geçit sayısını sayar. Eşleşen herhangi "
-"bir ağdaki geçit sayısı `max` değerini aşarsa, o ağ için hata üretilir."
-"<br>                                                                                                                                                                                                                                                                                                   "
+"bir ağdaki geçit sayısı `max` değerini aşarsa, o ağ için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Bir zone ile bir pad arasındaki bağlantı türünü belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                           "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
+"`none`                                                                                "
+"| Bir zone ile bir pad arasındaki bağlantı türünü belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "\n"
 "\n"
@@ -41205,7 +41210,7 @@ msgstr "%s üzerinde yerel üzerine yazma; bölge bağlantısı: %s."
 #: pcbnew/drc/drc_engine.cpp:917
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s üzerinde yerel geçersiz kılma; termal tahliye boşluğu: %s."
+msgstr "%s üzerinde yerel geçersiz kılma; termal rölyef aralığı: %s."
 
 #: pcbnew/drc/drc_engine.cpp:934
 #, c-format
@@ -41441,7 +41446,7 @@ msgstr "bölge"
 #: pcbnew/drc/drc_engine.cpp:1586
 #, c-format
 msgid "%s thermal relief gap: %s."
-msgstr "%s termal tahliye boşluğu: %s."
+msgstr "%s termal rölyef aralığı: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1603
 #, c-format
@@ -41515,7 +41520,7 @@ msgstr "İzole bakır dolgu"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Thermal relief connection to zone incomplete"
-msgstr "Eksik bölgeye termal tahliye bağlantısı"
+msgstr "Bölgeye termal rölyef bağlantısı eksik"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Via is not connected or connected on only one layer"
@@ -41679,7 +41684,7 @@ msgstr "Yollar arası sapma aralık dışında"
 
 #: pcbnew/drc/drc_item.cpp:270
 msgid "Too many or too few vias on a connection"
-msgstr "Bir bağlantıda çok fazla veya çok az geçiş noktası var"
+msgstr "Bir bağlantıda çok fazla veya çok az geçit var"
 
 #: pcbnew/drc/drc_item.cpp:274
 msgid "Differential pair gap out of range"
@@ -42064,18 +42069,17 @@ msgstr "%s bölge bağlantısı geçersiz kılma özelliğine sahip."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:300
 #, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s termal tahliye boşluğu geçersiz kılma özelliğine sahiptir."
+msgstr "%s, termal rölyef aralığı geçersiz kılmasına sahip."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:307
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr ""
-"%s termal rölyef bağlantı kolu genişliği geçersiz kılma özelliğine sahip."
+msgstr "%s, termal rölyef kol genişliği geçersiz kılmasına sahip."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:313
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s termal rölyef bağlantı kolu açısı geçersiz kılma özelliğine sahip."
+msgstr "%s, termal rölyef kol açısı geçersiz kılmasına sahip."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:319
 #, c-format
@@ -42156,12 +42160,12 @@ msgstr "%s şekil ofseti delikten %s katmanında farklı."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:426
 #, c-format
 msgid "%s drill shape differs."
-msgstr "%s matkap şekli farklı."
+msgstr "%s delme şekli farklı."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s drill size differs."
-msgstr "%s matkap boyutu farklı."
+msgstr "%s delme boyutu farklı."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:479
 #, c-format
@@ -44764,7 +44768,7 @@ msgstr "Lehim Maskesi Marjı Geçersiz Kılma"
 
 #: pcbnew/pad.cpp:2970 pcbnew/zone.cpp:2154
 msgid "Thermal Relief Spoke Width"
-msgstr "Termal Tahliye iletim Genişliği"
+msgstr "Termal Rölyef Kol Genişliği"
 
 #: pcbnew/pad.cpp:2976
 msgid "Thermal Relief Spoke Angle"
@@ -44772,7 +44776,7 @@ msgstr "Termal Rölyef Bağlantı Kolu Açısı"
 
 #: pcbnew/pad.cpp:2981 pcbnew/zone.cpp:2148
 msgid "Thermal Relief Gap"
-msgstr "Termal Rölyef Boşluğu"
+msgstr "Termal Rölyef Aralığı"
 
 #: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
@@ -48160,7 +48164,7 @@ msgstr "Termal rölyef aralığı çözünürlüğü için:"
 #: pcbnew/tools/board_inspection_tool.cpp:843
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Çözülen termal tahliye boşluğu: %s."
+msgstr "Çözümlenmiş termal rölyef aralığı: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:848
 msgid "Thermal-relief spoke width resolution for:"
@@ -48173,7 +48177,7 @@ msgstr "Çözümlenen bağlantı kolu genişliği: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Termal rölyef min bağlantı kolu sayısı çözünürlüğü için:"
+msgstr "Termal rölyef minimum bağlantı kolu sayısı çözünürlüğü için:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
@@ -49679,7 +49683,7 @@ msgstr "Drill Dosyaları (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1031
 msgid "Generate Excellon drill file(s)"
-msgstr "Excellon matkap dosyası oluştur"
+msgstr "Excellon delme dosya(lar)ı oluştur"
 
 #: pcbnew/tools/pcb_actions.cpp:1037
 msgid "Component Placement (.pos, .gbr)..."
@@ -49779,7 +49783,7 @@ msgstr "Delme ve bileşen yerleştirme dosyaları için orijin noktası yerleşt
 
 #: pcbnew/tools/pcb_actions.cpp:1161
 msgid "Reset Drill Origin"
-msgstr "Matkap Orijinini Sıfırla"
+msgstr "Delme Orijinini Sıfırla"
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Toggle Lock"
@@ -52208,7 +52212,7 @@ msgstr "miras alınmış"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr "termal kabartmalar"
+msgstr "termal rölyefler"
 
 #: pcbnew/zones.h:64
 msgid "solid"
@@ -52352,7 +52356,7 @@ msgstr "Gerber Dosyası"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr "Excellon matkap dosyası"
+msgstr "Excellon delme dosyası"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
