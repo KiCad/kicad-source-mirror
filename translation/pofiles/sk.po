@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 23:35+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-07 18:04+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -17092,9 +17092,9 @@ msgstr "Nie je vybraný žiadny symbol na uloženie."
 
 #: eeschema/eeschema_jobs_handler.cpp:1046 pcbnew/pcbnew_jobs_handler.cpp:1168
 #: pcbnew/pcbnew_jobs_handler.cpp:1841
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting %s"
-msgstr "Očakávam %s"
+msgstr "Exportovanie %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1076 pcbnew/pcbnew_jobs_handler.cpp:1721
 msgid "Output path must not conflict with existing path\n"
@@ -17108,19 +17108,17 @@ msgstr ""
 "mimo KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1113
-#, fuzzy
 msgid "Saving symbol library in updated format\n"
-msgstr "Neplatný identifikátor knižnice symbolov\n"
+msgstr "Ukladanie knižnice symbolov v aktualizovanom formáte\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1132
-#, fuzzy
 msgid "Symbol library was not updated\n"
-msgstr "Knižnica symbolov nie je povolená.\n"
+msgstr "Knižnica symbolov nebola aktualizovaná\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1205 pcbnew/pcbnew_jobs_handler.cpp:2086
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Povoliť porušenie KDR\n"
+msgstr "Nájdených %d porušení\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1220
 #, c-format
@@ -17133,9 +17131,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "ERC protokol uložený do %s\n"
 
 #: eeschema/eeschema_settings.cpp:71 eeschema/tools/sch_actions.cpp:960
-#, fuzzy
 msgid "Net Navigator"
-msgstr "Navigátor hierarchie"
+msgstr "Navigátor spojov"
 
 #: eeschema/eeschema_settings.cpp:115 eeschema/sch_edit_frame.cpp:1961
 #: pcbnew/footprint_edit_frame.cpp:256 pcbnew/footprint_edit_frame.cpp:1036
@@ -17170,9 +17167,8 @@ msgid "Passive Pin"
 msgstr "Pasívny vývod"
 
 #: eeschema/erc/erc.cpp:85 eeschema/erc/erc.cpp:102
-#, fuzzy
 msgid "Free Pin"
-msgstr "Vytvoriť súbor"
+msgstr "Voľný vývod"
 
 #: eeschema/erc/erc.cpp:86 eeschema/erc/erc.cpp:103
 msgid "Unspecified Pin"
@@ -17196,7 +17192,7 @@ msgstr "Otvorený emitor"
 
 #: eeschema/erc/erc.cpp:91 eeschema/erc/erc.cpp:108
 msgid "No Connection"
-msgstr "Nespojený"
+msgstr "Bez pripojenia"
 
 #: eeschema/erc/erc.cpp:211 eeschema/erc/erc.cpp:230
 #: pcbnew/drc/drc_test_provider_misc.cpp:319
@@ -17219,9 +17215,9 @@ msgid "Different footprints assigned to %s and %s"
 msgstr "Rôzne stopy priradené k %s a %s"
 
 #: eeschema/erc/erc.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Symbol '%s' už v '%s' existuje."
+msgstr "Symbol %s má neumiestnené jednotky %s"
 
 #: eeschema/erc/erc.cpp:659
 #, fuzzy, c-format
@@ -17239,9 +17235,9 @@ msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "Symbol zmien stopy nie je uložený"
 
 #: eeschema/erc/erc.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Nástroj %d nie je definovaný"
+msgstr "Trieda spojov  %s nie je definovaná"
 
 #: eeschema/erc/erc.cpp:772
 #, c-format
@@ -17249,14 +17245,13 @@ msgid "Label connects more than one wire at %d, %d"
 msgstr "Označenie prepája viac ako jeden spoj na %d, %d"
 
 #: eeschema/erc/erc.cpp:852
-#, fuzzy, c-format
+#, c-format
 msgid "Four items connected at %d, %d"
-msgstr "Nie je možné pripojiť sa k '%s' "
+msgstr "Štyri položky spojené v %d, %d"
 
 #: eeschema/erc/erc.cpp:946
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "Piny typu 'bez pripojenia' sú spojené"
+msgstr "Vývod typu „bez pripojenia“ je pripojený"
 
 #: eeschema/erc/erc.cpp:1159
 #, c-format
@@ -17373,7 +17368,7 @@ msgstr "Kontroluje sa plnenie zón..."
 
 #: eeschema/erc/erc.cpp:2019
 msgid "Checking no connect pins for connections..."
-msgstr "Kontrola, či nie sú pripojené piny \"žiadne pripojenie (NC)\"..."
+msgstr "Kontrola vývodov \"bez pripojenia\" na pripojenie..."
 
 #: eeschema/erc/erc.cpp:2028
 msgid "Checking for library symbol issues..."
@@ -17460,11 +17455,11 @@ msgstr "Označenie prepája viac ako jeden spoj"
 
 #: eeschema/erc/erc_item.cpp:97
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Je pripojený špendlík s príznakom \"žiadne pripojenie\""
+msgstr "Je pripojený vývod s príznakom \"bez pripojenia\""
 
 #: eeschema/erc/erc_item.cpp:101
 msgid "Unconnected \"no connection\" flag"
-msgstr "Vlajka nepripojeného \"žiadne pripojenie\""
+msgstr "Nepripojený príznak \"bez pripojenia\""
 
 #: eeschema/erc/erc_item.cpp:105
 msgid "Label not connected to anything"
@@ -17829,7 +17824,7 @@ msgid "No loader can read the specified file: '%s'."
 msgstr "Žiadny program pre čítanie zadaného súboru: '%s'."
 
 #: eeschema/files-io.cpp:760 eeschema/files-io.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
