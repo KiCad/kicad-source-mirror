@@ -2822,7 +2822,54 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     else
         addAttribute( packageNode,  "pinOne", "UNKNOWN" );
 
-    addAttribute( packageNode,  "pinOneOrientation", "OTHER" );
+    // Infer pinOneOrientation from pin 1 position relative to package centroid.
+    // IPC-2581C 8.2.3.6 requires a comment attribute when OTHER is used.
+    PAD* pinOnePad = fp->FindPadByNumber( "1" );
+
+    if( !pinOnePad )
+        pinOnePad = fp->FindPadByNumber( "A1" );
+
+    if( pinOnePad && fp->Pads().size() >= 2 )
+    {
+        VECTOR2I pinPos = pinOnePad->GetFPRelativePosition();
+        BOX2I    fpBBox = fp->GetBoundingBox();
+        VECTOR2I center = fpBBox.GetCenter();
+
+        // Use 5% of each dimension as the centerline tolerance band
+        int tolX = fpBBox.GetWidth() / 20;
+        int tolY = fpBBox.GetHeight() / 20;
+
+        bool onCenterX = std::abs( pinPos.x - center.x ) <= tolX;
+        bool onCenterY = std::abs( pinPos.y - center.y ) <= tolY;
+
+        const char* orientation = "OTHER";
+
+        if( onCenterX && onCenterY )
+            orientation = "CENTER";
+        else if( onCenterX && pinPos.y < center.y )
+            orientation = "UPPER_CENTER";
+        else if( onCenterX && pinPos.y > center.y )
+            orientation = "LOWER_CENTER";
+        else if( onCenterY && pinPos.x < center.x )
+            orientation = "LEFT";
+        else if( onCenterY && pinPos.x > center.x )
+            orientation = "RIGHT";
+        else if( pinPos.x < center.x && pinPos.y < center.y )
+            orientation = "UPPER_LEFT";
+        else if( pinPos.x > center.x && pinPos.y < center.y )
+            orientation = "UPPER_RIGHT";
+        else if( pinPos.x < center.x && pinPos.y > center.y )
+            orientation = "LOWER_LEFT";
+        else
+            orientation = "LOWER_RIGHT";
+
+        addAttribute( packageNode, "pinOneOrientation", orientation );
+    }
+    else
+    {
+        addAttribute( packageNode, "pinOneOrientation", "OTHER" );
+        addAttribute( packageNode, "comment", "Pin 1 orientation could not be determined" );
+    }
 
     // After normalization: F_CrtYd is top, B_CrtYd is bottom.
     // For bottom components (wasFlipped), these are swapped from original orientation.
