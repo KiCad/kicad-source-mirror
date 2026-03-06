@@ -195,6 +195,12 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.dist",
             &m_IP2581Bom.dist, wxEmptyString ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.bom_rev",
+            &m_IP2581Bom.bomRev, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.sch_revision",
+            &m_IP2581Bom.schRevision, wxEmptyString ) );
+
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
     registerMigration( 2, 3, std::bind( &PROJECT_FILE::migrateSchema2To3, this ) );

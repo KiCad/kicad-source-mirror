@@ -61,6 +61,7 @@ public:
     wxString        m_colMfg;
     wxString        m_colDistPn;
     wxString        m_colDist;
+    wxString        m_bomRev;
 };
 
 #endif

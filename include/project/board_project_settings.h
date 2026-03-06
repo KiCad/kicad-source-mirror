@@ -143,10 +143,12 @@ enum class RATSNEST_MODE
 struct KICOMMON_API IP2581_BOM
 {
     wxString mfg;       ///< Manufacturer name column
-    wxString MPN;     ///< Manufacturer part number column
+    wxString MPN;       ///< Manufacturer part number column
     wxString dist;      ///< Distributor name column
     wxString distPN;    ///< Distributor part number column
     wxString id;        ///< Internal ID column
+    wxString bomRev;       ///< Explicit BOM revision override set by user
+    wxString schRevision;  ///< Auto-propagated schematic title block revision
 };
 
 /**

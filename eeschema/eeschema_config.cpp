@@ -223,6 +223,13 @@ void SCH_EDIT_FRAME::saveProjectSettings()
         }
     }
 
+    // Propagate the root schematic revision to the project file for IPC-2581 BOM export
+    if( Schematic().RootScreen() )
+    {
+        Prj().GetProjectFile().m_IP2581Bom.schRevision =
+                Schematic().RootScreen()->GetTitleBlock().GetRevision();
+    }
+
     // Update top-level sheets information in the project file
     const std::vector<SCH_SHEET*>& topLevelSheets = Schematic().GetTopLevelSheets();
 

@@ -1579,7 +1579,15 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
     addAttribute( bomNode,  "name", genString( fn.GetName(), "BOM" ) );
 
     wxXmlNode* bomHeaderNode = appendNode( bomNode, "BomHeader" );
-    addAttribute( bomHeaderNode,  "revision", "1.0" );
+    wxString bomRevision = m_bomRev;
+
+    if( bomRevision.IsEmpty() )
+        bomRevision = m_board->GetTitleBlock().GetRevision();
+
+    if( bomRevision.IsEmpty() )
+        bomRevision = wxS( "1.0" );
+
+    addAttribute( bomHeaderNode,  "revision", bomRevision );
     addAttribute( bomHeaderNode,  "assembly", genString( fn.GetName() ) );
 
     wxXmlNode* stepRefNode = appendNode( bomHeaderNode, "StepRef" );
@@ -4030,6 +4038,9 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     if( auto it = aProperties->find( "distpn" ); it != aProperties->end() )
         m_distpn = it->second.wx_str();
+
+    if( auto it = aProperties->find( "bomrev" ); it != aProperties->end() )
+        m_bomRev = it->second.wx_str();
 
     if( m_version == 'B' )
     {

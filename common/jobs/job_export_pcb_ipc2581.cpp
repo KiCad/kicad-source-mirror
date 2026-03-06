@@ -47,7 +47,8 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
         m_colMfgPn(),
         m_colMfg(),
         m_colDistPn(),
-        m_colDist()
+        m_colDist(),
+        m_bomRev()
 {
     m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
     m_params.emplace_back( new JOB_PARAM<IPC2581_UNITS>( "units", &m_units, m_units ) );
@@ -64,6 +65,7 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
                                                     &m_colDistPn,
                                                     m_colDistPn ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist", &m_colDist, m_colDist ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "bom_rev", &m_bomRev, m_bomRev ) );
 }
 
 

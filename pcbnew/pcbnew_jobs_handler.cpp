@@ -2538,6 +2538,20 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     props["dist"] = job->m_colDist;
     props["distpn"] = job->m_colDistPn;
 
+    wxString bomRev = job->m_bomRev;
+
+    if( bomRev.IsEmpty() && brd->GetProject() )
+    {
+        const IP2581_BOM& bomSettings = brd->GetProject()->GetProjectFile().m_IP2581Bom;
+        bomRev = bomSettings.bomRev;
+
+        if( bomRev.IsEmpty() )
+            bomRev = bomSettings.schRevision;
+    }
+
+    if( !bomRev.IsEmpty() )
+        props["bomrev"] = bomRev;
+
     wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
     try
     {

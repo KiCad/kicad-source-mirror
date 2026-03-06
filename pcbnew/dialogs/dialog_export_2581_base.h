@@ -58,6 +58,8 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblVersion;
 		wxChoice* m_versionChoice;
 		wxCheckBox* m_cbCompress;
+		wxStaticText* m_lblBomRev;
+		wxTextCtrl* m_textBomRev;
 		wxStaticText* m_columnsLabel;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_lblOEM;
