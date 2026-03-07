@@ -56,15 +56,7 @@ class SETTINGS_MANAGER;
 /*
  * Boost test printers
  */
-namespace boost { namespace test_tools { namespace tt_detail {
-
-template<>
-struct print_log_value<VIATYPE>
-{
-    void operator()( std::ostream& os, const VIATYPE& viaType ) const;
-};
-
-}}} // namespace boost::test_tools::tt_detail
+std::ostream& boost_test_print_type( std::ostream& os, const VIATYPE& aViaType );
 
 
 namespace KI_TEST
