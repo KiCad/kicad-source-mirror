@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-62-g497c85bd-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,7 +78,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_addFieldButton = new STD_BITMAP_BUTTON( m_viewControlsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_addFieldButton->SetToolTip( _("Add a new field") );
 
-	bFieldsButtons->Add( m_addFieldButton, 0, wxBOTTOM, 5 );
+	bFieldsButtons->Add( m_addFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 	m_renameFieldButton = new STD_BITMAP_BUTTON( m_viewControlsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_renameFieldButton->SetToolTip( _("Rename selected field") );
@@ -104,7 +104,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	m_bomPresetsLabel = new wxStaticText( m_viewControlsPanel, wxID_ANY, _("View presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
-	bPresets->Add( m_bomPresetsLabel, 0, 0, 5 );
+	bPresets->Add( m_bomPresetsLabel, 0, wxLEFT, 5 );
 
 
 	bPresets->Add( 0, 2, 0, 0, 5 );
@@ -113,7 +113,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
 	m_cbBomPresets = new wxChoice( m_viewControlsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
 	m_cbBomPresets->SetSelection( 0 );
-	bPresets->Add( m_cbBomPresets, 0, wxEXPAND, 5 );
+	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bPresets->Add( 0, 5, 0, wxEXPAND, 5 );
@@ -122,7 +122,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bMargins->Add( bPresets, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bViewControlsSizer->Add( bMargins, 1, wxALL|wxEXPAND, 5 );
+	bViewControlsSizer->Add( bMargins, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
 	m_viewControlsPanel->SetSizer( bViewControlsSizer );
@@ -145,25 +145,25 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_addVariantButton, 0, wxRIGHT, 5 );
+	bSizer14->Add( m_addVariantButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_renameVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_renameVariantButton, 0, 0, 5 );
+	bSizer14->Add( m_renameVariantButton, 0, wxBOTTOM, 5 );
 
 	m_copyVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_copyVariantButton, 0, 0, 5 );
+	bSizer14->Add( m_copyVariantButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bSizer14->Add( 15, 0, 0, 0, 5 );
+	bSizer14->Add( 20, 0, 0, 0, 5 );
 
 	m_deleteVariantButton = new STD_BITMAP_BUTTON( m_variantsPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer14->Add( m_deleteVariantButton, 0, wxLEFT, 5 );
+	bSizer14->Add( m_deleteVariantButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bMargins2->Add( bSizer14, 0, wxEXPAND|wxTOP|wxLEFT, 2 );
 
 
-	bVariantsSizer->Add( bMargins2, 1, wxALL|wxEXPAND, 3 );
+	bVariantsSizer->Add( bMargins2, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 
 	m_variantsPanel->SetSizer( bVariantsSizer );
@@ -263,7 +263,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelEdit->SetSizer( bEditSizer );
 	m_panelEdit->Layout();
 	bEditSizer->Fit( m_panelEdit );
-	m_nbPages->AddPage( m_panelEdit, _("Edit"), true );
+	m_nbPages->AddPage( m_panelEdit, _("Edit"), false );
 	m_panelExport = new wxPanel( m_nbPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxGridBagSizer* gbExport;
 	gbExport = new wxGridBagSizer( 0, 5 );
@@ -378,7 +378,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelExport->SetSizer( gbExport );
 	m_panelExport->Layout();
 	gbExport->Fit( m_panelExport );
-	m_nbPages->AddPage( m_panelExport, _("Export"), false );
+	m_nbPages->AddPage( m_panelExport, _("Export"), true );
 
 	bMargins1->Add( m_nbPages, 1, wxEXPAND|wxALL, 5 );
 

@@ -11,35 +11,38 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : WX_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	mainSizer->Add( m_staticline4, 0, wxEXPAND|wxRIGHT, 5 );
 
 	bContentSizer = new wxBoxSizer( wxVERTICAL );
 
 	bBasicDetailSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 1, 4, 5, 0 );
+	fgSizer2 = new wxFlexGridSizer( 1, 4, 5, 5 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->AddGrowableCol( 3 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_nameLabel = new wxStaticText( this, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_nameLabel = new wxStaticText( this, wxID_ANY, _("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameLabel->Wrap( -1 );
-	fgSizer2->Add( m_nameLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer2->Add( m_nameLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_nameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_PROCESS_ENTER );
-	fgSizer2->Add( m_nameCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_nameCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_commentLabel = new wxStaticText( this, wxID_ANY, _("Comment"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_commentLabel = new wxStaticText( this, wxID_ANY, _("Comment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_commentLabel->Wrap( -1 );
-	fgSizer2->Add( m_commentLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer2->Add( m_commentLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_commentCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxTE_PROCESS_ENTER );
-	fgSizer2->Add( m_commentCtrl, 0, wxALL|wxEXPAND, 5 );
+	fgSizer2->Add( m_commentCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bBasicDetailSizer->Add( fgSizer2, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
@@ -51,10 +54,10 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 
 	m_constraintHeaderTitle = new wxStaticText( this, wxID_ANY, _("Constraint"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_constraintHeaderTitle->Wrap( -1 );
-	m_constraintSizer->Add( m_constraintHeaderTitle, 0, wxALL, 5 );
+	m_constraintSizer->Add( m_constraintHeaderTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_constraintSizer->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	m_constraintSizer->Add( m_staticline3, 0, wxEXPAND|wxALL, 2 );
 
 	m_constraintContentSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -72,19 +75,19 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 
 	m_conditionHeaderTitle = new wxStaticText( this, wxID_ANY, _("Conditions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_conditionHeaderTitle->Wrap( -1 );
-	bSizer13->Add( m_conditionHeaderTitle, 0, wxALL, 5 );
+	bSizer13->Add( m_conditionHeaderTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_syntaxHelp = new wxHyperlinkCtrl( this, wxID_ANY, _("Syntax help"), wxT("http://www.wxformbuilder.org"), wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
-	bSizer13->Add( m_syntaxHelp, 0, wxALL, 5 );
+	bSizer13->Add( m_syntaxHelp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bConditionSizer->Add( bSizer13, 0, wxEXPAND, 5 );
 
 	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bConditionSizer->Add( m_staticline8, 0, wxEXPAND | wxALL, 5 );
+	bConditionSizer->Add( m_staticline8, 0, wxEXPAND|wxALL, 2 );
 
 	m_conditionControlsSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -150,10 +153,10 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 
 	m_staticText711 = new wxStaticText( this, wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText711->Wrap( -1 );
-	bLayerSizer->Add( m_staticText711, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bLayerSizer->Add( m_staticText711, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline111 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLayerSizer->Add( m_staticline111, 0, wxEXPAND | wxALL, 5 );
+	bLayerSizer->Add( m_staticline111, 0, wxEXPAND | wxALL, 2 );
 
 	m_LayersComboBoxSizer = new wxBoxSizer( wxVERTICAL );
 

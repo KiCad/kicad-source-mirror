@@ -26,6 +26,8 @@
 #include <wx/panel.h>
 #include <functional>
 #include <vector>
+#include <widgets/std_bitmap_button.h>
+
 
 class BOARD;
 class DRC_RE_CONDITION_ROW_PANEL;
@@ -107,7 +109,7 @@ private:
     bool                         m_suppressCallbacks;
     std::vector<CONDITION_ENTRY> m_conditions;
     wxBoxSizer*                  m_mainSizer;
-    wxBitmapButton*              m_addBtn;
+    STD_BITMAP_BUTTON*           m_addBtn;
     wxStaticText*                m_labelText;
 
     std::function<void()>        m_changeCallback;

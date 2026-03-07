@@ -32,6 +32,7 @@
 
 #include <dialog_shim.h>
 #include <dialogs/rule_editor_data_base.h>
+#include <widgets/std_bitmap_button.h>
 
 class WX_INFOBAR;
 
@@ -465,21 +466,21 @@ private:
     void onClose( wxCloseEvent& aEvt );
 
 protected:
-    wxTreeCtrl*       m_ruleTreeCtrl;
-    WX_INFOBAR*       m_infoBar;
-    wxPanel*          m_contentPanel;
-    wxScrolledWindow* m_scrolledContentWin;
-    wxSplitterWindow* m_splitter;
-    wxSearchCtrl*     m_filterSearch;
-    wxTextCtrl*       m_filterText;
-    wxBoxSizer*       m_buttonsSizer;
-    wxBitmapButton*   m_addRuleButton;
-    wxBitmapButton*   m_copyRuleButton;
-    wxBitmapButton*   m_moveTreeItemUpButton;
-    wxBitmapButton*   m_moveTreeItemDownButton;
-    wxBitmapButton*   m_deleteRuleButton;
-    wxButton*         m_saveRuleButton;
-    wxButton*         m_cancelRuleButton;
+    wxTreeCtrl*        m_ruleTreeCtrl;
+    WX_INFOBAR*        m_infoBar;
+    wxPanel*           m_contentPanel;
+    wxScrolledWindow*  m_scrolledContentWin;
+    wxSplitterWindow*  m_splitter;
+    wxSearchCtrl*      m_filterSearch;
+    wxTextCtrl*        m_filterText;
+    wxBoxSizer*        m_buttonsSizer;
+    STD_BITMAP_BUTTON* m_addRuleButton;
+    STD_BITMAP_BUTTON* m_copyRuleButton;
+    STD_BITMAP_BUTTON* m_moveTreeItemUpButton;
+    STD_BITMAP_BUTTON* m_moveTreeItemDownButton;
+    STD_BITMAP_BUTTON* m_deleteRuleButton;
+    wxButton*          m_saveRuleButton;
+    wxButton*          m_cancelRuleButton;
 
 private:
     bool m_isDragging;

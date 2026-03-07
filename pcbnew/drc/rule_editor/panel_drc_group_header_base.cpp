@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,7 @@ PANEL_DRC_GROUP_HEADER_BASE::PANEL_DRC_GROUP_HEADER_BASE( wxWindow* parent, wxWi
 	m_dataGrid->AutoSizeColumns();
 	m_dataGrid->EnableDragColMove( false );
 	m_dataGrid->EnableDragColSize( true );
+	m_dataGrid->SetColLabelSize( 20 );
 	m_dataGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -38,11 +39,12 @@ PANEL_DRC_GROUP_HEADER_BASE::PANEL_DRC_GROUP_HEADER_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_dataGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	mainSizer->Add( m_dataGrid, 1, wxALL|wxEXPAND, 5 );
+	mainSizer->Add( m_dataGrid, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_DRC_GROUP_HEADER_BASE::OnSize ) );

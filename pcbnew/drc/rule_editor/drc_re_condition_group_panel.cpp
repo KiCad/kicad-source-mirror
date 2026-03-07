@@ -52,12 +52,13 @@ DRC_RE_CONDITION_GROUP_PANEL::DRC_RE_CONDITION_GROUP_PANEL( wxWindow* aParent, B
     m_mainSizer->Add( m_labelText, 0, wxALL, 5 );
 
     // Add button (added to sizer before first condition row so insert logic works)
-    m_addBtn = new wxBitmapButton( this, wxID_ANY, KiBitmapBundle( BITMAPS::small_plus ) );
+    m_addBtn = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
     m_addBtn->SetToolTip( _( "Add another condition" ) );
     m_mainSizer->Add( m_addBtn, 0, wxALL | wxALIGN_RIGHT, 5 );
 
     SetSizer( m_mainSizer );
 
+    m_addBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_addBtn->Bind( wxEVT_BUTTON, &DRC_RE_CONDITION_GROUP_PANEL::onAddClicked, this );
 
     // Start with one empty condition row

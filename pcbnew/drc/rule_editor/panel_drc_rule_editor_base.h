@@ -12,15 +12,16 @@
 #include <wx/intl.h>
 class WX_HTML_REPORT_BOX;
 
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include "widgets/wx_panel.h"
+#include <wx/statline.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/hyperlink.h>
 #include <wx/stc/stc.h>
 #include <wx/bmpbuttn.h>
@@ -36,11 +37,12 @@ class WX_HTML_REPORT_BOX;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_DRC_RULE_EDITOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_DRC_RULE_EDITOR_BASE : public wxPanel
+class PANEL_DRC_RULE_EDITOR_BASE : public WX_PANEL
 {
 	private:
 
 	protected:
+		wxStaticLine* m_staticline4;
 		wxBoxSizer* bContentSizer;
 		wxBoxSizer* bBasicDetailSizer;
 		wxStaticText* m_nameLabel;
@@ -72,7 +74,7 @@ class PANEL_DRC_RULE_EDITOR_BASE : public wxPanel
 
 	public:
 
-		PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_NONE|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_DRC_RULE_EDITOR_BASE();
 
