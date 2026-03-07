@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 23:16+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-08 02:17+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -26662,6 +26662,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
+"Uwaga: Ścieżka raportu przekazana z pominięciem parametru --generate-report, "
+"raport nie zostanie utworzony\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -28553,7 +28555,7 @@ msgstr "Aktywuj śledzenie przez Git"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
-msgstr ""
+msgstr "Przywraca integrację z Git dla tego projektu"
 
 #: kicad/project_tree_pane.cpp:1063
 #, fuzzy
@@ -28562,7 +28564,7 @@ msgstr "Aktywuj śledzenie przez Git"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
-msgstr ""
+msgstr "Wyłącza integrację z Git dla tego projektu"
 
 #: kicad/project_tree_pane.cpp:1121
 #, c-format
@@ -43354,7 +43356,7 @@ msgstr "Tworzenie plików ODB++"
 
 #: pcbnew/footprint.cpp:1404
 msgid "Other"
-msgstr "Pozostałe"
+msgstr "Inne"
 
 #: pcbnew/footprint.cpp:1744
 msgid "Footprint Name"
