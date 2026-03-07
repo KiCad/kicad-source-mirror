@@ -804,7 +804,10 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
             }
         }
 
-        if( !rule->m_LayerSource.IsEmpty() )
+        const bool isInner = rule->m_LayerSource.IsSameAs( wxT( "'inner'" ), false );
+        const bool isOuter = rule->m_LayerSource.IsSameAs( wxT( "'outer'" ), false );
+
+        if( !rule->m_LayerSource.IsEmpty() && !isInner && !isOuter )
         {
             LSET invalid = rule->m_LayerCondition & ~enabledLayers;
 
