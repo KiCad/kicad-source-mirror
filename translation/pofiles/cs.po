@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-06 13:07-0800\n"
-"PO-Revision-Date: 2026-03-06 23:55+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-09 13:09+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -46798,9 +46798,8 @@ msgid "Error exporting VRML"
 msgstr "Chyba při exportu VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:533
-#, fuzzy
 msgid "Invalid image dimensions"
-msgstr "Neplatná definice názvů vývodů"
+msgstr "Neplatné rozměry obrázku"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:793
 #, fuzzy
