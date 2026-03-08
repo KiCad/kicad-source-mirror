@@ -25,6 +25,7 @@
 #include <footprint.h>
 #include <lset.h>
 #include <pad.h>
+#include <pcb_field.h>
 #include <pcb_group.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
@@ -56,6 +57,16 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
             return nullptr;
 
         return std::make_unique<PAD>( footprint );
+    }
+
+    case PCB_FIELD_T:
+    {
+        FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aContainer );
+
+        if( !footprint )
+            return nullptr;
+
+        return std::make_unique<PCB_FIELD>( footprint, INVALID_FIELD );
     }
 
     case PCB_FOOTPRINT_T:

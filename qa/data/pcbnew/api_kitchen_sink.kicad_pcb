@@ -536,6 +536,19 @@
 				)
 			)
 		)
+		(property "CustomField" "CustomValue"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "212d694f-e13b-46df-9a52-6773137fcf6d")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(attr through_hole)
 		(fp_line
 			(start -5.08 3.81)
