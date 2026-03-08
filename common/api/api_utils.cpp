@@ -122,10 +122,9 @@ KICOMMON_API void PackPolyLine( types::PolyLine& aOutput, const SHAPE_LINE_CHAIN
         if( vertex < 0 )
             break;
 
-        types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
-
-        if( aSlc.IsPtOnArc( vertex ) )
+        if( aSlc.IsArcStart( vertex ) )
         {
+            types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
             const SHAPE_ARC& arc = aSlc.Arc( aSlc.ArcIndex( vertex ) );
             node->mutable_arc()->mutable_start()->set_x_nm( arc.GetP0().x );
             node->mutable_arc()->mutable_start()->set_y_nm( arc.GetP0().y );
@@ -134,8 +133,9 @@ KICOMMON_API void PackPolyLine( types::PolyLine& aOutput, const SHAPE_LINE_CHAIN
             node->mutable_arc()->mutable_end()->set_x_nm( arc.GetP1().x );
             node->mutable_arc()->mutable_end()->set_y_nm( arc.GetP1().y );
         }
-        else
+        else if( !aSlc.IsPtOnArc( vertex ) )
         {
+            types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
             node->mutable_point()->set_x_nm( aSlc.CPoint( vertex ).x );
             node->mutable_point()->set_y_nm( aSlc.CPoint( vertex ).y );
         }

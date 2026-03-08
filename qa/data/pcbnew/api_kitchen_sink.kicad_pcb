@@ -630,6 +630,37 @@
 			)
 		)
 	)
+	(gr_poly
+		(pts
+			(arc
+				(start 85.1 125.9)
+				(mid 85.807107 125.607107)
+				(end 86.1 124.9)
+			)
+			(arc
+				(start 86.1 121)
+				(mid 85.807107 120.292893)
+				(end 85.1 120)
+			)
+			(arc
+				(start 81 120)
+				(mid 80.292893 120.292893)
+				(end 80 121)
+			)
+			(arc
+				(start 80 124.9)
+				(mid 80.292893 125.607107)
+				(end 81 125.9)
+			)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "b5d89b57-14eb-4e87-92ab-25ae8eacf292")
+	)
 	(gr_arc
 		(start 111.5 55)
 		(mid 110.556284 51.236651)
@@ -667,17 +698,6 @@
 		(uuid "98ab137c-f925-4075-af50-4ac8fe13c14d")
 	)
 	(gr_circle
-		(center 224.6 97.7)
-		(end 228.25 99.55)
-		(stroke
-			(width 0.05)
-			(type default)
-		)
-		(fill no)
-		(layer "Edge.Cuts")
-		(uuid "b27945e5-32fe-454b-ad80-b75cae1194e1")
-	)
-	(gr_circle
 		(center 197.75 63.3)
 		(end 199.05 65.4)
 		(stroke
@@ -687,6 +707,17 @@
 		(fill no)
 		(layer "Edge.Cuts")
 		(uuid "e1699138-73b7-4cfd-aec1-5bee869795d9")
+	)
+	(gr_circle
+		(center 224.6 97.7)
+		(end 228.25 99.55)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "b27945e5-32fe-454b-ad80-b75cae1194e1")
 	)
 	(gr_rect
 		(start 93.5 47.25)
@@ -709,6 +740,17 @@
 		(fill no)
 		(layer "B.Fab")
 		(uuid "2e68cc14-52eb-4276-b39c-c502b042bc91")
+	)
+	(gr_rect
+		(start 95 51)
+		(end 100 52)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "B.Fab")
+		(uuid "cb2af193-349d-4651-a0c1-5d028759a9f3")
 	)
 	(gr_arc
 		(start 105.222971 54.2804)
@@ -733,16 +775,15 @@
 		(layer "B.Fab")
 		(uuid "b5d27e62-c3ee-43b4-a859-5e626272bf9c")
 	)
-	(gr_rect
-		(start 95 51)
-		(end 100 52)
+	(gr_line
+		(start 111 46.5)
+		(end 115.5 54)
 		(stroke
-			(width 0)
-			(type solid)
+			(width 0.1)
+			(type default)
 		)
-		(fill yes)
-		(layer "B.Fab")
-		(uuid "cb2af193-349d-4651-a0c1-5d028759a9f3")
+		(layer "User.4")
+		(uuid "5cc814d5-0815-4cbb-b9cb-07dfd7225722")
 	)
 	(gr_line
 		(start 113.5 47)
@@ -753,16 +794,6 @@
 		)
 		(layer "User.4")
 		(uuid "22cd6520-1cf2-46ca-a9d9-28e8d8c4863c")
-	)
-	(gr_line
-		(start 111 46.5)
-		(end 115.5 54)
-		(stroke
-			(width 0.1)
-			(type default)
-		)
-		(layer "User.4")
-		(uuid "5cc814d5-0815-4cbb-b9cb-07dfd7225722")
 	)
 	(gr_text "Text!"
 		(at 120.45 49.35 0)
