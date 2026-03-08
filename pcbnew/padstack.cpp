@@ -224,6 +224,7 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
     Drill().size = kiapi::common::UnpackVector2( padstack.drill().diameter() );
     Drill().start = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().start_layer() );
     Drill().end = FromProtoEnum<PCB_LAYER_ID>( padstack.drill().end_layer() );
+    Drill().shape = FromProtoEnum<PAD_DRILL_SHAPE>( padstack.drill().shape() );
 
     for( const PadStackLayer& layer : padstack.copper_layers() )
     {
@@ -438,6 +439,7 @@ void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
     drill->set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( StartLayer() ) );
     drill->set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( EndLayer() ) );
     kiapi::common::PackVector2( *drill->mutable_diameter(), Drill().size );
+    drill->set_shape( ToProtoEnum<PAD_DRILL_SHAPE, kiapi::board::types::DrillShape>( Drill().shape ) );
 
     ForEachUniqueLayer( [&]( PCB_LAYER_ID aLayer )
                         {
