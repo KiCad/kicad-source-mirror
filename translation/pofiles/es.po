@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-09 11:11-0700\n"
-"PO-Revision-Date: 2026-03-07 00:23+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-10 12:12+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -25031,7 +25031,7 @@ msgstr "Exclusiones"
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "Excl. BOM"
+msgstr "Excluido del BOM"
 
 #: eeschema/widgets/search_handlers.cpp:168
 #, fuzzy
