@@ -52,6 +52,10 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_kindMask = m_itemMask;
+    if( m_overrideClearance )
+    {
+        opts.m_overrideClearance = *m_overrideClearance;
+    }
 
     if( ! m_restrictedSet.empty() )
     {
@@ -96,6 +100,14 @@ bool WALKAROUND::singleStep()
     TOPOLOGY topo( m_world );
     TOPOLOGY::CLUSTER pendingClusters[MaxWalkPolicies];
 
+    COLLISION_SEARCH_OPTIONS opts;
+
+    opts.m_kindMask = m_itemMask;
+    if( m_overrideClearance )
+    {
+        opts.m_overrideClearance = *m_overrideClearance;
+    }
+
     for( int i = 0; i < MaxWalkPolicies; i++ )
     {
         if( !m_enabledPolicies[i] )
@@ -126,7 +138,7 @@ bool WALKAROUND::singleStep()
 
     }
 
-    DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
+    ROUTING_REGIME_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
 
     auto processCluster = [ & ] ( TOPOLOGY::CLUSTER& aCluster, LINE& aLine, bool aCw ) -> bool
     {
@@ -154,12 +166,16 @@ bool WALKAROUND::singleStep()
             }
 
             int clearance = m_world->GetClearance( clItem, &aLine, false );
-            const SHAPE_LINE_CHAIN& cachedHull = m_world->GetRuleResolver()->HullCache(
+            if( m_overrideClearance )
+                clearance = *m_overrideClearance;
+            const SHAPE_CHAIN& cachedHull = m_world->GetRuleResolver()->HullCache(
                     clItem, clearance, aLine.Width(), aLine.Layer() );
 
-            SHAPE_LINE_CHAIN hull;
+            SHAPE_CHAIN hull;
 
-            if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+
+            // schain move hull generation elsewhere
+            if( cornerMode == ROUTING_REGIME_45::MITERED_90 || cornerMode == ROUTING_REGIME_45::ROUNDED_90 )
             {
                 BOX2I bbox = cachedHull.BBox();
                 hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
@@ -172,9 +188,16 @@ bool WALKAROUND::singleStep()
                 hull = cachedHull;
             }
 
-            LINE tmp( aLine );
 
-            aLine.Line().Simplify2();
+            aLine.Line().Simplify();
+            auto last = aLine.CPoint(-1);
+            if( hull.PointInside( last ) )
+            {
+                // schain fixme mutability
+                aLine.Line().Append( hull.NearestPoint( last ) );
+            }
+
+            LINE tmp( aLine );
 
             bool stat = aLine.Walkaround( hull, tmp.Line(), aCw );
 
@@ -218,8 +241,8 @@ bool WALKAROUND::singleStep()
         auto st_cw = processCluster( pendingClusters[WP_SHORTEST], path_cw, true );
         auto st_ccw = processCluster( pendingClusters[WP_SHORTEST], path_ccw, false );
 
-        bool cw_coll = st_cw ? m_world->CheckColliding( &path_cw ).has_value() : false;
-        bool ccw_coll = st_ccw ? m_world->CheckColliding( &path_ccw ).has_value() : false;
+        bool cw_coll = st_cw ? m_world->CheckColliding( &path_cw, opts ).has_value() : false;
+        bool ccw_coll = st_ccw ? m_world->CheckColliding( &path_ccw, opts ).has_value() : false;
 
         double lengthFactorCw = (double) path_cw.CLine().Length() / (double) m_initialLength;
         double lengthFactorCcw = (double) path_ccw.CLine().Length() / (double) m_initialLength;
@@ -267,7 +290,7 @@ bool WALKAROUND::singleStep()
             for( auto& item : m_processedItems )
             {
                 std::set<PNS::OBSTACLE> obstacles;
-                PNS::COLLISION_SEARCH_CONTEXT ctx( obstacles );
+                PNS::COLLISION_SEARCH_CONTEXT ctx( obstacles, opts );
                 if( shortest->Collide( item, m_world, shortest->Layer(), &ctx ) )
                 {
                     anyColliding = true;
@@ -375,7 +398,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( st == ST_IN_PROGRESS )
             st = ST_ALMOST_DONE;
 
-        if( ln.SegmentCount() < 1 || ln.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
+        if( ln.ShapeCount() < 1 || ln.CPoint( 0 ) != aInitialPath.CPoint( 0 ) )
         {
             st = ST_STUCK;
         }

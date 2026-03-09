@@ -46,7 +46,7 @@ void MOUSE_TRAIL_TRACER::Clear()
 
 void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
 {
-    if( m_trail.SegmentCount() == 0 )
+    if( m_trail.ShapeCount() == 0 )
     {
         m_trail.Append( aP );
     }
@@ -54,15 +54,15 @@ void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
     {
         SEG s_new( m_trail.CLastPoint(), aP );
 
-        if( m_trail.SegmentCount() > 2 )
+        if( m_trail.ShapeCount() > 2 )
         {
             SEG::ecoord limit = ( static_cast<SEG::ecoord>( m_tolerance ) * m_tolerance );
 
-            for( int i = 0; i < m_trail.SegmentCount() - 2; i++ )
+            for( int i = 0; i < m_trail.ShapeCount() - 2; i++ )
             {
-                const SEG& s_trail = m_trail.CSegment( i );
+                const SHAPE_SEGMENT& s_trail = m_trail.CSegment( i );
 
-                if( s_trail.SquaredDistance( s_new ) <= limit )
+                if( s_trail.GetSeg().SquaredDistance( s_new ) <= limit )
                 {
                     m_trail = m_trail.Slice( 0, i );
                     break;
@@ -81,8 +81,10 @@ void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
 }
 
 
-DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
+ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 {
+    using R45 = ROUTING_REGIME_45;
+
     // Tuning factor for how good the "fit" of the trail must be to the posture
     const double areaRatioThreshold = 1.3;
 
@@ -103,8 +105,8 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         // If mouse trail detection is enabled; using the last seg direction as a starting point
         // will give the best results.  Otherwise, just assume that we switch postures every
         // segment.
-        if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
-            m_direction = m_disableMouse ? m_lastSegDirection.Right() : m_lastSegDirection;
+        if( !m_manuallyForced && m_lastSegDirection != R45::UNDEFINED )
+            m_direction = m_disableMouse ? m_lastSegDirection.Right45() : m_lastSegDirection;
 
         return m_direction;
     }
@@ -112,24 +114,24 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     VECTOR2I         p0 = m_trail.CPoint( 0 );
     double refLength = SEG( p0, aP ).Length();
-    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
+    SHAPE_CHAIN straight( R45::BuildInitialTrace( p0, aP, false ) );
 
     straight.SetClosed( true );
-    straight.Append( m_trail.Reverse() );
+    straight.Append( m_trail.Reversed() );
     straight.Simplify();
 
     PNS_DBG( dbg, AddShape, &straight, m_forced ? BLUE : GREEN, 100000, wxT( "mt-straight" ) );
 
-    double areaS = straight.Area();
+    double areaS = straight.ToSLC().Area();
 
-    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
-    diag.Append( m_trail.Reverse() );
+    SHAPE_CHAIN diag( R45::BuildInitialTrace( p0, aP, true ) );
+    diag.Append( m_trail.Reversed() );
     diag.SetClosed( true );
     diag.Simplify();
 
     PNS_DBG( dbg, AddShape, &diag, YELLOW, 100000, wxT( "mt-diag" ) );
 
-    double areaDiag = diag.Area();
+    double areaDiag = diag.ToSLC().Area();
     double ratio    = areaS / ( areaDiag + 1.0 );
 
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
@@ -150,21 +152,21 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     if( !m_forced && refLength > minAreaCutoffDistanceFactor * m_tolerance )
     {
         double areaCutoff = m_tolerance * refLength;
-        SHAPE_LINE_CHAIN trail( m_trail );
+        SHAPE_CHAIN trail( m_trail );
         trail.SetClosed( true );
 
-        if( trail.Area() > areaCutoff )
+        if( trail.ToSLC().Area() > areaCutoff )
             areaOk = true;
     }
 
     PNS_DBG( dbg, Message, wxString::Format( "Posture: rl %.0f thr %d tol %d as %.3f area OK %d forced %d\n", refLength, (int)(unlockDistanceFactor * m_tolerance), m_tolerance, ratio, areaOk?1:0, m_forced?1:0 ) );
 
-    DIRECTION_45 straightDirection;
-    DIRECTION_45 diagDirection;
-    DIRECTION_45 newDirection = m_direction;
+    R45::DIRECTION straightDirection;
+    R45::DIRECTION diagDirection;
+    R45::DIRECTION newDirection = m_direction;
 
-    straightDirection = DIRECTION_45( straight.CSegment( 0 ) );
-    diagDirection     = DIRECTION_45( diag.CSegment( 0 ) );
+    straightDirection = R45::DIRECTION( straight.CSegment( 0 ) );
+    diagDirection     = R45::DIRECTION( diag.CSegment( 0 ) );
 
     if( !m_forced && areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
         newDirection = diagDirection;
@@ -182,7 +184,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     // If we have a last segment, correct the direction relative to it.  For segment exit, we want
     // to correct to the least obtuse
-    if( !m_manuallyForced && !m_disableMouse && m_lastSegDirection != DIRECTION_45::UNDEFINED )
+    if( !m_manuallyForced && !m_disableMouse && m_lastSegDirection != R45::UNDEFINED )
     {
         PNS_DBG( dbg, Message,
                  wxString::Format( wxT( "Posture: checking direction %s against last seg %s" ),
@@ -210,22 +212,22 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         }
         else
         {
-            switch( m_direction.Angle( m_lastSegDirection ) )
+            switch( R45::Angle( m_direction, m_lastSegDirection ) )
             {
-            case DIRECTION_45::ANG_HALF_FULL:
+            case R45::ANG_HALF_FULL:
                 // Force a better (acute) connection
                 m_direction = m_direction.IsDiagonal() ? straightDirection : diagDirection;
                 PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting half full => %s" ),
                                                          m_direction.Format() ) );
                 break;
 
-            case DIRECTION_45::ANG_ACUTE:
+            case R45::ANG_ACUTE:
             {
                 // Force a better connection by flipping if possible
-                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
+                R45::DIRECTION candidate = m_direction.IsDiagonal() ? straightDirection
                                                                   : diagDirection;
 
-                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_RIGHT )
+                if( R45::Angle( candidate, m_lastSegDirection ) == R45::ANG_RIGHT )
                 {
                     PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting right => %s" ),
                                                              candidate.Format() ) );
@@ -235,13 +237,13 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
                 break;
             }
 
-            case DIRECTION_45::ANG_RIGHT:
+            case R45::ANG_RIGHT:
             {
                 // Force a better connection by flipping if possible
-                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
+                R45::DIRECTION candidate = m_direction.IsDiagonal() ? straightDirection
                                                                   : diagDirection;
 
-                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
+                if( R45::Angle( candidate, m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
                 {
                     PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting obtuse => %s" ),
                                                              candidate.Format() ) );
@@ -270,8 +272,8 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
 void MOUSE_TRAIL_TRACER::FlipPosture()
 {
-    m_direction = m_direction.Right();
-    m_forced = true;
+    m_direction = m_direction.Right45();
+    m_forced = true;    
     m_manuallyForced = true;
 }
 

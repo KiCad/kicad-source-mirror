@@ -669,9 +669,9 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                         }
 
                         if( aDirection )
-                            outline.Append( aAnchor == arc.GetP0() ? arc : arc.Reversed() );
+                            outline.Append( aAnchor == arc.GetP0() ? arc : *arc.Reversed() );
                         else
-                            outline.Insert( 0, aAnchor == arc.GetP0() ? arc : arc.Reversed() );
+                            outline.Insert( 0, aAnchor == arc.GetP0() ? arc : *arc.Reversed() );
 
                         insertedItems.push_back( static_cast<BOARD_ITEM*>( aItem ) );
                     }

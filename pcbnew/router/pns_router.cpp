@@ -305,11 +305,10 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
     if( m_mode == PNS_MODE_ROUTE_SINGLE )
     {
-        SHAPE_LINE_CHAIN dummyStartSeg;
+        SHAPE_CHAIN dummyStartSeg;
         LINE             dummyStartLine;
 
-        dummyStartSeg.Append( startPoint );
-        dummyStartSeg.Append( startPoint, true );
+        dummyStartSeg.Append( SEG( startPoint, startPoint ) );
 
         dummyStartLine.SetShape( dummyStartSeg );
         dummyStartLine.SetLayer( aLayer );
@@ -378,16 +377,13 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             }
         }
 
-        SHAPE_LINE_CHAIN dummyStartSegA;
-        SHAPE_LINE_CHAIN dummyStartSegB;
+        SHAPE_CHAIN dummyStartSegA;
+        SHAPE_CHAIN dummyStartSegB;
         LINE             dummyStartLineA;
         LINE             dummyStartLineB;
 
-        dummyStartSegA.Append( dpPair.AnchorN() );
-        dummyStartSegA.Append( dpPair.AnchorN(), true );
-
-        dummyStartSegB.Append( dpPair.AnchorP() );
-        dummyStartSegB.Append( dpPair.AnchorP(), true );
+        dummyStartSegA.Append( SEG( dpPair.AnchorN(), dpPair.AnchorN() ) );
+        dummyStartSegB.Append( SEG( dpPair.AnchorP(), dpPair.AnchorP() ) );
 
         dummyStartLineA.SetShape( dummyStartSegA );
         dummyStartLineA.SetLayer( aLayer );
@@ -535,7 +531,7 @@ bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOth
     PNS::TOPOLOGY topo( lastNode );
 
     // If the user has drawn a line, get the anchor nearest to the line end
-    if( trace->SegmentCount() > 0 )
+    if( trace->ShapeCount() > 0 )
     {
         return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers,
                                                    aOtherEndItem );
@@ -1056,14 +1052,14 @@ bool ROUTER::IsPlacingVia() const
 
 void ROUTER::ToggleCornerMode()
 {
-    DIRECTION_45::CORNER_MODE mode = m_settings->GetCornerMode();
+    ROUTING_REGIME_45::CORNER_MODE mode = m_settings->GetCornerMode();
 
     switch( m_settings->GetCornerMode() )
     {
-    case DIRECTION_45::CORNER_MODE::MITERED_45: mode = DIRECTION_45::CORNER_MODE::ROUNDED_45; break;
-    case DIRECTION_45::CORNER_MODE::ROUNDED_45: mode = DIRECTION_45::CORNER_MODE::MITERED_90; break;
-    case DIRECTION_45::CORNER_MODE::MITERED_90: mode = DIRECTION_45::CORNER_MODE::ROUNDED_90; break;
-    case DIRECTION_45::CORNER_MODE::ROUNDED_90: mode = DIRECTION_45::CORNER_MODE::MITERED_45; break;
+    case ROUTING_REGIME_45::MITERED_45: mode = ROUTING_REGIME_45::ROUNDED_45; break;
+    case ROUTING_REGIME_45::ROUNDED_45: mode = ROUTING_REGIME_45::MITERED_90; break;
+    case ROUTING_REGIME_45::MITERED_90: mode = ROUTING_REGIME_45::ROUNDED_90; break;
+    case ROUTING_REGIME_45::ROUNDED_90: mode = ROUTING_REGIME_45::MITERED_45; break;
     }
 
     m_settings->SetCornerMode( mode );

@@ -26,11 +26,10 @@
 #include <cstdio>
 
 #include <settings/nested_settings.h>
-#include <geometry/direction45.h>
 
+#include "pns_routing_regime_45.h"
 #include "time_limit.h"
 
-class DIRECTION_45;
 class TOOL_SETTINGS;
 
 namespace PNS {
@@ -126,7 +125,7 @@ public:
 
     void SetFreeAngleMode( bool aEnable ) { m_freeAngleMode = aEnable; }
 
-    const DIRECTION_45 InitialDirection() const;
+    const ROUTING_REGIME_45::DIRS InitialDirection() const;
 
     int ShoveIterationLimit() const;
     TIME_LIMIT ShoveTimeLimit() const;
@@ -140,8 +139,8 @@ public:
     bool GetSnapToTracks() const { return m_snapToTracks; }
     bool GetSnapToPads() const { return m_snapToPads; }
 
-    DIRECTION_45::CORNER_MODE GetCornerMode() const { return m_cornerMode; }
-    void SetCornerMode( DIRECTION_45::CORNER_MODE aMode ) { m_cornerMode = aMode; }
+    ROUTING_REGIME_45::CORNER_MODE GetCornerMode() const { return m_cornerMode; }
+    void SetCornerMode( ROUTING_REGIME_45::CORNER_MODE aMode ) { m_cornerMode = aMode; }
 
     bool GetOptimizeEntireDraggedTrack() const { return m_optimizeEntireDraggedTrack; }
     void SetOptimizeEntireDraggedTrack( bool aEnable ) { m_optimizeEntireDraggedTrack = aEnable; }
@@ -174,7 +173,7 @@ private:
     bool m_autoPosture;
     bool m_fixAllSegments;
 
-    DIRECTION_45::CORNER_MODE m_cornerMode;
+    ROUTING_REGIME_45::CORNER_MODE m_cornerMode;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;

@@ -23,7 +23,7 @@
 #define __PNS_VIA_H
 
 #include <geometry/shape_index.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 #include <geometry/shape_circle.h>
 #include <math/box2.h>
 #include <optional>
@@ -308,7 +308,7 @@ public:
 
     VIA* Clone() const override;
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+    const SHAPE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override

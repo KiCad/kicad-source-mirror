@@ -194,7 +194,7 @@ public:
     void ClearCaches() override;
     void ClearTemporaryCaches() override;
 
-    const SHAPE_LINE_CHAIN& HullCache( const PNS::ITEM* aItem, int aClearance,
+    const SHAPE_CHAIN& HullCache( const PNS::ITEM* aItem, int aClearance,
                                        int aWalkaroundThickness, int aLayer ) override;
 
 private:
@@ -210,7 +210,7 @@ private:
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_tempClearanceCache;
-    std::unordered_map<HULL_CACHE_KEY, SHAPE_LINE_CHAIN> m_hullCache;
+    std::unordered_map<HULL_CACHE_KEY, SHAPE_CHAIN> m_hullCache;
 };
 
 
@@ -487,13 +487,13 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     // Check for multi-segment LINEs without BoardItems. These need segment-by-segment
     // evaluation because custom DRC rules may have geometry-dependent conditions (like
     // intersectsCourtyard) that require evaluating actual segment positions.
-    auto isMultiSegmentLine = []( const PNS::ITEM* aItem, BOARD_ITEM* aParent ) -> bool
+    auto isMultiShapeLine = []( const PNS::ITEM* aItem, BOARD_ITEM* aParent ) -> bool
     {
         if( !aItem || aParent || aItem->Kind() != PNS::ITEM::LINE_T )
             return false;
 
         const auto* line = static_cast<const PNS::LINE*>( aItem );
-        return line->CLine().SegmentCount() > 1;
+        return line->CLine().ShapeCount() > 1;
     };
 
     bool lineANeedsSegmentEval = false;
@@ -501,8 +501,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     if( drcEngine->HasGeometryDependentRules() )
     {
-        lineANeedsSegmentEval = isMultiSegmentLine( aItemA, parentA );
-        lineBNeedsSegmentEval = isMultiSegmentLine( aItemB, parentB );
+        lineANeedsSegmentEval = isMultiShapeLine( aItemA, parentA );
+        lineBNeedsSegmentEval = isMultiShapeLine( aItemB, parentB );
     }
 
     // Evaluate segments of a multi-segment LINE against a single opposing item.
@@ -511,14 +511,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     {
         DRC_CONSTRAINT bestConstraint;
         const auto* line = static_cast<const PNS::LINE*>( aLineItem );
-        const SHAPE_LINE_CHAIN& chain = line->CLine();
+        const SHAPE_CHAIN& chain = line->CLine();
 
         PCB_TRACK& dummyTrack = m_dummyTracks[aIdx];
         dummyTrack.SetLayer( board_layer );
         dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aLineItem->Net() ) );
         dummyTrack.SetWidth( line->Width() );
 
-        for( int i = 0; i < chain.SegmentCount(); i++ )
+        for( int i = 0; i < chain.ShapeCount(); i++ )
         {
             dummyTrack.SetStart( chain.CPoint( i ) );
             dummyTrack.SetEnd( chain.CPoint( i + 1 ) );
@@ -566,8 +566,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             // that are far apart since geometry-dependent rules won't trigger for them.
             const auto* lineA = static_cast<const PNS::LINE*>( aItemA );
             const auto* lineB = static_cast<const PNS::LINE*>( aItemB );
-            const SHAPE_LINE_CHAIN& chainA = lineA->CLine();
-            const SHAPE_LINE_CHAIN& chainB = lineB->CLine();
+            const SHAPE_CHAIN& chainA = lineA->CLine();
+            const SHAPE_CHAIN& chainB = lineB->CLine();
 
             const int proximityThreshold = std::max( lineA->Width(), lineB->Width() ) * 2;
 
@@ -584,7 +584,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             bool  done = false;
             BOX2I bboxA, bboxB;
 
-            for( int i = 0; i < chainA.SegmentCount() && !done; i++ )
+            for( int i = 0; i < chainA.ShapeCount() && !done; i++ )
             {
                 const VECTOR2I& ptA1 = chainA.CPoint( i );
                 const VECTOR2I& ptA2 = chainA.CPoint( i + 1 );
@@ -597,8 +597,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
                 dummyA.SetStart( ptA1 );
                 dummyA.SetEnd( ptA2 );
 
-                for( int j = 0; j < chainB.SegmentCount(); j++ )
+                for( int j = 0; j < chainB.ShapeCount(); j++ )
                 {
+                    // schain fixme arcs
                     const VECTOR2I& ptB1 = chainB.CPoint( j );
                     const VECTOR2I& ptB2 = chainB.CPoint( j + 1 );
 
@@ -723,7 +724,7 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearTemporaryCaches()
 }
 
 
-const SHAPE_LINE_CHAIN& PNS_PCBNEW_RULE_RESOLVER::HullCache( const PNS::ITEM* aItem,
+const SHAPE_CHAIN& PNS_PCBNEW_RULE_RESOLVER::HullCache( const PNS::ITEM* aItem,
                                                              int aClearance,
                                                              int aWalkaroundThickness,
                                                              int aLayer )
@@ -735,7 +736,7 @@ const SHAPE_LINE_CHAIN& PNS_PCBNEW_RULE_RESOLVER::HullCache( const PNS::ITEM* aI
     if( it != m_hullCache.end() )
         return it->second;
 
-    SHAPE_LINE_CHAIN hull = aItem->Hull( aClearance, aWalkaroundThickness, aLayer );
+    SHAPE_CHAIN hull = aItem->Hull( aClearance, aWalkaroundThickness, aLayer );
     auto result = m_hullCache.emplace( key, std::move( hull ) );
 
     return result.first->second;
@@ -3014,7 +3015,8 @@ PNS_KICAD_IFACE_BASE::getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine
         if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
         {
             LENGTH_DELAY_CALCULATION_ITEM item;
-            item.SetLine( l->CLine() );
+            // shull check
+            item.SetLine( l->CLine().ToSLC() );
 
             const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
             item.SetLayers( layer );

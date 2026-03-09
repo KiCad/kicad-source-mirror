@@ -192,7 +192,6 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
             SHAPE_LINE_CHAIN ff;
             ff.Append( mv.Pos() );
             ff.Append( mv.Pos() + l );
-
             mv.SetPos( mv.Pos() + l );
 
             PNS_DBG( dbg, AddShape, &ff, YELLOW, 100000, "via-force-lead" );
@@ -232,7 +231,7 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
 }
 
 
-const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+const SHAPE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     wxASSERT_MSG( aLayer >= 0 || m_stackMode == STACK_MODE::NORMAL,
                   wxT( "Warning: VIA::Hull called with invalid layer but viastack is complex" ) );

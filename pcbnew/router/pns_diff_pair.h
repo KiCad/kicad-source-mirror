@@ -86,15 +86,15 @@ public:
         m_priority = aPriority;
     }
 
-    void SetEntryLines( const SHAPE_LINE_CHAIN& aEntryP, const SHAPE_LINE_CHAIN& aEntryN )
+    void SetEntryLines( const SHAPE_CHAIN& aEntryP, const SHAPE_CHAIN& aEntryN )
     {
         m_entryP = aEntryP;
         m_entryN = aEntryN;
         m_hasEntryLines = true;
     }
 
-    const SHAPE_LINE_CHAIN& EntryP() const { return m_entryP; }
-    const SHAPE_LINE_CHAIN& EntryN() const { return m_entryN; }
+    const SHAPE_CHAIN& EntryP() const { return m_entryP; }
+    const SHAPE_CHAIN& EntryN() const { return m_entryN; }
     const DIFF_PAIR Entry() const ;
 
     void Reverse();
@@ -105,7 +105,7 @@ public:
     }
 
 private:
-    SHAPE_LINE_CHAIN m_entryP, m_entryN;
+    SHAPE_CHAIN m_entryP, m_entryN;
     bool m_hasEntryLines;
     VECTOR2I m_anchorP, m_anchorN;
     bool m_isDiagonal;
@@ -209,7 +209,7 @@ public:
 private:
     struct DP_CANDIDATE
     {
-        SHAPE_LINE_CHAIN p, n;
+        SHAPE_CHAIN p, n;
         VECTOR2I         gw_p, gw_n;
         int              score;
     };
@@ -234,27 +234,45 @@ private:
 class DIFF_PAIR : public LINK_HOLDER
 {
 public:
-    struct COUPLED_SEGMENTS
+    struct COUPLED_SHAPES
     {
-        COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP,
-                           const SEG& aCoupledN, const SEG& aParentN, int aIndexN ) :
-            coupledP( aCoupledP ),
-            coupledN( aCoupledN ),
-            parentP( aParentP ),
-            parentN( aParentN ),
+        COUPLED_SHAPES ( const SHAPE_BICONNECTED& aCoupledP, const SHAPE_BICONNECTED& aParentP, int aIndexP,
+                         const SHAPE_BICONNECTED& aCoupledN, const SHAPE_BICONNECTED& aParentN, int aIndexN ) :
+            coupledP( static_cast<SHAPE_BICONNECTED*>( aCoupledP.Clone() ) ),
+            coupledN( static_cast<SHAPE_BICONNECTED*>( aCoupledN.Clone() ) ),
+            parentP( static_cast<SHAPE_BICONNECTED*>( aParentP.Clone() ) ),
+            parentN( static_cast<SHAPE_BICONNECTED*>( aParentN.Clone() ) ),
             indexP( aIndexP ),
             indexN( aIndexN )
-        {}
+        {
+            wxASSERT( aCoupledN.Type() == SH_SEGMENT );
+            wxASSERT( aParentN.Type() == SH_SEGMENT );
+            wxASSERT( aCoupledP.Type() == SH_SEGMENT );
+            wxASSERT( aParentP.Type() == SH_SEGMENT );
+        }
 
-        SEG coupledP;
-        SEG coupledN;
-        SEG parentP;
-        SEG parentN;
+        COUPLED_SHAPES ( const COUPLED_SHAPES& aOther ) : 
+            coupledP( static_cast<SHAPE_BICONNECTED*>( aOther.coupledP->Clone() ) ),
+            coupledN( static_cast<SHAPE_BICONNECTED*>( aOther.coupledN->Clone() ) ),
+            parentP( static_cast<SHAPE_BICONNECTED*>( aOther.parentP->Clone() ) ),
+            parentN( static_cast<SHAPE_BICONNECTED*>( aOther.parentN->Clone() ) ),
+            indexP( aOther.indexP ),
+            indexN( aOther.indexN )
+        {
+
+        }
+        
+
+
+        std::unique_ptr<SHAPE_BICONNECTED> coupledP;
+        std::unique_ptr<SHAPE_BICONNECTED> coupledN;
+        std::unique_ptr<SHAPE_BICONNECTED> parentP;
+        std::unique_ptr<SHAPE_BICONNECTED> parentN;
         int indexP;
         int indexN;
     };
 
-    typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
+    typedef std::vector<COUPLED_SHAPES> COUPLED_SHAPES_VEC;
 
     DIFF_PAIR() :
         LINK_HOLDER( ITEM::DIFF_PAIR_T ),
@@ -286,7 +304,7 @@ public:
         m_chamferLimit = 0;
     }
 
-    DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ) :
+    DIFF_PAIR( const SHAPE_CHAIN &aP, const SHAPE_CHAIN& aN, int aGap = 0 ) :
         LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_n( aN ),
         m_p( aP ),
@@ -396,7 +414,7 @@ public:
         m_line_n.ClearLinks();
     }
 
-    void SetShape( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, bool aSwapLanes = false )
+    void SetShape( const SHAPE_CHAIN &aP, const SHAPE_CHAIN& aN, bool aSwapLanes = false )
     {
         if( aSwapLanes )
         {
@@ -508,7 +526,7 @@ public:
     double CoupledLengthFactor() const;
     double Skew() const;
 
-    void CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const;
+    void CoupledSegmentPairs( COUPLED_SHAPES_VEC& aPairs ) const;
 
     void Clear()
     {
@@ -524,17 +542,17 @@ public:
 
     bool Empty() const
     {
-        return ( m_n.SegmentCount() == 0 ) || ( m_p.SegmentCount() == 0 );
+        return ( m_n.ShapeCount() == 0 ) || ( m_p.ShapeCount() == 0 );
     }
 
-    const SHAPE_LINE_CHAIN& CP() const { return m_p; }
-    const SHAPE_LINE_CHAIN& CN() const { return m_n; }
+    const SHAPE_CHAIN& CP() const { return m_p; }
+    const SHAPE_CHAIN& CN() const { return m_n; }
 
     bool BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarget, bool aPrefDiagonal );
     bool CheckConnectionAngle( const DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength( const SEG& aP, const SEG& aN ) const;
 
-    int64_t CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
+    int64_t CoupledLength( const SHAPE_CHAIN& aP, const SHAPE_CHAIN& aN ) const;
 
     const RANGED_NUM<int> GapConstraint() const
     {
@@ -542,7 +560,7 @@ public:
     }
 
 private:
-    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, NET_HANDLE aNet, const VIA& aVia )
+    void updateLine( LINE &aLine, const SHAPE_CHAIN& aShape, NET_HANDLE aNet, const VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );
@@ -555,7 +573,7 @@ private:
             aLine.AppendVia( aVia );
     }
 
-    SHAPE_LINE_CHAIN m_n, m_p;
+    SHAPE_CHAIN m_n, m_p;
     LINE m_line_p, m_line_n;
     VIA m_via_p, m_via_n;
 

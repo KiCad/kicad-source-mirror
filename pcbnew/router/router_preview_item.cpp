@@ -125,7 +125,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 
     if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( aItem ) )
     {
-        if( !l->SegmentCount() )
+        if( !l->ShapeCount() )
             return;
     }
     else if( const PNS::VIA* v = dyn_cast<const PNS::VIA*>( aItem ) )
@@ -466,6 +466,17 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
         break;
     }
+
+    case SH_CHAIN:
+    {
+        const SHAPE_CHAIN *chain = static_cast<const SHAPE_CHAIN*>( aShape );
+
+        for( int i = 0; i < chain->ShapeCount(); i++ )
+            drawShape( chain->CShape(i), gal );
+
+        break;
+    }
+
 
     case SH_COMPOUND:
         wxFAIL_MSG( wxT( "Router preview item: nested compound shapes not supported" ) );

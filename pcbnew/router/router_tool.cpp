@@ -633,25 +633,25 @@ bool ROUTER_TOOL::Init()
     auto cornerMode45Cond =
         [this]( const SELECTION& )
         {
-            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::MITERED_45;
+            return m_router->Settings().GetCornerMode() == PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_45;
         };
 
     auto cornerMode90Cond =
         [this]( const SELECTION& )
         {
-            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::MITERED_90;
+            return m_router->Settings().GetCornerMode() == PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_90;
         };
 
     auto cornerModeArc45Cond =
         [this]( const SELECTION& )
         {
-            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::ROUNDED_45;
+            return m_router->Settings().GetCornerMode() == PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_45;
         };
 
     auto cornerModeArc90Cond =
         [this]( const SELECTION& )
         {
-            return m_router->Settings().GetCornerMode() == DIRECTION_45::CORNER_MODE::ROUNDED_90;
+            return m_router->Settings().GetCornerMode() == PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90;
         };
 
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
@@ -861,37 +861,37 @@ int ROUTER_TOOL::handlePnSCornerModeChange( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &ACT_SwitchCornerModeToNext ) )
     {
-        DIRECTION_45::CORNER_MODE curr_mode = m_router->Settings().GetCornerMode();
+        PNS::ROUTING_REGIME_45::CORNER_MODE curr_mode = m_router->Settings().GetCornerMode();
 
-        if( curr_mode == DIRECTION_45::CORNER_MODE::MITERED_45 )
-            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_45 );
-        else if( curr_mode == DIRECTION_45::CORNER_MODE::ROUNDED_45 )
-            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_90 );
-        else if( curr_mode == DIRECTION_45::CORNER_MODE::MITERED_90 )
-            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_90 );
-        else if( curr_mode == DIRECTION_45::CORNER_MODE::ROUNDED_90 )
-            m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_45 );
+        if( curr_mode == PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_45 )
+            m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_45 );
+        else if( curr_mode == PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_45 )
+            m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_90 );
+        else if( curr_mode == PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_90 )
+            m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90 );
+        else if( curr_mode == PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90 )
+            m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_45 );
 
         asChanged = true;
     }
     else if( aEvent.IsAction( &ACT_SwitchCornerMode45 ) )
     {
-        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_45 );
+        m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_45 );
         asChanged = true;
     }
     else if( aEvent.IsAction( &ACT_SwitchCornerModeArc45 ) )
     {
-        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_45 );
+        m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_45 );
         asChanged = true;
     }
     else if( aEvent.IsAction( &ACT_SwitchCornerMode90 ) )
     {
-        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::MITERED_90 );
+        m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_90 );
         asChanged = true;
     }
     else if( aEvent.IsAction( &ACT_SwitchCornerModeArc90 ) )
     {
-        m_router->Settings().SetCornerMode( DIRECTION_45::CORNER_MODE::ROUNDED_90 );
+        m_router->Settings().SetCornerMode( PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90 );
         asChanged = true;
     }
 
@@ -3016,10 +3016,10 @@ void ROUTER_TOOL::UpdateMessagePanel()
         {
             switch( m_router->Settings().GetCornerMode() )
             {
-            case DIRECTION_45::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
-            case DIRECTION_45::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
-            case DIRECTION_45::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
-            case DIRECTION_45::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
+            case PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
+            case PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
+            case PNS::ROUTING_REGIME_45::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
+            case PNS::ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
             default: break;
             }
         }

@@ -34,6 +34,7 @@
 #include <math/vector2d.h>
 #include <math/box2.h>
 #include <wx/string.h>
+#include <memory>
 
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
@@ -53,7 +54,8 @@ enum SHAPE_TYPE
     SH_COMPOUND,         ///< compound shape, consisting of multiple simple shapes
     SH_ARC,              ///< circular arc
     SH_NULL,             ///< empty shape (no shape...),
-    SH_POLY_SET_TRIANGLE ///< a single triangle belonging to a POLY_SET triangulation
+    SH_POLY_SET_TRIANGLE, ///< a single triangle belonging to a POLY_SET triangulation
+    SH_CHAIN              ///< generic set of biconnected primitices (arcs, segments, tapers)
 };
 
 static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
@@ -70,6 +72,7 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     case SH_ARC:               return wxT( "SH_ARC" );
     case SH_NULL:              return wxT( "SH_NULL" );
     case SH_POLY_SET_TRIANGLE: return wxT( "SH_POLY_SET_TRIANGLE" );
+    case SH_CHAIN:             return wxT( "SH_CHAIN" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -282,9 +285,6 @@ public:
      * @param aAngle rotation angle.
      */
     virtual void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) = 0;
-
-    virtual VECTOR2I GetStart() const { return {}; }
-    virtual VECTOR2I GetEnd() const { return {}; }
 
     virtual int GetWidth() const { return 0; }
     virtual void SetWidth( int aWidth ) {}

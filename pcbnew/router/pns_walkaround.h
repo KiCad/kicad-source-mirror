@@ -109,6 +109,12 @@ public:
         m_itemMask = aMask;
     }
 
+    void SetOverrideClearance( int aCl )
+    {
+        m_overrideClearance = aCl;
+    }
+
+
     void SetForceWinding ( bool aEnabled, bool aCw )
     {
         m_forceCw = aCw;
@@ -161,6 +167,7 @@ private:
     std::set<ITEM*> m_processedItems;
     RESULT m_currentResult;
     double m_initialLength;
+    std::optional<int> m_overrideClearance;
 };
 
 }

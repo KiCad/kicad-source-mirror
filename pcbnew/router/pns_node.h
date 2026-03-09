@@ -171,10 +171,10 @@ public:
 
     virtual int ClearanceEpsilon() const { return 0; }
 
-    virtual const SHAPE_LINE_CHAIN& HullCache( const ITEM* aItem, int aClearance,
+    virtual const SHAPE_CHAIN& HullCache( const ITEM* aItem, int aClearance,
                                                int aWalkaroundThickness, int aLayer )
     {
-        static SHAPE_LINE_CHAIN empty;
+        static SHAPE_CHAIN empty;
         empty = aItem->Hull( aClearance, aWalkaroundThickness, aLayer );
         return empty;
     }

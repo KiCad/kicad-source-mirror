@@ -1101,7 +1101,7 @@ void OUTSET_ROUTINE::ProcessItem( BOARD_ITEM& aItem )
 
                 if( inner.GetRadius() > 0 )
                 {
-                    chain.Append( inner.Reversed() );
+                    chain.Append( *inner.Reversed() );
                 }
 
                 // End cap at the P0 end back to the start

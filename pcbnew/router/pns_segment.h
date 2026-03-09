@@ -70,6 +70,19 @@ public:
         m_rank = aParentLine.Rank();
     }
 
+      SEGMENT( const LINE& aParentLine, const SHAPE_SEGMENT& aSeg ) :
+        LINKED_ITEM( SEGMENT_T ),
+        m_seg( aSeg )
+    {
+        m_parent = nullptr;
+        m_sourceItem = aParentLine.GetSourceItem();
+
+        m_net = aParentLine.Net();
+        m_layers = aParentLine.Layers();
+        m_marker = aParentLine.Marker();
+        m_rank = aParentLine.Rank();
+    }
+
     explicit SEGMENT( const LINKED_ITEM& aParent ) :
         LINKED_ITEM( aParent )
     {
@@ -119,7 +132,7 @@ public:
         m_seg.SetSeg( SEG (tmp.B , tmp.A ) );
     }
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness,
+    const SHAPE_CHAIN Hull( int aClearance, int aWalkaroundThickness,
                                  int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override

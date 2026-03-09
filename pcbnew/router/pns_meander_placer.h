@@ -25,7 +25,7 @@
 
 #include <math/vector2d.h>
 
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_node.h"
 #include "pns_line.h"
@@ -123,7 +123,7 @@ protected:
     LINE     m_currentTrace;
     ITEM_SET m_tunedPath;
 
-    SHAPE_LINE_CHAIN m_finalShape;
+    SHAPE_CHAIN m_finalShape;
     MEANDERED_LINE   m_result;
     LINKED_ITEM*     m_initialSegment;
 

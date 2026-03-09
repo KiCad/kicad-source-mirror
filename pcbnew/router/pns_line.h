@@ -26,14 +26,14 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
-#include <geometry/direction45.h>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_item.h"
 #include "pns_via.h"
 #include "pns_link_holder.h"
+#include "pns_routing_regime_45.h"
 
 namespace PNS {
 
@@ -78,7 +78,7 @@ public:
     /**
      * Copy properties (net, layers, etc.) from a base line and replaces the shape by another.
      */
-    LINE( const LINE& aBase, const SHAPE_LINE_CHAIN& aLine ) :
+    LINE( const LINE& aBase, const SHAPE_CHAIN& aLine ) :
         LINK_HOLDER( aBase ),
         m_line( aLine ),
         m_width( aBase.m_width ),
@@ -128,7 +128,7 @@ public:
     }
 
     ///< Assign a shape to the line (a polyline/line chain).
-    void SetShape( const SHAPE_LINE_CHAIN& aLine )
+    void SetShape( const SHAPE_CHAIN& aLine )
     {
         m_line = aLine;
         m_line.SetWidth( m_width );
@@ -138,18 +138,17 @@ public:
     const SHAPE* Shape( int aLayer ) const override { return &m_line; }
 
     ///< Modifiable accessor to the underlying shape.
-    SHAPE_LINE_CHAIN& Line() { return m_line; }
-    const SHAPE_LINE_CHAIN& CLine() const { return m_line; }
+    SHAPE_CHAIN& Line() { return m_line; }
+    const SHAPE_CHAIN& CLine() const { return m_line; }
 
-    int SegmentCount() const { return m_line.SegmentCount(); }
     int PointCount() const { return m_line.PointCount(); }
-    int ArcCount() const { return m_line.ArcCount(); }
     int ShapeCount() const { return m_line.ShapeCount(); }
 
     ///< Return the \a aIdx-th point of the line.
     const VECTOR2I& CPoint( int aIdx ) const { return m_line.CPoint( aIdx ); }
     const VECTOR2I& CLastPoint() const { return m_line.CLastPoint(); }
-    const SEG CSegment( int aIdx ) const { return m_line.CSegment( aIdx ); }
+    const SHAPE_BICONNECTED& CShape( int aIdx ) const { return *m_line.CShape( aIdx ); }
+    ITEM* CLinkedItem( int aIdx ) const { return GetLink( aIdx ); }
 
     ///< Set line width.
     void SetWidth( int aWidth )
@@ -184,10 +183,10 @@ public:
      * @param aPostPath is the path from obstacle till the end.
      * @param aCW determines whether to walk around in clockwise or counter-clockwise direction.
      */
-    bool Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre, SHAPE_LINE_CHAIN& aWalk,
-                     SHAPE_LINE_CHAIN& aPost, bool aCw ) const;
+    bool Walkaround( SHAPE_CHAIN aObstacle, SHAPE_CHAIN& aPre, SHAPE_CHAIN& aWalk,
+                     SHAPE_CHAIN& aPost, bool aCw ) const;
 
-    bool Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const;
+    bool Walkaround( const SHAPE_CHAIN& aObstacle, SHAPE_CHAIN& aPath, bool aCw ) const;
 
     ///< Print out all linked segments.
     void ShowLinks() const;
@@ -235,7 +234,7 @@ public:
     ITEM* GetBlockingObstacle() const { return m_blockingObstacle; }
 
     void DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
-    void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false, DIRECTION_45 aPreferredEndingDirection = DIRECTION_45() );
+    void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false, ROUTING_REGIME_45::DIRECTION aPreferredEndingDirection = ROUTING_REGIME_45::UNDEFINED );
 
     void SetRank( int aRank ) override;
     int Rank() const override;
@@ -259,17 +258,17 @@ public:
 
 private:
     void dragSegment45( const VECTOR2I& aP, int aIndex );
-    void dragCorner45( const VECTOR2I& aP, int aIndex, DIRECTION_45 aPreferredEndingDirection );
+    void dragCorner45( const VECTOR2I& aP, int aIndex, ROUTING_REGIME_45::DIRECTION aPreferredEndingDirection );
     void dragSegmentFree( const VECTOR2I& aP, int aIndex );
     void dragCornerFree( const VECTOR2I& aP, int aIndex );
 
-    VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+    VECTOR2I snapToNeighbourSegments( const SHAPE_CHAIN& aPath, const VECTOR2I& aP,
                                       int aIndex ) const;
 
-    VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+    VECTOR2I snapDraggedCorner( const SHAPE_CHAIN& aPath, const VECTOR2I& aP,
                                 int aIndex ) const;
 
-    SHAPE_LINE_CHAIN m_line;                ///< The actual shape of the line.
+    SHAPE_CHAIN      m_line;                ///< The actual shape of the line.
     int              m_width;               ///< Our width.
 
 

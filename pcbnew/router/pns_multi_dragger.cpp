@@ -128,7 +128,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             else
             {
                 l.cornerIsLast = true;
-                l.leaderSegIndex = l.originalLine.SegmentCount() - 1;
+                l.leaderSegIndex = l.originalLine.ShapeCount() - 1;
                 l.cornerDistance = distLast;
                 l.isCorner = true;
 
@@ -297,7 +297,7 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
     //DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
     LINE l( aClipped );
-    SHAPE_LINE_CHAIN tightest;
+    SHAPE_CHAIN tightest;
 
     bool didClip = false;
     int curL = l.CLine().Length();
@@ -305,7 +305,7 @@ bool clipToOtherLine( NODE* aNode, const LINE& aRef, LINE& aClipped )
 
     while( step > clipLengthThreshold )
     {
-        SHAPE_LINE_CHAIN sl_tmp( aClipped.CLine() );
+        SHAPE_CHAIN sl_tmp( aClipped.CLine() );
         VECTOR2I pclip = sl_tmp.PointAlong( curL );
         int idx = sl_tmp.Split( pclip );
         sl_tmp = sl_tmp.Slice(0, idx);
@@ -402,17 +402,19 @@ bool MULTI_DRAGGER::tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk )
 
 int MULTI_DRAGGER::findNewLeaderSegment( const MULTI_DRAGGER::MDRAG_LINE& aLine ) const
 {
-    const SEG origLeader = aLine.preDragLine.CSegment( aLine.leaderSegIndex );
-    const DIRECTION_45 origLeaderDir( origLeader );
+    const SHAPE_BICONNECTED* origLeader = aLine.preDragLine.CLine().CShape( aLine.leaderSegIndex );
+    const ROUTING_REGIME_45::DIRECTION origLeaderDir( *origLeader, true );
 
-    for ( int i = 0; i < aLine.draggedLine.SegmentCount(); i++ )
+    for ( int i = 0; i < aLine.draggedLine.ShapeCount(); i++ )
     {
-        const SEG& curSeg = aLine.draggedLine.CSegment(i);
-        const DIRECTION_45 curDir( curSeg );
+        const SHAPE_BICONNECTED* curShape = aLine.draggedLine.CLine().CShape(i);
+        const ROUTING_REGIME_45::DIRECTION curDir( *curShape, true );
+        std::vector<VECTOR2I> ips;
 
-        auto ip = curSeg.IntersectLines( m_guide );
-        PNS_DBG(Dbg(), Message, wxString::Format("s %d ip=%d c=%s o=%s", i, ip?1:0, curDir.Format(), origLeaderDir.Format() ));
-        if( ip && curSeg.Contains( *ip ) )
+        int nIps = curShape->IntersectLine( m_guide, &ips );
+        PNS_DBG(Dbg(), Message, wxString::Format("s %d nIps=%d c=%s o=%s", i, nIps, curDir.Format(), origLeaderDir.Format() ));
+
+        if( nIps >= 0 && curShape->Contains( ips[0] ) )
         {
             if( curDir == origLeaderDir || curDir == origLeaderDir.Opposite() )
                 return i;
@@ -701,13 +703,10 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 {
     std::optional<LINE> primaryPreDrag, primaryDragged;
 
-
-
-    SEG lastPreDrag;
-    DIRECTION_45 primaryDir;
+    const SHAPE_BICONNECTED* lastPreDrag;
+    ROUTING_REGIME_45::DIRECTION primaryDir;
+    ROUTING_REGIME_45::DIRECTION primaryLastSegDir;
     VECTOR2I perp;
-
-    DIRECTION_45 primaryLastSegDir;
     std::vector<MDRAG_LINE> completed;
 
     auto tryPosture = [&] ( int aVariant ) -> bool
@@ -755,35 +754,34 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
             // first, drag only the primary line
             PNS_DBG( Dbg(), AddPoint, primaryDragged->CLastPoint(), YELLOW, 600000, wxT("mdrag-sec"));
 
-	        lastPreDrag =  primaryPreDrag->CSegment( -1 );
-            primaryDir = DIRECTION_45( lastPreDrag );
+	        lastPreDrag =  primaryPreDrag->CLine().CShape( -1 );
+            primaryDir = ROUTING_REGIME_45::DIRECTION( *lastPreDrag, false );
 
             primaryDragged->SetSnapThreshhold( snapThreshold );
             primaryDragged->DragCorner( aP, primaryDragged->PointCount() - 1, false );
 
 
-            if( primaryDragged->SegmentCount() > 0 )
+            if( primaryDragged->ShapeCount() > 0 )
             {
-                SEG lastPrimDrag = primaryDragged->CSegment( -1 );
+                const SHAPE_BICONNECTED* lastPrimDrag = primaryDragged->CLine().CShape( -1 );
 
                 if ( aVariant == 2 )
                     lastPrimDrag = lastPreDrag;
 
-                auto lastSeg = primaryDragged->CSegment( -1 );
-                if( DIRECTION_45( lastSeg ) != primaryDir )
+                const SHAPE_BICONNECTED& lastShape = primaryDragged->CShape( -1 );
+                if( ROUTING_REGIME_45::DIRECTION( lastShape, false ) != primaryDir )
                 {
-                    if( lastSeg.Length() < primaryDragged->Width() )
+                    if( lastShape.Length() < primaryDragged->Width() )
                     {
                         lastPrimDrag = lastPreDrag;
                     }
                 }
 
-                perp = (lastPrimDrag.B - lastPrimDrag.A).Perpendicular();
-                primaryLastSegDir = DIRECTION_45( lastPrimDrag );
-
+                perp = lastPreDrag->NormalVector( false );
+                primaryLastSegDir = ROUTING_REGIME_45::DIRECTION( *lastPrimDrag, false );
 
                 PNS_DBG( Dbg(), AddItem, &(*primaryDragged), LIGHTGRAY, 100000, "prim" );
-                PNS_DBG( Dbg(), AddShape, SEG(lastPrimDrag.B, lastPrimDrag.B + perp), LIGHTGRAY, 100000, wxString::Format("prim-perp-seg") );
+                PNS_DBG( Dbg(), AddShape, SEG(lastPrimDrag->GetEnd(), lastPrimDrag->GetEnd() + perp), LIGHTGRAY, 100000, wxString::Format("prim-perp-seg") );
             } else {
                 return false;
             }
@@ -796,9 +794,8 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
         else
         {
 
-            SHAPE_LINE_CHAIN ll2( { lastPreDrag.A, lastPreDrag.B } );
-            PNS_DBG( Dbg(), AddShape, &ll2, LIGHTYELLOW, 300000, "par" );
-            lastPreDrag =  primaryDragged->CSegment( primaryLine->leaderSegIndex );
+            PNS_DBG( Dbg(), AddShape, lastPreDrag, LIGHTYELLOW, 300000, "par" );
+            lastPreDrag =  primaryDragged->CLine().CShape( primaryLine->leaderSegIndex );
             primaryDragged->SetSnapThreshhold( snapThreshold );
             primaryDragged->DragSegment( aP, primaryLine->leaderSegIndex );
             perp = (primaryLine->midSeg.B - primaryLine->midSeg.A).Perpendicular();
@@ -819,7 +816,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                 //PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 100000, wxT("mdrag-sec"));
 
                 // reject nulls
-                if( l.preDragLine.SegmentCount() >= 1 )
+                if( l.preDragLine.ShapeCount() >= 1 )
                 {
 
                     //PNS_DBG( Dbg(), AddPoint, l.preDragLine.CPoint( l.cornerIndex ), YELLOW, 600000, wxT("mdrag-sec"));
@@ -832,17 +829,19 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 
                     if( m_dragMode == DM_CORNER )
                     {
-                        DIRECTION_45 parallelDir( l.preDragLine.CSegment( -1 ) );
+                        ROUTING_REGIME_45::DIRECTION parallelDir( l.preDragLine.CLine().CSegment( -1 ) );
 
-                        auto leadAngle = primaryDir.Angle( parallelDir );
+                        auto leadAngle = ROUTING_REGIME_45::Angle( primaryDir, parallelDir );
 
-                        if( leadAngle == DIRECTION_45::ANG_OBTUSE
-                            || leadAngle == DIRECTION_45::ANG_RIGHT
-                            || leadAngle == DIRECTION_45::ANG_STRAIGHT )
+                        if( leadAngle == ROUTING_REGIME_45::ANG_OBTUSE
+                            || leadAngle == ROUTING_REGIME_45::ANG_RIGHT
+                            || leadAngle == ROUTING_REGIME_45::ANG_STRAIGHT )
                         {
                             // compute the distance between the primary line and the last point of
                             // the currently processed line
-                            int dist = lastPreDrag.LineDistance( l.preDragLine.CLastPoint(), true );
+                            auto tangentEnd = lastPreDrag->TangentVector( false );
+                            SEG tangentSeg ( lastPreDrag->GetEnd(), lastPreDrag->GetEnd() + tangentEnd );
+                            int dist = tangentSeg.LineDistance( l.preDragLine.CLastPoint(), true );
 
                             // now project it on the perpendicular line we computed before
                             auto projected = aP + perp.Resize( dist );
@@ -875,25 +874,23 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                     else if ( m_dragMode == DM_SEGMENT )
                     {
                         SEG sdrag = l.midSeg;
-                        DIRECTION_45 refDir( lastPreDrag );
-                        DIRECTION_45 curDir( sdrag );
-                        auto ang = refDir.Angle( curDir );
+                        ROUTING_REGIME_45::DIRECTION refDir( *lastPreDrag, true );
+                        ROUTING_REGIME_45::DIRECTION curDir( sdrag );
+                        auto ang = ROUTING_REGIME_45::Angle( refDir, curDir );
 
                         if( ang & ( DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT ) )
                         {
-                            int dist = lastPreDrag.LineDistance(
-                                    l.preDragLine.CPoint( l.leaderSegIndex ), true );
+                            auto tangentStart = lastPreDrag->TangentVector( true );
+                            SEG tangentSeg ( lastPreDrag->GetStart(), lastPreDrag->GetStart() + tangentStart );
+                            int dist = tangentSeg.LineDistance( l.preDragLine.CPoint( l.leaderSegIndex ), true );
                             auto projected = aP + perp.Resize( dist );
 
                             SEG      sperp( aP, aP + perp.Resize( 10000000 ) );
                             VECTOR2I startProj = sperp.LineProject( m_dragStartPoint );
 
-                            SHAPE_LINE_CHAIN ll( { sperp.A, sperp.B } );
+                            PNS_DBG( Dbg(), AddShape, sperp, LIGHTBLUE, 100000, "par" );
+                            PNS_DBG( Dbg(), AddShape, sdrag, LIGHTBLUE, 100000, "sdrag" );
 
-
-                            PNS_DBG( Dbg(), AddShape, &ll, LIGHTBLUE, 100000, "par" );
-                            SHAPE_LINE_CHAIN ll2( { sdrag.A, sdrag.B } );
-                            PNS_DBG( Dbg(), AddShape, &ll2, LIGHTBLUE, 100000, "sdrag" );
                             VECTOR2I v = projected - startProj;
                             l.dragDist = v.EuclideanNorm() * sign( v.Dot( perp ) );
                             l.dragOK = true;
@@ -939,7 +936,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                 if( l.isPrimaryLine )
                     continue;
 
-                DIRECTION_45 lastDir ( l.draggedLine.CSegment(-1) );
+                ROUTING_REGIME_45::DIRECTION lastDir ( l.draggedLine.CShape( -1 ), false );
 
                 if( lastDir != primaryLastSegDir )
                     return false;

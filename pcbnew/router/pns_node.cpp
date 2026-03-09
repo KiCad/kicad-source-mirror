@@ -298,17 +298,18 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
-    DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
+    ROUTING_REGIME_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
     OBSTACLES                 obstacleSet;
 
-    for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
+    for( int i = 0; i < aLine->CLine().ShapeCount(); i++ )
     {
         // Note: Clearances between &s and other items are cached,
         // which means they'll be the same for all segments in the line.
         // Disabling the cache will lead to slowness.
 
-        const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &s, obstacleSet, aOpts );
+        // shull fixme
+        //const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
+        //QueryColliding( &s, obstacleSet, aOpts );
     }
 
     if( aLine->EndsWithVia() )
@@ -323,16 +324,16 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
 
     const int      layer = aLine->Layer();
     RULE_RESOLVER* ruleResolver = GetRuleResolver();
-    const bool     simplifyHull = ( cornerMode == DIRECTION_45::MITERED_90
-                                    || cornerMode == DIRECTION_45::ROUNDED_90 );
+    const bool     simplifyHull = ( cornerMode == ROUTING_REGIME_45::MITERED_90
+                                    || cornerMode == ROUTING_REGIME_45::ROUNDED_90 );
     const bool     hasVia = aLine->EndsWithVia();
 
-    auto makeHull = [&]( const SHAPE_LINE_CHAIN& cachedHull ) -> SHAPE_LINE_CHAIN
+    auto makeHull = [&]( const SHAPE_CHAIN& cachedHull ) -> SHAPE_CHAIN
     {
         if( simplifyHull )
         {
             BOX2I            bbox = cachedHull.BBox();
-            SHAPE_LINE_CHAIN hull;
+            SHAPE_CHAIN hull;
             hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
             hull.Append( bbox.GetRight(), bbox.GetTop()    );
             hull.Append( bbox.GetRight(), bbox.GetBottom() );
@@ -348,8 +349,8 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     // before releasing the sequential phase.
     struct ObstacleHullData
     {
-        SHAPE_LINE_CHAIN lineHull;
-        SHAPE_LINE_CHAIN viaHull; // only populated when hasVia
+        SHAPE_CHAIN lineHull;
+        SHAPE_CHAIN viaHull; // only populated when hasVia
     };
 
     std::vector<ObstacleHullData> hullData( numObstacles );
@@ -383,16 +384,16 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     };
 
     std::vector<ObstacleResult> results( numObstacles );
-    const SHAPE_LINE_CHAIN&     linePath = aLine->CLine();
+    const SHAPE_CHAIN&     linePath = aLine->CLine();
 
     auto processObstacle = [&]( int i )
     {
-        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> ips;
+        std::vector<SHAPE_CHAIN::INTERSECTION> ips;
         ObstacleResult& result = results[i];
 
         HullIntersection( hullData[i].lineHull, linePath, ips );
 
-        for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : ips )
+        for( const SHAPE_CHAIN::INTERSECTION& ip : ips )
         {
             if( !ip.valid )
                 continue;
@@ -411,7 +412,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
             ips.clear();
             HullIntersection( hullData[i].viaHull, linePath, ips );
 
-            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : ips )
+            for( const SHAPE_CHAIN::INTERSECTION& ip : ips )
             {
                 if( !ip.valid )
                     continue;
@@ -507,16 +508,17 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, const COLLISION_SEA
     {
         int n = 0;
         const LINE* line = static_cast<const LINE*>( aItemA );
-        const SHAPE_LINE_CHAIN& l = line->CLine();
+        const SHAPE_CHAIN& l = line->CLine();
 
-        for( int i = 0; i < l.SegmentCount(); i++ )
+        for( int i = 0; i < l.ShapeCount(); i++ )
         {
             // Note: Clearances between &s and other items are cached,
             // which means they'll be the same for all segments in the line.
             // Disabling the cache will lead to slowness.
 
-            const SEGMENT s( *line, l.CSegment( i ) );
-            n += QueryColliding( &s, obs, aOpts );
+            // fixme schain
+            //const SEGMENT s( *line, l.CSegment( i ) );
+            //n += QueryColliding( &s, obs, aOpts );
 
             if( n )
                 return OPT_OBSTACLE( *obs.begin() );
@@ -684,50 +686,53 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
 {
     assert( !aLine.IsLinked() );
 
-    SHAPE_LINE_CHAIN& l = aLine.Line();
-
-    for( size_t i = 0; i < l.ArcCount(); i++ )
+    for( const auto shape : aLine.CLine().CShapes() )
     {
-        auto s = l.Arc( i );
-        ARC* rarc;
-
-        if( !aAllowRedundant && ( rarc = findRedundantArc( s.GetP0(), s.GetP1(), aLine.Layers(),
-                                                           aLine.Net() ) ) )
+        switch( shape->Type() )
         {
-            aLine.Link( rarc );
-        }
-        else
+        case SH_ARC:
         {
-            auto newarc = std::make_unique< ARC >( aLine, s );
-            aLine.Link( newarc.get() );
-            Add( std::move( newarc ), true );
-        }
-    }
+            const auto shArc = static_cast<const SHAPE_ARC*>( shape );
+            ARC*       rarc;
 
-    for( int i = 0; i < l.SegmentCount(); i++ )
-    {
-        if( l.IsArcSegment( i ) )
-            continue;
-
-        SEG s = l.CSegment( i );
-
-        if( s.A != s.B )
-        {
-            SEGMENT* rseg;
-
-            if( !aAllowRedundant && ( rseg = findRedundantSegment( s.A, s.B, aLine.Layers(),
-                                                                   aLine.Net() ) ) )
+            if( !aAllowRedundant
+                && ( rarc = findRedundantArc( shArc->GetP0(), shArc->GetP1(), aLine.Layers(), aLine.Net() ) ) )
             {
-                // another line could be referencing this segment too :(
-                if( !aLine.ContainsLink( rseg ) )
-                    aLine.Link( rseg );
+                aLine.Link( rarc );
             }
             else
             {
-                std::unique_ptr<SEGMENT> newseg = std::make_unique<SEGMENT>( aLine, s );
-                aLine.Link( newseg.get() );
-                Add( std::move( newseg ), true );
+                auto newarc = std::make_unique<ARC>( aLine, *shArc );
+                aLine.Link( newarc.get() );
+                Add( std::move( newarc ), true );
             }
+            break;
+        }
+        case SH_SEGMENT:
+        {
+            const auto shSeg = static_cast<const SHAPE_SEGMENT*>( shape );
+            if( shSeg->GetStart() != shSeg->GetEnd() )
+            {
+                SEGMENT* rseg;
+
+                if( !aAllowRedundant
+                    && ( rseg = findRedundantSegment( shSeg->GetStart(), shSeg->GetEnd(), aLine.Layers(),
+                                                      aLine.Net() ) ) )
+                {
+                    // another line could be referencing this segment too :(
+                    if( !aLine.ContainsLink( rseg ) )
+                        aLine.Link( rseg );
+                }
+                else
+                {
+                    std::unique_ptr<SEGMENT> newseg = std::make_unique<SEGMENT>( aLine, *shSeg );
+                    aLine.Link( newseg.get() );
+                    Add( std::move( newseg ), true );
+                }
+            }
+            break;
+        }
+        default: wxASSERT( false );
         }
     }
 }
@@ -1162,7 +1167,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
     LINKED_ITEM* prev_seg = nullptr;
     bool originSet = false;
 
-    SHAPE_LINE_CHAIN& line = pl.Line();
+    SHAPE_CHAIN& line = pl.Line();
 
     for( int i = i_start + 1; i < i_end; i++ )
     {
@@ -1182,7 +1187,8 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
                 const ARC*       arc = static_cast<const ARC*>( li );
                 const SHAPE_ARC* sa  = static_cast<const SHAPE_ARC*>( arc->Shape( -1 ) );
 
-                line.Append( arcReversed[i] ? sa->Reversed() : *sa );
+                //fixme leak
+                line.Append( arcReversed[i] ? *sa->Reversed() : *sa );
             }
 
             pl.Link( li );
@@ -1190,8 +1196,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
             // latter condition to avoid loops
             if( li == aSeg && aOriginSegmentIndex && !originSet )
             {
-                wxASSERT( n < line.SegmentCount() ||
-                          ( n == line.SegmentCount() && li->Kind() == ITEM::SEGMENT_T ) );
+                wxASSERT( n < line.ShapeCount() );
                 *aOriginSegmentIndex = line.PointCount() - 1;
                 originSet = true;
             }
@@ -1204,10 +1209,10 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
     pl.Line().RemoveDuplicatePoints();
 
     // TODO: maintain actual segment index under simplification system
-    if( aOriginSegmentIndex && *aOriginSegmentIndex >= pl.SegmentCount() )
-        *aOriginSegmentIndex = pl.SegmentCount() - 1;
+    if( aOriginSegmentIndex && *aOriginSegmentIndex >= pl.ShapeCount() )
+        *aOriginSegmentIndex = pl.ShapeCount() - 1;
 
-    wxASSERT_MSG( pl.SegmentCount() != 0, "assembled line should never be empty" );
+    wxASSERT_MSG( pl.ShapeCount() != 0, "assembled line should never be empty" );
 
     return pl;
 }

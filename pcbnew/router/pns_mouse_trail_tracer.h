@@ -24,8 +24,9 @@
 
 #include <math/vector2d.h>
 
-#include <geometry/direction45.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
+
+#include "pns_routing_regime_45.h"
 
 namespace PNS {
 
@@ -41,13 +42,13 @@ public:
 
     void SetTolerance( int toll ) { m_tolerance = toll; }
 
-    void SetDefaultDirections( DIRECTION_45 aInitDirection, DIRECTION_45 aLastSegDir )
+    void SetDefaultDirections( ROUTING_REGIME_45::DIRECTION aInitDirection, ROUTING_REGIME_45::DIRECTION aLastSegDir )
     {
         m_direction        = aInitDirection;
         m_lastSegDirection = aLastSegDir;
     }
 
-    DIRECTION_45 GetPosture( const VECTOR2I& aP );
+    ROUTING_REGIME_45::DIRECTION GetPosture( const VECTOR2I& aP );
 
     void FlipPosture();
 
@@ -61,10 +62,10 @@ public:
 
     VECTOR2I GetTrailLeadVector() const;
 private:
-     SHAPE_LINE_CHAIN m_trail;
+    SHAPE_CHAIN      m_trail;
     int              m_tolerance;
-    DIRECTION_45     m_direction;
-    DIRECTION_45     m_lastSegDirection;
+    ROUTING_REGIME_45::DIRECTION     m_direction;
+    ROUTING_REGIME_45::DIRECTION     m_lastSegDirection;
     bool             m_forced;
     bool             m_disableMouse;
     bool             m_manuallyForced;

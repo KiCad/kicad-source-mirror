@@ -27,7 +27,7 @@
 #include <core/minoptmax.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 class NETCLASS;
 
@@ -271,7 +271,7 @@ public:
     /**
      * @return the line chain representing the shape of the meander.
      */
-    const SHAPE_LINE_CHAIN& CLine( int aShape ) const
+    const SHAPE_CHAIN& CShape( int aShape ) const
     {
         return m_shapes[aShape];
     }
@@ -359,7 +359,7 @@ private:
     friend class MEANDERED_LINE;
 
     ///< Start turtle drawing
-    void start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir );
+    void start( SHAPE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir );
 
     ///< Move turtle forward by \a aLength.
     void forward( int aLength );
@@ -374,10 +374,10 @@ private:
     void uShape( int aSides, int aCorner, int aTop );
 
     ///< Generate a 90-degree circular arc.
-    SHAPE_LINE_CHAIN makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide );
+    SHAPE_CHAIN makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide );
 
     ///< Produce a meander shape of given type.
-    SHAPE_LINE_CHAIN genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide,
+    SHAPE_CHAIN genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide,
                                       MEANDER_TYPE aType, int aBaselineOffset = 0 );
 
     ///< Recalculate the clipped baseline after the parameters of the meander have been changed.
@@ -426,7 +426,7 @@ private:
     bool m_side;
 
     ///< The actual shapes (0 used for single, both for dual).
-    SHAPE_LINE_CHAIN m_shapes[2];
+    SHAPE_CHAIN m_shapes[2];
 
     ///< Index of the meandered segment in the base line.
     int m_baseIndex;
@@ -438,7 +438,7 @@ private:
     VECTOR2D m_currentPos;
 
     ///< The line the turtle is drawing on.
-    SHAPE_LINE_CHAIN* m_currentTarget;
+    SHAPE_CHAIN* m_currentTarget;
 };
 
 

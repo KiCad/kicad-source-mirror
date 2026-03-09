@@ -81,8 +81,8 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( m_originPair.Gap() < 0 )
         m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
-    if( !m_originPair.PLine().SegmentCount() ||
-        !m_originPair.NLine().SegmentCount() )
+    if( !m_originPair.PLine().ShapeCount() ||
+        !m_originPair.NLine().ShapeCount() )
         return false;
 
     m_tunedPathP = topo.AssembleTuningPath( Router()->GetInterface(), m_originPair.PLine().GetLink( 0 ), &m_startPad_p,
@@ -193,7 +193,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             PNS_DBG( Dbg(), AddItem, l, BLUE, 10000, wxT( "tuned-path-skew-p" ) );
 
-            m_router->GetInterface()->DisplayPathLine( l->CLine(), isPositive ? 1 : 0 );
+            m_router->GetInterface()->DisplayPathLine( l->CLine().ToSLC(), isPositive ? 1 : 0 );
         }
     }
 
@@ -203,7 +203,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             PNS_DBG( Dbg(), AddItem, l, YELLOW, 10000, wxT( "tuned-path-skew-n" ) );
 
-            m_router->GetInterface()->DisplayPathLine( l->CLine(), isPositive ? 0 : 1 );
+            m_router->GetInterface()->DisplayPathLine( l->CLine().ToSLC(), isPositive ? 0 : 1 );
         }
     }
 

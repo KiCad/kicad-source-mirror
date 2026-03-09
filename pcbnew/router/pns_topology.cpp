@@ -46,12 +46,12 @@ namespace PNS {
 
 bool TOPOLOGY::SimplifyLine( LINE* aLine )
 {
-    if( !aLine->IsLinked() || !aLine->SegmentCount() )
+    if( !aLine->IsLinked() || !aLine->ShapeCount() )
         return false;
 
     LINKED_ITEM* root = aLine->GetLink( 0 );
     LINE l = m_world->AssembleLine( root, nullptr, false, false, false );
-    SHAPE_LINE_CHAIN simplified( l.CLine() );
+    SHAPE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
 
@@ -350,8 +350,8 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
     assert( aLine2->IsLinked() );
 
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath START ===" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: initial line has %d segments, %zu links" ),
-                aLine2->SegmentCount(), aLine2->Links().size() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: initial line has %d shapes, %zu links" ),
+                aLine2->ShapeCount(), aLine2->Links().size() );
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "followTrivialPath: line endpoints: (%d,%d) to (%d,%d)" ),
                 aLine2->CPoint( 0 ).x, aLine2->CPoint( 0 ).y,
                 aLine2->CLastPoint().x, aLine2->CLastPoint().y );
@@ -385,15 +385,12 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
     if( aTerminalJointB )
         *aTerminalJointB = right.m_end;
 
-    // Count segments as we build the final path
-    int leftSegCount = 0;
-    int rightSegCount = 0;
-    int initialSegCount = 0;
+    // Count shapes as we build the final path
+    int leftShapeCount = 0;
+    int rightShapeCount = 0;
+    int initialShapeCount = aLine2->ShapeCount();
 
-    // Count initial segments
-    for( int i = 0; i < aLine2->SegmentCount(); i++ )
-        initialSegCount++;
-
+    
     // Add left items
     for( ITEM* item : left.m_items )
     {
@@ -402,9 +399,9 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
         {
             LINE* l = dynamic_cast<LINE*>( item );
             if( l )
-                leftSegCount += l->SegmentCount();
+                leftShapeCount += l->ShapeCount();
             else
-                leftSegCount++;
+                leftShapeCount++;
         }
     }
 
@@ -416,9 +413,9 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
         {
             LINE* l = dynamic_cast<LINE*>( item );
             if( l )
-                rightSegCount += l->SegmentCount();
+                rightShapeCount += l->ShapeCount();
             else
-                rightSegCount++;
+                rightShapeCount++;
         }
     }
 
@@ -427,11 +424,11 @@ ITEM_SET TOPOLOGY::followTrivialPath( LINE* aLine2, const JOINT** aTerminalJoint
 
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "" ) );
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath SUMMARY ===" ) );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Starting segment count: %d" ), initialSegCount );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Left branch: %d segments, length=%d" ), leftSegCount, left.m_length );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Initial line: %d segments, length=%lld" ), initialSegCount, aLine2->CLine().Length() );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Right branch: %d segments, length=%d" ), rightSegCount, right.m_length );
-    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total segments in path: %d" ), leftSegCount + initialSegCount + rightSegCount );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Starting shape count: %d" ), initialShapeCount );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Left branch: %d shapes, length=%d" ), leftShapeCount, left.m_length );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Initial line: %d shapes, length=%lld" ), initialShapeCount, aLine2->CLine().Length() );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Right branch: %d shapes, length=%d" ), rightShapeCount, right.m_length );
+    wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total shapes in path: %d" ), leftShapeCount + initialShapeCount + rightShapeCount );
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total path length: %d" ), totalLength );
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "Total items in result: %d" ), path.Size() );
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "=== followTrivialPath END ===" ) );
@@ -493,7 +490,7 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     LINE l = m_world->AssembleLine( seg, nullptr, false, aFollowLockedSegments );
 
     wxLogTrace( wxT( "PNS_TUNE" ), wxT( "AssembleTrivialPath: assembled line with %d segments, length=%lld" ),
-                l.SegmentCount(), l.CLine().Length() );
+                l.ShapeCount(), l.CLine().Length() );
 
     const JOINT* jointA = nullptr;
     const JOINT* jointB = nullptr;
@@ -587,7 +584,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ROUTER_IFACE* aRouterIface, ITEM* a
                 continue;
 
             LINE*        line = static_cast<LINE*>( initialPath[idx] );
-            SHAPE_LINE_CHAIN&  slc = line->Line();
+            SHAPE_LINE_CHAIN  slc = line->Line().ToSLC();
             const PCB_LAYER_ID pcbLayer = aRouterIface->GetBoardLayerFromPNSLayer( line->Layer() );
 
             int lengthBefore = slc.Length();

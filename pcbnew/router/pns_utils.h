@@ -24,7 +24,7 @@
 
 #include <math/vector2d.h>
 #include <math/box2.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
@@ -39,12 +39,12 @@ class DEBUG_DECORATOR;
 class NODE;
 /** Various utility functions */
 
-const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness );
+const SHAPE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance, int aWalkaroundThickness );
 
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
+const SHAPE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
                                       int aClearance, int aChamfer );
 
-const SHAPE_LINE_CHAIN SegmentHull( const SHAPE_SEGMENT& aSeg, int aClearance,
+const SHAPE_CHAIN SegmentHull( const SHAPE_SEGMENT& aSeg, int aClearance,
                                     int aWalkaroundThickness );
 
 /**
@@ -55,17 +55,17 @@ const SHAPE_LINE_CHAIN SegmentHull( const SHAPE_SEGMENT& aSeg, int aClearance,
  * @param aClearance The minimum distance between polygon and hull.
  * @return A closed line chain describing the octagon.
  */
-const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance );
+const SHAPE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance );
 
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
 
 OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB );
 OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB );
 
-void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
-                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips );
+void HullIntersection( const SHAPE_CHAIN& hull, const SHAPE_CHAIN& line,
+                       SHAPE_CHAIN::INTERSECTIONS& ips );
 
-const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
+const SHAPE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
                                                           int aWalkaroundThickness );
 
 void NodeStats( DEBUG_DECORATOR* aDbg, wxString aLabel, NODE *aNode );

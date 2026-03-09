@@ -26,7 +26,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_node.h"
 #include "pns_via.h"
@@ -126,8 +126,8 @@ private:
 //    void addMeander ( PNS_MEANDER *aM );
 //    void addCorner ( const VECTOR2I& aP );
 
-    const SEG baselineSegment( const DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs );
-    bool pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPair );
+    const SEG baselineSegment( const DIFF_PAIR::COUPLED_SHAPES& aCoupledSegs );
+    bool pairOrientation( const DIFF_PAIR::COUPLED_SHAPES& aPair );
 
     void setWorld( NODE* aWorld );
     void release();
@@ -145,12 +145,12 @@ private:
     NODE* m_currentNode;
 
     DIFF_PAIR m_originPair;
-    DIFF_PAIR::COUPLED_SEGMENTS_VEC m_coupledSegments;
+    DIFF_PAIR::COUPLED_SHAPES_VEC m_coupledSegments;
 
     LINE m_currentTraceN, m_currentTraceP;
     ITEM_SET m_tunedPath, m_tunedPathP, m_tunedPathN;
 
-    SHAPE_LINE_CHAIN m_finalShapeP, m_finalShapeN;
+    SHAPE_CHAIN m_finalShapeP, m_finalShapeN;
     MEANDERED_LINE m_result;
     LINKED_ITEM* m_initialSegment;
 

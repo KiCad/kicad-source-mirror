@@ -179,15 +179,15 @@ static DIRECTION_45::AngleType angle( const VECTOR2I &a, const VECTOR2I &b )
 }
 
 
-static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int gap )
+static bool checkGap( const SHAPE_CHAIN &p, const SHAPE_CHAIN &n, int gap )
 {
     SEG::ecoord gap_sq = SEG::Square( gap - 100 );
 
-    for( int i = 0; i < p.SegmentCount(); i++ )
+    for( int i = 0; i < p.ShapeCount(); i++ )
     {
-        for( int j = 0; j < n.SegmentCount() ; j++ )
+        for( int j = 0; j < n.ShapeCount() ; j++ )
         {
-            SEG::ecoord dist_sq = p.CSegment( i ).SquaredDistance( n.CSegment( j ) );
+            SEG::ecoord dist_sq = p.CShape( i )->SquaredShapeDistance( *n.CShape( j ) );
 
             if( dist_sq < gap_sq )
                 return false;
@@ -200,18 +200,19 @@ static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int 
 
 void DP_GATEWAY::Reverse()
 {
-    m_entryN = m_entryN.Reverse();
-    m_entryP = m_entryP.Reverse();
+    m_entryN = m_entryN.Reversed();
+    m_entryP = m_entryP.Reversed();
 }
 
 
 bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarget,
                               bool aPrefDiagonal )
 {
-    SHAPE_LINE_CHAIN p = DIRECTION_45().BuildInitialTrace( aEntry.AnchorP(), aTarget.AnchorP(),
-                                                           aPrefDiagonal );
-    SHAPE_LINE_CHAIN n = DIRECTION_45().BuildInitialTrace( aEntry.AnchorN(), aTarget.AnchorN(),
-                                                           aPrefDiagonal );
+    // fixme shapechain
+    SHAPE_CHAIN p;// = DIRECTION_45().BuildInitialTrace( aEntry.AnchorP(), aTarget.AnchorP(),
+                    //                                       aPrefDiagonal );
+    SHAPE_CHAIN n;// = DIRECTION_45().BuildInitialTrace( aEntry.AnchorN(), aTarget.AnchorN(),
+                      //                                     aPrefDiagonal );
 
     int mask = aEntry.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
 
@@ -263,30 +264,37 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
 
 bool DIFF_PAIR::CheckConnectionAngle( const DIFF_PAIR& aOther, int aAllowedAngles ) const
 {
-    bool checkP, checkN;
+    bool checkP = false, checkN = false;
 
-    if( m_p.SegmentCount() == 0 || aOther.m_p.SegmentCount() == 0 )
+    if( m_p.ShapeCount() == 0 || aOther.m_p.ShapeCount() == 0 )
     {
         checkP = true;
     }
     else
     {
-        DIRECTION_45 p0( m_p.CSegment( -1 ) );
-        DIRECTION_45 p1( aOther.m_p.CSegment( 0 ) );
+        if( m_p.IsSegment( -1 ) && aOther.m_p.IsSegment( 0 ) )
+        {
+            // schain fixme ugly
+            DIRECTION_45 p0( m_p.CSegment( -1 ).GetSeg() );
+            DIRECTION_45 p1( aOther.m_p.CSegment( 0 ).GetSeg() );
 
-        checkP = ( p0.Angle( p1 ) & aAllowedAngles ) != 0;
+            checkP = ( p0.Angle( p1 ) & aAllowedAngles ) != 0;
+        }
     }
 
-    if( m_n.SegmentCount() == 0 || aOther.m_n.SegmentCount() == 0 )
+    if( m_n.ShapeCount() == 0 || aOther.m_n.ShapeCount() == 0 )
     {
         checkN = true;
     }
     else
     {
-        DIRECTION_45 n0( m_n.CSegment( -1 ) );
-        DIRECTION_45 n1( aOther.m_n.CSegment( 0 ) );
+        if( m_n.IsSegment( -1 ) && aOther.m_n.IsSegment( 0 ) )
+        {
+            DIRECTION_45 n0( m_n.CSegment( -1 ).GetSeg() );
+            DIRECTION_45 n1( aOther.m_n.CSegment( 0 ).GetSeg() );
 
-        checkN = ( n0.Angle( n1 ) & aAllowedAngles ) != 0;
+            checkN = ( n0.Angle( n1 ) & aAllowedAngles ) != 0;
+        }
     }
 
     return checkP && checkN;
@@ -527,8 +535,8 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
                 VECTOR2I gw_p( p0_p + sign * ( dir + dp ) + dv );
                 VECTOR2I gw_n( p0_n + sign * ( dir + dp ) - dv );
 
-                SHAPE_LINE_CHAIN entryP( { p0_p, p0_p + sign * dir, gw_p } );
-                SHAPE_LINE_CHAIN entryN( { p0_n, p0_n + sign * dir, gw_n } );
+                auto entryP = SHAPE_CHAIN::ConstructFromPoints( { p0_p, p0_p + sign * dir, gw_p } );
+                auto entryN = SHAPE_CHAIN::ConstructFromPoints( { p0_n, p0_n + sign * dir, gw_n } );
 
                 DP_GATEWAY gw( gw_p, gw_n, false );
 
@@ -586,11 +594,12 @@ void DP_GATEWAYS::buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n )
     {
         if( !g.HasEntryLines() )
         {
-            SHAPE_LINE_CHAIN lead_p = DIRECTION_45().BuildInitialTrace ( g.AnchorP(), p0_p,
+            // schain dir45
+            /*SHAPE_CHAIN lead_p = DIRECTION_45().BuildInitialTrace ( g.AnchorP(), p0_p,
                                                                          g.IsDiagonal() ).Reverse();
-            SHAPE_LINE_CHAIN lead_n = DIRECTION_45().BuildInitialTrace ( g.AnchorN(), p0_n,
+            SHAPE_CHAIN lead_n = DIRECTION_45().BuildInitialTrace ( g.AnchorN(), p0_n,
                                                                          g.IsDiagonal() ).Reverse();
-            g.SetEntryLines( lead_p, lead_n );
+            g.SetEntryLines( lead_p, lead_n );*/
         }
     }
 }
@@ -616,20 +625,20 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
     auto addAngledGateways =
             [&]( int length, int priority )
             {
-                SHAPE_LINE_CHAIN entryLineP;
+                SHAPE_CHAIN entryLineP;
                 entryLineP.Append( aPair.AnchorP() );
                 entryLineP.Append( aPair.AnchorP() + aPair.DirP().ToVector().Resize( length ) );
                 DP_GATEWAY gwExtendP( entryLineP.CLastPoint(), aPair.AnchorN(), aIsDiagonal );
                 gwExtendP.SetPriority( priority );
-                gwExtendP.SetEntryLines( entryLineP, SHAPE_LINE_CHAIN() );
+                gwExtendP.SetEntryLines( entryLineP, SHAPE_CHAIN() );
                 m_gateways.push_back( gwExtendP );
 
-                SHAPE_LINE_CHAIN entryLineN;
+                SHAPE_CHAIN entryLineN;
                 entryLineN.Append( aPair.AnchorN() );
                 entryLineN.Append( aPair.AnchorN() + aPair.DirN().ToVector().Resize( length ) );
                 DP_GATEWAY gwExtendN( aPair.AnchorP(), entryLineN.CLastPoint(), aIsDiagonal );
                 gwExtendN.SetPriority( priority );
-                gwExtendN.SetEntryLines( SHAPE_LINE_CHAIN(), entryLineN );
+                gwExtendN.SetEntryLines( SHAPE_CHAIN(), entryLineN );
                 m_gateways.push_back( gwExtendN );
             };
 
@@ -772,11 +781,14 @@ DP_PRIMITIVE_PAIR DIFF_PAIR::EndingPrimitives()
         const LINE lP( PLine() );
         const LINE lN( NLine() );
 
-        SEGMENT sP( lP, lP.CSegment( -1 ) );
-        SEGMENT sN( lN, lN.CSegment( -1 ) );
+        wxASSERT( PLine().IsLinkedChecked() );
+        wxASSERT( NLine().IsLinkedChecked() );
 
-        DP_PRIMITIVE_PAIR dpair( &sP, &sN );
-        dpair.SetAnchors( sP.Seg().B, sN.Seg().B );
+        ITEM* sP = lP.CLinkedItem( -1 );
+        ITEM* sN = lN.CLinkedItem( -1 );
+
+        DP_PRIMITIVE_PAIR dpair( sP, sN );
+        dpair.SetAnchors( lP.CPoint( -1 ), lN.CPoint( -1 ) );
 
         return dpair;
     }
@@ -831,29 +843,36 @@ double DIFF_PAIR::Skew() const
 }
 
 
-void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
+void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SHAPES_VEC& aPairs ) const
 {
-    SHAPE_LINE_CHAIN p( m_p );
-    SHAPE_LINE_CHAIN n( m_n );
+    SHAPE_CHAIN p( m_p );
+    SHAPE_CHAIN n( m_n );
 
     p.Simplify();
     n.Simplify();
 
-    for( int i = 0; i < p.SegmentCount(); i++ )
+    for( int i = 0; i < p.ShapeCount(); i++ )
     {
-        for( int j = 0; j < n.SegmentCount(); j++ )
+        if( !p.IsSegment( i ) )
+            continue;
+        for( int j = 0; j < n.ShapeCount(); j++ )
         {
-            SEG sp = p.Segment( i );
-            SEG sn = n.Segment( j );
+            if( !n.IsSegment( j ) )
+                continue;
+
+            // schain fixme support for other shapes
+            const SHAPE_SEGMENT&sp = p.CSegment( i );
+            const SHAPE_SEGMENT&sn = n.CSegment( j );
 
             SEG p_clip, n_clip;
 
-            int64_t dist = std::abs( sp.Distance( sn ) - m_width );
+            int64_t dist = std::abs( sp.GetSeg().Distance( sn.GetSeg()) - m_width );
 
-            if( sp.ApproxParallel( sn, 2 ) && m_gapConstraint.Matches( dist ) &&
-                commonParallelProjection( sp, sn, p_clip, n_clip ) )
+            if( sp.GetSeg().ApproxParallel( sn.GetSeg(), 2 ) && m_gapConstraint.Matches( dist ) &&
+                commonParallelProjection( sp.GetSeg(), sn.GetSeg(), p_clip, n_clip ) )
             {
-                const COUPLED_SEGMENTS spair( p_clip, sp, i, n_clip, sn, j );
+                const COUPLED_SHAPES spair( SHAPE_SEGMENT(p_clip), sp, i, 
+                                            SHAPE_SEGMENT( n_clip ), sn, j );
                 aPairs.push_back( spair );
             }
         }
@@ -861,23 +880,29 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
 }
 
 
-int64_t DIFF_PAIR::CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const
+int64_t DIFF_PAIR::CoupledLength( const SHAPE_CHAIN& aP, const SHAPE_CHAIN& aN ) const
 {
     int64_t total = 0;
 
-    for( int i = 0; i < aP.SegmentCount(); i++ )
+    for( int i = 0; i < aP.ShapeCount(); i++ )
     {
-        for( int j = 0; j < aN.SegmentCount(); j++ )
+        if( !aP.IsSegment( i ) )
+            continue;
+    
+        for( int j = 0; j < aN.ShapeCount(); j++ )
         {
-            SEG sp = aP.CSegment( i );
-            SEG sn = aN.CSegment( j );
+            if( !aN.IsSegment( j ) )
+                continue;
+
+            // schain fixme support for other shapes
+            const SHAPE_SEGMENT&sp = aP.CSegment( i );
+            const SHAPE_SEGMENT&sn = aN.CSegment( j );
 
             SEG p_clip, n_clip;
+            int64_t dist = std::abs( sp.GetSeg().Distance(sn.GetSeg()) - m_width );
 
-            int64_t dist = std::abs( sp.Distance(sn) - m_width );
-
-            if( sp.ApproxParallel( sn ) && m_gapConstraint.Matches( dist ) &&
-                commonParallelProjection( sp, sn, p_clip, n_clip ) )
+            if( sp.GetSeg().ApproxParallel( sn.GetSeg() ) && m_gapConstraint.Matches( dist ) &&
+                commonParallelProjection( sp.GetSeg(), sn.GetSeg(), p_clip, n_clip ) )
                 total += p_clip.Length();
         }
     }
@@ -888,14 +913,14 @@ int64_t DIFF_PAIR::CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_C
 
 double DIFF_PAIR::CoupledLength() const
 {
-    COUPLED_SEGMENTS_VEC pairs;
+    COUPLED_SHAPES_VEC pairs;
 
     CoupledSegmentPairs( pairs );
 
     double l = 0.0;
 
-    for( const COUPLED_SEGMENTS& pair : pairs )
-        l += pair.coupledP.Length();
+    for( const COUPLED_SHAPES& pair : pairs )
+        l += pair.coupledP->Length();
 
     return l;
 }

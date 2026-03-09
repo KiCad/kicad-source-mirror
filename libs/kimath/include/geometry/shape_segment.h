@@ -27,29 +27,29 @@
 #define __SHAPE_SEGMENT_H
 
 #include <geometry/seg.h>
-#include <geometry/shape.h>
+#include <geometry/shape_biconnected.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <trigo.h>
 
 #include <algorithm>
 
-class SHAPE_SEGMENT : public SHAPE
+class SHAPE_SEGMENT : public SHAPE_BICONNECTED
 {
 public:
     SHAPE_SEGMENT() :
-        SHAPE( SH_SEGMENT ),
+        SHAPE_BICONNECTED( SH_SEGMENT ),
         m_width( 0 )
     {};
 
     SHAPE_SEGMENT( const VECTOR2I& aA, const VECTOR2I& aB, int aWidth = 0 ) :
-        SHAPE( SH_SEGMENT ),
+        SHAPE_BICONNECTED( SH_SEGMENT ),
         m_seg( aA, aB ),
         m_width( aWidth )
     {};
 
     SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ) :
-        SHAPE( SH_SEGMENT ),
+        SHAPE_BICONNECTED( SH_SEGMENT ),
         m_seg( aSeg ),
         m_width( aWidth )
     {};
@@ -61,6 +61,11 @@ public:
     SHAPE* Clone() const override
     {
         return new SHAPE_SEGMENT( m_seg, m_width );
+    }
+
+    std::unique_ptr<SHAPE_SEGMENT> Reversed() const
+    {
+        return std::unique_ptr<SHAPE_SEGMENT>( this->reversedImpl() );
     }
 
     const BOX2I BBox( int aClearance = 0 ) const override
@@ -132,8 +137,8 @@ public:
         return m_seg;
     }
 
-    VECTOR2I GetStart() const override { return m_seg.A; }
-    VECTOR2I GetEnd() const override { return m_seg.B; }
+    const VECTOR2I& GetStart() const override { return m_seg.A; }
+    const VECTOR2I& GetEnd() const override { return m_seg.B; }
 
     void SetWidth( int aWidth ) override
     {
@@ -187,7 +192,16 @@ public:
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override;
 
+    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
+    virtual VECTOR2I NormalVector( bool aTakeStartPoint ) const override;
+
 private:
+
+    virtual SHAPE_SEGMENT* reversedImpl() const override
+    {
+        return new SHAPE_SEGMENT( m_seg.B, m_seg.A, m_width );
+    }
+
     SEG m_seg;
     int m_width;
 };

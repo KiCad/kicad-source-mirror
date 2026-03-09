@@ -19,10 +19,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <geometry/direction45.h>
 #include <settings/parameters.h>
 
 #include "pns_routing_settings.h"
+#include "pns_routing_regime_45.h"
 
 namespace PNS {
 
@@ -50,7 +50,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_snapToTracks = false;
     m_snapToPads = false;
     m_optimizeEntireDraggedTrack = false;
-    m_cornerMode = DIRECTION_45::CORNER_MODE::MITERED_45;
+    m_cornerMode = ROUTING_REGIME_45::CORNER_MODE::MITERED_45;
     m_walkaroundHugLengthThreshold = 1.5;
     m_autoPosture = true;
     m_fixAllSegments = true;
@@ -97,9 +97,9 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "auto_posture",     &m_autoPosture,       true ) );
     m_params.emplace_back( new PARAM<bool>( "fix_all_segments", &m_fixAllSegments,    true ) );
 
-    m_params.emplace_back( new PARAM_ENUM<DIRECTION_45::CORNER_MODE>(
-            "corner_mode", &m_cornerMode, DIRECTION_45::CORNER_MODE::MITERED_45,
-            DIRECTION_45::CORNER_MODE::ROUNDED_90, DIRECTION_45::CORNER_MODE::MITERED_45 ) );
+    m_params.emplace_back( new PARAM_ENUM<ROUTING_REGIME_45::CORNER_MODE>(
+            "corner_mode", &m_cornerMode, ROUTING_REGIME_45::CORNER_MODE::MITERED_45,
+            ROUTING_REGIME_45::CORNER_MODE::ROUNDED_90, ROUTING_REGIME_45::CORNER_MODE::MITERED_45 ) );
 
     m_params.emplace_back( new PARAM<double>( "walkaround_hug_length_threshold",     &m_walkaroundHugLengthThreshold,     1.5 ) );
 
@@ -107,12 +107,12 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
 }
 
 
-const DIRECTION_45 ROUTING_SETTINGS::InitialDirection() const
+const ROUTING_REGIME_45::DIRS ROUTING_SETTINGS::InitialDirection() const
 {
     if( m_startDiagonal )
-        return DIRECTION_45( DIRECTION_45::NE );
+        return ROUTING_REGIME_45::NE;
     else
-        return DIRECTION_45( DIRECTION_45::N );
+        return ROUTING_REGIME_45::N;
 }
 
 

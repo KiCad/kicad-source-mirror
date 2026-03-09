@@ -811,21 +811,24 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForce
     if( !m_fitOk && !Settings().AllowDRCViolations() )
         return false;
 
-    if( m_currentTrace.CP().SegmentCount() < 1 || m_currentTrace.CN().SegmentCount() < 1 )
+    if( m_currentTrace.CP().ShapeCount() < 1 || m_currentTrace.CN().ShapeCount() < 1 )
         return false;
 
-    if( m_currentTrace.CP().SegmentCount() > 1 )
+        /// fixme dir45/isdiag
+    #if 0
+    if( m_currentTrace.CP().ShapeCount() > 1 )
         m_initialDiagonal = !DIRECTION_45( m_currentTrace.CP().CSegment( -2 ) ).IsDiagonal();
+    #endif
 
     TOPOLOGY topo( m_lastNode );
 
     if( !m_snapOnTarget && !m_currentTrace.EndsWithVias() && !aForceFinish &&
         !Settings().GetFixAllSegments() )
     {
-        SHAPE_LINE_CHAIN newP( m_currentTrace.CP() );
-        SHAPE_LINE_CHAIN newN( m_currentTrace.CN() );
+        SHAPE_CHAIN newP( m_currentTrace.CP() );
+        SHAPE_CHAIN newN( m_currentTrace.CN() );
 
-        if( newP.SegmentCount() > 1 && newN.SegmentCount() > 1 )
+        if( newP.ShapeCount() > 1 && newN.ShapeCount() > 1 )
         {
             newP.Remove( -1, -1 );
             newN.Remove( -1, -1 );
@@ -889,7 +892,7 @@ bool DIFF_PAIR_PLACER::AbortPlacement()
 
 bool DIFF_PAIR_PLACER::HasPlacedAnything() const
 {
-     return m_currentTrace.CP().SegmentCount() > 0 || m_currentTrace.CN().SegmentCount() > 0;
+     return m_currentTrace.CP().ShapeCount() > 0 || m_currentTrace.CN().ShapeCount() > 0;
 }
 
 

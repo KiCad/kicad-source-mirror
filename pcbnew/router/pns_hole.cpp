@@ -54,10 +54,10 @@ HOLE* HOLE::Clone() const
 }
 
 
-const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+const SHAPE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     if( !m_holeShape )
-        return SHAPE_LINE_CHAIN();
+        return SHAPE_CHAIN();
 
     if( m_holeShape->Type() == SH_CIRCLE )
     {
@@ -81,7 +81,8 @@ const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int
         }
         else
         {
-            SHAPE_POLY_SET hullSet;
+            // schain fixme compount outlines
+            /*SHAPE_POLY_SET hullSet;
 
             for( SHAPE* shape : cmpnd->Shapes() )
             {
@@ -90,7 +91,8 @@ const SHAPE_LINE_CHAIN HOLE::Hull( int aClearance, int aWalkaroundThickness, int
             }
 
             hullSet.Simplify();
-            return hullSet.Outline( 0 );
+            return hullSet.Outline( 0 );*/
+            return SHAPE_CHAIN();
         }
     }
     else

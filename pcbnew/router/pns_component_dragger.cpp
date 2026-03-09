@@ -88,7 +88,7 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
                 cn.offset      = aOffset;
 
                 // Lines that go directly between two linked pads are also special-cased
-                const SHAPE_LINE_CHAIN& line = cn.origLine.CLine();
+                const SHAPE_CHAIN& line = cn.origLine.CLine();
                 const JOINT* jA = m_world->FindJoint( line.CPoint( 0 ), aItem->Layer(), aItem->Net() );
                 const JOINT* jB = m_world->FindJoint( line.CLastPoint(), aItem->Layer(), aItem->Net() );
 

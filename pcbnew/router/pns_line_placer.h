@@ -26,7 +26,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_line.h"
 #include "pns_mouse_trail_tracer.h"
@@ -35,6 +35,7 @@
 #include "pns_sizes_settings.h"
 #include "pns_via.h"
 #include "pns_walkaround.h"
+#include "pns_routing_regime_45.h"
 
 namespace PNS {
 
@@ -56,7 +57,7 @@ public:
         int          layer;
         bool         placingVias;
         VECTOR2I     p;
-        DIRECTION_45 direction;
+        ROUTING_REGIME_45::DIRECTION direction;
     };
 
     struct STAGE
@@ -95,7 +96,7 @@ public:
     };
 
     void Clear();
-    void AddStage( const VECTOR2I& aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
+    void AddStage( const VECTOR2I& aStart, int aLayer, bool placingVias, ROUTING_REGIME_45::DIRECTION direction,
                    NODE* aNode );
     bool PopStage( STAGE& aStage );
     int StageCount() const;
@@ -277,7 +278,7 @@ private:
      * Set preferred direction of the very first track segment to be laid.
      * Used by posture switching mechanism.
      */
-    void setInitialDirection( const DIRECTION_45& aDirection );
+    void setInitialDirection( const ROUTING_REGIME_45::DIRECTION& aDirection );
 
     /**
      * Searches aNode for traces concurrent to aLatest and removes them. Updated
@@ -354,8 +355,8 @@ private:
     bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail );
     bool rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, PNS::PNS_MODE aMode, bool& aViaOk );
     bool splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LINE& aNewHead, LINE& aNewTail );
-    bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_LINE_CHAIN& aOut );
-    bool clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist );
+    bool cursorDistMinimum( const SHAPE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_CHAIN& aOut );
+    bool clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_CHAIN& aL, SHAPE_CHAIN& aOut, int &thresholdDist );
 
     void updatePStart( const LINE& tail );
 
@@ -372,8 +373,8 @@ private:
     bool buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MODE aMode, bool aForceNoVia = false );
 
 
-    DIRECTION_45   m_direction;         ///< current routing direction
-    DIRECTION_45   m_initial_direction; ///< routing direction for new traces
+    ROUTING_REGIME_45::DIRECTION   m_direction;         ///< current routing direction
+    ROUTING_REGIME_45::DIRECTION   m_initial_direction; ///< routing direction for new traces
 
     LINE           m_head;          ///< the volatile part of the track from the previously
                                     ///< analyzed point to the current routing destination

@@ -128,13 +128,15 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     }
     else if( m_freeAngleMode )
     {
+// fixme freeangle
+#if 0
         if( distB < distA &&
             ( m_draggedSegmentIndex < m_draggedLine.PointCount() - 2 ) &&
             ( !m_draggedLine.CLine().IsPtOnArc( static_cast<size_t>(m_draggedSegmentIndex) + 1 ) ) )
         {
             m_draggedSegmentIndex++;
         }
-
+#endif
         m_mode = DM_CORNER;
     }
     else
@@ -455,6 +457,19 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     aDragged.ClearLinks();
     aDragged.Unmark();
 
+    BOX2I origArea(aP);
+
+    for( int i = 0; i < aOrig.ShapeCount(); i++ )
+    {
+        const auto subshape = aOrig.CLine().CShape(i);
+        if( subshape->Contains( aP ) )
+        {
+            origArea.Merge( subshape->BBox() );
+        }
+    }
+
+    origArea.Inflate( aOrig.Width() );
+
     if( Settings().GetOptimizeEntireDraggedTrack() )
     {
         OPTIMIZER optimizer( m_lastNode );
@@ -481,7 +496,13 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
         PNS_DBG( Dbg(), AddPoint, anchor, YELLOW, 100000, wxT( "drag-anchor" ) );
         PNS_DBG( Dbg(), AddShape, *affectedArea, RED, 0, wxT( "drag-affected-area" ) );
 
-        optimizer.SetRestrictArea( *affectedArea );
+        BOX2I totalArea = affectedArea->Merge( origArea );
+
+        PNS_DBG( Dbg(), AddShape, totalArea, LIGHTRED, 0, wxT( "total-affected-area" ) );
+        PNS_DBG( Dbg(), AddShape, origArea, LIGHTBLUE, 0, wxT( "orig-area" ) );
+
+
+        optimizer.SetRestrictArea( totalArea );
 
         PNS_DBG( Dbg(), AddItem, &aDragged, RED, 0, wxT( "drag-preopt" ) );
         aDragged.Line().Split( anchor );
@@ -623,7 +644,10 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         PNS_DBG( Dbg(), Message, wxString::Format( "drag seg index %d", m_draggedSegmentIndex ) );
 
         if( m_mode == DM_CORNER && m_draggedSegmentIndex == 0 )
+        {
             policy |= SHOVE::SHP_REVERSED;
+            PNS_DBG( Dbg(), Message, wxString::Format( "reversed!" ) );
+        }
 
         m_shove->ClearHeads();
         m_shove->AddHeads( draggedPreShove, policy );

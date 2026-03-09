@@ -787,7 +787,8 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
             continue;
 
         PNS::LINE        line = world->AssembleLine( testItem, nullptr, false, false );
-        SHAPE_LINE_CHAIN oldChain = line.CLine();
+        // schain fixme
+        SHAPE_LINE_CHAIN oldChain = line.CLine().ToSLC();
 
         if( oldChain.PointOnEdge( aStartOut, 1 ) && oldChain.PointOnEdge( aEndOut, 1 ) )
             return line;
@@ -818,7 +819,7 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aPNSLayer, BOAR
         return false;
 
     PNS::LINE               line = world->AssembleLine( startItem );
-    const SHAPE_LINE_CHAIN& chain = line.CLine();
+    const SHAPE_LINE_CHAIN& chain = line.CLine().ToSLC();
 
     wxASSERT( line.ContainsLink( endItem ) );
 
@@ -905,7 +906,7 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, 
     SHAPE_LINE_CHAIN pre;
     SHAPE_LINE_CHAIN mid;
     SHAPE_LINE_CHAIN post;
-    pnsLine->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+    pnsLine->CLine().ToSLC().Split( startSnapPoint, endSnapPoint, pre, mid, post );
 
     for( PNS::LINKED_ITEM* li : pnsLine->Links() )
         aRouter->GetInterface()->RemoveItem( li );
@@ -918,7 +919,7 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, 
     straightChain.Append( post );
     straightChain.Simplify();
 
-    PNS::LINE straightLine( *pnsLine, straightChain );
+    PNS::LINE straightLine( *pnsLine, SHAPE_CHAIN::ConstructFromSLC( straightChain ) );
 
     aRouter->GetWorld()->Add( straightLine, false );
 
@@ -1031,7 +1032,7 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 
         recoverLine.SetLayer( m_layer );
         recoverLine.SetWidth( lineWidth );
-        recoverLine.Line() = *m_baseLine;
+        recoverLine.SetShape( SHAPE_CHAIN::ConstructFromSLC( *m_baseLine ) );
         recoverLine.SetNet( recoverNet );
         branch->Add( recoverLine, false );
 
@@ -1042,7 +1043,7 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 
             recoverLineCoupled.SetLayer( m_layer );
             recoverLineCoupled.SetWidth( lineWidth );
-            recoverLineCoupled.Line() = *m_baseLineCoupled;
+            recoverLineCoupled.SetShape( SHAPE_CHAIN::ConstructFromSLC( *m_baseLineCoupled ) );
             recoverLineCoupled.SetNet( recoverCoupledNet );
             branch->Add( recoverLineCoupled, false );
         }
@@ -1079,7 +1080,7 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer, 
     SHAPE_LINE_CHAIN straightChain;
     {
         SHAPE_LINE_CHAIN pre, mid, post;
-        pnsLine->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+        pnsLine->CLine().ToSLC().Split( startSnapPoint, endSnapPoint, pre, mid, post );
 
         straightChain.Append( pre );
         straightChain.Append( aBaseLine );
@@ -1131,7 +1132,7 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aPNSLayer, 
         }
     }
 
-    PNS::LINE newLine( *pnsLine, newLineChain );
+    PNS::LINE newLine( *pnsLine, SHAPE_CHAIN::ConstructFromSLC( newLineChain ) );
 
     branch->Add( newLine, false );
     router->CommitRouting( branch );

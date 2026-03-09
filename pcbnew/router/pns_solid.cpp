@@ -22,7 +22,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_poly_set.h>
@@ -36,10 +36,10 @@
 namespace PNS {
 
 
-const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+const SHAPE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
     if( !m_shape )
-        return SHAPE_LINE_CHAIN();
+        return SHAPE_CHAIN();
 
     if( m_shape->Type() == SH_COMPOUND )
     {
@@ -57,11 +57,12 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
             for( SHAPE* shape : cmpnd->Shapes() )
             {
                 hullSet.AddOutline( BuildHullForPrimitiveShape( shape, aClearance,
-                                                                aWalkaroundThickness ) );
+                                                                aWalkaroundThickness ).ToSLC() );
             }
 
+            // fixme schain no slc
             hullSet.Simplify();
-            return hullSet.Outline( 0 );
+            return SHAPE_CHAIN::ConstructFromSLC( hullSet.Outline( 0 ) );
         }
     }
     else

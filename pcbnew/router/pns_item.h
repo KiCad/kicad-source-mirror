@@ -29,7 +29,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_layerset.h"
 
@@ -161,10 +161,10 @@ public:
      * @param aLayer is the layer to build a hull for (the item may have different shapes on each
      *               layer).  If aLayer is -1, the hull will be a merged hull from all layers.
      */
-    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+    virtual const SHAPE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                          int aLayer = -1 ) const
     {
-        return SHAPE_LINE_CHAIN();
+        return SHAPE_CHAIN();
     }
 
     /**

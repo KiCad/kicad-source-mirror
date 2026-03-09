@@ -34,10 +34,10 @@
 
 namespace PNS {
 
-const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
+const SHAPE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize,
                                       int aClearance, int aChamfer )
 {
-    SHAPE_LINE_CHAIN s;
+    SHAPE_CHAIN s;
 
     s.SetClosed( true );
 
@@ -65,7 +65,7 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
 }
 
 
-const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalkaroundThickness )
+const SHAPE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalkaroundThickness )
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 ) / 2;
 
@@ -82,9 +82,10 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalk
     int d = aArc.GetWidth() / 2 + cl + SHAPE_ARC::DefaultAccuracyForPCB();
     int x = (int) ( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
 
+    // schain fixme arcs are now exact
     auto line = aArc.ConvertToPolyline( ARC_LOW_DEF );
 
-    SHAPE_LINE_CHAIN s;
+    SHAPE_CHAIN s;
     s.SetClosed( true );
     std::vector<VECTOR2I> reverse_line;
 
@@ -144,8 +145,8 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aArc, int aClearance, int aWalk
         s.Append( reverse_line[i] );
 
     // make sure the hull outline is always clockwise
-    if( s.CSegment( 0 ).Side( line.Segment( 0 ).A ) < 0 )
-        return s.Reverse();
+    if( s.MatchesOrientation( line.Segment( 0 ).A, false ) )
+        return s.Reversed();
     else
         return s;
 }
@@ -175,7 +176,7 @@ template <typename T> int sgn(T val) {
 }
 
 
-const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
+const SHAPE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness )
 {
     const int kinkThreshold = aClearance / 10;
@@ -262,7 +263,7 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     VECTOR2I pd = dir.Resize( xr2 );
     VECTOR2I dp = dir.Resize( dr );
 
-    SHAPE_LINE_CHAIN s;
+    SHAPE_CHAIN s;
 
     s.SetClosed( true );
 
@@ -276,8 +277,8 @@ const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
     s.Append( a + p0 - pd );
 
     // make sure the hull outline is always clockwise
-    if( s.CSegment( 0 ).Side( a ) < 0 )
-        return s.Reverse();
+    if( s.MatchesOrientation( a, false ) )
+        return s.Reversed();
     else
         return s;
 }
@@ -294,7 +295,7 @@ static void MoveDiagonal( SEG& aDiagonal, const SHAPE_LINE_CHAIN& aVertices, int
 }
 
 
-const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance )
+const SHAPE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance )
 {
     // this defines the horizontal and vertical lines in the hull octagon
     BOX2I box = aConvex.BBox( aClearance );
@@ -334,7 +335,7 @@ const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_SIMPLE& aConvex, int aClearance )
                            corner );
     MoveDiagonal( topleftline, vertices, aClearance );
 
-    SHAPE_LINE_CHAIN octagon;
+    SHAPE_CHAIN octagon;
     octagon.SetClosed( true );
 
     octagon.Append( *leftline.IntersectLines( bottomleftline ) );
@@ -389,19 +390,20 @@ OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB )
 }
 
 
-void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
-                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips )
+void HullIntersection( const SHAPE_CHAIN& hull, const SHAPE_CHAIN& line,
+                       SHAPE_CHAIN::INTERSECTIONS& ips )
 {
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips_raw;
+    //SHAPE_CHAIN::INTERSECTIONS ips_raw;
 
     if( line.PointCount() < 2 )
         return;
 
-    hull.Intersect( line, ips_raw );
+    hull.Intersect( line, ips );
 
+#if 0
     for( auto& p : ips_raw )
     {
-        SHAPE_LINE_CHAIN::INTERSECTION ipp;
+        SHAPE_CHAIN::INTERSECTION ipp;
 
         SEG      d1[2];
         VECTOR2I d2[2];
@@ -417,8 +419,8 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
             continue;
         }
 
-        if( p.index_our >= hull.SegmentCount() )
-            p.index_our -= hull.SegmentCount();
+        if( p.index_our >= hull.ShapeCount() )
+            p.index_our -= hull.ShapeCount();
 
         if( p.is_corner_our )
         {
@@ -469,10 +471,12 @@ void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& lin
             ips.push_back( ipp );
         }
     }
+#endif
+
 }
 
 
-const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
+const SHAPE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
                                                           int aWalkaroundThickness )
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
@@ -512,9 +516,10 @@ const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aCle
 
     case SH_SIMPLE:
     {
-        const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
+        // shull fixme convert
+        //const SHAPE_SIMPLE* convex = static_cast<const SHAPE_SIMPLE*>( aShape );
 
-        return ConvexHull( *convex, cl );
+        //return ConvexHull( *convex, cl );
     }
     default:
     {
@@ -525,7 +530,7 @@ const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aCle
     }
     }
 
-    return SHAPE_LINE_CHAIN();
+    return SHAPE_CHAIN();
 }
 
 

@@ -112,7 +112,7 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if( m_originPair.Gap() < 0 )
         m_originPair.SetGap( Router()->Sizes().DiffPairGap() );
 
-    if( !m_originPair.PLine().SegmentCount() || !m_originPair.NLine().SegmentCount() )
+    if( !m_originPair.PLine().ShapeCount() || !m_originPair.NLine().ShapeCount() )
         return false;
 
     m_tunedPathP = topo.AssembleTuningPath( Router()->GetInterface(), m_originPair.PLine().GetLink( 0 ), &m_startPad_p,
@@ -186,22 +186,22 @@ int64_t DP_MEANDER_PLACER::origPathDelay() const
 }
 
 
-const SEG DP_MEANDER_PLACER::baselineSegment( const DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs )
+const SEG DP_MEANDER_PLACER::baselineSegment( const DIFF_PAIR::COUPLED_SHAPES& aCoupledSegs )
 {
-    const VECTOR2I a( ( aCoupledSegs.coupledP.A + aCoupledSegs.coupledN.A ) / 2 );
-    const VECTOR2I b( ( aCoupledSegs.coupledP.B + aCoupledSegs.coupledN.B ) / 2 );
+    const VECTOR2I a( ( aCoupledSegs.coupledP->GetStart() + aCoupledSegs.coupledN->GetStart() ) / 2 );
+    const VECTOR2I b( ( aCoupledSegs.coupledP->GetEnd() + aCoupledSegs.coupledN->GetEnd() ) / 2 );
 
     return SEG( a, b );
 }
 
 
-bool DP_MEANDER_PLACER::pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPair )
+bool DP_MEANDER_PLACER::pairOrientation( const DIFF_PAIR::COUPLED_SHAPES& aPair )
 {
-    VECTOR2I midp = ( aPair.coupledP.A + aPair.coupledN.A ) / 2;
+    VECTOR2I midp = ( aPair.coupledP->GetStart() + aPair.coupledN->GetStart() ) / 2;
 
-    //DrawDebugPoint(midp, 6);
-
-    return aPair.coupledP.Side( midp ) > 0;
+    // schain fixme side
+    //return aPair.coupledP.Side( midp ) > 0;
+    return false;
 }
 
 
@@ -212,15 +212,15 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     if( m_currentStart == aP )
         return false;
 
-    DIFF_PAIR::COUPLED_SEGMENTS_VEC coupledSegments;
+    DIFF_PAIR::COUPLED_SHAPES_VEC coupledSegments;
 
     if( m_currentNode )
         delete m_currentNode;
 
     m_currentNode = m_world->Branch();
 
-    SHAPE_LINE_CHAIN preP, tunedP, postP;
-    SHAPE_LINE_CHAIN preN, tunedN, postN;
+    SHAPE_CHAIN preP, tunedP, postP;
+    SHAPE_CHAIN preN, tunedN, postN;
 
     m_originPair.CP().Split( m_currentStart, aP, preP, tunedP, postP );
     m_originPair.CN().Split( m_currentStart, aP, preN, tunedN, postN );
@@ -283,7 +283,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-p" ) );
 
-            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
+            m_router->GetInterface()->DisplayPathLine( l->CLine().ToSLC(), 1 );
         }
     }
 
@@ -293,13 +293,13 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             PNS_DBG( Dbg(), AddShape, &l->CLine(), YELLOW, 10000, wxT( "tuned-path-n" ) );
 
-            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
+            m_router->GetInterface()->DisplayPathLine( l->CLine().ToSLC(), 1 );
         }
     }
 
     int curIndexP = 0, curIndexN = 0;
 
-    for( const DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
+    for( const DIFF_PAIR::COUPLED_SHAPES& sp : coupledSegments )
     {
         SEG  base = baselineSegment( sp );
         bool side = false;
@@ -311,71 +311,63 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
         PNS_DBG( Dbg(), AddShape, base, GREEN, 10000, wxT( "dp-baseline" ) );
 
-        while( sp.indexP >= curIndexP && curIndexP != -1 )
+        while( sp.indexP >= curIndexP && curIndexP < tunedP.ShapeCount() )
         {
-            if( tunedP.IsArcSegment( curIndexP ) )
+            if( tunedP.IsArc( curIndexP ) )
             {
-                ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
-
-                m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
+                m_result.AddArcAndPt( tunedP.CArc( curIndexN ), tunedN.CPoint( curIndexN ) );
             }
             else
             {
                 m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
             }
 
-            curIndexP = tunedP.NextShape( curIndexP );
+            curIndexP++;
         }
 
-        while( sp.indexN >= curIndexN && curIndexN != -1 )
+        while( sp.indexN >= curIndexN && curIndexN < tunedN.ShapeCount() )
         {
-            if( tunedN.IsArcSegment( curIndexN ) )
+            if( tunedN.IsArc( curIndexN ) )
             {
-                ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
-
-                m_result.AddPtAndArc( tunedP.CPoint( sp.indexP ), tunedN.Arc( arcIndex ) );
+                m_result.AddPtAndArc( tunedP.CPoint( sp.indexP ), tunedN.CArc( curIndexN ) );
             }
             else
             {
                 m_result.AddCorner( tunedP.CPoint( sp.indexP ), tunedN.CPoint( curIndexN ) );
             }
 
-            curIndexN = tunedN.NextShape( curIndexN );
+            curIndexN++;
         }
 
         m_result.MeanderSegment( base, side );
     }
 
-    while( curIndexP < tunedP.PointCount() && curIndexP != -1 )
+    while( curIndexP < tunedP.PointCount() && curIndexP < tunedP.ShapeCount() )
     {
-        if( tunedP.IsArcSegment( curIndexP ) )
+        if( tunedP.IsArc( curIndexP ) )
         {
-            ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
-
-            m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
+            m_result.AddArcAndPt( tunedP.CArc( curIndexP ), tunedN.CPoint( curIndexN ) );
         }
         else
         {
             m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
         }
 
-        curIndexP = tunedP.NextShape( curIndexP );
+        curIndexP++;
     }
 
-    while( curIndexN < tunedN.PointCount() && curIndexN != -1 )
+    while( curIndexN < tunedN.PointCount() && curIndexN < tunedN.ShapeCount() )
     {
-        if( tunedN.IsArcSegment( curIndexN ) )
+        if( tunedN.IsArc( curIndexN ) )
         {
-            ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
-
-            m_result.AddPtAndArc( tunedP.CLastPoint(), tunedN.Arc( arcIndex ) );
+            m_result.AddPtAndArc( tunedP.CLastPoint(), tunedN.CArc( curIndexN ) );
         }
         else
         {
             m_result.AddCorner( tunedP.CLastPoint(), tunedN.CPoint( curIndexN ) );
         }
 
-        curIndexN = tunedN.NextShape( curIndexN );
+        curIndexN++;
     }
 
     m_result.AddCorner( tunedP.CLastPoint(), tunedN.CLastPoint() );
@@ -398,10 +390,10 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         if( m_settings.m_isTimeDomain )
         {
             int64_t tunedPDelay = m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                    tunedP, GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
+                    tunedP.ToSLC(), GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
                     m_netClass );
             int64_t tunedNDelay = m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                    tunedN, GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
+                    tunedN.ToSLC(), GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
                     m_netClass );
 
             m_lastDelay = dpDelay - std::max( tunedPDelay, tunedNDelay );
@@ -419,8 +411,8 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         {
             if( m->Type() != MT_EMPTY )
             {
-                tunedP.Append( m->CLine( 0 ) );
-                tunedN.Append( m->CLine( 1 ) );
+                tunedP.Append( m->CShape( 0 ) );
+                tunedN.Append( m->CShape( 1 ) );
             }
         }
 
@@ -429,10 +421,10 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         if( m_settings.m_isTimeDomain )
         {
             int64_t tunedPDelay = m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                    tunedP, GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
+                    tunedP.ToSLC(), GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
                     m_netClass );
             int64_t tunedNDelay = m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                    tunedN, GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
+                    tunedN.ToSLC(), GetOriginPair().Width(), true, GetOriginPair().Gap(), m_router->GetCurrentLayer(),
                     m_netClass );
 
             m_lastDelay += std::max( tunedPDelay, tunedNDelay );
@@ -502,7 +494,7 @@ bool DP_MEANDER_PLACER::AbortPlacement()
 
 bool DP_MEANDER_PLACER::HasPlacedAnything() const
 {
-     return m_originPair.CP().SegmentCount() > 0 || m_originPair.CN().SegmentCount() > 0;
+     return m_originPair.CP().ShapeCount() > 0 || m_originPair.CN().ShapeCount() > 0;
 }
 
 
@@ -518,8 +510,8 @@ bool DP_MEANDER_PLACER::CommitPlacement()
 
 bool DP_MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )
 {
-    LINE l1( m_originPair.PLine(), aShape->CLine( 0 ) );
-    LINE l2( m_originPair.NLine(), aShape->CLine( 1 ) );
+    LINE l1( m_originPair.PLine(), aShape->CShape( 0 ) );
+    LINE l2( m_originPair.NLine(), aShape->CShape( 1 ) );
 
     if( m_currentNode->CheckColliding( &l1 ) )
         return false;

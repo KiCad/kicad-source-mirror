@@ -44,7 +44,7 @@ std::ostream& operator<<( std::ostream& aStream, const SHAPE_ARC& aArc )
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                       const EDA_ANGLE& aCenterAngle, int aWidth ) :
-        SHAPE( SH_ARC ),
+        SHAPE_BICONNECTED( SH_ARC ),
         m_width( aWidth )
 {
     m_start = aArcStartPoint;
@@ -65,7 +65,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
                       const VECTOR2I& aArcEnd, int aWidth ) :
-        SHAPE( SH_ARC ),
+        SHAPE_BICONNECTED( SH_ARC ),
         m_start( aArcStart ),
         m_mid( aArcMid ),
         m_end( aArcEnd ),
@@ -76,7 +76,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
 
 
 SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth ) :
-        SHAPE( SH_ARC )
+        SHAPE_BICONNECTED( SH_ARC )
 {
     m_width = aWidth;
 
@@ -180,7 +180,7 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
 
 
 SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther ) :
-        SHAPE( SH_ARC )
+        SHAPE_BICONNECTED( SH_ARC )
 {
     m_start = aOther.m_start;
     m_end = aOther.m_end;
@@ -1097,10 +1097,16 @@ void SHAPE_ARC::Reverse()
 }
 
 
-SHAPE_ARC SHAPE_ARC::Reversed() const
+SHAPE_ARC* SHAPE_ARC::reversedImpl() const
 {
-    return SHAPE_ARC( m_end, m_mid, m_start, m_width );
+    return new SHAPE_ARC( m_end, m_mid, m_start, m_width );
 }
+
+std::unique_ptr<SHAPE_ARC> SHAPE_ARC::Reversed() const
+{
+    return std::unique_ptr<SHAPE_ARC>( this->reversedImpl() );
+}
+
 
 
 bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const

@@ -192,7 +192,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 {
     double base_len = aBase.Length();
 
-    SHAPE_LINE_CHAIN lc;
+    SHAPE_CHAIN lc;
 
     bool     singleSided = Settings().m_singleSided;
     bool     side = aSide;
@@ -406,10 +406,10 @@ int MEANDER_SHAPE::spacing( ) const
 }
 
 
-SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir,
+SHAPE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir,
                                                 bool aSide )
 {
-    SHAPE_LINE_CHAIN lc;
+    SHAPE_CHAIN lc;
 
     if( aDir.EuclideanNorm( ) == 0.0f )
     {
@@ -422,7 +422,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
 
     VECTOR2D endPoint = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );
     VECTOR2D p = aP;
-    lc.Append( ( int ) p.x, ( int ) p.y );
+    lc.Append( VECTOR2I( (int) p.x,  ( int ) p.y ) );
 
     // fixme: refactor
     switch( m_placer->MeanderSettings().m_cornerStyle )
@@ -449,12 +449,12 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
         VECTOR2D dir_cv = dir_v.Resize( correction );
 
         p = aP - dir_cu;
-        lc.Append( ( int ) p.x, ( int ) p.y );
+        lc.Append( VECTOR2I( ( int ) p.x, ( int ) p.y ) );
         p = aP + dir_u + (dir_v + dir_cv) * ( aSide ? -1.0 : 1.0 );
-        lc.Append( ( int ) p.x, ( int ) p.y );
+        lc.Append( VECTOR2I( ( int ) p.x, ( int ) p.y ) );
 
         p = endPoint;
-        lc.Append( (int) p.x, (int) p.y );
+        lc.Append( VECTOR2I( (int) p.x, (int) p.y ) );
         break;
     }
 
@@ -466,7 +466,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
 }
 
 
-void MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir )
+void MEANDER_SHAPE::start( SHAPE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir )
 {
     m_currentTarget = aTarget;
     m_currentTarget->Clear();
@@ -502,7 +502,7 @@ void MEANDER_SHAPE::miter( int aRadius, bool aSide )
     }
 
     VECTOR2D dir = m_currentDir.Resize( (double) aRadius );
-    SHAPE_LINE_CHAIN lc = makeMiterShape( m_currentPos, dir, aSide );
+    SHAPE_CHAIN lc = makeMiterShape( m_currentPos, dir, aSide );
 
     m_currentPos = lc.CLastPoint();
     turn( aSide ? ANGLE_90 : -ANGLE_90 );
@@ -521,7 +521,7 @@ void MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 }
 
 
-SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir,
+SHAPE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir,
                                                  bool aSide, MEANDER_TYPE aType,
                                                  int aBaselineOffset )
 {
@@ -554,7 +554,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     int turnSide = amplitude - cr;
     int top = spc - 2 * cr;
 
-    SHAPE_LINE_CHAIN lc;
+    SHAPE_CHAIN lc;
 
     start( &lc, aP + dir_v_b, aDir );
 
@@ -621,7 +621,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     {
         SEG axis( aP, aP + aDir );
 
-        lc.Mirror( axis );
+        lc = lc.Mirrored( axis );
     }
 
     // Clear the current target pointer to avoid dangling pointer after lc goes out of scope
@@ -646,11 +646,13 @@ bool MEANDERED_LINE::CheckSelfIntersections( MEANDER_SHAPE* aShape, int aClearan
         if( b1.ApproxParallel( b2 ) )
             continue;
 
-        int n = m->CLine( 0 ).SegmentCount();
+        int n = m->CShape( 0 ).ShapeCount();
 
         for( int j = n - 1; j >= 0; j-- )
         {
-            if( aShape->CLine( 0 ).Collide( m->CLine( 0 ) .CSegment( j ), aClearance ) )
+
+            // fixme ugly casting
+            if( ((const SHAPE&)aShape->CShape( 0 ) ) .Collide( m->CShape( 0 ).CShape( j ), aClearance ) )
                 return false;
         }
     }
@@ -888,7 +890,7 @@ int MEANDER_SHAPE::BaselineLength() const
 
 long long int MEANDER_SHAPE::CurrentLength() const
 {
-    return CLine( 0 ).Length();
+    return CShape( 0 ).Length();
 }
 
 
@@ -907,16 +909,17 @@ void MEANDER_SHAPE::updateBaseSegment( )
 {
     if( m_dual )
     {
-        VECTOR2I midpA = ( CLine( 0 ).CPoint( 0 )  + CLine( 1 ).CPoint( 0  ) ) / 2;
-        VECTOR2I midpB = ( CLine( 0 ).CLastPoint() + CLine( 1 ).CLastPoint() ) / 2;
+        // fixme schain not sure if this will work
+        VECTOR2I midpA = ( CShape( 0 ).CPoint( 0 )  + CShape( 1 ).CPoint( 0  ) ) / 2;
+        VECTOR2I midpB = ( CShape( 0 ).CLastPoint() + CShape( 1 ).CLastPoint() ) / 2;
 
         m_clippedBaseSeg.A = m_baseSeg.LineProject( midpA );
         m_clippedBaseSeg.B = m_baseSeg.LineProject( midpB );
     }
     else
     {
-        m_clippedBaseSeg.A = m_baseSeg.LineProject( CLine( 0 ).CPoint( 0 ) );
-        m_clippedBaseSeg.B = m_baseSeg.LineProject( CLine( 0 ).CLastPoint() );
+        m_clippedBaseSeg.A = m_baseSeg.LineProject( CShape( 0 ).CPoint( 0 ) );
+        m_clippedBaseSeg.B = m_baseSeg.LineProject( CShape( 0 ).CLastPoint() );
     }
 }
 

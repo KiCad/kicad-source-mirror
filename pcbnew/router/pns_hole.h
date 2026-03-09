@@ -25,7 +25,7 @@
 #include "pns_item.h"
 
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 namespace PNS
 {
@@ -61,7 +61,7 @@ public:
         return m_net;
     }
 
-    virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+    virtual const SHAPE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                          int aLayer = -1 ) const override;
 
     int Radius() const;

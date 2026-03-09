@@ -54,7 +54,12 @@ void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
     OPT_BOX2I changed_area = ChangedArea( aOld, aNew.get() );
 
     if( changed_area )
+    {
+        SHAPE_RECT r( *changed_area );
+        PNS_DBG( Dbg(), AddShape, &r, YELLOW, 0, wxT( "changed-area" ) );
+
         m_affectedArea = m_affectedArea ? m_affectedArea->Merge( *changed_area ) : *changed_area;
+    }
 
     ROOT_LINE_ENTRY *re = nullptr;
     LINKED_ITEM::UNIQ_ID newId;
@@ -256,8 +261,8 @@ bool SHOVE::checkShoveDirection( const LINE& aCurLine, const LINE& aObstacleLine
     }
 
     SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER checker( cp );
-    checker.AddPolyline( aObstacleLine.CLine() );
-    checker.AddPolyline( aShovedLine.CLine().Reverse() );
+    checker.AddPolyline( aObstacleLine.CLine().ToSLC() );
+    checker.AddPolyline( aShovedLine.CLine().Reversed().ToSLC() );
 
     bool inside = checker.IsInside();
 
@@ -289,9 +294,9 @@ bool SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LINE& aObstacleLin
     if( holeClearance + via.Drill() / 2 > clearance + via.Diameter( aObstacleLine.Layer() ) / 2 )
         clearance = holeClearance + via.Drill() / 2 - via.Diameter( aObstacleLine.Layer() ) / 2;
 
-    SHAPE_LINE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
-    SHAPE_LINE_CHAIN path_cw;
-    SHAPE_LINE_CHAIN path_ccw;
+    SHAPE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
+    SHAPE_CHAIN path_cw;
+    SHAPE_CHAIN path_ccw;
 
     if( ! aObstacleLine.Walkaround( hull, path_cw, true ) )
         return false;
@@ -340,11 +345,11 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
         bool invertTraversal = ( attempt >= 2 );
         bool clockwise = attempt % 2;
         int vFirst = -1, vLast = -1;
-        SHAPE_LINE_CHAIN obs = aObstacleLine.CLine();
+        SHAPE_CHAIN obs = aObstacleLine.CLine();
         LINE l( aObstacleLine );
-        SHAPE_LINE_CHAIN path( l.CLine() );
+        SHAPE_CHAIN path( l.CLine() );
 
-        if( permitAdjustingEndpoints && l.SegmentCount() >= 1 )
+        if( permitAdjustingEndpoints && l.ShapeCount() >= 1 )
         {
             auto minDistP = [&]( VECTOR2I pref, int& mdist, int& minhull ) -> VECTOR2I
             {
@@ -353,7 +358,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
                 for( int i = 0; i < (int) aHulls.size(); i++ )
                 {
-                    const SHAPE_LINE_CHAIN& hull =
+                    const SHAPE_CHAIN& hull =
                             aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
                     int  dist;
                     const VECTOR2I p = hull.NearestPoint( pref, true );
@@ -394,7 +399,8 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
             if( minDist0 < c_ENDPOINT_ON_HULL_THRESHOLD && aPermitAdjustingStart )
             {
-                l.Line().Insert( 0, p0 );
+                // fixme shull
+                //l.Line().Insert( 0, p0 );
                 obs = l.CLine();
                 path = l.CLine();
             }
@@ -405,7 +411,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
 
         for( int i = 0; i < (int) aHulls.size(); i++ )
         {
-            const SHAPE_LINE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
+            const SHAPE_CHAIN& hull = aHulls[invertTraversal ? aHulls.size() - 1 - i : i];
 
             PNS_DBG( Dbg(), AddShape, &hull, YELLOW, 10000, wxString::Format( "hull[%d]", i ) );
             PNS_DBG( Dbg(), AddShape, &path, WHITE, l.Width(), wxString::Format( "path[%d]", i ) );
@@ -422,7 +428,7 @@ bool SHOVE::shoveLineToHullSet( const LINE& aCurLine, const LINE& aObstacleLine,
                 break;
             }
 
-            path.Simplify2();
+            path.Simplify();
             l.SetShape( path );
         }
 
@@ -555,7 +561,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                                           aCurLine.EndsWithVia()?1:0, aObstacleLine.EndsWithVia()?1:0 ) );
 
 
-    if( viaOnEnd && ( !aCurLine.LayersOverlap( &obstacleLine ) || aCurLine.SegmentCount() == 0 ) )
+    if( viaOnEnd && ( !aCurLine.LayersOverlap( &obstacleLine ) || aCurLine.ShapeCount() == 0 ) )
     {
         // Shove obstacleLine to the hull of aCurLine's via.
         return shoveLineFromLoneVia( aCurLine, obstacleLine, aResultLine );
@@ -568,7 +574,7 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
 
         int      obstacleLineWidth = obstacleLine.Width();
         int      clearance = getClearance( &aCurLine, &obstacleLine );
-        int      currentLineSegmentCount = aCurLine.SegmentCount();
+        int      currentLineShapeCount = aCurLine.ShapeCount();
 
         /*PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
                                                    m_router->GetInterface()->GetNetCode( aCurLine.Net() ),
@@ -579,9 +585,11 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
         {
             HULL_SET hulls;
 
-            hulls.reserve( currentLineSegmentCount + 1 );
+            hulls.reserve( currentLineShapeCount + 1 );
 
-            for( int i = 0; i < currentLineSegmentCount; i++ )
+            // shull native arcs
+            #if 0
+            for( int i = 0; i < currentLineShapeCount; i++ )
             {
                 SEGMENT seg( aCurLine, aCurLine.CSegment( i ) );
 
@@ -593,10 +601,11 @@ bool SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& aObstacleLine,
                     clearance += KiROUND( SHAPE_ARC::DefaultAccuracyForPCB() );
                 }
 
-                SHAPE_LINE_CHAIN hull = seg.Hull( clearance + extraHullExpansion, obstacleLineWidth, obstacleLine.Layer() );
+                SHAPE_CHAIN hull = seg.Hull( clearance + extraHullExpansion, obstacleLineWidth, obstacleLine.Layer() );
 
                 hulls.push_back( hull );
             }
+            #endif
 
             if( viaOnEnd )
             {
@@ -667,7 +676,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
         int rank = aCurrent.Rank();
 
         shovedLine.SetRank( rank - 1 );
-        shovedLine.Line().Simplify2();
+        shovedLine.Line().Simplify();
 
         unwindLineStack( &obstacleLine );
 
@@ -840,7 +849,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
 
         walkaroundLine.ClearLinks();
         walkaroundLine.Unmark();
-    	walkaroundLine.Line().Simplify2();
+    	walkaroundLine.Line().Simplify();
 
     	if( walkaroundLine.HasLoops() )
             continue;
@@ -1014,6 +1023,15 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea )
     if( aAffectedArea )
     {
         if( prev_area )
+        {
+            SHAPE_RECT r( *prev_area );
+            PNS_DBG( Dbg(), AddShape, &r, LIGHTYELLOW, 0, wxT( "sp-prev-area" ) );
+        }
+            SHAPE_RECT r( *aAffectedArea );
+            PNS_DBG( Dbg(), AddShape, &r, YELLOW, 0, wxT( "sp-affected-area" ) );
+
+
+        if( prev_area )
             st.m_affectedArea = prev_area->Merge( *aAffectedArea );
         else
             st.m_affectedArea = aAffectedArea;
@@ -1099,7 +1117,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
             lp.second = lp.first;
             lp.second.ClearLinks();
             lp.second.DragCorner( p0_pushed, lp.second.CLine().Find( p0 ) );
-            lp.second.Line().Simplify2();
+            lp.second.Line().Simplify();
             draggedLines.push_back( std::move( lp ) );
         }
     }
@@ -1134,7 +1152,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         PNS_DBG( Dbg(), Message, wxString::Format("fan %d/%d\n", n, (int) draggedLines.size() ) );
         n++;
 
-        if( lp.second.SegmentCount() )
+        if( lp.second.ShapeCount() )
         {
             lp.second.ClearLinks();
             ROOT_LINE_ENTRY* rootEntry = replaceLine( lp.first, lp.second, true, true );
@@ -1150,7 +1168,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
                 rootEntry->newLine = lp.second; // fixme: it's inelegant
 
 
-            PNS_DBG( Dbg(), Message, wxString::Format("PushViaF %p %d eov %d\n", &lp.second, lp.second.SegmentCount(), lp.second.EndsWithVia()?1:0 ) );
+            PNS_DBG( Dbg(), Message, wxString::Format("PushViaF %p %d eov %d\n", &lp.second, lp.second.ShapeCount(), lp.second.EndsWithVia()?1:0 ) );
 
             if( !pushLineStack( lp.second ) ) //, true ) ) // WHY?
                 return SH_INCOMPLETE;
@@ -1279,7 +1297,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
         int clearance = getClearance( &aCurrent.Via(), aObstacleVia );
 
-        const SHAPE_LINE_CHAIN& hull = m_currentNode->GetRuleResolver()->HullCache(
+        const SHAPE_CHAIN& hull = m_currentNode->GetRuleResolver()->HullCache(
                 aObstacleVia, clearance, aCurrent.Width(), layer );
 
         bool epInsideHull = hull.PointInside( p0 );
@@ -1455,7 +1473,7 @@ void SHOVE::unwindLineStack( const ITEM* aItem )
 
 bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
 {
-    if( !aL.IsLinked() && aL.SegmentCount() != 0 )
+    if( !aL.IsLinked() && aL.ShapeCount() != 0 )
     {
         PNS_DBG( Dbg(), AddItem, &aL, BLUE, 10000, wxT( "push line stack failed" ) );
 
@@ -1643,7 +1661,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(),
              wxString::Format( wxT( "current sc=%d net=%s evia=%d" ),
-             currentLine.SegmentCount(),
+             currentLine.ShapeCount(),
              iface->GetNetName( currentLine.Net() ),
              currentLine.EndsWithVia() ? 1 : 0 ) );
 
@@ -1927,15 +1945,13 @@ OPT_BOX2I SHOVE::totalAffectedArea() const
 {
     OPT_BOX2I area;
 
+    if( m_affectedArea )
+        return m_affectedArea;
+
     if( !m_nodeStack.empty() )
-        area = m_nodeStack.back().m_affectedArea;
+        return m_nodeStack.back().m_affectedArea;
 
-    if( area  && m_affectedArea)
-        area->Merge( *m_affectedArea );
-    else if( !area )
-        area = m_affectedArea;
-
-    return area;
+    return OPT_BOX2I();
 }
 
 
@@ -2064,7 +2080,8 @@ void SHOVE::runOptimizer( NODE* aNode )
         optimizer.SetRestrictArea( *area, false );
     }
 
-    DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
+    // fixme freeangle 
+    ROUTING_REGIME_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
 
     // Smart Pads is incompatible with 90-degree mode for now
     if( Settings().SmartPads()
@@ -2363,10 +2380,10 @@ bool SHOVE::preShoveCleanup( LINE* aOld, LINE* aNew )
     //ctx.options.m_differentNetsOnly = false;
     //ctx.options.m_kindMask = ITEM::SEGMENT_T; // fixme arcs
 
-    SHAPE_LINE_CHAIN orig( aOld->CLine() );
+    SHAPE_CHAIN orig( aOld->CLine() );
 
     int vc_prev = orig.PointCount();
-    orig.Simplify2();
+    orig.Simplify();
     int vc_post = orig.PointCount();
 
     *aNew = *aOld;
@@ -2469,7 +2486,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             LINE head( *headLineEntry.origHead );
 
             // empty head? nothing to shove...
-            if( !head.SegmentCount() && !head.EndsWithVia() )
+            if( !head.ShapeCount() && !head.EndsWithVia() )
             {
                 st = SH_INCOMPLETE;
                 break;
@@ -2558,6 +2575,12 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
         // this must be called afrter reconstructHeads as it requires up-to-date via handles
         pushSpringback( m_currentNode, m_affectedArea );
+        if(  m_affectedArea )
+        {
+            SHAPE_RECT r( *m_affectedArea );
+            PNS_DBG( Dbg(), AddShape, &r, WHITE, 0, wxT( "push-changed-area" ) );
+        }
+
     }
     else
     {

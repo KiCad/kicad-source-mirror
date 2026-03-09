@@ -27,7 +27,7 @@
 #include <memory>
 
 #include <geometry/shape_index_list.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "range.h"
 
@@ -60,8 +60,8 @@ public:
 
     ~COST_ESTIMATOR() {};
 
-    static int CornerCost( const SEG& aA, const SEG& aB );
-    static int CornerCost( const SHAPE_LINE_CHAIN& aLine );
+    static int CornerCost( const SHAPE_CHAIN& aShape, int aVertex );
+    static int CornerCost( const SHAPE_CHAIN& aLine );
     static int CornerCost( const LINE& aLine );
 
     void Add( const LINE& aLine );
@@ -157,7 +157,7 @@ public:
 private:
     static const int MaxCachedItems = 256;
 
-    typedef std::vector<SHAPE_LINE_CHAIN> BREAKOUT_LIST;
+    typedef std::vector<SHAPE_CHAIN> BREAKOUT_LIST;
 
     struct CACHE_VISITOR;
 
@@ -173,20 +173,20 @@ private:
     bool mergeFull( LINE* aLine );
     bool mergeColinear( LINE* aLine );
     bool runSmartPads( LINE* aLine );
-    bool mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );
+    bool mergeStep( LINE* aLine, SHAPE_CHAIN& aCurrentLine, int step );
     bool fanoutCleanup( LINE * aLine );
     bool mergeDpSegments( DIFF_PAIR *aPair );
     bool mergeDpStep( DIFF_PAIR *aPair, bool aTryP, int step );
 
     bool checkColliding( ITEM* aItem, bool aUpdateCache = true );
-    bool checkColliding( LINE* aLine, const SHAPE_LINE_CHAIN& aOptPath );
+    bool checkColliding( LINE* aLine, const SHAPE_CHAIN& aOptPath );
 
     void cacheAdd( ITEM* aItem, bool aIsStatic );
     void removeCachedSegments( LINE* aLine, int aStartVertex = 0, int aEndVertex = -1 );
 
     bool checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine,
-                            const SHAPE_LINE_CHAIN& aCurrentPath,
-                            const SHAPE_LINE_CHAIN& aReplacement );
+                            const SHAPE_CHAIN& aCurrentPath,
+                            const SHAPE_CHAIN& aReplacement );
 
     BREAKOUT_LIST circleBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
     BREAKOUT_LIST rectBreakouts( int aWidth, const SHAPE* aShape, bool aPermitDiagonal ) const;
@@ -227,8 +227,8 @@ public:
     };
 
     virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                        const SHAPE_LINE_CHAIN& aCurrentPath,
-                        const SHAPE_LINE_CHAIN& aReplacement ) = 0;
+                        const SHAPE_CHAIN& aCurrentPath,
+                        const SHAPE_CHAIN& aReplacement ) = 0;
 
     int GetPriority() const { return m_priority; }
     void SetPriority( int aPriority ) { m_priority = aPriority; }
@@ -252,8 +252,8 @@ public:
     virtual ~ANGLE_CONSTRAINT_45() {};
 
     virtual bool Check ( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                         const SHAPE_LINE_CHAIN& aCurrentPath,
-                         const SHAPE_LINE_CHAIN& aReplacement ) override;
+                         const SHAPE_CHAIN& aCurrentPath,
+                         const SHAPE_CHAIN& aReplacement ) override;
 
 private:
     int m_entryDirectionMask;
@@ -270,8 +270,8 @@ public:
     };
 
     bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                const SHAPE_LINE_CHAIN& aCurrentPath,
-                const SHAPE_LINE_CHAIN& aReplacement ) override;
+                const SHAPE_CHAIN& aCurrentPath,
+                const SHAPE_CHAIN& aReplacement ) override;
 
 private:
     BOX2I m_allowedArea;
@@ -287,8 +287,8 @@ public:
     };
 
     bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                const SHAPE_LINE_CHAIN& aCurrentPath,
-                const SHAPE_LINE_CHAIN& aReplacement ) override;
+                const SHAPE_CHAIN& aCurrentPath,
+                const SHAPE_CHAIN& aReplacement ) override;
 };
 
 
@@ -302,8 +302,8 @@ public:
     };
 
     bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                const SHAPE_LINE_CHAIN& aCurrentPath,
-                const SHAPE_LINE_CHAIN& aReplacement ) override;
+                const SHAPE_CHAIN& aCurrentPath,
+                const SHAPE_CHAIN& aReplacement ) override;
 private:
     VECTOR2I m_v;
 };
@@ -318,8 +318,8 @@ public:
     };
 
     virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                        const SHAPE_LINE_CHAIN& aCurrentPath,
-                        const SHAPE_LINE_CHAIN& aReplacement ) override;
+                        const SHAPE_CHAIN& aCurrentPath,
+                        const SHAPE_CHAIN& aReplacement ) override;
 };
 
 
@@ -335,8 +335,8 @@ public:
     };
 
     virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
-                        const SHAPE_LINE_CHAIN& aCurrentPath,
-                        const SHAPE_LINE_CHAIN& aReplacement ) override;
+                        const SHAPE_CHAIN& aCurrentPath,
+                        const SHAPE_CHAIN& aReplacement ) override;
 
 private:
     int m_minCorners;

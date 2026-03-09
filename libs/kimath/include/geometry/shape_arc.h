@@ -27,6 +27,7 @@
 
 #include <core/mirror.h>     // for FLIP_DIRECTION
 #include <geometry/shape.h>
+#include <geometry/shape_biconnected.h>
 #include <base_units.h>
 #include <math/vector2d.h>   // for VECTOR2I
 #include <geometry/eda_angle.h>
@@ -36,12 +37,12 @@ class SHAPE_CIRCLE;
 class SHAPE_LINE_CHAIN;
 class SHAPE_RECT;
 
-class SHAPE_ARC : public SHAPE
+class SHAPE_ARC : public SHAPE_BICONNECTED
 {
 public:
 
     SHAPE_ARC() :
-        SHAPE( SH_ARC ),
+        SHAPE_BICONNECTED( SH_ARC ),
         m_width( 0 ),
         m_radius( 0 )
     {};
@@ -122,7 +123,7 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
-    VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
+    VECTOR2I NearestPoint( const VECTOR2I& aP ) const override;
 
     /**
       * Compute closest points between this arc and \a aArc.
@@ -184,7 +185,7 @@ public:
      * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
      * @return Number of intersection points found
      */
-    int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const;
+    int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const override;
 
     /**
      * Find intersection points between this arc and a CIRCLE. Ignores arc width.
@@ -204,8 +205,8 @@ public:
      */
     int Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuffer ) const;
 
-    VECTOR2I GetStart() const override { return m_start; }
-    VECTOR2I GetEnd() const override { return m_end; }
+    const VECTOR2I& GetStart() const override { return m_start; }
+    const VECTOR2I& GetEnd() const override { return m_end; }
 
     void SetWidth( int aWidth ) override
     {
@@ -240,7 +241,7 @@ public:
 
     void Reverse();
 
-    SHAPE_ARC Reversed() const;
+    std::unique_ptr<SHAPE_ARC> Reversed() const;
 
     double GetRadius() const;
 
@@ -322,10 +323,16 @@ public:
 
     bool IsClockwise() const { return !IsCCW(); }
 
+    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
+    virtual VECTOR2I NormalVector( bool aTakeStartPoint ) const override;
+
 private:
     void update_values();
 
     bool sliceContainsPoint( const VECTOR2I& p ) const;
+
+    virtual SHAPE_ARC* reversedImpl() const override;
+
 
 private:
     VECTOR2I m_start;

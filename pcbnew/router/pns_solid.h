@@ -26,7 +26,7 @@
 
 #include <geometry/seg.h>
 #include <geometry/shape.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_item.h"
 #include "pns_hole.h"
@@ -107,7 +107,7 @@ public:
     const SHAPE* Shape( int aLayer ) const override { return m_shape; }
 
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+    const SHAPE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
 
     void SetShape( SHAPE* shape )

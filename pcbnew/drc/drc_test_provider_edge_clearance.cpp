@@ -183,9 +183,8 @@ void DRC_TEST_PROVIDER_EDGE_CLEARANCE::resolveSilkDisposition( BOARD_ITEM* aItem
 }
 
 
-bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID shapeLayer,
-                                                        BOARD_ITEM* edge, DRC_CONSTRAINT_T aConstraintType,
-                                                        PCB_DRC_CODE aErrorCode )
+bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* edge,
+                                                        DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode )
 {
     std::shared_ptr<SHAPE> shape;
 
@@ -226,7 +225,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
             drcItem->SetItems( edge->m_Uuid, item->m_Uuid );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
-            reportTwoItemGeometry( drcItem, pos, edge, item, shapeLayer, actual );
+            reportTwoItemGeometry( drcItem, pos, edge, item, Edge_Cuts, actual );
 
             if( aErrorCode == DRCE_SILK_EDGE_CLEARANCE )
             {

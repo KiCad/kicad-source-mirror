@@ -175,7 +175,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
 
     m_currentNode = m_world->Branch();
 
-    SHAPE_LINE_CHAIN pre, tuned, post;
+    SHAPE_CHAIN pre, tuned, post;
 
     m_originLine.CLine().Split( m_currentStart, aP, pre, tuned, post );
 
@@ -183,32 +183,29 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     m_result.SetWidth( m_originLine.Width() );
     m_result.SetBaselineOffset( 0 );
 
-    for( int i = 0; i < tuned.SegmentCount(); i++ )
+    for( int i = 0; i < tuned.ShapeCount(); i++ )
     {
-        if( tuned.IsArcSegment( i ) )
+        if( tuned.IsArc( i ) )
         {
-            ssize_t arcIndex = tuned.ArcIndex( i );
-            m_result.AddArc( tuned.Arc( arcIndex ) );
-            i = tuned.NextShape( i );
-
-            // NextShape will return -1 if last shape
-            if( i < 0 )
-                i = tuned.SegmentCount();
-
+            m_result.AddArc( tuned.CArc( i ) );
             continue;
         }
 
+        if (!tuned.IsSegment( i ))
+            continue;
+
         bool      side = false;
-        const SEG s = tuned.CSegment( i );
+
+        const SHAPE_SEGMENT& s = tuned.CSegment( i );
 
         if( m_settings.m_initialSide == 0 )
-            side = s.Side( aP ) < 0;
+            side = s.GetSeg().Side( aP ) < 0;
         else
             side = m_settings.m_initialSide < 0;
 
-        m_result.AddCorner( s.A );
-        m_result.MeanderSegment( s, side );
-        m_result.AddCorner( s.B );
+        m_result.AddCorner( s.GetStart() );
+        m_result.MeanderSegment( s.GetSeg(), side );
+        m_result.AddCorner( s.GetEnd() );
     }
 
     long long int lineLen = origPathLength();
@@ -230,7 +227,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         {
             m_lastDelay = lineDelay
                           - m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                                  tuned, m_currentWidth, false, m_router->Sizes().DiffPairGap(),
+                                  tuned.ToSLC(), m_currentWidth, false, m_router->Sizes().DiffPairGap(),
                                   m_router->GetCurrentLayer(), m_netClass );
         }
 
@@ -243,7 +240,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         {
             PNS_DBG( Dbg(), AddItem, l, BLUE, 30000, wxT( "tuned-line" ) );
 
-            m_router->GetInterface()->DisplayPathLine( l->CLine(), 1 );
+            m_router->GetInterface()->DisplayPathLine( l->CLine().ToSLC(), 1 );
         }
     }
 
@@ -255,7 +252,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         {
             if( m->Type() != MT_EMPTY )
             {
-                tuned.Append ( m->CLine( 0 ) );
+                tuned.Append ( m->CShape( 0 ) );
             }
         }
 
@@ -264,7 +261,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         if( m_settings.m_isTimeDomain )
         {
             m_lastDelay += m_router->GetInterface()->CalculateDelayForShapeLineChain(
-                    tuned, m_currentWidth, false, m_router->Sizes().DiffPairGap(), m_router->GetCurrentLayer(),
+                    tuned.ToSLC(), m_currentWidth, false, m_router->Sizes().DiffPairGap(), m_router->GetCurrentLayer(),
                     m_netClass );
         }
 
@@ -322,7 +319,7 @@ bool MEANDER_PLACER::AbortPlacement()
 
 bool MEANDER_PLACER::HasPlacedAnything() const
 {
-     return m_currentTrace.SegmentCount() > 0;
+     return m_currentTrace.ShapeCount() > 0;
 }
 
 
@@ -338,7 +335,7 @@ bool MEANDER_PLACER::CommitPlacement()
 
 bool MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )
 {
-    LINE l( m_originLine, aShape->CLine( 0 ) );
+    LINE l( m_originLine, aShape->CShape( 0 ) );
 
     if( m_currentNode->CheckColliding( &l ) )
         return false;

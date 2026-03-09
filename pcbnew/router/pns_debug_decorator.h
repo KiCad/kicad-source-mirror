@@ -25,7 +25,7 @@
 #include <math/vector2d.h>
 #include <math/box2.h>
 #include <geometry/seg.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 #include <geometry/shape_rect.h>
 
 #include <gal/color4d.h>
@@ -101,7 +101,7 @@ public:
                          const wxString& aName = wxT( "" ),
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
     {
-        SHAPE_LINE_CHAIN lc;
+        SHAPE_CHAIN lc;
         lc.Append( aSeg.A );
         lc.Append( aSeg.B );
         AddShape( &lc, aColor, aOverrideWidth, aName, aSrcLoc );

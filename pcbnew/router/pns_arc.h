@@ -25,7 +25,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape_arc.h>
-#include <geometry/shape_line_chain.h>
+#include <geometry/shape_chain.h>
 
 #include "pns_line.h"
 #include "pns_linked_item.h"
@@ -90,12 +90,12 @@ public:
         return m_arc.GetWidth();
     }
 
-    const SHAPE_LINE_CHAIN CLine() const
+    /*const SHAPE_CHAIN CLine() const
     {
-        return SHAPE_LINE_CHAIN( m_arc );
-    }
+        return SHAPE_CHAIN( m_arc );
+    }*/
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const override;
+    const SHAPE_CHAIN Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {
