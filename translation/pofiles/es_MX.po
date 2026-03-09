@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-06 22:44+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -2000,7 +2000,8 @@ msgstr "Advertencia de archivo abierto"
 
 #: common/confirm.cpp:52 common/confirm.cpp:58
 msgid "Interleaved saves may produce very unexpected results."
-msgstr "Guardar de forma intercalada puede producir resultados muy inesperados."
+msgstr ""
+"Guardar de forma intercalada puede producir resultados muy inesperados."
 
 #: common/confirm.cpp:54 common/confirm.cpp:59 common/confirm.cpp:124
 #: common/confirm.cpp:151 common/dialog_shim.cpp:839
@@ -3424,8 +3425,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Seleccione una <b>Opción</b> en el listado superior, y pulse el botón de <b>"
-"Agregar opción seleccionada</b>."
+"Seleccione una <b>Opción</b> en el listado superior, y pulse el botón de "
+"<b>Agregar opción seleccionada</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -5859,8 +5860,8 @@ msgstr "Se agotó la memoria."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5897,7 +5898,7 @@ msgstr "Línea"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6529,7 +6530,7 @@ msgstr "Arco"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6566,7 +6567,7 @@ msgstr "Segmento"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6605,7 +6606,7 @@ msgstr "Puntos"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6624,7 +6625,7 @@ msgstr "Ancho"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6714,7 +6715,7 @@ msgstr "Color de relleno"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6740,7 +6741,7 @@ msgstr "Cursiva"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6758,7 +6759,7 @@ msgstr "Negrita+Cursiva"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -6771,7 +6772,7 @@ msgstr "Izquierda"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6786,7 +6787,7 @@ msgstr "Centrado"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -6796,7 +6797,7 @@ msgstr "Derecha"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Superior"
@@ -6805,7 +6806,7 @@ msgstr "Superior"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Inferior"
@@ -6817,7 +6818,7 @@ msgstr "Inferior"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -6830,7 +6831,7 @@ msgid "Orientation"
 msgstr "Orientación"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6853,8 +6854,8 @@ msgstr "Propiedades del texto"
 msgid "Font"
 msgstr "Fuente"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -6864,28 +6865,28 @@ msgstr "Fuente"
 msgid "Thickness"
 msgstr "Grosor"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Invertido"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Justificación horizontal"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Justificación vertical"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -6915,8 +6916,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"La ruta base de las bibliotecas de huellas instaladas localmente (carpetas "
-".pretty)."
+"La ruta base de las bibliotecas de huellas instaladas localmente "
+"(carpetas .pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -9120,8 +9121,8 @@ msgstr "Seleccionar fila(s)"
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
-"Seleccione la(s) fila(s) completas que contienen la(s) celda(s) seleccionada"
-"(s) actualmente"
+"Seleccione la(s) fila(s) completas que contienen la(s) celda(s) "
+"seleccionada(s) actualmente"
 
 #: common/tool/actions.cpp:390
 msgid "Select Table"
@@ -9163,7 +9164,8 @@ msgstr "Agregar columna después"
 
 #: common/tool/actions.cpp:419
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Insertar una nueva columna de tabla después de las celdas seleccionadas"
+msgstr ""
+"Insertar una nueva columna de tabla después de las celdas seleccionadas"
 
 #: common/tool/actions.cpp:425
 msgid "Delete Row(s)"
@@ -11075,7 +11077,8 @@ msgstr "Eliminar anotación"
 #: eeschema/annotate.cpp:278
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
+msgstr ""
+"Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
 
 #: eeschema/annotate.cpp:397
 #, c-format
@@ -13095,7 +13098,7 @@ msgstr "Alineación V"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13141,27 +13144,27 @@ msgstr "Eliminar campo"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Entrada"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Salida"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Bidireccional"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Triestado"
@@ -13169,17 +13172,17 @@ msgstr "Triestado"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Pasivo"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 msgid "Dot"
 msgstr "Punto"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr "Diamante"
 
@@ -14549,7 +14552,8 @@ msgstr "Datos del esquema"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:147
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "Falta el proyecto o es de solo lectura. Los ajustes no serán editables."
+msgstr ""
+"Falta el proyecto o es de solo lectura. Los ajustes no serán editables."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:189
 #, c-format
@@ -16194,7 +16198,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Actualizar/restablecer los tamaños y estilos de los campos"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
@@ -17425,7 +17429,8 @@ msgstr "El pin %s está conectado tanto a %s como a %s"
 #: eeschema/erc/erc.cpp:1300
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "El pin %s en el símbolo '%s' está conectado a redes diferentes: %s y %s"
+msgstr ""
+"El pin %s en el símbolo '%s' está conectado a redes diferentes: %s y %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17481,7 +17486,8 @@ msgstr "Huella '%s' no encontrada en la biblioteca '%s'."
 #: eeschema/erc/erc.cpp:1753
 #, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "La huella asignada ( %s ) no coincide con los filtros de huella ( %s )."
+msgstr ""
+"La huella asignada ( %s ) no coincide con los filtros de huella ( %s )."
 
 #: eeschema/erc/erc.cpp:1915
 msgid "Checking sheet names..."
@@ -17791,11 +17797,11 @@ msgstr "Horizontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 msgid "Allow Autoplacement"
 msgstr "Permitir autocolocación"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 msgid "Private"
 msgstr "Privado"
@@ -18976,7 +18982,7 @@ msgstr "Atrás a la hoja seleccionada previamente"
 msgid "Sheet References"
 msgstr "Referencias de la hoja"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 msgid "Show Field Name"
 msgstr "Mostrar el nombre del campo"
 
@@ -18998,8 +19004,8 @@ msgstr ""
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
-"El archivo de almacenamiento no fue completamente analizado (quedan %d bytes)"
-"."
+"El archivo de almacenamiento no fue completamente analizado (quedan %d "
+"bytes)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1158
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1260
@@ -19967,17 +19973,17 @@ msgstr "Etiqueta '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Etiqueta directiva [%s %s]"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Etiqueta global '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Etiqueta jerárquica '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 msgid "Pin length"
 msgstr "Longitud de pin"
 
@@ -20600,12 +20606,12 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;<br><samp>~"
-"{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;"
+"<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20642,9 +20648,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -21730,8 +21735,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
-"La directiva de comando de simulación de hoja esquemática ha cambiado.  ¿"
-"Desea actualizar el comando de simulación?"
+"La directiva de comando de simulación de hoja esquemática ha cambiado.  "
+"¿Desea actualizar el comando de simulación?"
 
 #: eeschema/sim/simulator_frame.cpp:475 eeschema/sim/simulator_frame.cpp:820
 msgid "Another simulation is already running."
@@ -22204,7 +22209,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+msgstr ""
+"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:360
 #, c-format
@@ -22336,7 +22342,8 @@ msgstr "Crear una copia editable"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:961
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
+msgstr ""
+"¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 msgid "Select type of item to save"
@@ -22502,7 +22509,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Symbol '%s' already exists in library '%s'. Do you want to overwrite it?"
-msgstr "El símbolo '%s' ya existe en la biblioteca '%s'. ¿Desea sobrescribirlo?"
+msgstr ""
+"El símbolo '%s' ya existe en la biblioteca '%s'. ¿Desea sobrescribirlo?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1016
 #, c-format
@@ -24023,7 +24031,8 @@ msgstr "Entrar en la hoja"
 
 #: eeschema/tools/sch_actions.cpp:1297
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
+msgstr ""
+"Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
 
 #: eeschema/tools/sch_actions.cpp:1305
 msgid "Leave Sheet"
@@ -24620,7 +24629,8 @@ msgstr "Alertas de símbolos"
 
 #: eeschema/tools/sch_inspection_tool.cpp:358
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Seleccione un símbolo para compararlo con su equivalente de biblioteca."
+msgstr ""
+"Seleccione un símbolo para compararlo con su equivalente de biblioteca."
 
 #: eeschema/tools/sch_inspection_tool.cpp:379
 #, c-format
@@ -25907,7 +25917,8 @@ msgstr "Archivo Gerber inválido: falta el comando de arco G74 o G75"
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr "RS274X: Formato de comando GERBER no válido '%c' en la línea %d: \"%s\""
+msgstr ""
+"RS274X: Formato de comando GERBER no válido '%c' en la línea %d: \"%s\""
 
 #: gerbview/rs274x.cpp:235
 #, c-format
@@ -26603,7 +26614,8 @@ msgstr "Exportar gráficos de serigrafía como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "Exportar capas de máscara de soldadura como un conjunto de caras planas"
+msgstr ""
+"Exportar capas de máscara de soldadura como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
@@ -27644,7 +27656,8 @@ msgstr "Editar el esquema del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:151
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Editar las bibliotecas de símbolos de esquema globales y/o del proyecto"
+msgstr ""
+"Editar las bibliotecas de símbolos de esquema globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Edit the project PCB design"
@@ -31495,8 +31508,8 @@ msgstr ""
 "mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "donde:<br>\n"
 "___I___ es la corriente máxima en A<br>\n"
 "___&Delta;T___ es el incremento de temperatura sobre la ambiente en "
@@ -33242,7 +33255,8 @@ msgstr "Eliminar pistas completamente dentro de pads"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:63
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Eliminar pistas que tengan la posición inicial y final dentro de un pad"
+msgstr ""
+"Eliminar pistas que tengan la posición inicial y final dentro de un pad"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:71
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:46
@@ -34254,7 +34268,8 @@ msgstr "Desfase de línea de extensión:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:419
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr "Espacio entre los puntos medidos y el inicio de las líneas de extensión"
+msgstr ""
+"Espacio entre los puntos medidos y el inicio de las líneas de extensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 msgid "Extension line overshoot:"
@@ -35553,8 +35568,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
-"del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el "
+"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "Este valor puede ser sustituido por un valor local del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
@@ -35739,8 +35754,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
-"del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el "
+"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
@@ -37896,8 +37911,8 @@ msgstr ""
 "PostScript.\n"
 "Esta corrección del ancho tiene como objeto compensar la anchura de pistas y "
 "errores en el tamaño de pads y vías.\n"
-"El valor de corrección razonable debe estar en el rango de [-(MinTrackWidth-"
-"1), +(MinClearanceValue-1)]."
+"El valor de corrección razonable debe estar en el rango de [-"
+"(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 # ¿Tamaño A4?
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
@@ -38568,7 +38583,8 @@ msgstr "El ancho de línea debe ser mayor que cero."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1209
 msgid "Line width must be greater than zero for an unfilled circle."
-msgstr "El ancho de línea debe ser mayor que cero para un círculo sin rellenar."
+msgstr ""
+"El ancho de línea debe ser mayor que cero para un círculo sin rellenar."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1215
 msgid "Line width must be greater than zero for an unfilled rectangle."
@@ -40561,177 +40577,174 @@ msgstr ""
 "\n"
 "### Restricciones\n"
 "\n"
-"| Tipo de restricción       | Tipo de argumento"
-"                                                                                                      "
-"| Descripción"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| Tipo de restricción       | Tipo de "
+"argumento                                                                                                      "
+"| "
+"Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"|---------------------------"
-"|------------------------------------------------------------------------------------------------------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Comprueba el ancho de los anillos anulares en las vías."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                            "
-"| Comprueba el ancho de los anillos anulares en las vías.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
+"| Comprueba la expresión dada."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                     "
-"| Comprueba la expresión dada.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                    "
+"| `clearance`               | "
+"min                                                                                                                    "
 "| Especifica el margen **eléctrico** entre objetos de cobre de redes "
 "distintas. (Vea `physical_clearance` si desea especificar márgenes entre "
 "objetos sin importar sus redes.)<br><br>Para permitir objetos intersecantes "
 "(colisiones), cree una restricción `clearance` con el valor `min` menor a "
-"cero (por ejemplo, `-1`).<br>"
-"                                                                                                                                                               "
+"cero (por ejemplo, `-1`)."
+"<br>                                                                                                                                                               "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                    "
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
 "| Comprueba el margen entre patios de huellas y genera un error al menos dos "
 "patios son más cercanos que la distancia `min`. Si una huella no tiene una "
-"forma de patio, no se generarán errores por esta restricción.<br>"
-"                                                                                                                                                                                                                                                                       "
+"forma de patio, no se generarán errores por esta restricción."
+"<br>                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                            "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
 "| Comprueba el espacio entre pistas acopladas en un par diferencial. Las "
 "pistas acopladas son segmentos que son paralelos entre sí. El espacio de par "
 "diferencial no es probado en porciones no acopladas de un par diferencial "
-"(por ejemplo, el fanout de un componente).<br>"
-"                                                                                                                                                                                                                  "
+"(por ejemplo, el fanout de un componente)."
+"<br>                                                                                                                                                                                                                  "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                    "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
 "| Comprueba la distancia que una pista de par diferencial es enrutada "
 "estando desacoplada de la pista con la otra polaridad en el par (por "
 "ejemplo, cuando el par se esparce hacia afuera de un componente (fanout), o "
-"se desacopla para pasar alrededor de otro objeto como una vía).<br>"
-"                                                                                                                                                                                                      "
+"se desacopla para pasar alrededor de otro objeto como una vía)."
+"<br>                                                                                                                                                                                                      "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Especifica uno o más tipos de objetos que no serán "
-"permitidos, separados por espacios. Por ejemplo, `(constraint disallow track)"
-"` o `(constraint disallow track via pad)`. Si un objeto de este tipo "
-"coincide con la condición de regla, se creará un error de DRC.<br><br>Esta "
-"restricción es esencialmente lo mismo que un área restringida, pero puede "
-"ser usada para crear áreas restringidas más especificas.<br>"
-"                                                                        |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Especifica uno o más tipos de objetos que no serán permitidos, separados "
+"por espacios. Por ejemplo, `(constraint disallow track)` o `(constraint "
+"disallow track via pad)`. Si un objeto de este tipo coincide con la "
+"condición de regla, se creará un error de DRC.<br><br>Esta restricción es "
+"esencialmente lo mismo que un área restringida, pero puede ser usada para "
+"crear áreas restringidas más especificas."
+"<br>                                                                        "
+"|\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Comprueba el margen entre objetos y el borde de la placa.<br><br>También "
 "se puede pensar de esto como la \"tolerancia de ranurado\" ya que el borde "
 "de la placa incluirá todos los elementos gráficos en la capa `Edge.Cuts` y "
 "también cualquier agujero de pad *ovalado*. (Vea `physical_hole_clearance` "
-"para la tolerancia de taladrado).<br>"
-"                                                                                                                                                "
+"para la tolerancia de taladrado)."
+"<br>                                                                                                                                                "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                                "
+"| `length`                  | min/"
+"max                                                                                                                "
 "| Comprueba la longitud total enrutada para las redes que coinciden con la "
 "condición de la regla y genera un error para cada red que está por debajo "
 "del valor `min` (si fue especificado) o por encima del valor `max` (si fue "
-"especificado) de la restricción.<br>"
-"                                                                                                                                                                                                                            "
+"especificado) de la restricción."
+"<br>                                                                                                                                                                                                                            "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                                "
+"| `hole`                    | min/"
+"max                                                                                                                "
 "| Comprueba el tamaño (diámetro) de un agujero taladrado en un pad o vía. "
 "Para agujeros ovalados, el diámetro menor será comparado con el valor `min` "
 "(si fue especificado) y el diámetro mayor será comparado con el valor `max` "
-"(si fue especificado).<br>"
-"                                                                                                                                                                                                                                  "
+"(si fue especificado)."
+"<br>                                                                                                                                                                                                                                  "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                    "
+"| `hole_clearance`          | "
+"min                                                                                                                    "
 "| Comprueba el margen entre un agujero taladrado en un pad o vía y objetos "
 "de cobre en una red distinta. El margen se mide desde el diámetro del "
-"agujero, no su centro.<br>"
-"                                                                                                                                                                                                                                                                                                                   "
+"agujero, no su centro."
+"<br>                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                    "
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
 "| Comprueba el margen entre agujeros taladrados mecánicamente en pads y "
-"vías. El margen se mide desde los diámetros de los agujeros, no sus "
-"centros.<br><br>Esta restricción es únicamente para la protección de brocas "
-"de taladro. El margen entre agujeros **taladrados por láser** (microvías) y "
+"vías. El margen se mide desde los diámetros de los agujeros, no sus centros."
+"<br><br>Esta restricción es únicamente para la protección de brocas de "
+"taladro. El margen entre agujeros **taladrados por láser** (microvías) y "
 "otros agujeros no taladrados mecánicamente no es comprobado, y tampoco lo es "
 "el margen entre agujeros **ranurados** (forma ovalada) y otros agujeros no "
 "taladrados mecánicamente.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                    "
+"| `physical_clearance`      | "
+"min                                                                                                                    "
 "| Comprueba el margen entre dos objetos en una capa dada (incluyendo capas "
 "que no son de cobre).<br><br>Aunque esto pueda realizar comprobaciones de "
 "propósito más general que `clearance`, es mucho más lento. Use `clearance` "
-"cuando sea posible.<br>"
-"                                                                                                                                                                                                                                         "
+"cuando sea posible."
+"<br>                                                                                                                                                                                                                                         "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                    "
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
 "| Comprueba el margen entre un agujero taladrado en un pad o vía y algún "
 "otro objeto, sin importar su red. El margen se mide desde el diámetro del "
 "agujero, no su centro.<br><br>También se puede pensar de esto como la "
 "\"tolerancia de taladrado\" ya que solo incluye agujeros **redondos**. (Vea "
-"`edge_clearance` para la tolerancia de ranurado).<br>"
-"                                                                                                                                     "
+"`edge_clearance` para la tolerancia de ranurado)."
+"<br>                                                                                                                                     "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                            "
-"| Comprueba el margen entre objetos en capas de serigrafía y otros "
-"objetos.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Comprueba el margen entre objetos en capas de serigrafía y otros objetos."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                    "
+"| `skew`                    | "
+"max                                                                                                                    "
 "| Comprueba la desviación (skew) total para las redes que coincidan con la "
 "condición de regla, es decir, la diferencia entre la longitud de cada red y "
 "el promedio de las longitudes de todas las redes que coinciden. Si el valor "
 "absoluto de la diferencia entre tal promedio y el largo de cualquier red "
-"está por encima del valor de restricción `max`, se generará un error.<br>"
-"                                                                                                           "
+"está por encima del valor de restricción `max`, se generará un error."
+"<br>                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                    "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
 "| Especifica el ancho del espacio entre un pad y una zona con una conexión "
-"de alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                               "
+"de alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                    "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
 "| Especifica el ancho de los radios que conectan un pad a una zona con una "
-"conexión de alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                      "
+"conexión de alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                            "
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
 "| Comprueba el ancho de segmentos de pista y arco. Se generará un error por "
 "cada segmento que tenga un ancho menor al valor `min` (si fue especificado) "
-"o mayor al valor `max` (si fue especificado).<br>"
-"                                                                                                                                                                                                                                                                                       "
+"o mayor al valor `max` (si fue especificado)."
+"<br>                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                    "
+"| `via_count`               | "
+"max                                                                                                                    "
 "| Cuenta el número de vías en cada red que coincide con la condición de "
 "regla. Si tal número excede el valor de restricción `max` en cualquiera de "
-"las redes coincidentes, se generará un error para tal red.<br>"
-"                                                                                                                                                                                                                                                                               "
+"las redes coincidentes, se generará un error para tal red."
+"<br>                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                 "
-"| Especifica la conexión a ser realizada entre una zona y un pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                           "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Especifica la conexión a ser realizada entre una zona y un pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "\n"
 "\n"
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
-"_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
+"binarias)_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -40791,8 +40804,8 @@ msgstr ""
 "\n"
 "### Funciones de expresiones\n"
 "\n"
-"Todos los parámetros de las funciones admiten comodines simples (`*` y `?`)"
-".\n"
+"Todos los parámetros de las funciones admiten comodines simples (`*` y `?"
+"`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<referencia_de_huella>')\n"
@@ -40903,13 +40916,13 @@ msgstr ""
 "\n"
 "    (rule \"Distancia entre vías de redes distintas\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Margen entre pads de redes distintas\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Margen de agujero de vía a pista\"\n"
@@ -41013,12 +41026,12 @@ msgstr ""
 "\n"
 "    # Permitir violaciones de agujero a agujero de vía ciega/enterrada a "
 "micro-via cuando se sabe que\n"
-"    # el fabricante perforará mecánicamente los agujeros ciegos/enterrados -"
-"antes- de perforar\n"
+"    # el fabricante perforará mecánicamente los agujeros ciegos/enterrados "
+"-antes- de perforar\n"
 "    # con láser las micro-vías.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -41042,8 +41055,8 @@ msgstr ""
 "### Items\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
-"_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
+"binarias)_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -42280,7 +42293,8 @@ msgstr "Falta la expresión de aserción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr "La opción within_diff_pairs no es válida para este tipo de restricción."
+msgstr ""
+"La opción within_diff_pairs no es válida para este tipo de restricción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:511
 msgid "Missing min value."
@@ -42845,15 +42859,15 @@ msgstr "(%s longitud máxima %s; real %s)"
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"( %s desviación mínima %s ; real %s ; longitud de red objetivo %s (desde %s )"
-"; real %s )"
+"( %s desviación mínima %s ; real %s ; longitud de red objetivo %s (desde "
+"%s ); real %s )"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
 #, c-format
 msgid "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"( %s desviación máxima %s ; real %s ; longitud de red objetivo %s (desde %s )"
-"; real %s )"
+"( %s desviación máxima %s ; real %s ; longitud de red objetivo %s (desde "
+"%s ); real %s )"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 #, c-format
@@ -43002,7 +43016,8 @@ msgstr "Construyendo máscara de soldadura..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:910
 msgid "Checking solder mask to silk clearance..."
-msgstr "Comprobando el espacio entre la máscara de soldadura y la serigrafía..."
+msgstr ""
+"Comprobando el espacio entre la máscara de soldadura y la serigrafía..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:915
 msgid "Checking solder mask web integrity..."
@@ -43323,8 +43338,8 @@ msgstr "Error al agregar borde del segmento (%d %d) -> (%d %d)"
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Error al agregar curva de arco desde (%d %d), arco p0 (%d %d), medio (%d %d)"
-", p1 (%d %d)"
+"Error al agregar curva de arco desde (%d %d), arco p0 (%d %d), medio (%d "
+"%d), p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1648
 #, c-format
@@ -43474,7 +43489,8 @@ msgstr "¿Cargar el archivo de recuperación '%s'?"
 #: pcbnew/files.cpp:361
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "Se cerrará la placa actual, ¿guardar cambios a '%s' antes de continuar?"
+msgstr ""
+"Se cerrará la placa actual, ¿guardar cambios a '%s' antes de continuar?"
 
 #: pcbnew/files.cpp:375
 msgid "Current Board will be closed. Continue?"
@@ -43790,8 +43806,8 @@ msgstr ""
 "No se permite escribir/modificar bibliotecas de legado (archivos .mod)\n"
 "Por favor, guarde la biblioteca actual en el nuevo formato .pretty\n"
 "y actualice su tabla de bibliotecas de huellas\n"
-"para guardar la huella (un archivo .kicad_mod) en la carpeta de biblioteca "
-".pretty"
+"para guardar la huella (un archivo .kicad_mod) en la carpeta de "
+"biblioteca .pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 msgid ""
@@ -44550,8 +44566,8 @@ msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está bloqueada)"
-"."
+"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está "
+"bloqueada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, c-format
@@ -44664,7 +44680,8 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:713
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr ""
+"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:719
 #, c-format
@@ -44706,8 +44723,8 @@ msgstr "%s pin %s desconectado."
 #, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr ""
-"No se encontró red para el componente %s pad %s (no hay pin %s en el símbolo)"
-"."
+"No se encontró red para el componente %s pad %s (no hay pin %s en el "
+"símbolo)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:925
 #, c-format
@@ -45525,7 +45542,8 @@ msgstr "Tipo de información primitiva extendida desconocida: '%s'."
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
+msgstr ""
+"El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:287
 #, c-format
@@ -46623,7 +46641,8 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:663
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Nombre de forma de pad desconocido '%s' en la capa '%s' en la fila %zu."
+msgstr ""
+"Nombre de forma de pad desconocido '%s' en la capa '%s' en la fila %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
 #, c-format
@@ -46860,7 +46879,8 @@ msgstr "Exportando capa %s, red %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2844
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr "La vía usa un padstack no soportado; se omitió de los datos de taladro."
+msgstr ""
+"La vía usa un padstack no soportado; se omitió de los datos de taladro."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2870
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
@@ -48778,7 +48798,8 @@ msgstr "Anulado por una mayor holgura física de %s;holgura: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "Remplazado por un margen de orificio físico mayor desde %s; margen: %s."
+msgstr ""
+"Remplazado por un margen de orificio físico mayor desde %s; margen: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:954
 msgid "Items belong to the same net. Min clearance is 0."
@@ -50112,7 +50133,8 @@ msgstr "Dibujar brechas de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
-msgstr "Creación de GAPS de longitud específica (para aplicaciones micro-ondas)"
+msgstr ""
+"Creación de GAPS de longitud específica (para aplicaciones micro-ondas)"
 
 #: pcbnew/tools/pcb_actions.cpp:879
 msgid "Draw Microwave Stubs"
@@ -50401,7 +50423,8 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1196
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr "Permite que los elementos sean movidos y/o redimensionados en el lienzo"
+msgstr ""
+"Permite que los elementos sean movidos y/o redimensionados en el lienzo"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Group the selected items so that they are treated as a single item"
@@ -50496,8 +50519,8 @@ msgstr "Líneas aéreas locales"
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr ""
-"Alterna la visualización de líneas aéreas para los elemento(s) seleccionado"
-"(s)"
+"Alterna la visualización de líneas aéreas para los elemento(s) "
+"seleccionado(s)"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Scripting Console"
@@ -51327,7 +51350,8 @@ msgstr "Cancelar elemento actual"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
 msgid "Skip current item and route next selected item."
-msgstr "Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
+msgstr ""
+"Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -51393,7 +51417,8 @@ msgstr "Ajustes de longitud..."
 
 #: pcbnew/tools/pcb_actions.cpp:2516
 msgid "Displays tuning pattern properties dialog"
-msgstr "Muestra el cuadro de diálogo de propiedades del patrón de sintonización"
+msgstr ""
+"Muestra el cuadro de diálogo de propiedades del patrón de sintonización"
 
 #: pcbnew/tools/pcb_control.cpp:247
 msgid "Don't show again"

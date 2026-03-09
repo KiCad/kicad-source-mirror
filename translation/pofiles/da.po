@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-06 23:59+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/v9/da/>\n"
@@ -1325,7 +1325,8 @@ msgstr "8x"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr "3D-Viewer skal være lukket og genåbnet for at anvende denne indstilling"
+msgstr ""
+"3D-Viewer skal være lukket og genåbnet for at anvende denne indstilling"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 #, fuzzy
@@ -6067,8 +6068,8 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -6105,7 +6106,7 @@ msgstr "Linje"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6772,7 +6773,7 @@ msgstr "Bue"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6811,7 +6812,7 @@ msgstr "Segment"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6850,7 +6851,7 @@ msgstr "Punkter"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6869,7 +6870,7 @@ msgstr "Bredde"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6966,7 +6967,7 @@ msgstr "Liniefarve:"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6992,7 +6993,7 @@ msgstr "Kursiv"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -7010,7 +7011,7 @@ msgstr "Fed + Kursiv"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -7023,7 +7024,7 @@ msgstr "Venstre"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -7038,7 +7039,7 @@ msgstr "Centrum"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -7048,7 +7049,7 @@ msgstr "Højre"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Øverst"
@@ -7057,7 +7058,7 @@ msgstr "Øverst"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Bunden"
@@ -7069,7 +7070,7 @@ msgstr "Bunden"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -7082,7 +7083,7 @@ msgid "Orientation"
 msgstr "Orientering"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -7105,8 +7106,8 @@ msgstr "Tekstegenskaber"
 msgid "Font"
 msgstr ""
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -7116,28 +7117,28 @@ msgstr ""
 msgid "Thickness"
 msgstr "Tykkelse"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Spejlet"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Horisontal begrundelse"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Vertikal begrundelse"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -7170,8 +7171,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Basisstien til lokalt installerede systemfodsporbiblioteker (.pretty folders)"
-"."
+"Basisstien til lokalt installerede systemfodsporbiblioteker (.pretty "
+"folders)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -11657,7 +11658,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "Net %s er grafisk forbundet med bus %s, men er ikke medlem af denne bus"
+msgstr ""
+"Net %s er grafisk forbundet med bus %s, men er ikke medlem af denne bus"
 
 #: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
 #, fuzzy
@@ -11961,7 +11963,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom.cpp:296
 #, fuzzy
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/dialogs/dialog_bom.cpp:301
 #, fuzzy
@@ -12932,7 +12935,8 @@ msgstr "%s Eksport"
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 #, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:718
 #: eeschema/dialogs/dialog_export_netlist.cpp:757
@@ -13613,7 +13617,7 @@ msgstr "V Juster"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13659,27 +13663,27 @@ msgstr "Slet felt"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Input"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Resultat"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Tovejs"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Tri-state"
@@ -13687,18 +13691,18 @@ msgstr "Tri-state"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Passiv"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 #, fuzzy
 msgid "Dot"
 msgstr "Prikker"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr ""
 
@@ -16862,7 +16866,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Opdater / nulstil feltstørrelser og typografier"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Syntaks Hjælp"
 
@@ -18550,12 +18554,12 @@ msgstr "Vandret"
 msgid "Vertical"
 msgstr "Vertikalt"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 #, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Regler for automatisk placering"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 #, fuzzy
 msgid "Private"
@@ -19682,7 +19686,8 @@ msgstr "Åbn skematisk"
 #: eeschema/sch_edit_frame.cpp:1463
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
@@ -19774,7 +19779,7 @@ msgstr "Forrige lag"
 msgid "Sheet References"
 msgstr "Intersheet Referencer"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 #, fuzzy
 msgid "Show Field Name"
 msgstr "Nyt feltnavn:"
@@ -20767,17 +20772,17 @@ msgstr "Mærkat '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Netetiket"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Globalt mærke '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarkisk etiket '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 #, fuzzy
 msgid "Pin length"
 msgstr "& Pin længde:"
@@ -21488,8 +21493,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>D [0..7 ]</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>"
-"\n"
+"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </"
+"td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> <br> </td>\n"
@@ -21510,8 +21515,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> præfiks {net1 net2 ...} </samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td>"
-"\n"
+"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </"
+"td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> USB1 {DP DM} </samp> </td>\n"
@@ -22653,7 +22658,8 @@ msgstr "Der var fejl under netlisteksporten, afbrudt."
 #: eeschema/sim/simulator_frame.cpp:371
 #, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/sim/simulator_frame.cpp:415
 msgid ""
@@ -23833,7 +23839,8 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:353
 #, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: eeschema/tools/backannotate.cpp:356
 #, fuzzy
@@ -30826,8 +30833,8 @@ msgstr ""
 "* __a__ dæmpning i dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (tabet)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / "
-"(L - 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / (L "
+"- 1) ___\n"
 "* ___R1 = Z <sub> i </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ud </sub> \\ * A - R2___\n"
 
@@ -30874,8 +30881,8 @@ msgstr ""
 "* __a__ dæmpning i dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (tabet)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / "
-"(L - 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> ind </sub> \\ * Z <sub> ud </sub>) / (L "
+"- 1) ___\n"
 "* ___R1 = Z <sub> i </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ud </sub> \\ * A - R2___\n"
 
@@ -35679,7 +35686,8 @@ msgstr "Bliv tilpasset dimensionen"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "Indstil automatisk tekstretningen, så den svarer til dimensionslinjerne"
+msgstr ""
+"Indstil automatisk tekstretningen, så den svarer til dimensionslinjerne"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
@@ -38868,7 +38876,8 @@ msgstr "Affasningshjørner:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:289
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr "Fasede hjørner. Positionen er i forhold til en padorientering 0 grader."
+msgstr ""
+"Fasede hjørner. Positionen er i forhold til en padorientering 0 grader."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:296
@@ -39382,7 +39391,8 @@ msgstr ""
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr "forvent 0 og brug deres begrænsninger, især til lodde maske min bredde."
+msgstr ""
+"forvent 0 og brug deres begrænsninger, især til lodde maske min bredde."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -39518,8 +39528,8 @@ msgstr ""
 "Indstil global breddekorrektion for nøjagtig bredde PostScript-output.\n"
 "Denne bredde korrektion er beregnet til at kompensere spor bredde og også "
 "fejl på pads og vias størrelse.\n"
-"Den rimelige breddekorrektionsværdi skal være i området [- (MinTrackWidth-1)"
-", + (MinClearanceValue-1)]."
+"Den rimelige breddekorrektionsværdi skal være i området [- "
+"(MinTrackWidth-1), + (MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -46660,7 +46670,8 @@ msgstr "Skift til PCB Editor"
 #: pcbnew/pcb_edit_frame.cpp:236
 #, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/pcb_edit_frame.cpp:502
 msgid "New PCB file is unsaved"
@@ -48997,7 +49008,8 @@ msgstr "Fejl ved udpakning af fil!\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1992 pcbnew/tools/drc_tool.cpp:160
 #, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2013 pcbnew/pcbnew_jobs_handler.cpp:2046
 #, fuzzy
@@ -49731,7 +49743,8 @@ msgstr "Ingen bestyrelsesproblemer fundet."
 #: pcbnew/tools/board_editor_control.cpp:647
 #, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
+msgstr ""
+"Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""

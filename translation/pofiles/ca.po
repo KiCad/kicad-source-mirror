@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-06 22:34+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
@@ -538,7 +538,8 @@ msgstr "Mostra els models 3D"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:289
 #, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Commuta els models 3D pels components del tipus 'Muntats en superfície'"
+msgstr ""
+"Commuta els models 3D pels components del tipus 'Muntats en superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:297
 msgid "Show Unspecified 3D Models"
@@ -564,7 +565,8 @@ msgstr "Mostrar models 3D marcats com a DNP"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:316
 #, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Commuta els models 3D pels components del tipus 'Muntats en superfície'"
+msgstr ""
+"Commuta els models 3D pels components del tipus 'Muntats en superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
@@ -3538,8 +3540,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Seleccioni una <b>Opció</b> de la llista superior, i cliqui el botó de <b>"
-"Afegir Opció Seleccionada</b>."
+"Seleccioni una <b>Opció</b> de la llista superior, i cliqui el botó de "
+"<b>Afegir Opció Seleccionada</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, fuzzy, c-format
@@ -4759,7 +4761,8 @@ msgstr "Un sobrenom de la fila de la taula de biblioteques està buit."
 #: common/dialogs/panel_design_block_lib_table.cpp:544
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:567
 msgid "A library table row path cell is empty."
-msgstr "Una cel·la del camí de la fila de la taula de la biblioteca està buida."
+msgstr ""
+"Una cel·la del camí de la fila de la taula de la biblioteca està buida."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:571
@@ -5314,8 +5317,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Aquesta escala proporciona una mida d'imatge molt grossa (%.1f mm o %.2f mil)"
-". N'estàs segur?"
+"Aquesta escala proporciona una mida d'imatge molt grossa (%.1f mm o %.2f "
+"mil). N'estàs segur?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
 #, fuzzy
@@ -6011,8 +6014,8 @@ msgstr ""
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -6049,7 +6052,7 @@ msgstr "Línia"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6696,7 +6699,7 @@ msgstr "Arc"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6735,7 +6738,7 @@ msgstr "Segment"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6774,7 +6777,7 @@ msgstr "Punts"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6793,7 +6796,7 @@ msgstr "Amplada"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6886,7 +6889,7 @@ msgstr "Color d'emplenament"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6912,7 +6915,7 @@ msgstr "Cursiva"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6930,7 +6933,7 @@ msgstr "Negreta+itàlica"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -6943,7 +6946,7 @@ msgstr "Esquerra"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6958,7 +6961,7 @@ msgstr "Centre"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -6968,7 +6971,7 @@ msgstr "Dreta"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Superior"
@@ -6977,7 +6980,7 @@ msgstr "Superior"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Inferior"
@@ -6989,7 +6992,7 @@ msgstr "Inferior"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -7002,7 +7005,7 @@ msgid "Orientation"
 msgstr "Orientació"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -7025,8 +7028,8 @@ msgstr "Propietats del text"
 msgid "Font"
 msgstr "Tipus de lletra"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -7036,28 +7039,28 @@ msgstr "Tipus de lletra"
 msgid "Thickness"
 msgstr "Gruix"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Reflexió"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Justificat horitzontal"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Justificat vertical"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -7102,7 +7105,8 @@ msgstr "El camí base de les biblioteques d'empremtes instal·lades localment."
 
 #: common/env_vars.cpp:109
 msgid "A directory containing project templates installed with KiCad."
-msgstr "La carpeta que conté les plantilles de projecte instal·lades per KiCad."
+msgstr ""
+"La carpeta que conté les plantilles de projecte instal·lades per KiCad."
 
 #: common/env_vars.cpp:111
 msgid ""
@@ -11199,7 +11203,8 @@ msgstr "Fitxer de projecte: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:1084
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
+msgstr ""
+"No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:211
 msgid "Footprint Association File"
@@ -13501,7 +13506,7 @@ msgstr "Alineació V"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13547,27 +13552,27 @@ msgstr "Esborra un camp"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Entrada"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Sortida"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Bidireccional"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Triestat"
@@ -13575,17 +13580,17 @@ msgstr "Triestat"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Passiu"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 msgid "Dot"
 msgstr "Punt"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr "Diamant"
 
@@ -16721,7 +16726,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Actualitza/restableix la mida i els estils dels camps"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Ajuda de sintaxis"
 
@@ -18414,12 +18419,12 @@ msgstr "Horitzontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 #, fuzzy
 msgid "Allow Autoplacement"
 msgstr "Posiciona automàticament els camps"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 msgid "Private"
 msgstr "Privat"
@@ -19632,7 +19637,7 @@ msgstr "Enrere a la fulla seleccionada prèviament"
 msgid "Sheet References"
 msgstr "Referències de fulla"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 #, fuzzy
 msgid "Show Field Name"
 msgstr "Nou nom del camp:"
@@ -20586,17 +20591,17 @@ msgstr "Etiqueta '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Etiqueta de directiva [%s %s]"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Etiqueta global '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Etiqueta jeràrquica '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 #, fuzzy
 msgid "Pin length"
 msgstr "Longitud de pin:"
@@ -20816,7 +20821,8 @@ msgstr "Recorrent al cau per definir el símbol '%s:%s' enllaç '%s'."
 #: eeschema/sch_screen.cpp:798
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "No s'ha trobat el símbol de biblioteca pel símbol d'esquemàtic '%s %s'."
+msgstr ""
+"No s'ha trobat el símbol de biblioteca pel símbol d'esquemàtic '%s %s'."
 
 #: eeschema/sch_shape.cpp:537
 #, c-format
@@ -21253,9 +21259,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -21292,9 +21298,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definició de Bus</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Xarxes resultants</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -25649,7 +25654,8 @@ msgstr ""
 #: pcbnew/tools/footprint_editor_control.cpp:675
 #, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
+msgstr ""
+"No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: eeschema/tools/symbol_editor_control.cpp:505
 #: eeschema/widgets/panel_symbol_chooser.cpp:705
@@ -40167,7 +40173,8 @@ msgstr "Reverteix els canvis"
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 #, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "La mida de perforació de la via és més petita que el diàmetre de la via"
+msgstr ""
+"La mida de perforació de la via és més petita que el diàmetre de la via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:651
 msgid "Via start layer and end layer cannot be the same"
@@ -43379,7 +43386,8 @@ msgstr "S'estan verificant els marges dels coures a la vora de la placa..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:153
 msgid "Checking silk to board edge clearances..."
-msgstr "S'estan verificant els marges de la serigrafia a la vora de la placa..."
+msgstr ""
+"S'estan verificant els marges de la serigrafia a la vora de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -46144,7 +46152,8 @@ msgstr "Error: la mida de la cantonada és negativa."
 #: pcbnew/pad.cpp:2400
 #, fuzzy, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "La mida de perforació de la via és més petita que el diàmetre de la via"
+msgstr ""
+"La mida de perforació de la via és més petita que el diàmetre de la via"
 
 #: pcbnew/pad.cpp:2424
 #, fuzzy
@@ -48225,8 +48234,8 @@ msgstr ""
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"introduïu el mòdul de python que implementi les funcions PLUGIN::Footprint*()"
-"."
+"introduïu el mòdul de python que implementi les funcions "
+"PLUGIN::Footprint*()."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"

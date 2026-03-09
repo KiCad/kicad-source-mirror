@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-09 18:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
@@ -1972,7 +1972,8 @@ msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
 #: common/common.cpp:708
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "Det här operativsystemet stöds inte längre av KiCad och dess beroenden."
+msgstr ""
+"Det här operativsystemet stöds inte längre av KiCad och dess beroenden."
 
 #: common/common.cpp:710
 msgid "Unsupported Operating System"
@@ -4310,7 +4311,8 @@ msgstr "Automatisk"
 #: common/dialogs/panel_common_settings_base.cpp:201
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr "Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
+msgstr ""
+"Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
 msgid "Toolbar icon size:"
@@ -5133,8 +5135,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Denna skala resulterar i en bild som är mycket stor (%.1f mm eller %.2f tum)"
-". Är du säker?"
+"Denna skala resulterar i en bild som är mycket stor (%.1f mm eller %.2f "
+"tum). Är du säker?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
 msgid "Scale:"
@@ -5817,8 +5819,8 @@ msgstr "Minnet tog slut."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5855,7 +5857,7 @@ msgstr "Linje"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6486,7 +6488,7 @@ msgstr "Båge"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6523,7 +6525,7 @@ msgstr "Segment"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6562,7 +6564,7 @@ msgstr "Punkter"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6581,7 +6583,7 @@ msgstr "Bredd"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6671,7 +6673,7 @@ msgstr "Fyllningsfärg"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6697,7 +6699,7 @@ msgstr "Kursiv"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6715,7 +6717,7 @@ msgstr "Fet+Kursiv"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -6728,7 +6730,7 @@ msgstr "Vänster"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6743,7 +6745,7 @@ msgstr "Centrera"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -6753,7 +6755,7 @@ msgstr "Höger"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Överst"
@@ -6762,7 +6764,7 @@ msgstr "Överst"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Nederst"
@@ -6774,7 +6776,7 @@ msgstr "Nederst"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -6787,7 +6789,7 @@ msgid "Orientation"
 msgstr "Orientering"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6810,8 +6812,8 @@ msgstr "Textegenskaper"
 msgid "Font"
 msgstr "Typsnitt"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -6821,28 +6823,28 @@ msgstr "Typsnitt"
 msgid "Thickness"
 msgstr "Tjocklek"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Spegelvänd"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Horisontell Justering"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Vertikal Justering"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -9440,7 +9442,8 @@ msgstr "Visa rutnät i redigeringsfönstrets bakgrund"
 
 #: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
-msgstr "Aktiverar objektspecifika rutnät som åsidosätter det nuvarande rutnätet"
+msgstr ""
+"Aktiverar objektspecifika rutnät som åsidosätter det nuvarande rutnätet"
 
 #: common/tool/actions.cpp:933
 msgid "Edit grid definitions"
@@ -12323,8 +12326,8 @@ msgstr "Spara alla effektförluster"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Skriv direktiv för att spara effektförlusterna för alla objekt (.probe p"
-"(<objekt>))"
+"Skriv direktiv för att spara effektförlusterna för alla objekt (.probe "
+"p(<objekt>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -13009,7 +13012,7 @@ msgstr "Vert. justering"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13055,27 +13058,27 @@ msgstr "Ta bort fält"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Indata"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Utdata"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Dubbelriktad"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Tretillstånds"
@@ -13083,17 +13086,17 @@ msgstr "Tretillstånds"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Passiv"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 msgid "Dot"
 msgstr "Punkt"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr "Diamant"
 
@@ -16091,7 +16094,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Uppdatera/återställ fältens storlekar och stilar"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Syntaxhjälp"
 
@@ -17666,11 +17669,11 @@ msgstr "Horisontell"
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 msgid "Allow Autoplacement"
 msgstr "Tillåt automatisk placering"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 msgid "Private"
 msgstr "Privat"
@@ -18589,7 +18592,8 @@ msgstr "Det gick inte att spara räddningsbiblioteket %s."
 
 #: eeschema/project_rescue.cpp:893
 msgid "Error occurred saving project specific symbol library table."
-msgstr "Ett fel inträffade när projektspecifik symbolbibliotekstabell sparades."
+msgstr ""
+"Ett fel inträffade när projektspecifik symbolbibliotekstabell sparades."
 
 #: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:169
 msgid "Not Found"
@@ -18752,7 +18756,8 @@ msgstr "Öppna kretsschema"
 
 #: eeschema/sch_edit_frame.cpp:1463
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
+msgstr ""
+"Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
 
 #: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
@@ -18837,7 +18842,7 @@ msgstr "Tillbaka till tidigare valt ark"
 msgid "Sheet References"
 msgstr "Arkreferenser"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 msgid "Show Field Name"
 msgstr "Visa fältnamn"
 
@@ -19806,17 +19811,17 @@ msgstr "Etikett '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Direktivetikett [%s %s]"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Global etikett '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarkisk etikett '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 msgid "Pin length"
 msgstr "Stiftlängd"
 
@@ -20438,9 +20443,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{överbalk}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>överbalk</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>överbalk</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20461,8 +20466,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> av symbol <i>refdes</i></samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> av symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20477,9 +20482,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Buss definition</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resulterande nät</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -26046,7 +26050,8 @@ msgstr "Ändra Render Color för"
 #: pcbnew/widgets/appearance_controls.cpp:2500
 msgid ""
 "Left double click or middle click for color change, right click for menu"
-msgstr "Vänster dubbelklicka eller mittklick för färgbyte, högerklicka för meny"
+msgstr ""
+"Vänster dubbelklicka eller mittklick för färgbyte, högerklicka för meny"
 
 #: gerbview/widgets/layer_widget.cpp:351
 msgid "Enable this for visibility"
@@ -26643,7 +26648,8 @@ msgstr "Skapa unika stiftnamn"
 #: kicad/cli/command_pcb_export_gencad.cpp:46
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "Skapa en ny form för varje fotavtrycksinstans (använd inte former igen)"
+msgstr ""
+"Skapa en ny form för varje fotavtrycksinstans (använd inte former igen)"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:50
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
@@ -31019,8 +31025,8 @@ msgstr ""
 "\n"
 "Beräkningsverktyget uppskattar energin som behövs för att hetta upp "
 "ledaren<br>\n"
-"till smältpunkten, såväl som energin som behövs för tillståndsförändring.<br>"
-"\n"
+"till smältpunkten, såväl som energin som behövs för tillståndsförändring."
+"<br>\n"
 "Denna energi jämförs sedan med den i ledarresistansen avgivna energin."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
@@ -31044,8 +31050,8 @@ msgstr ""
 "kontakt med varandra under vissa förhållanden.<br>\n"
 "Anoden i ett elektrokemiskt par oxideras och fräts bort, medan katoden får "
 "upplösta metaller pläterad på sig men förblir skyddad.<br>\n"
-"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk (+)"
-", kalla och varma färger indikerar också raders potential.<br>\n"
+"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk "
+"(+), kalla och varma färger indikerar också raders potential.<br>\n"
 "EN 50310 föreslår en potentialdifferens under 300mV. Känd praxis använder "
 "sig av en tredje gränssnittsmetall mellan huvudparet (t.ex. plätering av typ "
 "ENIG).<br>\n"
@@ -31073,8 +31079,8 @@ msgstr ""
 "\n"
 "Emellertid täcks vissa fall inte av denna kalkylator:\n"
 "\n"
-"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
-"4 behandlar dessa fall.\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. "
+"IEC60664-4 behandlar dessa fall.\n"
 "- Om täckande skikt eller ingjutning används för att skydda mot "
 "nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
 "isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
@@ -31242,8 +31248,8 @@ msgstr ""
 "mil (10 mm).\n"
 "\n"
 "Formeln, från IPC 2221, är\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "där:<br>\n"
 "___I___ är maximal ström i A<br>\n"
 "___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C<br>\n"
@@ -32318,8 +32324,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Det finns %i typer av referensbeteckningar i bruk<br/>"
-"**********************************************************<br/>"
+"<br/>Det finns %i typer av referensbeteckningar i bruk<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
 #, c-format
@@ -32365,8 +32371,8 @@ msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"<br/>Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.<br/>"
-"Designregelkontroll med alternativet 'Kontrollera att mönsterkort och "
+"<br/>Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.<br/"
+">Designregelkontroll med alternativet 'Kontrollera att mönsterkort och "
 "kretsschema överensstämmer' ikryssat rekommenderas.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
@@ -36353,7 +36359,8 @@ msgstr "Använda referensbeteckningar för att matcha symboler och fotavtryck.\n
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:246
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Använda t-stämplar (unika ID) för att matcha symboler och fotavtryck.\n"
+msgstr ""
+"Använda t-stämplar (unika ID) för att matcha symboler och fotavtryck.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
@@ -40187,178 +40194,174 @@ msgid ""
 msgstr ""
 "### Begränsningar\n"
 "\n"
-"| Begränsningstyp           | Argumenttyp"
-"                                                                                                           "
-"| Beskrivning"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"| Begränsningstyp           | "
+"Argumenttyp                                                                                                           "
+"| "
+"Beskrivning                                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"|---------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------"
-"|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Kontrollerar bredden på ringformade ringar på vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                           "
-"| Kontrollerar bredden på ringformade ringar på vias.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
+"| Kontrollerar det givna uttrycket."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                     "
-"| Kontrollerar det givna uttrycket.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                   "
+"| `clearance`               | "
+"min                                                                                                                   "
 "| Anger det **elektriska** avståndet mellan kopparobjekt i olika nät. (Se "
-"`physical_clearance` om du vill ange avstånd mellan objekt oavsett nät.)<br>"
-"<br>För att tillåta kopparobjekt att överlappa (kollidera), skapa en "
-"`clearance`(avstånds)-begränsning med `min`-värdet mindre än noll (till "
-"exempel `-1`).<br>"
-"                                                                                                                                    "
+"`physical_clearance` om du vill ange avstånd mellan objekt oavsett "
+"nät.)<br><br>För att tillåta kopparobjekt att överlappa (kollidera), skapa "
+"en `clearance`(avstånds)-begränsning med `min`-värdet mindre än noll (till "
+"exempel `-1`)."
+"<br>                                                                                                                                    "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                   "
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
 "| Kontrollerar avståndet mellan gårdsplaner och genererar ett fel om två "
 "gårdsplaner är närmare varandra än `min`-avståndet. Om ett gårdsplan inte "
-"har en gårdsplansform genereras inga fel från denna begränsning.<br>"
-"                                                                                                                                                                                                                                  "
+"har en gårdsplansform genereras inga fel från denna begränsning."
+"<br>                                                                                                                                                                                                                                  "
 "|\n"
-"| `creepage`                | min"
-"                                                                                                                   "
-"| Anger krypavståndet mellan kopparföremål i olika nät.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                              "
+"| `creepage`                | "
+"min                                                                                                                   "
+"| Anger krypavståndet mellan kopparföremål i olika nät."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                           "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar avståndet mellan kopplade spår i ett differentialpar. "
 "Kopplade spår är segment som är parallella med varandra. Differentialparets "
 "avstånd testas inte på frikopplade delar av ett differentialpar (till "
-"exempel fanout från en komponent).<br>"
-"                                                                                                                                                                                            "
+"exempel fanout från en komponent)."
+"<br>                                                                                                                                                                                            "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                   "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
 "| Kontrollerar avståndet som ett differentiellt parspår dirigeras okopplat "
 "från det andra polaritetsspåret i paret (till exempel där paret sprider sig "
 "ut från en komponent, eller blir okopplat för att passera runt ett annat "
-"objekt, såsom en via).<br>"
-"                                                                                                                                                                                               "
+"objekt, såsom en via)."
+"<br>                                                                                                                                                                                               "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Ange en eller flera objekttyper som ska förbjudas, "
-"separerade med mellanslag. Till exempel `(constraint disallow track)` eller `"
-"(constraint disallow track via pad)`. Om ett objekt av den här typen matchar "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Ange en eller flera objekttyper som ska förbjudas, separerade med "
+"mellanslag. Till exempel `(constraint disallow track)` eller `(constraint "
+"disallow track via pad)`. Om ett objekt av den här typen matchar "
 "regelvillkoret skapas ett DRC-fel.<br><br>Denna begränsning är i huvudsak "
 "densamma som ett område för att hålla ute-reglerna, men kan användas för att "
-"skapa mer specifika begränsningar för att hålla ute-reglerna.<br>"
-"                 |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                           "
+"skapa mer specifika begränsningar för att hålla ute-reglerna."
+"<br>                 |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar avståndet mellan objekt och skivans kant.<br><br>Detta kan "
 "också betraktas som \"milling tolerance\"(frästolerans) eftersom skivans "
-"kant kommer att inkludera alla grafiska objekt på lagret `Edge.Cuts`"
-"(kantskärningar) samt eventuella *ovala* hål i plattan. (Se "
-"`physical_hole_clearance` för borrtoleransen.)<br>"
-"                                                                                                                      "
+"kant kommer att inkludera alla grafiska objekt på lagret "
+"`Edge.Cuts`(kantskärningar) samt eventuella *ovala* hål i plattan. (Se "
+"`physical_hole_clearance` för "
+"borrtoleransen.)<br>                                                                                                                      "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                               "
+"| `length`                  | min/"
+"max                                                                                                               "
 "| Kontrollerar den totala routade längden för de nät som matchar "
 "regelvillkoret och genererar ett fel för varje nät som är under `min`-värdet "
-"(om det anges) eller över `max`-värdet (om det anges) för begränsningen.<br>"
-"                                                                                                                                                                                                                               "
+"(om det anges) eller över `max`-värdet (om det anges) för begränsningen."
+"<br>                                                                                                                                                                                                                               "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                               "
+"| `hole`                    | min/"
+"max                                                                                                               "
 "| Kontrollerar storleken (diametern) på ett borrat hål i en dyna eller via. "
 "För ovala hål testas den mindre (mindre) diametern mot `min`-värdet (om det "
 "anges) och den större (större) diametern testas mot `max`-värdet (om det "
-"anges).<br>"
-"                                                                                                                                                                                                             "
+"anges)."
+"<br>                                                                                                                                                                                                             "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                   "
+"| `hole_clearance`          | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan ett borrat hål i en dyna eller via och "
 "kopparföremål på ett annat nät. Spelet mäts från hålets diameter, inte dess "
-"centrum.<br>"
-"                                                                                                                                                                                                                                                                                             "
+"centrum."
+"<br>                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                   "
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan mekaniskt borrade hål i plattor och vias. "
-"Spelet mäts mellan hålens diametrar, inte mellan deras mittpunkter.<br><br>"
-"Denna begränsning är enbart för att skydda borrkronor. Spelet mellan "
+"Spelet mäts mellan hålens diametrar, inte mellan deras mittpunkter."
+"<br><br>Denna begränsning är enbart för att skydda borrkronor. Spelet mellan "
 "**laserborrade** (mikrovias) och andra icke-mekaniskt borrade hål "
 "kontrolleras inte, inte heller mellan **frästa** (ovala) och andra icke-"
 "mekaniskt borrade hål.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                   "
+"| `physical_clearance`      | "
+"min                                                                                                                   "
 "| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible.<br>"
-"                                                                                                                                                                                                                           "
+"than `clearance`, it is much slower.  Use `clearance` where possible."
+"<br>                                                                                                                                                                                                                           "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                   "
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan ett borrat hål i en dyna eller via och ett "
 "annat objekt, oavsett nät. Spelet mäts från hålets diameter, inte dess "
 "centrum.<br><br>Detta kan också betraktas som \"borrtolerans\" eftersom det "
 "bara inkluderar **runda** hål (se `edge_clearance`(kantspel) för "
-"frästoleransen).<br>"
-"                                                                                                                                           "
+"frästoleransen)."
+"<br>                                                                                                                                           "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                           "
-"| Kontrollerar avståndet mellan objekt på silkscreen-lager och andra "
-"objekt.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                         "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Kontrollerar avståndet mellan objekt på silkscreen-lager och andra objekt."
+"<br>                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                   "
+"| `skew`                    | "
+"max                                                                                                                   "
 "| Kontrollerar den totala snedvridningen för de nät som matchar "
 "regelvillkoret, det vill säga skillnaden mellan längden på varje nät och "
 "medelvärdet av alla längder på varje nät som matchas av regeln. Om det "
 "absoluta värdet av skillnaden mellan det medelvärdet och längden på något "
-"nät är över begränsningsvärdet `max` genereras ett fel.<br>"
-"                                                                                                    "
+"nät är över begränsningsvärdet `max` genereras ett fel."
+"<br>                                                                                                    "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                   "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
 "| Anger bredden på mellanrummet mellan en dyna och en zon med en termisk "
-"avlastningsanslutning..<br>"
-"                                                                                                                                                                                                                                                                                                                                                     "
+"avlastningsanslutning.."
+"<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                   "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
 "| Anger bredden på ekrarna som förbinder en dyna med en zon med en termisk "
-"avlastningsanslutning.<br>"
-"                                                                                                                                                                                                                                                                                                                                                    "
+"avlastningsanslutning."
+"<br>                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                           "
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar vinkeln mellan två anslutna spårsegment. Ett fel genereras "
 "för varje anslutet par med en vinkel under `min`-värdet (om angivet) eller "
-"över `max`-värdet (om angivet).<br>"
-"                                                                                                                                                                                                                                                                 "
+"över `max`-värdet (om angivet)."
+"<br>                                                                                                                                                                                                                                                                 "
 "|\n"
-"| `track_segment_length`    | min/max"
-"                                                                                                               "
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
 "| Kontrollerar längden på spår- och bågsegment. Ett fel genereras för varje "
 "segment som har en längd under `min`-värdet (om angivet) eller över `max`-"
-"värdet (om angivet).<br>"
-"                                                                                                                                                                                                                                                                           "
+"värdet (om angivet)."
+"<br>                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                   "
+"| `via_count`               | "
+"max                                                                                                                   "
 "| Räknar antalet vias på varje nät som matchas av regelvillkoret. Om det "
 "antalet överstiger begränsningens `max`-värde på något matchat nät genereras "
-"ett fel för det nätet.<br>"
-"                                                                                                                                                                                                                                                                         "
+"ett fel för det nätet."
+"<br>                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                "
-"| Anger anslutningen som ska göras mellan en zon och en pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                         "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| Anger anslutningen som ska göras mellan en zon och en pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "\n"
 "\n"
@@ -40945,13 +40948,13 @@ msgstr ""
 "\n"
 "    (rule \"Avstånd mellan vior i olika nät\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Frigång mellan lödytor i olika nät\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Frigång mellan viahål och ledare\"\n"
@@ -41064,8 +41067,8 @@ msgstr ""
 "laserborrning \n"
 "    # av mikrovior.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -41174,7 +41177,8 @@ msgstr "mönsterkortsinställningarnas begränsningar för anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup constraints silk text height"
-msgstr "mönsterkortsinställningarnas begränsning för texthöjd i anvisningstryck"
+msgstr ""
+"mönsterkortsinställningarnas begränsning för texthöjd i anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:204
 msgid "board setup constraints silk text thickness"
@@ -44236,7 +44240,8 @@ msgstr "Uppdaterade %s fotavtrycksfilter till '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:697
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr ""
+"Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
@@ -44246,7 +44251,8 @@ msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:713
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr ""
+"Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:719
 #, c-format
@@ -46867,7 +46873,8 @@ msgstr "Lösenord för <b>inloggning</b> till någon speciell biblioteksserver."
 #: pcbnew/pcb_io/pcb_io.cpp:196
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr "Ange pythonmodulen som implementerar funktionerna PCB_IO::Footprint*()."
+msgstr ""
+"Ange pythonmodulen som implementerar funktionerna PCB_IO::Footprint*()."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -47082,7 +47089,8 @@ msgstr "Footprint har ingen bakgård."
 #: pcbnew/pcbexpr_functions.cpp:662
 #, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Saknat argument för regelområde (A, B eller regelområdets namn) för %s."
+msgstr ""
+"Saknat argument för regelområde (A, B eller regelområdets namn) för %s."
 
 #: pcbnew/pcbexpr_functions.cpp:877
 #, c-format
@@ -47473,7 +47481,8 @@ msgstr "Placera Microvia"
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Lägger till en mikrovia i slutet av den ledare som dras för närvarande."
+msgstr ""
+"Lägger till en mikrovia i slutet av den ledare som dras för närvarande."
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Select Layer and Place Through Via..."
@@ -47933,7 +47942,8 @@ msgstr "Inga mönsterkortsproblem hittades."
 
 #: pcbnew/tools/board_editor_control.cpp:647
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Uppdatering av mönsterkort kräver att schemat är fullständigt numrerat."
+msgstr ""
+"Uppdatering av mönsterkort kräver att schemat är fullständigt numrerat."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""
@@ -50762,7 +50772,8 @@ msgstr "Försök avsluta"
 
 #: pcbnew/tools/pcb_actions.cpp:2389
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr "Försöker göra klart nuvarande ledardragning till närmaste nätlinjeända."
+msgstr ""
+"Försöker göra klart nuvarande ledardragning till närmaste nätlinjeända."
 
 #: pcbnew/tools/pcb_actions.cpp:2396
 msgid "Route Selected"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-09 13:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
@@ -5803,8 +5803,8 @@ msgstr "Nedostatek paměti."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5841,7 +5841,7 @@ msgstr "Čára"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6471,7 +6471,7 @@ msgstr "Oblouk"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6508,7 +6508,7 @@ msgstr "Segment"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6547,7 +6547,7 @@ msgstr "Body"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6566,7 +6566,7 @@ msgstr "Šířka"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6656,7 +6656,7 @@ msgstr "Barva výplně"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6682,7 +6682,7 @@ msgstr "Kurzíva"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6700,7 +6700,7 @@ msgstr "Tučné+kurzíva"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -6713,7 +6713,7 @@ msgstr "Vlevo"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6728,7 +6728,7 @@ msgstr "Na střed"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -6738,7 +6738,7 @@ msgstr "Vpravo"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Horní"
@@ -6747,7 +6747,7 @@ msgstr "Horní"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Dolní"
@@ -6759,7 +6759,7 @@ msgstr "Dolní"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -6772,7 +6772,7 @@ msgid "Orientation"
 msgstr "Orientace"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6795,8 +6795,8 @@ msgstr "Vlastnosti textu"
 msgid "Font"
 msgstr "Písmo"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -6806,28 +6806,28 @@ msgstr "Písmo"
 msgid "Thickness"
 msgstr "Tloušťka"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Zrcadlený"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Horizontální zarovnání"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Vertikální zarovnání"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -6857,8 +6857,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálně instalovanému systému knihoven pouzder (složky "
-".pretty)."
+"Základní cesta k lokálně instalovanému systému knihoven pouzder "
+"(složky .pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -11534,8 +11534,8 @@ msgstr ""
 "\n"
 " * `%I`: absolutní cesta a název souboru průběžného netlistu, který je "
 "vstupem do generátoru BOM\n"
-" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony souboru)"
-"\n"
+" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony "
+"souboru)\n"
 " * `%B`: základní název souboru výstupního BOM (bez přípony souboru)\n"
 " * `%P`: absolutní cesta k adresáři projektu, bez koncového lomítka\n"
 "\n"
@@ -11555,8 +11555,8 @@ msgstr ""
 "souboru>\n"
 "```\n"
 "\n"
-"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:\\U"
-"sers\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
+"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:"
+"\\Users\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\jménouživatele\\kicad\\my_python_script.py \"%I\" "
@@ -11967,8 +11967,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde nalezen)"
-",\n"
+"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde "
+"nalezen),\n"
 "zkuste najít kandidáta majícího stejné jméno v jedné z načtených knihoven "
 "symbolů."
 
@@ -12978,7 +12978,7 @@ msgstr "V Zarovnání"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13024,27 +13024,27 @@ msgstr "Smazat pole"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Vstup"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Výstup"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Obousměrný"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Tří-stavový"
@@ -13052,17 +13052,17 @@ msgstr "Tří-stavový"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Pasivní"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 msgid "Dot"
 msgstr "Tečka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr "Diamant"
 
@@ -13766,7 +13766,8 @@ msgstr "Alternativní název vývodu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
+msgstr ""
+"Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
@@ -14481,7 +14482,8 @@ msgstr "Okraj"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:95
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
+msgstr ""
+"Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
@@ -16065,7 +16067,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Aktualizace/reset velikostí a stylů polí"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
 
@@ -17249,7 +17251,8 @@ msgstr "Symbol %s má vstupní vývody na jednotkách %s, které nejsou umístě
 #: eeschema/erc/erc.cpp:673
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
+msgstr ""
+"Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc/erc.cpp:696
 #, c-format
@@ -17652,11 +17655,11 @@ msgstr "Horizontálně"
 msgid "Vertical"
 msgstr "Vertikální"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 msgid "Allow Autoplacement"
 msgstr "Povolit automatické umístění"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 #, fuzzy
 msgid "Private"
@@ -18421,7 +18424,8 @@ msgstr "Změnit jednotku"
 #: eeschema/picksymbol.cpp:198
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
+msgstr ""
+"Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
 #: eeschema/picksymbol.cpp:221 eeschema/tools/sch_edit_tool.cpp:2043
 msgid "Change Body Style"
@@ -18820,7 +18824,7 @@ msgstr "Zpět na předchozí vybraný list"
 msgid "Sheet References"
 msgstr "Reference listů"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 #, fuzzy
 msgid "Show Field Name"
 msgstr "Zobrazit název pole"
@@ -19204,7 +19208,8 @@ msgstr ""
 #: eeschema/sch_io/database/sch_io_database.cpp:297
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
+msgstr ""
+"Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -19767,17 +19772,17 @@ msgstr "Označení '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Směrnice označení [%s %s]"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Globální označení '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchické označení '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 msgid "Pin length"
 msgstr "Délka vývodu"
 
@@ -20414,9 +20419,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20453,9 +20458,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20560,7 +20564,8 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
+msgstr ""
+"Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
 
 #: eeschema/schematic.cpp:1566
 msgid "Schematic Cleanup"
@@ -21995,7 +22000,8 @@ msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 #: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
+msgstr ""
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/symbol_checker.cpp:402
 #, c-format
@@ -26774,7 +26780,8 @@ msgstr "Zahrnout pouze SMD pouzdra (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:78
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
+msgstr ""
+"Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:99
@@ -31202,8 +31209,8 @@ msgstr ""
 "stoupne do 100 °C a šířky do 400 mil (10 mm).\n"
 "\n"
 "Vzorec z IPC 2221 je\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "kde:<br>\n"
 "___I___ je maximální proud v A<br>\n"
 "___&Delta;T___ je zvýšení teploty nad okolním v &deg;C<br>\n"
@@ -32278,8 +32285,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Používají se %i referenční prefixy<br/>"
-"**********************************************************<br/>"
+"<br/>Používají se %i referenční prefixy<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
 #, c-format
@@ -35490,8 +35497,8 @@ msgstr "Použít relativní cestu?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru desky)"
-"!"
+"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
+"desky)!"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:338
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:447
@@ -37809,8 +37816,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Pokud je povoleno, router se pokusí propojit plošky/prokovy čistým "
-"způsobem - vyhýbat se ostrým úhlům a zubatým spojům."
+"Pokud je povoleno, router se pokusí propojit plošky/prokovy čistým způsobem "
+"- vyhýbat se ostrým úhlům a zubatým spojům."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
@@ -44140,7 +44147,8 @@ msgstr "%s pouzdro ID '%s' není platné."
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
+msgstr ""
+"%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -45645,12 +45653,14 @@ msgstr "Žádný '%s' balíček v knihovně '%s'."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2350
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
+msgstr ""
+"Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1607
 #, fuzzy, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
+msgstr ""
+"Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1915
 #, c-format
@@ -46267,7 +46277,8 @@ msgstr "%d není platný počet vrstev"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2812
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+msgstr ""
+"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3211
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6388
@@ -46354,7 +46365,8 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6663
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+msgstr ""
+"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6287
 #, fuzzy, c-format

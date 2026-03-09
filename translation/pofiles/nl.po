@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-06 13:07-0800\n"
+"POT-Creation-Date: 2026-03-09 11:11-0700\n"
 "PO-Revision-Date: 2026-03-06 23:08+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v9/nl/>\n"
@@ -5849,8 +5849,8 @@ msgstr "Onvoldoende werkgeheugen."
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:391
 #: common/eda_item.cpp:392 common/eda_item.cpp:420 common/eda_text.cpp:1349
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:47
-#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1919
-#: eeschema/sch_label.cpp:2329 eeschema/sch_tablecell.cpp:150
+#: eeschema/sch_field.cpp:1233 eeschema/sch_field.cpp:1925
+#: eeschema/sch_label.cpp:2347 eeschema/sch_tablecell.cpp:150
 #: eeschema/sch_text.cpp:694 eeschema/sch_text.h:59 eeschema/schematic.cpp:80
 #: eeschema/widgets/panel_sch_selection_filter.cpp:203
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:55
@@ -5887,7 +5887,7 @@ msgstr "Lijn"
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_shape.cpp:987
 #: common/eda_shape.cpp:2332
 #: eeschema/dialogs/dialog_label_properties_base.cpp:200
-#: eeschema/sch_label.cpp:2310
+#: eeschema/sch_label.cpp:2328
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2738
 #: pcbnew/pcb_dimension.cpp:2027
 msgid "Rectangle"
@@ -6520,7 +6520,7 @@ msgstr "Boog"
 
 #: common/eda_shape.cpp:331 common/eda_shape.cpp:983 common/eda_shape.cpp:2334
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
-#: eeschema/sch_label.cpp:2308 gerbview/gerber_draw_item.cpp:231
+#: eeschema/sch_label.cpp:2326 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:1627
 #: pcbnew/pad.cpp:2737 pcbnew/pcb_dimension.cpp:2028
 msgid "Circle"
@@ -6557,7 +6557,7 @@ msgstr "Segment"
 #: common/eda_shape.cpp:999 common/eda_shape.cpp:2384
 #: eeschema/dialogs/dialog_label_properties_base.cpp:174
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#: eeschema/sch_label.cpp:2290 eeschema/sch_label.cpp:2322
+#: eeschema/sch_label.cpp:2308 eeschema/sch_label.cpp:2340
 #: eeschema/sch_tablecell.cpp:227 eeschema/sch_textbox.cpp:681
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:228
@@ -6596,7 +6596,7 @@ msgstr "Punten"
 
 #: common/eda_shape.cpp:1027 common/eda_shape.cpp:2429 common/eda_text.cpp:1389
 #: eeschema/sch_bitmap.cpp:201 eeschema/sch_bitmap.cpp:340
-#: eeschema/sch_field.cpp:1900 eeschema/sch_tablecell.cpp:228
+#: eeschema/sch_field.cpp:1906 eeschema/sch_tablecell.cpp:228
 #: eeschema/sch_tablecell.cpp:236 eeschema/sch_text.cpp:840
 #: eeschema/sch_textbox.cpp:683 pcbnew/dialogs/dialog_board_statistics.cpp:685
 #: pcbnew/dialogs/dialog_board_statistics.cpp:695
@@ -6615,7 +6615,7 @@ msgstr "Breedte"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
-#: eeschema/sch_field.cpp:1901 eeschema/sch_tablecell.cpp:229
+#: eeschema/sch_field.cpp:1907 eeschema/sch_tablecell.cpp:229
 #: eeschema/sch_tablecell.cpp:237 eeschema/sch_text.cpp:841
 #: eeschema/sch_textbox.cpp:684 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:696
@@ -6705,7 +6705,7 @@ msgstr "Vulkleur"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:119
 #: eeschema/dialogs/dialog_text_properties_base.cpp:113
 #: eeschema/fields_grid_table.cpp:496 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2331 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2349 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
@@ -6731,7 +6731,7 @@ msgstr "Cursief"
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:116
 #: eeschema/dialogs/dialog_text_properties_base.cpp:108
 #: eeschema/fields_grid_table.cpp:497 eeschema/sch_label.cpp:1248
-#: eeschema/sch_label.cpp:2332 eeschema/sch_tablecell.cpp:159
+#: eeschema/sch_label.cpp:2350 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
 #: eeschema/widgets/tuner_slider_base.cpp:48
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
@@ -6749,7 +6749,7 @@ msgstr "Vet Italic"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:319 eeschema/fields_grid_table.cpp:773
 #: eeschema/fields_grid_table.cpp:917 eeschema/pin_type.cpp:113
-#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1854
+#: eeschema/sch_field.cpp:1245 eeschema/sch_field.cpp:1860
 #: eeschema/sch_pin.cpp:2118 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2629
 msgid "Left"
@@ -6762,7 +6762,7 @@ msgstr "Links"
 #: eeschema/fields_grid_table.cpp:774 eeschema/fields_grid_table.cpp:785
 #: eeschema/fields_grid_table.cpp:919 eeschema/fields_grid_table.cpp:941
 #: eeschema/sch_field.cpp:1246 eeschema/sch_field.cpp:1256
-#: eeschema/sch_field.cpp:1855 eeschema/sch_field.cpp:1864
+#: eeschema/sch_field.cpp:1861 eeschema/sch_field.cpp:1870
 #: eeschema/sch_text.cpp:724 gerbview/gerber_file_image.cpp:375
 #: gerbview/gerber_file_image.cpp:378
 #: pcbnew/dialogs/dialog_shape_properties.cpp:886
@@ -6777,7 +6777,7 @@ msgstr "Centreren"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:283
 #: eeschema/fields_grid_table.cpp:321 eeschema/fields_grid_table.cpp:775
 #: eeschema/fields_grid_table.cpp:921 eeschema/pin_type.cpp:112
-#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1856
+#: eeschema/sch_field.cpp:1247 eeschema/sch_field.cpp:1862
 #: eeschema/sch_pin.cpp:2117 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2630
 msgid "Right"
@@ -6787,7 +6787,7 @@ msgstr "Rechts"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:311 eeschema/fields_grid_table.cpp:784
 #: eeschema/fields_grid_table.cpp:939 eeschema/sch_field.cpp:1255
-#: eeschema/sch_field.cpp:1863 eeschema/sch_text.cpp:723
+#: eeschema/sch_field.cpp:1869 eeschema/sch_text.cpp:723
 #: pcbnew/dialogs/dialog_render_job.cpp:42
 msgid "Top"
 msgstr "Top"
@@ -6796,7 +6796,7 @@ msgstr "Top"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:307
 #: eeschema/fields_grid_table.cpp:313 eeschema/fields_grid_table.cpp:786
 #: eeschema/fields_grid_table.cpp:943 eeschema/sch_field.cpp:1257
-#: eeschema/sch_field.cpp:1865 eeschema/sch_text.cpp:725
+#: eeschema/sch_field.cpp:1871 eeschema/sch_text.cpp:725
 #: pcbnew/dialogs/dialog_render_job.cpp:38
 msgid "Bottom"
 msgstr "Onderkant"
@@ -6808,7 +6808,7 @@ msgstr "Onderkant"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:68
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
-#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1908
+#: eeschema/fields_grid_table.cpp:499 eeschema/sch_field.cpp:1914
 #: eeschema/sch_pin.cpp:1580 eeschema/sch_pin.cpp:2163
 #: eeschema/sch_symbol.cpp:3046 eeschema/sch_tablecell.cpp:239
 #: eeschema/sch_text.cpp:849 eeschema/sch_textbox.cpp:711
@@ -6821,7 +6821,7 @@ msgid "Orientation"
 msgstr "Oriëntatie"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
-#: eeschema/sch_field.cpp:1875 eeschema/sch_field.cpp:1906
+#: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
 #: eeschema/sch_text.cpp:846 eeschema/sch_textbox.cpp:709
 #: pcbnew/dialogs/dialog_text_properties.cpp:152
 #: pcbnew/dialogs/dialog_text_properties_base.h:112
@@ -6844,8 +6844,8 @@ msgstr "Teksteigenschappen"
 msgid "Font"
 msgstr "Lettertype"
 
-#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1898
-#: eeschema/sch_label.cpp:2330 eeschema/sch_tablecell.cpp:238
+#: common/eda_text.cpp:1360 eeschema/sch_field.cpp:1904
+#: eeschema/sch_label.cpp:2348 eeschema/sch_tablecell.cpp:238
 #: eeschema/sch_text.cpp:842 eeschema/sch_textbox.cpp:685
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -6855,28 +6855,28 @@ msgstr "Lettertype"
 msgid "Thickness"
 msgstr "Dikte"
 
-#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1899
+#: common/eda_text.cpp:1371 eeschema/sch_field.cpp:1905
 #: eeschema/sch_tablecell.cpp:240 eeschema/sch_text.cpp:839
 #: pcbnew/microwave/microwave_polygon.cpp:127
 #: pcbnew/pcb_fields_grid_table.cpp:160
 msgid "Mirrored"
 msgstr "Gespiegeld"
 
-#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1878
-#: eeschema/sch_field.cpp:1881 eeschema/sch_label.cpp:2334
+#: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
+#: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
 msgstr "Horizontale uitlijning"
 
-#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1885
-#: eeschema/sch_field.cpp:1888 eeschema/sch_label.cpp:2336
+#: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
 #: pcbnew/pcb_dimension.cpp:1938 pcbnew/pcb_dimension.cpp:1971
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
 msgstr "Verticale uitlijning"
 
-#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1897
-#: eeschema/sch_label.cpp:2294 eeschema/sch_tablecell.cpp:242
+#: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
+#: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
 #: pcbnew/pcb_dimension.cpp:1941 pcbnew/pcb_dimension.cpp:1974
 #: pcbnew/pcb_dimension.cpp:2012 pcbnew/pcb_dimension.cpp:2054
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_field.cpp:303
@@ -9281,7 +9281,8 @@ msgstr "Markering uitzonderen"
 
 #: common/tool/actions.cpp:551
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr "Huidige overtreding in het controlescherm markeren als een uitzondering"
+msgstr ""
+"Huidige overtreding in het controlescherm markeren als een uitzondering"
 
 #: common/tool/actions.cpp:564 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
 msgid "Refresh"
@@ -11697,8 +11698,9 @@ msgstr ""
 "python <scriptbestandsnaam> <invoerbestandsnaam> <uitvoerbestandsnaam>\n"
 "```\n"
 "\n"
-"Op Windows, als het gewenste generatiescript voor een CSV-BOM `C:\\Users\\g"
-"ebruikersnaam\\kicad\\my_python_script.py` is, zou de opdrachtregel zijn:\n"
+"Op Windows, als het gewenste generatiescript voor een CSV-BOM `C:"
+"\\Users\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de "
+"opdrachtregel zijn:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\gebruikersnaam\\kicad\\my_python_script.py \"%I\" "
@@ -12488,7 +12490,8 @@ msgstr "%s exporteren"
 #: eeschema/dialogs/dialog_export_netlist.cpp:658
 #: eeschema/netlist_exporters/netlist_generator.cpp:56
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Het exporteren van de netlijst vereist een volledig geannoteerd schema."
+msgstr ""
+"Het exporteren van de netlijst vereist een volledig geannoteerd schema."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:718
 #: eeschema/dialogs/dialog_export_netlist.cpp:757
@@ -13130,7 +13133,7 @@ msgstr "V uitlijnen"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:67
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:64
 #: eeschema/fields_grid_table.cpp:498 eeschema/sch_field.cpp:1241
-#: eeschema/sch_field.cpp:1904 eeschema/sch_label.cpp:1252
+#: eeschema/sch_field.cpp:1910 eeschema/sch_label.cpp:1252
 #: eeschema/sch_tablecell.cpp:163 eeschema/sch_text.cpp:707
 #: eeschema/sch_text.cpp:844 eeschema/sch_textbox.cpp:545
 #: eeschema/sch_textbox.cpp:706 pcbnew/tools/board_inspection_tool.cpp:1434
@@ -13176,27 +13179,27 @@ msgstr "Veld verwijderen"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:176
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:55
 #: eeschema/pin_type.cpp:85 eeschema/sch_label.cpp:98
-#: eeschema/sch_label.cpp:2252 eeschema/sch_pin.cpp:2084
+#: eeschema/sch_label.cpp:2270 eeschema/sch_pin.cpp:2084
 msgid "Input"
 msgstr "Ingang"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:179
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:58
 #: eeschema/pin_type.cpp:86 eeschema/sch_label.cpp:99
-#: eeschema/sch_label.cpp:2253 eeschema/sch_pin.cpp:2085
+#: eeschema/sch_label.cpp:2271 eeschema/sch_pin.cpp:2085
 msgid "Output"
 msgstr "Uitgang"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:182
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:61
 #: eeschema/pin_type.cpp:87 eeschema/sch_label.cpp:100
-#: eeschema/sch_label.cpp:2254 eeschema/sch_pin.cpp:2086
+#: eeschema/sch_label.cpp:2272 eeschema/sch_pin.cpp:2086
 msgid "Bidirectional"
 msgstr "Bidirectioneel"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
-#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2255
+#: eeschema/pin_type.cpp:88 eeschema/sch_label.cpp:2273
 #: eeschema/sch_pin.cpp:2087
 msgid "Tri-state"
 msgstr "Tri-state"
@@ -13204,17 +13207,17 @@ msgstr "Tri-state"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
 #: eeschema/pin_type.cpp:89 eeschema/sch_label.cpp:102
-#: eeschema/sch_label.cpp:2256 eeschema/sch_pin.cpp:2088
+#: eeschema/sch_label.cpp:2274 eeschema/sch_pin.cpp:2088
 msgid "Passive"
 msgstr "Passief"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:191
-#: eeschema/sch_label.cpp:2307
+#: eeschema/sch_label.cpp:2325
 msgid "Dot"
 msgstr "Stip"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:197
-#: eeschema/sch_label.cpp:2309
+#: eeschema/sch_label.cpp:2327
 msgid "Diamond"
 msgstr "Ruit"
 
@@ -16114,9 +16117,9 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
-"Ongeldige hyperlinkbestemming. Voer een valide URL in (bijv. file:// of http"
-"(s)://), of “#<paginanummer>” om een hyperlink naar een pagina in dit schema "
-"te maken."
+"Ongeldige hyperlinkbestemming. Voer een valide URL in (bijv. file:// of "
+"http(s)://), of “#<paginanummer>” om een hyperlink naar een pagina in dit "
+"schema te maken."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:591
 #: pcbnew/dialogs/dialog_text_properties.cpp:554
@@ -16228,7 +16231,7 @@ msgid "Update/reset field sizes and styles"
 msgstr "Veldmaten en -stijlen bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:259
-#: eeschema/sch_label.cpp:2229 pcbnew/dialogs/panel_setup_rules.cpp:877
+#: eeschema/sch_label.cpp:2247 pcbnew/dialogs/panel_setup_rules.cpp:877
 msgid "Syntax Help"
 msgstr "Syntaxishulp"
 
@@ -16250,7 +16253,8 @@ msgstr "Draad-/busbreedte:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr "Zet breedte op 0 om de draad-/busbreedte van de netklasse te gebruiken."
+msgstr ""
+"Zet breedte op 0 om de draad-/busbreedte van de netklasse te gebruiken."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
@@ -16458,7 +16462,8 @@ msgstr "<ESC> wist netmarkering"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr "Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
+msgstr ""
+"Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -16553,7 +16558,8 @@ msgstr "Automatische veldplaatsing toestaan om uit&lijning te wijzigen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:251
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
+msgstr ""
+"Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
@@ -16678,7 +16684,8 @@ msgstr "Globaal-labelmarge:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
 msgid "Percentage of the text size to use as space around a global label"
-msgstr "Percentage van de tekstgrootte als tussenruimte rond een algemeen label"
+msgstr ""
+"Percentage van de tekstgrootte als tussenruimte rond een algemeen label"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:122
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:158
@@ -17810,11 +17817,11 @@ msgstr "Horizontaal"
 msgid "Vertical"
 msgstr "Verticaal"
 
-#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1894
+#: eeschema/fields_grid_table.cpp:504 eeschema/sch_field.cpp:1900
 msgid "Allow Autoplacement"
 msgstr "Autoplaatsing toestaan"
 
-#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1933
+#: eeschema/fields_grid_table.cpp:505 eeschema/sch_field.cpp:1939
 #: eeschema/sch_item.cpp:597 eeschema/sch_item.cpp:682
 msgid "Private"
 msgstr "Privé"
@@ -18992,7 +18999,7 @@ msgstr "Terug naar vorig geselecteerde blad"
 msgid "Sheet References"
 msgstr "Bladverwijzingen"
 
-#: eeschema/sch_field.cpp:1891
+#: eeschema/sch_field.cpp:1897
 msgid "Show Field Name"
 msgstr "Veldnaam weergeven"
 
@@ -19970,17 +19977,17 @@ msgstr "Label '%s'"
 msgid "Directive Label [%s %s]"
 msgstr "Richtlijnlabel [%s %s]"
 
-#: eeschema/sch_label.cpp:2065
+#: eeschema/sch_label.cpp:2083
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Globaal label '%s'"
 
-#: eeschema/sch_label.cpp:2212
+#: eeschema/sch_label.cpp:2230
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hiërarchisch label '%s'"
 
-#: eeschema/sch_label.cpp:2325
+#: eeschema/sch_label.cpp:2343
 msgid "Pin length"
 msgstr "Pinlengte"
 
@@ -20608,9 +20615,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20631,8 +20638,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20647,9 +20654,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busdefinitie</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resulterende netten</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -24647,7 +24653,8 @@ msgstr "Symbool waarschuwingen"
 
 #: eeschema/tools/sch_inspection_tool.cpp:358
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Selecteer een symbool om te vergelijken met zijn bibliotheekequivalent."
+msgstr ""
+"Selecteer een symbool om te vergelijken met zijn bibliotheekequivalent."
 
 #: eeschema/tools/sch_inspection_tool.cpp:379
 #, c-format
@@ -25678,8 +25685,8 @@ msgstr "Bestand is niet gevonden:"
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
-"<b>Een gerber-taakbestand kan niet worden geladen als een plotbestand</b> <i>"
-"%s</i>"
+"<b>Een gerber-taakbestand kan niet worden geladen als een plotbestand</b> "
+"<i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -26948,7 +26955,8 @@ msgstr "PDF genereren van een lijst van lagen"
 #: kicad/cli/command_pcb_export_pdf.cpp:44
 #: kicad/cli/command_pcb_export_svg.cpp:52
 msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr "Spiegel het bord (nuttig voor het weergeven van lagen aan de onderkant)"
+msgstr ""
+"Spiegel het bord (nuttig voor het weergeven van lagen aan de onderkant)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:89
 msgid "Color theme to use (will default to PCB Editor settings)"
@@ -27271,7 +27279,8 @@ msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:68
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Kleurthema om te gebruiken (volgt standaard de schema-editorinstelling)"
+msgstr ""
+"Kleurthema om te gebruiken (volgt standaard de schema-editorinstelling)"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
 #, fuzzy
@@ -27335,7 +27344,8 @@ msgstr "Exporteert symbool of hele symboolbibliotheek naar SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
 msgid "Color theme to use (will default to symbol editor settings)"
-msgstr "Kleurthema om te gebruiken (volgt standaard de symbooleditorinstelling)"
+msgstr ""
+"Kleurthema om te gebruiken (volgt standaard de symbooleditorinstelling)"
 
 #: kicad/cli/command_sym_export_svg.cpp:54
 msgid "Specific symbol to export within the library"
@@ -29045,7 +29055,8 @@ msgstr "Fout!"
 
 #: kicad/tools/kicad_manager_control.cpp:787
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Maak een nieuw project (of open een project) om het schema te bewerken."
+msgstr ""
+"Maak een nieuw project (of open een project) om het schema te bewerken."
 
 #: kicad/tools/kicad_manager_control.cpp:792
 msgid "Create (or open) a project to edit a pcb."
@@ -31131,7 +31142,8 @@ msgstr "Thermische weerstand:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
+msgstr ""
+"Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
@@ -31536,12 +31548,12 @@ msgstr ""
 "\n"
 "De controlerende waarde is vetgedrukt.\n"
 "\n"
-"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A (intern)"
-", temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
+"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A "
+"(intern), temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
 "\n"
 "De formule, uit IPC 2221, is\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "where:<br>\n"
 "___I___ is maximale stroom in A<br>\n"
 "___&Delta;T___ is temperatuurstijging boven omgevingstemperatuur in "
@@ -33276,7 +33288,8 @@ msgstr "Colineaire sporen samen&voegen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:53
 msgid "merge aligned track segments, and remove null segments"
-msgstr "gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
+msgstr ""
+"gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:57
 msgid "Delete tracks unconnected at one end"
@@ -38163,8 +38176,8 @@ msgid ""
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
 "Indien ingeschakeld probeert de router botsende sporen achter vaste "
-"obstakels (bijv. pads) langs te verplaatsen in plaats van de botsing te “"
-"reflecteren”"
+"obstakels (bijv. pads) langs te verplaatsen in plaats van de botsing te "
+"“reflecteren”"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2810
@@ -40676,134 +40689,129 @@ msgstr ""
 "\n"
 "### Beperkingen\n"
 "\n"
-"| Beperkingstype            | Argumenttype"
-"                                                                                                           "
-"| Description"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"| Beperkingstype            | "
+"Argumenttype                                                                                                           "
+"| "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------"
-"|------------------------------------------------------------------------------------------------------------------------"
-"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Controleert de breedte van annulusringen op vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                            "
-"| Controleert de breedte van annulusringen op vias.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                      "
+"| Controleert op de gegeven expressie."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                      "
-"| Controleert op de gegeven expressie.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                    "
+"| `clearance`               | "
+"min                                                                                                                    "
 "| Specificeert de **elektrische** vrije afstand tussen koperobjecten van "
 "verschillende netten.  (Zie `physical_clearance` als u de vrije afstand "
 "tussen objecten ongeacht het net wilt specificeren.)<br><br>Maak om "
 "koperobjecten te laten overlappen (botsen) een `clearance`-beperking met een "
-"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`).<br>"
-"                                                                                                   "
+"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`)."
+"<br>                                                                                                   "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                    "
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
 "| Controleert de vrije afstand tussen footprint-afbakeningen en genereert "
 "een fout als twee afbakeningen dichter bij elkaar zijn dan de `min`-"
 "afstand.  Als een footprint geen afbakeningsvorm heeft worden er geen "
-"foutmeldingen gegenereerd door deze beperking.<br>"
-"                                                                                                                                                                                    "
+"foutmeldingen gegenereerd door deze beperking."
+"<br>                                                                                                                                                                                    "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                            "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
 "| Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
 "paar.  Gekoppelde sporen zijn segmenten die parallel aan elkaar lopen.  De "
 "tussenruimte van differentiele paren wordt niet getest op ongekoppelde delen "
-"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component)"
-".<br>"
-"                                                                                                                                      "
+"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component)."
+"<br>                                                                                                                                      "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                    "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
 "| Controleert de afstand waar een differentieel paar ongekoppeld is "
 "gerouteerd van het andere polariteitsspoor in het paar (bijvoorbeeld waar "
 "het paar uitwaaiert van een component, of ongekoppeld wordt om een ander "
-"object zoals een via te passeren).<br>"
-"                                                                                                                                                                                             "
+"object zoals een via te passeren)."
+"<br>                                                                                                                                                                                             "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Geef één of meer objecttypes om te verbieden, gescheiden "
-"door spaties.  Bijvoorbeeld, `(constraint disallow track)` of `(constraint "
-"disallow track via pad)`.  Als een object van dit type overeen komt met de "
-"regelvoorwaarde wordt een DRC-fout aangemaakt.<br><br>Deze beperking is in "
-"essentie hetzelfde als een weerregelgebied, maar kan gebruikt worden om meer "
-"specifieke weerbeperkingen te creëren.<br>"
-"                                       |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
+"Bijvoorbeeld, `(constraint disallow track)` of `(constraint disallow track "
+"via pad)`.  Als een object van dit type overeen komt met de regelvoorwaarde "
+"wordt een DRC-fout aangemaakt.<br><br>Deze beperking is in essentie "
+"hetzelfde als een weerregelgebied, maar kan gebruikt worden om meer "
+"specifieke weerbeperkingen te creëren."
+"<br>                                       |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Controleert de vrije afstand tussen objecten en de bordrand.<br><br>Dit "
 "kan ook beschouwd worden als de “freestolerantie” aangezien de bordrand alle "
 "grafische items op de `Edge.Cuts`-laag zal omvatten, evenals eventuele "
-"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de boortolerantie.)"
-"<br>"
-"                                                                                                                                              "
+"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de "
+"boortolerantie.)<br>                                                                                                                                              "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                                "
+"| `length`                  | min/"
+"max                                                                                                                "
 "| Controleert de totale gerouteerde lengte voor de netten die overeenkomen "
 "met de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
 "waarde (als opgegeven) of boven de `max`-waarde (als opgegeven) van de "
-"beperking ligt.<br>"
-"                                                                                                                                                                                                        "
+"beperking ligt."
+"<br>                                                                                                                                                                                                        "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                                "
+"| `hole`                    | min/"
+"max                                                                                                                "
 "| Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
 "ovale gaten zal de kleinere (minore) diameter worden getest tegen de `min`-"
 "waarde (als opgegeven) en de grotere (majore) diameter zal worden getest "
-"tegen de `max`-waarde (als opgegeven).<br>"
-"                                                                                                                                                                               "
+"tegen de `max`-waarde (als opgegeven)."
+"<br>                                                                                                                                                                               "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                    "
+"| `hole_clearance`          | "
+"min                                                                                                                    "
 "| Controleert de vrije afstand tussen een boorgat in een pad of via en "
 "koperobjecten op een ander net.  De vrije afstand wordt gemeten vanaf de "
-"diameter van het gat, niet vanuit het midden.<br>"
-"                                                                                                                                                                                                                                                         "
+"diameter van het gat, niet vanuit het midden."
+"<br>                                                                                                                                                                                                                                                         "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                    "
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
 "| Controleert de vrije afstand tussen mechanisch geboorde gaten in pads en "
 "via’s.  De vrije afstand wordt gemeten tussen de diameters van de gaten, "
 "niet tussen hun middelpunten.<br><br>Deze beperking bestaat puur ter "
 "bescherming van boorbitjes. De vrije afstand tussen **lasergeboorde** "
 "(microvia’s) gaten wordt niet gecontroleerd, noch de vrije afstand tussen "
-"**gefreesde** (ovaalvormige) gaten en andere niet-mechanisch geboorde "
-"gaten.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                    "
+"**gefreesde** (ovaalvormige) gaten en andere niet-mechanisch geboorde gaten."
+"<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
 "| Controleert de vrije afstand tussen twee objecten op een gegeven laag "
 "(inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
 "uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar "
-"mogelijk.<br>"
-"                                                                                                                                                                                                               "
+"mogelijk."
+"<br>                                                                                                                                                                                                               "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                    "
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
 "| Controleert de vrije afstand tussen een boorgat in een pad of via en een "
 "ander object, ongeacht het net. De vrije afstand wordt gemeten vanaf de "
 "diameter van het gat, niet het midden.<br><br>Dit kan ook worden beschouwd "
 "als de “boortolerantie” aangezien het alleen **ronde** gaten omvat (zie "
-"`edge_clearance` voor de freestolerantie).<br>"
-"                                                                                                      "
+"`edge_clearance` voor de freestolerantie)."
+"<br>                                                                                                      "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Controleert de vrije afstand tussen objecten op silkscreenlagen en andere "
-"objecten.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                 "
+"objecten."
+"<br>                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                    "
+"| `skew`                    | "
+"max                                                                                                                    "
 "| Controleert de totale scheeftrekking voor de netten die met de "
 "regelvoorwaarde overeenkomen. Dat wil zeggen, het verschil tussen de lengte "
 "van elk net en het gemiddelde van alle lengtes van elk net dat overeenkomt "
@@ -40811,37 +40819,37 @@ msgstr ""
 "en de lengte van eender net boven de `max`-waarde van de beperking ligt, "
 "wordt een fout gegenereerd.<br>                                             "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                    "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
 "| Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
-"thermische ontlastingsverbinding.<br>"
-"                                                                                                                                                                                                                                                                                                                                           "
+"thermische ontlastingsverbinding."
+"<br>                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                    "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
 "| Geeft de breedte van de spaken die een pad met een zone verbinden via een "
-"thermische ontlastingsverbinding.<br>"
-"                                                                                                                                                                                                                                                                                                                                         "
+"thermische ontlastingsverbinding."
+"<br>                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                            "
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
 "| Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat "
 "een breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde "
-"(als opgegeven) heeft wordt een fout gegenereerd.<br>"
-"                                                                                                                                                                                                                                               "
+"(als opgegeven) heeft wordt een fout gegenereerd."
+"<br>                                                                                                                                                                                                                                               "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                    "
+"| `via_count`               | "
+"max                                                                                                                    "
 "| Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
 "het aantal de `max`-waarde van de beperking overschrijft op eender van de "
-"overeenkomende netten, wordt er een fout gegenereerd voor dat net.<br>"
-"                                                                                                                                                                                                                              "
+"overeenkomende netten, wordt er een fout gegenereerd voor dat net."
+"<br>                                                                                                                                                                                                                              "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                 "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
 "| Specificeert de verbinding die moet worden gemaakt tussen een zone en een "
-"pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                      "
+"pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
 "\n"
@@ -41013,13 +41021,13 @@ msgstr ""
 "\n"
 "    (rule \"Afstand tussen via’s van verschillende netten\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Vrije afstand tussen pads van verschillende netten\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Vrije afstand tussen via-gat en spoor\"\n"
@@ -42295,7 +42303,8 @@ msgstr "Voorwaardeexpressie ontbreekt."
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:466
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
+msgstr ""
+"Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
 
 #: pcbnew/drc/drc_rule_parser.cpp:241
 msgid "'layer' keyword already present."
@@ -44904,7 +44913,8 @@ msgstr "Kan waarde in symboolgedeelte van netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
+msgstr ""
+"Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
@@ -44938,7 +44948,8 @@ msgstr "Geen footprint gedefiniëerd voor symbool %s."
 #: pcbnew/netlist_reader/netlist.cpp:221
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "Footprint van %s gewijzigd: bordfootprint '%s', netlijstfootprint '%s'."
+msgstr ""
+"Footprint van %s gewijzigd: bordfootprint '%s', netlijstfootprint '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:244
 #, c-format
@@ -45970,8 +45981,8 @@ msgid ""
 "and the schematic. "
 msgstr ""
 "Het geselecteerde bestand geeft aan dat de netten mogelijk niet "
-"gesynchroniseerd zijn met het schema. Het wordt aanbevolen om de procedure ‘"
-"Netten uitlijnen’ in CADSTAR uit te voeren en opnieuw te importeren om "
+"gesynchroniseerd zijn met het schema. Het wordt aanbevolen om de procedure "
+"‘Netten uitlijnen’ in CADSTAR uit te voeren en opnieuw te importeren om "
 "inconsistenties tussen de printplaat en het schema te voorkomen. "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:131
@@ -46188,7 +46199,8 @@ msgstr "Kan component '%s' niet vinden in de bibliotheek (Symdef ID: '%s')"
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1884
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr "Kan documentatiesymbool niet vinden in de bibliotheek (Symdef-ID: '%s')"
+msgstr ""
+"Kan documentatiesymbool niet vinden in de bibliotheek (Symdef-ID: '%s')"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1953
 #, c-format
@@ -46224,8 +46236,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"Het CADSTAR-sjabloon '%s' heeft een niet-nulwaarde gedefinieerd voor de ‘"
-"Sliver Width’-instelling. Er is hiervoor geen KiCad-equivalent, dus deze "
+"Het CADSTAR-sjabloon '%s' heeft een niet-nulwaarde gedefinieerd voor de "
+"‘Sliver Width’-instelling. Er is hiervoor geen KiCad-equivalent, dus deze "
 "instelling is genegeerd."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1990
@@ -46459,7 +46471,8 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1915
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr "Een draad negeren omdat Eagle-laag '%s' (%d) niet in kaart was gebracht"
+msgstr ""
+"Een draad negeren omdat Eagle-laag '%s' (%d) niet in kaart was gebracht"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2083
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2085
@@ -46477,7 +46490,8 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2097
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "Een tekst negeren omdat Eagle-laag '%s' (%d) niet in kaart was gebracht"
+msgstr ""
+"Een tekst negeren omdat Eagle-laag '%s' (%d) niet in kaart was gebracht"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2235
 #, c-format
@@ -47278,8 +47292,8 @@ msgid ""
 msgstr ""
 "Het geselecteerde bestand bevat meerdere footprints. Alleen de eerste zal "
 "worden geïmporteerd.\n"
-"Om alle footprints in te laden, voeg hem toe als bibliotheek in "
-"Voorkeuren -> Footprintbibliotheken beheren..."
+"Om alle footprints in te laden, voeg hem toe als bibliotheek in Voorkeuren "
+"-> Footprintbibliotheken beheren..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -47509,7 +47523,8 @@ msgstr "Niet-herkende laag '%s'"
 #: pcbnew/pcbexpr_functions.cpp:272
 #, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
+msgstr ""
+"Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
 
 #: pcbnew/pcbexpr_functions.cpp:505
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -47977,7 +47992,8 @@ msgstr "Spoorhoekmodus"
 
 #: pcbnew/router/router_tool.cpp:200
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
+msgstr ""
+"Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
 
 #: pcbnew/router/router_tool.cpp:226
 msgid "Select Track/Via Width"
@@ -48735,7 +48751,8 @@ msgstr "Vrije afstand voor gebieden: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:894
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
+msgstr ""
+"Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
@@ -49167,7 +49184,8 @@ msgstr "Omkeren"
 
 #: pcbnew/tools/edit_tool.cpp:2717
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr "Gebruik het scherm met footprinteigenschappen om velden te verwijderen."
+msgstr ""
+"Gebruik het scherm met footprinteigenschappen om velden te verwijderen."
 
 #: pcbnew/tools/edit_tool.cpp:2877
 msgid "Move Exactly"
@@ -50067,7 +50085,8 @@ msgstr "Teardrops bewerken..."
 
 #: pcbnew/tools/pcb_actions.cpp:841
 msgid "Add, remove or edit teardrops globally across board"
-msgstr "Teardrops globaal over het hele bord toevoegen, verwijderen of bewerken"
+msgstr ""
+"Teardrops globaal over het hele bord toevoegen, verwijderen of bewerken"
 
 #: pcbnew/tools/pcb_actions.cpp:847
 msgid "Global Deletions..."
@@ -52986,7 +53005,8 @@ msgstr "PCB-rekenhulpmiddel"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
-msgstr "Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
+msgstr ""
+"Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
