@@ -94,11 +94,32 @@ class SHAPE_CHAIN : public SHAPE
             SHAPE(SH_CHAIN),
             m_shapes( aShapes )
         {
-
         }
 
-        static const SHAPE_CHAIN ConstructFromPoints( const std::vector<VECTOR2I>& aPts );
-        static const SHAPE_CHAIN ConstructFromSLC( const SHAPE_LINE_CHAIN& aSLC ); // for legacy stuff
+        ~SHAPE_CHAIN()
+        {
+            for( auto shape : m_shapes )
+                delete shape;
+        }
+
+        static const SHAPE_CHAIN ConstructFromPoints( const std::vector<VECTOR2I>& aPts )
+        {
+            SHAPE_CHAIN chain;
+
+            chain.reserve( aPts.size() );
+            for( auto& pt : aPts )
+            {
+                chain.Append( pt );
+            }
+
+            return chain;
+        }
+
+        static const SHAPE_CHAIN ConstructFromSLC( const SHAPE_LINE_CHAIN& aSLC ) // for legacy stuff
+        {
+            //wxCHECK_MSG( 0, SHAPE_CHAIN(), wxT("ConstructFromSLC Unimplemented") );
+            return SHAPE_CHAIN();
+        }
 
         int PointCount() const
         {
@@ -191,36 +212,240 @@ class SHAPE_CHAIN : public SHAPE
         int Find( const VECTOR2I& aP, int aThreshold = 0 ) const;
 
 
-        void Append( const SHAPE_BICONNECTED& aShape );
-        void Append( const VECTOR2I& aP );
-        void Append( const SEG& aSeg );
-        void Append( const SHAPE_CHAIN& aShape );
-        void Append( int x, int y );
+        void Append( const SHAPE_BICONNECTED& aShape )
+        {
+            if( !m_shapes.empty() )
+            {
+                wxASSERT( m_shapes.back()->GetEnd() == aShape.GetStart() );
+            }
 
-        void Remove( int aStartIndex, int aEndIndex );
+            m_shapes.push_back( static_cast<SHAPE_BICONNECTED*>(aShape.Clone() ) );
+        }
+
+
+        void Append( const VECTOR2I& aP, int aWidth = 0 )
+        {
+            wxASSERT( !m_shapes.empty() ); // can't have a single-point chain
+            auto lastShape = m_shapes.back();
+            m_shapes.push_back( new SHAPE_SEGMENT( lastShape->GetEnd(), aP, aWidth ? aWidth : lastShape->GetWidth() ) );
+        }
+
+        void Append( const SEG& aSeg, int aWidth = 0 )
+        {
+            
+            int width = aWidth;
+
+            if ( !IsEmpty() )
+            {
+                auto lastShape = m_shapes.back();    
+
+                wxASSERT( lastShape->GetEnd() == aSeg.A );
+                if ( !width )
+                {
+                    width = lastShape->GetWidth();
+                }
+            }
+            
+            m_shapes.push_back( new SHAPE_SEGMENT( aSeg.A, aSeg.B, width ) );
+        }
+
+        void Append( const SHAPE_CHAIN& aShape )
+        {
+            if (aShape.IsEmpty() )
+                return;
+
+            if ( !IsEmpty() )
+            {
+                wxASSERT( m_shapes.back()->GetEnd() == aShape.m_shapes.front()->GetStart() );
+            }
+         
+            m_shapes.reserve( m_shapes.size() + aShape.m_shapes.size() );
+
+            for( const auto& sh : aShape.m_shapes )
+                m_shapes.push_back( static_cast<SHAPE_BICONNECTED*>( sh->Clone() ) );
+        }
+
+        void Append( int x, int y, int aWidth = 0 )
+        {
+            Append( VECTOR2I(x, y), aWidth );
+        }
+
+        void RemoveShape( int aIndex ) {};
+
+        void Remove( int aStartIndex, int aEndIndex )
+        {
+            if( aEndIndex < 0 )
+                aEndIndex += PointCount();
+
+            if( aStartIndex < 0 )
+                aStartIndex += PointCount();
+
+            if( aStartIndex >= PointCount() || aEndIndex >= PointCount() || aStartIndex > aEndIndex)
+                return;
+         
+            
+            for( int i = aStartIndex; i <= aEndIndex; i++ )
+                delete m_shapes[i];
+
+            m_shapes.erase( m_shapes.begin() + aStartIndex, m_shapes.begin() + aEndIndex + 1 );
+        }
+
         void Remove( int aIndex )
         {
             Remove( aIndex, aIndex );
         }
 
-        bool PointOnEdge2( const VECTOR2I& aP, int aAccuracy = 0 ) const;
-        bool PointInside2( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+        bool PointOnEdge2( const VECTOR2I& aP, int aAccuracy = 0 ) const
+        {
+            return false;
+        }
 
-        bool Intersects( const SHAPE_CHAIN& aChain ) const;
-        int Intersect( const SHAPE_CHAIN& aChain, INTERSECTIONS& aIp ) const;
+        bool PointInside2( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const
+        {
+            return false;
+        }
+
+        bool Intersects( const SHAPE_CHAIN& aChain ) const
+        {
+            INTERSECTIONS dummyIps;
+            return Intersect( aChain, dummyIps, 1 );
+        }
+
+        int Intersect( const SHAPE_CHAIN& aChain, INTERSECTIONS& aIp, int aMaxCount = std::numeric_limits<int>::max() ) const
+        {
+            #if 0
+            const int ourShapeCount = ShapeCount();
+            const int theirShapeCount = aChain.ShapeCount();
+
+            
+            if( ourShapeCount == 0 || theirShapeCount == 0 )
+                return 0;
+
+            for( int s1 = 0; s1 < ourShapeCount; s1++ )
+            {
+                const SHAPE_BICONNECTED* ourShape = m_shapes[s1];
+
+                for( int s2 = 0; s2 < ourShapeCount; s2++ )
+                {
+                    std::vector<VECTOR2I> tmpIps;
+                    tmpIps.reserve( 2 );
+
+                    const SHAPE_BICONNECTED* theirShape = m_shapes[s2];
+        
+                    int nIps = ourShape->Intersect( *theirShape, tmpIps );
+
+                    if ( !nIps )
+                        continue;
+
+                    INTERSECTION is;
+                    is.index_our = s1;
+                    is.index_their = s2;
+                    is.is_corner_our = false;
+                    is.is_corner_their = false;
+                    is.valid = true;
+
+                }
+            }
+                
+
+        
+
+        
+
+            if( !aExcludeColinearAndTouching && a.Collinear( b ) )
+            {
+                if( a.Contains( b.A ) )
+                {
+                    is.p = b.A;
+                    is.is_corner_their = true;
+                    aIp.push_back( is );
+                }
+
+                if( a.Contains( b.B ) )
+                {
+                    is.p = b.B;
+                    is.index_their++;
+                    is.is_corner_their = true;
+                    aIp.push_back( is );
+                }
+
+                if( b.Contains( a.A ) )
+                {
+                    is.p = a.A;
+                    is.is_corner_our = true;
+                    aIp.push_back( is );
+                }
+
+                if( b.Contains( a.B ) )
+                {
+                    is.p = a.B;
+                    is.index_our++;
+                    is.is_corner_our = true;
+                    aIp.push_back( is );
+                }
+            }
+            else if( p )
+            {
+                is.p = *p;
+                is.is_corner_our = false;
+                is.is_corner_their = false;
+
+                if( p == a.A )
+                {
+                    is.is_corner_our = true;
+                }
+
+                if( p == a.B )
+                {
+                    is.is_corner_our = true;
+                    is.index_our++;
+                }
+
+                if( p == b.A )
+                {
+                    is.is_corner_their = true;
+                }
+
+                if( p == b.B )
+                {
+                    is.is_corner_their = true;
+                    is.index_their++;
+                }
+
+                aIp.push_back( is );
+            }
+        }
+    }
+
+    return aIp.size();
+
+            return false;
+        }
+        
+#endif
+return 0;
+        };
+
         virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
                             VECTOR2I* aLocation = nullptr ) const override;
         virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                             VECTOR2I* aLocation = nullptr ) const override;
 
-        const BOX2I BBox( int aClearance = 0 ) const override;
-
-
+        const BOX2I BBox( int aClearance = 0 ) const override
+        {
+            return m_cachedBBox;
+        }
     
         void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override { wxASSERT(false); };
+        
         void Move( const VECTOR2I& aVector ) override { wxASSERT(false); };
         void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override { wxASSERT(false); };
+
+        bool IsEmpty() const
+        {
+            return m_shapes.empty();
+        }
 
         bool IsSolid() const override
         {
@@ -229,22 +454,47 @@ class SHAPE_CHAIN : public SHAPE
 
         const SHAPE_LINE_CHAIN ToSLC() const;
 
-        VECTOR2I::coord_type Length() const;
+        VECTOR2I::coord_type Length() const
+        {
+            VECTOR2I::coord_type len = 0;
+            for( auto sh : m_shapes )
+                len += sh->Length();
+            return len;
+        }
 
-        const SHAPE_CHAIN Reversed() const;
-        const SHAPE_CHAIN Mirrored( const SEG& axis );
+        const SHAPE_CHAIN Reversed() const
+        {
+            SHAPE_CHAIN chain;
+            chain.m_shapes.reserve( m_shapes.size() );
+            for( auto sh : m_shapes )
+            {
+                chain.m_shapes.push_back( static_cast<SHAPE_BICONNECTED*>( sh->Reversed()->Clone() ) );
+            }
+            return chain;
+        }
+
+        const SHAPE_CHAIN Mirrored( const SEG& axis )
+        {
+            return SHAPE_CHAIN();
+        }
 
         const VECTOR2I PointAlong( int aPathLength ) const; // fixme return matching shape too
-        const SHAPE_CHAIN Slice( int aStartIndex, int aEndIndex ) const;
+        
+        const SHAPE_CHAIN Slice( int aStartIndex, int aEndIndex ) const
+        {
+            return SHAPE_CHAIN();
 
-        const std::optional<INTERSECTION> SelfIntersecting() const;
 
-        DIRECTION_45::AngleType AngleAtVertex( int aVertex ) const;
+        }
+
+        const std::optional<INTERSECTION> SelfIntersecting() const
+        {
+            return std::optional<INTERSECTION>();
+        }
 
         void SetClosed( bool aClosed )
         {
             m_closed = aClosed;
-            //mergeFirstLastPointIfNeeded();
         }
 
         /**
@@ -255,25 +505,74 @@ class SHAPE_CHAIN : public SHAPE
             return m_closed;
         }
 
-        int MinWidth() const;
+        int MinWidth() const
+        {
+            int minW = 0;
+            for( auto sh : m_shapes )
+                minW = std::min( minW, sh->Length() );
+            return 0;
+        }
 
-        bool CompareGeometry( const SHAPE_CHAIN& aOther ) const;
+        bool CompareGeometry( const SHAPE_CHAIN& aOther ) const
+        {
+            return false;
+        }
 
+        bool MatchesOrientation( const VECTOR2I& aTestPoint, bool aCw )
+        {
+            return false;
+        }
 
-        bool MatchesOrientation( const VECTOR2I& aTestPoint, bool aCw );
+        int SubshapeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
+        {
+            const int     threshold = aAccuracy + 1;
+            const int64_t thresholdSq = int64_t( threshold ) * threshold;
+            
+            if( IsEmpty() )
+            {
+                return -1;
+            }
+            
+            int i = 0;
 
-        void RemoveShape( int aIndex );
+            for( auto subshape : m_shapes )
+            {
+                if( subshape->GetStart() == aPt || subshape->GetEnd() == aPt )
+                    return i;
 
-        int PathLength( const VECTOR2I& aP, int aIndex = -1 ) const;
+                if( subshape->SquaredDistance( aPt ) <= thresholdSq )
+                    return i;
 
-        void RemoveDuplicatePoints();
+                i++;
+            }
+
+            return -1;
+        }
+
+        int PathLength( const VECTOR2I& aP, int aIndex = -1 ) const
+        {
+
+            return 0;
+        }
+
+        void RemoveDuplicatePoints()
+        {
+
+        }
 
 
         const std::vector<SHAPE_BICONNECTED*>& CShapes() const { return m_shapes; }
 
     private:
+
+        void reserve( size_t count )
+        {
+            m_shapes.reserve( count );
+        }
+
         std::vector<SHAPE_BICONNECTED*> m_shapes;
         bool m_closed;
+        BOX2I m_cachedBBox;
 };
 
 

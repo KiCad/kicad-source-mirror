@@ -47,15 +47,18 @@ class SHAPE_BICONNECTED : public SHAPE
         return std::unique_ptr<SHAPE_BICONNECTED>( this->reversedImpl() );
     }
 
-    bool Contains( const VECTOR2I& aP ) const;
+    bool Contains( const VECTOR2I& aP ) const { return false; }
 
-    virtual SEG::ecoord SquaredShapeDistance( const SHAPE_BICONNECTED& aOtherShape ) const;
-    virtual int Length() const;
-    virtual VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
-    virtual int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const;
-    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const;
-    virtual VECTOR2I NormalVector( bool aTakeStartPoint ) const;
+    static int Intersect( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB, std::vector<VECTOR2I>& aIntersections ) { return 0; }
+    
+    virtual SEG::ecoord SquaredShapeDistance( const SHAPE_BICONNECTED& aOtherShape ) const { return 0; }
+    virtual int Length() const { return 0; }
+    virtual VECTOR2I NearestPoint( const VECTOR2I& aP ) const { return VECTOR2I(); }
 
+    
+    virtual int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const { return 0; };
+
+    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const { return VECTOR2I(); }
 
 protected:
     virtual SHAPE_BICONNECTED* reversedImpl() const = 0;

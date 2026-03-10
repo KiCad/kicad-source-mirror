@@ -777,7 +777,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                     }
                 }
 
-                perp = lastPreDrag->NormalVector( false );
+                perp = lastPreDrag->TangentVector( false ).Perpendicular();
                 primaryLastSegDir = ROUTING_REGIME_45::DIRECTION( *lastPrimDrag, false );
 
                 PNS_DBG( Dbg(), AddItem, &(*primaryDragged), LIGHTGRAY, 100000, "prim" );

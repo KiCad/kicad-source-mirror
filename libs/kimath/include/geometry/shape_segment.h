@@ -192,8 +192,7 @@ public:
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override;
 
-    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
-    virtual VECTOR2I NormalVector( bool aTakeStartPoint ) const override;
+    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override { return VECTOR2I(); }
 
 private:
 

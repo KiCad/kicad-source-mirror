@@ -342,9 +342,9 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
 }
 
 
-int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const
+int SHAPE_ARC::intersectSeg( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer, bool aSegIsALine ) const
 {
-    if( aSeg.A == aSeg.B )      // One point does not define a line....
+    if( aSegIsALine && aSeg.A == aSeg.B )      // One point does not define a line....
         return 0;
 
     if( GetRadius() >= (double) std::numeric_limits<int>::max() / 2.0 )
@@ -352,7 +352,7 @@ int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer
 
     CIRCLE circ( GetCenter(), GetRadius() );
 
-    std::vector<VECTOR2I> intersections = circ.IntersectLine( aSeg );
+    std::vector<VECTOR2I> intersections = aSegIsALine ? circ.IntersectLine( aSeg ) :  circ.Intersect( aSeg );
 
     const size_t originalSize = aIpsBuffer->size();
 
@@ -363,6 +363,18 @@ int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer
     }
 
     return aIpsBuffer->size() - originalSize;
+}
+
+
+int SHAPE_ARC::IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const
+{
+    return intersectSeg( aSeg, aIpsBuffer, true );
+}
+
+
+int SHAPE_ARC::Intersect( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const
+{
+    return intersectSeg( aSeg, aIpsBuffer, false );
 }
 
 
@@ -1138,4 +1150,61 @@ bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
 void SHAPE_ARC::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError, ERROR_LOC aErrorLoc ) const
 {
     TransformArcToPolygon( aBuffer, m_start, m_mid, m_end, m_width, aError, aErrorLoc );
+}
+
+void SHAPE_ARC::EnsureWinding( bool aCw )
+{
+    if ( IsCCW() && aCw )
+    {
+        std::swap( m_start, m_end );
+    }
+}
+
+bool SHAPE_ARC::IsCongruentWith( const SHAPE_ARC& aOther, int aAccuracy ) const
+{
+    VECTOR2I centerA = GetCenter();
+    VECTOR2I::extended_type   sqRadiusA = VECTOR2D( centerA - m_start ).SquaredEuclideanNorm();
+    VECTOR2I centerB = GetCenter();
+    VECTOR2I::extended_type   sqRadiusB = VECTOR2D( centerB - aOther.m_start ).SquaredEuclideanNorm();
+
+    VECTOR2I centerDelta ( centerA - centerB );
+    int maxDist = std::max( std::abs(centerDelta.x), std::abs(centerDelta.y) );
+
+    if (maxDist > aAccuracy)
+        return false;
+
+    int radiusDelta = std::sqrt( std::abs( sqRadiusA - sqRadiusB ) );
+
+    if( radiusDelta > aAccuracy )
+        return false;
+
+    if ( aOther.m_start == m_start )
+        return true;
+
+    if ( aOther.m_end == m_end )
+        return true;
+
+    if ( aOther.m_end == m_start )
+        return true;
+
+    if ( aOther.m_start == m_end )
+        return true;
+
+    if( sliceContainsPoint( aOther.GetStart() ) )
+        return true;
+
+    if( sliceContainsPoint( aOther.GetEnd() ) )
+        return true;
+
+    return false;
+}
+
+VECTOR2I SHAPE_ARC::TangentVector( bool aTakeStartPoint ) const
+{
+    VECTOR2I centerA = GetCenter();
+    VECTOR2I::extended_type   sqRadiusA = VECTOR2D( centerA - m_start ).SquaredEuclideanNorm();
+    bool ccw = IsCCW();
+
+    
+    return VECTOR2I();
 }

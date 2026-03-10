@@ -188,6 +188,16 @@ public:
     int IntersectLine( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const override;
 
     /**
+     * Find intersection points between this arc and aSeg.
+     * Ignores arc width.
+     *
+     * @param aSeg Line to intersect against (treated as an infinite line)
+     * @param aIpsBuffer Buffer to store the resulting intersection points (if any)
+     * @return Number of intersection points found
+     */
+    int Intersect( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer ) const;
+
+    /**
      * Find intersection points between this arc and a CIRCLE. Ignores arc width.
      *
      * @param aCircle Circle to intersect against
@@ -323,15 +333,21 @@ public:
 
     bool IsClockwise() const { return !IsCCW(); }
 
-    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
-    virtual VECTOR2I NormalVector( bool aTakeStartPoint ) const override;
+    void EnsureWinding( bool aCw );
 
+    bool IsCongruentWith( const SHAPE_ARC& aOther, int aAccuracy = 1 ) const;
+
+    // returns a vector (scaled to arc radius) tangent (i.e. straight line contiunation) to the start or end point of the arc
+    virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
+    
 private:
     void update_values();
 
     bool sliceContainsPoint( const VECTOR2I& p ) const;
 
     virtual SHAPE_ARC* reversedImpl() const override;
+
+    int intersectSeg( const SEG& aSeg, std::vector<VECTOR2I>* aIpsBuffer, bool aSegIsALine ) const;
 
 
 private:
