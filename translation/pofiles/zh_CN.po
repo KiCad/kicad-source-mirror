@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-09 11:11-0700\n"
-"PO-Revision-Date: 2026-03-06 23:22+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-10 12:09+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17035,9 +17035,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "引脚 %s 同时连接到 %s 和 %s"
 
 #: eeschema/erc/erc.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "引脚 %s 同时连接到 %s 和 %s"
+msgstr "引脚 %s 在符号 '%s' 上连接到不同的网络: %s 和 %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -41396,7 +41396,7 @@ msgstr "%s 个 '钻孔形状' 不一致。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s drill size differs."
-msgstr "%s 个 '钻孔大小' 不一致。"
+msgstr "%s 个 '钻孔孔径' 不一致。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:479
 #, c-format
@@ -45200,7 +45200,7 @@ msgstr "%zu 行中的行大小无效。应有 %zu 个元素, 但实际找�
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:513
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr "预期钻头尺寸值, 但找到了 %s!%s!%s, 位于行 %zu。"
+msgstr "期望的钻孔孔径，但在第 %4$zu 行发现 %1$s!%2$s!%3%s。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:561
 #, c-format
