@@ -157,4 +157,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260830  // Custom user properties
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20261015  // Custom user properties for SCH_SHAPEs
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20261025  // Reference image rotation and opacity
-#define SEXPR_SCHEMATIC_FILE_VERSION   20261106  // Persist custom properties for pins and sheet pins
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20261106  // Persist custom properties for pins and sheet pins
+#define SEXPR_SCHEMATIC_FILE_VERSION   20261113  // Rule area variants

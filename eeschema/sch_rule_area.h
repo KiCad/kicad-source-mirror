@@ -21,6 +21,7 @@
 #define SCH_RULE_AREA_H
 
 #include <unordered_set>
+#include <map>
 #include <utility>
 
 #include <plotters/plotter.h>
@@ -32,6 +33,23 @@
 #include <sch_view.h>
 
 class SCHEMATIC;
+
+class SCH_RULE_AREA;
+
+
+class SCH_RULE_AREA_VARIANT : public VARIANT
+{
+public:
+    SCH_RULE_AREA_VARIANT( const wxString& aName = wxEmptyString ) :
+            VARIANT( aName )
+    {
+    }
+
+    virtual ~SCH_RULE_AREA_VARIANT() = default;
+
+    void InitializeAttributes( const SCH_RULE_AREA& aRuleArea );
+};
+
 
 class SCH_RULE_AREA : public SCH_SHAPE
 {
@@ -61,39 +79,39 @@ public:
      * Set or clear the exclude from simulation flag.
      */
     void SetExcludedFromSim( bool aExcludeFromSim, const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) override
-    {
-        m_excludedFromSim = aExcludeFromSim;
-    }
+                             const wxString& aVariantName = wxEmptyString ) override;
 
     bool GetExcludedFromSim( const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) const override
+                             const wxString&       aVariantName = wxEmptyString ) const override;
+
+    bool GetExcludedFromSimProp() const
     {
-        return m_excludedFromSim;
+        return GetExcludedFromSim( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
-    bool GetExcludedFromSimProp() const { return GetExcludedFromSim(); }
-
-    void SetExcludedFromSimProp( bool aExcludeFromSim ) { SetExcludedFromSim( aExcludeFromSim ); }
+    void SetExcludedFromSimProp( bool aExcludeFromSim )
+    {
+        SetExcludedFromSim( aExcludeFromSim, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
 
     /**
      * Set or clear the exclude from schematic bill of materials flag.
      */
     void SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) override
-    {
-        m_excludedFromBOM = aExcludeFromBOM;
-    }
+                             const wxString& aVariantName = wxEmptyString ) override;
 
     bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
-                             const wxString& aVariantName = wxEmptyString ) const override
+                             const wxString&       aVariantName = wxEmptyString ) const override;
+
+    bool GetExcludedFromBOMProp() const
     {
-        return m_excludedFromBOM;
+        return GetExcludedFromBOM( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
     }
 
-    bool GetExcludedFromBOMProp() const { return GetExcludedFromBOM(); }
-
-    void SetExcludedFromBOMProp( bool aExcludeFromBOM ) { SetExcludedFromBOM( aExcludeFromBOM ); }
+    void SetExcludedFromBOMProp( bool aExcludeFromBOM )
+    {
+        SetExcludedFromBOM( aExcludeFromBOM, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() );
+    }
 
     /**
      * Set or clear exclude from board netlist flag.
@@ -117,13 +135,13 @@ public:
      * Set or clear the 'Do Not Populate' flag.
      */
     bool GetDNP( const SCH_SHEET_PATH* aInstance = nullptr,
-                 const wxString& aVariantName = wxEmptyString ) const override { return m_DNP; }
+                 const wxString&       aVariantName = wxEmptyString ) const override;
     void SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance = nullptr,
-                 const wxString& aVariantName = wxEmptyString ) override { m_DNP = aDNP; }
+                 const wxString& aVariantName = wxEmptyString ) override;
 
-    bool GetDNPProp() const { return GetDNP(); }
+    bool GetDNPProp() const { return GetDNP( &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() ); }
 
-    void SetDNPProp( bool aDNP ) { SetDNP( aDNP ); }
+    void SetDNPProp( bool aDNP ) { SetDNP( aDNP, &Schematic()->CurrentSheet(), Schematic()->GetCurrentVariant() ); }
 
     std::vector<int> ViewGetLayers() const override;
 
@@ -179,6 +197,23 @@ public:
     /// Remove a directive label from this rule area's caches (called when the label is deleted).
     void RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel );
 
+    /// Add or replace a variant definition by name.
+    void AddVariant( const SCH_RULE_AREA_VARIANT& aVariant );
+
+    /// Delete a variant definition by name, if it exists.
+    void DeleteVariant( const wxString& aVariantName );
+
+    /// Rename an existing variant definition.
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName );
+
+    /// Copy a variant definition to a new name.
+    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant );
+
+    /// Test if a variant definition exists.
+    bool HasVariant( const wxString& aVariantName ) const { return m_Variants.contains( aVariantName ); }
+
+    const std::map<wxString, SCH_RULE_AREA_VARIANT>& GetVariants() const { return m_Variants; }
+
     /// Break the const-contract for the test suite (only)
     std::unordered_set<SCH_ITEM*>& _GetContainedItems() { return m_items; }
     std::unordered_set<SCH_DIRECTIVE_LABEL*>& _GetContainedDirectives() { return m_directives; }
@@ -198,6 +233,9 @@ protected:
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
+
+    /// Per-variant overrides for attributes keyed by variant name.
+    std::map<wxString, SCH_RULE_AREA_VARIANT> m_Variants;
 
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;

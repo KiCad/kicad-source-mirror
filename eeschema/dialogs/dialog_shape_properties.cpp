@@ -227,10 +227,16 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 
     if( SCH_RULE_AREA* ruleArea = dynamic_cast<SCH_RULE_AREA*>( m_shape ) )
     {
-        m_cbExcludeFromSim->SetValue( ruleArea->GetExcludedFromSim() );
-        m_cbExcludeFromBom->SetValue( ruleArea->GetExcludedFromBOM() );
-        m_cbExcludeFromBoard->SetValue( ruleArea->GetExcludedFromBoard() );
-        m_cbDNP->SetValue( ruleArea->GetDNP() );
+        if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        {
+            SCH_SHEET_PATH currentSheet = editFrame->Schematic().CurrentSheet();
+            wxString       currentVariant = editFrame->Schematic().GetCurrentVariant();
+
+            m_cbExcludeFromSim->SetValue( ruleArea->GetExcludedFromSim( &currentSheet, currentVariant ) );
+            m_cbExcludeFromBom->SetValue( ruleArea->GetExcludedFromBOM( &currentSheet, currentVariant ) );
+            m_cbExcludeFromBoard->SetValue( ruleArea->GetExcludedFromBoard() );
+            m_cbDNP->SetValue( ruleArea->GetDNP( &currentSheet, currentVariant ) );
+        }
     }
 
     if( m_shape->GetWidth() >= 0 )
@@ -433,10 +439,16 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( SCH_RULE_AREA* ruleArea = dynamic_cast<SCH_RULE_AREA*>( m_shape ) )
     {
-        ruleArea->SetExcludedFromSim( m_cbExcludeFromSim->GetValue() );
-        ruleArea->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue() );
-        ruleArea->SetExcludedFromBoard( m_cbExcludeFromBoard->GetValue() );
-        ruleArea->SetDNP( m_cbDNP->GetValue() );
+        if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        {
+            SCH_SHEET_PATH currentSheet = editFrame->Schematic().CurrentSheet();
+            wxString       currentVariant = editFrame->Schematic().GetCurrentVariant();
+
+            ruleArea->SetExcludedFromSim( m_cbExcludeFromSim->GetValue(), &currentSheet, currentVariant );
+            ruleArea->SetExcludedFromBOM( m_cbExcludeFromBom->GetValue(), &currentSheet, currentVariant );
+            ruleArea->SetExcludedFromBoard( m_cbExcludeFromBoard->GetValue() );
+            ruleArea->SetDNP( m_cbDNP->GetValue(), &currentSheet, currentVariant );
+        }
     }
 
     STROKE_PARAMS stroke = m_shape->GetStroke();

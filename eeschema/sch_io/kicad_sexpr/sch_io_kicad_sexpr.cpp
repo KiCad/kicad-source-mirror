@@ -1557,10 +1557,26 @@ void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea )
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aRuleArea->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aRuleArea->GetDNP() );
 
+    for( const auto& [name, variant] : aRuleArea->GetVariants() )
+    {
+        m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
+
+        if( variant.m_DNP != aRuleArea->GetDNP() )
+            KICAD_FORMAT::FormatBool( m_out, "dnp", variant.m_DNP );
+
+        if( variant.m_ExcludedFromSim != aRuleArea->GetExcludedFromSim() )
+            KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.m_ExcludedFromSim );
+
+        if( variant.m_ExcludedFromBOM != aRuleArea->GetExcludedFromBOM() )
+            KICAD_FORMAT::FormatBool( m_out, "in_bom", !variant.m_ExcludedFromBOM );
+
+        m_out->Print( ")" ); // Closes `variant` token.
+    }
+
     saveShape( aRuleArea );
 
     KICAD_FORMAT::FormatCustomProperties( m_out, *aRuleArea );
-    m_out->Print( ")" );
+    m_out->Print( ")" ); // Closes `rule_area`.
 }
 
 

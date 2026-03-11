@@ -264,6 +264,184 @@ wxString SCH_RULE_AREA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool
 }
 
 
+void SCH_RULE_AREA_VARIANT::InitializeAttributes( const SCH_RULE_AREA& aRuleArea )
+{
+    m_DNP = aRuleArea.GetDNP();
+    m_ExcludedFromBOM = aRuleArea.GetExcludedFromBOM();
+    m_ExcludedFromSim = aRuleArea.GetExcludedFromSim();
+
+    m_ExcludedFromBoard = false;    // global in all variants for a particular rule area
+    m_ExcludedFromPosFiles = false; // rule areas do not support exclusion from position files
+}
+
+
+void SCH_RULE_AREA::SetExcludedFromSim( bool aExcludeFromSim, const SCH_SHEET_PATH* aInstance,
+                                        const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() )
+    {
+        m_excludedFromSim = aExcludeFromSim;
+        return;
+    }
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+    {
+        it->second.m_ExcludedFromSim = aExcludeFromSim;
+        return;
+    }
+
+    SCH_RULE_AREA_VARIANT variant( aVariantName );
+
+    variant.InitializeAttributes( *this );
+    variant.m_ExcludedFromSim = aExcludeFromSim;
+    AddVariant( variant );
+}
+
+
+bool SCH_RULE_AREA::GetExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return m_excludedFromSim;
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+        return it->second.m_ExcludedFromSim;
+
+    return m_excludedFromSim;
+}
+
+
+void SCH_RULE_AREA::SetExcludedFromBOM( bool aExcludeFromBOM, const SCH_SHEET_PATH* aInstance,
+                                        const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() )
+    {
+        m_excludedFromBOM = aExcludeFromBOM;
+        return;
+    }
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+    {
+        it->second.m_ExcludedFromBOM = aExcludeFromBOM;
+        return;
+    }
+
+    SCH_RULE_AREA_VARIANT variant( aVariantName );
+
+    variant.InitializeAttributes( *this );
+    variant.m_ExcludedFromBOM = aExcludeFromBOM;
+    AddVariant( variant );
+}
+
+
+bool SCH_RULE_AREA::GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return m_excludedFromBOM;
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+        return it->second.m_ExcludedFromBOM;
+
+    return m_excludedFromBOM;
+}
+
+
+void SCH_RULE_AREA::SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() )
+    {
+        m_DNP = aDNP;
+        return;
+    }
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+    {
+        it->second.m_DNP = aDNP;
+        return;
+    }
+
+    SCH_RULE_AREA_VARIANT variant( aVariantName );
+
+    variant.InitializeAttributes( *this );
+    variant.m_DNP = aDNP;
+    AddVariant( variant );
+}
+
+
+bool SCH_RULE_AREA::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
+{
+    if( aVariantName.IsEmpty() )
+        return m_DNP;
+
+    auto it = m_Variants.find( aVariantName );
+
+    if( it != m_Variants.end() )
+        return it->second.m_DNP;
+
+    return m_DNP;
+}
+
+
+void SCH_RULE_AREA::AddVariant( const SCH_RULE_AREA_VARIANT& aVariant )
+{
+    if( aVariant.m_Name.IsEmpty() )
+        return;
+
+    m_Variants[aVariant.m_Name] = aVariant;
+}
+
+
+void SCH_RULE_AREA::DeleteVariant( const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() )
+        return;
+
+    m_Variants.erase( aVariantName );
+}
+
+
+void SCH_RULE_AREA::RenameVariant( const wxString& aOldName, const wxString& aNewName )
+{
+    if( aOldName.IsEmpty() || aNewName.IsEmpty() || aOldName == aNewName )
+        return;
+
+    auto it = m_Variants.find( aOldName );
+
+    if( it == m_Variants.end() )
+        return;
+
+    SCH_RULE_AREA_VARIANT variant = it->second;
+    variant.m_Name = aNewName;
+    m_Variants.erase( it );
+    m_Variants.insert( std::make_pair( aNewName, variant ) );
+}
+
+
+void SCH_RULE_AREA::CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant )
+{
+    if( aSourceVariant.IsEmpty() || aNewVariant.IsEmpty() || aSourceVariant == aNewVariant )
+        return;
+
+    auto it = m_Variants.find( aSourceVariant );
+
+    if( it == m_Variants.end() )
+        return;
+
+    SCH_RULE_AREA_VARIANT variant = it->second;
+    variant.m_Name = aNewVariant;
+    m_Variants.insert( std::make_pair( aNewVariant, variant ) );
+}
+
+
 void SCH_RULE_AREA::resetCaches()
 {
     // Save the current state
