@@ -73,6 +73,10 @@ public:
         return m_excludedFromSim;
     }
 
+    bool GetExcludedFromSimProp() const { return GetExcludedFromSim(); }
+
+    void SetExcludedFromSimProp( bool aExcludeFromSim ) { SetExcludedFromSim( aExcludeFromSim ); }
+
     /**
      * Set or clear the exclude from schematic bill of materials flag.
      */
@@ -87,6 +91,10 @@ public:
     {
         return m_excludedFromBOM;
     }
+
+    bool GetExcludedFromBOMProp() const { return GetExcludedFromBOM(); }
+
+    void SetExcludedFromBOMProp( bool aExcludeFromBOM ) { SetExcludedFromBOM( aExcludeFromBOM ); }
 
     /**
      * Set or clear exclude from board netlist flag.
@@ -103,6 +111,9 @@ public:
         return m_excludedFromBoard;
     }
 
+    bool GetExcludedFromBoardProp() const { return GetExcludedFromBoard(); }
+    void SetExcludedFromBoardProp( bool aExclude ) { SetExcludedFromBoard( aExclude ); }
+
     /**
      * Set or clear the 'Do Not Populate' flag.
      */
@@ -110,6 +121,10 @@ public:
                  const wxString& aVariantName = wxEmptyString ) const override { return m_DNP; }
     void SetDNP( bool aDNP, const SCH_SHEET_PATH* aInstance = nullptr,
                  const wxString& aVariantName = wxEmptyString ) override { m_DNP = aDNP; }
+
+    bool GetDNPProp() const { return GetDNP(); }
+
+    void SetDNPProp( bool aDNP ) { SetDNP( aDNP ); }
 
     std::vector<int> ViewGetLayers() const override;
 
