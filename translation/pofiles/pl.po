@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-11 13:58-0700\n"
-"PO-Revision-Date: 2026-03-09 13:09+0000\n"
-"Last-Translator: szumsky <beish97@gmail.com>\n"
+"PO-Revision-Date: 2026-03-12 23:09+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -17545,9 +17545,8 @@ msgstr ""
 "zasilania"
 
 #: eeschema/erc/erc_item.cpp:65
-#, fuzzy
 msgid "Duplicate pins with different nets"
-msgstr "Klonuje niewypełniony obrys strefy na inną warstwę"
+msgstr "Klonuje piny z różnymi sieciami"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -17712,9 +17711,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Raport ERC (%s, Kodowanie UTF8)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "Plik raportu"
+msgstr "Raport uwzględnia: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -26623,14 +26622,12 @@ msgid "Generate map / summary of drill hits"
 msgstr "Wygeneruj mapę / zestawienie miejsc owiertów"
 
 #: kicad/cli/command_pcb_export_drill.cpp:95
-#, fuzzy
 msgid "Generate report of drill hits"
-msgstr "Wygeneruj mapę / zestawienie miejsc owiertów"
+msgstr "Wygeneruj zestawienie miejsc owiertów"
 
 #: kicad/cli/command_pcb_export_drill.cpp:100
-#, fuzzy
 msgid "Report output file path"
-msgstr "Wybierz ścieżkę docelową"
+msgstr "Wybierz ścieżkę docelową zestawienia"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
@@ -28561,18 +28558,16 @@ msgid "Switch to Branch"
 msgstr "Przełącz gałąź"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy
 msgid "Enable Git Integration"
-msgstr "Aktywuj śledzenie przez Git"
+msgstr "Aktywuj integrację z Git"
 
 #: kicad/project_tree_pane.cpp:1059
 msgid "Re-enable Git integration for this project"
 msgstr "Przywraca integrację z Git dla tego projektu"
 
 #: kicad/project_tree_pane.cpp:1063
-#, fuzzy
 msgid "Disable Git Integration"
-msgstr "Aktywuj śledzenie przez Git"
+msgstr "Dezaktywuj integrację z Git"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Disable Git integration for this project"
@@ -44592,6 +44587,8 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full "
 "'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
+"Ostrzeżenie: %s footprint '%s' nie ma nazwy biblioteki. Użyj pełnego formatu "
+"'Biblioteka:Footprint' by zapobiec następnym ostrzeżnieniom."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, c-format
@@ -45357,9 +45354,9 @@ msgid "Loading board data..."
 msgstr "Wczytywanie danych płytki..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1198
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' could not be mapped and will be skipped."
-msgstr "Plik '%s' nie może zostać utworzony."
+msgstr "Warstwa '%s' nie może zostać zmapowana i zostanie pominięta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1262
 msgid "Loading netclasses..."
@@ -47027,6 +47024,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' posiada znaki spoza zestawu ASCII w oznaczeniu; skonwertowano "
+"do '%s' by wyeksportować ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -47034,6 +47033,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponent '%s' posiada niedorzeczne oznaczenie po konwersji; zmieniono nazwę "
+"na '%s' by wyeksportować ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"
