@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-11 13:58-0700\n"
-"PO-Revision-Date: 2026-03-11 20:02+0000\n"
+"PO-Revision-Date: 2026-03-12 23:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -113,7 +113,7 @@ msgstr "Vaša verzia OpenGL nie je podporovaná. Potrebné minimum je 1.5."
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:568
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Čas renderovania %.0f ms"
+msgstr "Posledný čas vykreslenia %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:743
 #, c-format
@@ -951,9 +951,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Uložiť a obnoviť pozíciu kamery a priblíženie.\n"
-"Použiť %s+Tab pre aktiváciu.\n"
-"Nasledujúce okná sa budú cyklicky zobrazovať kým je aktívny %s."
+"Uložiť a obnoviť pozíciu kamery a priblížiť.\n"
+"Pomocou %s+Tab je aktivovaný výber.\n"
+"Opakovaným stláčaním klávesy Tab pri stlačenej klávese %s, je prepínané "
+"medzi zobrazeniami vo vyskakovacom okne."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:565
 msgid "Left double click or middle click to change color"
@@ -1033,42 +1034,42 @@ msgstr "Vybrať predvoľbu:"
 #: pcbnew/widgets/appearance_controls.cpp:2934
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Okná zobrazenia (%s+Tab):"
+msgstr "Zobrazenia (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:955
 #: pcbnew/widgets/appearance_controls.cpp:2943
 msgid "Save viewport..."
-msgstr "Uložiť oblasť zobrazenia..."
+msgstr "Uložiť zobrazenie..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:956
 #: pcbnew/widgets/appearance_controls.cpp:2944
 msgid "Delete viewport..."
-msgstr "Odstrániť oblasť zobrazenia..."
+msgstr "Odstrániť zobrazenie..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:989
 #: pcbnew/widgets/appearance_controls.cpp:2995
 msgid "Viewport name:"
-msgstr "Názov oblasti pohľadu:"
+msgstr "Názov zobrazenia:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:990
 #: pcbnew/widgets/appearance_controls.cpp:2995
 msgid "Save Viewport"
-msgstr "Uložiť oblasť zobrazenia"
+msgstr "Uložiť zobrazenie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1032
 #: pcbnew/widgets/appearance_controls.cpp:3036
 msgid "Viewports"
-msgstr "Oblasť zobrazenia"
+msgstr "Zobrazenia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1041
 #: pcbnew/widgets/appearance_controls.cpp:3045
 msgid "Delete Viewport"
-msgstr "Odstrániť oblasť zobrazenia"
+msgstr "Odstrániť zobrazenie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:1042
 #: pcbnew/widgets/appearance_controls.cpp:3046
 msgid "Select viewport:"
-msgstr "Vybrať oblasť zobrazenia:"
+msgstr "Vybrať zobrazenie:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
@@ -4401,7 +4402,7 @@ msgstr "Editovanie"
 
 #: common/dialogs/panel_common_settings_base.cpp:297
 msgid "Warp mouse to anchor of moved object"
-msgstr "Umiestniť kurzor myši na kotvu presunutého objektu"
+msgstr "Umiestniť kurzor myši na bod ukotvenia presunutého objektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:301
 msgid "First hotkey selects tool"
@@ -8161,7 +8162,7 @@ msgstr "Vylúčenia ERC"
 #: common/layer_id.cpp:105 common/layer_id.cpp:144
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Anchors"
-msgstr "Ukotvenia"
+msgstr "Body ukotvenia"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:148
 msgid "Helper items"
@@ -9045,7 +9046,7 @@ msgstr "Zvýšiť sekundárne pole vybranej položky (položiek)"
 
 #: common/tool/actions.cpp:369
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "Úbytok sekundárny"
 
 #: common/tool/actions.cpp:370
 msgid "Decrement the secondary field of the selected item(s)"
@@ -9057,7 +9058,7 @@ msgstr "Vybrať stĺpec(stĺpce)"
 
 #: common/tool/actions.cpp:377
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Vybrať celý stĺpec (stĺpce) obsahujúce aktuálnu vybranú bunku (bunky)"
 
 #: common/tool/actions.cpp:383
 msgid "Select Row(s)"
@@ -9065,7 +9066,7 @@ msgstr "Vybrať riadok(riadky)"
 
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Vybrať celý riadok (riadky) obsahujúce aktuálnu vybranú bunku (bunky)"
 
 #: common/tool/actions.cpp:390
 msgid "Select Table"
@@ -9089,7 +9090,7 @@ msgstr "Pridať riadok pod"
 
 #: common/tool/actions.cpp:405
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Vložiť nový riadok tabuľky pod vybranú bunku (bunky)"
 
 #: common/tool/actions.cpp:411 include/tool/edit_table_tool_base.h:265
 msgid "Add Column Before"
@@ -9097,7 +9098,7 @@ msgstr "Pridať stĺpec pred"
 
 #: common/tool/actions.cpp:412
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Vložiť nový riadok tabuľky pred vybranú bunku (bunky)"
 
 #: common/tool/actions.cpp:418 include/tool/edit_table_tool_base.h:316
 msgid "Add Column After"
@@ -9129,11 +9130,11 @@ msgstr "Zlúčiť bunky"
 
 #: common/tool/actions.cpp:440
 msgid "Turn selected table cells into a single cell"
-msgstr ""
+msgstr "Premeniť vybrané bunky tabuľky na jednu bunku"
 
 #: common/tool/actions.cpp:446 include/tool/edit_table_tool_base.h:579
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Rozdeliť bunky"
 
 #: common/tool/actions.cpp:447
 msgid "Turn merged table cells back into separate cells."
@@ -9151,7 +9152,7 @@ msgstr "Prepnúť režim úprav oblúka"
 
 #: common/tool/actions.cpp:466
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Prepnúť na iný spôsob úpravy oblúkov"
 
 #: common/tool/actions.cpp:474
 msgid "Show/hide the search panel"
@@ -9285,7 +9286,7 @@ msgstr "Vrátiť poslednú zmenu priblíženia"
 
 #: common/tool/actions.cpp:676 common/widgets/mathplot.cpp:1404
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "Návrat na úroveň priblíženia pred poslednou akciou priblíženia"
 
 #: common/tool/actions.cpp:682 common/widgets/mathplot.cpp:1405
 msgid "Redo Last Zoom"
@@ -9293,7 +9294,7 @@ msgstr "Obnoviť posledné priblíženie"
 
 #: common/tool/actions.cpp:683 common/widgets/mathplot.cpp:1406
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Návrat na úroveň priblíženia pred posledným zrušením priblíženia"
 
 #: common/tool/actions.cpp:698
 msgid "Pan to Center Selected Objects"
@@ -13577,6 +13578,9 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"Vybrať túto možnosť ak všetky jednotky symbolu majú rovnakú funkciu.\n"
+"Napríklad môže byť táto možnosť vybraná pre štvornásobné hradlo NAND, zatiaľ "
+"čo pre dvojitú triódu (kde jednotka C je vlákno) by sa nemala vybrať."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 #, fuzzy
@@ -13802,7 +13806,7 @@ msgid ""
 "Synchronized pins mode is enabled.\n"
 "Similar pins will be edited regardless of this option."
 msgstr ""
-"Režim synchronizácie vývodov je povolený.\n"
+"Synchronizovaný režim vývodov je povolený.\n"
 "Podobné vývody budú upravené, bez ohľadu na túto možnosť."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
@@ -13830,17 +13834,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:452
 msgid "Synchronized Pins Mode."
-msgstr "Režim synchronizovania vývodov"
+msgstr "Synchronizovaný režim vývodov."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
-"Synchronizovaný režim vývodů je povolen.    Do všech jednotek bude přidán "
-"nový pin."
+"Synchronizovaný režim vývodov.    Nový vývod bude pridaný do všetkých "
+"jednotiek."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
+"Synchronizovaný režim vývodov.   Zhodné vývody v iných jednotkách budú "
+"aktualizované."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -14184,7 +14190,7 @@ msgstr "Otvoriť súbor po vykreslení"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:182
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Otvoriť výstupný súbor s priradenou aplikáciou po úspešnom vykreslení"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
 msgid "Plot Schematic"
@@ -14375,7 +14381,7 @@ msgstr "Zhoda pri &veľkosti písmen"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Whole &words only"
-msgstr ""
+msgstr "Iba celé &slová"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:90
 msgid "Regular Expression"
@@ -14824,7 +14830,7 @@ msgstr "Hz"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:440
 #: eeschema/dialogs/dialog_sim_command_base.cpp:510
 msgid "Stop frequency:"
-msgstr "Frekvencia zastavenia:"
+msgstr "Koncová frekvencia:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:111
 msgid "Source 2"
@@ -14956,11 +14962,11 @@ msgstr "Zdroj šumu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "Uložiť príspevky od všetkých generátorov šumu"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Výpočet šumového prúdu korelačnej matice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 msgid "SPICE directives:"
@@ -14976,11 +14982,11 @@ msgstr "Funkcia prenosu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(výstupné napätie) / (vstupné napätie)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(výstupné napätie) / (vstupný prúd)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
 msgid "Input:"
@@ -15001,7 +15007,7 @@ msgstr "Hľadať:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles and Zeros"
-msgstr ""
+msgstr "Póly a nuly"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles"
@@ -15080,7 +15086,7 @@ msgstr "Bodkovaný prúd/fáza"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:822
 msgid "Margins:"
-msgstr ""
+msgstr "Okraje:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:832
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:546
@@ -23303,9 +23309,8 @@ msgid "Create SVG file from the current symbol"
 msgstr "Vytvorte súbor SVG z aktuálneho symbolu"
 
 #: eeschema/tools/sch_actions.cpp:329
-#, fuzzy
 msgid "Synchronized Pins Mode"
-msgstr "Režim úprav synchronizovaných kolíkov"
+msgstr "Synchronizovaný režim vývodov"
 
 #: eeschema/tools/sch_actions.cpp:330
 msgid ""
@@ -23313,7 +23318,7 @@ msgid ""
 "When enabled propagates all changes (except pin numbers) to other units.\n"
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
-"Synchronizovaný režim úprav vývodov\n"
+"Synchronizovaný režim vývodov\n"
 "Ak je táto možnosť povolená, všetky zmeny (okrem čísel vývodov) sa rozšíria "
 "na ďalšie jednotky.\n"
 "Predvolene je povolené pre viac jednotkové súčiastky so zameniteľnými "
@@ -23358,7 +23363,7 @@ msgstr "Kresliť mnohouholníky"
 
 #: eeschema/tools/sch_actions.cpp:395
 msgid "Move Symbol Anchor"
-msgstr "Presuňte kotvu symbolov"
+msgstr "Presunúť bod ukotvenia symbolu"
 
 #: eeschema/tools/sch_actions.cpp:404
 msgid "Push Pin Length"
@@ -25079,6 +25084,7 @@ msgstr "Táto pozícia je už obsadená iným vývodom v jednotke %d."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
+"Zakázať možnosť 'synchronizovaný režim vývodov' pre potlačenie tejto správy."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -28236,9 +28242,8 @@ msgid "EasyEDA (JLCEDA) Std Backup..."
 msgstr "Záloha EasyEDA (JLCEDA) Std..."
 
 #: kicad/menubar.cpp:130
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "Importujte schému XML EAGLE CAD a dosku"
+msgstr "Importovať EasyEDA (JLCEDA) Standard schému a dosku"
 
 #: kicad/menubar.cpp:134
 #, fuzzy
@@ -30119,7 +30124,7 @@ msgstr "Vlastnosti kruhu"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:34
 msgid "Standard Size:"
-msgstr "Štandardná velkosť:"
+msgstr "Štandardná veľkosť:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:58
 #: pcbnew/dialogs/dialog_board_statistics.cpp:107
@@ -31780,7 +31785,6 @@ msgstr ""
 "Ukončiť a zahodiť zmeny?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -31797,34 +31801,20 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Série E definované v IEC 60063 sú všeobecne akceptovaným preferovaným "
-"systémom\n"
-"čísla pre elektronické súčiastky. Dostupné hodnoty sú približne\n"
-"rovnako rozložené v logaritmickej mierke.\n"
+"- Táto kalkulačka vyhľadáva kombinácie štandardných rezistorov rady E (medzi "
+"10Ω a 1MΩ) na vytvorenie ľubovoľných hodnôt.\n"
+"- Môžete zadať požadovaný odpor od 0,0025 do 4000 kΩ.\n"
+"- Umožňuje riešenia s použitím až 4 komponentov.\n"
 "\n"
-"E12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"E6: 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
-"E3: 1,0 - - - 2,2 - - - 4,7 - - -\n"
-"E1: 1,0 - - - - - - - - - - - -\n"
-"\n"
-"Táto kalkulačka vyhľadáva kombinácie štandardných komponentov série E.\n"
-"vytvárať ľubovoľné hodnoty. Môžete zadať požadovaný odpor od 0,0025 do 4000 "
-"kOhm.\n"
-"Uvádzané sú riešenia využívajúce až 3 komponenty.\n"
-"\n"
-"Ak je potrebné bližšie riešenie, poskytne riešenie možnosť 4R\n"
-"s použitím iba 4 komponentov iba pre sériu E12. Táto možnosť\n"
-"výpočet môže trvať dlhšie.\n"
-"\n"
-"Je tiež možné určiť až dve hodnoty, ktoré sa majú z riešenia vylúčiť, ak sú "
-"tieto\n"
-"hodnoty komponentov nie sú k dispozícii\n"
+"Požadovaná hodnota je vždy vylúčená zo sady riešení.<br>\n"
+"V prípade problémov s dostupnosťou súčiastok, je možné vylúčiť až dve ďalšie "
+"hodnoty.\n"
 "\n"
 "Riešenia sú uvedené v nasledujúcich formátoch:\n"
 "\n"
-"Rezistory R1 + R2 +... + Rn v sérii\n"
-"R1 | R2 |... | Rn rezistory paralelne\n"
-"R1 + (R2 | R3)... akákoľvek kombinácia vyššie uvedených\n"
+"\tR1 + R2 +...+ Rn \trezistory zapojené sériovo\n"
+"\tR1 | R2 |...| Rn\trezistory zapojené paralelne\n"
+"\tR1 + (R2|R3)...\t\tľubovoľná kombinácia vyššie uvedených\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 #, fuzzy
@@ -35589,9 +35579,8 @@ msgid "Tight (0.001 mm)"
 msgstr "Štandardné (1,2,3)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
-#, fuzzy
 msgid "Standard (0.01 mm)"
-msgstr "Štandardné (1,2,3)"
+msgstr "Štandardné (0,01 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:267
 msgid "Loose (0.1 mm)"
@@ -37415,7 +37404,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:105
 msgid "Rotate around item anchor"
-msgstr "Otočiť okolo kotvy položky"
+msgstr "Otočiť položku okolo bodu ukotvenia"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:108
 msgid "Rotate around selection center"
@@ -38825,7 +38814,7 @@ msgid ""
 "The anchor position will be the position of the selected item."
 msgstr ""
 "Kliknite a vyberte položku na doske.\n"
-"Poloha ukotvenia bude pozíciou vybranej položky."
+"Poloha bodu ukotvenia bude pozíciou vybranej položky."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
@@ -49306,9 +49295,8 @@ msgid "Draw Dimension"
 msgstr "Kresliť kótu"
 
 #: pcbnew/tools/drawing_tool.cpp:2087
-#, fuzzy
 msgid "Move Footprint Anchor"
-msgstr "Umiestnite kotvu stopy"
+msgstr "Presunúť bod kotvenia puzdra"
 
 #: pcbnew/tools/drawing_tool.cpp:3787
 #, fuzzy
@@ -49969,12 +49957,11 @@ msgstr "Pridať zónu s rovnakými nastaveniami ako má existujúca zóna"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Place the Footprint Anchor"
-msgstr "Umiestnite kotvu stopy"
+msgstr "Umiestniť bod ukotvenia puzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:349
-#, fuzzy
 msgid "Set the anchor point of the footprint"
-msgstr "Nastavte začiatočný bod (kotvu) súradnice stopy"
+msgstr "Nastaviť bod ukotvenia puzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
@@ -52195,10 +52182,10 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Uložiť a obnoviť polohu pohľadu a priblíženie.\n"
-"Použite %s+Tab pre aktiváciu selektora\n"
-"Postupným stlačením klávesu Tab a podržaním klávesu %s sa prepínajú "
-"predvoľby v kontextovom okne."
+"Uložiť a obnoviť polohu pohľadu a priblížiť.\n"
+"Pomocou %s+Tab je aktivovaný výber.\n"
+"Opakovaným stláčaním klávesy Tab pri stlačenej klávese %s, je prepínané "
+"medzi zobrazeniami vo vyskakovacom okne."
 
 #: pcbnew/widgets/appearance_controls.cpp:469
 msgid "Filter nets"
