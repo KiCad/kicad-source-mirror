@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:27+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-03-13 21:28+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -2201,8 +2201,7 @@ msgstr ""
 #: common/design_block_lib_table.cpp:348
 #, c-format
 msgid "design-block-lib-table files contain no library named '%s'."
-msgstr ""
-"súbory design-block-lib-table neobsahujú žiadnu knižnicu s názvom '%s'."
+msgstr "súbory design-block-lib-table neobsahujú žiadnu knižnicu s názvom '%s'."
 
 #: common/design_block_lib_table.cpp:610 common/fp_lib_table.cpp:607
 #: eeschema/symbol_lib_table.cpp:605
@@ -10211,8 +10210,7 @@ msgstr "Nastaviť klávesovú skratku"
 #: common/widgets/widget_hotkey_list.cpp:387
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr ""
-"'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
+msgstr "'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
 
 #: common/widgets/widget_hotkey_list.cpp:451
 msgid "Edit..."
@@ -10912,8 +10910,7 @@ msgstr "Uložiť do schémy"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr ""
-"Uložiť priradenia puzdier do polí 'footprint' v schematických symboloch"
+msgstr "Uložiť priradenia puzdier do polí 'footprint' v schematických symboloch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
@@ -12322,8 +12319,8 @@ msgstr "Uložiť všetky stratové výkony"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Napísať direktívy na uloženie stratových výkonov všetkých položiek (.probe "
-"p(<item>))"
+"Napísať direktívy na uloženie stratových výkonov všetkých položiek (.probe p"
+"(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15819,8 +15816,7 @@ msgstr "Mapovanie tabuľky knižnice symbolov je dokončené!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr ""
-"Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
+msgstr "Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:358
 #: eeschema/dialogs/dialog_symbol_remap.cpp:531
@@ -20101,8 +20097,7 @@ msgstr "Schematický marker"
 #: eeschema/sch_screen.cpp:695 eeschema/sch_screen.cpp:787
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
-"Nastaviť knižničný identifikátor schematického symbolu '%s %s' na '%s'."
+msgstr "Nastaviť knižničný identifikátor schematického symbolu '%s %s' na '%s'."
 
 #: eeschema/sch_screen.cpp:711
 #, c-format
@@ -36088,8 +36083,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Knižničné ID a ID puzdra sú priradené.   Pomocou príkazu \"Zameniť puzdro..."
-"\" môžete priradiť iné puzdro."
+"Knižničné ID a ID puzdra sú priradené.   Pomocou príkazu \"Zameniť "
+"puzdro...\" môžete priradiť iné puzdro."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -39954,8 +39949,7 @@ msgstr "Skryté knižnice puzdier nie sú ešte podporované."
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr ""
-"Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
+msgstr "Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, fuzzy, c-format
@@ -47284,8 +47278,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6663
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Neplatná vrstva v padstacku '%s' v súbore '%s' na riadku %d, offset %d."
+msgstr "Neplatná vrstva v padstacku '%s' v súbore '%s' na riadku %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6287
 #, fuzzy, c-format
@@ -48052,8 +48045,7 @@ msgstr "Umiestniť slepý/vnorený prekov"
 
 #: pcbnew/router/router_tool.cpp:130
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
+msgstr "Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
 
 #: pcbnew/router/router_tool.cpp:140
 msgid "Place Microvia"
