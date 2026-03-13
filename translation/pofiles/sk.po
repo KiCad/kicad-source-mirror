@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 18:15+0000\n"
-"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 21:27+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -6872,8 +6872,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálne inštalovanému systému knižníc puzdier "
-"(priečinky .pretty)."
+"Základní cesta k lokálne inštalovanému systému knižníc puzdier (priečinky "
+".pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -11569,8 +11569,8 @@ msgstr ""
 "\n"
 " * `%I`: absolutní cesta a název souboru průběžného netlistu, který je "
 "vstupem do generátoru BOM\n"
-" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony "
-"souboru)\n"
+" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony souboru)"
+"\n"
 " * `%B`: základní název souboru výstupního BOM (bez přípony souboru)\n"
 " * `%P`: absolutní cesta k adresáři projektu, bez koncového lomítka\n"
 "\n"
@@ -11590,8 +11590,8 @@ msgstr ""
 "souboru>\n"
 "```\n"
 "\n"
-"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:"
-"\\Users\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
+"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:\\U"
+"sers\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\jménouživatele\\kicad\\my_python_script.py \"%I\" "
@@ -13794,8 +13794,7 @@ msgstr "Alternatívny názov PIN"
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
-"Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
+msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
@@ -19320,8 +19319,7 @@ msgstr ""
 #: eeschema/sch_io/database/sch_io_database.cpp:297
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
-"Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
+msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -20564,9 +20562,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20603,8 +20601,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22403,8 +22402,7 @@ msgstr "Spravovať knižnice symbolov"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:924
 #, fuzzy, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr ""
-"Symbol %s je odvodeným symbolom.  Grafiku symbolu nebude možné upraviť."
+msgstr "Symbol %s je odvodeným symbolom.  Grafiku symbolu nebude možné upraviť."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 msgid "Library is read-only.  Changes cannot be saved to this library."
@@ -24336,8 +24334,7 @@ msgstr "Uložiť zošit"
 #: eeschema/tools/sch_actions.cpp:1487
 #, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"Prečíta aktuálny netlist a vypíše puzdra, ktoré chýbajú alebo sú naviac"
+msgstr "Prečíta aktuálny netlist a vypíše puzdra, ktoré chýbajú alebo sú naviac"
 
 #: eeschema/tools/sch_actions.cpp:1495
 #, fuzzy
@@ -30989,8 +30986,7 @@ msgstr "Dátový súbor regulátora:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:88
 msgid "The name of the data file which stores known regulators parameters."
-msgstr ""
-"Názov dátového súboru, v ktorom sú uložené známe parametre regulátorov."
+msgstr "Názov dátového súboru, v ktorom sú uložené známe parametre regulátorov."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
 msgid "Browse"
@@ -31852,8 +31848,7 @@ msgstr "Faktor dielektrickej straty"
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
-msgstr ""
-"Elektrický odpor alebo špecifický elektrický odpor vodiča (ohm * meter)"
+msgstr "Elektrický odpor alebo špecifický elektrický odpor vodiča (ohm * meter)"
 
 #: pcb_calculator/transline_ident.cpp:110
 msgid "Frequency of the input signal"
@@ -34332,8 +34327,7 @@ msgstr "Otočiť obrázok"
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr ""
-"Položku otáčajte a posúvajte - viacnásobný výber sa bude otáčať súčasne"
+msgstr "Položku otáčajte a posúvajte - viacnásobný výber sa bude otáčať súčasne"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:409
 msgid "Numbering Options"
@@ -50402,8 +50396,7 @@ msgstr "Upraviť plôšku ako grafický tvar"
 
 #: pcbnew/tools/pcb_actions.cpp:956
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
-msgstr ""
-"Oddelí podložku vlastného tvaru na úpravy ako jednotlivé grafické tvary"
+msgstr "Oddelí podložku vlastného tvaru na úpravy ako jednotlivé grafické tvary"
 
 #: pcbnew/tools/pcb_actions.cpp:963
 msgid "Finish Pad Edit"
