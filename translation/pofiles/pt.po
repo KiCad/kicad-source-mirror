@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-13 20:11+0000\n"
-"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v9/pt/>"
 "\n"
 "Language: pt\n"
@@ -24522,8 +24522,7 @@ msgstr "A rede deve ser rotulada para que seja atribuída à uma classe da rede.
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1072
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"Colar uma cadeia de texto longa pode ser muito lento. Deseja continuar?"
+msgstr "Colar uma cadeia de texto longa pode ser muito lento. Deseja continuar?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
