@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-06 22:41+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-03-13 20:07+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/v9/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -938,8 +938,7 @@ msgstr "לחץ לחיצה כפולה שמאלית או לחיצה אמצעית �
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:575
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
-"בטל את הסימון של 'השתמש בצבעי מחסנית שכבות הלוח' כדי לאפשר עריכת צבעים."
+msgstr "בטל את הסימון של 'השתמש בצבעי מחסנית שכבות הלוח' כדי לאפשר עריכת צבעים."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:630
 #: pcbnew/widgets/appearance_controls.cpp:2251
@@ -4444,8 +4443,8 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
-"אם הגודל הכולל של קבצי הגיבוי עולה על מגבלה זו, גיבויים ישנים יימחקו (הגדר "
-"ל-0 ללא הגבלה)"
+"אם הגודל הכולל של קבצי הגיבוי עולה על מגבלה זו, גיבויים ישנים יימחקו (הגדר ל-"
+"0 ללא הגבלה)"
 
 #: common/dialogs/panel_common_settings_base.cpp:447
 msgid "MB"
@@ -10082,8 +10081,7 @@ msgstr "שחזר ברירות מחדל"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
-"'%s' כבר מוקצה ל-'%s' במקטע '%s'. האם אתה בטוח שברצונך לשנות את ההקצאה?"
+msgstr "'%s' כבר מוקצה ל-'%s' במקטע '%s'. האם אתה בטוח שברצונך לשנות את ההקצאה?"
 
 #: common/widgets/widget_hotkey_list.cpp:502
 msgid "Confirm change"
@@ -10664,8 +10662,8 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"חלק מתצורות הרכיבים המשויכות הן רשומות מדור קודם ללא שמות ספרייה. האם תרצה "
-"ש-KiCad ינסה להמיר אותן לפורמט LIB_ID הנדרש החדש? (אם תענה לא, שיוכים אלה "
+"חלק מתצורות הרכיבים המשויכות הן רשומות מדור קודם ללא שמות ספרייה. האם תרצה ש-"
+"KiCad ינסה להמיר אותן לפורמט LIB_ID הנדרש החדש? (אם תענה לא, שיוכים אלה "
 "יימחקו ותצטרך לשייך אותם מחדש ידנית.)"
 
 #: cvpcb/readwrite_dlgs.cpp:150
@@ -21298,8 +21296,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
-"<b>(%s, %s)</b> בסגנון גוף %s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
+"(%s, %s)</b> בסגנון גוף %s."
 
 #: eeschema/symbol_checker.cpp:93
 #, c-format
@@ -21307,8 +21305,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
-"<b>(%s, %s)</b> ביחידות %s ו-%s של סגנון גוף %s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
+"(%s, %s)</b> ביחידות %s ו-%s של סגנון גוף %s."
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -21316,8 +21314,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
-"<b>(%s, %s)</b>."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
+"(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:126
 #, c-format
@@ -21325,8 +21323,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
-"<b>(%s, %s)</b> ביחידות %s ו-%s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
+"(%s, %s)</b> ביחידות %s ו-%s."
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
@@ -21363,8 +21361,7 @@ msgstr "<b>סמל כוח חשוד</b><br>רק לפין כוח של קלט או �
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
-msgstr ""
-"<b>סמל כוח חשוד</b><br>פינים מוסתרים של קלט כוח אינם נדרשים עוד<br><br>"
+msgstr "<b>סמל כוח חשוד</b><br>פינים מוסתרים של קלט כוח אינם נדרשים עוד<br><br>"
 
 #: eeschema/symbol_checker.cpp:269
 #, c-format
@@ -22871,8 +22868,7 @@ msgstr "ייבא הקצאות תצורת רכיב..."
 #: eeschema/tools/sch_actions.cpp:1029
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr ""
-"ייבא הקצאות תצורת רכיב לסמלים מקובץ .cmp שנוצר על ידי עורך המעגל המודפס"
+msgstr "ייבא הקצאות תצורת רכיב לסמלים מקובץ .cmp שנוצר על ידי עורך המעגל המודפס"
 
 #: eeschema/tools/sch_actions.cpp:1035
 msgid "Annotate Schematic..."
@@ -26668,8 +26664,7 @@ msgstr "הצג כלים לחישוב התנגדות, כושר זרם וכו'"
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr ""
-"ערוך גבולות גיליון שרטוט ותיבות כותרת לשימוש בסכימות ועיצובי מעגל מודפס"
+msgstr "ערוך גבולות גיליון שרטוט ותיבות כותרת לשימוש בסכימות ועיצובי מעגל מודפס"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -30389,8 +30384,8 @@ msgstr ""
 "100 °C, ורוחבים עד 400 מיל (10 מ\"מ).\n"
 "\n"
 "הנוסחה, מתוך IPC 2221, היא\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "כאשר:<br>\n"
 "___I___ הוא הזרם המקסימלי ב-A<br>\n"
 "___&Delta;T___ היא עליית הטמפרטורה מעל הסביבה ב-&deg;C<br>\n"
@@ -42898,8 +42893,7 @@ msgstr "מזהה תצורת הרכיב '%s' של %s אינו חוקי."
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr ""
-"תצורת הרכיב '%s' של %s לא נמצאה באף ספרייה בטבלת ספריות תצורות הרכיבים."
+msgstr "תצורת הרכיב '%s' של %s לא נמצאה באף ספרייה בטבלת ספריות תצורות הרכיבים."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -43641,8 +43635,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "טוען ספרייה '%s':\n"
-"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה "
-"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
+"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2639
 #, c-format
@@ -43650,8 +43644,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה "
-"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
+"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2682
 #, c-format
@@ -43765,8 +43759,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "טוען ספרייה '%s':\n"
-"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה "
-"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
+"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3700
 #, c-format
@@ -43774,8 +43768,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה "
-"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
+"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3728
 #, c-format
@@ -44061,8 +44055,8 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
-"אזור CADSTAR‏ '%s' מסומן כאזור מיקום ב-CADSTAR. אזורי מיקום אינם נתמכים "
-"ב-KiCad. רק הרכיבים הנתמכים באזור יובאו."
+"אזור CADSTAR‏ '%s' מסומן כאזור מיקום ב-CADSTAR. אזורי מיקום אינם נתמכים ב-"
+"KiCad. רק הרכיבים הנתמכים באזור יובאו."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1733
 #, c-format
@@ -45057,8 +45051,7 @@ msgstr ""
 msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
-msgstr ""
-"לרכיב '%s' יש תווים שאינם ASCII בסמן שלו; הומר ל-'%s' עבור ייצוא ODB++."
+msgstr "לרכיב '%s' יש תווים שאינם ASCII בסמן שלו; הומר ל-'%s' עבור ייצוא ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
