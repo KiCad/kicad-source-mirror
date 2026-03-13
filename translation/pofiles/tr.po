@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-12 23:13+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 21:23+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -5547,8 +5547,7 @@ msgstr "Çizgi-Nokta-Nokta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:185
 msgid "Set color to transparent to use layer default color."
-msgstr ""
-"Katman varsayılan rengini kullanmak için rengi şeffaf olarak ayarlayın."
+msgstr "Katman varsayılan rengini kullanmak için rengi şeffaf olarak ayarlayın."
 
 #: common/dialogs/panel_setup_netclasses.cpp:429
 msgid ""
@@ -9282,8 +9281,7 @@ msgstr "Son Yakınlaştırmayı Tekrarla"
 
 #: common/tool/actions.cpp:683 common/widgets/mathplot.cpp:1406
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
-"Yakınlaştırmayı son yakınlaştırmadan önceki seviyeye döndürmeyi geri al"
+msgstr "Yakınlaştırmayı son yakınlaştırmadan önceki seviyeye döndürmeyi geri al"
 
 #: common/tool/actions.cpp:698
 msgid "Pan to Center Selected Objects"
@@ -9519,8 +9517,7 @@ msgstr "Etkin Olmayan Katman Görünümü Modu (3 durumlu)"
 
 #: common/tool/actions.cpp:1032
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr ""
-"Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekleme"
+msgstr "Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekleme"
 
 #: common/tool/actions.cpp:1038
 msgid "Draw Bounding Boxes"
@@ -10176,8 +10173,7 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: common/widgets/widget_hotkey_list.cpp:104
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
-"Yeni bir kısayol tuşuna basın veya iptal etmek için Esc tuşuna basın..."
+msgstr "Yeni bir kısayol tuşuna basın veya iptal etmek için Esc tuşuna basın..."
 
 #: common/widgets/widget_hotkey_list.cpp:117
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:28
@@ -24593,8 +24589,7 @@ msgstr "Pin Özelliklerini Düzenle"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:238
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr ""
-"Bu konum zaten%d birimindeki başka bir pim tarafından işgal edilmiştir."
+msgstr "Bu konum zaten%d birimindeki başka bir pim tarafından işgal edilmiştir."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
@@ -29774,8 +29769,8 @@ msgstr ""
 "Temel: Tehlikeli-canlı parçaların yalıtımı.\n"
 "\n"
 "Güçlendirilmiş: Çift yalıtıma eşdeğer bir koruma derecesi sağlayan tek "
-"yalıtım. (bunlardan birinin arızalanması durumunda iki ayrı temel "
-"yalıtımdır)."
+"yalıtım. (bunlardan birinin arızalanması durumunda iki ayrı temel yalıtımdır)"
+"."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Functional"
@@ -30027,8 +30022,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
-"Uzun kaynaştırma süresi nedeniyle mevcut hesaplama hafife alınmaktadır."
+msgstr "Uzun kaynaştırma süresi nedeniyle mevcut hesaplama hafife alınmaktadır."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -31478,8 +31472,7 @@ msgstr "Zoran"
 
 #: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
-"Tek mod empedansı (zıt (diferansiyel) voltajlarla tahrik edilen hatlar)"
+msgstr "Tek mod empedansı (zıt (diferansiyel) voltajlarla tahrik edilen hatlar)"
 
 #: pcb_calculator/transline_ident.cpp:365
 msgid "Distance between strip and top metal"
@@ -32857,8 +32850,7 @@ msgstr "Farklı ağları birbirine bağlayan &yolları sil"
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr ""
-"farklı ağlara ait düğümleri bağlayan yol parçalarını kaldır kısa devre)"
+msgstr "farklı ağlara ait düğümleri bağlayan yol parçalarını kaldır kısa devre)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "&Delete redundant vias"
@@ -38183,8 +38175,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1221
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
-"Doldurulmamış bir çokgen için çizgi genişliği sıfırdan büyük olmalıdır."
+msgstr "Doldurulmamış bir çokgen için çizgi genişliği sıfırdan büyük olmalıdır."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1233
 msgid "Line width must be greater than zero for an unfilled curve."
@@ -47267,8 +47258,7 @@ msgstr ""
 #: pcbnew/router/pns_diff_pair_placer.cpp:598
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr ""
-"Birleştirilmiş net \"%s\" için uygun bir başlangıç noktası bulunamıyor."
+msgstr "Birleştirilmiş net \"%s\" için uygun bir başlangıç noktası bulunamıyor."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:80
 #: pcbnew/router/pns_meander_placer.cpp:63
@@ -48204,8 +48194,8 @@ msgstr "Bölge boşluğu: %s."
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr ""
-"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz "
-"kılınmıştır ;açıklık: %s."
+"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz kılınmıştır "
+";açıklık: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
