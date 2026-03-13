@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-07 00:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v9/lt/"
@@ -11988,7 +11988,7 @@ msgstr "Anotuoti schemą"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 msgid "Generate"
 msgstr "Kurti grandinių sąrašą"
 
@@ -38606,7 +38606,7 @@ msgstr "Perkelti elementą"
 msgid "Sheet Path"
 msgstr "Pasirinkite kelią"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 #, fuzzy
 msgid "Component Class"

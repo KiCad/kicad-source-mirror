@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-12 23:13+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
@@ -11318,7 +11318,7 @@ msgstr "Şemayı Numaralandır"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 msgid "Generate"
 msgstr "Oluştur"
 
@@ -36525,7 +36525,7 @@ msgstr "Ögeyi Taşı"
 msgid "Sheet Path"
 msgstr "Sayfa Yolu"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "Bileşen Sınıfı"

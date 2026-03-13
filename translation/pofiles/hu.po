@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-06 23:29+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
@@ -11646,7 +11646,7 @@ msgstr "Rajzjel sorszámozó"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 #, fuzzy
 msgid "Generate"
 msgstr "Létrehozás"
@@ -37815,7 +37815,7 @@ msgstr "Elem mozgatása"
 msgid "Sheet Path"
 msgstr "Elérési útvonal kiválasztása"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 #, fuzzy
 msgid "Component Class"

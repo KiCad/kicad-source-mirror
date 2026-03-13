@@ -10,11 +10,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-12 23:11+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v9/vi/>"
-"\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v9/vi/"
+">\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10879,7 +10879,8 @@ msgstr "Lưu vào Sơ đồ mạch"
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr "Lưu phép gán dấu chân vào trường 'dấu chân' của ký hiệu sơ đồ nguyên lý"
+msgstr ""
+"Lưu phép gán dấu chân vào trường 'dấu chân' của ký hiệu sơ đồ nguyên lý"
 
 #: cvpcb/tools/cvpcb_actions.cpp:81
 msgid "Save to Schematic and File"
@@ -10935,7 +10936,8 @@ msgstr "Sử dụng bộ lọc dấu chân và ký hiệu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:154
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr "Lọc danh sách dấu chân bằng bộ lọc dấu chân được xác định trong ký hiệu"
+msgstr ""
+"Lọc danh sách dấu chân bằng bộ lọc dấu chân được xác định trong ký hiệu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:162
 msgid "Filter by pin count"
@@ -11301,7 +11303,7 @@ msgstr "Chú thích Sơ đồ mạch"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 msgid "Generate"
 msgstr "Tạo"
 
@@ -13905,7 +13907,8 @@ msgstr "Không thể bình thường hóa đường dẫn '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:567
 msgid "No project or path defined for the current schematic."
-msgstr "Không có dự án hoặc đường dẫn được chỉ rõ cho sơ đồ nguyên lý hiện tại."
+msgstr ""
+"Không có dự án hoặc đường dẫn được chỉ rõ cho sơ đồ nguyên lý hiện tại."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
@@ -17179,7 +17182,8 @@ msgstr "Chân %s được kết nối với cả %s và %s"
 #: eeschema/erc/erc.cpp:1300
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Chân %s trên ký hiệu '%s' được kết nối với các lưới khác nhau: %s và %s"
+msgstr ""
+"Chân %s trên ký hiệu '%s' được kết nối với các lưới khác nhau: %s và %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -17406,7 +17410,8 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr "Xung đột giữa các định nghĩa bí danh bus trên các trang sơ đồ nguyên lý"
+msgstr ""
+"Xung đột giữa các định nghĩa bí danh bus trên các trang sơ đồ nguyên lý"
 
 #: eeschema/erc/erc_item.cpp:145
 msgid "More than one name given to this bus or net"
@@ -19841,7 +19846,8 @@ msgstr "Linh kiện chưa đánh chú thích: %s%s"
 #: eeschema/sch_reference_list.cpp:702
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Lỗi: ký hiệu %s%s%s (đơn vị %d) vượt quá số đơn vị được định nghĩa (%d)"
+msgstr ""
+"Lỗi: ký hiệu %s%s%s (đơn vị %d) vượt quá số đơn vị được định nghĩa (%d)"
 
 #: eeschema/sch_reference_list.cpp:741
 #, c-format
@@ -20924,7 +20930,8 @@ msgstr "Lỗi khi tạo tệp đầu ra tạm thời"
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
 "chen.pdf"
-msgstr "Kibis chưa hỗ trợ giá trị DUT. https://ibis.org/summits/nov16a/chen.pdf"
+msgstr ""
+"Kibis chưa hỗ trợ giá trị DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:854
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -23248,7 +23255,8 @@ msgstr "Nhập gán dấu chân..."
 #: eeschema/tools/sch_actions.cpp:1029
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "Nhập gán dấu chân ký hiệu từ tệp .cmp được tạo bởi trình soạn bảng mạch"
+msgstr ""
+"Nhập gán dấu chân ký hiệu từ tệp .cmp được tạo bởi trình soạn bảng mạch"
 
 #: eeschema/tools/sch_actions.cpp:1035
 msgid "Annotate Schematic..."
@@ -26009,7 +26017,8 @@ msgstr "Ghi đè tệp đầu ra"
 
 #: kicad/cli/command_pcb_export_3d.cpp:87
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
-msgstr "Loại trừ các mô hình 3D cho linh kiện có loại dấu chân 'Không xác định'"
+msgstr ""
+"Loại trừ các mô hình 3D cho linh kiện có loại dấu chân 'Không xác định'"
 
 #: kicad/cli/command_pcb_export_3d.cpp:92
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
@@ -27121,7 +27130,8 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Quản lý các gói có thể tải xuống từ KiCad và các kho lưu trữ bên thứ ba"
+msgstr ""
+"Quản lý các gói có thể tải xuống từ KiCad và các kho lưu trữ bên thứ ba"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -29393,8 +29403,8 @@ msgid ""
 "is a standard 1.2/50µs wave"
 msgstr ""
 "Dựa trên điện áp định mức và loại quá áp, thiết bị phải chịu được giá trị "
-"này mà không bị phá vỡ cách điện. Điện áp xung này là sóng tiêu chuẩn 1.2/"
-"50µs"
+"này mà không bị phá vỡ cách điện. Điện áp xung này là sóng tiêu chuẩn "
+"1.2/50µs"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -30875,8 +30885,8 @@ msgstr ""
 "mm).\n"
 "\n"
 "Công thức, từ IPC 2221, là\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "trong đó:<br>\n"
 "___I___ là dòng điện tối đa tính bằng A<br>\n"
 "___&Delta;T___ là tăng nhiệt độ so với môi trường xung quanh tính bằng "
@@ -36184,7 +36194,7 @@ msgstr "Di chuyển mục"
 msgid "Sheet Path"
 msgstr "Đường dẫn trang"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "Lớp linh kiện"
@@ -37134,7 +37144,8 @@ msgstr "Hệ số tỷ lệ X:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr "Đặt hệ số điều chỉnh tỷ lệ X toàn cục cho đầu ra PostScript đúng tỷ lệ."
+msgstr ""
+"Đặt hệ số điều chỉnh tỷ lệ X toàn cục cho đầu ra PostScript đúng tỷ lệ."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:290
 msgid "Y scale factor:"
@@ -37142,7 +37153,8 @@ msgstr "Hệ số tỷ lệ Y:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr "Đặt hệ số điều chỉnh tỷ lệ Y toàn cục cho đầu ra PostScript đúng tỷ lệ."
+msgstr ""
+"Đặt hệ số điều chỉnh tỷ lệ Y toàn cục cho đầu ra PostScript đúng tỷ lệ."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:302
 msgid "Track width correction:"
@@ -37160,8 +37172,8 @@ msgstr ""
 "xác.\n"
 "Hiệu chỉnh chiều rộng này nhằm bù đắp sai số chiều rộng đường mạch và kích "
 "thước điểm hàn, via.\n"
-"Giá trị hiệu chỉnh chiều rộng hợp lý phải nằm trong khoảng [-(MinTrackWidth-"
-"1), +(MinClearanceValue-1)]."
+"Giá trị hiệu chỉnh chiều rộng hợp lý phải nằm trong khoảng [-"
+"(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -43454,8 +43466,8 @@ msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
 msgstr ""
-"Không thể bỏ dấu chân linh kiện %s không dùng (dấu chân linh kiện đã bị khóa)"
-"."
+"Không thể bỏ dấu chân linh kiện %s không dùng (dấu chân linh kiện đã bị "
+"khóa)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1447
 #, c-format
@@ -45273,7 +45285,8 @@ msgstr "Không thể định vị padstack %s trong tệp %s\n"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2762
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr "Điểm hàn tùy chỉnh '%s' không hợp lệ. Thay thế bằng điểm hàn hình tròn."
+msgstr ""
+"Điểm hàn tùy chỉnh '%s' không hợp lệ. Thay thế bằng điểm hàn hình tròn."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2770
 #, c-format
@@ -45288,7 +45301,8 @@ msgstr "Mong đợi dữ liệu etch trên lớp đồng. Tìm thấy hàng trê
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3278
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
-msgstr "Loại hình dạng %d không được xử lý trong đa giác trên lớp %s, seq %d %d"
+msgstr ""
+"Loại hình dạng %d không được xử lý trong đa giác trên lớp %s, seq %d %d"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3437
 #, c-format
@@ -45876,7 +45890,8 @@ msgstr ""
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
-msgstr "Bật ghi nhật ký <b>gỡ lỗi</b> cho các hàm Dấu chân*() trong PCB_IO này."
+msgstr ""
+"Bật ghi nhật ký <b>gỡ lỗi</b> cho các hàm Dấu chân*() trong PCB_IO này."
 
 #: pcbnew/pcb_io/pcb_io.cpp:178
 msgid "Regular expression <b>footprint name</b> filter."
@@ -46098,7 +46113,8 @@ msgstr "Lớp không nhận dạng được '%s'"
 #: pcbnew/pcbexpr_functions.cpp:272
 #, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Thiếu đối số dấu chân linh kiện (A, B, hoặc ký hiệu tham chiếu) cho %s."
+msgstr ""
+"Thiếu đối số dấu chân linh kiện (A, B, hoặc ký hiệu tham chiếu) cho %s."
 
 #: pcbnew/pcbexpr_functions.cpp:505
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -46528,7 +46544,8 @@ msgstr "Kích Thước Đường Mạch/Via Tùy Chỉnh..."
 
 #: pcbnew/router/router_tool.cpp:183
 msgid "Shows a dialog for changing the track width and via size."
-msgstr "Hiển thị hộp thoại để thay đổi chiều rộng đường mạch và kích thước via."
+msgstr ""
+"Hiển thị hộp thoại để thay đổi chiều rộng đường mạch và kích thước via."
 
 #: pcbnew/router/router_tool.cpp:191
 msgid "Switch Track Posture"
@@ -47379,12 +47396,14 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:1366
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "Ràng buộc chiều rộng đã giải quyết: tối thiểu %s; tối ưu %s; tối đa %s."
+msgstr ""
+"Ràng buộc chiều rộng đã giải quyết: tối thiểu %s; tối ưu %s; tối đa %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1386
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "Ràng buộc đường kính đã giải quyết: tối thiểu %s; tối ưu %s; tối đa %s."
+msgstr ""
+"Ràng buộc đường kính đã giải quyết: tối thiểu %s; tối ưu %s; tối đa %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1393
 msgid "Via Annular Width"
@@ -48873,7 +48892,8 @@ msgstr "Thay đổi chiều rộng đường mạch sang kích thước định 
 
 #: pcbnew/tools/pcb_actions.cpp:1106
 msgid "Change via size to next pre-defined size"
-msgstr "Thay đổi kích thước via sang kích thước được định nghĩa trước tiếp theo"
+msgstr ""
+"Thay đổi kích thước via sang kích thước được định nghĩa trước tiếp theo"
 
 #: pcbnew/tools/pcb_actions.cpp:1113
 msgid "Decrease Via Size"
@@ -48922,7 +48942,8 @@ msgstr "Ngăn các mục bị di chuyển và/hoặc thay đổi kích thước 
 
 #: pcbnew/tools/pcb_actions.cpp:1196
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr "Cho phép các mục được di chuyển và/hoặc thay đổi kích thước trên canvas"
+msgstr ""
+"Cho phép các mục được di chuyển và/hoặc thay đổi kích thước trên canvas"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Group the selected items so that they are treated as a single item"

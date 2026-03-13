@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-12 23:13+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/v9/da/>\n"
@@ -9408,7 +9408,8 @@ msgstr "Vis baggrundsgitter i redigeringsvinduet"
 
 #: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
-msgstr "Aktiverer elementspecifikke gitre der tilsidesætter det aktuelle gitter"
+msgstr ""
+"Aktiverer elementspecifikke gitre der tilsidesætter det aktuelle gitter"
 
 #: common/tool/actions.cpp:933
 msgid "Edit grid definitions"
@@ -11297,7 +11298,7 @@ msgstr "Kommenter skematisk"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 msgid "Generate"
 msgstr "Opret"
 
@@ -12197,8 +12198,8 @@ msgstr "Gem alle effektforbrug"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Skriv direktiver til at gemme effektforbrug for alle elementer (.probe p"
-"(<element>))"
+"Skriv direktiver til at gemme effektforbrug for alle elementer (.probe "
+"p(<element>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -13709,7 +13710,8 @@ msgstr "Synkroniseret pin-tilstand. Ny pin tilføjes til alle enheder."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr "Synkroniseret pin-tilstand. Tilsvarende pins i andre enheder opdateres."
+msgstr ""
+"Synkroniseret pin-tilstand. Tilsvarende pins i andre enheder opdateres."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -18845,7 +18847,8 @@ msgstr "Fil ser ikke ud til at være en CADSTAR-delebiblioteksfil"
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr "Kan ikke finde symbol %s, refereret af del %s. Delen blev ikke indlæst."
+msgstr ""
+"Kan ikke finde symbol %s, refereret af del %s. Delen blev ikke indlæst."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:147
 #, c-format
@@ -23537,7 +23540,8 @@ msgstr "Opret stykliste (ekstern)..."
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Opret en stykliste for det aktuelle skema ved brug af ekstern generator"
+msgstr ""
+"Opret en stykliste for det aktuelle skema ved brug af ekstern generator"
 
 #: eeschema/tools/sch_actions.cpp:1144
 #, fuzzy
@@ -24447,7 +24451,8 @@ msgstr "Symbolbiblioteket '%s' blev ikke fundet."
 #: pcbnew/tools/footprint_editor_control.cpp:650
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
-msgstr "Manglende/fejlformet filstifinder-argument '%F' i fælles indstillinger."
+msgstr ""
+"Manglende/fejlformet filstifinder-argument '%F' i fælles indstillinger."
 
 #: eeschema/tools/symbol_editor_control.cpp:435
 #: pcbnew/tools/footprint_editor_control.cpp:675
@@ -26772,7 +26777,8 @@ msgstr "Roter bræt; format 'X,Y,Z' f.eks.: '-45,0,45' for isometrisk visning"
 
 #: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr "Topslyslysintensitet; format 'R,G,B' eller et enkelt tal; interval: 0-1"
+msgstr ""
+"Topslyslysintensitet; format 'R,G,B' eller et enkelt tal; interval: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -29574,8 +29580,8 @@ msgid ""
 "is a standard 1.2/50µs wave"
 msgstr ""
 "Givet mærkespændingen og overspændingskategorien skal en enhed tåle denne "
-"værdi uden isolationssammenbrud. Denne impulsspænding er en standard 1.2/"
-"50µs-bølge"
+"værdi uden isolationssammenbrud. Denne impulsspænding er en standard "
+"1.2/50µs-bølge"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -29613,8 +29619,8 @@ msgid ""
 msgstr ""
 "Transiente overspændinger pga.:\n"
 "\n"
-"- Atmosfæriske forstyrrelser overført via netforsyningen (f.eks. lynnedslag)"
-"\n"
+"- Atmosfæriske forstyrrelser overført via netforsyningen (f.eks. "
+"lynnedslag)\n"
 "- Koblingstransiente i netforsyningen\n"
 "- Eksterne kredsløb\n"
 "- Intern generering\n"
@@ -30860,8 +30866,8 @@ msgstr ""
 "kontakt under visse betingelser.<br>\n"
 "Anoden i et elektrokemisk par oxideres og ædes op, mens katoden beskyttede "
 "mod opløsning.<br>\n"
-"Et positivt tal angiver at rækken er anodisk (-) og kolonnen er katodisk (+)"
-", varme og kolde farvenuancer angiver rækkernes potentiale.<br>\n"
+"Et positivt tal angiver at rækken er anodisk (-) og kolonnen er katodisk "
+"(+), varme og kolde farvenuancer angiver rækkernes potentiale.<br>\n"
 "EN 50310 anbefaler en spændingsforskel under 300 mV. Praksis anvender et "
 "tredje interface-metal imellem det primære par (f.eks. ENIG-"
 "overfladebehandling).<br>\n"
@@ -31043,8 +31049,8 @@ msgstr ""
 "mm).\n"
 "\n"
 "Formlen fra IPC 2221 er\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (B &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (B &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "hvor:<br>\n"
 "___I___ er maksimalstrøm i A<br>\n"
 "___&Delta;T___ er temperaturstigning over omgivelsestemperatur i °C<br>\n"
@@ -36417,7 +36423,7 @@ msgstr "Flyt element"
 msgid "Sheet Path"
 msgstr "Arksti"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "Komponentklasse"
@@ -42674,7 +42680,8 @@ msgstr "Rediger zone"
 
 #: pcbnew/footprint_editor_utils.cpp:365 pcbnew/footprint_editor_utils.cpp:377
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr "Brug Administrér fodaftryksbiblioteker til at redigere konfigurationen."
+msgstr ""
+"Brug Administrér fodaftryksbiblioteker til at redigere konfigurationen."
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
@@ -45165,7 +45172,8 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2482
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr "Tekstvariabler kunne ikke angives da der ikke er indlæst noget projekt."
+msgstr ""
+"Tekstvariabler kunne ikke angives da der ikke er indlæst noget projekt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2567
 msgid ""
@@ -46124,8 +46132,8 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Valgt fil indeholder flere fodaftryk. Kun det første vil blive importeret.\n"
-"For at indlæse alle fodaftryk, tilføj det som et bibliotek via "
-"Præferencer -> Administrér fodaftryksbiblioteker..."
+"For at indlæse alle fodaftryk, tilføj det som et bibliotek via Præferencer "
+"-> Administrér fodaftryksbiblioteker..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -49319,7 +49327,8 @@ msgstr "Vis Ratsnest"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr "Vis linjer/buer der repræsenterer manglende forbindelser på printkortet"
+msgstr ""
+"Vis linjer/buer der repræsenterer manglende forbindelser på printkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Curved Ratsnest Lines"

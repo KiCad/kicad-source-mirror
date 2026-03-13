@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:58-0700\n"
+"POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-13 18:17+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -4216,7 +4216,8 @@ msgstr "Vis rullefelt i redigeringsprogram"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "This change takes effect when relaunching the editor."
-msgstr "Denne endringen trer i kraft når redigeringsprogrammet startes på nytt."
+msgstr ""
+"Denne endringen trer i kraft når redigeringsprogrammet startes på nytt."
 
 #: common/dialogs/panel_common_settings_base.cpp:164
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -10814,7 +10815,8 @@ msgstr "Komponent '%s' fotavtrykk '%s' <b>ikke funnet</b> i noe bibliotek.\n"
 #: cvpcb/readwrite_dlgs.cpp:157
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr "Komponent '%s' fotavtrykk '%s' ble funnet i <b>flere</b> biblioteker.\n"
+msgstr ""
+"Komponent '%s' fotavtrykk '%s' ble funnet i <b>flere</b> biblioteker.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "First check your footprint library table entries."
@@ -11294,7 +11296,7 @@ msgstr "Kommenter skjematisk"
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 msgid "Generate"
 msgstr "Generer"
 
@@ -11392,7 +11394,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Tilbakestill listen over BOM-generatorskript til standardinnstillingene"
+msgstr ""
+"Tilbakestill listen over BOM-generatorskript til standardinnstillingene"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -15329,8 +15332,8 @@ msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
-"Kan ikke gjøre banen relativ (målvolum er forskjellig fra skjemafilens volum)"
-"!"
+"Kan ikke gjøre banen relativ (målvolum er forskjellig fra skjemafilens "
+"volum)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1360
 msgid "Unsaved data"
@@ -22018,7 +22021,8 @@ msgstr "Administrer symbolbiblioteker"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:924
 #, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr "Symbol %s er et avledet symbol. Symbolgrafikk vil ikke kunne redigeres."
+msgstr ""
+"Symbol %s er et avledet symbol. Symbolgrafikk vil ikke kunne redigeres."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 msgid "Library is read-only.  Changes cannot be saved to this library."
@@ -24233,7 +24237,8 @@ msgstr "Nett må merkes for å tilordne en nettklasse."
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1072
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "Innliming av en lang tekststreng kan være svært treg. Vil du fortsette?"
+msgstr ""
+"Innliming av en lang tekststreng kan være svært treg. Vil du fortsette?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
@@ -26286,7 +26291,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr "Ikke optimaliser STEP-filen (aktiverer skriving av parametriske kurver)"
+msgstr ""
+"Ikke optimaliser STEP-filen (aktiverer skriving av parametriske kurver)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
 msgid ""
@@ -27633,7 +27639,8 @@ msgstr "Fargetemaer (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:83
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Er du sikker på at du vil oppdatere festet pakke fra versjon %s til %s?"
+msgstr ""
+"Er du sikker på at du vil oppdatere festet pakke fra versjon %s til %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:86
 msgid "Confirm update"
@@ -31065,8 +31072,8 @@ msgstr ""
 "mm).\n"
 "\n"
 "Formelen, fra IPC 2221, er\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "hvor:<br>\n"
 "___I___ er maksimal strøm i A<br>\n"
 "___&Delta;T___ er temperaturøkning over omgivelsene i &deg;C<br>\n"
@@ -35160,8 +35167,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Bibliotekets ID og fotavtrykk-ID som for øyeblikket er tilordnet. Bruk «"
-"Endre fotavtrykk...» for å tilordne et annet fotavtrykk."
+"Bibliotekets ID og fotavtrykk-ID som for øyeblikket er tilordnet. Bruk "
+"«Endre fotavtrykk...» for å tilordne et annet fotavtrykk."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -36438,7 +36445,7 @@ msgstr "Flyttet oppføringer"
 msgid "Sheet Path"
 msgstr "Arksti"
 
-#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
+#: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:94
 #: pcbnew/footprint.cpp:1799 pcbnew/footprint.cpp:4255 pcbnew/zone.cpp:1919
 msgid "Component Class"
 msgstr "Komponentklasse"
@@ -36486,7 +36493,8 @@ msgstr "Kopier andre elementer"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
-msgstr "Kopier tekst, former, soner og andre elementer inne i kilderegelområdet"
+msgstr ""
+"Kopier tekst, former, soner og andre elementer inne i kilderegelområdet"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 #, fuzzy
@@ -45142,8 +45150,8 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 "CADSTAR-malen '%s' har termiske avlastninger i det opprinnelige designet, "
-"men eikbredden (%.2f mm) er tynnere enn minimumstykkelsen for sonen (%.2f mm)"
-". KiCad krever at minimumstykkelsen for sonen bevares. Derfor har "
+"men eikbredden (%.2f mm) er tynnere enn minimumstykkelsen for sonen (%.2f "
+"mm). KiCad krever at minimumstykkelsen for sonen bevares. Derfor har "
 "minimumstykkelsen blitt brukt som ny eikbredde og vil bli anvendt neste gang "
 "sonene fylles."
 
@@ -45432,7 +45440,8 @@ msgstr "Ukjent FABMASTER-seksjon %s:%s i rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:286
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "Ugyldig radstørrelse i J-rad %zu. Forventet 11 elementer, men fant %zu."
+msgstr ""
+"Ugyldig radstørrelse i J-rad %zu. Forventet 11 elementer, men fant %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
 msgid "Could not find units value, defaulting to mils."
@@ -45526,7 +45535,8 @@ msgstr "Ugyldig format for record_tag-streng '%s' i rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1724
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "Ugyldig radstørrelse i rad %zu.  Forventet %zu elementer, men fant %zu."
+msgstr ""
+"Ugyldig radstørrelse i rad %zu.  Forventet %zu elementer, men fant %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1763
 #, c-format
@@ -46148,8 +46158,8 @@ msgid ""
 msgstr ""
 "Den valgte filen inneholder flere fotavtrykk. Kun det første vil bli "
 "importert.\n"
-"For å laste alle fotavtrykk, legg den til som et bibliotek via "
-"Innstillinger -> Administrer fotavtrykksbiblioteker..."
+"For å laste alle fotavtrykk, legg den til som et bibliotek via Innstillinger "
+"-> Administrer fotavtrykksbiblioteker..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -46179,7 +46189,8 @@ msgstr "Passord for <b> pålogging </b> til en spesiell bibliotektjener."
 #: pcbnew/pcb_io/pcb_io.cpp:196
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr "Angi python-modulen som implementerer PCB_IO::Footprint*()-funksjonene."
+msgstr ""
+"Angi python-modulen som implementerer PCB_IO::Footprint*()-funksjonene."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -46506,7 +46517,8 @@ msgstr "Skrev posisjonsdata til '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1738
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Fotavtrykksbiblioteksstien eksisterer ikke eller er ikke tilgjengelig\n"
+msgstr ""
+"Fotavtrykksbiblioteksstien eksisterer ikke eller er ikke tilgjengelig\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1778
 msgid "Unable to save library\n"
@@ -49283,7 +49295,8 @@ msgstr "Vis nett i rottenettet"
 
 #: pcbnew/tools/pcb_actions.cpp:1297
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Vis det valgte nettet i rottenettet av ikke-tilkoblede nettlinjer/-buer"
+msgstr ""
+"Vis det valgte nettet i rottenettet av ikke-tilkoblede nettlinjer/-buer"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
 msgid "Switch to Schematic Editor"
@@ -49336,7 +49349,8 @@ msgstr "Vis Ratsnest"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr "Vis linjer/buer som representerer manglende tilkoblinger på kretskortet"
+msgstr ""
+"Vis linjer/buer som representerer manglende tilkoblinger på kretskortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Curved Ratsnest Lines"
@@ -49349,7 +49363,8 @@ msgstr "Rottenettmodus (3-tilstand)"
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "Veksle mellom å vise rottenett for alle lag, bare synlige lag, og ingen"
+msgstr ""
+"Veksle mellom å vise rottenett for alle lag, bare synlige lag, og ingen"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid "Net Color Mode (3-state)"
