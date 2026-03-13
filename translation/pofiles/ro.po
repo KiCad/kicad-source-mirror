@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:08+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-03-13 21:09+0000\n"
+"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -30448,8 +30448,7 @@ msgstr "Afișați titlul în modul de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:114
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Spațiile rezervate pentru text sunt înlocuite cu date de previzualizare"
+msgstr "Spațiile rezervate pentru text sunt înlocuite cu date de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 #, fuzzy
@@ -40656,8 +40655,7 @@ msgstr "Amprenta \"%s\" nu a fost găsită."
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr ""
-"Folderul „%s” există deja. Doriți să suprascrieți amprentele existente?"
+msgstr "Folderul „%s” există deja. Doriți să suprascrieți amprentele existente?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, fuzzy, c-format
@@ -51005,8 +51003,7 @@ msgstr "Amprente în bibliotecă..."
 
 #: pcbnew/tools/pcb_actions.cpp:792
 msgid "Update footprints to include any changes from the library"
-msgstr ""
-"Actualizați amprentele pentru a include orice modificări din bibliotecă"
+msgstr "Actualizați amprentele pentru a include orice modificări din bibliotecă"
 
 #: pcbnew/tools/pcb_actions.cpp:798
 #, fuzzy
