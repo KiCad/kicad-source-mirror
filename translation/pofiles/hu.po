@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-06 23:29+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 20:38+0000\n"
+"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -10998,8 +10998,7 @@ msgstr "Könyvtár helye: ismeretlen"
 #: cvpcb/cvpcb_mainframe.cpp:894
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr ""
-"Nincsenek alkatrészrajzolat könyvtárak az aktuális könyvtártáblázatban."
+msgstr "Nincsenek alkatrészrajzolat könyvtárak az aktuális könyvtártáblázatban."
 
 #: cvpcb/cvpcb_mainframe.cpp:895
 msgid "Configuration Error"
@@ -19719,8 +19718,8 @@ msgstr ""
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
-"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni "
-"a(z) %s adatbázishoz (%s)"
+"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni a"
+"(z) %s adatbázishoz (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -19788,8 +19787,7 @@ msgstr "Nem találtunk érvényes kapcsolási rajz fájlt \"%s\"-ban"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr ""
-"Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
+msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -20957,9 +20955,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20980,8 +20978,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20996,8 +20994,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busz Definiciók</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Eredmény</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -25092,8 +25091,7 @@ msgstr "\"%s\" busz megnevezés tagjai"
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1072
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
+msgstr "Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, fuzzy, c-format
@@ -32094,8 +32092,8 @@ msgstr ""
 "- A kívánt érték 0.0025 és 4000 kΩ közötti lehet.\n"
 "- Legfeljebb 4 alkatrészből álló megoldásokat közöl.\n"
 "\n"
-"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. "
-"<br>\n"
+"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. <br>"
+"\n"
 "Ezen kívül két további értéket is kizárhatunk, beszerezhetőségi problémák "
 "esetén.\n"
 "\n"
@@ -46480,8 +46478,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2548
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
-"%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
+msgstr "%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2625
 #, c-format
@@ -52418,8 +52415,7 @@ msgstr "Vonszolás (tetszőleges szög)"
 #: pcbnew/tools/pcb_actions.cpp:2447
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr ""
-"Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
+msgstr "Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
 
 #: pcbnew/tools/pcb_actions.cpp:2457
 msgid "Update All Tuning Patterns"
