@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-09 13:09+0000\n"
-"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 21:05+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -6857,8 +6857,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálně instalovanému systému knihoven pouzder "
-"(složky .pretty)."
+"Základní cesta k lokálně instalovanému systému knihoven pouzder (složky "
+".pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -11534,8 +11534,8 @@ msgstr ""
 "\n"
 " * `%I`: absolutní cesta a název souboru průběžného netlistu, který je "
 "vstupem do generátoru BOM\n"
-" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony "
-"souboru)\n"
+" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony souboru)"
+"\n"
 " * `%B`: základní název souboru výstupního BOM (bez přípony souboru)\n"
 " * `%P`: absolutní cesta k adresáři projektu, bez koncového lomítka\n"
 "\n"
@@ -11555,8 +11555,8 @@ msgstr ""
 "souboru>\n"
 "```\n"
 "\n"
-"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:"
-"\\Users\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
+"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:\\U"
+"sers\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\jménouživatele\\kicad\\my_python_script.py \"%I\" "
@@ -11967,8 +11967,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde "
-"nalezen),\n"
+"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde nalezen)"
+",\n"
 "zkuste najít kandidáta majícího stejné jméno v jedné z načtených knihoven "
 "symbolů."
 
@@ -13766,8 +13766,7 @@ msgstr "Alternativní název vývodu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr ""
-"Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
+msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
@@ -14482,8 +14481,7 @@ msgstr "Okraj"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:95
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr ""
-"Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
+msgstr "Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
@@ -17251,8 +17249,7 @@ msgstr "Symbol %s má vstupní vývody na jednotkách %s, které nejsou umístě
 #: eeschema/erc/erc.cpp:673
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr ""
-"Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
+msgstr "Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc/erc.cpp:696
 #, c-format
@@ -18424,8 +18421,7 @@ msgstr "Změnit jednotku"
 #: eeschema/picksymbol.cpp:198
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr ""
-"Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
+msgstr "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
 #: eeschema/picksymbol.cpp:221 eeschema/tools/sch_edit_tool.cpp:2043
 msgid "Change Body Style"
@@ -19208,8 +19204,7 @@ msgstr ""
 #: eeschema/sch_io/database/sch_io_database.cpp:297
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
-"Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
+msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -20419,9 +20414,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20458,8 +20453,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20564,8 +20560,7 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
-"Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
+msgstr "Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
 
 #: eeschema/schematic.cpp:1566
 msgid "Schematic Cleanup"
@@ -22000,8 +21995,7 @@ msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 #: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
+msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/symbol_checker.cpp:402
 #, c-format
@@ -26780,8 +26774,7 @@ msgstr "Zahrnout pouze SMD pouzdra (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:78
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr ""
-"Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
+msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:99
@@ -31209,8 +31202,8 @@ msgstr ""
 "stoupne do 100 °C a šířky do 400 mil (10 mm).\n"
 "\n"
 "Vzorec z IPC 2221 je\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "kde:<br>\n"
 "___I___ je maximální proud v A<br>\n"
 "___&Delta;T___ je zvýšení teploty nad okolním v &deg;C<br>\n"
@@ -35497,8 +35490,8 @@ msgstr "Použít relativní cestu?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
-"desky)!"
+"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru desky)"
+"!"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:338
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:447
@@ -37816,8 +37809,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Pokud je povoleno, router se pokusí propojit plošky/prokovy čistým způsobem "
-"- vyhýbat se ostrým úhlům a zubatým spojům."
+"Pokud je povoleno, router se pokusí propojit plošky/prokovy čistým "
+"způsobem - vyhýbat se ostrým úhlům a zubatým spojům."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
@@ -44147,8 +44140,7 @@ msgstr "%s pouzdro ID '%s' není platné."
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr ""
-"%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
+msgstr "%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -45653,14 +45645,12 @@ msgstr "Žádný '%s' balíček v knihovně '%s'."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2350
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
-"Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
+msgstr "Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1607
 #, fuzzy, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
+msgstr "Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1915
 #, c-format
@@ -46277,8 +46267,7 @@ msgstr "%d není platný počet vrstev"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2812
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3211
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6388
@@ -46365,8 +46354,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6663
 #, fuzzy, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6287
 #, fuzzy, c-format
