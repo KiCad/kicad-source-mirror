@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-06 23:48+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 21:12+0000\n"
+"Last-Translator: Luka Borkovic <borkovic@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -4598,8 +4598,7 @@ msgstr "Невалидна дефиниција реда"
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
-msgstr ""
-"Празне ћелије ће резултовати брисањем свих невалидних редова из табеле."
+msgstr "Празне ћелије ће резултовати брисањем свих невалидних редова из табеле."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:552
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:575
@@ -8077,8 +8076,7 @@ msgstr "Грешка у учитавању kiface библиотеке '%s'."
 #: common/kiway.cpp:290
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
-msgstr ""
-"Не могу да прочитам име инстанце и верзију из kiface библиотеке \"%s\"."
+msgstr "Не могу да прочитам име инстанце и верзију из kiface библиотеке \"%s\"."
 
 #: common/kiway.cpp:463
 msgid "Error loading editor."
