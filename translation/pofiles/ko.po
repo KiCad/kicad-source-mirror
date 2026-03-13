@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-13 20:43+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: DevAny <devany.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -8466,10 +8466,10 @@ msgid ""
 "reports when crashes or events occur. \n"
 "Your design files such as schematic and PCB are not shared in this process."
 msgstr ""
-"KiCad는 치명적인 버그를 찾아내고 기능 개선 방향을 안내하기 위해, 익명으로 충"
-"돌 및 특별 이벤트 데이터를 개발자에게 전송할 수 있습니다.\n"
-"사용자가 자발적으로 참여하기로 선택하면, 충돌이나 이벤트 발생 시 KiCad가 자동"
-"으로 해당 보고서를 전송합니다.\n"
+"KiCad는 치명적인 버그를 찾아내고 기능 개선 방향을 안내하기 위해, 익명으로 "
+"충돌 및 특별 이벤트 데이터를 개발자에게 전송할 수 있습니다.\n"
+"사용자가 자발적으로 참여하기로 선택하면, 충돌이나 이벤트 발생 시 KiCad가 "
+"자동으로 해당 보고서를 전송합니다.\n"
 "이 과정에서 회로도나 PCB 같은 설계 파일은 공유되지 않습니다."
 
 #: common/pgm_base.cpp:391
@@ -11000,8 +11000,8 @@ msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"최상위 시트의 \"%s\" 계층식 라벨은 존재하지 않는 상위 시트와 연결할 수 없습니"
-"다"
+"최상위 시트의 \"%s\" 계층식 라벨은 존재하지 않는 상위 시트와 연결할 수 "
+"없습니다"
 
 #: eeschema/connection_graph.cpp:4375
 #, c-format
@@ -21121,8 +21121,7 @@ msgstr "측정 형식 정의 요구"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
-msgstr ""
-"ngspice 공유 라이브러리를 불러올 수 없습니다. 설치 상태를 확인해 주세요."
+msgstr "ngspice 공유 라이브러리를 불러올 수 없습니다. 설치 상태를 확인해 주세요."
 
 #: eeschema/sim/sim_lib_mgr.cpp:91 eeschema/sim/sim_lib_mgr.cpp:144
 #, c-format
