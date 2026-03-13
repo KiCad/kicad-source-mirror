@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:38+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 20:40+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -1296,8 +1296,7 @@ msgstr "Tükröződések:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
-"A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
+msgstr "A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
@@ -2398,8 +2397,7 @@ msgstr "Licensz"
 
 #: common/dialog_about/dialog_about.cpp:268
 msgid "Could not open clipboard to write version information."
-msgstr ""
-"Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
+msgstr "Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
 
 #: common/dialog_about/dialog_about.cpp:269
 msgid "Clipboard Error"
@@ -3646,8 +3644,7 @@ msgstr "Egyedi:"
 #: common/dialogs/dialog_print_generic_base.cpp:77
 #, fuzzy
 msgid "Set X scale adjust for exact scale plotting"
-msgstr ""
-"X tengely irányú méretezés megadása a méretpontos nyomat létrehozásához"
+msgstr "X tengely irányú méretezés megadása a méretpontos nyomat létrehozásához"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -10933,8 +10930,7 @@ msgstr "Alkalmaz, Kapcsolási rajz mentése és Folytatás"
 #: cvpcb/cvpcb_mainframe.cpp:211
 #, fuzzy
 msgid "Symbol to footprint changes are unsaved"
-msgstr ""
-"Az alkatrészrajzolatra vonatkozó rajzjel módosításai nincsenek elmentve"
+msgstr "Az alkatrészrajzolatra vonatkozó rajzjel módosításai nincsenek elmentve"
 
 #: cvpcb/cvpcb_mainframe.cpp:401
 #, fuzzy
@@ -17667,8 +17663,7 @@ msgstr "Feloldatlan szövegváltozó a rajzlapon"
 #: eeschema/erc/erc.cpp:461
 #, fuzzy, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
-"A(z) \"%s\" busz megnevezés több lapon is ellentmondóan van definiálva:"
+msgstr "A(z) \"%s\" busz megnevezés több lapon is ellentmondóan van definiálva:"
 
 #: eeschema/erc/erc.cpp:526
 #, fuzzy, c-format
@@ -18675,8 +18670,7 @@ msgstr "Váratlan kivétel történt."
 #: eeschema/libarch.cpp:101
 #, fuzzy, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr ""
-"A(z) %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
+msgstr "A(z) %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
 
 #: eeschema/libarch.cpp:117
 #, fuzzy, c-format
@@ -29101,8 +29095,7 @@ msgstr "A sablon elérési útvonal megnyitható!"
 #: kicad/project_template.cpp:57
 #, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr ""
-"Nem sikerült megnyitni a meta információs könyvtárat ehhez a sablonhoz!"
+msgstr "Nem sikerült megnyitni a meta információs könyvtárat ehhez a sablonhoz!"
 
 #: kicad/project_template.cpp:63
 #, fuzzy
@@ -40194,8 +40187,7 @@ msgstr "Újra"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:44
 #, fuzzy
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr ""
-"Gyorsbillentyűvel vagy helyi menüből forgatás egysége (fokban megadva)."
+msgstr "Gyorsbillentyűvel vagy helyi menüből forgatás egysége (fokban megadva)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
 msgid "Arc editing mode:"
@@ -44569,14 +44561,12 @@ msgstr "A(z) \"%s\" alkatrészrajzolat már létezik \"%s\"-ben."
 #: pcbnew/footprint_libraries_utils.cpp:1204
 #, fuzzy, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr ""
-"A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
+msgstr "A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
 
 #: pcbnew/footprint_libraries_utils.cpp:1205
 #, fuzzy, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr ""
-"A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
+msgstr "A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
 
 #: pcbnew/footprint_libraries_utils.cpp:1249
 msgid "Untitled"
@@ -45898,8 +45888,7 @@ msgstr "Figyelmeztetés: A forrszem furata nem a forrszem belsejében van."
 #: pcbnew/pad.cpp:2446
 #, fuzzy
 msgid "(negative local clearance values have no effect)"
-msgstr ""
-"Figyelmeztetés: A negatív szigetelési távolság értékeknek nincs hatása."
+msgstr "Figyelmeztetés: A negatív szigetelési távolság értékeknek nincs hatása."
 
 #: pcbnew/pad.cpp:2465
 #, fuzzy
@@ -47810,8 +47799,7 @@ msgstr "A(z) \"%s\" lap típus nem érvényes "
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2043
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr ""
-"A(z) \"%s\" réteg a(z) \"%s\\ fájl %d. sorában nem érvényes azonosítójú"
+msgstr "A(z) \"%s\" réteg a(z) \"%s\\ fájl %d. sorában nem érvényes azonosítójú"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2080
 #, fuzzy, c-format
