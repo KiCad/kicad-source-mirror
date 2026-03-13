@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-11 13:58-0700\n"
-"PO-Revision-Date: 2026-03-09 18:07+0000\n"
+"PO-Revision-Date: 2026-03-13 18:17+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -7225,10 +7225,13 @@ msgid "Added"
 msgstr "Tillagd"
 
 #: common/git/git_pull_handler.cpp:495
+#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Kan inte flytta gren: Du har osparade ändringar. Vänligen överlämna eller "
+"göm undan dem innan hämtning."
 
 #: common/git/git_pull_handler.cpp:543
 msgid "Conflicts detected during rebase"
