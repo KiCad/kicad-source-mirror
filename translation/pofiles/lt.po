@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-07 00:09+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v9/lt/"
-">\n"
+"PO-Revision-Date: 2026-03-13 21:21+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v9/lt/>"
+"\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5478,8 +5478,7 @@ msgstr "Nubrėžkite stačiakampį"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
-"Vilkite pasirinktus objektus; kitaip nubrėžkite pasirinkimo stačiakampį"
+msgstr "Vilkite pasirinktus objektus; kitaip nubrėžkite pasirinkimo stačiakampį"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 #, fuzzy
@@ -10287,8 +10286,7 @@ msgstr "Atnaujinti papildinius"
 
 #: common/tool/actions.cpp:1247
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr ""
-"Perkraukite visus „Python“ papildinius ir atnaujinkite papildinių meniu"
+msgstr "Perkraukite visus „Python“ papildinius ir atnaujinkite papildinių meniu"
 
 #: common/tool/actions.cpp:1255
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:86
@@ -11511,8 +11509,8 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"Jei norėsite, kad jie būtų tinkamai atnaujinti, kai kitą kartą importuosite "
-"„netclist“ į „Pcbnew“, turėsite juos priskirti rankiniu būdu."
+"Jei norėsite, kad jie būtų tinkamai atnaujinti, kai kitą kartą importuosite „"
+"netclist“ į „Pcbnew“, turėsite juos priskirti rankiniu būdu."
 
 #: cvpcb/readwrite_dlgs.cpp:309
 msgid "Schematic saved"
@@ -16866,8 +16864,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr ""
-"Atnaujinkite simbolių reikšmes, kurios buvo pakeistos PCB redaktoriuje."
+msgstr "Atnaujinkite simbolių reikšmes, kurios buvo pakeistos PCB redaktoriuje."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -18467,8 +18464,7 @@ msgstr "Kitame simbolio vienete priskiriamas skirtingas pėdsakas"
 
 #: eeschema/erc/erc_item.cpp:137
 msgid "Different net assigned to a shared pin in another unit of the symbol"
-msgstr ""
-"Skirtingas tinklas, priskirtas bendram kaiščiui kitame simbolio vienete"
+msgstr "Skirtingas tinklas, priskirtas bendram kaiščiui kitame simbolio vienete"
 
 #: eeschema/erc/erc_item.cpp:141
 msgid "Conflict between bus alias definitions across schematic sheets"
@@ -21528,8 +21524,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${refdes:field}</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> <i> lauko_vertė </i> simbolis <i>refdes</"
-"i></samp> </td>\n"
+"        <td> & nbsp; <br> <samp> <i> lauko_vertė </i> simbolis <i>refdes</i>"
+"</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${R3:VALUE}</samp> </td>\n"
@@ -21556,8 +21552,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>D[0..7]</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </"
-"td>\n"
+"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> <br> </td>\n"
@@ -22310,8 +22306,7 @@ msgstr "Forma neturi taškų!"
 #: eeschema/sim/kibis/kibis.cpp:651 eeschema/sim/kibis/kibis.cpp:717
 #, fuzzy
 msgid "Cannot remove temporary output file"
-msgstr ""
-"Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
+msgstr "Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
 
 #: eeschema/sim/kibis/kibis.cpp:702
 #, fuzzy
@@ -22705,8 +22700,7 @@ msgstr "Kintamosios srovės fazė:"
 #, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr ""
-"Šis modeliavimas nepateikia siužetų. Rezultatų ieškokite konsolės lange"
+msgstr "Šis modeliavimas nepateikia siužetų. Rezultatų ieškokite konsolės lange"
 
 #: eeschema/sim/simulator_frame.cpp:332
 #, fuzzy
@@ -30940,8 +30934,8 @@ msgstr ""
 "* __a__ susilpnėjimas dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (nuostolis)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> į </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> out </sub> \\ * A - R2___\n"
 
@@ -30988,8 +30982,8 @@ msgstr ""
 "* __a__ susilpnėjimas dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (nuostolis)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / (L "
-"- 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / "
+"(L - 1) ___\n"
 "* ___R1 = Z <sub> į </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> out </sub> \\ * A - R2___\n"
 
@@ -36353,8 +36347,7 @@ msgstr "Failas „%s“ jau yra. Ar norite perrašyti šį failą?"
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:371
 #, fuzzy, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr ""
-"Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
+msgstr "Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:385
 #, fuzzy
@@ -39630,8 +39623,8 @@ msgstr "Y mastelio koeficientas:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Set global Y scale adjust for exact scale PostScript output."
 msgstr ""
-"Nustatykite visuotinį „Y“ mastelio koregavimą, kad gautumėte tikslią "
-"„PostScript“ išvestį."
+"Nustatykite visuotinį „Y“ mastelio koregavimą, kad gautumėte tikslią „"
+"PostScript“ išvestį."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:302
 msgid "Track width correction:"
@@ -44766,8 +44759,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:3550
 #, fuzzy, c-format
 msgid "Cannot rename temporary file '%s' to '%s'."
-msgstr ""
-"Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
+msgstr "Negalima pervadinti laikino failo „%s“ į pėdsakų bibliotekos failą „%s“"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2945
 #, fuzzy, c-format
@@ -44826,8 +44818,8 @@ msgid ""
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Jei šios plokštės zonos bus užpildytos, bus naudojamas „Copper Edge "
-"Clearance“ nustatymas (žr. Lentos sąranka> Dizaino taisyklės).\n"
+"Jei šios plokštės zonos bus užpildytos, bus naudojamas „Copper Edge Clearance"
+"“ nustatymas (žr. Lentos sąranka> Dizaino taisyklės).\n"
 "Tai gali sukelti skirtingus užpildymus, palyginti su ankstesnėmis „Kicad“ "
 "versijomis, kuriose „Edge Cuts“ sluoksnyje buvo naudojami lentos ribos "
 "linijų storiai."
@@ -47148,8 +47140,8 @@ msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium sluoksnio zonoje %d nėra KiCad atitikmens. Vietoj to įdėkite jį į "
-"„Eco1_User“"
+"Altium sluoksnio zonoje %d nėra KiCad atitikmens. Vietoj to įdėkite jį į „"
+"Eco1_User“"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2548
 #, fuzzy, c-format
@@ -47174,8 +47166,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium sluoksnio zonoje %d nėra KiCad atitikmens. Vietoj to įdėkite jį į "
-"„Eco1_User“"
+"Altium sluoksnio zonoje %d nėra KiCad atitikmens. Vietoj to įdėkite jį į „"
+"Eco1_User“"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2682
 #, fuzzy, c-format
@@ -47629,8 +47621,7 @@ msgstr "Nepavyko rasti komponento „%s“ bibliotekoje („Symdef ID“: „%s�
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1884
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
-"Nepavyko rasti dokumentacijos simbolio bibliotekoje („Symdef ID“: '%s')"
+msgstr "Nepavyko rasti dokumentacijos simbolio bibliotekoje („Symdef ID“: '%s')"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1953
 #, c-format
@@ -47666,8 +47657,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"„CADSTAR“ šablone „%s“ nustatyta vertė, lygi nuliui, apibrėžta nustatymui "
-"„Sliver Width“. Tam nėra „KiCad“ atitikmens, todėl šis parametras buvo "
+"„CADSTAR“ šablone „%s“ nustatyta vertė, lygi nuliui, apibrėžta nustatymui „"
+"Sliver Width“. Tam nėra „KiCad“ atitikmens, todėl šis parametras buvo "
 "ignoruojamas."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1990
@@ -47761,9 +47752,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"CADSTAR kodas naudojant kodą „%s“ skiriasi nuo apibrėžto apskritimo formos. "
-"„KiCad“ palaiko tik apskritas vijas, todėl šis „via“ tipas pakeistas į "
-"„via“, kurio apskritimo forma yra %.2f mm skersmens."
+"CADSTAR kodas naudojant kodą „%s“ skiriasi nuo apibrėžto apskritimo formos. „"
+"KiCad“ palaiko tik apskritas vijas, todėl šis „via“ tipas pakeistas į „via“, "
+"kurio apskritimo forma yra %.2f mm skersmens."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2802
 #, c-format
@@ -47791,8 +47782,8 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR perėjimo kodas „%s“ turi skirtingus kiekvieno liuko linijų pločius. "
-"„KiCad“ palaiko tik vieną plotį. Importuotam perinti naudojamas plotis, "
+"CADSTAR perėjimo kodas „%s“ turi skirtingus kiekvieno liuko linijų pločius. „"
+"KiCad“ palaiko tik vieną plotį. Importuotam perinti naudojamas plotis, "
 "apibrėžtas pirmojo liuko apibrėžime, t. Y. %.2f mm."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3635
@@ -47815,9 +47806,9 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"„CADSTAR“ perinimo kodo „%s“ liukų kampų skirtumas yra %.1f laipsnių. "
-"„KiCad“ palaiko tik perėjimą 90 laipsnių kampu. Importuotame perintuve yra "
-"du liukai, esantys 90 laipsnių atstumu, nukreipti %.1f laipsnių kampu nuo "
+"„CADSTAR“ perinimo kodo „%s“ liukų kampų skirtumas yra %.1f laipsnių. „KiCad"
+"“ palaiko tik perėjimą 90 laipsnių kampu. Importuotame perintuve yra du "
+"liukai, esantys 90 laipsnių atstumu, nukreipti %.1f laipsnių kampu nuo "
 "horizontalios."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3718
@@ -51123,8 +51114,7 @@ msgstr "Redaguoti aikštelę"
 #: pcbnew/tools/pad_tool.cpp:830
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
-"Trinkelių redagavimo režimas. Dar kartą paspauskite %s, kad išeitumėte."
+msgstr "Trinkelių redagavimo režimas. Dar kartą paspauskite %s, kad išeitumėte."
 
 #: pcbnew/tools/pad_tool.cpp:835
 #, c-format
@@ -53053,8 +53043,7 @@ msgstr "Vilkite (45 laipsnių režimas)"
 
 #: pcbnew/tools/pcb_actions.cpp:2438
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr ""
-"Vilkite takelio atkarpą laikydami sujungtus takelius 45 laipsnių kampu."
+msgstr "Vilkite takelio atkarpą laikydami sujungtus takelius 45 laipsnių kampu."
 
 #: pcbnew/tools/pcb_actions.cpp:2446
 #, fuzzy
