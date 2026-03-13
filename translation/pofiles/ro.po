@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-06 23:38+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-13 21:08+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -3389,8 +3389,7 @@ msgstr "Alocați indicativ de referință unici simbolurilor lipite"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr ""
-"Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
+msgstr "Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
@@ -4443,8 +4442,7 @@ msgstr "Sesiune"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
-msgstr ""
-"Țineți minte fișierele deschise pentru următoarea lansare a proiectului"
+msgstr "Țineți minte fișierele deschise pentru următoarea lansare a proiectului"
 
 #: common/dialogs/panel_common_settings_base.cpp:324
 msgid ""
@@ -11969,8 +11967,7 @@ msgstr "Actualizarea simbolurilor care corespund valorii:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
-msgstr ""
-"Actualizarea simbolurilor care corespund identificatorului bibliotecii:"
+msgstr "Actualizarea simbolurilor care corespund identificatorului bibliotecii:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:79
 msgid "New library identifier:"
@@ -18805,8 +18802,7 @@ msgstr "Excluderea din setările plăcii diferă."
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr ""
-"Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
+msgstr "Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
 
 #: eeschema/libarch.cpp:86
 #, fuzzy
@@ -20633,8 +20629,7 @@ msgstr "Marcator schematic"
 #: eeschema/sch_screen.cpp:695 eeschema/sch_screen.cpp:787
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
-"Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
+msgstr "Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
 
 #: eeschema/sch_screen.cpp:711
 #, c-format
@@ -21108,9 +21103,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -21131,8 +21126,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:câmp}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> simbol</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> simbol</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -21147,8 +21142,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definiția autobuzului</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Plase rezultate</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -21198,8 +21194,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;"
-"<sub>&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> "
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;<sub>"
+"&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> "
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</samp><br><samp>MEM. "
 "D<sub>1</sub>, MEM. D<sub>2</sub>, MEM. Zăvor</samp> </td>\n"
 "    </tr>\n"
@@ -25509,8 +25505,7 @@ msgstr "Fișier SPICE netlist"
 #: eeschema/tools/symbol_editor_control.cpp:293
 #, fuzzy, c-format
 msgid "Failed to load symbol %s from library %s."
-msgstr ""
-"Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
+msgstr "Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
 
 #: eeschema/tools/symbol_editor_control.cpp:313
 #, fuzzy
@@ -36626,8 +36621,7 @@ msgstr "Distanțe"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:268
 #, fuzzy
 msgid "Leave values blank to use Board Setup values."
-msgstr ""
-"Setați valorile la 0 pentru a utiliza valorile din Configurarea plăcii."
+msgstr "Setați valorile la 0 pentru a utiliza valorile din Configurarea plăcii."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:278
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
@@ -47013,8 +47007,7 @@ msgstr "Nu se poate găsi un program de vizualizare PDF pentru \"%s\"."
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1884
 #, fuzzy, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr ""
-"Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
+msgstr "Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1953
 #, c-format
