@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:07+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-03-14 23:16+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/v9/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -6716,17 +6716,17 @@ msgstr "קישור"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcbnew/generators/pcb_tuning_pattern.cpp:212
 msgid "min"
-msgstr "מינימום"
+msgstr "מינ"
 
 #: common/eda_units.cpp:437
 msgid "opt"
-msgstr "אופציונלי"
+msgstr "אופט"
 
 #: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
 #: pcbnew/generators/pcb_tuning_pattern.cpp:215
 msgid "max"
-msgstr "מקסימום"
+msgstr "מקס"
 
 #: common/env_vars.cpp:102
 msgid ""
