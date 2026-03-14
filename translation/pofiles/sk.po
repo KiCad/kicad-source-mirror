@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:28+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-14 23:20+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -976,7 +976,7 @@ msgstr "Zobraziť alebo skryť %s"
 #: pcbnew/widgets/appearance_controls.cpp:2625
 #, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Prednastavuje (%s+Tab):"
+msgstr "Prednastavenie (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:723
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1662
@@ -1074,7 +1074,7 @@ msgstr "Vybrať zobrazenie:"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr "Prednastavuje (Ctrl+Tab):"
+msgstr "Prednastavenie (Ctrl+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
@@ -2325,7 +2325,7 @@ msgstr "Symboly"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
 msgid "Footprints"
-msgstr "Púzdra"
+msgstr "Puzdrá"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
@@ -8842,7 +8842,7 @@ msgstr "Uložiť zmeny"
 
 #: common/tool/actions.cpp:100 eeschema/tools/sch_actions.cpp:228
 msgid "Save As..."
-msgstr "Uložiť Ako..."
+msgstr "Uložiť ako..."
 
 #: common/tool/actions.cpp:101
 msgid "Save current document to another location"
@@ -10544,7 +10544,7 @@ msgstr "IPC-D-356 Test súbory"
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "Workbook file"
-msgstr "Súbor zošita"
+msgstr "Súbor zostavy simulácie"
 
 #: common/wildcards_and_files_ext.cpp:556
 msgid "PNG file"
@@ -10886,7 +10886,7 @@ msgstr "Schéma bola uložená"
 
 #: cvpcb/toolbars_cvpcb.cpp:70
 msgid "Footprint Filters:"
-msgstr "Filter puzdier:"
+msgstr "Filtre puzdra:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View Selected Footprint"
@@ -10962,11 +10962,11 @@ msgstr "Odstrániť všetky priradenia puzdier"
 
 #: cvpcb/tools/cvpcb_actions.cpp:153
 msgid "Use symbol footprint filters"
-msgstr "Použiť filtre puzdier symbolov"
+msgstr "Použiť filtre puzdra symbolu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:154
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr "Filter footprint list by footprint filters definované v symbole"
+msgstr "Filtrovať zoznam puzdier podľa filtrov puzdra definovaných v symbole"
 
 #: cvpcb/tools/cvpcb_actions.cpp:162
 msgid "Filter by pin count"
@@ -10974,7 +10974,7 @@ msgstr "Filtrovať podľa počtu vývodov"
 
 #: cvpcb/tools/cvpcb_actions.cpp:163
 msgid "Filter footprint list by pin count"
-msgstr "Filtrujte zoznam stôp podľa počtu vývodov"
+msgstr "Filtrovať zoznam puzdier podľa počtu vývodov"
 
 #: cvpcb/tools/cvpcb_actions.cpp:171
 msgid "Filter by library"
@@ -10982,7 +10982,7 @@ msgstr "Filtrovať podľa knižnice"
 
 #: cvpcb/tools/cvpcb_actions.cpp:172
 msgid "Filter footprint list by library"
-msgstr "Filtrujte zoznam stôp podľa knižnice"
+msgstr "Filtrovať zoznam puzdier podľa knižnice"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
@@ -11803,7 +11803,7 @@ msgstr "Aktualizovať tvar symbolu a vývodov"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update keywords and footprint filters"
-msgstr "Aktualizovať kľúčové slová a filtre puzdier"
+msgstr "Aktualizovať kľúčové slová a filtre puzdra"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
 msgid "Update/reset pin name/number visibility"
@@ -13682,7 +13682,7 @@ msgstr "Vylúčiť zo simulácie"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:303
 msgid "Footprint filters:"
-msgstr "Filter puzdier:"
+msgstr "Filtre puzdra:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:305
 msgid ""
@@ -13708,7 +13708,7 @@ msgstr "Odstrániť filter puzdra"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:343
 msgid "Footprint Filters"
-msgstr "Filter Puzdier"
+msgstr "Filtre puzdra"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:356
 msgid "Edit Simulation Model..."
@@ -17437,7 +17437,7 @@ msgstr "Kontrolujú sa problémy s prepojeniami puzdra..."
 
 #: eeschema/erc/erc.cpp:2044
 msgid "Checking footprint assignments against footprint filters..."
-msgstr "Kontrolujú sa priradenia puzdier voči filtru puzdier..."
+msgstr "Kontrolujú sa priradenia puzdier voči filtrom puzdra..."
 
 #: eeschema/erc/erc.cpp:2052
 msgid "Checking for off grid pins and wires..."
@@ -17607,7 +17607,7 @@ msgstr "Naznačiť spoje puzdra"
 
 #: eeschema/erc/erc_item.cpp:189
 msgid "Assigned footprint doesn't match footprint filters"
-msgstr "Priradené puzdro nezodpovedá filtru puzdier"
+msgstr "Priradené puzdro nezodpovedá filtrom puzdra"
 
 #: eeschema/erc/erc_item.cpp:193
 msgid "Symbol is not annotated"
@@ -18203,9 +18203,8 @@ msgid "Footprint filters differs."
 msgstr "Názov stopy:"
 
 #: eeschema/lib_symbol.cpp:1783
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "Názov stopy:"
+msgstr "Filtre puzdra sa nezhodujú."
 
 #: eeschema/lib_symbol.cpp:1794
 #, fuzzy
@@ -20966,7 +20965,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:414
 msgid "There is an invalid current in an IV table"
-msgstr ""
+msgstr "Neplatný prúd v IV tabuľke"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:460
 #, fuzzy
@@ -21076,7 +21075,7 @@ msgstr "Chýba názov pravidla."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:651
 msgid "The parser does not handle this IBIS version"
-msgstr ""
+msgstr "Parser nespracováva túto verziu IBIS"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:660
 #, fuzzy
@@ -21172,7 +21171,7 @@ msgstr "Položky v importovanom súbore nejde správne spracovať."
 #: eeschema/sim/kibis/ibis_parser.cpp:1022
 #: eeschema/sim/kibis/ibis_parser.cpp:1037
 msgid "Line exceeds maximum length."
-msgstr ""
+msgstr "Riadok prekračuje maximálnu dĺžku."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1062
 msgid "Failed to read a double."
@@ -21386,14 +21385,16 @@ msgid ""
 "There are two waveform pairs, but only one transistor. More equations than "
 "unknowns."
 msgstr ""
+"Existujú dva páry priebehov, ale iba jeden tranzistor. Rovnice prevyšujú "
+"počet neznámych."
 
 #: eeschema/sim/kibis/kibis.cpp:1171
 msgid "Model has no waveform pair, using [Ramp] instead, poor accuracy"
-msgstr ""
+msgstr "Model nemá pár priebehov, namiesto toho používa [Ramp], nízka presnosť"
 
 #: eeschema/sim/kibis/kibis.cpp:1185
 msgid "Model has more than 2 waveform pairs, using the first two."
-msgstr ""
+msgstr "Model má viac ako 2 páry priebehov, pričom používa prvé dva."
 
 #: eeschema/sim/kibis/kibis.cpp:1225
 #, fuzzy
@@ -21426,7 +21427,7 @@ msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1506
 msgid "Falling edge is longer than off time."
-msgstr ""
+msgstr "Zostupná hrana je dlhšia ako doba vypnutia."
 
 #: eeschema/sim/kibis/kibis.cpp:1544
 msgid "Rising edge is longer than ON time."
@@ -21434,7 +21435,7 @@ msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1552
 msgid "Falling edge is longer than OFF time."
-msgstr ""
+msgstr "Zostupná hrana je dlhšia ako čas vypnutia."
 
 #: eeschema/sim/kibis/kibis.cpp:1567 eeschema/sim/kibis/kibis.cpp:1599
 #, fuzzy
@@ -21448,18 +21449,16 @@ msgstr "Medzera spojov musí byť väčšia než nula."
 
 #: eeschema/sim/kibis/kibis.cpp:1585
 msgid "Bitrate is too high for rising / falling edges"
-msgstr ""
+msgstr "Bitová rýchlosť je príliš vysoká pre nábežné / zostupné hrany"
 
 #: eeschema/sim/kibis/kibis.cpp:1613
 msgid "Bitrate could be too high for rising / falling edges"
-msgstr ""
+msgstr "Bitová rýchlosť môže byť príliš vysoká pre nábežné / zostupné hrany"
 
 #: eeschema/sim/legacy_workbook.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"Chyba pri načítaní súboru dosky:\n"
-"%s"
+msgstr "Chyba pri načítaní súboru zostavy simulácie: riadok %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:132
 #, fuzzy
@@ -21508,7 +21507,7 @@ msgstr "Definícia obvodu dosky"
 
 #: eeschema/sim/legacy_workbook.cpp:283
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "očakávaná definícia formátu merania"
 
 #: eeschema/sim/ngspice.cpp:498
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -21796,7 +21795,7 @@ msgstr "Nepodarilo sa načítať alebo spracovať súbor %s"
 
 #: eeschema/sim/simulator_frame.cpp:621
 msgid "Save changes to workbook?"
-msgstr "Uložiť zmeny do zošita?"
+msgstr "Uložiť zmeny do zostavy simulácie?"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
 #, fuzzy
@@ -22187,7 +22186,7 @@ msgstr ""
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
-msgstr ""
+msgstr "<b>Upozornenie: referencia je prázdna</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:187
 #, c-format
@@ -22579,13 +22578,13 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:974
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
+msgstr "Symbol '%s' nemôže nahradiť iný symbol '%s', z ktorého pochádza"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:984
 #, c-format
 msgid ""
 "Symbol '%s' cannot replace another symbol '%s' that is a descendent of it."
-msgstr ""
+msgstr "Symbol '%s' nemôže nahradiť iný symbol '%s', ktorý je jeho potomkom."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:998
 #, c-format
@@ -22606,6 +22605,8 @@ msgid ""
 "\n"
 "Do you want to overwrite all of them, or rename the new symbols?"
 msgstr ""
+"\n"
+"Chcete ich všetky prepísať alebo premenovať nové symboly?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1028
 msgid "Overwrite All"
@@ -22844,6 +22845,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
+"Zmeny vykonané v tomto dialógovom okne sa prejavia okamžite, na ich zrušenie "
+"použite v každom dotknutom dokumente príkaz 'Späť'"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 #: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
@@ -24314,9 +24317,8 @@ msgid "Create a new tab containing a simulation analysis"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1477
-#, fuzzy
 msgid "Open Workbook..."
-msgstr "Otvorte zošit"
+msgstr "Otvoriť zostavu simulácie..."
 
 #: eeschema/tools/sch_actions.cpp:1478
 msgid "Open a saved set of analysis tabs and settings"
@@ -24324,7 +24326,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1486
 msgid "Save Workbook"
-msgstr "Uložiť zošit"
+msgstr "Uložiť zostavu simulácie"
 
 #: eeschema/tools/sch_actions.cpp:1487
 #, fuzzy
@@ -24332,9 +24334,8 @@ msgid "Save the current set of analysis tabs and settings"
 msgstr "Prečíta aktuálny netlist a vypíše puzdra, ktoré chýbajú alebo sú naviac"
 
 #: eeschema/tools/sch_actions.cpp:1495
-#, fuzzy
 msgid "Save Workbook As..."
-msgstr "Uložiť zošit"
+msgstr "Uložiť zostavu simulácie ako..."
 
 #: eeschema/tools/sch_actions.cpp:1496
 #, fuzzy
@@ -24910,18 +24911,16 @@ msgid "Add Corner"
 msgstr "Pridajte silu"
 
 #: eeschema/tools/simulator_control.cpp:109
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "Otvorte zošit so simuláciou"
+msgstr "Otvoriť zostavu simulácie"
 
 #: eeschema/tools/simulator_control.cpp:128
 msgid "noname"
 msgstr "bez mena"
 
 #: eeschema/tools/simulator_control.cpp:161
-#, fuzzy
 msgid "Save Simulation Workbook As"
-msgstr "Uložiť simulačný zošit"
+msgstr "Uložiť zostavu simulácie ako"
 
 #: eeschema/tools/simulator_control.cpp:181
 msgid "Save Plot as Image"
@@ -31353,7 +31352,7 @@ msgstr "Hrúbka pokovovania (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr "Cez dĺžku:"
+msgstr "Dĺžka prekovu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
@@ -31361,7 +31360,7 @@ msgstr "Dĺžka prekovu je hrúbka dosky pre priechodzie otvory prekovov"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Cez priemer podložky:"
+msgstr "Priemer plôšky prekovu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
@@ -38539,7 +38538,7 @@ msgstr "Stopová medzera:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Cez medzeru:"
+msgstr "Medzera medzi prekovmi:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 #, fuzzy
@@ -38596,7 +38595,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
-msgstr "Skáčte cez prekážky"
+msgstr "Preskočiť mimo prekážky"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
@@ -39386,7 +39385,7 @@ msgstr "Veľkosť vrtáku prekovu musí byť menšia než priemer prekovu"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:651
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Cez počiatočnú vrstvu a koncovú vrstvu nemôžu byť rovnaké"
+msgstr "Počiatočná a koncová vrstva prekovu, nemôžu byť rovnaké"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:919
 msgid "Edit Track/Via Properties"
@@ -40288,7 +40287,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
-msgstr "Minimum cez priemer:"
+msgstr "Minimálny priemer prekovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:117
 msgid ""
@@ -42141,9 +42140,8 @@ msgid "Footprint attributes don't match symbol"
 msgstr "Parametre puzdra sa nezhodujú so symbolom"
 
 #: pcbnew/drc/drc_item.cpp:205
-#, fuzzy
 msgid "Footprint doesn't match symbol's footprint filters"
-msgstr "Puzdro sa nezhoduje s kópiou v knižnici"
+msgstr "Puzdro sa nezodpovedá filtrom puzdra v nastavení symbolu"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
@@ -42206,7 +42204,7 @@ msgstr "Medzera diferenciálneho páru je mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:278
 msgid "Differential uncoupled length too long"
-msgstr "Príliš dlhý diferenciálny pár"
+msgstr "Nezviazaná dĺžka diferenciálneho páru je príliš dlhá"
 
 #: pcbnew/drc/drc_item.cpp:282
 msgid "Footprint is not valid"
@@ -42497,9 +42495,9 @@ msgid "(%s creepage %s; actual %s)"
 msgstr "(%s klírens %s; skutočný %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:671
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s maximálna odpojená dĺžka: %s; skutočná: %s)"
+msgstr "(%s maximálna nezviazaná dĺžka: %s; skutočná: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:739
 #, fuzzy, c-format
@@ -42849,14 +42847,12 @@ msgid "Solder mask expansion overridden."
 msgstr "Prepísané zväčšenie spájkovacej masky."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:779
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "Absolútna vôľa spájkovacej pasty:"
+msgstr "Absolútny odstup spájkovacej pasty prepísaná."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:786
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Relatívna vôľa spájkovacej pasty:"
+msgstr "Relatívny odstup spájkovacej pasty prepísaný."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:793
 #, fuzzy
@@ -43786,9 +43782,9 @@ msgid "Show 3D viewer in own window"
 msgstr "Zobraziť okno 3D prehliadača"
 
 #: pcbnew/footprint_chooser_frame.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "Pridajte filter stopy"
+msgstr "Použiť filtre puzdra (%s)"
 
 #: pcbnew/footprint_chooser_frame.cpp:511
 #, fuzzy, c-format
@@ -44746,14 +44742,14 @@ msgid "Updated %s sheetfile to '%s'."
 msgstr "Aktualizované %s z %s na %s"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:675
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s footprint filters to '%s'."
-msgstr "Aktualizovať stopu %s z '%s' na '%s'"
+msgstr "Aktualizovať %s filtre puzdra na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "Zmeniť stopu %s z '%s' na '%s'"
+msgstr "Aktualizované %s filtre puzdra na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:697
 #, c-format
@@ -44848,7 +44844,7 @@ msgstr "Opätovné pripojenie pomocou z %s na %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1073
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "Cez pripojenie k neznámej sieti (%s)."
+msgstr "Prekov pripojený k neznámemu spoju (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1138
 #, fuzzy, c-format
@@ -45996,9 +45992,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Nekovovaná podložka '%s' má otvor. Toto by sa nemalo stávať"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3909
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Načítavam..."
+msgstr "Načítavanie prekovov..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3953
 #, fuzzy, c-format
@@ -47539,7 +47534,7 @@ msgstr "Mikro Via %s dňa %s"
 #: pcbnew/pcb_track.cpp:174
 #, c-format
 msgid "Via %s on %s"
-msgstr "Cez %s dňa %s"
+msgstr "Prekov %s na %s"
 
 #: pcbnew/pcb_track.cpp:602
 msgid "removed annular ring"
@@ -47605,7 +47600,7 @@ msgstr "Spodná vrstva"
 
 #: pcbnew/pcb_track.cpp:2197
 msgid "Via Type"
-msgstr "Cez Type"
+msgstr "Type prekovu"
 
 #: pcbnew/pcb_track.cpp:2199
 msgid "Front tenting"
@@ -48155,7 +48150,7 @@ msgstr "Spoje %s"
 
 #: pcbnew/router/router_tool.cpp:282
 msgid "Via netclass values"
-msgstr "Cez hodnoty netclass"
+msgstr "Hodnoty prekovu z triedy spojov"
 
 #: pcbnew/router/router_tool.cpp:287 pcbnew/tools/drawing_tool.cpp:126
 #, fuzzy, c-format
@@ -48187,7 +48182,7 @@ msgstr "Šírka %s"
 #: pcbnew/router/router_tool.cpp:402
 #, c-format
 msgid "Width %s, via gap %s"
-msgstr "Šírka %s, cez medzeru %s"
+msgstr "Šírka %s, medzeru medzi prekovmi %s"
 
 #: pcbnew/router/router_tool.cpp:411
 #, c-format
@@ -48197,7 +48192,7 @@ msgstr "Šírka %s, medzera %s"
 #: pcbnew/router/router_tool.cpp:417
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Šírka %s, medzera %s, cez medzeru %s"
+msgstr "Šírka %s, medzera %s, medzeru medzi prekovmi %s"
 
 #: pcbnew/router/router_tool.cpp:479
 msgid "Interactive Router"
@@ -48448,12 +48443,12 @@ msgstr "Upraviť preddefinované veľkosti..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:653
 msgid "Via: use netclass sizes"
-msgstr "Cez: použite veľkosti netclass"
+msgstr "Prekov: použiť veľkosti z triedy spojov"
 
 #: pcbnew/toolbars_pcb_editor.cpp:676
 #, c-format
 msgid "Via: %s (%s)"
-msgstr "Cez: %s (%s)"
+msgstr "Prekov: %s (%s)"
 
 #: pcbnew/tools/align_distribute_tool.cpp:64
 msgid "Align/Distribute"
@@ -48623,20 +48618,18 @@ msgid "Report incomplete: could not compile custom design rules."
 msgstr "Protokol je neúplný: nebolo možné zostaviť vlastné pravidlá návrhu."
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
-#, fuzzy
 msgid "Uncoupled Length"
-msgstr "Dĺžka dosky"
+msgstr "Nezviazaná dĺžka"
 
 #: pcbnew/tools/board_inspection_tool.cpp:391
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Diferenčná odpojená dĺžka je príliš dlhá"
+msgstr "Vyhodnotenie nezviazanej dĺžky dif. páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:399
 #: pcbnew/tools/board_inspection_tool.cpp:1023
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Odstráňte nepoužívanú sieť '%s'."
+msgstr "Vyriešená max. nezviazaná dĺžka: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1435
@@ -48650,9 +48643,8 @@ msgstr "Obmedzenia šírky: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:421
 #: pcbnew/tools/board_inspection_tool.cpp:1451
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Dĺžka stopy je mimo rozsahu"
+msgstr "Vyhodnotenie hrúbky textu pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:429
 #, fuzzy, c-format
@@ -48662,7 +48654,7 @@ msgstr "Obmedzenia šírky: min %s max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:436
 #: pcbnew/tools/board_inspection_tool.cpp:1358
 msgid "Track width resolution for:"
-msgstr "Rozlíšenie šírky spoja pre:"
+msgstr "Vyhodnotenie šírky spoja pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:444
 #, fuzzy, c-format
@@ -48675,9 +48667,8 @@ msgid "Track Angle"
 msgstr "Dĺžka spoja"
 
 #: pcbnew/tools/board_inspection_tool.cpp:451
-#, fuzzy
 msgid "Track Angle resolution for:"
-msgstr "Rozlíšenie šírky stopy pre:"
+msgstr "Vyhodnotenie uhlov spoja pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:459
 #, fuzzy, c-format
@@ -48690,9 +48681,8 @@ msgid "Track Segment Length"
 msgstr "Dĺžka segmentu"
 
 #: pcbnew/tools/board_inspection_tool.cpp:466
-#, fuzzy
 msgid "Track segment length resolution for:"
-msgstr "Rozlíšenie šírky stopy pre:"
+msgstr "Vyhodnotenie dĺžky segmentu spoja pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:474
 #, fuzzy, c-format
@@ -48705,9 +48695,8 @@ msgid "Connection Width"
 msgstr "Typ spojenia:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:481
-#, fuzzy
 msgid "Connection width resolution for:"
-msgstr "Rozlíšenie šírky stopy pre:"
+msgstr "Vyhodnotenie dĺžky pripojenia pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:489
 #, fuzzy, c-format
@@ -48722,7 +48711,7 @@ msgstr "Polomer prechodky"
 #: pcbnew/tools/board_inspection_tool.cpp:495
 #: pcbnew/tools/board_inspection_tool.cpp:1377
 msgid "Via diameter resolution for:"
-msgstr "Cez rozlíšenie priemeru pre:"
+msgstr "Vyhodnotenie priemeru prekovu pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:503
 #, fuzzy, c-format
@@ -48737,7 +48726,7 @@ msgstr "Cez prstencovú šírku"
 #: pcbnew/tools/board_inspection_tool.cpp:510
 #: pcbnew/tools/board_inspection_tool.cpp:1394
 msgid "Via annular width resolution for:"
-msgstr "Prostredníctvom rozlíšenia kruhovej šírky pre:"
+msgstr "Vyhodnotenie prstenca plôšky prekovu pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:518
 #, fuzzy, c-format
@@ -48751,9 +48740,8 @@ msgstr "Veľkosť otvoru"
 
 #: pcbnew/tools/board_inspection_tool.cpp:526
 #: pcbnew/tools/board_inspection_tool.cpp:1415
-#, fuzzy
 msgid "Hole size resolution for:"
-msgstr "Rozlíšenie priemeru otvoru pre:"
+msgstr "Vyhodnotenie veľkosti otvoru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:534
 #, fuzzy, c-format
@@ -48767,9 +48755,8 @@ msgstr "Rozstup"
 
 #: pcbnew/tools/board_inspection_tool.cpp:541
 #: pcbnew/tools/board_inspection_tool.cpp:1127
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie min. vzdialenosti otvoru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:549
 #: pcbnew/tools/board_inspection_tool.cpp:652
@@ -48798,9 +48785,8 @@ msgstr "Vyriešená klírens: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:564
 #: pcbnew/tools/board_inspection_tool.cpp:1289
-#, fuzzy
 msgid "Physical hole clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie min. vzdialenosti fyz. otvoru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:573
 #: pcbnew/tools/board_inspection_tool.cpp:1301
@@ -48815,9 +48801,8 @@ msgstr "Rozstupy spojov:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:585
 #: pcbnew/tools/board_inspection_tool.cpp:1156
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie min. vzdialenosti medzi otvormi pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:599
 #, fuzzy
@@ -48826,21 +48811,19 @@ msgstr "Rozstup"
 
 #: pcbnew/tools/board_inspection_tool.cpp:600
 #: pcbnew/tools/board_inspection_tool.cpp:1195
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie min. vzdialenosti okraja dosky pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:644
 #: pcbnew/tools/board_inspection_tool.cpp:949
 msgid "Clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie min. vzdialenosti pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:667
 #: pcbnew/tools/board_inspection_tool.cpp:1244
 #: pcbnew/tools/board_inspection_tool.cpp:1269
-#, fuzzy
 msgid "Physical clearance resolution for:"
-msgstr "Rozlíšenie klírensu pre:"
+msgstr "Vyhodnotenie fyz. min. vzdialenosti pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:676
 #: pcbnew/tools/board_inspection_tool.cpp:1220
@@ -48951,11 +48934,11 @@ msgstr "Obmedzenia šírky: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1010
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Vyhodnotenie max. dĺžky nespriahnutého úseku diferenciálneho páru pre:"
+msgstr "Vyhodnotenie max. nezviazanej dĺžky diferenciálneho páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1016
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr ""
+msgstr "Návrhové obmedzenie 'diff_pair_uncoupled' nie je definované."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1047
 #, c-format
@@ -49003,7 +48986,7 @@ msgstr "Obmedzenia priemeru: min %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1393
 msgid "Via Annular Width"
-msgstr "Cez prstencovú šírku"
+msgstr "Šírka prstenca plôšky prekovu"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1403
 #, fuzzy, c-format
@@ -51908,9 +51891,8 @@ msgid "Checking null tracks and vias..."
 msgstr "Kontroluje sa nulová šírka spojov a prekovov..."
 
 #: pcbnew/tracks_cleaner.cpp:76
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Globálna úprava spojov a prepojení"
+msgstr "Odstraňovanie prázdnych spojov a prekovov..."
 
 #: pcbnew/tracks_cleaner.cpp:87
 msgid "Checking redundant tracks..."
@@ -51944,14 +51926,12 @@ msgid "Checking dangling tracks and vias..."
 msgstr "Kontrolujú sa nepripojené konce spojov a prekovov..."
 
 #: pcbnew/tracks_cleaner.cpp:139
-#, fuzzy
 msgid "Removing dangling tracks..."
-msgstr "Načítavam..."
+msgstr "Odstraňovanie nepripojených spojov..."
 
 #: pcbnew/tracks_cleaner.cpp:142
-#, fuzzy
 msgid "Removing dangling vias..."
-msgstr "Načítavam..."
+msgstr "Odstraňovanie nepripojených prekovov..."
 
 #: pcbnew/tracks_cleaner.cpp:156
 msgid "Checking collinear tracks..."
@@ -52753,7 +52733,7 @@ msgstr "Via Count"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:128
 msgid "Via Length"
-msgstr "Cez Dĺžka"
+msgstr "Dĺžka prekovu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:130
 #, fuzzy
