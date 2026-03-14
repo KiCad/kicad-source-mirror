@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:25+0000\n"
-"Last-Translator: Deleted User <noreply+108163@weblate.org>\n"
+"PO-Revision-Date: 2026-03-14 23:20+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v9/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -6855,7 +6855,7 @@ msgstr "min"
 
 #: common/eda_units.cpp:437
 msgid "opt"
-msgstr "opsiyon"
+msgstr "opt"
 
 #: common/eda_units.cpp:445
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:151
