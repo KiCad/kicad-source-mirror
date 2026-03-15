@@ -1382,8 +1382,22 @@ HANDLER_RESULT<NetsResponse> API_HANDLER_PCB::handleGetNets( const HANDLER_CONTE
     {
         NETCLASS* nc = net->GetNetClass();
 
-        if( !netclassFilter.empty() && nc && !netclassFilter.count( nc->GetName() ) )
-            continue;
+        if( !netclassFilter.empty() && nc )
+        {
+            bool inClass = false;
+
+            for( const wxString& filter : netclassFilter )
+            {
+                if( nc->ContainsNetclassWithName( filter ) )
+                {
+                    inClass = true;
+                    break;
+                }
+            }
+
+            if( !inClass )
+                continue;
+        }
 
         board::types::Net* netProto = response.add_nets();
         netProto->set_name( net->GetNetname() );
