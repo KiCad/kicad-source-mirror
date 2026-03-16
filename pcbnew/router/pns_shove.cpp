@@ -2443,29 +2443,13 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
 
-
-
-
-
-
     //nodeStats( Dbg(), m_currentNode, "right-after-branch" );
 
     auto iface = Router()->GetInterface();
 
-    //    for ( auto& hq : m_headLines )
-    //      if( hq.oldHead )
-    //        m_currentNode->Remove( *hq.oldHead );
-
-
     // Push the via to its new location
     for( auto& headLineEntry : m_headLines )
     {
-        //if( rootEntry->line ) // head already processed in previous steps
-        //{
-        //  PNS_DBG( Dbg(), Message, wxString::Format( "RL found" ) );
-
-        //continue;
-        //}
         m_currentNode->ClearRanks();
 
         if( headLineEntry.theVia )
@@ -2618,6 +2602,11 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
                 m_headsModified = true;
             }
         }
+
+	// NODE's destructor invalidates all linked items in the LINEs stored in the stack/queue
+	// Erase them first to avoid a use-after-free issue.
+        m_lineStack.clear();
+        m_optimizerQueue.clear();
 
         pruneRootLines( m_currentNode );
 
