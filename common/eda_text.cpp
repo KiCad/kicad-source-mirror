@@ -189,14 +189,14 @@ void EDA_TEXT::Serialize( google::protobuf::Any &aContainer ) const
     using namespace kiapi::common;
     types::Text text;
 
-    text.set_text( GetText().ToStdString() );
-    text.set_hyperlink( GetHyperlink().ToStdString() );
+    text.set_text( GetText().ToUTF8() );
+    text.set_hyperlink( GetHyperlink().ToUTF8() );
     PackVector2( *text.mutable_position(), GetTextPos() );
 
     types::TextAttributes* attrs = text.mutable_attributes();
 
     if( GetFont() )
-        attrs->set_font_name( GetFont()->GetName().ToStdString() );
+        attrs->set_font_name( GetFont()->GetName().ToUTF8() );
 
     attrs->set_horizontal_alignment(
             ToProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( GetHorizJustify() ) );

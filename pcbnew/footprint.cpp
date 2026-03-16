@@ -322,8 +322,8 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     def->mutable_id()->CopyFrom( kiapi::common::LibIdToProto( GetFPID() ) );
     // anchor?
-    def->mutable_attributes()->set_description( GetLibDescription().ToStdString() );
-    def->mutable_attributes()->set_keywords( GetKeywords().ToStdString() );
+    def->mutable_attributes()->set_description( GetLibDescription().ToUTF8() );
+    def->mutable_attributes()->set_keywords( GetKeywords().ToUTF8() );
 
     // TODO: serialize library mandatory fields
 
@@ -350,7 +350,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         wxStringTokenizer tokenizer( group, " " );
 
         while( tokenizer.HasMoreTokens() )
-            netTie->add_pad_number( tokenizer.GetNextToken().ToStdString() );
+            netTie->add_pad_number( tokenizer.GetNextToken().ToUTF8() );
     }
 
     for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
