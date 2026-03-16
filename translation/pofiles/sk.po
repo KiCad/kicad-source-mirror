@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-16 00:15+0000\n"
+"PO-Revision-Date: 2026-03-17 01:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -39640,9 +39640,8 @@ msgid "Update footprint fields from symbols"
 msgstr "Pre symbol '%s' nie je definovaná žiadna stopa."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:68
-#, fuzzy
 msgid "Remove footprint fields not found in symbols"
-msgstr "Odstráňte polia, ak nie sú v novom symbole"
+msgstr "Odstrániť polia puzdra, ak sa tieto nenachádzajú aj v symboloch"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:56
 msgid "Update PCB from Schematic"
@@ -42087,7 +42086,7 @@ msgstr "Puzdro sa nezodpovedá filtrom puzdra v nastavení symbolu"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Footprint not found in libraries"
-msgstr "Puzdro sa nenachádza v knižnici"
+msgstr "Puzdro sa nenachádza v knižniciach"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Footprint doesn't match copy in library"
@@ -43199,6 +43198,8 @@ msgid ""
 "Could not add 3D model for %s.\n"
 "File not found: %s\n"
 msgstr ""
+"Nebolo možné pridať 3D model pre %s.\n"
+"Súbor sa nenašiel: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:436
 #, c-format
@@ -43780,7 +43781,7 @@ msgstr ""
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
-msgstr "Knižnica nebola nájdená v tabuľke knižníc puzdier."
+msgstr "Knižnica sa nenašla v tabuľke knižníc puzdier."
 
 #: pcbnew/footprint_editor_utils.cpp:378
 msgid "Footprint library not enabled."
@@ -44523,9 +44524,9 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Nie je možné pridať %s (nie je priradená žiadna stopa)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Nie je možné pridať %s (stopa '%s' sa nenašla)."
+msgstr "Nie je možné pridať %s (puzdro '%s' sa nenašlo)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:166
 #, fuzzy, c-format
@@ -44573,9 +44574,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "Nie je možné aktualizovať %s (nepriradené puzdro)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Nie je možné aktualizovať %s (stopa '%s' sa nenašla)."
+msgstr "Nie je možné aktualizovať %s (puzdro '%s' sa nenašlo)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:330
 #, fuzzy, c-format
@@ -44812,7 +44813,7 @@ msgstr "Symbol zmien stopy nie je uložený"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s podložka %s sa nenašla v priečinku %s."
+msgstr "%s plôška %s sa nenašla v %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1311
 #, c-format
@@ -44941,10 +44942,11 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s puzdro ID \"%s\" nie je platné."
 
 #: pcbnew/netlist_reader/netlist.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "%s puzdro \"%s\" nenájdené v žiadnej knižnici v knižnici puzdier."
+msgstr ""
+"%s puzdro '%s' sa nenašlo v žiadnej z knižníc z tabuľky knižníc puzdier."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -45445,7 +45447,7 @@ msgstr ""
 "tímu, pomocou menu Pomocník->Nahlásiť chybu."
 
 #: pcbnew/pcb_edit_frame.cpp:2076
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Schematický súbor '%s' sa nenašiel."
 
@@ -45601,14 +45603,14 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "Súbor sa nenašiel: '%s' v adresári '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Knižnica stopy sa nenašla."
+msgstr "Adresár puzdier sa nenašiel: '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:719
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:749
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
 msgstr "Súbor sa nenašiel: '%s'."
 
@@ -45697,7 +45699,7 @@ msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Ignorovaná kóta typu %d (zatiaľ nie je podporovaná)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2076
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Súbor sa nenašiel: '%s'. 3D-model nebol importovaný."
 
@@ -45991,9 +45993,9 @@ msgid "No footprints in library '%s'"
 msgstr "Načítať puzdro z knižnice"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "V knižniciach nemožno nájsť niektoré puzdra"
+msgstr "Puzdro '%s' sa nenašlo v '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
 msgid "Altium Designer PCB files"
@@ -46093,7 +46095,7 @@ msgstr "Neočakávaná vrstva '%s' v zásobníku vrstiev."
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:745
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr "Pravidlo návrhu %s sa nenašlo. Toto bolo ignorované."
+msgstr "Pravidlo návrhu %s nebolo nájdené. Toto bolo ignorované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:774
 msgid ""
@@ -46574,9 +46576,9 @@ msgid "Cannot load footprint '%s' from '%s'"
 msgstr "Nie je možné načítať stopu '%s' z '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "V knižniciach nemožno nájsť niektoré puzdra"
+msgstr "Puzdro '%s' sa nenašlo v projekte '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
@@ -46764,9 +46766,9 @@ msgstr "Nie je možné previesť '%s' na celé číslo"
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:225
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:871
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Knižnica stopy sa nenašla."
+msgstr "Knižnica puzdier '%s' sa nenašla."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:279
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:218
@@ -46835,9 +46837,9 @@ msgid "Generating BOM section"
 msgstr "Nastavenie rendra"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1371
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s not found in dictionary; BOM data may be incomplete."
-msgstr "V knižniciach nemožno nájsť niektoré puzdra"
+msgstr "Puzdro %s sa nenašlo v slovníku; údaje BOM môžu byť neúplné."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1387
 #, c-format
@@ -47805,9 +47807,9 @@ msgstr "Výnimka v kóde pluginu akcie python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:139
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Metóda '%s' sa nenašla alebo sa nedá zavolať"
+msgstr "Metóda '%s' sa nenašla, alebo sa nedá zavolať"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:140
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -48303,7 +48305,7 @@ msgstr "Chýbajúca sekcia \"library_out\" v súbore relácie"
 #: pcbnew/specctra_import_export/specctra_import.cpp:426
 #, c-format
 msgid "Reference '%s' not found."
-msgstr "Odkaz '%s' sa nenašiel."
+msgstr "Referencia '%s' sa nenašla."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:566
 #, c-format
