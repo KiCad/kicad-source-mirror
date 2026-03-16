@@ -2332,7 +2332,7 @@ void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
 
 PCB_LAYER_ID PNS_KICAD_IFACE_BASE::GetBoardLayerFromPNSLayer( int aLayer ) const
 {
-    if( aLayer < 0 )
+    if( aLayer < 0 || aLayer >= m_board->GetCopperLayerCount() )
         return PCB_LAYER_ID::UNDEFINED_LAYER;
 
     if( aLayer == 0 )
