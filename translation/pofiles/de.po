@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:04+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-17 20:00+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -25711,8 +25711,7 @@ msgstr "Datei nicht gefunden:"
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
-"<b> Eine Gerber-Jobdatei kann nicht als Plotdatei geladen werden. </b> <i> "
-"%s </i>"
+"<b>Eine Gerber-Jobdatei kann nicht als Plotdatei geladen werden.</b><i>%s</i>"
 
 #: gerbview/files.cpp:303
 msgid "Loading files..."
@@ -42195,7 +42194,7 @@ msgstr "FEHLER im Ausdruck."
 #: pcbnew/drc/drc_rule_parser.cpp:597
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FEHLER: <a href=\"%d:%d\"> %s </a> %s"
+msgstr "FEHLER: <a href=\"%d:%d\">%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:68 pcbnew/drc/drc_rule_parser.cpp:604
 #, c-format
