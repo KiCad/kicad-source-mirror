@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-14 23:16+0000\n"
+"PO-Revision-Date: 2026-03-17 19:58+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/v9/he/>\n"
 "Language: he\n"
@@ -209,7 +209,7 @@ msgstr "העתק תמונת תלת מימד"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
 msgid "3D Grid"
-msgstr "רשת תלת-ממד"
+msgstr "סריג תלת-ממד"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 msgid "Raytracing"
@@ -459,23 +459,23 @@ msgstr "מבט מלמטה"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "No 3D Grid"
-msgstr "ללא רשת תלת-ממד"
+msgstr "ללא סריג תלת-ממד"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:226
 msgid "3D Grid 10mm"
-msgstr "רשת תלת-ממד 10ממ"
+msgstr "סריג תלת-ממד 10ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "3D Grid 5mm"
-msgstr "רשת תלת-ממד 5 ממ"
+msgstr "סריג תלת-ממד 5 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "3D Grid 2.5mm"
-msgstr "רשת תלת-ממד 2.5 ממ"
+msgstr "סריג תלת-ממד 2.5 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:247
 msgid "3D Grid 1mm"
-msgstr "רשת תלת-ממד 1 ממ"
+msgstr "סריג תלת-ממד 1 ממ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
 msgid "Render Realistic Materials"
@@ -588,11 +588,11 @@ msgstr "הצג הדבקה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Solder Paste"
-msgstr "משחת בדיל"
+msgstr "משחת הלחמה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show solder paste"
-msgstr "הצג משחת בדיל"
+msgstr "הצג משחת הלחמה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -604,11 +604,11 @@ msgstr "הצג הדפסת משי תחתונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
-msgstr "הצג מסיכת בדיל עליונה"
+msgstr "הצג מסיכת הלחמה עליונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
-msgstr "הצג מסיכת בדיל תחתונה"
+msgstr "הצג מסיכת הלחמה תחתונה"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "Show user drawings layer"
@@ -1978,7 +1978,7 @@ msgstr "&שמור"
 
 #: common/confirm.cpp:74 common/confirm.cpp:111
 msgid "&Discard Changes"
-msgstr "&בטל שינויים"
+msgstr "&השלך שינויים"
 
 #: common/confirm.cpp:77 common/confirm.cpp:157
 msgid "&Apply to all"
@@ -2774,11 +2774,11 @@ msgstr "הגדר את טבלת הספרייה הגלובלית"
 
 #: common/dialogs/dialog_grid_settings.cpp:82
 msgid "Grid size X out of range."
-msgstr "גודל הרשת X מחוץ לטווח."
+msgstr "גודל הסריג X מחוץ לטווח."
 
 #: common/dialogs/dialog_grid_settings.cpp:89
 msgid "Grid size Y out of range."
-msgstr "גודל הרשת Y מחוץ לטווח."
+msgstr "גודל הסריג Y מחוץ לטווח."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: common/dialogs/git/dialog_git_repository_base.cpp:31
@@ -2879,7 +2879,7 @@ msgstr "מצומד"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "הגדרות רשת"
+msgstr "הגדרות סריג"
 
 #: common/dialogs/dialog_hotkey_list.cpp:36
 msgid "Hotkey List"
@@ -3319,7 +3319,7 @@ msgstr "נקה סמני הפניה בכל הסמלים שהודבקו"
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
-msgstr "סמני הפניה"
+msgstr "מציני הפניה"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
@@ -3938,7 +3938,7 @@ msgstr "עדכון אחרון"
 #: common/dialogs/git/dialog_git_switch.cpp:151
 #: common/dialogs/git/dialog_git_switch.cpp:218
 msgid "Switch"
-msgstr "החלף"
+msgstr "עבור"
 
 #: common/dialogs/git/dialog_git_switch.cpp:223
 #: eeschema/design_block_utils.cpp:90 eeschema/sch_base_frame.cpp:307
@@ -4834,7 +4834,7 @@ msgstr "הקובץ '%s' כבר קיים."
 #: pcbnew/footprint_libraries_utils.cpp:1166
 #: pcbnew/tools/footprint_editor_control.cpp:473
 msgid "Overwrite"
-msgstr "החלף"
+msgstr "דרוס"
 
 #: common/dialogs/panel_embedded_files.cpp:366
 #, c-format
@@ -4919,7 +4919,7 @@ msgstr "%s%s (%s)"
 #: common/dialogs/panel_grid_settings.cpp:308
 #, c-format
 msgid "Grid size '%s' already exists."
-msgstr "גודל רשת '%s' כבר קיים."
+msgstr "גודל סריג '%s' כבר קיים."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 #: common/eda_base_frame.cpp:1138 common/eda_base_frame.cpp:1147
@@ -4927,15 +4927,15 @@ msgstr "גודל רשת '%s' כבר קיים."
 #: common/eda_base_frame.cpp:1219 common/eda_base_frame.cpp:1241
 #: common/tool/common_tools.cpp:605
 msgid "Grids"
-msgstr "רשתות"
+msgstr "סריגים"
 
 #: common/dialogs/panel_grid_settings_base.cpp:67
 msgid "Fast Grid Switching"
-msgstr "החלפת רשת מהירה"
+msgstr "החלפת סריג מהירה"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
-msgstr "רשת 1:"
+msgstr "סריג 1:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
@@ -4944,11 +4944,11 @@ msgstr "(מקש קיצור)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
 msgid "Grid 2:"
-msgstr "רשת 2:"
+msgstr "סריג 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:925
 msgid "Grid Overrides"
-msgstr "דריסות רשת"
+msgstr "דריסות סריג"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -4983,11 +4983,11 @@ msgstr "הקלד טקסט סינון"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
-msgstr "בטל את כל השינויים"
+msgstr "שחזר את כל השינויים"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
-msgstr "בטל את כל השינויים שבוצעו עד כה בתיבת דו-שיח זו"
+msgstr "שחזר את כל השינויים שבוצעו עד כה בתיבת דו-שיח זו"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
@@ -5877,7 +5877,7 @@ msgstr "מספר נקודה צפה לא חוקי"
 #: common/eda_base_frame.cpp:436 common/tool/actions.cpp:190
 #: pcbnew/dialogs/panel_setup_rules.cpp:125
 msgid "Undo"
-msgstr "בטל"
+msgstr "שחזר"
 
 #: common/eda_base_frame.cpp:445 common/tool/actions.cpp:202
 #: pcbnew/dialogs/panel_setup_rules.cpp:126
@@ -6060,7 +6060,7 @@ msgstr "סוג MIME לא ידוע עבור קובץ התיעוד '%s'"
 
 #: common/eda_draw_frame.cpp:382 common/tool/actions.cpp:932
 msgid "Edit Grids..."
-msgstr "ערוך רשתות..."
+msgstr "ערוך סריגים..."
 
 #: common/eda_draw_frame.cpp:547
 msgid "Zoom Auto"
@@ -6074,7 +6074,7 @@ msgstr "תקריב %.2f"
 #: common/eda_draw_frame.cpp:648
 #, c-format
 msgid "grid %s"
-msgstr "רשת %s"
+msgstr "סריג %s"
 
 #: common/eda_draw_frame.cpp:664 pagelayout_editor/pl_editor_frame.cpp:751
 msgid "inches"
@@ -6214,7 +6214,7 @@ msgstr "קדח מעבר"
 #: common/eda_item.cpp:399 common/eda_item.cpp:411 eeschema/sch_marker.cpp:367
 #: pcbnew/pcb_marker.cpp:223
 msgid "Marker"
-msgstr "סמן"
+msgstr "סימון"
 
 #: common/eda_item.cpp:400 common/eda_item.cpp:401 common/eda_item.cpp:402
 #: common/eda_item.cpp:403 pcbnew/pcb_dimension.cpp:609
@@ -7316,7 +7316,7 @@ msgstr "הסר מהבחירה"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "התעלם מהצמדה לרשת"
+msgstr "התעלם מהצמדה לסריג"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
@@ -8021,7 +8021,7 @@ msgstr "פריטי עזר"
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Grid"
-msgstr "רשת"
+msgstr "סריג"
 
 #: common/layer_id.cpp:108
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:104
@@ -8172,7 +8172,7 @@ msgstr "צללי סמני DRC"
 
 #: common/layer_id.cpp:150
 msgid "Grid axes"
-msgstr "צירי רשת"
+msgstr "צירי סריג"
 
 #: common/layer_id.cpp:153
 msgid "Locked item shadow"
@@ -8716,7 +8716,7 @@ msgstr "חזור"
 
 #: common/tool/actions.cpp:122
 msgid "Throw away changes"
-msgstr "בטל שינויים"
+msgstr "השלך שינויים"
 
 #: common/tool/actions.cpp:129
 msgid "Page Settings..."
@@ -9024,7 +9024,7 @@ msgstr "חפש הקודם"
 
 #: common/tool/actions.cpp:514
 msgid "Find Next Marker"
-msgstr "מצא סמן הבא"
+msgstr "מצא סימון הבא"
 
 #: common/tool/actions.cpp:520
 msgid "Replace and Find Next"
@@ -9037,15 +9037,15 @@ msgstr "החלף הכל"
 
 #: common/tool/actions.cpp:538
 msgid "Previous Marker"
-msgstr "סמן קודם"
+msgstr "סימון קודם"
 
 #: common/tool/actions.cpp:544
 msgid "Next Marker"
-msgstr "סמן הבא"
+msgstr "סימון הבא"
 
 #: common/tool/actions.cpp:550
 msgid "Exclude Marker"
-msgstr "החרג סמן"
+msgstr "החרג סימון"
 
 #: common/tool/actions.cpp:551
 msgid "Mark current violation in Checker window as an exclusion"
@@ -9127,7 +9127,7 @@ msgstr "התמקד בבחירה"
 
 #: common/tool/actions.cpp:675 common/widgets/mathplot.cpp:1403
 msgid "Undo Last Zoom"
-msgstr "בטל זום אחרון"
+msgstr "שחזר זום אחרון"
 
 #: common/tool/actions.cpp:676 common/widgets/mathplot.cpp:1404
 msgid "Return zoom to level prior to last zoom action"
@@ -9245,59 +9245,59 @@ msgstr "גלגל ימינה"
 
 #: common/tool/actions.cpp:864
 msgid "Switch to Fast Grid 1"
-msgstr "החלף לרשת מהירה 1"
+msgstr "החלף לסריג מהירה 1"
 
 #: common/tool/actions.cpp:871
 msgid "Switch to Fast Grid 2"
-msgstr "החלף לרשת מהירה 2"
+msgstr "החלף לסריג מהירה 2"
 
 #: common/tool/actions.cpp:878
 msgid "Cycle Fast Grid"
-msgstr "מחזור רשת מהירה"
+msgstr "מחזור סריג מהירה"
 
 #: common/tool/actions.cpp:885
 msgid "Switch to Next Grid"
-msgstr "החלף לרשת הבאה"
+msgstr "החלף לסריג הבאה"
 
 #: common/tool/actions.cpp:892
 msgid "Switch to Previous Grid"
-msgstr "החלף לרשת הקודמת"
+msgstr "החלף לסריג הקודמת"
 
 #: common/tool/actions.cpp:898 common/tool/common_tools.cpp:628
 msgid "Grid Origin"
-msgstr "נקודת מוצא של רשת"
+msgstr "נקודת מוצא של סריג"
 
 #: common/tool/actions.cpp:899
 msgid "Place the grid origin point"
-msgstr "מקם את נקודת המוצא של הרשת"
+msgstr "מקם את נקודת המוצא של הסריג"
 
 #: common/tool/actions.cpp:907
 msgid "Reset Grid Origin"
-msgstr "אפס נקודת מוצא של רשת"
+msgstr "אפס נקודת מוצא של סריג"
 
 #: common/tool/actions.cpp:917
 msgid "Show Grid"
-msgstr "הצג רשת"
+msgstr "הצג סריג"
 
 #: common/tool/actions.cpp:918
 msgid "Display background grid in the edit window"
-msgstr "הצג רשת רקע בחלון העריכה"
+msgstr "הצג סריג רקע בחלון העריכה"
 
 #: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
-msgstr "אפשר רשתות ייחודיות לפריט שעוקפות את הרשת הנוכחית"
+msgstr "אפשר סריגים ייחודיות לפריט שעוקפות את הסריג הנוכחית"
 
 #: common/tool/actions.cpp:933
 msgid "Edit grid definitions"
-msgstr "ערוך הגדרות רשת"
+msgstr "ערוך הגדרות סריג"
 
 #: common/tool/actions.cpp:939
 msgid "Grid Origin..."
-msgstr "נקודת מוצא של רשת..."
+msgstr "נקודת מוצא של סריג..."
 
 #: common/tool/actions.cpp:940
 msgid "Set the grid origin point"
-msgstr "הגדר את נקודת המוצא של הרשת"
+msgstr "הגדר את נקודת המוצא של הסריג"
 
 #: common/tool/actions.cpp:954 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -9822,7 +9822,7 @@ msgstr "גרפיקה תוכנתית (עבור מחשבים שאינם תומכי
 
 #: common/widgets/gal_options_panel_base.cpp:47
 msgid "Grid Display"
-msgstr "תצוגת רשת"
+msgstr "תצוגת סריג"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_line_properties_base.cpp:62
@@ -9852,15 +9852,15 @@ msgstr "צלבים קטנים"
 
 #: common/widgets/gal_options_panel_base.cpp:78
 msgid "Grid thickness:"
-msgstr "עובי רשת:"
+msgstr "עובי סריג:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
 msgid "Minimum grid spacing:"
-msgstr "ריווח רשת מינימלי:"
+msgstr "ריווח סריג מינימלי:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Snap to grid:"
-msgstr "הצמדה לרשת:"
+msgstr "הצמדה לסריג:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -9873,7 +9873,7 @@ msgstr "תמיד"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 msgid "When grid shown"
-msgstr "כאשר הרשת מוצגת"
+msgstr "כאשר הסריג מוצגת"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -10062,7 +10062,7 @@ msgstr "ערוך חלופי..."
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Undo Changes"
-msgstr "בטל שינויים"
+msgstr "שחזר שינויים"
 
 #: common/widgets/widget_hotkey_list.cpp:454
 msgid "Clear Assigned Hotkey"
@@ -10202,12 +10202,12 @@ msgstr "כל קבצי הסכימה של KiCad"
 #: common/wildcards_and_files_ext.cpp:275
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.h:74
 msgid "KiCad legacy schematic files"
-msgstr "קובצי סכימה מדור קודם של KiCad"
+msgstr "קבצי סכימה מדור קודם של KiCad"
 
 #: common/wildcards_and_files_ext.cpp:282
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:76
 msgid "KiCad s-expression schematic files"
-msgstr "קובצי סכימה בתחביר s-expression של KiCad"
+msgstr "קבצי סכימה בתחביר s-expression של KiCad"
 
 #: common/wildcards_and_files_ext.cpp:289
 msgid "Altium Project files"
@@ -10256,7 +10256,7 @@ msgstr "קבצי מעגל מודפס של KiCad"
 #: common/wildcards_and_files_ext.cpp:352
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:312
 msgid "KiCad footprint files"
-msgstr "קובצי תצורת רכיב של KiCad"
+msgstr "קבצי תצורת רכיב של KiCad"
 
 #: common/wildcards_and_files_ext.cpp:358
 msgid "KiCad footprint library paths"
@@ -10280,7 +10280,7 @@ msgstr "קבצי קישור סמל-תצורת רכיב של KiCad"
 
 #: common/wildcards_and_files_ext.cpp:395 gerbview/files.cpp:71
 msgid "Drill files"
-msgstr "קובצי קידוח"
+msgstr "קבצי קידוח"
 
 #: common/wildcards_and_files_ext.cpp:402
 msgid "SVG files"
@@ -10572,7 +10572,7 @@ msgstr "הקובץ '%s' כבר קיים ברשימה."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
 msgid "Footprint association files:"
-msgstr "קובצי שיוך תצורות רכיב:"
+msgstr "קבצי שיוך תצורות רכיב:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 msgid "Add association file"
@@ -10717,14 +10717,14 @@ msgstr "הצג תצורת רכיב נבחרת"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
 msgid "Manage Footprint Association Files..."
-msgstr "נהל קובצי שיוך תצורות רכיב..."
+msgstr "נהל קבצי שיוך תצורות רכיב..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
-"ערוך את רשימת קובצי שיוך תצורות הרכיב. קבצים אלה משמשים להקצאה אוטומטית של "
+"ערוך את רשימת קבצי שיוך תצורות הרכיב. קבצים אלה משמשים להקצאה אוטומטית של "
 "תצורות רכיב בהתבסס על ערכי סמלים."
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
@@ -10745,7 +10745,7 @@ msgid ""
 "then save schematic files"
 msgstr ""
 "שמור הקצאות תצורות רכיב בשדות 'תצורת רכיב' של סמלי הסכימה ולאחר מכן שמור "
-"קובצי סכימה"
+"קבצי סכימה"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select Next Unassigned Symbol"
@@ -11763,7 +11763,7 @@ msgstr "למחוק גם החרגות?"
 #: pcbnew/dialogs/dialog_drc.cpp:1298 pcbnew/dialogs/dialog_drc_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
-msgstr "מחק את כל הסמנים"
+msgstr "מחק את כל הסימונים"
 
 #: eeschema/dialogs/dialog_erc.cpp:343 pcbnew/dialogs/dialog_drc.cpp:1300
 msgid "Errors and Warnings Only"
@@ -11864,7 +11864,7 @@ msgstr "ערוך חומרת הפרות..."
 
 #: eeschema/dialogs/dialog_erc.cpp:743
 msgid "Edit connection grid spacing..."
-msgstr "ערוך ריווח רשת חיבורים..."
+msgstr "ערוך ריווח סריג חיבורים..."
 
 #: eeschema/dialogs/dialog_erc.cpp:755 eeschema/dialogs/dialog_erc.cpp:791
 #: pcbnew/dialogs/dialog_drc.cpp:796 pcbnew/dialogs/dialog_drc.cpp:849
@@ -11968,7 +11968,7 @@ msgstr "בדיקות שהתעלמו מהן (%s)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:216
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:76
 msgid "Delete Marker"
-msgstr "מחק סמן"
+msgstr "מחק סימון"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
@@ -12119,7 +12119,7 @@ msgstr "תוסף זה כבר קיים."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:928
 msgid "Maximum number of plugins already added to dialog."
-msgstr "מספר התוספים המרבי כבר נוסף לדיאלוג."
+msgstr "מספר התוספים המרבי כבר נוסף לתיבת הדו-שיח."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:966
 msgid "You must provide a netlist generator title"
@@ -12152,7 +12152,7 @@ msgstr "הוסף מייצא רשימת רשתות מבוסס סקריפט"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:252
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "ניתן לשנות את שם קובץ הגיליון רק בדיאלוג מאפייני גיליון."
+msgstr "ניתן לשנות את שם קובץ הגיליון רק בתיבת הדו-שיח של מאפייני גיליון."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:621
 #: eeschema/dialogs/dialog_label_properties.cpp:540
@@ -12389,7 +12389,7 @@ msgstr "סמלים שאינם סמלי כוח"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "סמלי כוח"
+msgstr "סמלי הספק"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -13071,17 +13071,17 @@ msgstr "האם אתה בטוח שברצונך להסיר את השדה '%s'?"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:917
 msgid "Exclude From BOM"
-msgstr "לא כלול ב-BOM"
+msgstr "החרג מ-BOM"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:918 eeschema/sch_sheet.cpp:1765
 #: eeschema/sch_symbol.cpp:3143
 msgid "Exclude From Simulation"
-msgstr "לא כלול בהדמיה"
+msgstr "החרג מהדמיה"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:919 eeschema/sch_sheet.cpp:1762
 #: eeschema/sch_symbol.cpp:1133 eeschema/sch_symbol.cpp:3140
 msgid "Exclude From Board"
-msgstr "לא כלול בלוח"
+msgstr "החרג מהלוח"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1765
@@ -13156,7 +13156,7 @@ msgstr "החרג מרשימת חומרים"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:212
 msgid "Exclude from board"
-msgstr "לא כלול בלוח"
+msgstr "החרג מהלוח"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:109
 msgid "Pin name position offset:"
@@ -13379,7 +13379,7 @@ msgstr "יחידות"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
 #: eeschema/dialogs/dialog_text_properties_base.cpp:86
 msgid "Exclude from simulation"
-msgstr "לא כלול בהדמיה"
+msgstr "החרג מהדמיה"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:303
 msgid "Footprint filters:"
@@ -13524,7 +13524,7 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"פין זה אינו על רשת של %d mils, מה שיקשה על החיבור אליו בסכימה.\n"
+"פין זה אינו על סריג של %d mils, מה שיקשה על החיבור אליו בסכימה.\n"
 "האם ברצונך להמשיך?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:452
@@ -13735,8 +13735,7 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"תיקיית יעד לקובצי שרטוט. יכולה להיות מוחלטת או יחסית למיקום קובץ הסכימה "
-"הראשי."
+"תיקיית יעד לקבצי שרטוט. יכולה להיות מוחלטת או יחסית למיקום קובץ הסכימה הראשי."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -13987,7 +13986,7 @@ msgstr "ייבא מ:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
-msgstr "תיקיית יעד לקובצי שרטוט. יכולה להיות מוחלטת או יחסית למיקום קובץ הלוח."
+msgstr "תיקיית יעד לקבצי שרטוט. יכולה להיות מוחלטת או יחסית למיקום קובץ הלוח."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -14575,7 +14574,7 @@ msgstr "צעד הגדלה:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:222
 msgid "Swap sources"
-msgstr "החלף מקורות"
+msgstr "שנה סדר מקורות"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:251
 msgid "Time step:"
@@ -14750,7 +14749,7 @@ msgstr "מקסימום:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:805
 msgid "Show grid"
-msgstr "הצג רשת"
+msgstr "הצג סריג"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
 msgid "Show legend"
@@ -15519,7 +15518,7 @@ msgstr "יצירת תיקיית הגיבוי '%s' נכשלה.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:530
 msgid "Some of the project files could not be backed up."
-msgstr "לא ניתן היה לגבות חלק מקובצי הפרויקט."
+msgstr "לא ניתן היה לגבות חלק מקבצי הפרויקט."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
@@ -16069,7 +16068,7 @@ msgstr "א&פשר למיקום אוטומטי של שדות לשנות יישו�
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:251
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "ת&מיד ישר שדות ממוקמים אוטומטית לרשת 50 מיל"
+msgstr "ת&מיד ישר שדות ממוקמים אוטומטית לסריג 50 מיל"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
@@ -16223,7 +16222,7 @@ msgstr "גדול ביותר"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 msgid "Connection grid:"
-msgstr "רשת חיבורים:"
+msgstr "סריג חיבורים:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -17053,7 +17052,7 @@ msgstr "בודק הקצאות תצורת רכיב מול מסננים..."
 
 #: eeschema/erc/erc.cpp:2052
 msgid "Checking for off grid pins and wires..."
-msgstr "בודק פינים וחוטים מחוץ לרשת..."
+msgstr "בודק פינים וחוטים מחוץ לסריג..."
 
 #: eeschema/erc/erc.cpp:2060
 msgid "Checking for four way junctions..."
@@ -17082,7 +17081,7 @@ msgstr "שמות גיליונות כפולים בתוך גיליון נתון"
 
 #: eeschema/erc/erc_item.cpp:49
 msgid "Symbol pin or wire end off connection grid"
-msgstr "פין סמל או קצה חוט מחוץ לרשת החיבור"
+msgstr "פין סמל או קצה חוט מחוץ לסריג החיבור"
 
 #: eeschema/erc/erc_item.cpp:53
 msgid "Pin not connected"
@@ -17275,7 +17274,7 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:296 eeschema/files-io.cpp:882
 #: eeschema/tools/sch_editor_control.cpp:129
 msgid "Schematic Files"
-msgstr "קובצי סכימה"
+msgstr "קבצי סכימה"
 
 #: eeschema/fields_grid_table.cpp:327 eeschema/fields_grid_table.cpp:803
 #: eeschema/fields_grid_table.cpp:971
@@ -17327,7 +17326,7 @@ msgid ""
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
 "'%s' אינו קובץ סכימה של KiCad.\n"
-"השתמש בקובץ -> ייבוא עבור קובצי סכימה שאינם של KiCad."
+"השתמש בקובץ -> ייבוא עבור קבצי סכימה שאינם של KiCad."
 
 #: eeschema/files-io.cpp:286
 msgid ""
@@ -17655,12 +17654,12 @@ msgstr "ב"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:74
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:115
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "נקודת מוצא DXF על רשת מעגל מודפס, קואורדינטת X"
+msgstr "נקודת מוצא DXF על סריג מעגל מודפס, קואורדינטת X"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:95
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:132
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "נקודת מוצא DXF על רשת מעגל מודפס, קואורדינטת Y"
+msgstr "נקודת מוצא DXF על סריג מעגל מודפס, קואורדינטת Y"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:116
 msgid "Import Parameters"
@@ -18036,7 +18035,7 @@ msgstr "ש&כפל '%s'"
 
 #: eeschema/picksymbol.cpp:179
 msgid "Swap Units"
-msgstr "החלף יחידות"
+msgstr "שנה סדר יחידות"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -18552,7 +18551,7 @@ msgstr "גרסה 5.0 של קובץ ספריית סכימת Altium צפויה"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:83
 msgid "Altium schematic files"
-msgstr "קובצי סכימה של Altium"
+msgstr "קבצי סכימה של Altium"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:88
 msgid "Altium Schematic Library or Integrated Library"
@@ -18590,8 +18589,8 @@ msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
-"עיצוב ה-CADSTAR מכיל פריטים מקובצים שאין להם מקבילה ב-KiCad. כל הפריטים "
-"המקובצים בוטלה קיבוצם."
+"עיצוב ה-CADSTAR מכיל פריטים מקבצים שאין להם מקבילה ב-KiCad. כל הפריטים "
+"המקבצים בוטלה קיבוצם."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:400
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -18794,11 +18793,11 @@ msgstr "לא ניתן למצוא את קובץ ה-.csa המתאים לספריי
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
-msgstr "קובצי ארכיון סכימה של CADSTAR"
+msgstr "קבצי ארכיון סכימה של CADSTAR"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
 msgid "CADSTAR Parts Library files"
-msgstr "קובצי ספריית רכיבים של CADSTAR"
+msgstr "קבצי ספריית רכיבים של CADSTAR"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:220
 #, c-format
@@ -18817,7 +18816,7 @@ msgstr "לא ניתן לטעון ספריית מסד נתונים: לא ניתן
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
-msgstr "קובצי ספריית מסד נתונים של KiCad"
+msgstr "קבצי ספריית מסד נתונים של KiCad"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:609
 #, c-format
@@ -18825,7 +18824,7 @@ msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
-"'%s' הוא קובץ בתבנית בינארית של Eagle; ניתן לייבא רק קובצי Eagle בתבנית XML."
+"'%s' הוא קובץ בתבנית בינארית של Eagle; ניתן לייבא רק קבצי Eagle בתבנית XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
 #, c-format
@@ -18860,11 +18859,11 @@ msgstr "לא ניתן למצוא את '%s' בספרייה המיובאת."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:88
 msgid "Eagle XML schematic files"
-msgstr "קובצי סכימה בתבנית XML של Eagle"
+msgstr "קבצי סכימה בתבנית XML של Eagle"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:93
 msgid "Eagle XML library files"
-msgstr "קובצי ספרייה בתבנית XML של Eagle"
+msgstr "קבצי ספרייה בתבנית XML של Eagle"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:147
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:324
@@ -19256,7 +19255,7 @@ msgstr ""
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
-msgstr "קובצי סכימה של LTspice"
+msgstr "קבצי סכימה של LTspice"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:44 pcbnew/pcb_io/pcb_io_mgr.cpp:53
 #, c-format
@@ -19465,7 +19464,7 @@ msgstr "לא נכלל"
 
 #: eeschema/sch_marker.h:102
 msgid "ERC Marker"
-msgstr "סמן ERC"
+msgstr "סימון ERC"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:250
 msgid "No Connect"
@@ -19653,7 +19652,7 @@ msgstr "BOM"
 #: eeschema/sch_sheet.cpp:906 eeschema/sch_symbol.cpp:2080
 #: eeschema/sch_text.cpp:699 eeschema/sch_textbox.cpp:537
 msgid "Exclude from"
-msgstr "לא לכלול מ"
+msgstr "החרג מ"
 
 #: eeschema/sch_sheet.cpp:1198
 #, c-format
@@ -19697,7 +19696,7 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:2091
 msgid "Power symbol"
-msgstr "סמל כוח"
+msgstr "סמל הספק"
 
 #: eeschema/sch_symbol.cpp:2111
 msgid "flags"
@@ -21398,7 +21397,7 @@ msgstr "(פינים מוסתרים של כוח יניעו את שמות הפינ
 #: eeschema/symbol_checker.cpp:328
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>פין חורג מהרשת %s</b> %s במיקום <b>(%s, %s)</b> של סגנון גוף %s."
+msgstr "<b>פין חורג מהסריג %s</b> %s במיקום <b>(%s, %s)</b> של סגנון גוף %s."
 
 #: eeschema/symbol_checker.cpp:338
 #, c-format
@@ -21406,17 +21405,18 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>פין חורג מהרשת %s</b> %s במיקום <b>(%s, %s)</b> ביחידה %c של סגנון גוף %s."
+"<b>פין חורג מהסריג %s</b> %s במיקום <b>(%s, %s)</b> ביחידה %c של סגנון גוף "
+"%s."
 
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>פין חורג מהרשת %s</b> %s במיקום <b>(%s, %s)</b>."
+msgstr "<b>פין חורג מהסריג %s</b> %s במיקום <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>פין חורג מהרשת %s</b> %s במיקום <b>(%s, %s)</b> ביחידה %c."
+msgstr "<b>פין חורג מהסריג %s</b> %s במיקום <b>(%s, %s)</b> ביחידה %c."
 
 #: eeschema/symbol_checker.cpp:402
 #, c-format
@@ -21923,8 +21923,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
-"שינויים שנעשים בדו-שיח זה חלים מיידית, השתמש בביטול בכל מסמך שהושפע כדי לבטל "
-"אותם"
+"שינויים שנעשים בדו-שיח זה חלים מיידית, השתמש בביטול בכל מסמך שהושפע כדי "
+"לשחזר אותם"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 #: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
@@ -22085,7 +22085,7 @@ msgstr "שנה את 'לא לאכלוס' של %s מ-'%s' ל-'%s'."
 #: eeschema/tools/backannotate.cpp:445
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "שנה את 'אל תכלול מרשימת חומרים' של %s מ-'%s' ל-'%s'."
+msgstr "שנה את 'אל תכלול ברשימת חומרים' של %s מ-'%s' ל-'%s'."
 
 #: eeschema/tools/backannotate.cpp:466
 #, c-format
@@ -22592,15 +22592,15 @@ msgstr "הופך פריטים נבחרים משמאל לימין"
 #: eeschema/tools/sch_actions.cpp:727 pcbnew/tools/edit_tool_move_fct.cpp:153
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Swap"
-msgstr "החלף"
+msgstr "שנה סדר"
 
 #: eeschema/tools/sch_actions.cpp:728 pcbnew/tools/pcb_actions.cpp:570
 msgid "Swap positions of selected items"
-msgstr "החלף מיקומים של פריטים נבחרים"
+msgstr "שנה סדר מיקומים של פריטים נבחרים"
 
 #: eeschema/tools/sch_actions.cpp:744
 msgid "Edit Reference Designator..."
-msgstr "ערוך סמן הפניה..."
+msgstr "ערוך מציין הפניה..."
 
 #: eeschema/tools/sch_actions.cpp:752
 msgid "Edit Value..."
@@ -22807,27 +22807,27 @@ msgstr "פתח את הסמל הנבחר בעורך הסמלים"
 
 #: eeschema/tools/sch_actions.cpp:975
 msgid "Exclude from Bill of Materials"
-msgstr "לא לכלול ברשימת חומרים"
+msgstr "החרג מרשימת חומרים"
 
 #: eeschema/tools/sch_actions.cpp:976
 msgid "Set the exclude from bill of materials attribute"
-msgstr "הגדר את התכונה 'אל תכלול מרשימת חומרים'"
+msgstr "הגדר את התכונה 'אל תכלול ברשימת חומרים'"
 
 #: eeschema/tools/sch_actions.cpp:981
 msgid "Exclude from Simulation"
-msgstr "לא לכלול בהדמיה"
+msgstr "החרג מהדמיה"
 
 #: eeschema/tools/sch_actions.cpp:982
 msgid "Set the exclude from simulation attribute"
-msgstr "הגדר את התכונה 'אל תכלול מהדמיה'"
+msgstr "הגדר את התכונה 'אל תכלול בהדמיה'"
 
 #: eeschema/tools/sch_actions.cpp:987
 msgid "Exclude from Board"
-msgstr "לא לכלול בלוח"
+msgstr "החרג מהלוח"
 
 #: eeschema/tools/sch_actions.cpp:988
 msgid "Set the exclude from board attribute"
-msgstr "הגדר את התכונה 'אל תכלול מהלוח'"
+msgstr "הגדר את התכונה 'אל תכלול בהלוח'"
 
 #: eeschema/tools/sch_actions.cpp:994
 msgid "Set the do not populate attribute"
@@ -23232,7 +23232,7 @@ msgstr "הוצא חוט מאפיק"
 
 #: eeschema/tools/sch_actions.cpp:1408 pcbnew/tools/pcb_actions.cpp:2374
 msgid "Undo Last Segment"
-msgstr "בטל מקטע אחרון"
+msgstr "שחזר מקטע אחרון"
 
 #: eeschema/tools/sch_actions.cpp:1409
 msgid "Walks the current line back one segment."
@@ -23265,7 +23265,7 @@ msgstr "הזז פריטים תוך שמירה על החיבורים שלהם"
 #: eeschema/tools/sch_actions.cpp:1445 eeschema/tools/sch_move_tool.cpp:1854
 #: eeschema/tools/symbol_editor_move_tool.cpp:426
 msgid "Align Items to Grid"
-msgstr "ישר פריטים לרשת"
+msgstr "ישר פריטים לסריג"
 
 #: eeschema/tools/sch_actions.cpp:1453
 msgid "Save Current Sheet Copy As..."
@@ -24237,7 +24237,7 @@ msgstr "ללא ייצוא"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:215
 #, c-format
 msgid "Gerbers with known layers: %d"
-msgstr "קובצי גרבר עם שכבות מזוהות: %d"
+msgstr "קבצי גרבר עם שכבות מזוהות: %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:216
 msgid "Assign to matching PCB layers?"
@@ -24678,15 +24678,15 @@ msgstr "<b>הזיכרון אזל בעת קריאת:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:208
 msgid "Gerber files"
-msgstr "קובצי גרבר"
+msgstr "קבצי גרבר"
 
 #: gerbview/files.cpp:89
 msgid "Zip files"
-msgstr "קובצי Zip"
+msgstr "קבצי Zip"
 
 #: gerbview/files.cpp:106
 msgid "Job files"
-msgstr "קובצי עבודה"
+msgstr "קבצי עבודה"
 
 #: gerbview/files.cpp:188
 msgid "Open Autodetected File(s)"
@@ -24742,11 +24742,11 @@ msgstr "מאסטר פדים תחתון"
 
 #: gerbview/files.cpp:231
 msgid "Open Gerber File(s)"
-msgstr "פתיחת קובצי גרבר"
+msgstr "פתיחת קבצי גרבר"
 
 #: gerbview/files.cpp:242
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "פתיחת קובצי קידוח NC (Excellon)"
+msgstr "פתיחת קבצי קידוח NC (Excellon)"
 
 #: gerbview/files.cpp:279
 msgid "File not found:"
@@ -24829,7 +24829,7 @@ msgstr "סוף"
 
 #: gerbview/gerber_draw_item.cpp:725 pcbnew/dialogs/dialog_set_offset.cpp:62
 msgid "Clear"
-msgstr "ניקוי"
+msgstr "בהיר"
 
 #: gerbview/gerber_draw_item.cpp:726 gerbview/gerber_file_image.cpp:372
 msgid "Polarity"
@@ -24902,17 +24902,17 @@ msgstr "שכבה גרפית %d"
 #: gerbview/gerbview_frame.cpp:70 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "ניקוי קובצי Zip אחרונים"
+msgstr "ניקוי קבצי Zip אחרונים"
 
 #: gerbview/gerbview_frame.cpp:72 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "ניקוי קובצי קידוח אחרונים"
+msgstr "ניקוי קבצי קידוח אחרונים"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "ניקוי קובצי עבודה אחרונים"
+msgstr "ניקוי קבצי עבודה אחרונים"
 
 #: gerbview/gerbview_frame.cpp:90
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
@@ -24946,7 +24946,7 @@ msgstr "פתיחת קובץ עבודת גרבר"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
-msgstr "ניקוי קובצי גרבר אחרונים"
+msgstr "ניקוי קבצי גרבר אחרונים"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
@@ -25290,7 +25290,7 @@ msgstr "הצג אובייקטים שליליים בצבע זה"
 #: gerbview/widgets/gerbview_layer_widget.cpp:136
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show the (x,y) grid dots"
-msgstr "הצג את נקודות הרשת (x,y)"
+msgstr "הצג את נקודות הסריג (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:138
 msgid "Show drawing sheet border and title block"
@@ -25575,7 +25575,7 @@ msgstr "פורמט דוח לא חוקי\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "כלי ייצוא (גרבר, קידוח, קובצי מיקום וכו')"
+msgstr "כלי ייצוא (גרבר, קידוח, קבצי מיקום וכו')"
 
 #: kicad/cli/command_pcb_export_3d.cpp:78
 msgid ""
@@ -25596,7 +25596,7 @@ msgstr "החרג מודלים תלת-ממדיים עבור רכיבים עם ת�
 
 #: kicad/cli/command_pcb_export_3d.cpp:100
 msgid "Use Grid Origin for output origin"
-msgstr "השתמש בנקודת מוצא של הרשת עבור נקודת מוצא הפלט"
+msgstr "השתמש בנקודת מוצא של הסריג עבור נקודת מוצא הפלט"
 
 #: kicad/cli/command_pcb_export_3d.cpp:104
 msgid "Use Drill Origin for output origin"
@@ -25724,7 +25724,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
 msgid "Generate Drill Files"
-msgstr "צור קובצי קידוח"
+msgstr "צור קבצי קידוח"
 
 #: kicad/cli/command_pcb_export_drill.cpp:54
 msgid "Valid options excellon, gerber."
@@ -25974,7 +25974,7 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
-"שרטט מספר קובצי גרבר עבור מעגל מודפס, כולל אפשרות להשתמש בהגדרות שרטוט "
+"שרטט מספר קבצי גרבר עבור מעגל מודפס, כולל אפשרות להשתמש בהגדרות שרטוט "
 "השמורות בלוח"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:41
@@ -25996,7 +25996,7 @@ msgstr "ערכת צבעים לשימוש (ברירת מחדל להגדרות ע�
 
 #: kicad/cli/command_pcb_export_pdf.cpp:109
 msgid "Plot the layers to individual PDF files"
-msgstr "שרטט את השכבות לקובצי PDF נפרדים"
+msgstr "שרטט את השכבות לקבצי PDF נפרדים"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:113
 msgid "Plot the layers to a single PDF file with multiple pages"
@@ -27018,7 +27018,7 @@ msgstr "החל שינויים ממתינים"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:168
 msgid "Discard Pending Changes"
-msgstr "בטל שינויים ממתינים"
+msgstr "השלך שינויים ממתינים"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:213
 msgid ""
@@ -27056,7 +27056,7 @@ msgstr "מאגר"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
-msgstr "בטל פעולה"
+msgstr "השלך פעולה"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 msgid "Install from File..."
@@ -27594,7 +27594,7 @@ msgstr "בצע Commit של שינויים למאגר המקומי"
 
 #: kicad/project_tree_pane.cpp:1018
 msgid "Push"
-msgstr "Push"
+msgstr "דחיפה"
 
 #: kicad/project_tree_pane.cpp:1019
 msgid "Push committed local changes to remote repository"
@@ -27602,7 +27602,7 @@ msgstr "דחוף שינויים מקומיים שבוצע להם Commit למאג
 
 #: kicad/project_tree_pane.cpp:1022
 msgid "Pull"
-msgstr "Pull"
+msgstr "משיכה"
 
 #: kicad/project_tree_pane.cpp:1023
 msgid "Pull changes from remote repository into local"
@@ -30950,7 +30950,7 @@ msgstr "Epsilon R"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:106
 msgid "Loss Tan"
-msgstr "Loss Tan"
+msgstr "טנגנס הפסד"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
@@ -30958,7 +30958,7 @@ msgstr "Epsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tan:"
-msgstr "Loss Tan:"
+msgstr "טנגנס הפסד:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -31286,7 +31286,7 @@ msgstr "שמור רשימת חומרים"
 
 #: pcbnew/build_BOM_from_board.cpp:110
 msgid "Designator"
-msgstr "סמן"
+msgstr "מציין"
 
 #: pcbnew/build_BOM_from_board.cpp:112
 msgid "Quantity"
@@ -31580,7 +31580,7 @@ msgid ""
 "This helps with misaligned parts."
 msgstr ""
 "מיקום הרכיב יעוגל\n"
-"לרשת זו לפני המיון.\n"
+"לסריג זו לפני המיון.\n"
 "זה עוזר עם חלקים לא מיושרים."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:165
@@ -31816,7 +31816,7 @@ msgstr "חור עובר:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:152
 msgid "Connector:"
-msgstr "מחבר:"
+msgstr "מחבר חשמלי:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:153
 msgid "NPTH:"
@@ -32499,7 +32499,7 @@ msgstr "ספירה אנכית"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:425
 msgid "stagger"
-msgstr "הסטה"
+msgstr "דירוג"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:481
 msgid "point count"
@@ -32511,7 +32511,7 @@ msgstr "פרמטרים שגויים"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
 msgid "Grid Array Size"
-msgstr "גודל מערך רשת"
+msgstr "גודל מערך סריג"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Horizontal count:"
@@ -32568,11 +32568,11 @@ msgstr "היסט שנוסף למיקום העמודה הבאה"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:147
 msgid "Stagger Settings"
-msgstr "הגדרות הסטה"
+msgstr "הגדרות דירוג"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:152
 msgid "Stagger:"
-msgstr "הסטה:"
+msgstr "דירוג:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:154
 msgid "Value -1,  0 or 1 disable this option."
@@ -32588,7 +32588,7 @@ msgstr "עמודות"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:175
 msgid "Grid Position"
-msgstr "מיקום רשת"
+msgstr "מיקום סריג"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:177
 msgid "Source items remain in place"
@@ -32660,7 +32660,7 @@ msgstr "תוספת מספור פדים:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:290
 msgid "Grid Array"
-msgstr "מערך רשת"
+msgstr "מערך סריג"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Center position"
@@ -33805,7 +33805,7 @@ msgstr "נקודת מוצא של קובץ קידוח/מיקום"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:171
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr "נקודת מוצא של רשת"
+msgstr "נקודת מוצא של סריג"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:174
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -34209,7 +34209,7 @@ msgstr "לא בסכימה"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:735
 msgid "Exclude from position files"
-msgstr "החרג מקובצי מיקום"
+msgstr "החרג מקבצי מיקום"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:209
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
@@ -34552,7 +34552,7 @@ msgstr "לא ניתן ליצור נתיב יחסי (כרך היעד שונה מ�
 #: pcbnew/dialogs/dialog_plot.cpp:1267
 #, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "לא ניתן לכתוב קובצי שרטוט לתיקייה '%s'."
+msgstr "לא ניתן לכתוב קבצי שרטוט לתיקייה '%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:362
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:482
@@ -34632,7 +34632,7 @@ msgstr "צור קובץ יחיד עם מיקומי צד קדמי ואחורי"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:78
 msgid "Generate Placement Files"
-msgstr "צור קובצי מיקום"
+msgstr "צור קבצי מיקום"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:39
 msgid "Export to GenCAD settings"
@@ -34804,7 +34804,7 @@ msgstr "מוליכים && קדחי מעבר"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Markers"
-msgstr "סמנים"
+msgstr "סימונים"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:49
 msgid "Clear board"
@@ -35707,7 +35707,7 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr "עגל כלפי חוץ לכפולות רשת (כאשר אפשרי)"
+msgstr "עגל כלפי חוץ לכפולות סריג (כאשר אפשרי)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -35719,7 +35719,7 @@ msgstr "עגל פינות (כאשר אפשרי)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:46
 msgid "Grid size:"
-msgstr "גודל רשת:"
+msgstr "גודל סריג:"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:50
 msgid "0.01"
@@ -35835,7 +35835,7 @@ msgstr "חור עובר"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "Edge Connector"
-msgstr "מחבר קצה"
+msgstr "מחבר חשמלי קצה"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "NPTH, Mechanical"
@@ -36051,7 +36051,7 @@ msgstr "הדפסת משי אחורית"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Front solder mask"
-msgstr "מסיכת בדיל קדמית"
+msgstr "מסיכת הלחמה קדמית"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:563
 msgid "Back solder mask"
@@ -36085,7 +36085,7 @@ msgid ""
 "Castellated specifies a through hole pad on a board edge\n"
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
-"מאפיין אופציונלי לציון מטרה מיוחדת או אילוץ בקובצי ייצור:\n"
+"מאפיין אופציונלי לציון מטרה מיוחדת או אילוץ בקבצי ייצור:\n"
 "תכונת BGA מיועדת לפדים בתצורות רכיב מסוג BGA\n"
 "סימן יישור מקומי הוא סימן יישור עבור תצורת הרכיב האב\n"
 "סימן יישור גלובלי הוא סימן יישור עבור הלוח כולו\n"
@@ -36837,7 +36837,7 @@ msgstr "בחר נקודת ייחוס..."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:246
 msgid "Reference location: grid origin"
-msgstr "מיקום ייחוס: נקודת מוצא של הרשת"
+msgstr "מיקום ייחוס: נקודת מוצא של הסריג"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:250
 msgid "Reference location: local coordinates origin"
@@ -36867,7 +36867,7 @@ msgstr "השתמש בנקודת מוצא מקומית"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:37
 msgid "Use Grid Origin"
-msgstr "השתמש בנקודת מוצא של הרשת"
+msgstr "השתמש בנקודת מוצא של הסריג"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid ""
@@ -37315,7 +37315,7 @@ msgstr "לשכבה:"
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 #: pcbnew/tools/global_edit_tool.cpp:187
 msgid "Swap Layers"
-msgstr "החלפת שכבות"
+msgstr "שינוי סדר שכבות"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
@@ -41613,11 +41613,11 @@ msgstr "לא בסכימה"
 
 #: pcbnew/footprint.cpp:1784
 msgid "exclude from pos files"
-msgstr "הוצא מקובצי מיקום"
+msgstr "החרג מקבצי מיקום"
 
 #: pcbnew/footprint.cpp:1787
 msgid "exclude from BOM"
-msgstr "הוצא מ-BOM"
+msgstr "החרג מ-BOM"
 
 #: pcbnew/footprint.cpp:1792
 msgid "Status: "
@@ -41679,7 +41679,7 @@ msgstr "לא בסכימה"
 
 #: pcbnew/footprint.cpp:4263
 msgid "Exclude From Position Files"
-msgstr "אל תכלול בקובצי מיקום"
+msgstr "החרג מקבצי מיקום"
 
 #: pcbnew/footprint.cpp:4273 pcbnew/pad.cpp:2940
 msgid "Overrides"
@@ -42041,7 +42041,7 @@ msgstr "אילוצי הטיה: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2233
 #, c-format
 msgid "Target Length: %s"
-msgstr "אורך מטרה: %s"
+msgstr "אורך יעד: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 #, c-format
@@ -42107,11 +42107,11 @@ msgstr "אחוז רדיוס פינה"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2709
 msgid "Target Length"
-msgstr "אורך מטרה"
+msgstr "אורך יעד"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2718
 msgid "Target Skew"
-msgstr "הטיה מטרה"
+msgstr "הטיה יעד"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2726
 msgid "Override Custom Rules"
@@ -45146,7 +45146,7 @@ msgstr "(לא מופעל)"
 #: pcbnew/pcb_marker.cpp:292
 #, c-format
 msgid "Marker (%s)"
-msgstr "סמן (%s)"
+msgstr "סימון (%s)"
 
 #: pcbnew/pcb_plotter.cpp:67
 msgid "No layers selected for plotting."
@@ -46148,7 +46148,7 @@ msgstr "ייצא רשימת רשתות של לוח"
 
 #: pcbnew/tools/board_editor_control.cpp:443
 msgid "KiCad board netlist files"
-msgstr "קובצי רשימת רשתות של לוח KiCad"
+msgstr "קבצי רשימת רשתות של לוח KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:457
 #, c-format
@@ -46727,7 +46727,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:279
 msgid "Loss Tangent"
-msgstr "Loss Tangent"
+msgstr "טנגנס הפסד"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:302
 msgid "Dielectric"
@@ -47774,7 +47774,7 @@ msgstr "הקצה תצורות רכיב שונות מהספרייה"
 
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Swap Layers..."
-msgstr "החלף שכבות..."
+msgstr "שנה סדר שכבות..."
 
 #: pcbnew/tools/pcb_actions.cpp:820
 msgid "Move tracks or drawings from one layer to another"
@@ -50579,7 +50579,7 @@ msgstr "חבילת EDA לעיצוב סכימות ופריסת מעגלים מו�
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
 msgid "Circuit board"
