@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 19:59+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-17 22:13+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -2111,7 +2111,7 @@ msgstr "NEZNÁMÉ (%d)"
 
 #: common/design_block_io.cpp:137
 msgid "KiCad Design Block folders"
-msgstr "Složky s projektovými bloky programu KiCad"
+msgstr "Složky s bloky návrhu KiCad"
 
 #: common/design_block_io.cpp:174
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3017
@@ -13257,9 +13257,9 @@ msgid "Group By"
 msgstr "Skupiny"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Součástka \"%s\" nalezena v knihovně \"%s\""
+msgstr "V knihovně %s nejsou žádné symboly."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, c-format
@@ -15351,9 +15351,8 @@ msgid "Sequentially place all units of the symbol."
 msgstr "Umístěte postupně všechny jednotky symbolu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:200
-#, fuzzy
 msgid "Column Label"
-msgstr "%d sloupec tabulky"
+msgstr "Název sloupce"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:205
 msgid "Show Column"
@@ -15372,8 +15371,8 @@ msgid ""
 "Group\n"
 "By"
 msgstr ""
-"Skupina\n"
-"Podle"
+"Seskupit\n"
+"podle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -15390,11 +15389,11 @@ msgstr "Název pole %s již existuje."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:949
 msgid "The Quantity column cannot be grouped by."
-msgstr "Sloupec Množství nelze seskupit."
+msgstr "Podle sloupce množství nelze seskupovat."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:957
 msgid "The Item Number column cannot be grouped by."
-msgstr "Sloupec Číslo položky nelze použít pro seskupení."
+msgstr "Podle sloupce číslo položky nelze seskupovat."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1327
 msgid "Bill of Materials Output File"
@@ -16822,9 +16821,8 @@ msgid "Nickname cannot be empty."
 msgstr "Název vývodu nesmí být prázdný."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:457
-#, fuzzy
 msgid "Path cannot be empty."
-msgstr "Text nemůže být prázdný."
+msgstr "Cesta nemůže být prázdná."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:470
 #, fuzzy
@@ -17272,9 +17270,9 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Pouzdro '%s' se neshoduje s kopií v knihovně '%s'"
 
 #: eeschema/erc/erc.cpp:1651
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "'%s' není platné pouzdro."
+msgstr "'%s' není platný identifikátor pouzdra."
 
 #: eeschema/erc/erc.cpp:1665
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:969
@@ -17561,9 +17559,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Zpráva ERC (%s, kódování UTF8)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "Soubory reportů"
+msgstr "Report zahrnuje: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -19606,7 +19604,7 @@ msgid ""
 "Unable to find LTspice symbols.\n"
 "Install LTspice or put its library files into %s"
 msgstr ""
-"Symboly LTspice nebyly nalezeny.\\n"
+"Symboly LTspice nebyly nalezeny.\n"
 "Nainstalujte LTspice nebo umístěte soubory jeho knihovny do %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
@@ -22749,9 +22747,8 @@ msgid "Properties..."
 msgstr "Vlastnosti ..."
 
 #: eeschema/tools/sch_actions.cpp:178
-#, fuzzy
 msgid "Edit properies of design block"
-msgstr "Prosím, zadejte název repozitáře"
+msgstr "Upravit vlastnosti bloku návrhu"
 
 #: eeschema/tools/sch_actions.cpp:188
 msgid "Save Library As..."
@@ -23040,9 +23037,8 @@ msgid "Place Sheet Pins"
 msgstr "Umístit vývody listu"
 
 #: eeschema/tools/sch_actions.cpp:559 eeschema/tools/sch_actions.cpp:567
-#, fuzzy
 msgid "Sync Sheet Pins..."
-msgstr "Synchronizovat vývody listu"
+msgstr "Synchronizovat vývody listu..."
 
 #: eeschema/tools/sch_actions.cpp:575
 msgid "Import Sheet..."
@@ -37957,9 +37953,8 @@ msgid "Mid Point"
 msgstr "Střední bod"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:918
-#, fuzzy
 msgid "Start Angle"
-msgstr "Počáteční vrstva:"
+msgstr "Počáteční úhel"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:935
 msgid "Point on Circle"
@@ -38048,9 +38043,8 @@ msgstr "Řídicí body Bezierovy křivky"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
-msgstr "Technické vrstvy"
+msgstr "Technické vrstvy:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
@@ -43636,9 +43630,9 @@ msgstr ""
 "upozornění na aktualizaci použijte formát 'Knihovna:Pouzdro'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for %s."
-msgstr "Nalezeno více pouzder pro '%s'."
+msgstr "Pro %s bylo nalezeno více pouzder."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1442
 #, c-format
@@ -45744,8 +45738,9 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"Nahlaste prosím tuto chybu. Chyba při ověřování struktury skupiny: %s\\n\\n"
-"Uložit přesto?"
+"Nahlaste prosím tuto chybu.  Chyba při ověřování struktury skupiny: %s\n"
+"\n"
+"Přesto uložit?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:297
 msgid "Save Anyway"
@@ -46097,9 +46092,10 @@ msgid "No layers selected for plotting."
 msgstr "Pro vykreslování nebyly vybrány žádné vrstvy."
 
 #: pcbnew/pcb_plotter.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
-msgstr "Barevné téma k použití (bude výchozí v nastavení pcbnew)"
+msgstr ""
+"Barevné schéma '%s' nenalezeno, bude nahrazeno tím z nastavení PCB editoru.\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -47754,14 +47750,12 @@ msgid "Yes, Bevelled"
 msgstr "Ano, zkosený"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:531
-#, fuzzy
 msgid "Board Characteristics"
-msgstr "Přidat charakteristiky desky"
+msgstr "Charakteristiky desky"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:664
-#, fuzzy
 msgid "Place Items"
-msgstr "Umístit položku"
+msgstr "Umístit položky"
 
 #: pcbnew/tools/drawing_tool.cpp:95
 msgid "Select Via Size"
@@ -48096,9 +48090,8 @@ msgid "Some of the lines could not be extended to meet."
 msgstr "Některé čáry nebylo možné prodloužit tak, aby se setkaly."
 
 #: pcbnew/tools/item_modification_routine.cpp:569
-#, fuzzy
 msgid "Merge polygons."
-msgstr "Grafická Kři&vka"
+msgstr "Sloučit polygony."
 
 #: pcbnew/tools/item_modification_routine.cpp:577
 msgid "Unable to merge the selected polygons."
@@ -48109,9 +48102,8 @@ msgid "Some of the polygons could not be merged."
 msgstr "Některé polygony nebylo možné sloučit."
 
 #: pcbnew/tools/item_modification_routine.cpp:599
-#, fuzzy
 msgid "Subtract polygons."
-msgstr "Mnohoúhelníky v režimu obrysů"
+msgstr "Odečíst polygony."
 
 #: pcbnew/tools/item_modification_routine.cpp:607
 msgid "Unable to subtract the selected polygons."
@@ -48171,9 +48163,8 @@ msgid "Repeat layout"
 msgstr "Opakovat rozložení"
 
 #: pcbnew/tools/multichannel_tool.cpp:532
-#, fuzzy
 msgid "Group repeated items"
-msgstr "Seskupit položky"
+msgstr "Seskupit opakované položky"
 
 #: pcbnew/tools/multichannel_tool.cpp:538
 #, c-format
