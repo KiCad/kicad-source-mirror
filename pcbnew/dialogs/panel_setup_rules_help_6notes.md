@@ -25,13 +25,13 @@ Rules that are not modified in the graphical editor preserve their original
 text formatting when saved.
 <br><br><br>
 
-`signal_length` vs `length`:
+`net_chain_length` vs `length`:
 
-When a net belongs to a signal and both constraints match, `signal_length` checks the sum of all member nets and `length` is ignored.  Nets that don't belong to a signal still see `length`.
+When a net belongs to a chain and both constraints match, `net_chain_length` checks the sum of every member net and `length` is ignored.  Nets that don't belong to a chain still see `length`.  `signal_length` remains accepted as a legacy synonym.
 
 Time-domain targets:
 
-Both constraints accept `(time_domain yes)` to bound propagation delay instead of physical length.  For `signal_length` in time-domain mode the delay window applies to the signal as a whole; the tuner subtracts the routed delay from the other member nets to figure out what's left for the net being tuned.
+Both constraints accept `(time_domain yes)` to bound propagation delay instead of physical length.  For `net_chain_length` in time-domain mode the delay window applies to the chain as a whole; the tuner subtracts the routed delay from the other member nets to figure out what's left for the net being tuned.
 
 
 <br><br><br>

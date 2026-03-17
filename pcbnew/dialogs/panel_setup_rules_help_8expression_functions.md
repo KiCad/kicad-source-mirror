@@ -63,6 +63,31 @@ For example, `inDiffPair('/CLK')` matches items in the `/CLK_P` and `/CLK_N` net
 
 
 ```
+    A.inNetChain('<chain_name>')
+```
+> True if `A`'s net is a member of the named chain.  `<chain_name>`
+accepts wildcards: `inNetChain('DDR_*')` matches every chain whose
+name starts with `DDR_`.
+
+
+
+```
+    A.hasNetChain()
+```
+> True if `A`'s net belongs to any chain.
+
+
+
+```
+    A.inNetChainClass('<class_name>')
+```
+> True if `A`'s net belongs to a chain whose assigned chain class
+matches `<class_name>`.  Class assignments live in the project's
+`net_chain_classes` map.  `<class_name>` accepts wildcards.
+
+
+
+```
     A.intersectsArea('<zone_name>')
 ```
 > True if any part of `A` lies within the given zone's outline.

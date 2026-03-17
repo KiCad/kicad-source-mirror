@@ -112,7 +112,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
 
     // Set up the column display vector
     m_columns.emplace_back( 0u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
-    m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Signal" ), _( "Signal" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
+    m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Net Chain" ), _( "Net Chain" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
     m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Netclass" ), _( "Netclass" ), CSV_COLUMN_DESC::CSV_QUOTE, false );
 
     if( m_showTimeDomainDetails )
@@ -126,7 +126,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
                                 true );
     }
 
-    m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Signal Length" ), _( "Signal Length" ), CSV_COLUMN_DESC::CSV_NONE,
+    m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Net Chain Length" ), _( "Net Chain Length" ), CSV_COLUMN_DESC::CSV_NONE,
                             true );
 
     m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ), CSV_COLUMN_DESC::CSV_NONE, false );
@@ -1338,7 +1338,7 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     groupNetclass->Check( m_groupByNetclass );
 
     wxMenuItem* groupSignal = new wxMenuItem( &menu, ID_GROUP_BY_SIGNAL,
-                                              _( "Group by Signal" ),
+                                              _( "Group by Net Chain" ),
                                               wxEmptyString, wxITEM_CHECK );
     menu.Append( groupSignal );
     groupSignal->Check( m_groupBySignal );

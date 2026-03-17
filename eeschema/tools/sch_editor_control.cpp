@@ -1856,7 +1856,7 @@ int SCH_EDITOR_CONTROL::NameSignal( const TOOL_EVENT& aEvent )
 
     if( SCH_NETCHAIN* sig = graph->GetSignalForNet( pin->Connection()->Name() ) )
     {
-        wxString newName = wxGetTextFromUser( _( "Signal name:" ), _( "Name Signal" ), sig->GetName() );
+        wxString newName = wxGetTextFromUser( _( "Net chain name:" ), _( "Name Net Chain" ), sig->GetName() );
 
         if( !newName.IsEmpty() && newName != sig->GetName() )
         {

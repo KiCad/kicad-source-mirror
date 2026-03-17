@@ -1100,15 +1100,15 @@ TOOL_ACTION SCH_ACTIONS::highlightNetTool( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::highlightSignal( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.highlightSignal" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Highlight Signal" ) )
-        .Tooltip( _( "Highlight signal under cursor" ) )
+        .FriendlyName( _( "Highlight Net Chain" ) )
+        .Tooltip( _( "Highlight the net chain under the cursor" ) )
         .Icon( BITMAPS::net_highlight_schematic ) );
 
 TOOL_ACTION SCH_ACTIONS::removeFromSignal( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.removeFromSignal" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Remove from Signal" ) )
-        .Tooltip( _( "Remove the selected net from its signal by disabling propagation on the bridging component(s)" ) ) );
+        .FriendlyName( _( "Remove from Net Chain" ) )
+        .Tooltip( _( "Remove the selected net from its net chain by disabling propagation on the bridging component(s)" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::replaceTerminalPin( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.replaceTerminalPin" )
@@ -1118,8 +1118,8 @@ TOOL_ACTION SCH_ACTIONS::replaceTerminalPin( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::nameSignal( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.nameSignal" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Name Signal" ) )
-        .Tooltip( _( "Assign a name to the signal" ) ) );
+        .FriendlyName( _( "Name Net Chain" ) )
+        .Tooltip( _( "Assign a name to the net chain" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::createSignalBetweenPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.createSignalBetweenPins" )

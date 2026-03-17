@@ -2251,7 +2251,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     // Show signal name if available
     if( primaryNet && !primaryNet->GetSignal().IsEmpty() )
-        aList.emplace_back( _( "Signal" ), primaryNet->GetSignal() );
+        aList.emplace_back( _( "Net Chain" ), primaryNet->GetSignal() );
 
     if( width && !mixedWidth )
         aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( width ) );
