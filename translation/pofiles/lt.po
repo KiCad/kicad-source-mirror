@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-16 00:11+0000\n"
+"PO-Revision-Date: 2026-03-18 18:47+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v9/lt/>"
 "\n"
@@ -26003,10 +26003,12 @@ msgid "Move Current Layer Down"
 msgstr "Perkelti dabartinį sluoksnį žemyn"
 
 #: gerbview/widgets/layer_widget.cpp:131
+#, fuzzy
 msgid "Change Layer Color for"
 msgstr "Keisti sluoksnio spalvą:"
 
 #: gerbview/widgets/layer_widget.cpp:187
+#, fuzzy
 msgid "Change Render Color for"
 msgstr "Keisti atvaizdavimo spalvą:"
 
