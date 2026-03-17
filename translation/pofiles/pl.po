@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:56+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-17 07:03+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -22146,14 +22146,13 @@ msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu %c."
 #: eeschema/symbol_checker.cpp:402
 #, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>Okrąg (grafika) ma promień równy zero</b> na pozycji <b>(%s, %s)</b>."
+msgstr "<b>Okrąg (grafika) ma promień równy 0</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:414
 #, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Prostokąt (grafika) ma zerowy rozmiar</b> na pozycji <b>(%s, %s)</b>."
+"<b>Prostokąt (grafika) ma rozmiar równy 0</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:71
 msgid "Symbol Chooser"
