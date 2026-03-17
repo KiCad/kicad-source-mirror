@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-14 23:20+0000\n"
+"PO-Revision-Date: 2026-03-18 18:47+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/v9/lv/>\n"
 "Language: lv\n"
@@ -39087,7 +39087,7 @@ msgstr ""
 "slāņi mainās."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:824
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Footprints have some items on removed layers:\n"
 "%s\n"
@@ -39124,7 +39124,7 @@ msgid "Layer name '%s' already in use."
 msgstr "Slāņa nosaukums '%s' jau tiek izmantots."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:1009
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Imported settings have fewer copper layers than the current board (%i "
 "instead of %i).\n"
@@ -43657,6 +43657,7 @@ msgid "Thermal Relief Gap"
 msgstr "Termiskā atvieglojuma sprauga"
 
 #: pcbnew/pcb_base_frame.cpp:1228
+#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
