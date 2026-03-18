@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-18 18:47+0000\n"
+"PO-Revision-Date: 2026-03-19 17:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/v9/lv/>\n"
 "Language: lv\n"
@@ -14636,7 +14636,7 @@ msgstr "Avots:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:132
 msgid "Sweep type:"
-msgstr "Pārejas veids:"
+msgstr "Pārslaukšanas veids:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:136
 msgid "Source 1"
@@ -21237,7 +21237,7 @@ msgstr "Signāls"
 #: eeschema/sim/simulator_frame_ui_base.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:225 pcbnew/dialogs/dialog_plot_base.h:154
 msgid "Plot"
-msgstr "Diagramma"
+msgstr "Attēlot"
 
 #: eeschema/sim/simulator_frame_ui.cpp:611
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
@@ -24081,7 +24081,7 @@ msgstr "Saglabāt grafiku kā attēlu"
 
 #: eeschema/tools/simulator_control.cpp:287
 msgid "Save Plot Data"
-msgstr "Saglabāt grafika datus"
+msgstr "Saglabāt zīmēšanas datus"
 
 #: eeschema/tools/simulator_control.cpp:520
 msgid "SPICE Netlist"
@@ -29441,7 +29441,7 @@ msgstr "Atstarpe:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
-msgstr "Noplūde:"
+msgstr "Noplūdes ceļš:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 msgid "Min groove width:"
@@ -30258,7 +30258,7 @@ msgstr "Pāreju aptveroša kontaktlaukuma diametrs (apkārtējais gredzens)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "Attīrīšanas cauruma diametrs:"
+msgstr "Atstarpes cauruma diametrs:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
@@ -32623,7 +32623,7 @@ msgstr "Nošķelšana"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:371
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:83
 msgid "Fillet"
-msgstr "Aplokne"
+msgstr "Noapaļojums"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:115
@@ -35262,7 +35262,7 @@ msgstr "Lietot un aizvērt"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:536
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:555
 msgid "Edit Teardrops"
-msgstr "Rediģēt ūdenskritumu"
+msgstr "Rediģēt asarveida formas"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
 msgid "PTH pads"
@@ -35282,11 +35282,11 @@ msgstr "Tikai apaļi kontaktlaukumi"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
 msgid "Existing teardrops only"
-msgstr "Tikai esošie ūdenskritumi"
+msgstr "Tikai esošās asarveida formas"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
-msgstr "Noņemt ūdenskritumu"
+msgstr "Noņemt asarveida formas"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:115
 msgid "Remove teardrops according to filtering options"
@@ -35294,7 +35294,7 @@ msgstr "Noņemt ūdenskritumu atbilstoši filtrēšanas opcijām"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:119
 msgid "Remove all teardrops"
-msgstr "Noņemt visus ūdenskritumu"
+msgstr "Noņemt visas asarveida formas"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Remove all teardrops, regardless of filtering options"
@@ -35473,7 +35473,7 @@ msgstr "Izliektas malas"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 msgid "Set Teardrops"
-msgstr "Iestatīt ūdenskritumu"
+msgstr "Iestatīt asarveida formas"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:141
 msgid "Text items"
@@ -35846,7 +35846,7 @@ msgstr "Iepriekš definētie celiņu un pāreju izmēri"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
 msgid "Teardrop defaults"
-msgstr "Ūdenskritumu noklusējumi"
+msgstr "Asarveida formu noklusējumi"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
 msgid "Length-tuning pattern defaults"
@@ -36559,7 +36559,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:704
 msgid "Teardrop Shape"
-msgstr "Ūdenskrituma forma"
+msgstr "Asarveida forma"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:854
 msgid "Pad connection:"
@@ -36837,11 +36837,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Mirrored plot"
-msgstr "Spoguļattēls"
+msgstr "Spoguļots zīmējums"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:152
 msgid "Negative plot"
-msgstr "Negatīvs attēls"
+msgstr "Negatīvs zīmējums"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
@@ -49193,11 +49193,11 @@ msgstr "Noņemt stūri"
 
 #: pcbnew/tools/pcb_actions.cpp:1999
 msgid "Chamfer Corner"
-msgstr "Noapaļot stūri"
+msgstr "Nošķelt stūri"
 
 #: pcbnew/tools/pcb_actions.cpp:2000
 msgid "Chamfer corner"
-msgstr "Noapaļo stūri"
+msgstr "Nošķel stūri"
 
 #: pcbnew/tools/pcb_actions.cpp:2006
 msgid "Keep Arc Center, Adjust Radius"
