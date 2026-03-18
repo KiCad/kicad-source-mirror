@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-18 18:47+0000\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
 "Language: hu\n"
@@ -2327,7 +2327,7 @@ msgstr "Rajzjelek"
 #: pcbnew/widgets/panel_selection_filter_base.cpp:29
 #: pcbnew/widgets/search_handlers.cpp:116
 msgid "Footprints"
-msgstr "Alkatrész rajzolatok"
+msgstr "Lábkiosztások"
 
 #: common/dialog_about/AboutDialog_main.cpp:935
 msgid "Icons"
@@ -2931,7 +2931,7 @@ msgstr "(opcionális)"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:320
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:336
 msgid "unit"
-msgstr "mértékegység"
+msgstr "egység"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
 msgid "Linked"
@@ -3145,7 +3145,7 @@ msgstr "US Ledger méret 17 × 11 hüvelyk"
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
-msgstr "Egyedi lapméret"
+msgstr "Felhasználói (Egyedi)"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Preview Settings"
@@ -6077,7 +6077,7 @@ msgstr "Rajzjel Szerkesztő"
 #: common/eda_base_frame.cpp:1172 common/eda_base_frame.cpp:1185
 #: common/eda_base_frame.cpp:1217 common/eda_base_frame.cpp:1240
 msgid "Display Options"
-msgstr "Beállítások megjelenítése"
+msgstr "Megjelenítési beállítások"
 
 #: common/eda_base_frame.cpp:1139 common/eda_base_frame.cpp:1148
 #: common/eda_base_frame.cpp:1175 common/eda_base_frame.cpp:1188
@@ -9962,7 +9962,7 @@ msgstr "<nincs találat>"
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
 #: eeschema/sch_symbol.cpp:2071 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
-msgstr "Nyákterv"
+msgstr "Panel"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
 #: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2127
@@ -11293,7 +11293,7 @@ msgstr "Sorszámozás üzenet:"
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
 msgid "Annotate"
-msgstr "Feliratoz"
+msgstr "Sorszámoz"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -19978,7 +19978,7 @@ msgstr "Nyomtatva ide: '%s'.\n"
 #: pcbnew/pcb_plotter.cpp:250
 #, c-format
 msgid "Plotted to '%s'."
-msgstr "Nyomtatva ide: '%s'."
+msgstr "Kirajzolva: '%s'."
 
 #: eeschema/sch_plotter.cpp:1068
 #, c-format
@@ -38482,7 +38482,7 @@ msgstr "Lábkiosztás %s (%s), %s, %.1f fokkal elforgatva"
 #: pcbnew/pcb_dimension.cpp:2091 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:666
 msgid "Knockout"
-msgstr "Kiütés"
+msgstr "Negatív szöveg"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
