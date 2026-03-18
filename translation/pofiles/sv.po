@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-14 23:16+0000\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
 "Language: sv\n"
@@ -87,7 +87,7 @@ msgstr "Förenklar polygoner på kopparlager"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1213
 msgid "Calculating plated copper"
-msgstr "Beräknar koppar med oxidskydd"
+msgstr "Beräknar pläterad koppar"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1267
 #, c-format
@@ -20134,7 +20134,7 @@ msgstr "Hierarkiskt arkstift %s"
 
 #: eeschema/sch_symbol.cpp:2091
 msgid "Power symbol"
-msgstr "Kraftsymbol"
+msgstr "Strömförsörjningssymbol"
 
 #: eeschema/sch_symbol.cpp:2111
 msgid "flags"
@@ -31845,7 +31845,7 @@ msgstr "Pläterad mönsterkortskant"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "Oxidskydd på koppar:"
+msgstr "Ytfinish på koppar:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -39686,7 +39686,7 @@ msgstr "signal"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "power plane"
-msgstr "kraftplan"
+msgstr "strömplan"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
 msgid "mixed"
@@ -46981,7 +46981,7 @@ msgstr "Via %s på %s"
 
 #: pcbnew/pcb_track.cpp:602
 msgid "removed annular ring"
-msgstr "borttagen ringring"
+msgstr "borttagen krage"
 
 #: pcbnew/pcb_track.cpp:1627
 msgid "Track (arc)"
