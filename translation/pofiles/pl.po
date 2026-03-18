@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 07:03+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2026-03-19 17:34+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -451,12 +451,12 @@ msgstr "Odwraca widok płytki (lustrzane odbicie)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 msgid "Toggle Orthographic Projection"
-msgstr "Przełącz projekcję perspektywiczną"
+msgstr "Przełącz projekcję ortograficzną"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:202
 msgid "Enable/disable orthographic projection"
-msgstr "Włącza lub wyłącza projekcję perspektywiczną"
+msgstr "Włącza lub wyłącza projekcję ortograficzną"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "View Front"
@@ -1299,7 +1299,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
-msgstr "Refleksy:"
+msgstr "Odbicia:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -1315,7 +1315,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
-msgstr "Odbicia:"
+msgstr "Załamania:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -1353,35 +1353,35 @@ msgstr "Azymut (w stopniach)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr "Jasny 1:"
+msgstr "Światło 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr "Jasny 5:"
+msgstr "Światło 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr "Jasny 2:"
+msgstr "Światło 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr "Jasny 6:"
+msgstr "Światło 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr "Jasny 3:"
+msgstr "Światło 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr "Jasny 7:"
+msgstr "Światło 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr "Jasny 4:"
+msgstr "Światło 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr "Jasny 8:"
+msgstr "Światło 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:414
 msgid "3D Preview Options"
@@ -1460,7 +1460,7 @@ msgstr "Przesunięcie"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:158
 msgid "Opacity"
-msgstr "Przeźroczystość"
+msgstr "Krycie"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:178
 #: common/dialogs/dialog_page_settings_base.cpp:123
@@ -2537,7 +2537,7 @@ msgstr "Kolory zdefiniowane"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Przeźroczystość:"
+msgstr "Krycie:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:179
 msgid "Preview (old/new):"
@@ -16338,7 +16338,7 @@ msgstr "Grubość kolorowego podświetlenia:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:202
 msgid "Color highlight opacity:"
-msgstr "Przeźroczystość koloru wyróżnienia:"
+msgstr "Krycie koloru wyróżnienia:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
 msgid "Line drawing mode:"
@@ -21715,7 +21715,7 @@ msgstr "Pomiar czasu maksymalnego"
 
 #: eeschema/sim/simulator_frame_ui.cpp:165
 msgid "Measure Integral"
-msgstr "Pomiar integralności"
+msgstr "Pomiar całki"
 
 #: eeschema/sim/simulator_frame_ui.cpp:170
 msgid "Perform Fourier Analysis..."
@@ -23956,7 +23956,7 @@ msgstr "Przenieś się o jeden arkusz wyżej w hierarchii"
 
 #: eeschema/tools/sch_actions.cpp:1321
 msgid "Navigate Back"
-msgstr "Nawiguj w dół"
+msgstr "Nawiguj wstecz"
 
 #: eeschema/tools/sch_actions.cpp:1322
 msgid "Move backward in sheet navigation history"
@@ -25262,7 +25262,7 @@ msgstr "Tryb wyświetlania z wymuszonym przezroczystością"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:77
 msgid "Forced opacity:"
-msgstr "Wymuszona przeźroczystość:"
+msgstr "Wymuszone krycie:"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:79
 msgid "Opacity in forced opacity display mode"
@@ -31247,7 +31247,7 @@ msgstr "Długość fali"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:184
 msgid "RF Attenuators"
-msgstr "Tłumiki FR"
+msgstr "Tłumiki RF"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:185
 msgid "Transmission Lines"
@@ -32246,7 +32246,7 @@ msgstr "Naturalny PTFE"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
-msgstr "Poliamid"
+msgstr "Poliimid"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
@@ -37027,11 +37027,11 @@ msgstr "Własny (na bazie prostokąta)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Trapezoid delta:"
-msgstr "Nachylenie:"
+msgstr "Delta trapezu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:153
 msgid "Trapezoid axis:"
-msgstr "Nachylenie:"
+msgstr "Oś trapezu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:174
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:312
@@ -37297,7 +37297,7 @@ msgstr "Użyj uwypuklenia obrysu pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
 msgid "Thermal Relief Overrides"
-msgstr "Naruszenia łącza termicznego"
+msgstr "Zastąpienia łącza termicznego"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:889
 msgid "Relief gap:"
@@ -37314,7 +37314,7 @@ msgstr "Kąt łącza termicznego:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
 msgid "Clearance Overrides"
-msgstr "Naruszenia prześwitu"
+msgstr "Zastąpienia prześwitu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:950
 msgid "Leave values blank to use parent footprint or netclass values."
@@ -38207,7 +38207,7 @@ msgstr "Perspektywa"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:153
 msgid "Orthogonal"
-msgstr "Prostokątny"
+msgstr "Ortogonalny"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:155
 msgid "Projection"
@@ -43454,15 +43454,15 @@ msgstr "Wyklucz z plików położeń"
 
 #: pcbnew/footprint.cpp:4273 pcbnew/pad.cpp:2940
 msgid "Overrides"
-msgstr "Przekroczenia"
+msgstr "Zastąpienia"
 
 #: pcbnew/footprint.cpp:4280 pcbnew/pad.cpp:2943
 msgid "Clearance Override"
-msgstr "Przekroczenie prześwitu"
+msgstr "Zastąpienie prześwitu"
 
 #: pcbnew/footprint.cpp:4285 pcbnew/pad.cpp:2953
 msgid "Solderpaste Margin Override"
-msgstr "Przekroczenie marginesu pasy lutowniczej"
+msgstr "Zastąpienie marginesu pasty lutowniczej"
 
 #: pcbnew/footprint.cpp:4290 pcbnew/pad.cpp:2958
 msgid "Solderpaste Margin Ratio Override"
@@ -45025,7 +45025,7 @@ msgstr "Właściwość produkcyjna"
 #: pcbnew/pad.cpp:2948 pcbnew/pcb_shape.cpp:984 pcbnew/pcb_tablecell.cpp:219
 #: pcbnew/pcb_textbox.cpp:816 pcbnew/pcb_track.cpp:2171
 msgid "Soldermask Margin Override"
-msgstr "Przekroczenie marginesu soldermaski"
+msgstr "Zastąpienie marginesu soldermaski"
 
 #: pcbnew/pad.cpp:2970 pcbnew/zone.cpp:2154
 msgid "Thermal Relief Spoke Width"
@@ -50514,7 +50514,7 @@ msgstr "Przełącza pomiędzy warstwami w aktywnej parze warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1815
 msgid "Increase Layer Opacity"
-msgstr "Zwiększ przeźroczystość warstw"
+msgstr "Zwiększ krycie warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1816
 msgid "Make the current layer less transparent"
@@ -50523,7 +50523,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1825
 msgid "Decrease Layer Opacity"
-msgstr "Zmniejsz przeźroczystość warstw"
+msgstr "Zmniejsz krycie warstw"
 
 #: pcbnew/tools/pcb_actions.cpp:1826
 msgid "Make the current layer more transparent"
