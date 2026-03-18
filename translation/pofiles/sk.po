@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 20:00+0000\n"
+"PO-Revision-Date: 2026-03-19 17:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -2645,7 +2645,7 @@ msgstr "Premenné prostredia"
 #: pcbnew/zone.cpp:1995 pcbnew/zone_manager/dialog_zone_manager_base.cpp:38
 #: pcbnew/zone_manager/model_zones_overview_table.h:75
 msgid "Name"
-msgstr "Meno"
+msgstr "Názov"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 msgid "Path"
@@ -2847,7 +2847,7 @@ msgstr "Veľkosť mriežky Y je mimo rozsah."
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1056
 msgid "Name:"
-msgstr "Meno:"
+msgstr "Názov:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
@@ -13369,7 +13369,7 @@ msgstr "Vylúčiť z dosky"
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1765
 msgid "Power Symbol"
-msgstr "Symbol Napajania"
+msgstr "Symbol napájania"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
@@ -18011,7 +18011,7 @@ msgstr "Centimeter"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:62
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:57
 msgid "Feet"
-msgstr "Nohy"
+msgstr "stopy"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
@@ -19769,13 +19769,13 @@ msgstr "Zamčené"
 #: pcbnew/microwave/microwave_polygon.cpp:135 pcbnew/pcb_target.cpp:155
 #: pcbnew/pcb_target.cpp:247
 msgid "Size"
-msgstr "Velikost"
+msgstr "Veľkosť"
 
 #: eeschema/sch_junction.cpp:379
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:104 pcbnew/pad.cpp:1436
 #: pcbnew/pcb_track.cpp:1713 pcbnew/pcb_track.cpp:2189
 msgid "Diameter"
-msgstr "Průměr"
+msgstr "Priemer"
 
 #: eeschema/sch_label.cpp:101
 msgid "Tri-State"
@@ -19923,7 +19923,7 @@ msgstr "ERC značka"
 
 #: eeschema/sch_no_connect.h:98 eeschema/tools/sch_edit_tool.cpp:250
 msgid "No Connect"
-msgstr "Nezapojeno"
+msgstr "Nezapojené"
 
 #: eeschema/sch_pin.cpp:1584
 msgid "Pos X"
@@ -20063,7 +20063,7 @@ msgstr "Kruh, polomer %s"
 #: eeschema/sch_shape.cpp:550
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Křivka, %d bodů"
+msgstr "Krivka, %d bodov"
 
 #: eeschema/sch_shape.cpp:554
 #, c-format
@@ -20279,7 +20279,7 @@ msgstr "Grafický text '%s'"
 
 #: eeschema/sch_text.cpp:712
 msgid "Align center"
-msgstr "Vystředit"
+msgstr "Vycentrovať"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -21508,7 +21508,7 @@ msgstr "Intenzita"
 #: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:800
 #: eeschema/widgets/search_handlers.cpp:247
 msgid "Power"
-msgstr "Výkon"
+msgstr "Napájanie"
 
 #: eeschema/sim/sim_plot_tab.cpp:742
 msgid "Voltage (swept)"
@@ -21793,7 +21793,7 @@ msgstr "Prechodná analýza"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr "Analýza zkreslení malých signálů"
+msgstr "Analýza skreslenia malých signálov"
 
 #: eeschema/sim/spice_simulator.cpp:62
 msgid "Noise Analysis"
@@ -28171,7 +28171,7 @@ msgstr "Inštalujem balík '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:312
 msgid "Aborting package installation."
-msgstr "Přerušení instalace balíčku."
+msgstr "Prerušenie inštalácie balíčka."
 
 #: kicad/pcm/pcm_task_manager.cpp:360
 #, c-format
@@ -30120,7 +30120,7 @@ msgstr "Nerezová ocel 18-9"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:50
 msgid "Silver"
-msgstr "Stříbro"
+msgstr "Striebro"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:51
 msgid "Mercury"
@@ -30195,7 +30195,7 @@ msgstr "Mangán"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:68
 msgid "Magnesium"
-msgstr "Hořčík"
+msgstr "Horčík"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:33
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:38
@@ -30816,7 +30816,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
-msgstr "Tepelná odpor:"
+msgstr "Tepelný odpor:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
@@ -30901,7 +30901,7 @@ msgstr "Vlnová dĺžka v prostredí:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:75
 msgid "Speed in medium:"
-msgstr "Rýchlosť ve středu:"
+msgstr "Rýchlosť v prostredí:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:87
 msgid "er:"
@@ -31648,7 +31648,7 @@ msgstr "Plôšky"
 #: pcbnew/widgets/panel_selection_filter.cpp:199
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "Prechody"
+msgstr "Prekovy"
 
 #: pcbnew/board.cpp:2094 pcbnew/pcb_draw_panel_gal.cpp:717
 msgid "Track Segments"
@@ -31664,7 +31664,7 @@ msgstr "Trieda siete"
 
 #: pcbnew/board_connected_item.cpp:254
 msgid "NetName"
-msgstr "Meno siete"
+msgstr "Názov siete"
 
 #: pcbnew/board_connected_item.cpp:288
 #: pcbnew/dialogs/dialog_board_setup.cpp:164
@@ -32079,11 +32079,11 @@ msgstr "Žltá"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr "FR4 přirozený"
+msgstr "FR4 prirodzený"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr "PTFE přirozený"
+msgstr "PTFE prirodzený"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
@@ -32772,7 +32772,7 @@ msgstr "Y Veľkosť"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 msgid "Plated"
-msgstr "Pokované"
+msgstr "Pokovené"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "Via/Pad"
@@ -34481,7 +34481,7 @@ msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:286
 msgid "Non-unity scaled models:"
-msgstr "Modely bez měřítka jednoty:"
+msgstr "Modely bez jednotkového mierka:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:288
 msgid ""
@@ -35096,7 +35096,7 @@ msgstr "SMD"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:201
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:731
 msgid "Not in schematic"
-msgstr "Nie je to schematické"
+msgstr "Nie je v schéme"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
@@ -37119,7 +37119,7 @@ msgstr "Z rodičovského puzdra"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:864
 msgid "Zone knockout:"
-msgstr "Vyřazení zóny:"
+msgstr "Výrez zóny:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:868
 msgid "Pad shape"
@@ -39642,7 +39642,7 @@ msgstr "signál"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "power plane"
-msgstr "silové lietadlo"
+msgstr "silová plocha"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
 msgid "mixed"
@@ -43546,7 +43546,7 @@ msgstr "Umiestniť mikrovlnné prvky"
 
 #: pcbnew/netinfo_item.cpp:87 pcbnew/widgets/pcb_net_inspector_panel.cpp:120
 msgid "Net Name"
-msgstr "Meno siete"
+msgstr "Názov siete"
 
 #: pcbnew/netinfo_item.cpp:89
 msgid "Net Code"
@@ -47051,7 +47051,7 @@ msgstr "Prekov %s, otvor %s"
 #: pcbnew/router/router_tool.cpp:293 pcbnew/tools/drawing_tool.cpp:132
 #, c-format
 msgid "Via %s"
-msgstr "Prechod %s"
+msgstr "Prekov %s"
 
 #: pcbnew/router/router_tool.cpp:359
 msgid "Select Differential Pair Dimensions"
@@ -47429,7 +47429,7 @@ msgstr "Umiestniť puzdro"
 
 #: pcbnew/tools/board_editor_control.cpp:1306 pcbnew/tools/pcb_actions.cpp:1188
 msgid "Lock"
-msgstr "Zámok"
+msgstr "Zamknúť"
 
 #: pcbnew/tools/board_editor_control.cpp:1306 pcbnew/tools/pcb_actions.cpp:1195
 msgid "Unlock"
@@ -48756,7 +48756,7 @@ msgstr "Vyberie puzdro referenčným označením a umiestni ju pod kurzor na pre
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Move Individually"
-msgstr "Přesunout individuálně"
+msgstr "Presunúť individuálne"
 
 #: pcbnew/tools/pcb_actions.cpp:467
 msgid "Moves the selected items one-by-one"
