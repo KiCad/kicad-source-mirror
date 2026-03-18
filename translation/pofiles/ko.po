@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:43+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v9/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -2110,7 +2110,7 @@ msgstr "디자인_블록 로딩..."
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
-msgstr "키캐드"
+msgstr "KiCad"
 
 #: common/design_block_io.cpp:48 pcbnew/pcb_io/pcb_io_mgr.cpp:90
 #, c-format
@@ -6527,7 +6527,7 @@ msgstr "포인트"
 #: pcbnew/pcb_target.cpp:249 pcbnew/pcb_text.cpp:296 pcbnew/pcb_textbox.cpp:808
 #: pcbnew/pcb_track.cpp:1646 pcbnew/pcb_track.cpp:2140
 msgid "Width"
-msgstr "두께"
+msgstr "폭"
 
 #: common/eda_shape.cpp:1030 common/eda_shape.cpp:2435 common/eda_text.cpp:1394
 #: eeschema/sch_bitmap.cpp:203 eeschema/sch_bitmap.cpp:347
@@ -11167,7 +11167,7 @@ msgstr "주석 메시지:"
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
 msgid "Annotate"
-msgstr "주석"
+msgstr "부품 번호 지정"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -16338,7 +16338,7 @@ msgstr "Net / Nested 버스 이름"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:37
 msgid "Annotations"
-msgstr "주석"
+msgstr "부품 번호 지정"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -22874,7 +22874,7 @@ msgstr "전원 심볼 배치"
 
 #: eeschema/tools/sch_actions.cpp:458
 msgid "Place Design Block"
-msgstr "풋프린트 배치"
+msgstr "디자인 블록 배치"
 
 #: eeschema/tools/sch_actions.cpp:459
 msgid "Add selected design block to current sheet"
@@ -28063,7 +28063,7 @@ msgstr "로컬 저장소에 변경 사항 커밋하기"
 
 #: kicad/project_tree_pane.cpp:1018
 msgid "Push"
-msgstr "올리기(Push)"
+msgstr "밀어내기"
 
 #: kicad/project_tree_pane.cpp:1019
 msgid "Push committed local changes to remote repository"
@@ -31242,7 +31242,7 @@ msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr "feet"
+msgstr "피트"
 
 #: pcb_calculator/widgets/unit_selector.cpp:279
 msgid "mW"
@@ -32005,7 +32005,7 @@ msgstr "다시 주석을 달까요?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:551
 msgid "Annotation"
-msgstr "주석"
+msgstr "부품 번호 지정"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:690
 #, c-format
@@ -32828,12 +32828,12 @@ msgstr ""
 #: pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1888
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
-msgstr "단열판"
+msgstr "서멀 릴리프"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Reliefs for PTH"
-msgstr "PTH를 릴리프"
+msgstr "PTH용 서멀 릴리프"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
@@ -34894,7 +34894,7 @@ msgstr "영역 설정 사용"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 msgid "Thermal relief"
-msgstr "단열판"
+msgstr "서멀 릴리프"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:398
@@ -36725,7 +36725,7 @@ msgstr "패드 볼록 선체"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
 msgid "Thermal Relief Overrides"
-msgstr "단열판 재정의"
+msgstr "서멀 릴리프 재정의"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:889
 msgid "Relief gap:"
@@ -41114,7 +41114,7 @@ msgstr "구리 도선 연결이 너무 좁습니다"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Track width"
-msgstr "배선 두께"
+msgstr "배선 폭"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Track angle"
@@ -47652,7 +47652,7 @@ msgstr "정의된 '물리적 공간거리' 제약 조건이 없음."
 #: pcbnew/tools/board_inspection_tool.cpp:687
 #: pcbnew/tools/board_inspection_tool.cpp:1493
 msgid "Assertions"
-msgstr "규칙"
+msgstr "어서션"
 
 #: pcbnew/tools/board_inspection_tool.cpp:688
 #: pcbnew/tools/board_inspection_tool.cpp:1494
@@ -51668,7 +51668,7 @@ msgstr "승계"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr "단열판"
+msgstr "서멀 릴리프"
 
 #: pcbnew/zones.h:64
 msgid "solid"
