@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-16 00:15+0000\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
@@ -1894,7 +1894,7 @@ msgstr "F.Cu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "Serigrafia.F"
+msgstr "F.Silkscreen"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
@@ -14197,7 +14197,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:92
 msgid "Plot Schematic"
-msgstr "Representa l'esquemàtic"
+msgstr "Ploteja l'esquemàtic"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:102
 msgid ""
@@ -14882,7 +14882,7 @@ msgstr "Font:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:132
 msgid "Sweep type:"
-msgstr "Tipus d'escombrat:"
+msgstr "Tipus de barrida:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:136
 msgid "Source 1"
@@ -15129,7 +15129,7 @@ msgstr "Dreta:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:892
 msgid "Plot Setup"
-msgstr "Configuració de la representació"
+msgstr "Configuració del ploteig"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 msgid "Simulation Analysis"
@@ -21572,19 +21572,19 @@ msgstr "Potència"
 
 #: eeschema/sim/sim_plot_tab.cpp:742
 msgid "Voltage (swept)"
-msgstr "Voltatge (escombrat)"
+msgstr "Voltatge (en barrida)"
 
 #: eeschema/sim/sim_plot_tab.cpp:753
 msgid "Current (swept)"
-msgstr "Corrent (escombrat)"
+msgstr "Corrent (en barrida)"
 
 #: eeschema/sim/sim_plot_tab.cpp:764
 msgid "Resistance (swept)"
-msgstr "Resistència (escombrada)"
+msgstr "Resistència (en barrida)"
 
 #: eeschema/sim/sim_plot_tab.cpp:775
 msgid "Temperature (swept)"
-msgstr "Temperatura (escombrada)"
+msgstr "Temperatura (en barrida)"
 
 #: eeschema/sim/sim_plot_tab.cpp:793
 msgid "Voltage (measured)"
@@ -24126,7 +24126,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1538
 msgid "Dark Mode Plots"
-msgstr "Gràfics en mode fosc"
+msgstr "Traçats en mode fosc"
 
 #: eeschema/tools/sch_actions.cpp:1539
 msgid "Draw plots with a black background"
@@ -30610,7 +30610,7 @@ msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
 msgid "Power Comment:"
-msgstr "Comentari de potència:"
+msgstr "Comentari d'alimentació:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
@@ -33351,7 +33351,7 @@ msgstr "El marge entre els pads de la mateixa xarxa i les àrees omplertes."
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:178
 msgid "Thermal spoke width:"
-msgstr "Amplada de l'alleujament tèrmic:"
+msgstr "Amplada del raig tèrmic:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:183
@@ -37318,11 +37318,11 @@ msgstr "Espai d'alleujament:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:900
 msgid "Spoke width:"
-msgstr "Amplada de l'alleujament:"
+msgstr "Amplada del raig:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:911
 msgid "Spoke angle:"
-msgstr "Angle del radi:"
+msgstr "Angle del raig:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
@@ -49806,7 +49806,7 @@ msgstr "Línies d'embolic corbes"
 
 #: pcbnew/tools/pcb_actions.cpp:1381
 msgid "Ratsnest Mode (3-state)"
-msgstr "Mode de línies aèries (3 estats)"
+msgstr "Mode d'embolic (3 estats)"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid ""
@@ -51208,12 +51208,12 @@ msgstr "Els colors de xarxa i classe de xarxa no es mostren"
 #: pcbnew/widgets/appearance_controls.cpp:2600
 #, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Visualització de línies aèries (%s):"
+msgstr "Visualització d'embolic (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:751
 #: pcbnew/widgets/appearance_controls.cpp:2602
 msgid "Ratsnest display:"
-msgstr "Visualització del ratsnest:"
+msgstr "Visualització de l'embolic:"
 
 #: pcbnew/widgets/appearance_controls.cpp:756
 #: pcbnew/widgets/appearance_controls.cpp:2605
