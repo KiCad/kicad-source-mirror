@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-14 23:22+0000\n"
+"PO-Revision-Date: 2026-03-19 17:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v9/fi/>\n"
 "Language: fi\n"
@@ -13255,7 +13255,7 @@ msgstr "Suodata yksikön mukaan:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
-msgstr "Flipperi"
+msgstr "Nastataulukko"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:84
 #, fuzzy
@@ -25421,11 +25421,11 @@ msgstr "Yläosan peittokuva"
 
 #: gerbview/files.cpp:217
 msgid "Bottom paste"
-msgstr "Alaosan liittäminen"
+msgstr "Alapuolen juotospasta"
 
 #: gerbview/files.cpp:218
 msgid "Top paste"
-msgstr "Yläosan liittäminen"
+msgstr "Yläpuolen juotospasta"
 
 #: gerbview/files.cpp:219
 msgid "Keep-out layer"
@@ -32639,7 +32639,7 @@ msgstr "Piirilevyn pinnoite"
 #: pcbnew/dialogs/dialog_board_setup.cpp:119
 #: pcbnew/dialogs/dialog_plot.cpp:1391
 msgid "Solder Mask/Paste"
-msgstr "Juotosmaski/Liitä"
+msgstr "Juotosmaski/juotospasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:121
 msgid "Text & Graphics"
@@ -36458,7 +36458,7 @@ msgstr "Piirilevyn kerrokset ja fyysinen pinoaminen"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
-msgstr "Juotosmaski/liitä oletukset"
+msgstr "Juotosmaski/juotospasta oletukset"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Text && graphics default properties"
