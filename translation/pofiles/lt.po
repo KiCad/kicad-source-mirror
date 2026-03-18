@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-18 18:47+0000\n"
+"PO-Revision-Date: 2026-03-19 17:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v9/lt/>"
 "\n"
@@ -8344,7 +8344,7 @@ msgstr "Užrakinto elemento šešėlis"
 
 #: common/layer_id.cpp:154
 msgid "Courtyard collision shadow"
-msgstr "Kiemo susidūrimo šešėlis"
+msgstr "Courtyard zonos susidūrimo šešėlis"
 
 #: common/layer_id.cpp:155
 msgid "Track net names"
@@ -18008,7 +18008,7 @@ msgstr "Importuoti vektorinės grafikos failą"
 #: eeschema/lib_symbol.cpp:311 eeschema/sch_symbol.cpp:534
 #, c-format
 msgid "Unit %s"
-msgstr "Blokas %s"
+msgstr "Vienetas %s"
 
 #: eeschema/lib_symbol.cpp:601 eeschema/sch_sheet.cpp:312
 #: eeschema/sch_symbol.cpp:1628
@@ -18038,7 +18038,7 @@ msgstr "Maitinimo vėliavėlė skiriasi."
 
 #: eeschema/lib_symbol.cpp:1638
 msgid "Unit count differs."
-msgstr "Blokų skaičius skiriasi."
+msgstr "Vienetų skaičius skiriasi."
 
 #: eeschema/lib_symbol.cpp:1678
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:850
@@ -18348,7 +18348,7 @@ msgstr "Simbolio vienetas '%s' jau patalpintas (lape '%s')"
 
 #: eeschema/picksymbol.cpp:132
 msgid "Unit Already Placed"
-msgstr "Blokas jau patalpintas"
+msgstr "Vienetas jau patalpintas"
 
 #: eeschema/picksymbol.cpp:133
 #, c-format
@@ -18362,11 +18362,11 @@ msgstr "&Dubliuoti '%s'"
 
 #: eeschema/picksymbol.cpp:179
 msgid "Swap Units"
-msgstr "Sukeisti blokus"
+msgstr "Sukeisti vienetus"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
-msgstr "Keisti bloką"
+msgstr "Keisti vienetą"
 
 #: eeschema/picksymbol.cpp:198
 #, fuzzy, c-format
@@ -32966,7 +32966,7 @@ msgstr "Naudoti centrinę liniją"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:151
 #: pcbnew/tools/convert_tool.cpp:98
 msgid "Create bounding hull"
-msgstr "Kurti ribojantį korpusą"
+msgstr "Kurti ribojančią gaubiamąją"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:231
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:125
@@ -36031,7 +36031,7 @@ msgstr "Krašto pjūviai"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:62
 msgid "Courtyards"
-msgstr "Kiemai"
+msgstr "Courtyard zonos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:278
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
@@ -37115,7 +37115,7 @@ msgstr "Aikštelės forma"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:868
 msgid "Pad convex hull"
-msgstr "Aikštelės išgaubtas korpusas"
+msgstr "Aikštelės išgaubtoji gaubiamoji"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
 msgid "Thermal Relief Overrides"
@@ -41117,7 +41117,7 @@ msgstr "Mikroperkojų skylės dydis už ribų"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "Courtyards overlap"
-msgstr "Kiemai persidengia"
+msgstr "Courtyard zonos persidengia"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Footprint has no courtyard defined"
@@ -41129,11 +41129,11 @@ msgstr "Korpusas turi deformuotą kiemą"
 
 #: pcbnew/drc/drc_item.cpp:169
 msgid "PTH inside courtyard"
-msgstr "PTH kieme"
+msgstr "PTH Courtyard zonoje"
 
 #: pcbnew/drc/drc_item.cpp:173
 msgid "NPTH inside courtyard"
-msgstr "NPTH kieme"
+msgstr "NPTH Courtyard zonoje"
 
 #: pcbnew/drc/drc_item.cpp:177
 msgid "Item on a disabled copper layer"
@@ -41497,7 +41497,7 @@ msgstr "Tikrinami korpusų kiemai..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
-msgstr "Renkami korpusų kiemai..."
+msgstr "Renkami korpusų Courtyard plotai..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:150
 msgid "Checking footprints for overlapping courtyards..."
@@ -46923,7 +46923,7 @@ msgstr "Negalima pradėti diferencinės poros trasavimo niekur."
 
 #: pcbnew/router/router_tool.cpp:118
 msgid "Place Through Via"
-msgstr "Padėti kiaurai einančią perkojų"
+msgstr "Padėti kiaurai einančią perkoją"
 
 #: pcbnew/router/router_tool.cpp:119
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -46931,7 +46931,7 @@ msgstr "Prideda kiaurai einančią perkojų rasavimo takelio gale."
 
 #: pcbnew/router/router_tool.cpp:129
 msgid "Place Blind/Buried Via"
-msgstr "Padėti aklą/paslėptą perkojų"
+msgstr "Padėti aklą/paslėptą perkoją"
 
 #: pcbnew/router/router_tool.cpp:130
 msgid "Adds a blind or buried via at the end of currently routed track."
@@ -50744,7 +50744,7 @@ msgstr "Rodyti šešėlį ant užrakintų elementų"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Colliding Courtyards"
-msgstr "Susikertantys kiemai"
+msgstr "Susikertančios Courtyard zonos"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show colliding footprint courtyards"
@@ -51597,7 +51597,7 @@ msgstr "Kampų skaičius"
 
 #: pcbnew/zone.cpp:936
 msgid "Teardrop Area"
-msgstr "Ašaros plotas"
+msgstr "Lašelio plotas"
 
 #: pcbnew/zone.cpp:938
 msgid "Copper Zone"
@@ -51650,7 +51650,7 @@ msgstr "Taisyklių sritys"
 #: pcbnew/zone.cpp:1129
 #, c-format
 msgid "Teardrop %s %s"
-msgstr "Ašara %s %s"
+msgstr "Lašelis %s %s"
 
 #: pcbnew/zone.cpp:1137
 #, c-format
