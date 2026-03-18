@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 01:10+0000\n"
+"PO-Revision-Date: 2026-03-19 17:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v9/el/>\n"
 "Language: el\n"
@@ -1440,7 +1440,7 @@ msgstr "Χ:"
 #: pcbnew/microwave/microwave_polygon.cpp:153
 #: pcbnew/tools/pcb_point_editor.cpp:2478
 msgid "Y:"
-msgstr "Ψ:"
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:51
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:96
@@ -1897,7 +1897,7 @@ msgstr "F.Cu"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Silkscreen"
-msgstr "Μπροστά.Μεταξοτυπία"
+msgstr "F.Silkscreen"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Mask"
@@ -1905,7 +1905,7 @@ msgstr "F.Mask"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Drawings"
-msgstr "Σχέδια.Χρήστη"
+msgstr "User.Drawings"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Comments"
@@ -13139,7 +13139,7 @@ msgstr "Θέση Χ"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:67
 #: eeschema/fields_grid_table.cpp:501
 msgid "Y Position"
-msgstr "Θέση Ψ"
+msgstr "Θέση Y"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:143
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
@@ -16706,11 +16706,11 @@ msgstr "Πλέγμα συνδέσεων:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
-msgstr "Εσωτερικές Αναφορές Φύλλων"
+msgstr "Αναφορές Μεταξύ Φύλλων"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:196
 msgid "Show inter-sheet references"
-msgstr "Εμφάνιση εσωτερικών αναφορών φύλλων"
+msgstr "Εμφάνιση αναφορών μεταξύ φύλλων"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:202
 msgid "Show own page reference"
@@ -18993,7 +18993,7 @@ msgstr "Μετάβαση στη σελίδα %s (%s)"
 
 #: eeschema/sch_field.cpp:1303
 msgid "Back to Previous Selected Sheet"
-msgstr "Δημιουργία Έδρας από Επιλεγμένα Σχήματα"
+msgstr "Επιστροφή στο προηγούμενο επιλεγμένο φύλλο"
 
 #: eeschema/sch_field.cpp:1394 eeschema/sch_label.cpp:218
 msgid "Sheet References"
@@ -19678,7 +19678,7 @@ msgstr "Αδυναμία προσπέλασης %s σαν σύμβολο"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:328
 msgid "Invalid symbol name"
-msgstr "Μη έγκυρο όνομα σήματος"
+msgstr "Μη έγκυρο όνομα συμβόλου"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:346
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3056
@@ -19731,7 +19731,7 @@ msgstr "Άκυρος υπερσύνδεσμος URL '%s'"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:980
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2213
 msgid "Invalid property name"
-msgstr "Μη έγκυρο όνομα σήματος"
+msgstr "Μη έγκυρο όνομα ιδιότητας"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:988
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2221
@@ -19745,7 +19745,7 @@ msgstr "Μη έγκυρη τιμή ιδιότητας"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1627
 msgid "Invalid pin name"
-msgstr "Μη έγκυρος αριθμός ακροδέκτη"
+msgstr "Μη έγκυρο όνομα ακροδέκτη"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1665
 msgid "Invalid pin number"
@@ -19762,7 +19762,7 @@ msgstr "Μη έγκυρη τιμή κειμένου"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2053
 msgid "Invalid page type"
-msgstr "άκυρος τύπος ετικέτας"
+msgstr "άκυρος τύπος σελίδας"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2180
 msgid "Invalid title block comment number"
@@ -23914,7 +23914,7 @@ msgstr "Εμφάνιση Ετικετών Οδηγίας"
 
 #: eeschema/tools/sch_actions.cpp:1183
 msgid "Show ERC Warnings"
-msgstr "Εμφάνιση Προειδοποιήσεων ΕΚΣ"
+msgstr "Εμφάνιση Προειδοποιήσεων ΕΗΚ"
 
 #: eeschema/tools/sch_actions.cpp:1184
 msgid "Show markers for electrical rules checker warnings"
@@ -26109,7 +26109,7 @@ msgstr "Εμφάνιση πολυγώνων σε λειτουργία περιγ
 
 #: gerbview/tools/gerbview_actions.cpp:212
 msgid "Ghost Negative Objects"
-msgstr "Ψευδή Αρνητικά Αντικείμενα"
+msgstr "Φαντασματική εμφάνιση αρνητικών αντικειμένων"
 
 #: gerbview/tools/gerbview_actions.cpp:213
 msgid "Show negative objects in ghost color"
@@ -37458,7 +37458,7 @@ msgstr "Από γονικό αποτύπωμα"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:864
 msgid "Zone knockout:"
-msgstr "Αλληλεπικάλυψη ζωνών:"
+msgstr "Αποκοπή ζώνης:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:868
 msgid "Pad shape"
@@ -38723,7 +38723,7 @@ msgstr "Αποτύπωμα %s (%s), %s, περιστραμμένο %.1f βαθμ
 #: pcbnew/pcb_dimension.cpp:2091 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:666
 msgid "Knockout"
-msgstr "Αλληλεπικάλυψη"
+msgstr "Αρνητικό κείμενο"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
@@ -39519,11 +39519,11 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases right"
-msgstr "Αύξηση Απόστασης"
+msgstr "Αύξηση προς τα δεξιά"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases left"
-msgstr "Αύξηση Πάχους Γραμμής"
+msgstr "Αύξηση προς τα αριστερά"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
@@ -45199,7 +45199,7 @@ msgstr "Γωνία Ακτίνων Θερμικής Εκτόνωσης"
 
 #: pcbnew/pad.cpp:2981 pcbnew/zone.cpp:2148
 msgid "Thermal Relief Gap"
-msgstr "Θερμικές Εκτονώσεις"
+msgstr "Κενό Θερμικής Εκτόνωσης"
 
 #: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
@@ -52831,7 +52831,7 @@ msgstr "Σουίτα εργαλείων για σχηματικό σχεδιασ
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
-msgstr "Εκτέλεση PCB Calculator"
+msgstr "Υπολογιστής PCB KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
@@ -52839,7 +52839,7 @@ msgstr "PCB;Calculator;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
-msgstr "Εκτέλεση PCB Calculator"
+msgstr "Υπολογιστής PCB"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
