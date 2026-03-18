@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 22:13+0000\n"
-"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -3585,7 +3585,7 @@ msgstr "Výstupní režim:"
 #: pcbnew/pcb_tablecell.cpp:243 pcbnew/pcb_text.cpp:664
 #: pcbnew/pcb_textbox.cpp:813 pcbnew/tools/drawing_stackup_table_tool.cpp:271
 msgid "Color"
-msgstr "Barevně"
+msgstr "Barva"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:380
@@ -5632,7 +5632,7 @@ msgstr "Šířka spoje"
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: pcb_calculator/pcb_calculator_frame.cpp:176
 msgid "Via Size"
-msgstr "Velikosti prokovu"
+msgstr "Velikost prokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "Via Hole"
@@ -5640,7 +5640,7 @@ msgstr "Díra prokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "mikroprokov Velikost"
+msgstr "Velikost mikroprokovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
@@ -7999,7 +7999,7 @@ msgstr "Dráty"
 
 #: common/layer_id.cpp:72
 msgid "Buses"
-msgstr "Sbernice"
+msgstr "Sběrnice"
 
 #: common/layer_id.cpp:73
 msgid "Bus junctions"
@@ -8085,7 +8085,7 @@ msgstr "Text schématu && grafické pozadí"
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:206
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 msgid "Pins"
-msgstr "Špendlíky"
+msgstr "Vývody"
 
 #: common/layer_id.cpp:93
 msgid "Sheet borders"
@@ -9285,7 +9285,7 @@ msgstr "Kurzor vlevo"
 
 #: common/tool/actions.cpp:729
 msgid "Cursor Right"
-msgstr "Vpravo vpravo"
+msgstr "Kurzor vpravo"
 
 #: common/tool/actions.cpp:738
 msgid "Cursor Up Fast"
@@ -12106,7 +12106,7 @@ msgstr "Komentář o vyloučení"
 #: eeschema/dialogs/dialog_erc.cpp:879
 #: eeschema/dialogs/dialog_schematic_setup.cpp:99
 msgid "Pin Conflicts Map"
-msgstr "Připnout mapu konfliktů"
+msgstr "Mapa konfliktů vývodů"
 
 #: eeschema/dialogs/dialog_erc.cpp:883 eeschema/dialogs/dialog_erc.cpp:1013
 #: eeschema/dialogs/dialog_schematic_setup.cpp:92
@@ -14278,7 +14278,7 @@ msgstr "Závažnost porušení"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 msgid "Pin conflict map"
-msgstr "Připnout mapu konfliktu"
+msgstr "Mapa konfliktů vývodů"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
@@ -21521,7 +21521,7 @@ msgstr "Měření maximálního času"
 
 #: eeschema/sim/simulator_frame_ui.cpp:165
 msgid "Measure Integral"
-msgstr "Měření integrity"
+msgstr "Měřit integrál"
 
 #: eeschema/sim/simulator_frame_ui.cpp:170
 msgid "Perform Fourier Analysis..."
@@ -29166,7 +29166,7 @@ msgstr "Třída 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr "Šířka spoje"
+msgstr "Šířka čar"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
@@ -32982,7 +32982,7 @@ msgstr ""
 #: pcbnew/pad.cpp:2766 pcbnew/zone.cpp:1888
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Thermal reliefs"
-msgstr "Teplotní profily"
+msgstr "Tepelná odlehčení"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
@@ -32992,7 +32992,7 @@ msgstr "Reliéfy pro PTH"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
 msgid "Thermal relief gap:"
-msgstr "Teplotní profil mezera:"
+msgstr "Mezera tepelného odlehčení:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:165
@@ -33011,7 +33011,7 @@ msgstr "Izolační mezera mezi ploškami stejné sítě a vyplněnou oblastí."
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:178
 msgid "Thermal spoke width:"
-msgstr "Teplotní profil šířka:"
+msgstr "Šířka paprsku tepelného odlehčení:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:183
@@ -35058,7 +35058,7 @@ msgstr "Použít nastavení zóny"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:331
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:858
 msgid "Thermal relief"
-msgstr "Teplotní profil"
+msgstr "Tepelné odlehčení"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:398
@@ -35228,7 +35228,7 @@ msgstr "Python skripty nelze načíst:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "Zobrazit spoj"
+msgstr "Zobrazit stopu"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -43775,7 +43775,7 @@ msgstr "Globální značka"
 
 #: pcbnew/pad.cpp:1420
 msgid "Fiducial local"
-msgstr "Výchozí místní"
+msgstr "Místní fiduciál"
 
 #: pcbnew/pad.cpp:1421
 msgid "Test point"
@@ -43822,7 +43822,7 @@ msgstr "VlastníTvar"
 
 #: pcbnew/pad.cpp:1645
 msgid "Conn"
-msgstr "Spojit"
+msgstr "Konektor"
 
 #: pcbnew/pad.cpp:1663
 #, c-format
@@ -44090,7 +44090,7 @@ msgstr "Úhel paprsku tepelného spojení"
 
 #: pcbnew/pad.cpp:2981 pcbnew/zone.cpp:2148
 msgid "Thermal Relief Gap"
-msgstr "Teplotní profil Mezera"
+msgstr "Mezera tepelného odlehčení"
 
 #: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
@@ -51488,7 +51488,7 @@ msgstr "dědičný"
 
 #: pcbnew/zones.h:63
 msgid "thermal reliefs"
-msgstr "teplotní profily"
+msgstr "tepelná odlehčení"
 
 #: pcbnew/zones.h:64
 msgid "solid"
