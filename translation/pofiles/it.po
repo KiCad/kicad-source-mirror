@@ -116,8 +116,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:37+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v9/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12830,7 +12830,7 @@ msgstr "Simboli non di potenza"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "Simboli di potenza"
+msgstr "Simboli di alimentazione"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -13532,7 +13532,7 @@ msgstr "Escludi dalla scheda"
 #: eeschema/dialogs/dialog_lib_fields.cpp:921
 #: eeschema/symbol_editor/symbol_editor.cpp:1765
 msgid "Power Symbol"
-msgstr "Simbolo di potenza"
+msgstr "Simbolo di alimentazione"
 
 #: eeschema/dialogs/dialog_lib_fields_base.h:87
 #, fuzzy
@@ -30699,7 +30699,7 @@ msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
 msgid "Power Comment:"
-msgstr "Commento potenza:"
+msgstr "Commento alimentazione:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
