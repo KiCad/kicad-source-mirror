@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-14 23:22+0000\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v9/ka/>\n"
 "Language: ka\n"
@@ -5522,7 +5522,7 @@ msgstr "დიფ. წყვილი ბილიკის სიგანე"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Differential pair gap"
-msgstr "დიფ. წყვილი გა"
+msgstr "დიფ. წყვილის დაშორება"
 
 #: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire thickness"
@@ -5851,7 +5851,7 @@ msgstr "მართკუთხედი, სიგანე %s სიმაღ
 #: common/drawing_sheet/ds_draw_item.cpp:472
 #, c-format
 msgid "Line, length %s"
-msgstr "ხაზი, ხანგრძლივობა %s"
+msgstr "ხაზი, სიგრძე %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:530
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:106
@@ -6274,7 +6274,7 @@ msgstr "განზომილება"
 #: common/eda_item.cpp:404 pcbnew/pcb_dimension.cpp:1313
 #: pcbnew/pcb_dimension.cpp:1480
 msgid "Leader"
-msgstr "ლიდერი"
+msgstr "მინიშნების ხაზი"
 
 #: common/eda_item.cpp:405 pcbnew/pcb_target.cpp:125
 msgid "Target"
@@ -6458,7 +6458,7 @@ msgstr "რადიუსი"
 #: eeschema/sch_pin.cpp:1578 eeschema/sch_pin.cpp:2167
 #: pcbnew/dialogs/dialog_shape_properties.cpp:902
 msgid "Length"
-msgstr "ხანგრძლივობა"
+msgstr "სიგრძე"
 
 #: common/eda_shape.cpp:1012 common/eda_shape.cpp:1042
 #: common/eda_shape.cpp:2454 pcbnew/dialogs/dialog_shape_properties.cpp:903
@@ -15074,7 +15074,7 @@ msgstr "საკონტაქტო ღერო:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:92
 msgid "Differential"
-msgstr "განსხვავება"
+msgstr "დიფერენციალური"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:95
 msgid "Pin model:"
@@ -19580,7 +19580,7 @@ msgstr "ჰორიზონტალური გრაფიკა ხაზ�
 #: eeschema/sch_line.cpp:756
 #, c-format
 msgid "Wire, length %s"
-msgstr "მავთული, ხანგრძლივობა %s"
+msgstr "მავთული, სიგრძე %s"
 
 #: eeschema/sch_line.cpp:757
 #, c-format
@@ -23238,7 +23238,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1160
 msgid "Select on PCB"
-msgstr "on ნაბეჭდი დაფის მონიშვნა"
+msgstr "ნაბეჭდ დაფაზე მონიშვნა"
 
 #: eeschema/tools/sch_actions.cpp:1161
 msgid "Select corresponding items in PCB editor"
@@ -29116,7 +29116,7 @@ msgstr "მიმდინარე:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:201
 msgid "Length:"
-msgstr "ხანგრძლივობა:"
+msgstr "სიგრძე:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:203
 msgid "Length includes the return path"
@@ -30079,7 +30079,7 @@ msgstr "გარე ფენის ბილიკები"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
 msgid "Track width (W):"
-msgstr "ბილიკის ვიდეო (W):"
+msgstr "ბილიკის სიგანე (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
@@ -30999,7 +30999,7 @@ msgstr "დიელექტრიკული დანაკარგებ�
 
 #: pcb_calculator/transline_ident.cpp:315
 msgid "Differential Impedance (Zd):"
-msgstr "განსხვავება იმპედანსი (Zd):"
+msgstr "დიფერენციალური იმპედანსი (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:340
 msgid "Zeven"
@@ -32683,7 +32683,7 @@ msgstr "რელიეფები PTH-ისთვის"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:163
 msgid "Thermal relief gap:"
-msgstr "თერმული რელიეფი გა:"
+msgstr "თერმული რელიეფის ღრეჩო:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:165
@@ -33147,7 +33147,7 @@ msgstr "განზომილების თვისებების ჩ�
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
-msgstr "ლიდერი ფორმატი"
+msgstr "მინიშნების ხაზის ფორმატი"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 msgid "Text frame:"
@@ -33632,7 +33632,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:323
 msgid "Change Footprint"
-msgstr "კურსორის გარეგნობის შეცვლა"
+msgstr "ნაკვალევის შეცვლა"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:373
 #, c-format
@@ -33904,7 +33904,7 @@ msgstr "tgz ფაილები"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:123
 msgid "Export ODB++ File"
-msgstr "OOB++ ფაილის გატანა"
+msgstr "ODB++ ფაილის გატანა"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:151
 msgid "The selected output file name is not a supported archive format."
@@ -34612,7 +34612,7 @@ msgstr "ნაკვალევის განახლება ბიბლ�
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:232
 #: pcbnew/tools/pcb_actions.cpp:805
 msgid "Change Footprint..."
-msgstr "კურსორის გარეგნობის შეცვლა..."
+msgstr "ნაკვალევის შეცვლა..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:241
 #: pcbnew/tools/pcb_actions.cpp:439
@@ -37098,7 +37098,7 @@ msgstr "ბილიკის დაშორება:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "გამტარი ნახვრეტი გა:"
+msgstr "გამტარი ნახვრეტის ღრეჩო:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as track gap"
@@ -38468,11 +38468,11 @@ msgstr "აღარ მაჩვენო"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on pads"
-msgstr "on საკონტაქტო ბალიშების ჩვენება"
+msgstr "საკონტაქტო ბალიშებზე ჩვენება"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on tracks"
-msgstr "on ბილიკის ჩვენება"
+msgstr "ბილიკებზე ჩვენება"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on pads & tracks"
@@ -40046,7 +40046,7 @@ msgstr "გა"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "Via Gap"
-msgstr "გამტარი ნახვრეტი გა"
+msgstr "გამტარი ნახვრეტის ღრეჩო"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
 msgid "Default Properties for Single Track Tuning"
@@ -41405,7 +41405,7 @@ msgstr "<შეუზღუდავი>"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:431
 msgid "Checking length constraints..."
-msgstr "შემოწმება ხანგრძლივობა შეზღუდვები..."
+msgstr "სიგრძის შეზღუდვების შემოწმება..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:121
 msgid "(Suspicious items found on Edge.Cuts layer)"
@@ -42373,7 +42373,7 @@ msgstr "წინა ნაკვალევის განთავსებ�
 #: pcbnew/footprint_libraries_utils.cpp:990
 #: pcbnew/footprint_viewer_frame.cpp:799
 msgid "Insert Footprint"
-msgstr "Insert ნაკვალევი"
+msgstr "ნაკვალევის ჩასმა"
 
 #: pcbnew/footprint_libraries_utils.cpp:1011
 msgid "Save Footprint As"
@@ -42496,7 +42496,7 @@ msgstr "მიმდინარე დახრა"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2097
 msgid "current length"
-msgstr "მიმდინარე ხანგრძლივობა"
+msgstr "მიმდინარე სიგრძე"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2184
 msgid "Routed Lengths"
@@ -42528,12 +42528,12 @@ msgstr "(აღებულია ტიუნინგის შაბლონ
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2220
 #, c-format
 msgid "Skew Constraints: %s"
-msgstr "სიგანის შეზღუდვა: %s"
+msgstr "დახრის შეზღუდვები: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2233
 #, c-format
 msgid "Target Length: %s"
-msgstr "ჯამური სიგრძე: %s"
+msgstr "სამიზნე სიგრძე: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2242
 #, c-format
@@ -42866,11 +42866,11 @@ msgstr "&ტრასირება"
 
 #: pcbnew/microwave/microwave_footprint.cpp:57
 msgid "Gap Size:"
-msgstr "გა ზომა:"
+msgstr "ღრეჩოს ზომა:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:63
 msgid "Stub Size:"
-msgstr "შტუცერის ზომა:"
+msgstr "სტაბის ზომა:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
@@ -42955,7 +42955,7 @@ msgstr "ქსელი კოდი"
 
 #: pcbnew/netinfo_item.cpp:133 pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Net Length"
-msgstr "ქსელი ხანგრძლივობა"
+msgstr "ქსელის სიგრძე"
 
 #: pcbnew/netinfo_item.cpp:137
 msgid "On Board"
@@ -43747,7 +43747,7 @@ msgstr "თერმული რელიეფის სპიკის კუ
 
 #: pcbnew/pad.cpp:2981 pcbnew/zone.cpp:2148
 msgid "Thermal Relief Gap"
-msgstr "თერმული რელიეფი გა"
+msgstr "თერმული რელიეფის ღრეჩო"
 
 #: pcbnew/pcb_base_frame.cpp:1228
 msgid ""
@@ -43812,7 +43812,7 @@ msgstr "გაგრძელების ხაზის გადახურ�
 
 #: pcbnew/pcb_dimension.cpp:2000
 msgid "Leader Length"
-msgstr "ლიდერი ხანგრძლივობა"
+msgstr "მინიშნების ხაზის სიგრძე"
 
 #: pcbnew/pcb_dimension.cpp:2043
 msgid "Text Frame"
@@ -45874,7 +45874,7 @@ msgstr "ბილიკი (რკალი)"
 
 #: pcbnew/pcb_track.cpp:1654
 msgid "Segment Length"
-msgstr "სეგმენტი ხანგრძლივობა"
+msgstr "სეგმენტის სიგრძე"
 
 #: pcbnew/pcb_track.cpp:1689
 #, c-format
@@ -49173,7 +49173,7 @@ msgstr "დაფის სტატისტიკის ჩვენება"
 
 #: pcbnew/tools/pcb_actions.cpp:1851
 msgid "Clearance Resolution"
-msgstr "ღრეჩო გაფართოება"
+msgstr "ღრეჩოს განსაზღვრა"
 
 #: pcbnew/tools/pcb_actions.cpp:1852
 msgid ""
@@ -49182,7 +49182,7 @@ msgstr "ორ მონიშნულ ობიექტს შორის �
 
 #: pcbnew/tools/pcb_actions.cpp:1858
 msgid "Constraints Resolution"
-msgstr "შეზღუდვები გაფართოება"
+msgstr "შეზღუდვების განსაზღვრა"
 
 #: pcbnew/tools/pcb_actions.cpp:1859
 msgid "Show constraints resolution for the selected object"
@@ -49446,7 +49446,7 @@ msgstr "იმავე სქემის ფურცლის ყველა
 
 #: pcbnew/tools/pcb_actions.cpp:2171
 msgid "Select on Schematic"
-msgstr "on სქემის მონიშვნა"
+msgstr "სქემაზე მონიშვნა"
 
 #: pcbnew/tools/pcb_actions.cpp:2172
 msgid "Selects corresponding items in Schematic editor"
@@ -50778,7 +50778,7 @@ msgstr "გამტარი ნახვრეტის სიგრძე"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:130
 msgid "Track Length"
-msgstr "ბილიკი ხანგრძლივობა"
+msgstr "ბილიკის სიგრძე"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:132
 msgid "Die Length"
