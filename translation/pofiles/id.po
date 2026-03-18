@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-16 00:13+0000\n"
+"PO-Revision-Date: 2026-03-19 17:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/v9/id/>"
 "\n"
@@ -38901,7 +38901,7 @@ msgstr "Zona tidak akan mengisi tembaga ke dalam area ini"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:38
 msgid "Keep out footprints"
-msgstr "Jaga keluar footprint"
+msgstr "Larang footprint"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:39
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
@@ -46790,11 +46790,11 @@ msgstr "Netclass Diselesaikan: %s"
 #: pcbnew/router/router_tool.cpp:2772
 #, c-format
 msgid "Routing Track: %s"
-msgstr "Mengarahkan Trek: %s"
+msgstr "Merutekan Trek: %s"
 
 #: pcbnew/router/router_tool.cpp:2781
 msgid "Routing Track"
-msgstr "Mengarahkan Trek"
+msgstr "Merutekan Trek"
 
 #: pcbnew/router/router_tool.cpp:2782
 msgid "(no net)"
@@ -48360,7 +48360,7 @@ msgstr "Atur titik jangkar footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase Line Width"
-msgstr "Tam"
+msgstr "Tambah Lebar Garis"
 
 #: pcbnew/tools/pcb_actions.cpp:365
 msgid "Decrease Line Width"
@@ -51319,11 +51319,11 @@ msgstr "Trek Area Larangan"
 
 #: pcbnew/zone.cpp:2006
 msgid "Keep Out Vias"
-msgstr "Jaga Keluar Via"
+msgstr "Larang Via"
 
 #: pcbnew/zone.cpp:2012
 msgid "Keep Out Pads"
-msgstr "Jaga Keluar Pad"
+msgstr "Larang Pad"
 
 #: pcbnew/zone.cpp:2018
 #, fuzzy
@@ -51332,7 +51332,7 @@ msgstr "Buat lapisan"
 
 #: pcbnew/zone.cpp:2024
 msgid "Keep Out Footprints"
-msgstr "Jaga Keluar Footprint"
+msgstr "Larang Footprint"
 
 #: pcbnew/zone.cpp:2033
 msgid "Enable"
