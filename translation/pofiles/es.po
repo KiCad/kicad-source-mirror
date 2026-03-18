@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:02+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -2509,7 +2509,7 @@ msgstr "Patrón:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
-msgstr "Clase de nodo:"
+msgstr "Clase de red:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -5709,7 +5709,7 @@ msgstr "Clases de nodos"
 #: pcbnew/tools/board_inspection_tool.cpp:643
 #: pcbnew/tools/board_inspection_tool.cpp:1194 pcbnew/zone.cpp:2130
 msgid "Clearance"
-msgstr "Margen"
+msgstr "Holgura"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:177
@@ -6546,7 +6546,7 @@ msgstr "Dibujar elemento"
 
 #: common/eda_shape.cpp:319
 msgid "Thermal Spoke"
-msgstr "Alivio térmico"
+msgstr "Rayo térmico"
 
 #: common/eda_shape.cpp:320 pcbnew/pcb_shape.cpp:952
 msgid "Number Box"
@@ -7933,7 +7933,7 @@ msgstr "Esquema: Generar lista de materiales"
 #: common/jobs/job_export_sch_netlist.cpp:80
 #, c-format
 msgid "Export %s netlist"
-msgstr "Exportar lista de nodos %s"
+msgstr "Exportar lista de redes %s"
 
 #: common/jobs/job_export_sch_netlist.cpp:86
 msgid "Export Netlist Job Settings"
@@ -14656,7 +14656,7 @@ msgstr "Rellenar con el color del fondo"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:174
 msgid "Fill with:"
-msgstr "Ancho de relleno:"
+msgstr "Rellenar con:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:208
 #: eeschema/dialogs/dialog_text_properties_base.cpp:318
@@ -14675,7 +14675,7 @@ msgstr "Editar propiedades del pin de página"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "Propiedades de la hoja de pines"
+msgstr "Propiedades del pin de hoja"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:277
 #: eeschema/dialogs/dialog_sheet_properties.cpp:288
@@ -16227,7 +16227,7 @@ msgstr "Señales definidas por el usuario"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
 msgid "Wire/Bus"
-msgstr "Cable/Bus"
+msgstr "Hilo/Bus"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
 msgid "Wires/Buses"
@@ -30748,7 +30748,7 @@ msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
 msgid "Power Comment:"
-msgstr "Comentario de potencia:"
+msgstr "Comentario de alimentación:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
 msgid "Copy to Clipboard"
@@ -33334,7 +33334,7 @@ msgstr "Convertir a zonas de cobre"
 #: pcbnew/zone_manager/panel_zone_properties.cpp:185
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:89
 msgid "Chamfer distance:"
-msgstr "Distacia de biselado:"
+msgstr "Distancia de biselado:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:432
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:180
@@ -33534,7 +33534,7 @@ msgstr "Ancho del cobre en los alivios térmicos."
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:211
 msgid "Fill type:"
-msgstr "Typo de relleno:"
+msgstr "Tipo de relleno:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
@@ -36399,7 +36399,7 @@ msgstr "Cortes de bordes"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:66
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:62
 msgid "Courtyards"
-msgstr "Patios"
+msgstr "Áreas de exclusión"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:278
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
@@ -47389,7 +47389,7 @@ msgstr "Máscara de soldadura"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr "Objetivo de la placa"
+msgstr "Marca de registro"
 
 #: pcbnew/pcb_text.cpp:280
 msgid "PCB Text"
@@ -51460,7 +51460,7 @@ msgstr "Margen de borde resuelto"
 
 #: pcbnew/tools/pcb_control.cpp:1878
 msgid "Resolved Margin Clearance"
-msgstr "Margen de cortesía resuelto"
+msgstr "Holgura de capa Margin resuelta"
 
 #: pcbnew/tools/pcb_control.cpp:1890
 msgid "Selected Items"
@@ -51757,7 +51757,7 @@ msgstr "Mostrar una sombra en los elementos bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Colliding Courtyards"
-msgstr "Áreas de cortesía en colisión"
+msgstr "Áreas de exclusión en colisión"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show colliding footprint courtyards"
