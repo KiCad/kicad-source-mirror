@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 20:46+0000\n"
-"Last-Translator: Håvard Syslak <haavard.syslak@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:34+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "v9/nb_NO/>\n"
 "Language: no\n"
@@ -992,7 +992,7 @@ msgstr "Lagre lagforhåndsinnstilling"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2244
 #: pcbnew/widgets/appearance_controls.cpp:2790
 msgid "Overwrite existing preset?"
-msgstr "Overskrive eksisterende prosjekt?"
+msgstr "Overskrive eksisterende forhåndsinnstilling?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1864
@@ -3288,7 +3288,7 @@ msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 msgid "Revision:"
-msgstr "Revisjoner:"
+msgstr "Revisjon:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:252
 #: eeschema/dialogs/dialog_export_netlist.cpp:456
@@ -4293,7 +4293,7 @@ msgstr "Verktøylinje-ikonstørrelse:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Small"
-msgstr "Mindre"
+msgstr "Liten"
 
 #: common/dialogs/panel_common_settings_base.cpp:216
 msgid "Use compact icons in the toolbars"
@@ -5472,7 +5472,7 @@ msgstr "<Ikke definert>"
 #: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1889
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
-msgstr "Ugjennomsiktig"
+msgstr "Hel"
 
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2343
 #: common/stroke_params.cpp:41
@@ -5694,7 +5694,7 @@ msgstr "Mønster"
 #: eeschema/sch_field.cpp:1390 eeschema/sch_label.cpp:220
 #: pcbnew/board_connected_item.cpp:239 pcbnew/pad.cpp:2821 pcbnew/zone.cpp:1989
 msgid "Net Class"
-msgstr "Netto klasse"
+msgstr "Nettklasse"
 
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
@@ -6266,7 +6266,7 @@ msgstr "Skjerm"
 #: pcbnew/pcb_shape.cpp:612 pcbnew/pcb_text.cpp:274
 #: pcbnew/plot_board_layers.cpp:171
 msgid "Footprint"
-msgstr "Fotspor"
+msgstr "Fotavtrykk"
 
 #: common/eda_item.cpp:387 pcbnew/dialogs/dialog_board_statistics.cpp:515
 #: pcbnew/pad.cpp:1375
@@ -6322,16 +6322,16 @@ msgstr "Markør"
 #: common/eda_item.cpp:403 pcbnew/pcb_dimension.cpp:609
 #: pcbnew/widgets/search_handlers.cpp:300
 msgid "Dimension"
-msgstr "Dimensjoner"
+msgstr "Dimensjon"
 
 #: common/eda_item.cpp:404 pcbnew/pcb_dimension.cpp:1313
 #: pcbnew/pcb_dimension.cpp:1480
 msgid "Leader"
-msgstr "Leder"
+msgstr "Hintelinje"
 
 #: common/eda_item.cpp:405 pcbnew/pcb_target.cpp:125
 msgid "Target"
-msgstr "Mål"
+msgstr "Sikte"
 
 #: common/eda_item.cpp:406 pcbnew/tools/board_inspection_tool.cpp:825
 msgid "Zone"
@@ -6352,7 +6352,7 @@ msgstr "Gruppe"
 #: common/eda_item.cpp:412 eeschema/sch_junction.cpp:304
 #: eeschema/sch_junction.h:102
 msgid "Junction"
-msgstr "Veikryss"
+msgstr "Knutepunkt"
 
 #: common/eda_item.cpp:413
 msgid "No-Connect Flag"
@@ -6440,7 +6440,7 @@ msgstr "Nummerboks"
 
 #: common/eda_shape.cpp:329 pcbnew/pad.cpp:1629
 msgid "Rect"
-msgstr "Rett"
+msgstr "Rekt"
 
 #: common/eda_shape.cpp:330 common/eda_shape.cpp:984 common/eda_shape.cpp:2333
 #: gerbview/gerber_draw_item.cpp:230
@@ -6747,7 +6747,7 @@ msgstr "Bunn"
 #: pcbnew/pcb_dimension.cpp:1893 pcbnew/pcb_fields_grid_table.cpp:155
 #: pcbnew/pcb_tablecell.cpp:241
 msgid "Orientation"
-msgstr "Skjermretning"
+msgstr "Orientering"
 
 #: common/eda_text.cpp:1347 eeschema/dialogs/dialog_text_properties_base.h:117
 #: eeschema/sch_field.cpp:1881 eeschema/sch_field.cpp:1912
@@ -6794,7 +6794,7 @@ msgstr "Speilet"
 #: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
 #: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
-msgstr "Horisontal begrunnelse"
+msgstr "Horisontal tekstjustering"
 
 #: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
 #: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
@@ -6802,7 +6802,7 @@ msgstr "Horisontal begrunnelse"
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
-msgstr "Vertikal begrunnelse"
+msgstr "Vertikal tekstjustering"
 
 #: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
 #: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
@@ -6983,7 +6983,7 @@ msgstr "Skriften '%s' ble ikke funnet; erstatter med '%s'."
 #: eeschema/symbol_viewer_frame.cpp:305
 #: eeschema/widgets/panel_design_block_chooser.cpp:428
 msgid "Load Error"
-msgstr "Last Errors"
+msgstr "Innlastingsfeil"
 
 #: common/footprint_info.cpp:124
 #: eeschema/widgets/panel_design_block_chooser.cpp:430
@@ -9164,7 +9164,7 @@ msgstr "Neste markør"
 
 #: common/tool/actions.cpp:550
 msgid "Exclude Marker"
-msgstr "Ekskluder peker"
+msgstr "Ekskluder markør"
 
 #: common/tool/actions.cpp:551
 msgid "Mark current violation in Checker window as an exclusion"
@@ -9889,7 +9889,7 @@ msgstr "<ikke funnet>"
 #: common/widgets/footprint_diff_widget.cpp:41 eeschema/sch_sheet.cpp:897
 #: eeschema/sch_symbol.cpp:2071 pcbnew/dialogs/dialog_board_statistics.cpp:681
 msgid "Board"
-msgstr "Tavle"
+msgstr "Kretskort"
 
 #: common/widgets/footprint_diff_widget.cpp:42 cvpcb/cvpcb_mainframe.cpp:814
 #: eeschema/sch_base_frame.cpp:594 eeschema/sch_symbol.cpp:2127
@@ -10121,7 +10121,7 @@ msgstr "Grunnleggende egenskaper"
 #: pcbnew/dialogs/dialog_drc_base.cpp:196
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
 msgid "Exclusions"
-msgstr "Unnlatelser"
+msgstr "Unntak"
 
 #: common/widgets/search_pane.cpp:47
 msgid "Toggle zooming to selections in the search pane"
@@ -10729,11 +10729,11 @@ msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:39
 msgid "Schematic assignment"
-msgstr "Skjematisk oppgave"
+msgstr "Skjematilordning"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:42
 msgid "Cmp file assignment"
-msgstr "Cmp filoppgave"
+msgstr "Cmp-filtilordning"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -10749,7 +10749,7 @@ msgstr ""
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "Fotavtrykk Oppgavekonflikter"
+msgstr "Fotavtrykk tilordningskonflikter"
 
 #: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:176
@@ -10994,7 +10994,7 @@ msgstr "Nummerert %s som %s."
 
 #: eeschema/annotate.cpp:439
 msgid "Annotation complete."
-msgstr "Kommentar fullført."
+msgstr "Annotering fullført."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
@@ -11205,12 +11205,12 @@ msgstr "Designblokk '%s' slettet fra biblioteket '%s'"
 
 #: eeschema/dialogs/dialog_annotate.cpp:89
 msgid "Annotation Messages:"
-msgstr "Kommentarmeldinger:"
+msgstr "Annoteringmeldinger:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
 msgid "Annotate"
-msgstr "Kommenter"
+msgstr "Annoter"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -11257,11 +11257,11 @@ msgstr "Sorter symboler etter &Y-posisjon"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Keep existing annotations"
-msgstr "Behold eksisterende kommentarer"
+msgstr "Behold eksisterende nummereringer"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Reset existing annotations"
-msgstr "Tilbakestill eksisterende kommentarer"
+msgstr "Tilbakestill eksisterende nummereringer"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:61
@@ -11289,7 +11289,7 @@ msgstr "Fjern merknader"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
-msgstr "Kommenter skjematisk"
+msgstr "Annoter skjema"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:199
 #: pcbnew/dialogs/dialog_gendrill.cpp:93
@@ -11863,7 +11863,7 @@ msgstr "Ny biblioteksreferanse"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr "Kart foreldreløse barn"
+msgstr "Tilordne foreldreløse symboler"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -12125,7 +12125,7 @@ msgstr "Slett markør"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
-msgstr "Elektriske regler Checker"
+msgstr "Elektrisk regelkontroll"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -12545,11 +12545,11 @@ msgstr "Filtrer elementer etter foreldresymboltype:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
-msgstr "Ikke-maktsymboler"
+msgstr "Ikke-strømsymboler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
-msgstr "Kraftsymboler"
+msgstr "Strømsymboler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:128
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
@@ -12834,7 +12834,7 @@ msgstr "Vis syntakshjelpvindu"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
 #: pcbnew/footprint.cpp:4234
 msgid "Fields"
-msgstr "Jorder"
+msgstr "Felt"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_fields.cpp:259
@@ -13318,7 +13318,7 @@ msgstr "Ekskluder fra materiallister"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:157
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:212
 msgid "Exclude from board"
-msgstr "Ekskluder fra styret"
+msgstr "Ekskluder fra kretskort"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:109
 msgid "Pin name position offset:"
@@ -16071,7 +16071,7 @@ msgstr "Standard skrifttype:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:103
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:35
 msgid "S&how hidden pins"
-msgstr "S & hvordan skjulte pinner"
+msgstr "Vis skjulte pinner"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:106
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:38
@@ -27423,7 +27423,7 @@ msgstr "Eksporter GLB (binær GLTF)"
 
 #: kicad/kicad_cli.cpp:123
 msgid "Export STEP"
-msgstr "Eksporter TRINN"
+msgstr "Eksporter STEP"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export BREP"
@@ -31605,7 +31605,7 @@ msgstr "Bunnloddemaske"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:717
 msgid "Bottom Solder Paste"
-msgstr "Lim inn på loddetinn"
+msgstr "Bunn loddepasta"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:725
 msgid "Bottom Silk Screen"
@@ -32419,7 +32419,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "Geografisk kommentar"
+msgstr "Geografisk omnummerering"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:55
 msgid "Board Setup"
@@ -32448,7 +32448,7 @@ msgstr "Board Finish"
 #: pcbnew/dialogs/dialog_board_setup.cpp:119
 #: pcbnew/dialogs/dialog_plot.cpp:1391
 msgid "Solder Mask/Paste"
-msgstr "Loddemaske / Lim inn"
+msgstr "Loddemaske/loddepasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:121
 msgid "Text & Graphics"
@@ -36258,7 +36258,7 @@ msgstr "Kretskortlag og fysisk lagoppbygging"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
-msgstr "Loddemaske / lim inn standardinnstillinger"
+msgstr "Loddemaske/loddepasta standardinnstillinger"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 msgid "Text && graphics default properties"
@@ -39489,7 +39489,7 @@ msgstr "signal"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "power plane"
-msgstr "kraftfly"
+msgstr "kraftplan"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
 msgid "mixed"
@@ -42521,7 +42521,7 @@ msgstr "Board Side"
 
 #: pcbnew/footprint.cpp:1759
 msgid "Back (Flipped)"
-msgstr "Tilbake (Vendt)"
+msgstr "Bakside (vendt)"
 
 #: pcbnew/footprint.cpp:1778
 msgid "autoplaced"
@@ -48541,7 +48541,7 @@ msgstr "Reduser linjebredden"
 
 #: pcbnew/tools/pcb_actions.cpp:372
 msgid "Switch Arc Posture"
-msgstr "Bytt lysbueholdning"
+msgstr "Bytt bueholdning"
 
 #: pcbnew/tools/pcb_actions.cpp:384
 msgid "Snap to Objects on the Active Layer Only"
@@ -50505,7 +50505,7 @@ msgstr "Vis fotavtrykk som er om bord foran"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprints Back"
-msgstr "Fotavtrykk Tilbake"
+msgstr "Fotavtrykk bakside"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's back"
