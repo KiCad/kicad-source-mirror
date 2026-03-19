@@ -67,6 +67,20 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    // The messages panel uses a negative min width so it doesn't drive the dialog width.
+    // Ensure the dialog is at least wide enough for the standard buttons and the messages
+    // panel's internal controls (filter checkboxes and Save button).
+    int btnWidth = m_stdButtons->GetMinSize().GetWidth() + 10;
+    int panelWidth = m_messagesPanel->GetBestSize().GetWidth() + 10;
+    int minWidth = std::max( btnWidth, panelWidth );
+    wxSize dialogMin = GetMinSize();
+
+    if( dialogMin.GetWidth() < minWidth )
+    {
+        SetMinSize( wxSize( minWidth, dialogMin.GetHeight() ) );
+        SetSize( wxSize( std::max( GetSize().GetWidth(), minWidth ), GetSize().GetHeight() ) );
+    }
 }
 
 
@@ -90,6 +104,20 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_F
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+
+    // The messages panel uses a negative min width so it doesn't drive the dialog width.
+    // Ensure the dialog is at least wide enough for the standard buttons and the messages
+    // panel's internal controls (filter checkboxes and Save button).
+    int btnWidth = m_stdButtons->GetMinSize().GetWidth() + 10;
+    int panelWidth = m_messagesPanel->GetBestSize().GetWidth() + 10;
+    int minWidth = std::max( btnWidth, panelWidth );
+    wxSize dialogMin = GetMinSize();
+
+    if( dialogMin.GetWidth() < minWidth )
+    {
+        SetMinSize( wxSize( minWidth, dialogMin.GetHeight() ) );
+        SetSize( wxSize( std::max( GetSize().GetWidth(), minWidth ), GetSize().GetHeight() ) );
+    }
 }
 
 
