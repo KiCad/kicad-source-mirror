@@ -51,5 +51,7 @@ DOCSET_BUNDLE_ID        = ${DOCSET_BUNDLE_ID}
 DISABLE_INDEX           = YES
 GENERATE_TREEVIEW       = NO
 SEARCHENGINE            = NO
-GENERATE_TAGFILE        = ${DOXY_TAG_FILE}"
+GENERATE_TAGFILE        = ${DOXY_TAG_FILE}
+# Doxygen-awesome doesn't look great without the index
+HTML_EXTRA_STYLESHEET   = "
     )
