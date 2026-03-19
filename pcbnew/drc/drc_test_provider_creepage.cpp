@@ -280,11 +280,58 @@ void DRC_TEST_PROVIDER_CREEPAGE::CollectBoardEdges( std::vector<BOARD_ITEM*>& aV
         if( p->GetAttribute() != PAD_ATTRIB::NPTH )
             continue;
 
-        auto s = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
-        s->SetRadius( p->GetDrillSize().x / 2 );
-        s->SetPosition( p->GetPosition() );
-        aVector.push_back( s.get() );
-        aOwned.push_back( std::move( s ) );
+        std::shared_ptr<SHAPE_SEGMENT> hole = p->GetEffectiveHoleShape();
+
+        if( !hole )
+            continue;
+
+        VECTOR2I ptA = hole->GetSeg().A;
+        VECTOR2I ptB = hole->GetSeg().B;
+        int      radius = hole->GetWidth() / 2;
+
+        if( ptA == ptB )
+        {
+            // Circular hole: add as a single circle.
+            auto s = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
+            s->SetRadius( radius );
+            s->SetPosition( ptA );
+            aVector.push_back( s.get() );
+            aOwned.push_back( std::move( s ) );
+        }
+        else
+        {
+            // Oblong slot: add the two semicircular end caps and two straight sides.
+            // The slot outline is the border that creepage paths must not cross.
+            VECTOR2I axis = ptB - ptA;
+            VECTOR2I perp = axis.Perpendicular().Resize( radius );
+
+            // Side segments connecting the two end caps.
+            auto seg1 = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::SEGMENT );
+            seg1->SetStart( ptA + perp );
+            seg1->SetEnd( ptB + perp );
+            aVector.push_back( seg1.get() );
+            aOwned.push_back( std::move( seg1 ) );
+
+            auto seg2 = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::SEGMENT );
+            seg2->SetStart( ptA - perp );
+            seg2->SetEnd( ptB - perp );
+            aVector.push_back( seg2.get() );
+            aOwned.push_back( std::move( seg2 ) );
+
+            // Semicircular arc at ptA end (180 degrees, away from ptB).
+            VECTOR2I midA = ptA - axis.Resize( radius );
+            auto     arcA = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::ARC );
+            arcA->SetArcGeometry( ptA + perp, midA, ptA - perp );
+            aVector.push_back( arcA.get() );
+            aOwned.push_back( std::move( arcA ) );
+
+            // Semicircular arc at ptB end (180 degrees, away from ptA).
+            VECTOR2I midB = ptB + axis.Resize( radius );
+            auto     arcB = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::ARC );
+            arcB->SetArcGeometry( ptB - perp, midB, ptB + perp );
+            aVector.push_back( arcB.get() );
+            aOwned.push_back( std::move( arcB ) );
+        }
     }
 }
 

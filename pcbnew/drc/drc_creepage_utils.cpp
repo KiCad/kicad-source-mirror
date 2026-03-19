@@ -790,7 +790,7 @@ void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared
 
     double weight = abs( m_radius * ( angle2 - angle1 ).AsRadians() );
 
-    if( true || aG.m_minGrooveWidth <= 0 )
+    if( aG.m_minGrooveWidth <= 0 )
     {
         if( ( weight > aG.GetTarget() ) )
             return;
