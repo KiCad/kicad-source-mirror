@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
 "PO-Revision-Date: 2026-03-19 17:34+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -13467,7 +13467,7 @@ msgstr "Liczba części składowych w paczce:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:77
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:182
 msgid "All units are interchangeable"
-msgstr "Części składowe są zamienne"
+msgstr "Wszystkie jednostki są wymienne"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:78
 msgid ""
@@ -44846,7 +44846,7 @@ msgstr "(właściwość 'castellated' jest używana tylko dla padów PTH)"
 
 #: pcbnew/pad.cpp:2307
 msgid "('BGA' property is for SMD pads)"
-msgstr "Właściwość BGA jest używana tylko dla pól SMD"
+msgstr "(właściwość 'BGA' jest dla pól SMD)"
 
 #: pcbnew/pad.cpp:2310
 msgid "('mechanical' property is for PTH pads)"
