@@ -91,17 +91,6 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 
 	gbSizer1->Add( m_cbCompress, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxTOP, 5 );
 
-	m_lblBomRev = new wxStaticText( this, wxID_ANY, _("BOM revision:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lblBomRev->Wrap( -1 );
-	m_lblBomRev->SetToolTip( _("Revision string for the BOM section. Auto-populated from schematic title block revision") );
-
-	gbSizer1->Add( m_lblBomRev, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
-
-	m_textBomRev = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textBomRev->SetToolTip( _("Revision string for the BOM section. Auto-populated from schematic title block revision") );
-
-	gbSizer1->Add( m_textBomRev, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxTOP, 5 );
-
 
 	gbSizer1->AddGrowableCol( 1 );
 
@@ -128,6 +117,17 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_lblBomRev = new wxStaticText( this, wxID_ANY, _("BOM revision:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblBomRev->Wrap( -1 );
+	m_lblBomRev->SetToolTip( _("Revision string for the BOM section. Auto-populated from schematic title block revision") );
+
+	fgSizer4->Add( m_lblBomRev, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_textBomRev = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textBomRev->SetToolTip( _("Revision string for the BOM section. Auto-populated from schematic title block revision") );
+
+	fgSizer4->Add( m_textBomRev, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_lblOEM = new wxStaticText( this, wxID_ANY, _("Internal ID:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblOEM->Wrap( -1 );
