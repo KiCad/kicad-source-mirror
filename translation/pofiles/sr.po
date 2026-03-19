@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:15+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"Last-Translator: Damjan Prerad <damjan@kipro-pcb.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Креирање слојева"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:982
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Подножје није учитано"
+msgstr "Подножје није учитано."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:997
 msgid ""
@@ -128,7 +128,7 @@ msgstr "Учитај OpenGL: плочу"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr "Учитај OpenGL: рупе и вие"
+msgstr "Учитај OpenGL: рупе и вије"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:546
 msgid "Load OpenGL: layers"
@@ -225,7 +225,7 @@ msgstr "Raytracing опције"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Врати на почетна подешавања"
+msgstr "Врати на подразумевана подешавања"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:312 cvpcb/menubar.cpp:79
@@ -237,7 +237,7 @@ msgstr "Врати на почетна подешавања"
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:479
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr "&Фајл"
+msgstr "&Датотека"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:80
 #: eeschema/menubar.cpp:348
@@ -255,7 +255,7 @@ msgstr "&Уреди"
 #: pcbnew/menubar_footprint_editor.cpp:245 pcbnew/menubar_pcb_editor.cpp:481
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr "&Погледати"
+msgstr "&Поглед"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:313 cvpcb/menubar.cpp:81
@@ -270,7 +270,7 @@ msgstr "Поново учитај плочу"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:64
 msgid "Copy 3D image to clipboard"
-msgstr "Копирај 3D слику у clipboard"
+msgstr "Копирај 3D слику у привремену меморију"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 msgid "Render current view using Raytracing"
@@ -314,14 +314,14 @@ msgstr "застареле боје"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:736
 msgid "3D Image File Name"
-msgstr "Име фајла 3D слике"
+msgstr "Име датотеке 3D слике"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:757
 #: common/eda_base_frame.cpp:1342 common/eda_base_frame.cpp:1346
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:341
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "Недовољне дозволе за чување фајла '%s'."
+msgstr "Недовољне дозволе за чување датотеке '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:758 common/confirm.cpp:211
 #: common/dialogs/dialog_grid_settings.cpp:82
@@ -362,11 +362,11 @@ msgstr "Грешка"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:798
 msgid "Failed to copy image to clipboard"
-msgstr "Неуспешно копирање слике у clipboard"
+msgstr "Неуспешно копирање слике у привремену меморију"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:809
 msgid "Can't save file"
-msgstr "Немогуће сачувати фајл"
+msgstr "Немогуће сачувати датотеку"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
