@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:19-0700\n"
-"PO-Revision-Date: 2026-03-18 20:46+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
+"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
 "source/hu/>\n"
 "Language: hu\n"
@@ -9627,7 +9627,7 @@ msgstr ""
 
 #: common/remote_provider_metadata.cpp:199
 msgid "auth.metadata_url"
-msgstr ""
+msgstr "auth.metadata_url"
 
 #: common/remote_provider_models.cpp:44
 #, fuzzy, c-format
@@ -9643,16 +9643,15 @@ msgstr ""
 
 #: common/remote_provider_models.cpp:55
 msgid "authorization_endpoint"
-msgstr ""
+msgstr "authorization_endpoint"
 
 #: common/remote_provider_models.cpp:60
-#, fuzzy
 msgid "token_endpoint"
-msgstr "(végpont)"
+msgstr "token_endpoint"
 
 #: common/remote_provider_models.cpp:66
 msgid "revocation_endpoint"
-msgstr ""
+msgstr "revocation_endpoint"
 
 #: common/remote_provider_models.cpp:98
 #, c-format
@@ -9666,7 +9665,7 @@ msgstr ""
 
 #: common/remote_provider_models.cpp:136
 msgid "assets[].download_url"
-msgstr ""
+msgstr "assets[].download_url"
 
 #: common/remote_provider_models.cpp:147
 #, fuzzy, c-format
@@ -9791,7 +9790,7 @@ msgstr ""
 
 #: common/startwizard/startwizard.cpp:110
 msgid "For help, please visit "
-msgstr ""
+msgstr "Segítségért keresse fel: "
 
 #: common/startwizard/startwizard.cpp:180
 #, fuzzy
@@ -21882,7 +21881,6 @@ msgid "Excluded"
 msgstr "Mező érték:"
 
 #: eeschema/sch_marker.h:97
-#, fuzzy
 msgid "ERC Marker"
 msgstr "ERC hibajelölő"
 
@@ -22192,9 +22190,8 @@ msgstr "Könyvtár leírása"
 #: pcbnew/widgets/pcb_properties_panel.cpp:590
 #: pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:706
-#, fuzzy
 msgid "Exclude From Position Files"
-msgstr "Kizárás a pozíciófájlokból"
+msgstr "Kihagyni a pozíciófájlokból"
 
 #: eeschema/sch_table.cpp:301
 #, c-format
@@ -49566,7 +49563,6 @@ msgid "Chamferedrect"
 msgstr "Letört sarkú négyszög"
 
 #: pcbnew/pad.cpp:2156
-#, fuzzy
 msgid "CustomShape"
 msgstr "Egyedi alakzat"
 
@@ -57317,7 +57313,7 @@ msgstr "3D modell beágyazása"
 #: pcbnew/tools/pcb_control.cpp:2901
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
-msgstr ""
+msgstr "%d 3D modell sikeresen beágyazva."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2671
 msgid "Resize Table Cells"
