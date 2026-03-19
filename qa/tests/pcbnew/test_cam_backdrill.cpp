@@ -181,6 +181,59 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
 }
 
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23451
+// GERBER_WRITER::SetFormat() precision was not passed to the plotter; output always used 4.6.
+BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "precision_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    auto via = new PCB_VIA( &board );
+    via->SetPosition( VECTOR2I( 0, 0 ) );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    board.Add( via );
+
+    // Verify precision 5 produces "Fmt 4.5" in the file header
+    GERBER_WRITER gerber5( &board );
+    gerber5.SetOptions( VECTOR2I( 0, 0 ) );
+    gerber5.SetFormat( 5 );
+    BOOST_REQUIRE( gerber5.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, false, nullptr ) );
+
+    wxFileName gerberFile5( tempDir.GetFullPath(), wxT( "precision_board-PTH-drl.gbr" ) );
+    BOOST_REQUIRE( gerberFile5.FileExists() );
+
+    wxFFile gerberStream5( gerberFile5.GetFullPath(), wxT( "rb" ) );
+    wxString gerberContents5;
+    BOOST_REQUIRE( gerberStream5.ReadAll( &gerberContents5 ) );
+    BOOST_CHECK_MESSAGE( gerberContents5.Contains( wxT( "Fmt 4.5" ) ),
+                         "Expected 'Fmt 4.5' in gerber header with precision=5" );
+    BOOST_CHECK( !gerberContents5.Contains( wxT( "Fmt 4.6" ) ) );
+    gerberStream5.Close();
+
+    // Verify precision 6 produces "Fmt 4.6" in the file header
+    GERBER_WRITER gerber6( &board );
+    gerber6.SetOptions( VECTOR2I( 0, 0 ) );
+    gerber6.SetFormat( 6 );
+    BOOST_REQUIRE( gerber6.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, false, nullptr ) );
+
+    wxFFile gerberStream6( gerberFile5.GetFullPath(), wxT( "rb" ) );
+    wxString gerberContents6;
+    BOOST_REQUIRE( gerberStream6.ReadAll( &gerberContents6 ) );
+    BOOST_CHECK_MESSAGE( gerberContents6.Contains( wxT( "Fmt 4.6" ) ),
+                         "Expected 'Fmt 4.6' in gerber header with precision=6" );
+    BOOST_CHECK( !gerberContents6.Contains( wxT( "Fmt 4.5" ) ) );
+    gerberStream6.Close();
+
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23005
 // GenDrillReportFile crashed when aReporter was null (the default)
 BOOST_AUTO_TEST_CASE( DrillReportNullReporter )

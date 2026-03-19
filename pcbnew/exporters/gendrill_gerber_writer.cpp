@@ -199,7 +199,7 @@ int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_
                          /* mirror */ false );
 
     // has meaning only for gerber plotter. Must be called only after SetViewport
-    plotter.SetGerberCoordinatesFormat( 6 );
+    plotter.SetGerberCoordinatesFormat( m_precision.m_Rhs );
     plotter.SetCreator( wxT( "PCBNEW" ) );
 
     // Add the standard X2 FileFunction for drill files
@@ -339,7 +339,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     plotter.SetViewport( m_offset, pcbIUScale.IU_PER_MILS/10, /* scale */ 1.0, /* mirror */false );
 
     // has meaning only for gerber plotter. Must be called only after SetViewport
-    plotter.SetGerberCoordinatesFormat( 6 );
+    plotter.SetGerberCoordinatesFormat( m_precision.m_Rhs );
     plotter.SetCreator( wxT( "PCBNEW" ) );
 
     // Add the standard X2 FileFunction for drill files
