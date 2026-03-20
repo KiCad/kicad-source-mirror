@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:19-0700\n"
-"PO-Revision-Date: 2026-03-19 10:13+0000\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
 "Last-Translator: Damjan Prerad <damjan@kipro-pcb.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -220,15 +220,13 @@ msgstr "3D координатна мрежа"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:97
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:43
-#, fuzzy
 msgid "Rotate Board"
-msgstr "Окрени"
+msgstr "Окрени плочу"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/tools/eda_3d_controller.cpp:57
-#, fuzzy
 msgid "Move Board"
-msgstr "Помери плочу нагоре"
+msgstr "Помери плочу"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Reset to Default Settings"
@@ -391,9 +389,8 @@ msgid "Export Image..."
 msgstr "Извези слику..."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:72
-#, fuzzy
 msgid "Export the Current View as an image file"
-msgstr "Извези тренутни приказ као PNG слику"
+msgstr "Извези тренутни приказ као слику"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:80
 msgid "Set Pivot"
@@ -612,14 +609,12 @@ msgid "Show board body"
 msgstr "Прикажи тело плоче"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Plated Barrels"
-msgstr "Попуњавање зона"
+msgstr "Обложена буренца"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Прикажи"
+msgstr "Прикажи буренца обложених рупица и вија"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front copper / surface finish color"
@@ -1120,14 +1115,12 @@ msgid "(unsaved)"
 msgstr "(Није сачувано)"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:35
-#, fuzzy
 msgid "Export 3D View"
-msgstr "Избор 3D модела"
+msgstr "Извези 3D приказ"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:52
-#, fuzzy
 msgid "Image Size"
-msgstr "Величина слике:"
+msgstr "Величина слике"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:60
 #: common/dialogs/dialog_page_settings_base.cpp:93
@@ -1341,9 +1334,8 @@ msgid "mm"
 msgstr "mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:75
-#, fuzzy
 msgid "in"
-msgstr "Пин"
+msgstr "улаз"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:80
 #: common/dialogs/dialog_page_settings_base.cpp:72
@@ -1354,34 +1346,29 @@ msgid "Height:"
 msgstr "Висина:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:101
-#, fuzzy
 msgid "Resolution"
-msgstr "Резолуција:"
+msgstr "Резолуција"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:109
-#, fuzzy
 msgid "X resolution:"
-msgstr "Резолуција:"
+msgstr "X резолуција:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:117
-#, fuzzy
 msgid "pixels/in"
-msgstr "пиксели"
+msgstr "пиксели по инчу"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:118
-#, fuzzy
 msgid "pixels/mm"
-msgstr "пиксели"
+msgstr "пиксели по милиметру"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:123
-#, fuzzy
 msgid "Y resolution:"
-msgstr "Резолуција:"
+msgstr "Y резолуција:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:324
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d × %d пиксела"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1866,14 +1853,12 @@ msgid "Errors"
 msgstr "Грешке"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:589
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Стави текст"
+msgstr "Замени учитану датотеку?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:590
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "\"%s\" већ постоји."
+msgstr "Већ постоји учитана датотека. Да ли желите да је замените?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2069,9 +2054,8 @@ msgid "Background Jobs"
 msgstr "Операције у позадини"
 
 #: common/common.cpp:345 pcbnew/dialogs/dialog_board_reannotate.cpp:290
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "Нови"
+msgstr "Неозначено подножје"
 
 #: common/common.cpp:511
 #, c-format
@@ -2156,9 +2140,8 @@ msgid "Your current changes will be permanently lost."
 msgstr "Ваше тренутне промене ће заувек бити изгубљене."
 
 #: common/confirm.cpp:123
-#, fuzzy
 msgid "&Revert"
-msgstr "Врати"
+msgstr "&Врати"
 
 #: common/confirm.cpp:157 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:1715
@@ -2204,9 +2187,8 @@ msgid "&Yes"
 msgstr "Да"
 
 #: common/confirm.cpp:278 common/dialog_shim.cpp:1718
-#, fuzzy
 msgid "&No"
-msgstr "Не"
+msgstr "&Не"
 
 #: common/design_block_io.cpp:51 common/design_block_io.cpp:61
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
@@ -2320,23 +2302,22 @@ msgstr "Design block директоријум '%s' не може бити изб
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "Фајл '%s' није пронађен."
+msgstr "Угнијеждена таблеа '%s' није пронађена."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
 #: pcbnew/footprint_library_adapter.cpp:514
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown library type %s "
-msgstr "Додај поље"
+msgstr "Непознат тип библиотеке %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:139
 #: pcbnew/footprint_library_adapter.cpp:519
-#, fuzzy
 msgid "Internal error"
-msgstr "Остали слојеви"
+msgstr "Унутрашња грешка"
 
 #: common/design_block_tree_model_adapter.cpp:118 cvpcb/cvpcb_mainframe.cpp:793
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1042
@@ -2473,7 +2454,7 @@ msgstr "Програмери за паковање"
 #: common/dialog_about/dialog_about.cpp:108
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI објекти у употреби %u"
 
 #: common/dialog_about/dialog_about.cpp:115
 #, c-format
@@ -2874,9 +2855,8 @@ msgid "Design Block Properties"
 msgstr "Особине Design Block-а"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "Нема конекције"
+msgstr "Генериши везу ка бази података"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -2885,19 +2865,16 @@ msgstr "Нема конекције"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:3276
 #: pcbnew/via_protection_ui_mixin.h:136
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:847
-#, fuzzy
 msgid "Custom"
-msgstr "Изабери језик"
+msgstr "Наменски"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "Извор"
+msgstr "Име извора података"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
-#, fuzzy
 msgid "Username"
-msgstr "Име:"
+msgstr "Име"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:58
 #: common/dialogs/git/dialog_git_auth.cpp:64
@@ -2905,14 +2882,12 @@ msgid "Password"
 msgstr "Лозинка"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
-#, fuzzy
 msgid "Timeout"
-msgstr "Вријеме"
+msgstr "Време истека"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "Нема конекције"
+msgstr "Опис везе"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -2921,19 +2896,16 @@ msgid "Test Connection"
 msgstr "Тестирај конекцију"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "Табела"
+msgstr "Табеле"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "Креирање зона"
+msgstr "Није могуће успоставити везу ка бази података"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Database Error"
-msgstr "фајл не постоји"
+msgstr "Грешка базе података"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
@@ -3449,12 +3421,11 @@ msgid "Close"
 msgstr "Затвори"
 
 #: common/dialogs/dialog_print_generic.cpp:143
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "Упозорење: размера није број."
+msgstr "Упозорење: наменска скала мора бити број."
 
 #: common/dialogs/dialog_print_generic.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
@@ -3463,7 +3434,7 @@ msgstr ""
 "Биће ограничена на %f."
 
 #: common/dialogs/dialog_print_generic.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
@@ -3607,7 +3578,7 @@ msgstr "Тестира на упареност између PCB и шеме"
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:45
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Поново испуни све зоне прије покретања провере дизајна (DRC)"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_unit_entry_base.cpp:21
@@ -3798,7 +3769,6 @@ msgid "Status"
 msgstr "Статус"
 
 #: common/dialogs/git/dialog_git_commit.cpp:98
-#, fuzzy
 msgid "New"
 msgstr "Нови"
 
@@ -3946,7 +3916,7 @@ msgstr "Додај"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
 msgid "Enable Git tracking"
-msgstr "Омогући Git праћење"
+msgstr "Дозволи Гит праћење"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -4112,18 +4082,16 @@ msgid "Rendering Engine"
 msgstr "Render опције"
 
 #: common/dialogs/panel_common_settings_base.cpp:35
-#, fuzzy
 msgid "Accelerated Graphics"
-msgstr "Убрзана графика:"
+msgstr "Убрзана графика"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Хардверски убрзана графика (препоручено)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
-#, fuzzy
 msgid "Fallback Graphics"
-msgstr "Закључана графика"
+msgstr "Резервна графика"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid ""
@@ -4219,14 +4187,15 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "Кад се омогући, користи различиту боју за сваки други ред у табели"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Онемогући наменске крстиће"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"Кад је омогућено, KiCad ће користити подразумеване системске крстиће уместо "
+"наменских"
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4324,9 +4293,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Диминг фактор висококонтрастног мода:"
 
 #: common/dialogs/panel_common_settings_base.cpp:304
-#, fuzzy
 msgid "Scaling"
-msgstr "Скалирање:"
+msgstr "Скалирање"
 
 #: common/dialogs/panel_common_settings_base.cpp:319
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
@@ -4401,7 +4369,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4441,7 +4408,6 @@ msgid "Reset Unique Id"
 msgstr "Ресетуј јединствени ID"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
 msgstr "Библиотеке дизајн блокова"
 
@@ -4500,9 +4466,9 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:801
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:67
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "Библиотека \"%s\" није пронађена."
+msgstr "Библиотека '%s' није пронађена."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:639
 #, c-format
@@ -4539,17 +4505,15 @@ msgstr "Упозорење: Дупли надимци"
 #: common/dialogs/panel_design_block_lib_table.cpp:744
 #: eeschema/dialogs/panel_sym_lib_table.cpp:579
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
 msgstr "Библитека са надимком '%s' већ постоји."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:745
 #: eeschema/dialogs/panel_sym_lib_table.cpp:580
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:671
-#, fuzzy
 msgid "One of the nicknames will need to be changed."
-msgstr ""
-"Један од надимака ће морати да се промени након додавања ове билбиотеке."
+msgstr "Један од надимака ће морати да се промени."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:762
 #: common/dialogs/panel_embedded_files.cpp:479
@@ -4571,14 +4535,12 @@ msgstr "Додај свеједно"
 #: common/dialogs/panel_design_block_lib_table.cpp:837
 #: eeschema/dialogs/panel_sym_lib_table.cpp:861
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
 "Грешка при чувању глобалне табеле библиотека:\n"
 "\n"
-"%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:838
 #: common/dialogs/panel_design_block_lib_table.cpp:857
@@ -4599,11 +4561,12 @@ msgstr "Грешка при чувању фајла"
 #: common/dialogs/panel_design_block_lib_table.cpp:856
 #: eeschema/dialogs/panel_sym_lib_table.cpp:880
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:877
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
-msgstr "Грешка: "
+msgstr ""
+"Грешка приликом чувања пројектне библиотечке табеле:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:946
 msgid "Design Block Libraries"
@@ -4664,17 +4627,21 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Обрисане уграђене датотеке се референцирају у неким подножјима.\n"
+"Обриши подножја такође?"
 
 #: common/dialogs/panel_embedded_files.cpp:212
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Обрисани уграђени фајлови се помињу у неким симболима.\n"
+"Такође обриши симболе?"
 
 #: common/dialogs/panel_embedded_files.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "Грешка у додавању фајла '%s'."
+msgstr "Грешка у читању датотеке '%s'."
 
 #: common/dialogs/panel_embedded_files.cpp:349
 #, c-format
@@ -4684,22 +4651,23 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"Датотека под називом '%s' је већ уграђена, али датотека на диску има "
+"другачији садржај.\n"
+"\n"
+"Да ли желите да замените садржај уграђене датотеке са новом верзијом?"
 
 #: common/dialogs/panel_embedded_files.cpp:353
-#, fuzzy
 msgid "Embedded File Conflict"
-msgstr "Image фајлови"
+msgstr "Конфликт уграђених датотека"
 
 #: common/dialogs/panel_embedded_files.cpp:355
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
-#, fuzzy
 msgid "Replace"
-msgstr "&Замјени"
+msgstr "Замени"
 
 #: common/dialogs/panel_embedded_files.cpp:355
-#, fuzzy
 msgid "Reuse Existing"
-msgstr "Додај постојеће"
+msgstr "Искористи постојеће"
 
 #: common/dialogs/panel_embedded_files.cpp:381
 #, c-format
@@ -4713,6 +4681,8 @@ msgstr "Изабери фајл за уградњу"
 #: common/dialogs/panel_embedded_files.cpp:421
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"Уграђене датотеке су наслеђене од родитељског симбола и не могу бити "
+"уклоњене."
 
 #: common/dialogs/panel_embedded_files.cpp:463
 msgid "Select a directory to export files"
@@ -4800,7 +4770,6 @@ msgstr "Извези..."
 
 #: common/dialogs/panel_gal_options_base.cpp:17
 #: common/widgets/gal_options_panel_base.cpp:17
-#, fuzzy
 msgid "Grid Display"
 msgstr "Опције приказивања"
 
@@ -4815,9 +4784,8 @@ msgstr "Опције приказивања"
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:87
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:122
-#, fuzzy
 msgid "Style:"
-msgstr "Стил"
+msgstr "Стил:"
 
 #: common/dialogs/panel_gal_options_base.cpp:31
 #: common/widgets/gal_options_panel_base.cpp:31
@@ -4841,15 +4809,13 @@ msgstr "Дебљина мрежице:"
 
 #: common/dialogs/panel_gal_options_base.cpp:61
 #: common/widgets/gal_options_panel_base.cpp:61
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "Попуњавање зона"
+msgstr "Најмањи размак у мрежи:"
 
 #: common/dialogs/panel_gal_options_base.cpp:72
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Прикажи"
+msgstr "Закачи на мрежу:"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -4862,9 +4828,8 @@ msgstr "Увијек"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
-#, fuzzy
 msgid "When grid shown"
-msgstr "Изабери језик"
+msgstr "Када је мрежа приказана"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -4884,27 +4849,23 @@ msgstr "Курсор"
 
 #: common/dialogs/panel_gal_options_base.cpp:102 common/tool/actions.cpp:1179
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "Мали крстићи"
 
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
-#, fuzzy
 msgid "Full window crosshairs"
-msgstr "Прикажи"
+msgstr "Крстићи у целом прозору"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
-#, fuzzy
 msgid "45 degree crosshairs"
-msgstr "степен"
+msgstr "Крстићи под 45 степени"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
-#, fuzzy
 msgid "Always show crosshairs"
-msgstr "Прикажи"
+msgstr "Увек прикажи крстиће"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
@@ -5020,9 +4981,8 @@ msgid "| Action | Default Hotkey | Description"
 msgstr "| Радња | Подразумевана пречица | Опис"
 
 #: common/dialogs/panel_image_editor.cpp:80
-#, fuzzy
 msgid "Scale must be a positive number."
-msgstr "%s мора бити најмање %s."
+msgstr "Размера мора бити позитиван број."
 
 #: common/dialogs/panel_image_editor.cpp:90
 #, c-format
@@ -5106,19 +5066,16 @@ msgid "Convert to Greyscale"
 msgstr "Претвори у монохроматску слику"
 
 #: common/dialogs/panel_maintenance.cpp:90
-#, fuzzy
 msgid "File history cleared."
-msgstr "Величина историје фајлова:"
+msgstr "Историја датотека је очишћена."
 
 #: common/dialogs/panel_maintenance.cpp:113
-#, fuzzy
 msgid "\"Don't show again\" dialogs reset."
-msgstr "Не приказуј поново"
+msgstr "Ресетуј ”Не приказуј поново” прозор."
 
 #: common/dialogs/panel_maintenance.cpp:134
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "Врати %s на почетна подешавања"
+msgstr "Врати све дијалог прозоре на почетна подешавања."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
@@ -5137,23 +5094,20 @@ msgid "days"
 msgstr "дана"
 
 #: common/dialogs/panel_maintenance_base.cpp:42
-#, fuzzy
 msgid "Clear \"Open Recent\" History"
-msgstr "Избриши недавно отворене фајлове"
+msgstr "Избриши листу недавно отворених датотека"
 
 #: common/dialogs/panel_maintenance_base.cpp:48
 msgid "Reset \"Don't Show Again\" Dialogs"
-msgstr ""
+msgstr "Поново намести ”Немој да Приказујеш Поново” дијалог прозор"
 
 #: common/dialogs/panel_maintenance_base.cpp:51
-#, fuzzy
 msgid "Reset All Dialogs to Defaults"
-msgstr "Врати %s на почетна подешавања"
+msgstr "Врати све дијалог прозоре на почетна подешавања"
 
 #: common/dialogs/panel_maintenance_base.cpp:54
-#, fuzzy
 msgid "Reset All Program Settings to Defaults"
-msgstr "Врати %s на почетна подешавања"
+msgstr "Поново намести сва програмска подешавања на подразумевана"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:32
@@ -5707,9 +5661,8 @@ msgid "DP Gap"
 msgstr "Размак ДП"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "Tuning Profile"
-msgstr "Дефинисане боје"
+msgstr "Профил подешавања дужине"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "PCB Color"
@@ -5813,41 +5766,36 @@ msgstr ""
 "Желиш ли да их поново учиташ?"
 
 #: common/dialogs/panel_spacemouse_base.cpp:20
-#, fuzzy
 msgid "Pan and Rotate"
-msgstr "Померање и зумирање"
+msgstr "Померање и закретање"
 
 #: common/dialogs/panel_spacemouse_base.cpp:35
-#, fuzzy
 msgid "Rotation speed:"
-msgstr "Брзина анимације:"
+msgstr "Брзина закретања:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:45
-#, fuzzy
 msgid "Reverse rotation direction"
-msgstr "Опис:"
+msgstr "Обрни смер закретања"
 
 #: common/dialogs/panel_spacemouse_base.cpp:46
 msgid "Swap the direction of rotation"
-msgstr ""
+msgstr "Замени смер закретања"
 
 #: common/dialogs/panel_spacemouse_base.cpp:50
-#, fuzzy
 msgid "Pan speed:"
-msgstr "Аутоматска брзина померања приказа:"
+msgstr "Брзина померања приказа:"
 
 #: common/dialogs/panel_spacemouse_base.cpp:60
 msgid "Reverse vertical pan direction"
-msgstr ""
+msgstr "Обрни смер вертикалног померања"
 
 #: common/dialogs/panel_spacemouse_base.cpp:63
 msgid "Reverse horizontal pan direction"
-msgstr ""
+msgstr "Обрни смер хоризонталног померања"
 
 #: common/dialogs/panel_spacemouse_base.cpp:66
-#, fuzzy
 msgid "Reverse zoom direction"
-msgstr "Појасни избор"
+msgstr "Обрни смер уближавања"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:20
 msgid ""
@@ -5860,6 +5808,9 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
+"KiCad долази уз велику скуп симбола и библиотека подножја које одржава KiCad "
+"тим за библиотеке. Можда пожелите да направите сопствене библиотеке, и "
+"инсталирате неке креиране од другог извора у Менаџеру Садржаја и Прикључака"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
