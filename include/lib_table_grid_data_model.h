@@ -96,6 +96,8 @@ public:
 
     LIBRARY_MANAGER_ADAPTER* Adapter() const { return m_adapter; }
 
+    void RecheckRows();
+
 protected:
     bool badCoords( int aRow, int aCol );
 

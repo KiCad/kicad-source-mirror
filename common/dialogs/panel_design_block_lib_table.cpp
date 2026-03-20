@@ -331,6 +331,8 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::AddTable( LIBRARY_TABLE* table, const wxStrin
                         true /* take ownership */ );
     }
 
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->RecheckRows();
+
     // add Cut, Copy, and Paste to wxGrids
     grid->PushEventHandler( new DESIGN_BLOCK_GRID_TRICKS( this, grid ) );
 

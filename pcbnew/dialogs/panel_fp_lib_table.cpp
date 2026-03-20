@@ -263,6 +263,8 @@ void PANEL_FP_LIB_TABLE::AddTable( LIBRARY_TABLE* aTable, const wxString& aTitle
                         true /* take ownership */ );
     }
 
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->RecheckRows();
+
     // add Cut, Copy, and Paste to wxGrids
     grid->PushEventHandler( new FP_GRID_TRICKS( this, grid,
             [this]( wxCommandEvent& event )

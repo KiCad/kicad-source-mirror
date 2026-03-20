@@ -271,6 +271,8 @@ void PANEL_SYM_LIB_TABLE::AddTable( LIBRARY_TABLE* table, const wxString& aTitle
                         true /* take ownership */ );
     }
 
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->RecheckRows();
+
     // add Cut, Copy, and Paste to wxGrids
     grid->PushEventHandler( new SYMBOL_GRID_TRICKS( this, grid,
             [this]( wxCommandEvent& event )

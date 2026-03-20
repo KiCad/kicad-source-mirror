@@ -115,9 +115,6 @@ wxString LIB_TABLE_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         if( !r.IsOk() )
             return r.ErrorDescription();
 
-        if( std::optional<LIBRARY_ERROR> error = m_adapter->LibraryError( r.Nickname() ) )
-            return error->message;
-
         if( m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
             return _( "Edit settings" );
         else if( r.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
@@ -155,12 +152,6 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
 
     case COL_STATUS:
         if( !tableRow.IsOk() )
-        {
-            m_warningAttr->IncRef();
-            return enhanceAttr( m_warningAttr, aRow, aCol, aKind );
-        }
-
-        if( std::optional<LIBRARY_ERROR> error = m_adapter->LibraryError( tableRow.Nickname() ) )
         {
             m_warningAttr->IncRef();
             return enhanceAttr( m_warningAttr, aRow, aCol, aKind );
@@ -358,6 +349,19 @@ bool LIB_TABLE_GRID_DATA_MODEL::ContainsNickname( const wxString& aNickname )
             return true;
     }
     return false;
+}
+
+
+void LIB_TABLE_GRID_DATA_MODEL::RecheckRows()
+{
+    if( !m_adapter )
+        return;
+
+    for( size_t row = 0; row < size(); ++row )
+        m_adapter->CheckTableRow( at( row ) );
+
+    if( GetView() && GetNumberRows() > 0 )
+        GetView()->RefreshBlock( 0, COL_STATUS, GetNumberRows() - 1, COL_STATUS );
 }
 
 
