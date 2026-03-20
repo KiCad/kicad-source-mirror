@@ -89,6 +89,13 @@ void SCH_EDIT_FRAME::LoadDrawingSheet()
     // If empty, or not existing, the default drawing sheet is loaded.
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
+
+    if( settings.m_SchDrawingSheetFileName == wxS( "empty.kicad_wks" ) )
+    {
+        DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
+        return;
+    }
+
     FILENAME_RESOLVER resolver;
     resolver.SetProject( &Prj() );
     resolver.SetProgramBase( &Pgm() );

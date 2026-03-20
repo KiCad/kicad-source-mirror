@@ -264,6 +264,12 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
 
     auto loadSheet = [&]( const wxString& path ) -> bool
     {
+        if( path == wxS( "empty.kicad_wks" ) )
+        {
+            DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
+            return true;
+        }
+
         wxString          msg;
         FILENAME_RESOLVER resolve;
         resolve.SetProject( &aSch->Project() );
