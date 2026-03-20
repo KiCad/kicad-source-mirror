@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:19-0700\n"
-"PO-Revision-Date: 2026-03-19 20:26+0000\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -12615,7 +12615,6 @@ msgid "Bill of Materials"
 msgstr "Lista materiałowa"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -12772,11 +12771,11 @@ msgstr ""
 "```\n"
 "\n"
 "W systemie Linux, jeśli żądanym skryptem generatora dla CSV BOM jest `/home/"
-"username/kicad/my_python_script.py`, wiersz poleceń będzie wyglądał "
+"<username>/kicad/my_python_script.py`, wiersz poleceń będzie wyglądał "
 "następująco:\n"
 "\n"
 "```\n"
-"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"python /home/<username>/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
 "Podwójne cudzysłowy (`\"`) wokół argumentów są zalecane w przypadku, gdy "
@@ -25741,19 +25740,16 @@ msgid "Update Design Block from Current Sheet"
 msgstr "Aktualizuje blok projektowy z aktualnego arkusza"
 
 #: eeschema/tools/sch_actions.cpp:152
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Dodaje wybrany blok projektowy do bieżącego arkusza"
+msgstr "Ustawia blok projektowy schematu na bieżący arkusz"
 
 #: eeschema/tools/sch_actions.cpp:158 pcbnew/tools/pcb_actions.cpp:534
-#, fuzzy
 msgid "Update Design Block from Selection"
-msgstr "Aktualizacja bibliotek bloków projektowych"
+msgstr "Uaktualnia Blok projektowy na podstawie zaznaczenia"
 
 #: eeschema/tools/sch_actions.cpp:159
-#, fuzzy
 msgid "Set design block schematic to current selection"
-msgstr "Tworzy nowy blok projektowy na podstawie zaznaczenia"
+msgstr "Ustawia blok projektowy schematu na bieżące zaznaczenie"
 
 #: eeschema/tools/sch_actions.cpp:165 pcbnew/tools/pcb_actions.cpp:541
 msgid "Delete Design Block"
@@ -25769,9 +25765,8 @@ msgid "Properties..."
 msgstr "Właściwości..."
 
 #: eeschema/tools/sch_actions.cpp:173 pcbnew/tools/pcb_actions.cpp:549
-#, fuzzy
 msgid "Edit properties of design block"
-msgstr "Zmienia właściwości bloku projektowego"
+msgstr "Edycja właściwości bloku projektowego"
 
 #: eeschema/tools/sch_actions.cpp:183
 msgid "Save Library As..."
@@ -25862,29 +25857,25 @@ msgid "Update symbol to match changes made in parent symbol"
 msgstr "Uaktualnia symbol by dołączyć zmiany wykonane w symbolu nadrzędnym"
 
 #: eeschema/tools/sch_actions.cpp:283
-#, fuzzy
 msgid "Flatten Symbol"
-msgstr "Wklej symbol"
+msgstr "Spłaszcz symbol"
 
 #: eeschema/tools/sch_actions.cpp:284
-#, fuzzy
 msgid "Remove inheritance from symbol"
-msgstr "Usuwa bibliotekę z tabeli"
+msgstr "Usuwa dziedziczenie z symbolu"
 
 #: eeschema/tools/sch_actions.cpp:289 eeschema/tools/sch_actions.cpp:1111
-#, fuzzy
 msgid "Bulk Edit Symbol Fields..."
-msgstr "Edycja pól symboli..."
+msgstr "Masowa edycja pól symboli..."
 
 #: eeschema/tools/sch_actions.cpp:290
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the library"
-msgstr "Uaktualnij pola symbolu z nowej biblioteki"
+msgstr ""
+"Pozwala na edycję tabeli z polami pobranymi z wszystkich symboli w bibliotece"
 
 #: eeschema/tools/sch_actions.cpp:296
-#, fuzzy
 msgid "Bulk Edit Related Symbol Fields..."
-msgstr "Edycja pól symboli..."
+msgstr "Masowa edycja powiązanych pól symboli..."
 
 #: eeschema/tools/sch_actions.cpp:297
 msgid "Edit a table of fields from all symbols related to the selected symbol"
@@ -26112,11 +26103,10 @@ msgid "Place Pins from Sheet"
 msgstr "Umieść piny z arkusza"
 
 #: eeschema/tools/sch_actions.cpp:609
-#, fuzzy
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Pin hierarchiczny %s nie ma odpowiednika w etykietach hierarchicznych "
-"wewnątrz arkusza"
+"Dodaje piny arkusza z istniejących etykiet hierarchicznych znalezionych na "
+"tym arkuszu"
 
 #: eeschema/tools/sch_actions.cpp:617
 msgid "Autoplace All Sheet Pins"
@@ -26127,24 +26117,20 @@ msgid "Imports and auto places all sheet pins"
 msgstr "Importuje i automatycznie rozmieszcza wszelkie piny arkusza"
 
 #: eeschema/tools/sch_actions.cpp:623
-#, fuzzy
 msgid "Sync Selected Sheet Pins..."
-msgstr "Synchronizacja pinów arkusza..."
+msgstr "Synchronizacja zaznaczonych pinów arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:624
-#, fuzzy
 msgid "Synchronize selected sheet pins and hierarchical labels"
-msgstr "Synchronizacja pinów arkusza i etykiet hierarchicznych"
+msgstr "Synchronizuje zaznaczone piny arkusza i ich etykiety hierarchiczne"
 
 #: eeschema/tools/sch_actions.cpp:631
-#, fuzzy
 msgid "Sync All Sheet Pins..."
-msgstr "Synchronizacja pinów arkusza..."
+msgstr "Synchronizacja wszystkich pinów arkusza..."
 
 #: eeschema/tools/sch_actions.cpp:632
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
-msgstr "Synchronizacja pinów arkusza i etykiet hierarchicznych"
+msgstr "Synchronizuje wszystkie piny arkusza i ich etykiety hierarchiczne"
 
 #: eeschema/tools/sch_actions.cpp:639
 msgid "Import Sheet..."
@@ -26245,34 +26231,28 @@ msgid "Swap positions of selected items"
 msgstr "Zamień pozycje wybranych elementów"
 
 #: eeschema/tools/sch_actions.cpp:810 eeschema/tools/sch_edit_tool.cpp:1843
-#, fuzzy
 msgid "Swap Pins"
-msgstr "Zamień warstwy"
+msgstr "Zamień piny"
 
 #: eeschema/tools/sch_actions.cpp:811
-#, fuzzy
 msgid "Swap the selected symbol pins' positions"
-msgstr "Zamienia pozycje wybranych elementów"
+msgstr "Zamienia pozycje wybranych pinów symbolu"
 
 #: eeschema/tools/sch_actions.cpp:817 eeschema/tools/sch_edit_tool.cpp:1946
-#, fuzzy
 msgid "Swap Pin Labels"
-msgstr "Zamień warstwy"
+msgstr "Zamień etykiety pinów"
 
 #: eeschema/tools/sch_actions.cpp:818
-#, fuzzy
 msgid "Swap the labels attached to selected pins"
-msgstr "Pokazuje nitki wspomagające dla wybranej sieci"
+msgstr "Zamienia miejscami etykiety podpięte pod zaznaczone piny"
 
 #: eeschema/tools/sch_actions.cpp:824 eeschema/tools/sch_edit_tool.cpp:2028
-#, fuzzy
 msgid "Swap Unit Labels"
-msgstr "Zamień jednostki"
+msgstr "Zamień etykiety jednostek"
 
 #: eeschema/tools/sch_actions.cpp:825
-#, fuzzy
 msgid "Swap labels between selected units"
-msgstr "Obetnij rogi między wybranymi liniami"
+msgstr "Zamienia etykiety między wybranymi jednostkami"
 
 #: eeschema/tools/sch_actions.cpp:841
 msgid "Edit Reference Designator..."
@@ -26333,24 +26313,21 @@ msgid "Assign a netclass to nets matching a pattern"
 msgstr "Przypisz klasę sieci do sieci na podstawie dopasowania do wzorca"
 
 #: eeschema/tools/sch_actions.cpp:907
-#, fuzzy
 msgid "Find in Net Navigator"
-msgstr "Nawigator listy sieci"
+msgstr "Szukaj w Nawigatorze listy sieci"
 
 #: eeschema/tools/sch_actions.cpp:908
-#, fuzzy
 msgid "Locate the selected net in the net navigator"
-msgstr "Otwiera wybrany footprint w edytorze footprintów"
+msgstr "Lokalizuje zaznaczoną sieć w oknie nawigatora sieci"
 
 #: eeschema/tools/sch_actions.cpp:913
-#, fuzzy
 msgid "Cycle Body Style"
-msgstr "Zmień styl prezentacji"
+msgstr "Zmień cyklicznie styl prezentacji"
 
 #: eeschema/tools/sch_actions.cpp:914
-#, fuzzy
 msgid "Switch between De Morgan (or other) representations"
-msgstr "Przełącza pomiędzy reprezentacjami symbolu"
+msgstr ""
+"Przełącza pomiędzy reprezentacjami De Morgan (lub innymi) danego symbolu"
 
 #: eeschema/tools/sch_actions.cpp:920
 msgid "Change to Label"
@@ -26431,9 +26408,8 @@ msgid "Displays pin table for bulk editing of pins"
 msgstr "Wyświetla tabelę pinów przeznaczoną do masowej ich edycji"
 
 #: eeschema/tools/sch_actions.cpp:1002
-#, fuzzy
 msgid "Convert Stacked Pins"
-msgstr "Skonwertuj na ścieżki"
+msgstr "Skonwertuj stos pinów"
 
 #: eeschema/tools/sch_actions.cpp:1003
 msgid ""
@@ -26522,20 +26498,18 @@ msgid "Open the library symbol in the Symbol Editor"
 msgstr "Otwiera symbol z biblioteki w Edytorze Symboli"
 
 #: eeschema/tools/sch_actions.cpp:1112
-#, fuzzy
 msgid "Edit a table of fields from all symbols in the schematic"
-msgstr "Masowa edycja pól wszystkich symboli na schemacie"
+msgstr "Edytuj tabelę pól ze wszystkich symboli na schemacie"
 
 #: eeschema/tools/sch_actions.cpp:1118
-#, fuzzy
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Edycja odnośników w bibliotece symboli..."
+msgstr "Masowa edycja odnośników w bibliotece symboli..."
 
 #: eeschema/tools/sch_actions.cpp:1119
-#, fuzzy
 msgid "Edit a table of links between schematic and library symbols"
 msgstr ""
-"Pozwala na edycję łącz pomiędzy symbolami na schemacie a biblioteką symboli"
+"Pozwala na masową edycję łącz pomiędzy symbolami na schemacie a bibliotekami "
+"symboli"
 
 #: eeschema/tools/sch_actions.cpp:1125
 msgid "Assign Footprints..."
@@ -26688,17 +26662,16 @@ msgstr ""
 "Tworzy listę materiałową dla bieżącego schematu za pomocą zewnętrznej wtyczki"
 
 #: eeschema/tools/sch_actions.cpp:1248
-#, fuzzy
 msgid "Export Symbols..."
-msgstr "Eksportuj symbol..."
+msgstr "Eksportuj symbole..."
 
 #: eeschema/tools/sch_actions.cpp:1249
-#, fuzzy
 msgid ""
 "Add symbols from schematic to a new or an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Dodaj symbole używane na schemacie do istniejącej biblioteki sybmoli\n"
+"Dodaje symbole używane na schemacie do istniejącej lub nowej biblioteki "
+"symboli\n"
 "(nie usuwa innych symboli z tej biblioteki)"
 
 #: eeschema/tools/sch_actions.cpp:1256
@@ -26794,9 +26767,8 @@ msgstr ""
 "kątem 45 stopni"
 
 #: eeschema/tools/sch_actions.cpp:1360 pcbnew/tools/pcb_actions.cpp:1490
-#, fuzzy
 msgid "Switch to next angle snapping mode"
-msgstr "Przełącz na następny tryb rysowania linii"
+msgstr "Przełącz na następny tryb przyciągania linii"
 
 #: eeschema/tools/sch_actions.cpp:1370
 msgid "Annotate Automatically"
@@ -27149,23 +27121,20 @@ msgid "Show SPICE Netlist"
 msgstr "Pokaż listę sieci SPICE"
 
 #: eeschema/tools/sch_actions.cpp:1768
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "Dodaj sieć..."
+msgstr "Dodaj wariant projektu..."
 
 #: eeschema/tools/sch_actions.cpp:1769
 msgid "Add new design variant to the schematic."
 msgstr "Dodaje nowy wariant projektu do schematu."
 
 #: eeschema/tools/sch_actions.cpp:1774
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "Usuwanie pól..."
+msgstr "Usuń wariant projektu..."
 
 #: eeschema/tools/sch_actions.cpp:1775
-#, fuzzy
 msgid "Remove an existing design variant from the schematic."
-msgstr "Wystąpił błąd podczas próby wydruku schematu."
+msgstr "Usuwa istniejący wariant projektu ze schematu."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -27215,9 +27184,8 @@ msgid "Could not find design block %s."
 msgstr "Nie można odnaleźć bloku projektowego %s."
 
 #: eeschema/tools/sch_drawing_tools.cpp:751
-#, fuzzy
 msgid "Design block has no schematic to place."
-msgstr "Blok projektowy %s nie posiada pliku schematu."
+msgstr "Blok projektowy nie posiada schematu by go umieścić."
 
 #: eeschema/tools/sch_drawing_tools.cpp:912
 msgid "Add Design Block"
@@ -27353,9 +27321,8 @@ msgstr "Eksportuj tabelę jako CSV"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:122
 #: pcbnew/tools/pcb_edit_table_tool.cpp:163
-#, fuzzy
 msgid "CSV files (*.csv)|*.csv"
-msgstr "Wszystkie pliki (*.*)|*.*"
+msgstr "Pliki CSV (*.csv)|*.csv"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:145
 #: pcbnew/tools/pcb_edit_table_tool.cpp:186
@@ -27523,9 +27490,8 @@ msgid "Edit Symbol Properties..."
 msgstr "Edycja właściwości symbolu..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3577
-#, fuzzy
 msgid "Edit Netclasses..."
-msgstr "Wczytywanie klas sieci..."
+msgstr "Edycja klas sieci..."
 
 #: eeschema/tools/sch_editor_control.cpp:462
 #, c-format
@@ -27535,9 +27501,8 @@ msgstr ""
 "wersji?"
 
 #: eeschema/tools/sch_editor_control.cpp:656
-#, fuzzy
 msgid "Export Symbols"
-msgstr "Eksportuj symbol"
+msgstr "Eksportuj symbole"
 
 #: eeschema/tools/sch_editor_control.cpp:656
 msgid "Export symbols to library:"
@@ -27558,19 +27523,16 @@ msgstr ""
 "Błąd: znaleziono zdublowane nazwy arkuszy podrzędnych w bieżącym arkuszu."
 
 #: eeschema/tools/sch_editor_control.cpp:1171
-#, fuzzy
 msgid "No nets selected."
-msgstr "Nie wybrano sieci."
+msgstr "Nie wybrano żadnej sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1210
-#, fuzzy
 msgid "All selected nets must be labeled to assign a netclass."
-msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
+msgstr "Sieci muszą być nazwane za pomocą etykiet by je dołączyć do klas sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:1361
-#, fuzzy
 msgid "No connected net selected."
-msgstr "Nie wybrano sieci."
+msgstr "Nie wybrano połączonych sieci."
 
 #: eeschema/tools/sch_editor_control.cpp:2090 pcbnew/tools/pcb_control.cpp:1187
 msgid ""
@@ -27579,9 +27541,8 @@ msgstr ""
 "Wklejanie długich ciągów znaków może być powolne.  Czy chcesz kontynuować?"
 
 #: eeschema/tools/sch_editor_control.cpp:2145 pcbnew/tools/pcb_control.cpp:1152
-#, fuzzy
 msgid "Paste Cells"
-msgstr "Wklej specjalnie"
+msgstr "Wklej komórki"
 
 #: eeschema/tools/sch_editor_control.cpp:2150 pcbnew/tools/pcb_control.cpp:1157
 msgid "Failed to paste cells"
@@ -27612,9 +27573,8 @@ msgid "Design block %s does not have a schematic file."
 msgstr "Blok projektowy %s nie posiada pliku schematu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:348
-#, fuzzy
 msgid "Reached end of symbol."
-msgstr "Osiągnięto koniec arkusza."
+msgstr "Osiągnięto koniec symbolu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:350
 msgid "Reached end of schematic."
@@ -27740,14 +27700,12 @@ msgid "Press <ESC> to cancel drag."
 msgstr "Naciśnij <ESC> by anulować przeciąganie."
 
 #: eeschema/tools/sch_move_tool.cpp:851
-#, fuzzy
 msgid "Press <ESC> to cancel break."
-msgstr "Naciśnij <ESC> by anulować przeciąganie."
+msgstr "Naciśnij <ESC> by anulować przerwanie."
 
 #: eeschema/tools/sch_move_tool.cpp:852
-#, fuzzy
 msgid "Press <ESC> to cancel slice."
-msgstr "Naciśnij <ESC> by anulować przesuwanie."
+msgstr "Naciśnij <ESC> by anulować krojenie."
 
 #: eeschema/tools/sch_navigate_tool.cpp:99
 #, c-format
@@ -27845,9 +27803,8 @@ msgid "SVG File Name"
 msgstr "Nazwa pliku SVG"
 
 #: eeschema/tools/symbol_editor_control.cpp:869
-#, fuzzy
 msgid "No symbol to flatten"
-msgstr "Nie ma nic do wyeksportowania"
+msgstr "Brak symbolu by go spłaszczyć"
 
 #: eeschema/tools/symbol_editor_control.cpp:875
 msgid "Failed to flatten symbol"
@@ -27933,19 +27890,16 @@ msgid "Create a new project for this schematic"
 msgstr "Stwórz nowy projekt dla tego schematu"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Rekursywnie wewnątrz arkuszy"
+msgstr "Nie kopiuj subakuszy"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Tylko bieżący arkusz"
+msgstr "Kopiuj tylko wewnętrzne subarkusze"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Wszystkie arkusze"
+msgstr "Kopiuj wszystkie subarkusze"
 
 #: eeschema/widgets/hierarchy_pane.cpp:500
 msgid "Edit Page Number"
@@ -27962,25 +27916,21 @@ msgstr "Zmień nazwę tego arkusza"
 #: eeschema/widgets/hierarchy_pane.cpp:509
 #: eeschema/widgets/hierarchy_pane.cpp:596
 #: eeschema/widgets/hierarchy_pane.cpp:601
-#, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Usuń piny arkusza"
+msgstr "Usuń arkusz najwyższego poziomu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:510
-#, fuzzy
 msgid "Remove this top-level sheet from the project"
-msgstr "Usuń sygnał z ekranu wykresu"
+msgstr "Usuwa ten najwyżej postawiony arkusz z projektu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:518
 #: eeschema/widgets/hierarchy_pane.cpp:533
-#, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Opuść arkusz"
+msgstr "Nowy arkusz najwyższego poziomu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:518
-#, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Utwórz nowy folder dla projektu"
+msgstr "Tworzy nowy najwyżej postawiony arkusz projektu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:532
 msgid "Enter name for new top-level sheet:"
@@ -28011,9 +27961,8 @@ msgid "Cannot delete the last top-level sheet."
 msgstr "Nie można usunąć ostatniego arkusza najwyższego poziomu."
 
 #: eeschema/widgets/hierarchy_pane.cpp:611
-#, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Usuń wybraną sieć"
+msgstr "Usuń arkusz najwyższego poziomu"
 
 #: eeschema/widgets/hierarchy_pane.cpp:627
 #, c-format
@@ -28030,19 +27979,17 @@ msgid "(page %s)"
 msgstr "(strona %s)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:76
-#, fuzzy
 msgid "Missing payload data."
-msgstr "Brakuje słowa kluczowego."
+msgstr "Brak danych w ładunku."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:84
-#, fuzzy
 msgid "Failed to decode base64 payload."
-msgstr "Nie można odczytać wartości typu word."
+msgstr "Nie można zdekodować ładunku base64."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported compression '%s'."
-msgstr "Niewspierany plik schematu '%s'."
+msgstr "Niewspierany format kompresji '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:114
 msgid "Compressed payload was empty."
@@ -28054,14 +28001,13 @@ msgid "Decompressed size %llu exceeds limit %llu."
 msgstr "Zdekompresowany rozmiar %llu przekracza limit %llu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "ZSTD decompression failed: %s"
-msgstr "Niepowodzenie przy połączeniu z bazą danych: %s"
+msgstr "Dekompresja ZSTD zakończona niepowodzeniem: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:169
-#, fuzzy
 msgid "Symbol payload was empty."
-msgstr "Plik biblioteki symboli '%s' jest pusty."
+msgstr "Ładunek symboli jest pusty."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:177
 #: eeschema/widgets/panel_remote_symbol.cpp:186
@@ -44884,7 +44830,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -45123,6 +45068,15 @@ msgstr ""
 "| Sprawdza podane wyrażenie warunkowe.<br>"
 "                                                                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
+"| `bridged_mask`            "
+"|                                                                                                                        "
+"| Sprawdza soldermaskę czy jest ona połączona lub nie nad dwoma elementami z "
+"miedzi. To ograniczenie nie ma wartości min/opt/max. W połączeniu z klauzulą "
+"dotyczącą ważności błędu, to ograniczenie może zostać użyte do dopuszczenia "
+"bądź nie takich zmostkowanych otwarć soldermaski w szczególnych "
+"sytuacjach.<br>"
+"                                                                                                                                                           "
+"|\n"
 "| `clearance`               | min"
 "                                                                                                                    "
 "| Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. "
@@ -45304,6 +45258,15 @@ msgstr ""
 "ta przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla "
 "tej sieci zostanie wygenerowany błąd.<br>"
 "                                                                                                                                                                                                                                                                                "
+"|\n"
+"| `via_dangling`            "
+"|                                                                                                                        "
+"| Sprawdza przelotki czy są niepodłączone lub połączone tylko z jedną "
+"warstwą. To ograniczenie nie ma wartości min/opt/max. W połączeniu z "
+"klauzulą dotyczącą ważności błędu, to ograniczenie może zostać użyte do "
+"dopuszczenia bądź nie niedokończonych przelotek w szczególnych "
+"sytuacjach.<br>"
+"                                                                                                                                                                               "
 "|\n"
 "| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
 "`none`                                                                                 "
@@ -45513,7 +45476,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -45687,138 +45649,184 @@ msgstr ""
 "\n"
 "Wszystkie parametry funkcji obsługują proste sybmole wieloznaczne (`*` oraz "
 "`?`).\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.enclosedByArea('<nazwa_strefy>')\n"
-"Prawdziwe jeśli całość `A` leży w obrysie podanej strefy.  \n"
+"```\n"
+"> Prawdziwe jeśli całość `A` leży w obrysie podanej strefy.  \n"
 "\n"
-"UWAGA: Jest to potencjalnie bardziej czasochłonne wywołanie niż "
+"> UWAGA: Jest to potencjalnie bardziej czasochłonne wywołanie niż "
 "`intersectsArea()`.  Użyj `intersectsArea()` \n"
 "tam gdzie to możliwe.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.existsOnLayer('<nazwa_warstwy>')\n"
-"Prawdziwe jeśli `A` istnieje na określonej warstwie.  Nazwa warstwy może być "
-"zarówno\n"
+"```\n"
+"> Prawdziwe jeśli `A` istnieje na określonej warstwie.  Nazwa warstwy może "
+"być zarówno\n"
 "nazwą przypisaną w oknie dialogowym Ustawienia Płytki > Ustawienia warstw "
 "jak też\n"
 "jej nazwą kanoniczną (na przykład: `F.Cu`).\n"
 "\n"
-"UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
+"> UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
 "niezależnie czy reguła jest oceniana dla tej warstwy.\n"
 "W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")"
 "`.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.fromTo('x', 'y')\n"
-"Zwraca prawdę jeśli obiekt istnieje na ścieżce pomiędzy danymi polami "
+"```\n"
+"> Zwraca prawdę jeśli obiekt istnieje na ścieżce pomiędzy danymi polami "
 "lutowniczymi. \n"
 "`x` i `y` to pełne nazwy pól lutowniczych aktywnego projektu, jak na "
 "przykład \n"
 "`R1-Pad1`.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.getField('<nazwa_pola>')\n"
-"Zwraca wartość podanego pola. Pola mają tylko footpriny, zatem pole jest "
+"```\n"
+"> Zwraca wartość podanego pola. Pola mają tylko footpriny, zatem pole jest "
 "zwracane tylko\n"
 "gdy `A` jest footprintem.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.hasComponentClass('<nazwa_klasy_komponentu>')\n"
-"Zwraca prawdę jeśli zestaw klas komponentu przypisanego do `A` zawiera "
+"```\n"
+"> Zwraca prawdę jeśli zestaw klas komponentu przypisanego do `A` zawiera "
 "nazwaną klasę\n"
 "komponentu.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.hasNetclass('<nazwa_klasy_sieci>')\n"
-"Prawdziwe jeśli `A` ma przypisaną daną klasę sieci, poprzez jawną etykietę "
+"```\n"
+"> Prawdziwe jeśli `A` ma przypisaną daną klasę sieci, poprzez jawną etykietę "
 "klasy sieci, \n"
 "albo poprzez przypisanie przez dopasowania wzorca.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.inDiffPair('<nazwa_sieci>')\n"
-"Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
+"```\n"
+"> Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
 "`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład `inDiffPair('/"
 "CLK')`\n"
 "odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"\n"
+"```\n"
 "    A.intersectsArea('<nazwa_strefy>')\n"
-"Prawdziwe jeśli dowolna część `A` leży w obrysie podanej strefy.\n"
-"<br><br>\n"
+"```\n"
+"> Prawdziwe jeśli dowolna część `A` leży w obrysie podanej strefy.\n"
 "\n"
+"\n"
+"```\n"
 "    A.intersectsCourtyard('<oznaczenie_footprintu>')\n"
-"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"```\n"
+"> Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.intersectsFrontCourtyard('<oznaczenie_footprintu>')\n"
-"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"```\n"
+"> Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu na stronie górnej.\n"
-"<br><br>\n"
 "\n"
+"\n"
+"```\n"
 "    A.intersectsBackCourtyard('<oznaczenie_footprintu>')\n"
-"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"```\n"
+"> Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
 "footprintu na stronie dolnej.\n"
-"<br><br>\n"
 "\n"
-"`oznaczenie_footprintu` wspomniane powyżej może być jednym z poniższych "
+"\n"
+"> `oznaczenie_footprintu` wspomniane powyżej może być jednym z poniższych "
 "zasad:\n"
 "\n"
-"1. Odnośnik, również zawierający znaki wieloznaczne `*` oraz `?`\n"
-"2. Identyfikator biblioteki footprintu, przykładowo `Nazwa:NazwaFootprintu`. "
-"W tym przypadku,\n"
+"> 1. Odnośnik, również zawierający znaki wieloznaczne `*` oraz `?`\n"
+"> 2. Identyfikator biblioteki footprintu, przykładowo "
+"`Nazwa:NazwaFootprintu`. W tym przypadku,\n"
 "   identyfikator musi zawierać znak `:` oddzielający nazwę biblioteki od "
 "nazwy footprintu\n"
 "   w tej bibliotece, i nazwa ta może również zawierać znaki wieloznaczne.\n"
-"3. Klasa komponentu, w formie `${Class:NazwaKlasy}`.  Słowo kluczowe `Class` "
-"nie rozróżnia\n"
+"> 3. Klasa komponentu, w formie `${Class:NazwaKlasy}`.  Słowo kluczowe "
+"`Class` nie rozróżnia\n"
 "   wielkości znaków, ale nazwa klasy musi już być zapisana dokładnie.\n"
 "\n"
-"<br>\n"
 "\n"
-"    A.isBlindBuriedVia()\n"
-"Zwraca prawdę jeśli `A` to przelotka ślepa/zagrzebana.\n"
-"<br><br>\n"
-"\n"
+"```\n"
 "    AB.isCoupledDiffPair()\n"
-"Prawdziwe jeśli `A` i `B` są członkami tej samej pary różnicowej.\n"
-"<br><br>\n"
+"```\n"
+"> Prawdziwe jeśli `A` i `B` są członkami tej samej pary różnicowej.\n"
 "\n"
+"\n"
+"```\n"
 "    A.isMicroVia()\n"
-"Zwraca prawdę jesli `A` to mikroprzelotka.\n"
-"<br><br>\n"
+"```\n"
+"> Zwraca prawdę jesli `A` to mikroprzelotka.\n"
 "\n"
+"\n"
+"```\n"
+"    A.isBlindVia()\n"
+"```\n"
+"> Zwraca prawdę jesli `A` to przelotka ślepa.\n"
+"\n"
+"\n"
+"```\n"
+"    A.isBuriedVia()\n"
+"```\n"
+"> Zwraca prawdę jesli `A` to przelotka zagrzebana.\n"
+"\n"
+"\n"
+"```\n"
 "    A.isPlated()\n"
-"Prawdziwe jeśli `A` posiada otwór, który jest metalizowany.\n"
-"<br><br>\n"
+"```\n"
+"> Prawdziwe jeśli `A` posiada otwór, który jest metalizowany.\n"
 "\n"
+"\n"
+"```\n"
 "    A.memberOfGroup('<nazwa_groupy>')\n"
-"Prawdziwe jeśli `A` jest członkiem podanej grupy. Można użyć sybmoli "
-"wieloznacznych. \n"
-"Nawet zagnieżdżonej w innej grupie.\n"
-"<br><br>\n"
-"\n"
-"    A.memberOfFootprint('<odnośnik_do_footprintu>')\n"
-"Prawdziwe jeśli `A` jest elementem footprintu pasującego do podanego "
-"oznaczenia. \n"
+"```\n"
+"> Prawdziwe jeśli `A` jest członkiem podanej grupy. \n"
 "Można użyć sybmoli wieloznacznych. \n"
+"Nawet zagnieżdżonej w innej grupie.\n"
 "\n"
 "\n"
+"```\n"
+"    A.memberOfFootprint('<odnośnik_do_footprintu>')\n"
+"```\n"
+"> Prawdziwe jeśli `A` jest elementem footprintu pasującego do podanego "
+"oznaczenia\n"
+"(na przykład, pole lub kształt graficzny zostały zdefiniowane w tym "
+"footprincie). \n"
+"Różne formy określenia parameru 'odnośnik_do_footprintu' zostały pokazane "
+"poniżej.\n"
+"\n"
+"\n"
+"```\n"
 "    A.memberOfSheet('<ścieżka_arkusza>')\n"
-"Prawda gdy `A` jest członkiem podanego arkusza. Ścieżka arkusza nie może "
-"zawierać znaków wieloznacznych.\n"
-"<br><br>\n"
+"```\n"
+"> Prawda gdy `A` jest członkiem podanego arkusza. \n"
+"Ścieżka arkusza może zawierać znaki wieloznaczne.\n"
 "\n"
+"\n"
+"```\n"
 "    A.memberOfSheetOrChildren('<sheet_path>')\n"
-"Prawda gdy `A` jest członkiem podanego arkusza, lub dowolnego z jego "
-"potomków w hierarchii. Ścieżka arkusza może\n"
-"zawierać znaki wieloznaczne.\n"
-"<br><br>\n"
+"```\n"
+"> Prawda gdy `A` jest członkiem podanego arkusza, lub dowolnego z jego "
+"potomków w hierarchii. \n"
+"Ścieżka arkusza może zawierać znaki wieloznaczne.\n"
+"\n"
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -46135,6 +46143,13 @@ msgstr ""
 "        (constraint solder_paste_abs_margin (opt -50mm))\n"
 "        (condition \"A.Do_not_Populate\"))\n"
 "\n"
+"\n"
+"    # Dopuszcza mostkowanie maski lutowniczej pod otwarciami maski "
+"pierścienia ochronnego\n"
+"    (rule guard_ring_bridging\n"
+"        (constraint bridged_mask)\n"
+"        (condition \"A.intersectsArea('guard_ring')\")\n"
+"        (severity ignore))\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
