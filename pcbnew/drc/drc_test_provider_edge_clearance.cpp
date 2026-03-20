@@ -70,8 +70,8 @@ public:
 private:
     void resolveSilkDisposition( BOARD_ITEM* aItem, const SHAPE* aItemShape, const SHAPE_POLY_SET& aBoardOutline );
 
-    bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* other, DRC_CONSTRAINT_T aConstraintType,
-                          PCB_DRC_CODE aErrorCode );
+    bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID shapeLayer, BOARD_ITEM* other,
+                          DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode );
 
 private:
     std::vector<PAD*> m_castellatedPads;
@@ -176,8 +176,9 @@ void DRC_TEST_PROVIDER_EDGE_CLEARANCE::resolveSilkDisposition( BOARD_ITEM* aItem
 }
 
 
-bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* edge,
-                                                        DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode )
+bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID shapeLayer,
+                                                        BOARD_ITEM* edge, DRC_CONSTRAINT_T aConstraintType,
+                                                        PCB_DRC_CODE aErrorCode )
 {
     std::shared_ptr<SHAPE> shape;
 
@@ -218,7 +219,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 
             drcItem->SetItems( edge->m_Uuid, item->m_Uuid );
             drcItem->SetViolatingRule( constraint.GetParentRule() );
-            reportTwoItemGeometry( drcItem, pos, edge, item, Edge_Cuts, actual );
+            reportTwoItemGeometry( drcItem, pos, edge, item, shapeLayer, actual );
 
             if( aErrorCode == DRCE_SILK_EDGE_CLEARANCE )
                 m_silkDisposition[item] = CROSSES_EDGE;
@@ -448,9 +449,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                             m_edgesTree.QueryColliding( item, shapeLayer, testLayer, nullptr,
                                     [&]( BOARD_ITEM* edge ) -> bool
                                     {
-                                        return testAgainstEdge( item, itemShape.get(), edge,
-                                                                EDGE_CLEARANCE_CONSTRAINT,
-                                                                DRCE_EDGE_CLEARANCE );
+                                        return testAgainstEdge( item, itemShape.get(), shapeLayer, edge,
+                                                                EDGE_CLEARANCE_CONSTRAINT, DRCE_EDGE_CLEARANCE );
                                     },
                                     m_largestEdgeClearance );
                         }
@@ -460,9 +460,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                             m_edgesTree.QueryColliding( item, shapeLayer, testLayer, nullptr,
                                     [&]( BOARD_ITEM* edge ) -> bool
                                     {
-                                        return testAgainstEdge( item, itemShape.get(), edge,
-                                                                SILK_CLEARANCE_CONSTRAINT,
-                                                                DRCE_SILK_EDGE_CLEARANCE );
+                                        return testAgainstEdge( item, itemShape.get(), shapeLayer, edge,
+                                                                SILK_CLEARANCE_CONSTRAINT, DRCE_SILK_EDGE_CLEARANCE );
                                     },
                                     m_largestEdgeClearance );
                         }
