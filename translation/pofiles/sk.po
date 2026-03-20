@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:19-0700\n"
-"PO-Revision-Date: 2026-03-19 20:26+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
 "Language: sk\n"
@@ -127,7 +127,7 @@ msgstr "Chyba OpenGL počas vykresľovania mimo obrazovky: 0x%04X\n"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:977
 #, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Sieť %s\tTriedy spojov %s"
+msgstr "Spoj %s\tTrieda spojov %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:1000
 #, c-format
@@ -4883,7 +4883,7 @@ msgstr "Plôšky:"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
-msgstr "puzdra/plôšky:"
+msgstr "Puzdrá/plôšky:"
 
 #: common/dialogs/panel_grid_settings.cpp:62
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
@@ -5620,7 +5620,7 @@ msgstr "Štýl čiary schémy"
 
 #: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "PCB netclass color"
-msgstr "farba triedy spojov DPS"
+msgstr "Farba triedy spojov DPS"
 
 #: common/dialogs/panel_setup_netclasses.cpp:759
 msgid "The default net class is required."
@@ -5870,10 +5870,10 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"Vstavané tabuľky knižníc sa nenašli na očakávanom mieste. Zvyčajne to "
-"znamená, že ste nainštalovali softvér KiCad bez inštalácie knižníc. Môžete "
-"pokračovať v inštalácii, ale knižnice budete musieť nainštalovať samostatne, "
-"aby boli k dispozícii."
+"Vstavané tabuľky knižníc nebolo možné nájsť na očakávanom mieste. Zvyčajne "
+"to znamená, že ste nainštalovali softvér KiCad bez inštalácie knižníc. "
+"Môžete pokračovať v inštalácii, ale knižnice budete musieť nainštalovať "
+"samostatne, aby boli k dispozícii."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -6684,7 +6684,7 @@ msgstr "Zoznam položiek"
 
 #: common/eda_item.cpp:450
 msgid "NetInfo"
-msgstr "Info siete"
+msgstr "Info spoja"
 
 #: common/eda_item.cpp:452 pcbnew/pcb_barcode.cpp:437
 msgid "Barcode"
@@ -7910,7 +7910,7 @@ msgstr "Pridať do výberu"
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1517
 #: pcbnew/tools/pcb_actions.cpp:1547
 msgid "Highlight Net"
-msgstr "Zvýrazniť sieť"
+msgstr "Zvýrazniť spoj"
 
 #: common/hotkey_store.cpp:52
 msgid "Remove from Selection"
@@ -11339,11 +11339,11 @@ msgstr "Nastaviť zobrazenie grafu tak, aby sa zobrazili všetky položky"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:281
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:282
 msgid "<no net>"
-msgstr "<žiadna sieť>"
+msgstr "<žiadny spoj>"
 
 #: common/widgets/net_selector.cpp:33
 msgid "<create net>"
-msgstr "<vytvoriť sieť>"
+msgstr "<vytvoriť spoj>"
 
 #: common/widgets/paged_dialog.cpp:85 common/widgets/paged_dialog.cpp:347
 #: eeschema/dialogs/dialog_bom_base.cpp:114
@@ -12288,7 +12288,7 @@ msgstr "%s aj %s sú pripojené k rovnakým položkám; %s sa použije v netlist
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
-"Sieť %s je graficky pripojená k zbernici %s, ale nie je členom tejto zbernice"
+"Spoj %s je graficky pripojený k zbernici %s, ale nie je členom tejto zbernice"
 
 #: eeschema/connection_graph.cpp:4032 eeschema/erc/erc_item.cpp:241
 msgid "Unconnected wire endpoint"
@@ -18031,7 +18031,7 @@ msgstr "Názov aliasu '%s' sa už používa."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:307
 msgid "Member net/alias name cannot be empty."
-msgstr "Názov členskej siete/aliasu nemôže byť prázdny."
+msgstr "Názov člena spoja/aliasu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 msgid "Bus Definitions"
@@ -18829,7 +18829,7 @@ msgstr "Vývod %s je pripojený k %s a %s"
 #: eeschema/erc/erc.cpp:1352
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Vývod %s symbolu '%s' je pripojený k rôznym sieťam: %s a %s"
+msgstr "Vývod %s symbolu '%s' je pripojený k rozdielnym spojom: %s a %s"
 
 #: eeschema/erc/erc.cpp:1423
 #, c-format
@@ -18990,7 +18990,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:65
 msgid "Duplicate pins with different nets"
-msgstr "Duplicitné vývody s rôznymi sieťami"
+msgstr "Duplicitné vývody s rôznymi spojmi"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
@@ -19065,11 +19065,11 @@ msgstr "Viac ako jedno meno dané tejto autobusovej sieti alebo sieti"
 
 #: eeschema/erc/erc_item.cpp:149
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr "Sieť je graficky pripojená k zbernici, ale nie k členu zbernice"
+msgstr "Spoj je graficky pripojený k zbernici, ale nie je člen zbernice"
 
 #: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
-msgstr "Autobusy sú graficky spojené, ale nezdieľajú žiadnych členov zbernice"
+msgstr "Zbernice sú graficky prepojené, ale nezdieľajú žiadnych členov zbernice"
 
 #: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
@@ -20336,7 +20336,7 @@ msgstr "Názov pripojenia"
 #: eeschema/sch_connection.cpp:461 eeschema/sch_connection.cpp:470
 #, c-format
 msgid "Bus Alias %s Members"
-msgstr "Bus Alias %s členov"
+msgstr "Členovia zbernice s aliasom %s"
 
 #: eeschema/sch_design_block_utils.cpp:64
 #, c-format
@@ -20458,7 +20458,7 @@ msgstr "[žiadna schéma nenačítaná]"
 #: eeschema/sch_edit_frame.cpp:2063
 #, c-format
 msgid "Highlighted net: %s"
-msgstr "Zvýraznená sieť: %s"
+msgstr "Zvýraznený spoj: %s"
 
 #: eeschema/sch_edit_frame.cpp:2261
 msgid "Save Symbol to Schematic"
@@ -20880,9 +20880,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Symbol '%s' sa v pôvodnom dizajne CADSTAR otáča o uhol %.1f stupňov, ale "
+"Symbol '%s' je v pôvodnom dizajne CADSTAR, otočený o uhol %.1f stupňov, ale "
 "KiCad podporuje iba násobky uhlov otočenia o 90 stupňov. Pripojovacie vodiče "
-"budú musieť byť pripevnené ručne."
+"budú musieť byť upravené ručne."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2130
 #, c-format
@@ -20899,8 +20899,8 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Sieť %s odkazuje na neznámy prvok siete %s. Sieť nebola správne nabitá a "
-"môže vyžadovať ručné upevnenie."
+"Spoj %s odkazuje na neznámy prvok %s. Spoj nebol správne načítaný a môže "
+"vyžadovať ručné úpravy."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2529
 #, c-format
@@ -25465,7 +25465,7 @@ msgstr "Zmeniť %s vývod %s spoja označený z '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:1414
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "Sieť %s nemôže byť zmenená na %s, pretože je riadená napájacím vývodom."
+msgstr "Spoj %s nemôže byť zmenený na %s, pretože je riadený napájacím vývodom."
 
 #: eeschema/tools/backannotate.cpp:1423
 #, c-format
@@ -26128,15 +26128,15 @@ msgstr "Priradiť triedu siete..."
 
 #: eeschema/tools/sch_actions.cpp:901 pcbnew/tools/pcb_actions.cpp:1404
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Priradiť triedu siete k sieťam zodpovedajúcim vzoru"
+msgstr "Priradiť triedu spojov ku spojom zodpovedajúcim vzoru"
 
 #: eeschema/tools/sch_actions.cpp:907
 msgid "Find in Net Navigator"
-msgstr "Nájsť v navigátore sietí"
+msgstr "Nájsť v navigátore spojov"
 
 #: eeschema/tools/sch_actions.cpp:908
 msgid "Locate the selected net in the net navigator"
-msgstr "Nájsť vybranú sieť v navigátore sietí"
+msgstr "Nájsť vybraný spoj v navigátore spojov"
 
 #: eeschema/tools/sch_actions.cpp:913
 msgid "Cycle Body Style"
@@ -26261,7 +26261,7 @@ msgstr "Rozdeliť na neprepojené segmenty"
 
 #: eeschema/tools/sch_actions.cpp:1038 pcbnew/tools/pcb_actions.cpp:1518
 msgid "Highlight net under cursor"
-msgstr "Zvýraznite sieť pod kurzorom"
+msgstr "Zvýrazniť spoj pod kurzorom"
 
 #: eeschema/tools/sch_actions.cpp:1045 pcbnew/tools/pcb_actions.cpp:1533
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1098
@@ -26282,7 +26282,7 @@ msgstr "Zvýraznite drôty a kolíky siete"
 
 #: eeschema/tools/sch_actions.cpp:1065
 msgid "Show/hide the net navigator"
-msgstr "Zobraziť/skryť navigátor sietí"
+msgstr "Zobraziť/skryť navigátor spojov"
 
 #: eeschema/tools/sch_actions.cpp:1072
 msgid "Edit with Symbol Editor"
@@ -27327,7 +27327,7 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:1361
 msgid "No connected net selected."
-msgstr "Žiadna prepojená sieť nie je vybraná."
+msgstr "Nie je vybraný žiadny pripojený spoj."
 
 #: eeschema/tools/sch_editor_control.cpp:2090 pcbnew/tools/pcb_control.cpp:1187
 msgid ""
@@ -27385,7 +27385,7 @@ msgstr "Nájdite znova a začnite sa ovíjať."
 
 #: eeschema/tools/sch_group_tool.cpp:55 pcbnew/tools/pcb_group_tool.cpp:58
 msgid "Click on new member..."
-msgstr "Kliknite na nového člena..."
+msgstr "Kliknúť na nového člena..."
 
 #: eeschema/tools/sch_inspection_tool.cpp:292
 msgid "No symbol issues found."
@@ -27471,7 +27471,7 @@ msgstr "Nie je vybraný žiadny autobus"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:119
 msgid "Bus has no members"
-msgstr "Autobus nemá žiadnych členov"
+msgstr "Zbernica nemá žiadnych členov"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:813
 msgid "Press <ESC> to cancel drawing."
@@ -28835,7 +28835,7 @@ msgstr "Os AB"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:28
 msgid "Net:"
-msgstr "Sieť:"
+msgstr "Spoj:"
 
 #: gerbview/gerber_draw_item.cpp:753
 #, c-format
@@ -29787,7 +29787,7 @@ msgstr "Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samosta
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
-"Zahrnúť iba meďové prvky patriace sieťam zodpovedajúcim tomuto zástupnému "
+"Zahrnúť iba medené prvky patriace sspojom zodpovedajúcim tomuto zástupnému "
 "znaku"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
@@ -34448,7 +34448,7 @@ msgstr "Mikropásková linka"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Coupled Microstrip Line"
-msgstr "Viazaná mikropásková linka"
+msgstr "Párová mikropásková linka"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
 msgid "Stripline"
@@ -34456,7 +34456,7 @@ msgstr "Páskové vedenie"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:26
 msgid "Coupled Stripline"
-msgstr "Spojené pásikové vedenie"
+msgstr "Párové pásikové vedenie"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:27
 msgid "Coplanar wave guide"
@@ -36403,7 +36403,7 @@ msgstr ""
 #: pcbnew/connectivity/topo_match.cpp:223
 #, c-format
 msgid "net %d"
-msgstr "sieť %d"
+msgstr "spoj %d"
 
 #: pcbnew/connectivity/topo_match.cpp:226
 #, c-format
@@ -37089,8 +37089,8 @@ msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
-"(Podložky, ktoré sa nachádzajú v skupinách sieťových väzieb, nebudú "
-"uvažované pri zlučovaní.)"
+"(Plôšky, ktoré sa nachádzajú v skupinách Net Tie, nebudú pri zlučovaní brané "
+"v úvahu.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
@@ -37141,7 +37141,7 @@ msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"odstrániť segmenty koľaje spájajúce uzly patriace k rôznym sieťam (skrat)"
+"odstrániť segmenty spoja spájajúce uzly patriace k rôznym spojom (skrat)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "&Delete redundant vias"
@@ -39467,7 +39467,7 @@ msgstr "Pripojenie k medeným zónam"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:462
 msgid "Net Ties"
-msgstr "Sieťové väzby"
+msgstr "Prepojky spojov"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:464
 msgid "Pad groups allowed to short different nets:"
@@ -42696,12 +42696,12 @@ msgstr "Štýl okraja:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:914
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr "Použitie týchto zmien skratuje sieť %s so sieťou %s."
+msgstr "Použitie týchto zmien skratuje spoj %s so spojom %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:920
 #, c-format
 msgid "Applying these changes will short net %s with other nets."
-msgstr "Použitie týchto zmien skratuje sieť %s s inými sieťami."
+msgstr "Použitie týchto zmien skratuje spoj %s s inými spojmi."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:925
 msgid "Apply Anyway"
@@ -42747,7 +42747,7 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
-"Automaticky meniť sieť tohto prekovu, keď sú zmenené podložky alebo zóny, "
+"Automaticky meniť spoj tohto prekovu, keď sú zmenené plôšky alebo zóny, "
 "ktorých sa dotýka"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:76
@@ -43292,7 +43292,7 @@ msgstr "Prepnúť výber"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:186
 #: pcbnew/dialogs/panel_edit_options_base.cpp:260
 msgid "Highlight net (for pads/tracks)"
-msgstr "Zvýrazniť sieť (pre podložky/spoje)"
+msgstr "Zvýrazniť spoj (pre plôšky/spoje)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Shift+Cmd:"
@@ -46130,11 +46130,11 @@ msgstr "Plôška nie je plôška s priechodzím otvorom; pripojenie bude: %s."
 #: pcbnew/drc/drc_engine.cpp:1096
 #, c-format
 msgid "Net tie on %s; clearance: 0."
-msgstr "Sieťový spoj na %s; odstup: 0."
+msgstr "Prepojka spojov na %s; odstup: 0."
 
 #: pcbnew/drc/drc_engine.cpp:1099
 msgid "net tie"
-msgstr "sieťový spoj"
+msgstr "prepojka spojov"
 
 #: pcbnew/drc/drc_engine.cpp:1126 pcbnew/drc/drc_engine.cpp:1136
 #, c-format
@@ -46222,7 +46222,7 @@ msgstr "Kontroluje sa %s povrchová cesta: %s."
 #: pcbnew/drc/drc_engine.cpp:1365
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
-msgstr "Kontroluje sa %s max. nezviazaná dĺžka: %s."
+msgstr "Kontroluje sa %s max. nepárová dĺžka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1371
 #, c-format
@@ -46332,7 +46332,8 @@ msgstr "Kontroluje sa %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1549
 msgid "Netclass clearances apply only between copper items."
-msgstr "Sieťové izolačné medzery aplikovať iba medzi medenými častami."
+msgstr ""
+"Minimálne vzdialenosti z triedy spojov použiť iba medzi medenými položkami."
 
 #: pcbnew/drc/drc_engine.cpp:1553 pcbnew/drc/drc_engine.cpp:1558
 #, c-format
@@ -46694,7 +46695,7 @@ msgstr "Medzera diferenciálneho páru je mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:282
 msgid "Differential uncoupled length too long"
-msgstr "Nezviazaná dĺžka diferenciálneho páru je príliš dlhá"
+msgstr "Nepárová dĺžka diferenciálneho páru je príliš dlhá"
 
 #: pcbnew/drc/drc_item.cpp:286
 msgid "Footprint is not valid"
@@ -47019,7 +47020,7 @@ msgstr "(%s creepage %s; skutočný %s)"
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:665
 #, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s maximálna nezviazaná dĺžka: %s; skutočná: %s)"
+msgstr "(%s maximálna nepárová dĺžka: %s; skutočná: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:730
 #, c-format
@@ -47431,7 +47432,7 @@ msgstr "Pripojenie zóny je prepísané."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:900
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:905
 msgid "Net tie pad groups differ."
-msgstr "Skupiny podložiek sieťového spoja sa líšia."
+msgstr "Skupiny plôšok prepojok spojov sa nezhodujú."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:966
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1006
@@ -47621,12 +47622,12 @@ msgstr "Nenašiel sa zodpovedajúci pin v schéme"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:284
 #, c-format
 msgid "Pad missing net given by schematic (%s)"
-msgstr "Podložke chýba sieť zadaná schémou (%s)"
+msgstr "Plôške chýba spoj daný schémou (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:298
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)"
-msgstr "Sieť podložky (%s) sa nezhoduje so sieťou zadanou schémou (%s)"
+msgstr "Spoj plôšky (%s) sa nezhoduje so spojom daným schémou (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:331
 #, c-format
@@ -48015,7 +48016,7 @@ msgstr "Tolerancia medzery musí byť menšia ako optimálna medzera"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:103
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "Maximálna nezviazaná dĺžka musí byť väčšia ako alebo rovná 0"
+msgstr "Maximálna nepárová dĺžka musí byť väčšia ako alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:106
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:113
@@ -48621,7 +48622,7 @@ msgstr "Nie je možné premenovať dočasný súbor '%s' na '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3515
 msgid "Cannot use VRML models when exporting to non-mesh formats."
-msgstr "Pri exporte do formátov bez sieťoviny nie je možné použiť modely VRML."
+msgstr "Pri exporte do nesieťových formátov nie je možné použiť modely VRML."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3525
 #, c-format
@@ -49943,13 +49944,13 @@ msgstr "Odpojený pin %s súčiastky %s."
 #, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
 msgstr ""
-"Pre súčiastku %s, podložku %s sa nenašla žiadna sieť (kolík %s nie je v "
+"Pre súčiastku %s, plôšku %s sa nenašiel žiaden spoj (vývod %s nie je v "
 "symbole)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1190
 #, c-format
 msgid "Add net %s."
-msgstr "Pridajte sieť %s."
+msgstr "Pridať spoj %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1201
 #, c-format
@@ -50182,7 +50183,7 @@ msgstr "Odstránená nepoužívaná puzdra %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2329
 #, c-format
 msgid "Removed unused net %s."
-msgstr "Odstránená nepoužívaná sieť %s."
+msgstr "Odstrániť nepoužitý spoj %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2342
 msgid "Updating design variants..."
@@ -51694,9 +51695,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"Vrstva CADSTAR '%s' je definovaná ako vrstva výkonovej roviny. Sieť s "
-"takýmto názvom však neexistuje. Vrstva bola načítaná, ale nebola vytvorená "
-"žiadna medená zóna."
+"Vrstva CADSTAR '%s' je definovaná ako napájacia vrstva. Spoj s takýmto "
+"názvom však neexistuje. Vrstva bola načítaná, ale nebola vytvorená žiadna "
+"medená zóna."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2167
 msgid ""
@@ -51715,8 +51716,7 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
-"Sieť '%s' odkazuje na ID komponentu '%s', ktoré neexistuje. Toto bolo "
-"ignorované."
+"Spoj '%s' odkazuje na komponent s ID '%s', ktoré neexistuje. Bol ignorovaný."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2275
 #, c-format
@@ -51724,8 +51724,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Sieť '%s' odkazuje na neexistujúci index podložky '%d' v komponente '%s'. "
-"Toto bolo ignorované."
+"Spoj '%s' odkazuje na neexistujúci plôšku s indexom '%d' v komponente '%s'. "
+"Bol ignorovaný."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2440
 msgid "Text Variables could not be set as there is no project loaded."
@@ -52105,7 +52105,7 @@ msgstr "Neošetrený typ tvaru %d v mnohouholníku na vrstve %s, sekvencia %d %d
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3511
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr "Neplatný otvor s %d bodmi v zóne na vrstve %s so sieťou %s"
+msgstr "Neplatný otvor s %d bodmi v zóne na vrstve %s so spojom %s"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3553
 #, c-format
@@ -52239,7 +52239,7 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3386
 #, c-format
 msgid "Exporting Layer %s, Net %s"
-msgstr "Exportovanie vrstvy %s, sieť %s"
+msgstr "Exportovanie vrstvy %s, spoj %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3422
 msgid "Via uses unsupported padstack; omitted from drill data."
@@ -53499,7 +53499,7 @@ msgstr "Priemer spätného vŕtania je príliš malé."
 
 #: pcbnew/pcb_track.cpp:1889
 msgid "Tertiary backdrill diameter is too small."
-msgstr "Terciárny priemer spätného vŕtania je príliš malý"
+msgstr "Terciárny priemer spätného vŕtania je príliš malý."
 
 #: pcbnew/pcb_track.cpp:2321
 msgid "Track (arc)"
@@ -54053,7 +54053,7 @@ msgstr ""
 #: pcbnew/router/pns_diff_pair_placer.cpp:598
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr "Nemožno nájsť vhodný východiskový bod pre viazanú sieť '%s'."
+msgstr "Nemožno nájsť vhodný východiskový bod pre párový spoj '%s'."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:91
 #: pcbnew/router/pns_meander_placer.cpp:70
@@ -54422,7 +54422,7 @@ msgstr "Smerovanie spoja"
 
 #: pcbnew/router/router_tool.cpp:2946
 msgid "(no net)"
-msgstr "(žiadna sieť)"
+msgstr "(žiadny spoj)"
 
 #: pcbnew/router/router_tool.cpp:2955
 msgid "Free-angle"
@@ -54461,7 +54461,7 @@ msgstr "Medzera diferenciálneho páru: %s"
 #: pcbnew/router/router_tool.cpp:3006 pcbnew/tools/pcb_control.cpp:2297
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
-msgstr "Max. nespárovaná dĺžka DP: %s"
+msgstr "Max. nepárová dĺžka DP: %s"
 
 #: pcbnew/sel_layer.cpp:745
 msgid "Warning: top and bottom layers are same."
@@ -54640,7 +54640,7 @@ msgstr "KiCad netlist súbory dosky"
 #: pcbnew/tools/board_editor_control.cpp:598
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr "Osirelá sieť %s prerodená.\n"
+msgstr "Osamotený spoj %s bol preradený.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:661
 #: pcbnew/tools/footprint_editor_control.cpp:958
@@ -54752,17 +54752,17 @@ msgstr "Protokol je neúplný: nebolo možné zostaviť vlastné pravidlá návr
 
 #: pcbnew/tools/board_inspection_tool.cpp:556
 msgid "Uncoupled Length"
-msgstr "Nezviazaná dĺžka"
+msgstr "Nepárová dĺžka"
 
 #: pcbnew/tools/board_inspection_tool.cpp:557
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Vyhodnotenie nezviazanej dĺžky dif. páru pre:"
+msgstr "Vyhodnotenie nepárovej dĺžky dif. páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:565
 #: pcbnew/tools/board_inspection_tool.cpp:1245
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Zistená max. nezviazaná dĺžka: %s."
+msgstr "Zistená max. nepárová dĺžka: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1727
@@ -55063,11 +55063,12 @@ msgstr "Zistené obmedzenia medzery: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1232
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Vyhodnotenie max. nezviazanej dĺžky diferenciálneho páru pre:"
+msgstr "Vyhodnotenie max. nepárovej dĺžky diferenciálneho páru pre:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1238
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Návrhové obmedzenie 'diff_pair_uncoupled' nie je definované."
+msgstr ""
+"Návrhové obmedzenie nepárovej dĺžky 'diff_pair_uncoupled' nie je definované."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
@@ -55306,7 +55307,7 @@ msgstr "Presunúť bod kotvenia puzdra"
 
 #: pcbnew/tools/drawing_tool.cpp:4015
 msgid "Select Net:"
-msgstr "Vybrať sieť:"
+msgstr "Vybrať spoj:"
 
 #: pcbnew/tools/drawing_tool.cpp:4281
 msgid "Via location violates DRC."
@@ -55479,8 +55480,8 @@ msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
-"%zu nevybratá/é/ých podložka/podložky/podložiek sú prepojené s týmito "
-"sieťami. Ako chcete pokračovať?"
+"%zu nevybratých plôšky/plôšiek sú prepojené s týmito spojmi. Ako chcete "
+"pokračovať?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
@@ -56867,7 +56868,7 @@ msgstr "Prepnúť posledné zvýraznenie siete"
 
 #: pcbnew/tools/pcb_actions.cpp:1526
 msgid "Toggle between last two highlighted nets"
-msgstr "Prepínanie medzi poslednými dvoma zvýraznenými sieťami"
+msgstr "Prepínanie medzi poslednými dvoma zvýraznenými spojmi"
 
 #: pcbnew/tools/pcb_actions.cpp:1539
 msgid "Toggle Net Highlight"
@@ -56875,7 +56876,7 @@ msgstr "Prepnúť zvýraznenie siete"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Zvýrazniť všetky medené položky na vybranej sieti/sieťach"
+msgstr "Zvýrazniť všetky medené položky na vybranom spoji/spojoch"
 
 #: pcbnew/tools/pcb_actions.cpp:1559
 msgid "Hide Net in Ratsnest"
@@ -58435,17 +58436,17 @@ msgstr "Vyberte, kedy sa majú zobrazovať farby siete a netclass"
 #: pcbnew/widgets/appearance_controls.cpp:726
 #: pcbnew/widgets/appearance_controls.cpp:2623
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "Sieť a farby netclass sú zobrazené na všetkých medených predmetoch"
+msgstr "Farby spoja a triedy spojov sú zobrazené na všetkých medených položkách"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 #: pcbnew/widgets/appearance_controls.cpp:2626
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Farby spojov a triedy spojov použiť iba na vzdušné spoje"
+msgstr "Farby spojov a triedy spojov použiť iba na vzdušné prepojenia"
 
 #: pcbnew/widgets/appearance_controls.cpp:741
 #: pcbnew/widgets/appearance_controls.cpp:2629
 msgid "Net and netclass colors are not shown"
-msgstr "Sieť a farby netclass nie sú zobrazené"
+msgstr "Farby spoja a triedy spojov nie sú zobrazené"
 
 #: pcbnew/widgets/appearance_controls.cpp:752
 #: pcbnew/widgets/appearance_controls.cpp:2634
@@ -58970,19 +58971,19 @@ msgstr "Počet plôšok"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1094
 msgid "Highlight Selected Net"
-msgstr "Zvýrazniť vybranú sieť"
+msgstr "Zvýrazniť vybraný spoj"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1110
 msgid "Rename Selected Net..."
-msgstr "Premenovať vybranú sieť..."
+msgstr "Premenovať vybraný spoj..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1114
 msgid "Delete Selected Net"
-msgstr "Odstrániť vybranú sieť"
+msgstr "Odstrániť vybraný spoj"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1120
 msgid "Add Net..."
-msgstr "Pridať sieť..."
+msgstr "Pridať spoj..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1133
 msgid "Highlight Selected Nets"
@@ -59072,7 +59073,7 @@ msgstr "%s (%s)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1626
 msgid "New Net"
-msgstr "Nová sieť"
+msgstr "Nový spoj"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1638
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1704
@@ -59082,7 +59083,7 @@ msgstr "Názov spoja '%s' sa už používa."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1682
 msgid "Rename Net"
-msgstr "Premenovať sieť"
+msgstr "Premenovať spoj"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1695
 msgid "Net name cannot be empty."
@@ -59091,7 +59092,7 @@ msgstr "Názov siete nemôže byť prázdny."
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1761
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Sieť '%s' sa používa. Odstrániť napriek tomu?"
+msgstr "Spoj '%s' sa používa.  Odstrániť aj napriek tomu?"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1801
 #, c-format
@@ -59114,7 +59115,7 @@ msgstr "Trieda"
 #: pcbnew/widgets/search_handlers.cpp:476
 #: pcbnew/widgets/search_handlers.cpp:564
 msgid "No Net"
-msgstr "Žiadna sieť"
+msgstr "Žiadny spoj"
 
 #: pcbnew/widgets/search_handlers.cpp:607
 msgid "Drills"
