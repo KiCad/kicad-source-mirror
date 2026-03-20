@@ -3666,6 +3666,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         int                         m_worstClearance;
         bool                        m_allowDRCViolations;
 
+        int sub_e( int aClearance )
+        {
+            return std::max( 0, aClearance - m_drcEpsilon );
+        };
+
         VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) :
                 m_frame( aFrame ),
                 m_gridHelper( aFrame->GetToolManager(), aFrame->GetMagneticItemsSettings() ),
@@ -3833,7 +3838,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( layer );
                     std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
 
-                    if( viaShape->Collide( otherShape.get(), clearance - m_drcEpsilon ) )
+                    if( viaShape->Collide( otherShape.get(), sub_e( clearance ) ) )
                         return true;
                 }
             }
@@ -3847,7 +3852,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( UNDEFINED_LAYER );
 
-                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(), clearance - m_drcEpsilon ) )
+                    if( viaShape->Collide( aOther->GetEffectiveHoleShape().get(), sub_e( clearance ) ) )
                         return true;
                 }
             }

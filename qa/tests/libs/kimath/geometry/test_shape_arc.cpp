@@ -975,16 +975,13 @@ BOOST_DATA_TEST_CASE( CollideArc, boost::unit_test::data::make( arc_arc_collide_
     // SHAPE_LINE_CHAIN is zero width
     int clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc2.GetWidth() / 2 );
 
-    bool result_arc_to_chain =
-            arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+    bool result_arc_to_chain = arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
     clearance = pcbIUScale.mmToIU( c.m_clearance ) + ( arc1.GetWidth() / 2 );
-    bool result_chain_to_arc =
-            arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
+    bool result_chain_to_arc = arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
 
     clearance = ( arc1.GetWidth() / 2 ) + ( arc2.GetWidth() / 2 );
-    bool result_chain_to_chain =
-            arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+    bool result_chain_to_chain = arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
 
     BOOST_CHECK_EQUAL( result_arc_to_arc, c.m_exp_result );
     BOOST_CHECK_EQUAL( result_arc_to_chain, c.m_exp_result );
