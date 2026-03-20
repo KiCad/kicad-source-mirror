@@ -416,17 +416,19 @@ void PCB_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     // Make sure value comes immediately after reference.  (Reference is invariant, so was added by
     // FOOTPRINT_DESC().  We *could* still add it here, but then the whole Fields section comes at
     // the end, which isn't ideal.)
-    m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( _HKI( "Value" ) ), groupFields );
+    if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), _HKI( "Value" ) ) )
+        m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( _HKI( "Value" ) ), groupFields );
 
     for( const wxString& name : m_currentFieldNames )
     {
         if( !m_propMgr.GetProperty( TYPE_HASH( FOOTPRINT ), name ) )
         {
             m_propMgr.AddProperty( new PCB_FOOTPRINT_FIELD_PROPERTY( name ), groupFields )
-                    .SetAvailableFunc( [name]( INSPECTABLE* )
-                                       {
-                                           return PCB_PROPERTIES_PANEL::m_currentFieldNames.count( name );
-                                       } );
+                    .SetAvailableFunc(
+                            [name]( INSPECTABLE* )
+                            {
+                                return PCB_PROPERTIES_PANEL::m_currentFieldNames.count( name );
+                            } );
         }
     }
 
