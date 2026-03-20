@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
-"Last-Translator: Mitja Nemec <mitja.nemec@fe.uni-lj.si>\n"
+"PO-Revision-Date: 2026-03-20 17:12+0000\n"
+"Last-Translator: Mojca Miklavec Groenhuis <mojca@macports.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v9/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -514,9 +514,8 @@ msgid "Render Solid Colors"
 msgstr "Prikaži polne barve"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Uporabite samo lastnost difuzne barve iz datoteke 3D modela modela"
+msgstr "Uporabi samo lastnost difuzne barve iz datoteke 3D modela"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 #, fuzzy
@@ -4365,9 +4364,9 @@ msgid "Could not connect to '%s' "
 msgstr "Arhivske datoteke ni bilo mogoče odpreti\n"
 
 #: common/dialogs/git/dialog_git_repository.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Arhivske datoteke ni bilo mogoče odpreti\n"
+msgstr "Ni bilo mogoče odpreti privatnega ključa \"%s\""
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
 #, fuzzy
@@ -5100,9 +5099,9 @@ msgstr "Ponastavi in neuporabi"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:464
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Ločnica, %d točk"
+msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:540
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:563
@@ -5266,11 +5265,8 @@ msgid "Add Anyway"
 msgstr "Vseeno dodaj"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1173
-#, fuzzy
 msgid "Design Block Libraries"
 msgstr ""
-"\n"
-"Pregledam vse knjižnice?"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:1194
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1208
@@ -5523,9 +5519,9 @@ msgid "Retry"
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s'."
-msgstr "Ne morem odpreti datoteke"
+msgstr "Ne morem odpreti datoteke \"%s\"."
 
 #: common/dialogs/panel_embedded_files.cpp:527
 #, fuzzy, c-format
@@ -5571,9 +5567,9 @@ msgid "Tracks:"
 msgstr "Povezave:"
 
 #: common/dialogs/panel_grid_settings.cpp:137 common/tool/grid_menu.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Pojdi na stran %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:264
 #: common/dialogs/panel_grid_settings.cpp:308
@@ -6023,9 +6019,9 @@ msgid "Library nickname prefix:"
 msgstr "Napaka knjižničnega vzdevka"
 
 #: common/dialogs/panel_plugin_settings.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Obstoječa pot:"
+msgstr ""
 
 #: common/dialogs/panel_plugin_settings.cpp:112
 msgid "This installation of KiCad does not have API support enabled."
@@ -6042,9 +6038,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_plugin_settings.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Ne najdem datoteke"
+msgstr ""
 
 #: common/dialogs/panel_plugin_settings.cpp:151
 msgid "Not a valid Python 3 interpreter"
@@ -6925,9 +6921,9 @@ msgid "Zoom %.2f"
 msgstr "Povečava %.2f"
 
 #: common/eda_draw_frame.cpp:648
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "uporabnik mreže"
+msgstr "mreža %s"
 
 #: common/eda_draw_frame.cpp:664 pagelayout_editor/pl_editor_frame.cpp:751
 #, fuzzy
@@ -7741,9 +7737,9 @@ msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Imenik, ki vsebuje predloge projektov, nameščene s programom KiCad."
 
 #: common/env_vars.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Zastarela različica KICAD_TEMPLATE_DIR."
+msgstr "Zastarela različica %s."
 
 #: common/exceptions.cpp:78
 #, fuzzy, c-format
@@ -7765,7 +7761,7 @@ msgstr ""
 "pozneje."
 
 #: common/exceptions.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -7776,8 +7772,8 @@ msgstr ""
 "KiCad ni mogel odpreti te datoteke, saj je bila ustvarjena z novejšo "
 "različico od tiste, ki jo uporabljate.\n"
 "\n"
-"Za odpiranje boste morali KiCad nadgraditi na različico datirano %s ali "
-"pozneje."
+"Za odpiranje morate KiCad nadgraditi na različico %s ali novejšo (format "
+"datoteke %s ali novejši)."
 
 #: common/exceptions.cpp:153
 #, fuzzy
@@ -7835,9 +7831,9 @@ msgstr ""
 "%s"
 
 #: common/font/fontconfig.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Odtisa \"%s\" ni mogoče najti."
+msgstr "Pisave \"%s\" ni mogoče najti; zamenjana je s/z \"%s\"."
 
 #: common/footprint_info.cpp:122 cvpcb/cvpcb_mainframe.cpp:965
 #: eeschema/symbol_library_manager.cpp:82
@@ -7902,9 +7898,9 @@ msgid "'%s' is not a directory"
 msgstr "Bakreno območje (%s) nima povezanih blazinic."
 
 #: common/gestfich.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Ciljni imenik"
+msgstr "Napaka pri odstranjevanju imenika \"%s\": %s"
 
 #: common/gestfich.cpp:442 common/gestfich.cpp:519 common/gestfich.cpp:619
 #, fuzzy, c-format
@@ -13422,11 +13418,8 @@ msgid "Description:"
 msgstr "Opis:"
 
 #: eeschema/dialogs/dialog_design_block_properties_base.h:70
-#, fuzzy
 msgid "Design Block Properties"
 msgstr ""
-"\n"
-"Pregledam vse knjižnice?"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:550
 #, fuzzy, c-format
@@ -13557,14 +13550,12 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d simbol(i) mora(jo) biti številčen(i)"
 
 #: eeschema/dialogs/dialog_erc.cpp:483
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- Uporabnik je preklical ERC. <br> <br>"
+msgstr "-------- Uporabnik je preklical ERC.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:485 pcbnew/dialogs/dialog_drc.cpp:391
-#, fuzzy
 msgid "Done.<br><br>"
-msgstr "Končano. <br> <br>"
+msgstr "Končano.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:700
 #, fuzzy
@@ -28619,18 +28610,14 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr "<b> V Gerbview ni več razpoložljivih slojev </b> za nalaganje datotek"
 
 #: gerbview/files.cpp:45
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"\n"
-"<b> Ni naloženo: </b> <i> %s </i>"
+msgstr "<b>Ni naloženo:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
 msgstr ""
-"\n"
-"<b> Ni naloženo: </b> <i> %s </i>"
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:208
 #, fuzzy
