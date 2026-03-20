@@ -36,67 +36,68 @@ enum ERCE_T
 {
     ERCE_UNSPECIFIED = 0,
     ERCE_FIRST,
-    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST,  ///< Duplicate sheet names within a given sheet.
-    ERCE_ENDPOINT_OFF_GRID,       ///< Pin or wire-end off grid.
-    ERCE_PIN_NOT_CONNECTED,       ///< Pin not connected and not no connect symbol.
-    ERCE_PIN_NOT_DRIVEN,          ///< Pin connected to some others pins but no pin to drive it.
-                                  ///<   pins to drive it can be output, passive, 3sttae, I/O
-    ERCE_POWERPIN_NOT_DRIVEN,     ///< Power input pin connected to some others pins but no
-                                  ///<   power out pin to drive it.
-    ERCE_HIERACHICAL_LABEL,       ///< Mismatch between hierarchical labels and pins sheets.
-    ERCE_NOCONNECT_CONNECTED,     ///< A no connect symbol is connected to more than 1 pin.
-    ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.
-    ERCE_LABEL_NOT_CONNECTED,     ///< Label not connected to any pins.
-    ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
-    ERCE_SIMILAR_POWER,           ///< 2 power pins are equal for case insensitive comparisons.
-    ERCE_SIMILAR_LABEL_AND_POWER, ///< label and pin are equal for case insensitive comparisons.
-    ERCE_SINGLE_GLOBAL_LABEL,            ///< A label only exists once in the schematic.
-    ERCE_SAME_LOCAL_GLOBAL_LABEL, ///< 2 labels are equal for case insensitive comparisons.
-    ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
-                                  ///<   footprints assigned.
-    ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the
-                                  ///<   schematic
-    ERCE_MISSING_INPUT_PIN,       ///< Symbol has input pins that are not placed
-    ERCE_MISSING_BIDI_PIN,        ///< Symbol has bi-directional pins that are not placed
-    ERCE_MISSING_UNIT,            ///< Symbol has units that are not placed on the schematic
-    ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit symbol is connected to
-                                  ///<   more than one net.
-    ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.
-    ERCE_DRIVER_CONFLICT,         ///< Conflicting drivers (labels, etc) on a subgraph.
-    ERCE_BUS_ENTRY_CONFLICT,      ///< A wire connected to a bus doesn't match the bus.
-    ERCE_BUS_TO_BUS_CONFLICT,     ///< A connection between bus objects doesn't share at least
-                                  ///<   one net.
-    ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
-                                  ///<   (or vice versa).
-    ERCE_GROUND_PIN_NOT_GROUND,   ///< A ground-labeled pin is not on a ground net while another pin is.
-    ERCE_LABEL_SINGLE_PIN,        ///< A label is connected only to a single pin
-    ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
-    ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced but not defined.
-    ERCE_SIMULATION_MODEL,        ///< An error was found in the simulation model.
-    ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
-    ERCE_LIB_SYMBOL_ISSUES,       ///< Symbol not found in active libraries.
-    ERCE_LIB_SYMBOL_MISMATCH,     ///< Symbol doesn't match copy in library.
-    ERCE_FOOTPRINT_LINK_ISSUES,   ///< The footprint link is invalid, or points to a missing
-                                  ///<   (or inactive) footprint or library.
-    ERCE_FOOTPRINT_FILTERS,       ///< The assigned footprint doesn't match the footprint filters
-    ERCE_UNANNOTATED,             ///< Symbol has not been annotated.
-    ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
-    ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.
-    ERCE_DUPLICATE_REFERENCE,     ///< More than one symbol with the same reference.
-    ERCE_BUS_ENTRY_NEEDED,        ///< Importer failed to auto-place a bus entry.
-    ERCE_FOUR_WAY_JUNCTION,       ///< A four-way junction was found.
-    ERCE_LABEL_MULTIPLE_WIRES,    ///< A label is connected to more than one wire.
-    ERCE_UNCONNECTED_WIRE_ENDPOINT, ///< A label is connected to more than one wire.
-    ERCE_STACKED_PIN_SYNTAX,      ///< Pin name resembles stacked pin notation.
-    ERCE_FIELD_NAME_WHITESPACE,   ///< Field name has leading or trailing whitespace.
+    ERCE_DUPLICATE_SHEET_NAME = ERCE_FIRST, ///< Duplicate sheet names within a given sheet.
+    ERCE_ENDPOINT_OFF_GRID,                 ///< Pin or wire-end off grid.
+    ERCE_PIN_NOT_CONNECTED,                 ///< Pin not connected and not no connect symbol.
+    ERCE_PIN_NOT_DRIVEN,                    ///< Pin connected to some others pins but no pin to drive it.
+                                            ///<   pins to drive it can be output, passive, 3sttae, I/O
+    ERCE_POWERPIN_NOT_DRIVEN,               ///< Power input pin connected to some others pins but no
+                                            ///<   power out pin to drive it.
+    ERCE_HIERACHICAL_LABEL,                 ///< Mismatch between hierarchical labels and pins sheets.
+    ERCE_NOCONNECT_CONNECTED,               ///< A no connect symbol is connected to more than 1 pin.
+    ERCE_NOCONNECT_NOT_CONNECTED,           ///< A no connect symbol is not connected to anything.
+    ERCE_LABEL_NOT_CONNECTED,               ///< Label not connected to any pins.
+    ERCE_SIMILAR_LABELS,                    ///< 2 labels are equal for case insensitive comparisons.
+    ERCE_SIMILAR_POWER,                     ///< 2 power pins are equal for case insensitive comparisons.
+    ERCE_SIMILAR_LABEL_AND_POWER,           ///< label and pin are equal for case insensitive comparisons.
+    ERCE_SINGLE_GLOBAL_LABEL,               ///< A label only exists once in the schematic.
+    ERCE_SAME_LOCAL_GLOBAL_LABEL,           ///< 2 labels are equal for case insensitive comparisons.
+    ERCE_SAME_LOCAL_GLOBAL_POWER,           ///< Local power port and global power port have the same name.
+    ERCE_DIFFERENT_UNIT_FP,                 ///< Different units of the same symbol have different
+                                            ///<   footprints assigned.
+    ERCE_MISSING_POWER_INPUT_PIN,           ///< Symbol has power input pins that are not placed on the
+                                            ///<   schematic
+    ERCE_MISSING_INPUT_PIN,                 ///< Symbol has input pins that are not placed
+    ERCE_MISSING_BIDI_PIN,                  ///< Symbol has bi-directional pins that are not placed
+    ERCE_MISSING_UNIT,                      ///< Symbol has units that are not placed on the schematic
+    ERCE_DIFFERENT_UNIT_NET,                ///< Shared pin in a multi-unit symbol is connected to
+                                            ///<   more than one net.
+    ERCE_BUS_ALIAS_CONFLICT,                ///< Conflicting bus alias definitions across sheets.
+    ERCE_DRIVER_CONFLICT,                   ///< Conflicting drivers (labels, etc) on a subgraph.
+    ERCE_BUS_ENTRY_CONFLICT,                ///< A wire connected to a bus doesn't match the bus.
+    ERCE_BUS_TO_BUS_CONFLICT,               ///< A connection between bus objects doesn't share at least
+                                            ///<   one net.
+    ERCE_BUS_TO_NET_CONFLICT,               ///< A bus wire is graphically connected to a net port/pin
+                                            ///<   (or vice versa).
+    ERCE_GROUND_PIN_NOT_GROUND,             ///< A ground-labeled pin is not on a ground net while another pin is.
+    ERCE_LABEL_SINGLE_PIN,                  ///< A label is connected only to a single pin
+    ERCE_UNRESOLVED_VARIABLE,               ///< A text variable could not be resolved.
+    ERCE_UNDEFINED_NETCLASS,                ///< A netclass was referenced but not defined.
+    ERCE_SIMULATION_MODEL,                  ///< An error was found in the simulation model.
+    ERCE_WIRE_DANGLING,                     ///< Some wires are not connected to anything else.
+    ERCE_LIB_SYMBOL_ISSUES,                 ///< Symbol not found in active libraries.
+    ERCE_LIB_SYMBOL_MISMATCH,               ///< Symbol doesn't match copy in library.
+    ERCE_FOOTPRINT_LINK_ISSUES,             ///< The footprint link is invalid, or points to a missing
+                                            ///<   (or inactive) footprint or library.
+    ERCE_FOOTPRINT_FILTERS,                 ///< The assigned footprint doesn't match the footprint filters
+    ERCE_UNANNOTATED,                       ///< Symbol has not been annotated.
+    ERCE_EXTRA_UNITS,                       ///< Symbol has more units than are defined.
+    ERCE_DIFFERENT_UNIT_VALUE,              ///< Units of same symbol have different values.
+    ERCE_DUPLICATE_REFERENCE,               ///< More than one symbol with the same reference.
+    ERCE_BUS_ENTRY_NEEDED,                  ///< Importer failed to auto-place a bus entry.
+    ERCE_FOUR_WAY_JUNCTION,                 ///< A four-way junction was found.
+    ERCE_LABEL_MULTIPLE_WIRES,              ///< A label is connected to more than one wire.
+    ERCE_UNCONNECTED_WIRE_ENDPOINT,         ///< A label is connected to more than one wire.
+    ERCE_STACKED_PIN_SYNTAX,                ///< Pin name resembles stacked pin notation.
+    ERCE_FIELD_NAME_WHITESPACE,             ///< Field name has leading or trailing whitespace.
 
     ERCE_LAST = ERCE_FIELD_NAME_WHITESPACE,
 
     ERCE_DUPLICATE_PIN_ERROR,
-    ERCE_PIN_TO_PIN_WARNING,    // pin connected to an other pin: warning level
-    ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
-    ERCE_ANNOTATION_ACTION,     // Not actually an error; just an action performed during
-                                // annotation which is passed back through the error handler.
+    ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level
+    ERCE_PIN_TO_PIN_ERROR,   // pin connected to an other pin: error level
+    ERCE_ANNOTATION_ACTION,  // Not actually an error; just an action performed during
+                             // annotation which is passed back through the error handler.
     ERCE_GENERIC_WARNING,
     ERCE_GENERIC_ERROR
 };

@@ -38,6 +38,22 @@ struct ERC_REGRESSION_TEST_FIXTURE
 };
 
 
+static int CountErrorCode( SHEETLIST_ERC_ITEMS_PROVIDER& aErrors, int aErrorCode )
+{
+    int count = 0;
+
+    for( int i = 0; i < aErrors.GetCount(); ++i )
+    {
+        std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( aErrors.GetItem( i ) );
+
+        if( ercItem && ercItem->GetErrorCode() == aErrorCode )
+            ++count;
+    }
+
+    return count;
+}
+
+
 BOOST_FIXTURE_TEST_CASE( ERCLabelCapitalization, ERC_REGRESSION_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
@@ -113,4 +129,38 @@ BOOST_FIXTURE_TEST_CASE( ERCSameLocalGlobalLabel, ERC_REGRESSION_TEST_FIXTURE )
                                          << " but got " << errors.GetCount() << "\n"
                                          << reportWriter.GetTextReport() );
     }
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ERCSameLocalGlobalPower, ERC_REGRESSION_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    KI_TEST::LoadSchematic( m_settingsManager, "same_local_global_power", m_schematic );
+
+    ERC_SETTINGS&                settings = m_schematic->ErcSettings();
+    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+    settings.m_ERCSeverities[ERCE_SAME_LOCAL_GLOBAL_LABEL] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_SAME_LOCAL_GLOBAL_POWER] = RPT_SEVERITY_ERROR;
+
+    m_schematic->ConnectionGraph()->RunERC();
+
+    ERC_TESTER tester( m_schematic.get() );
+    tester.TestSameLocalGlobalLabel();
+
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+
+    BOOST_CHECK_MESSAGE( CountErrorCode( errors, ERCE_SAME_LOCAL_GLOBAL_POWER ) == 2,
+                         "Expected 2 ERCE_SAME_LOCAL_GLOBAL_POWER violations\n"
+                                 << reportWriter.GetTextReport() );
+
+    BOOST_CHECK_MESSAGE( CountErrorCode( errors, ERCE_SAME_LOCAL_GLOBAL_LABEL ) == 0,
+                         "Expected 0 ERCE_SAME_LOCAL_GLOBAL_LABEL violations\n"
+                                 << reportWriter.GetTextReport() );
 }
