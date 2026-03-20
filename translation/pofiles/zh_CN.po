@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:19-0700\n"
-"PO-Revision-Date: 2026-03-18 18:47+0000\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -5804,8 +5804,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"未在预期位置找到内置库表。这通常意味着表示你安装了 KiCad 软件但未安装库。你可"
-"以继续进行配置, 但需要单独安装库后才会生效。"
+"未在预期位置找到内置库表。这通常意味着表示你安装了 KiCad 软件但未安装库。\n"
+"你可以继续进行配置, 但需要单独安装库后才会生效。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -5847,7 +5847,7 @@ msgstr "启用匿名数据收集"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
-msgstr "您想如何配置 KiCad?"
+msgstr "打算如何配置 KiCad?"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:25
 msgid "Import settings from a previous version at:"
@@ -5863,7 +5863,7 @@ msgstr "所选路径不包含有效的 KiCad 设置!"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:52
 msgid "Start with default settings"
-msgstr "以默认设置开始"
+msgstr "使用默认设置启动"
 
 #: common/dialogs/panel_text_variables.cpp:107
 msgid ""
@@ -9666,13 +9666,13 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
-"KiCad 正在首次启动中 (缺少某些配置文件), 需要一点时间配置一些基本设置。\n"
+"KiCad 首次启动, 或某些配置文件丢失, 需要进行一些基本配置。\n"
 "\n"
 "稍后你可以通过「偏好设置」来修改默认设置。"
 
 #: common/startwizard/startwizard.cpp:110
 msgid "For help, please visit "
-msgstr "需要帮助, 请访问 "
+msgstr "如需帮助, 请访问 "
 
 #: common/startwizard/startwizard.cpp:180
 msgid "KiCad Setup"
