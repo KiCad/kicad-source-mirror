@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"PO-Revision-Date: 2026-03-20 17:11+0000\n"
 "Last-Translator: Damjan Prerad <damjan@kipro-pcb.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v9/sr/>\n"
 "Language: sr\n"
@@ -219,9 +219,8 @@ msgid "3D Grid"
 msgstr "3D координатна мрежа"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
-#, fuzzy
 msgid "Raytracing"
-msgstr "Raytracing опције"
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
@@ -1176,9 +1175,8 @@ msgid "Show model bounding boxes"
 msgstr "Прикажи оквире око модела"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Прикажи дебљину бакра"
+msgstr "Прикажи дебљину бакрних и техничких слојева (веома спора опција)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1227,9 +1225,8 @@ msgid "Disable thickness"
 msgstr "Онемогући дебљину"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable vias"
-msgstr "Искључити рупе"
+msgstr "Искључи вије"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
@@ -1724,14 +1721,12 @@ msgid "Errors"
 msgstr "Грешке"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:587
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Стави текст"
+msgstr "Замени учитану датотеку?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:588
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "\"%s\" већ постоји."
+msgstr "Већ постоји учитана датотека. Да ли желите да је замените?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2016,9 +2011,8 @@ msgid "Your current changes will be permanently lost."
 msgstr "Ваше тренутне промене ће заувек бити изгубљене."
 
 #: common/confirm.cpp:124
-#, fuzzy
 msgid "&Revert"
-msgstr "Врати"
+msgstr "&Врати"
 
 #: common/confirm.cpp:150 common/dialog_about/dialog_about_base.cpp:90
 #: common/dialog_shim.cpp:838
@@ -2082,9 +2076,8 @@ msgid "&Yes"
 msgstr "Да"
 
 #: common/confirm.cpp:273 common/dialog_shim.cpp:841
-#, fuzzy
 msgid "&No"
-msgstr "Не"
+msgstr "&Не"
 
 #: common/design_block_info_impl.cpp:132
 msgid "Loading design_blocks..."
@@ -2331,7 +2324,7 @@ msgstr "Програмери за паковање"
 #: common/dialog_about/dialog_about.cpp:118
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "GDI објекти у употреби %u"
 
 #: common/dialog_about/dialog_about.cpp:125
 #, c-format
@@ -3853,7 +3846,6 @@ msgid "Status"
 msgstr "Статус"
 
 #: common/dialogs/git/dialog_git_commit.cpp:99
-#, fuzzy
 msgid "New"
 msgstr "Нови"
 
@@ -4006,9 +3998,8 @@ msgid "Add"
 msgstr "Додај"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:20
-#, fuzzy
 msgid "Enable Git tracking"
-msgstr "Дозволи анимацију"
+msgstr "Дозволи Гит праћење"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:28
 msgid "Remote Tracking"
@@ -4657,9 +4648,9 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:222
 #: eeschema/dialogs/panel_sym_lib_table.cpp:963
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:867
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "Библиотека \"%s\" није пронађена."
+msgstr "Библиотека '%s' није пронађена."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:855
 #, c-format
@@ -4890,12 +4881,16 @@ msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"Обрисане уграђене датотеке се референцирају у неким подножјима.\n"
+"Обриши подножја такође?"
 
 #: common/dialogs/panel_embedded_files.cpp:222
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"Обрисани уграђени фајлови се помињу у неким симболима.\n"
+"Такође обриши симболе?"
 
 #: common/dialogs/panel_embedded_files.cpp:344
 #: common/dialogs/panel_embedded_files.cpp:460
@@ -4936,6 +4931,8 @@ msgstr "Изабери фајл за уградњу"
 #: common/dialogs/panel_embedded_files.cpp:404
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"Уграђене датотеке су наслеђене од родитељског симбола и не могу бити "
+"уклоњене."
 
 #: common/dialogs/panel_embedded_files.cpp:447
 msgid "Select a directory to export files"
@@ -10335,7 +10332,6 @@ msgstr ""
 "а)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
 msgstr "Опције приказивања"
 
@@ -10350,9 +10346,8 @@ msgstr "Опције приказивања"
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:87
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:115
-#, fuzzy
 msgid "Style:"
-msgstr "Стил"
+msgstr "Стил:"
 
 #: common/widgets/gal_options_panel_base.cpp:61
 msgid "Dots"
@@ -10371,14 +10366,12 @@ msgid "Grid thickness:"
 msgstr "Дебљина мрежице:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "Попуњавање зона"
+msgstr "Најмањи размак у мрежи:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Прикажи"
+msgstr "Закачи на мрежу:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -10390,9 +10383,8 @@ msgid "Always"
 msgstr "Увијек"
 
 #: common/widgets/gal_options_panel_base.cpp:106
-#, fuzzy
 msgid "When grid shown"
-msgstr "Изабери језик"
+msgstr "Када је мрежа приказана"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -10404,19 +10396,16 @@ msgid "Never"
 msgstr "Никад"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "Мали крстићи"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
-msgstr "Прикажи"
+msgstr "Крстићи у целом прозору"
 
 #: common/widgets/gal_options_panel_base.cpp:141
-#, fuzzy
 msgid "Always show crosshairs"
-msgstr "Прикажи"
+msgstr "Увек прикажи крстиће"
 
 #: common/widgets/grid_text_button_helpers.cpp:375
 #, fuzzy
@@ -15016,9 +15005,8 @@ msgid "Search &net names"
 msgstr "Име:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:127
-#, fuzzy
 msgid "Replace"
-msgstr "&Замјени"
+msgstr "Замени"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:44
 #, fuzzy
@@ -15394,9 +15382,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283 pcbnew/pad.cpp:2743
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:711
-#, fuzzy
 msgid "Custom"
-msgstr "Изабери језик"
+msgstr "Наменски"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
@@ -35725,7 +35712,7 @@ msgstr "није покренуто"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Поново испуни све зоне прије покретања провере дизајна (DRC)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
