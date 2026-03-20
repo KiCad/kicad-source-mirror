@@ -307,6 +307,9 @@ public:
                                                         DRC_CONSTRAINT_T aConstraint = ASSERTION_CONSTRAINT,
                                                         REPORTER* aReporter = nullptr );
 
+    std::vector<BOARD_ITEM*> GetItemsMatchingRule( const std::shared_ptr<DRC_RULE>& aRule,
+                                                   REPORTER*                        aReporter = nullptr );
+
     static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
     /**
