@@ -158,7 +158,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
                             row.SetErrorDescription( child->ErrorDescription() );
                         }
 
-                        m_childTables.insert( { row.URI(), std::move( child ) } );
+                        m_childTables.insert_or_assign( row.URI(), std::move( child ) );
                     }
                 }
             };
