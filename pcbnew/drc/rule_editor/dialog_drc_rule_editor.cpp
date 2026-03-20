@@ -943,56 +943,56 @@ int DIALOG_DRC_RULE_EDITOR::highlightMatchingItems( int aNodeId )
 
     // Ensure we use the latest text from the condition editor
     m_ruleEditorPanel->TransferDataFromWindow();
-    wxString condition = m_ruleEditorPanel->GetConstraintData()->GetRuleCondition();
 
-    if( condition.IsEmpty() )
-    {
-        wxString ruleText = m_ruleEditorPanel->GetConstraintData()->GetGeneratedRule();
+    std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> constraintData = m_ruleEditorPanel->GetConstraintData();
+    std::shared_ptr<DRC_RULE>                    selectedRule;
+    wxString                                     condition;
+    wxString                                     ruleText = constraintData->GetGeneratedRule();
 
-        if( !ruleText.IsEmpty() )
-        {
-            wxString fullText = wxS( "(version 1)\n" ) + ruleText;
-
-            try
-            {
-                std::vector<std::shared_ptr<DRC_RULE>> rules;
-                DRC_RULES_PARSER                       parser( fullText, wxS( "ShowMatches" ) );
-                parser.Parse( rules, nullptr );
-
-                if( !rules.empty() && rules[0]->m_Condition )
-                    condition = rules[0]->m_Condition->GetExpression();
-            }
-            catch( PARSE_ERROR& )
-            {
-                return -1;
-            }
-        }
-    }
-
-    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
-                wxS( "[ShowMatches] nodeId=%d, condition='%s'" ), aNodeId, condition );
-
-    // Empty condition matches nothing
-    if( condition.IsEmpty() )
+    if( ruleText.IsEmpty() )
     {
         m_frame->FocusOnItems( {} );
         Raise();
         return 0;
     }
 
-    // Pre-compile condition to detect syntax errors
-    DRC_RULE_CONDITION testCondition( condition );
+    wxString fullText = wxS( "(version 1)\n" ) + ruleText;
 
-    if( !testCondition.Compile( nullptr ) )
+    try
     {
-        wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ), wxS( "[ShowMatches] compile failed" ) );
+        std::vector<std::shared_ptr<DRC_RULE>> rules;
+        DRC_RULES_PARSER                       parser( fullText, wxS( "ShowMatches" ) );
+        parser.Parse( rules, nullptr );
+
+        if( rules.empty() )
+        {
+            m_frame->FocusOnItems( {} );
+            Raise();
+            return 0;
+        }
+
+        selectedRule = rules[0];
+        condition = selectedRule->m_Condition ? selectedRule->m_Condition->GetExpression() : wxString();
+
+        if( selectedRule->m_Condition && !selectedRule->m_Condition->GetExpression().IsEmpty()
+            && !selectedRule->m_Condition->Compile( nullptr ) )
+        {
+            return -1;
+        }
+    }
+    catch( PARSE_ERROR& )
+    {
         return -1;
     }
 
+    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ), wxS( "[ShowMatches] nodeId=%d, condition='%s'" ), aNodeId,
+                condition );
+
     m_drcTool = m_frame->GetToolManager()->GetTool<DRC_TOOL>();
 
-    std::vector<BOARD_ITEM*> allMatches =
-            m_drcTool->GetDRCEngine()->GetItemsMatchingCondition( condition, ASSERTION_CONSTRAINT, m_reporter );
+    std::vector<BOARD_ITEM*> allMatches;
+
+    allMatches = m_drcTool->GetDRCEngine()->GetItemsMatchingRule( selectedRule, m_reporter );
 
     // Filter out items without visible geometry
     std::vector<BOARD_ITEM*> matches;
