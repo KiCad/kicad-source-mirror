@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-13 21:38+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-03-20 17:12+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3030,7 +3030,7 @@ msgstr "选择设置路径"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
-msgstr "您想如何配置 KiCad?"
+msgstr "打算如何配置 KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
@@ -3056,7 +3056,7 @@ msgstr "选中后, 先前版本的符号和封装库表将导入到此版本中"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
-msgstr "以默认设置开始"
+msgstr "使用默认设置启动"
 
 #: common/dialogs/dialog_migrate_settings_base.h:68
 msgid "Configure KiCad Settings Path"
