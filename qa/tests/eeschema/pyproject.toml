@@ -9,6 +9,7 @@ dependencies = [
     "pydantic>=2.0.0",
     "uvicorn[standard]>=0.23.0",
     "sexpdata>=1.0.0",
+    "python-multipart>=0.0.22",
 ]
 
 [project.optional-dependencies]
