@@ -694,11 +694,6 @@ async def oauth_revoke():
     return Response(status_code=200)
 
 
-@app.get("/v1/parts/{part_id}")
-async def remote_provider_manifest(request: Request, part_id: str):
-    return manifest_payload(request, part_id)
-
-
 @app.get("/downloads/{asset_name}")
 async def download_asset(asset_name: str):
     if asset_name not in download_payloads:
@@ -732,6 +727,13 @@ async def get_part_details(part_id: str):
         raise HTTPException(status_code=404, detail=f"Part {part_id} not found")
 
     return detailed_parts[part_id]
+
+# Note: this path must come after the /v1/parts/{part_id}.json path above
+# because it will greedily match all requests to /v1/parts/{part_id}, including
+# those intended for /v1/parts/{part_id}.json
+@app.get("/v1/parts/{part_id}")
+async def remote_provider_manifest(request: Request, part_id: str):
+    return manifest_payload(request, part_id)
 
 
 def main():
