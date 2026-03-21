@@ -22,10 +22,9 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-20 17:11+0000\n"
+"PO-Revision-Date: 2026-03-22 01:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3615,9 +3614,8 @@ msgstr "Wypełnij wszystkie strefy przed przeprowadzeniem kontroli DRC"
 
 #: common/dialogs/dialog_restore_local_history.cpp:34
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "Klonuj projekt z repozytorium..."
+msgstr "Przywróć projekt z lokalnej historii..."
 
 #: common/dialogs/dialog_restore_local_history.cpp:47
 #: eeschema/dialogs/dialog_sim_format_value.cpp:48
@@ -5003,7 +5001,7 @@ msgstr "Siatka 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1084
 msgid "Grid Overrides"
-msgstr "Zastępowanie siatki"
+msgstr "Alternatywne siatki"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -28002,14 +28000,12 @@ msgid "Unable to create a temporary file for the symbol payload."
 msgstr "Nie można utworzyć pliku tymczasowego dla przeładowania symbolu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:193
-#, fuzzy
 msgid "Failed to write the temporary symbol payload."
-msgstr "Nie udało się utworzyć pliku tymczasowego '%s'."
+msgstr "Nie udało się zapisać tymczasowego ładunku symboli."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:205
-#, fuzzy
 msgid "Unable to access the KiCad symbol plugin."
-msgstr "Nie można ściąć wybranych linii."
+msgstr "Nie można uzyskać dostępu do wtyczki obsługującej symbole KiCad."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:219
 msgid "Symbol payload did not include the expected symbol."
@@ -28029,33 +28025,28 @@ msgid "Configure remote providers"
 msgstr "Konfiguracja zdalnych dostawców"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:395
-#, fuzzy
 msgid "No remote providers configured."
-msgstr "Nie skonfigurowano żadnej gałęzi nadrzędnej."
+msgstr "Nie skonfigurowano żadnych zdalnych dostawców symboli."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:470
-#, fuzzy
 msgid "Unable to load remote provider metadata."
-msgstr "Nie można odczytać pliku danych '%s'."
+msgstr "Nie można załadować metadanych zdalnego dostawcy."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:715
 msgid "A remote provider sign-in flow is already in progress."
 msgstr "Proces logowania zdalnego dostawcy jest już w toku."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:747
-#, fuzzy
 msgid "Unable to start the local OAuth callback listener."
-msgstr "Nie można odjąć zaznaczonych polygonów."
+msgstr "Nie można uruchomić lokalnego nasłuchu wywołań zwrotnych OAuth."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:757
-#, fuzzy
 msgid "Unable to open the system browser for sign-in."
-msgstr "Nie można otworzyć '%s' dla odczytu."
+msgstr "Nie można otworzyć przeglądarki systemowej by móc się zalogować."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:787
-#, fuzzy
 msgid "Failed to delete stored remote provider tokens."
-msgstr "Nie można przetworzyć lokalnego pliku 'repository.json'."
+msgstr "Nie można usnąć zapisanych tokenów zdalnych dostawców."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:827
 #, c-format
@@ -28063,9 +28054,8 @@ msgid "Unsupported RPC version %d."
 msgstr "Niewspierane RPC wersja %d."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:836
-#, fuzzy
 msgid "Missing session identifier."
-msgstr "Brak informacji o numerze wersji."
+msgstr "Brak informacji o identyfikatorze sesji."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:843
 msgid "Session identifier did not match the active provider session."
@@ -28076,19 +28066,18 @@ msgid "No remote provider is currently selected."
 msgstr "Żaden zdalny dostawca nie jest obecnie wybrany."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1052
-#, fuzzy
 msgid "Unable to process provider payload."
-msgstr "Nie można zachować ładunku."
+msgstr "Nie można przetworzyć ładunku dostawcy."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1058
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' is not supported."
-msgstr "%s nie jest obsługiwany."
+msgstr "Polecenie '%s' nie jest obsługiwane."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1071
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported transfer mode '%s'."
-msgstr "Niewspierany plik schematu '%s'."
+msgstr "Niewspierany tryb transferu '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1077
 msgid "Unsupported symbol payload type."
@@ -28099,9 +28088,8 @@ msgid "No schematic editor is available to store symbols."
 msgstr "Brak dostępnego edytora schematów by zachować symbole."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1128
-#, fuzzy
 msgid "Unable to access the symbol library manager."
-msgstr "Nie dało się utworzyć pliku bibliotek symboli '%s'."
+msgstr "Nie ma dostępu do zarządzania biblioteką symboli."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1145
 msgid "Unable to save the downloaded symbol."
@@ -28117,23 +28105,21 @@ msgid "Component list must be a non-empty array."
 msgstr "Lista komponentów nie może być pustą tabelą."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1189
-#, fuzzy
 msgid "Component entries must be objects."
-msgstr "Komponent: Nazwa nie może być pusta."
+msgstr "Wpisy o komponentach muszą być obiektami."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1197
 msgid "Component entry was missing a type."
 msgstr "Wpis o komponencie nie posiada typu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1256
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported component type '%s'."
-msgstr "Niewspierany plik schematu '%s'."
+msgstr "Niewspierany typ komponentu '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1275
-#, fuzzy
 msgid "Unsupported footprint payload type."
-msgstr "Nie załadowano footprintu."
+msgstr "Niewspierany typ ładunku footprintów."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1390
 msgid "Remote provider metadata is not loaded."
@@ -28156,9 +28142,8 @@ msgid "Remote provider sign-in failed."
 msgstr "Logowanie do zdalnego dostawcy nie powiodło się."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1483
-#, fuzzy
 msgid "Failed to store remote provider tokens securely."
-msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
+msgstr "Nie udało się w bezpieczny sposób zapisać tokenów zdalnego dostawcy."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -29129,9 +29114,9 @@ msgid "(with X2 attributes)"
 msgstr "(z atrybutami X2)"
 
 #: gerbview/gerbview_frame.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
-msgstr "Nazwa obrazu: \"%s\"  Nazwa warstwy: \"%s\""
+msgstr "Nazwa obrazu: '%s'  Nazwa warstwy: '%s'"
 
 #: gerbview/gerbview_frame.cpp:712
 msgid "X2 attr"
@@ -29200,14 +29185,14 @@ msgid "Invalid Gerber file: missing G74 or G75 arc command"
 msgstr "Nieprawidłowy plik Gerber: brak poleceń rysowania łuków G74 lub G75"
 
 #: gerbview/rs274x.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X: Niepoprawny format polecenia Gerber '%c' w linii %d: \"%s\""
+msgstr "RS274X: Niepoprawny format polecenia Gerber '%c' w linii %d: '%s'"
 
 #: gerbview/rs274x.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "GERBER file '%s' may not display as intended."
-msgstr "Plik GERBER \"%s\" może nie być wyświetlany jak powinien."
+msgstr "Plik GERBER '%s' może nie być wyświetlany jak powinien."
 
 #: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -29260,7 +29245,6 @@ msgid "Aperture highlight"
 msgstr "Podświetl aperturę"
 
 #: gerbview/toolbars_gerber.cpp:317
-#, fuzzy
 msgid "DCode selector"
 msgstr "Wybór D-Kodów"
 
@@ -29675,9 +29659,8 @@ msgid "Add new library to global library table"
 msgstr "Dodaj bibliotekę do globalnej tabeli bibliotek"
 
 #: include/widgets/filedlg_hook_new_library.h:43
-#, fuzzy
 msgid "Add new library to project library table"
-msgstr "Dodaj nowy wpis w Bibliotece Symboli Projektu"
+msgstr "Dodaje nową bibliotekę do tabeli bibliotek projektu"
 
 #: include/widgets/filedlg_import_non_kicad.h:38
 msgid "Show import issues"
@@ -29712,9 +29695,8 @@ msgid "Input directory"
 msgstr "Folder wejściowy"
 
 #: kicad/cli/command.cpp:158
-#, fuzzy
 msgid "Input file or directory"
-msgstr "Folder wejściowy"
+msgstr "Plik wejściowy lub folder"
 
 #: kicad/cli/command.cpp:174
 msgid "Output file"
@@ -29725,9 +29707,8 @@ msgid "Output directory"
 msgstr "Folder wyjściowy"
 
 #: kicad/cli/command.cpp:190
-#, fuzzy
 msgid "Output file or directory"
-msgstr "Folder wejściowy"
+msgstr "Plik wyjściowy lub folder"
 
 #: kicad/cli/command.cpp:206
 msgid ""
@@ -29877,9 +29858,8 @@ msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "Zwracaj niezerowy kod błędu zależny od wystąpienia naruszeń"
 
 #: kicad/cli/command_pcb_drc.cpp:95
-#, fuzzy
 msgid "Refill zones before running DRC"
-msgstr "Wypełnij wszystkie strefy przed przeprowadzeniem kontroli DRC"
+msgstr "Wypełnij strefy przed przeprowadzeniem kontroli DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:99
 msgid "Save the board after DRC, must be used with --refill-zones"
@@ -30077,24 +30057,20 @@ msgid "Valid options excellon, gerber."
 msgstr "Prawidłowe opcje Excellon, Gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: absolute, plot"
-msgstr "Prawidłowe opcje to: absolute,plot"
+msgstr "Prawidłowe opcje to: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr "Prawidłowe opcje to: decimal,suppressleading,suppresstrailing,keep."
+msgstr "Prawidłowe opcje to: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
-#, fuzzy
 msgid "Valid options are: route, alternate."
 msgstr "Prawidłowe opcje to: route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:76
-#, fuzzy
 msgid "Output units, valid options: in, mm"
-msgstr "Jednostki wyjściowe, prawidłowe opcje: in,mm"
+msgstr "Jednostki wyjściowe, prawidłowe opcje: in, mm"
 
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
@@ -30127,9 +30103,8 @@ msgid "Generate a file specifically for tenting"
 msgstr "Wygeneruj plik z danymi o procesie wykończenia przelotek"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
-#, fuzzy
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
-msgstr "Prawidłowe opcje: pdf,gerberx2,ps,dxf,svg"
+msgstr "Prawidłowe opcje: pdf, gerberx2, ps, dxf, svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:114
 msgid "Precision of Gerber coordinates (5 or 6)"
@@ -30383,24 +30358,21 @@ msgid "Generate Position File"
 msgstr "Generowanie plików położeń footprintów"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
-#, fuzzy
 msgid ""
 "Valid options: front, back, both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Prawidłowe opcje: front,back,both. Format Gerber obsługuje tylko \"front\" "
+"Prawidłowe opcje: front, back, both. Format Gerber obsługuje tylko \"front\" "
 "lub \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
-#, fuzzy
 msgid "Valid options: ascii, csv, gerber"
-msgstr "Prawidłowe opcje: ascii,csv,gerber"
+msgstr "Prawidłowe opcje: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:60
-#, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
 msgstr ""
-"Jednostki wyjściowe; tylko ascii lub format csv; prawidłowe opcje: in,mm"
+"Jednostki wyjściowe; tylko ascii lub format csv; prawidłowe opcje: in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:64
 msgid ""
@@ -30470,22 +30442,18 @@ msgid "Force A4 paper size."
 msgstr "Wymuś rozmiar A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
-#, fuzzy
 msgid "Generate a board statistics report"
-msgstr "Pokazuje okno ze danymi statystycznymi płytki"
+msgstr "Pokazuje okno z danymi statystycznymi płytki"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
-#, fuzzy
 msgid "Report units; valid options: in, mm"
-msgstr "Jednostki wyjściowe raportu, prawidłowe opcje: in, mm, mils"
+msgstr "Jednostki wyjściowe raportu, prawidłowe opcje: in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
-#, fuzzy
 msgid "Exclude footprints without pads"
-msgstr "Wyklucz wszystkie footprinty które nie posiadają pól"
+msgstr "Wyklucz footprinty które nie posiadają pól lutowniczych"
 
 #: kicad/cli/command_pcb_export_stats.cpp:53
-#, fuzzy
 msgid "Subtract holes from the board area"
 msgstr "Odejmij otwory od powierzchni płytki"
 
@@ -30521,9 +30489,8 @@ msgid "No drawing sheet"
 msgstr "Nie rysuj ramki arkusza"
 
 #: kicad/cli/command_pcb_import.cpp:40
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Eksportuj listę sieci w formacie KiCad"
+msgstr "Importuj plik PCB spoza KiCad do formatu KiCad"
 
 #: kicad/cli/command_pcb_import.cpp:44
 msgid ""
@@ -30695,14 +30662,12 @@ msgid "Invalid image format\n"
 msgstr "Nieprawidłowy format obrazu\n"
 
 #: kicad/cli/command_pcb_upgrade.cpp:31
-#, fuzzy
 msgid "Upgrade the board file's format to the latest one"
-msgstr "Importuje plik z obwodem drukowanym z innych aplikacji"
+msgstr "Zaktualizuj format pliku płytki do najnowszej wersji"
 
 #: kicad/cli/command_pcb_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the board file to be resaved regardless of versioning"
-msgstr "Wymusza ponowne zapisanie biblioteki symboli niezależnie od wersji"
+msgstr "Wymusza ponowne zapisanie pliku tablicy niezależnie od wersji"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -30833,9 +30798,8 @@ msgid "Upgrade the schematic file's format to the latest one"
 msgstr "Uaktualnij plik schematu do najnowszego formatu"
 
 #: kicad/cli/command_sch_upgrade.cpp:34
-#, fuzzy
 msgid "Forces the schematic file to be resaved regardless of versioning"
-msgstr "Wymusza ponowne zapisanie biblioteki symboli niezależnie od wersji"
+msgstr "Wymusza ponowne zapisanie pliku schematu niezależnie od wersji"
 
 #: kicad/cli/command_sym.h:31
 msgid "Symbol and Symbol Libraries"
@@ -30932,9 +30896,8 @@ msgid "Include jobs:"
 msgstr "Uwzględnij zadania:"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:160
-#, fuzzy
 msgid "Edit Advanced Configuration"
-msgstr "Przeładuj konfigurację"
+msgstr "Edycja konfiguracji zaawansowanej"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:173
 msgid "Key"
@@ -30945,7 +30908,6 @@ msgid "Extant"
 msgstr "Pozostałe"
 
 #: kicad/dialogs/dialog_edit_cfg.cpp:311
-#, fuzzy
 msgid "Reset to default"
 msgstr "Resetuj do domyślnych"
 
@@ -30970,39 +30932,35 @@ msgid "Execute Command Job Settings"
 msgstr "Ustawienia zadania wykonania polecenia zewnętrznego"
 
 #: kicad/dialogs/dialog_template_selector.cpp:296
-#, fuzzy
 msgid "Edit Template"
-msgstr "Szablony użytkownika"
+msgstr "Edycja szablonu"
 
 #: kicad/dialogs/dialog_template_selector.cpp:296
 msgid "Open Template (Read-Only)"
 msgstr "Otwórz szablon (Tylko do odczytu)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:297
-#, fuzzy
 msgid "Open Template Folder"
-msgstr "Otwórz folder z motywami"
+msgstr "Otwórz folder z szablonami"
 
 #: kicad/dialogs/dialog_template_selector.cpp:298
 #: kicad/dialogs/dialog_template_selector.cpp:371
-#, fuzzy
 msgid "Duplicate Template"
-msgstr "Powiel parametry"
+msgstr "Powiel szablon"
 
 #: kicad/dialogs/dialog_template_selector.cpp:327
 msgid "Could not open template directory."
 msgstr "Nie można otworzyć folderu tymczasowego."
 
 #: kicad/dialogs/dialog_template_selector.cpp:336
-#, fuzzy
 msgid "No project file found in template directory."
-msgstr "W repozytorium nie znaleziono żadnych plików projektu."
+msgstr "Nie znaleziono pliku projektu w folderze szablonów."
 
 #: kicad/dialogs/dialog_template_selector.cpp:357
 #: kicad/dialogs/panel_jobset.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s'."
-msgstr "Nie udało się otworzyć pliku '%s'."
+msgstr "Nie udało się otworzyć '%s'."
 
 #: kicad/dialogs/dialog_template_selector.cpp:371
 msgid "Enter name for the new template:"
@@ -31014,18 +30972,17 @@ msgid "_copy"
 msgstr "_kopia"
 
 #: kicad/dialogs/dialog_template_selector.cpp:381
-#, fuzzy
 msgid "Template name cannot be empty."
-msgstr "Nazwa sieci nie może być pusta."
+msgstr "Nazwa szablonu nie może być pusta."
 
 #: kicad/dialogs/dialog_template_selector.cpp:389
 msgid "Could not find user templates directory."
 msgstr "Nie można odnaleźć folderu szablonów użytkownika."
 
 #: kicad/dialogs/dialog_template_selector.cpp:399
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' already exists."
-msgstr "Folder wyjściowy '%s' już istnieje."
+msgstr "Folder '%s' już istnieje."
 
 #: kicad/dialogs/dialog_template_selector.cpp:405
 #, c-format
@@ -31047,14 +31004,12 @@ msgid "Project Template Selector"
 msgstr "Wybór szablonu projektu"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
-#, fuzzy
 msgid "Recent project templates"
-msgstr "Tworzy nowy projekt na podstawie szablonu"
+msgstr "Ostatnio użyte szablony projektu"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
-#, fuzzy
 msgid "All Templates"
-msgstr "Szablony użytkownika"
+msgstr "Wszystkie szablony"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:59
 msgid "User Templates"
@@ -31065,9 +31020,8 @@ msgid "System Templates"
 msgstr "Szablony systemowe"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:101
-#, fuzzy
 msgid "Go Back"
-msgstr "Dolna"
+msgstr "Wróć"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
