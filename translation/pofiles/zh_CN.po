@@ -46,10 +46,10 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-20 17:11+0000\n"
+"PO-Revision-Date: 2026-03-22 01:10+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
-"projects/kicad/master-source/zh_Hans/>\n"
+"projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -611,11 +611,11 @@ msgstr "无论元件在 .pos 文件中是否存在, 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:351
 msgid "Show 3D Models marked DNP"
-msgstr "显示标记为 'DNP (不作装配)' 的元件的 3D 模型"
+msgstr "显示标记为 '不作装配 (DNP)' 的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "无论元件是否被标记为 'DNP (不作装配)', 均显示其 3D 模型"
+msgstr "无论元件是否被标记为 '不作装配 (DNP)', 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
@@ -8595,7 +8595,7 @@ msgstr "无连接符号"
 
 #: common/layer_id.cpp:100
 msgid "DNP markers"
-msgstr "DNP (不作装配) 标记"
+msgstr "不作装配 (DNP) 标记"
 
 #: common/layer_id.cpp:101
 msgid "Excluded-from-simulation markers"
@@ -9114,7 +9114,7 @@ msgstr "%s, %s 和 %d 更多"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9122,9 +9122,9 @@ msgid ""
 "offset: %d"
 msgstr ""
 "无效的封装标识, 位于\n"
-"文件: %s\n"
+"文件: '%s'\n"
 "行: %d\n"
-"偏移: %d。"
+"偏移: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:946
@@ -15767,7 +15767,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:839
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:184
 msgid "Do not populate"
-msgstr "DNP (不作装配)"
+msgstr "不作装配 (DNP)"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:76
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
@@ -16600,15 +16600,15 @@ msgstr "名称为 %s 的字段已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:956
 msgid "Include 'DNP' Symbols"
-msgstr "包含 'DNP (不作装配)' 符号"
+msgstr "包含 '不作装配 (DNP)' 符号"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:957
 msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
-"在表中显示被标记为 'DNP (不作装配)' 的符号。此设置还控制是否在导出数据中包含 "
-"'DNP (不作装配)' 符号。"
+"在表中显示被标记为 '不作装配 (DNP)' 的符号。此设置还控制是否在导出数据中包含 "
+"'不作装配 (DNP)' 符号。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:962
 msgid "Include 'Exclude from BOM' Symbols"
@@ -19285,7 +19285,7 @@ msgstr "不参与电路仿真"
 #: eeschema/sch_symbol.cpp:2024 eeschema/sch_symbol.cpp:2649
 #: eeschema/widgets/search_handlers.cpp:169 pcbnew/footprint.cpp:2166
 msgid "DNP"
-msgstr "DNP (不作装配)"
+msgstr "不作装配 (DNP)"
 
 #: eeschema/lib_symbol.cpp:2029
 msgid "Power flag differs."
@@ -19554,19 +19554,19 @@ msgid "Label '%s' at (%s, %s)"
 msgstr "(%2$s, %3$s) 处的标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at (%s, %s)"
-msgstr "%2$s, %3$s 处的全局标签 '%1$s'"
+msgstr "(%2$s, %3$s) 处的全局标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at (%s, %s)"
-msgstr "%2$s, %3$s 处的层次标签 '%1$s'"
+msgstr "(%2$s, %3$s) 处的层次标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "%s, %s处的结点"
+msgstr "(%s, %s) 处的结点"
 
 #: eeschema/net_navigator.cpp:160
 #, fuzzy, c-format
@@ -19584,9 +19584,9 @@ msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
 msgstr "从 %s, %s 到 %s, %s 的总线至总线入口"
 
 #: eeschema/net_navigator.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at (%s, %s)"
-msgstr "%2$s, %3$s 处的网络类标签 '%1$s'"
+msgstr "(%2$s, %3$s) 处的网络类标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:198
 #, c-format
@@ -20695,8 +20695,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"无法加载文件 '%s'。\n"
-"位于文件: %s, 行: %d, 偏移: %d。"
+"无法读取文件 '%s'。\n"
+"错误 '%s' 位于: 行 %d, 列 %d, 偏移 %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1063
 #, c-format
@@ -24608,7 +24608,7 @@ msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
 #: eeschema/tools/backannotate.cpp:857
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "将 %s 的 '不作装配' 特性由 '%s' 更改为 '%s'。"
+msgstr "将 %s 的 '不作装配 (DNP)' 特性由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:871
 #, c-format
@@ -25517,7 +25517,7 @@ msgstr "设置 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/sch_actions.cpp:1098
 msgid "Set the do not populate attribute"
-msgstr "设置 'DNP (不作装配)' 特性"
+msgstr "设置 '不作装配 (DNP)' 特性"
 
 #: eeschema/tools/sch_actions.cpp:1105
 msgid "Open the library symbol in the Symbol Editor"
@@ -28870,7 +28870,7 @@ msgstr "排除封装类型为 '未指定' 的元件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:93
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "排除被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
+msgstr "排除设置了 '不作装配 (DNP)' 特性的元件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:103
 msgid "Use Grid Origin for output origin"
@@ -29336,7 +29336,7 @@ msgstr "排除所有带通孔焊盘的封装 (仅 ascii 或 csv)"
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:110
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "排除所有设置了 'DNP (不作装配)' 特性的封装"
+msgstr "排除所有设置了 '不作装配 (DNP)' 特性的封装"
 
 #: kicad/cli/command_pcb_export_pos.cpp:86
 msgid "Include board edge layer (Gerber only)"
@@ -37411,7 +37411,7 @@ msgstr "输出单位:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:120
 msgid "Ignore 'Do not populate' components"
-msgstr "忽略设置了 'DNP (不作装配)' 特性的元件"
+msgstr "忽略设置了 '不作装配 (DNP)' 特性的元件"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:87
 #: pcbnew/dialogs/dialog_export_step_base.cpp:255
@@ -37744,7 +37744,7 @@ msgstr "用户定义的原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Do not show components marked 'Do not populate'"
-msgstr "不显示设置了 'DNP (不作装配)' 特性的元件"
+msgstr "不显示设置了 '不作装配 (DNP)' 特性的元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:256
 msgid "Do not show components with Footprint Type 'Unspecified'"
@@ -48605,23 +48605,23 @@ msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1598
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "为 %s 添加 'DNP (不作装配)' 制造特性。"
+msgstr "为 %s 添加 '不作装配 (DNP)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:780
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "为 %s 移除 'DNP (不作装配)' 制造特性。"
+msgstr "为 %s 移除 '不作装配 (DNP)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1599
 #, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr "已为 %s 添加 'DNP (不作装配)' 制造特性。"
+msgstr "已为 %s 添加 '不作装配 (DNP)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:794
 #, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr "已为 %s 移除 'DNP (不作装配)' 制造特性。"
+msgstr "已为 %s 移除 '不作装配 (DNP)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:815
 #, c-format
@@ -48649,9 +48649,9 @@ msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:865
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "已为 %s 移除 'DNP (不作装配)' 制造特性。"
+msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:873
 #, c-format
@@ -48659,9 +48659,9 @@ msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr "为 %s 移除 'DNP (不作装配)' 制造特性。"
+msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:892
 #, c-format
@@ -48793,9 +48793,8 @@ msgid "Removed %s '%s' attribute from variant %s."
 msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
-#, fuzzy
 msgid "Do not place"
-msgstr "DNP (不作装配)"
+msgstr "不作装配 (DNP)"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1497
 #, fuzzy
@@ -51172,7 +51171,7 @@ msgstr "%d 不是一个有效的层数"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3151
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "文件 '%2$s' 中第 %3$d 行, 偏移量 %4$d 处的 NETCLASS 名称 '%1$s' 重复。"
+msgstr "文件 '%2$s' 中, 第 %3$d 行, 偏移 %4$d 处出现重复的 NETCLASS 名称 '%1$s'。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3726
 #, c-format
@@ -51215,7 +51214,7 @@ msgid ""
 "line: %d offset: %d"
 msgstr ""
 "无效的网络标识, 位于\n"
-"文件: \"%s\"\n"
+"文件: %s\n"
 "行: %d 偏移: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6049
