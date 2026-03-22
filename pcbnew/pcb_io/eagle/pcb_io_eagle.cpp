@@ -1567,6 +1567,14 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     else
         zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
 
+    if( vertices.size() < 3 )
+    {
+        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
+                                        eagle_layer_name( p.layer ),
+                                        p.layer ) );
+        return nullptr;
+    }
+
     vertices.push_back( vertices[0] );
 
     SHAPE_POLY_SET polygon;
