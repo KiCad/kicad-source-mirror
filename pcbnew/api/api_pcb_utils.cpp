@@ -33,6 +33,7 @@
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_dimension.h>
 #include <zone.h>
 
 
@@ -80,6 +81,12 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
 
         return std::make_unique<FOOTPRINT>( board );
     }
+
+    case PCB_DIM_ALIGNED_T: return std::make_unique<PCB_DIM_ALIGNED>( aContainer );
+    case PCB_DIM_ORTHOGONAL_T: return std::make_unique<PCB_DIM_ORTHOGONAL>( aContainer );
+    case PCB_DIM_RADIAL_T: return std::make_unique<PCB_DIM_RADIAL>( aContainer );
+    case PCB_DIM_LEADER_T: return std::make_unique<PCB_DIM_LEADER>( aContainer );
+    case PCB_DIM_CENTER_T: return std::make_unique<PCB_DIM_CENTER>( aContainer );
 
     default:
         return nullptr;

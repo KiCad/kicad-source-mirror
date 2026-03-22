@@ -860,6 +860,12 @@ EDA_ITEM* PCB_DIM_ALIGNED::Clone() const
 }
 
 
+void PCB_DIM_ALIGNED::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_DIM_ALIGNED_T, /* void */ );
+    *this = *static_cast<const PCB_DIM_ALIGNED*>( aOther );
+}
+
 void PCB_DIM_ALIGNED::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;
@@ -1086,6 +1092,12 @@ EDA_ITEM* PCB_DIM_ORTHOGONAL::Clone() const
     return new PCB_DIM_ORTHOGONAL( *this );
 }
 
+
+void PCB_DIM_ORTHOGONAL::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_DIM_ORTHOGONAL_T, /* void */ );
+    *this = *static_cast<const PCB_DIM_ORTHOGONAL*>( aOther );
+}
 
 void PCB_DIM_ORTHOGONAL::Serialize( google::protobuf::Any &aContainer ) const
 {
@@ -1352,6 +1364,12 @@ PCB_DIM_LEADER::PCB_DIM_LEADER( BOARD_ITEM* aParent ) :
 }
 
 
+void PCB_DIM_LEADER::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_DIM_LEADER_T, /* void */ );
+    *this = *static_cast<const PCB_DIM_LEADER*>( aOther );
+}
+
 void PCB_DIM_LEADER::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;
@@ -1540,6 +1558,11 @@ PCB_DIM_RADIAL::PCB_DIM_RADIAL( BOARD_ITEM* aParent ) :
     m_leaderLength        = m_arrowLength * 3;
 }
 
+void PCB_DIM_RADIAL::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_DIM_RADIAL_T, /* void */ );
+    *this = *static_cast<const PCB_DIM_RADIAL*>( aOther );
+}
 
 void PCB_DIM_RADIAL::Serialize( google::protobuf::Any &aContainer ) const
 {
@@ -1693,6 +1716,11 @@ PCB_DIM_CENTER::PCB_DIM_CENTER( BOARD_ITEM* aParent ) :
     m_overrideTextEnabled = true;
 }
 
+void PCB_DIM_CENTER::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_DIM_CENTER_T, /* void */ );
+    *this = *static_cast<const PCB_DIM_CENTER*>( aOther );
+}
 
 void PCB_DIM_CENTER::Serialize( google::protobuf::Any &aContainer ) const
 {
