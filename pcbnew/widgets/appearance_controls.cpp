@@ -2949,8 +2949,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 {
-    BOARD*           board = m_frame->GetBoard();
-    KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
+    BOARD* board = m_frame->GetBoard();
 
     setVisibleLayers( aPreset.layers );
     setVisibleObjects( aPreset.renderLayers );
@@ -2972,11 +2971,9 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
     if( !m_isFpEditor )
         m_frame->GetCanvas()->SyncLayersVisibility( board );
 
-    if( aPreset.flipBoard != view->IsMirroredX() )
-    {
-        view->SetMirror( !view->IsMirroredX(), view->IsMirroredY() );
-        view->RecacheAllItems();
-    }
+    PCB_DISPLAY_OPTIONS options = m_frame->GetDisplayOptions();
+    options.m_FlipBoardView = aPreset.flipBoard;
+    m_frame->SetDisplayOptions( options, false );
 
     m_frame->GetCanvas()->Refresh();
 
