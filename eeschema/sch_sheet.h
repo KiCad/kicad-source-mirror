@@ -180,6 +180,14 @@ public:
     void SetScreen( SCH_SCREEN* aScreen );
 
     /**
+     * Take the identity of the screen this sheet owns.
+     *
+     * A sheet and its screen are one object to the rest of the schematic, so loaders and
+     * importers that build the pair together have to give them a single UUID.
+     */
+    void SyncUuidToScreen();
+
+    /**
      * Return the number of times the associated screen for the sheet is being used.
      *
      * If no screen is associated with the sheet, then zero is returned.

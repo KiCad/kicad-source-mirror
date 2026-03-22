@@ -302,8 +302,8 @@ void SCHEMATIC::ensureDefaultTopLevelSheet()
     SCH_SHEET*  rootSheet = new SCH_SHEET( this );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( this );
 
-    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
     rootSheet->SetScreen( rootScreen );
+    rootSheet->SyncUuidToScreen();
 
     SetTopLevelSheets( { rootSheet } );
 
@@ -2035,8 +2035,8 @@ void SCHEMATIC::CreateDefaultScreens()
     SCH_SHEET*  rootSheet = new SCH_SHEET( this );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( this );
 
-    const_cast<KIID&>( rootSheet->m_Uuid ) = rootScreen->GetUuid();
     rootSheet->SetScreen( rootScreen );
+    rootSheet->SyncUuidToScreen();
     rootScreen->SetFileName( "untitled.kicad_sch" ); // Set default filename to avoid conflicts
     rootScreen->SetPageNumber( wxT( "1" ) );
 

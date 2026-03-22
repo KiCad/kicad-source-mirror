@@ -292,6 +292,14 @@ void SCH_SHEET::SetScreen( SCH_SCREEN* aScreen )
 }
 
 
+void SCH_SHEET::SyncUuidToScreen()
+{
+    wxCHECK_RET( m_screen, wxS( "Cannot sync a sheet UUID without a screen" ) );
+
+    const_cast<KIID&>( m_Uuid ) = m_screen->GetUuid();
+}
+
+
 int SCH_SHEET::GetScreenCount() const
 {
     if( m_screen == nullptr )
