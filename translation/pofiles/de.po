@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-17 20:00+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-03-22 14:28+0000\n"
+"Last-Translator: Till Donner <isntyourbusiness@proton.me>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1258,7 +1258,7 @@ msgstr "8×"
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 "3D-Betrachter muss geschlossen und wieder geöffnet werden, um diese Änderung "
-"anzuwenden."
+"anzuwenden"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1328,7 +1328,7 @@ msgid ""
 "point"
 msgstr ""
 "Anzahl der Strahlen, die in Lichtrichtung geworfen werden, um einen "
-"Schattenpunkt auszuwerten."
+"Schattenpunkt auszuwerten"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:81
 msgid "Reflections:"
@@ -8603,9 +8603,9 @@ msgstr ""
 "KiCad konnte \"%s\" nicht verwenden.\n"
 "\n"
 "1. Deaktivieren Sie \"Kontrollierter Ordnerzugriff\" in den Windows-"
-"Einstellungen oder der Gruppenrichtlinie.\n"
-"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt.\n"
-"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen."
+"Einstellungen oder der Gruppenrichtlinie\n"
+"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt\n"
+"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen"
 
 #: common/pgm_base.cpp:218
 msgid "No default editor found, you must choose one."
@@ -10529,7 +10529,7 @@ msgstr "EasyEDA (JLCEDA) Pro Dateien"
 #: common/wildcards_and_files_ext.cpp:345
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:302
 msgid "KiCad printed circuit board files"
-msgstr "KiCad PCB-Dateien"
+msgstr "KiCad-Leiterplattendateien"
 
 #: common/wildcards_and_files_ext.cpp:352
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:312
@@ -12382,7 +12382,7 @@ msgstr "Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
-msgstr "Elektrische Regeln überprüfen (ERC)"
+msgstr "Elektrische Regelprüfung (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -14819,7 +14819,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
-"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen."
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -14831,7 +14831,7 @@ msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
 "Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
-"Verbinder und Gehäuse."
+"Verbinder und Gehäuse"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
@@ -22803,8 +22803,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
-"Veränderungen innerhalb dieses Dialogs werden sofort angewendet, verwenden "
-"Sie Rückgängig in jedem einzelnen Dokument, um diese zurückzusetzen."
+"Änderungen in diesem Dialog werden sofort übernommen, verwenden Sie "
+"Rückgängig in jedem betroffenen Dokument, um sie rückgängig zu machen"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 #: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
@@ -23013,7 +23013,7 @@ msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
-msgstr "Electrical-Rule-Check (ERC)-Fenster anzeigen"
+msgstr "Das Fenster der elektrischen Regelprüfung (ERC) anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
@@ -23185,7 +23185,7 @@ msgstr "Symbolfelder aktualisieren ..."
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
 "Symbol aktualisieren, um alle Änderungen vom übergeordneten Symbol zu "
-"übernehmen."
+"übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
@@ -23530,7 +23530,7 @@ msgstr "Symbole aus Bibliothek aktualisieren ..."
 
 #: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
@@ -23543,7 +23543,7 @@ msgstr "Symbol aktualisieren ..."
 #: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
+"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1124
 msgid "Assign Netclass..."
@@ -25057,7 +25057,7 @@ msgstr "Von Sim. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "Von Stückl. ausschl."
+msgstr "Von Stückliste ausschließen"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
@@ -25619,7 +25619,7 @@ msgstr "Unbekannter Excellon-G-Code: &lt;%s&gt;"
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 "In GerbView sind <b>keine freien Lagen mehr vorhanden</b>, um Dateien zu "
-"laden."
+"laden"
 
 #: gerbview/files.cpp:45
 #, c-format
@@ -26605,11 +26605,11 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Exclude board body"
-msgstr "Platinenkörper ausschl."
+msgstr "Platinenkörper ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:126
 msgid "Exclude 3D models for components"
-msgstr "3D-Modelle von Komponenten ausschl."
+msgstr "3D-Modelle von Komponenten ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:130
 msgid ""
