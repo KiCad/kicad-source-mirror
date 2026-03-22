@@ -1071,7 +1071,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
                                                        {
                                                            OnAddRow( aEvent );
                                                        } ) );
-    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
     m_grid->ShowHideColumns( "0 1 2 3 4 5 9 10" );
     m_columnsShown = m_grid->GetShownColumns();
 
