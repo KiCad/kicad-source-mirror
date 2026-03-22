@@ -37,6 +37,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/roundrect.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/roundrect.h>
 #include <macros.h>
 #include <algorithm>
 #include <properties/property_validators.h>
@@ -2397,19 +2398,36 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
             }
             else
             {
-                // Export outline as a set of thick segments:
+                ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), GetCornerRadius() );
                 SHAPE_POLY_SET poly;
-                TransformRoundChamferedRectToPolygon( poly, position, size, ANGLE_0, GetCornerRadius(),
-                                                      0.0, 0, 0, aError, aErrorLoc );
+                rr.TransformToPolygon( poly, aError );
                 SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
                 outline.SetClosed( true );
 
-                for( int ii = 0; ii < outline.PointCount(); ii++ )
+                std::set<size_t> arcsHandled;
+
+                for( int ii = 0; ii < outline.SegmentCount(); ++ii )
                 {
-                    TransformOvalToPolygon( aBuffer, outline.CPoint( ii ), outline.CPoint( ii+1 ), width,
-                                            aError, aErrorLoc );
+                    if( outline.IsArcSegment( ii ) )
+                    {
+                        size_t arcIndex = outline.ArcIndex( ii );
+
+                        if( arcsHandled.contains( arcIndex ) )
+                            continue;
+
+                        arcsHandled.insert( arcIndex );
+
+                        const SHAPE_ARC& arc = outline.Arc( arcIndex );
+                        TransformArcToPolygon( aBuffer, arc.GetP0(), arc.GetArcMid(), arc.GetP1(), width, aError,
+                                               aErrorLoc );
+                    }
+                    else
+                    {
+                        const SEG& seg = outline.GetSegment( ii );
+                        TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aError, aErrorLoc );
+                    }
                 }
-           }
+            }
         }
         else
         {
