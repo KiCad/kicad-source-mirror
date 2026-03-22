@@ -34,6 +34,12 @@ enum class ICON_THEME
     AUTO
 };
 
+enum class APP_THEME
+{
+    LIGHT,
+    DARK,
+    AUTO
+};
 
 class KICOMMON_API COMMON_SETTINGS : public JSON_SETTINGS
 {
@@ -43,6 +49,7 @@ public:
         bool       show_scrollbars;
         double     canvas_scale;
         ICON_THEME icon_theme;
+        APP_THEME app_theme;
         bool       use_icons_in_menus;
         bool       apply_icon_scale_to_fonts;
         double     hicontrast_dimming_factor;

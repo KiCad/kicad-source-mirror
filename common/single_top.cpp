@@ -51,6 +51,7 @@
 #include <confirm.h>
 #include <design_block_library_adapter.h>
 
+#include <settings/common_settings.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
@@ -393,6 +394,15 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     GetSettingsManager().SetKiway( &Kiway );
 
     GetSettingsManager().RegisterSettings( new KICAD_SETTINGS );
+
+
+    if( const COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+    {
+        if( cfg->m_Appearance.app_theme == APP_THEME::DARK )
+            KIPLATFORM::APP::EnableDarkMode( true );
+        else if( cfg->m_Appearance.app_theme == APP_THEME::AUTO )
+            KIPLATFORM::APP::EnableDarkMode( false );
+    }
 
 #ifdef KICAD_IPC_API
     // Create the API server thread once the app event loop exists

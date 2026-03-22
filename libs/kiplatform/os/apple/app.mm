@@ -32,6 +32,11 @@ bool KIPLATFORM::APP::Init()
 }
 
 
+void KIPLATFORM::APP::EnableDarkMode( bool aForce )
+{
+}
+
+
 bool KIPLATFORM::APP::AttachConsole( bool aTryAlloc )
 {
     // Not implemented on this platform

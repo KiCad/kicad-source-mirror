@@ -122,11 +122,15 @@ bool KIPLATFORM::APP::Init()
         wxLog::SetActiveTarget( new wxLogStderr );
     }
 
-#if wxCHECK_VERSION( 3, 3, 0 )
-    wxTheApp->MSWEnableDarkMode( 0, new KICAD_DARK_MODE_SETTINGS() );
-#endif
-
     return true;
+}
+
+
+void KIPLATFORM::APP::EnableDarkMode( bool aForce )
+{
+#if wxCHECK_VERSION( 3, 3, 0 )
+    wxTheApp->MSWEnableDarkMode( aForce ? wxApp::DarkMode_Always : wxApp::DarkMode_Auto, new KICAD_DARK_MODE_SETTINGS() );
+#endif
 }
 
 

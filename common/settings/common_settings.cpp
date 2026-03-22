@@ -74,6 +74,13 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_Appearance.icon_theme = ICON_THEME::AUTO;
 #endif
 
+#if defined( __WXMSW__ )
+    m_params.emplace_back( new PARAM_ENUM<APP_THEME>( "appearance.app_theme", &m_Appearance.app_theme,
+                                                       APP_THEME::AUTO, APP_THEME::LIGHT, APP_THEME::AUTO ) );
+#else
+    m_Appearance.app_theme = APP_THEME::AUTO;
+#endif
+
     /*
    	 * Automatic canvas scaling works fine on all supported platforms, so it's no longer exposed as
      * a configuration option.

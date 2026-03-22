@@ -69,6 +69,14 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent ) :
     m_rbIconThemeAuto->Show( false );
 #endif
 
+    // It's common on Windows to have separate app and system settings for light/dark
+#ifndef __WXMSW__
+    m_stAppTheme->Show( false );
+    m_rbAppThemeLight->Show( false );
+    m_rbAppThemeDark->Show( false );
+    m_rbAppThemeAuto->Show( false );
+#endif
+
    	/*
    	 * Automatic canvas scaling works fine on all supported platforms, so manual scaling is disabled
    	 */
@@ -188,6 +196,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     else if( m_rbIconThemeAuto->GetValue() )
         commonSettings->m_Appearance.icon_theme = ICON_THEME::AUTO;
 
+    if( m_rbAppThemeLight->GetValue() )
+        commonSettings->m_Appearance.app_theme = APP_THEME::LIGHT;
+    else if( m_rbAppThemeDark->GetValue() )
+        commonSettings->m_Appearance.app_theme = APP_THEME::DARK;
+    else if( m_rbAppThemeAuto->GetValue() )
+        commonSettings->m_Appearance.app_theme = APP_THEME::AUTO;
+
     if( m_rbIconSizeSmall->GetValue() )
         commonSettings->m_Appearance.toolbar_icon_size = 16;
     else if( m_rbIconSizeNormal->GetValue() )
@@ -272,6 +287,13 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     case ICON_THEME::LIGHT: m_rbIconThemeLight->SetValue( true );   break;
     case ICON_THEME::DARK:  m_rbIconThemeDark->SetValue( true );    break;
     case ICON_THEME::AUTO:  m_rbIconThemeAuto->SetValue( true );    break;
+    }
+
+    switch( aSettings.m_Appearance.app_theme )
+    {
+    case APP_THEME::LIGHT: m_rbAppThemeLight->SetValue( true ); break;
+    case APP_THEME::DARK: m_rbAppThemeDark->SetValue( true ); break;
+    case APP_THEME::AUTO: m_rbAppThemeAuto->SetValue( true ); break;
     }
 
     switch( aSettings.m_Appearance.toolbar_icon_size )

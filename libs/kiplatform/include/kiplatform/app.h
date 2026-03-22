@@ -36,6 +36,8 @@ namespace KIPLATFORM
          */
         bool Init();
 
+        void EnableDarkMode( bool aForce );
+
         /**
          * Tries to attach a console window with stdout, stderr and stdin.
          *

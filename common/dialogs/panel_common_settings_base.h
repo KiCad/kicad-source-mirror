@@ -87,6 +87,10 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_highContrastLabel;
 		wxTextCtrl* m_highContrastCtrl;
 		wxStaticText* m_highContrastUnits;
+		wxStaticText* m_stAppTheme;
+		wxRadioButton* m_rbAppThemeLight;
+		wxRadioButton* m_rbAppThemeDark;
+		wxRadioButton* m_rbAppThemeAuto;
 		wxStaticText* m_staticText251;
 		wxStaticLine* m_staticline7;
 		wxBoxSizer* m_scalingSizer;
