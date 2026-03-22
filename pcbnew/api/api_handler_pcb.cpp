@@ -640,6 +640,35 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
 
             break;
         }
+        
+        case PCB_DIMENSION_T:
+        {
+            handledAnything = true;
+            bool inserted = false;
+
+            for( BOARD_ITEM* item : board->Drawings() )
+            {
+                switch (item->Type()) {
+                    case PCB_DIM_ALIGNED_T:
+                    case PCB_DIM_CENTER_T:
+                    case PCB_DIM_RADIAL_T:
+                    case PCB_DIM_ORTHOGONAL_T:
+                    case PCB_DIM_LEADER_T:
+                        items.emplace_back( item );
+                        inserted = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // we have to add the dimension subtypes to the requested to get them out
+            typesRequested.insert( {PCB_DIM_ALIGNED_T, PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T, PCB_DIM_LEADER_T } );
+
+            if( inserted )
+                typesInserted.insert( {PCB_DIM_ALIGNED_T, PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T, PCB_DIM_LEADER_T } );
+
+            break;
+        }
 
         case PCB_ZONE_T:
         {
