@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-22 01:10+0000\n"
+"PO-Revision-Date: 2026-03-22 14:28+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -5812,7 +5812,7 @@ msgstr "Przydział klas sieci"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:147
 msgid "Pattern"
-msgstr "Szablon"
+msgstr "Wzór"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
 #: eeschema/sch_field.cpp:1107 eeschema/sch_label.cpp:224
@@ -11769,7 +11769,7 @@ msgstr "Pliki CSV/TSV"
 
 #: common/wildcards_and_files_ext.cpp:439
 msgid "Portable document format files"
-msgstr "Pliki PDF"
+msgstr "Pliki Portable Document Format"
 
 #: common/wildcards_and_files_ext.cpp:445
 msgid "PostScript files"
@@ -31126,9 +31126,8 @@ msgid "View Last Run Log..."
 msgstr "Pokaż wyniki ostatniego uruchomienia..."
 
 #: kicad/dialogs/panel_jobset.cpp:336
-#, fuzzy
 msgid "Open Output"
-msgstr "Wyjście"
+msgstr "Otwórz docelowy"
 
 #: kicad/dialogs/panel_jobset.cpp:436
 msgid "Edit Job Description"
@@ -31236,9 +31235,8 @@ msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr "Zarządzaj pakietami do pobrania z repozytoriów KiCad i innych źródeł"
 
 #: kicad/dialogs/template_default_html.h:234
-#, fuzzy
 msgid "Select a Template"
-msgstr "Wybierz plik"
+msgstr "Wybierz szablon"
 
 #: kicad/dialogs/template_default_html.h:236
 msgid ""
@@ -31248,9 +31246,8 @@ msgstr ""
 "tworzenie projektu."
 
 #: kicad/dialogs/template_default_html.h:243
-#, fuzzy
 msgid "Pre-configured Libraries"
-msgstr "Migracja bibliotek"
+msgstr "Skonfigurowane wstępnie biblioteki"
 
 #: kicad/dialogs/template_default_html.h:244
 msgid "Common symbols and footprints already linked and ready to use."
@@ -31271,9 +31268,8 @@ msgstr ""
 "zastosowania."
 
 #: kicad/dialogs/template_default_html.h:257
-#, fuzzy
 msgid "Board Stackups"
-msgstr "Stos warstw płytki"
+msgstr "Stosy warstw"
 
 #: kicad/dialogs/template_default_html.h:258
 msgid "Layer configurations optimized for common manufacturing processes."
@@ -31290,9 +31286,8 @@ msgstr ""
 "przeglądać katalogi niestandardowych szablonów."
 
 #: kicad/dialogs/template_default_html.h:399
-#, fuzzy
 msgid "Template"
-msgstr "Szablony użytkownika"
+msgstr "Szablon"
 
 #: kicad/dialogs/template_default_html.h:403
 msgid ""
@@ -31303,14 +31298,12 @@ msgstr ""
 "projektu."
 
 #: kicad/dialogs/template_default_html.h:406
-#, fuzzy
 msgid "To use this template"
-msgstr "Szablony użytkownika"
+msgstr "By użyć tego szablonu"
 
 #: kicad/dialogs/template_default_html.h:410
-#, fuzzy
 msgid "Create the project"
-msgstr "Utwórz nowy projekt"
+msgstr "Utwórz projekt"
 
 #: kicad/dialogs/template_default_html.h:411
 msgid "Click OK to create a new project folder with this template's contents."
@@ -31318,18 +31311,16 @@ msgstr ""
 "Kliknij OK, aby utworzyć nowy folder projektu z zawartością tego szablonu."
 
 #: kicad/dialogs/template_default_html.h:417
-#, fuzzy
 msgid "Open schematic and PCB"
-msgstr "Otwórz schemat"
+msgstr "Otwórz schemat oraz PCB"
 
 #: kicad/dialogs/template_default_html.h:418
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
 msgstr "Użyj Menedżera projektu, by uruchomić edytory schematów i płytek PCB."
 
 #: kicad/dialogs/template_default_html.h:424
-#, fuzzy
 msgid "Review settings"
-msgstr "Ustawienia podglądu"
+msgstr "Przegląd ustawień"
 
 #: kicad/dialogs/template_default_html.h:425
 msgid "Verify libraries, design rules, and board stackup match your needs."
@@ -31346,19 +31337,16 @@ msgid "inside this template's directory."
 msgstr "wewnątrz tego folderu szablonów."
 
 #: kicad/dialogs/template_default_html.h:541
-#, fuzzy
 msgid "No Templates Found"
-msgstr "Nie znaleziono"
+msgstr "Nie znaleziono żadnych szablonów"
 
 #: kicad/dialogs/template_default_html.h:543
-#, fuzzy
 msgid "The selected directory does not contain any project templates."
-msgstr "Zaznaczony folder nie jest projektem Git."
+msgstr "Zaznaczony folder nie zawiera żadnych projektów szablonów."
 
 #: kicad/dialogs/template_default_html.h:546
-#, fuzzy
 msgid "Suggestions"
-msgstr "Pytanie"
+msgstr "Proponowane"
 
 #: kicad/dialogs/template_default_html.h:548
 msgid "Browse to a different directory using the folder icon"
@@ -31369,9 +31357,8 @@ msgid "Use the refresh icon to reload the current directory"
 msgstr "Użyj ikony odświeżania, aby ponownie załadować bieżący folder"
 
 #: kicad/dialogs/template_default_html.h:550
-#, fuzzy
 msgid "Switch to a system templates tab"
-msgstr "Szablony systemowe"
+msgstr "Przełącza do zakładki systemowych szablonów"
 
 #: kicad/dialogs/template_default_html.h:556
 msgid "Each template needs a 'meta' folder containing configuration files."
@@ -31404,18 +31391,17 @@ msgid "Unzipping project in '%s'.\n"
 msgstr "Rozpakowywanie projektu w '%s'.\n"
 
 #: kicad/import_proj.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "Nie można otworzyć/utworzyć ścieżki '%s'."
+msgstr "Nie można otworzyć pliku projektu gEDA / Lepton EDA '%s'."
 
 #: kicad/import_proj.cpp:488 kicad/import_proj.cpp:499
 msgid "Locate gEDA / Lepton EDA Schematic"
 msgstr "Schemat Locate gEDA / Lepton EDA"
 
 #: kicad/import_proj.cpp:597
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB files"
-msgstr "Pliki EasyEDA (JLCEDA) Pro"
+msgstr "Pliki gEDA / Lepton EDA PCB"
 
 #: kicad/import_proj.cpp:600
 msgid "Locate gEDA / Lepton EDA PCB"
@@ -31471,14 +31457,12 @@ msgid "Import EasyEDA Pro Project"
 msgstr "Import projektów z programu EasyEDA Pro"
 
 #: kicad/import_project.cpp:218
-#, fuzzy
 msgid "Import PADS Project Files"
-msgstr "Import plików projektu programu Altium"
+msgstr "Import plików projektów PADS"
 
 #: kicad/import_project.cpp:226
-#, fuzzy
 msgid "Import gEDA / Lepton EDA Project Files"
-msgstr "Import projektów z programu EAGLE"
+msgstr "Import plików projektów gEDA / Lepton EDA"
 
 #: kicad/jobs_runner.cpp:243
 #, c-format
@@ -31494,13 +31478,13 @@ msgid "Job failed"
 msgstr "Zadanie ukończone niepowodzeniem"
 
 #: kicad/kicad.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File '%s'\n"
 "does not appear to be a KiCad project file."
 msgstr ""
 "Plik '%s'\n"
-"nie wygląda na prawidłowy plik z projektem programu KiCad."
+"nie wygląda na plik z projektem programu KiCad."
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export GLB (binary GLTF)"
@@ -31555,16 +31539,15 @@ msgid "Project Files"
 msgstr "Pliki projektu"
 
 #: kicad/kicad_manager_frame.cpp:241 kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Local History"
-msgstr "Plik lokalny"
+msgstr "Historia lokalna"
 
 #: kicad/kicad_manager_frame.cpp:406
 msgid "PCM Updates Available"
 msgstr "Dostępne są aktualizacje pakietów PCM"
 
 #: kicad/kicad_manager_frame.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) available"
 msgstr "%d dostępnych aktualizacji pakietów"
 
@@ -31586,9 +31569,8 @@ msgstr ""
 "zapisane pliki projektu."
 
 #: kicad/kicad_manager_frame.cpp:964
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "Cofnij zmiany"
+msgstr "Przywróć niezapisane zmiany"
 
 #: kicad/kicad_manager_frame.cpp:966
 msgid ""
@@ -31625,9 +31607,8 @@ msgid "Restoring '%s'"
 msgstr "Przywracanie '%s'"
 
 #: kicad/local_history_pane.cpp:129
-#, fuzzy
 msgid "Moments ago"
-msgstr "Komentarzy"
+msgstr "Chwilę temu"
 
 #: kicad/local_history_pane.cpp:134
 #, c-format
@@ -31640,9 +31621,8 @@ msgid "%d hours ago"
 msgstr "%d godzin temu"
 
 #: kicad/local_history_pane.cpp:248
-#, fuzzy
 msgid "Restore Commit"
-msgstr "Ostatnie zmiany"
+msgstr "Przywróć zatwierdzenie"
 
 #: kicad/menubar.cpp:64
 msgid "Clear Recent Projects"
@@ -31696,34 +31676,28 @@ msgstr ""
 "Importuje schemat oraz obwód drukowany programu EasyEDA (JLCEDA) Professional"
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "PADS Project..."
-msgstr "Projekt programu CADSTAR..."
+msgstr "Projekt programu PADS..."
 
 #: kicad/menubar.cpp:150
-#, fuzzy
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr "Importuj archiwum schematu CADSTAR i PCB (*.csa, *.cpa)"
+msgstr "Importuj schemat PADS Logic oraz PADS ASCII PCB (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:153
-#, fuzzy
 msgid "gEDA / Lepton EDA Project..."
-msgstr "Projekt programu EAGLE..."
+msgstr "Projekt programu gEDA / Lepton EDA..."
 
 #: kicad/menubar.cpp:154
-#, fuzzy
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
-msgstr ""
-"Importuje schemat oraz obwód drukowany programu EAGLE CAD w formacie XML"
+msgstr "Importuje schemat gEDA lub Lepton EDA oraz rysunek PCB"
 
 #: kicad/menubar.cpp:183
 msgid "Edit Advanced Config..."
 msgstr "Edycja zaawansowanych opcji..."
 
 #: kicad/menubar.cpp:184
-#, fuzzy
 msgid "Edit advanced settings"
-msgstr "Parametry oraz ustawienia symulacji"
+msgstr "Edycja zaawansowanych ustawień"
 
 #: kicad/menubar.cpp:234
 msgid "Edit Local File..."
@@ -31742,13 +31716,12 @@ msgid "Fully qualified repository url:"
 msgstr "W pełni kwalifikowany adres URL repozytorium:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
-#, fuzzy
 msgid "Add Repository"
 msgstr "Dodaj repozytorium"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
-msgstr "Dodaj repozytorium"
+msgstr "Dodaje repozytorium"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
 msgid "Remove repository"
@@ -32246,14 +32219,14 @@ msgid "Could not open the template path '%s'"
 msgstr "Nie można otworzyć ścieżki z szablonami! '%s'"
 
 #: kicad/project_template.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected 'meta' directory at '%s'"
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można odnaleźć spodziewanego folderu 'meta' w '%s'"
 
 #: kicad/project_template.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find the expected meta HTML file at '%s'"
-msgstr "Nie można odnaleźć pliku biblioteki '%s'"
+msgstr "Nie można odnaleźć spodziewanego pliku z metadanymi HTML w '%s'"
 
 #: kicad/project_template.cpp:345
 #, c-format
@@ -32277,9 +32250,8 @@ msgid "Unable to rename file ... "
 msgstr "Nie mogę zmienić nazwy pliku ... "
 
 #: kicad/project_tree_item.cpp:147
-#, fuzzy
 msgid "Permission denied"
-msgstr "odmowa uprawnień"
+msgstr "Odmowa uprawnień"
 
 #: kicad/project_tree_item.cpp:166
 #, c-format
@@ -32612,14 +32584,12 @@ msgid "Unarchive project files from zip archive"
 msgstr "Rozpakowuje pliki projektu z archiwum ZIP"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
-#, fuzzy
 msgid "Reveal Project in Finder"
-msgstr "Podgląd folderu projektu w aplikacji Finder"
+msgstr "Podgląd projektu w aplikacji Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:228
-#, fuzzy
 msgid "Open project folder in Finder"
-msgstr "Podgląd folderu projektu w aplikacji Finder"
+msgstr "Otwórz folder projektu w aplikacji Finder"
 
 #: kicad/tools/kicad_manager_actions.cpp:230
 msgid "Browse Project Files"
@@ -32634,9 +32604,8 @@ msgid "Restore project files from local history"
 msgstr "Przywraca pliki projektu z lokalnej historii plików"
 
 #: kicad/tools/kicad_manager_actions.cpp:246
-#, fuzzy
 msgid "Show or hide local history panel"
-msgstr "Pokaż/Ukryj tą warstwę"
+msgstr "Pokaż/Ukryj panel z lokalną historią"
 
 #: kicad/tools/kicad_manager_control.cpp:82
 msgid "Create New Project"
@@ -32713,16 +32682,15 @@ msgid "Save Project To"
 msgstr "Zapisz plik projektu do"
 
 #: kicad/tools/kicad_manager_control.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Please make sure you have sufficient permissions."
 msgstr ""
-"Folder '%s' nie może zostać utworzony.\n"
+"Folder '%s' nie mógł być utworzony.\n"
 "\n"
-"Należy upewnić się czy użytkownik posiada uprawnienia do zapisu i spróbować "
-"ponownie."
+"Należy upewnić się czy użytkownik posiada wystarczające uprawnienia."
 
 #: kicad/tools/kicad_manager_control.cpp:763
 msgid "Create (or open) a project to edit a schematic."
@@ -32763,9 +32731,8 @@ msgid "Success"
 msgstr "Zakończono sukcesem"
 
 #: libs/kiplatform/include/printing.h:47
-#, fuzzy
 msgid "Cancelled"
-msgstr "Anuluj"
+msgstr "Anulowano"
 
 #: libs/kiplatform/include/printing.h:48
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:558
@@ -32778,9 +32745,8 @@ msgid "Failed to load PDF"
 msgstr "Nie można załadować PDF"
 
 #: libs/kiplatform/include/printing.h:50
-#, fuzzy
 msgid "Failed to print"
-msgstr "Footprinty filtrowane"
+msgstr "Wydruk nie powiódł się"
 
 #: libs/kiplatform/include/printing.h:51
 msgid "Unsupported"
@@ -33048,9 +33014,9 @@ msgid "The current drawing sheet has been modified. Save changes?"
 msgstr "Bieżący footprint został zmieniony. Zapisać zmiany?"
 
 #: pagelayout_editor/files.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' loaded"
-msgstr "Plik \"%s\" został załadowany"
+msgstr "Plik '%s' został załadowany"
 
 #: pagelayout_editor/files.cpp:132
 msgid "Append Existing Drawing Sheet"
@@ -33062,9 +33028,9 @@ msgid "Unable to load %s file"
 msgstr "Nie mogę załadować pliku %s"
 
 #: pagelayout_editor/files.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' inserted"
-msgstr "Plik \"%s\" został dołączony"
+msgstr "Plik '%s' został dołączony"
 
 #: pagelayout_editor/files.cpp:161
 msgid "Open Drawing Sheet"
@@ -33165,7 +33131,6 @@ msgstr ""
 "elementy, które nie są składnikami wszystkich stron"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:177
-#, fuzzy
 msgid "Origin selector"
 msgstr "Wybór pozycji bazowej"
 
@@ -33174,7 +33139,6 @@ msgid "Select the origin of the status bar coordinates"
 msgstr "Wybierz początek układu współrzędnych paska stanu"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:181
-#, fuzzy
 msgid "Page selector"
 msgstr "Wybór strony"
 
@@ -33709,7 +33673,6 @@ msgid "Overvoltage category:"
 msgstr "Kategoria przepięć:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -33867,7 +33830,6 @@ msgid "Pollution Degree:"
 msgstr "Stopień zanieczyszczenia:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
-#, fuzzy
 msgid ""
 "PD1: No pollution or only dry, non-conductive pollution occurs\n"
 "\n"
@@ -34433,7 +34395,6 @@ msgid "Remove Regulator"
 msgstr "Usuń stabilizator"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:404
-#, fuzzy
 msgid "Vout must be greater than Vref"
 msgstr "Vout musi być większe niż Vref"
 
@@ -35155,7 +35116,6 @@ msgstr ""
 "uzupełnieniu tabeli.\n"
 
 #: pcb_calculator/iec60664_help.h:2
-#, fuzzy
 msgid ""
 "The goal of the IEC60664-1 is to provide guidance on designing insulation "
 "for products that have a connection to mains supply.\n"
@@ -36302,9 +36262,8 @@ msgid "Through vias:"
 msgstr "Przelotek na wylot:"
 
 #: pcbnew/board_statistics_report.cpp:123
-#, fuzzy
 msgid "Blind vias:"
-msgstr "Przelotek zagrzebanych:"
+msgstr "Ślepych przelotek:"
 
 #: pcbnew/board_statistics_report.cpp:124
 msgid "Buried vias:"
@@ -36351,14 +36310,12 @@ msgid "Back copper area"
 msgstr "Dolna warstwa miedzi"
 
 #: pcbnew/board_statistics_report.cpp:565
-#, fuzzy
 msgid "Min track clearance"
-msgstr "Minimalny prześwit"
+msgstr "Minimalny prześwit ścieżek"
 
 #: pcbnew/board_statistics_report.cpp:569
-#, fuzzy
 msgid "Min track width"
-msgstr "Minimalna szerokość ścieżki"
+msgstr "Minimalna szerokość ścieżek"
 
 #: pcbnew/board_statistics_report.cpp:574
 msgid "Min drill diameter"
@@ -36369,19 +36326,16 @@ msgid "Board stackup thickness"
 msgstr "Grubość stosu warstw płytki"
 
 #: pcbnew/board_statistics_report.cpp:581
-#, fuzzy
 msgid "Front footprint area"
-msgstr "Eksportuj footprint"
+msgstr "Obszar footprintów na górze"
 
 #: pcbnew/board_statistics_report.cpp:583
-#, fuzzy
 msgid "Back footprint area"
-msgstr "Pakowanie footprintów"
+msgstr "Obszar footprintów na dole"
 
 #: pcbnew/board_statistics_report.cpp:586
-#, fuzzy
 msgid "Front component density"
-msgstr "Eksportuj komponenty"
+msgstr "Zagęszczenie elementów po stronie górnej"
 
 #: pcbnew/board_statistics_report.cpp:595
 msgid "Back component density"
@@ -36750,9 +36704,9 @@ msgstr ""
 "Niezgodny odnośnik biblioteki: %s wymaga '%s' choć kandydat %s to '%s'."
 
 #: pcbnew/connectivity/topo_match.cpp:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Component pads differ between %s and %s."
-msgstr "Szerokość tekstu musi zawierać się między %s a %s."
+msgstr "Pola lut. komponentu różnią się między %s a %s."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:422
 msgid "(multiple board outlines not supported)"
@@ -36795,14 +36749,12 @@ msgid "Custom Rules"
 msgstr "Reguły użytkownika"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
-#, fuzzy
 msgid "Barcode Error"
-msgstr "Błąd kopii zapasowej"
+msgstr "Błąd kodu kresowego"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:255
-#, fuzzy
 msgid "Modify barcode"
-msgstr "Modyfikuj pole lutownicze"
+msgstr "Modyfikuj kod kreskowy"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:96 pcbnew/pcb_barcode.cpp:857
@@ -36818,9 +36770,8 @@ msgid "If checked, the barcode will be inverted with a margin around it"
 msgstr "Jeśli zaznaczone, kod kreskowy będzie odwrócony z marginesem wokół"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:63
-#, fuzzy
 msgid "Show text"
-msgstr "Pokaż połączenia wspomagające"
+msgstr "Pokaż tekst"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:111
 msgid "Size X:"
@@ -36838,14 +36789,12 @@ msgid "90"
 msgstr "90"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:159
-#, fuzzy
 msgid "Min margin X:"
-msgstr "Marginesy:"
+msgstr "Min. margines X:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:170
-#, fuzzy
 msgid "Min margin Y:"
-msgstr "Marginesy:"
+msgstr "Min. margines Y:"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:181
 msgid "Code 39 (ISO 16388)"
@@ -36885,9 +36834,8 @@ msgstr "~65% (Poziom H)"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:189
 #: pcbnew/pcb_barcode.cpp:837
-#, fuzzy
 msgid "Error Correction"
-msgstr "Kierunek strzałki"
+msgstr "Korekcja błędów"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.h:98
 #: pcbnew/pcb_barcode.cpp:773
@@ -36915,7 +36863,6 @@ msgid "PCB successfully reannotated"
 msgstr "PCB poprawnie zrenumerowany"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:223
-#, fuzzy
 msgid ""
 "PCB annotation changes should be synchronized with schematic using \"Update "
 "Schematic from PCB\"."
@@ -36924,44 +36871,38 @@ msgstr ""
 "narzędzia \"Uaktualnij schemat na podstawie PCB\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:321
-#, fuzzy
 msgid "Reference Designator Prefixes in Use"
-msgstr "Oznaczenia"
+msgstr "Prefiksy oznaczeń w użyciu"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "(Excluding %s from reannotation.)"
-msgstr "Wykluczenie: %s wykluczony z ponownej numeracji<br/>"
+msgstr "(Wykluczam %s z ponownej numeracji.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:343
-#, fuzzy
 msgid "Change Log"
-msgstr "Zmień na"
+msgstr "Rejestr zmian"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
-#, fuzzy
 msgid "Front Footprints"
-msgstr "Eksportuj footprint"
+msgstr "Footprinty na górze"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
-#, fuzzy
 msgid "Back Footprints"
-msgstr "Pakowanie footprintów"
+msgstr "Footprinty na dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:372
-#, fuzzy
 msgid "(sorted by footprint location)"
-msgstr "lokalizacji footprintów"
+msgstr "(sortowanie wg lokalizacji footprintów)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:374
-#, fuzzy
 msgid "(sorted by reference designator location)"
-msgstr "pozycja oznaczenia"
+msgstr "(sortowanie wg pozycji oznaczenia)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%d %s X, Y: %s, zaokrąglenie X, Y: %s"
+msgstr "<br/>%d %s na %s (zaokrąglenie do %s)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:403
 msgid "Selected options resulted in errors! Change them and try again."
@@ -37208,9 +37149,8 @@ msgid "Solder Mask/Paste"
 msgstr "Soldermaska/Pasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:139
-#, fuzzy
 msgid "Zone Hatch Offsets"
-msgstr "Ustaw przesunięcie"
+msgstr "Przesunięcie kreskowania strefy"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:141
 msgid "Text & Graphics"
@@ -37235,9 +37175,8 @@ msgstr "Wzorce dostrajania długości"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:206
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
-#, fuzzy
 msgid "Tuning Profiles"
-msgstr "Tryb dostrajania"
+msgstr "Profile dostrajania"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:228
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
@@ -37297,7 +37236,6 @@ msgid "Min track clearance:"
 msgstr "Minimalna odległość ścieżek:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
-#, fuzzy
 msgid "Min track width:"
 msgstr "Miminalna szerokość ścieżki:"
 
@@ -37306,23 +37244,20 @@ msgid "Min drill diameter:"
 msgstr "Minimalna średnica otworu:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:139
-#, fuzzy
 msgid "Board stackup thickness:"
-msgstr "Grubość płytki:"
+msgstr "Grubość stosu warstw płytki:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:140
-#, fuzzy
 msgid "Front footprint area:"
-msgstr "Górna warstwa miedzi:"
+msgstr "Obszar footprintów na górze:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:141
 msgid "Front footprint density:"
 msgstr "Zagęszczenie footprintów na stronie górnej:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:142
-#, fuzzy
 msgid "Back footprint area:"
-msgstr "Dolna warstwa miedzi:"
+msgstr "Obszar footprintów na dole:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
 msgid "Back footprint density:"
@@ -37522,9 +37457,8 @@ msgid "Cleanup Tracks and Vias"
 msgstr "Oczyść ścieżki i przelotki"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:135
-#, fuzzy
 msgid "Legacy Teardrop Properties"
-msgstr "Właściwości łezek"
+msgstr "Właściwości łezek starszego typu"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:139
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:115
@@ -37576,9 +37510,8 @@ msgid "Layers:"
 msgstr "Warstwy:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Open Zone Manager..."
-msgstr "Menedżer stref..."
+msgstr "Otwórz menedżera stref..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:62
 msgid "Copper Zone Properties"
@@ -38277,19 +38210,19 @@ msgid "Run DRC"
 msgstr "Uruchom DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:280
-#, fuzzy
 msgid "Report All Errors for Each Track"
-msgstr "Raportuj wszystkie błędy dla każdej ze ścieżek (wolne)"
+msgstr "Raportuj wszystkie błędy dla każdej ze ścieżek"
 
 #: pcbnew/dialogs/dialog_drc.cpp:281
-#, fuzzy
 msgid "If unchecked, only the first error will be reported for each track"
-msgstr "Jeśli zaznaczone, strefy będą wypełnione ponownie po każdej operacji"
+msgstr ""
+"Jeśli nie zaznaczone, tylko jeden pierwotny błąd będzie raportowany dla "
+"każdej ze ścieżek"
 
 #: pcbnew/dialogs/dialog_drc.cpp:288
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr "Podświetla symbole odpowiadające wybranym footprintom"
+msgstr ""
+"Podświetlaj odpowiadające elementy na kanwie po wybraniu ich z listy DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:371
 msgid "DRC incomplete: could not compile custom design rules."
@@ -38404,14 +38337,12 @@ msgid "Update text layers and visibilities"
 msgstr "Uaktualnij warstwy z tekstem oraz widoczność"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
-#, fuzzy
 msgid "Update text sizes and styles"
-msgstr "Uaktualnij rozmiary oraz styl tekstów pól"
+msgstr "Uaktualnij rozmiary oraz styl tekstu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
-#, fuzzy
 msgid "Update text positions"
-msgstr "Uaktualnij pozycje pól"
+msgstr "Uaktualnij pozycje tekstu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Update text content"
@@ -38500,14 +38431,12 @@ msgid "Update/reset text layers and visibilities"
 msgstr "Uaktualnij/zresetuj warstwy z tekstem oraz widoczność"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
-#, fuzzy
 msgid "Update/reset text sizes and styles"
-msgstr "Uaktualnij/zresetuj rozmiary oraz styl tekstów pól"
+msgstr "Uaktualnij/zresetuj rozmiary oraz styl tekstu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text positions"
-msgstr "Uaktualnij/zresetuj pozycje pól"
+msgstr "Uaktualnij/zresetuj pozycje tekstu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
@@ -38616,9 +38545,8 @@ msgid "Compress output into 'zip' file"
 msgstr "Kompresuje dane wyjściowe do pliku 'zip'"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM revision:"
-msgstr "Rewizja:"
+msgstr "Rewizja BOM:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:96
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
@@ -38647,7 +38575,6 @@ msgstr ""
 "Numer ten musi być unikalny dla każdej części."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:138
-#, fuzzy
 msgid "Generate unique"
 msgstr "Generuj unikalny"
 
@@ -38701,9 +38628,8 @@ msgid "*.emn"
 msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:33
-#, fuzzy
 msgid "Set board reference point:"
-msgstr "Punkt odniesienia siatki:"
+msgstr "Ustaw punkt odniesienia płytki:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 #: pcbnew/dialogs/dialog_export_step_base.cpp:203
@@ -38860,9 +38786,8 @@ msgid "Universal 3D files"
 msgstr "Uniwersalne pliki 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:302
-#, fuzzy
 msgid "PDF files"
-msgstr "Pliki PLY"
+msgstr "Pliki PDF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:310
 msgid "3D Model Output File"
@@ -39171,16 +39096,14 @@ msgid "Footprint 3D model path:"
 msgstr "Ścieżka do modeli 3D footprintów:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:35
-#, fuzzy
 msgid "shapes3D"
-msgstr "kształty"
+msgstr "kształty 3D"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
 msgid "meter"
 msgstr "metry"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:102
-#, fuzzy
 msgid "0.1 inch"
 msgstr "0.1 cala"
 
@@ -39350,9 +39273,8 @@ msgstr "Modele 3D"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1023
 #: pcbnew/dialogs/panel_setup_mask_and_paste.cpp:46
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:150
-#, fuzzy
 msgid "Solder paste clearance:"
-msgstr "Całkowity prześwit pasty lutowniczej:"
+msgstr "Prześwit pasty lutowniczej:"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:137
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
@@ -39370,7 +39292,6 @@ msgstr ""
 "Jeśli pole jest puste, używana jest wartość globalna."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:286
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved or oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
@@ -39700,9 +39621,8 @@ msgid "Component type:"
 msgstr "Typ komponentu:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:190
-#, fuzzy
 msgid "Custom Layers"
-msgstr "Personalizuj paski narzędzi"
+msgstr "Warstwy użytkownika"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:197
 msgid "Use custom stackup"
@@ -39713,9 +39633,8 @@ msgid "Copper layers"
 msgstr "Warstwy miedzi"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
-#, fuzzy
 msgid "User Layers"
-msgstr "Pozostałe warstwy"
+msgstr "Warstwy użytkownika"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:270
 msgid "Private Layers"
@@ -39893,17 +39812,14 @@ msgid "Chamfered rectangle"
 msgstr "Sfazowany prostokąt"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52 pcbnew/pad.cpp:2156
-#, fuzzy
 msgid "Custom shape"
 msgstr "Kształt własny"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:59
-#, fuzzy
 msgid "Pad Table"
-msgstr "Dodaj tabelę"
+msgstr "Tabela punktów lut"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:72
-#, fuzzy
 msgid "Pad numbers:"
 msgstr "Numer pola:"
 
@@ -39912,9 +39828,8 @@ msgid "Pad count:"
 msgstr "Liczba pól lut:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
-#, fuzzy
 msgid "Duplicate pads:"
-msgstr "Zdublowane wyprowadzenia:"
+msgstr "Zdublowane pola:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3443
 msgid "Size X"
@@ -39925,22 +39840,18 @@ msgid "Size Y"
 msgstr "Rozmiar Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:111
-#, fuzzy
 msgid "Drill X"
-msgstr "Wiercenie"
+msgstr "Wiercenie X"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:112
-#, fuzzy
 msgid "Drill Y"
-msgstr "Wiercenie"
+msgstr "Wiercenie Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:113
-#, fuzzy
 msgid "Pad->Die Length"
 msgstr "Odległość od pola do krzemu"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:114
-#, fuzzy
 msgid "Pad->Die Delay"
 msgstr "Opóźnienie od pola do krzemu"
 
@@ -39966,9 +39877,8 @@ msgid "Aperture"
 msgstr "Apertura"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:559
-#, fuzzy
 msgid "Edit Pads"
-msgstr "Edytuj pole lutownicze"
+msgstr "Edytuj pola lutownicze"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:235
 msgid "Use a relative path?"
@@ -40056,9 +39966,8 @@ msgid "Exclude all footprints with through hole pads"
 msgstr "Wyklucz wszystkie footprinty z polami przewlekanymi"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:113
-#, fuzzy
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Wyklucz wszystkie footprinty oznaczone jako nie montowane"
+msgstr "Wyklucz wszystkie footprinty oznaczone flagą Wykluczone z BOM"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:116
 msgid "Include board edge layer"
@@ -40287,14 +40196,12 @@ msgid "Unlocked tracks"
 msgstr "Odblokowane ścieżki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
-#, fuzzy
 msgid "Locked vias"
-msgstr "Zablokowane elementy"
+msgstr "Zablokowane przelotki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:89
-#, fuzzy
 msgid "Unlocked vias"
-msgstr "Odblokowane ścieżki"
+msgstr "Odblokowane przelotki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
 #, c-format
@@ -40706,7 +40613,6 @@ msgid "Unknown choice"
 msgstr "Nieznany wybór"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:45
-#, fuzzy
 msgid "Microvias"
 msgstr "Mikroprzelotki"
 
@@ -40715,7 +40621,6 @@ msgid "Filter tracks by width:"
 msgstr "Filtruj ścieżki na podstawie szerokości:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:127
-#, fuzzy
 msgid "Filter vias by diameter:"
 msgstr "Filtrowane przelotek na podstawie rozmiaru:"
 
@@ -40728,7 +40633,6 @@ msgid "Via size:"
 msgstr "Rozmiar przelotki:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
-#, fuzzy
 msgid "Via annular rings:"
 msgstr "Szerokość pierścienia:"
 
