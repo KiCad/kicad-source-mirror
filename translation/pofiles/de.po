@@ -35,10 +35,9 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-17 20:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2026-03-22 14:28+0000\n"
+"Last-Translator: Till Donner <isntyourbusiness@proton.me>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1567,7 +1566,7 @@ msgstr "8×"
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
 "3D-Betrachter muss geschlossen und wieder geöffnet werden, um diese Änderung "
-"anzuwenden."
+"anzuwenden"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1633,7 +1632,7 @@ msgid ""
 "point"
 msgstr ""
 "Anzahl der Strahlen, die in Lichtrichtung geworfen werden, um einen "
-"Schattenpunkt auszuwerten."
+"Schattenpunkt auszuwerten"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
@@ -4202,7 +4201,7 @@ msgstr "Hardwarebeschleunigte Grafik (empfohlen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
 msgid "Fallback Graphics"
-msgstr "Langsame Grafik"
+msgstr "Ersatzgrafik"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid ""
@@ -9497,9 +9496,9 @@ msgstr ""
 "KiCad konnte \"%s\" nicht verwenden.\n"
 "\n"
 "1. Deaktivieren Sie \"Kontrollierter Ordnerzugriff\" in den Windows-"
-"Einstellungen oder der Gruppenrichtlinie.\n"
-"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt.\n"
-"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen."
+"Einstellungen oder der Gruppenrichtlinie\n"
+"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt\n"
+"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen"
 
 #: common/pgm_base.cpp:246
 msgid "No default editor found, you must choose one."
@@ -11804,7 +11803,7 @@ msgstr "EasyEDA (JLCEDA) Pro Dateien"
 #: common/wildcards_and_files_ext.cpp:358
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:328
 msgid "KiCad printed circuit board files"
-msgstr "KiCad PCB-Dateien"
+msgstr "KiCad-Leiterplattendateien"
 
 #: common/wildcards_and_files_ext.cpp:365
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:338
@@ -13509,7 +13508,7 @@ msgstr "Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:50
 msgid "Electrical Rules Checker"
-msgstr "Elektrische Regeln überprüfen (ERC)"
+msgstr "Elektrische Regelprüfung (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -16099,7 +16098,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
-"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen."
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:55
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -16112,7 +16111,7 @@ msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
 "Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
-"Verbinder und Gehäuse."
+"Verbinder und Gehäuse"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
@@ -17295,7 +17294,7 @@ msgid ""
 msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die nicht in exportierte "
 "Positionsdateien,\n"
-"die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen."
+"die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2381
@@ -18959,17 +18958,20 @@ msgstr "Symbol %s hat unplatzierte Einheiten %s"
 #: eeschema/erc/erc.cpp:684
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
-msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
+msgstr ""
+"Symbol %s hat Eingangs-Versorgungspins in Einheiten %s, die nicht platziert "
+"sind"
 
 #: eeschema/erc/erc.cpp:690
 #, c-format
 msgid "Symbol %s has input pins in units %s that are not placed"
-msgstr "Symbol %s hat in den Einheiten %s unplatzierte Eingangs-Pins."
+msgstr "Symbol %s hat Eingangspins in Einheiten %s, die nicht platziert sind"
 
 #: eeschema/erc/erc.cpp:696
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
-msgstr "Symbol %s hat in den Einheiten %s unplatzierte bidirektionale Pins."
+msgstr ""
+"Symbol %s hat bidirektionale Pins in Einheiten %s, die nicht platziert sind"
 
 #: eeschema/erc/erc.cpp:719
 #, c-format
@@ -19020,7 +19022,7 @@ msgstr "Die aktuelle Konfiguration enthält nicht die Symbolbibliothek \"%s\""
 #: eeschema/erc/erc.cpp:1696
 #, c-format
 msgid "The symbol library '%s' was not found at '%s'"
-msgstr "Die Symbolbibliothek \"%s\" wurde nicht unter \"%s\" gefunden."
+msgstr "Die Symbolbibliothek \"%s\" wurde nicht unter \"%s\" gefunden"
 
 #: eeschema/erc/erc.cpp:1715
 #, c-format
@@ -19041,8 +19043,7 @@ msgstr "\"%s\" ist keine gültige Footprint-ID"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1106
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr ""
-"Die aktuelle Konfiguration enthält nicht die Footprint-Bibliothek \"%s\"."
+msgstr "Die aktuelle Konfiguration enthält die Footprint-Bibliothek '%s' nicht"
 
 #: eeschema/erc/erc.cpp:1819
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1120
@@ -19050,13 +19051,13 @@ msgstr ""
 msgid "The footprint library '%s' is not enabled in the current configuration"
 msgstr ""
 "Die Footprint-Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht "
-"aktiviert."
+"aktiviert"
 
 #: eeschema/erc/erc.cpp:1828
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1171
 #, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
+msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden"
 
 #: eeschema/erc/erc.cpp:1898
 #, c-format
@@ -25479,8 +25480,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
-"Veränderungen innerhalb dieses Dialogs werden sofort angewendet, verwenden "
-"Sie Rückgängig in jedem einzelnen Dokument, um diese zurückzusetzen."
+"Änderungen in diesem Dialog werden sofort übernommen, verwenden Sie "
+"Rückgängig in jedem betroffenen Dokument, um sie rückgängig zu machen"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 msgid "Synchronize sheet pins and hierarchical labels"
@@ -25772,7 +25773,7 @@ msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:51
 msgid "Show the electrical rules checker window"
-msgstr "Electrical-Rule-Check (ERC)-Fenster anzeigen"
+msgstr "Das Fenster der elektrischen Regelprüfung (ERC) anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:57
 msgid "Symbol Checker"
@@ -25973,7 +25974,7 @@ msgstr "Symbolfelder aktualisieren ..."
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
 "Symbol aktualisieren, um alle Änderungen vom übergeordneten Symbol zu "
-"übernehmen."
+"übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:283
 msgid "Flatten Symbol"
@@ -26412,7 +26413,7 @@ msgstr "Symbole aus Bibliothek aktualisieren ..."
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Update symbols to include any changes from the library"
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:887
 msgid "Assign a different symbol from the library"
@@ -26425,7 +26426,7 @@ msgstr "Symbol aktualisieren ..."
 #: eeschema/tools/sch_actions.cpp:894
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
+"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen"
 
 #: eeschema/tools/sch_actions.cpp:900 pcbnew/tools/pcb_actions.cpp:1403
 msgid "Assign Netclass..."
@@ -26536,8 +26537,8 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
-"Wandelt mehrere Pins an derselben Stelle in einen einzelnen Pin, mit "
-"\"gestapelter\"-Notation in der Pin-Nummer, um."
+"Mehrere Pins an derselben Position in einen einzelnen Pin mit gestapelter "
+"Notation umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:1009
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1473
@@ -26546,9 +26547,7 @@ msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:1010
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr ""
-"Wandelt einen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, in "
-"mehrere eigenständige Pins um."
+msgstr "Einen Pin mit gestapelter Notation in mehrere einzelne Pins umwandeln"
 
 #: eeschema/tools/sch_actions.cpp:1016
 msgid "Break"
@@ -28417,15 +28416,15 @@ msgstr "Eigenschaften bearbeiten"
 
 #: eeschema/widgets/search_handlers.cpp:166
 msgid "Excl. Sim"
-msgstr "Von Sim. ausschl."
+msgstr "Von Simulation ausschließen"
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "Von Stückl. ausschl."
+msgstr "Von Stückliste ausschließen"
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. Board"
-msgstr "Von Platine ausschl."
+msgstr "Von Platine ausschließen"
 
 #: eeschema/widgets/search_handlers.cpp:478
 msgid "Hierarchical"
@@ -29002,7 +29001,7 @@ msgstr "Unbekannter Excellon-G-Code: &lt;%s&gt;"
 msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 "In GerbView sind <b>keine freien Lagen mehr vorhanden</b>, um Dateien zu "
-"laden."
+"laden"
 
 #: gerbview/files.cpp:46
 #, c-format
@@ -30093,11 +30092,11 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:125
 msgid "Exclude board body"
-msgstr "Platinenkörper ausschl."
+msgstr "Platinenkörper ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Exclude 3D models for components"
-msgstr "3D-Modelle von Komponenten ausschl."
+msgstr "3D-Modelle von Komponenten ausschließen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:133
 msgid ""
