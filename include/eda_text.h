@@ -40,6 +40,17 @@ class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 
 
+struct EDA_TEXT_RENDER_CACHE_DATA
+{
+    wxString                                    text;
+    const KIFONT::FONT*                         font = nullptr;
+    EDA_ANGLE                                   angle;
+    VECTOR2I                                    offset;
+    bool                                        mirrored = false;
+    std::vector<std::unique_ptr<KIFONT::GLYPH>> glyphs;
+};
+
+
 // These are only here for algorithmic safety, not to tell the user what to do.
 // PL_EDITOR has the least resolution (its internal units are microns), so the min size is chosen
 // to yield 1 in PL_EDITOR.
@@ -463,12 +474,7 @@ private:
 
     std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
 
-    mutable wxString                                    m_render_cache_text;
-    mutable const KIFONT::FONT*                         m_render_cache_font;
-    mutable EDA_ANGLE                                   m_render_cache_angle;
-    mutable VECTOR2I                                    m_render_cache_offset;
-    mutable bool                                        m_render_cache_mirrored;
-    mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
+    mutable std::unique_ptr<EDA_TEXT_RENDER_CACHE_DATA> m_render_cache;
 
     struct BBOX_CACHE_ENTRY
     {

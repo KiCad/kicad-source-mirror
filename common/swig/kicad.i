@@ -75,6 +75,7 @@ principle should be easily implemented by adapting the current STL containers.
 
 %ignore InitKiCadAbout;
 %ignore GetCommandOptions;
+%ignore EDA_TEXT_RENDER_CACHE_DATA;
 
 %rename(getWxRect) operator wxRect;
 %rename(getBOX2I) operator BOX2I;

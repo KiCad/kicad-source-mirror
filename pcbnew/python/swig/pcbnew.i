@@ -62,6 +62,7 @@ warnings.warn("The SWIG-based Python interface to the PCB editor is deprecated a
 // ignore a couple of items that generate warnings from swig built code
 %ignore BOARD_ITEM::ZeroOffset;
 %ignore PAD::m_PadSketchModePenSize;
+%ignore PCB_TEXT_KNOCKOUT_CACHE_DATA;
 
 class BASE_SET {};
 %ignore BASE_SET;

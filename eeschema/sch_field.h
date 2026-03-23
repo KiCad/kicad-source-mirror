@@ -38,6 +38,13 @@ class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
 
+struct SCH_FIELD_RENDER_CACHE_DATA
+{
+    VECTOR2I                                    pos;
+    std::vector<std::unique_ptr<KIFONT::GLYPH>> glyphs;
+};
+
+
 class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
 public:
@@ -343,9 +350,7 @@ private:
     bool     m_autoAdded;        ///< Was this field automatically added to a LIB_SYMBOL?
     bool     m_showInChooser;    ///< This field is available as a data column for the chooser
 
-    mutable bool                                        m_renderCacheValid;
-    mutable VECTOR2I                                    m_renderCachePos;
-    mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_renderCache;
+    mutable std::unique_ptr<SCH_FIELD_RENDER_CACHE_DATA> m_renderCache;
 
     mutable COLOR4D                                     m_lastResolvedColor;
 };

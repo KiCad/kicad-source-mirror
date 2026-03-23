@@ -79,6 +79,26 @@ PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype ) :
 }
 
 
+PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther ) :
+        BOARD_ITEM( aOther ),
+        EDA_TEXT( aOther )
+{
+}
+
+
+PCB_TEXT& PCB_TEXT::operator=( const PCB_TEXT& aOther )
+{
+    if( this == &aOther )
+        return *this;
+
+    BOARD_ITEM::operator=( aOther );
+    EDA_TEXT::operator=( aOther );
+    m_knockout_cache.reset();
+
+    return *this;
+}
+
+
 PCB_TEXT::~PCB_TEXT()
 {
 }
@@ -525,33 +545,37 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHIN
 }
 
 
-SHAPE_POLY_SET PCB_TEXT::GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
-                                           int aMaxError ) const
+const SHAPE_POLY_SET& PCB_TEXT::GetKnockoutCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
+                                                  int aMaxError ) const
 {
     TEXT_ATTRIBUTES attrs = GetAttributes();
     EDA_ANGLE       drawAngle = GetDrawRotation();
     VECTOR2I        drawPos = GetDrawPos();
 
-    if( m_knockout_cache.IsEmpty() || m_knockout_cache_text_attrs != attrs || m_knockout_cache_text != forResolvedText
-        || m_knockout_cache_angle != drawAngle )
+    if( !m_knockout_cache )
+        m_knockout_cache = std::make_unique<PCB_TEXT_KNOCKOUT_CACHE_DATA>();
+
+    if( m_knockout_cache->cache.IsEmpty() || m_knockout_cache->text_attrs != attrs
+        || m_knockout_cache->text != forResolvedText
+        || m_knockout_cache->angle != drawAngle )
     {
-        m_knockout_cache.RemoveAllContours();
+        m_knockout_cache->cache.RemoveAllContours();
 
-        TransformTextToPolySet( m_knockout_cache, 0, aMaxError, ERROR_INSIDE );
-        m_knockout_cache.Fracture();
+        TransformTextToPolySet( m_knockout_cache->cache, 0, aMaxError, ERROR_INSIDE );
+        m_knockout_cache->cache.Fracture();
 
-        m_knockout_cache_text_attrs = attrs;
-        m_knockout_cache_angle = drawAngle;
-        m_knockout_cache_text = forResolvedText;
-        m_knockout_cache_pos = drawPos;
+        m_knockout_cache->text_attrs = attrs;
+        m_knockout_cache->angle = drawAngle;
+        m_knockout_cache->text = forResolvedText;
+        m_knockout_cache->pos = drawPos;
     }
-    else if( m_knockout_cache_pos != drawPos )
+    else if( m_knockout_cache->pos != drawPos )
     {
-        m_knockout_cache.Move( drawPos - m_knockout_cache_pos );
-        m_knockout_cache_pos = drawPos;
+        m_knockout_cache->cache.Move( drawPos - m_knockout_cache->pos );
+        m_knockout_cache->pos = drawPos;
     }
 
-    return m_knockout_cache;
+    return m_knockout_cache->cache;
 }
 
 
