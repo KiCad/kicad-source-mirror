@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-22 14:28+0000\n"
-"Last-Translator: Till Donner <isntyourbusiness@proton.me>\n"
+"PO-Revision-Date: 2026-03-24 13:09+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -8603,9 +8603,9 @@ msgstr ""
 "KiCad konnte \"%s\" nicht verwenden.\n"
 "\n"
 "1. Deaktivieren Sie \"Kontrollierter Ordnerzugriff\" in den Windows-"
-"Einstellungen oder der Gruppenrichtlinie\n"
-"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt\n"
-"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen"
+"Einstellungen oder der Gruppenrichtlinie.\n"
+"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt.\n"
+"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen."
 
 #: common/pgm_base.cpp:218
 msgid "No default editor found, you must choose one."
@@ -12382,7 +12382,7 @@ msgstr "Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc_base.h:101 eeschema/tools/sch_actions.cpp:47
 msgid "Electrical Rules Checker"
-msgstr "Elektrische Regelprüfung (ERC)"
+msgstr "Elektrische Regeln überprüfen (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -14819,7 +14819,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
-"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
@@ -14831,7 +14831,7 @@ msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
 "Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
-"Verbinder und Gehäuse"
+"Verbinder und Gehäuse."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
@@ -23013,7 +23013,7 @@ msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:48
 msgid "Show the electrical rules checker window"
-msgstr "Das Fenster der elektrischen Regelprüfung (ERC) anzeigen"
+msgstr "Electrical-Rule-Check (ERC)-Fenster anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:54
 msgid "Symbol Checker"
@@ -23185,7 +23185,7 @@ msgstr "Symbolfelder aktualisieren ..."
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
 "Symbol aktualisieren, um alle Änderungen vom übergeordneten Symbol zu "
-"übernehmen"
+"übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:288
 msgid "Set Unit Display Name..."
@@ -23530,7 +23530,7 @@ msgstr "Symbole aus Bibliothek aktualisieren ..."
 
 #: eeschema/tools/sch_actions.cpp:783
 msgid "Update symbols to include any changes from the library"
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:790
 msgid "Assign a different symbol from the library"
@@ -23543,7 +23543,7 @@ msgstr "Symbol aktualisieren ..."
 #: eeschema/tools/sch_actions.cpp:797
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen"
+"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:1124
 msgid "Assign Netclass..."
@@ -25057,7 +25057,7 @@ msgstr "Von Sim. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "Von Stückliste ausschließen"
+msgstr "Von Stückl. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. board"
