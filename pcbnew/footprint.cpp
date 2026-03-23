@@ -541,7 +541,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
         wxString group;
 
         for( const std::string& pad : netTieMsg.pad_number() )
-            group.Append( wxString::Format( wxT( "%s " ), pad ) );
+            group.Append( wxString::Format( wxT( "%s, " ), pad ) );
 
         group.Trim();
         AddNetTiePadGroup( group );
