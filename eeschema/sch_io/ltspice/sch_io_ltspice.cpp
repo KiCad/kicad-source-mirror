@@ -67,7 +67,7 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         rootSheet->SetScreen( screen );
 
         // Virtual root sheet UUID must be the same as the schematic file UUID.
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+        rootSheet->SyncUuidToScreen();
     }
 
     // Windows path: C:\Users\USERNAME\AppData\Local\LTspice\lib

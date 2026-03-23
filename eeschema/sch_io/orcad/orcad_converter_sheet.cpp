@@ -517,7 +517,7 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
                 screen = new SCH_SCREEN( m_schematic );
                 sheet = new SCH_SHEET( m_schematic );
                 sheet->SetScreen( screen );
-                const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
+                sheet->SyncUuidToScreen();
             }
 
             wxString base = sj.name;

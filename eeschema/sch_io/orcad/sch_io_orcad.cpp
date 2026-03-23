@@ -197,7 +197,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         rootSheet->SetScreen( screen );
 
         // Top-level sheet UUID must match schematic file UUID
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+        rootSheet->SyncUuidToScreen();
     }
 
     if( m_progressReporter )

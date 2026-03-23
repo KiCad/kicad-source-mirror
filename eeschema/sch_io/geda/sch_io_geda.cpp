@@ -4544,7 +4544,7 @@ SCH_SHEET* SCH_IO_GEDA::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
         SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
         screen->SetFileName( aFileName );
         m_rootSheet->SetScreen( screen );
-        const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
+        m_rootSheet->SyncUuidToScreen();
     }
 
     m_screen = m_rootSheet->GetScreen();

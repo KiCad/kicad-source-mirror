@@ -231,7 +231,7 @@ void SCH_IO_KICAD_LEGACY::loadHierarchy( SCH_SHEET* aSheet )
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
 
             if( aSheet == m_rootSheet )
-                const_cast<KIID&>( aSheet->m_Uuid ) = aSheet->GetScreen()->GetUuid();
+                aSheet->SyncUuidToScreen();
 
             try
             {

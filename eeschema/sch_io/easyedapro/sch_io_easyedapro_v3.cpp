@@ -269,7 +269,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         screen->SetFileName( aFileName );
         rootSheet->SetScreen( screen );
 
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+        rootSheet->SyncUuidToScreen();
     }
 
     EASYEDAPRO::V3_DOC_PARSER v3( aFileName );

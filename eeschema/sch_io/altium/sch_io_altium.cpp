@@ -607,7 +607,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
         // For single-file import, use the screen's UUID for the root sheet
         if( !aFileName.empty() )
-            const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
+            m_rootSheet->SyncUuidToScreen();
     }
 
     m_sheetPath.push_back( m_rootSheet );

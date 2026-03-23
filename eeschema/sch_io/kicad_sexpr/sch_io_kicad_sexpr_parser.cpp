@@ -3237,7 +3237,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             // is saved in the symbol instance path.
             if( aSheet == m_rootSheet )
             {
-                const_cast<KIID&>( aSheet->m_Uuid ) = screen->GetUuid();
+                aSheet->SyncUuidToScreen();
                 m_rootUuid = screen->GetUuid();
                 fileHasUuid = true;
             }
@@ -3517,7 +3517,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
     // as the virtual root sheet UUID.
     if( ( aSheet == m_rootSheet ) && !fileHasUuid )
     {
-        const_cast<KIID&>( aSheet->m_Uuid ) = screen->GetUuid();
+        aSheet->SyncUuidToScreen();
         m_rootUuid = screen->GetUuid();
     }
 

@@ -612,7 +612,7 @@ SCH_SHEET* SCH_IO_EASYEDA::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         rootSheet->SetScreen( screen );
 
         // Virtual root sheet UUID must be the same as the schematic file UUID.
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+        rootSheet->SyncUuidToScreen();
     }
 
     LoadSchematic( aSchematic, rootSheet, aFileName );
