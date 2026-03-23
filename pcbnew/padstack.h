@@ -338,6 +338,9 @@ public:
     ///! Returns the name of this padstack in IPC-7351 format
     wxString Name() const;
 
+    const wxChar* CustomName() const;
+    void SetCustomName( const wxString& aCustomName );
+
     EDA_ANGLE GetOrientation() const { return m_orientation; }
     void SetOrientation( EDA_ANGLE aAngle )
     {
@@ -531,7 +534,7 @@ private:
     LSET m_layerSet;
 
     ///! An override for the IPC-7351 padstack name
-    wxString m_customName;
+    std::unique_ptr<wxString> m_customName;
 
     ///! The rotation of the pad relative to an outer reference frame
     EDA_ANGLE m_orientation;

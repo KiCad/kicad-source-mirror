@@ -114,7 +114,6 @@ PAD::PAD( FOOTPRINT* parent ) :
     for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, BoardCopperLayerCount() ) )
         m_zoneLayerOverrides[layer] = ZLO_NONE;
 
-    m_lastGalZoomLevel = 0.0;
 }
 
 
@@ -954,7 +953,9 @@ const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon( PCB_LAYER_ID aL
 
     aLayer = Padstack().EffectiveLayerFor( aLayer );
 
-    return m_effectivePolygons[ aLayer ][ aErrorLoc ];
+    const PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
+
+    return drawCache.m_effectivePolygons.at( aLayer )[ aErrorLoc ];
 }
 
 
@@ -1049,14 +1050,16 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
 
     aLayer = Padstack().EffectiveLayerFor( aLayer );
 
-    wxCHECK_MSG( m_effectiveShapes.contains( aLayer ), nullptr,
+    const PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
+
+    wxCHECK_MSG( drawCache.m_effectiveShapes.contains( aLayer ), nullptr,
                  wxString::Format( wxT( "Missing shape in PAD::GetEffectiveShape for layer %s." ),
                                    magic_enum::enum_name( aLayer ) ) );
-    wxCHECK_MSG( m_effectiveShapes.at( aLayer ), nullptr,
+    wxCHECK_MSG( drawCache.m_effectiveShapes.at( aLayer ), nullptr,
                  wxString::Format( wxT( "Null shape in PAD::GetEffectiveShape for layer %s." ),
                                    magic_enum::enum_name( aLayer ) ) );
 
-    return m_effectiveShapes[aLayer];
+    return drawCache.m_effectiveShapes.at( aLayer );
 }
 
 
@@ -1065,7 +1068,7 @@ std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape() const
     if( m_shapesDirty )
         BuildEffectiveShapes();
 
-    return m_effectiveHoleShape;
+    return getDrawCache().m_effectiveHoleShape;
 }
 
 
@@ -1078,6 +1081,15 @@ int PAD::GetBoundingRadius() const
 }
 
 
+PAD::PAD_DRAW_CACHE_DATA& PAD::getDrawCache() const
+{
+    if( !m_drawCache )
+        m_drawCache = std::make_unique<PAD_DRAW_CACHE_DATA>();
+
+    return *m_drawCache;
+}
+
+
 void PAD::BuildEffectiveShapes() const
 {
     std::lock_guard<std::mutex> RAII_lock( m_dataMutex );
@@ -1087,17 +1099,20 @@ void PAD::BuildEffectiveShapes() const
     if( !m_shapesDirty )
         return;
 
-    m_effectiveBoundingBox = BOX2I();
+    PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
+
+    drawCache.m_effectiveBoundingBox = BOX2I();
+    drawCache.m_effectiveShapes.clear();
 
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
                 const SHAPE_COMPOUND& layerShape = buildEffectiveShape( aLayer );
-                m_effectiveBoundingBox.Merge( layerShape.BBox() );
+                drawCache.m_effectiveBoundingBox.Merge( layerShape.BBox() );
             } );
 
     // Hole shape
-    m_effectiveHoleShape = nullptr;
+    drawCache.m_effectiveHoleShape = nullptr;
 
     VECTOR2I half_size = m_padStack.Drill().size / 2;
     int      half_width;
@@ -1115,9 +1130,10 @@ void PAD::BuildEffectiveShapes() const
 
     RotatePoint( half_len, GetOrientation() );
 
-    m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
-                                                            half_width * 2 );
-    m_effectiveBoundingBox.Merge( m_effectiveHoleShape->BBox() );
+    drawCache.m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len,
+                                                                       m_pos + half_len,
+                                                                       half_width * 2 );
+    drawCache.m_effectiveBoundingBox.Merge( drawCache.m_effectiveHoleShape->BBox() );
 
     // All done
     m_shapesDirty = false;
@@ -1126,11 +1142,13 @@ void PAD::BuildEffectiveShapes() const
 
 const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
-    m_effectiveShapes[aLayer] = std::make_shared<SHAPE_COMPOUND>();
+    PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
+
+    drawCache.m_effectiveShapes[aLayer] = std::make_shared<SHAPE_COMPOUND>();
 
     auto add = [this, aLayer]( SHAPE* aShape )
                {
-                   m_effectiveShapes[aLayer]->AddShape( aShape );
+                   getDrawCache().m_effectiveShapes[aLayer]->AddShape( aShape );
                };
 
     VECTOR2I  shapePos = ShapePos( aLayer ); // Fetch only once; rotation involves trig
@@ -1273,7 +1291,7 @@ const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
         }
     }
 
-    return *m_effectiveShapes[aLayer];
+    return *drawCache.m_effectiveShapes[aLayer];
 }
 
 
@@ -1289,11 +1307,14 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
     if( !m_polyDirty[ aErrorLoc ] )
         return;
 
+    PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
+
     Padstack().ForEachUniqueLayer(
         [&]( PCB_LAYER_ID aLayer )
         {
             // Polygon
-            std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon = m_effectivePolygons[ aLayer ][ aErrorLoc ];
+            std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
+                    drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
             effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
             TransformShapeToPolygon( *effectivePolygon, aLayer, 0, GetMaxError(), aErrorLoc );
@@ -1306,7 +1327,8 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
         Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
-                std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon = m_effectivePolygons[ aLayer ][ aErrorLoc ];
+                std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon =
+                        drawCache.m_effectivePolygons[ aLayer ][ aErrorLoc ];
 
                 for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
                 {
@@ -1334,7 +1356,7 @@ const BOX2I PAD::GetBoundingBox() const
     if( m_shapesDirty )
         BuildEffectiveShapes();
 
-    return m_effectiveBoundingBox;
+    return getDrawCache().m_effectiveBoundingBox;
 }
 
 
