@@ -345,9 +345,8 @@ public:
      */
     int GetPointCount() const;
 
-    // Accessors to the polygonal shape
-    SHAPE_POLY_SET& GetPolyShape() { return m_poly; }
-    const SHAPE_POLY_SET& GetPolyShape() const { return m_poly; }
+    SHAPE_POLY_SET& GetPolyShape();
+    const SHAPE_POLY_SET& GetPolyShape() const;
 
     /**
      * @return true if the polygonal shape is valid (has more than 2 points).
@@ -356,13 +355,13 @@ public:
 
     void SetPolyShape( const SHAPE_POLY_SET& aShape )
     {
-        m_poly = aShape;
+        GetPolyShape() = aShape;
 
-        for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
+        for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
         {
-            if( m_poly.HoleCount( ii ) )
+            if( GetPolyShape().HoleCount( ii ) )
             {
-                m_poly.Fracture();
+                GetPolyShape().Fracture();
                 break;
             }
         }
@@ -534,7 +533,7 @@ protected:
     VECTOR2I               m_bezierC2;          // Bezier Control Point 2
 
     std::vector<VECTOR2I>  m_bezierPoints;
-    SHAPE_POLY_SET         m_poly;              // Stores the S_POLYGON shape
+    mutable std::unique_ptr<SHAPE_POLY_SET> m_poly;     // Stores the S_POLYGON shape
 
     int                    m_editState;
     bool                   m_proxyItem;         // A shape storing proxy information (ie: a pad

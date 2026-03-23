@@ -214,7 +214,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     {
         ptList.clear();
 
-        for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
+        for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
             ptList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
     }
     else if( GetShape() == SHAPE_T::BEZIER )
@@ -399,7 +399,7 @@ wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
     case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),
-                                 int( m_poly.Outline( 0 ).GetPointCount() ) );
+                                 int( GetPolyShape().Outline( 0 ).GetPointCount() ) );
 
     case SHAPE_T::BEZIER:
         return wxString::Format( _( "Bezier Curve, %d points" ),
@@ -458,13 +458,13 @@ void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
 {
     if( GetShape() == SHAPE_T::POLY )
     {
-        if( m_poly.IsEmpty() )
+        if( GetPolyShape().IsEmpty() )
         {
-            m_poly.NewOutline();
-            m_poly.Outline( 0 ).SetClosed( false );
+            GetPolyShape().NewOutline();
+            GetPolyShape().Outline( 0 ).SetClosed( false );
         }
 
-        m_poly.Outline( 0 ).Append( aPosition, true );
+        GetPolyShape().Outline( 0 ).Append( aPosition, true );
     }
     else
     {

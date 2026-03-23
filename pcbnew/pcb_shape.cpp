@@ -515,9 +515,9 @@ void PCB_SHAPE::Normalize()
                 };
 
         // Convert a poly back to a rectangle if appropriate
-        if( m_poly.OutlineCount() == 1 && m_poly.Outline( 0 ).SegmentCount() == 4 )
+        if( GetPolyShape().OutlineCount() == 1 && GetPolyShape().Outline( 0 ).SegmentCount() == 4 )
         {
-            SHAPE_LINE_CHAIN& outline = m_poly.Outline( 0 );
+            SHAPE_LINE_CHAIN& outline = GetPolyShape().Outline( 0 );
 
             if( horizontal( outline.Segment( 0 ) )
                 && vertical( outline.Segment( 1 ) )

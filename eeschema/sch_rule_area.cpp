@@ -131,7 +131,7 @@ void SCH_RULE_AREA::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OP
 
     ptList.clear();
 
-    const std::vector<VECTOR2I>& polyPoints = m_poly.Outline( 0 ).CPoints();
+    const std::vector<VECTOR2I>& polyPoints = GetPolyShape().Outline( 0 ).CPoints();
 
     for( const VECTOR2I& pt : polyPoints )
         ptList.push_back( pt );

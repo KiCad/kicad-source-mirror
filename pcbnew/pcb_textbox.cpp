@@ -743,7 +743,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
     {
         aBuffer.NewOutline();
 
-        const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
+        const SHAPE_LINE_CHAIN& poly = GetPolyShape().Outline( 0 );
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
             aBuffer.Append( poly.GetPoint( ii ) );
