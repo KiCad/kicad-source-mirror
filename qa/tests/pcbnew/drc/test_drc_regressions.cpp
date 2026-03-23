@@ -232,6 +232,7 @@ BOOST_FIXTURE_TEST_CASE( DRCZoneFalsePositiveRegressions, DRC_REGRESSION_TEST_FI
     std::vector<wxString> tests =
     {
         "issue19090/issue19090",  // Copper graphic shapes count as thermal spoke connections
+        "issue23467/issue23467",  // Zones must respect clearance from NPTH pads with no copper layers
     };
 
     for( const wxString& relPath : tests )

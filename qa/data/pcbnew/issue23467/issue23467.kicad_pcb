@@ -1,0 +1,70 @@
+(kicad_pcb
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(25 "Edge.Cuts" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+	)
+	(footprint "npth_test"
+		(layer "F.Cu")
+		(uuid "11111111-0000-0000-0000-000000000001")
+		(at 5 5)
+		(attr board_only exclude_from_pos_files exclude_from_bom)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 2.1 2.1)
+			(drill 2.1)
+			(layers "*.Mask")
+			(uuid "11111111-0000-0000-0000-000000000002")
+		)
+		(pad "" np_thru_hole oval
+			(at 5 0)
+			(size 2.2 1.6)
+			(drill oval 2.2 1.6)
+			(layers "*.Mask")
+			(uuid "11111111-0000-0000-0000-000000000003")
+		)
+	)
+	(gr_rect
+		(start 0 0)
+		(end 15 10)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "11111111-0000-0000-0000-000000000010")
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "F.Cu")
+		(uuid "11111111-0000-0000-0000-000000000020")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0.5)
+		)
+		(min_thickness 0.25)
+		(fill yes
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 0 0) (xy 15 0) (xy 15 10) (xy 0 10)
+			)
+		)
+	)
+)

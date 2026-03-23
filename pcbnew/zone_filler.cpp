@@ -1588,7 +1588,13 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( !pad->IsOnLayer( aLayer ) )
+            // NPTH pads with a drill hole affect all copper layers even when they carry no copper
+            // on that layer (e.g. layers limited to "*.Mask"). The physical hole still requires
+            // a clearance knockout, so skip only pads that are truly irrelevant to this layer.
+            bool npthWithHole = pad->GetAttribute() == PAD_ATTRIB::NPTH
+                                && pad->GetDrillSize().x > 0;
+
+            if( !pad->IsOnLayer( aLayer ) && !npthWithHole )
                 continue;
 
             BOX2I padBBox = pad->GetBoundingBox();
@@ -1917,6 +1923,15 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     gap = std::max( gap, evalRulesForItems( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer ) );
 
                     gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer ) );
+
+                    // Oblong NPTH holes are milled rather than drilled, so they need
+                    // edge clearance in addition to hole clearance
+                    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH
+                        && aPad->GetDrillSize().x != aPad->GetDrillSize().y )
+                    {
+                        gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aZone,
+                                                                aPad, aLayer ) );
+                    }
 
                     if( gap >= 0 )
                         addHoleKnockout( aPad, gap + extra_margin, aHoles );
