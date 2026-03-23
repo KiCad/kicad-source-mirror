@@ -648,14 +648,6 @@ void EDA_SHAPE::UpdateHatching() const
         shapeBuffer.Fracture();
     }
 
-    if( shapeBuffer.IsEmpty() )
-    {
-        hatching().RemoveAllContours();
-        hatchLines().clear();
-        m_hatchingDirty = false;
-        return;
-    }
-
     // Generate hatch lines for stroke-based rendering. All hatch types use line segments.
     std::vector<SEG> hatchSegs = shapeBuffer.GenerateHatchLines( slopes, spacing, -1 );
     m_hatchLines = hatchSegs;

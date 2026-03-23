@@ -3509,9 +3509,6 @@ const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<dou
 {
     std::vector<SEG> hatchLines;
 
-    if( OutlineCount() == 0 || TotalVertices() == 0 )
-        return hatchLines;
-
     // define range for hatch lines
     int min_x = CVertex( 0 ).x;
     int max_x = CVertex( 0 ).x;
