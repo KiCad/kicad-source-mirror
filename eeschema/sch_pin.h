@@ -348,7 +348,7 @@ public:
      * laid out than just the bounding box, you can use this. The SCH_PAINTER,
      * for example, can use this to avoid having to duplicate text extent calcs.
      */
-    PIN_LAYOUT_CACHE& GetLayoutCache() const { return *m_layoutCache; }
+    PIN_LAYOUT_CACHE& GetLayoutCache() const;
 
 protected:
     wxString getItemDescription( ALT* aAlt ) const;

@@ -128,8 +128,7 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
         m_hidden( false ),
         m_numTextSize( schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ) ),
         m_nameTextSize( schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ) ),
-        m_isDangling( true ),
-        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
+        m_isDangling( true )
 {
     if( SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ) )
     {
@@ -156,8 +155,7 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxStri
         m_hidden( false ),
         m_numTextSize( aNumTextSize ),
         m_nameTextSize( aNameTextSize ),
-        m_isDangling( true ),
-        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
+        m_isDangling( true )
 {
     SetName( aName );
     SetNumber( aNumber );
@@ -172,8 +170,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
         m_orientation( PIN_ORIENTATION::INHERIT ),
         m_shape( GRAPHIC_PINSHAPE::INHERIT ),
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
-        m_isDangling( true ),
-        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
+        m_isDangling( true )
 {
     wxASSERT( aParentSymbol );
 
@@ -194,8 +191,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
         m_number( aNumber ),
         m_alt( aAlt ),
-        m_isDangling( true ),
-        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
+        m_isDangling( true )
 {
     wxASSERT( aParentSymbol );
 
@@ -217,8 +213,7 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         m_numTextSize( aPin.m_numTextSize ),
         m_nameTextSize( aPin.m_nameTextSize ),
         m_alt( aPin.m_alt ),
-        m_isDangling( aPin.m_isDangling ),
-        m_layoutCache( std::make_unique<PIN_LAYOUT_CACHE>( *this ) )
+        m_isDangling( aPin.m_isDangling )
 {
     SetName( aPin.m_name );
     SetNumber( aPin.m_number );
@@ -250,6 +245,7 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     m_numTextSize = aPin.m_numTextSize;
     m_nameTextSize = aPin.m_nameTextSize;
     m_isDangling = aPin.m_isDangling;
+    m_layoutCache.reset();
 
     return *this;
 }
@@ -338,7 +334,9 @@ void SCH_PIN::SetType( ELECTRICAL_PINTYPE aType )
         return;
 
     m_type = aType;
-    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::ELEC_TYPE );
+
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::ELEC_TYPE );
 }
 
 
@@ -430,7 +428,8 @@ void SCH_PIN::SetName( const wxString& aName )
     // pin name string does not support spaces
     m_name.Replace( wxT( " " ), wxT( "_" ) );
 
-    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
 }
 
 
@@ -650,7 +649,8 @@ void SCH_PIN::SetNumber( const wxString& aNumber )
     // pin number string does not support spaces
     m_number.Replace( wxT( " " ), wxT( "_" ) );
 
-    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
 }
 
 
@@ -674,7 +674,9 @@ void SCH_PIN::SetNameTextSize( int aSize )
         return;
 
     m_nameTextSize = aSize;
-    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
+
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NAME );
 }
 
 
@@ -698,7 +700,9 @@ void SCH_PIN::SetNumberTextSize( int aSize )
         return;
 
     m_numTextSize = aSize;
-    m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
+
+    if( m_layoutCache )
+        m_layoutCache->MarkDirty( PIN_LAYOUT_CACHE::DIRTY_FLAGS::NUMBER );
 }
 
 
@@ -1576,8 +1580,18 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
                                bool aIncludeElectricalType ) const
 {
     // Just defer to the cache
-    return m_layoutCache->GetPinBoundingBox( aIncludeLabelsOnInvisiblePins, aIncludeNameAndNumber,
-                                             aIncludeElectricalType );
+    return GetLayoutCache().GetPinBoundingBox( aIncludeLabelsOnInvisiblePins,
+                                               aIncludeNameAndNumber,
+                                               aIncludeElectricalType );
+}
+
+
+PIN_LAYOUT_CACHE& SCH_PIN::GetLayoutCache() const
+{
+    if( !m_layoutCache )
+        m_layoutCache = std::make_unique<PIN_LAYOUT_CACHE>( *this );
+
+    return *m_layoutCache;
 }
 
 
