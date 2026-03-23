@@ -1408,9 +1408,11 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             {
                 braceNesting++;
 
-                if( !tmp.IsEmpty() )
-                    tmp.RemoveLast();
-
+                // Keep the full formatting notation (e.g. ~{CAS}) in the member name.
+                // A net named ~{CAS} is distinct from CAS, and stripping the marker
+                // would lose that identity.  Vector bus members like D_{[1..2]} also
+                // preserve their subscript so recursive ForEachBusMember can parse them.
+                tmp += wxT( '{' );
                 continue;
             }
             else
@@ -1421,6 +1423,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             if( braceNesting )
             {
                 braceNesting--;
+                tmp += wxT( '}' );
                 continue;
             }
             else
