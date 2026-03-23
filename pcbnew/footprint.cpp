@@ -87,9 +87,6 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_attributes( 0 ),
         m_fpStatus( FP_PADS_are_LOCKED ),
         m_fileFormatVersionAtLoad( 0 ),
-        m_boundingBoxCacheTimeStamp( 0 ),
-        m_textExcludedBBoxCacheTimeStamp( 0 ),
-        m_hullCacheTimeStamp( 0 ),
         m_duplicatePadNumbersAreJumpers( false ),
         m_allowMissingCourtyard( false ),
         m_allowSolderMaskBridges( false ),
@@ -135,12 +132,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_fpStatus                = aFootprint.m_fpStatus;
     m_fileFormatVersionAtLoad = aFootprint.m_fileFormatVersionAtLoad;
 
-    m_cachedBoundingBox              = aFootprint.m_cachedBoundingBox;
-    m_boundingBoxCacheTimeStamp      = aFootprint.m_boundingBoxCacheTimeStamp;
-    m_cachedTextExcludedBBox         = aFootprint.m_cachedTextExcludedBBox;
-    m_textExcludedBBoxCacheTimeStamp = aFootprint.m_textExcludedBBoxCacheTimeStamp;
-    m_cachedHull                     = aFootprint.m_cachedHull;
-    m_hullCacheTimeStamp             = aFootprint.m_hullCacheTimeStamp;
+    m_geometry_cache.reset();
 
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_jumperPadGroups                = aFootprint.m_jumperPadGroups;
@@ -824,6 +816,9 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
+    m_courtyard_cache.reset();
+    m_geometry_cache.reset();
+
     m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
     m_attributes    = aOther.m_attributes;
@@ -833,13 +828,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
     m_variants      = std::move( aOther.m_variants );
-
-    m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
-    m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
-    m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
-    m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
-    m_cachedHull                     = aOther.m_cachedHull;
-    m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
 
     m_clearance                      = aOther.m_clearance;
     m_solderMaskMargin               = aOther.m_solderMaskMargin;
@@ -974,6 +962,9 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
+    m_courtyard_cache.reset();
+    m_geometry_cache.reset();
+
     m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
     m_attributes    = aOther.m_attributes;
@@ -982,13 +973,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
-
-    m_cachedBoundingBox              = aOther.m_cachedBoundingBox;
-    m_boundingBoxCacheTimeStamp      = aOther.m_boundingBoxCacheTimeStamp;
-    m_cachedTextExcludedBBox         = aOther.m_cachedTextExcludedBBox;
-    m_textExcludedBBoxCacheTimeStamp = aOther.m_textExcludedBBoxCacheTimeStamp;
-    m_cachedHull                     = aOther.m_cachedHull;
-    m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
 
     m_clearance                      = aOther.m_clearance;
     m_solderMaskMargin               = aOther.m_solderMaskMargin;
@@ -1142,12 +1126,13 @@ void FOOTPRINT::CopyFrom( const BOARD_ITEM* aOther )
 
 void FOOTPRINT::InvalidateGeometryCaches()
 {
-    m_boundingBoxCacheTimeStamp = 0;
-    m_textExcludedBBoxCacheTimeStamp = 0;
-    m_hullCacheTimeStamp = 0;
+    {
+        std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
+        m_geometry_cache.reset();
+    }
 
-    m_courtyard_cache_back_hash.Clear();
-    m_courtyard_cache_front_hash.Clear();
+    std::lock_guard<std::mutex> lock( m_courtyard_cache_mutex );
+    m_courtyard_cache.reset();
 }
 
 
@@ -1754,19 +1739,22 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
     const BOARD* board = GetBoard();
 
     {
-        std::lock_guard<std::mutex> lock( m_bboxCacheMutex );
+        std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
 
         if( board )
         {
+            if( !m_geometry_cache )
+                m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
+
             if( aIncludeText )
             {
-                if( m_boundingBoxCacheTimeStamp >= board->GetTimeStamp() )
-                    return m_cachedBoundingBox;
+                if( m_geometry_cache->bounding_box_timestamp >= board->GetTimeStamp() )
+                    return m_geometry_cache->bounding_box;
             }
             else
             {
-                if( m_textExcludedBBoxCacheTimeStamp >= board->GetTimeStamp() )
-                    return m_cachedTextExcludedBBox;
+                if( m_geometry_cache->text_excluded_bbox_timestamp >= board->GetTimeStamp() )
+                    return m_geometry_cache->text_excluded_bbox;
             }
         }
     }
@@ -1884,17 +1872,20 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText ) const
 
     if( board )
     {
-        std::lock_guard<std::mutex> lock( m_bboxCacheMutex );
+        std::lock_guard<std::mutex> lock( m_geometry_cache_mutex );
+
+        if( !m_geometry_cache )
+            m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
 
         if( aIncludeText || noDrawItems )
         {
-            m_boundingBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedBoundingBox = bbox;
+            m_geometry_cache->bounding_box_timestamp = board->GetTimeStamp();
+            m_geometry_cache->bounding_box = bbox;
         }
         else
         {
-            m_textExcludedBBoxCacheTimeStamp = board->GetTimeStamp();
-            m_cachedTextExcludedBBox = bbox;
+            m_geometry_cache->text_excluded_bbox_timestamp = board->GetTimeStamp();
+            m_geometry_cache->text_excluded_bbox = bbox;
         }
     }
 
@@ -1965,8 +1956,8 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     if( board )
     {
-        if( m_hullCacheTimeStamp >= board->GetTimeStamp() )
-            return m_cachedHull;
+        if( m_geometry_cache && m_geometry_cache->hull_timestamp >= board->GetTimeStamp() )
+            return m_geometry_cache->hull;
     }
 
     SHAPE_POLY_SET rawPolys;
@@ -2031,16 +2022,19 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
     std::vector<VECTOR2I> convex_hull;
     BuildConvexHull( convex_hull, rawPolys );
 
-    m_cachedHull.RemoveAllContours();
-    m_cachedHull.NewOutline();
+    if( !m_geometry_cache )
+        m_geometry_cache = std::make_unique<FOOTPRINT_GEOMETRY_CACHE_DATA>();
+
+    m_geometry_cache->hull.RemoveAllContours();
+    m_geometry_cache->hull.NewOutline();
 
     for( const VECTOR2I& pt : convex_hull )
-        m_cachedHull.Append( pt );
+        m_geometry_cache->hull.Append( pt );
 
     if( board )
-        m_hullCacheTimeStamp = board->GetTimeStamp();
+        m_geometry_cache->hull_timestamp = board->GetTimeStamp();
 
-    return m_cachedHull;
+    return m_geometry_cache->hull;
 }
 
 
@@ -2952,20 +2946,25 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         point->Flip( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Swap the courtyard sides, then mirror in the same way as everything else.
-    std::swap( m_courtyard_cache_back, m_courtyard_cache_front );
-    m_courtyard_cache_back.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
-    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+    if( m_courtyard_cache )
+    {
+        std::swap( m_courtyard_cache->back, m_courtyard_cache->front );
+        m_courtyard_cache->back.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+        m_courtyard_cache->back_hash = m_courtyard_cache->back.GetHash();
 
-    m_courtyard_cache_front.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
-    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+        m_courtyard_cache->front.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+        m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
+    }
 
-    m_cachedHull.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
+    if( m_geometry_cache )
+        m_geometry_cache->hull.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
 
     // Now rotate 180 deg if required
     if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
         Rotate( aCentre, ANGLE_180 );
 
-    m_textExcludedBBoxCacheTimeStamp = 0;
+    if( m_geometry_cache )
+        m_geometry_cache->text_excluded_bbox_timestamp = 0;
 }
 
 
@@ -2990,16 +2989,22 @@ void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
     for( PCB_POINT* point : m_points )
         point->Move( delta );
 
-    m_cachedBoundingBox.Move( delta );
-    m_cachedTextExcludedBBox.Move( delta );
-    m_cachedHull.Move( delta );
+    if( m_geometry_cache )
+    {
+        m_geometry_cache->bounding_box.Move( delta );
+        m_geometry_cache->text_excluded_bbox.Move( delta );
+        m_geometry_cache->hull.Move( delta );
+    }
 
     // The geometry work has been conserved by using Move(). But the hashes
     // need to be updated, otherwise the cached polygons will still be rebuild.
-    m_courtyard_cache_back.Move( delta );
-    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
-    m_courtyard_cache_front.Move( delta );
-    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+    if( m_courtyard_cache )
+    {
+        m_courtyard_cache->back.Move( delta );
+        m_courtyard_cache->back_hash = m_courtyard_cache->back.GetHash();
+        m_courtyard_cache->front.Move( delta );
+        m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
+    }
 }
 
 
@@ -3041,16 +3046,22 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
         model.m_Offset.y -= pcbIUScale.IUTomm( moveVector.y );
     }
 
-    m_cachedBoundingBox.Move( moveVector );
-    m_cachedTextExcludedBBox.Move( moveVector );
-    m_cachedHull.Move( moveVector );
+    if( m_geometry_cache )
+    {
+        m_geometry_cache->bounding_box.Move( moveVector );
+        m_geometry_cache->text_excluded_bbox.Move( moveVector );
+        m_geometry_cache->hull.Move( moveVector );
+    }
 
     // The geometry work have been conserved by using Move(). But the hashes
     // need to be updated, otherwise the cached polygons will still be rebuild.
-    m_courtyard_cache_back.Move( moveVector );
-    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
-    m_courtyard_cache_front.Move( moveVector );
-    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+    if( m_courtyard_cache )
+    {
+        m_courtyard_cache->back.Move( moveVector );
+        m_courtyard_cache->back_hash = m_courtyard_cache->back.GetHash();
+        m_courtyard_cache->front.Move( moveVector );
+        m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
+    }
 }
 
 
@@ -3078,15 +3089,20 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     for( PCB_POINT* point : m_points )
         point->Rotate( rotationCenter, angleChange );
 
-    m_textExcludedBBoxCacheTimeStamp = 0;
+    if( m_geometry_cache )
+        m_geometry_cache->text_excluded_bbox_timestamp = 0;
 
-    m_courtyard_cache_front.Rotate( angleChange, rotationCenter );
-    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+    if( m_courtyard_cache )
+    {
+        m_courtyard_cache->front.Rotate( angleChange, rotationCenter );
+        m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
 
-    m_courtyard_cache_back.Rotate( angleChange, rotationCenter );
-    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+        m_courtyard_cache->back.Rotate( angleChange, rotationCenter );
+        m_courtyard_cache->back_hash = m_courtyard_cache->back.GetHash();
+    }
 
-    m_cachedHull.Rotate( angleChange, rotationCenter );
+    if( m_geometry_cache )
+        m_geometry_cache->hull.Rotate( angleChange, rotationCenter );
 }
 
 
@@ -3561,8 +3577,9 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
 {
     std::lock_guard<std::mutex> lock( m_courtyard_cache_mutex );
 
-    if( m_courtyard_cache_front_hash != m_courtyard_cache_front.GetHash()
-        || m_courtyard_cache_back_hash != m_courtyard_cache_back.GetHash() )
+    if( !m_courtyard_cache
+        || m_courtyard_cache->front_hash != m_courtyard_cache->front.GetHash()
+        || m_courtyard_cache->back_hash != m_courtyard_cache->back.GetHash() )
     {
         const_cast<FOOTPRINT*>(this)->BuildCourtyardCaches();
     }
@@ -3573,17 +3590,23 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
 
 const SHAPE_POLY_SET& FOOTPRINT::GetCachedCourtyard( PCB_LAYER_ID aLayer ) const
 {
+    if( !m_courtyard_cache )
+        m_courtyard_cache = std::make_unique<FOOTPRINT_COURTYARD_CACHE_DATA>();
+
     if( IsBackLayer( aLayer ) )
-        return m_courtyard_cache_back;
+        return m_courtyard_cache->back;
     else
-        return m_courtyard_cache_front;
+        return m_courtyard_cache->front;
 }
 
 
 void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
-    m_courtyard_cache_front.RemoveAllContours();
-    m_courtyard_cache_back.RemoveAllContours();
+    if( !m_courtyard_cache )
+        m_courtyard_cache = std::make_unique<FOOTPRINT_COURTYARD_CACHE_DATA>();
+
+    m_courtyard_cache->front.RemoveAllContours();
+    m_courtyard_cache->back.RemoveAllContours();
     ClearFlags( MALFORMED_COURTYARDS );
 
     // Build the courtyard area from graphic items on the courtyard.
@@ -3617,7 +3640,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     int maxError = pcbIUScale.mmToIU( 0.005 );        // max error for polygonization
     int chainingEpsilon = pcbIUScale.mmToIU( 0.02 );  // max dist from one endPt to next startPt
 
-    if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, maxError, chainingEpsilon,
+    if( ConvertOutlineToPolygon( list_front, m_courtyard_cache->front, maxError, chainingEpsilon,
                                  true, aErrorHandler ) )
     {
         int width = 0;
@@ -3625,9 +3648,9 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
         // Use maxError here because that is the allowed deviation when transforming arcs/circles to
         // polygons.
-        m_courtyard_cache_front.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
+        m_courtyard_cache->front.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
-        m_courtyard_cache_front.CacheTriangulation( false );
+        m_courtyard_cache->front.CacheTriangulation( false );
         auto max = std::max_element( front_width_histogram.begin(), front_width_histogram.end(),
                                      []( const std::pair<int, int>& a, const std::pair<int, int>& b )
                                      {
@@ -3640,23 +3663,23 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         if( width == 0 )
             width = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH );
 
-        if( m_courtyard_cache_front.OutlineCount() > 0 )
-            m_courtyard_cache_front.Outline( 0 ).SetWidth( width );
+        if( m_courtyard_cache->front.OutlineCount() > 0 )
+            m_courtyard_cache->front.Outline( 0 ).SetWidth( width );
     }
     else
     {
         SetFlags( MALFORMED_F_COURTYARD );
     }
 
-    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, maxError, chainingEpsilon, true,
+    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache->back, maxError, chainingEpsilon, true,
                                  aErrorHandler ) )
     {
         int width = 0;
 
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_back.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
+        m_courtyard_cache->back.Inflate( -maxError, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
-        m_courtyard_cache_back.CacheTriangulation( false );
+        m_courtyard_cache->back.CacheTriangulation( false );
         auto max = std::max_element( back_width_histogram.begin(), back_width_histogram.end(),
                                      []( const std::pair<int, int>& a, const std::pair<int, int>& b )
                                      {
@@ -3669,16 +3692,16 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         if( width == 0 )
             width = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH );
 
-        if( m_courtyard_cache_back.OutlineCount() > 0 )
-            m_courtyard_cache_back.Outline( 0 ).SetWidth( width );
+        if( m_courtyard_cache->back.OutlineCount() > 0 )
+            m_courtyard_cache->back.Outline( 0 ).SetWidth( width );
     }
     else
     {
         SetFlags( MALFORMED_B_COURTYARD );
     }
 
-    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
-    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
+    m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
+    m_courtyard_cache->back_hash = m_courtyard_cache->back.GetHash();
 }
 
 
