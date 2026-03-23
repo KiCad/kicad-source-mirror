@@ -412,7 +412,6 @@ public:
         m_radius = aRadius;
     }
 
-    VECTOR2I GetPos() const { return m_pos; };
     int      GetRadius() const override { return m_radius; };
 
     std::vector<PATH_CONNECTION> Paths( const BE_SHAPE_POINT& aS2, double aMaxWeight,
@@ -433,7 +432,6 @@ public:
                                         double aMaxSquaredWeight ) const override;
 
 protected:
-    VECTOR2I m_pos = VECTOR2I( 0, 0 );
     double   m_radius = 1;
 };
 

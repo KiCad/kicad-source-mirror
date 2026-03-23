@@ -24,9 +24,11 @@
 /**
  * @file test_drc_creepage_issue23364.cpp
  *
- * Regression test for creepage DRC with multiple Edge.Cuts rectangular slots.
- * When two or more rectangular slots exist on Edge.Cuts, the path validation
- * must not skip slot edges during board intersection testing.
+ * Regression test for creepage DRC with circular pad shapes. A member variable
+ * shadowing bug in CU_SHAPE_CIRCLE caused GetPos() through a base pointer to
+ * return (0,0), making spatial filtering reject all work items involving
+ * circular pads. This test verifies that the creepage algorithm correctly
+ * finds paths involving circular pad shapes.
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -67,14 +69,8 @@ BOOST_FIXTURE_TEST_CASE( CreepageDualSlotsIssue23364, DRC_CREEPAGE_DUAL_SLOTS_FI
 
     BOOST_REQUIRE_MESSAGE( m_board, "Failed to load board creepage_slots" );
 
-    struct ViolationInfo
-    {
-        std::shared_ptr<DRC_ITEM> item;
-        double                    distance;
-    };
-
-    std::vector<ViolationInfo> violations;
-    BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
+    std::vector<std::shared_ptr<DRC_ITEM>> violations;
+    BOARD_DESIGN_SETTINGS&                 bds = m_board->GetDesignSettings();
 
     BOOST_REQUIRE_MESSAGE( bds.m_DRCEngine, "DRC engine not initialized" );
 
@@ -88,27 +84,17 @@ BOOST_FIXTURE_TEST_CASE( CreepageDualSlotsIssue23364, DRC_CREEPAGE_DUAL_SLOTS_FI
                  const std::function<void( PCB_MARKER* )>& aPathGenerator )
             {
                 if( bds.GetSeverity( aItem->GetErrorCode() ) == SEVERITY::RPT_SEVERITY_ERROR )
-                {
-                    ViolationInfo vi;
-                    vi.item = aItem;
-                    vi.distance = -1;
-
-                    wxString msg = aItem->GetErrorMessage( false );
-                    BOOST_TEST_MESSAGE( wxString::Format( "  Violation: %s", msg ) );
-                    violations.push_back( vi );
-                }
+                    violations.push_back( aItem );
             } );
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
     bds.m_DRCEngine->ClearViolationHandler();
 
-    BOOST_TEST_MESSAGE( wxString::Format( "Found %d creepage violations", (int) violations.size() ) );
-
-    // The board has pads in the 'Sitove' netclass separated by two rectangular
-    // slots on Edge.Cuts. The creepage rule requires 5mm. Before the fix, paths
-    // between corners of different Edge.Cuts rectangles had both rectangles in
-    // the IgnoreForTest list, allowing invalid shortcut paths through slot
-    // interiors.
+    // The board has circular pads in the 'Sitove' netclass separated by two
+    // rectangular slots on Edge.Cuts. The creepage rule requires 5mm. Before
+    // the fix, CU_SHAPE_CIRCLE had a shadowed m_pos member that caused
+    // GetPos() through a base pointer to return (0,0), making spatial filtering
+    // reject all work items involving circular pads.
     BOOST_CHECK_GE( violations.size(), 1 );
 }
