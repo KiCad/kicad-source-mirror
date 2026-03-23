@@ -27,6 +27,8 @@
 
 class DS_DATA_ITEM;
 class PAGE_INFO;
+class PROJECT;
+class EMBEDDED_FILES;
 
 /**
  * Handle the graphic items list to draw/plot the frame and title block.
@@ -130,6 +132,25 @@ public:
 
     void SetDefaultLayout();
     void SetEmptyLayout();
+
+    /**
+     * Return the reserved drawing-sheet name that marks a design as deliberately having no
+     * sheet, as opposed to one that failed to resolve. It names no file on disk.
+     */
+    static const wxString& EmptyLayoutName();
+
+    /**
+     * Populate the list from @p aSheetName, which is either @ref EmptyLayoutName, an embedded
+     * file reference or a path resolved against @p aBasePath.
+     *
+     * Callers store an unresolved sheet name, so this owns the whole decision rather than
+     * leaving each of them to recognize the reserved name before resolving.
+     *
+     * @param aMsg [optional] if non-null, is filled with any error message.
+     * @return false only when a real drawing sheet failed to load.
+     */
+    bool LoadFromName( const wxString& aSheetName, const wxString& aBasePath, PROJECT* aProject,
+                       std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack, wxString* aMsg );
 
     /**
      * Return a string containing the empty layout shape.

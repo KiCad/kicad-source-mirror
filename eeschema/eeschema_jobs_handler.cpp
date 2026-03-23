@@ -264,20 +264,10 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
 
     auto loadSheet = [&]( const wxString& path ) -> bool
     {
-        if( path == wxS( "empty.kicad_wks" ) )
-        {
-            DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
-            return true;
-        }
+        wxString msg;
 
-        wxString          msg;
-        FILENAME_RESOLVER resolve;
-        resolve.SetProject( &aSch->Project() );
-        resolve.SetProgramBase( &Pgm() );
-
-        wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(), { aSch->GetEmbeddedFiles() } );
-
-        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
+        if( !DS_DATA_MODEL::GetTheInstance().LoadFromName( path, wxGetCwd(), &aSch->Project(),
+                                                           { aSch->GetEmbeddedFiles() }, &msg ) )
         {
             m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ) + wxS( "\n" ) + msg
                                         + wxS( "\n" ),

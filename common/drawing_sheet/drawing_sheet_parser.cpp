@@ -26,7 +26,9 @@
 #include <wx/log.h>
 
 #include <eda_item.h>
+#include <filename_resolver.h>
 #include <locale_io.h>
+#include <pgm_base.h>
 #include <string_utils.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
@@ -946,6 +948,31 @@ void DS_DATA_MODEL::SetEmptyLayout()
 wxString DS_DATA_MODEL::EmptyLayout()
 {
     return wxString( emptyDrawingSheet );
+}
+
+
+const wxString& DS_DATA_MODEL::EmptyLayoutName()
+{
+    static const wxString name( wxS( "empty.kicad_wks" ) );
+
+    return name;
+}
+
+
+bool DS_DATA_MODEL::LoadFromName( const wxString& aSheetName, const wxString& aBasePath, PROJECT* aProject,
+                                  std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack, wxString* aMsg )
+{
+    if( aSheetName == EmptyLayoutName() )
+    {
+        SetEmptyLayout();
+        return true;
+    }
+
+    FILENAME_RESOLVER resolver;
+    resolver.SetProject( aProject );
+    resolver.SetProgramBase( &Pgm() );
+
+    return LoadDrawingSheet( resolver.ResolvePath( aSheetName, aBasePath, std::move( aEmbeddedFilesStack ) ), aMsg );
 }
 
 
