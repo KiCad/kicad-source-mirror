@@ -152,6 +152,60 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
 }
 
 
+EDA_SHAPE::EDA_SHAPE( const EDA_SHAPE& aOther ) :
+        m_endsSwapped( aOther.m_endsSwapped ),
+        m_shape( aOther.m_shape ),
+        m_stroke( aOther.m_stroke ),
+        m_fill( aOther.m_fill ),
+        m_fillColor( aOther.m_fillColor ),
+        m_hatchingDirty( true ),
+        m_rectangleHeight( aOther.m_rectangleHeight ),
+        m_rectangleWidth( aOther.m_rectangleWidth ),
+        m_cornerRadius( aOther.m_cornerRadius ),
+        m_start( aOther.m_start ),
+        m_end( aOther.m_end ),
+        m_arcCenter( aOther.m_arcCenter ),
+        m_arcMidData( aOther.m_arcMidData ),
+        m_bezierC1( aOther.m_bezierC1 ),
+        m_bezierC2( aOther.m_bezierC2 ),
+        m_bezierPoints( aOther.m_bezierPoints ),
+        m_poly( aOther.m_poly ),
+        m_editState( aOther.m_editState ),
+        m_proxyItem( aOther.m_proxyItem )
+{
+}
+
+
+EDA_SHAPE& EDA_SHAPE::operator=( const EDA_SHAPE& aOther )
+{
+    if( this == &aOther )
+        return *this;
+
+    m_endsSwapped = aOther.m_endsSwapped;
+    m_shape = aOther.m_shape;
+    m_stroke = aOther.m_stroke;
+    m_fill = aOther.m_fill;
+    m_fillColor = aOther.m_fillColor;
+    m_hatchingCache.reset();
+    m_hatchingDirty = true;
+    m_rectangleHeight = aOther.m_rectangleHeight;
+    m_rectangleWidth = aOther.m_rectangleWidth;
+    m_cornerRadius = aOther.m_cornerRadius;
+    m_start = aOther.m_start;
+    m_end = aOther.m_end;
+    m_arcCenter = aOther.m_arcCenter;
+    m_arcMidData = aOther.m_arcMidData;
+    m_bezierC1 = aOther.m_bezierC1;
+    m_bezierC2 = aOther.m_bezierC2;
+    m_bezierPoints = aOther.m_bezierPoints;
+    m_poly = aOther.m_poly;
+    m_editState = aOther.m_editState;
+    m_proxyItem = aOther.m_proxyItem;
+
+    return *this;
+}
+
+
 void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;
@@ -573,6 +627,42 @@ UI_FILL_MODE EDA_SHAPE::GetFillModeProp() const
 }
 
 
+const SHAPE_POLY_SET& EDA_SHAPE::GetHatching() const
+{
+    if( !m_hatchingCache )
+        m_hatchingCache = std::make_unique<EDA_SHAPE_HATCH_CACHE_DATA>();
+
+    return m_hatchingCache->hatching;
+}
+
+
+const std::vector<SEG>& EDA_SHAPE::GetHatchLines() const
+{
+    if( !m_hatchingCache )
+        m_hatchingCache = std::make_unique<EDA_SHAPE_HATCH_CACHE_DATA>();
+
+    return m_hatchingCache->hatchLines;
+}
+
+
+SHAPE_POLY_SET& EDA_SHAPE::hatching() const
+{
+    if( !m_hatchingCache )
+        m_hatchingCache = std::make_unique<EDA_SHAPE_HATCH_CACHE_DATA>();
+
+    return m_hatchingCache->hatching;
+}
+
+
+std::vector<SEG>& EDA_SHAPE::hatchLines() const
+{
+    if( !m_hatchingCache )
+        m_hatchingCache = std::make_unique<EDA_SHAPE_HATCH_CACHE_DATA>();
+
+    return m_hatchingCache->hatchLines;
+}
+
+
 void EDA_SHAPE::UpdateHatching() const
 {
     if( !m_hatchingDirty )
@@ -631,8 +721,8 @@ void EDA_SHAPE::UpdateHatching() const
 
     // Clear cached hatching only after all validation passes.
     // This prevents flickering when early returns would otherwise leave empty hatching.
-    m_hatching.RemoveAllContours();
-    m_hatchLines.clear();
+    hatching().RemoveAllContours();
+    hatchLines().clear();
 
     BOX2I extents = shapeBuffer.BBox();
     int   majorAxis = std::max( extents.GetWidth(), extents.GetHeight() );
@@ -650,7 +740,7 @@ void EDA_SHAPE::UpdateHatching() const
 
     // Generate hatch lines for stroke-based rendering. All hatch types use line segments.
     std::vector<SEG> hatchSegs = shapeBuffer.GenerateHatchLines( slopes, spacing, -1 );
-    m_hatchLines = hatchSegs;
+    hatchLines() = hatchSegs;
 
     // Also generate polygon representation for exports, 3D viewer, and hit testing
     if( GetFillMode() == FILL_T::HATCH || GetFillMode() == FILL_T::REVERSE_HATCH )
@@ -660,10 +750,11 @@ void EDA_SHAPE::UpdateHatching() const
             // We don't really need the rounded ends at all, so don't spend any extra time on them
             int maxError = lineWidth;
 
-            TransformOvalToPolygon( m_hatching, seg.A, seg.B, lineWidth, maxError, ERROR_INSIDE );
+            TransformOvalToPolygon( hatching(), seg.A, seg.B, lineWidth, maxError,
+                                    ERROR_INSIDE );
         }
 
-        m_hatching.Fracture();
+        hatching().Fracture();
         m_hatchingDirty = false;
     }
     else
@@ -674,8 +765,8 @@ void EDA_SHAPE::UpdateHatching() const
         int gridsize = spacing;
         int hole_size = gridsize - GetHatchLineWidth();
 
-        m_hatching = shapeBuffer.CloneDropTriangulation();
-        m_hatching.Rotate( -ANGLE_45 );
+        hatching() = shapeBuffer.CloneDropTriangulation();
+        hatching().Rotate( -ANGLE_45 );
 
         // Build hole shape
         SHAPE_LINE_CHAIN hole_base;
@@ -690,7 +781,7 @@ void EDA_SHAPE::UpdateHatching() const
         hole_base.SetClosed( true );
 
         // Build holes
-        BOX2I bbox = m_hatching.BBox( 0 );
+        BOX2I bbox = GetHatching().BBox( 0 );
         SHAPE_POLY_SET holes;
 
         int x_offset = bbox.GetX() - ( bbox.GetX() ) % gridsize - gridsize;
@@ -706,16 +797,17 @@ void EDA_SHAPE::UpdateHatching() const
             }
         }
 
-        m_hatching.BooleanSubtract( holes );
-        m_hatching.Fracture();
+        hatching().BooleanSubtract( holes );
+        hatching().Fracture();
 
-        // Must re-rotate after Fracture().  Clipper struggles mightily with fracturing 45-degree holes.
-        m_hatching.Rotate( ANGLE_45 );
+        // Must re-rotate after Fracture().  Clipper struggles mightily with fracturing
+        // 45-degree holes.
+        hatching().Rotate( ANGLE_45 );
 
         if( !knockouts.IsEmpty() )
         {
-            m_hatching.BooleanSubtract( knockouts );
-            m_hatching.Fracture();
+            hatching().BooleanSubtract( knockouts );
+            hatching().Fracture();
         }
 
         m_hatchingDirty = false;
