@@ -28,10 +28,9 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-18 20:48+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2026-03-24 13:10+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5543,7 +5542,7 @@ msgstr "<Nedefinovano>"
 #: pcbnew/pad.cpp:3352 pcbnew/pcb_table.cpp:828 pcbnew/pcb_textbox.cpp:836
 #: pcbnew/zone.cpp:987 pcbnew/zone.cpp:1893
 msgid "Solid"
-msgstr "Pevné"
+msgstr "Plné"
 
 #: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2800
 #: common/stroke_params.cpp:41
@@ -40430,7 +40429,7 @@ msgstr "Typ výplně:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:1902
 msgid "Solid fill"
-msgstr "Pevné vyplnění"
+msgstr "Plná výplň"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:1903
@@ -41605,8 +41604,8 @@ msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Je-li povoleno, trasovač se pokouší přesunout kolidující spoje za pevné "
-"překážky (např. plošky) místo jejich \"odrazu\" zpět"
+"Je-li povoleno, router se pokouší přesunout kolidující spoje za překážky "
+"(např. plošky) místo jejich \"odrazu\" zpět"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2974
@@ -41634,7 +41633,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Je-li povoleno, trasovač se pokouší vyvést plošky/prokovy čistým způsobem, "
+"Je-li povoleno, router se pokouší vyvést plošky/prokovy čistým způsobem, "
 "vyhýbajíc se ostrým úhlům a nepravidelnému začátku trasy."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
@@ -51255,9 +51254,10 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"Návrh CADSTAR obsahuje prvky mědi, které nemají přímý ekvivalent v KiCadu. "
-"Ty byly importovány jako zóna KiCadu, pokud jsou pevné nebo šrafované, nebo "
-"jako spoj KiCadu, pokud byl tvar nevyplněný obrys (otevřený nebo uzavřený)."
+"Návrh CADSTARu obsahuje prvky COPPER, které nemají přímo ekvivalent v "
+"KiCadu. Pokud byly vyplněné nebo šrafované, byly importovány jako zóna, "
+"pokud šlo o nevyplněný obrys (otevřený nebo uzavřený), byly importovány jako "
+"spoj."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2269
 #, c-format
@@ -53647,8 +53647,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Tuto zónu nelze zpracovat trasovačem.\n"
-"Ověřte prosím, zda se nejedná o polygon s vlastním průnikem."
+"Tuto zónu nelze zpracovat routerem.\n"
+"Ověřte prosím, jestli se nejedná o polygon s vlastním průnikem."
 
 #: pcbnew/router/pns_kicad_iface.cpp:2798
 msgid "Routing"
@@ -53917,7 +53917,7 @@ msgstr "Režim rohů spoje"
 
 #: pcbnew/router/router_tool.cpp:703
 msgid "Save router log"
-msgstr "Uložit log trasovače"
+msgstr "Uložit log routeru"
 
 #: pcbnew/router/router_tool.cpp:1296
 msgid "Via needs 2 different layers."
@@ -55026,6 +55026,7 @@ msgstr ""
 "%zu nevybraných plošek je připojeno k těmto spojům. Jak chcete pokračovat?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
+#, fuzzy
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
@@ -57109,35 +57110,35 @@ msgstr "Otevřít nastavení rozměrů diferenciálního páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2549
 msgid "Router Highlight Mode"
-msgstr "Režim zvýraznění trasovače"
+msgstr "Režim zvýraznění routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2550
 msgid "Switch router to highlight mode"
-msgstr "Přepnout trasovač do režimu zvýraznění"
+msgstr "Přepnout router do režimu zvýrazňování"
 
 #: pcbnew/tools/pcb_actions.cpp:2557
 msgid "Router Shove Mode"
-msgstr "Režim odtlačování trasovače"
+msgstr "Režim odtlačování routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2558
 msgid "Switch router to shove mode"
-msgstr "Přepnout trasovač do režimu odsunu"
+msgstr "Přepnout router do režimu odsouvání"
 
 #: pcbnew/tools/pcb_actions.cpp:2565
 msgid "Router Walkaround Mode"
-msgstr "Režim obcházení trasovače"
+msgstr "Režim obcházení routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2566
 msgid "Switch router to walkaround mode"
-msgstr "Přepnout trasovač do režimu obcházení"
+msgstr "Přepnout router do režimu obcházení"
 
 #: pcbnew/tools/pcb_actions.cpp:2573
 msgid "Cycle Router Mode"
-msgstr "Přepnout režim trasovače"
+msgstr "Přepnout režim routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2574
 msgid "Cycle router to the next mode"
-msgstr "Přepnout trasovač do dalšího režimu"
+msgstr "Přepnout router do dalšího režimu"
 
 #: pcbnew/tools/pcb_actions.cpp:2579
 msgid "Set Layer Pair..."
@@ -58356,11 +58357,11 @@ msgstr "Skrýt všechny vrstvy mědi"
 
 #: pcbnew/widgets/appearance_controls.cpp:1927
 msgid "Show All Non Copper Layers"
-msgstr "Zobrazit všechny vrstvy mědi"
+msgstr "Zobrazit všechny neměděné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1930
 msgid "Hide All Non Copper Layers"
-msgstr "Skrýt všechny vrstvy mědi"
+msgstr "Skrýt všechny neměděné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1943
 msgid "Show Only Front Assembly Layers"
