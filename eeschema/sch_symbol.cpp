@@ -2822,8 +2822,25 @@ bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
             return true;
     }
 
-    for( SCH_ITEM& drawItem : GetLibSymbolRef()->GetDrawItems() )
+    // Search instance fields rather than lib template fields so that modified values
+    // (e.g. a "+5VA" symbol derived from "+5V") are matched correctly.  Skip the
+    // Reference field to avoid infinite recursion: SCH_FIELD::Matches() for REFERENCE
+    // calls back into SCH_SYMBOL::Matches().
+    for( const SCH_FIELD& field : m_fields )
     {
+        if( field.GetId() == FIELD_T::REFERENCE )
+            continue;
+
+        if( field.Matches( aSearchData, aAuxData ) )
+            return true;
+    }
+
+    // Search non-field lib draw items (pins, graphical text) for completeness.
+    for( const SCH_ITEM& drawItem : GetLibSymbolRef()->GetDrawItems() )
+    {
+        if( drawItem.Type() == SCH_FIELD_T )
+            continue;
+
         if( drawItem.Matches( aSearchData, aAuxData ) )
             return true;
     }

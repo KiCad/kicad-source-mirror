@@ -33,6 +33,8 @@
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <lib_symbol.h>
+#include <eda_search_data.h>
 
 
 class TEST_SCH_SYMBOL_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
@@ -1158,6 +1160,52 @@ BOOST_AUTO_TEST_CASE( VariantAttributeInitFromSymbol )
                          "InitializeAttributes should copy ExcludedFromBoard from symbol" );
     BOOST_CHECK_MESSAGE( initializedVariant.m_ExcludedFromPosFiles,
                          "InitializeAttributes should copy ExcludedFromPosFiles from symbol" );
+}
+
+
+/**
+ * Regression test for issue #23518.
+ *
+ * Find-and-replace was matching power symbols derived from "+5V" (e.g. "+5VA") when
+ * searching for "+5V" with whole-word matching, because SCH_SYMBOL::Matches() was
+ * iterating the library template's fields instead of the instance's fields.  The lib
+ * template for "+5VA" still contained "+5V" in its value field.
+ */
+BOOST_AUTO_TEST_CASE( MatchesUsesInstanceFields )
+{
+    // Build a minimal lib symbol simulating "+5V"
+    LIB_SYMBOL* libSym = new LIB_SYMBOL( wxS( "+5V" ) );
+
+    // The lib symbol value field text stays as "+5V"
+    libSym->GetValueField().SetText( wxS( "+5V" ) );
+    libSym->GetValueField().SetVisible( true );
+
+    SCH_SYMBOL symbol( *libSym, libSym->GetLibId(), nullptr, 0, 0, VECTOR2I() );
+
+    // Change the instance value to "+5VA" (simulating a user-derived power symbol)
+    symbol.GetField( FIELD_T::VALUE )->SetText( wxS( "+5VA" ) );
+
+    SCH_SEARCH_DATA data;
+    data.findString = wxS( "+5V" );
+    data.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
+    data.searchAllFields = false;
+
+    // "+5VA" must NOT match a whole-word search for "+5V"
+    BOOST_CHECK_MESSAGE( !symbol.Matches( data, nullptr ),
+                         "'+5VA' symbol must not match whole-word search for '+5V'" );
+
+    // "+5VA" must match a plain search for "+5V" (substring)
+    data.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
+    BOOST_CHECK_MESSAGE( symbol.Matches( data, nullptr ),
+                         "'+5VA' symbol must match plain search for '+5V'" );
+
+    // "+5VA" must match a whole-word search for "+5VA"
+    data.findString = wxS( "+5VA" );
+    data.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
+    BOOST_CHECK_MESSAGE( symbol.Matches( data, nullptr ),
+                         "'+5VA' symbol must match whole-word search for '+5VA'" );
+
+    delete libSym;
 }
 
 
