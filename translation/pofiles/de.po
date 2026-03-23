@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-22 14:28+0000\n"
-"Last-Translator: Till Donner <isntyourbusiness@proton.me>\n"
+"PO-Revision-Date: 2026-03-24 13:10+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4201,7 +4201,7 @@ msgstr "Hardwarebeschleunigte Grafik (empfohlen)"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
 msgid "Fallback Graphics"
-msgstr "Ersatzgrafik"
+msgstr "Langsame Grafik"
 
 #: common/dialogs/panel_common_settings_base.cpp:41
 msgid ""
@@ -5963,7 +5963,7 @@ msgstr "<b>Folgende globale Bibliothekstabellen müssen erstellt werden:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
 msgid "How would you like KiCad to create them?"
-msgstr "Wie sollen diese durch KiCad erstellt werden?"
+msgstr "Wie soll KiCad diese erstellen?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
 msgid "Start with the built-in KiCad libraries (recommended)"
@@ -9496,9 +9496,9 @@ msgstr ""
 "KiCad konnte \"%s\" nicht verwenden.\n"
 "\n"
 "1. Deaktivieren Sie \"Kontrollierter Ordnerzugriff\" in den Windows-"
-"Einstellungen oder der Gruppenrichtlinie\n"
-"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt\n"
-"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen"
+"Einstellungen oder der Gruppenrichtlinie.\n"
+"2. Stellen Sie sicher, dass keine Antivirensoftware KiCad beeinträchtigt.\n"
+"3. Stellen Sie sicher, dass Sie über ausreichende Berechtigungen verfügen."
 
 #: common/pgm_base.cpp:246
 msgid "No default editor found, you must choose one."
@@ -13508,7 +13508,7 @@ msgstr "Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:50
 msgid "Electrical Rules Checker"
-msgstr "Elektrische Regelprüfung (ERC)"
+msgstr "Elektrische Regeln überprüfen (ERC)"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -16098,7 +16098,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
-"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:55
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -16111,7 +16111,7 @@ msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
 "Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
-"Verbinder und Gehäuse"
+"Verbinder und Gehäuse."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
@@ -17294,7 +17294,7 @@ msgid ""
 msgstr ""
 "Dies ist nützlich, um Symbole hinzuzufügen, die nicht in exportierte "
 "Positionsdateien,\n"
-"die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen"
+"die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #: eeschema/sch_edit_frame.cpp:2381
@@ -18958,9 +18958,7 @@ msgstr "Symbol %s hat unplatzierte Einheiten %s"
 #: eeschema/erc/erc.cpp:684
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
-msgstr ""
-"Symbol %s hat Eingangs-Versorgungspins in Einheiten %s, die nicht platziert "
-"sind"
+msgstr "Symbol %s hat in den Einheiten %s unplatzierte Stromversorgungs-Pins."
 
 #: eeschema/erc/erc.cpp:690
 #, c-format
@@ -18970,8 +18968,7 @@ msgstr "Symbol %s hat Eingangspins in Einheiten %s, die nicht platziert sind"
 #: eeschema/erc/erc.cpp:696
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed"
-msgstr ""
-"Symbol %s hat bidirektionale Pins in Einheiten %s, die nicht platziert sind"
+msgstr "Symbol %s hat in den Einheiten %s unplatzierte bidirektionale Pins."
 
 #: eeschema/erc/erc.cpp:719
 #, c-format
@@ -19051,13 +19048,13 @@ msgstr "Die aktuelle Konfiguration enthält die Footprint-Bibliothek '%s' nicht"
 msgid "The footprint library '%s' is not enabled in the current configuration"
 msgstr ""
 "Die Footprint-Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht "
-"aktiviert"
+"aktiviert."
 
 #: eeschema/erc/erc.cpp:1828
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1171
 #, c-format
 msgid "Footprint '%s' not found in library '%s'"
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden"
+msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
 
 #: eeschema/erc/erc.cpp:1898
 #, c-format
@@ -25773,7 +25770,7 @@ msgstr "Regelbereich zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:51
 msgid "Show the electrical rules checker window"
-msgstr "Das Fenster der elektrischen Regelprüfung (ERC) anzeigen"
+msgstr "Electrical-Rule-Check (ERC)-Fenster anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:57
 msgid "Symbol Checker"
@@ -25974,7 +25971,7 @@ msgstr "Symbolfelder aktualisieren ..."
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
 "Symbol aktualisieren, um alle Änderungen vom übergeordneten Symbol zu "
-"übernehmen"
+"übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:283
 msgid "Flatten Symbol"
@@ -26413,7 +26410,7 @@ msgstr "Symbole aus Bibliothek aktualisieren ..."
 
 #: eeschema/tools/sch_actions.cpp:880
 msgid "Update symbols to include any changes from the library"
-msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen"
+msgstr "Symbole aktualisieren, um Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:887
 msgid "Assign a different symbol from the library"
@@ -26426,7 +26423,7 @@ msgstr "Symbol aktualisieren ..."
 #: eeschema/tools/sch_actions.cpp:894
 msgid "Update symbol to include any changes from the library"
 msgstr ""
-"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen"
+"Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:900 pcbnew/tools/pcb_actions.cpp:1403
 msgid "Assign Netclass..."
@@ -26537,8 +26534,8 @@ msgid ""
 "Convert multiple pins at the same location to a single pin with stacked "
 "notation"
 msgstr ""
-"Mehrere Pins an derselben Position in einen einzelnen Pin mit gestapelter "
-"Notation umwandeln"
+"Wandelt mehrere Pins an derselben Stelle in einen einzelnen Pin, mit "
+"\"gestapelter\"-Notation in der Pin-Nummer, um."
 
 #: eeschema/tools/sch_actions.cpp:1009
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1473
@@ -26547,7 +26544,9 @@ msgstr "Gestapelten Pin aufteilen"
 
 #: eeschema/tools/sch_actions.cpp:1010
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr "Einen Pin mit gestapelter Notation in mehrere einzelne Pins umwandeln"
+msgstr ""
+"Wandelt einen Pin, mit \"gestapelter\" Notation in der Pin-Nummer, in "
+"mehrere eigenständige Pins um."
 
 #: eeschema/tools/sch_actions.cpp:1016
 msgid "Break"
@@ -28416,15 +28415,15 @@ msgstr "Eigenschaften bearbeiten"
 
 #: eeschema/widgets/search_handlers.cpp:166
 msgid "Excl. Sim"
-msgstr "Von Simulation ausschließen"
+msgstr "Von Sim. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:167
 msgid "Excl. BOM"
-msgstr "Von Stückliste ausschließen"
+msgstr "Von Stückl. ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:168
 msgid "Excl. Board"
-msgstr "Von Platine ausschließen"
+msgstr "Von Platine ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:478
 msgid "Hierarchical"
