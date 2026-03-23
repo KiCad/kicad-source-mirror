@@ -45,10 +45,12 @@ BOOST_AUTO_TEST_CASE( ParsesFormattedGroupWithVectorMember )
     wxString              name;
     std::vector<wxString> members;
 
+    // D_{[1..2]} keeps the subscript so recursive expansion via ParseBusVector works.
+    // ~{LATCH} preserves the overbar notation because ~{LATCH} and LATCH are different nets.
     BOOST_CHECK( NET_SETTINGS::ParseBusGroup( wxS( "MEM{D_{[1..2]} ~{LATCH}}" ), &name, &members ) );
     BOOST_CHECK_EQUAL( name, wxS( "MEM" ) );
 
-    std::vector<wxString> expected = { wxS( "D[1..2]" ), wxS( "LATCH" ) };
+    std::vector<wxString> expected = { wxS( "D_{[1..2]}" ), wxS( "~{LATCH}" ) };
 
     BOOST_CHECK_EQUAL_COLLECTIONS( members.begin(), members.end(), expected.begin(), expected.end() );
 }
@@ -309,6 +311,44 @@ BOOST_AUTO_TEST_CASE( ParsesSubscriptInGroupBusPrefix )
     std::vector<wxString> expected = { wxS( "net1" ), wxS( "net2" ) };
 
     BOOST_CHECK_EQUAL_COLLECTIONS( members.begin(), members.end(), expected.begin(), expected.end() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParsesOverbarMembersInBusGroup )
+{
+    // Regression test for issue #23521: inverted (overbar) group bus members
+    // must be preserved as-is so they match the net name on the schematic.
+    // ~{CAS} and CAS are distinct nets; stripping the overbar loses connectivity.
+    wxString              name;
+    std::vector<wxString> members;
+
+    BOOST_CHECK( NET_SETTINGS::ParseBusGroup( wxS( "MEM{~{CAS} ~{RAS} ~{WE} A[2..0]}" ), &name, &members ) );
+    BOOST_CHECK_EQUAL( name, wxS( "MEM" ) );
+
+    std::vector<wxString> expected = { wxS( "~{CAS}" ), wxS( "~{RAS}" ), wxS( "~{WE}" ),
+                                       wxS( "A[2..0]" ) };
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( members.begin(), members.end(), expected.begin(), expected.end() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForEachBusMemberExpandsOverbarMembersInGroup )
+{
+    // Verify that overbar group bus members are passed through as net names to the callback,
+    // and that subscript vector members are still correctly expanded.
+    std::vector<wxString> expandedMembers;
+    auto collector = [&expandedMembers]( const wxString& member )
+                     {
+                         expandedMembers.push_back( member );
+                     };
+
+    NET_SETTINGS::ForEachBusMember( wxS( "MEM{~{CAS} ~{RAS} A[0..1]}" ), collector );
+
+    std::vector<wxString> expected = { wxS( "~{CAS}" ), wxS( "~{RAS}" ),
+                                       wxS( "A0" ), wxS( "A1" ) };
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( expandedMembers.begin(), expandedMembers.end(),
+                                   expected.begin(), expected.end() );
 }
 
 
