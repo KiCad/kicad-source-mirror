@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-24 13:10+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -5493,7 +5493,7 @@ msgstr "<Nedefinovano>"
 #: pcbnew/zone.cpp:863 pcbnew/zone.cpp:1889
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:157
 msgid "Solid"
-msgstr "Pevné"
+msgstr "Plné"
 
 #: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2343
 #: common/stroke_params.cpp:41
@@ -28412,9 +28412,8 @@ msgid "New Project..."
 msgstr "Nový projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create a new, blank project"
-msgstr "Vytvoří nový prázdný projekt"
+msgstr "Vytvořit prázdný projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
@@ -32852,9 +32851,8 @@ msgstr ""
 "Pouze názvy sítí odpovídající tomuto vzoru budou zobrazeny."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide automatically generated net names"
-msgstr "Skrýt automaticky generované názvy sítě"
+msgstr "Skrýt automaticky vytvořené názvy sítí"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -33028,7 +33026,7 @@ msgstr "Typ výplně:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1898 pcbnew/zone_manager/panel_zone_properties_base.cpp:215
 msgid "Solid fill"
-msgstr "Pevné vyplnění"
+msgstr "Plná výplň"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
@@ -35965,9 +35963,8 @@ msgid "Filter tracks by width:"
 msgstr "Filtrovat spoje podle šířky:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
-#, fuzzy
 msgid "Filter vias by size:"
-msgstr "Filtrovat položky podle sítě:"
+msgstr "Filtrovat prokovy podle velikosti:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:150
 msgid "-- leave unchanged --  "
@@ -37474,8 +37471,8 @@ msgid ""
 "When enabled, the router tries to move colliding tracks behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Je-li povoleno, trasovač se pokouší přesunout kolidující spoje za pevné "
-"překážky (např. plošky) místo jejich \"odrazu\" zpět"
+"Je-li povoleno, router se pokouší přesunout kolidující spoje za překážky "
+"(např. plošky) místo jejich \"odrazu\" zpět"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2810
@@ -37503,7 +37500,7 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout tracks."
 msgstr ""
-"Je-li povoleno, trasovač se pokouší vyvést plošky/prokovy čistým způsobem, "
+"Je-li povoleno, router se pokouší vyvést plošky/prokovy čistým způsobem, "
 "vyhýbajíc se ostrým úhlům a nepravidelnému začátku trasy."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
@@ -37891,12 +37888,11 @@ msgstr "Vzdálenost mezi rovnoběžnými čarami použitými pro šrafování ob
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "Vynulovat hodnotu."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
-#, fuzzy
 msgid "Reset this value to the original value."
-msgstr "Nastavte pole na originální hodnoty z knihovny"
+msgstr "Vrátit na výchozí hodnotu."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 #, fuzzy
@@ -38136,7 +38132,7 @@ msgstr "Popis nadřazeného pouzdra"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:274
 msgid "Update Thickness According to Text Size"
-msgstr ""
+msgstr "Nastavit tloušťku podle velikosti textu"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:275
 msgid ""
@@ -45065,9 +45061,10 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"Návrh CADSTAR obsahuje prvky mědi, které nemají přímý ekvivalent v KiCadu. "
-"Ty byly importovány jako zóna KiCadu, pokud jsou pevné nebo šrafované, nebo "
-"jako spoj KiCadu, pokud byl tvar nevyplněný obrys (otevřený nebo uzavřený)."
+"Návrh CADSTARu obsahuje prvky COPPER, které nemají přímo ekvivalent v "
+"KiCadu. Pokud byly vyplněné nebo šrafované, byly importovány jako zóna, "
+"pokud šlo o nevyplněný obrys (otevřený nebo uzavřený), byly importovány jako "
+"spoj."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2309
 #, c-format
@@ -46598,8 +46595,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Tuto zónu nelze zpracovat trasovačem.\n"
-"Ověřte prosím, zda se nejedná o polygon s vlastním průnikem."
+"Tuto zónu nelze zpracovat routerem.\n"
+"Ověřte prosím, jestli se nejedná o polygon s vlastním průnikem."
 
 #: pcbnew/router/pns_kicad_iface.cpp:2250
 msgid "Routing"
@@ -46820,7 +46817,7 @@ msgstr "Interaktivní router"
 
 #: pcbnew/router/router_tool.cpp:600
 msgid "Save router log"
-msgstr "Uložit log trasovače"
+msgstr "Uložit log routeru"
 
 #: pcbnew/router/router_tool.cpp:1124
 msgid "Via needs 2 different layers."
@@ -49875,35 +49872,35 @@ msgstr "Otevřít nastavení rozměrů diferenciálního páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2297
 msgid "Router Highlight Mode"
-msgstr "Režim zvýraznění trasovače"
+msgstr "Režim zvýraznění routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2298
 msgid "Switch router to highlight mode"
-msgstr "Přepnout trasovač do režimu zvýraznění"
+msgstr "Přepnout router do režimu zvýrazňování"
 
 #: pcbnew/tools/pcb_actions.cpp:2305
 msgid "Router Shove Mode"
-msgstr "Režim odtlačování trasovače"
+msgstr "Režim odtlačování routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
 msgid "Switch router to shove mode"
-msgstr "Přepnout trasovač do režimu odsunu"
+msgstr "Přepnout router do režimu odsouvání"
 
 #: pcbnew/tools/pcb_actions.cpp:2313
 msgid "Router Walkaround Mode"
-msgstr "Režim obcházení trasovače"
+msgstr "Režim obcházení routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2314
 msgid "Switch router to walkaround mode"
-msgstr "Přepnout trasovač do režimu obcházení"
+msgstr "Přepnout router do režimu obcházení"
 
 #: pcbnew/tools/pcb_actions.cpp:2321
 msgid "Cycle Router Mode"
-msgstr "Přepnout režim trasovače"
+msgstr "Přepnout režim routeru"
 
 #: pcbnew/tools/pcb_actions.cpp:2322
 msgid "Cycle router to the next mode"
-msgstr "Přepnout trasovač do dalšího režimu"
+msgstr "Přepnout router do dalšího režimu"
 
 #: pcbnew/tools/pcb_actions.cpp:2327
 msgid "Set Layer Pair..."
@@ -50951,11 +50948,11 @@ msgstr "Skrýt všechny vrstvy mědi"
 
 #: pcbnew/widgets/appearance_controls.cpp:1887
 msgid "Show All Non Copper Layers"
-msgstr "Zobrazit všechny vrstvy mědi"
+msgstr "Zobrazit všechny neměděné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1891
 msgid "Hide All Non Copper Layers"
-msgstr "Skrýt všechny vrstvy mědi"
+msgstr "Skrýt všechny neměděné vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:1905
 msgid "Show Only Front Assembly Layers"
