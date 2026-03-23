@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-24 13:09+0000\n"
+"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v9/vi/>"
 "\n"
 "Language: vi\n"
@@ -2386,7 +2386,7 @@ msgstr "Lỗi bộ nhớ tạm"
 
 #: common/dialog_about/dialog_about.cpp:278
 msgid "Copied..."
-msgstr "Sao chép..."
+msgstr "Đã sao chép..."
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
@@ -2410,7 +2410,7 @@ msgstr "Sao chép thông tin phiên bản KiCad vào bộ nhớ tạm"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "&Report Bug"
-msgstr "&Báo cáo vấn đề gây Lỗi"
+msgstr "&Báo cáo lỗi"
 
 #: common/dialog_about/dialog_about_base.cpp:60 common/tool/actions.cpp:1234
 msgid "Report a problem with KiCad"
@@ -2482,7 +2482,7 @@ msgstr "Xanh lá:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:57
 msgid "Blue:"
-msgstr "Xanh Da Trời:"
+msgstr "Xanh dương:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:77
 msgid "HSV"
@@ -8227,7 +8227,7 @@ msgstr "Đường mạch"
 
 #: common/layer_id.cpp:129
 msgid "Through vias"
-msgstr "Lỗ  xuyên các lớp"
+msgstr "Lỗ xuyên các lớp"
 
 #: common/layer_id.cpp:130
 #, fuzzy
@@ -12873,7 +12873,7 @@ msgstr "Hiển thị tên"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:60
 #: eeschema/fields_grid_table.cpp:494
 msgid "H Align"
-msgstr "Căn chỉnh H"
+msgstr "Căn chỉnh ngang"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:114
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:64
@@ -12881,7 +12881,7 @@ msgstr "Căn chỉnh H"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:61
 #: eeschema/fields_grid_table.cpp:495
 msgid "V Align"
-msgstr "Căn chỉnh V"
+msgstr "Căn chỉnh dọc"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:117
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:67
@@ -16285,11 +16285,11 @@ msgstr "T&ự động đặt trường ký hiệu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:248
 msgid "A&llow field autoplace to change justification"
-msgstr "Cho phép tự động đặt trường thay đổi căn &chỉnh"
+msgstr "Cho phép trường tự động thay đổi căn chỉnh(&l)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:251
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Luôn căn chỉnh các trường tự động đặt vào lưới 50 &mil"
+msgstr "Luôn căn chỉnh các trường tự động đặt vào lưới 50 mil(&w)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:98
@@ -50968,7 +50968,7 @@ msgstr "Nhóm Mới"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1293
 msgid "(Use /.../ to indicate a regular expression.)"
-msgstr "(Dùng /.../  để chỉ biểu thức chính quy.)"
+msgstr "(Dùng /.../ để chỉ biểu thức chính quy.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1367
 msgid "Filter by Net Name"
