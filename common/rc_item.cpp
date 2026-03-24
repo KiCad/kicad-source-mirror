@@ -420,10 +420,14 @@ unsigned int RC_TREE_MODEL::GetChildren( wxDataViewItem const& aItem,
 void RC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                               unsigned int aCol ) const
 {
-    if( !aItem.IsOk() || m_view->IsFrozen() )
+    if( !aItem.IsOk() || m_view->IsFrozen() || m_tree.empty() )
         return;
 
     const RC_TREE_NODE*            node = ToNode( aItem );
+
+    if( !node || !node->m_RcItem )
+        return;
+
     const std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
     MARKER_BASE*                   marker = rcItem->GetParent();
     EDA_ITEM*                      item = nullptr;
@@ -495,10 +499,13 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
                              unsigned int            aCol,
                              wxDataViewItemAttr&     aAttr ) const
 {
-    if( !aItem.IsOk() || m_view->IsFrozen() )
+    if( !aItem.IsOk() || m_view->IsFrozen() || m_tree.empty() )
         return false;
 
     const RC_TREE_NODE* node = ToNode( aItem );
+
+    if( !node || !node->m_RcItem )
+        return false;
 
     bool ret = false;
     bool heading = node->m_Type == RC_TREE_NODE::MARKER;
@@ -620,12 +627,16 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     if( m_view )
     {
         m_view->UnselectAll();
-        wxSafeYield();
         m_view->Freeze();
     }
 
     if( !m_rcItemsProvider )
+    {
+        if( m_view )
+            m_view->Thaw();
+
         return;
+    }
 
     for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
     {
