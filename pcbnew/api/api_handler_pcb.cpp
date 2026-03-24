@@ -93,6 +93,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
             &API_HANDLER_PCB::handleCheckPadstackPresenceOnLayers );
     registerHandler<GetTitleBlockInfo, types::TitleBlockInfo>(
             &API_HANDLER_PCB::handleGetTitleBlockInfo );
+    registerHandler<SetTitleBlockInfo, Empty>( &API_HANDLER_PCB::handleSetTitleBlockInfo );
     registerHandler<ExpandTextVariables, ExpandTextVariablesResponse>(
             &API_HANDLER_PCB::handleExpandTextVariables );
     registerHandler<GetBoardOrigin, types::Vector2>( &API_HANDLER_PCB::handleGetBoardOrigin );
@@ -1393,6 +1394,50 @@ HANDLER_RESULT<types::TitleBlockInfo> API_HANDLER_PCB::handleGetTitleBlockInfo(
     response.set_comment9( block.GetComment( 8 ).ToUTF8() );
 
     return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetTitleBlockInfo( const HANDLER_CONTEXT<SetTitleBlockInfo>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( !aCtx.Request.has_title_block() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "SetTitleBlockInfo requires title_block" );
+        return tl::unexpected( e );
+    }
+
+    BOARD* board = this->board();
+    TITLE_BLOCK& block = board->GetTitleBlock();
+
+    const types::TitleBlockInfo& request = aCtx.Request.title_block();
+
+    block.SetTitle( wxString::FromUTF8( request.title() ) );
+    block.SetDate( wxString::FromUTF8( request.date() ) );
+    block.SetRevision( wxString::FromUTF8( request.revision() ) );
+    block.SetCompany( wxString::FromUTF8( request.company() ) );
+    block.SetComment( 0, wxString::FromUTF8( request.comment1() ) );
+    block.SetComment( 1, wxString::FromUTF8( request.comment2() ) );
+    block.SetComment( 2, wxString::FromUTF8( request.comment3() ) );
+    block.SetComment( 3, wxString::FromUTF8( request.comment4() ) );
+    block.SetComment( 4, wxString::FromUTF8( request.comment5() ) );
+    block.SetComment( 5, wxString::FromUTF8( request.comment6() ) );
+    block.SetComment( 6, wxString::FromUTF8( request.comment7() ) );
+    block.SetComment( 7, wxString::FromUTF8( request.comment8() ) );
+    block.SetComment( 8, wxString::FromUTF8( request.comment9() ) );
+
+    if( frame() )
+    {
+        frame()->OnModify();
+        frame()->UpdateUserInterface();
+    }
+
+    return Empty();
 }
 
 

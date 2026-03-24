@@ -405,6 +405,13 @@ message GetTitleBlockInfo
   kiapi.common.types.DocumentSpecifier document = 1;
 }
 
+message SetTitleBlockInfo
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  kiapi.common.types.TitleBlockInfo title_block = 2;
+}
+
 message SaveDocumentToString
 {
   kiapi.common.types.DocumentSpecifier document = 1;

@@ -121,6 +121,9 @@ private:
     HANDLER_RESULT<types::TitleBlockInfo> handleGetTitleBlockInfo(
             const HANDLER_CONTEXT<commands::GetTitleBlockInfo>& aCtx );
 
+    HANDLER_RESULT<Empty> handleSetTitleBlockInfo(
+            const HANDLER_CONTEXT<commands::SetTitleBlockInfo>& aCtx );
+
     HANDLER_RESULT<commands::ExpandTextVariablesResponse> handleExpandTextVariables(
             const HANDLER_CONTEXT<commands::ExpandTextVariables>& aCtx );
 
