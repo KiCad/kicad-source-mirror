@@ -379,6 +379,17 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
         def->add_private_layers( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
 
+    types::JumperSettings* jumpers = def->mutable_jumpers();
+    jumpers->set_duplicate_names_are_jumpered( GetDuplicatePadNumbersAreJumpers() );
+
+    for( const std::set<wxString>& group : JumperPadGroups() )
+    {
+        types::JumperGroup* jumperGroup = jumpers->add_groups();
+
+        for( const wxString& padName : group )
+            jumperGroup->add_pad_names( padName.ToUTF8() );
+    }
+
     for( const PCB_FIELD* item : m_fields )
     {
         if( item->IsMandatory() )
@@ -545,6 +556,20 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
         group.Trim();
         AddNetTiePadGroup( group.BeforeLast( ',' ) );
+    }
+
+    SetDuplicatePadNumbersAreJumpers( footprint.definition().jumpers().duplicate_names_are_jumpered() );
+    JumperPadGroups().clear();
+
+    for( const types::JumperGroup& groupMsg : footprint.definition().jumpers().groups() )
+    {
+        std::set<wxString> group;
+
+        for( const std::string& padName : groupMsg.pad_names() )
+            group.insert( wxString::FromUTF8( padName ) );
+
+        if( !group.empty() )
+            JumperPadGroups().push_back( std::move( group ) );
     }
 
     LSET privateLayers;
