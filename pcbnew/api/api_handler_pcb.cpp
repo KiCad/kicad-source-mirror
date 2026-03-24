@@ -1412,8 +1412,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetTitleBlockInfo( const HANDLER_CO
         return tl::unexpected( e );
     }
 
-    BOARD* board = this->board();
-    TITLE_BLOCK& block = board->GetTitleBlock();
+    TITLE_BLOCK& block = frame()->GetBoard()->GetTitleBlock();
 
     const types::TitleBlockInfo& request = aCtx.Request.title_block();
 
