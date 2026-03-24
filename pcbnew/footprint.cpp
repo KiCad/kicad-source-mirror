@@ -544,7 +544,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
             group.Append( wxString::Format( wxT( "%s, " ), pad ) );
 
         group.Trim();
-        AddNetTiePadGroup( group );
+        AddNetTiePadGroup( group.BeforeLast( ',' ) );
     }
 
     LSET privateLayers;
