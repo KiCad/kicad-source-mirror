@@ -1493,54 +1493,6 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
 }
 
 
-BOOST_AUTO_TEST_CASE( V9_MultiGate_TL082_FromFile )
-{
-    std::string testFile = "/home/seth/Downloads/ATS-501 Tape Template (1).txt";
-
-    if( !wxFileExists( wxString::FromUTF8( testFile ) ) )
-    {
-        BOOST_TEST_MESSAGE( "Skipping: test file not present" );
-        return;
-    }
-
-    PADS_SCH::PADS_SCH_PARSER parser;
-    BOOST_REQUIRE( parser.Parse( testFile ) );
-
-    const auto& partTypes = parser.GetPartTypes();
-    auto ptIt = partTypes.find( "TL082" );
-    BOOST_REQUIRE( ptIt != partTypes.end() );
-
-    const auto& tl082 = ptIt->second;
-    BOOST_REQUIRE_EQUAL( tl082.gates.size(), 2u );
-    BOOST_CHECK_EQUAL( tl082.gates[0].num_pins, 5 );
-    BOOST_CHECK_EQUAL( tl082.gates[1].num_pins, 3 );
-    BOOST_CHECK_EQUAL( tl082.gates[0].decal_names[0], "TL082A" );
-    BOOST_CHECK_EQUAL( tl082.gates[1].decal_names[0], "TL082" );
-
-    const auto& params = parser.GetParameters();
-    PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( params );
-
-    LIB_SYMBOL* sym = builder.BuildMultiUnitSymbol( tl082, parser.GetSymbolDefs() );
-    BOOST_REQUIRE( sym != nullptr );
-    BOOST_CHECK_EQUAL( sym->GetUnitCount(), 2 );
-
-    int unit1Pins = 0, unit2Pins = 0;
-
-    for( auto* pin : sym->GetPins() )
-    {
-        if( pin->GetUnit() == 1 )
-            unit1Pins++;
-        else if( pin->GetUnit() == 2 )
-            unit2Pins++;
-    }
-
-    BOOST_CHECK_EQUAL( unit1Pins, 5 );
-    BOOST_CHECK_EQUAL( unit2Pins, 3 );
-
-    delete sym;
-}
-
-
 BOOST_AUTO_TEST_SUITE_END()
 
 
@@ -2351,7 +2303,6 @@ BOOST_AUTO_TEST_CASE( CreateHierLabel_ValidLabel )
     // Label should be added to screen
     BOOST_CHECK( screen.Items().size() > 0 );
 }
-
 
 
 BOOST_AUTO_TEST_CASE( IsGlobalSignal_PowerNets )

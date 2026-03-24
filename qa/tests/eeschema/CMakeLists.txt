@@ -62,6 +62,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/database/test_sch_io_database_cycle.cpp
     sch_io/pads/test_pads_sch_parser.cpp
     sch_io/pads/test_pads_sch_import.cpp
+    sch_io/pads/test_pads_sch_binary_reader.cpp
     sch_io/geda/test_geda_sch_import.cpp
     sch_io/diptrace/test_diptrace_sch_import.cpp
     sch_io/pcad/test_pcad_sch_import.cpp

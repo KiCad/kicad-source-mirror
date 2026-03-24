@@ -29,8 +29,9 @@
 #include <vector>
 
 class BOARD;
+class PCB_SHAPE;
 
-namespace PADS_IO { class BINARY_PARSER; }
+namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; }
 
 /**
  * PCB I/O plugin for importing PADS binary .pcb files.
@@ -51,6 +52,7 @@ public:
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     bool CanReadBoard( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const std::map<std::string, UTF8>* aProperties, PROJECT* aProject ) override;
@@ -68,9 +70,13 @@ private:
     void loadNets();
     void loadFootprints();
     void loadBoardOutline();
+    void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
+                             const PADS_IO::ARC_POINT& aCurr );
     void loadTracksAndVias();
     void loadTexts();
+    void loadCopperShapes();
     void loadZones();
+    void loadKeepouts();
     void reportStatistics();
     void clearLoadingState();
 

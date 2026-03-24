@@ -46,7 +46,8 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "PADS Logic schematic files" ), { "asc", "txt" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "PADS Logic schematic files" ),
+                                      { "asc", "txt", "sch" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
@@ -82,6 +83,19 @@ private:
      * @return True if file appears to be a PADS Logic schematic.
      */
     bool checkFileHeader( const wxString& aFileName ) const;
+
+    /**
+     * Check whether the file is the proprietary PADS Logic BINARY .sch
+     * (magic 00 FE, version 0x000D) rather than the ASCII export.
+     */
+    bool isBinarySchematicFile( const wxString& aFileName ) const;
+
+    /**
+     * Load the proprietary binary .sch via the structural binary reader
+     * (symbols + wires only; see PADS_SCH_BINARY_READER).
+     */
+    SCH_SHEET* loadBinarySchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                        SCH_SHEET* aAppendToMe );
 
     /**
      * Parse the PADS Logic ASCII file and populate the library symbol cache.

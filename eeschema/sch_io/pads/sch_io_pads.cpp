@@ -21,6 +21,7 @@
 #include <sch_io/pads/pads_sch_parser.h>
 #include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <sch_io/pads/pads_sch_schematic_builder.h>
+#include <sch_io/pads/pads_sch_binary_reader.h>
 
 #include <libraries/symbol_library_adapter.h>
 
@@ -279,6 +280,11 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
     LOCALE_IO setlocale;
+
+    // The proprietary binary .sch is read by a separate structural path; the
+    // ASCII export remains the route for net-label and free-text bindings.
+    if( isBinarySchematicFile( aFileName ) )
+        return loadBinarySchematicFile( aFileName, aSchematic, aAppendToMe );
 
     SCH_SHEET* rootSheet = nullptr;
 
@@ -1317,6 +1323,74 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 }
 
 
+SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName,
+                                                 SCHEMATIC*      aSchematic,
+                                                 SCH_SHEET*      aAppendToMe )
+{
+    std::vector<uint8_t> data;
+
+    if( !PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data ) )
+        THROW_IO_ERROR( wxString::Format( _( "Cannot read file '%s'." ), aFileName ) );
+
+    PADS_SCH_BINARY::PADS_SCH_BINARY_READER reader;
+
+    if( !reader.Parse( data ) )
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a valid PADS Logic binary schematic." ),
+                                          aFileName ) );
+
+    SCH_SHEET* rootSheet = nullptr;
+
+    if( aAppendToMe )
+    {
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
+        rootSheet = aAppendToMe;
+    }
+    else
+    {
+        rootSheet = new SCH_SHEET( aSchematic );
+        rootSheet->SetFileName( aFileName );
+        aSchematic->SetTopLevelSheets( { rootSheet } );
+    }
+
+    if( !rootSheet->GetScreen() )
+    {
+        SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
+        screen->SetFileName( aFileName );
+        rootSheet->SetScreen( screen );
+
+        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
+    }
+
+    SCH_SCREEN* rootScreen = rootSheet->GetScreen();
+    wxCHECK( rootScreen, nullptr );
+
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( rootSheet );
+
+    SCH_SHEET_INSTANCE sheetInstance;
+    sheetInstance.m_Path = rootPath.Path();
+    sheetInstance.m_PageNumber = wxT( "#" );
+    rootScreen->m_sheetInstances.emplace_back( sheetInstance );
+
+    reader.BuildSchematic( aSchematic, rootSheet );
+
+    if( m_reporter )
+    {
+        m_reporter->Report(
+                wxString::Format(
+                        _( "Imported PADS Logic binary schematic '%s': %zu symbols, "
+                           "%zu wire connections. Symbol graphics are generic and net labels / "
+                           "free text are not recoverable from the binary; use the PADS ASCII "
+                           "export for a lossless import." ),
+                        aFileName, reader.GetPlacements().size(),
+                        reader.GetWirePolylines().size() ),
+                RPT_SEVERITY_WARNING );
+    }
+
+    return rootSheet;
+}
+
+
 void SCH_IO_PADS::EnumerateSymbolLib( wxArrayString&                     aSymbolNameList,
                                       const wxString&                    aLibraryPath,
                                       const std::map<std::string, UTF8>* aProperties )
@@ -1522,6 +1596,26 @@ bool SCH_IO_PADS::checkFileHeader( const wxString& aFileName ) const
             if( line.find( "*PADS-LOGIC" ) != std::string::npos )
                 return true;
         }
+    }
+    catch( ... )
+    {
+    }
+
+    return isBinarySchematicFile( aFileName );
+}
+
+
+bool SCH_IO_PADS::isBinarySchematicFile( const wxString& aFileName ) const
+{
+    try
+    {
+        std::vector<uint8_t> data;
+
+        // The reader predicate is the single source of truth: it checks the
+        // magic, version, AND a minimum container size, so a stray 4-byte file
+        // with the right magic is not falsely claimed and later rejected.
+        return PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data )
+               && PADS_SCH_BINARY::PADS_SCH_BINARY_READER::IsBinarySch( data );
     }
     catch( ... )
     {

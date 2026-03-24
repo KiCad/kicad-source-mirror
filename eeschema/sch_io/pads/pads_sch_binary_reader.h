@@ -1,0 +1,108 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2025 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef PADS_SCH_BINARY_READER_H_
+#define PADS_SCH_BINARY_READER_H_
+
+#include <cstdint>
+#include <string>
+#include <vector>
+
+#include <wx/string.h>
+
+class SCHEMATIC;
+class SCH_SHEET;
+
+namespace PADS_SCH_BINARY
+{
+
+/// One placed schematic symbol recovered from the binary .sch part array.
+struct PLACEMENT
+{
+    std::string reference;   ///< Reference designator (e.g. "U1", "J6-1").
+    int         x_mils = 0;  ///< Page X in mils.
+    int         y_mils = 0;  ///< Page Y in mils (PADS is Y-up).
+    int         rotation = 0;///< 0 or 90 degrees.
+};
+
+/// One wire vertex recovered from the binary 8-byte vertex pool.
+struct WIRE_VERTEX
+{
+    int x_mils = 0;
+    int y_mils = 0;
+};
+
+/**
+ * Reader for the proprietary PADS Logic binary .sch format (magic 00 FE,
+ * version 0x000D).
+ *
+ * eeschema's primary PADS path is the PADS-LOGIC ASCII export; this reader
+ * adds a path for the binary .sch.  The decode is driven entirely by the
+ * serialized record structure:
+ *
+ *   - SYMBOLS  the stride-136 part-instance records, one run per sheet, framed
+ *              by the MFC class tag and the text-style trailer; recovered as a
+ *              generic placeholder symbol at the stored page position and
+ *              orientation (the placement->parttype->graphic link is a runtime
+ *              heap pointer and is not in the file, so the real symbol graphic
+ *              cannot be recovered)
+ *   - WIRES    the 8-byte vertex pools tiled by the stride-40 split-header
+ *              cumulative-index chain, emitted as SCH_LINE wires
+ *
+ * Net-label positions and free-text strings are stored as runtime heap pointers
+ * (only their names/geometry survive, not their on-page binding) and are NOT
+ * imported here; use the ASCII export when those are required.
+ */
+class PADS_SCH_BINARY_READER
+{
+public:
+    PADS_SCH_BINARY_READER() = default;
+
+    /// Return true if @p aData is a PADS Logic binary schematic.
+    static bool IsBinarySch( const std::vector<uint8_t>& aData );
+
+    /// Read the file at @p aFileName into @p aData. Returns false on I/O error.
+    static bool ReadFile( const wxString& aFileName, std::vector<uint8_t>& aData );
+
+    /// Parse @p aData. Returns false if the container header is invalid.
+    bool Parse( const std::vector<uint8_t>& aData );
+
+    const std::vector<PLACEMENT>&                   GetPlacements() const { return m_placements; }
+    const std::vector<WIRE_VERTEX>&                 GetWireVertices() const { return m_wireVertices; }
+    const std::vector<std::vector<WIRE_VERTEX>>&    GetWirePolylines() const { return m_wirePolylines; }
+
+    /**
+     * Build the recovered symbols and wires onto @p aRootSheet's screen.
+     *
+     * @return the number of objects (symbols + wires) appended.
+     */
+    int BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const;
+
+private:
+    void decodePlacements( const std::vector<uint8_t>& aData );
+    void decodeWires( const std::vector<uint8_t>& aData );
+
+    std::vector<PLACEMENT>               m_placements;
+    std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
+    std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
+};
+
+} // namespace PADS_SCH_BINARY
+
+#endif // PADS_SCH_BINARY_READER_H_

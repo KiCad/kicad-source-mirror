@@ -95,6 +95,16 @@ static std::vector<std::string> expandShortcutPattern( const std::string& aPatte
 }
 
 
+static std::string normalizeNetName( const std::string& aNetName )
+{
+    // PADS uses numeric sentinels in optional owner/signame fields for unassigned nets.
+    if( aNetName == "-1" || aNetName == "0" )
+        return {};
+
+    return aNetName;
+}
+
+
 PARSER::PARSER()
 {
 }
@@ -1224,7 +1234,7 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
 
             POUR pour;
             pour.name = name;
-            pour.net_name = signame;
+            pour.net_name = normalizeNetName( signame );
             pour.layer = level;
             pour.priority = priority;
             pour.width = width;
@@ -3347,7 +3357,7 @@ void PARSER::parseSectionLINES( std::ifstream& aStream )
                 copper.name = name;
                 copper.layer = level;
                 copper.width = width;
-                copper.net_name = signame;
+                copper.net_name = normalizeNetName( signame );
 
                 copper.filled = ( shape_type == "COPCLS" || shape_type == "COPCIR" );
                 copper.is_cutout = ( shape_type == "COPCUT" || shape_type == "COPCCO" ||

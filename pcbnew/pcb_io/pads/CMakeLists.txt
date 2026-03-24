@@ -2,9 +2,11 @@
 # Sources for the pcbnew PLUGIN called PADS_PLUGIN
 
 set( PADS2PCBNEW_SRCS
+    pads_binary_parser.cpp
     pads_layer_mapper.cpp
     pads_parser.cpp
     pcb_io_pads.cpp
+    pcb_io_pads_binary.cpp
     )
 
 add_library( pads2pcbnew STATIC ${PADS2PCBNEW_SRCS} )

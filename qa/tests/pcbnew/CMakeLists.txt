@@ -240,6 +240,7 @@ set( QA_PCBNEW_SRCS
     pcb_io/eagle/test_eagle_lbr_import.cpp
     pcb_io/eagle/test_eagle_managed_lib_naming.cpp
     pcb_io/pads/test_pads_import.cpp
+    pcb_io/pads/test_pads_binary_import.cpp
     pcb_io/pads/test_pads_layer_mapper.cpp
     pcb_io/pads/test_pads_arc_structures.cpp
     pcb_io/pads/test_pads_part_structures.cpp
