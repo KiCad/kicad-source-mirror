@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-24 13:10+0000\n"
-"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"PO-Revision-Date: 2026-03-25 14:10+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -27407,11 +27407,11 @@ msgstr "Export do STEP"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export BREP"
-msgstr "Export BREP"
+msgstr "BREP export"
 
 #: kicad/kicad_cli.cpp:125
 msgid "Export XAO"
-msgstr "Export XAO"
+msgstr "XAO export"
 
 #: kicad/kicad_cli.cpp:126
 msgid "Export VRML"
@@ -27419,11 +27419,11 @@ msgstr "VRML export"
 
 #: kicad/kicad_cli.cpp:127
 msgid "Export PLY"
-msgstr "Export PLY"
+msgstr "PLY export"
 
 #: kicad/kicad_cli.cpp:128
 msgid "Export STL"
-msgstr "Export STL"
+msgstr "STL export"
 
 #: kicad/kicad_cli.cpp:148
 msgid "Export PS"
@@ -43595,8 +43595,7 @@ msgstr "Zóna mědi '%s' nemá připojené žádné plošky."
 #, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
 msgstr ""
-"Měděná zóna na %s na pozici (%s, %s) nemá žádné plošky připojené ke spoji "
-"\"%s\"."
+"Zóna mědi %s na pozici (%s, %s) nemá žádné plošky připojené k síti \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
