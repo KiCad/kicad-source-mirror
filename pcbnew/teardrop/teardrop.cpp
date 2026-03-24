@@ -62,7 +62,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 
     // Create a deterministic UUID from the track and candidate UUIDs so that teardrops
     // maintain stable ordering in the output file across save/load cycles.
-    const_cast<KIID&>( teardrop->m_Uuid ) = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
+    teardrop->SetUuidDirect( KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid ) );
 
     // teardrop settings are the last zone settings used by a zone dialog.
     // override them by default.
@@ -108,7 +108,7 @@ ZONE* TEARDROP_MANAGER::createTeardropMask( TEARDROP_VARIANT aTeardropVariant,
     // to differentiate from the copper teardrop zone.
     KIID maskUuid = KIID::Combine( aTrack->m_Uuid, aCandidate->m_Uuid );
     maskUuid.Increment();
-    const_cast<KIID&>( teardrop->m_Uuid ) = maskUuid;
+    teardrop->SetUuidDirect( maskUuid );
 
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
                                                                       : TEARDROP_TYPE::TD_TRACKEND );

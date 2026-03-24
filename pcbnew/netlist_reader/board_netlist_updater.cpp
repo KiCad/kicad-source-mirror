@@ -1001,7 +1001,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
             if( newGroup == nullptr )
             {
                 newGroup = new PCB_GROUP( m_board );
-                const_cast<KIID&>( newGroup->m_Uuid ) = newGroupKIID;
+                newGroup->SetUuid( newGroupKIID );
                 newGroup->SetName( aNetlistComponent->GetGroup()->name );
 
                 // Add the group to the board manually so we can find it by checking

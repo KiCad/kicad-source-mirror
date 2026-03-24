@@ -123,7 +123,7 @@ PAD::PAD( const PAD& aOther ) :
 {
     PAD::operator=( aOther );
 
-    const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
+    SetUuidDirect( aOther.m_Uuid );
 }
 
 
@@ -225,7 +225,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &pad ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( pad.id().value() );
+    SetUuidDirect( KIID( pad.id().value() ) );
     SetPosition( kiapi::common::UnpackVector2( pad.position() ) );
     UnpackNet( pad.net() );
     SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );

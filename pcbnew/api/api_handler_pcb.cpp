@@ -502,7 +502,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_PCB::handleCreateUpdateItemsIntern
                 item->RunOnChildren(
                         []( BOARD_ITEM* aChild )
                         {
-                            const_cast<KIID&>( aChild->m_Uuid ) = KIID();
+                            aChild->ResetUuid();
                         },
                         RECURSE );
             }

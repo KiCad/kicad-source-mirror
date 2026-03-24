@@ -365,7 +365,7 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &zone ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( zone.id().value() );
+    SetUuidDirect( KIID( zone.id().value() ) );
     SetLayerSet( UnpackLayerSet( zone.layers() ) );
     SetAssignedPriority( zone.priority() );
     SetZoneName( wxString::FromUTF8( zone.name() ) );

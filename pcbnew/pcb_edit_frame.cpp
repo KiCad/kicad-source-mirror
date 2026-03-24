@@ -2514,7 +2514,7 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
     }
 
     aDest.SetLocked( aSrc.IsLocked() );
-    const_cast<KIID&>( aDest.m_Uuid ) = aSrc.m_Uuid;
+    aDest.SetUuid( aSrc.m_Uuid );
 }
 
 
@@ -2625,9 +2625,9 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     aNew->SetLocked( aExisting->IsLocked() );
 
-    const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
-    const_cast<KIID&>( aNew->Reference().m_Uuid ) = aExisting->Reference().m_Uuid;
-    const_cast<KIID&>( aNew->Value().m_Uuid ) = aExisting->Value().m_Uuid;
+    aNew->SetUuid( aExisting->m_Uuid );
+    aNew->Reference().SetUuid( aExisting->Reference().m_Uuid );
+    aNew->Value().SetUuid( aExisting->Value().m_Uuid );
 
     std::vector<PAD*> oldPads;
     oldPads.reserve( aExisting->Pads().size() );
@@ -2650,7 +2650,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         PAD* newPad = match.second;
 
         matchedNewPads.insert( newPad );
-        const_cast<KIID&>( newPad->m_Uuid ) = oldPad->m_Uuid;
+        newPad->SetUuid( oldPad->m_Uuid );
         newPad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
         newPad->SetPinFunction( oldPad->GetPinFunction() );
         newPad->SetPinType( oldPad->GetPinType() );
@@ -2666,7 +2666,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         if( matchedNewPads.find( newPad ) != matchedNewPads.end() )
             continue;
 
-        const_cast<KIID&>( newPad->m_Uuid ) = KIID();
+        newPad->ResetUuid();
         newPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
@@ -2693,13 +2693,13 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
         oldToNewDrawings[ oldItem ] = newItem;
         matchedNewDrawings.insert( newItem );
-        const_cast<KIID&>( newItem->m_Uuid ) = oldItem->m_Uuid;
+        newItem->SetUuid( oldItem->m_Uuid );
     }
 
     for( BOARD_ITEM* newItem : newDrawings )
     {
         if( matchedNewDrawings.find( newItem ) == matchedNewDrawings.end() )
-            const_cast<KIID&>( newItem->m_Uuid ) = KIID();
+            newItem->ResetUuid();
     }
 
     std::vector<ZONE*> oldZones;
@@ -2723,13 +2723,13 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         ZONE* newZone = match.second;
 
         matchedNewZones.insert( newZone );
-        const_cast<KIID&>( newZone->m_Uuid ) = oldZone->m_Uuid;
+        newZone->SetUuid( oldZone->m_Uuid );
     }
 
     for( ZONE* newZone : newZones )
     {
         if( matchedNewZones.find( newZone ) == matchedNewZones.end() )
-            const_cast<KIID&>( newZone->m_Uuid ) = KIID();
+            newZone->ResetUuid();
     }
 
     std::vector<PCB_POINT*> oldPoints;
@@ -2753,13 +2753,13 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         PCB_POINT* newPoint = match.second;
 
         matchedNewPoints.insert( newPoint );
-        const_cast<KIID&>( newPoint->m_Uuid ) = oldPoint->m_Uuid;
+        newPoint->SetUuid( oldPoint->m_Uuid );
     }
 
     for( PCB_POINT* newPoint : newPoints )
     {
         if( matchedNewPoints.find( newPoint ) == matchedNewPoints.end() )
-            const_cast<KIID&>( newPoint->m_Uuid ) = KIID();
+            newPoint->ResetUuid();
     }
 
     std::vector<PCB_GROUP*> oldGroups;
@@ -2783,13 +2783,13 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         PCB_GROUP* newGroup = match.second;
 
         matchedNewGroups.insert( newGroup );
-        const_cast<KIID&>( newGroup->m_Uuid ) = oldGroup->m_Uuid;
+        newGroup->SetUuid( oldGroup->m_Uuid );
     }
 
     for( PCB_GROUP* newGroup : newGroups )
     {
         if( matchedNewGroups.find( newGroup ) == matchedNewGroups.end() )
-            const_cast<KIID&>( newGroup->m_Uuid ) = KIID();
+            newGroup->ResetUuid();
     }
 
     std::vector<PCB_FIELD*> oldFieldsVec;
@@ -2830,13 +2830,13 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
         oldToNewFields[ oldField ] = newField;
         matchedNewFields.insert( newField );
-        const_cast<KIID&>( newField->m_Uuid ) = oldField->m_Uuid;
+        newField->SetUuid( oldField->m_Uuid );
     }
 
     for( PCB_FIELD* newField : newFieldsVec )
     {
         if( matchedNewFields.find( newField ) == matchedNewFields.end() )
-            const_cast<KIID&>( newField->m_Uuid ) = KIID();
+            newField->ResetUuid();
     }
 
     std::unordered_map<PCB_TEXT*, PCB_TEXT*> oldToNewTexts;

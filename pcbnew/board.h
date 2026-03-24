@@ -1505,6 +1505,11 @@ public:
         return m_itemByIdCache;
     }
 
+    bool IsItemIndexedById( const BOARD_ITEM* aItem ) const
+    {
+        return m_cachedIdByItem.contains( aItem );
+    }
+
     /**
      * Return a cached item for @a aId if the entry is still self-consistent.
      *
@@ -1520,16 +1525,7 @@ public:
      * This is called by FOOTPRINT::Add() when items are added to footprints that are already
      * on the board, to keep the cache in sync.
      */
-    void CacheItemById( BOARD_ITEM* aItem )
-    {
-        if( IsFootprintHolder() )
-            return;
-
-        auto [it, inserted] = m_itemByIdCache.insert( { aItem->m_Uuid, aItem } );
-
-        if( inserted )
-            aItem->m_boardCacheOwner = this;
-    }
+    void CacheItemById( BOARD_ITEM* aItem ) const;
 
     /**
      * Remove an item from the item-by-id cache.
@@ -1537,15 +1533,58 @@ public:
      * This is called by FOOTPRINT::Remove() when items are removed from footprints that are
      * already on the board, to keep the cache in sync.
      */
-    void UncacheItemById( const KIID& aId )
-    {
-        auto it = m_itemByIdCache.find( aId );
+    void UncacheItemById( const KIID& aId ) const;
 
-        if( it != m_itemByIdCache.end() )
-        {
-            it->second->m_boardCacheOwner = nullptr;
-            m_itemByIdCache.erase( it );
-        }
+    void CacheItemSubtreeById( BOARD_ITEM* aItem )
+    {
+        wxCHECK( aItem, /* void */ );
+
+        CacheItemById( aItem );
+
+        aItem->RunOnChildren(
+                [this]( BOARD_ITEM* aChild )
+                {
+                    CacheItemSubtreeById( aChild );
+                },
+                RECURSE_MODE::NO_RECURSE );
+    }
+
+    void CacheChildrenById( const BOARD_ITEM* aParent )
+    {
+        wxCHECK( aParent, /* void */ );
+
+        aParent->RunOnChildren(
+                [this]( BOARD_ITEM* aChild )
+                {
+                    CacheItemSubtreeById( aChild );
+                },
+                RECURSE_MODE::NO_RECURSE );
+    }
+
+    void UncacheItemSubtreeById( const BOARD_ITEM* aItem )
+    {
+        wxCHECK( aItem, /* void */ );
+
+        UncacheItemById( aItem->m_Uuid );
+
+        aItem->RunOnChildren(
+                [this]( BOARD_ITEM* aChild )
+                {
+                    UncacheItemSubtreeById( aChild );
+                },
+                RECURSE_MODE::NO_RECURSE );
+    }
+
+    void UncacheChildrenById( const BOARD_ITEM* aParent )
+    {
+        wxCHECK( aParent, /* void */ );
+
+        aParent->RunOnChildren(
+                [this]( BOARD_ITEM* aChild )
+                {
+                    UncacheItemSubtreeById( aChild );
+                },
+                RECURSE_MODE::NO_RECURSE );
     }
 
     /**
@@ -1666,7 +1705,8 @@ private:
 
     // Cache for fast access to items in the containers above by KIID, including children.
     // Mutable because it's a performance cache that can be populated during const lookups.
-    mutable std::unordered_map<KIID, BOARD_ITEM*> m_itemByIdCache;
+    mutable std::unordered_map<KIID, BOARD_ITEM*>        m_itemByIdCache;
+    mutable std::unordered_map<const BOARD_ITEM*, KIID>  m_cachedIdByItem;
 
     std::map<int, LAYER> m_layers;                  // layer data
 

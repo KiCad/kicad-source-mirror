@@ -55,7 +55,7 @@ PCB_TABLECELL* PCB_EDIT_TABLE_TOOL::copyCell( PCB_TABLECELL* aSource )
     PCB_TABLECELL* cell = new PCB_TABLECELL( *aSource );
 
     // Generate a new UUID to avoid duplicates (copy constructor preserves the old UUID)
-    const_cast<KIID&>( cell->m_Uuid ) = KIID();
+    cell->ResetUuidDirect();
 
     // Clear text content - we only want the formatting, not the content
     cell->SetText( wxEmptyString );

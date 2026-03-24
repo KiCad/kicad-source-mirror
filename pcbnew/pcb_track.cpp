@@ -135,7 +135,7 @@ PCB_VIA::PCB_VIA( const PCB_VIA& aOther ) :
 {
     PCB_VIA::operator=( aOther );
 
-    const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
+    SetUuidDirect( aOther.m_Uuid );
     m_zoneLayerOverrides = aOther.m_zoneLayerOverrides;
 }
 
@@ -431,7 +431,7 @@ bool PCB_TRACK::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &track ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( track.id().value() );
+    SetUuidDirect( KIID( track.id().value() ) );
     SetStart( VECTOR2I( track.start().x_nm(), track.start().y_nm() ) );
     SetEnd( VECTOR2I( track.end().x_nm(), track.end().y_nm() ) );
     SetWidth( track.width().value_nm() );
@@ -477,7 +477,7 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &arc ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( arc.id().value() );
+    SetUuidDirect( KIID( arc.id().value() ) );
     SetStart( VECTOR2I( arc.start().x_nm(), arc.start().y_nm() ) );
     SetMid( VECTOR2I( arc.mid().x_nm(), arc.mid().y_nm() ) );
     SetEnd( VECTOR2I( arc.end().x_nm(), arc.end().y_nm() ) );
@@ -528,7 +528,7 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &via ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( via.id().value() );
+    SetUuidDirect( KIID( via.id().value() ) );
     SetStart( VECTOR2I( via.position().x_nm(), via.position().y_nm() ) );
     SetEnd( GetStart() );
 
@@ -3398,4 +3398,3 @@ ENUM_TO_WXANY( COVERING_MODE );
 ENUM_TO_WXANY( PLUGGING_MODE );
 ENUM_TO_WXANY( CAPPING_MODE );
 ENUM_TO_WXANY( FILLING_MODE );
-

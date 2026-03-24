@@ -1272,12 +1272,12 @@ void PCB_IO_KICAD_LEGACY::loadFOOTPRINT( FOOTPRINT* aFootprint )
             aFootprint->SetPosition( VECTOR2I( pos_x, pos_y ) );
             aFootprint->SetLayer( layer_id );
             aFootprint->SetOrientation( EDA_ANGLE( orient, TENTHS_OF_A_DEGREE_T ) );
-            const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
+            aFootprint->SetUuidDirect( KIID( uuid ) );
         }
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
             char* uuid = strtok_r( (char*) line + SZ( "Sc" ), delims, (char**) &data );
-            const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
+            aFootprint->SetUuidDirect( KIID( uuid ) );
         }
         else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement (no longer supported)
         {
@@ -1970,7 +1970,7 @@ void PCB_IO_KICAD_LEGACY::loadPCB_LINE()
                 }
 
                 case 3:
-                    const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );
+                    dseg->SetUuidDirect( KIID( data ) );
                     break;
 
                 case 4:
@@ -2150,7 +2150,7 @@ void PCB_IO_KICAD_LEGACY::loadPCB_TEXT()
             char* vJustify    = strtok_r( nullptr, delims, (char**) &data );
 
             pcbtxt->SetMirrored( !notMirrored );
-            const_cast<KIID&>( pcbtxt->m_Uuid ) = KIID( uuid );
+            pcbtxt->SetUuidDirect( KIID( uuid ) );
             pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
             if( hJustify )
@@ -2290,7 +2290,7 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
             newVia->SetViaType( viatype );
             newVia->SetWidth( PADSTACK::ALL_LAYERS, width );
 
-            const_cast<KIID&>( newVia->m_Uuid ) = KIID( uuid );
+            newVia->SetUuidDirect( KIID( uuid ) );
             newVia->SetPosition( VECTOR2I( start_x, start_y ) );
             newVia->SetEnd( VECTOR2I( end_x, end_y ) );
 
@@ -2324,7 +2324,7 @@ void PCB_IO_KICAD_LEGACY::loadTrackList( int aStructType )
         {
             newTrack->SetWidth( width );
 
-            const_cast<KIID&>( newTrack->m_Uuid ) = KIID( uuid );
+            newTrack->SetUuidDirect( KIID( uuid ) );
             newTrack->SetPosition( VECTOR2I( start_x, start_y ) );
             newTrack->SetEnd( VECTOR2I( end_x, end_y ) );
 
@@ -2492,7 +2492,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
                 THROW_IO_ERROR( wxT( "ZInfo netname too long" ) );
 
-            const_cast<KIID&>( zc->m_Uuid ) = KIID( uuid );
+            zc->SetUuidDirect( KIID( uuid ) );
 
             // Init the net code only, not the netname, to be sure
             // the zone net name is the name read in file.
@@ -2759,7 +2759,7 @@ void PCB_IO_KICAD_LEGACY::loadDIMENSION()
             char* uuid      = strtok_r( (char*) data, delims, (char**) &data );
 
             dim->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
-            const_cast<KIID&>( dim->m_Uuid ) = KIID( uuid );
+            dim->SetUuidDirect( KIID( uuid ) );
 
             // not used
             ( void )shape;
@@ -2894,7 +2894,7 @@ void PCB_IO_KICAD_LEGACY::loadPCB_TARGET()
                                             VECTOR2I( pos_x, pos_y ), size, width );
             m_board->Add( t, ADD_MODE::APPEND );
 
-            const_cast<KIID&>( t->m_Uuid ) = KIID( uuid );
+            t->SetUuidDirect( KIID( uuid ) );
         }
     }
 

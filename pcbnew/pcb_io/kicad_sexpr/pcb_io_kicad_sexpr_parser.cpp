@@ -1597,7 +1597,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
             group->SetName( groupInfo->name );
         }
 
-        const_cast<KIID&>( group->m_Uuid ) = groupInfo->uuid;
+        group->SetUuidDirect( groupInfo->uuid );
 
         if( groupInfo->libId.IsValid() )
             group->SetDesignBlockLibId( groupInfo->libId );
@@ -3569,7 +3569,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
+            shape->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -3740,7 +3740,7 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
         case T_uuid:
         {
             NextTok();
-            const_cast<KIID&>( bitmap->m_Uuid ) = CurStrToKIID();
+            bitmap->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
         }
@@ -3902,7 +3902,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( aText->m_Uuid ) = CurStrToKIID();
+            aText->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -4085,7 +4085,7 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( barcode->m_Uuid ) = CurStrToKIID();
+            barcode->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -4282,7 +4282,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( aTextBox->m_Uuid ) = CurStrToKIID();
+            aTextBox->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -4356,7 +4356,7 @@ PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
 
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( table->m_Uuid ) = CurStrToKIID();
+            table->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -4575,7 +4575,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( dim->m_Uuid ) = CurStrToKIID();
+            dim->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -5103,7 +5103,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( footprint->m_Uuid ) = CurStrToKIID();
+            footprint->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -5497,13 +5497,13 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 {
                 case FIELD_T::REFERENCE:
                     footprint->Reference() = PCB_FIELD( *text, FIELD_T::REFERENCE );
-                    const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
+                    footprint->Reference().SetUuidDirect( text->m_Uuid );
                     delete text;
                     break;
 
                 case FIELD_T::VALUE:
                     footprint->Value() = PCB_FIELD( *text, FIELD_T::VALUE );
-                    const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
+                    footprint->Value().SetUuidDirect( text->m_Uuid );
                     delete text;
                     break;
 
@@ -6412,7 +6412,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( pad->m_Uuid ) = CurStrToKIID();
+            pad->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -7280,7 +7280,7 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
+            arc->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -7375,7 +7375,7 @@ PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TRACK()
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
+            track->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -7577,7 +7577,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( via->m_Uuid ) = CurStrToKIID();
+            via->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -7929,7 +7929,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( zone->m_Uuid ) = CurStrToKIID();
+            zone->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
@@ -8617,7 +8617,7 @@ PCB_POINT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_POINT()
         case T_uuid:
         {
             NextTok();
-            const_cast<KIID&>( point->m_Uuid ) = CurStrToKIID();
+            point->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
         }
@@ -8679,7 +8679,7 @@ PCB_TARGET* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TARGET()
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( target->m_Uuid ) = CurStrToKIID();
+            target->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 

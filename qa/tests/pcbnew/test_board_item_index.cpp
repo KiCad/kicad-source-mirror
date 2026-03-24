@@ -126,6 +126,52 @@ BOOST_AUTO_TEST_CASE( RebindItemUuidUpdatesCacheAtomically )
 }
 
 
+BOOST_AUTO_TEST_CASE( AttachedChildSetUuidRebindsCache )
+{
+    BOARD* board = new BOARD();
+
+    auto footprint = std::make_unique<FOOTPRINT>( board );
+    auto pad = new PAD( footprint.get() );
+    PAD* livePad = pad;
+    const KIID oldId = livePad->m_Uuid;
+    const KIID newId;
+
+    footprint->Add( pad );
+    board->Add( footprint.release() );
+
+    livePad->SetUuid( newId );
+
+    BOOST_CHECK( livePad->m_Uuid == newId );
+    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
+    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
+    BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), livePad );
+
+    delete board;
+}
+
+
+BOOST_AUTO_TEST_CASE( CacheItemByIdCanonicalizesRewrittenUuid )
+{
+    BOARD* board = new BOARD();
+
+    auto shape = std::make_unique<PCB_SHAPE>( board );
+    PCB_SHAPE* liveShape = shape.get();
+    const KIID oldId = liveShape->m_Uuid;
+    const KIID newId;
+
+    board->Add( shape.release() );
+
+    const_cast<KIID&>( liveShape->m_Uuid ) = newId;
+    board->CacheItemById( liveShape );
+
+    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
+    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
+    BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), liveShape );
+
+    delete board;
+}
+
+
 BOOST_AUTO_TEST_CASE( RepairDuplicateItemUuidsKeepsEarlierTraversalWinner )
 {
     BOARD* board = new BOARD();

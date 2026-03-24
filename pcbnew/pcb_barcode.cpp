@@ -215,7 +215,7 @@ bool PCB_BARCODE::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &barcode ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( barcode.id().value() );
+    SetUuidDirect( KIID( barcode.id().value() ) );
     SetText( wxString::FromUTF8( barcode.text() ) );
 
     switch( barcode.kind() )

@@ -148,7 +148,7 @@ bool PCB_TEXT::Deserialize( const google::protobuf::Any& aContainer )
         return false;
 
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( boardText.layer() ) );
-    const_cast<KIID&>( m_Uuid ) = KIID( boardText.id().value() );
+    SetUuidDirect( KIID( boardText.id().value() ) );
     SetIsKnockout( boardText.knockout() );
     SetLocked( boardText.locked() == types::LockedState::LS_LOCKED );
 

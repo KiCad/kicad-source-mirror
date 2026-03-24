@@ -83,7 +83,7 @@ bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &group ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( group.id().value() );
+    SetUuidDirect( KIID( group.id().value() ) );
     SetName( wxString( group.name().c_str(), wxConvUTF8 ) );
 
     BOARD* board = GetBoard();

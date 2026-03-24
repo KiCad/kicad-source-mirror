@@ -452,7 +452,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &footprint ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( footprint.id().value() );
+    SetUuidDirect( KIID( footprint.id().value() ) );
     SetPosition( VECTOR2I( footprint.position().x_nm(), footprint.position().y_nm() ) );
     SetOrientationDegrees( footprint.orientation().value_degrees() );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( footprint.layer() ) );
@@ -602,22 +602,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     // If this footprint is on a board, uncache all items before clearing
     if( BOARD* board = GetBoard() )
-    {
-        for( PAD* pad : m_pads )
-            board->UncacheItemById( pad->m_Uuid );
-
-        for( BOARD_ITEM* item : m_drawings )
-            board->UncacheItemById( item->m_Uuid );
-
-        for( ZONE* zone : m_zones )
-            board->UncacheItemById( zone->m_Uuid );
-
-        for( PCB_GROUP* group : m_groups )
-            board->UncacheItemById( group->m_Uuid );
-
-        for( PCB_POINT* point : m_points )
-            board->UncacheItemById( point->m_Uuid );
-    }
+        board->UncacheChildrenById( this );
 
     Pads().clear();
     GraphicalItems().clear();
@@ -833,7 +818,7 @@ bool FOOTPRINT::FixUuids()
     {
         if( item->m_Uuid == niluuid )
         {
-            const_cast<KIID&>( item->m_Uuid ) = KIID();
+            item->ResetUuidDirect();
             changed = true;
         }
     }
@@ -870,25 +855,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // If this footprint is on a board, uncache all items before deleting them
     if( BOARD* board = GetBoard() )
-    {
-        for( PCB_FIELD* field : m_fields )
-            board->UncacheItemById( field->m_Uuid );
-
-        for( PAD* pad : m_pads )
-            board->UncacheItemById( pad->m_Uuid );
-
-        for( ZONE* zone : m_zones )
-            board->UncacheItemById( zone->m_Uuid );
-
-        for( BOARD_ITEM* item : m_drawings )
-            board->UncacheItemById( item->m_Uuid );
-
-        for( PCB_GROUP* group : m_groups )
-            board->UncacheItemById( group->m_Uuid );
-
-        for( PCB_POINT* point : m_points )
-            board->UncacheItemById( point->m_Uuid );
-    }
+        board->UncacheChildrenById( this );
 
     // Move the fields
     for( PCB_FIELD* field : m_fields )
@@ -1016,25 +983,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // If this footprint is on a board, uncache all items before deleting them
     if( BOARD* board = GetBoard() )
-    {
-        for( PCB_FIELD* field : m_fields )
-            board->UncacheItemById( field->m_Uuid );
-
-        for( PAD* pad : m_pads )
-            board->UncacheItemById( pad->m_Uuid );
-
-        for( ZONE* zone : m_zones )
-            board->UncacheItemById( zone->m_Uuid );
-
-        for( BOARD_ITEM* item : m_drawings )
-            board->UncacheItemById( item->m_Uuid );
-
-        for( PCB_GROUP* group : m_groups )
-            board->UncacheItemById( group->m_Uuid );
-
-        for( PCB_POINT* point : m_points )
-            board->UncacheItemById( point->m_Uuid );
-    }
+        board->UncacheChildrenById( this );
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -1521,7 +1470,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 
     // If this footprint is on a board, update the board's item-by-id cache
     if( BOARD* board = GetBoard() )
-        board->CacheItemById( aBoardItem );
+        board->CacheItemSubtreeById( aBoardItem );
 
     InvalidateGeometryCaches();
 }
@@ -1624,7 +1573,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
     // If this footprint is on a board, update the board's item-by-id cache
     if( BOARD* board = GetBoard() )
-        board->UncacheItemById( aBoardItem->m_Uuid );
+        board->UncacheItemSubtreeById( aBoardItem );
 
     aBoardItem->SetFlags( STRUCT_DELETED );
 
@@ -3131,7 +3080,7 @@ BOARD_ITEM* FOOTPRINT::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit )
 
     dupe->RunOnChildren( [&]( BOARD_ITEM* child )
                             {
-                                const_cast<KIID&>( child->m_Uuid ) = KIID();
+                                child->ResetUuidDirect();
                             },
                             RECURSE_MODE::RECURSE );
 
@@ -3149,7 +3098,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_PAD_T:
     {
         PAD* new_pad = new PAD( *static_cast<const PAD*>( aItem ) );
-        const_cast<KIID&>( new_pad->m_Uuid ) = KIID();
+        new_pad->ResetUuidDirect();
 
         if( addToFootprint )
             m_pads.push_back( new_pad );
@@ -3161,7 +3110,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_ZONE_T:
     {
         ZONE* new_zone = new ZONE( *static_cast<const ZONE*>( aItem ) );
-        const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
+        new_zone->ResetUuidDirect();
 
         if( addToFootprint )
             m_zones.push_back( new_zone );
@@ -3173,7 +3122,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_POINT_T:
     {
         PCB_POINT* new_point = new PCB_POINT( *static_cast<const PCB_POINT*>( aItem ) );
-        const_cast<KIID&>( new_point->m_Uuid ) = KIID();
+        new_point->ResetUuidDirect();
 
         if( addToFootprint )
             m_points.push_back( new_point );
@@ -3186,7 +3135,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_TEXT_T:
     {
         PCB_TEXT* new_text = new PCB_TEXT( *static_cast<const PCB_TEXT*>( aItem ) );
-        const_cast<KIID&>( new_text->m_Uuid ) = KIID();
+        new_text->ResetUuidDirect();
 
         if( aItem->Type() == PCB_FIELD_T )
         {
@@ -3209,7 +3158,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_SHAPE_T:
     {
         PCB_SHAPE* new_shape = new PCB_SHAPE( *static_cast<const PCB_SHAPE*>( aItem ) );
-        const_cast<KIID&>( new_shape->m_Uuid ) = KIID();
+        new_shape->ResetUuidDirect();
 
         if( addToFootprint )
             Add( new_shape );
@@ -3221,7 +3170,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_BARCODE_T:
     {
         PCB_BARCODE* new_barcode = new PCB_BARCODE( *static_cast<const PCB_BARCODE*>( aItem ) );
-        const_cast<KIID&>( new_barcode->m_Uuid ) = KIID();
+        new_barcode->ResetUuidDirect();
 
         if( addToFootprint )
             Add( new_barcode );
@@ -3233,7 +3182,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_REFERENCE_IMAGE_T:
     {
         PCB_REFERENCE_IMAGE* new_image = new PCB_REFERENCE_IMAGE( *static_cast<const PCB_REFERENCE_IMAGE*>( aItem ) );
-        const_cast<KIID&>( new_image->m_Uuid ) = KIID();
+        new_image->ResetUuidDirect();
 
         if( addToFootprint )
             Add( new_image );
@@ -3245,7 +3194,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     case PCB_TEXTBOX_T:
     {
         PCB_TEXTBOX* new_textbox = new PCB_TEXTBOX( *static_cast<const PCB_TEXTBOX*>( aItem ) );
-        const_cast<KIID&>( new_textbox->m_Uuid ) = KIID();
+        new_textbox->ResetUuidDirect();
 
         if( addToFootprint )
             Add( new_textbox );

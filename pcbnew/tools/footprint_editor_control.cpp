@@ -922,7 +922,8 @@ int FOOTPRINT_EDITOR_CONTROL::RepairFootprint( const TOOL_EVENT& aEvent )
                 if( ids.count( aItem->m_Uuid ) )
                 {
                     duplicates++;
-                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
+                    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
+                        boardItem->ResetUuid();
                 }
 
                 ids.insert( aItem->m_Uuid );

@@ -40,13 +40,6 @@
 #include <properties/property_mgr.h>
 
 
-BOARD_ITEM::~BOARD_ITEM()
-{
-    if( m_boardCacheOwner )
-        m_boardCacheOwner->UncacheItemByPtr( this );
-}
-
-
 bool BOARD_ITEM::IsGroupableType() const
 {
     switch ( Type() )
@@ -108,6 +101,27 @@ BOARD* BOARD_ITEM::GetBoard()
 FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
 {
     return static_cast<FOOTPRINT*>( findParent( PCB_FOOTPRINT_T ) );
+}
+
+
+void BOARD_ITEM::SetUuid( const KIID& aUuid )
+{
+    if( m_Uuid == aUuid )
+        return;
+
+    if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
+    {
+        board->RebindItemUuid( this, aUuid );
+        return;
+    }
+
+    SetUuidDirect( aUuid );
+}
+
+
+void BOARD_ITEM::SetUuidDirect( const KIID& aUuid )
+{
+    const_cast<KIID&>( m_Uuid ) = aUuid;
 }
 
 
@@ -293,12 +307,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     // which would leave the cache holding dangling pointers to the destroyed children.
     if( board )
     {
-        RunOnChildren(
-                [board]( BOARD_ITEM* child )
-                {
-                    board->UncacheItemById( child->m_Uuid );
-                },
-                RECURSE_MODE::NO_RECURSE );
+        board->UncacheChildrenById( this );
     }
 
     swapData( aImage );
@@ -310,12 +319,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
 
     if( board )
     {
-        RunOnChildren(
-                [board]( BOARD_ITEM* child )
-                {
-                    board->CacheItemById( child );
-                },
-                RECURSE_MODE::NO_RECURSE );
+        board->CacheChildrenById( this );
     }
 }
 
@@ -323,7 +327,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
 BOARD_ITEM* BOARD_ITEM::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
 {
     BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
-    const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+    dupe->ResetUuid();
 
     if( addToParentGroup )
     {

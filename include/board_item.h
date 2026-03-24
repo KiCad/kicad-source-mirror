@@ -97,7 +97,7 @@ public:
             m_isKnockout( aOther.m_isKnockout ),
             m_isLocked( aOther.m_isLocked )
     {
-        // m_boardCacheOwner deliberately NOT copied: clones are not in any board's cache
+        // Cache membership is owned by BOARD: clones start detached from any board index
     }
 
     BOARD_ITEM& operator=( const BOARD_ITEM& aOther )
@@ -109,11 +109,8 @@ public:
         m_layer = aOther.m_layer;
         m_isKnockout = aOther.m_isKnockout;
         m_isLocked = aOther.m_isLocked;
-        // m_boardCacheOwner deliberately NOT copied
         return *this;
     }
-
-    ~BOARD_ITEM() override;
 
     virtual void CopyFrom( const BOARD_ITEM* aOther );
 
@@ -237,6 +234,18 @@ public:
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
     FOOTPRINT* GetParentFootprint() const;
+
+    /**
+     * Raw UUID assignment.  No board index maintenance.
+     *
+     * Use for detached/load-time items only.  Prefer SetUuid() for normal callers.
+     */
+    void SetUuidDirect( const KIID& aUuid );
+
+    void ResetUuidDirect() { SetUuidDirect( KIID() ); }
+
+    void SetUuid( const KIID& aUuid );
+    void ResetUuid() { SetUuid( KIID() ); }
 
     VECTOR2I GetFPRelativePosition() const;
     void SetFPRelativePosition( const VECTOR2I& aPos );
@@ -481,8 +490,6 @@ protected:
     PCB_LAYER_ID    m_layer;
     bool            m_isKnockout;
     bool            m_isLocked;
-
-    BOARD*          m_boardCacheOwner = nullptr;     ///< Set/cleared by BOARD cache methods
 
     friend class BOARD;
 };

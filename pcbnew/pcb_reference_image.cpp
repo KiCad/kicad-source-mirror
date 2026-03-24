@@ -226,7 +226,7 @@ bool PCB_REFERENCE_IMAGE::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &refImage ) )
         return false;
 
-    const_cast<KIID&>( m_Uuid ) = KIID( refImage.id().value() );
+    SetUuidDirect( KIID( refImage.id().value() ) );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( refImage.layer() ) );
     SetPosition( kiapi::common::UnpackVector2( refImage.position() ) );
     m_referenceImage.SetTransformOriginOffset( kiapi::common::UnpackVector2( refImage.transform_origin_offset() ) );

@@ -163,10 +163,8 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    for( auto& [uuid, item] : m_itemByIdCache )
-        item->m_boardCacheOwner = nullptr;
-
     m_itemByIdCache.clear();
+    m_cachedIdByItem.clear();
 
     // Clean up the owned elements
     DeleteMARKERs();
@@ -1383,12 +1381,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         else
             m_footprints.push_front( footprint );
 
-        footprint->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    CacheItemById( aChild );
-                },
-                RECURSE_MODE::NO_RECURSE );
+        CacheChildrenById( footprint );
         break;
     }
 
@@ -1413,14 +1406,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
         if( aBoardItem->Type() == PCB_TABLE_T )
         {
-            PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
-
-            table->RunOnChildren(
-                    [&]( BOARD_ITEM* aChild )
-                    {
-                        CacheItemById( aChild );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+            CacheChildrenById( aBoardItem );
         }
 
         break;
@@ -1525,14 +1511,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_FOOTPRINT_T:
     {
         std::erase( m_footprints, aBoardItem );
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aBoardItem );
-
-        footprint->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    UncacheItemById( aChild->m_Uuid );
-                },
-                RECURSE_MODE::NO_RECURSE );
+        UncacheChildrenById( aBoardItem );
 
         break;
     }
@@ -1559,14 +1538,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
         if( aBoardItem->Type() == PCB_TABLE_T )
         {
-            PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
-
-            table->RunOnChildren(
-                    [&]( BOARD_ITEM* aChild )
-                    {
-                        UncacheItemById( aChild->m_Uuid );
-                    },
-                    RECURSE_MODE::NO_RECURSE );
+            UncacheChildrenById( aBoardItem );
         }
 
         break;
@@ -1668,10 +1640,8 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
-    for( auto& [uuid, item] : m_itemByIdCache )
-        item->m_boardCacheOwner = nullptr;
-
     m_itemByIdCache.clear();
+    m_cachedIdByItem.clear();
 
     IncrementTimeStamp();
 
@@ -1966,7 +1936,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
         for( PCB_POINT* point : footprint->Points() )
         {
             if( point->m_Uuid == aID )
-                return cacheAndReturn( point );
+                return CacheAndReturnItemById( aID, point );
         }
     }
 
@@ -2032,28 +2002,82 @@ BOARD_ITEM* BOARD::GetCachedItemById( const KIID& aId ) const
     if( item && item->m_Uuid == aId )
         return item;
 
-    if( item && item->m_boardCacheOwner == this )
-        item->m_boardCacheOwner = nullptr;
+    UncacheItemById( aId );
+    return nullptr;
+}
+
+
+void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
+{
+    if( IsFootprintHolder() )
+        return;
+
+    if( auto prev = m_cachedIdByItem.find( aItem );
+        prev != m_cachedIdByItem.end() && prev->second != aItem->m_Uuid )
+    {
+        auto prevIt = m_itemByIdCache.find( prev->second );
+
+        if( prevIt != m_itemByIdCache.end() && prevIt->second == aItem )
+            m_itemByIdCache.erase( prevIt );
+    }
+
+    if( auto existing = m_itemByIdCache.find( aItem->m_Uuid );
+        existing != m_itemByIdCache.end() && existing->second != aItem )
+    {
+        if( auto prev = m_cachedIdByItem.find( existing->second );
+            prev != m_cachedIdByItem.end() && prev->second == aItem->m_Uuid )
+        {
+            m_cachedIdByItem.erase( prev );
+        }
+    }
+
+    m_itemByIdCache.insert_or_assign( aItem->m_Uuid, aItem );
+    m_cachedIdByItem.insert_or_assign( aItem, aItem->m_Uuid );
+}
+
+
+void BOARD::UncacheItemById( const KIID& aId ) const
+{
+    auto it = m_itemByIdCache.find( aId );
+
+    if( it == m_itemByIdCache.end() )
+        return;
+
+    const BOARD_ITEM* item = it->second;
 
     m_itemByIdCache.erase( it );
-    return nullptr;
+
+    if( auto cached = m_cachedIdByItem.find( item );
+        cached != m_cachedIdByItem.end() && cached->second == aId )
+    {
+        m_cachedIdByItem.erase( cached );
+    }
 }
 
 
 BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const
 {
-    for( auto it = m_itemByIdCache.begin(); it != m_itemByIdCache.end(); )
+    if( auto prev = m_cachedIdByItem.find( aItem );
+        prev != m_cachedIdByItem.end() && prev->second != aId )
     {
-        if( it->second == aItem && it->first != aId )
-            it = m_itemByIdCache.erase( it );
-        else
-            ++it;
+        auto prevIt = m_itemByIdCache.find( prev->second );
+
+        if( prevIt != m_itemByIdCache.end() && prevIt->second == aItem )
+            m_itemByIdCache.erase( prevIt );
     }
 
-    auto [it, inserted] = m_itemByIdCache.insert( { aId, aItem } );
+    if( auto existing = m_itemByIdCache.find( aId );
+        existing != m_itemByIdCache.end() && existing->second != aItem )
+    {
+        if( auto prev = m_cachedIdByItem.find( existing->second );
+            prev != m_cachedIdByItem.end() && prev->second == aId )
+        {
+            m_cachedIdByItem.erase( prev );
+        }
+    }
 
-    if( inserted )
-        aItem->m_boardCacheOwner = const_cast<BOARD*>( this );
+    m_itemByIdCache.insert_or_assign( aId, aItem );
+    m_cachedIdByItem.insert_or_assign( aItem, aId );
 
     return aItem;
 }
@@ -2061,17 +2085,23 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
 
 void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
 {
+    if( auto cached = m_cachedIdByItem.find( aItem ); cached != m_cachedIdByItem.end() )
+    {
+        auto it = m_itemByIdCache.find( cached->second );
+
+        if( it != m_itemByIdCache.end() && it->second == aItem )
+            m_itemByIdCache.erase( it );
+
+        m_cachedIdByItem.erase( cached );
+        return;
+    }
+
     for( auto it = m_itemByIdCache.begin(); it != m_itemByIdCache.end(); )
     {
         if( it->second == aItem )
-        {
-            it->second->m_boardCacheOwner = nullptr;
             it = m_itemByIdCache.erase( it );
-        }
         else
-        {
             ++it;
-        }
     }
 }
 
@@ -2097,7 +2127,7 @@ void BOARD::RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId )
     }
 
     UncacheItemByPtr( aItem );
-    const_cast<KIID&>( aItem->m_Uuid ) = aNewId;
+    aItem->SetUuidDirect( aNewId );
     CacheAndReturnItemById( aNewId, aItem );
 }
 

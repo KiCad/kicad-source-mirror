@@ -1982,12 +1982,12 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
     {
         if( aIsNew )
         {
-            const_cast<KIID&>( item->m_Uuid ) = KIID();
+            item->ResetUuid();
 
             item->RunOnChildren(
                     []( BOARD_ITEM* aChild )
                     {
-                        const_cast<KIID&>( aChild->m_Uuid ) = KIID();
+                        aChild->ResetUuid();
                     },
                     RECURSE_MODE::RECURSE );
 
