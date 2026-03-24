@@ -74,6 +74,9 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle ) override;
 

@@ -31,6 +31,8 @@
 #include <trigo.h>
 
 #include <base_units.h>
+#include <api/api_enums.h>
+#include <api/board/board_types.pb.h>
 #include <pcb_barcode.h>
 #include <board.h>
 #include <geometry/shape_poly_set.h>
@@ -45,10 +47,12 @@
 #include <stdexcept>
 #include <utility>
 #include <algorithm>
+#include <api/api_utils.h>
 #include <footprint.h>
 
 #include <backend/zint.h>
 #include <board_design_settings.h>
+#include <google/protobuf/any.pb.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -146,6 +150,110 @@ wxString PCB_BARCODE::GetText() const
 wxString PCB_BARCODE::GetShownText() const
 {
     return m_text.GetShownText( true );
+}
+
+
+void PCB_BARCODE::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+
+    Barcode barcode;
+
+    barcode.mutable_id()->set_value( m_Uuid.AsStdString() );
+    barcode.set_text( GetText().ToUTF8() );
+
+    switch( m_kind )
+    {
+    case BARCODE_T::CODE_39:       barcode.set_kind( BK_CODE_39 );       break;
+    case BARCODE_T::CODE_128:      barcode.set_kind( BK_CODE_128 );      break;
+    case BARCODE_T::DATA_MATRIX:   barcode.set_kind( BK_DATA_MATRIX );   break;
+    case BARCODE_T::QR_CODE:       barcode.set_kind( BK_QR_CODE );       break;
+    case BARCODE_T::MICRO_QR_CODE: barcode.set_kind( BK_MICRO_QR_CODE ); break;
+    }
+
+    switch( m_errorCorrection )
+    {
+    case BARCODE_ECC_T::L: barcode.set_error_correction( BEC_L ); break;
+    case BARCODE_ECC_T::M: barcode.set_error_correction( BEC_M ); break;
+    case BARCODE_ECC_T::Q: barcode.set_error_correction( BEC_Q ); break;
+    case BARCODE_ECC_T::H: barcode.set_error_correction( BEC_H ); break;
+    }
+
+    kiapi::common::PackVector2( *barcode.mutable_position(), m_pos );
+    barcode.mutable_orientation()->set_value_degrees( m_angle.AsDegrees() );
+    barcode.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
+
+    barcode.mutable_width()->set_value_nm( m_width );
+    barcode.mutable_height()->set_value_nm( m_height );
+
+    barcode.set_show_text( m_text.IsVisible() );
+    barcode.mutable_text_height()->set_value_nm( m_text.GetTextHeight() );
+
+    barcode.set_knockout( IsKnockout() );
+    kiapi::common::PackVector2( *barcode.mutable_knockout_margin(), m_margin );
+
+    barcode.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                                   : kiapi::common::types::LockedState::LS_UNLOCKED );
+
+    aContainer.PackFrom( barcode );
+}
+
+
+bool PCB_BARCODE::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board::types;
+
+    Barcode barcode;
+
+    if( !aContainer.UnpackTo( &barcode ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( barcode.id().value() );
+    SetText( wxString::FromUTF8( barcode.text() ) );
+
+    switch( barcode.kind() )
+    {
+    case BK_CODE_39:       SetKind( BARCODE_T::CODE_39 );       break;
+    case BK_CODE_128:      SetKind( BARCODE_T::CODE_128 );      break;
+    case BK_DATA_MATRIX:   SetKind( BARCODE_T::DATA_MATRIX );   break;
+    case BK_QR_CODE:       SetKind( BARCODE_T::QR_CODE );       break;
+    case BK_MICRO_QR_CODE: SetKind( BARCODE_T::MICRO_QR_CODE ); break;
+    default:               SetKind( BARCODE_T::QR_CODE );       break;
+    }
+
+    switch( barcode.error_correction() )
+    {
+    case BEC_L: SetErrorCorrection( BARCODE_ECC_T::L ); break;
+    case BEC_M: SetErrorCorrection( BARCODE_ECC_T::M ); break;
+    case BEC_Q: SetErrorCorrection( BARCODE_ECC_T::Q ); break;
+    case BEC_H: SetErrorCorrection( BARCODE_ECC_T::H ); break;
+    default:    SetErrorCorrection( BARCODE_ECC_T::L ); break;
+    }
+
+    m_pos = kiapi::common::UnpackVector2( barcode.position() );
+    m_angle = EDA_ANGLE( barcode.orientation().value_degrees(), DEGREES_T );
+    m_layer = FromProtoEnum<PCB_LAYER_ID, BoardLayer>( barcode.layer() );
+
+    m_width = barcode.width().value_nm();
+    m_height = barcode.height().value_nm();
+
+    m_text.SetLayer( m_layer );
+    m_text.SetVisible( barcode.show_text() );
+
+    if( barcode.has_text_height() )
+    {
+        int textSize = std::max( 1, static_cast<int>( barcode.text_height().value_nm() ) );
+        m_text.SetTextSize( VECTOR2I( textSize, textSize ) );
+        m_text.SetTextThickness( std::max( 1, GetPenSizeForNormal( m_text.GetTextHeight() ) ) );
+    }
+
+    m_margin = kiapi::common::UnpackVector2( barcode.knockout_margin() );
+    BOARD_ITEM::SetIsKnockout( barcode.knockout() );
+    SetLocked( barcode.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+
+    AssembleBarcode();
+
+    return true;
 }
 
 
@@ -750,15 +858,21 @@ bool PCB_BARCODE::operator==( const BOARD_ITEM& aItem ) const
     if( !ClassOf( &aItem ) )
         return false;
 
-    const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( &aItem );
+    const PCB_BARCODE& other = static_cast<const PCB_BARCODE&>( aItem );
 
+    return *this == other;
+}
+
+
+bool PCB_BARCODE::operator==( const PCB_BARCODE& aOther ) const
+{
     // Compare text, width, height, text height, position, and kind
-    return ( GetText() == other->GetText()
-            && m_width == other->m_width
-            && m_height == other->m_height
-            && GetTextSize() == other->GetTextSize()
-            && GetPosition() == other->GetPosition()
-            && m_kind == other->m_kind );
+    return ( GetText() == aOther.GetText()
+            && m_width == aOther.m_width
+            && m_height == aOther.m_height
+            && GetTextSize() == aOther.GetTextSize()
+            && GetPosition() == aOther.GetPosition()
+            && m_kind == aOther.m_kind );
 }
 
 // ---- Property registration ----

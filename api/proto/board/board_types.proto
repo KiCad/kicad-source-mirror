@@ -492,6 +492,48 @@ message BoardGraphicShape
   kiapi.common.types.LockedState locked = 5;
 }
 
+enum BarcodeKind
+{
+  BK_UNKNOWN = 0;
+  BK_CODE_39 = 1;
+  BK_CODE_128 = 2;
+  BK_DATA_MATRIX = 3;
+  BK_QR_CODE = 4;
+  BK_MICRO_QR_CODE = 5;
+}
+
+enum BarcodeErrorCorrection
+{
+  BEC_UNKNOWN = 0;
+  BEC_L = 1;
+  BEC_M = 2;
+  BEC_Q = 3;
+  BEC_H = 4;
+}
+
+message Barcode
+{
+  kiapi.common.types.KIID id = 1;
+
+  string text = 2;
+  BarcodeKind kind = 3;
+  BarcodeErrorCorrection error_correction = 4;
+
+  kiapi.common.types.Vector2 position = 5;
+  kiapi.common.types.Angle orientation = 6;
+  BoardLayer layer = 7;
+
+  kiapi.common.types.Distance width = 8;
+  kiapi.common.types.Distance height = 9;
+
+  bool show_text = 10;
+  kiapi.common.types.Distance text_height = 11;
+
+  bool knockout = 12;
+  kiapi.common.types.Vector2 knockout_margin = 13;
+  kiapi.common.types.LockedState locked = 14;
+}
+
 // A board-specific text object, existing on a board layer
 message BoardText
 {
@@ -895,7 +937,16 @@ message Dimension
 
 message ReferenceImage
 {
-  // TODO
+  kiapi.common.types.KIID id = 1;
+  BoardLayer layer = 2;
+
+  kiapi.common.types.Vector2 position = 3;
+  kiapi.common.types.Vector2 transform_origin_offset = 4;
+  kiapi.common.types.Ratio image_scale = 5;
+
+  bytes image_data = 6;
+
+  kiapi.common.types.LockedState locked = 7;
 }
 
 message Group

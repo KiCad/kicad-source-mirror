@@ -1,7 +1,7 @@
 (kicad_pcb
 	(version 20241229)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(general
 		(thickness 1.6)
 		(legacy_teardrops no)
@@ -795,6 +795,77 @@
 		(layer "User.4")
 		(uuid "22cd6520-1cf2-46ca-a9d9-28e8d8c4863c")
 	)
+	(image
+		(at 79 138.5)
+		(layer "B.Cu")
+		(scale 2)
+		(locked yes)
+		(data "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAABOvAAATrwFj5o7DAAAA"
+			"GXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAA50RVh0VGl0bGUAYXBwX2ljb27D"
+			"TNv9AAAAUnRFWHRDb3B5cmlnaHQAQ0MgQXR0cmlidXRpb24tU2hhcmVBbGlrZSBodHRwOi8vY3Jl"
+			"YXRpdmVjb21tb25zLm9yZy9saWNlbnNlcy9ieS1zYS80LjAvw1RiBQAADPNJREFUeJzlW3uMVcUZ"
+			"/31z7t7dK7s8BBaQRRAwCCyu+GiNtYpUKUTFaCzahDTGR0xbqWnxUUSB1UYtPqnGtKY1DWhb6yMN"
+			"tYKp4iPGZ40gj+1WeQjyWtwnu8s+7pmvf8yZc2bmnPsicbX0S2bPzJwz832/7zVz5twlZsb/M6VK"
+			"ebhu1mvf9anvOgkaLzweBYiq8KYg40kCIKyxDIJNbpudu65hpP2MNO/LI+zTAQLv7fe9ZxvfmvO3"
+			"wmgCPoU8YOQpa6uqx5StRhnNpTJUKFEpAEDI3YbV57DNwS1JFg6vZNTjfTKqZ5HlfnpHdNLCzR/M"
+			"2ZMPX14FTJu1/mFRgZ/Bg6fZacsWUkIwvaOMPDidR/RDChQ7/a4y7DZBqqoP5l5+cdsb8xYw606H"
+			"ZZICiCBqL1i/gTM43wUXBy4MyR3ADCR7RT4ygQdtiu7ZCmGnL4dH9OALv/PIaQ3vX95cUAG0YIE3"
+			"vfnaXShHjQswVx1sKsZURDwE4rnAESjmHi5IQxHkhoKrCMMbsujy24+Md5UQS4JTv7z2LVSgJrfV"
+			"jTbb90rPBXHiWE2BYUcZDAZYK0L1hmBBYEgQtKEYlOJBoirzCRHGmeFgpepp5627S5TjHGYFLipC"
+			"gWUBZgFIAsugHvTpuh4Tte1nmD2npJy2O5cI+6O2w1sGMoX9sGRR8hCoDCdMP2/9cybmMATOPPPJ"
+			"sp5hJx5GCuWRe1OgQcPlQ6s7/aHmhVGPh4EdAmbdjX3b4rZHyDx1FRp2CBjhIcHZ1tTkxg++twMw"
+			"QqA3c+Jj8FDOnADe6ksC7/YnhQxQTCgw4nGtenRSM/8qGey6DIwkQcRRn5aAJKUy/asBnGspQKbp"
+			"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"
+			"4uTgEQAAAABJRU5ErkJggg=="
+		)
+		(uuid "b1308a10-16da-4d5b-9ca8-0d19372e7ae0")
+	)
 	(gr_text "Text!"
 		(at 120.45 49.35 0)
 		(layer "B.Fab")
@@ -826,6 +897,31 @@
 			(width 0.12)
 			(type dot)
 		)
+		(knockout no)
+	)
+	(barcode
+		(at 258.5 141.5 90)
+		(layer "F.Cu")
+		(size 42 44)
+		(text "acode")
+		(text_height 3)
+		(type qr)
+		(ecc_level M)
+		(hide no)
+		(knockout no)
+		(uuid "705675f1-5a54-4ef0-bc6c-93b7d057008e")
+	)
+	(barcode
+		(at 255 44.5 180)
+		(layer "F.SilkS")
+		(size 42 44)
+		(text "differentcode")
+		(text_height 2)
+		(type datamatrix)
+		(hide no)
+		(knockout yes)
+		(margins 1 2)
+		(uuid "f05e3942-bda0-44a3-acc1-c3bd813c7fed")
 	)
 	(dimension
 		(type aligned)

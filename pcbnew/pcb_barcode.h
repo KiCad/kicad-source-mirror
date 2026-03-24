@@ -120,6 +120,9 @@ public:
      */
     void SetLayer( PCB_LAYER_ID aLayer ) override;
 
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
     /**
      * Get the barcode width (in internal units).
      */
@@ -350,6 +353,8 @@ public:
      * @return true if the other item is a PCB_BARCODE and has identical key properties.
      */
     bool operator==( const BOARD_ITEM& aItem ) const override;
+
+    bool operator==( const PCB_BARCODE& aBarcode ) const;
 
     /**
      * Returns the type of the barcode (QR, CODE_39, etc.).

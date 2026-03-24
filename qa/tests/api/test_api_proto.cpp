@@ -29,7 +29,9 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_barcode.h>
 #include <pcb_dimension.h>
+#include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <zone.h>
 
@@ -54,8 +56,6 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aS
         google::protobuf::Any any;
         BOOST_REQUIRE_NO_THROW( aInput->Serialize( any ) );
 
-        BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
-
         ProtoClass proto;
         BOOST_REQUIRE_MESSAGE( any.UnpackTo( &proto ),
                                "Any message did not unpack into the requested type" );
@@ -79,10 +79,11 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aS
         // This round-trip checks that we can create an equivalent protobuf
         google::protobuf::Any outputAny;
         BOOST_REQUIRE_NO_THROW( output->Serialize( outputAny ) );
-        BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
 
         if( !( outputAny.SerializeAsString() == any.SerializeAsString() ) )
         {
+            BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
+            BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
             BOOST_TEST_FAIL( "Round-tripped protobuf does not match" );
         }
 
@@ -98,6 +99,9 @@ void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aS
 BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
 {
     KI_TEST::LoadBoard( m_settingsManager, "api_kitchen_sink", m_board );
+
+    int barcodeCount = 0;
+    int referenceImageCount = 0;
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
@@ -160,14 +164,27 @@ BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
                     static_cast<PCB_DIM_RADIAL*>( item ), m_board.get() );
             break;
 
+        case PCB_BARCODE_T:
+            testProtoFromKiCadObject<kiapi::board::types::Barcode>(
+                    static_cast<PCB_BARCODE*>( item ), m_board.get() );
+            ++barcodeCount;
+            break;
+
+        case PCB_REFERENCE_IMAGE_T:
+            testProtoFromKiCadObject<kiapi::board::types::ReferenceImage>(
+                    static_cast<PCB_REFERENCE_IMAGE*>( item ), m_board.get() );
+            ++referenceImageCount;
+            break;
+
         default: break;
         }
         // TODO(JE) Shapes
 
         // TODO(JE) Text
-
-        // TODO Barcodes
     }
+
+    BOOST_CHECK_GT( barcodeCount, 0 );
+    BOOST_CHECK_GT( referenceImageCount, 0 );
 }
 
 
