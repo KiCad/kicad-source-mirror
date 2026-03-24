@@ -236,5 +236,5 @@ void CLI::COMMAND::addVariantsArg()
                        "multiple variants.\n"
                        "When specifying multiple variants, use ${VARIANT} in the output path to "
                        "generate separate files for each variant.\n"
-                       "When no --variant argument is provided the default variant is output." ) ) );
+                       "When no --variant argument is provided, the default variant is output." ) ) );
 }
