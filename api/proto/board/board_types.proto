@@ -127,6 +127,7 @@ enum BoardLayer
   BL_User_45 = 98;
 }
 
+// Deprecated: Use Net with the name property only
 message NetCode
 {
   int32 value = 1;
@@ -135,7 +136,7 @@ message NetCode
 // Describes a copper item's net
 message Net
 {
-  // A unique code representing this net
+  // Deprecated: net codes are no longer used in KiCad
   NetCode code = 1;
 
   // Human-readable net name

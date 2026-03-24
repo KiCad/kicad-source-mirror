@@ -155,11 +155,15 @@ message GetItemsByNet
   // Specifies which document to query, which fields to return, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  // List of one or more types of items to retreive
+  // Optional list of item types to filter by.  If not provided, will return pads, vias,
+  // tracks, and zones.
   repeated kiapi.common.types.KiCadObjectType types = 2;
 
-  // A list of net codes to filter items by
-  repeated kiapi.board.types.NetCode net_codes = 3;
+  // Removed; NetCode was deprecated before a handler for this was written
+  // repeated kiapi.board.types.NetCode net_codes = 3;
+
+  // A list of nets to filter items by
+  repeated kiapi.board.types.Net nets = 4;
 }
 
 // Retrieve all the copper items belonging to a certain net class or set of net classes
@@ -169,11 +173,26 @@ message GetItemsByNetClass
   // Specifies which document to query, which fields to return, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  // List of one or more types of items to retreive
+  // Optional list of item types to filter by.  If not provided, will return pads, vias,
+  // tracks, and zones.
   repeated kiapi.common.types.KiCadObjectType types = 2;
 
   // A list of net class names to filter items by
   repeated string net_classes = 3;
+}
+
+// Retrieve all copper-connected items connected to one or more source items
+// returns kiapi.common.commands.GetItemsResponse
+message GetConnectedItems
+{
+  // Specifies which document to query, which fields to return, etc.
+  kiapi.common.types.ItemHeader header = 1;
+
+  // One or more item IDs used as the source set for connectivity queries
+  repeated kiapi.common.types.KIID items = 2;
+
+  // Optional list of item types to return. If empty, all connected item types are returned.
+  repeated kiapi.common.types.KiCadObjectType types = 3;
 }
 
 // A net may be part of multiple classes that have a priority ordering, which will result in a
