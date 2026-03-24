@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-20 17:11+0000\n"
+"PO-Revision-Date: 2026-03-24 13:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -392,27 +392,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
-msgstr "Otočiť X v smere HR"
+msgstr "Otočiť X v smere hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate X Counterclockwise"
-msgstr "Otočiť X proti smeru HR"
+msgstr "Otočiť X proti smeru hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Rotate Y Clockwise"
-msgstr "Otočiť Y v smere HR"
+msgstr "Otočiť Y v smere hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Rotate Y Counterclockwise"
-msgstr "Otočiť Y proti smeru HR"
+msgstr "Otočiť Y proti smeru hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Rotate Z Clockwise"
-msgstr "Otočiť Z v smere HR"
+msgstr "Otočiť Z v smere hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:95
 msgid "Rotate Z Counterclockwise"
-msgstr "Otočiť Z proti smeru HR"
+msgstr "Otočiť Z proti smeru hodinových ručičiek"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Move Board Left"
@@ -10515,7 +10515,7 @@ msgstr "Súbory priradení symbolov a puzdier"
 
 #: common/wildcards_and_files_ext.cpp:504
 msgid "Zip file"
-msgstr "Súbor ZIP"
+msgstr "Súbor Zip"
 
 #: common/wildcards_and_files_ext.cpp:510
 msgid "GenCAD 1.4 board files"
@@ -10552,7 +10552,7 @@ msgstr "PNG súbor"
 
 #: common/wildcards_and_files_ext.cpp:562
 msgid "Jpeg file"
-msgstr "Súbor JPEG"
+msgstr "Súbor Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:568
 msgid "Hotkey file"
@@ -11093,7 +11093,7 @@ msgstr ""
 #: eeschema/cross-probing.cpp:160
 #, c-format
 msgid "%s pin %s found"
-msgstr "Vývod %s puzdra %s nájdený"
+msgstr "%s vývod %s nájdený"
 
 #: eeschema/cross-probing.cpp:162
 #, c-format
@@ -11958,7 +11958,7 @@ msgstr "Všetkých %u odkazov zistených"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:695
 msgid "Invalid symbol library identifier"
-msgstr "Neplatný knižničný identifikátor symbolov"
+msgstr "Neplatný knižničný identifikátor symbolu"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:748
 #, c-format
@@ -12895,7 +12895,7 @@ msgstr "Vlastnosti označenia direktívy"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:142
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "Hierarchické vlastnosti čapu listu"
+msgstr "Vlastnosti vývodu hierarchického listu"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:520
 msgid "Label can not be empty."
@@ -13411,7 +13411,7 @@ msgid ""
 "Check this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
-"Zaškrtnite túto možnosť, ak sú všetky jednotky symbolu rovnaké okrem \n"
+"Zaškrtnite túto možnosť, ak sú všetky jednotky symbolu rovnaké okrem\n"
 "čísel vývodov."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
@@ -13446,11 +13446,11 @@ msgstr "Posun názvu v popise vývodov:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:126
 msgid "Show pin number text"
-msgstr "Zobraziť číslo vývodu"
+msgstr "Zobraziť text čísla vývodu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:130
 msgid "Show pin name text"
-msgstr "Zobraziť názov vývodu"
+msgstr "Zobraziť text názvu vývodu"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:134
 msgid "Pin name inside"
@@ -13615,7 +13615,7 @@ msgstr "Zobraziť číslo vývodu"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:179
 msgid "Show or hide pin numbers"
-msgstr "Zobrazí/skryje čísla vývodov"
+msgstr "Zobraziť alebo skryť čísla vývodov"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin name"
@@ -13624,11 +13624,11 @@ msgstr "Zobraziť názov vývodu"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:223
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:185
 msgid "Show or hide pin names"
-msgstr "Zobrazí/skryje čísla vývodov"
+msgstr "Zobraziť alebo skryť názvy vývodov"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:230
 msgid "Place pin names inside"
-msgstr "Umiestniť názov vývodu do vnútra"
+msgstr "Umiestniť názvy vývodov dovnútra"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:232
 msgid ""
@@ -13645,7 +13645,7 @@ msgstr "Posun pozície:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:241
 msgid "Margin between the pin name position and the symbol body."
-msgstr "Kraj mezi polohou vývodu a tělem symbolu."
+msgstr "Odstup mezi pozíciou názvu vývodu a telom symbolu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:248
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:120
@@ -13780,7 +13780,7 @@ msgstr "Migrovať autobusy"
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
-msgstr "Alternatívny názov PIN"
+msgstr "Alternatívny názov vývodu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
@@ -13789,7 +13789,7 @@ msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení výv
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
-msgstr "Ukončiť režim synchr. vývodov"
+msgstr "Ukončiť synchronizovaný režim vývodov"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:302
 msgid ""
@@ -13829,13 +13829,13 @@ msgstr "Synchronizovaný režim vývodov."
 #: eeschema/dialogs/dialog_pin_properties.cpp:454
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
-"Synchronizovaný režim vývodov.    Nový vývod bude pridaný do všetkých "
+"Synchronizovaný režim vývodov.  Nový vývod bude pridaný do všetkých "
 "jednotiek."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
 msgstr ""
-"Synchronizovaný režim vývodov.   Zhodné vývody v iných jednotkách budú "
+"Synchronizovaný režim vývodov.  Zodpovedajúce vývody v iných jednotkách budú "
 "aktualizované."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
@@ -13848,7 +13848,7 @@ msgstr "Číslo &vývodu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "Číslo PIN: 1 až 4 písmená alebo číslice ASCII"
+msgstr "Číslo vývodu: 1 až 4 ASCII písmená alebo číslice"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
@@ -14570,9 +14570,9 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
-"Použití relativních ciest v názvech hierarchických listů se zlepšuje "
-"přenositelnost schématu mezi systémy a platformami.  Použití absolutních "
-"ciest může vést k problémům s přenositelností."
+"Použitie relatívnych ciest v názvoch hierarchických listov, zlepšuje "
+"prenositeľnosť schémy medzi systémami a platformami.  Použitie absolútnych "
+"ciest, môže viesť k problémom s prenositeľnosťou."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:332
 msgid "Use Relative Path"
@@ -15694,11 +15694,11 @@ msgstr "Okolo osi Y"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:177
 msgid "Show pin numbers"
-msgstr "Zobraziť čísla PIN"
+msgstr "Zobraziť čísla vývodov"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:183
 msgid "Show pin names"
-msgstr "Zobraziť názvy pinov"
+msgstr "Zobraziť názvy vývodov"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:229
 msgid "Update Symbol from Library..."
@@ -19209,7 +19209,7 @@ msgid ""
 msgstr ""
 "Cesta k CADSTAR archívnym súborom schém (*.csa) súvisiacich k tejto CADSTAR "
 "knižnici súčiastok. Ak nie je zadaná žiadna cesta, predpokladá sa, že ide o "
-"súbor „symbol.csa“ v rovnakom priečinku."
+"súbor 'symbol.csa' v rovnakom priečinku."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
@@ -19629,11 +19629,11 @@ msgstr "Žiadny objekt schémy"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3021
 msgid "Invalid symbol library name"
-msgstr "Neplatný knižničný identifikátor symbolu"
+msgstr "Neplatný názov knižnice symbolu"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3062
 msgid "Invalid symbol library ID"
-msgstr "Neplatné knižničné ID symbolu"
+msgstr "Neplatný knižničný ID symbolu"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:221
 #, c-format
@@ -19782,7 +19782,7 @@ msgstr "Trojstavový"
 
 #: eeschema/sch_label.cpp:1235
 msgid "Hierarchical Sheet Pin"
-msgstr "Hierarchický vývod listu"
+msgstr "Vývod hierarchického listu"
 
 #: eeschema/sch_label.cpp:1248 eeschema/sch_tablecell.cpp:159
 #: eeschema/sch_text.cpp:703 eeschema/sch_textbox.cpp:541
@@ -20022,8 +20022,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Referencia knižničného prepojenia schematického symbolu '%s' nie je platná. "
-"Nepodarilo sa prepojiť symbol knižnice."
+"Referencia knižničného identifikátoru schematického symbolu '%s' nie je "
+"platná. Nepodarilo sa prepojiť symbol knižnice."
 
 #: eeschema/sch_screen.cpp:727
 #, c-format
@@ -20630,8 +20630,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
 msgstr ""
-"Celú schému sa nepodarilo načítať. Pri pokuse o načítanie schém "
-"hierarchického hárka sa vyskytli chyby."
+"Celú schému sa nebolo možné načítať.  Pri pokuse o načítanie schém "
+"hierarchických listov sa vyskytli chyby."
 
 #: eeschema/sheet.cpp:219
 msgid "Schematic Load Error"
@@ -20745,10 +20745,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Názov súboru '%s' môže spôsobiť problémy s existujúcim názvom súboru,\n"
-"ktorý je už definovaný v schéme, na systémoch ktoré nerozlišujú veľké a "
-"malé\n"
-"písmená. Toto spôsobí problémy,  ak skopírujete tento projekt do\n"
+"Názov súboru '%s' môže spôsobiť problémy s existujúcim \n"
+"názvom súboru, ktorý je už definovaný v schéme na systémoch,\n"
+" ktoré nerozlišujú veľké a malé písmená. \n"
+"Toto spôsobí problémy,  ak skopírujete tento projekt do\n"
 "operačného systému, ktorý nerozlišuje veľké a malé písmená.\n"
 "\n"
 "Chcete pokračovať?"
@@ -23247,11 +23247,11 @@ msgstr "Duplikuje poslednú nakreslenú položku"
 
 #: eeschema/tools/sch_actions.cpp:694 pcbnew/tools/pcb_actions.cpp:527
 msgid "Rotate Clockwise"
-msgstr "Otočiť doprava"
+msgstr "Otočiť v smere hodinových ručičiek"
 
 #: eeschema/tools/sch_actions.cpp:702 pcbnew/tools/pcb_actions.cpp:537
 msgid "Rotate Counterclockwise"
-msgstr "Otočiť doľava"
+msgstr "Otočiť proti smeru hodinových ručičiek"
 
 #: eeschema/tools/sch_actions.cpp:710 pcbnew/tools/pcb_actions.cpp:561
 msgid "Mirror Vertically"
@@ -33570,8 +33570,8 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
-"Pozitívne uhly predstavujú rotáciu proti smeru hodinových ručičiek. Uhol 0 "
-"vytvorí plný kruh rozdelený rovnomerne na časti \"Počítať\"."
+"Kladné uhly vyjadrujú rotáciu proti smeru hodinových ručičiek. Uhol 0 "
+"vytvorí plný kruh rozdelený rovnomerne na \"počet\" častí."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:376
 msgid "Item count:"
@@ -35408,6 +35408,7 @@ msgstr ""
 "vertikálneho odstupu je 10% výšky plôšky.\n"
 "Výsledná hodnota odstupu je súčet týchto hodnôt a absolútnej hodnoty "
 "odstupu.\n"
+"Záporná hodnota znamená menšiu veľkosť otvoru šablóny ako veľkosť podložky.\n"
 "Táto hodnota môže byť prepísaná v lokálnych nastaveniach jednotlivých plôšok "
 "v karte Odstup a nastavenia vo vlastnostiach plôšky."
 
@@ -45231,7 +45232,7 @@ msgstr "V knižnici sa nepodarilo nájsť komponent '%s' (Symdef ID: '%s')"
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1884
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
-msgstr "Nepodarilo sa nájsť dokumentáciu symbolu (Symdef ID: '%s') v knižnici"
+msgstr "Nepodarilo sa nájsť symbol dokumentácie (Symdef ID: '%s') v knižnici"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1953
 #, c-format
@@ -50039,7 +50040,7 @@ msgstr "Vyberie všetky puzdra a spoje v schematickom liste"
 
 #: pcbnew/tools/pcb_actions.cpp:2164
 msgid "Items in Same Hierarchical Sheet"
-msgstr "Položky na rovnakom hierarchickom hárku"
+msgstr "Položky na rovnakom hierarchickom liste"
 
 #: pcbnew/tools/pcb_actions.cpp:2165
 msgid "Selects all footprints and tracks in the same schematic sheet"
