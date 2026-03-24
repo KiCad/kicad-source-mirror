@@ -192,6 +192,12 @@ TOOLBAR_SETTINGS::TOOLBAR_SETTINGS( const wxString& aFullPath ) :
 
 std::optional<TOOLBAR_CONFIGURATION> TOOLBAR_SETTINGS::GetToolbarConfig( TOOLBAR_LOC aToolbar, bool aAllowCustom )
 {
+    std::optional<TOOLBAR_CONFIGURATION> defaultConfig = DefaultToolbarConfig( aToolbar );
+
+    // If the frame does not support this toolbar location, ignore any stored custom config too
+    if( !defaultConfig.has_value() )
+        return std::nullopt;
+
     // If custom is allowed, look for if a toolbar exists
     if( aAllowCustom )
     {
