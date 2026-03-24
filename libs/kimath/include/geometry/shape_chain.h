@@ -190,7 +190,6 @@ class SHAPE_CHAIN : public SHAPE
 
         const VECTOR2I NearestPoint( const VECTOR2I& aP, bool aAllowInternalShapePoints = true ) const;
         const VECTOR2I NearestPoint( const SEG& aSeg, int& aDistance ) const;
-
         int NearestShape( const VECTOR2I& aP ) const;
 
         const VECTOR2I& CLastPoint() const

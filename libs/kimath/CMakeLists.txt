@@ -36,6 +36,7 @@ set( KIMATH_SRCS
     src/geometry/shape_nearest_points.cpp
     src/geometry/shape_poly_set.cpp
     src/geometry/shape_rect.cpp
+    src/geometry/shape_chain.cpp
     src/geometry/shape_segment.cpp
     src/geometry/vector_utils.cpp
     src/geometry/shape_utils.cpp

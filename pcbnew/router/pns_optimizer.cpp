@@ -1574,4 +1574,11 @@ void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLin
 
 #endif
 
+bool OPTIMIZER::mergeDpSegments( DIFF_PAIR* aPair )
+{
+    assert(false);
+    return false;
+}
+
+
 }

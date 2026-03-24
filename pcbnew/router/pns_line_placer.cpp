@@ -277,7 +277,7 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
         // calculate a replacement route and check if it matches
         // the direction of the segment to be replaced
-        SHAPE_CHAIN replacement = R45::BuildInitialTrace( s->GetStart(), aEnd, dir );
+        SHAPE_CHAIN replacement = R45::BuildInitialTrace( s->GetStart(), aEnd, dir.IsDiagonal() );
 
         if( replacement.ShapeCount() < 1 )
             continue;
@@ -298,7 +298,7 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
     if( reduce_index >= 0 )
     {
         PNS_DBG( Dbg(), Message, wxString::Format( "Placer: reducing tail: %d" , reduce_index ) );
-        SHAPE_CHAIN reducedLine = R45::BuildInitialTrace( new_start, aEnd, new_direction );
+        SHAPE_CHAIN reducedLine = R45::BuildInitialTrace( new_start, aEnd, new_direction.IsDiagonal() );
 
         m_direction = new_direction;
         tail.Remove( reduce_index + 1, -1 );
@@ -2064,7 +2064,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
         {
             auto dir = ( m_tail.PointCount() > 0 ? m_direction : guessedDir );
 
-            l = R45::BuildInitialTrace( m_p_start, aP, dir, cornerMode );
+            l = R45::BuildInitialTrace( m_p_start, aP, dir.IsDiagonal(), cornerMode );
         }
 
         if( l.ShapeCount() > 1 && m_orthoMode )
@@ -2110,7 +2110,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
 
         if( v.PushoutForce( m_currentNode, lead, force, collMask, iterLimit ) )
         {
-            SHAPE_CHAIN line = R45::BuildInitialTrace( m_p_start, aP + force, guessedDir, cornerMode );
+            SHAPE_CHAIN line = R45::BuildInitialTrace( m_p_start, aP + force, guessedDir.IsDiagonal(), cornerMode );
             aHead = LINE( aHead, line );
 
             v.SetPos( v.Pos() + force );

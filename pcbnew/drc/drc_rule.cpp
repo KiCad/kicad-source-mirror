@@ -81,6 +81,7 @@ std::optional<DRC_CONSTRAINT> DRC_RULE::FindConstraint( DRC_CONSTRAINT_T aType )
 
 wxString DRC_RULE::FormatRuleFromProto( const kiapi::board::CustomRule& aRule, wxString* aErrorText )
 {
+    #if 0
     if( aErrorText )
         *aErrorText = wxEmptyString;
 
@@ -370,6 +371,9 @@ wxString DRC_RULE::FormatRuleFromProto( const kiapi::board::CustomRule& aRule, w
 
     ruleText << ")\n";
     return ruleText;
+    #endif
+
+    return wxT("");
 }
 
 

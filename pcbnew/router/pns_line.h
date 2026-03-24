@@ -128,33 +128,33 @@ public:
     }
 
     ///< Assign a shape to the line (a polyline/line chain).
-    void SetShape( const SHAPE_CHAIN& aLine )
+    void SetShape(  std::unique_ptr<SHAPE_CHAIN> aLine )
     {
-        m_line = aLine;
-        m_line.SetWidth( m_width );
+        m_line = std::move( aLine );
+        m_line->SetWidth( m_width );
     }
 
     ///< Return the shape of the line.
     const SHAPE* Shape( int aLayer ) const override { return &m_line; }
 
     ///< Modifiable accessor to the underlying shape.
-    SHAPE_CHAIN& Line() { return m_line; }
-    const SHAPE_CHAIN& CLine() const { return m_line; }
+    SHAPE_CHAIN& Line() { return *m_line.get(); }
+    const SHAPE_CHAIN& CLine() const { return *m_line.get(); }
 
-    int PointCount() const { return m_line.PointCount(); }
-    int ShapeCount() const { return m_line.ShapeCount(); }
+    int PointCount() const { return m_line->PointCount(); }
+    int ShapeCount() const { return m_line->ShapeCount(); }
 
     ///< Return the \a aIdx-th point of the line.
-    const VECTOR2I& CPoint( int aIdx ) const { return m_line.CPoint( aIdx ); }
-    const VECTOR2I& CLastPoint() const { return m_line.CLastPoint(); }
-    const SHAPE_BICONNECTED& CShape( int aIdx ) const { return *m_line.CShape( aIdx ); }
+    const VECTOR2I& CPoint( int aIdx ) const { return m_line->CPoint( aIdx ); }
+    const VECTOR2I& CLastPoint() const { return m_line->CLastPoint(); }
+    const SHAPE_BICONNECTED& CShape( int aIdx ) const { return *m_line->CShape( aIdx ); }
     ITEM* CLinkedItem( int aIdx ) const { return GetLink( aIdx ); }
 
     ///< Set line width.
     void SetWidth( int aWidth )
     {
         m_width = aWidth;
-        m_line.SetWidth( aWidth );
+        m_line->SetWidth( aWidth );
     }
 
     ///< Return line width.
@@ -219,15 +219,15 @@ public:
 
     virtual VECTOR2I Anchor( int n ) const override
     {
-        if( m_line.PointCount() < 1 )
+        if( m_line->PointCount() < 1 )
             return VECTOR2I();
 
-        return ( n == 0 ) ? m_line.CPoint( 0 ) : m_line.CPoint( -1 );
+        return ( n == 0 ) ? m_line->CPoint( 0 ) : m_line->CPoint( -1 );
     }
 
     virtual int AnchorCount() const override
     {
-        return ( m_line.PointCount() >= 2 ) ? 2 : m_line.PointCount();
+        return ( m_line->PointCount() >= 2 ) ? 2 : m_line->PointCount();
     }
 
     void SetBlockingObstacle( ITEM* aObstacle ) { m_blockingObstacle = aObstacle; }
@@ -268,7 +268,7 @@ private:
     VECTOR2I snapDraggedCorner( const SHAPE_CHAIN& aPath, const VECTOR2I& aP,
                                 int aIndex ) const;
 
-    SHAPE_CHAIN      m_line;                ///< The actual shape of the line.
+    std::unique_ptr<SHAPE_CHAIN> m_line;                ///< The actual shape of the line.
     int              m_width;               ///< Our width.
 
 

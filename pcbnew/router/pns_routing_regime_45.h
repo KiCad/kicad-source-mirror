@@ -34,12 +34,30 @@ public:
             m_dir( aDir )
         {};
 
-        DIRECTION( const SEG& aSeg );
-        DIRECTION( const SHAPE_SEGMENT& aSeg );
-        DIRECTION( const SHAPE_BICONNECTED& aSeg, bool aTakeFirstPoint );
-        DIRECTION( EDA_ANGLE aAngle );
+        DIRECTION( const SEG& aSeg )
+        {
 
-        wxString Format() const;
+        }
+
+        DIRECTION( const SHAPE_SEGMENT& aSeg )
+        {
+
+        }
+
+        DIRECTION( const SHAPE_BICONNECTED& aSeg, bool aTakeFirstPoint )
+        {
+
+        }
+
+        DIRECTION( EDA_ANGLE aAngle )
+        {
+
+        }
+
+        wxString Format() const
+        {
+            return wxT("");
+        }
 
         bool operator==( const DIRECTION& aOther ) const
         {
@@ -110,14 +128,21 @@ public:
 
     static const SHAPE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
                                               bool aStartDiagonal = false,
-                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 );
-    static const SHAPE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
+                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 )
+                                              {
+                                                return SHAPE_CHAIN();
+                                              }
+    
+    /*                                          static const SHAPE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
                                               DIRECTION aInitDirection = DIRECTION(DIRS::N),
-                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 );
+                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 )
+                                              {
 
-    static ANGLE_TYPE Angle( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB ); // fixme implement
-    static ANGLE_TYPE Angle( const SHAPE_CHAIN& aLine, int aVertex ); // fixme implement
-    static ANGLE_TYPE Angle( DIRECTION aA, DIRECTION aB ); // fixme implement
+                                              } */
+
+    static ANGLE_TYPE Angle( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB ) { return ANG_UNDEFINED; } // fixme implement
+    static ANGLE_TYPE Angle( const SHAPE_CHAIN& aLine, int aVertex ) { return ANG_UNDEFINED; } // fixme implement
+    static ANGLE_TYPE Angle( DIRECTION aA, DIRECTION aB ) { return ANG_UNDEFINED; } // fixme implement
 
 
 };
