@@ -1616,7 +1616,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 // differently to KiCad), so set it to an empty one.
                 DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
                 drawingSheet.SetEmptyLayout();
-                BASE_SCREEN::m_DrawingSheetFileName = "empty.kicad_wks";
+                BASE_SCREEN::m_DrawingSheetFileName = DS_DATA_MODEL::EmptyLayoutName();
 
                 newfilename.SetPath( Prj().GetProjectPath() );
                 newfilename.SetName( Prj().GetProjectName() );
