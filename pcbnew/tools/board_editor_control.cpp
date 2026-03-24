@@ -746,95 +746,53 @@ int BOARD_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     wxString details;
     bool     quiet = aEvent.Parameter<bool>();
 
-    // Repair duplicate IDs and missing nets.
-    std::set<KIID> ids;
-    int            duplicates = 0;
-
-    auto processItem =
-            [&]( EDA_ITEM* aItem )
-            {
-                if( ids.count( aItem->m_Uuid ) )
-                {
-                    duplicates++;
-                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
-                }
-
-                ids.insert( aItem->m_Uuid );
-
-                BOARD_CONNECTED_ITEM* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
-
-                if( cItem && cItem->GetNetCode() )
-                {
-                    NETINFO_ITEM* netinfo = cItem->GetNet();
-
-                    if( netinfo && !board()->FindNet( netinfo->GetNetname() ) )
-                    {
-                        board()->Add( netinfo );
-
-                        details += wxString::Format( _( "Orphaned net %s re-parented.\n" ),
-                                                     netinfo->GetNetname() );
-                        errors++;
-                    }
-                }
-            };
-
-    // Footprint IDs are the most important, so give them the first crack at "claiming" a
-    // particular KIID.
-
-    for( FOOTPRINT* footprint : board()->Footprints() )
-        processItem( footprint );
-
-    // After that the principal use is for DRC marker pointers, which are most likely to pads
-    // or tracks.
-
-    for( FOOTPRINT* footprint : board()->Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
-            processItem( pad );
-    }
-
-    for( PCB_TRACK* track : board()->Tracks() )
-        processItem( track );
-
-    // From here out I don't think order matters much.
-
-    for( FOOTPRINT* footprint : board()->Footprints() )
-    {
-        processItem( &footprint->Reference() );
-        processItem( &footprint->Value() );
-
-        for( BOARD_ITEM* item : footprint->GraphicalItems() )
-            processItem( item );
-
-        for( ZONE* zone : footprint->Zones() )
-            processItem( zone );
-
-        for( PCB_GROUP* group : footprint->Groups() )
-            processItem( group );
-    }
-
-    // Everything owned by the board not handled above
-    for( BOARD_ITEM* item : board()->GetItemSet() )
-    {
-        // Top-level footprints and tracks were handled above.
-        switch( item->Type() )
-        {
-        case PCB_FOOTPRINT_T:
-        case PCB_TRACE_T:
-        case PCB_ARC_T:
-        case PCB_VIA_T:
-            break;
-
-        default:
-            processItem( item );
-            break;
-        }
-    }
+    int duplicates = board()->RepairDuplicateItemUuids();
 
     if( duplicates )
     {
         errors += duplicates;
         details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
+    }
+
+    for( FOOTPRINT* footprint : board()->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            BOARD_CONNECTED_ITEM* cItem = pad;
+
+            if( cItem->GetNetCode() )
+            {
+                NETINFO_ITEM* netinfo = cItem->GetNet();
+
+                if( netinfo && !board()->FindNet( netinfo->GetNetname() ) )
+                {
+                    board()->Add( netinfo );
+
+                    details += wxString::Format( _( "Orphaned net %s re-parented.\n" ),
+                                                 netinfo->GetNetname() );
+                    errors++;
+                }
+            }
+        }
+    }
+
+    for( PCB_TRACK* track : board()->Tracks() )
+    {
+        BOARD_CONNECTED_ITEM* cItem = track;
+
+        if( cItem->GetNetCode() )
+        {
+            NETINFO_ITEM* netinfo = cItem->GetNet();
+
+            if( netinfo && !board()->FindNet( netinfo->GetNetname() ) )
+            {
+                board()->Add( netinfo );
+
+                details += wxString::Format( _( "Orphaned net %s re-parented.\n" ),
+                                             netinfo->GetNetname() );
+                errors++;
+            }
+        }
     }
 
     /*******************************

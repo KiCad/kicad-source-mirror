@@ -40,6 +40,13 @@
 #include <properties/property_mgr.h>
 
 
+BOARD_ITEM::~BOARD_ITEM()
+{
+    if( m_boardCacheOwner )
+        m_boardCacheOwner->UncacheItemByPtr( this );
+}
+
+
 bool BOARD_ITEM::IsGroupableType() const
 {
     switch ( Type() )

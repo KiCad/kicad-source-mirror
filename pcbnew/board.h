@@ -609,6 +609,20 @@ public:
      */
     BOARD_ITEM* ResolveItem( const KIID& aID, bool aAllowNullptrReturn = false ) const;
 
+    /**
+     * Rebind the UUID of an attached item and keep the item-by-id cache coherent.
+     */
+    void RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId );
+
+    /**
+     * Rebind duplicate attached-item UUIDs so each live board item has a unique ID.
+     *
+     * Traversal order is stable and earlier items keep their existing UUIDs.
+     *
+     * @return number of duplicate IDs repaired.
+     */
+    int RepairDuplicateItemUuids();
+
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 
     /**
@@ -1492,6 +1506,15 @@ public:
     }
 
     /**
+     * Return a cached item for @a aId if the entry is still self-consistent.
+     *
+     * UUIDs can still be rewritten in-place in some attached-item paths.  When that happens, the
+     * cache may temporarily contain a stale alias from the old UUID to the live item.  Drop those
+     * aliases on read so lookups never return an item whose current UUID no longer matches the key.
+     */
+    BOARD_ITEM* GetCachedItemById( const KIID& aId ) const;
+
+    /**
      * Add an item to the item-by-id cache.
      *
      * This is called by FOOTPRINT::Add() when items are added to footprints that are already
@@ -1502,7 +1525,10 @@ public:
         if( IsFootprintHolder() )
             return;
 
-        m_itemByIdCache.insert( { aItem->m_Uuid, aItem } );
+        auto [it, inserted] = m_itemByIdCache.insert( { aItem->m_Uuid, aItem } );
+
+        if( inserted )
+            aItem->m_boardCacheOwner = this;
     }
 
     /**
@@ -1513,8 +1539,24 @@ public:
      */
     void UncacheItemById( const KIID& aId )
     {
-        m_itemByIdCache.erase( aId );
+        auto it = m_itemByIdCache.find( aId );
+
+        if( it != m_itemByIdCache.end() )
+        {
+            it->second->m_boardCacheOwner = nullptr;
+            m_itemByIdCache.erase( it );
+        }
     }
+
+    /**
+     * Remove every cache entry that still points to @a aItem.
+     *
+     * Safe to call from ~BOARD_ITEM and UUID-rebind paths: avoids evicting live items that
+     * share the same UUID while still purging stale aliases after in-place UUID changes.
+     */
+    void UncacheItemByPtr( const BOARD_ITEM* aItem );
+
+    BOARD_ITEM* CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const;
 
     // --------- Item order comparators ---------
 
