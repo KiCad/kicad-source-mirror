@@ -3282,6 +3282,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 // will not properly select it later on
                 dupe_item->ClearSelected();
 
+                if( dupe_item->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( dupe_item )->IsHatchedFill() )
+                {
+                    dupe_item->SetFlags( IS_NEW );
+                }
+
                 new_items.push_back( dupe_item );
                 commit.Add( dupe_item );
                 break;
