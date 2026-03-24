@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
 "PO-Revision-Date: 2026-03-24 13:10+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -20446,7 +20446,7 @@ msgstr "Konnte heruntergeladenes Symbol nicht für Platzierung laden."
 
 #: eeschema/remote_symbol_import_utils.cpp:237
 msgid "Unable to access the schematic placement tools."
-msgstr "Konnte nicht auf Platzungswerkzeuge im Schaltplan zugreifen."
+msgstr "Konnte nicht auf Platzierungswerkzeuge im Schaltplan zugreifen."
 
 #: eeschema/sch_base_frame.cpp:746
 msgid "Create New Library"
