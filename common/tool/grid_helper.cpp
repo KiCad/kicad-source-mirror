@@ -37,6 +37,7 @@
 #include <tool/tools_holder.h>
 #include <view/view.h>
 #include <settings/app_settings.h>
+#include <gal/painter.h>
 
 
 GRID_HELPER::GRID_HELPER() :
@@ -63,8 +64,12 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
     if( !m_toolMgr )
         return;
 
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-    wxUnusedVar( aConstructionLayer );
+    KIGFX::VIEW*            view = m_toolMgr->GetView();
+    KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
+    KIGFX::COLOR4D          constructionColor = settings->GetLayerColor( aConstructionLayer );
+
+    m_constructionGeomPreview.SetColor( constructionColor );
+    m_constructionGeomPreview.SetPersistentColor( constructionColor );
 
     view->Add( &m_constructionGeomPreview );
     view->SetVisible( &m_constructionGeomPreview, false );

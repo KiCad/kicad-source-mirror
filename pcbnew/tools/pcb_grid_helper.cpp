@@ -166,6 +166,7 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
     KIGFX::VIEW*            view = m_toolMgr->GetView();
     KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
     KIGFX::COLOR4D          auxItemsColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
+    KIGFX::COLOR4D          anchorColor = settings->GetLayerColor( LAYER_ANCHOR );
 
     m_viewAxis.SetSize( 20000 );
     m_viewAxis.SetStyle( KIGFX::ORIGIN_VIEWITEM::CROSS );
@@ -179,6 +180,7 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
     m_viewSnapPoint.SetColor( auxItemsColor );
     m_viewSnapPoint.SetDrawAtZero( true );
     view->Add( &m_viewSnapPoint );
+    getSnapManager().SetSnapGuideColors( anchorColor, anchorColor.Brightened( 0.2 ) );
     view->SetVisible( &m_viewSnapPoint, false );
 
     if( m_toolMgr->GetModel() )
