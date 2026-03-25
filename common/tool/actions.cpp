@@ -352,14 +352,16 @@ TOOL_ACTION ACTIONS::selectSetRect( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Rectangle" ) )
         .Tooltip( _( "Set selection mode to use rectangle" ) )
-        .Icon( BITMAPS::cursor ) );
+        .Icon( BITMAPS::cursor )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION ACTIONS::selectSetLasso( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.selectSetLasso" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Lasso" ) )
         .Tooltip( _( "Set selection mode to use polygon lasso" ) )
-        .Icon( BITMAPS::lasso ) );
+        .Icon( BITMAPS::lasso )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION ACTIONS::selectAll( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.selectAll" )
