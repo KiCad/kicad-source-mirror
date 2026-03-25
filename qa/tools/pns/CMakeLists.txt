@@ -71,7 +71,6 @@ add_executable( pns_debug_tool
     ../../qa_utils/utility_program.cpp
     ../../qa_utils/mocks.cpp
 
-    shape_chain.cpp
     playground.cpp
     pns_debug_tool_main.cpp
   )

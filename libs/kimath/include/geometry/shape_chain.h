@@ -84,32 +84,65 @@ class SHAPE_CHAIN : public SHAPE
 
         typedef std::vector<INTERSECTION> INTERSECTIONS;
 
+        SHAPE_CHAIN( const SHAPE_CHAIN& aShape ) :
+            SHAPE(SH_CHAIN),
+            m_closed( aShape.m_closed ),
+            m_cachedBBox( aShape.m_cachedBBox )
+        {
+            reserve( aShape.ShapeCount() );
+            for( const auto sh : aShape.CShapes() )
+            {
+                m_shapes.push_back( cloneBShape( sh ) );
+            }
+        }
+
         SHAPE_CHAIN() :
-            SHAPE(SH_CHAIN)
+            SHAPE(SH_CHAIN),
+            m_closed( false )
         {
 
         }
 
-        SHAPE_CHAIN ( const std::vector<SHAPE_BICONNECTED*>aShapes ) : 
+        SHAPE_CHAIN ( const std::vector<SHAPE_BICONNECTED*>& aShapes, bool aClosed = false ) : 
             SHAPE(SH_CHAIN),
-            m_shapes( aShapes )
+            m_shapes( aShapes ),
+            m_closed( aClosed )
         {
         }
 
         ~SHAPE_CHAIN()
         {
-            for( auto shape : m_shapes )
-                delete shape;
+            releaseShapes();
         }
 
-        static const SHAPE_CHAIN ConstructFromPoints( const std::vector<VECTOR2I>& aPts )
+
+        SHAPE_CHAIN& operator=( const SHAPE_CHAIN& aB )
+        {
+            releaseShapes();
+            m_closed = aB.m_closed;
+            m_cachedBBox = aB.m_cachedBBox;
+            reserve( aB.ShapeCount() );
+
+            for( const auto sh : aB.CShapes() )
+            {
+                m_shapes.push_back( cloneBShape( sh ) );
+            }
+
+            return *this;
+        }
+
+        
+        static const SHAPE_CHAIN ConstructFromPoints( const std::vector<VECTOR2I>& aPts, int aWidth = 0 )
         {
             SHAPE_CHAIN chain;
 
-            chain.reserve( aPts.size() );
-            for( auto& pt : aPts )
+            wxASSERT( aPts.size() >= 2 );
+
+            chain.reserve( aPts.size() - 1);
+            
+            for( size_t i = 0; i < aPts.size() - 1; i++ )
             {
-                chain.Append( pt );
+                chain.Append( SEG( aPts[i], aPts[i + 1] ), aWidth );
             }
 
             return chain;
@@ -224,9 +257,24 @@ class SHAPE_CHAIN : public SHAPE
 
         void Append( const VECTOR2I& aP, int aWidth = 0 )
         {
-            wxASSERT( !m_shapes.empty() ); // can't have a single-point chain
-            auto lastShape = m_shapes.back();
-            m_shapes.push_back( new SHAPE_SEGMENT( lastShape->GetEnd(), aP, aWidth ? aWidth : lastShape->GetWidth() ) );
+            if( m_shapes.empty() )
+            {
+                m_shapes.push_back( new SHAPE_SEGMENT( aP, aP, aWidth ) );
+            }
+            else
+            {
+                auto lastShape = m_shapes.back();
+                if( lastShape->Type() == SH_SEGMENT && ( lastShape->GetStart() == lastShape->GetEnd() ) )
+                {
+                    // fixme: special case for construcring SLCs by subsequently appending points. To be removed once we have the router working again.
+                    auto seg = static_cast<SHAPE_SEGMENT*>( lastShape );
+                    seg->SetSeg( SEG( seg->GetStart(), aP ) );
+                }
+                else
+                {
+                    m_shapes.push_back( new SHAPE_SEGMENT( lastShape->GetEnd(), aP, aWidth ? aWidth : lastShape->GetWidth() ) );
+                }
+            }
         }
 
         void Append( const SEG& aSeg, int aWidth = 0 )
@@ -261,7 +309,7 @@ class SHAPE_CHAIN : public SHAPE
             m_shapes.reserve( m_shapes.size() + aShape.m_shapes.size() );
 
             for( const auto& sh : aShape.m_shapes )
-                m_shapes.push_back( static_cast<SHAPE_BICONNECTED*>( sh->Clone() ) );
+                m_shapes.push_back( cloneBShape( sh ) );
         }
 
         void Append( int x, int y, int aWidth = 0 )
@@ -467,7 +515,7 @@ return 0;
             chain.m_shapes.reserve( m_shapes.size() );
             for( auto sh : m_shapes )
             {
-                chain.m_shapes.push_back( static_cast<SHAPE_BICONNECTED*>( sh->Reversed()->Clone() ) );
+                chain.m_shapes.push_back( cloneBShape( sh->Reversed().get() ) );
             }
             return chain;
         }
@@ -564,9 +612,20 @@ return 0;
 
     private:
 
+        static SHAPE_BICONNECTED* cloneBShape( const SHAPE_BICONNECTED* aRef )
+        {
+            return static_cast<SHAPE_BICONNECTED*>( aRef->Clone() );
+        }
+
         void reserve( size_t count )
         {
             m_shapes.reserve( count );
+        }
+
+        void releaseShapes()
+        {
+            for( auto shape : m_shapes )
+                delete shape;
         }
 
         std::vector<SHAPE_BICONNECTED*> m_shapes;

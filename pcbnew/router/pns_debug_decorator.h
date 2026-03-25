@@ -102,8 +102,7 @@ public:
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() )
     {
         SHAPE_CHAIN lc;
-        lc.Append( aSeg.A );
-        lc.Append( aSeg.B );
+        lc.Append( aSeg );
         AddShape( &lc, aColor, aOverrideWidth, aName, aSrcLoc );
     }
 
