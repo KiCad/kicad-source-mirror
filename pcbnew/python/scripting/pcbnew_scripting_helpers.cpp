@@ -165,12 +165,9 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
 
     if( !project )
     {
-        if( wxFileExists( projectPath ) )
-        {
-            // cli
-            settingsManager.LoadProject( projectPath, aSetActive );
-            project = settingsManager.GetProject( projectPath );
-        }
+        // cli
+        settingsManager.LoadProject( projectPath, aSetActive );
+        project = settingsManager.GetProject( projectPath );
     }
     else if( s_PcbEditFrame && project == &settingsManager.Prj() )
     {

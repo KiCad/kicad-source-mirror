@@ -104,16 +104,8 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
 
     if( !project )
     {
-        if( wxFileExists( projectPath ) )
-        {
-            // cli
-            manager.LoadProject( projectPath, true );
-            project = manager.GetProject( projectPath );
-        }
-        else
-        {
-            manager.LoadProject( "" );
-        }
+        manager.LoadProject( projectPath, true );
+        project = manager.GetProject( projectPath );
     }
 
     schematic->Reset();
