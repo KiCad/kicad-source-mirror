@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-24 13:09+0000\n"
+"PO-Revision-Date: 2026-03-25 14:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -2578,7 +2578,7 @@ msgstr "Protokol"
 
 #: common/dialogs/dialog_assign_netclass.cpp:213
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Aktuálne odpovedajúce siete:</b>"
+msgstr "<b>Aktuálne zodpovedajúce spoje:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
 msgid "Pattern:"
@@ -3351,7 +3351,7 @@ msgid ""
 "<b>Append Selected Option</b> button."
 msgstr ""
 "Vyberte <b>Voľba možnosti</b> v zozname vyššie a potom kliknite na tlačidlo "
-"<b>Pripojiť vybratú možnosť</b>."
+"<b>Pripojiť vybranú možnosť</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -3379,7 +3379,7 @@ msgstr "Možnosti podporované aktuálnym doplnkom"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<<    Pripojiť vybratú možnosť"
+msgstr "<<    Pripojiť vybranú možnosť"
 
 #: common/dialogs/dialog_print_generic.cpp:96
 #: common/dialogs/dialog_print_generic.cpp:299
@@ -4076,7 +4076,7 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
-"Nastavte mierku pre plátno.\n"
+"Nastaviť mierku pre plátno.\n"
 "\n"
 "Na displejoch s vysokým DPI na niektorých platformách nemôže KiCad určiť "
 "faktor mierky. V takom prípade bude možno potrebné nastaviť túto hodnotu "
@@ -4439,7 +4439,7 @@ msgstr ""
 "Na prepojenie automatických správ z tej istej inštalácie KiCad sa vygeneruje "
 "jedinečný identifikátor, ktorý je úplne náhodný a používa sa iba pre účely "
 "hlásenia zlyhania. K tomuto identifikátoru nie sú uložené ani pripojené "
-"žiadne osobné údaje (PII) vrátane IP adresy. Toto ID môžete kedykoľvek "
+"žiadne osobné údaje (PII) vrátane IP adresy. Toto ID je možné kedykoľvek "
 "prestaviť na stránke vlastností pre zhromažďovanie údajov.\n"
 "\n"
 "Ak sa rozhodnete dobrovoľne sa zúčastniť, KiCad automaticky spracuje "
@@ -5665,7 +5665,7 @@ msgstr "Vyžaduje sa predvolená trieda spojov."
 #: common/dialogs/panel_setup_netclasses.cpp:915
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr "<b>Siete zodpovedajúce '%s':</b>"
+msgstr "<b>Spoje zodpovedajúce '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 msgid "Netclasses"
@@ -5860,9 +5860,9 @@ msgid ""
 "add project-specific libraries if desired."
 msgstr ""
 "KiCad obsahuje rozsiahlu sadu knižníc symbolov a puzdier, ktoré spravuje tím "
-"KiCad knihovníkov.   Môžete si tiež vytvoriť vlastné knižnice a nainštalovať "
-"knižnice tretích strán pomocou správcu doplnkov a obsahu, alebo z iných "
-"zdrojov.\n"
+"KiCad knihovníkov.   Je možné si tiež vytvoriť vlastné knižnice a "
+"nainštalovať knižnice tretích strán pomocou správcu doplnkov a obsahu, alebo "
+"z iných zdrojov.\n"
 "\n"
 "Tabuľky knižníc sú konfiguračné súbory, ktoré obsahujú zoznam knižníc, ktoré "
 "sa majú načítať. Globálne knižnice sú k dispozícii v každom projekte a v "
@@ -5907,8 +5907,8 @@ msgid ""
 "install the libraries separately in order for them to be available."
 msgstr ""
 "Vstavané tabuľky knižníc nebolo možné nájsť na očakávanom mieste. Zvyčajne "
-"to znamená, že ste nainštalovali softvér KiCad bez inštalácie knižníc. "
-"Môžete pokračovať v inštalácii, ale knižnice budete musieť nainštalovať "
+"to znamená, že ste nainštalovali softvér KiCad bez inštalácie knižníc. Je "
+"možné pokračovať v inštalácii, ale knižnice bude potrebné nainštalovať "
 "samostatne, aby boli k dispozícii."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
@@ -5968,7 +5968,7 @@ msgstr "Vybrať inú cestu"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:45
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "Vybratá cesta neobsahuje platné nastavenia KiCad-u!"
+msgstr "Vybraná cesta neobsahuje platné nastavenia KiCad-u!"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:52
 msgid "Start with default settings"
@@ -8108,7 +8108,7 @@ msgstr "Import súboru bol zrušený používateľom."
 #: common/io/cadstar/cadstar_archive_parser.cpp:2562
 #: common/io/cadstar/cadstar_archive_parser.cpp:2573
 msgid "The selected file is not valid or might be corrupt!"
-msgstr "Vybratý súbor je neplatný alebo môže byť poškodený!"
+msgstr "Vybraný súbor je neplatný alebo môže byť poškodený!"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2680
 #, c-format
@@ -9032,7 +9032,7 @@ msgstr "Nezhoda typov medzi '%s' a %lf"
 #: common/libeval_compiler/libeval_compiler.cpp:1190
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Nezhoda typu pre %lf a '%s'"
+msgstr "Nezhoda typu medzi %lf a '%s'"
 
 #: common/libraries/lib_table_grid_data_model.cpp:122
 msgid "Edit settings"
@@ -10059,7 +10059,7 @@ msgstr "Vykonajte akciu s pravým tlačidlom myši"
 
 #: common/tool/actions.cpp:314
 msgid "Cut selected item(s) to clipboard"
-msgstr "Vystrihnúť vybraté položky do schránky"
+msgstr "Vystrihnúť vybrané položky do schránky"
 
 #: common/tool/actions.cpp:325
 msgid "Copy selected item(s) to clipboard"
@@ -10117,7 +10117,7 @@ msgstr "Duplikovať"
 
 #: common/tool/actions.cpp:392
 msgid "Duplicates the selected item(s)"
-msgstr "Duplikuje vybraté položky"
+msgstr "Duplikuje vybrané položky"
 
 #: common/tool/actions.cpp:405
 msgid "Delete selected item(s)"
@@ -10746,7 +10746,7 @@ msgstr "Režim zobrazenia jednej vrstvy"
 
 #: common/tool/actions.cpp:1202
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "Neaktívne vrstvy môžete prepínať medzi normálnymi a stlmenými"
+msgstr "Prepínať neaktívne vrstvy medzi normálnym a stlmeným zobrazením"
 
 #: common/tool/actions.cpp:1210
 msgid "Inactive Layer View Mode (3-state)"
@@ -11904,7 +11904,7 @@ msgstr "Filtrované podľa %s"
 #: cvpcb/cvpcb_mainframe.cpp:848
 #, c-format
 msgid ": %i matching footprints"
-msgstr ": %i zhodných puzdier"
+msgstr ": %i zodpovedajúcich puzdier"
 
 #: cvpcb/cvpcb_mainframe.cpp:860
 #, c-format
@@ -11951,7 +11951,8 @@ msgstr "Súbor projektu: '%s'"
 #: kicad/project_tree_pane.cpp:1104
 msgid "No text editor selected in KiCad.  Please choose one."
 msgstr ""
-"V aplikácii KiCad nie je vybratý žiadny textový editor. Vyberte si jednu."
+"V aplikácii KiCad nie je vybraný žiadny textový editor. Je potrebné jeden "
+"vybrať."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:215
 msgid "Footprint Association File"
@@ -12454,7 +12455,7 @@ msgstr "(chýba súbor)"
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Vybratý skript generátora zoznamu materiálu %s nebolo možné nájsť."
+msgstr "Vybraný skript generátora zoznamu materiálu %s nebolo možné nájsť."
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -14838,13 +14839,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
-"Vyberať symbol, z ktorého sa tento symbol odvodí, alebo vyberte\n"
-"<Žiadne> pre východzí symbol.\n"
+"Vybrať symbol, z ktorého má byť odvodený tento symbol, alebo vybrať\n"
+"<Žiadny> pre východzí symbol.\n"
 "\n"
 "Odvodené symboly sa predtým označovali ako aliasy.\n"
-"Toto už neplatí a všetky symboly sú\n"
-"odvodené z iných symbolov alebo sú samostatné\n"
-"ako východzie symboly."
+"To už neplatí a všetky symboly sú buď\n"
+"odvodené z iných symbolov, alebo stoja samostatne ako\n"
+"východzie symboly."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:167
 msgid "Define as power symbol"
@@ -15717,7 +15718,7 @@ msgstr "Do&zadu"
 #: eeschema/dialogs/dialog_sch_find_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match &case"
-msgstr "Zhoda pri &veľkosti písmen"
+msgstr "Rozlišovať veľkosť písmen"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -15747,7 +15748,7 @@ msgstr "Hľadať iba v aktuálnom &výbere"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:105
 msgid "Replace matches in reference designators"
-msgstr "Nahraďte zhody v referenčných označeniach"
+msgstr "Nahradiť zhody v referenčných označeniach"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:110
 #: pcbnew/dialogs/dialog_find_base.cpp:88
@@ -17458,7 +17459,7 @@ msgstr ""
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
 msgstr ""
-"Aktualizovať atribút symbolu ako \"Neosadzovať\" aby zodpovedal puzdru."
+"Aktualizovať atribúty symbolu ako \"Neosadzovať\" aby zodpovedali puzdru."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -17803,15 +17804,15 @@ msgstr "Ak nie je začiarknuté, ťahaním myši sa vykoná operácia presunu (M
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:61
 msgid "Automatically start wires on unconnected pins"
-msgstr "Automaticky spustiť vodiče na nepripojených kolíkoch"
+msgstr "Automaticky začať kresliť spoje na nepripojených vývodoch"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:62
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Ak je táto možnosť povolená, môžete spustiť zapojenie kliknutím na nespojené "
-"kolíky, aj keď drôtový nástroj nie je aktívny"
+"Ak je táto možnosť povolená, je možné začať kresliť spoj iba kliknutím na "
+"nepripojený vývod, aj keď nie je aktívny nástroj kreslenia spojov"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:66
 #: pcbnew/dialogs/panel_edit_options_base.cpp:427
@@ -17831,7 +17832,7 @@ msgstr "Atomaticky očíslovať symboly"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid "Allow unconstrained pin swaps"
-msgstr "Povoliť neobmedzené výmeny vývodov"
+msgstr "Povoliť neobmedzené zámeny vývodov"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:75
 msgid ""
@@ -21063,7 +21064,7 @@ msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
 msgstr ""
-"Nesúlad verzie symbolu pre '%s' (%s): schéma má symversion %s, knižnicový "
+"Nesúlad verzie symbolu pre '%s' (%s): schéma má symversion %s, knižničný "
 "symbol má symversion %s."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
@@ -24935,8 +24936,8 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Knižnica '%s' je len na čítanie. Vyberte inú knižnicu, do ktorej chcete "
-"uložiť symbol '%s'."
+"Knižnica '%s' je len na čítanie. Je potrebné vybrať inú knižnicu, do ktorej "
+"sa má uložiť symbol '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:936
 #, c-format
@@ -25337,7 +25338,7 @@ msgstr "Prepojenie puzdier zrušil používateľ."
 #: eeschema/tools/backannotate.cpp:754
 #, c-format
 msgid "Swap %s unit %s with unit %s."
-msgstr "Vymeniť %s jednotku %s za jednotku %s."
+msgstr "Zameniť %s jednotku %s za jednotku %s."
 
 #: eeschema/tools/backannotate.cpp:804
 msgid "true"
@@ -25398,8 +25399,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects."
 msgstr ""
-"Vymenilo by vývodov %s %s a %s podľa DPS, ale symbol je zdieľaný v iných "
-"projektoch."
+"Zameniť %s vývody %s a %s tak, aby zodpovedali DPS, ale symbol je zdieľaný "
+"naprieč inými projektami."
 
 #: eeschema/tools/backannotate.cpp:1260
 #, c-format
@@ -25407,8 +25408,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is shared across "
 "other projects (%s)."
 msgstr ""
-"Vymenilo by vývodov %s %s a %s podľa DPS, ale symbol je zdieľaný v iných "
-"projektoch (%s)."
+"Zameniť %s vývody %s a %s tak, aby zodpovedali DPS, ale symbol je zdieľaný "
+"naprieč inými projektami (%s)."
 
 #: eeschema/tools/backannotate.cpp:1270
 #, c-format
@@ -25416,13 +25417,14 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
-"Vymenilo by vývodov %s %s a %s podľa DPS, ale symbol je používaný vo "
-"viacerých inštanciách listu (%s)."
+"Zameniť %s vývody %s a %s tak, aby zodpovedali DPS, ale symbol je používaný "
+"vo viacerých inštanciách listu (%s)."
 
 #: eeschema/tools/backannotate.cpp:1278
 #, c-format
 msgid "Would swap %s pins %s and %s to match PCB, but the symbol is shared."
-msgstr "Vymenilo by vývodov %s %s a %s podľa DPS, ale symbol je zdieľaný."
+msgstr ""
+"Zameniť %s vývody %s a %s tak, aby zodpovedali DPS, ale symbol je zdieľaný."
 
 #: eeschema/tools/backannotate.cpp:1285
 #, c-format
@@ -25430,13 +25432,13 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but unconstrained pin swaps are "
 "disabled in the schematic preferences."
 msgstr ""
-"Chcete zameniť %s vývody %s a %s, aby sa zhodovali s doskou plošných spojov, "
-"ale neobmedzená výmena vývodov je v nastaveniach schémy zakázaná."
+"Zameniť %s vývody %s a %s tak, aby zodpovedali DPS, ale neobmedzená zámena "
+"vývodov je v nastaveniach schémy zakázaná."
 
 #: eeschema/tools/backannotate.cpp:1321
 #, c-format
 msgid "Swap %s pins %s and %s to match PCB."
-msgstr "Vymeniť vývodov %s %s a %s podľa DPS."
+msgstr "Zameniť %s vývody %s a %s aby zodpovedali s DPS."
 
 #: eeschema/tools/backannotate.cpp:1396
 #, c-format
@@ -26023,19 +26025,19 @@ msgstr "Prevráti vybrané položky zľava doprava"
 #: eeschema/tools/sch_actions.cpp:802 eeschema/tools/sch_edit_tool.cpp:1725
 #: pcbnew/tools/edit_tool_move_fct.cpp:201 pcbnew/tools/pcb_actions.cpp:696
 msgid "Swap"
-msgstr "Prohodit"
+msgstr "Zameniť"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:697
 msgid "Swap positions of selected items"
-msgstr "Vymeniť pozície vybraných prvkov"
+msgstr "Vzájomne zameniť vybrané položky"
 
 #: eeschema/tools/sch_actions.cpp:810 eeschema/tools/sch_edit_tool.cpp:1875
 msgid "Swap Pins"
-msgstr "Vymeniť vývodov"
+msgstr "Zameniť vývody"
 
 #: eeschema/tools/sch_actions.cpp:811
 msgid "Swap the selected symbol pins' positions"
-msgstr "Vymeniť pozície vývodov vybraného symbolu"
+msgstr "Zameniť pozície vývodov vybraného symbolu"
 
 #: eeschema/tools/sch_actions.cpp:817 eeschema/tools/sch_edit_tool.cpp:1978
 msgid "Swap Pin Labels"
@@ -26047,7 +26049,7 @@ msgstr "Zameniť označenia pripojené k vybraným vývodom"
 
 #: eeschema/tools/sch_actions.cpp:824 eeschema/tools/sch_edit_tool.cpp:2060
 msgid "Swap Unit Labels"
-msgstr "Zameniť označenie jednotiek"
+msgstr "Zameniť označenia jednotiek"
 
 #: eeschema/tools/sch_actions.cpp:825
 msgid "Swap labels between selected units"
@@ -26358,7 +26360,7 @@ msgstr "Upraviť číslo stránky..."
 
 #: eeschema/tools/sch_actions.cpp:1162
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Upraviť číslo strany aktuálneho alebo vybratého hárka"
+msgstr "Upraviť číslo strany aktuálneho alebo vybraného hárka"
 
 #: eeschema/tools/sch_actions.cpp:1167
 msgid "Rescue Symbols..."
@@ -27168,8 +27170,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
-"Výmena vývodov je zakázaná pre symboly zdieľané v iných projektoch. "
-"Duplikujte list na nezávislú úpravu vývodov."
+"Zámena vývodov je zakázaná pre symboly zdieľané v iných projektoch. Je "
+"potrebné duplikovať list pre nezávislú úpravu vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1793
 #, c-format
@@ -27177,8 +27179,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"Výmena vývodov je zakázaná pre symboly zdieľané v iných projektoch (%s). "
-"Duplikujte list na nezávislú úpravu vývodov."
+"Zámena vývodov je zakázaná pre symboly zdieľané v iných projektoch (%s). Je "
+"potrebné duplikovať list pre nezávislú úpravu vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1803
 #, c-format
@@ -27186,16 +27188,16 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"Výmena vývodov je zakázaná pre symboly používané vo viacerých inštanciách "
-"listu (%s). Duplikujte list na nezávislú úpravu vývodov."
+"Zámena vývodov je zakázaná pre symboly používané vo viacerých inštanciách "
+"listu (%s). Je potrebné duplikovať list pre nezávislú úpravu vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1810
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
-"Výmena vývodov je zakázaná pre zdieľané symboly. Duplikujte list na "
-"nezávislú úpravu vývodov."
+"Zámena vývodov je zakázaná pre zdieľané symboly. Je potrebné duplikovať list "
+"pre nezávislú úpravu vývodov."
 
 #: eeschema/tools/sch_edit_tool.cpp:1954
 msgid ""
@@ -27549,12 +27551,12 @@ msgstr ""
 #: eeschema/tools/symbol_editor_control.cpp:449
 #: pcbnew/tools/footprint_editor_control.cpp:673
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "V KiCad nie je vybratý žiadny textový editor. Prosím, vyberte jeden."
+msgstr "V KiCad nie je vybraný žiadny textový editor. Je potrebné jeden vybrať."
 
 #: eeschema/tools/symbol_editor_control.cpp:527
 #: eeschema/widgets/panel_symbol_chooser.cpp:657
 msgid "No symbol selected"
-msgstr "Nie je vybratý žiadny symbol"
+msgstr "Nie je vybraný žiadny symbol"
 
 #: eeschema/tools/symbol_editor_control.cpp:571
 msgid "Change Symbol Name"
@@ -27853,7 +27855,7 @@ msgstr "Identifikátor relácie sa nezhoduje s aktívnou reláciou poskytovateľ
 
 #: eeschema/widgets/panel_remote_symbol.cpp:931
 msgid "No remote provider is currently selected."
-msgstr "Momentálne nie je vybratý žiadny vzdialený poskytovateľ."
+msgstr "Momentálne nie je vybraný žiadny vzdialený poskytovateľ."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1052
 msgid "Unable to process provider payload."
@@ -32032,7 +32034,7 @@ msgstr "Prepnúť na tento projekt"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Close all editors, and switch to the selected project"
-msgstr "Zatvorte všetkých editorov a prepnite na vybratý projekt"
+msgstr "Zatvoriť všetky editory a prepnúť na vybraný projekt"
 
 #: kicad/project_tree_pane.cpp:932
 msgid "New Directory..."
@@ -32246,7 +32248,7 @@ msgstr "Zahodenie commit-u kvôli prázdnej správe commit-u."
 
 #: kicad/project_tree_pane.cpp:2302
 msgid "Discarding commit due to empty file selection."
-msgstr "Zahodenie commit-u kvôli nevybratému súboru."
+msgstr "Zahodenie commit-u kvôli nevybranému súboru."
 
 #: kicad/project_tree_traverser.cpp:209
 #, c-format
@@ -34215,7 +34217,7 @@ msgstr "Upraviť regulátor"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:108
 msgid "Edit the current selected regulator."
-msgstr "Upraviť aktuálne vybratý regulátor."
+msgstr "Upraviť aktuálne vybraný regulátor."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:112
 msgid "Add Regulator"
@@ -34816,10 +34818,10 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"Túto kalkulačku môžete použiť na overenie, či malý spoj zvládne veľký prúd "
+"Túto kalkulačku je môžné použiť na overenie, či malý spoj zvládne veľký prúd "
 "po krátky čas.<br>\n"
-"Tento nástroj vám umožňuje navrhnúť poistku zo spoja, ale mal by sa používať "
-"len ako odhad.\n"
+"Tento nástroj umožňuje navrhnúť poistku zo spoja, ale mal by sa používať len "
+"ako odhad.\n"
 "\n"
 "Kalkulačka odhaduje energiu potrebnú na ohriatie vodiča<br>\n"
 "na bod topenia, ako aj energiu potrebnú na zmenu fázy.<br>\n"
@@ -34992,7 +34994,7 @@ msgid ""
 msgstr ""
 "- Táto kalkulačka vyhľadáva kombinácie štandardných rezistorov rady E (medzi "
 "10Ω a 1MΩ) na vytvorenie ľubovoľných hodnôt.\n"
-"- Môžete zadať požadovaný odpor od 0,0025 do 4000 kΩ.\n"
+"- Je možné zadať požadovaný odpor od 0,0025 do 4000 kΩ.\n"
 "- Umožňuje riešenia s použitím až 4 komponentov.\n"
 "\n"
 "Požadovaná hodnota je vždy vylúčená zo sady riešení.<br>\n"
@@ -36371,15 +36373,15 @@ msgid ""
 "Pad %s of %s cannot match candidate pad %s of %s due to differing "
 "connectivity."
 msgstr ""
-"Podložka %s stopy %s sa nemôže zhodovať s kandidátskou podložkou %s stopy %s "
-"kvôli odlišnej konektivite."
+"Plôška %s z %s sa nemôže zhodovať s kandidátskou plôškou %s z %s z dôvodu "
+"odlišného spôsobu pripojenia."
 
 #: pcbnew/connectivity/topo_match.cpp:171
 #, c-format
 msgid "Component %s expects %lu matching pads but candidate %s provides %lu."
 msgstr ""
-"Súčiastka %s očakáva %lu zodpovedajúcich podložiek, ale kandidát %s "
-"poskytuje %lu."
+"Súčiastka %s očakáva %lu zodpovedajúcich plôšiek, ale kandidát %s poskytuje "
+"%lu."
 
 #: pcbnew/connectivity/topo_match.cpp:220
 #: pcbnew/connectivity/topo_match.cpp:223
@@ -36391,8 +36393,8 @@ msgstr "spoj %d"
 #, c-format
 msgid "Pad %s of %s is on net %s but its match in candidate %s is on net %s."
 msgstr ""
-"Podložka %s súčiastky %s je na sieti %s, ale jej zhoda v kandidátovi %s je "
-"na sieti %s."
+"Plôška %s súčiastky %s je na spoji %s, ale jej zhoda v kandidátovi %s je na "
+"spoji %s."
 
 #: pcbnew/connectivity/topo_match.cpp:247
 #, c-format
@@ -37237,7 +37239,7 @@ msgstr "Konvertovať na medenú zónu"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:225
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:359
 msgid "No layer selected."
-msgstr "Nie je vybratá vrstva."
+msgstr "Nie je vybraná vrstva."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
@@ -38050,7 +38052,7 @@ msgstr "Zmeniť všetky puzdrá na doske"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:69
 msgid "Change selected footprint(s)"
-msgstr "Zmeniť vybraté puzdro(y)"
+msgstr "Zmeniť vybrané puzdro(a)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:70
 msgid "Change footprints matching reference designator:"
@@ -38136,7 +38138,7 @@ msgstr "Aktualizovať všetky puzdrá na doske"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:28
 msgid "Update selected footprint(s)"
-msgstr "Aktualizovať vybraté puzdro(y)"
+msgstr "Aktualizovať vybrané puzdro(a)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:31
 msgid "Update footprints matching reference designator:"
@@ -39271,8 +39273,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Knižničné ID a ID puzdra sú priradené.   Pomocou príkazu \"Zameniť puzdro..."
-"\" môžete priradiť iné puzdro."
+"Knižničné ID a ID puzdra sú priradené.   Pomocou príkazu \"Zameniť "
+"puzdro...\" je možné priradiť iné puzdro."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:120
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:133
@@ -40597,7 +40599,7 @@ msgstr "Povolená"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:55
 msgid "Select Layer"
-msgstr "Vybratie vrstvy"
+msgstr "Vybrať vrstvu"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:82
 msgid "Select Copper Layer Pair"
@@ -42422,7 +42424,7 @@ msgstr "Nenájdené na doske "
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:500
 msgid "No layers selected."
-msgstr "Nie je vybratá vrstva."
+msgstr "Nie je vybraná vrstva."
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:41
 msgid "Area name:"
@@ -42609,7 +42611,7 @@ msgstr "Na vrstvu:"
 #: pcbnew/dialogs/dialog_swap_layers_base.h:48
 #: pcbnew/tools/global_edit_tool.cpp:185
 msgid "Swap Layers"
-msgstr "Zamieňajte vrstvy"
+msgstr "Zameniť vrstvy"
 
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:225
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
@@ -48944,7 +48946,7 @@ msgstr "[žiadne načítané puzdro]"
 
 #: pcbnew/footprint_edit_frame.cpp:1543
 msgid "No footprint selected."
-msgstr "Nie je vybraté žiadne puzdro."
+msgstr "Nie je vybrané žiadne puzdro."
 
 #: pcbnew/footprint_editor_utils.cpp:242
 msgid "Edit Zone"
@@ -51391,9 +51393,9 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
-"Vybratý súbor naznačuje, že siete nemusia byť synchronizované so schémou. "
-"Odporúča sa vykonať postup „Zarovnať siete“ v aplikácii CADSTAR a opätovný "
-"import, aby ste sa vyhli nezrovnalostiam medzi DPS a schémou. "
+"Vybraný súbor naznačuje, že spoje nemusia byť synchronizované so schémou. "
+"Odporúča sa vykonať „Zarovnanie spojov“ v aplikácii CADSTAR a opätovný "
+"import, aby sa vyhlo nezrovnalostiam medzi DPS a schémou. "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:134
 #, c-format
@@ -55333,12 +55335,12 @@ msgstr "Úprava tvaru"
 
 #: pcbnew/tools/edit_tool.cpp:270
 msgid "Swap Gate Nets..."
-msgstr "Vymeniť siete hradiel..."
+msgstr "Zameniť spoje hradiel..."
 
 #: pcbnew/tools/edit_tool.cpp:452
 #, c-format
 msgid "Swap with %s"
-msgstr "Vymeniť s %s"
+msgstr "Zameniť s %s"
 
 #: pcbnew/tools/edit_tool.cpp:989
 #, c-format
@@ -55470,16 +55472,15 @@ msgid ""
 "%zu unselected pad(s) are connected to these nets. How do you want to "
 "proceed?"
 msgstr ""
-"%zu nevybratých plôšky/plôšiek sú prepojené s týmito spojmi. Ako chcete "
-"pokračovať?"
+"%zu nevybraných plôšok je prepojených s týmito spojmi. Ako chcete pokračovať?"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:79
 msgid ""
 "Connected tracks, vias, and other non-zone copper items will still swap nets "
 "even if you ignore the unselected pads."
 msgstr ""
-"Prepojené spoje, prekovy a iné medené položky mimo zóny si vymenia siete aj "
-"v prípade, že ignorujete nevybrané podložky."
+"Pripojené spoje, prekovy a ostatné medené prvky mimo zón, budú aj tak "
+"prehodené medzi spojmi, aj keď sú ignorované nevybrané plôšky."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
 msgid "Unselected pads:"
@@ -55491,36 +55492,36 @@ msgstr "Ignorovať nevybrané plôšky"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
 msgid "Swap All Connected Pads"
-msgstr "Vymeniť všetky prepojené podložky"
+msgstr "Zameniť všetky prepojené plôšky"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:316
 #: pcbnew/tools/edit_tool_move_fct.cpp:349 pcbnew/tools/pcb_actions.cpp:703
 msgid "Swap Pad Nets"
-msgstr "Vymeniť siete podložiek"
+msgstr "Zameniť spoje plôšok"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
 msgstr ""
-"Výmena hradiel sa musí vykonávať na podložkách v rámci jednej viachradelnej "
+"Zámena hradiel sa musí vykonávať na plôškach v rámci jedného viachradlového "
 "puzdra."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:493
 msgid "Gate swapping must be performed on gates with equal pin counts."
-msgstr "Výmena hradiel sa musí vykonávať na hradlách s rovnakým počtom pinov."
+msgstr "Zámena hradiel sa musí vykonávať na hradlách s rovnakým počtom vývodov."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:514
 msgid "Gate swapping failed: pad in unit missing from footprint."
-msgstr "Výmena hradiel zlyhala: podložka v jednotke chýba v puzdre."
+msgstr "Zámena hradiel zlyhala: plôška jednotky chýba v puzdre."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:542
 msgid "Gate swapping has no effect: all selected gates have identical nets."
-msgstr "Výmena hradiel nemá efekt: všetky vybrané hradlá majú rovnaké siete."
+msgstr "Zámena hradiel nemá efekt: všetky vybrané hradlá majú rovnaké spoje."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:615
 #: pcbnew/tools/edit_tool_move_fct.cpp:657 pcbnew/tools/pcb_actions.cpp:710
 msgid "Swap Gate Nets"
-msgstr "Vymeniť siete hradiel"
+msgstr "Zameniť spoje hradiel"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:714
 msgid "Pack Footprints"
@@ -56133,7 +56134,7 @@ msgstr "Duplikát a prírastok"
 
 #: pcbnew/tools/pcb_actions.cpp:622
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr "Duplikuje vybraté položky s prírastkom čísel podložiek"
+msgstr "Duplikuje vybrané položky s prírastkom čísel podložiek"
 
 #: pcbnew/tools/pcb_actions.cpp:630
 msgid "Move Exactly..."
@@ -56173,11 +56174,11 @@ msgstr "Zrkadlí vybrané položky pozdĺž osi X"
 
 #: pcbnew/tools/pcb_actions.cpp:704
 msgid "Swap nets between two selected pads and their connected copper"
-msgstr "Vymeniť siete medzi dvoma vybranými podložkami a ich prepojenou meďou"
+msgstr "Zameniť spoje medzi dvoma vybranými plôškami a ich prepojenou meďou"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Swap nets between gates of a footprint and their connected copper"
-msgstr "Vymeniť siete medzi hradlami puzdra a ich prepojenou meďou"
+msgstr "Zameniť spoje medzi hradlami puzdra a ich prepojenou meďou"
 
 #: pcbnew/tools/pcb_actions.cpp:719
 msgid "Pack and Move Footprints"
@@ -56268,7 +56269,7 @@ msgstr "Zlúčiť vybrané mnohouholníky do jedného mnohouholníka"
 
 #: pcbnew/tools/pcb_actions.cpp:814
 msgid "Subtract selected polygons from the last one selected"
-msgstr "Odpočítať vybraté mnohouholníky od posledného vybraného"
+msgstr "Odpočítať vybrané mnohouholníky od posledného vybraného"
 
 #: pcbnew/tools/pcb_actions.cpp:821
 msgid "Create the intersection of the selected polygons"
@@ -56280,7 +56281,7 @@ msgstr "Odstrániť celú stopu"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Deletes selected item(s) and copper connections"
-msgstr "Vymaže vybraté položky a medené pripojenia"
+msgstr "Vymaže vybrané položky a medené pripojenia"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Create Array..."
@@ -56308,7 +56309,7 @@ msgstr "Upraviť puzdro"
 
 #: pcbnew/tools/pcb_actions.cpp:876
 msgid "Show selected footprint on editor canvas"
-msgstr "Zobraziť vybraté puzdro na plátne editora"
+msgstr "Zobraziť vybrané puzdro na plátne editora"
 
 #: pcbnew/tools/pcb_actions.cpp:882
 msgid "Duplicate Footprint"
