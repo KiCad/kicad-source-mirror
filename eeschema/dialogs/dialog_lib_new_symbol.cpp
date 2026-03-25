@@ -77,14 +77,6 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME*      aParent,
                                         wxCommandEventHandler( DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields ),
                                         nullptr, this );
 
-    // Trigger the event handler to show/hide the info bar message.
-    wxCommandEvent dummyEvent;
-    onParentSymbolSelect( dummyEvent );
-
-    // Trigger the event handler to handle other check boxes
-    onPowerCheckBox( dummyEvent );
-    onCheckTransferUserFields( dummyEvent );
-
     // initial focus should be on first editable field.
     m_textName->SetFocus();
 
@@ -108,11 +100,20 @@ DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
 
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataToWindow()
 {
+    wxCommandEvent dummyEvent;
+
     if( !m_inheritFromSymbolName.IsEmpty() )
     {
         m_comboInheritanceSelect->SetSelectedString( UnescapeString( m_inheritFromSymbolName ) );
         m_textName->ChangeValue( UnescapeString( getDerivativeName( m_inheritFromSymbolName ) ) );
+
+        // Trigger the event handler to show/hide the info bar message.
+        onParentSymbolSelect( dummyEvent );
+        onCheckTransferUserFields( dummyEvent );
     }
+
+    // Trigger the event handler to handle power boxes
+    onPowerCheckBox( dummyEvent );
 
     return true;
 }
