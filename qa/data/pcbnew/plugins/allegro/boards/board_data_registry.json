@@ -108,7 +108,15 @@
             "url": "https://github.com/beagleboard/beaglebone-ai",
             "license": "CC-BY-4.0",
             "boardFile": "BeagleBone-AI.brd",
-            "testLabels": ["slow-board"]
+            "testLabels": ["slow-board"],
+            "blocks": [
+                {
+                    "type": "0x1c",
+                    "offset": "0x00047f44",
+                    "comment": "Padstack 200C125D, plated mech hole",
+                    "extraTest": "BeagleBoneAI_PS_200C125D"
+                }
+            ]
         },
         "BeagleBone-AI-64": {
             "formatVersion": "17.2",
@@ -140,6 +148,12 @@
                     "type": "0x08",
                     "offset": "0x00136a5c",
                     "skip": false
+                },
+                {
+                    "type": "0x1c",
+                    "offset": "0x0001ef8c",
+                    "comment": "Padstack C50H340M700N, NPTH mech hole",
+                    "extraTests": "CutiePi_PS_C50H340M700N"
                 }
             ],
             "boardExpectations": [

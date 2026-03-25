@@ -90,6 +90,40 @@ static void TestOlympus0x20( const BLOCK_BASE& aBlock )
 }
 
 
+static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x1fda );
+    BOOST_TEST( blk.m_LayerCount == 12 );
+
+    BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_RECTANGLE );
+    BOOST_TEST( blk.m_Components[0].m_W == 244000 );
+    BOOST_TEST( blk.m_Components[0].m_H == 244000 );
+}
+
+
+static void TestCutiePi_PS_C50H340M700N( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x0bfa9588 );
+
+    BOOST_TEST( blk.m_LayerCount == 6 );
+    BOOST_TEST( blk.m_Drill == 133858 );
+
+    BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_CIRCLE );
+    BOOST_TEST( blk.m_Components[0].m_W == 275591 );
+    BOOST_TEST( blk.m_Components[0].m_H == 275591 );
+}
+
+
 /**
  * The registry of additional block tests, keyed by board name and block offset.
  *
@@ -101,6 +135,8 @@ static void TestOlympus0x20( const BLOCK_BASE& aBlock )
 // clang-format off
 static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlockTests{
     { { "Olympus_15061-1b_v165",      0x0131553c }, TestOlympus0x20 },
+    { { "BeagleBone-AI",              0x00047f44 }, TestBeagleBoneAI_PS_200C125D },
+    { { "CutiePi_V2_3_v166",          0x0001ef8c }, TestCutiePi_PS_C50H340M700N }
 };
 
 
