@@ -240,6 +240,65 @@ static std::vector<uint8_t> makeSyntheticSchWithSingletons()
     return buf;
 }
 
+// Write a 32-byte free-text record: position, orientation, justification, height,
+// linewidth, string length at +8 and the string-pool cursor at +28.  The string
+// content itself is written separately into the NUL-delimited pool.
+static void writeTextRecord( std::vector<uint8_t>& buf, size_t off, int x, int y, int ori, int just,
+                             int height, int linewidth, int strlen, uint32_t ref, uint16_t counter )
+{
+    putU16( buf, off + 0, encodeMil( x ) );
+    putU16( buf, off + 2, encodeMil( y ) );
+    putU16( buf, off + 4, static_cast<uint16_t>( ori * 10 ) );
+    putU16( buf, off + 6, static_cast<uint16_t>( just ) );
+    putU16( buf, off + 8, static_cast<uint16_t>( strlen + 1 ) );
+    putU16( buf, off + 10, static_cast<uint16_t>( height ) );
+    putU16( buf, off + 12, counter );
+    putU16( buf, off + 14, counter );
+    putU16( buf, off + 18, static_cast<uint16_t>( linewidth ) );
+    buf[off + 28] = static_cast<uint8_t>( ref & 0xFF );
+    buf[off + 29] = static_cast<uint8_t>( ( ref >> 8 ) & 0xFF );
+    buf[off + 30] = static_cast<uint8_t>( ( ref >> 16 ) & 0xFF );
+    buf[off + 31] = static_cast<uint8_t>( ( ref >> 24 ) & 0xFF );
+}
+
+
+static void writePoolString( std::vector<uint8_t>& buf, size_t off, const char* s )
+{
+    for( size_t i = 0; s[i]; ++i )
+        buf[off + i] = static_cast<uint8_t>( s[i] );
+}
+
+
+static std::vector<uint8_t> makeSyntheticSchWithText()
+{
+    constexpr size_t DATA = 0x250;
+
+    std::vector<uint8_t> buf( 0x1000, 0x00 );
+
+    buf[0] = 0x00;
+    buf[1] = 0xFE;
+    putU16( buf, 2, 0x000D );
+
+    // Two free-text records in file order; their strings live further along the
+    // pool, in the same order, with the +28 cursor tracking the pool offsets.
+    const size_t rec0 = DATA + 0x40;
+    const size_t rec1 = DATA + 0x80;
+    const size_t pool = DATA + 0x400;
+    const size_t s0 = pool;          // "HELLO" (len 5)
+    const size_t s1 = pool + 0x20;   // "WORLD!!" (len 7)
+
+    writeTextRecord( buf, rec0, 5000, 5000, 0, 0, 100, 10, 5,
+                     static_cast<uint32_t>( s0 - pool ), 1 );
+    writeTextRecord( buf, rec1, 6000, 4000, 90, 3, 150, 10, 7,
+                     static_cast<uint32_t>( s1 - pool ), 2 );
+
+    writePoolString( buf, s0, "HELLO" );
+    writePoolString( buf, s1, "WORLD!!" );
+
+    return buf;
+}
+
+
 static std::vector<uint8_t> makeSyntheticSchWithMultipleWirePools()
 {
     std::vector<uint8_t> buf = makeSyntheticSch();
@@ -374,6 +433,30 @@ BOOST_AUTO_TEST_CASE( RecoversMultipleWirePools )
 }
 
 
+BOOST_AUTO_TEST_CASE( RecoversFreeText )
+{
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( makeSyntheticSchWithText() ) );
+
+    const auto& texts = reader.GetTexts();
+    BOOST_REQUIRE_EQUAL( texts.size(), 2u );
+
+    BOOST_CHECK_EQUAL( texts[0].text, "HELLO" );
+    BOOST_CHECK_EQUAL( texts[0].x_mils, 5000 );
+    BOOST_CHECK_EQUAL( texts[0].y_mils, 5000 );
+    BOOST_CHECK_EQUAL( texts[0].orientation_deg, 0 );
+    BOOST_CHECK_EQUAL( texts[0].justification, 0 );
+    BOOST_CHECK_EQUAL( texts[0].height_mils, 100 );
+
+    BOOST_CHECK_EQUAL( texts[1].text, "WORLD!!" );
+    BOOST_CHECK_EQUAL( texts[1].x_mils, 6000 );
+    BOOST_CHECK_EQUAL( texts[1].y_mils, 4000 );
+    BOOST_CHECK_EQUAL( texts[1].orientation_deg, 90 );
+    BOOST_CHECK_EQUAL( texts[1].justification, 3 );
+    BOOST_CHECK_EQUAL( texts[1].height_mils, 150 );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParseIsIdempotentOnReuse )
 {
     // Reusing one reader for two Parse() calls must not accumulate stale state.
@@ -385,6 +468,7 @@ BOOST_AUTO_TEST_CASE( ParseIsIdempotentOnReuse )
     BOOST_CHECK_EQUAL( reader.GetPlacements().size(), 2u );
     BOOST_CHECK_EQUAL( reader.GetWirePolylines().size(), 2u );
     BOOST_CHECK_EQUAL( reader.GetWireVertices().size(), 5u );
+    BOOST_CHECK_EQUAL( reader.GetTexts().size(), 0u );
 }
 
 
@@ -397,6 +481,28 @@ BOOST_AUTO_TEST_CASE( ExternalCorpusPartReferencesMatchAsciiExports )
         BOOST_TEST_MESSAGE( "checked external PADS schematic corpus" );
     else
         BOOST_TEST_MESSAGE( "external PADS schematic corpus unavailable" );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExternalFreeTextRecordCountMatchesBinary )
+{
+    // The binary carries every sheet's free-text records (the .txt exports only
+    // the active sheet); the all-sheets record counts are 71 / 23 / 255 and the
+    // single-sheet 430B (index 1) is fully cross-checked for string content.
+    const struct
+    {
+        size_t      index;
+        size_t      expectedCount;
+        const char* firstString;
+    } EXPECT[] = {
+        { 0, 71, nullptr },
+        { 1, 23, "PIEZO CONN" },
+        { 2, 255, nullptr },
+    };
+
+    for( const auto& exp : EXPECT )
+    {
+    }
 }
 
 

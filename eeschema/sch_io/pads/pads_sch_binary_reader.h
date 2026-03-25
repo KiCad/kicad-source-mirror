@@ -48,6 +48,18 @@ struct WIRE_VERTEX
     int y_mils = 0;
 };
 
+/// One free-text item recovered from the binary 32-byte text record pool.
+struct TEXT_ITEM
+{
+    int         x_mils = 0;
+    int         y_mils = 0;
+    int         orientation_deg = 0; ///< 0 or 90.
+    int         justification = 0;   ///< PADS JUST column verbatim.
+    int         height_mils = 0;
+    int         linewidth_mils = 0;
+    std::string text;                ///< Recovered string content (may be empty).
+};
+
 /**
  * Reader for the proprietary PADS Logic binary .sch format (magic 00 FE,
  * version 0x000D).
@@ -64,10 +76,13 @@ struct WIRE_VERTEX
  *              cannot be recovered)
  *   - WIRES    the 8-byte vertex pools tiled by the stride-40 split-header
  *              cumulative-index chain, emitted as SCH_LINE wires
+ *   - TEXT     the 32-byte free-text records (position, orientation,
+ *              justification, height, linewidth), with string content recovered
+ *              by an ordered length-matched walk of the shared string pool
  *
- * Net-label positions and free-text strings are stored as runtime heap pointers
- * (only their names/geometry survive, not their on-page binding) and are NOT
- * imported here; use the ASCII export when those are required.
+ * The placement->parttype->graphic link (the real symbol body) is recovered
+ * through the part-type and used-decal pools rather than the 136-byte record;
+ * that binding is decoded separately.
  */
 class PADS_SCH_BINARY_READER
 {
@@ -86,6 +101,7 @@ public:
     const std::vector<PLACEMENT>&                   GetPlacements() const { return m_placements; }
     const std::vector<WIRE_VERTEX>&                 GetWireVertices() const { return m_wireVertices; }
     const std::vector<std::vector<WIRE_VERTEX>>&    GetWirePolylines() const { return m_wirePolylines; }
+    const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
 
     /**
      * Build the recovered symbols and wires onto @p aRootSheet's screen.
@@ -97,10 +113,12 @@ public:
 private:
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
+    void decodeTexts( const std::vector<uint8_t>& aData );
 
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
+    std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
 };
 
 } // namespace PADS_SCH_BINARY

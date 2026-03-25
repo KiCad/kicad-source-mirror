@@ -29,6 +29,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
+#include <sch_text.h>
 #include <schematic.h>
 
 #include <base_units.h>
@@ -37,6 +38,8 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cstdlib>
+#include <limits>
 
 namespace PADS_SCH_BINARY
 {
@@ -122,12 +125,14 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_placements.clear();
     m_wireVertices.clear();
     m_wirePolylines.clear();
+    m_texts.clear();
 
     if( !IsBinarySch( aData ) )
         return false;
 
     decodePlacements( aData );
     decodeWires( aData );
+    decodeTexts( aData );
 
     return true;
 }
@@ -506,6 +511,227 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 
 
 // ---------------------------------------------------------------------------
+// FREE TEXT
+//
+// Free-text items are fixed 32-byte records anchored on the duplicated counter
+// at +12 == +14, carrying position, orientation, justification, height and
+// linewidth inline plus the string length at +8 and a string-pool cursor at
+// +28.  The string CONTENT lives in a shared NUL-delimited pool interleaved with
+// component-attribute strings, so it is recovered by an ordered length-matched
+// walk anchored on the pool whose matched offsets best track the +28 cursor.
+// ---------------------------------------------------------------------------
+static constexpr size_t TEXT_STRIDE = 32;
+static constexpr int    TEXT_REF_OFF = 28;  // u32 string-pool cursor
+
+
+struct TEXT_RECORD
+{
+    int    x_mils = 0;
+    int    y_mils = 0;
+    int    orientation_deg = 0;
+    int    justification = 0;
+    int    height_mils = 0;
+    int    linewidth_mils = 0;
+    int    strlen = 0;
+    uint32_t ref = 0;
+};
+
+
+static bool isTextRecord( const std::vector<uint8_t>& d, size_t o, TEXT_RECORD& aRec )
+{
+    if( o + TEXT_STRIDE > d.size() )
+        return false;
+
+    uint16_t rx = readU16( d, o + 0 );
+    uint16_t ry = readU16( d, o + 2 );
+    uint16_t ori = readU16( d, o + 4 );
+    uint16_t just = readU16( d, o + 6 );
+    uint16_t slen = readU16( d, o + 8 );
+    uint16_t height = readU16( d, o + 10 );
+    uint16_t c0 = readU16( d, o + 12 );
+    uint16_t c1 = readU16( d, o + 14 );
+    uint16_t lw = readU16( d, o + 18 );
+
+    if( c0 != c1 || c0 == 0 || c0 > 4000 )
+        return false;
+
+    if( ori % 10 || ori > 3600 )
+        return false;
+
+    if( slen < 2 || slen > 400 )
+        return false;
+
+    if( height < 40 || height > 400 )
+        return false;
+
+    if( lw != 5 && lw != 10 && lw != 15 && lw != 20 && lw != 25 && lw != 30 )
+        return false;
+
+    if( just > 15 )
+        return false;
+
+    aRec.x_mils = designMil( rx );
+    aRec.y_mils = designMil( ry );
+    aRec.orientation_deg = ori / 10;
+    aRec.justification = just;
+    aRec.height_mils = height;
+    aRec.linewidth_mils = lw;
+    aRec.strlen = slen - 1;
+    aRec.ref = readU32( d, o + TEXT_REF_OFF );
+
+    return true;
+}
+
+
+// One NUL-delimited printable string in the shared pool.
+struct POOL_STRING
+{
+    size_t      offset = 0;
+    std::string text;
+};
+
+
+static std::vector<POOL_STRING> collectPoolStrings( const std::vector<uint8_t>& d )
+{
+    std::vector<POOL_STRING> pool;
+    size_t                   n = d.size();
+    size_t                   o = DATA_STREAM_OFFSET;
+
+    while( o < n )
+    {
+        size_t e = o;
+
+        while( e < n && d[e] != 0 )
+            ++e;
+
+        size_t len = e - o;
+
+        if( len >= 1 && len <= 400 )
+        {
+            bool printable = true;
+
+            for( size_t i = o; i < e; ++i )
+            {
+                if( d[i] < 0x20 || d[i] >= 0x7f )
+                {
+                    printable = false;
+                    break;
+                }
+            }
+
+            if( printable )
+                pool.push_back( { o, std::string( reinterpret_cast<const char*>( &d[o] ), len ) } );
+        }
+
+        o = ( e > o ) ? e + 1 : o + 1;
+    }
+
+    return pool;
+}
+
+
+// Walk the pool from @p aStart, taking the next string of each record's length in
+// order.  Returns false if any record cannot be matched or offsets are not
+// strictly increasing.  Fills @p aStrings and @p aOffsets on success.
+static bool lengthMatchedWalk( const std::vector<POOL_STRING>& aPool, size_t aStart,
+                               const std::vector<TEXT_RECORD>& aRecords,
+                               std::vector<std::string>& aStrings, std::vector<size_t>& aOffsets )
+{
+    aStrings.clear();
+    aOffsets.clear();
+    size_t idx = aStart;
+
+    for( const TEXT_RECORD& rec : aRecords )
+    {
+        while( idx < aPool.size() && static_cast<int>( aPool[idx].text.size() ) != rec.strlen )
+            ++idx;
+
+        if( idx >= aPool.size() )
+            return false;
+
+        if( !aOffsets.empty() && aPool[idx].offset <= aOffsets.back() )
+            return false;
+
+        aStrings.push_back( aPool[idx].text );
+        aOffsets.push_back( aPool[idx].offset );
+        ++idx;
+    }
+
+    return true;
+}
+
+
+void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
+{
+    std::vector<TEXT_RECORD> records;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + TEXT_STRIDE <= d.size(); ++i )
+    {
+        TEXT_RECORD rec;
+
+        if( isTextRecord( d, i, rec ) )
+            records.push_back( rec );
+    }
+
+    if( records.empty() )
+        return;
+
+    // Recover string content: anchor the pool start on the candidate whose
+    // length-matched walk fully covers the records and whose matched offsets best
+    // track the per-record +28 cursor, then take each record's string in order.
+    std::vector<POOL_STRING> pool = collectPoolStrings( d );
+
+    std::vector<std::string> bestStrings;
+    double                   bestResidual = std::numeric_limits<double>::max();
+
+    for( size_t si = 0; si < pool.size(); ++si )
+    {
+        if( static_cast<int>( pool[si].text.size() ) != records[0].strlen )
+            continue;
+
+        std::vector<std::string> strings;
+        std::vector<size_t>      offsets;
+
+        if( !lengthMatchedWalk( pool, si, records, strings, offsets ) )
+            continue;
+
+        long long base0 = static_cast<long long>( offsets[0] ) - records[0].ref;
+        double    residual = 0.0;
+
+        for( size_t k = 0; k < offsets.size(); ++k )
+        {
+            long long predicted = base0 + records[k].ref;
+            residual += static_cast<double>( std::llabs( static_cast<long long>( offsets[k] ) - predicted ) );
+        }
+
+        residual /= static_cast<double>( offsets.size() );
+
+        if( residual < bestResidual )
+        {
+            bestResidual = residual;
+            bestStrings = std::move( strings );
+        }
+    }
+
+    for( size_t k = 0; k < records.size(); ++k )
+    {
+        TEXT_ITEM item;
+        item.x_mils = records[k].x_mils;
+        item.y_mils = records[k].y_mils;
+        item.orientation_deg = records[k].orientation_deg;
+        item.justification = records[k].justification;
+        item.height_mils = records[k].height_mils;
+        item.linewidth_mils = records[k].linewidth_mils;
+
+        if( k < bestStrings.size() )
+            item.text = bestStrings[k];
+
+        m_texts.push_back( std::move( item ) );
+    }
+}
+
+
+// ---------------------------------------------------------------------------
 // SCHEMATIC BUILD
 // ---------------------------------------------------------------------------
 int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const
@@ -577,6 +803,29 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             screen->Append( line );
             ++appended;
         }
+    }
+
+    // --- FREE TEXT (recovered geometry, style and string content) ---
+    for( const TEXT_ITEM& txt : m_texts )
+    {
+        if( txt.text.empty() )
+            continue;
+
+        SCH_TEXT* text = new SCH_TEXT( VECTOR2I( schIUScale.MilsToIU( txt.x_mils ),
+                                                 milToY( txt.y_mils ) ),
+                                       wxString::FromUTF8( txt.text ) );
+
+        text->SetTextHeight( schIUScale.MilsToIU( txt.height_mils ) );
+        text->SetTextWidth( schIUScale.MilsToIU( txt.height_mils ) );
+        text->SetTextThickness( schIUScale.MilsToIU( txt.linewidth_mils ) );
+
+        if( txt.orientation_deg == 90 )
+            text->SetTextAngle( ANGLE_VERTICAL );
+        else
+            text->SetTextAngle( ANGLE_HORIZONTAL );
+
+        screen->Append( text );
+        ++appended;
     }
 
     return appended;
