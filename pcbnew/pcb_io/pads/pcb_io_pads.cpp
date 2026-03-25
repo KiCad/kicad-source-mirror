@@ -2548,13 +2548,41 @@ SHAPE_ARC PCB_IO_PADS::makeMidpointArc( const PADS_IO::ARC_POINT& aPrev,
     VECTOR2I start( scaleCoord( aPrev.x, true ), scaleCoord( aPrev.y, false ) );
     VECTOR2I end( scaleCoord( aCurr.x, true ), scaleCoord( aCurr.y, false ) );
 
-    // Compute the arc midpoint in PADS coordinate space (before the Y-axis
-    // flip in scaleCoord) so the 3-point constructor gets the correct winding.
-    double startAngleRad = atan2( aPrev.y - aCurr.arc.cy, aPrev.x - aCurr.arc.cx );
-    double midAngleRad = startAngleRad + ( aCurr.arc.delta_angle * M_PI / 180.0 ) / 2.0;
+    double midX, midY;
 
-    double midX = aCurr.arc.cx + aCurr.arc.radius * cos( midAngleRad );
-    double midY = aCurr.arc.cy + aCurr.arc.radius * sin( midAngleRad );
+    if( aCurr.arc.radius == 0.0 )
+    {
+        // Route arcs specify only CW/CCW direction without explicit geometry.
+        // They are semicircles between the two endpoints. Compute the midpoint
+        // on the perpendicular bisector of the chord, at distance radius from
+        // the chord center (where radius = half the chord length).
+        double dx = aCurr.x - aPrev.x;
+        double dy = aCurr.y - aPrev.y;
+
+        if( aCurr.arc.delta_angle < 0 )
+        {
+            // CW: arc bulges to the left of the start-to-end direction
+            midX = ( aPrev.x + aCurr.x ) / 2.0 - dy / 2.0;
+            midY = ( aPrev.y + aCurr.y ) / 2.0 + dx / 2.0;
+        }
+        else
+        {
+            // CCW: arc bulges to the right of the start-to-end direction
+            midX = ( aPrev.x + aCurr.x ) / 2.0 + dy / 2.0;
+            midY = ( aPrev.y + aCurr.y ) / 2.0 - dx / 2.0;
+        }
+    }
+    else
+    {
+        // Full arc with explicit center and radius (pours, decals, board outlines).
+        // Compute the arc midpoint in PADS coordinate space (before the Y-axis
+        // flip in scaleCoord) so the 3-point constructor gets the correct winding.
+        double startAngleRad = atan2( aPrev.y - aCurr.arc.cy, aPrev.x - aCurr.arc.cx );
+        double midAngleRad = startAngleRad + ( aCurr.arc.delta_angle * M_PI / 180.0 ) / 2.0;
+
+        midX = aCurr.arc.cx + aCurr.arc.radius * cos( midAngleRad );
+        midY = aCurr.arc.cy + aCurr.arc.radius * sin( midAngleRad );
+    }
 
     VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
 

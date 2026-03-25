@@ -1335,4 +1335,57 @@ BOOST_AUTO_TEST_CASE( ImportIssue23352 )
 }
 
 
+/**
+ * Verify that route arcs (CW/CCW) from PADS are imported as proper semicircles.
+ *
+ * Issue #23540: route arcs specified with only CW/CCW direction (no explicit
+ * center/radius) were imported with degenerate geometry because the arc
+ * midpoint was computed from zero center and zero radius.
+ */
+BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir()
+                        + "plugins/pads/issue23540/test_import.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int arcCount = 0;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() != PCB_ARC_T )
+            continue;
+
+        PCB_ARC* arc = static_cast<PCB_ARC*>( trk );
+        arcCount++;
+
+        EDA_ANGLE angle = arc->GetAngle();
+        double absDeg = std::abs( angle.AsDegrees() );
+
+        BOOST_CHECK_MESSAGE( absDeg > 170.0 && absDeg < 190.0,
+                "route arc angle " << absDeg << " should be ~180 degrees (semicircle)" );
+
+        VECTOR2I mid = arc->GetMid();
+        VECTOR2I start = arc->GetStart();
+        VECTOR2I end = arc->GetEnd();
+
+        // In PADS the CW arc from left to right goes upward. After the Y-axis
+        // flip to KiCad coordinates, "upward on screen" means smaller Y values.
+        // The arc midpoint Y must be less than both endpoint Y values.
+        int chordY = ( start.y + end.y ) / 2;
+
+        BOOST_CHECK_MESSAGE( mid.y < chordY,
+                "arc midpoint Y=" << mid.y << " should be above (less than) "
+                "chord center Y=" << chordY );
+    }
+
+    BOOST_CHECK_MESSAGE( arcCount >= 1,
+            "expected at least 1 PCB_ARC from route CW/CCW arc, got " << arcCount );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
