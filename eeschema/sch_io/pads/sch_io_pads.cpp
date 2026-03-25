@@ -1379,11 +1379,12 @@ SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName,
         m_reporter->Report(
                 wxString::Format(
                         _( "Imported PADS Logic binary schematic '%s': %zu symbols, "
-                           "%zu wire connections. Symbol graphics are generic and net labels / "
-                           "free text are not recoverable from the binary; use the PADS ASCII "
-                           "export for a lossless import." ),
+                           "%zu wire connections, %zu free-text items, %zu junctions. "
+                           "Symbol graphics are generic; use the PADS ASCII export for a "
+                           "fully lossless import." ),
                         aFileName, reader.GetPlacements().size(),
-                        reader.GetWirePolylines().size() ),
+                        reader.GetWirePolylines().size(), reader.GetTexts().size(),
+                        reader.GetJunctions().size() ),
                 RPT_SEVERITY_WARNING );
     }
 

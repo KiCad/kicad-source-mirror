@@ -82,7 +82,8 @@ struct TEXT_ITEM
  *              heap pointer and is not in the file, so the real symbol graphic
  *              cannot be recovered)
  *   - WIRES    the 8-byte vertex pools tiled by the stride-40 split-header
- *              cumulative-index chain, emitted as SCH_LINE wires
+ *              cumulative-index chain, emitted as SCH_LINE wires; the explicit
+ *              gap slices between cumulative jumps are bus polylines
  *   - TEXT     the 32-byte free-text records (position, orientation,
  *              justification, height, linewidth), with string content recovered
  *              by an ordered length-matched walk of the shared string pool
@@ -110,6 +111,7 @@ public:
     const std::vector<PLACEMENT>&                   GetPlacements() const { return m_placements; }
     const std::vector<WIRE_VERTEX>&                 GetWireVertices() const { return m_wireVertices; }
     const std::vector<std::vector<WIRE_VERTEX>>&    GetWirePolylines() const { return m_wirePolylines; }
+    const std::vector<std::vector<WIRE_VERTEX>>&    GetBusPolylines() const { return m_busPolylines; }
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
 
@@ -129,6 +131,7 @@ private:
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
+    std::vector<std::vector<WIRE_VERTEX>> m_busPolylines;  ///< Bus polylines (split-run gaps).
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
 };

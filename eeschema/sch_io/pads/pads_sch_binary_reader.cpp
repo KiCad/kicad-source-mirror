@@ -126,6 +126,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_placements.clear();
     m_wireVertices.clear();
     m_wirePolylines.clear();
+    m_busPolylines.clear();
     m_texts.clear();
     m_junctions.clear();
 
@@ -497,6 +498,14 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
                 break;
 
             m_wirePolylines.emplace_back( vertices.begin() + prev, vertices.begin() + connEnd );
+
+            // The explicit slice between this connection's end and the next
+            // cumulative start is a bus polyline.
+            size_t gapEnd = run.cumulative[k];
+
+            if( gapEnd > connEnd && gapEnd <= vertices.size() )
+                m_busPolylines.emplace_back( vertices.begin() + connEnd, vertices.begin() + gapEnd );
+
             prev = run.cumulative[k];
         }
 
@@ -875,6 +884,24 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 continue;
 
             SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
+            line->SetEndPoint( end );
+            screen->Append( line );
+            ++appended;
+        }
+    }
+
+    // --- BUSES (the split-run gap polylines) ---
+    for( const std::vector<WIRE_VERTEX>& poly : m_busPolylines )
+    {
+        for( size_t k = 0; k + 1 < poly.size(); ++k )
+        {
+            VECTOR2I start( schIUScale.MilsToIU( poly[k].x_mils ), milToY( poly[k].y_mils ) );
+            VECTOR2I end( schIUScale.MilsToIU( poly[k + 1].x_mils ), milToY( poly[k + 1].y_mils ) );
+
+            if( start == end )
+                continue;
+
+            SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_BUS );
             line->SetEndPoint( end );
             screen->Append( line );
             ++appended;

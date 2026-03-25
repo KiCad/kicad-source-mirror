@@ -310,6 +310,49 @@ static void writeJunctionRecord( std::vector<uint8_t>& buf, size_t off, int x, i
 }
 
 
+// Build an image whose split-run cumulative chain leaves an explicit gap between
+// a connection's end and the next cumulative start; that gap is a bus polyline.
+static std::vector<uint8_t> makeSyntheticSchWithBus()
+{
+    constexpr size_t DATA = 0x250;
+
+    std::vector<uint8_t> buf( 0x2000, 0x00 );
+
+    buf[0] = 0x00;
+    buf[1] = 0xFE;
+    putU16( buf, 2, 0x000D );
+
+    // One full header: a 2-vertex connection, then a cumulative jump of 4 leaving
+    // a 2-vertex bus gap; the terminal header is a final 2-vertex connection.
+    const size_t hdrOff = DATA + 0x100;
+    const std::vector<std::pair<int, int>> verts = {
+        { 5000, 5000 }, { 5500, 5000 },   // connection 0
+        { 6000, 6000 }, { 6000, 7000 },   // bus gap
+        { 7000, 5000 }, { 7500, 5000 },   // connection 1 (terminal)
+    };
+
+    // Full header 0: nverts 2, cumulative 4 (a 2-vertex gap follows the connection).
+    buf[hdrOff + 0x01] = 0xFD;
+    buf[hdrOff + 0x02] = 2;
+    buf[hdrOff + 0x0b] = 4;
+
+    // Terminal header: nverts 2, no cumulative field.
+    const size_t termOff = hdrOff + SPLIT_STRIDE;
+    buf[termOff + 0x01] = 0xFD;
+    buf[termOff + 0x02] = 2;
+
+    const size_t vpool = termOff + 8;
+
+    for( size_t k = 0; k < verts.size(); ++k )
+    {
+        putU16( buf, vpool + 8 * k + 3, encodeMil( verts[k].first ) );
+        putU16( buf, vpool + 8 * k + 5, encodeMil( verts[k].second ) );
+    }
+
+    return buf;
+}
+
+
 static std::vector<uint8_t> makeSyntheticSchWithJunctions()
 {
     constexpr size_t DATA = 0x250;
@@ -488,6 +531,24 @@ BOOST_AUTO_TEST_CASE( RecoversFreeText )
 }
 
 
+BOOST_AUTO_TEST_CASE( RecoversBusPolyline )
+{
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( makeSyntheticSchWithBus() ) );
+
+    // Two connections plus one bus polyline carved from the cumulative-chain gap.
+    BOOST_REQUIRE_EQUAL( reader.GetWirePolylines().size(), 2u );
+
+    const auto& buses = reader.GetBusPolylines();
+    BOOST_REQUIRE_EQUAL( buses.size(), 1u );
+    BOOST_REQUIRE_EQUAL( buses[0].size(), 2u );
+    BOOST_CHECK_EQUAL( buses[0][0].x_mils, 6000 );
+    BOOST_CHECK_EQUAL( buses[0][0].y_mils, 6000 );
+    BOOST_CHECK_EQUAL( buses[0][1].x_mils, 6000 );
+    BOOST_CHECK_EQUAL( buses[0][1].y_mils, 7000 );
+}
+
+
 BOOST_AUTO_TEST_CASE( RecoversJunctions )
 {
     PADS_SCH_BINARY_READER reader;
@@ -522,6 +583,7 @@ BOOST_AUTO_TEST_CASE( ParseIsIdempotentOnReuse )
     BOOST_CHECK_EQUAL( reader.GetWireVertices().size(), 5u );
     BOOST_CHECK_EQUAL( reader.GetTexts().size(), 0u );
     BOOST_CHECK_EQUAL( reader.GetJunctions().size(), 0u );
+    BOOST_CHECK_EQUAL( reader.GetBusPolylines().size(), 0u );
 }
 
 
@@ -672,6 +734,14 @@ BOOST_AUTO_TEST_CASE( ExternalSingleSheetWireTilingMatchesAsciiConnections )
 
     // The raw pool is the connection vertices plus the single 4-vertex bus.
     BOOST_CHECK_EQUAL( reader.GetWireVertices().size(), 200u );
+
+    // That 4-vertex gap is the SENSOR_SIGNALS bus polyline.
+    BOOST_REQUIRE_EQUAL( reader.GetBusPolylines().size(), 1u );
+    BOOST_REQUIRE_EQUAL( reader.GetBusPolylines()[0].size(), 4u );
+    BOOST_CHECK_EQUAL( reader.GetBusPolylines()[0][0].x_mils, 5200 );
+    BOOST_CHECK_EQUAL( reader.GetBusPolylines()[0][0].y_mils, 4400 );
+    BOOST_CHECK_EQUAL( reader.GetBusPolylines()[0][3].x_mils, 11200 );
+    BOOST_CHECK_EQUAL( reader.GetBusPolylines()[0][3].y_mils, 3400 );
 }
 
 
