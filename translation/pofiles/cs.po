@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-25 14:10+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2026-03-26 05:18+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -34612,9 +34612,8 @@ msgid "Footprint 3D model path:"
 msgstr "3D model pouzdra cesty:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "Možnosti počátku souřadnic:"
+msgstr "Možnosti počátku souřadnic"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -41682,9 +41681,9 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrola pouzder desky proti knihovně..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Knihovna pouzder '%s' nenalezena."
+msgstr "Knihovna pouzder '%s' nebyla nalezena v '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1047
 #, c-format
@@ -42100,7 +42099,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 msgid "** Got problems while fusing shapes **"
-msgstr ""
+msgstr "** Při slučování tvarů nastaly problémy **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:2072
@@ -42114,7 +42113,7 @@ msgstr "Upozornění:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain vytvořil prázdný tvar **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:945
 msgid "OCC error adding pad/via polygon."
@@ -42406,9 +42405,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1333
-#, fuzzy
 msgid "Generating ODB++ output files"
-msgstr "Generovat IPC-D-356 soubor netlistu"
+msgstr "Generování výstupních ODB++ souborů"
 
 #: pcbnew/footprint.cpp:1404
 msgid "Other"
@@ -43875,33 +43873,28 @@ msgstr ""
 "vnější vrstvě)"
 
 #: pcbnew/pad.cpp:2294
-#, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Varování: Vlastnost Fiducial nemá smysl pro NPTH plošky."
+msgstr "(vlastnost 'fiducial' nemá smysl pro NPTH plošky)"
 
 #: pcbnew/pad.cpp:2298
-#, fuzzy
 msgid "('testpoint' property makes no sense on NPTH pads)"
-msgstr "Varování: Vlastnost Testpoint nemá smysl pro NPTH plošky."
+msgstr "(vlastnost 'testpoint' nemá smysl pro NPTH plošky)"
 
 #: pcbnew/pad.cpp:2301
-#, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Varování: Vlastnost Chladič nemá smysl pro NPTH plošky."
+msgstr "(vlastnost 'heatsink' nemá smysl pro NPTH plošky)"
 
 #: pcbnew/pad.cpp:2304
-#, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Varování: Vlastnost Castellated je pro PTH plošky."
+msgstr "(vlastnost 'castellated' je určená pro PTH plošky)"
 
 #: pcbnew/pad.cpp:2307
 msgid "('BGA' property is for SMD pads)"
 msgstr "('BGA' vlastnost je pro SMD plošky)"
 
 #: pcbnew/pad.cpp:2310
-#, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "Varování: Vlastnost Castellated je pro PTH plošky."
+msgstr "(vlastnost 'mechanical' je určená pro PTH plošky)"
 
 #: pcbnew/pad.cpp:2326
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -46157,9 +46150,9 @@ msgid "PCB text '%s' on %s"
 msgstr "Text DPS '%s' na %s"
 
 #: pcbnew/pcb_textbox.cpp:583
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box '%s' on %s"
-msgstr "Text na DPS '%s' na %s"
+msgstr "Textové pole na DPS '%s' na %s"
 
 #: pcbnew/pcb_textbox.cpp:818
 msgid "Border Properties"
@@ -49673,9 +49666,8 @@ msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "Umístí vybranou položku(y) o přesnou částku vzhledem k jiné"
 
 #: pcbnew/tools/pcb_actions.cpp:2044
-#, fuzzy
 msgid "Position Interactively..."
-msgstr "Relativní pozice k..."
+msgstr "Interaktivní umístění..."
 
 #: pcbnew/tools/pcb_actions.cpp:2045
 #, fuzzy
@@ -51326,9 +51318,9 @@ msgid "Rule Area %s"
 msgstr "Oblast pravidel %s"
 
 #: pcbnew/zone.cpp:1122
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Oblast pravidel %s"
+msgstr "Oblast pravidel '%s' %s"
 
 #: pcbnew/zone.cpp:1129
 #, c-format
@@ -51362,9 +51354,8 @@ msgid "Keep Out Pads"
 msgstr "Vyloučit plošky"
 
 #: pcbnew/zone.cpp:2018
-#, fuzzy
 msgid "Keep Out Copper Pours"
-msgstr "Zakázané vyplněné oblasti"
+msgstr "Zabránit rozlévání mědi"
 
 #: pcbnew/zone.cpp:2024
 msgid "Keep Out Footprints"
