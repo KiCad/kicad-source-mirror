@@ -299,6 +299,37 @@ static std::vector<uint8_t> makeSyntheticSchWithText()
 }
 
 
+// Write a 12-byte tie-dot record: X and Y page-biased u16, a net-index word, the
+// constant 0xfc marker at +6 and a zero tail.
+static void writeJunctionRecord( std::vector<uint8_t>& buf, size_t off, int x, int y, int netIdx )
+{
+    putU16( buf, off + 0, encodeMil( x ) );
+    putU16( buf, off + 2, encodeMil( y ) );
+    putU16( buf, off + 4, static_cast<uint16_t>( netIdx ) );
+    buf[off + 6] = 0xFC;
+}
+
+
+static std::vector<uint8_t> makeSyntheticSchWithJunctions()
+{
+    constexpr size_t DATA = 0x250;
+
+    std::vector<uint8_t> buf( 0x800, 0x00 );
+
+    buf[0] = 0x00;
+    buf[1] = 0xFE;
+    putU16( buf, 2, 0x000D );
+
+    // A contiguous run of three tie-dots on the page grid.
+    const size_t run = DATA + 0x100;
+    writeJunctionRecord( buf, run + 0 * 12, 5900, 1800, 0 );
+    writeJunctionRecord( buf, run + 1 * 12, 7000, 1500, 7 );
+    writeJunctionRecord( buf, run + 2 * 12, 6300, 2200, 10 );
+
+    return buf;
+}
+
+
 static std::vector<uint8_t> makeSyntheticSchWithMultipleWirePools()
 {
     std::vector<uint8_t> buf = makeSyntheticSch();
@@ -457,6 +488,27 @@ BOOST_AUTO_TEST_CASE( RecoversFreeText )
 }
 
 
+BOOST_AUTO_TEST_CASE( RecoversJunctions )
+{
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( makeSyntheticSchWithJunctions() ) );
+
+    const auto& junctions = reader.GetJunctions();
+    BOOST_REQUIRE_EQUAL( junctions.size(), 3u );
+
+    BOOST_CHECK_EQUAL( junctions[0].x_mils, 5900 );
+    BOOST_CHECK_EQUAL( junctions[0].y_mils, 1800 );
+    BOOST_CHECK_EQUAL( junctions[2].x_mils, 6300 );
+    BOOST_CHECK_EQUAL( junctions[2].y_mils, 2200 );
+
+    // A lone 0xfc-marked record (run length 1) must not be accepted as a junction.
+    std::vector<uint8_t> single = makeSyntheticSchWithJunctions();
+    std::fill( single.begin() + 0x250 + 0x100 + 12, single.end(), uint8_t( 0 ) );
+    BOOST_REQUIRE( reader.Parse( single ) );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().size(), 0u );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParseIsIdempotentOnReuse )
 {
     // Reusing one reader for two Parse() calls must not accumulate stale state.
@@ -469,6 +521,7 @@ BOOST_AUTO_TEST_CASE( ParseIsIdempotentOnReuse )
     BOOST_CHECK_EQUAL( reader.GetWirePolylines().size(), 2u );
     BOOST_CHECK_EQUAL( reader.GetWireVertices().size(), 5u );
     BOOST_CHECK_EQUAL( reader.GetTexts().size(), 0u );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().size(), 0u );
 }
 
 
@@ -503,6 +556,23 @@ BOOST_AUTO_TEST_CASE( ExternalFreeTextRecordCountMatchesBinary )
     for( const auto& exp : EXPECT )
     {
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( ExternalSingleSheetJunctionsMatchAsciiTiedots )
+{
+    // SC350430B01 is single-sheet, so its tie-dot pool is exactly the .txt
+    // *TIEDOTS* list (18 junctions); the first tie-dot is at (5900, 1800).
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    BOOST_REQUIRE_EQUAL( reader.GetJunctions().size(), 18u );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().front().x_mils, 5900 );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().front().y_mils, 1800 );
 }
 
 

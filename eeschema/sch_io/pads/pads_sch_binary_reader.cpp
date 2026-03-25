@@ -24,6 +24,7 @@
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <page_info.h>
+#include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -126,6 +127,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_wireVertices.clear();
     m_wirePolylines.clear();
     m_texts.clear();
+    m_junctions.clear();
 
     if( !IsBinarySch( aData ) )
         return false;
@@ -133,6 +135,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     decodePlacements( aData );
     decodeWires( aData );
     decodeTexts( aData );
+    decodeJunctions( aData );
 
     return true;
 }
@@ -732,6 +735,79 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 
 
 // ---------------------------------------------------------------------------
+// JUNCTIONS (PADS tie-dots)
+//
+// Tie-dots are fixed 12-byte records: X (u16) and Y (u16) in the page-biased
+// half-mil encoding, a net-index word at +4, and a constant 0xfc marker at +6
+// with a zero tail at +7..+11.  PADS stores one contiguous run per sheet; the
+// runs appear in sheet order (the first frames the active sheet), so every run
+// is a tie-dot array and all are collected.
+// ---------------------------------------------------------------------------
+static constexpr size_t   JUNCTION_STRIDE = 12;
+static constexpr int      JUNCTION_MARKER_OFF = 6;
+static constexpr uint8_t  JUNCTION_MARKER = 0xFC;
+
+
+static bool isJunctionRecord( const std::vector<uint8_t>& d, size_t o, int aPageWidth, int aPageHeight )
+{
+    if( o + JUNCTION_STRIDE > d.size() )
+        return false;
+
+    if( d[o + JUNCTION_MARKER_OFF] != JUNCTION_MARKER || d[o + 7] != 0 )
+        return false;
+
+    if( d[o + 8] != 0 || d[o + 9] != 0 || d[o + 10] != 0 || d[o + 11] != 0 )
+        return false;
+
+    int x = designMil( readU16( d, o ) );
+    int y = designMil( readU16( d, o + 2 ) );
+
+    if( x % 50 != 0 || y % 50 != 0 )
+        return false;
+
+    return x >= 0 && x <= aPageWidth && y >= 0 && y <= aPageHeight;
+}
+
+
+void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
+{
+    int pageWidth = 0;
+    int pageHeight = 0;
+    pageExtent( d, pageWidth, pageHeight );
+
+    size_t i = DATA_STREAM_OFFSET;
+
+    while( i + JUNCTION_STRIDE <= d.size() )
+    {
+        if( !isJunctionRecord( d, i, pageWidth, pageHeight ) )
+        {
+            ++i;
+            continue;
+        }
+
+        // A run must hold at least two tie-dots to distinguish it from a stray
+        // 0xfc-marked record; collect every record of the run.
+        size_t j = i;
+        std::vector<JUNCTION> run;
+
+        while( j + JUNCTION_STRIDE <= d.size() && isJunctionRecord( d, j, pageWidth, pageHeight ) )
+        {
+            JUNCTION jct;
+            jct.x_mils = designMil( readU16( d, j ) );
+            jct.y_mils = designMil( readU16( d, j + 2 ) );
+            run.push_back( jct );
+            j += JUNCTION_STRIDE;
+        }
+
+        if( run.size() >= 2 )
+            m_junctions.insert( m_junctions.end(), run.begin(), run.end() );
+
+        i = j;
+    }
+}
+
+
+// ---------------------------------------------------------------------------
 // SCHEMATIC BUILD
 // ---------------------------------------------------------------------------
 int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const
@@ -825,6 +901,14 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             text->SetTextAngle( ANGLE_HORIZONTAL );
 
         screen->Append( text );
+        ++appended;
+    }
+
+    // --- JUNCTIONS (PADS tie-dots) ---
+    for( const JUNCTION& jct : m_junctions )
+    {
+        VECTOR2I pos( schIUScale.MilsToIU( jct.x_mils ), milToY( jct.y_mils ) );
+        screen->Append( new SCH_JUNCTION( pos ) );
         ++appended;
     }
 

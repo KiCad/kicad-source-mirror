@@ -48,6 +48,13 @@ struct WIRE_VERTEX
     int y_mils = 0;
 };
 
+/// One junction (PADS tie-dot) recovered from the binary 12-byte tie-dot pool.
+struct JUNCTION
+{
+    int x_mils = 0;
+    int y_mils = 0;
+};
+
 /// One free-text item recovered from the binary 32-byte text record pool.
 struct TEXT_ITEM
 {
@@ -79,6 +86,8 @@ struct TEXT_ITEM
  *   - TEXT     the 32-byte free-text records (position, orientation,
  *              justification, height, linewidth), with string content recovered
  *              by an ordered length-matched walk of the shared string pool
+ *   - JUNCTIONS the 12-byte tie-dot records (one run per sheet, marker 0xfc),
+ *              emitted as SCH_JUNCTION
  *
  * The placement->parttype->graphic link (the real symbol body) is recovered
  * through the part-type and used-decal pools rather than the 136-byte record;
@@ -102,6 +111,7 @@ public:
     const std::vector<WIRE_VERTEX>&                 GetWireVertices() const { return m_wireVertices; }
     const std::vector<std::vector<WIRE_VERTEX>>&    GetWirePolylines() const { return m_wirePolylines; }
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
+    const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
 
     /**
      * Build the recovered symbols and wires onto @p aRootSheet's screen.
@@ -114,11 +124,13 @@ private:
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
+    void decodeJunctions( const std::vector<uint8_t>& aData );
 
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
+    std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
 };
 
 } // namespace PADS_SCH_BINARY
