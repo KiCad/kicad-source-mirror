@@ -831,6 +831,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::selectSetRect,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::selectSetLasso,      CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     auto showHiddenPinsCond =
             [this]( const SELECTION& )

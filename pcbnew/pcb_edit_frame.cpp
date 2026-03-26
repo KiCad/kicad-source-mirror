@@ -1268,6 +1268,9 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::drawSimilarZone, ENABLE( singleZoneCond ) );
     mgr->SetConditions( PCB_ACTIONS::zoneMerge,       ENABLE( zoneMergeCond ) );
 
+    mgr->SetConditions( ACTIONS::selectSetRect,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::selectSetLasso,      CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
     // These tools can be used at any time to inspect the board
