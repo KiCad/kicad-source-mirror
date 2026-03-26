@@ -42,12 +42,16 @@ namespace PADS_IO
 // Expected footer GUID
 static const uint8_t FOOTER_GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
 
-// Pad shape codes from binary format
+// Section 4 pad-shape codes. Validated against the ASC PARTDECAL pad shapes and by
+// the finger-geometry invariant: codes 0 (OF) and 1 (RF) carry a non-zero finLength
+// (size B) in 100% of records on every v0x2021..v0x2027 board, while 2 (R) and 3 (S)
+// never do. Code 4 occurs on no board; the earlier {1:RF,2:R,3:S,4:OF} map left code 0
+// unmapped, so every oblong (OF) pad was silently imported as round.
 static const std::map<uint8_t, std::string> PAD_SHAPE_NAMES = {
+    { 0x00, "OF" },
     { 0x01, "RF" },
     { 0x02, "R" },
     { 0x03, "S" },
-    { 0x04, "OF" },
 };
 
 

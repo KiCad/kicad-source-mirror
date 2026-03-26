@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <cstdint>
 
 #include <math/vector2d.h>
@@ -116,6 +117,22 @@ public:
     // structural decode and catches a sec12 base or owner-lag regression that a board-level
     // zone count would not surface.
     int32_t GetSec12BaseForTest() const { return m_sec12Base; }
+
+    // Test-only access to the distinct section-4 pad-shape names the parser decoded.
+    // Asserts the shape-code enum directly (e.g. that a board's code-0 oblong padstacks
+    // surface as "OF"), independent of the placement->decal->padstack assignment.
+    std::set<std::string> GetPadStackShapesForTest() const
+    {
+        std::set<std::string> shapes;
+
+        for( const auto& [idx, layers] : m_padStackCache )
+        {
+            for( const PAD_STACK_LAYER& psl : layers )
+                shapes.insert( psl.shape );
+        }
+
+        return shapes;
+    }
 
     bool GetOwnerLoopForTest( const std::string& aName, std::vector<VECTOR2I>& aOut ) const
     {

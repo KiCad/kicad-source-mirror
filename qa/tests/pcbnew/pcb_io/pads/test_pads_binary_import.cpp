@@ -1514,4 +1514,41 @@ BOOST_AUTO_TEST_CASE( DecalNameTableRejectsOversizedCount )
 }
 
 
+/**
+ * Section-4 pad-shape enum decode.
+ *
+ * The shape code is an enum {0:OF, 1:RF, 2:R, 3:S}; the earlier map left code 0
+ * unmapped so every oblong (OF) padstack was imported as round. TMS1mmX19 and
+ * MC4_PLUS_CSHAPE both carry code-0 oblong padstacks, so the decoded shape set must
+ * contain "OF". Asserted at the parser level because the importer currently assigns a
+ * single default padstack per decal, which would mask the per-padstack shape.
+ */
+BOOST_AUTO_TEST_CASE( PadStackShapeEnum_OblongDecoded )
+{
+    const std::vector<std::string> boardsWithOblong = { "TMS1mmX19", "MC4_PLUS_CSHAPE" };
+
+    for( const std::string& dir : boardsWithOblong )
+    {
+        BOOST_TEST_CONTEXT( dir )
+        {
+            PADS_IO::BINARY_PARSER parser;
+            wxString filename =
+                    KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + dir + "/" + dir + ".pcb";
+
+            parser.Parse( filename );
+
+            std::set<std::string> shapes = parser.GetPadStackShapesForTest();
+
+            BOOST_CHECK_MESSAGE( shapes.count( "OF" ),
+                                 dir << " decoded no OF padstack (shape-enum off-by-one regression)" );
+
+            // The same boards carry round and rectangular-finger padstacks, so a decode
+            // that collapsed everything to one shape would also be caught.
+            BOOST_CHECK_MESSAGE( shapes.count( "R" ), dir << " decoded no round padstack" );
+            BOOST_CHECK_MESSAGE( shapes.count( "RF" ), dir << " decoded no RF padstack" );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
