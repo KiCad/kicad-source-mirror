@@ -64,6 +64,10 @@ struct BLOCK_TEST_INFO
     size_t m_BlockOffset;
     /// Whether to skip this test while parsers don't support a certain format
     bool m_Skip;
+    /// Do we have an additional block-level test to run for this block?
+    bool m_ExtraBlockTest;
+    /// Do we have an additional DB_OBJ-level test to run for this block?
+    bool m_ExtraDbObjTest;
     /// The the source of the block data (probably a filename)
     std::string m_DataSource;
 

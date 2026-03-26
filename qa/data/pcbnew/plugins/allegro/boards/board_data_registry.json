@@ -113,7 +113,8 @@
                 {
                     "type": "0x1c",
                     "offset": "0x00047f44",
-                    "comment": "Padstack 200C125D, plated mech hole"
+                    "comment": "Padstack 200C125D, plated mech hole",
+                    "extraBlockTest": true
                 }
             ]
         },
@@ -151,7 +152,8 @@
                 {
                     "type": "0x1c",
                     "offset": "0x0001ef8c",
-                    "comment": "Padstack C50H340M700N, NPTH mech hole"
+                    "comment": "Padstack C50H340M700N, NPTH mech hole",
+                    "extraBlockTest": true
                 }
             ],
             "boardExpectations": [
@@ -226,7 +228,8 @@
                     "comment": "This is the only known 0x20 in the boards seen so far",
                     "type": "0x20",
                     "offset": "0x0131553c",
-                    "skip": false
+                    "extraBlockTest": true,
+                    "extraDbObjTest": true
                 }
             ]
         },
@@ -238,7 +241,8 @@
                 {
                     "type": "0x1c",
                     "offset": "0x000368c8",
-                    "comment": "Padstack 56X55RT"
+                    "comment": "Padstack 56X55RT",
+                    "extraBlockTest": true
                 }
             ]
         },

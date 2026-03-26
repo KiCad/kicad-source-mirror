@@ -190,7 +190,7 @@ void KI_TEST::RunAdditionalBlockTest( const std::string& aBoardName, size_t aBlo
     }
     else
     {
-        BOOST_TEST_MESSAGE( "No additional test defined for this block" );
+        BOOST_TEST_FAIL( "No additional test defined for this block" );
     }
 }
 
@@ -209,6 +209,6 @@ void KI_TEST::RunAdditionalObjectTest( const std::string& aBoardName, size_t aBl
     }
     else
     {
-        BOOST_TEST_MESSAGE( "No additional test defined for this DB_OBJ" );
+        BOOST_TEST_FAIL( "No additional test defined for this DB_OBJ" );
     }
 }
