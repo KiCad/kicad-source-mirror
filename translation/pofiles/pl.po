@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
 "PO-Revision-Date: 2026-03-27 01:05+0000\n"
-"Last-Translator: Jan Sobków <sobkow.jan@gmail.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -55425,19 +55425,16 @@ msgid "Assertions for:"
 msgstr "Asercja dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:918
-#, fuzzy
 msgid "Select first item for clearance resolution..."
-msgstr "Wybierz dwa elementy by utworzyć raport z analizą prześwitu."
+msgstr "Wybierz pierwszy elementy by przeanalizować prześwit..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:929
-#, fuzzy
 msgid "Select second item for clearance resolution..."
-msgstr "Wybierz dwa elementy by utworzyć raport z analizą prześwitu."
+msgstr "Wybierz drugi elementy by przeanalizować prześwit..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:939
-#, fuzzy
 msgid "Select two different items for clearance resolution."
-msgstr "Wybierz dwa elementy by utworzyć raport z analizą prześwitu."
+msgstr "Wybierz dwa różne elementy by przeanalizować prześwit."
 
 #: pcbnew/tools/board_inspection_tool.cpp:962
 #: pcbnew/tools/board_inspection_tool.cpp:975
@@ -55563,14 +55560,12 @@ msgstr ""
 "ograniczenia 'physical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1576
-#, fuzzy
 msgid "Select item for constraints resolution..."
-msgstr "Wybierz element do raportu z analizą ograniczeń."
+msgstr "Wybierz element by przeanalizować ograniczenia..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1584
-#, fuzzy
 msgid "Select a single item for a constraints resolution report."
-msgstr "Wybierz element do raportu z analizą ograniczeń."
+msgstr "Wybierz pojedynczy element by otrzymać raport z analiz ograniczeń..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1612
 #, c-format
@@ -55732,9 +55727,8 @@ msgid "Select Via Size"
 msgstr "Wybierz rozmiar przelotki"
 
 #: pcbnew/tools/drawing_tool.cpp:350
-#, fuzzy
 msgid "Constrain to H, V"
-msgstr "Ogranicz do poziomych, pionowych i pod kątem 45 stopni"
+msgstr "Ogranicz do poziomych, pionowych"
 
 #: pcbnew/tools/drawing_tool.cpp:391 pcbnew/tools/drawing_tool.cpp:2596
 msgid "Draw Line"
@@ -55761,9 +55755,8 @@ msgid "Draw Bezier"
 msgstr "Rysuj krzywą Beziera"
 
 #: pcbnew/tools/drawing_tool.cpp:925
-#, fuzzy
 msgid "Place point"
-msgstr "Umieść wyprowadzenie"
+msgstr "Umieść punkt"
 
 #: pcbnew/tools/drawing_tool.cpp:1552
 msgid "Draw Barcode"
@@ -55814,9 +55807,8 @@ msgid "Shape Modification"
 msgstr "Modyfikacja kształtu"
 
 #: pcbnew/tools/edit_tool.cpp:270
-#, fuzzy
 msgid "Swap Gate Nets..."
-msgstr "Zamień warstwy..."
+msgstr "Zamień sieci bramki..."
 
 #: pcbnew/tools/edit_tool.cpp:452
 #, c-format
@@ -55966,25 +55958,21 @@ msgstr ""
 "nadal będą zamieniać się sieciami, nawet jeśli zignorujesz niewybrane pady."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:82
-#, fuzzy
 msgid "Unselected pads:"
-msgstr "Pola metalizowane:"
+msgstr "Niezaznaczone pola:"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Ignore Unselected Pads"
-msgstr "Usuń nieużywane pola lutownicze"
+msgstr "Ignoruj niezaznaczone pola"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:93
-#, fuzzy
 msgid "Swap All Connected Pads"
-msgstr "Zaznacz połączone ścieżki"
+msgstr "Zamień wszystkie połączone pola"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:316
 #: pcbnew/tools/edit_tool_move_fct.cpp:349 pcbnew/tools/pcb_actions.cpp:703
-#, fuzzy
 msgid "Swap Pad Nets"
-msgstr "Pokaż sieci niepołączonych pól"
+msgstr "Zamień sieci pól"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:370
 msgid ""
@@ -56011,9 +55999,8 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:615
 #: pcbnew/tools/edit_tool_move_fct.cpp:657 pcbnew/tools/pcb_actions.cpp:710
-#, fuzzy
 msgid "Swap Gate Nets"
-msgstr "Aktualizacja listy sieci"
+msgstr "Zamień sieci bramki"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:714
 msgid "Pack Footprints"
@@ -56188,9 +56175,8 @@ msgid "Some of the items could not be outset."
 msgstr "Niektóre z elementów nie mogły zostać zaokrąglone."
 
 #: pcbnew/tools/multichannel_tool.cpp:86
-#, fuzzy
 msgid "(none)"
-msgstr "brak"
+msgstr "(brak)"
 
 #: pcbnew/tools/multichannel_tool.cpp:136
 #: pcbnew/tools/multichannel_tool.cpp:1526
@@ -56207,9 +56193,8 @@ msgid "No Rule Areas to repeat layout to have been found."
 msgstr "Nie znaleziono stref z regułami by powtórzyć układ ścieżek."
 
 #: pcbnew/tools/multichannel_tool.cpp:730
-#, fuzzy
 msgid "Checking Rule Area compatibility..."
-msgstr "Sprawdzanie stref z regułami..."
+msgstr "Sprawdzanie kompatybilności stref z regułami..."
 
 #: pcbnew/tools/multichannel_tool.cpp:755
 #, c-format
@@ -56272,14 +56257,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1589
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Nie można automatycznie wygenerować stref rozmieszczania, ponieważ schemat "
 "zawiera tylko jeden arkusz hierarchiczny bądź nie zawiera go wcale, lub nie "
-"zawiera klas komponentów."
+"zawiera grup bądź klas komponentów."
 
 #: pcbnew/tools/multichannel_tool.cpp:1779
 msgid "Auto-generate placement rule areas"
@@ -56381,14 +56365,12 @@ msgid "Create outset lines from the selected item"
 msgstr "Tworzy linie zaokrąglenia z zaznaczonych elementów"
 
 #: pcbnew/tools/pcb_actions.cpp:167
-#, fuzzy
 msgid "Add Barcode"
-msgstr "Dodaje okrąg"
+msgstr "Dodaj kod kreskowy"
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Add a barcode"
-msgstr "Dodaje łuk"
+msgstr "Dodaje graficzny kod kreskowy"
 
 #: pcbnew/tools/pcb_actions.cpp:177
 msgid "Add Board Characteristics"
@@ -56407,9 +56389,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Dodaje tabelę ze stosem warstw na warstwie rysunkowej"
 
 #: pcbnew/tools/pcb_actions.cpp:194
-#, fuzzy
 msgid "Place Point"
-msgstr "Umieść wyprowadzenie"
+msgstr "Umieść punkt"
 
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Add reference/snap points"
@@ -56567,38 +56548,32 @@ msgid "Add selected design block to current board"
 msgstr "Dodaje wybrany blok projektowy do bieżącego obwodu drukowanego"
 
 #: pcbnew/tools/pcb_actions.cpp:490
-#, fuzzy
 msgid "Apply Design Block Layout"
-msgstr "Biblioteki bloków projektowych"
+msgstr "Zastosuj układ ścieżek bloku projektowego"
 
 #: pcbnew/tools/pcb_actions.cpp:491
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Umieszcza blok projektowy połączone z wybraną grupą"
+msgstr "Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
 
 #: pcbnew/tools/pcb_actions.cpp:513
-#, fuzzy
 msgid "Save Board as Design Block..."
-msgstr "Zapisz bieżący obwód jako blok projektowy..."
+msgstr "Zapisz obwód jako blok projektowy..."
 
 #: pcbnew/tools/pcb_actions.cpp:514
 msgid "Create a new design block from the current board"
 msgstr "Tworzy nowy blok projektowy z aktualnego obwodu drukowanego"
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Update Design Block from Board"
-msgstr "Aktualizacja bibliotek bloków projektowych"
+msgstr "Aktualizuj blok projektowy z płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Set design block layout to current board"
-msgstr "Dodaje wybrany blok projektowy do bieżącego obwodu drukowanego"
+msgstr "Ustaw układ ścieżek bloku projektowego do bieżącego obwodu drukowanego"
 
 #: pcbnew/tools/pcb_actions.cpp:535
-#, fuzzy
 msgid "Set design block layout to current selection"
-msgstr "Tworzy nowy blok projektowy na podstawie zaznaczenia"
+msgstr "Ustaw układ ścieżek bloku projektowego do bieżącego zaznaczenia"
 
 #: pcbnew/tools/pcb_actions.cpp:559
 msgid "Open in Footprint Editor"
@@ -56753,9 +56728,8 @@ msgid "Simplify polygon outlines, removing superfluous points"
 msgstr "Upraszcza kontury wielokątów, usuwając niepotrzebne punkty"
 
 #: pcbnew/tools/pcb_actions.cpp:786
-#, fuzzy
 msgid "Edit Corners..."
-msgstr "Edycja opcji..."
+msgstr "Edycja narożników..."
 
 #: pcbnew/tools/pcb_actions.cpp:787
 msgid "Edit polygon corners using a table"
@@ -56864,14 +56838,12 @@ msgid "Footprint Properties..."
 msgstr "Właściwości footprintu..."
 
 #: pcbnew/tools/pcb_actions.cpp:938
-#, fuzzy
 msgid "Pad Table..."
-msgstr "Tabela pinów…"
+msgstr "Tabela pól lut…"
 
 #: pcbnew/tools/pcb_actions.cpp:939
-#, fuzzy
 msgid "Displays pad table for bulk editing of pads"
-msgstr "Wyświetla tabelę pinów przeznaczoną do masowej ich edycji"
+msgstr "Wyświetla tabelę pól lutowniczych przeznaczoną do masowej ich edycji"
 
 #: pcbnew/tools/pcb_actions.cpp:946
 msgid "Show the footprint checker window"
@@ -57134,7 +57106,6 @@ msgid "Export Footprints..."
 msgstr "Eksport footprintów..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
-#, fuzzy
 msgid ""
 "Add footprints from board to a new or an existing footprint library\n"
 "(does not remove other footprints from this library)"
@@ -57355,9 +57326,8 @@ msgstr "Blokuj lub odblokuj zaznaczone elementy"
 
 #: pcbnew/tools/pcb_actions.cpp:1461 pcbnew/tools/pcb_actions.cpp:1470
 #: pcbnew/tools/pcb_actions.cpp:1479 pcbnew/tools/pcb_actions.cpp:1489
-#, fuzzy
 msgid "Line Modes"
-msgstr "Tryb wydruku"
+msgstr "Tryb lini"
 
 #: pcbnew/tools/pcb_actions.cpp:1501
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -57410,14 +57380,12 @@ msgid "Open schematic in schematic editor"
 msgstr "Otwórz schemat w edytorze schematów"
 
 #: pcbnew/tools/pcb_actions.cpp:1583
-#, fuzzy
 msgid "DRC Rule Editor"
-msgstr "Reguły DRC"
+msgstr "Edytor reguł DRC"
 
 #: pcbnew/tools/pcb_actions.cpp:1584
-#, fuzzy
 msgid "Open DRC rule editor window"
-msgstr "Reguły DRC"
+msgstr "Otwiera okno edytora reguł projektowych"
 
 #: pcbnew/tools/pcb_actions.cpp:1592
 msgid "Local Ratsnest"
@@ -57816,7 +57784,6 @@ msgid "Distribute Horizontally by Centers"
 msgstr "Rozłóż poziomo na postawie punktów centralnych"
 
 #: pcbnew/tools/pcb_actions.cpp:2257
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
@@ -57891,14 +57858,13 @@ msgstr ""
 "odległość"
 
 #: pcbnew/tools/pcb_actions.cpp:2327
-#, fuzzy
 msgid "Interactive Offset Tool"
-msgstr "Interaktywne narzędzie usuwania"
+msgstr "Interaktywne narzędzie przesuwania"
 
 #: pcbnew/tools/pcb_actions.cpp:2328
-#, fuzzy
 msgid "Interactive tool for offsetting items by exact amounts"
-msgstr "Przesuń zaznaczony element(y) o zadaną wartość"
+msgstr ""
+"Interaktywne narzędzie służące do przesuwania elementów o zadaną odległość"
 
 #: pcbnew/tools/pcb_actions.cpp:2350
 msgid ""
@@ -58312,9 +58278,8 @@ msgid "Export footprint to editor"
 msgstr "Eksportuj footprint do edytora"
 
 #: pcbnew/tools/pcb_control.cpp:153 pcbnew/tools/pcb_control.cpp:183
-#, fuzzy
 msgid "Add Footprint Library"
-msgstr "Utwórz bibliotekę footprintów"
+msgstr "Dodaj bibliotekę footprintów"
 
 #: pcbnew/tools/pcb_control.cpp:300
 msgid "Don't show again"
@@ -58368,9 +58333,8 @@ msgid "Invalid clipboard contents"
 msgstr "Niepoprawna zawartość schowka"
 
 #: pcbnew/tools/pcb_control.cpp:1433
-#, fuzzy
 msgid "Design block has no layout to place."
-msgstr "Blok projektowy '%s' posiada już trasowanie."
+msgstr "Blok projektowy nie posiada trasowania by je umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:1498 pcbnew/tools/pcb_control.cpp:1723
 #, c-format
@@ -58378,9 +58342,10 @@ msgid "Design block %s does not have a board file."
 msgstr "Blok projektowy %s nie posiada pliku obwodu drukowanego."
 
 #: pcbnew/tools/pcb_control.cpp:1579
-#, fuzzy
 msgid "Design block placement failed - no footprints were placed."
-msgstr "Nie można odczytać pliku '%s' z metadanymi bloków projektowych."
+msgstr ""
+"Umieszczenie bloku projektowego nie powiodło się - brak footprintów do "
+"umieszczenia."
 
 #: pcbnew/tools/pcb_control.cpp:1614
 #, c-format
@@ -58388,9 +58353,8 @@ msgid "Footprint %s is locked and cannot be placed."
 msgstr "Footprint %s jest zablokowany i nie można go umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:1631
-#, fuzzy
 msgid "Selected group contains no footprints to place."
-msgstr "Wybór nie zawiera elementów z opisanymi sieciami."
+msgstr "Zaznaczona grupa nie zawiera footprintów by je umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:2003
 msgid "Error loading board."
@@ -58444,9 +58408,8 @@ msgid "Resolved Margin Clearance"
 msgstr "Rozpoznany prześwit względem marginesu"
 
 #: pcbnew/tools/pcb_control.cpp:2488
-#, fuzzy
 msgid "Pad Size"
-msgstr "Rozmiar strony"
+msgstr "Rozmiar pola"
 
 #: pcbnew/tools/pcb_control.cpp:2520
 msgid "Selected Items"
@@ -58461,14 +58424,12 @@ msgid "Selected 2D Copper Area"
 msgstr "Pole miedzi zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2697
-#, fuzzy
 msgid "Selected 2D Area"
-msgstr "Pole miedzi zaznaczonego 2D"
+msgstr "Pole zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2699
-#, fuzzy
 msgid "Selected 2D Total Area"
-msgstr "Pole miedzi zaznaczonego 2D"
+msgstr "Całkowite pole zaznaczonego 2D"
 
 #: pcbnew/tools/pcb_control.cpp:2757
 msgid "Place Board Characteristics"
@@ -58684,89 +58645,72 @@ msgid "From rules"
 msgstr "Z reguł"
 
 #: pcbnew/via_protection_ui_mixin.h:119
-#, fuzzy
 msgid "Type I-a (tented top)"
-msgstr "Typ I a ( maskowane z góry )"
+msgstr "Typ I-a (maskowane z góry)"
 
 #: pcbnew/via_protection_ui_mixin.h:120
-#, fuzzy
 msgid "Type I-b (tented both sides)"
-msgstr "Typ I b ( maskowane z obu stron )"
+msgstr "Typ I-b (maskowane z obu stron)"
 
 #: pcbnew/via_protection_ui_mixin.h:121
-#, fuzzy
 msgid "Type I-a (tented bottom)"
-msgstr "Typ I a ( maskowane z dołu )"
+msgstr "Typ I-a (maskowane z dołu)"
 
 #: pcbnew/via_protection_ui_mixin.h:122
-#, fuzzy
 msgid "Type II-a (covered and tented top)"
-msgstr "Typ II a ( zakryte i maskowane z góry )"
+msgstr "Typ II-a (zakryte i maskowane z góry)"
 
 #: pcbnew/via_protection_ui_mixin.h:123
-#, fuzzy
 msgid "Type II-b (covered and tented both sides)"
-msgstr "Typ II b ( zakryte i maskowane z obu stron )"
+msgstr "Typ II-b (zakryte i maskowane z obu stron)"
 
 #: pcbnew/via_protection_ui_mixin.h:124
-#, fuzzy
 msgid "Type II-a (covered and tented bottom)"
-msgstr "Typ II a ( zakryte i maskowane z dołu )"
+msgstr "Typ II- a (zakryte i maskowane z dołu)"
 
 #: pcbnew/via_protection_ui_mixin.h:125
-#, fuzzy
 msgid "Type III-a (plugged top)"
-msgstr "Typ III a ( zatkane z góry )"
+msgstr "Typ III-a (zatkane z góry)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
-#, fuzzy
 msgid "Type III-b (plugged both sides)"
-msgstr "Typ III b ( zatkane z obu stron )"
+msgstr "Typ III-b (zatkane z obu stron)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
-#, fuzzy
 msgid "Type III-a (plugged bottom)"
-msgstr "Typ III a ( zatkane z dołu )"
+msgstr "Typ III-a (zatkane z dołu)"
 
 #: pcbnew/via_protection_ui_mixin.h:128
-#, fuzzy
 msgid "Type IV-a (plugged and tented top)"
-msgstr "Typ IV a ( zatkane i maskowane z góry )"
+msgstr "Typ IV-a (zatkane i maskowane z góry)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
-#, fuzzy
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "Typ IV b ( zatkane i maskowane z obu stron )"
+msgstr "Typ IV-b (zatkane i maskowane z obu stron)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
-#, fuzzy
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "Typ IV a ( zatkane i maskowane z dołu )"
+msgstr "Typ IV-a (zatkane i maskowane z dołu)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
-#, fuzzy
 msgid "Type V (filled )"
-msgstr "Typ V ( wypełnione )"
+msgstr "Typ V (wypełnione)"
 
 #: pcbnew/via_protection_ui_mixin.h:132
-#, fuzzy
 msgid "Type VI-a (filled and tented top)"
-msgstr "Typ VI a (wypełnione oraz zakryte z góry )"
+msgstr "Typ VI-a (wypełnione oraz zakryte z góry)"
 
 #: pcbnew/via_protection_ui_mixin.h:133
-#, fuzzy
 msgid "Type VI-b (filled and tented both sides)"
-msgstr "Typ VI b ( wypełnione oraz zakryte z obu stron )"
+msgstr "Typ VI-b (wypełnione oraz zakryte z obu stron)"
 
 #: pcbnew/via_protection_ui_mixin.h:134
-#, fuzzy
 msgid "Type VI-a (filled and tented bottom)"
-msgstr "Typ VI a ( wypełnione oraz zakryte z dołu )"
+msgstr "Typ VI-a (wypełnione oraz zakryte z dołu)"
 
 #: pcbnew/via_protection_ui_mixin.h:135
-#, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "Typ VII ( wypełnione oraz zatkane )"
+msgstr "Typ VII (wypełnione oraz zatkane)"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 msgid "Show tracks"
@@ -58845,9 +58789,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
-#, fuzzy
 msgid "Show explicit snap points as crosses"
-msgstr "Pokaż punkty bazowe footprintu i opisy w postaci krzyżyka"
+msgstr "Pokaż wyraźne punkty przyciągania w postaci krzyżyka"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Locked Item Shadow"
@@ -59573,14 +59516,12 @@ msgid "(Use /.../ to indicate a regular expression.)"
 msgstr "(Użyj /.../, by wskazać wyrażenie regularne.)"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1222
-#, fuzzy
 msgid "Auto-fit Column"
-msgstr "Wypełnij automatycznie strefę(-y)"
+msgstr "Automatycznie dopasuj kolumnę"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1223
-#, fuzzy
 msgid "Auto-fit All Columns"
-msgstr "Wypełnij automatycznie strefę(-y)"
+msgstr "Automatycznie dopasuj wszystkie kolumny"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1247
 msgid "Filter by Net Name"
@@ -59682,9 +59623,8 @@ msgid "No Net"
 msgstr "Brak sieci"
 
 #: pcbnew/widgets/search_handlers.cpp:607
-#, fuzzy
 msgid "Drills"
-msgstr "Wiercenie"
+msgstr "Wiercenia"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:56
 msgid "X coord"
@@ -59695,9 +59635,8 @@ msgid "Y coord"
 msgstr "wsp. Y"
 
 #: pcbnew/widgets/vertex_editor_pane.cpp:321
-#, fuzzy
 msgid "Edit Vertex"
-msgstr "Edycja tekstu"
+msgstr "Edycja wierzchołka"
 
 #: pcbnew/zone.cpp:910
 msgid "No vias"
@@ -59782,7 +59721,7 @@ msgid "Rule Area %s"
 msgstr "Strefa z regułami %s"
 
 #: pcbnew/zone.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
 msgstr "Strefa z regułami '%s' %s"
 
@@ -60130,9 +60069,9 @@ msgid "Process could not be created"
 msgstr "Proces nie mógł zostać utworzony"
 
 #: scripting/python_scripting.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create user scripting path %s."
-msgstr "Nie można otworzyć/utworzyć ścieżki '%s'."
+msgstr "Nie można utworzyć ścieżki %s do skryptów użytkownika."
 
 #~ msgid "Select snapshot"
 #~ msgstr "Wybierz migawkę"
