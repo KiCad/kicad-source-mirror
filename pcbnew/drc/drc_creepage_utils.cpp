@@ -1510,6 +1510,35 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
     if( dist > aMaxWeight || dist == 0 )
         return result;
 
+    double circleAngle = EDA_ANGLE( center2 - center1 ).AsRadians();
+
+    if( dist <= R2 )
+    {
+        // Copper circle center is inside the board-edge circle so external tangent lines
+        // don't exist. The nearest gap is the radial distance between circle boundaries.
+        double weight = std::max( R2 - dist - R1, 0.0 );
+
+        if( weight > aMaxWeight )
+            return result;
+
+        double radialAngle = circleAngle + M_PI;
+        double cx = cos( radialAngle );
+        double cy = sin( radialAngle );
+        VECTOR2I pEnd = center2 + VECTOR2I( R2 * cx, R2 * cy );
+        VECTOR2I pStart = center1 + VECTOR2I( R1 * cx, R1 * cy );
+
+        PATH_CONNECTION pc;
+        pc.a1 = pStart;
+        pc.a2 = pEnd;
+        pc.weight = weight;
+
+        // Callers expect two entries (one per tangent side) and select by index.
+        result.push_back( pc );
+        result.push_back( pc );
+
+        return result;
+    }
+
     double weight = sqrt( dist * dist - R2 * R2 ) - R1;
     double theta = asin( R2 / dist );
     double psi = acos( R2 / dist );
@@ -1519,8 +1548,6 @@ std::vector<PATH_CONNECTION> CU_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 
     PATH_CONNECTION pc;
     pc.weight = std::max( weight, 0.0 );
-
-    double circleAngle = EDA_ANGLE( center2 - center1 ).AsRadians();
 
     VECTOR2I pStart;
     VECTOR2I pEnd;
