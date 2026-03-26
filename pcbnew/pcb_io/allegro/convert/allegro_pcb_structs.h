@@ -2042,6 +2042,9 @@ struct BLK_0x36_DEF_TABLE
     struct X05
     {
         std::array<uint8_t, 28> m_Unknown;
+
+        // This is in Nvidia Jetson (17.4), not in EVK BaseBoard (17.2)
+        COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
     };
 
     struct X06
@@ -2101,7 +2104,14 @@ struct BLK_0x36_DEF_TABLE
         COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2;
     };
 
-    using SubstructVariant = std::variant<X02, X03, X05, X06, FontDef_X08, X0B, X0C, X0D, X0F, X10>;
+    // So far only seen in a V175 file (Jetson)
+    struct X12
+    {
+        // No point reading this before we can use it
+        // std::array<uint8_t, 1052> m_Unknown;
+    };
+
+    using SubstructVariant = std::variant<X02, X03, X05, X06, FontDef_X08, X0B, X0C, X0D, X0F, X10, X12>;
 
     std::vector<SubstructVariant> m_Items;
 };

@@ -505,16 +505,23 @@ aspect ratio (m_W vs m_H) with the drill aspect ratio (drillW vs
 drillH). If they disagree on orientation, the drill dimensions are
 swapped. Round drills (equal W and H) skip the check.
 
-## Font Definitions (0x36)
+## Definition tables (0x36)
 
 The 0x36 block contains a heterogeneous list of substruct variants.
+One block contains only one kind of substruct. The type of the substruct
+is indicated by the second byte after the block type.
+
+Most of these are of unknown function.
+
+### Font Definitions (0x08)
+
 The `FontDef_X08` variant provides font metrics:
 
 - `m_CharHeight`: Character height in internal units
 - `m_CharWidth`: Character width in internal units
 
 Text objects (0x30) reference a font definition by 1-based index
-into the cached list of FontDef_X08 entries.
+into the cached list of `FontDef_X08` entries.
 
 ## String Table
 
