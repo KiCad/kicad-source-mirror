@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-26 05:18+0000\n"
+"PO-Revision-Date: 2026-03-26 09:37+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -22232,7 +22232,7 @@ msgstr "Wyklucz z plików położeń"
 #: eeschema/sch_table.cpp:301
 #, c-format
 msgid "%d Column Table"
-msgstr "%d kolumn tabeli"
+msgstr "%d kolumnowa tabela"
 
 #: eeschema/sch_table.cpp:470 pcbnew/pcb_table.cpp:682
 #, c-format
@@ -50356,9 +50356,9 @@ msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
 msgstr "Usuń %s atrybutów '%s' z wariantu %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s."
-msgstr "Dodaj pole %s '%s' z wartością '%s'."
+msgstr "Dodaje atrybut %s '%s' do wariantu '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1404
 #, c-format
@@ -50386,12 +50386,10 @@ msgid "Removed %s '%s' attribute from variant %s."
 msgstr "Usunięto %s atrybutów '%s' z wariantu %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1459
-#, fuzzy
 msgid "Do not place"
 msgstr "Nie obsadzony"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1497
-#, fuzzy
 msgid "exclude from position files"
 msgstr "Wyklucz z plików położeń"
 
@@ -50401,9 +50399,9 @@ msgid "Change %s field '%s' to '%s' on variant %s (footprint %s)."
 msgstr "Zmień %s pól '%s' na '%s' w wariancie %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1532
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s field '%s' to '%s' on variant %s."
-msgstr "Zmień pole %s:%s '%s' na '%s'."
+msgstr "Zmień pole %s '%s' na '%s' w wariancie %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1543
 #, c-format
@@ -50411,9 +50409,9 @@ msgid "Changed %s field '%s' to '%s' on variant %s (footprint %s)."
 msgstr "Zmieniam %s pól '%s' na '%s' w wariancie %s (footprint %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1552
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s field '%s' to '%s' on variant %s."
-msgstr "Zmieniam pole %s:%s '%s' na '%s'."
+msgstr "Zmieniono pole %s '%s' na '%s' w wariancie %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1573
 #, c-format
@@ -50473,14 +50471,14 @@ msgstr ""
 "połączonych z siecią \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1867
-#, fuzzy, c-format
+#, c-format
 msgid "Change group name from '%s' to '%s'."
-msgstr "Zmieniam nazwę grupy '%s' na '%s'."
+msgstr "Zmieniam nazwę grupy z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1873
-#, fuzzy, c-format
+#, c-format
 msgid "Changed group name from '%s' to '%s'."
-msgstr "Zmieniono nazwę grupy '%s' na '%s'."
+msgstr "Zmieniono nazwę grupy z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1887
 #, c-format
@@ -50549,9 +50547,8 @@ msgid "Removed unused net %s."
 msgstr "Usunięto nieużywaną sieć %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2342
-#, fuzzy
 msgid "Updating design variants..."
-msgstr "Uaktualnianie sieci..."
+msgstr "Uaktualnianie wariantów projektu..."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2370
 #, c-format
@@ -50649,9 +50646,8 @@ msgid "Castellated"
 msgstr "Kastelacja"
 
 #: pcbnew/pad.cpp:1929
-#, fuzzy
 msgid "Press-fit"
-msgstr "Ustawienia wstępne"
+msgstr "Na wcisk"
 
 #: pcbnew/pad.cpp:1962
 msgid "Length in Package"
@@ -50886,23 +50882,20 @@ msgid "Mechanical pad"
 msgstr "Pole mechaniczne"
 
 #: pcbnew/pad.cpp:3309
-#, fuzzy
 msgid "Press-fit pad"
-msgstr "Drukuj stronę %d"
+msgstr "Pole Na wcisk"
 
 #: pcbnew/pad.cpp:3312
 msgid "Undefined"
 msgstr "Niezdefiniowany"
 
 #: pcbnew/pad.cpp:3324
-#, fuzzy
 msgid "Not post-machined"
-msgstr "Nieokreślony"
+msgstr "Bez obróbki"
 
 #: pcbnew/pad.cpp:3337
-#, fuzzy
 msgid "No backdrill"
-msgstr "Brak znacznika wiercenia"
+msgstr "Bez nawiercania"
 
 #: pcbnew/pad.cpp:3338
 msgid "Backdrill bottom"
@@ -50921,14 +50914,12 @@ msgid "Front, back and connected layers"
 msgstr "Górna, dolna oraz połączone warstwy"
 
 #: pcbnew/pad.cpp:3408
-#, fuzzy
 msgid "Post-machining Properties"
-msgstr "Właściwości pinu"
+msgstr "Właściwości obróbki"
 
 #: pcbnew/pad.cpp:3409
-#, fuzzy
 msgid "Backdrill Properties"
-msgstr "Właściwości ramki"
+msgstr "Właściwości nawiercenia"
 
 #: pcbnew/pad.cpp:3411
 msgid "Pad Type"
@@ -50963,37 +50954,36 @@ msgid "Hole Size Y"
 msgstr "Rozmiar otworu Y"
 
 #: pcbnew/pad.cpp:3514
-#, fuzzy
 msgid "Top Post-machining"
-msgstr "Pozycjonowanie"
+msgstr "Obróbka na górnej"
 
 #: pcbnew/pad.cpp:3527
 msgid "Top Post-machining Size"
-msgstr ""
+msgstr "Rozmiar obróbki na górnej"
 
 #: pcbnew/pad.cpp:3545
 msgid "Top Counterbore Depth"
-msgstr ""
+msgstr "Głębokość pogłębienia na górnej"
 
 #: pcbnew/pad.cpp:3562
 msgid "Top Countersink Angle"
-msgstr ""
+msgstr "Kąt stożka na górnej"
 
 #: pcbnew/pad.cpp:3579
 msgid "Bottom Post-machining"
-msgstr ""
+msgstr "Obróbka na dolnej"
 
 #: pcbnew/pad.cpp:3592
 msgid "Bottom Post-machining Size"
-msgstr ""
+msgstr "Rozmiar obróbki na dolnej"
 
 #: pcbnew/pad.cpp:3610
 msgid "Bottom Counterbore Depth"
-msgstr ""
+msgstr "Głębokość pogłębienia na dolnej"
 
 #: pcbnew/pad.cpp:3627
 msgid "Bottom Countersink Angle"
-msgstr ""
+msgstr "Kąt stożka na dolnej"
 
 #: pcbnew/pad.cpp:3644 pcbnew/pcb_track.cpp:3231
 msgid "Backdrill Mode"
@@ -51006,9 +50996,8 @@ msgstr "Rozmiar dolnego nawiercenia"
 #: pcbnew/pad.cpp:3664 pcbnew/pcb_track.cpp:3249
 #: pcbnew/widgets/pcb_properties_panel.cpp:651
 #: pcbnew/widgets/pcb_properties_panel.cpp:655
-#, fuzzy
 msgid "Bottom Backdrill Must-Cut"
-msgstr "Dolna Pad Master"
+msgstr "Must-Cut dolnego nawiercenia"
 
 #: pcbnew/pad.cpp:3681 pcbnew/pcb_track.cpp:3262
 msgid "Top Backdrill Size"
@@ -51018,7 +51007,7 @@ msgstr "Rozmiar górnego nawiercenia"
 #: pcbnew/widgets/pcb_properties_panel.cpp:652
 #: pcbnew/widgets/pcb_properties_panel.cpp:656
 msgid "Top Backdrill Must-Cut"
-msgstr ""
+msgstr "Must-Cut górnego nawiercenia"
 
 #: pcbnew/pad.cpp:3716
 msgid "Fabrication Property"
@@ -51308,24 +51297,20 @@ msgid "Generator Properties"
 msgstr "Właściwości generatora"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4672
-#, fuzzy
 msgid "Constructing caches"
-msgstr "Etykiety sygnałów w konflikcie"
+msgstr "Konstruowanie bufora"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4687
-#, fuzzy
 msgid "Creating nets"
-msgstr "Tworzenie jednostek"
+msgstr "Tworzenie sieci"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4696
-#, fuzzy
 msgid "Creating tracks"
-msgstr "istniejąca ścieżka"
+msgstr "Tworzenie ścieżek"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4735
-#, fuzzy
 msgid "Converting footprints"
-msgstr "W punkcie centralnym footprintu"
+msgstr "Konwertowanie footprintów"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2476
 msgid "Parsing Allegro objects"
@@ -51348,14 +51333,12 @@ msgstr ""
 "wynikowy."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:181
-#, fuzzy
 msgid "Failed to build board from Allegro data"
-msgstr "Wystąpił błąd przy dodawaniu danych komponentu"
+msgstr "Wystąpił błąd przy budowaniu płytki z danych Allegro PCB"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:39
-#, fuzzy
 msgid "Allegro PCB files"
-msgstr "Pliki listy sieci programu Allegro"
+msgstr "Pliki programu Allegro"
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:177
 #, c-format
@@ -51363,9 +51346,9 @@ msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Nieznane mapowanie dla warstwy '%s' programu Altium."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown mapping of the Altium layer kind '%s'."
-msgstr "Nieznane mapowanie dla warstwy '%s' programu Altium."
+msgstr "Nieznane mapowanie warstwy Altium typu '%s'."
 
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:284
 #, c-format
@@ -51662,7 +51645,7 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3767
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad shape."
@@ -51671,7 +51654,7 @@ msgstr ""
 "W footprincie %s pole %s używa nieznanego kształtu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3780
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
 msgstr "W footprincie %s pole %s używa nieznanego kształtu."
 
@@ -51727,7 +51710,7 @@ msgstr ""
 "nie obsługiwane)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4121
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
 msgstr "Pole nie będące polem miedzi %s używa nieznanego kształtu pola."
 
@@ -52004,7 +51987,7 @@ msgstr ""
 "lokowania nie są obsługiwane."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find component '%s' in the library (Symdef ID: '%s')"
 msgstr "Nie można odnaleźć komponentu '%s' w bibliotece (Symdef ID: '%s')"
 
@@ -52227,14 +52210,13 @@ msgstr ""
 "programu CADSTAR (które zostały zaimportowane dla wszystkich sieci)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3913
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
 "imported. Please review the design rules as copper pours may be affected by "
 "this."
 msgstr ""
-"Projekt CADSTAR zawiera sieci z przypisaną 'Spacing Class'. Program KiCad "
+"Projekt CADSTAR zawiera sieci z przypisanym 'Spacing Class'. Program KiCad "
 "nie ma odpowiednika tych klas programu CADSTAR, więc te elementy nie zostały "
 "zaimportowane. Prosimy o zapoznanie się z regułami projektowymi, ponieważ "
 "wpłynie to na sposób wypełniania."
@@ -52605,23 +52587,21 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Biblioteka footprintu '%s' nie może zostać usunięta."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Via token contains %d parameters, expected at least 10."
-msgstr "Token \"Element\" zawiera %d parametrów."
+msgstr "Token Przelotka zawiera %d parametrów, choć spodziewano się minimum 10."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:68
 msgid "gEDA / Lepton EDA PCB board file"
 msgstr "Plik z płytką gEDA / Lepton EDA PCB"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:82
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint file"
-msgstr "Plik footprintów gEDA PCB"
+msgstr "Plik footprintów gEDA / Lepton EDA PCB"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:87
-#, fuzzy
 msgid "gEDA / Lepton EDA PCB footprint library directory"
-msgstr "Folder bibliotek footprintów programu gEDA PCB"
+msgstr "Folder bibliotek footprintów programu gEDA / Lepton EDA PCB"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:437
 msgid "Generating content section"
@@ -52736,14 +52716,14 @@ msgstr "Zduplikowana nazwa NETCLASS '%s'."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2515
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2526
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZAux for CZONE_CONTAINER '%s'"
-msgstr "Zły ZAux dla CZONE_CONTAINER \"%s\""
+msgstr "Zły ZAux dla CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2541
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
-msgstr "Zły ZSmoothing dla CZONE_CONTAINER \"%s\""
+msgstr "Zły ZSmoothing dla CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2593
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8441
@@ -52755,9 +52735,9 @@ msgstr ""
 "Wypełnienia zostaną poddane konwersji na najlepiej dostosowane do wymagań."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2619
-#, fuzzy, c-format
+#, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER '%s'"
-msgstr "Zła opcja pola ZClearance dla CZONE_CONTAINER \"%s\""
+msgstr "Zła opcja pola ZClearance dla CZONE_CONTAINER '%s'"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2915
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2954
@@ -52799,9 +52779,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Biblioteka footprintów '%s' jest tylko do odczytu."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Warning in file '%s'"
-msgstr "Nie można otworzyć pliku '%s'"
+msgstr "Ostrzeżeni w pliku '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:1643
 #, c-format
@@ -53200,9 +53180,8 @@ msgstr ""
 "ustawień edytora PCB.\n"
 
 #: pcbnew/pcb_point.cpp:189
-#, fuzzy
 msgid "PCB Point"
-msgstr "Punkty odniesienia"
+msgstr "Punkt PCB"
 
 #: pcbnew/pcb_reference_image.cpp:365
 msgid "Associated Layer"
@@ -53241,12 +53220,12 @@ msgid "Pad Primitives"
 msgstr "Prymitywy pól"
 
 #: pcbnew/pcb_table.cpp:640
-#, fuzzy, c-format
+#, c-format
 msgid "%d column table"
 msgstr "%d kolumn tabeli"
 
 #: pcbnew/pcb_tablecell.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Table cell %s"
 msgstr "Komórka tabeli %s"
 
@@ -53573,9 +53552,314 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Markup</th>\n"
+"        <th></th>\n"
+"        <th>Rezultat</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{indeks górny}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>indeks górny</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{indeks dolny}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>indeks dolny</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{kreska negacji}</samp><br> &nbsp;<br><samp>~"
+"{CLK}</samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>kreska negacji</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${zmienna}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>wartość zmiennej</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${PROJECTNAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>MyBoard</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Zmienne PCB</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILENAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILEPATH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>/path/to/board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${LAYER}</samp> (w tekstach/tabelach)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>F.Cu, B.Cu, F.SilkS...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Sondowanie footprintów</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${oznaczenie:pole}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>wartość pola</i> footprintu <i>o oznaczeniu</"
+"i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:REFERENCE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>U1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>STM32F407VGT6</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_LIBRARY}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Package_QFP</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_NAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>LQFP-100_14x14mm_P0.5mm</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Funkcje Padów/Pinów</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${oznaczenie:NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Nazwa sieci połączonej z padem</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${oznaczenie:SHORT_NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Krótka nazwa sieci lub NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> lub <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${oznaczenie:NET_CLASS(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Klasa sieci przydzielona padowi</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${oznaczenie:PIN_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Funkcja/nazwa pinu</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Zmienne tablicowe</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (w tabelach)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (w tabelach)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (w tabelach)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A1, B2, C3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Wyrażenia matematyczne</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{wyrażenie}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>wynik obliczeń</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} - 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>3</samp> (gdy ROW=4)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Porównywanie ciągów i teksty warunkowe</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" == \"text\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" != \"other\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(warunek, wartość gdy prawda, wartość gdy "
+"fałsz)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Warunkowe wyświetlenie tekstu</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
+"\"BOTTOM\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (gdy warstwaw górna) lub <samp>"
+"BOTTOM</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Działa również porównywanie liczb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Kody Escape</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (nie przetworzone)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Price: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Price: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (nie wyliczone)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Zmienne potomne</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(@{${ROW}-2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamiczne sprawdzenie sieci w tabelach</samp></"
+"td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U${ROW}:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynamiczny odnośnik footprintu</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Uwaga. Ta notacja ma pierwszeństwo przed wyliczaniem zmiennych.</i>\n"
+"<p></p>\n"
+"<p><b>Sondowanie footprintów:</b> Pola odnośnika oraz pady w innych "
+"footprintach używają składni <samp>${oznaczenie:pole}</samp> lub <samp>$"
+"{oznaczenie:funkcja(pad)}</samp>.</p>\n"
+"<p><b>Zmienne potomne:</b> Zmienne mogą zawierać inne zmienne. Wewnętrzne "
+"zmienne są rozpoznawane jako pierwsze. Maksymalne zagnieżdżenie: 10 "
+"poziomów.</p>\n"
+"<p><b>Komunikaty błędu:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Zmienna lub funkcja nie mogła "
+"zostać rozwiązana</li>\n"
+"<li><samp>&lt;Unknown reference: U1&gt;</samp> - Nie znaleziono takiego "
+"footprintu</li>\n"
+"</ul>\n"
+"\n"
 
 #: pcbnew/pcb_textbox.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "PCB text box '%s' on %s"
 msgstr "Pole tekstowe PCB '%s' na %s"
 
@@ -53584,17 +53868,17 @@ msgid "Border Properties"
 msgstr "Właściwości ramki"
 
 #: pcbnew/pcb_track.cpp:177
-#, fuzzy, c-format
+#, c-format
 msgid "Blind via %s on %s"
-msgstr "Ślepa/Zagrzebana przelotka %s na %s"
+msgstr "Ślepa przelotka %s na %s"
 
 #: pcbnew/pcb_track.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Buried via %s on %s"
-msgstr "Ślepa/Zagrzebana przelotka %s na %s"
+msgstr "Zagrzebana przelotka %s na %s"
 
 #: pcbnew/pcb_track.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "Micro via %s on %s"
 msgstr "Mikroprzelotka %s na %s"
 
@@ -53620,9 +53904,8 @@ msgid "No via hole size defined."
 msgstr "Nie zdefiniowano rozmiaru otworu przelotki."
 
 #: pcbnew/pcb_track.cpp:1806
-#, fuzzy
 msgid "No via diameter defined."
-msgstr "Nie zdefiniowano rozmiaru otworu przelotki."
+msgstr "Nie zdefiniowano rozmiaru przelotki."
 
 #: pcbnew/pcb_track.cpp:1814
 msgid "Via hole size must be smaller than via diameter"
@@ -53674,9 +53957,8 @@ msgid "Micro Via"
 msgstr "Mikroprzelotka"
 
 #: pcbnew/pcb_track.cpp:2434
-#, fuzzy
 msgid "Blind Via"
-msgstr "Przelotka ślepa/zagrzebana"
+msgstr "Przelotka ślepa"
 
 #: pcbnew/pcb_track.cpp:2435
 msgid "Buried Via"
@@ -53708,7 +53990,6 @@ msgstr "Ścieżka %s na %s, długość %s"
 #: pcbnew/pcb_track.cpp:2885 pcbnew/pcb_track.cpp:2891
 #: pcbnew/pcb_track.cpp:2897 pcbnew/pcb_track.cpp:2903
 #: pcbnew/pcb_track.cpp:2909
-#, fuzzy
 msgid "From board stackup"
 msgstr "Ze stosu warstw"
 
@@ -53753,9 +54034,8 @@ msgid "Via Properties"
 msgstr "Właściwości przelotki"
 
 #: pcbnew/pcb_track.cpp:3180
-#, fuzzy
 msgid "Post-machining"
-msgstr "Pozycjonowanie"
+msgstr "Obróbka"
 
 #: pcbnew/pcb_track.cpp:3191 pcbnew/widgets/pcb_properties_panel.cpp:653
 msgid "Layer Top"
@@ -53802,38 +54082,36 @@ msgid "Filling"
 msgstr "Wypełnienie"
 
 #: pcbnew/pcb_track.cpp:3289
-#, fuzzy
 msgid "Front Post-machining"
-msgstr "Maskowanie po stronie górnej"
+msgstr "Obróbka po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:3292
 msgid "Front Post-machining Size"
-msgstr ""
+msgstr "Rozmiar obróbki po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:3307
 msgid "Front Post-machining Depth"
-msgstr ""
+msgstr "Głębokość obróbki po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:3321
 msgid "Front Post-machining Angle"
-msgstr ""
+msgstr "Kąt obróbki po stronie górnej"
 
 #: pcbnew/pcb_track.cpp:3335
-#, fuzzy
 msgid "Back Post-machining"
-msgstr "Maskowanie po stronie dolnej"
+msgstr "Obróbka po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:3338
 msgid "Back Post-machining Size"
-msgstr ""
+msgstr "Rozmiar obróbki po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:3353
 msgid "Back Post-machining Depth"
-msgstr ""
+msgstr "Głębokość obróbki po stronie dolnej"
 
 #: pcbnew/pcb_track.cpp:3367
 msgid "Back Post-machining Angle"
-msgstr ""
+msgstr "Kąt obróbki po stronie dolnej"
 
 #: pcbnew/pcbexpr_evaluator.cpp:696
 msgid "must be mm, in, mil, deg, fs, or ps"
@@ -53911,7 +54189,6 @@ msgid "Missing component class name argument to hasComponentClass()"
 msgstr "Brak argumentu z nazwą klasy komponentu dla hasComponentNetclass()"
 
 #: pcbnew/pcbnew.cpp:790 pcbnew/pcbnew.cpp:803
-#, fuzzy
 msgid "Loading Footprint Libraries"
 msgstr "Ładowanie bibliotek footprintów"
 
@@ -53920,9 +54197,9 @@ msgid "Failed to load board\n"
 msgstr "Nie można wczytać obwodu drukowanego\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Nieprawidłowa nazwa warstwy \"%s\"\n"
+msgstr "Nieprawidłowa nazwa warstwy '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:559 pcbnew/pcbnew_jobs_handler.cpp:639
 #: pcbnew/pcbnew_jobs_handler.cpp:683
@@ -53971,9 +54248,9 @@ msgid "Error writing file '%s'.\n"
 msgstr "Błąd podczas zapisywania pliku '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1585
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote board statistics to '%s'.\n"
-msgstr "Zapisano dane o pozycjach elementów na stronie dolnej do '%s'.\n"
+msgstr "Zapisano statystykę płytki do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1925 pcbnew/pcbnew_jobs_handler.cpp:2003
 #, c-format
@@ -54055,9 +54332,8 @@ msgid "Saved board\n"
 msgstr "Zapisana płytka\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2486
-#, fuzzy
 msgid "Failed to save board.\n"
-msgstr "Nie można wczytać obwodu drukowanego\n"
+msgstr "Nie można zapisać płytki\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2609
 #, c-format
@@ -54083,9 +54359,8 @@ msgstr ""
 "powodzeniem\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2751
-#, fuzzy
 msgid "Board file was not updated\n"
-msgstr "Biblioteka symboli nie została zaktualizowana\n"
+msgstr "Płytka nie została zaktualizowana\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2894
 #, c-format
@@ -54148,17 +54423,16 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:221
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można otworzyć folderu z wtyczkami '%s'."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:222
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:230
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:239
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:245
-#, fuzzy
 msgid "Plugin Directory"
-msgstr "Otwórz Folder Wtyczek"
+msgstr "Folder z wtyczkami"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:228
 #, c-format
@@ -54166,9 +54440,9 @@ msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Folder z wtyczkami '%s' nie istnieje.  Utworzyć nowy?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć folderu z wtyczkami '%s'."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
@@ -54407,9 +54681,8 @@ msgid "Switches posture of the currently routed track."
 msgstr "Zmienia sposób załamania bieżąco prowadzonej ścieżki."
 
 #: pcbnew/router/router_tool.cpp:230
-#, fuzzy
 msgid "Track Corner Mode Switch"
-msgstr "Tryb zaokrąglania ścieżek"
+msgstr "Przełącz tryb zaokrąglania ścieżek"
 
 #: pcbnew/router/router_tool.cpp:231
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -54418,52 +54691,42 @@ msgstr ""
 "podczas trasowania."
 
 #: pcbnew/router/router_tool.cpp:239
-#, fuzzy
 msgid "Track Corner Mode 45"
-msgstr "Tryb zaokrąglania ścieżek"
+msgstr "Tryb łamania 45"
 
 #: pcbnew/router/router_tool.cpp:240
-#, fuzzy
 msgid "Switch to 45° corner when routing tracks."
 msgstr ""
-"Przełącza pomiędzy stosowaniem kątów ostrych a 45°/90° przy łamaniu ścieżek "
-"podczas trasowania."
+"Przełącza na łamanie pod kątem 45° przy łamaniu ścieżek podczas trasowania."
 
 #: pcbnew/router/router_tool.cpp:246
-#, fuzzy
 msgid "Track Corner Mode 90"
-msgstr "Tryb zaokrąglania ścieżek"
+msgstr "Tryb łamania 90"
 
 #: pcbnew/router/router_tool.cpp:247
-#, fuzzy
 msgid "Switch to 90° corner when routing tracks."
 msgstr ""
-"Przełącza pomiędzy stosowaniem kątów ostrych a 45°/90° przy łamaniu ścieżek "
-"podczas trasowania."
+"Przełącza na łamanie pod kątem 90° przy łamaniu ścieżek podczas trasowania."
 
 #: pcbnew/router/router_tool.cpp:253
-#, fuzzy
 msgid "Track Corner Mode Arc 45"
-msgstr "Tryb zaokrąglania ścieżek"
+msgstr "Tryb zaokrąglania 45"
 
 #: pcbnew/router/router_tool.cpp:254
-#, fuzzy
 msgid "Switch to arc 45° corner when routing tracks."
 msgstr ""
-"Przełącza pomiędzy stosowaniem kątów ostrych a 45°/90° przy łamaniu ścieżek "
-"podczas trasowania."
+"Przełącza na zaokrąglanie pod kątem 45° przy łamaniu ścieżek podczas "
+"trasowania."
 
 #: pcbnew/router/router_tool.cpp:260
-#, fuzzy
 msgid "Track Corner Mode Arc 90"
-msgstr "Tryb zaokrąglania ścieżek"
+msgstr "Tryb zaokrąglania 90"
 
 #: pcbnew/router/router_tool.cpp:261
-#, fuzzy
 msgid "Switch to arc 90° corner when routing tracks."
 msgstr ""
-"Przełącza pomiędzy stosowaniem kątów ostrych a 45°/90° przy łamaniu ścieżek "
-"podczas trasowania."
+"Przełącza na zaokrąglanie pod kątem 90° przy łamaniu ścieżek podczas "
+"trasowania."
 
 #: pcbnew/router/router_tool.cpp:286
 msgid "Select Track/Via Width"
@@ -54755,9 +55018,8 @@ msgid "Control to select the via diameter"
 msgstr "Kontrolka służąca do wyboru rozmiaru przelotki"
 
 #: pcbnew/toolbars_pcb_editor.cpp:137
-#, fuzzy
 msgid "Control to select the current variant"
-msgstr "Kontrolka służąca do wyboru rozmiaru przelotki"
+msgstr "Kontrolka służąca do wyboru bieżącego wariantu"
 
 #: pcbnew/toolbars_pcb_editor.cpp:220
 msgid "Track routing tools"
@@ -54768,9 +55030,8 @@ msgid "Track tuning tools"
 msgstr "Narzędzia dostrajania"
 
 #: pcbnew/toolbars_pcb_editor.cpp:292
-#, fuzzy
 msgid "PCB origins and points"
-msgstr "Punkty odniesienia"
+msgstr "Punkty bazowe i odniesienia PCB"
 
 #: pcbnew/toolbars_pcb_editor.cpp:405
 msgid ""
