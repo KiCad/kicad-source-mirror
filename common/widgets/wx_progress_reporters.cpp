@@ -34,7 +34,7 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
         WX_PROGRESS_REPORTER_BASE( aTitle,
-                                   ( aReserveSpaceForMessage ? wxString( ' ', 80 ) : wxT( "" ) ),
+                                   ( aReserveSpaceForMessage ? wxString( ' ', 80 ) : wxString( wxT( "" ) ) ),
                                    1, aParent,
                                    // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
                                                          // quasi-modal dialog
