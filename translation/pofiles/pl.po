@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:34+0000\n"
+"PO-Revision-Date: 2026-03-26 09:37+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -20279,7 +20279,7 @@ msgstr "Łącze do biblioteki"
 #: eeschema/sch_table.cpp:424 pcbnew/pcb_table.cpp:578
 #, c-format
 msgid "%d Column Table"
-msgstr "%d kolumn tabeli"
+msgstr "%d kolumnowa tabela"
 
 #: eeschema/sch_table.cpp:582 pcbnew/pcb_table.cpp:614
 #, c-format
