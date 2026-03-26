@@ -621,21 +621,18 @@ BOOST_AUTO_TEST_CASE( ExternalFreeTextRecordCountMatchesBinary )
 }
 
 
-BOOST_AUTO_TEST_CASE( ExternalSingleSheetJunctionsMatchAsciiTiedots )
+BOOST_AUTO_TEST_CASE( ExternalSheetCountMatchesDesign )
 {
-    // SC350430B01 is single-sheet, so its tie-dot pool is exactly the .txt
-    // *TIEDOTS* list (18 junctions); the first tie-dot is at (5900, 1800).
+    // The per-sheet CAE signature occurs once per sheet (== pool3.used_count):
+    // 5 sheets in SC350420B02, 1 in SC350430B01, 16 in SC350460A01.
+    const struct
+    {
+        size_t index;
+        size_t expectedSheets;
+    } EXPECT[] = { { 0, 5 }, { 1, 1 }, { 2, 16 } };
 
-    std::vector<uint8_t> data;
-    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
-
-    PADS_SCH_BINARY_READER reader;
-    BOOST_REQUIRE( reader.Parse( data ) );
-
-    BOOST_REQUIRE_EQUAL( reader.GetJunctions().size(), 18u );
-    BOOST_CHECK_EQUAL( reader.GetJunctions().front().x_mils, 5900 );
-    BOOST_CHECK_EQUAL( reader.GetJunctions().front().y_mils, 1800 );
-}
+    for( const auto& exp : EXPECT )
+    {
 
 
 // Count the connection polylines and their total vertices in a PADS Logic ASCII

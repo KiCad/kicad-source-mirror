@@ -115,6 +115,9 @@ public:
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
 
+    /// Number of PADS sheets in the design (>= 1).
+    size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
+
     /**
      * Build the recovered symbols and wires onto @p aRootSheet's screen.
      *
@@ -123,11 +126,14 @@ public:
     int BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const;
 
 private:
+    void decodeSheets( const std::vector<uint8_t>& aData );
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );
 
+    /// File offsets of each per-sheet object block (empty for a single-sheet design).
+    std::vector<size_t>                  m_sheetOffsets;
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.

@@ -123,6 +123,7 @@ bool PADS_SCH_BINARY_READER::ReadFile( const wxString& aFileName, std::vector<ui
 
 bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 {
+    m_sheetOffsets.clear();
     m_placements.clear();
     m_wireVertices.clear();
     m_wirePolylines.clear();
@@ -133,12 +134,39 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     if( !IsBinarySch( aData ) )
         return false;
 
+    decodeSheets( aData );
     decodePlacements( aData );
     decodeWires( aData );
     decodeTexts( aData );
     decodeJunctions( aData );
 
     return true;
+}
+
+
+// ---------------------------------------------------------------------------
+// SHEETS
+//
+// PADS Logic stores one object block per sheet in the data stream, each framed
+// by a per-sheet CAE view record carrying the fixed signature
+//     80 00 00 00 30 00 00 00
+// The signature occurs exactly once per sheet (== pool3.used_count), in sheet
+// order, so its offsets bound the per-sheet object blocks.  Sheets carry no name
+// in this format (they are numbered) and the page size is a single global value.
+// ---------------------------------------------------------------------------
+static const std::array<uint8_t, 8> SHEET_SIGNATURE = { 0x80, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00 };
+
+
+void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
+{
+    if( d.size() < SHEET_SIGNATURE.size() )
+        return;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() <= d.size(); ++i )
+    {
+        if( std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
+            m_sheetOffsets.push_back( i );
+    }
 }
 
 
