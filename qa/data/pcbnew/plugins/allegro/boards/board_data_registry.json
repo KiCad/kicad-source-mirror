@@ -113,8 +113,7 @@
                 {
                     "type": "0x1c",
                     "offset": "0x00047f44",
-                    "comment": "Padstack 200C125D, plated mech hole",
-                    "extraTest": "BeagleBoneAI_PS_200C125D"
+                    "comment": "Padstack 200C125D, plated mech hole"
                 }
             ]
         },
@@ -152,8 +151,7 @@
                 {
                     "type": "0x1c",
                     "offset": "0x0001ef8c",
-                    "comment": "Padstack C50H340M700N, NPTH mech hole",
-                    "extraTests": "CutiePi_PS_C50H340M700N"
+                    "comment": "Padstack C50H340M700N, NPTH mech hole"
                 }
             ],
             "boardExpectations": [
@@ -229,6 +227,18 @@
                     "type": "0x20",
                     "offset": "0x0131553c",
                     "skip": false
+                }
+            ]
+        },
+        "parallella_v163": {
+            "formatVersion": "16.3",
+            "url": "https://github.com/parallella/parallella-hw",
+            "license": "CC-BY-SA-3.0",
+            "blocks": [
+                {
+                    "type": "0x1c",
+                    "offset": "0x000368c8",
+                    "comment": "Padstack 56X55RT"
                 }
             ]
         },

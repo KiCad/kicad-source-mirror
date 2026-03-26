@@ -1058,13 +1058,20 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     ReadArrayU32( aStream, data.m_DrillArr );
 
     ReadCond( aStream, aVer, data.m_SlotAndUnknownArr );
-    ReadCond( aStream, aVer, data.m_UnknownArr8_2 );
+    ReadCond( aStream, aVer, data.m_Unknown12 );
 
     // V180 has 8 extra uint32s between the fixed arrays and the component table
     ReadCond( aStream, aVer, data.m_V180Trailer );
 
-    // Work out how many fixed slots we have, and how many per-layer slots
-    data.m_NumFixedCompEntries = aVer < FMT_VER::V_172 ? 10 : 21;
+    // Work out how many fixed slots we have
+    if( aVer < FMT_VER::V_165 )
+        data.m_NumFixedCompEntries = 10;
+    else if( aVer < FMT_VER::V_172 )
+        data.m_NumFixedCompEntries = 11;
+    else
+        data.m_NumFixedCompEntries = 21;
+
+    // ...and how many per-layer slots
     data.m_NumCompsPerLayer = aVer < FMT_VER::V_172 ? 3 : 4;
 
     const size_t nComps = data.m_NumFixedCompEntries + ( data.m_LayerCount * data.m_NumCompsPerLayer );

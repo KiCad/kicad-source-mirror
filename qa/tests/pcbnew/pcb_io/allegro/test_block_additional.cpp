@@ -90,6 +90,23 @@ static void TestOlympus0x20( const BLOCK_BASE& aBlock )
 }
 
 
+/**
+ * This is a 1-layer SMD padstack in v16.3 format.
+ */
+static void TestParallellaV163_PS_56X55RT( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x0acda700 );
+
+    BOOST_TEST( blk.m_LayerCount == 1 );
+    BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
+}
+
+
 static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
@@ -100,13 +117,15 @@ static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
     BOOST_TEST( blk.m_Key == 0x1fda );
     BOOST_TEST( blk.m_LayerCount == 12 );
 
+    BOOST_TEST( blk.m_Components.size() == 21 + 4 * 12 );
+
     BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_RECTANGLE );
     BOOST_TEST( blk.m_Components[0].m_W == 244000 );
     BOOST_TEST( blk.m_Components[0].m_H == 244000 );
 }
 
 
-static void TestCutiePi_PS_C50H340M700N( const BLOCK_BASE& aBlock )
+static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
@@ -117,6 +136,8 @@ static void TestCutiePi_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_LayerCount == 6 );
     BOOST_TEST( blk.m_Drill == 133858 );
+
+    BOOST_TEST( blk.m_Components.size() == 11 + 3 * 6 );
 
     BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_CIRCLE );
     BOOST_TEST( blk.m_Components[0].m_W == 275591 );
@@ -136,7 +157,8 @@ static void TestCutiePi_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlockTests{
     { { "Olympus_15061-1b_v165",      0x0131553c }, TestOlympus0x20 },
     { { "BeagleBone-AI",              0x00047f44 }, TestBeagleBoneAI_PS_200C125D },
-    { { "CutiePi_V2_3_v166",          0x0001ef8c }, TestCutiePi_PS_C50H340M700N }
+    { { "CutiePi_V2_3_v166",          0x0001ef8c }, TestCutiePiV166_PS_C50H340M700N },
+    { { "parallella_v163",            0x000368c8 }, TestParallellaV163_PS_56X55RT },
 };
 
 

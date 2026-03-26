@@ -187,10 +187,31 @@ The parent field can be:
 
 ## Padstack Layout (0x1C)
 
-A padstack contains fixed-slot components followed by per-layer
-components (`m_LayerCount * m_NumCompsPerLayer`).
+A padstack contains a fixed header of data, followed by a list of components.
 
-### Drill Diameter
+Padstacks had a major overhaul in V17.2:
+
+ * New pad shapes (rounded rect, chanmfered rects, donut, n-sided poly)
+ * Square hole type added
+ * Drill tool size (string data) added
+ * Drill diameter migrated to "finished diameter/size"
+ * Slot tolerance in X and Y
+ * Secondary drills - counterbore/countersink
+ * Multi-shape mask pads
+ * Keepouts
+ * Suppress unconnected internal pad (legacy compatibility)
+ * Lock Layer Span
+
+### Header
+
+The first few fields in the header are the same in all versions:
+
+* Block type (and some other numbers which drive a list size)
+* Key
+* Next block key
+* The padstack name string key
+
+#### Drill Diameter
 
 The drill field location is version-dependent:
 
@@ -201,18 +222,25 @@ The drill field location is version-dependent:
   equal to width). The old `m_Drill` field still exists in V172+ but
   does NOT contain the drill diameter.
 
-### Fixed Slots (Technical Layers)
+### Component list
 
-The number of fixed slots varies by version: 10 for pre-V172, 21 for
-V172+. Verified slot assignments:
+The component list is fixed-size set of components followed by per-layer
+components (`m_LayerCount * m_NumCompsPerLayer`).
 
-Pre-V172 (10 fixed):
+The fixed slots are technical layers, the variable slots are stack-up layers.
+
+#### Fixed Slots (Technical Layers)
+
+The number of fixed slots varies by version: 10 for pre-V165, 10 for
+pre-V172, 21 for 172+. Verified slot assignments:
+
+V165+, pre-V172 (11 fixed):
 
 | Slot | Layer                    |
 |------|--------------------------|
-| 0    | Top solder mask (~TSM)   |
-| 5    | Top paste mask (~TPM)    |
-| 7    | Top film mask (~TFM)     |
+| 1    | Top solder mask (~TSM)   |
+| 6    | Top paste mask (~TPM)    |
+| 8    | Top film mask (~TFM)     |
 
 V172+ (21 fixed):
 
@@ -221,14 +249,14 @@ V172+ (21 fixed):
 | 14   | Top solder mask (~TSM)   |
 | 15   | Bottom solder mask       |
 
-### Per-Layer Components
+#### Per-Layer Components
 
 Per-layer component order (`m_NumCompsPerLayer` entries per layer):
 - Index 0: Antipad (clearance)
 - Index 1: Thermal relief
 - Index 2: Pad shape
 
-### Thermal Relief
+#### Thermal Relief
 
 The thermal relief component (per-layer index 1) stores the outer
 extent of the thermal pattern in m_W/m_H, not the spoke width. The
@@ -334,7 +362,7 @@ The `m_Ptr7` field is version-conditional: `m_Ptr7` exists in V172+,
 
 The 0x37 pointer array holds keys of blocks, of which the 0x1B NET
 block provides net information and 0x28 SHAPE blocks specify fills.
-The `m_Count` field indicates how many entries are specified in the 
+The `m_Count` field indicates how many entries are specified in the
 array. Some keys may be invalid.
 
 ## Board Outline

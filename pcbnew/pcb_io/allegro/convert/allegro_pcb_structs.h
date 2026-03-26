@@ -1209,10 +1209,12 @@ struct BLK_0x1C_PADSTACK
      * in internal coordinate units. For routed slots (round drill bit routed along a path),
      * m_DrillArr holds only the bit diameter while this array holds the full slot envelope.
      * For punched oblong drills, these values match m_DrillArr[4] and [7].
+     *
+     * This probably also holds secondary drill parameters and other new V17.2 features.
      */
     COND_GE<FMT_VER::V_172, std::array<uint32_t, 28>> m_SlotAndUnknownArr;
 
-    COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, std::array<uint32_t, 8>> m_UnknownArr8_2;
+    COND_GE_LT<FMT_VER::V_165, FMT_VER::V_172, uint32_t> m_Unknown12;
 
     /**
      * V180 inserts 8 extra uint32s between the fixed arrays and the component table.
@@ -1228,12 +1230,18 @@ struct BLK_0x1C_PADSTACK
      *
      * All fixed slots are technical layers (solder mask, paste mask, film mask,
      * assembly variant, etc). The exact slot-to-layer mapping is version-dependent
-     * and not fully contiguous. Verified mappings from WORKLOG reverse engineering:
+     * and not fully contiguous.
      *
-     * V<172 (10 fixed):
+     * V<165 (10 fixed)
      *   Slot 0  = ~TSM (top solder mask)
      *   Slot 5  = ~TPM (top paste mask)
      *   Slot 7  = ~TFM (top film mask)
+     *
+     * V<172 (11 fixed):
+     *   Slot 0  = ??? (looks the same size as a solder mask)
+     *   Slot 1  = ~TSM (top solder mask)
+     *   Slot 6  = ~TPM (top paste mask)
+     *   Slot 8  = ~TFM (top film mask)
      *
      * V>=172 (21 fixed):
      *   Slot 14 = ~TSM (top solder mask)
@@ -1274,7 +1282,7 @@ struct BLK_0x1C_PADSTACK
      * *  < 17.2: 10 + layer_count * 3
      * * >= 17.2: 21 + layer_count * 4
      *
-     * The first 10/21 components seem to be a fixed set of technical layers.
+     * The first 10/11/21 components seem to be a fixed set of technical layers.
      *
      * Then, a set of groups of 3/4 components for each layer.
      */
