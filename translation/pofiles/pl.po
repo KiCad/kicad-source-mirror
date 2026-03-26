@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-24 13:10+0000\n"
+"PO-Revision-Date: 2026-03-26 05:18+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -48358,14 +48358,12 @@ msgid "At least one constraint must be specified"
 msgstr "Musi zostać określone przynajmniej jedno ograniczenie"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:91
-#, fuzzy
 msgid "Minimum Via Diameter must be greater than 0"
-msgstr "Kąt łuku musi być większy niż zero"
+msgstr "Minimalny rozmiar przelotki musi być większy niż 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:94
-#, fuzzy
 msgid "Maximum Via Diameter must be greater than 0"
-msgstr "Promień musi być większy niż zero"
+msgstr "Maksymalny rozmiar przelotki musi być większy niż 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:97
 msgid "Minimum Via Diameter cannot be greater than Maximum Via Diameter"
@@ -48378,9 +48376,8 @@ msgid "Minimum Via Hole Size must be greater than 0"
 msgstr "Minimalna średnica otworu przelotki musi być większa niż zero"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:106
-#, fuzzy
 msgid "Maximum Via Hole Size must be greater than 0"
-msgstr "Promień musi być większy niż zero"
+msgstr "Maksymalny rozmiar otworu przelotki musi być większy niż 0"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:109
 msgid "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size"
@@ -48389,9 +48386,8 @@ msgstr ""
 "rozmiar otworu przelotki"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
-#, fuzzy
 msgid "At least one via type must be selected"
-msgstr "Musi zostać określona przynajmniej jedna warstwa"
+msgstr "Musi zostać określony przynajmniej jeden typ przelotki"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:337
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:379
@@ -48452,9 +48448,8 @@ msgid "Rule type"
 msgstr "Typ reguły"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header.cpp:43
-#, fuzzy
 msgid "Rule name"
-msgstr "Zmień nazwę"
+msgstr "Nazwa reguły"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:444
 msgid "Rule name must be unique."
@@ -48469,24 +48464,21 @@ msgid "ERROR: No condition text provided for validation."
 msgstr "BŁĄD: Nie podano tekstu warunku umożliwiającego walidację."
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:950
-#, fuzzy
 msgid "DRC rule"
-msgstr "Reguły DRC"
+msgstr "Reguła DRC"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1058
-#, fuzzy
 msgid "Show Matches (error)"
-msgstr "Pokaż wszystkie wersje"
+msgstr "Pokaż pasujące (błędne)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1062
-#, fuzzy, c-format
+#, c-format
 msgid "Show Matches (%d)"
-msgstr "Motywy kolorystyczne (%d)"
+msgstr "Pokaż pasujące (%d)"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1070
-#, fuzzy
 msgid "Show Matches"
-msgstr "Pokaż ścieżkę"
+msgstr "Pokaż pasujące"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1126
 msgid "outer"
@@ -48775,9 +48767,8 @@ msgid "OCC error adding pad/via polygon."
 msgstr "Błąd OCC podczas dodawania pola/przelotki strefy."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1247
-#, fuzzy
 msgid "Failed to create counterbore cylinder shape"
-msgstr "Nie udało się utworzyć podpisu autora: '%s'"
+msgstr "Nie udało się utworzyć kształtu cylindra z pogłębieniem walcowym"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1262
 #, c-format
@@ -49083,9 +49074,8 @@ msgstr "Nie można załadować reguł przypisywania klas do komponentów"
 
 #: pcbnew/files.cpp:842 pcbnew/footprint_libraries_utils.cpp:467
 #: pcbnew/footprint_libraries_utils.cpp:1157 pcbnew/tools/pcb_control.cpp:151
-#, fuzzy
 msgid "New Footprint Library"
-msgstr "Utwórz bibliotekę footprintów"
+msgstr "Nowa biblioteka footprintów"
 
 #: pcbnew/files.cpp:865
 #, c-format
@@ -49253,19 +49243,16 @@ msgid "Footprint Chooser"
 msgstr "Wybór footprintu"
 
 #: pcbnew/footprint_chooser_frame.cpp:152
-#, fuzzy
 msgid "Show/hide description panel"
-msgstr "Pokazuje lub ukrywa panel wyszukiwania"
+msgstr "Pokaż/ukryj panel z opisem"
 
 #: pcbnew/footprint_chooser_frame.cpp:163
-#, fuzzy
 msgid "Show/hide 3D view panel"
-msgstr "Pokazuje lub ukrywa panel wyszukiwania"
+msgstr "Pokaż/ukryj panel podglądu 3D"
 
 #: pcbnew/footprint_chooser_frame.cpp:170
-#, fuzzy
 msgid "Show/hide footprint view panel"
-msgstr "Pokaż wartości dla footprintów"
+msgstr "Pokaż/ukryj podgląd footprintów"
 
 #: pcbnew/footprint_chooser_frame.cpp:178
 msgid "Show 3D viewer in own window"
@@ -49424,9 +49411,8 @@ msgid "No footprints to export!"
 msgstr "Nie ma footprintów mogących być wyeksportowanych!"
 
 #: pcbnew/footprint_libraries_utils.cpp:658
-#, fuzzy
 msgid "Export Footprints"
-msgstr "Eksportuj footprint"
+msgstr "Eksportuj footprinty"
 
 #: pcbnew/footprint_libraries_utils.cpp:658
 msgid "Export footprints to library:"
@@ -49731,9 +49717,8 @@ msgid "Please select a valid layer."
 msgstr "Proszę wybrać prawidłową warstwę."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:53
-#, fuzzy
 msgid "1.0"
-msgstr "10"
+msgstr "1.0"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
 msgid "DXF default line width:"
@@ -49744,9 +49729,8 @@ msgid "Used when the DXF items in file have no line thickness set"
 msgstr "Używana, gdy elementy DXF w pliku nie mają ustawionej grubości linii"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:65
-#, fuzzy
 msgid "0.2"
-msgstr "0,0"
+msgstr "0.2"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -49812,9 +49796,8 @@ msgid "Footprints [%u items]"
 msgstr "Footprinty [%u pozycji]"
 
 #: pcbnew/load_select_footprint.cpp:331
-#, fuzzy
 msgid "Save Footprint Library As"
-msgstr "Utwórz bibliotekę footprintów"
+msgstr "Zapisz bibliotekę footprintów jako"
 
 #: pcbnew/load_select_footprint.cpp:360
 #, c-format
@@ -49849,7 +49832,6 @@ msgid "Create a PNG file from the current view"
 msgstr "Tworzy obrazek PNG z aktualnie załadowanego symbolu"
 
 #: pcbnew/menubar_footprint_editor.cpp:114 pcbnew/menubar_pcb_editor.cpp:185
-#, fuzzy
 msgid "&Select"
 msgstr "Wybierz"
 
@@ -49894,9 +49876,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Footprints..."
-msgstr "Footprint..."
+msgstr "Footprinty..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Fabrication Outputs"
@@ -49958,7 +49939,6 @@ msgid "Add Microwave Inductor"
 msgstr "Dodaje cewkę mikrofalową"
 
 #: pcbnew/microwave/microwave_inductor.cpp:367
-#, fuzzy
 msgid "Length of track:"
 msgstr "Długość ścieżki:"
 
@@ -49979,9 +49959,8 @@ msgid "Requested length can't be represented"
 msgstr "Żądana długość nie może zostać przedstawiona"
 
 #: pcbnew/microwave/microwave_inductor.cpp:406
-#, fuzzy
 msgid "Component value:"
-msgstr "Wartość:"
+msgstr "Wartość komponentu:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:110
 msgid "Complex Shape"
@@ -50290,24 +50269,24 @@ msgid "Update %s jumper pad groups"
 msgstr "Uaktualnianie %s grup pól zworkowych"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s from group '%s'."
-msgstr "Usuwam %s z grupy \"%s\"."
+msgstr "Usuwam %s z grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s from group '%s'."
-msgstr "Usunięto %s z grupy \"%s\"."
+msgstr "Usunięto %s z grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:987
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s to group '%s'."
-msgstr "Dodaje %s do grupy \"%s\"."
+msgstr "Dodaje %s do grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s to group '%s'."
-msgstr "Dodaje %s do grupy \"%s\"."
+msgstr "Dodano %s do grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1109
 #, c-format
@@ -50351,14 +50330,14 @@ msgid "Connected %s pin %s to %s."
 msgstr "Połączono %s pin %s do %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1293
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s unit metadata."
-msgstr "Uaktualniam %s pól."
+msgstr "Uaktualnianie metadanych %s elementów."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1309
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s unit metadata."
-msgstr "Uaktualniono %s pól."
+msgstr "Uaktualniono metadane %s elementów."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1356
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2081
