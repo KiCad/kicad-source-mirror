@@ -60,7 +60,7 @@ struct PLACEMENT_LAYOUT
 {
     int                nameOff = 0;           // refdes string
     int                xOff = 0;              // i32 X
-    std::optional<int> yOff = std::nullopt;   // i32 Y; absent in old format (Y unsolved)
+    std::optional<int> yOff = std::nullopt;   // i32 Y (immediately follows X at xOff+4)
     int                angleOff = 0;          // i32 rotation
     int                feffOff = 0;           // 0xFEFF marker offset within the record
     int                scanStride = 0;        // record stride for the section-19/21 FEFF scan
@@ -71,11 +71,14 @@ struct PLACEMENT_LAYOUT
 static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
 {
     // v0x2021 and v0x2022 share the old offset block; only v0x2021 enables the
-    // verified direct decal-index pad chain. yOff is left default (absent) for the
-    // old dialects whose Y encoding is unsolved.
-    static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .angleOff = 4,
+    // verified direct decal-index pad chain. The placement record is structurally
+    // identical to the new dialect (refdes, then X at +16, Y at +20, angle at +24,
+    // side at +28); the old framing simply anchors refdes at +76 instead of +44, so
+    // X/Y/angle/side land at +92/+96/+100/+104. Validated 5/5 against the MAIS_FC
+    // (v0x2021) ASC oracle and cross-checked by the inside-bbox invariant on 2FOC-001.
+    static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
                                              .feffOff = 28, .scanStride = 96, .v2021PadChain = true };
-    static constexpr PLACEMENT_LAYOUT vOld{ .nameOff = 76, .xOff = 92, .angleOff = 4,
+    static constexpr PLACEMENT_LAYOUT vOld{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
                                             .feffOff = 28, .scanStride = 96, .v2021PadChain = false };
     static constexpr PLACEMENT_LAYOUT vNew{ .nameOff = 44, .xOff = 60, .yOff = 64, .angleOff = 68,
                                             .feffOff = 92, .scanStride = 94, .v2021PadChain = false };
@@ -407,8 +410,12 @@ void BINARY_PARSER::parsePartPlacements()
         return;
 
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
-    bool                    isOld = !layout.yOff.has_value();
+    bool                    isOld = isOldFormat();
     uint32_t                recSize = entry->perItem;
+
+    // Highest byte touched by a record: refdes..+16, X/Y/angle, and the side flag at
+    // nameOff+28. The old framing reads to nameOff+29 (104..105), past its 96 B stride.
+    size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
     for( uint32_t i = 0; i < entry->count; ++i )
     {
@@ -417,10 +424,9 @@ void BINARY_PARSER::parsePartPlacements()
         if( off + recSize > entry->totalBytes )
             break;
 
-        // Old-format records span scanStride bytes (xOff 92..+4). Guard against a directory
-        // whose perItem is smaller than the fields we read, so a count/size-skewed file
-        // cannot pull bytes from beyond the record into a placement.
-        if( isOld && off + static_cast<size_t>( layout.scanStride ) > entry->totalBytes )
+        // Guard against a directory whose perItem is smaller than the fields we read, so a
+        // count/size-skewed file cannot pull bytes from beyond the record into a placement.
+        if( off + fieldSpan > entry->totalBytes )
             break;
 
         size_t base = entry->dataOffset + off;
@@ -430,8 +436,6 @@ void BINARY_PARSER::parsePartPlacements()
             continue;
 
         int32_t x = readI32( base + layout.xOff );
-
-        // v0x2021 Y coordinate encoding is not yet solved. Use 0 as placeholder.
         int32_t y = layout.yOff ? readI32( base + *layout.yOff ) : 0;
         int32_t angleRaw = readI32( base + layout.angleOff );
 
@@ -440,7 +444,10 @@ void BINARY_PARSER::parsePartPlacements()
         part.location.x = toBasicCoordX( x );
         part.location.y = toBasicCoordY( y );
         part.rotation = toBasicAngle( angleRaw );
-        part.bottom_layer = !isOld && ( readU8( base + 72 ) != 0 );
+
+        // Side flag is the i32 at nameOff+28 in both dialects (new: +72, old: +104);
+        // bit 0 set marks a mirrored (bottom-side) placement.
+        part.bottom_layer = readU8( base + layout.nameOff + 28 ) != 0;
         part.units = "M";
 
         // The placement's parttype index lives in the NEXT physical sec22 record's
@@ -474,15 +481,17 @@ void BINARY_PARSER::parseSection19Parts()
     // Part records can be embedded in sections other than section 22.
     // Scan sections 19 (design_rules) and 21 (board_outline) for FEFF-delimited part records.
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
-    bool                    isOld = !layout.yOff.has_value();
+    bool                    isOld = isOldFormat();
 
     // The 0xFEFF marker sits at layout.feffOff, but the placement record actually spans
     // the full block. Bounds must cover every field we read (the refdes at nameOff..+16
     // and, for v0x2021, the whole 96-byte block plus its +1-lag successor), not just the
     // marker, so a trailing or stray marker near a section end cannot fabricate a part
-    // from adjacent-section bytes.
+    // from adjacent-section bytes. The side flag at nameOff+28 pushes the old framing to
+    // nameOff+29 (105), one int past its 96 B stride.
     static constexpr int OLD_REC_SIZE = 96;
-    int recSize = layout.scanStride;
+    int    recSize = layout.scanStride;
+    size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
     std::unordered_set<std::string> existingRefs;
 
@@ -522,7 +531,7 @@ void BINARY_PARSER::parseSection19Parts()
 
             size_t base = markerBase - static_cast<size_t>( layout.feffOff );
 
-            if( !m_cursor.InBounds( base, static_cast<size_t>( recSize ) ) )
+            if( !m_cursor.InBounds( base, fieldSpan ) )
                 continue;
 
             std::string refDes = readFixedString( base + layout.nameOff, 16 );
@@ -543,15 +552,17 @@ void BINARY_PARSER::parseSection19Parts()
                     size_t leadBase = base - OLD_REC_SIZE;
                     std::string leadRef = readFixedString( leadBase + layout.nameOff, 16 );
 
-                    if( m_cursor.InBounds( leadBase, OLD_REC_SIZE ) && !leadRef.empty()
+                    if( m_cursor.InBounds( leadBase, fieldSpan ) && !leadRef.empty()
                         && std::isalnum( static_cast<unsigned char>( leadRef[0] ) )
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead;
                         lead.name = leadRef;
                         lead.location.x = toBasicCoordX( readI32( leadBase + layout.xOff ) );
-                        lead.location.y = 0;
+                        lead.location.y = layout.yOff
+                                ? toBasicCoordY( readI32( leadBase + *layout.yOff ) ) : 0;
                         lead.rotation = toBasicAngle( readI32( leadBase + layout.angleOff ) );
+                        lead.bottom_layer = readU8( leadBase + layout.nameOff + 28 ) != 0;
                         lead.units = "M";
 
                         // Decal index for the leading block is in this first block's @+56.
@@ -578,7 +589,7 @@ void BINARY_PARSER::parseSection19Parts()
             part.location.x = toBasicCoordX( x );
             part.location.y = toBasicCoordY( y );
             part.rotation = toBasicAngle( angleRaw );
-            part.bottom_layer = !isOld && ( readU8( base + 72 ) != 0 );
+            part.bottom_layer = readU8( base + layout.nameOff + 28 ) != 0;
             part.units = "M";
 
             // These section 19/21 placements are the parts omitted from section 22

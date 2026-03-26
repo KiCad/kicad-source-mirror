@@ -36,12 +36,14 @@
 #include <netinfo.h>
 #include <zone.h>
 #include <board_design_settings.h>
+#include <algorithm>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <map>
 #include <set>
 #include <utility>
+#include <vector>
 
 #include <wx/filename.h>
 
@@ -1167,6 +1169,100 @@ BOOST_AUTO_TEST_CASE( V2021_PadImport_Dexter_MotorCtrl )
     }
 
     BOOST_CHECK_EQUAL( verified, 2 );
+}
+
+
+/**
+ * Verify the v0x2021 placement Y coordinate, orientation and side.
+ *
+ * The v0x2021 dialect frames its 96-byte placement records shifted +20 from the new
+ * dialect, putting Y immediately after X (xOff+4), the orientation at xOff+8 and the
+ * side flag at nameOff+28. Y was previously emitted as 0 (collapsing every part onto a
+ * single line) and the orientation was read from the lagged neighbour record. Ground
+ * truth is the MAIS_FC.asc *PART* section (the binary SetOrientation path does not
+ * negate the stored angle, so the placed orientation equals the ASC ORI value):
+ *   J7  9000000 270 M   J1 10800000 0 N   J2 23663130 180 N
+ *   J3  8785902   0 N   J4 21216083 90 N
+ */
+BOOST_AUTO_TEST_CASE( V2021_PartPlacement_MAIS_FC )
+{
+    auto bin = LoadBinary( PADS_BINARY_BOARDS[7] );   // MAIS_FC, v0x2021
+
+    if( !bin )
+        return;
+
+    struct Oracle
+    {
+        wxString ref;
+        int      ascY;       // ASC design-space Y, for relative ordering only
+        double   ori;        // ASC ORI degrees (top-side parts)
+        bool     flipped;    // ASC MIRROR flag
+    };
+
+    const std::vector<Oracle> oracle = {
+        { "J1", 10800000,   0.0, false }, { "J2", 23663130, 180.0, false },
+        { "J3",  8785902,   0.0, false }, { "J4", 21216083,  90.0, false },
+        { "J7",  9000000, 270.0, true  },
+    };
+
+    std::map<wxString, FOOTPRINT*> binFps;
+
+    for( FOOTPRINT* fp : bin->Footprints() )
+        binFps[fp->GetReference()] = fp;
+
+    // Y must not collapse onto a single value (the unsolved-Y regression emitted 0 for all).
+    std::set<int> binYs;
+
+    for( const Oracle& o : oracle )
+    {
+        BOOST_REQUIRE_MESSAGE( binFps.count( o.ref ), "v0x2021 missing footprint " << o.ref );
+        binYs.insert( binFps[o.ref]->GetPosition().y );
+    }
+
+    BOOST_CHECK_MESSAGE( binYs.size() == oracle.size(),
+                         "v0x2021 part Y collapsed to " << binYs.size() << " of " << oracle.size()
+                         << " distinct values (Y decode regression)" );
+
+    // Side must match the MIRROR flag; un-mirrored parts must carry the exact ASC ORI.
+    for( const Oracle& o : oracle )
+    {
+        FOOTPRINT* fp = binFps[o.ref];
+
+        BOOST_CHECK_MESSAGE( fp->IsFlipped() == o.flipped,
+                             "v0x2021 " << o.ref << " side " << fp->IsFlipped() << " != " << o.flipped );
+
+        if( o.flipped )
+            continue;
+
+        double deg = fp->GetOrientation().Normalize().AsDegrees();
+        double diff = std::abs( deg - o.ori );
+
+        BOOST_CHECK_MESSAGE( diff < 0.1 || std::abs( diff - 360.0 ) < 0.1,
+                             "v0x2021 " << o.ref << " orientation " << deg << " != " << o.ori );
+    }
+
+    // Relative Y ordering must follow the ASC (origin/scale/flip invariant): sorting by ASC
+    // Y must yield a strictly monotonic placed-Y sequence.
+    std::vector<Oracle> byAscY( oracle );
+    std::sort( byAscY.begin(), byAscY.end(),
+               []( const Oracle& a, const Oracle& b ) { return a.ascY < b.ascY; } );
+
+    bool incr = true;
+    bool decr = true;
+
+    for( size_t i = 1; i < byAscY.size(); ++i )
+    {
+        int prev = binFps[byAscY[i - 1].ref]->GetPosition().y;
+        int cur = binFps[byAscY[i].ref]->GetPosition().y;
+
+        if( cur <= prev )
+            incr = false;
+
+        if( cur >= prev )
+            decr = false;
+    }
+
+    BOOST_CHECK_MESSAGE( incr || decr, "v0x2021 placed-Y ordering does not match ASC oracle" );
 }
 
 
