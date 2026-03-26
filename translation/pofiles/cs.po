@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-25 14:10+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2026-03-27 01:05+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -12770,7 +12770,7 @@ msgstr "Aktualizovat/obnovit pole"
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:41
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
 msgid "Select None"
-msgstr "Nevybrat žádný"
+msgstr "Zrušit výběr"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
