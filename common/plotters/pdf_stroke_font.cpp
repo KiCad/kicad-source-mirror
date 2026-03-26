@@ -218,6 +218,34 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
         data.m_maxY += yOffset;
     }
 
+    // Apply X offset to bounding box to match the offset applied to stroke coordinates
+    double xOffset = ADVANCED_CFG::GetCfg().m_PDFStrokeFontXOffset * m_unitsPerEm;
+    data.m_minX += xOffset;
+    data.m_maxX += xOffset;
+
+    // Expand bbox by half the stroke width so the d1 clipping rect covers the full painted
+    // area, not just the stroke center lines.
+    double widthFactor = ADVANCED_CFG::GetCfg().m_PDFStrokeFontWidthFactor;
+
+    if( m_isBold )
+    {
+        double boldMul = ADVANCED_CFG::GetCfg().m_PDFStrokeFontBoldMultiplier;
+
+        if( boldMul < 1.0 )
+            boldMul = 1.0;
+
+        widthFactor *= boldMul;
+    }
+
+    if( widthFactor <= 0.0 )
+        widthFactor = 0.04;
+
+    double halfStroke = m_unitsPerEm * widthFactor / 2.0;
+    data.m_minX -= halfStroke;
+    data.m_minY -= halfStroke;
+    data.m_maxX += halfStroke;
+    data.m_maxY += halfStroke;
+
     // Build charproc stream: first specify width and bbox (d1 operator) then stroke path.
     double kerningFactor = ADVANCED_CFG::GetCfg().m_PDFStrokeFontKerningFactor;
 

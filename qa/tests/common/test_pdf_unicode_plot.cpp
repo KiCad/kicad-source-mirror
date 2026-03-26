@@ -253,6 +253,94 @@ BOOST_AUTO_TEST_CASE( PlotMultilingualTextBoldItalic )
     MaybeRemoveFile( pdfPath );
 }
 
+// Verify that d1 bounding boxes account for X offset and stroke width so PDF viewers don't
+// clip the rendered glyphs.  Regression test for gitlab.com/kicad/code/kicad/-/issues/23621.
+BOOST_AUTO_TEST_CASE( GlyphBBoxIncludesOffsetAndStrokeWidth )
+{
+    const std::string sampleUtf8 = "MW";
+    wxString sample = wxString::FromUTF8( sampleUtf8.c_str() );
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_bbox_check" );
+
+    PDF_PLOTTER plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "BBoxTest" ) ) );
+
+    TEXT_ATTRIBUTES attrs = BuildTextAttributes( 3000, 300, false, false );
+    auto strokeFont = LoadStrokeFontUnique();
+    KIFONT::METRICS metrics;
+
+    plotter.PlotText( VECTOR2I( 50000, 60000 ), COLOR4D( 0, 0, 0, 1 ), sample, attrs,
+                      strokeFont.get(), metrics );
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+
+    // Parse d1 operators: format is "width 0 minX minY maxX maxY d1"
+    // Verify that no glyph has a minX of exactly 0 (would mean X offset was not applied) and
+    // that the bbox extends beyond the stroke center coordinates by at least half the stroke
+    // width.
+    const ADVANCED_CFG& cfg = ADVANCED_CFG::GetCfg();
+    double unitsPerEm = 1000.0;
+    double expectedXOffset = cfg.m_PDFStrokeFontXOffset * unitsPerEm;
+    double expectedHalfStroke = unitsPerEm * cfg.m_PDFStrokeFontWidthFactor / 2.0;
+
+    // Find all d1 operators (skip .notdef which has all-zero bbox)
+    std::string::size_type pos = 0;
+    int checkedGlyphs = 0;
+
+    while( ( pos = buffer.find( " d1 ", pos ) ) != std::string::npos )
+    {
+        // Walk backwards to find the start of the d1 line
+        std::string::size_type lineStart = buffer.rfind( '\n', pos );
+
+        if( lineStart == std::string::npos )
+            lineStart = 0;
+        else
+            lineStart++;
+
+        std::string d1Line = buffer.substr( lineStart, pos + 3 - lineStart );
+
+        double width, wy, minX, minY, maxX, maxY;
+
+        if( sscanf( d1Line.c_str(), "%lf %lf %lf %lf %lf %lf", &width, &wy, &minX, &minY,
+                     &maxX, &maxY ) == 6 )
+        {
+            // Skip .notdef (all zeros)
+            if( width == 0.0 && maxX == 0.0 )
+            {
+                pos += 4;
+                continue;
+            }
+
+            // The bbox minX should be shifted by the X offset minus half stroke width.
+            // With default offset 0.1 and stroke factor 0.12, minX should be around
+            // 0.1*1000 - 0.12*1000/2 = 100 - 60 = 40, not 0.
+            BOOST_CHECK_MESSAGE( minX < -expectedHalfStroke + 1.0 || minX > 0.1,
+                                 "Glyph bbox minX (" << minX
+                                 << ") suggests X offset or stroke padding is missing" );
+
+            // maxX must exceed the advance width to account for offset + stroke padding
+            BOOST_CHECK_MESSAGE( maxX > width,
+                                 "Glyph bbox maxX (" << maxX << ") must exceed advance width ("
+                                 << width << ") to prevent clipping" );
+
+            checkedGlyphs++;
+        }
+
+        pos += 4;
+    }
+
+    BOOST_CHECK_MESSAGE( checkedGlyphs >= 2,
+                         "Expected at least 2 non-notdef glyphs, found " << checkedGlyphs );
+
+    MaybeRemoveFile( pdfPath );
+}
+
 // Test Y offset bounding box fix: ensure characters are not clipped when Y offset is applied
 BOOST_AUTO_TEST_CASE( PlotMultilingualTextWithYOffset )
 {
