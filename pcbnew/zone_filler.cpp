@@ -3783,7 +3783,7 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 if( !otherZone->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( otherZone->IsTeardropArea() )
+                if( otherZone->IsTeardropArea() && otherZone->SameNet( aZone ) )
                     return;
 
                 if( !otherZone->HigherPriority( aZone ) )
