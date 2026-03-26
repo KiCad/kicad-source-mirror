@@ -767,9 +767,20 @@ int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
 int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQuit, int aId,
                                void* aUser )
 {
-    // Something went wrong, reload the dll
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
     sim->m_error = true;
+
+    // ngspice calls this when it encounters a fatal error (e.g. out of memory) or receives a
+    // 'quit' command. For error exits, we must notify the UI before ngspice crashes during
+    // cleanup, since cbBGThreadRunning may never fire if the background thread is terminated.
+    if( !aExitOnQuit && sim->m_reporter )
+    {
+        sim->m_reporter->Report(
+                _( "Simulation terminated by ngspice. This may be caused by insufficient "
+                   "memory or an internal error. The simulator will be reset." ) );
+
+        sim->m_reporter->OnSimStateChange( sim, SIM_IDLE );
+    }
 
     return 0;
 }
