@@ -1216,6 +1216,11 @@ const PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
     }
     else if( m_mode == MODE::CUSTOM )
     {
+        if( IsFrontLayer( aLayer ) && m_copperProps.contains( F_Cu ) )
+            return m_copperProps.at( F_Cu );
+        else if( IsBackLayer( aLayer ) && m_copperProps.contains( B_Cu ) )
+            return m_copperProps.at( B_Cu );
+
         if( m_copperProps.count( aLayer ) )
             return m_copperProps.at( aLayer );
 
@@ -1272,7 +1277,7 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
     if( m_mode == MODE::NORMAL )
         return ALL_LAYERS;
 
-    if( m_mode == MODE::FRONT_INNER_BACK )
+    if( m_mode == MODE::FRONT_INNER_BACK || IsNonCopperLayer( aLayer ) )
     {
         if( IsFrontLayer( aLayer ) )
             return F_Cu;

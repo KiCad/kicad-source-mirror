@@ -25,6 +25,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <geometry/shape_circle.h>
 #include <pad.h>
 #include <memory>
 
@@ -116,6 +117,50 @@ BOOST_AUTO_TEST_CASE( PadsInDifferentFootprintsDoNotForceInnerLayerFlashing )
     BOOST_CHECK( pad2->FlashLayer( B_Cu ) );
     BOOST_CHECK( !pad1->FlashLayer( In1_Cu ) );
     BOOST_CHECK( !pad2->FlashLayer( In1_Cu ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( TechLayersPullFromAppropriateSide )
+{
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+
+    auto footprint = std::make_unique<FOOTPRINT>( &board );
+
+    auto net = new NETINFO_ITEM( &board, "P1", 1 );
+    board.Add( net );
+
+    auto pad = new PAD( footprint.get() );
+
+    const int d1 = pcbIUScale.mmToIU( 1.0 );
+    const int d2 = pcbIUScale.mmToIU( 2.0 );
+    const int drill = pcbIUScale.mmToIU( 0.5 );
+
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetLayerSet( LSET::AllCuMask() | LSET::AllBoardTechMask() );
+    pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
+    pad->SetDrillSize( VECTOR2I( drill, drill ) );
+    pad->SetSize( F_Cu, VECTOR2I( d1, d1 ) );
+    pad->SetSize( B_Cu, VECTOR2I( d2, d2 ) );
+
+    pad->BuildEffectiveShapes();
+
+    auto shapes = pad->GetEffectiveShape( F_Mask );
+    BOOST_REQUIRE( dynamic_cast<SHAPE_COMPOUND*>( shapes.get() ) );
+    BOOST_REQUIRE( !dynamic_cast<SHAPE_COMPOUND*>( shapes.get() )->Empty() );
+    SHAPE* subshape = dynamic_cast<SHAPE_COMPOUND*>( shapes.get() )->Shapes()[0];
+    BOOST_REQUIRE( dynamic_cast<SHAPE_CIRCLE*>( subshape ) );
+    BOOST_CHECK_EQUAL( dynamic_cast<SHAPE_CIRCLE*>( subshape )->GetRadius(), d1 / 2 );
+
+    shapes = pad->GetEffectiveShape( B_Mask );
+    BOOST_REQUIRE( dynamic_cast<SHAPE_COMPOUND*>( shapes.get() ) );
+    BOOST_REQUIRE( !dynamic_cast<SHAPE_COMPOUND*>( shapes.get() )->Empty() );
+    subshape = dynamic_cast<SHAPE_COMPOUND*>( shapes.get() )->Shapes()[0];
+    BOOST_REQUIRE( dynamic_cast<SHAPE_CIRCLE*>( subshape ) );
+    BOOST_CHECK_EQUAL( dynamic_cast<SHAPE_CIRCLE*>( subshape )->GetRadius(), d2 / 2 );
+
+    BOOST_CHECK_EQUAL( pad->GetSize( F_Mask ).x, d1 );
+    BOOST_CHECK_EQUAL( pad->GetSize( B_Mask ).x, d2 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
