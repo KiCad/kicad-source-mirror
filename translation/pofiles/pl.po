@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-26 09:37+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2026-03-27 01:05+0000\n"
+"Last-Translator: Jan Sobków <sobkow.jan@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -55766,9 +55766,8 @@ msgid "Place point"
 msgstr "Umieść wyprowadzenie"
 
 #: pcbnew/tools/drawing_tool.cpp:1552
-#, fuzzy
 msgid "Draw Barcode"
-msgstr "Rysuje okrąg"
+msgstr "Rysuj kod paskowy"
 
 #: pcbnew/tools/drawing_tool.cpp:1833
 msgid "Draw Dimension"
