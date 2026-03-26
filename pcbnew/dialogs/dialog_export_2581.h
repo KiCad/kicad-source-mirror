@@ -30,6 +30,10 @@ public:
     DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent );
     DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
 
+    // Generate the actual IPC-2581 file; shared between dialog and CLI
+    static bool GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoard,
+                              PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter );
+
     wxString GetOutputPath() const
     {
         return m_outputFileName->GetValue();

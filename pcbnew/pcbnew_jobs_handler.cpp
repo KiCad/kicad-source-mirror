@@ -2520,10 +2520,9 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( FILEEXT::Ipc2581FileExtension );
+        fn.SetExt( job->m_compress ? std::string( "zip" ) : FILEEXT::Ipc2581FileExtension );
 
-        job->SetWorkingOutputPath( fn.GetName() );
+        job->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = resolveJobOutputPath( aJob, brd );
@@ -2534,84 +2533,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    std::map<std::string, UTF8> props;
-    props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? "mm" : "inch";
-    props["sigfig"] = wxString::Format( "%d", job->m_precision );
-    props["version"] = job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
-    props["OEMRef"] = job->m_colInternalId;
-    props["mpn"] = job->m_colMfgPn;
-    props["mfg"] = job->m_colMfg;
-    props["dist"] = job->m_colDist;
-    props["distpn"] = job->m_colDistPn;
-
-    wxString bomRev = job->m_bomRev;
-
-    if( bomRev.IsEmpty() && brd->GetProject() )
-    {
-        const IP2581_BOM& bomSettings = brd->GetProject()->GetProjectFile().m_IP2581Bom;
-        bomRev = bomSettings.bomRev;
-
-        if( bomRev.IsEmpty() )
-            bomRev = bomSettings.schRevision;
-    }
-
-    if( !bomRev.IsEmpty() )
-        props["bomrev"] = bomRev;
-
-    wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
-    try
-    {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
-        pi->SetProgressReporter( m_progressReporter );
-        pi->SaveBoard( tempFile, brd, &props );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        m_reporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
-                                              job->m_filename,
-                                              ioe.What() ),
-                            RPT_SEVERITY_ERROR );
-
-        wxRemoveFile( tempFile );
-
+    if( !DIALOG_EXPORT_2581::GenerateFile( *job, brd, m_progressReporter, m_reporter ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    if( job->m_compress )
-    {
-        wxFileName tempfn = outPath;
-        tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
-        wxFileName zipfn = tempFile;
-        zipfn.SetExt( "zip" );
-
-        {
-            wxFFileOutputStream fnout( zipfn.GetFullPath() );
-
-            // Use a large I/O buffer to improve compatibility with cloud-synced folders.
-            // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
-            if( FILE* fp = fnout.GetFile()->fp() )
-                setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
-
-            wxZipOutputStream   zip( fnout );
-            wxFFileInputStream  fnin( tempFile );
-
-            zip.PutNextEntry( tempfn.GetFullName() );
-            fnin.Read( zip );
-        }
-
-        wxRemoveFile( tempFile );
-        tempFile = zipfn.GetFullPath();
-    }
-
-    // If save succeeded, replace the original with what we just wrote
-    if( !wxRenameFile( tempFile, outPath ) )
-    {
-        m_reporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n"
-                                                 "Failed to rename temporary file '%s." ),
-                                              outPath,
-                                              tempFile ),
-                            RPT_SEVERITY_ERROR );
-    }
 
     return CLI::EXIT_CODES::SUCCESS;
 }

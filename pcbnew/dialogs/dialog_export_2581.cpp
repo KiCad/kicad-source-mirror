@@ -30,6 +30,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <kiway_holder.h>
+#include <paths.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
@@ -42,8 +43,10 @@
 #include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <jobs/job_export_pcb_ipc2581.h>
+#include <kiplatform/io.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 #include <wx_filename.h>
-
 
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
@@ -232,8 +235,12 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
         return;
     }
 
-    if( !TransferDataFromWindow() )
-        return;
+    JOB_EXPORT_PCB_IPC2581 job;
+    m_job = &job;
+
+    TransferDataFromWindow();
+
+    m_job = nullptr;
 
     m_messagesPanel->Clear();
 
@@ -261,51 +268,116 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
 
     WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ), 5, PR_CAN_ABORT );
 
+    if( !GenerateFile( job, m_parent->GetBoard(), &progress, &reporter ) )
+        return;
+
+    reporter.Report( _( "IPC-2581 file generated successfully." ), RPT_SEVERITY_ACTION );
+}
+
+
+bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoard,
+                                       PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter )
+{
+    wxCHECK( aBoard, false );
+    wxString outPath = aJob.GetFullOutputPath( aBoard->GetProject() );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+
+        return false;
+    }
+
     std::map<std::string, UTF8> props;
+    props["units"] = aJob.m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? "mm" : "inch";
+    props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
+    props["version"] = aJob.m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
+    props["OEMRef"] = aJob.m_colInternalId;
+    props["mpn"] = aJob.m_colMfgPn;
+    props["mfg"] = aJob.m_colMfg;
+    props["dist"] = aJob.m_colDist;
+    props["distpn"] = aJob.m_colDistPn;
 
-    props[ "units" ] = TO_UTF8( GetUnitsString() );
-    props[ "sigfig" ] = TO_UTF8( GetPrecision() );
-    props[ "version" ] = TO_UTF8( wxString( GetVersion() ) );
-    props[ "OEMRef" ] = TO_UTF8( GetOEM() );
-    props[ "mpn" ] = TO_UTF8( GetMPN() );
-    props[ "mfg" ] = TO_UTF8( GetMfg() );
-    props[ "dist" ] = TO_UTF8( GetDist() );
-    props[ "distpn" ] = TO_UTF8( GetDistPN() );
+    wxString bomRev = aJob.m_bomRev;
 
-    wxString bomRev = m_textBomRev->GetValue();
+    if( bomRev.IsEmpty() && aBoard->GetProject() )
+    {
+        const IP2581_BOM& bomSettings = aBoard->GetProject()->GetProjectFile().m_IP2581Bom;
+        bomRev = bomSettings.bomRev;
+
+        if( bomRev.IsEmpty() )
+            bomRev = bomSettings.schRevision;
+    }
 
     if( !bomRev.IsEmpty() )
-        props[ "bomrev" ] = TO_UTF8( bomRev );
+        props["bomrev"] = bomRev;
+
+    wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
 
     try
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
-        pi->SetProgressReporter( &progress );
-        pi->SetReporter( &reporter );
-        pi->SaveBoard( tempFile, m_parent->GetBoard(), &props );
+        pi->SetProgressReporter( aProgressReporter );
+        pi->SaveBoard( tempFile, aBoard, &props );
     }
     catch( const IO_ERROR& ioe )
     {
-        reporter.Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
-                                           pcbFileName.GetFullPath(), ioe.What() ),
-                         RPT_SEVERITY_ERROR );
+        if( aReporter )
+        {
+            aReporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
+                                                  aJob.m_filename,
+                                                  ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+        }
 
         wxRemoveFile( tempFile );
-        return;
+
+        return false;
     }
 
-    if( wxFileExists( pcbFileName.GetFullPath() ) )
-        wxRemoveFile( pcbFileName.GetFullPath() );
-
-    if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )
+    if( aJob.m_compress )
     {
-        reporter.Report( wxString::Format( _( "Failed to create file '%s'." ), pcbFileName.GetFullPath() ),
-                         RPT_SEVERITY_ERROR );
+        wxFileName tempfn = outPath;
+        tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
+        wxFileName zipfn = tempFile;
+        zipfn.SetExt( "zip" );
+
+        {
+            wxFFileOutputStream fnout( zipfn.GetFullPath() );
+
+            // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+            // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
+            if( FILE* fp = fnout.GetFile()->fp() )
+                setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
+            wxZipOutputStream   zip( fnout );
+            wxFFileInputStream  fnin( tempFile );
+
+            zip.PutNextEntry( tempfn.GetFullName() );
+            fnin.Read( zip );
+        }
+
         wxRemoveFile( tempFile );
-        return;
+        tempFile = zipfn.GetFullPath();
     }
 
-    reporter.Report( _( "IPC-2581 file generated successfully." ), RPT_SEVERITY_ACTION );
+    // If save succeeded, replace the original with what we just wrote
+    if( !wxRenameFile( tempFile, outPath ) )
+    {
+        if( aReporter )
+        {
+            aReporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n"
+                                                     "Failed to rename temporary file '%s." ),
+                                                  outPath,
+                                                  tempFile ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
+    }
+
+    aJob.AddOutput( outPath );
+    return true;
 }
 
 
