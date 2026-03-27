@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-26 09:37+0000\n"
+"PO-Revision-Date: 2026-03-28 10:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -5761,7 +5761,7 @@ msgstr "Przydział klas sieci"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:152
 msgid "Pattern"
-msgstr "Szablon"
+msgstr "Wzorzec"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:153
 #: eeschema/sch_field.cpp:1390 eeschema/sch_label.cpp:220
@@ -8515,7 +8515,7 @@ msgstr "%s, %s i %d więcej"
 
 #: common/notifications_manager.cpp:93
 msgid "View Details"
-msgstr "Pokaż szczegóły"
+msgstr "Wyświetl szczegóły"
 
 #: common/notifications_manager.cpp:97
 msgid "Dismiss"
@@ -18973,7 +18973,7 @@ msgstr "Pokrycia aktualnie nieobsługiwane."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Odnaleziono nieznany lub niespodziewany rekord ID %d w %s."
+msgstr "Odnaleziono nieznany lub niespodziewany ID rekordu %d w %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1607
 #, c-format
