@@ -21,7 +21,10 @@
 #define IPC2581_EXPORT_DIALOG_H
 #include "dialog_export_2581_base.h"
 
+class BOARD;
 class PCB_EDIT_FRAME;
+class PROGRESS_REPORTER;
+class REPORTER;
 class JOB_EXPORT_PCB_IPC2581;
 
 class DIALOG_EXPORT_2581 : public DIALOG_EXPORT_2581_BASE
