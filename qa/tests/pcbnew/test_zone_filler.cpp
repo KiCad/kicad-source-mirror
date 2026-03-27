@@ -1554,3 +1554,82 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetOverlappingZones, ZONE_FILL_TEST_FIXTU
         }
     }
 }
+
+
+BOOST_FIXTURE_TEST_CASE( RegressionDiffNetOverlappingZones, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    auto runAreaLossCheck =
+            [this]( bool aIterative )
+            {
+                ADVANCED_CFG& innerCfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+                innerCfg.m_ZoneFillIterativeRefill = aIterative;
+
+                KI_TEST::LoadBoard( m_settingsManager, "issue23418_diffnet/testing", m_board );
+                KI_TEST::FillZones( m_board.get() );
+
+                int epsilon = pcbIUScale.mmToIU( 0.001 );
+
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    int half_min_width = zone->GetMinThickness() / 2;
+
+                    if( half_min_width - epsilon <= epsilon )
+                        continue;
+
+                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                    {
+                        if( !zone->HasFilledPolysForLayer( layer ) )
+                            continue;
+
+                        std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+                        if( !fill || fill->OutlineCount() == 0 )
+                            continue;
+
+                        for( int ii = 0; ii < fill->OutlineCount(); ii++ )
+                        {
+                            SHAPE_POLY_SET island;
+                            island.AddOutline( fill->Outline( ii ) );
+
+                            for( int jj = 0; jj < fill->HoleCount( ii ); jj++ )
+                                island.AddHole( fill->Hole( ii, jj ) );
+
+                            double originalArea = island.Area();
+
+                            if( originalArea <= 0 )
+                                continue;
+
+                            SHAPE_POLY_SET test = island.CloneDropTriangulation();
+
+                            test.Deflate( half_min_width - epsilon,
+                                          CORNER_STRATEGY::CHAMFER_ALL_CORNERS, ARC_HIGH_DEF );
+
+                            test.Inflate( half_min_width - epsilon,
+                                          CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF, true );
+
+                            double prunedArea = test.Area();
+                            double areaLoss = ( originalArea - prunedArea ) / originalArea;
+
+                            BOOST_CHECK_MESSAGE(
+                                    areaLoss < 0.01,
+                                    wxString::Format(
+                                            "Zone %s (priority %d) layer %d island %d lost "
+                                            "%.2f%% area (iterative=%d), suggesting degenerate "
+                                            "geometry from different-net zone knockouts",
+                                            zone->GetNetname(), zone->GetAssignedPriority(),
+                                            static_cast<int>( layer ), ii, areaLoss * 100.0,
+                                            aIterative ) );
+                        }
+                    }
+                }
+            };
+
+    runAreaLossCheck( false );
+    runAreaLossCheck( true );
+}

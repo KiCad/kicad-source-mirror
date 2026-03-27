@@ -2850,16 +2850,25 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     }
 
     /* -------------------------------------------------------------------------------------
-     * Lastly give any same-net but higher-priority zones control over their own area.
+     * Re-prune minimum-width violations introduced by different-net zone knockouts.
+     *
+     * This must run BEFORE subtracting same-net higher-priority zones.  At this point the
+     * fill still extends into overlapping same-net zone areas, which provides a natural
+     * buffer that prevents the deflate/inflate cycle from creating divots at same-net
+     * zone boundaries (the same role aSmoothedOutline plays in the initial min-width pass).
      */
-
-    subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
-    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "minus-higher-priority-zones" ) );
 
     if( knockoutsApplied )
         postKnockoutMinWidthPrune( aZone, aFillPolys );
 
-    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In19_Cu, wxT( "after-post-knockout-min-width" ) );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In18_Cu, wxT( "after-post-knockout-min-width" ) );
+
+    /* -------------------------------------------------------------------------------------
+     * Lastly give any same-net but higher-priority zones control over their own area.
+     */
+
+    subtractHigherPriorityZones( aZone, aLayer, aFillPolys );
+    DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In19_Cu, wxT( "minus-higher-priority-zones" ) );
 
     aFillPolys.Fracture();
     return true;
@@ -3772,7 +3781,8 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
             };
 
     bool           knockoutsApplied = false;
-    SHAPE_POLY_SET knockouts;
+    SHAPE_POLY_SET diffNetKnockouts;
+    SHAPE_POLY_SET sameNetKnockouts;
 
     auto collectZoneKnockout =
             [&]( ZONE* otherZone )
@@ -3802,7 +3812,7 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
 
                 if( otherZone->SameNet( aZone ) )
                 {
-                    knockouts.Append( *otherFill );
+                    sameNetKnockouts.Append( *otherFill );
                 }
                 else
                 {
@@ -3818,31 +3828,38 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                     SHAPE_POLY_SET inflatedFill = *otherFill;
                     inflatedFill.Inflate( gap + extra_margin + m_maxError,
                                           CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
-                    knockouts.Append( inflatedFill );
+                    diffNetKnockouts.Append( inflatedFill );
                     knockoutsApplied = true;
                 }
             };
 
     forEachBoardAndFootprintZone( m_board, collectZoneKnockout );
 
-    // Collect keepout zones (rule areas with do-not-fill) into the same accumulator
     auto collectKeepout =
             [&]( ZONE* candidate )
             {
                 if( !isZoneFillKeepout( candidate, aLayer, zoneBBox ) )
                     return;
 
-                appendZoneOutlineWithoutArcs( candidate, knockouts );
+                appendZoneOutlineWithoutArcs( candidate, diffNetKnockouts );
                 knockoutsApplied = true;
             };
 
     forEachBoardAndFootprintZone( m_board, collectKeepout );
 
-    if( knockouts.OutlineCount() > 0 )
-        aFillPolys.BooleanSubtract( knockouts );
+    // Subtract different-net knockouts and keepouts first, then re-prune min-width
+    // violations BEFORE subtracting same-net knockouts.  The fill still extends into
+    // overlapping same-net zone areas at this point, which provides a natural buffer
+    // that prevents the deflate/inflate cycle from creating divots at same-net
+    // zone boundaries.
+    if( diffNetKnockouts.OutlineCount() > 0 )
+        aFillPolys.BooleanSubtract( diffNetKnockouts );
 
     if( knockoutsApplied )
         postKnockoutMinWidthPrune( aZone, aFillPolys );
+
+    if( sameNetKnockouts.OutlineCount() > 0 )
+        aFillPolys.BooleanSubtract( sameNetKnockouts );
 
     aFillPolys.Fracture();
 
