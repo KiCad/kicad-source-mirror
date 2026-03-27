@@ -111,15 +111,15 @@ void boost_test_update_symbol_connectivity()
     BOOST_CHECK_EQUAL( powerPin->Connection( &sheetPath )->Name( true ), "VCC" );
 
     // Duplicate pin numbers link together
-    const SCH_ITEM_VEC& dupAConn = dupA->ConnectedItems( sheetPath );
+    const std::vector<SCH_ITEM*>& dupAConn = dupA->ConnectedItems( sheetPath );
     BOOST_CHECK( std::find( dupAConn.begin(), dupAConn.end(), dupB ) != dupAConn.end() );
-    const SCH_ITEM_VEC& dupBConn = dupB->ConnectedItems( sheetPath );
+    const std::vector<SCH_ITEM*>& dupBConn = dupB->ConnectedItems( sheetPath );
     BOOST_CHECK( std::find( dupBConn.begin(), dupBConn.end(), dupA ) != dupBConn.end() );
 
     // Jumper group links pins
-    const SCH_ITEM_VEC& jumpCConn = jumpC->ConnectedItems( sheetPath );
+    const std::vector<SCH_ITEM*>& jumpCConn = jumpC->ConnectedItems( sheetPath );
     BOOST_CHECK( std::find( jumpCConn.begin(), jumpCConn.end(), jumpD ) != jumpCConn.end() );
-    const SCH_ITEM_VEC& jumpDConn = jumpD->ConnectedItems( sheetPath );
+    const std::vector<SCH_ITEM*>& jumpDConn = jumpD->ConnectedItems( sheetPath );
     BOOST_CHECK( std::find( jumpDConn.begin(), jumpDConn.end(), jumpC ) != jumpDConn.end() );
 
     // Connection map contains all pins

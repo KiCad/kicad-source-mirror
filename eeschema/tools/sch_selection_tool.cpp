@@ -3438,9 +3438,7 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
             }
         }
 
-        const SCH_ITEM_VEC& neighbors = item->ConnectedItems( currentSheet );
-
-        for( SCH_ITEM* neighbor : neighbors )
+        for( SCH_ITEM* neighbor : item->ConnectedItems( currentSheet ) )
         {
             if( !neighbor )
                 continue;

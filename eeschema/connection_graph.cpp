@@ -1674,9 +1674,8 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                         connected_conn->SetSubgraphCode( subgraph->m_code );
                         m_item_to_subgraph_map[connected_item] = subgraph;
                         subgraph->AddItem( connected_item );
-                        const SCH_ITEM_VEC& citemset = connected_item->ConnectedItems( sheet );
 
-                        for( SCH_ITEM* citem : citemset )
+                        for( SCH_ITEM* citem : connected_item->ConnectedItems( sheet ) )
                         {
                             if( citem->HasFlag( CONNECTIVITY_CANDIDATE ) )
                                 continue;
@@ -1854,9 +1853,7 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 
     for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
-        SCH_ITEM_VEC vec = subgraph->GetAllBusLabels();
-
-        for( SCH_ITEM* item : vec )
+        for( SCH_ITEM* item : subgraph->GetAllBusLabels() )
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 

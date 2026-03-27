@@ -98,63 +98,57 @@ BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
 
                 for( SCH_ITEM* item : items )
                 {
-                    for( SCH_ITEM* check_item : items )
-                    {
-                        auto& conn_items = check_item->ConnectedItems( path );
-                        auto conn = check_item->Connection();
-                        std::string netname = conn ? conn->GetNetName().ToStdString() : "NoNet";
-                        int subgraph = conn ? conn->SubgraphCode() : -1;
-                        BOOST_TEST_MESSAGE( test.ToStdString() << ": Item "
-                                                                << check_item->GetFriendlyName().ToStdString()
-                                                                << " in net " << netname << " subgraph " << subgraph
-                                                                << " has " << conn_items.size() << " connections" );
-                    }
-                    SCH_CONNECTION* connection = item->Connection();
+                    const std::vector<SCH_ITEM*>& conn_items = item->ConnectedItems( path );
+                    SCH_CONNECTION*               conn = item->Connection();
+                    wxString                      netname = conn ? conn->GetNetName().ToStdString() : wxString( "NoNet" );
+                    int                           subgraph = conn ? conn->SubgraphCode() : -1;
 
-                    if( !connection )
+                    BOOST_TEST_MESSAGE( test.ToStdString()
+                                        << ": Item " << item->GetFriendlyName().ToStdString()
+                                        << " in net " << netname.ToStdString() << " subgraph " << subgraph
+                                        << " has " << conn_items.size() << " connections" );
+
+                    if( !conn )
                         continue;
-
-                    wxString netname = connection->GetNetName();
 
                     if( !item->IsConnectable() )
                         continue;
 
-                    SCH_ITEM_VEC prev_items = item->ConnectedItems( path );
+                    std::vector<SCH_ITEM*> prev_items = item->ConnectedItems( path );
                     std::sort( prev_items.begin(), prev_items.end() );
                     alg::remove_duplicates( prev_items );
-
 
                     std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
                             m_schematic->ConnectionGraph()->ExtractAffectedItems( { item } );
                     all_items.insert( { path, item } );
-                    BOOST_TEST_MESSAGE( test.ToStdString() << ": Item "
-                                                           << item->GetFriendlyName().ToStdString()
-                                                           << " in net " << netname.ToStdString()
-                                                           << " has " << all_items.size() << " affected items" );
+                    BOOST_TEST_MESSAGE( test.ToStdString()
+                                        << ": Item " << item->GetFriendlyName().ToStdString()
+                                        << " in net " << netname.ToStdString()
+                                        << " has " << all_items.size() << " affected items" );
 
                     CONNECTION_GRAPH new_graph( m_schematic.get() );
 
                     new_graph.SetLastCodes( m_schematic->ConnectionGraph() );
 
-                    for( auto&[ path, item ] : all_items )
+                    for( auto&[ apath, aitem ] : all_items )
                     {
-                        wxCHECK2( item, continue );
-                        item->SetConnectivityDirty();
+                        wxCHECK2( aitem, continue );
+                        aitem->SetConnectivityDirty();
                     }
 
                     new_graph.Recalculate( sheets, false );
                     m_schematic->ConnectionGraph()->Merge( new_graph );
 
-                    SCH_ITEM_VEC curr_items = item->ConnectedItems( path );
+                    std::vector<SCH_ITEM*> curr_items = item->ConnectedItems( path );
                     std::sort( curr_items.begin(), curr_items.end() );
                     alg::remove_duplicates( curr_items );
 
                     BOOST_CHECK_MESSAGE( prev_items == curr_items,
-                                         test.ToStdString() << ": Item "
-                                                            << item->GetFriendlyName().ToStdString()
-                                                            << " in net " << netname.ToStdString()
-                                                            << " changed from " << prev_items.size()
-                                                            << " to " << curr_items.size() << " Location:" << item->GetPosition().x << "," << item->GetPosition().y );
+                                         test.ToStdString()
+                                         << ": Item " << item->GetFriendlyName().ToStdString()
+                                         << " in net " << netname.ToStdString()
+                                         << " changed from " << prev_items.size() << " to " << curr_items.size()
+                                         << " Location:" << item->GetPosition().x << "," << item->GetPosition().y );
                 }
 
             }

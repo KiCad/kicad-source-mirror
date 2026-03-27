@@ -559,7 +559,7 @@ void SCH_ITEM::ClearConnectedItems( const SCH_SHEET_PATH& aSheet )
 }
 
 
-const SCH_ITEM_VEC& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
+const std::vector<SCH_ITEM*>& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 {
     return m_connected_items[ aSheet ];
 }
@@ -567,7 +567,7 @@ const SCH_ITEM_VEC& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 
 void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 {
-    SCH_ITEM_VEC& vec = m_connected_items[ aSheet ];
+    std::vector<SCH_ITEM*>& vec = m_connected_items[ aSheet ];
 
     // The vector elements are small, so reserve 1k at a time to prevent re-allocations
     if( vec.size() == vec.capacity() )

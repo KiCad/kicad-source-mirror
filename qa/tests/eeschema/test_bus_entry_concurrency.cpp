@@ -104,8 +104,8 @@ BOOST_FIXTURE_TEST_CASE( BusEntryConcurrency, BUS_ENTRY_CONCURRENCY_FIXTURE )
         BOOST_CHECK( entry->m_connected_bus_items[1] == bus2 );
     }
 
-    SCH_ITEM_VEC bus1_items = bus1->ConnectedItems( path );
-    SCH_ITEM_VEC bus2_items = bus2->ConnectedItems( path );
+    std::vector<SCH_ITEM*> bus1_items = bus1->ConnectedItems( path );
+    std::vector<SCH_ITEM*> bus2_items = bus2->ConnectedItems( path );
 
     BOOST_CHECK_EQUAL( bus1_items.size(), entries.size() );
     BOOST_CHECK_EQUAL( bus2_items.size(), entries.size() );
