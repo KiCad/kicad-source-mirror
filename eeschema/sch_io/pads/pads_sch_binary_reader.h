@@ -28,6 +28,8 @@
 
 class SCHEMATIC;
 class SCH_SHEET;
+class SCH_SCREEN;
+class SCH_SHEET_PATH;
 
 namespace PADS_SCH_BINARY
 {
@@ -39,6 +41,7 @@ struct PLACEMENT
     int         x_mils = 0;  ///< Page X in mils.
     int         y_mils = 0;  ///< Page Y in mils (PADS is Y-up).
     int         rotation = 0;///< 0 or 90 degrees.
+    int         sheetIndex = 0; ///< Owning PADS sheet (0-based).
 };
 
 /// One wire vertex recovered from the binary 8-byte vertex pool.
@@ -53,6 +56,7 @@ struct JUNCTION
 {
     int x_mils = 0;
     int y_mils = 0;
+    int sheetIndex = 0; ///< Owning PADS sheet (0-based).
 };
 
 /// One free-text item recovered from the binary 32-byte text record pool.
@@ -65,6 +69,7 @@ struct TEXT_ITEM
     int         height_mils = 0;
     int         linewidth_mils = 0;
     std::string text;                ///< Recovered string content (may be empty).
+    int         sheetIndex = 0;      ///< Owning PADS sheet (0-based).
 };
 
 /**
@@ -112,6 +117,8 @@ public:
     const std::vector<WIRE_VERTEX>&                 GetWireVertices() const { return m_wireVertices; }
     const std::vector<std::vector<WIRE_VERTEX>>&    GetWirePolylines() const { return m_wirePolylines; }
     const std::vector<std::vector<WIRE_VERTEX>>&    GetBusPolylines() const { return m_busPolylines; }
+    const std::vector<int>&                         GetWirePolylineSheets() const { return m_wirePolylineSheets; }
+    const std::vector<int>&                         GetBusPolylineSheets() const { return m_busPolylineSheets; }
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
 
@@ -127,10 +134,20 @@ public:
 
 private:
     void decodeSheets( const std::vector<uint8_t>& aData );
+
+    /// Map a record's file offset to its owning sheet (0-based) via the per-sheet
+    /// block boundaries.
+    int sheetIndexForOffset( size_t aOffset ) const;
+
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );
+
+    /// Emit every element belonging to @p aSheetIndex (or all sheets when it is
+    /// negative) onto @p aScreen, returning the count appended.
+    int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
+                            int aPageHeightIU ) const;
 
     /// File offsets of each per-sheet object block (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
@@ -138,6 +155,8 @@ private:
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
     std::vector<std::vector<WIRE_VERTEX>> m_busPolylines;  ///< Bus polylines (split-run gaps).
+    std::vector<int>                     m_wirePolylineSheets; ///< Sheet index per wire polyline.
+    std::vector<int>                     m_busPolylineSheets;  ///< Sheet index per bus polyline.
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
 };

@@ -35,6 +35,7 @@
 
 #include <base_units.h>
 #include <math/util.h>
+#include <wildcards_and_files_ext.h>
 
 #include <algorithm>
 #include <array>
@@ -128,6 +129,8 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_wireVertices.clear();
     m_wirePolylines.clear();
     m_busPolylines.clear();
+    m_wirePolylineSheets.clear();
+    m_busPolylineSheets.clear();
     m_texts.clear();
     m_junctions.clear();
 
@@ -167,6 +170,20 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
         if( std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
             m_sheetOffsets.push_back( i );
     }
+}
+
+
+int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
+{
+    if( m_sheetOffsets.empty() )
+        return 0;
+
+    // The block for sheet k spans [m_sheetOffsets[k], m_sheetOffsets[k+1]); records
+    // before the first signature belong to the first sheet.
+    auto it = std::upper_bound( m_sheetOffsets.begin(), m_sheetOffsets.end(), aOffset );
+    int  idx = static_cast<int>( it - m_sheetOffsets.begin() ) - 1;
+
+    return idx < 0 ? 0 : idx;
 }
 
 
@@ -352,6 +369,7 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             pl.x_mils = designMil( readU16( d, p + PART_X_OFF ) );
             pl.y_mils = designMil( readU16( d, p + PART_Y_OFF ) );
             pl.rotation = ( d[p + PART_ORI_OFF] == PART_ORI_90 ) ? 90 : 0;
+            pl.sheetIndex = sheetIndexForOffset( p );
             m_placements.push_back( std::move( pl ) );
 
             p += PART_STRIDE;
@@ -516,6 +534,7 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
         // Tile the pool with the cumulative chain.  Each full header emits one
         // connection slice of nverts; the gap up to the next cumulative start
         // is a bus polyline.  The terminal header emits the final connection.
+        int    runSheet = sheetIndexForOffset( run.vertexOffset );
         size_t prev = 0;
 
         for( size_t k = 0; k < run.cumulative.size(); ++k )
@@ -526,13 +545,17 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
                 break;
 
             m_wirePolylines.emplace_back( vertices.begin() + prev, vertices.begin() + connEnd );
+            m_wirePolylineSheets.push_back( runSheet );
 
             // The explicit slice between this connection's end and the next
             // cumulative start is a bus polyline.
             size_t gapEnd = run.cumulative[k];
 
             if( gapEnd > connEnd && gapEnd <= vertices.size() )
+            {
                 m_busPolylines.emplace_back( vertices.begin() + connEnd, vertices.begin() + gapEnd );
+                m_busPolylineSheets.push_back( runSheet );
+            }
 
             prev = run.cumulative[k];
         }
@@ -542,6 +565,7 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
         if( prev + terminalNverts <= vertices.size() )
         {
             m_wirePolylines.emplace_back( vertices.begin() + prev, vertices.begin() + prev + terminalNverts );
+            m_wirePolylineSheets.push_back( runSheet );
         }
 
         // Resume past this run's vertex pool; runs do not overlap.
@@ -574,6 +598,7 @@ struct TEXT_RECORD
     int    linewidth_mils = 0;
     int    strlen = 0;
     uint32_t ref = 0;
+    size_t offset = 0;
 };
 
 
@@ -710,7 +735,10 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
         TEXT_RECORD rec;
 
         if( isTextRecord( d, i, rec ) )
+        {
+            rec.offset = i;
             records.push_back( rec );
+        }
     }
 
     if( records.empty() )
@@ -762,6 +790,7 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
         item.justification = records[k].justification;
         item.height_mils = records[k].height_mils;
         item.linewidth_mils = records[k].linewidth_mils;
+        item.sheetIndex = sheetIndexForOffset( records[k].offset );
 
         if( k < bestStrings.size() )
             item.text = bestStrings[k];
@@ -827,11 +856,14 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
         size_t j = i;
         std::vector<JUNCTION> run;
 
+        int runSheet = sheetIndexForOffset( i );
+
         while( j + JUNCTION_STRIDE <= d.size() && isJunctionRecord( d, j, pageWidth, pageHeight ) )
         {
             JUNCTION jct;
             jct.x_mils = designMil( readU16( d, j ) );
             jct.y_mils = designMil( readU16( d, j + 2 ) );
+            jct.sheetIndex = runSheet;
             run.push_back( jct );
             j += JUNCTION_STRIDE;
         }
@@ -847,33 +879,32 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 // SCHEMATIC BUILD
 // ---------------------------------------------------------------------------
-int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const
+int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath,
+                                                int aSheetIndex, int aPageHeightIU ) const
 {
-    if( !aSchematic || !aRootSheet || !aRootSheet->GetScreen() )
-        return 0;
-
-    SCH_SCREEN* screen = aRootSheet->GetScreen();
-
-    SCH_SHEET_PATH path;
-    path.push_back( aRootSheet );
-
-    PAGE_INFO   pageInfo = screen->GetPageSettings();
-    const int   pageHeightIU = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
-
     auto milToY = [&]( int aMil ) -> int
     {
-        return pageHeightIU - schIUScale.MilsToIU( aMil );
+        return aPageHeightIU - schIUScale.MilsToIU( aMil );
     };
 
-    int appended = 0;
+    auto onSheet = [&]( int aIdx ) -> bool
+    {
+        return aSheetIndex < 0 || aIdx == aSheetIndex;
+    };
+
+    SCH_SHEET_PATH path = aPath;
+    int            appended = 0;
 
     // --- SYMBOLS (generic placeholder at recovered position + orientation) ---
     for( const PLACEMENT& pl : m_placements )
     {
+        if( !onSheet( pl.sheetIndex ) )
+            continue;
+
         wxString name = wxString::Format( wxT( "PADS_%s" ), wxString::FromUTF8( pl.reference ) );
 
-        // A minimal generic library symbol: the placement->graphic link is
-        // heap-walled, so we emit an empty body carrying the recovered
+        // A minimal generic library symbol: the placement->graphic link is still
+        // being decoded, so we emit an empty body carrying the recovered
         // reference and position.  The user can re-link to a real symbol.
         std::unique_ptr<LIB_SYMBOL> libSym = std::make_unique<LIB_SYMBOL>( name );
 
@@ -896,13 +927,18 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         symbol->SetRef( &path, wxString::FromUTF8( pl.reference ) );
         symbol->AddHierarchicalReference( path.Path(), wxString::FromUTF8( pl.reference ), 1 );
 
-        screen->Append( symbol.release() );
+        aScreen->Append( symbol.release() );
         ++appended;
     }
 
     // --- WIRES (one polyline per recovered connection) ---
-    for( const std::vector<WIRE_VERTEX>& poly : m_wirePolylines )
+    for( size_t p = 0; p < m_wirePolylines.size(); ++p )
     {
+        if( p < m_wirePolylineSheets.size() && !onSheet( m_wirePolylineSheets[p] ) )
+            continue;
+
+        const std::vector<WIRE_VERTEX>& poly = m_wirePolylines[p];
+
         for( size_t k = 0; k + 1 < poly.size(); ++k )
         {
             VECTOR2I start( schIUScale.MilsToIU( poly[k].x_mils ), milToY( poly[k].y_mils ) );
@@ -913,14 +949,19 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_WIRE );
             line->SetEndPoint( end );
-            screen->Append( line );
+            aScreen->Append( line );
             ++appended;
         }
     }
 
     // --- BUSES (the split-run gap polylines) ---
-    for( const std::vector<WIRE_VERTEX>& poly : m_busPolylines )
+    for( size_t p = 0; p < m_busPolylines.size(); ++p )
     {
+        if( p < m_busPolylineSheets.size() && !onSheet( m_busPolylineSheets[p] ) )
+            continue;
+
+        const std::vector<WIRE_VERTEX>& poly = m_busPolylines[p];
+
         for( size_t k = 0; k + 1 < poly.size(); ++k )
         {
             VECTOR2I start( schIUScale.MilsToIU( poly[k].x_mils ), milToY( poly[k].y_mils ) );
@@ -931,7 +972,7 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_BUS );
             line->SetEndPoint( end );
-            screen->Append( line );
+            aScreen->Append( line );
             ++appended;
         }
     }
@@ -939,7 +980,7 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
     // --- FREE TEXT (recovered geometry, style and string content) ---
     for( const TEXT_ITEM& txt : m_texts )
     {
-        if( txt.text.empty() )
+        if( !onSheet( txt.sheetIndex ) || txt.text.empty() )
             continue;
 
         SCH_TEXT* text = new SCH_TEXT( VECTOR2I( schIUScale.MilsToIU( txt.x_mils ),
@@ -955,16 +996,70 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         else
             text->SetTextAngle( ANGLE_HORIZONTAL );
 
-        screen->Append( text );
+        aScreen->Append( text );
         ++appended;
     }
 
     // --- JUNCTIONS (PADS tie-dots) ---
     for( const JUNCTION& jct : m_junctions )
     {
+        if( !onSheet( jct.sheetIndex ) )
+            continue;
+
         VECTOR2I pos( schIUScale.MilsToIU( jct.x_mils ), milToY( jct.y_mils ) );
-        screen->Append( new SCH_JUNCTION( pos ) );
+        aScreen->Append( new SCH_JUNCTION( pos ) );
         ++appended;
+    }
+
+    return appended;
+}
+
+
+int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet ) const
+{
+    if( !aSchematic || !aRootSheet || !aRootSheet->GetScreen() )
+        return 0;
+
+    SCH_SCREEN* rootScreen = aRootSheet->GetScreen();
+    PAGE_INFO   pageInfo = rootScreen->GetPageSettings();
+    const int   pageHeightIU = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
+
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( aRootSheet );
+
+    // A single-sheet design lands directly on the root screen.
+    if( GetSheetCount() <= 1 )
+        return appendSheetContent( rootScreen, rootPath, -1, pageHeightIU );
+
+    // A multi-sheet design becomes one child sheet per PADS sheet under the root;
+    // each PADS sheet shares the one global page size.
+    int    appended = 0;
+    size_t nSheets = GetSheetCount();
+
+    for( size_t s = 0; s < nSheets; ++s )
+    {
+        VECTOR2I pos( schIUScale.MilsToIU( 500 + static_cast<int>( s % 4 ) * 2500 ),
+                      schIUScale.MilsToIU( 500 + static_cast<int>( s / 4 ) * 2000 ) );
+        VECTOR2I size( schIUScale.MilsToIU( 2000 ), schIUScale.MilsToIU( 1500 ) );
+
+        SCH_SHEET*  child = new SCH_SHEET( aRootSheet, pos, size );
+        SCH_SCREEN* childScreen = new SCH_SCREEN( aSchematic );
+        child->SetScreen( childScreen );
+        childScreen->SetPageSettings( pageInfo );
+
+        child->GetField( FIELD_T::SHEET_NAME )->SetText( wxString::Format( _( "Sheet %zu" ), s + 1 ) );
+        child->GetField( FIELD_T::SHEET_FILENAME )
+                ->SetText( wxString::Format( wxT( "pads_sheet%zu.%s" ), s + 1,
+                                             FILEEXT::KiCadSchematicFileExtension ) );
+
+        child->SetFlags( IS_NEW );
+        rootScreen->Append( child );
+
+        SCH_SHEET_PATH childPath( rootPath );
+        childPath.push_back( child );
+        childPath.SetPageNumber( wxString::Format( wxT( "%zu" ), s + 1 ) );
+
+        appended += appendSheetContent( childScreen, childPath, static_cast<int>( s ), pageHeightIU );
     }
 
     return appended;
