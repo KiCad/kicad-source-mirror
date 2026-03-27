@@ -125,6 +125,10 @@ bool PADS_SCH_BINARY_READER::ReadFile( const wxString& aFileName, std::vector<ui
 bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 {
     m_sheetOffsets.clear();
+    m_decals.clear();
+    m_decalIndex.clear();
+    m_usedDecalTables.clear();
+    m_decalBuiltinCount = 0;
     m_placements.clear();
     m_wireVertices.clear();
     m_wirePolylines.clear();
@@ -138,6 +142,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
         return false;
 
     decodeSheets( aData );
+    decodeDecals( aData );
     decodePlacements( aData );
     decodeWires( aData );
     decodeTexts( aData );
@@ -184,6 +189,255 @@ int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
     int  idx = static_cast<int>( it - m_sheetOffsets.begin() ) - 1;
 
     return idx < 0 ? 0 : idx;
+}
+
+
+// ---------------------------------------------------------------------------
+// CAE DECALS (gate-symbol geometry library) + placement->decal binding
+//
+// Geometry library: a stride-0x50 record table (name@+0, class 0x06@+0x29,
+// cumulative-VERTEX u32@+0x34), followed by a stride-6 piece pool (marker@+1 =
+// 0xff open / 0x00 closed, nverts@+2, linewidth@+4) and a stride-6 vertex pool
+// (x=2*i16, y=2*i16, decal-relative).  A decal's vertices are the pool slice
+// [cumVtx[i], cumVtx[i+1]); its pieces are those whose vertices fall in that slice.
+//
+// Binding: each placement carries a u16 decal handle at refdes-0x1a; the decal
+// name is used_decal_table[handle - BUILTIN], where the used-decal table is a
+// stride-0x6c name run (per sheet) and BUILTIN = pool5.used_count.
+// ---------------------------------------------------------------------------
+static constexpr size_t DECAL_STRIDE = 0x50;
+static constexpr size_t USED_DECAL_STRIDE = 0x6c;
+
+
+static int decalMil( const std::vector<uint8_t>& d, size_t o )
+{
+    return 2 * static_cast<int>( static_cast<int16_t>( readU16( d, o ) ) );
+}
+
+
+static std::string nameAt( const std::vector<uint8_t>& d, size_t o, size_t maxlen )
+{
+    if( o + 1 > d.size() )
+        return std::string();
+
+    size_t end = o;
+
+    while( end < d.size() && end < o + maxlen && d[end] != 0 )
+        ++end;
+
+    if( end == o )
+        return std::string();
+
+    for( size_t i = o; i < end; ++i )
+    {
+        if( d[i] < 0x20 || d[i] >= 0x7f )
+            return std::string();
+    }
+
+    return std::string( reinterpret_cast<const char*>( &d[o] ), end - o );
+}
+
+
+void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
+{
+    // BUILTIN handle base = pool5.used_count (header pool descriptor #5, +8).
+    if( 0x20 + 28 * 5 + 8 + 4 <= d.size() )
+        m_decalBuiltinCount = readU32( d, 0x20 + 28 * 5 + 8 );
+
+    size_t n = d.size();
+
+    // --- Geometry library: find the decal-record table base (a run of >= 8 records
+    // with 0x06@+0x29 and cumVertex@+0x34 monotone non-decreasing from 0). ---
+    size_t base = 0;
+    bool   found = false;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + DECAL_STRIDE * 8 < n; ++i )
+    {
+        if( d[i + 0x29] != 0x06 || readU32( d, i + 0x34 ) != 0 )
+            continue;
+
+        uint32_t prev = 0;
+        int      good = 0;
+
+        for( int k = 0; k < 8; ++k )
+        {
+            size_t   rec = i + DECAL_STRIDE * k;
+            uint32_t cv = readU32( d, rec + 0x34 );
+
+            if( d[rec + 0x29] == 0x06 && cv >= prev && cv < 100000 )
+            {
+                ++good;
+                prev = cv;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if( good >= 8 )
+        {
+            base = i;
+            found = true;
+            break;
+        }
+    }
+
+    if( found )
+    {
+        std::vector<std::pair<std::string, uint32_t>> recs;
+        uint32_t                                      prev = 0;
+
+        for( size_t k = 0; ; ++k )
+        {
+            size_t rec = base + DECAL_STRIDE * k;
+
+            if( rec + DECAL_STRIDE > n )
+                break;
+
+            uint32_t    cv = readU32( d, rec + 0x34 );
+            std::string nm = nameAt( d, rec, 0x26 );
+
+            if( cv < prev || cv > 100000 || nm.empty() )
+                break;
+
+            recs.emplace_back( nm, cv );
+            prev = cv;
+        }
+
+        // Piece pool follows the record table.
+        size_t pieceOff = base + DECAL_STRIDE * recs.size();
+        struct PIECE_REC { bool closed; int nverts; int width; size_t vstart; };
+        std::vector<PIECE_REC> pieces;
+        size_t                 vcursor = 0;
+        size_t                 j = pieceOff;
+
+        while( j + 6 <= n )
+        {
+            uint8_t marker = d[j + 1];
+            int     nv = d[j + 2];
+
+            if( ( marker != 0x00 && marker != 0xFF ) || nv == 0 || nv > 80 )
+                break;
+
+            pieces.push_back( { marker == 0x00, nv, d[j + 4], vcursor } );
+            vcursor += static_cast<size_t>( nv );
+            j += 6;
+        }
+
+        // Vertex pool follows the piece pool.
+        size_t              vertOff = j;
+        std::vector<std::pair<int, int>> verts;
+
+        for( size_t q = 0; q < vcursor; ++q )
+        {
+            size_t o = vertOff + 6 * q;
+
+            if( o + 6 > n )
+                break;
+
+            verts.emplace_back( decalMil( d, o ), decalMil( d, o + 2 ) );
+        }
+
+        // Split pieces into decals by the cumulative-vertex ranges.
+        for( size_t di = 0; di < recs.size(); ++di )
+        {
+            size_t lo = recs[di].second;
+            size_t hi = ( di + 1 < recs.size() ) ? recs[di + 1].second : verts.size();
+
+            if( m_decalIndex.count( recs[di].first ) )
+                continue;
+
+            DECAL decal;
+            decal.name = recs[di].first;
+
+            for( const PIECE_REC& pr : pieces )
+            {
+                if( pr.vstart < lo || pr.vstart >= hi )
+                    continue;
+
+                DECAL_PIECE piece;
+                piece.closed = pr.closed;
+                piece.width_mils = pr.width;
+
+                for( int v = 0; v < pr.nverts; ++v )
+                {
+                    size_t idx = pr.vstart + static_cast<size_t>( v );
+
+                    if( idx < verts.size() )
+                        piece.verts.push_back( verts[idx] );
+                }
+
+                if( !piece.verts.empty() )
+                    decal.pieces.push_back( std::move( piece ) );
+            }
+
+            m_decalIndex[decal.name] = m_decals.size();
+            m_decals.push_back( std::move( decal ) );
+        }
+    }
+
+    // --- Used-decal name tables (stride 0x6c), one per sheet; names validated
+    // against the geometry library. ---
+    size_t i = DATA_STREAM_OFFSET;
+
+    while( i + USED_DECAL_STRIDE < n )
+    {
+        std::string nm0 = nameAt( d, i, 0x26 );
+        std::string nm1 = nameAt( d, i + USED_DECAL_STRIDE, 0x26 );
+
+        if( m_decalIndex.count( nm0 ) && m_decalIndex.count( nm1 ) )
+        {
+            std::vector<std::string> names;
+            size_t                   j = i;
+            int                      gaps = 0;
+
+            while( j + USED_DECAL_STRIDE <= n )
+            {
+                std::string nm = nameAt( d, j, 0x26 );
+                names.push_back( nm );
+
+                if( m_decalIndex.count( nm ) )
+                {
+                    gaps = 0;
+                }
+                else if( ++gaps > 6 )
+                {
+                    break;
+                }
+
+                j += USED_DECAL_STRIDE;
+            }
+
+            while( !names.empty() && !m_decalIndex.count( names.back() ) )
+                names.pop_back();
+
+            if( names.size() >= 5 )
+            {
+                m_usedDecalTables.emplace_back( i, std::move( names ) );
+                i = j;
+                continue;
+            }
+        }
+
+        ++i;
+    }
+}
+
+
+const std::vector<std::string>* PADS_SCH_BINARY_READER::usedDecalTableForOffset( size_t aOffset ) const
+{
+    const std::vector<std::string>* best = nullptr;
+
+    for( const auto& tbl : m_usedDecalTables )
+    {
+        if( tbl.first <= aOffset )
+            best = &tbl.second;
+        else
+            break;
+    }
+
+    return best;
 }
 
 
@@ -370,6 +624,23 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             pl.y_mils = designMil( readU16( d, p + PART_Y_OFF ) );
             pl.rotation = ( d[p + PART_ORI_OFF] == PART_ORI_90 ) ? 90 : 0;
             pl.sheetIndex = sheetIndexForOffset( p );
+
+            // Bind the gate decal: handle at refdes-0x1a indexes this sheet's
+            // used-decal table (base = the built-in handle count).
+            if( p >= 0x1a )
+            {
+                const std::vector<std::string>* table = usedDecalTableForOffset( p );
+                uint16_t handle = readU16( d, p - 0x1a );
+
+                if( table && handle >= m_decalBuiltinCount )
+                {
+                    size_t idx = handle - m_decalBuiltinCount;
+
+                    if( idx < table->size() )
+                        pl.decalName = ( *table )[idx];
+                }
+            }
+
             m_placements.push_back( std::move( pl ) );
 
             p += PART_STRIDE;

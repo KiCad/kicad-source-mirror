@@ -21,7 +21,9 @@
 #define PADS_SCH_BINARY_READER_H_
 
 #include <cstdint>
+#include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <wx/string.h>
@@ -42,6 +44,23 @@ struct PLACEMENT
     int         y_mils = 0;  ///< Page Y in mils (PADS is Y-up).
     int         rotation = 0;///< 0 or 90 degrees.
     int         sheetIndex = 0; ///< Owning PADS sheet (0-based).
+    std::string decalName;   ///< Bound CAE-decal (gate symbol) name, empty if unbound.
+};
+
+/// One drawing piece of a CAE decal (a polyline of decal-relative mil vertices).
+struct DECAL_PIECE
+{
+    bool                            closed = false;  ///< Filled/closed outline.
+    int                             width_mils = 0;
+    std::vector<std::pair<int, int>> verts;          ///< Decal-relative mils.
+};
+
+/// One CAE decal (gate symbol) body and its pin terminals.
+struct DECAL
+{
+    std::string                      name;
+    std::vector<DECAL_PIECE>         pieces;
+    std::vector<std::pair<int, int>> terminals;      ///< Pin connection points (mils).
 };
 
 /// One wire vertex recovered from the binary 8-byte vertex pool.
@@ -121,6 +140,7 @@ public:
     const std::vector<int>&                         GetBusPolylineSheets() const { return m_busPolylineSheets; }
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
+    const std::vector<DECAL>&                       GetDecals() const { return m_decals; }
 
     /// Number of PADS sheets in the design (>= 1).
     size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
@@ -139,6 +159,13 @@ private:
     /// block boundaries.
     int sheetIndexForOffset( size_t aOffset ) const;
 
+    /// Decode the CAE-decal geometry library + pin terminals, and locate the
+    /// per-sheet used-decal name tables (for the placement->decal binding).
+    void decodeDecals( const std::vector<uint8_t>& aData );
+
+    /// The used-decal name table that owns @p aOffset (greatest table at/below it).
+    const std::vector<std::string>* usedDecalTableForOffset( size_t aOffset ) const;
+
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
@@ -151,6 +178,15 @@ private:
 
     /// File offsets of each per-sheet object block (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
+
+    /// CAE-decal geometry library, indexed by name via m_decalIndex.
+    std::vector<DECAL>                   m_decals;
+    std::map<std::string, size_t>        m_decalIndex;
+
+    /// Per-sheet used-decal name tables: (file offset, ordered decal names).
+    std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
+    size_t                               m_decalBuiltinCount = 0; ///< pool5.used_count (handle base).
+
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.

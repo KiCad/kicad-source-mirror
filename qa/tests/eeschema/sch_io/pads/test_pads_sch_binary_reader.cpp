@@ -635,6 +635,23 @@ BOOST_AUTO_TEST_CASE( ExternalSheetCountMatchesDesign )
     {
 
 
+BOOST_AUTO_TEST_CASE( ExternalSingleSheetJunctionsMatchAsciiTiedots )
+{
+    // SC350430B01 is single-sheet, so its tie-dot pool is exactly the .txt
+    // *TIEDOTS* list (18 junctions); the first tie-dot is at (5900, 1800).
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    BOOST_REQUIRE_EQUAL( reader.GetJunctions().size(), 18u );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().front().x_mils, 5900 );
+    BOOST_CHECK_EQUAL( reader.GetJunctions().front().y_mils, 1800 );
+}
+
+
 // Count the connection polylines and their total vertices in a PADS Logic ASCII
 // export *CONNECTION* section.  A connection header is "<name> <signal> <nverts>
 // <flags>" followed by nverts coordinate rows.
