@@ -786,6 +786,13 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag, bool
         if( PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame ) )
             editFrame->HighlightSelectionFilter( rejected );
 
+        if( !m_additive && !m_subtractive && !m_exclusive_or && m_selection.GetSize() > 0 )
+        {
+            ClearSelection( true /*quiet mode*/ );
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+            return true;
+        }
+
         return false;
     }
 
