@@ -420,4 +420,30 @@ BOOST_AUTO_TEST_CASE( AlternativeEnum )
     }
 }
 
+// Duplicate registration should not crash or leak
+BOOST_AUTO_TEST_CASE( DuplicateProperty )
+{
+    PROPERTY_BASE* original = propMgr.GetProperty( TYPE_HASH( B ), "C" );
+    BOOST_REQUIRE( original );
+
+    int origValue = 42;
+    b.setC( origValue );
+
+    // Attempt to register a duplicate property with the same name and owner
+    PROPERTY_BASE& returned = propMgr.AddProperty(
+            new PROPERTY<B, int>( "C", &B::setC, &B::getC ) );
+
+    // AddProperty should return the existing property, not the new one
+    BOOST_CHECK_EQUAL( &returned, original );
+
+    // The original property should still function correctly
+    BOOST_CHECK_EQUAL( *b.Get<int>( "C" ), origValue );
+
+    // Rebuild should succeed without crashing on dangling pointers
+    propMgr.Rebuild();
+
+    PROPERTY_BASE* afterRebuild = propMgr.GetProperty( TYPE_HASH( B ), "C" );
+    BOOST_CHECK_EQUAL( afterRebuild, original );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

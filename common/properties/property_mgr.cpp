@@ -138,7 +138,15 @@ PROPERTY_BASE& PROPERTY_MANAGER::AddProperty( PROPERTY_BASE* aProperty, const wx
     TYPE_ID         hash = aProperty->OwnerHash();
     CLASS_DESC&     classDesc = getClass( hash );
 
-    classDesc.m_ownProperties.emplace( name, aProperty );
+    auto [it, inserted] = classDesc.m_ownProperties.try_emplace( name, aProperty );
+
+    if( !inserted )
+    {
+        // Property with this name already exists; delete the duplicate and return the existing one.
+        delete aProperty;
+        return *it->second;
+    }
+
     classDesc.m_ownDisplayOrder.emplace_back( aProperty );
 
     aProperty->SetGroup( aGroup );
@@ -299,6 +307,7 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
     std::set<std::pair<size_t, wxString>> replaced;
     std::set<std::pair<size_t, wxString>> masked;
     m_allProperties.clear();
+    m_displayOrder.clear();
     collectPropsRecur( m_allProperties, replaced, m_displayOrder, masked );
 
     // We need to keep properties sorted to be able to use std::set_* functions
