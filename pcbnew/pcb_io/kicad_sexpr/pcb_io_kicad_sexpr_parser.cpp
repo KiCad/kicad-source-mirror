@@ -2022,16 +2022,30 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
             type = BS_ITEM_TYPE_COPPER;
 
         BOARD_STACKUP_ITEM* item = nullptr;
+        bool                skipItem = false;
 
         if( type != BS_ITEM_TYPE_UNDEFINED )
         {
+            // A 32-copper-layer board has at most 69 stackup items (32 copper +
+            // 31 dielectric + 6 mask/paste/silk).  Anything far beyond that
+            // indicates a corrupted file.  Parse the item so tokens are consumed
+            // correctly, but don't keep it.
+            static constexpr int MAX_STACKUP_ITEMS = 128;
+
             item = new BOARD_STACKUP_ITEM( type );
             item->SetBrdLayerId( layerId );
 
             if( type == BS_ITEM_TYPE_DIELECTRIC )
                 item->SetDielectricLayerId( dielectric_idx++ );
 
-            stackup.Add( item );
+            if( stackup.GetCount() < MAX_STACKUP_ITEMS )
+            {
+                stackup.Add( item );
+            }
+            else
+            {
+                skipItem = true;
+            }
         }
         else
         {
@@ -2145,6 +2159,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
                 item->AddDielectricPrms( sublayer_idx );
             }
         }
+
+        if( skipItem )
+            delete item;
     }
 
     if( token != T_RIGHT )

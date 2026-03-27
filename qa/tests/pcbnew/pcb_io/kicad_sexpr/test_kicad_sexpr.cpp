@@ -31,6 +31,8 @@
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <board.h>
+#include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <pcb_shape.h>
 #include <zone.h>
 
@@ -152,6 +154,33 @@ BOOST_AUTO_TEST_CASE( ScientificNotationLoading )
     BOOST_REQUIRE( arc );
     BOOST_TEST( arc->GetArcMid().x == 4170000 );
     BOOST_TEST( arc->GetArcMid().y == -45 );
+}
+
+
+/**
+ * Verify that a corrupted file with thousands of stackup items does not crash
+ * KiCad.  The parser should silently cap the stackup item count.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23625
+ */
+BOOST_AUTO_TEST_CASE( Issue23625_CorruptedStackupCapped )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/kicad_sexpr/Issue23625_CorruptedStackup/";
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    BOOST_CHECK_NO_THROW( kicadPlugin.LoadBoard( dataPath + "corrupted_stackup.kicad_pcb",
+                                                 testBoard.get() ) );
+
+    const BOARD_STACKUP& stackup =
+            testBoard->GetDesignSettings().GetStackupDescriptor();
+
+    // The test file has 200 dielectric layers (plus copper, silk, mask), well
+    // beyond the parser's 128-item cap.  After loading, the count must be
+    // clamped and the board must still be usable.
+    BOOST_CHECK_LE( stackup.GetCount(), 128 );
+    BOOST_CHECK_GT( stackup.GetCount(), 0 );
 }
 
 
