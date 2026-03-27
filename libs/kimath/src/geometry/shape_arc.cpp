@@ -1208,3 +1208,30 @@ VECTOR2I SHAPE_ARC::TangentVector( bool aTakeStartPoint ) const
     
     return VECTOR2I();
 }
+
+const std::string SHAPE_ARC::Format( bool aCplusPlus  ) const
+{
+    std::stringstream ss;
+    if( aCplusPlus )
+    {
+        ss << "SHAPE_ARC( VECTOR2I( ";
+        ss << m_start.x;
+        ss << ", ";
+        ss << m_start.y;
+        ss << "), VECTOR2I( ";
+        ss << m_mid.x;
+        ss << ", ";
+        ss << m_mid.y;
+        ss << "), VECTOR2I( ";
+        ss << m_end.x;
+        ss << ", ";
+        ss << m_end.y;
+        ss << ") ); ";
+    }
+    else
+    {
+        //fixme
+    }
+
+    return ss.str();
+}

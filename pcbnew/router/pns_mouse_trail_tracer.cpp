@@ -46,7 +46,7 @@ void MOUSE_TRAIL_TRACER::Clear()
 
 void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
 {
-    if( m_trail.ShapeCount() == 0 )
+    if( m_trail.SegmentCount() == 0 )
     {
         m_trail.Append( aP );
     }
@@ -54,15 +54,15 @@ void MOUSE_TRAIL_TRACER::AddTrailPoint( const VECTOR2I& aP )
     {
         SEG s_new( m_trail.CLastPoint(), aP );
 
-        if( m_trail.ShapeCount() > 2 )
+        if( m_trail.SegmentCount() > 2 )
         {
             SEG::ecoord limit = ( static_cast<SEG::ecoord>( m_tolerance ) * m_tolerance );
 
-            for( int i = 0; i < m_trail.ShapeCount() - 2; i++ )
+            for( int i = 0; i < m_trail.SegmentCount() - 2; i++ )
             {
-                const SHAPE_SEGMENT& s_trail = m_trail.CSegment( i );
+                const SEG& s_trail = m_trail.CSegment( i );
 
-                if( s_trail.GetSeg().SquaredDistance( s_new ) <= limit )
+                if( s_trail.SquaredDistance( s_new ) <= limit )
                 {
                     m_trail = m_trail.Slice( 0, i );
                     break;
@@ -106,7 +106,7 @@ ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP 
         // will give the best results.  Otherwise, just assume that we switch postures every
         // segment.
         if( !m_manuallyForced && m_lastSegDirection != R45::UNDEFINED )
-            m_direction = m_disableMouse ? m_lastSegDirection.Right45() : m_lastSegDirection;
+            m_direction = m_disableMouse ? m_lastSegDirection.Right() : m_lastSegDirection;
 
         return m_direction;
     }
@@ -114,24 +114,24 @@ ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP 
     DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     VECTOR2I         p0 = m_trail.CPoint( 0 );
     double refLength = SEG( p0, aP ).Length();
-    SHAPE_CHAIN straight( R45::BuildInitialTrace( p0, aP, false ) );
+    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
 
     straight.SetClosed( true );
-    straight.Append( m_trail.Reversed() );
+    straight.Append( m_trail.Reverse() );
     straight.Simplify();
 
     PNS_DBG( dbg, AddShape, &straight, m_forced ? BLUE : GREEN, 100000, wxT( "mt-straight" ) );
 
-    double areaS = straight.ToSLC().Area();
+    double areaS = straight.Area();
 
-    SHAPE_CHAIN diag( R45::BuildInitialTrace( p0, aP, true ) );
-    diag.Append( m_trail.Reversed() );
+    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
+    diag.Append( m_trail.Reverse() );
     diag.SetClosed( true );
     diag.Simplify();
 
     PNS_DBG( dbg, AddShape, &diag, YELLOW, 100000, wxT( "mt-diag" ) );
 
-    double areaDiag = diag.ToSLC().Area();
+    double areaDiag = diag.Area();
     double ratio    = areaS / ( areaDiag + 1.0 );
 
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
@@ -152,10 +152,10 @@ ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP 
     if( !m_forced && refLength > minAreaCutoffDistanceFactor * m_tolerance )
     {
         double areaCutoff = m_tolerance * refLength;
-        SHAPE_CHAIN trail( m_trail );
+        SHAPE_LINE_CHAIN trail( m_trail );
         trail.SetClosed( true );
 
-        if( trail.ToSLC().Area() > areaCutoff )
+        if( trail.Area() > areaCutoff )
             areaOk = true;
     }
 
@@ -243,7 +243,7 @@ ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP 
                 R45::DIRECTION candidate = m_direction.IsDiagonal() ? straightDirection
                                                                   : diagDirection;
 
-                if( R45::Angle( candidate, m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
+                if( R45::Angle( candidate, m_lastSegDirection ) == R45::ANG_OBTUSE )
                 {
                     PNS_DBG( dbg, Message, wxString::Format( wxT( "Posture: correcting obtuse => %s" ),
                                                              candidate.Format() ) );
@@ -272,7 +272,7 @@ ROUTING_REGIME_45::DIRECTION MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP 
 
 void MOUSE_TRAIL_TRACER::FlipPosture()
 {
-    m_direction = m_direction.Right45();
+    m_direction = m_direction.Right();
     m_forced = true;    
     m_manuallyForced = true;
 }

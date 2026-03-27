@@ -108,7 +108,7 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
     LINE track( *aTrack );
     VECTOR2I end;
 
-    if( !track.PointCount() )
+    if( !track.ShapeCount() )
         return false;
 
     std::unique_ptr<NODE> tmpNode( m_world->Branch() );

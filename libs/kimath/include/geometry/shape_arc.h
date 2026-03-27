@@ -116,6 +116,9 @@ public:
                                             const VECTOR2I& aCenter, bool aClockwise = false,
                                             double aWidth = 0 );
 
+
+    static const SHAPE_ARC ConstructBitangent( const VECTOR2I& aFocus, const VECTOR2I& aA, const VECTOR2I& aB, int aRadius );
+
     const VECTOR2I& GetP0() const { return m_start; }
     const VECTOR2I& GetP1() const { return m_end; }
     const VECTOR2I& GetArcMid() const { return m_mid; }
@@ -339,7 +342,10 @@ public:
 
     // returns a vector (scaled to arc radius) tangent (i.e. straight line contiunation) to the start or end point of the arc
     virtual VECTOR2I TangentVector( bool aTakeStartPoint ) const override;
-    
+
+    virtual const std::string Format( bool aCplusPlus = true ) const override;
+
+
 private:
     void update_values();
 

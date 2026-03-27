@@ -163,7 +163,7 @@ public:
             if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( lineItem ) )
             {
                 LENGTH_DELAY_CALCULATION_ITEM item;
-                item.SetLine( l->CLine() );
+                item.SetLine( l->CLine().ToSLC() );
 
                 const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
                 item.SetLayers( layer );
@@ -290,6 +290,8 @@ public:
     void AnnotatedPolyset( const SHAPE_POLY_SET& aL, std::string name = "",
                            bool aShowVertexNumbers = false );
     void AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std::string name,
+                            bool aShowVertexNumbers = false );
+    void AnnotatedPolyline( const SHAPE_CHAIN& aL, std::string name,
                             bool aShowVertexNumbers = false );
     void AnnotatedPoint( const VECTOR2I p, int size, std::string name = "",
                          bool aShowVertexNumbers = false );

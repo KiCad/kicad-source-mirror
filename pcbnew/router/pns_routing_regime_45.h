@@ -56,7 +56,19 @@ public:
 
         wxString Format() const
         {
-            return wxT("");
+            switch( m_dir )
+            {
+            case N: return wxT( "north" );
+            case NE: return wxT( "north-east" );
+            case E: return wxT( "east" );
+            case SE: return wxT( "south-east" );
+            case S: return wxT( "south" );
+            case SW: return wxT( "south-west" );
+            case W: return wxT( "west" );
+            case NW: return wxT( "north-west" );
+            case UNDEFINED: return wxT( "undefined" );
+            default: return wxT( "<Error>" );
+            }
         }
 
         bool operator==( const DIRECTION& aOther ) const
@@ -73,7 +85,7 @@ public:
         /**
          * Return the direction on the right side of this (i.e. turns right by 45 deg).
          */
-        const DIRECTION Right45() const
+        const DIRECTION Right() const
         {
             return DIRECTION( static_cast<DIRS>( ( m_dir + 1 ) % LAST ) );
         }
@@ -128,17 +140,8 @@ public:
 
     static const SHAPE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
                                               bool aStartDiagonal = false,
-                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 )
-                                              {
-                                                return SHAPE_CHAIN();
-                                              }
+                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 );
     
-    /*                                          static const SHAPE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
-                                              DIRECTION aInitDirection = DIRECTION(DIRS::N),
-                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 )
-                                              {
-
-                                              } */
 
     static ANGLE_TYPE Angle( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB ) { return ANG_UNDEFINED; } // fixme implement
     static ANGLE_TYPE Angle( const SHAPE_CHAIN& aLine, int aVertex ) { return ANG_UNDEFINED; } // fixme implement

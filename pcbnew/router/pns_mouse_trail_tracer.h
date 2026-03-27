@@ -24,7 +24,7 @@
 
 #include <math/vector2d.h>
 
-#include <geometry/shape_chain.h>
+#include <geometry/shape_line_chain.h>
 
 #include "pns_routing_regime_45.h"
 
@@ -62,7 +62,7 @@ public:
 
     VECTOR2I GetTrailLeadVector() const;
 private:
-    SHAPE_CHAIN      m_trail;
+    SHAPE_LINE_CHAIN      m_trail;
     int              m_tolerance;
     ROUTING_REGIME_45::DIRECTION     m_direction;
     ROUTING_REGIME_45::DIRECTION     m_lastSegDirection;

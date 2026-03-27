@@ -396,6 +396,10 @@ int playground_main_func( int argc, char* argv[] )
 }
 
 
+const SHAPE_ARC SHAPE_ARC::ConstructBitangent( const VECTOR2I& aFocus, const VECTOR2I& aA, const VECTOR2I& aB, int aRadius )
+{
+    
+}
 
 int drawShapes( int argc, char* argv[] )
 {

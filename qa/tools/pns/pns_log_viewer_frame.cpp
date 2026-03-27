@@ -99,6 +99,39 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_LINE_CHAIN& aL, std:
 }
 
 
+void PNS_LOG_VIEWER_OVERLAY::AnnotatedPolyline( const SHAPE_CHAIN& aL, std::string name,
+                                                bool aShowVertexNumbers )
+{
+    for( auto sh : aL.CShapes() )
+    {
+        switch( sh->Type() )
+        {
+            case SH_SEGMENT:
+            {
+                auto seg = static_cast<const SHAPE_SEGMENT*>( sh );
+                break;
+            }
+
+            case SH_ARC:
+            {
+                auto arc = static_cast<const SHAPE_ARC*>( sh );
+                break;
+            }
+        }
+    }
+
+    if( name.length() > 0  && aL.ShapeCount() > 0 )
+        m_labelMgr->Add( aL.CLastPoint(), name, GetStrokeColor() );
+
+    if( aShowVertexNumbers )
+    {
+        for( int i = 0; i < aL.PointCount(); i++ )
+            m_labelMgr->Add( aL.CPoint(i), wxString::Format("%d", i ), GetStrokeColor() );
+    }
+}
+
+
+
 void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::string name, bool aShowVertexNumbers )
 {
     Line( p + VECTOR2D( size, size ), p - VECTOR2D( size, size ) );
@@ -256,6 +289,13 @@ void PNS_LOG_VIEWER_FRAME::drawSimpleShape( SHAPE* aShape, bool aIsSelected, con
 
         break;
     }
+    case SH_ARC:
+    {
+        auto arc = static_cast<SHAPE_ARC*>( aShape );
+        m_overlay->Arc( *arc );
+
+        break;
+    }
     case SH_RECT:
     {
         auto rect = static_cast<SHAPE_RECT*>( aShape );
@@ -300,8 +340,12 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
         if( !isEnabled )
             return true;
 
+        printf("ent %p shapecount %d\n", ent, ent->m_shapes.size() );
+
         for( auto& sh : ent->m_shapes )
         {
+            printf("shape %p\n", sh );
+
             COLOR4D color = ent->m_color;
             int lineWidth = ent->m_width;
 
@@ -323,6 +367,15 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
                 auto cmpnd = static_cast<SHAPE_COMPOUND*>( sh );
 
                 for( auto subshape : cmpnd->Shapes() )
+                {
+                    drawSimpleShape( subshape, isSelected, ent->m_name.ToStdString() );
+                }
+            }
+            if( sh->Type() == SH_CHAIN )
+            {
+                auto schain = static_cast<SHAPE_CHAIN*>( sh );
+
+                for( auto subshape : schain->CShapes() )
                 {
                     drawSimpleShape( subshape, isSelected, ent->m_name.ToStdString() );
                 }
@@ -824,7 +877,12 @@ void PNS_LOG_VIEWER_FRAME::buildListTree( wxTreeListItem item,
 
     for( SHAPE* sh : ent->m_shapes )
     {
-        if( sh->Type() == SH_LINE_CHAIN )
+        if( sh->Type() == SH_CHAIN )
+        {
+            auto sc = static_cast<SHAPE_CHAIN*>( sh );
+            totalVC += sc->ShapeCount();
+        }
+        else if( sh->Type() == SH_LINE_CHAIN )
         {
             auto lc = static_cast<SHAPE_LINE_CHAIN*>( sh );
 

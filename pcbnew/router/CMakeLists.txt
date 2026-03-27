@@ -54,6 +54,7 @@ set( PCBNEW_PNS_SRCS
     pns_via.cpp
     pns_walkaround.cpp
     pns_multi_dragger.cpp
+    pns_routing_regime_45.cpp
     router_preview_item.cpp
     router_status_view_item.cpp
     router_tool.cpp

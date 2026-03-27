@@ -171,6 +171,9 @@ void PNS_TEST_DEBUG_DECORATOR::EndGroup( const SRC_LOCATION_INFO& aSrcLoc )
 
 void PNS_TEST_DEBUG_DECORATOR::addEntry( PNS_DEBUG_SHAPE* ent )
 {
+    for( auto sh : ent->m_shapes )
+        wxASSERT( sh );
+
     auto st = currentStage();
     m_activeEntry->AddChild( ent );
 }
@@ -208,6 +211,11 @@ void PNS_TEST_DEBUG_DECORATOR::AddItem( const PNS::ITEM* aItem, const KIGFX::COL
 {
     // TODO(JE) padstacks
     SHAPE*           sh = aItem->Shape( -1 )->Clone();
+
+    printf("** sh %p %p\n", aItem->Shape( -1 ), sh );
+
+
+    assert( sh );
     PNS_DEBUG_SHAPE* ent = new PNS_DEBUG_SHAPE();
 
     ent->m_shapes.push_back( sh );
@@ -227,6 +235,8 @@ void PNS_TEST_DEBUG_DECORATOR::AddShape( const SHAPE* aShape, const KIGFX::COLOR
 {
     SHAPE*           sh = aShape->Clone();
     PNS_DEBUG_SHAPE* ent = new PNS_DEBUG_SHAPE();
+
+    assert( sh );
 
     ent->m_shapes.push_back( sh );
     ent->m_color = aColor;

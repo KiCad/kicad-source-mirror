@@ -783,6 +783,10 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             continue;
 
         const LINE* l = static_cast<const LINE*>( item );
+
+        if( !l->CLine().ShapeCount() )
+            continue;
+
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
 
         m_iface->DisplayItem( l, clearance, false, PNS_HEAD_TRACE );

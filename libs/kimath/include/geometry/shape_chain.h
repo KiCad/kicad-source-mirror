@@ -115,12 +115,16 @@ class SHAPE_CHAIN : public SHAPE
             releaseShapes();
         }
 
+        SHAPE* Clone() const override
+        {
+            return new SHAPE_CHAIN( *this );
+        }
 
         SHAPE_CHAIN& operator=( const SHAPE_CHAIN& aB )
         {
-            releaseShapes();
             m_closed = aB.m_closed;
             m_cachedBBox = aB.m_cachedBBox;
+            m_shapes.clear();
             reserve( aB.ShapeCount() );
 
             for( const auto sh : aB.CShapes() )
@@ -174,6 +178,8 @@ class SHAPE_CHAIN : public SHAPE
 
         const VECTOR2I& CPoint( int aIndex ) const
         {
+            wxASSERT( m_shapes.size() > 0 );
+
             int nPoints = PointCount();
             if( aIndex < 0 )
                 aIndex += nPoints;

@@ -1104,7 +1104,7 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 
 void LINE_PLACER::updatePStart( const LINE& tail )
 {
-    if( tail.CLine().PointCount() )
+    if( tail.CLine().ShapeCount() )
         m_p_start = tail.CLine().CLastPoint();
     else
         m_p_start = m_currentStart;
@@ -1133,6 +1133,10 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         LINE prevTail( m_tail );
         LINE prevHead( m_head );
         LINE newHead, newTail;
+
+        //fixme
+        if( n_iter > 10 )
+            break;
 
         if( !go_back && Settings().FollowMouse() )
             reduceTail( aP );
@@ -1225,7 +1229,7 @@ bool LINE_PLACER::route( const VECTOR2I& aP )
 {
     routeStep( aP );
 
-    if( !m_head.PointCount() )
+    if( !m_head.ShapeCount() )
         return false;
 
     return m_head.CLastPoint() == aP;
@@ -1504,7 +1508,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     current = Trace();
 
-    VECTOR2I splitPoint = current.PointCount() ? current.CLine().CLastPoint() : m_p_start;
+    VECTOR2I splitPoint = current.ShapeCount() ? current.CLine().CLastPoint() : m_p_start;
 
     if( reachesEnd && aEndItem && current.ShapeCount() && aEndItem->OfKind( ITEM::SEGMENT_T ) )
     {
@@ -1631,7 +1635,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     VECTOR2I p_pre_last = l.CLastPoint();
     const VECTOR2I p_last = l.CLastPoint();
 
-    if( l.PointCount() > 2 )
+    if( l.ShapeCount() >= 2 )
         p_pre_last = l.CPoint( -2 );
 
     if( aEndItem && m_currentNet && m_currentNet == aEndItem->Net() )
@@ -2082,7 +2086,8 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
     aHead.SetLayer( m_currentLayer );
     aHead.SetShape( l );
 
-    PNS_DBG( Dbg(), AddItem, &aHead, CYAN, 10000, wxT( "initial-trace" ) );
+
+    PNS_DBG( Dbg(), AddItem, &aHead, CYAN, 10000, wxString::Format( "initial-trace [sc %d]", l.ShapeCount() ) );
 
 
     if( !m_placingVia || aForceNoVia )
