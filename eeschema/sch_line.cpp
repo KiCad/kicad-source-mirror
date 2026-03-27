@@ -1175,28 +1175,17 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
             double lineAngle = std::atan2( GetEndPoint().y - GetStartPoint().y,
                                            GetEndPoint().x - GetStartPoint().x );
 
-            // Convert the angle from radians to degrees
-            double lineAngleDeg = lineAngle * ( 180.0f / M_PI );
+            // Normalize to [0, pi) so the arc side doesn't depend
+            // on which endpoint is start vs end
+            double arcAngle = lineAngle;
 
-            // Normalize the angle to be between 0 and 360 degrees
-            if( lineAngleDeg < 0 )
-                lineAngleDeg += 360;
+            if( arcAngle < 0.0 )
+                arcAngle += M_PI;
+            else if( arcAngle >= M_PI )
+                arcAngle -= M_PI;
 
-            double startAngle = lineAngleDeg;
-            double endAngle = startAngle + 180.0f;
-
-            // Adjust the end angle if it exceeds 360 degrees
-            if( endAngle >= 360.0 )
-                endAngle -= 360.0;
-
-            // Convert start and end angles from degrees to radians
-            double startAngleRad = startAngle * ( M_PI / 180.0f );
-            double endAngleRad = endAngle * ( M_PI / 180.0f );
-
-            VECTOR2I arcMidPoint = {
-                hopMid.x + static_cast<int>( R * cos( ( startAngleRad + endAngleRad ) / 2.0f ) ),
-                hopMid.y - static_cast<int>( R * sin( ( startAngleRad + endAngleRad ) / 2.0f ) )
-            };
+            VECTOR2I arcMidPoint = { hopMid.x + static_cast<int>( R * std::sin( arcAngle ) ),
+                                     hopMid.y - static_cast<int>( R * std::cos( arcAngle ) ) };
 
             VECTOR2I beforeHop = hopMid - KiROUND( R * std::cos( lineAngle ), R * std::sin( lineAngle ) );
             VECTOR2I afterHop = hopMid + KiROUND( R * std::cos( lineAngle ), R * std::sin( lineAngle ) );
@@ -1206,7 +1195,6 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
             wire_shape.emplace_back( beforeHop.x, beforeHop.y, 0 );
 
             // Create an arc object
-            SHAPE_ARC arc( beforeHop, arcMidPoint, afterHop, 0 );
             wire_shape.emplace_back( beforeHop.x, beforeHop.y, 1 );
             wire_shape.emplace_back( arcMidPoint.x, arcMidPoint.y, 1 );
             wire_shape.emplace_back( afterHop.x, afterHop.y, 1 );
