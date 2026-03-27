@@ -2555,17 +2555,17 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     // Also if there are multiple drills, we will need to make a pad for each
     std::vector<std::unique_ptr<BOARD_ITEM>> padItems;
 
-    std::vector<std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>> copperLayers( aPadstack.m_LayerCount );
+    std::vector<std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>> copperLayers( aPadstack.GetLayerCount() );
 
     // Thermal relief gap from antipad/pad size difference on the first layer that has both.
     std::optional<int> thermalGap;
 
     const wxString& padStackName = m_brdDb.GetString( aPadstack.m_PadStr );
 
-    wxLogTrace( traceAllegroBuilder, "Building pad '%s' with %u layers", padStackName, aPadstack.m_LayerCount );
+    wxLogTrace( traceAllegroBuilder, "Building pad '%s' with %u layers", padStackName, aPadstack.GetLayerCount() );
 
     // First, gather all the copper layers into a set of shape props, which we can then use to decide on the padstack mode
-    for( size_t i = 0; i < aPadstack.m_LayerCount; ++i )
+    for( size_t i = 0; i < aPadstack.GetLayerCount(); ++i )
     {
         const size_t layerBaseIndex = aPadstack.m_NumFixedCompEntries + i * aPadstack.m_NumCompsPerLayer;
         const ALLEGRO::PADSTACK_COMPONENT& padComp = aPadstack.m_Components[layerBaseIndex + BLK_0x1C_PADSTACK::LAYER_COMP_SLOT::PAD];
@@ -2896,30 +2896,33 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     int drillW = 0;
     int drillH = 0;
 
-    if( m_brdDb.m_FmtVer >= FMT_VER::V_172 )
+    if( std::holds_alternative<BLK_0x1C_PADSTACK::HEADER_v16x>( aPadstack.m_Header ) )
     {
-        if( aPadstack.m_SlotAndUnknownArr.has_value() )
-        {
-            const auto& slotArr = aPadstack.m_SlotAndUnknownArr.value();
-            int slotX = scale( static_cast<int>( slotArr[0] ) );
-            int slotY = scale( static_cast<int>( slotArr[3] ) );
+        const auto& hdr16x = std::get<BLK_0x1C_PADSTACK::HEADER_v16x>( aPadstack.m_Header );
 
-            if( slotX > 0 && slotY > 0 )
-            {
-                drillW = slotX;
-                drillH = slotY;
-            }
+        if( hdr16x.m_SlotY > 0 )
+        {
+            drillW = scale( static_cast<int>( hdr16x.m_SlotX ) );
+            drillH = scale( static_cast<int>( hdr16x.m_SlotY ) );
         }
-
-        if( drillW == 0 )
+        else
         {
-            drillW = scale( static_cast<int>( aPadstack.m_DrillArr[4] ) );
-            drillH = scale( static_cast<int>( aPadstack.m_DrillArr[7] ) );
+            drillW = scale( static_cast<int>( aPadstack.GetDrillSize() ) );
         }
     }
     else
     {
-        drillW = scale( static_cast<int>( aPadstack.m_Drill ) );
+        const auto& hdr17x = std::get<BLK_0x1C_PADSTACK::HEADER_v17x>( aPadstack.m_Header );
+
+        if( hdr17x.m_SlotY > 0 )
+        {
+            drillW = scale( static_cast<int>( hdr17x.m_SlotX ) );
+            drillH = scale( static_cast<int>( hdr17x.m_SlotY ) );
+        }
+        else
+        {
+            drillW = scale( static_cast<int>( hdr17x.m_DrillSize ) );
+        }
     }
 
     if( drillH == 0 )
@@ -2928,7 +2931,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     // Allegro stores slot dimensions as (primary, secondary) regardless of orientation,
     // not as (X, Y). Compare the first copper layer pad's aspect ratio to determine if
     // the drill needs to be rotated 90 degrees.
-    if( drillW != drillH && aPadstack.m_LayerCount > 0 )
+    if( drillW != drillH && aPadstack.GetLayerCount() > 0 )
     {
         size_t firstCopperIdx = aPadstack.m_NumFixedCompEntries;
         const ALLEGRO::PADSTACK_COMPONENT& firstPadComp =
@@ -2941,7 +2944,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             std::swap( drillW, drillH );
     }
 
-    bool isSmd = ( drillW == 0 ) || ( aPadstack.m_LayerCount == 1 );
+    bool isSmd = ( drillW == 0 ) || ( aPadstack.GetLayerCount() == 1 );
 
     if( isSmd )
     {
@@ -2967,7 +2970,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( PAD::SMDMask() );
     }
-    else if( aPadstack.m_Flags & BLK_0x1C_PADSTACK::PAD_FLAGS::FLAG_PLATED )
+    else if( aPadstack.IsPlated() )
     {
         pad->SetAttribute( PAD_ATTRIB::PTH );
         pad->SetLayerSet( PAD::PTHMask() );
@@ -3429,7 +3432,7 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
     // Extract via size from the first copper layer's pad component
     int viaWidth = 0;
 
-    if( viaPadstack->m_LayerCount > 0 )
+    if( viaPadstack->GetLayerCount() > 0 )
     {
         const size_t layerBaseIndex = viaPadstack->m_NumFixedCompEntries;
         const ALLEGRO::PADSTACK_COMPONENT& padComp =
@@ -3441,12 +3444,7 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
         }
     }
 
-    int viaDrill = 0;
-
-    if( m_brdDb.m_FmtVer >= FMT_VER::V_172 )
-        viaDrill = scale( static_cast<int>( viaPadstack->m_DrillArr[4] ) );
-    else
-        viaDrill = scale( static_cast<int>( viaPadstack->m_Drill ) );
+    int viaDrill = scale( viaPadstack->GetDrillSize() );
 
     if( viaDrill == 0 )
     {

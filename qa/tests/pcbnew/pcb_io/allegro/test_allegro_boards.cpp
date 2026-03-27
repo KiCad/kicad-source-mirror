@@ -353,7 +353,7 @@ void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTest
 {
     BOARD* board = nullptr;
 
-    BOOST_TEST_CONTEXT( wxString::Format( "Testing load from board %s", aBrdName ) )
+    BOOST_TEST_CONTEXT( "Testing load from board: " << aBrdName )
     {
         if( aBoardTestJson.contains( "boardFile" ) )
         {
@@ -379,8 +379,7 @@ void RunBoardLoad( const std::string& aBrdName, const nlohmann::json& aBoardTest
             }
             else
             {
-                BOOST_CHECK( board != nullptr );
-                BOOST_TEST_MESSAGE( "Board load was expected to succeed, and it did." );
+                BOOST_CHECK_MESSAGE( board != nullptr, "Board load was expected to succeed, but it failed." );
 
                 // Can allow a certain number of warnings, but no errors
                 AssertNoErrors( reporter );

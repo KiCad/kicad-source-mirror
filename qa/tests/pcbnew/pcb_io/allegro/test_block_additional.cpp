@@ -102,8 +102,65 @@ static void TestParallellaV163_PS_56X55RT( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_Key == 0x0acda700 );
 
-    BOOST_TEST( blk.m_LayerCount == 1 );
+    BOOST_TEST( blk.GetLayerCount() == 1 );
     BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
+}
+
+
+static void TestParallellaV163_PS_28C128N( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x0acd0920 );
+
+    // BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
+}
+
+
+static void TestParallellaV163_PS_P65X1P7SLT( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x0acd1ea0 );
+
+    // BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
+
+    const auto& hdr16x = std::get<BLK_0x1C_PADSTACK::HEADER_v16x>( blk.m_Header );
+
+    BOOST_TEST( hdr16x.m_DrillSize == 2559 );
+
+    BOOST_TEST( hdr16x.m_SlotX == 2559 );
+    BOOST_TEST( hdr16x.m_SlotY == 6693 );
+}
+
+
+static void TestBeagleBoneBlack_PS_120X040SLOT( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
+
+    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
+    const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Key == 0x1421 );
+    BOOST_TEST( blk.GetLayerCount() == 6 );
+
+    const auto& hdr17x = std::get<BLK_0x1C_PADSTACK::HEADER_v17x>( blk.m_Header );
+
+    BOOST_TEST( hdr17x.m_DrillSize == 4000 );
+
+    BOOST_TEST( hdr17x.m_SlotX == 12000 );
+    BOOST_TEST( hdr17x.m_SlotY == 4000 );
+
+    BOOST_TEST( hdr17x.m_TolerancePos == 300 );
+    BOOST_TEST( hdr17x.m_ToleranceNeg == 300 );
+    BOOST_TEST( hdr17x.m_ToleranceTravelPos == 300 );
+    BOOST_TEST( hdr17x.m_ToleranceTravelNeg == 300 );
 }
 
 
@@ -115,7 +172,9 @@ static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x1fda );
-    BOOST_TEST( blk.m_LayerCount == 12 );
+    BOOST_TEST( blk.GetLayerCount() == 12 );
+
+    BOOST_TEST( blk.GetDrillSize() == 125000 );
 
     BOOST_TEST( blk.m_Components.size() == 21 + 4 * 12 );
 
@@ -134,8 +193,8 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_Key == 0x0bfa9588 );
 
-    BOOST_TEST( blk.m_LayerCount == 6 );
-    BOOST_TEST( blk.m_Drill == 133858 );
+    BOOST_TEST( blk.GetLayerCount() == 6 );
+    BOOST_TEST( blk.GetDrillSize() == 133858 );
 
     BOOST_TEST( blk.m_Components.size() == 11 + 3 * 6 );
 
@@ -156,9 +215,12 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 // clang-format off
 static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlockTests{
     { { "Olympus_15061-1b_v165",      0x0131553c }, TestOlympus0x20 },
+    { { "BeagleBone_Black_RevC",      0x0007c420 }, TestBeagleBoneBlack_PS_120X040SLOT },
     { { "BeagleBone-AI",              0x00047f44 }, TestBeagleBoneAI_PS_200C125D },
     { { "CutiePi_V2_3_v166",          0x0001ef8c }, TestCutiePiV166_PS_C50H340M700N },
     { { "parallella_v163",            0x000368c8 }, TestParallellaV163_PS_56X55RT },
+    { { "parallella_v163",            0x0002cc08 }, TestParallellaV163_PS_28C128N },
+    { { "parallella_v163",            0x0002e168 }, TestParallellaV163_PS_P65X1P7SLT },
 };
 
 

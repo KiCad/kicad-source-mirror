@@ -983,6 +983,32 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1B_NET( FILE_STREAM& stream, FMT
 }
 
 
+static PAD_TYPE decodePadType( uint8_t aVal )
+{
+    // clang-format off
+    switch( (aVal & 0xF0) )
+    {
+    case 0x00:
+        return PAD_TYPE::THROUGH_VIA;
+    case 0x10:
+        return PAD_TYPE::VIA;
+        break;
+    case 0x20:
+    case 0xa0: // Unclear what the difference is
+        return PAD_TYPE::SMD_PIN;
+    case 0x30:
+        return PAD_TYPE::SLOT;
+        break;
+    case 0x80:
+        return PAD_TYPE::NPTH;
+        break;
+    default:
+        THROW_IO_ERROR( wxString::Format( "Unknown padstack type 0x%x", aVal ) );
+        break;
+    }
+};
+
+
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStream, FMT_VER aVer )
 {
     auto block = std::make_unique<BLOCK<BLK_0x1C_PADSTACK>>( 0x1C, aStream.Position() );
@@ -995,73 +1021,88 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
     data.m_Key = aStream.ReadU32();
     data.m_Next = aStream.ReadU32();
-
     data.m_PadStr = aStream.ReadU32();
-    data.m_Drill = aStream.ReadU32();
-    data.m_Unknown2 = aStream.ReadU32();
-    data.m_PadPath = aStream.ReadU32();
 
-    ReadCond( aStream, aVer, data.m_Unknown3 );
-    ReadCond( aStream, aVer, data.m_Unknown4 );
-    ReadCond( aStream, aVer, data.m_Unknown5 );
-    ReadCond( aStream, aVer, data.m_Unknown6 );
-
+    if( aVer < FMT_VER::V_172 )
     {
-        const uint8_t t = aStream.ReadU8();
+        BLK_0x1C_PADSTACK::HEADER_v16x& hdr = data.m_Header.emplace<BLK_0x1C_PADSTACK::HEADER_v16x>();
 
-        // clang-format off
-        switch( (t & 0xF0) >> 4 )
-        {
-        case 0x00:
-            data.m_Type = PAD_TYPE::THROUGH_VIA;
-            break;
-        case 0x01:
-            data.m_Type = PAD_TYPE::VIA;
-            break;
-        case 0x02:
-        case 0x0a: // Unclear what the difference is
-            data.m_Type = PAD_TYPE::SMD_PIN;
-            break;
-        case 0x03:
-            data.m_Type = PAD_TYPE::SLOT;
-            break;
-        case 0x08:
-            data.m_Type = PAD_TYPE::NPTH;
-            break;
-        default:
-            THROW_IO_ERROR( wxString::Format( "Unknown padstack type 0x%x", t ) );
-            break;
-        }
-        // clang-format on
-        data.m_A = ( t & 0x0F );
+        hdr.m_DrillSize = aStream.ReadU32();
+        hdr.m_UnknownStr = aStream.ReadU32();
+        hdr.m_DrillMarkSizeX = aStream.ReadU32();
+        hdr.m_DrillMarkSizeY = aStream.ReadU32();
+        hdr.m_DrillOffsetX = aStream.ReadU32();
+        hdr.m_DrillOffsetY = aStream.ReadU32();
+
+        hdr.m_DrillMarkShape = aStream.ReadU8();
+        hdr.m_B = aStream.ReadU8();
+        hdr.m_C = aStream.ReadU8();
+        hdr.m_D = aStream.ReadU8();
+        hdr.m_Unknown_1 = aStream.ReadU16();
+
+        hdr.m_ArrayNX = aStream.ReadU16();
+        hdr.m_ArrayNY = aStream.ReadU16();
+
+        hdr.m_LayerCount = aStream.ReadU16();
+        hdr.m_ClearanceX = aStream.ReadU32();
+        hdr.m_ClearanceY = aStream.ReadU32();
+        hdr.m_TolerancePos = aStream.ReadU32();
+        hdr.m_ToleranceNeg = aStream.ReadU32();
+
+        hdr.m_Unknown_2 = aStream.ReadU32();
+        hdr.m_SlotX = aStream.ReadU32();
+        hdr.m_SlotY = aStream.ReadU32();
+        hdr.m_Unknown_3 = aStream.ReadU32();
+
+        ReadCond( aStream, aVer, hdr.m_Unknown_4 );
     }
-
-    data.m_B = aStream.ReadU8();
-    data.m_Flags = aStream.ReadU8();
-    data.m_D = aStream.ReadU8();
-
-    ReadCond( aStream, aVer, data.m_Unknown7 );
-    ReadCond( aStream, aVer, data.m_Unknown8 );
-    ReadCond( aStream, aVer, data.m_Unknown9 );
-
-    ReadCond( aStream, aVer, data.m_Unknown10 );
-    data.m_LayerCount = aStream.ReadU16();
-
-    if( data.m_LayerCount > 256 )
+    else
     {
-        THROW_IO_ERROR( wxString::Format( "Padstack layer count %u exceeds maximum at offset %#010zx",
-                                          data.m_LayerCount, aStream.Position() ) );
+        BLK_0x1C_PADSTACK::HEADER_v17x& hdr = data.m_Header.emplace<BLK_0x1C_PADSTACK::HEADER_v17x>();
+
+        hdr.m_UnknownStr = aStream.ReadU32();
+        hdr.m_Unknown1 = aStream.ReadU32();
+        hdr.m_Unknown2 = aStream.ReadU32();
+
+        uint8_t padTypeAndA = aStream.ReadU8();
+        hdr.m_PadType = decodePadType( padTypeAndA );
+        hdr.m_A = ( padTypeAndA & 0x0F );
+
+        hdr.m_B = aStream.ReadU8();
+        hdr.m_Flags = aStream.ReadU8();
+        hdr.m_D = aStream.ReadU8();
+
+        hdr.m_unknown3 = aStream.ReadU32();
+        hdr.m_Unknown4 = aStream.ReadU32();
+        hdr.m_ArrayNX = aStream.ReadU16();
+        hdr.m_ArrayNY = aStream.ReadU16();
+        hdr.m_LayerCount = aStream.ReadU16();
+        hdr.m_Unknown5 = aStream.ReadU16();
+
+        hdr.m_ClearanceX = aStream.ReadU32();
+        hdr.m_ClearanceY = aStream.ReadU32();
+
+        hdr.m_Unknown6a = aStream.ReadU32();
+        hdr.m_Unknown6b = aStream.ReadU32();
+
+        hdr.m_DrillSize = aStream.ReadU32();
+        hdr.m_TolerancePos = aStream.ReadU32();
+        hdr.m_ToleranceNeg = aStream.ReadU32();
+
+        hdr.m_SlotX = aStream.ReadU32();
+        hdr.m_SlotY = aStream.ReadU32();
+
+        hdr.m_ToleranceTravelPos = aStream.ReadU32();
+        hdr.m_ToleranceTravelNeg = aStream.ReadU32();
+
+        hdr.m_DrillMarkSizeX = aStream.ReadU32();
+        hdr.m_DrillMarkSizeY = aStream.ReadU32();
+        hdr.m_DrillMarkShape = aStream.ReadU32();
+
+        ReadArrayU32( aStream, hdr.m_UnknownArr3 );
+
+        ReadCond( aStream, aVer, hdr.m_UnknownArr_v180 );
     }
-
-    ReadCond( aStream, aVer, data.m_Unknown11 );
-
-    ReadArrayU32( aStream, data.m_DrillArr );
-
-    ReadCond( aStream, aVer, data.m_SlotAndUnknownArr );
-    ReadCond( aStream, aVer, data.m_Unknown12 );
-
-    // V180 has 8 extra uint32s between the fixed arrays and the component table
-    ReadCond( aStream, aVer, data.m_V180Trailer );
 
     // Work out how many fixed slots we have
     if( aVer < FMT_VER::V_165 )
@@ -1074,7 +1115,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
     // ...and how many per-layer slots
     data.m_NumCompsPerLayer = aVer < FMT_VER::V_172 ? 3 : 4;
 
-    const size_t nComps = data.m_NumFixedCompEntries + ( data.m_LayerCount * data.m_NumCompsPerLayer );
+    const size_t nComps = data.m_NumFixedCompEntries + ( data.GetLayerCount() * data.m_NumCompsPerLayer );
 
     data.m_Components.reserve( nComps );
     for( size_t i = 0; i < nComps; ++i )
