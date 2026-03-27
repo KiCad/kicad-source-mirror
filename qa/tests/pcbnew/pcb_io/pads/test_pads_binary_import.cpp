@@ -1551,4 +1551,58 @@ BOOST_AUTO_TEST_CASE( PadStackShapeEnum_OblongDecoded )
 }
 
 
+/**
+ * De-duplicated passive terminal positions (the sec14 trailer pool + sec15 unified stream,
+ * addressed by the per-decal +68 cursor in the decal-name header table).
+ *
+ * The high-volume 2-pin passives (0402/0603/...) are de-duplicated out of section 15 and
+ * previously imported with their pads stacked at the origin (the synthesizePlaceholderTerminals
+ * fallback). The +68 cursor recovers each decal's exact decal-local terminal window. Values
+ * here are the binary-decoded positions, independently confirmed against the MC4 ASC
+ * *PARTDECAL* terminals.
+ */
+BOOST_AUTO_TEST_CASE( DedupePoolTerminalPositions_MC4 )
+{
+    PADS_IO::BINARY_PARSER parser;
+    wxString               filename = KI_TEST::GetPcbnewTestDataDir()
+                         + "plugins/pads/MC4_PLUS_CSHAPE/MC4_PLUS_CSHAPE.pcb";
+
+    parser.Parse( filename );
+
+    const std::map<std::string, PADS_IO::PART_DECAL>& decals = parser.GetPartDecals();
+
+    struct Expected
+    {
+        std::string                          name;
+        std::vector<std::pair<double, double>> terms;
+    };
+
+    const std::vector<Expected> cases = {
+        { "0402", { { -750000, 0 }, { 750000, 0 } } },
+        { "0603", { { -945000, 0 }, { 945000, 0 } } },
+        { "0805", { { -1200000, 0 }, { 1200000, 0 } } },
+        { "1206", { { -1800000, 0 }, { 1800000, 0 } } },
+        { "CC3", { { 0, -571500 }, { 0, 0 }, { 0, 571500 } } },
+    };
+
+    for( const Expected& e : cases )
+    {
+        BOOST_TEST_CONTEXT( e.name )
+        {
+            auto it = decals.find( e.name );
+            BOOST_REQUIRE_MESSAGE( it != decals.end(), "decal " << e.name << " missing" );
+
+            const std::vector<PADS_IO::TERMINAL>& terms = it->second.terminals;
+            BOOST_REQUIRE_EQUAL( terms.size(), e.terms.size() );
+
+            for( size_t t = 0; t < e.terms.size(); ++t )
+            {
+                BOOST_CHECK_EQUAL( terms[t].x, e.terms[t].first );
+                BOOST_CHECK_EQUAL( terms[t].y, e.terms[t].second );
+            }
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

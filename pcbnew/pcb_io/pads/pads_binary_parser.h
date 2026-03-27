@@ -329,6 +329,13 @@ private:
     // Covers passives/connectors that lack a sec14 descriptor.
     std::map<std::string, uint32_t> m_decalTerminalCount;
 
+    // Decal name -> start cursor (i32 @ +68 of the same header record) into the unified
+    // terminal stream S = POOL33 ++ SEC15 (the 33-record sec14 de-dup pool followed by the
+    // section-15 geometry pool). A decal's terminals are S[start .. start+count). This is
+    // the de-dup-aware per-decal terminal index; it cannot be derived from counts because
+    // the pool de-duplicates geometrically identical decals onto shared windows.
+    std::map<std::string, int32_t> m_decalTerminalStart;
+
     // Section 23 array index -> net name, used to attribute structural vias to nets
     std::map<uint32_t, std::string> m_sec23IndexToNet;
 

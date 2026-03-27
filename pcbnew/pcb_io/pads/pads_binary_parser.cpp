@@ -757,6 +757,7 @@ void BINARY_PARSER::parseDecalNameTable()
     static constexpr int DECAL_HDR_OFFSET = 1188;
     static constexpr int REC_SIZE = 112;
     static constexpr int SENTINEL_OFFSET = 64;
+    static constexpr int START_OFFSET = 68;
     static constexpr int COUNT_OFFSET = 72;
 
     const DirEntry* sec14 = getSection( SECTION::DecalHeader );
@@ -789,10 +790,16 @@ void BINARY_PARSER::parseDecalNameTable()
         std::string name = readFixedString( off, 41 );
         m_decalNameTable.push_back( name );
 
+        int32_t startCursor = readI32( off + START_OFFSET );
         int32_t count = readI32( off + COUNT_OFFSET );
 
         if( !name.empty() && count > 0 && count <= 1000 )
+        {
             m_decalTerminalCount.emplace( name, static_cast<uint32_t>( count ) );
+
+            if( startCursor >= 0 )
+                m_decalTerminalStart.emplace( name, startCursor );
+        }
     }
 }
 
@@ -984,88 +991,92 @@ void BINARY_PARSER::parseTerminals()
         return;
     }
 
+    // Terminal positions for EVERY decal come from an explicit per-decal cursor (the +68
+    // field of the decal-name header table, captured in m_decalTerminalStart) indexing a
+    // unified terminal stream S = POOL33 ++ SEC15:
+    //   POOL33 = the fixed 33-record (36 B each) de-dup pool in the sec14 trailer, holding
+    //            the terminals of the high-volume passives that are de-duplicated out of
+    //            section 15. Always exactly 33 records at (sec14.count-11)*112 + 44.
+    //   SEC15  = the section-15 geometry pool (36 B records, x@+0/y@+4), zero-tail terminated.
+    // A decal's terminals are the window S[start .. start+count): start < 33 selects the
+    // de-dup pool, start >= 33 selects SEC15[start-33]. Coordinates are decal-LOCAL. The
+    // start cursor is stored (not derivable from counts) because the pool de-duplicates
+    // geometrically identical decals onto shared windows. This supersedes the section-14
+    // descriptor walk (which mis-keyed the passives) and the old (0,0) placeholder.
+    static constexpr int TERM_SIZE = 36;
+    static constexpr int POOL_SIZE = 33;
+
+    std::vector<std::pair<int32_t, int32_t>> stream;
+
     const DirEntry* sec14 = getSection( SECTION::DecalHeader );
 
-    if( !sec14 || sec14->totalBytes == 0 )
-        return;
-
-    static constexpr int DESC_SIZE = 112;
-    static constexpr int TERM_SIZE = 36;
-
-    // Read the flat section 15 terminal-position pool, indexed by descriptor start.
-    struct TerminalRecord
+    if( sec14 && sec14->count >= 11 )
     {
-        int32_t x = 0;
-        int32_t y = 0;
-    };
+        size_t poolBase = static_cast<size_t>( sec14->dataOffset )
+                          + static_cast<size_t>( sec14->count - 11 ) * 112 + 44;
 
-    std::vector<TerminalRecord> sec15Pool;
-    const DirEntry*             sec15 = getSection( SECTION::TerminalPool );
+        for( int i = 0; i < POOL_SIZE; ++i )
+        {
+            size_t off = poolBase + static_cast<size_t>( i ) * TERM_SIZE;
+
+            if( off + 8 <= m_data.size() )
+                stream.emplace_back( readI32( off ), readI32( off + 4 ) );
+            else
+                stream.emplace_back( 0, 0 );
+        }
+    }
+
+    const DirEntry* sec15 = getSection( SECTION::TerminalPool );
 
     if( sec15 && sec15->totalBytes > 0 && sec15->perItem == TERM_SIZE )
     {
+        size_t end = static_cast<size_t>( sec15->dataOffset ) + sec15->totalBytes;
+
         for( uint32_t i = 0; i < sec15->count; ++i )
         {
             size_t off = sec15->dataOffset + static_cast<size_t>( i ) * TERM_SIZE;
 
-            if( off + TERM_SIZE > sec15->dataOffset + sec15->totalBytes )
+            if( off + TERM_SIZE > end )
                 break;
 
-            sec15Pool.push_back( { readI32( off ), readI32( off + 4 ) } );
+            // The geometry block ends at the first record whose +24/+28/+32 tail is
+            // non-zero (the per-save heap trailer that follows the terminal records).
+            if( readI32( off + 24 ) != 0 || readI32( off + 28 ) != 0 || readI32( off + 32 ) != 0 )
+                break;
+
+            stream.emplace_back( readI32( off ), readI32( off + 4 ) );
         }
     }
 
-    // Walk the section 14 descriptor run, assigning each decal its terminal run from
-    // the section 15 pool. The count comes from the following record's @+4 (the +1 lag).
-    size_t descEnd = std::min( static_cast<size_t>( sec14->dataOffset )
-                                       + static_cast<size_t>( sec14->totalBytes ),
-                               m_data.size() );
-
-    for( uint32_t i = 0; i < sec14->count; ++i )
+    for( auto& [name, decal] : m_decals )
     {
-        size_t off = sec14->dataOffset + static_cast<size_t>( i ) * DESC_SIZE;
-
-        if( off + DESC_SIZE > descEnd || readU16( off + 108 ) != 0xFFFE )
-            break;
-
-        std::string name = readFixedString( off + 44, 44 );
-        int32_t     startIdx = readI32( off );
-
-        size_t  nextOff = off + DESC_SIZE;
-        int32_t termCount = ( nextOff + 8 <= descEnd ) ? readI32( nextOff + 4 ) : 0;
-
-        auto decalIt = m_decals.find( name );
-
-        if( decalIt == m_decals.end() || name.empty() )
-            continue;
-
-        if( startIdx < 0 || termCount <= 0 || termCount > 1000 )
-            continue;
-
-        PART_DECAL& decal = decalIt->second;
-
         if( !decal.terminals.empty() )
             continue;
 
-        for( int32_t t = 0; t < termCount; ++t )
+        auto startIt = m_decalTerminalStart.find( name );
+        auto countIt = m_decalTerminalCount.find( name );
+
+        if( startIt == m_decalTerminalStart.end() || countIt == m_decalTerminalCount.end() )
+            continue;
+
+        size_t   start = static_cast<size_t>( startIt->second );
+        uint32_t count = countIt->second;
+
+        if( start + count > stream.size() )
+            continue;
+
+        for( uint32_t t = 0; t < count; ++t )
         {
-            size_t poolIdx = static_cast<size_t>( startIdx ) + static_cast<size_t>( t );
-
-            if( poolIdx >= sec15Pool.size() )
-                break;
-
             TERMINAL term;
-            term.x = toBasicCoordX( sec15Pool[poolIdx].x );
-            term.y = toBasicCoordY( sec15Pool[poolIdx].y );
+            term.x = toBasicCoordX( stream[start + t].first );
+            term.y = toBasicCoordY( stream[start + t].second );
             term.name = std::to_string( t + 1 );
             decal.terminals.push_back( term );
         }
     }
 
-    // Decals without a section 14 descriptor: synthesize the correct terminal count from
-    // m_decalTerminalCount, the lagged sentinel-stream count keyed by decal name. Per-terminal
-    // positions are not independently indexed for these, so use a placeholder layout of the
-    // correct count rather than fabricate a wrong index into the pool.
+    // Any decal still without terminals (a count-only entry whose +68 cursor is absent)
+    // falls back to the count-correct placeholder layout.
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
 }
