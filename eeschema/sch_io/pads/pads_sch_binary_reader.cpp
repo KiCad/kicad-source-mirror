@@ -27,6 +27,8 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_screen.h>
+#include <sch_shape.h>
+#include <stroke_params.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
@@ -1172,12 +1174,36 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         if( !onSheet( pl.sheetIndex ) )
             continue;
 
-        wxString name = wxString::Format( wxT( "PADS_%s" ), wxString::FromUTF8( pl.reference ) );
+        // Use the bound CAE-decal as the symbol identity + body; fall back to a
+        // generic placeholder named after the refdes when the decal is unbound.
+        auto    decalIt = m_decalIndex.find( pl.decalName );
+        bool    haveDecal = !pl.decalName.empty() && decalIt != m_decalIndex.end();
+        wxString name = haveDecal ? wxString::FromUTF8( pl.decalName )
+                                  : wxString::Format( wxT( "PADS_%s" ), wxString::FromUTF8( pl.reference ) );
 
-        // A minimal generic library symbol: the placement->graphic link is still
-        // being decoded, so we emit an empty body carrying the recovered
-        // reference and position.  The user can re-link to a real symbol.
         std::unique_ptr<LIB_SYMBOL> libSym = std::make_unique<LIB_SYMBOL>( name );
+
+        if( haveDecal )
+        {
+            // Each decal drawing piece becomes a polyline body shape; PADS decal
+            // geometry is Y-up, so the symbol-local Y is negated (library convention).
+            for( const DECAL_PIECE& piece : m_decals[decalIt->second].pieces )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+
+                for( const std::pair<int, int>& v : piece.verts )
+                    shape->AddPoint( VECTOR2I( schIUScale.MilsToIU( v.first ),
+                                               -schIUScale.MilsToIU( v.second ) ) );
+
+                int width = piece.width_mils > 0 ? schIUScale.MilsToIU( piece.width_mils ) : 0;
+                shape->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+
+                if( piece.closed )
+                    shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+
+                libSym->AddDrawItem( shape );
+            }
+        }
 
         std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
 
