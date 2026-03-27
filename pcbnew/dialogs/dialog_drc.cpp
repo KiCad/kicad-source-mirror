@@ -1032,9 +1032,9 @@ void DIALOG_DRC::OnIgnoredItemRClick( wxListEvent& event )
     int    errorCode = (int) event.m_item.GetData();
     wxMenu menu;
 
-    menu.Append( RPT_SEVERITY_ERROR,   _( "Error" ),   wxEmptyString, wxITEM_CHECK );
-    menu.Append( RPT_SEVERITY_WARNING, _( "Warning" ), wxEmptyString, wxITEM_CHECK );
-    menu.Append( RPT_SEVERITY_IGNORE,  _( "Ignore" ),  wxEmptyString, wxITEM_CHECK );
+    menu.Append( RPT_SEVERITY_ERROR,   _( "Error" ),   wxEmptyString, wxITEM_RADIO );
+    menu.Append( RPT_SEVERITY_WARNING, _( "Warning" ), wxEmptyString, wxITEM_RADIO );
+    menu.Append( RPT_SEVERITY_IGNORE,  _( "Ignore" ),  wxEmptyString, wxITEM_RADIO );
 
     menu.Check( bds().GetSeverity( errorCode ), true );
 
