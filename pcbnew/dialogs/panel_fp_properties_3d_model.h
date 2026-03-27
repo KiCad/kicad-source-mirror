@@ -70,7 +70,14 @@ private:
     void Cfg3DPath( wxCommandEvent& event ) override;
 
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnEnableExtrusion( wxCommandEvent& event ) override;
+    void OnExportExtrudedModel( wxCommandEvent& event ) override;
+    void onExtrusionControlChanged( wxCommandEvent& event );
+    void onExtrusionColorChanged( wxCommandEvent& event );
+    void onExtrusionMaterialChanged( wxCommandEvent& event );
 
+    void updateExtrusionControls();
+    void updateExtrusionPreview();
     void updateValidateStatus( int aRow );
     void cleanupFilename( wxString* aFilename );
 
@@ -96,4 +103,5 @@ private:
     PANEL_EMBEDDED_FILES*   m_filesPanel;
 
     bool                    m_inSelect;
+    bool                    m_userSetExtrusionColor;
 };

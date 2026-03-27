@@ -298,6 +298,11 @@ private:
                                      ///< outline.
     SPHERES_GIZMO* m_spheres_gizmo;
     MODEL_3D*      m_placeholderModel = nullptr;
+
+    std::map<const FOOTPRINT*, OPENGL_RENDER_LIST*> m_extrudedBodyLists;
+    std::map<const FOOTPRINT*, OPENGL_RENDER_LIST*> m_extrudedPadLists;
+
+    void renderExtrudedBodies();
 };
 
 #endif // RENDER_3D_OPENGL_H

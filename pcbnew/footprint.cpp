@@ -161,6 +161,10 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_privateLayers    = aFootprint.m_privateLayers;
 
     m_3D_Drawings      = aFootprint.m_3D_Drawings;
+
+    if( aFootprint.m_extrudedBody )
+        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>( *aFootprint.m_extrudedBody );
+
     m_initial_comments = aFootprint.m_initial_comments ? new wxArrayString( *aFootprint.m_initial_comments )
                                                        : nullptr;
 
@@ -932,6 +936,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings      = aOther.m_3D_Drawings;
+    m_extrudedBody = std::move( aOther.m_extrudedBody );
     m_libDescription   = aOther.m_libDescription;
     m_keywords         = aOther.m_keywords;
     m_privateLayers    = aOther.m_privateLayers;
@@ -1074,6 +1079,12 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings   = aOther.m_3D_Drawings;
+
+    if( aOther.m_extrudedBody )
+        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>( *aOther.m_extrudedBody );
+    else
+        m_extrudedBody.reset();
+
     m_libDescription = aOther.m_libDescription;
     m_keywords      = aOther.m_keywords;
     m_privateLayers = aOther.m_privateLayers;
@@ -2520,6 +2531,21 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 }
 
 
+EXTRUDED_3D_BODY& FOOTPRINT::EnsureExtrudedBody()
+{
+    if( !m_extrudedBody )
+        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>();
+
+    return *m_extrudedBody;
+}
+
+
+void FOOTPRINT::SetExtrudedBody( std::unique_ptr<EXTRUDED_3D_BODY> aBody )
+{
+    m_extrudedBody = std::move( aBody );
+}
+
+
 bool FOOTPRINT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     if( aSearchData.searchMetadata )
@@ -2931,6 +2957,10 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         m_courtyard_cache->front.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );
         m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
     }
+
+    // Flip the extrusion source layer to match the new side.
+    if( m_extrudedBody && m_extrudedBody->m_layer != UNDEFINED_LAYER )
+        m_extrudedBody->m_layer = GetBoard()->FlipLayer( m_extrudedBody->m_layer );
 
     if( m_geometry_cache )
         m_geometry_cache->hull.Mirror( m_pos, FLIP_DIRECTION::TOP_BOTTOM );

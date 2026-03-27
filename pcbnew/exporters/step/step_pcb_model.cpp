@@ -50,6 +50,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <3d_rendering/3d_placeholder_utils.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <kiplatform/io.h>
@@ -1672,6 +1673,73 @@ void STEP_PCB_MODEL::getBoardBodyZPlacement( double& aZPos, double& aThickness )
 }
 
 
+bool STEP_PCB_MODEL::AddExtrudedBody( const SHAPE_POLY_SET& aOutline, bool aBottom, double aStandoff, double aHeight,
+                                      const VECTOR2D& aOrigin, uint32_t aColor, EXTRUSION_MATERIAL aMaterial )
+{
+    double f_pos, f_thickness;
+    double b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+    double boardSurfaceZ;
+
+    if( !aBottom )
+        boardSurfaceZ = std::max( f_pos, f_pos + f_thickness );
+    else
+        boardSurfaceZ = std::min( b_pos, b_pos + b_thickness );
+
+    double bodyThickness = aHeight - aStandoff;
+    double zBot;
+
+    if( !aBottom )
+        zBot = boardSurfaceZ + aStandoff;
+    else
+        zBot = boardSurfaceZ - aHeight;
+
+    uint64_t key = ( static_cast<uint64_t>( aMaterial ) << 32 ) | aColor;
+    return MakeShapes( m_extruded_bodies[key], aOutline, false, bodyThickness, zBot, aOrigin );
+}
+
+
+bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom, double aStandoff,
+                                      const VECTOR2D& aOrigin )
+{
+    if( aStandoff <= 0.0 )
+        return false;
+
+    SHAPE_POLY_SET pinPoly;
+
+    if( !GetExtrusionPinOutline( aFootprint, pinPoly ) )
+        return false;
+
+    double f_pos, f_thickness;
+    double b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+
+    double boardTopZ = std::max( f_pos, f_pos + f_thickness );
+    double boardBotZ = std::min( b_pos, b_pos + b_thickness );
+
+    static const double c_protrusion = 1.0; // 1mm below opposite side
+
+    double pinZBot, pinHeight;
+
+    if( !aBottom )
+    {
+        pinZBot = boardBotZ - c_protrusion;
+        pinHeight = ( boardTopZ + aStandoff ) - pinZBot;
+    }
+    else
+    {
+        double pinZTop = boardTopZ + c_protrusion;
+        pinZBot = boardBotZ - aStandoff;
+        pinHeight = pinZTop - pinZBot;
+    }
+
+    return MakeShapes( m_extruded_pins, pinPoly, false, pinHeight, pinZBot, aOrigin );
+}
+
+
 bool STEP_PCB_MODEL::AddPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
                                        const VECTOR2D& aOrigin, const wxString& aNetname )
 {
@@ -2879,6 +2947,54 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
     if( aPushBoardBody )
         pushToAssembly( m_board_outlines, board_mat, "PCB", false, "Body" );
+
+    for( auto& [compositeKey, shapes] : m_extruded_bodies )
+    {
+        if( shapes.empty() )
+            continue;
+
+        uint32_t           colorKey = static_cast<uint32_t>( compositeKey & 0xFFFFFFFF );
+        EXTRUSION_MATERIAL material = static_cast<EXTRUSION_MATERIAL>( compositeKey >> 32 );
+
+        double r = ( ( colorKey >> 24 ) & 0xFF ) / 255.0;
+        double g = ( ( colorKey >> 16 ) & 0xFF ) / 255.0;
+        double b = ( ( colorKey >> 8 ) & 0xFF ) / 255.0;
+        double a = ( colorKey & 0xFF ) / 255.0;
+
+        double metallic, roughness;
+
+        switch( material )
+        {
+        default:
+        case EXTRUSION_MATERIAL::PLASTIC:
+            metallic = 0.0;
+            roughness = 0.6;
+            break;
+        case EXTRUSION_MATERIAL::MATTE:
+            metallic = 0.0;
+            roughness = 0.9;
+            break;
+        case EXTRUSION_MATERIAL::METAL:
+            metallic = 0.8;
+            roughness = 0.3;
+            break;
+        case EXTRUSION_MATERIAL::COPPER:
+            metallic = 1.0;
+            roughness = 0.4;
+            break;
+        }
+
+        Quantity_ColorRGBA bodyClr( Quantity_Color( r, g, b, Quantity_TOC_RGB ), a );
+        TDF_Label          body_mat = makeMaterial( "extruded_body", bodyClr, metallic, roughness );
+        pushToAssembly( shapes, body_mat, "extruded_body", false, "Extruded Bodies" );
+    }
+
+    if( !m_extruded_pins.empty() )
+    {
+        Quantity_ColorRGBA pinClr( Quantity_Color( 0.75, 0.75, 0.75, Quantity_TOC_RGB ), 1.0 );
+        TDF_Label          pin_mat = makeMaterial( "extruded_pin", pinClr, 0.6, 0.3 );
+        pushToAssembly( m_extruded_pins, pin_mat, "extruded_pin", false, "Extruded Pins" );
+    }
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();

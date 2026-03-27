@@ -2992,6 +2992,12 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         // Preserve model references and all embedded model data.
         aNew->Models() = aExisting->Models();
 
+        // Preserve extruded 3D body settings.
+        if( aExisting->HasExtrudedBody() )
+            aNew->SetExtrudedBody( std::make_unique<EXTRUDED_3D_BODY>( *aExisting->GetExtrudedBody() ) );
+        else
+            aNew->ClearExtrudedBody();
+
         for( const auto& [name, file] : aExisting->GetEmbeddedFiles()->EmbeddedFileMap() )
         {
             if( file->type != EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL )

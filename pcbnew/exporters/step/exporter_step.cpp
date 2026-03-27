@@ -40,6 +40,7 @@
 #include <zone.h>
 #include <footprint_library_adapter.h>
 #include "step_pcb_model.h"
+#include <3d_rendering/3d_placeholder_utils.h>
 
 #include <pgm_base.h>
 #include <reporter.h>
@@ -626,6 +627,59 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
                                 RPT_SEVERITY_WARNING );
         }
 
+    }
+
+    // Add extruded 3D body from 2D outline if component height is set
+    if( aFootprint->HasExtrudedBody() )
+    {
+        const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
+        SHAPE_POLY_SET outline;
+
+        if( GetExtrusionOutline( aFootprint, outline, true ) && outline.OutlineCount() > 0 )
+        {
+            bool   bottomSide = aFootprint->GetLayer() == B_Cu;
+            double standoff = pcbIUScale.IUTomm( body->m_standoff );
+            double height = pcbIUScale.IUTomm( body->m_height );
+
+            KIGFX::COLOR4D c = body->m_color;
+
+            if( c == KIGFX::COLOR4D::UNSPECIFIED )
+                c = EXTRUDED_3D_BODY::GetDefaultColor( body->m_material );
+
+            uint32_t colorKey = EXTRUDED_3D_BODY::PackColorKey( c );
+
+            try
+            {
+                if( m_pcbModel->AddExtrudedBody( outline, bottomSide, standoff, height, aOrigin, colorKey,
+                                                 body->m_material ) )
+                {
+                    hasdata = true;
+                }
+            }
+            catch( const Standard_Failure& e )
+            {
+                m_reporter->Report( wxString::Format( _( "Could not add extruded body for %s.\n"
+                                                         "OpenCASCADE error: %s\n" ),
+                                                      aFootprint->GetReference(), e.GetMessageString() ),
+                                    RPT_SEVERITY_WARNING );
+            }
+
+            // Add metallic pin extrusions for through-hole pads
+            if( standoff > 0.0 )
+            {
+                try
+                {
+                    m_pcbModel->AddExtrudedPins( aFootprint, bottomSide, standoff, aOrigin );
+                }
+                catch( const Standard_Failure& e )
+                {
+                    m_reporter->Report( wxString::Format( _( "Could not add extruded pins for %s.\n"
+                                                             "OpenCASCADE error: %s\n" ),
+                                                          aFootprint->GetReference(), e.GetMessageString() ),
+                                        RPT_SEVERITY_WARNING );
+                }
+            }
+        }
     }
 
     return hasdata;

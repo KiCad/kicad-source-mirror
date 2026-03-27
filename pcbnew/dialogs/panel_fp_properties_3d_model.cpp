@@ -49,8 +49,15 @@
 #include <dialogs/panel_embedded_files.h>
 #include <settings/settings_manager.h>
 #include <project_pcb.h>
+#include <widgets/color_swatch.h>
+#include <3d_rendering/3d_placeholder_utils.h>
+#include <exporters/step/step_pcb_model.h>
+#include <geometry/shape_poly_set.h>
+
+#include <reporter.h>
 
 #include <wx/defs.h>
+#include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
 enum MODELS_TABLE_COLUMNS
@@ -60,7 +67,10 @@ enum MODELS_TABLE_COLUMNS
     COL_SHOWN    = 2
 };
 
+
 wxDEFINE_EVENT( wxCUSTOM_PANEL_SHOWN_EVENT, wxCommandEvent );
+
+static const PCB_LAYER_ID s_extrusionLayers[] = { UNDEFINED_LAYER, F_CrtYd, F_Fab, B_CrtYd, B_Fab };
 
 PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame,
                                                             FOOTPRINT* aFootprint,
@@ -147,6 +157,13 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_modelsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     Bind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
     m_parentDialog->Bind( wxEVT_ACTIVATE, &PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent, this );
+
+    // Bind extrusion control events to update the 3D preview
+    m_componentHeightCtrl->Bind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_standoffHeightCtrl->Bind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_extrusionLayerChoice->Bind( wxEVT_CHOICE, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_extrusionColorSwatch->Bind( COLOR_SWATCH_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionColorChanged, this );
+    m_extrusionMaterialChoice->Bind( wxEVT_CHOICE, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionMaterialChanged, this );
 }
 
 
@@ -159,6 +176,13 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
     // Unbind OnShowEvent to prevent unnecessary event handling.
     Unbind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
 
+    m_componentHeightCtrl->Unbind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_standoffHeightCtrl->Unbind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_extrusionLayerChoice->Unbind( wxEVT_CHOICE, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
+    m_extrusionColorSwatch->Unbind( COLOR_SWATCH_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionColorChanged,
+                                    this );
+    m_extrusionMaterialChoice->Unbind( wxEVT_CHOICE, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionMaterialChanged, this );
+
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
     PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->FlushCache( false );
@@ -170,13 +194,110 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
 bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
 {
     ReloadModelsFromFootprint();
+
+    bool hasExtrusion = m_footprint->HasExtrudedBody();
+    m_enableExtrusionCheckbox->SetValue( hasExtrusion );
+
+    const EXTRUDED_3D_BODY* body = m_footprint->GetExtrudedBody();
+    m_componentHeightCtrl->SetValue(
+            wxString::Format( wxT( "%.4f" ), body ? pcbIUScale.IUTomm( body->m_height ) : 0.0 ) );
+    m_standoffHeightCtrl->SetValue(
+            wxString::Format( wxT( "%.4f" ), body ? pcbIUScale.IUTomm( body->m_standoff ) : 0.0 ) );
+
+    // Populate extrusion layer dropdown with board-aware layer names
+    BOARD* board = m_frame->GetBoard();
+
+    if( board )
+    {
+        m_extrusionLayerChoice->SetString( 1, board->GetLayerName( F_CrtYd ) );
+        m_extrusionLayerChoice->SetString( 2, board->GetLayerName( F_Fab ) );
+        m_extrusionLayerChoice->SetString( 3, board->GetLayerName( B_CrtYd ) );
+        m_extrusionLayerChoice->SetString( 4, board->GetLayerName( B_Fab ) );
+    }
+    else
+    {
+        m_extrusionLayerChoice->SetString( 1, BOARD::GetStandardLayerName( F_CrtYd ) );
+        m_extrusionLayerChoice->SetString( 2, BOARD::GetStandardLayerName( F_Fab ) );
+        m_extrusionLayerChoice->SetString( 3, BOARD::GetStandardLayerName( B_CrtYd ) );
+        m_extrusionLayerChoice->SetString( 4, BOARD::GetStandardLayerName( B_Fab ) );
+    }
+
+    PCB_LAYER_ID layer = body ? body->m_layer : UNDEFINED_LAYER;
+    int          selection = 0; // Auto
+
+    for( size_t i = 0; i < std::size( s_extrusionLayers ); i++ )
+    {
+        if( s_extrusionLayers[i] == layer )
+        {
+            selection = static_cast<int>( i );
+            break;
+        }
+    }
+
+    m_extrusionLayerChoice->SetSelection( selection );
+
+    KIGFX::COLOR4D color = body ? body->m_color : KIGFX::COLOR4D::UNSPECIFIED;
+    m_userSetExtrusionColor = ( color != KIGFX::COLOR4D::UNSPECIFIED );
+
+    if( color == KIGFX::COLOR4D::UNSPECIFIED )
+        color = EXTRUDED_3D_BODY::GetDefaultColor( body ? body->m_material : EXTRUSION_MATERIAL::PLASTIC );
+
+    m_extrusionColorSwatch->SetSwatchColor( color, false );
+
+    m_extrusionMaterialChoice->SetSelection(
+            static_cast<int>( body ? body->m_material : EXTRUSION_MATERIAL::PLASTIC ) );
+
+    updateExtrusionControls();
+    updateExtrusionPreview();
+
     return true;
 }
 
 
 bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 {
-    return m_modelsGrid->CommitPendingChanges();
+    if( !m_modelsGrid->CommitPendingChanges() )
+        return false;
+
+    if( m_enableExtrusionCheckbox->GetValue() )
+    {
+        double compHeight = 0.0;
+        double standoff = 0.0;
+        m_componentHeightCtrl->GetValue().ToDouble( &compHeight );
+        m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+
+        if( compHeight <= 0.0 )
+        {
+            wxMessageBox( _( "Component height must be greater than zero." ), _( "Extruded 3D Body" ),
+                          wxOK | wxICON_WARNING, this );
+            return false;
+        }
+
+        if( standoff < 0.0 )
+            standoff = 0.0;
+
+        if( standoff >= compHeight )
+        {
+            wxMessageBox( _( "Standoff height must be less than the overall height." ), _( "Extruded 3D Body" ),
+                          wxOK | wxICON_WARNING, this );
+            return false;
+        }
+
+        int sel = m_extrusionLayerChoice->GetSelection();
+
+        EXTRUDED_3D_BODY& body = m_footprint->EnsureExtrudedBody();
+        body.m_height = pcbIUScale.mmToIU( compHeight );
+        body.m_standoff = pcbIUScale.mmToIU( standoff );
+        body.m_layer = s_extrusionLayers[sel];
+        body.m_color = m_userSetExtrusionColor ? m_extrusionColorSwatch->GetSwatchColor() : KIGFX::COLOR4D::UNSPECIFIED;
+        body.m_material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
+    }
+    else
+    {
+        m_footprint->ClearExtrudedBody();
+    }
+
+    return true;
 }
 
 
@@ -654,4 +775,176 @@ void PANEL_FP_PROPERTIES_3D_MODEL::postCustomPanelShownEventWithPredicate( bool 
     event.SetEventObject( m_previewPane );
     event.SetInt( static_cast<int>( predicate ) );
     m_previewPane->ProcessWindowEvent( event );
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::OnEnableExtrusion( wxCommandEvent& event )
+{
+    updateExtrusionControls();
+    updateExtrusionPreview();
+    onModify();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged( wxCommandEvent& event )
+{
+    updateExtrusionPreview();
+    onModify();
+    event.Skip();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionColorChanged( wxCommandEvent& event )
+{
+    m_userSetExtrusionColor = true;
+    updateExtrusionPreview();
+    onModify();
+    event.Skip();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionControls()
+{
+    bool enabled = m_enableExtrusionCheckbox->GetValue();
+    m_componentHeightCtrl->Enable( enabled );
+    m_standoffHeightCtrl->Enable( enabled );
+    m_extrusionLayerChoice->Enable( enabled );
+    m_extrusionColorSwatch->Enable( enabled );
+    m_extrusionMaterialChoice->Enable( enabled );
+    m_buttonExportExtruded->Enable( enabled );
+
+    // Scale/rotation/offset/opacity only apply to external 3D model files
+    m_previewPane->SetModelTransformControlsEnabled( !enabled );
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionPreview()
+{
+    FOOTPRINT* dummyFp = m_previewPane->GetDummyFootprint();
+
+    if( !dummyFp )
+        return;
+
+    if( m_enableExtrusionCheckbox->GetValue() )
+    {
+        double compHeight = 0.0;
+        double standoff = 0.0;
+        m_componentHeightCtrl->GetValue().ToDouble( &compHeight );
+        m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+
+        int sel = m_extrusionLayerChoice->GetSelection();
+
+        EXTRUDED_3D_BODY& body = dummyFp->EnsureExtrudedBody();
+        body.m_height = pcbIUScale.mmToIU( compHeight );
+        body.m_standoff = pcbIUScale.mmToIU( standoff );
+        body.m_layer = s_extrusionLayers[sel];
+        body.m_color = m_userSetExtrusionColor ? m_extrusionColorSwatch->GetSwatchColor() : KIGFX::COLOR4D::UNSPECIFIED;
+        body.m_material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
+    }
+    else
+    {
+        dummyFp->ClearExtrudedBody();
+    }
+
+    m_previewPane->UpdateDummyFootprint( true );
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionMaterialChanged( wxCommandEvent& event )
+{
+    if( !m_userSetExtrusionColor )
+    {
+        EXTRUSION_MATERIAL mat = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
+        m_extrusionColorSwatch->SetSwatchColor( EXTRUDED_3D_BODY::GetDefaultColor( mat ), false );
+    }
+
+    updateExtrusionPreview();
+    onModify();
+    event.Skip();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event )
+{
+    double height = 0.0;
+    double standoff = 0.0;
+    m_componentHeightCtrl->GetValue().ToDouble( &height );
+    m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+
+    if( height <= 0.0 )
+    {
+        wxMessageBox( _( "Component height must be greater than zero." ), _( "Export Extruded Body" ),
+                      wxOK | wxICON_WARNING, this );
+        return;
+    }
+
+    int layerSel = m_extrusionLayerChoice->GetSelection();
+
+    SHAPE_POLY_SET outline;
+    bool           gotOutline = GetExtrusionOutline( m_footprint, outline, true, s_extrusionLayers[layerSel] )
+                      && outline.OutlineCount() > 0;
+
+    if( !gotOutline )
+    {
+        wxMessageBox( _( "No extrusion outline could be generated for this footprint." ), _( "Export Extruded Body" ),
+                      wxOK | wxICON_WARNING, this );
+        return;
+    }
+
+    wxString defaultName = m_footprint->GetReference() + wxT( "_extruded" );
+
+    wxFileDialog dlg( this, _( "Export Extruded 3D Body" ), wxEmptyString, defaultName,
+                      _( "STEP files" ) + wxT( " (*.step)|*.step|" ) + _( "GLB files" ) + wxT( " (*.glb)|*.glb|" )
+                              + _( "STL files" ) + wxT( " (*.stl)|*.stl|" ) + _( "BREP files" )
+                              + wxT( " (*.brep)|*.brep" ),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString path = dlg.GetPath();
+    int      filterIdx = dlg.GetFilterIndex();
+
+    bool     bottom = m_footprint->IsFlipped();
+    VECTOR2D origin( 0, 0 );
+
+    EXTRUSION_MATERIAL material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
+
+    KIGFX::COLOR4D c = m_extrusionColorSwatch->GetSwatchColor();
+
+    if( c == KIGFX::COLOR4D::UNSPECIFIED )
+        c = EXTRUDED_3D_BODY::GetDefaultColor( material );
+
+    uint32_t colorKey = EXTRUDED_3D_BODY::PackColorKey( c );
+
+    NULL_REPORTER  reporter;
+    STEP_PCB_MODEL model( wxT( "extruded_body" ), &reporter );
+
+    if( !model.AddExtrudedBody( outline, bottom, standoff, height, origin, colorKey, material ) )
+    {
+        wxMessageBox( _( "Failed to create extruded body geometry." ), _( "Export Extruded Body" ), wxOK | wxICON_ERROR,
+                      this );
+        return;
+    }
+
+    if( standoff > 0.0 )
+        model.AddExtrudedPins( m_footprint, bottom, standoff, origin );
+
+    SHAPE_POLY_SET boardOutline( outline );
+    model.CreatePCB( boardOutline, origin, false );
+
+    bool ok = false;
+
+    switch( filterIdx )
+    {
+    case 0: ok = model.WriteSTEP( path, true, false ); break;
+    case 1: ok = model.WriteGLTF( path ); break;
+    case 2: ok = model.WriteSTL( path ); break;
+    case 3: ok = model.WriteBREP( path ); break;
+    }
+
+    if( !ok )
+    {
+        wxMessageBox( _( "Failed to write file." ), _( "Export Extruded Body" ), wxOK | wxICON_ERROR, this );
+    }
 }

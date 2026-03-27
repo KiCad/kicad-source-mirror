@@ -57,6 +57,7 @@ bevelled
 blind
 blind_buried_vias_allowed
 board_only
+body_pcb_gap
 bold
 border
 bottom
@@ -132,6 +133,7 @@ exclude_from_bom
 extension_height
 extension_offset
 external
+extruded
 fab_layers_line_width
 fab_layers_text_dims
 face
@@ -256,6 +258,7 @@ other_layers_line_width
 other_layers_text_dims
 outward
 oval
+overall_height
 override_value
 pad
 pads

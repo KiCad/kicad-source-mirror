@@ -25,8 +25,10 @@
 #define PLACEHOLDER_3D_UTILS_H
 
 #include <math/box2.h>
+#include <layer_ids.h>
 
 class FOOTPRINT;
+class SHAPE_POLY_SET;
 
 /**
  * Calculate a local space bounding box for a placeholder 3D model.
@@ -35,5 +37,30 @@ class FOOTPRINT;
  * then falls back to the footprint bounding box.
  */
 BOX2I CalcPlaceholderLocalBox( const FOOTPRINT* aFootprint );
+
+/**
+ * Get the extrusion outline polygon for a footprint in board coordinates.
+ *
+ * @param aFootprint the footprint to extract an outline from.
+ * @param aOutline output polygon set.
+ * @param aForceFilled when true, treat all closed contours as filled (for STEP export).
+ *                     When false, use per-shape TransformShapeToPolygon which respects
+ *                     fill state and handles all shape types including arcs.
+ * @param aLayerOverride when not UNDEFINED_LAYER, use this layer instead of
+ *                       the footprint's extruded body layer setting.
+ * @return true if outline was found.
+ */
+bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline, bool aForceFilled = false,
+                          PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER );
+
+/**
+ * Get the pin outline polygons for extruded THT pin rendering.
+ *
+ * Collects drill hole shapes from all pads with holes, shrunk to ~90% of the
+ * drill diameter so pins sit inside the hole.
+ *
+ * @return true if at least one hole polygon was generated.
+ */
+bool GetExtrusionPinOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aPinPoly );
 
 #endif // PLACEHOLDER_3D_UTILS_H

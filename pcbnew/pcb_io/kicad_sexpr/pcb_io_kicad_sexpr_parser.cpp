@@ -909,15 +909,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseRenderCache( EDA_TEXT* text )
 }
 
 
-FP_3DMODEL* PCB_IO_KICAD_SEXPR_PARSER::parse3DModel()
+FP_3DMODEL* PCB_IO_KICAD_SEXPR_PARSER::parse3DModel( bool aFileNameAlreadyParsed )
 {
-    wxCHECK_MSG( CurTok() == T_model, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FP_3DMODEL." ) );
+    if( !aFileNameAlreadyParsed )
+    {
+        wxCHECK_MSG( CurTok() == T_model, nullptr,
+                     wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FP_3DMODEL." ) );
+
+        NeedSYMBOLorNUMBER();
+    }
 
     T token;
 
     FP_3DMODEL* n3D = new FP_3DMODEL;
-    NeedSYMBOLorNUMBER();
     n3D->m_Filename = FromUTF8();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -5540,9 +5544,103 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
         case T_model:
         {
-            FP_3DMODEL* model = parse3DModel();
-            footprint->Add3DModel( model );
-            delete model;
+            token = NextTok();
+
+            if( token == T_LEFT )
+            {
+                // Typed model (model (type extruded) ...)
+                token = NextTok();
+
+                if( token != T_type )
+                    Expecting( T_type );
+
+                NeedSYMBOL();
+
+                if( CurTok() == T_extruded )
+                {
+                    NeedRIGHT(); // close (type extruded)
+
+                    EXTRUDED_3D_BODY& body = footprint->EnsureExtrudedBody();
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
+
+                        token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_overall_height:
+                            body.m_height = parseBoardUnits( "overall height" );
+                            NeedRIGHT();
+                            break;
+
+                        case T_body_pcb_gap:
+                            body.m_standoff = parseBoardUnits( "body pcb gap" );
+                            NeedRIGHT();
+                            break;
+
+                        case T_layer:
+                        {
+                            NeedSYMBOL();
+                            wxString layerName = From_UTF8( CurText() );
+                            int      layer = LSET::NameToLayer( layerName );
+
+                            if( layer >= 0 )
+                                body.m_layer = static_cast<PCB_LAYER_ID>( layer );
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        case T_material:
+                        {
+                            NeedSYMBOL();
+                            wxString matName = From_UTF8( CurText() );
+
+                            if( matName == wxT( "matte" ) )
+                                body.m_material = EXTRUSION_MATERIAL::MATTE;
+                            else if( matName == wxT( "metal" ) )
+                                body.m_material = EXTRUSION_MATERIAL::METAL;
+                            else if( matName == wxT( "copper" ) )
+                                body.m_material = EXTRUSION_MATERIAL::COPPER;
+                            else
+                                body.m_material = EXTRUSION_MATERIAL::PLASTIC;
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        case T_color:
+                        {
+                            body.m_color.r = parseDouble( "red" );
+                            body.m_color.g = parseDouble( "green" );
+                            body.m_color.b = parseDouble( "blue" );
+                            body.m_color.a = parseDouble( "alpha" );
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        default:
+                            Expecting( "overall_height, body_pcb_gap, layer, material, "
+                                       "or color" );
+                        }
+                    }
+                }
+                else
+                {
+                    Expecting( "extruded" );
+                }
+            }
+            else
+            {
+                // Reference model (model "filename" ...)
+                FP_3DMODEL* model = parse3DModel( true );
+                footprint->Add3DModel( model );
+                delete model;
+            }
+
             break;
         }
 

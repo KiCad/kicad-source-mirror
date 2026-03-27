@@ -110,6 +110,12 @@ public:
      */
     FOOTPRINT* GetDummyFootprint() const { return m_dummyFootprint; }
 
+    /**
+     * Enable or disable the scale/rotation/offset/opacity controls.
+     * Used to grey them out when an extruded body is active.
+     */
+    void SetModelTransformControlsEnabled( bool aEnabled );
+
 private:
     /**
      * Load 3D relevant settings from the user configuration

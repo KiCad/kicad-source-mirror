@@ -336,6 +336,33 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 }
 
 
+void PANEL_PREVIEW_3D_MODEL::SetModelTransformControlsEnabled( bool aEnabled )
+{
+    xscale->Enable( aEnabled );
+    yscale->Enable( aEnabled );
+    zscale->Enable( aEnabled );
+    m_spinXscale->Enable( aEnabled );
+    m_spinYscale->Enable( aEnabled );
+    m_spinZscale->Enable( aEnabled );
+
+    xrot->Enable( aEnabled );
+    yrot->Enable( aEnabled );
+    zrot->Enable( aEnabled );
+    m_spinXrot->Enable( aEnabled );
+    m_spinYrot->Enable( aEnabled );
+    m_spinZrot->Enable( aEnabled );
+
+    xoff->Enable( aEnabled );
+    yoff->Enable( aEnabled );
+    zoff->Enable( aEnabled );
+    m_spinXoffset->Enable( aEnabled );
+    m_spinYoffset->Enable( aEnabled );
+    m_spinZoffset->Enable( aEnabled );
+
+    m_opacity->Enable( aEnabled );
+}
+
+
 void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
     if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )

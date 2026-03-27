@@ -47,6 +47,7 @@
 #include <functional>
 #include <math/vector3.h>
 #include <case_insensitive_map.h>
+#include <gal/color4d.h>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -88,6 +89,50 @@ enum FOOTPRINT_ATTR_T
     FP_BOARD_ONLY               = 0x0010,   // Footprint has no corresponding symbol
     FP_JUST_ADDED               = 0x0020,   // Footprint just added by netlist update
     FP_DNP                      = 0x0040
+};
+
+enum class EXTRUSION_MATERIAL
+{
+    PLASTIC = 0,
+    MATTE,
+    METAL,
+    COPPER
+};
+
+class EXTRUDED_3D_BODY
+{
+public:
+    EXTRUDED_3D_BODY() = default;
+
+    int                m_height = 0;
+    int                m_standoff = 0;
+    PCB_LAYER_ID       m_layer = UNDEFINED_LAYER;
+    KIGFX::COLOR4D     m_color = KIGFX::COLOR4D::UNSPECIFIED;
+    EXTRUSION_MATERIAL m_material = EXTRUSION_MATERIAL::PLASTIC;
+
+    static KIGFX::COLOR4D GetDefaultColor( EXTRUSION_MATERIAL aMaterial )
+    {
+        switch( aMaterial )
+        {
+        default:
+        case EXTRUSION_MATERIAL::PLASTIC: return KIGFX::COLOR4D( 0.2, 0.2, 0.2, 1.0 );
+        case EXTRUSION_MATERIAL::MATTE: return KIGFX::COLOR4D( 0.4, 0.4, 0.4, 1.0 );
+        case EXTRUSION_MATERIAL::METAL: return KIGFX::COLOR4D( 0.7, 0.7, 0.7, 1.0 );
+        case EXTRUSION_MATERIAL::COPPER: return KIGFX::COLOR4D( 0.72, 0.45, 0.2, 1.0 );
+        }
+    }
+
+    bool operator==( const EXTRUDED_3D_BODY& aOther ) const
+    {
+        return m_height == aOther.m_height && m_standoff == aOther.m_standoff && m_layer == aOther.m_layer
+               && m_color == aOther.m_color && m_material == aOther.m_material;
+    }
+
+    static uint32_t PackColorKey( const KIGFX::COLOR4D& aColor )
+    {
+        return ( (uint8_t) ( aColor.r * 255 ) << 24 ) | ( (uint8_t) ( aColor.g * 255 ) << 16 )
+               | ( (uint8_t) ( aColor.b * 255 ) << 8 ) | (uint8_t) ( aColor.a * 255 );
+    }
 };
 
 enum class FOOTPRINT_STACKUP
@@ -342,6 +387,13 @@ public:
 
     std::vector<FP_3DMODEL>& Models()             { return m_3D_Drawings; }
     const std::vector<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
+
+    bool                    HasExtrudedBody() const { return m_extrudedBody != nullptr; }
+    const EXTRUDED_3D_BODY* GetExtrudedBody() const { return m_extrudedBody.get(); }
+    EXTRUDED_3D_BODY*       GetExtrudedBody() { return m_extrudedBody.get(); }
+    EXTRUDED_3D_BODY&       EnsureExtrudedBody();
+    void                    SetExtrudedBody( std::unique_ptr<EXTRUDED_3D_BODY> aBody );
+    void                    ClearExtrudedBody() { m_extrudedBody.reset(); }
 
     void     SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override { return m_pos; }
@@ -1389,6 +1441,9 @@ private:
     KIID            m_link;              // Temporary logical link used during editing
 
     std::vector<FP_3DMODEL> m_3D_Drawings;       // 3D models.
+
+    std::unique_ptr<EXTRUDED_3D_BODY> m_extrudedBody; // nullptr = disabled
+
     wxArrayString*          m_initial_comments;  // s-expression comments in the footprint,
                                                  //   lazily allocated only if needed for speed
 

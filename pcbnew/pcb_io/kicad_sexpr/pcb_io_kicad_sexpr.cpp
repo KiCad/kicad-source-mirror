@@ -1496,6 +1496,39 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     if( !aFootprint->GetEmbeddedFiles()->IsEmpty() )
         aFootprint->WriteEmbeddedFiles( *m_out, !( m_ctl & CTL_FOR_BOARD ) );
 
+    // Save extruded 3D body info.
+    if( const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody(); body && body->m_height > 0 )
+    {
+        m_out->Print( "(model" );
+        m_out->Print( "(type extruded)" );
+
+        m_out->Print( "(overall_height %s)", formatInternalUnits( body->m_height ).c_str() );
+
+        if( body->m_standoff > 0 )
+        {
+            m_out->Print( "(body_pcb_gap %s)", formatInternalUnits( body->m_standoff ).c_str() );
+        }
+
+        if( body->m_layer != UNDEFINED_LAYER )
+        {
+            m_out->Print( "(layer %s)", m_out->Quotew( LSET::Name( body->m_layer ) ).c_str() );
+        }
+
+        {
+            static const char* matNames[] = { "plastic", "matte", "metal", "copper" };
+            m_out->Print( "(material %s)", matNames[static_cast<int>( body->m_material )] );
+        }
+
+        if( body->m_color != KIGFX::COLOR4D::UNSPECIFIED )
+        {
+            m_out->Print( "(color %s %s %s %s)", FormatDouble2Str( body->m_color.r ).c_str(),
+                          FormatDouble2Str( body->m_color.g ).c_str(), FormatDouble2Str( body->m_color.b ).c_str(),
+                          FormatDouble2Str( body->m_color.a ).c_str() );
+        }
+
+        m_out->Print( ")" );
+    }
+
     // Save 3D info.
     auto bs3D = aFootprint->Models().begin();
     auto es3D = aFootprint->Models().end();
