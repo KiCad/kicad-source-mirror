@@ -2985,7 +2985,7 @@ static struct EDA_SHAPE_DESC
                     {
                         // For some reason masking "Filled" and "Fill Color" at the
                         // PCB_TABLECELL level doesn't work.
-                        if( edaItem->Type() == PCB_TABLECELL_T )
+                        if( edaItem->Type() == PCB_TABLECELL_T || edaItem->Type() == PCB_TEXTBOX_T )
                             return false;
                     }
 
