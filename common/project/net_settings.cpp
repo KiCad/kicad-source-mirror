@@ -1157,6 +1157,11 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
 
     // Parse prefix
     //
+    // Formatting markers (^{}, _{}, ~{}) can appear either as part of the prefix name
+    // (e.g. I^{2}C[0..7]) or wrapping the range specifier (e.g. D_{[1..2]}).
+    // We preserve formatting in the prefix and only strip it when the range bracket
+    // appears inside formatting braces, indicating the formatting wraps the range.
+    //
     for( ; i < busLen; ++i )
     {
         // Handle quoted strings (allows spaces inside)
@@ -1187,10 +1192,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
             if( i > 0 && isSuperSubOverbar( aBus[i-1] ) )
             {
                 braceNesting++;
-
-                if( !prefix.IsEmpty() )
-                    prefix.RemoveLast();
-
+                prefix += wxT( '{' );
                 continue;
             }
             else
@@ -1199,6 +1201,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         else if( aBus[i] == '}' )
         {
             braceNesting--;
+            prefix += wxT( '}' );
             continue;
         }
 
@@ -1214,7 +1217,23 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
             return false;
 
         if( aBus[i] == '[' )
+        {
+            if( braceNesting > 0 )
+            {
+                // The range bracket is inside formatting braces (e.g. D_{[1..2]}).
+                // Strip the formatting wrapper from the prefix since it decorates the
+                // range indices, not the name itself.
+                size_t fmtStart = prefix.rfind( wxT( '{' ) );
+
+                if( fmtStart != wxString::npos && fmtStart > 0
+                    && isSuperSubOverbar( prefix[fmtStart - 1] ) )
+                {
+                    prefix.erase( fmtStart - 1 );
+                }
+            }
+
             break;
+        }
 
         prefix += aBus[i];
     }
@@ -1342,6 +1361,10 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
 
     // Parse prefix
     //
+    // Formatting markers (^{}, _{}, ~{}) in the prefix are part of the group name
+    // and must be preserved.  The member-list opening brace is distinguished by NOT
+    // being preceded by a formatting character.
+    //
     for( ; i < groupLen; ++i )
     {
         // Handle quoted strings (allows spaces inside)
@@ -1372,10 +1395,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
             if( i > 0 && isSuperSubOverbar( aGroup[i-1] ) )
             {
                 braceNesting++;
-
-                if( !prefix.IsEmpty() )
-                    prefix.RemoveLast();
-
+                prefix += wxT( '{' );
                 continue;
             }
             else
@@ -1384,6 +1404,7 @@ bool NET_SETTINGS::ParseBusGroup( const wxString& aGroup, wxString* aName,
         else if( aGroup[i] == '}' )
         {
             braceNesting--;
+            prefix += wxT( '}' );
             continue;
         }
 

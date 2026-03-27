@@ -1931,9 +1931,12 @@ void CONNECTION_GRAPH::processSubGraphs()
                         if( prefix.empty() )
                             prefix = wxT( "BUS" ); // So result will be "BUS_1{...}"
 
-                        wxString oldName = aConn->Name().AfterFirst( '{' );
+                        // Use BusPrefix length to skip past any formatting markers
+                        // in the prefix (e.g. ~{RESET}) rather than AfterFirst('{')
+                        // which would split at a formatting brace.
+                        wxString members = aConn->Name().Mid( aConn->BusPrefix().length() );
 
-                        newName << prefix << wxT( "_" ) << suffixStr << wxT( "{" ) << oldName;
+                        newName << prefix << wxT( "_" ) << suffixStr << members;
 
                         aConn->ConfigureFromLabel( newName );
                     }
