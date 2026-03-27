@@ -423,7 +423,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
         {
             candidate = ( candidate->GetParentGroup() ? candidate->GetParentGroup()->AsEdaItem() : nullptr );
 
-            while( candidate && !candidate->IsSelected() )
+            while( candidate && !candidate->IsSelected() && candidate->GetParentGroup() )
                 candidate = candidate->GetParentGroup()->AsEdaItem();
 
             if( !candidate )
