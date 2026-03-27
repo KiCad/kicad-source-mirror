@@ -142,6 +142,10 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
 void DIALOG_REFERENCE_IMAGE_PROPERTIES::onWidthChanged( wxCommandEvent& aEvent )
 {
     double newWidth = m_width.GetDoubleValue();
+
+    if( newWidth <= 0 )
+        return;
+
     VECTOR2I size = m_imageEditor->GetImageSize();
 
     if( size.x > 0 )
@@ -157,6 +161,10 @@ void DIALOG_REFERENCE_IMAGE_PROPERTIES::onWidthChanged( wxCommandEvent& aEvent )
 void DIALOG_REFERENCE_IMAGE_PROPERTIES::onHeightChanged( wxCommandEvent& aEvent )
 {
     double newHeight = m_height.GetDoubleValue();
+
+    if( newHeight <= 0 )
+        return;
+
     VECTOR2I size = m_imageEditor->GetImageSize();
 
     if( size.y > 0 )
