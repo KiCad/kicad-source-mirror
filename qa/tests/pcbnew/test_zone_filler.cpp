@@ -1633,3 +1633,72 @@ BOOST_FIXTURE_TEST_CASE( RegressionDiffNetOverlappingZones, ZONE_FILL_TEST_FIXTU
     runAreaLossCheck( false );
     runAreaLossCheck( true );
 }
+
+
+/**
+ * Test for issue 23535: Thermal relief spokes should not extend into areas knocked out
+ * by higher-priority zones on different nets.
+ *
+ * The test board has:
+ * - A GND zone (priority 0) covering x=0..12mm
+ * - A VCC zone (priority 1) covering x=8..20mm
+ * - An SMD pad at (6.5, 5) on net GND with thermal relief connection
+ *
+ * The VCC zone knockout removes GND copper from roughly x=7.5 onward (VCC boundary at
+ * x=8 minus 0.5mm clearance).  The pad's thermal gap extends to x=7.75 on the right
+ * side.  Without the fix, a right-pointing thermal spoke is incorrectly kept because
+ * the spoke endpoint test area does not account for zone-to-zone clearances.  This
+ * leaves a stub of copper in the thermal gap that does not connect to zone copper.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionThermalReliefsToNowhere, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue23535_minimal/issue23535_minimal", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    ZONE* gndZone = nullptr;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetNetname() == "GND" )
+            gndZone = zone;
+    }
+
+    BOOST_REQUIRE( gndZone );
+    BOOST_REQUIRE( gndZone->HasFilledPolysForLayer( F_Cu ) );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& gndFill = gndZone->GetFilledPolysList( F_Cu );
+
+    // The pad is at (6.5mm, 5mm) with size 1.5mm and thermal gap 0.5mm.
+    // The right edge of the pad is at x=7.25mm, thermal gap extends to x=7.75mm.
+    // After zone knockout, GND fill stops at roughly x=7.5mm.
+    //
+    // A thermal-relief-to-nowhere spoke would create copper at a point inside the
+    // thermal gap but past the zone fill boundary.  Check a point at (7.4mm, 5mm)
+    // which is in the thermal gap (x > 7.25) and near the knockout edge.
+    VECTOR2I spokeTestPoint( pcbIUScale.mmToIU( 7.4 ), pcbIUScale.mmToIU( 5.0 ) );
+
+    bool hasSpokeToNowhere = gndFill->Contains( spokeTestPoint );
+
+    BOOST_CHECK_MESSAGE( !hasSpokeToNowhere,
+                         "GND zone fill contains copper at the thermal gap test point (7.4, 5.0), "
+                         "indicating a thermal relief spoke to nowhere (issue 23535)." );
+
+    // Also verify that the left-pointing spoke still connects properly.
+    // A point at (5.6mm, 5mm) is in the thermal gap on the left side and should have
+    // copper from a valid left-pointing spoke.
+    VECTOR2I validSpokePoint( pcbIUScale.mmToIU( 5.6 ), pcbIUScale.mmToIU( 5.0 ) );
+
+    bool hasValidSpoke = gndFill->Contains( validSpokePoint );
+
+    BOOST_CHECK_MESSAGE( hasValidSpoke,
+                         "GND zone fill does not contain copper at the valid spoke test point "
+                         "(5.6, 5.0). The fix may have incorrectly removed valid spokes." );
+}

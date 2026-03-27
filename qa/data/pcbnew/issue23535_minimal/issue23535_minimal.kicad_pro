@@ -1,0 +1,30 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "apply_defaults_to_fp_fields": false,
+        "apply_defaults_to_fp_shapes": false,
+        "apply_defaults_to_fp_text": false
+      },
+      "rules": {
+        "min_clearance": 0.0,
+        "min_track_width": 0.0
+      }
+    }
+  },
+  "meta": {
+    "filename": "issue23535_minimal.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "clearance": 0.5,
+        "name": "Default",
+        "track_width": 0.2,
+        "via_diameter": 0.6,
+        "via_drill": 0.3
+      }
+    ]
+  }
+}
