@@ -166,8 +166,10 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( const wxString& aFullFilename, PCB
             pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_SMD;
 
         // Add component value info:
-        pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->Value().GetShownText( false ),
-                                                            allowUtf8, quoteOption );
+        wxString fpValue = UnescapeString(
+                footprint->GetFieldValueForVariant( m_variant,
+                                                    GetCanonicalFieldName( FIELD_T::VALUE ) ) );
+        pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( fpValue, allowUtf8, quoteOption );
 
         // Add component footprint info:
         wxString fp_info = From_UTF8( footprint->GetFPID().GetLibItemName().c_str() );

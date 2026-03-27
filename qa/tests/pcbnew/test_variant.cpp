@@ -32,6 +32,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <exporters/place_file_exporter.h>
 #include <pcbnew/netlist_reader/kicad_netlist_parser.h>
 #include <pcbnew/netlist_reader/pcb_netlist.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -1100,6 +1101,82 @@ BOOST_AUTO_TEST_CASE( VariantTestProjectLoad )
             }
         }
     }
+}
+
+
+/**
+ * Test that PLACE_FILE_EXPORTER uses variant-specific Value fields (issue #23547).
+ * When a variant overrides a component's Value, the pos file export must reflect
+ * the variant's value, not the default footprint value. Both ASCII and CSV formats
+ * must respect the variant.
+ */
+BOOST_AUTO_TEST_CASE( PosExportVariantValue )
+{
+    BOARD board;
+
+    board.AddVariant( "AltPop" );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( "R1" );
+    fp->SetValue( "10K" );
+
+    FOOTPRINT_VARIANT altPopVariant( "AltPop" );
+    altPopVariant.SetFieldValue( fp->Value().GetName(), "22K" );
+    fp->SetVariant( altPopVariant );
+
+    board.Add( fp, ADD_MODE::INSERT );
+
+    auto runExport = [&]( const wxString& aVariant, bool aCsv ) -> std::string
+    {
+        PLACE_FILE_EXPORTER exporter( &board,
+                                      true,    // mm
+                                      false,   // all footprints
+                                      false,   // include TH
+                                      false,   // don't exclude DNP
+                                      false,   // don't exclude BOM
+                                      true,    // front
+                                      true,    // back
+                                      aCsv,    // format
+                                      false,   // no aux origin
+                                      false ); // don't negate X
+        exporter.SetVariant( aVariant );
+        return exporter.GenPositionData();
+    };
+
+    // ASCII format
+    std::string defaultAscii = runExport( wxEmptyString, false );
+    BOOST_CHECK( defaultAscii.find( "10K" ) != std::string::npos );
+    BOOST_CHECK( defaultAscii.find( "22K" ) == std::string::npos );
+
+    std::string altPopAscii = runExport( wxS( "AltPop" ), false );
+    BOOST_CHECK( altPopAscii.find( "22K" ) != std::string::npos );
+    BOOST_CHECK( altPopAscii.find( "10K" ) == std::string::npos );
+
+    // CSV format
+    std::string defaultCsv = runExport( wxEmptyString, true );
+    BOOST_CHECK( defaultCsv.find( "10K" ) != std::string::npos );
+    BOOST_CHECK( defaultCsv.find( "22K" ) == std::string::npos );
+
+    std::string altPopCsv = runExport( wxS( "AltPop" ), true );
+    BOOST_CHECK( altPopCsv.find( "22K" ) != std::string::npos );
+    BOOST_CHECK( altPopCsv.find( "10K" ) == std::string::npos );
+
+    // GenReportData should also respect the variant
+    auto runReport = [&]( const wxString& aVariant ) -> std::string
+    {
+        PLACE_FILE_EXPORTER exporter( &board, true, false, false, false, false,
+                                      true, true, false, false, false );
+        exporter.SetVariant( aVariant );
+        return exporter.GenReportData();
+    };
+
+    std::string defaultReport = runReport( wxEmptyString );
+    BOOST_CHECK( defaultReport.find( "10K" ) != std::string::npos );
+    BOOST_CHECK( defaultReport.find( "22K" ) == std::string::npos );
+
+    std::string altPopReport = runReport( wxS( "AltPop" ) );
+    BOOST_CHECK( altPopReport.find( "22K" ) != std::string::npos );
+    BOOST_CHECK( altPopReport.find( "10K" ) == std::string::npos );
 }
 
 
