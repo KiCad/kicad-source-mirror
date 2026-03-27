@@ -53,7 +53,8 @@ std::set<int> g_excludedLayers =
         {
             LAYER_NOTES_BACKGROUND,
             LAYER_DANGLING,
-            LAYER_NET_COLOR_HIGHLIGHT
+            LAYER_NET_COLOR_HIGHLIGHT,
+            LAYER_GROUP
         };
 
 
