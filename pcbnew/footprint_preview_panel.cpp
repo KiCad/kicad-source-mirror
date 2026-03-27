@@ -70,6 +70,8 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     Raise();
     Show( true );
     StartDrawing();
+
+    Bind( wxEVT_SIZE, &FOOTPRINT_PREVIEW_PANEL::onSize, this );
 }
 
 
@@ -163,6 +165,21 @@ void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
 }
 
 
+void FOOTPRINT_PREVIEW_PANEL::onSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+
+    if( m_pendingFit && m_currentFootprint && IsShownOnScreen() )
+    {
+        m_pendingFit = false;
+
+        // Defer the fit until after the base class onSize handler has called
+        // GAL::ResizeScreen(), so SetViewport sees the correct screen dimensions.
+        CallAfter( [this]() { fitToCurrentFootprint(); } );
+    }
+}
+
+
 bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 {
     m_dummyBoard->DetachAllFootprints();
@@ -186,6 +203,7 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
     if( m_currentFootprint )
     {
         renderFootprint( m_currentFootprint );
+        m_pendingFit = true;
         fitToCurrentFootprint();
     }
 
@@ -217,6 +235,7 @@ void FOOTPRINT_PREVIEW_PANEL::DisplayFootprints( std::shared_ptr<FOOTPRINT> aFoo
 
         renderFootprint( m_currentFootprint );
         renderFootprint( m_otherFootprint );
+        m_pendingFit = true;
         fitToCurrentFootprint();
     }
 

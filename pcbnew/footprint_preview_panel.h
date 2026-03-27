@@ -97,6 +97,8 @@ private:
 
     void fitToCurrentFootprint();
 
+    void onSize( wxSizeEvent& aEvent );
+
 private:
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
@@ -104,6 +106,9 @@ private:
     std::map<wxString, wxString>                m_pinFunctions;
     std::shared_ptr<FOOTPRINT>                  m_currentFootprint;
     std::shared_ptr<FOOTPRINT>                  m_otherFootprint;
+
+    // Set when a footprint is loaded but the panel hasn't been fitted at its final size yet.
+    bool                                        m_pendingFit = false;
 };
 
 #endif
