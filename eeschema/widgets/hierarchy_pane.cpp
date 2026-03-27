@@ -103,6 +103,12 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
 
 HIERARCHY_PANE::~HIERARCHY_PANE()
 {
+    // Cancel any in-progress label edit before unbinding. Destroying the tree while
+    // a text control is open causes a focus-loss event that fires onTreeEditFinished
+    // after the schematic has been torn down.
+    if( m_tree->GetEditControl() )
+        m_tree->EndEditLabel( m_tree->GetSelection(), true );
+
     Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
@@ -685,6 +691,13 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
 void HIERARCHY_PANE::onTreeEditFinished( wxTreeEvent& event )
 {
+    // The frame is shutting down — schematic and current sheet state are no longer safe to access.
+    if( m_frame->IsClosing() )
+    {
+        event.Veto();
+        return;
+    }
+
     TREE_ITEM_DATA* data = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( event.GetItem() ) );
     wxString        newName = event.GetLabel();
 
