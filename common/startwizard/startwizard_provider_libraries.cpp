@@ -29,6 +29,8 @@
 #include <startwizard/startwizard_provider_settings.h>
 #include <trace_helpers.h>
 #include <regex>
+#include <set>
+#include <wx/log.h>
 
 
 class PANEL_STARTWIZARD_LIBRARIES : public PANEL_STARTWIZARD_LIBRARIES_BASE
