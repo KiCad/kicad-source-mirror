@@ -182,6 +182,19 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     instance.push_back( m_sheet );
     m_pageNumberTextCtrl->ChangeValue( instance.GetPageNumber() );
 
+    // Recalculate the dialog size now that the grid is populated and controls
+    // have their real values. On first run, the dialog was sized before data
+    // was available, so the minimum size may not account for the actual content.
+    m_grid->Layout();
+    Layout();
+    GetSizer()->SetSizeHints( this );
+
+    wxSize minSize = GetMinSize();
+    wxSize curSize = GetSize();
+
+    if( curSize.x < minSize.x || curSize.y < minSize.y )
+        SetSize( wxSize( std::max( curSize.x, minSize.x ), std::max( curSize.y, minSize.y ) ) );
+
     return true;
 }
 
