@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-28 10:09+0000\n"
+"PO-Revision-Date: 2026-03-29 16:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v9/pl/>\n"
 "Language: pl\n"
@@ -27642,7 +27642,7 @@ msgstr "Importuj plik archiwum projektu CADSTAR"
 
 #: kicad/import_project.cpp:162
 msgid "Import Eagle Project Files"
-msgstr "Import projektów z programu EAGLE"
+msgstr "Import projektów z programu Eagle"
 
 #: kicad/import_project.cpp:169
 msgid "Import EasyEDA Std Backup"
@@ -28062,7 +28062,7 @@ msgstr "Zasoby"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:513
 msgid "Package download url is not specified"
-msgstr "Nie określono adresu URL pobierania pakietu"
+msgstr "Nie określono adresu URL pobieranego pakietu"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:514
 msgid "Error downloading package"
