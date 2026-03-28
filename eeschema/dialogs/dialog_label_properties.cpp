@@ -375,6 +375,19 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
         m_autoRotate->SetValue( m_currentLabel->AutoRotateOnPlacement() );
 
+    // Recalculate layout after grid population
+    m_grid->Layout();
+    Layout();
+    GetSizer()->SetSizeHints( this );
+
+    wxSize minSize = GetMinSize();
+    wxSize curSize = GetSize();
+
+    if( curSize.x < minSize.x || curSize.y < minSize.y )
+        SetSize( wxSize( std::max( curSize.x, minSize.x ), std::max( curSize.y, minSize.y ) ) );
+
+    SendSizeEvent( wxSEND_EVENT_POST );
+
     return true;
 }
 
