@@ -971,6 +971,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             if( dataElement.m_isModified )
                 symbolChangeHandler( symbol );
 
+            if( srcName.Matches( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME ) )
+                continue;
+
             // Attributes bypass the field logic, so handle them first
             if( col != -1 && ColIsCheck( col ) )
             {
