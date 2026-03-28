@@ -282,7 +282,7 @@ void WEBVIEW_PANEL::OnWebViewLoaded( wxWebViewEvent& aEvt )
         if( m_toolManager && m_tool )
             m_toolManager->RunMainStack( m_tool, [this]() { DoInitHandlers(); } );
         else
-            m_initRetryTimer.StartOnce( 0 );
+            m_initRetryTimer.StartOnce();
     }
 
     aEvt.Skip();

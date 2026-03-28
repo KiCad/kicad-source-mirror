@@ -701,7 +701,7 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
                         {
                             auto templ = std::make_unique<PROJECT_TEMPLATE>( subFull );
                             wxFileName htmlFile = templ->GetHtmlFile();
-                            wxString description = ExtractDescription( htmlFile );
+                            wxString description = templ->GetError().IsEmpty() ? ExtractDescription( htmlFile ) : templ->GetError();
 
                             TEMPLATE_WIDGET* widget = new TEMPLATE_WIDGET( m_scrolledTemplates, this );
                             widget->SetTemplate( templ.get() );

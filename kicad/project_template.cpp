@@ -51,18 +51,21 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     if( !wxFileName::DirExists( m_basePath.GetPath() ) )
     {
         // Error, the path doesn't exist!
-        m_title.Printf( _( "Could not open the template path '%s'" ), aPath );
+        m_error.Printf( _( "Could not open the template path '%s'" ), aPath );
     }
     else if( !wxFileName::DirExists( m_metaPath.GetPath() ) )
     {
         // Error, the meta information directory doesn't exist!
-        m_title.Printf( _( "Could not find the expected 'meta' directory at '%s'" ), m_metaPath.GetPath() );
+        m_error.Printf( _( "Could not find the expected 'meta' directory at '%s'" ), m_metaPath.GetPath() );
     }
     else if( !wxFileName::FileExists( m_metaHtmlFile.GetFullPath() ) )
     {
         // Error, the meta information directory doesn't contain the informational html file!
-        m_title.Printf( _( "Could not find the expected meta HTML file at '%s'" ), m_metaHtmlFile.GetFullPath() );
+        m_error.Printf( _( "Could not find the expected meta HTML file at '%s'" ), m_metaHtmlFile.GetFullPath() );
     }
+
+    if( m_title.IsEmpty() )
+        m_title = GetPrjDirName();
 
     // Try to load an icon
     if( !wxFileName::FileExists( m_metaIconFile.GetFullPath() ) )
@@ -375,6 +378,9 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
 wxString* PROJECT_TEMPLATE::GetTitle()
 {
+    if( !GetHtmlFile().IsFileReadable() )
+        return &m_title;
+
     wxFFileInputStream input( GetHtmlFile().GetFullPath() );
     wxString           separator( wxT( "\x9" ) );
     wxTextInputStream  text( input, separator, wxConvUTF8 );
