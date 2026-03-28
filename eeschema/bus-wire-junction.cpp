@@ -202,7 +202,7 @@ void SCH_EDIT_FRAME::UpdateHopOveredWires( SCH_ITEM* aItem )
         if( item == aItem )
             continue;
 
-        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T } ) )
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
         {
             GetCanvas()->GetView()->Update( item );
         }

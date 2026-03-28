@@ -536,7 +536,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                 SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-                if( line->IsWire() )
+                if( line->IsWire() || line->IsBus() )
                     UpdateHopOveredWires( line );
             }
         }

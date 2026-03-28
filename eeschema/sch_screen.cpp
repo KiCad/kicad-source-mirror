@@ -990,7 +990,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
         {
             SCH_LINE* aLine = static_cast<SCH_LINE*>( item );
 
-            if( !aLine->IsWire() || !aPlotOpts.m_plotHopOver )
+            if( ( !aLine->IsWire() && !aLine->IsBus() ) || !aPlotOpts.m_plotHopOver )
             {
                 item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
             }

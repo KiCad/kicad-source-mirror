@@ -1099,7 +1099,7 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
     std::vector<VECTOR3I> wire_shape;       // List of coordinates:
                                             // 2 points for a segment, 3 points for an arc
 
-    if( !IsWire() )
+    if( !IsWire() && !IsBus() )
     {
         wire_shape.emplace_back( GetStartPoint().x,GetStartPoint().y, 0 );
         wire_shape.emplace_back( GetEndPoint().x, GetEndPoint().y, 0 );
@@ -1113,7 +1113,7 @@ std::vector<VECTOR3I> SCH_LINE::BuildWireWithHopShape( const SCH_SCREEN* aScreen
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-        if( line->IsWire() )
+        if( line->IsWire() || line->IsBus() )
             existingWires.push_back( line );
     }
 

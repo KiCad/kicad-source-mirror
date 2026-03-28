@@ -1916,7 +1916,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     std::vector<VECTOR3I> curr_wire_shape;
 
-    if( aLine->IsWire() && hopOverScale > 0.0 )
+    if( ( aLine->IsWire() || aLine->IsBus() ) && hopOverScale > 0.0 )
     {
         double arcRadius = defaultLineWidth * hopOverScale;
         curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(), arcRadius );
