@@ -116,7 +116,7 @@ static void TestParallellaV163_PS_28C128N( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_Key == 0x0acd0920 );
 
-    // BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
+    BOOST_TEST( blk.IsPlated() == false );
 }
 
 
@@ -129,14 +129,14 @@ static void TestParallellaV163_PS_P65X1P7SLT( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_Key == 0x0acd1ea0 );
 
-    // BOOST_TEST( blk.m_Components.size() == 10 + 3 * 1);
-
     const auto& hdr16x = std::get<BLK_0x1C_PADSTACK::HEADER_v16x>( blk.m_Header );
 
     BOOST_TEST( hdr16x.m_DrillSize == 2559 );
 
     BOOST_TEST( hdr16x.m_SlotX == 2559 );
     BOOST_TEST( hdr16x.m_SlotY == 6693 );
+
+    BOOST_TEST( blk.IsPlated() == true );
 }
 
 
@@ -161,6 +161,8 @@ static void TestBeagleBoneBlack_PS_120X040SLOT( const BLOCK_BASE& aBlock )
     BOOST_TEST( hdr17x.m_ToleranceNeg == 300 );
     BOOST_TEST( hdr17x.m_ToleranceTravelPos == 300 );
     BOOST_TEST( hdr17x.m_ToleranceTravelNeg == 300 );
+
+    BOOST_TEST( blk.IsPlated() == true );
 }
 
 
@@ -181,6 +183,8 @@ static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
     BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_RECTANGLE );
     BOOST_TEST( blk.m_Components[0].m_W == 244000 );
     BOOST_TEST( blk.m_Components[0].m_H == 244000 );
+
+    BOOST_TEST( blk.IsPlated() == true );
 }
 
 
@@ -201,6 +205,8 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
     BOOST_TEST( blk.m_Components[0].m_Type == PADSTACK_COMPONENT::TYPE_CIRCLE );
     BOOST_TEST( blk.m_Components[0].m_W == 275591 );
     BOOST_TEST( blk.m_Components[0].m_H == 275591 );
+
+    BOOST_TEST( blk.IsPlated() == false );
 }
 
 

@@ -1142,6 +1142,17 @@ struct BLK_0x1C_PADSTACK
 {
     struct HEADER_v16x
     {
+        /**
+         * Pad flags are founds in a byte of the pad info
+         */
+        enum PAD_FLAGS
+        {
+            FLAG_PLATED = 0x01,
+            // NPTHs seem to have this instead of 0x01
+            // SMDs seems to have this or 0x01, no clear pattern identified
+            FLAG_UNKNOWN1 = 0x02,
+        };
+
         uint32_t m_DrillSize;
         uint32_t m_UnknownStr;
         uint32_t m_DrillMarkSizeX;
@@ -1152,10 +1163,15 @@ struct BLK_0x1C_PADSTACK
 
         // Drill char presumably somewhere in here - can cross-match with 0x0C PIN_DEF to find
         uint8_t m_DrillMarkShape;
-        uint8_t m_B;
+        // Mask or enum of pad flags, including plating
+        uint8_t m_Flags;
         uint8_t m_C;
         uint8_t m_D;
 
+        // Probably some kind of type:
+        // 0x0000 for through-hole
+        // 0x0002 for SMD
+        // 0x0400 for slots
         uint16_t m_Unknown_1;
 
         uint16_t m_ArrayNX;
@@ -1178,6 +1194,16 @@ struct BLK_0x1C_PADSTACK
 
     struct HEADER_v17x
     {
+        /**
+         * Pad flags are founds in a byte of the pad info
+         */
+        enum PAD_FLAGS
+        {
+            // Some through-holes have this, some don't
+            FLAG_UNKNOWN1   = 0x01,
+            FLAG_PLATED     = 0x20,
+        };
+
         // Presumably the same as the one in the v16x header
         uint32_t m_UnknownStr;
         uint32_t m_Unknown1; // 0?
@@ -1225,16 +1251,6 @@ struct BLK_0x1C_PADSTACK
 
         // To check - this could be another component?
         COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_UnknownArr_v180;
-    };
-
-    /**
-     * Pad flags are founds in a byte of the pad info
-     */
-    enum PAD_FLAGS
-    {
-        // Some through-holes have this, some don't
-        FLAG_UNKNOWN1   = 0x01,
-        FLAG_PLATED     = 0x20,
     };
 
     uint8_t m_UnknownByte1;
@@ -1372,12 +1388,11 @@ struct BLK_0x1C_PADSTACK
     {
         if( std::holds_alternative<HEADER_v17x>( m_Header ) )
         {
-            return ( std::get<HEADER_v17x>( m_Header ).m_Flags & PAD_FLAGS::FLAG_PLATED ) != 0;
+            return ( std::get<HEADER_v17x>( m_Header ).m_Flags & HEADER_v17x::PAD_FLAGS::FLAG_PLATED ) != 0;
         }
         else
         {
-            // Somewhere in the header is the plated flag for pre-V172 versions.
-            return true;
+            return ( std::get<HEADER_v16x>( m_Header ).m_Flags & HEADER_v16x::PAD_FLAGS::FLAG_PLATED ) != 0;
         }
     }
 };

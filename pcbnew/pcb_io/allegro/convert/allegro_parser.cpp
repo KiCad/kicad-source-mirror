@@ -1035,7 +1035,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
         hdr.m_DrillOffsetY = aStream.ReadU32();
 
         hdr.m_DrillMarkShape = aStream.ReadU8();
-        hdr.m_B = aStream.ReadU8();
+        hdr.m_Flags = aStream.ReadU8();
         hdr.m_C = aStream.ReadU8();
         hdr.m_D = aStream.ReadU8();
         hdr.m_Unknown_1 = aStream.ReadU16();
