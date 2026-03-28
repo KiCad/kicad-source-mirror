@@ -651,8 +651,8 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
         wxFAIL;
     }
 
-    std::function<void(const std::unique_ptr<LIBRARY_TABLE>&)> processTable =
-            [&]( const std::unique_ptr<LIBRARY_TABLE>& aTable )
+    std::function<void(const std::unique_ptr<LIBRARY_TABLE>&, bool parentHidden)> processTable =
+            [&]( const std::unique_ptr<LIBRARY_TABLE>& aTable, const bool parentHidden )
             {
                 if( aTable->Type() != aType )
                     return;
@@ -663,16 +663,20 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
                     {
                         if( row.IsOk() || aIncludeInvalid )
                         {
+                            // Hide child row if parent is hidden
+                            if( parentHidden )
+                                row.SetHidden( true );
+
                             if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                             {
                                 if( !m_childTables.contains( row.URI() ) )
                                     continue;
 
-                                // Don't include libraries from disabled or hidden nested tables
-                                if( row.Disabled() || row.Hidden() )
+                                // Don't include libraries from disabled nested tables
+                                if( row.Disabled() )
                                     continue;
 
-                                processTable( m_childTables.at( row.URI() ) );
+                                processTable( m_childTables.at( row.URI() ), row.Hidden() );
                             }
                             else
                             {
@@ -689,7 +693,7 @@ std::vector<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER::Rows( LIBRARY_TABLE_TYPE aType,
     for( const std::unique_ptr<LIBRARY_TABLE>& table :
          std::views::join( tables ) | std::views::values )
     {
-        processTable( table );
+        processTable( table, false );
     }
 
     std::vector<LIBRARY_TABLE_ROW*> ret;
