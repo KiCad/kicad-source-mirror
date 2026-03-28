@@ -384,6 +384,13 @@ protected:
 };
 
 
+KICAD_T PCBEXPR_CONTEXT::GetEffectiveType( const BOARD_ITEM* aItem ) const
+{
+    auto it = m_typeOverrides.find( aItem );
+    return it != m_typeOverrides.end() ? it->second : aItem->Type();
+}
+
+
 LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
@@ -524,7 +531,10 @@ LIBEVAL::VALUE* PCBEXPR_TYPE_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     if( !item )
         return new LIBEVAL::VALUE();
 
-    return new LIBEVAL::VALUE( ENUM_MAP<KICAD_T>::Instance().ToString( item->Type() ) );
+    PCBEXPR_CONTEXT* ctx = static_cast<PCBEXPR_CONTEXT*>( aCtx );
+    KICAD_T          type = ctx->GetEffectiveType( item );
+
+    return new LIBEVAL::VALUE( ENUM_MAP<KICAD_T>::Instance().ToString( type ) );
 }
 
 
