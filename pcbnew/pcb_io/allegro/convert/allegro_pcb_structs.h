@@ -1165,7 +1165,8 @@ struct BLK_0x1C_PADSTACK
         uint8_t m_DrillMarkShape;
         // Mask or enum of pad flags, including plating
         uint8_t m_Flags;
-        uint8_t m_C;
+        // An ASCII char, or 0x00
+        uint8_t m_DrillChar;
         uint8_t m_D;
 
         // Probably some kind of type:
@@ -1245,9 +1246,10 @@ struct BLK_0x1C_PADSTACK
         uint32_t m_DrillMarkSizeX;
         uint32_t m_DrillMarkSizeY;
         uint32_t m_DrillMarkShape;
+        uint32_t m_DrillChars; // Presumably 4 drill chars
 
         // Probably holds secondary drill parameters and other new V17.2 features
-        std::array<uint32_t, 22> m_UnknownArr3;
+        std::array<uint32_t, 21> m_UnknownArr3;
 
         // To check - this could be another component?
         COND_GE<FMT_VER::V_180, std::array<uint32_t, 8>> m_UnknownArr_v180;

@@ -116,7 +116,11 @@ static void TestParallellaV163_PS_28C128N( const BLOCK_BASE& aBlock )
 
     BOOST_TEST( blk.m_Key == 0x0acd0920 );
 
+    const auto& hdr16x = std::get<BLK_0x1C_PADSTACK::HEADER_v16x>( blk.m_Header );
+
     BOOST_TEST( blk.IsPlated() == false );
+
+    BOOST_TEST( hdr16x.m_DrillChar == 'L' );
 }
 
 
