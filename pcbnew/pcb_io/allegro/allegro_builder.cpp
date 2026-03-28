@@ -3449,14 +3449,18 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
     if( viaDrill == 0 )
     {
         viaDrill = viaWidth / 2;
-        wxLogTrace( traceAllegroBuilder, "Via at (%d, %d): no drill in padstack, using fallback %d",
-                    aViaData.m_CoordsX, aViaData.m_CoordsY, viaDrill );
+        const wxString& padstackName = m_brdDb.GetString( viaPadstack->m_PadStr );
+        wxLogTrace( traceAllegroBuilder, "Via at (%d, %d): no drill in padstack '%s' key %#010x, using fallback %d",
+                    aViaData.m_CoordsX, aViaData.m_CoordsY, padstackName, viaPadstack->m_Key, viaDrill );
     }
 
     if( viaWidth <= 0 )
     {
-        wxLogTrace( traceAllegroBuilder, "Via at (%d, %d) has no valid pad component, using drill-based fallback",
-                    aViaData.m_CoordsX, aViaData.m_CoordsY );
+        const wxString& padstackName = m_brdDb.GetString( viaPadstack->m_PadStr );
+        wxLogTrace( traceAllegroBuilder,
+                    "Via at (%d, %d) in padstack '%s' key %#010x has no valid pad component, using drill-based "
+                    "fallback (%d * 2)",
+                    aViaData.m_CoordsX, aViaData.m_CoordsY, padstackName, viaPadstack->m_Key, viaDrill );
         viaWidth = viaDrill * 2;
     }
 
