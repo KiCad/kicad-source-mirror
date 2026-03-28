@@ -93,8 +93,6 @@ private:
 
     void testZonesToZones();
 
-    void testTeardropClearances();
-
     void testItemAgainstZone( BOARD_ITEM* aItem, ZONE* aZone, PCB_LAYER_ID aLayer );
 
     void testKnockoutTextAgainstZone( BOARD_ITEM* aText, NETINFO_ITEM** aInheritedNet, ZONE* aZone );
@@ -173,11 +171,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
             return false;   // DRC cancelled
 
         testZonesToZones();
-
-        if( !reportPhase( _( "Checking teardrop clearances..." ) ) )
-            return false; // DRC cancelled
-
-        testTeardropClearances();
     }
     else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT ) )
     {
@@ -1208,40 +1201,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
 }
 
 
-void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTeardropClearances()
-{
-    LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
-
-    for( ZONE* teardrop : m_board->m_DRCCopperZones )
-    {
-        if( !teardrop->IsTeardropArea() )
-            continue;
-
-        for( PCB_LAYER_ID layer : LSET( teardrop->GetLayerSet() & boardCopperLayers ) )
-        {
-            if( m_drcEngine->IsCancelled() )
-                return;
-
-            auto zoneIt = m_board->m_DRCCopperZonesByLayer.find( layer );
-
-            if( zoneIt == m_board->m_DRCCopperZonesByLayer.end() )
-                continue;
-
-            for( ZONE* zone : zoneIt->second )
-            {
-                if( zone == teardrop )
-                    continue;
-
-                testItemAgainstZone( teardrop, zone, layer );
-
-                if( m_drcEngine->IsCancelled() )
-                    return;
-            }
-        }
-    }
-}
-
-
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 {
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
@@ -1346,10 +1305,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     for ( size_t ii = 0; ii < m_board->m_DRCCopperZones.size(); ii++ )
     {
         ZONE* zone = m_board->m_DRCCopperZones[ii];
-
-        // Teardrop areas are tested as tracks, not zones
-        if( zone->IsTeardropArea() )
-            continue;
 
         for( PCB_LAYER_ID layer : zone->GetLayerSet() )
         {

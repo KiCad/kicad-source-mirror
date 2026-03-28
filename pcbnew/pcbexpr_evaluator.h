@@ -26,9 +26,7 @@
 #define PCBEXPR_EVALUATOR_H
 
 #include <set>
-#include <map>
 #include <unordered_map>
-#include <core/typeinfo.h>
 
 #include <layer_ids.h>
 
@@ -76,10 +74,6 @@ public:
         m_items[1] = b;
     }
 
-    void SetTypeOverride( const BOARD_ITEM* aItem, KICAD_T aType ) { m_typeOverrides[aItem] = aType; }
-
-    KICAD_T GetEffectiveType( const BOARD_ITEM* aItem ) const;
-
     BOARD* GetBoard() const;
 
     int GetConstraint() const              { return m_constraint; }
@@ -87,10 +81,9 @@ public:
     PCB_LAYER_ID GetLayer() const          { return m_layer; }
 
 private:
-    int                                  m_constraint;
-    BOARD_ITEM*                          m_items[2];
-    PCB_LAYER_ID                         m_layer;
-    std::map<const BOARD_ITEM*, KICAD_T> m_typeOverrides;
+    int          m_constraint;
+    BOARD_ITEM*  m_items[2];
+    PCB_LAYER_ID m_layer;
 };
 
 
