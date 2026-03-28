@@ -38,7 +38,7 @@ PANEL_STARTWIZARD_LIBRARIES_BASE::PANEL_STARTWIZARD_LIBRARIES_BASE( wxWindow* pa
 	m_stQuery->Wrap( 400 );
 	bSizer8->Add( m_stQuery, 0, wxALL, 5 );
 
-	m_rbDefaultTables = new wxRadioButton( this, wxID_ANY, _("Start with the built-in KiCad libraries (recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbDefaultTables = new wxRadioButton( this, wxID_ANY, _("Start with the built-in KiCad libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbDefaultTables->SetValue( true );
 	bSizer8->Add( m_rbDefaultTables, 0, wxALL, 5 );
 
@@ -46,6 +46,18 @@ PANEL_STARTWIZARD_LIBRARIES_BASE::PANEL_STARTWIZARD_LIBRARIES_BASE( wxWindow* pa
 	m_rbImport->SetToolTip( _("Library tables will be imported from the version you selected on the previous step.  Any tables that cannot be imported will be created with the default KiCad libraries.") );
 
 	bSizer8->Add( m_rbImport, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_cbMigrateBuiltInLibraries = new wxCheckBox( this, wxID_ANY, _("Migrate built-in libraries to the latest version (recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbMigrateBuiltInLibraries->SetValue(true);
+	m_cbMigrateBuiltInLibraries->SetToolTip( _("When enabled, KiCad will replace any existing references to built-in libraries with references to the latest version") );
+
+	bSizer4->Add( m_cbMigrateBuiltInLibraries, 0, wxALL, 5 );
+
+
+	bSizer8->Add( bSizer4, 0, wxLEFT, 20 );
 
 	m_rbBlankTables = new wxRadioButton( this, wxID_ANY, _("Start with no libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_rbBlankTables, 0, wxALL, 5 );

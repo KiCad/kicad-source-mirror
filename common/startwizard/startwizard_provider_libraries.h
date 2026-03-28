@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 
 #ifndef STARTWIZARD_PROVIDER_LIBRARIES_H
 #define STARTWIZARD_PROVIDER_LIBRARIES_H
@@ -35,6 +35,8 @@ enum class STARTWIZARD_LIBRARIES_MODE
 struct STARTWIZARD_PROVIDER_LIBRARIES_MODEL
 {
     STARTWIZARD_LIBRARIES_MODE mode = STARTWIZARD_LIBRARIES_MODE::USE_DEFAULTS;
+    bool mode_initialized = false;
+    bool migrate_built_in_libraries = true;
 
     std::vector<LIBRARY_TABLE_TYPE> missing_tables;
 };

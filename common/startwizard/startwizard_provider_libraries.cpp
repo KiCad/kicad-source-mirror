@@ -27,6 +27,8 @@
 #include <startwizard/startwizard.h>
 #include <startwizard/startwizard_provider_libraries.h>
 #include <startwizard/startwizard_provider_settings.h>
+#include <trace_helpers.h>
+#include <regex>
 
 
 class PANEL_STARTWIZARD_LIBRARIES : public PANEL_STARTWIZARD_LIBRARIES_BASE
@@ -42,6 +44,13 @@ public:
         m_bmpWarning->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
         m_sizerWarning->Layout();
 
+        Bind( wxEVT_RADIOBUTTON, &PANEL_STARTWIZARD_LIBRARIES::OnModeChanged, this,
+              m_rbDefaultTables->GetId() );
+        Bind( wxEVT_RADIOBUTTON, &PANEL_STARTWIZARD_LIBRARIES::OnModeChanged, this,
+              m_rbImport->GetId() );
+        Bind( wxEVT_RADIOBUTTON, &PANEL_STARTWIZARD_LIBRARIES::OnModeChanged, this,
+              m_rbBlankTables->GetId() );
+
         InitTableListMsg();
     }
 
@@ -54,17 +63,38 @@ public:
         else
             m_model->mode = STARTWIZARD_LIBRARIES_MODE::CREATE_BLANK;
 
+        m_model->mode_initialized = true;
+
+        m_model->migrate_built_in_libraries = m_cbMigrateBuiltInLibraries->GetValue();
+
         return true;
     }
 
     bool TransferDataToWindow() override
     {
+        if( !m_model->mode_initialized )
+        {
+            // If the user is importing settings from a previous version, let's default to taking their
+            // library settings as well, since we can clean up old stock paths now.
+            if( auto settings = dynamic_cast<STARTWIZARD_PROVIDER_SETTINGS*>( m_wizard->GetProvider( "settings" ) ) )
+            {
+                if( settings->NeedsUserInput() )
+                    m_model->mode = STARTWIZARD_LIBRARIES_MODE::IMPORT;
+                else
+                    m_model->mode = STARTWIZARD_LIBRARIES_MODE::USE_DEFAULTS;
+            }
+
+            m_model->mode_initialized = true;
+        }
+
         switch( m_model->mode )
         {
         case STARTWIZARD_LIBRARIES_MODE::USE_DEFAULTS:  m_rbDefaultTables->SetValue( true ); break;
         case STARTWIZARD_LIBRARIES_MODE::IMPORT:        m_rbImport->SetValue( true );        break;
         case STARTWIZARD_LIBRARIES_MODE::CREATE_BLANK:  m_rbBlankTables->SetValue( true );   break;
         }
+
+        m_cbMigrateBuiltInLibraries->SetValue( m_model->migrate_built_in_libraries );
 
         if( auto settings = dynamic_cast<STARTWIZARD_PROVIDER_SETTINGS*>( m_wizard->GetProvider( "settings" ) ) )
         {
@@ -74,6 +104,7 @@ public:
                 // only offer import when we have the context of a previous version settings
                 // path selected by the user
                 m_rbImport->Show( false );
+                m_cbMigrateBuiltInLibraries->Show( false );
             }
             else if( settings->GetModel().mode == STARTWIZARD_SETTINGS_MODE::USE_DEFAULTS )
             {
@@ -89,6 +120,8 @@ public:
                 m_rbImport->Enable();
             }
         }
+
+        UpdateMigrateCheckboxState();
 
         m_bmpWarning->Show( m_showWarning );
         m_stWarning->Show( m_showWarning );
@@ -136,6 +169,19 @@ public:
     }
 
 private:
+    void OnModeChanged( wxCommandEvent& aEvt )
+    {
+        aEvt.Skip();
+        UpdateMigrateCheckboxState();
+    }
+
+    void UpdateMigrateCheckboxState()
+    {
+        m_cbMigrateBuiltInLibraries->Enable( m_rbImport->IsShown()
+                                             && m_rbImport->IsEnabled()
+                                             && m_rbImport->GetValue() );
+    }
+
     std::shared_ptr<STARTWIZARD_PROVIDER_LIBRARIES_MODEL> m_model;
     STARTWIZARD* m_wizard;
     bool m_showWarning;
@@ -164,9 +210,69 @@ wxPanel* STARTWIZARD_PROVIDER_LIBRARIES::GetWizardPanel( wxWindow* aParent, STAR
 
 void STARTWIZARD_PROVIDER_LIBRARIES::Finish()
 {
-    // TODO(JE) handle importing tables from previous version and sanitizing them
-
     bool populateTables = m_model->mode == STARTWIZARD_LIBRARIES_MODE::USE_DEFAULTS;
+
+    if( m_model->mode == STARTWIZARD_LIBRARIES_MODE::IMPORT && m_model->migrate_built_in_libraries )
+    {
+        for( LIBRARY_TABLE_TYPE type : { LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_TYPE::FOOTPRINT } )
+        {
+            wxString tablePath = LIBRARY_MANAGER::DefaultGlobalTablePath( type );
+            wxString stockPath = LIBRARY_MANAGER::StockTablePath( type );
+
+            if( !LIBRARY_MANAGER::IsTableValid( tablePath ) )
+                continue;
+
+            wxFileName tableFile( tablePath );
+            LIBRARY_TABLE table( tableFile, LIBRARY_TABLE_SCOPE::GLOBAL );
+
+            if( !table.IsOk() )
+                continue;
+
+            const std::regex builtInPattern( type == LIBRARY_TABLE_TYPE::SYMBOL
+                    ? R"(^\$\{KICAD\d+_SYMBOL_DIR\})"
+                    : R"(^\$\{KICAD\d+_FOOTPRINT_DIR\})" );
+
+            bool insertStock = true;
+            std::set<wxString> toRemove;
+
+            for( const LIBRARY_TABLE_ROW& row : table.Rows() )
+            {
+                if( std::regex_search( row.URI().ToStdString(), builtInPattern ) )
+                {
+                    toRemove.insert( row.URI() );
+                    wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: removing old stock row '%s'" ), row.URI() );
+                }
+                else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME && row.URI() == stockPath )
+                {
+                    insertStock = false;
+                    wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: migrated table already has valid stock setup" ) );
+                }
+            }
+
+            auto toErase = std::ranges::remove_if( table.Rows(),
+                    [&]( const LIBRARY_TABLE_ROW& aRow )
+                    {
+                        return toRemove.contains( aRow.URI() );
+                    } );
+
+            table.Rows().erase( toErase.begin(), toErase.end() );
+
+            if( insertStock )
+            {
+                LIBRARY_TABLE_ROW chained = table.MakeRow();
+                chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
+                chained.SetNickname( wxT( "KiCad" ) );
+                chained.SetDescription( _( "KiCad Default Libraries" ) );
+                chained.SetURI( stockPath );
+                table.Rows().insert( table.Rows().begin(), chained );
+            }
+
+            wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: removed %zu rows; saving" ),
+                        toRemove.size() );
+
+            table.Save();
+        }
+    }
 
     for( LIBRARY_TABLE_TYPE type : LIBRARY_MANAGER::InvalidGlobalTables() )
     {
