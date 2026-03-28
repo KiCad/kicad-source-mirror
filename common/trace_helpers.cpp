@@ -314,6 +314,7 @@ TRACE_MANAGER& TRACE_MANAGER::Instance()
 
 bool TRACE_MANAGER::IsTraceEnabled( const wxString& aWhat )
 {
+    return true;
     if( !m_printAllTraces )
     {
         if( !m_globalTraceEnabled )

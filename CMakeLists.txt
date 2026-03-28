@@ -277,7 +277,7 @@ option( KICAD_BUILD_PNS_DEBUG_TOOL
 
 option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
-    OFF )
+    ON )
 
 option( KICAD_IPC_API
     "Enable IPC API"

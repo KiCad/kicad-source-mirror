@@ -188,24 +188,17 @@ bool LINE_PLACER::handlePullback()
     SHAPE_CHAIN& head = m_head.Line();
     SHAPE_CHAIN& tail = m_tail.Line();
 
-    if( head.PointCount() < 2 )
+    if( ! head.ShapeCount() )
         return false;
 
-    int n = tail.PointCount();
+    int n = tail.ShapeCount();
 
     if( n == 0 )
     {
         return false;
     }
-    else if( n == 1 )
-    {
-        tail.Clear();
-        return true;
-    }
 
     using R45 = ROUTING_REGIME_45;
-
-    wxASSERT( tail.ShapeCount() >= 1 );
 
     int lastShapeIdx = tail.ShapeCount() - 1;
 
@@ -213,16 +206,12 @@ bool LINE_PLACER::handlePullback()
     R45::DIRECTION last_tail( *tail.CShape( -1 ), false );
     R45::ANGLE_TYPE angle = R45::Angle( first_head, last_tail );
 
-    // case 1: we have a defined routing direction, and the currently computed
-    // head goes in different one.
-    bool pullback_1 = false;    // (m_direction != ROUTING_REGIME_45::UNDEFINED && m_direction != first_head);
-
     // case 2: regardless of the current routing direction, if the tail/head
     // extremities form an acute or right angle, reduce the tail by one segment
     // (and hope that further iterations) will result with a cleaner trace
-    bool pullback_2 = ( angle == R45::ANG_RIGHT || angle == R45::ANG_ACUTE );
+    bool doPullback = ( angle == R45::ANG_RIGHT || angle == R45::ANG_ACUTE );
 
-    if( pullback_1 || pullback_2 )
+    if( doPullback )
     {
         m_direction = R45::DIRECTION( *tail.CShape( lastShapeIdx ), false );
 
@@ -1152,7 +1141,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         {
             m_tail = std::move( prevTail );
             m_head = std::move( prevHead );
-
+            PNS_DBG( Dbg(), Message, wxT( "rh-head-failed" ) );
+        
             // If we fail to walk out of the initial point (no tail), instead of returning an empty
             // line, return a zero-length line so that the user gets some feedback that routing is
             // happening.  This will get pruned later.
@@ -1171,8 +1161,6 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         if( fail )
             break;
 
-        PNS_DBG( Dbg(), Message, wxString::Format( "N VIA H %d T %d\n", m_head.EndsWithVia() ? 1 : 0, m_tail.EndsWithVia() ? 1 : 0 ) );
-
         m_head = std::move( newHead );
         m_tail = std::move( newTail );
 
@@ -1181,8 +1169,6 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             n_iter++;
             go_back = true;
         }
-
-        PNS_DBG( Dbg(), Message, wxString::Format( "SI VIA H %d T %d\n", m_head.EndsWithVia() ? 1 : 0, m_tail.EndsWithVia() ? 1 : 0 ) );
 
         PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 10000, wxT( "tail-after-si" ) );
         PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 10000, wxT( "head-after-si" ) );
@@ -1194,10 +1180,8 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
             go_back = true;
         }
 
-        PNS_DBG( Dbg(), Message, wxString::Format( "PB VIA H %d T %d\n", m_head.EndsWithVia() ? 1 : 0, m_tail.EndsWithVia() ? 1 : 0 ) );
-
         PNS_DBG( Dbg(), AddItem, &m_tail, WHITE, 100000, wxT( "tail-after-pb" ) );
-        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, wxT( "head-after-pb" ) );
+        PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, wxString::Format( "head-after-pb go_back=%d", go_back?1:0 ) );
     }
 
 

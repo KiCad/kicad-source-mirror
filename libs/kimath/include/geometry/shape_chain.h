@@ -484,10 +484,7 @@ return 0;
         virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                             VECTOR2I* aLocation = nullptr ) const override;
 
-        const BOX2I BBox( int aClearance = 0 ) const override
-        {
-            return m_cachedBBox;
-        }
+        const BOX2I BBox( int aClearance = 0 ) const override;
     
         void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                              ERROR_LOC aErrorLoc ) const override { wxASSERT(false); };
