@@ -97,7 +97,6 @@ static void TestParallellaV163_PS_56X55RT( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x0acda700 );
@@ -111,7 +110,6 @@ static void TestParallellaV163_PS_28C128N( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x0acd0920 );
@@ -128,7 +126,6 @@ static void TestParallellaV163_PS_P65X1P7SLT( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x0acd1ea0 );
@@ -148,7 +145,6 @@ static void TestBeagleBoneBlack_PS_120X040SLOT( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x1421 );
@@ -174,7 +170,6 @@ static void TestBeagleBoneAI_PS_200C125D( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x1fda );
@@ -196,7 +191,6 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 {
     BOOST_REQUIRE( aBlock.GetBlockType() == 0x1c );
 
-    // Just test that the block is parsed and has the expected key, the rest of the data is mostly unknown and not worth testing
     const auto& blk = static_cast<const BLOCK<BLK_0x1C_PADSTACK>&>( aBlock ).GetData();
 
     BOOST_TEST( blk.m_Key == 0x0bfa9588 );
