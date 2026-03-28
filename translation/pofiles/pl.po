@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-28 10:09+0000\n"
+"PO-Revision-Date: 2026-03-29 16:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -17654,7 +17654,7 @@ msgstr "Predefiniowane listy materiałowe"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 msgid "Bill of Materials Formatting Presets"
-msgstr "Zdefiniowane formatowania BOM"
+msgstr "Zdefiniowane formatowania listy materiałowej"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -31397,7 +31397,7 @@ msgstr "Nie można otworzyć pliku projektu gEDA / Lepton EDA '%s'."
 
 #: kicad/import_proj.cpp:488 kicad/import_proj.cpp:499
 msgid "Locate gEDA / Lepton EDA Schematic"
-msgstr "Schemat Locate gEDA / Lepton EDA"
+msgstr "Lokalizacja schematu gEDA / Lepton EDA"
 
 #: kicad/import_proj.cpp:597
 msgid "gEDA / Lepton EDA PCB files"
@@ -31405,7 +31405,7 @@ msgstr "Pliki gEDA / Lepton EDA PCB"
 
 #: kicad/import_proj.cpp:600
 msgid "Locate gEDA / Lepton EDA PCB"
-msgstr "Locate gEDA / Lepton EDA PCB"
+msgstr "Lokalizacja gEDA / Lepton EDA PCB"
 
 #: kicad/import_project.cpp:73
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
@@ -31446,7 +31446,7 @@ msgstr "Importuj plik archiwum projektu CADSTAR"
 
 #: kicad/import_project.cpp:197
 msgid "Import Eagle Project Files"
-msgstr "Import projektów z programu EAGLE"
+msgstr "Import projektów z programu Eagle"
 
 #: kicad/import_project.cpp:204
 msgid "Import EasyEDA Std Backup"
@@ -31931,7 +31931,7 @@ msgstr "Zasoby"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:508
 msgid "Package download url is not specified"
-msgstr "Nie określono adresu URL pobierania pakietu"
+msgstr "Nie określono adresu URL pobieranego pakietu"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:508
 msgid "Error downloading package"
@@ -51120,7 +51120,7 @@ msgstr "Nadpisać istniejące trasowanie?"
 #: pcbnew/pcb_design_block_utils.cpp:346
 msgid "Error saving temporary board file to create design block."
 msgstr ""
-"Błąd podczas zapisywania tymczasowego pliku PCB przy tworzeniu bloku "
+"Błąd podczas zapisywania tymczasowego pliku płytki przy tworzeniu bloku "
 "projektowego."
 
 #: pcbnew/pcb_dimension.cpp:633 pcbnew/pcb_dimension.cpp:1888
@@ -51334,7 +51334,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:181
 msgid "Failed to build board from Allegro data"
-msgstr "Wystąpił błąd przy budowaniu płytki z danych Allegro PCB"
+msgstr "Wystąpił błąd przy budowaniu płytki z danych Allegro"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:39
 msgid "Allegro PCB files"
