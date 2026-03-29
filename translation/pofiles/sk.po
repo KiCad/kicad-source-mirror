@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-29 16:09+0000\n"
+"PO-Revision-Date: 2026-03-30 17:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -4965,7 +4965,7 @@ msgstr "Mriežka 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1084
 msgid "Grid Overrides"
-msgstr "Prepísania mriežky"
+msgstr "Prepísanie mriežky"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -6532,7 +6532,7 @@ msgstr "Neznámy MIME typ pre súbor dokumentácie '%s'"
 #: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1222
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 msgid "Override locks"
-msgstr "Ignorovať uzamknutia"
+msgstr "Prepísať uzamknutia"
 
 #: common/eda_draw_frame.cpp:450 common/tool/actions.cpp:1092
 msgid "Edit Grids..."
@@ -6573,7 +6573,7 @@ msgstr "palce"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:123
 #: pagelayout_editor/pl_editor_frame.cpp:760
 msgid "mils"
-msgstr "mils"
+msgstr "milov"
 
 #: common/eda_draw_frame.cpp:736 cvpcb/toolbars_display_footprints.cpp:46
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
@@ -8210,7 +8210,7 @@ msgstr "DPS: Export 3D modelu"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
 msgid "Export drill data"
-msgstr "Export vŕtacích dát"
+msgstr "Exportovať vŕtacie dáta"
 
 #: common/jobs/job_export_pcb_drill.cpp:143
 msgid "Export Drill Data Job Settings"
@@ -8270,7 +8270,7 @@ msgstr "DPS: Export Gerber súborov"
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:187 kicad/kicad_cli.cpp:164
 msgid "Export HPGL"
-msgstr "Export HPGL"
+msgstr "HPGL Export"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
 msgid "PCB: Export HPGL"
@@ -8451,15 +8451,15 @@ msgstr "Nastavenia úlohy importu DPS"
 #: common/jobs/job_pcb_render.cpp:132
 #, c-format
 msgid "Render %s"
-msgstr "Vykresliť %s"
+msgstr "Vytvoriť obrázok %s"
 
 #: common/jobs/job_pcb_render.cpp:138
 msgid "Render PCB Job Settings"
-msgstr "Nastavenia úlohy vykreslenia DPS"
+msgstr "Nastavenia úlohy tvorby obrázka DPS"
 
 #: common/jobs/job_pcb_render.cpp:142
 msgid "PCB: Render"
-msgstr "DPS: Vykresliť"
+msgstr "DPS: Vytvoriť obrázok"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -10648,7 +10648,8 @@ msgstr "Zobraziť mriežku v pozadí v okne editora"
 #: common/tool/actions.cpp:1085
 msgid "Enables item-specific grids that override the current grid"
 msgstr ""
-"Umožňuje použiť mriežky špecifické pre prvky, ktoré prepíšu aktuálnu mriežku"
+"Umožňuje použiť mriežky špecifické pre položky, ktoré prepíšu aktuálnu "
+"mriežku"
 
 #: common/tool/actions.cpp:1093
 msgid "Edit grid definitions"
@@ -11495,7 +11496,7 @@ msgstr "Potvrďte zmenu"
 
 #: common/widgets/widget_hotkey_list.cpp:534
 msgid "Command (double-click to edit)"
-msgstr "Príkaz (dvakrát kliknúť pre úpravu)"
+msgstr "Príkaz (upraviť dvojitým kliknutím)"
 
 #: common/widgets/widget_hotkey_list.cpp:537
 msgid "Hotkey"
@@ -14102,7 +14103,7 @@ msgstr "Pomoc so syntaxou"
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:89
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:31
 msgid "Show syntax help window"
-msgstr "Zobraziť okno pomocníka syntaxe."
+msgstr "Zobraziť okno pomocníka syntaxe"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:81
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
@@ -16865,7 +16866,7 @@ msgstr "Nepodarilo sa zapísať výstup BOM '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1513
 #, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "BOM zapísaný do výstupu '%s'."
+msgstr "BOM zapísaný do výstupu '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1852
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2254
@@ -17517,7 +17518,7 @@ msgstr "Odstrániť polia, ak nie sú v nadradenom symbole"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr "Resetovať polia, ak sú prázdne v nadradenom symbole."
+msgstr "Resetovať polia, ak sú prázdne v nadradenom symbole"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:80
 msgid "Update/reset field sizes and styles"
@@ -18641,7 +18642,7 @@ msgstr "Nájdených %d porušení\n"
 #: eeschema/eeschema_jobs_handler.cpp:1337
 #, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Nepodarilo sa uložiť  ERC protokol do %s\n"
+msgstr "Nepodarilo sa uložiť ERC protokol do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1342
 #, c-format
@@ -18779,7 +18780,7 @@ msgstr "Symbol %s má neumiestnené obojsmerné napájacie vývody, v jednotkác
 #: eeschema/erc/erc.cpp:719
 #, c-format
 msgid "Netclass %s is not defined"
-msgstr "Trieda spojov  %s nie je definovaná"
+msgstr "Trieda spojov %s nie je definovaná"
 
 #: eeschema/erc/erc.cpp:796
 #, c-format
@@ -19311,7 +19312,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:820
 msgid "Schematic is read only."
-msgstr "Schéma je iba na čítanie"
+msgstr "Schéma je iba na čítanie."
 
 #: eeschema/files-io.cpp:850
 msgid ""
@@ -20661,7 +20662,7 @@ msgstr "Pri načítavaní obrázku %s nastala chyba."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4430
 #, c-format
 msgid "File not found %s."
-msgstr "Súbor sa nenašiel %s"
+msgstr "Súbor sa nenašiel %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5235
 #, c-format
@@ -21049,7 +21050,7 @@ msgstr "EasyEDA (JLCEDA) Std súbory"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:76
 #, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "Nepodarilo sa spracovať hodnotu %s."
+msgstr "Nepodarilo sa spracovať hodnotu: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3646
 #, c-format
@@ -25106,7 +25107,7 @@ msgstr "Importovať symbol do knižnice:"
 #: pcbnew/load_select_footprint.cpp:353
 #, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Nepodarilo sa nájsť prehliadač pre '%s'"
+msgstr "Nepodarilo sa nájsť prehliadač pre '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:146
 #, c-format
@@ -25371,7 +25372,7 @@ msgstr "Zmeniť hodnotu %s z '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:857
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Zmeniť %s 'Neosadzovať' z '%s' na '%s'"
+msgstr "Zmeniť %s 'Neosadzovať' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:871
 #, c-format
@@ -25396,7 +25397,7 @@ msgstr "Pridať pole '%s' s hodnotou '%s' pre %s."
 #: eeschema/tools/backannotate.cpp:990
 #, c-format
 msgid "Delete %s field '%s.'"
-msgstr "Odstrániť pole '%s' súčiastky %s."
+msgstr "Odstrániť %s pole '%s.'"
 
 #: eeschema/tools/backannotate.cpp:1253
 #, c-format
@@ -26863,7 +26864,7 @@ msgstr "Kresliť grafy s čiernym pozadím"
 
 #: eeschema/tools/sch_actions.cpp:1719
 msgid "Edit Analysis Tab..."
-msgstr "Upraviť tabuľku analýz"
+msgstr "Upraviť kartu analýz..."
 
 #: eeschema/tools/sch_actions.cpp:1720
 msgid "Edit the current analysis tab's SPICE command and plot setup"
@@ -27306,7 +27307,7 @@ msgstr "Chyba: v aktuálnom hárku sa našli duplikáty názvov podlistov."
 
 #: eeschema/tools/sch_editor_control.cpp:1176
 msgid "No nets selected."
-msgstr "Žiadne siete nie sú vybrané."
+msgstr "Žiadne spoje nie sú vybrané."
 
 #: eeschema/tools/sch_editor_control.cpp:1215
 msgid "All selected nets must be labeled to assign a netclass."
@@ -28706,11 +28707,11 @@ msgstr "Mechanické vrstvy"
 
 #: gerbview/files.cpp:239
 msgid "Top Pad Master"
-msgstr "Hlavná podložka horná"
+msgstr "Hlavná plôška horná"
 
 #: gerbview/files.cpp:240
 msgid "Bottom Pad Master"
-msgstr "Hlavná podložka spodná"
+msgstr "Hlavná plôška spodná"
 
 #: gerbview/files.cpp:246
 msgid "Open Gerber File(s)"
@@ -28747,7 +28748,7 @@ msgstr "Nie je možné otvoriť súbor zip '%s'."
 #: gerbview/files.cpp:499
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "Preskočený súbor '%s' (Gerber)"
+msgstr "Preskočený súbor '%s' (súbor úlohy Gerber)."
 
 #: gerbview/files.cpp:546
 #, c-format
@@ -29214,7 +29215,7 @@ msgstr "Zobraziť v režime XOR"
 
 #: gerbview/tools/gerbview_actions.cpp:243
 msgid "Show layers in exclusive-or compare mode"
-msgstr "Zobraziť vrstvy v režime porovnania typu exclusive-or."
+msgstr "Zobraziť vrstvy v režime typu exclusive-or"
 
 #: gerbview/tools/gerbview_actions.cpp:250
 msgid "Flip Gerber View"
@@ -29258,7 +29259,7 @@ msgstr "Zvýrazniť položky súčiastky '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Zvýrazniť položky siete '%s'"
+msgstr "Zvýrazniť položky spoja '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
@@ -29737,7 +29738,7 @@ msgstr "Exportovať spoje a prekovy"
 #: kicad/cli/command_pcb_export_3d.cpp:143
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Export pads"
-msgstr "Exportovať podložky"
+msgstr "Exportovať plôšky"
 
 #: kicad/cli/command_pcb_export_3d.cpp:147
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
@@ -30305,7 +30306,8 @@ msgstr "Neplatný formát protokolu: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:220
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr "Renderuje DPS v 3D zobrazení do obrázka PNG alebo JPEG"
+msgstr ""
+"Vytvorenie obrázka 3D pohľadu na DPS a uloženie do súboru PNG alebo JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Image width"
@@ -30318,7 +30320,7 @@ msgstr "Výška obrázka"
 #: kicad/cli/command_pcb_render.cpp:238
 #, c-format
 msgid "Render from side. Options: %s"
-msgstr "Renderovanie zo strany. Možnosti: %s"
+msgstr "Vytvoriť obrázok pohľadu zo strany. Možnosti: %s"
 
 #: kicad/cli/command_pcb_render.cpp:243
 #, c-format
@@ -30331,7 +30333,7 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:252
 #, c-format
 msgid "Render quality. Options: %s"
-msgstr "Kvalita renderovania. Možnosti: %s"
+msgstr "Kvalita tvorby obrázka. Možnosti: %s"
 
 #: kicad/cli/command_pcb_render.cpp:258
 #, c-format
@@ -30342,7 +30344,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:265
 msgid "Colors defined in board stackup override those in preset"
-msgstr "Farby definované v skladbe vrstiev dosky majú prednosť pred predvoľbou"
+msgstr "Farby definované v skladbe vrstiev dosky prepíšu farby z predvoľby"
 
 #: kicad/cli/command_pcb_render.cpp:269
 msgid ""
@@ -33092,11 +33094,11 @@ msgstr "Prekov: (priemer - vŕtanie)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diameter - drill)"
-msgstr "Osadená podložka: (priemer - vŕtanie)"
+msgstr "Pokovená plôška: (priemer - vŕtanie)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
 msgid "NP Pad: (diameter - drill)"
-msgstr "Neosadená podložka: (priemer - vŕtanie)"
+msgstr "Nepokovená plôška: (priemer - vŕtanie)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:94
 msgid "AWG0000"
@@ -36139,7 +36141,7 @@ msgstr "Pokovené"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:244
 #: pcbnew/widgets/search_handlers.cpp:615
 msgid "Via/Pad"
-msgstr "Prekov/Podložka"
+msgstr "Prekov/Plôška"
 
 #: pcbnew/board_statistics_report.cpp:665
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:245
@@ -36354,7 +36356,7 @@ msgstr "Konvertovať čiary na štvoruholník"
 
 #: pcbnew/cleanup_item.cpp:60
 msgid "Merge overlapping shapes into pad"
-msgstr "Zlúčiť prekrývajúce sa tvary do podložky"
+msgstr "Zlúčiť prekrývajúce sa tvary do plôšky"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
@@ -36405,8 +36407,7 @@ msgstr ""
 #: pcbnew/connectivity/topo_match.cpp:247
 #, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
-msgstr ""
-"Podložka %s súčiastky %s má nekonzistentné mapovanie siete v kandidátovi %s."
+msgstr "Plôška %s z %s má nekonzistentné mapovanie spojov v kandidátovi %s."
 
 #: pcbnew/connectivity/topo_match.cpp:355
 msgid "No compatible component found in the target area."
@@ -37449,7 +37450,7 @@ msgstr "Od počiatočnej hodnoty"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:212
 msgid "Initial Pad Number"
-msgstr "Počiatočné číslo podložky"
+msgstr "Počiatočné číslo plôšky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Continuous (1, 2, 3...)"
@@ -37474,7 +37475,7 @@ msgstr "Číslovanie sekundárnych osí:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:250
 #: pcbnew/dialogs/dialog_create_array_base.cpp:457
 msgid "Pad numbering start:"
-msgstr "Začiatok číslovania podložky:"
+msgstr "Začiatok číslovania plôšok:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:264
 #: pcbnew/dialogs/dialog_create_array_base.cpp:464
@@ -37572,11 +37573,11 @@ msgstr "Možnosti číslovania"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:438
 msgid "Initial Pad Number:"
-msgstr "Počiatočné číslo podložky:"
+msgstr "Počiatočné číslo plôšky:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:442
 msgid "Pad Numbering:"
-msgstr "Číslovanie podložky:"
+msgstr "Číslovanie plôšky:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:487
 msgid "Circular Array"
@@ -38039,7 +38040,7 @@ msgstr "Prefix názvu plôšky:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:47
 msgid "First pad number:"
-msgstr "Číslo prvej podložky:"
+msgstr "Prvé číslo plôšky:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:54
 msgid "Numbering step:"
@@ -38445,8 +38446,7 @@ msgstr "Nepodarilo sa vytvoriť dočasný výstupný adresár."
 msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
-msgstr ""
-"Výstupný adresár '%s' už  existuje a nie je prázdny. Chcete ho prepísať?"
+msgstr "Výstupný adresár '%s' už existuje a nie je prázdny. Chcete ho prepísať?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:379
 #, c-format
@@ -39249,12 +39249,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:584
 #: pcbnew/zone.cpp:2129
 msgid "Pad Connections"
-msgstr "Pripojenie podložky"
+msgstr "Pripojenie plôšky"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:348
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:445
 msgid "Pad connection to zones:"
-msgstr "Pripojenie podložky k zónam:"
+msgstr "Pripojenie plôšky k zónam:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:352
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
@@ -39273,7 +39273,7 @@ msgstr "Skupiny prepojok:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 msgid "Clearance Overrides && Pad Connections"
-msgstr "Prepísať odstup a pripojenia plôšky"
+msgstr "Prepísanie odstup a pripojenia plôšky"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -39429,7 +39429,7 @@ msgstr ""
 "vertikálneho odstupu je 10% výšky plôšky.\n"
 "Výsledná hodnota odstupu je súčet týchto hodnôt a absolútnej hodnoty "
 "odstupu.\n"
-"Záporná hodnota znamená menšiu veľkosť otvoru šablóny ako veľkosť podložky.\n"
+"Záporná hodnota znamená menšiu veľkosť apertúry ako je veľkosť plôšky.\n"
 "Táto hodnota môže byť prepísaná v lokálnych nastaveniach jednotlivých plôšok "
 "v karte Odstup a nastavenia vo vlastnostiach plôšky."
 
@@ -39452,7 +39452,7 @@ msgstr "Negenerovať porušenie DRC - „chýbajúci courtyard“"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:976
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1093
 msgid "Clearance Overrides"
-msgstr "Prepísať odstupy"
+msgstr "Prepísanie odstupov"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:443
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:875
@@ -39983,11 +39983,11 @@ msgstr "Upraviť teardropy"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
 msgid "PTH pads"
-msgstr "PTH podložky"
+msgstr "Pokovené (PTH) plôšky"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
-msgstr "SMD podložky"
+msgstr "SMD plôšky"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:39
 msgid "Track to track"
@@ -40073,8 +40073,7 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"Max. pomer veľkosti podložky/prekovu k šírke spoja pre vytvorenie "
-"teardropu.\n"
+"Max. pomer veľkosti plôšky/prekovu k šírke spoja pre vytvorenie teardropu.\n"
 "100 vždy vytvorí teardrop."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:178
@@ -40993,7 +40992,7 @@ msgid ""
 "This is not possible for items like pads, which will still use the value "
 "below."
 msgstr ""
-"Toto nie je možné pre položky ako podložky, ktoré naďalej používajú hodnotu "
+"Toto nie je možné pre položky ako plôšky, ktoré naďalej používajú hodnotu "
 "nižšie."
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:86
@@ -41016,7 +41015,7 @@ msgstr "Vlastnosti plôšky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:191
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Predvolené vlastnosti podložky pre nástroj Pridať podložku"
+msgstr "Predvolené vlastnosti plôšky pre nástroj Pridať plôšku"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:233
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
@@ -41089,7 +41088,7 @@ msgstr "Veľkosť otvoru X:"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1870
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Pad size X:"
-msgstr "Veľkosť podložky X:"
+msgstr "Veľkosť plôšky X:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1873
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1874
@@ -41154,7 +41153,7 @@ msgstr "Upraviť vrstvu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:123
 msgid "Pad shape:"
-msgstr "Tvar podložky:"
+msgstr "Tvar plôšky:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Circular"
@@ -41200,7 +41199,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Polomer rohu v percentách šírky podložky.\n"
+"Polomer rohu v percentách šírky plôšky.\n"
 "Šírka je menšia hodnota medzi veľkosťou X a veľkosťou Y.\n"
 "Maximálna hodnota je 50 percent."
 
@@ -41217,7 +41216,7 @@ msgid ""
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
 "Polomer rohu.\n"
-"Môže byť nie viac ako polovica šírky podložky.\n"
+"Môže byť nie viac ako polovica šírky plôšky.\n"
 "Šírka je menšia hodnota medzi veľkosťou X a veľkosťou Y.\n"
 "Poznámka: Norma IPC dáva maximálnu hodnotu = 0,25 mm."
 
@@ -41233,7 +41232,7 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Veľkosť skosenia v percentách šírky podložky.\n"
+"Veľkosť skosenia v percentách šírky plôšky.\n"
 "Šírka je menšia hodnota medzi veľkosťou X a veľkosťou Y.\n"
 "Maximálna hodnota je 50 percent."
 
@@ -41282,7 +41281,7 @@ msgstr "Oválny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
-msgstr "Zadajte dĺžku podložky"
+msgstr "Zadajte dĺžku plôšky po čip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:507
 msgid "Specify pad to die delay"
@@ -41390,11 +41389,11 @@ msgstr "Fiduciál, globálny k doske"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3305
 msgid "Test point pad"
-msgstr "Podložka na testovacie body"
+msgstr "Plôška testovacieho bodu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3306
 msgid "Heatsink pad"
-msgstr "Podložka chladiča"
+msgstr "Plôška chladiča"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:1928
 msgid "Mechanical"
@@ -41421,7 +41420,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:668
 msgid "Add teardrops on pad's track connections"
-msgstr "Pridať teardropy na prepojenia spoja s podložkou"
+msgstr "Pridať teardropy na prepojenia spoja s plôškou"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:677
 msgid "Allow teardrops to span 2 track segments"
@@ -41438,7 +41437,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:703
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:314
 msgid "Tracks which are similar in size to the pad do not need teardrops."
-msgstr "Spoje podobnej veľkosti ako podložka nepotrebujú teardropy."
+msgstr "Spoje podobnej veľkosti ako plôška nepotrebujú teardropy."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
 msgid "Teardrop Shape"
@@ -41462,7 +41461,7 @@ msgstr "Tvar plôšky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:897
 msgid "Pad convex hull"
-msgstr "Konvexný obal podložky"
+msgstr "Konvexný obal plôšky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:910
 msgid "Thermal Relief Overrides"
@@ -42289,7 +42288,7 @@ msgstr "Neupravovať plôšky, ktoré sú iného typu"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:50
 msgid "Push Pad Properties"
-msgstr "Vlastnosti podložky"
+msgstr "Nanútiť vlastnosti plôšky"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:103
 msgid ""
@@ -42415,7 +42414,7 @@ msgstr "Výška bočných svetiel:"
 
 #: pcbnew/dialogs/dialog_render_job_base.h:104
 msgid "Render PCB Job Options"
-msgstr "Možnosti úlohy renderovania DPS"
+msgstr "Možnosti úlohy tvorby obrázka DPS"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:130
 #: pcbnew/tools/board_inspection_tool.cpp:1759
@@ -42710,13 +42709,12 @@ msgstr "Zrušiť zmeny"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:939
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "Zmena siete aktualizuje aj podložku %s č. %s na %s."
+msgstr "Zmena spoja aktualizuje aj plôšku %s č. %s na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:948
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
-"Zmena siete aktualizuje aj podložku %s č. %s a podložku %s č. %s na %s."
+msgstr "Zmena spoja aktualizuje aj plôšku %s č. %s a plôšku %s č. %s na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:957
 #, c-format
@@ -42729,7 +42727,7 @@ msgstr "Zmeniť siete"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:963
 msgid "Leave Nets Unchanged"
-msgstr "Nechať siete bez zmeny"
+msgstr "Nechať spoj bez zmeny"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:1640
 msgid "Edit Track/Via Properties"
@@ -42737,7 +42735,7 @@ msgstr "Upraviť vlastnosti spoja/prekovu"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
-msgstr "Automaticky aktualizovať siete prekovov"
+msgstr "Automaticky aktualizovať prekovy spojov"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:42
 msgid ""
@@ -42849,7 +42847,7 @@ msgstr "Spoje podobnej veľkosti ako prekov nepotrebujú teardropy."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:696
 msgid "(as a percentage of pad/via/track size)"
-msgstr "(ako percento veľkosti podložky/prekovov/spoja)"
+msgstr "(ako percento veľkosti plôšky/prekovu/spoja)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:191
 msgid "Track & Via Properties"
@@ -42965,7 +42963,7 @@ msgstr "Obnoviť všetky vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:205
 msgid "Remove Unused Pads"
-msgstr "Odstrániť nepoužívané podložky"
+msgstr "Odstrániť nepoužité plôšky"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
 msgid "&Selected only"
@@ -42977,7 +42975,7 @@ msgstr "Zachovať vonkajšie vrstvy"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:57
 msgid "Unused Pads"
-msgstr "Nepoužívané podložky"
+msgstr "Nepoužité plôšky"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:42
 msgid "Update Footprints"
@@ -43173,7 +43171,7 @@ msgstr "Nezobraziť"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:122
 msgid "Show on pads"
-msgstr "Zobraziť na podložkách"
+msgstr "Zobraziť na plôškach"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:122
 msgid "Show on tracks"
@@ -43260,7 +43258,7 @@ msgstr "Hore/dole"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:109
 msgid "Allow free pads"
-msgstr "Povoliť voľné podložky"
+msgstr "Povoliť voľné plôšky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:110
 msgid ""
@@ -43310,7 +43308,7 @@ msgstr "Magnetické body"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:304
 msgid "Magnetic pads"
-msgstr "Magnetické podložky"
+msgstr "Magnetické plôšky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:308
 msgid "Magnetic graphics"
@@ -43318,12 +43316,12 @@ msgstr "Magnetická grafika"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:336
 msgid "Snap to pads:"
-msgstr "Prichytenie na podložky:"
+msgstr "Prichytiť k plôškam:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:338
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Zachyťte kurzor, keď myš vstúpi do oblasti podložky"
+msgstr "Zachytiť kurzor, ak myš vstúpi do oblasti plôšky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 #: pcbnew/dialogs/panel_edit_options_base.cpp:356
@@ -43375,7 +43373,7 @@ msgstr "Automaticky znova vyplniť zóny"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:443
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr "Ak je začiarknuté, zóny sa po každej úprave znova vyplnia."
+msgstr "Ak je začiarknuté, zóny sa po každej úprave znova vyplnia"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:112
 msgid "Internal Layers"
@@ -44080,7 +44078,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers.cpp:919 pcbnew/pad.cpp:2218
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr "Podložka %s z %s na %s"
+msgstr "Plôška %s z %s na %s"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:931
 msgid ""
@@ -44274,7 +44272,7 @@ msgstr "Pravidlá '%s' a '%s' majú rovnakú podmienku."
 #: pcbnew/dialogs/panel_setup_rules.cpp:800
 #, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
-msgstr "Pravidlo '%s' odkazuje na nedefinovanú triedu siete '%s'."
+msgstr "Pravidlo '%s' odkazuje na nedefinovanú triedu spojov '%s'."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:826
 #, c-format
@@ -44572,211 +44570,216 @@ msgid ""
 msgstr ""
 "### Obmedzenia\n"
 "\n"
-"| Typ obmedzenia            | Typ "
-"argumentu                                                                                                         "
-"| "
-"Popis                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| Typ obmedzenia            | Typ argumentu"
+"                                                                                                         "
+"| Popis"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Kontroluje šírku prstencového krúžku na prekovoch."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | \"&lt;"
-"výraz>\"                                                                                                          "
-"| Kontroluje zadaný výraz."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"| `annular_width`           | min/opt/max"
+"                                                                                                           "
+"| Kontroluje šírku prstencového krúžku na prekovoch.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                  "
+"|\n"
+"| `assertion`               | \"&lt;výraz>"
+"\"                                                                                                          "
+"| Kontroluje zadaný výraz.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
 "| Kontroluje mostíky spájkovacej masky medzi medenými objektmi. Toto "
 "obmedzenie nepoužíva hodnotu min/opt/max. V kombinácii s klauzuľou "
 "závažnosti možno toto obmedzenie použiť na povolenie alebo zakázanie "
-"mostíkov spájkovacej masky v rôznych podmienkach."
-"<br>                                                                                                                                                                                        "
+"mostíkov spájkovacej masky v rôznych podmienkach.<br>"
+"                                                                                                                                                                                        "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
-"| Určuje **elektrický** odstúp medzi medenými objektmi rôznych sietí. (Pozri "
-"`physical_clearance` ak chcete zadať odstúp medzi objektmi bez ohľadu na "
-"sieť.)<br><br>Pre povolenie prekrývania medených objektov vytvorte "
-"obmedzenie `clearance` s hodnotou `min` menšou ako nula (napríklad `-1`)."
-"<br>                                                                                                                                                   "
+"| `clearance`               | min"
+"                                                                                                                   "
+"| Určuje **elektrický** odstúp medzi medenými objektmi rôznych spojov. "
+"(Pozri `physical_clearance` ak chcete zadať odstúp medzi objektmi bez ohľadu "
+"na spoj.)<br><br>Pre povolenie prekrývania medených objektov vytvorte "
+"obmedzenie `clearance` s hodnotou `min` menšou ako nula (napríklad `-1`).<br>"
+"                                                                                                                                                   "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
 "| Kontroluje odstúp medzi nádvoriami puzdier a generuje chybu, ak sú "
 "ľubovolné dve nádvoria bližšie ako hodnota `min`. Ak puzdro nemá tvar "
-"nádvoria, toto obmedzenie negeneruje žiadne chyby."
-"<br>                                                                                                                                                                                                                                                       "
+"nádvoria, toto obmedzenie negeneruje žiadne chyby.<br>"
+"                                                                                                                                                                                                                                                       "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
-"| Určuje povrchovú vzdialenosť medzi medenými objektmi rôznych sietí."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                "
+"| `creepage`                | min"
+"                                                                                                                   "
+"| Určuje povrchovú vzdialenosť medzi medenými objektmi rôznych spojov.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
+"| `diff_pair_gap`           | min/opt/max"
+"                                                                                                           "
 "| Kontroluje medzeru medzi spájanými spojmi v diferenciálnom páre. Spájané "
 "spoje sú segmenty, ktoré sú navzájom rovnobežné. Medzera diferenciálneho "
 "páru sa nekontroluje na nespájaných častiach diferenciálneho páru (napríklad "
-"výbeh zo súčiastky)."
-"<br>                                                                                                                                                                                                "
+"výbeh zo súčiastky).<br>"
+"                                                                                                                                                                                                "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
+"| `diff_pair_uncoupled`     | max"
+"                                                                                                                   "
 "| Kontroluje vzdialenosť, na ktorej je spoj diferenciálneho páru vedený "
 "nespojený s druhým polárnym spojom v páre (napríklad kde pár vybieha zo "
-"súčiastky alebo sa odpojí pri obchádzaní iného objektu, napr. prekovu)."
-"<br>                                                                                                                                                                                                                              "
+"súčiastky alebo sa odpojí pri obchádzaní iného objektu, napr. prekovu).<br>"
+"                                                                                                                                                                                                                              "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Určite jeden alebo viac typov objektov na zakázanie, oddelených medzerami. "
-"Napríklad `(constraint disallow track)` alebo `(constraint disallow track "
-"via pad)`. Ak objekt tohto typu zodpovedá podmienke pravidla, vytvorí sa "
-"chyba DRC.<br><br>Toto obmedzenie je v podstate rovnaké ako zakázaná oblasť, "
-"ale umožňuje vytvoriť špecifickejšie obmedzenia."
-"<br>                                                                                      "
+"| `disallow`                | `track`<br>`via`<br>`through_via`<br>"
+"`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>"
+"`graphic`<br>`hole`<br>`footprint`<br> | Určite jeden alebo viac typov "
+"objektov na zakázanie, oddelených medzerami. Napríklad `(constraint disallow "
+"track)` alebo `(constraint disallow track via pad)`. Ak objekt tohto typu "
+"zodpovedá podmienke pravidla, vytvorí sa chyba DRC.<br><br>Toto obmedzenie "
+"je v podstate rovnaké ako zakázaná oblasť, ale umožňuje vytvoriť "
+"špecifickejšie obmedzenia.<br>"
+"                                                                                      "
 "|\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
+"| `edge_clearance`          | min/opt/max"
+"                                                                                                           "
 "| Kontroluje odstúp medzi objektmi a okrajom dosky.<br><br>Možno to chápať "
 "aj ako „toleranciu frézovania“, keďže okraj dosky zahrňuje všetky grafické "
 "prvky na vrstve `Edge.Cuts` a všetky *oválne* otvory plôšok. (Pozri "
-"`physical_hole_clearance` pre toleranciu "
-"vŕtania.)<br>                                                                                                                                                                           "
+"`physical_hole_clearance` pre toleranciu vŕtania.)<br>"
+"                                                                                                                                                                           "
 "|\n"
-"| `length`                  | min/"
-"max                                                                                                               "
-"| Kontroluje celkovú dĺžku trasy pre siete zodpovedajúce podmienke pravidla "
-"a generuje chybu pre každú sieť, ktorá je pod hodnotou `min` (ak je zadaná) "
-"alebo nad hodnotou `max` (ak je zadaná)."
-"<br>                                                                                                                                                                                                                                                   "
+"| `length`                  | min/max"
+"                                                                                                               "
+"| Kontroluje celkovú dĺžku trasy pre spoje zodpovedajúce podmienke pravidla "
+"a generuje chybu pre každý spoj, ktorá je pod hodnotou `min` (ak je zadaná) "
+"alebo nad hodnotou `max` (ak je zadaná).<br>"
+"                                                                                                                                                                                                                                                   "
 "|\n"
-"| `hole`                    | min/"
-"max                                                                                                               "
+"| `hole`                    | min/max"
+"                                                                                                               "
 "| Kontroluje veľkosť (priemer) vŕtaného otvoru v plôške alebo prekove. Pre "
 "oválne otvory sa menší (vedľajší) priemer testuje voči hodnote `min` (ak je "
-"zadaná) a väčší (hlavný) priemer voči hodnote `max` (ak je zadaná)."
-"<br>                                                                                                                                                                                                                          "
+"zadaná) a väčší (hlavný) priemer voči hodnote `max` (ak je zadaná).<br>"
+"                                                                                                                                                                                                                          "
 "|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
+"| `hole_clearance`          | min"
+"                                                                                                                   "
 "| Kontroluje odstúp medzi vŕtaným otvorom v plôške alebo prekove a medenými "
-"objektmi na inej sieti. Odstúp sa meria od priemeru otvoru, nie od jeho "
-"stredu."
-"<br>                                                                                                                                                                                                                                                                                          "
+"objektmi v inom spoji. Odstúp sa meria od priemeru otvoru, nie od jeho "
+"stredu.<br>"
+"                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
 "| Kontroluje odstúp medzi mechanicky vŕtanými otvormi v plôškach a "
-"prekovoch. Odstúp sa meria medzi priemermi otvorov, nie medzi ich stredmi."
-"<br><br>Toto obmedzenie slúži výlučne na ochranu vrtákov. Nekontroluje sa "
-"odstúp medzi **laserovo vŕtanými** (mikroprekovmi) a inými nemechanicky "
-"vŕtanými otvormi, ani odstúp medzi **frézovanými** (oválnymi) a inými "
-"nemechanicky vŕtanými otvormi."
-"<br>                                                   |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
+"prekovoch. Odstúp sa meria medzi priemermi otvorov, nie medzi ich "
+"stredmi.<br><br>Toto obmedzenie slúži výlučne na ochranu vrtákov. "
+"Nekontroluje sa odstúp medzi **laserovo vŕtanými** (mikroprekovmi) a inými "
+"nemechanicky vŕtanými otvormi, ani odstúp medzi **frézovanými** (oválnymi) a "
+"inými nemechanicky vŕtanými otvormi.<br>"
+"                                                   |\n"
+"| `physical_clearance`      | min"
+"                                                                                                                   "
 "| Kontroluje odstúp medzi dvoma objektmi na danej vrstve (vrátane nemedených "
 "vrstiev).<br><br>Hoci dokáže vykonávať všeobecnejšie kontroly než "
-"`clearance`, je oveľa pomalší. Použite `clearance` kde je to možné."
-"<br>                                                                                                                                                                                                                                   "
+"`clearance`, je oveľa pomalší. Použite `clearance` kde je to možné.<br>"
+"                                                                                                                                                                                                                                   "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
 "| Kontroluje odstúp medzi vŕtaným otvorom v plôške alebo prekove a iným "
-"objektom, bez ohľadu na sieť. Odstúp sa meria od priemeru otvoru, nie od "
+"objektom, bez ohľadu na spoj. Odstúp sa meria od priemeru otvoru, nie od "
 "jeho stredu.<br><br>Možno to chápať aj ako „toleranciu vŕtania“, keďže "
 "zahrňuje len **okrúhle** otvory (pozri `edge_clearance` pre toleranciu "
-"frézovania)."
-"<br>                                                                                                                                            "
+"frézovania).<br>"
+"                                                                                                                                            "
 "|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Kontroluje odstúp medzi objektmi na vrstvách potlače a inými objektmi."
-"<br>                                                                                                                                                                                                                                                                                                                                                                              "
+"| `silk_clearance`          | min/opt/max"
+"                                                                                                           "
+"| Kontroluje odstúp medzi objektmi na vrstvách potlače a inými objektmi.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                   "
-"| Kontroluje celkové skreslenie pre siete zodpovedajúce podmienke pravidla, "
-"t.j. rozdiel medzi dĺžkou každej siete a priemerom všetkých dĺžok sietí "
+"| `skew`                    | max"
+"                                                                                                                   "
+"| Kontroluje celkové skreslenie pre spoje zodpovedajúce podmienke pravidla, "
+"t.j. rozdiel medzi dĺžkou každého spoja a priemerom všetkých dĺžok spojov "
 "zodpovedajúcich pravidlu. Ak absolútna hodnota rozdielu medzi priemerom a "
-"dĺžkou ľubovolnej siete presahuje hodnotu `max`, vygeneruje sa chyba."
-"<br>                                                                                                                                                 "
+"dĺžkou ľubovoľného spoja presahuje hodnotu `max`, vygeneruje sa chyba.<br>"
+"                                                                                                                                                 "
 "|\n"
-"| `solder_mask_expansion`   | "
-"opt                                                                                                                   "
+"| `solder_mask_expansion`   | opt"
+"                                                                                                                   "
 "| Určuje rozšírenie spájkovacej masky pre plôšky, tvary a "
 "spoje.                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `solder_paste_abs_margin` | "
-"opt                                                                                                                   "
+"| `solder_paste_abs_margin` | opt"
+"                                                                                                                   "
 "| Určuje absolútny odstúp spájkovacej pasty pre plôšky. Zvyčajne záporný pre "
 "zmenšenie pasty.<br><br>Výsledný odstúp spájkovacej pasty bude absolútny "
 "odstúp plus relatívny "
 "odstúp.                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `solder_paste_rel_margin` | "
-"opt                                                                                                                   "
+"| `solder_paste_rel_margin` | opt"
+"                                                                                                                   "
 "| Určuje relatívny odstúp spájkovacej pasty pre plôšky. Zvyčajne záporný pre "
 "zmenšenie pasty.<br><br>Výsledný odstúp spájkovacej pasty bude absolútny "
 "odstúp plus relatívny "
 "odstúp.                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Určuje šírku medzery medzi plôškou a zónou s pripojením tepelného reliéfu."
-"<br>                                                                                                                                                                                                                                                                                                                                                                          "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
+"| Určuje šírku medzery medzi plôškou a zónou s pripojením tepelného "
+"reliéfu.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
 "| Určuje šírku lúčov spájajúcich plôšku so zónou s pripojením tepelného "
-"reliéfu."
-"<br>                                                                                                                                                                                                                                                                                                                                                                      "
+"reliéfu.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
+"| `track_width`             | min/opt/max"
+"                                                                                                           "
 "| Kontroluje šírku segmentov spojov a oblúkov. Chyba sa vygeneruje pre každý "
 "segment, ktorý má šírku pod hodnotou `min` (ak je zadaná) alebo nad hodnotou "
-"`max` (ak je zadaná)."
-"<br>                                                                                                                                                                                                                                                                      "
+"`max` (ak je zadaná).<br>"
+"                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_angle`             | min/opt/"
-"max                                                                                                           "
+"| `track_angle`             | min/opt/max"
+"                                                                                                           "
 "| Kontroluje uhol medzi dvoma spojenými segmentmi spojov. Chyba sa "
 "vygeneruje pre každý spojený pár s uhlom pod hodnotou `min` (ak je zadaná) "
-"alebo nad hodnotou `max` (ak je zadaná)."
-"<br>                                                                                                                                                                                                                                                               "
+"alebo nad hodnotou `max` (ak je zadaná).<br>"
+"                                                                                                                                                                                                                                                               "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
+"| `track_segment_length`    | min/max"
+"                                                                                                               "
 "| Kontroluje dĺžku segmentov spojov a oblúkov. Chyba sa vygeneruje pre každý "
 "segment, ktorý má dĺžku pod hodnotou `min` (ak je zadaná) alebo nad hodnotou "
-"`max` (ak je zadaná)."
-"<br>                                                                                                                                                                                                                                                                      "
+"`max` (ak je zadaná).<br>"
+"                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `via_count`               | "
-"max                                                                                                                   "
-"| Počíta počet prekovov na každej sieti zodpovedajúcej podmienke pravidla. "
-"Ak tento počet prekročí hodnotu `max` na ľubovolnej zodpovedajúcej sieti, "
-"vygeneruje sa chyba."
-"<br>                                                                                                                                                                                                                                                                            "
+"| `via_count`               | max"
+"                                                                                                                   "
+"| Počíta počet prekovov na každom spoji zodpovedajúcej podmienke pravidla. "
+"Ak tento počet prekročí hodnotu `max` na ľubovolnom zodpovedajúcom spoji, "
+"vygeneruje sa chyba.<br>"
+"                                                                                                                                                                                                                                                                            "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
 "| Kontroluje prekovy, ktoré sú nepripojené alebo pripojené len na jednej "
 "vrstve. Toto obmedzenie nepoužíva hodnotu min/opt/max. V kombinácii s "
 "klauzuľou závažnosti možno toto obmedzenie použiť na povolenie alebo "
-"zakázanie visiacich prekovov v rôznych podmienkach."
-"<br>                                                                                                                                                                              "
+"zakázanie visiacich prekovov v rôznych podmienkach.<br>"
+"                                                                                                                                                                              "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Určuje typ pripojenia medzi zónou a plôškou."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                        "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
+"`none`                                                                                "
+"| Určuje typ pripojenia medzi zónou a plôškou.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "\n"
 "\n"
@@ -45878,7 +45881,7 @@ msgstr "ps/cm"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:187
 msgid "Via delay overrides:"
-msgstr "Prepisy oneskorenia prekovov:"
+msgstr "Prepísanie oneskorenia prekovov:"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:204
 msgid "Signal Layer From"
@@ -45948,8 +45951,8 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
-"Predvolený typ prepojenia podložky so zónou.\n"
-"Toto nastavenie môže byť prepísané lokálnymi nastaveniami podložky"
+"Predvolený typ prepojenia plôšky so zónou.\n"
+"Toto nastavenie môže byť prepísané lokálnymi nastaveniami plôšky"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:102 pcbnew/footprint.cpp:4798
 #: pcbnew/pad.cpp:3351 pcbnew/zone.cpp:1892
@@ -45969,8 +45972,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
-"Vzdialenosť, ktorá bude zachovaná medzi vyplnenou oblasťou zóny a podložkou "
-"pripojenou lúčmi tepelného reliéfu."
+"Vzdialenosť, ktorá bude zachovaná medzi vyplnenou oblasťou zóny a plôškou "
+"pripojenou ramenami tepelného prepojenia."
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:115
 msgid "Clearance between pads in the same net and filled areas."
@@ -45990,7 +45993,7 @@ msgstr "Odstupy && Prepojenia podložiek"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:185
 msgid "Display Overrides"
-msgstr "Prepísať zobrazenie"
+msgstr "Prepísanie zobrazenia"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:196
 msgid "Hatched fill"
@@ -45998,7 +46001,7 @@ msgstr "Šrafovaná výplň"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:260
 msgid "Hatch offset overrides:"
-msgstr "Prepísania odsadenia šrafovania:"
+msgstr "Prepísanie odsadenia šrafovania:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:321
 msgid "Hatched Fill"
@@ -46034,35 +46037,35 @@ msgstr "Zhromažďovanie medených položiek..."
 #: pcbnew/drc/drc_test_provider_track_width.cpp:125
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:112
 msgid "board setup constraints"
-msgstr "obmedzenia nastavenia dosky"
+msgstr "obmedzenia z nastavenia dosky"
 
 #: pcbnew/drc/drc_engine.cpp:196
 msgid "board setup constraints zone fill strategy"
-msgstr "obmedzenia nastavenia stratégie vypĺňania zón dosky"
+msgstr "obmedzenia z nastavenia dosky pre stratégie vypĺňania zón"
 
 #: pcbnew/drc/drc_engine.cpp:202
 msgid "board setup constraints silk"
-msgstr "obmedzenia nastavenia popisu dosky"
+msgstr "obmedzenia z nastavenia dosky pre popisy"
 
 #: pcbnew/drc/drc_engine.cpp:208
 msgid "board setup constraints silk text height"
-msgstr "obmedzenia nastavenia výšky popisu dosky"
+msgstr "obmedzenia z nastavenia dosky pre výšky popisov"
 
 #: pcbnew/drc/drc_engine.cpp:215
 msgid "board setup constraints silk text thickness"
-msgstr "obmedzenia nastavenia hrúbky popisu dosky"
+msgstr "obmedzenia z nastavenia dosky pre hrúbky popisov"
 
 #: pcbnew/drc/drc_engine.cpp:222
 msgid "board setup constraints hole"
-msgstr "obmedzenia nastavenia dier dosky"
+msgstr "obmedzenia z nastavenia dosky pre otvory"
 
 #: pcbnew/drc/drc_engine.cpp:227
 msgid "board setup constraints edge"
-msgstr "obmedzenia nastavenia hrán dosky"
+msgstr "obmedzenia z nastavenia dosky pre hrany dosky"
 
 #: pcbnew/drc/drc_engine.cpp:232
 msgid "board setup constraints courtyard"
-msgstr "obmedzenia nastavenia výrezov dosky"
+msgstr "obmedzenia z nastavenia dosky pre montážne oblasti"
 
 #: pcbnew/drc/drc_engine.cpp:240
 msgid "board setup constraints micro-via"
@@ -46378,7 +46381,7 @@ msgstr "Bezpodmienečné pravidlo uplatnené."
 
 #: pcbnew/drc/drc_engine.cpp:1697
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Bezpodmienečné pravidlo uplatnené; potlačí predchádzajúce obmedzenia."
+msgstr "Bezpodmienečné pravidlo uplatnené; prepíše predchádzajúce obmedzenia."
 
 #: pcbnew/drc/drc_engine.cpp:1711 pcbnew/drc/drc_engine.cpp:2124
 #, c-format
@@ -46395,7 +46398,7 @@ msgstr "Pravidlo bolo uplatnené."
 
 #: pcbnew/drc/drc_engine.cpp:1730
 msgid "Rule applied; overrides previous constraints."
-msgstr "Pravidlo uplatnené; potlačí predchádzajúce obmedzenia."
+msgstr "Pravidlo uplatnené; prepíše predchádzajúce obmedzenia."
 
 #: pcbnew/drc/drc_engine.cpp:1738
 msgid "Membership not satisfied; constraint ignored."
@@ -46900,12 +46903,12 @@ msgstr "Kontrolujú sa prstence plôšok a prekovov..."
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:261
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s minimálna šírka prstenca %s; skutočná %s)"
+msgstr "(%s minimálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:269
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr "(%s maximálna šírka prstenca %s; skutočná %s)"
+msgstr "(%s maximálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:306
 msgid "Checking nets for minimum connection width..."
@@ -46914,7 +46917,7 @@ msgstr "Kontroluje sa minimálna šírka pripojenia spojov..."
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:450
 #, c-format
 msgid "(%s minimum connection width %s; actual %s)"
-msgstr "(%s minimálna šírka spojenia %s; skutočná %s)"
+msgstr "(%s minimálna šírka spojenia %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:60
 msgid "Checking pad, via and zone connections..."
@@ -46982,12 +46985,12 @@ msgstr "(siete %s a %s)"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:281
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s klírens %s; skutočný %s)"
+msgstr "(%s odstup/minimálna vzdialenosť %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:351
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s odstup %s; skutočný < 0)"
+msgstr "(%s odstup/min. vzdial. %s; aktuálna < 0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1230
 msgid "(intersecting zones must have distinct priorities)"
@@ -47012,22 +47015,22 @@ msgstr "Kontrolujú sa povrchové cesty..."
 #: pcbnew/drc/drc_test_provider_creepage.cpp:167
 #, c-format
 msgid "(%s creepage %s; actual %s)"
-msgstr "(%s creepage %s; skutočný %s)"
+msgstr "(%s povrchová cesta %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:665
 #, c-format
 msgid "(%s maximum uncoupled length %s; actual %s)"
-msgstr "(%s maximálna nepárová dĺžka: %s; skutočná: %s)"
+msgstr "(%s maximálna nepárová dĺžka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:730
 #, c-format
 msgid "(%s minimum gap %s; actual %s)"
-msgstr "(%s minimálna medzera %s; skutočná %s)"
+msgstr "(%s minimálna medzera %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:737
 #, c-format
 msgid "(%s maximum gap %s; actual %s)"
-msgstr "(%s maximálna medzera %s; skutočná %s)"
+msgstr "(%s maximálna medzera %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:63
 msgid "Checking keepouts & disallow constraints..."
@@ -47061,13 +47064,13 @@ msgstr "Kontrolujú sa otvory mikro prekovov..."
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:239
 #, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min. otvor %s; skutočný %s)"
+msgstr "(%s min. otvor %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:175
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:246
 #, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s max. otvor %s; skutočný %s)"
+msgstr "(%s max. otvor %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:108
 msgid "Checking hole to hole clearances..."
@@ -47076,12 +47079,12 @@ msgstr "Kontrolujú sa min. vzdialenosti medzi otvormi..."
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:310
 #, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s min %s; skutočné %s)"
+msgstr "(%s min %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:118
 #, c-format
 msgid "Pad %s"
-msgstr "Podložka %s"
+msgstr "Plôška %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:258
 #, c-format
@@ -47149,7 +47152,7 @@ msgstr "%s vrstvy sa líšia."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:360
 #, c-format
 msgid "%s pad type differs."
-msgstr "%s typ podložky sa líši."
+msgstr "%s typ plôšky sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:362
 #, c-format
@@ -47164,7 +47167,7 @@ msgstr "%s orientácia sa líši."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:378
 #, c-format
 msgid "%s pad shape type differs on layer %s."
-msgstr "%s tvar podložky sa líši na vrstve %s."
+msgstr "%s tvar plôšky sa nezhoduje na vrstve %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:383
 #, c-format
@@ -47408,7 +47411,7 @@ msgstr "Skladba vrstiev puzdra sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:866
 msgid "Pad clearance overridden."
-msgstr "Odstup podložky je prepísaný."
+msgstr "Odstup plôšky je prepísaný."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:873
 msgid "Solder mask expansion overridden."
@@ -47475,19 +47478,19 @@ msgstr "Puzdro '%s' sa nezhoduje s kópiou v knižnici '%s'"
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:129
 #, c-format
 msgid "(%s min length %s; actual %s)"
-msgstr "(%s min. dĺžka %s; skutočná %s)"
+msgstr "(%s min. dĺžka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:128
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:136
 #, c-format
 msgid "(%s max length %s; actual %s)"
-msgstr "(%s max. dĺžka %s; skutočná %s)"
+msgstr "(%s max. dĺžka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:203
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s min. rozdiel dĺžok %s; skutočný %s; cieľová dĺžka spoja %s (z %s); "
+"(%s min. rozdiel dĺžok %s; aktuálny %s; cieľová dĺžka spoja %s (z %s); "
 "aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:213
@@ -47500,7 +47503,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:283
 #, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s max. počet %d; skutočný %d)"
+msgstr "(%s max. počet %d; aktuálny %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:288
 msgid "Too many vias on a connection"
@@ -47509,7 +47512,7 @@ msgstr "Príliš veľa prekovov na spojení"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:293
 #, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s min. počet %d; skutočný %d)"
+msgstr "(%s min. počet %d; aktuálny %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:298
 msgid "Too few vias on a connection"
@@ -47576,7 +47579,7 @@ msgstr "Kontrolujú sa fyzické min. vzdialenosti..."
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:513
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Porušenie interného odstupu (%s odstup %s; skutočný %s)"
+msgstr "Porušenie interného odstupu (%s odstup %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:108
 #, c-format
@@ -47682,12 +47685,12 @@ msgstr "Kontroluje sa text kót..."
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:97
 #, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s min. výška %s; skutočná %s)"
+msgstr "(%s min. výška %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:110
 #, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s max. výška %s; skutočná %s)"
+msgstr "(%s max. výška %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:198
 msgid "(TrueType font characters with insufficient stroke weight)"
@@ -47696,12 +47699,12 @@ msgstr "(znaky písma TrueType s nedostatočnou hrúbkou ťahu)"
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:212
 #, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s min. hrúbka %s; skutočná %s)"
+msgstr "(%s min. hrúbka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:225
 #, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s max. hrúbka %s; skutočná %s)"
+msgstr "(%s max. hrúbka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_text_mirroring.cpp:67
 msgid "Checking text mirroring..."
@@ -47714,7 +47717,7 @@ msgstr "Kontrolujú sa uhly spojov..."
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:172
 #, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s min. uhol %s; skutočný %s)"
+msgstr "(%s min. uhol %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:179
 #, c-format
@@ -47732,12 +47735,12 @@ msgstr "Kontrolujú sa šírky spojov..."
 #: pcbnew/drc/drc_test_provider_track_width.cpp:127
 #, c-format
 msgid "(%s min width %s; actual %s)"
-msgstr "(%s min. Šírka %s; skutočná %s)"
+msgstr "(%s min. šírka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:134
 #, c-format
 msgid "(%s max width %s; actual %s)"
-msgstr "(%s maximálna šírka %s; skutočná %s)"
+msgstr "(%s maximálna šírka %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:65
 msgid "Checking via diameters..."
@@ -47746,12 +47749,12 @@ msgstr "Kontrolujú sa priemery prekovov..."
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:114
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr "(%s minimálny priemer %s; skutočný %s)"
+msgstr "(%s minimálny priemer %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:121
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr "(%s maximálny priemer %s; skutočný %s)"
+msgstr "(%s maximálny priemer %s; aktuálny %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:199
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:294
@@ -47767,7 +47770,7 @@ msgstr "(vrstva %s; %s vlastný počet paprskov %d; skutočný %d)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:301
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(vrstva %s; %s min. počet paprskov %d; skutočný %d)"
+msgstr "(vrstva %s; %s min. počet ramien %d; aktuálny %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:325
 msgid "Checking thermal reliefs..."
@@ -48202,7 +48205,7 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
-"Súbor obsahuje tvary plôšok, ktoré nie sú podporované exportérom Hyperlynx  "
+"Súbor obsahuje tvary plôšok, ktoré nie sú podporované exportérom Hyperlynx "
 "(podporované tvary sú ovál, štvoruholník, zaoblený štvoruholník a kruh)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:182
@@ -48562,7 +48565,7 @@ msgstr "Odpočítanie otvorov pre %s"
 #: pcbnew/exporters/step/step_pcb_model.cpp:2589
 #, c-format
 msgid "** Got problems while cutting %s net '%s' **"
-msgstr "** Problémy pri delení siete '%s' v %s **"
+msgstr "** Problémy pri delení %s spoja '%s' **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2642
 msgid "shapes"
@@ -48627,7 +48630,7 @@ msgstr "Pri exporte do nesieťových formátov nie je možné použiť modely VR
 #: pcbnew/exporters/step/step_pcb_model.cpp:3525
 #, c-format
 msgid "Cannot identify actual file type for '%s'."
-msgstr "Nie je možné určiť skutočný typ súboru '%s'."
+msgstr "Nie je možné určiť aktuálny typ súboru '%s'."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3534
 #, c-format
@@ -48832,7 +48835,7 @@ msgstr "(očakávané 'Priechodzí otvor'; aktuálne '%s')"
 #: pcbnew/footprint.cpp:3876
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(očakávalo sa 'SMD'; skutočné '%s')"
+msgstr "(očakávalo sa 'SMD'; aktuálne '%s')"
 
 #: pcbnew/footprint.cpp:4095
 #, c-format
@@ -48858,7 +48861,7 @@ msgstr "Nie je v schéme"
 
 #: pcbnew/footprint.cpp:4884 pcbnew/pad.cpp:3734
 msgid "Overrides"
-msgstr "Prepísania"
+msgstr "Prepísanie"
 
 #: pcbnew/footprint.cpp:4886
 msgid "Exempt From Courtyard Requirement"
@@ -49199,7 +49202,7 @@ msgstr "Naroutované oneskorenie"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2096 pcbnew/pad.cpp:3724
 #: pcbnew/pcb_track.cpp:2382
 msgid "Pad To Die Length"
-msgstr "Dĺžka podložky"
+msgstr "Dĺžka plôšky po čip"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2099 pcbnew/pcb_track.cpp:2385
 msgid "Full Length"
@@ -49907,7 +49910,7 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:892
 #, c-format
 msgid "Updated %s jumper pad groups"
-msgstr "Aktualizované skupiny prepojovacie podložky %s"
+msgstr "Aktualizované %s skupiny prepojovacích plôšok"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
 #, c-format
@@ -50255,7 +50258,7 @@ msgstr ""
 #: pcbnew/pad.cpp:1623 pcbnew/pad.cpp:1837 pcbnew/pad.cpp:1853
 #: pcbnew/pad.cpp:1862
 msgid "pad"
-msgstr "podložka"
+msgstr "plôška"
 
 #: pcbnew/pad.cpp:1885 pcbnew/pad.cpp:3429
 msgid "Pin Type"
@@ -50559,7 +50562,7 @@ msgstr "Vlastnosti spätného vŕtania"
 
 #: pcbnew/pad.cpp:3411
 msgid "Pad Type"
-msgstr "Typ podložky"
+msgstr "Typ plôšky"
 
 #: pcbnew/pad.cpp:3415 pcbnew/tools/pcb_control.cpp:2481
 msgid "Pad Shape"
@@ -50567,7 +50570,7 @@ msgstr "Tvar podložky"
 
 #: pcbnew/pad.cpp:3420
 msgid "Pad Number"
-msgstr "Číslo podložky"
+msgstr "Číslo plôšky"
 
 #: pcbnew/pad.cpp:3480
 msgid "Corner Radius Ratio"
@@ -51971,7 +51974,7 @@ msgstr "Nepodarilo sa nájsť hodnotu jednotiek, predvolene sú nastavené mils.
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:334
 #, c-format
 msgid "Could not find column label %s."
-msgstr "Nepodarilo sa nájsť stĺpec označenia %s"
+msgstr "Nebolo možné nájsť označenie stĺpca %s."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:368
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:439
@@ -52280,7 +52283,7 @@ msgstr "Súbor '%s' má nerozpoznanú verziu: %d."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:795
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Neznámy typ hárku '%s' na riadku: %d"
+msgstr "Neznámy typ listu '%s' na riadku: %d."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1375
 #, c-format
@@ -52481,7 +52484,7 @@ msgstr "%d nie je platný počet vrstiev"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3151
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "Duplicitný názov NETCLASS '%s' v súbore '%s' na riadku %d, offset %d"
+msgstr "Duplicitný názov NETCLASS '%s' v súbore '%s' na riadku %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3726
 #, c-format
@@ -52588,7 +52591,7 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
-"Súčiastka '%s' má v designátore znaky mimo ASCII; konvertované na '%s' pre "
+"Súčiastka '%s' má v označení ne-ASCII znaky; boli konvertované na '%s' pre "
 "export ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:89
@@ -52597,8 +52600,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
-"Súčiastka '%s' má po konverzii nejednoznačný designátor; premenovaná na '%s' "
-"pre export ODB++."
+"Súčiastka '%s' má po konverzii nejednoznačné označenie; bola premenovaná na "
+"'%s' pre export ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1209
 msgid "Failed to add component data"
@@ -53164,9 +53167,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -53249,7 +53252,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:NET_NAME(pad)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Názov siete pripojenej k podložke</samp></td>\n"
+"        <td>&nbsp;<br><samp>Názov spoja pripojeného k plôške</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:NET_NAME(5)}</samp></td>\n"
@@ -53259,7 +53262,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pad)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Krátky názov siete alebo NC</samp></td>\n"
+"        <td>&nbsp;<br><samp>Krátky názov spoja alebo NC</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
@@ -53351,8 +53354,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Podmienené zobrazenie textu</samp></td>\n"
 "    </tr>\n"
@@ -53360,12 +53363,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (na prednej vrstve) alebo "
-"<samp>BOTTOM</samp></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (na prednej vrstve) alebo <samp>"
+"BOTTOM</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Číselné porovnania tiež fungujú</samp></td>\n"
 "    </tr>\n"
@@ -53403,7 +53406,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:NET_NAME(@{${ROW}-2})}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Dynamické vyhľadávanie siete v tabuľkách</samp></"
+"        <td>&nbsp;<br><samp>Dynamické vyhľadávanie spoja v tabuľkách</samp></"
 "td>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -53420,8 +53423,8 @@ msgstr ""
 "<i>Značkovanie má prednosť pred rozvinutím premenných.</i>\n"
 "<p></p>\n"
 "<p><b>Krížové odkazy puzdier:</b> Polia referencií a podložky na iných "
-"puzdrách pomocou syntax <samp>${refdes:field}</samp> alebo <samp>${refdes:"
-"function(pad)}</samp>.</p>\n"
+"puzdrách pomocou syntax <samp>${refdes:field}</samp> alebo <samp>$"
+"{refdes:function(pad)}</samp>.</p>\n"
 "<p><b>Vnorené premenné:</b> Premenné môžu obsahovať iné premenné. Vnútorné "
 "premenné sa rozvinú ako prvé. Maximálna hĺbka vnorenia: 10 úrovní.</p>\n"
 "<p><b>Chybové správy:</b></p>\n"
@@ -53794,11 +53797,11 @@ msgstr "Neplatné rozmery obrázku"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:920
 msgid "Successfully created 3D render image"
-msgstr "3D render obrázok úspešne vytvorený"
+msgstr "3D obrázok úspešne vytvorený"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:925
 msgid "Error creating 3D render image"
-msgstr "Pri vytváraní 3D renderovaného obrázka nastala chyba"
+msgstr "Pri vytváraní obrázku 3D nastala chyba"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:983 pcbnew/pcbnew_jobs_handler.cpp:1052
 #: pcbnew/pcbnew_jobs_handler.cpp:1145 pcbnew/pcbnew_jobs_handler.cpp:1233
@@ -55803,11 +55806,11 @@ msgstr "Automaticky generovať oblasti pravidiel umiestnenia"
 
 #: pcbnew/tools/pad_tool.cpp:163
 msgid "Paste Pad Properties"
-msgstr "Vlastnosti vloženia podložky"
+msgstr "Vložiť vlastnosti plôšky"
 
 #: pcbnew/tools/pad_tool.cpp:268
 msgid "Push Pad Settings"
-msgstr "Nastavenia podložky"
+msgstr "Nanútiť nastavenia plôšky"
 
 #: pcbnew/tools/pad_tool.cpp:400
 #, c-format
@@ -55833,12 +55836,12 @@ msgstr "Upraviť plôšku"
 #: pcbnew/tools/pad_tool.cpp:790
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr "Režim úpravy podložky. Opätovným stlačením %s ponuku opustíte."
+msgstr "Režim úpravy plôšky.  Opätovným stlačením %s opustíte tento režim."
 
 #: pcbnew/tools/pad_tool.cpp:795
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr "Režim úpravy podložky. Stlačením %s ponuku opustíte."
+msgstr "Režim úpravy plôšky.  Stlačením %s opustíte tento režim."
 
 #: pcbnew/tools/pcb_actions.cpp:56
 msgid "Create Polygon from Selection..."
@@ -56538,15 +56541,15 @@ msgstr "Vytvorte riadok určenej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Copy Pad Properties to Default"
-msgstr "Skopírujte vlastnosti podložky na predvolené nastavenie"
+msgstr "Kopírovať vlastnosti plôšky ako predvolené"
 
 #: pcbnew/tools/pcb_actions.cpp:1116
 msgid "Copy current pad's properties"
-msgstr "Skopírujte vlastnosti aktuálnej podložky"
+msgstr "Kopírovať vlastnosti aktuálnej plôšky"
 
 #: pcbnew/tools/pcb_actions.cpp:1122
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Prilepte predvolené vlastnosti podložky na vybrané"
+msgstr "Prilepiť predvolené vlastnosti plôšky na vybrané"
 
 #: pcbnew/tools/pcb_actions.cpp:1123
 msgid "Replace the current pad's properties with those copied earlier"
@@ -56554,15 +56557,15 @@ msgstr "Nahradiť vlastnosti aktuálnej plôšky tými, ktoré boli skopírovan�
 
 #: pcbnew/tools/pcb_actions.cpp:1129
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Vlastnosti klávesnice na ďalšie podložky..."
+msgstr "Nanútiť vlastnosti plôšky na ďalšie plôšky..."
 
 #: pcbnew/tools/pcb_actions.cpp:1130
 msgid "Copy the current pad's properties to other pads"
-msgstr "Skopírujte vlastnosti aktuálnej podložky do iných podložiek"
+msgstr "Kopírovať vlastnosti aktuálnej plôšky do iných plôšok"
 
 #: pcbnew/tools/pcb_actions.cpp:1136
 msgid "Renumber Pads..."
-msgstr "Prečíslovať podložky..."
+msgstr "Prečíslovať plôšky..."
 
 #: pcbnew/tools/pcb_actions.cpp:1137
 msgid "Renumber pads by clicking on them in the desired order"
@@ -56583,19 +56586,20 @@ msgstr "Upraviť plôšku ako grafický tvar"
 #: pcbnew/tools/pcb_actions.cpp:1155
 msgid "Ungroups a custom-shaped pad for editing as individual graphic shapes"
 msgstr ""
-"Oddelí podložku vlastného tvaru na úpravy ako jednotlivé grafické tvary"
+"Zrušiť zoskupenie plôšky vlastného tvaru pre úpravu ako jednotlivé grafické "
+"tvary"
 
 #: pcbnew/tools/pcb_actions.cpp:1162
 msgid "Finish Pad Edit"
-msgstr "Úprava cieľovej podložky"
+msgstr "Ukončiť úpravu plôšky"
 
 #: pcbnew/tools/pcb_actions.cpp:1163
 msgid "Regroups all touching graphic shapes into the edited pad"
-msgstr "Preskupí všetky dotýkajúce sa grafické tvary do upravenej podložky"
+msgstr "Preskupiť všetky dotýkajúce sa grafické tvary do upravenej plôšky"
 
 #: pcbnew/tools/pcb_actions.cpp:1169
 msgid "Default Pad Properties..."
-msgstr "Predvolené vlastnosti podložky..."
+msgstr "Predvolené vlastnosti plôšky..."
 
 #: pcbnew/tools/pcb_actions.cpp:1170
 msgid "Edit the pad properties used when creating new pads"
@@ -57895,7 +57899,7 @@ msgstr "Zistené obmedzenia"
 
 #: pcbnew/tools/pcb_control.cpp:2343
 msgid "Actual Clearance"
-msgstr "Skutočný odstup"
+msgstr "Aktuálny odstup"
 
 #: pcbnew/tools/pcb_control.cpp:2386
 msgid "Resolved Hole Clearance"
@@ -57903,7 +57907,7 @@ msgstr "Zistené obmedzenia otvoru"
 
 #: pcbnew/tools/pcb_control.cpp:2391
 msgid "Actual Hole Clearance"
-msgstr "Skutočný odstup otvoru"
+msgstr "Aktuálny odstup otvoru"
 
 #: pcbnew/tools/pcb_control.cpp:2426
 msgid "Resolved Edge Clearance"
@@ -58227,7 +58231,7 @@ msgstr "Zobraziť všetky prekovy"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show all pads"
-msgstr "Zobraziť všetky podložky"
+msgstr "Zobraziť všetky plôšky"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show copper zones"
@@ -58429,7 +58433,7 @@ msgstr "Možnosti čistého zobrazenia"
 #: pcbnew/widgets/appearance_controls.cpp:2615
 #, c-format
 msgid "Net colors (%s):"
-msgstr "Farby siete (%s):"
+msgstr "Farby spoja (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
 #: pcbnew/widgets/appearance_controls.cpp:2617
@@ -58875,7 +58879,7 @@ msgstr "Vymazať farbu triedy spojov"
 #: pcbnew/widgets/appearance_controls.cpp:2475
 #, c-format
 msgid "Highlight Nets in %s"
-msgstr "Zvýrazniť siete v %s"
+msgstr "Zvýrazniť spoje v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2486
 msgid "Show All Netclasses"
@@ -59049,7 +59053,7 @@ msgstr "Odstrániť všetky vlastné skupiny"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1292
 msgid "Show Zero Pad Nets"
-msgstr "Zobraziť siete s nulovým počtom podložiek"
+msgstr "Zobraziť spoje s nulovým počtom plôšok"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1297
 msgid "Show Unconnected Nets"
@@ -59096,7 +59100,7 @@ msgstr "Premenovať spoj"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1695
 msgid "Net name cannot be empty."
-msgstr "Názov siete nemôže byť prázdny."
+msgstr "Názov spoja nemôže byť prázdny."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1761
 #, c-format
@@ -59106,7 +59110,7 @@ msgstr "Spoj '%s' sa používa.  Odstrániť aj napriek tomu?"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1801
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr "Odstrániť všetky siete v skupine '%s'?"
+msgstr "Odstrániť všetky spoje v skupine '%s'?"
 
 #: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:941
 msgid "Priority"
