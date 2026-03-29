@@ -1543,7 +1543,7 @@ wxString PADSTACK::Name() const
 const wxChar* PADSTACK::CustomName() const
 {
     if( m_customName )
-        return *m_customName;
+        return m_customName->wx_str();
 
     return wxEmptyString;
 }
