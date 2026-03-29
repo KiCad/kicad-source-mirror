@@ -60,9 +60,6 @@ class SCH_COMMIT;
 class SCH_SHAPE;
 
 
-/// A container for several SCH_FIELD items
-typedef std::vector<SCH_FIELD>    SCH_FIELDS;
-
 typedef std::weak_ptr<LIB_SYMBOL> PART_REF;
 
 

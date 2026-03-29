@@ -2561,8 +2561,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( const LAYER_ID& aCadstarSheetI
                                      aSheet );
 
             // Hide all KiCad sheet properties (sheet name/filename is not applicable in CADSTAR)
-            SCH_SHEET* loadedSheet = m_sheetMap.at( block.AssocLayerID );
-            SCH_FIELDS fields = loadedSheet->GetFields();
+            SCH_SHEET*             loadedSheet = m_sheetMap.at( block.AssocLayerID );
+            std::vector<SCH_FIELD> fields = loadedSheet->GetFields();
 
             for( SCH_FIELD& field : fields )
             {

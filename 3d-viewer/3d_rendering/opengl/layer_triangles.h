@@ -35,8 +35,6 @@
 #include <mutex>
 
 
-typedef std::vector< SFVEC3F > SFVEC3F_VECTOR;
-
 
 /**
  * Container to manage a vector of triangles.
@@ -84,8 +82,8 @@ public:
     unsigned int GetNormalsSize() const { return (unsigned int) m_normals.size(); }
 
 private:
-    SFVEC3F_VECTOR m_vertexs;  ///< vertex array
-    SFVEC3F_VECTOR m_normals;  ///< normals array
+    std::vector<SFVEC3F> m_vertexs;  ///< vertex array
+    std::vector<SFVEC3F> m_normals;  ///< normals array
 };
 
 

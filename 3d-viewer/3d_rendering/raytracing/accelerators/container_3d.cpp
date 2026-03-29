@@ -40,11 +40,8 @@ void CONTAINER_3D_BASE::Clear()
 {
     if( !m_objects.empty() )
     {
-        for( LIST_OBJECT::iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
-        {
-            delete *ii;
-            *ii = nullptr;
-        }
+        for( OBJECT_3D* object : m_objects )
+            delete object;
 
         m_objects.clear();
     }
@@ -59,7 +56,7 @@ CONTAINER_3D_BASE::~CONTAINER_3D_BASE()
 }
 
 
-void CONTAINER_3D_BASE::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
+void CONTAINER_3D_BASE::ConvertTo( std::vector<const OBJECT_3D*> &aOutVector ) const
 {
     aOutVector.resize( m_objects.size() );
 
@@ -67,11 +64,10 @@ void CONTAINER_3D_BASE::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
     {
         unsigned int i = 0;
 
-        for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
+        for( const OBJECT_3D* object : m_objects )
         {
-            wxASSERT( (*ii) != nullptr );
-
-            aOutVector[i++] = static_cast<const OBJECT_3D*>( *ii );
+            wxASSERT( object );
+            aOutVector[i++] = object;
         }
     }
 }
@@ -85,10 +81,8 @@ bool CONTAINER_3D::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
     bool hitted = false;
 
-    for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
+    for( const OBJECT_3D* object : m_objects )
     {
-        const OBJECT_3D *object = static_cast<const OBJECT_3D *>( *ii );
-
         if( object->Intersect( aRay, aHitInfo) )
             hitted = true;
     }
@@ -99,10 +93,8 @@ bool CONTAINER_3D::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
 bool CONTAINER_3D::IntersectP( const RAY &aRay, float aMaxDistance ) const
 {
-    for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
+    for( const OBJECT_3D* object : m_objects )
     {
-        const OBJECT_3D *object = static_cast<const OBJECT_3D*>( *ii );
-
         if( object->IntersectP( aRay, aMaxDistance ) )
             return true;
     }
