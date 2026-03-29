@@ -1114,15 +1114,17 @@ struct PADSTACK_COMPONENT
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
 
+    // Pad size
     int32_t m_W;
     int32_t m_H;
 
-    COND_GE<FMT_VER::V_172, int16_t> m_Z1;
+    // In rounded rectangles, this is the corner radius.
+    // In chamfered rectangles, this is the chamfer size.
+    COND_GE<FMT_VER::V_172, int32_t> m_Z1;
 
+    // This is the pad component offset
     int32_t m_X3;
     int32_t m_X4;
-
-    COND_GE<FMT_VER::V_172, int16_t> m_Z;
 
     /**
      * Seems to point to various things:

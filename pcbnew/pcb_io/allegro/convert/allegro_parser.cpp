@@ -118,6 +118,10 @@ static T ReadField( FILE_STREAM& aStream, FMT_VER aFmtVer )
     {
         field = aStream.ReadS16();
     }
+    else if constexpr( std::is_same_v<T, int32_t> )
+    {
+        field = aStream.ReadS32();
+    }
     else if constexpr( std::is_same_v<T, FILE_HEADER::LINKED_LIST> )
     {
         field = ReadLL( aStream, aFmtVer );
@@ -1141,12 +1145,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
         comp.m_X3 = aStream.ReadS32();
         comp.m_X4 = aStream.ReadS32();
 
-        ReadCond( aStream, aVer, comp.m_Z );
-
         comp.m_StrPtr = aStream.ReadU32();
 
         // The last component has a different size only in < 17.2
-        if( !( aVer < FMT_VER::V_172 && i == nComps - 1 ) )
+        if( aVer >= FMT_VER::V_172 || i < nComps - 1 )
         {
             comp.m_Z2 = aStream.ReadU32();
         }
