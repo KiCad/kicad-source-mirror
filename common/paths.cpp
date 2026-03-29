@@ -287,7 +287,10 @@ wxString PATHS::GetStockEDALibraryPath()
 #elif defined( __WXMSW__ )
     path = GetStockDataPath( false );
 #else
-    path = wxString::FromUTF8Unchecked( KICAD_LIBRARY_DATA );
+    if( wxGetEnv( wxT( "APPDIR" ), &path ) )
+        path += wxT( "/share/kicad" );
+    else
+        path = wxString::FromUTF8Unchecked( KICAD_LIBRARY_DATA );
 #endif
 
     return path;
