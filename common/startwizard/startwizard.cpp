@@ -221,7 +221,7 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
     static constexpr int WIZARD_CHROME_HEIGHT = 120;
     static constexpr int WIZARD_MARGIN = 40;
 
-    wxSize pageSize = minPageSize + wxSize( 10, 10 );
+    wxSize pageSize = minPageSize + wxSize( 20, 20 );
 
     int displayIdx = wxDisplay::GetFromWindow( aParent ? aParent : wxTheApp->GetTopWindow() );
 

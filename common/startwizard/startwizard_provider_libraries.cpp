@@ -54,6 +54,9 @@ public:
               m_rbBlankTables->GetId() );
 
         InitTableListMsg();
+
+        m_containingSizer->Fit( this );
+        SetSize( GetBestSize() );
     }
 
     bool TransferDataFromWindow() override
@@ -166,8 +169,13 @@ public:
     void OnSize( wxSizeEvent& aEvt ) override
     {
         aEvt.Skip();
+#ifdef __WXGTK__
+        m_stIntro->Wrap( GetClientSize().x - FromDIP( 10 ) );
+        m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 18 ) );
+#else
         m_stIntro->Wrap( GetClientSize().x - FromDIP( 20 ) );
         m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 28 ) );
+#endif
     }
 
 private:
