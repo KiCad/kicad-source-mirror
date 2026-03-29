@@ -53,6 +53,9 @@ public:
         Bind( wxEVT_RADIOBUTTON, &PANEL_STARTWIZARD_LIBRARIES::OnModeChanged, this,
               m_rbBlankTables->GetId() );
 
+        m_introText = m_stIntro->GetLabel();
+        m_warningText = m_stWarning->GetLabel();
+
         InitTableListMsg();
 
         m_containingSizer->Fit( this );
@@ -169,6 +172,12 @@ public:
     void OnSize( wxSizeEvent& aEvt ) override
     {
         aEvt.Skip();
+
+        // Wrapping is destructive and the size can change a few times during construction, at least
+        // on macOS.  Resetting the label makes wrapping work properly.
+        m_stIntro->SetLabel( m_introText );
+        m_stWarning->SetLabel( m_warningText );
+
 #if defined( __WXMAC__ )
         m_stIntro->Wrap( GetClientSize().x - FromDIP( 20 ) );
         m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 28 ) );
@@ -198,6 +207,8 @@ private:
     std::shared_ptr<STARTWIZARD_PROVIDER_LIBRARIES_MODEL> m_model;
     STARTWIZARD* m_wizard;
     bool m_showWarning;
+    wxString m_introText;
+    wxString m_warningText;
 };
 
 
