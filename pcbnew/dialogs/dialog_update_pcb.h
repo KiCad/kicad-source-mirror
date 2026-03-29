@@ -37,6 +37,7 @@ public:
     void PerformUpdate( bool aDryRun );
 
 private:
+    bool TransferDataToWindow() override;
     void OnOptionChanged( wxCommandEvent& event ) override;
     void OnUpdateClick( wxCommandEvent& event ) override;
 

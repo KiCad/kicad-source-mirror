@@ -56,7 +56,6 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     finishDialogSettings();
 
     m_initialized = true;
-    PerformUpdate( true );
 }
 
 
@@ -115,6 +114,14 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         return;
 
     m_frame->OnNetlistChanged( updater, &m_runDragCommand );
+}
+
+
+bool DIALOG_UPDATE_PCB::TransferDataToWindow()
+{
+    PerformUpdate( true );
+
+    return true;
 }
 
 
