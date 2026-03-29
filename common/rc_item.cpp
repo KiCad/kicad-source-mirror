@@ -350,6 +350,7 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
     }
 
     m_tree.clear();
+    m_handles.clear();
 
     // wxDataView::ExpandAll() pukes with large lists
     int count = 0;
