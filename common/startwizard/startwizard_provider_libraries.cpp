@@ -237,17 +237,37 @@ void STARTWIZARD_PROVIDER_LIBRARIES::Finish()
             bool insertStock = true;
             std::set<wxString> toRemove;
 
-            for( const LIBRARY_TABLE_ROW& row : table.Rows() )
+            for( LIBRARY_TABLE_ROW& row : table.Rows() )
             {
                 if( std::regex_search( row.URI().ToStdString(), builtInPattern ) )
                 {
                     toRemove.insert( row.URI() );
-                    wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: removing old stock row '%s'" ), row.URI() );
+                    wxLogTrace( traceLibraries, wxT( "Libraries migration: removing old stock row '%s'" ), row.URI() );
                 }
-                else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME && row.URI() == stockPath )
+                else if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME && row.Nickname() == wxT( "KiCad" ) )
                 {
                     insertStock = false;
-                    wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: migrated table already has valid stock setup" ) );
+
+                    if( row.URI().Matches( stockPath ) )
+                    {
+                        wxLogTrace( traceLibraries,
+                                    wxT( "Libraries migration: migrated table already has latest stock setup" ) );
+                    }
+                    else if( LIBRARY_MANAGER::IsTableValid( row.URI() ) && !LIBRARY_MANAGER::IsTableValid( stockPath ) )
+                    {
+                        wxLogTrace( traceLibraries,
+                                    wxT( "Libraries migration: migrated table has working stock table at "
+                                         "'%s' but calculated stock path '%s' is missing or invalid.  Leaving alone." ),
+                                    row.URI(), stockPath );
+                    }
+                    else
+                    {
+                        wxLogTrace( traceLibraries,
+                                    wxT( "Libraries migration: migrated chained table URI from '%s' to '%s'" ),
+                                    row.URI(), stockPath );
+                        row.SetDescription( _( "KiCad Default Libraries" ) );
+                        row.SetURI( stockPath );
+                    }
                 }
             }
 
@@ -261,6 +281,7 @@ void STARTWIZARD_PROVIDER_LIBRARIES::Finish()
 
             if( insertStock )
             {
+                wxLogTrace( traceLibraries, wxT( "Libraries migration: inserting chained default table" ) );
                 LIBRARY_TABLE_ROW chained = table.MakeRow();
                 chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
                 chained.SetNickname( wxT( "KiCad" ) );
@@ -269,10 +290,15 @@ void STARTWIZARD_PROVIDER_LIBRARIES::Finish()
                 table.Rows().insert( table.Rows().begin(), chained );
             }
 
-            wxLogTrace( traceLibraries, wxT( "StartWizard libraries migration: removed %zu rows; saving" ),
-                        toRemove.size() );
-
-            table.Save();
+            if( toRemove.size() || insertStock )
+            {
+                wxLogTrace( traceLibraries, wxT( "Libraries migration: removed %zu rows; saving" ), toRemove.size() );
+                table.Save();
+            }
+            else
+            {
+                wxLogTrace( traceLibraries, wxT( "Libraries migration: no actions needed" ) );
+            }
         }
     }
 
