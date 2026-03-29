@@ -31,6 +31,7 @@
 #include <cstdint>
 #include <optional>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <variant>
