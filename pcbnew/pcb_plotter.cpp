@@ -38,6 +38,7 @@
 #include <jobs/job_export_pcb_svg.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
+#include <geometry/shape_poly_set.h>
 #include <math/util.h> // for KiROUND
 
 
@@ -86,6 +87,12 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() ) // Page is board boundary size
     {
         BOX2I     bbox = m_board->ComputeBoundingBox( false, false );
+        SHAPE_POLY_SET boardOutlines;
+
+        // Board outline geometry is better if it exists so that origin is not influenced by Edge.Cuts line width
+        if( m_board->GetBoardPolygonOutlines( boardOutlines, false ) && boardOutlines.OutlineCount() > 0 )
+            bbox = boardOutlines.BBox();
+
         PAGE_INFO currPageInfo = m_board->GetPageSettings();
 
         currPageInfo.SetWidthMils( bbox.GetWidth() / pcbIUScale.IU_PER_MILS );
