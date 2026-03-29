@@ -47,7 +47,7 @@ public:
      * @param aParent is the parent widget.
      * @param aHotkeys is the #EDA_HOTKEY_CONFIG data: a hotkey store is constructed from this.
      */
-    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore );
+    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool readOnly );
 
     /**
      * Apply a filter string to the hotkey list, selecting which hotkeys to show.

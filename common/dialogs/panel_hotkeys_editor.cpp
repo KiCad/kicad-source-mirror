@@ -64,7 +64,7 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 }
 
 
-PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow ) :
+PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool readOnly ) :
         RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_frame( aFrame ),
         m_hotkeyStore()
@@ -75,7 +75,7 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     m_filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
     bMargins->Add( m_filterSearch, 0, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, readOnly );
     bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
 
     m_bottomSizer = new wxBoxSizer( wxHORIZONTAL );
