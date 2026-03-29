@@ -169,12 +169,15 @@ public:
     void OnSize( wxSizeEvent& aEvt ) override
     {
         aEvt.Skip();
-#ifdef __WXGTK__
-        m_stIntro->Wrap( GetClientSize().x - FromDIP( 10 ) );
-        m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 18 ) );
-#else
+#if defined( __WXMAC__ )
         m_stIntro->Wrap( GetClientSize().x - FromDIP( 20 ) );
         m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 28 ) );
+#elif defined( __WXMSW__ )
+        m_stIntro->Wrap( GetClientSize().x );
+        m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 10 ) );
+#else
+        m_stIntro->Wrap( GetClientSize().x - FromDIP( 10 ) );
+        m_stWarning->Wrap( GetClientSize().x - m_bmpWarning->GetSize().x - FromDIP( 18 ) );
 #endif
     }
 
