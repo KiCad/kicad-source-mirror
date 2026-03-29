@@ -91,6 +91,46 @@ static void TestOlympus0x20( const BLOCK_BASE& aBlock )
 
 
 /**
+ * Tests a V17.2 slot def
+ */
+static void TestBeagleBoneBlack_0x0F_SlotG1( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x0f );
+
+    const auto& blk = static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( aBlock ).GetData();
+    BOOST_TEST( blk.m_Key == 0xbf0 );
+
+    BOOST_TEST( blk.m_Ptr0x06 == 0xb91 );
+    BOOST_TEST( blk.m_Next.value_or( 0 ) == 0xb91 ); // Last slot in component
+
+    BOOST_TEST( blk.m_SlotName == 0x2ba );
+    BOOST_TEST( blk.m_Ptr0x11 == 0x060aa );
+
+    BOOST_TEST( blk.GetCompDeviceTypeStr() == "RES_10K_1/16W_1%_0402_402_10K,1" );
+}
+
+
+/**
+ * Tests a V17.4 slot def
+ */
+static void TestOpenBreath_0x0F_SlotAM4096_G1( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x0f );
+
+    const auto& blk = static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( aBlock ).GetData();
+    BOOST_TEST( blk.m_Key == 0x12d );
+
+    BOOST_TEST( blk.m_Ptr0x06 == 0x126 );
+    BOOST_TEST( blk.m_Next.value_or( 0 ) == 0x126 ); // Last slot in component
+
+    BOOST_TEST( blk.m_SlotName == 0x87 );
+    BOOST_TEST( blk.m_Ptr0x11 == 0x264 ); // ptr to "ZERO"
+
+    BOOST_TEST( blk.GetCompDeviceTypeStr() == "AM4096" );
+}
+
+
+/**
  * This is a 1-layer SMD padstack in v16.3 format.
  */
 static void TestParallellaV163_PS_56X55RT( const BLOCK_BASE& aBlock )
@@ -219,6 +259,12 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 // clang-format off
 static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlockTests{
     { { "Olympus_15061-1b_v165",      0x0131553c }, TestOlympus0x20 },
+
+    // 0x0F
+    { { "BeagleBone_Black_RevC",      0x0000c8b8 }, TestBeagleBoneBlack_0x0F_SlotG1 },
+    { { "OpenBreath_encoder_v174",    0x00001c3c }, TestOpenBreath_0x0F_SlotAM4096_G1 },
+
+    // Padstacks
     { { "BeagleBone_Black_RevC",      0x0007c420 }, TestBeagleBoneBlack_PS_120X040SLOT },
     { { "BeagleBone-AI",              0x00047f44 }, TestBeagleBoneAI_PS_200C125D },
     { { "CutiePi_V2_3_v166",          0x0001ef8c }, TestCutiePiV166_PS_C50H340M700N },

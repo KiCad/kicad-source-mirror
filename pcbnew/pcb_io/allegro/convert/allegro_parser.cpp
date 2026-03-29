@@ -828,14 +828,16 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
 
     data.m_Key = stream.ReadU32();
     data.m_SlotName = stream.ReadU32();
+
+    ReadCond( stream, aVer, data.m_Unknown1 );
+
     stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
+
+    ReadCond( stream, aVer, data.m_Next );
 
     data.m_Ptr0x06 = stream.ReadU32();
     data.m_Ptr0x11 = stream.ReadU32();
-    data.m_Unknown1 = stream.ReadU32();
-
-    ReadCond( stream, aVer, data.m_Unknown2 );
-    ReadCond( stream, aVer, data.m_Unknown3 );
+    data.m_Unknown2 = stream.ReadU32();
 
     return block;
 }

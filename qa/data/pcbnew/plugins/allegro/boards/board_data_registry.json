@@ -5,6 +5,12 @@
             "boardFile": "BeagleBone_Black_RevC.brd",
             "blocks": [
                 {
+                    "type": "0x0F",
+                    "offset": "0x0000c8b8",
+                    "comment": "Function slot G1 = RES_10K_1/16W_1%_0402_402_10K,1",
+                    "extraBlockTest": true
+                },
+                {
                     "type": "0x1C",
                     "offset": "0x0007c420",
                     "comment": "Padstack 120X040SLOT, slotted PTH pad",
@@ -238,6 +244,20 @@
                     "offset": "0x0131553c",
                     "extraBlockTest": true,
                     "extraDbObjTest": true
+                }
+            ]
+        },
+        "OpenBreath_encoder_v174": {
+            "formatVersion": "17.4",
+            "url": "https://github.com/CombatCovid/Open_Breath",
+            "license": "CC0",
+            "boardFile": "motor_encoder_brd.brd",
+            "blocks": [
+                {
+                    "type": "0x0f",
+                    "offset": "0x00001c3c",
+                    "comment": "Slot G1 of comp AM4096",
+                    "extraBlockTest": true
                 }
             ]
         },

@@ -905,16 +905,22 @@ struct BLK_0x0F_FUNCTION_SLOT
 
     uint32_t m_SlotName;
 
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
+
     std::array<char, 32> m_CompDeviceType;
+
+    COND_GE<FMT_VER::V_172, uint32_t> m_Next;
 
     uint32_t m_Ptr0x06;
     uint32_t m_Ptr0x11;
 
-    uint32_t m_Unknown1;
+    uint32_t m_Unknown2;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
-
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
+    std::string GetCompDeviceTypeStr() const
+    {
+        // The string is stored as a fixed-length array, but is null-terminated
+        return std::string( m_CompDeviceType.data(), strnlen( m_CompDeviceType.data(), m_CompDeviceType.size() ) );
+    }
 };
 
 
