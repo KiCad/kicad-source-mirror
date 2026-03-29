@@ -1507,6 +1507,7 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aFlags );
+    m_appearancePanel->CommonSettingsChanged( aFlags );
 
     if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
     {

@@ -1055,6 +1055,11 @@ void APPEARANCE_CONTROLS::OnLanguageChanged( wxCommandEvent& aEvent )
     aEvent.Skip();
 }
 
+void APPEARANCE_CONTROLS::CommonSettingsChanged( int aFlags )
+{
+    if( aFlags & HOTKEYS_CHANGED )
+        rebuildLayers();
+}
 
 void APPEARANCE_CONTROLS::OnBoardChanged()
 {

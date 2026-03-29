@@ -295,6 +295,8 @@ public:
     bool IsTogglingNetclassRatsnestVisibility();
     bool IsTogglingNetRatsnestVisibility();
 
+    void CommonSettingsChanged( int aFlag );
+
 protected:
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
     void OnSetFocus( wxFocusEvent& aEvent ) override;
