@@ -1180,6 +1180,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTeardropClearances()
                 if( !zone->GetLayerSet().Contains( layer ) )
                     continue;
 
+                // For teardrop-vs-teardrop pairs, use pointer ordering so each
+                // pair is tested only once.
+                if( zone->IsTeardropArea() && zone < teardrop )
+                    continue;
+
                 testItemAgainstZone( teardrop, zone, layer );
 
                 if( m_drcEngine->IsCancelled() )
