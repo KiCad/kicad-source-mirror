@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-27 01:06+0000\n"
+"PO-Revision-Date: 2026-03-29 16:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -2196,8 +2196,8 @@ msgid ""
 "Duplicate library nickname '%s' found in design block library table file "
 "line %d."
 msgstr ""
-"Nájdená duplicitná prezývka '%s' knižnice, v súbore tabuľky knižníc "
-"návrhových blokov, na riadku %d."
+"Duplicitná prezývka knižnice '%s' sa našla v riadku %d súboru tabuľky "
+"návrhových blokov."
 
 #: common/design_block_lib_table.cpp:348
 #, c-format
@@ -2991,9 +2991,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %zu locked items."
-msgstr "Výber obsahuje %d zamknuté položky."
+msgstr "Výber obsahuje %zu uzamknutých položiek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -3363,8 +3363,8 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
-"Nájdi ďalšie použiteľné referenčné označenia pre každé označenie už "
-"existujúce v dizajne."
+"Nájde ďalšie dostupné referenčné označenie pre akékoľvek označenia, ktoré už "
+"v návrhu existujú."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
@@ -3520,27 +3520,26 @@ msgid "Close"
 msgstr "Zatvoriť"
 
 #: common/dialogs/dialog_print_generic.cpp:156
-#, fuzzy
 msgid "Warning: scale is not a number."
-msgstr "Varovanie: Zlé číslo stupnice"
+msgstr "Upozornenie: mierka nie je číslo."
 
 #: common/dialogs/dialog_print_generic.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very large value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Upozornenie: Voľba mierky je nastavená na príliš veľkú hodnotu.\n"
-" Obmedzené na %f"
+"Upozornenie: voľba mierky je nastavená na príliš veľkú hodnotu.\n"
+"Bude obmedzená na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: scale set to a very small value.\n"
 "It will be clamped to %f."
 msgstr ""
-"Upozornenie: Voľba mierky je nastavená na príliš malú hodnotu.\n"
-" Obmedzené na %f"
+"Upozornenie: voľba mierky je nastavená na príliš malú hodnotu.\n"
+"Bude obmedzená na %f."
 
 #: common/dialogs/dialog_print_generic.cpp:244
 #: common/dialogs/dialog_print_generic.cpp:295
@@ -3961,7 +3960,7 @@ msgstr "HTTPS"
 #: common/dialogs/git/dialog_git_repository_base.cpp:58
 #: eeschema/widgets/search_handlers.cpp:464
 msgid "Local"
-msgstr "Miestny"
+msgstr "Lokálny"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
@@ -4705,7 +4704,7 @@ msgstr "Vybrať %s knižnicu"
 #: common/dialogs/panel_design_block_lib_table.cpp:985
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1010
 msgid "Warning: Duplicate Nicknames"
-msgstr "Upozornenie: Duplicitné prezývky"
+msgstr "Upozornenie: duplicitné prezývky"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:986
 #: eeschema/dialogs/panel_sym_lib_table.cpp:658
@@ -7036,8 +7035,8 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"V súbore tabuľky knižníc puzder sa našiel duplicitný názov knižnice '%s' na "
-"riadku %d."
+"Duplicitná prezývka knižnice '%s' sa našla v riadku %d súboru tabuľky "
+"puzdier."
 
 #: common/gestfich.cpp:251
 #, c-format
@@ -8507,7 +8506,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:218
 msgid "No default editor found, you must choose one."
-msgstr "Nenájdený predvolený editor, musíte si ho vybrať"
+msgstr "Predvolený editor nájdený, musíte si ho vybrať."
 
 #: common/pgm_base.cpp:238 common/pgm_base.cpp:240
 msgid "Executable file"
@@ -8584,14 +8583,13 @@ msgid "Open %s"
 msgstr "Otvoriť %s"
 
 #: common/project.cpp:416 common/project.cpp:421 pcbnew/project_pcb.cpp:69
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Chyba načítania tabuľky z knižnice puzdier projektu"
+msgstr "Pri načítavaní projektovej tabuľky knižnice puzdier nastala chyba."
 
 #: common/project.cpp:451 common/project.cpp:457
-#, fuzzy
 msgid "Error loading project design block library table."
-msgstr "Chyba načítania tabuľky z knižnice puzdier projektu"
+msgstr ""
+"Pri načítavaní projektovej tabuľky knižnice návrhových blokov nastala chyba."
 
 #: common/project/net_settings.cpp:66 pcbnew/board.cpp:133
 msgid "This is the default net class."
@@ -9366,9 +9364,8 @@ msgid "No longer keep the library at the top of the list"
 msgstr "Nezachovať knižnicu na začiatku zoznamu"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Library Table"
-msgstr "Tabuľky knižníc PCB"
+msgstr "Tabuľky knižníc"
 
 #: common/tool/actions.cpp:811
 msgid "Library Tree"
@@ -10508,7 +10505,7 @@ msgstr "SPICE súbor netlistu"
 
 #: common/wildcards_and_files_ext.cpp:492
 msgid "CadStar netlist file"
-msgstr "Súbor netlistov CadStar"
+msgstr "Súbor CadStar netlist"
 
 #: common/wildcards_and_files_ext.cpp:498
 msgid "Symbol footprint association files"
@@ -10614,11 +10611,11 @@ msgstr ""
 "CvPcb."
 
 #: cvpcb/cvpcb.cpp:206
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
-"Pri pokuse o načítanie tabuľky globálnej stopy knižnice sa vyskytla chyba"
+"Pri pokuse o načítanie tabuľky globálnej tabuľky knižnice puzdier sa "
+"vyskytla chyba."
 
 #: cvpcb/cvpcb_mainframe.cpp:66 cvpcb/cvpcb_mainframe.cpp:82
 #: cvpcb/menubar.cpp:51
@@ -10816,9 +10813,8 @@ msgid "Footprint '%s' not found."
 msgstr "Puzdro '%s' sa nenašlo."
 
 #: cvpcb/display_footprints_frame.cpp:451
-#, fuzzy
 msgid "Error loading footprint"
-msgstr "Pri načítaní písma sa vyskytla chyba '%s'."
+msgstr "Pri načítavaní puzdra sa vyskytla chyba"
 
 #: cvpcb/display_footprints_frame.cpp:514 pcbnew/footprint.cpp:1802
 #, c-format
@@ -11010,7 +11006,7 @@ msgstr "Najdených a nahradených %d duplikovaných časových pečiatok."
 #: eeschema/annotate.cpp:397
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Aktualizované %s (jednotka %s) z %s na %s"
+msgstr "Aktualizované %s (jednotka %s) z %s na %s."
 
 #: eeschema/annotate.cpp:405
 #, c-format
@@ -11258,7 +11254,7 @@ msgstr "Očíslovať"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:26
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 msgid "Scope"
-msgstr "Rozsah"
+msgstr "Pôsobnosť"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:42
 msgid "Entire schematic"
@@ -12655,7 +12651,7 @@ msgstr "Filtrovať položky podľa označenia nadradeného odkazu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
-msgstr "Filtrovanie položiek podľa ID nadradenej knižnice symbolov:"
+msgstr "Filtrovanie položiek podľa id nadradenej knižnice symbolov:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Filter items by parent symbol type:"
@@ -13285,9 +13281,9 @@ msgid "Show datasheet in browser"
 msgstr "Zobraziť technický list v prehliadači"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol Library Fields: %s"
-msgstr "Knižnice symbolov"
+msgstr "Polia knižnice symbolov: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:258 eeschema/sch_label.cpp:1231
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:232
@@ -13300,9 +13296,9 @@ msgid "Group By"
 msgstr "Zoskupiť podľa"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "No symbols found in library %s."
-msgstr "Meno súčiastky „%s” nenájdené v knižnici „%s”."
+msgstr "Symbol sa nenašiel v knižnici %s."
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
 #, c-format
@@ -14018,9 +14014,9 @@ msgstr "Návrat na používateľskú cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:542
 #: eeschema/dialogs/dialog_plot_schematic.cpp:580
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Nie je možné otvoriť súbor '%s'"
+msgstr "Nie je možné normalizovať cestu '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:567
 msgid "No project or path defined for the current schematic."
@@ -15412,18 +15408,20 @@ msgid "Show Column"
 msgstr "Zobraziť skryté špendlíky"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:208
-#, fuzzy
 msgid ""
 "Show\n"
 "Column"
-msgstr "Zobraziť skryté špendlíky"
+msgstr ""
+"Zobraziť\n"
+"stĺpec"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:209
-#, fuzzy
 msgid ""
 "Group\n"
 "By"
-msgstr "Zoskupiť podľa"
+msgstr ""
+"Zoskupiť\n"
+"podľa"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:710
 msgid "Qty"
@@ -15539,9 +15537,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Zoskupte symboly na základe spoločných vlastností"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Scope:"
-msgstr "Rozsah"
+msgstr "Pôsobnosť:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
 #, fuzzy
@@ -15554,9 +15551,8 @@ msgid "Recursive"
 msgstr "Rekurzívna úroveň"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Výber zväčšenia"
+msgstr "Akcia krížového zvýraznenia:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:180
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -15782,14 +15778,13 @@ msgstr ""
 "Pridanie knižnice '%s', súboru '%s' do projektovej tabuľky knižnice symbolov."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
 msgstr ""
 "Pri písaní prázdnej tabuľky knižnice symbolov sa vyskytla chyba.\n"
-"\n"
-"%s"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:246
 msgid "Created project symbol library table.\n"
@@ -16460,9 +16455,8 @@ msgid "Member net/alias name cannot be empty."
 msgstr "Názov člena spoja/aliasu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
-#, fuzzy
 msgid "Bus definitions:"
-msgstr "Definície autobusov"
+msgstr "Definície zberníc:"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
@@ -16473,9 +16467,9 @@ msgid "(source)"
 msgstr "(zdroj)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s':"
-msgstr "potrebujete číslo pre '%s'"
+msgstr "Členovia '%s':"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:114
 #, fuzzy
@@ -16923,7 +16917,7 @@ msgstr "Pridať knižnicu"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:657
 msgid "Warning: Duplicate Nickname"
-msgstr "Varovanie: Duplicitná prezývka"
+msgstr "Upozornenie: duplicitná prezývka"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:862
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1094
@@ -17003,9 +16997,9 @@ msgid "Global Field Name Templates"
 msgstr "Globálne šablóny názvov polí"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "The field name \"%s\" contains trailing and/or leading whitespace."
-msgstr "Záznam obsahuje koncové biele miesto."
+msgstr "Názov poľa \"%s\" obsahuje medzery na konci a/alebo na začiatku."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:215
 msgid ""
@@ -17083,7 +17077,8 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
-"Varovanie: schéma má chyby v číslovaní, prosím opravte ich v editore schém\n"
+"Upozornenie: schéma má chyby v číslovaní, prosím opravte ich v editore "
+"schém\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:432
 #: eeschema/eeschema_jobs_handler.cpp:554
@@ -17263,19 +17258,22 @@ msgid "Symbol %s has unplaced units %s"
 msgstr "Symbol %s má neumiestnené jednotky %s"
 
 #: eeschema/erc/erc.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Symbol zmien stopy nie je uložený"
+msgstr ""
+"Symbol %s má vývody vstupného napájania v jednotkách %s, ktoré nie sú "
+"umiestnené."
 
 #: eeschema/erc/erc.cpp:666
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Symbol zmien stopy nie je uložený"
+msgstr "Symbol %s má vstupné vývody v jednotkách %s, ktoré nie sú umiestnené."
 
 #: eeschema/erc/erc.cpp:673
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Symbol zmien stopy nie je uložený"
+msgstr ""
+"Symbol %s má obojsmerné vývody v jednotkách %s, ktoré nie sú umiestnené."
 
 #: eeschema/erc/erc.cpp:696
 #, c-format
@@ -17322,9 +17320,9 @@ msgid "The symbol library '%s' is not enabled in the current configuration"
 msgstr "Knižnica '%s' nie je v súčasnej konfigurácii povolená."
 
 #: eeschema/erc/erc.cpp:1554
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' was not found at '%s'."
-msgstr "Knižnica stopy sa nenašla."
+msgstr "Knižnica symbolov '%s' nebola nájdená v '%s'."
 
 #: eeschema/erc/erc.cpp:1574
 #, c-format
@@ -17357,9 +17355,9 @@ msgstr "Knižnica puzdier '%s' nie je povolená v aktuálnej konfigurácii."
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1034
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "V knižniciach nemožno nájsť niektoré puzdra"
+msgstr "Puzdro '%s' sa nenašlo v knižnici '%s'."
 
 #: eeschema/erc/erc.cpp:1753
 #, c-format
@@ -17631,9 +17629,9 @@ msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Správa ERC (%s, kódovanie UTF8)\n"
 
 #: eeschema/erc/erc_report.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Report includes: %s\n"
-msgstr "Súbory správ"
+msgstr "Protokol zahrňuje: %s\n"
 
 #: eeschema/erc/erc_report.cpp:93
 #, c-format
@@ -17934,7 +17932,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Aktuálna schéma bola zmenená. Uložiť zmeny?"
 
 #: eeschema/files-io.cpp:1570
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -17942,11 +17939,10 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Toto je potenciálne trápne!\n"
-"Zdá sa, že ste naposledy upravovali súbor\n"
-"'%s'\n"
-"nebolo ulozene spravne. Prajete si obnoviť posledné uložené úpravy, ktoré "
-"ste vykonali?"
+"No toto je ale nepríjemné!\n"
+"Zdá sa, že naposledy boli upravené jeden alebo viac súborov so schémami,\n"
+"ale neboli správne uložené. Chcete obnoviť posledné uložené úpravy, ktoré "
+"boli vykonané?"
 
 #: eeschema/files-io.cpp:1580
 #, fuzzy, c-format
@@ -18143,9 +18139,9 @@ msgid "Pin %s not found."
 msgstr "%s nenájdený"
 
 #: eeschema/lib_symbol.cpp:1725
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "Počet segmentov"
+msgstr "Vývod %s sa nezhoduje."
 
 #: eeschema/lib_symbol.cpp:1752
 #, c-format
@@ -18158,9 +18154,8 @@ msgid "Field count differs."
 msgstr "Počet segmentov"
 
 #: eeschema/lib_symbol.cpp:1771
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "Názov stopy:"
+msgstr "Filtre puzdier sa nezhodujú."
 
 #: eeschema/lib_symbol.cpp:1783
 msgid "Footprint filters differ."
@@ -18288,14 +18283,14 @@ msgid "P&references"
 msgstr "&Nastavenia"
 
 #: eeschema/net_navigator.cpp:57
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "%s spoj z (%s,%s) do (%s,%s)"
+msgstr "Spoj z %s, %s do %s, %s"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "%s zbernica z (%s,%s) do (%s,%s)"
+msgstr "Zbernica z %s, %s do %s, %s"
 
 #: eeschema/net_navigator.cpp:73
 msgid "Graphic line not connectable"
@@ -18312,44 +18307,44 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "Vývod '%s' listu '%s'"
 
 #: eeschema/net_navigator.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "Štítok '%s'"
+msgstr "Označenie '%s' na %s, %s"
 
 #: eeschema/net_navigator.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Globálna značka '%s'"
+msgstr "Globálne označenie '%s' na %s, %s"
 
 #: eeschema/net_navigator.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Hierarchická značka '%s'"
+msgstr "Hierarchické označenie '%s' na %s, %s"
 
 #: eeschema/net_navigator.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Veľkosť spojovacieho bodu:"
+msgstr "Spojovací bod na %s, %s"
 
 #: eeschema/net_navigator.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Bez pripájania"
+msgstr "Nepripojené na %s, %s"
 
 #: eeschema/net_navigator.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "%s spoj z (%s,%s) do (%s,%s)"
+msgstr "Pripojenie spoja na zbernicu z %s, %s do %s, %s"
 
 #: eeschema/net_navigator.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "%s zbernica z (%s,%s) do (%s,%s)"
+msgstr "Pripojenie zbernice do zbernice z %s, %s do %s, %s"
 
 #: eeschema/net_navigator.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Globálna značka '%s'"
+msgstr "Označenie triedy spojov '%s' na %s, %s"
 
 #: eeschema/net_navigator.cpp:190
 #, c-format
@@ -18977,7 +18972,7 @@ msgstr "Altium súbory schém"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:88
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "Knižnica schém Altium alebo integrovaná knižnica"
+msgstr "Altium knižnica schém alebo integrovaná knižnica"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:89
 msgid "File does not appear to be a CADSTAR parts Library file"
@@ -19006,16 +19001,16 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCadu. Načítal sa "
-"iba hlavný variant ('%s')."
+"CADSTAR návrh obsahuje varianty, ktoré nemajú ekvivalent KiCadu. Bol "
+"načítaný iba hlavný variant ('%s')."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:393
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
-"Dizajn CADSTAR obsahuje zoskupené položky, ktoré nemajú ekvivalent KiCadu. "
-"Všetky zoskupené položky boli zoskupené."
+"CADSTAR návrh obsahuje zoskupené položky, ktoré nemajú ekvivalent KiCadu. "
+"Všetkým zoskupeným položkám bolo zrušené zoskupenie."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:400
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -19023,7 +19018,7 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"Dizajn CADSTAR obsahuje bloky na opätovné použitie, ktoré nemajú ekvivalent "
+"CADSTAR návrh obsahuje bloky na opätovné použitie, ktoré nemajú ekvivalent "
 "KiCadu. Informácie o opakovanom použití bloku boli počas importu zahodené."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:514
@@ -19032,7 +19027,7 @@ msgid ""
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
 msgstr ""
-"Písma CADSTAR sa líšia od písiem v KiCade. To pravdepodobne povedie k "
+"CADSTAR písma sa líšia od písiem v KiCade. To pravdepodobne povedie k "
 "problémom so zarovnaním. Prosím, pozorne skontrolujte importované textové "
 "prvky a v prípade potreby ich manuálne opravte."
 
@@ -19042,7 +19037,7 @@ msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
-"Návrh CADSTAR sa úspešne importoval.\n"
+"CADSTAR návrh sa úspešne importoval.\n"
 "Prosím, skontrolujte vzniknuté chyby a upozornenia (ak existujú) pri importe."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:538
@@ -19055,11 +19050,11 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
-"Dizajn je príliš veľký a nie je možné ho importovať do KiCadu.\n"
+"Návrh je príliš veľký a nie je možné ho importovať do KiCadu.\n"
 "Prosím, znížte maximálnu veľkosť návrhu v aplikácii CADSTAR tak, že prejdete "
 "na:\n"
-"Karta Návrh -> Vlastnosti -> Možnosti návrhu -> Maximálna veľkosť dizajnu.\n"
-"Aktuálna veľkosť dizajnu: %.2f, %.2f milimetrov.\n"
+"Karta Návrh -> Vlastnosti -> Možnosti návrhu -> Maximálna veľkosť návrhu.\n"
+"Aktuálna veľkosť návrhu: %.2f, %.2f milimetrov.\n"
 "Maximálna povolená veľkosť návrhu: %.2f, %.2f milimetrov.\n"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:599
@@ -19072,7 +19067,7 @@ msgstr ""
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:604
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "Schéma CADSTAR môže byť poškodená: neexistuje žiadny východzí list."
+msgstr "CADSTAR schéma môže byť poškodená: neexistuje žiadny východzí list."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:678
 #, c-format
@@ -19162,8 +19157,8 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Symbol '%s' je v pôvodnom dizajne CADSTAR, otočený o uhol %.1f stupňov, ale "
-"KiCad podporuje iba násobky uhlov otočenia o 90 stupňov. Pripojovacie vodiče "
+"Symbol '%s' je v pôvodnom návrhu CADSTAR, otočený o uhol %.1f stupňov, ale "
+"KiCad podporuje iba uhly otočenia o násobky 90 stupňov. Pripojovacie spoje "
 "budú musieť byť upravené ručne."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2137
@@ -19172,7 +19167,7 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
-"Symbol '%s' odkazuje na identifikačný list ID '%s', ktorý v dizajne "
+"Symbol '%s' odkazuje na identifikačný list ID '%s', ktorý v návrhu "
 "neexistuje. Symbol nebol načítaný."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2272
@@ -19201,7 +19196,7 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
-"Schéma CADSTAR môže byť poškodená: Blok %s odkazuje na podradený list, ale "
+"CADSTAR schéma môže byť poškodená: Blok %s odkazuje na podradený list, ale "
 "nemá definovaný žiadny obrázok."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:233
@@ -19221,7 +19216,7 @@ msgid ""
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 "Názov knižnice puzdier súvisiacej so symbolmi v tejto knižnici. Mali by ste "
-"vytvoriť samostatnú položku pre CADSTAR DPS archívny súbor (*.cpa) v tabuľke "
+"vytvoriť samostatnú položku pre súbor CADSTAR PCB archive (*.cpa) v tabuľke "
 "knižníc puzdier. Ak nie je zadaný žiadny názov, použije sa „cadstarpcblib“."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
@@ -19331,7 +19326,7 @@ msgstr "Pri načítaní symbolu '%s' z knižnice '%s': %s nastala chyba"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:468
 #, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Pri enumerácii knižnice symbolov '%s': %s nastala chyba"
+msgstr "Pri získavaní zoznamu knižnice symbolov '%s': %s nastala chyba"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:602
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:607
@@ -19387,12 +19382,9 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "Nepodarilo sa pripojiť k %s. Chyby: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr ""
-"Chyba pri načítaní stopy %s z knižnice %s.\n"
-"\n"
-"%s"
+msgstr "Chyba pri získavaní údajov z knižnice HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:45
 msgid "KiCad HTTP library files"
@@ -19535,13 +19527,9 @@ msgid "Invalid parent symbol name"
 msgstr "Neplatný názov nadradeného symbolu"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Žiadny rodič pre rozšírený symbol %s v\n"
-"súbor: \"%s\"\n"
-"riadok: %d\n"
-"offset: %d"
+msgstr "Žiadny nadradený symbol pre rozšírený symbol %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:439
 msgid "Invalid symbol unit name"
@@ -19563,13 +19551,9 @@ msgid "Invalid symbol unit number %s"
 msgstr "Neplatné číslo časti symbolu %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Neplatný symbol na prevod čísla %s v\n"
-"súbor: \"%s\"\n"
-"riadok: %d\n"
-"offset: %d"
+msgstr "Neplatné číslo konverzie symbolu %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:818
 #, c-format
@@ -20685,9 +20669,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú v aktuálnej projektovej "
-"tabuľke knižníc.  To môže mať za následok nefunkčné referencie na knižnicu "
-"symbolov pre načítanú schému. \n"
+"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú v aktuálnej tabuľke "
+"projektových knižníc.  To môže mať za následok nefunkčné referencie na "
+"knižnicu symbolov pre načítanú schému. \n"
 "\n"
 "Chcete pokračovať?"
 
@@ -20713,9 +20697,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú vo zvolenej projektovej "
-"tabuľke knižníc.  To môže mať za následok nefunkčné referencie na knižnicu "
-"symbolov.\n"
+"Vo zvolenej schéme sú názvy knižníc, ktoré chýbajú vo zvolenej tabuľke "
+"projektových knižníc.  To môže mať za následok nefunkčné referencie na "
+"knižnicu symbolov.\n"
 "\n"
 "Chcete pokračovať?"
 
@@ -20906,9 +20890,8 @@ msgid "C_comp is invalid."
 msgstr "C_comp je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:570
-#, fuzzy
 msgid "Temperature Range is invalid."
-msgstr "Nárast teploty:"
+msgstr "Teplotný rozsah je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:590
 msgid "Voltage Range is invalid."
@@ -20925,14 +20908,12 @@ msgid "Invalid pullup."
 msgstr "Neplatný reťazec hodnoty korenia"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:609
-#, fuzzy
 msgid "Invalid POWER clamp."
-msgstr "Mierka Y:"
+msgstr "Neplatná POWER svorka."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:615
-#, fuzzy
 msgid "Invalid GND clamp."
-msgstr "Mierka Y:"
+msgstr "Neplatná GND svorka."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:624
 #, fuzzy
@@ -21193,7 +21174,7 @@ msgstr "Zistená vnútorná chyba, mal by existovať časový priebeh vlny"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2545
 msgid "Internal error: Bad parser context."
-msgstr "Vnútorná chyba: Nesprávne spracovaný kontext."
+msgstr "Vnútorná chyba: nesprávne spracovaný kontext."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2606
 msgid "Missing keyword."
@@ -21773,9 +21754,9 @@ msgstr "Pri spracovávaní SPICE knižnice nastala chyba '%s': %s"
 
 #: eeschema/sim/spice_model_parser.cpp:102
 #: eeschema/sim/spice_model_parser.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
+msgstr "Nebolo možné nájsť model '%s' pre kopírovanie do iného modelu '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "DC Operating Point"
@@ -22253,21 +22234,13 @@ msgstr "Knižnica symbolov nie je povolená."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1874
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1926
-#, fuzzy
 msgid "Error saving global library table."
-msgstr ""
-"Chyba pri ukladaní tabuľky globálnej knižnice:\n"
-"\n"
-"%s"
+msgstr "Chyba pri ukladaní tabuľky globálnej knižnice."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1875
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1927
-#, fuzzy
 msgid "Error saving project library table."
-msgstr ""
-"Chyba pri ukladaní tabuľky knižnice špecifickej pre projekt:\n"
-"\n"
-"%s"
+msgstr "Chyba pri ukladaní tabuľky projektovej knižnice."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 msgid "[from schematic]"
@@ -22522,12 +22495,12 @@ msgid "Symbol library file '%s' is empty."
 msgstr "Súbor knižnice symbolov '%s' je prázdny."
 
 #: eeschema/symbol_lib_table.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"V riadku súboru tabuľky knižnice symbolov %d sa našla duplicitná prezývka "
-"'%s'"
+"Duplicitná prezývka knižnice '%s' sa našla v riadku %d súboru tabuľky "
+"symbolov"
 
 #: eeschema/symbol_library.cpp:605 eeschema/symbol_tree_model_adapter.cpp:222
 #, c-format
@@ -22541,9 +22514,9 @@ msgid "Errors loading symbols:"
 msgstr "Chyba načítania symbolov:"
 
 #: eeschema/symbol_library_manager.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr "Knižnica sa nenašla v tabuľke knižnice symbolov."
+msgstr "Knižnica '%s' sa nenašla v tabuľke knižníc symbolov."
 
 #: eeschema/symbol_library_manager.cpp:439
 msgid "Symbol not found."
@@ -22555,9 +22528,9 @@ msgid "Cannot load symbol '%s' from library '%s'."
 msgstr "Nie je možné načítať symbol '%s' z knižnice '%s'."
 
 #: eeschema/symbol_library_manager.cpp:814
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "Nie je možné vymenovať knižnicu '%s' (%s)"
+msgstr "Nie je možné získať zoznam knižnice '%s'."
 
 #: eeschema/symbol_library_manager.cpp:873
 #: eeschema/symbol_library_manager.cpp:878
@@ -24079,11 +24052,11 @@ msgstr "Pridajte simulátorovú sondu"
 
 #: eeschema/tools/sch_actions.cpp:1573
 msgid "Add Tuned Value..."
-msgstr "Pridať nastavenú hodnotu..."
+msgstr "Pridať naladenú hodnotu..."
 
 #: eeschema/tools/sch_actions.cpp:1574
 msgid "Select a value to be tuned"
-msgstr "Vybrať hodnotu, ktorú sa má naladiť"
+msgstr "Vybrať hodnotu, ktorá sa má naladiť"
 
 #: eeschema/tools/sch_actions.cpp:1580
 msgid "User-defined Signals..."
@@ -24437,9 +24410,9 @@ msgstr "%s a %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:231
 #: pcbnew/tools/board_inspection_tool.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s"
-msgstr "%s zo %s"
+msgstr "Spustiť %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:318
 msgid "No symbol issues found."
@@ -24862,7 +24835,7 @@ msgstr "Pridať nový záznam do globálnej tabuľky knižníc"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:44
 msgid "Add new project library table entry"
-msgstr "Pridať nový záznam do tabuľky knižníc projektu"
+msgstr "Pridať nový záznam do tabuľky projektových knižníc"
 
 #: eeschema/widgets/tuner_slider.cpp:67 eeschema/widgets/tuner_slider.cpp:123
 #, c-format
@@ -24872,7 +24845,7 @@ msgstr "Ladiť %s"
 #: eeschema/widgets/tuner_slider.cpp:84
 #, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
-msgstr ""
+msgstr "%s má simulačný model typu '%s %s'; len pasíva RLC budú naladené"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
 msgid "Limit to E24 series values."
@@ -26573,7 +26546,7 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
-"Upozornenie: Ak je cesta k protokolu zadaná bez --generate-report, "
+"Upozornenie: ak je cesta k protokolu zadaná bez --generate-report, "
 "nevygeneruje sa žiadna výsledná správa\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
@@ -26696,7 +26669,7 @@ msgstr "Použiť počiatok súradníc vŕtania/umiestnenia ako počiatok súradn
 #: kicad/cli/command_pcb_export_gencad.cpp:54
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Save the origin coordinates in the file"
-msgstr "Uložte súradnice začiatku do súboru"
+msgstr "Uložiť súradnice počiatku do súboru"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:40
 msgid "Plot given layers to a single Gerber file"
@@ -27619,9 +27592,9 @@ msgid "PCM Updates Available"
 msgstr "Dostupné aktualizácie PCM"
 
 #: kicad/kicad_manager_frame.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Nejsou dostupné žádné aktualizace balíčků"
+msgstr "%d dostupných aktualizácii balíčkov"
 
 #: kicad/kicad_manager_frame.cpp:813
 msgid "Error opening jobs file"
@@ -27659,15 +27632,15 @@ msgstr "Importovať projekt, ktorý nie je KiCad..."
 
 #: kicad/menubar.cpp:115
 msgid "Altium Project..."
-msgstr "Projekt Altium..."
+msgstr "Altium projekt..."
 
 #: kicad/menubar.cpp:116
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
-msgstr "Importovať schému a DPS Altium (*.PrjPcb)"
+msgstr "Importovať Altium schému a DPS (*.PrjPcb)"
 
 #: kicad/menubar.cpp:119
 msgid "CADSTAR Project..."
-msgstr "Projekt CADSTAR..."
+msgstr "CADSTAR projekt..."
 
 #: kicad/menubar.cpp:120
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -27675,11 +27648,11 @@ msgstr "Importovať CADSTAR archívne súbory schémy a DPS (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:124
 msgid "EAGLE Project..."
-msgstr "Projekt EAGLE..."
+msgstr "EAGLE Projekt ..."
 
 #: kicad/menubar.cpp:125
 msgid "Import EAGLE CAD XML schematic and board"
-msgstr "Importujte schému XML EAGLE CAD a dosku"
+msgstr "Importovať EAGLE CAD XML schému a dosku"
 
 #: kicad/menubar.cpp:129
 msgid "EasyEDA (JLCEDA) Std Backup..."
@@ -28507,9 +28480,9 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Nepodarilo sa vyhľadať vetvu '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1917
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "Nemožno nájsť zobrazovač PDF pre \"%s\""
+msgstr "Nepodarilo sa nájsť hlavičku vetvy pre '%s'"
 
 #: kicad/project_tree_pane.cpp:1928
 #, fuzzy, c-format
@@ -29187,7 +29160,7 @@ msgstr "Pripojiť existujúci súbor listu výkresu k aktuálnemu súboru"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid "Show Design Inspector"
-msgstr "Zobraziť inšpektora dizajnu"
+msgstr "Zobraziť inšpektora návrhu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Page Preview Settings..."
@@ -30172,9 +30145,8 @@ msgid "Carbon steel"
 msgstr "Uhlíková ocel"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:62
-#, fuzzy
 msgid "Aluminium"
-msgstr "Medená povrchová úprava:"
+msgstr "Hliník"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:63
 msgid "Cadmium"
@@ -32294,9 +32266,8 @@ msgstr ""
 "***********************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:463
-#, fuzzy
 msgid "(will be ignored)"
-msgstr " bude ignorovaný"
+msgstr "(bude ignorované)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:476
 msgid "<br/>No footprints"
@@ -32425,7 +32396,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:165
 msgid "Reannotation Scope"
-msgstr "Rozsah prečíslovania"
+msgstr "Pôsobnosť prečíslovania"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:181
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
@@ -33050,9 +33021,8 @@ msgstr ""
 "Názvy sietí vyhovujúce tomuto vzoru nebudú zobrazené."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide automatically generated net names"
-msgstr "Alternatívny názov PIN"
+msgstr "Skryť automaticky generované názvy spojov"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -33502,7 +33472,7 @@ msgstr "Priebežné (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:212
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr "Souřadnice (A1, A2, ... B1, ...)"
+msgstr "Súradnice (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:214
 msgid "Pad Numbering Scheme"
@@ -34818,9 +34788,8 @@ msgid "Footprint 3D model path:"
 msgstr "Cesta 3D modelu puzdra:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "Možnosti pôvodu súradníc:"
+msgstr "Možnosti počiatku súradníc"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -35189,7 +35158,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Absolútna vôľa spájkovacej pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:309
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -35198,11 +35166,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Toto je miestna vzdialenosť medzi doštičkami a spájkovacou pastou pre túto "
-"stopu.\n"
-"Táto hodnota môže byť nahradená lokálnymi hodnotami podložky.\n"
-"Konečná hodnota vôle je súčtom tejto hodnoty a pomeru hodnoty vôle.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky."
+"Toto je lokálny odstup medzi plôškami a spájkovacou pastou pre toto puzdro.\n"
+"Táto hodnota môže byť nahradená lokálnymi hodnotami plôšky.\n"
+"Konečná hodnota odstupu je súčtom tejto hodnoty a pomeru hodnoty odstupu.\n"
+"Záporná hodnota znamená menšiu veľkosť apertúry ako je veľkosť plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
@@ -35212,7 +35179,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relatívny odstup spájkovacej pasty:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:322
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -35223,12 +35190,12 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Toto je pomer miestnej vôle v percentách medzi doštičkami a spájkovacou "
-"pastou pre túto stopu.\n"
-"Hodnota 10 znamená, že hodnota vôle je 10 percent veľkosti podložky.\n"
-"Táto hodnota môže byť nahradená lokálnou hodnotou podložky.\n"
-"Konečná hodnota klírensu je súčtom tejto hodnoty a hodnoty klírensu.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky."
+"Toto je pomer lokálneho odstupu v percentách medzi plôškami a spájkovacou "
+"pastou pre toto puzdro.\n"
+"Hodnota 10 znamená, že hodnota odstupu je 10 percent veľkosti plôšku.\n"
+"Táto hodnota môže byť nahradená lokálnou hodnotou plôšky.\n"
+"Konečná hodnota odstupu je súčtom tejto hodnoty a hodnoty odstupu.\n"
+"Záporná hodnota znamená menšiu veľkosť apertúry ako je veľkosť plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:345
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:313
@@ -35376,7 +35343,6 @@ msgstr ""
 "Odstup a nastavenia vo vlastnostiach plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:277
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -35386,13 +35352,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Toto je miestna vzdialenosť medzi doštičkami a spájkovacou pastou pre\n"
-"táto stopa.\n"
-"Konečná hodnota vôle je súčtom tejto hodnoty a pomeru hodnoty vôle.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky.\n"
+"Toto je lokálny odstup medzi plôškami a spájkovacou pastou pre\n"
+"toto puzdro.\n"
+"Konečná hodnota odstupu je súčtom tejto hodnoty a pomeru hodnoty odstupu.\n"
+"Záporná hodnota znamená menšiu veľkosť apertúry ako je veľkosť plôšky.\n"
 "Túto hodnotu je možné prepísať v jednotlivých lokálnych položkách po "
-"jednotlivých položkách\n"
-"Karta Odbavenie a nastavenie v časti Vlastnosti podložky."
+"jednotlivých plôškach\n"
+"v karte Odstup a nastavenie v časti Vlastnosti plôšky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:290
 #, c-format
@@ -36229,24 +36195,18 @@ msgid "footprint"
 msgstr "puzdra"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr ""
-"Pri písaní prázdneho súboru tabuľky knižnej stopy sa vyskytla chyba.\n"
-"\n"
-"%s"
+msgstr "Pri zapisovaní prázdneho súboru tabuľky puzdier sa vyskytla chyba '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:75
 msgid "Please select a footprint library table file."
 msgstr "Vyberte súbor tabuľky knižnice stopy."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"Súbor '%s' nie je platným súborom tabuľky knižnice stopy.\n"
-"\n"
-"%s"
+msgstr "'%s' nie je platnou tabuľkou knižnice puzdier."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:110
 #, fuzzy, c-format
@@ -36254,20 +36214,17 @@ msgid "Cannot create library table path '%s'."
 msgstr "Nie je možné vytvoriť cestu tabuľky globálnej knižnice '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"Nie je možné kopírovať súbor tabuľky globálnej stopy knižnice:\n"
-"\n"
-" '%s'\n"
-"\n"
-": do:\n"
-"\n"
-"'%s'."
+"Nie je možné kopírovať tabuľky knižnice z:\n"
+"%s\n"
+"do:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:141
 #, fuzzy
@@ -36511,7 +36468,7 @@ msgstr "Otočiť okolo centra výberu"
 #: pcbnew/dialogs/dialog_move_exact.cpp:111
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr "Otočiť okolo pôvodu miestnych súradníc"
+msgstr "Otočiť okolo počiatku lokálnych súradníc"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:114
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -36594,9 +36551,8 @@ msgid "Target areas:"
 msgstr "Cieľové oblasti:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:61
-#, fuzzy
 msgid "Reference Rule Area:"
-msgstr "Referenčné označenie"
+msgstr "Referenčná oblasť pravidiel:"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:77
 msgid "Copy footprint placement"
@@ -36746,7 +36702,7 @@ msgstr "%s, %s a spojené vrstvy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1426
 msgid "Error: Through hole pad has no hole."
-msgstr "Chyba: Plôška s priechodzím otvorom nemá otvor."
+msgstr "Chyba: plôška s priechodzím otvorom nemá otvor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1431
 msgid "Pad Properties Errors"
@@ -37203,10 +37159,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Toto je miestna vzdialenosť medzi touto vložkou a spájkovacou pastou.\n"
-"Ak je 0, použije sa hodnota stopy alebo globálna hodnota.\n"
-"Konečná hodnota vôle je súčtom tejto hodnoty a pomeru hodnoty vôle.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky."
+"Toto je lokálna vzdialenosť medzi touto plôškou a spájkovacou pastou.\n"
+"Ak je 0, použije sa hodnota puzdra alebo globálna hodnota.\n"
+"Konečná hodnota odstupu je súčtom tejto hodnoty a pomeru hodnoty odstupu.\n"
+"Záporná hodnota znamená menšiu apertúru masky ako je veľkosť podložky."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1009
 msgid ""
@@ -37217,12 +37173,12 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Toto je pomer miestnej vôle v percentách medzi touto vložkou a spájkovacou "
-"pastou.\n"
-"Hodnota 10 znamená, že hodnota vôle je 10 percent veľkosti podložky.\n"
-"Ak je 0, použije sa hodnota stopy alebo globálna hodnota.\n"
-"Konečná hodnota klírensu je súčtom tejto hodnoty a hodnoty klírensu.\n"
-"Záporná hodnota znamená menšiu veľkosť masky ako veľkosť podložky."
+"Toto je pomer miestneho odstupu v percentách medzi touto plôškou a "
+"spájkovacou pastou.\n"
+"Hodnota 10 znamená, že hodnota odstupu je 10 percent veľkosti plôšky.\n"
+"Ak je 0, použije sa hodnota puzdra alebo globálna hodnota.\n"
+"Konečná hodnota odstupu je súčtom tejto hodnoty a hodnoty odstupu.\n"
+"Záporná hodnota znamená menšiu veľkosť masky ako je veľkosť podložky."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1212
 msgid "Preview pad in sketch mode"
@@ -37296,11 +37252,11 @@ msgstr "Nie je vybraná žiadna vrstva, nie je čo vykresľovať"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1305
 msgid "Warning: Scale option set to a very small value"
-msgstr "Upozornenie: Voľba mierky je nastavená na príliš malú hodnotu"
+msgstr "Upozornenie: voľba mierky je nastavená na príliš malú hodnotu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1308
 msgid "Warning: Scale option set to a very large value"
-msgstr "Upozornenie: Voľba mierky je nastavená na príliš veľkú hodnotu"
+msgstr "Upozornenie: voľba mierky je nastavená na príliš veľkú hodnotu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1377
 #, c-format
@@ -37835,7 +37791,7 @@ msgstr "Referenčné umiestnenie: počiatok mriežky"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:250
 msgid "Reference location: local coordinates origin"
-msgstr "Referenčné umiestnenie: pôvod miestnych súradníc"
+msgstr "Referenčné umiestnenie: lokálny počiatok súradníc"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:256
 msgid "<none selected>"
@@ -37857,7 +37813,7 @@ msgstr "Referenčná položka: <žiadny nebol vybraný>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:34
 msgid "Use Local Origin"
-msgstr "Použite miestny pôvod"
+msgstr "Použiť lokálny počiatok"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:37
 msgid "Use Grid Origin"
@@ -38136,9 +38092,8 @@ msgid "Reset this value to the original value."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
-#, fuzzy
 msgid "Set a new value for this offset:"
-msgstr "Vytvorte nový adresár pre projekt"
+msgstr "Nastaviť novú hodnotu pre tento posun:"
 
 #: pcbnew/dialogs/dialog_set_offset_base.h:63
 #, fuzzy
@@ -38190,9 +38145,8 @@ msgid "Mid Point"
 msgstr "Stredný bod"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:918
-#, fuzzy
 msgid "Start Angle"
-msgstr "Počiatočná vrstva:"
+msgstr "Počiatočný uhol"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:935
 msgid "Point on Circle"
@@ -38281,9 +38235,8 @@ msgstr "Bézier riadiace body"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:244
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:184
-#, fuzzy
 msgid "Technical Layers:"
-msgstr "Technické vrstvy"
+msgstr "Technické vrstvy:"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:254
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:194
@@ -38590,9 +38543,8 @@ msgid "Track and Via Dimensions"
 msgstr "Rozmery spoja a prekovu"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Cieľová odchýlka: "
+msgstr "Cieľový rozdiel dĺžok: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:95
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2221
@@ -39754,14 +39706,12 @@ msgid "Add User Defined Layer..."
 msgstr "Pridať používateľom definovanú vrstvu..."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
-"Použite odporúčanie vášho penziónu na vôľu spájkovacej masky a minimálnu "
-"šírku mostíka.\n"
-"Ak nie je zadaná žiadna hodnota, odporúča sa nastavenie na nulu."
+"Použite odporúčania výrobcu dosky pre rozšírenie spájkovacej masky a "
+"minimálnu šírku mostíka spájkovacej masky."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -39847,7 +39797,6 @@ msgstr "Nastavenia spájkovacej pasty"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:149
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:154
-#, fuzzy
 msgid ""
 "Global absolute clearance between pads and the solder paste.\n"
 "Negative clearance means solder paste area smaller than the pad (typical for "
@@ -39856,12 +39805,11 @@ msgid ""
 "Final clearance value is the sum of this value and the relative clearance "
 "value."
 msgstr ""
-"Pomer globálneho klírensu v percentách medzi doštičkami a spájkovacou "
-"pastou.\n"
-"Hodnota 10 znamená, že hodnota vôle je 10 percent veľkosti podložky.\n"
-"Táto hodnota môže byť nahradená miestnymi hodnotami pre stopu alebo "
-"podložku.\n"
-"Konečná hodnota klírensu je súčet tejto hodnoty a hodnoty klírensu."
+"Pomer globálneho odstupu v percentách medzi plôškami a spájkovacou pastou.\n"
+"Hodnota 10 znamená, že hodnota odstupu je 10 percent veľkosti plôšky.\n"
+"Táto hodnota môže byť nahradená lokálnymi hodnotami pre puzdro alebo "
+"plôšku.\n"
+"Konečná hodnota odstupu je súčet tejto hodnoty a hodnoty odstupu."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:164
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:169
@@ -39903,7 +39851,7 @@ msgstr "CHYBA:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:779
 msgid "Design rules cannot be added without a project"
-msgstr "Pravidlá pre dizajn sa nedajú pridať bez projektu"
+msgstr "Pravidlá návrhu sa nedajú pridať bez projektu"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
@@ -40670,7 +40618,7 @@ msgstr "obmedzenia nastavenia dosky"
 
 #: pcbnew/drc/drc_engine.cpp:187
 msgid "board setup constraints zone fill strategy"
-msgstr "stratégia vypĺňania zón nastavenia dosky"
+msgstr "obmedzenia nastavenia stratégie vypĺňania zón dosky"
 
 #: pcbnew/drc/drc_engine.cpp:192
 msgid "board setup constraints silk"
@@ -40821,7 +40769,7 @@ msgstr "Kontroluje sa %s max. nepárová dĺžka: %s."
 #: pcbnew/drc/drc_engine.cpp:1003
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Kontroluje sa %s max. skosenie: %s."
+msgstr "Kontroluje sa %s max. rozd. dĺžok: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1009
 #, c-format
@@ -40995,7 +40943,7 @@ msgstr "Zdedené od nadradeného: %s."
 #: pcbnew/drc/drc_engine.cpp:1470 pcbnew/drc/drc_engine.cpp:1494
 #, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Miestna izolačná medzera na %s; izolačná medzera: %s."
+msgstr "Lokálna minimálna vzdialenosť na %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1553
 #, c-format
@@ -41249,7 +41197,7 @@ msgstr "Dĺžka spoja mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:265
 msgid "Skew between tracks out of range"
-msgstr "Skew medzi spojmi mimo rozsahu"
+msgstr "Rozdiel dĺžok medzi spojmi je mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:270
 msgid "Too many or too few vias on a connection"
@@ -41290,7 +41238,7 @@ msgstr "Pravidlá: %s"
 
 #: pcbnew/drc/drc_item.cpp:496
 msgid "Local override"
-msgstr "Místní prepísanie"
+msgstr "Lokálne prepísať"
 
 #: pcbnew/drc/drc_rule.h:167
 #, c-format
@@ -41766,9 +41714,9 @@ msgid "%s keep-out property differs."
 msgstr "%s vlastnosť zakázanej oblasti sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "Chráňte medené odlievanie"
+msgstr "Nastavenie %s medenej výplne sa líši."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
 #, c-format
@@ -41937,14 +41885,14 @@ msgid "Checking board footprints against library..."
 msgstr "Kontrolujú sa puzdrá dosky voči knižnici..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' was not found at '%s'."
-msgstr "Knižnica stopy sa nenašla."
+msgstr "Knižnica puzdra '%s' nebola nájdená v '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "Editor knižnice – Vytvorenie a úprava súčiastok"
+msgstr "Puzdro '%s' sa nezhoduje s kópiou v knižnici '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:114
 #: pcbnew/drc/drc_test_provider_track_segment_length.cpp:138
@@ -41962,13 +41910,15 @@ msgstr "(%s max. dĺžka %s; skutočná %s)"
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s min. skew %s; skutočný %s; cieľová dĺžka siete %s (z %s); skutočná %s)"
+"(%s min. rozdiel dĺžok %s; skutočný %s; cieľová dĺžka spoja %s (z %s); "
+"aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
 #, c-format
 msgid "(%s max skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s max. skew %s; skutočný %s; cieľová dĺžka siete %s (z %s); skutočná %s)"
+"(%s max. rozdiel dĺžok %s; skutočný %s; cieľová dĺžka spoja %s (z %s); "
+"aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 #, c-format
@@ -42048,9 +41998,9 @@ msgid "Missing footprint %s (%s)"
 msgstr "Chýbajúce puzdro %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Value (%s) doesn't match symbol value (%s)."
-msgstr "Editor knižnice – Vytvorenie a úprava súčiastok"
+msgstr "Hodnota (%s) nezodpovedá hodnote symbolu (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, fuzzy, c-format
@@ -42058,9 +42008,9 @@ msgid "%s doesn't match footprint given by symbol (%s)."
 msgstr "Sieť podložky (%s) sa nezhoduje so sieťou danou schémou (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:177
-#, fuzzy, c-format
+#, c-format
 msgid "%s doesn't match symbol's footprint filters (%s)."
-msgstr "Použite filtre stopy"
+msgstr "%s nezodpovedá filtrom puzdier symbolu (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:228
 msgid "No corresponding pin found in schematic."
@@ -43052,12 +43002,9 @@ msgid "Documentation"
 msgstr "Dokumentácia"
 
 #: pcbnew/generate_footprint_info.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"Chyba pri načítaní stopy %s z knižnice %s.\n"
-"\n"
-"%s"
+msgstr "Pri načítaní puzdra %s z knižnice '%s' nastala chyba."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:262
 #: pcbnew/generators/pcb_tuning_pattern.cpp:267
@@ -43083,7 +43030,7 @@ msgstr "príliš krátke"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1490
 msgid "tuned"
-msgstr "vyladené"
+msgstr "naladené"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1570
 msgid "Edit Tuning Pattern"
@@ -43091,7 +43038,7 @@ msgstr "Upraviť ladiaci tvar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2095
 msgid "current skew"
-msgstr "aktuálne skosenie"
+msgstr "aktuálny rozdiel dĺžok"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2097
 msgid "current length"
@@ -43117,7 +43064,7 @@ msgstr "Celá dĺžka"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2211
 #, c-format
 msgid "Target Skew: %s"
-msgstr "Cieľové skosenie: %s"
+msgstr "Cieľový rozdiel dĺžok: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2212
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2234
@@ -43127,7 +43074,7 @@ msgstr "(z vlastností ladiaceho tvaru)"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2220
 #, c-format
 msgid "Skew Constraints: %s"
-msgstr "Obmedzenie skreslenia: %s"
+msgstr "Obmedzenia rozdielu dĺžok: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2233
 #, c-format
@@ -43140,9 +43087,8 @@ msgid "Length Constraints: %s"
 msgstr "Obmedzenia dĺžky: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2263
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Vyladené: zošikmenie "
+msgstr "Ladiť rozdiel dĺžok"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2476
 msgid "Unable to tune segments inside other tuning patterns."
@@ -43167,7 +43113,7 @@ msgstr "Diferenciálny pár"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2626
 msgid "Diff pair skew"
-msgstr "Skosenie diferenciálneho páru"
+msgstr "Rozdiel dĺžok diferenciálneho páru"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2640
 msgid "Pattern Properties"
@@ -43203,7 +43149,7 @@ msgstr "Cieľová dĺžka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2718
 msgid "Target Skew"
-msgstr "Cieľové skosenie"
+msgstr "Cieľový rozdiel dĺžok"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2726
 msgid "Override Custom Rules"
@@ -43861,8 +43807,7 @@ msgstr "Medená zóna '%s' nemá žiadne pripojené plôšky."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1205
 #, c-format
 msgid "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"."
-msgstr ""
-"Medená zóna na %s na (%s, %s) nemá žiadne plôšky pripojené k spoju\"%s\"."
+msgstr "Medená zóna %s na (%s, %s) nemá žiadne plôšky pripojené k spoju\"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1249
 #, c-format
@@ -43889,7 +43834,7 @@ msgid ""
 "Warning: %s footprint '%s' is missing a library name. Use the full "
 "'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
-"Upozornenie: Chýbajúci názov knižnice v %s puzdre '%s'. Použite plný formát "
+"Upozornenie: chýbajúci názov knižnice v %s puzdre '%s'. Použite plný formát "
 "'Knižnica:Puzdro', aby ste sa vyhli opakovaným upozorneniam na aktualizácie."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
@@ -44600,7 +44545,7 @@ msgid ""
 "Altium layer %s has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
-"Vrstva Altium %d nemá ekvivalent v KiCade. Bola presunutá do vrstvy "
+"Vrstva Altium %s nemá ekvivalent v KiCade. Bola presunutá do vrstvy "
 "Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:484
@@ -44838,14 +44783,15 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Podložka %s puzdra %s má štvorcový otvor (zatiaľ nepodporovaný)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Podložka '%s' stopy Footprint %s má rotáciu otvoru o %f stupňa. KiCad "
-"podporuje iba 90 stupňové uhly"
+"Načítavanie knižnice '%s':\n"
+"Puzdro %s vývod %s má nastavenú rotáciu otvoru o %f stupňov. KiCad podporuje "
+"iba 90 stupňové natočenie."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3444
 #, fuzzy, c-format
@@ -44871,20 +44817,18 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Podložka %s puzdra %s používa otvor neznámeho druhu %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3543
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
-"Pad '%s' Footprint %s používa zložitý stack padov (druh %d), ktorý zatiaľ "
-"nie je podporovaný"
+"Chyba pri načítavaní knižnice '%s':\n"
+"Puzdro %s plôška %s používa neznámy tvar."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3556
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
-"Pad '%s' Footprint %s používa zložitý stack padov (druh %d), ktorý zatiaľ "
-"nie je podporovaný"
+msgstr "Puzdro %s plôška %s používa neznámy tvar plôšky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3657
 #, c-format
@@ -44892,7 +44836,7 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Nemedená podložka %s sa nachádza na vrstve Altium (%d) bez ekvivalentu v "
+"Nemedená plôška %s sa nachádza na vrstve Altium (%d) bez ekvivalentu v "
 "KiCad. Bola presunutá na vrstvu KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3685
@@ -44912,7 +44856,7 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Nemedená podložka %s puzdra %s sa nachádza na vrstve Altium (%d) bez "
+"Nemedená plôška %s puzdra %s sa nachádza na vrstve Altium (%d) bez "
 "ekvivalentu v KiCad. Bola presunutá na vrstvu KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3728
@@ -44967,20 +44911,21 @@ msgstr ""
 "podporovaný."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4301
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Čiarový kód na vrstve Altium %d ignorujte, pretože momentálne nie je "
-"podporovaný."
+"Chyba pri načítavaní knižnice '%s':\n"
+"Puzdro %s obsahuje čiarový kód na Altium vrstve %d (zatiaľ nie je "
+"podporovaný)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4314
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Čiarový kód na vrstve Altium %d ignorujte, pretože momentálne nie je "
-"podporovaný."
+"Puzdro %s obsahuje čiarový kód na Altium vrstve %d (zatiaľ nie je "
+"podporovaný)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4514
 #, c-format
@@ -44993,11 +44938,11 @@ msgstr "Načítavanie štvoruholníkov..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
-msgstr "Súbory s plošnými spojmi Altium Circuit Maker"
+msgstr "Súbory Altium Circuit Maker DPS"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_studio.h:37
 msgid "Altium Circuit Studio PCB files"
-msgstr "Súbory DPS Altium Circuit Studio"
+msgstr "Súbory Altium Circuit Studio DPS"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:306
 #, c-format
@@ -45011,15 +44956,15 @@ msgstr "Puzdro '%s' sa nenašlo v '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
 msgid "Altium Designer PCB files"
-msgstr "Súbory DPS Altium Designer"
+msgstr "Súbory Altium Designer DPS"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:49
 msgid "Altium PCB Library or Integrated Library"
-msgstr "Knižnica Altium DPS alebo Integrated Library"
+msgstr "Altium DPS knižnica alebo Integrovaná knižnica"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:32
 msgid "Solidworks PCB files"
-msgstr "Súbory Solidworks DPS"
+msgstr "Súbory Solidworks PCB"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -45048,8 +44993,8 @@ msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje prvky smerovania kufra, ktoré nemajú ekvivalent "
-"KiCadu. Tieto prvky neboli načítané."
+"CADSTAR návrh obsahuje prvky skupinového routovania (Trunk Routing), ktoré "
+"nemajú ekvivalent KiCadu. Tieto prvky neboli načítané."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
@@ -45057,8 +45002,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
-"Dizajn CADSTAR obsahuje varianty, ktoré nemajú ekvivalent KiCad-u. Načítal "
-"sa iba variant '%s'."
+"CADSTAR návrh obsahuje varianty, ktoré nemajú ekvivalent KiCad-u. Bol "
+"načítaný iba variant '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:164
 msgid ""
@@ -45066,7 +45011,7 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
-"Písma CADSTAR sa líšia od písiem v KiCade. To pravdepodobne povedie k "
+"CADSTAR písma sa líšia od písiem v KiCade. To pravdepodobne povedie k "
 "problémom so zarovnaním, ktoré môžu spôsobiť chyby DRC. Prosím, skontrolujte "
 "importované textové prvky a v prípade potreby ich manuálne opravte."
 
@@ -45076,7 +45021,7 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
-"Vrstva CADSTAR '%s' nemá ekvivalent KiCadu. Všetky prvky v tejto vrstve boli "
+"CADSTAR vrstva '%s' nemá ekvivalent KiCadu. Všetky prvky v tejto vrstve boli "
 "namapované na vrstvu KiCad '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:253
@@ -45085,7 +45030,7 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
-"Vrstva CADSTAR '%s' sa považovala za technickú vrstvu. Všetky prvky v tejto "
+"CADSTAR vrstva '%s' sa považovala za technickú vrstvu. Všetky prvky v tejto "
 "vrstve boli namapované na vrstvu KiCad '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
@@ -45095,7 +45040,7 @@ msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"Konštrukčná vrstva CADSTAR '%s' sa nachádza na vonkajšom povrchu dosky. Bola "
+"CADSTAR konštrukčná vrstva '%s' sa nachádza na vonkajšom povrchu dosky. Bola "
 "ignorovaná."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:588
@@ -45115,8 +45060,8 @@ msgid ""
 "rules that have been applied."
 msgstr ""
 "Pravidlá návrhu KiCad sa líšia od pravidiel CADSTAR. Importovali sa iba "
-"pravidlá kompatibilného dizajnu. Odporúča sa skontrolovať použité "
-"dizajnérske pravidlá."
+"pravidlá kompatibilného návrhu. Odporúča sa skontrolovať použité návrhové "
+"pravidlá."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:865
 #, c-format
@@ -45133,7 +45078,7 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Oblasť CADSTAR '%s' v komponente knižnice '%s' nemá ekvivalent v KiCade. "
+"CADSTAR oblasť '%s' v komponente knižnice '%s' nemá ekvivalent v KiCade. "
 "Táto oblasť nie je ani prekov ani zakázanou oblasťou routovania. Oblasť sa "
 "neimportovala."
 
@@ -45154,13 +45099,13 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"Definícia podložky CADSTAR '%s' má tvar otvoru mimo tvar podložky. Otvor bol "
-"presunutý do stredu podložky."
+"CADSTAR definícia plôšky '%s' má otvor mimo plôšky. Otvor bol presunutý do "
+"stredu plôšky."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1342
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
+msgstr "CADSTAR definícia plôšky '%s' vrátila chyby importu: %s"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1360
 #, c-format
@@ -45196,7 +45141,7 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"ID kóty %s má 'Externý' 3t7l v CADSTAR. Štýly externých kót zatiaľ nie sú v "
+"CADSTAR ID kóty %s má 'Externý' štýl. Štýly externých kót zatiaľ nie sú v "
 "KiCad podporované. Objekt kóty bol importovaný ako interný štýl kóty."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1549
@@ -45220,9 +45165,8 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
-"Oblasť CADSTAR '%s' je v CADSTAR označená ako oblasť umiestnenia. KiCad "
-"nepodporuje oblasti s umiestneniami. Boli importované iba podporované prvky "
-"pre oblasť."
+"CADSTAR oblasť '%s' je označená ako oblasť umiestnenia. KiCad nepodporuje "
+"oblasti s umiestneniami. Boli importované iba podporované prvky pre oblasť."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1733
 #, c-format
@@ -45230,8 +45174,8 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
-"Oblasť CADSTAR '%s' nemá ekvivalent KiCad. Oblasti Pure Placement nie sú "
-"podporované."
+"CADSTAR oblasť '%s' nemá ekvivalent KiCad. Výhradné umiestnenie oblasti nie "
+"je podporované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1760
 #, c-format
@@ -45249,7 +45193,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"Šablóna CADSTAR '%s' má povolené nastavenie 'Povoliť v žiadnych smerovacích "
+"CADSTAR šablóna '%s' má povolené nastavenie 'Povoliť v neroutovaných "
 "oblastiach'. Toto nastavenie nemá žiadny ekvivalent KiCadu, takže bolo "
 "ignorované."
 
@@ -45259,7 +45203,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"Šablóna CADSTAR '%s' má povolené nastavenie 'Box Isolated Pins'. Toto "
+"CADSTAR šablóna '%s' má povolené nastavenie 'Box Isolated Pins'. Toto "
 "nastavenie nemá ekvivalent v KiCad, preto bolo ignorované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1969
@@ -45268,7 +45212,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"Šablóna CADSTAR '%s' má povolené nastavenie 'Automatic Repour'. Toto "
+"CADSTAR šablóna '%s' má povolené nastavenie 'Automatic Repour'. Toto "
 "nastavenie nemá ekvivalent v KiCad, preto bolo ignorované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1980
@@ -45278,9 +45222,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"Šablóna CADSTAR '%s' má nenulovú hodnotu definovanú pre nastavenie 'Šírka "
-"šrotu'. Neexistuje pre to žiadny ekvivalent KiCad, takže toto nastavenie "
-"bolo ignorované."
+"CADSTAR šablóna '%s' má nenulovú hodnotu definovanú pre nastavenie "
+"'Minimálna šírka zvyšku medi'. Neexistuje pre to žiadny ekvivalent KiCad, "
+"takže toto nastavenie bolo ignorované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1990
 #, c-format
@@ -45290,9 +45234,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"Šablóna CADSTAR '%s' má rôzne nastavenia pre 'zadržať nalievanú meď - "
-"disjunkt' a 'zadržať nalievanú meď - izolovaná'. KiCad nerozlišuje medzi "
-"týmito dvoma nastaveniami. Nastavenie pre disjunktnú meď sa použilo ako "
+"CADSTAR šablóna '%s' má rôzne nastavenia pre 'Retain Poured Copper - "
+"Disjoint' a 'Retain Poured Copper - Isolated'. KiCad nerozlišuje medzi "
+"týmito dvoma nastaveniami. Nastavenie pre nesúvislú meď sa použilo ako "
 "minimálna ostrovná oblasť zóny KiCad."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2041
@@ -45302,7 +45246,7 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"Šablóna CADSTAR '%s' má rôzne nastavenia tepelného reliéfu v plôškach a "
+"CADSTAR šablóna '%s' má rôzne nastavenia tepelného reliéfu v plôškach a "
 "prekovoch. KiCad podporuje pre obidve iba jedno jediné nastavenie. Bolo "
 "použité nastavenie pre plôšky."
 
@@ -45315,9 +45259,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"Šablona CADSTAR '%s' má tepelný reliéf v pôvodnom prevedení, ale šírka "
+"CADSTAR šablona '%s' má tepelný reliéf v pôvodnom prevedení, ale šírka "
 "ramena tepelného prepojenia (%.2f mm) je tenšia ako minimálna šírky zóny "
-"(%.2f mm).KiCad vyžaduje zachovanie minimálnej šírky zóny. Preto bola "
+"(%.2f mm). KiCad vyžaduje zachovanie minimálnej šírky zóny. Preto bola "
 "minimálna šírka použitá jako nová šírka ramena tep. prepojenia a bude "
 "použitá pri nasledujúcom vyplnení zóny."
 
@@ -45328,7 +45272,7 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
-"Vrstva CADSTAR '%s' je definovaná ako napájacia vrstva. Spoj s takýmto "
+"CADSTAR vrstva '%s' je definovaná ako napájacia vrstva. Spoj s takýmto "
 "názvom však neexistuje. Vrstva bola načítaná, ale nebola vytvorená žiadna "
 "medená zóna."
 
@@ -45339,9 +45283,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"Dizajn CADSTAR obsahuje prvky MEDI, ktoré nemajú priamy ekvivalent KiCadu. "
-"Boli importované ako zóna KiCad, ak sú vyplnené plným alebo poklopom, alebo "
-"ako KiCad Track, ak bol tvar nevyplneným obrysom (otvorený alebo uzavretý)."
+"CADSTAR návrh obsahuje prvky medi, ktoré nemajú priamy ekvivalent KiCadu. "
+"Boli importované ako zóna KiCad, ak boli vyplnené alebo šrafované, alebo ako "
+"KiCad spoj, ak bol tvar nevyplneným obrysom (otvorený alebo uzavretý)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2309
 #, c-format
@@ -45370,7 +45314,7 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
-"Návrh CADSTAR obsahuje teardropy. Tento importér ich zatiaľ nepodporuje, "
+"CADSTAR návrh obsahuje teardropy. Tento importér ich zatiaľ nepodporuje, "
 "takže teardropy v návrhu boli ignorované."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2598
@@ -45400,7 +45344,7 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"Kód šrafovania CADSTAR '%s' má definované %d šrafy. KiCad podporuje iba 2 "
+"CADSTAR kód šrafovania '%s' má definované %d šrafy. KiCad podporuje iba 2 "
 "šrafy (šrafovanie) vzdialené od seba 90 stupňov. Importovaný šrafovanie je "
 "šrafované."
 
@@ -45411,7 +45355,7 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"Šrafovací kód CADSTAR '%s' má pre každé šrafovanie rôzne šírky čiar. KiCad "
+"CADSTAR kód šrafovania '%s' má pre každé šrafovanie rôzne šírky čiar. KiCad "
 "podporuje iba jednu šírku šrafovania. Importované šrafovanie používa šírku "
 "definovanú v prvej definícii šrafovania, t.j. %.2f mm."
 
@@ -45422,7 +45366,7 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"Šrafovací kód CADSTAR '%s' má pre každé šrafovanie rôzne veľkosti kroku. "
+"CADSTAR kód šrafovania '%s' má pre každé šrafovanie rôzne veľkosti kroku. "
 "KiCad podporuje iba jednu veľkosť kroku šrafovania. Importované šrafovanie "
 "používa veľkosť kroku definovanú v prvej definícii šrafovania, t.j. %.2f mm."
 
@@ -45434,7 +45378,7 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
-"Otvory v kóde šrafovania CADSTAR '%s' majú rozdiel uhlov %.1f stupňov. KiCad "
+"CADSTAR otvory v kóde šrafovania '%s' majú rozdiel uhlov %.1f stupňov. KiCad "
 "podporuje iba šrafovanie o 90 stupňov od seba. Importovaný šrafovanie má dva "
 "šrafy vzdialené od seba 90 stupňov, orientované %.1f stupňov od vodorovnej "
 "polohy."
@@ -45455,7 +45399,7 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"Dizajn CADSTAR obsahuje spoje s priradenou triedou siete. KiCad nemá "
+"CADSTAR návrh obsahuje spoje priradené k triede spojov. KiCad nemá "
 "ekvivalent k čistej triede CADSTAR, takže tieto prvky neboli importované. "
 "Poznámka: KiCad verzia triedy spojov je bližšia k 'CAD Route Code' (ktorý "
 "bol importovaný pre všetky spoje) programu CADSTAR."
@@ -45473,7 +45417,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
-msgstr "PCB CADSTAR archívne súbory"
+msgstr "CADSTAR PCB archívne súbory"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:361
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:198
@@ -45506,7 +45450,7 @@ msgstr "Ignorovaný mnohouholník na vrstve '%s' (%d): počet obrysov nie je 1"
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1915
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorovanie drôtu, pretože vrstva Eagle '%s' (%d) nebola mapovaná"
+msgstr "Ignorovaný spoj, pretože Eagle vrstva '%s' (%d) nebola mapovaná"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2083
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2085
@@ -45524,23 +45468,23 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2097
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorovanie textu, pretože vrstva Eagle '%s' (%d) nebola mapovaná"
+msgstr "Ignorovaný text, pretože Eagle vrstva '%s' (%d) nebola mapovaná"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2235
 #, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Ignorovanie štvoruholníkov, pretože Eagle vrstva '%s' (%d) nebola priradená"
+"Ignorovaný štvoruholník, pretože Eagle vrstva '%s' (%d) nebola priradená"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2426
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorovanie kruhu, pretože vrstva Eagle '%s' (%d) nebola zmapovaná"
+msgstr "Ignorovaný kruh, pretože Eagle vrstva '%s' (%d) nebola zmapovaná"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:137
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.h:72
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Orol ver. 6.x súbory DPS XML"
+msgstr "Eagle ver. 6.x XML PCB súbory"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:142
 msgid "Eagle ver. 6.x XML library files"
@@ -45572,7 +45516,7 @@ msgstr "Nepodarilo sa nájsť platné puzdrá v '%s'"
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:374
 #, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "Pri enumerácii knižnice puzdier '%s': %s nastala chyba"
+msgstr "Pri získavaní zoznamu knižnice puzdier '%s': %s nastala chyba"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:528
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:533
@@ -45599,7 +45543,7 @@ msgstr "EasyEDA (JLCEDA) Pre projekt"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:268
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
-msgstr "Neznámá FABMASTER sekce %s:%s v řádku %zu."
+msgstr "Neznáma FABMASTER sekcia %s:%s na riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:286
 #, c-format
@@ -45778,7 +45722,7 @@ msgstr "Nebolo možné načítať súbor "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
-msgstr "Súbory DPS spoločnosti Fabmaster"
+msgstr "Súbory Fabmaster PCB"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:94
 #, c-format
@@ -46303,7 +46247,7 @@ msgstr "Výrobný súbor ODB++"
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
 #, c-format
 msgid "Unknown PCad layer %u"
-msgstr "Neznáma vrstva PCad %u"
+msgstr "Neznáma PCad vrstva %u"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:753
 msgid "KiCad only supports 32 signal layers."
@@ -46378,9 +46322,10 @@ msgid "No layers selected for plotting."
 msgstr "Nie je vybraná žiadna vrstva pre vykresľovanie."
 
 #: pcbnew/pcb_plotter.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Color theme '%s' not found, will use theme from PCB Editor settings.\n"
-msgstr "Barevné téma k použití (bude výchozí v nastavení pcbnew)"
+msgstr ""
+"Farebná téma '%s' sa nenašla, bude použitá téma z nastavenia editora DPS.\n"
 
 #: pcbnew/pcb_reference_image.cpp:350
 msgid "Associated Layer"
@@ -46628,9 +46573,9 @@ msgid "Failed to load board\n"
 msgstr "Nepodarilo sa načítať dosku\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid layer name \"%s\"\n"
-msgstr "Neplatné meno signálu\n"
+msgstr "Neplatný názov vrstvy \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:430 pcbnew/pcbnew_jobs_handler.cpp:507
 #: pcbnew/pcbnew_jobs_handler.cpp:555
@@ -46840,7 +46785,7 @@ msgstr "Nemožno nájsť vhodný východiskový bod pre párový spoj '%s'."
 #: pcbnew/router/pns_dp_meander_placer.cpp:80
 #: pcbnew/router/pns_meander_placer.cpp:63
 msgid "Please select a track whose length you want to tune."
-msgstr "Prosím, vyberte spoj, ktorého dĺžku chcete naladiť."
+msgstr "Prosím, vyberte spoj pre naladenie jeho dĺžky."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:94
 msgid ""
@@ -46898,7 +46843,7 @@ msgid ""
 "_N/_P or +/-."
 msgstr ""
 "Nepodarilo sa nájsť komplementárne signály diferenciálneho páru pre ladenie "
-"rozdielu dĺžky. Uistite sa, že názvy signálov patriacich do diferenciálneho "
+"rozdielu dĺžok. Uistite sa, že názvy signálov patriacich do diferenciálneho "
 "páru končia buď _N/_P, alebo +/-."
 
 #: pcbnew/router/pns_router.cpp:228
@@ -48096,9 +48041,8 @@ msgid "Place via"
 msgstr "Umiestniť prekov"
 
 #: pcbnew/tools/edit_tool.cpp:128
-#, fuzzy
 msgid "Positioning Tools"
-msgstr "Posun pozície:"
+msgstr "Nástroje polohovania"
 
 #: pcbnew/tools/edit_tool.cpp:150
 msgid "Shape Modification"
@@ -50221,11 +50165,11 @@ msgstr "Ladiť dĺžku jedného spoja"
 
 #: pcbnew/tools/pcb_actions.cpp:2349
 msgid "Tune Length of a Differential Pair"
-msgstr "Naladiť dĺžku diferenciálneho páru"
+msgstr "Ladiť dĺžku diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2360
 msgid "Tune Skew of a Differential Pair"
-msgstr "Naladiť rozdiel dĺžok diferenciálneho páru"
+msgstr "Ladiť rozdiel dĺžok diferenciálneho páru"
 
 #: pcbnew/tools/pcb_actions.cpp:2375
 msgid "Walks the current track back one segment."
@@ -50388,7 +50332,7 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
-"Upozornenie: Niektoré vložené položky boli na vrstvách, ktoré nie sú "
+"Upozornenie: niektoré vložené položky boli na vrstvách, ktoré nie sú "
 "prítomné na aktuálnej doske.\n"
 "Tieto položky sa nepodarilo vložiť.\n"
 
@@ -51640,9 +51584,9 @@ msgid "Rule Area %s"
 msgstr "Oblasť pravidiel %s"
 
 #: pcbnew/zone.cpp:1122
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area '%s' %s"
-msgstr "Oblasti pravidiel"
+msgstr "Oblasť pravidiel '%s' %s"
 
 #: pcbnew/zone.cpp:1129
 #, c-format
