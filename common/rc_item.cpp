@@ -728,7 +728,6 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
                 retireNodeTree( child );
             }
 
-            m_tree[i]->m_Children.clear();
             ItemsDeleted( markerItem, childItems );
 
             retireNodeTree( m_tree[i] );
