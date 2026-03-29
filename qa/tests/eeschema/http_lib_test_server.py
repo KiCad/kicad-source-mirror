@@ -68,6 +68,8 @@ class PartField(BaseModel):
 class DetailedPart(BaseModel):
     id: str
     name: Optional[str] = None
+    description: Optional[str] = None
+    keywords: Optional[str] = None
     symbolIdStr: str
     exclude_from_bom: str
     exclude_from_board: str
@@ -93,6 +95,8 @@ detailed_parts = {
     "1": DetailedPart(
         id="1",
         name="RC0603FR-0710KL",
+        description="10 kOhms ±1% 0.1W, 1/10W Chip Resistor 0603 (1608 Metric) Moisture Resistant Thick Film",
+        keywords="RES passive smd",
         symbolIdStr="Device:R",
         exclude_from_bom="False",
         exclude_from_board="False",
@@ -108,11 +112,6 @@ detailed_parts = {
             ),
             "value": PartField(value="10k"),
             "reference": PartField(value="R"),
-            "description": PartField(
-                value="10 kOhms ±1% 0.1W, 1/10W Chip Resistor 0603 (1608 Metric) Moisture Resistant Thick Film",
-                visible="False",
-            ),
-            "keywords": PartField(value="RES passive smd", visible="False"),
         },
     )
 }
