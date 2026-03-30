@@ -1323,9 +1323,6 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
     wxString    msg;
     const auto& variants = aComponent->GetVariants();
 
-    if( variants.empty() )
-        return;
-
     if( aBaseFpid.empty() )
         return;
 
