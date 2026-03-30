@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-27 01:06+0000\n"
+"PO-Revision-Date: 2026-03-31 20:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -11764,9 +11764,8 @@ msgid "Update keywords and footprint filters"
 msgstr "Aktualizovat klíčová slova a filtry pouzder"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibility"
-msgstr "Aktualizace/reset viditelnosti pole"
+msgstr "Aktualizovat/obnovit viditelnost názvu/čísla vývodu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
 #, fuzzy
