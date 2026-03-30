@@ -26,7 +26,7 @@
 #include <reporter.h>
 #include <drc/drc_rule_condition.h>
 #include <pcbexpr_evaluator.h>
-
+#include <zone.h>
 
 DRC_RULE_CONDITION::DRC_RULE_CONDITION( const wxString& aExpression ) :
     m_expression( aExpression ),
@@ -67,6 +67,13 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
     BOARD_ITEM* b = const_cast<BOARD_ITEM*>( aItemB );
+
+    // Treat teardrop areas as tracks for DRC rule matching
+    if( a && a->Type() == PCB_ZONE_T && static_cast<ZONE*>( a )->IsTeardropArea() )
+        ctx.SetTypeOverride( a, PCB_TRACE_T );
+
+    if( b && b->Type() == PCB_ZONE_T && static_cast<ZONE*>( b )->IsTeardropArea() )
+        ctx.SetTypeOverride( b, PCB_TRACE_T );
 
     ctx.SetItems( a, b );
 

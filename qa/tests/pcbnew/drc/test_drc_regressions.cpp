@@ -61,7 +61,6 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue7975",    // Differential pair gap out of range fault by DRC
         "issue8407",    // PCBNEW: Arc for diff pair has clearance DRC error
         "issue10906",   // Soldermask bridge for only one object
-        "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
         "issue14412",   // Solder mask bridge between pads in a net-tie pad group
         "issue15280",   // Very wide spokes mis-counted as being single spoke
@@ -161,6 +160,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue18878", 12, {} },       // Updated: fix reports all cross-net mask bridge pairs
         { "issue19325/issue19325", 4, issue19325_ignore }, // Overlapping pad annular ring calculation
         { "issue22102", 2, issue22102_ignore },        // arc-to-rect collision; colocated arcs collision
+        { "issue11814", 2, {} },        // Teardrop clearance to pad
     };
 
     for( const auto& [testName, expectedErrors, customSeverities] : tests )
