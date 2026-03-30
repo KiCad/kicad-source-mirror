@@ -214,7 +214,7 @@ std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload( const st
         LIB_SYMBOL* loaded = plugin->LoadSymbol( tempFile.GetFullPath(), aLibItemName );
 
         if( loaded )
-            symbol.reset( loaded );
+            symbol = std::make_unique<LIB_SYMBOL>( *loaded );
         else
             aError = _( "Symbol payload did not include the expected symbol." );
     }
