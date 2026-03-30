@@ -26,6 +26,7 @@
 #include <page_info.h>
 #include <sch_junction.h>
 #include <sch_line.h>
+#include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
 #include <stroke_params.h>
@@ -379,45 +380,107 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
         }
     }
 
-    // --- Used-decal name tables (stride 0x6c), one per sheet; names validated
-    // against the geometry library. ---
+    // --- Used-decal tables (stride 0x6c, a 1-byte lead precedes the name), one per
+    // sheet, plus the stride-26 pin terminal pool that immediately follows each.
+    // Per record: name@+1, terminal count@+0x2b, cumulative-terminal start@+0x2d (a
+    // running prefix sum).  Terminal: X = 2*i16@+3, Y = 2*i16@+5 (decal-relative). ---
+    struct UREC { std::string name; int count; int cum; };
     size_t i = DATA_STREAM_OFFSET;
 
-    while( i + USED_DECAL_STRIDE < n )
+    while( i + USED_DECAL_STRIDE * 4 < n )
     {
-        std::string nm0 = nameAt( d, i, 0x26 );
-        std::string nm1 = nameAt( d, i + USED_DECAL_STRIDE, 0x26 );
+        std::string seed0 = nameAt( d, i + 1, 0x20 );
+        std::string seed1 = nameAt( d, i + 1 + USED_DECAL_STRIDE, 0x20 );
 
-        if( m_decalIndex.count( nm0 ) && m_decalIndex.count( nm1 ) )
+        if( m_decalIndex.count( seed0 ) && m_decalIndex.count( seed1 ) )
         {
-            std::vector<std::string> names;
-            size_t                   j = i;
-            int                      gaps = 0;
+            std::vector<UREC> recs;
+            int               expect = 0;
 
-            while( j + USED_DECAL_STRIDE <= n )
+            for( size_t k = 0; ; ++k )
             {
-                std::string nm = nameAt( d, j, 0x26 );
-                names.push_back( nm );
+                size_t rec = i + USED_DECAL_STRIDE * k;
 
-                if( m_decalIndex.count( nm ) )
-                {
-                    gaps = 0;
-                }
-                else if( ++gaps > 6 )
-                {
+                if( rec + USED_DECAL_STRIDE > n )
                     break;
-                }
 
-                j += USED_DECAL_STRIDE;
+                std::string nm = nameAt( d, rec + 1, 0x20 );
+                int         cnt = d[rec + 0x2b];
+                int         cum = readU16( d, rec + 0x2d );
+
+                if( nm.empty() || cum != expect || cnt > 64 )
+                    break;
+
+                recs.push_back( { nm, cnt, cum } );
+                expect = cum + cnt;
             }
 
-            while( !names.empty() && !m_decalIndex.count( names.back() ) )
-                names.pop_back();
-
-            if( names.size() >= 5 )
+            if( recs.size() >= 4 )
             {
+                std::vector<std::string> names;
+                names.reserve( recs.size() );
+
+                for( const UREC& r : recs )
+                    names.push_back( r.name );
+
                 m_usedDecalTables.emplace_back( i, std::move( names ) );
-                i = j;
+
+                // The terminal pool follows the table; snap the base +/-2 so the
+                // single-terminal power/$OSR decals read their (0,0) origin.
+                int    total = recs.back().cum + recs.back().count;
+                size_t nominal = i + USED_DECAL_STRIDE * recs.size();
+                size_t poolBase = nominal;
+                int    bestScore = -1;
+
+                for( size_t cand = ( nominal >= 2 ? nominal - 2 : 0 ); cand <= nominal + 2; ++cand )
+                {
+                    if( cand + 26 * static_cast<size_t>( total ) > n )
+                        continue;
+
+                    int score = 0;
+
+                    for( const UREC& r : recs )
+                    {
+                        bool anchor = r.count == 1
+                                      && ( r.name.rfind( "$OSR", 0 ) == 0 || r.name.rfind( "GND", 0 ) == 0
+                                           || r.name == "+5V" || r.name == "+12V" || r.name == "-5V"
+                                           || r.name == "-12V" || r.name == "+5VA" );
+
+                        if( !anchor )
+                            continue;
+
+                        size_t o = cand + 26 * static_cast<size_t>( r.cum );
+
+                        if( decalMil( d, o + 3 ) == 0 && decalMil( d, o + 5 ) == 0 )
+                            ++score;
+                    }
+
+                    if( score > bestScore )
+                    {
+                        bestScore = score;
+                        poolBase = cand;
+                    }
+                }
+
+                // Assign each decal's terminal slice to the geometry-library decal.
+                for( const UREC& r : recs )
+                {
+                    auto it = m_decalIndex.find( r.name );
+
+                    if( it == m_decalIndex.end() || !m_decals[it->second].terminals.empty() )
+                        continue;
+
+                    for( int t = 0; t < r.count; ++t )
+                    {
+                        size_t o = poolBase + 26 * static_cast<size_t>( r.cum + t );
+
+                        if( o + 6 <= n )
+                            m_decals[it->second].terminals.emplace_back( decalMil( d, o + 3 ),
+                                                                         decalMil( d, o + 5 ) );
+                    }
+                }
+
+                i = nominal;
                 continue;
             }
         }
@@ -1202,6 +1265,51 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                     shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
 
                 libSym->AddDrawItem( shape );
+            }
+
+            // Pin terminals -> SCH_PINs at the connection points, the stub oriented
+            // toward the decal body so wires connect at the terminal.
+            const DECAL& decal = m_decals[decalIt->second];
+            double       cx = 0.0;
+            double       cy = 0.0;
+            int          nv = 0;
+
+            for( const DECAL_PIECE& piece : decal.pieces )
+            {
+                for( const std::pair<int, int>& v : piece.verts )
+                {
+                    cx += v.first;
+                    cy += v.second;
+                    ++nv;
+                }
+            }
+
+            if( nv > 0 )
+            {
+                cx /= nv;
+                cy /= nv;
+            }
+
+            int pinNumber = 1;
+
+            for( const std::pair<int, int>& term : decal.terminals )
+            {
+                SCH_PIN* pin = new SCH_PIN( libSym.get() );
+                pin->SetPosition( VECTOR2I( schIUScale.MilsToIU( term.first ),
+                                            -schIUScale.MilsToIU( term.second ) ) );
+                pin->SetNumber( wxString::Format( wxT( "%d" ), pinNumber++ ) );
+                pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+
+                int ddx = static_cast<int>( cx ) - term.first;
+                int ddy = static_cast<int>( cy ) - term.second;
+
+                if( std::abs( ddx ) >= std::abs( ddy ) )
+                    pin->SetOrientation( ddx >= 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
+                else
+                    pin->SetOrientation( ddy < 0 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN );
+
+                pin->SetLength( schIUScale.MilsToIU( 100 ) );
+                libSym->AddDrawItem( pin );
             }
         }
 
