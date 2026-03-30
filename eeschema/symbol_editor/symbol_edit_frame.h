@@ -195,6 +195,8 @@ public:
     void FreezeLibraryTree();
     void ThawLibraryTree();
 
+    bool IsSyncLibrariesInProgress() const { return m_syncLibrariesInProgress; }
+
     void OnUpdateUnitNumber( wxUpdateUIEvent& event );
     void OnUpdateBodyStyle( wxUpdateUIEvent& event );
 
@@ -576,6 +578,12 @@ private:
     // They are enabled when the loaded symbol has graphic items for converted shape
     // But under some circumstances (New symbol created) these tools must left enabled
     static bool m_showDeMorgan;
+
+    // Guard against re-entrant SyncLibraries calls.  The progress dialog used during sync
+    // yields the event loop, which can dispatch queued UI events (e.g. menu clicks that
+    // accumulated while the app was busy).  Without this guard, opening the symbol library
+    // table dialog from within an active SyncLibraries call corrupts the library tree.
+    bool        m_syncLibrariesInProgress;
 };
 
 #endif  // SYMBOL_EDIT_FRAME_H

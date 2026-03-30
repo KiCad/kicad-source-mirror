@@ -985,6 +985,19 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     auto symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false ) );
     wxString msg;
 
+    // Refuse to open the dialog re-entrantly while a library sync is running.  A
+    // sync can yield the event loop (via the progress dialog), which dispatches any
+    // pending UI events — including clicks that accumulated while the app was busy.
+    // Opening the dialog mid-sync corrupts the library tree.  Reschedule instead.
+    if( symbolEditor && symbolEditor->IsSyncLibrariesInProgress() )
+    {
+        symbolEditor->CallAfter( [aKiway, aParent]()
+        {
+            InvokeSchEditSymbolLibTable( aKiway, aParent );
+        } );
+        return;
+    }
+
     if( symbolEditor )
     {
         // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)

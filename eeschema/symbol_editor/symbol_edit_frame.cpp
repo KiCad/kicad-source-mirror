@@ -131,6 +131,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
     m_unit = 1;
     m_bodyStyle = 1;
+    m_syncLibrariesInProgress = false;
     m_aboutTitle = _HKI( "KiCad Symbol Editor" );
 
     wxIcon icon;
@@ -1333,6 +1334,14 @@ wxString SYMBOL_EDIT_FRAME::getTargetLib() const
 void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelled,
                                        const wxString& aForceRefresh )
 {
+    // Prevent re-entrant calls.  The progress dialog yields the event loop during Sync(),
+    // which can dispatch queued UI events (e.g. menu clicks queued while the app was busy
+    // loading libraries).  A re-entrant call would corrupt the library tree mid-rebuild.
+    if( m_syncLibrariesInProgress )
+        return;
+
+    m_syncLibrariesInProgress = true;
+
     LIB_ID selected;
 
     if( m_treePane )
@@ -1406,6 +1415,8 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
             GetLibTree()->CenterLibId( current );
         }
     }
+
+    m_syncLibrariesInProgress = false;
 }
 
 
