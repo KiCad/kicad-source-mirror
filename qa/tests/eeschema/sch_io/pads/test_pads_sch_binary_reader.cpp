@@ -635,6 +635,68 @@ BOOST_AUTO_TEST_CASE( ExternalSheetCountMatchesDesign )
     {
 
 
+BOOST_AUTO_TEST_CASE( ExternalDecalBindingAndGeometry )
+{
+    // SC350430B01: the placement->decal binding (handle @ refdes-0x1a indexing the
+    // used-decal table) and the decal geometry library are decoded.  R2 is a
+    // horizontal resistor (RESZ-H); the PIN decal is a single OPEN (0,0)-(200,0).
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    // Placement->decal binding: every resistor (R2/R1) binds to a RESZ alternate.
+    auto decalOf = [&]( const std::string& ref ) -> std::string
+    {
+        for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+        {
+            if( pl.reference == ref )
+                return pl.decalName;
+        }
+
+        return std::string();
+    };
+
+    BOOST_CHECK_EQUAL( decalOf( "R2" ), "RESZ-H" );
+    BOOST_CHECK_EQUAL( decalOf( "R1" ), "RESZ-H" );
+
+    // Decal geometry library: the PIN decal is one OPEN piece (0,0)-(200,0).
+    const PADS_SCH_BINARY::DECAL* pin = nullptr;
+
+    for( const PADS_SCH_BINARY::DECAL& dec : reader.GetDecals() )
+    {
+        if( dec.name == "PIN" )
+            pin = &dec;
+    }
+
+    BOOST_REQUIRE( pin );
+    BOOST_REQUIRE_EQUAL( pin->pieces.size(), 1u );
+    BOOST_REQUIRE_EQUAL( pin->pieces[0].verts.size(), 2u );
+    BOOST_CHECK_EQUAL( pin->pieces[0].verts[0].first, 0 );
+    BOOST_CHECK_EQUAL( pin->pieces[0].verts[0].second, 0 );
+    BOOST_CHECK_EQUAL( pin->pieces[0].verts[1].first, 200 );
+    BOOST_CHECK_EQUAL( pin->pieces[0].verts[1].second, 0 );
+
+    // Pin terminals: the resistor decal RESZ-H has two terminals at (0,0)/(500,0).
+    const PADS_SCH_BINARY::DECAL* resz = nullptr;
+
+    for( const PADS_SCH_BINARY::DECAL& dec : reader.GetDecals() )
+    {
+        if( dec.name == "RESZ-H" )
+            resz = &dec;
+    }
+
+    BOOST_REQUIRE( resz );
+    BOOST_REQUIRE_EQUAL( resz->terminals.size(), 2u );
+    BOOST_CHECK_EQUAL( resz->terminals[0].first, 0 );
+    BOOST_CHECK_EQUAL( resz->terminals[0].second, 0 );
+    BOOST_CHECK_EQUAL( resz->terminals[1].first, 500 );
+    BOOST_CHECK_EQUAL( resz->terminals[1].second, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( ExternalNetLabelsBindNetNames )
 {
     // SC350430B01 off-page refs bind to net names via the connection-segment

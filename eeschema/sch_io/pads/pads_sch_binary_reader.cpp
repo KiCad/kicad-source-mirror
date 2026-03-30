@@ -45,6 +45,7 @@
 #include <array>
 #include <cctype>
 #include <cstdlib>
+#include <cstring>
 #include <limits>
 #include <set>
 
@@ -130,6 +131,7 @@ bool PADS_SCH_BINARY_READER::ReadFile( const wxString& aFileName, std::vector<ui
 bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 {
     m_sheetOffsets.clear();
+    m_sheetNames.clear();
     m_decals.clear();
     m_decalIndex.clear();
     m_usedDecalTables.clear();
@@ -162,25 +164,107 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 // ---------------------------------------------------------------------------
 // SHEETS
 //
-// PADS Logic stores one object block per sheet in the data stream, each framed
-// by a per-sheet CAE view record carrying the fixed signature
-//     80 00 00 00 30 00 00 00
-// The signature occurs exactly once per sheet (== pool3.used_count), in sheet
-// order, so its offsets bound the per-sheet object blocks.  Sheets carry no name
-// in this format (they are numbered) and the page size is a single global value.
+// The authoritative per-sheet partition is the pool3 sheet table: a contiguous
+// stride-48 array (count == pool3.used_count) whose records carry the absolute
+// start offset of each sheet's object block (+0x00), its byte length (+0x04), a
+// 0xFFFF marker (+0x0a) and the "[N]NAME" sheet name (+0x0c).  The ranges
+// [A_k, A_{k+1}) tile the object stream with zero gaps.  The per-sheet CAE view
+// record (signature 80 00 00 00 30 00 00 00) sits exactly 664 bytes into each
+// block (A_k + 664), so it is a worse boundary -- it leaks each block's leading
+// text/wires into the previous sheet.  We anchor the table on the first validated
+// signature minus 664.  Sheets ARE named, and file order is NOT active-first.
 // ---------------------------------------------------------------------------
 static const std::array<uint8_t, 8> SHEET_SIGNATURE = { 0x80, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00 };
+static constexpr uint32_t SHEET_SIG_TO_BLOCK = 664;  // block_off_A = signature - 664
 
 
 void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 {
-    if( d.size() < SHEET_SIGNATURE.size() )
+    if( 0x7c + 4 > d.size() )
         return;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() <= d.size(); ++i )
+    // pool3.used_count (descriptor #3 @ 0x74, used_count at +8) = sheet count.
+    size_t sheetCount = readU32( d, 0x7c );
+
+    if( sheetCount == 0 || sheetCount > 4096 )
+        return;
+
+    // The first VALID per-sheet CAE signature: SCALE f32 in [1,60] at +8, and a
+    // heap pointer (high byte >= 0xC0) at +12, rejecting stray byte coincidences.
+    size_t firstSig = 0;
+    bool   haveSig = false;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() + 8 <= d.size(); ++i )
     {
-        if( std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
-            m_sheetOffsets.push_back( i );
+        if( !std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
+            continue;
+
+        uint32_t scaleBits = readU32( d, i + 8 );
+        float    scale = 0.0f;
+        std::memcpy( &scale, &scaleBits, sizeof( scale ) );
+        uint32_t heapPtr = readU32( d, i + 12 );
+
+        if( scale >= 1.0f && scale <= 60.0f && ( heapPtr >> 24 ) >= 0xC0 )
+        {
+            firstSig = i;
+            haveSig = true;
+            break;
+        }
+    }
+
+    if( !haveSig || firstSig < SHEET_SIG_TO_BLOCK )
+        return;
+
+    uint32_t targetA0 = static_cast<uint32_t>( firstSig - SHEET_SIG_TO_BLOCK );
+
+    // Locate the stride-48 sheet table: a record whose block offset equals targetA0
+    // and whose 0xFFFF marker is present, followed by sheetCount strictly-increasing
+    // in-bounds block offsets.
+    for( size_t o = DATA_STREAM_OFFSET; o + sheetCount * 48 <= d.size(); ++o )
+    {
+        if( readU32( d, o ) != targetA0 || readU16( d, o + 0x0a ) != 0xFFFF )
+            continue;
+
+        std::vector<uint32_t> offs;
+        bool                  ok = true;
+
+        for( size_t k = 0; k < sheetCount; ++k )
+        {
+            uint32_t a = readU32( d, o + k * 48 );
+
+            if( a < DATA_STREAM_OFFSET || a >= d.size() || ( k > 0 && a <= offs.back() ) )
+            {
+                ok = false;
+                break;
+            }
+
+            offs.push_back( a );
+        }
+
+        if( !ok )
+            continue;
+
+        for( size_t k = 0; k < sheetCount; ++k )
+        {
+            m_sheetOffsets.push_back( offs[k] );
+
+            std::string name;
+
+            for( size_t j = o + k * 48 + 0x0c; j < o + k * 48 + 48; ++j )
+            {
+                uint8_t c = d[j];
+
+                if( c == 0x00 )
+                    break;
+
+                if( c >= 0x20 && c < 0x7f )
+                    name.push_back( static_cast<char>( c ) );
+            }
+
+            m_sheetNames.push_back( name );
+        }
+
+        return;
     }
 }
 
@@ -1683,7 +1767,10 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         child->SetScreen( childScreen );
         childScreen->SetPageSettings( pageInfo );
 
-        child->GetField( FIELD_T::SHEET_NAME )->SetText( wxString::Format( _( "Sheet %zu" ), s + 1 ) );
+        wxString sheetName = ( s < m_sheetNames.size() && !m_sheetNames[s].empty() )
+                                     ? wxString::FromUTF8( m_sheetNames[s] )
+                                     : wxString::Format( _( "Sheet %zu" ), s + 1 );
+        child->GetField( FIELD_T::SHEET_NAME )->SetText( sheetName );
         child->GetField( FIELD_T::SHEET_FILENAME )
                 ->SetText( wxString::Format( wxT( "pads_sheet%zu.%s" ), s + 1,
                                              FILEEXT::KiCadSchematicFileExtension ) );

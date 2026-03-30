@@ -155,6 +155,9 @@ public:
     /// Number of PADS sheets in the design (>= 1).
     size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
 
+    /// Per-sheet "[N]NAME" names from the pool3 sheet table, in file order.
+    const std::vector<std::string>& GetSheetNames() const { return m_sheetNames; }
+
     /**
      * Build the recovered symbols and wires onto @p aRootSheet's screen.
      *
@@ -187,8 +190,12 @@ private:
     int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
                             int aPageHeightIU ) const;
 
-    /// File offsets of each per-sheet object block (empty for a single-sheet design).
+    /// Start file offset of each per-sheet object block, from the pool3 sheet table
+    /// (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
+
+    /// Per-sheet display name ("[N]NAME") from the sheet table, parallel to m_sheetOffsets.
+    std::vector<std::string>             m_sheetNames;
 
     /// CAE-decal geometry library, indexed by name via m_decalIndex.
     std::vector<DECAL>                   m_decals;
