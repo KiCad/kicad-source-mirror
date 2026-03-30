@@ -381,13 +381,12 @@ wxString* PROJECT_TEMPLATE::GetTitle()
     if( !GetHtmlFile().IsFileReadable() )
         return &m_title;
 
-    wxFFileInputStream input( GetHtmlFile().GetFullPath() );
-    wxString           separator( wxT( "\x9" ) );
-    wxTextInputStream  text( input, separator, wxConvUTF8 );
-
-    /* Open HTML file and get the text between the title tags */
     if( m_title == wxEmptyString )
     {
+        wxFFileInputStream input( GetHtmlFile().GetFullPath() );
+        wxString           separator( wxT( "\x9" ) );
+        wxTextInputStream  text( input, separator, wxConvUTF8 );
+
         int  start = 0;
         int  finish = 0;
         bool done = false;

@@ -217,4 +217,49 @@ BOOST_AUTO_TEST_CASE( ExactMatchDirectoryRenamed )
 }
 
 
+BOOST_AUTO_TEST_CASE( TemplateWithoutMetaDirSetsErrorTitle )
+{
+    // Issue #23623: user template directories that are just regular KiCad projects
+    // (no meta/info.html) should not crash. The constructor should set an error
+    // title and GetTitle() should return that error without trying to open a
+    // nonexistent file.
+    fs::path noMetaPath = m_tempDir / "no_meta_template";
+    fs::create_directories( noMetaPath );
+
+    std::ofstream f( ( noMetaPath / "no_meta_template.kicad_pro" ).string() );
+    f << "{}";
+    f.close();
+
+    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( noMetaPath.string() ) );
+
+    wxString* title = tmpl.GetTitle();
+    BOOST_REQUIRE( title != nullptr );
+    BOOST_CHECK_MESSAGE( !title->IsEmpty(), "Template without meta dir should have an error title" );
+
+    // Calling GetTitle() again should return the same cached result without
+    // attempting to open meta/info.html
+    wxString* title2 = tmpl.GetTitle();
+    BOOST_CHECK( *title == *title2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( TemplateWithMetaDirButNoInfoHtml )
+{
+    // meta directory exists but info.html is missing
+    fs::path tmplPath = m_tempDir / "meta_no_html";
+    fs::create_directories( tmplPath / "meta" );
+
+    std::ofstream f( ( tmplPath / "meta_no_html.kicad_pro" ).string() );
+    f << "{}";
+    f.close();
+
+    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( tmplPath.string() ) );
+
+    wxString* title = tmpl.GetTitle();
+    BOOST_REQUIRE( title != nullptr );
+    BOOST_CHECK_MESSAGE( !title->IsEmpty(),
+                         "Template with meta dir but no info.html should have an error title" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

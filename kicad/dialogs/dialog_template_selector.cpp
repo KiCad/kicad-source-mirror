@@ -695,15 +695,22 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
                     while( cont )
                     {
                         wxString subFull = aPath + wxFileName::GetPathSeparator() + subName;
-                        wxDir subDir;
 
-                        if( subDir.Open( subFull ) )
+                        // Only treat subdirectories that contain a meta directory as templates.
+                        // Directories without meta (e.g. regular project directories the user
+                        // placed in the template path) are silently skipped.
+                        wxFileName metaTest;
+                        metaTest.AssignDir( subFull );
+                        metaTest.AppendDir( METADIR );
+
+                        if( metaTest.DirExists() )
                         {
                             auto templ = std::make_unique<PROJECT_TEMPLATE>( subFull );
                             wxFileName htmlFile = templ->GetHtmlFile();
                             wxString description = templ->GetError().IsEmpty() ? ExtractDescription( htmlFile ) : templ->GetError();
 
-                            TEMPLATE_WIDGET* widget = new TEMPLATE_WIDGET( m_scrolledTemplates, this );
+                            TEMPLATE_WIDGET* widget =
+                                    new TEMPLATE_WIDGET( m_scrolledTemplates, this );
                             widget->SetTemplate( templ.get() );
                             widget->SetDescription( description );
                             widget->SetIsUserTemplate( aIsUser );
