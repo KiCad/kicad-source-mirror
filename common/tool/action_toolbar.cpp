@@ -754,9 +754,9 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
             m_toolManager->CancelTool();
             handled = true;
         }
-        else if( selectionSpecialCase
-                 || ( groupIt != m_actionGroups.end()
-                      && std::none_of( groupIt->second->GetActions().begin(),
+        else if( groupIt != m_actionGroups.end()
+                 && ( selectionSpecialCase
+                      || std::none_of( groupIt->second->GetActions().begin(),
                                        groupIt->second->GetActions().end(),
                                        []( const TOOL_ACTION* a )
                                        {
