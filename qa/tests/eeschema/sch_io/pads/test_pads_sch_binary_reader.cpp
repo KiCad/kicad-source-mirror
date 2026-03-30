@@ -635,6 +635,40 @@ BOOST_AUTO_TEST_CASE( ExternalSheetCountMatchesDesign )
     {
 
 
+BOOST_AUTO_TEST_CASE( ExternalNetLabelsBindNetNames )
+{
+    // SC350430B01 off-page refs bind to net names via the connection-segment
+    // net-table ordinal; the power nets GND and +24V are present, and every
+    // decoded label carries a non-empty net name (correct-or-omit, never wrong).
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    const auto& labels = reader.GetNetLabels();
+    BOOST_CHECK_GT( labels.size(), 40u );
+
+    bool haveGnd = false;
+    bool have24v = false;
+
+    for( const PADS_SCH_BINARY::NET_LABEL& lbl : labels )
+    {
+        BOOST_CHECK( !lbl.netName.empty() );
+
+        if( lbl.netName == "GND" )
+            haveGnd = true;
+
+        if( lbl.netName == "+24V" )
+            have24v = true;
+    }
+
+    BOOST_CHECK( haveGnd );
+    BOOST_CHECK( have24v );
+}
+
+
 BOOST_AUTO_TEST_CASE( ExternalSingleSheetJunctionsMatchAsciiTiedots )
 {
     // SC350430B01 is single-sheet, so its tie-dot pool is exactly the .txt

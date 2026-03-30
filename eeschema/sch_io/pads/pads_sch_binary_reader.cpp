@@ -25,6 +25,7 @@
 #include <lib_symbol.h>
 #include <page_info.h>
 #include <sch_junction.h>
+#include <sch_label.h>
 #include <sch_line.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
@@ -45,6 +46,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <limits>
+#include <set>
 
 namespace PADS_SCH_BINARY
 {
@@ -140,6 +142,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_busPolylineSheets.clear();
     m_texts.clear();
     m_junctions.clear();
+    m_netLabels.clear();
 
     if( !IsBinarySch( aData ) )
         return false;
@@ -150,6 +153,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     decodeWires( aData );
     decodeTexts( aData );
     decodeJunctions( aData );
+    decodeNetLabels( aData );
 
     return true;
 }
@@ -1213,6 +1217,221 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 
 
 // ---------------------------------------------------------------------------
+// NET LABELS (off-page refs / power ports)
+//
+// Each connection segment (stride 40, marker 0x02fd/0x03fd @+0x0c) carries the
+// net's ordinal into the 88-byte net table at +0x1a and two endpoint refs at
+// +0x1e/+0x20 whose high nibble 2 means "off-page ref O<idx>".  The off-page
+// symbols live in a stride-0x20 array (X@+0, Y@+2 page-biased; 1-based index at
+// +0x14).  Joining them per sheet places a net label at each off-page position.
+// ---------------------------------------------------------------------------
+static constexpr size_t NET_STRIDE = 88;
+static constexpr size_t SEG_STRIDE = 40;
+static constexpr size_t OFFPAGE_STRIDE = 0x20;
+
+
+static bool isNetRecord( const std::vector<uint8_t>& d, size_t o )
+{
+    if( o + NET_STRIDE > d.size() )
+        return false;
+
+    if( d[o + 0x48] != 0xFF || d[o + 0x49] != 0xFF || d[o + 0x4a] != 0xFF || d[o + 0x4b] != 0xFF )
+        return false;
+
+    size_t e = o + 0x10;
+
+    while( e < o + 0x48 && d[e] != 0 )
+        ++e;
+
+    size_t len = e - ( o + 0x10 );
+
+    if( len == 0 || len > 47 )
+        return false;
+
+    for( size_t i = o + 0x10; i < e; ++i )
+    {
+        if( d[i] < 0x20 || d[i] >= 0x7f )
+            return false;
+    }
+
+    return true;
+}
+
+
+static bool isSegmentMarker( uint16_t aMarker )
+{
+    return aMarker == 0x02FD || aMarker == 0x03FD;
+}
+
+
+void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
+{
+    // 1. Net table = the longest contiguous stride-88 net-record run.
+    size_t           netBase = 0;
+    size_t           netCount = 0;
+    std::set<size_t> seenNet;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE < d.size(); )
+    {
+        if( !isNetRecord( d, i ) )
+        {
+            ++i;
+            continue;
+        }
+
+        size_t start = i;
+
+        while( start >= DATA_STREAM_OFFSET + NET_STRIDE && isNetRecord( d, start - NET_STRIDE ) )
+            start -= NET_STRIDE;
+
+        if( seenNet.count( start ) )
+        {
+            i += NET_STRIDE;
+            continue;
+        }
+
+        seenNet.insert( start );
+        size_t p = start;
+        size_t cnt = 0;
+
+        while( isNetRecord( d, p ) )
+        {
+            ++cnt;
+            p += NET_STRIDE;
+        }
+
+        if( cnt > netCount )
+        {
+            netCount = cnt;
+            netBase = start;
+        }
+
+        i = p;
+    }
+
+    if( netCount == 0 )
+        return;
+
+    auto netName = [&]( size_t k ) -> std::string
+    {
+        return nameAt( d, netBase + NET_STRIDE * k + 0x10, 0x38 );
+    };
+
+    // 2. Segment pools -> (sheet, off-page index) -> net name (first segment wins;
+    // all referencing segments agree).
+    std::map<std::pair<int, int>, std::string> offNet;
+    std::set<size_t>                           seenSeg;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + SEG_STRIDE < d.size(); )
+    {
+        if( !isSegmentMarker( readU16( d, i + 0x0c ) ) )
+        {
+            ++i;
+            continue;
+        }
+
+        size_t start = i;
+
+        while( start >= DATA_STREAM_OFFSET + SEG_STRIDE
+               && isSegmentMarker( readU16( d, start - SEG_STRIDE + 0x0c ) ) )
+            start -= SEG_STRIDE;
+
+        if( seenSeg.count( start ) )
+        {
+            i += SEG_STRIDE;
+            continue;
+        }
+
+        seenSeg.insert( start );
+        size_t p = start;
+
+        while( p + SEG_STRIDE <= d.size() && isSegmentMarker( readU16( d, p + 0x0c ) ) )
+        {
+            uint16_t ni = readU16( d, p + 0x1a );
+
+            if( ni < netCount )
+            {
+                std::string net = netName( ni );
+                int         sheet = sheetIndexForOffset( p );
+
+                for( int off : { 0x1e, 0x20 } )
+                {
+                    uint16_t v = readU16( d, p + off );
+
+                    if( ( v >> 12 ) == 2 )
+                        offNet.emplace( std::make_pair( sheet, v & 0xfff ), net );
+                }
+            }
+
+            p += SEG_STRIDE;
+        }
+
+        i = p;
+    }
+
+    // 3. Off-page arrays -> emit a label per decoded (sheet, index).
+    int pageWidth = 0;
+    int pageHeight = 0;
+    pageExtent( d, pageWidth, pageHeight );
+
+    auto coordOk = [&]( size_t o ) -> bool
+    {
+        if( o + 4 > d.size() )
+            return false;
+
+        int x = designMil( readU16( d, o ) );
+        int y = designMil( readU16( d, o + 2 ) );
+
+        return x % 50 == 0 && y % 50 == 0 && x >= 0 && x <= pageWidth && y >= 0 && y <= pageHeight;
+    };
+
+    std::set<std::pair<int, int>> emitted;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + OFFPAGE_STRIDE * 2 < d.size(); )
+    {
+        if( !coordOk( i ) || !coordOk( i + OFFPAGE_STRIDE )
+            || readU16( d, i + OFFPAGE_STRIDE + 0x14 ) != readU16( d, i + 0x14 ) + 1 )
+        {
+            ++i;
+            continue;
+        }
+
+        size_t j = i;
+        int    prevSeq = static_cast<int>( readU16( d, i + 0x14 ) ) - 1;
+
+        while( j + OFFPAGE_STRIDE <= d.size() && coordOk( j ) )
+        {
+            int seq = readU16( d, j + 0x14 );
+
+            if( seq != prevSeq + 1 )
+                break;
+
+            int  sheet = sheetIndexForOffset( j );
+            auto key = std::make_pair( sheet, seq - 1 );
+            auto it = offNet.find( key );
+
+            if( it != offNet.end() && !emitted.count( key ) )
+            {
+                emitted.insert( key );
+
+                NET_LABEL lbl;
+                lbl.x_mils = designMil( readU16( d, j ) );
+                lbl.y_mils = designMil( readU16( d, j + 2 ) );
+                lbl.netName = it->second;
+                lbl.sheetIndex = sheet;
+                m_netLabels.push_back( std::move( lbl ) );
+            }
+
+            prevSeq = seq;
+            j += OFFPAGE_STRIDE;
+        }
+
+        i = j;
+    }
+}
+
+
+// ---------------------------------------------------------------------------
 // SCHEMATIC BUILD
 // ---------------------------------------------------------------------------
 int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath,
@@ -1413,6 +1632,18 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
         VECTOR2I pos( schIUScale.MilsToIU( jct.x_mils ), milToY( jct.y_mils ) );
         aScreen->Append( new SCH_JUNCTION( pos ) );
+        ++appended;
+    }
+
+    // --- NET LABELS (off-page refs / power ports) ---
+    for( const NET_LABEL& lbl : m_netLabels )
+    {
+        if( !onSheet( lbl.sheetIndex ) )
+            continue;
+
+        VECTOR2I        pos( schIUScale.MilsToIU( lbl.x_mils ), milToY( lbl.y_mils ) );
+        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( pos, wxString::FromUTF8( lbl.netName ) );
+        aScreen->Append( label );
         ++appended;
     }
 

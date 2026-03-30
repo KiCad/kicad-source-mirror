@@ -78,6 +78,15 @@ struct JUNCTION
     int sheetIndex = 0; ///< Owning PADS sheet (0-based).
 };
 
+/// One net label / off-page reference (power port, off-sheet connector).
+struct NET_LABEL
+{
+    int         x_mils = 0;
+    int         y_mils = 0;
+    std::string netName;
+    int         sheetIndex = 0;
+};
+
 /// One free-text item recovered from the binary 32-byte text record pool.
 struct TEXT_ITEM
 {
@@ -140,6 +149,7 @@ public:
     const std::vector<int>&                         GetBusPolylineSheets() const { return m_busPolylineSheets; }
     const std::vector<TEXT_ITEM>&                   GetTexts() const { return m_texts; }
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
+    const std::vector<NET_LABEL>&                   GetNetLabels() const { return m_netLabels; }
     const std::vector<DECAL>&                       GetDecals() const { return m_decals; }
 
     /// Number of PADS sheets in the design (>= 1).
@@ -170,6 +180,7 @@ private:
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );
+    void decodeNetLabels( const std::vector<uint8_t>& aData );
 
     /// Emit every element belonging to @p aSheetIndex (or all sheets when it is
     /// negative) onto @p aScreen, returning the count appended.
@@ -195,6 +206,7 @@ private:
     std::vector<int>                     m_busPolylineSheets;  ///< Sheet index per bus polyline.
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
+    std::vector<NET_LABEL>               m_netLabels;      ///< Off-page / power-port net labels.
 };
 
 } // namespace PADS_SCH_BINARY
