@@ -132,10 +132,11 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                 std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( name, false );
 
-                int priority = entry["priority"];
-                nc->SetPriority( priority );
+                if( entry.contains( "priority" ) && entry["priority"].is_number() )
+                    nc->SetPriority( entry["priority"].get<int>() );
 
-                nc->SetTuningProfile( entry["tuning_profile"] );
+                if( entry.contains( "tuning_profile" ) && entry["tuning_profile"].is_string() )
+                    nc->SetTuningProfile( entry["tuning_profile"].get<wxString>() );
 
                 if( auto value = getInPcbUnits( entry, "clearance" ) )
                     nc->SetClearance( *value );
