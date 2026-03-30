@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-03-31 20:09+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -8418,7 +8418,7 @@ msgstr "認識されないファンクション '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:1028
 #, c-format
 msgid "Unexpected units for '%s'"
-msgstr "'%s'に対して想定外の単位です"
+msgstr "'%s'に対して想定外のユニットです"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1040
 #, c-format
