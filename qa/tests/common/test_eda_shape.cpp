@@ -19,6 +19,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eda_shape.h>
+#include <tool/point_editor_behavior.h>
 #include <qa_utils/geometry/geometry.h> // For KI_TEST::IsVecWithinTol
 #include <geometry/shape_arc.h> // For SHAPE_ARC::DefaultAccuracyForPCB()
 
@@ -168,6 +169,41 @@ BOOST_AUTO_TEST_CASE( SetArcGeometry )
 
         // Check that the centre is still correct
     }
+}
+
+/**
+ * Verify that EDA_POLYGON_POINT_EDIT_BEHAVIOR survives EDA_SHAPE assignment.
+ *
+ * EDA_SHAPE::operator= replaces m_poly with a new unique_ptr. The behavior must
+ * resolve GetPolyShape() on each call rather than caching a reference that goes stale.
+ * See https://gitlab.com/kicad/code/kicad/-/issues/23648
+ */
+BOOST_AUTO_TEST_CASE( PolygonBehaviorSurvivesAssignment )
+{
+    EDA_SHAPE_MOCK shape( SHAPE_T::POLY );
+
+    SHAPE_POLY_SET& poly = shape.GetPolyShape();
+    poly.NewOutline();
+    poly.Append( { 0, 0 } );
+    poly.Append( { 1000000, 0 } );
+    poly.Append( { 1000000, 1000000 } );
+
+    EDA_POLYGON_POINT_EDIT_BEHAVIOR behavior( shape );
+
+    EDIT_POINTS points( nullptr );
+    behavior.MakePoints( points );
+    BOOST_CHECK_EQUAL( points.PointsSize(), 3u );
+
+    EDA_SHAPE_MOCK copy( shape );
+    shape = copy;
+
+    // After assignment, shape.m_poly is a fresh allocation.
+    // The behavior must still work (not use-after-free).
+    EDIT_POINTS points2( nullptr );
+    behavior.MakePoints( points2 );
+    BOOST_CHECK_EQUAL( points2.PointsSize(), 3u );
+
+    BOOST_CHECK( behavior.UpdatePoints( points ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

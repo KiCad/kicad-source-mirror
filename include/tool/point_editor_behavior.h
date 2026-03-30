@@ -190,24 +190,44 @@ private:
 /**
  * "Standard" polygon editing behavior for EDA_SHAPE polygons.
  *
- * As long as updating the EDA_SHAPE's SHAPE_POLY_SET in-place is enough,
- * this will do the job.
+ * This class resolves the SHAPE_POLY_SET from the EDA_SHAPE on each call rather than
+ * caching a reference, because the EDA_SHAPE's internal SHAPE_POLY_SET can be
+ * reallocated (e.g. by operator=) while the behavior is still alive.
  */
-class EDA_POLYGON_POINT_EDIT_BEHAVIOR : public POLYGON_POINT_EDIT_BEHAVIOR
+class EDA_POLYGON_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
 public:
-    // Editing the underlying polygon shape in-place is enough
     EDA_POLYGON_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aPolygon ) :
-            POLYGON_POINT_EDIT_BEHAVIOR( aPolygon.GetPolyShape() )
+            m_shape( aPolygon )
     {
         wxASSERT( aPolygon.GetShape() == SHAPE_T::POLY );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( aPoints, m_shape.GetPolyShape() );
+    }
+
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        POLYGON_POINT_EDIT_BEHAVIOR::UpdatePointsFromOutline( m_shape.GetPolyShape(), aPoints );
+        return true;
     }
 
     void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
                      std::vector<EDA_ITEM*>& aUpdatedItems ) override
     {
-        POLYGON_POINT_EDIT_BEHAVIOR::UpdateItem( aEditedPoint, aPoints, aCommit, aUpdatedItems );
+        POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints(
+                m_shape.GetPolyShape(), aEditedPoint, aPoints );
     }
+
+    void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) override
+    {
+        m_shape.GetPolyShape().RemoveNullSegments();
+    }
+
+private:
+    EDA_SHAPE& m_shape;
 };
 
 
