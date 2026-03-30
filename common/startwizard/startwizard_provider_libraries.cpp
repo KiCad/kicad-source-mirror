@@ -26,6 +26,8 @@
 #include <paths.h>
 #include <startwizard/startwizard.h>
 #include <startwizard/startwizard_provider_libraries.h>
+
+#include <magic_enum.hpp>
 #include <startwizard/startwizard_provider_settings.h>
 #include <trace_helpers.h>
 #include <regex>
@@ -57,6 +59,8 @@ public:
         m_warningText = m_stWarning->GetLabel();
 
         InitTableListMsg();
+        m_bmpWarning->Show( m_showWarning );
+        m_stWarning->Show( m_showWarning );
 
         m_containingSizer->Fit( this );
         SetSize( GetBestSize() );
@@ -144,8 +148,13 @@ public:
 
         for( const LIBRARY_TABLE_TYPE& type : m_model->missing_tables )
         {
-            if( !LIBRARY_MANAGER::IsTableValid( LIBRARY_MANAGER::StockTablePath( type ) ) )
+            if( !LIBRARY_MANAGER::IsTableValid( LIBRARY_MANAGER::StockTablePath( type ) )
+                && type != LIBRARY_TABLE_TYPE::DESIGN_BLOCK )
+            {
+                wxLogTrace( traceLibraries, wxT( "Stock table path for %s is not valid; will show warning" ),
+                            magic_enum::enum_name( type ) );
                 m_showWarning = true;
+            }
 
             switch( type )
             {
