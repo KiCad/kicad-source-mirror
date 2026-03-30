@@ -1475,27 +1475,6 @@ void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 }
 
 
-int getHatchFillThermalClearance( const ZONE* aZone, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
-{
-    int minorAxis = 0;
-
-    if( aItem->Type() == PCB_PAD_T )
-    {
-        PAD*     pad = static_cast<PAD*>( aItem );
-        VECTOR2I padSize = pad->GetSize( aLayer );
-
-        minorAxis = std::min( padSize.x, padSize.y );
-    }
-    else if( aItem->Type() == PCB_VIA_T )
-    {
-        PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-
-        minorAxis = via->GetWidth( aLayer );
-    }
-
-    return ( aZone->GetHatchGap() - aZone->GetHatchThickness() - minorAxis ) / 2;
-}
-
 
 /**
  * Add a knockout for a graphic item.  The knockout is 'aGap' larger than the item (which
@@ -1761,87 +1740,115 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
         }
     }
 
-    // For hatch zones, vias also get proper thermal treatment. They always use thermal connection
-    // since vias don't have zone connection settings like pads do.
+    // For hatch zones, vias also need thermal treatment to prevent isolation inside hatch holes.
+    // We respect the zone connection type just like pads: THERMAL gets a relief knockout,
+    // FULL connects directly to the webbing, NONE is handled in buildCopperItemClearances.
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
     {
         for( PCB_TRACK* track : m_board->Tracks() )
         {
-            if( track->Type() == PCB_VIA_T )
+            if( track->Type() != PCB_VIA_T )
+                continue;
+
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+            if( !via->IsOnLayer( aLayer ) )
+                continue;
+
+            BOX2I viaBBox = via->GetBoundingBox();
+            viaBBox.Inflate( m_worstClearance );
+
+            if( !viaBBox.Intersects( aZone->GetBoundingBox() ) )
+                continue;
+
+            // Deduplicate coincident vias (circular, so use max of drill and width)
+            int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
+            VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize, via->GetNetCode() };
+
+            if( !processedVias.insert( viaKey ).second )
+                continue;
+
+            bool noConnection = via->GetNetCode() != aZone->GetNetCode()
+                    || ( via->Padstack().UnconnectedLayerMode() == UNCONNECTED_LAYER_MODE::START_END_ONLY
+                         && aLayer != via->Padstack().Drill().start
+                         && aLayer != via->Padstack().Drill().end );
+
+            if( via->GetZoneLayerOverride( aLayer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
+                noConnection = true;
+
+            // Check if this layer is affected by backdrill or post-machining
+            if( via->IsBackdrilledOrPostMachined( aLayer ) )
             {
-                PCB_VIA* via = static_cast<PCB_VIA*>( track );
+                noConnection = true;
 
-                if( !via->IsOnLayer( aLayer ) )
-                    continue;
+                // Add knockout for backdrill/post-machining hole
+                int pmSize = 0;
+                int bdSize = 0;
 
-                BOX2I viaBBox = via->GetBoundingBox();
-                viaBBox.Inflate( m_worstClearance );
+                const PADSTACK::POST_MACHINING_PROPS& frontPM = via->Padstack().FrontPostMachining();
+                const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
 
-                if( !viaBBox.Intersects( aZone->GetBoundingBox() ) )
-                    continue;
-
-                // Deduplicate coincident vias (circular, so use max of drill and width)
-                int viaEffectiveSize = std::max( via->GetDrillValue(), via->GetWidth( aLayer ) );
-                VIA_KNOCKOUT_KEY viaKey{ via->GetPosition(), viaEffectiveSize,
-                                         via->GetNetCode() };
-
-                if( !processedVias.insert( viaKey ).second )
-                    continue;
-
-                bool noConnection = via->GetNetCode() != aZone->GetNetCode()
-                        || ( via->Padstack().UnconnectedLayerMode() == UNCONNECTED_LAYER_MODE::START_END_ONLY
-                             && aLayer != via->Padstack().Drill().start
-                             && aLayer != via->Padstack().Drill().end );
-
-                // Check if this layer is affected by backdrill or post-machining
-                if( via->IsBackdrilledOrPostMachined( aLayer ) )
+                if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
                 {
-                    noConnection = true;
-
-                    // Add knockout for backdrill/post-machining hole
-                    int pmSize = 0;
-                    int bdSize = 0;
-
-                    const PADSTACK::POST_MACHINING_PROPS& frontPM = via->Padstack().FrontPostMachining();
-                    const PADSTACK::POST_MACHINING_PROPS& backPM = via->Padstack().BackPostMachining();
-
-                    if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-                        && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                    {
-                        pmSize = std::max( pmSize, frontPM.size );
-                    }
-
-                    if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-                        && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                    {
-                        pmSize = std::max( pmSize, backPM.size );
-                    }
-
-                    const PADSTACK::DRILL_PROPS& secDrill = via->Padstack().SecondaryDrill();
-
-                    if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
-                        bdSize = secDrill.size.x;
-
-                    int knockoutSize = std::max( pmSize, bdSize );
-
-                    if( knockoutSize > 0 )
-                    {
-                        int clearance = aZone->GetLocalClearance().value_or( 0 );
-
-                        TransformCircleToPolygon( holes, via->GetPosition(), knockoutSize / 2 + clearance,
-                                                  m_maxError, ERROR_OUTSIDE );
-                    }
+                    pmSize = std::max( pmSize, frontPM.size );
                 }
 
-                if( noConnection )
-                    continue;
+                if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+                    && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                {
+                    pmSize = std::max( pmSize, backPM.size );
+                }
 
-                // Use proper thermal gap from DRC constraints
-                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, via, aZone, aLayer );
+                const PADSTACK::DRILL_PROPS& secDrill = via->Padstack().SecondaryDrill();
+
+                if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
+                    bdSize = secDrill.size.x;
+
+                int knockoutSize = std::max( pmSize, bdSize );
+
+                if( knockoutSize > 0 )
+                {
+                    int clearance = aZone->GetLocalClearance().value_or( 0 );
+
+                    TransformCircleToPolygon( holes, via->GetPosition(), knockoutSize / 2 + clearance,
+                                              m_maxError, ERROR_OUTSIDE );
+                }
+            }
+
+            if( noConnection )
+                continue;
+
+            constraint = bds.m_DRCEngine->EvalZoneConnection( via, aZone, aLayer );
+            connection = constraint.m_ZoneConnection;
+
+            switch( connection )
+            {
+            case ZONE_CONNECTION::THERMAL:
+            {
+                constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, via,
+                                                          aZone, aLayer );
                 int thermalGap = constraint.GetValue().Min();
 
-                aThermalConnectionPads.push_back( via );
-                addKnockout( via, aLayer, thermalGap, holes );
+                // Only force thermal if the via is small enough to be isolated in a hatch hole.
+                // A via wider than the hole width will always touch the webbing naturally.
+                if( thermalGap > 0 )
+                {
+                    aThermalConnectionPads.push_back( via );
+                    addKnockout( via, aLayer, thermalGap, holes );
+                }
+
+                break;
+            }
+
+            case ZONE_CONNECTION::NONE:
+                // Will be handled by buildCopperItemClearances
+                break;
+
+            case ZONE_CONNECTION::FULL:
+            default:
+                // No knockout - via connects directly to the hatch webbing
+                break;
             }
         }
     }

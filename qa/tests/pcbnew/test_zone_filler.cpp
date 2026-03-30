@@ -1874,3 +1874,164 @@ BOOST_FIXTURE_TEST_CASE( RegressionKeepoutBoundaryMissingFill, ZONE_FILL_TEST_FI
                     ( 1.0 - iterativeAreaRatio ) * 100.0,
                     storedArea / 1e6, iterativeArea / 1e6 ) );
 }
+
+
+/**
+ * Test for issue 23516: Vias in hatched fill zones should respect the zone connection
+ * setting (FULL vs THERMAL). Before this fix, thermal relief was always forced on all
+ * vias in hatch-fill zones regardless of the zone's "Pad connections" setting.
+ *
+ * With FULL connection, the zone fill should touch the via directly.
+ * With THERMAL connection, the fill is cut away around the via with a thermal gap.
+ */
+BOOST_FIXTURE_TEST_CASE( HatchZoneViaConnectionRespectsSetting, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+
+    // Two-layer board is sufficient for this test
+    m_board->SetCopperLayerCount( 2 );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.SetCopperLayerCount( 2 );
+
+    bds.m_MinClearance = pcbIUScale.mmToIU( 0.2 );
+
+    // Add a GND net
+    NETINFO_ITEM* gndNet = new NETINFO_ITEM( m_board.get(), wxT( "GND" ) );
+    m_board->Add( gndNet );
+    int gndNetCode = gndNet->GetNetCode();
+
+    // Via dimensions: 2.0mm diameter, 1.0mm drill - large enough to span multiple hatch cells
+    // so the via always touches webbing lines regardless of position within the hatch grid.
+    int viaDiam  = pcbIUScale.mmToIU( 2.0 );
+    int viaDrill = pcbIUScale.mmToIU( 1.0 );
+
+    // Hatch zone parameters: 0.5mm gap, 0.3mm thickness.  The via (radius=1.0mm) is wider
+    // than the gap, so it will always intersect webbing in FULL mode.  The thermal gap
+    // (0.5mm) makes the knockout circle radius = 1.0+0.5 = 1.5mm.
+    int hatchGap       = pcbIUScale.mmToIU( 0.5 );
+    int hatchThickness = pcbIUScale.mmToIU( 0.3 );
+
+    // Via center at 10mm,10mm (middle of the zone)
+    VECTOR2I viaPos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
+
+    auto makeVia =
+            [&]() -> PCB_VIA*
+            {
+                PCB_VIA* via = new PCB_VIA( m_board.get() );
+                via->SetPosition( viaPos );
+                via->SetLayerPair( F_Cu, B_Cu );
+                via->SetDrill( viaDrill );
+                via->SetWidth( PADSTACK::ALL_LAYERS, viaDiam );
+                via->SetNetCode( gndNetCode );
+                m_board->Add( via );
+                return via;
+            };
+
+    auto makeHatchZone =
+            [&]( ZONE_CONNECTION aConnection ) -> ZONE*
+            {
+                ZONE* zone = new ZONE( m_board.get() );
+                zone->SetLayer( F_Cu );
+                zone->SetNetCode( gndNetCode );
+                zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+                zone->SetHatchGap( hatchGap );
+                zone->SetHatchThickness( hatchThickness );
+                zone->SetPadConnection( aConnection );
+                zone->SetMinThickness( pcbIUScale.mmToIU( 0.2 ) );
+                zone->SetThermalReliefGap( pcbIUScale.mmToIU( 0.5 ) );
+                zone->SetThermalReliefSpokeWidth( pcbIUScale.mmToIU( 0.5 ) );
+
+                SHAPE_POLY_SET outline;
+                outline.NewOutline();
+                outline.Append( VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                outline.Append( VECTOR2I( pcbIUScale.mmToIU( 19 ), pcbIUScale.mmToIU( 1 ) ) );
+                outline.Append( VECTOR2I( pcbIUScale.mmToIU( 19 ), pcbIUScale.mmToIU( 19 ) ) );
+                outline.Append( VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 19 ) ) );
+                zone->AddPolygon( outline.COutline( 0 ) );
+
+                m_board->Add( zone );
+                return zone;
+            };
+
+    auto initDRC =
+            [&]()
+            {
+                m_board->BuildConnectivity();
+                auto drcEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+                drcEngine->InitEngine( wxFileName() );
+                bds.m_DRCEngine = drcEngine;
+            };
+
+    // The thermal relief adds a circular ring around the via that covers hatch holes which
+    // would otherwise be open.  With viaRadius=1.0mm, thermalGap=0.5mm, spokeWidth=0.5mm:
+    //   ring outer radius = 1.75mm, inner radius = 1.25mm
+    //   ring area added inside hatch holes > knockout area removed from webbing
+    //   net result: THERMAL fill area > FULL fill area by ~0.4 sq mm
+    // FULL connection skips both the knockout and the ring addition, so the THERMAL fill
+    // should be measurably larger than the FULL fill.
+
+    double fullFillArea    = 0.0;
+    double thermalFillArea = 0.0;
+
+    // Test 1: FULL connection
+    {
+        PCB_VIA* via  = makeVia();
+        ZONE*    zone = makeHatchZone( ZONE_CONNECTION::FULL );
+
+        initDRC();
+        KI_TEST::FillZones( m_board.get() );
+
+        BOOST_REQUIRE_MESSAGE( zone->HasFilledPolysForLayer( F_Cu ),
+                               "Zone should have fill on F.Cu with FULL connection" );
+
+        const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+
+        for( int i = 0; i < fill->OutlineCount(); i++ )
+            fullFillArea += std::abs( fill->Outline( i ).Area() );
+
+        m_board->Remove( via );
+        m_board->Remove( zone );
+        delete via;
+        delete zone;
+    }
+
+    // Test 2: THERMAL connection
+    {
+        PCB_VIA* via  = makeVia();
+        ZONE*    zone = makeHatchZone( ZONE_CONNECTION::THERMAL );
+
+        initDRC();
+        KI_TEST::FillZones( m_board.get() );
+
+        BOOST_REQUIRE_MESSAGE( zone->HasFilledPolysForLayer( F_Cu ),
+                               "Zone should have fill on F.Cu with THERMAL connection" );
+
+        const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+
+        for( int i = 0; i < fill->OutlineCount(); i++ )
+            thermalFillArea += std::abs( fill->Outline( i ).Area() );
+
+        m_board->Remove( via );
+        m_board->Remove( zone );
+        delete via;
+        delete zone;
+    }
+
+    // The THERMAL fill should have more area than the FULL fill because a thermal ring was
+    // added around the via, filling hatch holes that would otherwise be open.
+    // Use a 0.2 sq mm threshold to avoid sensitivity to small edge effects.
+    double iuPerMM       = pcbIUScale.IU_PER_MM;
+    double areaThreshold = 0.2 * iuPerMM * iuPerMM;  // 0.2 sq mm in IU^2
+
+    double areaIU2toMM2 = 1.0 / ( iuPerMM * iuPerMM );
+
+    BOOST_CHECK_MESSAGE( thermalFillArea > fullFillArea + areaThreshold,
+                         wxString::Format(
+                                 "THERMAL connection fill area (%.2f sq mm) should be larger "
+                                 "than FULL fill area (%.2f sq mm) by at least 0.2 sq mm. "
+                                 "If they are equal or FULL is larger, thermal ring was not "
+                                 "added for THERMAL connection, or thermal ring was incorrectly "
+                                 "added for FULL connection (issue 23516 regression).",
+                                 thermalFillArea * areaIU2toMM2, fullFillArea * areaIU2toMM2 ) );
+}
