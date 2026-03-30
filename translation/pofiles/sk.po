@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-30 17:09+0000\n"
+"PO-Revision-Date: 2026-03-31 20:12+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -19988,7 +19988,7 @@ msgstr "Otvorený emitor"
 
 #: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:1936
 msgid "Unconnected"
-msgstr "Nezapojený"
+msgstr "Nepripojené"
 
 #: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:1944
 msgid "Inverted"
@@ -28830,12 +28830,12 @@ msgstr "Spoj:"
 #: gerbview/gerber_draw_item.cpp:753
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s Pad: %s"
+msgstr "Súč: %s plôška: %s"
 
 #: gerbview/gerber_draw_item.cpp:759
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s Pad: %s Fct %s"
+msgstr "Súč: %s Plôška: %s Fun %s"
 
 #: gerbview/gerber_draw_item.cpp:768 gerbview/toolbars_gerber.cpp:185
 #: gerbview/toolbars_gerber.cpp:188
@@ -36249,7 +36249,7 @@ msgstr "Plôšky s polootvorom: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:117
 msgid "Press-fit pads: "
-msgstr "Podložky press-fit: "
+msgstr "Plôška pre lisovaný kontakt: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:121
 msgid "Plated board edge: "
@@ -36372,8 +36372,8 @@ msgid ""
 "Pad %s of %s connects to %lu pads, but candidate pad %s of %s connects to "
 "%lu."
 msgstr ""
-"Podložka %s súčiastky %s sa pripája k %lu podložkám, ale kandidátska "
-"podložka %s súčiastky %s sa pripája k %lu."
+"Plôška %s z %s je pripojená k %lu plôškam, ale kandidátska plôška %s z %s je "
+"pripojená k %lu."
 
 #: pcbnew/connectivity/topo_match.cpp:132
 #, c-format
@@ -37420,7 +37420,7 @@ msgstr "Centrovať na zdrojové prvky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Renumber pads"
-msgstr "Prečíslovať podložky"
+msgstr "Prečíslovať plôšky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:201
 msgid "Horizontal, then vertical"
@@ -39339,7 +39339,7 @@ msgstr ""
 #, c-format
 msgid "Pad '%s' in jumper pad group %d does not exist in this footprint."
 msgstr ""
-"Podložka '%s' v skupine prepojovacích podložiek %d v tejto puzdre neexistuje."
+"Plôška '%s' v skupine prepojovacích plôšok %d v tomto puzdre neexistuje."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
@@ -39563,7 +39563,7 @@ msgstr "Počet podložiek:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:92
 msgid "Duplicate pads:"
-msgstr "Duplicitné podložky:"
+msgstr "Duplicitné plôšky:"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109 pcbnew/pad.cpp:3443
 msgid "Size X"
@@ -39583,11 +39583,11 @@ msgstr "Vrták Y"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:113
 msgid "Pad->Die Length"
-msgstr "Dĺžka podložka->čip"
+msgstr "Dĺžka plôška->čip"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:114
 msgid "Pad->Die Delay"
-msgstr "Oneskorenie podložka->čip"
+msgstr "Oneskorenie plôška->čip"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:124
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:257
@@ -39612,7 +39612,7 @@ msgstr "Clona"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:559
 msgid "Edit Pads"
-msgstr "Upraviť podložky"
+msgstr "Upraviť plôšky"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:235
 msgid "Use a relative path?"
@@ -41281,11 +41281,11 @@ msgstr "Oválny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
-msgstr "Zadajte dĺžku plôšky po čip"
+msgstr "Zadať vzdialenosť plôšky po čip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:507
 msgid "Specify pad to die delay"
-msgstr "Zadať oneskorenie podložka->čip"
+msgstr "Zadať oneskorenie od plôšky po čip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
 msgid ""
@@ -44581,7 +44581,7 @@ msgstr ""
 "|\n"
 "| `annular_width`           | min/opt/max"
 "                                                                                                           "
-"| Kontroluje šírku prstencového krúžku na prekovoch.<br>"
+"| Kontroluje šírku prstenca na prekovoch.<br>"
 "                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "| `assertion`               | \"&lt;výraz>"
@@ -44592,36 +44592,36 @@ msgstr ""
 "| `bridged_mask`            "
 "|                                                                                                                       "
 "| Kontroluje mostíky spájkovacej masky medzi medenými objektmi. Toto "
-"obmedzenie nepoužíva hodnotu min/opt/max. V kombinácii s klauzuľou "
-"závažnosti možno toto obmedzenie použiť na povolenie alebo zakázanie "
+"obmedzenie nepoužíva hodnotu min/opt/max. V kombinácii s klauzulou "
+"závažnosti, možno toto obmedzenie použiť na povolenie alebo zakázanie "
 "mostíkov spájkovacej masky v rôznych podmienkach.<br>"
 "                                                                                                                                                                                        "
 "|\n"
 "| `clearance`               | min"
 "                                                                                                                   "
-"| Určuje **elektrický** odstúp medzi medenými objektmi rôznych spojov. "
-"(Pozri `physical_clearance` ak chcete zadať odstúp medzi objektmi bez ohľadu "
-"na spoj.)<br><br>Pre povolenie prekrývania medených objektov vytvorte "
+"| Určuje **elektrický** odstup medzi medenými objektami rôznych spojov. "
+"(Pozri `physical_clearance` ak chcete zadať odstup medzi objektami bez "
+"ohľadu na spoj.)<br><br>Pre povolenie prekrývania medených objektov vytvorte "
 "obmedzenie `clearance` s hodnotou `min` menšou ako nula (napríklad `-1`).<br>"
 "                                                                                                                                                   "
 "|\n"
 "| `courtyard_clearance`     | min"
 "                                                                                                                   "
-"| Kontroluje odstúp medzi nádvoriami puzdier a generuje chybu, ak sú "
-"ľubovolné dve nádvoria bližšie ako hodnota `min`. Ak puzdro nemá tvar "
-"nádvoria, toto obmedzenie negeneruje žiadne chyby.<br>"
+"| Kontroluje odstup medzi montážnymi oblasťami puzdier a generuje chybu, ak "
+"sú ľubovolné dve bližšie ako hodnota `min`. Ak puzdro nemá tvar montážnej "
+"oblasti, toto obmedzenie negeneruje žiadne chyby.<br>"
 "                                                                                                                                                                                                                                                       "
 "|\n"
 "| `creepage`                | min"
 "                                                                                                                   "
-"| Určuje povrchovú vzdialenosť medzi medenými objektmi rôznych spojov.<br>"
+"| Určuje povrchovú vzdialenosť medzi medenými objektami rôznych spojov.<br>"
 "                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
 "| `diff_pair_gap`           | min/opt/max"
 "                                                                                                           "
-"| Kontroluje medzeru medzi spájanými spojmi v diferenciálnom páre. Spájané "
+"| Kontroluje medzeru medzi párovými spojmi v diferenciálnom páre. Párové "
 "spoje sú segmenty, ktoré sú navzájom rovnobežné. Medzera diferenciálneho "
-"páru sa nekontroluje na nespájaných častiach diferenciálneho páru (napríklad "
+"páru sa nekontroluje na nepáových častiach diferenciálneho páru (napríklad "
 "výbeh zo súčiastky).<br>"
 "                                                                                                                                                                                                "
 "|\n"
@@ -44644,7 +44644,7 @@ msgstr ""
 "|\n"
 "| `edge_clearance`          | min/opt/max"
 "                                                                                                           "
-"| Kontroluje odstúp medzi objektmi a okrajom dosky.<br><br>Možno to chápať "
+"| Kontroluje odstup medzi objektami a okrajom dosky.<br><br>Možno to chápať "
 "aj ako „toleranciu frézovania“, keďže okraj dosky zahrňuje všetky grafické "
 "prvky na vrstve `Edge.Cuts` a všetky *oválne* otvory plôšok. (Pozri "
 "`physical_hole_clearance` pre toleranciu vŕtania.)<br>"
@@ -44666,31 +44666,30 @@ msgstr ""
 "|\n"
 "| `hole_clearance`          | min"
 "                                                                                                                   "
-"| Kontroluje odstúp medzi vŕtaným otvorom v plôške alebo prekove a medenými "
-"objektmi v inom spoji. Odstúp sa meria od priemeru otvoru, nie od jeho "
+"| Kontroluje odstup medzi vŕtaným otvorom v plôške alebo prekove a medenými "
+"objektami v inom spoji. Odstup sa meria od okraja otvoru, nie od jeho "
 "stredu.<br>"
 "                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `hole_to_hole`            | min"
 "                                                                                                                   "
-"| Kontroluje odstúp medzi mechanicky vŕtanými otvormi v plôškach a "
-"prekovoch. Odstúp sa meria medzi priemermi otvorov, nie medzi ich "
-"stredmi.<br><br>Toto obmedzenie slúži výlučne na ochranu vrtákov. "
-"Nekontroluje sa odstúp medzi **laserovo vŕtanými** (mikroprekovmi) a inými "
-"nemechanicky vŕtanými otvormi, ani odstúp medzi **frézovanými** (oválnymi) a "
-"inými nemechanicky vŕtanými otvormi.<br>"
-"                                                   |\n"
+"| Kontroluje odstup medzi mechanicky vŕtanými otvormi v plôškach a "
+"prekovoch. Odstup sa meria medzi okrajmi otvorov, nie medzi ich stredmi.<br>"
+"<br>Toto obmedzenie slúži výlučne na ochranu vrtákov. Nekontroluje sa odstup "
+"medzi **laserovo vŕtanými** (mikroprekovmi) a inými nemechanicky vŕtanými "
+"otvormi, ani odstup medzi **frézovanými** (oválnymi) a inými nemechanicky "
+"vŕtanými otvormi.<br>                                                   |\n"
 "| `physical_clearance`      | min"
 "                                                                                                                   "
-"| Kontroluje odstúp medzi dvoma objektmi na danej vrstve (vrátane nemedených "
+"| Kontroluje odstup medzi dvoma objektmi na danej vrstve (vrátane nemedených "
 "vrstiev).<br><br>Hoci dokáže vykonávať všeobecnejšie kontroly než "
 "`clearance`, je oveľa pomalší. Použite `clearance` kde je to možné.<br>"
 "                                                                                                                                                                                                                                   "
 "|\n"
 "| `physical_hole_clearance` | min"
 "                                                                                                                   "
-"| Kontroluje odstúp medzi vŕtaným otvorom v plôške alebo prekove a iným "
-"objektom, bez ohľadu na spoj. Odstúp sa meria od priemeru otvoru, nie od "
+"| Kontroluje odstup medzi vŕtaným otvorom v plôške alebo prekove a iným "
+"objektom, bez ohľadu na spoj. Odstup sa meria od priemeru otvoru, nie od "
 "jeho stredu.<br><br>Možno to chápať aj ako „toleranciu vŕtania“, keďže "
 "zahrňuje len **okrúhle** otvory (pozri `edge_clearance` pre toleranciu "
 "frézovania).<br>"
@@ -44698,35 +44697,37 @@ msgstr ""
 "|\n"
 "| `silk_clearance`          | min/opt/max"
 "                                                                                                           "
-"| Kontroluje odstúp medzi objektmi na vrstvách potlače a inými objektmi.<br>"
+"| Kontroluje odstup medzi objektami na vrstvách potlače a inými "
+"objektami.<br>"
 "                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
 "| `skew`                    | max"
 "                                                                                                                   "
-"| Kontroluje celkové skreslenie pre spoje zodpovedajúce podmienke pravidla, "
-"t.j. rozdiel medzi dĺžkou každého spoja a priemerom všetkých dĺžok spojov "
-"zodpovedajúcich pravidlu. Ak absolútna hodnota rozdielu medzi priemerom a "
-"dĺžkou ľubovoľného spoja presahuje hodnotu `max`, vygeneruje sa chyba.<br>"
+"| Kontroluje celkový rozdiel dĺžok pre spoje zodpovedajúce podmienke "
+"pravidla, t.j. rozdiel medzi dĺžkou každého spoja a priemerom všetkých dĺžok "
+"spojov zodpovedajúcich pravidlu. Ak absolútna hodnota rozdielu medzi "
+"priemerom a dĺžkou ľubovoľného spoja presahuje hodnotu `max`, vygeneruje sa "
+"chyba.<br>"
 "                                                                                                                                                 "
 "|\n"
 "| `solder_mask_expansion`   | opt"
 "                                                                                                                   "
-"| Určuje rozšírenie spájkovacej masky pre plôšky, tvary a "
+"| Určuje zväčšenie spájkovacej masky pre plôšky, tvary a "
 "spoje.                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "| `solder_paste_abs_margin` | opt"
 "                                                                                                                   "
-"| Určuje absolútny odstúp spájkovacej pasty pre plôšky. Zvyčajne záporný pre "
-"zmenšenie pasty.<br><br>Výsledný odstúp spájkovacej pasty bude absolútny "
-"odstúp plus relatívny "
-"odstúp.                                                                                                                                                                                                                                                                       "
+"| Určuje absolútny odstup spájkovacej pasty pre plôšky. Zvyčajne je záporný "
+"pre zmenšenie pasty.<br><br>Výsledný odstup spájkovacej pasty je absolútny "
+"odstup plus relatívny "
+"odstup.                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `solder_paste_rel_margin` | opt"
 "                                                                                                                   "
-"| Určuje relatívny odstúp spájkovacej pasty pre plôšky. Zvyčajne záporný pre "
-"zmenšenie pasty.<br><br>Výsledný odstúp spájkovacej pasty bude absolútny "
-"odstúp plus relatívny "
-"odstúp.                                                                                                                                                                                                                                                                       "
+"| Určuje relatívny odstup spájkovacej pasty pre plôšky. Zvyčajne je záporný "
+"pre zmenšenie pasty.<br><br>Výsledný odstup spájkovacej pasty bude absolútny "
+"odstup plus relatívny "
+"odstup.                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `thermal_relief_gap`      | min"
 "                                                                                                                   "
@@ -44749,7 +44750,7 @@ msgstr ""
 "|\n"
 "| `track_angle`             | min/opt/max"
 "                                                                                                           "
-"| Kontroluje uhol medzi dvoma spojenými segmentmi spojov. Chyba sa "
+"| Kontroluje uhol medzi dvoma spojenými segmentami spojov. Chyba sa "
 "vygeneruje pre každý spojený pár s uhlom pod hodnotou `min` (ak je zadaná) "
 "alebo nad hodnotou `max` (ak je zadaná).<br>"
 "                                                                                                                                                                                                                                                               "
@@ -44772,7 +44773,7 @@ msgstr ""
 "|                                                                                                                       "
 "| Kontroluje prekovy, ktoré sú nepripojené alebo pripojené len na jednej "
 "vrstve. Toto obmedzenie nepoužíva hodnotu min/opt/max. V kombinácii s "
-"klauzuľou závažnosti možno toto obmedzenie použiť na povolenie alebo "
+"klauzulou závažnosti, možno toto obmedzenie použiť na povolenie alebo "
 "zakázanie visiacich prekovov v rôznych podmienkach.<br>"
 "                                                                                                                                                                              "
 "|\n"
@@ -45180,7 +45181,7 @@ msgstr ""
 "    A.fromTo('x', 'y')\n"
 "```\n"
 "> Pravda, ak objekt existuje na medenej ceste medzi danými\n"
-"podložkami. `x` a `y` sú úplné názvy podložiek v projekte, napríklad\n"
+"plôškami. `x` a `y` sú úplné názvy plôšok v projekte, napríklad\n"
 "`R1-Pad1`.\n"
 "\n"
 "\n"
@@ -45295,7 +45296,7 @@ msgstr ""
 "    A.memberOfFootprint('<footprint_identifier>')\n"
 "```\n"
 "> Pravda, ak `A` je členom danej puzdra\n"
-"(napríklad podložka alebo grafický tvar definovaný vo vnútri tej puzdra).\n"
+"(napríklad plôška alebo grafický tvar definovaný vo vnútri tej puzdra).\n"
 "Rôzne spôsoby zadania `footprint_identifier` sú opísané vyššie.\n"
 "\n"
 "\n"
@@ -45499,13 +45500,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45531,18 +45532,18 @@ msgstr ""
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
+"    # Definícia optimálnej vzdialenosť medzi konkrétnym diferenciálny pár\n"
 "    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Specify a larger clearance around any diff-pair\n"
+"    # Definícia väčšieho odstup okolo ľubovoľného diferenciálneho páru\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Don't use thermal reliefs on heatsink pads\n"
+"    # Nepoužiť tepelné prepojenie na chladičovej plôške\n"
 "    (rule heat_sink_pad\n"
 "        (constraint zone_connection solid)\n"
 "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
@@ -45615,8 +45616,8 @@ msgstr ""
 "drilling \n"
 "    # micro-vias.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -46013,7 +46014,7 @@ msgstr "Odstrániť ostrovčeky:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:352
 msgid "Choose what to do with unconnected copper islands"
-msgstr "Vybrať čo robiť s neprepojenými medenými ostrovčekmi"
+msgstr "Vybrať čo robiť s nepripojenými medenými ostrovčekmi"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1913
 msgid "Below area limit"
@@ -46527,7 +46528,7 @@ msgstr "Prekov nie je pripojený alebo pripojený iba na jednej vrstve"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Track has unconnected end"
-msgstr "Spoj má nespojený koniec"
+msgstr "Spoj má nepripojený koniec"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Hole clearance violation"
@@ -47130,7 +47131,7 @@ msgstr "%s má prepísané nastavenie výrezu zóny."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:325
 #, c-format
 msgid "%s pad to die length differs."
-msgstr "%s dĺžka pad-to-die sa líši."
+msgstr "%s vzdialenosť plôšky po čip sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:327
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:499
@@ -48169,7 +48170,7 @@ msgstr "Upraviť vlastnosti zóny"
 
 #: pcbnew/exporters/export_d356.cpp:414
 msgid "Do not export unconnected pads"
-msgstr "Neexportovať neprepojené podložky"
+msgstr "Neexportovať nepripojené plôšky"
 
 #: pcbnew/exporters/export_d356.cpp:444 pcbnew/tools/pcb_actions.cpp:1294
 msgid "Generate IPC-D-356 netlist file"
@@ -48210,7 +48211,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:182
 msgid "They have been exported as oval pads."
-msgstr "Boli exportované ako oválne podložky."
+msgstr "Boli exportované ako oválne plôšky."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:696
 msgid "Export Hyperlynx Layout"
@@ -48573,7 +48574,7 @@ msgstr "tvary"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2651
 msgid "pads"
-msgstr "podložky"
+msgstr "plôšky"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2652
 msgid "vias"
@@ -48840,12 +48841,12 @@ msgstr "(očakávalo sa 'SMD'; aktuálne '%s')"
 #: pcbnew/footprint.cpp:4095
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr "(skupina podložiek net-tie obsahuje neznáme číslo podložky %s)"
+msgstr "(skupina prepojovacích plôšok obsahuje neznáme číslo plôšky %s)"
 
 #: pcbnew/footprint.cpp:4100
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr "(podložka %s sa nachádza vo viac ako jednej skupine podložiek net-tie)"
+msgstr "(plôška %s sa nachádza vo viac ako jednej skupine prepojok spojov)"
 
 #: pcbnew/footprint.cpp:4796 pcbnew/pad.cpp:3349 pcbnew/zone.cpp:1890
 msgid "Inherited"
@@ -49202,7 +49203,7 @@ msgstr "Naroutované oneskorenie"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2096 pcbnew/pad.cpp:3724
 #: pcbnew/pcb_track.cpp:2382
 msgid "Pad To Die Length"
-msgstr "Dĺžka plôšky po čip"
+msgstr "Vzdialenosť plôšky po čip"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2099 pcbnew/pcb_track.cpp:2385
 msgid "Full Length"
@@ -49211,7 +49212,7 @@ msgstr "Celá dĺžka"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2104 pcbnew/pad.cpp:3729
 #: pcbnew/pcb_track.cpp:2396
 msgid "Pad To Die Delay"
-msgstr "Oneskorenie podložka na výstup"
+msgstr "Oneskorenie plôšky po čip"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2107 pcbnew/pcb_track.cpp:2399
 msgid "Full Delay"
@@ -49915,7 +49916,7 @@ msgstr "Aktualizované %s skupiny prepojovacích plôšok"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
 #, c-format
 msgid "Update %s jumper pad groups"
-msgstr "Aktualizovať skupiny prepojovacie podložky %s"
+msgstr "Aktualizovať skupiny prepojovacích plôšok %s"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
 #, c-format
@@ -50330,45 +50331,45 @@ msgstr "Conn"
 #: pcbnew/pad.cpp:2208
 #, c-format
 msgid "NPTH pad of %s"
-msgstr "Nepokovená podložka súčiastky %s"
+msgstr "NPTH plôška z %s"
 
 #: pcbnew/pad.cpp:2210
 msgid "NPTH pad"
-msgstr "Nepokovená podložka"
+msgstr "NPTH plôška"
 
 #: pcbnew/pad.cpp:2225
 #, c-format
 msgid "Pad on %s"
-msgstr "Podložka na %s"
+msgstr "Plôška na %s"
 
 #: pcbnew/pad.cpp:2233
 #, c-format
 msgid "PTH pad %s of %s"
-msgstr "Pokovená podložka %s súčiastky %s"
+msgstr "PTH plôška %s z %s"
 
 #: pcbnew/pad.cpp:2239
 msgid "PTH pad"
-msgstr "Pokovená podložka"
+msgstr "PTH plôška"
 
 #: pcbnew/pad.cpp:2249
 #, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Podložka %s %s súčiastky %s na %s"
+msgstr "Plôška %s %s z %s na %s"
 
 #: pcbnew/pad.cpp:2257
 #, c-format
 msgid "Pad %s on %s"
-msgstr "Podložka %s na %s"
+msgstr "Plôška %s na %s"
 
 #: pcbnew/pad.cpp:2266
 #, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Pokovená podložka %s %s súčiastky %s"
+msgstr "PTH plôška %s %s z %s"
 
 #: pcbnew/pad.cpp:2273
 #, c-format
 msgid "PTH pad %s"
-msgstr "Pokovená podložka %s"
+msgstr "PTH plôška %s"
 
 #: pcbnew/pad.cpp:2840
 msgid ""
@@ -50413,7 +50414,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2894
 msgid "(SMD pad has a hole)"
-msgstr "(SMD podložka má otvor)"
+msgstr "(SMD plôška má otvor)"
 
 #: pcbnew/pad.cpp:2900
 msgid "(SMD pad has copper on both sides of the board)"
@@ -50429,28 +50430,28 @@ msgstr "(SMD plôška má meď a pastu na rôznych stranách dosky)"
 
 #: pcbnew/pad.cpp:2930
 msgid "(SMD pad has no outer layers)"
-msgstr "(SMD podložka nemá žiadne vonkajšie vrstvy)"
+msgstr "(SMD plôška nemá žiadne vonkajšie vrstvy)"
 
 #: pcbnew/pad.cpp:2949
 msgid "(Pad must have a positive size)"
-msgstr "(Podložka musí mať kladnú veľkosť)"
+msgstr "(Plôška musí mať kladnú veľkosť)"
 
 #: pcbnew/pad.cpp:2960
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "(Veľkosť otvoru pokovené podložky musí byť väčšia ako %s)"
+msgstr "(Veľkosť otvoru PTH plôšky musí byť väčší ako %s)"
 
 #: pcbnew/pad.cpp:2983
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(otvor PTH podložky nezanecháva meď)"
+msgstr "(otvor PTH plôšky nezanecháva žiadnu meď)"
 
 #: pcbnew/pad.cpp:2993
 msgid "(PTH pad hole not fully inside copper)"
-msgstr "(otvor PTH podložky nie je celý vo vnútri medi)"
+msgstr "(otvor PTH plôšky nie je celý vo vnútri medi)"
 
 #: pcbnew/pad.cpp:3000
 msgid "(pad hole not inside pad shape)"
-msgstr "(otvor podložky nie je vo vnútri tvaru podložky)"
+msgstr "(otvor plôšky nie je vo vnútri tvaru plôšky)"
 
 #: pcbnew/pad.cpp:3005
 msgid "(negative local clearance values have no effect)"
@@ -50486,7 +50487,7 @@ msgstr "(záporný polomer rohu nie je povolený)"
 
 #: pcbnew/pad.cpp:3062
 msgid "(corner size will make pad circular)"
-msgstr "(veľkosť rohu spraví podložku kruhovú)"
+msgstr "(veľkosť rohu vytvorí plôšku kruhovú)"
 
 #: pcbnew/pad.cpp:3067
 msgid "(negative corner chamfer is not allowed)"
@@ -50502,7 +50503,7 @@ msgstr "(delta lichobežníka je príliš veľká)"
 
 #: pcbnew/pad.cpp:3088
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(vlastný tvar podložky musí zodpovedať jednému mnohouholníku)"
+msgstr "(vlastný tvar plôšky musí zodpovedať jednému mnohouholníku)"
 
 #: pcbnew/pad.cpp:3288
 msgid "Edge connector"
@@ -50522,7 +50523,7 @@ msgstr "Mechanická plôška"
 
 #: pcbnew/pad.cpp:3309
 msgid "Press-fit pad"
-msgstr "Lisovacia podložka"
+msgstr "Plôška lisovaného kontaktu"
 
 #: pcbnew/pad.cpp:3312
 msgid "Undefined"
@@ -50566,7 +50567,7 @@ msgstr "Typ plôšky"
 
 #: pcbnew/pad.cpp:3415 pcbnew/tools/pcb_control.cpp:2481
 msgid "Pad Shape"
-msgstr "Tvar podložky"
+msgstr "Tvar plôšky"
 
 #: pcbnew/pad.cpp:3420
 msgid "Pad Number"
@@ -51006,7 +51007,7 @@ msgstr "Neznámy typ rozšírených základných informácií: '%s'."
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:1057
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "Prúd Pads6 má neočakávanú dĺžku pre podrekord 6: %d."
+msgstr "Dátový tok Pads6 má neočakávanú dĺžku pre podzáznam 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:483
 #, c-format
@@ -51226,8 +51227,7 @@ msgstr ""
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Podložka %s puzdra %s nie je označená ako viacvrstvová, ale je to podložka s "
-"priechodným otvorom."
+"Puzdro %s plôška %s nie je označená ako viacvrstvová, ale je to TH plôška."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3605
 #, c-format
@@ -51241,7 +51241,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3618
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Podložka %s puzdra %s má štvorcový otvor (zatiaľ nepodporovaný)."
+msgstr "Puzdro %s plôška %s má štvorcový otvor (zatiaľ nepodporovaný)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3653
 #, c-format
@@ -51260,8 +51260,8 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %d degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Podložka %s puzdra %s má natočenie otvoru o %d stupňov. KiCad podporuje iba "
-"otočenia po 90 stupňoch."
+"Puzdro %s plôška %s má otočenie otvoru o %d stupňov. KiCad podporuje iba "
+"otočenie po 90 stupňoch."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3688
 #, c-format
@@ -51275,7 +51275,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Podložka %s puzdra %s používa otvor neznámeho druhu %d."
+msgstr "Puzdro %s plôška %s používa otvor neznámeho druhu %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3767
 #, c-format
@@ -51289,7 +51289,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3780
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
-msgstr "Podložka %s puzdra %s používa neznámy tvar podložky."
+msgstr "Puzdro %s plôška %s používa neznámy tvar plôšky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3882
 #, c-format
@@ -51323,23 +51323,22 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3953
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Nemedená podložka %s je pripojená k sieti, čo nie je podporované."
+msgstr "Nemedená plôška %s je pripojená k spoju, čo nie je podporované."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3964
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Nemedená podložka %s má otvor, čo nie je podporované."
+msgstr "Nemedená plôška %s má otvor, čo nie je podporované."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3974
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
-"Nemedená podložka %s má komplexný zásobník podložiek (zatiaľ nepodporovaný)."
+msgstr "Nemedená plôška %s má komplexný padstack (zatiaľ nepodporované)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4121
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad shape."
-msgstr "Nemedená podložka %s používa neznámy tvar podložky."
+msgstr "Nemedená plôška %s používa neznámy tvar plôšky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4134
 msgid "Loading vias..."
@@ -52000,12 +51999,13 @@ msgstr "Očakávaná hodnota veľkosti vrtáku, ale nájdené %s!%s!%s v riadku 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:537
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "Očakávané hodnoty veľkosti podložky, ale nájdené %s : %s v riadku %zu."
+msgstr ""
+"Očakávajú sa hodnoty veľkosti plôšky, ale nájdené bolo %s : %s v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:562
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "Neplatná veľkosť podložky v riadku %zu."
+msgstr "Neplatná veľkosť plôšky v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:597
 #, c-format
@@ -52015,7 +52015,7 @@ msgstr "Očakávajú sa hodnoty posunu plôšky, ale našlo sa %s:%s v riadku %z
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:642
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Neznámy názov tvaru podložky '%s' na vrstve '%s' v riadku %zu."
+msgstr "Neznámy názov tvaru plôšky '%s' na vrstve '%s' v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:780
 #, c-format
@@ -52025,7 +52025,7 @@ msgstr "Žiadna užívateľská vrstva pre vrstvu %s"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:993
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
-msgstr "Neplatný formát reťazca id '%s' v riadku vlastnej podložky %zu."
+msgstr "Neplatný formát id reťazca '%s' v riadku vlastnej plôšky %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1035
 #, c-format
@@ -52089,12 +52089,12 @@ msgstr "Nepodarilo sa nájsť padstack %s v súbore %s\n"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2781
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr "Neplatná vlastná podložka '%s'. Nahradená kruhovou podložkou."
+msgstr "Neplatná vlastná plôška '%s'. Nahradená kruhovou plôškou."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2789
 #, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "Nepodarilo sa nájsť vlastnú podložku '%s'."
+msgstr "Nebolo možné nájsť vlastnú plôšku '%s'."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3062
 #, c-format
@@ -52206,7 +52206,7 @@ msgstr "Generovanie sekcie obsahu"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1024
 msgid "Pad has unsupported type; it was skipped."
-msgstr "Podložka má nepodporovaný typ; bola preskočená."
+msgstr "Plôška je nepodporovaného typu; bola preskočená."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1415
 msgid "Generating history section"
@@ -53245,7 +53245,7 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Funkcie podložiek/pinov</th>\n"
+"        <th>Funkcie plôšok/vývodov</th>\n"
 "        <th></th>\n"
 "        <th></th>\n"
 "    </tr>\n"
@@ -53272,7 +53272,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pad)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Trieda spojov pre podložku</samp></td>\n"
+"        <td>&nbsp;<br><samp>Trieda spojov pre plôšku</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
@@ -53422,7 +53422,7 @@ msgstr ""
 "<p></p>\n"
 "<i>Značkovanie má prednosť pred rozvinutím premenných.</i>\n"
 "<p></p>\n"
-"<p><b>Krížové odkazy puzdier:</b> Polia referencií a podložky na iných "
+"<p><b>Krížové odkazy puzdier:</b> Polia referencií a plôšky na iných "
 "puzdrách pomocou syntax <samp>${refdes:field}</samp> alebo <samp>$"
 "{refdes:function(pad)}</samp>.</p>\n"
 "<p><b>Vnorené premenné:</b> Premenné môžu obsahovať iné premenné. Vnútorné "
@@ -53883,7 +53883,7 @@ msgstr "DRC"
 #: pcbnew/pcbnew_jobs_handler.cpp:2448
 #, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Nájdených %d neprepojených položiek\n"
+msgstr "Nájdených %d nepripojených položiek\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2454
 #, c-format
@@ -55331,7 +55331,7 @@ msgstr "Upraviť vlastnosti puzdra..."
 
 #: pcbnew/tools/drc_tool.cpp:328
 msgid "Edit Pad Properties..."
-msgstr "Upraviť vlastnosti podložky..."
+msgstr "Upraviť vlastnosti plôšky..."
 
 #: pcbnew/tools/drc_tool.cpp:338
 msgid "Edit Dimension Properties..."
@@ -55563,7 +55563,7 @@ msgstr ""
 #: pcbnew/tools/edit_tool_move_fct.cpp:878
 #, c-format
 msgid "%s pad %s"
-msgstr "%s podložka %s"
+msgstr "%s plôška %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:921
 msgid "Select reference point for move..."
@@ -55823,7 +55823,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:428 pcbnew/tools/pad_tool.cpp:531
 msgid "Renumber Pads"
-msgstr "Prečíslovať podložky"
+msgstr "Prečíslovať plôšky"
 
 #: pcbnew/tools/pad_tool.cpp:673
 msgid "Place pad"
@@ -56432,8 +56432,8 @@ msgstr "Odstrániť nepoužívané plôšky..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Odstrániť alebo obnoviť nespojené vnútorné vrstvy v plôškach s priechodzími "
-"otvormi a prekovoch"
+"Odstrániť alebo obnoviť nepripojené vnútorné vrstvy v plôškach s "
+"priechodzími otvormi a prekovoch"
 
 #: pcbnew/tools/pcb_actions.cpp:1004
 msgid "Assign a different footprint from the library"
@@ -57431,22 +57431,22 @@ msgstr "Zrušiť výber všetkých spojov a prekovov patriacich rovnakému spoju
 
 #: pcbnew/tools/pcb_actions.cpp:2394
 msgid "Select All Unconnected Footprints"
-msgstr "Vybrať všetky neprepojené puzdra"
+msgstr "Vybrať všetky nepripojené puzdrá"
 
 #: pcbnew/tools/pcb_actions.cpp:2395
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Vyberie všetky neprepojené puzdra patriace každej vybranej sieti."
+msgstr "Vyberie všetky nepripojené puzdrá patriace každému vybranému spoju."
 
 #: pcbnew/tools/pcb_actions.cpp:2401
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Uchopiť najbližšie neprepojené puzdra"
+msgstr "Uchopiť najbližšie nepripojené puzdrá"
 
 #: pcbnew/tools/pcb_actions.cpp:2402
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
-"Vyberie a spustí presúvanie najbližšieho neprepojeného puzdra na každom "
+"Vyberie a spustí presúvanie najbližšieho nepripojeného puzdra na každom "
 "vybranom spoji."
 
 #: pcbnew/tools/pcb_actions.cpp:2408
@@ -57919,7 +57919,7 @@ msgstr "Zistené obmedzenia okraju"
 
 #: pcbnew/tools/pcb_control.cpp:2488
 msgid "Pad Size"
-msgstr "Veľkosť podložky"
+msgstr "Veľkosť plôšky"
 
 #: pcbnew/tools/pcb_control.cpp:2520
 msgid "Selected Items"
@@ -59057,7 +59057,7 @@ msgstr "Zobraziť spoje s nulovým počtom plôšok"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1297
 msgid "Show Unconnected Nets"
-msgstr "Zobraziť neprepojené siete"
+msgstr "Zobraziť nepripojené spoje"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1305
 msgid "Show Time Domain Details"
