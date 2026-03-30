@@ -2437,11 +2437,14 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
-                placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
-                m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
-                meanderSettings.m_spacing = placer->MeanderSettings().m_spacing;
+                if( placer )
+                {
+                    placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
+                    m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
+                    meanderSettings.m_spacing = placer->MeanderSettings().m_spacing;
 
-                updateTuningPattern();
+                    updateTuningPattern();
+                }
             }
             else
             {
@@ -2455,11 +2458,14 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
-                placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
-                m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
-                meanderSettings.m_maxAmplitude = placer->MeanderSettings().m_maxAmplitude;
+                if( placer )
+                {
+                    placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
+                    m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
+                    meanderSettings.m_maxAmplitude = placer->MeanderSettings().m_maxAmplitude;
 
-                updateTuningPattern();
+                    updateTuningPattern();
+                }
             }
             else
             {
