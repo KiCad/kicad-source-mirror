@@ -238,6 +238,9 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
+    if( !board )
+        return 0;
+
     APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
     EDA_SEARCH_DATA                 frp;
 
@@ -268,12 +271,17 @@ wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
         return UnescapeString( zone->GetNetname() );
     else if( aCol == 2 )
     {
+        BOARD* board = m_frame->GetBoard();
+
+        if( !board )
+            return wxEmptyString;
+
         wxArrayString layers;
-        BOARD*        board = m_frame->GetBoard();
+
         // Make sure we don't show layers from Rule Areas that aren't actually on the board,
         // since they have all copper areas by default.
-        LSET          dialogLayers = LSET::AllNonCuMask()
-                                     | LSET::AllCuMask( board->GetCopperLayerCount() );
+        LSET dialogLayers = LSET::AllNonCuMask()
+                            | LSET::AllCuMask( board->GetCopperLayerCount() );
 
         for( PCB_LAYER_ID layer : dialogLayers.UIOrder() )
         {
@@ -315,6 +323,9 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return 0;
 
     APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
     EDA_SEARCH_DATA                 frp;
@@ -388,6 +399,9 @@ int GROUP_SEARCH_HANDLER::Search( const wxString& aQuery )
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
+    if( !board )
+        return 0;
+
     APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
     EDA_SEARCH_DATA                 frp;
 
@@ -455,6 +469,9 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
 
     BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return 0;
 
     for( NETINFO_ITEM* net : board->GetNetInfo() )
     {
@@ -539,6 +556,9 @@ int RATSNEST_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     BOARD* board = m_frame->GetBoard();
 
+    if( !board )
+        return 0;
+
     for( NETINFO_ITEM* net : board->GetNetInfo() )
     {
         if( net == nullptr || !net->Matches( frp, nullptr ) )
@@ -621,6 +641,9 @@ DRILL_SEARCH_HANDLER::DRILL_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
 int DRILL_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return 0;
 
     m_drills.clear();
     m_ptrToDrill.clear();
@@ -786,7 +809,11 @@ void DRILL_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* a
 
 void DRILL_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 {
-    BOARD*                          board = m_frame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     std::vector<EDA_ITEM*>          selectedItems;
     APP_SETTINGS_BASE::SEARCH_PANE& settings = m_frame->config()->m_SearchPane;
 
@@ -877,6 +904,9 @@ void DRILL_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 wxString DRILL_SEARCH_HANDLER::cellText( const DRILL_LINE_ITEM& e, int col ) const
 {
     BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return wxEmptyString;
 
     switch( col )
     {

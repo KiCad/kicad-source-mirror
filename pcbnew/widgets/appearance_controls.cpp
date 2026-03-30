@@ -222,7 +222,11 @@ int NET_GRID_TABLE::GetRowByNetcode( int aCode ) const
 
 void NET_GRID_TABLE::Rebuild()
 {
-    BOARD*                      board = m_frame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     const NETNAMES_MAP&         nets  = board->GetNetInfo().NetsByName();
     KIGFX::RENDER_SETTINGS*     renderSettings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS* rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
@@ -1063,6 +1067,9 @@ void APPEARANCE_CONTROLS::CommonSettingsChanged( int aFlags )
 
 void APPEARANCE_CONTROLS::OnBoardChanged()
 {
+    if( !m_frame->GetBoard() )
+        return;
+
     m_netsGrid->ClearSelection();
 
     Freeze();
@@ -1183,6 +1190,9 @@ void APPEARANCE_CONTROLS::OnBoardCompositeUpdate( BOARD&                    aBoa
 
 void APPEARANCE_CONTROLS::handleBoardItemsChanged()
 {
+    if( !m_frame->GetBoard() )
+        return;
+
     m_netsGrid->ClearSelection();
 
     Freeze();
@@ -1193,6 +1203,9 @@ void APPEARANCE_CONTROLS::handleBoardItemsChanged()
 
 void APPEARANCE_CONTROLS::OnColorThemeChanged()
 {
+    if( !m_frame->GetBoard() )
+        return;
+
     syncColorsAndVisibility();
     syncObjectSettings();
 }
@@ -1301,7 +1314,12 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
             setting->ctl_visibility->SetValue( isVisible );
     }
 
-    m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
+    board->SetElementVisibility( aLayer, isVisible );
 
     m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
@@ -1319,9 +1337,9 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
         for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
             view->SetLayerVisible( layer, aLayers.Contains( layer ) );
     }
-    else
+    else if( BOARD* board = m_frame->GetBoard() )
     {
-        m_frame->GetBoard()->SetVisibleLayers( aLayers );
+        board->SetVisibleLayers( aLayers );
 
         // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
         // they won't be found in the view layer's itemset for repainting.
@@ -1364,8 +1382,13 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
             aLayers.set( LAYER_RATSNEST, m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
+        BOARD* board = m_frame->GetBoard();
+
+        if( !board )
+            return;
+
         m_frame->SetGridVisibility( aLayers.test( LAYER_GRID - GAL_LAYER_ID_START ) );
-        m_frame->GetBoard()->SetVisibleElements( aLayers );
+        board->SetVisibleElements( aLayers );
 
         // Update VIEW layer visibility to stay in sync with board settings
         for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ) && i < aLayers.size(); i++ )
@@ -1402,10 +1425,12 @@ LSET APPEARANCE_CONTROLS::getVisibleLayers()
 
         return set;
     }
-    else
+    else if( BOARD* board = m_frame->GetBoard() )
     {
-        return m_frame->GetBoard()->GetVisibleLayers();
+        return board->GetVisibleLayers();
     }
+
+    return LSET();
 }
 
 
@@ -1422,10 +1447,12 @@ GAL_SET APPEARANCE_CONTROLS::getVisibleObjects()
 
         return set;
     }
-    else
+    else if( BOARD* board = m_frame->GetBoard() )
     {
-        return m_frame->GetBoard()->GetVisibleElements();
+        return board->GetVisibleElements();
     }
+
+    return GAL_SET();
 }
 
 
@@ -1593,6 +1620,10 @@ void APPEARANCE_CONTROLS::ApplyViewport( const VIEWPORT& aViewport )
 void APPEARANCE_CONTROLS::rebuildLayers()
 {
     BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     LSET enabled = board->GetEnabledLayers();
     LSET visible = getVisibleLayers();
 
@@ -1952,7 +1983,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
                        KiBitmap( BITMAPS::show_all_front_layers ) );
 
     // Only show the internal layer option if internal layers are enabled
-    if( m_frame->GetBoard()->GetCopperLayerCount() > 2 )
+    if( m_frame->GetBoard() && m_frame->GetBoard()->GetCopperLayerCount() > 2 )
     {
         KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER, _( "Show Only Inner Layers" ),
                            KiBitmap( BITMAPS::show_all_copper_layers ) );
@@ -1968,8 +1999,12 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
 void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
 {
-    BOARD* board   = m_frame->GetBoard();
-    LSET   visible = getVisibleLayers();
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
+    LSET visible = getVisibleLayers();
 
     PCB_LAYER_ID current = m_frame->GetActiveLayer();
 
@@ -2171,7 +2206,10 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
         {
             m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest = isVisible;
-            m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
+
+            if( m_frame->GetBoard() )
+                m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
+
             m_frame->OnDisplayOptionsChanged();
             m_frame->GetCanvas()->RedrawRatsnest();
         }
@@ -2451,7 +2489,11 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
 void APPEARANCE_CONTROLS::buildNetClassMenu( wxMenu& aMenu, bool isDefaultClass,
                                              const wxString& aName )
 {
-    BOARD*                         board = m_frame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
 
     if( !isDefaultClass)
@@ -2500,12 +2542,13 @@ void APPEARANCE_CONTROLS::buildNetClassMenu( wxMenu& aMenu, bool isDefaultClass,
 
 void APPEARANCE_CONTROLS::rebuildNets()
 {
-    BOARD*          board   = m_frame->GetBoard();
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board || !board->GetProject() )
+        return;
+
     COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
-
-    // If the board isn't fully loaded, we can't yet rebuild
-    if( !board->GetProject() )
         return;
 
     m_staticTextNets->SetLabel( _( "Nets" ) );
@@ -2956,6 +2999,9 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 {
     BOARD* board = m_frame->GetBoard();
 
+    if( !board )
+        return;
+
     setVisibleLayers( aPreset.layers );
     setVisibleObjects( aPreset.renderLayers );
 
@@ -3258,9 +3304,14 @@ void APPEARANCE_CONTROLS::onNetclassVisibilityChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 {
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     m_togglingNetclassRatsnestVisibility = true;
 
-    for( NETINFO_ITEM* net : m_frame->GetBoard()->GetNetInfo() )
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
     {
         if( net->GetNetClass()->ContainsNetclassWithName( aClassName ) )
         {
@@ -3291,10 +3342,14 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 
 void APPEARANCE_CONTROLS::onNetclassColorChanged( wxCommandEvent& aEvent )
 {
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     COLOR_SWATCH* swatch = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
     wxString      netclassName = netclassNameFromEvent( aEvent );
 
-    BOARD*                         board = m_frame->GetBoard();
     std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
     std::shared_ptr<NETCLASS>      nc = netSettings->GetNetClassByName( netclassName );
 
@@ -3370,11 +3425,15 @@ void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
 {
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     KIGFX::VIEW*                   view = m_frame->GetCanvas()->GetView();
     KIGFX::PCB_RENDER_SETTINGS*    rs =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    BOARD*                         board = m_frame->GetBoard();
     std::shared_ptr<NET_SETTINGS>& netSettings = board->GetDesignSettings().m_NetSettings;
     APPEARANCE_SETTING*            setting = nullptr;
 

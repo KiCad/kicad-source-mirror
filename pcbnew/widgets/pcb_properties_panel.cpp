@@ -358,11 +358,16 @@ EDA_ITEM* PCB_PROPERTIES_PANEL::getFrontItem()
 
 void PCB_PROPERTIES_PANEL::UpdateData()
 {
+    BOARD* board = m_frame->GetBoard();
+
+    if( !board )
+        return;
+
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
 
     // TODO perhaps it could be called less often? use PROPERTIES_TOOL and catch MODEL_RELOAD?
-    updateLists( static_cast<PCB_EDIT_FRAME*>( m_frame )->GetBoard() );
+    updateLists( board );
 
     // Will actually just be updatePropertyValues() if selection hasn't changed
     rebuildProperties( selection );
@@ -371,6 +376,9 @@ void PCB_PROPERTIES_PANEL::UpdateData()
 
 void PCB_PROPERTIES_PANEL::AfterCommit()
 {
+    if( !m_frame->GetBoard() )
+        return;
+
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
 

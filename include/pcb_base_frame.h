@@ -211,7 +211,6 @@ public:
 
     BOARD* GetBoard() const
     {
-        wxASSERT( m_pcb );
         return m_pcb;
     }
 
