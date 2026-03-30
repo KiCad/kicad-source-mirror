@@ -375,11 +375,12 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     if( m_progressReporter )
         m_progressReporter->SetNumPhases( static_cast<int>( GetNodeCount( currentNode ) ) );
 
-    // Delete on exception, if I own m_rootSheet, according to aAppendToMe
-    unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
-
     wxFileName newFilename( m_filename );
     newFilename.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    // Owns the temporary VR for the non-append path so it is freed when this scope exits.
+    // The actual schematic VR will be created by SetTopLevelSheets() inside loadSchematic().
+    unique_ptr<SCH_SHEET> tempVROwner;
 
     if( aAppendToMe )
     {
@@ -404,10 +405,12 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     }
     else
     {
-        m_rootSheet = new SCH_SHEET( aSchematic );
+        // Create a temporary local VR used only to anchor m_sheetPath during loading.
+        // loadSchematic() will call SetTopLevelSheets() with the real Eagle pages, which
+        // creates the actual schematic VR and re-parents the pages to it.
+        tempVROwner = std::make_unique<SCH_SHEET>( aSchematic );
+        m_rootSheet = tempVROwner.get();
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = niluuid;
-        m_rootSheet->SetFileName( newFilename.GetFullPath() );
-        aSchematic->SetTopLevelSheets( { m_rootSheet } );
     }
 
     if( !m_rootSheet->GetScreen() )
@@ -458,20 +461,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     loadDrawing( m_eagleDoc->drawing );
 
     if( !aAppendToMe )
-    {
-        std::vector<SCH_SHEET*> topLevelSheets;
-
-        for( SCH_SHEET* sheet : aSchematic->GetTopLevelSheets() )
-        {
-            if( sheet && !sheet->IsVirtualRootSheet() )
-                topLevelSheets.push_back( sheet );
-        }
-
-        if( !topLevelSheets.empty() )
-            aSchematic->SetTopLevelSheets( topLevelSheets );
-
         m_rootSheet = &aSchematic->Root();
-    }
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
@@ -765,7 +755,11 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     // local labels will be used for nets found only on that sheet.
     countNets( aSchematic );
 
-    // Create all Eagle pages as top-level sheets (direct children of the root)
+    // Create all Eagle pages as top-level sheets (direct children of the virtual root).
+    // Collect them first so we can atomically replace any spurious default sheet created
+    // during schematic construction with exactly the set of real Eagle pages.
+    std::vector<SCH_SHEET*> eaglePages;
+    eaglePages.reserve( aSchematic.sheets.size() );
 
     for( const std::unique_ptr<ESHEET>& esheet : aSchematic.sheets )
     {
@@ -774,7 +768,6 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
         std::unique_ptr<SCH_SHEET> sheet = std::make_unique<SCH_SHEET>( m_rootSheet );
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         sheet->SetScreen( screen );
-        screen->SetFileName( sheet->GetFileName() );
 
         wxCHECK2( sheet && screen, continue );
 
@@ -786,14 +779,27 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
         m_sheetPath.SetPageNumber( pageNo );
         m_sheetPath.pop_back();
 
-        SCH_SCREEN* currentScreen = m_rootSheet->GetScreen();
-
-        wxCHECK2( currentScreen, continue );
-
-        sheet->SetParent( m_sheetPath.Last() );
-        m_schematic->AddTopLevelSheet( sheet.release() );
+        eaglePages.push_back( sheet.release() );
 
         m_sheetIndex++;
+    }
+
+    if( !eaglePages.empty() )
+    {
+        // In the append path m_rootSheet is already the schematic's VR.  Use
+        // AddTopLevelSheet to avoid discarding sheets already in the target.
+        // In the fresh-import path m_rootSheet is a temporary local VR, so we use
+        // SetTopLevelSheets to atomically replace any spurious default sheet with
+        // exactly the Eagle pages.
+        if( m_rootSheet == &m_schematic->Root() )
+        {
+            for( SCH_SHEET* page : eaglePages )
+                m_schematic->AddTopLevelSheet( page );
+        }
+        else
+        {
+            m_schematic->SetTopLevelSheets( eaglePages );
+        }
     }
 
     // Handle the missing symbol units that need to be instantiated
@@ -899,9 +905,6 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
     if( m_modules.empty() )
     {
         std::string filename;
-        wxFileName  fn = m_filename;
-
-        fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         filename = wxString::Format( wxT( "%s_%d" ), m_filename.GetName(), m_sheetIndex );
 
@@ -913,7 +916,12 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         ReplaceIllegalFileNameChars( filename );
         replace( filename.begin(), filename.end(), ' ', '_' );
 
+        // Use the project directory so saved pages land alongside the project file,
+        // not in the Eagle source directory.
+        wxFileName fn;
+        fn.SetPath( m_schematic->Project().GetProjectPath() );
         fn.SetName( filename );
+        fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         sheet->SetFileName( fn.GetFullName() );
         screen->SetFileName( fn.GetFullPath() );
@@ -2070,13 +2078,11 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
     symbol->AddHierarchicalReference( m_sheetPath.Path(), refPrefix + reference, unit );
 
-    // Save the pin positions
-    LIB_SYMBOL* libSymbol =
-            PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() )->LoadSymbol( symbol->GetLibId() );
-
-    wxCHECK( libSymbol, /*void*/ );
-
-    symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
+    // Cache the lib symbol so pin positions are available for connection-point tracking.
+    // Use the already-loaded `part` directly rather than re-fetching through the adapter,
+    // because the .kicad_sym library is still buffered in m_pi and has not yet been saved to
+    // disk at the time loadInstance runs.
+    symbol->SetLibSymbol( new LIB_SYMBOL( *part ) );
 
     for( const SCH_PIN* pin : symbol->GetLibPins() )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
