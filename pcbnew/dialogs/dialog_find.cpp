@@ -44,6 +44,8 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
 {
     GetSizer()->SetSizeHints( this );
 
+    OptOut( m_searchCombo );
+
     m_searchCombo->Append( m_frame->GetFindHistoryList() );
 
     while( m_searchCombo->GetCount() > 10 )

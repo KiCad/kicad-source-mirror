@@ -39,6 +39,9 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aDat
 {
     wxASSERT_MSG( m_findReplaceData, wxT( "can't create find dialog without data" ) );
 
+    OptOut( m_comboFind );
+    OptOut( m_comboReplace );
+
     if( aStyle & wxFR_REPLACEDIALOG )
     {
         SetTitle( _( "Find and Replace" ) );
