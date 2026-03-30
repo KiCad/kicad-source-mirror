@@ -24,6 +24,7 @@
 #include "dialog_fp_edit_pad_table.h"
 
 #include <wx/button.h>
+#include <wx/display.h>
 #include <wx/sizer.h>
 #include <wx/dcclient.h>
 #include <wx/stattext.h>
@@ -216,8 +217,33 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
           wxID_CANCEL );
 
     Layout();
-    topSizer->Fit( this );
     finishDialogSettings();
+
+    // Cap the initial height so the dialog does not grow off-screen for footprints
+    // with many pads. The grid grows to fill the available space via wxEXPAND.
+    // Use the parent window to find the display since this dialog isn't shown yet.
+    int displayIdx = wxDisplay::GetFromWindow( aParent );
+
+    if( displayIdx == wxNOT_FOUND )
+        displayIdx = 0;
+
+    wxRect displayArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea();
+    wxSize dlgSize = GetSize();
+    int    maxH = ( displayArea.height * 4 ) / 5;
+
+    if( dlgSize.y > maxH )
+    {
+        dlgSize.y = maxH;
+        SetSize( dlgSize );
+
+        // Reset minimum height so the user can resize the capped dialog freely.
+        // The minimum width from finishDialogSettings() is still honoured.
+        wxSize minSz = GetMinSize();
+        minSz.y = -1;
+        SetMinSize( minSz );
+
+        Centre();
+    }
 }
 
 
