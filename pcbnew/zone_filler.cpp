@@ -2375,40 +2375,36 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
                     return c.GetValue().Min();
             };
 
+    // Keepout zones (rule areas) are excluded here because they are subtracted earlier in the
+    // fill process, before the deflate/inflate min-width cycle.  Subtracting them here would
+    // trigger a second deflate/inflate pass that creates artifacts along curved keepout
+    // boundaries (issue 23515).
     auto knockoutZoneClearance =
             [&]( ZONE* aKnockout )
             {
+                if( aKnockout->GetIsRuleArea() )
+                    return;
+
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
                 if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    if( aKnockout->GetIsRuleArea() )
+                    if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
                     {
-                        if( aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                        {
-                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE,
-                                                                          nullptr );
-                        }
-                    }
-                    else
-                    {
-                        if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
-                        {
-                            int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
-                                                                      aLayer ) );
+                        int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
+                                                                   aZone, aKnockout, aLayer ) );
 
-                            gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
+                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
+                                                                 aKnockout, aLayer ) );
 
-                            // Negative clearance permits zones to short
-                            if( gap < 0 )
-                                return;
+                        if( gap < 0 )
+                            return;
 
-                            SHAPE_POLY_SET poly;
-                            aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
-                                                                ERROR_OUTSIDE );
-                            aHoles.Append( poly );
-                        }
+                        SHAPE_POLY_SET poly;
+                        aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
+                                                             m_maxError, ERROR_OUTSIDE );
+                        aHoles.Append( poly );
                     }
                 }
             };
@@ -2489,38 +2485,18 @@ void ZONE_FILLER::connect_nearby_polys( SHAPE_POLY_SET& aPolys, double aDistance
     {
         SHAPE_LINE_CHAIN& line = aPolys.Outline( outline );
 
-        if( vertices.empty() )
-            continue;
-
         // Stable sort here because we want to make sure that we are inserting pt1 first and
-        // pt2 second but still sorting the rest of the indices
+        // pt2 second but still sorting the rest of the indices from highest to lowest.
+        // This allows us to insert into the existing polygon without modifying the future
+        // insertion points.
         std::stable_sort( vertices.begin(), vertices.end(),
                   []( const std::pair<int, VECTOR2I>& a, const std::pair<int, VECTOR2I>& b )
                   {
-                      return a.first < b.first;
+                      return a.first > b.first;
                   } );
 
-        std::vector<VECTOR2I> new_points;
-        new_points.reserve( line.PointCount() + vertices.size() );
-
-        size_t vertex_idx = 0;
-
-        for( int i = 0; i < line.PointCount(); ++i )
-        {
-            new_points.push_back( line.CPoint( i ) );
-
-            // Insert all points that should come after position i
-            while( vertex_idx < vertices.size() && vertices[vertex_idx].first == i )
-            {
-                new_points.push_back( vertices[vertex_idx].second );
-                vertex_idx++;
-            }
-        }
-
-        line.Clear();
-
-        for( const auto& pt : new_points )
-            line.Append( pt );
+        for( const auto& [vertex, pt] : vertices )
+            line.Insert( vertex + 1, pt );
     }
 }
 
@@ -2651,12 +2627,42 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * Knockout electrical clearances.
      */
 
-    // When iterative refill is enabled, we build zone clearances separately so we can cache
-    // the fill before zone knockouts are applied (issue 21746).
+    // When iterative refill is enabled, we build zone-to-zone clearances separately so we can
+    // cache the fill before zone knockouts are applied (issue 21746).  Keepout zones are always
+    // included in clearanceHoles regardless of the iterative refill setting so they are
+    // subtracted before the deflate/inflate min-width cycle.  Subtracting keepouts after that
+    // cycle and running a second deflate/inflate pass creates artifacts along curved keepout
+    // boundaries (issue 23515).
     const bool iterativeRefill = ADVANCED_CFG::GetCfg().m_ZoneFillIterativeRefill;
 
     buildCopperItemClearances( aZone, aLayer, noConnectionPads, clearanceHoles,
                                !iterativeRefill /* include zone clearances only if not iterative */ );
+
+    if( iterativeRefill )
+    {
+        BOX2I zone_boundingbox = aZone->GetBoundingBox();
+        bool  addedKeepoutHoles = false;
+
+        auto collectKeepoutHoles =
+                [&]( ZONE* candidate )
+                {
+                    if( aZone->IsTeardropArea() )
+                        return;
+
+                    if( !isZoneFillKeepout( candidate, aLayer, zone_boundingbox ) )
+                        return;
+
+                    candidate->TransformSmoothedOutlineToPolygon( clearanceHoles, 0, m_maxError,
+                                                                  ERROR_OUTSIDE, nullptr );
+                    addedKeepoutHoles = true;
+                };
+
+        forEachBoardAndFootprintZone( m_board, collectKeepoutHoles );
+
+        if( addedKeepoutHoles )
+            clearanceHoles.Simplify();
+    }
+
     DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, wxT( "clearance-holes" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -3867,19 +3873,11 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
 
     forEachBoardAndFootprintZone( m_board, collectZoneKnockout );
 
-    auto collectKeepout =
-            [&]( ZONE* candidate )
-            {
-                if( !isZoneFillKeepout( candidate, aLayer, zoneBBox ) )
-                    return;
+    // Keepout zones are not collected here because they are already baked into the cached
+    // pre-knockout fill.  They were subtracted before the initial deflate/inflate min-width
+    // cycle so the cached fill already reflects keepout boundaries (issue 23515).
 
-                appendZoneOutlineWithoutArcs( candidate, diffNetKnockouts );
-                knockoutsApplied = true;
-            };
-
-    forEachBoardAndFootprintZone( m_board, collectKeepout );
-
-    // Subtract different-net knockouts and keepouts first, then re-prune min-width
+    // Subtract different-net knockouts first, then re-prune min-width
     // violations BEFORE subtracting same-net knockouts.  The fill still extends into
     // overlapping same-net zone areas at this point, which provides a natural buffer
     // that prevents the deflate/inflate cycle from creating divots at same-net

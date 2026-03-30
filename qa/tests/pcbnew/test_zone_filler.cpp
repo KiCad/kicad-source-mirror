@@ -1788,3 +1788,89 @@ BOOST_FIXTURE_TEST_CASE( OffCenterTeardropSymmetry, ZONE_FILL_TEST_FIXTURE )
 
     BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone for off-center track" );
 }
+
+
+/**
+ * Test for issue 23515: Zone fills have random pieces missing near keepout boundaries.
+ *
+ * The test board is a reporter-provided v9 board file with stored zone fill from the v9
+ * algorithm.  That stored fill is the oracle.  Re-filling the same board with the current
+ * algorithm should not lose noticeable area near keepout boundaries.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionKeepoutBoundaryMissingFill, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    auto getTotalFilledArea =
+            [this]() -> double
+            {
+                double totalArea = 0;
+
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->GetIsRuleArea() )
+                        continue;
+
+                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                    {
+                        if( !zone->HasFilledPolysForLayer( layer ) )
+                            continue;
+
+                        std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+                        if( fill )
+                            totalArea += std::abs( fill->Area() );
+                    }
+                }
+
+                return totalArea;
+            };
+
+    auto refillAndMeasure =
+            [this, &cfg, &getTotalFilledArea]( bool aIterative ) -> double
+            {
+                cfg.m_ZoneFillIterativeRefill = aIterative;
+
+                KI_TEST::LoadBoard( m_settingsManager, "issue23515/issue23515", m_board );
+
+                double storedArea = getTotalFilledArea();
+
+                BOOST_REQUIRE_MESSAGE( storedArea > 0, "Stored v9 fill has zero area" );
+
+                KI_TEST::FillZones( m_board.get() );
+                return getTotalFilledArea();
+            };
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue23515/issue23515", m_board );
+
+    double storedArea = getTotalFilledArea();
+
+    BOOST_REQUIRE_MESSAGE( storedArea > 0, "Stored v9 fill has zero area" );
+
+    double nonIterativeArea = refillAndMeasure( false );
+    double iterativeArea = refillAndMeasure( true );
+    double nonIterativeAreaRatio = nonIterativeArea / storedArea;
+    double iterativeAreaRatio = iterativeArea / storedArea;
+
+    BOOST_CHECK_MESSAGE(
+            nonIterativeAreaRatio > 0.99999,
+            wxString::Format(
+                    "Non-iterative refill lost %.4f%% versus stored v9 fill "
+                    "(stored=%.2f mm^2, non-iterative=%.2f mm^2). "
+                    "This suggests missing pieces near keepout boundaries (issue 23515).",
+                    ( 1.0 - nonIterativeAreaRatio ) * 100.0,
+                    storedArea / 1e6, nonIterativeArea / 1e6 ) );
+
+    BOOST_CHECK_MESSAGE(
+            iterativeAreaRatio > 0.99999,
+            wxString::Format(
+                    "Iterative refill lost %.4f%% versus stored v9 fill "
+                    "(stored=%.2f mm^2, iterative=%.2f mm^2). "
+                    "This suggests missing pieces near keepout boundaries (issue 23515).",
+                    ( 1.0 - iterativeAreaRatio ) * 100.0,
+                    storedArea / 1e6, iterativeArea / 1e6 ) );
+}
