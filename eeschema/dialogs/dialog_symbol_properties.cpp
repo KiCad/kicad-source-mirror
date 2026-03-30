@@ -832,8 +832,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked(), &currentSheet, currentVariant );
-    m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
-    m_symbol->SetExcludedFromPosFiles( m_cbExcludeFromPosFiles->IsChecked() );
+    m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked(), &currentSheet, currentVariant );
+    m_symbol->SetExcludedFromPosFiles( m_cbExcludeFromPosFiles->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetDNP( m_cbDNP->IsChecked(), &currentSheet, currentVariant );
 
     // Update any assignments

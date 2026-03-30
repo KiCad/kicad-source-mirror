@@ -196,6 +196,65 @@ BOOST_AUTO_TEST_CASE( FieldAdditionByName )
 
 
 /**
+ * Regression test for issue #23545.
+ *
+ * The symbol properties dialog called SetExcludedFromBoard() and SetExcludedFromPosFiles()
+ * without variant parameters, causing them to modify the base property instead of the variant
+ * override. When reading back via GetExcludedFromBoard/PosFiles with a variant name, the
+ * stale variant value (from InitializeAttributes at variant creation time) was returned instead
+ * of the user-intended value.
+ *
+ * This test simulates the dialog's TransferDataFromWindow call order to verify all five
+ * boolean attributes survive a batch commit to the same variant.
+ */
+BOOST_AUTO_TEST_CASE( VariantDialogBatchCommit )
+{
+    wxFileName fn;
+    fn.SetPath( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variant_test" ) );
+    fn.SetName( wxS( "variant_test" ) );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+    LoadSchematic( fn.GetFullPath() );
+
+    SCH_SYMBOL* symbol = GetFirstSymbol();
+    BOOST_REQUIRE( symbol );
+
+    SCH_SHEET_LIST        hierarchy = m_schematic->Hierarchy();
+    const SCH_SHEET_PATH& sheet = hierarchy[0];
+    wxString              variantName = wxS( "DialogTest" );
+
+    // All base properties should start false.
+    BOOST_CHECK( !symbol->GetDNP() );
+    BOOST_CHECK( !symbol->GetExcludedFromBOM() );
+    BOOST_CHECK( !symbol->GetExcludedFromSim() );
+    BOOST_CHECK( !symbol->GetExcludedFromBoard() );
+    BOOST_CHECK( !symbol->GetExcludedFromPosFiles() );
+
+    // Simulate dialog_symbol_properties TransferDataFromWindow call order.
+    // ExcludeFromSim is left unchecked (false), the other four are checked (true).
+    symbol->SetExcludedFromSim( false, &sheet, variantName );
+    symbol->SetExcludedFromBOM( true, &sheet, variantName );
+    symbol->SetExcludedFromBoard( true, &sheet, variantName );
+    symbol->SetExcludedFromPosFiles( true, &sheet, variantName );
+    symbol->SetDNP( true, &sheet, variantName );
+
+    // All four checked properties must read back as true through the variant.
+    BOOST_CHECK( symbol->GetDNP( &sheet, variantName ) );
+    BOOST_CHECK( symbol->GetExcludedFromBOM( &sheet, variantName ) );
+    BOOST_CHECK( symbol->GetExcludedFromBoard( &sheet, variantName ) );
+    BOOST_CHECK( symbol->GetExcludedFromPosFiles( &sheet, variantName ) );
+    BOOST_CHECK( !symbol->GetExcludedFromSim( &sheet, variantName ) );
+
+    // Base properties must remain unchanged.
+    BOOST_CHECK( !symbol->GetDNP() );
+    BOOST_CHECK( !symbol->GetExcludedFromBOM() );
+    BOOST_CHECK( !symbol->GetExcludedFromBoard() );
+    BOOST_CHECK( !symbol->GetExcludedFromPosFiles() );
+}
+
+
+/**
  * Test variant description methods.
  */
 BOOST_AUTO_TEST_CASE( VariantDescription )
