@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-22 01:10+0000\n"
+"PO-Revision-Date: 2026-03-30 17:09+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
@@ -46568,11 +46568,12 @@ msgstr ""
 "\n"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1193
-#, fuzzy
 msgid ""
 "\n"
 "Do you want to save your changes?"
-msgstr "是否要取消导出过程?"
+msgstr ""
+"\n"
+"是否保存修改?"
 
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1360
 #, fuzzy, c-format
@@ -47118,11 +47119,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:1365
-#, fuzzy, c-format
+#, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
-msgstr ""
-"\n"
-"** 导出 %s 文件时出错。导出中止。**\n"
+msgstr "** 导出 %s 文件时出错。导出中止。**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1373
 #, c-format
