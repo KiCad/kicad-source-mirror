@@ -2438,12 +2438,21 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         auto angleSnap = GetAngleSnapMode();
-        if( evt->Modifier( MD_CTRL ) )
-            angleSnap = LEADER_MODE::DIRECT;
 
-        // Rectangular shapes never get zero-size snapping
-        if( shape == SHAPE_T::RECTANGLE && angleSnap == LEADER_MODE::DEG90 )
-            angleSnap = LEADER_MODE::DEG45;
+        // Drawing rectangles and circles ignore the snap behavior by default, but constrains
+        // when the modifier key is pressed
+        if( shape == SHAPE_T::RECTANGLE || shape == SHAPE_T::CIRCLE)
+        {
+            if( evt->Modifier( MD_CTRL ) )
+                angleSnap = LEADER_MODE::DEG45;
+            else
+                angleSnap = LEADER_MODE::DIRECT;
+        }
+        else {
+            // All other drawing uses the snap mode, except that is disabled with the modifier key
+            if( evt->Modifier( MD_CTRL ) )
+                angleSnap = LEADER_MODE::DIRECT;
+        }
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
         cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(), { m_layer }, GRID_GRAPHICS ),
