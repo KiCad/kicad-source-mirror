@@ -206,6 +206,13 @@ bool LINE_PLACER::handlePullback()
     R45::DIRECTION last_tail( *tail.CShape( -1 ), false );
     R45::ANGLE_TYPE angle = R45::Angle( first_head, last_tail );
 
+    PNS_DBG( Dbg(), Message, wxString::Format( "Placer: pullback fh=%s lt=%s angle=%s",
+        first_head.Format(),
+        last_tail.Format(),
+        R45::Format( angle )
+    ) );
+
+
     // case 2: regardless of the current routing direction, if the tail/head
     // extremities form an acute or right angle, reduce the tail by one segment
     // (and hope that further iterations) will result with a cleaner trace
@@ -1212,11 +1219,14 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 bool LINE_PLACER::route( const VECTOR2I& aP )
 {
     routeStep( aP );
-
+    
     if( !m_head.ShapeCount() )
         return false;
 
-    return m_head.CLastPoint() == aP;
+    bool complete = m_head.CLastPoint() == aP;
+    PNS_DBG( Dbg(), AddItem, &m_head, GREEN, 100000, wxString::Format( wxT( "head [complete=%d]" ), complete?1:0 ) );
+
+    return complete;
 }
 
 
@@ -2068,9 +2078,9 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
     }
 
     aHead.SetLayer( m_currentLayer );
+    l.SetWidth( m_sizes.TrackWidth() );
     aHead.SetShape( l );
-
-
+            
     PNS_DBG( Dbg(), AddItem, &aHead, CYAN, 10000, wxString::Format( "initial-trace [sc %d]", l.ShapeCount() ) );
 
 
@@ -2100,6 +2110,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
         if( v.PushoutForce( m_currentNode, lead, force, collMask, iterLimit ) )
         {
             SHAPE_CHAIN line = R45::BuildInitialTrace( m_p_start, aP + force, guessedDir.IsDiagonal(), cornerMode );
+            line.SetWidth( m_sizes.TrackWidth() );
             aHead = LINE( aHead, line );
 
             v.SetPos( v.Pos() + force );

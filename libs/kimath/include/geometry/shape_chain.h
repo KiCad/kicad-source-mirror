@@ -226,7 +226,6 @@ class SHAPE_CHAIN : public SHAPE
             m_closed = false;
         }
 
-
         const VECTOR2I NearestPoint( const VECTOR2I& aP, bool aAllowInternalShapePoints = true ) const;
         const VECTOR2I NearestPoint( const SEG& aSeg, int& aDistance ) const;
         int NearestShape( const VECTOR2I& aP ) const;
@@ -612,6 +611,8 @@ return 0;
 
 
         const std::vector<SHAPE_BICONNECTED*>& CShapes() const { return m_shapes; }
+
+        virtual void SetWidth( int aWidth ) override;
 
     private:
 

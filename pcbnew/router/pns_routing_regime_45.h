@@ -36,22 +36,32 @@ public:
 
         DIRECTION( const SEG& aSeg )
         {
-
+            m_dir = constructFromVector( aSeg.B - aSeg.A );
         }
 
         DIRECTION( const SHAPE_SEGMENT& aSeg )
         {
-
+            m_dir = constructFromVector( aSeg.GetSeg().B - aSeg.GetSeg().A );
         }
 
-        DIRECTION( const SHAPE_BICONNECTED& aSeg, bool aTakeFirstPoint )
+        DIRECTION( const SHAPE_BICONNECTED& aShape, bool aTakeFirstPoint )
         {
-
+            switch( aShape.Type() )
+            {
+                case SH_SEGMENT:
+                {
+                    const auto& shSeg = static_cast<const SHAPE_SEGMENT& >( aShape );
+                    m_dir = constructFromVector( shSeg.GetSeg().B - shSeg.GetSeg().A );
+                }                    
+                // case SH_ARC:  fixme
+                default:
+                    m_dir = UNDEFINED;
+            }
         }
 
         DIRECTION( EDA_ANGLE aAngle )
         {
-
+            wxASSERT( false );
         }
 
         wxString Format() const
@@ -142,11 +152,53 @@ public:
                                               bool aStartDiagonal = false,
                                               CORNER_MODE aMode = CORNER_MODE::MITERED_45 );
     
+    
+    static const wxString Format( ANGLE_TYPE aAngle );
 
-    static ANGLE_TYPE Angle( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB ) { return ANG_UNDEFINED; } // fixme implement
-    static ANGLE_TYPE Angle( const SHAPE_CHAIN& aLine, int aVertex ) { return ANG_UNDEFINED; } // fixme implement
-    static ANGLE_TYPE Angle( DIRECTION aA, DIRECTION aB ) { return ANG_UNDEFINED; } // fixme implement
+    static ANGLE_TYPE Angle( const SHAPE_BICONNECTED& aA, const SHAPE_BICONNECTED& aB ) { wxASSERT( false ); return ANG_UNDEFINED; } // fixme implement
+    static ANGLE_TYPE Angle( const SHAPE_CHAIN& aLine, int aVertex ) { wxASSERT( false ); return ANG_UNDEFINED; } // fixme implement
+    static ANGLE_TYPE Angle( const DIRECTION& aA, const DIRECTION& aB ) 
+    { 
+        if( aA.m_dir == UNDEFINED || aB.m_dir == UNDEFINED )
+            return ANG_UNDEFINED;
 
+        int d = std::abs( static_cast<int>( aA.m_dir ) - static_cast<int>( aB.m_dir ) );
+
+        if( d == 1 || d == 7 )
+            return ANG_OBTUSE;
+        else if( d == 2 || d == 6 )
+            return ANG_RIGHT;
+        else if( d == 3 || d == 5 )
+            return ANG_ACUTE;
+        else if( d == 4 )
+            return ANG_HALF_FULL;
+        else
+            return ANG_STRAIGHT;    
+    }
+
+    static DIRS constructFromVector( const VECTOR2I& aVec )
+    {
+        if( aVec.x == 0 && aVec.y == 0 )
+            return UNDEFINED;
+
+        double mag = 360.0 - ( 180.0 / M_PI * atan2( (double) (-aVec.y), (double) aVec.x ) ) + 90.0;
+
+        if( mag >= 360.0 )
+            mag -= 360.0;
+
+        if( mag < 0.0 )
+            mag += 360.0;
+
+        int dir = ( mag + 22.5 ) / 45.0;
+
+        if( dir >= LAST )
+            dir -= LAST;
+
+        if( dir < 0 )
+            dir += LAST;
+
+        return (DIRS) dir;
+    }
 
 };
 
