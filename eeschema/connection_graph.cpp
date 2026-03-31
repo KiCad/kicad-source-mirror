@@ -4243,11 +4243,19 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
             size_t localPins = pinCount;
             bool   hasLocalHierarchy = false;
 
-            // A label that bridges a local hierarchical connection (sheet
-            // pin) to a bus with hierarchical routing is serving a valid
-            // purpose even without local component pins.
             if( !aSubgraph->m_hier_pins.empty() || !aSubgraph->m_hier_ports.empty() )
             {
+                // A label bridging multiple hierarchical connections
+                // (e.g., connecting sheet pins from different sub-sheet
+                // instances) is serving a valid routing purpose even
+                // without local component pins.
+                if( aSubgraph->m_hier_pins.size() + aSubgraph->m_hier_ports.size() > 1 )
+                {
+                    hasLocalHierarchy = true;
+                }
+
+                // Also check bus parents for bus-based hierarchical
+                // routing on the same sheet.
                 for( auto& [connection, busParents] : aSubgraph->m_bus_parents )
                 {
                     for( const CONNECTION_SUBGRAPH* busParent : busParents )
