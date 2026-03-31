@@ -106,7 +106,7 @@ std::vector<std::unique_ptr<ZONE>> MergeZonesWithSameOutline( std::vector<std::u
     };
 
     std::vector<std::unique_ptr<ZONE>> deduplicatedZones;
-    size_t                             mergedCount = 0;
+
     // Map of zone indexes that we have already merged into a prior zone
     std::vector<bool> merged( aZones.size(), false );
 
@@ -141,7 +141,6 @@ std::vector<std::unique_ptr<ZONE>> MergeZonesWithSameOutline( std::vector<std::u
 
                 layers |= candidate.GetLayerSet();
                 merged[j] = true;
-                mergedCount++;
             }
         }
 
