@@ -4457,6 +4457,8 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
     bool inRuleSet = false;
     bool inRuleSetFor = false;
     bool inClearanceRule = false;
+    int netClassDataDepth = -1;
+    int netClassDepth = -1;
     int ruleSetDepth = -1;
     int clearanceRuleDepth = -1;
     bool foundDefaultRules = false;
@@ -4496,9 +4498,8 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                     currentDiffPair = DIFF_PAIR_DEF();
                 }
 
-                if( braceDepth == 1 && inNetClass )
+                if( inNetClass && braceDepth <= netClassDepth )
                 {
-                    // End of NET_CLASS block (inside NET_CLASS DATA)
                     if( !currentNetClass.name.empty() )
                         m_net_classes.push_back( currentNetClass );
 
@@ -4506,9 +4507,8 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                     currentNetClass = NET_CLASS_DEF();
                 }
 
-                if( braceDepth == 0 && inNetClassData )
+                if( inNetClassData && braceDepth <= netClassDataDepth )
                 {
-                    // End of NET_CLASS DATA block
                     inNetClassData = false;
                 }
 
@@ -4568,7 +4568,6 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
             }
         }
 
-        // Check for NET_CLASS DATA section header
         if( token == "NET_CLASS" )
         {
             std::string secondToken;
@@ -4576,24 +4575,26 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
 
             if( secondToken == "DATA" )
             {
-                // Entering NET_CLASS DATA section
                 inNetClassData = true;
+                netClassDataDepth = braceDepth;
             }
             else if( inNetClassData && !secondToken.empty() )
             {
-                // Starting a new NET_CLASS definition inside NET_CLASS DATA
-                // Format: NET_CLASS class_name
                 if( inNetClass && !currentNetClass.name.empty() )
                     m_net_classes.push_back( currentNetClass );
 
                 currentNetClass = NET_CLASS_DEF();
                 currentNetClass.name = secondToken;
                 inNetClass = true;
+                netClassDepth = braceDepth;
+            }
+            else if( inRuleSetFor && !secondToken.empty() )
+            {
+                ruleSetNetClass = secondToken;
             }
         }
         else if( inNetClass && token == "NET" )
         {
-            // Add net to current net class
             std::string netName;
             iss >> netName;
 
@@ -4613,10 +4614,6 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
         else if( inRuleSet && !inClearanceRule && token == "FOR" )
         {
             inRuleSetFor = true;
-        }
-        else if( inRuleSetFor && token == "NET_CLASS" )
-        {
-            iss >> ruleSetNetClass;
         }
         else if( inRuleSet && token == "CLEARANCE_RULE" )
         {
