@@ -679,6 +679,51 @@ BOOST_AUTO_TEST_CASE( ExternalComponentFields )
 }
 
 
+BOOST_AUTO_TEST_CASE( ExternalEditLogHeadTableFields )
+{
+    // SC350420B02 is an edit-log save with NO consolidated offset-index table, so
+    // the design-controlled fields come from the head resolved-attribute stream via
+    // the sub-record + WDI-P/N rebinding fallback.  Part-type 300962 (the 0.47uF
+    // cap, e.g. C9) recovers its DESCRIPTION/VALUE/PCB DECAL exactly.  The
+    // manufacturer fields are not asserted here -- on edit-log saves they hold the
+    // stale pre-merge value (proven non-serialized), unlike the compaction path.
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    const PADS_SCH_BINARY::PLACEMENT* cap = nullptr;
+
+    for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+    {
+        if( pl.partType == "300962" && !pl.fields.empty() )
+        {
+            cap = &pl;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( cap );
+
+    auto fieldValue = [&]( const std::string& key ) -> std::string
+    {
+        for( const std::pair<std::string, std::string>& f : cap->fields )
+        {
+            if( f.first == key )
+                return f.second;
+        }
+
+        return std::string();
+    };
+
+    BOOST_CHECK_EQUAL( fieldValue( "DESCRIPTION" ), "CAP,SMD,0.47uF,10%,50V,X5R,CER,0402" );
+    BOOST_CHECK_EQUAL( fieldValue( "VALUE" ), "0.47uF" );
+    BOOST_CHECK_EQUAL( fieldValue( "PCB DECAL" ), "CAPC1005X55N" );
+}
+
+
 BOOST_AUTO_TEST_CASE( ExternalDecalBindingAndGeometry )
 {
     // SC350430B01: the placement->decal binding (handle @ refdes-0x1a indexing the

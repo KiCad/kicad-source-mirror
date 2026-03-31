@@ -687,9 +687,27 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     if( decodeFieldsViaIndex( d, ptBase ) )
         return;
 
-    // 3. Fallback (edit-log files with no consolidated index): the flat tagged
-    // stream, where the attribute pool start = first 0x00-tagged non-key whose
-    // next 0x00-tagged string is a known attribute key.
+    // 3. Fallback (edit-log files with no consolidated index): the head resolved-
+    // attribute stream right after the title-block *FIELDS*.  It is a flat tagged
+    // key/value run grouped into per-part-type blocks; an edit/compaction append
+    // re-emits whole field groups, so the stream is split into SUB-RECORDS (a
+    // repeated key, or a part-type-name token, opens a new one) and each sub-record
+    // is bound to its part-type by its own 'WDI P/N' value (the canonical identity),
+    // else the name token that opened it.  This recovers the design-controlled
+    // fields (DESCRIPTION, VALUE, PCB DECAL, ...) for every named+WDI-bound part-
+    // type; the manufacturer fields read stale on edit-log saves and are not
+    // corrected here (their resolved value is only serialized via the offset-index
+    // table consumed by the compaction path above).
+    std::set<std::string> ptNameSet;
+
+    for( const std::string& nm : m_partTypeNames )
+    {
+        if( nm.size() > 1 && nm[0] != '$' && nm != "d" )
+            ptNameSet.insert( nm );
+    }
+
+    // Region start = first known part-type name immediately followed by a key (this
+    // skips the title *FIELDS* run and any free-standing net-name run before it).
     size_t                  scanEnd = std::min( d.size(), static_cast<size_t>( 0x4000 ) );
     std::vector<TAGGED_STR> head = walkTaggedStrings( d, DATA_STREAM_OFFSET, scanEnd );
     size_t                  attrStart = std::string::npos;
@@ -698,7 +716,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     {
         bool zero = ( head[k].tag == 0 || head[k].tag == -1 );
 
-        if( zero && !FIELD_ATTR_KEYS.count( head[k].text )
+        if( zero && ptNameSet.count( head[k].text )
             && head[k + 1].tag == 0 && FIELD_ATTR_KEYS.count( head[k + 1].text ) )
         {
             attrStart = head[k].off;
@@ -709,7 +727,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     if( attrStart == std::string::npos )
         return;
 
-    // End = the first >= 16-byte zero run after the start.
+    // End = the first >= 64-byte zero run after the start.
     size_t attrEnd = d.size();
     size_t run = 0;
 
@@ -717,7 +735,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     {
         if( d[o] == 0 )
         {
-            if( ++run >= 16 )
+            if( ++run >= 64 )
             {
                 attrEnd = o - run + 1;
                 break;
@@ -732,29 +750,47 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     size_t walkFrom = ( attrStart > 0 && d[attrStart - 1] < 0x20 ) ? attrStart - 1 : attrStart;
     std::vector<TAGGED_STR> toks = walkTaggedStrings( d, walkFrom, attrEnd );
 
-    // 3. Parse with repeat-lock.
-    std::string cur;
-    bool        locked = false;
+    // Split into sub-records.
+    struct SUBREC
+    {
+        std::string                                      name;
+        std::vector<std::pair<std::string, std::string>> kv;
+    };
+
+    std::vector<SUBREC> subs;
+    SUBREC              cur;
+
+    auto hasKey = []( const SUBREC& r, const std::string& k )
+    {
+        for( const std::pair<std::string, std::string>& p : r.kv )
+        {
+            if( p.first == k )
+                return true;
+        }
+
+        return false;
+    };
+
+    auto flush = [&]()
+    {
+        if( !cur.kv.empty() || !cur.name.empty() )
+            subs.push_back( cur );
+
+        cur = SUBREC{};
+    };
 
     for( size_t idx = 0; idx < toks.size(); )
     {
         const TAGGED_STR& t = toks[idx];
         bool              zero = ( t.tag == 0 || t.tag == -1 );
 
-        if( zero && !FIELD_ATTR_KEYS.count( t.text ) )
+        if( !zero )
         {
-            if( idx + 1 < toks.size() && toks[idx + 1].tag == 0 && FIELD_ATTR_KEYS.count( toks[idx + 1].text ) )
-            {
-                cur = t.text;
-                m_partTypeFields[cur];
-                locked = false;
-            }
-
             ++idx;
             continue;
         }
 
-        if( zero )
+        if( FIELD_ATTR_KEYS.count( t.text ) )
         {
             std::string key = t.text;
             std::string val;
@@ -769,30 +805,68 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
                 ++idx;
             }
 
-            if( !cur.empty() && !locked )
+            if( hasKey( cur, key ) )
+                flush();
+
+            cur.kv.emplace_back( key, val );
+        }
+        else
+        {
+            flush();
+            cur.name = t.text;
+            ++idx;
+        }
+    }
+
+    flush();
+
+    // Bind each sub-record to its part-type and union the fields (first non-empty
+    // value wins).
+    for( const SUBREC& r : subs )
+    {
+        std::string wdi;
+
+        for( const std::pair<std::string, std::string>& p : r.kv )
+        {
+            if( p.first == "WDI P/N" )
             {
-                std::vector<std::pair<std::string, std::string>>& kv = m_partTypeFields[cur];
-                bool present = false;
-
-                for( const auto& pr : kv )
-                {
-                    if( pr.first == key )
-                    {
-                        present = true;
-                        break;
-                    }
-                }
-
-                if( present )
-                    locked = true;
-                else
-                    kv.emplace_back( key, val );
+                wdi = p.second;
+                break;
             }
-
-            continue;
         }
 
-        ++idx;
+        std::string key;
+
+        if( !wdi.empty() && ptNameSet.count( wdi ) )
+            key = wdi;
+        else if( !r.name.empty() && ptNameSet.count( r.name ) )
+            key = r.name;
+
+        if( key.empty() )
+            continue;
+
+        std::vector<std::pair<std::string, std::string>>& dst = m_partTypeFields[key];
+
+        for( const std::pair<std::string, std::string>& p : r.kv )
+        {
+            bool present = false;
+
+            for( std::pair<std::string, std::string>& q : dst )
+            {
+                if( q.first == p.first )
+                {
+                    present = true;
+
+                    if( q.second.empty() && !p.second.empty() )
+                        q.second = p.second;
+
+                    break;
+                }
+            }
+
+            if( !present )
+                dst.emplace_back( p.first, p.second );
+        }
     }
 }
 
