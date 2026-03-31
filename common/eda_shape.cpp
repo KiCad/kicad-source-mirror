@@ -858,6 +858,20 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
         break;
     }
 
+    // Translate the cached hatch geometry instead of leaving it stale. The hatch pattern is
+    // invariant under translation, so shifting line endpoints is sufficient and keeps the
+    // display correct during interactive moves without hitting GenerateHatchLines().
+    if( m_hatchingCache )
+    {
+        for( SEG& seg : m_hatchingCache->hatchLines )
+        {
+            seg.A += aMoveVector;
+            seg.B += aMoveVector;
+        }
+
+        m_hatchingCache->hatching.Move( aMoveVector );
+    }
+
     m_hatchingDirty = true;
 }
 

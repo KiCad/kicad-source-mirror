@@ -1030,7 +1030,14 @@ void ZONE::Move( const VECTOR2I& offset )
     /* move outlines */
     m_Poly->Move( offset );
 
-    HatchBorder();
+    // Translate existing hatch lines instead of regenerating them. HatchBorder() is expensive
+    // (O(n*m) segment intersections + point-in-polygon tests) and the hatch pattern is
+    // invariant under translation.
+    for( SEG& seg : m_borderHatchLines )
+    {
+        seg.A += offset;
+        seg.B += offset;
+    }
 
     /* move fills */
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
