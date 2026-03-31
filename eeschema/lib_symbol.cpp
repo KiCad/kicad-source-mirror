@@ -690,6 +690,7 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
             retv->SetExcludedFromSim( parentChain.front()->GetExcludedFromSim() );
             retv->SetExcludedFromBOM( parentChain.front()->GetExcludedFromBOM() );
             retv->SetExcludedFromBoard( parentChain.front()->GetExcludedFromBoard() );
+            retv->SetExcludedFromPosFiles( parentChain.front()->GetExcludedFromPosFiles() );
         }
 
         retv->m_parent.reset();

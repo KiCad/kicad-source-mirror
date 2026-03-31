@@ -666,6 +666,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
             symbol->SetExcludedFromSim( symbol->GetLibSymbolRef()->GetExcludedFromSim() );
             symbol->SetExcludedFromBOM( symbol->GetLibSymbolRef()->GetExcludedFromBOM() );
             symbol->SetExcludedFromBoard( symbol->GetLibSymbolRef()->GetExcludedFromBoard() );
+            symbol->SetExcludedFromPosFiles( symbol->GetLibSymbolRef()->GetExcludedFromPosFiles() );
         }
 
         if( m_resetPinTextVisibility->GetValue() )
