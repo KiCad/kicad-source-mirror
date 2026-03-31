@@ -68,6 +68,19 @@ static const std::vector<wxString> c_formatCommand = { FILEEXT::StepFileExtensio
                                                        wxS( "3dpdf" ),
                                                     };
 
+// Maps m_choiceFormat selection to the step exporter format
+static const std::map<int, EXPORTER_STEP_PARAMS::FORMAT> c_formatJobCommand = {
+        { 0, EXPORTER_STEP_PARAMS::FORMAT::STEP },
+        { 1, EXPORTER_STEP_PARAMS::FORMAT::GLB },
+        { 2, EXPORTER_STEP_PARAMS::FORMAT::XAO },
+        { 3, EXPORTER_STEP_PARAMS::FORMAT::BREP },
+        { 4, EXPORTER_STEP_PARAMS::FORMAT::PLY },
+        { 5, EXPORTER_STEP_PARAMS::FORMAT::STL },
+        { 6, EXPORTER_STEP_PARAMS::FORMAT::STEPZ },
+        { 7, EXPORTER_STEP_PARAMS::FORMAT::U3D },
+        { 8, EXPORTER_STEP_PARAMS::FORMAT::PDF }
+    };
+
 // Maps file extensions to m_choiceFormat selection
 static const std::map<wxString, int> c_formatExtToChoice = { { FILEEXT::StepFileExtension, 0 },
                                                              { FILEEXT::StepFileAbrvExtension, 0 },
@@ -184,6 +197,11 @@ bool DIALOG_EXPORT_STEP::TransferDataToWindow()
             if( idx != wxNOT_FOUND )
                 m_choiceVariant->SetSelection( idx );
         }
+
+        wxFileName fn = m_outputFileName->GetValue();
+
+        if( auto formatChoice = get_opt( c_formatExtToChoice, fn.GetExt().Lower() ) )
+           m_choiceFormat->SetSelection( *formatChoice );
     }
     else
     {
@@ -235,6 +253,16 @@ bool DIALOG_EXPORT_STEP::TransferDataToWindow()
 
             if( idx != wxNOT_FOUND )
                 m_choiceVariant->SetSelection( idx );
+        }
+
+        // Use the recorded format instead of the file extension for jobs
+        for( auto& formats : c_formatJobCommand )
+        {
+            if( formats.second == m_job->m_3dparams.m_Format )
+            {
+                m_choiceFormat->SetSelection( formats.first );
+                break;
+            }
         }
     }
 
@@ -628,7 +656,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->m_3dparams.m_SubstModels = m_cbSubstModels->GetValue();
         m_job->m_3dparams.m_BoardOutlinesChainingEpsilon = tolerance;
 
-        m_job->SetStepFormat( static_cast<EXPORTER_STEP_PARAMS::FORMAT>( m_choiceFormat->GetSelection() ) );
+        if( auto formatChoice = get_opt( c_formatJobCommand, m_choiceFormat->GetSelection() ) )
+        {
+            m_job->SetStepFormat( *formatChoice );
+        }
+        else
+        {
+            wxASSERT_MSG(false, wxString::Format( "Unknown format value %d", m_choiceFormat->GetSelection() ) );
+        }
+
 
         // ensure the main format on the job is populated
         switch( m_job->m_3dparams.m_Format )
