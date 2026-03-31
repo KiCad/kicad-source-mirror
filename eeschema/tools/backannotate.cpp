@@ -976,26 +976,31 @@ void BACK_ANNOTATE::applyChangelist()
             }
 
             // 3. Existing field has been deleted from footprint and needs to be deleted from symbol
-            // Check all symbol fields for existence in the footprint field map
+            // Check all symbol fields for existence in the footprint field map.
+            // Collect names first to avoid iterator invalidation when removing fields.
+            std::vector<wxString> fieldsToDelete;
+
             for( SCH_FIELD& field : symbol->GetFields() )
             {
-                // Never delete mandatory fields
                 if( field.IsMandatory() )
                     continue;
 
                 if( fpData.m_fieldsMap.find( field.GetCanonicalName() ) == fpData.m_fieldsMap.end() )
                 {
-                    // Field not found in footprint field map, delete it
                     m_changesCount++;
                     msg.Printf( _( "Delete %s field '%s.'" ),
                                 DescribeRef( ref.GetRef() ),
                                 EscapeHTML( field.GetName() ) );
 
-                    if( !m_dryRun )
-                        symbol->RemoveField( symbol->GetField( field.GetName() ) );
-
+                    fieldsToDelete.push_back( field.GetName() );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                 }
+            }
+
+            if( !m_dryRun )
+            {
+                for( const wxString& fieldName : fieldsToDelete )
+                    symbol->RemoveField( fieldName );
             }
         }
 

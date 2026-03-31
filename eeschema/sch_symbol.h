@@ -468,7 +468,11 @@ public:
      */
     void RemoveField( const wxString& aFieldName );
 
-    void RemoveField( SCH_FIELD* aField ) { RemoveField( aField->GetName() ); }
+    void RemoveField( SCH_FIELD* aField )
+    {
+        if( aField )
+            RemoveField( aField->GetName() );
+    }
 
     /**
      * Search for a #SCH_FIELD with \a aFieldName
